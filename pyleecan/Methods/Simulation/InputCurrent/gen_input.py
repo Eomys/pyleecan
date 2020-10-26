@@ -3,7 +3,7 @@
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
-from numpy import ndarray, linspace, pi, mean, transpose
+from numpy import ndarray, pi, mean, transpose
 from ....Functions.Electrical.coordinate_transformation import n2dq
 from SciDataTool import Data1D, DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
@@ -33,8 +33,8 @@ def gen_input(self):
 
     # Set discretization
     Time, Angle = self.comp_axes(simu.machine, self.N0)
-    output.time = Time
-    output.angle = Angle
+    output.Time = Time
+    output.Angle = Angle
 
     # Number of winding phases for stator/rotor
     qs = len(simu.machine.stator.get_name_phase())
@@ -68,7 +68,7 @@ def gen_input(self):
             Phase = Data1D(
                 name="phase",
                 unit="",
-                values=gen_name(qs, is_add_phase=True),
+                values=gen_name(qs),
                 is_components=True,
             )
             output.Is = DataTime(
@@ -81,7 +81,7 @@ def gen_input(self):
             # Compute corresponding Id/Iq reference
             Idq = n2dq(
                 transpose(output.Is.values),
-                2 * pi * output.felec * output.time.get_values(is_oneperiod=False),
+                2 * pi * output.felec * output.Time.get_values(is_oneperiod=False),
                 is_dq_rms=True,
             )
             output.Id_ref = mean(Idq[:, 0])
@@ -105,7 +105,7 @@ def gen_input(self):
             Phase = Data1D(
                 name="phase",
                 unit="",
-                values=gen_name(qr, is_add_phase=True),
+                values=gen_name(qr),
                 is_components=True,
             )
             output.Ir = DataTime(

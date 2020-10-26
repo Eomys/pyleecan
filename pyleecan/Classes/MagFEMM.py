@@ -58,6 +58,11 @@ try:
 except ImportError as error:
     get_meshsolution_parallel = error
 
+try:
+    from ..Methods.Simulation.MagFEMM.comp_time_angle import comp_time_angle
+except ImportError as error:
+    comp_time_angle = error
+
 
 from ._check import InitUnKnowClassError
 from .DXFImport import DXFImport
@@ -161,6 +166,17 @@ class MagFEMM(Magnetics):
         )
     else:
         get_meshsolution_parallel = get_meshsolution_parallel
+    # cf Methods.Simulation.MagFEMM.comp_time_angle
+    if isinstance(comp_time_angle, ImportError):
+        comp_time_angle = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method comp_time_angle: " + str(comp_time_angle)
+                )
+            )
+        )
+    else:
+        comp_time_angle = comp_time_angle
     # save and copy methods are available in all object
     save = save
     copy = copy

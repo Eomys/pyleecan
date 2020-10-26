@@ -287,7 +287,14 @@ class Test_InCurrent_meth(object):
         assert out.elec.Id_ref == pytest.approx(test_dict["Id"], abs=0.01)
         assert out.elec.Iq_ref == pytest.approx(test_dict["Iq"], abs=0.01)
 
-        out.plot_A_time("elec.Is", index_list=[0, 1, 2])
+        # Plot 3-phase current function of time
+        out.plot_2D_Data(
+            "elec.Is",
+            "time",
+            "phase",
+        )
+
+        # Save picture
         title = "Id=" + str(test_dict["Id"]) + " Iq=" + str(test_dict["Iq"])
         fig = plt.gcf()
         plt.title(title)
@@ -302,3 +309,36 @@ class Test_InCurrent_meth(object):
             )
         )
         plt.close("all")
+
+        return out
+
+
+# To run it without pytest
+if __name__ == "__main__":
+
+    obj = Test_InCurrent_meth()
+
+    test_dict = idq_test[0]
+
+    out = obj.test_InputCurrent_DQ(test_dict)
+
+    # out.plot_2D_Data(
+    #         "elec.Is",
+    #         "time",
+    #         "phase",
+    #     )
+
+    # title = "Id=" + str(test_dict["Id"]) + " Iq=" + str(test_dict["Iq"])
+    # fig = plt.gcf()
+    # plt.title(title)
+    # fig.savefig(
+    #     join(
+    #         save_path,
+    #         "test_InCurrent_Id="
+    #         + str(test_dict["Id"])
+    #         + "_Iq="
+    #         + str(test_dict["Iq"])
+    #         + ".png",
+    #     )
+    # )
+    # plt.close("all")

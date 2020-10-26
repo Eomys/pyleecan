@@ -3,7 +3,6 @@
 from ....Classes.OutMag import OutMag
 from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
-from numpy import ndarray
 
 
 def gen_input(self):
@@ -33,8 +32,8 @@ def gen_input(self):
     else:
         N0 = self.OP.N0
     Time, Angle = self.comp_axes(simu.machine, N0)
-    output.time = Time
-    output.angle = Angle
+    output.Time = Time
+    output.Angle = Angle
 
     if self.B is None:
         raise InputError("ERROR: InFlux.B missing")

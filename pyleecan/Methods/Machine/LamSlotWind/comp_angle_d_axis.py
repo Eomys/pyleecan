@@ -1,5 +1,4 @@
-from numpy import pi, argmax, cos, abs as np_abs, angle as np_angle, squeeze
-import matplotlib.pyplot as plt
+from numpy import argmax, cos, abs as np_abs, angle as np_angle
 
 
 def comp_angle_d_axis(self):
@@ -22,7 +21,7 @@ def comp_angle_d_axis(self):
 
     p = self.get_pole_pair_number()
 
-    MMF = self.comp_mmf_unit(Nt=1, Na=400 * p)
+    MMF, _ = self.comp_mmf_unit(Nt=1, Na=400 * p)
 
     # Get angle values
     results1 = MMF.get_along("angle[oneperiod]")
@@ -33,7 +32,7 @@ def comp_angle_d_axis(self):
     wavenumber = results["wavenumber"]
     mmf_ft = results[MMF.symbol]
 
-    # Find the angle where the FFT is max
+    # Find the fundamental harmonic of MMF
     indr_fund = np_abs(wavenumber - p).argmin()
     phimax = np_angle(mmf_ft[indr_fund])
     magmax = np_abs(mmf_ft[indr_fund])
@@ -43,6 +42,9 @@ def comp_angle_d_axis(self):
 
     # Get the first angle where mmf is max
     d_angle = angle_stator[argmax(mmf_waveform)]
+
+    # import matplotlib.pyplot as plt
+    # from numpy import squeeze
 
     # fig, ax = plt.subplots()
     # ax.plot(angle_stator, squeeze(MMF.get_along("angle[oneperiod]")[MMF.symbol]), "k")

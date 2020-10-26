@@ -56,13 +56,14 @@ def import_data():
     data["time"] = ImportMatlab(mat_file_time, var_name="timec")
     data["Time"] = ImportData(field=data["time"], unit="s", name="time")
     data["angle"] = ImportMatlab(mat_file_angle, var_name="alpha_radc")
-    data["Angle"] = ImportData(field=data["angle"], unit="rad", name="angle")
+    data["Angle"] = ImportData(
+        field=data["angle"], unit="rad", name="angle", normalizations={"space_order": 3}
+    )
     data["Br"] = ImportData(
         axes=[data["Time"], data["Angle"]],
         field=data["flux"],
         unit="T",
         name="Airgap radial flux density",
-        normalizations={"space_order": 3},
         symbol="B_{rad}",
     )
     data["B"] = ImportVectorField(components={"radial": data["Br"]})
@@ -148,9 +149,7 @@ class Test_plots(object):
             symbol="B_r",
             name="Airgap radial flux density",
             unit="T",
-            symmetries={"time": {"period": 3}, "angle": {"period": 3}},
             axes=[Time2, Angle2],
-            normalizations={},
             values=Br_reduced,
         )
         out2.mag.B = VectorField(
@@ -159,14 +158,22 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_time(
+
+        out.plot_2D_Data(
             "mag.B",
-            is_fft=True,
-            freq_max=freq_max,
+            "time",
+            "angle[0]{°}",
+            data_list=[out2.mag.B],
+            is_auto_ticks=False,
+            legend_list=["Reference", "Periodic"],
+            save_path=join(save_path, "test_default_proj_Br_dataobj_period.png"),
+        )
+        out.plot_2D_Data(
+            "mag.B",
+            "freqs=[0," + str(freq_max) + "]",
             data_list=[out2.mag.B],
             legend_list=["Reference", "Periodic"],
-            is_auto_ticks=False,
-            save_path=join(save_path, "test_default_proj_Br_dataobj_period.png"),
+            save_path=join(save_path, "test_default_proj_Br_dataobj_period_fft.png"),
         )
 
         out3 = Output(simu=simu)
@@ -204,7 +211,6 @@ class Test_plots(object):
             unit="T",
             symmetries={},
             axes=[Time3, Angle3],
-            normalizations={"space_order": 3},
             values=flux_arr,
         )
         out3.mag.B = VectorField(
@@ -213,15 +219,21 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (Data1D / DataLinspace)
         plt.close("all")
-        out.plot_A_space(
+        out.plot_2D_Data(
             "mag.B",
-            is_fft=True,
-            is_spaceorder=True,
-            r_max=r_max,
+            "angle",
             data_list=[out3.mag.B],
             legend_list=["Reference", "Linspace"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_linspace.png"),
+        )
+        out.plot_2D_Data(
+            "mag.B",
+            "wavenumber->space_order=[0,100]",
+            data_list=[out3.mag.B],
+            legend_list=["Reference", "Linspace"],
+            is_auto_ticks=False,
+            save_path=join(save_path, "test_default_proj_Br_dataobj_linspace_fft.png"),
         )
 
         simu4 = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
@@ -236,14 +248,22 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (direct / ifft)
         plt.close("all")
-        out.plot_A_space(
+
+        out.plot_2D_Data(
             "mag.B",
-            is_fft=True,
-            r_max=r_max,
+            "angle",
             data_list=[out4.mag.B],
             legend_list=["Reference", "Inverse FFT"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_ift.png"),
+        )
+        out.plot_2D_Data(
+            "mag.B",
+            "wavenumber=[0,100]",
+            data_list=[out4.mag.B],
+            legend_list=["Reference", "Inverse FFT"],
+            is_auto_ticks=False,
+            save_path=join(save_path, "test_default_proj_Br_dataobj_ift_fft.png"),
         )
 
         out5 = Output(simu=simu)
@@ -271,9 +291,7 @@ class Test_plots(object):
             symbol="B_r",
             name="Airgap radial flux density",
             unit="T",
-            symmetries={},
             axes=[Time5],
-            normalizations={},
             values=Br5,
         )
         out5.mag.B = VectorField(
@@ -282,12 +300,15 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_time(
+
+        out.plot_2D_Data(
             "mag.B",
+            "time",
+            "angle[0]{°}",
             data_list=[out5.mag.B],
             legend_list=["Br", "0.2sin(375t-1.5)"],
-            is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_compare.png"),
+            is_auto_ticks=False,
         )
 
     def test_default_proj_Br_cfft2(self, import_data):
@@ -321,12 +342,12 @@ class Test_plots(object):
         out = Output(simu=simu)
         simu.run()
 
-        # Plot the result by comparing the two simulation (sym / no sym)
+        # Plot the 2D FFT of flux density as stem plot
         plt.close("all")
-        out.plot_A_cfft2(
+        out.plot_3D_Data(
             "mag.B",
-            freq_max=freq_max,
-            r_max=r_max,
+            "freqs=[0," + str(freq_max) + "]",
+            "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
             N_stem=N_stem,
             save_path=join(save_path, "test_default_proj_Br_dataobj_cfft2.png"),
         )
@@ -362,10 +383,13 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_surf(
+        out.plot_3D_Data(
             "mag.B",
-            t_max=0.06,
+            "time=[0,0.06]",
+            "angle",
+            component_list=["radial"],
             save_path=join(save_path, "test_default_proj_Br_surf_dataobj.png"),
+            is_2D_view=False,
         )
 
     def test_default_proj_fft2(self, import_data):
@@ -397,12 +421,15 @@ class Test_plots(object):
         out = Output(simu=simu)
         simu.run()
 
-        # Plot the result by comparing the two simulation (sym / no sym)
+        # Plot the 2D FFT of flux density as 2D scatter plot with colormap
         plt.close("all")
-        out.plot_A_fft2(
+        freq_max = (500,)
+        r_max = (20,)
+        out.plot_3D_Data(
             "mag.B",
-            freq_max=500,
-            r_max=20,
+            "freqs=[0," + str(freq_max) + "]",
+            "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
+            is_2D_view=True,
             save_path=join(save_path, "test_default_proj_Br_fft2_dataobj.png"),
         )
 

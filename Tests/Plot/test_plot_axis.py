@@ -284,7 +284,8 @@ def test_axis_LamWind(CURVE_COLORS):
     simu.run()
 
     plt.close("all")
-    out.plot_A_space("mag.B", is_deg=False)
+    out.plot_2D_Data("mag.B", "angle{rad}")
+
     fig = plt.gcf()
     Br = out.mag.B.get_rad_along("time", "angle")
     fig.axes[0].plot(d_angle, max(max(Br)), "rx")

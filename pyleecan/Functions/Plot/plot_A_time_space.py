@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import matplotlib.pyplot as plt
-from .plot_A_2D import plot_A_2D
-from .plot_A_3D import plot_A_3D
+from .plot_2D import plot_2D
+from .plot_3D import plot_3D
 from ...definitions import config_dict
 from numpy import meshgrid, max as np_max
 
@@ -87,13 +87,12 @@ def plot_A_time_space(
     angle_map, time_map = meshgrid(angle, time)
     if z_max is None:
         z_max = np_max(A_t_s)
-    plot_A_3D(
+    plot_3D(
         angle_map,
         time_map,
         A_t_s,
         z_max=z_max,
         z_min=-z_max,
-        colormap=colormap,
         xlabel=xlabel,
         ylabel=ylabel,
         zlabel=zlabel,
@@ -115,7 +114,7 @@ def plot_A_time_space(
     time = results["time"]
     Ydata = [results[data.symbol]]
     # Plot the original graph
-    plot_A_2D(
+    plot_2D(
         time,
         Ydata,
         fig=fig,
@@ -137,7 +136,7 @@ def plot_A_time_space(
     angle = results["angle"]
     Ydata = [results[data.symbol]]
     # Plot the original graph
-    plot_A_2D(
+    plot_2D(
         angle,
         Ydata,
         fig=fig,
@@ -180,7 +179,7 @@ def plot_A_time_space(
     else:
         xticks = None
 
-    plot_A_2D(
+    plot_2D(
         freqs,
         Ydata,
         fig=fig,
@@ -216,7 +215,7 @@ def plot_A_time_space(
     else:
         xticks = None
 
-    plot_A_2D(
+    plot_2D(
         wavenumber,
         Ydata,
         fig=fig,

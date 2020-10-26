@@ -3,12 +3,16 @@
 from itertools import repeat
 
 import matplotlib.pyplot as plt
-from numpy import where, argmin, abs, squeeze, split, ndarray
+from numpy import argmin, abs, squeeze, split, ndarray
 
 from ...Functions.init_fig import init_subplot, init_fig
 from ...definitions import config_dict
 
+# Import values from config dict
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
+FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
+FONT_SIZE_LABEL = config_dict["PLOT"]["FONT_SIZE_LABEL"]
+FONT_SIZE_LEGEND = config_dict["PLOT"]["FONT_SIZE_LEGEND"]
 
 
 def plot_A_2D(
@@ -27,8 +31,7 @@ def plot_A_2D(
     is_logscale_y=False,
     is_disp_title=True,
     is_grid=True,
-    type="curve",
-    is_fund=False,
+    type_plot="curve",
     fund_harm=None,
     x_min=None,
     x_max=None,
@@ -36,12 +39,13 @@ def plot_A_2D(
     y_max=None,
     xticks=None,
     save_path=None,
+    barwidth=100,
 ):
     """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
     Parameters
     ----------
-    Xdata : ndarray
+    Xdatas : ndarray
         array of x-axis values
     Ydatas : list
         list of y-axes values
@@ -69,18 +73,24 @@ def plot_A_2D(
         boolean indicating if the title must be displayed
     is_grid : bool
         boolean indicating if the grid must be displayed
-    type : str
+    type_plot : str
         type of 2D graph : "curve", "bargraph", "barchart" or "quiver"
-    is_fund : bool
-        boolean indicating if the bar corresponding to the fundamental must be displayed in red
     fund_harm : float
-        frequency of the fundamental harmonic
+        frequency/order/wavenumber of the fundamental harmonic that must be displayed in red in the fft
+    x_min : float
+        minimum value for the x-axis
+    x_max : float
+        maximum value for the x-axis
     y_min : float
         minimum value for the y-axis
     y_max : float
         maximum value for the y-axis
     xticks : list
         list of ticks to use for the x-axis
+    save_path : str
+        full path where the figure is saved if save_path is not None
+    barwidth : float
+        barwidth scaling factor, only if type_plot = "bargraph"
     """
 
     # Set figure/subplot
@@ -120,7 +130,7 @@ def plot_A_2D(
         no_legend = False
 
     # Plot
-    if type == "curve":
+    if type_plot == "curve":
         for i in range(ndatas):
             ax.plot(
                 Xdatas[i_Xdatas[i]],
@@ -132,11 +142,11 @@ def plot_A_2D(
             )
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
-    elif type == "bargraph":
+    elif type_plot == "bargraph":
         positions = range(-ndatas + 1, ndatas, 2)
         for i in range(ndatas):
             # width = (Xdatas[i_Xdatas[i]][1] - Xdatas[i_Xdatas[i]][0]) / ndatas
-            width = Xdatas[i_Xdatas[i]][-1] / 100
+            width = Xdatas[i_Xdatas[i]][-1] / barwidth
             barlist = ax.bar(
                 Xdatas[i_Xdatas[i]] + positions[i] * width / (2 * ndatas),
                 Ydatas[i],
@@ -144,16 +154,14 @@ def plot_A_2D(
                 width=width,
                 label=legend_list[i],
             )
-            if is_fund:  # Find fundamental
-                if fund_harm is None:
-                    mag_max = max(Ydatas[i])
-                    imax = int(where(Ydatas[i] == mag_max)[0])
-                else:
-                    imax = argmin(abs(Xdatas[i] - fund_harm))
+            if fund_harm is not None:  # Find fundamental
+                imax = argmin(abs(Xdatas[i] - fund_harm))
                 barlist[imax].set_edgecolor("k")
+                barlist[imax].set_facecolor("k")
+
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
-    elif type == "barchart":
+    elif type_plot == "barchart":
         for i in range(ndatas):
             if i == 0:
                 ax.bar(
@@ -178,7 +186,7 @@ def plot_A_2D(
             [str(f) for f in Xdatas[i_Xdatas[i]]],
             rotation=90,
         )
-    elif type == "quiver":
+    elif type_plot == "quiver":
         for i in range(ndatas):
             x = [e[0] for e in Xdatas[i_Xdatas[i]]]
             y = [e[1] for e in Xdatas[i_Xdatas[i]]]
@@ -204,16 +212,16 @@ def plot_A_2D(
         ax.grid()
 
     if ndatas > 1 and not no_legend:
-        ax.legend(prop={"family": FONT_NAME, "size": 22})
+        ax.legend(prop={"family": FONT_NAME, "size": FONT_SIZE_LEGEND})
 
     plt.tight_layout()
     for item in (
         [ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()
     ):
         item.set_fontname(FONT_NAME)
-        item.set_fontsize(22)
+        item.set_fontsize(FONT_SIZE_LABEL)
     ax.title.set_fontname(FONT_NAME)
-    ax.title.set_fontsize(24)
+    ax.title.set_fontsize(FONT_SIZE_TITLE)
 
     if save_path is not None:
         fig.savefig(save_path)

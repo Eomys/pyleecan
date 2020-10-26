@@ -18,7 +18,7 @@ def comp_rot_dir(self):
     p = self.get_pole_pair_number()
 
     # Compute unit mmf
-    MMF = self.comp_mmf_unit(
+    MMF, _ = self.comp_mmf_unit(
         Nt=20 * p, Na=20 * p
     )  # 20 points per pole over time and space is enough to capture rotating direction of fundamental mmf
 
