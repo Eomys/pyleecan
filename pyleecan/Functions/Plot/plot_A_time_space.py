@@ -186,7 +186,7 @@ def plot_A_time_space(
         subplot_index=3,
         xlabel=xlabel,
         ylabel=ylabel,
-        type="bargraph",
+        type_plot="bargraph",
         xticks=xticks,
         color_list=color_list,
     )
@@ -222,7 +222,7 @@ def plot_A_time_space(
         subplot_index=5,
         xlabel=xlabel,
         ylabel=ylabel,
-        type="bargraph",
+        type_plot="bargraph",
         xticks=xticks,
         color_list=color_list,
     )
