@@ -172,11 +172,14 @@ def plot_2D_Data(
             if axis.unit == "SI":
                 unit = unit_dict[axis.name]
                 xlabel = name.capitalize() + " [" + unit + "]"
+                main_axis_name = name
             elif axis.unit in norm_dict:
                 xlabel = norm_dict[axis.unit]
+                main_axis_name = axis.unit
             else:
                 unit = axis.unit
                 xlabel = name.capitalize() + " [" + unit + "]"
+                main_axis_name = name
             if (
                 axis.name == "angle"
                 and axis.unit == "°"
@@ -307,8 +310,8 @@ def plot_2D_Data(
             fund_harm = None
         else:
             # Activate the option only if main axis is in dict and only one Data is plotted
-            if main_axis.name in fund_harm_dict and len(Ydatas) == 1:
-                fund_harm = fund_harm_dict[main_axis.name]
+            if main_axis_name in fund_harm_dict and len(Ydatas) == 1:
+                fund_harm = fund_harm_dict[main_axis_name]
             else:
                 # Deactivate the option
                 fund_harm = None

@@ -86,7 +86,7 @@ def plot_2D_Data(
 
     # Get fundamental harmonic properties from Output
     if fund_harm_dict is None:
-        fund_harm_dict = self.get_fund_harm(Data_str.split(".")[1])
+        fund_harm_dict = self.get_fund_harm(data)
 
     # Call the plot function
     if isinstance(data, VectorField):

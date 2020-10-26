@@ -11,7 +11,18 @@ def comp_time_angle(self, output):
         a Force object
     output : Output
         an Output object (to update)
+
+    Returns
+    -------
+    axes_dict: {Data}
+        Dict containing Time and Angle axes including (anti-)periodicties used in any Force module
     """
+
+    # Store Time axis in OutMag
+    output.force.Time = output.mag.Time.copy()
+
+    # Store Angle axis in OutMag
+    output.force.Angle = output.mag.Angle.copy()
 
     # Get time and space (anti-)periodicities of the machine
     (
@@ -23,7 +34,7 @@ def comp_time_angle(self, output):
 
     # Compute Time axis based on the one stored in OutMag and removing anti-periodicty
     Time, is_periodicity_t = create_from_axis(
-        axis_in=output.mag.Time,
+        axis_in=output.force.Time,
         per=per_t,
         is_aper=is_antiper_t,
         is_include_per=self.is_periodicity_t,
@@ -42,12 +53,9 @@ def comp_time_angle(self, output):
             + "). Time periodicity removed"
         )
 
-    # Store Time axis in OutForce
-    output.force.Time = Time
-
     # Compute Angle axis based on the one stored in OutMag and removing anti-periodicty
     Angle, is_periodicity_a = create_from_axis(
-        axis_in=output.mag.Angle,
+        axis_in=output.force.Angle,
         per=per_a,
         is_aper=is_antiper_a,
         is_include_per=self.is_periodicity_a,
@@ -66,5 +74,6 @@ def comp_time_angle(self, output):
             + "). Angular periodicity removed"
         )
 
-    # Store Angle axis in OutForce
-    output.force.Angle = Angle
+    axes_dict = {"Time": Time, "Angle": Angle}
+
+    return axes_dict

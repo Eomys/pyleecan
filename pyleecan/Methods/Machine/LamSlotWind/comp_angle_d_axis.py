@@ -43,13 +43,13 @@ def comp_angle_d_axis(self):
     # Get the first angle where mmf is max
     d_angle = angle_stator[argmax(mmf_waveform)]
 
-    #import matplotlib.pyplot as plt
-    #from numpy import squeeze
+    # import matplotlib.pyplot as plt
+    # from numpy import squeeze
 
-    #fig, ax = plt.subplots()
-    #ax.plot(angle_stator, squeeze(MMF.get_along("angle[oneperiod]")[MMF.symbol]), "k")
-    #ax.plot(angle_stator, mmf_waveform, "r")
-    #ax.plot([d_angle, d_angle], [-magmax, magmax], "--k")
-    #plt.show()
+    # fig, ax = plt.subplots()
+    # ax.plot(angle_stator, squeeze(MMF.get_along("angle[oneperiod]")[MMF.symbol]), "k")
+    # ax.plot(angle_stator, mmf_waveform, "r")
+    # ax.plot([d_angle, d_angle], [-magmax, magmax], "--k")
+    # plt.show()
 
     return d_angle

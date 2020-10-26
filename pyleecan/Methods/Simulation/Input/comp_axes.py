@@ -27,15 +27,27 @@ def comp_axes(self, machine, N0=None):
 
     """
 
-    # Time axis
+    # Get machine pole pair number
+    p = machine.get_pole_pair_number()
+
+    # Get electrical fundamental frequency
+    f_elec = self.comp_felec()
+
+    # Airgap radius
+    Rag = machine.comp_Rgap_mec()
+
+    # Setup normalizations for time and angle axes
     norm_time = {
-        "elec_order": self.comp_felec(),
-        "mech_order": self.comp_felec(),
+        "elec_order": f_elec,
+        "mech_order": f_elec / p,
     }
+    norm_angle = {"space_order": p, "distance": 1 / Rag}
+
+    # Create time axis
     if self.time is None:
         if N0 is None:
             raise InputError("ERROR: time and N0 can't be both None")
-
+        # Create time axis as a DataLinspace
         Time = DataLinspace(
             name="time",
             unit="s",
@@ -46,15 +58,14 @@ def comp_axes(self, machine, N0=None):
             normalizations=norm_time,
         )
     else:
-        # Load and check time
+        # Load time data
         time = self.time.get_data()
         self.Nt_tot = len(time)
         Time = Data1D(name="time", unit="s", values=time, normalizations=norm_time)
 
-    # Angle axis
-    norm_space = {"space_order": machine.get_pole_pair_number()}
+    # Create angle axis
     if self.angle is None:
-        # Create angle vector as a linspace
+        # Create angle axis as a DataLinspace
         Angle = DataLinspace(
             name="angle",
             unit="rad",
@@ -62,14 +73,14 @@ def comp_axes(self, machine, N0=None):
             final=2 * pi,
             number=self.Na_tot,
             include_endpoint=False,
-            normalizations=norm_space,
+            normalizations=norm_angle,
         )
     else:
         # Load angle data
         angle = self.angle.get_data()
         self.Na_tot = len(angle)
         Angle = Data1D(
-            name="angle", unit="rad", values=angle, normalizations=norm_space
+            name="angle", unit="rad", values=angle, normalizations=norm_angle
         )
 
     return Time, Angle

@@ -11,7 +11,7 @@ from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
-def solve_FEMM(self, femm, output, sym, Time_Tem):
+def solve_FEMM(self, femm, output, sym, axes_dict):
     """
     Solve FEMM model to calculate airgap flux density, torque instantaneous/average/ripple values,
     flux induced in stator windings and flux density, field and permeability maps
@@ -28,13 +28,14 @@ def solve_FEMM(self, femm, output, sym, Time_Tem):
         An Output object
     sym: int
         Spatial symmetry factor
-    Time_Tem: Data
-        Axis (Data object) for torque storage
+    axes_dict: {Data}
+        Dict of axes used for magnetic calculation
     """
 
     # Get time and angular axes
-    Angle = output.mag.Angle
-    Time = output.mag.Time
+    Angle = axes_dict["Angle"]
+    Time = axes_dict["Time"]
+    Time_Tem = axes_dict["Time_Tem"]
 
     # Check if the angular axis is anti-periodic
     _, is_antiper_a = Angle.get_periodicity()

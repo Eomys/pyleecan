@@ -6,12 +6,14 @@ unit_dict = {
     "phase": "",
     "z": "m",
     "radius": "m",
+    "distance": "m",
 }
 
 norm_dict = {
     "elec_order": "Electrical order []",
     "mech_order": "Mechanical order []",
     "space_order": "Space order []",
+    "distance": "Distance [m]",
 }
 
 axes_dict = {

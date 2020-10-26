@@ -14,11 +14,11 @@ def comp_flux_airgap(self, output, axes_dict):
     output : Output
         an Output object
     axes_dict: {Data}
-        Dict containing Time axis used in MagFEMM to store torque result
+        Dict of axes used for magnetic calculation
     """
 
     # Set the symmetry factor according to the machine
-    sym, is_antiper_a = output.mag.Angle.get_periodicity()
+    sym, is_antiper_a = axes_dict["Angle"].get_periodicity()
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
@@ -57,8 +57,7 @@ def comp_flux_airgap(self, output, axes_dict):
         femm.opendocument(self.import_file)
 
     # Solve for all time step and store all the results in output
-    Time_Tem = axes_dict["Time_Tem"]
     if self.nb_worker > 1:
-        self.solve_FEMM_parallel(femm, output, sym, Time_Tem)
+        self.solve_FEMM_parallel(femm, output, sym, axes_dict)
     else:
-        self.solve_FEMM(femm, output, sym, Time_Tem)
+        self.solve_FEMM(femm, output, sym, axes_dict)

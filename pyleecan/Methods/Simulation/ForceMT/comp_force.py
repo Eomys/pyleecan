@@ -2,21 +2,22 @@ from numpy import pi, all as np_all
 from SciDataTool import DataTime, VectorField
 
 
-def comp_force(self, output):
+def comp_force(self, output, axes_dict):
     """Compute the air-gap surface force based on Maxwell Tensor (MT).
 
     Parameters
     ----------
     self : ForceMT
         A ForceMT object
-
     output : Output
         an Output object (to update)
+    axes_dict: {Data}
+        Dict of axes used for force calculation
     """
 
     # Get time and angular axes
-    Angle = output.force.Angle
-    Time = output.force.Time
+    Angle = axes_dict["Angle"]
+    Time = axes_dict["Time"]
 
     # Import angular vector from Angle Data object
     _, is_antiper_a = Angle.get_periodicity()

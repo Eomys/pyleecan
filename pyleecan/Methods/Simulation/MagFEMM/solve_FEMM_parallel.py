@@ -16,7 +16,7 @@ from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
-def solve_FEMM_parallel(self, femm, output, sym, Time_Tem):
+def solve_FEMM_parallel(self, femm, output, sym, axes_dict):
     """
     Same as solve_FEMM including parallelization on several workers
     /!\ Any changes in solve_FEMM must be also made in solve_FEMM_parallel
@@ -31,8 +31,8 @@ def solve_FEMM_parallel(self, femm, output, sym, Time_Tem):
         An Output object
     sym: int
         Spatial symmetry factor
-    Time_Tem: Data
-        Axis (Data object) for torque storage
+    axes_dict: {Data}
+        Dict of axes used for magnetic calculation
     """
 
     # The following function must be in solve_FEMM_parallel to access
@@ -164,8 +164,9 @@ def solve_FEMM_parallel(self, femm, output, sym, Time_Tem):
                 return B_elem, H_elem, mu_elem
 
     # Get time and angular axes
-    Angle = output.mag.Angle
-    Time = output.mag.Time
+    Angle = axes_dict["Angle"]
+    Time = axes_dict["Time"]
+    Time_Tem = axes_dict["Time_Tem"]
 
     # Check if the angular axis is anti-periodic
     _, is_antiper_a = Angle.get_periodicity()
