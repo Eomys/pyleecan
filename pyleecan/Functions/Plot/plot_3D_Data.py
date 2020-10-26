@@ -3,13 +3,13 @@
 from ..init_fig import init_fig
 from .plot_4D import plot_4D
 from .plot_3D import plot_3D
-from . import unit_dict, norm_dict, axes_dict, fft_dict, ifft_dict
+from . import unit_dict, norm_dict, axes_dict
 from numpy import where, meshgrid, max as np_max, min as np_min
 
 
 def plot_3D_Data(
     data,
-    *args,
+    *arg_list,
     is_norm=False,
     unit="SI",
     save_path=None,
@@ -30,7 +30,7 @@ def plot_3D_Data(
     ----------
     data : Data
         a Data object
-    *args : list of str
+    *arg_list : list of str
         arguments to specify which axes to plot
     is_norm : bool
         boolean indicating if the field must be normalized
@@ -60,8 +60,8 @@ def plot_3D_Data(
         existing figure to use if None create a new one
     """
 
-    if len(args) == 1 and type(args[0]) == tuple:
-        args = args[0]  # if called from another script with *args
+    if len(arg_list) == 1 and type(arg_list[0]) == tuple:
+        arg_list = arg_list[0]  # if called from another script with *arg_list
 
     # Set plot
     is_show_fig = True if fig is None else False
@@ -73,7 +73,7 @@ def plot_3D_Data(
 
     # Detect fft
     is_fft = False
-    if any("wavenumber" in s for s in args) or any("freqs" in s for s in args):
+    if any("wavenumber" in s for s in arg_list) or any("freqs" in s for s in arg_list):
         is_fft = True
         if "dB" in unit:
             unit_str = (
@@ -98,13 +98,13 @@ def plot_3D_Data(
     # Extract field and axes
     if is_fft:
         if is_2D_view:
-            result = data.get_magnitude_along(args, unit=unit, is_norm=is_norm)
+            result = data.get_magnitude_along(arg_list, unit=unit, is_norm=is_norm)
         else:
             result = data.get_harmonics(
-                N_stem, args, unit=unit, is_norm=is_norm, is_flat=True
+                N_stem, arg_list, unit=unit, is_norm=is_norm, is_flat=True
             )
     else:
-        result = data.get_along(args, unit=unit, is_norm=is_norm)
+        result = data.get_along(arg_list, unit=unit, is_norm=is_norm)
     axes_list = result["axes_list"]
     axes_dict_other = result["axes_dict_other"]
     Xdata = result[axes_list[0].name]
