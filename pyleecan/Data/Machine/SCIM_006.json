@@ -340,7 +340,7 @@
                 }
             },
             "is_reverse_wind": false,
-            "p": 3,
+            "p": 2,
             "qs": 28,
             "type_connection": 0
         }
@@ -632,7 +632,7 @@
                 }
             },
             "is_reverse_wind": false,
-            "p": 3,
+            "p": 2,
             "qs": 3,
             "type_connection": 0
         }

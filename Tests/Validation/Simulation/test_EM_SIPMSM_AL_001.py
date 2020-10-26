@@ -98,7 +98,7 @@ def test_Magnetic_FEMM_sym():
         symbol="B_t",
     )
     B = ImportVectorField(components={"radial": Br_data, "tangential": Bt_data})
-    simu_load.input = InputFlux(time=time, Na_tot=Na_tot, B=B)
+    simu_load.input = InputFlux(time=time, Na_tot=Na_tot, B=B, OP=simu.input)
 
     out = Output(simu=simu)
     simu.run()
