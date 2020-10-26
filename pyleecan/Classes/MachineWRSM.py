@@ -22,11 +22,6 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Machine.MachineWRSM.get_lam_list import get_lam_list
-except ImportError as error:
-    get_lam_list = error
-
-try:
     from ..Methods.Machine.MachineWRSM.get_machine_type import get_machine_type
 except ImportError as error:
     get_machine_type = error
@@ -53,17 +48,6 @@ class MachineWRSM(MachineSync):
         )
     else:
         check = check
-    # cf Methods.Machine.MachineWRSM.get_lam_list
-    if isinstance(get_lam_list, ImportError):
-        get_lam_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MachineWRSM method get_lam_list: " + str(get_lam_list)
-                )
-            )
-        )
-    else:
-        get_lam_list = get_lam_list
     # cf Methods.Machine.MachineWRSM.get_machine_type
     if isinstance(get_machine_type, ImportError):
         get_machine_type = property(

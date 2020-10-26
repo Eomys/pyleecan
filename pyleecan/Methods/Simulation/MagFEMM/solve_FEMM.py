@@ -34,7 +34,8 @@ def solve_FEMM(self, femm, output, sym):
 
     # Number of time steps
     Nt_comp = Time_comp.get_length(
-        is_oneperiod=True, is_antiperiod=is_antiper_t and self.is_periodicity_t,
+        is_oneperiod=True,
+        is_antiperiod=is_antiper_t and self.is_periodicity_t,
     )
 
     # Loading parameters for readibility
