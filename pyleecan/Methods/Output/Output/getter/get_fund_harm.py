@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from SciDataTool import VectorField
-from ....Functions.Plot import fft_dict
+from .....Functions.Plot import fft_dict
 
 
 def get_fund_harm(self, data):
