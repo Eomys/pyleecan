@@ -3231,7 +3231,8 @@
         "desc": "Input to skip the magnetic module and start with the structural one",
         "is_internal": false,
         "methods": [
-            "gen_input"
+            "gen_input",
+            "comp_felec"
         ],
         "mother": "Input",
         "name": "InputFlux",
@@ -10456,7 +10457,7 @@
             {
                 "desc": "number of phases ",
                 "max": "100",
-                "min": "1",
+                "min": "0",
                 "name": "qs",
                 "type": "int",
                 "unit": "-",

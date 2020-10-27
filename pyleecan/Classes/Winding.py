@@ -299,7 +299,7 @@ class Winding(FrozenClass):
 
     def _set_qs(self, value):
         """setter of qs"""
-        check_var("qs", value, "int", Vmin=1, Vmax=100)
+        check_var("qs", value, "int", Vmin=0, Vmax=100)
         self._qs = value
 
     qs = property(
@@ -308,7 +308,7 @@ class Winding(FrozenClass):
         doc=u"""number of phases 
 
         :Type: int
-        :min: 1
+        :min: 0
         :max: 100
         """,
     )

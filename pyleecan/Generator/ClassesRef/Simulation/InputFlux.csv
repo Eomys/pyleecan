@@ -1,3 +1,3 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 B,T,Airgap flux density,,ImportVectorField,None,,,,Simulation,Input,gen_input,VERSION,1,Input to skip the magnetic module and start with the structural one
-OP,-,InputCurrent to define Operating Point (not mandatory),,Input,None,,,,,,,,,
+OP,-,InputCurrent to define Operating Point (not mandatory),,Input,None,,,,,,comp_felec,,,

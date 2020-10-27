@@ -3,7 +3,7 @@
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
-from numpy import ndarray, pi, mean, transpose
+from numpy import ndarray, pi, mean, transpose, zeros
 from ....Functions.Electrical.coordinate_transformation import n2dq
 from SciDataTool import Data1D, DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
@@ -90,31 +90,31 @@ def gen_input(self):
     # Load and check Ir is needed
     if qr > 0:
         if self.Ir is None:
-            raise InputError("ERROR: InputCurrent.Ir missing")
+            Ir = zeros((self.Nt_tot, qr))
         else:
             Ir = self.Ir.get_data()
-            if not isinstance(Ir, ndarray) or Ir.shape != (self.Nt_tot, qr):
-                raise InputError(
-                    "ERROR: InputCurrent.Ir must be a matrix with the shape "
-                    + str((self.Nt_tot, qr))
-                    + " (len(time), rotor phase number), "
-                    + str(Ir.shape)
-                    + " returned"
-                )
-            # Creating the data object
-            Phase = Data1D(
-                name="phase",
-                unit="",
-                values=gen_name(qr),
-                is_components=True,
+        if not isinstance(Ir, ndarray) or Ir.shape != (self.Nt_tot, qr):
+            raise InputError(
+                "ERROR: InputCurrent.Ir must be a matrix with the shape "
+                + str((self.Nt_tot, qr))
+                + " (len(time), rotor phase number), "
+                + str(Ir.shape)
+                + " returned"
             )
-            output.Ir = DataTime(
-                name="Rotor current",
-                unit="A",
-                symbol="Ir",
-                axes=[Phase, Time],
-                values=transpose(Ir),
-            )
+        # Creating the data object
+        Phase = Data1D(
+            name="phase",
+            unit="",
+            values=gen_name(qr),
+            is_components=True,
+        )
+        output.Ir = DataTime(
+            name="Rotor current",
+            unit="A",
+            symbol="Ir",
+            axes=[Phase, Time],
+            values=transpose(Ir),
+        )
 
     # Load and check alpha_rotor and N0
     if self.angle_rotor is None and self.N0 is None:

@@ -60,12 +60,12 @@ N0 = 1
 M1 = MachineDFIM()
 M1.stator = LamSlotWind()
 M1.stator.winding.qs = 3
-M1.rotor.winding = None
+M1.rotor.winding.qs = 0
 # Winding rotor only
 M2 = MachineDFIM()
 M2.rotor = LamSlotWind()
 M2.rotor.winding.qs = 2
-M2.stator.winding = None
+M2.stator.winding.qs = 0
 # Winding rotor + stator
 M3 = MachineDFIM()
 M3.stator = LamSlotWind()
@@ -258,11 +258,11 @@ class Test_InCurrent_meth(object):
         # Generate Is according to Id/Iq
         test_obj.input.gen_input()
         assert_array_almost_equal(
-            output.elec.time.get_values(is_oneperiod=False),
+            output.elec.Time.get_values(is_oneperiod=False),
             time_exp,
         )
         assert_array_almost_equal(
-            output.elec.angle.get_values(is_oneperiod=False),
+            output.elec.Angle.get_values(is_oneperiod=False),
             linspace(0, 2 * pi, Na_tot, endpoint=False),
         )
         assert_array_almost_equal(output.elec.get_Is().values, Is_exp)

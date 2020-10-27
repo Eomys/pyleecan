@@ -13,7 +13,7 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.ImportData import ImportData
 from pyleecan.Classes.ImportVectorField import ImportVectorField
 from pyleecan.Classes.InputFlux import InputFlux
-
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 from os.path import isfile
@@ -83,7 +83,7 @@ def import_data():
         symbol="B_{rad}",
     )
     data["B_FT"] = ImportVectorField(components={"radial": data["Br_FT"]})
-
+    data["OP"] = InputCurrent(N0=2000, Id_ref=10, Iq_ref=-10)
     # Plot parameters
     data["freq_max"] = 2000
     data["r_max"] = 78
@@ -112,6 +112,7 @@ class Test_plots(object):
         B_FT = import_data["B_FT"]
         freq_max = import_data["freq_max"]
         r_max = import_data["r_max"]
+        OP = import_data["OP"]
 
         time_arr = squeeze(time.get_data())
         angle_arr = squeeze(angle.get_data())
@@ -121,7 +122,7 @@ class Test_plots(object):
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle)
+        simu.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
         out = Output(simu=simu)
         simu.run()
 
@@ -209,7 +210,6 @@ class Test_plots(object):
             symbol="B_r",
             name="Airgap radial flux density",
             unit="T",
-            symmetries={},
             axes=[Time3, Angle3],
             values=flux_arr,
         )
@@ -237,11 +237,10 @@ class Test_plots(object):
         )
 
         simu4 = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu4.input = InputFlux(B=B_FT, time=time, angle=angle)
         simu4.mag = None
         simu4.force = None
         simu4.struct = None
-        simu4.input = InputFlux(B=B, time=time, angle=angle)
+        simu4.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
         out4 = Output(simu=simu4)
         simu4.run()
         out4.post.legend_name = "Inverse FT"
@@ -330,15 +329,15 @@ class Test_plots(object):
         B_FT = import_data["B_FT"]
         freq_max = import_data["freq_max"]
         r_max = import_data["r_max"]
+        OP = import_data["OP"]
 
         N_stem = 100
 
         simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B, time=time, angle=angle)
+        simu.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle)
         out = Output(simu=simu)
         simu.run()
 
@@ -371,13 +370,13 @@ class Test_plots(object):
         B_FT = import_data["B_FT"]
         freq_max = import_data["freq_max"]
         r_max = import_data["r_max"]
+        OP = import_data["OP"]
 
         simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B_FT, time=time, angle=angle)
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle)
+        simu.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
         out = Output(simu=simu)
         simu.run()
 
@@ -411,13 +410,13 @@ class Test_plots(object):
         B_FT = import_data["B_FT"]
         freq_max = import_data["freq_max"]
         r_max = import_data["r_max"]
+        OP = import_data["OP"]
 
         simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B_FT, time=time, angle=angle)
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle)
+        simu.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
         out = Output(simu=simu)
         simu.run()
 
@@ -452,13 +451,13 @@ class Test_plots(object):
         B_FT = import_data["B_FT"]
         freq_max = import_data["freq_max"]
         r_max = import_data["r_max"]
+        OP = import_data["OP"]
 
         simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B, time=time, angle=angle)
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle)
+        simu.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
         out = Output(simu=simu)
         simu.run()
 
