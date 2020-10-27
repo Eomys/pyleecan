@@ -8,6 +8,9 @@ from ...definitions import config_dict
 
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 COLORMAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
+FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
+FONT_SIZE_LABEL = config_dict["PLOT"]["FONT_SIZE_LABEL"]
+FONT_SIZE_LEGEND = config_dict["PLOT"]["FONT_SIZE_LEGEND"]
 
 
 def plot_4D(
@@ -110,8 +113,8 @@ def plot_4D(
             vmax=z_max,
         )
         clb = fig.colorbar(c, ax=ax)
-        clb.ax.set_title(zlabel, fontsize=18, fontname=FONT_NAME)
-        clb.ax.tick_params(labelsize=18)
+        clb.ax.set_title(zlabel, fontsize=FONT_SIZE_LEGEND, fontname=FONT_NAME)
+        clb.ax.tick_params(labelsize=FONT_SIZE_LEGEND)
         for l in clb.ax.yaxis.get_ticklabels():
             l.set_family(FONT_NAME)
         if xticks is not None:
@@ -140,16 +143,16 @@ def plot_4D(
             + ax.get_yticklabels()
             + ax.get_zticklabels()
         ):
-            item.set_fontsize(22)
+            item.set_fontsize(FONT_SIZE_LABEL)
     else:
         for item in (
             [ax.xaxis.label, ax.yaxis.label]
             + ax.get_xticklabels()
             + ax.get_yticklabels()
         ):
-            item.set_fontsize(22)
+            item.set_fontsize(FONT_SIZE_LABEL)
             item.set_fontname(FONT_NAME)
-    ax.title.set_fontsize(24)
+    ax.title.set_fontsize(FONT_SIZE_TITLE)
     ax.title.set_fontname(FONT_NAME)
 
     if save_path is not None:
