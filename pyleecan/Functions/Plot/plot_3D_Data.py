@@ -132,7 +132,7 @@ def plot_3D_Data(
         z_min = np_min(Zdata)
     if z_max is None:
         z_max = np_max(Zdata)
-    size_flat = 1000 * Z_flat / z_max
+    size_flat = 500 * Z_flat / z_max
 
     # Build labels and titles
     axis = axes_list[0]
