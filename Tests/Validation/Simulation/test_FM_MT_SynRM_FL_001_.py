@@ -1,20 +1,20 @@
-from numpy import ones, pi, array, zeros, linspace, cos
+from numpy import pi, zeros, linspace, cos
 from os.path import join
-import matplotlib.pyplot as plt
+
 from Tests import save_validation_path as save_path
 
 from pyleecan.Classes.Simu1 import Simu1
 
 from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.InputFlux import InputFlux
+
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportMatlab import ImportMatlab
+
 from pyleecan.Classes.ForceMT import ForceMT
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from Tests import TEST_DATA_DIR
+
 import pytest
 import json
 
@@ -84,21 +84,35 @@ def test_Magnetic_AGSF():
 
     # Plot the AGSF as a function of space with the spatial fft
     r_max = 78
-    out.plot_A_space("force.P", is_fft=True, r_max=r_max)
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_FM_SynRM_FL_001_plot_force_space"))
+    out.plot_2D_Data(
+        "force.P",
+        "angle",
+        "time[0]",
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space.png"),
+    )
+
+    out.plot_2D_Data(
+        "force.P",
+        "wavenumber=[0," + str(r_max) + "]",
+        "time[0]",
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft.png"),
+    )
 
     # Plot the AGSF as a function of time with the time fft
     freq_max = 1000
-    out.plot_A_time("force.P", alpha=0, is_fft=True, freq_max=freq_max)
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_FM_SynRM_FL_001_plot_force_time"))
+    out.plot_2D_Data(
+        "force.P",
+        "time",
+        "angle[0]",
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_time.png"),
+    )
 
-    # # Plot the AGSF as a function of space with the spatial fft
-    # out.plot_A_space("force.Ptan", is_fft=True, r_max=r_max)
-
-    # # Plot the AGSF as a function of time with the time fft
-    # out.plot_A_time("force.Ptan", alpha=0, is_fft=True, freq_max=freq_max)
+    out.plot_2D_Data(
+        "force.P",
+        "freqs=[0," + str(freq_max) + "]",
+        "angle[0]",
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_time_fft.png"),
+    )
 
     # ------------------------------------------------------
 
@@ -111,38 +125,51 @@ def test_Magnetic_AGSF():
 
     # Plot the AGSF as a function of space with the spatial fft
     r_max = 78
-    out.plot_A_space(
+    out.plot_2D_Data(
         "force.P",
-        is_fft=True,
-        r_max=r_max,
-        fund_harm=0,
-        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space"),
+        "angle",
+        "time[0]",
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space2.png"),
+    )
+
+    out.plot_2D_Data(
+        "force.P",
+        "wavenumber=[0," + str(r_max) + "]",
+        "time[0]",
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft2.png"),
     )
 
     # Plot the AGSF as a function of time with the time fft
     freq_max = 1000
-    out.plot_A_time(
+    out.plot_2D_Data(
         "force.P",
-        alpha=0,
-        is_fft=True,
-        freq_max=freq_max,
-        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_time"),
+        "time",
+        "angle[0]",
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space2.png"),
     )
 
-    out.plot_A_fft2(
+    out.plot_2D_Data(
         "force.P",
-        component_list=["radial"],
-        freq_max=freq_max,
-        r_max=r_max,
-        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_fft2"),
+        "freqs=[0," + str(freq_max) + "]",
+        "angle[0]",
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft2.png"),
     )
 
-    out.plot_A_cfft2(
+    out.plot_3D_Data(
         "force.P",
+        "freqs=[0," + str(freq_max) + "]",
+        "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
         component_list=["radial"],
-        freq_max=freq_max,
-        r_max=r_max,
-        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_cfft2"),
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_fft2.png"),
+        is_2D_view=True,
+    )
+
+    out.plot_3D_Data(
+        "force.P",
+        "freqs=[0," + str(freq_max) + "]",
+        "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
+        component_list=["radial"],
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_cfft2.png"),
     )
 
     out.plot_A_time_space(
@@ -160,4 +187,12 @@ def test_Magnetic_AGSF():
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_flux_time_space"),
     )
 
+    return out
+
     # ------------------------------------------------------
+
+
+# To run it without pytest
+if __name__ == "__main__":
+
+    out = test_Magnetic_AGSF()

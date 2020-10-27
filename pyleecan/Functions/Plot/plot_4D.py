@@ -6,15 +6,18 @@ import mpl_toolkits.mplot3d.art3d as art3d
 from ...Functions.init_fig import init_subplot
 from ...definitions import config_dict
 
-COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
+COLORMAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
+FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
+FONT_SIZE_LABEL = config_dict["PLOT"]["FONT_SIZE_LABEL"]
+FONT_SIZE_LEGEND = config_dict["PLOT"]["FONT_SIZE_LEGEND"]
 
 
-def plot_A_3D(
+def plot_4D(
     Xdata,
     Ydata,
     Zdata,
-    colormap="RdBu",
+    Sdata,
     x_min=None,
     x_max=None,
     y_min=None,
@@ -27,16 +30,18 @@ def plot_A_3D(
     zlabel="",
     xticks=None,
     yticks=None,
+    xticklabels=None,
+    yticklabels=None,
     fig=None,
     subplot_index=None,
     is_logscale_x=False,
     is_logscale_y=False,
     is_logscale_z=False,
     is_disp_title=True,
-    type="stem",
+    type="scatter",
     save_path=None,
 ):
-    """Plots a 3D graph ("stem", "surf" or "pcolor")
+    """Plots a 4D graph
 
     Parameters
     ----------
@@ -46,6 +51,8 @@ def plot_A_3D(
         array of y-axis values
     Zdata : ndarray
         array of z-axis values
+    Sdata : ndarray
+        array of 4th axis values
     colormap : colormap object
         colormap prescribed by user
     x_min : float
@@ -89,92 +96,33 @@ def plot_A_3D(
     # Set figure/subplot
     is_show_fig = True if fig is None else False
     is_3d = False
-    if type != "pcolor" and type != "scatter":
+    if type != "scatter":
         is_3d = True
     fig, ax = init_subplot(fig=fig, subplot_index=subplot_index, is_3d=is_3d)
 
     # Plot
-    if type == "stem":
-        for xi, yi, zi in zip(Xdata, Ydata, Zdata):
-            line = art3d.Line3D(
-                *zip((xi, yi, 0), (xi, yi, zi)),
-                linewidth=3.0,
-                marker="o",
-                markersize=5.0,
-                markevery=(1, 1),
-                color=COLORS[0]
-            )
-            ax.add_line(line)
-        ax.set_xlim3d(x_max, x_min)
-        ax.set_ylim3d(y_min, y_max)
-        ax.set_zlim3d(z_min, z_max)
-        # set correct angle
-        ax.view_init(elev=20.0, azim=45)
-        ax.zaxis.set_rotate_label(False)
-        ax.set_zlabel(zlabel, rotation=0)
-        ax.xaxis.labelpad = 30
-        ax.yaxis.labelpad = 30
-        ax.zaxis.labelpad = 30
-        if xticks is not None:
-            ax.xaxis.set_ticks(xticks)
-        if yticks is not None:
-            ax.yaxis.set_ticks(yticks)
-        # white background
-        ax.xaxis.pane.fill = False
-        ax.yaxis.pane.fill = False
-        ax.zaxis.pane.fill = False
-        ax.xaxis.pane.set_edgecolor("w")
-        ax.yaxis.pane.set_edgecolor("w")
-        ax.zaxis.pane.set_edgecolor("w")
-        if is_logscale_z:
-            ax.zscale("log")
-    elif type == "surf":
-        ax.plot_surface(Xdata, Ydata, Zdata, cmap=colormap)
-        ax.set_xlim3d(x_max, x_min)
-        ax.set_ylim3d(y_min, y_max)
-        ax.set_zlim3d(z_min, z_max)
-        ax.zaxis.set_rotate_label(False)
-        ax.set_zlabel(zlabel, rotation=0)
-        ax.xaxis.labelpad = 30
-        ax.yaxis.labelpad = 30
-        ax.zaxis.labelpad = 30
-        if xticks is not None:
-            ax.xaxis.set_ticks(xticks)
-        if yticks is not None:
-            ax.yaxis.set_ticks(yticks)
-        # white background
-        ax.xaxis.pane.fill = False
-        ax.yaxis.pane.fill = False
-        ax.zaxis.pane.fill = False
-        ax.xaxis.pane.set_edgecolor("w")
-        ax.yaxis.pane.set_edgecolor("w")
-        ax.zaxis.pane.set_edgecolor("w")
-        if is_logscale_z:
-            ax.zscale("log")
-    elif type == "pcolor":
-        c = ax.pcolormesh(Xdata, Ydata, Zdata, cmap=colormap, vmin=z_min, vmax=z_max)
-        clb = fig.colorbar(c, ax=ax)
-        clb.ax.set_title(zlabel, fontsize=18, fontname=FONT_NAME)
-        clb.ax.tick_params(labelsize=18)
-        for l in clb.ax.yaxis.get_ticklabels():
-            l.set_family(FONT_NAME)
-        if xticks is not None:
-            ax.xaxis.set_ticks(xticks)
-        if yticks is not None:
-            ax.yaxis.set_ticks(yticks)
-    elif type == "scatter":
+    if type == "scatter":
         c = ax.scatter(
-            Xdata, Ydata, c=Zdata, marker="s", cmap=colormap, vmin=z_min, vmax=z_max
+            Xdata,
+            Ydata,
+            c=Zdata,
+            s=Sdata,
+            marker="s",
+            cmap=COLORMAP,
+            vmin=z_min,
+            vmax=z_max,
         )
         clb = fig.colorbar(c, ax=ax)
-        clb.ax.set_title(zlabel, fontsize=18, fontname=FONT_NAME)
-        clb.ax.tick_params(labelsize=18)
+        clb.ax.set_title(zlabel, fontsize=FONT_SIZE_LEGEND, fontname=FONT_NAME)
+        clb.ax.tick_params(labelsize=FONT_SIZE_LEGEND)
         for l in clb.ax.yaxis.get_ticklabels():
             l.set_family(FONT_NAME)
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
+            ax.set_xticklabels(xticklabels)
         if yticks is not None:
             ax.yaxis.set_ticks(yticks)
+            ax.set_yticklabels(yticklabels)
 
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
@@ -195,16 +143,16 @@ def plot_A_3D(
             + ax.get_yticklabels()
             + ax.get_zticklabels()
         ):
-            item.set_fontsize(22)
+            item.set_fontsize(FONT_SIZE_LABEL)
     else:
         for item in (
             [ax.xaxis.label, ax.yaxis.label]
             + ax.get_xticklabels()
             + ax.get_yticklabels()
         ):
-            item.set_fontsize(22)
+            item.set_fontsize(FONT_SIZE_LABEL)
             item.set_fontname(FONT_NAME)
-    ax.title.set_fontsize(24)
+    ax.title.set_fontsize(FONT_SIZE_TITLE)
     ax.title.set_fontname(FONT_NAME)
 
     if save_path is not None:

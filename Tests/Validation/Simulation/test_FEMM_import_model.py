@@ -22,10 +22,10 @@ IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
 @pytest.mark.validation
 @pytest.mark.FEMM
 @pytest.mark.long
-def test_import_FEMM_file():
+def test_FEMM_import_model():
     """Test to compute a simulation with/without reusing femm file"""
     # First simulation creating femm file
-    simu = Simu1(name="EM_IPMSM_FL_001", machine=IPMSM_xxx)
+    simu = Simu1(name="FEMM_import_model", machine=IPMSM_xxx)
 
     # Initialization of the simulation starting point
     simu.input = InputCurrent()
@@ -70,16 +70,13 @@ def test_import_FEMM_file():
 
     # Plot the result by comparing the two simulation
     plt.close("all")
-    out.plot_A_space(
+    out.plot_2D_Data(
         "mag.B",
+        "angle",
         data_list=[out2.mag.B],
         legend_list=["Creating .fem", "Importing .fem"],
-        color_list=["b", "r"],
-        linestyle_list=["-", "dotted"],
+        save_path=join(save_path, "FEMM_import_model_B.png"),
     )
-
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_import_FEMM_file.png"))
 
     assert_array_almost_equal(
         out.mag.B.components["tangential"].values,
