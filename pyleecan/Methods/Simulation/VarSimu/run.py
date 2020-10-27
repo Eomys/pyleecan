@@ -40,6 +40,7 @@ def run(self):
         logger.info("Computing reference simulation")
 
         simulation = simulation_list.pop(ref_simu_index)
+        simulation.index = ref_simu_index
         index_list.pop(ref_simu_index)
         xoutput.simu = simulation
 
