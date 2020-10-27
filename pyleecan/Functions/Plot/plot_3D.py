@@ -12,6 +12,7 @@ COLORMAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
 FONT_SIZE_LABEL = config_dict["PLOT"]["FONT_SIZE_LABEL"]
+FONT_SIZE_LEGEND = config_dict["PLOT"]["FONT_SIZE_LEGEND"]
 
 
 def plot_3D(
@@ -101,9 +102,9 @@ def plot_3D(
         for xi, yi, zi in zip(Xdata, Ydata, Zdata):
             line = art3d.Line3D(
                 *zip((xi, yi, 0), (xi, yi, zi)),
-                linewidth=3.0,
+                linewidth=2.0,
                 marker="o",
-                markersize=5.0,
+                markersize=3.0,
                 markevery=(1, 1),
                 color=COLORS[0]
             )
@@ -115,9 +116,9 @@ def plot_3D(
         ax.view_init(elev=20.0, azim=45)
         ax.zaxis.set_rotate_label(False)
         ax.set_zlabel(zlabel, rotation=0)
-        ax.xaxis.labelpad = 30
-        ax.yaxis.labelpad = 30
-        ax.zaxis.labelpad = 30
+        ax.xaxis.labelpad = 5
+        ax.yaxis.labelpad = 5
+        ax.zaxis.labelpad = 5
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
         if yticks is not None:
@@ -138,9 +139,9 @@ def plot_3D(
         ax.set_zlim3d(z_min, z_max)
         ax.zaxis.set_rotate_label(False)
         ax.set_zlabel(zlabel, rotation=0)
-        ax.xaxis.labelpad = 30
-        ax.yaxis.labelpad = 30
-        ax.zaxis.labelpad = 30
+        ax.xaxis.labelpad = 5
+        ax.yaxis.labelpad = 5
+        ax.zaxis.labelpad = 5
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
         if yticks is not None:
@@ -157,8 +158,8 @@ def plot_3D(
     elif type == "pcolor":
         c = ax.pcolormesh(Xdata, Ydata, Zdata, cmap=COLORMAP, vmin=z_min, vmax=z_max)
         clb = fig.colorbar(c, ax=ax)
-        clb.ax.set_title(zlabel, fontsize=FONT_SIZE_TITLE, fontname=FONT_NAME)
-        clb.ax.tick_params(labelsize=FONT_SIZE_LABEL)
+        clb.ax.set_title(zlabel, fontsize=FONT_SIZE_LEGEND, fontname=FONT_NAME)
+        clb.ax.tick_params(labelsize=FONT_SIZE_LEGEND)
         for l in clb.ax.yaxis.get_ticklabels():
             l.set_family(FONT_NAME)
         if xticks is not None:
@@ -170,8 +171,8 @@ def plot_3D(
             Xdata, Ydata, c=Zdata, marker="s", cmap=COLORMAP, vmin=z_min, vmax=z_max
         )
         clb = fig.colorbar(c, ax=ax)
-        clb.ax.set_title(zlabel, fontsize=FONT_SIZE_TITLE, fontname=FONT_NAME)
-        clb.ax.tick_params(labelsize=FONT_SIZE_LABEL)
+        clb.ax.set_title(zlabel, fontsize=FONT_SIZE_LEGEND, fontname=FONT_NAME)
+        clb.ax.tick_params(labelsize=FONT_SIZE_LEGEND)
         for l in clb.ax.yaxis.get_ticklabels():
             l.set_family(FONT_NAME)
         if xticks is not None:

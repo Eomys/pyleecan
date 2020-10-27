@@ -319,7 +319,7 @@ def plot_2D_Data(
         plot_2D(
             Xdatas,
             Ydatas,
-            legend_list=legend_list,
+            legend_list=legends,
             color_list=color_list,
             fig=fig,
             title=title,

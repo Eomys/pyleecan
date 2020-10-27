@@ -39,7 +39,7 @@ def CEFC_Lam():
     )
     stator.slot = None
     stator.winding.qs = 0
-    stator.winding.p = 0
+    stator.winding.p = 4
 
     # Rotor setup
     rotor = LamHole(

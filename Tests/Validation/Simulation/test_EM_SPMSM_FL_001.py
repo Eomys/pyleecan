@@ -100,7 +100,7 @@ def test_Magnetic_FEMM_sym():
         symbol="B_t",
     )
     B = ImportVectorField(components={"radial": Br_data, "tangential": Bt_data})
-    simu_load.input = InputFlux(time=time, Na_tot=Na_tot, B=B, OP=simu.input)
+    simu_load.input = InputFlux(time=time, Na_tot=Na_tot, B=B, OP=simu.input.copy())
     out = Output(simu=simu)
     simu.run()
 
@@ -131,3 +131,7 @@ def test_Magnetic_FEMM_sym():
         legend_list=["No symmetry", "MANATEE SDM"],
         save_path=join(save_path, "test_EM_SPMSM_FL_001_SDM.png"),
     )
+
+
+if __name__ == "__main__":
+    test_Magnetic_FEMM_sym()
