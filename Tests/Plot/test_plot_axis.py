@@ -219,7 +219,7 @@ def test_axis_LamWind(CURVE_COLORS):
     fig.savefig(join(save_path, "test_axis_LamWind_mmf.png"))
 
     # Plot maximum of the fundamental of the mmf
-    MMF = SCIM_001.stator.comp_mmf_unit(Na=600, Nt=1)
+    MMF = SCIM_001.stator.comp_mmf_unit(Na=600, Nt=1)[0]
     p = SCIM_001.stator.get_pole_pair_number()
     results = MMF.get_along("angle")
     angle_rotor = results["angle"]
