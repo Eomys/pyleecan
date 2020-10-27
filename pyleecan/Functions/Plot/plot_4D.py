@@ -7,6 +7,7 @@ from ...Functions.init_fig import init_subplot
 from ...definitions import config_dict
 
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
+COLORMAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 
 def plot_4D(
@@ -14,7 +15,6 @@ def plot_4D(
     Ydata,
     Zdata,
     Sdata,
-    colormap="RdBu",
     x_min=None,
     x_max=None,
     y_min=None,
@@ -105,7 +105,7 @@ def plot_4D(
             c=Zdata,
             s=Sdata,
             marker="s",
-            cmap=colormap,
+            cmap=COLORMAP,
             vmin=z_min,
             vmax=z_max,
         )
