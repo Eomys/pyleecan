@@ -422,8 +422,8 @@ class Test_plots(object):
 
         # Plot the 2D FFT of flux density as 2D scatter plot with colormap
         plt.close("all")
-        freq_max = (500,)
-        r_max = (20,)
+        freq_max = 500
+        r_max = 20
         out.plot_3D_Data(
             "mag.B",
             "freqs=[0," + str(freq_max) + "]",
