@@ -59,6 +59,7 @@ class Simulation(FrozenClass):
         var_simu=None,
         postproc_list=-1,
         index=None,
+        path_result=None,
         init_dict=None,
         init_str=None,
     ):
@@ -93,6 +94,8 @@ class Simulation(FrozenClass):
                 postproc_list = init_dict["postproc_list"]
             if "index" in list(init_dict.keys()):
                 index = init_dict["index"]
+            if "path_result" in list(init_dict.keys()):
+                path_result = init_dict["path_result"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -103,6 +106,7 @@ class Simulation(FrozenClass):
         self.var_simu = var_simu
         self.postproc_list = postproc_list
         self.index = index
+        self.path_result = path_result
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -144,6 +148,7 @@ class Simulation(FrozenClass):
                 "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
             )
         Simulation_str += "index = " + str(self.index) + linesep
+        Simulation_str += 'path_result = "' + str(self.path_result) + '"' + linesep
         return Simulation_str
 
     def __eq__(self, other):
@@ -166,6 +171,8 @@ class Simulation(FrozenClass):
         if other.postproc_list != self.postproc_list:
             return False
         if other.index != self.index:
+            return False
+        if other.path_result != self.path_result:
             return False
         return True
 
@@ -195,6 +202,7 @@ class Simulation(FrozenClass):
             for obj in self.postproc_list:
                 Simulation_dict["postproc_list"].append(obj.as_dict())
         Simulation_dict["index"] = self.index
+        Simulation_dict["path_result"] = self.path_result
         # The class name is added to the dict for deserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
@@ -214,6 +222,7 @@ class Simulation(FrozenClass):
         for obj in self.postproc_list:
             obj._set_None()
         self.index = None
+        self.path_result = None
 
     def _get_name(self):
         """getter of name"""
@@ -406,5 +415,23 @@ class Simulation(FrozenClass):
 
         :Type: int
         :min: 0
+        """,
+    )
+
+    def _get_path_result(self):
+        """getter of path_result"""
+        return self._path_result
+
+    def _set_path_result(self, value):
+        """setter of path_result"""
+        check_var("path_result", value, "str")
+        self._path_result = value
+
+    path_result = property(
+        fget=_get_path_result,
+        fset=_set_path_result,
+        doc=u"""Path to the Result folder to use (None to use default one)
+
+        :Type: str
         """,
     )

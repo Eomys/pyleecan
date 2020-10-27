@@ -6819,7 +6819,7 @@
                 "desc": "Path to the folder to same the results",
                 "max": "",
                 "min": "",
-                "name": "path_res",
+                "name": "path_result",
                 "type": "str",
                 "unit": "-",
                 "value": ""
@@ -7513,6 +7513,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Path to the Result folder to use (None to use default one)",
+                "max": "",
+                "min": "",
+                "name": "path_result",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
             }
         ]
     },
@@ -10138,7 +10147,8 @@
         "is_internal": false,
         "methods": [
             "check_param",
-            "get_simulations"
+            "get_simulations",
+            "get_simu_number"
         ],
         "mother": "VarSimu",
         "name": "VarParam",

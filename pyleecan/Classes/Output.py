@@ -331,7 +331,7 @@ class Output(FrozenClass):
     def __init__(
         self,
         simu=-1,
-        path_res="",
+        path_result="",
         geo=-1,
         elec=-1,
         mag=-1,
@@ -359,8 +359,8 @@ class Output(FrozenClass):
             # Overwrite default value with init_dict content
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
-            if "path_res" in list(init_dict.keys()):
-                path_res = init_dict["path_res"]
+            if "path_result" in list(init_dict.keys()):
+                path_result = init_dict["path_result"]
             if "geo" in list(init_dict.keys()):
                 geo = init_dict["geo"]
             if "elec" in list(init_dict.keys()):
@@ -378,7 +378,7 @@ class Output(FrozenClass):
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.simu = simu
-        self.path_res = path_res
+        self.path_result = path_result
         self.geo = geo
         self.elec = elec
         self.mag = mag
@@ -403,7 +403,7 @@ class Output(FrozenClass):
             Output_str += "simu = " + tmp
         else:
             Output_str += "simu = None" + linesep + linesep
-        Output_str += 'path_res = "' + str(self.path_res) + '"' + linesep
+        Output_str += 'path_result = "' + str(self.path_result) + '"' + linesep
         if self.geo is not None:
             tmp = self.geo.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Output_str += "geo = " + tmp
@@ -444,7 +444,7 @@ class Output(FrozenClass):
             return False
         if other.simu != self.simu:
             return False
-        if other.path_res != self.path_res:
+        if other.path_result != self.path_result:
             return False
         if other.geo != self.geo:
             return False
@@ -470,7 +470,7 @@ class Output(FrozenClass):
             Output_dict["simu"] = None
         else:
             Output_dict["simu"] = self.simu.as_dict()
-        Output_dict["path_res"] = self.path_res
+        Output_dict["path_result"] = self.path_result
         if self.geo is None:
             Output_dict["geo"] = None
         else:
@@ -505,7 +505,7 @@ class Output(FrozenClass):
 
         if self.simu is not None:
             self.simu._set_None()
-        self.path_res = None
+        self.path_result = None
         if self.geo is not None:
             self.geo._set_None()
         if self.elec is not None:
@@ -548,18 +548,18 @@ class Output(FrozenClass):
         """,
     )
 
-    def _get_path_res(self):
-        """getter of path_res"""
-        return self._path_res
+    def _get_path_result(self):
+        """getter of path_result"""
+        return self._path_result
 
-    def _set_path_res(self, value):
-        """setter of path_res"""
-        check_var("path_res", value, "str")
-        self._path_res = value
+    def _set_path_result(self, value):
+        """setter of path_result"""
+        check_var("path_result", value, "str")
+        self._path_result = value
 
-    path_res = property(
-        fget=_get_path_res,
-        fset=_set_path_res,
+    path_result = property(
+        fget=_get_path_result,
+        fset=_set_path_result,
         doc=u"""Path to the folder to same the results
 
         :Type: str

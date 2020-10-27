@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from os.path import join, dirname, abspath
+from os.path import join, dirname, abspath, isdir
+from os import makedirs
 
 
 def get_path_result(self):
@@ -18,9 +19,12 @@ def get_path_result(self):
         path to the result folder
     """
 
-    if self.path_res in [None, ""]:
-        # If the path doesn't exist, set the default one
-        self.path_res = abspath(
-            join(dirname(__file__), "..", "..", "..", "..", "Results", self.simu.name)
-        )
-    return self.path_res
+    if self.path_result in [None, ""]:
+        if self.simu.path_result is not None:
+            self.path_result = self.simu.path_result.replace("\\", "/")
+        else:
+            # If the path doesn't exist, set the default one
+            self.path_result = abspath(join(RESULT_DIR, self.simu.name))
+        if not isdir(self.path_result):
+            makedirs(self.path_result)  # Make sure that the folder exist
+    return self.path_result
