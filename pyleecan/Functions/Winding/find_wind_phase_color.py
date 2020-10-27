@@ -22,9 +22,9 @@ def find_wind_phase_color(label, wind_mat):
 
     """
     st = label.split("_")
-    Nrad = int(st[1][1:])
-    Ntan = int(st[2][1:])
-    Zs = int(st[3][1:])
+    Nrad = int(st[2][1:])
+    Ntan = int(st[3][1:])
+    Zs = int(st[4][1:])
     if wind_mat is not None:
         q = get_phase_id(wind_mat, Nrad, Ntan, Zs)
         if q is None:  # No phase => White

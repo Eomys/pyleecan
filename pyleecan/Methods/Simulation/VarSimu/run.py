@@ -1,10 +1,14 @@
 import numpy as np
 import itertools
 from ....Functions.Simulation.VarSimu.run_single_simu import run_single_simu
+from ....Functions.Load.import_class import import_class
 
 
 def run(self):
     """Run each simulation contained"""
+
+    logger = self.get_logger()
+
     # Check var_simu parameters
     self.check_param()
 
@@ -33,7 +37,6 @@ def run(self):
     ref_simu_in_multsim = isinstance(self.ref_simu_index, int)
 
     if ref_simu_in_multsim:
-        logger = self.get_logger()
         logger.info("Computing reference simulation")
 
         simulation = simulation_list.pop(ref_simu_index)
@@ -66,8 +69,21 @@ def run(self):
 
     # Execute the other simulations
     nb_simu = self.nb_simu
+    InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
     for idx, [i, simulation] in zip(index_list, enumerate(simulation_list)):
         simulation.index = idx  # For plot and save results
+        msg = "Running simulation " + str(idx + 1) + "/" + str(self.nb_simu) + " with "
+        for param_exp in simu_dict["paramexplorer_list"]:
+            if isinstance(param_exp.get_value()[idx], InputCurrent):
+                msg += "Id=" + format(param_exp.get_value()[idx].Id_ref, ".8g")
+                msg += ", Iq=" + format(param_exp.get_value()[idx].Iq_ref, ".8g") + ", "
+            else:
+                msg += param_exp.symbol
+                msg += "="
+                msg += format(param_exp.get_value()[idx], ".8g")
+                msg += ", "
+        msg = msg[:-2]
+        logger.info(msg)
         # Run the simulation handling errors
         run_single_simu(
             xoutput,
@@ -83,8 +99,7 @@ def run(self):
             "\r["
             + "=" * (50 * (i + 1 + ref_simu_in_multsim) // (nb_simu))
             + " " * (50 - ((50 * (i + 1 + ref_simu_in_multsim)) // (nb_simu)))
-            + "] {:3d}%".format(((100 * (i + 1 + ref_simu_in_multsim)) // (nb_simu))),
-            end="",
+            + "] {:3d}%".format(((100 * (i + 1 + ref_simu_in_multsim)) // (nb_simu)))
         )
 
     # Running postprocessings

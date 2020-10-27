@@ -43,11 +43,8 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         )
     self.check()
 
-    # check if the slot is on the stator for the label
-    if self.get_is_stator():
-        st = "S"
-    else:
-        st = "R"
+    # get the name of the lamination
+    st = self.get_name_lam()
 
     [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10, Z11] = self._comp_point_coordinate()
 
@@ -87,10 +84,10 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         wind2.append(Segment(Zw2s, Zw3s))
 
     surf_list.append(
-        SurfLine(line_list=wind1, label="Wind" + st + "_R0_T0_S0", point_ref=Ref1)
+        SurfLine(line_list=wind1, label="Wind_" + st + "_R0_T0_S0", point_ref=Ref1)
     )
     surf_list.append(
-        SurfLine(line_list=wind2, label="Wind" + st + "_R0_T1_S0", point_ref=Ref2)
+        SurfLine(line_list=wind2, label="Wind_" + st + "_R0_T1_S0", point_ref=Ref2)
     )
 
     # Rotate and translate the surfaces

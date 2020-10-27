@@ -1,3 +1,6 @@
+from numpy import ndarray, min as np_min, max as np_max
+
+
 def run_single_simu(
     xoutput,
     datakeeper_list,
@@ -66,8 +69,39 @@ def run_single_simu(
                 ):
                     setattr(xoutput, attr, getattr(result, attr))
 
-        # Execute keepers
+        # DataKeeper
+        msg = "Results: "
         for datakeeper in datakeeper_list:
+            # Run and store Datakeeper
             xoutput.xoutput_dict[datakeeper.symbol].result[index] = datakeeper.keeper(
                 result
             )
+            # Format log
+            if isinstance(
+                xoutput.xoutput_dict[datakeeper.symbol].result[index], ndarray
+            ):
+                msg += (
+                    datakeeper.symbol
+                    + "=array(min="
+                    + format(
+                        np_min(xoutput.xoutput_dict[datakeeper.symbol].result[index]),
+                        ".8g",
+                    )
+                    + ",max="
+                    + format(
+                        np_max(xoutput.xoutput_dict[datakeeper.symbol].result[index]),
+                        ".8g",
+                    )
+                    + ")"
+                )
+            else:
+                msg += (
+                    datakeeper.symbol
+                    + "="
+                    + format(
+                        xoutput.xoutput_dict[datakeeper.symbol].result[index], ".8g"
+                    )
+                )
+            msg += ", "
+        msg = msg[:-2]
+        simulation.get_logger().info(msg)
