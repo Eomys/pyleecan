@@ -7508,6 +7508,15 @@
                 "type": "[Post]",
                 "unit": "-",
                 "value": []
+            },
+            {
+                "desc": "Index of the simulation (if part of a multi-simulation)",
+                "max": "",
+                "min": "0",
+                "name": "index",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },

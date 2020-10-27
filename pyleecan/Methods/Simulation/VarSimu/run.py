@@ -67,6 +67,7 @@ def run(self):
     # Execute the other simulations
     nb_simu = self.nb_simu
     for idx, [i, simulation] in zip(index_list, enumerate(simulation_list)):
+        simulation.index = idx  # For plot and save results
         # Run the simulation handling errors
         run_single_simu(
             xoutput,
