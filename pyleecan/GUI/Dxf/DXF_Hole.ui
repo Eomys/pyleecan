@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DXF</class>
- <widget class="QDialog" name="DXF">
+ <class>DXF_Hole</class>
+ <widget class="QDialog" name="DXF_Hole">
   <property name="geometry">
    <rect>
     <x>0</x>

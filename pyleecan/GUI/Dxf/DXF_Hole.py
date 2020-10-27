@@ -13,7 +13,7 @@ from ...Classes.HoleUD import HoleUD
 from ...Classes.Magnet import Magnet
 from ...Classes.SurfLine import SurfLine
 from ...GUI.Tools.MPLCanvas import MPLCanvas2
-from .Ui_DXF import Ui_DXF
+from .Ui_DXF_Hole import Ui_DXF_Hole
 
 # Column index for table
 TYPE_COL = 0
@@ -21,7 +21,7 @@ DEL_COL = 1
 HL_COL = 2
 
 
-class DXF(Ui_DXF, QWidget):
+class DXF_Hole(Ui_DXF_Hole, QWidget):
     """Dialog to create HoleUD objects from DXF files"""
 
     def __init__(self, dxf_path=None):
@@ -29,8 +29,8 @@ class DXF(Ui_DXF, QWidget):
 
         Parameters
         ----------
-        self : DXF
-            a DXF object
+        self : DXF_Hole
+            a DXF_Hole object
         dxf_path : str
             Path to a dxf file to read
         """
@@ -87,8 +87,8 @@ class DXF(Ui_DXF, QWidget):
 
         Parameters
         ----------
-        self : DXF
-            a DXF object
+        self : DXF_Hole
+            a DXF_Hole object
         """
 
         # Read the DXF file
@@ -105,8 +105,8 @@ class DXF(Ui_DXF, QWidget):
 
         Parameters
         ----------
-        self : DXF
-            a DXF object
+        self : DXF_Hole
+            a DXF_Hole object
         """
         fig, axes = self.w_viewer.fig, self.w_viewer.axes
         axes.set_axis_off()
@@ -183,8 +183,8 @@ class DXF(Ui_DXF, QWidget):
 
         Parameters
         ----------
-        self : DXF
-            a DXF object
+        self : DXF_Hole
+            a DXF_Hole object
         """
         fig, axes = self.w_viewer.fig, self.w_viewer.axes
         axes.clear()
@@ -206,8 +206,8 @@ class DXF(Ui_DXF, QWidget):
 
         Parameters
         ----------
-        self : DXF
-            a DXF object
+        self : DXF_Hole
+            a DXF_Hole object
 
         Returns
         -------
@@ -241,8 +241,8 @@ class DXF(Ui_DXF, QWidget):
 
         Parameters
         ----------
-        self : DXF
-            a DXF object
+        self : DXF_Hole
+            a DXF_Hole object
         """
 
         # Get all the selected lines
@@ -308,8 +308,8 @@ class DXF(Ui_DXF, QWidget):
 
         Parameters
         ----------
-        self : DXF
-            a DXF object
+        self : DXF_Hole
+            a DXF_Hole object
 
         Returns
         -------
@@ -352,8 +352,8 @@ class DXF(Ui_DXF, QWidget):
 
         Parameters
         ----------
-        self : DXF
-            a DXF object
+        self : DXF_Hole
+            a DXF_Hole object
         """
         hole = self.get_hole()
         hole.plot()
@@ -363,8 +363,8 @@ class DXF(Ui_DXF, QWidget):
 
         Parameters
         ----------
-        self : DXF
-            a DXF object
+        self : DXF_Hole
+            a DXF_Hole object
         """
         nrow = self.w_surface_list.currentRow()
         self.surf_list.pop(nrow)
@@ -375,8 +375,8 @@ class DXF(Ui_DXF, QWidget):
 
         Parameters
         ----------
-        self : DXF
-            a DXF object
+        self : DXF_Hole
+            a DXF_Hole object
         """
         self.selected_list = [False for line in self.line_list]
         surf = self.surf_list[self.w_surface_list.currentRow()]
@@ -393,8 +393,8 @@ class DXF(Ui_DXF, QWidget):
 
         Parameters
         ----------
-        self : DXF
-            a DXF object
+        self : DXF_Hole
+            a DXF_Hole object
         """
 
         hole = self.get_hole()
