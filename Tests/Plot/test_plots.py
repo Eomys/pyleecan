@@ -116,7 +116,8 @@ class Test_plots(object):
 
         time_arr = squeeze(time.get_data())
         angle_arr = squeeze(angle.get_data())
-        flux_arr = flux.get_data()
+        flux_arr = flux.get_data()                
+        norm_angle = {"space_order": 3}
 
         simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
         simu.mag = None
@@ -137,14 +138,15 @@ class Test_plots(object):
         Time2 = Data1D(
             name="time",
             unit="s",
-            symmetries={"time": {"period": 3}},
+            symmetries={"period": 3},
             values=time_reduced,
         )
         Angle2 = Data1D(
             name="angle",
             unit="rad",
-            symmetries={"angle": {"period": 3}},
+            symmetries={"period": 3},
             values=angle_reduced,
+            normalizations = norm_angle,
         )
         Br2 = DataTime(
             symbol="B_r",
@@ -191,7 +193,6 @@ class Test_plots(object):
         Time3 = DataLinspace(
             name="time",
             unit="s",
-            symmetries={},
             initial=t0,
             final=tf + deltat,
             step=deltat,
@@ -200,7 +201,7 @@ class Test_plots(object):
         Angle3 = DataLinspace(
             name="angle",
             unit="rad",
-            symmetries={},
+            normalizations = norm_angle,
             initial=a0,
             step=deltaa,
             number=Na,
@@ -280,7 +281,6 @@ class Test_plots(object):
         Time5 = DataLinspace(
             name="time",
             unit="s",
-            symmetries={},
             initial=t0,
             final=tf,
             number=Nt,
