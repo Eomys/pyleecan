@@ -266,10 +266,10 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # No magnet and W1 = 0
     curve_list = list()
-    curve_list.append(Arc1(Z1, Z11, Rbo - self.H1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z1, Z11, Rbo - self.H1, is_trigo_direction=True))
     curve_list.append(Segment(Z11, Z8))
     curve_list.append(Segment(Z8, Z11s))
-    curve_list.append(Arc1(Z11s, Z1s, Rbo - self.H1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z11s, Z1s, Rbo - self.H1, is_trigo_direction=True))
     curve_list.append(Segment(Z1s, Z2s))
     if self.H3 > 0:
         curve_list.append(Segment(Z2s, Z3s))

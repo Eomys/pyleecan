@@ -27,7 +27,7 @@ def comp_axes(self, machine, N0=None):
 
     """
     if self.time is None and N0 is None:
-            raise InputError("ERROR: time and N0 can't be both None")
+        raise InputError("ERROR: time and N0 can't be both None")
 
     # Get machine pole pair number
     p = machine.get_pole_pair_number()
@@ -38,18 +38,18 @@ def comp_axes(self, machine, N0=None):
     # Airgap radius
     Rag = machine.comp_Rgap_mec()
 
-    # Setup normalizations for time and angle axes 
-    norm_time = {        
+    # Setup normalizations for time and angle axes
+    norm_time = {
         "elec_order": f_elec,
         "mech_order": f_elec / p,
-    }    
+    }
     if N0 is not None:
-        norm_time["angle_rotor"]= 1/(360*N0/60)
-        
+        norm_time["angle_rotor"] = 1 / (360 * N0 / 60)
+
     norm_angle = {"space_order": p, "distance": 1 / Rag}
 
     # Create time axis
-    if self.time is None:        
+    if self.time is None:
         # Create time axis as a DataLinspace
         Time = DataLinspace(
             name="time",

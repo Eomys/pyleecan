@@ -187,12 +187,12 @@ def test_Magnetic_AGSF():
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_flux_time_space"),
     )
 
-    return out    
-    
+    return out
+
     # ------------------------------------------------------
-    
+
+
 # To run it without pytest
 if __name__ == "__main__":
 
     out = test_Magnetic_AGSF()
-

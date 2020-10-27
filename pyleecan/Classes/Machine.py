@@ -96,6 +96,11 @@ except ImportError as error:
     plot_anim_rotor = error
 
 try:
+    from ..Methods.Machine.Machine.get_lam_list import get_lam_list
+except ImportError as error:
+    get_lam_list = error
+
+try:
     from ..Methods.Machine.Machine.get_pole_pair_number import get_pole_pair_number
 except ImportError as error:
     get_pole_pair_number = error
@@ -277,6 +282,17 @@ class Machine(FrozenClass):
         )
     else:
         plot_anim_rotor = plot_anim_rotor
+    # cf Methods.Machine.Machine.get_lam_list
+    if isinstance(get_lam_list, ImportError):
+        get_lam_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_list: " + str(get_lam_list)
+                )
+            )
+        )
+    else:
+        get_lam_list = get_lam_list
     # cf Methods.Machine.Machine.get_pole_pair_number
     if isinstance(get_pole_pair_number, ImportError):
         get_pole_pair_number = property(

@@ -19,6 +19,6 @@ def comp_surface_wind(self, Ndisc=200):
 
     """
 
-    surf = self.build_geometry_wind(Nrad=1, Ntan=1)
+    surf = self.get_surface_wind()
 
-    return surf[0].comp_surface(Ndisc=Ndisc)
+    return surf.comp_surface(Ndisc=Ndisc)

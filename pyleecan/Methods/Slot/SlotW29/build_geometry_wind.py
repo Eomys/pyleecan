@@ -30,10 +30,9 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
 
     """
 
-    if self.get_is_stator():  # check if the slot is on the stator
-        st = "S"
-    else:
-        st = "R"
+    # get the name of the lamination
+    st = self.get_name_lam()
+
     [Z12, Z11, Z10, Z9, Z8, Z7, Z6, Z5, Z4, Z3, Z2, Z1] = self._comp_point_coordinate()
 
     X = linspace(Z8, Z7, Nrad + 1)
@@ -73,7 +72,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
                     curve_list.append(Segment(Z2, Z3))
                 if ii != Nrad - 1:
                     curve_list.append(Segment(Z3, Z4))
-                label = "Wind" + st + "_R" + str(ii) + "_T" + str(jj) + "_S0"
+                label = "Wind_" + st + "_R" + str(ii) + "_T" + str(jj) + "_S0"
                 surface = SurfLine(
                     line_list=curve_list, label=label, point_ref=point_ref
                 )
@@ -86,7 +85,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
                 curve_list.append(Segment(Z4, Z1))
                 surface = SurfLine(
                     line_list=curve_list,
-                    label="Wind" + st + "_R" + str(ii) + "_T" + str(jj) + "_S0",
+                    label="Wind_" + st + "_R" + str(ii) + "_T" + str(jj) + "_S0",
                     point_ref=point_ref,
                 )
                 surf_list.append(surface)
