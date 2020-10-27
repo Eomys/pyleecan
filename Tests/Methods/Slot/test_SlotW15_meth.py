@@ -113,3 +113,12 @@ class Test_SlotW15_meth(object):
 
         with pytest.raises(S15InnerError) as context:
             test_obj.slot._comp_point_coordinate()
+
+    def test_get_surface_wind(self):
+        """Check that the get_surface_wind works when stator = false"""
+        lam = LamSlot(is_internal=False, Rint=0.3164, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW15(
+            H0=0.1584, H1=5e-3, H2=20e-3, R1=0.15648, R2=4e-3, W0=5e-3, W3=10e-3
+        )
+        result = lam.slot.get_surface_wind()
+        assert result.label == "WindR_R0_T0_S0"

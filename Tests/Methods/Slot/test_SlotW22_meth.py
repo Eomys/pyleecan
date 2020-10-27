@@ -152,3 +152,10 @@ class Test_SlotW22_meth(object):
                 a = result[i].angle
                 b = curve_list[i].angle
                 assert abs((a - b) / a - 0) < DELTA
+
+    def test_get_surface_wind(self):
+        """Check that the get_surface_wind works when stator = false"""
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW22(Zs=36, W0=pi / 72, W2=pi / 36, H0=6e-3, H2=40e-3)
+        result = lam.slot.get_surface_wind()
+        assert result.label == "WindR_R0_T0_S0"

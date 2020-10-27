@@ -30,7 +30,7 @@ slotW16_test.append(
 )
 
 # External Slot
-lam = LamSlot(is_internal=False, Rext=0.1325)
+lam = LamSlot(is_internal=False, Rext=0.1325, is_stator=False)
 lam.slot = SlotW16(Zs=8, H0=5e-3, H2=30e-3, R1=5e-3, W0=pi / 12, W3=10e-3)
 slotW16_wrong_test.append(
     {
@@ -117,3 +117,10 @@ class Test_SlotW16_meth(object):
 
         with pytest.raises(S16OutterError) as context:
             test_obj.slot._comp_point_coordinate()
+
+    def test_get_surface_wind(self):
+        """Check that the get_surface_wind works when stator = false"""
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW16(Zs=8, H0=5e-3, H2=30e-3, R1=5e-3, W0=pi / 12, W3=10e-3)
+        result = lam.slot.get_surface_wind()
+        assert result.label == "WindR_R0_T0_S0"

@@ -31,7 +31,7 @@ slotW13_test.append(
 )
 
 # Outward Slot
-lam = LamSlot(is_internal=False, Rint=0.1325)
+lam = LamSlot(is_internal=False, Rint=0.1325, is_stator=False)
 lam.slot = SlotW13(
     H0=5e-3, H1=10e-3, H2=30e-3, W0=10e-3, W1=14e-3, W2=8e-3, W3=20e-3, H1_is_rad=False
 )
@@ -148,3 +148,19 @@ class Test_SlotW13_meth(object):
 
         with pytest.raises(S13_H1rCheckError) as context:
             test_obj.check()
+
+    def test_get_surface_wind(self):
+        """Check that the get_surface_wind works when stator = false"""
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW13(
+            H0=5e-3,
+            H1=10e-3,
+            H2=30e-3,
+            W0=10e-3,
+            W1=14e-3,
+            W2=8e-3,
+            W3=20e-3,
+            H1_is_rad=False,
+        )
+        result = lam.slot.get_surface_wind()
+        assert result.label == "WindR_R0_T0_S0"

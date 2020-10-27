@@ -247,3 +247,12 @@ class Test_SlowW21_meth(object):
 
         with pytest.raises(S21_H1rCheckError) as context:
             lam.slot.check()
+
+    def test_get_surface_wind(self):
+        """Check that the get_surface_wind works when stator = false"""
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW21(
+            Zs=36, H0=3e-3, H1=0, H1_is_rad=False, H2=20e-3, W0=3e-3, W1=13e-3, W2=10e-3
+        )
+        result = lam.slot.get_surface_wind()
+        assert result.label == "WindR_R0_T0_S0"

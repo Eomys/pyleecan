@@ -127,3 +127,10 @@ class Test_SlotW25_meth(object):
 
         with pytest.raises(S25_HWCheckError) as context:
             lam.slot.check()
+
+    def test_get_surface_wind(self):
+        """Check that the get_surface_wind works when stator = false"""
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW25(Zs=10, H1=3e-3, H2=30e-3, W3=20e-3, W4=40e-3)
+        result = lam.slot.get_surface_wind()
+        assert result.label == "WindR_R0_T0_S0"
