@@ -7,6 +7,7 @@ from pyleecan.Classes.SlotMFlat import SlotMFlat
 from pyleecan.Classes.MagnetType10 import MagnetType10
 from pyleecan.Classes.Segment import Segment
 from pyleecan.Methods.Machine.Magnet.comp_surface import comp_surface
+from pyleecan.Methods import ParentMissingError
 
 from numpy import exp
 
@@ -79,6 +80,12 @@ class Test_Magnet_Type_10_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
+        # Checking the error
+
+        magnet = MagnetType10(Hmag=5e-3, Wmag=10e-3)
+        with pytest.raises(ParentMissingError) as context:
+            magnet.comp_angle_opening()
+
     @pytest.mark.parametrize("test_dict", Mag10_test)
     def test_comp_radius_mec(self, test_dict):
         """Check that the computation of the opening angle is correct"""
@@ -126,6 +133,12 @@ class Test_Magnet_Type_10_meth(object):
             b = curve_list[i].end
             assert abs((a - b) / a - 0) < DELTA
 
+        # Checking the error
+
+        magnet = MagnetType10(Hmag=5e-3, Wmag=10e-3)
+        with pytest.raises(ParentMissingError) as context:
+            magnet.build_geometry()
+
     def test_build_geometry_out(self):
         """check that curve_list is correct (outwards magnet)"""
         lam = LamSlotMag(
@@ -164,3 +177,47 @@ class Test_Magnet_Type_10_meth(object):
             a = result[i].end
             b = curve_list[i].end
             assert abs((a - b) / a - 0) < DELTA
+
+        # Checking the error
+
+        magnet = MagnetType10(Hmag=5e-3, Wmag=10e-3)
+        with pytest.raises(ParentMissingError) as context:
+            magnet.build_geometry()
+
+        # Is simplified + W0 > Wmag
+
+        lam = LamSlotMag(
+            Rint=1,
+            Rext=0.09,
+            is_internal=False,
+            is_stator=False,
+            L1=0.45,
+            Nrvd=1,
+            Wrvd=0.05,
+        )
+        lam.slot = SlotMFlat(
+            Zs=8, W0=0.8, H0=0.2, magnet=[MagnetType10(Wmag=0.6, Hmag=0.2)]
+        )
+        test_obj = lam.slot.magnet[0]
+        surface = test_obj.build_geometry(is_simplified=True)
+
+        assert len(surface[0].line_list) == 3
+
+        # Is simplified + H0 < Hmag
+
+        lam = LamSlotMag(
+            Rint=1,
+            Rext=0.09,
+            is_internal=False,
+            is_stator=False,
+            L1=0.45,
+            Nrvd=1,
+            Wrvd=0.05,
+        )
+        lam.slot = SlotMFlat(
+            Zs=8, W0=0.6, H0=0.2, magnet=[MagnetType10(Wmag=0.6, Hmag=0.8)]
+        )
+        test_obj = lam.slot.magnet[0]
+        surface = test_obj.build_geometry(is_simplified=True)
+
+        assert len(surface[0].line_list) == 3

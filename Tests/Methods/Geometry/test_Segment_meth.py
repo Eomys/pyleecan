@@ -3,6 +3,7 @@ from pyleecan.Classes.Segment import Segment
 
 from pyleecan.Methods.Geometry.Segment.check import PointSegmentError
 from pyleecan.Methods.Geometry.Segment.discretize import NbPointSegmentDError
+from pyleecan.Methods.Geometry.Segment.rotate import AngleRotationSegmentError
 from numpy import pi, array, exp, sqrt
 import pytest
 
@@ -150,6 +151,9 @@ class Test_Segment_meth(object):
         expect_end = -1j
         assert round(abs(abs(expect_begin - segment.begin) - 0), 7) == 0
         assert round(abs(abs(expect_end - segment.end) - 0), 7) == 0
+
+        with pytest.raises(AngleRotationSegmentError) as context:
+            segment.rotate("error")
 
     def test_translate(self):
         """Check that you can translate the segment"""

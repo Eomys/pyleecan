@@ -2,6 +2,7 @@
 
 from pyleecan.Classes.Arc3 import Arc3
 from pyleecan.Classes.Arc2 import Arc2
+from pyleecan.Methods.Geometry.Arc3.rotate import AngleRotationArc3Error
 from numpy import pi, exp, sqrt, linspace
 
 import pytest
@@ -329,3 +330,13 @@ class Test_Arc3_meth(object):
         assert round(abs(arc.begin - test_dict["N_begin"]), 7) == 0
         assert round(abs(arc.center - test_dict["N_center"]), 7) == 0
         assert round(abs(arc.angle - test_dict["N_angle"]), 7) == 0
+
+    def test_arc_rotate_error(self):
+        """Check that the arc3 rotate raise an error"""
+        arc = Arc3(
+            begin=1 - 5j,
+            end=3 + 2j,
+            is_trigo_direction=True,
+        )
+        with pytest.raises(AngleRotationArc3Error) as context:
+            arc.rotate("error")
