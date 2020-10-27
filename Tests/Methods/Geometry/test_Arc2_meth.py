@@ -450,6 +450,13 @@ class Test_Arc2_meth(object):
         b = pi / 4
         assert abs((a - b) / a - 0) < DELTA
 
+        # The end point is to close from 0
+
+        test_obj = Arc2(0, 0.00000000000000000001, -pi / 6)
+        result = test_obj.get_end()
+
+        assert result == 0
+
     @pytest.mark.parametrize("test_dict", comp_mid_test)
     def test_get_middle(self, test_dict):
         """Check that the middle is computed correctly"""

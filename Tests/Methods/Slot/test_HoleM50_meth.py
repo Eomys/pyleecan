@@ -309,3 +309,43 @@ class Test_HoleM50_meth(object):
         assert result[5].label[:5] == "Hole_"
         assert result[5].label[-9:] == "_R0_T3_S0"
         assert len(result[5].line_list) == 7
+
+    def test_comp_radius_mid_yoke(self):
+        test_obj = LamHole(is_internal=True, is_stator=False, Rext=0.325, Rint=0.032121)
+        test_obj.hole.append(
+            HoleM50(
+                Zh=8,
+                W0=50e-3,
+                W1=2e-3,
+                W2=1e-3,
+                W3=1e-3,
+                W4=20.6e-3,
+                H0=17.3e-3,
+                H1=1.25e-3,
+                H2=0.5e-3,
+                H3=6.8e-3,
+                H4=1e-3,
+            )
+        )
+        assert test_obj.comp_radius_mid_yoke() == 0.1661908960397621
+
+        test_obj = LamHole(
+            is_internal=False, is_stator=False, Rext=0.325, Rint=0.032121
+        )
+        test_obj.hole.append(
+            HoleM50(
+                Zh=8,
+                W0=50e-3,
+                W1=2e-3,
+                W2=1e-3,
+                W3=1e-3,
+                W4=20.6e-3,
+                H0=17.3e-3,
+                H1=1.25e-3,
+                H2=0.5e-3,
+                H3=6.8e-3,
+                H4=1e-3,
+            )
+        )
+        assert test_obj.comp_radius_mid_yoke() != 0.1661908960397621
+        assert test_obj.comp_radius_mid_yoke() == 0.1785605
