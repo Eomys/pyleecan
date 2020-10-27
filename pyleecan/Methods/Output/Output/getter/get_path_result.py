@@ -2,6 +2,7 @@
 
 from os.path import join, dirname, abspath, isdir
 from os import makedirs
+from .....definitions import RESULT_DIR
 
 
 def get_path_result(self):

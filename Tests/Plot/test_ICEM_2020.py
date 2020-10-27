@@ -80,11 +80,11 @@ def test_FEMM_sym():
 
     # FEMM files (mesh and results) are available in Results folder
     copyfile(
-        join(out.path_res, "Femm", "fig_09_FEMM_sym_model.ans"),
+        join(out.path_result, "Femm", "fig_09_FEMM_sym_model.ans"),
         join(save_path, "fig_09_FEMM_sym_model.ans"),
     )
     copyfile(
-        join(out.path_res, "Femm", "fig_09_FEMM_sym_model.fem"),
+        join(out.path_result, "Femm", "fig_09_FEMM_sym_model.fem"),
         join(save_path, "fig_09_FEMM_sym_model.fem"),
     )
 
@@ -489,11 +489,11 @@ def test_ecc_FEMM():
 
     # FEMM files (mesh and results) are available in Results folder
     copyfile(
-        join(out.path_res, "Femm", "fig_19_Transform_list_model.ans"),
+        join(out.path_result, "Femm", "fig_19_Transform_list_model.ans"),
         join(save_path, "fig_19_Transform_list_model.ans"),
     )
     copyfile(
-        join(out.path_res, "Femm", "fig_19_Transform_list_model.fem"),
+        join(out.path_result, "Femm", "fig_19_Transform_list_model.fem"),
         join(save_path, "fig_19_Transform_list_model.fem"),
     )
     # Plot, check, save
