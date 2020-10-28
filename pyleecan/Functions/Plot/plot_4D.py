@@ -40,6 +40,7 @@ def plot_4D(
     is_disp_title=True,
     type="scatter",
     save_path=None,
+    is_show_fig=None,
 ):
     """Plots a 4D graph
 
@@ -91,10 +92,16 @@ def plot_4D(
         boolean indicating if the title must be displayed
     type : str
         type of 3D graph : "stem", "surf", "pcolor" or "scatter"
+    save_path : str
+        full path including folder, name and extension of the file to save if save_path is not None
+    is_show_fig : bool
+        True to show figure after plot
     """
 
     # Set figure/subplot
-    is_show_fig = True if fig is None else False
+    if is_show_fig is None:
+        is_show_fig = True if fig is None else False
+
     is_3d = False
     if type != "scatter":
         is_3d = True

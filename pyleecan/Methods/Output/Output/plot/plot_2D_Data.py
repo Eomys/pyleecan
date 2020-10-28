@@ -28,6 +28,7 @@ def plot_2D_Data(
     barwidth=100,
     type_plot=None,
     fund_harm_dict=None,
+    is_show_fig=None,
 ):
     """Plots a field as a function of time
 
@@ -77,7 +78,8 @@ def plot_2D_Data(
         type of 2D graph : "curve", "bargraph", "barchart" or "quiver"
     fund_harm_dict : dict
         Dict containing axis name as key and frequency/order/wavenumber of fundamental harmonic as value to display fundamental harmonic in red in the fft
-
+    is_show_fig : bool
+        True to show figure after plot
     """
 
     # Get Data object names
@@ -124,8 +126,8 @@ def plot_2D_Data(
                 barwidth=barwidth,
                 type_plot=type_plot,
                 fund_harm_dict=fund_harm_dict,
+                is_show_fig=is_show_fig,
             )
-            fig.show()
 
     else:
         (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
@@ -151,5 +153,5 @@ def plot_2D_Data(
             barwidth=barwidth,
             type_plot=type_plot,
             fund_harm_dict=fund_harm_dict,
+            is_show_fig=is_show_fig,
         )
-        fig.show()

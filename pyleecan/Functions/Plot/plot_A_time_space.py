@@ -22,6 +22,8 @@ def plot_A_time_space(
     colormap=None,
     save_path=None,
     is_auto_ticks=True,
+    is_show_fig=None,
+    fig=None,
 ):
     """Plots a field as a function of time and space (angle)
 
@@ -48,10 +50,17 @@ def plot_A_time_space(
     colormap : colormap object
         colormap prescribed by user
     save_path : str
-        path and name of the png file to save
+        full path including folder, name and extension of the file to save if save_path is not None
     is_auto_ticks : bool
         in fft, adjust ticks to freqs and wavenumbers (deactivate if too close)
+    is_show_fig : bool
+        True to show figure after plot
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
     """
+
+    if is_show_fig is None:
+        is_show_fig = True if fig is None else False
 
     # Set plot
     fig, axs = plt.subplots(3, 2, tight_layout=True, figsize=(20, 10))
@@ -235,6 +244,7 @@ def plot_A_time_space(
 
     if save_path is not None:
         fig.savefig(save_path)
-        # plt.close()
+        plt.close()
 
-    fig.show()
+    if is_show_fig:
+        fig.show()

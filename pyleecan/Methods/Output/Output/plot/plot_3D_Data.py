@@ -23,6 +23,7 @@ def plot_3D_Data(
     is_2D_view=False,
     N_stem=100,
     fig=None,
+    is_show_fig=None,
 ):
     """Plots a field as a function of time
 
@@ -39,7 +40,7 @@ def plot_3D_Data(
     unit : str
         unit in which to plot the field
     save_path : str
-        path and name of the png file to save
+        full path including folder, name and extension of the file to save if save_path is not None
     x_min : float
         minimum value for the x-axis
     x_max : float
@@ -60,6 +61,8 @@ def plot_3D_Data(
         number of harmonics to plot (only for stem plots)
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
+    is_show_fig : bool
+        True to show figure after plot
     """
 
     # Get Data object names
@@ -96,6 +99,7 @@ def plot_3D_Data(
                 is_2D_view=is_2D_view,
                 N_stem=N_stem,
                 fig=fig,
+                is_show_fig=is_show_fig,
             )
 
     else:
@@ -116,6 +120,5 @@ def plot_3D_Data(
             is_2D_view=is_2D_view,
             N_stem=N_stem,
             fig=fig,
+            is_show_fig=is_show_fig,
         )
-
-    fig.show()

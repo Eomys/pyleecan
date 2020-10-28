@@ -7070,7 +7070,8 @@
         ],
         "daughters": [
             "PostFunction",
-            "PostMethod"
+            "PostMethod",
+            "PostPlot"
         ],
         "desc": "Abstract class for postprocessing",
         "is_internal": false,
@@ -7115,7 +7116,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "PostPlot"
+        ],
         "desc": "Abstract class for post-processing defined in the method run",
         "is_internal": false,
         "methods": [
@@ -7126,6 +7129,80 @@
         "package": "Post",
         "path": "pyleecan/Generator/ClassesRef/Post/PostMethod.csv",
         "properties": []
+    },
+    "PostPlot": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Post-processing to do a plot which is a method of Output or other class if attribute is not None",
+        "is_internal": false,
+        "methods": [
+            "run"
+        ],
+        "mother": "PostMethod",
+        "name": "PostPlot",
+        "package": "Post",
+        "path": "pyleecan/Generator/ClassesRef/Post/PostPlot.csv",
+        "properties": [
+            {
+                "desc": "Name of the plot method of the Output to call",
+                "max": "",
+                "min": "",
+                "name": "module_plot",
+                "type": "str",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "desc": "Attribute to add to Output to reach the plot given by module_plot",
+                "max": "",
+                "min": "",
+                "name": "attribute",
+                "type": "str",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "desc": "Dictionnary of parameters to pass the plot method",
+                "max": "",
+                "min": "",
+                "name": "parameters",
+                "type": "dict",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Name of the plot",
+                "max": "",
+                "min": "",
+                "name": "plot_name",
+                "type": "str",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "desc": "True to show the figure after plotting",
+                "max": "",
+                "min": "",
+                "name": "is_show_plot",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "File format extension (\"png\", \"svg\", \"eps\") in which to save the figure",
+                "max": "",
+                "min": "",
+                "name": "save_format",
+                "type": "str",
+                "unit": "",
+                "value": "png"
+            }
+        ]
     },
     "RefCell": {
         "constants": [

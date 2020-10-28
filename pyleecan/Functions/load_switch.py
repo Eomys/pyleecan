@@ -128,6 +128,7 @@ load_switch = {
     "Post": Post,
     "PostFunction": PostFunction,
     "PostMethod": PostMethod,
+    "PostPlot": PostPlot,
     "RefCell": RefCell,
     "RefSegmentP1": RefSegmentP1,
     "RefTriangle3": RefTriangle3,

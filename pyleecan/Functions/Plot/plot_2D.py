@@ -40,6 +40,7 @@ def plot_2D(
     xticks=None,
     save_path=None,
     barwidth=100,
+    is_show_fig=None,
 ):
     """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
@@ -88,13 +89,17 @@ def plot_2D(
     xticks : list
         list of ticks to use for the x-axis
     save_path : str
-        full path where the figure is saved if save_path is not None
+        full path including folder, name and extension of the file to save if save_path is not None
     barwidth : float
         barwidth scaling factor, only if type_plot = "bargraph"
+    is_show_fig : bool
+        True to show figure after plot
     """
 
     # Set figure/subplot
-    is_show_fig = True if fig is None else False
+    if is_show_fig is None:
+        is_show_fig = True if fig is None else False
+
     if fig is None:
         (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
 
