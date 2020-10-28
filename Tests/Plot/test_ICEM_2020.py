@@ -268,6 +268,10 @@ def test_MachineUD():
         lam4.winding.comp_connection_mat(Zs=10)
 
     """Check that comp_connection_mat can raise a WindingError"""
+    winding = WindingCW2LT(qs=3, p=3)
+
+    with pytest.raises(WindingError) as context:
+        winding.comp_connection_mat(Zs=None)
 
     lam4.winding = WindingCW2LT(qs=3, p=3)
     lam4.slot = None

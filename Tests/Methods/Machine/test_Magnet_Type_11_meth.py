@@ -164,3 +164,27 @@ class Test_Magnet_Type_11_meth(object):
         magnet = MagnetType11(Wmag=pi / 10, Hmag=0.2)
         with pytest.raises(ParentMissingError) as context:
             magnet._comp_point_coordinate()
+
+    def test_build_geometry(self):
+        """check that curve_list is correct"""
+
+        with pytest.raises(ParentMissingError) as context:
+            MagnetType11(Hmag=1, Wmag=pi / 5, type_magnetization=2).build_geometry()
+
+        lam = LamSlotMag(is_internal=True, Rext=0.5)
+        lam.slot = SlotMPolar(H0=0, W0=pi / 4, Zs=4)
+        lam.slot.magnet = [MagnetType11(Hmag=1, Wmag=pi / 5, type_magnetization=2)]
+
+        surface = lam.slot.magnet[0].build_geometry(is_simplified=True)
+
+        assert len(surface) == 1
+        assert surface[0].label == "MagnetRotorHallbach_N_R0_T0_S0"
+
+        lam = LamSlotMag(is_internal=True, Rext=0.5)
+        lam.slot = SlotMPolar(H0=2, W0=pi / 4, Zs=4)
+        lam.slot.magnet = [MagnetType11(Hmag=1, Wmag=pi / 4, type_magnetization=2)]
+
+        surface = lam.slot.magnet[0].build_geometry(is_simplified=True)
+
+        assert len(surface) == 1
+        assert surface[0].label == "MagnetRotorHallbach_N_R0_T0_S0"
