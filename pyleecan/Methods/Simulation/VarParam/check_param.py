@@ -40,10 +40,11 @@ def check_param(self):
             raise ParamExplorerError("ParamExplorer.value_list cannot be empty")
 
     # Default simulation index
+    N_simu = self.get_simu_number()
     if self.ref_simu_index is not None:
-        assert self.ref_simu_index < len(self.paramexplorer_list), VarParamError(
+        assert self.ref_simu_index < N_simu, VarParamError(
             "ref_simu_index must be less than {}, got {}".format(
-                len(self.paramexplorer_list), self.ref_simu_index
+                N_simu, self.ref_simu_index
             )
         )
 

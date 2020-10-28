@@ -40,6 +40,7 @@ def run(self):
         logger.info("Computing reference simulation")
 
         simulation = simulation_list.pop(ref_simu_index)
+        simulation.index = ref_simu_index
         index_list.pop(ref_simu_index)
         xoutput.simu = simulation
 
@@ -71,6 +72,7 @@ def run(self):
     nb_simu = self.nb_simu
     InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
     for idx, [i, simulation] in zip(index_list, enumerate(simulation_list)):
+        simulation.index = idx  # For plot and save results
         msg = "Running simulation " + str(idx + 1) + "/" + str(self.nb_simu) + " with "
         for param_exp in simu_dict["paramexplorer_list"]:
             if isinstance(param_exp.get_value()[idx], InputCurrent):

@@ -342,7 +342,7 @@
                 "name": "interpolation",
                 "type": "Interpolation",
                 "unit": "",
-                "value": -1
+                "value": ""
             }
         ]
     },
@@ -2309,7 +2309,7 @@
                 "max": "",
                 "min": "",
                 "name": "magnet_dict",
-                "type": "dict",
+                "type": "{Magnet}",
                 "unit": "",
                 "value": ""
             }
@@ -5909,11 +5909,11 @@
         "path": "pyleecan/Generator/ClassesRef/Optimization/OptiProblem.csv",
         "properties": [
             {
-                "desc": "Default output to define the default simulation. ",
+                "desc": "Default simulation",
                 "max": "",
                 "min": "",
-                "name": "output",
-                "type": "Output",
+                "name": "simu",
+                "type": "Simulation",
                 "unit": "",
                 "value": ""
             },
@@ -6798,7 +6798,7 @@
                 "desc": "Path to the folder to same the results",
                 "max": "",
                 "min": "",
-                "name": "path_res",
+                "name": "path_result",
                 "type": "str",
                 "unit": "-",
                 "value": ""
@@ -7483,6 +7483,24 @@
                 "type": "[Post]",
                 "unit": "-",
                 "value": []
+            },
+            {
+                "desc": "Index of the simulation (if part of a multi-simulation)",
+                "max": "",
+                "min": "0",
+                "name": "index",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Path to the Result folder to use (None to use default one)",
+                "max": "",
+                "min": "",
+                "name": "path_result",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
             }
         ]
     },
@@ -10108,7 +10126,8 @@
         "is_internal": false,
         "methods": [
             "check_param",
-            "get_simulations"
+            "get_simulations",
+            "get_simu_number"
         ],
         "mother": "VarSimu",
         "name": "VarParam",

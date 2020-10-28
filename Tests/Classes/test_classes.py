@@ -162,6 +162,8 @@ def test_class_as_dict(class_dict):
             d[prop["name"]] = None
         elif type(prop["value"]) is str and "()" in prop["value"]:
             d[prop["name"]] = eval(prop["value"] + ".as_dict()")
+        elif prop["type"] == "complex":
+            d[prop["name"]] = str(prop["value"])
         elif prop["type"] == "dict":
             if prop["value"] == "":
                 d[prop["name"]] = {}
