@@ -262,6 +262,7 @@ def plot_3D_Data(
                 xlabel=xlabel,
                 ylabel=ylabel,
                 zlabel=zlabel,
+                title=title,
                 xticks=xticks,
                 fig=fig,
                 type="pcolor",
