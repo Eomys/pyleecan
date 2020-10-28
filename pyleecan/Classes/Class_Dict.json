@@ -1230,8 +1230,7 @@
         "is_internal": false,
         "methods": [
             "comp_time_angle",
-            "run",
-            "get_axes"
+            "run"
         ],
         "mother": "",
         "name": "Force",
@@ -1248,7 +1247,7 @@
                 "value": 0
             },
             {
-                "desc": "True to compute only on one time periodicity (use periodicities defined in output.mag.time)",
+                "desc": "True to compute only on one time periodicity (use periodicities defined in output.force.Time)",
                 "max": "",
                 "min": "",
                 "name": "is_periodicity_t",
@@ -1257,7 +1256,7 @@
                 "value": 0
             },
             {
-                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.angle)",
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.force.Angle)",
                 "max": "",
                 "min": "",
                 "name": "is_periodicity_a",
@@ -3232,7 +3231,8 @@
         "desc": "Input to skip the magnetic module and start with the structural one",
         "is_internal": false,
         "methods": [
-            "gen_input"
+            "gen_input",
+            "comp_felec"
         ],
         "mother": "Input",
         "name": "InputFlux",
@@ -3825,7 +3825,8 @@
             "get_polar_eq",
             "plot",
             "plot_anim_rotor",
-            "get_lam_list"
+            "get_lam_list",
+            "get_pole_pair_number"
         ],
         "mother": "",
         "name": "Machine",
@@ -4248,7 +4249,10 @@
             "solve_FEMM",
             "get_meshsolution",
             "get_path_save_fem",
-            "build_meshsolution"
+            "build_meshsolution",
+            "solve_FEMM_parallel",
+            "get_meshsolution_parallel",
+            "comp_time_angle"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",
@@ -4378,6 +4382,15 @@
                 "min": "",
                 "name": "is_close_femm",
                 "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
+                "max": "",
+                "min": "",
+                "name": "nb_worker",
+                "type": "int",
                 "unit": "",
                 "value": 1
             }
@@ -4759,8 +4772,7 @@
         "methods": [
             "run",
             "comp_time_angle",
-            "comp_emf",
-            "get_axes"
+            "comp_emf"
         ],
         "mother": "",
         "name": "Magnetics",
@@ -4831,7 +4843,7 @@
                 "value": 0
             },
             {
-                "desc": "True to compute only on one time periodicity (use periodicities defined in output.mag.time)",
+                "desc": "True to compute only on one time periodicity (use periodicities defined in output.mag.Time)",
                 "max": "",
                 "min": "",
                 "name": "is_periodicity_t",
@@ -4840,7 +4852,7 @@
                 "value": 0
             },
             {
-                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.angle)",
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)",
                 "max": "",
                 "min": "",
                 "name": "is_periodicity_a",
@@ -6039,19 +6051,19 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutElec.csv",
         "properties": [
             {
-                "desc": "Electrical time vector (no symmetry)",
+                "desc": "Electrical time Data object",
                 "max": "",
                 "min": "",
-                "name": "time",
+                "name": "Time",
                 "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "s",
                 "value": "None"
             },
             {
-                "desc": "Electrical position vector (no symmetry)",
+                "desc": "Electrical position Data object",
                 "max": "",
                 "min": "",
-                "name": "angle",
+                "name": "Angle",
                 "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
                 "value": "None"
@@ -6111,15 +6123,6 @@
                 "value": "Pyleecan.OutElec"
             },
             {
-                "desc": "Unit magnetomotive force",
-                "max": "",
-                "min": "",
-                "name": "mmf_unit",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "-",
-                "value": "None"
-            },
-            {
                 "desc": "Theorical Average Electromagnetic torque",
                 "max": "",
                 "min": "",
@@ -6129,7 +6132,7 @@
                 "value": null
             },
             {
-                "desc": "d-axis current magnitude",
+                "desc": "Electrical time vector (no symmetry)",
                 "max": "",
                 "min": "",
                 "name": "Id_ref",
@@ -6219,40 +6222,22 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutForce.csv",
         "properties": [
             {
-                "desc": "Structural time vector (no symmetry)",
+                "desc": "Force time Data object",
                 "max": "",
                 "min": "",
-                "name": "time",
+                "name": "Time",
                 "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "s",
                 "value": "None"
             },
             {
-                "desc": "Structural position vector (no symmetry)",
+                "desc": "Force position Data object",
                 "max": "",
                 "min": "",
-                "name": "angle",
+                "name": "Angle",
                 "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
                 "value": "None"
-            },
-            {
-                "desc": "Length of the time vector",
-                "max": "",
-                "min": "",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Length of the angle vector",
-                "max": "",
-                "min": "",
-                "name": "Na_tot",
-                "type": "int",
-                "unit": "-",
-                "value": null
             },
             {
                 "desc": "Air-gap surface force",
@@ -6270,7 +6255,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutStruct"
+                "value": "Pyleecan.OutForce"
             }
         ]
     },
@@ -6534,19 +6519,19 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutMag.csv",
         "properties": [
             {
-                "desc": "Magnetic time vector (no symmetry)",
+                "desc": "Magnetic time Data object",
                 "max": "",
                 "min": "",
-                "name": "time",
+                "name": "Time",
                 "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "s",
                 "value": "None"
             },
             {
-                "desc": "Magnetic position vector (no symmetry)",
+                "desc": "Magnetic position Data object",
                 "max": "",
                 "min": "",
-                "name": "angle",
+                "name": "Angle",
                 "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
                 "value": "None"
@@ -6696,19 +6681,19 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutStruct.csv",
         "properties": [
             {
-                "desc": "Structural time vector (no symmetry)",
+                "desc": "Structural time Data object",
                 "max": "",
                 "min": "",
-                "name": "time",
+                "name": "Time",
                 "type": "ndarray",
                 "unit": "s",
                 "value": null
             },
             {
-                "desc": "Structural position vector (no symmetry)",
+                "desc": "Structural position Data object",
                 "max": "",
                 "min": "",
-                "name": "angle",
+                "name": "Angle",
                 "type": "ndarray",
                 "unit": "rad",
                 "value": null
@@ -6789,17 +6774,11 @@
             "getter.get_path_result",
             "getter.get_machine_periodicity",
             "getter.get_rot_dir",
-            "plot.Magnetic.plot_B_space",
-            "plot.plot_A_cfft2",
-            "plot.plot_A_fft_space",
-            "plot.plot_A_fft_time",
-            "plot.plot_A_fft2",
+            "plot.plot_2D_Data",
+            "getter.get_fund_harm",
             "plot.plot_A_quiver_2D",
-            "plot.plot_A_space",
-            "plot.plot_A_surf",
-            "plot.plot_A_time",
-            "plot.plot_A_time_space",
-            "plot.Structural.plot_force_space"
+            "plot.plot_3D_Data",
+            "plot.plot_A_time_space"
         ],
         "mother": "",
         "name": "Output",
@@ -10490,7 +10469,7 @@
             {
                 "desc": "number of phases ",
                 "max": "100",
-                "min": "1",
+                "min": "0",
                 "name": "qs",
                 "type": "int",
                 "unit": "-",

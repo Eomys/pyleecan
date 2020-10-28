@@ -31,11 +31,6 @@ try:
 except ImportError as error:
     comp_emf = error
 
-try:
-    from ..Methods.Simulation.Magnetics.get_axes import get_axes
-except ImportError as error:
-    get_axes = error
-
 
 from ._check import InitUnKnowClassError
 
@@ -76,15 +71,6 @@ class Magnetics(FrozenClass):
         )
     else:
         comp_emf = comp_emf
-    # cf Methods.Simulation.Magnetics.get_axes
-    if isinstance(get_axes, ImportError):
-        get_axes = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Magnetics method get_axes: " + str(get_axes))
-            )
-        )
-    else:
-        get_axes = get_axes
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -369,7 +355,7 @@ class Magnetics(FrozenClass):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.mag.time)
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.mag.Time)
 
         :Type: bool
         """,
@@ -387,7 +373,7 @@ class Magnetics(FrozenClass):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.angle)
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)
 
         :Type: bool
         """,

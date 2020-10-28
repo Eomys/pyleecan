@@ -4,8 +4,8 @@ from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Classes._FEMMHandler import FEMMHandler
 
 
-def comp_flux_airgap(self, output):
-    """Compute using FEMM the flux in the airgap
+def comp_flux_airgap(self, output, axes_dict):
+    """Build and solve FEMM model to calculate and store magnetic quantities
 
     Parameters
     ----------
@@ -13,16 +13,12 @@ def comp_flux_airgap(self, output):
         a MagFEMM object
     output : Output
         an Output object
+    axes_dict: {Data}
+        Dict of axes used for magnetic calculation
     """
 
     # Set the symmetry factor according to the machine
-    if self.is_periodicity_a:
-        (sym, is_antiper_a, _, _) = self.parent.parent.get_machine_periodicity()
-        if is_antiper_a:
-            sym = sym * 2
-    else:
-        sym = 1
-        is_antiper_a = False
+    sym, is_antiper_a = axes_dict["Angle"].get_periodicity()
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
@@ -56,9 +52,12 @@ def comp_flux_airgap(self, output):
         self.get_logger().debug("Reusing the FEMM file: " + self.import_file)
         output.mag.FEMM_dict = self.FEMM_dict
         # Open the document
-        femm.openfemm()
-        femm.main_minimize()
+        femm.openfemm(1)
+        # femm.main_minimize()
         femm.opendocument(self.import_file)
 
     # Solve for all time step and store all the results in output
-    self.solve_FEMM(femm, output, sym)
+    if self.nb_worker > 1:
+        self.solve_FEMM_parallel(femm, output, sym, axes_dict)
+    else:
+        self.solve_FEMM(femm, output, sym, axes_dict)

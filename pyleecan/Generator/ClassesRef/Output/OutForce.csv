@@ -1,7 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-time,s,Structural time vector (no symmetry),Nt_tot,SciDataTool.Classes.DataND.Data,None,,,,Output,,,VERSION,1,Gather the structural module outputs
-angle,rad,Structural position vector (no symmetry),Na_tot,SciDataTool.Classes.DataND.Data,None,,,,,,,,,
-Nt_tot,-,Length of the time vector,,int,None,,,,,,,,,
-Na_tot,-,Length of the angle vector,,int,None,,,,,,,,,
+Time,s,Force time Data object,Nt_tot,SciDataTool.Classes.DataND.Data,None,,,,Output,,,VERSION,1,Gather the structural module outputs
+Angle,rad,Force position Data object,Na_tot,SciDataTool.Classes.DataND.Data,None,,,,,,,,,
 P,N.m^2,Air-gap surface force,"(Nt_tot ,Na_tot)",SciDataTool.Classes.VectorField.VectorField,None,,,,,,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.OutStruct,,,,,,,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.OutForce,,,,,,,,,

@@ -46,6 +46,23 @@ try:
 except ImportError as error:
     build_meshsolution = error
 
+try:
+    from ..Methods.Simulation.MagFEMM.solve_FEMM_parallel import solve_FEMM_parallel
+except ImportError as error:
+    solve_FEMM_parallel = error
+
+try:
+    from ..Methods.Simulation.MagFEMM.get_meshsolution_parallel import (
+        get_meshsolution_parallel,
+    )
+except ImportError as error:
+    get_meshsolution_parallel = error
+
+try:
+    from ..Methods.Simulation.MagFEMM.comp_time_angle import comp_time_angle
+except ImportError as error:
+    comp_time_angle = error
+
 
 from ._check import InitUnKnowClassError
 from .DXFImport import DXFImport
@@ -125,6 +142,41 @@ class MagFEMM(Magnetics):
         )
     else:
         build_meshsolution = build_meshsolution
+    # cf Methods.Simulation.MagFEMM.solve_FEMM_parallel
+    if isinstance(solve_FEMM_parallel, ImportError):
+        solve_FEMM_parallel = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method solve_FEMM_parallel: "
+                    + str(solve_FEMM_parallel)
+                )
+            )
+        )
+    else:
+        solve_FEMM_parallel = solve_FEMM_parallel
+    # cf Methods.Simulation.MagFEMM.get_meshsolution_parallel
+    if isinstance(get_meshsolution_parallel, ImportError):
+        get_meshsolution_parallel = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method get_meshsolution_parallel: "
+                    + str(get_meshsolution_parallel)
+                )
+            )
+        )
+    else:
+        get_meshsolution_parallel = get_meshsolution_parallel
+    # cf Methods.Simulation.MagFEMM.comp_time_angle
+    if isinstance(comp_time_angle, ImportError):
+        comp_time_angle = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method comp_time_angle: " + str(comp_time_angle)
+                )
+            )
+        )
+    else:
+        comp_time_angle = comp_time_angle
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -147,6 +199,7 @@ class MagFEMM(Magnetics):
         stator_dxf=None,
         import_file="",
         is_close_femm=True,
+        nb_worker=1,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -202,6 +255,8 @@ class MagFEMM(Magnetics):
                 import_file = init_dict["import_file"]
             if "is_close_femm" in list(init_dict.keys()):
                 is_close_femm = init_dict["is_close_femm"]
+            if "nb_worker" in list(init_dict.keys()):
+                nb_worker = init_dict["nb_worker"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -235,6 +290,7 @@ class MagFEMM(Magnetics):
         self.stator_dxf = stator_dxf
         self.import_file = import_file
         self.is_close_femm = is_close_femm
+        self.nb_worker = nb_worker
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -285,6 +341,7 @@ class MagFEMM(Magnetics):
             MagFEMM_str += "stator_dxf = None" + linesep + linesep
         MagFEMM_str += 'import_file = "' + str(self.import_file) + '"' + linesep
         MagFEMM_str += "is_close_femm = " + str(self.is_close_femm) + linesep
+        MagFEMM_str += "nb_worker = " + str(self.nb_worker) + linesep
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -324,6 +381,8 @@ class MagFEMM(Magnetics):
             return False
         if other.is_close_femm != self.is_close_femm:
             return False
+        if other.nb_worker != self.nb_worker:
+            return False
         return True
 
     def as_dict(self):
@@ -355,6 +414,7 @@ class MagFEMM(Magnetics):
             MagFEMM_dict["stator_dxf"] = self.stator_dxf.as_dict()
         MagFEMM_dict["import_file"] = self.import_file
         MagFEMM_dict["is_close_femm"] = self.is_close_femm
+        MagFEMM_dict["nb_worker"] = self.nb_worker
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -379,6 +439,7 @@ class MagFEMM(Magnetics):
             self.stator_dxf._set_None()
         self.import_file = None
         self.is_close_femm = None
+        self.nb_worker = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -661,5 +722,23 @@ class MagFEMM(Magnetics):
         doc=u"""To close femm automatically after the simulation
 
         :Type: bool
+        """,
+    )
+
+    def _get_nb_worker(self):
+        """getter of nb_worker"""
+        return self._nb_worker
+
+    def _set_nb_worker(self, value):
+        """setter of nb_worker"""
+        check_var("nb_worker", value, "int")
+        self._nb_worker = value
+
+    nb_worker = property(
+        fget=_get_nb_worker,
+        fset=_set_nb_worker,
+        doc=u"""To run FEMM in parallel (the parallelization is on the time loop)
+
+        :Type: int
         """,
     )

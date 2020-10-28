@@ -98,7 +98,7 @@ def test_Magnetic_FEMM_sym():
         symbol="B_t",
     )
     B = ImportVectorField(components={"radial": Br_data, "tangential": Bt_data})
-    simu_load.input = InputFlux(time=time, Na_tot=Na_tot, B=B)
+    simu_load.input = InputFlux(time=time, Na_tot=Na_tot, B=B, OP=simu.input.copy())
 
     out = Output(simu=simu)
     simu.run()
@@ -108,9 +108,11 @@ def test_Magnetic_FEMM_sym():
 
     # Plot the result by comparing the two simulation (no sym / MANATEE SDM)
     plt.close("all")
-    out.plot_A_space(
-        "mag.B", data_list=[out3.mag.B], legend_list=["No symmetry", "MANATEE SDM"]
-    )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_EM_SIPMSM_AL_001_SDM.png"))
+    out.plot_2D_Data(
+        "mag.B",
+        "angle",
+        data_list=[out3.mag.B],
+        legend_list=["No symmetry", "MANATEE SDM"],
+        save_path=join(save_path, "test_EM_SIPMSM_AL_001_SDM.png"),
+    )
