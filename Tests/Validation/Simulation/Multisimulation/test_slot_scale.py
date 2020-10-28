@@ -120,7 +120,7 @@ def test_slot_scale():
             name="Radial Airgap flux density",
             unit="H",
             symbol="B",
-            keeper="lambda output: output.mag.B.components['radial']",
+            keeper="lambda output: output.mag.B.components['radial'].get_along('time','angle')['B_r']",
             error_keeper=error_keeper_mag_flux,
         ),
     ]
