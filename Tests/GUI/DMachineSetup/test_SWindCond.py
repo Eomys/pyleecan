@@ -84,6 +84,14 @@ class TestSWindCond(object):
         assert self.widget_2.w_cond.lf_Wins_wire.value() == 21e-3
         assert self.widget_2.w_cond.lf_Wins_cond.value() == 31e-3
 
+        self.test_obj.stator.winding.conductor = None
+        self.widget_1 = SWindCond(
+            machine=self.test_obj, matlib=self.matlib, is_stator=True
+        )
+
+        assert self.widget_1.w_mat_0.in_mat_type.text() == "mat_wind1: "
+        assert type(self.test_obj.stator.winding.conductor) is CondType11
+
     def test_set_si_Nwpc1_rad(self):
         """Check that the Widget allow to update si_Nwpc1_rad"""
         # Clear the field before writing the new value
@@ -159,3 +167,24 @@ class TestSWindCond(object):
         self.widget_2.w_cond.lf_Wins_cond.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.rotor.winding.conductor.Wins_cond == value
+
+    def test_set_cond_type(self):
+        """Check that the Widget allow to update conductor type"""
+        assert type(self.test_obj.stator.winding.conductor) is CondType11
+
+        self.widget_1.c_cond_type.setCurrentIndex(1)
+        assert type(self.test_obj.stator.winding.conductor) is CondType12
+
+        self.widget_1.c_cond_type.setCurrentIndex(0)
+        assert type(self.test_obj.stator.winding.conductor) is CondType11
+
+    def test_check(self):
+        """Check that the check method return errors"""
+        rotor = LamSlotWind(is_stator=False)
+        rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        rotor.winding = Winding(Npcpp=20, Ntcoil=None)
+        rotor.winding.conductor = CondType12(
+            Nwppc=4, Wwire=None, Wins_wire=21e-3, Wins_cond=31e-3
+        )
+
+        assert self.widget_2.check(rotor) == "You must set Wwire !"

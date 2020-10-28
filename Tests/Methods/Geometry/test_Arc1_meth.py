@@ -8,6 +8,7 @@ from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Methods.Geometry.Arc1.check import PointArc1Error, RadiusArc1Error
 from pyleecan.Methods.Geometry.Arc1.discretize import NbPointArc1DError
 from pyleecan.Methods.Geometry.Arc1.rotate import AngleRotationArc1Error
+from pyleecan.Methods.Geometry.Arc1.translate import PointTranslateArc1Error
 from Tests import save_plot_path as save_path
 import pytest
 
@@ -853,3 +854,12 @@ class Test_Arc1_meth(object):
         )
         with pytest.raises(AngleRotationArc1Error) as context:
             arc.rotate("error")
+
+    def test_translate_error(self):
+        """Check that you can't translate an arc1 when an error occurs"""
+        arc = Arc1(
+            begin=1 - 5j,
+            end=3 + 2j,
+        )
+        with pytest.raises(PointTranslateArc1Error) as context:
+            arc.translate("error")

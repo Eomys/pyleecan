@@ -5,6 +5,7 @@ from pyleecan.Classes.Arc2 import Arc2
 from pyleecan.Methods.Geometry.Arc2.check import PointArc2Error, AngleArc2Error
 from pyleecan.Methods.Geometry.Arc2.discretize import NbPointArc2DError
 from pyleecan.Methods.Geometry.Arc2.rotate import AngleRotationArc2Error
+from pyleecan.Methods.Geometry.Arc2.translate import PointTranslateArc2Error
 from numpy import pi, array, sqrt, exp, angle
 import pytest
 
@@ -538,3 +539,13 @@ class Test_Arc2_meth(object):
         )
         with pytest.raises(AngleRotationArc2Error) as context:
             arc.rotate("error")
+
+    def test_translate_error(self):
+        """Check that you can't translate an arc2 when an error occurs"""
+        arc = Arc2(
+            begin=1 - 5j,
+            center=3 + 2j,
+            angle=pi / 2,
+        )
+        with pytest.raises(PointTranslateArc2Error) as context:
+            arc.translate("error")

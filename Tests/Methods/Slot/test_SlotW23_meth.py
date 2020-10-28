@@ -194,4 +194,4 @@ class Test_SlotW23_meth(object):
         )
         lam.slot._comp_W()
         assert lam.slot.W1 == 0.017303874301855315
-        assert lam.slot.W2 == 0.0074524346457750515
+        assert lam.slot.W2 == 0.022533218866714805

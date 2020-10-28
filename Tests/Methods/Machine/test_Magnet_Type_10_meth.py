@@ -221,3 +221,41 @@ class Test_Magnet_Type_10_meth(object):
         surface = test_obj.build_geometry(is_simplified=True)
 
         assert len(surface[0].line_list) == 3
+
+        # Type Magnet 1
+
+        lam = LamSlotMag(
+            Rint=1,
+            Rext=0.09,
+            is_internal=False,
+            is_stator=False,
+            L1=0.45,
+            Nrvd=1,
+            Wrvd=0.05,
+        )
+        lam.slot = SlotMFlat(
+            Zs=8, W0=0.6, H0=0.2, magnet=[MagnetType10(Wmag=0.6, Hmag=0.8)]
+        )
+        lam.slot.magnet[0].type_magnetization = 1
+        surface = lam.build_geometry()
+
+        assert len(surface) == 9
+
+        # Type Magnet 2
+
+        lam = LamSlotMag(
+            Rint=1,
+            Rext=0.09,
+            is_internal=False,
+            is_stator=False,
+            L1=0.45,
+            Nrvd=1,
+            Wrvd=0.05,
+        )
+        lam.slot = SlotMFlat(
+            Zs=8, W0=0.6, H0=0.2, magnet=[MagnetType10(Wmag=0.6, Hmag=0.8)]
+        )
+        lam.slot.magnet[0].type_magnetization = 2
+        surface = lam.build_geometry()
+
+        assert len(surface) == 9
