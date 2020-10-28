@@ -5,6 +5,7 @@ from copy import deepcopy
 from datetime import datetime
 import numpy as np
 
+from ....Classes.Output import Output
 from ....Classes.XOutput import XOutput
 from ....Classes.DataKeeper import DataKeeper
 from ....Classes.ParamExplorerSet import ParamExplorerSet
@@ -66,7 +67,11 @@ def solve(self):
         self.create_toolbox()
 
         # Add the reference output to multi_output
-        xoutput = XOutput(init_dict=self.problem.output.as_dict())
+        if isinstance(self.problem.simu.parent, Output):
+            xoutput = XOutput(init_dict=self.problem.simu.parent.as_dict())
+        else:
+            xoutput = XOutput(simu=self.problem.simu.copy())
+
         self.xoutput = xoutput
 
         # Fitness symbol
@@ -80,6 +85,7 @@ def solve(self):
         xoutput.xoutput_dict["is_valid"] = DataKeeper(
             name="Individual validity", symbol="is_valid"
         )
+        # Add datakeeper to XOutput to store additionnal values
         for dk in self.problem.datakeeper_list:
             assert dk.symbol not in xoutput.xoutput_dict
             xoutput.xoutput_dict[dk.symbol] = dk
