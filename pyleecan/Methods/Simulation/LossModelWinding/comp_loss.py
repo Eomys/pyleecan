@@ -46,9 +46,7 @@ def comp_loss(self, output):
 
     # check that lamination has a winding
     if hasattr(lam, "winding") and lam.winding is not None:
-        R = lam.winding.comp_resistance_norm(T=self.temperature) * (
-            lam.L1 + 2 * lam.winding.comp_length_endwinding()
-        )
+        R = lam.comp_resistance_wind(T=self.temperature)
         if lam.is_stator:
             I = output.elec.get_Is()
             name = "Is"  # TODO extract the data name instead
