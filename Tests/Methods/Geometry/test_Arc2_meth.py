@@ -4,6 +4,7 @@ from pyleecan.Classes.Arc2 import Arc2
 
 from pyleecan.Methods.Geometry.Arc2.check import PointArc2Error, AngleArc2Error
 from pyleecan.Methods.Geometry.Arc2.discretize import NbPointArc2DError
+from pyleecan.Methods.Geometry.Arc2.rotate import AngleRotationArc2Error
 from numpy import pi, array, sqrt, exp, angle
 import pytest
 
@@ -527,3 +528,13 @@ class Test_Arc2_meth(object):
         assert round(abs(arc.begin - test_dict["N_begin"]), 7) == 0
         assert round(abs(arc.center - test_dict["N_center"]), 7) == 0
         assert round(abs(arc.angle - test_dict["N_angle"]), 7) == 0
+
+    def test_arc_rotate_error(self):
+        """Check that the arc3 rotate raise an error"""
+        arc = Arc2(
+            begin=1 - 5j,
+            center=3 + 2j,
+            angle=pi / 2,
+        )
+        with pytest.raises(AngleRotationArc2Error) as context:
+            arc.rotate("error")

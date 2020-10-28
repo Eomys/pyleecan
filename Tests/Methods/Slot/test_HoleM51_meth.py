@@ -239,3 +239,28 @@ class Test_HoleM51_meth(object):
 
         assert len(lst) == 7
         assert lst[0].line_list[1].begin != lst2[0].line_list[1].begin
+
+    def test_comp_surface_magnet_id(self):
+        """Check that the computation of the magnet surface is correct"""
+        test_obj = LamHole(
+            Rint=45e-3 / 2, Rext=81.5e-3, is_stator=False, is_internal=True, L1=0.9
+        )
+        test_obj.hole = list()
+        test_obj.hole.append(
+            HoleM51(
+                Zh=8,
+                W0=0.016,
+                W1=pi / 6,
+                W2=0.004,
+                W3=0.01,
+                W4=0.002,
+                W5=0.01,
+                W6=0.002,
+                W7=0.01,
+                H0=0.01096,
+                H1=0.0015,
+                H2=0.0055,
+            )
+        )
+        result = test_obj.hole[0].comp_surface_magnet_id(5)
+        assert result == 0

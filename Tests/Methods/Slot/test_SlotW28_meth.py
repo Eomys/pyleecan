@@ -9,6 +9,11 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.SlotW28.check import (
+    S28_ZsCheckError,
+    S28_RboW0CheckError,
+    S28_R1R1CheckError,
+)
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -119,3 +124,27 @@ class Test_SlotW28_meth(object):
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+    def test_check(self):
+        """Check that the check function is raising error"""
+        lam = LamSlot(is_internal=True, Rext=84e-3)
+        lam.slot = SlotW28(Zs=420, W0=3.5e-3, H0=0.45e-3, R1=3.5e-3, H3=14e-3, W3=5e-3)
+
+        with pytest.raises(S28_ZsCheckError) as context:
+            lam.slot.check()
+
+        lam = LamSlot(is_internal=True, Rext=84e-3)
+        lam.slot = SlotW28(Zs=420, W0=300.5, H0=0.45e-3, R1=3.5e-3, H3=14e-3, W3=5e-3)
+
+        with pytest.raises(S28_RboW0CheckError) as context:
+            lam.slot.check()
+
+        # Test with Outwards and the error S28_R1R1CheckError to be sure that it works
+
+        lam = LamSlot(
+            is_internal=False, Rext=0.000000000000000000151, Rint=0.00000000000001256
+        )
+        lam.slot = SlotW28(Zs=1, W0=3.5e-53, H0=0, R1=30000000.5, H3=14e-3, W3=5e-3)
+
+        with pytest.raises(S28_R1R1CheckError) as context:
+            lam.slot.check()

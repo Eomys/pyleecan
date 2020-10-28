@@ -83,6 +83,15 @@ class TestSBar(object):
         assert self.widget.w_bar.w_out.out_Sslot.text() == "Sslot: 0.002088 m²"
         assert self.widget.w_bar.w_out.out_ratio.text() == "Sbar / Sslot: 10.06 %"
 
+        self.test_obj.rotor = LamSquirrelCage(Hscr=0.21, Lscr=0.22)
+        self.test_obj.rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        self.test_obj.rotor.winding.Lewout = 0.23
+        self.test_obj.rotor.ring_mat.name = "test2"
+        self.test_obj.rotor.winding.conductor = None
+        self.widget = SBar(machine=self.test_obj, matlib=self.matlib, is_stator=False)
+
+        assert self.widget.c_bar_type.currentIndex() == 0
+
     def test_init_Cond22(self):
         self.test_obj.rotor = LamSquirrelCage(Hscr=0.21, Lscr=0.22)
         self.test_obj.rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
@@ -194,3 +203,28 @@ class TestSBar(object):
         self.test_obj.rotor.winding.conductor = None
         self.widget = PCondType21(machine=self.test_obj, matlib=self.matlib)
         assert type(self.widget.machine.rotor.winding.conductor) is CondType21
+
+    def test_check(self):
+        """Check that the check method return errors"""
+        lam = LamSquirrelCage(Hscr=0.21, Lscr=0.22)
+        lam.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        lam.winding.Lewout = None
+        lam.ring_mat.name = "test2"
+        lam.winding.conductor = None
+        assert self.widget.check(lam) == "You must set Lewout !"
+
+        lam = LamSquirrelCage(Hscr=None, Lscr=0.22)
+        assert self.widget.check(lam) == "You must set Hscr !"
+
+        lam = LamSquirrelCage(Hscr=0.21, Lscr=None)
+        assert self.widget.check(lam) == "You must set Lscr !"
+
+        lam = LamSquirrelCage(Hscr=0.21, Lscr=0.22)
+        lam.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        lam.winding.Lewout = 0.23
+        lam.ring_mat.name = "test2"
+        lam.winding.conductor = CondType21(Hbar=None, Wbar=0.015)
+        assert self.widget.check(lam) == "You must set Hbar !"
+
+        lam.winding.conductor = CondType21(Hbar=0.014, Wbar=None)
+        assert self.widget.check(lam) == "You must set Wbar !"

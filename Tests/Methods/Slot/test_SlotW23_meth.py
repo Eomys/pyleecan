@@ -177,3 +177,21 @@ class Test_SlotW23_meth(object):
         result = lam.slot.get_surface_wind()
         assert result.label == "WindR_R0_T0_S0"
         assert len(result.get_lines()) == 4
+
+    def test_comp_W(self):
+        """Check that the computations of the Ws are right"""
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW23(
+            H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
+        )
+        lam.slot._comp_W()
+        assert lam.slot.W1 == 0.012681779210634543
+        assert lam.slot.W2 == 0.0074524346457750515
+
+        lam = LamSlot(is_internal=False, Rext=0.1325, is_stator=False, Rint=0.154)
+        lam.slot = SlotW23(
+            H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
+        )
+        lam.slot._comp_W()
+        assert lam.slot.W1 == 0.017303874301855315
+        assert lam.slot.W2 == 0.0074524346457750515

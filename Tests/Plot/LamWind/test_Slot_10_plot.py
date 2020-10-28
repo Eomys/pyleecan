@@ -180,3 +180,44 @@ class Test_Slot_10_plot(object):
         # Testing comp_angle_d_axis
         test_obj.stator.winding = None
         assert test_obj.stator.comp_angle_d_axis() == 0
+
+    def test_plot_stator_true(self):
+        """Test if the plot is right with a stator LamSlotWind"""
+        plt.close("all")
+        test_obj = MachineDFIM()
+
+        test_obj.stator = LamSlotWind(
+            Rint=0.51,
+            Rext=0.8,
+            is_internal=False,
+            is_stator=True,
+            L1=0.95,
+            Nrvd=1,
+            Wrvd=0.05,
+        )
+        test_obj.stator.slot = SlotW10(
+            Zs=6,
+            W0=50e-3,
+            W1=80e-3,
+            W2=50e-3,
+            H0=15e-3,
+            H1=25e-3,
+            H2=140e-3,
+            H1_is_rad=False,
+        )
+        test_obj.stator.winding = WindingUD(
+            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
+        )
+
+        test_obj.frame = Frame(Rint=0.8, Rext=0.9, Lfra=1)
+        test_obj.frame.mat_type.name = "M330_35A"
+
+        test_obj.stator.plot()
+
+        # The rotor will be blue
+
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s10_Stator.png"))
+
+        result = test_obj.stator.plot(is_display=False)
+        assert len(result) == 26

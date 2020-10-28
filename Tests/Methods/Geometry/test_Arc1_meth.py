@@ -7,6 +7,7 @@ from numpy import array, exp, pi, sqrt
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Methods.Geometry.Arc1.check import PointArc1Error, RadiusArc1Error
 from pyleecan.Methods.Geometry.Arc1.discretize import NbPointArc1DError
+from pyleecan.Methods.Geometry.Arc1.rotate import AngleRotationArc1Error
 from Tests import save_plot_path as save_path
 import pytest
 
@@ -843,3 +844,12 @@ class Test_Arc1_meth(object):
         plt.plot()
         fig = plt.gcf()
         fig.savefig(join(save_path, "Arc1_schematics.png"))
+
+    def test_arc_rotate_error(self):
+        """Check that the arc3 rotate raise an error"""
+        arc = Arc1(
+            begin=1 - 5j,
+            end=3 + 2j,
+        )
+        with pytest.raises(AngleRotationArc1Error) as context:
+            arc.rotate("error")
