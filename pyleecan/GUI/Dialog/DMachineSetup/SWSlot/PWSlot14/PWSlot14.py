@@ -180,5 +180,5 @@ class PWSlot14(Gen_PWSlot14, QWidget):
             return translate("Unable to compute yoke height:", "PWSlot14") + str(error)
         if yoke_height <= 0:
             return translate(
-                "The slot height is greater than the lamination !", "PWSlot14"
+                "The slot height is greater than the lamination !", "PWSlot14 yoke"
             )

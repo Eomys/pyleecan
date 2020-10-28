@@ -1095,6 +1095,15 @@ is_on_line_list.append(
     }
 )
 
+# # 7 Check at the center of the arc
+# is_on_line_list.append(
+#     {
+#         "arc": Arc1(begin=1+1j, end=-1 -1j, radius=-1, is_trigo_direction=False),
+#         "Z": 0+0j,  # First point of cutting line             TODO
+#         "result": True,
+#     }
+# )
+
 
 @pytest.mark.parametrize("test_dict", is_on_line_list)
 def test_is_on_line(test_dict):

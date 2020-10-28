@@ -101,7 +101,7 @@ class TestPWSlot14(object):
 
     def test_check(self):
         """Check that the check is working correctly"""
-        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
+        self.test_obj = LamSlotWind(Rint=0.7, Rext=0.5)
         self.test_obj.slot = SlotW14(H0=0.10, H3=0.11, H1=0.12, W0=None, W3=0.16)
         self.widget = PWSlot14(self.test_obj)
         assert self.widget.check(self.test_obj) == "PWSlot14 check"
@@ -113,3 +113,5 @@ class TestPWSlot14(object):
         assert self.widget.check(self.test_obj) == "PWSlot14 check"
         self.test_obj.slot = SlotW14(H0=None, H3=0.11, H1=0.12, W0=0.31, W3=0.16)
         assert self.widget.check(self.test_obj) == "PWSlot14 check"
+        self.test_obj.slot = SlotW14(H0=0.10, H3=0.11, H1=0.12, W0=0.31, W3=0.16)
+        assert self.widget.check(self.test_obj) == "PWSlot14 yoke"

@@ -124,3 +124,4 @@ class Test_SlotW16_meth(object):
         lam.slot = SlotW16(Zs=8, H0=5e-3, H2=30e-3, R1=5e-3, W0=pi / 12, W3=10e-3)
         result = lam.slot.get_surface_wind()
         assert result.label == "WindR_R0_T0_S0"
+        assert len(result.get_lines()) == 8
