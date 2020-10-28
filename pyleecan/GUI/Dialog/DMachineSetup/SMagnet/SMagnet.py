@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QDialog, QMessageBox
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QDialog, QMessageBox
 
 from .....Classes.Magnet import Magnet
 from .....Classes.MagnetType13 import MagnetType13
@@ -17,11 +17,10 @@ from .....GUI.Dialog.DMachineSetup.SMagnet.Ui_SMagnet import Ui_SMagnet
 
 
 class SMagnet(Ui_SMagnet, QDialog):
-    """Step to set the magnet (and slot) for SPMSM/SIPMSM
-    """
+    """Step to set the magnet (and slot) for SPMSM/SIPMSM"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineType nav
     step_name = "Magnet"
 
@@ -35,7 +34,7 @@ class SMagnet(Ui_SMagnet, QDialog):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -142,8 +141,7 @@ class SMagnet(Ui_SMagnet, QDialog):
             self.out_Nmag.setText(Nmag_txt + "?")
 
     def emit_save(self):
-        """Emit the saveNeeded signal for the DMachineSetup
-        """
+        """Emit the saveNeeded signal for the DMachineSetup"""
         self.saveNeeded.emit()
 
     def set_type_gui(self, index):
@@ -211,7 +209,7 @@ class SMagnet(Ui_SMagnet, QDialog):
 
     def s_plot(self):
         """Plot the current machine
-        
+
         Parameters
         ----------
         self : SMagnet

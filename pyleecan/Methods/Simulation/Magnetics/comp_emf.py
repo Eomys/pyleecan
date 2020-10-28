@@ -4,8 +4,7 @@ from ....Methods.Simulation.Input import InputError
 
 
 def comp_emf(self):
-    """Compute the Electromotive force [V]
-    """
+    """Compute the Electromotive force [V]"""
     if self.parent is None:
         raise InputError(
             "ERROR: The Magnetic object must be in a Simulation object to run"
@@ -16,9 +15,10 @@ def comp_emf(self):
         )
 
     output = self.parent.parent
-    Phi_wind = output.mag.Phi_wind_stator
-    time = output.mag.time
-    Nt_tot = output.mag.Nt_tot
+    Phi_wind_symb = output.mag.Phi_wind_stator.symbol
+    Phi_wind = output.mag.Phi_wind_stator.get_along("time", "phase")[Phi_wind_symb]
+    time = output.mag.Time.get_values(is_oneperiod=False)
+    Nt_tot = time.size
     qs = output.simu.machine.stator.winding.qs
 
     if Nt_tot > 1:

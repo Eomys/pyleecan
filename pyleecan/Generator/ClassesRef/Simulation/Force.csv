@@ -1,3 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe file
 is_comp_nodal_force,-,1 to compute lumped tooth forces,0,bool,0,,,,Simulation,,comp_time_angle,VERSION,1,Forces module abstract object,ForceMT
-,,,,,,,,,,,run,,,,
+is_periodicity_t,-,True to compute only on one time periodicity (use periodicities defined in output.force.Time),0,bool,0,,,,,,run,,,,
+is_periodicity_a,-,True to compute only on one angle periodicity (use periodicities defined in output.force.Angle),0,bool,0,,,,,,,,,,

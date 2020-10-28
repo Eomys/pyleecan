@@ -4,8 +4,7 @@ import re
 
 
 def importName(modulename, name, ignore_error=False):
-    """ Import a named object from a module in the context of this function.
-    """
+    """Import a named object from a module in the context of this function."""
     try:
         module = __import__(modulename, globals(), locals(), [name])
         return vars(module)[name]
@@ -20,8 +19,7 @@ def importName(modulename, name, ignore_error=False):
 
 
 def rel_file_path(file, wildcard):
-    """ try to generate relative file path with given wildcard
-    """
+    """try to generate relative file path with given wildcard"""
     root_path = importName("..definitions", wildcard, ignore_error=True)
     if root_path:
         root_path = normpath(abspath(root_path))
@@ -36,8 +34,7 @@ def rel_file_path(file, wildcard):
 
 
 def abs_file_path(file, is_check=True):
-    """ check a file path for a wildcard and replace it to get the abs path
-    """
+    """check a file path for a wildcard and replace it to get the abs path"""
     if "<" in file and ">\\" in file:
         wildcard = re.search(r"\<([A-Za-z0-9_]+)\>", file).group(1)
         root_path = importName("..definitions", wildcard)
@@ -50,15 +47,13 @@ def abs_file_path(file, is_check=True):
 
 
 class FileError(Exception):
-    """Raised when the file does not exists
-    """
+    """Raised when the file does not exists"""
 
     pass
 
 
 class ImportError(Exception):
-    """Raised when the path could not be imported
-    """
+    """Raised when the path could not be imported"""
 
     pass
 

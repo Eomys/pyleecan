@@ -7,7 +7,11 @@ import matplotlib.pyplot as plt
 from numpy import array, linspace, ones, pi, zeros
 
 from pyleecan.Classes.import_all import *
-from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+
+try:
+    from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+except ImportError as error:
+    gen_3D_mesh = error
 from Tests import save_plot_path
 from Tests.Plot.LamWind import wind_mat
 from pyleecan.Functions.load import load
@@ -27,10 +31,6 @@ import random
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-
-SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
-SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
-
 # Gather results in the same folder
 save_path = join(save_plot_path, "ICEM_2020")
 makedirs(save_path)
@@ -48,6 +48,7 @@ def test_FEMM_sym():
     """Figure 9: Check that the FEMM can handle symmetry
     From pyleecan/Tests/Validation/Simulation/test_EM_SCIM_NL_006.py
     """
+    SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
     simu = Simu1(name="ICEM_2020", machine=SCIM_006)
     simu.machine.name = "fig_09_FEMM_sym"
 
@@ -55,27 +56,21 @@ def test_FEMM_sym():
     N0 = 1500
     Is = ImportMatrixVal(value=array([[20, -10, -10]]))
     Ir = ImportMatrixVal(value=zeros((1, 28)))
-    time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=4096, endpoint=False)
+    Nt_tot = 1
+    Na_tot = 4096
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
         N0=N0,
         angle_rotor=None,  # Will be computed
-        time=time,
-        angle=angle,
+        Nt_tot=Nt_tot,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.2244,
     )
 
     # Definition of the magnetic simulation
     # 2 sym + antiperiodicity = 1/4 Lamination
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_symmetry_a=True,
-        sym_a=2,
-        is_antiper_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True)
     # Stop after magnetic computation
     simu.force = None
     simu.struct = None
@@ -95,10 +90,14 @@ def test_FEMM_sym():
 
 
 @pytest.mark.GMSH
+@pytest.mark.long
 def test_gmsh_mesh_dict():
     """Figure 10: Generate a 3D mesh with Gmsh by setting the
     number of element on each lines
     """
+    if isinstance(gen_3D_mesh, ImportError):
+        raise ImportError("Fail to import gen_3D_mesh (gmsh package missing)")
+
     # Stator definition
     stator = LamSlotWind(
         Rint=0.1325,
@@ -151,10 +150,15 @@ def test_gmsh_mesh_dict():
 
 
 @pytest.mark.GMSH
+@pytest.mark.long
 def test_SlotMulti_sym():
-    """Figure 11: Generate a 3D mesh with GMSH for a lamination
+    """Figure 11: Genera
+    te a 3D mesh with GMSH for a lamination
     with several slot types and notches
     """
+
+    if isinstance(gen_3D_mesh, ImportError):
+        raise ImportError("Fail to import gen_3D_mesh (gmsh package missing)")
 
     plt.close("all")
     # Rotor definition
@@ -204,8 +208,7 @@ def test_SlotMulti_sym():
 
 
 def test_MachineUD():
-    """Figure 12: Check that you can plot a machine with 4 laminations
-    """
+    """Figure 12: Check that you can plot a machine with 4 laminations"""
     machine = MachineUD()
     machine.name = "Machine with 4 laminations"
 
@@ -258,8 +261,7 @@ def test_MachineUD():
 
 
 def test_SlotMulti():
-    """Figure 13: Check that you can plot a LamSlotMulti (two slots kind + notches)
-    """
+    """Figure 13: Check that you can plot a LamSlotMulti (two slots kind + notches)"""
     plt.close("all")
     # Lamination main dimensions definition
     rotor = LamSlotMulti(Rint=0.2, Rext=0.7, is_internal=True, is_stator=False)
@@ -297,8 +299,7 @@ def test_SlotMulti():
 
 
 def test_SlotUD():
-    """Figure 14: User Defined slot "snowflake"
-    """
+    """Figure 14: User Defined slot "snowflake" """
 
     plt.close("all")
     # Enfore first point on rotor bore
@@ -436,8 +437,8 @@ def test_BoreFlower():
 @pytest.mark.FEMM
 @pytest.mark.long
 def test_ecc_FEMM():
-    """Figure 19: transfrom_list in FEMM for eccentricities
-    """
+    """Figure 19: transfrom_list in FEMM for eccentricities"""
+    SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
     simu = Simu1(name="ICEM_2020", machine=SPMSM_015)
     simu.machine.name = "fig_19_Transform_list"
 
@@ -465,11 +466,10 @@ def test_ecc_FEMM():
         type_BH_stator=0,
         type_BH_rotor=0,
         is_sliding_band=False,  # Ecc => No sliding band
-        is_symmetry_a=False,  # No sym
+        is_periodicity_a=False,
         is_mmfs=False,
         is_get_mesh=True,
         is_save_FEA=True,
-        sym_a=1,
     )
     simu.force = None
     simu.struct = None
@@ -511,10 +511,10 @@ def test_Optimization_problem():
     Figure20: Individuals in the fitness space
     Figure21: Pareto Front in the fitness space
     Figure22: Topology to maximize first torque harmonic
-    Figure22: Topology to minimize second torque harmonic  
+    Figure22: Topology to minimize second torque harmonic
 
     WARNING: The computation takes 6 hours on a single 3GHz CPU core.
-    The algorithm uses randomization at different steps so 
+    The algorithm uses randomization at different steps so
     the results won't be exactly the same as the one in the publication
     """
     # ------------------ #
@@ -528,8 +528,8 @@ def test_Optimization_problem():
     SPMSM_001 = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
 
     # Definition of the enforced output of the electrical module
-    Na = 1024  # Angular steps
-    Nt = 32  # Time step
+    Na_tot = 1024  # Angular steps
+    Nt_tot = 32  # Time step
     Is = ImportMatrixVal(
         value=np.array(
             [
@@ -570,8 +570,6 @@ def test_Optimization_problem():
     )
     N0 = 400
     Ir = ImportMatrixVal(value=np.zeros((Nt, 28)))
-    time = ImportGenVectLin(start=0, stop=1 / (400 / 60) / 24, num=Nt, endpoint=False)
-    angle = ImportGenVectLin(start=0, stop=2 * np.pi, num=Na, endpoint=False)
 
     SPMSM_001.name = (
         "Default SPMSM machine"  # Rename the machine to have the good plot title
@@ -585,17 +583,18 @@ def test_Optimization_problem():
         Ir=Ir,  # zero current for the rotor
         N0=N0,
         angle_rotor=None,  # Will be computed
-        time=time,
-        angle=angle,
+        Nt_tot=Nt_tot,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.39,
     )
 
     # Definition of the magnetic simulation
     simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=True, is_antiper_a=False
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=True,
     )
 
-    simu.mag.sym_a = 4
     simu.struct = None
 
     # Default Output
@@ -618,13 +617,11 @@ def test_Optimization_problem():
     # -------------------- #
 
     # Objective functions
-    def tem_av(output):
-        """Return the average torque opposite (opposite to be maximized)"""
-        return -abs(output.mag.Tem_av)
+    """Return the average torque opposite (opposite to be maximized)"""
+    tem_av = "lambda output: -abs(output.mag.Tem_av)"
 
-    def Tem_rip_pp(output):
-        """Return the torque ripple """
-        return abs(output.mag.Tem_rip_pp)
+    """Return the torque ripple """
+    Tem_rip_pp = "lambda output: abs(output.mag.Tem_rip_pp)"
 
     my_objs = [
         DataKeeper(
@@ -652,7 +649,7 @@ def test_Optimization_problem():
                 0.2 * output.simu.machine.stator.slot.W2,
                 output.simu.machine.stator.slot.W2,
             ],
-            get_value=lambda space: random.uniform(*space),
+            get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.stator.slot.W0",
         ),
         OptiDesignVar(
@@ -664,7 +661,7 @@ def test_Optimization_problem():
                 0.5 * output.simu.machine.rotor.slot.W0,
                 0.99 * output.simu.machine.rotor.slot.W0,
             ],  # May generate error in FEMM
-            get_value=lambda space: random.uniform(*space),
+            get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.rotor.slot.magnet[0].Wmag",
         ),
     ]

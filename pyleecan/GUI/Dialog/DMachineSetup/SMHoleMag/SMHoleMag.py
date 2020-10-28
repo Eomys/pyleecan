@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget, QSizePolicy
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget, QSizePolicy
 
 from .....Classes.HoleM50 import HoleM50
 from .....Classes.Material import Material
@@ -12,11 +12,10 @@ from .....Methods.Slot.Slot.check import SlotCheckError
 
 
 class SMHoleMag(Ui_SMHoleMag, QWidget):
-    """Step to set several Holes
-    """
+    """Step to set several Holes"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup
     step_name = "Slot"
 
@@ -30,7 +29,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -77,8 +76,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         self.b_plot.clicked.connect(self.s_plot)
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     def set_hole_pitch(self, Zh):

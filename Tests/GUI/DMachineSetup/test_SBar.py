@@ -2,10 +2,9 @@
 
 import sys
 from random import uniform
-from unittest import TestCase
 
-from PyQt5 import QtWidgets
-from PyQt5.QtTest import QTest
+from PySide2 import QtWidgets
+from PySide2.QtTest import QTest
 
 from pyleecan.Classes.CondType21 import CondType21
 from pyleecan.Classes.CondType22 import CondType22
@@ -23,10 +22,10 @@ import pytest
 
 
 @pytest.mark.GUI
-class test_SBar(TestCase):
+class TestSBar(object):
     """Test that the widget SBar behave like it should"""
 
-    def setUp(self):
+    def setup_method(self, method):
         """Run at the begining of every test to setup the gui"""
         self.test_obj = MachineSCIM()
         self.test_obj.rotor = LamSquirrelCage(Hscr=0.11, Lscr=0.12)
@@ -49,40 +48,40 @@ class test_SBar(TestCase):
         self.widget = SBar(machine=self.test_obj, matlib=self.matlib, is_stator=False)
 
     @classmethod
-    def setUpClass(cls):
+    def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test SBar")
         # gui_option.unit.unit_m =0 #m
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
-    def tearDownClass(cls):
+    def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
 
     def test_init(self):
-        """Check that the Widget spinbox initialise to the lamination value
-        """
+        """Check that the Widget spinbox initialise to the lamination value"""
 
-        self.assertEqual(self.widget.lf_Hscr.value(), 0.11)
-        self.assertEqual(self.widget.lf_Lscr.value(), 0.12)
-        self.assertEqual(self.widget.lf_Lewout.value(), 0.13)
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentIndex(), 2)
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentText(), "test3")
-        self.assertIs(type(self.widget.w_bar), PCondType21)
-        self.assertEqual(self.widget.c_bar_type.count(), 2)
-        self.assertEqual(self.widget.c_bar_type.currentIndex(), 0)
-        self.assertEqual(self.widget.c_bar_type.currentText(), "Rectangular bar")
-        self.assertEqual(self.widget.w_bar.lf_Hbar.value(), 0.014)
-        self.assertEqual(self.widget.w_bar.lf_Wbar.value(), 0.015)
-        self.assertEqual(self.widget.w_bar.w_mat.c_mat_type.currentIndex(), 0)
-        self.assertEqual(self.widget.w_bar.w_mat.c_mat_type.currentText(), "test1")
+        assert self.widget.lf_Hscr.value() == 0.11
+        assert self.widget.lf_Lscr.value() == 0.12
+        assert self.widget.lf_Lewout.value() == 0.13
+        assert self.widget.w_mat.c_mat_type.currentIndex() == 2
+        assert self.widget.w_mat.c_mat_type.currentText() == "test3"
+        assert type(self.widget.w_bar) is PCondType21
+        assert self.widget.c_bar_type.count() == 2
+        assert self.widget.c_bar_type.currentIndex() == 0
+        assert self.widget.c_bar_type.currentText() == "Rectangular bar"
+        assert self.widget.w_bar.lf_Hbar.value() == 0.014
+        assert self.widget.w_bar.lf_Wbar.value() == 0.015
+        assert self.widget.w_bar.w_mat.c_mat_type.currentIndex() == 0
+        assert self.widget.w_bar.w_mat.c_mat_type.currentText() == "test1"
         # Check output txt
-        self.assertEqual(self.widget.w_bar.w_out.out_Sbar.text(), "Sbar: 0.00021 m²")
-        self.assertEqual(self.widget.w_bar.w_out.out_Sslot.text(), "Sslot: 0.002088 m²")
-        self.assertEqual(
-            self.widget.w_bar.w_out.out_ratio.text(), "Sbar / Sslot: 10.06 %"
-        )
+        assert self.widget.w_bar.w_out.out_Sbar.text() == "Sbar: 0.00021 m²"
+        assert self.widget.w_bar.w_out.out_Sslot.text() == "Sslot: 0.002088 m²"
+        assert self.widget.w_bar.w_out.out_ratio.text() == "Sbar / Sslot: 10.06 %"
 
     def test_init_Cond22(self):
         self.test_obj.rotor = LamSquirrelCage(Hscr=0.21, Lscr=0.22)
@@ -93,22 +92,20 @@ class test_SBar(TestCase):
         self.test_obj.rotor.winding.conductor.cond_mat.name = "test3"
         self.widget = SBar(machine=self.test_obj, matlib=self.matlib, is_stator=False)
 
-        self.assertEqual(self.widget.lf_Hscr.value(), 0.21)
-        self.assertEqual(self.widget.lf_Lscr.value(), 0.22)
-        self.assertEqual(self.widget.lf_Lewout.value(), 0.23)
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentIndex(), 1)
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentText(), "test2")
-        self.assertIs(type(self.widget.w_bar), PCondType22)
-        self.assertEqual(self.widget.c_bar_type.currentIndex(), 1)
-        self.assertEqual(self.widget.c_bar_type.currentText(), "Die cast bar")
-        self.assertEqual(self.widget.w_bar.w_mat.c_mat_type.currentIndex(), 2)
-        self.assertEqual(self.widget.w_bar.w_mat.c_mat_type.currentText(), "test3")
+        assert self.widget.lf_Hscr.value() == 0.21
+        assert self.widget.lf_Lscr.value() == 0.22
+        assert self.widget.lf_Lewout.value() == 0.23
+        assert self.widget.w_mat.c_mat_type.currentIndex() == 1
+        assert self.widget.w_mat.c_mat_type.currentText() == "test2"
+        assert type(self.widget.w_bar) is PCondType22
+        assert self.widget.c_bar_type.currentIndex() == 1
+        assert self.widget.c_bar_type.currentText() == "Die cast bar"
+        assert self.widget.w_bar.w_mat.c_mat_type.currentIndex() == 2
+        assert self.widget.w_bar.w_mat.c_mat_type.currentText() == "test3"
         # Check output txt
-        self.assertEqual(self.widget.w_bar.w_out.out_Sbar.text(), "Sbar: 0.002088 m²")
-        self.assertEqual(self.widget.w_bar.w_out.out_Sslot.text(), "Sslot: 0.002088 m²")
-        self.assertEqual(
-            self.widget.w_bar.w_out.out_ratio.text(), "Sbar / Sslot: 100 %"
-        )
+        assert self.widget.w_bar.w_out.out_Sbar.text() == "Sbar: 0.002088 m²"
+        assert self.widget.w_bar.w_out.out_Sslot.text() == "Sslot: 0.002088 m²"
+        assert self.widget.w_bar.w_out.out_ratio.text() == "Sbar / Sslot: 100 %"
 
     def test_set_Hscr(self):
         """Check that the Widget allow to update Hscr"""
@@ -117,7 +114,8 @@ class test_SBar(TestCase):
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Hscr, str(value))
         self.widget.lf_Hscr.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.Hscr, value)
+
+        assert self.test_obj.rotor.Hscr == value
 
     def test_set_Lscr(self):
         """Check that the Widget allow to update Lscr"""
@@ -127,7 +125,7 @@ class test_SBar(TestCase):
         QTest.keyClicks(self.widget.lf_Lscr, str(value))
         self.widget.lf_Lscr.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.test_obj.rotor.Lscr, value)
+        assert self.test_obj.rotor.Lscr == value
 
     def test_set_Hbar(self):
         """Check that the Widget allow to update Hbar"""
@@ -136,7 +134,8 @@ class test_SBar(TestCase):
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.w_bar.lf_Hbar, str(value))
         self.widget.w_bar.lf_Hbar.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.winding.conductor.Hbar, value)
+
+        assert self.test_obj.rotor.winding.conductor.Hbar == value
 
     def test_set_Wbar(self):
         """Check that the Widget allow to update Wbar"""
@@ -145,7 +144,8 @@ class test_SBar(TestCase):
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.w_bar.lf_Wbar, str(value))
         self.widget.w_bar.lf_Wbar.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.winding.conductor.Wbar, value)
+
+        assert self.test_obj.rotor.winding.conductor.Wbar == value
 
     def test_set_Lewout(self):
         """Check that the Widget allow to update Lewout"""
@@ -155,35 +155,32 @@ class test_SBar(TestCase):
         QTest.keyClicks(self.widget.lf_Lewout, str(value))
         self.widget.lf_Lewout.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.test_obj.rotor.winding.Lewout, value)
+        assert self.test_obj.rotor.winding.Lewout == value
 
     def test_set_material(self):
         """Check that the combobox update the material"""
         self.widget.w_mat.c_mat_type.setCurrentIndex(0)
-        self.assertEqual(self.test_obj.rotor.ring_mat.name, "test1")
-        self.assertEqual(self.test_obj.rotor.ring_mat.elec.rho, 0.31)
+        assert self.test_obj.rotor.ring_mat.name == "test1"
+        assert self.test_obj.rotor.ring_mat.elec.rho == 0.31
 
         self.widget.w_mat.c_mat_type.setCurrentIndex(1)
-        self.assertEqual(self.test_obj.rotor.ring_mat.name, "test2")
-        self.assertEqual(self.test_obj.rotor.ring_mat.elec.rho, 0.32)
+        assert self.test_obj.rotor.ring_mat.name == "test2"
+        assert self.test_obj.rotor.ring_mat.elec.rho == 0.32
 
         self.widget.w_mat.c_mat_type.setCurrentIndex(2)
-        self.assertEqual(self.test_obj.rotor.ring_mat.name, "test3")
-        self.assertEqual(self.test_obj.rotor.ring_mat.elec.rho, 0.33)
+        assert self.test_obj.rotor.ring_mat.name == "test3"
+        assert self.test_obj.rotor.ring_mat.elec.rho == 0.33
 
     def test_set_cond_type(self):
-        """Check that you can change the conductor type
-        """
+        """Check that you can change the conductor type"""
         # To remember to update the test
-        self.assertEqual(self.widget.c_bar_type.count(), 2)
+        assert self.widget.c_bar_type.count() == 2
         # Check init position
-        self.assertIs(type(self.widget.w_bar), PCondType21)
-        self.assertIs(type(self.test_obj.rotor.winding.conductor), CondType21)
-
+        assert type(self.widget.w_bar) is PCondType21
+        assert type(self.test_obj.rotor.winding.conductor) is CondType21
         self.widget.c_bar_type.setCurrentIndex(1)
-        self.assertIs(type(self.widget.w_bar), PCondType22)
-        self.assertIs(type(self.test_obj.rotor.winding.conductor), CondType22)
-
+        assert type(self.widget.w_bar) is PCondType22
+        assert type(self.test_obj.rotor.winding.conductor) is CondType22
         self.widget.c_bar_type.setCurrentIndex(0)
-        self.assertIs(type(self.widget.w_bar), PCondType21)
-        self.assertIs(type(self.test_obj.rotor.winding.conductor), CondType21)
+        assert type(self.widget.w_bar) is PCondType21
+        assert type(self.test_obj.rotor.winding.conductor) is CondType21

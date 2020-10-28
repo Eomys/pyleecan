@@ -4,12 +4,11 @@ import sys
 from os import remove, mkdir
 from os.path import abspath, join, isdir
 from shutil import copyfile, rmtree
-from unittest import TestCase
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtTest import QTest
-from PyQt5.QtWidgets import QDialogButtonBox
+from PySide2 import QtWidgets
+from PySide2.QtCore import Qt
+from PySide2.QtTest import QTest
+from PySide2.QtWidgets import QDialogButtonBox
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM50 import HoleM50
@@ -29,13 +28,11 @@ import pytest
 
 
 @pytest.mark.GUI
-class test_Workflow_DMatLib(TestCase):
-    """Test that the widget DMatLib behave like it should when called from a Widget
-    """
+class Test_Workflow_DMatLib(object):
+    """Test that the widget DMatLib behave like it should when called from a Widget"""
 
-    def setUp(self):
-        """Run at the begining of every test to create the workspace
-        """
+    def setup_method(self, method):
+        """Run at the begining of every test to create the workspace"""
         self.work_path = join(save_path, "Material Workflow")
         # Delete old test if needed
         if isdir(self.work_path):
@@ -60,25 +57,26 @@ class test_Workflow_DMatLib(TestCase):
         self.matlib = MatLib(self.work_path)
 
     def teardown(self):
-        """Delete the workspace at the end of the tests
-        """
+        """Delete the workspace at the end of the tests"""
         if is_clean_result:
             rmtree(self.work_path)
 
     @classmethod
-    def setUpClass(cls):
+    def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test Workflow MatLib")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
-    def tearDownClass(cls):
+    def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
 
     def test_init_empty(self):
-        """Check that the widget can open with an unknown material
-        """
+        """Check that the widget can open with an unknown material"""
         self.machine = MachineIPMSM()
         self.machine.stator = LamSlotWind()
         self.machine.rotor = LamHole()
@@ -90,37 +88,32 @@ class test_Workflow_DMatLib(TestCase):
         self.widget = SMHoleMag(
             machine=self.machine, matlib=self.matlib, is_stator=False
         )
-
         # Check default material
-        self.assertEqual(
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.count(), 4
+        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.count() == 4
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentText() == ""
         )
-        self.assertEqual(
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentText(), ""
-        )
-        self.assertEqual(
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentIndex(), -1
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentIndex()
+            == -1
         )
         # Click to open matlib
-        self.assertFalse(hasattr(self.widget, "mat_win"))
+        assert not hasattr(self.widget, "mat_win")
         self.widget.tab_hole.widget(0).w_hole.w_mat_1.b_matlib.clicked.emit()
-        self.assertEqual(
-            type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win), DMatLib
-        )
+        assert type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win) == DMatLib
         # Check Matlib init
-        self.assertEqual(
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.nav_mat.count(), 4
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.nav_mat.count() == 4
         )
-        self.assertEqual(
+        assert (
             self.widget.tab_hole.widget(0)
             .w_hole.w_mat_1.mat_win.nav_mat.currentItem()
-            .text(),
-            "001 - Copper1",
+            .text()
+            == "001 - Copper1"
         )
 
     def test_init(self):
-        """Check that the Widget spinbox initialise to the lamination value
-        """
+        """Check that the Widget spinbox initialise to the lamination value"""
         self.machine = MachineIPMSM()
         self.machine.stator = LamSlotWind()
         self.machine.rotor = LamHole()
@@ -132,41 +125,39 @@ class test_Workflow_DMatLib(TestCase):
         )
 
         # Check default (hole is set to type 50)
-        self.assertEqual(
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.count(), 4
+        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.count() == 4
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentText()
+            == "Magnet1"
         )
-        self.assertEqual(
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentText(),
-            "Magnet1",
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentIndex() == 3
         )
-        self.assertEqual(
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentIndex(), 3
-        )
+
         # Click to open matlib
-        self.assertFalse(hasattr(self.widget, "mat_win"))
+        assert not hasattr(self.widget, "mat_win")
         self.widget.tab_hole.widget(0).w_hole.w_mat_1.b_matlib.clicked.emit()
-        self.assertEqual(
-            type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win), DMatLib
+        assert type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win) == DMatLib
+
+        # Check Matlib ini
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.nav_mat.count() == 4
         )
-        # Check Matlib init
-        self.assertEqual(
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.nav_mat.count(), 4
-        )
-        self.assertEqual(
+        assert (
             self.widget.tab_hole.widget(0)
             .w_hole.w_mat_1.mat_win.nav_mat.currentItem()
-            .text(),
-            "004 - Magnet1",
+            .text()
+            == "004 - Magnet1"
         )
-        # Duplicate Magnet1
-        self.assertFalse(
-            hasattr(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win, "mat_win")
+        assert not hasattr(
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win, "mat_win"
         )
         self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.b_duplicate.clicked.emit()
-        self.assertEqual(
-            type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win),
-            DMatSetup,
+        assert (
+            type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win)
+            == DMatSetup
         )
+
         # Edit Magnet1 to Magnet_test
         self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.le_name.setText(
             "Magnet_test_python"
@@ -174,20 +165,19 @@ class test_Workflow_DMatLib(TestCase):
         self.widget.tab_hole.widget(
             0
         ).w_hole.w_mat_1.mat_win.mat_win.le_name.editingFinished.emit()
-        self.assertEqual(
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.name,
-            "Magnet_test_python",
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.name
+            == "Magnet_test_python"
         )
-
         self.widget.tab_hole.widget(
             0
         ).w_hole.w_mat_1.mat_win.mat_win.lf_rho_elec.setText("1234.56789")
         self.widget.tab_hole.widget(
             0
         ).w_hole.w_mat_1.mat_win.mat_win.lf_rho_elec.editingFinished.emit()
-        self.assertEqual(
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.elec.rho,
-            1234.56789,
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.elec.rho
+            == 1234.56789
         )
         # Close the Edit GUI and check Matlib modification
 

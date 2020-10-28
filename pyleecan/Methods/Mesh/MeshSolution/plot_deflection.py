@@ -59,6 +59,20 @@ def plot_deflection(
 
         is_pyvistaqt = False
 
+    if save_path is None:
+        try:
+            import pyvistaqt as pv
+
+            is_pyvistaqt = True
+        except:
+            import pyvista as pv
+
+            is_pyvistaqt = False
+    else:
+        import pyvista as pv
+
+        is_pyvistaqt = False
+
     # Get the mesh
     mesh = self.get_mesh(label=label, index=index)
     if isinstance(mesh, MeshMat):

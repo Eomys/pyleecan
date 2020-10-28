@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.HoleM50 import HoleM50
 from ......GUI import gui_option
@@ -13,11 +13,10 @@ from ......Methods.Slot.Slot.check import SlotCheckError
 
 
 class PHoleM50(Gen_PHoleM50, QWidget):
-    """Page to set the Hole Type 50
-    """
+    """Page to set the Hole Type 50"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for WHoleMag
     hole_name = "Slot Type 50"
     hole_type = HoleM50
@@ -32,7 +31,7 @@ class PHoleM50(Gen_PHoleM50, QWidget):
         hole : HoleM50
             current hole to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
@@ -316,6 +315,5 @@ class PHoleM50(Gen_PHoleM50, QWidget):
             return str(error)
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()

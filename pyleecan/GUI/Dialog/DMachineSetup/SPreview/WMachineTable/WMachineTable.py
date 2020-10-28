@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem
+from PySide2.QtWidgets import QWidget, QTableWidgetItem
 from ......GUI.Dialog.DMachineSetup.SPreview.WMachineTable.Ui_WMachineTable import (
     Ui_WMachineTable,
 )
@@ -8,8 +8,7 @@ import matplotlib.pyplot as plt
 
 
 class WMachineTable(Ui_WMachineTable, QWidget):
-    """Table to display the main paramaters of the machine
-    """
+    """Table to display the main paramaters of the machine"""
 
     def __init__(self, parent=None):
         """Initialize the GUI
@@ -62,8 +61,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 self.tab_param.setItem(ii, 1, QTableWidgetItem(txt))
 
     def plot_mmf(self):
-        """Plot the unit mmf of the stator
-        """
+        """Plot the unit mmf of the stator"""
         if self.machine is not None:
             fig, axes = plt.subplots()
             axes.set_visible(False)

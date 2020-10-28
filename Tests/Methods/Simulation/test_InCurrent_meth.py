@@ -4,12 +4,21 @@ from os import chdir
 chdir("../../..")
 
 from os.path import join
-from unittest import TestCase
 
-from ddt import data, ddt
-from numpy import array, linspace, ones, pi, sqrt, transpose, zeros
+from numpy import (
+    array,
+    linspace,
+    ones,
+    pi,
+    sqrt,
+    cos,
+    transpose,
+    zeros,
+    abs as np_abs,
+    angle as np_angle,
+)
 from numpy.testing import assert_array_almost_equal
-
+import matplotlib.pyplot as plt
 from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
@@ -22,6 +31,8 @@ from pyleecan.Classes.Simulation import Simulation
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from pyleecan.Methods.Simulation.Input import InputError
+import pytest
+from Tests import save_plot_path as save_path
 
 IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 InputCurrent_Error_test = list()
@@ -49,12 +60,12 @@ N0 = 1
 M1 = MachineDFIM()
 M1.stator = LamSlotWind()
 M1.stator.winding.qs = 3
-M1.rotor.winding = None
+M1.rotor.winding.qs = 0
 # Winding rotor only
 M2 = MachineDFIM()
 M2.rotor = LamSlotWind()
 M2.rotor.winding.qs = 2
-M2.stator.winding = None
+M2.stator.winding.qs = 0
 # Winding rotor + stator
 M3 = MachineDFIM()
 M3.stator = LamSlotWind()
@@ -167,148 +178,167 @@ InputCurrent_Error_test.append(
     }
 )
 
+idq_test = list()
+idq_test.append({"Id": 2, "Iq": 0})
+idq_test.append({"Id": 0, "Iq": 2})
+idq_test.append({"Id": sqrt(2), "Iq": sqrt(2)})
 
-@ddt
-class unittest_InputCurrent_meth(TestCase):
+
+@pytest.mark.METHODS
+class Test_InCurrent_meth(object):
     """unittest for InputCurrent object methods"""
 
-    @data(*InputCurrent_Error_test)
+    @pytest.mark.parametrize("test_dict", InputCurrent_Error_test)
     def test_InputCurrent_Error_test(self, test_dict):
-        """Check that the input current raises the correct errors
-        """
+        """Check that the input current raises the correct errors"""
         output = Output(simu=test_dict["test_obj"])
-        with self.assertRaises(
-            InputError, msg="Expect: " + test_dict["exp"]
-        ) as context:
+        with pytest.raises(InputError) as context:
             output.simu.input.gen_input()
-        self.assertEqual(test_dict["exp"], str(context.exception))
+            assert test_dict["exp"] == str(context.exception)
 
-    def test_InputCurrent_Ok(self):
-        """Check that the input current can return a correct output
-        """
-        test_obj = Simulation(machine=M3)
-        output = Output(simu=test_obj)
-        time = ImportGenVectLin(0, 1, 16)
-        angle = ImportGenVectLin(0, 2 * pi, 20)
-        Is = ImportGenMatrixSin(is_transpose=True)
-        Is.init_vector(f=[2, 2, 2], A=[2, 2, 2], Phi=[pi / 2, 0, -pi / 2], N=16, Tf=1)
-        S = sqrt(2)
-        Is_exp = array(
-            [
-                [2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S],
-                [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
-                [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
-            ]
-        )
-
-        Ir = ImportGenMatrixSin(is_transpose=True)
-        Ir.init_vector(f=[2, 2], A=[2, 2], Phi=[0, -pi / 2], N=16, Tf=1)
-        Ir_exp = array(
-            [
-                [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
-                [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
-            ]
-        )
-
-        angle_rotor = ImportGenVectLin(0, 2 * pi, 16)
-        N0 = 10
-        test_obj.input = InputCurrent(
-            time=time, angle=angle, Is=Is, Ir=Ir, angle_rotor=angle_rotor, N0=N0
-        )
-
-        test_obj.input.gen_input()
-        assert_array_almost_equal(output.elec.time, linspace(0, 1, 16))
-        assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
-        assert_array_almost_equal(output.elec.Is.values, Is_exp)
-        assert_array_almost_equal(output.elec.Ir.values, Ir_exp)
-        assert_array_almost_equal(output.elec.angle_rotor, linspace(0, 2 * pi, 16))
-        assert_array_almost_equal(output.elec.N0, ones(16) * 10)
-
-    def test_InputCurrent_DQ(self):
-        """Check that the input current can return a correct output
-        """
+    @pytest.mark.parametrize("test_dict", idq_test)
+    def test_InputCurrent_DQ(self, test_dict):
+        """Enforce Id/Iq, check Is then enforce Is, check Id/Iq"""
         test_obj = Simulation(machine=IPMSM_A)
         output = Output(simu=test_obj)
-        time = ImportGenVectLin(0, 1, 7)
-        angle = ImportGenVectLin(0, 2 * pi, 20)
-        Id_ref = 2
-        Iq_ref = 0
+        Nt_tot = 70
+        Na_tot = 20
+        N0 = 2000
 
-        Is_exp = array(
-            [
-                [2, 1, -1, -2, -1, 1, 2],
-                [-1, -2, -1, 1, 2, 1, -1],
-                [-1, 1, 2, 1, -1, -2, -1],
-            ]
+        # In RMS cf .csv conventions
+        Id_ref = test_dict["Id"]
+        Iq_ref = test_dict["Iq"]
+
+        # Compute expected current
+        A_rms = np_abs(Id_ref + 1j * Iq_ref)
+        Phi0 = np_angle(Id_ref + 1j * Iq_ref)
+        qs = IPMSM_A.stator.winding.qs
+        p = IPMSM_A.stator.get_pole_pair_number()
+        time_exp = linspace(0, 60 / N0, Nt_tot, endpoint=False)
+        felec = p * N0 / 60
+        rot_dir = IPMSM_A.stator.comp_rot_dir()
+        Ia = (
+            A_rms
+            * sqrt(2)
+            * cos(2 * pi * felec * time_exp + 0 * rot_dir * 2 * pi / qs + Phi0)
+        )
+        Ib = (
+            A_rms
+            * sqrt(2)
+            * cos(2 * pi * felec * time_exp + 1 * rot_dir * 2 * pi / qs + Phi0)
+        )
+        Ic = (
+            A_rms
+            * sqrt(2)
+            * cos(2 * pi * felec * time_exp + 2 * rot_dir * 2 * pi / qs + Phi0)
+        )
+        Is_exp = array([Ia, Ib, Ic])
+
+        # Compute expected rotor position
+        angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
+        # rot_dir is the rotation direction of the fundamental magnetic field
+        # Then rotor position is -1 * rot_dir
+        angle_rotor_exp = (
+            linspace(0, -1 * rot_dir * 2 * pi, Nt_tot, endpoint=False)
+            + angle_rotor_initial
         )
 
-        zp = IPMSM_A.stator.get_pole_pair_number()
-        angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
-        angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
-
-        N0 = 60 / zp
         test_obj.input = InputCurrent(
-            time=time,
-            angle=angle,
+            Nt_tot=Nt_tot,
+            Na_tot=Na_tot,
             Is=None,
             Iq_ref=Iq_ref,
             Id_ref=Id_ref,
             Ir=None,
-            angle_rotor=None,
+            angle_rotor=None,  # Will be computed according to N0 and rot_dir
             N0=N0,
-            angle_rotor_initial=angle_rotor_initial,
-            rot_dir=1,
+            rot_dir=None,
         )
 
+        # Generate Is according to Id/Iq
         test_obj.input.gen_input()
-        assert_array_almost_equal(output.elec.time, linspace(0, 1, 7))
-        assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
+        assert_array_almost_equal(
+            output.elec.Time.get_values(is_oneperiod=False),
+            time_exp,
+        )
+        assert_array_almost_equal(
+            output.elec.Angle.get_values(is_oneperiod=False),
+            linspace(0, 2 * pi, Na_tot, endpoint=False),
+        )
         assert_array_almost_equal(output.elec.get_Is().values, Is_exp)
         assert_array_almost_equal(output.get_angle_rotor(), angle_rotor_exp)
-        assert_array_almost_equal(output.elec.N0, ones(7) * 60 / zp)
+        assert_array_almost_equal(output.elec.N0, N0)
+        assert_array_almost_equal(output.geo.rot_dir, rot_dir)
 
-    def test_InputCurrent_I0Phi0(self):
-        """Check that the input current can return a correct output
-        """
-        test_obj = Simulation(machine=IPMSM_A)
-        output = Output(simu=test_obj)
-        time = ImportGenVectLin(0, 1, 7)
-        angle = ImportGenVectLin(0, 2 * pi, 20)
-        Id_ref = 2
-        Iq_ref = 0
+        # Check Id/Iq by enforcing Is
+        test_obj.input = InputCurrent(
+            Nt_tot=Nt_tot,
+            Na_tot=Na_tot,
+            Is=Is_exp.transpose(),
+            Iq_ref=None,
+            Id_ref=None,
+            Ir=None,
+            angle_rotor=None,  # Will be computed according to N0 and rot_dir
+            N0=N0,
+            rot_dir=None,
+        )
+        out = Output(simu=test_obj)
+        test_obj.input.gen_input()
+        assert out.elec.Id_ref == pytest.approx(test_dict["Id"], abs=0.01)
+        assert out.elec.Iq_ref == pytest.approx(test_dict["Iq"], abs=0.01)
 
-        Is_exp = transpose(
-            array(
-                [
-                    [2, 1, -1, -2, -1, 1, 2],
-                    [-1, -2, -1, 1, 2, 1, -1],
-                    [-1, 1, 2, 1, -1, -2, -1],
-                ]
+        # Plot 3-phase current function of time
+        out.plot_2D_Data(
+            "elec.Is",
+            "time",
+            "phase",
+        )
+
+        # Save picture
+        title = "Id=" + str(test_dict["Id"]) + " Iq=" + str(test_dict["Iq"])
+        fig = plt.gcf()
+        plt.title(title)
+        fig.savefig(
+            join(
+                save_path,
+                "test_InCurrent_Id="
+                + str(test_dict["Id"])
+                + "_Iq="
+                + str(test_dict["Iq"])
+                + ".png",
             )
         )
-        Is = ImportMatrixVal(value=Is_exp)
+        plt.close("all")
 
-        zp = IPMSM_A.stator.get_pole_pair_number()
-        angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
-        angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
+        return out
 
-        N0 = 60 / zp
 
-        test_obj.input = InputCurrent(
-            time=time,
-            angle=angle,
-            Is=Is,
-            Ir=None,
-            angle_rotor=None,
-            angle_rotor_initial=angle_rotor_initial,
-            N0=N0,
-            rot_dir=1,
-        )
+# To run it without pytest
+if __name__ == "__main__":
 
-        test_obj.input.gen_input()
-        assert_array_almost_equal(output.elec.time, linspace(0, 1, 7))
-        assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
-        assert_array_almost_equal(output.get_angle_rotor(), angle_rotor_exp)
-        assert_array_almost_equal(output.elec.Id_ref, Id_ref)
-        assert_array_almost_equal(output.elec.Iq_ref, Iq_ref)
-        assert_array_almost_equal(output.elec.N0, ones(7) * 60 / zp)
+    obj = Test_InCurrent_meth()
+
+    test_dict = idq_test[0]
+
+    out = obj.test_InputCurrent_DQ(test_dict)
+
+    # out.plot_2D_Data(
+    #         "elec.Is",
+    #         "time",
+    #         "phase",
+    #     )
+
+    # title = "Id=" + str(test_dict["Id"]) + " Iq=" + str(test_dict["Iq"])
+    # fig = plt.gcf()
+    # plt.title(title)
+    # fig.savefig(
+    #     join(
+    #         save_path,
+    #         "test_InCurrent_Id="
+    #         + str(test_dict["Id"])
+    #         + "_Iq="
+    #         + str(test_dict["Iq"])
+    #         + ".png",
+    #     )
+    # )
+    # plt.close("all")

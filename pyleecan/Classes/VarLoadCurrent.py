@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .VarLoad import VarLoad
 
 # Import all class method
@@ -46,6 +49,7 @@ except ImportError as error:
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
+from .Post import Post
 
 
 class VarLoadCurrent(VarLoad):
@@ -113,15 +117,9 @@ class VarLoadCurrent(VarLoad):
         )
     else:
         get_elec_datakeeper = get_elec_datakeeper
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -133,45 +131,28 @@ class VarLoadCurrent(VarLoad):
         is_power=False,
         name="",
         desc="",
-        datakeeper_list=list(),
-        nb_proc=1,
+        datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,
         nb_simu=0,
+        is_reuse_femm_file=True,
+        postproc_list=-1,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            OP_matrix = obj.OP_matrix
-            type_OP_matrix = obj.type_OP_matrix
-            is_torque = obj.is_torque
-            is_power = obj.is_power
-            name = obj.name
-            desc = obj.desc
-            datakeeper_list = obj.datakeeper_list
-            nb_proc = obj.nb_proc
-            is_keep_all_output = obj.is_keep_all_output
-            stop_if_error = obj.stop_if_error
-            ref_simu_index = obj.ref_simu_index
-            nb_simu = obj.nb_simu
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -189,8 +170,6 @@ class VarLoadCurrent(VarLoad):
                 desc = init_dict["desc"]
             if "datakeeper_list" in list(init_dict.keys()):
                 datakeeper_list = init_dict["datakeeper_list"]
-            if "nb_proc" in list(init_dict.keys()):
-                nb_proc = init_dict["nb_proc"]
             if "is_keep_all_output" in list(init_dict.keys()):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
@@ -199,9 +178,12 @@ class VarLoadCurrent(VarLoad):
                 ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
-        # Initialisation by argument
-        # OP_matrix can be None, a ndarray or a list
-        set_array(self, "OP_matrix", OP_matrix)
+            if "is_reuse_femm_file" in list(init_dict.keys()):
+                is_reuse_femm_file = init_dict["is_reuse_femm_file"]
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
+        # Set the properties (value check and convertion are done in setter)
+        self.OP_matrix = OP_matrix
         self.type_OP_matrix = type_OP_matrix
         self.is_torque = is_torque
         self.is_power = is_power
@@ -210,17 +192,18 @@ class VarLoadCurrent(VarLoad):
             name=name,
             desc=desc,
             datakeeper_list=datakeeper_list,
-            nb_proc=nb_proc,
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
             ref_simu_index=ref_simu_index,
             nb_simu=nb_simu,
+            is_reuse_femm_file=is_reuse_femm_file,
+            postproc_list=postproc_list,
         )
         # The class is frozen (in VarLoad init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         VarLoadCurrent_str = ""
         # Get the properties inherited from VarLoad
@@ -257,8 +240,7 @@ class VarLoadCurrent(VarLoad):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from VarLoad
         VarLoadCurrent_dict = super(VarLoadCurrent, self).as_dict()
@@ -269,7 +251,7 @@ class VarLoadCurrent(VarLoad):
         VarLoadCurrent_dict["type_OP_matrix"] = self.type_OP_matrix
         VarLoadCurrent_dict["is_torque"] = self.is_torque
         VarLoadCurrent_dict["is_power"] = self.is_power
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VarLoadCurrent_dict["__class__"] = "VarLoadCurrent"
         return VarLoadCurrent_dict
@@ -290,7 +272,7 @@ class VarLoadCurrent(VarLoad):
 
     def _set_OP_matrix(self, value):
         """setter of OP_matrix"""
-        if value is None:
+        if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
             try:

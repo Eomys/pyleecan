@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Lamination import Lamination
 
 # Import all class method
@@ -64,9 +67,9 @@ except ImportError as error:
     comp_radius_mid_yoke = error
 
 try:
-    from ..Methods.Machine.LamSlot.comp_sym import comp_sym
+    from ..Methods.Machine.LamSlot.comp_periodicity import comp_periodicity
 except ImportError as error:
-    comp_sym = error
+    comp_periodicity = error
 
 
 from ._check import InitUnKnowClassError
@@ -189,24 +192,21 @@ class LamSlot(Lamination):
         )
     else:
         comp_radius_mid_yoke = comp_radius_mid_yoke
-    # cf Methods.Machine.LamSlot.comp_sym
-    if isinstance(comp_sym, ImportError):
-        comp_sym = property(
+    # cf Methods.Machine.LamSlot.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LamSlot method comp_sym: " + str(comp_sym))
+                ImportError(
+                    "Can't use LamSlot method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
             )
         )
     else:
-        comp_sym = comp_sym
-    # save method is available in all object
+        comp_periodicity = comp_periodicity
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -222,45 +222,23 @@ class LamSlot(Lamination):
         Rint=0,
         Rext=1,
         is_stator=True,
-        axial_vent=list(),
-        notch=list(),
+        axial_vent=-1,
+        notch=-1,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if slot == -1:
-            slot = Slot()
-        if mat_type == -1:
-            mat_type = Material()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            slot = obj.slot
-            L1 = obj.L1
-            mat_type = obj.mat_type
-            Nrvd = obj.Nrvd
-            Wrvd = obj.Wrvd
-            Kf1 = obj.Kf1
-            is_internal = obj.is_internal
-            Rint = obj.Rint
-            Rext = obj.Rext
-            is_stator = obj.is_stator
-            axial_vent = obj.axial_vent
-            notch = obj.notch
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -288,86 +266,8 @@ class LamSlot(Lamination):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
-        # Initialisation by argument
-        # slot can be None, a Slot object or a dict
-        if isinstance(slot, dict):
-            # Check that the type is correct (including daughter)
-            class_name = slot.get("__class__")
-            if class_name not in [
-                "Slot",
-                "Slot19",
-                "SlotCirc",
-                "SlotMFlat",
-                "SlotMPolar",
-                "SlotMag",
-                "SlotUD",
-                "SlotW10",
-                "SlotW11",
-                "SlotW12",
-                "SlotW13",
-                "SlotW14",
-                "SlotW15",
-                "SlotW16",
-                "SlotW21",
-                "SlotW22",
-                "SlotW23",
-                "SlotW24",
-                "SlotW25",
-                "SlotW26",
-                "SlotW27",
-                "SlotW28",
-                "SlotW29",
-                "SlotW60",
-                "SlotW61",
-                "SlotWind",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for slot"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.slot = class_obj(init_dict=slot)
-        elif isinstance(slot, str):
-            from ..Functions.load import load
-
-            slot = load(slot)
-            # Check that the type is correct (including daughter)
-            class_name = slot.__class__.__name__
-            if class_name not in [
-                "Slot",
-                "Slot19",
-                "SlotCirc",
-                "SlotMFlat",
-                "SlotMPolar",
-                "SlotMag",
-                "SlotUD",
-                "SlotW10",
-                "SlotW11",
-                "SlotW12",
-                "SlotW13",
-                "SlotW14",
-                "SlotW15",
-                "SlotW16",
-                "SlotW21",
-                "SlotW22",
-                "SlotW23",
-                "SlotW24",
-                "SlotW25",
-                "SlotW26",
-                "SlotW27",
-                "SlotW28",
-                "SlotW29",
-                "SlotW60",
-                "SlotW61",
-                "SlotWind",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for slot"
-                )
-            self.slot = slot
-        else:
-            self.slot = slot
+        # Set the properties (value check and convertion are done in setter)
+        self.slot = slot
         # Call Lamination init
         super(LamSlot, self).__init__(
             L1=L1,
@@ -386,7 +286,7 @@ class LamSlot(Lamination):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         LamSlot_str = ""
         # Get the properties inherited from Lamination
@@ -412,8 +312,7 @@ class LamSlot(Lamination):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Lamination
         LamSlot_dict = super(LamSlot, self).as_dict()
@@ -421,7 +320,7 @@ class LamSlot(Lamination):
             LamSlot_dict["slot"] = None
         else:
             LamSlot_dict["slot"] = self.slot.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlot_dict["__class__"] = "LamSlot"
         return LamSlot_dict
@@ -440,6 +339,13 @@ class LamSlot(Lamination):
 
     def _set_slot(self, value):
         """setter of slot"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "slot")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Slot()
         check_var("slot", value, "Slot")
         self._slot = value
 

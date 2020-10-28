@@ -2,7 +2,7 @@
 
 
 def comp_length(self):
-    """Compure the total length of the Lamination (including radial
+    """Compute the total length of the Lamination (including radial
     ventilations duct)
 
     Parameters

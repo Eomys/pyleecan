@@ -22,7 +22,7 @@ import pytest
 @pytest.mark.validation
 @pytest.mark.FEMM
 @pytest.mark.MeshSol
-def test_CEFC_002():
+def test_CEFC_002(CEFC_Lam):
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication
 
@@ -37,16 +37,17 @@ def test_CEFC_002():
     # Definition of the enforced output of the electrical module
     N0 = 3000
     Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
-    time = ImportGenVectLin(start=0, stop=1, num=1, endpoint=True)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
+    Nt_tot = 1
+    Na_tot = 1024
 
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
         N0=N0,
         angle_rotor=None,  # Will be computed
-        time=time,
-        angle=angle,
+        Nt_tot=Nt_tot,
+        Na_tot=Na_tot,
+        rot_dir=-1,
     )
 
     # Definition of the magnetic simulation (no symmetry)
@@ -54,6 +55,7 @@ def test_CEFC_002():
         type_BH_stator=2,
         type_BH_rotor=2,
         is_get_mesh=True,
+        is_periodicity_a=False,
         is_save_FEA=False,
         is_sliding_band=True,
     )
@@ -98,7 +100,6 @@ def test_CEFC_002():
 
 @pytest.mark.skip
 def test_CEFC_002_load():
-    save_path = "C:\\Users\\Raphael\\Desktop\\Git\\pyleecan_tests\\pyleecan\\Results\\SM_CEFC_002_save_mag"
     load_path = join(save_path, "Output.json")
     # Test to load the Meshsolution object (inside the output):
     with open(load_path) as json_file:
@@ -124,4 +125,4 @@ def test_CEFC_002_load():
         save_path=join(save_path, "CEFC_002_H_stator_load.png"),
     )
 
-    FEMM.mag.meshsolution.plot_contour(label="H", group_names=["stator", "/", "airgap"])
+    FEMM.mag.meshsolution.plot_contour(label="H", group_names=["stator", "airgap"])

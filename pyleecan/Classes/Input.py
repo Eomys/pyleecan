@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -19,9 +22,9 @@ except ImportError as error:
     gen_input = error
 
 try:
-    from ..Methods.Simulation.Input.comp_time import comp_time
+    from ..Methods.Simulation.Input.comp_axes import comp_axes
 except ImportError as error:
-    comp_time = error
+    comp_axes = error
 
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
@@ -46,24 +49,18 @@ class Input(FrozenClass):
         )
     else:
         gen_input = gen_input
-    # cf Methods.Simulation.Input.comp_time
-    if isinstance(comp_time, ImportError):
-        comp_time = property(
+    # cf Methods.Simulation.Input.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Input method comp_time: " + str(comp_time))
+                ImportError("Can't use Input method comp_axes: " + str(comp_axes))
             )
         )
     else:
-        comp_time = comp_time
-    # save method is available in all object
+        comp_axes = comp_axes
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -79,31 +76,16 @@ class Input(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if time == -1:
-            time = ImportMatrix()
-        if angle == -1:
-            angle = ImportMatrix()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            time = obj.time
-            angle = obj.angle
-            Nt_tot = obj.Nt_tot
-            Nrev = obj.Nrev
-            Na_tot = obj.Na_tot
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -117,94 +99,10 @@ class Input(FrozenClass):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # time can be None, a ImportMatrix object or a dict
-        if isinstance(time, dict):
-            # Check that the type is correct (including daughter)
-            class_name = time.get("__class__")
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for time"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.time = class_obj(init_dict=time)
-        elif isinstance(time, str):
-            from ..Functions.load import load
-
-            time = load(time)
-            # Check that the type is correct (including daughter)
-            class_name = time.__class__.__name__
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for time"
-                )
-            self.time = time
-        else:
-            self.time = time
-        # angle can be None, a ImportMatrix object or a dict
-        if isinstance(angle, dict):
-            # Check that the type is correct (including daughter)
-            class_name = angle.get("__class__")
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for angle"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.angle = class_obj(init_dict=angle)
-        elif isinstance(angle, str):
-            from ..Functions.load import load
-
-            angle = load(angle)
-            # Check that the type is correct (including daughter)
-            class_name = angle.__class__.__name__
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for angle"
-                )
-            self.angle = angle
-        else:
-            self.angle = angle
+        self.time = time
+        self.angle = angle
         self.Nt_tot = Nt_tot
         self.Nrev = Nrev
         self.Na_tot = Na_tot
@@ -213,7 +111,7 @@ class Input(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Input_str = ""
         if self.parent is None:
@@ -253,8 +151,7 @@ class Input(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Input_dict = dict()
         if self.time is None:
@@ -268,7 +165,7 @@ class Input(FrozenClass):
         Input_dict["Nt_tot"] = self.Nt_tot
         Input_dict["Nrev"] = self.Nrev
         Input_dict["Na_tot"] = self.Na_tot
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Input_dict["__class__"] = "Input"
         return Input_dict
 
@@ -289,10 +186,17 @@ class Input(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
+        elif value == -1:
+            value = ImportMatrix()
+        elif isinstance(value, dict):
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "time")
+            value = class_obj(init_dict=value)
         check_var("time", value, "ImportMatrix")
         self._time = value
 
@@ -314,10 +218,19 @@ class Input(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
+        elif value == -1:
+            value = ImportMatrix()
+        elif isinstance(value, dict):
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "angle"
+            )
+            value = class_obj(init_dict=value)
         check_var("angle", value, "ImportMatrix")
         self._angle = value
 

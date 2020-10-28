@@ -16,15 +16,13 @@ import pytest
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
-
 
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_EM_IPMSM_FL_001():
-    """Test compute the Flux in FEMM of machine IPMSM_xxx, with and without symmetry
-    """
+    """Test compute the Flux in FEMM of machine IPMSM_xxx, with and without symmetry"""
+    IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
     simu = Simu1(name="EM_IPMSM_FL_001", machine=IPMSM_xxx)
 
     # Initialization of the simulation starting point
@@ -33,9 +31,8 @@ def test_EM_IPMSM_FL_001():
     simu.input.time = ImportMatrixVal(
         value=linspace(start=0, stop=0.015, num=4, endpoint=True)
     )
-    simu.input.angle = ImportMatrixVal(
-        value=linspace(start=0, stop=2 * pi, num=1024, endpoint=False)
-    )
+    simu.input.Na_tot = 1024
+
     # Definition of the enforced output of the electrical module
     simu.input.Is = ImportMatrixVal(
         value=array(  # Stator currents as a function of time
@@ -52,18 +49,14 @@ def test_EM_IPMSM_FL_001():
     simu.input.angle_rotor_initial = 0.5216 + pi  # Rotor position at t=0 [rad]
 
     # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=False, is_antiper_a=True
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=False)
     simu.force = None
     simu.struct = None
 
-    assert IPMSM_xxx.comp_sym() == (4, True)
+    assert IPMSM_xxx.comp_periodicity() == (4, True, 4, True)
     # Copy the simu and activate the symmetry
     simu_sym = Simu1(init_dict=simu.as_dict())
-    simu_sym.mag.is_symmetry_a = True
-    simu_sym.mag.sym_a = 4
-    simu_sym.mag.is_antiper_a = False
+    simu_sym.mag.is_periodicity_a = True
 
     out = Output(simu=simu)
     simu.run()
@@ -73,9 +66,10 @@ def test_EM_IPMSM_FL_001():
 
     # Plot the result by comparing the two simulation
     plt.close("all")
-    out.plot_A_space(
-        "mag.B", data_list=[out2.mag.B], legend_list=["No symmetry", "1/4 symmetry"]
+    out.plot_2D_Data(
+        "mag.B",
+        "angle",
+        data_list=[out2.mag.B],
+        legend_list=["No symmetry", "1/4 symmetry"],
+        save_path=join(save_path, "test_EM_IPMSM_FL_001_sym.png"),
     )
-
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_EM_IPMSM_FL_001_sym.png"))

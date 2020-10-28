@@ -17,8 +17,7 @@ if not isdir(save_path):
 
 
 def test_forward():
-    """Check that the ImportGenToothSaw can generate forward toothsaw
-    """
+    """Check that the ImportGenToothSaw can generate forward toothsaw"""
     Tf = 2
     N = 2048 * 4
     test_obj = ImportGenToothSaw(type_signal=0, f=4, A=2, N=N, Tf=Tf)
@@ -42,8 +41,7 @@ def test_forward():
 
 
 def test_forward_delay():
-    """Check that the ImportGenToothSaw can generate forward toothsaw
-    """
+    """Check that the ImportGenToothSaw can generate forward toothsaw"""
     Tf = 2
     N = 2048 * 4
     test_obj = ImportGenToothSaw(type_signal=0, Dt=0.2, f=4, A=2, N=N, Tf=Tf)
@@ -67,8 +65,7 @@ def test_forward_delay():
 
 
 def test_backward():
-    """Check that the ImportGenToothSaw can generate backward toothsaw
-    """
+    """Check that the ImportGenToothSaw can generate backward toothsaw"""
     Tf = 1
     N = 2048 * 4
     test_obj = ImportGenToothSaw(type_signal=1, f=4, A=4, N=N, Tf=Tf)
@@ -92,8 +89,7 @@ def test_backward():
 
 
 def test_sym():
-    """Check that the ImportGenToothSaw can generate symmetry toothsaw
-    """
+    """Check that the ImportGenToothSaw can generate symmetry toothsaw"""
     Tf = 1
     N = 2048 * 4
     test_obj = ImportGenToothSaw(type_signal=2, f=4, A=4, N=N, Tf=Tf)

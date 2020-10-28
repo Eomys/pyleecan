@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -37,57 +40,36 @@ class ImportData(FrozenClass):
         )
     else:
         get_data = get_data
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        axes=list(),
+        axes=-1,
         field=None,
         unit="SI",
         name="",
         symbol="",
-        normalizations={},
-        symmetries={},
+        normalizations=-1,
+        symmetries=-1,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if field == -1:
-            field = Import()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            axes = obj.axes
-            field = obj.field
-            unit = obj.unit
-            name = obj.name
-            symbol = obj.symbol
-            normalizations = obj.normalizations
-            symmetries = obj.symmetries
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -105,67 +87,10 @@ class ImportData(FrozenClass):
                 normalizations = init_dict["normalizations"]
             if "symmetries" in list(init_dict.keys()):
                 symmetries = init_dict["symmetries"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # axes can be None or a list of ImportData object
-        self.axes = list()
-        if type(axes) is list:
-            for obj in axes:
-                if obj is None:  # Default value
-                    self.axes.append(ImportData())
-                elif isinstance(obj, dict):
-                    self.axes.append(ImportData(init_dict=obj))
-                else:
-                    self.axes.append(obj)
-        elif axes is None:
-            self.axes = list()
-        else:
-            self.axes = axes
-        # field can be None, a Import object or a dict
-        if isinstance(field, dict):
-            # Check that the type is correct (including daughter)
-            class_name = field.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for field"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.field = class_obj(init_dict=field)
-        elif isinstance(field, str):
-            from ..Functions.load import load
-
-            field = load(field)
-            # Check that the type is correct (including daughter)
-            class_name = field.__class__.__name__
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for field"
-                )
-            self.field = field
-        else:
-            self.field = field
+        self.axes = axes
+        self.field = field
         self.unit = unit
         self.name = name
         self.symbol = symbol
@@ -176,7 +101,7 @@ class ImportData(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         ImportData_str = ""
         if self.parent is None:
@@ -222,13 +147,15 @@ class ImportData(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         ImportData_dict = dict()
-        ImportData_dict["axes"] = list()
-        for obj in self.axes:
-            ImportData_dict["axes"].append(obj.as_dict())
+        if self.axes is None:
+            ImportData_dict["axes"] = None
+        else:
+            ImportData_dict["axes"] = list()
+            for obj in self.axes:
+                ImportData_dict["axes"].append(obj.as_dict())
         if self.field is None:
             ImportData_dict["field"] = None
         else:
@@ -236,9 +163,13 @@ class ImportData(FrozenClass):
         ImportData_dict["unit"] = self.unit
         ImportData_dict["name"] = self.name
         ImportData_dict["symbol"] = self.symbol
-        ImportData_dict["normalizations"] = self.normalizations
-        ImportData_dict["symmetries"] = self.symmetries
-        # The class name is added to the dict fordeserialisation purpose
+        ImportData_dict["normalizations"] = (
+            self.normalizations.copy() if self.normalizations is not None else None
+        )
+        ImportData_dict["symmetries"] = (
+            self.symmetries.copy() if self.symmetries is not None else None
+        )
+        # The class name is added to the dict for deserialisation purpose
         ImportData_dict["__class__"] = "ImportData"
         return ImportData_dict
 
@@ -257,19 +188,25 @@ class ImportData(FrozenClass):
 
     def _get_axes(self):
         """getter of axes"""
-        for obj in self._axes:
-            if obj is not None:
-                obj.parent = self
+        if self._axes is not None:
+            for obj in self._axes:
+                if obj is not None:
+                    obj.parent = self
         return self._axes
 
     def _set_axes(self, value):
         """setter of axes"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "axes"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
         check_var("axes", value, "[ImportData]")
         self._axes = value
-
-        for obj in self._axes:
-            if obj is not None:
-                obj.parent = self
 
     axes = property(
         fget=_get_axes,
@@ -286,6 +223,15 @@ class ImportData(FrozenClass):
 
     def _set_field(self, value):
         """setter of field"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "field"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Import()
         check_var("field", value, "Import")
         self._field = value
 
@@ -361,6 +307,8 @@ class ImportData(FrozenClass):
 
     def _set_normalizations(self, value):
         """setter of normalizations"""
+        if type(value) is int and value == -1:
+            value = dict()
         check_var("normalizations", value, "dict")
         self._normalizations = value
 
@@ -379,6 +327,8 @@ class ImportData(FrozenClass):
 
     def _set_symmetries(self, value):
         """setter of symmetries"""
+        if type(value) is int and value == -1:
+            value = dict()
         check_var("symmetries", value, "dict")
         self._symmetries = value
 

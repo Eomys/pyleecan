@@ -3,8 +3,8 @@
 from os import getcwd, rename
 from os.path import basename, join, isfile, dirname
 
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QWidget
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
 
 from ....Functions.Material.compare_material import compare_material
 from ....Functions.load import load, load_matlib
@@ -25,8 +25,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
     """Main windows of the Machine Setup Tools"""
 
     # Signal to update the simulation
-    machineChanged = pyqtSignal()
-    rejected = pyqtSignal()
+    machineChanged = Signal()
+    rejected = Signal()
 
     def __init__(self, machine=None, dmatlib=None, machine_path=""):
         """Initialize the GUI according to machine type
@@ -205,8 +205,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             self.update_nav()
 
     def update_nav(self):
-        """Update the nav list to match the step of the current machine
-        """
+        """Update the nav list to match the step of the current machine"""
         mach_dict = mach_list[self.get_machine_index()]
         self.nav_step.blockSignals(True)
         self.nav_step.clear()
@@ -267,8 +266,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         self.last_index = index - 1
 
     def get_machine_index(self):
-        """Get the index corresponding to the current machine in the mach_list
-        """
+        """Get the index corresponding to the current machine in the mach_list"""
         # Get the correct machine dictionnary
         index = mach_index.index(type(self.machine))
         if index == -1:

@@ -1,18 +1,16 @@
-from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
+from PySide2.QtCore import QSize
+from PySide2.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
 
 from ......GUI import gui_option
 
 
 class WMagnetOut(QGroupBox):
-    """Setup of QGroupBox for output for Magnet
-    """
+    """Setup of QGroupBox for output for Magnet"""
 
     def __init__(self, parent=None):
-        """Initialize the widget
-        """
+        """Initialize the widget"""
 
-        QWidget.__init__(self, parent)
+        QGroupBox.__init__(self, parent)
         self.u = gui_option.unit
         # Setup main widget
         self.setTitle(self.tr("Output"))

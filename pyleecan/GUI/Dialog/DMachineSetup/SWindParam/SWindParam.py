@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....GUI.Dialog.DMachineSetup.SWindParam.Gen_SWindParam import Gen_SWindParam
 
 
 class SWindParam(Gen_SWindParam, QWidget):
-    """Step to define the winding parameters
-    """
+    """Step to define the winding parameters"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup nav
     step_name = "Winding Parameter"
 
@@ -25,7 +24,7 @@ class SWindParam(Gen_SWindParam, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """

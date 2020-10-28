@@ -73,8 +73,7 @@ def check(self):
 
 
 class S50_NoneError(SlotCheckError):
-    """Raised when a propery of HoleM50 is None
-    """
+    """Raised when a propery of HoleM50 is None"""
 
     pass
 

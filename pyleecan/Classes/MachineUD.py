@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Machine import Machine
 
 # Import all class method
@@ -17,11 +20,6 @@ try:
     from ..Methods.Machine.MachineUD.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
-
-try:
-    from ..Methods.Machine.MachineUD.get_lam_list import get_lam_list
-except ImportError as error:
-    get_lam_list = error
 
 try:
     from ..Methods.Machine.MachineUD.plot import plot
@@ -57,17 +55,6 @@ class MachineUD(Machine):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Machine.MachineUD.get_lam_list
-    if isinstance(get_lam_list, ImportError):
-        get_lam_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MachineUD method get_lam_list: " + str(get_lam_list)
-                )
-            )
-        )
-    else:
-        get_lam_list = get_lam_list
     # cf Methods.Machine.MachineUD.plot
     if isinstance(plot, ImportError):
         plot = property(
@@ -88,21 +75,15 @@ class MachineUD(Machine):
         )
     else:
         is_synchronous = is_synchronous
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        lam_list=list(),
+        lam_list=-1,
         is_sync=True,
         frame=-1,
         shaft=-1,
@@ -115,34 +96,16 @@ class MachineUD(Machine):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if frame == -1:
-            frame = Frame()
-        if shaft == -1:
-            shaft = Shaft()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            lam_list = obj.lam_list
-            is_sync = obj.is_sync
-            frame = obj.frame
-            shaft = obj.shaft
-            name = obj.name
-            desc = obj.desc
-            type_machine = obj.type_machine
-            logger_name = obj.logger_name
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -162,42 +125,8 @@ class MachineUD(Machine):
                 type_machine = init_dict["type_machine"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-        # Initialisation by argument
-        # lam_list can be None or a list of Lamination object
-        self.lam_list = list()
-        if type(lam_list) is list:
-            for obj in lam_list:
-                if obj is None:  # Default value
-                    self.lam_list.append(Lamination())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Lamination",
-                        "LamHole",
-                        "LamSlot",
-                        "LamSlotMag",
-                        "LamSlotMulti",
-                        "LamSlotWind",
-                        "LamSquirrelCage",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for lam_list"
-                        )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.lam_list.append(class_obj(init_dict=obj))
-                else:
-                    self.lam_list.append(obj)
-        elif lam_list is None:
-            self.lam_list = list()
-        else:
-            self.lam_list = lam_list
+        # Set the properties (value check and convertion are done in setter)
+        self.lam_list = lam_list
         self.is_sync = is_sync
         # Call Machine init
         super(MachineUD, self).__init__(
@@ -212,7 +141,7 @@ class MachineUD(Machine):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         MachineUD_str = ""
         # Get the properties inherited from Machine
@@ -241,16 +170,18 @@ class MachineUD(Machine):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Machine
         MachineUD_dict = super(MachineUD, self).as_dict()
-        MachineUD_dict["lam_list"] = list()
-        for obj in self.lam_list:
-            MachineUD_dict["lam_list"].append(obj.as_dict())
+        if self.lam_list is None:
+            MachineUD_dict["lam_list"] = None
+        else:
+            MachineUD_dict["lam_list"] = list()
+            for obj in self.lam_list:
+                MachineUD_dict["lam_list"].append(obj.as_dict())
         MachineUD_dict["is_sync"] = self.is_sync
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineUD_dict["__class__"] = "MachineUD"
         return MachineUD_dict
@@ -266,19 +197,25 @@ class MachineUD(Machine):
 
     def _get_lam_list(self):
         """getter of lam_list"""
-        for obj in self._lam_list:
-            if obj is not None:
-                obj.parent = self
+        if self._lam_list is not None:
+            for obj in self._lam_list:
+                if obj is not None:
+                    obj.parent = self
         return self._lam_list
 
     def _set_lam_list(self, value):
         """setter of lam_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "lam_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
         check_var("lam_list", value, "[Lamination]")
         self._lam_list = value
-
-        for obj in self._lam_list:
-            if obj is not None:
-                obj.parent = self
 
     lam_list = property(
         fget=_get_lam_list,

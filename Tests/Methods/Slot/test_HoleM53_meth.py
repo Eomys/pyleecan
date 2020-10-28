@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
-from ddt import ddt, data
+import pytest
 
 from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.SurfLine import SurfLine
@@ -51,57 +50,54 @@ HoleM53_test.append(
 )
 
 
-@ddt
-class test_holeB53_meth(TestCase):
-    """unittest for holeB53 methods"""
+@pytest.mark.METHODS
+class Test_HoleM53_meth(object):
+    """pytest for holeB53 methods"""
 
-    @data(*HoleM53_test)
+    @pytest.mark.parametrize("test_dict", HoleM53_test)
     def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
+        """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_surface()
 
         a = result
         b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*HoleM53_test)
+    @pytest.mark.parametrize("test_dict", HoleM53_test)
     def test_comp_surface_mag(self, test_dict):
-        """Check that the computation of the magnet surface is correct
-        """
+        """Check that the computation of the magnet surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_surface_magnets()
 
         a = result
         b = test_dict["SM_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*HoleM53_test)
+    @pytest.mark.parametrize("test_dict", HoleM53_test)
     def test_comp_radius(self, test_dict):
-        """Check that the computation of the radius is correct
-        """
+        """Check that the computation of the radius is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_radius()
 
         a = result[0]
         b = test_dict["Rmin"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         a = result[1]
         b = test_dict["Rmax"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*HoleM53_test)
+    @pytest.mark.parametrize("test_dict", HoleM53_test)
     def test_comp_W5(self, test_dict):
-        """Check that the computation of W5 iscorrect
-        """
+        """Check that the computation of W5 iscorrect"""
         test_obj = test_dict["test_obj"]
+
         a = test_obj.hole[0].comp_W5()
         b = test_dict["W5"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg

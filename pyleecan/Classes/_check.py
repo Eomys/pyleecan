@@ -21,9 +21,7 @@ def set_array(obj, prop, value):
     None
 
     """
-    if value is None:  # Default value
-        value = empty(0)
-    elif isinstance(value, list):
+    if isinstance(value, list):
         value = array(value)
     setattr(obj, prop, value)
 
@@ -337,8 +335,7 @@ def check_max(var_name, value, type_value, Vmax):
 
 
 def raise_(ex):
-    """Function to raise an exeption for the method import lambda
-    """
+    """Function to raise an exeption for the method import lambda"""
     raise ex
 
 

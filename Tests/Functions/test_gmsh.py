@@ -1,6 +1,5 @@
 from os import remove, getcwd
 from os.path import isfile, join
-from unittest import TestCase
 import pytest
 
 try:
@@ -14,9 +13,9 @@ from Tests import save_validation_path as save_path
 
 
 @pytest.mark.GMSH
+@pytest.mark.long
 def test_slot_10():
-    """Check generation of the 3D mesh of Slot 10 with gmsh
-    """
+    """Check generation of the 3D mesh of Slot 10 with gmsh"""
     if isinstance(gen_3D_mesh, ImportError):
         raise ImportError("Fail to import gen_3D_mesh (gmsh package missing)")
 

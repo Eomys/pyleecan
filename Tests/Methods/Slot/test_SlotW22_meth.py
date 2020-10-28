@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
+import pytest
 
 from pyleecan.Classes.Arc2 import Arc2
 from pyleecan.Classes.Segment import Segment
@@ -7,7 +7,6 @@ from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.SlotW22 import SlotW22
 from numpy import pi, ndarray, cos, sin
 from pyleecan.Classes.LamSlot import LamSlot
-from ddt import ddt, data
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
@@ -33,84 +32,79 @@ slotW22_test.append(
 )
 
 
-@ddt
-class test_SlotW22_meth(TestCase):
-    """unittest for SlotW22 methods"""
+@pytest.mark.METHODS
+class Test_SlotW22_meth(object):
+    """pytest for SlotW22 methods"""
 
-    @data(*slotW22_test)
+    @pytest.mark.parametrize("test_dict", slotW22_test)
     def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
+        """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface()
 
         a = result
         b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*slotW22_test)
+    @pytest.mark.parametrize("test_dict", slotW22_test)
     def test_comp_surface_wind(self, test_dict):
-        """Check that the computation of the winding surface is correct
-        """
+        """Check that the computation of the winding surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface_wind()
 
         a = result
         b = test_dict["SW_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = comp_surface_wind(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*slotW22_test)
+    @pytest.mark.parametrize("test_dict", slotW22_test)
     def test_comp_height(self, test_dict):
-        """Check that the computation of the height is correct
-        """
+        """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_height()
 
         a = result
         b = test_dict["H_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*slotW22_test)
+    @pytest.mark.parametrize("test_dict", slotW22_test)
     def test_comp_angle_opening(self, test_dict):
-        """Check that the computation of the average opening angle iscorrect
-        """
+        """Check that the computation of the average opening angle iscorrect"""
         test_obj = test_dict["test_obj"]
         a = test_obj.slot.comp_angle_opening()
-        self.assertEqual(a, test_obj.slot.W0)
+        assert a == test_obj.slot.W0
         # Check that the analytical method returns the same result as the numerical one
         b = comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*slotW22_test)
+    @pytest.mark.parametrize("test_dict", slotW22_test)
     def test_comp_angle_wind_eq(self, test_dict):
-        """Check that the computation of the average angle is correct
-        """
+        """Check that the computation of the average angle is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_angle_wind_eq()
 
         a = result
         b = test_obj.slot.W2
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
     def test_build_geometry(self):
         """check that curve_list is correct"""
@@ -139,25 +133,22 @@ class test_SlotW22_meth(TestCase):
         curve_list.append(Segment(Z7, Z8))
 
         result = test_obj.build_geometry()
-        self.assertEqual(len(result), len(curve_list))
+        assert len(result) == len(curve_list)
         for i in range(0, len(result)):
             if isinstance(result[i], Segment):
                 a = result[i].begin
                 b = curve_list[i].begin
-                self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
-
+                assert abs((a - b) / a - 0) < DELTA
                 a = result[i].end
                 b = curve_list[i].end
-                self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+                assert abs((a - b) / a - 0) < DELTA
             else:  # Arc2
                 a = result[i].begin
                 b = curve_list[i].begin
-                self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
-
+                assert abs((a - b) / a - 0) < DELTA
                 a = result[i].center
                 b = curve_list[i].center
-                self.assertAlmostEqual(a, b)
-
+                assert round(abs(a - b), 7) == 0
                 a = result[i].angle
                 b = curve_list[i].angle
-                self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+                assert abs((a - b) / a - 0) < DELTA

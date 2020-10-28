@@ -21,8 +21,6 @@ import pytest
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
-
 
 @pytest.mark.long
 @pytest.mark.validation
@@ -38,6 +36,7 @@ def test_Magnetic_FEMM_sym():
     Test compute the Flux in FEMM, with and without symmetry
     and with MANATEE semi-analytical subdomain model
     """
+    SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
     simu = Simu1(name="EM_SPMSM_FL_001", machine=SPMSM_003)
 
     # Definition of the enforced output of the electrical module
@@ -53,7 +52,7 @@ def test_Magnetic_FEMM_sym():
         )
     )
     time = ImportGenVectLin(start=0, stop=0.015, num=4, endpoint=True)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
+    Na_tot = 1024
 
     simu.input = InputCurrent(
         Is=Is,
@@ -61,20 +60,18 @@ def test_Magnetic_FEMM_sym():
         N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + pi,
     )
 
     # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=False, is_antiper_a=True
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=False)
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
-    assert SPMSM_003.comp_sym() == (1, True)
+    assert SPMSM_003.comp_periodicity() == (1, True, 1, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
-    simu_sym.mag.is_symmetry_a = True
+    simu_sym.mag.is_periodicity_a = True
 
     # Just load the Output and ends (we could also have directly filled the Output object)
     simu_load = Simu1(init_dict=simu.as_dict())
@@ -83,7 +80,11 @@ def test_Magnetic_FEMM_sym():
     Br = ImportMatlab(file_path=mat_file, var_name="XBr")
     Bt = ImportMatlab(file_path=mat_file, var_name="XBt")
     Time = ImportData(field=time, unit="s", name="time")
-    Angle = ImportData(field=angle, unit="rad", name="angle")
+    Angle = ImportData(
+        field=ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False),
+        unit="rad",
+        name="angle",
+    )
     Br_data = ImportData(
         axes=[Time, Angle],
         field=Br,
@@ -99,7 +100,7 @@ def test_Magnetic_FEMM_sym():
         symbol="B_t",
     )
     B = ImportVectorField(components={"radial": Br_data, "tangential": Bt_data})
-    simu_load.input = InputFlux(time=time, angle=angle, B=B)
+    simu_load.input = InputFlux(time=time, Na_tot=Na_tot, B=B, OP=simu.input.copy())
     out = Output(simu=simu)
     simu.run()
 
@@ -111,21 +112,26 @@ def test_Magnetic_FEMM_sym():
 
     # Plot the result by comparing the two simulation (sym / no sym)
     plt.close("all")
-    out.plot_A_space(
-        "mag.B", data_list=[out2.mag.B], legend_list=["No symmetry", "1/2 symmetry"]
-    )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_EM_SPMSM_FL_001_sym.png"))
+    out.plot_2D_Data(
+        "mag.B",
+        "angle",
+        data_list=[out2.mag.B],
+        legend_list=["No symmetry", "1/2 symmetry"],
+        save_path=join(save_path, "test_EM_SPMSM_FL_001_sym.png"),
+    )
 
     # Plot the result by comparing the two simulation (sym / MANATEE)
     plt.close("all")
-    out.plot_A_space(
+
+    out.plot_2D_Data(
         "mag.B",
-        t_index=1,
+        "angle",
         data_list=[out3.mag.B],
         legend_list=["No symmetry", "MANATEE SDM"],
+        save_path=join(save_path, "test_EM_SPMSM_FL_001_SDM.png"),
     )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_EM_SPMSM_FL_001_SDM.png"))
+
+if __name__ == "__main__":
+    test_Magnetic_FEMM_sym()

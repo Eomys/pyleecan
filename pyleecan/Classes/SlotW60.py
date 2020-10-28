@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .SlotWind import SlotWind
 
 # Import all class method
@@ -57,6 +60,11 @@ try:
     from ..Methods.Slot.SlotW60.comp_surface_wind import comp_surface_wind
 except ImportError as error:
     comp_surface_wind = error
+
+try:
+    from ..Methods.Slot.SlotW60.get_surface_wind import get_surface_wind
+except ImportError as error:
+    get_surface_wind = error
 
 
 from ._check import InitUnKnowClassError
@@ -168,15 +176,21 @@ class SlotW60(SlotWind):
         )
     else:
         comp_surface_wind = comp_surface_wind
-    # save method is available in all object
+    # cf Methods.Slot.SlotW60.get_surface_wind
+    if isinstance(get_surface_wind, ImportError):
+        get_surface_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW60 method get_surface_wind: "
+                    + str(get_surface_wind)
+                )
+            )
+        )
+    else:
+        get_surface_wind = get_surface_wind
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -196,31 +210,16 @@ class SlotW60(SlotWind):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            W1 = obj.W1
-            W2 = obj.W2
-            H1 = obj.H1
-            H2 = obj.H2
-            R1 = obj.R1
-            H3 = obj.H3
-            H4 = obj.H4
-            W3 = obj.W3
-            Zs = obj.Zs
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -242,7 +241,7 @@ class SlotW60(SlotWind):
                 W3 = init_dict["W3"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.W1 = W1
         self.W2 = W2
         self.H1 = H1
@@ -257,7 +256,7 @@ class SlotW60(SlotWind):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         SlotW60_str = ""
         # Get the properties inherited from SlotWind
@@ -300,8 +299,7 @@ class SlotW60(SlotWind):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from SlotWind
         SlotW60_dict = super(SlotW60, self).as_dict()
@@ -313,7 +311,7 @@ class SlotW60(SlotWind):
         SlotW60_dict["H3"] = self.H3
         SlotW60_dict["H4"] = self.H4
         SlotW60_dict["W3"] = self.W3
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotW60_dict["__class__"] = "SlotW60"
         return SlotW60_dict

@@ -2,15 +2,15 @@
 
 from os.path import isdir, join
 from os import walk, getcwd, chdir
-from ..Functions.load_switch import load_switch
-from ..Classes.Material import Material
 from .Load.load_json import load_json
 from .Load.load_hdf5 import load_hdf5
 from .Load.load_pkl import load_pkl
+from .Load.import_class import import_class
+from ..Classes._check import InitUnKnowClassError
 
 
 def init_data(obj, file_path):
-    """ 
+    """
     Initialize pyleecan objects (by init_dict) within list and/or dict data structure.
     Non pyleecan, list or dict type data will be kept as they are.
 
@@ -21,10 +21,10 @@ def init_data(obj, file_path):
 
     file_path: str
         path of the obj loaded
-        
+
     Returns
     -------
-    data: 
+    data:
         initialized pyleecan objects within a list or dict
     """
 
@@ -47,19 +47,15 @@ def init_data(obj, file_path):
         # Check if the dictionay has a "__class__" key
         if "__class__" in obj:
             # Check if data is a pyleecan class
-            if obj["__class__"] in load_switch:
-                if "init_str" in obj:  # Load from file
-                    return load_switch[obj["__class__"]](
-                        init_str=folder_path + obj["init_str"]
-                    )
-                elif folder_path != "":
-                    wd = getcwd()
-                    chdir(folder_path)
-                    new_obj = load_switch[obj["__class__"]](init_dict=obj)
-                    chdir(wd)
-                    return new_obj
-                else:
-                    return load_switch[obj["__class__"]](init_dict=obj)
+            class_obj = import_class("pyleecan.Classes", obj.get("__class__"), "")
+            if folder_path != "":
+                wd = getcwd()
+                chdir(folder_path)
+                new_obj = class_obj(init_dict=obj)
+                chdir(wd)
+                return new_obj
+            else:
+                return class_obj(init_dict=obj)
 
         # --- 'normal' dict ---
         data = dict()
@@ -73,6 +69,18 @@ def init_data(obj, file_path):
         return obj
 
 
+def load_init_dict(file_path):
+    """load the init_dict from a h5 or json file"""
+    if file_path.endswith("hdf5") or file_path.endswith("h5"):
+        return load_hdf5(file_path)
+    elif file_path.endswith("json") or isdir(file_path):
+        return load_json(file_path)
+    else:
+        raise Exception(
+            "Load error: Only hdf5, h5 and json format supported: " + file_path
+        )
+
+
 def load(file_path):
     """Load a pyleecan object from a json file
 
@@ -81,13 +89,9 @@ def load(file_path):
     file_path: str
         path to the file to load
     """
-
-    if file_path.endswith("hdf5") or file_path.endswith("h5"):
-        file_path, init_dict = load_hdf5(file_path)
-    elif file_path.endswith(".pkl"):
+    if file_path.endswith(".pkl"):
         return load_pkl(file_path)
-    else:
-        file_path, init_dict = load_json(file_path)
+    file_path, init_dict = load_init_dict(file_path)
 
     # Check that loaded data are of type dict
     if not isinstance(init_dict, dict):
@@ -99,11 +103,6 @@ def load(file_path):
     # Check that the dictionay has a "__class__" key
     if "__class__" not in init_dict:
         raise LoadWrongDictClassError('Key "__class__" missing in loaded file')
-    # Check that data is a pyleecan class
-    if init_dict["__class__"] not in load_switch:
-        raise LoadWrongDictClassError(
-            init_dict["__class__"] + " is not a pyleecan class"
-        )
 
     return init_data(init_dict, file_path)
 
@@ -128,10 +127,6 @@ def _load(file_path, cls_type=None):
                 + cls_type
                 + '" expected.'
             )
-
-    # check that load_switch does not contain 'dict' or 'list' for init_data to work
-    if ("list" in load_switch) or ("dict" in load_switch):
-        raise LoadSwitchError("'list' or 'dict' should not be in load_switch dict.")
 
     return init_data(obj, file_path)
 
@@ -177,7 +172,7 @@ def load_matlib(mat_path):
                     mat.name = file_name[:-5]
                     mat.path = file_path
                     # Keep only the materials
-                    if isinstance(mat, Material):
+                    if isinstance(mat, import_class("pyleecan.Classes", "Material")):
                         matlib.append(mat)
                 except Exception:
                     print("When loading matlib, unable to load file: " + file_path)

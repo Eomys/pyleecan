@@ -1,24 +1,23 @@
 # -*- coding: utf-8 -*-
 
-import PyQt5.QtCore
+import PySide2.QtCore
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.SlotW13 import SlotW13
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot13.Gen_PWSlot13 import Gen_PWSlot13
 from ......Methods.Slot.Slot.check import SlotCheckError
 
-translate = PyQt5.QtCore.QCoreApplication.translate
+translate = PySide2.QtCore.QCoreApplication.translate
 
 
 class PWSlot13(Gen_PWSlot13, QWidget):
-    """Page to set the Slot Type 13
-    """
+    """Page to set the Slot Type 13"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for Slot combobox
     slot_name = "Slot Type 13"
     slot_type = SlotW13

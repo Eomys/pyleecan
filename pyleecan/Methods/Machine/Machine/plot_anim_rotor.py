@@ -40,8 +40,7 @@ def plot_anim_rotor(self, Nframe, Tanim, Nrot=1, is_loop=True):
     Dalpha = 2 * pi * Nrot / Nframe
 
     def init():
-        """Create the patches for the first image
-        """
+        """Create the patches for the first image"""
         Spatches = self.stator.plot(is_display=False)
         Rpatches = self.rotor.plot(is_display=False)
         for patch in Spatches:
@@ -51,8 +50,7 @@ def plot_anim_rotor(self, Nframe, Tanim, Nrot=1, is_loop=True):
         return []
 
     def update_rotor(ii):
-        """Rotate and update the rotor patches
-        """
+        """Rotate and update the rotor patches"""
         for ii in range(len(Rsurf)):
             Rsurf[ii].rotate(Dalpha)
             patches = Rsurf[ii].get_patches()

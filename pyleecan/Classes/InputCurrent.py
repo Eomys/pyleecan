@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Input import Input
 
 # Import all class method
@@ -76,15 +79,9 @@ class InputCurrent(Input):
         )
     else:
         comp_felec = comp_felec
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -94,11 +91,12 @@ class InputCurrent(Input):
         Ir=None,
         angle_rotor=None,
         N0=None,
-        rot_dir=-1,
+        rot_dir=None,
         angle_rotor_initial=0,
         Tem_av_ref=None,
         Id_ref=None,
         Iq_ref=None,
+        felec=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -109,46 +107,16 @@ class InputCurrent(Input):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if Is == -1:
-            Is = ImportMatrix()
-        if Ir == -1:
-            Ir = ImportMatrix()
-        if angle_rotor == -1:
-            angle_rotor = Import()
-        if time == -1:
-            time = ImportMatrix()
-        if angle == -1:
-            angle = ImportMatrix()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            Is = obj.Is
-            Ir = obj.Ir
-            angle_rotor = obj.angle_rotor
-            N0 = obj.N0
-            rot_dir = obj.rot_dir
-            angle_rotor_initial = obj.angle_rotor_initial
-            Tem_av_ref = obj.Tem_av_ref
-            Id_ref = obj.Id_ref
-            Iq_ref = obj.Iq_ref
-            time = obj.time
-            angle = obj.angle
-            Nt_tot = obj.Nt_tot
-            Nrev = obj.Nrev
-            Na_tot = obj.Na_tot
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -170,6 +138,8 @@ class InputCurrent(Input):
                 Id_ref = init_dict["Id_ref"]
             if "Iq_ref" in list(init_dict.keys()):
                 Iq_ref = init_dict["Iq_ref"]
+            if "felec" in list(init_dict.keys()):
+                felec = init_dict["felec"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -180,144 +150,17 @@ class InputCurrent(Input):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-        # Initialisation by argument
-        # Is can be None, a ImportMatrix object or a dict
-        if isinstance(Is, dict):
-            # Check that the type is correct (including daughter)
-            class_name = Is.get("__class__")
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Is"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.Is = class_obj(init_dict=Is)
-        elif isinstance(Is, str):
-            from ..Functions.load import load
-
-            Is = load(Is)
-            # Check that the type is correct (including daughter)
-            class_name = Is.__class__.__name__
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Is"
-                )
-            self.Is = Is
-        else:
-            self.Is = Is
-        # Ir can be None, a ImportMatrix object or a dict
-        if isinstance(Ir, dict):
-            # Check that the type is correct (including daughter)
-            class_name = Ir.get("__class__")
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Ir"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.Ir = class_obj(init_dict=Ir)
-        elif isinstance(Ir, str):
-            from ..Functions.load import load
-
-            Ir = load(Ir)
-            # Check that the type is correct (including daughter)
-            class_name = Ir.__class__.__name__
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Ir"
-                )
-            self.Ir = Ir
-        else:
-            self.Ir = Ir
-        # angle_rotor can be None, a Import object or a dict
-        if isinstance(angle_rotor, dict):
-            # Check that the type is correct (including daughter)
-            class_name = angle_rotor.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for angle_rotor"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.angle_rotor = class_obj(init_dict=angle_rotor)
-        elif isinstance(angle_rotor, str):
-            from ..Functions.load import load
-
-            angle_rotor = load(angle_rotor)
-            # Check that the type is correct (including daughter)
-            class_name = angle_rotor.__class__.__name__
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for angle_rotor"
-                )
-            self.angle_rotor = angle_rotor
-        else:
-            self.angle_rotor = angle_rotor
+        # Set the properties (value check and convertion are done in setter)
+        self.Is = Is
+        self.Ir = Ir
+        self.angle_rotor = angle_rotor
         self.N0 = N0
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         self.Tem_av_ref = Tem_av_ref
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
+        self.felec = felec
         # Call Input init
         super(InputCurrent, self).__init__(
             time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
@@ -326,7 +169,7 @@ class InputCurrent(Input):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         InputCurrent_str = ""
         # Get the properties inherited from Input
@@ -356,6 +199,7 @@ class InputCurrent(Input):
         InputCurrent_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         InputCurrent_str += "Id_ref = " + str(self.Id_ref) + linesep
         InputCurrent_str += "Iq_ref = " + str(self.Iq_ref) + linesep
+        InputCurrent_str += "felec = " + str(self.felec) + linesep
         return InputCurrent_str
 
     def __eq__(self, other):
@@ -385,11 +229,12 @@ class InputCurrent(Input):
             return False
         if other.Iq_ref != self.Iq_ref:
             return False
+        if other.felec != self.felec:
+            return False
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Input
         InputCurrent_dict = super(InputCurrent, self).as_dict()
@@ -411,7 +256,8 @@ class InputCurrent(Input):
         InputCurrent_dict["Tem_av_ref"] = self.Tem_av_ref
         InputCurrent_dict["Id_ref"] = self.Id_ref
         InputCurrent_dict["Iq_ref"] = self.Iq_ref
-        # The class name is added to the dict fordeserialisation purpose
+        InputCurrent_dict["felec"] = self.felec
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputCurrent_dict["__class__"] = "InputCurrent"
         return InputCurrent_dict
@@ -431,6 +277,7 @@ class InputCurrent(Input):
         self.Tem_av_ref = None
         self.Id_ref = None
         self.Iq_ref = None
+        self.felec = None
         # Set to None the properties inherited from Input
         super(InputCurrent, self)._set_None()
 
@@ -440,10 +287,17 @@ class InputCurrent(Input):
 
     def _set_Is(self, value):
         """setter of Is"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
+        elif value == -1:
+            value = ImportMatrix()
+        elif isinstance(value, dict):
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "Is")
+            value = class_obj(init_dict=value)
         check_var("Is", value, "ImportMatrix")
         self._Is = value
 
@@ -465,10 +319,17 @@ class InputCurrent(Input):
 
     def _set_Ir(self, value):
         """setter of Ir"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
+        elif value == -1:
+            value = ImportMatrix()
+        elif isinstance(value, dict):
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "Ir")
+            value = class_obj(init_dict=value)
         check_var("Ir", value, "ImportMatrix")
         self._Ir = value
 
@@ -490,6 +351,15 @@ class InputCurrent(Input):
 
     def _set_angle_rotor(self, value):
         """setter of angle_rotor"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "angle_rotor"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Import()
         check_var("angle_rotor", value, "Import")
         self._angle_rotor = value
 
@@ -591,7 +461,7 @@ class InputCurrent(Input):
     Id_ref = property(
         fget=_get_Id_ref,
         fset=_set_Id_ref,
-        doc=u"""d-axis current magnitude
+        doc=u"""d-axis current RMS magnitude
 
         :Type: float
         """,
@@ -609,7 +479,25 @@ class InputCurrent(Input):
     Iq_ref = property(
         fget=_get_Iq_ref,
         fset=_set_Iq_ref,
-        doc=u"""q-axis current magnitude
+        doc=u"""q-axis current RMS magnitude
+
+        :Type: float
+        """,
+    )
+
+    def _get_felec(self):
+        """getter of felec"""
+        return self._felec
+
+    def _set_felec(self, value):
+        """setter of felec"""
+        check_var("felec", value, "float")
+        self._felec = value
+
+    felec = property(
+        fget=_get_felec,
+        fset=_set_felec,
+        doc=u"""electrical frequency
 
         :Type: float
         """,

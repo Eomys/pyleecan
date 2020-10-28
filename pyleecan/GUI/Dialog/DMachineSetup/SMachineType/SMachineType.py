@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import Gen_SMachineType
 from .....Classes.Winding import Winding
@@ -13,11 +13,10 @@ from .....definitions import PACKAGE_NAME
 
 
 class SMachineType(Gen_SMachineType, QWidget):
-    """First Step to setup the Machine Type
-    """
+    """First Step to setup the Machine Type"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for the DMachineSetup nav
     step_name = "Machine Type"
 
@@ -31,7 +30,7 @@ class SMachineType(Gen_SMachineType, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """

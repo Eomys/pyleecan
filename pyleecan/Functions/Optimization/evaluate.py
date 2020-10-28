@@ -10,18 +10,19 @@ else:
 
 from os import stat, remove
 from datetime import datetime
+from numpy import nan
 
 
 def evaluate(solver, indiv):
     """Evaluate the individual according to the solver method
-    
+
     Parameters
     ----------
     solver : Solver
         optimization solver
-    indiv : individual 
+    indiv : individual
         individual to evaluate
-    
+
     Returns
     -------
     evaluation_failure : bool
@@ -37,6 +38,10 @@ def evaluate(solver, indiv):
         logger.debug(design_variable + " : " + str(indiv[i]))
 
     try:
+        # Run the preprocessing
+        if solver.problem.preprocessing is not None:
+            solver.problem.preprocessing(indiv.output.simu)
+
         if solver.problem.eval_func == None:
             indiv.output.simu.run()
         else:
@@ -54,7 +59,7 @@ def evaluate(solver, indiv):
             # Except error and try to compute the error_keeper
             except Exception as err:
                 logger.warning(
-                    "Objectif computation " + obj_func.name + " failed:" + err
+                    "Objectiv computation " + obj_func.name + " failed:" + err
                 )
                 if obj_func.error_keeper is None:  # Set fitness value as infinity
                     fitness.append(float("inf"))
@@ -67,14 +72,44 @@ def evaluate(solver, indiv):
                     # Set the fitness value as infinity
                     except Exception as err:
                         logger.warning(
-                            "Objectif error computation "
+                            "Objectiv error computation "
                             + obj_func.name
                             + " failed:"
                             + err
                         )
                         fitness.append(float("inf"))
 
+        # Add fitness values to indiv object
         indiv.fitness.values = fitness
+
+        # Execute the DataKeepers
+        for datakeeper in solver.problem.datakeeper_list:
+            try:
+                datakeeper.result.append(datakeeper.keeper(indiv.output))
+            except KeyboardInterrupt:
+                raise KeyboardInterrupt("Stopped by the user.")
+            except Exception as err:
+                logger.warning(
+                    "DataKeeper" + datakeeper.name + ".keeper execution failed:" + err
+                )
+                if datakeeper.error_keeper:
+                    try:
+                        datakeeper.result.append(
+                            datakeeper.error_keeper(indiv.output.simu)
+                        )
+                    except KeyboardInterrupt:
+                        raise KeyboardInterrupt("Stopped by the user.")
+                    except Exception as err:
+                        logger.warning(
+                            "DataKeeper"
+                            + datakeeper.name
+                            + ".error_keeper execution failed:"
+                            + err
+                        )
+                        datakeeper.result.append(nan)
+                else:
+                    datakeeper.result.append(nan)
+
         indiv.is_simu_valid = True
 
         evaluation_failure = False  # Evaluation succeed
@@ -98,6 +133,24 @@ def evaluate(solver, indiv):
         # Set fitness as inf
         indiv.fitness.values = [float("inf") for _ in solver.problem.obj_func]
         indiv.is_simu_valid = False
+
+        # Execute the DataKeepers
+        for datakeeper in solver.problem.datakeeper_list:
+            if datakeeper.error_keeper:
+                try:
+                    datakeeper.result.append(datakeeper.error_keeper(indiv.output.simu))
+                except KeyboardInterrupt:
+                    raise KeyboardInterrupt("Stopped by the user.")
+                except Exception as err:
+                    logger.warning(
+                        "DataKeeper"
+                        + datakeeper.name
+                        + ".error_keeper execution failed:"
+                        + err
+                    )
+                    datakeeper.result.append(nan)
+            else:
+                datakeeper.result.append(nan)
 
         # Reset standard output and error
         evaluation_failure = True  # Evaluation failed

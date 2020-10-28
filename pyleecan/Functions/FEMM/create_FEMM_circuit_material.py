@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import femm
 from numpy import linalg as LA, pi, sign, sqrt
 
 from ...Functions.FEMM.comp_FEMM_Jcus import comp_FEMM_Jcus
@@ -10,12 +9,14 @@ from ...Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
 
 
 def create_FEMM_circuit_material(
-    circuits, label, is_eddies, lam, I, is_mmf, j_t0, materials
+    femm, circuits, label, is_eddies, lam, I, is_mmf, j_t0, materials
 ):
     """Set in FEMM circuits property
-    
+
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     circuits: list
         list the name of all circuits
     label : str
@@ -35,7 +36,7 @@ def create_FEMM_circuit_material(
         time step for winding current calculation@type integer
     materials :
         list of materials already created in FEMM
-    
+
     Returns
     -------
     property, materials, circuits: tuple
@@ -51,9 +52,9 @@ def create_FEMM_circuit_material(
 
     # Decode the label
     st = label.split("_")
-    Nrad_id = int(st[1][1:])  # zone radial coordinate
-    Ntan_id = int(st[2][1:])  # zone tangential coordinate
-    Zs_id = int(st[3][1:])  # Zone slot number coordinate
+    Nrad_id = int(st[2][1:])  # zone radial coordinate
+    Ntan_id = int(st[3][1:])  # zone tangential coordinate
+    Zs_id = int(st[4][1:])  # Zone slot number coordinate
     # Get the phase value in the correct slot zone
     q_id = get_phase_id(wind_mat, Nrad_id, Ntan_id, Zs_id)
     s = sign(wind_mat[Nrad_id, Ntan_id, Zs_id, q_id])
@@ -63,7 +64,7 @@ def create_FEMM_circuit_material(
         Clabel = "Circr" + str(q_id)
     else:
         Clabel = "Circs" + str(q_id)
-    circuits = set_FEMM_circuit_prop(circuits, Clabel, I, is_mmf, Npcpp, j_t0)
+    circuits = set_FEMM_circuit_prop(femm, circuits, Clabel, I, is_mmf, Npcpp, j_t0)
 
     # definition of armature field current sources
     if "Rotor" in label:
@@ -78,7 +79,7 @@ def create_FEMM_circuit_material(
     # adding new current source material if necessary
     Jcus = comp_FEMM_Jcus(lam, cname, I, j_t0, is_mmf)
     materials = set_FEMM_wind_material(
-        materials, cname, Jcus, is_eddies * 1e-6 / rho, sqrt(4 * Swire / pi)
+        femm, materials, cname, Jcus, is_eddies * 1e-6 / rho, sqrt(4 * Swire / pi)
     )
 
     return cname, materials, circuits

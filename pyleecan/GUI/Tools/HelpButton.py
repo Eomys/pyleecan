@@ -1,14 +1,13 @@
-from PyQt5.QtCore import QUrl, Qt
-from PyQt5.QtGui import QCursor, QDesktopServices, QPixmap
-from PyQt5.QtWidgets import QLabel
+from PySide2.QtCore import QUrl, Qt
+from PySide2.QtGui import QCursor, QDesktopServices, QPixmap
+from PySide2.QtWidgets import QLabel
 
 
 class HelpButton(QLabel):
     """A Qlabel with a ? icon, and a click event that open a link"""
 
     def __init__(self, *args, **kwargs):
-        """Same constructor as QLineEdit + config validator
-        """
+        """Same constructor as QLineEdit + config validator"""
         self.url = "https://eomys.com/"
 
         # Call the QLabel constructor

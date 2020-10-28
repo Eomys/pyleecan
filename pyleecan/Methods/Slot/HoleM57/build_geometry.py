@@ -32,9 +32,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     """
 
     if self.get_is_stator():  # check if the slot is on the stator
-        st = "S"
+        st = "_Stator"
     else:
-        st = "R"
+        st = "_Rotor"
     Rbo = self.get_Rbo()
 
     # "Tooth" angle (P1',0,P1)
@@ -95,112 +95,112 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # TODO: Create all the surfaces for all the cases
     # (with/without magnet W1>0 or W1=0)
     # Air surface (W3) with magnet_0
-    curve_list_air = list()
-    curve_list_air.append(Segment(Z1, Z2))
-    curve_list_air.append(Segment(Z2, Z7))
+    curve_list = list()
+    curve_list.append(Segment(Z1, Z2))
+    curve_list.append(Segment(Z2, Z7))
     if self.W2 > 0:
-        curve_list_air.append(Segment(Z7, Z8))
-    curve_list_air.append(Segment(Z8, Z1))
+        curve_list.append(Segment(Z7, Z8))
+    curve_list.append(Segment(Z8, Z1))
 
     # initiating the label of the line on the air surface
-    curve_list_air = set_name_line(curve_list_air, "hole_1_line")
+    curve_list = set_name_line(curve_list, "hole_1_line")
     point_ref = (Z1 + Z2 + Z7 + Z8) / 4
-    S1 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S1 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
 
     # Magnet_0 surface
-    curve_list_mag = list()
+    curve_list = list()
     if is_simplified:
-        curve_list_mag.append(Segment(Z7, Z2))
-        curve_list_mag.append(Segment(Z3, Z6))
+        curve_list.append(Segment(Z7, Z2))
+        curve_list.append(Segment(Z3, Z6))
     else:
-        curve_list_mag.append(Segment(Z2, Z3))
-        curve_list_mag.append(Segment(Z3, Z6))
-        curve_list_mag.append(Segment(Z6, Z7))
-        curve_list_mag.append(Segment(Z7, Z2))
+        curve_list.append(Segment(Z2, Z3))
+        curve_list.append(Segment(Z3, Z6))
+        curve_list.append(Segment(Z6, Z7))
+        curve_list.append(Segment(Z7, Z2))
 
     # initiating the label of the line of the magnet surface
-    curve_list_mag = set_name_line(curve_list_mag, "magnet_1_line")
+    curve_list = set_name_line(curve_list, "magnet_1_line")
     point_ref = (Z2 + Z3 + Z6 + Z7) / 4
     S2 = SurfLine(
-        line_list=curve_list_mag,
+        line_list=curve_list,
         label="Magnet" + st + "_N_R0_T0_S0",
         point_ref=point_ref,
     )
 
     # Air surface with magnet_0 and W1 > 0
-    curve_list_air = list()
-    curve_list_air.append(Segment(Z4, Z5))
-    curve_list_air.append(Segment(Z5, Z6))
-    curve_list_air.append(Segment(Z6, Z3))
+    curve_list = list()
+    curve_list.append(Segment(Z4, Z5))
+    curve_list.append(Segment(Z5, Z6))
+    curve_list.append(Segment(Z6, Z3))
     if abs(Z4 - Z3) > 1e-6:
-        curve_list_air.append(Segment(Z3, Z4))
+        curve_list.append(Segment(Z3, Z4))
 
     # initiating the label of the line on the air surface
-    curve_list_air = set_name_line(curve_list_air, "hole_2_line")
+    curve_list = set_name_line(curve_list, "hole_2_line")
     point_ref = (Z6 + Z5 + Z4) / 3
 
-    S3 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S3 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
 
     # Symmetry Air surface (W3) with magnet_1
-    curve_list_air = list()
-    curve_list_air.append(Segment(Z2s, Z1s))
-    curve_list_air.append(Segment(Z1s, Z8s))
+    curve_list = list()
+    curve_list.append(Segment(Z2s, Z1s))
+    curve_list.append(Segment(Z1s, Z8s))
     if self.W2 > 0:
-        curve_list_air.append(Segment(Z8s, Z7s))
-    curve_list_air.append(Segment(Z7s, Z2s))
+        curve_list.append(Segment(Z8s, Z7s))
+    curve_list.append(Segment(Z7s, Z2s))
     point_ref = (Z1s + Z2s + Z8s + Z7s) / 4
     # initiating the label of the line on the air surface
-    curve_list_air = set_name_line(curve_list_air, "hole_3_line")
-    S4 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    curve_list = set_name_line(curve_list, "hole_3_line")
+    S4 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
 
     # magnet_1 surface
-    curve_list_mag = list()
+    curve_list = list()
     if is_simplified:
-        curve_list_mag.append(Segment(Z2s, Z7s))
-        curve_list_mag.append(Segment(Z6s, Z3s))
+        curve_list.append(Segment(Z2s, Z7s))
+        curve_list.append(Segment(Z6s, Z3s))
     else:
-        curve_list_mag.append(Segment(Z3s, Z2s))
-        curve_list_mag.append(Segment(Z2s, Z7s))
-        curve_list_mag.append(Segment(Z7s, Z6s))
-        curve_list_mag.append(Segment(Z6s, Z3s))
+        curve_list.append(Segment(Z3s, Z2s))
+        curve_list.append(Segment(Z2s, Z7s))
+        curve_list.append(Segment(Z7s, Z6s))
+        curve_list.append(Segment(Z6s, Z3s))
     point_ref = (Z3s + Z2s + Z7s + Z6s) / 4
 
     # initiating the label of the line on the magnet surface
-    curve_list_mag = set_name_line(curve_list_mag, "magnet_2_line")
+    curve_list = set_name_line(curve_list, "magnet_2_line")
     S5 = SurfLine(
-        line_list=curve_list_mag,
+        line_list=curve_list,
         label="Magnet" + st + "_N_R0_T1_S0",
         point_ref=point_ref,
     )
 
     # Air surface with magnet_1 and W1 > 0
-    curve_list_air = list()
-    curve_list_air.append(Segment(Z3s, Z6s))
-    curve_list_air.append(Segment(Z6s, Z5s))
-    curve_list_air.append(Segment(Z5s, Z4s))
+    curve_list = list()
+    curve_list.append(Segment(Z3s, Z6s))
+    curve_list.append(Segment(Z6s, Z5s))
+    curve_list.append(Segment(Z5s, Z4s))
     if abs(Z4 - Z3) > 1e-6:
-        curve_list_air.append(Segment(Z4s, Z3s))
+        curve_list.append(Segment(Z4s, Z3s))
 
     point_ref = (Z3s + Z6s + Z5s) / 3
 
     # initiating the label of the line on the air surface
-    curve_list_air = set_name_line(curve_list_air, "hole_4_line")
-    S6 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    curve_list = set_name_line(curve_list, "hole_4_line")
+    S6 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
 
     # Air surface between magnet_0 and magnet_1 with W1 == 0
-    curve_list_air = list()
-    curve_list_air.append(Segment(Z3, Z4))
-    curve_list_air.append(Segment(Z4, Z3s))
-    curve_list_air.append(Segment(Z3s, Z6s))
-    curve_list_air.append(Segment(Z6s, Z5))
-    curve_list_air.append(Segment(Z5, Z6))
-    curve_list_air.append(Segment(Z6, Z3))
+    curve_list = list()
+    curve_list.append(Segment(Z3, Z4))
+    curve_list.append(Segment(Z4, Z3s))
+    curve_list.append(Segment(Z3s, Z6s))
+    curve_list.append(Segment(Z6s, Z5))
+    curve_list.append(Segment(Z5, Z6))
+    curve_list.append(Segment(Z6, Z3))
 
     # initiating the label of the line on the air surface
-    curve_list_air = set_name_line(curve_list_air, "hole_2_line")
+    curve_list = set_name_line(curve_list, "hole_2_line")
     point_ref = (Z5 + Z4) / 2
 
-    S7 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S7 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
 
     # Create the surface list by selecting the correct ones
     if self.magnet_0 and self.magnet_1 and self.W1 > 0:
@@ -229,7 +229,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
 
 def set_name_line(hole_lines, name):
-    """ Define the  label of each line of the hole
+    """Define the  label of each line of the hole
 
     Parameters
     ----------

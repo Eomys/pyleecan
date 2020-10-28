@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from ....Methods.Simulation.Input import InputError
+from ....Classes.PostFunction import PostFunction
+from ....Classes.PostMethod import PostMethod
 
 
 def run_single(self):
@@ -12,6 +14,7 @@ def run_single(self):
         A Simu1 object
 
     """
+    logger = self.get_logger()
 
     if self.parent is None:
         raise InputError("ERROR: Simulation object must be inside an Output object")
@@ -35,3 +38,10 @@ def run_single(self):
         self.struct.run()
     # if self.ac is not None:
     #     self.ac.run()
+
+    # Running postprocessings
+
+    if self.postproc_list:
+        logger.info("Running simulation postprocessings...")
+        for postproc in self.postproc_list:
+            postproc.run(output)

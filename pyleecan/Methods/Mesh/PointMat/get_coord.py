@@ -3,32 +3,29 @@
 import numpy as np
 
 
-def get_coord(self, node_tags):
-    """Return the coordinates of node(s).
+def get_coord(self, point_tags):
+    """Return the coordinates of point(s).
 
-     Parameters
-     ----------
-     self : PointMat
-         an PointMat object
-     node_tags : np.array
-         an array of node tags
+    Parameters
+    ----------
+    self : PointMat
+        an PointMat object
+    point_tags : np.array
+        an array of point tags
 
-     Returns
-     -------
-     coord: np.array
-         an array of node coordinates
+    Returns
+    -------
+    coord: np.array
+        an array of point coordinates
 
-     """
+    """
 
-    nd_case = np.size(node_tags)
+    nd_case = np.size(point_tags)
     coord = np.zeros((nd_case, 2))
     if nd_case == 1:
-        Ipos = np.where(self.tag == node_tags)[0]
-        coord = self.coordinate[Ipos, :]
+        coord = self.coordinate[point_tags, :]
     else:
-        for ind in range(nd_case):
-            Ipos = np.where(self.tag == node_tags[ind])[0]
-            coord[ind, :] = self.coordinate[Ipos, :]
+        coord = self.coordinate[point_tags, :]
 
     if np.size(coord) == 0:
         return None

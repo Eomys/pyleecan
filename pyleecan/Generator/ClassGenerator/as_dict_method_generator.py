@@ -25,7 +25,7 @@ def generate_as_dict(gen_dict, class_dict):
     var_str = ""  # For the creation of the return dict (in as_dict)
 
     for prop in class_dict["properties"]:
-        if prop["type"] in PYTHON_TYPE:
+        if prop["type"] in PYTHON_TYPE and prop["type"] not in ["dict", "list"]:
             # Add => "class_name ["var_name"] = self.var_name" to var_str
             var_str += (
                 TAB2
@@ -35,6 +35,19 @@ def generate_as_dict(gen_dict, class_dict):
                 + '"] = self.'
                 + prop["name"]
                 + "\n"
+            )
+        elif prop["type"] in ["dict", "list"]:
+            # Add => "class_name_dict["var_name"] = self.var_name.copy()" to var_str
+            var_str += (
+                TAB2
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"] = self.'
+                + prop["name"]
+                + ".copy() if self."
+                + prop["name"]
+                + " is not None else None\n"
             )
         elif prop["type"] == "ndarray":
             # Add => "class_name ["var_name"] = self.var_name.tolist()" to
@@ -51,24 +64,78 @@ def generate_as_dict(gen_dict, class_dict):
                 + prop["name"]
                 + ".tolist()\n"
             )
-        elif prop["type"] == "function":
-            # Add => "class_name ["var_name"] = self._var_name" to
+        elif prop["type"] == "[ndarray]":
+            var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = list()\n'
+            var_str += TAB3 + "for obj in self." + prop["name"] + ":\n"
+            var_str += (
+                TAB4
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"].append(obj.tolist())\n'
+            )
+        elif prop["type"] == "{ndarray}":
+            # Add => "class_name ["var_name"] = self.var_name.tolist()" to
             # var_str
             var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
             var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
             var_str += TAB2 + "else:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
+            var_str += TAB3 + "for key, obj in self." + prop["name"] + ".items():\n"
+            var_str += (
+                TAB4
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"][key] = obj.tolist()\n'
+            )
+        elif is_list_pyleecan_type(prop["type"]):
+            var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = list()\n'
+            var_str += TAB3 + "for obj in self." + prop["name"] + ":\n"
+            var_str += (
+                TAB4
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"].append(obj.as_dict())\n'
+            )
+        elif is_dict_pyleecan_type(prop["type"]):
+            var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
+            var_str += TAB3 + "for key, obj in self." + prop["name"] + ".items():\n"
+            var_str += (
+                TAB4
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"][key] = obj.as_dict()\n'
+            )
+        elif prop["type"] == "function":
+            # Add => "class_name ["var_name"] = self._var_name" to
+            # var_str
+            var_str += TAB2 + "if self._" + prop["name"] + "_str is not None:\n"
             var_str += (
                 TAB3
                 + class_name
                 + '_dict["'
                 + prop["name"]
-                + '"] = [dumps(self._'
+                + '"] = self._'
                 + prop["name"]
-                + "[0]).decode('ISO-8859-2'), self._"
-                + prop["name"]
-                + "[1]]\n"
+                + "_str\n"
             )
-        elif "." in prop["type"]:  # Type from external package
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
+        elif (
+            "." in prop["type"] and not "SciDataTool" in prop["type"]
+        ):  # Type from external package
             var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
             var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
             var_str += (
@@ -90,37 +157,6 @@ def generate_as_dict(gen_dict, class_dict):
                 + prop["name"]
                 + ").decode('ISO-8859-2')}\n"
             )
-
-        elif is_list_pyleecan_type(prop["type"]):
-            var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = list()\n'
-            var_str += TAB2 + "for obj in self." + prop["name"] + ":\n"
-            var_str += (
-                TAB3
-                + class_name
-                + '_dict["'
-                + prop["name"]
-                + '"].append(obj.as_dict())\n'
-            )
-        elif prop["type"] == "{ndarray}":
-            var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
-            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
-            var_str += (
-                TAB3
-                + class_name
-                + '_dict["'
-                + prop["name"]
-                + '"][key] = obj.tolist()\n'
-            )
-        elif is_dict_pyleecan_type(prop["type"]):
-            var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
-            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
-            var_str += (
-                TAB3
-                + class_name
-                + '_dict["'
-                + prop["name"]
-                + '"][key] = obj.as_dict()\n'
-            )
         else:
             # Add => "class_name ["var_name"] = self.var_name.as_dict()" to
             # var_str
@@ -140,7 +176,7 @@ def generate_as_dict(gen_dict, class_dict):
     # Code generation
     dict_str += TAB + "def as_dict(self):\n"
     dict_str += (
-        TAB2 + '"""Convert this objet in a json seriable dict (can '
+        TAB2 + '"""Convert this object in a json seriable dict (can '
         "be use in __init__)\n" + TAB2 + '"""\n\n'
     )
     if class_dict["mother"] != "":
@@ -156,7 +192,7 @@ def generate_as_dict(gen_dict, class_dict):
 
     dict_str += var_str
     dict_str += (
-        TAB2 + "# The class name is added to the dict for" + "deserialisation purpose\n"
+        TAB2 + "# The class name is added to the dict for deserialisation purpose\n"
     )
     if class_dict["mother"] != "":
         dict_str += TAB2 + "# Overwrite the mother class name\n"

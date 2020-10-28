@@ -11,28 +11,29 @@ from pyleecan.definitions import config_dict
 from Tests import save_plot_path as save_path
 
 
-test_obj = LamSlotWind(Rint=0.4, Rext=1, is_stator=True, is_internal=False)
-test_obj.slot = SlotW10(
-    Zs=6, W0=125e-3 * 2, W1=200e-3 * 2, W2=125e-3 * 2, H0=30e-3, H1=60e-3, H2=0.4
-)
-sp = 2 * pi / test_obj.slot.Zs
-wind_mat = zeros((3, 2, 6, 6))
-wind_mat[0, 0, 0, 0] = 1
-wind_mat[1, 0, 0, 1] = 1
-wind_mat[2, 0, 0, 2] = 1
-wind_mat[0, 1, 0, 3] = -1
-wind_mat[1, 1, 0, 4] = -1
-wind_mat[2, 1, 0, 5] = -1
-test_obj.winding = WindingUD(user_wind_mat=wind_mat)
+@pytest.fixture(scope="module")
+def test_obj():
+    test_obj = LamSlotWind(Rint=0.4, Rext=1, is_stator=True, is_internal=False)
+    test_obj.slot = SlotW10(
+        Zs=6, W0=125e-3 * 2, W1=200e-3 * 2, W2=125e-3 * 2, H0=30e-3, H1=60e-3, H2=0.4
+    )
+    wind_mat = zeros((3, 2, 6, 6))
+    wind_mat[0, 0, 0, 0] = 1
+    wind_mat[1, 0, 0, 1] = 1
+    wind_mat[2, 0, 0, 2] = 1
+    wind_mat[0, 1, 0, 3] = -1
+    wind_mat[1, 1, 0, 4] = -1
+    wind_mat[2, 1, 0, 5] = -1
+    test_obj.winding = WindingUD(user_wind_mat=wind_mat)
+    return test_obj
 
 
-CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
+@pytest.mark.PLOT
+def test_slot(test_obj):
+    """Schematics for slot number"""
+    CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
-
-def test_slot():
-    """Schematics for slot number
-    """
-
+    sp = 2 * pi / test_obj.slot.Zs
     plt.close("all")
     test_obj.plot(is_lam_only=True)
 
@@ -56,12 +57,13 @@ def test_slot():
     fig.savefig(join(save_path, "test_Wind_Slot.png"))
 
 
-def test_rad_tan():
-    """Schematics for rad/tan layer
-    """
+@pytest.mark.PLOT
+def test_rad_tan(test_obj):
+    """Schematics for rad/tan layer"""
 
     plt.close("all")
     # Plot first slot on X axis
+    sp = 2 * pi / test_obj.slot.Zs
     test_obj.plot(alpha=-sp / 2)
 
     # # Add Label

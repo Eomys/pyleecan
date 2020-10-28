@@ -19,7 +19,7 @@ def comp_winding_factor(self, Harmonics=[1]):
 
     Raises
     ------
-    
+
     """
     if self.parent is None:
         raise WindingError("ERROR: The Winding object must be in a Lamination object.")

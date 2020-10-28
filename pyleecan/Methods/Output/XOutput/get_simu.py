@@ -1,12 +1,12 @@
 def get_simu(self, index):
     """
     Generate a simulation according to index
-    
+
     Parameters
     ----------
     index: int
         simulation index
-    
+
     Returns
     -------
     simu : Simulation

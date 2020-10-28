@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.Frame import Frame
 from .....GUI import gui_option
@@ -13,11 +13,10 @@ from .....GUI.Resources import pixmap_dict
 
 
 class SMachineDimension(Ui_SMachineDimension, QWidget):
-    """Step to setup the Machine dimension
-    """
+    """Step to setup the Machine dimension"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for the DMachineSetup nav
     step_name = "Machine Dimensions"
 
@@ -31,7 +30,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -397,6 +396,5 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.machine.frame = None
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()

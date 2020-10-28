@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Magnetics import Magnetics
 
 # Import all class method
@@ -42,6 +45,23 @@ try:
     from ..Methods.Simulation.MagFEMM.build_meshsolution import build_meshsolution
 except ImportError as error:
     build_meshsolution = error
+
+try:
+    from ..Methods.Simulation.MagFEMM.solve_FEMM_parallel import solve_FEMM_parallel
+except ImportError as error:
+    solve_FEMM_parallel = error
+
+try:
+    from ..Methods.Simulation.MagFEMM.get_meshsolution_parallel import (
+        get_meshsolution_parallel,
+    )
+except ImportError as error:
+    get_meshsolution_parallel = error
+
+try:
+    from ..Methods.Simulation.MagFEMM.comp_time_angle import comp_time_angle
+except ImportError as error:
+    comp_time_angle = error
 
 
 from ._check import InitUnKnowClassError
@@ -122,15 +142,44 @@ class MagFEMM(Magnetics):
         )
     else:
         build_meshsolution = build_meshsolution
-    # save method is available in all object
+    # cf Methods.Simulation.MagFEMM.solve_FEMM_parallel
+    if isinstance(solve_FEMM_parallel, ImportError):
+        solve_FEMM_parallel = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method solve_FEMM_parallel: "
+                    + str(solve_FEMM_parallel)
+                )
+            )
+        )
+    else:
+        solve_FEMM_parallel = solve_FEMM_parallel
+    # cf Methods.Simulation.MagFEMM.get_meshsolution_parallel
+    if isinstance(get_meshsolution_parallel, ImportError):
+        get_meshsolution_parallel = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method get_meshsolution_parallel: "
+                    + str(get_meshsolution_parallel)
+                )
+            )
+        )
+    else:
+        get_meshsolution_parallel = get_meshsolution_parallel
+    # cf Methods.Simulation.MagFEMM.comp_time_angle
+    if isinstance(comp_time_angle, ImportError):
+        comp_time_angle = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method comp_time_angle: " + str(comp_time_angle)
+                )
+            )
+        )
+    else:
+        comp_time_angle = comp_time_angle
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -140,14 +189,17 @@ class MagFEMM(Magnetics):
         Kgeo_fineness=1,
         type_calc_leakage=0,
         file_name="",
-        FEMM_dict={},
+        FEMM_dict=-1,
         angle_stator=0,
         is_get_mesh=False,
         is_save_FEA=False,
         is_sliding_band=True,
-        transform_list=[],
+        transform_list=-1,
         rotor_dxf=None,
         stator_dxf=None,
+        import_file="",
+        is_close_femm=True,
+        nb_worker=1,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -155,62 +207,23 @@ class MagFEMM(Magnetics):
         is_mmfr=True,
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_symmetry_t=False,
-        sym_t=1,
-        is_antiper_t=False,
-        is_symmetry_a=False,
-        sym_a=1,
-        is_antiper_a=False,
+        is_periodicity_t=False,
+        is_periodicity_a=False,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if rotor_dxf == -1:
-            rotor_dxf = DXFImport()
-        if stator_dxf == -1:
-            stator_dxf = DXFImport()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            Kmesh_fineness = obj.Kmesh_fineness
-            Kgeo_fineness = obj.Kgeo_fineness
-            type_calc_leakage = obj.type_calc_leakage
-            file_name = obj.file_name
-            FEMM_dict = obj.FEMM_dict
-            angle_stator = obj.angle_stator
-            is_get_mesh = obj.is_get_mesh
-            is_save_FEA = obj.is_save_FEA
-            is_sliding_band = obj.is_sliding_band
-            transform_list = obj.transform_list
-            rotor_dxf = obj.rotor_dxf
-            stator_dxf = obj.stator_dxf
-            is_remove_slotS = obj.is_remove_slotS
-            is_remove_slotR = obj.is_remove_slotR
-            is_remove_vent = obj.is_remove_vent
-            is_mmfs = obj.is_mmfs
-            is_mmfr = obj.is_mmfr
-            type_BH_stator = obj.type_BH_stator
-            type_BH_rotor = obj.type_BH_rotor
-            is_symmetry_t = obj.is_symmetry_t
-            sym_t = obj.sym_t
-            is_antiper_t = obj.is_antiper_t
-            is_symmetry_a = obj.is_symmetry_a
-            sym_a = obj.sym_a
-            is_antiper_a = obj.is_antiper_a
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -238,6 +251,12 @@ class MagFEMM(Magnetics):
                 rotor_dxf = init_dict["rotor_dxf"]
             if "stator_dxf" in list(init_dict.keys()):
                 stator_dxf = init_dict["stator_dxf"]
+            if "import_file" in list(init_dict.keys()):
+                import_file = init_dict["import_file"]
+            if "is_close_femm" in list(init_dict.keys()):
+                is_close_femm = init_dict["is_close_femm"]
+            if "nb_worker" in list(init_dict.keys()):
+                nb_worker = init_dict["nb_worker"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -252,19 +271,11 @@ class MagFEMM(Magnetics):
                 type_BH_stator = init_dict["type_BH_stator"]
             if "type_BH_rotor" in list(init_dict.keys()):
                 type_BH_rotor = init_dict["type_BH_rotor"]
-            if "is_symmetry_t" in list(init_dict.keys()):
-                is_symmetry_t = init_dict["is_symmetry_t"]
-            if "sym_t" in list(init_dict.keys()):
-                sym_t = init_dict["sym_t"]
-            if "is_antiper_t" in list(init_dict.keys()):
-                is_antiper_t = init_dict["is_antiper_t"]
-            if "is_symmetry_a" in list(init_dict.keys()):
-                is_symmetry_a = init_dict["is_symmetry_a"]
-            if "sym_a" in list(init_dict.keys()):
-                sym_a = init_dict["sym_a"]
-            if "is_antiper_a" in list(init_dict.keys()):
-                is_antiper_a = init_dict["is_antiper_a"]
-        # Initialisation by argument
+            if "is_periodicity_t" in list(init_dict.keys()):
+                is_periodicity_t = init_dict["is_periodicity_t"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
+        # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
         self.type_calc_leakage = type_calc_leakage
@@ -274,27 +285,12 @@ class MagFEMM(Magnetics):
         self.is_get_mesh = is_get_mesh
         self.is_save_FEA = is_save_FEA
         self.is_sliding_band = is_sliding_band
-        if transform_list == -1:
-            transform_list = []
         self.transform_list = transform_list
-        # rotor_dxf can be None, a DXFImport object or a dict
-        if isinstance(rotor_dxf, dict):
-            self.rotor_dxf = DXFImport(init_dict=rotor_dxf)
-        elif isinstance(rotor_dxf, str):
-            from ..Functions.load import load
-
-            self.rotor_dxf = load(rotor_dxf)
-        else:
-            self.rotor_dxf = rotor_dxf
-        # stator_dxf can be None, a DXFImport object or a dict
-        if isinstance(stator_dxf, dict):
-            self.stator_dxf = DXFImport(init_dict=stator_dxf)
-        elif isinstance(stator_dxf, str):
-            from ..Functions.load import load
-
-            self.stator_dxf = load(stator_dxf)
-        else:
-            self.stator_dxf = stator_dxf
+        self.rotor_dxf = rotor_dxf
+        self.stator_dxf = stator_dxf
+        self.import_file = import_file
+        self.is_close_femm = is_close_femm
+        self.nb_worker = nb_worker
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -304,18 +300,14 @@ class MagFEMM(Magnetics):
             is_mmfr=is_mmfr,
             type_BH_stator=type_BH_stator,
             type_BH_rotor=type_BH_rotor,
-            is_symmetry_t=is_symmetry_t,
-            sym_t=sym_t,
-            is_antiper_t=is_antiper_t,
-            is_symmetry_a=is_symmetry_a,
-            sym_a=sym_a,
-            is_antiper_a=is_antiper_a,
+            is_periodicity_t=is_periodicity_t,
+            is_periodicity_a=is_periodicity_a,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         MagFEMM_str = ""
         # Get the properties inherited from Magnetics
@@ -347,6 +339,9 @@ class MagFEMM(Magnetics):
             MagFEMM_str += "stator_dxf = " + tmp
         else:
             MagFEMM_str += "stator_dxf = None" + linesep + linesep
+        MagFEMM_str += 'import_file = "' + str(self.import_file) + '"' + linesep
+        MagFEMM_str += "is_close_femm = " + str(self.is_close_femm) + linesep
+        MagFEMM_str += "nb_worker = " + str(self.nb_worker) + linesep
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -382,11 +377,16 @@ class MagFEMM(Magnetics):
             return False
         if other.stator_dxf != self.stator_dxf:
             return False
+        if other.import_file != self.import_file:
+            return False
+        if other.is_close_femm != self.is_close_femm:
+            return False
+        if other.nb_worker != self.nb_worker:
+            return False
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Magnetics
         MagFEMM_dict = super(MagFEMM, self).as_dict()
@@ -394,12 +394,16 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["Kgeo_fineness"] = self.Kgeo_fineness
         MagFEMM_dict["type_calc_leakage"] = self.type_calc_leakage
         MagFEMM_dict["file_name"] = self.file_name
-        MagFEMM_dict["FEMM_dict"] = self.FEMM_dict
+        MagFEMM_dict["FEMM_dict"] = (
+            self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        )
         MagFEMM_dict["angle_stator"] = self.angle_stator
         MagFEMM_dict["is_get_mesh"] = self.is_get_mesh
         MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
         MagFEMM_dict["is_sliding_band"] = self.is_sliding_band
-        MagFEMM_dict["transform_list"] = self.transform_list
+        MagFEMM_dict["transform_list"] = (
+            self.transform_list.copy() if self.transform_list is not None else None
+        )
         if self.rotor_dxf is None:
             MagFEMM_dict["rotor_dxf"] = None
         else:
@@ -408,7 +412,10 @@ class MagFEMM(Magnetics):
             MagFEMM_dict["stator_dxf"] = None
         else:
             MagFEMM_dict["stator_dxf"] = self.stator_dxf.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        MagFEMM_dict["import_file"] = self.import_file
+        MagFEMM_dict["is_close_femm"] = self.is_close_femm
+        MagFEMM_dict["nb_worker"] = self.nb_worker
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
         return MagFEMM_dict
@@ -430,6 +437,9 @@ class MagFEMM(Magnetics):
             self.rotor_dxf._set_None()
         if self.stator_dxf is not None:
             self.stator_dxf._set_None()
+        self.import_file = None
+        self.is_close_femm = None
+        self.nb_worker = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -513,6 +523,8 @@ class MagFEMM(Magnetics):
 
     def _set_FEMM_dict(self, value):
         """setter of FEMM_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 
@@ -603,6 +615,8 @@ class MagFEMM(Magnetics):
 
     def _set_transform_list(self, value):
         """setter of transform_list"""
+        if type(value) is int and value == -1:
+            value = list()
         check_var("transform_list", value, "list")
         self._transform_list = value
 
@@ -621,6 +635,15 @@ class MagFEMM(Magnetics):
 
     def _set_rotor_dxf(self, value):
         """setter of rotor_dxf"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "rotor_dxf"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DXFImport()
         check_var("rotor_dxf", value, "DXFImport")
         self._rotor_dxf = value
 
@@ -642,6 +665,15 @@ class MagFEMM(Magnetics):
 
     def _set_stator_dxf(self, value):
         """setter of stator_dxf"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "stator_dxf"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DXFImport()
         check_var("stator_dxf", value, "DXFImport")
         self._stator_dxf = value
 
@@ -654,5 +686,59 @@ class MagFEMM(Magnetics):
         doc=u"""To use a dxf version of the rotor instead of build_geometry
 
         :Type: DXFImport
+        """,
+    )
+
+    def _get_import_file(self):
+        """getter of import_file"""
+        return self._import_file
+
+    def _set_import_file(self, value):
+        """setter of import_file"""
+        check_var("import_file", value, "str")
+        self._import_file = value
+
+    import_file = property(
+        fget=_get_import_file,
+        fset=_set_import_file,
+        doc=u"""To import an existing femm file
+
+        :Type: str
+        """,
+    )
+
+    def _get_is_close_femm(self):
+        """getter of is_close_femm"""
+        return self._is_close_femm
+
+    def _set_is_close_femm(self, value):
+        """setter of is_close_femm"""
+        check_var("is_close_femm", value, "bool")
+        self._is_close_femm = value
+
+    is_close_femm = property(
+        fget=_get_is_close_femm,
+        fset=_set_is_close_femm,
+        doc=u"""To close femm automatically after the simulation
+
+        :Type: bool
+        """,
+    )
+
+    def _get_nb_worker(self):
+        """getter of nb_worker"""
+        return self._nb_worker
+
+    def _set_nb_worker(self, value):
+        """setter of nb_worker"""
+        check_var("nb_worker", value, "int")
+        self._nb_worker = value
+
+    nb_worker = property(
+        fget=_get_nb_worker,
+        fset=_set_nb_worker,
+        doc=u"""To run FEMM in parallel (the parallelization is on the time loop)
+
+        :Type: int
         """,
     )

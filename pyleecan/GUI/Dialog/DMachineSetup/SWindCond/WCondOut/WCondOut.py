@@ -1,18 +1,16 @@
-from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
+from PySide2.QtCore import QSize
+from PySide2.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
 
 from ......GUI import gui_option
 
 
 class WCondOut(QGroupBox):
-    """Setup of QGroupBox for output for Winding Conductor
-    """
+    """Setup of QGroupBox for output for Winding Conductor"""
 
     def __init__(self, parent=None):
-        """Initialize the widget
-        """
+        """Initialize the widget"""
 
-        QWidget.__init__(self, parent)
+        QGroupBox.__init__(self, parent)
         # Set main widget
         self.u = gui_option.unit
         self.setTitle(self.tr("Output"))

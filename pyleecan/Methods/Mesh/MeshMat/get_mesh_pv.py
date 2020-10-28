@@ -3,9 +3,10 @@
 import pyvista as pv
 import meshio
 import os
+from pyleecan.definitions import RESULT_DIR
 
 
-def get_mesh_pv(self, path="temp.vtk", indices=None):
+def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
     """Return the pyvista mesh object (or submesh).
 
     Parameters
@@ -24,12 +25,12 @@ def get_mesh_pv(self, path="temp.vtk", indices=None):
     points = self.get_point()
     cells, nb_cell, indice_dict = self.get_cell()
 
-    # for key in cells:
+    cells_meshio = list()
     for key in cells:
-        cells_meshio = [(key, cells[key])]  # TODO : Generalize to any cell type
-
+        cells_meshio.append((key, cells[key]))
         # Write .vtk file using meshio
-        meshio.write_points_cells(filename=path, points=points, cells=cells_meshio)
+
+    meshio.write_points_cells(filename=path, points=points, cells=cells_meshio)
 
     # Read .vtk file with pyvista
     mesh = pv.read(path)

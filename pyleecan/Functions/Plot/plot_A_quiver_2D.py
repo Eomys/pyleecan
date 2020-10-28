@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ..init_fig import init_fig
-from .plot_A_2D import plot_A_2D
+from .plot_2D import plot_2D
 
 
 def plot_A_quiver_2D(data, t=None, t_index=0, is_norm=False, unit="SI"):
@@ -38,6 +38,8 @@ def plot_A_quiver_2D(data, t=None, t_index=0, is_norm=False, unit="SI"):
     Ydata = results[data.symbol]
 
     # Plot the original graph
-    plot_A_2D(
+    plot_2D(
         xy, [Ydata], fig=fig, title=title, xlabel=xlabel, ylabel=ylabel, type="quiver"
     )
+
+    fig.show()

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import femm
 from numpy import angle, pi, floor_divide
 from ...Classes.HoleM50 import HoleM50
 from ...Classes.HoleM51 import HoleM51
@@ -9,10 +8,12 @@ from ...Methods import NotImplementedYetError
 from ...Functions.FEMM.get_mesh_param import get_mesh_param
 
 
-def assign_FEMM_surface(surf, prop, FEMM_dict, rotor, stator):
+def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
     """Assign the property given in parameter to surface having the label given
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     surf : Surface
         the surface to assign
     prop : str
@@ -49,11 +50,11 @@ def assign_FEMM_surface(surf, prop, FEMM_dict, rotor, stator):
         femm.mi_selectlabel(point_ref.real, point_ref.imag)
 
         # Get circuit or magnetization properties if needed
-        if "Wind" in label:  # If the surface is a winding
+        if "Wind" in label or "Bar":  # If the surface is a winding
             if "Rotor" in label:  # Winding on the rotor
-                Clabel = "Circr" + prop[2]
+                Clabel = "Circr" + prop[:-1][2:]
             else:  # winding on the stator
-                Clabel = "Circs" + prop[2]
+                Clabel = "Circs" + prop[:-1][2:]
             Ntcoil = lam.winding.Ntcoil
             if prop[-1] == "-":  # Adapt Ntcoil sign if needed
                 Ntcoil *= -1

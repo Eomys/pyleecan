@@ -9,11 +9,16 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
-from inspect import getsource
-from cloudpickle import dumps, loads
+from ntpath import basename
+from os.path import isfile
 from ._check import CheckTypeError
+import numpy as np
+import random
 from ._check import InitUnKnowClassError
 from .Output import Output
 from .OptiDesignVar import OptiDesignVar
@@ -26,53 +31,36 @@ class OptiProblem(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
         output=-1,
-        design_var=list(),
-        obj_func=list(),
+        design_var=-1,
+        obj_func=-1,
         eval_func=None,
-        constraint=list(),
+        constraint=-1,
+        preprocessing=None,
+        datakeeper_list=-1,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if output == -1:
-            output = Output()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            output = obj.output
-            design_var = obj.design_var
-            obj_func = obj.obj_func
-            eval_func = obj.eval_func
-            constraint = obj.constraint
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -86,82 +74,25 @@ class OptiProblem(FrozenClass):
                 eval_func = init_dict["eval_func"]
             if "constraint" in list(init_dict.keys()):
                 constraint = init_dict["constraint"]
-        # Initialisation by argument
+            if "preprocessing" in list(init_dict.keys()):
+                preprocessing = init_dict["preprocessing"]
+            if "datakeeper_list" in list(init_dict.keys()):
+                datakeeper_list = init_dict["datakeeper_list"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # output can be None, a Output object or a dict
-        if isinstance(output, dict):
-            # Check that the type is correct (including daughter)
-            class_name = output.get("__class__")
-            if class_name not in ["Output", "XOutput"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for output"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.output = class_obj(init_dict=output)
-        elif isinstance(output, str):
-            from ..Functions.load import load
-
-            output = load(output)
-            # Check that the type is correct (including daughter)
-            class_name = output.__class__.__name__
-            if class_name not in ["Output", "XOutput"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for output"
-                )
-            self.output = output
-        else:
-            self.output = output
-        # design_var can be None or a list of OptiDesignVar object
-        self.design_var = list()
-        if type(design_var) is list:
-            for obj in design_var:
-                if obj is None:  # Default value
-                    self.design_var.append(OptiDesignVar())
-                elif isinstance(obj, dict):
-                    self.design_var.append(OptiDesignVar(init_dict=obj))
-                else:
-                    self.design_var.append(obj)
-        elif design_var is None:
-            self.design_var = list()
-        else:
-            self.design_var = design_var
-        # obj_func can be None or a list of DataKeeper object
-        self.obj_func = list()
-        if type(obj_func) is list:
-            for obj in obj_func:
-                if obj is None:  # Default value
-                    self.obj_func.append(DataKeeper())
-                elif isinstance(obj, dict):
-                    self.obj_func.append(DataKeeper(init_dict=obj))
-                else:
-                    self.obj_func.append(obj)
-        elif obj_func is None:
-            self.obj_func = list()
-        else:
-            self.obj_func = obj_func
+        self.output = output
+        self.design_var = design_var
+        self.obj_func = obj_func
         self.eval_func = eval_func
-        # constraint can be None or a list of OptiConstraint object
-        self.constraint = list()
-        if type(constraint) is list:
-            for obj in constraint:
-                if obj is None:  # Default value
-                    self.constraint.append(OptiConstraint())
-                elif isinstance(obj, dict):
-                    self.constraint.append(OptiConstraint(init_dict=obj))
-                else:
-                    self.constraint.append(obj)
-        elif constraint is None:
-            self.constraint = list()
-        else:
-            self.constraint = constraint
+        self.constraint = constraint
+        self.preprocessing = preprocessing
+        self.datakeeper_list = datakeeper_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         OptiProblem_str = ""
         if self.parent is None:
@@ -187,12 +118,12 @@ class OptiProblem(FrozenClass):
         for ii in range(len(self.obj_func)):
             tmp = self.obj_func[ii].__str__().replace(linesep, linesep + "\t") + linesep
             OptiProblem_str += "obj_func[" + str(ii) + "] =" + tmp + linesep + linesep
-        if self._eval_func[1] is None:
-            OptiProblem_str += "eval_func = " + str(self._eval_func[1])
+        if self._eval_func_str is not None:
+            OptiProblem_str += "eval_func = " + self._eval_func_str + linesep
+        elif self._eval_func_func is not None:
+            OptiProblem_str += "eval_func = " + str(self._eval_func_func) + linesep
         else:
-            OptiProblem_str += (
-                "eval_func = " + linesep + str(self._eval_func[1]) + linesep + linesep
-            )
+            OptiProblem_str += "eval_func = None" + linesep + linesep
         if len(self.constraint) == 0:
             OptiProblem_str += "constraint = []" + linesep
         for ii in range(len(self.constraint)):
@@ -200,6 +131,24 @@ class OptiProblem(FrozenClass):
                 self.constraint[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
             OptiProblem_str += "constraint[" + str(ii) + "] =" + tmp + linesep + linesep
+        if self._preprocessing_str is not None:
+            OptiProblem_str += "preprocessing = " + self._preprocessing_str + linesep
+        elif self._preprocessing_func is not None:
+            OptiProblem_str += (
+                "preprocessing = " + str(self._preprocessing_func) + linesep
+            )
+        else:
+            OptiProblem_str += "preprocessing = None" + linesep + linesep
+        if len(self.datakeeper_list) == 0:
+            OptiProblem_str += "datakeeper_list = []" + linesep
+        for ii in range(len(self.datakeeper_list)):
+            tmp = (
+                self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            OptiProblem_str += (
+                "datakeeper_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return OptiProblem_str
 
     def __eq__(self, other):
@@ -213,38 +162,57 @@ class OptiProblem(FrozenClass):
             return False
         if other.obj_func != self.obj_func:
             return False
-        if other.eval_func != self.eval_func:
+        if other._eval_func_str != self._eval_func_str:
             return False
         if other.constraint != self.constraint:
+            return False
+        if other._preprocessing_str != self._preprocessing_str:
+            return False
+        if other.datakeeper_list != self.datakeeper_list:
             return False
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OptiProblem_dict = dict()
         if self.output is None:
             OptiProblem_dict["output"] = None
         else:
             OptiProblem_dict["output"] = self.output.as_dict()
-        OptiProblem_dict["design_var"] = list()
-        for obj in self.design_var:
-            OptiProblem_dict["design_var"].append(obj.as_dict())
-        OptiProblem_dict["obj_func"] = list()
-        for obj in self.obj_func:
-            OptiProblem_dict["obj_func"].append(obj.as_dict())
-        if self.eval_func is None:
-            OptiProblem_dict["eval_func"] = None
+        if self.design_var is None:
+            OptiProblem_dict["design_var"] = None
         else:
-            OptiProblem_dict["eval_func"] = [
-                dumps(self._eval_func[0]).decode("ISO-8859-2"),
-                self._eval_func[1],
-            ]
-        OptiProblem_dict["constraint"] = list()
-        for obj in self.constraint:
-            OptiProblem_dict["constraint"].append(obj.as_dict())
-        # The class name is added to the dict fordeserialisation purpose
+            OptiProblem_dict["design_var"] = list()
+            for obj in self.design_var:
+                OptiProblem_dict["design_var"].append(obj.as_dict())
+        if self.obj_func is None:
+            OptiProblem_dict["obj_func"] = None
+        else:
+            OptiProblem_dict["obj_func"] = list()
+            for obj in self.obj_func:
+                OptiProblem_dict["obj_func"].append(obj.as_dict())
+        if self._eval_func_str is not None:
+            OptiProblem_dict["eval_func"] = self._eval_func_str
+        else:
+            OptiProblem_dict["eval_func"] = None
+        if self.constraint is None:
+            OptiProblem_dict["constraint"] = None
+        else:
+            OptiProblem_dict["constraint"] = list()
+            for obj in self.constraint:
+                OptiProblem_dict["constraint"].append(obj.as_dict())
+        if self._preprocessing_str is not None:
+            OptiProblem_dict["preprocessing"] = self._preprocessing_str
+        else:
+            OptiProblem_dict["preprocessing"] = None
+        if self.datakeeper_list is None:
+            OptiProblem_dict["datakeeper_list"] = None
+        else:
+            OptiProblem_dict["datakeeper_list"] = list()
+            for obj in self.datakeeper_list:
+                OptiProblem_dict["datakeeper_list"].append(obj.as_dict())
+        # The class name is added to the dict for deserialisation purpose
         OptiProblem_dict["__class__"] = "OptiProblem"
         return OptiProblem_dict
 
@@ -260,6 +228,9 @@ class OptiProblem(FrozenClass):
         self.eval_func = None
         for obj in self.constraint:
             obj._set_None()
+        self.preprocessing = None
+        for obj in self.datakeeper_list:
+            obj._set_None()
 
     def _get_output(self):
         """getter of output"""
@@ -267,6 +238,15 @@ class OptiProblem(FrozenClass):
 
     def _set_output(self, value):
         """setter of output"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "output"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Output()
         check_var("output", value, "Output")
         self._output = value
 
@@ -284,19 +264,25 @@ class OptiProblem(FrozenClass):
 
     def _get_design_var(self):
         """getter of design_var"""
-        for obj in self._design_var:
-            if obj is not None:
-                obj.parent = self
+        if self._design_var is not None:
+            for obj in self._design_var:
+                if obj is not None:
+                    obj.parent = self
         return self._design_var
 
     def _set_design_var(self, value):
         """setter of design_var"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "design_var"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
         check_var("design_var", value, "[OptiDesignVar]")
         self._design_var = value
-
-        for obj in self._design_var:
-            if obj is not None:
-                obj.parent = self
 
     design_var = property(
         fget=_get_design_var,
@@ -309,19 +295,25 @@ class OptiProblem(FrozenClass):
 
     def _get_obj_func(self):
         """getter of obj_func"""
-        for obj in self._obj_func:
-            if obj is not None:
-                obj.parent = self
+        if self._obj_func is not None:
+            for obj in self._obj_func:
+                if obj is not None:
+                    obj.parent = self
         return self._obj_func
 
     def _set_obj_func(self, value):
         """setter of obj_func"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "obj_func"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
         check_var("obj_func", value, "[DataKeeper]")
         self._obj_func = value
-
-        for obj in self._obj_func:
-            if obj is not None:
-                obj.parent = self
 
     obj_func = property(
         fget=_get_obj_func,
@@ -334,23 +326,28 @@ class OptiProblem(FrozenClass):
 
     def _get_eval_func(self):
         """getter of eval_func"""
-        return self._eval_func[0]
+        return self._eval_func_func
 
     def _set_eval_func(self, value):
         """setter of eval_func"""
-        try:
-            check_var("eval_func", value, "list")
-        except CheckTypeError:
-            check_var("eval_func", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._eval_func = [loads(value[0].encode("ISO-8859-2")), value[1]]
-        elif value is None:
-            self._eval_func = [None, None]
+        if value is None:
+            self._eval_func_str = None
+            self._eval_func_func = None
+        elif isinstance(value, str) and "lambda" in value:
+            self._eval_func_str = value
+            self._eval_func_func = eval(value)
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+            self._eval_func_str = value
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._eval_func_func = eval(basename(value[:-3]))
         elif callable(value):
-            self._eval_func = [value, getsource(value)]
+            self._eval_func_str = None
+            self._eval_func_func = value
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
+            raise CheckTypeError(
+                "For property eval_func Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
             )
 
     eval_func = property(
@@ -364,19 +361,25 @@ class OptiProblem(FrozenClass):
 
     def _get_constraint(self):
         """getter of constraint"""
-        for obj in self._constraint:
-            if obj is not None:
-                obj.parent = self
+        if self._constraint is not None:
+            for obj in self._constraint:
+                if obj is not None:
+                    obj.parent = self
         return self._constraint
 
     def _set_constraint(self, value):
         """setter of constraint"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "constraint"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
         check_var("constraint", value, "[OptiConstraint]")
         self._constraint = value
-
-        for obj in self._constraint:
-            if obj is not None:
-                obj.parent = self
 
     constraint = property(
         fget=_get_constraint,
@@ -384,5 +387,71 @@ class OptiProblem(FrozenClass):
         doc=u"""List containing the constraints 
 
         :Type: [OptiConstraint]
+        """,
+    )
+
+    def _get_preprocessing(self):
+        """getter of preprocessing"""
+        return self._preprocessing_func
+
+    def _set_preprocessing(self, value):
+        """setter of preprocessing"""
+        if value is None:
+            self._preprocessing_str = None
+            self._preprocessing_func = None
+        elif isinstance(value, str) and "lambda" in value:
+            self._preprocessing_str = value
+            self._preprocessing_func = eval(value)
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+            self._preprocessing_str = value
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._preprocessing_func = eval(basename(value[:-3]))
+        elif callable(value):
+            self._preprocessing_str = None
+            self._preprocessing_func = value
+        else:
+            raise CheckTypeError(
+                "For property preprocessing Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
+            )
+
+    preprocessing = property(
+        fget=_get_preprocessing,
+        fset=_set_preprocessing,
+        doc=u"""Function to execute a preprocessing on the simulation right before it is run.
+
+        :Type: function
+        """,
+    )
+
+    def _get_datakeeper_list(self):
+        """getter of datakeeper_list"""
+        if self._datakeeper_list is not None:
+            for obj in self._datakeeper_list:
+                if obj is not None:
+                    obj.parent = self
+        return self._datakeeper_list
+
+    def _set_datakeeper_list(self, value):
+        """setter of datakeeper_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
+        check_var("datakeeper_list", value, "[DataKeeper]")
+        self._datakeeper_list = value
+
+    datakeeper_list = property(
+        fget=_get_datakeeper_list,
+        fset=_set_datakeeper_list,
+        doc=u"""List of DataKeepers to run on every output
+
+        :Type: [DataKeeper]
         """,
     )

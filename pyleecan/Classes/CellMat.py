@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -36,6 +39,7 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
+from .Interpolation import Interpolation
 
 
 class CellMat(FrozenClass):
@@ -85,49 +89,34 @@ class CellMat(FrozenClass):
         )
     else:
         is_exist = is_exist
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        connectivity=None,
+        connectivity=[],
         nb_cell=0,
         nb_pt_per_cell=0,
-        indice=None,
+        indice=[],
+        interpolation=-1,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            connectivity = obj.connectivity
-            nb_cell = obj.nb_cell
-            nb_pt_per_cell = obj.nb_pt_per_cell
-            indice = obj.indice
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -139,20 +128,21 @@ class CellMat(FrozenClass):
                 nb_pt_per_cell = init_dict["nb_pt_per_cell"]
             if "indice" in list(init_dict.keys()):
                 indice = init_dict["indice"]
-        # Initialisation by argument
+            if "interpolation" in list(init_dict.keys()):
+                interpolation = init_dict["interpolation"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # connectivity can be None, a ndarray or a list
-        set_array(self, "connectivity", connectivity)
+        self.connectivity = connectivity
         self.nb_cell = nb_cell
         self.nb_pt_per_cell = nb_pt_per_cell
-        # indice can be None, a ndarray or a list
-        set_array(self, "indice", indice)
+        self.indice = indice
+        self.interpolation = interpolation
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         CellMat_str = ""
         if self.parent is None:
@@ -175,6 +165,15 @@ class CellMat(FrozenClass):
             + linesep
             + linesep
         )
+        if self.interpolation is not None:
+            tmp = (
+                self.interpolation.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            CellMat_str += "interpolation = " + tmp
+        else:
+            CellMat_str += "interpolation = None" + linesep + linesep
         return CellMat_str
 
     def __eq__(self, other):
@@ -190,11 +189,12 @@ class CellMat(FrozenClass):
             return False
         if not array_equal(other.indice, self.indice):
             return False
+        if other.interpolation != self.interpolation:
+            return False
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         CellMat_dict = dict()
         if self.connectivity is None:
@@ -207,7 +207,11 @@ class CellMat(FrozenClass):
             CellMat_dict["indice"] = None
         else:
             CellMat_dict["indice"] = self.indice.tolist()
-        # The class name is added to the dict fordeserialisation purpose
+        if self.interpolation is None:
+            CellMat_dict["interpolation"] = None
+        else:
+            CellMat_dict["interpolation"] = self.interpolation.as_dict()
+        # The class name is added to the dict for deserialisation purpose
         CellMat_dict["__class__"] = "CellMat"
         return CellMat_dict
 
@@ -218,6 +222,8 @@ class CellMat(FrozenClass):
         self.nb_cell = None
         self.nb_pt_per_cell = None
         self.indice = None
+        if self.interpolation is not None:
+            self.interpolation._set_None()
 
     def _get_connectivity(self):
         """getter of connectivity"""
@@ -225,7 +231,7 @@ class CellMat(FrozenClass):
 
     def _set_connectivity(self, value):
         """setter of connectivity"""
-        if value is None:
+        if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
             try:
@@ -286,7 +292,7 @@ class CellMat(FrozenClass):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value is None:
+        if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
             try:
@@ -302,5 +308,35 @@ class CellMat(FrozenClass):
         doc=u"""Element indices
 
         :Type: ndarray
+        """,
+    )
+
+    def _get_interpolation(self):
+        """getter of interpolation"""
+        return self._interpolation
+
+    def _set_interpolation(self, value):
+        """setter of interpolation"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "interpolation"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Interpolation()
+        check_var("interpolation", value, "Interpolation")
+        self._interpolation = value
+
+        if self._interpolation is not None:
+            self._interpolation.parent = self
+
+    interpolation = property(
+        fget=_get_interpolation,
+        fset=_set_interpolation,
+        doc=u"""Define FEA interpolation
+
+        :Type: Interpolation
         """,
     )

@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
@@ -20,15 +23,9 @@ class OutGeoLam(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -40,37 +37,25 @@ class OutGeoLam(FrozenClass):
         S_slot=None,
         S_slot_wind=None,
         S_wind_act=None,
-        sym=None,
-        is_asym_wind=None,
+        per_a=None,
+        is_antiper_a=None,
+        per_t=None,
+        is_antiper_t=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            name_phase = obj.name_phase
-            BH_curve = obj.BH_curve
-            Ksfill = obj.Ksfill
-            S_slot = obj.S_slot
-            S_slot_wind = obj.S_slot_wind
-            S_wind_act = obj.S_wind_act
-            sym = obj.sym
-            is_asym_wind = obj.is_asym_wind
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -86,29 +71,32 @@ class OutGeoLam(FrozenClass):
                 S_slot_wind = init_dict["S_slot_wind"]
             if "S_wind_act" in list(init_dict.keys()):
                 S_wind_act = init_dict["S_wind_act"]
-            if "sym" in list(init_dict.keys()):
-                sym = init_dict["sym"]
-            if "is_asym_wind" in list(init_dict.keys()):
-                is_asym_wind = init_dict["is_asym_wind"]
-        # Initialisation by argument
+            if "per_a" in list(init_dict.keys()):
+                per_a = init_dict["per_a"]
+            if "is_antiper_a" in list(init_dict.keys()):
+                is_antiper_a = init_dict["is_antiper_a"]
+            if "per_t" in list(init_dict.keys()):
+                per_t = init_dict["per_t"]
+            if "is_antiper_t" in list(init_dict.keys()):
+                is_antiper_t = init_dict["is_antiper_t"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        if name_phase == -1:
-            name_phase = []
         self.name_phase = name_phase
-        # BH_curve can be None, a ndarray or a list
-        set_array(self, "BH_curve", BH_curve)
+        self.BH_curve = BH_curve
         self.Ksfill = Ksfill
         self.S_slot = S_slot
         self.S_slot_wind = S_slot_wind
         self.S_wind_act = S_wind_act
-        self.sym = sym
-        self.is_asym_wind = is_asym_wind
+        self.per_a = per_a
+        self.is_antiper_a = is_antiper_a
+        self.per_t = per_t
+        self.is_antiper_t = is_antiper_t
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         OutGeoLam_str = ""
         if self.parent is None:
@@ -132,8 +120,10 @@ class OutGeoLam(FrozenClass):
         OutGeoLam_str += "S_slot = " + str(self.S_slot) + linesep
         OutGeoLam_str += "S_slot_wind = " + str(self.S_slot_wind) + linesep
         OutGeoLam_str += "S_wind_act = " + str(self.S_wind_act) + linesep
-        OutGeoLam_str += "sym = " + str(self.sym) + linesep
-        OutGeoLam_str += "is_asym_wind = " + str(self.is_asym_wind) + linesep
+        OutGeoLam_str += "per_a = " + str(self.per_a) + linesep
+        OutGeoLam_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
+        OutGeoLam_str += "per_t = " + str(self.per_t) + linesep
+        OutGeoLam_str += "is_antiper_t = " + str(self.is_antiper_t) + linesep
         return OutGeoLam_str
 
     def __eq__(self, other):
@@ -153,18 +143,23 @@ class OutGeoLam(FrozenClass):
             return False
         if other.S_wind_act != self.S_wind_act:
             return False
-        if other.sym != self.sym:
+        if other.per_a != self.per_a:
             return False
-        if other.is_asym_wind != self.is_asym_wind:
+        if other.is_antiper_a != self.is_antiper_a:
+            return False
+        if other.per_t != self.per_t:
+            return False
+        if other.is_antiper_t != self.is_antiper_t:
             return False
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutGeoLam_dict = dict()
-        OutGeoLam_dict["name_phase"] = self.name_phase
+        OutGeoLam_dict["name_phase"] = (
+            self.name_phase.copy() if self.name_phase is not None else None
+        )
         if self.BH_curve is None:
             OutGeoLam_dict["BH_curve"] = None
         else:
@@ -173,9 +168,11 @@ class OutGeoLam(FrozenClass):
         OutGeoLam_dict["S_slot"] = self.S_slot
         OutGeoLam_dict["S_slot_wind"] = self.S_slot_wind
         OutGeoLam_dict["S_wind_act"] = self.S_wind_act
-        OutGeoLam_dict["sym"] = self.sym
-        OutGeoLam_dict["is_asym_wind"] = self.is_asym_wind
-        # The class name is added to the dict fordeserialisation purpose
+        OutGeoLam_dict["per_a"] = self.per_a
+        OutGeoLam_dict["is_antiper_a"] = self.is_antiper_a
+        OutGeoLam_dict["per_t"] = self.per_t
+        OutGeoLam_dict["is_antiper_t"] = self.is_antiper_t
+        # The class name is added to the dict for deserialisation purpose
         OutGeoLam_dict["__class__"] = "OutGeoLam"
         return OutGeoLam_dict
 
@@ -188,8 +185,10 @@ class OutGeoLam(FrozenClass):
         self.S_slot = None
         self.S_slot_wind = None
         self.S_wind_act = None
-        self.sym = None
-        self.is_asym_wind = None
+        self.per_a = None
+        self.is_antiper_a = None
+        self.per_t = None
+        self.is_antiper_t = None
 
     def _get_name_phase(self):
         """getter of name_phase"""
@@ -197,6 +196,8 @@ class OutGeoLam(FrozenClass):
 
     def _set_name_phase(self, value):
         """setter of name_phase"""
+        if type(value) is int and value == -1:
+            value = list()
         check_var("name_phase", value, "list")
         self._name_phase = value
 
@@ -215,7 +216,7 @@ class OutGeoLam(FrozenClass):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
-        if value is None:
+        if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
             try:
@@ -306,37 +307,73 @@ class OutGeoLam(FrozenClass):
         """,
     )
 
-    def _get_sym(self):
-        """getter of sym"""
-        return self._sym
+    def _get_per_a(self):
+        """getter of per_a"""
+        return self._per_a
 
-    def _set_sym(self, value):
-        """setter of sym"""
-        check_var("sym", value, "int")
-        self._sym = value
+    def _set_per_a(self, value):
+        """setter of per_a"""
+        check_var("per_a", value, "int")
+        self._per_a = value
 
-    sym = property(
-        fget=_get_sym,
-        fset=_set_sym,
-        doc=u"""Symmetry factor of the lamination (1=full machine; 2 = half;...)
+    per_a = property(
+        fget=_get_per_a,
+        fset=_set_per_a,
+        doc=u"""Number of spatial periodicities of the lamination
 
         :Type: int
         """,
     )
 
-    def _get_is_asym_wind(self):
-        """getter of is_asym_wind"""
-        return self._is_asym_wind
+    def _get_is_antiper_a(self):
+        """getter of is_antiper_a"""
+        return self._is_antiper_a
 
-    def _set_is_asym_wind(self, value):
-        """setter of is_asym_wind"""
-        check_var("is_asym_wind", value, "bool")
-        self._is_asym_wind = value
+    def _set_is_antiper_a(self, value):
+        """setter of is_antiper_a"""
+        check_var("is_antiper_a", value, "bool")
+        self._is_antiper_a = value
 
-    is_asym_wind = property(
-        fget=_get_is_asym_wind,
-        fset=_set_is_asym_wind,
-        doc=u"""True if the winding has a asymmetry
+    is_antiper_a = property(
+        fget=_get_is_antiper_a,
+        fset=_set_is_antiper_a,
+        doc=u"""True if an spatial anti-periodicity is possible after the periodicities
+
+        :Type: bool
+        """,
+    )
+
+    def _get_per_t(self):
+        """getter of per_t"""
+        return self._per_t
+
+    def _set_per_t(self, value):
+        """setter of per_t"""
+        check_var("per_t", value, "int")
+        self._per_t = value
+
+    per_t = property(
+        fget=_get_per_t,
+        fset=_set_per_t,
+        doc=u"""Number of time periodicities of the lamination
+
+        :Type: int
+        """,
+    )
+
+    def _get_is_antiper_t(self):
+        """getter of is_antiper_t"""
+        return self._is_antiper_t
+
+    def _set_is_antiper_t(self, value):
+        """setter of is_antiper_t"""
+        check_var("is_antiper_t", value, "bool")
+        self._is_antiper_t = value
+
+    is_antiper_t = property(
+        fget=_get_is_antiper_t,
+        fset=_set_is_antiper_t,
+        doc=u"""True if an time anti-periodicity is possible after the periodicities
 
         :Type: bool
         """,

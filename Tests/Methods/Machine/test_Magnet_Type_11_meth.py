@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
-
-from ddt import ddt, data
+import pytest
 
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Segment import Segment
@@ -37,51 +35,47 @@ Mag11_test.append({"test_obj": lam, "S_exp": 2.09439e-6, "Ao": pi / 12, "H_exp":
 DELTA = 1e-4
 
 
-@ddt
-class test_Magnet_Type_11_meth(TestCase):
-    """unittest for MagnetType11 methods
-    """
+@pytest.mark.METHODS
+class Test_Magnet_Type_11_meth(object):
+    """unittest for MagnetType11 methods"""
 
-    @data(*Mag11_test)
+    @pytest.mark.parametrize("test_dict", Mag11_test)
     def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
+        """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_surface()
 
         a = result
         b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         # Compare numerical and analytical results
         b = comp_surface(test_obj.slot.magnet[0])
         msg = "Analytical: " + str(a) + " Numerical " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*Mag11_test)
+    @pytest.mark.parametrize("test_dict", Mag11_test)
     def test_comp_height(self, test_dict):
-        """Check that the computation of the height is correct
-        """
+        """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_height()
 
         a = result
         b = test_dict["H_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*Mag11_test)
+    @pytest.mark.parametrize("test_dict", Mag11_test)
     def test_comp_angle_op(self, test_dict):
-        """Check that the computation of the opening angle is correct
-        """
+        """Check that the computation of the opening angle is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_angle_opening()
 
         a = result
         b = test_dict["Ao"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
     def test_build_geometry_out(self):
         """check that curve_list is correct (outwards magnet)"""
@@ -117,11 +111,11 @@ class test_Magnet_Type_11_meth(TestCase):
         for i in range(0, len(result)):
             a = result[i].begin
             b = curve_list[i].begin
-            self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+            assert abs((a - b) / a - 0) < DELTA
 
             a = result[i].end
             b = curve_list[i].end
-            self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+            assert abs((a - b) / a - 0) < DELTA
 
     def test_build_geometry_in(self):
         """check that curve_list is correct (inwards magnet)"""
@@ -157,8 +151,8 @@ class test_Magnet_Type_11_meth(TestCase):
         for i in range(0, len(result)):
             a = result[i].begin
             b = curve_list[i].begin
-            self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+            assert abs((a - b) / a - 0) < DELTA
 
             a = result[i].end
             b = curve_list[i].end
-            self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+            assert abs((a - b) / a - 0) < DELTA

@@ -9,11 +9,16 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
-from inspect import getsource
-from cloudpickle import dumps, loads
+from ntpath import basename
+from os.path import isfile
 from ._check import CheckTypeError
+import numpy as np
+import random
 from ._check import InitUnKnowClassError
 
 
@@ -22,15 +27,9 @@ class OptiConstraint(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -45,26 +44,16 @@ class OptiConstraint(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            name = obj.name
-            type_const = obj.type_const
-            value = obj.value
-            get_variable = obj.get_variable
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -76,7 +65,7 @@ class OptiConstraint(FrozenClass):
                 value = init_dict["value"]
             if "get_variable" in list(init_dict.keys()):
                 get_variable = init_dict["get_variable"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.type_const = type_const
@@ -87,7 +76,7 @@ class OptiConstraint(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         OptiConstraint_str = ""
         if self.parent is None:
@@ -99,16 +88,14 @@ class OptiConstraint(FrozenClass):
         OptiConstraint_str += 'name = "' + str(self.name) + '"' + linesep
         OptiConstraint_str += 'type_const = "' + str(self.type_const) + '"' + linesep
         OptiConstraint_str += "value = " + str(self.value) + linesep
-        if self._get_variable[1] is None:
-            OptiConstraint_str += "get_variable = " + str(self._get_variable[1])
-        else:
+        if self._get_variable_str is not None:
+            OptiConstraint_str += "get_variable = " + self._get_variable_str + linesep
+        elif self._get_variable_func is not None:
             OptiConstraint_str += (
-                "get_variable = "
-                + linesep
-                + str(self._get_variable[1])
-                + linesep
-                + linesep
+                "get_variable = " + str(self._get_variable_func) + linesep
             )
+        else:
+            OptiConstraint_str += "get_variable = None" + linesep + linesep
         return OptiConstraint_str
 
     def __eq__(self, other):
@@ -122,26 +109,22 @@ class OptiConstraint(FrozenClass):
             return False
         if other.value != self.value:
             return False
-        if other.get_variable != self.get_variable:
+        if other._get_variable_str != self._get_variable_str:
             return False
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OptiConstraint_dict = dict()
         OptiConstraint_dict["name"] = self.name
         OptiConstraint_dict["type_const"] = self.type_const
         OptiConstraint_dict["value"] = self.value
-        if self.get_variable is None:
-            OptiConstraint_dict["get_variable"] = None
+        if self._get_variable_str is not None:
+            OptiConstraint_dict["get_variable"] = self._get_variable_str
         else:
-            OptiConstraint_dict["get_variable"] = [
-                dumps(self._get_variable[0]).decode("ISO-8859-2"),
-                self._get_variable[1],
-            ]
-        # The class name is added to the dict fordeserialisation purpose
+            OptiConstraint_dict["get_variable"] = None
+        # The class name is added to the dict for deserialisation purpose
         OptiConstraint_dict["__class__"] = "OptiConstraint"
         return OptiConstraint_dict
 
@@ -209,23 +192,28 @@ class OptiConstraint(FrozenClass):
 
     def _get_get_variable(self):
         """getter of get_variable"""
-        return self._get_variable[0]
+        return self._get_variable_func
 
     def _set_get_variable(self, value):
         """setter of get_variable"""
-        try:
-            check_var("get_variable", value, "list")
-        except CheckTypeError:
-            check_var("get_variable", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._get_variable = [loads(value[0].encode("ISO-8859-2")), value[1]]
-        elif value is None:
-            self._get_variable = [None, None]
+        if value is None:
+            self._get_variable_str = None
+            self._get_variable_func = None
+        elif isinstance(value, str) and "lambda" in value:
+            self._get_variable_str = value
+            self._get_variable_func = eval(value)
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+            self._get_variable_str = value
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._get_variable_func = eval(basename(value[:-3]))
         elif callable(value):
-            self._get_variable = [value, getsource(value)]
+            self._get_variable_str = None
+            self._get_variable_func = value
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
+            raise CheckTypeError(
+                "For property get_variable Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
             )
 
     get_variable = property(

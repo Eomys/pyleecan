@@ -23,12 +23,12 @@ def plot_multi(
         ParamExplorer or DataKeeper symbol
     plot_type: str
         scatter or plot to chose plot type
-    idx: slice 
+    idx: slice
         To plot only some data
     ax: matplotlib.pyplot.Axe
         To put the plot in a specific ax
     title: str
-        Figure or subfigure title according to ax 
+        Figure or subfigure title according to ax
 
     Returns
     -------
@@ -36,7 +36,7 @@ def plot_multi(
 
     Raises
     ------
-    PlotError  
+    PlotError
     """
 
     if idx is None:
@@ -74,9 +74,9 @@ def plot_multi(
     # Plot in new figure
     if ax is None:
         fig, ax = plt.subplots()
-        if plot_type is "scatter":
+        if plot_type == "scatter":
             ax.scatter(x_values, y_values, c=COLORS[0])
-        elif plot_type is "plot":
+        elif plot_type == "plot":
             sort_index = np.argsort(x_values)
             ax.plot(x_values[sort_index], y_values[sort_index])
 
@@ -87,9 +87,9 @@ def plot_multi(
 
     # Plot in ax
     else:
-        if plot_type is "scatter":
+        if plot_type == "scatter":
             ax.scatter(x_values, y_values)
-        elif plot_type is "plot":
+        elif plot_type == "plot":
             sort_index = np.argsort(x_values)
             ax.plot(x_values[sort_index], y_values[sort_index])
 

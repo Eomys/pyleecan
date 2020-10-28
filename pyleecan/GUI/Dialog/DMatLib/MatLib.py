@@ -10,15 +10,14 @@ from ....Functions.Material.replace_material_pyleecan_obj import (
 from ....definitions import config_dict
 from ....GUI import GUI_logger
 
-from PyQt5.QtCore import QObject, pyqtSignal
+from PySide2.QtCore import QObject, Signal
 
 
 class MatLib(QObject):
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
 
     def __init__(self, path=None):
-        """MatLib contains the material library and the specific machine materials.
-        """
+        """MatLib contains the material library and the specific machine materials."""
         # Dict containing the material library and the specific machine materials
         self.dict_mat = {
             "RefMatLib": [],  # Reference Material Library
@@ -36,7 +35,7 @@ class MatLib(QObject):
 
     def load_mat_ref(self, path):
         """Remove the reference materials and load materials from the path
-        
+
         Parameters
         ----------
         self: MatLib
@@ -60,14 +59,14 @@ class MatLib(QObject):
 
     def add_machine_mat(self, machine):
         """
-        Add machine materials if they are not in the MatLib 
-        
+        Add machine materials if they are not in the MatLib
+
         Parameters
         ----------
         self: MatLib
-        
+
         machine: Machine
-            Machine containing material to add 
+            Machine containing material to add
 
         Returns
         -------
@@ -145,9 +144,9 @@ class MatLib(QObject):
 
         Parameters
         ----------
-        self: MatLib 
+        self: MatLib
         key: str
-            machine name to move the right material  
+            machine name to move the right material
         index: int
             position of the machine material in its machine materials list
         """
@@ -166,7 +165,7 @@ class MatLib(QObject):
 
     def move_ref_mat_to_mach(self, key, index):
         """
-        Move a material from the reference material library to 
+        Move a material from the reference material library to
         the machine materials
 
         self: MatLib
@@ -346,15 +345,15 @@ class MatLib(QObject):
         index: int
             index of the material to replace
         material: Material
-            new material 
-        save: bool 
+            new material
+        save: bool
             save modification in the MatLib file
-        
+
         Returns
         -------
 
         is_change: bool
-            Machine has been change 
+            Machine has been change
         """
         is_change = False
         # Replace the material in the current machine

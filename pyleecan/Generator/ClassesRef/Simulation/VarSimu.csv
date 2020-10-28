@@ -1,9 +1,10 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 name,-,Name of the multi-simulation,0,str,,,,,Simulation,,run,VERSION,1,Abstract class for the multi-simulation
-desc,-,Multi-simulation description,0,str,,,,,,,,,,
-datakeeper_list,-,List containing DataKeepers to extract VarSimu results ,0,[DataKeeper],[],,,,,,,,,
-nb_proc,-,Number of processors used to run the simulations,0,int,1,1,,,,,,,,
-is_keep_all_output,-,True to store every output in a list,0,bool,False,,,,,,,,,
+desc,-,Multi-simulation description,0,str,,,,,,,set_reused_data,,,
+datakeeper_list,-,List containing DataKeepers to extract VarSimu results ,0,[DataKeeper],,,,,,,check_param,,,
+is_keep_all_output,-,True to store every output in a list,0,bool,False,,,,,,get_simulations,,,
 stop_if_error,-,Stop the multi-simulation if a simulation fails ,0,bool,False,,,,,,,,,
 ref_simu_index,-,"Index of the reference simulation, if None the reference simulation is not in the multi-simulation",0,int,None,0,,,,,,,,
 nb_simu,-,Number of simulations,0,int,0,,,,,,,,,
+is_reuse_femm_file,-,"True to reuse the femm file for each simulation (draw the machine only once, MagFEMM only)",0,bool,1,,,,,,,,,
+postproc_list,-,List of post-processing to run on XOutput after the multisimulation,0,[Post],,,,,,,,,,

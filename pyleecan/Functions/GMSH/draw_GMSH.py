@@ -13,22 +13,22 @@ import cmath
 def _find_point_tag(d={}, p=complex(0.0, 0.0)):
     """Find a point in the GMSH dictionary
 
-        Parameters
-        ----------
-        d : Dictionary
-            GMSH dictionary
-        p : Complex
-            Point coordinates
+    Parameters
+    ----------
+    d : Dictionary
+        GMSH dictionary
+    p : Complex
+        Point coordinates
 
-        Returns
-        -------
-        tag : int
-            Existing tag number or new one if it does not exist
-        real : float
-            Real coordinates of point
-        imag : float
-            Imaginary coordinates of point
-        """
+    Returns
+    -------
+    tag : int
+        Existing tag number or new one if it does not exist
+    real : float
+        Real coordinates of point
+    imag : float
+        Imaginary coordinates of point
+    """
     tol = 1e-6
     for s_id, s_data in d.items():
         for lid, lvalues in s_data.items():
@@ -47,18 +47,18 @@ def _find_point_tag(d={}, p=complex(0.0, 0.0)):
 def _find_points_from_line(d={}, ltag=-1):
     """Find points tag from existing lines
 
-        Parameters
-        ----------
-        d : Dictionary
-            GMSH dictionary
-        ltag : int
-            line tag
+    Parameters
+    ----------
+    d : Dictionary
+        GMSH dictionary
+    ltag : int
+        line tag
 
-        Returns
-        -------
-        coord : float
-            Coordinates of point if found
-        """
+    Returns
+    -------
+    coord : float
+        Coordinates of point if found
+    """
     btag = None
     etag = None
     ctag = None
@@ -85,18 +85,18 @@ def _find_points_from_line(d={}, ltag=-1):
 def _find_lines_from_point(d={}, ptag=-1):
     """Find lines that have the given point tag
 
-        Parameters
-        ----------
-        d : Dictionary
-            GMSH dictionary
-        ptag : int
-            point tag
+    Parameters
+    ----------
+    d : Dictionary
+        GMSH dictionary
+    ptag : int
+        point tag
 
-        Returns
-        -------
-        ltag : int
-            List of line tags
-        """
+    Returns
+    -------
+    ltag : int
+        List of line tags
+    """
     lines = list()
     for s_id, s_data in d.items():
         for lid, lvalues in s_data.items():
@@ -113,25 +113,25 @@ def _find_lines_from_point(d={}, ptag=-1):
 def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=None):
     """Draw a new line and add it to GMSH dictionary if it does not exist
 
-        Parameters
-        ----------
-        geo : Model
-            GMSH Model objet
-        line : Object
-            Line Object
-        d : Dictionary
-            GMSH dictionary
-        idx : int
-            Surface index it belongs to
-        mesh_size : float
-            Points mesh size
-        n_elements : int
-            Number of elements on the line for meshing control
+    Parameters
+    ----------
+    geo : Model
+        GMSH Model objet
+    line : Object
+        Line Object
+    d : Dictionary
+        GMSH dictionary
+    idx : int
+        Surface index it belongs to
+    mesh_size : float
+        Points mesh size
+    n_elements : int
+        Number of elements on the line for meshing control
 
-        Returns
-        -------
-        None
-        """
+    Returns
+    -------
+    None
+    """
 
     dlines = list()
     ltag = None
@@ -177,7 +177,7 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
             if type(lvalues) is not dict:
                 continue
             else:
-                if lvalues['tag'] == ltag:
+                if lvalues["tag"] == ltag:
                     repeated = True
 
         if not repeated:
@@ -336,7 +336,7 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
             if type(lvalues) is not dict:
                 continue
             else:
-                if lvalues['tag'] == ltag:
+                if lvalues["tag"] == ltag:
                     repeated = True
 
         if not repeated:
@@ -395,7 +395,7 @@ def draw_GMSH(
     -------
     GMSH_dict : dict
         Dictionnary containing the main parameters of GMSH File
-        """
+    """
 
     machine = output.simu.machine
     mesh_dict = {}
@@ -521,7 +521,9 @@ def draw_GMSH(
                         mesh_size=mesh_size,
                         bc=bc_name,
                     )
-            elif isinstance(line, Arc) and (abs(line.get_angle()*180.0/cmath.pi) <= tol):
+            elif isinstance(line, Arc) and (
+                abs(line.get_angle() * 180.0 / cmath.pi) <= tol
+            ):
                 # Don't draw anything, this is a circle and usually is repeated ?
                 pass
             else:
@@ -556,18 +558,18 @@ def draw_GMSH(
             lloop.extend([lvalues["tag"]])
         cloop = factory.addCurveLoop(lloop)
         # search for the holes to substract from rotor lam
-        if s_data['label'].find('Lamination_Rotor') != -1:
+        if s_data["label"].find("Lamination_Rotor") != -1:
             ext_lam_loop = cloop
         else:
             # MachineSIPSM does not have holes in rotor lam
             # only shaft is taken out if symmetry is one
             if isinstance(machine, MachineSIPMSM):
-                if sym == 1 and s_data['label'] == "Shaft":
+                if sym == 1 and s_data["label"] == "Shaft":
                     lam_and_holes.extend([cloop])
             else:
                 if sym == 1:
                     lam_and_holes.extend([cloop])
-                elif s_data['label'] != "Shaft":
+                elif s_data["label"] != "Shaft":
                     lam_and_holes.extend([cloop])
                 else:
                     pass
@@ -718,10 +720,10 @@ def draw_GMSH(
         cloop = factory.addCurveLoop(lloop)
         stator_cloops.append(cloop)
         # Winding surfaces are created
-        if s_data['label'].find('Lamination_Stator') != -1:
-            s_data['tag'] = factory.addPlaneSurface([cloop], tag=-1)
-            pg = model.addPhysicalGroup(2, [s_data['tag']])
-            model.setPhysicalName(2, pg, s_data['label'])
+        if s_data["label"].find("Lamination_Stator") != -1:
+            s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
+            pg = model.addPhysicalGroup(2, [s_data["tag"]])
+            model.setPhysicalName(2, pg, s_data["label"])
         else:
             # Stator lamination is built
             if not is_lam_only_S:
@@ -857,7 +859,7 @@ def draw_GMSH(
 
     # Save and close
     gmsh.write(path_save)
-    #gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
+    # gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()
 
 

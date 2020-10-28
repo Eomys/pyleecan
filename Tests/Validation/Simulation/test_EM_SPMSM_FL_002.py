@@ -16,8 +16,6 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 from Tests import save_validation_path as save_path
 
-SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
-
 
 @pytest.mark.long
 @pytest.mark.validation
@@ -34,6 +32,7 @@ def test_Magnetic_FEMM_sym():
     Test compute the Flux in FEMM, with and without symmetry
     and with MANATEE semi-analytical subdomain model
     """
+    SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
     simu = Simu1(name="EM_SPMSM_FL_002", machine=SPMSM_003)
 
     # Definition of the enforced output of the electrical module
@@ -49,7 +48,7 @@ def test_Magnetic_FEMM_sym():
         )
     )
     time = ImportGenVectLin(start=0, stop=0.015, num=4, endpoint=True)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
+    Na_tot = 1024
 
     simu.input = InputCurrent(
         Is=Is,
@@ -57,7 +56,7 @@ def test_Magnetic_FEMM_sym():
         N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + pi,
     )
 
@@ -65,16 +64,15 @@ def test_Magnetic_FEMM_sym():
     simu.mag = MagFEMM(
         type_BH_stator=2,
         type_BH_rotor=2,
-        is_symmetry_a=False,
-        is_antiper_a=True,
+        is_periodicity_a=False,
         is_get_mesh=True,
     )
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
-    assert SPMSM_003.comp_sym() == (1, True)
+    assert SPMSM_003.comp_periodicity() == (1, True, 1, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
-    simu_sym.mag.is_symmetry_a = True
+    simu_sym.mag.is_periodicity_a = True
 
     out = Output(simu=simu_sym)
     out.post.legend_name = "1/2 symmetry"

@@ -7,19 +7,19 @@ import numpy as np
 def get_group(self, element):
     """Define a new PointMat object based on a set of elements.
 
-     Parameters
-     ----------
-     self : PointMat
-         an PointMat object
-     element : Element
-         an Element object
+    Parameters
+    ----------
+    self : PointMat
+        an PointMat object
+    element : Element
+        an Element object
 
-     Returns
-     -------
-     node: Node
-         a Node object corresponding to Element
+    Returns
+    -------
+    node: Node
+        a Node object corresponding to Element
 
-     """
+    """
     module = __import__(PACKAGE_NAME + ".Classes." + "PointMat", fromlist=["PointMat"])
     node = getattr(module, "PointMat")()
 

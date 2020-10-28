@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -38,42 +41,27 @@ class DXFImport(FrozenClass):
         )
     else:
         get_surfaces = get_surfaces
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
-        self, file_path="", surf_dict={}, BC_list=[], init_dict=None, init_str=None
+        self, file_path="", surf_dict=-1, BC_list=-1, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            file_path = obj.file_path
-            surf_dict = obj.surf_dict
-            BC_list = obj.BC_list
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -83,19 +71,17 @@ class DXFImport(FrozenClass):
                 surf_dict = init_dict["surf_dict"]
             if "BC_list" in list(init_dict.keys()):
                 BC_list = init_dict["BC_list"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.file_path = file_path
         self.surf_dict = surf_dict
-        if BC_list == -1:
-            BC_list = []
         self.BC_list = BC_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         DXFImport_str = ""
         if self.parent is None:
@@ -126,14 +112,17 @@ class DXFImport(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         DXFImport_dict = dict()
         DXFImport_dict["file_path"] = self.file_path
-        DXFImport_dict["surf_dict"] = self.surf_dict
-        DXFImport_dict["BC_list"] = self.BC_list
-        # The class name is added to the dict fordeserialisation purpose
+        DXFImport_dict["surf_dict"] = (
+            self.surf_dict.copy() if self.surf_dict is not None else None
+        )
+        DXFImport_dict["BC_list"] = (
+            self.BC_list.copy() if self.BC_list is not None else None
+        )
+        # The class name is added to the dict for deserialisation purpose
         DXFImport_dict["__class__"] = "DXFImport"
         return DXFImport_dict
 
@@ -168,6 +157,8 @@ class DXFImport(FrozenClass):
 
     def _set_surf_dict(self, value):
         """setter of surf_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
         check_var("surf_dict", value, "dict")
         self._surf_dict = value
 
@@ -186,6 +177,8 @@ class DXFImport(FrozenClass):
 
     def _set_BC_list(self, value):
         """setter of BC_list"""
+        if type(value) is int and value == -1:
+            value = list()
         check_var("BC_list", value, "list")
         self._BC_list = value
 

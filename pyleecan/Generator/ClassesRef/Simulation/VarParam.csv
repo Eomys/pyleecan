@@ -1,3 +1,3 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-paramexplorer_list,-,List containing ParamSetter to define every simulation,0,[ParamExplorer],[],,,,Simulation,VarSimu,check_param,VERSION,1,Handle multisimulation by varying parameters
+paramexplorer_list,-,List containing ParamSetter to define every simulation,0,[ParamExplorer],,,,,Simulation,VarSimu,check_param,VERSION,1,Handle multisimulation by varying parameters
 ,,,,,,,,,,,get_simulations,,,

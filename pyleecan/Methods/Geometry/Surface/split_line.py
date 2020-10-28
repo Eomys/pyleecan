@@ -15,7 +15,7 @@ def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
         Second point of the cutting Line
     is_top : bool
         True to keep the part above the cutting line.
-        "Above" is in the coordinate system with Z1 in 0 and Z2 on the X>0 axis 
+        "Above" is in the coordinate system with Z1 in 0 and Z2 on the X>0 axis
     is_join : bool
         True to join the split_list with Segment on the cutting line
     label_join : str
@@ -42,14 +42,29 @@ def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
         )
 
     # Make sure that the surface is closed (if needed)
-    if is_join and abs(split_list[-1].get_end() - split_list[0].get_begin()) > 1e-6:
-        split_list.append(
-            Segment(
-                begin=split_list[-1].get_end(),
-                end=split_list[0].get_begin(),
-                label=label_join,
+    if is_join:
+        final_list = list()
+        for ii in range(len(split_list) - 1):
+            final_list.append(split_list[ii])
+            if abs(split_list[ii].get_end() - split_list[ii + 1].get_begin()) > 1e-6:
+                final_list.append(
+                    Segment(
+                        begin=split_list[ii].get_end(),
+                        end=split_list[ii + 1].get_begin(),
+                        label=label_join,
+                    )
+                )
+        final_list.append(split_list[-1])
+        # Add last line
+        if abs(split_list[-1].get_end() - split_list[0].get_begin()) > 1e-6:
+            final_list.append(
+                Segment(
+                    begin=split_list[-1].get_end(),
+                    end=split_list[0].get_begin(),
+                    label=label_join,
+                )
             )
-        )
+        split_list = final_list
 
     # Create the resulting surface and update ref point
     surf = SurfLine(label=self.label, line_list=split_list)

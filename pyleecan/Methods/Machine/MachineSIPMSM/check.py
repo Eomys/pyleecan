@@ -58,7 +58,7 @@ class M2C_WrongRotor(MachineCheckError):
     Raises
     ------
     Magnet
-        
+
 
     """
 
@@ -96,7 +96,7 @@ class M2C_PError(MachineCheckError):
     Raises
     ------
     values
-        
+
 
     """
 

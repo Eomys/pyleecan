@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
@@ -20,11 +20,10 @@ WIDGET_LIST = [PWSlot60, PWSlot61]
 
 
 class SWPole(Ui_SWPole, QWidget):
-    """Step to set the lamination pole (for WRSM)
-    """
+    """Step to set the lamination pole (for WRSM)"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup
     step_name = "Pole"
 
@@ -38,7 +37,7 @@ class SWPole(Ui_SWPole, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -88,8 +87,7 @@ class SWPole(Ui_SWPole, QWidget):
         self.b_plot.clicked.connect(self.s_plot)
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     def set_slot_type(self, index):

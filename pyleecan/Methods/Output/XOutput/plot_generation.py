@@ -5,7 +5,7 @@ from matplotlib.colors import LinearSegmentedColormap
 
 def plot_generation(self, x_symbol, y_symbol, ax=None):
     """Plot every fitness values according to the two fitness
-    
+
     Parameters
     ----------
     self : XOutput
@@ -20,12 +20,12 @@ def plot_generation(self, x_symbol, y_symbol, ax=None):
     cm = LinearSegmentedColormap.from_list(
         "colormap",
         [(35 / 255, 89 / 255, 133 / 255), (250 / 255, 202 / 255, 56 / 255)],
-        N=max(self["ngen"]) + 1,
+        N=max(self["ngen"].result) + 1,
     )
 
     # Get fitness and ngen
-    is_valid = np.array(self["is_valid"])
-    ngen = np.array(self["ngen"])
+    is_valid = np.array(self["is_valid"].result)
+    ngen = np.array(self["ngen"].result)
 
     # Keep only valid values
     indx = np.where(is_valid)[0]

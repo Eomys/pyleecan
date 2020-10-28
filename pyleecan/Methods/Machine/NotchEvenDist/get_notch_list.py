@@ -13,7 +13,7 @@ def get_notch_list(self, sym=1):
 
     Returns
     -------
-    notch_list : list 
+    notch_list : list
         list of dictionary with key: "begin_angle", "end_angle", "obj"
     """
 

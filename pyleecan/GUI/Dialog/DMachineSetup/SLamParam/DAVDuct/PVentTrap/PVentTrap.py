@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from .......GUI import gui_option
 from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.Gen_PVentTrap import (
@@ -10,11 +10,10 @@ from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.Gen_PVentTrap i
 
 
 class PVentTrap(Gen_PVentTrap, QWidget):
-    """Page to setup the Ventilation Trap
-    """
+    """Page to setup the Ventilation Trap"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
 
     def __init__(self, lam=None, vent=None):
         """Initialize the widget according the current lamination
@@ -140,7 +139,7 @@ class PVentTrap(Gen_PVentTrap, QWidget):
         Parameters
         ----------
         self : PVentTrap
-            A PVentTrap object    
+            A PVentTrap object
 
         Returns
         -------

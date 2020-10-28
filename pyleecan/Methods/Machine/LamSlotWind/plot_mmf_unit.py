@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-from numpy import pi
-from SciDataTool import Data1D, DataLinspace, DataTime
-from ....Functions.Winding.gen_phase_list import gen_name
-from ....Functions.Plot.plot_A_space import plot_A_space
+from ....Functions.Plot.plot_2D_Data import plot_2D_Data
 from ....definitions import config_dict
 
 
-def plot_mmf_unit(self, Na=2048, fig=None):
+def plot_mmf_unit(self, r_max=100, fig=None):
     """Plot the winding unit mmf as a function of space
     Parameters
     ----------
@@ -19,36 +16,25 @@ def plot_mmf_unit(self, Na=2048, fig=None):
     """
 
     # Compute the winding function and mmf
-    wf = self.comp_wind_function(Na=Na)
+    wf = self.comp_wind_function(per_a=1)
     qs = self.winding.qs
-    mmf_u = self.comp_mmf_unit(Na=Na)
-
-    # Create a Data object
-    Phase = Data1D(
-        name="phase",
-        unit="",
-        values=gen_name(qs, is_add_phase=True),
-        is_components=True,
-    )
-    Angle = DataLinspace(
-        name="angle",
-        unit="rad",
-        symmetries={},
-        initial=0,
-        final=2 * pi,
-        number=Na,
-        include_endpoint=False,
-    )
-    Br = DataTime(
-        name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf
-    )
+    MMF_U, WF = self.comp_mmf_unit(Nt=1, Na=wf.shape[1])
 
     color_list = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][: qs + 1]
-    plot_A_space(
-        Br,
-        is_fft=True,
-        index_list=[0, 1, 2],
-        data_list=[mmf_u],
+    plot_2D_Data(
+        WF,
+        "angle",
+        "phase",
+        data_list=[MMF_U],
+        fig=fig,
+        color_list=color_list,
+    )
+
+    plot_2D_Data(
+        WF,
+        "wavenumber=[0," + str(r_max) + "]",
+        "phase[0]",
+        data_list=[MMF_U],
         fig=fig,
         color_list=color_list,
     )

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QDialog, QMessageBox
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QDialog, QMessageBox
 
 from ......Classes.MagnetType14 import MagnetType14
 from ......Classes.SlotMPolar import SlotMPolar
@@ -10,11 +10,10 @@ from ......GUI.Dialog.DMachineSetup.SMagnet.PMagnet14.Gen_PMagnet14 import Gen_P
 
 
 class PMagnet14(Gen_PMagnet14, QDialog):
-    """Page to set the Magnet Type 14
-    """
+    """Page to set the Magnet Type 14"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for Magnet combobox
     mag_name = "Polar bottom, curved top"
     mag_type = MagnetType14

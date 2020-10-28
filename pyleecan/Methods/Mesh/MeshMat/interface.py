@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 from ....Classes.PointMat import PointMat
 from ....Classes.CellMat import CellMat
+from ....Classes.Interpolation import Interpolation
+from ....Classes.FPGNSeg import FPGNSeg
+from ....Classes.ScalarProductL2 import ScalarProductL2
+from ....Classes.RefSegmentP1 import RefSegmentP1
+
 from ....definitions import PACKAGE_NAME
 from collections import Counter
 import numpy as np
@@ -32,6 +37,11 @@ def interface(self, other_mesh):
         if self.cell[key].nb_pt_per_cell == 3:  # Triangle case
 
             new_mesh.cell["line"] = CellMat(nb_pt_per_cell=2)
+            interp = Interpolation()
+            interp.gauss_point = FPGNSeg()
+            interp.ref_cell = RefSegmentP1()
+            interp.scalar_product = ScalarProductL2()
+            new_mesh.cell["line"].interpolation = interp
 
             connect = self.cell[key].get_connectivity()
             connect2 = other_mesh.cell[key].get_connectivity()

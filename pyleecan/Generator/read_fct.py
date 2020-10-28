@@ -90,7 +90,7 @@ def read_file(path):
     # The class name is the csv file name
     class_dict["name"] = path.split("\\")[-1][:-4]
     try:  # Cleanup path to avoid "commit noise"
-        class_dict["path"] = path[path.index(PACKAGE_NAME) :]
+        class_dict["path"] = path[path.rfind(PACKAGE_NAME) :]
     except ValueError:  # Path doesn't contain pyleecan
         class_dict["path"] = path
     # Cleanup \ to avoid errors
@@ -210,7 +210,7 @@ def get_value_str(value, type_val):
         # For int convert to avoid ".0"
         return str(int(value))
     elif type_val == "dict":
-        return "{}"
+        return "-1"
     elif type_val == "bool":
         # change 1 or 0 to True and False
         return str(bool(int(value)))
@@ -277,7 +277,12 @@ def is_list_pyleecan_type(type_name):
     is_list : bool
         True if the type is a list of pyleecan type
     """
-    return type_name[0] == "[" and type_name[-1] == "]"
+    return (
+        type_name[0] == "["
+        and type_name[-1] == "]"
+        and type_name != "[ndarray]"
+        and ("." not in type_name or "SciDataTool" in type_name)
+    )
 
 
 def is_dict_pyleecan_type(type_name):
@@ -294,18 +299,21 @@ def is_dict_pyleecan_type(type_name):
         True if the type is a dict of pyleecan type
     """
 
-    return type_name[0] == "{" and type_name[-1] == "}" and type_name != "{ndarray}"
+    return (
+        type_name[0] == "{"
+        and type_name[-1] == "}"
+        and type_name != "{ndarray}"
+        and ("." not in type_name or "SciDataTool" in type_name)
+    )
 
 
 class NotAFile(Exception):
-    """Raised when the code generator is call on a wrong path
-    """
+    """Raised when the code generator is call on a wrong path"""
 
     pass
 
 
 class InheritError(Exception):
-    """Raised when a class has a wrong mother defined
-    """
+    """Raised when a class has a wrong mother defined"""
 
     pass
