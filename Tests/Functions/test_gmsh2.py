@@ -109,5 +109,5 @@ def encode_complex(z):
     if isinstance(z, complex):
         return (z.real, z.imag)
 
-if __name__ == '__main__':
-    sys.exit(test_gmsh_ipm())
+# if __name__ == '__main__':
+#     sys.exit(test_gmsh_ipm())
