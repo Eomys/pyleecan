@@ -8,7 +8,7 @@ from SciDataTool import VectorField
 def plot_3D_Data(
     self,
     Data_str,
-    *args,
+    *arg_list,
     component_list=None,
     is_norm=False,
     unit="SI",
@@ -32,7 +32,7 @@ def plot_3D_Data(
         an Output object
     Data_str : str
         name of the Data Object to plot (e.g. "mag.Br")
-    *args : list of str
+    *arg_list : list of str
         arguments to specify which axes to plot
     is_norm : bool
         boolean indicating if the field must be normalized
@@ -82,7 +82,7 @@ def plot_3D_Data(
 
             plot_3D_Data_fct(
                 data.components[comp],
-                args,
+                arg_list,
                 is_norm=is_norm,
                 unit=unit,
                 save_path=save_path_comp,
@@ -102,7 +102,7 @@ def plot_3D_Data(
         (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
         plot_3D_Data_fct(
             data,
-            args,
+            arg_list,
             is_norm=is_norm,
             unit=unit,
             save_path=save_path,

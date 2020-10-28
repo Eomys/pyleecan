@@ -6,7 +6,8 @@ from ....Methods.Machine.Winding import WindingError
 from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from ....Functions.Winding.shift_wind_mat import shift_wind_mat
 
-
+# TODO: update docstring -> there should not be elementary circuits since
+#       every bar could have its own unique current
 def comp_connection_mat(self, Zs=None):
     """Compute the Winding Matrix (for winding type 10)
     type 10 : Squirrel cage Winding (elementary circuit loop involving bar n°1
@@ -55,8 +56,9 @@ def comp_connection_mat(self, Zs=None):
 
     for ii in range(Zs):
         # phase n°ii
-        wind_mat[0, 0, ii, ii] = -1
-        wind_mat[0, 0, (ii - 1) % Zs, ii] = 1
+        # wind_mat[0, 0, ii, ii] = -1 # there are only positive 'windings' for now
+        # wind_mat[0, 0, (ii - 1) % Zs, ii] = 1
+        wind_mat[0, 0, ii, ii] = 1
 
     # Apply the transformations
     if self.is_reverse_wind:

@@ -104,14 +104,14 @@ def test_Magnetic_AGSF():
         "force.P",
         "time",
         "angle[0]",
-        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space.png"),
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_time.png"),
     )
 
     out.plot_2D_Data(
         "force.P",
         "freqs=[0," + str(freq_max) + "]",
-        "time[0]",
-        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft.png"),
+        "angle[0]",
+        save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_time_fft.png"),
     )
 
     # ------------------------------------------------------
@@ -151,7 +151,7 @@ def test_Magnetic_AGSF():
     out.plot_2D_Data(
         "force.P",
         "freqs=[0," + str(freq_max) + "]",
-        "time[0]",
+        "angle[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft2.png"),
     )
 
@@ -187,4 +187,12 @@ def test_Magnetic_AGSF():
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_flux_time_space"),
     )
 
+    return out
+
     # ------------------------------------------------------
+
+
+# To run it without pytest
+if __name__ == "__main__":
+
+    out = test_Magnetic_AGSF()

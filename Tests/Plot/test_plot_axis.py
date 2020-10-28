@@ -287,7 +287,7 @@ def test_axis_LamWind(CURVE_COLORS):
     out.plot_2D_Data("mag.B", "angle{rad}")
 
     fig = plt.gcf()
-    Br = out.mag.B.get_rad_along("time", "angle")
+    Br = out.mag.B.components["radial"].get_along("time", "angle")
     fig.axes[0].plot(d_angle, max(max(Br)), "rx")
     fig.axes[0].text(d_angle, max(max(Br)), "Max of mmf")
     fig.savefig(join(save_path, "test_axis_LamWind_flux.png"))

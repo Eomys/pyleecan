@@ -26,11 +26,6 @@ try:
 except ImportError as error:
     get_machine_type = error
 
-try:
-    from ..Methods.Machine.MachineIPMSM.get_lam_list import get_lam_list
-except ImportError as error:
-    get_lam_list = error
-
 
 from ._check import InitUnKnowClassError
 from .LamHole import LamHole
@@ -66,17 +61,6 @@ class MachineIPMSM(MachineSync):
         )
     else:
         get_machine_type = get_machine_type
-    # cf Methods.Machine.MachineIPMSM.get_lam_list
-    if isinstance(get_lam_list, ImportError):
-        get_lam_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MachineIPMSM method get_lam_list: " + str(get_lam_list)
-                )
-            )
-        )
-    else:
-        get_lam_list = get_lam_list
     # save and copy methods are available in all object
     save = save
     copy = copy

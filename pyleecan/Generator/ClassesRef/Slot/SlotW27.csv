@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 H0,m,Slot isthmus height.,0,float,3.00E-03,0,,,Slot,SlotWind,_comp_point_coordinate,VERSION,1,semi-closed trapezoidal without fillet without wedge (flat bottom)
 H1,m,Slot first part height,0,float,0,0,,,,,build_geometry,IS_SYMMETRICAL,1,
-H2,m,Slot second part height,0,float,2.00E-02,0,,,,,build_geometry_wind,,,
+H2,m,Slot second part height,0,float,2.00E-02,0,,,,,get_surface_wind,,,
 W0,m,Slot isthmus width.,0,float,3.00E-03,0,,,,,check,,,
 W1,m,Slot top width.,0,float,1.30E-02,0,,,,,comp_angle_opening,,,
 W2,m,Slot middle width,0,float,1.00E-02,0,,,,,comp_height,,,
