@@ -58,6 +58,24 @@ class Test_HoleUD_meth(object):
 
         assert exp == pytest.approx(result, rel=0.01)
 
+    def test_build_geometry_mag(self):
+        """check that curve_list is correct and Parallel"""
+        assert IPMSM_C.rotor.hole[0].magnet_dict["magnet_0"].type_magnetization == 0
+        assert IPMSM_C.rotor.hole[0].magnet_dict["magnet_1"].type_magnetization == 0
+        IPMSM_C.rotor.hole[0].magnet_dict["magnet_0"].type_magnetization = 1
+        IPMSM_C.rotor.hole[0].magnet_dict["magnet_1"].type_magnetization = 1
+
+        surf_list = IPMSM_C.rotor.hole[0].build_geometry()
+        assert len(surf_list) == 5
+        assert surf_list[0].label == "Hole_Stator_R0_T0_S0"
+        assert surf_list[1].label == "HoleMagnet_Stator_Parallel_N_R0_T0_S0"
+        assert surf_list[2].label == "Hole_Stator_R0_T1_S0"
+        assert surf_list[3].label == "HoleMagnet_Stator_Parallel_N_R0_T1_S0"
+        assert surf_list[4].label == "Hole_Stator_R0_T2_S0"
+
+        IPMSM_C.rotor.hole[0].magnet_dict["magnet_0"].type_magnetization = 0
+        IPMSM_C.rotor.hole[0].magnet_dict["magnet_1"].type_magnetization = 0
+
     def test_build_geometry_no_mag(self):
         """check that curve_list is correct (Remove magnet)"""
         assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_0"] is not None

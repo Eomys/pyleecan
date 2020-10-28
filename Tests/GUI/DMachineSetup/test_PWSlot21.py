@@ -4,6 +4,7 @@ import sys
 
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
+from numpy import pi
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW21 import SlotW21
@@ -111,6 +112,14 @@ class TestPWSlot21(object):
 
         assert self.widget.slot.H1 == 0.35
         assert self.test_obj.slot.H1 == 0.35
+
+        self.widget.c_H1_unit.setCurrentIndex(3)
+        self.widget.lf_H1.clear()  # Clear the field before writing
+        value = 1.4
+        QTest.keyClicks(self.widget.lf_H1, str(value))
+        self.widget.lf_H1.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.slot.H1 == value / 180 * pi
 
     def test_set_H1_is_rad(self):
         """Check that the Widget allow to update H1_is_rad"""
