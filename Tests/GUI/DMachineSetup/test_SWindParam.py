@@ -123,6 +123,9 @@ class TestSWindParam(object):
     def test_check(self):
         """Check that the check method return errors"""
         rotor = LamSlotWind(is_stator=False)
+        rotor.winding = None
+        assert rotor.comp_fill_factor() == 0
+
         rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
         rotor.winding = Winding(Npcpp=20, Ntcoil=None)
 

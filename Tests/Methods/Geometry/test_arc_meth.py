@@ -1022,6 +1022,14 @@ D_test.append(
         "D": abs(-1 - 2j - (-1j + exp(1j * 5 * pi / 4))),
     }
 )
+# 12
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1,  # First point of cutting line
+        "D": abs(-1 - 2j - (-1j + exp(1j * 5 * pi / 4))),
+    }
+)
 
 
 @pytest.mark.parametrize("test_dict", D_test)

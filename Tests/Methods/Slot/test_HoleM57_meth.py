@@ -7,9 +7,6 @@ import pytest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.Magnet import Magnet
-from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.HoleM57 import HoleM57
 
 HoleM57_test = list()
@@ -37,7 +34,7 @@ HoleM57_test.append(
 
 @pytest.mark.METHODS
 class Test_HoleM57_meth(object):
-    """Test machine plot hole 58"""
+    """Test machine plot hole 57"""
 
     @pytest.mark.parametrize("test_dict", HoleM57_test)
     def test_build_geometry_magnet_0_and_1(self, test_dict):

@@ -90,3 +90,6 @@ def test_SlotMFlat2_plot():
     # %%
 
     # %%
+
+    lam.slot.magnet = list()
+    assert lam.slot.comp_angle_opening() == 0
