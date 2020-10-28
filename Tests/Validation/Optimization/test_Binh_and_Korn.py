@@ -75,8 +75,6 @@ def test_Binh_and_Korn():
     # simu.mag.Kgeo_fineness=0.02
     simu.struct = None
 
-    output = Output(simu=simu)
-
     # ### Design variable
     my_vars = [
         OptiDesignVar(
@@ -139,7 +137,7 @@ def test_Binh_and_Korn():
     # ### Defining the problem
 
     my_prob = OptiProblem(
-        output=output,
+        simu=simu,
         design_var=my_vars,
         obj_func=objs,
         constraint=cstrs,
