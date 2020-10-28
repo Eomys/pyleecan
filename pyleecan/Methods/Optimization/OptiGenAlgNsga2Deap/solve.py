@@ -92,28 +92,23 @@ def solve(self):
         # Create the first population
         pop = self.toolbox.population(self.size_pop)
 
-        # Start of the evaluation of the generation
-        time_start_gen = datetime.now().strftime("%H:%M:%S")
-
         # Evaluate the population
         nb_error = 0
         for i in range(0, self.size_pop):
+            time = datetime.now().strftime("%H:%M:%S")
+            print_gen_simu(time, 0, i, self.size_pop, nb_error, pop)
             nb_error += evaluate(self, pop[i])
-            print(
-                "\r{}  gen {:>5}: {:>5.2f}%, {:>4} errors.\n".format(
-                    time_start_gen, 0, (i + 1) * 100 / self.size_pop, nb_error
-                ),
-                end="",
-            )
+            print_obj(self.problem.obj_func, pop[i])
 
         # Check the constraints violation
         nb_infeasible = 0
         if len(self.problem.constraint) > 0:
+            time = datetime.now().strftime("%H:%M:%S")
             for indiv in pop:
                 nb_infeasible += check_cstr(self, indiv) == False
         print(
-            "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.\n".format(
-                time_start_gen, 0, nb_error, nb_infeasible
+            "\r{}  gen {:>5}: Finished, {:>4} errors,{:>4} infeasible.\n".format(
+                time, 0, nb_error, nb_infeasible
             )
         )
 
@@ -147,7 +142,6 @@ def solve(self):
         # LOOP FOR EACH GENERATION #
         ############################
         for ngen in range(1, self.nb_gen):
-            time_start_gen = datetime.now().strftime("%H:%M:%S")
             # Extracting parents using
             parents = tournamentDCD(pop, self.size_pop)
 
@@ -185,22 +179,20 @@ def solve(self):
 
             nb_error = 0
             for i in range(len(to_eval)):
+                time = datetime.now().strftime("%H:%M:%S")
+                print_gen_simu(time, ngen, i, self.size_pop, nb_error, to_eval)
                 nb_error += evaluate(self, to_eval[i])
-                print(
-                    "\r{}  gen {:>5}: {:>5.2f}%, {:>4} errors.\n".format(
-                        time_start_gen, ngen, (i + 1) * 100 / len(to_eval), nb_error
-                    ),
-                    end="",
-                )
+                print_obj(self.problem.obj_func, to_eval[i])
 
             # Check the constraints violation
             nb_infeasible = 0
             if len(self.problem.constraint) > 0:
+                time = datetime.now().strftime("%H:%M:%S")
                 for indiv in to_eval:
                     nb_infeasible += check_cstr(self, indiv) == False
             print(
-                "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.\n".format(
-                    time_start_gen, ngen, nb_error, nb_infeasible
+                "\r{}  gen {:>5}: Finished, {:>4} errors,{:>4} infeasible.\n".format(
+                    time, ngen, nb_error, nb_infeasible
                 )
             )
 
@@ -282,3 +274,29 @@ def solve(self):
     except Exception as err:
         logger.error("{}: {}".format(type(err).__name__, err))
         raise err
+
+
+def print_gen_simu(time, gen_id, simu_id, size_pop, nb_error, to_eval):
+    print(
+        "\r{}  gen {:>5}: simu {}/{} ({:>5.2f}%), {:>4} errors.".format(
+            time, gen_id, (simu_id + 1), size_pop, (simu_id) * 100 / size_pop, nb_error,
+        )
+    )
+    msg = "Design Variables: "
+    for ii in range(len(to_eval[simu_id])):
+        msg += (
+            to_eval[simu_id].design_var[ii].symbol
+            + ": "
+            + format(to_eval[simu_id][ii], ".2e")
+            + ", "
+        )
+    print(msg[:-2])
+
+
+def print_obj(obj_func, indiv):
+    msg = "Objectives: "
+    for ii in range(len(obj_func)):
+        msg += (
+            obj_func[ii].symbol + ": " + format(indiv.fitness.values[ii], ".2e") + ", "
+        )
+    print(msg[:-2] + "\n")
