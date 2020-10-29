@@ -236,12 +236,16 @@ def solve(self):
 
         # Save design variable values in ParamExplorerSet
         for i, param_explorer in enumerate(self.problem.design_var):
+            if param_explorer._setter_str is None:
+                setter = param_explorer._setter_func
+            else:
+                setter = param_explorer._setter_str
             xoutput.paramexplorer_list.append(
                 ParamExplorerSet(
                     name=param_explorer.name,
                     unit=param_explorer.unit,
                     symbol=param_explorer.symbol,
-                    setter=param_explorer.setter,
+                    setter=setter,
                     value=paramexplorer_value[:, i].tolist(),
                 )
             )
