@@ -6,7 +6,7 @@ from scipy import optimize
 
 from ....Methods.Simulation.LossModel import LossModelError
 
-# TODO: define one loss calculation function
+# TODO define one loss calculation function to use everywhere in class
 def _comp_loss(self, C, Cx, f, B):
     f_norm = f / self.F_REF
     B_norm = B / self.B_REF
@@ -69,7 +69,8 @@ def comp_coeff_Bertotti(self, mat):
     Loss = data[:, 2]
 
     # fit the data
-    _comp_err = lambda Cx: (_comp_loss(self, C, Cx, f, B) - Loss) / (f)  # TODO:
+    # TODO Which normalization to use? 1/f or should it be user defined?
+    _comp_err = lambda Cx: (_comp_loss(self, C, Cx, f, B) - Loss) / (f)  
     C0 = np.ones([n_est])  # initial values for the parameters
     result = optimize.least_squares(_comp_err, C0[:], method="lm")
 
