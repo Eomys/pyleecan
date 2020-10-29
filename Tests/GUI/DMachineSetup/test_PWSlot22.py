@@ -65,6 +65,14 @@ class TestPWSlot22(object):
         assert self.widget.slot.W0 == 0.31
         assert self.test_obj.slot.W0 == 0.31
 
+        self.widget.c_W0_unit.setCurrentIndex(3)
+        self.widget.lf_W0.clear()  # Clear the field before writing
+        value = 1.4
+        QTest.keyClicks(self.widget.lf_W0, str(value))
+        self.widget.lf_W0.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.slot.W0 == value / 180 * pi
+
     def test_set_W2(self):
         """Check that the Widget allow to update W2"""
         self.widget.lf_W2.clear()  # Clear the field before writing
@@ -73,6 +81,14 @@ class TestPWSlot22(object):
 
         assert self.widget.slot.W2 == 0.33
         assert self.test_obj.slot.W2 == 0.33
+
+        self.widget.c_W2_unit.setCurrentIndex(3)
+        self.widget.lf_W2.clear()  # Clear the field before writing
+        value = 1.4
+        QTest.keyClicks(self.widget.lf_W2, str(value))
+        self.widget.lf_W2.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.slot.W2 == value / 180 * pi
 
     def test_set_H0(self):
         """Check that the Widget allow to update H0"""
@@ -106,3 +122,18 @@ class TestPWSlot22(object):
         self.test_obj.slot = SlotW22(Zs=6, W0=pi / 20, W2=pi / 10, H0=20e-3, H2=150e-3)
         self.widget = PWSlot22(self.test_obj)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.17 m"
+
+    def test_check(self):
+        """Check that the check is working correctly"""
+        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
+        self.test_obj.slot = SlotW22(H0=None, H2=0.12, W0=0.13, W2=0.15)
+        self.widget = PWSlot22(self.test_obj)
+        assert self.widget.check(self.test_obj) == "PWSlot22 check"
+        self.test_obj.slot = SlotW22(H0=0.10, H2=None, W0=0.13, W2=0.15)
+        assert self.widget.check(self.test_obj) == "PWSlot22 check"
+        self.test_obj.slot = SlotW22(H0=0.10, H2=0.12, W0=None, W2=0.15)
+        assert self.widget.check(self.test_obj) == "PWSlot22 check"
+        self.test_obj.slot = SlotW22(H0=0.10, H2=0.12, W0=0.13, W2=None)
+        assert self.widget.check(self.test_obj) == "PWSlot22 check"
+        self.test_obj.slot = SlotW22(H0=0.10, H2=0.12, W0=0.13, W2=0.15, Zs=None)
+        assert self.widget.check(self.test_obj) == "PWSlot22 check"

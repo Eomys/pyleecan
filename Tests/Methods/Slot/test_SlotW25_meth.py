@@ -135,3 +135,13 @@ class Test_SlotW25_meth(object):
         result = lam.slot.get_surface_wind()
         assert result.label == "WindR_R0_T0_S0"
         assert len(result.get_lines()) == 6
+
+    def test_build_geometry_wind(self):
+        """Check if the build geometry of the winding works correctly"""
+        lam = LamSlot(is_internal=True, Rext=0.1325)
+        lam.slot = SlotW25(Zs=10, H1=3e-3, H2=30e-3, W3=20e-3, W4=40e-3)
+
+        result = lam.slot.build_geometry_wind(Nrad=2, Ntan=2, is_simplified=True)
+        a = result
+        assert "WindS_R0_T0_S0" == a[0].label
+        assert len(a) == 4

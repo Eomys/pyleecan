@@ -195,3 +195,15 @@ class Test_SlotW23_meth(object):
         lam.slot._comp_W()
         assert lam.slot.W1 == 0.017303874301855315
         assert lam.slot.W2 == 0.022533218866714805
+
+    def test_build_geometry_wind(self):
+        """Check if the build geometry of the winding works correctly"""
+        lam = LamSlot(is_internal=True, Rext=0.1325)
+        lam.slot = SlotW23(
+            H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
+        )
+
+        result = lam.slot.build_geometry_wind(Nrad=2, Ntan=4, is_simplified=True)
+        a = result
+        assert "WindS_R0_T0_S0" == a[0].label
+        assert len(a) == 8

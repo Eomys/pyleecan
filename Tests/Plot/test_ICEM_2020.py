@@ -261,6 +261,20 @@ def test_MachineUD():
     fig.savefig(join(save_path, "fig_12_MachineUD.svg"), format="svg")
     assert len(fig.axes[0].patches) == 56
 
+    machine.frame = None
+    machine.name = None
+
+    machine.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.png"))
+    fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.svg"), format="svg")
+    assert len(fig.axes[0].patches) == 56
+
+    """Check that plot raise an error when comp_machine is set for a MachineUD"""
+
+    with pytest.raises(ValueError) as context:
+        machine.plot(comp_machine=1564)
+
     """Check that comp_connection_mat can raise a WindingT1DefMsError"""
 
     lam4.winding = WindingCW2LT(qs=16, p=3)
@@ -294,8 +308,8 @@ def test_MachineUD():
         lam4.winding.comp_connection_mat(Zs=None)
 
 
-def test_SlotMulti():
-    """Figure 13: Check that you can plot a LamSlotMulti (two slots kind + notches)"""
+def test_SlotMulti_rotor():
+    """Figure 13: Check that you can plot a LamSlotMulti rotor (two slots kind + notches)"""
     plt.close("all")
     # Lamination main dimensions definition
     rotor = LamSlotMulti(Rint=0.2, Rext=0.7, is_internal=True, is_stator=False)
@@ -327,8 +341,46 @@ def test_SlotMulti():
     # Plot, check and save
     rotor.plot()
     fig = plt.gcf()
-    fig.savefig(join(save_path, "fig_13_LamSlotMulti.png"))
-    fig.savefig(join(save_path, "fig_13_LamSlotMulti.svg"), format="svg")
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_rotor.png"))
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_rotor.svg"), format="svg")
+    assert len(fig.axes[0].patches) == 2
+
+
+def test_SlotMulti_stator():
+    """Figure 13: Check that you can plot a LamSlotMulti stator (two slots kind + notches)"""
+    plt.close("all")
+    # Lamination main dimensions definition
+    stator = LamSlotMulti(Rint=0.2, Rext=0.7, is_internal=False, is_stator=True)
+
+    # Reference slot definition
+    Slot1 = SlotW10(
+        Zs=10, W0=50e-3, H0=30e-3, W1=100e-3, H1=30e-3, H2=100e-3, W2=120e-3
+    )
+    Slot2 = SlotW22(Zs=12, W0=pi / 12, H0=50e-3, W2=pi / 6, H2=125e-3)
+
+    # Reference slot are duplicated to get 5 of each in alternance
+    slot_list = list()
+    for ii in range(5):
+        slot_list.append(SlotW10(init_dict=Slot1.as_dict()))
+        slot_list.append(SlotW22(init_dict=Slot2.as_dict()))
+
+    # Two slots in the list are modified (bigger than the others)
+    stator.slot_list = slot_list
+    stator.slot_list[0].H2 = 300e-3
+    stator.slot_list[7].H2 = 300e-3
+    # Set slots position
+    stator.alpha = array([0, 29, 60, 120, 150, 180, 210, 240, 300, 330]) * pi / 180
+
+    # Evenly distributed Notch definition
+    slot3 = SlotW10(Zs=12, W0=40e-3, W1=40e-3, W2=40e-3, H0=0, H1=0, H2=25e-3)
+    notch = NotchEvenDist(notch_shape=slot3, alpha=15 * pi / 180)
+    stator.notch = [notch]
+
+    # Plot, check and save
+    stator.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_stator.png"))
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_stator.svg"), format="svg")
     assert len(fig.axes[0].patches) == 2
 
 
