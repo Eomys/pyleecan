@@ -204,6 +204,16 @@ class TestSBar(object):
         self.widget = PCondType21(machine=self.test_obj, matlib=self.matlib)
         assert type(self.widget.machine.rotor.winding.conductor) is CondType21
 
+    def test_init_PCondType22(self):
+        """Check that the init is setting a conductor if None"""
+        self.test_obj.rotor = LamSquirrelCage(Hscr=0.21, Lscr=0.22)
+        self.test_obj.rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        self.test_obj.rotor.winding.Lewout = 0.23
+        self.test_obj.rotor.ring_mat.name = "test2"
+        self.test_obj.rotor.winding.conductor = None
+        self.widget = PCondType22(machine=self.test_obj, matlib=self.matlib)
+        assert type(self.widget.machine.rotor.winding.conductor) is CondType22
+
     def test_check(self):
         """Check that the check method return errors"""
         lam = LamSquirrelCage(Hscr=0.21, Lscr=0.22)
