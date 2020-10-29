@@ -22,7 +22,7 @@ def get_wave(self):
     Phase = Data1D(
         name="phase",
         unit="",
-        values=gen_name(wave.shape[0], is_add_phase=True),
+        values=gen_name(wave.shape[0]),
         is_components=True,
     )
     # Ouput.Simulation.Electrical.EEC.Drive

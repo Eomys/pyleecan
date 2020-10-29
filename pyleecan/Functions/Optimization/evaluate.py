@@ -59,7 +59,7 @@ def evaluate(solver, indiv):
             # Except error and try to compute the error_keeper
             except Exception as err:
                 logger.warning(
-                    "Objectiv computation " + obj_func.name + " failed:" + err
+                    "Objectiv computation " + obj_func.name + " failed:" + str(err)
                 )
                 if obj_func.error_keeper is None:  # Set fitness value as infinity
                     fitness.append(float("inf"))
@@ -75,7 +75,7 @@ def evaluate(solver, indiv):
                             "Objectiv error computation "
                             + obj_func.name
                             + " failed:"
-                            + err
+                            + str(err)
                         )
                         fitness.append(float("inf"))
 
@@ -90,7 +90,10 @@ def evaluate(solver, indiv):
                 raise KeyboardInterrupt("Stopped by the user.")
             except Exception as err:
                 logger.warning(
-                    "DataKeeper" + datakeeper.name + ".keeper execution failed:" + err
+                    "DataKeeper"
+                    + datakeeper.name
+                    + ".keeper execution failed:"
+                    + str(err)
                 )
                 if datakeeper.error_keeper:
                     try:
@@ -104,7 +107,7 @@ def evaluate(solver, indiv):
                             "DataKeeper"
                             + datakeeper.name
                             + ".error_keeper execution failed:"
-                            + err
+                            + str(err)
                         )
                         datakeeper.result.append(nan)
                 else:
@@ -146,7 +149,7 @@ def evaluate(solver, indiv):
                         "DataKeeper"
                         + datakeeper.name
                         + ".error_keeper execution failed:"
-                        + err
+                        + str(err)
                     )
                     datakeeper.result.append(nan)
             else:

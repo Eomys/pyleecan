@@ -32,8 +32,8 @@ class OutMag(FrozenClass):
 
     def __init__(
         self,
-        time=None,
-        angle=None,
+        Time=None,
+        Angle=None,
         B=None,
         Tem=None,
         Tem_av=None,
@@ -62,10 +62,10 @@ class OutMag(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "time" in list(init_dict.keys()):
-                time = init_dict["time"]
-            if "angle" in list(init_dict.keys()):
-                angle = init_dict["angle"]
+            if "Time" in list(init_dict.keys()):
+                Time = init_dict["Time"]
+            if "Angle" in list(init_dict.keys()):
+                Angle = init_dict["Angle"]
             if "B" in list(init_dict.keys()):
                 B = init_dict["B"]
             if "Tem" in list(init_dict.keys()):
@@ -88,8 +88,8 @@ class OutMag(FrozenClass):
                 logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.time = time
-        self.angle = angle
+        self.Time = Time
+        self.Angle = Angle
         self.B = B
         self.Tem = Tem
         self.Tem_av = Tem_av
@@ -112,8 +112,8 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = None " + linesep
         else:
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutMag_str += "time = " + str(self.time) + linesep + linesep
-        OutMag_str += "angle = " + str(self.angle) + linesep + linesep
+        OutMag_str += "Time = " + str(self.Time) + linesep + linesep
+        OutMag_str += "Angle = " + str(self.Angle) + linesep + linesep
         OutMag_str += "B = " + str(self.B) + linesep + linesep
         OutMag_str += "Tem = " + str(self.Tem) + linesep + linesep
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
@@ -147,9 +147,9 @@ class OutMag(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.time != self.time:
+        if other.Time != self.Time:
             return False
-        if other.angle != self.angle:
+        if other.Angle != self.Angle:
             return False
         if other.B != self.B:
             return False
@@ -177,14 +177,14 @@ class OutMag(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutMag_dict = dict()
-        if self.time is None:
-            OutMag_dict["time"] = None
+        if self.Time is None:
+            OutMag_dict["Time"] = None
         else:
-            OutMag_dict["time"] = self.time.as_dict()
-        if self.angle is None:
-            OutMag_dict["angle"] = None
+            OutMag_dict["Time"] = self.Time.as_dict()
+        if self.Angle is None:
+            OutMag_dict["Angle"] = None
         else:
-            OutMag_dict["angle"] = self.angle.as_dict()
+            OutMag_dict["Angle"] = self.Angle.as_dict()
         if self.B is None:
             OutMag_dict["B"] = None
         else:
@@ -219,8 +219,8 @@ class OutMag(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.time = None
-        self.angle = None
+        self.Time = None
+        self.Angle = None
         self.B = None
         self.Tem = None
         self.Tem_av = None
@@ -233,55 +233,55 @@ class OutMag(FrozenClass):
         self.FEMM_dict = None
         self.logger_name = None
 
-    def _get_time(self):
-        """getter of time"""
-        return self._time
+    def _get_Time(self):
+        """getter of Time"""
+        return self._Time
 
-    def _set_time(self, value):
-        """setter of time"""
+    def _set_Time(self, value):
+        """setter of Time"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "time"
+                "SciDataTool.Classes", value.get("__class__"), "Time"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Data()
-        check_var("time", value, "Data")
-        self._time = value
+        check_var("Time", value, "Data")
+        self._Time = value
 
-    time = property(
-        fget=_get_time,
-        fset=_set_time,
-        doc=u"""Magnetic time vector (no symmetry)
+    Time = property(
+        fget=_get_Time,
+        fset=_set_Time,
+        doc=u"""Magnetic time Data object
 
         :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
-    def _get_angle(self):
-        """getter of angle"""
-        return self._angle
+    def _get_Angle(self):
+        """getter of Angle"""
+        return self._Angle
 
-    def _set_angle(self, value):
-        """setter of angle"""
+    def _set_Angle(self, value):
+        """setter of Angle"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "angle"
+                "SciDataTool.Classes", value.get("__class__"), "Angle"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Data()
-        check_var("angle", value, "Data")
-        self._angle = value
+        check_var("Angle", value, "Data")
+        self._Angle = value
 
-    angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Magnetic position vector (no symmetry)
+    Angle = property(
+        fget=_get_Angle,
+        fset=_set_Angle,
+        doc=u"""Magnetic position Data object
 
         :Type: SciDataTool.Classes.DataND.Data
         """,

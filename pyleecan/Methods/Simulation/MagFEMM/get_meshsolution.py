@@ -5,6 +5,8 @@ from ....definitions import MAIN_DIR
 from ....Classes.MeshMat import MeshMat
 from ....Classes.CellMat import CellMat
 from ....Classes.PointMat import PointMat
+from ....Classes.RefTriangle3 import RefTriangle3
+
 from os.path import join
 
 from ....Functions.FEMM import (
@@ -117,6 +119,7 @@ def get_meshsolution(self, femm, save_path, j_t0):
             nb_pt_per_cell=3,
             indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
         )
+        mesh.cell["triangle"].interpolation.ref_cell = RefTriangle3(epsilon=1e-9)
         mesh.point = PointMat(
             coordinate=listNd[:, 0:2], nb_pt=NbNd, indice=np.linspace(0, NbNd - 1, NbNd)
         )

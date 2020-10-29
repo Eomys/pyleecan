@@ -80,16 +80,17 @@ def test_FEMM_sym():
 
     # FEMM files (mesh and results) are available in Results folder
     copyfile(
-        join(out.path_res, "Femm", "fig_09_FEMM_sym_model.ans"),
+        join(out.path_result, "Femm", "fig_09_FEMM_sym_model.ans"),
         join(save_path, "fig_09_FEMM_sym_model.ans"),
     )
     copyfile(
-        join(out.path_res, "Femm", "fig_09_FEMM_sym_model.fem"),
+        join(out.path_result, "Femm", "fig_09_FEMM_sym_model.fem"),
         join(save_path, "fig_09_FEMM_sym_model.fem"),
     )
 
 
 @pytest.mark.GMSH
+@pytest.mark.long
 def test_gmsh_mesh_dict():
     """Figure 10: Generate a 3D mesh with Gmsh by setting the
     number of element on each lines
@@ -149,8 +150,10 @@ def test_gmsh_mesh_dict():
 
 
 @pytest.mark.GMSH
+@pytest.mark.long
 def test_SlotMulti_sym():
-    """Figure 11: Generate a 3D mesh with GMSH for a lamination
+    """Figure 11: Genera
+    te a 3D mesh with GMSH for a lamination
     with several slot types and notches
     """
 
@@ -486,11 +489,11 @@ def test_ecc_FEMM():
 
     # FEMM files (mesh and results) are available in Results folder
     copyfile(
-        join(out.path_res, "Femm", "fig_19_Transform_list_model.ans"),
+        join(out.path_result, "Femm", "fig_19_Transform_list_model.ans"),
         join(save_path, "fig_19_Transform_list_model.ans"),
     )
     copyfile(
-        join(out.path_res, "Femm", "fig_19_Transform_list_model.fem"),
+        join(out.path_result, "Femm", "fig_19_Transform_list_model.fem"),
         join(save_path, "fig_19_Transform_list_model.fem"),
     )
     # Plot, check, save

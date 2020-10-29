@@ -48,6 +48,11 @@ try:
 except ImportError as error:
     comp_periodicity = error
 
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_surface_ring import comp_surface_ring
+except ImportError as error:
+    comp_surface_ring = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -129,6 +134,18 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_periodicity = comp_periodicity
+    # cf Methods.Machine.LamSquirrelCage.comp_surface_ring
+    if isinstance(comp_surface_ring, ImportError):
+        comp_surface_ring = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_surface_ring: "
+                    + str(comp_surface_ring)
+                )
+            )
+        )
+    else:
+        comp_surface_ring = comp_surface_ring
     # save and copy methods are available in all object
     save = save
     copy = copy

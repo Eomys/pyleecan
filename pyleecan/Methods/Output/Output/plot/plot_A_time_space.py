@@ -17,7 +17,6 @@ def plot_A_time_space(
     z_max=None,
     is_norm=False,
     unit="SI",
-    colormap=None,
     save_path=None,
     is_auto_ticks=True,
     component_list=None,
@@ -75,7 +74,6 @@ def plot_A_time_space(
                 z_max=z_max,
                 is_norm=is_norm,
                 unit=unit,
-                colormap=colormap,
                 save_path=save_path,
                 is_auto_ticks=is_auto_ticks,
             )
@@ -91,7 +89,6 @@ def plot_A_time_space(
             z_max=z_max,
             is_norm=is_norm,
             unit=unit,
-            colormap=colormap,
             save_path=save_path,
             is_auto_ticks=is_auto_ticks,
         )

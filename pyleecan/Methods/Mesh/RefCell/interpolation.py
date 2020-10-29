@@ -26,8 +26,10 @@ def interpolation(self, point, vertice, field):
 
     """
 
-    point_ref = self.get_ref_point(vertice, point)
-    [values_ref, size] = self.shape_function(point_ref, 1)
+    point_ref = self.get_ref_point(vertice, point)  # TODO: input only single point
+    [values_ref, size] = self.shape_function(
+        point_ref, 1
+    )  # TODO: input only multipel points
 
     interp_func = np.tensordot(values_ref, field, axes=([2], [0]))
 
