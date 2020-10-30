@@ -252,3 +252,10 @@ class Test_HoleM53_meth(object):
 
         assert len(lst1) != len(lst_pattern)
         assert len(lst2) != len(lst_pattern)
+
+    def test_comp_surface_magnet_id(self):
+        """check that id is 0"""
+        hole = HoleM53(
+            Zh=8, H0=0.02, H1=0.001, H2=0.01, H3=0.003, W1=0.005, W2=0, W3=0.01, W4=0.78
+        )
+        assert hole.comp_surface_magnet_id(2) == 0

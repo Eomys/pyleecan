@@ -10,25 +10,25 @@ import pytest
 
 
 @pytest.mark.METHODS
-class TestSlot(object):
-    """Test that the methods of Slot behave like it should"""
+class TestHole(object):
+    """Test that the methods of Hole behave like it should"""
 
     @pytest.fixture
     def setup(self):
         """Run at the begining of every test to setup the gui"""
 
         return HoleM50(
-                Zh=8,
-                W0=50e-3,
-                W1=2e-3,
-                W2=1e-3,
-                W3=1e-3,
-                W4=20.6e-3,
-                H0=17.3e-3,
-                H1=1.25e-3,
-                H2=0.5e-3,
-                H3=6.8e-3,
-            )
+            Zh=8,
+            W0=50e-3,
+            W1=2e-3,
+            W2=1e-3,
+            W3=1e-3,
+            W4=20.6e-3,
+            H0=17.3e-3,
+            H1=1.25e-3,
+            H2=0.5e-3,
+            H3=6.8e-3,
+        )
 
     def test_get_is_stator(self, setup):
         """Check that the get_is_stator function can raise an error"""

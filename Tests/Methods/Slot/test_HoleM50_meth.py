@@ -349,3 +349,19 @@ class Test_HoleM50_meth(object):
         )
         assert test_obj.comp_radius_mid_yoke() != 0.1661908960397621
         assert test_obj.comp_radius_mid_yoke() == 0.1785605
+
+    def test_comp_surface_magnet_id(self):
+        """check that id is 0"""
+        hole = HoleM50(
+            Zh=8,
+            W0=50e-3,
+            W1=2e-3,
+            W2=1e-3,
+            W3=1e-3,
+            W4=20.6e-3,
+            H0=17.3e-3,
+            H1=1.25e-3,
+            H2=0.5e-3,
+            H3=6.8e-3,
+        )
+        assert hole.comp_surface_magnet_id(3) == 0
