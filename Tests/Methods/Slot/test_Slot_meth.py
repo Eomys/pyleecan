@@ -31,7 +31,7 @@ class TestSlot(object):
         setup.check()
 
     def test_get_is_stator(self, setup):
-        """Check that the is_outwards function can raise an error"""
+        """Check that the get_is_stator function can raise an error"""
 
         with pytest.raises(ParentMissingError) as context:
             setup.get_is_stator()
@@ -41,7 +41,7 @@ class TestSlot(object):
         assert test_obj.slot.get_is_stator() == True
 
     def test_get_Rbo(self, setup):
-        """Check that the is_outwards function can raise an error"""
+        """Check that the get_rbo function can raise an error"""
 
         with pytest.raises(ParentMissingError) as context:
             setup.get_Rbo()
