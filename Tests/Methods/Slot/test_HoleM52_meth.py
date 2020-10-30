@@ -8,6 +8,8 @@ from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM52 import HoleM52
 from pyleecan.Classes.Magnet import Magnet
+from pyleecan.Methods.Slot.HoleM52.check import S52_NoneError, S52_W1CheckError
+
 from numpy import exp, arcsin, ndarray, pi
 
 # For AlmostEqual
@@ -161,3 +163,27 @@ class Test_Hole52_meth(object):
         assert a[1].line_list[1] is not None
         with pytest.raises(IndexError) as context:
             a[1].line_list[2]
+
+    def test_check(self):
+        """Check that the check function can raise error"""
+        test_obj = LamHole(is_internal=True, is_stator=False, hole=list(), Rext=0.1)
+        test_obj.hole = [HoleM52(Zh=8, W0=None, W3=15e-3, H0=12e-3, H1=18e-3, H2=2e-3)]
+        with pytest.raises(S52_NoneError) as context:
+            test_obj.hole[0].check()
+        test_obj.hole = [HoleM52(Zh=8, W0=30e-3, W3=None, H0=12e-3, H1=18e-3, H2=2e-3)]
+        with pytest.raises(S52_NoneError) as context:
+            test_obj.hole[0].check()
+        test_obj.hole = [HoleM52(Zh=8, W0=30e-3, W3=15e-3, H0=None, H1=18e-3, H2=2e-3)]
+        with pytest.raises(S52_NoneError) as context:
+            test_obj.hole[0].check()
+        test_obj.hole = [HoleM52(Zh=8, W0=30e-3, W3=15e-3, H0=12e-3, H1=None, H2=2e-3)]
+        with pytest.raises(S52_NoneError) as context:
+            test_obj.hole[0].check()
+        test_obj.hole = [HoleM52(Zh=8, W0=30e-3, W3=15e-3, H0=12e-3, H1=18e-3, H2=None)]
+        with pytest.raises(S52_NoneError) as context:
+            test_obj.hole[0].check()
+        test_obj.hole = [
+            HoleM52(Zh=8, W0=0.9999999, W3=15e-3, H0=12e-3, H1=18e-3, H2=2e-3)
+        ]
+        with pytest.raises(S52_W1CheckError) as context:
+            test_obj.hole[0].check()

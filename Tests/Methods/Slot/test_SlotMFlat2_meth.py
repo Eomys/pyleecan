@@ -90,6 +90,9 @@ def test_SlotMFlat2_plot():
     # %%
 
     # %%
+    lam.slot.magnet.append(MagnetType10(Wmag=4 * mm, Hmag=10 * mm))
+    result = lam.slot.build_geometry()
+    assert len(result) == 15
 
     lam.slot.magnet = list()
     assert lam.slot.comp_angle_opening() == 0

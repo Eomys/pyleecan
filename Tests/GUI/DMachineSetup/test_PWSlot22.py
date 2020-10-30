@@ -5,6 +5,7 @@ import sys
 from numpy import pi
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
+from PySide2.QtCore import Qt
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW22 import SlotW22

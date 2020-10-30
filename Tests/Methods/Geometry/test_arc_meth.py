@@ -1031,6 +1031,7 @@ D_test.append(
     }
 )
 
+
 @pytest.mark.parametrize("test_dict", D_test)
 def test_distance(test_dict):
     """Check the comp_distance method"""
