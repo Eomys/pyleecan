@@ -10,15 +10,21 @@ def run(self, output):
 
     """
 
-    # Find object which contains the plot method if attribute is not None
-    obj = output
-    if self.attribute is not None:
-        names = self.attribute.split(".")
-        for i in range(len(names)):
-            obj = getattr(obj, names[i])
+    list_names = self.method.split(".")
 
-    # Getting the name of the plot method of the output or the object given by attribute
-    plot_method = getattr(obj, self.module_plot)
+    if len(list_names) == 1:
+        # Getting the name of the plot method of the output or the object given by attribute
+        plot_method = getattr(output, self.method)
+    else:
+        # Find object which contains the plot method if attribute is not None
+        obj = output
+
+        # Get successive objects to reach the one containing the method
+        for i in range(len(list_names) - 1):
+            obj = getattr(obj, list_names[i])
+
+        # Getting the name of the plot method of the output or the object given by attribute
+        plot_method = getattr(obj, list_names[-1])
 
     # Get path of results folder in the Output
     result_path = output.get_path_result()
@@ -33,4 +39,9 @@ def run(self, output):
     save_path = result_path + "/" + self.name + str_format
 
     # Execute plot method
-    plot_method(**self.parameters, is_show_plot=self.is_show_plot, save_path=save_path)
+    plot_method(
+        *self.param_list,
+        **self.param_dict,
+        is_show_fig=self.is_show_fig,
+        save_path=save_path
+    )

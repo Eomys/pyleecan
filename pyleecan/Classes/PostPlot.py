@@ -47,11 +47,11 @@ class PostPlot(PostMethod):
 
     def __init__(
         self,
-        module_plot=None,
-        attribute=None,
-        parameters=None,
-        plot_name=None,
-        is_show_plot=True,
+        method=None,
+        name=None,
+        param_list=-1,
+        param_dict=-1,
+        is_show_fig=True,
         save_format="png",
         init_dict=None,
         init_str=None,
@@ -71,24 +71,24 @@ class PostPlot(PostMethod):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "module_plot" in list(init_dict.keys()):
-                module_plot = init_dict["module_plot"]
-            if "attribute" in list(init_dict.keys()):
-                attribute = init_dict["attribute"]
-            if "parameters" in list(init_dict.keys()):
-                parameters = init_dict["parameters"]
-            if "plot_name" in list(init_dict.keys()):
-                plot_name = init_dict["plot_name"]
-            if "is_show_plot" in list(init_dict.keys()):
-                is_show_plot = init_dict["is_show_plot"]
+            if "method" in list(init_dict.keys()):
+                method = init_dict["method"]
+            if "name" in list(init_dict.keys()):
+                name = init_dict["name"]
+            if "param_list" in list(init_dict.keys()):
+                param_list = init_dict["param_list"]
+            if "param_dict" in list(init_dict.keys()):
+                param_dict = init_dict["param_dict"]
+            if "is_show_fig" in list(init_dict.keys()):
+                is_show_fig = init_dict["is_show_fig"]
             if "save_format" in list(init_dict.keys()):
                 save_format = init_dict["save_format"]
         # Set the properties (value check and convertion are done in setter)
-        self.module_plot = module_plot
-        self.attribute = attribute
-        self.parameters = parameters
-        self.plot_name = plot_name
-        self.is_show_plot = is_show_plot
+        self.method = method
+        self.name = name
+        self.param_list = param_list
+        self.param_dict = param_dict
+        self.is_show_fig = is_show_fig
         self.save_format = save_format
         # Call PostMethod init
         super(PostPlot, self).__init__()
@@ -101,11 +101,16 @@ class PostPlot(PostMethod):
         PostPlot_str = ""
         # Get the properties inherited from PostMethod
         PostPlot_str += super(PostPlot, self).__str__()
-        PostPlot_str += 'module_plot = "' + str(self.module_plot) + '"' + linesep
-        PostPlot_str += 'attribute = "' + str(self.attribute) + '"' + linesep
-        PostPlot_str += "parameters = " + str(self.parameters) + linesep
-        PostPlot_str += 'plot_name = "' + str(self.plot_name) + '"' + linesep
-        PostPlot_str += "is_show_plot = " + str(self.is_show_plot) + linesep
+        PostPlot_str += 'method = "' + str(self.method) + '"' + linesep
+        PostPlot_str += 'name = "' + str(self.name) + '"' + linesep
+        PostPlot_str += (
+            "param_list = "
+            + linesep
+            + str(self.param_list).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        PostPlot_str += "param_dict = " + str(self.param_dict) + linesep
+        PostPlot_str += "is_show_fig = " + str(self.is_show_fig) + linesep
         PostPlot_str += 'save_format = "' + str(self.save_format) + '"' + linesep
         return PostPlot_str
 
@@ -118,15 +123,15 @@ class PostPlot(PostMethod):
         # Check the properties inherited from PostMethod
         if not super(PostPlot, self).__eq__(other):
             return False
-        if other.module_plot != self.module_plot:
+        if other.method != self.method:
             return False
-        if other.attribute != self.attribute:
+        if other.name != self.name:
             return False
-        if other.parameters != self.parameters:
+        if other.param_list != self.param_list:
             return False
-        if other.plot_name != self.plot_name:
+        if other.param_dict != self.param_dict:
             return False
-        if other.is_show_plot != self.is_show_plot:
+        if other.is_show_fig != self.is_show_fig:
             return False
         if other.save_format != self.save_format:
             return False
@@ -137,13 +142,15 @@ class PostPlot(PostMethod):
 
         # Get the properties inherited from PostMethod
         PostPlot_dict = super(PostPlot, self).as_dict()
-        PostPlot_dict["module_plot"] = self.module_plot
-        PostPlot_dict["attribute"] = self.attribute
-        PostPlot_dict["parameters"] = (
-            self.parameters.copy() if self.parameters is not None else None
+        PostPlot_dict["method"] = self.method
+        PostPlot_dict["name"] = self.name
+        PostPlot_dict["param_list"] = (
+            self.param_list.copy() if self.param_list is not None else None
         )
-        PostPlot_dict["plot_name"] = self.plot_name
-        PostPlot_dict["is_show_plot"] = self.is_show_plot
+        PostPlot_dict["param_dict"] = (
+            self.param_dict.copy() if self.param_dict is not None else None
+        )
+        PostPlot_dict["is_show_fig"] = self.is_show_fig
         PostPlot_dict["save_format"] = self.save_format
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -153,101 +160,103 @@ class PostPlot(PostMethod):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.module_plot = None
-        self.attribute = None
-        self.parameters = None
-        self.plot_name = None
-        self.is_show_plot = None
+        self.method = None
+        self.name = None
+        self.param_list = None
+        self.param_dict = None
+        self.is_show_fig = None
         self.save_format = None
         # Set to None the properties inherited from PostMethod
         super(PostPlot, self)._set_None()
 
-    def _get_module_plot(self):
-        """getter of module_plot"""
-        return self._module_plot
+    def _get_method(self):
+        """getter of method"""
+        return self._method
 
-    def _set_module_plot(self, value):
-        """setter of module_plot"""
-        check_var("module_plot", value, "str")
-        self._module_plot = value
+    def _set_method(self, value):
+        """setter of method"""
+        check_var("method", value, "str")
+        self._method = value
 
-    module_plot = property(
-        fget=_get_module_plot,
-        fset=_set_module_plot,
-        doc=u"""Name of the plot method of the Output to call
-
-        :Type: str
-        """,
-    )
-
-    def _get_attribute(self):
-        """getter of attribute"""
-        return self._attribute
-
-    def _set_attribute(self, value):
-        """setter of attribute"""
-        check_var("attribute", value, "str")
-        self._attribute = value
-
-    attribute = property(
-        fget=_get_attribute,
-        fset=_set_attribute,
-        doc=u"""Attribute to add to Output to reach the plot given by module_plot
+    method = property(
+        fget=_get_method,
+        fset=_set_method,
+        doc=u"""Full path of the plot method to call except Output (ex: "plot_2D_Data", "mag.meshsolution.plot_contour")
 
         :Type: str
         """,
     )
 
-    def _get_parameters(self):
-        """getter of parameters"""
-        return self._parameters
+    def _get_name(self):
+        """getter of name"""
+        return self._name
 
-    def _set_parameters(self, value):
-        """setter of parameters"""
+    def _set_name(self, value):
+        """setter of name"""
+        check_var("name", value, "str")
+        self._name = value
+
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the plot to use when saving the figure after plotting
+
+        :Type: str
+        """,
+    )
+
+    def _get_param_list(self):
+        """getter of param_list"""
+        return self._param_list
+
+    def _set_param_list(self, value):
+        """setter of param_list"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("param_list", value, "list")
+        self._param_list = value
+
+    param_list = property(
+        fget=_get_param_list,
+        fset=_set_param_list,
+        doc=u"""Dictionnary of parameters to pass to the plot method when executing it
+
+        :Type: list
+        """,
+    )
+
+    def _get_param_dict(self):
+        """getter of param_dict"""
+        return self._param_dict
+
+    def _set_param_dict(self, value):
+        """setter of param_dict"""
         if type(value) is int and value == -1:
             value = dict()
-        check_var("parameters", value, "dict")
-        self._parameters = value
+        check_var("param_dict", value, "dict")
+        self._param_dict = value
 
-    parameters = property(
-        fget=_get_parameters,
-        fset=_set_parameters,
-        doc=u"""Dictionnary of parameters to pass the plot method
+    param_dict = property(
+        fget=_get_param_dict,
+        fset=_set_param_dict,
+        doc=u"""Dictionnary of parameters to pass to the plot method when executing it
 
         :Type: dict
         """,
     )
 
-    def _get_plot_name(self):
-        """getter of plot_name"""
-        return self._plot_name
+    def _get_is_show_fig(self):
+        """getter of is_show_fig"""
+        return self._is_show_fig
 
-    def _set_plot_name(self, value):
-        """setter of plot_name"""
-        check_var("plot_name", value, "str")
-        self._plot_name = value
+    def _set_is_show_fig(self, value):
+        """setter of is_show_fig"""
+        check_var("is_show_fig", value, "bool")
+        self._is_show_fig = value
 
-    plot_name = property(
-        fget=_get_plot_name,
-        fset=_set_plot_name,
-        doc=u"""Name of the plot
-
-        :Type: str
-        """,
-    )
-
-    def _get_is_show_plot(self):
-        """getter of is_show_plot"""
-        return self._is_show_plot
-
-    def _set_is_show_plot(self, value):
-        """setter of is_show_plot"""
-        check_var("is_show_plot", value, "bool")
-        self._is_show_plot = value
-
-    is_show_plot = property(
-        fget=_get_is_show_plot,
-        fset=_set_is_show_plot,
+    is_show_fig = property(
+        fget=_get_is_show_fig,
+        fset=_set_is_show_fig,
         doc=u"""True to show the figure after plotting
 
         :Type: bool

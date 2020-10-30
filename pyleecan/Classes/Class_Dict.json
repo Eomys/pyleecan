@@ -7149,46 +7149,46 @@
         "path": "pyleecan/Generator/ClassesRef/Post/PostPlot.csv",
         "properties": [
             {
-                "desc": "Name of the plot method of the Output to call",
+                "desc": "Full path of the plot method to call except Output (ex: \"plot_2D_Data\", \"mag.meshsolution.plot_contour\")",
                 "max": "",
                 "min": "",
-                "name": "module_plot",
+                "name": "method",
                 "type": "str",
                 "unit": "",
                 "value": "None"
             },
             {
-                "desc": "Attribute to add to Output to reach the plot given by module_plot",
+                "desc": "Name of the plot to use when saving the figure after plotting",
                 "max": "",
                 "min": "",
-                "name": "attribute",
+                "name": "name",
                 "type": "str",
                 "unit": "",
                 "value": "None"
             },
             {
-                "desc": "Dictionnary of parameters to pass the plot method",
+                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
                 "max": "",
                 "min": "",
-                "name": "parameters",
+                "name": "param_list",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "max": "",
+                "min": "",
+                "name": "param_dict",
                 "type": "dict",
                 "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Name of the plot",
-                "max": "",
-                "min": "",
-                "name": "plot_name",
-                "type": "str",
-                "unit": "",
-                "value": "None"
+                "value": {}
             },
             {
                 "desc": "True to show the figure after plotting",
                 "max": "",
                 "min": "",
-                "name": "is_show_plot",
+                "name": "is_show_fig",
                 "type": "bool",
                 "unit": "",
                 "value": 1

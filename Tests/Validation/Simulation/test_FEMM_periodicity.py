@@ -65,7 +65,7 @@ def test_FEMM_periodicity():
         "angle[0]{°}",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, "FEMM_periodicity_B_time.png"),
+        save_path=join(save_path, simu.name + "_B_time.png"),
     )
 
     out.plot_2D_Data(
@@ -74,7 +74,7 @@ def test_FEMM_periodicity():
         "time[0]",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, "FEMM_periodicity_B_space.png"),
+        save_path=join(save_path, simu.name + "_B_space.png"),
     )
 
     out.plot_2D_Data(
@@ -82,7 +82,7 @@ def test_FEMM_periodicity():
         "wavenumber=[0,100]",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, "FEMM_periodicity_B_space_fft.png"),
+        save_path=join(save_path, simu.name + "_B_space_fft.png"),
     )
 
     out.plot_2D_Data(
@@ -91,7 +91,7 @@ def test_FEMM_periodicity():
         "angle[0]{°}",
         data_list=[out2.force.P],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, "FEMM_periodicity_P_time.png"),
+        save_path=join(save_path, simu.name + "_P_time.png"),
     )
 
     out.plot_2D_Data(
@@ -100,7 +100,7 @@ def test_FEMM_periodicity():
         "time[0]",
         data_list=[out2.force.P],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, "FEMM_periodicity_P_space.png"),
+        save_path=join(save_path, simu.name + "_P_space.png"),
     )
 
     out.plot_2D_Data(
@@ -109,7 +109,7 @@ def test_FEMM_periodicity():
         "time[0]",
         data_list=[out2.force.P],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, "FEMM_periodicity_P_space_fft.png"),
+        save_path=join(save_path, simu.name + "_P_space_fft.png"),
     )
 
     out.plot_2D_Data(
@@ -117,7 +117,7 @@ def test_FEMM_periodicity():
         "time",
         data_list=[out2.mag.Tem],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, "FEMM_periodicity_Tem_time.png"),
+        save_path=join(save_path, simu.name + "_Tem_time.png"),
     )
 
     out.plot_2D_Data(
@@ -126,7 +126,7 @@ def test_FEMM_periodicity():
         "phase",
         data_list=[out2.mag.Phi_wind_stator],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
+        save_path=join(save_path, simu.name + "_Phi_wind_stator_time.png"),
     )
 
     return out, out2

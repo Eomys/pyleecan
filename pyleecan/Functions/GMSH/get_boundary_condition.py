@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-#from numpy import exp, pi
+# from numpy import exp, pi
 
-#from ...Classes.Arc1 import Arc1
-#from ...Classes.Circle import Circle
-#from ...Classes.Segment import Segment
-#from ...Classes.SurfLine import SurfLine
+# from ...Classes.Arc1 import Arc1
+# from ...Classes.Circle import Circle
+# from ...Classes.Segment import Segment
+# from ...Classes.SurfLine import SurfLine
 
 
 def get_boundary_condition(line, machine):
