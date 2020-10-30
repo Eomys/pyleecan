@@ -98,3 +98,11 @@ class Test_HoleUD_meth(object):
         assert surf_list[2].label == "Hole_Stator_R0_T1_S0"
         assert surf_list[3].label == "HoleMagnet_Stator_Radial_N_R0_T1_S0"
         assert surf_list[4].label == "Hole_Stator_R0_T2_S0"
+
+    def test_comp_surface_magnet_id(self):
+        """check that ids are correct (Remove magnet)"""
+        assert IPMSM_B.rotor.hole[0].comp_surface_magnet_id(0) == 0
+        surf_list = IPMSM_C.rotor.hole[0].surf_list
+        for surf in surf_list:
+            surf.label = ""
+        assert IPMSM_C.rotor.hole[0].comp_surface_magnet_id(0) == 0

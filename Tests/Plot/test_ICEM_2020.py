@@ -300,12 +300,21 @@ def test_MachineUD():
     lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
     with pytest.raises(WindingT2DefNtError) as context:
         lam4.winding.comp_connection_mat(Zs=17)
+
+    lam4.winding = WindingCW1L(qs=2, p=3)
+    lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
+    lam4.winding.comp_connection_mat(Zs=None)
+
     """Check that comp_connection_mat can raise a WindingError"""
 
     lam4.winding = WindingCW1L(qs=3, p=3)
     lam4.slot = None
     with pytest.raises(WindingError) as context:
         lam4.winding.comp_connection_mat(Zs=None)
+
+    winding = WindingCW1L(qs=3, p=3)
+    with pytest.raises(WindingError) as context:
+        winding.comp_connection_mat(Zs=None)
 
 
 def test_SlotMulti_rotor():
