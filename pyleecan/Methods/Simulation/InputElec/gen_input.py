@@ -3,7 +3,6 @@
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
-from numpy import ndarray, pi, linspace
 
 
 def gen_input(self):
@@ -32,8 +31,8 @@ def gen_input(self):
 
     # Set discretization
     Time, Angle = self.comp_axes(simu.machine, self.N0)
-    output.time = Time
-    output.angle = Angle
+    output.Time = Time
+    output.Angle = Angle
 
     # Initialize output at None
     output.Id_ref = None

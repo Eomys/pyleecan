@@ -83,7 +83,7 @@ class Test_HoleM50_meth(object):
         )
         result = test_obj.hole[0].comp_surface()
         a = result
-        b = 3.77977e-04
+        b = 3.7803e-04
         assert abs((a - b) / a - 0) < DELTA
 
     def test_comp_W5(self):

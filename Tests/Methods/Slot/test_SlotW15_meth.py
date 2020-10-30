@@ -121,5 +121,5 @@ class Test_SlotW15_meth(object):
             H0=0.1584, H1=5e-3, H2=20e-3, R1=0.15648, R2=4e-3, W0=5e-3, W3=10e-3
         )
         result = lam.slot.get_surface_wind()
-        assert result.label == "WindR_R0_T0_S0"
+        assert result.label == "Wind_Rotor_R0_T0_S0"
         assert len(result.get_lines()) == 10

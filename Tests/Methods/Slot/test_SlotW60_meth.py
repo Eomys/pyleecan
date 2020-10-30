@@ -183,7 +183,7 @@ class Test_SlotW60_meth(object):
 
         result = test_obj.slot.build_geometry_wind(Nrad=1, Ntan=2)
         a = result
-        assert "WindS_R0_T0_S0" == a[0].label
+        assert "Wind_Stator_R0_T0_S0" == a[0].label
 
     @pytest.mark.parametrize("test_dict", slotW60_test)
     def test_build_geometry_error(self, test_dict):

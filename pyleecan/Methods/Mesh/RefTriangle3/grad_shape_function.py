@@ -7,7 +7,7 @@ def grad_shape_function(self, point):
     """ Return the gradient of linear shape functions in reference triangle for a given point """
 
     values = np.zeros([2, 3], dtype=float)
-    [x, y] = point[0:2]
+    (x, y) = point[0:2]
 
     if (x >= 0) or (y >= 0) or (1 - x - y >= 0):
         values[0, 0] = -1

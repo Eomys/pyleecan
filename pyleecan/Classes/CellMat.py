@@ -101,7 +101,7 @@ class CellMat(FrozenClass):
         nb_cell=0,
         nb_pt_per_cell=0,
         indice=[],
-        interpolation=None,
+        interpolation=-1,
         init_dict=None,
         init_str=None,
     ):

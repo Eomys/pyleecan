@@ -175,7 +175,7 @@ class Test_SlotW23_meth(object):
             H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
         )
         result = lam.slot.get_surface_wind()
-        assert result.label == "WindR_R0_T0_S0"
+        assert result.label == "Wind_Rotor_R0_T0_S0"
         assert len(result.get_lines()) == 4
 
     def test_comp_W(self):
@@ -205,5 +205,5 @@ class Test_SlotW23_meth(object):
 
         result = lam.slot.build_geometry_wind(Nrad=2, Ntan=4, is_simplified=True)
         a = result
-        assert "WindS_R0_T0_S0" == a[0].label
+        assert "Wind_Stator_R0_T0_S0" == a[0].label
         assert len(a) == 8

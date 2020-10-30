@@ -75,6 +75,7 @@ distance_test.append({"begin": -2, "end": 2, "Z": -2, "result": 0})
 distance_test.append({"begin": -2, "end": 2, "Z": 2, "result": 0})
 distance_test.append({"begin": 2j, "end": 2, "Z": 1 + 1j, "result": 0})
 distance_test.append({"begin": 2j, "end": 2, "Z": 3 - 1j, "result": sqrt(2)})
+distance_test.append({"begin": 1 + 0j, "end": 0 + 1j, "Z": 0 + 192j, "result": 191})
 
 
 @pytest.mark.METHODS

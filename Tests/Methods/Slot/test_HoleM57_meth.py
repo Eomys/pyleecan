@@ -41,12 +41,12 @@ class Test_HoleM57_meth(object):
         """Test build_geometry with both magnet"""
 
         result1 = test_obj.hole[0].build_geometry()
-        assert result1[1].label == "MagnetR_N_R0_T0_S0"
+        assert result1[1].label == "Magnet_Rotor_N_R0_T0_S0"
         assert result1[3].point_ref == (
             0.05300650262595291 + 0.02768664153388476j
         )  # SurfLine #6
         assert (
-            result1[4].label == "MagnetR_N_R0_T1_S0"
+            result1[4].label == "Magnet_Rotor_N_R0_T1_S0"
         )  # Label SurfLine #5 at 5th position
 
         test_obj.hole[0].W1 = 0
@@ -64,11 +64,11 @@ class Test_HoleM57_meth(object):
         test_obj.hole[0].W1 = 10e-3
 
         result1 = test_obj.hole[0].build_geometry(is_simplified=True)
-        assert result1[1].label == "MagnetR_N_R0_T0_S0"
+        assert result1[1].label == "Magnet_Rotor_N_R0_T0_S0"
         assert result1[3].point_ref == (
             0.05300650262595291 + 0.02768664153388476j
         )  # SurfLine #6
-        assert result1[4].label == "MagnetR_N_R0_T1_S0"  # SurfLine #5 at 5th position
+        assert result1[4].label == "Magnet_Rotor_N_R0_T1_S0"  # SurfLine #5 at 5th position
 
         test_obj.hole[0].W1 = 0
 

@@ -26,6 +26,11 @@ try:
 except ImportError as error:
     get_simulations = error
 
+try:
+    from ..Methods.Simulation.VarParam.get_simu_number import get_simu_number
+except ImportError as error:
+    get_simu_number = error
+
 
 from ._check import InitUnKnowClassError
 from .ParamExplorer import ParamExplorer
@@ -61,6 +66,17 @@ class VarParam(VarSimu):
         )
     else:
         get_simulations = get_simulations
+    # cf Methods.Simulation.VarParam.get_simu_number
+    if isinstance(get_simu_number, ImportError):
+        get_simu_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarParam method get_simu_number: " + str(get_simu_number)
+                )
+            )
+        )
+    else:
+        get_simu_number = get_simu_number
     # save and copy methods are available in all object
     save = save
     copy = copy

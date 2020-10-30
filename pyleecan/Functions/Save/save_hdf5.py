@@ -60,11 +60,14 @@ def list_to_hdf5(file, group_name, name, list_to_save):
             variable_to_hdf5(file, group_name, element, "list_{}".format(i))
 
     else:  # Save as an array
-        grp = file[group_name]
-
-        grp[name] = array_list
-        # Add an attribute to load correctly
-        grp[name].attrs["array_list"] = True
+        if group_name == "":
+            file[name] = array_list
+            file[name].attrs["array_list"] = True
+        else:
+            grp = file[group_name]
+            grp[name] = array_list
+            # Add an attribute to load correctly
+            grp[name].attrs["array_list"] = True
 
 
 def dict_to_hdf5(file, prefix, dict_to_save):

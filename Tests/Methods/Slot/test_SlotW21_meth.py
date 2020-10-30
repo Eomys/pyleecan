@@ -66,7 +66,7 @@ slotW21_test.append(
 
 
 @pytest.mark.METHODS
-class Test_SlowW21_meth(object):
+class Test_SlotW21_meth(object):
     """pytest for SlotW21 methods"""
 
     @pytest.mark.parametrize("test_dict", slotW21_test)
@@ -210,7 +210,7 @@ class Test_SlowW21_meth(object):
         curve_list.append(Segment(Z4, Z3))
         point_ref = (Z3 + Ztan1 + Ztan2 + Z4) / 4
         surface = SurfLine(
-            line_list=curve_list, point_ref=point_ref, label="WindS_R0_T0_S0"
+            line_list=curve_list, point_ref=point_ref, label="Wind_Stator_R0_T0_S0"
         )
         expected.append(surface)
 
@@ -222,7 +222,7 @@ class Test_SlowW21_meth(object):
         curve_list.append(Segment(Ztan2, Ztan1))
         point_ref = (Z5 + Ztan1 + Ztan2 + Z6) / 4
         surface = SurfLine(
-            line_list=curve_list, point_ref=point_ref, label="WindS_R0_T1_S0"
+            line_list=curve_list, point_ref=point_ref, label="Wind_Stator_R0_T1_S0"
         )
         expected.append(surface)
 
@@ -255,5 +255,5 @@ class Test_SlowW21_meth(object):
             Zs=36, H0=3e-3, H1=0, H1_is_rad=False, H2=20e-3, W0=3e-3, W1=13e-3, W2=10e-3
         )
         result = lam.slot.get_surface_wind()
-        assert result.label == "WindR_R0_T0_S0"
+        assert result.label == "Wind_Rotor_R0_T0_S0"
         assert len(result.get_lines()) == 4

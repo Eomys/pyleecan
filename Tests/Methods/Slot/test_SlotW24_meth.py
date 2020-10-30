@@ -133,7 +133,7 @@ class Test_SlotW24_meth(object):
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW24(Zs=6, H2=30e-3, W3=12e-3)
         result = lam.slot.get_surface_wind()
-        assert result.label == "WindR_R0_T0_S0"
+        assert result.label == "Wind_Rotor_R0_T0_S0"
         assert len(result.get_lines()) == 4
 
     def test_build_geometry_wind(self):
@@ -143,5 +143,5 @@ class Test_SlotW24_meth(object):
 
         result = lam.slot.build_geometry_wind(Nrad=2, Ntan=4, is_simplified=True)
         a = result
-        assert "WindS_R0_T0_S0" == a[0].label
+        assert "Wind_Stator_R0_T0_S0" == a[0].label
         assert len(a) == 8
