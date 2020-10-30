@@ -20,7 +20,7 @@ from ._check import CheckTypeError
 import numpy as np
 import random
 from ._check import InitUnKnowClassError
-from .Output import Output
+from .Simulation import Simulation
 from .OptiDesignVar import OptiDesignVar
 from .DataKeeper import DataKeeper
 from .OptiConstraint import OptiConstraint
@@ -39,7 +39,7 @@ class OptiProblem(FrozenClass):
 
     def __init__(
         self,
-        output=-1,
+        simu=-1,
         design_var=-1,
         obj_func=-1,
         eval_func=None,
@@ -64,8 +64,8 @@ class OptiProblem(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "output" in list(init_dict.keys()):
-                output = init_dict["output"]
+            if "simu" in list(init_dict.keys()):
+                simu = init_dict["simu"]
             if "design_var" in list(init_dict.keys()):
                 design_var = init_dict["design_var"]
             if "obj_func" in list(init_dict.keys()):
@@ -80,7 +80,7 @@ class OptiProblem(FrozenClass):
                 datakeeper_list = init_dict["datakeeper_list"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.output = output
+        self.simu = simu
         self.design_var = design_var
         self.obj_func = obj_func
         self.eval_func = eval_func
@@ -101,11 +101,11 @@ class OptiProblem(FrozenClass):
             OptiProblem_str += (
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
-        if self.output is not None:
-            tmp = self.output.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiProblem_str += "output = " + tmp
+        if self.simu is not None:
+            tmp = self.simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OptiProblem_str += "simu = " + tmp
         else:
-            OptiProblem_str += "output = None" + linesep + linesep
+            OptiProblem_str += "simu = None" + linesep + linesep
         if len(self.design_var) == 0:
             OptiProblem_str += "design_var = []" + linesep
         for ii in range(len(self.design_var)):
@@ -156,7 +156,7 @@ class OptiProblem(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.output != self.output:
+        if other.simu != self.simu:
             return False
         if other.design_var != self.design_var:
             return False
@@ -176,10 +176,10 @@ class OptiProblem(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OptiProblem_dict = dict()
-        if self.output is None:
-            OptiProblem_dict["output"] = None
+        if self.simu is None:
+            OptiProblem_dict["simu"] = None
         else:
-            OptiProblem_dict["output"] = self.output.as_dict()
+            OptiProblem_dict["simu"] = self.simu.as_dict()
         if self.design_var is None:
             OptiProblem_dict["design_var"] = None
         else:
@@ -219,8 +219,8 @@ class OptiProblem(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.output is not None:
-            self.output._set_None()
+        if self.simu is not None:
+            self.simu._set_None()
         for obj in self.design_var:
             obj._set_None()
         for obj in self.obj_func:
@@ -232,33 +232,31 @@ class OptiProblem(FrozenClass):
         for obj in self.datakeeper_list:
             obj._set_None()
 
-    def _get_output(self):
-        """getter of output"""
-        return self._output
+    def _get_simu(self):
+        """getter of simu"""
+        return self._simu
 
-    def _set_output(self, value):
-        """setter of output"""
+    def _set_simu(self, value):
+        """setter of simu"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "output"
-            )
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "simu")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            value = Output()
-        check_var("output", value, "Output")
-        self._output = value
+            value = Simulation()
+        check_var("simu", value, "Simulation")
+        self._simu = value
 
-        if self._output is not None:
-            self._output.parent = self
+        if self._simu is not None:
+            self._simu.parent = self
 
-    output = property(
-        fget=_get_output,
-        fset=_set_output,
-        doc=u"""Default output to define the default simulation. 
+    simu = property(
+        fget=_get_simu,
+        fset=_set_simu,
+        doc=u"""Default simulation
 
-        :Type: Output
+        :Type: Simulation
         """,
     )
 

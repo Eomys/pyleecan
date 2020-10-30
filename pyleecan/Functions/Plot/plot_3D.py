@@ -140,7 +140,7 @@ def plot_3D(
         if is_logscale_z:
             ax.zscale("log")
     elif type == "surf":
-        ax.plot_surface(Xdata, Ydata, Zdata, cmap=COLORMAP)
+        ax.plot_surface(Xdata, Ydata, Zdata, cmap=COLORMAP, cstride=2, rstride=2)
         ax.set_xlim3d(x_max, x_min)
         ax.set_ylim3d(y_min, y_max)
         ax.set_zlim3d(z_min, z_max)
@@ -163,7 +163,15 @@ def plot_3D(
         if is_logscale_z:
             ax.zscale("log")
     elif type == "pcolor":
-        c = ax.pcolormesh(Xdata, Ydata, Zdata, cmap=COLORMAP, vmin=z_min, vmax=z_max)
+        c = ax.pcolormesh(
+            Xdata,
+            Ydata,
+            Zdata,
+            cmap=COLORMAP,
+            vmin=z_min,
+            vmax=z_max,
+            shading="gouraud",
+        )
         clb = fig.colorbar(c, ax=ax)
         clb.ax.set_title(zlabel, fontsize=FONT_SIZE_LEGEND, fontname=FONT_NAME)
         clb.ax.tick_params(labelsize=FONT_SIZE_LEGEND)

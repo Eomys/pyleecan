@@ -5909,11 +5909,11 @@
         "path": "pyleecan/Generator/ClassesRef/Optimization/OptiProblem.csv",
         "properties": [
             {
-                "desc": "Default output to define the default simulation. ",
+                "desc": "Default simulation",
                 "max": "",
                 "min": "",
-                "name": "output",
-                "type": "Output",
+                "name": "simu",
+                "type": "Simulation",
                 "unit": "",
                 "value": ""
             },
