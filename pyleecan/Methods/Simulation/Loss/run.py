@@ -45,10 +45,10 @@ def run(self):
     # iterate through the models and compute the losses
     # setup losses output structure and meshsolution beforehand
     n_lam = len(output.simu.machine.get_lam_list())
-    output.loss.lamination = [ [] for x in range(n_lam)]
-    output.loss.winding = [ [] for x in range(n_lam)]
-    output.loss.magnet = [ [] for x in range(n_lam)]
-    output.loss.meshsolutions = []
+    output.loss.lamination = [[] for x in range(n_lam)]
+    output.loss.winding = [[] for x in range(n_lam)]
+    output.loss.magnet = [[] for x in range(n_lam)]
+    output.loss.meshsolution = []
 
     for model in self.models:
         model.comp_loss()
