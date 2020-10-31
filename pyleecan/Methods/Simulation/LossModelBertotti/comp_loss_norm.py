@@ -37,19 +37,19 @@ def _get_field_comps(axes, components, field):
 
 
 def _get_axes_(meshsolution, indices, label):
-    """Get the axes of the first solution of a SolutionVector and the respective 
-    components names. The SolutionVector is the solution with given label. 
+    """Get the axes of the first solution of a SolutionVector and the respective
+    components names. The SolutionVector is the solution with given label.
     Further the indices axis is replaced by input indices.
 
     Parameters
     ----------
     meshsolution : MeshSolution
-        MeshSolution 
+        MeshSolution
     label : string
         label of the solution that contains the requested axis
     indices : ndarray
         ndarray of indices to create the indices axes
-    
+
     Returns
     -------
     axes : list
@@ -58,7 +58,7 @@ def _get_axes_(meshsolution, indices, label):
         list of components names of the SolutionVector components
     """
     components = meshsolution.get_solution(label=label).field.components
-    
+
     comp_names = [comp for comp in components.keys()]
 
     axes = []
@@ -116,7 +116,7 @@ def comp_loss_norm(self, meshsolution):
     # filter needed mesh group
     sol = meshsolution.get_group(self.group).get_solution(label="B")
     fld = sol.get_field()
-    
+
     # get data
     axes, comps = _get_axes_(meshsolution, sol.indice, label="B")
     components = _get_field_comps(axes, comps, fld)
@@ -131,9 +131,9 @@ def comp_loss_norm(self, meshsolution):
         # TODO add filter function to limit max. order of harmonics
         mag_dict = component.get_magnitude_along(*axes_names)
         symbol = component.symbol
-    
+
         # TODO better data check (axis size, ...)
-        
+
         f_norm = abs(mag_dict["freqs"][:, newaxis] / F_REF)
         B_norm = (
             1 / 2 * mag_dict[symbol] / B_REF
