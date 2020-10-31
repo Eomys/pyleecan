@@ -3945,9 +3945,9 @@
                 "max": "",
                 "min": "",
                 "name": "lam_id",
-                "type": "str",
+                "type": "int",
                 "unit": "-",
-                "value": "None"
+                "value": null
             }
         ]
     },
@@ -3979,13 +3979,13 @@
                 "value": 20
             },
             {
-                "desc": "Name of machine's laminaton that contains the winding, e.g. 'machine.stator'",
+                "desc": "Index of the corresponding lamination (of machine.get_lam_list method)",
                 "max": "",
                 "min": "",
-                "name": "lam",
-                "type": "str",
+                "name": "lam_id",
+                "type": "int",
                 "unit": "-",
-                "value": "'machine.stator'"
+                "value": null
             }
         ]
     },
@@ -6738,7 +6738,11 @@
         "desc": "Gather the loss module outputs",
         "is_internal": false,
         "methods": [
-            "get_loss"
+            "get_loss",
+            "get_loss_lam",
+            "get_loss_winding",
+            "get_loss_magnet",
+            "get_loss_dist"
         ],
         "mother": "",
         "name": "OutLoss",
@@ -6746,10 +6750,28 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
         "properties": [
             {
-                "desc": "List of the computed losses of SciDataTool's DataND type",
+                "desc": "List of the computed lamination losses",
                 "max": "",
                 "min": "",
-                "name": "losses",
+                "name": "lamination",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "List of the computed winding losses",
+                "max": "",
+                "min": "",
+                "name": "winding",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "List of the computed magnet losses",
+                "max": "",
+                "min": "",
+                "name": "magnet",
                 "type": "list",
                 "unit": "",
                 "value": []
@@ -6758,7 +6780,7 @@
                 "desc": "list of FEA software mesh and post processing results",
                 "max": "",
                 "min": "",
-                "name": "meshsolutions",
+                "name": "meshsolution",
                 "type": "list",
                 "unit": "",
                 "value": []

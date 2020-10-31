@@ -21,6 +21,26 @@ try:
 except ImportError as error:
     get_loss = error
 
+try:
+    from ..Methods.Output.OutLoss.get_loss_lam import get_loss_lam
+except ImportError as error:
+    get_loss_lam = error
+
+try:
+    from ..Methods.Output.OutLoss.get_loss_winding import get_loss_winding
+except ImportError as error:
+    get_loss_winding = error
+
+try:
+    from ..Methods.Output.OutLoss.get_loss_magnet import get_loss_magnet
+except ImportError as error:
+    get_loss_magnet = error
+
+try:
+    from ..Methods.Output.OutLoss.get_loss_dist import get_loss_dist
+except ImportError as error:
+    get_loss_dist = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -30,6 +50,7 @@ class OutLoss(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Output.OutLoss.get_loss
     if isinstance(get_loss, ImportError):
         get_loss = property(
@@ -39,6 +60,51 @@ class OutLoss(FrozenClass):
         )
     else:
         get_loss = get_loss
+    # cf Methods.Output.OutLoss.get_loss_lam
+    if isinstance(get_loss_lam, ImportError):
+        get_loss_lam = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutLoss method get_loss_lam: " + str(get_loss_lam)
+                )
+            )
+        )
+    else:
+        get_loss_lam = get_loss_lam
+    # cf Methods.Output.OutLoss.get_loss_winding
+    if isinstance(get_loss_winding, ImportError):
+        get_loss_winding = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutLoss method get_loss_winding: "
+                    + str(get_loss_winding)
+                )
+            )
+        )
+    else:
+        get_loss_winding = get_loss_winding
+    # cf Methods.Output.OutLoss.get_loss_magnet
+    if isinstance(get_loss_magnet, ImportError):
+        get_loss_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutLoss method get_loss_magnet: " + str(get_loss_magnet)
+                )
+            )
+        )
+    else:
+        get_loss_magnet = get_loss_magnet
+    # cf Methods.Output.OutLoss.get_loss_dist
+    if isinstance(get_loss_dist, ImportError):
+        get_loss_dist = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutLoss method get_loss_dist: " + str(get_loss_dist)
+                )
+            )
+        )
+    else:
+        get_loss_dist = get_loss_dist
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -47,8 +113,10 @@ class OutLoss(FrozenClass):
 
     def __init__(
         self,
-        losses=-1,
-        meshsolutions=-1,
+        lamination=-1,
+        winding=-1,
+        magnet=-1,
+        meshsolution=-1,
         logger_name="Pyleecan.OutLoss",
         init_dict=None,
         init_str=None,
@@ -68,16 +136,22 @@ class OutLoss(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "losses" in list(init_dict.keys()):
-                losses = init_dict["losses"]
-            if "meshsolutions" in list(init_dict.keys()):
-                meshsolutions = init_dict["meshsolutions"]
+            if "lamination" in list(init_dict.keys()):
+                lamination = init_dict["lamination"]
+            if "winding" in list(init_dict.keys()):
+                winding = init_dict["winding"]
+            if "magnet" in list(init_dict.keys()):
+                magnet = init_dict["magnet"]
+            if "meshsolution" in list(init_dict.keys()):
+                meshsolution = init_dict["meshsolution"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.losses = losses
-        self.meshsolutions = meshsolutions
+        self.lamination = lamination
+        self.winding = winding
+        self.magnet = magnet
+        self.meshsolution = meshsolution
         self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
@@ -92,15 +166,27 @@ class OutLoss(FrozenClass):
         else:
             OutLoss_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutLoss_str += (
-            "losses = "
+            "lamination = "
             + linesep
-            + str(self.losses).replace(linesep, linesep + "\t")
+            + str(self.lamination).replace(linesep, linesep + "\t")
             + linesep
         )
         OutLoss_str += (
-            "meshsolutions = "
+            "winding = "
             + linesep
-            + str(self.meshsolutions).replace(linesep, linesep + "\t")
+            + str(self.winding).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        OutLoss_str += (
+            "magnet = "
+            + linesep
+            + str(self.magnet).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        OutLoss_str += (
+            "meshsolution = "
+            + linesep
+            + str(self.meshsolution).replace(linesep, linesep + "\t")
             + linesep
         )
         OutLoss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
@@ -111,9 +197,13 @@ class OutLoss(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.losses != self.losses:
+        if other.lamination != self.lamination:
             return False
-        if other.meshsolutions != self.meshsolutions:
+        if other.winding != self.winding:
+            return False
+        if other.magnet != self.magnet:
+            return False
+        if other.meshsolution != self.meshsolution:
             return False
         if other.logger_name != self.logger_name:
             return False
@@ -123,9 +213,15 @@ class OutLoss(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutLoss_dict = dict()
-        OutLoss_dict["losses"] = self.losses.copy() if self.losses is not None else None
-        OutLoss_dict["meshsolutions"] = (
-            self.meshsolutions.copy() if self.meshsolutions is not None else None
+        OutLoss_dict["lamination"] = (
+            self.lamination.copy() if self.lamination is not None else None
+        )
+        OutLoss_dict["winding"] = (
+            self.winding.copy() if self.winding is not None else None
+        )
+        OutLoss_dict["magnet"] = self.magnet.copy() if self.magnet is not None else None
+        OutLoss_dict["meshsolution"] = (
+            self.meshsolution.copy() if self.meshsolution is not None else None
         )
         OutLoss_dict["logger_name"] = self.logger_name
         # The class name is added to the dict for deserialisation purpose
@@ -135,44 +231,86 @@ class OutLoss(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.losses = None
-        self.meshsolutions = None
+        self.lamination = None
+        self.winding = None
+        self.magnet = None
+        self.meshsolution = None
         self.logger_name = None
 
-    def _get_losses(self):
-        """getter of losses"""
-        return self._losses
+    def _get_lamination(self):
+        """getter of lamination"""
+        return self._lamination
 
-    def _set_losses(self, value):
-        """setter of losses"""
+    def _set_lamination(self, value):
+        """setter of lamination"""
         if type(value) is int and value == -1:
             value = list()
-        check_var("losses", value, "list")
-        self._losses = value
+        check_var("lamination", value, "list")
+        self._lamination = value
 
-    losses = property(
-        fget=_get_losses,
-        fset=_set_losses,
-        doc=u"""List of the computed losses of SciDataTool's DataND type
+    lamination = property(
+        fget=_get_lamination,
+        fset=_set_lamination,
+        doc=u"""List of the computed lamination losses
 
         :Type: list
         """,
     )
 
-    def _get_meshsolutions(self):
-        """getter of meshsolutions"""
-        return self._meshsolutions
+    def _get_winding(self):
+        """getter of winding"""
+        return self._winding
 
-    def _set_meshsolutions(self, value):
-        """setter of meshsolutions"""
+    def _set_winding(self, value):
+        """setter of winding"""
         if type(value) is int and value == -1:
             value = list()
-        check_var("meshsolutions", value, "list")
-        self._meshsolutions = value
+        check_var("winding", value, "list")
+        self._winding = value
 
-    meshsolutions = property(
-        fget=_get_meshsolutions,
-        fset=_set_meshsolutions,
+    winding = property(
+        fget=_get_winding,
+        fset=_set_winding,
+        doc=u"""List of the computed winding losses
+
+        :Type: list
+        """,
+    )
+
+    def _get_magnet(self):
+        """getter of magnet"""
+        return self._magnet
+
+    def _set_magnet(self, value):
+        """setter of magnet"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("magnet", value, "list")
+        self._magnet = value
+
+    magnet = property(
+        fget=_get_magnet,
+        fset=_set_magnet,
+        doc=u"""List of the computed magnet losses
+
+        :Type: list
+        """,
+    )
+
+    def _get_meshsolution(self):
+        """getter of meshsolution"""
+        return self._meshsolution
+
+    def _set_meshsolution(self, value):
+        """setter of meshsolution"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("meshsolution", value, "list")
+        self._meshsolution = value
+
+    meshsolution = property(
+        fget=_get_meshsolution,
+        fset=_set_meshsolution,
         doc=u"""list of FEA software mesh and post processing results
 
         :Type: list
