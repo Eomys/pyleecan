@@ -31,8 +31,8 @@ class OutStruct(FrozenClass):
 
     def __init__(
         self,
-        time=None,
-        angle=None,
+        Time=None,
+        Angle=None,
         Nt_tot=None,
         Na_tot=None,
         logger_name="Pyleecan.OutStruct",
@@ -57,10 +57,10 @@ class OutStruct(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "time" in list(init_dict.keys()):
-                time = init_dict["time"]
-            if "angle" in list(init_dict.keys()):
-                angle = init_dict["angle"]
+            if "Time" in list(init_dict.keys()):
+                Time = init_dict["Time"]
+            if "Angle" in list(init_dict.keys()):
+                Angle = init_dict["Angle"]
             if "Nt_tot" in list(init_dict.keys()):
                 Nt_tot = init_dict["Nt_tot"]
             if "Na_tot" in list(init_dict.keys()):
@@ -75,8 +75,8 @@ class OutStruct(FrozenClass):
                 Ar = init_dict["Ar"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.time = time
-        self.angle = angle
+        self.Time = Time
+        self.Angle = Angle
         self.Nt_tot = Nt_tot
         self.Na_tot = Na_tot
         self.logger_name = logger_name
@@ -96,16 +96,16 @@ class OutStruct(FrozenClass):
         else:
             OutStruct_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutStruct_str += (
-            "time = "
+            "Time = "
             + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
+            + str(self.Time).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
         OutStruct_str += (
-            "angle = "
+            "Angle = "
             + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
+            + str(self.Angle).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
@@ -122,9 +122,9 @@ class OutStruct(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if not array_equal(other.time, self.time):
+        if not array_equal(other.Time, self.Time):
             return False
-        if not array_equal(other.angle, self.angle):
+        if not array_equal(other.Angle, self.Angle):
             return False
         if other.Nt_tot != self.Nt_tot:
             return False
@@ -144,14 +144,14 @@ class OutStruct(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutStruct_dict = dict()
-        if self.time is None:
-            OutStruct_dict["time"] = None
+        if self.Time is None:
+            OutStruct_dict["Time"] = None
         else:
-            OutStruct_dict["time"] = self.time.tolist()
-        if self.angle is None:
-            OutStruct_dict["angle"] = None
+            OutStruct_dict["Time"] = self.Time.tolist()
+        if self.Angle is None:
+            OutStruct_dict["Angle"] = None
         else:
-            OutStruct_dict["angle"] = self.angle.tolist()
+            OutStruct_dict["Angle"] = self.Angle.tolist()
         OutStruct_dict["Nt_tot"] = self.Nt_tot
         OutStruct_dict["Na_tot"] = self.Na_tot
         OutStruct_dict["logger_name"] = self.logger_name
@@ -174,8 +174,8 @@ class OutStruct(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.time = None
-        self.angle = None
+        self.Time = None
+        self.Angle = None
         self.Nt_tot = None
         self.Na_tot = None
         self.logger_name = None
@@ -183,12 +183,12 @@ class OutStruct(FrozenClass):
         self.Vr = None
         self.Ar = None
 
-    def _get_time(self):
-        """getter of time"""
-        return self._time
+    def _get_Time(self):
+        """getter of Time"""
+        return self._Time
 
-    def _set_time(self, value):
-        """setter of time"""
+    def _set_Time(self, value):
+        """setter of Time"""
         if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
@@ -196,24 +196,24 @@ class OutStruct(FrozenClass):
                 value = array(value)
             except:
                 pass
-        check_var("time", value, "ndarray")
-        self._time = value
+        check_var("Time", value, "ndarray")
+        self._Time = value
 
-    time = property(
-        fget=_get_time,
-        fset=_set_time,
-        doc=u"""Structural time vector (no symmetry)
+    Time = property(
+        fget=_get_Time,
+        fset=_set_Time,
+        doc=u"""Structural time Data object
 
         :Type: ndarray
         """,
     )
 
-    def _get_angle(self):
-        """getter of angle"""
-        return self._angle
+    def _get_Angle(self):
+        """getter of Angle"""
+        return self._Angle
 
-    def _set_angle(self, value):
-        """setter of angle"""
+    def _set_Angle(self, value):
+        """setter of Angle"""
         if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
@@ -221,13 +221,13 @@ class OutStruct(FrozenClass):
                 value = array(value)
             except:
                 pass
-        check_var("angle", value, "ndarray")
-        self._angle = value
+        check_var("Angle", value, "ndarray")
+        self._Angle = value
 
-    angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Structural position vector (no symmetry)
+    Angle = property(
+        fget=_get_Angle,
+        fset=_set_Angle,
+        doc=u"""Structural position Data object
 
         :Type: ndarray
         """,

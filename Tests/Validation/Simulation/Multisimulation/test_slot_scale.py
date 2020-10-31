@@ -69,6 +69,7 @@ def test_slot_scale():
     # Multi-simulation to variate the slot size
     multisim = VarParam(
         stop_if_error=True,
+        is_reuse_femm_file=False,
         ref_simu_index=0,  # Reference simulation is set as the first simulation from var_simu
     )
 
@@ -104,7 +105,7 @@ def test_slot_scale():
 
     multisim.paramexplorer_list = paramexplorer_list
 
-    error_keeper_mag_flux = "lambda simu: np.nan * np.zeros(len(simu.mag.B.time.value), len(simu.mag.B.angle.value))"
+    error_keeper_mag_flux = "lambda simu: np.nan * np.zeros(len(simu.mag.B.Time.get_values()), len(simu.mag.B.Angle.get_values()))"
 
     # List of DataKeeper to store results
     datakeeper_list = [
@@ -116,10 +117,10 @@ def test_slot_scale():
             error_keeper="lambda simu: np.nan",
         ),
         DataKeeper(
-            name="Airgap flux density components",
+            name="Radial Airgap flux density",
             unit="H",
             symbol="B",
-            keeper="lambda output: output.mag.B",
+            keeper="lambda output: output.mag.B.components['radial'].get_along('time','angle')['B_r']",
             error_keeper=error_keeper_mag_flux,
         ),
     ]

@@ -50,7 +50,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
         femm.mi_selectlabel(point_ref.real, point_ref.imag)
 
         # Get circuit or magnetization properties if needed
-        if "Wind" in label or "Bar":  # If the surface is a winding
+        if "Wind" in label or "Bar" in label:  # If the surface is a winding
             if "Rotor" in label:  # Winding on the rotor
                 Clabel = "Circr" + prop[:-1][2:]
             else:  # winding on the stator

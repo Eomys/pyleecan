@@ -94,7 +94,7 @@ def test_Magnetic_FEMM_sym():
         symmetries={"angle": {"period": 2}},
     )
     B = ImportVectorField(components={"radial": Br_data, "tangential": Bt_data})
-    simu_load.input = InputFlux(time=time, angle=angle2, B=B)
+    simu_load.input = InputFlux(time=time, angle=angle2, B=B, OP=simu.input.copy())
 
     out = Output(simu=simu)
     simu.run()
@@ -103,9 +103,11 @@ def test_Magnetic_FEMM_sym():
     simu_load.run()
 
     plt.close("all")
-    out.plot_A_space(
-        "mag.B", data_list=[out3.mag.B], legend_list=["Symmetry", "MANATEE SDM"]
-    )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_EM_SPMSM_NL_001_SDM.png"))
+    out.plot_2D_Data(
+        "mag.B",
+        "angle",
+        data_list=[out3.mag.B],
+        legend_list=["Symmetry", "MANATEE SDM"],
+        save_path=join(save_path, "test_EM_SPMSM_NL_001_SDM.png"),
+    )

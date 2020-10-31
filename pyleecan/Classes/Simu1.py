@@ -68,6 +68,8 @@ class Simu1(Simulation):
         logger_name="Pyleecan.Simulation",
         var_simu=None,
         postproc_list=-1,
+        index=None,
+        path_result=None,
         init_dict=None,
         init_str=None,
     ):
@@ -110,6 +112,10 @@ class Simu1(Simulation):
                 var_simu = init_dict["var_simu"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
+            if "index" in list(init_dict.keys()):
+                index = init_dict["index"]
+            if "path_result" in list(init_dict.keys()):
+                path_result = init_dict["path_result"]
         # Set the properties (value check and convertion are done in setter)
         self.elec = elec
         self.mag = mag
@@ -125,6 +131,8 @@ class Simu1(Simulation):
             logger_name=logger_name,
             var_simu=var_simu,
             postproc_list=postproc_list,
+            index=index,
+            path_result=path_result,
         )
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties

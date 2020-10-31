@@ -98,6 +98,9 @@ def generate_prop_setter(gen_dict, class_dict, prop):
     set_str += TAB2 + '"""setter of ' + prop["name"] + '"""\n'
 
     ## Convertion to correct type
+    if prop["type"] == "complex":
+        set_str += TAB2 + "if isinstance(value,str):\n"
+        set_str += TAB3 + "value = complex(value)\n"
     if prop["type"] == "ndarray":
         set_str += TAB2 + "if type(value) is int and value == -1:\n"
         set_str += TAB3 + "value = array([])\n"

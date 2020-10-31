@@ -370,7 +370,7 @@ class XOutput(Output):
         xoutput_dict=-1,
         nb_simu=0,
         simu=-1,
-        path_res="",
+        path_result="",
         geo=-1,
         elec=-1,
         mag=-1,
@@ -407,8 +407,8 @@ class XOutput(Output):
                 nb_simu = init_dict["nb_simu"]
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
-            if "path_res" in list(init_dict.keys()):
-                path_res = init_dict["path_res"]
+            if "path_result" in list(init_dict.keys()):
+                path_result = init_dict["path_result"]
             if "geo" in list(init_dict.keys()):
                 geo = init_dict["geo"]
             if "elec" in list(init_dict.keys()):
@@ -433,7 +433,7 @@ class XOutput(Output):
         # Call Output init
         super(XOutput, self).__init__(
             simu=simu,
-            path_res=path_res,
+            path_result=path_result,
             geo=geo,
             elec=elec,
             mag=mag,
