@@ -3830,9 +3830,7 @@
         ],
         "desc": "Abstract Loss Model Class",
         "is_internal": false,
-        "methods": [
-            "comp_loss"
-        ],
+        "methods": [],
         "mother": "",
         "name": "LossModel",
         "package": "Simulation",

@@ -14,14 +14,6 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Simulation.LossModel.comp_loss import comp_loss
-except ImportError as error:
-    comp_loss = error
-
-
 from ._check import InitUnKnowClassError
 
 
@@ -30,15 +22,6 @@ class LossModel(FrozenClass):
 
     VERSION = 1
 
-    # cf Methods.Simulation.LossModel.comp_loss
-    if isinstance(comp_loss, ImportError):
-        comp_loss = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LossModel method comp_loss: " + str(comp_loss))
-            )
-        )
-    else:
-        comp_loss = comp_loss
     # save and copy methods are available in all object
     save = save
     copy = copy
