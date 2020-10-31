@@ -8,4 +8,6 @@ struct,-,Structural module output,0,OutStruct,,,,,,,getter.get_machine_periodici
 post,-,Post-Processing settings,0,OutPost,,,,,,,getter.get_rot_dir,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.Output,,,,,,plot.plot_2D_Data,,,
 force,-,Force module output,0,OutForce,,,,,,,getter.get_fund_harm,,,
-loss,-,Loss module output,0,OutLoss,,,,,,,,,,
+loss,-,Loss module output,0,OutLoss,,,,,,,plot.plot_A_quiver_2D,,,
+,,,,,,,,,,,plot.plot_3D_Data,,,
+,,,,,,,,,,,plot.plot_A_time_space,,,
