@@ -160,7 +160,7 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_str += "alpha_ed = " + str(self.alpha_ed) + linesep
         LossModelBertotti_str += "alpha_ex = " + str(self.alpha_ex) + linesep
         LossModelBertotti_str += 'group = "' + str(self.group) + '"' + linesep
-        LossModelBertotti_str += 'lam_id = "' + str(self.lam_id) + '"' + linesep
+        LossModelBertotti_str += "lam_id = " + str(self.lam_id) + linesep
         return LossModelBertotti_str
 
     def __eq__(self, other):
@@ -354,7 +354,7 @@ class LossModelBertotti(LossModel):
 
     def _set_lam_id(self, value):
         """setter of lam_id"""
-        check_var("lam_id", value, "str")
+        check_var("lam_id", value, "int")
         self._lam_id = value
 
     lam_id = property(
@@ -362,6 +362,6 @@ class LossModelBertotti(LossModel):
         fset=_set_lam_id,
         doc=u"""Index of the corresponding lamination (of machine.get_lam_list method)
 
-        :Type: str
+        :Type: int
         """,
     )
