@@ -37,7 +37,7 @@ def _comp_loss_sum(meshsolution, L1=1, rho=7650, sym=1, logger=None):
     return loss.sum()
 
 
-def comp_loss(self, output):
+def comp_loss(self):
     """Compute the Losses"""
     if self.parent is None:
         raise InputError(
@@ -55,13 +55,16 @@ def comp_loss(self, output):
     # get logger
     logger = self.get_logger()
 
+    # get the simulation and output
+    simu = self.parent.parent
+    output = simu.parent
+
     # setup meshsolution, clear solution
     meshsolution = output.mag.meshsolution
-    output.loss.meshsolutions.append(meshsolution.get_group(self.group))
-    output.loss.meshsolutions[-1].solution = []
+    output.loss.meshsolution.append(meshsolution.get_group(self.group))
+    output.loss.meshsolution[-1].solution = []
 
     # get length and material
-    simu = self.parent.parent
     lam = simu.machine.get_lam_list()[self.lam_id]
 
     L1 = lam.L1
@@ -74,7 +77,7 @@ def comp_loss(self, output):
     if success:
         # compute loss density
         LossDens = self.comp_loss_norm(meshsolution)
-        _store_solution(output.loss.meshsolutions[-1], LossDens, label="LossDens")
+        _store_solution(output.loss.meshsolution[-1], LossDens, label="LossDens")
 
         # compute sum over frequencies
         axes_list = [axis.name for axis in LossDens.axes]
@@ -104,14 +107,23 @@ def comp_loss(self, output):
             values=tile(loss_sum, (2, 1)),
             # values=loss_sum[newaxis,:], # TODO squeeze issue
         )
-        _store_solution(output.loss.meshsolutions[-1], loss_sum_, label="LossDensSum")
+        _store_solution(output.loss.meshsolution[-1], loss_sum_, label="LossDensSum")
 
         # compute overall loss sum
+        # Set the symmetry factor according to the machine
+        if simu.mag.is_periodicity_a:
+            (sym, is_antiper_a, _, _) = output.get_machine_periodicity()
+            if is_antiper_a:
+                sym = sym * 2
+        else:
+            sym = 1
+
+        """
         sym = 1 if not output.simu.mag.is_symmetry_a else output.simu.mag.sym_a
         sym *= output.simu.mag.is_antiper_a + 1
-
+        """
         loss_sum = _comp_loss_sum(
-            output.loss.meshsolutions[-1], L1=L1, rho=rho, sym=sym, logger=logger
+            output.loss.meshsolution[-1], L1=L1, rho=rho, sym=sym, logger=logger
         )
 
         Time = Data1D(
@@ -131,4 +143,4 @@ def comp_loss(self, output):
             values=loss_sum * ones_like(Time.values),
         )
 
-        output.loss.losses.append(data)
+        output.loss.lamination[self.lam_id].append(data)

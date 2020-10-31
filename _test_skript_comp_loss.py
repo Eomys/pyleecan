@@ -32,7 +32,7 @@ myWindingLoss = LossModelWinding()
 mySimu.loss = Loss()
 mySimu.loss.models = [myIronLoss, myWindingLoss]
 
-myWindingLoss.lam = "machine.stator"
+myWindingLoss.lam_id = 1
 
 myIronLoss.name = "Stator Iron Losses"
 myIronLoss.k_hy = None
@@ -41,8 +41,8 @@ myIronLoss.k_ed = None
 myIronLoss.alpha_ed = 2
 myIronLoss.k_ex = 0
 myIronLoss.alpha_ex = 1.5
-myIronLoss.lam = "machine.stator" # could be substituted by lam list index
-myIronLoss.group = "stator core" # this is the FEMM group name
+myIronLoss.lam_id = 1  # could be substituted by lam list index
+myIronLoss.group = "stator core"  # this is the FEMM group name
 
 LossData = ImportMatrixXls()
 # LossData.file_path = "pyleecan\\pyleecan\\Data\\Material\\M400-50A.xlsx"

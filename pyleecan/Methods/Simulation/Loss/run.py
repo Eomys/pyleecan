@@ -48,4 +48,4 @@ def run(self):
     output.loss.meshsolutions = []
 
     for model in self.models:
-        model.comp_loss(output)
+        model.comp_loss()

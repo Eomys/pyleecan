@@ -12,7 +12,7 @@ from logging import getLogger
 # TODO add the possibility to compute single (or group of) phase losses
 
 
-def comp_loss(self, output):
+def comp_loss(self):
     """Compute the Losses"""
     if self.parent is None:
         raise InputError(
@@ -32,17 +32,8 @@ def comp_loss(self, output):
 
     # get length and material
     simu = self.parent.parent
-
-    if not self.lam.startswith("machine"):
-        raise Exception("Lam string must start with 'machine'")
-
-    _, *attr_list = self.lam.split(".")
-
-    try:
-        lam = getattr_recursive(simu.machine, attr_list)
-    except Exception:
-        logger.info("LossModelWinding: Unable to get Lamination.")
-        return  # TODO eventualy append emtpy DataTime
+    output = simu.parent
+    lam = simu.machine.get_lam_list()[self.lam_id]
 
     # check that lamination has a winding
     if hasattr(lam, "winding") and lam.winding is not None:
@@ -72,4 +63,4 @@ def comp_loss(self, output):
             values=lam.winding.qs * R * data_dict[name] ** 2,
         )
 
-        output.loss.losses.append(data)
+        output.loss.winding[self.lam_id].append(data)
