@@ -3941,10 +3941,10 @@
                 "value": "None"
             },
             {
-                "desc": "Name of machine's part to get lenght and material data, e.g. 'machine.stator'",
+                "desc": "Index of the corresponding lamination (of machine.get_lam_list method)",
                 "max": "",
                 "min": "",
-                "name": "lam",
+                "name": "lam_id",
                 "type": "str",
                 "unit": "-",
                 "value": "None"

@@ -62,13 +62,7 @@ def comp_loss(self, output):
 
     # get length and material
     simu = self.parent.parent
-
-    if not self.lam.startswith("machine"):
-        raise Exception("Lam string must start with 'machine'")
-
-    _, *attr_list = self.lam.split(".")
-
-    lam = getattr_recursive(simu.machine, attr_list)
+    lam = simu.machine.get_lam_list()[self.lam_id]
 
     L1 = lam.L1
     mat_type = lam.mat_type
