@@ -8,7 +8,7 @@ from os.path import join
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
-def solve_FEMM(self, output, sym, axes_dict):
+def solve_FEA(self, output, sym, axes_dict):
     """
     Solve Elmer model to calculate airgap flux density, torque instantaneous/average/ripple values,
     flux induced in stator windings and flux density, field and permeability maps
@@ -71,31 +71,29 @@ def solve_FEMM(self, output, sym, axes_dict):
     Bt = zeros((Nt_comp, Na_comp))
     Tem = zeros((Nt_comp))
 
-    Rag = output.simu.machine.comp_Rgap_mec()
-
-    # Compute the data for each time step
+    # compute the data for each time step
     # TODO Other than FEMM, in Elmer I think it's possible to compute
     #      all time steps at once
     self.get_logger().debug("Solving Simulation")
-        
-    # Run the computation
+
+    # run the computation
     if self.nb_worker > 1:
-        # TODO solve parallel
+        # TODO run solver in parallel
         pass
     else:
-        # TODO solve 'normal'
+        # TODO run solver 'normal'
         pass
-        
-    # Load results
-    
-    # Get the air gap flux result
-    # TODO ii -> Time, jj -> Angle
+
+    # get the air gap flux result
+    # TODO add function (or method)
+    # ii -> Time, jj -> Angle
     # Br[ii, jj], Bt[ii, jj] = get_airgap_flux()
-    
-    # Compute the torque
+
+    # get the torque
+    # TODO add function (or method)
     # Tem[ii] = comp_Elmer_torque(FEM_dict, sym=sym)
 
-    # Phi_wind computation
+    # flux linkage computation
     if (
         hasattr(output.simu.machine.stator, "winding")
         and output.simu.machine.stator.winding is not None
@@ -104,22 +102,12 @@ def solve_FEMM(self, output, sym, axes_dict):
         # Phi_wind[ii, :] = comp_Elmer_Phi_wind()
         pass
 
-    # Load mesh data & solution
+    # store mesh data & solution if requested
     if (Nt_comp == 1) and (self.is_get_mesh or self.is_save_FEA):
-        # TODO
-        # xxx = self.get_meshsolution(save_path, ii)
+        output.mag.meshsolution = self.get_meshsolution()
 
-        # TODO get following quantities
-        # meshFEM
-        # groups
-        # B_elem
-        # H_elem
-        # mu_elem ??
-        pass
-
-    """
     # The following code may be unified with FEMM post processing
-
+    """
     # Shift to take into account stator position
     roll_id = int(self.angle_stator * Na_comp / (2 * pi))
     Br = roll(Br, roll_id, axis=1)

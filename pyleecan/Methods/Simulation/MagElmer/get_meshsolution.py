@@ -6,28 +6,28 @@
 # from ....Classes.CellMat import CellMat
 # from ....Classes.PointMat import PointMat
 # from ....Classes.RefTriangle3 import RefTriangle3
+from ....Classes.MeshSolution import MeshSolution
 
-def get_meshsolution(self, save_path):
-    """Load the mesh data and solution data. Elmer simulation must have been solved.
+
+def get_meshsolution(self):
+    """Build the MeshSolution objects from the FEA outputs.
 
     Parameters
     ----------
     self : MagElmer
         a MagElmer object
-    is_get_mesh : bool
-        1 to load the mesh and solution into the simulation
-    is_save_FEA : bool
-        1 to save the mesh and solution into a .json file
 
     Returns
     -------
-    # TODO
+    meshsol: MeshSolution
+        a MeshSolution object with Elmer outputs at every time step
     """
 
-    mesh = None
-    groups = None
-    B = None
-    H = None
-    mu = None
+    meshsol = MeshSolution(
+        label="Elmer Solution",
+        # mesh=meshElmer,
+        # solution=sol_list,
+        # dimension=2,
+    )
 
-    return mesh, B, H, mu, groups
+    return meshsol

@@ -4233,6 +4233,139 @@
             }
         ]
     },
+    "MagElmer": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Magnetic module: Finite Element model with Elmer",
+        "is_internal": false,
+        "methods": [
+            "comp_flux_airgap",
+            "solve_FEA",
+            "get_meshsolution",
+            "get_path_save_fem",
+            "get_path_save",
+            "comp_time_angle"
+        ],
+        "mother": "Magnetics",
+        "name": "MagElmer",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/MagElmer.csv",
+        "properties": [
+            {
+                "desc": "global coefficient to adjust mesh fineness (1 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kmesh_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "global coefficient to adjust geometry fineness (1 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kgeo_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Name of the file to save the Elmer model",
+                "max": "",
+                "min": "",
+                "name": "file_name",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To enforce user-defined values for Elmer main parameters ",
+                "max": "",
+                "min": "",
+                "name": "FEA_dict",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Angular position shift of the stator",
+                "max": "",
+                "min": "",
+                "name": "angle_stator",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            },
+            {
+                "desc": "To save FEA mesh for latter post-procesing ",
+                "max": "",
+                "min": "",
+                "name": "is_get_mesh",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "To save FEA mesh and solution in a file",
+                "max": "",
+                "min": "",
+                "name": "is_save_FEA",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "max": "",
+                "min": "",
+                "name": "transform_list",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "To use a dxf version of the rotor instead of build_geometry",
+                "max": "",
+                "min": "",
+                "name": "rotor_dxf",
+                "type": "DXFImport",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "To use a dxf version of the rotor instead of build_geometry",
+                "max": "",
+                "min": "",
+                "name": "stator_dxf",
+                "type": "DXFImport",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "To import an existing simulation file",
+                "max": "",
+                "min": "",
+                "name": "import_file",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To run Elmer in parallel (the parallelization is on the time loop)",
+                "max": "",
+                "min": "",
+                "name": "nb_worker",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            }
+        ]
+    },
     "MagFEMM": {
         "constants": [
             {
@@ -4765,6 +4898,7 @@
             }
         ],
         "daughters": [
+            "MagElmer",
             "MagFEMM"
         ],
         "desc": "Magnetic module abstract object",

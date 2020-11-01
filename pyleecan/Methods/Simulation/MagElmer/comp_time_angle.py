@@ -7,15 +7,15 @@ def comp_time_angle(self, output):
 
     Parameters
     ----------
-    self : Magnetic
-        a Magnetic object
+    self : MagElmer
+        a MagElmer object
     output : Output
         an Output object (to update)
 
     Returns
     -------
     axes_dict: {Data}
-        Dict containing Time axis used in MagFEMM to store torque result
+        Dict containing Time axis used in MagElmer to store torque result
     """
     # Calculate and store Time and Angle axes for airgap flux
     axes_dict = Magnetics.comp_time_angle(self, output)

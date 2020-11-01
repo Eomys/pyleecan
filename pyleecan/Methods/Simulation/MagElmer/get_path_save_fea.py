@@ -4,7 +4,7 @@ import os
 from os.path import join, isdir
 
 
-def get_path_save_fem(self, output):
+def get_path_save_fea(self, output):
     """Return the path to save the Elmer simulation
 
     Parameters

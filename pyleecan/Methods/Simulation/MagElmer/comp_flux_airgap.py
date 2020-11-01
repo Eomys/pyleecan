@@ -22,23 +22,19 @@ def comp_flux_airgap(self, output, axes_dict):
     # Setup the Elmer simulation
     # Geometry building
     if not self.import_file:  # True if None or len == 0
-        self.get_logger().debug("Drawing machine in Gmsh...")
-        # output.mag.FEM_dict = draw_GMSH()
+        self.get_logger().debug("Drawing machine in GMSH...")
+        # output.mag.FEA_dict = draw_GMSH() # TODO add inputs
         pass
     else:
-        self.get_logger().debug("Reusing the FEM file: " + self.import_file)
-        # output.mag.FEM_dict = self.FEM_dict
+        self.get_logger().debug("Reusing the FEA file: " + self.import_file)
+        # output.mag.FEA_dict = self.FEA_dict
         pass
 
     # post process GMSH mesh with ElmerGrid
-    # TODO
-    if self.nb_worker > 1:
-        pass
-    else:
-        pass
+    # TODO add respective function (or method)
 
     # setup Elmer solver
-    # TODO
+    # TODO add respective functions or methods
 
     # Solve for all time step and store all the results in output
     self.solve_FEA(output, sym, axes_dict)
