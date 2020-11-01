@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from matplotlib.pyplot import axis
+import matplotlib.pyplot as plt
 from ....Functions.init_fig import init_fig
 
 
@@ -12,7 +12,7 @@ def plot(
     delta=0,
     is_edge_only=False,
     comp_machine=None,
-    is_show=True,
+    is_show_fig=True,
     save_path=None,
 ):
     """Plot the Machine in a matplotlib fig
@@ -83,7 +83,7 @@ def plot(
         "alpha": alpha,
         "delta": delta,
         "is_edge_only": is_edge_only,
-        "is_show": is_show,
+        "is_show_fig": is_show_fig,
     }
 
     _plot(plot_frame, fig, plot_args)
@@ -93,10 +93,20 @@ def plot(
 
     if comp_machine is not None:
         comp_machine.rotor.plot(
-            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=True, is_show=is_show
+            fig,
+            sym=sym,
+            alpha=alpha,
+            delta=delta,
+            is_edge_only=True,
+            is_show_fig=is_show_fig,
         )
         comp_machine.stator.plot(
-            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=True, is_show=is_show
+            fig,
+            sym=sym,
+            alpha=alpha,
+            delta=delta,
+            is_edge_only=True,
+            is_show_fig=is_show_fig,
         )
 
     ax.set_xlabel("(m)")
@@ -104,7 +114,7 @@ def plot(
     ax.set_title(self.name)
 
     # Axis Setup
-    axis("equal")
+    plt.axis("equal")
 
     # The Lamination is centered in the figure
     ax.set_xlim(-Lim, Lim)
@@ -114,7 +124,7 @@ def plot(
         fig.savefig(save_path)
         plt.close()
 
-    if is_show:
+    if is_show_fig:
         fig.show()
 
 

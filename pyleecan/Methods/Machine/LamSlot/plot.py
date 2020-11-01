@@ -19,7 +19,7 @@ def plot(
     delta=0,
     is_edge_only=False,
     is_display=True,
-    is_show=True,
+    is_show_fig=True,
 ):
     """Plot the Lamination with empty Slots in a matplotlib fig
 
@@ -42,7 +42,7 @@ def plot(
         To plot transparent Patches
     is_display : bool
         False to return the patches
-    is_show : bool
+    is_show_fig : bool
         To call show at the end of the method
     Returns
     -------
@@ -92,7 +92,7 @@ def plot(
                 axes.set_title("Rotor with empty slot")
 
             legend(patch_leg, label_leg)
-        if is_show:
+        if is_show_fig:
             fig.show()
     else:
         return patches

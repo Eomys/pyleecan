@@ -81,7 +81,7 @@ def test_PostPlot():
     plot_machine_Tem_time1 = PostPlot(
         method="simu.machine.plot",
         param_dict={
-            "is_show": False,
+            "is_show_fig": False,
             "save_path": None,
             "fig": fig2,
             "ax": axes2[0],
