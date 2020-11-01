@@ -21,7 +21,6 @@ def plot_A_time_space(
     is_auto_ticks=True,
     component_list=None,
     is_show_fig=None,
-    fig=None,
 ):
     """Plots a field as a function of time and space (angle)
 
@@ -57,8 +56,6 @@ def plot_A_time_space(
         list of component names to plot in separate figures
     is_show_fig : bool
         True to show figure after plot
-    fig : Matplotlib.figure.Figure
-        existing figure to use if None create a new one
     """
 
     # Get Data object names
@@ -83,7 +80,6 @@ def plot_A_time_space(
                 save_path=save_path,
                 is_auto_ticks=is_auto_ticks,
                 is_show_fig=is_show_fig,
-                fig=fig,
             )
 
     else:
@@ -100,5 +96,4 @@ def plot_A_time_space(
             save_path=save_path,
             is_auto_ticks=is_auto_ticks,
             is_show_fig=is_show_fig,
-            fig=fig,
         )

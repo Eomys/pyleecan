@@ -13,6 +13,7 @@ def plot_A_quiver_2D(
     is_show_fig=None,
     save_path=None,
     fig=None,
+    ax=None,
 ):
     """Plots a 2D vector field
 
@@ -34,10 +35,13 @@ def plot_A_quiver_2D(
         full path including folder, name and extension of the file to save if save_path is not None
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        ax on which to plot the data
     """
 
-    # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
+    # Set figure if needed
+    if fig is None and ax is None:
+        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle")
 
     xlabel = "x [m]"
     ylabel = "y [m]"
@@ -58,6 +62,7 @@ def plot_A_quiver_2D(
         xy,
         [Ydata],
         fig=fig,
+        ax=ax,
         title=title,
         xlabel=xlabel,
         ylabel=ylabel,
