@@ -1,3 +1,6 @@
+from inspect import getfullargspec
+
+
 def run(self, output):
     """Execute the plot contained in the PostPlot object and save it to save_path
 
@@ -26,8 +29,11 @@ def run(self, output):
         # Getting the name of the plot method of the output or the object given by attribute
         plot_method = getattr(obj, list_names[-1])
 
-    # Path to save the figure if save_format is not None
-    if "save_path" not in self.param_dict:
+    # Path to save the figure if save_path is not already in param_dict and is an argument of the plot method
+    if (
+        "save_path" not in self.param_dict
+        and "save_path" in getfullargspec(plot_method)[5]
+    ):
         # Get path of results folder in the Output
         result_path = output.get_path_result()
 
