@@ -15,6 +15,7 @@ def plot_A_quiver_2D(
     is_show_fig=None,
     save_path=None,
     fig=None,
+    ax=None,
 ):
     """Plots a field as a function of space (angle)
 
@@ -38,6 +39,8 @@ def plot_A_quiver_2D(
         full path including folder, name and extension of the file to save if save_path is not None
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        ax on which to plot the data
     """
 
     # Get Data object names
@@ -53,4 +56,6 @@ def plot_A_quiver_2D(
         unit=unit,
         is_show_fig=is_show_fig,
         save_path=save_path,
+        fig=fig,
+        ax=ax,
     )

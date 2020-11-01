@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from .....Functions.Plot.plot_3D_Data import plot_3D_Data as plot_3D_Data_fct
-from .....Functions.init_fig import init_fig
 from SciDataTool import VectorField
 
 
@@ -23,6 +22,7 @@ def plot_3D_Data(
     is_2D_view=False,
     N_stem=100,
     fig=None,
+    ax=None,
     is_show_fig=None,
 ):
     """Plots a field as a function of time
@@ -61,6 +61,8 @@ def plot_3D_Data(
         number of harmonics to plot (only for stem plots)
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        ax on which to plot the data
     is_show_fig : bool
         True to show figure after plot
     """
@@ -74,7 +76,6 @@ def plot_3D_Data(
         if component_list is None:  # default: extract all components
             component_list = data.components.keys()
         for i, comp in enumerate(component_list):
-            (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
 
             if save_path is not None:
                 save_path_comp = (
@@ -99,11 +100,11 @@ def plot_3D_Data(
                 is_2D_view=is_2D_view,
                 N_stem=N_stem,
                 fig=fig,
+                ax=ax,
                 is_show_fig=is_show_fig,
             )
 
     else:
-        (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
         plot_3D_Data_fct(
             data,
             arg_list,
@@ -120,5 +121,6 @@ def plot_3D_Data(
             is_2D_view=is_2D_view,
             N_stem=N_stem,
             fig=fig,
+            ax=ax,
             is_show_fig=is_show_fig,
         )

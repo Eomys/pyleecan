@@ -26,22 +26,22 @@ def run(self, output):
         # Getting the name of the plot method of the output or the object given by attribute
         plot_method = getattr(obj, list_names[-1])
 
-    # Get path of results folder in the Output
-    result_path = output.get_path_result()
+    # Path to save the figure if save_format is not None
+    if "save_path" not in self.param_dict:
+        # Get path of results folder in the Output
+        result_path = output.get_path_result()
 
-    # Check in case format begins with a "."
-    if self.save_format[0] == ".":
-        str_format = self.save_format
-    else:
-        str_format = "." + self.save_format
+        # Check in case format begins with a "."
+        if self.save_format[0] == ".":
+            str_format = self.save_format
+        else:
+            str_format = "." + self.save_format
 
-    # Build save_path of the picture
-    save_path = result_path + "/" + self.name + str_format
+        # Build save_path of the picture
+        self.param_dict["save_path"] = result_path + "/" + self.name + str_format
 
     # Execute plot method
     plot_method(
         *self.param_list,
         **self.param_dict,
-        is_show_fig=self.is_show_fig,
-        save_path=save_path
     )

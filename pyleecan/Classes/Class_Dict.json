@@ -7164,7 +7164,7 @@
                 "name": "name",
                 "type": "str",
                 "unit": "",
-                "value": "None"
+                "value": "[]"
             },
             {
                 "desc": "Dictionnary of parameters to pass to the plot method when executing it",
@@ -7183,15 +7183,6 @@
                 "type": "dict",
                 "unit": "",
                 "value": {}
-            },
-            {
-                "desc": "True to show the figure after plotting",
-                "max": "",
-                "min": "",
-                "name": "is_show_fig",
-                "type": "bool",
-                "unit": "",
-                "value": 1
             },
             {
                 "desc": "File format extension (\"png\", \"svg\", \"eps\") in which to save the figure",

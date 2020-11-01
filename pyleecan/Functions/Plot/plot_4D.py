@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import matplotlib.pyplot as plt
-import mpl_toolkits.mplot3d.art3d as art3d
 
-from ...Functions.init_fig import init_subplot
+from ...Functions.init_fig import init_fig
 from ...definitions import config_dict
 
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
@@ -33,7 +32,7 @@ def plot_4D(
     xticklabels=None,
     yticklabels=None,
     fig=None,
-    subplot_index=None,
+    ax=None,
     is_logscale_x=False,
     is_logscale_y=False,
     is_logscale_z=False,
@@ -80,8 +79,8 @@ def plot_4D(
         list of ticks to use for the x-axis
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
-    subplot_index : int
-        index of subplot in which to plot
+    ax : Matplotlib.axes.Axes object
+        ax on which to plot the data
     is_logscale_x : bool
         boolean indicating if the x-axis must be set in logarithmic scale
     is_logscale_y : bool
@@ -102,10 +101,13 @@ def plot_4D(
     if is_show_fig is None:
         is_show_fig = True if fig is None else False
 
+    # Set figure if needed
+    if fig is None and ax is None:
+        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle")
+
     is_3d = False
     if type != "scatter":
         is_3d = True
-    fig, ax = init_subplot(fig=fig, subplot_index=subplot_index, is_3d=is_3d)
 
     # Plot
     if type == "scatter":

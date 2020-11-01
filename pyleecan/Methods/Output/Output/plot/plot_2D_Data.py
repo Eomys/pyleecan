@@ -25,6 +25,8 @@ def plot_2D_Data(
     is_disp_title=True,
     is_grid=True,
     is_auto_ticks=True,
+    fig=None,
+    ax=None,
     barwidth=100,
     type_plot=None,
     fund_harm_dict=None,
@@ -72,6 +74,10 @@ def plot_2D_Data(
         boolean indicating if the grid must be displayed
     is_auto_ticks : bool
         in fft, adjust ticks to freqs (deactivate if too close)
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        ax on which to plot the data
     barwidth : float
         barwidth scaling factor, only if type_plot = "bargraph"
     type_plot : str
@@ -95,7 +101,7 @@ def plot_2D_Data(
         if component_list is None:  # default: extract all components
             component_list = data.components.keys()
         for i, comp in enumerate(component_list):
-            (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+            # (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
 
             if save_path is not None:
                 save_path_comp = (
@@ -123,6 +129,7 @@ def plot_2D_Data(
                 is_grid=is_grid,
                 is_auto_ticks=is_auto_ticks,
                 fig=fig,
+                ax=ax,
                 barwidth=barwidth,
                 type_plot=type_plot,
                 fund_harm_dict=fund_harm_dict,
@@ -130,7 +137,7 @@ def plot_2D_Data(
             )
 
     else:
-        (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+        # (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
         plot_2D_Data_fct(
             data,
             arg_list,
@@ -150,6 +157,7 @@ def plot_2D_Data(
             is_grid=is_grid,
             is_auto_ticks=is_auto_ticks,
             fig=fig,
+            ax=ax,
             barwidth=barwidth,
             type_plot=type_plot,
             fund_harm_dict=fund_harm_dict,

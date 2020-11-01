@@ -4,6 +4,8 @@ import pytest
 
 from numpy import exp, sqrt, pi
 
+import matplotlib.pyplot as plt
+
 from pyleecan.Classes.Simu1 import Simu1
 
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -38,37 +40,84 @@ def test_PostPlot():
         Id_ref=Id_ref,
         Iq_ref=Iq_ref,
         Na_tot=252 * 8,
-        Nt_tot=2 * 8,
+        Nt_tot=20 * 8,
         N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity
-    simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True)
+    simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True, nb_worker=4)
     simu.force = ForceMT(is_periodicity_a=True, is_periodicity_t=True)
 
-    plot_B_radial_space = PostPlot(
+    # Plot radial and tangential flux densities over angle as an automated PostProc
+    # and save the picture
+    fig1, axes1 = plt.subplots(2, 1)
+    fig2, axes2 = plt.subplots(1, 2)
+
+    plot_B_rad_tan_space1 = PostPlot(
         method="plot_2D_Data",
         param_list=["mag.B", "angle"],
         param_dict={
             "component_list": ["radial"],
+            "is_show_fig": False,
+            "save_path": None,
+            "fig": fig1,
+            "ax": axes1[0],
         },
-        name="plot_B_radial_space",
-        is_show_fig=True,
-        save_format="png",
     )
 
-    plot_B_tangential_space = PostPlot(
+    plot_B_rad_tan_space2 = PostPlot(
         method="plot_2D_Data",
         param_list=["mag.B", "angle"],
         param_dict={
             "component_list": ["tangential"],
+            "is_show_fig": True,
+            "fig": fig1,
+            "ax": axes1[1],
         },
-        name="plot_B_tangential_space",
-        is_show_fig=False,
+        name="plot_B_rad_tan_space",
+        save_format="png",
+    )
+
+    plot_machine_Tem_time1 = PostPlot(
+        method="simu.machine.plot",
+        param_dict={
+            "is_show": False,
+            "save_path": None,
+            "fig": fig2,
+            "ax": axes2[0],
+        },
+    )
+
+    plot_machine_Tem_time2 = PostPlot(
+        method="plot_2D_Data",
+        param_list=["mag.Tem", "time"],
+        param_dict={
+            "is_show_fig": True,
+            "fig": fig2,
+            "ax": axes2[1],
+        },
+        name="plot_machine_Tem_time",
+        save_format="png",
+    )
+
+    plot_P_radial_space_svg = PostPlot(
+        method="plot_2D_Data",
+        param_list=["force.P", "angle"],
+        param_dict={
+            "component_list": ["radial"],
+            "is_show_fig": False,
+        },
+        name="plot_P_radial_space",
         save_format="svg",
     )
 
-    simu.postproc_list = [plot_B_radial_space, plot_B_tangential_space]
+    simu.postproc_list = [
+        plot_B_rad_tan_space1,
+        plot_B_rad_tan_space2,
+        plot_machine_Tem_time1,
+        plot_machine_Tem_time2,
+        plot_P_radial_space_svg,
+    ]
 
     # Run simulations
     out = simu.run()

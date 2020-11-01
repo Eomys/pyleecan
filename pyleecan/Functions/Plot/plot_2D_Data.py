@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from ..init_fig import init_fig
 from .plot_2D import plot_2D
 from . import unit_dict, norm_dict, axes_dict
 from ...definitions import config_dict
@@ -26,6 +25,7 @@ def plot_2D_Data(
     is_grid=True,
     is_auto_ticks=True,
     fig=None,
+    ax=None,
     barwidth=100,
     type_plot=None,
     fund_harm_dict=None,
@@ -71,6 +71,8 @@ def plot_2D_Data(
         in fft, adjust ticks to freqs (deactivate if too close)
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        ax on which to plot the data
     barwidth : float
         barwidth scaling factor, only if type_plot = "bargraph"
     type_plot : str
@@ -84,12 +86,6 @@ def plot_2D_Data(
     # Extract arg_list it the function called from another script with *arg_list
     if len(arg_list) == 1 and type(arg_list[0]) == tuple:
         arg_list = arg_list[0]
-
-    # Set plot
-    if is_show_fig is None:
-        is_show_fig = True if fig is None else False
-
-    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
 
     # Get colors and line_styles from config_dict
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
@@ -327,6 +323,7 @@ def plot_2D_Data(
             legend_list=legends,
             color_list=color_list,
             fig=fig,
+            ax=ax,
             title=title,
             xlabel=xlabel,
             ylabel=ylabel,
@@ -358,6 +355,7 @@ def plot_2D_Data(
             legend_list=legends,
             color_list=color_list,
             fig=fig,
+            ax=ax,
             title=title,
             xlabel=xlabel,
             ylabel=ylabel,

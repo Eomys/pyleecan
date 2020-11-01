@@ -48,10 +48,9 @@ class PostPlot(PostMethod):
     def __init__(
         self,
         method=None,
-        name=None,
+        name="[]",
         param_list=-1,
         param_dict=-1,
-        is_show_fig=True,
         save_format="png",
         init_dict=None,
         init_str=None,
@@ -79,8 +78,6 @@ class PostPlot(PostMethod):
                 param_list = init_dict["param_list"]
             if "param_dict" in list(init_dict.keys()):
                 param_dict = init_dict["param_dict"]
-            if "is_show_fig" in list(init_dict.keys()):
-                is_show_fig = init_dict["is_show_fig"]
             if "save_format" in list(init_dict.keys()):
                 save_format = init_dict["save_format"]
         # Set the properties (value check and convertion are done in setter)
@@ -88,7 +85,6 @@ class PostPlot(PostMethod):
         self.name = name
         self.param_list = param_list
         self.param_dict = param_dict
-        self.is_show_fig = is_show_fig
         self.save_format = save_format
         # Call PostMethod init
         super(PostPlot, self).__init__()
@@ -110,7 +106,6 @@ class PostPlot(PostMethod):
             + linesep
         )
         PostPlot_str += "param_dict = " + str(self.param_dict) + linesep
-        PostPlot_str += "is_show_fig = " + str(self.is_show_fig) + linesep
         PostPlot_str += 'save_format = "' + str(self.save_format) + '"' + linesep
         return PostPlot_str
 
@@ -131,8 +126,6 @@ class PostPlot(PostMethod):
             return False
         if other.param_dict != self.param_dict:
             return False
-        if other.is_show_fig != self.is_show_fig:
-            return False
         if other.save_format != self.save_format:
             return False
         return True
@@ -150,7 +143,6 @@ class PostPlot(PostMethod):
         PostPlot_dict["param_dict"] = (
             self.param_dict.copy() if self.param_dict is not None else None
         )
-        PostPlot_dict["is_show_fig"] = self.is_show_fig
         PostPlot_dict["save_format"] = self.save_format
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -164,7 +156,6 @@ class PostPlot(PostMethod):
         self.name = None
         self.param_list = None
         self.param_dict = None
-        self.is_show_fig = None
         self.save_format = None
         # Set to None the properties inherited from PostMethod
         super(PostPlot, self)._set_None()
@@ -242,24 +233,6 @@ class PostPlot(PostMethod):
         doc=u"""Dictionnary of parameters to pass to the plot method when executing it
 
         :Type: dict
-        """,
-    )
-
-    def _get_is_show_fig(self):
-        """getter of is_show_fig"""
-        return self._is_show_fig
-
-    def _set_is_show_fig(self, value):
-        """setter of is_show_fig"""
-        check_var("is_show_fig", value, "bool")
-        self._is_show_fig = value
-
-    is_show_fig = property(
-        fget=_get_is_show_fig,
-        fset=_set_is_show_fig,
-        doc=u"""True to show the figure after plotting
-
-        :Type: bool
         """,
     )
 

@@ -1,7 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 method,,"Full path of the plot method to call except Output (ex: ""plot_2D_Data"", ""mag.meshsolution.plot_contour"")",,str,None,,,,Post,PostMethod,run,VERSION,1,Post-processing to do a plot which is a method of Output or other class if attribute is not None
-name,,Name of the plot to use when saving the figure after plotting,,str,None,,,,,,,,,
+name,,Name of the plot to use when saving the figure after plotting,,str,[],,,,,,,,,
 param_list,,Dictionnary of parameters to pass to the plot method when executing it,,list,[],,,,,,,,,
 param_dict,,Dictionnary of parameters to pass to the plot method when executing it,,dict,{},,,,,,,,,
-is_show_fig,,True to show the figure after plotting,,bool,1,,,,,,,,,
 save_format,,"File format extension (""png"", ""svg"", ""eps"") in which to save the figure",,str,png,,,,,,,,,
