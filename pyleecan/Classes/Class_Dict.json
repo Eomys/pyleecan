@@ -6743,10 +6743,10 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing the main FEMM parameter",
+                "desc": "Dictionnary containing the main FEA parameter",
                 "max": "",
                 "min": "",
-                "name": "FEMM_dict",
+                "name": "FEA_dict",
                 "type": "dict",
                 "unit": "",
                 "value": null

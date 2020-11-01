@@ -166,7 +166,7 @@ def solve_FEA(self, output, sym, axes_dict):
             values=Phi_wind_stator,
         )
 
-    output.mag.FEMM_dict = FEMM_dict
+    output.mag.FEA_dict = FEA_dict
 
     if self.is_get_mesh:
         output.mag.meshsolution = self.build_meshsolution(
