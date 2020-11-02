@@ -5,25 +5,18 @@ from os.path import basename, splitext
 from SciDataTool import DataTime, VectorField, Data1D
 from os.path import join
 
-from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
-from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
-from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
-def solve_FEMM(self, femm, output, sym, axes_dict):
+def solve_FEA(self, output, sym, axes_dict):
     """
-    Solve FEMM model to calculate airgap flux density, torque instantaneous/average/ripple values,
+    Solve Elmer model to calculate airgap flux density, torque instantaneous/average/ripple values,
     flux induced in stator windings and flux density, field and permeability maps
-
-    /!\ Any changes in solve_FEMM must be also made in solve_FEMM_parallel
 
     Parameters
     ----------
-    self: MagFEMM
-        A MagFEMM object
-    femm: FEMMHandler
-        Object to handle FEMM
+    self: MagElmer
+        A MagElmer object
     output: Output
         An Output object
     sym: int
@@ -61,7 +54,7 @@ def solve_FEMM(self, femm, output, sym, axes_dict):
     # Loading parameters for readibility
     L1 = output.simu.machine.stator.comp_length()
     save_path = self.get_path_save(output)
-    FEMM_dict = output.mag.FEA_dict
+    FEM_dict = output.mag.FEM_dict
 
     if (
         hasattr(output.simu.machine.stator, "winding")
@@ -73,92 +66,48 @@ def solve_FEMM(self, femm, output, sym, axes_dict):
     else:
         Phi_wind_stator = None
 
-    # Create the mesh
-    femm.mi_createmesh()
-
     # Initialize results matrix
     Br = zeros((Nt_comp, Na_comp))
     Bt = zeros((Nt_comp, Na_comp))
     Tem = zeros((Nt_comp))
 
-    Rag = output.simu.machine.comp_Rgap_mec()
+    # compute the data for each time step
+    # TODO Other than FEMM, in Elmer I think it's possible to compute
+    #      all time steps at once
+    self.get_logger().debug("Solving Simulation")
 
-    # Compute the data for each time step
-    for ii in range(Nt_comp):
-        self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt_comp))
-        # Update rotor position and currents
-        update_FEMM_simulation(
-            femm=femm,
-            output=output,
-            materials=FEMM_dict["materials"],
-            circuits=FEMM_dict["circuits"],
-            is_mmfs=self.is_mmfs,
-            is_mmfr=self.is_mmfr,
-            j_t0=ii,
-            is_sliding_band=self.is_sliding_band,
-        )
-        # try "previous solution" for speed up of FEMM calculation
-        if self.is_sliding_band:
-            try:
-                base = basename(self.get_path_save_fem(output))
-                ans_file = splitext(base)[0] + ".ans"
-                femm.mi_setprevious(ans_file, 0)
-            except:
-                pass
+    # run the computation
+    if self.nb_worker > 1:
+        # TODO run solver in parallel
+        pass
+    else:
+        # TODO run solver 'normal'
+        pass
 
-        # Run the computation
-        femm.mi_analyze()
+    # get the air gap flux result
+    # TODO add function (or method)
+    # ii -> Time, jj -> Angle
+    # Br[ii, jj], Bt[ii, jj] = get_airgap_flux()
 
-        # Load results
-        femm.mi_loadsolution()
+    # get the torque
+    # TODO add function (or method)
+    # Tem[ii] = comp_Elmer_torque(FEM_dict, sym=sym)
 
-        # Get the flux result
-        if self.is_sliding_band:
-            for jj in range(Na_comp):
-                Br[ii, jj], Bt[ii, jj] = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
-        else:
-            for jj in range(Na_comp):
-                B = femm.mo_getb(Rag * np.cos(angle[jj]), Rag * np.sin(angle[jj]))
-                Br[ii, jj] = B[0] * np.cos(angle[jj]) + B[1] * np.sin(angle[jj])
-                Bt[ii, jj] = -B[0] * np.sin(angle[jj]) + B[1] * np.cos(angle[jj])
+    # flux linkage computation
+    if (
+        hasattr(output.simu.machine.stator, "winding")
+        and output.simu.machine.stator.winding is not None
+    ):
+        # TODO
+        # Phi_wind[ii, :] = comp_Elmer_Phi_wind()
+        pass
 
-        # Compute the torque
-        Tem[ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
+    # store mesh data & solution if requested
+    if (Nt_comp == 1) and (self.is_get_mesh or self.is_save_FEA):
+        output.mag.meshsolution = self.get_meshsolution()
 
-        if (
-            hasattr(output.simu.machine.stator, "winding")
-            and output.simu.machine.stator.winding is not None
-        ):
-            # Phi_wind computation
-            Phi_wind_stator[ii, :] = comp_FEMM_Phi_wind(
-                femm,
-                qs,
-                Npcpp,
-                is_stator=True,
-                Lfemm=FEMM_dict["Lfemm"],
-                L1=L1,
-                sym=sym,
-            )
-
-        # Load mesh data & solution
-        if (self.is_sliding_band or Nt_comp == 1) and (
-            self.is_get_mesh or self.is_save_FEA
-        ):
-            tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
-                femm, save_path, ii
-            )
-
-            if ii == 0:
-                meshFEMM = [tmpmeshFEMM]
-                groups = [tmpgroups]
-                B_elem = np.zeros([Nt_comp, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                H_elem = np.zeros([Nt_comp, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                mu_elem = np.zeros([Nt_comp, meshFEMM[ii].cell["triangle"].nb_cell])
-
-            B_elem[ii, :, 0:2] = tmpB
-            H_elem[ii, :, 0:2] = tmpH
-            mu_elem[ii, :] = tmpmu
-
+    # The following code may be unified with FEMM post processing
+    """
     # Shift to take into account stator position
     roll_id = int(self.angle_stator * Na_comp / (2 * pi))
     Br = roll(Br, roll_id, axis=1)
@@ -217,11 +166,11 @@ def solve_FEMM(self, femm, output, sym, axes_dict):
             values=Phi_wind_stator,
         )
 
-    output.mag.FEA_dict = FEMM_dict
+    output.mag.FEA_dict = FEA_dict
 
     if self.is_get_mesh:
         output.mag.meshsolution = self.build_meshsolution(
-            Nt_comp, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
+            Nt_comp, meshFEM, Time, B_elem, H_elem, mu_elem, groups
         )
 
     if self.is_save_FEA:
@@ -236,6 +185,4 @@ def solve_FEMM(self, femm, output, sym, axes_dict):
         self.comp_emf()
     else:
         output.mag.emf = None
-
-    if self.is_close_femm:
-        femm.closefemm()
+    """
