@@ -2,7 +2,7 @@ import pytest
 import sys
 import json
 
-from os import makedirs
+from os import makedirs, removedirs
 from os.path import join
 from pyleecan.Functions.load import load
 from pyleecan.Classes.Simu1 import Simu1
@@ -61,10 +61,8 @@ def test_gmsh_2d():
         path_save=join(save_path, "GSMH_model_ipm.msh"),
     )
 
-#    with open("gmsh_test_ipm.json", "w") as fw:
-#        json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
-
-
+    with open(join(save_path,"gmsh_test_ipm.json"), "w") as fw:
+        json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
 @pytest.mark.long
 @pytest.mark.GMSH
@@ -76,7 +74,6 @@ def test_gmsh_spm():
     # Import the machine from a script
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
     save_path = join(save_plot_path, "GMSH")
-    makedirs(save_path)
     # Plot the machine
     # im = PMSM_A.plot()
 
@@ -110,7 +107,7 @@ def test_gmsh_spm():
         path_save=join(save_path, "GSMH_model_spm.msh")
     )
 
-    with open("gmsh_test_spm.json", "w") as fw:
+    with open(join(save_path, "gmsh_test_spm.json"), "w") as fw:
         json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
 
