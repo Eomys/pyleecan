@@ -41,20 +41,15 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
         QWidget.__init__(self)
         self.setupUi(self)
 
+        # Set properties
         self.matlib = matlib
         self.hole = hole
         self.u = gui_option.unit
+        self.w_mat_dict = dict()  # For magnet materials
 
-        self.update_graph()
-
-        # Set default materials
+        # Setup void material
         self.w_mat_0.setText("mat_void:")
         self.w_mat_0.def_mat = "Air"
-        self.w_mat_0.update(self.hole, "mat_void", self.matlib)
-
-        self.w_mat_dict = dict()  # For magnet materials
-        self.update_mag_list()
-        self.comp_output()
 
         # Setup Path selector for Json files
         self.w_path_json.obj = None
@@ -63,6 +58,12 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
         self.w_path_json.extension = "JSON file (*.json)"
         self.w_path_json.update()
 
+        # Update the GUI according to the current hole
+        self.update_mag_list()
+        self.update_graph()
+        self.comp_output()
+
+        # Connect the signals
         self.b_dxf.clicked.connect(self.open_dxf_hole)
         self.w_path_json.pathChanged.connect(self.load_hole)
 
@@ -90,15 +91,39 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
                 self.hole.magnet_dict["magnet_" + str(index)], "mat_type", self.matlib
             )
 
+    def update_graph(self):
+        """Plot the lamination with/without the hole"""
+        # Use a copy to avoid changing the main object
+        lam = self.hole.parent.copy()
+        try:
+            self.hole.check()
+            lam.hole = [self.hole]
+        except SlotCheckError:
+            # Plot only the lamination
+            lam.hole = list()
+        # Plot the lamination in the viewer fig
+        lam.plot(fig=self.w_viewer.fig, is_show=False)
+
+        # Update the Graph
+        self.w_viewer.draw()
+        self.w_viewer.axes.axis("off")
+        self.w_viewer.axes.autoscale(enable=True, axis="both")
+        if self.w_viewer.axes.get_legend():
+            self.w_viewer.axes.get_legend().remove()
+
     def load_hole(self):
         """Load the selected json file and display the hole"""
+        # Check that the json file is correct
         try:
             hole = load(self.w_path_json.get_path())
         except Exception as e:
             QMessageBox().critical(
-                self, self.tr("Error"), self.tr("Error when loading file:\n" + str(e)),
+                self,
+                self.tr("Error"),
+                self.tr("Error when loading file:\n" + str(e)),
             )
             return
+        # Check that the json file contain a HoleUD
         if not isinstance(hole, HoleUD):
             QMessageBox().critical(
                 self,
@@ -109,42 +134,32 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
             )
             return
 
-        # Import is correct
+        # Update the hole object
         Zh = self.hole.Zh
         parent = self.hole.parent
         self.hole.__init__(init_dict=hole.as_dict())  # keep pointer
         self.hole.Zh = Zh
         self.hole.parent = parent
 
+        # Update the new GUI according to the slot
         self.update_graph()
         self.update_mag_list()
         self.comp_output()
 
-    def update_graph(self):
-        lam = self.hole.parent.copy()
-        try:
-            self.hole.check()
-            lam.hole = [self.hole]
-        except SlotCheckError:
-            # Plot only the lamination
-            lam.hole = list()
-        lam.plot(fig=self.w_viewer.fig, is_show=False)
-
-        self.w_viewer.draw()
-        self.w_viewer.axes.axis("off")
-        self.w_viewer.axes.autoscale(enable=True, axis="both")
-        if self.w_viewer.axes.get_legend():
-            self.w_viewer.axes.get_legend().remove()
-
     def open_dxf_hole(self):
         """Open the GUI to define the HoleUD"""
+        # Init GUI with lamination parameters
         self.dxf_gui = DXF_Hole(Zh=self.hole.Zh, Lmag=self.hole.parent.L1)
-        self.dxf_gui.setWindowFlags(Qt.Window)
+        self.dxf_gui.setWindowFlags(Qt.Window)  # To maximize the GUI
         self.dxf_gui.show()
+        # Update the hole when saving
         self.dxf_gui.accepted.connect(self.set_dxf_path)
 
     def set_dxf_path(self):
+        """Update the hole according to the file defined by DXF_Hole"""
+        # Get the saving path from DXF_Hole
         self.w_path_json.set_path_txt(self.dxf_gui.save_path)
+        # Update hole and GUI
         self.load_hole()
         self.dxf_gui = None
 
