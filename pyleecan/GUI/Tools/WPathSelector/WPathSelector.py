@@ -69,7 +69,9 @@ class WPathSelector(Ui_WPathSelector, QWidget):
 
     def set_path_txt(self, path):
         """Set the line edit text"""
-        self.le_path.setText(path.replace("\\", "/"))
+        if path is not None:
+            path = path.replace("\\", "/")
+        self.le_path.setText(path)
 
     def set_obj_path(self):
         """Update the object with the current path (if correct)"""
