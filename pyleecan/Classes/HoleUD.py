@@ -36,6 +36,11 @@ try:
 except ImportError as error:
     remove_magnet = error
 
+try:
+    from ..Methods.Slot.HoleUD.check import check
+except ImportError as error:
+    check = error
+
 
 from ._check import InitUnKnowClassError
 from .Surface import Surface
@@ -93,6 +98,15 @@ class HoleUD(HoleMag):
         )
     else:
         remove_magnet = remove_magnet
+    # cf Methods.Slot.HoleUD.check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleUD method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # save and copy methods are available in all object
     save = save
     copy = copy

@@ -1425,7 +1425,10 @@
             "get_Rbo",
             "has_magnet",
             "plot",
-            "comp_height"
+            "comp_height",
+            "get_magnet_by_id",
+            "set_magnet_by_id",
+            "get_magnet_dict"
         ],
         "mother": "",
         "name": "Hole",
@@ -2288,7 +2291,8 @@
             "build_geometry",
             "comp_surface_magnet_id",
             "has_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "check"
         ],
         "mother": "HoleMag",
         "name": "HoleUD",
