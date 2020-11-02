@@ -40,7 +40,12 @@ class SPreview(Ui_SPreview, QWidget):
         self.tab_machine.update_tab(self.machine)
 
         self.machine.plot(
-            fig=self.w_plot.fig, sym=1, alpha=0, delta=0, is_show_fig=False
+            fig=self.w_plot.fig,
+            ax=self.w_plot.axes,
+            sym=1,
+            alpha=0,
+            delta=0,
+            is_show_fig=False,
         )
         self.w_plot.axes.set_axis_off()
         if self.w_plot.axes.get_legend() is not None:

@@ -101,7 +101,7 @@ def plot_3D(
 
     # Set figure if needed
     if fig is None and ax is None:
-        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle")
+        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle", is_3d=True)
 
     # Set if figure is 3D
     if type != "pcolor" and type != "scatter":

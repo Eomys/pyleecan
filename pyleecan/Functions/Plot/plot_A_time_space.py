@@ -163,7 +163,7 @@ def plot_A_time_space(
     )
 
     axs[0, 1].axis("off")
-    axs[0, 1].title("off")
+    axs[0, 1].set_title("")
 
     fig.canvas.set_window_title(title)
     fig.suptitle(title, x=0.65, fontsize=24, fontname=FONT_NAME)

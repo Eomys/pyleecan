@@ -7185,7 +7185,7 @@
                 "value": {}
             },
             {
-                "desc": "File format extension (\"png\", \"svg\", \"eps\") in which to save the figure",
+                "desc": "File format extension (\"png\", \"svg\", \"eps\") in which to save the figure. The PostPlot automatically saves the figure in the results folder. The user can specify a different folder by specifying \"save_path\"=path_str or not save the figure by specifying \"save_path\"=None in param_dict, if the plot_method enables it.",
                 "max": "",
                 "min": "",
                 "name": "save_format",

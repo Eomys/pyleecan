@@ -248,7 +248,7 @@ class PostPlot(PostMethod):
     save_format = property(
         fget=_get_save_format,
         fset=_set_save_format,
-        doc=u"""File format extension ("png", "svg", "eps") in which to save the figure
+        doc=u"""File format extension ("png", "svg", "eps") in which to save the figure. The PostPlot automatically saves the figure in the results folder. The user can specify a different folder by specifying "save_path"=path_str or not save the figure by specifying "save_path"=None in param_dict, if the plot_method enables it.
 
         :Type: str
         """,
