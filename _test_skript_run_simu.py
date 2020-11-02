@@ -46,9 +46,8 @@ mySimu.input.angle.value = linspace(
 mySimu.input.N0 = rotor_speed
 
 # Stator currents [A]
-mySimu.input.Id_ref = -100
+mySimu.input.Id_ref = 0
 mySimu.input.Iq_ref = 0
-mySimu.input.rot_dir = 1
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 
@@ -64,16 +63,15 @@ mySimu.mag = MagFEMM(
     file_name="",  # Name of the file to save the FEMM model
     Kmesh_fineness=1,  # mesh fineness (1:default ,>1: finner ,<1: less fine)
     Kgeo_fineness=1,  # geometry fineness (1:default ,>1: finner ,<1: less fine)
+    nb_worker=1, # nbr. of threats to use for FEMM calculation
 )
 
 # We only use the magnetic part
 mySimu.force = None
 mySimu.struct = None
 
-mySimu.mag.is_symmetry_a = True  # 0 Compute on the complete machine,
-# 1 compute according to sym_a and is_antiper_a
-mySimu.mag.sym_a = 4  # Number of symmetry for the angle vector
-mySimu.mag.is_antiper_a = False  # To add an antiperiodicity to the angle vector
+mySimu.mag.is_periodicity_a = True  # 0 Compute on the complete machine,
+                                    # 1 compute symmetry
 
 mySimu.mag.is_get_mesh = True  # To get FEA mesh for latter post-procesing
 mySimu.mag.is_save_FEA = False  # To save FEA results in a dat file
