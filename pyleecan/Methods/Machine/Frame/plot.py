@@ -9,7 +9,7 @@ from ....definitions import config_dict
 FRAME_COLOR = config_dict["PLOT"]["COLOR_DICT"]["FRAME_COLOR"]
 
 
-def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, is_show=True):
+def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, is_show_fig=True):
     """Plot the Frame in a matplotlib fig
 
     Parameters
@@ -26,7 +26,7 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, is_show=Tr
         Complex value for translation
     is_edge_only: bool
         To plot transparent Patches
-    is_show : bool
+    is_show_fig : bool
         To call show at the end of the method
 
     Returns
@@ -61,5 +61,5 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, is_show=Tr
             patch_leg.append(Patch(color=FRAME_COLOR))
             label_leg.append("Frame")
             axes.legend(patch_leg, label_leg)
-        if is_show:
+        if is_show_fig:
             fig.show()

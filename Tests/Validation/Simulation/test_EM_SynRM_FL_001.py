@@ -110,6 +110,7 @@ def test_Magnetic_Phi0():
         type_BH_rotor=0,
         is_periodicity_a=True,
         is_periodicity_t=False,
+        nb_worker=3,
     )
     simu.force = None
     simu.struct = None
