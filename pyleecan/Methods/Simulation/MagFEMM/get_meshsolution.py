@@ -38,17 +38,23 @@ def get_meshsolution(self, femm, save_path, j_t0):
         a MagFEMM object
     femm : FEMMHandler
         client to send command to a FEMM instance
-    is_get_mesh : bool
-        1 to load the mesh and solution into the simulation
-    is_save_FEA : bool
-        1 to save the mesh and solution into a .json file
+    save_path : string
+        path of the FEA results
     j_t0 : int
         Targeted time step
 
     Returns
     -------
-    res_path: str
-        path to the result folder
+    mesh : MeshMat
+        Mesh of the FEMM analysis
+    groups : dict
+        dict of group indices
+    B : ndarray
+        array of elemental B field
+    H : ndarray
+        array of elemental H field
+    mu : ndarray
+        array of elemental permeability
     """
 
     idworker = "1"  # For parallelization TODO

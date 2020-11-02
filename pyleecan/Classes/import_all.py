@@ -82,6 +82,7 @@ from ..Classes.MachineSyRM import MachineSyRM
 from ..Classes.MachineSync import MachineSync
 from ..Classes.MachineUD import MachineUD
 from ..Classes.MachineWRSM import MachineWRSM
+from ..Classes.MagElmer import MagElmer
 from ..Classes.MagFEMM import MagFEMM
 from ..Classes.Magnet import Magnet
 from ..Classes.MagnetFlat import MagnetFlat
