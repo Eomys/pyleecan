@@ -43,12 +43,12 @@ def test_FEMM_periodicity():
     )
 
     # Definition of the magnetic simulation: with periodicity
-    simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True)
+    simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True, nb_worker=2)
     simu.force = ForceMT(is_periodicity_a=True, is_periodicity_t=True)
 
     # Definition of the magnetic simulation: no periodicity
     simu2 = simu.copy()
-    simu2.mag = MagFEMM(is_periodicity_a=False, is_periodicity_t=False)
+    simu2.mag = MagFEMM(is_periodicity_a=False, is_periodicity_t=False, nb_worker=2)
     simu2.force = ForceMT(is_periodicity_a=False, is_periodicity_t=False)
 
     # Run simulations
