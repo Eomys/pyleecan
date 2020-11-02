@@ -1,11 +1,22 @@
-from ....Functions.Electrical.coordinate_transformation import dq2n
+
 from numpy import pi, array, transpose
+
 from SciDataTool import Data1D, DataTime
+
+from ....Functions.Electrical.coordinate_transformation import dq2n
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def get_Is(self):
-    """Return the stator current"""
+    """Return the stator current DataTime object
+
+    Parameters
+    ----------
+    self : OutElec
+        an OutElec object
+        
+    """
+    # Calculate stator currents if Is is not in OutElec
     if self.Is is None:
         # Generate current according to Id/Iq
         Isdq = array([self.Id_ref, self.Iq_ref])
