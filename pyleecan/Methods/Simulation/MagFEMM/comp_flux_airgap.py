@@ -18,10 +18,10 @@ def comp_flux_airgap(self, output, axes_dict):
     axes_dict: {Data}
         Dict of axes used for magnetic calculation
     """
-    
+
     # Init output
     Bz = None
-    
+
     # Get time and angular axes
     Angle = axes_dict["Angle"]
     Time = axes_dict["Time"]
@@ -33,7 +33,7 @@ def comp_flux_airgap(self, output, axes_dict):
     angle = Angle.get_values(
         is_oneperiod=self.is_periodicity_a,
         is_antiperiod=is_antiper_a and self.is_periodicity_a,
-    )    
+    )
 
     # Check if the time axis is anti-periodic
     _, is_antiper_t = Time.get_periodicity()
@@ -44,17 +44,17 @@ def comp_flux_airgap(self, output, axes_dict):
         is_antiperiod=is_antiper_t and self.is_periodicity_t,
     )
     Nt = time.size
-    
+
     # Get rotor anuglar position
     angle_rotor = output.get_angle_rotor()[0:Nt]
-    
+
     # Interpolate current on magnetic model time axis
     # Get stator current from elec out
     if self.is_mmfs:
-        Is = output.elec.comp_Is(time) 
+        Is = output.elec.comp_Is(time)
     else:
-        Is = None   
-    # Get rotor current from elec out    
+        Is = None
+    # Get rotor current from elec out
     Ir = output.elec.Ir  # TODO: same as for stator currents
 
     # Setup the FEMM simulation
@@ -95,24 +95,64 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Solve for all time step and store all the results in output
     if self.nb_worker > 1:
-        Br, Bt, Tem, Phi_wind_stator, FEMM_dict, meshFEMM, B_elem, H_elem, mu_elem, groups = self.solve_FEMM_parallel(femm, output, sym=sym, Nt=Nt, angle=angle, Is=Is, Ir=Ir, angle_rotor=angle_rotor)
+        (
+            Br,
+            Bt,
+            Tem,
+            Phi_wind_stator,
+            FEMM_dict,
+            meshFEMM,
+            B_elem,
+            H_elem,
+            mu_elem,
+            groups,
+        ) = self.solve_FEMM_parallel(
+            femm,
+            output,
+            sym=sym,
+            Nt=Nt,
+            angle=angle,
+            Is=Is,
+            Ir=Ir,
+            angle_rotor=angle_rotor,
+        )
     else:
-        Br, Bt, Tem, Phi_wind_stator, FEMM_dict, meshFEMM, B_elem, H_elem, mu_elem, groups = self.solve_FEMM(femm, output, sym=sym, Nt=Nt, angle=angle, Is=Is, Ir=Ir, angle_rotor=angle_rotor)
-    
+        (
+            Br,
+            Bt,
+            Tem,
+            Phi_wind_stator,
+            FEMM_dict,
+            meshFEMM,
+            B_elem,
+            H_elem,
+            mu_elem,
+            groups,
+        ) = self.solve_FEMM(
+            femm,
+            output,
+            sym=sym,
+            Nt=Nt,
+            angle=angle,
+            Is=Is,
+            Ir=Ir,
+            angle_rotor=angle_rotor,
+        )
+
     # Update FEMM_dict in OutMag
     output.mag.FEA_dict = FEMM_dict
-    
+
     # Store FEMM mesh results in meshsolution
     if self.is_get_mesh:
         # Build MeshSolution object and store it in OutMag
         output.mag.meshsolution = self.build_meshsolution(
             Nt, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
-        )    
-        
+        )
+
         # Save it as h5 on disk if requested
         if self.is_save_FEA:
             save_path = self.get_path_save(output)
             save_path_fea = join(save_path, "MeshSolutionFEMM.h5")
             output.mag.meshsolution.save(save_path_fea)
-        
+
     return Br, Bt, Bz, Tem, Phi_wind_stator

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from numpy import mean, max as np_max, min as np_min
 
-from SciDataTool import DataTime, VectorField
+from SciDataTool import DataTime, VectorField, Data1D
 
 from ....Methods.Simulation.Input import InputError
+from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def run(self):
@@ -18,29 +19,29 @@ def run(self):
         )
 
     self.get_logger().info("Starting Magnetic module")
-    output = self.parent.parent   
-    
+    output = self.parent.parent
+
     # Compute and store time and angle axes from elec output
     # and returns additional axes in axes_dict
-    axes_dict = self.comp_time_angle(output)    
-    
+    axes_dict = self.comp_time_angle(output)
+
     # Calculate airgap flux
-    (Br, Bt, Bz, Tem, Phi_wind_stator) = self.comp_flux_airgap(output, axes_dict)    
-    
+    (Br, Bt, Bz, Tem, Phi_wind_stator) = self.comp_flux_airgap(output, axes_dict)
+
     # Get time and angular axes
     Angle = axes_dict["Angle"]
-    Time = axes_dict["Time"]    
-    
+    Time = axes_dict["Time"]
+
     # Store the results
     # Store airgap flux as VectorField object
-    axis_list = [Time, Angle] # Axes for each airgap flux component
+    axis_list = [Time, Angle]  # Axes for each airgap flux component
     output.mag.B = VectorField(
-            name="Airgap flux density",
-            symbol="B",            
-        )
+        name="Airgap flux density",
+        symbol="B",
+    )
     # Radial flux component
     if Br is not None:
-         output.mag.B.components["radial"]= DataTime(
+        output.mag.B.components["radial"] = DataTime(
             name="Airgap radial flux density",
             unit="T",
             symbol="B_r",
@@ -48,8 +49,8 @@ def run(self):
             values=Br,
         )
     # Tangential flux component
-    if Bt is not None:     
-        output.mag.B.components["tangential"]= DataTime(
+    if Bt is not None:
+        output.mag.B.components["tangential"] = DataTime(
             name="Airgap tangential flux density",
             unit="T",
             symbol="B_t",
@@ -57,19 +58,19 @@ def run(self):
             values=Bt,
         )
     # Axial flux component
-    if Bz is not None:     
-        output.mag.B.components["axial"]= DataTime(
-            name="Airgap tangential flux density",
+    if Bz is not None:
+        output.mag.B.components["axial"] = DataTime(
+            name="Airgap axial flux density",
             unit="T",
             symbol="B_z",
             axes=axis_list,
             values=Bz,
         )
-        
+
     # Store electromagnetic torque over time, and global values: average, peak to peak and ripple
     if Tem is not None:
-        Time_Tem = axes_dict["Time_Tem"]    
-        
+        Time_Tem = axes_dict["Time_Tem"]
+
         output.mag.Tem = DataTime(
             name="Electromagnetic torque",
             unit="Nm",
@@ -77,20 +78,28 @@ def run(self):
             axes=[Time_Tem],
             values=Tem,
         )
-                
+
         output.mag.Tem_av = mean(Tem)
         self.get_logger().debug("Average Torque: " + str(output.mag.Tem_av) + " N.m")
-        
-        output.mag.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]    
+
+        output.mag.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]
         if output.mag.Tem_av != 0:
             output.mag.Tem_rip_norm = output.mag.Tem_rip_pp / output.mag.Tem_av  # []
         else:
             output.mag.Tem_rip_norm = None
-    
+
     # Store stator winding flux and calculate electromotive force
     if Phi_wind_stator is not None:
-        Phase = [axe for axe in Is.axes if axe.name == "phase"]
-        
+
+        qs = self.parent.machine.stator.winding.qs
+
+        Phase = Data1D(
+            name="phase",
+            unit="",
+            values=gen_name(qs),
+            is_components=True,
+        )
+
         output.mag.Phi_wind_stator = DataTime(
             name="Stator Winding Flux",
             unit="Wb",
@@ -98,7 +107,6 @@ def run(self):
             axes=[Time, Phase],
             values=Phi_wind_stator,
         )
-        
+
         # Electromotive forces computation (update output)
         output.mag.comp_emf()
-

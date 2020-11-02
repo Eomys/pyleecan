@@ -6177,7 +6177,8 @@
         "methods": [
             "get_Nr",
             "get_Is",
-            "get_Us"
+            "get_Us",
+            "comp_Is"
         ],
         "mother": "",
         "name": "OutElec",
@@ -6203,7 +6204,7 @@
                 "value": "None"
             },
             {
-                "desc": "Stator currents as a function of time (each column correspond to one phase)",
+                "desc": "Stator currents DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Is",
@@ -6646,7 +6647,9 @@
         "daughters": [],
         "desc": "Gather the magnetic module outputs",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "comp_emf"
+        ],
         "mother": "",
         "name": "OutMag",
         "package": "Output",
@@ -6671,7 +6674,7 @@
                 "value": "None"
             },
             {
-                "desc": "Airgap flux density components",
+                "desc": "Airgap flux density VectorField object",
                 "max": "",
                 "min": "",
                 "name": "B",
@@ -6680,7 +6683,7 @@
                 "value": "None"
             },
             {
-                "desc": "Electromagnetic torque",
+                "desc": "Electromagnetic torque DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Tem",
@@ -6716,7 +6719,7 @@
                 "value": null
             },
             {
-                "desc": "Stator winding flux",
+                "desc": "Stator winding flux DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Phi_wind_stator",
@@ -6725,13 +6728,13 @@
                 "value": "None"
             },
             {
-                "desc": "Electromotive force",
+                "desc": "Electromotive force DataTime object",
                 "max": "",
                 "min": "",
                 "name": "emf",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataTime.DataTime",
                 "unit": "V",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "FEA software mesh and solution",

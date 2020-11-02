@@ -1,4 +1,3 @@
-
 from numpy import pi, array, transpose
 
 from SciDataTool import Data1D, DataTime
@@ -14,7 +13,7 @@ def get_Is(self):
     ----------
     self : OutElec
         an OutElec object
-        
+
     """
     # Calculate stator currents if Is is not in OutElec
     if self.Is is None:

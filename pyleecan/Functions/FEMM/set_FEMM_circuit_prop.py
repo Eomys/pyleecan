@@ -23,7 +23,7 @@ def set_FEMM_circuit_prop(femm, circuits, Clabel, I=None):
         list the name of the circuits in FEMM
 
     """
-    
+
     # Find phase index of current surface label
     q_id = int(Clabel[5:])
 

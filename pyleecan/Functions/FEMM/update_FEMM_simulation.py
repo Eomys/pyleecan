@@ -5,7 +5,14 @@ from ...Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
 
 
 def update_FEMM_simulation(
-    femm, circuits, is_internal_rotor, is_sliding_band, angle_rotor, Is, Ir, 
+    femm,
+    circuits,
+    is_internal_rotor,
+    is_sliding_band,
+    angle_rotor,
+    Is,
+    Ir,
+    ii,
 ):
     """Update the simulation by changing the rotor position and
     updating the currents
@@ -20,36 +27,38 @@ def update_FEMM_simulation(
     is_internal_rotor: bool
         True if it is an internal rotor topology
     is_sliding_band: bool
-        True if it is an internal rotor topology        
+        True if it is an internal rotor topology
     angle_rotor: ndarray
         Vector of rotor angular position over time [Nt,]
     Is : ndarray
-        Stator currents for given time step and for all phases [qs,1]
+        Stator currents function of phase and time [qs,Nt]
     Ir : ndarray
-        Rotor currents for given time step and for all phases [qr,1]       
-        
-    """ 
+        Rotor currents function of phase and time [qr,Nt]
+    ii : int
+        Time step index
+
+    """
 
     if is_sliding_band:  # No rotation without sliding band.
         # Rotor rotation using sliding band
         if is_internal_rotor:
-            femm.mi_modifyboundprop("bc_ag2", 10, 180 * angle_rotor / pi)
+            femm.mi_modifyboundprop("bc_ag2", 10, 180 * angle_rotor[ii] / pi)
         else:
-            femm.mi_modifyboundprop("bc_ag2", 11, 180 * angle_rotor / pi)
-            
+            femm.mi_modifyboundprop("bc_ag2", 11, 180 * angle_rotor[ii] / pi)
+
     # Update currents
     for label in circuits:
-        if "Circs" in label:  # Stator
+        if "Circs" in label and Is is not None:  # Stator
             set_FEMM_circuit_prop(
                 femm,
                 circuits,
                 label,
-                Is,
+                Is[:, ii],
             )
-        if "Circr" in label:  # Rotor
+        if "Circr" in label and Is is not None:  # Rotor
             set_FEMM_circuit_prop(
                 femm,
                 circuits,
                 label,
-                Ir,
+                Ir[:, ii],
             )

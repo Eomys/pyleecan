@@ -1,7 +1,8 @@
-import numpy as np
-
-from numpy import zeros, pi, roll
 from os.path import basename, splitext
+
+from numpy import zeros, pi, roll, cos, sin
+
+# from scipy.interpolate import interp1d
 
 from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
@@ -29,7 +30,7 @@ def solve_FEMM(self, femm, output, sym, Nt, angle, Is, Ir, angle_rotor):
         Number of time steps for calculation
     angle: ndarray
         Angle vector for calculation
-    Is : ndarray 
+    Is : ndarray
         Stator current matrix [qs,Nt]
     Ir : ndarray
         Stator current matrix [qs,Nt]
@@ -38,7 +39,7 @@ def solve_FEMM(self, femm, output, sym, Nt, angle, Is, Ir, angle_rotor):
     """
     # Init outputs
     meshFEMM, B_elem, H_elem, mu_elem, groups = None, None, None, None, None
-    
+
     # Number of angular steps
     Na = angle.size
 
@@ -48,7 +49,7 @@ def solve_FEMM(self, femm, output, sym, Nt, angle, Is, Ir, angle_rotor):
     save_path = self.get_path_save(output)
     FEMM_dict = output.mag.FEA_dict
     is_internal_rotor = output.simu.machine.rotor.is_internal
-    
+
     # Init stator winding flux matrix
     if (
         hasattr(output.simu.machine.stator, "winding")
@@ -66,7 +67,7 @@ def solve_FEMM(self, femm, output, sym, Nt, angle, Is, Ir, angle_rotor):
     # Initialize results matrix
     Br = zeros((Nt, Na))
     Bt = zeros((Nt, Na))
-    Tem = zeros((Nt))  
+    Tem = zeros((Nt))
 
     # Compute the data for each time step
     for ii in range(Nt):
@@ -81,6 +82,7 @@ def solve_FEMM(self, femm, output, sym, Nt, angle, Is, Ir, angle_rotor):
             angle_rotor=angle_rotor,
             Is=Is,
             Ir=Ir,
+            ii=ii,
         )
         # try "previous solution" for speed up of FEMM calculation
         if self.is_sliding_band:
@@ -103,17 +105,14 @@ def solve_FEMM(self, femm, output, sym, Nt, angle, Is, Ir, angle_rotor):
                 Br[ii, jj], Bt[ii, jj] = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
         else:
             for jj in range(Na):
-                B = femm.mo_getb(Rag * np.cos(angle[jj]), Rag * np.sin(angle[jj]))
-                Br[ii, jj] = B[0] * np.cos(angle[jj]) + B[1] * np.sin(angle[jj])
-                Bt[ii, jj] = -B[0] * np.sin(angle[jj]) + B[1] * np.cos(angle[jj])
+                B = femm.mo_getb(Rag * cos(angle[jj]), Rag * sin(angle[jj]))
+                Br[ii, jj] = B[0] * cos(angle[jj]) + B[1] * sin(angle[jj])
+                Bt[ii, jj] = -B[0] * sin(angle[jj]) + B[1] * cos(angle[jj])
 
         # Compute the torque
         Tem[ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
 
-        if (
-            hasattr(output.simu.machine.stator, "winding")
-            and output.simu.machine.stator.winding is not None
-        ):
+        if Phi_wind_stator is not None:
             # Phi_wind computation
             Phi_wind_stator[ii, :] = comp_FEMM_Phi_wind(
                 femm,
@@ -126,9 +125,7 @@ def solve_FEMM(self, femm, output, sym, Nt, angle, Is, Ir, angle_rotor):
             )
 
         # Load mesh data & solution
-        if (self.is_sliding_band or Nt == 1) and (
-            self.is_get_mesh or self.is_save_FEA
-        ):
+        if (self.is_sliding_band or Nt == 1) and (self.is_get_mesh or self.is_save_FEA):
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
                 femm, save_path, ii
             )
@@ -136,20 +133,37 @@ def solve_FEMM(self, femm, output, sym, Nt, angle, Is, Ir, angle_rotor):
             if ii == 0:
                 meshFEMM = [tmpmeshFEMM]
                 groups = [tmpgroups]
-                B_elem = np.zeros([Nt, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                H_elem = np.zeros([Nt, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                mu_elem = np.zeros([Nt, meshFEMM[ii].cell["triangle"].nb_cell])
+                B_elem = zeros([Nt, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                H_elem = zeros([Nt, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                mu_elem = zeros([Nt, meshFEMM[ii].cell["triangle"].nb_cell])
 
             B_elem[ii, :, 0:2] = tmpB
             H_elem[ii, :, 0:2] = tmpH
             mu_elem[ii, :] = tmpmu
 
     # Shift to take into account stator position
-    roll_id = int(self.angle_stator * Na / (2 * pi))
-    Br = roll(Br, roll_id, axis=1)
-    Bt = roll(Bt, roll_id, axis=1)
+    if self.angle_stator != 0:
+        roll_id = int(self.angle_stator * Na / (2 * pi))
+        Br = roll(Br, roll_id, axis=1)
+        Bt = roll(Bt, roll_id, axis=1)
+
+        # # Interpolate on updated angular position # TODO to improve accuracy
+        # angle_new = (angle - self.angle_stator) % (2 * pi / sym)
+        # Br = interp1d(append(angle, 2 * pi / sym), append(Br, Br[:,0]), axis=1)[angle_new]
+        # Bt = interp1d(append(angle, 2 * pi / sym), append(Br, Br[:,0]), axis=1)[angle_new]
 
     if self.is_close_femm:
         femm.closefemm()
-        
-    return Br, Bt, Tem, Phi_wind_stator, FEMM_dict, meshFEMM, B_elem, H_elem, mu_elem, groups
+
+    return (
+        Br,
+        Bt,
+        Tem,
+        Phi_wind_stator,
+        FEMM_dict,
+        meshFEMM,
+        B_elem,
+        H_elem,
+        mu_elem,
+        groups,
+    )

@@ -6,7 +6,7 @@
 
 from os import linesep
 from logging import getLogger
-from ._check import set_array, check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.copy import copy
@@ -14,7 +14,14 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
-from numpy import array, array_equal
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Output.OutMag.comp_emf import comp_emf
+except ImportError as error:
+    comp_emf = error
+
+
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
 
@@ -24,6 +31,15 @@ class OutMag(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Output.OutMag.comp_emf
+    if isinstance(comp_emf, ImportError):
+        comp_emf = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMag method comp_emf: " + str(comp_emf))
+            )
+        )
+    else:
+        comp_emf = comp_emf
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -122,13 +138,7 @@ class OutMag(FrozenClass):
         OutMag_str += (
             "Phi_wind_stator = " + str(self.Phi_wind_stator) + linesep + linesep
         )
-        OutMag_str += (
-            "emf = "
-            + linesep
-            + str(self.emf).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutMag_str += "emf = " + str(self.emf) + linesep + linesep
         if self.meshsolution is not None:
             tmp = (
                 self.meshsolution.__str__()
@@ -163,7 +173,7 @@ class OutMag(FrozenClass):
             return False
         if other.Phi_wind_stator != self.Phi_wind_stator:
             return False
-        if not array_equal(other.emf, self.emf):
+        if other.emf != self.emf:
             return False
         if other.meshsolution != self.meshsolution:
             return False
@@ -203,7 +213,7 @@ class OutMag(FrozenClass):
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:
-            OutMag_dict["emf"] = self.emf.tolist()
+            OutMag_dict["emf"] = self.emf.as_dict()
         if self.meshsolution is None:
             OutMag_dict["meshsolution"] = None
         else:
@@ -306,7 +316,7 @@ class OutMag(FrozenClass):
     B = property(
         fget=_get_B,
         fset=_set_B,
-        doc=u"""Airgap flux density components
+        doc=u"""Airgap flux density VectorField object
 
         :Type: SciDataTool.Classes.VectorField.VectorField
         """,
@@ -333,7 +343,7 @@ class OutMag(FrozenClass):
     Tem = property(
         fget=_get_Tem,
         fset=_set_Tem,
-        doc=u"""Electromagnetic torque
+        doc=u"""Electromagnetic torque DataTime object
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -414,7 +424,7 @@ class OutMag(FrozenClass):
     Phi_wind_stator = property(
         fget=_get_Phi_wind_stator,
         fset=_set_Phi_wind_stator,
-        doc=u"""Stator winding flux
+        doc=u"""Stator winding flux DataTime object
 
         :Type: SciDataTool.Classes.DataTime.DataTime
         """,
@@ -426,22 +436,24 @@ class OutMag(FrozenClass):
 
     def _set_emf(self, value):
         """setter of emf"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("emf", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "emf"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataTime()
+        check_var("emf", value, "DataTime")
         self._emf = value
 
     emf = property(
         fget=_get_emf,
         fset=_set_emf,
-        doc=u"""Electromotive force
+        doc=u"""Electromotive force DataTime object
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataTime.DataTime
         """,
     )
 

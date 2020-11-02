@@ -289,7 +289,12 @@ def solve(self):
 def print_gen_simu(time, gen_id, simu_id, size_pop, nb_error, to_eval):
     print(
         "\r{}  gen {:>5}: simu {}/{} ({:>5.2f}%), {:>4} errors.".format(
-            time, gen_id, (simu_id + 1), size_pop, (simu_id) * 100 / size_pop, nb_error,
+            time,
+            gen_id,
+            (simu_id + 1),
+            size_pop,
+            (simu_id) * 100 / size_pop,
+            nb_error,
         )
     )
     msg = "Design Variables: "

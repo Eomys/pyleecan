@@ -154,6 +154,7 @@ def solve_FEMM_parallel(self, femm, output, sym, axes_dict):
                 B_elem[ii, :, 0:2] = tmpB
                 H_elem[ii, :, 0:2] = tmpH
                 mu_elem[ii, :] = tmpmu
+
         femm.closefemm()
 
         # Return data for mesh solution

@@ -25,6 +25,8 @@ def test_FEMM_periodicity():
 
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
+    assert IPMSM_A.comp_periodicity() == (4, True, 4, True)
+
     simu = Simu1(name="FEMM_periodicity", machine=IPMSM_A)
 
     # Definition of the enforced output of the electrical module
