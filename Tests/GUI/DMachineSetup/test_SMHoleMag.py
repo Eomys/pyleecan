@@ -16,6 +16,7 @@ from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.HoleM57 import HoleM57
 from pyleecan.Classes.HoleM58 import HoleM58
+from pyleecan.Classes.HoleUD import HoleUD
 from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 from pyleecan.Classes.Material import Material
@@ -84,7 +85,7 @@ class TestSMHoleMag(object):
         assert (
             self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 50"
         )
-        assert self.widget.tab_hole.widget(0).c_hole_type.count() == 6
+        assert self.widget.tab_hole.widget(0).c_hole_type.count() == 7
 
     def test_init_SyRM(self):
         """Check that the Widget initialize to the correct hole"""
@@ -95,7 +96,7 @@ class TestSMHoleMag(object):
         assert (
             self.widget2.tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 54"
         )
-        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 7
+        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 8
 
     def test_init_SyRM_51(self):
         """Check that the Widget initialize to the correct hole"""
@@ -127,7 +128,7 @@ class TestSMHoleMag(object):
         assert (
             self.widget2.tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 51"
         )
-        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 7
+        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 8
 
         assert self.widget2.tab_hole.widget(0).w_hole.lf_W0.text() == "0.11"
         assert self.widget2.tab_hole.widget(0).w_hole.lf_W1.text() == "0.12"
@@ -204,6 +205,21 @@ class TestSMHoleMag(object):
         assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 5
         assert (
             self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 58"
+        )
+
+    def test_init_UD(self):
+        """Check that you can edit a hole UD"""
+        self.test_obj.rotor.hole[0] = HoleUD(Zh=20)
+        self.test_obj.rotor.hole[0].magnet_dict["magnet_0"] = Magnet()
+        self.test_obj.rotor.hole[0].magnet_dict["magnet_0"].mat_type.name = "Magnet1"
+        self.widget = SMHoleMag(
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
+        )
+        assert self.widget.out_hole_pitch.text() == "Slot pitch = 360 / 2p = 18 °"
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 7
+        assert (
+            self.widget.tab_hole.widget(0).c_hole_type.currentText()
+            == "Import from DXF"
         )
 
     def test_set_type_51(self):

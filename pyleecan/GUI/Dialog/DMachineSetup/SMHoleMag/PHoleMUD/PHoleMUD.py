@@ -102,7 +102,7 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
             # Plot only the lamination
             lam.hole = list()
         # Plot the lamination in the viewer fig
-        lam.plot(fig=self.w_viewer.fig, is_show=False)
+        lam.plot(fig=self.w_viewer.fig, is_show_fig=False)
 
         # Update the Graph
         self.w_viewer.draw()

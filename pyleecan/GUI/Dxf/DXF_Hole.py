@@ -285,14 +285,18 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         combobox = QComboBox()
         combobox.addItems(["Hole", "Magnet"])
         self.w_surface_list.setCellWidget(
-            nrows, TYPE_COL, combobox,
+            nrows,
+            TYPE_COL,
+            combobox,
         )
         # Adding Delete button
         del_button = QPushButton("Delete")
         del_button.setIcon(QIcon(self.delete_icon))
         del_button.pressed.connect(self.delete_surface)
         self.w_surface_list.setCellWidget(
-            nrows, DEL_COL, del_button,
+            nrows,
+            DEL_COL,
+            del_button,
         )
 
         # Adding Highlight button
@@ -300,7 +304,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         HL_button.setIcon(QIcon(self.highlight_icon))
         HL_button.pressed.connect(self.highlight_surface)
         self.w_surface_list.setCellWidget(
-            nrows, HL_COL, HL_button,
+            nrows,
+            HL_COL,
+            HL_button,
         )
 
         # Remove selection
