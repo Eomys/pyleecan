@@ -5,6 +5,7 @@ from pyleecan.Classes.Arc2 import Arc2
 from pyleecan.Methods.Geometry.Arc3.rotate import AngleRotationArc3Error
 from pyleecan.Methods.Geometry.Arc3.discretize import NbPointArc3DError
 from pyleecan.Methods.Geometry.Arc3.translate import PointTranslateArc3Error
+from pyleecan.Methods.Geometry.Arc3.check import PointArc3Error
 from numpy import pi, exp, sqrt, linspace
 
 import pytest
@@ -366,3 +367,14 @@ class Test_Arc3_meth(object):
 
         with pytest.raises(PointTranslateArc3Error) as context:
             arc.translate("error")
+
+    def test_check(self):
+        """Check that you get the correct error on check"""
+        arc = Arc3(
+            begin=2,
+            end=2,
+            is_trigo_direction=False,
+        )
+
+        with pytest.raises(PointArc3Error) as context:
+            arc.check()
