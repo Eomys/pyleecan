@@ -6776,6 +6776,24 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutLoss"
+            },
+            {
+                "desc": "List of the mechanical losses",
+                "max": "",
+                "min": "",
+                "name": "mech",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "List of the miscellaneous losses",
+                "max": "",
+                "min": "",
+                "name": "misc",
+                "type": "list",
+                "unit": "",
+                "value": []
             }
         ]
     },

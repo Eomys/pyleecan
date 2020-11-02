@@ -118,6 +118,8 @@ class OutLoss(FrozenClass):
         magnet=-1,
         meshsolution=-1,
         logger_name="Pyleecan.OutLoss",
+        mech=-1,
+        misc=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -146,6 +148,10 @@ class OutLoss(FrozenClass):
                 meshsolution = init_dict["meshsolution"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "mech" in list(init_dict.keys()):
+                mech = init_dict["mech"]
+            if "misc" in list(init_dict.keys()):
+                misc = init_dict["misc"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.lamination = lamination
@@ -153,6 +159,8 @@ class OutLoss(FrozenClass):
         self.magnet = magnet
         self.meshsolution = meshsolution
         self.logger_name = logger_name
+        self.mech = mech
+        self.misc = misc
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -190,6 +198,18 @@ class OutLoss(FrozenClass):
             + linesep
         )
         OutLoss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        OutLoss_str += (
+            "mech = "
+            + linesep
+            + str(self.mech).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        OutLoss_str += (
+            "misc = "
+            + linesep
+            + str(self.misc).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return OutLoss_str
 
     def __eq__(self, other):
@@ -206,6 +226,10 @@ class OutLoss(FrozenClass):
         if other.meshsolution != self.meshsolution:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.mech != self.mech:
+            return False
+        if other.misc != self.misc:
             return False
         return True
 
@@ -224,6 +248,8 @@ class OutLoss(FrozenClass):
             self.meshsolution.copy() if self.meshsolution is not None else None
         )
         OutLoss_dict["logger_name"] = self.logger_name
+        OutLoss_dict["mech"] = self.mech.copy() if self.mech is not None else None
+        OutLoss_dict["misc"] = self.misc.copy() if self.misc is not None else None
         # The class name is added to the dict for deserialisation purpose
         OutLoss_dict["__class__"] = "OutLoss"
         return OutLoss_dict
@@ -236,6 +262,8 @@ class OutLoss(FrozenClass):
         self.magnet = None
         self.meshsolution = None
         self.logger_name = None
+        self.mech = None
+        self.misc = None
 
     def _get_lamination(self):
         """getter of lamination"""
@@ -332,5 +360,45 @@ class OutLoss(FrozenClass):
         doc=u"""Name of the logger to use
 
         :Type: str
+        """,
+    )
+
+    def _get_mech(self):
+        """getter of mech"""
+        return self._mech
+
+    def _set_mech(self, value):
+        """setter of mech"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("mech", value, "list")
+        self._mech = value
+
+    mech = property(
+        fget=_get_mech,
+        fset=_set_mech,
+        doc=u"""List of the mechanical losses
+
+        :Type: list
+        """,
+    )
+
+    def _get_misc(self):
+        """getter of misc"""
+        return self._misc
+
+    def _set_misc(self, value):
+        """setter of misc"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("misc", value, "list")
+        self._misc = value
+
+    misc = property(
+        fget=_get_misc,
+        fset=_set_misc,
+        doc=u"""List of the miscellaneous losses
+
+        :Type: list
         """,
     )
