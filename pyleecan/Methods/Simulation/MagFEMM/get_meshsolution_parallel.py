@@ -6,11 +6,9 @@ import numpy as np
 from ....Classes.CellMat import CellMat
 from ....Classes.MeshMat import MeshMat
 from ....Classes.PointMat import PointMat
-from ....Functions.FEMM import (
-    GROUP_SC,
-    GROUP_AG,
-    GROUP_SW,
-)
+
+from ....Functions.FEMM import FEMM_GROUPS
+
 from ....definitions import MAIN_DIR
 
 
@@ -42,7 +40,7 @@ def get_meshsolution_parallel(
         path to the result folder
     """
 
-    idworker = str(id_worker)  # For parallelization TODO
+    idworker = str(id_worker)  # For parallelization
 
     path_txt = join(MAIN_DIR, "Functions", "FEMM") + "\\"
     path_txt_lua = path_txt.replace("\\", "/")
@@ -113,19 +111,14 @@ def get_meshsolution_parallel(
         mesh.point = PointMat(
             coordinate=listNd[:, 0:2], nb_pt=NbNd, indice=np.linspace(0, NbNd - 1, NbNd)
         )
+        # get all groups that are in the FEMM model
         groups = dict()
-        groups["stator"] = mesh.cell["triangle"].indice[
-            np.where(listElem0[:, 6] == GROUP_SC)[0]
-        ]
-        groups["airgap"] = mesh.cell["triangle"].indice[
-            np.where(listElem0[:, 6] == GROUP_AG)[0]
-        ]
-        groups["stator_windings"] = mesh.cell["triangle"].indice[
-            np.where(listElem0[:, 6] == GROUP_SW)[0]
-        ]
-
-        # If necessary, other groups can be defined here
-
+        for grp in FEMM_GROUPS:
+            idx = FEMM_GROUPS[grp]["ID"]
+            name = FEMM_GROUPS[grp]["name"]
+            ind = np.where(listElem0[:, 6] == idx)[0]
+            if ind.size > 0:
+                groups[name] = mesh.cell["triangle"].indice[ind]
     else:
         mesh = None
         groups = None

@@ -34,7 +34,7 @@ def get_meshsolution(self, femm, save_path, j_t0):
         path to the result folder
     """
 
-    idworker = "1"  # For parallelization TODO
+    idworker = "1"  # For parallelization
 
     path_txt = join(MAIN_DIR, "Functions", "FEMM") + "\\"
     path_txt_lua = path_txt.replace("\\", "/")
