@@ -2,7 +2,7 @@ Variable name,Unit,Description,Size,Type,Default value,Minimum value,Maximum val
 Kmesh_fineness,,"global coefficient to adjust mesh fineness (1 : default , > 1 : finner , < 1 : less fine)",0,float,1,,,,Simulation,Magnetics,comp_flux_airgap,VERSION,1,Magnetic module: Finite Element model with Elmer,
 Kgeo_fineness,,"global coefficient to adjust geometry fineness (1 : default , > 1 : finner , < 1 : less fine)",0,float,1,,,,,,solve_FEA,,,,
 file_name,,Name of the file to save the Elmer model,0,str,,,,,,,get_meshsolution,,,,
-FEA_dict,,"To enforce user-defined values for Elmer main parameters ",0,dict,,,,,,,get_path_save_fem,,,,
+FEA_dict,,"To enforce user-defined values for Elmer main parameters ",0,dict,,,,,,,get_path_save_fea,,,,
 angle_stator,rad,Angular position shift of the stator,0,float,0,,,,,,get_path_save,,,,
 is_get_mesh,,"To save FEA mesh for latter post-procesing ",0,bool,0,,,,,,comp_time_angle,,,,
 is_save_FEA,,To save FEA mesh and solution in a file,0,bool,0,,,,,,,,,,
