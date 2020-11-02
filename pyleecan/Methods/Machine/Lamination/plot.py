@@ -20,7 +20,7 @@ def plot(
     alpha=0,
     delta=0,
     is_edge_only=False,
-    is_show=True,
+    is_show_fig=True,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -40,7 +40,7 @@ def plot(
         Complex value for translation
     is_edge_only: bool
         To plot transparent Patches
-    is_show : bool
+    is_show_fig : bool
         To call show at the end of the method
 
     Returns
@@ -95,5 +95,5 @@ def plot(
             axes.set_title("Rotor without slot")
 
         legend(patch_leg, label_leg)
-    if is_show:
+    if is_show_fig:
         fig.show()

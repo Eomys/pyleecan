@@ -3,7 +3,7 @@ import sys
 import json
 
 from os import makedirs
-from os.path import join
+from os.path import join, isdir
 from pyleecan.Functions.load import load
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
@@ -27,7 +27,8 @@ def test_gmsh_2d():
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     IPMSM_A.stator.slot.H1 = 1e-3
     save_path = join(save_plot_path, "GMSH")
-    makedirs(save_path)
+    if not isdir(save_path):
+        makedirs(save_path)
     # Plot the machine
     # im = IPMSM_A.plot()
 
@@ -76,7 +77,8 @@ def test_gmsh_spm():
     # Import the machine from a script
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
     save_path = join(save_plot_path, "GMSH")
-    makedirs(save_path)
+    if not isdir(save_path):
+        makedirs(save_path)
     # Plot the machine
     # im = PMSM_A.plot()
 

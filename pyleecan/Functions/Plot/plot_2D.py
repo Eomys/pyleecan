@@ -5,7 +5,7 @@ from itertools import repeat
 import matplotlib.pyplot as plt
 from numpy import argmin, abs, squeeze, split, ndarray
 
-from ...Functions.init_fig import init_subplot, init_fig
+from ...Functions.init_fig import init_fig
 from ...definitions import config_dict
 
 # Import values from config dict
@@ -26,7 +26,7 @@ def plot_2D(
     xlabel="",
     ylabel="",
     fig=None,
-    subplot_index=None,
+    ax=None,
     is_logscale_x=False,
     is_logscale_y=False,
     is_disp_title=True,
@@ -40,6 +40,7 @@ def plot_2D(
     xticks=None,
     save_path=None,
     barwidth=100,
+    is_show_fig=None,
 ):
     """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
@@ -63,8 +64,8 @@ def plot_2D(
         label for the y-axis
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
-    subplot_index : int
-        index of subplot in which to plot
+    ax : Matplotlib.axes.Axes object
+        ax on which to plot the data
     is_logscale_x : bool
         boolean indicating if the x-axis must be set in logarithmic scale
     is_logscale_y : bool
@@ -88,17 +89,20 @@ def plot_2D(
     xticks : list
         list of ticks to use for the x-axis
     save_path : str
-        full path where the figure is saved if save_path is not None
+        full path including folder, name and extension of the file to save if save_path is not None
     barwidth : float
         barwidth scaling factor, only if type_plot = "bargraph"
+    is_show_fig : bool
+        True to show figure after plot
     """
 
-    # Set figure/subplot
-    is_show_fig = True if fig is None else False
-    if fig is None:
-        (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    # Set is_show_fig if is None
+    if is_show_fig is None:
+        is_show_fig = True if fig is None else False
 
-    fig, ax = init_subplot(fig=fig, subplot_index=subplot_index)
+    # Set figure if needed
+    if fig is None and ax is None:
+        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle")
 
     # Number of curves on a axe
     ndatas = len(Ydatas)
@@ -229,5 +233,3 @@ def plot_2D(
 
     if is_show_fig:
         fig.show()
-
-    return ax

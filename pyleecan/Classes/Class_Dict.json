@@ -4237,6 +4237,139 @@
             }
         ]
     },
+    "MagElmer": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Magnetic module: Finite Element model with Elmer",
+        "is_internal": false,
+        "methods": [
+            "comp_flux_airgap",
+            "solve_FEA",
+            "get_meshsolution",
+            "get_path_save_fem",
+            "get_path_save",
+            "comp_time_angle"
+        ],
+        "mother": "Magnetics",
+        "name": "MagElmer",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/MagElmer.csv",
+        "properties": [
+            {
+                "desc": "global coefficient to adjust mesh fineness (1 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kmesh_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "global coefficient to adjust geometry fineness (1 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kgeo_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Name of the file to save the Elmer model",
+                "max": "",
+                "min": "",
+                "name": "file_name",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To enforce user-defined values for Elmer main parameters ",
+                "max": "",
+                "min": "",
+                "name": "FEA_dict",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Angular position shift of the stator",
+                "max": "",
+                "min": "",
+                "name": "angle_stator",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            },
+            {
+                "desc": "To save FEA mesh for latter post-procesing ",
+                "max": "",
+                "min": "",
+                "name": "is_get_mesh",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "To save FEA mesh and solution in a file",
+                "max": "",
+                "min": "",
+                "name": "is_save_FEA",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "max": "",
+                "min": "",
+                "name": "transform_list",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "To use a dxf version of the rotor instead of build_geometry",
+                "max": "",
+                "min": "",
+                "name": "rotor_dxf",
+                "type": "DXFImport",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "To use a dxf version of the rotor instead of build_geometry",
+                "max": "",
+                "min": "",
+                "name": "stator_dxf",
+                "type": "DXFImport",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "To import an existing simulation file",
+                "max": "",
+                "min": "",
+                "name": "import_file",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To run Elmer in parallel (the parallelization is on the time loop)",
+                "max": "",
+                "min": "",
+                "name": "nb_worker",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            }
+        ]
+    },
     "MagFEMM": {
         "constants": [
             {
@@ -4769,6 +4902,7 @@
             }
         ],
         "daughters": [
+            "MagElmer",
             "MagFEMM"
         ],
         "desc": "Magnetic module abstract object",
@@ -6613,10 +6747,10 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing the main FEMM parameter",
+                "desc": "Dictionnary containing the main FEA parameter",
                 "max": "",
                 "min": "",
-                "name": "FEMM_dict",
+                "name": "FEA_dict",
                 "type": "dict",
                 "unit": "",
                 "value": null
@@ -7074,7 +7208,8 @@
         ],
         "daughters": [
             "PostFunction",
-            "PostMethod"
+            "PostMethod",
+            "PostPlot"
         ],
         "desc": "Abstract class for postprocessing",
         "is_internal": false,
@@ -7119,7 +7254,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "PostPlot"
+        ],
         "desc": "Abstract class for post-processing defined in the method run",
         "is_internal": false,
         "methods": [
@@ -7130,6 +7267,71 @@
         "package": "Post",
         "path": "pyleecan/Generator/ClassesRef/Post/PostMethod.csv",
         "properties": []
+    },
+    "PostPlot": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Post-processing to do a plot which is a method of Output or other class if attribute is not None",
+        "is_internal": false,
+        "methods": [
+            "run"
+        ],
+        "mother": "PostMethod",
+        "name": "PostPlot",
+        "package": "Post",
+        "path": "pyleecan/Generator/ClassesRef/Post/PostPlot.csv",
+        "properties": [
+            {
+                "desc": "Full path of the plot method to call except Output (ex: \"plot_2D_Data\", \"mag.meshsolution.plot_contour\")",
+                "max": "",
+                "min": "",
+                "name": "method",
+                "type": "str",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "desc": "Name of the plot to use when saving the figure after plotting",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "",
+                "value": "[]"
+            },
+            {
+                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "max": "",
+                "min": "",
+                "name": "param_list",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "max": "",
+                "min": "",
+                "name": "param_dict",
+                "type": "dict",
+                "unit": "",
+                "value": {}
+            },
+            {
+                "desc": "File format extension (\"png\", \"svg\", \"eps\") in which to save the figure. The PostPlot automatically saves the figure in the results folder. The user can specify a different folder by specifying \"save_path\"=path_str or not save the figure by specifying \"save_path\"=None in param_dict, if the plot_method enables it.",
+                "max": "",
+                "min": "",
+                "name": "save_format",
+                "type": "str",
+                "unit": "",
+                "value": "png"
+            }
+        ]
     },
     "RefCell": {
         "constants": [

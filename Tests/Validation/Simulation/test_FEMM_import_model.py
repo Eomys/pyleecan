@@ -63,7 +63,7 @@ def test_FEMM_import_model():
         is_periodicity_a=True,
         is_periodicity_t=False,
         import_file=out.simu.mag.get_path_save_fem(out),
-        FEMM_dict=out.mag.FEMM_dict,
+        FEMM_dict=out.mag.FEA_dict,
     )
 
     out2 = simu2.run()
