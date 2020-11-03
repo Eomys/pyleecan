@@ -34,7 +34,7 @@ class Ui_PWSlotUD(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.w_path_json = WPathSelector(PWSlotUD)
         self.w_path_json.setObjectName(u"w_path_json")
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.w_path_json.sizePolicy().hasHeightForWidth())
@@ -69,7 +69,7 @@ class Ui_PWSlotUD(object):
     def retranslateUi(self, PWSlotUD):
         PWSlotUD.setWindowTitle(QCoreApplication.translate("PWSlotUD", u"Form", None))
         self.b_dxf.setText(
-            QCoreApplication.translate("PWSlotUD", u"Define Hole from DXF", None)
+            QCoreApplication.translate("PWSlotUD", u"Define Slot from DXF", None)
         )
 
     # retranslateUi

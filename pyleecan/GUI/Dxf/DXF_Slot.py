@@ -342,7 +342,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             # Add the winding if defined
             if slot.wind_begin_index is not None:
                 surf_wind = slot.get_surface_wind()
-                surf_wind.plot(fig=plt.gcf(), color=WIND_COLOR)
+                surf_wind.plot(fig=plt.gcf(), color=WIND_COLOR, is_show_fig=False)
 
     def save(self):
         """Save the SlotUD object in a json file

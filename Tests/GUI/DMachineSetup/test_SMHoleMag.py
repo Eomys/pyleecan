@@ -216,7 +216,7 @@ class TestSMHoleMag(object):
             machine=self.test_obj, matlib=self.matlib, is_stator=False
         )
         assert self.widget.out_hole_pitch.text() == "Slot pitch = 360 / 2p = 18 °"
-        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 7
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 6
         assert (
             self.widget.tab_hole.widget(0).c_hole_type.currentText()
             == "Import from DXF"
