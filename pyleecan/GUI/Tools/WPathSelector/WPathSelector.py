@@ -78,8 +78,11 @@ class WPathSelector(Ui_WPathSelector, QWidget):
         path = self.get_path().replace("\\", "/")
         if (self.is_file and isfile(path)) or (not self.is_file and isdir(path)):
             if self.obj is not None:
-                setattr(self.obj, self.param_name, path)
-            self.pathChanged.emit()
+                if getattr(self.obj, self.param_name) != path:
+                    setattr(self.obj, self.param_name, path)
+                    self.pathChanged.emit()
+            else:
+                self.pathChanged.emit()
 
     def select_path(self):
         """Open a popup to select the correct path"""
