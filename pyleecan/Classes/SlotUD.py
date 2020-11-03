@@ -31,6 +31,11 @@ try:
 except ImportError as error:
     get_surface_wind = error
 
+try:
+    from ..Methods.Slot.SlotUD.check import check
+except ImportError as error:
+    check = error
+
 
 from ._check import InitUnKnowClassError
 from .Line import Line
@@ -76,6 +81,15 @@ class SlotUD(SlotWind):
         )
     else:
         get_surface_wind = get_surface_wind
+    # cf Methods.Slot.SlotUD.check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotUD method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # save and copy methods are available in all object
     save = save
     copy = copy

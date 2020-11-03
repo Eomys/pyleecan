@@ -8153,7 +8153,8 @@
         "methods": [
             "build_geometry",
             "set_from_point_list",
-            "get_surface_wind"
+            "get_surface_wind",
+            "check"
         ],
         "mother": "SlotWind",
         "name": "SlotUD",
