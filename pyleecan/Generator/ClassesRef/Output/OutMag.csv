@@ -10,5 +10,5 @@ Phi_wind_stator,Wb,Stator winding flux,"(Nt_tot, qs)",SciDataTool.Classes.DataTi
 Phi_wind_rotor,Wb,Rotor winding flux,"(Nt_tot, qr)",SciDataTool.Classes.DataTime.DataTime,None,,,,,,,,,
 emf,V,Electromotive force,"(Nt_tot, qs)",ndarray,None,,,,,,,,,
 meshsolution,,FEA software mesh and solution,,MeshSolution,,,,,,,,,,
-FEMM_dict,,Dictionnary containing the main FEMM parameter,,dict,None,,,,,,,,,
+FEA_dict,,Dictionnary containing the main FEA parameter,,dict,None,,,,,,,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.OutMag,,,,,,,,,

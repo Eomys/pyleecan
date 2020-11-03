@@ -208,7 +208,7 @@ def solve_FEMM_parallel(self, femm, output, sym, axes_dict):
     L1 = output.simu.machine.stator.comp_length()
     save_path = self.get_path_save(output)
     fem_file = self.get_path_save_fem(output)
-    FEMM_dict = output.mag.FEMM_dict
+    FEMM_dict = output.mag.FEA_dict
     nb_worker = self.nb_worker
     logger = self.get_logger()
 
@@ -355,7 +355,7 @@ def solve_FEMM_parallel(self, femm, output, sym, axes_dict):
             values=Phi_wind_rotor,
         )
 
-    output.mag.FEMM_dict = FEMM_dict
+    output.mag.FEA_dict = FEMM_dict
 
     # Building mesh solution
     if self.is_get_mesh:

@@ -43,7 +43,7 @@ class OutMag(FrozenClass):
         Phi_wind_rotor=None,
         emf=None,
         meshsolution=-1,
-        FEMM_dict=None,
+        FEA_dict=None,
         logger_name="Pyleecan.OutMag",
         init_dict=None,
         init_str=None,
@@ -85,8 +85,8 @@ class OutMag(FrozenClass):
                 emf = init_dict["emf"]
             if "meshsolution" in list(init_dict.keys()):
                 meshsolution = init_dict["meshsolution"]
-            if "FEMM_dict" in list(init_dict.keys()):
-                FEMM_dict = init_dict["FEMM_dict"]
+            if "FEA_dict" in list(init_dict.keys()):
+                FEA_dict = init_dict["FEA_dict"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
@@ -102,7 +102,7 @@ class OutMag(FrozenClass):
         self.Phi_wind_rotor = Phi_wind_rotor
         self.emf = emf
         self.meshsolution = meshsolution
-        self.FEMM_dict = FEMM_dict
+        self.FEA_dict = FEA_dict
         self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
@@ -143,7 +143,7 @@ class OutMag(FrozenClass):
             OutMag_str += "meshsolution = " + tmp
         else:
             OutMag_str += "meshsolution = None" + linesep + linesep
-        OutMag_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
+        OutMag_str += "FEA_dict = " + str(self.FEA_dict) + linesep
         OutMag_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutMag_str
 
@@ -174,7 +174,7 @@ class OutMag(FrozenClass):
             return False
         if other.meshsolution != self.meshsolution:
             return False
-        if other.FEMM_dict != self.FEMM_dict:
+        if other.FEA_dict != self.FEA_dict:
             return False
         if other.logger_name != self.logger_name:
             return False
@@ -219,8 +219,8 @@ class OutMag(FrozenClass):
             OutMag_dict["meshsolution"] = None
         else:
             OutMag_dict["meshsolution"] = self.meshsolution.as_dict()
-        OutMag_dict["FEMM_dict"] = (
-            self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        OutMag_dict["FEA_dict"] = (
+            self.FEA_dict.copy() if self.FEA_dict is not None else None
         )
         OutMag_dict["logger_name"] = self.logger_name
         # The class name is added to the dict for deserialisation purpose
@@ -242,7 +242,7 @@ class OutMag(FrozenClass):
         self.emf = None
         if self.meshsolution is not None:
             self.meshsolution._set_None()
-        self.FEMM_dict = None
+        self.FEA_dict = None
         self.logger_name = None
 
     def _get_Time(self):
@@ -514,21 +514,21 @@ class OutMag(FrozenClass):
         """,
     )
 
-    def _get_FEMM_dict(self):
-        """getter of FEMM_dict"""
-        return self._FEMM_dict
+    def _get_FEA_dict(self):
+        """getter of FEA_dict"""
+        return self._FEA_dict
 
-    def _set_FEMM_dict(self, value):
-        """setter of FEMM_dict"""
+    def _set_FEA_dict(self, value):
+        """setter of FEA_dict"""
         if type(value) is int and value == -1:
             value = dict()
-        check_var("FEMM_dict", value, "dict")
-        self._FEMM_dict = value
+        check_var("FEA_dict", value, "dict")
+        self._FEA_dict = value
 
-    FEMM_dict = property(
-        fget=_get_FEMM_dict,
-        fset=_set_FEMM_dict,
-        doc=u"""Dictionnary containing the main FEMM parameter
+    FEA_dict = property(
+        fget=_get_FEA_dict,
+        fset=_set_FEA_dict,
+        doc=u"""Dictionnary containing the main FEA parameter
 
         :Type: dict
         """,

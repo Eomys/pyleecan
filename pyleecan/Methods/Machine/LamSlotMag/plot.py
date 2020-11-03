@@ -19,7 +19,7 @@ def plot(
     alpha=0,
     delta=0,
     is_edge_only=False,
-    is_show=True,
+    is_show_fig=True,
 ):
     """Plot a Lamination with Magnets in a matplotlib fig
 
@@ -40,7 +40,7 @@ def plot(
         Complex value for translation
     is_edge_only: bool
         To plot transparent Patches
-    is_show : bool
+    is_show_fig : bool
         To call show at the end of the method
 
     Returns
@@ -97,5 +97,5 @@ def plot(
             patch_leg.append(Patch(color=MAGNET_COLOR))
             label_leg.append("Magnet")
         legend(patch_leg, label_leg)
-    if is_show:
+    if is_show_fig:
         fig.show()
