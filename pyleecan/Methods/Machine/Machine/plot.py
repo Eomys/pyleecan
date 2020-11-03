@@ -24,7 +24,7 @@ def plot(
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
     ax : Matplotlib.axes.Axes object
-        ax on which to plot the data
+        Axis on which to plot the data
     sym : int
         Symmetry factor (1= full machine, 2= half of the machine...)
     alpha : float
@@ -41,59 +41,55 @@ def plot(
         full path including folder, name and extension of the file to save if save_path is not None
     """
 
-    # Set figure if needed
-    if fig is None and ax is None:
-        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle")
+    (fig, ax, _, _) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
-    # Get the patches to display from corresponding plot
-    # The order in the list matters (largest to smallest)
+    # Call each plot method to properly set the legend
     if self.frame is not None:
-        plot_frame = self.frame.plot
+        self.frame.plot(
+            fig=fig,
+            ax=ax,
+            sym=sym,
+            alpha=alpha,
+            delta=delta,
+            is_edge_only=is_edge_only,
+            is_show_fig=False,
+        )
         Wfra = self.frame.comp_height_eq()
     else:
-        plot_frame = None
         Wfra = 0
 
     # Determin order of plotting parts
-    plot_int, plot_ext, plot_shaft = None, None, None
-    Rext = 0
+    lam_list = self.get_lam_list(is_int_to_ext=True)
 
-    if self.rotor is not None:
-        if self.rotor.is_internal:
-            plot_int = self.rotor.plot
-            if self.rotor.Rint > 0 and self.shaft is not None:
-                plot_shaft = self.shaft.plot
-        else:
-            plot_ext = self.rotor.plot
-        Rext = self.rotor.Rext  # will be reset by stator in case
+    Rext = lam_list[-1].Rext
+    for lam in lam_list[::-1]:
+        lam.plot(
+            fig=fig,
+            ax=ax,
+            sym=sym,
+            alpha=alpha,
+            delta=delta,
+            is_edge_only=is_edge_only,
+            is_show_fig=False,
+        )
 
-    if self.stator is not None:
-        if self.stator.is_internal:
-            plot_int = self.stator.plot
-        else:
-            plot_ext = self.stator.plot
-        if self.stator.Rext > Rext:
-            Rext = self.stator.Rext
+    if lam_list[0].Rint > 0 and self.shaft is not None:
+        self.shaft.plot(
+            fig=fig,
+            ax=ax,
+            sym=sym,
+            alpha=alpha,
+            delta=delta,
+            is_edge_only=is_edge_only,
+            is_show_fig=False,
+        )
 
     Lim = (Rext + Wfra) * 1.5  # Axes limit for plot
-
-    # Plot
-    plot_args = {
-        "sym": sym,
-        "alpha": alpha,
-        "delta": delta,
-        "is_edge_only": is_edge_only,
-        "is_show_fig": is_show_fig,
-    }
-
-    _plot(plot_frame, fig, plot_args)
-    _plot(plot_ext, fig, plot_args)
-    _plot(plot_int, fig, plot_args)
-    _plot(plot_shaft, fig, plot_args)
 
     if comp_machine is not None:
         comp_machine.rotor.plot(
             fig,
+            ax,
             sym=sym,
             alpha=alpha,
             delta=delta,
@@ -102,6 +98,7 @@ def plot(
         )
         comp_machine.stator.plot(
             fig,
+            ax,
             sym=sym,
             alpha=alpha,
             delta=delta,
@@ -126,11 +123,3 @@ def plot(
 
     if is_show_fig:
         fig.show()
-
-
-def _plot(plt_fcn, fig, plot_args):
-    if plt_fcn is not None:
-        try:
-            plt_fcn(fig, **plot_args)
-        except Exception:
-            pass
