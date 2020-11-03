@@ -40,6 +40,7 @@ class OutMag(FrozenClass):
         Tem_rip_norm=None,
         Tem_rip_pp=None,
         Phi_wind_stator=None,
+        Phi_wind_rotor=None,
         emf=None,
         meshsolution=-1,
         FEMM_dict=None,
@@ -78,6 +79,8 @@ class OutMag(FrozenClass):
                 Tem_rip_pp = init_dict["Tem_rip_pp"]
             if "Phi_wind_stator" in list(init_dict.keys()):
                 Phi_wind_stator = init_dict["Phi_wind_stator"]
+            if "Phi_wind_rotor" in list(init_dict.keys()):
+                Phi_wind_rotor = init_dict["Phi_wind_rotor"]
             if "emf" in list(init_dict.keys()):
                 emf = init_dict["emf"]
             if "meshsolution" in list(init_dict.keys()):
@@ -96,6 +99,7 @@ class OutMag(FrozenClass):
         self.Tem_rip_norm = Tem_rip_norm
         self.Tem_rip_pp = Tem_rip_pp
         self.Phi_wind_stator = Phi_wind_stator
+        self.Phi_wind_rotor = Phi_wind_rotor
         self.emf = emf
         self.meshsolution = meshsolution
         self.FEMM_dict = FEMM_dict
@@ -122,6 +126,7 @@ class OutMag(FrozenClass):
         OutMag_str += (
             "Phi_wind_stator = " + str(self.Phi_wind_stator) + linesep + linesep
         )
+        OutMag_str += "Phi_wind_rotor = " + str(self.Phi_wind_rotor) + linesep + linesep
         OutMag_str += (
             "emf = "
             + linesep
@@ -163,6 +168,8 @@ class OutMag(FrozenClass):
             return False
         if other.Phi_wind_stator != self.Phi_wind_stator:
             return False
+        if other.Phi_wind_rotor != self.Phi_wind_rotor:
+            return False
         if not array_equal(other.emf, self.emf):
             return False
         if other.meshsolution != self.meshsolution:
@@ -200,6 +207,10 @@ class OutMag(FrozenClass):
             OutMag_dict["Phi_wind_stator"] = None
         else:
             OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.as_dict()
+        if self.Phi_wind_rotor is None:
+            OutMag_dict["Phi_wind_rotor"] = None
+        else:
+            OutMag_dict["Phi_wind_rotor"] = self.Phi_wind_rotor.as_dict()
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:
@@ -227,6 +238,7 @@ class OutMag(FrozenClass):
         self.Tem_rip_norm = None
         self.Tem_rip_pp = None
         self.Phi_wind_stator = None
+        self.Phi_wind_rotor = None
         self.emf = None
         if self.meshsolution is not None:
             self.meshsolution._set_None()
@@ -415,6 +427,33 @@ class OutMag(FrozenClass):
         fget=_get_Phi_wind_stator,
         fset=_set_Phi_wind_stator,
         doc=u"""Stator winding flux
+
+        :Type: SciDataTool.Classes.DataTime.DataTime
+        """,
+    )
+
+    def _get_Phi_wind_rotor(self):
+        """getter of Phi_wind_rotor"""
+        return self._Phi_wind_rotor
+
+    def _set_Phi_wind_rotor(self, value):
+        """setter of Phi_wind_rotor"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Phi_wind_rotor"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataTime()
+        check_var("Phi_wind_rotor", value, "DataTime")
+        self._Phi_wind_rotor = value
+
+    Phi_wind_rotor = property(
+        fget=_get_Phi_wind_rotor,
+        fset=_set_Phi_wind_rotor,
+        doc=u"""Rotor winding flux
 
         :Type: SciDataTool.Classes.DataTime.DataTime
         """,

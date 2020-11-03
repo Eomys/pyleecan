@@ -73,6 +73,16 @@ def solve_FEMM(self, femm, output, sym, axes_dict):
     else:
         Phi_wind_stator = None
 
+    if (
+        hasattr(output.simu.machine.rotor, "winding")
+        and output.simu.machine.rotor.winding is not None
+    ):
+        qs_rotor = output.simu.machine.rotor.winding.qs  # Winding phase number
+        Npcpp_rotor = output.simu.machine.rotor.winding.Npcpp
+        Phi_wind_rotor = zeros((Nt_comp, qs_rotor))
+    else:
+        Phi_wind_rotor = None
+
     # Create the mesh
     femm.mi_createmesh()
 
@@ -135,6 +145,21 @@ def solve_FEMM(self, femm, output, sym, axes_dict):
                 qs,
                 Npcpp,
                 is_stator=True,
+                Lfemm=FEMM_dict["Lfemm"],
+                L1=L1,
+                sym=sym,
+            )
+
+        if (
+            hasattr(output.simu.machine.rotor, "winding")
+            and output.simu.machine.rotor.winding is not None
+        ):
+            # Phi_wind computation
+            Phi_wind_rotor[ii, :] = comp_FEMM_Phi_wind(
+                femm,
+                qs_rotor,
+                Npcpp_rotor,
+                is_stator=False,
                 Lfemm=FEMM_dict["Lfemm"],
                 L1=L1,
                 sym=sym,
@@ -215,6 +240,24 @@ def solve_FEMM(self, femm, output, sym, axes_dict):
             symbol="Phi_{wind}",
             axes=[Time, Phase],
             values=Phi_wind_stator,
+        )
+
+    if (
+        hasattr(output.simu.machine.rotor, "winding")
+        and output.simu.machine.rotor.winding is not None
+    ):
+        Phase = Data1D(
+            name="phase",
+            unit="",
+            values=gen_name(qs_rotor),
+            is_components=True,
+        )
+        output.mag.Phi_wind_rotor = DataTime(
+            name="Rotor Winding Flux",
+            unit="Wb",
+            symbol="Phi_{wind}",
+            axes=[Time, Phase],
+            values=Phi_wind_rotor,
         )
 
     output.mag.FEMM_dict = FEMM_dict
