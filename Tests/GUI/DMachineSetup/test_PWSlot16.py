@@ -37,24 +37,6 @@ class TestPWSlot16(object):
 
         self.app.quit()
 
-    def setup_method(self, method):
-        """Run at the begining of every test to setup the gui"""
-
-
-    @classmethod
-    def setup_class(cls):
-        """Start the app for the test"""
-        print("\nStart Test PWSlot16")
-        if not QtWidgets.QApplication.instance():
-            cls.app = QtWidgets.QApplication(sys.argv)
-        else:
-            cls.app = QtWidgets.QApplication.instance()
-
-    @classmethod
-    def teardown_class(cls):
-        """Exit the app after the test"""
-        cls.app.quit()
-
     def test_init(self, setup):
         """Check that the Widget spinbox initialise to the lamination value"""
 
