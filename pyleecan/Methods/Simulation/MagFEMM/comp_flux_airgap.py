@@ -2,6 +2,8 @@
 
 from os.path import join
 
+from numpy import zeros
+
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Classes._FEMMHandler import FEMMHandler
 
@@ -17,6 +19,19 @@ def comp_flux_airgap(self, output, axes_dict):
         an Output object
     axes_dict: {Data}
         Dict of axes used for magnetic calculation
+
+    Returns
+    -------
+    Br : ndarray
+        Airgap radial flux density (Nt,Na) [T]
+    Bt : ndarray
+        Airgap tangential flux density (Nt,Na) [T]
+    Bz : ndarray
+        Airgap axial flux density (Nt,Na) [T]
+    Tem : ndarray
+        Electromagnetic torque over time (Nt,) [Nm]
+    Phi_wind_stator : ndarray
+        Stator winding flux (qs,Nt) [Wb]
     """
 
     # Init output
@@ -34,6 +49,7 @@ def comp_flux_airgap(self, output, axes_dict):
         is_oneperiod=self.is_periodicity_a,
         is_antiperiod=is_antiper_a and self.is_periodicity_a,
     )
+    Na = angle.size
 
     # Check if the time axis is anti-periodic
     _, is_antiper_t = Time.get_periodicity()
@@ -61,7 +77,7 @@ def comp_flux_airgap(self, output, axes_dict):
     # Geometry building and assigning property in FEMM
     # Instanciate a new FEMM
     femm = FEMMHandler(not self.is_close_femm)
-    if not self.import_file:  # True if None or len == 0
+    if self.import_file is None:
         self.get_logger().debug("Drawing machine in FEMM...")
         output.mag.FEA_dict = draw_FEMM(
             femm,
@@ -88,27 +104,31 @@ def comp_flux_airgap(self, output, axes_dict):
     else:
         self.get_logger().debug("Reusing the FEMM file: " + self.import_file)
         output.mag.FEA_dict = self.FEMM_dict
-        # Open the document
-        femm.openfemm(1)
-        # femm.main_minimize()
-        femm.opendocument(self.import_file)
+
+    # Init flux arrays
+    Br = zeros((Nt, Na))
+    Bt = zeros((Nt, Na))
+    # Init torque array
+    Tem = zeros((Nt))
+    # Init stator winding flux array
+    if (
+        hasattr(output.simu.machine.stator, "winding")
+        and output.simu.machine.stator.winding is not None
+    ):
+        qs = output.simu.machine.stator.winding.qs  # Winding phase number
+        Phi_wind_stator = zeros((Nt, qs))
+    else:
+        Phi_wind_stator = None
 
     # Solve for all time step and store all the results in output
     if self.nb_worker > 1:
-        (
+        B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM_parallel(
+            femm,
+            output,
             Br,
             Bt,
             Tem,
             Phi_wind_stator,
-            FEMM_dict,
-            meshFEMM,
-            B_elem,
-            H_elem,
-            mu_elem,
-            groups,
-        ) = self.solve_FEMM_parallel(
-            femm,
-            output,
             sym=sym,
             Nt=Nt,
             angle=angle,
@@ -117,30 +137,22 @@ def comp_flux_airgap(self, output, axes_dict):
             angle_rotor=angle_rotor,
         )
     else:
-        (
+        B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM(
+            femm,
+            output,
             Br,
             Bt,
             Tem,
             Phi_wind_stator,
-            FEMM_dict,
-            meshFEMM,
-            B_elem,
-            H_elem,
-            mu_elem,
-            groups,
-        ) = self.solve_FEMM(
-            femm,
-            output,
             sym=sym,
             Nt=Nt,
             angle=angle,
             Is=Is,
             Ir=Ir,
             angle_rotor=angle_rotor,
+            is_close_femm=self.is_close_femm,
+            filename=self.import_file,
         )
-
-    # Update FEMM_dict in OutMag
-    output.mag.FEA_dict = FEMM_dict
 
     # Store FEMM mesh results in meshsolution
     if self.is_get_mesh:

@@ -29,7 +29,7 @@ from ....Functions.FEMM import (
 )
 
 
-def get_meshsolution(self, femm, save_path, j_t0):
+def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False):
     """Load the mesh data and solution data. FEMM must be working and a simulation must have been solved.
 
     Parameters
@@ -38,26 +38,31 @@ def get_meshsolution(self, femm, save_path, j_t0):
         a MagFEMM object
     femm : FEMMHandler
         client to send command to a FEMM instance
-    save_path : string
-        path of the FEA results
+    save_path: str
+        Full path to folder in which to save results
     j_t0 : int
-        Targeted time step
+        time step index
+    id_worker : int
+        worker index
+    is_get_mesh : bool
+        True to load and create the mesh or not
 
     Returns
     -------
-    mesh : MeshMat
-        Mesh of the FEMM analysis
-    groups : dict
-        dict of group indices
-    B : ndarray
-        array of elemental B field
+    mesh: MeshMat
+        Object containing magnetic mesh
+    B: ndarray
+        3D Magnetic flux density for each element (Nelem, 3) [T]
     H : ndarray
-        array of elemental H field
+        3D Magnetic field for each element (Nelem, 3) [A/m]      
     mu : ndarray
-        array of elemental permeability
+        Magnetic relative permeability for each element (Nelem,1) []
+    groups: dict
+        Dict whose values are group label and values are array of indices of related elements
+
     """
 
-    idworker = "1"  # For parallelization TODO
+    idworker = str(id_worker)  # For parallelization TODO
 
     path_txt = join(MAIN_DIR, "Functions", "FEMM") + "\\"
     path_txt_lua = path_txt.replace("\\", "/")
@@ -116,7 +121,7 @@ def get_meshsolution(self, femm, save_path, j_t0):
     ## Create Mesh and Solution dictionaries
 
     # Save MeshMat for only 1 time step with sliding band
-    if j_t0 == 0:
+    if is_get_mesh:
         mesh = MeshMat()
         mesh.label = "FEMM"
         mesh.cell["triangle"] = CellMat(

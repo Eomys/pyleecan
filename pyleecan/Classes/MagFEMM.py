@@ -52,13 +52,6 @@ except ImportError as error:
     solve_FEMM_parallel = error
 
 try:
-    from ..Methods.Simulation.MagFEMM.get_meshsolution_parallel import (
-        get_meshsolution_parallel,
-    )
-except ImportError as error:
-    get_meshsolution_parallel = error
-
-try:
     from ..Methods.Simulation.MagFEMM.comp_time_angle import comp_time_angle
 except ImportError as error:
     comp_time_angle = error
@@ -154,18 +147,6 @@ class MagFEMM(Magnetics):
         )
     else:
         solve_FEMM_parallel = solve_FEMM_parallel
-    # cf Methods.Simulation.MagFEMM.get_meshsolution_parallel
-    if isinstance(get_meshsolution_parallel, ImportError):
-        get_meshsolution_parallel = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MagFEMM method get_meshsolution_parallel: "
-                    + str(get_meshsolution_parallel)
-                )
-            )
-        )
-    else:
-        get_meshsolution_parallel = get_meshsolution_parallel
     # cf Methods.Simulation.MagFEMM.comp_time_angle
     if isinstance(comp_time_angle, ImportError):
         comp_time_angle = property(
@@ -197,7 +178,7 @@ class MagFEMM(Magnetics):
         transform_list=-1,
         rotor_dxf=None,
         stator_dxf=None,
-        import_file="",
+        import_file=None,
         is_close_femm=True,
         nb_worker=1,
         is_remove_slotS=False,

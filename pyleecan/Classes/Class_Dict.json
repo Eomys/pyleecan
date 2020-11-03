@@ -4384,7 +4384,6 @@
             "get_path_save_fem",
             "build_meshsolution",
             "solve_FEMM_parallel",
-            "get_meshsolution_parallel",
             "comp_time_angle"
         ],
         "mother": "Magnetics",
@@ -4507,7 +4506,7 @@
                 "name": "import_file",
                 "type": "str",
                 "unit": "",
-                "value": ""
+                "value": "None"
             },
             {
                 "desc": "To close femm automatically after the simulation",
