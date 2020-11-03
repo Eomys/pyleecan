@@ -69,31 +69,28 @@ matlib_path = join(TEST_DATA_DIR, "Material")
 class TestDMachineSetup(object):
     """Test that the widget DMachineSetup behave like it should"""
 
-    def setup_method(self, method):
+    @pytest.fixture
+    def setup(self):
         """Run at the begining of every test to setup the gui"""
+
+        if not QtWidgets.QApplication.instance():
+            self.app = QtWidgets.QApplication(sys.argv)
+        else:
+            self.app = QtWidgets.QApplication.instance()
+
         # MatLib widget
         matlib = MatLib(matlib_path)
         dmatlib = DMatLib(matlib=matlib)
-        self.widget = DMachineSetup(
+        widget = DMachineSetup(
             dmatlib=dmatlib, machine_path=join(TEST_DATA_DIR, "Machine")
         )
 
-    @classmethod
-    def setup_class(cls):
-        """Start the app for the test"""
-        print("\nStart Test DMachineSetup")
-        if not QtWidgets.QApplication.instance():
-            cls.app = QtWidgets.QApplication(sys.argv)
-        else:
-            cls.app = QtWidgets.QApplication.instance()
+        yield {"widget" : widget}
 
-    @classmethod
-    def teardown_class(cls):
-        """Exit the app after the test"""
-        cls.app.quit()
+        self.app.quit()
 
     @pytest.mark.parametrize("test_dict", load_test)
-    def test_load(self, test_dict):
+    def test_load(self, setup, test_dict):
         """Check that you can load a machine"""
 
         return_value = (
@@ -104,62 +101,62 @@ class TestDMachineSetup(object):
             "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
-            self.widget.b_load.clicked.emit()
-        self.widget.nav_step.setCurrentRow(0)
+            setup["widget"].b_load.clicked.emit()
+        setup["widget"].nav_step.setCurrentRow(0)
         # To remember to update when adding a new machine type
-        assert self.widget.w_step.c_type.count() == 8
+        assert setup["widget"].w_step.c_type.count() == 8
         # Check load MachineType
-        assert type(self.widget.w_step) == SMachineType
-        assert self.widget.w_step.c_type.currentIndex() == test_dict["index"]
-        assert self.widget.w_step.c_type.currentText() == test_dict["type"]
-        assert self.widget.w_step.si_p.value() == test_dict["p"]
-        assert self.widget.w_step.le_name.text() == test_dict["name"]
+        assert type(setup["widget"].w_step) == SMachineType
+        assert setup["widget"].w_step.c_type.currentIndex() == test_dict["index"]
+        assert setup["widget"].w_step.c_type.currentText() == test_dict["type"]
+        assert setup["widget"].w_step.si_p.value() == test_dict["p"]
+        assert setup["widget"].w_step.le_name.text() == test_dict["name"]
         # Check that the nav_step is correct
-        assert self.widget.nav_step.count() == test_dict["count"]
+        assert setup["widget"].nav_step.count() == test_dict["count"]
 
-    def test_set_save_machine_type(self):
+    def test_set_save_machine_type(self, setup):
         """Check that the Widget allow to change the machine type and save"""
         # Check that all the machine type are available
-        assert self.widget.w_step.c_type.count() == 8
+        assert setup["widget"].w_step.c_type.count() == 8
         # DFIM
-        self.widget.w_step.c_type.setCurrentIndex(1)
-        assert self.widget.w_step.c_type.currentText() == "DFIM"
-        assert type(self.widget.machine) == MachineDFIM
-        save_function(self.widget, "test_dfim_save")
+        setup["widget"].w_step.c_type.setCurrentIndex(1)
+        assert setup["widget"].w_step.c_type.currentText() == "DFIM"
+        assert type(setup["widget"].machine) == MachineDFIM
+        save_function(setup["widget"], "test_dfim_save")
         # SyRM
-        self.widget.w_step.c_type.setCurrentIndex(2)
-        assert self.widget.w_step.c_type.currentText() == "SyRM"
-        assert type(self.widget.machine) == MachineSyRM
-        save_function(self.widget, "test_syrm_save")
+        setup["widget"].w_step.c_type.setCurrentIndex(2)
+        assert setup["widget"].w_step.c_type.currentText() == "SyRM"
+        assert type(setup["widget"].machine) == MachineSyRM
+        save_function(setup["widget"], "test_syrm_save")
         # SPMSM
-        self.widget.w_step.c_type.setCurrentIndex(3)
-        assert self.widget.w_step.c_type.currentText() == "SPMSM"
-        assert type(self.widget.machine) == MachineSIPMSM
-        save_function(self.widget, "test_spmsm_save")
+        setup["widget"].w_step.c_type.setCurrentIndex(3)
+        assert setup["widget"].w_step.c_type.currentText() == "SPMSM"
+        assert type(setup["widget"].machine) == MachineSIPMSM
+        save_function(setup["widget"], "test_spmsm_save")
         # SIPMSM
-        self.widget.w_step.c_type.setCurrentIndex(4)
-        assert self.widget.w_step.c_type.currentText() == "SIPMSM"
-        assert type(self.widget.machine) == MachineSIPMSM
-        save_function(self.widget, "test_sipmsm_save")
+        setup["widget"].w_step.c_type.setCurrentIndex(4)
+        assert setup["widget"].w_step.c_type.currentText() == "SIPMSM"
+        assert type(setup["widget"].machine) == MachineSIPMSM
+        save_function(setup["widget"], "test_sipmsm_save")
         # IPMSM
-        self.widget.w_step.c_type.setCurrentIndex(5)
-        assert self.widget.w_step.c_type.currentText() == "IPMSM"
-        assert type(self.widget.machine) == MachineIPMSM
-        save_function(self.widget, "test_ipmsm_save")
+        setup["widget"].w_step.c_type.setCurrentIndex(5)
+        assert setup["widget"].w_step.c_type.currentText() == "IPMSM"
+        assert type(setup["widget"].machine) == MachineIPMSM
+        save_function(setup["widget"], "test_ipmsm_save")
         # WRSM
-        self.widget.w_step.c_type.setCurrentIndex(6)
-        assert self.widget.w_step.c_type.currentText() == "WRSM"
-        assert type(self.widget.machine) == MachineWRSM
-        save_function(self.widget, "test_wrsm_save")
+        setup["widget"].w_step.c_type.setCurrentIndex(6)
+        assert setup["widget"].w_step.c_type.currentText() == "WRSM"
+        assert type(setup["widget"].machine) == MachineWRSM
+        save_function(setup["widget"], "test_wrsm_save")
         # SRM
-        self.widget.w_step.c_type.setCurrentIndex(7)
-        assert self.widget.w_step.c_type.currentText() == "SRM"
-        assert type(self.widget.machine) == MachineSRM
-        save_function(self.widget, "test_srm_save")
+        setup["widget"].w_step.c_type.setCurrentIndex(7)
+        assert setup["widget"].w_step.c_type.currentText() == "SRM"
+        assert type(setup["widget"].machine) == MachineSRM
+        save_function(setup["widget"], "test_srm_save")
         # SCIM
-        self.widget.w_step.c_type.setCurrentIndex(0)
-        assert self.widget.w_step.c_type.currentText() == "SCIM"
-        assert type(self.widget.machine) == MachineSCIM
+        setup["widget"].w_step.c_type.setCurrentIndex(0)
+        assert setup["widget"].w_step.c_type.currentText() == "SCIM"
+        assert type(setup["widget"].machine) == MachineSCIM
 
 
 def save_function(widget, file_name):
