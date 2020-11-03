@@ -62,18 +62,16 @@ def plot(
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
 
     patches = list()
-    # getting the matrix  wind_mat [Nrad,Ntan,Zs,qs] representing the winding
-    if type(self.winding) is WindingSC:
-        wind_mat = None
-    else:
-        try:
+    # getting the number of phases and winding connection matrix
+    if self.winding is not None:
+        if isinstance(self.winding, WindingSC):  # plot only one phase for WindingSC
+            wind_mat = None
+            qs = 1
+        else:
             Zs = self.get_Zs()
             wind_mat = self.winding.comp_connection_mat(Zs)
-            (Nrad, Ntan, Zs, qs) = wind_mat.shape
-        except Exception:
-            wind_mat = None
-    if wind_mat is None:
-        qs = 1  # getting number of surface in winding Zone in the Slot
+            qs = self.winding.qs
+
     for surf in surf_list:
         if surf.label is not None and "Lamination" in surf.label:
             patches.extend(surf.get_patches(color_lam, is_edge_only=is_edge_only))
@@ -111,13 +109,21 @@ def plot(
                 axes.set_title("Rotor with Winding")
             # Add the winding legend only if needed
             if not is_lam_only:
-                phase_name = gen_name(qs, is_add_phase=True)
-                for ii in range(qs):
-                    if not phase_name[ii] in label_leg:
-                        # Avoid adding twice the same label
-                        index = ii % len(PHASE_COLORS)
-                        patch_leg.append(Patch(color=PHASE_COLORS[index]))
-                        label_leg.append(phase_name[ii])
+                if self.is_stator:
+                    prefix = "Stator "
+                else:
+                    prefix = "Rotor "
+                if isinstance(self.winding, WindingSC):
+                    patch_leg.append(Patch(color=PHASE_COLORS[0]))
+                    label_leg.append(prefix + "Bar")
+                else:
+                    phase_name = [prefix + n for n in gen_name(qs, is_add_phase=True)]
+                    for ii in range(qs):
+                        if not phase_name[ii] in label_leg:
+                            # Avoid adding twice the same label
+                            index = ii % len(PHASE_COLORS)
+                            patch_leg.append(Patch(color=PHASE_COLORS[index]))
+                            label_leg.append(phase_name[ii])
             legend(patch_leg, label_leg)
         if is_show_fig:
             fig.show()
