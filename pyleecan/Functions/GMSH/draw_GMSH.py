@@ -182,12 +182,18 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
 
         if not repeated:
             nline = len(d[idx]) - 2
-            d[idx].update({nline: {'tag': ltag,
-                               'n_elements': n_elements,
-                               'bc_name': bc,
-                               'begin': {'tag': btag, 'coord': complex(bx, by)},
-                               'end': {'tag': etag, 'coord': complex(ex, ey)},
-                               'cent': {'tag': ctag, 'coord': complex(cx, cy)}}})
+            d[idx].update(
+                {
+                    nline: {
+                        "tag": ltag,
+                        "n_elements": n_elements,
+                        "bc_name": bc,
+                        "begin": {"tag": btag, "coord": complex(bx, by)},
+                        "end": {"tag": etag, "coord": complex(ex, ey)},
+                        "cent": {"tag": ctag, "coord": complex(cx, cy)},
+                    }
+                }
+            )
 
     else:
         if len(dlines) > 0:
@@ -216,16 +222,22 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
             if type(lvalues) is not dict:
                 continue
             else:
-                if lvalues['tag'] == ltag:
+                if lvalues["tag"] == ltag:
                     repeated = True
 
         if not repeated:
             nline = len(d[idx]) - 2
-            d[idx].update({nline: {'tag': ltag,
-                               'n_elements': n_elements,
-                               'bc_name': bc,
-                               'begin': {'tag': btag, 'coord': complex(bx, by)},
-                               'end': {'tag': etag, 'coord': complex(ex, ey)}}})
+            d[idx].update(
+                {
+                    nline: {
+                        "tag": ltag,
+                        "n_elements": n_elements,
+                        "bc_name": bc,
+                        "begin": {"tag": btag, "coord": complex(bx, by)},
+                        "end": {"tag": etag, "coord": complex(ex, ey)},
+                    }
+                }
+            )
 
     return None
 
@@ -233,25 +245,25 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
 def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=None):
     """Draw a new Air Gap line and add it to GMSH dictionary if it does not exist
 
-        Parameters
-        ----------
-        geo : Model
-            GMSH Model objet
-        line : Object
-            Line Object
-        d : Dictionary
-            GMSH dictionary
-        idx : int
-            Surface index it belongs to
-        mesh_size : float
-            Points mesh size
-        n_elements : int
-            Number of elements on the line for meshing control
+    Parameters
+    ----------
+    geo : Model
+        GMSH Model objet
+    line : Object
+        Line Object
+    d : Dictionary
+        GMSH dictionary
+    idx : int
+        Surface index it belongs to
+    mesh_size : float
+        Points mesh size
+    n_elements : int
+        Number of elements on the line for meshing control
 
-        Returns
-        -------
-        None
-        """
+    Returns
+    -------
+    None
+    """
 
     dlines = list()
     ltag = None
@@ -297,17 +309,23 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
             if type(lvalues) is not dict:
                 continue
             else:
-                if lvalues['tag'] == ltag:
+                if lvalues["tag"] == ltag:
                     repeated = True
 
         if not repeated:
             nline = len(d[idx]) - 2
-            d[idx].update({nline: {'tag': ltag,
-                               'n_elements': n_elements,
-                               'bc_name': bc,
-                               'begin': {'tag': btag, 'coord': complex(bx, by)},
-                               'end': {'tag': etag, 'coord': complex(ex, ey)},
-                               'cent': {'tag': ctag, 'coord': complex(cx, cy)}}})
+            d[idx].update(
+                {
+                    nline: {
+                        "tag": ltag,
+                        "n_elements": n_elements,
+                        "bc_name": bc,
+                        "begin": {"tag": btag, "coord": complex(bx, by)},
+                        "end": {"tag": etag, "coord": complex(ex, ey)},
+                        "cent": {"tag": ctag, "coord": complex(cx, cy)},
+                    }
+                }
+            )
 
     else:
         if len(dlines) > 0:
@@ -341,11 +359,17 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
 
         if not repeated:
             nline = len(d[idx]) - 2
-            d[idx].update({nline: {'tag': ltag,
-                               'n_elements': n_elements,
-                               'bc_name': bc,
-                               'begin': {'tag': btag, 'coord': complex(bx, by)},
-                               'end': {'tag': etag, 'coord': complex(ex, ey)}}})
+            d[idx].update(
+                {
+                    nline: {
+                        "tag": ltag,
+                        "n_elements": n_elements,
+                        "bc_name": bc,
+                        "begin": {"tag": btag, "coord": complex(bx, by)},
+                        "end": {"tag": etag, "coord": complex(ex, ey)},
+                    }
+                }
+            )
 
     return None
 
@@ -417,7 +441,6 @@ def draw_GMSH(
     rotor_list.extend(machine.rotor.build_geometry(sym=sym))
     stator_list = list()
     stator_list.extend(machine.stator.build_geometry(sym=sym))
-
 
     oo = factory.addPoint(0, 0, 0, 0, tag=-1)
 
@@ -606,10 +629,9 @@ def draw_GMSH(
         }
     }
 
-
     # Default rotor mesh element size
     mesh_size = machine.stator.Rext / 100.0
-    #nsurf = 0
+    # nsurf = 0
     stator_cloops = []
     for surf in stator_list:
         nsurf += 1
@@ -740,10 +762,9 @@ def draw_GMSH(
     else:
         sb_list = []
 
-
     # Default sliding mesh element size
     mesh_size = 2.0 * cmath.pi * machine.rotor.Rext / 360.0
-    #nsurf = 0
+    # nsurf = 0
     for surf in sb_list:
         nsurf += 1
         gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
@@ -752,8 +773,8 @@ def draw_GMSH(
             # Gmsh built-in engine does not allow arcs larger than 180deg
             # so arcs are split into two
             if (
-                        isinstance(line, Arc)
-                    and abs(line.get_angle() * 180.0 / cmath.pi) == 180.0
+                isinstance(line, Arc)
+                and abs(line.get_angle() * 180.0 / cmath.pi) == 180.0
             ):
                 if line.is_trigo_direction == True:
                     arc1 = Arc2(
@@ -835,13 +856,15 @@ def draw_GMSH(
                         bc=line.label,
                     )
 
-
     for s_id, s_data in gmsh_dict.items():
         lloop = []
         if s_id == 0:
             continue
         for lid, lvalues in s_data.items():
-            if s_data['label'].find('Airgap') != -1 or s_data['label'].find('SlidingBand') != -1:
+            if (
+                s_data["label"].find("Airgap") != -1
+                or s_data["label"].find("SlidingBand") != -1
+            ):
                 if type(lvalues) is not dict:
                     continue
                 lloop.extend([lvalues["tag"]])
@@ -862,7 +885,4 @@ def draw_GMSH(
     # gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()
 
-
     return gmsh_dict
-
-

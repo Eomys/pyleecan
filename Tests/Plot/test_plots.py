@@ -92,6 +92,7 @@ def import_data():
 
 @pytest.mark.validation
 @pytest.mark.PLOT
+@pytest.mark.long
 class Test_plots(object):
     def test_default_proj_Br_time_space(self, import_data):
         SCIM_006 = import_data["SCIM_006"]

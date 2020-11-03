@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from ..init_fig import init_fig
 from .plot_2D import plot_2D
 from . import unit_dict, norm_dict, axes_dict
 from ...definitions import config_dict
@@ -26,9 +25,11 @@ def plot_2D_Data(
     is_grid=True,
     is_auto_ticks=True,
     fig=None,
+    ax=None,
     barwidth=100,
     type_plot=None,
     fund_harm_dict=None,
+    is_show_fig=None,
 ):
     """Plots a field as a function of time
 
@@ -49,7 +50,7 @@ def plot_2D_Data(
     color_list : list
         list of colors to use for each Data object
     save_path : str
-        full path of the png file where the figure is saved if save_path is not None
+        full path including folder, name and extension of the file to save if save_path is not None
     x_min : float
         minimum value for the x-axis
     x_max : float
@@ -70,21 +71,21 @@ def plot_2D_Data(
         in fft, adjust ticks to freqs (deactivate if too close)
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        ax on which to plot the data
     barwidth : float
         barwidth scaling factor, only if type_plot = "bargraph"
     type_plot : str
         type of 2D graph : "curve", "bargraph", "barchart" or "quiver"
     fund_harm_dict : dict
         Dict containing axis name as key and frequency/order/wavenumber of fundamental harmonic as value to display fundamental harmonic in red in the fft
+    is_show_fig : bool
+        True to show figure after plot
 
     """
     # Extract arg_list it the function called from another script with *arg_list
     if len(arg_list) == 1 and type(arg_list[0]) == tuple:
         arg_list = arg_list[0]
-
-    # Set plot
-    is_show_fig = True if fig is None else False
-    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
 
     # Get colors and line_styles from config_dict
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
@@ -150,7 +151,7 @@ def plot_2D_Data(
             Xdatas.append(result[list(result)[0]])
 
     # Find main axis as the axis with the most values
-    main_axis = axes_list[0]  # max(axes_list, key=lambda x: x.values.size)
+    # main_axis = axes_list[0]  # max(axes_list, key=lambda x: x.values.size)
 
     # Build xlabel and title parts 2 and 3
     title2 = ""
@@ -322,6 +323,7 @@ def plot_2D_Data(
             legend_list=legends,
             color_list=color_list,
             fig=fig,
+            ax=ax,
             title=title,
             xlabel=xlabel,
             ylabel=ylabel,
@@ -338,6 +340,7 @@ def plot_2D_Data(
             save_path=save_path,
             barwidth=barwidth,
             fund_harm=fund_harm,
+            is_show_fig=is_show_fig,
         )
 
     else:
@@ -352,6 +355,7 @@ def plot_2D_Data(
             legend_list=legends,
             color_list=color_list,
             fig=fig,
+            ax=ax,
             title=title,
             xlabel=xlabel,
             ylabel=ylabel,
@@ -367,7 +371,5 @@ def plot_2D_Data(
             xticks=xticks,
             linestyle_list=linestyle_list,
             save_path=save_path,
+            is_show_fig=is_show_fig,
         )
-
-    if is_show_fig:
-        fig.show()

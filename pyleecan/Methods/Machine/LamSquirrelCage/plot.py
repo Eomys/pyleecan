@@ -19,7 +19,7 @@ def plot(
     alpha=0,
     delta=0,
     is_edge_only=False,
-    is_show=True,
+    is_show_fig=True,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -40,7 +40,7 @@ def plot(
         Complex value for translation
     is_edge_only: bool
         To plot transparent Patches
-    is_show : bool
+    is_show_fig : bool
         To call show at the end of the method
 
     Returns
@@ -50,9 +50,10 @@ def plot(
 
     # Lamination and ventilation ducts patches
     (fig, axes, patch_leg, label_leg) = init_fig(fig)
+
     # Plot the lamination
     super(type(self), self).plot(
-        fig,
+        fig=fig,
         is_lam_only=is_lam_only,
         sym=sym,
         alpha=alpha,
@@ -60,39 +61,13 @@ def plot(
         is_edge_only=is_edge_only,
     )
 
-    # Plot the winding if needed
+    # init figure again to get updated label_leg and patch_leg
+    (fig, axes, patch_leg, label_leg) = init_fig(fig)
+
+    # setup the patch of the short circuit ring if needed
     if not is_lam_only:
-        # point needed to plot the bar of a slot
-        Hbar = self.winding.conductor.Hbar
-        Wbar = self.winding.conductor.Wbar
-        if self.is_internal:
-            HS = self.Rext - self.slot.comp_height()
-            Bar_points = [
-                HS + 1j * Wbar / 2,
-                HS - 1j * Wbar / 2,
-                HS + Hbar - 1j * Wbar / 2,
-                HS + Hbar + 1j * Wbar / 2,
-            ]
-        else:
-            HS = self.Rint + self.slot.comp_height()
-            Bar_points = [
-                HS + 1j * Wbar / 2,
-                HS - 1j * Wbar / 2,
-                HS - Hbar - 1j * Wbar / 2,
-                HS - Hbar + 1j * Wbar / 2,
-            ]
-        Bar_array = array(Bar_points)
-        # Computation of the coordinate of every bar by complex rotation
-        bar_list = []
-        for i in range(self.slot.Zs):
-            bar_list.append(Bar_array * exp(-1j * i * (2 * pi) / self.slot.Zs))
-
         patches = list()
-        # Creation of the bar patches
-        for wind in bar_list:
-            patches.append(Polygon(list(zip(wind.real, wind.imag)), color=BAR_COLOR))
 
-        # Add the Short Circuit Ring
         Rmw = self.slot.comp_radius_mid_wind()
         patches.append(
             Wedge(
@@ -112,17 +87,13 @@ def plot(
     axes.set_ylim(-Lim, Lim)
 
     if not is_lam_only:
-        # Add the bare to the fig
+        # Add the short ciruit ring to the fig
         for patch in patches:
             axes.add_patch(patch)
-        # Legend setup (Rotor already setup by LamSlotWind.plot)
-        if "Rotor Bar" not in label_leg:
-            patch_leg.append(Patch(color=BAR_COLOR))
-            label_leg.append("Rotor Bar")
         if "Short Circuit Ring" not in label_leg:
             patch_leg.append(Patch(color=SCR_COLOR))
             label_leg.append("Short Circuit Ring")
 
         legend(patch_leg, label_leg)
-    if is_show:
+    if is_show_fig:
         fig.show()

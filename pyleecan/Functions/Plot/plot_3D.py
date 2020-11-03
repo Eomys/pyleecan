@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.art3d as art3d
 
-from ...Functions.init_fig import init_subplot
+from ...Functions.init_fig import init_fig
 from ...definitions import config_dict
 
 # Import values from config dict
@@ -32,13 +32,14 @@ def plot_3D(
     xticks=None,
     yticks=None,
     fig=None,
-    subplot_index=None,
+    ax=None,
     is_logscale_x=False,
     is_logscale_y=False,
     is_logscale_z=False,
     is_disp_title=True,
     type="stem",
     save_path=None,
+    is_show_fig=None,
 ):
     """Plots a 3D graph ("stem", "surf" or "pcolor")
 
@@ -76,8 +77,8 @@ def plot_3D(
         list of ticks to use for the x-axis
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
-    subplot_index : int
-        index of subplot in which to plot
+    ax : Matplotlib.axes.Axes object
+        ax on which to plot the data
     is_logscale_x : bool
         boolean indicating if the x-axis must be set in logarithmic scale
     is_logscale_y : bool
@@ -88,14 +89,25 @@ def plot_3D(
         boolean indicating if the title must be displayed
     type : str
         type of 3D graph : "stem", "surf", "pcolor" or "scatter"
+    save_path : str
+        full path including folder, name and extension of the file to save if save_path is not None
+    is_show_fig : bool
+        True to show figure after plot
     """
 
-    # Set figure/subplot
-    is_show_fig = True if fig is None else False
-    is_3d = False
+    # Set if figure must be shown if is_show_fig is None
+    if is_show_fig is None:
+        is_show_fig = True if fig is None else False
+
+    # Set figure if needed
+    if fig is None and ax is None:
+        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle", is_3d=True)
+
+    # Set if figure is 3D
     if type != "pcolor" and type != "scatter":
         is_3d = True
-    fig, ax = init_subplot(fig=fig, subplot_index=subplot_index, is_3d=is_3d)
+    else:
+        is_3d = False
 
     # Plot
     if type == "stem":
