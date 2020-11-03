@@ -66,6 +66,11 @@ try:
 except ImportError as error:
     get_magnet_dict = error
 
+try:
+    from ..Methods.Slot.Hole.convert_to_UD import convert_to_UD
+except ImportError as error:
+    convert_to_UD = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -175,6 +180,17 @@ class Hole(FrozenClass):
         )
     else:
         get_magnet_dict = get_magnet_dict
+    # cf Methods.Slot.Hole.convert_to_UD
+    if isinstance(convert_to_UD, ImportError):
+        convert_to_UD = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Hole method convert_to_UD: " + str(convert_to_UD)
+                )
+            )
+        )
+    else:
+        convert_to_UD = convert_to_UD
     # save and copy methods are available in all object
     save = save
     copy = copy

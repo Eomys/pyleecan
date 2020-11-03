@@ -1428,7 +1428,8 @@
             "comp_height",
             "get_magnet_by_id",
             "set_magnet_by_id",
-            "get_magnet_dict"
+            "get_magnet_dict",
+            "convert_to_UD"
         ],
         "mother": "",
         "name": "Hole",
