@@ -10,7 +10,7 @@ from ....Methods import ParentMissingError
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
 
-def plot(self, fig=None, display_magnet=True):
+def plot(self, fig=None, display_magnet=True, is_show_fig=True):
     """Plot the Hole in a matplotlib fig
 
     Parameters
@@ -64,4 +64,5 @@ def plot(self, fig=None, display_magnet=True):
         patch_leg.append(Patch(color=MAGNET_COLOR))
         label_leg.append("Magnet")
         legend(patch_leg, label_leg)
-    fig.show()
+    if is_show_fig:
+        fig.show()

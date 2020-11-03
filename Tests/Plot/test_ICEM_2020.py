@@ -438,7 +438,8 @@ def test_SlotUD():
         0.0690858798800485 - 0.0283397459621556j,
         0.0569615242270663 - 0.0213397459621556j,
     ]
-    machine.rotor.slot = SlotUD(Zs=6, is_sym=True, point_list=point_list)
+    machine.rotor.slot = SlotUD(Zs=6)
+    machine.rotor.slot.set_from_point_list(is_sym=True, point_list=point_list)
 
     # Plot, check and save
     machine.plot()
@@ -490,7 +491,7 @@ def test_SlotUD_rotor_external():
         0.0690858798800485 - 0.0283397459621556j,
         0.0569615242270663 - 0.0213397459621556j,
     ]
-    machine.rotor.slot = SlotUD(Zs=6, is_sym=True, point_list=point_list)
+    machine.rotor.slot = SlotUD(Zs=6)
 
     # Plot, check and save
     machine.plot()

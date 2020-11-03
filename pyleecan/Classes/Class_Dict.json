@@ -1425,7 +1425,11 @@
             "get_Rbo",
             "has_magnet",
             "plot",
-            "comp_height"
+            "comp_height",
+            "get_magnet_by_id",
+            "set_magnet_by_id",
+            "get_magnet_dict",
+            "convert_to_UD"
         ],
         "mother": "",
         "name": "Hole",
@@ -2288,7 +2292,8 @@
             "build_geometry",
             "comp_surface_magnet_id",
             "has_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "check"
         ],
         "mother": "HoleMag",
         "name": "HoleUD",
@@ -4247,7 +4252,7 @@
             "comp_flux_airgap",
             "solve_FEA",
             "get_meshsolution",
-            "get_path_save_fem",
+            "get_path_save_fea",
             "get_path_save",
             "comp_time_angle"
         ],
@@ -8144,31 +8149,52 @@
             }
         ],
         "daughters": [],
-        "desc": "\"User defined\" Slot from a point list. ",
+        "desc": "\"User defined\" Slot from a line list. ",
         "is_internal": false,
         "methods": [
-            "build_geometry"
+            "build_geometry",
+            "set_from_point_list",
+            "get_surface_wind",
+            "check"
         ],
-        "mother": "Slot",
+        "mother": "SlotWind",
         "name": "SlotUD",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotUD.csv",
         "properties": [
             {
-                "desc": "Coordinates of the slot points (will be connected in order with Segments)",
+                "desc": "list of line to draw the edges of the slot",
                 "max": "",
                 "min": "",
-                "name": "point_list",
-                "type": "list",
+                "name": "line_list",
+                "type": "[Line]",
                 "unit": "-",
-                "value": []
+                "value": ""
             },
             {
-                "desc": "True to enter only half of the point coordinates",
+                "desc": "Index of the first line to include in the winding",
                 "max": "",
                 "min": "",
-                "name": "is_sym",
-                "type": "bool",
+                "name": "wind_begin_index",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Index of the last line to include in the winding",
+                "max": "",
+                "min": "",
+                "name": "wind_end_index",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "0 to close winding with Segment, 1 for Arc1",
+                "max": "1",
+                "min": "0",
+                "name": "type_line_wind",
+                "type": "int",
                 "unit": "-",
                 "value": 0
             }
@@ -9769,6 +9795,7 @@
         ],
         "daughters": [
             "SlotCirc",
+            "SlotUD",
             "SlotW10",
             "SlotW11",
             "SlotW12",

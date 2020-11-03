@@ -51,6 +51,26 @@ try:
 except ImportError as error:
     comp_height = error
 
+try:
+    from ..Methods.Slot.Hole.get_magnet_by_id import get_magnet_by_id
+except ImportError as error:
+    get_magnet_by_id = error
+
+try:
+    from ..Methods.Slot.Hole.set_magnet_by_id import set_magnet_by_id
+except ImportError as error:
+    set_magnet_by_id = error
+
+try:
+    from ..Methods.Slot.Hole.get_magnet_dict import get_magnet_dict
+except ImportError as error:
+    get_magnet_dict = error
+
+try:
+    from ..Methods.Slot.Hole.convert_to_UD import convert_to_UD
+except ImportError as error:
+    convert_to_UD = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -127,6 +147,50 @@ class Hole(FrozenClass):
         )
     else:
         comp_height = comp_height
+    # cf Methods.Slot.Hole.get_magnet_by_id
+    if isinstance(get_magnet_by_id, ImportError):
+        get_magnet_by_id = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Hole method get_magnet_by_id: " + str(get_magnet_by_id)
+                )
+            )
+        )
+    else:
+        get_magnet_by_id = get_magnet_by_id
+    # cf Methods.Slot.Hole.set_magnet_by_id
+    if isinstance(set_magnet_by_id, ImportError):
+        set_magnet_by_id = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Hole method set_magnet_by_id: " + str(set_magnet_by_id)
+                )
+            )
+        )
+    else:
+        set_magnet_by_id = set_magnet_by_id
+    # cf Methods.Slot.Hole.get_magnet_dict
+    if isinstance(get_magnet_dict, ImportError):
+        get_magnet_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Hole method get_magnet_dict: " + str(get_magnet_dict)
+                )
+            )
+        )
+    else:
+        get_magnet_dict = get_magnet_dict
+    # cf Methods.Slot.Hole.convert_to_UD
+    if isinstance(convert_to_UD, ImportError):
+        convert_to_UD = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Hole method convert_to_UD: " + str(convert_to_UD)
+                )
+            )
+        )
+    else:
+        convert_to_UD = convert_to_UD
     # save and copy methods are available in all object
     save = save
     copy = copy

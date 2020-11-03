@@ -66,8 +66,10 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
             hole_id += 1
 
     # Apply the transformations
+    return_list = list()
     for surf in surf_list:
-        surf.rotate(alpha)
-        surf.translate(delta)
+        return_list.append(surf.copy())
+        return_list[-1].rotate(alpha)
+        return_list[-1].translate(delta)
 
-    return surf_list
+    return return_list
