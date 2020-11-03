@@ -3574,7 +3574,8 @@
             "plot",
             "comp_number_phase_eq",
             "comp_periodicity",
-            "comp_surface_ring"
+            "comp_surface_ring",
+            "comp_resistance_wind"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -6586,6 +6587,15 @@
                 "max": "",
                 "min": "",
                 "name": "Phi_wind_stator",
+                "type": "SciDataTool.Classes.DataTime.DataTime",
+                "unit": "Wb",
+                "value": "None"
+            },
+            {
+                "desc": "Rotor winding flux",
+                "max": "",
+                "min": "",
+                "name": "Phi_wind_rotor",
                 "type": "SciDataTool.Classes.DataTime.DataTime",
                 "unit": "Wb",
                 "value": "None"
