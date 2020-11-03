@@ -25,7 +25,11 @@ def generate_as_dict(gen_dict, class_dict):
     var_str = ""  # For the creation of the return dict (in as_dict)
 
     for prop in class_dict["properties"]:
-        if prop["type"] in PYTHON_TYPE and prop["type"] not in ["dict", "list"]:
+        if prop["type"] in PYTHON_TYPE and prop["type"] not in [
+            "dict",
+            "list",
+            "complex",
+        ]:
             # Add => "class_name ["var_name"] = self.var_name" to var_str
             var_str += (
                 TAB2
@@ -35,6 +39,19 @@ def generate_as_dict(gen_dict, class_dict):
                 + '"] = self.'
                 + prop["name"]
                 + "\n"
+            )
+        elif prop["type"] == "complex":  # complex is not json serializable
+            var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
+            var_str += TAB2 + "else:\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"] = str(self.'
+                + prop["name"]
+                + ")\n"
             )
         elif prop["type"] in ["dict", "list"]:
             # Add => "class_name_dict["var_name"] = self.var_name.copy()" to var_str

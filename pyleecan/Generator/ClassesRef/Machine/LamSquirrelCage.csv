@@ -5,3 +5,4 @@ ring_mat,,Material of the Rotor short circuit ring,,Material,,,,,,,comp_length_r
 ,,,,,,,,,,,plot,,,
 ,,,,,,,,,,,comp_number_phase_eq,,,
 ,,,,,,,,,,,comp_periodicity,,,
+,,,,,,,,,,,comp_surface_ring,,,

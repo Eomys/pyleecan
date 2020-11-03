@@ -58,6 +58,18 @@ def check_optimization_input(self):
                 )
                 raise OptimizationAttributeError(mess)
 
+        # Check if objectives and other datakeepers have different symbol
+        if isinstance(self.problem.datakeeper_list, list):
+            symbol_list = [of.symbol for of in self.problem.obj_func] + [
+                dk.symbol for dk in self.problem.datakeeper_list
+            ]
+        else:
+            symbol_list = [of.symbol for of in self.problem.obj_func]
+
+        if len(symbol_list) != len(set(symbol_list)):
+            mess = "Every objective function and datakeeper must have a unique symbol."
+            raise OptimizationAttributeError(mess)
+
     # Check the problem contains at least one objective function
     if self.problem.design_var == None or (
         isinstance(self.problem.design_var, list) and len(self.problem.design_var) == 0

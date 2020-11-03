@@ -20,16 +20,16 @@ def get_surface_wind(self, alpha=0, delta=0):
         Surface corresponding to the Winding Area
     """
 
-    # check if the slot is on the stator
-    if self.get_is_stator():
-        st = "S"
-    else:
-        st = "R"
+    # get the name of the lamination
+    st = self.get_name_lam()
 
     # Create curve list
     curve_list = self.build_geometry()[2:-2]
     curve_list.append(
-        Segment(begin=curve_list[-1].get_end(), end=curve_list[0].get_begin(),)
+        Segment(
+            begin=curve_list[-1].get_end(),
+            end=curve_list[0].get_begin(),
+        )
     )
 
     # Create surface
@@ -40,7 +40,7 @@ def get_surface_wind(self, alpha=0, delta=0):
     else:
         Zmid = self.get_Rbo() - self.H0 - H1 - self.H2 / 2
     surface = SurfLine(
-        line_list=curve_list, label="Wind" + st + "_R0_T0_S0", point_ref=Zmid
+        line_list=curve_list, label="Wind_" + st + "_R0_T0_S0", point_ref=Zmid
     )
 
     # Apply transformation

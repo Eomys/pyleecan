@@ -12,6 +12,7 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.SlotW12.check import S12_R20CheckError
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -152,3 +153,11 @@ class Test_SlotW12_meth(object):
             a = result[i].end
             b = curve_list[i].end
             assert abs((a - b) / a - 0) < DELTA
+
+    def test_check_error(self):
+        """Check that the check method is correctly raising an error"""
+        lam = LamSlot(is_internal=True, Rext=0.1325)
+        lam.slot = SlotW12(Zs=69, R2=0)
+
+        with pytest.raises(S12_R20CheckError) as context:
+            lam.slot.check()

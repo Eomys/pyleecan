@@ -89,7 +89,7 @@ def test_Magnetic_FEMM_sym():
         symbol="B_r",
     )
     B = ImportVectorField(components={"radial": Br_data})
-    simu_load.input = InputFlux(time=time, angle=angle2, B=B)
+    simu_load.input = InputFlux(time=time, angle=angle2, B=B, OP=simu.input.copy())
 
     out = Output(simu=simu)
     simu.run()
@@ -102,21 +102,23 @@ def test_Magnetic_FEMM_sym():
 
     # Plot the result by comparing the two simulation (sym / no sym)
     plt.close("all")
-    out.plot_A_space(
-        "mag.B", data_list=[out2.mag.B], legend_list=["No symmetry", "1/2 symmetry"]
-    )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_EM_SCIM_NL_006_sym.png"))
+    out.plot_2D_Data(
+        "mag.B",
+        "angle",
+        data_list=[out2.mag.B],
+        legend_list=["No symmetry", "1/2 symmetry"],
+        save_path=join(save_path, "test_EM_SCIM_NL_006_sym.png"),
+    )
 
     # Plot the result by comparing the two simulation (no sym / MANATEE)
     plt.close("all")
-    out.plot_A_space(
+
+    out.plot_2D_Data(
         "mag.B",
+        "angle",
         data_list=[out3.mag.B],
         legend_list=["No symmetry", "MANATEE MMF"],
         component_list=["radial"],
+        save_path=join(save_path, "test_EM_SCIM_NL_006_MMF.png"),
     )
-
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_EM_SCIM_NL_006_MMF.png"))

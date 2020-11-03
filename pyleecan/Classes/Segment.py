@@ -306,8 +306,14 @@ class Segment(Line):
 
         # Get the properties inherited from Line
         Segment_dict = super(Segment, self).as_dict()
-        Segment_dict["begin"] = self.begin
-        Segment_dict["end"] = self.end
+        if self.begin is None:
+            Segment_dict["begin"] = None
+        else:
+            Segment_dict["begin"] = str(self.begin)
+        if self.end is None:
+            Segment_dict["end"] = None
+        else:
+            Segment_dict["end"] = str(self.end)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Segment_dict["__class__"] = "Segment"
@@ -327,6 +333,8 @@ class Segment(Line):
 
     def _set_begin(self, value):
         """setter of begin"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("begin", value, "complex")
         self._begin = value
 
@@ -345,6 +353,8 @@ class Segment(Line):
 
     def _set_end(self, value):
         """setter of end"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("end", value, "complex")
         self._end = value
 

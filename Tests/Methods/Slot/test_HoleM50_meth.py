@@ -83,7 +83,7 @@ class Test_HoleM50_meth(object):
         )
         result = test_obj.hole[0].comp_surface()
         a = result
-        b = 3.77977e-04
+        b = 3.7803e-04
         assert abs((a - b) / a - 0) < DELTA
 
     def test_comp_W5(self):
@@ -265,3 +265,103 @@ class Test_HoleM50_meth(object):
         assert result[5].label[:5] == "Hole_"
         assert result[5].label[-9:] == "_R0_T3_S0"
         assert len(result[5].line_list) == 7
+
+    def test_build_geometry_two_hole_with_magnet_is_simplified(self):
+        """check that curve_list is correct (one hole)"""
+        test_obj = LamHole(is_internal=True, is_stator=False, Rext=0.075)
+        test_obj.hole = list()
+        test_obj.hole.append(
+            HoleM50(
+                Zh=8,
+                W0=50e-3,
+                W1=2e-3,
+                W2=1e-3,
+                W3=1e-3,
+                W4=20.6e-3,
+                H0=17.3e-3,
+                H1=1.25e-3,
+                H2=0.5e-3,
+                H3=6.8e-3,
+                H4=1e-3,
+                magnet_0=MagnetType10(Wmag=0.01, Hmag=0.02),
+            )
+        )
+        result = test_obj.hole[0].build_geometry(is_simplified=True)
+        assert len(result) == 6
+        for surf in result:
+            assert type(surf) is SurfLine
+
+        assert result[0].label[:5] == "Hole_"
+        assert result[0].label[-9:] == "_R0_T0_S0"
+        assert len(result[0].line_list) == 7
+        assert result[1].label[:11] == "HoleMagnet_"
+        assert result[1].label[-11:] == "_N_R0_T0_S0"
+        assert len(result[1].line_list) == 2
+        assert result[2].label[:5] == "Hole_"
+        assert result[2].label[-9:] == "_R0_T1_S0"
+        assert len(result[2].line_list) == 4
+        assert result[3].label[:5] == "Hole_"
+        assert result[3].label[-9:] == "_R0_T2_S0"
+        assert len(result[3].line_list) == 4
+        assert result[4].label[:11] == "HoleMagnet_"
+        assert result[4].label[-11:] == "_N_R0_T1_S0"
+        assert len(result[4].line_list) == 2
+        assert result[5].label[:5] == "Hole_"
+        assert result[5].label[-9:] == "_R0_T3_S0"
+        assert len(result[5].line_list) == 7
+
+    def test_comp_radius_mid_yoke(self):
+        test_obj = LamHole(is_internal=True, is_stator=False, Rext=0.325, Rint=0.032121)
+        test_obj.hole.append(
+            HoleM50(
+                Zh=8,
+                W0=50e-3,
+                W1=2e-3,
+                W2=1e-3,
+                W3=1e-3,
+                W4=20.6e-3,
+                H0=17.3e-3,
+                H1=1.25e-3,
+                H2=0.5e-3,
+                H3=6.8e-3,
+                H4=1e-3,
+            )
+        )
+        assert test_obj.comp_radius_mid_yoke() == 0.1661908960397621
+
+        test_obj = LamHole(
+            is_internal=False, is_stator=False, Rext=0.325, Rint=0.032121
+        )
+        test_obj.hole.append(
+            HoleM50(
+                Zh=8,
+                W0=50e-3,
+                W1=2e-3,
+                W2=1e-3,
+                W3=1e-3,
+                W4=20.6e-3,
+                H0=17.3e-3,
+                H1=1.25e-3,
+                H2=0.5e-3,
+                H3=6.8e-3,
+                H4=1e-3,
+            )
+        )
+        assert test_obj.comp_radius_mid_yoke() != 0.1661908960397621
+        assert test_obj.comp_radius_mid_yoke() == 0.1785605
+
+    def test_comp_surface_magnet_id(self):
+        """check that id is 0"""
+        hole = HoleM50(
+            Zh=8,
+            W0=50e-3,
+            W1=2e-3,
+            W2=1e-3,
+            W3=1e-3,
+            W4=20.6e-3,
+            H0=17.3e-3,
+            H1=1.25e-3,
+            H2=0.5e-3,
+            H3=6.8e-3,
+        )
+        assert hole.comp_surface_magnet_id(3) == 0

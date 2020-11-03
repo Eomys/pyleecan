@@ -74,16 +74,11 @@ def test_EM_IPMSM_FL_002():
 
     # Plot the result by comparing the two simulation
     plt.close("all")
-    out.plot_A_space(
-        "mag.B", data_list=[out2.mag.B], legend_list=["No symmetry", "1/2 symmetry"]
+
+    out.plot_2D_Data(
+        "mag.B",
+        "angle",
+        data_list=[out2.mag.B],
+        legend_list=["No symmetry", "1/2 symmetry"],
+        save_path=join(save_path, "test_EM_IPMSM_FL_002_sym.png"),
     )
-
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_EM_IPMSM_FL_002_sym.png"))
-
-    # # Plot the surface magnetic forces
-    # plt.close("all")
-    # out.plot_force_space(j_t0=0, is_deg=False, out_list=[])
-
-    # fig = plt.gcf()
-    # fig.savefig(join(save_path, "test_EM_IPMSM_FL_002_force.png"))

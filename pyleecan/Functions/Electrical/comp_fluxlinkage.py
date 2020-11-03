@@ -1,7 +1,10 @@
+import os
+from os.path import join
+
 from ...Functions.FEMM.draw_FEMM import draw_FEMM
 from ...Functions.Electrical.coordinate_transformation import n2dq
 from ...Classes._FEMMHandler import FEMMHandler
-from numpy import zeros, linspace, pi, split, mean
+from numpy import linspace, pi, split
 from SciDataTool.Classes.Data1D import Data1D
 
 
@@ -24,6 +27,24 @@ def comp_fluxlinkage(obj, output):
     zp = output.simu.machine.stator.get_pole_pair_number()
     Nt_tot = obj.Nt_tot
     rot_dir = output.get_rot_dir()
+
+    # Get save path
+    str_EEC = "EEC"
+
+    path_res = output.get_path_result()
+
+    save_dir = join(path_res, "Femm")
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+
+    if output.simu.machine.name not in [None, ""]:
+        file_name = output.simu.machine.name + "_" + str_EEC + ".fem"
+    elif output.simu.name not in [None, ""]:
+        file_name = output.simu.name + "_" + str_EEC + ".fem"
+    else:  # Default name
+        file_name = "FEMM_" + str_EEC + ".fem"
+
+    path_save = join(save_dir, file_name)
 
     # Set the symmetry factor according to the machine
     if obj.is_periodicity_a:
@@ -51,7 +72,7 @@ def comp_fluxlinkage(obj, output):
     )
 
     # modify some quantities
-    output.elec.time = Data1D(
+    output.elec.Time = Data1D(
         name="time",
         unit="s",
         values=(angle_rotor - angle_rotor[0]) / (2 * pi * output.elec.N0 / 60),
@@ -73,10 +94,14 @@ def comp_fluxlinkage(obj, output):
         is_antiper=is_antiper_a,
         type_calc_leakage=obj.type_calc_leakage,
         kgeo_fineness=obj.Kgeo_fineness,  # TODO fix inconsistent lower/upper case
+        path_save=path_save,
     )
 
     # Solve for all time step and store all the results in output
     Phi_wind = obj.solve_FEMM(femm, output, sym, FEMM_dict)
+
+    # Close FEMM after simulation
+    femm.closefemm()
 
     # Define d axis angle for the d,q transform
     d_angle = (angle_rotor - angle_offset_initial) * zp

@@ -64,7 +64,7 @@ slotW10_test.append(
 
 
 @pytest.mark.METHODS
-class Test_SloyW10_meth(object):
+class Test_SlotW10_meth(object):
     """pytest for SlotW10 methods"""
 
     @pytest.mark.parametrize("test_dict", slotW10_test)
@@ -217,7 +217,7 @@ class Test_SloyW10_meth(object):
         point_ref = (Z7 + Ztan1 + Ztan2 + Z6) / 4
 
         surface = SurfLine(
-            line_list=curve_list, point_ref=point_ref, label="WindS_R0_T0_S0"
+            line_list=curve_list, point_ref=point_ref, label="Wind_Stator_R0_T0_S0"
         )
         expected.append(surface)
 
@@ -229,7 +229,7 @@ class Test_SloyW10_meth(object):
         curve_list.append(Segment(Ztan2, Ztan1))
         point_ref = (Z4 + Ztan1 + Ztan2 + Z5) / 4
         surface = SurfLine(
-            line_list=curve_list, point_ref=point_ref, label="WindS_R0_T1_S0"
+            line_list=curve_list, point_ref=point_ref, label="Wind_Stator_R0_T1_S0"
         )
         expected.append(surface)
 
@@ -246,3 +246,13 @@ class Test_SloyW10_meth(object):
                 assert abs((a - b) / a - 0) < DELTA
 
             assert result[i].label == expected[i].label
+
+    def test_get_surface_wind(self):
+        """Check that the get_surface_wind works when stator = false"""
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW10(
+            H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3, H1_is_rad=False
+        )
+        result = lam.slot.get_surface_wind()
+        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert len(result.get_lines()) == 4

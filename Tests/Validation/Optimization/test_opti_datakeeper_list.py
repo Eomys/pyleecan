@@ -35,8 +35,6 @@ def test_opti_datakeeper_list():
     # Definition of the simulation
     simu = Simu1(name="Test_machine", machine=SCIM_001)
 
-    output = Output(simu=simu)
-
     # Design variable
     my_vars = [
         OptiDesignVar(
@@ -82,7 +80,7 @@ def test_opti_datakeeper_list():
 
     # Defining the problem
     my_prob = OptiProblem(
-        output=output,
+        simu=simu,
         design_var=my_vars,
         obj_func=objs,
         datakeeper_list=datakeeper_list,

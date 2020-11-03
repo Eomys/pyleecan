@@ -119,5 +119,5 @@ class PWSlot24(Gen_PWSlot24, QWidget):
             )
         if yoke_height <= 0:
             return translate(
-                "The slot height is greater than the lamination !", "PWSlot24 check"
+                "The slot height is greater than the lamination !", "PWSlot24 yoke"
             )

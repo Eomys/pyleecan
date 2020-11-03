@@ -25,6 +25,11 @@ from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
+from pyleecan.Methods.Machine.Winding import WindingError
+from pyleecan.Methods.Machine.WindingCW2LT.comp_connection_mat import (
+    WindingT1DefMsError,
+)
+from pyleecan.Methods.Machine.WindingCW1L.comp_connection_mat import WindingT2DefNtError
 
 import numpy as np
 import random
@@ -80,16 +85,17 @@ def test_FEMM_sym():
 
     # FEMM files (mesh and results) are available in Results folder
     copyfile(
-        join(out.path_res, "Femm", "fig_09_FEMM_sym_model.ans"),
+        join(out.path_result, "Femm", "fig_09_FEMM_sym_model.ans"),
         join(save_path, "fig_09_FEMM_sym_model.ans"),
     )
     copyfile(
-        join(out.path_res, "Femm", "fig_09_FEMM_sym_model.fem"),
+        join(out.path_result, "Femm", "fig_09_FEMM_sym_model.fem"),
         join(save_path, "fig_09_FEMM_sym_model.fem"),
     )
 
 
 @pytest.mark.GMSH
+@pytest.mark.long
 def test_gmsh_mesh_dict():
     """Figure 10: Generate a 3D mesh with Gmsh by setting the
     number of element on each lines
@@ -149,8 +155,10 @@ def test_gmsh_mesh_dict():
 
 
 @pytest.mark.GMSH
+@pytest.mark.long
 def test_SlotMulti_sym():
-    """Figure 11: Generate a 3D mesh with GMSH for a lamination
+    """Figure 11: Genera
+    te a 3D mesh with GMSH for a lamination
     with several slot types and notches
     """
 
@@ -256,9 +264,64 @@ def test_MachineUD():
     fig.savefig(join(save_path, "fig_12_MachineUD.svg"), format="svg")
     assert len(fig.axes[0].patches) == 56
 
+    machine.frame = None
+    machine.name = None
 
-def test_SlotMulti():
-    """Figure 13: Check that you can plot a LamSlotMulti (two slots kind + notches)"""
+    machine.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.png"))
+    fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.svg"), format="svg")
+    assert len(fig.axes[0].patches) == 56
+
+    """Check that plot raise an error when comp_machine is set for a MachineUD"""
+
+    with pytest.raises(ValueError) as context:
+        machine.plot(comp_machine=1564)
+
+    """Check that comp_connection_mat can raise a WindingT1DefMsError"""
+
+    lam4.winding = WindingCW2LT(qs=16, p=3)
+    with pytest.raises(WindingT1DefMsError) as context:
+        lam4.winding.comp_connection_mat(Zs=10)
+
+    """Check that comp_connection_mat can raise a WindingError"""
+    winding = WindingCW2LT(qs=3, p=3)
+
+    with pytest.raises(WindingError) as context:
+        winding.comp_connection_mat(Zs=None)
+
+    lam4.winding = WindingCW2LT(qs=3, p=3)
+    lam4.slot = None
+    with pytest.raises(WindingError) as context:
+        lam4.winding.comp_connection_mat(Zs=None)
+
+    # FOR WindingCW1L comp_connection_mat
+
+    """Check that comp_connection_mat can raise a WindingT2DefNtError"""
+
+    lam4.winding = WindingCW1L(qs=2, p=3)
+    lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
+    with pytest.raises(WindingT2DefNtError) as context:
+        lam4.winding.comp_connection_mat(Zs=17)
+
+    lam4.winding = WindingCW1L(qs=2, p=3)
+    lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
+    lam4.winding.comp_connection_mat(Zs=None)
+
+    """Check that comp_connection_mat can raise a WindingError"""
+
+    lam4.winding = WindingCW1L(qs=3, p=3)
+    lam4.slot = None
+    with pytest.raises(WindingError) as context:
+        lam4.winding.comp_connection_mat(Zs=None)
+
+    winding = WindingCW1L(qs=3, p=3)
+    with pytest.raises(WindingError) as context:
+        winding.comp_connection_mat(Zs=None)
+
+
+def test_SlotMulti_rotor():
+    """Figure 13: Check that you can plot a LamSlotMulti rotor (two slots kind + notches)"""
     plt.close("all")
     # Lamination main dimensions definition
     rotor = LamSlotMulti(Rint=0.2, Rext=0.7, is_internal=True, is_stator=False)
@@ -290,8 +353,46 @@ def test_SlotMulti():
     # Plot, check and save
     rotor.plot()
     fig = plt.gcf()
-    fig.savefig(join(save_path, "fig_13_LamSlotMulti.png"))
-    fig.savefig(join(save_path, "fig_13_LamSlotMulti.svg"), format="svg")
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_rotor.png"))
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_rotor.svg"), format="svg")
+    assert len(fig.axes[0].patches) == 2
+
+
+def test_SlotMulti_stator():
+    """Figure 13: Check that you can plot a LamSlotMulti stator (two slots kind + notches)"""
+    plt.close("all")
+    # Lamination main dimensions definition
+    stator = LamSlotMulti(Rint=0.2, Rext=0.7, is_internal=False, is_stator=True)
+
+    # Reference slot definition
+    Slot1 = SlotW10(
+        Zs=10, W0=50e-3, H0=30e-3, W1=100e-3, H1=30e-3, H2=100e-3, W2=120e-3
+    )
+    Slot2 = SlotW22(Zs=12, W0=pi / 12, H0=50e-3, W2=pi / 6, H2=125e-3)
+
+    # Reference slot are duplicated to get 5 of each in alternance
+    slot_list = list()
+    for ii in range(5):
+        slot_list.append(SlotW10(init_dict=Slot1.as_dict()))
+        slot_list.append(SlotW22(init_dict=Slot2.as_dict()))
+
+    # Two slots in the list are modified (bigger than the others)
+    stator.slot_list = slot_list
+    stator.slot_list[0].H2 = 300e-3
+    stator.slot_list[7].H2 = 300e-3
+    # Set slots position
+    stator.alpha = array([0, 29, 60, 120, 150, 180, 210, 240, 300, 330]) * pi / 180
+
+    # Evenly distributed Notch definition
+    slot3 = SlotW10(Zs=12, W0=40e-3, W1=40e-3, W2=40e-3, H0=0, H1=0, H2=25e-3)
+    notch = NotchEvenDist(notch_shape=slot3, alpha=15 * pi / 180)
+    stator.notch = [notch]
+
+    # Plot, check and save
+    stator.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_stator.png"))
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_stator.svg"), format="svg")
     assert len(fig.axes[0].patches) == 2
 
 
@@ -343,6 +444,58 @@ def test_SlotUD():
     machine.plot()
     fig = plt.gcf()
     assert len(fig.axes[0].patches) == 83
+    fig.savefig(join(save_path, "fig_14_SlotUD.png"))
+    fig.savefig(join(save_path, "fig_14_SlotUD.svg"), format="svg")
+
+
+def test_SlotUD_rotor_external():
+    """Figure 14: User Defined slot "snowflake" """
+
+    plt.close("all")
+    # Enfore first point on rotor bore
+    Rrotor = abs(0.205917893677990 - 0.107339745962156j)
+    machine = MachineSRM()
+    machine.name = "User-Defined Slot"
+    # Stator definintion
+    machine.stator = LamSlotWind(
+        Rint=Rrotor + 5e-3, Rext=Rrotor + 120e-3, is_internal=False, is_stator=True
+    )
+    machine.stator.slot = SlotW21(
+        Zs=36, W0=7e-3, H0=10e-3, H1=0, H2=70e-3, W1=30e-3, W2=0.1e-3
+    )
+    machine.stator.winding = WindingDW2L(qs=3, p=3, coil_pitch=5)
+
+    # Rotor definition external
+    machine.rotor = LamSlot(Rint=0.02, Rext=Rrotor, is_internal=False, is_stator=False)
+    machine.rotor.axial_vent = [
+        VentilationTrap(Zh=6, Alpha0=0, D0=0.025, H0=0.025, W1=0.015, W2=0.04)
+    ]
+    # Complex coordinates of half the snowflake slot
+    point_list = [
+        0.205917893677990 - 0.107339745962156j,
+        0.187731360198517 - 0.0968397459621556j,
+        0.203257639640145 - 0.0919474411167423j,
+        0.199329436409870 - 0.0827512886940357j,
+        0.174740979141750 - 0.0893397459621556j,
+        0.143564064605510 - 0.0713397459621556j,
+        0.176848674296337 - 0.0616891108675446j,
+        0.172822394854708 - 0.0466628314259158j,
+        0.146001886779019 - 0.0531173140978201j,
+        0.155501886779019 - 0.0366628314259158j,
+        0.145109581933606 - 0.0306628314259158j,
+        0.127109581933606 - 0.0618397459621556j,
+        0.0916025403784439 - 0.0413397459621556j,
+        0.134949327895761 - 0.0282609076372691j,
+        0.129324972242779 - 0.0100025773880714j,
+        0.0690858798800485 - 0.0283397459621556j,
+        0.0569615242270663 - 0.0213397459621556j,
+    ]
+    machine.rotor.slot = SlotUD(Zs=6, is_sym=True, point_list=point_list)
+
+    # Plot, check and save
+    machine.plot()
+    fig = plt.gcf()
+    assert len(fig.axes[0].patches) == 74
     fig.savefig(join(save_path, "fig_14_SlotUD.png"))
     fig.savefig(join(save_path, "fig_14_SlotUD.svg"), format="svg")
 
@@ -486,11 +639,11 @@ def test_ecc_FEMM():
 
     # FEMM files (mesh and results) are available in Results folder
     copyfile(
-        join(out.path_res, "Femm", "fig_19_Transform_list_model.ans"),
+        join(out.path_result, "Femm", "fig_19_Transform_list_model.ans"),
         join(save_path, "fig_19_Transform_list_model.ans"),
     )
     copyfile(
-        join(out.path_res, "Femm", "fig_19_Transform_list_model.fem"),
+        join(out.path_result, "Femm", "fig_19_Transform_list_model.fem"),
         join(save_path, "fig_19_Transform_list_model.fem"),
     )
     # Plot, check, save

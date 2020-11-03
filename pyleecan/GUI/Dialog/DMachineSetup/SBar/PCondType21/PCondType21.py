@@ -57,6 +57,8 @@ class PCondType21(Gen_PCondType21, QWidget):
         if conductor is None or not isinstance(conductor, CondType21):
             self.machine.rotor.winding.conductor = CondType21()
             self.machine.rotor.winding.conductor._set_None()
+            # Make sure to re-set conductor with the new object
+            conductor = machine.rotor.winding.conductor
 
         self.lf_Hbar.setValue(conductor.Hbar)
         self.lf_Wbar.setValue(conductor.Wbar)

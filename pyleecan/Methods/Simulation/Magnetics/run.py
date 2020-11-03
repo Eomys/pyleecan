@@ -17,6 +17,9 @@ def run(self):
     self.get_logger().info("Starting Magnetic module")
     output = self.parent.parent
 
-    self.comp_time_angle(output)
+    # Compute and store time and angle axes from previous output
+    # and returns additional axes in axes_dict
+    axes_dict = self.comp_time_angle(output)
 
-    self.comp_flux_airgap(output)
+    # Calculate airgap flux
+    self.comp_flux_airgap(output, axes_dict)

@@ -13,6 +13,7 @@ from Tests import save_validation_path as save_path
 
 
 @pytest.mark.GMSH
+@pytest.mark.long
 def test_slot_10():
     """Check generation of the 3D mesh of Slot 10 with gmsh"""
     if isinstance(gen_3D_mesh, ImportError):

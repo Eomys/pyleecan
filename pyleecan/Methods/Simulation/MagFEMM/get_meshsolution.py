@@ -5,6 +5,8 @@ from ....definitions import MAIN_DIR
 from ....Classes.MeshMat import MeshMat
 from ....Classes.CellMat import CellMat
 from ....Classes.PointMat import PointMat
+from ....Classes.RefTriangle3 import RefTriangle3
+
 from os.path import join
 
 from ....Functions.FEMM import (
@@ -36,17 +38,23 @@ def get_meshsolution(self, femm, save_path, j_t0):
         a MagFEMM object
     femm : FEMMHandler
         client to send command to a FEMM instance
-    is_get_mesh : bool
-        1 to load the mesh and solution into the simulation
-    is_save_FEA : bool
-        1 to save the mesh and solution into a .json file
+    save_path : string
+        path of the FEA results
     j_t0 : int
         Targeted time step
 
     Returns
     -------
-    res_path: str
-        path to the result folder
+    mesh : MeshMat
+        Mesh of the FEMM analysis
+    groups : dict
+        dict of group indices
+    B : ndarray
+        array of elemental B field
+    H : ndarray
+        array of elemental H field
+    mu : ndarray
+        array of elemental permeability
     """
 
     idworker = "1"  # For parallelization TODO
@@ -117,6 +125,7 @@ def get_meshsolution(self, femm, save_path, j_t0):
             nb_pt_per_cell=3,
             indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
         )
+        mesh.cell["triangle"].interpolation.ref_cell = RefTriangle3(epsilon=1e-9)
         mesh.point = PointMat(
             coordinate=listNd[:, 0:2], nb_pt=NbNd, indice=np.linspace(0, NbNd - 1, NbNd)
         )
