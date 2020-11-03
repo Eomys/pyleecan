@@ -8,6 +8,7 @@ def solve_FEMM(obj, femm, output, sym, FEMM_dict):
 
     L1 = output.simu.machine.stator.comp_length()
     Nt_tot = obj.Nt_tot  # Number of time step
+    is_internal_rotor = output.simu.machine.rotor.is_internal
 
     if (
         hasattr(output.simu.machine.stator, "winding")
@@ -18,7 +19,18 @@ def solve_FEMM(obj, femm, output, sym, FEMM_dict):
         Phi_wind_stator = zeros((Nt_tot, qs))
     else:
         Phi_wind_stator = None
-
+        
+    # Interpolate current on electric model time axis
+    # Get stator current from elec out    
+    Is_data = output.elec.get_Is()
+    Is = Is_data.get_along("time","phase")["Is"]
+    
+    # Get rotor current from elec out
+    Ir = output.elec.Ir  # TODO: same as for stator currents
+    
+    # Get rotor angular position
+    angle_rotor = output.get_angle_rotor()[0:Nt_tot]
+    
     # Create the mesh
     femm.mi_createmesh()
 
@@ -26,14 +38,14 @@ def solve_FEMM(obj, femm, output, sym, FEMM_dict):
     for ii in range(Nt_tot):
         # Update rotor position and currents
         update_FEMM_simulation(
-            femm=femm,
-            output=output,
-            materials=FEMM_dict["materials"],
-            circuits=FEMM_dict["circuits"],
-            is_mmfs=1,
-            is_mmfr=1,
-            j_t0=ii,
-            is_sliding_band=obj.is_sliding_band,
+            femm,            
+            FEMM_dict["circuits"],
+            is_internal_rotor,
+            obj.is_sliding_band,
+            angle_rotor,
+            Is,
+            Ir,
+            ii,
         )
         # try "previous solution" for speed up of FEMM calculation
         if obj.is_sliding_band:
@@ -48,10 +60,7 @@ def solve_FEMM(obj, femm, output, sym, FEMM_dict):
         femm.mi_analyze()
         femm.mi_loadsolution()
 
-        if (
-            hasattr(output.simu.machine.stator, "winding")
-            and output.simu.machine.stator.winding is not None
-        ):
+        if Phi_wind_stator is not None:
             # Phi_wind computation
             Phi_wind_stator[ii, :] = comp_FEMM_Phi_wind(
                 femm,

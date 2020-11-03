@@ -61,7 +61,7 @@ def comp_flux_airgap(self, output, axes_dict):
     )
     Nt = time.size
 
-    # Get rotor anuglar position
+    # Get rotor angular position
     angle_rotor = output.get_angle_rotor()[0:Nt]
 
     # Interpolate current on magnetic model time axis
