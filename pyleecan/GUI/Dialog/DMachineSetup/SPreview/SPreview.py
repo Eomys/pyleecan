@@ -48,6 +48,7 @@ class SPreview(Ui_SPreview, QWidget):
             is_show_fig=False,
         )
         self.w_plot.axes.set_axis_off()
+        self.w_plot.axes.axis("equal")
         if self.w_plot.axes.get_legend() is not None:
             self.w_plot.axes.get_legend().remove()
         self.w_plot.draw()
