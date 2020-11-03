@@ -34,7 +34,7 @@ class Ui_PHoleMUD(object):
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.w_path_json = WPathSelector(PHoleMUD)
         self.w_path_json.setObjectName(u"w_path_json")
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.w_path_json.sizePolicy().hasHeightForWidth())
