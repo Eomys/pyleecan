@@ -1,30 +1,32 @@
 from os.path import dirname, isfile
 
 from ezdxf import readfile
-from numpy import angle as np_angle
+from numpy import angle as np_angle, argmin
 from numpy import array
 from pyleecan.GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
 from pyleecan.GUI.Resources import pixmap_dict
-from PySide2.QtCore import QSize
+from PySide2.QtCore import QSize, Qt
 from PySide2.QtGui import QIcon, QPixmap
-from PySide2.QtWidgets import QComboBox, QFileDialog, QPushButton, QWidget
-
-from ...Classes.HoleUD import HoleUD
+from PySide2.QtWidgets import QComboBox, QFileDialog, QPushButton, QDialog
+import matplotlib.pyplot as plt
+from ...Classes.SlotUD import SlotUD
 from ...Classes.Magnet import Magnet
-from ...Classes.SurfLine import SurfLine
+from ...Classes.LamSlot import LamSlot
 from ...GUI.Tools.MPLCanvas import MPLCanvas2
 from .Ui_DXF_Slot import Ui_DXF_Slot
+from ...definitions import config_dict
 
 # Column index for table
 TYPE_COL = 0
 DEL_COL = 1
 HL_COL = 2
+WIND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
 
 
-class DXF_Slot(Ui_DXF_Slot, QWidget):
-    """Dialog to create HoleUD objects from DXF files"""
+class DXF_Slot(Ui_DXF_Slot, QDialog):
+    """Dialog to create SlotUD objects from DXF files"""
 
-    def __init__(self, dxf_path=None):
+    def __init__(self, dxf_path=None, Zs=None, lam=None):
         """Initialize the Dialog
 
         Parameters
@@ -35,44 +37,42 @@ class DXF_Slot(Ui_DXF_Slot, QWidget):
             Path to a dxf file to read
         """
         # Widget setup
-        QWidget.__init__(self)
+        QDialog.__init__(self)
         self.setupUi(self)
-
-        # Icon preparation
-        self.delete_icon = QPixmap(pixmap_dict["delete_36"])
-
-        # Initialize the graph
-        self.w_viewer.setParent(None)
-        self.w_viewer = MPLCanvas2(self)
-        self.w_viewer.draw()
-        self.main_layout.removeWidget(self.w_viewer)
-        self.main_layout.insertWidget(0, self.w_viewer)
-        self.init_graph()
 
         # Init properties
         self.line_list = list()  # List of line from DXF
         self.selected_list = list()  # List of currently selected lines
-        self.surf_list = list()  # List of defined surfaces
+        self.lam = lam
+
+        # Initialize the graph
+        self.init_graph()
+
+        # Not used yet
+        self.in_coord_center.hide()
+        self.lf_center_x.hide()
+        self.lf_center_y.hide()
+        self.lf_axe_angle.hide()
+        self.in_axe_angle.hide()
         self.lf_center_x.setValue(0)
         self.lf_center_y.setValue(0)
 
-        # Load the DXF file if provided
-        self.dxf_path = dxf_path
-        if dxf_path is not None and isfile(dxf_path):
-            self.open_document()
+        # Set default values
+        if Zs is not None:
+            self.si_Zs.setValue(Zs)
 
         # Setup Path selector for DXF files
+        self.dxf_path = dxf_path
         self.w_path_selector.obj = self
         self.w_path_selector.param_name = "dxf_path"
         self.w_path_selector.verbose_name = "DXF File"
         self.w_path_selector.extension = "DXF file (*.dxf)"
         self.w_path_selector.set_path_txt(self.dxf_path)
+        self.w_path_selector.update()
 
-        # Format w_surface_list table (QTableWidget)
-        self.w_surface_list.setColumnCount(3)
-        self.w_surface_list.horizontalHeader().hide()
-        self.w_surface_list.verticalHeader().hide()
-        self.w_surface_list.setColumnWidth(2, 24)
+        # Load the DXF file if provided
+        if self.dxf_path is not None and isfile(self.dxf_path):
+            self.open_document()
 
         # Connect signals to slot
         self.w_path_selector.pathChanged.connect(self.open_document)
@@ -136,10 +136,6 @@ class DXF_Slot(Ui_DXF_Slot, QWidget):
             axes.plot(point_list.real, point_list.imag, color, zorder=2)
             self.w_viewer.draw()
 
-            # Check if the surface is complete
-            if self.check_selection():
-                self.add_surface()
-
         def zoom(event):
             """Function to zoom/unzoom according the mouse wheel"""
 
@@ -202,7 +198,7 @@ class DXF_Slot(Ui_DXF_Slot, QWidget):
         self.w_viewer.draw()
 
     def check_selection(self):
-        """Check if every line in the selection form a surface
+        """Check if every line in the selection are connected
 
         Parameters
         ----------
@@ -211,8 +207,8 @@ class DXF_Slot(Ui_DXF_Slot, QWidget):
 
         Returns
         -------
-        is_surf : bool
-            True if it forms a surface
+        is_line : bool
+            True if it forms a line
         """
 
         # Create list of begin and end point for all lines
@@ -226,33 +222,67 @@ class DXF_Slot(Ui_DXF_Slot, QWidget):
         if len(point_list) == 0:
             return False
 
+        # Number of point only 1 time in the list (begin and end)
+        count_1 = 0
         for p1 in point_list:
             count = 0
             for p2 in point_list:
                 if abs(p1 - p2) < 1e-9:
                     count += 1
-            if count != 2:
+            if count == 1:
+                count_1 += 1
+                if count_1 > 2:
+                    return False
+            elif count != 2:
                 return False
 
         return True
 
-    def add_surface(self):
-        """Validate the selection and create a surface object
+    def get_slot(self):
+        """Generate the SlotUD object corresponding to the selected lines
 
         Parameters
         ----------
         self : DXF_Slot
             a DXF_Slot object
+
+        Returns
+        -------
+        sot : SlotUD
+            User defined slot according to selected lines
         """
 
         # Get all the selected lines
         line_list = list()
+        point_list = list()
         for ii, line in enumerate(self.line_list):
             if self.selected_list[ii]:
                 line_list.append(line.copy())
+                point_list.append(line.get_begin())
+                point_list.append(line.get_end())
+        # Find begin point
+        single_list = list()
+        for p1 in point_list:
+            count = 0
+            for p2 in point_list:
+                if abs(p1 - p2) < 1e-9:
+                    count += 1
+            if count == 1:
+                single_list.append(p1)
+        assert len(single_list) == 2
+        Zbegin = single_list[argmin(np_angle(array(single_list)))]
+        # Get begin line
+        id_list = list()
+        id_list.extend(
+            [
+                ii
+                for ii, line in enumerate(line_list)
+                if abs(line.get_begin() - Zbegin) < 1e-6
+            ]
+        )
         # Sort the lines (begin = end)
         curve_list = list()
-        curve_list.append(line_list.pop())
+        curve_list.append(line_list.pop(id_list[0]))
         while len(line_list) > 0:
             end = curve_list[-1].get_end()
             for ii in range(len(line_list)):
@@ -262,90 +292,34 @@ class DXF_Slot(Ui_DXF_Slot, QWidget):
                     line_list[ii].reverse()
                     break
             curve_list.append(line_list.pop(ii))
-        # Create the Surface object
-        self.surf_list.append(SurfLine(line_list=curve_list))
-        self.surf_list[-1].comp_point_ref(is_set=True)
 
-        # Update the GUI
-        nrows = self.w_surface_list.rowCount()
-        # Adding Surface Type combobox
-        self.w_surface_list.setRowCount(nrows + 1)
-        combobox = QComboBox()
-        combobox.addItems(["Hole", "Magnet"])
-        self.w_surface_list.setCellWidget(
-            nrows,
-            TYPE_COL,
-            combobox,
-        )
-        # Adding Delete button
-        del_button = QPushButton("Delete")
-        del_button.setIcon(QIcon(self.delete_icon))
-        del_button.setIconSize(QSize(24, 24))
-        del_button.pressed.connect(self.delete_surface)
-        self.w_surface_list.setCellWidget(
-            nrows,
-            DEL_COL,
-            del_button,
-        )
-
-        # Adding Highlight button
-        HL_button = QPushButton("Highlight")
-        # HL_button.setIcon(QIcon(self.delete_icon))
-        HL_button.setIconSize(QSize(24, 24))
-        HL_button.pressed.connect(self.highlight_surface)
-        self.w_surface_list.setCellWidget(
-            nrows,
-            HL_COL,
-            HL_button,
-        )
-
-        # Remove selection
-        self.selected_list = [False for line in self.line_list]
-        self.update_graph()
-
-    def get_hole(self):
-        """Generate the HoleUD object corresponding to the selected surfaces
-
-        Parameters
-        ----------
-        self : DXF_Slot
-            a DXF_Slot object
-
-        Returns
-        -------
-        hole : HoleUD
-            User defined hole according to selected surfaces
-        """
-
-        hole = HoleUD(surf_list=self.surf_list)
-        # Set labels
-        Nmag = 0
-        for ii in range(self.w_surface_list.rowCount()):
-            if self.w_surface_list.cellWidget(ii, TYPE_COL).currentIndex() == 0:
-                hole.surf_list[ii].label = "Hole"
-            else:
-                hole.surf_list[ii].label = "HoleMagnet"
-                Nmag += 1
-        # Create magnet objects
-        hole.magnet_dict = dict()
-        for ii in range(Nmag):
-            hole.magnet_dict["magnet_" + str(ii)] = Magnet()
-
-        # Sort the surfaces
-        angles = [np_angle(surf.point_ref) for surf in hole.surf_list]
-        idx = sorted(range(len(angles)), key=lambda k: angles[k])
-        surf_list_sorted = [hole.surf_list[ii] for ii in idx]
-        hole.surf_list = surf_list_sorted
+        # Create the Slot object
+        slot = SlotUD(line_list=curve_list)
+        slot.type_line_wind = self.c_type_line.currentIndex()
+        begin_id = self.si_wind_begin_index.value()
+        end_id = self.si_wind_end_index.value()
+        if (
+            begin_id < len(curve_list)
+            and end_id < len(curve_list)
+            and begin_id < end_id
+        ):
+            slot.wind_begin_index = begin_id
+            slot.wind_end_index = end_id
+        else:
+            slot.wind_begin_index = None
+            slot.wind_end_index = None
 
         # Rotation
-        Zref = sum([surf.point_ref for surf in hole.surf_list])
-        for surf in hole.surf_list:
-            surf.rotate(-1 * np_angle(Zref))
+        Z1 = curve_list[0].get_begin()
+        Z2 = curve_list[-1].get_end()
+        alpha = (np_angle(Z2) + np_angle(Z1)) / 2
+        for line in curve_list:
+            line.rotate(-1 * alpha)
 
         # Set metadata
-        hole.Zh = self.si_Zh.value()
+        slot.Zs = self.si_Zs.value()
 
-        return hole
+        return slot
 
     def plot(self):
         """Plot the current state of the hole
@@ -355,41 +329,23 @@ class DXF_Slot(Ui_DXF_Slot, QWidget):
         self : DXF_Slot
             a DXF_Slot object
         """
-        hole = self.get_hole()
-        hole.plot()
-
-    def delete_surface(self):
-        """Delete a selected surface
-
-        Parameters
-        ----------
-        self : DXF_Slot
-            a DXF_Slot object
-        """
-        nrow = self.w_surface_list.currentRow()
-        self.surf_list.pop(nrow)
-        self.w_surface_list.removeRow(nrow)
-
-    def highlight_surface(self):
-        """Highlight a surface to find it on the viewer
-
-        Parameters
-        ----------
-        self : DXF_Slot
-            a DXF_Slot object
-        """
-        self.selected_list = [False for line in self.line_list]
-        surf = self.surf_list[self.w_surface_list.currentRow()]
-        # Find the index of the surface line in self.line_list
-        for surf_line in surf.line_list:
-            mid = surf_line.get_middle()
-            for ii, line in enumerate(self.line_list):
-                if abs(mid - line.get_middle()) < 1e-6:
-                    self.selected_list[ii] = True
-        self.update_graph()
+        if self.check_selection():
+            slot = self.get_slot()
+            # Lamination definition
+            if self.lam is None:
+                lam = LamSlot(slot=slot)
+                Rbo = abs(slot.line_list[0].get_begin())
+            else:
+                lam = self.lam.copy()
+                lam.slot = slot
+            slot.plot()
+            # Add the winding if defined
+            if slot.wind_begin_index is not None:
+                surf_wind = slot.get_surface_wind()
+                surf_wind.plot(fig=plt.gcf(), color=WIND_COLOR)
 
     def save(self):
-        """Save the HoleUD object in a json file
+        """Save the SlotUD object in a json file
 
         Parameters
         ----------
@@ -397,9 +353,13 @@ class DXF_Slot(Ui_DXF_Slot, QWidget):
             a DXF_Slot object
         """
 
-        hole = self.get_hole()
+        if self.check_selection():
+            slot = self.get_slot()
 
-        save_file_path = QFileDialog.getSaveFileName(
-            self, self.tr("Save file"), dirname(self.dxf_path), "Json (*.json)"
-        )[0]
-        hole.save(save_file_path)
+            save_file_path = QFileDialog.getSaveFileName(
+                self, self.tr("Save file"), dirname(self.dxf_path), "Json (*.json)"
+            )[0]
+            if save_file_path not in ["", ".json", None]:
+                self.save_path = save_file_path
+                slot.save(save_file_path)
+                self.accept()
