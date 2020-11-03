@@ -388,7 +388,7 @@ class TestSMHoleMag(object):
 
     def test_s_plot(self):
         self.test_obj = MachineIPMSM(type_machine=8)
-        self.test_obj.stator = LamSlotWind()
+        self.test_obj.stator = LamSlotWind(slot=None)
         self.test_obj.stator.winding.p = 4
         self.test_obj.rotor = LamHole(Rint=0.1, Rext=0.2)
         self.test_obj.rotor.hole = list()

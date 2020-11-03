@@ -449,58 +449,6 @@ def test_SlotUD():
     fig.savefig(join(save_path, "fig_14_SlotUD.svg"), format="svg")
 
 
-def test_SlotUD_rotor_external():
-    """Figure 14: User Defined slot "snowflake" """
-
-    plt.close("all")
-    # Enfore first point on rotor bore
-    Rrotor = abs(0.205917893677990 - 0.107339745962156j)
-    machine = MachineSRM()
-    machine.name = "User-Defined Slot"
-    # Stator definintion
-    machine.stator = LamSlotWind(
-        Rint=Rrotor + 5e-3, Rext=Rrotor + 120e-3, is_internal=False, is_stator=True
-    )
-    machine.stator.slot = SlotW21(
-        Zs=36, W0=7e-3, H0=10e-3, H1=0, H2=70e-3, W1=30e-3, W2=0.1e-3
-    )
-    machine.stator.winding = WindingDW2L(qs=3, p=3, coil_pitch=5)
-
-    # Rotor definition external
-    machine.rotor = LamSlot(Rint=0.02, Rext=Rrotor, is_internal=False, is_stator=False)
-    machine.rotor.axial_vent = [
-        VentilationTrap(Zh=6, Alpha0=0, D0=0.025, H0=0.025, W1=0.015, W2=0.04)
-    ]
-    # Complex coordinates of half the snowflake slot
-    point_list = [
-        0.205917893677990 - 0.107339745962156j,
-        0.187731360198517 - 0.0968397459621556j,
-        0.203257639640145 - 0.0919474411167423j,
-        0.199329436409870 - 0.0827512886940357j,
-        0.174740979141750 - 0.0893397459621556j,
-        0.143564064605510 - 0.0713397459621556j,
-        0.176848674296337 - 0.0616891108675446j,
-        0.172822394854708 - 0.0466628314259158j,
-        0.146001886779019 - 0.0531173140978201j,
-        0.155501886779019 - 0.0366628314259158j,
-        0.145109581933606 - 0.0306628314259158j,
-        0.127109581933606 - 0.0618397459621556j,
-        0.0916025403784439 - 0.0413397459621556j,
-        0.134949327895761 - 0.0282609076372691j,
-        0.129324972242779 - 0.0100025773880714j,
-        0.0690858798800485 - 0.0283397459621556j,
-        0.0569615242270663 - 0.0213397459621556j,
-    ]
-    machine.rotor.slot = SlotUD(Zs=6)
-
-    # Plot, check and save
-    machine.plot()
-    fig = plt.gcf()
-    assert len(fig.axes[0].patches) == 74
-    fig.savefig(join(save_path, "fig_14_SlotUD.png"))
-    fig.savefig(join(save_path, "fig_14_SlotUD.svg"), format="svg")
-
-
 def test_WindingUD():
     """Figure 16: User-defined Winding
     From pyleecan/Tests/Plot/LamWind/test_Slot_12_plot.py
