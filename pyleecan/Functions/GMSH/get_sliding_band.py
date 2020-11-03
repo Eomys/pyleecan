@@ -43,7 +43,7 @@ def get_sliding_band(sym, machine):
     Sor = lam_ext.Rext
     Wgap_mec = Rgap_mec_ext - Rgap_mec_int
     W_sb = Wgap_mec / 4  # Width sliding band
-    tol = 0.1e-3        # Tolerance
+    tol = 0.1e-3  # Tolerance
     max_radius_Airgap_ext = Rgap_mec_ext + wedge_height + tol
     min_radius_Airgap_int = Rgap_mec_int - tol
 
@@ -60,13 +60,18 @@ def get_sliding_band(sym, machine):
                     p3 = line.get_center()
                     r_p3, phi_p3 = cmath.polar(p3)
                     radius = r_p1 - r_p3
-                    line_copy = Arc1(begin=p1, end=p2, radius=radius,
-                                     label=line.label, is_trigo_direction=True)
-                    #if phi_p2 > phi_p1:
+                    line_copy = Arc1(
+                        begin=p1,
+                        end=p2,
+                        radius=radius,
+                        label=line.label,
+                        is_trigo_direction=True,
+                    )
+                    # if phi_p2 > phi_p1:
                     #    line_copy.reverse()
                 else:
                     line_copy = Segment(begin=p1, end=p2, label=line.label)
-                    #if phi_p2 > phi_p1:
+                    # if phi_p2 > phi_p1:
                     #    line_copy.reverse()
                 stator_airgap_ext_lines.append(line_copy)
 
@@ -83,8 +88,13 @@ def get_sliding_band(sym, machine):
                     p3 = line.get_center()
                     r_p3, phi_p3 = cmath.polar(p3)
                     radius = r_p1 - r_p3
-                    line_copy = Arc1(begin=p1, end=p2, radius=radius,
-                                     label=line.label, is_trigo_direction=True)
+                    line_copy = Arc1(
+                        begin=p1,
+                        end=p2,
+                        radius=radius,
+                        label=line.label,
+                        is_trigo_direction=True,
+                    )
                     if phi_p2 > phi_p1:
                         line_copy.reverse()
                 else:
@@ -135,8 +145,13 @@ def get_sliding_band(sym, machine):
         Z3 = Z2 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
         airgap_lines.append(Segment(begin=Z1, end=Z2, label="int_airgap_line_1"))
-        int_airgap_arc = Arc1(begin=Z2, end=Z3, radius=Rgap_mec_int + W_sb,
-                              label="int_airgap_arc", is_trigo_direction=True)
+        int_airgap_arc = Arc1(
+            begin=Z2,
+            end=Z3,
+            radius=Rgap_mec_int + W_sb,
+            label="int_airgap_arc",
+            is_trigo_direction=True,
+        )
         airgap_lines.append(int_airgap_arc)
         airgap_lines.append(Segment(begin=Z3, end=Z0, label="int_airgap_line_2"))
         airgap_lines.extend(rotor_airgap_int_lines)
@@ -149,16 +164,26 @@ def get_sliding_band(sym, machine):
         )
 
         # Internal Sliding Band
-        Z4 = Rgap_mec_int + 2*W_sb
+        Z4 = Rgap_mec_int + 2 * W_sb
         Z5 = Z4 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
         airgap_lines.append(Segment(begin=Z2, end=Z4, label="int_sb_line_1"))
-        int_sb_arc = Arc1(begin=Z4, end=Z5, radius=Rgap_mec_int + 2 * W_sb,
-                          label="int_sb_arc", is_trigo_direction=True)
+        int_sb_arc = Arc1(
+            begin=Z4,
+            end=Z5,
+            radius=Rgap_mec_int + 2 * W_sb,
+            label="int_sb_arc",
+            is_trigo_direction=True,
+        )
         airgap_lines.append(int_sb_arc)
         airgap_lines.append(Segment(begin=Z5, end=Z3, label="int_sb_line_2"))
-        int_airgap_arc_copy = Arc1(begin=Z2, end=Z3, radius=Rgap_mec_int + W_sb,
-                              label="int_airgap_arc_copy", is_trigo_direction=True)
+        int_airgap_arc_copy = Arc1(
+            begin=Z2,
+            end=Z3,
+            radius=Rgap_mec_int + W_sb,
+            label="int_airgap_arc_copy",
+            is_trigo_direction=True,
+        )
         int_airgap_arc_copy.reverse()
         airgap_lines.append(int_airgap_arc_copy)
         surf_list.append(
@@ -176,12 +201,22 @@ def get_sliding_band(sym, machine):
         Z9 = Z8 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
         airgap_lines.append(Segment(begin=Z6, end=Z8, label="ext_sb_line_1"))
-        ext_airgap_arc = Arc1(begin=Z8, end=Z9, radius=Rgap_mec_int + 3 * W_sb,
-                          label="ext_airgap_arc", is_trigo_direction=True)
+        ext_airgap_arc = Arc1(
+            begin=Z8,
+            end=Z9,
+            radius=Rgap_mec_int + 3 * W_sb,
+            label="ext_airgap_arc",
+            is_trigo_direction=True,
+        )
         airgap_lines.append(ext_airgap_arc)
         airgap_lines.append(Segment(begin=Z9, end=Z7, label="ext_sb_line_2"))
-        ext_sb_arc = Arc1(begin=Z6, end=Z7, radius=Rgap_mec_int + 2 * W_sb,
-                          label="ext_sb_arc", is_trigo_direction=True)
+        ext_sb_arc = Arc1(
+            begin=Z6,
+            end=Z7,
+            radius=Rgap_mec_int + 2 * W_sb,
+            label="ext_sb_arc",
+            is_trigo_direction=True,
+        )
         ext_sb_arc.reverse()
         airgap_lines.append(ext_sb_arc)
         surf_list.append(
@@ -198,8 +233,13 @@ def get_sliding_band(sym, machine):
         airgap_lines = list()
         airgap_lines.append(Segment(begin=Z8, end=Z10, label="ext_airgap_line_1"))
         airgap_lines.append(Segment(begin=Z11, end=Z9, label="ext_airgap_line_2"))
-        ext_airgap_arc_copy = Arc1(begin=Z8, end=Z9, radius=Rgap_mec_int + 3 * W_sb,
-                              label="ext_airgap_arc_copy", is_trigo_direction=True)
+        ext_airgap_arc_copy = Arc1(
+            begin=Z8,
+            end=Z9,
+            radius=Rgap_mec_int + 3 * W_sb,
+            label="ext_airgap_arc_copy",
+            is_trigo_direction=True,
+        )
         ext_airgap_arc_copy.reverse()
         airgap_lines.append(ext_airgap_arc_copy)
         airgap_lines.extend(stator_airgap_ext_lines)
@@ -210,6 +250,5 @@ def get_sliding_band(sym, machine):
                 label="Airgap_ext",
             )
         )
-
 
     return surf_list
