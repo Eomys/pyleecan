@@ -56,13 +56,13 @@ def solve_FEMM_parallel(
         Stator current matrix (qs,Nt) [A]
     angle_rotor: ndarray
         Rotor angular position vector (Nt,)
-        
+
     Returns
-    -------    
+    -------
     B: ndarray
         3D Magnetic flux density for all time steps and each element (Nt, Nelem, 3) [T]
     H : ndarray
-        3D Magnetic field for all time steps and each element (Nt, Nelem, 3) [A/m]      
+        3D Magnetic field for all time steps and each element (Nt, Nelem, 3) [A/m]
     mu : ndarray
         Magnetic relative permeability for all time steps and each element (Nt, Nelem) []
     mesh: MeshMat
@@ -89,13 +89,13 @@ def solve_FEMM_parallel(
             first timestep to compute
         end_t: int
             last timestep to compute
-            
+
         Returns
-        -------    
+        -------
         B: ndarray
             3D Magnetic flux density for time steps of the current FEMM instance and each element (Nt0, Nelem, 3) [T]
         H : ndarray
-            3D Magnetic field for time steps of the current FEMM instance and each element (Nt0, Nelem, 3) [A/m]      
+            3D Magnetic field for time steps of the current FEMM instance and each element (Nt0, Nelem, 3) [A/m]
         mu : ndarray
             Magnetic relative permeability for time steps of the current FEMM instance and each element (Nt0, Nelem) []
         mesh: MeshMat

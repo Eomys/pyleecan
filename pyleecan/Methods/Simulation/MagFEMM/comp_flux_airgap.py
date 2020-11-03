@@ -67,7 +67,7 @@ def comp_flux_airgap(self, output, axes_dict):
     # Interpolate current on magnetic model time axis
     # Get stator current from elec out
     if self.is_mmfs:
-        Is = output.elec.comp_Is(time)
+        Is = output.elec.comp_Is_mag(time)
     else:
         Is = None
     # Get rotor current from elec out

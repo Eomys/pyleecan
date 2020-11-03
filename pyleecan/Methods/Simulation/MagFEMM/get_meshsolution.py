@@ -54,7 +54,7 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
     B: ndarray
         3D Magnetic flux density for each element (Nelem, 3) [T]
     H : ndarray
-        3D Magnetic field for each element (Nelem, 3) [A/m]      
+        3D Magnetic field for each element (Nelem, 3) [A/m]
     mu : ndarray
         Magnetic relative permeability for each element (Nelem,1) []
     groups: dict

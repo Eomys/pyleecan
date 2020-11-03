@@ -68,14 +68,14 @@ def solve_FEMM(
     start_t: int
         Index of first time step (0 by default, used for parallelization)
     end_t: int
-        Index of last time step (Nt by default, used for parallelization)            
-        
+        Index of last time step (Nt by default, used for parallelization)
+
     Returns
-    -------    
+    -------
     B: ndarray
         3D Magnetic flux density for all time steps and each element (Nt, Nelem, 3) [T]
     H : ndarray
-        3D Magnetic field for all time steps and each element (Nt, Nelem, 3) [A/m]      
+        3D Magnetic field for all time steps and each element (Nt, Nelem, 3) [A/m]
     mu : ndarray
         Magnetic relative permeability for all time steps and each element (Nt, Nelem) []
     mesh: MeshMat
@@ -123,7 +123,6 @@ def solve_FEMM(
     for ii in range(start_t, end_t):
         self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt))
         # Update rotor position and currents
-        # circuits, is_mmfs, is_mmfr, angle_rotor, Is, Ir, is_sliding_band, is_internal_rotor, Npcpp_stator, Npcpp_rotor
         update_FEMM_simulation(
             femm=femm,
             circuits=FEMM_dict["circuits"],
@@ -184,7 +183,7 @@ def solve_FEMM(
                 id_worker=start_t,
                 is_get_mesh=ii == start_t,
             )
-            
+
             # Initialize mesh and magnetic quantities for first time step
             if ii == start_t:
                 meshFEMM = [tmpmeshFEMM]
@@ -194,7 +193,7 @@ def solve_FEMM(
                 B_elem = zeros([Nt0, Nelem, 3])
                 H_elem = zeros([Nt0, Nelem, 3])
                 mu_elem = zeros([Nt0, Nelem])
-            
+
             # Shift time index ii in case start_t is not 0 (parallelization)
             ii0 = ii - start_t
             # Store magnetic flux density, field and relative permeability for the current time step
@@ -212,7 +211,7 @@ def solve_FEMM(
         # angle_new = (angle - self.angle_stator) % (2 * pi / sym)
         # Br = interp1d(append(angle, 2 * pi / sym), append(Br, Br[:,0]), axis=1)[angle_new]
         # Bt = interp1d(append(angle, 2 * pi / sym), append(Br, Br[:,0]), axis=1)[angle_new]
-    
+
     # Close FEMM handler
     if is_close_femm:
         femm.closefemm()

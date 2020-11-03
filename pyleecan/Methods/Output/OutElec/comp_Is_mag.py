@@ -1,4 +1,4 @@
-def comp_Is(self, time):
+def comp_Is_mag(self, time):
     """Compute the stator current on the given time vector to use it in Magnetics model
 
     Parameters

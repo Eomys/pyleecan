@@ -6177,7 +6177,7 @@
             "get_Nr",
             "get_Is",
             "get_Us",
-            "comp_Is"
+            "comp_Is_mag"
         ],
         "mother": "",
         "name": "OutElec",

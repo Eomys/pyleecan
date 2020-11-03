@@ -19,18 +19,18 @@ def solve_FEMM(obj, femm, output, sym, FEMM_dict):
         Phi_wind_stator = zeros((Nt_tot, qs))
     else:
         Phi_wind_stator = None
-        
+
     # Interpolate current on electric model time axis
-    # Get stator current from elec out    
+    # Get stator current from elec out
     Is_data = output.elec.get_Is()
-    Is = Is_data.get_along("time","phase")["Is"]
-    
+    Is = Is_data.get_along("time", "phase")["Is"]
+
     # Get rotor current from elec out
     Ir = output.elec.Ir  # TODO: same as for stator currents
-    
+
     # Get rotor angular position
     angle_rotor = output.get_angle_rotor()[0:Nt_tot]
-    
+
     # Create the mesh
     femm.mi_createmesh()
 
@@ -38,7 +38,7 @@ def solve_FEMM(obj, femm, output, sym, FEMM_dict):
     for ii in range(Nt_tot):
         # Update rotor position and currents
         update_FEMM_simulation(
-            femm,            
+            femm,
             FEMM_dict["circuits"],
             is_internal_rotor,
             obj.is_sliding_band,

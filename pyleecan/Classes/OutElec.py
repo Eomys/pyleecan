@@ -32,9 +32,9 @@ except ImportError as error:
     get_Us = error
 
 try:
-    from ..Methods.Output.OutElec.comp_Is import comp_Is
+    from ..Methods.Output.OutElec.comp_Is_mag import comp_Is_mag
 except ImportError as error:
-    comp_Is = error
+    comp_Is_mag = error
 
 
 from numpy import array, array_equal
@@ -74,15 +74,15 @@ class OutElec(FrozenClass):
         )
     else:
         get_Us = get_Us
-    # cf Methods.Output.OutElec.comp_Is
-    if isinstance(comp_Is, ImportError):
-        comp_Is = property(
+    # cf Methods.Output.OutElec.comp_Is_mag
+    if isinstance(comp_Is_mag, ImportError):
+        comp_Is_mag = property(
             fget=lambda x: raise_(
-                ImportError("Can't use OutElec method comp_Is: " + str(comp_Is))
+                ImportError("Can't use OutElec method comp_Is_mag: " + str(comp_Is_mag))
             )
         )
     else:
-        comp_Is = comp_Is
+        comp_Is_mag = comp_Is_mag
     # save and copy methods are available in all object
     save = save
     copy = copy
