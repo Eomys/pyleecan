@@ -43,6 +43,12 @@
    </property>
    <item>
     <widget class="QLabel" name="in_path">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
       <string>path</string>
      </property>
@@ -50,6 +56,12 @@
    </item>
    <item>
     <widget class="QLineEdit" name="le_path">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
        <width>150</width>
@@ -71,8 +83,8 @@
   <tabstop>b_path</tabstop>
  </tabstops>
  <resources>
-  <include location="../../../Resources/pyleecan.qrc"/>
-  <include location="../../../Resources/pyleecan.qrc"/>
+  <include location="../../Resources/pyleecan.qrc"/>
+  <include location="../../Resources/pyleecan.qrc"/>
   <include location="../../../Resources/pyleecan.qrc"/>
  </resources>
  <connections/>

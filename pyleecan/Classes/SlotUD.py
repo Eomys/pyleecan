@@ -12,7 +12,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .Slot import Slot
+from .SlotWind import SlotWind
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -21,15 +21,32 @@ try:
 except ImportError as error:
     build_geometry = error
 
+try:
+    from ..Methods.Slot.SlotUD.set_from_point_list import set_from_point_list
+except ImportError as error:
+    set_from_point_list = error
+
+try:
+    from ..Methods.Slot.SlotUD.get_surface_wind import get_surface_wind
+except ImportError as error:
+    get_surface_wind = error
+
+try:
+    from ..Methods.Slot.SlotUD.check import check
+except ImportError as error:
+    check = error
+
 
 from ._check import InitUnKnowClassError
+from .Line import Line
 
 
-class SlotUD(Slot):
-    """"User defined" Slot from a point list. """
+class SlotUD(SlotWind):
+    """"User defined" Slot from a line list. """
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.SlotUD.build_geometry
     if isinstance(build_geometry, ImportError):
         build_geometry = property(
@@ -41,6 +58,38 @@ class SlotUD(Slot):
         )
     else:
         build_geometry = build_geometry
+    # cf Methods.Slot.SlotUD.set_from_point_list
+    if isinstance(set_from_point_list, ImportError):
+        set_from_point_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotUD method set_from_point_list: "
+                    + str(set_from_point_list)
+                )
+            )
+        )
+    else:
+        set_from_point_list = set_from_point_list
+    # cf Methods.Slot.SlotUD.get_surface_wind
+    if isinstance(get_surface_wind, ImportError):
+        get_surface_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotUD method get_surface_wind: " + str(get_surface_wind)
+                )
+            )
+        )
+    else:
+        get_surface_wind = get_surface_wind
+    # cf Methods.Slot.SlotUD.check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotUD method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -48,7 +97,14 @@ class SlotUD(Slot):
     get_logger = get_logger
 
     def __init__(
-        self, point_list=-1, is_sym=False, Zs=36, init_dict=None, init_str=None
+        self,
+        line_list=-1,
+        wind_begin_index=None,
+        wind_end_index=None,
+        type_line_wind=0,
+        Zs=36,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -65,33 +121,42 @@ class SlotUD(Slot):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "point_list" in list(init_dict.keys()):
-                point_list = init_dict["point_list"]
-            if "is_sym" in list(init_dict.keys()):
-                is_sym = init_dict["is_sym"]
+            if "line_list" in list(init_dict.keys()):
+                line_list = init_dict["line_list"]
+            if "wind_begin_index" in list(init_dict.keys()):
+                wind_begin_index = init_dict["wind_begin_index"]
+            if "wind_end_index" in list(init_dict.keys()):
+                wind_end_index = init_dict["wind_end_index"]
+            if "type_line_wind" in list(init_dict.keys()):
+                type_line_wind = init_dict["type_line_wind"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
         # Set the properties (value check and convertion are done in setter)
-        self.point_list = point_list
-        self.is_sym = is_sym
-        # Call Slot init
+        self.line_list = line_list
+        self.wind_begin_index = wind_begin_index
+        self.wind_end_index = wind_end_index
+        self.type_line_wind = type_line_wind
+        # Call SlotWind init
         super(SlotUD, self).__init__(Zs=Zs)
-        # The class is frozen (in Slot init), for now it's impossible to
+        # The class is frozen (in SlotWind init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         SlotUD_str = ""
-        # Get the properties inherited from Slot
+        # Get the properties inherited from SlotWind
         SlotUD_str += super(SlotUD, self).__str__()
-        SlotUD_str += (
-            "point_list = "
-            + linesep
-            + str(self.point_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        SlotUD_str += "is_sym = " + str(self.is_sym) + linesep
+        if len(self.line_list) == 0:
+            SlotUD_str += "line_list = []" + linesep
+        for ii in range(len(self.line_list)):
+            tmp = (
+                self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            SlotUD_str += "line_list[" + str(ii) + "] =" + tmp + linesep + linesep
+        SlotUD_str += "wind_begin_index = " + str(self.wind_begin_index) + linesep
+        SlotUD_str += "wind_end_index = " + str(self.wind_end_index) + linesep
+        SlotUD_str += "type_line_wind = " + str(self.type_line_wind) + linesep
         return SlotUD_str
 
     def __eq__(self, other):
@@ -100,24 +165,33 @@ class SlotUD(Slot):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from Slot
+        # Check the properties inherited from SlotWind
         if not super(SlotUD, self).__eq__(other):
             return False
-        if other.point_list != self.point_list:
+        if other.line_list != self.line_list:
             return False
-        if other.is_sym != self.is_sym:
+        if other.wind_begin_index != self.wind_begin_index:
+            return False
+        if other.wind_end_index != self.wind_end_index:
+            return False
+        if other.type_line_wind != self.type_line_wind:
             return False
         return True
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        # Get the properties inherited from Slot
+        # Get the properties inherited from SlotWind
         SlotUD_dict = super(SlotUD, self).as_dict()
-        SlotUD_dict["point_list"] = (
-            self.point_list.copy() if self.point_list is not None else None
-        )
-        SlotUD_dict["is_sym"] = self.is_sym
+        if self.line_list is None:
+            SlotUD_dict["line_list"] = None
+        else:
+            SlotUD_dict["line_list"] = list()
+            for obj in self.line_list:
+                SlotUD_dict["line_list"].append(obj.as_dict())
+        SlotUD_dict["wind_begin_index"] = self.wind_begin_index
+        SlotUD_dict["wind_end_index"] = self.wind_end_index
+        SlotUD_dict["type_line_wind"] = self.type_line_wind
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotUD_dict["__class__"] = "SlotUD"
@@ -126,45 +200,97 @@ class SlotUD(Slot):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.point_list = None
-        self.is_sym = None
-        # Set to None the properties inherited from Slot
+        for obj in self.line_list:
+            obj._set_None()
+        self.wind_begin_index = None
+        self.wind_end_index = None
+        self.type_line_wind = None
+        # Set to None the properties inherited from SlotWind
         super(SlotUD, self)._set_None()
 
-    def _get_point_list(self):
-        """getter of point_list"""
-        return self._point_list
+    def _get_line_list(self):
+        """getter of line_list"""
+        if self._line_list is not None:
+            for obj in self._line_list:
+                if obj is not None:
+                    obj.parent = self
+        return self._line_list
 
-    def _set_point_list(self, value):
-        """setter of point_list"""
-        if type(value) is int and value == -1:
+    def _set_line_list(self, value):
+        """setter of line_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "line_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
             value = list()
-        check_var("point_list", value, "list")
-        self._point_list = value
+        check_var("line_list", value, "[Line]")
+        self._line_list = value
 
-    point_list = property(
-        fget=_get_point_list,
-        fset=_set_point_list,
-        doc=u"""Coordinates of the slot points (will be connected in order with Segments)
+    line_list = property(
+        fget=_get_line_list,
+        fset=_set_line_list,
+        doc=u"""list of line to draw the edges of the slot
 
-        :Type: list
+        :Type: [Line]
         """,
     )
 
-    def _get_is_sym(self):
-        """getter of is_sym"""
-        return self._is_sym
+    def _get_wind_begin_index(self):
+        """getter of wind_begin_index"""
+        return self._wind_begin_index
 
-    def _set_is_sym(self, value):
-        """setter of is_sym"""
-        check_var("is_sym", value, "bool")
-        self._is_sym = value
+    def _set_wind_begin_index(self, value):
+        """setter of wind_begin_index"""
+        check_var("wind_begin_index", value, "int")
+        self._wind_begin_index = value
 
-    is_sym = property(
-        fget=_get_is_sym,
-        fset=_set_is_sym,
-        doc=u"""True to enter only half of the point coordinates
+    wind_begin_index = property(
+        fget=_get_wind_begin_index,
+        fset=_set_wind_begin_index,
+        doc=u"""Index of the first line to include in the winding
 
-        :Type: bool
+        :Type: int
+        """,
+    )
+
+    def _get_wind_end_index(self):
+        """getter of wind_end_index"""
+        return self._wind_end_index
+
+    def _set_wind_end_index(self, value):
+        """setter of wind_end_index"""
+        check_var("wind_end_index", value, "int")
+        self._wind_end_index = value
+
+    wind_end_index = property(
+        fget=_get_wind_end_index,
+        fset=_set_wind_end_index,
+        doc=u"""Index of the last line to include in the winding
+
+        :Type: int
+        """,
+    )
+
+    def _get_type_line_wind(self):
+        """getter of type_line_wind"""
+        return self._type_line_wind
+
+    def _set_type_line_wind(self, value):
+        """setter of type_line_wind"""
+        check_var("type_line_wind", value, "int", Vmin=0, Vmax=1)
+        self._type_line_wind = value
+
+    type_line_wind = property(
+        fget=_get_type_line_wind,
+        fset=_set_type_line_wind,
+        doc=u"""0 to close winding with Segment, 1 for Arc1
+
+        :Type: int
+        :min: 0
+        :max: 1
         """,
     )
