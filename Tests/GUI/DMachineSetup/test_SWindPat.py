@@ -65,7 +65,9 @@ class TestSWindPat(object):
 
         setup["test_obj"] = MachineSCIM()
         setup["test_obj"].stator = LamSlotWind()
-        setup["test_obj"].stator.slot = SlotW22(Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        setup["test_obj"].stator.slot = SlotW22(
+            Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2
+        )
         setup["test_obj"].stator.winding = None
         setup["widget"] = SWindPat(machine=setup["test_obj"], matlib=[], is_stator=True)
 
@@ -74,7 +76,9 @@ class TestSWindPat(object):
 
         setup["test_obj"] = MachineSCIM()
         setup["test_obj"].stator = LamSlotWind()
-        setup["test_obj"].stator.slot = SlotW22(Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        setup["test_obj"].stator.slot = SlotW22(
+            Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2
+        )
         setup["test_obj"].stator.winding = WindingDW2L()
         setup["test_obj"].stator.winding.qs = None
         setup["test_obj"].stator.winding.coil_pitch = None
@@ -92,7 +96,9 @@ class TestSWindPat(object):
 
         setup["test_obj"] = MachineSCIM()
         setup["test_obj"].stator = LamSlotWind()
-        setup["test_obj"].stator.slot = SlotW22(Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        setup["test_obj"].stator.slot = SlotW22(
+            Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2
+        )
         setup["test_obj"].rotor.winding = Winding(p=8, qs=None)
 
         setup["widget"] = SWindPat(machine=setup["test_obj"], matlib=[], is_stator=True)
@@ -105,7 +111,9 @@ class TestSWindPat(object):
         setup["test_obj"] = MachineWRSM(type_machine=9)
 
         setup["test_obj"].stator = LamSlotWind()
-        setup["test_obj"].stator.slot = SlotW22(Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        setup["test_obj"].stator.slot = SlotW22(
+            Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2
+        )
         setup["test_obj"].stator.winding = WindingDW2L(p=8, qs=4)
 
         setup["test_obj"].rotor = LamSlotWind()
@@ -113,7 +121,9 @@ class TestSWindPat(object):
         setup["test_obj"].rotor.winding = Winding(p=8, qs=4)
 
         setup["widget"] = SWindPat(machine=setup["test_obj"], matlib=[], is_stator=True)
-        setup["widget2"] = SWindPat(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget2"] = SWindPat(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         # Check result stator
         assert type(setup["test_obj"].stator.winding) == WindingDW2L
@@ -140,7 +150,9 @@ class TestSWindPat(object):
             == "DC wound winding for salient pole"
         )
         assert setup["widget2"].is_reverse.checkState() == Qt.Unchecked
-        assert setup["widget2"].out_shape.text() == "Winding Matrix shape: [1, 2, 36, 1]"
+        assert (
+            setup["widget2"].out_shape.text() == "Winding Matrix shape: [1, 2, 36, 1]"
+        )
 
     def test_set_wind_type(self, setup):
         """Check that the Widget allow to update type_winding"""
@@ -205,9 +217,13 @@ class TestSWindPat(object):
     def test_set_output(self, setup):
         """Check that the set_output works correctly"""
         setup["test_obj"].rotor = LamSlotWind()
-        setup["test_obj"].rotor.slot = SlotW22(Zs=None, H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        setup["test_obj"].rotor.slot = SlotW22(
+            Zs=None, H0=0.001, H2=0.01, W0=0.1, W2=0.2
+        )
         setup["test_obj"].rotor.winding = Winding(p=8, qs=None)
-        setup["widget"] = SWindPat(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SWindPat(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         assert setup["widget"].out_shape.text() == "Winding Matrix shape: [1, 2, ?, 3]"
         assert setup["widget"].out_ms.text() == "ms = Zs / (2*p*qs) = ?"

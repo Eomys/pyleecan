@@ -59,9 +59,7 @@ class TestSMagnet_inset(object):
         matlib.dict_mat["RefMatLib"][1].elec.rho = 0.32
         matlib.dict_mat["RefMatLib"][2].elec.rho = 0.33
 
-        widget = SMagnet(
-            machine=test_obj, matlib=matlib, is_stator=False
-        )
+        widget = SMagnet(machine=test_obj, matlib=matlib, is_stator=False)
 
         yield {"widget": widget, "test_obj": test_obj}
 
@@ -77,7 +75,10 @@ class TestSMagnet_inset(object):
         assert setup["widget"].w_mag.lf_H0.text() == "0.005"
         assert setup["widget"].w_mat.in_mat_type.text() == "mat_mag:"
         assert setup["widget"].w_mat.c_mat_type.currentIndex() == 2
-        assert setup["widget"].w_mag.w_out.out_Smag.text() == "Magnet surface: 0.0003521 m²"
+        assert (
+            setup["widget"].w_mag.w_out.out_Smag.text()
+            == "Magnet surface: 0.0003521 m²"
+        )
         assert setup["widget"].w_mag.w_out.out_gap.text() == "gap: 0.05 m"
 
     def test_set_material(self, setup):

@@ -39,7 +39,7 @@ class Test_Workflow_DMatLib(object):
             self.app = QtWidgets.QApplication(sys.argv)
         else:
             self.app = QtWidgets.QApplication.instance()
-        
+
         work_path = join(save_path, "Material Workflow")
         # Delete old test if needed
         if isdir(work_path):

@@ -51,9 +51,7 @@ class TestSMachineDimension(object):
         ]
         matlib.index_first_mat_mach = 3
 
-        widget = SMachineDimension(
-            machine=test_obj, matlib=matlib, is_stator=False
-        )
+        widget = SMachineDimension(machine=test_obj, matlib=matlib, is_stator=False)
 
         yield {"widget": widget, "test_obj": test_obj, "matlib": matlib}
 

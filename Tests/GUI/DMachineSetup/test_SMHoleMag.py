@@ -61,14 +61,16 @@ class TestSMHoleMag(object):
         ]
         matlib.index_first_mat_mach = 3
 
-        widget = SMHoleMag(
-            machine=test_obj, matlib=matlib, is_stator=False
-        )
-        widget2 = SMHoleMag(
-            machine=test_obj2, matlib=matlib, is_stator=False
-        )
+        widget = SMHoleMag(machine=test_obj, matlib=matlib, is_stator=False)
+        widget2 = SMHoleMag(machine=test_obj2, matlib=matlib, is_stator=False)
 
-        yield {"widget": widget, "widget2": widget2, "test_obj": test_obj, "test_obj2": test_obj2, "matlib": matlib}
+        yield {
+            "widget": widget,
+            "widget2": widget2,
+            "test_obj": test_obj,
+            "test_obj2": test_obj2,
+            "matlib": matlib,
+        }
 
         self.app.quit()
 
@@ -79,7 +81,8 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.count() == 1
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 0
         assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 50"
+            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 50"
         )
         assert setup["widget"].tab_hole.widget(0).c_hole_type.count() == 7
 
@@ -111,11 +114,14 @@ class TestSMHoleMag(object):
     def test_init_SyRM(self, setup):
         """Check that the Widget initialize to the correct hole"""
 
-        assert setup["widget2"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 22.5 °"
+        assert (
+            setup["widget2"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 22.5 °"
+        )
         assert setup["widget2"].tab_hole.count() == 1
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.currentIndex() == 4
         assert (
-            setup["widget2"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 54"
+            setup["widget2"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 54"
         )
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.count() == 8
 
@@ -143,11 +149,14 @@ class TestSMHoleMag(object):
         setup["widget2"] = SMHoleMag(
             machine=setup["test_obj2"], matlib=setup["matlib"], is_stator=False
         )
-        assert setup["widget2"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 22.5 °"
+        assert (
+            setup["widget2"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 22.5 °"
+        )
         assert setup["widget2"].tab_hole.count() == 1
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.currentIndex() == 1
         assert (
-            setup["widget2"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 51"
+            setup["widget2"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 51"
         )
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.count() == 8
 
@@ -173,7 +182,8 @@ class TestSMHoleMag(object):
         assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 20 °"
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 1
         assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 51"
+            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 51"
         )
 
     def test_init_52(self, setup):
@@ -186,7 +196,8 @@ class TestSMHoleMag(object):
         assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 20 °"
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 2
         assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 52"
+            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 52"
         )
 
     def test_init_53(self, setup):
@@ -196,10 +207,13 @@ class TestSMHoleMag(object):
         setup["widget"] = SMHoleMag(
             machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
         )
-        assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 32.73 °"
+        assert (
+            setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 32.73 °"
+        )
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 3
         assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 53"
+            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 53"
         )
 
     def test_init_57(self, setup):
@@ -212,7 +226,8 @@ class TestSMHoleMag(object):
         assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 20 °"
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 4
         assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 57"
+            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 57"
         )
 
     def test_init_58(self, setup):
@@ -225,14 +240,17 @@ class TestSMHoleMag(object):
         assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 20 °"
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 5
         assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 58"
+            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 58"
         )
 
     def test_init_UD(self, setup):
         """Check that you can edit a hole UD"""
         setup["test_obj"].rotor.hole[0] = HoleUD(Zh=20)
         setup["test_obj"].rotor.hole[0].magnet_dict["magnet_0"] = Magnet()
-        setup["test_obj"].rotor.hole[0].magnet_dict["magnet_0"].mat_type.name = "Magnet1"
+        setup["test_obj"].rotor.hole[0].magnet_dict[
+            "magnet_0"
+        ].mat_type.name = "Magnet1"
         setup["widget"] = SMHoleMag(
             machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
         )
@@ -251,7 +269,8 @@ class TestSMHoleMag(object):
         assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 45 °"
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 1
         assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 51"
+            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 51"
         )
 
     def test_set_type_52(self, setup):
@@ -262,7 +281,8 @@ class TestSMHoleMag(object):
         assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 45 °"
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 2
         assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 52"
+            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 52"
         )
 
     def test_set_type_53(self, setup):
@@ -273,7 +293,8 @@ class TestSMHoleMag(object):
         assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 45 °"
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 3
         assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 53"
+            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 53"
         )
 
     def test_set_type_57(self, setup):
@@ -284,7 +305,8 @@ class TestSMHoleMag(object):
         assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 45 °"
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 4
         assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 57"
+            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 57"
         )
 
     def test_set_type_58(self, setup):
@@ -295,7 +317,8 @@ class TestSMHoleMag(object):
         assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 45 °"
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 5
         assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 58"
+            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 58"
         )
 
     def test_SyRM_set_type_54_51_54(self, setup):
@@ -303,7 +326,8 @@ class TestSMHoleMag(object):
         # Init a HoleM54
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.currentIndex() == 4
         assert (
-            setup["widget2"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 54"
+            setup["widget2"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 54"
         )
         assert setup["test_obj2"].rotor.hole[0].Zh == 16
 
@@ -311,7 +335,8 @@ class TestSMHoleMag(object):
         setup["widget2"].tab_hole.widget(0).c_hole_type.setCurrentIndex(1)
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.currentIndex() == 1
         assert (
-            setup["widget2"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 51"
+            setup["widget2"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 51"
         )
         assert type(setup["test_obj2"].rotor.hole[0]) == HoleM51
         assert setup["test_obj2"].rotor.hole[0].magnet_0 == None
@@ -321,7 +346,8 @@ class TestSMHoleMag(object):
         setup["widget2"].tab_hole.widget(0).c_hole_type.setCurrentIndex(4)
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.currentIndex() == 4
         assert (
-            setup["widget2"].tab_hole.widget(0).c_hole_type.currentText() == "Slot Type 54"
+            setup["widget2"].tab_hole.widget(0).c_hole_type.currentText()
+            == "Slot Type 54"
         )
         assert type(setup["test_obj2"].rotor.hole[0]) == HoleM54
         assert setup["test_obj2"].rotor.hole[0].Zh == 16

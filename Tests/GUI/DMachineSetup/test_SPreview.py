@@ -52,7 +52,6 @@ load_preview_test = [SCIM_dict, IPMSM_dict]
 
 @pytest.mark.GUI
 class TestSPreview(object):
-
     @pytest.fixture
     def setup(self):
         """Run at the begining of every test to setup the gui"""
@@ -86,7 +85,9 @@ class TestSPreview(object):
         # Check load MachineType
         assert type(setup["widget"].w_step) is SPreview
         # Check the table
-        assert setup["widget"].w_step.tab_machine.tab_param.rowCount() == test_dict["Nrow"]
+        assert (
+            setup["widget"].w_step.tab_machine.tab_param.rowCount() == test_dict["Nrow"]
+        )
         for ii, content in enumerate(test_dict["table"]):
             assert (
                 setup["widget"].w_step.tab_machine.tab_param.item(ii, 0).text()

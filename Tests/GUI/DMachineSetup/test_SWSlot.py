@@ -322,4 +322,7 @@ class TestSWSlot(object):
             setup["widget"].c_slot_type.setCurrentIndex(ii)
             assert type(setup["test_obj"].stator.slot) == slot_list[ii]
             assert type(setup["widget"].w_slot) == WIDGET_LIST[ii]
-            assert setup["widget"].w_slot.w_out.out_Wlam.text() == "Lamination width: 0.1 m"
+            assert (
+                setup["widget"].w_slot.w_out.out_Wlam.text()
+                == "Lamination width: 0.1 m"
+            )

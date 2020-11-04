@@ -43,7 +43,7 @@ def check(self):
 
     alpha = self.comp_alpha()
     if alpha <= 0:
-        print( "The teeth are too wide for the lamination (reduce W3 or H0)")
+        print("The teeth are too wide for the lamination (reduce W3 or H0)")
         raise S52_alphaCheckError(
             "The teeth are too wide for the lamination (reduce W3 or H0)"
         )

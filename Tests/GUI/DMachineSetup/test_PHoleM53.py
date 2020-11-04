@@ -178,8 +178,13 @@ class TestPHoleM53(object):
         setup["widget"].hole = setup["test_obj"].hole[0]
         setup["widget"].comp_output()
 
-        assert setup["widget"].out_slot_surface.text() == "Slot suface (2 part): 0.01033 m²"
-        assert setup["widget"].out_magnet_surface.text() == "Magnet surface: 4.08e-07 m²"
+        assert (
+            setup["widget"].out_slot_surface.text()
+            == "Slot suface (2 part): 0.01033 m²"
+        )
+        assert (
+            setup["widget"].out_magnet_surface.text() == "Magnet surface: 4.08e-07 m²"
+        )
         assert setup["widget"].out_W5.text() == "W5: 0.01565 m"
 
     def test_PHoleM53_None_Magnet(self, setup):

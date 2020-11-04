@@ -21,7 +21,6 @@ from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 
 @pytest.mark.GUI
 class TestSWindCond(object):
-
     @pytest.fixture
     def setup(self):
         """Run at the begining of every test to setup the gui"""
@@ -56,14 +55,15 @@ class TestSWindCond(object):
         matlib.dict_mat["RefMatLib"][1].elec.rho = 0.32
         matlib.dict_mat["RefMatLib"][2].elec.rho = 0.33
 
-        widget_1 = SWindCond(
-            machine=test_obj, matlib=matlib, is_stator=True
-        )
-        widget_2 = SWindCond(
-            machine=test_obj, matlib=matlib, is_stator=False
-        )
+        widget_1 = SWindCond(machine=test_obj, matlib=matlib, is_stator=True)
+        widget_2 = SWindCond(machine=test_obj, matlib=matlib, is_stator=False)
 
-        yield {"widget": widget_1, "widget2": widget_2, "test_obj": test_obj, "matlib": matlib}
+        yield {
+            "widget": widget_1,
+            "widget2": widget_2,
+            "test_obj": test_obj,
+            "matlib": matlib,
+        }
 
         self.app.quit()
 
@@ -96,7 +96,9 @@ class TestSWindCond(object):
         setup["widget"].w_cond.si_Nwpc1_rad.clear()
         value = int(uniform(5, 100))
         QTest.keyClicks(setup["widget"].w_cond.si_Nwpc1_rad, str(value))
-        setup["widget"].w_cond.si_Nwpc1_rad.editingFinished.emit()  # To trigger the slot
+        setup[
+            "widget"
+        ].w_cond.si_Nwpc1_rad.editingFinished.emit()  # To trigger the slot
 
         assert setup["test_obj"].stator.winding.conductor.Nwppc_rad == value
 
@@ -106,7 +108,9 @@ class TestSWindCond(object):
         setup["widget"].w_cond.si_Nwpc1_tan.clear()
         value = int(uniform(5, 100))
         QTest.keyClicks(setup["widget"].w_cond.si_Nwpc1_tan, str(value))
-        setup["widget"].w_cond.si_Nwpc1_tan.editingFinished.emit()  # To trigger the slot
+        setup[
+            "widget"
+        ].w_cond.si_Nwpc1_tan.editingFinished.emit()  # To trigger the slot
 
         assert setup["test_obj"].stator.winding.conductor.Nwppc_tan == value
 
@@ -126,7 +130,9 @@ class TestSWindCond(object):
         setup["widget"].w_cond.lf_Wins_wire.clear()
         value = uniform(5, 100)
         QTest.keyClicks(setup["widget"].w_cond.lf_Wins_wire, str(value))
-        setup["widget"].w_cond.lf_Wins_wire.editingFinished.emit()  # To trigger the slot
+        setup[
+            "widget"
+        ].w_cond.lf_Wins_wire.editingFinished.emit()  # To trigger the slot
 
         assert setup["test_obj"].stator.winding.conductor.Wins_wire == value
 
@@ -134,7 +140,9 @@ class TestSWindCond(object):
         setup["widget2"].w_cond.lf_Wins_wire.clear()
         value = uniform(5, 100)
         QTest.keyClicks(setup["widget2"].w_cond.lf_Wins_wire, str(value))
-        setup["widget2"].w_cond.lf_Wins_wire.editingFinished.emit()  # To trigger the slot
+        setup[
+            "widget2"
+        ].w_cond.lf_Wins_wire.editingFinished.emit()  # To trigger the slot
 
         assert setup["test_obj"].rotor.winding.conductor.Wins_wire == value
 
@@ -180,7 +188,9 @@ class TestSWindCond(object):
         setup["widget2"].w_cond.lf_Wins_cond.clear()
         value = uniform(5, 100)
         QTest.keyClicks(setup["widget2"].w_cond.lf_Wins_cond, str(value))
-        setup["widget2"].w_cond.lf_Wins_cond.editingFinished.emit()  # To trigger the slot
+        setup[
+            "widget2"
+        ].w_cond.lf_Wins_cond.editingFinished.emit()  # To trigger the slot
 
         assert setup["test_obj"].rotor.winding.conductor.Wins_cond == value
 

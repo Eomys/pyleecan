@@ -35,16 +35,12 @@ class TestDAVDuct(object):
             self.app = QtWidgets.QApplication.instance()
 
         test_obj = Lamination(Rint=0.1, Rext=1, is_stator=True, is_internal=True)
-        test_obj.axial_vent.append(
-            VentilationCirc(Zh=8, H0=10e-3, D0=40e-3, Alpha0=0)
-        )
-        test_obj.axial_vent.append(
-            VentilationCirc(Zh=9, H0=20e-3, D0=50e-3, Alpha0=0)
-        )
+        test_obj.axial_vent.append(VentilationCirc(Zh=8, H0=10e-3, D0=40e-3, Alpha0=0))
+        test_obj.axial_vent.append(VentilationCirc(Zh=9, H0=20e-3, D0=50e-3, Alpha0=0))
 
         widget = DAVDuct(test_obj)
 
-        yield {"widget" : widget, "test_obj" : test_obj}
+        yield {"widget": widget, "test_obj": test_obj}
 
         self.app.quit()
 
@@ -192,9 +188,7 @@ class TestDAVDuct(object):
     def test_init_all_type(self, setup):
         """Check that you can combine several kind of ventilations"""
         test_obj = Lamination(Rint=0.1, Rext=1, is_stator=True, is_internal=True)
-        test_obj.axial_vent.append(
-            VentilationCirc(Zh=8, H0=10e-3, D0=40e-3, Alpha0=0)
-        )
+        test_obj.axial_vent.append(VentilationCirc(Zh=8, H0=10e-3, D0=40e-3, Alpha0=0))
         test_obj.axial_vent.append(
             VentilationTrap(Zh=4, H0=24e-3, D0=34e-3, W1=44e-3, W2=54e-3, Alpha0=0)
         )

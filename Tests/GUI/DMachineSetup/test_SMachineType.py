@@ -69,7 +69,9 @@ class TestSMachineType(object):
         setup["test_obj"].rotor = LamSlotWind(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         assert setup["widget"].le_name.text() == "test_machine_dfim"
         assert setup["widget"].si_p.value() == 7
@@ -86,7 +88,9 @@ class TestSMachineType(object):
         setup["test_obj"].rotor = LamHole(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         assert setup["widget"].le_name.text() == "test_machine_syrm"
         assert setup["widget"].si_p.value() == 21
@@ -103,7 +107,9 @@ class TestSMachineType(object):
         setup["test_obj"].rotor = LamSlotMag(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         assert setup["widget"].le_name.text() == "test_machine_spmsm"
         assert setup["widget"].si_p.value() == 8
@@ -120,7 +126,9 @@ class TestSMachineType(object):
         setup["test_obj"].rotor = LamSlotMag(
             is_stator=False, is_internal=True, Rint=0.11, Rext=0.12
         )
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         assert setup["widget"].le_name.text() == "test_machine_sipmsm"
         assert setup["widget"].si_p.value() == 9
@@ -137,7 +145,9 @@ class TestSMachineType(object):
         setup["test_obj"].rotor = LamHole(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         assert setup["widget"].le_name.text() == "test_machine_ipmsm"
         assert setup["widget"].si_p.value() == 10
@@ -154,7 +164,9 @@ class TestSMachineType(object):
         setup["test_obj"].rotor = LamSlotWind(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         assert setup["widget"].le_name.text() == "test_machine_wrsm"
         assert setup["widget"].si_p.value() == 5
@@ -199,7 +211,9 @@ class TestSMachineType(object):
         setup["test_obj"].rotor = LamSlotWind(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         # Clear the field before writing the new value
         setup["widget"].si_p.clear()
@@ -219,7 +233,9 @@ class TestSMachineType(object):
         setup["test_obj"].rotor = LamSlotMag(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         # Clear the field before writing the new value
         setup["widget"].si_p.clear()
@@ -239,7 +255,9 @@ class TestSMachineType(object):
         setup["test_obj"].rotor = LamSlotMag(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         # Clear the field before writing the new value
         setup["widget"].si_p.clear()
@@ -261,7 +279,9 @@ class TestSMachineType(object):
         )
         setup["test_obj"].rotor.hole = list()
         setup["test_obj"].rotor.hole.append(HoleM50(Zh=0))
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         # Clear the field before writing the new value
         setup["widget"].si_p.clear()
@@ -282,7 +302,9 @@ class TestSMachineType(object):
         )
         setup["test_obj"].rotor.hole = list()
         setup["test_obj"].rotor.hole.append(HoleM50(Zh=0))
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         # Clear the field before writing the new value
         setup["widget"].si_p.clear()
@@ -305,7 +327,9 @@ class TestSMachineType(object):
         )
         setup["test_obj"].rotor.hole = list()
         setup["test_obj"].rotor.hole.append(HoleM50(Zh=0))
-        setup["widget"] = SMachineType(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         # Clear the field before writing the new value
         setup["widget"].si_p.clear()

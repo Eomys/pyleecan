@@ -96,7 +96,9 @@ class TestPWSlot25(object):
             Nrvd=1,
             Wrvd=0.1,
         )
-        setup["test_obj"].slot = SlotW25(Zs=12, W4=150e-3, W3=75e-3, H1=30e-3, H2=150e-3)
+        setup["test_obj"].slot = SlotW25(
+            Zs=12, W4=150e-3, W3=75e-3, H1=30e-3, H2=150e-3
+        )
         setup["widget"] = PWSlot25(setup["test_obj"])
         assert setup["widget"].w_out.out_slot_height.text() == "Slot height: 0.1789 m"
 

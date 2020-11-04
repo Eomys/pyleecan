@@ -84,7 +84,9 @@ class TestSBar(object):
         setup["test_obj"].rotor.winding.Lewout = 0.23
         setup["test_obj"].rotor.ring_mat.name = "test2"
         setup["test_obj"].rotor.winding.conductor = None
-        setup["widget"] = SBar(machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False)
+        setup["widget"] = SBar(
+            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
+        )
 
         assert setup["widget"].c_bar_type.currentIndex() == 0
 
@@ -95,7 +97,9 @@ class TestSBar(object):
         setup["test_obj"].rotor.ring_mat.name = "test2"
         setup["test_obj"].rotor.winding.conductor = CondType22()
         setup["test_obj"].rotor.winding.conductor.cond_mat.name = "test3"
-        setup["widget"] = SBar(machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False)
+        setup["widget"] = SBar(
+            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
+        )
 
         assert setup["widget"].lf_Hscr.value() == 0.21
         assert setup["widget"].lf_Lscr.value() == 0.22

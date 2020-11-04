@@ -33,7 +33,7 @@ class Testsave_load_matlib(object):
             self.app = QtWidgets.QApplication(sys.argv)
         else:
             self.app = QtWidgets.QApplication.instance()
-        
+
         work_path = join(save_path, "Material")
         # Delete old test if needed
         if isdir(work_path):
@@ -45,7 +45,7 @@ class Testsave_load_matlib(object):
         self.app.quit()
 
         rmtree(work_path)
-        
+
     def test_load_save_several_file(self, setup):
         """Check that you can load/save several machine files"""
         # Copy the matlib

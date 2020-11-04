@@ -72,7 +72,9 @@ class TestSWindParam(object):
 
         setup["test_obj"].type_machine = 9
 
-        setup["widget2"] = SWindParam(machine=setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget2"] = SWindParam(
+            machine=setup["test_obj"], matlib=[], is_stator=False
+        )
 
         assert setup["widget2"].in_Zs.isHidden()
         assert setup["widget2"].in_Nlay.isHidden()

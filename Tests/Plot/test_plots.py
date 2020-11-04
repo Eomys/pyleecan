@@ -171,6 +171,7 @@ class Test_plots(object):
             is_auto_ticks=False,
             legend_list=["Reference", "Periodic"],
             save_path=join(save_path, "test_default_proj_Br_dataobj_period.png"),
+            is_show_fig=False
         )
         out.plot_2D_Data(
             "mag.B",
@@ -178,6 +179,7 @@ class Test_plots(object):
             data_list=[out2.mag.B],
             legend_list=["Reference", "Periodic"],
             save_path=join(save_path, "test_default_proj_Br_dataobj_period_fft.png"),
+            is_show_fig=False
         )
 
         out3 = Output(simu=simu)
@@ -228,6 +230,7 @@ class Test_plots(object):
             legend_list=["Reference", "Linspace"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_linspace.png"),
+            is_show_fig=False
         )
         out.plot_2D_Data(
             "mag.B",
@@ -236,6 +239,7 @@ class Test_plots(object):
             legend_list=["Reference", "Linspace"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_linspace_fft.png"),
+            is_show_fig=False
         )
 
         simu4 = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
@@ -257,6 +261,7 @@ class Test_plots(object):
             legend_list=["Reference", "Inverse FFT"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_ift.png"),
+            is_show_fig=False
         )
         out.plot_2D_Data(
             "mag.B",
@@ -265,6 +270,7 @@ class Test_plots(object):
             legend_list=["Reference", "Inverse FFT"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_ift_fft.png"),
+            is_show_fig=False
         )
 
         out5 = Output(simu=simu)
@@ -309,6 +315,7 @@ class Test_plots(object):
             legend_list=["Br", "0.2sin(375t-1.5)"],
             save_path=join(save_path, "test_default_proj_Br_compare.png"),
             is_auto_ticks=False,
+            is_show_fig=False
         )
 
     def test_default_proj_Br_cfft2(self, import_data):
@@ -350,6 +357,7 @@ class Test_plots(object):
             "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
             N_stem=N_stem,
             save_path=join(save_path, "test_default_proj_Br_dataobj_cfft2.png"),
+            is_show_fig=False
         )
 
     def test_default_proj_surf(self, import_data):
@@ -390,6 +398,7 @@ class Test_plots(object):
             component_list=["radial"],
             save_path=join(save_path, "test_default_proj_Br_surf_dataobj.png"),
             is_2D_view=False,
+            is_show_fig=False
         )
 
     def test_default_proj_fft2(self, import_data):
@@ -431,6 +440,7 @@ class Test_plots(object):
             "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
             is_2D_view=True,
             save_path=join(save_path, "test_default_proj_Br_fft2_dataobj.png"),
+            is_show_fig=False
         )
 
     def test_default_proj_time_space(self, import_data):
@@ -470,4 +480,5 @@ class Test_plots(object):
             r_max=r_max,
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_time_space_dataobj.png"),
+            is_show_fig=False
         )

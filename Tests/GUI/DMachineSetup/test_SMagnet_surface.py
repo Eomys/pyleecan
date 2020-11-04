@@ -45,9 +45,7 @@ class TestSMagnet_surface(object):
         test_obj.stator = LamSlotWind(Rint=0.95, Rext=0.99)
         test_obj.rotor = LamSlotMag(Rint=0.1, Rext=0.9)
         test_obj.rotor.slot = SlotMFlat(Zs=8, W0=10e-3, H0=0e-3)
-        test_obj.rotor.slot.magnet = [
-            MagnetType13(Wmag=10e-3, Hmag=3e-3, Rtop=12e-3)
-        ]
+        test_obj.rotor.slot.magnet = [MagnetType13(Wmag=10e-3, Hmag=3e-3, Rtop=12e-3)]
         test_obj.rotor.slot.magnet[0].mat_type.name = "test2"
 
         matlib = MatLib()
@@ -60,9 +58,7 @@ class TestSMagnet_surface(object):
         matlib.dict_mat["RefMatLib"][1].elec.rho = 0.32
         matlib.dict_mat["RefMatLib"][2].elec.rho = 0.33
 
-        widget = SMagnet(
-            machine=test_obj, matlib=matlib, is_stator=False
-        )
+        widget = SMagnet(machine=test_obj, matlib=matlib, is_stator=False)
 
         yield {"widget": widget, "test_obj": test_obj}
 
@@ -78,7 +74,10 @@ class TestSMagnet_surface(object):
         assert setup["widget"].w_mag.lf_H0.text() == "0"
         assert setup["widget"].w_mag.lf_Rtopm.text() == "0.012"
         assert setup["widget"].w_mat.c_mat_type.currentIndex() == 1
-        assert setup["widget"].w_mag.w_out.out_Smag.text() == "Magnet surface: 3.734e-05 m²"
+        assert (
+            setup["widget"].w_mag.w_out.out_Smag.text()
+            == "Magnet surface: 3.734e-05 m²"
+        )
         assert setup["widget"].w_mag.w_out.out_gap.text() == "gap: 0.05 m"
 
     def test_set_material(self, setup):

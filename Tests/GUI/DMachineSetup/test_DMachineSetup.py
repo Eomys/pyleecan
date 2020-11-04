@@ -85,7 +85,7 @@ class TestDMachineSetup(object):
             dmatlib=dmatlib, machine_path=join(TEST_DATA_DIR, "Machine")
         )
 
-        yield {"widget" : widget}
+        yield {"widget": widget}
 
         self.app.quit()
 

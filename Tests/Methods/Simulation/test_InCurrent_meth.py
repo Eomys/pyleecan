@@ -292,6 +292,7 @@ class Test_InCurrent_meth(object):
             "elec.Is",
             "time",
             "phase",
+            is_show_fig=False
         )
 
         # Save picture
@@ -326,6 +327,7 @@ if __name__ == "__main__":
     #         "elec.Is",
     #         "time",
     #         "phase",
+    #         is_show_fig=False
     #     )
 
     # title = "Id=" + str(test_dict["Id"]) + " Iq=" + str(test_dict["Iq"])

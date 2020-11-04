@@ -30,7 +30,7 @@ class TestDMatSetup(object):
             self.app = QtWidgets.QApplication(sys.argv)
         else:
             self.app = QtWidgets.QApplication.instance()
-        
+
         work_path = join(save_path, "Material")
         # Delete old test if needed
         if isdir(work_path):

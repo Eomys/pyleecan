@@ -27,9 +27,7 @@ class TestPWSlot29(object):
             self.app = QtWidgets.QApplication.instance()
 
         test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
-        test_obj.slot = SlotW29(
-            H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15
-        )
+        test_obj.slot = SlotW29(H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15)
         widget = PWSlot29(test_obj)
 
         yield {"widget": widget, "test_obj": test_obj}

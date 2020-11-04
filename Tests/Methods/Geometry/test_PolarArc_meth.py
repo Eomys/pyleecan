@@ -104,4 +104,4 @@ class Test_PolarArc_meth(object):
         )
 
         with pytest.raises(AnglePolarArcError) as context:
-            surface.check() 
+            surface.check()

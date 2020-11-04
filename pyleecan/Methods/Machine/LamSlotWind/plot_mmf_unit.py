@@ -3,7 +3,7 @@ from ....Functions.Plot.plot_2D_Data import plot_2D_Data
 from ....definitions import config_dict
 
 
-def plot_mmf_unit(self, r_max=100, fig=None):
+def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
     """Plot the winding unit mmf as a function of space
     Parameters
     ----------
@@ -13,6 +13,8 @@ def plot_mmf_unit(self, r_max=100, fig=None):
         Space discretization
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
+    is_show_fig : bool
+        To call show at the end of the method
     """
 
     # Compute the winding function and mmf
@@ -28,6 +30,7 @@ def plot_mmf_unit(self, r_max=100, fig=None):
         data_list=[MMF_U],
         fig=fig,
         color_list=color_list,
+        is_show_fig=is_show_fig
     )
 
     plot_2D_Data(
@@ -37,4 +40,5 @@ def plot_mmf_unit(self, r_max=100, fig=None):
         data_list=[MMF_U],
         fig=fig,
         color_list=color_list,
+        is_show_fig=is_show_fig
     )

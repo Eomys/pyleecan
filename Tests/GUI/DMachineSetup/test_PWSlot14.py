@@ -31,7 +31,6 @@ class TestPWSlot14(object):
         test_obj.slot = SlotW14(H0=0.10, H1=0.11, H3=0.12, W0=0.13, W3=0.14)
         widget = PWSlot14(test_obj)
 
-
         yield {"widget": widget, "test_obj": test_obj}
 
         self.app.quit()

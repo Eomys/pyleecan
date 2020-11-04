@@ -55,14 +55,15 @@ class TestSLamParam(object):
         matlib.dict_mat["RefMatLib"][1].elec.rho = 0.32
         matlib.dict_mat["RefMatLib"][2].elec.rho = 0.33
 
-        widget_1 = SLamParam(
-            machine=test_obj, matlib=matlib, is_stator=True
-        )
-        widget_2 = SLamParam(
-            machine=test_obj, matlib=matlib, is_stator=False
-        )
+        widget_1 = SLamParam(machine=test_obj, matlib=matlib, is_stator=True)
+        widget_2 = SLamParam(machine=test_obj, matlib=matlib, is_stator=False)
 
-        yield {"widget": widget_1, "widget2": widget_2, "test_obj": test_obj, "matlib": matlib}
+        yield {
+            "widget": widget_1,
+            "widget2": widget_2,
+            "test_obj": test_obj,
+            "matlib": matlib,
+        }
 
         self.app.quit()
 
