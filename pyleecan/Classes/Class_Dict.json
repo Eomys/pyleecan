@@ -4254,7 +4254,8 @@
             "get_meshsolution",
             "get_path_save_fea",
             "get_path_save",
-            "comp_axes"
+            "comp_axes",
+            "store_output"
         ],
         "mother": "Magnetics",
         "name": "MagElmer",
@@ -4380,7 +4381,8 @@
             "get_path_save_fem",
             "build_meshsolution",
             "solve_FEMM_parallel",
-            "comp_axes"
+            "comp_axes",
+            "store_output"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",
@@ -4891,7 +4893,8 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_axes"
+            "comp_axes",
+            "store_output"
         ],
         "mother": "",
         "name": "Magnetics",
@@ -10004,7 +10007,7 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_time_angle"
+            "comp_axes"
         ],
         "mother": "",
         "name": "Structural",
@@ -10012,11 +10015,11 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Structural.csv",
         "properties": [
             {
-                "desc": "Force module",
+                "desc": "Structural module",
                 "max": "",
                 "min": "",
-                "name": "force",
-                "type": "Force",
+                "name": "structural",
+                "type": "Structural",
                 "unit": "-",
                 "value": ""
             }

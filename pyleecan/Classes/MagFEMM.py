@@ -56,6 +56,11 @@ try:
 except ImportError as error:
     comp_axes = error
 
+try:
+    from ..Methods.Simulation.MagFEMM.store_output import store_output
+except ImportError as error:
+    store_output = error
+
 
 from ._check import InitUnKnowClassError
 from .DXFImport import DXFImport
@@ -156,6 +161,17 @@ class MagFEMM(Magnetics):
         )
     else:
         comp_axes = comp_axes
+    # cf Methods.Simulation.MagFEMM.store_output
+    if isinstance(store_output, ImportError):
+        store_output = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method store_output: " + str(store_output)
+                )
+            )
+        )
+    else:
+        store_output = store_output
     # save and copy methods are available in all object
     save = save
     copy = copy

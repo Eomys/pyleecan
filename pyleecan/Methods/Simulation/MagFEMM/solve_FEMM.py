@@ -14,10 +14,7 @@ def solve_FEMM(
     self,
     femm,
     output,
-    Br,
-    Bt,
-    Tem,
-    Phi_wind_stator,
+    out_dict,
     sym,
     Nt,
     angle,
@@ -30,58 +27,62 @@ def solve_FEMM(
     end_t=None,
 ):
     """
-    Solve FEMM model to calculate airgap flux density, torque instantaneous/average/ripple values,
-    flux induced in stator windings and flux density, field and permeability maps
+     Solve FEMM model to calculate airgap flux density, torque instantaneous/average/ripple values,
+     flux induced in stator windings and flux density, field and permeability maps
 
-    Parameters
-    ----------
-    self: MagFEMM
-        A MagFEMM object
-    femm: FEMMHandler
-        Object to handle FEMM
-    output: Output
-        An Output object
-    Br : ndarray
-        Airgap radial flux density (Nt,Na) [T]
-    Bt : ndarray
-        Airgap tangential flux density (Nt,Na) [T]
-    Tem : ndarray
-        Electromagnetic torque over time (Nt,) [Nm]
-    Phi_wind_stator : ndarray
-        Stator winding flux (qs,Nt) [Wb]
-    sym: int
-        Spatial symmetry factor
-    Nt: int
-        Number of time steps for calculation
-    angle: ndarray
-        Angle vector for calculation
-    Is : ndarray
-        Stator current matrix (qs,Nt) [A]
-    Ir : ndarray
-        Stator current matrix (qs,Nt) [A]
-    angle_rotor: ndarray
-        Rotor angular position vector (Nt,)
-    is_close_femm: bool
-        True to close FEMM handler in the end
-    filename: str
-        Path to FEMM model to open
-    start_t: int
-        Index of first time step (0 by default, used for parallelization)
-    end_t: int
-        Index of last time step (Nt by default, used for parallelization)
+     Parameters
+     ----------
+     self: MagFEMM
+         A MagFEMM object
+     femm: FEMMHandler
+         Object to handle FEMM
+     output: Output
+         An Output object
+    out_dict: dict
+         Dict containing the following quantities to update for each time step:
+             Br : ndarray
+                 Airgap radial flux density (Nt,Na) [T]
+             Bt : ndarray
+                 Airgap tangential flux density (Nt,Na) [T]
+             Bz : ndarray
+                 Airgap axial flux density (Nt,Na) [T]
+             Tem : ndarray
+                 Electromagnetic torque over time (Nt,) [Nm]
+             Phi_wind_stator : ndarray
+                 Stator winding flux (qs,Nt) [Wb]
+     sym: int
+         Spatial symmetry factor
+     Nt: int
+         Number of time steps for calculation
+     angle: ndarray
+         Angle vector for calculation
+     Is : ndarray
+         Stator current matrix (qs,Nt) [A]
+     Ir : ndarray
+         Stator current matrix (qs,Nt) [A]
+     angle_rotor: ndarray
+         Rotor angular position vector (Nt,)
+     is_close_femm: bool
+         True to close FEMM handler in the end
+     filename: str
+         Path to FEMM model to open
+     start_t: int
+         Index of first time step (0 by default, used for parallelization)
+     end_t: int
+         Index of last time step (Nt by default, used for parallelization)
 
-    Returns
-    -------
-    B: ndarray
-        3D Magnetic flux density for all time steps and each element (Nt, Nelem, 3) [T]
-    H : ndarray
-        3D Magnetic field for all time steps and each element (Nt, Nelem, 3) [A/m]
-    mu : ndarray
-        Magnetic relative permeability for all time steps and each element (Nt, Nelem) []
-    mesh: MeshMat
-        Object containing magnetic mesh at first time step
-    groups: dict
-        Dict whose values are group label and values are array of indices of related elements
+     Returns
+     -------
+     B: ndarray
+         3D Magnetic flux density for all time steps and each element (Nt, Nelem, 3) [T]
+     H : ndarray
+         3D Magnetic field for all time steps and each element (Nt, Nelem, 3) [A/m]
+     mu : ndarray
+         Magnetic relative permeability for all time steps and each element (Nt, Nelem) []
+     mesh: MeshMat
+         Object containing magnetic mesh at first time step
+     groups: dict
+         Dict whose values are group label and values are array of indices of related elements
 
     """
     # Open FEMM file if not None, else it is already open
@@ -115,7 +116,7 @@ def solve_FEMM(
     save_path = self.get_path_save(output)
     FEMM_dict = output.mag.FEA_dict
     is_internal_rotor = output.simu.machine.rotor.is_internal
-    if Phi_wind_stator is not None:
+    if "Phi_wind_stator" in out_dict:
         qs = output.simu.machine.stator.winding.qs  # Winding phase number
         Npcpp = output.simu.machine.stator.winding.Npcpp
 
@@ -154,19 +155,21 @@ def solve_FEMM(
         # Get the flux result
         if self.is_sliding_band:
             for jj in range(Na):
-                Br[ii, jj], Bt[ii, jj] = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
+                out_dict["Br"][ii, jj], out_dict["Bt"][ii, jj] = femm.mo_getgapb(
+                    "bc_ag2", angle[jj] * 180 / pi
+                )
         else:
             for jj in range(Na):
                 B = femm.mo_getb(Rag * cos(angle[jj]), Rag * sin(angle[jj]))
-                Br[ii, jj] = B[0] * cos(angle[jj]) + B[1] * sin(angle[jj])
-                Bt[ii, jj] = -B[0] * sin(angle[jj]) + B[1] * cos(angle[jj])
+                out_dict["Br"][ii, jj] = B[0] * cos(angle[jj]) + B[1] * sin(angle[jj])
+                out_dict["Bt"][ii, jj] = -B[0] * sin(angle[jj]) + B[1] * cos(angle[jj])
 
         # Compute the torque
-        Tem[ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
+        out_dict["Tem"][ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
 
-        if Phi_wind_stator is not None:
+        if "Phi_wind_stator" in out_dict:
             # Phi_wind computation
-            Phi_wind_stator[ii, :] = comp_FEMM_Phi_wind(
+            out_dict["Phi_wind_stator"][ii, :] = comp_FEMM_Phi_wind(
                 femm,
                 qs,
                 Npcpp,
@@ -207,13 +210,13 @@ def solve_FEMM(
     # Shift to take into account stator position
     if self.angle_stator_shift != 0:
         roll_id = int(self.angle_stator_shift * Na / (2 * pi))
-        Br = roll(Br, roll_id, axis=1)
-        Bt = roll(Bt, roll_id, axis=1)
+        out_dict["Br"] = roll(out_dict["Br"], roll_id, axis=1)
+        out_dict["Bt"] = roll(out_dict["Bt"], roll_id, axis=1)
 
         # # Interpolate on updated angular position # TODO to improve accuracy
         # angle_new = (angle - self.angle_stator_shift) % (2 * pi / sym)
-        # Br = interp1d(append(angle, 2 * pi / sym), append(Br, Br[:,0]), axis=1)[angle_new]
-        # Bt = interp1d(append(angle, 2 * pi / sym), append(Br, Br[:,0]), axis=1)[angle_new]
+        # out_dict["Br"] = interp1d(append(angle, 2 * pi / sym), append(out_dict["Br"], out_dict["Br"][:,0]), axis=1)[angle_new]
+        # out_dict["Bt"] = interp1d(append(angle, 2 * pi / sym), append(out_dict["Bt"], out_dict["Bt"][:,0]), axis=1)[angle_new]
 
     # Close FEMM handler
     if is_close_femm:

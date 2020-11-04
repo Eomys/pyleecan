@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import mean, max as np_max, min as np_min
-
-from SciDataTool import DataTime, VectorField, Data1D
-
 from ....Methods.Simulation.Input import InputError
-from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def run(self):
@@ -23,90 +18,10 @@ def run(self):
 
     # Compute and store time and angle axes from elec output
     # and returns additional axes in axes_dict
-    axes_dict = self.comp_time_angle(output)
+    axes_dict = self.comp_axes(output)
 
     # Calculate airgap flux
-    (Br, Bt, Bz, Tem, Phi_wind_stator) = self.comp_flux_airgap(output, axes_dict)
+    out_dict = self.comp_flux_airgap(output, axes_dict)
 
-    # Get time and angular axes
-    Angle = axes_dict["Angle"]
-    Time = axes_dict["Time"]
-
-    # Store the results
-    # Store airgap flux as VectorField object
-    axis_list = [Time, Angle]  # Axes for each airgap flux component
-    output.mag.B = VectorField(
-        name="Airgap flux density",
-        symbol="B",
-    )
-    # Radial flux component
-    if Br is not None:
-        output.mag.B.components["radial"] = DataTime(
-            name="Airgap radial flux density",
-            unit="T",
-            symbol="B_r",
-            axes=axis_list,
-            values=Br,
-        )
-    # Tangential flux component
-    if Bt is not None:
-        output.mag.B.components["tangential"] = DataTime(
-            name="Airgap tangential flux density",
-            unit="T",
-            symbol="B_t",
-            axes=axis_list,
-            values=Bt,
-        )
-    # Axial flux component
-    if Bz is not None:
-        output.mag.B.components["axial"] = DataTime(
-            name="Airgap axial flux density",
-            unit="T",
-            symbol="B_z",
-            axes=axis_list,
-            values=Bz,
-        )
-
-    # Store electromagnetic torque over time, and global values: average, peak to peak and ripple
-    if Tem is not None:
-        Time_Tem = axes_dict["Time_Tem"]
-
-        output.mag.Tem = DataTime(
-            name="Electromagnetic torque",
-            unit="Nm",
-            symbol="T_{em}",
-            axes=[Time_Tem],
-            values=Tem,
-        )
-
-        output.mag.Tem_av = mean(Tem)
-        self.get_logger().debug("Average Torque: " + str(output.mag.Tem_av) + " N.m")
-
-        output.mag.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]
-        if output.mag.Tem_av != 0:
-            output.mag.Tem_rip_norm = output.mag.Tem_rip_pp / output.mag.Tem_av  # []
-        else:
-            output.mag.Tem_rip_norm = None
-
-    # Store stator winding flux and calculate electromotive force
-    if Phi_wind_stator is not None:
-
-        qs = self.parent.machine.stator.winding.qs
-
-        Phase = Data1D(
-            name="phase",
-            unit="",
-            values=gen_name(qs),
-            is_components=True,
-        )
-
-        output.mag.Phi_wind_stator = DataTime(
-            name="Stator Winding Flux",
-            unit="Wb",
-            symbol="Phi_{wind}",
-            axes=[Time, Phase],
-            values=Phi_wind_stator,
-        )
-
-        # Electromotive forces computation (update output)
-        output.mag.comp_emf()
+    # Store magnetic quantities contained in out_dict in OutMag, as Data object if necessary
+    self.store_output(output, out_dict, axes_dict)

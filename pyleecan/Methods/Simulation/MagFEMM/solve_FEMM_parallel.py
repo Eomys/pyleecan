@@ -11,10 +11,7 @@ def solve_FEMM_parallel(
     self,
     femm,
     output,
-    Br,
-    Bt,
-    Tem,
-    Phi_wind_stator,
+    out_dict,
     sym,
     Nt,
     angle,
@@ -33,16 +30,18 @@ def solve_FEMM_parallel(
         Object to handle FEMM
     output: Output
         An Output object
-    output: Output
-        An Output object
-    Br : ndarray
-        Airgap radial flux density (Nt,Na) [T]
-    Bt : ndarray
-        Airgap tangential flux density (Nt,Na) [T]
-    Tem : ndarray
-        Electromagnetic torque over time (Nt,) [Nm]
-    Phi_wind_stator : ndarray
-        Stator winding flux (qs,Nt) [Wb]
+    out_dict: dict
+        Dict containing the following quantities to update for each time step:
+            Br : ndarray
+                Airgap radial flux density (Nt,Na) [T]
+            Bt : ndarray
+                Airgap tangential flux density (Nt,Na) [T]
+            Bz : ndarray
+                Airgap axial flux density (Nt,Na) [T]
+            Tem : ndarray
+                Electromagnetic torque over time (Nt,) [Nm]
+            Phi_wind_stator : ndarray
+                Stator winding flux (qs,Nt) [Wb]
     sym: int
         Spatial symmetry factor
     Nt: int
@@ -107,10 +106,7 @@ def solve_FEMM_parallel(
         B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM(
             femm,
             output,
-            Br,
-            Bt,
-            Tem,
-            Phi_wind_stator,
+            out_dict,
             sym=sym,
             Nt=Nt,
             angle=angle,
