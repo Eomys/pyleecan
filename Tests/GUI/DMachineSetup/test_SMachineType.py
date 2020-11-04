@@ -295,3 +295,65 @@ class TestSMachineType(object):
 
         assert self.test_obj.stator.winding.p == value
         assert self.test_obj.rotor.hole[0].Zh == 2 * value
+
+    def test_set_p(self):
+        """Check that the Widget allow to update p when Winding is None"""
+        self.test_obj = MachineSyRM(name="test_machine_ipmsm", type_machine=5)
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22, Ksfill=0.545
+        )
+        self.test_obj.stator.winding = None
+        self.test_obj.rotor = LamHole(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
+        )
+        self.test_obj.rotor.hole = list()
+        self.test_obj.rotor.hole.append(HoleM50(Zh=0))
+        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+
+        # Clear the field before writing the new value
+        self.widget.si_p.clear()
+        value = int(uniform(3, 100))
+        QTest.keyClicks(self.widget.si_p, str(value))
+        self.widget.si_p.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.machine.stator.winding.p == value
+        assert self.widget.machine.stator.winding.is_reverse_wind == None
+        assert self.widget.machine.stator.winding.Nslot_shift_wind == None
+        assert self.widget.machine.stator.winding.qs == None
+        assert self.widget.machine.stator.winding.Ntcoil == None
+        assert self.widget.machine.stator.winding.Npcpp == None
+        assert self.widget.machine.stator.winding.type_connection == None
+        assert self.widget.machine.stator.winding.Lewout == None
+
+    # def test_set_c_type(self):
+    #     """Check that the Widget allow to update c_type when changing value in the combobox"""
+    #     # SIPMSM
+    #     self.test_obj = MachineSIPMSM(name="test_machine_sipmsm", type_machine=7)
+    #     self.test_obj.stator = LamSlotWind(
+    #         is_stator=True, is_internal=False, Rint=0.21, Rext=0.22
+    #     )
+    #     self.test_obj.stator.winding.p = 9
+    #     self.test_obj.rotor = LamSlotMag(
+    #         is_stator=False, is_internal=True, Rint=0.11, Rext=0.12
+    #     )
+    #     self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+
+    #     assert self.widget.le_name.text() == "test_machine_sipmsm"
+    #     assert self.widget.si_p.value() == 9
+    #     assert self.widget.c_type.currentIndex() == 4
+    #     assert self.widget.c_type.currentText() == "SIPMSM"
+    #     assert self.widget.is_inner_rotor.checkState() == Qt.Checked
+
+    #     QTest.keyClicks(self.widget.c_type, "WRSM")
+
+    #     assert self.widget.c_type.currentIndex() == 3
+    #     assert self.widget.c_type.currentText() == "WRSM"   TODO
+
+    def test_check(self):
+        self.test_obj = MachineSyRM(name="test_machine_ipmsm", type_machine=5)
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
+        )
+        self.test_obj.stator.winding = None
+
+        assert self.widget.check(self.test_obj) == "Missing stator winding"

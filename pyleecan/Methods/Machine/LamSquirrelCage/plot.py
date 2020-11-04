@@ -14,6 +14,7 @@ SCR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["SCR_COLOR"]
 def plot(
     self,
     fig=None,
+    ax=None,
     is_lam_only=False,
     sym=1,
     alpha=0,
@@ -27,9 +28,10 @@ def plot(
     ----------
     self : LamSquirrelCage
         A LamSquirrelCage object
-    fig :
-        if None, open a new fig and plot, else add to the current
-        one (Default value = None)
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
     is_lam_only : bool
         True to plot only the lamination (remove the bare)
     sym : int
@@ -49,7 +51,7 @@ def plot(
     """
 
     # Lamination and ventilation ducts patches
-    (fig, axes, patch_leg, label_leg) = init_fig(fig)
+    (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
     # Plot the lamination
     super(type(self), self).plot(
@@ -59,6 +61,7 @@ def plot(
         alpha=alpha,
         delta=delta,
         is_edge_only=is_edge_only,
+        is_show_fig=is_show_fig,
     )
 
     # init figure again to get updated label_leg and patch_leg

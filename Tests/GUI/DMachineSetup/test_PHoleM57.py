@@ -30,7 +30,20 @@ class TestPHoleM57(object):
         self.test_obj.hole.append(
             HoleM57(H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15, W3=0.17, W4=0.19)
         )
+        self.test_obj.hole.append(
+            HoleM57(
+                H1=0.11,
+                H2=0.12,
+                W0=0.13,
+                W1=0.14,
+                W2=0.15,
+                W3=0.17,
+                W4=0.19,
+                magnet_0=None,
+            )
+        )
         self.widget = PHoleM57(self.test_obj.hole[0])
+        self.widget2 = PHoleM57(self.test_obj.hole[1])
 
     @classmethod
     def setup_class(cls):
@@ -57,6 +70,8 @@ class TestPHoleM57(object):
         assert self.widget.lf_W3.value() == 0.17
         assert self.widget.lf_W4.value() == 0.19
 
+        assert self.widget.w_mat_1.isHidden() == False
+
         self.test_obj.hole[0] = HoleM57(
             H1=0.21, H2=0.22, W0=0.23, W1=0.24, W2=0.25, W3=0.27, W4=0.29
         )
@@ -68,6 +83,8 @@ class TestPHoleM57(object):
         assert self.widget.lf_W2.value() == 0.25
         assert self.widget.lf_W3.value() == 0.27
         assert self.widget.lf_W4.value() == 0.29
+
+        assert self.widget2.w_mat_1.isHidden() == True
 
     def test_set_W0(self):
         """Check that the Widget allow to update W0"""

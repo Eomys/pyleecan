@@ -181,6 +181,20 @@ class Test_Lam_Mag_surface_plot(object):
         assert len(fig.axes[0].patches) == 2
         fig.savefig(join(save_path, "test_Lam_Mag_13s_3-Stator.png"))
 
+        rotor = Lamination(
+            Rint=130e-3,
+            Rext=0.2,
+            is_internal=False,
+            is_stator=False,
+            L1=0.35,
+            Nrvd=3,
+            Wrvd=0.05,
+        )
+        stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
+        rotor.plot()
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 2
+
     def test_Lam_Mag_14_surface(self):
         """Test machine plot with Magnet 14 surface"""
 

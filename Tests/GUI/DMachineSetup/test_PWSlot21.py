@@ -4,6 +4,7 @@ import sys
 
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
+from numpy import pi
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW21 import SlotW21
@@ -112,6 +113,14 @@ class TestPWSlot21(object):
         assert self.widget.slot.H1 == 0.35
         assert self.test_obj.slot.H1 == 0.35
 
+        self.widget.c_H1_unit.setCurrentIndex(3)
+        self.widget.lf_H1.clear()  # Clear the field before writing
+        value = 1.4
+        QTest.keyClicks(self.widget.lf_H1, str(value))
+        self.widget.lf_H1.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.slot.H1 == value / 180 * pi
+
     def test_set_H1_is_rad(self):
         """Check that the Widget allow to update H1_is_rad"""
         assert not self.test_obj.slot.H1_is_rad
@@ -152,3 +161,36 @@ class TestPWSlot21(object):
         )
         self.widget = PWSlot21(self.test_obj)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.1504 m"
+
+    def test_check(self):
+        """Check that the check is working correctly"""
+        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
+        self.test_obj.slot = SlotW21(
+            H0=None, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
+        )
+        self.widget = PWSlot21(self.test_obj)
+        assert self.widget.check(self.test_obj) == "PWSlot21 check"
+        self.test_obj.slot = SlotW21(
+            H0=0.10, H1=None, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot21 check"
+        self.test_obj.slot = SlotW21(
+            H0=0.10, H1=0.11, H2=None, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot21 check"
+        self.test_obj.slot = SlotW21(
+            H0=0.10, H1=0.11, H2=0.12, W0=None, W1=0.14, W2=0.15, H1_is_rad=False
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot21 check"
+        self.test_obj.slot = SlotW21(
+            H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=None, W2=0.15, H1_is_rad=False
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot21 check"
+        self.test_obj.slot = SlotW21(
+            H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=None, H1_is_rad=False
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot21 check"
+        self.test_obj.slot = SlotW21(
+            H0=0.10, H1=5.3, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot21 check"

@@ -94,21 +94,31 @@ class TestPHoleM51(object):
         """Check that the Widget allow to update W0"""
         # Clear the field before writing the new value
         self.widget.lf_W0.clear()
-        QTest.keyClicks(self.widget.lf_W0, "0.31")
+        QTest.keyClicks(self.widget.lf_W0, "0.30")
         self.widget.lf_W0.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.hole.W0 == 0.31
-        assert self.test_obj.hole[0].W0 == 0.31
+        assert self.widget.hole.W0 == 0.30
+        assert self.test_obj.hole[0].W0 == 0.30
 
     def test_set_W1(self):
         """Check that the Widget allow to update W1"""
         # Clear the field before writing the new value
         self.widget.lf_W1.clear()
-        QTest.keyClicks(self.widget.lf_W1, "0.32")
+        QTest.keyClicks(self.widget.lf_W1, "0.31")
         self.widget.lf_W1.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.hole.W1 == 0.32
-        assert self.test_obj.hole[0].W1 == 0.32
+        assert self.widget.hole.W1 == 0.31
+        assert self.test_obj.hole[0].W1 == 0.31
+
+    def test_set_W2(self):
+        """Check that the Widget allow to update W2"""
+        # Clear the field before writing the new value
+        self.widget.lf_W2.clear()
+        QTest.keyClicks(self.widget.lf_W2, "0.32")
+        self.widget.lf_W2.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.hole.W2 == 0.32
+        assert self.test_obj.hole[0].W2 == 0.32
 
     def test_set_W3(self):
         """Check that the Widget allow to update W3"""
@@ -217,3 +227,12 @@ class TestPHoleM51(object):
 
         assert self.widget.w_mat_3.c_mat_type.currentText() == "Magnet3"
         assert self.test_obj.hole[0].magnet_2.mat_type.name == "Magnet3"
+
+    def test_comp_output(self):
+        """Check that comp_output is correctly working"""
+        self.test_obj.hole[0].W0 = 0.5
+        self.test_obj.hole[0].H0 = 0.00000001
+        self.widget.hole = self.test_obj.hole[0]
+        self.widget.comp_output()
+        assert not (self.widget.out_alpha.text() == "alpha: ?")
+        assert not (self.widget.out_Whole.text() == "Wslot: ?")

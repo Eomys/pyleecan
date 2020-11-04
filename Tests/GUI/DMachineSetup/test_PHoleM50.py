@@ -223,3 +223,31 @@ class TestPHoleM50(object):
 
         assert self.widget.w_mat_2.c_mat_type.currentText() == "Magnet1"
         assert self.test_obj.hole[0].magnet_1.mat_type.name == "Magnet1"
+
+    def test_comp_output(self):
+        """Check that you can compute the output only if the hole is correctly set """
+        self.test_obj = LamHole(Rint=0.1, Rext=0.2)
+        self.test_obj.hole = list()
+        self.test_obj.hole.append(
+            HoleM50(
+                H0=0.20,
+                H1=0.11,
+                H2=0.12,
+                W0=0.23,
+                W1=0.14,
+                W2=0.15,
+                H3=0.16,
+                W3=0.27,
+                H4=0.18,
+                W4=0.19,
+            )
+        )
+        self.widget.hole = self.test_obj.hole[0]
+        self.widget.comp_output()
+
+        # Nan are there because the value are not correct for the sin, cos and tan methods. But with true values, it works.
+
+        assert self.widget.out_slot_surface.text() == "Slot suface (2 part): nan m²"
+        assert self.widget.out_magnet_surface.text() == "Magnet surface: 0.0608 m²"
+        assert self.widget.out_alpha.text() == "alpha: nan rad (nan°)"
+        assert self.widget.out_W5.text() == "W5: nan m"

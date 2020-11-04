@@ -117,3 +117,11 @@ class Test_SlotW26_meth(object):
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+    def test_build_geometry_wind(self):
+        """Check if the build geometry of the winding works correctly"""
+        lam = LamSlot(is_internal=True, Rext=0.1325)
+        lam.slot = SlotW26(Zs=12, H0=10e-3, W0=10e-3, H1=0, R1=0.01, R2=0.0075)
+
+        result = lam.slot.build_geometry()
+        assert len(result) == 5
