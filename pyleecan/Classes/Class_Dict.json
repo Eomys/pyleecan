@@ -4298,15 +4298,6 @@
                 "value": ""
             },
             {
-                "desc": "Angular position shift of the stator",
-                "max": "",
-                "min": "",
-                "name": "angle_stator",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
-            },
-            {
                 "desc": "To save FEA mesh for latter post-procesing ",
                 "max": "",
                 "min": "",
@@ -4440,15 +4431,6 @@
                 "type": "dict",
                 "unit": "",
                 "value": ""
-            },
-            {
-                "desc": "Angular position shift of the stator",
-                "max": "",
-                "min": "",
-                "name": "angle_stator",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             },
             {
                 "desc": "To save FEA mesh for latter post-procesing ",
@@ -4995,6 +4977,24 @@
                 "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Shift angle to appy to the stator in magnetic model",
+                "max": "",
+                "min": "",
+                "name": "angle_stator_shift",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            },
+            {
+                "desc": "Shift angle to appy to the rotor in magnetic model",
+                "max": "",
+                "min": "",
+                "name": "angle_rotor_shift",
+                "type": "float",
+                "unit": "rad",
                 "value": 0
             }
         ]

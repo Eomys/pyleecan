@@ -33,9 +33,9 @@ class TestLamSlotWind(object):
 
         assert setup.get_name_phase() == []
 
-        setup.winding =  Winding(Npcpp=10, Ntcoil=11)
+        setup.winding = Winding(Npcpp=10, Ntcoil=11)
 
-        assert setup.get_name_phase() == ['A', 'B', 'C']
+        assert setup.get_name_phase() == ["A", "B", "C"]
 
     # def test_comp_output_geo(self, setup):
     #     """Check that the comp_output_geo function can raise an error"""
@@ -47,5 +47,4 @@ class TestLamSlotWind(object):
     #     setup.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
 
     #     assert setup.comp_output_geo().S_slot == 0
-    #     assert setup.comp_output_geo().S_slot_wind == 0 
-
+    #     assert setup.comp_output_geo().S_slot_wind == 0

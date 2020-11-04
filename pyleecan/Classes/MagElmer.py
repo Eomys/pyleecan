@@ -136,7 +136,6 @@ class MagElmer(Magnetics):
         Kgeo_fineness=1,
         file_name="",
         FEA_dict=-1,
-        angle_stator=0,
         is_get_mesh=False,
         is_save_FEA=False,
         transform_list=-1,
@@ -153,6 +152,8 @@ class MagElmer(Magnetics):
         type_BH_rotor=0,
         is_periodicity_t=False,
         is_periodicity_a=False,
+        angle_stator_shift=0,
+        angle_rotor_shift=0,
         init_dict=None,
         init_str=None,
     ):
@@ -179,8 +180,6 @@ class MagElmer(Magnetics):
                 file_name = init_dict["file_name"]
             if "FEA_dict" in list(init_dict.keys()):
                 FEA_dict = init_dict["FEA_dict"]
-            if "angle_stator" in list(init_dict.keys()):
-                angle_stator = init_dict["angle_stator"]
             if "is_get_mesh" in list(init_dict.keys()):
                 is_get_mesh = init_dict["is_get_mesh"]
             if "is_save_FEA" in list(init_dict.keys()):
@@ -213,12 +212,15 @@ class MagElmer(Magnetics):
                 is_periodicity_t = init_dict["is_periodicity_t"]
             if "is_periodicity_a" in list(init_dict.keys()):
                 is_periodicity_a = init_dict["is_periodicity_a"]
+            if "angle_stator_shift" in list(init_dict.keys()):
+                angle_stator_shift = init_dict["angle_stator_shift"]
+            if "angle_rotor_shift" in list(init_dict.keys()):
+                angle_rotor_shift = init_dict["angle_rotor_shift"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
         self.file_name = file_name
         self.FEA_dict = FEA_dict
-        self.angle_stator = angle_stator
         self.is_get_mesh = is_get_mesh
         self.is_save_FEA = is_save_FEA
         self.transform_list = transform_list
@@ -237,6 +239,8 @@ class MagElmer(Magnetics):
             type_BH_rotor=type_BH_rotor,
             is_periodicity_t=is_periodicity_t,
             is_periodicity_a=is_periodicity_a,
+            angle_stator_shift=angle_stator_shift,
+            angle_rotor_shift=angle_rotor_shift,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
@@ -251,7 +255,6 @@ class MagElmer(Magnetics):
         MagElmer_str += "Kgeo_fineness = " + str(self.Kgeo_fineness) + linesep
         MagElmer_str += 'file_name = "' + str(self.file_name) + '"' + linesep
         MagElmer_str += "FEA_dict = " + str(self.FEA_dict) + linesep
-        MagElmer_str += "angle_stator = " + str(self.angle_stator) + linesep
         MagElmer_str += "is_get_mesh = " + str(self.is_get_mesh) + linesep
         MagElmer_str += "is_save_FEA = " + str(self.is_save_FEA) + linesep
         MagElmer_str += (
@@ -293,8 +296,6 @@ class MagElmer(Magnetics):
             return False
         if other.FEA_dict != self.FEA_dict:
             return False
-        if other.angle_stator != self.angle_stator:
-            return False
         if other.is_get_mesh != self.is_get_mesh:
             return False
         if other.is_save_FEA != self.is_save_FEA:
@@ -322,7 +323,6 @@ class MagElmer(Magnetics):
         MagElmer_dict["FEA_dict"] = (
             self.FEA_dict.copy() if self.FEA_dict is not None else None
         )
-        MagElmer_dict["angle_stator"] = self.angle_stator
         MagElmer_dict["is_get_mesh"] = self.is_get_mesh
         MagElmer_dict["is_save_FEA"] = self.is_save_FEA
         MagElmer_dict["transform_list"] = (
@@ -350,7 +350,6 @@ class MagElmer(Magnetics):
         self.Kgeo_fineness = None
         self.file_name = None
         self.FEA_dict = None
-        self.angle_stator = None
         self.is_get_mesh = None
         self.is_save_FEA = None
         self.transform_list = None
@@ -434,24 +433,6 @@ class MagElmer(Magnetics):
         doc=u"""To enforce user-defined values for Elmer main parameters 
 
         :Type: dict
-        """,
-    )
-
-    def _get_angle_stator(self):
-        """getter of angle_stator"""
-        return self._angle_stator
-
-    def _set_angle_stator(self, value):
-        """setter of angle_stator"""
-        check_var("angle_stator", value, "float")
-        self._angle_stator = value
-
-    angle_stator = property(
-        fget=_get_angle_stator,
-        fset=_set_angle_stator,
-        doc=u"""Angular position shift of the stator
-
-        :Type: float
         """,
     )
 

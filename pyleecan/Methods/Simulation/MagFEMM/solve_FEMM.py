@@ -119,6 +119,9 @@ def solve_FEMM(
         qs = output.simu.machine.stator.winding.qs  # Winding phase number
         Npcpp = output.simu.machine.stator.winding.Npcpp
 
+    # Account for initial angular shift of stator and rotor and apply it to the sliding band
+    angle_shift = self.angle_rotor_shift - self.angle_stator_shift
+
     # Compute the data for each time step
     for ii in range(start_t, end_t):
         self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt))
@@ -128,7 +131,7 @@ def solve_FEMM(
             circuits=FEMM_dict["circuits"],
             is_sliding_band=self.is_sliding_band,
             is_internal_rotor=is_internal_rotor,
-            angle_rotor=angle_rotor,
+            angle_rotor=angle_rotor + angle_shift,
             Is=Is,
             Ir=Ir,
             ii=ii,
@@ -202,13 +205,13 @@ def solve_FEMM(
             mu_elem[ii0, :] = tmpmu
 
     # Shift to take into account stator position
-    if self.angle_stator != 0:
-        roll_id = int(self.angle_stator * Na / (2 * pi))
+    if self.angle_stator_shift != 0:
+        roll_id = int(self.angle_stator_shift * Na / (2 * pi))
         Br = roll(Br, roll_id, axis=1)
         Bt = roll(Bt, roll_id, axis=1)
 
         # # Interpolate on updated angular position # TODO to improve accuracy
-        # angle_new = (angle - self.angle_stator) % (2 * pi / sym)
+        # angle_new = (angle - self.angle_stator_shift) % (2 * pi / sym)
         # Br = interp1d(append(angle, 2 * pi / sym), append(Br, Br[:,0]), axis=1)[angle_new]
         # Bt = interp1d(append(angle, 2 * pi / sym), append(Br, Br[:,0]), axis=1)[angle_new]
 
