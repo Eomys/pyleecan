@@ -26,11 +26,6 @@ try:
 except ImportError as error:
     comp_time_angle = error
 
-try:
-    from ..Methods.Simulation.Magnetics.comp_emf import comp_emf
-except ImportError as error:
-    comp_emf = error
-
 
 from ._check import InitUnKnowClassError
 
@@ -62,15 +57,6 @@ class Magnetics(FrozenClass):
         )
     else:
         comp_time_angle = comp_time_angle
-    # cf Methods.Simulation.Magnetics.comp_emf
-    if isinstance(comp_emf, ImportError):
-        comp_emf = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Magnetics method comp_emf: " + str(comp_emf))
-            )
-        )
-    else:
-        comp_emf = comp_emf
     # save and copy methods are available in all object
     save = save
     copy = copy

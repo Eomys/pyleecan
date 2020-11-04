@@ -48,14 +48,14 @@ def update_FEMM_simulation(
 
     # Update currents
     for label in circuits:
-        if "Circs" in label and Is is not None:  # Stator
+        if "Circs" in label and Is is not None and not all(Is == 0):  # Stator
             set_FEMM_circuit_prop(
                 femm,
                 circuits,
                 label,
                 Is[:, ii],
             )
-        if "Circr" in label and Is is not None:  # Rotor
+        if "Circr" in label and Ir is not None and not all(Ir == 0):  # Rotor
             set_FEMM_circuit_prop(
                 femm,
                 circuits,

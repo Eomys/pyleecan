@@ -24,7 +24,6 @@ def solve_FEMM_parallel(
 ):
     """
     Same as solve_FEMM including parallelization on several workers
-    /!\ Any changes in solve_FEMM must be also made in solve_FEMM_parallel
 
     Parameters
     ----------

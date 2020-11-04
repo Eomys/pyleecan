@@ -67,11 +67,14 @@ def comp_flux_airgap(self, output, axes_dict):
     # Interpolate current on magnetic model time axis
     # Get stator current from elec out
     if self.is_mmfs:
-        Is = output.elec.comp_Is_mag(time)
+        Is = output.elec.comp_I_mag(time, is_stator=True)
     else:
         Is = None
     # Get rotor current from elec out
-    Ir = output.elec.Ir  # TODO: same as for stator currents
+    if self.is_mmfr:
+        Ir = output.elec.comp_I_mag(time, is_stator=False)
+    else:
+        Ir = None
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
