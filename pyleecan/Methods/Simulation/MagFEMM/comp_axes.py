@@ -2,8 +2,8 @@
 from ....Classes.Magnetics import Magnetics
 
 
-def comp_time_angle(self, output):
-    """Compute the time and space discretization of the MagFEMM module
+def comp_axes(self, output):
+    """Compute the axes required in the MagFEMM module
 
     Parameters
     ----------

@@ -42,9 +42,9 @@ except ImportError as error:
     get_path_save = error
 
 try:
-    from ..Methods.Simulation.MagElmer.comp_time_angle import comp_time_angle
+    from ..Methods.Simulation.MagElmer.comp_axes import comp_axes
 except ImportError as error:
-    comp_time_angle = error
+    comp_axes = error
 
 
 from ._check import InitUnKnowClassError
@@ -113,17 +113,15 @@ class MagElmer(Magnetics):
         )
     else:
         get_path_save = get_path_save
-    # cf Methods.Simulation.MagElmer.comp_time_angle
-    if isinstance(comp_time_angle, ImportError):
-        comp_time_angle = property(
+    # cf Methods.Simulation.MagElmer.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MagElmer method comp_time_angle: " + str(comp_time_angle)
-                )
+                ImportError("Can't use MagElmer method comp_axes: " + str(comp_axes))
             )
         )
     else:
-        comp_time_angle = comp_time_angle
+        comp_axes = comp_axes
     # save and copy methods are available in all object
     save = save
     copy = copy

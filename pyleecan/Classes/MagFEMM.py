@@ -52,9 +52,9 @@ except ImportError as error:
     solve_FEMM_parallel = error
 
 try:
-    from ..Methods.Simulation.MagFEMM.comp_time_angle import comp_time_angle
+    from ..Methods.Simulation.MagFEMM.comp_axes import comp_axes
 except ImportError as error:
-    comp_time_angle = error
+    comp_axes = error
 
 
 from ._check import InitUnKnowClassError
@@ -147,17 +147,15 @@ class MagFEMM(Magnetics):
         )
     else:
         solve_FEMM_parallel = solve_FEMM_parallel
-    # cf Methods.Simulation.MagFEMM.comp_time_angle
-    if isinstance(comp_time_angle, ImportError):
-        comp_time_angle = property(
+    # cf Methods.Simulation.MagFEMM.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MagFEMM method comp_time_angle: " + str(comp_time_angle)
-                )
+                ImportError("Can't use MagFEMM method comp_axes: " + str(comp_axes))
             )
         )
     else:
-        comp_time_angle = comp_time_angle
+        comp_axes = comp_axes
     # save and copy methods are available in all object
     save = save
     copy = copy

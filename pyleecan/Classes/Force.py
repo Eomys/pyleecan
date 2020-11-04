@@ -17,14 +17,14 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.Force.comp_time_angle import comp_time_angle
-except ImportError as error:
-    comp_time_angle = error
-
-try:
     from ..Methods.Simulation.Force.run import run
 except ImportError as error:
     run = error
+
+try:
+    from ..Methods.Simulation.Force.comp_axes import comp_axes
+except ImportError as error:
+    comp_axes = error
 
 
 from ._check import InitUnKnowClassError
@@ -36,17 +36,6 @@ class Force(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.Force.comp_time_angle
-    if isinstance(comp_time_angle, ImportError):
-        comp_time_angle = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Force method comp_time_angle: " + str(comp_time_angle)
-                )
-            )
-        )
-    else:
-        comp_time_angle = comp_time_angle
     # cf Methods.Simulation.Force.run
     if isinstance(run, ImportError):
         run = property(
@@ -56,6 +45,15 @@ class Force(FrozenClass):
         )
     else:
         run = run
+    # cf Methods.Simulation.Force.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Force method comp_axes: " + str(comp_axes))
+            )
+        )
+    else:
+        comp_axes = comp_axes
     # save and copy methods are available in all object
     save = save
     copy = copy

@@ -1,6 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
 is_remove_slotS,-,1 to artificially remove stator slotting effects in permeance mmf calculations,0,bool,0,,,,Simulation,,run,VERSION,1,Magnetic module abstract object,MagFEMM
-is_remove_slotR,-,1 to artificially remove rotor slotting effects in permeance mmf calculations,0,bool,0,,,,,,comp_time_angle,,,,MagElmer
+is_remove_slotR,-,1 to artificially remove rotor slotting effects in permeance mmf calculations,0,bool,0,,,,,,comp_axes,,,,MagElmer
 is_remove_vent,-,1 to artificially remove the ventilations duct,0,bool,0,,,,,,,,,,
 is_mmfs,-,1 to compute the stator magnetomotive force / stator armature magnetic field,0,bool,1,,,,,,,,,,
 is_mmfr,-,1 to compute the rotor magnetomotive force / rotor magnetic field,0,bool,1,,,,,,,,,,

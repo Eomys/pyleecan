@@ -1229,8 +1229,8 @@
         "desc": "Forces module abstract object",
         "is_internal": false,
         "methods": [
-            "comp_time_angle",
-            "run"
+            "run",
+            "comp_axes"
         ],
         "mother": "",
         "name": "Force",
@@ -4254,7 +4254,7 @@
             "get_meshsolution",
             "get_path_save_fea",
             "get_path_save",
-            "comp_time_angle"
+            "comp_axes"
         ],
         "mother": "Magnetics",
         "name": "MagElmer",
@@ -4380,7 +4380,7 @@
             "get_path_save_fem",
             "build_meshsolution",
             "solve_FEMM_parallel",
-            "comp_time_angle"
+            "comp_axes"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",
@@ -4891,7 +4891,7 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_time_angle"
+            "comp_axes"
         ],
         "mother": "",
         "name": "Magnetics",
