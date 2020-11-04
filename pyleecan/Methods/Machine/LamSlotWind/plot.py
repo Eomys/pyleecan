@@ -8,6 +8,7 @@ from ....Functions.Winding.gen_phase_list import gen_name
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 from ....Classes.WindingSC import WindingSC
+from ....Classes.Winding import Winding
 
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
@@ -17,6 +18,7 @@ STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 def plot(
     self,
     fig=None,
+    ax=None,
     is_lam_only=False,
     sym=1,
     alpha=0,
@@ -31,9 +33,10 @@ def plot(
     ----------
     self : LamSlotWind
         A LamSlotWind object
-    fig :
-        if None, open a new fig and plot, else add to the current
-        one (Default value = None)
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
     is_lam_only : bool
         True to plot only the lamination (remove the Winding)
     sym : int
@@ -63,7 +66,7 @@ def plot(
 
     patches = list()
     # getting the number of phases and winding connection matrix
-    if self.winding is not None:
+    if self.winding is not None and not type(self.winding) is Winding:
         if isinstance(self.winding, WindingSC):  # plot only one phase for WindingSC
             wind_mat = None
             qs = 1
@@ -71,6 +74,9 @@ def plot(
             Zs = self.get_Zs()
             wind_mat = self.winding.comp_connection_mat(Zs)
             qs = self.winding.qs
+    else:
+        wind_mat = None
+        qs = 1
 
     for surf in surf_list:
         if surf.label is not None and "Lamination" in surf.label:
@@ -84,7 +90,7 @@ def plot(
 
     if is_display:
         # Display the result
-        (fig, axes, patch_leg, label_leg) = init_fig(fig)
+        (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
         axes.set_xlabel("(m)")
         axes.set_ylabel("(m)")
         for patch in patches:
@@ -116,7 +122,7 @@ def plot(
                 if isinstance(self.winding, WindingSC):
                     patch_leg.append(Patch(color=PHASE_COLORS[0]))
                     label_leg.append(prefix + "Bar")
-                else:
+                elif self.winding is not None and not type(self.winding) is Winding:
                     phase_name = [prefix + n for n in gen_name(qs, is_add_phase=True)]
                     for ii in range(qs):
                         if not phase_name[ii] in label_leg:

@@ -37,6 +37,6 @@ class TestSaveEmit(object):
         assert self.widget.qmessagebox_question is not None
 
     def test_save_emit(self, setup_method):
-        """Check that the Widget allow to update W0"""
+        """Check that the Widget allow send the save_needed signal"""
         self.widget.save_needed()
         assert self.widget.is_save_needed == True

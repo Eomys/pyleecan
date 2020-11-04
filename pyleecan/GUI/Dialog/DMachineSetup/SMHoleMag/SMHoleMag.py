@@ -121,7 +121,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             if self.machine.type_machine == 5:
                 hole.remove_magnet()
             else:
-                hole.magnet_0 = self.obj.hole[0].magnet_0
+                hole.set_magnet_by_id(0, self.obj.hole[0].get_magnet_by_id(0))
             hole.Zh = self.obj.hole[0].Zh
         else:
             hole_index = self.obj.hole.index(hole)

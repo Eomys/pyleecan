@@ -64,6 +64,7 @@ class Test_Hole_50_plot(object):
             Rint=0.078, Rext=0.104, is_internal=False, is_stator=True, L1=0.8
         )
         test_obj.stator.slot = None
+        test_obj.stator.winding = None
         test_obj.stator.axial_vent.append(
             VentilationPolar(Zh=8, H0=0.08, D0=0.01, W1=pi / 8, Alpha0=pi / 8)
         )

@@ -18,3 +18,4 @@ h5py>=2.10.0
 nbformat
 nbconvert
 quadpy
+pytest-qt>=3.3.0

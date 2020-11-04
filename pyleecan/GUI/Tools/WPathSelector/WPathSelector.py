@@ -69,15 +69,20 @@ class WPathSelector(Ui_WPathSelector, QWidget):
 
     def set_path_txt(self, path):
         """Set the line edit text"""
-        self.le_path.setText(path.replace("\\", "/"))
+        if path is not None:
+            path = path.replace("\\", "/")
+        self.le_path.setText(path)
 
     def set_obj_path(self):
         """Update the object with the current path (if correct)"""
         path = self.get_path().replace("\\", "/")
         if (self.is_file and isfile(path)) or (not self.is_file and isdir(path)):
             if self.obj is not None:
-                setattr(self.obj, self.param_name, path)
-            self.pathChanged.emit()
+                if getattr(self.obj, self.param_name) != path:
+                    setattr(self.obj, self.param_name, path)
+                    self.pathChanged.emit()
+            else:
+                self.pathChanged.emit()
 
     def select_path(self):
         """Open a popup to select the correct path"""

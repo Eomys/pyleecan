@@ -15,7 +15,7 @@ class Gen_SWindPat(Ui_SWindPat):
         self.in_qs.setToolTip(txt)
 
         # Setup of si_qs
-        self.si_qs.setMinimum(1)
+        self.si_qs.setMinimum(0)
         self.si_qs.setMaximum(100)
         txt = self.tr(u"""number of phases """)
         self.si_qs.setWhatsThis(txt)
