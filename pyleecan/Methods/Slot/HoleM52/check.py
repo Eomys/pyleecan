@@ -38,19 +38,16 @@ def check(self):
         raise S52_NoneError("You must set H2 !")
 
     if self.H2 >= self.H1:
-        print("You must have H2 < H1")
         raise S52_H12CheckError("You must have H2 < H1")
 
     alpha = self.comp_alpha()
     if alpha <= 0:
-        print( "The teeth are too wide for the lamination (reduce W3 or H0)")
         raise S52_alphaCheckError(
             "The teeth are too wide for the lamination (reduce W3 or H0)"
         )
 
     W1 = self.comp_W1()
     if W1 <= 0:
-        print("W1 is <=0, you must reduce W0 or W3")
         raise S52_W1CheckError("W1 is <=0, you must reduce W0 or W3")
 
 
