@@ -5,9 +5,9 @@ from numpy import angle as np_angle
 from numpy import array
 from pyleecan.GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
 from pyleecan.GUI.Resources import pixmap_dict
-from PySide2.QtCore import QSize
+from PySide2.QtCore import QSize, Qt
 from PySide2.QtGui import QIcon, QPixmap
-from PySide2.QtWidgets import QComboBox, QFileDialog, QPushButton, QWidget
+from PySide2.QtWidgets import QComboBox, QFileDialog, QPushButton, QDialog
 
 from ...Classes.HoleUD import HoleUD
 from ...Classes.Magnet import Magnet
@@ -19,12 +19,13 @@ from .Ui_DXF_Hole import Ui_DXF_Hole
 TYPE_COL = 0
 DEL_COL = 1
 HL_COL = 2
+ICON_SIZE = 24
 
 
-class DXF_Hole(Ui_DXF_Hole, QWidget):
+class DXF_Hole(Ui_DXF_Hole, QDialog):
     """Dialog to create HoleUD objects from DXF files"""
 
-    def __init__(self, dxf_path=None):
+    def __init__(self, dxf_path=None, Zh=None, Lmag=None):
         """Initialize the Dialog
 
         Parameters
@@ -35,19 +36,30 @@ class DXF_Hole(Ui_DXF_Hole, QWidget):
             Path to a dxf file to read
         """
         # Widget setup
-        QWidget.__init__(self)
+        QDialog.__init__(self)
         self.setupUi(self)
 
         # Icon preparation
-        self.delete_icon = QPixmap(pixmap_dict["delete_36"])
+        self.delete_icon = QPixmap(pixmap_dict["cross"])
+        self.delete_icon.scaled(ICON_SIZE, ICON_SIZE, Qt.KeepAspectRatio)
+        self.highlight_icon = QPixmap(pixmap_dict["search"])
+        self.highlight_icon.scaled(ICON_SIZE, ICON_SIZE, Qt.KeepAspectRatio)
 
         # Initialize the graph
-        self.w_viewer.setParent(None)
-        self.w_viewer = MPLCanvas2(self)
-        self.w_viewer.draw()
-        self.main_layout.removeWidget(self.w_viewer)
-        self.main_layout.insertWidget(0, self.w_viewer)
         self.init_graph()
+
+        # Not used yet
+        self.in_coord_center.hide()
+        self.lf_center_x.hide()
+        self.lf_center_y.hide()
+        self.lf_axe_angle.hide()
+        self.in_axe_angle.hide()
+
+        # Set default values
+        if Zh is not None:
+            self.si_Zh.setValue(Zh)
+        if Lmag is not None:
+            self.lf_mag_len.setValue(Lmag)
 
         # Init properties
         self.line_list = list()  # List of line from DXF
@@ -67,12 +79,12 @@ class DXF_Hole(Ui_DXF_Hole, QWidget):
         self.w_path_selector.verbose_name = "DXF File"
         self.w_path_selector.extension = "DXF file (*.dxf)"
         self.w_path_selector.set_path_txt(self.dxf_path)
+        self.w_path_selector.update()
 
         # Format w_surface_list table (QTableWidget)
         self.w_surface_list.setColumnCount(3)
         self.w_surface_list.horizontalHeader().hide()
         self.w_surface_list.verticalHeader().hide()
-        self.w_surface_list.setColumnWidth(2, 24)
 
         # Connect signals to slot
         self.w_path_selector.pathChanged.connect(self.open_document)
@@ -280,7 +292,6 @@ class DXF_Hole(Ui_DXF_Hole, QWidget):
         # Adding Delete button
         del_button = QPushButton("Delete")
         del_button.setIcon(QIcon(self.delete_icon))
-        del_button.setIconSize(QSize(24, 24))
         del_button.pressed.connect(self.delete_surface)
         self.w_surface_list.setCellWidget(
             nrows,
@@ -290,8 +301,7 @@ class DXF_Hole(Ui_DXF_Hole, QWidget):
 
         # Adding Highlight button
         HL_button = QPushButton("Highlight")
-        # HL_button.setIcon(QIcon(self.delete_icon))
-        HL_button.setIconSize(QSize(24, 24))
+        HL_button.setIcon(QIcon(self.highlight_icon))
         HL_button.pressed.connect(self.highlight_surface)
         self.w_surface_list.setCellWidget(
             nrows,
@@ -344,6 +354,13 @@ class DXF_Hole(Ui_DXF_Hole, QWidget):
 
         # Set metadata
         hole.Zh = self.si_Zh.value()
+        for magnet in hole.magnet_dict.values():
+            magnet.Lmag = self.lf_mag_len.value()
+
+        # Remove all materials => To be set in GUI
+        hole.mat_void = None
+        for magnet in hole.magnet_dict.values():
+            magnet.mat_type = None
 
         return hole
 
@@ -402,4 +419,7 @@ class DXF_Hole(Ui_DXF_Hole, QWidget):
         save_file_path = QFileDialog.getSaveFileName(
             self, self.tr("Save file"), dirname(self.dxf_path), "Json (*.json)"
         )[0]
-        hole.save(save_file_path)
+        if save_file_path not in ["", ".json", None]:
+            self.save_path = save_file_path
+            hole.save(save_file_path)
+            self.accept()

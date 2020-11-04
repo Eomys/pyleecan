@@ -29,11 +29,21 @@ class Ui_WPathSelector(object):
         self.horizontalLayout.setContentsMargins(4, 2, 4, 2)
         self.in_path = QLabel(WPathSelector)
         self.in_path.setObjectName(u"in_path")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.in_path.sizePolicy().hasHeightForWidth())
+        self.in_path.setSizePolicy(sizePolicy1)
 
         self.horizontalLayout.addWidget(self.in_path)
 
         self.le_path = QLineEdit(WPathSelector)
         self.le_path.setObjectName(u"le_path")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.le_path.sizePolicy().hasHeightForWidth())
+        self.le_path.setSizePolicy(sizePolicy2)
         self.le_path.setMinimumSize(QSize(150, 0))
 
         self.horizontalLayout.addWidget(self.le_path)
