@@ -23,6 +23,7 @@ def comp_fluxlinkage(obj, output):
     fluxdq : ndarray
         the calculated fluxlinkage
     """
+    # get some machine and simulation parameters
     qs = output.simu.machine.stator.winding.qs
     zp = output.simu.machine.stator.get_pole_pair_number()
     Nt_tot = obj.Nt_tot

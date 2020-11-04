@@ -28,10 +28,10 @@ def solve_EEC(self, output):
         an Output object
     """
     Rs = self.parameters["Rs"]
-    Rr = self.parameters["Rr"]
+    Rr = self.parameters["Rr_norm"]
     Rfe = self.parameters["Rfe"]
     Ls = self.parameters["Ls"]
-    Lr = self.parameters["Lr"]
+    Lr = self.parameters["Lr_norm"]
     Lm = self.parameters["Lm"]
 
     s = self.parameters["s"]
