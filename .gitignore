@@ -10,3 +10,4 @@ _Internal/
 run_GUI_internal.py
 /Tests/logtest.txt
 **/.vscode
+**/.ipynb*
