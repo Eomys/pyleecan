@@ -25,8 +25,6 @@ def comp_flux_airgap(self, output, axes_dict):
                 Airgap radial flux density (Nt,Na) [T]
             Bt : ndarray
                 Airgap tangential flux density (Nt,Na) [T]
-            Bz : ndarray
-                Airgap axial flux density (Nt,Na) [T]
             Tem : ndarray
                 Electromagnetic torque over time (Nt,) [Nm]
             Phi_wind_stator : ndarray
@@ -122,8 +120,9 @@ def comp_flux_airgap(self, output, axes_dict):
         qs = output.simu.machine.stator.winding.qs  # Winding phase number
         out_dict["Phi_wind_stator"] = zeros((Nt, qs))
 
-    # Solve for all time step and store all the results in output
+    # Solve for all time step and store all the results in out_dict
     if self.nb_worker > 1:
+        # With parallelization
         B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM_parallel(
             femm,
             output,
@@ -136,6 +135,7 @@ def comp_flux_airgap(self, output, axes_dict):
             angle_rotor=angle_rotor,
         )
     else:
+        # Without parallelization
         B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM(
             femm,
             output,

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import pi
+from numpy import pi, all as np_all
 
 from ...Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
 
@@ -48,14 +48,14 @@ def update_FEMM_simulation(
 
     # Update currents
     for label in circuits:
-        if "Circs" in label and Is is not None and not all(Is == 0):  # Stator
+        if "Circs" in label and Is is not None and not np_all(Is == 0):  # Stator
             set_FEMM_circuit_prop(
                 femm,
                 circuits,
                 label,
                 Is[:, ii],
             )
-        if "Circr" in label and Ir is not None and not all(Ir == 0):  # Rotor
+        if "Circr" in label and Ir is not None and not np_all(Ir == 0):  # Rotor
             set_FEMM_circuit_prop(
                 femm,
                 circuits,

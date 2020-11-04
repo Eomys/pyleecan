@@ -36,8 +36,6 @@ def solve_FEMM_parallel(
                 Airgap radial flux density (Nt,Na) [T]
             Bt : ndarray
                 Airgap tangential flux density (Nt,Na) [T]
-            Bz : ndarray
-                Airgap axial flux density (Nt,Na) [T]
             Tem : ndarray
                 Electromagnetic torque over time (Nt,) [Nm]
             Phi_wind_stator : ndarray
