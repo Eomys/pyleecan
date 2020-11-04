@@ -35,7 +35,7 @@ def init_fig(fig, shape="default", is_3d=False):
                 )
             else:
                 fig, axes = subplots(tight_layout=True, figsize=(8, 4))
-                axes.set_visible(False)
+                axes.set_visible(True)
         else:
             if is_3d:
                 fig, axes = subplots(
