@@ -68,6 +68,17 @@ class TestSWindParam(object):
         assert self.widget_2.in_qs.text() == "qs: 3"
         assert self.widget_2.out_Ncspc.text() == "Ncspc: ?"
         assert self.widget_2.out_Ntspc.text() == "Ntspc: ?"
+        self.test_obj = MachineSCIM()
+        self.test_obj.rotor = LamSlotWind(is_stator=False)
+        self.test_obj.rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        self.test_obj.rotor.winding = Winding(Npcpp=20, Ntcoil=None)
+
+        self.test_obj.type_machine = 9
+
+        self.widget_2 = SWindParam(machine=self.test_obj, matlib=[], is_stator=False)
+
+        assert self.widget_2.in_Zs.isHidden()
+        assert self.widget_2.in_Nlay.isHidden()
 
     def test_set_Npcp1(self):
         """Check that the Widget allow to update Npcp1"""
@@ -108,3 +119,14 @@ class TestSWindParam(object):
         self.widget_2.si_Ntcoil.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.rotor.winding.Ntcoil == value
+
+    def test_check(self):
+        """Check that the check method return errors"""
+        rotor = LamSlotWind(is_stator=False)
+        rotor.winding = None
+        assert rotor.comp_fill_factor() == 0
+
+        rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        rotor.winding = Winding(Npcpp=20, Ntcoil=None)
+
+        assert self.widget_1.check(rotor) == "You must set Ntcoil !"

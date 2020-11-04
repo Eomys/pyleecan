@@ -63,7 +63,7 @@ def test_FEMM_parallelization_mag():
         "time[0]",
         data_list=[out2.mag.B],
         legend_list=["Serial", "Parallelization"],
-        save_path=join(save_path, "FEMM_parallelization_mag_B_t0.png"),
+        save_path=join(save_path, simu.name + "_B_t0.png"),
     )
 
     out.plot_2D_Data(
@@ -72,7 +72,7 @@ def test_FEMM_parallelization_mag():
         "time[0]",
         data_list=[out2.mag.B],
         legend_list=["Serial", "Parallelization"],
-        save_path=join(save_path, "FEMM_parallelization_mag_B_t1.png"),
+        save_path=join(save_path, simu.name + "_B_t1.png"),
     )
 
     out.plot_2D_Data(
@@ -80,7 +80,7 @@ def test_FEMM_parallelization_mag():
         "time",
         data_list=[out2.mag.Tem],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, "FEMM_parallelization_mag_Tem.png"),
+        save_path=join(save_path, simu.name + "_Tem.png"),
     )
 
     out.plot_2D_Data(
@@ -89,7 +89,7 @@ def test_FEMM_parallelization_mag():
         "phase",
         data_list=[out2.mag.Phi_wind_stator],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, "FEMM_parallelization_mag_Phi_wind_stator.png"),
+        save_path=join(save_path, simu.name + "_Phi_wind_stator.png"),
     )
 
     assert_allclose(
@@ -166,77 +166,65 @@ def test_FEMM_parallelization_meshsolution():
     # %%
     # Plots solution computed without parallelization
     out.mag.meshsolution.plot_mesh(
-        save_path=join(
-            save_path, "FEMM_parallelization_meshsolution_mesh_not_parallel.png"
-        )
+        save_path=join(save_path, simu.name + "_mesh_not_parallel.png")
     )
 
     out.mag.meshsolution.plot_mesh(
         group_names="stator",
-        save_path=join(
-            save_path, "FEMM_parallelization_meshsolution_mesh_stator_not_parallel.png"
-        ),
+        save_path=join(save_path, simu.name + "_mesh_stator_not_parallel.png"),
     )
 
     out.mag.meshsolution.plot_mesh(
         group_names=["stator", "/", "airgap", "stator_windings"],
         save_path=join(
             save_path,
-            "FEMM_parallelization_meshsolution_mesh_stator_interface_not_parallel.png",
+            simu.name + "_mesh_stator_interface_not_parallel.png",
         ),
     )
 
     out.mag.meshsolution.plot_contour(
         label="\mu",
-        save_path=join(
-            save_path, "FEMM_parallelization_meshsolution_mu_not_parallel.png"
-        ),
+        save_path=join(save_path, simu.name + "_mu_not_parallel.png"),
     )
     out.mag.meshsolution.plot_contour(
         label="B",
-        save_path=join(
-            save_path, "FEMM_parallelization_meshsolution_B_not_parallel.png"
-        ),
+        save_path=join(save_path, simu.name + "_B_not_parallel.png"),
     )
     out.mag.meshsolution.plot_contour(
         label="H",
-        save_path=join(
-            save_path, "FEMM_parallelization_meshsolution_H_not_parallel.png"
-        ),
+        save_path=join(save_path, simu.name + "_H_not_parallel.png"),
     )
 
     # %%
     # Plots solution computed with parallelization
     out2.mag.meshsolution.plot_mesh(
-        save_path=join(save_path, "FEMM_parallelization_meshsolution_mesh_parallel.png")
+        save_path=join(save_path, simu.name + "_mesh_parallel.png")
     )
 
     out2.mag.meshsolution.plot_mesh(
         group_names="stator",
-        save_path=join(
-            save_path, "FEMM_parallelization_meshsolution_mesh_stator_parallel.png"
-        ),
+        save_path=join(save_path, simu.name + "_mesh_stator_parallel.png"),
     )
 
     out2.mag.meshsolution.plot_mesh(
         group_names=["stator", "/", "airgap", "stator_windings"],
         save_path=join(
             save_path,
-            "FEMM_parallelization_meshsolution_mesh_stator_interface_parallel.png",
+            simu.name + "_mesh_stator_interface_parallel.png",
         ),
     )
 
     out2.mag.meshsolution.plot_contour(
         label="\mu",
-        save_path=join(save_path, "FEMM_parallelization_meshsolution_mu_parallel.png"),
+        save_path=join(save_path, simu.name + "_mu_parallel.png"),
     )
     out2.mag.meshsolution.plot_contour(
         label="B",
-        save_path=join(save_path, "FEMM_parallelization_meshsolution_B_parallel.png"),
+        save_path=join(save_path, simu.name + "_B_parallel.png"),
     )
     out2.mag.meshsolution.plot_contour(
         label="H",
-        save_path=join(save_path, "FEMM_parallelization_meshsolution_H_parallel.png"),
+        save_path=join(save_path, simu.name + "_H_parallel.png"),
     )
 
     return out, out2

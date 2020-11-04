@@ -2,6 +2,7 @@
 
 import sys
 from random import uniform
+from numpy import pi
 
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
@@ -100,6 +101,14 @@ class TestPWSlot13(object):
 
         assert self.widget.slot.H1 == value
 
+        self.widget.c_H1_unit.setCurrentIndex(3)
+        self.widget.lf_H1.clear()  # Clear the field before writing
+        value = round(uniform(0, 1), 4)
+        QTest.keyClicks(self.widget.lf_H1, str(value))
+        self.widget.lf_H1.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.slot.H1 == value / 180 * pi
+
     def test_set_H2(self):
         """Check that the Widget allow to update H2"""
         self.widget.lf_H2.clear()  # Clear the field before writing
@@ -167,3 +176,40 @@ class TestPWSlot13(object):
         )
         self.widget = PWSlot13(self.test_obj)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.03502 m"
+
+    def test_check(self):
+        """Check that the check is working correctly"""
+        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
+        self.test_obj.slot = SlotW13(
+            H0=None, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15, W3=0.6
+        )
+        self.widget = PWSlot13(self.test_obj)
+        assert self.widget.check(self.test_obj) == "PWSlot13 check"
+        self.test_obj.slot = SlotW13(
+            H0=0.10, H1=None, H2=0.12, W0=0.13, W1=0.14, W2=0.15, W3=0.6
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot13 check"
+        self.test_obj.slot = SlotW13(
+            H0=0.10, H1=0.11, H2=None, W0=0.13, W1=0.14, W2=0.15, W3=0.6
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot13 check"
+        self.test_obj.slot = SlotW13(
+            H0=0.10, H1=0.11, H2=0.12, W0=None, W1=0.14, W2=0.15, W3=0.6
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot13 check"
+        self.test_obj.slot = SlotW13(
+            H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=None, W2=0.15, W3=0.6
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot13 check"
+        self.test_obj.slot = SlotW13(
+            H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=None, W3=0.6
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot13 check"
+        self.test_obj.slot = SlotW13(
+            H0=0.10, H1=5.3, H2=0.12, W0=0.13, W1=0.14, W2=0.15, W3=None
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot13 check"
+        self.test_obj.slot = SlotW13(
+            H0=0.10, H1=5.3, H2=0.12, W0=0.13, W1=0.14, W2=0.15, W3=0.6
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot13 check"

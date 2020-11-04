@@ -32,9 +32,9 @@ except ImportError as error:
     get_meshsolution = error
 
 try:
-    from ..Methods.Simulation.MagElmer.get_path_save_fem import get_path_save_fem
+    from ..Methods.Simulation.MagElmer.get_path_save_fea import get_path_save_fea
 except ImportError as error:
-    get_path_save_fem = error
+    get_path_save_fea = error
 
 try:
     from ..Methods.Simulation.MagElmer.get_path_save import get_path_save
@@ -90,18 +90,18 @@ class MagElmer(Magnetics):
         )
     else:
         get_meshsolution = get_meshsolution
-    # cf Methods.Simulation.MagElmer.get_path_save_fem
-    if isinstance(get_path_save_fem, ImportError):
-        get_path_save_fem = property(
+    # cf Methods.Simulation.MagElmer.get_path_save_fea
+    if isinstance(get_path_save_fea, ImportError):
+        get_path_save_fea = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MagElmer method get_path_save_fem: "
-                    + str(get_path_save_fem)
+                    "Can't use MagElmer method get_path_save_fea: "
+                    + str(get_path_save_fea)
                 )
             )
         )
     else:
-        get_path_save_fem = get_path_save_fem
+        get_path_save_fea = get_path_save_fea
     # cf Methods.Simulation.MagElmer.get_path_save
     if isinstance(get_path_save, ImportError):
         get_path_save = property(

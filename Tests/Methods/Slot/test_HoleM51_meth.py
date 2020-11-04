@@ -7,6 +7,8 @@ from pyleecan.Classes.SurfLine import SurfLine
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM51 import HoleM51
+
+from pyleecan.Classes.Magnet import Magnet
 from numpy import exp, arcsin, ndarray, pi
 
 # For AlmostEqual
@@ -164,3 +166,101 @@ class Test_HoleM51_meth(object):
         assert result[0].label[:5] == "Hole_"
         assert result[0].label[-9:] == "_R0_T0_S0"
         assert len(result[0].line_list) == 8
+
+    @pytest.mark.parametrize("test_dict", HoleM51_test)
+    def test_build_geometry_simplified_parallel(self, test_dict):
+        """Check that the build geometry method works"""
+
+        # is_simplified to True and magnetization Parallel
+
+        test_obj = test_dict["test_obj"]
+        test_obj.hole[0].magnet_0 = Magnet(type_magnetization=1)
+        test_obj.hole[0].magnet_1 = Magnet(type_magnetization=1)
+        test_obj.hole[0].magnet_2 = Magnet(type_magnetization=1)
+        a = test_obj.hole[0].build_geometry(is_simplified=True)
+
+        assert a[1].label == "HoleMagnet_Rotor_Parallel_N_R0_T0_S0"
+        assert a[1].line_list[0] is not None
+        assert a[1].line_list[1] is not None
+        with pytest.raises(IndexError) as context:
+            a[1].line_list[2]
+
+        assert a[3].label == "HoleMagnet_Rotor_Parallel_N_R0_T1_S0"
+        assert a[3].line_list[0] is not None
+        assert a[3].line_list[1] is not None
+        with pytest.raises(IndexError) as context:
+            a[3].line_list[2]
+
+        assert a[5].label == "HoleMagnet_Rotor_Parallel_N_R0_T2_S0"
+        assert a[5].line_list[0] is not None
+        assert a[5].line_list[1] is not None
+        with pytest.raises(IndexError) as context:
+            a[5].line_list[2]
+
+    @pytest.mark.parametrize("test_dict", HoleM51_test)
+    def test_build_geometry_Z6(self, test_dict):
+        """Check if Z6 is different between Zint[0].real > 0 or Zint[1].real > 0"""
+
+        test_obj = test_dict["test_obj"]
+
+        # Zint[1].real > 0
+        test_obj.hole[0] = HoleM51(
+            Zh=8,
+            W0=0.016,
+            W1=pi / 6,
+            W2=0.004,
+            W3=0.01,
+            W4=0.002,
+            W5=0.01,
+            W6=0.002,
+            W7=0.01,
+            H0=0.01096,
+            H1=0.0015,
+            H2=0.1055,
+        )
+        lst = test_obj.hole[0].build_geometry()
+
+        # Zint[0].real > 0
+        test_obj.hole[0] = HoleM51(
+            Zh=8,
+            W0=0.016,
+            W1=pi / 65,
+            W2=0.004,
+            W3=0.01,
+            W4=0.002,
+            W5=0.01,
+            W6=0.002,
+            W7=0.01,
+            H0=0.01096,
+            H1=0.0015,
+            H2=0.0055,
+        )
+        lst2 = test_obj.hole[0].build_geometry()
+
+        assert len(lst) == 7
+        assert lst[0].line_list[1].begin != lst2[0].line_list[1].begin
+
+    def test_comp_surface_magnet_id(self):
+        """Check that the computation of the magnet surface is correct"""
+        test_obj = LamHole(
+            Rint=45e-3 / 2, Rext=81.5e-3, is_stator=False, is_internal=True, L1=0.9
+        )
+        test_obj.hole = list()
+        test_obj.hole.append(
+            HoleM51(
+                Zh=8,
+                W0=0.016,
+                W1=pi / 6,
+                W2=0.004,
+                W3=0.01,
+                W4=0.002,
+                W5=0.01,
+                W6=0.002,
+                W7=0.01,
+                H0=0.01096,
+                H1=0.0015,
+                H2=0.0055,
+            )
+        )
+        result = test_obj.hole[0].comp_surface_magnet_id(5)
+        assert result == 0

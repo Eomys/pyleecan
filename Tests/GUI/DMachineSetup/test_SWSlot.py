@@ -89,6 +89,20 @@ class TestSWSlot(object):
         assert self.widget.c_slot_type.currentIndex() == 0
         assert type(self.widget.w_slot) == PWSlot10
 
+        self.test_obj = MachineSCIM()
+        self.test_obj.rotor = LamSlotWind(Rint=0.1, Rext=0.2)
+        self.test_obj.rotor.slot = SlotW10(
+            Zs=123,
+            H0=0.10,
+            H1=0.11,
+            H2=0.12,
+            W0=0.13,
+            W1=0.14,
+            W2=0.15,
+            H1_is_rad=False,
+        )
+        self.widget = SWSlot(self.test_obj, matlib=[], is_stator=False)
+
     def test_set_slot_11(self):
         """Check that you can edit a Slot 11"""
         Zs = int(uniform(1, 100))
@@ -263,6 +277,12 @@ class TestSWSlot(object):
         self.widget.si_Zs.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.stator.slot.Zs == value
+
+    def test_set_slot_type(self):
+        """Check that the slot_type can change"""
+        self.widget.set_slot_type(1)
+        self.widget.set_slot_type(1)
+        assert self.widget.si_Zs.value() == 123
 
     def test_c_slot_type(self):
         """Check that the combobox allow to update the slot type"""

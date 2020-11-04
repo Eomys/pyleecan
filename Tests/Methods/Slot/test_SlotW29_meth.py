@@ -193,3 +193,11 @@ class Test_SlotW29_meth(object):
                 + str(b)
                 + ")"
             )
+
+    def test_get_surface_wind(self):
+        """Check that the get_surface_wind works when stator = false"""
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW29(H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=20e-3)
+        result = lam.slot.get_surface_wind()
+        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert len(result.get_lines()) == 6

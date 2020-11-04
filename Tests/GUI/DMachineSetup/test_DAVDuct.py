@@ -269,3 +269,19 @@ class TestDAVDuct(object):
         assert self.widget.tab_vent.widget(0).w_vent.lf_H0.value() == 10e-3
         assert self.widget.tab_vent.widget(0).w_vent.lf_D0.value() == 40e-3
         assert self.widget.tab_vent.widget(0).w_vent.lf_Alpha0.value() == 0
+
+    def test_check_PVentCirc(self):
+        """Test that check of PVentCirc"""
+        lam = Lamination(Rint=0.1, Rext=1, is_stator=True, is_internal=True)
+        vent = VentilationCirc(Zh=8, H0=10e-3, D0=40e-3, Alpha0=None)
+        assert PVentCirc(vent=vent, lam=lam).check() == "You must set Alpha0 !"
+
+        vent = VentilationCirc(Zh=8, H0=10e-3, D0=None, Alpha0=None)
+        assert PVentCirc(vent=vent, lam=lam).check() == "You must set D0 !"
+
+        vent = VentilationCirc(Zh=8, H0=None, D0=None, Alpha0=None)
+        assert PVentCirc(vent=vent, lam=lam).check() == "You must set H0 !"
+
+        pvent = PVentCirc(vent=vent, lam=lam)
+        pvent.vent.Zh = None
+        assert pvent.check() == "You must set Zh !"

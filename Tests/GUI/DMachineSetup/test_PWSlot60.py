@@ -143,3 +143,108 @@ class TestPWSlot60(object):
 
         assert self.widget.slot.H4 == 0.38
         assert self.test_obj.slot.H4 == 0.38
+
+    def test_check(self):
+        """Check that the check is working correctly"""
+        self.test_obj = LamSlotWind(Rint=0.7, Rext=0.5)
+        self.test_obj.slot = SlotW60(
+            W1=None,
+            W2=12.5e-3,
+            H1=20e-3,
+            H2=20e-3,
+            R1=0.1325,
+            H3=2e-3,
+            H4=1e-3,
+            W3=2e-3,
+        )
+        self.widget = PWSlot60(self.test_obj)
+        assert self.widget.check(self.test_obj) == "PWSlot60 check"
+        self.test_obj.slot = SlotW60(
+            W1=25e-3,
+            W2=None,
+            H1=20e-3,
+            H2=20e-3,
+            R1=0.1325,
+            H3=2e-3,
+            H4=1e-3,
+            W3=2e-3,
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot60 check"
+        self.test_obj.slot = SlotW60(
+            W1=25e-3,
+            W2=12.5e-3,
+            H1=None,
+            H2=20e-3,
+            R1=0.1325,
+            H3=2e-3,
+            H4=1e-3,
+            W3=2e-3,
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot60 check"
+        self.test_obj.slot = SlotW60(
+            W1=25e-3,
+            W2=12.5e-3,
+            H1=20e-3,
+            H2=None,
+            R1=0.1325,
+            H3=2e-3,
+            H4=1e-3,
+            W3=2e-3,
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot60 check"
+        self.test_obj.slot = SlotW60(
+            W1=25e-3,
+            W2=12.5e-3,
+            H1=20e-3,
+            H2=20e-3,
+            R1=None,
+            H3=2e-3,
+            H4=1e-3,
+            W3=2e-3,
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot60 check"
+        self.test_obj.slot = SlotW60(
+            W1=25e-3,
+            W2=12.5e-3,
+            H1=20e-3,
+            H2=20e-3,
+            R1=0.1325,
+            H3=None,
+            H4=1e-3,
+            W3=2e-3,
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot60 check"
+        self.test_obj.slot = SlotW60(
+            W1=25e-3,
+            W2=12.5e-3,
+            H1=20e-3,
+            H2=20e-3,
+            R1=0.1325,
+            H3=0.1,
+            H4=None,
+            W3=2e-3,
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot60 check"
+        self.test_obj.slot = SlotW60(
+            W1=25e-3,
+            W2=12.5e-3,
+            H1=20e-3,
+            H2=20e-3,
+            R1=0.1325,
+            H3=0.1,
+            H4=1e-3,
+            W3=None,
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot60 check"
+
+        self.test_obj.slot = SlotW60(
+            W1=25e-3,
+            W2=12.5e-3,
+            H1=20e-3,
+            H2=0.90,
+            R1=0.1325,
+            H3=0.1,
+            H4=1e-3,
+            W3=0.0000000005,
+        )
+        assert self.widget.check(self.test_obj) == "SWSlot_60 check"

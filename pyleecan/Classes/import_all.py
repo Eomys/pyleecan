@@ -127,6 +127,7 @@ from ..Classes.PolarArc import PolarArc
 from ..Classes.Post import Post
 from ..Classes.PostFunction import PostFunction
 from ..Classes.PostMethod import PostMethod
+from ..Classes.PostPlot import PostPlot
 from ..Classes.RefCell import RefCell
 from ..Classes.RefSegmentP1 import RefSegmentP1
 from ..Classes.RefTriangle3 import RefTriangle3

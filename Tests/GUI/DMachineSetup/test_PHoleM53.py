@@ -165,3 +165,49 @@ class TestPHoleM53(object):
 
         assert self.widget.w_mat_2.c_mat_type.currentText() == "Magnet1"
         assert self.test_obj.hole[0].magnet_1.mat_type.name == "Magnet1"
+
+    def test_comp_output(self):
+        """Check that comp_output is correctly working"""
+        self.test_obj.hole[0] = HoleM53(
+            H0=0.10,
+            H1=0.0000000000011,
+            H2=0.12,
+            H3=0.0000000000015,
+            W4=0.99,
+            W1=0.14,
+            W2=0.0000015,
+            W3=0.0000017,
+        )
+        self.widget.hole = self.test_obj.hole[0]
+        self.widget.comp_output()
+
+        assert self.widget.out_slot_surface.text() == "Slot suface (2 part): 0.01033 m²"
+        assert self.widget.out_magnet_surface.text() == "Magnet surface: 4.08e-07 m²"
+        assert self.widget.out_W5.text() == "W5: 0.01565 m"
+
+    def test_PHoleM53_None_Magnet(self):
+        """Check that you can create PHoleM53 with None for magnet_0"""
+        self.test_obj.hole.append(
+            HoleM53(
+                H0=0.10,
+                H1=0.11,
+                H2=0.12,
+                W4=0.13,
+                W1=0.14,
+                W2=0.15,
+                W3=0.17,
+                magnet_0=None,
+            )
+        )
+
+        self.matlib = MatLib()
+        self.matlib.dict_mat["RefMatLib"] = [
+            Material(name="Magnet1"),
+            Material(name="Magnet2"),
+            Material(name="Magnet3"),
+        ]
+
+        self.widget = PHoleM53(self.test_obj.hole[1], self.matlib)
+
+        assert self.widget.w_mat_1.isHidden()
+        assert self.widget.w_mat_2.isHidden()

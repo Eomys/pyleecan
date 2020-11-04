@@ -51,6 +51,11 @@ class Test_Winding_plot(object):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Wind_CW2LT_lam_p=4.png"))
 
+        test_obj = LamSlotWind(Rint=0.5, Rext=0.9, is_internal=False, is_stator=False)
+        test_obj.slot = SlotW22(Zs=6, H0=20e-3, H2=0.2, W0=pi / 10, W2=pi / 6)
+        test_obj.winding = WindingCW2LT(p=2, qs=3)
+        test_obj.plot_winding(all_slot=True)
+
     def test_type_wind_CW1L(self):
         """Test Winding matrix plot for type_winding CW1L"""
 
