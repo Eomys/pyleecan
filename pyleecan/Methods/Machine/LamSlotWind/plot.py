@@ -74,6 +74,9 @@ def plot(
             Zs = self.get_Zs()
             wind_mat = self.winding.comp_connection_mat(Zs)
             qs = self.winding.qs
+    else:
+        wind_mat = None
+        qs = 1
 
     for surf in surf_list:
         if surf.label is not None and "Lamination" in surf.label:
