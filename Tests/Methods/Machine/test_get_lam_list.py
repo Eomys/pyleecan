@@ -7,7 +7,6 @@ from pyleecan.Classes.Lamination import Lamination
 
 
 @pytest.mark.METHODS
-@pytest.mark.DEV
 class Test_get_lam_list(object):
     """unittest to test Machine get_lam_list method"""
 
