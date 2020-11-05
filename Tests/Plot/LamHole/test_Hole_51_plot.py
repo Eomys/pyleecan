@@ -51,6 +51,8 @@ class Test_Hole_51_plot(object):
         test_obj.stator = LamSlotWind(
             Rint=0.09, Rext=0.12, is_internal=False, is_stator=True, L1=0.9, slot=None
         )
+        test_obj.stator.slot = None
+        test_obj.stator.winding = None
         test_obj.frame = Frame(Rint=0.12, Rext=0.12, Lfra=0.7)
         return test_obj
 

@@ -553,10 +553,3 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         """
         self.mat.struct.nu_yz = self.lf_nu_yz.value()
 
-    def save(self):
-        """Signal to save the material"""
-        return 1
-
-    def add_matlib(self):
-        """Signal to save the material in the Material Library"""
-        return 2

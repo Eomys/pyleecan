@@ -52,6 +52,7 @@ class Test_Hole_57_plot(object):
             Rint=0.078, Rext=0.104, is_internal=False, is_stator=True, L1=0.8
         )
         test_obj.stator.slot = None
+        test_obj.stator.winding = None
         test_obj.frame = Frame(Rint=0.104, Rext=0.114, Lfra=1)
         self.test_obj = test_obj
 

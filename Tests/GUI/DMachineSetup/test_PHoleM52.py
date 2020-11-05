@@ -62,6 +62,21 @@ class TestPHoleM52(object):
         assert self.widget.w_mat_1.c_mat_type.currentText() == "Magnet2"
         assert self.widget.w_mat_1.c_mat_type.currentIndex() == 1
 
+        self.test_obj = LamHole(Rint=0.1, Rext=0.2)
+        self.test_obj.hole = list()
+        self.test_obj.hole.append(HoleM52(H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=0.17))
+        self.test_obj.hole[0].magnet_0 == None
+
+        self.matlib = MatLib()
+        self.matlib.dict_mat["RefMatLib"] = [
+            Material(name="Magnet1"),
+            Material(name="Magnet2"),
+            Material(name="Magnet3"),
+        ]
+
+        self.widget = PHoleM52(self.test_obj.hole[0], self.matlib)
+        assert not self.widget.w_mat_1.isHidden()
+
     def test_set_W0(self):
         """Check that the Widget allow to update W0"""
         # Clear the field before writing the new value
@@ -125,3 +140,20 @@ class TestPHoleM52(object):
 
         assert self.widget.w_mat_1.c_mat_type.currentText() == "Magnet1"
         assert self.test_obj.hole[0].magnet_0.mat_type.name == "Magnet1"
+
+    def test_comp_output(self):
+        """Check that you can compute the output only if the hole is correctly set """
+        self.test_obj = LamHole(Rint=0.1, Rext=0.2)
+        self.test_obj.hole = list()
+        self.test_obj.hole.append(
+            HoleM52(H0=0.0010, H1=0.11, H2=0.00012, W0=0.0013, W3=0.0017)
+        )
+        self.widget.hole = self.test_obj.hole[0]
+        self.widget.comp_output()
+
+        # Nan are there because the value are not correct for the sin, cos and tan methods. But with true values, it works.
+
+        assert self.widget.out_slot_surface.text() == "Slot suface: 0.002569 m²"
+        assert self.widget.out_magnet_surface.text() == "Magnet surface: 0.000143 m²"
+        assert self.widget.out_alpha.text() == "alpha: 0.166 rad (9.511°)"
+        assert self.widget.out_W1.text() == "W1: 0.006234 m"

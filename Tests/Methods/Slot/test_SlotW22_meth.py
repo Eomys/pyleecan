@@ -5,7 +5,8 @@ from pyleecan.Classes.Arc2 import Arc2
 from pyleecan.Classes.Segment import Segment
 
 from pyleecan.Classes.SlotW22 import SlotW22
-from numpy import pi, ndarray, cos, sin
+from numpy import pi, ndarray, cos, sin, arcsin, exp
+from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
@@ -152,3 +153,21 @@ class Test_SlotW22_meth(object):
                 a = result[i].angle
                 b = curve_list[i].angle
                 assert abs((a - b) / a - 0) < DELTA
+
+    def test_build_geometry_wind(self):
+        """Check if the build geometry of the winding works correctly"""
+        test_obj = SlotW22(W0=pi / 10, H0=0.1, W2=pi / 5, H2=0.1)
+        lam = LamSlot(is_internal=False, slot=test_obj, Rint=1)
+
+        result = test_obj.build_geometry_wind(Nrad=2, Ntan=4, is_simplified=True)
+        a = result
+        assert "Wind_Stator_R0_T0_S0" == a[0].label
+        assert len(a) == 8
+
+    def test_get_surface_wind(self):
+        """Check that the get_surface_wind works when stator = false"""
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW22(Zs=36, W0=pi / 72, W2=pi / 36, H0=6e-3, H2=40e-3)
+        result = lam.slot.get_surface_wind()
+        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert len(result.get_lines()) == 6

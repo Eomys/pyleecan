@@ -9,6 +9,7 @@ from .....Classes.Slot import Slot
 from .....Classes.SlotW10 import SlotW10
 from .....Classes.SlotWind import SlotWind
 from .....GUI.Dialog.DMachineSetup.SWSlot.Gen_SWSlot import Gen_SWSlot
+from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.PWSlotUD import PWSlotUD
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot10.PWSlot10 import PWSlot10
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.PWSlot11 import PWSlot11
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot12.PWSlot12 import PWSlot12
@@ -44,6 +45,7 @@ WIDGET_LIST = [
     PWSlot27,
     PWSlot28,
     PWSlot29,
+    PWSlotUD,
 ]
 INIT_INDEX = [wid.slot_type for wid in WIDGET_LIST]
 SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]

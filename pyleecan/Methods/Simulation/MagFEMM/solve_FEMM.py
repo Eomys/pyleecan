@@ -61,7 +61,7 @@ def solve_FEMM(self, femm, output, sym, axes_dict):
     # Loading parameters for readibility
     L1 = output.simu.machine.stator.comp_length()
     save_path = self.get_path_save(output)
-    FEMM_dict = output.mag.FEMM_dict
+    FEMM_dict = output.mag.FEA_dict
 
     if (
         hasattr(output.simu.machine.stator, "winding")
@@ -217,7 +217,7 @@ def solve_FEMM(self, femm, output, sym, axes_dict):
             values=Phi_wind_stator,
         )
 
-    output.mag.FEMM_dict = FEMM_dict
+    output.mag.FEA_dict = FEMM_dict
 
     if self.is_get_mesh:
         output.mag.meshsolution = self.build_meshsolution(

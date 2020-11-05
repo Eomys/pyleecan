@@ -147,6 +147,30 @@ class TestDMatSetup(object):
         assert self.widget.lf_alpha.value() == 0.2
         assert self.widget.lf_cost_unit.value() == 0.21
 
+        # Test Magnet material None elec
+        self.test_obj.elec = None
+        self.widget = DMatSetup(material=self.test_obj)
+
+        assert self.widget.mat.elec is not None
+
+        # Test Magnet material None eco
+        self.test_obj.eco = None
+        self.widget = DMatSetup(material=self.test_obj)
+
+        assert self.widget.mat.eco is not None
+
+        # Test Magnet material None HT
+        self.test_obj.HT = None
+        self.widget = DMatSetup(material=self.test_obj)
+
+        assert self.widget.mat.HT is not None
+
+        # Test Magnet material None struct
+        self.test_obj.struct = None
+        self.widget = DMatSetup(material=self.test_obj)
+
+        assert self.widget.mat.struct is not None
+
     def test_set_name(self):
         """Check that you can change the name and the path"""
         self.widget.le_name.setText("Magnet2")
@@ -334,3 +358,80 @@ class TestDMatSetup(object):
         self.widget.lf_Gxz.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.Gxz == value
+
+    def test_set_is_isotropic(self):
+        """Check that the Widget allow to change value of is_isotropic"""
+        QTest.mouseClick(
+            self.widget.is_isotropic, Qt.LeftButton
+        )  # Clicking the checkbox with the leftbutton
+
+        assert self.widget.is_isotropic.isChecked() == False
+        assert self.widget.nav_meca.currentIndex() == 0
+        assert self.widget.nav_ther.currentIndex() == 0
+
+        QTest.mouseClick(self.widget.is_isotropic, Qt.LeftButton)
+
+        assert self.widget.is_isotropic.isChecked() == True
+        assert self.widget.nav_meca.currentIndex() == 1
+        assert self.widget.nav_ther.currentIndex() == 1
+
+    def test_set_cost_unit(self):
+        """Check that the Widget allow to update cost_unit"""
+        self.widget.lf_cost_unit.clear()
+        value = 0.4548
+        QTest.keyClicks(self.widget.lf_cost_unit, str(value))
+        self.widget.lf_cost_unit.editingFinished.emit()
+
+        assert self.widget.mat.eco.cost_unit == value
+
+    def test_set_CP(self):
+        """Check that the Widget allow to update mat.HT.Cp"""
+        self.widget.lf_Cp.clear()
+        value = 0.4548
+        QTest.keyClicks(self.widget.lf_Cp, str(value))
+        self.widget.lf_Cp.editingFinished.emit()
+
+        assert self.widget.mat.HT.Cp == value
+
+    def test_set_alpha(self):
+        """Check that the Widget allow to update mat.HT.alpha"""
+        self.widget.lf_alpha.clear()
+        value = 0.4548
+        QTest.keyClicks(self.widget.lf_alpha, str(value))
+        self.widget.lf_alpha.editingFinished.emit()
+
+        assert self.widget.mat.HT.alpha == value
+
+    def test_set_lambda(self):
+        """Check that the Widget allow to update mat.HT.lambda"""
+        self.widget.lf_L.clear()
+        value = 0.4548
+        QTest.keyClicks(self.widget.lf_L, str(value))
+        self.widget.lf_L.editingFinished.emit()
+
+        assert self.widget.mat.HT.lambda_x == value
+        assert self.widget.mat.HT.lambda_y == value
+        assert self.widget.mat.HT.lambda_z == value
+
+    def test_set_lambda_x_y_z(self):
+        """Check that the Widget allow to update mat.HT.lambda_x_y_z"""
+        self.widget.lf_Lx.clear()
+        value = 0.4548
+        QTest.keyClicks(self.widget.lf_Lx, str(value))
+        self.widget.lf_Lx.editingFinished.emit()
+
+        assert self.widget.mat.HT.lambda_x == value
+
+        self.widget.lf_Ly.clear()
+        value = 0.4548
+        QTest.keyClicks(self.widget.lf_Ly, str(value))
+        self.widget.lf_Ly.editingFinished.emit()
+
+        assert self.widget.mat.HT.lambda_y == value
+
+        self.widget.lf_Lz.clear()
+        value = 0.4548
+        QTest.keyClicks(self.widget.lf_Lz, str(value))
+        self.widget.lf_Lz.editingFinished.emit()
+
+        assert self.widget.mat.HT.lambda_z == value

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from os.path import join, dirname, abspath, isdir
+from os.path import join, abspath, isdir
 from os import makedirs
 from .....definitions import RESULT_DIR
 

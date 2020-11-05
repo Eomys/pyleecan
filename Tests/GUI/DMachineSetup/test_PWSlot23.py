@@ -4,6 +4,7 @@ import sys
 
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
+from PySide2.QtCore import Qt, QPoint
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW23 import SlotW23
@@ -92,6 +93,17 @@ class TestPWSlot23(object):
         assert self.widget.slot.W2 == 0.33
         assert self.test_obj.slot.W2 == 0.33
 
+    def test_set_W3(self):
+        """Check that the Widget allow to update W2"""
+        self.widget.lf_W3.setEnabled(True)
+
+        self.widget.lf_W3.clear()
+        QTest.keyClicks(self.widget.lf_W3, "0.99")
+        self.widget.lf_W3.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.slot.W3 == 0.99
+        assert self.test_obj.slot.W3 == 0.99
+
     def test_set_H0(self):
         """Check that the Widget allow to update H0"""
         self.widget.lf_H0.clear()
@@ -129,6 +141,24 @@ class TestPWSlot23(object):
         assert self.widget.slot.H2 == 0.36
         assert self.test_obj.slot.H2 == 0.36
 
+    def test_is_cst_tooth(self):
+        """Check that the Widget allow be checked"""
+        assert self.widget.slot.W1 is not None
+        assert self.widget.slot.W2 is not None
+        QTest.mouseClick(self.widget.is_cst_tooth, Qt.LeftButton)
+        assert self.widget.is_cst_tooth.isChecked() == True
+        assert self.widget.slot.W1 is None
+        assert self.widget.slot.W2 is None
+        assert self.widget.lf_W1.isEnabled() == False
+        assert self.widget.lf_W2.isEnabled() == False
+        assert self.widget.lf_W3.isEnabled() == True
+
+        QTest.mouseClick(self.widget.is_cst_tooth, Qt.LeftButton)
+        assert self.widget.is_cst_tooth.isChecked() == False
+        assert self.widget.lf_W1.isEnabled() == True
+        assert self.widget.lf_W2.isEnabled() == True
+        assert self.widget.lf_W3.isEnabled() == False
+
     def test_output_txt(self):
         """Check that the Output text is computed and correct"""
         self.test_obj = LamSlotWind(
@@ -145,3 +175,28 @@ class TestPWSlot23(object):
         )
         self.widget = PWSlot23(self.test_obj)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.1345 m"
+
+    def test_check(self):
+        """Check that the check function is correctly returning error messages"""
+        self.test_obj = LamSlotWind(Rint=0.7, Rext=0.5)
+        self.test_obj.slot = SlotW23(
+            H0=0.10, H1=0.11, H2=0.12, W0=None, W1=0.14, W2=0.15, H1_is_rad=False
+        )
+        self.widget = PWSlot23(self.test_obj)
+        assert self.widget.check(self.test_obj) == "PWSlot23 check"
+        self.test_obj.slot = SlotW23(
+            H0=None, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot23 check"
+        self.test_obj.slot = SlotW23(
+            H0=0.10, H1=None, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot23 check"
+        self.test_obj.slot = SlotW23(
+            H0=0.10, H1=0.11, H2=None, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot23 check"
+        self.test_obj.slot = SlotW23(
+            H0=0.10, H1=0.11, H2=0.12, W0=0.0011, W1=0.14, W2=0.15, H1_is_rad=False
+        )
+        assert self.widget.check(self.test_obj) == "PWSlot23 check"

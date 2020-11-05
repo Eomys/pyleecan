@@ -7,6 +7,8 @@ from numpy import array, exp, pi, sqrt
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Methods.Geometry.Arc1.check import PointArc1Error, RadiusArc1Error
 from pyleecan.Methods.Geometry.Arc1.discretize import NbPointArc1DError
+from pyleecan.Methods.Geometry.Arc1.rotate import AngleRotationArc1Error
+from pyleecan.Methods.Geometry.Arc1.translate import PointTranslateArc1Error
 from Tests import save_plot_path as save_path
 import pytest
 
@@ -727,6 +729,12 @@ class Test_Arc1_meth(object):
         )
         assert abs(abs(result - test_dict["expect"]) - 0) < 1e-6, msg
 
+    def test_get_middle_zero(self):
+        """Checking that get_middle() can return 0"""
+        arc = Arc1(begin=0, end=-0.0000000001j, is_trigo_direction=True, radius=1)
+        result = arc.get_middle()
+        assert result == 0
+
     @pytest.mark.parametrize("test_dict", comp_rotate_test)
     def test_rotate(self, test_dict):
         """Check that you can rotate the arc1"""
@@ -837,3 +845,21 @@ class Test_Arc1_meth(object):
         plt.plot()
         fig = plt.gcf()
         fig.savefig(join(save_path, "Arc1_schematics.png"))
+
+    def test_arc_rotate_error(self):
+        """Check that the arc3 rotate raise an error"""
+        arc = Arc1(
+            begin=1 - 5j,
+            end=3 + 2j,
+        )
+        with pytest.raises(AngleRotationArc1Error) as context:
+            arc.rotate("error")
+
+    def test_translate_error(self):
+        """Check that you can't translate an arc1 when an error occurs"""
+        arc = Arc1(
+            begin=1 - 5j,
+            end=3 + 2j,
+        )
+        with pytest.raises(PointTranslateArc1Error) as context:
+            arc.translate("error")
