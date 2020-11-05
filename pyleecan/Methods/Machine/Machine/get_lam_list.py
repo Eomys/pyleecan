@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def get_lam_list(self, is_int_to_ext=True):
+def get_lam_list(self, is_int_to_ext=True, key=None):
     """Returns the ordered list of lamination of the machine
 
     Parameters
@@ -10,6 +10,8 @@ def get_lam_list(self, is_int_to_ext=True):
         Machine object
     is_int_to_ext : bool
         true to order the list from the inner lamination to the extrenal one
+    key : string
+        keyword to return only stator or rotor laminations, default None to return all
 
     Returns
     -------
@@ -26,4 +28,22 @@ def get_lam_list(self, is_int_to_ext=True):
         if hasattr(self, "rotor"):
             lam_list.append(self.rotor)
 
-    return sorted(lam_list, key=lambda x: x.Rint, reverse=not is_int_to_ext)
+    lam_list = sorted(lam_list, key=lambda x: x.Rint, reverse=not is_int_to_ext)
+
+    if key is not None:
+        if key == "Stator":
+            is_stator = True
+        elif key == "Rotor":
+            is_stator = False
+        else:
+            raise KeyInputError(f"'{key}' is not a valid input argument for key. ")
+
+        lam_list = [lam for lam in lam_list if lam.is_stator is is_stator]
+
+    return lam_list
+
+
+class KeyInputError(Exception):
+    """ """
+
+    pass
