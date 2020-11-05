@@ -64,7 +64,7 @@ slotW10_test.append(
 
 
 @pytest.mark.METHODS
-class Test_SloyW10_meth(object):
+class Test_SlotW10_meth(object):
     """pytest for SlotW10 methods"""
 
     @pytest.mark.parametrize("test_dict", slotW10_test)
