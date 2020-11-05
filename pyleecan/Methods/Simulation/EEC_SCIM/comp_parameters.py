@@ -14,7 +14,7 @@ def comp_parameters(self, output):
         an Output object
     """
     # number of time steps for averaging (FEMM only) TODO make user input of it
-    n_step = 4
+    n_step = 32
 
     # get some machine parameters
     machine = output.simu.machine
@@ -26,7 +26,9 @@ def comp_parameters(self, output):
 
     xi = machine.stator.winding.comp_winding_factor()
     Ntspc = machine.stator.winding.comp_Ntspc()
-    ratio = (xi[0] * Ntspc) / (Zsr / 6)  # rotor - stator transformation ratio
+    norm = (xi[0] * Ntspc) / (Zsr / 6)  # rotor - stator transformation norm
+
+    self.parameters["norm"] = norm
 
     # get temperatures TODO remove/replace, since this is a temp. solution only
     Tws = 20 if "Tws" not in self.parameters else self.parameter["Tws"]
@@ -36,28 +38,28 @@ def comp_parameters(self, output):
     is_comp_ind = False
 
     # Parameters to compute only once
-    if "Rs" not in self.parameters:
+    if "Rs" not in self.parameters or self.parameters["Rs"] is None:
         self.parameters["Rs"] = machine.stator.comp_resistance_wind(T=Tws)
 
-    if "Rr_norm" not in self.parameters:
+    if "Rr_norm" not in self.parameters or self.parameters["Rr_norm"] is None:
         # 3 phase equivalent rotor resistance
         Rr = machine.rotor.comp_resistance_wind(T=Twr, qs=3)
-        self.parameters["Rr_norm"] = ratio ** 2 * Rr
+        self.parameters["Rr_norm"] = norm ** 2 * Rr
 
-    if "s" not in self.parameters:
+    if "slip" not in self.parameters or self.parameters["slip"] is None:
         zp = output.simu.machine.stator.get_pole_pair_number()
         Nr = output.elec.N0
         Ns = output.elec.felec / zp * 60
-        self.parameters["s"] = (Ns - Nr) / Ns
+        self.parameters["slip"] = (Ns - Nr) / Ns
         # print(f"slip = {(Ns - Nr) / Ns}")
 
-    if "Lm" not in self.parameters:
+    if "Lm" not in self.parameters or self.parameters["Lm"] is None:
         is_comp_ind = True
 
-    if "Ls" not in self.parameters:
+    if "Ls" not in self.parameters or self.parameters["Ls"] is None:
         is_comp_ind = True
 
-    if "Lr_norm" not in self.parameters:
+    if "Lr_norm" not in self.parameters or self.parameters["Lr_norm"] is None:
         is_comp_ind = True
 
     if "Rfe" not in self.parameters:
@@ -65,6 +67,7 @@ def comp_parameters(self, output):
 
     if is_comp_ind:
         # setup a MagFEMM simulation to get the parameters
+        # TODO utilize paralellization
         # TODO maybe use IndMagFEMM or FluxlinkageFEMM
         # TODO but for now they are not suitable so I utilize 'normal' MagFEMM simu
         from ....Classes.Simu1 import Simu1
@@ -120,8 +123,8 @@ def comp_parameters(self, output):
         # TODO check wind_mat that the i-th bars is in the i-th slots
         Phi_s, Phi_r = _comp_flux_mean(out, qsr, sym)
 
-        self.parameters["Lm"] = (Phi_r * ratio * Zsr / 3) / Imu
-        self.parameters["Ls"] = (Phi_s - (Phi_r * ratio * Zsr / 3)) / Imu
+        self.parameters["Lm"] = (Phi_r * norm * Zsr / 3) / Imu
+        self.parameters["Ls"] = (Phi_s - (Phi_r * norm * Zsr / 3)) / Imu
 
         # --- compute the main inductance and rotor stray inductance ---
         # set new output
@@ -129,7 +132,7 @@ def comp_parameters(self, output):
 
         # set current values
         Ir_ = zeros([n_step, 2])
-        Ir_[:, 0] = Imu * ratio
+        Ir_[:, 0] = Imu * norm * sqrt(2)
         Ir = ab2n(Ir_, n=qsr // sym)  # TODO no rotation for now
 
         Ir = ImportMatrixVal(value=tile(Ir, (1, sym)))
@@ -146,11 +149,7 @@ def comp_parameters(self, output):
         Phi_s, Phi_r = _comp_flux_mean(out, qsr, sym)
 
         self.parameters["Lm_"] = Phi_s / Imu
-        self.parameters["Lr"] = ((Phi_r * ratio * Zsr / 3) - Phi_s) / Imu
-
-        from pprint import pprint
-
-        pprint(self.parameters)
+        self.parameters["Lr_norm"] = ((Phi_r * norm * Zsr / 3) - Phi_s) / Imu
 
 
 def _comp_flux_mean(out, qsr, sym):
