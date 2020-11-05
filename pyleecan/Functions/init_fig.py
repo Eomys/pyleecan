@@ -5,7 +5,7 @@ import mpl_toolkits.mplot3d
 from numpy import array
 
 
-def init_fig(fig, shape="default", is_3d=False):
+def init_fig(fig=None, ax=None, shape="default", is_3d=False):
     """Get all the handle and legend of a figure or initialize them
     (for matplotlib)
 
@@ -13,6 +13,8 @@ def init_fig(fig, shape="default", is_3d=False):
     ----------
     fig : Matplotlib.figure.Figure
         The figure to get the handle from (can be None)
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
     shape : str
         Shape of the figure: "default" or "rectangle" for 20x10 figure
     is_3d : bool
@@ -35,7 +37,6 @@ def init_fig(fig, shape="default", is_3d=False):
                 )
             else:
                 fig, axes = subplots(tight_layout=True, figsize=(8, 4))
-                axes.set_visible(True)
         else:
             if is_3d:
                 fig, axes = subplots(
@@ -45,7 +46,10 @@ def init_fig(fig, shape="default", is_3d=False):
                 fig, axes = subplots(tight_layout=True)
         patch_leg, label_leg = [], []
     else:
-        axes = fig.axes[0]
+        if ax is None:
+            axes = fig.axes[0]
+        else:
+            axes = ax
         if axes.legend_ is None:
             # Empty legend
             patch_leg, label_leg = [], []

@@ -13,6 +13,9 @@ from pyleecan.Classes.Material import Material
 from pyleecan.Classes.SlotW22 import SlotW22
 from pyleecan.Classes.Winding import Winding
 from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
+from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import (
+    PCondType12,
+)
 from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 
 
@@ -84,6 +87,14 @@ class TestSWindCond(object):
         assert self.widget_2.w_cond.lf_Wins_wire.value() == 21e-3
         assert self.widget_2.w_cond.lf_Wins_cond.value() == 31e-3
 
+        self.test_obj.stator.winding.conductor = None
+        self.widget_1 = SWindCond(
+            machine=self.test_obj, matlib=self.matlib, is_stator=True
+        )
+
+        assert self.widget_1.w_mat_0.in_mat_type.text() == "mat_wind1: "
+        assert type(self.test_obj.stator.winding.conductor) is CondType11
+
     def test_set_si_Nwpc1_rad(self):
         """Check that the Widget allow to update si_Nwpc1_rad"""
         # Clear the field before writing the new value
@@ -132,6 +143,24 @@ class TestSWindCond(object):
 
         assert self.test_obj.rotor.winding.conductor.Wins_wire == value
 
+    def test_set_Wwire(self):
+        """Check that the Widget allow to update Wins_wire"""
+        # Clear the field before writing the new value
+        self.widget_1.w_cond.lf_Wwire.clear()
+        value = uniform(5, 100)
+        QTest.keyClicks(self.widget_1.w_cond.lf_Wwire, str(value))
+        self.widget_1.w_cond.lf_Wwire.editingFinished.emit()  # To trigger the slot
+
+        assert self.test_obj.stator.winding.conductor.Wwire == value
+
+        # Clear the field before writing the new value
+        self.widget_2.w_cond.lf_Wwire.clear()
+        value = uniform(5, 100)
+        QTest.keyClicks(self.widget_2.w_cond.lf_Wwire, str(value))
+        self.widget_2.w_cond.lf_Wwire.editingFinished.emit()  # To trigger the slot
+
+        assert self.test_obj.rotor.winding.conductor.Wwire == value
+
     def test_set_Lewout(self):
         """Check that the Widget allow to update Lewout"""
         # Clear the field before writing the new value
@@ -159,3 +188,57 @@ class TestSWindCond(object):
         self.widget_2.w_cond.lf_Wins_cond.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.rotor.winding.conductor.Wins_cond == value
+
+    def test_set_cond_type(self):
+        """Check that the Widget allow to update conductor type"""
+        assert type(self.test_obj.stator.winding.conductor) is CondType11
+
+        self.widget_1.c_cond_type.setCurrentIndex(1)
+        assert type(self.test_obj.stator.winding.conductor) is CondType12
+
+        self.widget_1.c_cond_type.setCurrentIndex(0)
+        assert type(self.test_obj.stator.winding.conductor) is CondType11
+
+    def test_check(self):
+        """Check that the check method return errors"""
+        rotor = LamSlotWind(is_stator=False)
+        rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        rotor.winding = Winding(Npcpp=20, Ntcoil=None)
+        rotor.winding.conductor = CondType12(
+            Nwppc=4, Wwire=None, Wins_wire=21e-3, Wins_cond=31e-3
+        )
+
+        assert self.widget_2.check(rotor) == "You must set Wwire !"
+
+    def test_init_PCondType12(self):
+        """Check that the init is setting a conductor if None"""
+        lam = LamSlotWind(is_stator=False)
+        lam.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        lam.winding = Winding(Npcpp=20, Ntcoil=21, Lewout=None)
+        lam.winding.conductor = None
+        widget = PCondType12(lamination=lam)
+        assert type(widget.cond) is CondType12
+        assert widget.cond.Nwppc == 1
+        assert widget.cond.Wins_wire == 0
+        assert widget.cond.Wins_cond == 0
+        assert widget.lam.winding.Lewout == 0
+
+    def test_check_PCondType12(self):
+        """Check that the check methods is correctly working"""
+        lam = LamSlotWind(is_stator=False)
+        lam.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        lam.winding = Winding(Npcpp=20, Ntcoil=21, Lewout=0.15)
+        lam.winding.conductor = None
+        widget = PCondType12(lamination=lam)
+        widget.cond.Wwire = 0.5
+
+        widget.lam.winding.Lewout = None
+        assert widget.check() == "You must set Lewout !"
+        widget.cond.Wins_cond = None
+        assert widget.check() == "You must set Wins_cond !"
+        widget.cond._Wins_wire = None
+        assert widget.check() == "You must set Wins_wire !"
+        widget.cond.Wwire = None
+        assert widget.check() == "You must set Wwire !"
+        widget.cond.Nwppc = None
+        assert widget.check() == "You must set Nwppc !"

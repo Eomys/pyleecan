@@ -116,3 +116,7 @@ class Test_get_cell_MeshMat(object):
                 + str(solution[key])
             )
             assert testA, msg
+
+    def test_get_connectivity_None(self):
+        """Check if get_connectivity works correctly"""
+        assert self.mesh.cell["triangle3"].get_connectivity(5) == None

@@ -27,11 +27,13 @@ def test_coordinate_transformation_Ok():
 
     X_uvw = array([[1, -0.5, -0.5], [-1, 0.5, 0.5]])
     X_ab = array([[1, 0], [0, 1]])
+    X_ab_wrong = array([1, 0])
 
     th_90 = pi / 2
     th_180 = pi
 
     X_dq90 = array([[0, -1], [1, 0]])
+    X_dq90_wrong = array([[0, -1]])
     X_dq180 = array([[-1, 0], [0, -1]])
 
     assert_array_almost_equal(ab2n(n2ab(X_uvw)), X_uvw)
@@ -40,3 +42,5 @@ def test_coordinate_transformation_Ok():
 
     assert_array_almost_equal(ab2dq(X_ab, th_90), X_dq90)
     assert_array_almost_equal(ab2dq(X_ab, th_180), X_dq180)
+
+    assert_array_almost_equal(ab2dq(X_ab_wrong, th_90), X_dq90_wrong)

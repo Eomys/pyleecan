@@ -8,6 +8,7 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.SlotW24.check import S24_HWCheckError
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -118,3 +119,29 @@ class Test_SlotW24_meth(object):
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+    def test_check_error(self):
+        """Check that the check method is correctly raising an error"""
+        lam = LamSlot(is_internal=True, Rext=0.1325)
+        lam.slot = SlotW24(Zs=69, H2=0.0015, W3=12e-3)
+
+        with pytest.raises(S24_HWCheckError) as context:
+            lam.slot.check()
+
+    def test_get_surface_wind(self):
+        """Check that the get_surface_wind works when stator = false"""
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW24(Zs=6, H2=30e-3, W3=12e-3)
+        result = lam.slot.get_surface_wind()
+        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert len(result.get_lines()) == 4
+
+    def test_build_geometry_wind(self):
+        """Check if the build geometry of the winding works correctly"""
+        lam = LamSlot(is_internal=True, Rext=0.1325)
+        lam.slot = SlotW24(Zs=6, H2=30e-3, W3=12e-3)
+
+        result = lam.slot.build_geometry_wind(Nrad=2, Ntan=4, is_simplified=True)
+        a = result
+        assert "Wind_Stator_R0_T0_S0" == a[0].label
+        assert len(a) == 8
