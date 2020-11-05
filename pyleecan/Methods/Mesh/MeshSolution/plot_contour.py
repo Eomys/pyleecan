@@ -22,6 +22,7 @@ def plot_contour(
     group_names=None,
     save_path=None,
     itime=0,
+    is_show_fig=True
 ):
     """Plot the contour of a field on a mesh using pyvista plotter.
 
@@ -51,7 +52,8 @@ def plot_contour(
         path to save the figure
     itime : int
         index of the time step to be plotted
-
+    is_show_fig : bool
+        To call show at the end of the method
     Returns
     -------
     """
@@ -149,7 +151,7 @@ def plot_contour(
         )
         if self.dimension == 2:
             p.view_xy()
-        if save_path is None:
+        if save_path is None and is_show_fig:
             p.show()
-        else:
+        elif save_path is not None and is_show_fig:
             p.show(interactive=False, screenshot=save_path)

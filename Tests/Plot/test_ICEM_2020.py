@@ -592,7 +592,7 @@ def test_ecc_FEMM():
     )
     # Plot, check, save
     out.mag.meshsolution.plot_mesh(
-        save_path=join(save_path, "fig_19_transform_list.png")
+        save_path=join(save_path, "fig_19_transform_list.png"), is_show_fig=False
     )
 
 

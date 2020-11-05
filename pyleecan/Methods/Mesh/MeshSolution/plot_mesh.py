@@ -4,7 +4,7 @@ from ....Classes.MeshMat import MeshMat
 
 
 def plot_mesh(
-    self, label=None, index=None, indices=None, save_path=None, group_names=None
+    self, label=None, index=None, indices=None, save_path=None, group_names=None, is_show_fig=True
 ):
     """Plot the mesh using pyvista plotter.
 
@@ -18,7 +18,8 @@ def plot_mesh(
         an index
     indices : list
         list of the points to extract (optional)
-
+    is_show_fig : bool
+        To call show at the end of the method
     Returns
     -------
     """
@@ -67,7 +68,7 @@ def plot_mesh(
         )
         if self.dimension == 2:
             p.view_xy()
-        if save_path is None:
+        if save_path is None and is_show_fig:
             p.show()
-        else:
+        elif save_path is not None and is_show_fig:
             p.show(interactive=False, screenshot=save_path)

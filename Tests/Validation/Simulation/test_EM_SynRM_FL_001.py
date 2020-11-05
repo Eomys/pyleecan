@@ -127,6 +127,7 @@ def test_Magnetic_Phi0():
         ylabel="Electrical torque [N.m]",
         title="Electrical torque vs current angle",
         save_path=join(save_path, "test_SynRM_Syr-e.png"),
+        is_show_fig=False
     )
 
     return Xout

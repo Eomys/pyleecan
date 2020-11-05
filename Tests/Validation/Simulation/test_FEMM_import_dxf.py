@@ -84,4 +84,5 @@ def test_FEMM_import_dxf():
         data_list=[out2.mag.B],
         legend_list=["Rotor from DXF", "Rotor from pyleecan"],
         save_path=join(save_path, "FEMM_import_dxf_B.png"),
+        is_show_fig=False
     )

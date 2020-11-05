@@ -89,6 +89,7 @@ def test_Magnetic_AGSF():
         "angle",
         "time[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space.png"),
+        is_show_fig=False
     )
 
     out.plot_2D_Data(
@@ -96,6 +97,7 @@ def test_Magnetic_AGSF():
         "wavenumber=[0," + str(r_max) + "]",
         "time[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft.png"),
+        is_show_fig=False
     )
 
     # Plot the AGSF as a function of time with the time fft
@@ -105,6 +107,7 @@ def test_Magnetic_AGSF():
         "time",
         "angle[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_time.png"),
+        is_show_fig=False
     )
 
     out.plot_2D_Data(
@@ -112,6 +115,7 @@ def test_Magnetic_AGSF():
         "freqs=[0," + str(freq_max) + "]",
         "angle[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_time_fft.png"),
+        is_show_fig=False
     )
 
     # ------------------------------------------------------
@@ -130,6 +134,7 @@ def test_Magnetic_AGSF():
         "angle",
         "time[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space2.png"),
+        is_show_fig=False
     )
 
     out.plot_2D_Data(
@@ -137,6 +142,7 @@ def test_Magnetic_AGSF():
         "wavenumber=[0," + str(r_max) + "]",
         "time[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft2.png"),
+        is_show_fig=False
     )
 
     # Plot the AGSF as a function of time with the time fft
@@ -146,6 +152,7 @@ def test_Magnetic_AGSF():
         "time",
         "angle[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space2.png"),
+        is_show_fig=False
     )
 
     out.plot_2D_Data(
@@ -153,6 +160,7 @@ def test_Magnetic_AGSF():
         "freqs=[0," + str(freq_max) + "]",
         "angle[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft2.png"),
+        is_show_fig=False
     )
 
     out.plot_3D_Data(
@@ -161,6 +169,7 @@ def test_Magnetic_AGSF():
         "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
         component_list=["radial"],
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_fft2.png"),
+        is_show_fig=False,
         is_2D_view=True,
     )
 
@@ -170,6 +179,7 @@ def test_Magnetic_AGSF():
         "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
         component_list=["radial"],
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_cfft2.png"),
+        is_show_fig=False
     )
 
     out.plot_A_time_space(
@@ -178,6 +188,7 @@ def test_Magnetic_AGSF():
         freq_max=freq_max,
         r_max=r_max,
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_time_space"),
+        is_show_fig=False
     )
     out.plot_A_time_space(
         "mag.B",
@@ -185,6 +196,7 @@ def test_Magnetic_AGSF():
         freq_max=freq_max,
         r_max=r_max,
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_flux_time_space"),
+        is_show_fig=False
     )
 
     return out
