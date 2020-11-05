@@ -18,4 +18,5 @@ h5py>=2.10.0
 nbformat
 nbconvert
 quadpy
+ezdxf>=0.14.2
 pytest-qt>=3.3.0
