@@ -132,7 +132,7 @@ def solve_EEC(self, output):
         is_components=True,
     )
     output.elec.Ir = DataTime(
-        name="Stator current",
+        name="Rotor current",
         unit="A",
         symbol="Ir",
         axes=[Phase, output.elec.Time.copy()],
