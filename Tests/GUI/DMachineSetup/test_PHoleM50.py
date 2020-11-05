@@ -207,6 +207,11 @@ class TestPHoleM50(object):
         assert setup["widget"].w_mat_0.c_mat_type.currentText() == "Magnet1"
         assert setup["test_obj"].hole[0].mat_void.name == "Magnet1"
 
+        setup["widget"].w_mat_0.c_mat_type.setCurrentIndex(1)
+
+        assert setup["widget"].w_mat_0.c_mat_type.currentText() == "Magnet2"
+        assert setup["test_obj"].hole[0].mat_void.name == "Magnet2"
+
     def test_set_material_1(self, setup):
         """Check that you can change the material of magnet_1"""
         setup["widget"].w_mat_1.c_mat_type.setCurrentIndex(0)
