@@ -262,7 +262,10 @@ def plot_2D_Data(
                     + unit
                     for j in range(n_curves)
                 ]
-                colors += [phase_colors[i * n_curves + j] for j in range(n_curves)]
+                colors += [
+                    phase_colors[(i * n_curves + j) % len(phase_colors)]
+                    for j in range(n_curves)
+                ]
                 linestyle_list += [line_styles[i] for j in range(n_curves)]
 
         if not is_overlay:
@@ -270,7 +273,7 @@ def plot_2D_Data(
             colors += [curve_colors[i]]
             linestyle_list += [line_styles[i]]
 
-    # Set colors_list to colors taht has just been built
+    # Set colors_list to colors that has just been built
     if color_list == []:
         color_list = colors
 
