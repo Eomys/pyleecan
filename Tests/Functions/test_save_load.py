@@ -114,7 +114,7 @@ def test_save_load_folder_path(CEFC_Lam):
         Is=Is,
         Ir=None,  # No winding on the rotor
         N0=N0,
-        angle_rotor=None,  # Will be computed
+        angle_rotor=0,  # Will be computed
         time=time,
         angle=angle,
         rot_dir=-1,
@@ -298,7 +298,7 @@ def test_save_load_simu(type_file, CEFC_Lam):
         Is=Is,
         Ir=None,  # No winding on the rotor
         N0=N0,
-        angle_rotor=None,  # Will be computed
+        angle_rotor=0,  # Will be computed
         time=time,
         angle=angle,
         rot_dir=-1,

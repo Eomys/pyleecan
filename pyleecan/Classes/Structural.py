@@ -60,7 +60,7 @@ class Structural(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, structural=-1, init_dict=None, init_str=None):
+    def __init__(self, structural=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -93,13 +93,7 @@ class Structural(FrozenClass):
             Structural_str += "parent = None " + linesep
         else:
             Structural_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        if self.structural is not None:
-            tmp = (
-                self.structural.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            )
-            Structural_str += "structural = " + tmp
-        else:
-            Structural_str += "structural = None" + linesep + linesep
+        Structural_str += "structural = " + str(self.structural) + linesep
         return Structural_str
 
     def __eq__(self, other):
@@ -115,10 +109,7 @@ class Structural(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Structural_dict = dict()
-        if self.structural is None:
-            Structural_dict["structural"] = None
-        else:
-            Structural_dict["structural"] = self.structural.as_dict()
+        Structural_dict["structural"] = self.structural
         # The class name is added to the dict for deserialisation purpose
         Structural_dict["__class__"] = "Structural"
         return Structural_dict
@@ -126,8 +117,7 @@ class Structural(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.structural is not None:
-            self.structural._set_None()
+        self.structural = None
 
     def _get_structural(self):
         """getter of structural"""
@@ -135,26 +125,14 @@ class Structural(FrozenClass):
 
     def _set_structural(self, value):
         """setter of structural"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "structural"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Structural()
-        check_var("structural", value, "Structural")
+        check_var("structural", value, "int")
         self._structural = value
-
-        if self._structural is not None:
-            self._structural.parent = self
 
     structural = property(
         fget=_get_structural,
         fset=_set_structural,
         doc=u"""Structural module
 
-        :Type: Structural
+        :Type: int
         """,
     )

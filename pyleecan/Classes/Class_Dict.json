@@ -10019,9 +10019,9 @@
                 "max": "",
                 "min": "",
                 "name": "structural",
-                "type": "Structural",
+                "type": "int",
                 "unit": "-",
-                "value": ""
+                "value": 0
             }
         ]
     },

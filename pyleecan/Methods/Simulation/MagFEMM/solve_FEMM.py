@@ -27,27 +27,27 @@ def solve_FEMM(
     end_t=None,
 ):
     """
-     Solve FEMM model to calculate airgap flux density, torque instantaneous/average/ripple values,
-     flux induced in stator windings and flux density, field and permeability maps
+    Solve FEMM model to calculate airgap flux density, torque instantaneous/average/ripple values,
+    flux induced in stator windings and flux density, field and permeability maps
 
-     Parameters
-     ----------
-     self: MagFEMM
-         A MagFEMM object
-     femm: FEMMHandler
-         Object to handle FEMM
-     output: Output
-         An Output object
+    Parameters
+    ----------
+    self: MagFEMM
+        A MagFEMM object
+    femm: FEMMHandler
+        Object to handle FEMM
+    output: Output
+        An Output object
     out_dict: dict
-         Dict containing the following quantities to update for each time step:
-             Br : ndarray
-                 Airgap radial flux density (Nt,Na) [T]
-             Bt : ndarray
-                 Airgap tangential flux density (Nt,Na) [T]
-             Tem : ndarray
-                 Electromagnetic torque over time (Nt,) [Nm]
-             Phi_wind_stator : ndarray
-                 Stator winding flux (qs,Nt) [Wb]
+        Dict containing the following quantities to update for each time step:
+            Br : ndarray
+                Airgap radial flux density (Nt,Na) [T]
+            Bt : ndarray
+                Airgap tangential flux density (Nt,Na) [T]
+            Tem : ndarray
+                Electromagnetic torque over time (Nt,) [Nm]
+            Phi_wind_stator : ndarray
+                Stator winding flux (qs,Nt) [Wb]
      sym: int
          Spatial symmetry factor
      Nt: int
