@@ -5,6 +5,7 @@ from numpy import array, exp, arctan
 from ....Classes.SurfLine import SurfLine
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
+from ....Methods import ParentMissingError
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):
@@ -30,7 +31,14 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         list of surfaces needed to draw the magnet
 
     """
-
+    if self.parent is not None:
+        (Z1, Z2) = self.parent.get_point_bottom()
+        H0 = self.parent.H0
+        W0 = self.parent.W0
+    else:
+        raise ParentMissingError(
+            "Error: The magnet object is not inside a " + "slot object"
+        )
     # defining label for type_magnetization
     if self.type_magnetization == 0:
         t_p = "Radial"
@@ -38,6 +46,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         t_p = "Parallel"
     elif self.type_magnetization == 2:
         t_p = "Hallbach"
+
 
     [Z1, Z2, Z3, Zs3, Zs4, Z4, Zref] = self._comp_point_coordinate()
     # Creation of curve

@@ -145,7 +145,7 @@ def plot_3D(
         if is_logscale_z:
             ax.zscale("log")
     elif type == "surf":
-        ax.plot_surface(Xdata, Ydata, Zdata, cmap=COLORMAP, cstride=2, rstride=2)
+        ax.plot_surface(Xdata, Ydata, Zdata, cmap=COLORMAP)
         ax.set_xlim3d(x_max, x_min)
         ax.set_ylim3d(y_min, y_max)
         ax.set_zlim3d(z_min, z_max)

@@ -3,6 +3,8 @@ from os.path import join
 
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
+from pyleecan.Classes.MachineIPMSM import MachineIPMSM
+from pyleecan.Classes.LamHole import LamHole
 
 
 def test_desc_SCIM():
@@ -66,3 +68,22 @@ def test_desc_IPMSM():
 
     assert desc_dict[7]["name"] == "Mmachine"
     assert desc_dict[7]["value"] == pytest.approx(33.37, rel=0.1)
+
+
+def test_desc_Outer_Rotor():
+    """Check that the description with Outer Rotor is correct"""
+
+    test_obj = MachineIPMSM()
+    test_obj.rotor = LamHole(
+        is_internal=False,
+        Rint=0.021,
+        Rext=0.075,
+        is_stator=False,
+        L1=0.7,
+        Nrvd=0,
+        Kf1=0.95,
+    )
+
+    desc_dict = test_obj.comp_desc_dict()
+    assert desc_dict[3]["name"] == "Topology"
+    assert desc_dict[3]["value"] == "Outer Rotor"

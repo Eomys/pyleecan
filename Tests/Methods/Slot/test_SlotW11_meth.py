@@ -12,10 +12,12 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.SlotW11.check import S11_H1rCheckError
 
 # For AlmostEqual
 DELTA = 1e-6
 slotW11_test = list()
+slotW11_H1_rad_test = list()
 
 # Internal Slot
 lam = LamSlot(is_internal=True, Rext=0.1325)
@@ -34,6 +36,19 @@ slotW11_test.append(
 lam = LamSlot(is_internal=False, Rint=0.1325)
 lam.slot = SlotW11(H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3, R1=5e-3)
 slotW11_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 4.04682446e-4,
+        "Aw": 0.0832448,
+        "SW_exp": 3.7427e-04,
+        "H_exp": 3.236711e-2,
+    }
+)
+lam = LamSlot(is_internal=False, Rint=0.1325)
+lam.slot = SlotW11(
+    H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3, R1=5e-3, H1_is_rad=True
+)
+slotW11_H1_rad_test.append(
     {
         "test_obj": lam,
         "S_exp": 4.04682446e-4,
@@ -114,3 +129,53 @@ class Test_SlotW11_meth(object):
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW11_H1_rad_test)
+    def test_comp_point_coordinate_rad(self, test_dict):
+        """Check that the error is well raised"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot._comp_point_coordinate()
+        assert result == [
+            (0.13236408123052115 - 0.006j),
+            (0.13336408123052115 - 0.006j),
+            (0.13336558123164616 - 0.007j),
+            (0.15836558123164615 - 0.006j),
+            (0.16336558123164616 - 0.001j),
+            (0.16336558123164616 + 0.001j),
+            (0.15836558123164615 + 0.006j),
+            (0.13336558123164616 + 0.007j),
+            (0.13336408123052115 + 0.006j),
+            (0.13236408123052115 + 0.006j),
+            1,
+        ]
+
+    @pytest.mark.parametrize("test_dict", slotW11_H1_rad_test)
+    def test_comp_surface_rad(self, test_dict):
+        """Check that the value is correct when rad is True """
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.comp_surface()
+        assert result == 0.0003852019464390075
+
+    @pytest.mark.parametrize("test_dict", slotW11_H1_rad_test)
+    def test_comp_height(self, test_dict):
+        """Check that the value is correct when rad is True """
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.comp_height()
+        assert result == 0.03086864182318949
+
+    def test_SlotW11_check(self):
+        """Check if the error S11_H1rCheckError is correctly raised in the check method"""
+        lam = LamSlot(is_internal=False, Rint=0.1325)
+        lam.slot = SlotW11(
+            H0=1e-3,
+            H1=3,
+            H2=30e-3,
+            W0=12e-3,
+            W1=14e-3,
+            W2=12e-3,
+            R1=5e-3,
+            H1_is_rad=True,
+        )
+
+        with pytest.raises(S11_H1rCheckError) as context:
+            lam.slot.check()

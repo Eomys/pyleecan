@@ -87,6 +87,31 @@ class TestSMHoleMag(object):
         )
         assert self.widget.tab_hole.widget(0).c_hole_type.count() == 7
 
+        self.test_obj2 = MachineSyRM(type_machine=5)
+        self.test_obj2.stator = LamSlotWind()
+        self.test_obj2.stator.winding.p = 4
+        self.test_obj2.rotor = LamHole(Rint=0.1, Rext=0.2)
+        self.test_obj2.rotor.hole = list()
+        self.widget2 = SMHoleMag(
+            machine=self.test_obj2, matlib=self.matlib, is_stator=False
+        )
+
+        assert self.widget2.machine.rotor.hole[0].magnet_0 == None
+        assert self.widget2.machine.rotor.hole[0].magnet_1 == None
+
+        self.test_obj = MachineIPMSM(type_machine=8)
+        self.test_obj.stator = LamSlotWind()
+        self.test_obj.stator.winding.p = 4
+        self.test_obj.rotor = LamHole(Rint=0.1, Rext=0.2)
+        self.test_obj.rotor.hole = list()
+        self.test_obj.rotor.hole.append(HoleM50(Zh=0))
+        self.test_obj.rotor.hole[0].magnet_0.mat_type.name = "Magnet3"
+        self.widget = SMHoleMag(
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
+        )
+
+        assert self.widget.out_hole_pitch.text() == "Slot pitch = 360 / 2p = ?"
+
     def test_init_SyRM(self):
         """Check that the Widget initialize to the correct hole"""
 
@@ -360,3 +385,25 @@ class TestSMHoleMag(object):
         self.widget2.b_remove.clicked.emit()
         assert len(self.test_obj2.rotor.hole) == 1
         assert self.widget2.tab_hole.count() == 1
+
+    def test_s_plot(self):
+        self.test_obj = MachineIPMSM(type_machine=8)
+        self.test_obj.stator = LamSlotWind(slot=None)
+        self.test_obj.stator.winding.p = 4
+        self.test_obj.rotor = LamHole(Rint=0.1, Rext=0.2)
+        self.test_obj.rotor.hole = list()
+        self.test_obj.rotor.hole.append(
+            HoleM50(Zh=1, W1=0.055, W0=0.150, W3=0.0015, H2=0.005, H3=0.006)
+        )
+        self.test_obj.rotor.hole[0].magnet_0.mat_type.name = "Magnet3"
+        self.widget = SMHoleMag(
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
+        )
+        self.widget.s_plot()
+
+        assert self.widget.machine.rotor.hole[0].Zh == 8
+
+        self.widget.machine.rotor.hole[0].W1 = 0.300
+        self.widget.s_plot()
+
+        assert self.widget.out_hole_pitch.text() == "Slot pitch = 360 / 2p = 45 °"

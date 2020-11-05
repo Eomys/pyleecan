@@ -66,6 +66,43 @@ class TestSWindPat(object):
         assert self.widget.is_reverse.checkState() == Qt.Checked
         assert self.widget.out_shape.text() == "Winding Matrix shape: [2, 1, 36, 6]"
 
+        self.test_obj = MachineSCIM()
+        self.test_obj.stator = LamSlotWind()
+        self.test_obj.stator.slot = SlotW22(Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        self.test_obj.stator.winding = None
+        self.widget = SWindPat(machine=self.test_obj, matlib=[], is_stator=True)
+
+        assert self.widget.c_wind_type.currentIndex() == 0
+        assert type(self.test_obj.stator.winding) == WindingCW2LT
+
+        self.test_obj = MachineSCIM()
+        self.test_obj.stator = LamSlotWind()
+        self.test_obj.stator.slot = SlotW22(Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        self.test_obj.stator.winding = WindingDW2L()
+        self.test_obj.stator.winding.qs = None
+        self.test_obj.stator.winding.coil_pitch = None
+        self.test_obj.stator.winding.Nslot_shift_wind = None
+        self.test_obj.stator.winding.Ntcoil = None
+        self.test_obj.stator.winding.is_reverse_wind = None
+
+        self.widget = SWindPat(machine=self.test_obj, matlib=[], is_stator=True)
+
+        assert self.widget.si_qs.value() == 3
+        assert self.widget.si_coil_pitch.value() == 0
+        assert self.widget.si_Nslot.value() == 0
+        assert self.widget.machine.stator.winding.Ntcoil == 1
+        assert not self.widget.machine.stator.winding.is_reverse_wind
+
+        self.test_obj = MachineSCIM()
+        self.test_obj.stator = LamSlotWind()
+        self.test_obj.stator.slot = SlotW22(Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        self.test_obj.rotor.winding = Winding(p=8, qs=None)
+
+        self.widget = SWindPat(machine=self.test_obj, matlib=[], is_stator=True)
+
+        assert self.widget.c_wind_type.currentIndex() == 0
+        assert type(self.test_obj.stator.winding) == WindingCW2LT
+
     def test_init_WRSM(self):
         """Check that the GUI is correctly initialize with a WRSM machine"""
         self.test_obj = MachineWRSM(type_machine=9)
@@ -167,3 +204,21 @@ class TestSWindPat(object):
         self.widget.si_Nslot.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.stator.winding.Nslot_shift_wind == value
+
+    def test_set_output(self):
+        """Check that the set_output works correctly"""
+        self.test_obj.rotor = LamSlotWind()
+        self.test_obj.rotor.slot = SlotW22(Zs=None, H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        self.test_obj.rotor.winding = Winding(p=8, qs=None)
+        self.widget = SWindPat(machine=self.test_obj, matlib=[], is_stator=False)
+
+        assert self.widget.out_shape.text() == "Winding Matrix shape: [1, 2, ?, 3]"
+        assert self.widget.out_ms.text() == "ms = Zs / (2*p*qs) = ?"
+
+    def test_check(self):
+        """Check that the check works correctly"""
+        rotor = LamSlotWind()
+        rotor.slot = SlotW22(Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2)
+        rotor.winding = Winding(p=8, qs=None)
+
+        assert self.widget.check(rotor) == "You must set qs !"
