@@ -1,10 +1,13 @@
 # Load the machine
 import sys
 from os.path import dirname, abspath, normpath, join
-import matplotlib.pyplot as plt
 
 sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", "..", ".."))))
 sys.path.insert(0, normpath(abspath(dirname(__file__))))
+
+import pytest
+
+from numpy import ones, zeros, linspace, pi, array, sqrt, arange, exp
 
 from pyleecan.Functions.Plot.plot_2D import plot_2D
 from pyleecan.definitions import config_dict
@@ -15,10 +18,8 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
-from numpy import ones, zeros, linspace, pi, array, sqrt, arange, exp
+from pyleecan.Classes.DataKeeper import DataKeeper
 from Tests import save_validation_path as save_path
-import pytest
-
 
 @pytest.mark.FEMM
 @pytest.mark.long
@@ -85,6 +86,31 @@ def test_EM_FEMM_IPMSM_varload():
     print(OP_matrix)
 
     simu.var_simu = varload
+    
+    # Datakeepers
+    # Airgap flux density Datakeeper
+    B_dk = DataKeeper(
+        name="Airgap Flux Density", symbol="B", unit="T", keeper="lambda out: out.mag.B"
+    )
+
+    # Stator Winding Flux Datakeeper
+    Phi_wind_stator_dk = DataKeeper(
+        name="Stator Winding Flux",
+        symbol="Phi_{wind}",
+        unit="Wb",
+        keeper="lambda out: out.mag.Phi_wind_stator",
+    )
+
+    # Instanteneous torque Datakeeper
+    Tem_dk = DataKeeper(
+        name="Electromagnetic torque",
+        symbol="T_{em}",
+        unit="N.m",
+        keeper="lambda out: out.mag.Tem",
+    )
+    # Store Datakeepers
+    simu.var_simu.datakeeper_list = [B_dk, Phi_wind_stator_dk, Tem_dk]
+    
     Xout = simu.run()
 
     print("Values available in XOutput:")
