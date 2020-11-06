@@ -237,7 +237,9 @@ class PWSlot13(Gen_PWSlot13, QWidget):
         elif lam.slot.H2 is None:
             return translate("You must set H2 !", "PWSlot13 check")
         elif lam.slot.H1 >= pi / 2:
-            return translate("With H1 in degree, you must have H1 < 90°", "PWSlot13 check")
+            return translate(
+                "With H1 in degree, you must have H1 < 90°", "PWSlot13 check"
+            )
 
         # Check that everything is set right
         # Constraints

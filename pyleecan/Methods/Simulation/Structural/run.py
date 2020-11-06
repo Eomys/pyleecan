@@ -16,7 +16,7 @@ def run(self):
 
     output = self.parent.parent
 
-    self.comp_time_angle(output)
+    self.comp_axes(output)
 
     group = self.force.group  # Magnetic force target
 

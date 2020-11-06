@@ -47,7 +47,6 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     elif self.type_magnetization == 2:
         t_p = "Hallbach"
 
-
     [Z1, Z2, Z3, Zs3, Zs4, Z4, Zref] = self._comp_point_coordinate()
     # Creation of curve
     curve_list = list()

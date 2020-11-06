@@ -35,7 +35,8 @@ from pyleecan.Functions.Save.save_json import save_json
 from Tests import TEST_DATA_DIR
 from Tests import save_load_path as save_path
 from Tests import x as logger
-from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
+
+from pyleecan.definitions import DATA_DIR
 
 load_file_1 = join(TEST_DATA_DIR, "test_wrong_slot_load_1.json")
 load_file_2 = join(TEST_DATA_DIR, "test_wrong_slot_load_2.json")
@@ -100,9 +101,10 @@ def test_save_load_machine():
     assert result.frame == None
 
 
-def test_save_load_folder_path(CEFC_Lam):
+def test_save_load_folder_path():
     """Save with a folder path"""
-    simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
+    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    simu = Simu1(name="SM_CEFC_001", machine=IPMSM_A, struct=None)
 
     # Definition of the enforced output of the electrical module
     N0 = 3000
@@ -121,7 +123,9 @@ def test_save_load_folder_path(CEFC_Lam):
     )
 
     # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=0, is_sliding_band=False)
+    simu.mag = MagFEMM(
+        type_BH_stator=2, type_BH_rotor=0, is_periodicity_a=True, is_sliding_band=False
+    )
     simu.force = None
     simu.struct = None
 
@@ -145,7 +149,7 @@ def test_save_load_folder_path(CEFC_Lam):
     assert isfile(file_path)
     assert isfile(join(loc_save_path, "Material.json"))
     assert isfile(join(loc_save_path, "M400-50A.json"))
-    assert isfile(join(loc_save_path, "CEFC_Lam.json"))
+    assert isfile(join(loc_save_path, "IPMSM_A.json"))
     assert isfile(join(loc_save_path, "SM_CEFC_001.json"))
     test_obj2 = load(loc_save_path)
     assert test_obj == test_obj2
@@ -284,9 +288,10 @@ def test_save_load_dict():
 @pytest.mark.long
 @pytest.mark.FEMM
 @pytest.mark.parametrize("type_file", ["json", "h5", "pkl"])
-def test_save_load_simu(type_file, CEFC_Lam):
+def test_save_load_simu(type_file):
     """Save in hdf5 file"""
-    simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
+    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    simu = Simu1(name="SM_CEFC_001", machine=IPMSM_A, struct=None)
 
     # Definition of the enforced output of the electrical module
     N0 = 3000
@@ -305,7 +310,9 @@ def test_save_load_simu(type_file, CEFC_Lam):
     )
 
     # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=0, is_sliding_band=False)
+    simu.mag = MagFEMM(
+        type_BH_stator=2, type_BH_rotor=0, is_periodicity_a=True, is_sliding_band=False
+    )
     simu.force = None
     simu.struct = None
 

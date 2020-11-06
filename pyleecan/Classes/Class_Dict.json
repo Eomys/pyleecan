@@ -1229,8 +1229,8 @@
         "desc": "Forces module abstract object",
         "is_internal": false,
         "methods": [
-            "comp_time_angle",
-            "run"
+            "run",
+            "comp_axes"
         ],
         "mother": "",
         "name": "Force",
@@ -4254,7 +4254,8 @@
             "get_meshsolution",
             "get_path_save_fea",
             "get_path_save",
-            "comp_time_angle"
+            "comp_axes",
+            "store_output"
         ],
         "mother": "Magnetics",
         "name": "MagElmer",
@@ -4296,15 +4297,6 @@
                 "type": "dict",
                 "unit": "",
                 "value": ""
-            },
-            {
-                "desc": "Angular position shift of the stator",
-                "max": "",
-                "min": "",
-                "name": "angle_stator",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             },
             {
                 "desc": "To save FEA mesh for latter post-procesing ",
@@ -4389,8 +4381,8 @@
             "get_path_save_fem",
             "build_meshsolution",
             "solve_FEMM_parallel",
-            "get_meshsolution_parallel",
-            "comp_time_angle"
+            "comp_axes",
+            "store_output"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",
@@ -4441,15 +4433,6 @@
                 "type": "dict",
                 "unit": "",
                 "value": ""
-            },
-            {
-                "desc": "Angular position shift of the stator",
-                "max": "",
-                "min": "",
-                "name": "angle_stator",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             },
             {
                 "desc": "To save FEA mesh for latter post-procesing ",
@@ -4512,7 +4495,7 @@
                 "name": "import_file",
                 "type": "str",
                 "unit": "",
-                "value": ""
+                "value": "None"
             },
             {
                 "desc": "To close femm automatically after the simulation",
@@ -4910,8 +4893,8 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_time_angle",
-            "comp_emf"
+            "comp_axes",
+            "store_output"
         ],
         "mother": "",
         "name": "Magnetics",
@@ -4997,6 +4980,24 @@
                 "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Shift angle to appy to the stator in magnetic model",
+                "max": "",
+                "min": "",
+                "name": "angle_stator_shift",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            },
+            {
+                "desc": "Shift angle to appy to the rotor in magnetic model",
+                "max": "",
+                "min": "",
+                "name": "angle_rotor_shift",
+                "type": "float",
+                "unit": "rad",
                 "value": 0
             }
         ]
@@ -6182,7 +6183,8 @@
         "methods": [
             "get_Nr",
             "get_Is",
-            "get_Us"
+            "get_Us",
+            "comp_I_mag"
         ],
         "mother": "",
         "name": "OutElec",
@@ -6208,7 +6210,7 @@
                 "value": "None"
             },
             {
-                "desc": "Stator currents as a function of time (each column correspond to one phase)",
+                "desc": "Stator currents DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Is",
@@ -6651,7 +6653,9 @@
         "daughters": [],
         "desc": "Gather the magnetic module outputs",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "comp_emf"
+        ],
         "mother": "",
         "name": "OutMag",
         "package": "Output",
@@ -6676,7 +6680,7 @@
                 "value": "None"
             },
             {
-                "desc": "Airgap flux density components",
+                "desc": "Airgap flux density VectorField object",
                 "max": "",
                 "min": "",
                 "name": "B",
@@ -6685,7 +6689,7 @@
                 "value": "None"
             },
             {
-                "desc": "Electromagnetic torque",
+                "desc": "Electromagnetic torque DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Tem",
@@ -6721,7 +6725,7 @@
                 "value": null
             },
             {
-                "desc": "Stator winding flux",
+                "desc": "Stator winding flux DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Phi_wind_stator",
@@ -6730,13 +6734,13 @@
                 "value": "None"
             },
             {
-                "desc": "Electromotive force",
+                "desc": "Electromotive force DataTime object",
                 "max": "",
                 "min": "",
                 "name": "emf",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataTime.DataTime",
                 "unit": "V",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "FEA software mesh and solution",
@@ -10103,7 +10107,7 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_time_angle"
+            "comp_axes"
         ],
         "mother": "",
         "name": "Structural",
@@ -10111,13 +10115,13 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Structural.csv",
         "properties": [
             {
-                "desc": "Force module",
+                "desc": "Structural module",
                 "max": "",
                 "min": "",
-                "name": "force",
-                "type": "Force",
+                "name": "structural",
+                "type": "int",
                 "unit": "-",
-                "value": ""
+                "value": 0
             }
         ]
     },

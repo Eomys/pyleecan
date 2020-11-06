@@ -22,13 +22,12 @@ except ImportError as error:
     run = error
 
 try:
-    from ..Methods.Simulation.Structural.comp_time_angle import comp_time_angle
+    from ..Methods.Simulation.Structural.comp_axes import comp_axes
 except ImportError as error:
-    comp_time_angle = error
+    comp_axes = error
 
 
 from ._check import InitUnKnowClassError
-from .Force import Force
 
 
 class Structural(FrozenClass):
@@ -46,25 +45,22 @@ class Structural(FrozenClass):
         )
     else:
         run = run
-    # cf Methods.Simulation.Structural.comp_time_angle
-    if isinstance(comp_time_angle, ImportError):
-        comp_time_angle = property(
+    # cf Methods.Simulation.Structural.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Structural method comp_time_angle: "
-                    + str(comp_time_angle)
-                )
+                ImportError("Can't use Structural method comp_axes: " + str(comp_axes))
             )
         )
     else:
-        comp_time_angle = comp_time_angle
+        comp_axes = comp_axes
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, force=-1, init_dict=None, init_str=None):
+    def __init__(self, structural=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -80,11 +76,11 @@ class Structural(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "force" in list(init_dict.keys()):
-                force = init_dict["force"]
+            if "structural" in list(init_dict.keys()):
+                structural = init_dict["structural"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.force = force
+        self.structural = structural
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -97,11 +93,7 @@ class Structural(FrozenClass):
             Structural_str += "parent = None " + linesep
         else:
             Structural_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        if self.force is not None:
-            tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Structural_str += "force = " + tmp
-        else:
-            Structural_str += "force = None" + linesep + linesep
+        Structural_str += "structural = " + str(self.structural) + linesep
         return Structural_str
 
     def __eq__(self, other):
@@ -109,7 +101,7 @@ class Structural(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.force != self.force:
+        if other.structural != self.structural:
             return False
         return True
 
@@ -117,10 +109,7 @@ class Structural(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Structural_dict = dict()
-        if self.force is None:
-            Structural_dict["force"] = None
-        else:
-            Structural_dict["force"] = self.force.as_dict()
+        Structural_dict["structural"] = self.structural
         # The class name is added to the dict for deserialisation purpose
         Structural_dict["__class__"] = "Structural"
         return Structural_dict
@@ -128,35 +117,22 @@ class Structural(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.force is not None:
-            self.force._set_None()
+        self.structural = None
 
-    def _get_force(self):
-        """getter of force"""
-        return self._force
+    def _get_structural(self):
+        """getter of structural"""
+        return self._structural
 
-    def _set_force(self, value):
-        """setter of force"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "force"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Force()
-        check_var("force", value, "Force")
-        self._force = value
+    def _set_structural(self, value):
+        """setter of structural"""
+        check_var("structural", value, "int")
+        self._structural = value
 
-        if self._force is not None:
-            self._force.parent = self
+    structural = property(
+        fget=_get_structural,
+        fset=_set_structural,
+        doc=u"""Structural module
 
-    force = property(
-        fget=_get_force,
-        fset=_set_force,
-        doc=u"""Force module
-
-        :Type: Force
+        :Type: int
         """,
     )
