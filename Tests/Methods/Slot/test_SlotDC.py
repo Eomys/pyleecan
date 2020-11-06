@@ -68,7 +68,7 @@ class Test_SlotDC_meth(object):
 
     @pytest.mark.parametrize("test_dict", SlotDC_test)
     def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct"""
+        """Check that the computation of the surface of the slotDC is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface()
 

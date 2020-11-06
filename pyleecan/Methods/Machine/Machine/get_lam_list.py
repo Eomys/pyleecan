@@ -39,7 +39,9 @@ def get_lam_list(self, is_int_to_ext=True, key=None):
         elif key == "Rotor":
             is_stator = False
         else:
-            raise KeyInputError(f"'{key}' is not a valid input argument for key (only 'Stator' or 'Rotor' accepted for now)")
+            raise KeyInputError(
+                f"'{key}' is not a valid input argument for key (only 'Stator' or 'Rotor' accepted for now)"
+            )
 
         lam_list = [lam for lam in lam_list if lam.is_stator is is_stator]
 
