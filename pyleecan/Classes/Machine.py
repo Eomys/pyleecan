@@ -101,6 +101,16 @@ except ImportError as error:
     get_lam_list = error
 
 try:
+    from ..Methods.Machine.Machine.get_lam_list_label import get_lam_list_label
+except ImportError as error:
+    get_lam_list_label = error
+
+try:
+    from ..Methods.Machine.Machine.get_lam_by_label import get_lam_by_label
+except ImportError as error:
+    get_lam_by_label = error
+
+try:
     from ..Methods.Machine.Machine.get_pole_pair_number import get_pole_pair_number
 except ImportError as error:
     get_pole_pair_number = error
@@ -293,6 +303,30 @@ class Machine(FrozenClass):
         )
     else:
         get_lam_list = get_lam_list
+    # cf Methods.Machine.Machine.get_lam_list_label
+    if isinstance(get_lam_list_label, ImportError):
+        get_lam_list_label = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_list_label: "
+                    + str(get_lam_list_label)
+                )
+            )
+        )
+    else:
+        get_lam_list_label = get_lam_list_label
+    # cf Methods.Machine.Machine.get_lam_by_label
+    if isinstance(get_lam_by_label, ImportError):
+        get_lam_by_label = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_by_label: "
+                    + str(get_lam_by_label)
+                )
+            )
+        )
+    else:
+        get_lam_by_label = get_lam_by_label
     # cf Methods.Machine.Machine.get_pole_pair_number
     if isinstance(get_pole_pair_number, ImportError):
         get_pole_pair_number = property(
