@@ -104,7 +104,9 @@ def run_single_simu(
                 msg += (
                     datakeeper.symbol
                     + "="
-                    + type(xoutput.xoutput_dict[datakeeper.symbol].result[index]).__name__
+                    + type(
+                        xoutput.xoutput_dict[datakeeper.symbol].result[index]
+                    ).__name__
                 )
             else:
                 msg += (
