@@ -27,9 +27,9 @@ except ImportError as error:
     set_from_point_list = error
 
 try:
-    from ..Methods.Slot.SlotUD.get_surface_wind import get_surface_wind
+    from ..Methods.Slot.SlotUD.get_surface_active import get_surface_active
 except ImportError as error:
-    get_surface_wind = error
+    get_surface_active = error
 
 try:
     from ..Methods.Slot.SlotUD.check import check
@@ -70,17 +70,18 @@ class SlotUD(SlotWind):
         )
     else:
         set_from_point_list = set_from_point_list
-    # cf Methods.Slot.SlotUD.get_surface_wind
-    if isinstance(get_surface_wind, ImportError):
-        get_surface_wind = property(
+    # cf Methods.Slot.SlotUD.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotUD method get_surface_wind: " + str(get_surface_wind)
+                    "Can't use SlotUD method get_surface_active: "
+                    + str(get_surface_active)
                 )
             )
         )
     else:
-        get_surface_wind = get_surface_wind
+        get_surface_active = get_surface_active
     # cf Methods.Slot.SlotUD.check
     if isinstance(check, ImportError):
         check = property(

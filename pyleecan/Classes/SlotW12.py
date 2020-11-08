@@ -22,9 +22,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotW12.get_surface_wind import get_surface_wind
+    from ..Methods.Slot.SlotW12.get_surface_active import get_surface_active
 except ImportError as error:
-    get_surface_wind = error
+    get_surface_active = error
 
 try:
     from ..Methods.Slot.SlotW12.check import check
@@ -42,9 +42,9 @@ except ImportError as error:
     comp_height = error
 
 try:
-    from ..Methods.Slot.SlotW12.comp_height_wind import comp_height_wind
+    from ..Methods.Slot.SlotW12.comp_height_active import comp_height_active
 except ImportError as error:
-    comp_height_wind = error
+    comp_height_active = error
 
 try:
     from ..Methods.Slot.SlotW12.comp_surface import comp_surface
@@ -52,9 +52,9 @@ except ImportError as error:
     comp_surface = error
 
 try:
-    from ..Methods.Slot.SlotW12.comp_surface_wind import comp_surface_wind
+    from ..Methods.Slot.SlotW12.comp_surface_active import comp_surface_active
 except ImportError as error:
-    comp_surface_wind = error
+    comp_surface_active = error
 
 
 from ._check import InitUnKnowClassError
@@ -77,18 +77,18 @@ class SlotW12(SlotWind):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW12.get_surface_wind
-    if isinstance(get_surface_wind, ImportError):
-        get_surface_wind = property(
+    # cf Methods.Slot.SlotW12.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW12 method get_surface_wind: "
-                    + str(get_surface_wind)
+                    "Can't use SlotW12 method get_surface_active: "
+                    + str(get_surface_active)
                 )
             )
         )
     else:
-        get_surface_wind = get_surface_wind
+        get_surface_active = get_surface_active
     # cf Methods.Slot.SlotW12.check
     if isinstance(check, ImportError):
         check = property(
@@ -119,18 +119,18 @@ class SlotW12(SlotWind):
         )
     else:
         comp_height = comp_height
-    # cf Methods.Slot.SlotW12.comp_height_wind
-    if isinstance(comp_height_wind, ImportError):
-        comp_height_wind = property(
+    # cf Methods.Slot.SlotW12.comp_height_active
+    if isinstance(comp_height_active, ImportError):
+        comp_height_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW12 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW12 method comp_height_active: "
+                    + str(comp_height_active)
                 )
             )
         )
     else:
-        comp_height_wind = comp_height_wind
+        comp_height_active = comp_height_active
     # cf Methods.Slot.SlotW12.comp_surface
     if isinstance(comp_surface, ImportError):
         comp_surface = property(
@@ -142,18 +142,18 @@ class SlotW12(SlotWind):
         )
     else:
         comp_surface = comp_surface
-    # cf Methods.Slot.SlotW12.comp_surface_wind
-    if isinstance(comp_surface_wind, ImportError):
-        comp_surface_wind = property(
+    # cf Methods.Slot.SlotW12.comp_surface_active
+    if isinstance(comp_surface_active, ImportError):
+        comp_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW12 method comp_surface_wind: "
-                    + str(comp_surface_wind)
+                    "Can't use SlotW12 method comp_surface_active: "
+                    + str(comp_surface_active)
                 )
             )
         )
     else:
-        comp_surface_wind = comp_surface_wind
+        comp_surface_active = comp_surface_active
     # save and copy methods are available in all object
     save = save
     copy = copy

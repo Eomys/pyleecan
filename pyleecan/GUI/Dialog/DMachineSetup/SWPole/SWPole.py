@@ -189,7 +189,7 @@ class SWPole(Ui_SWPole, QWidget):
         if error:  # Error => Display it
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Plot the slot (No winding for LamSquirrelCage)
-            self.obj.plot(plot_winding=(type(self.obj) is LamSlotWind))
+            self.obj.plot(plot_activeing=(type(self.obj) is LamSlotWind))
 
     @staticmethod
     def check(lam):

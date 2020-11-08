@@ -66,7 +66,9 @@ class WWSlotOut(QGroupBox):
         )
         if self.parent().check(lam) is None:
             # Compute all the needed output as string
-            w_surf = format(gui_option.unit.get_m2(lam.slot.comp_surface_wind()), ".4g")
+            w_surf = format(
+                gui_option.unit.get_m2(lam.slot.comp_surface_active()), ".4g"
+            )
             tot_surf = format(gui_option.unit.get_m2(lam.slot.comp_surface()), ".4g")
             op_angle = "%.4g" % lam.slot.comp_angle_opening()
             slot_height = format(gui_option.unit.get_m(lam.slot.comp_height()), ".4g")

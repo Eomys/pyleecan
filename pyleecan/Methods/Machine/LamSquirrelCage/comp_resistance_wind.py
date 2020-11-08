@@ -29,7 +29,7 @@ def comp_resistance_wind(self, qs=3):
     Rring = rho * lring / Sring
 
     # calculate resistance rod
-    Srod = self.slot.comp_surface_wind()
+    Srod = self.slot.comp_surface_active()
     lrod = self.comp_length() + 2 * self.winding.Lewout
     Rrod = rho * lrod / Srod
 

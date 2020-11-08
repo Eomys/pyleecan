@@ -17,34 +17,34 @@ from .Slot import Slot
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Slot.SlotWind.comp_angle_wind_eq import comp_angle_wind_eq
+    from ..Methods.Slot.SlotWind.comp_angle_active_eq import comp_angle_active_eq
 except ImportError as error:
-    comp_angle_wind_eq = error
+    comp_angle_active_eq = error
 
 try:
-    from ..Methods.Slot.SlotWind.comp_height_wind import comp_height_wind
+    from ..Methods.Slot.SlotWind.comp_height_active import comp_height_active
 except ImportError as error:
-    comp_height_wind = error
+    comp_height_active = error
 
 try:
-    from ..Methods.Slot.SlotWind.comp_radius_mid_wind import comp_radius_mid_wind
+    from ..Methods.Slot.SlotWind.comp_radius_mid_active import comp_radius_mid_active
 except ImportError as error:
-    comp_radius_mid_wind = error
+    comp_radius_mid_active = error
 
 try:
-    from ..Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+    from ..Methods.Slot.SlotWind.comp_surface_active import comp_surface_active
 except ImportError as error:
-    comp_surface_wind = error
+    comp_surface_active = error
 
 try:
-    from ..Methods.Slot.SlotWind.plot_wind import plot_wind
+    from ..Methods.Slot.SlotWind.plot_active import plot_active
 except ImportError as error:
-    plot_wind = error
+    plot_active = error
 
 try:
-    from ..Methods.Slot.SlotWind.build_geometry_wind import build_geometry_wind
+    from ..Methods.Slot.SlotWind.build_geometry_active import build_geometry_active
 except ImportError as error:
-    build_geometry_wind = error
+    build_geometry_active = error
 
 
 from ._check import InitUnKnowClassError
@@ -56,75 +56,77 @@ class SlotWind(Slot):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Slot.SlotWind.comp_angle_wind_eq
-    if isinstance(comp_angle_wind_eq, ImportError):
-        comp_angle_wind_eq = property(
+    # cf Methods.Slot.SlotWind.comp_angle_active_eq
+    if isinstance(comp_angle_active_eq, ImportError):
+        comp_angle_active_eq = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotWind method comp_angle_wind_eq: "
-                    + str(comp_angle_wind_eq)
+                    "Can't use SlotWind method comp_angle_active_eq: "
+                    + str(comp_angle_active_eq)
                 )
             )
         )
     else:
-        comp_angle_wind_eq = comp_angle_wind_eq
-    # cf Methods.Slot.SlotWind.comp_height_wind
-    if isinstance(comp_height_wind, ImportError):
-        comp_height_wind = property(
+        comp_angle_active_eq = comp_angle_active_eq
+    # cf Methods.Slot.SlotWind.comp_height_active
+    if isinstance(comp_height_active, ImportError):
+        comp_height_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotWind method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotWind method comp_height_active: "
+                    + str(comp_height_active)
                 )
             )
         )
     else:
-        comp_height_wind = comp_height_wind
-    # cf Methods.Slot.SlotWind.comp_radius_mid_wind
-    if isinstance(comp_radius_mid_wind, ImportError):
-        comp_radius_mid_wind = property(
+        comp_height_active = comp_height_active
+    # cf Methods.Slot.SlotWind.comp_radius_mid_active
+    if isinstance(comp_radius_mid_active, ImportError):
+        comp_radius_mid_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotWind method comp_radius_mid_wind: "
-                    + str(comp_radius_mid_wind)
+                    "Can't use SlotWind method comp_radius_mid_active: "
+                    + str(comp_radius_mid_active)
                 )
             )
         )
     else:
-        comp_radius_mid_wind = comp_radius_mid_wind
-    # cf Methods.Slot.SlotWind.comp_surface_wind
-    if isinstance(comp_surface_wind, ImportError):
-        comp_surface_wind = property(
+        comp_radius_mid_active = comp_radius_mid_active
+    # cf Methods.Slot.SlotWind.comp_surface_active
+    if isinstance(comp_surface_active, ImportError):
+        comp_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotWind method comp_surface_wind: "
-                    + str(comp_surface_wind)
+                    "Can't use SlotWind method comp_surface_active: "
+                    + str(comp_surface_active)
                 )
             )
         )
     else:
-        comp_surface_wind = comp_surface_wind
-    # cf Methods.Slot.SlotWind.plot_wind
-    if isinstance(plot_wind, ImportError):
-        plot_wind = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SlotWind method plot_wind: " + str(plot_wind))
-            )
-        )
-    else:
-        plot_wind = plot_wind
-    # cf Methods.Slot.SlotWind.build_geometry_wind
-    if isinstance(build_geometry_wind, ImportError):
-        build_geometry_wind = property(
+        comp_surface_active = comp_surface_active
+    # cf Methods.Slot.SlotWind.plot_active
+    if isinstance(plot_active, ImportError):
+        plot_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotWind method build_geometry_wind: "
-                    + str(build_geometry_wind)
+                    "Can't use SlotWind method plot_active: " + str(plot_active)
                 )
             )
         )
     else:
-        build_geometry_wind = build_geometry_wind
+        plot_active = plot_active
+    # cf Methods.Slot.SlotWind.build_geometry_active
+    if isinstance(build_geometry_active, ImportError):
+        build_geometry_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWind method build_geometry_active: "
+                    + str(build_geometry_active)
+                )
+            )
+        )
+    else:
+        build_geometry_active = build_geometry_active
     # save and copy methods are available in all object
     save = save
     copy = copy

@@ -20,9 +20,9 @@ def get_polar_eq(self):
     polar_eq = type(self)(init_dict=self.as_dict())
 
     # Compute the polar dimension of the slot
-    Hwind = self.slot.comp_height_wind()
+    Hwind = self.slot.comp_height_active()
     Histhmus = self.slot.comp_height() - Hwind
-    Wwind = self.slot.comp_angle_wind_eq()
+    Wwind = self.slot.comp_angle_active_eq()
     Wisthmus = self.slot.comp_angle_opening()
 
     polar_eq.slot = SlotW22(

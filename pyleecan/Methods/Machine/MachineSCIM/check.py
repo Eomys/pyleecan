@@ -40,7 +40,7 @@ def check(self):
             "The stator and the rotor winding must " "have the same value for p"
         )
     if self.rotor.is_internal and (
-        self.rotor.slot.comp_radius_mid_wind() + self.rotor.Hscr / 2.0
+        self.rotor.slot.comp_radius_mid_active() + self.rotor.Hscr / 2.0
         > self.stator.Rint
     ):
         raise M1C_RingTooLarge("The Ring is larger than the stator internal " "radius")

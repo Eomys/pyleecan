@@ -230,7 +230,7 @@ class PWSlot61(Gen_PWSlot61, QWidget):
 
             # Compute all the needed output as string
             w_surf = format(
-                gui_option.unit.get_m2(self.slot.comp_surface_wind()), ".4g"
+                gui_option.unit.get_m2(self.slot.comp_surface_active()), ".4g"
             )
             tot_surf = format(gui_option.unit.get_m2(self.slot.comp_surface()), ".4g")
             op_angle = "%.4g" % self.slot.comp_angle_opening()

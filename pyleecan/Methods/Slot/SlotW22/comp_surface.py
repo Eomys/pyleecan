@@ -20,7 +20,7 @@ def comp_surface(self):
     """
     Rbo = self.get_Rbo()
 
-    Swind = self.comp_surface_wind()
+    Swind = self.comp_surface_active()
 
     # Computation of isthmus surface
     if self.is_outwards():

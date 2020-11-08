@@ -26,6 +26,6 @@ def get_boundary_condition(line, machine):
     """
 
     slot_height = machine.stator.slot.comp_height()
-    winding_slot_height = machine.stator.slot.comp_height_wind()
+    winding_slot_height = machine.stator.slot.comp_height_active()
 
     return None

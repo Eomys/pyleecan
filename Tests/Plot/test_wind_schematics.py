@@ -68,7 +68,7 @@ def test_rad_tan(test_obj):
 
     # # Add Label
     fig = plt.gcf()
-    surf_list = test_obj.slot.build_geometry_wind(3, 2)
+    surf_list = test_obj.slot.build_geometry_active(3, 2)
     for surf in surf_list:
         txt = surf.label[6:-3]
         fig.axes[0].text(surf.point_ref.real, surf.point_ref.imag, txt)

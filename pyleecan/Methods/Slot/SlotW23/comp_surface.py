@@ -37,6 +37,6 @@ def comp_surface(self):
         S1 = (pi * (Rbo ** 2) - pi * ((Rbo - self.H0) ** 2)) * alpha / (2 * pi) + Sarc
 
     S2 = 0.5 * (Wint + self.W1) * self.H1
-    Swind = self.comp_surface_wind()
+    Swind = self.comp_surface_active()
 
     return S1 + S2 + Swind
