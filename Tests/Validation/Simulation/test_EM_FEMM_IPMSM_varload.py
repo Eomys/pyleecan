@@ -21,6 +21,7 @@ from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.DataKeeper import DataKeeper
 from Tests import save_validation_path as save_path
 
+
 @pytest.mark.FEMM
 @pytest.mark.long
 def test_EM_FEMM_IPMSM_varload():
@@ -86,7 +87,7 @@ def test_EM_FEMM_IPMSM_varload():
     print(OP_matrix)
 
     simu.var_simu = varload
-    
+
     # Datakeepers
     # Airgap flux density Datakeeper
     B_dk = DataKeeper(
@@ -110,7 +111,7 @@ def test_EM_FEMM_IPMSM_varload():
     )
     # Store Datakeepers
     simu.var_simu.datakeeper_list = [B_dk, Phi_wind_stator_dk, Tem_dk]
-    
+
     Xout = simu.run()
 
     print("Values available in XOutput:")
