@@ -479,69 +479,36 @@ def draw_GMSH(
             if sym == 1 and line.label == "Lamination_Rotor_Yoke_Radius_Int":
                 continue
             n_elem = mesh_dict.get(line.label)
+            n_elem = n_elem if n_elem is not None else 0
             bc_name = get_boundary_condition(line, machine)
+
+            # Gmsh built-in engine does not allow arcs larger than 180deg
+            # so arcs are split into two
             if (
                 isinstance(line, Arc)
                 and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
             ):
-                if line.is_trigo_direction == True:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                else:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                if n_elem is not None:
+                rot_dir = 1 if line.is_trigo_direction == True else -1
+                arc1 = Arc2(
+                    begin=line.get_begin(),
+                    center=line.get_center(),
+                    angle=rot_dir * cmath.pi / 2.0,
+                    label=line.label,
+                )
+                arc2 = Arc2(
+                    begin=arc1.get_end(),
+                    center=line.get_center(),
+                    angle=rot_dir * cmath.pi / 2.0,
+                    label=line.label,
+                )
+                for arc in [arc1, arc2]:
                     _add_line_to_dict(
                         geo=factory,
-                        line=arc1,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
-                    )
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
-                    )
-                else:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc1,
+                        line=arc,
                         d=gmsh_dict,
                         idx=nsurf,
                         mesh_size=mesh_size,
-                        bc=bc_name,
-                    )
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
+                        n_elements=n_elem,
                         bc=bc_name,
                     )
             elif isinstance(line, Arc) and (
@@ -550,24 +517,15 @@ def draw_GMSH(
                 # Don't draw anything, this is a circle and usually is repeated ?
                 pass
             else:
-                if n_elem is not None:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=line,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
-                    )
-                else:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=line,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
-                        bc=bc_name,
-                    )
+                _add_line_to_dict(
+                    geo=factory,
+                    line=line,
+                    d=gmsh_dict,
+                    idx=nsurf,
+                    mesh_size=mesh_size,
+                    n_elements=n_elem,
+                    bc=bc_name,
+                )
 
     lam_and_holes = list()
     ext_lam_loop = None
@@ -611,8 +569,10 @@ def draw_GMSH(
     model.setPhysicalName(2, pg, gmsh_dict[lam_rotor_surf_id]["label"])
     rotor_cloops = lam_and_holes
 
+    # store rotor dict
     rotor_dict = gmsh_dict.copy()
 
+    # init new dict for stator
     gmsh_dict = {
         0: {
             "tag": 0,
@@ -629,7 +589,7 @@ def draw_GMSH(
         }
     }
 
-    # Default rotor mesh element size
+    # Default stator mesh element size
     mesh_size = machine.stator.Rext / 100.0
     # nsurf = 0
     stator_cloops = []
@@ -645,91 +605,47 @@ def draw_GMSH(
             mesh_dict.update(user_mesh_dict)
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
+            n_elem = n_elem if n_elem is not None else 0
+
             # Gmsh built-in engine does not allow arcs larger than 180deg
             # so arcs are split into two
             if (
                 isinstance(line, Arc)
-                and abs(line.get_angle() * 180.0 / cmath.pi) == 180.0
+                and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
             ):
-                if line.is_trigo_direction == True:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                else:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                if n_elem is not None:
+                rot_dir = 1 if line.is_trigo_direction == True else -1
+                arc1 = Arc2(
+                    begin=line.get_begin(),
+                    center=line.get_center(),
+                    angle=rot_dir * cmath.pi / 2.0,
+                    label=line.label,
+                )
+                arc2 = Arc2(
+                    begin=arc1.get_end(),
+                    center=line.get_center(),
+                    angle=rot_dir * cmath.pi / 2.0,
+                    label=line.label,
+                )
+                for arc in [arc1, arc2]:
                     _add_line_to_dict(
                         geo=factory,
-                        line=arc1,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
-                    )
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
-                    )
-                else:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc1,
+                        line=arc,
                         d=gmsh_dict,
                         idx=nsurf,
                         mesh_size=mesh_size,
-                        bc=bc_name,
-                    )
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
+                        n_elements=n_elem,
                         bc=bc_name,
                     )
             else:
-                if n_elem is not None:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=line,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
-                    )
-                else:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=line,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
-                        bc=bc_name,
-                    )
+                _add_line_to_dict(
+                    geo=factory,
+                    line=line,
+                    d=gmsh_dict,
+                    idx=nsurf,
+                    mesh_size=mesh_size,
+                    n_elements=n_elem,
+                    bc=bc_name,
+                )
 
     for s_id, s_data in gmsh_dict.items():
         lloop = []
@@ -742,18 +658,12 @@ def draw_GMSH(
         cloop = factory.addCurveLoop(lloop)
         stator_cloops.append(cloop)
         # Winding surfaces are created
-        if s_data["label"].find("Lamination_Stator") != -1:
+        if (s_data["label"].find("Lamination_Stator") != -1) or (not is_lam_only_S):
             s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
             pg = model.addPhysicalGroup(2, [s_data["tag"]])
             model.setPhysicalName(2, pg, s_data["label"])
-        else:
-            # Stator lamination is built
-            if not is_lam_only_S:
-                s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
-                pg = model.addPhysicalGroup(2, [s_data["tag"]])
-                model.setPhysicalName(2, pg, s_data["label"])
 
-    stator_dict = gmsh_dict.copy()
+    # stator_dict = gmsh_dict.copy()
 
     gmsh_dict.update(rotor_dict)
 
@@ -770,91 +680,47 @@ def draw_GMSH(
         gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
+            n_elem = n_elem if n_elem is not None else 0
+
             # Gmsh built-in engine does not allow arcs larger than 180deg
             # so arcs are split into two
             if (
                 isinstance(line, Arc)
-                and abs(line.get_angle() * 180.0 / cmath.pi) == 180.0
+                and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
             ):
-                if line.is_trigo_direction == True:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                else:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                if n_elem is not None:
+                rot_dir = 1 if line.is_trigo_direction == True else -1
+                arc1 = Arc2(
+                    begin=line.get_begin(),
+                    center=line.get_center(),
+                    angle=rot_dir * cmath.pi / 2.0,
+                    label=line.label,
+                )
+                arc2 = Arc2(
+                    begin=arc1.get_end(),
+                    center=line.get_center(),
+                    angle=rot_dir * cmath.pi / 2.0,
+                    label=line.label,
+                )
+                for arc in [arc1, arc2]:
                     _add_agline_to_dict(
                         geo=factory,
-                        line=arc1,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=line.label,
-                    )
-                    _add_agline_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=line.label,
-                    )
-                else:
-                    _add_agline_to_dict(
-                        geo=factory,
-                        line=arc1,
+                        line=arc,
                         d=gmsh_dict,
                         idx=nsurf,
                         mesh_size=mesh_size,
-                        bc=line.label,
-                    )
-                    _add_agline_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
+                        n_elements=n_elem,
                         bc=line.label,
                     )
             else:
-                if n_elem is not None:
-                    _add_agline_to_dict(
-                        geo=factory,
-                        line=line,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=line.label,
-                    )
-                else:
-                    _add_agline_to_dict(
-                        geo=factory,
-                        line=line,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
-                        bc=line.label,
-                    )
+                _add_agline_to_dict(
+                    geo=factory,
+                    line=line,
+                    d=gmsh_dict,
+                    idx=nsurf,
+                    mesh_size=mesh_size,
+                    n_elements=n_elem,
+                    bc=line.label,
+                )
 
     for s_id, s_data in gmsh_dict.items():
         lloop = []
