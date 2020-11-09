@@ -81,7 +81,7 @@ def store(self, out_dict, axes_dict):
 
         # Calculate torque ripple in percentage
         if self.Tem_av != 0:
-           self.Tem_rip_norm = self.Tem_rip_pp / self.Tem_av  # []
+            self.Tem_rip_norm = self.Tem_rip_pp / self.Tem_av  # []
         else:
             self.Tem_rip_norm = None
 
@@ -108,15 +108,13 @@ def store(self, out_dict, axes_dict):
 
         # Electromotive force computation
         self.comp_emf()
-        
-    # Store MeshSolution object and save it as .h5 file if requested
-    if "meshsolution" in out_dict:
 
-        # Store meshsolution in OutMag
+    # Store FEA dict object
+    if "FEA_dict" in out_dict:
+        self.FEA_dict = out_dict.pop("FEA_dict")
+
+    # Store MeshSolution object
+    if "meshsolution" in out_dict:
         self.meshsolution = out_dict.pop("meshsolution")
 
-        # Save meshsolution as .h5 on disk if requested
-        if self.is_save_FEA:
-            save_path = self.get_path_save(output)
-            save_path_fea = join(save_path, "MeshSolutionFEMM.h5")
-            self.meshsolution.save(save_path_fea)
+        
