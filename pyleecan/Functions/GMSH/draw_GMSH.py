@@ -31,11 +31,11 @@ def _find_point_tag(d={}, p=complex(0.0, 0.0)):
         Imaginary coordinates of point
     """
     tol = 1e-6
-    for s_id, s_data in d.items():
-        for lid, lvalues in s_data.items():
+    for s_data in d.values():
+        for lvalues in s_data.values():
             if type(lvalues) is not dict:
                 continue
-            for pid, pvalues in lvalues.items():
+            for pvalues in lvalues.values():
                 if type(pvalues) is not dict:
                     continue
                 if pvalues["tag"] is not None:
@@ -63,8 +63,8 @@ def _find_points_from_line(d={}, ltag=-1):
     btag = None
     etag = None
     ctag = None
-    for s_id, s_data in d.items():
-        for lid, lvalues in s_data.items():
+    for s_data in d.values():
+        for lvalues in s_data.values():
             if type(lvalues) is not dict:
                 continue
             if lvalues["tag"] != ltag:
@@ -99,11 +99,11 @@ def _find_lines_from_point(d={}, ptag=-1):
         List of line tags
     """
     lines = list()
-    for s_id, s_data in d.items():
-        for lid, lvalues in s_data.items():
+    for s_data in d.values():
+        for lvalues in s_data.values():
             if type(lvalues) is not dict:
                 continue
-            for pid, pvalues in lvalues.items():
+            for pvalues in lvalues.values():
                 if type(pvalues) is not dict:
                     continue
                 if pvalues["tag"] == ptag:
@@ -174,7 +174,7 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
 
         # To avoid fill the dictionary with repeated lines
         repeated = False
-        for lid, lvalues in d[idx].items():
+        for lvalues in d[idx].values():
             if type(lvalues) is not dict:
                 continue
             else:
@@ -219,7 +219,7 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
 
         # To avoid fill the dictionary with repeated lines
         repeated = False
-        for lid, lvalues in d[idx].items():
+        for lvalues in d[idx].values():
             if type(lvalues) is not dict:
                 continue
             else:
@@ -306,7 +306,7 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
 
         # To avoid fill the dictionary with repeated lines
         repeated = False
-        for lid, lvalues in d[idx].items():
+        for lvalues in d[idx].values():
             if type(lvalues) is not dict:
                 continue
             else:
@@ -351,7 +351,7 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
 
         # To avoid fill the dictionary with repeated lines
         repeated = False
-        for lid, lvalues in d[idx].items():
+        for lvalues in d[idx].values():
             if type(lvalues) is not dict:
                 continue
             else:
@@ -470,7 +470,7 @@ def draw_GMSH(
 
     # Default rotor mesh element size
     mesh_size = machine.rotor.Rext / 25.0
-    nsurf = 0
+    nsurf = 0  # number of surfaces
     if not is_lam_only_S:
         for surf in rotor_list:
             nsurf += 1
@@ -489,7 +489,7 @@ def draw_GMSH(
                     continue
                 n_elem = mesh_dict.get(line.label)
                 n_elem = n_elem if n_elem is not None else 0
-                bc_name = get_boundary_condition(line, machine)
+                bc_name = None  # get_boundary_condition(line, machine)
 
                 # Gmsh built-in engine does not allow arcs larger than 180deg
                 # so arcs are split into two
@@ -542,7 +542,7 @@ def draw_GMSH(
             lloop = []
             if s_id == 0:
                 continue
-            for lid, lvalues in s_data.items():
+            for lvalues in s_data.values():
                 if type(lvalues) is not dict:
                     continue
                 lloop.extend([lvalues["tag"]])
@@ -578,7 +578,7 @@ def draw_GMSH(
         )
         pg = model.addPhysicalGroup(2, [gmsh_dict[lam_rotor_surf_id]["tag"]])
         model.setPhysicalName(2, pg, gmsh_dict[lam_rotor_surf_id]["label"])
-        rotor_cloops = lam_and_holes
+        # rotor_cloops = lam_and_holes
 
     # store rotor dict
     rotor_dict = gmsh_dict.copy()
@@ -618,7 +618,7 @@ def draw_GMSH(
             for line in surf.get_lines():
                 n_elem = mesh_dict.get(line.label)
                 n_elem = n_elem if n_elem is not None else 0
-                bc_name = get_boundary_condition(line, machine)
+                bc_name = None  # get_boundary_condition(line, machine)
 
                 # Gmsh built-in engine does not allow arcs larger than 180deg
                 # so arcs are split into two
@@ -664,7 +664,7 @@ def draw_GMSH(
             lloop = []
             if s_id == 0:
                 continue
-            for lid, lvalues in s_data.items():
+            for lvalues in s_data.values():
                 if type(lvalues) is not dict:
                     continue
                 lloop.extend([lvalues["tag"]])
@@ -739,7 +739,7 @@ def draw_GMSH(
         lloop = []
         if s_id == 0:
             continue
-        for lid, lvalues in s_data.items():
+        for lvalues in s_data.values():
             if (
                 s_data["label"].find("Airgap") != -1
                 or s_data["label"].find("SlidingBand") != -1
