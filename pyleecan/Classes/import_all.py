@@ -141,6 +141,7 @@ from ..Classes.Slot import Slot
 from ..Classes.Slot19 import Slot19
 from ..Classes.SlotCirc import SlotCirc
 from ..Classes.SlotDC import SlotDC
+from ..Classes.SlotM10 import SlotM10
 from ..Classes.SlotMFlat import SlotMFlat
 from ..Classes.SlotMFlat2 import SlotMFlat2
 from ..Classes.SlotMPolar import SlotMPolar
