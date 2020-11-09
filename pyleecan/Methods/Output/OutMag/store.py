@@ -116,5 +116,3 @@ def store(self, out_dict, axes_dict):
     # Store MeshSolution object
     if "meshsolution" in out_dict:
         self.meshsolution = out_dict.pop("meshsolution")
-
-        

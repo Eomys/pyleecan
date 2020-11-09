@@ -158,12 +158,12 @@ def comp_flux_airgap(self, output, axes_dict):
     if self.import_file is None:
         out_dict["FEA_dict"] = FEMM_dict
 
-    # Store FEMM mesh results in meshsolution 
+    # Store FEMM mesh results in meshsolution
     if self.is_get_mesh:
         # Build MeshSolution object and store it in out_dict
         out_dict["meshsolution"] = self.build_meshsolution(
             Nt, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
-        )        
+        )
         # Save meshsolution as .h5 on disk if requested
         if self.is_save_FEA:
             save_path = self.get_path_save(self.parent)

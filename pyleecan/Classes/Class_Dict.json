@@ -4379,8 +4379,7 @@
             "get_meshsolution",
             "get_path_save_fem",
             "build_meshsolution",
-            "solve_FEMM_parallel",
-            "comp_axes"
+            "solve_FEMM_parallel"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",

@@ -51,11 +51,6 @@ try:
 except ImportError as error:
     solve_FEMM_parallel = error
 
-try:
-    from ..Methods.Simulation.MagFEMM.comp_axes import comp_axes
-except ImportError as error:
-    comp_axes = error
-
 
 from ._check import InitUnKnowClassError
 from .DXFImport import DXFImport
@@ -147,15 +142,6 @@ class MagFEMM(Magnetics):
         )
     else:
         solve_FEMM_parallel = solve_FEMM_parallel
-    # cf Methods.Simulation.MagFEMM.comp_axes
-    if isinstance(comp_axes, ImportError):
-        comp_axes = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MagFEMM method comp_axes: " + str(comp_axes))
-            )
-        )
-    else:
-        comp_axes = comp_axes
     # save and copy methods are available in all object
     save = save
     copy = copy
