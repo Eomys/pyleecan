@@ -18,20 +18,10 @@ def comp_radius_mec(self):
 
     """
 
-    surf_list = list()
-    for magnet in self.slot.magnet:
-        surf_list.extend(magnet.build_geometry())
-
-    # Numerical computation
-    point_list = list()
-    for surf in surf_list:
-        point_list.extend(surf.discretize(50))
-    magnet_points = array(point_list)
+    (Rmin, Rmax) = self.slot.comp_radius()
 
     if self.is_internal:  # inward Slot
         # Top radius of the magnet
-        Rmec = max(self.Rext, max(abs(magnet_points)))
+        return max(self.Rext, Rmax)
     else:
-        Rmec = min(self.Rint, min(abs(magnet_points)))
-
-    return Rmec
+        return min(self.Rint, Rmin)
