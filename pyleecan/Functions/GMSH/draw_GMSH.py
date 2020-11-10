@@ -2,6 +2,7 @@ from ...Classes.Arc import Arc
 from ...Classes.Arc2 import Arc2
 from ...Classes.MachineSIPMSM import MachineSIPMSM
 
+from ...Functions.GMSH import InputError
 from ...Functions.GMSH.get_sliding_band import get_sliding_band
 from ...Functions.GMSH.get_boundary_condition import get_boundary_condition
 
@@ -30,11 +31,11 @@ def _find_point_tag(d={}, p=complex(0.0, 0.0)):
         Imaginary coordinates of point
     """
     tol = 1e-6
-    for s_id, s_data in d.items():
-        for lid, lvalues in s_data.items():
+    for s_data in d.values():
+        for lvalues in s_data.values():
             if type(lvalues) is not dict:
                 continue
-            for pid, pvalues in lvalues.items():
+            for pvalues in lvalues.values():
                 if type(pvalues) is not dict:
                     continue
                 if pvalues["tag"] is not None:
@@ -62,8 +63,8 @@ def _find_points_from_line(d={}, ltag=-1):
     btag = None
     etag = None
     ctag = None
-    for s_id, s_data in d.items():
-        for lid, lvalues in s_data.items():
+    for s_data in d.values():
+        for lvalues in s_data.values():
             if type(lvalues) is not dict:
                 continue
             if lvalues["tag"] != ltag:
@@ -98,11 +99,11 @@ def _find_lines_from_point(d={}, ptag=-1):
         List of line tags
     """
     lines = list()
-    for s_id, s_data in d.items():
-        for lid, lvalues in s_data.items():
+    for s_data in d.values():
+        for lvalues in s_data.values():
             if type(lvalues) is not dict:
                 continue
-            for pid, pvalues in lvalues.items():
+            for pvalues in lvalues.values():
                 if type(pvalues) is not dict:
                     continue
                 if pvalues["tag"] == ptag:
@@ -173,7 +174,7 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
 
         # To avoid fill the dictionary with repeated lines
         repeated = False
-        for lid, lvalues in d[idx].items():
+        for lvalues in d[idx].values():
             if type(lvalues) is not dict:
                 continue
             else:
@@ -218,7 +219,7 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
 
         # To avoid fill the dictionary with repeated lines
         repeated = False
-        for lid, lvalues in d[idx].items():
+        for lvalues in d[idx].values():
             if type(lvalues) is not dict:
                 continue
             else:
@@ -305,7 +306,7 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
 
         # To avoid fill the dictionary with repeated lines
         repeated = False
-        for lid, lvalues in d[idx].items():
+        for lvalues in d[idx].values():
             if type(lvalues) is not dict:
                 continue
             else:
@@ -350,7 +351,7 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
 
         # To avoid fill the dictionary with repeated lines
         repeated = False
-        for lid, lvalues in d[idx].items():
+        for lvalues in d[idx].values():
             if type(lvalues) is not dict:
                 continue
             else:
@@ -420,10 +421,17 @@ def draw_GMSH(
     GMSH_dict : dict
         Dictionnary containing the main parameters of GMSH File
     """
+    # check some input parameter
+    if is_lam_only_S and is_lam_only_R:
+        raise InputError(
+            "Only 'is_lam_only_S' or 'is_lam_only_R' can be True at the same time"
+        )
 
+    # get machine
     machine = output.simu.machine
     mesh_dict = {}
     tol = 1e-6
+
     # For readibility
     model = gmsh.model
     factory = model.geo
@@ -462,157 +470,120 @@ def draw_GMSH(
 
     # Default rotor mesh element size
     mesh_size = machine.rotor.Rext / 25.0
-    nsurf = 0
-    for surf in rotor_list:
-        nsurf += 1
-        gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
-        if surf.label.find("Lamination_Rotor") != -1:
-            gmsh_dict[nsurf]["with_holes"] = True
-            lam_rotor_surf_id = nsurf
-        else:
-            gmsh_dict[nsurf]["with_holes"] = False
-        if user_mesh_dict is not None:
-            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
-            mesh_dict.update(user_mesh_dict)
-        for line in surf.get_lines():
-            # When symmetry is 1 the shaft surface is substrtacted from Rotor Lam instead
-            if sym == 1 and line.label == "Lamination_Rotor_Yoke_Radius_Int":
-                continue
-            n_elem = mesh_dict.get(line.label)
-            bc_name = get_boundary_condition(line, machine)
-            if (
-                isinstance(line, Arc)
-                and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
-            ):
-                if line.is_trigo_direction == True:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                else:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                if n_elem is not None:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc1,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
-                    )
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
-                    )
-                else:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc1,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
-                        bc=bc_name,
-                    )
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
-                        bc=bc_name,
-                    )
-            elif isinstance(line, Arc) and (
-                abs(line.get_angle() * 180.0 / cmath.pi) <= tol
-            ):
-                # Don't draw anything, this is a circle and usually is repeated ?
-                pass
+    nsurf = 0  # number of surfaces
+    if not is_lam_only_S:
+        for surf in rotor_list:
+            nsurf += 1
+            gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
+            if surf.label.find("Lamination_Rotor") != -1:
+                gmsh_dict[nsurf]["with_holes"] = True
+                lam_rotor_surf_id = nsurf
             else:
-                if n_elem is not None:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=line,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
-                    )
-                else:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=line,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
-                        bc=bc_name,
-                    )
+                gmsh_dict[nsurf]["with_holes"] = False
+            if user_mesh_dict is not None:
+                mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
+                mesh_dict.update(user_mesh_dict)
+            for line in surf.get_lines():
+                # When symmetry is 1 the shaft surface is substrtacted from Rotor Lam instead
+                if sym == 1 and line.label == "Lamination_Rotor_Yoke_Radius_Int":
+                    continue
+                n_elem = mesh_dict.get(line.label)
+                n_elem = n_elem if n_elem is not None else 0
+                bc_name = None  # get_boundary_condition(line, machine)
 
-    lam_and_holes = list()
-    ext_lam_loop = None
-    for s_id, s_data in gmsh_dict.items():
-        lloop = []
-        if s_id == 0:
-            continue
-        for lid, lvalues in s_data.items():
-            if type(lvalues) is not dict:
-                continue
-            lloop.extend([lvalues["tag"]])
-        cloop = factory.addCurveLoop(lloop)
-        # search for the holes to substract from rotor lam
-        if s_data["label"].find("Lamination_Rotor") != -1:
-            ext_lam_loop = cloop
-        else:
-            # MachineSIPSM does not have holes in rotor lam
-            # only shaft is taken out if symmetry is one
-            if isinstance(machine, MachineSIPMSM):
-                if sym == 1 and s_data["label"] == "Shaft":
-                    lam_and_holes.extend([cloop])
-            else:
-                if sym == 1:
-                    lam_and_holes.extend([cloop])
-                elif s_data["label"] != "Shaft":
-                    lam_and_holes.extend([cloop])
-                else:
+                # Gmsh built-in engine does not allow arcs larger than 180deg
+                # so arcs are split into two
+                if (
+                    isinstance(line, Arc)
+                    and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
+                ):
+                    rot_dir = 1 if line.is_trigo_direction == True else -1
+                    arc1 = Arc2(
+                        begin=line.get_begin(),
+                        center=line.get_center(),
+                        angle=rot_dir * cmath.pi / 2.0,
+                        label=line.label,
+                    )
+                    arc2 = Arc2(
+                        begin=arc1.get_end(),
+                        center=line.get_center(),
+                        angle=rot_dir * cmath.pi / 2.0,
+                        label=line.label,
+                    )
+                    for arc in [arc1, arc2]:
+                        _add_line_to_dict(
+                            geo=factory,
+                            line=arc,
+                            d=gmsh_dict,
+                            idx=nsurf,
+                            mesh_size=mesh_size,
+                            n_elements=n_elem,
+                            bc=bc_name,
+                        )
+                elif isinstance(line, Arc) and (
+                    abs(line.get_angle() * 180.0 / cmath.pi) <= tol
+                ):
+                    # Don't draw anything, this is a circle and usually is repeated ?
                     pass
+                else:
+                    _add_line_to_dict(
+                        geo=factory,
+                        line=line,
+                        d=gmsh_dict,
+                        idx=nsurf,
+                        mesh_size=mesh_size,
+                        n_elements=n_elem,
+                        bc=bc_name,
+                    )
 
-            # Shaft, magnets and magnet pocket surfaces are created
-            if not is_lam_only_R:
-                s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
-                pg = model.addPhysicalGroup(2, [s_data["tag"]])
-                model.setPhysicalName(2, pg, s_data["label"])
+        lam_and_holes = list()
+        ext_lam_loop = None
+        for s_id, s_data in gmsh_dict.items():
+            lloop = []
+            if s_id == 0:
+                continue
+            for lvalues in s_data.values():
+                if type(lvalues) is not dict:
+                    continue
+                lloop.extend([lvalues["tag"]])
+            cloop = factory.addCurveLoop(lloop)
+            # search for the holes to substract from rotor lam
+            if s_data["label"].find("Lamination_Rotor") != -1:
+                ext_lam_loop = cloop
+            else:
+                # MachineSIPSM does not have holes in rotor lam
+                # only shaft is taken out if symmetry is one
+                if isinstance(machine, MachineSIPMSM):
+                    if sym == 1 and s_data["label"] == "Shaft":
+                        lam_and_holes.extend([cloop])
+                else:
+                    if sym == 1:
+                        lam_and_holes.extend([cloop])
+                    elif s_data["label"] != "Shaft":
+                        lam_and_holes.extend([cloop])
+                    else:
+                        pass
 
-    # Finally rotor lamination is built
-    if ext_lam_loop is not None:
-        lam_and_holes.insert(0, ext_lam_loop)
-    gmsh_dict[lam_rotor_surf_id]["tag"] = factory.addPlaneSurface(lam_and_holes, tag=-1)
-    pg = model.addPhysicalGroup(2, [gmsh_dict[lam_rotor_surf_id]["tag"]])
-    model.setPhysicalName(2, pg, gmsh_dict[lam_rotor_surf_id]["label"])
-    rotor_cloops = lam_and_holes
+                # Shaft, magnets and magnet pocket surfaces are created
+                if not is_lam_only_R:
+                    s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
+                    pg = model.addPhysicalGroup(2, [s_data["tag"]])
+                    model.setPhysicalName(2, pg, s_data["label"])
 
+        # Finally rotor lamination is built
+        if ext_lam_loop is not None:
+            lam_and_holes.insert(0, ext_lam_loop)
+        gmsh_dict[lam_rotor_surf_id]["tag"] = factory.addPlaneSurface(
+            lam_and_holes, tag=-1
+        )
+        pg = model.addPhysicalGroup(2, [gmsh_dict[lam_rotor_surf_id]["tag"]])
+        model.setPhysicalName(2, pg, gmsh_dict[lam_rotor_surf_id]["label"])
+        # rotor_cloops = lam_and_holes
+
+    # store rotor dict
     rotor_dict = gmsh_dict.copy()
 
+    # init new dict for stator
     gmsh_dict = {
         0: {
             "tag": 0,
@@ -629,98 +600,55 @@ def draw_GMSH(
         }
     }
 
-    # Default rotor mesh element size
+    # Default stator mesh element size
     mesh_size = machine.stator.Rext / 100.0
     # nsurf = 0
-    stator_cloops = []
-    for surf in stator_list:
-        nsurf += 1
-        gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
-        if surf.label.find("Lamination_Stator") != -1:
-            gmsh_dict[nsurf]["with_holes"] = True
-        else:
-            gmsh_dict[nsurf]["with_holes"] = False
-        if user_mesh_dict is not None:
-            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
-            mesh_dict.update(user_mesh_dict)
-        for line in surf.get_lines():
-            n_elem = mesh_dict.get(line.label)
-            # Gmsh built-in engine does not allow arcs larger than 180deg
-            # so arcs are split into two
-            if (
-                isinstance(line, Arc)
-                and abs(line.get_angle() * 180.0 / cmath.pi) == 180.0
-            ):
-                if line.is_trigo_direction == True:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                else:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                if n_elem is not None:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc1,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
-                    )
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
-                    )
-                else:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc1,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
-                        bc=bc_name,
-                    )
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
-                        bc=bc_name,
-                    )
+    if not is_lam_only_R:
+        stator_cloops = []
+        for surf in stator_list:
+            nsurf += 1
+            gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
+            if surf.label.find("Lamination_Stator") != -1:
+                gmsh_dict[nsurf]["with_holes"] = True
             else:
-                if n_elem is not None:
-                    _add_line_to_dict(
-                        geo=factory,
-                        line=line,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=bc_name,
+                gmsh_dict[nsurf]["with_holes"] = False
+            if user_mesh_dict is not None:
+                mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
+                mesh_dict.update(user_mesh_dict)
+            for line in surf.get_lines():
+                n_elem = mesh_dict.get(line.label)
+                n_elem = n_elem if n_elem is not None else 0
+                bc_name = None  # get_boundary_condition(line, machine)
+
+                # Gmsh built-in engine does not allow arcs larger than 180deg
+                # so arcs are split into two
+                if (
+                    isinstance(line, Arc)
+                    and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
+                ):
+                    rot_dir = 1 if line.is_trigo_direction == True else -1
+                    arc1 = Arc2(
+                        begin=line.get_begin(),
+                        center=line.get_center(),
+                        angle=rot_dir * cmath.pi / 2.0,
+                        label=line.label,
                     )
+                    arc2 = Arc2(
+                        begin=arc1.get_end(),
+                        center=line.get_center(),
+                        angle=rot_dir * cmath.pi / 2.0,
+                        label=line.label,
+                    )
+                    for arc in [arc1, arc2]:
+                        _add_line_to_dict(
+                            geo=factory,
+                            line=arc,
+                            d=gmsh_dict,
+                            idx=nsurf,
+                            mesh_size=mesh_size,
+                            n_elements=n_elem,
+                            bc=bc_name,
+                        )
                 else:
                     _add_line_to_dict(
                         geo=factory,
@@ -728,36 +656,31 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         mesh_size=mesh_size,
+                        n_elements=n_elem,
                         bc=bc_name,
                     )
 
-    for s_id, s_data in gmsh_dict.items():
-        lloop = []
-        if s_id == 0:
-            continue
-        for lid, lvalues in s_data.items():
-            if type(lvalues) is not dict:
+        for s_id, s_data in gmsh_dict.items():
+            lloop = []
+            if s_id == 0:
                 continue
-            lloop.extend([lvalues["tag"]])
-        cloop = factory.addCurveLoop(lloop)
-        stator_cloops.append(cloop)
-        # Winding surfaces are created
-        if s_data["label"].find("Lamination_Stator") != -1:
-            s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
-            pg = model.addPhysicalGroup(2, [s_data["tag"]])
-            model.setPhysicalName(2, pg, s_data["label"])
-        else:
-            # Stator lamination is built
-            if not is_lam_only_S:
+            for lvalues in s_data.values():
+                if type(lvalues) is not dict:
+                    continue
+                lloop.extend([lvalues["tag"]])
+            cloop = factory.addCurveLoop(lloop)
+            stator_cloops.append(cloop)
+            # Winding surfaces are created
+            if (s_data["label"].find("Lamination_Stator") != -1) or (not is_lam_only_S):
                 s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
                 pg = model.addPhysicalGroup(2, [s_data["tag"]])
                 model.setPhysicalName(2, pg, s_data["label"])
 
-    stator_dict = gmsh_dict.copy()
+        # stator_dict = gmsh_dict.copy()
 
     gmsh_dict.update(rotor_dict)
 
-    if is_sliding_band:
+    if is_sliding_band and (not is_lam_only_R) and (not is_lam_only_S):
         sb_list = get_sliding_band(sym=sym, machine=machine)
     else:
         sb_list = []
@@ -770,97 +693,53 @@ def draw_GMSH(
         gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
+            n_elem = n_elem if n_elem is not None else 0
+
             # Gmsh built-in engine does not allow arcs larger than 180deg
             # so arcs are split into two
             if (
                 isinstance(line, Arc)
-                and abs(line.get_angle() * 180.0 / cmath.pi) == 180.0
+                and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
             ):
-                if line.is_trigo_direction == True:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                else:
-                    arc1 = Arc2(
-                        begin=line.get_begin(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                    arc2 = Arc2(
-                        begin=arc1.get_end(),
-                        center=line.get_center(),
-                        angle=-cmath.pi / 2.0,
-                        label=line.label,
-                    )
-                if n_elem is not None:
+                rot_dir = 1 if line.is_trigo_direction == True else -1
+                arc1 = Arc2(
+                    begin=line.get_begin(),
+                    center=line.get_center(),
+                    angle=rot_dir * cmath.pi / 2.0,
+                    label=line.label,
+                )
+                arc2 = Arc2(
+                    begin=arc1.get_end(),
+                    center=line.get_center(),
+                    angle=rot_dir * cmath.pi / 2.0,
+                    label=line.label,
+                )
+                for arc in [arc1, arc2]:
                     _add_agline_to_dict(
                         geo=factory,
-                        line=arc1,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=line.label,
-                    )
-                    _add_agline_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=line.label,
-                    )
-                else:
-                    _add_agline_to_dict(
-                        geo=factory,
-                        line=arc1,
+                        line=arc,
                         d=gmsh_dict,
                         idx=nsurf,
                         mesh_size=mesh_size,
-                        bc=line.label,
-                    )
-                    _add_agline_to_dict(
-                        geo=factory,
-                        line=arc2,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
+                        n_elements=n_elem,
                         bc=line.label,
                     )
             else:
-                if n_elem is not None:
-                    _add_agline_to_dict(
-                        geo=factory,
-                        line=line,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        n_elements=n_elem,
-                        bc=line.label,
-                    )
-                else:
-                    _add_agline_to_dict(
-                        geo=factory,
-                        line=line,
-                        d=gmsh_dict,
-                        idx=nsurf,
-                        mesh_size=mesh_size,
-                        bc=line.label,
-                    )
+                _add_agline_to_dict(
+                    geo=factory,
+                    line=line,
+                    d=gmsh_dict,
+                    idx=nsurf,
+                    mesh_size=mesh_size,
+                    n_elements=n_elem,
+                    bc=line.label,
+                )
 
     for s_id, s_data in gmsh_dict.items():
         lloop = []
         if s_id == 0:
             continue
-        for lid, lvalues in s_data.items():
+        for lvalues in s_data.values():
             if (
                 s_data["label"].find("Airgap") != -1
                 or s_data["label"].find("SlidingBand") != -1
