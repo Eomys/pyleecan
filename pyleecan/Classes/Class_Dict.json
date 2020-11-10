@@ -3831,6 +3831,8 @@
             "plot",
             "plot_anim_rotor",
             "get_lam_list",
+            "get_lam_list_label",
+            "get_lam_by_label",
             "get_pole_pair_number"
         ],
         "mother": "",
@@ -7725,7 +7727,6 @@
         "daughters": [
             "Slot19",
             "SlotCirc",
-            "SlotDC",
             "SlotMFlat",
             "SlotMFlat2",
             "SlotMPolar",
@@ -9904,7 +9905,6 @@
         ],
         "daughters": [
             "SlotCirc",
-            "SlotDC",
             "SlotUD",
             "SlotW10",
             "SlotW11",
