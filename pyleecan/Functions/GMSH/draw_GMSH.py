@@ -475,21 +475,25 @@ def draw_GMSH(
         for surf in rotor_list:
             nsurf += 1
             gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
-            if surf.label.find("Lamination_Rotor") != -1:
+            if "Lamination_Rotor" in surf.label:
                 gmsh_dict[nsurf]["with_holes"] = True
                 lam_rotor_surf_id = nsurf
             else:
                 gmsh_dict[nsurf]["with_holes"] = False
-            if user_mesh_dict is not None:
-                mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
+
+            # comp. number of elements on the lines & override by user values in case
+            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
+            if user_mesh_dict:  # check if dict is not None nor empty
                 mesh_dict.update(user_mesh_dict)
+
+            # add all lines of the current surface to the gmsh_dict
             for line in surf.get_lines():
                 # When symmetry is 1 the shaft surface is substrtacted from Rotor Lam instead
                 if sym == 1 and line.label == "Lamination_Rotor_Yoke_Radius_Int":
                     continue
                 n_elem = mesh_dict.get(line.label)
                 n_elem = n_elem if n_elem is not None else 0
-                bc_name = None  # get_boundary_condition(line, machine)
+                bc_name = get_boundary_condition(line, machine)
 
                 # Gmsh built-in engine does not allow arcs larger than 180deg
                 # so arcs are split into two
@@ -538,17 +542,22 @@ def draw_GMSH(
 
         lam_and_holes = list()
         ext_lam_loop = None
-        for s_id, s_data in gmsh_dict.items():
+        # loop though all (surface) entries of the rotor lamination
+        for s_data in gmsh_dict.values():
             lloop = []
-            if s_id == 0:
+            # skip this surface dataset if it is the origin
+            if s_data["label"] == "origin":
                 continue
+
+            # build a lineloop of the surfaces lines
             for lvalues in s_data.values():
                 if type(lvalues) is not dict:
                     continue
                 lloop.extend([lvalues["tag"]])
             cloop = factory.addCurveLoop(lloop)
+
             # search for the holes to substract from rotor lam
-            if s_data["label"].find("Lamination_Rotor") != -1:
+            if "Lamination_Rotor" in s_data["label"]:
                 ext_lam_loop = cloop
             else:
                 # MachineSIPSM does not have holes in rotor lam
@@ -612,9 +621,13 @@ def draw_GMSH(
                 gmsh_dict[nsurf]["with_holes"] = True
             else:
                 gmsh_dict[nsurf]["with_holes"] = False
-            if user_mesh_dict is not None:
-                mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
+
+            # comp. number of elements on the lines & override by user values in case
+            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
+            if user_mesh_dict:  # check if dict is not None nor empty
                 mesh_dict.update(user_mesh_dict)
+
+            # add all lines of the current surface to the gmsh_dict
             for line in surf.get_lines():
                 n_elem = mesh_dict.get(line.label)
                 n_elem = n_elem if n_elem is not None else 0
@@ -660,16 +673,20 @@ def draw_GMSH(
                         bc=bc_name,
                     )
 
-        for s_id, s_data in gmsh_dict.items():
+        for s_data in gmsh_dict.values():
             lloop = []
-            if s_id == 0:
+            # skip this surface dataset if it is the origin
+            if s_data["label"] == "origin":
                 continue
+
+            # build a lineloop of the surfaces lines
             for lvalues in s_data.values():
                 if type(lvalues) is not dict:
                     continue
                 lloop.extend([lvalues["tag"]])
             cloop = factory.addCurveLoop(lloop)
             stator_cloops.append(cloop)
+
             # Winding surfaces are created
             if (s_data["label"].find("Lamination_Stator") != -1) or (not is_lam_only_S):
                 s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
