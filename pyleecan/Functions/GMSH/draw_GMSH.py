@@ -465,14 +465,15 @@ def draw_GMSH(
     gmsh.option.setNumber("Geometry.LineNumbers", 0)
     model.add("Pyleecan")
 
+    # build geometry
     rotor_list = list()
     rotor_list.extend(machine.shaft.build_geometry(sym=sym))
     rotor_list.extend(machine.rotor.build_geometry(sym=sym))
     stator_list = list()
     stator_list.extend(machine.stator.build_geometry(sym=sym))
 
+    # set origin
     oo = factory.addPoint(0, 0, 0, 0, tag=-1)
-
     gmsh_dict = {
         0: {
             "tag": 0,
@@ -831,23 +832,18 @@ def draw_GMSH(
         model.setPhysicalName(1, pg, "SLAVE_ROTOR_BOUNDARY")
         print("SLAVE_ROTOR_BOUNDARY", bc_slave_rotor_id)
 
-    # decide on saving mesh or geo file
+    factory.synchronize()
+
+    # save mesh or geo file depending on file extension
     filename, file_extension = splitext(path_save)
 
-    is_save_geo = False
     if file_extension == ".geo":
-        is_save_geo = True
-
-    factory.synchronize()
-    if not is_save_geo:
-        gmsh.model.mesh.generate(2)
-
-    # Save and close
-    if is_save_geo:
         gmsh.write(filename + ".geo_unrolled")
         rename(filename + ".geo_unrolled", filename + file_extension)
     else:
+        gmsh.model.mesh.generate(2)
         gmsh.write(path_save)
+
     # gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()
 
