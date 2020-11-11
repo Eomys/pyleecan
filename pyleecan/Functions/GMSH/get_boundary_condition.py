@@ -6,8 +6,9 @@
 # from ...Classes.Segment import Segment
 # from ...Classes.SurfLine import SurfLine
 
+from ...Functions.GMSH import boundary_prop
 
-def get_boundary_condition(line, machine):
+def get_boundary_condition(line):
     """Returns
 
     Parameters
@@ -25,7 +26,15 @@ def get_boundary_condition(line, machine):
         List of surface in the airgap including the sliding band surface
     """
 
-    slot_height = machine.stator.slot.comp_height()
-    winding_slot_height = machine.stator.slot.comp_height_wind()
+    propname = ""
+    for bound_label in boundary_prop:
+        if bound_label in line.label:
+            propname = boundary_prop[bound_label]
+        elif line.label.find("Rotor_Yoke_Side") != -1:
+            print(line.label)
+            propname = boundary_prop["Rotor_Yoke_Side"]
+        elif line.label.find("Stator_Yoke_Side") != -1:
+            print(line.label)
+            propname = boundary_prop["Stator_Yoke_Side"]
 
-    return None
+    return propname
