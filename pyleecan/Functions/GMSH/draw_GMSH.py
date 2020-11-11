@@ -3,6 +3,7 @@ from ...Classes.Arc2 import Arc2
 from ...Classes.MachineSIPMSM import MachineSIPMSM
 
 from ...Functions.GMSH import InputError
+from ...Functions.GMSH import boundary_prop, boundary_list
 from ...Functions.GMSH.get_sliding_band import get_sliding_band
 from ...Functions.GMSH.get_boundary_condition import get_boundary_condition
 
@@ -183,18 +184,20 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
 
         if not repeated:
             nline = len(d[idx]) - 2
-            d[idx].update(
-                {
-                    nline: {
-                        "tag": ltag,
-                        "n_elements": n_elements,
-                        "bc_name": bc,
-                        "begin": {"tag": btag, "coord": complex(bx, by)},
-                        "end": {"tag": etag, "coord": complex(ex, ey)},
-                        "cent": {"tag": ctag, "coord": complex(cx, cy)},
-                    }
-                }
-            )
+            arc_angle = cmath.phase(complex(ex, ey)) - cmath.phase(complex(bx, by))
+            d[idx].update({nline: {'tag': ltag,
+                                   'n_elements': n_elements,
+                                   'bc_name': bc,
+                                   'begin': {'tag': btag,
+                                             'coord': complex(bx, by)},
+                                   'end': {'tag': etag,
+                                           'coord': complex(ex, ey)},
+                                   'cent': {'tag': ctag,
+                                            'coord': complex(cx, cy)},
+                                   'arc_angle': arc_angle,
+                                   'line_angle': None,
+                                   }
+                           })
 
     else:
         if len(dlines) > 0:
@@ -223,22 +226,23 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
             if type(lvalues) is not dict:
                 continue
             else:
-                if lvalues["tag"] == ltag:
+                if lvalues['tag'] == ltag:
                     repeated = True
 
         if not repeated:
             nline = len(d[idx]) - 2
-            d[idx].update(
-                {
-                    nline: {
-                        "tag": ltag,
-                        "n_elements": n_elements,
-                        "bc_name": bc,
-                        "begin": {"tag": btag, "coord": complex(bx, by)},
-                        "end": {"tag": etag, "coord": complex(ex, ey)},
-                    }
-                }
-            )
+            line_angle = 0.5*(cmath.phase(complex(ex, ey)) + cmath.phase(complex(bx, by)))
+            d[idx].update({nline: {'tag': ltag,
+                                   'n_elements': n_elements,
+                                   'bc_name': bc,
+                                   'begin': {'tag': btag,
+                                             'coord': complex(bx, by)},
+                                   'end': {'tag': etag,
+                                           'coord': complex(ex, ey)},
+                                   'arc_angle': None,
+                                   'line_angle': line_angle,
+                                   }
+                           })
 
     return None
 
@@ -266,6 +270,7 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
     None
     """
 
+    # TO-DO: Allow repeated points for the rotor and stator sliding bands
     dlines = list()
     ltag = None
     btag, bx, by = _find_point_tag(d, line.get_begin())
@@ -310,23 +315,25 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
             if type(lvalues) is not dict:
                 continue
             else:
-                if lvalues["tag"] == ltag:
+                if lvalues['tag'] == ltag:
                     repeated = True
 
         if not repeated:
             nline = len(d[idx]) - 2
-            d[idx].update(
-                {
-                    nline: {
-                        "tag": ltag,
-                        "n_elements": n_elements,
-                        "bc_name": bc,
-                        "begin": {"tag": btag, "coord": complex(bx, by)},
-                        "end": {"tag": etag, "coord": complex(ex, ey)},
-                        "cent": {"tag": ctag, "coord": complex(cx, cy)},
-                    }
-                }
-            )
+            arc_angle = cmath.phase(complex(ex, ey)) - cmath.phase(complex(bx, by))
+            d[idx].update({nline: {'tag': ltag,
+                                   'n_elements': n_elements,
+                                   'bc_name': bc,
+                                   'begin': {'tag': btag,
+                                             'coord': complex(bx, by)},
+                                   'end': {'tag': etag,
+                                           'coord': complex(ex, ey)},
+                                   'cent': {'tag': ctag,
+                                            'coord': complex(cx, cy)},
+                                   'arc_angle': arc_angle,
+                                   'line_angle': None,
+                                   }
+                           })
 
     else:
         if len(dlines) > 0:
@@ -360,17 +367,18 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
 
         if not repeated:
             nline = len(d[idx]) - 2
-            d[idx].update(
-                {
-                    nline: {
-                        "tag": ltag,
-                        "n_elements": n_elements,
-                        "bc_name": bc,
-                        "begin": {"tag": btag, "coord": complex(bx, by)},
-                        "end": {"tag": etag, "coord": complex(ex, ey)},
-                    }
-                }
-            )
+            line_angle = 0.5 * (cmath.phase(complex(ex, ey)) + cmath.phase(complex(bx, by)))
+            d[idx].update({nline: {'tag': ltag,
+                                   'n_elements': n_elements,
+                                   'bc_name': bc,
+                                   'begin': {'tag': btag,
+                                             'coord': complex(bx, by)},
+                                   'end': {'tag': etag,
+                                           'coord': complex(ex, ey)},
+                                   'arc_angle': None,
+                                   'line_angle': line_angle,
+                                   }
+                           })
 
     return None
 
@@ -464,6 +472,8 @@ def draw_GMSH(
                 "begin": {"tag": oo, "coord": complex(0.0, 0.0)},
                 "end": {"tag": None, "coord": None},
                 "cent": {"tag": None, "coord": None},
+                "arc_angle": None,
+                "line_angle": None,
             },
         }
     }
@@ -493,7 +503,7 @@ def draw_GMSH(
                     continue
                 n_elem = mesh_dict.get(line.label)
                 n_elem = n_elem if n_elem is not None else 0
-                bc_name = get_boundary_condition(line, machine)
+                bc_name = get_boundary_condition(line)
 
                 # Gmsh built-in engine does not allow arcs larger than 180deg
                 # so arcs are split into two
@@ -631,7 +641,7 @@ def draw_GMSH(
             for line in surf.get_lines():
                 n_elem = mesh_dict.get(line.label)
                 n_elem = n_elem if n_elem is not None else 0
-                bc_name = None  # get_boundary_condition(line, machine)
+                bc_name = get_boundary_condition(line)
 
                 # Gmsh built-in engine does not allow arcs larger than 180deg
                 # so arcs are split into two
@@ -711,7 +721,7 @@ def draw_GMSH(
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
             n_elem = n_elem if n_elem is not None else 0
-
+            bc_name = get_boundary_condition(line)
             # Gmsh built-in engine does not allow arcs larger than 180deg
             # so arcs are split into two
             if (
@@ -739,7 +749,7 @@ def draw_GMSH(
                         idx=nsurf,
                         mesh_size=mesh_size,
                         n_elements=n_elem,
-                        bc=line.label,
+                        bc=bc_name,
                     )
             else:
                 _add_agline_to_dict(
@@ -749,7 +759,7 @@ def draw_GMSH(
                     idx=nsurf,
                     mesh_size=mesh_size,
                     n_elements=n_elem,
-                    bc=line.label,
+                    bc=bc_name,
                 )
 
     for s_id, s_data in gmsh_dict.items():
@@ -772,6 +782,61 @@ def draw_GMSH(
             s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
             pg = model.addPhysicalGroup(2, [s_data["tag"]])
             model.setPhysicalName(2, pg, s_data["label"])
+
+
+    # Set boundary conditions in gmsh lines
+    bc_master_stator_id = []
+    bc_slave_stator_id = []
+    bc_master_rotor_id = []
+    bc_slave_rotor_id = []
+    for propname in boundary_list:
+        # propname = boundary_prop[bound_label]
+        bc_id = []
+        for s_id, s_data in gmsh_dict.items():
+            for lid, lvalues in s_data.items():
+                if type(lvalues) is not dict:
+                    continue
+                if lvalues['bc_name'] == propname:
+                    if propname == "MASTER_SLAVE_STATOR_BOUNDARY":
+                        line_angle = lvalues.get("line_angle", None)
+                        print(propname, lvalues['tag'], line_angle)
+                        # Assumes Master coincides with x-Axis
+                        if line_angle is not None and abs(line_angle) < tol:
+                            bc_master_stator_id.extend([abs(lvalues['tag'])])
+                        else:
+                            bc_slave_stator_id.extend([abs(lvalues['tag'])])
+                    elif propname == "MASTER_SLAVE_ROTOR_BOUNDARY":
+                        line_angle = lvalues.get("line_angle", None)
+                        print(propname, lvalues['tag'], line_angle)
+                        # Assumes Master coincides with x-Axis
+                        if line_angle is not None and abs(line_angle) < tol:
+                            bc_master_rotor_id.extend([abs(lvalues['tag'])])
+                        else:
+                            bc_slave_rotor_id.extend([abs(lvalues['tag'])])
+                    else:
+                        bc_id.extend([abs(lvalues['tag'])])
+        if bc_id:
+            pg = model.addPhysicalGroup(1, bc_id)
+            model.setPhysicalName(1, pg, propname)
+
+    if bc_master_stator_id:
+        pg = model.addPhysicalGroup(1, bc_master_stator_id)
+        model.setPhysicalName(1, pg, "MASTER_SATOR_BOUNDARY")
+        print("MASTER_STATOR_BOUNDARY", bc_master_stator_id)
+    if bc_slave_stator_id:
+        pg = model.addPhysicalGroup(1, bc_slave_stator_id)
+        model.setPhysicalName(1, pg, "SLAVE_SATOR_BOUNDARY")
+        print("SLAVE_STATOR_BOUNDARY", bc_slave_stator_id)
+    if bc_master_rotor_id:
+        pg = model.addPhysicalGroup(1, bc_master_rotor_id)
+        model.setPhysicalName(1, pg, "MASTER_ROTOR_BOUNDARY")
+        print("MASTER_ROTOR_BOUNDARY", bc_master_rotor_id)
+    if bc_slave_rotor_id:
+        pg = model.addPhysicalGroup(1, bc_slave_rotor_id)
+        model.setPhysicalName(1, pg, "SLAVE_ROTOR_BOUNDARY")
+        print("SLAVE_ROTOR_BOUNDARY", bc_slave_rotor_id)
+
+
 
     factory.synchronize()
     gmsh.model.mesh.generate(2)
