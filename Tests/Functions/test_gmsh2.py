@@ -15,6 +15,23 @@ try:
 except:
     draw_GMSH = ImportError
 
+mesh_dict = {
+    "Lamination_Rotor_Bore_Radius_Ext": 180,
+    "surface_line_0": 5,
+    "surface_line_1": 10,
+    "surface_line_2": 5,
+    "surface_line_3": 5,
+    "surface_line_4": 10,
+    "surface_line_5": 5,
+    "Lamination_Stator_Bore_Radius_Int": 10,
+    "Lamination_Stator_Yoke_Side_Right": 30,
+    "Lamination_Stator_Yoke_Side_Left": 30,
+    "int_airgap_arc": 120,
+    "int_sb_arc": 120,
+    "ext_airgap_arc": 120,
+    "ext_sb_arc": 120,
+}
+
 
 @pytest.mark.long
 @pytest.mark.GMSH
@@ -34,22 +51,6 @@ def test_gmsh_ipm():
     # Create the Simulation
     mySimu = Simu1(name="EM_SIPMSM_AL_001", machine=IPMSM_A)
     myResults = Output(simu=mySimu)
-
-    mesh_dict = {
-        "Lamination_Rotor_Bore_Radius_Ext": 180,
-        "surface_line_0": 5,
-        "surface_line_1": 10,
-        "surface_line_2": 5,
-        "surface_line_3": 5,
-        "surface_line_4": 10,
-        "surface_line_5": 5,
-        "Lamination_Stator_Bore_Radius_Int": 10,
-        "Lamination_Stator_Yoke_Side": 30,
-        "int_airgap_arc": 120,
-        "int_sb_arc": 120,
-        "ext_airgap_arc": 120,
-        "ext_sb_arc": 120,
-    }
 
     gmsh_dict = draw_GMSH(
         output=myResults,
@@ -83,22 +84,6 @@ def test_gmsh_spm():
     # Create the Simulation
     mySimu = Simu1(name="EM_SPMSM_AL_001", machine=PMSM_A)
     myResults = Output(simu=mySimu)
-
-    mesh_dict = {
-        "Lamination_Rotor_Bore_Radius_Ext": 180,
-        "surface_line_0": 5,
-        "surface_line_1": 10,
-        "surface_line_2": 5,
-        "surface_line_3": 5,
-        "surface_line_4": 10,
-        "surface_line_5": 5,
-        "Lamination_Stator_Bore_Radius_Int": 10,
-        "Lamination_Stator_Yoke_Side": 30,
-        "int_airgap_arc": 120,
-        "int_sb_arc": 120,
-        "ext_airgap_arc": 120,
-        "ext_sb_arc": 120,
-    }
 
     gmsh_dict = draw_GMSH(
         output=myResults,
