@@ -453,6 +453,10 @@ def draw_GMSH(
     mesh_dict = {}
     tol = 1e-6
 
+    # Default stator mesh element size
+    mesh_size_S = machine.stator.Rext / 100.0
+    mesh_size_R = machine.rotor.Rext / 25.0
+
     # For readibility
     model = gmsh.model
     factory = model.geo
@@ -463,6 +467,8 @@ def draw_GMSH(
     gmsh.option.setNumber("Geometry.CopyMeshingMethod", 1)
     gmsh.option.setNumber("Geometry.PointNumbers", 0)
     gmsh.option.setNumber("Geometry.LineNumbers", 0)
+    gmsh.option.setNumber("Mesh.CharacteristicLengthMin", min(mesh_size_S, mesh_size_R))
+    gmsh.option.setNumber("Mesh.CharacteristicLengthMax", max(mesh_size_S, mesh_size_R))
     model.add("Pyleecan")
 
     # build geometry
@@ -492,8 +498,6 @@ def draw_GMSH(
         }
     }
 
-    # Default rotor mesh element size
-    mesh_size = machine.rotor.Rext / 25.0
     nsurf = 0  # number of surfaces
     if not is_lam_only_S:
         for surf in rotor_list:
@@ -506,7 +510,7 @@ def draw_GMSH(
                 gmsh_dict[nsurf]["with_holes"] = False
 
             # comp. number of elements on the lines & override by user values in case
-            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
+            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_R)
             if user_mesh_dict:  # check if dict is not None nor empty
                 mesh_dict.update(user_mesh_dict)
 
@@ -544,7 +548,7 @@ def draw_GMSH(
                             line=arc,
                             d=gmsh_dict,
                             idx=nsurf,
-                            mesh_size=mesh_size,
+                            mesh_size=mesh_size_R,
                             n_elements=n_elem,
                             bc=bc_name,
                         )
@@ -559,7 +563,7 @@ def draw_GMSH(
                         line=line,
                         d=gmsh_dict,
                         idx=nsurf,
-                        mesh_size=mesh_size,
+                        mesh_size=mesh_size_R,
                         n_elements=n_elem,
                         bc=bc_name,
                     )
@@ -633,8 +637,6 @@ def draw_GMSH(
         }
     }
 
-    # Default stator mesh element size
-    mesh_size = machine.stator.Rext / 100.0
     # nsurf = 0
     if not is_lam_only_R:
         stator_cloops = []
@@ -647,7 +649,7 @@ def draw_GMSH(
                 gmsh_dict[nsurf]["with_holes"] = False
 
             # comp. number of elements on the lines & override by user values in case
-            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
+            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_S)
             if user_mesh_dict:  # check if dict is not None nor empty
                 mesh_dict.update(user_mesh_dict)
 
@@ -682,7 +684,7 @@ def draw_GMSH(
                             line=arc,
                             d=gmsh_dict,
                             idx=nsurf,
-                            mesh_size=mesh_size,
+                            mesh_size=mesh_size_S,
                             n_elements=n_elem,
                             bc=bc_name,
                         )
@@ -692,7 +694,7 @@ def draw_GMSH(
                         line=line,
                         d=gmsh_dict,
                         idx=nsurf,
-                        mesh_size=mesh_size,
+                        mesh_size=mesh_size_S,
                         n_elements=n_elem,
                         bc=bc_name,
                     )
@@ -776,20 +778,19 @@ def draw_GMSH(
                     bc=bc_name,
                 )
 
-    for s_id, s_data in gmsh_dict.items():
+    for s_data in gmsh_dict.values():
         lloop = []
-        if s_id == 0:
+        # skip this surface dataset if it is the origin
+        if s_data["label"] == "origin" or not (
+            "Airgap" in s_data["label"] or "SlidingBand" in s_data["label"]
+        ):
             continue
+
+        # build a lineloop of the surfaces lines
         for lvalues in s_data.values():
-            if (
-                s_data["label"].find("Airgap") != -1
-                or s_data["label"].find("SlidingBand") != -1
-            ):
-                if type(lvalues) is not dict:
-                    continue
-                lloop.extend([lvalues["tag"]])
-            else:
+            if type(lvalues) is not dict:
                 continue
+            lloop.extend([lvalues["tag"]])
 
         if lloop:
             cloop = factory.addCurveLoop(lloop)
