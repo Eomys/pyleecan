@@ -15,6 +15,7 @@ def solve_FEMM(
     femm,
     output,
     out_dict,
+    FEMM_dict,
     sym,
     Nt,
     angle,
@@ -48,39 +49,41 @@ def solve_FEMM(
                 Electromagnetic torque over time (Nt,) [Nm]
             Phi_wind_stator : ndarray
                 Stator winding flux (qs,Nt) [Wb]
-     sym: int
-         Spatial symmetry factor
-     Nt: int
-         Number of time steps for calculation
-     angle: ndarray
-         Angle vector for calculation
-     Is : ndarray
-         Stator current matrix (qs,Nt) [A]
-     Ir : ndarray
-         Stator current matrix (qs,Nt) [A]
-     angle_rotor: ndarray
-         Rotor angular position vector (Nt,)
-     is_close_femm: bool
-         True to close FEMM handler in the end
-     filename: str
-         Path to FEMM model to open
-     start_t: int
-         Index of first time step (0 by default, used for parallelization)
-     end_t: int
-         Index of last time step (Nt by default, used for parallelization)
+    FEMM_dict : dict
+        Dict containing FEMM model parameters
+    sym: int
+        Spatial symmetry factor
+    Nt: int
+        Number of time steps for calculation
+    angle: ndarray
+        Angle vector for calculation
+    Is : ndarray
+        Stator current matrix (qs,Nt) [A]
+    Ir : ndarray
+        Stator current matrix (qs,Nt) [A]
+    angle_rotor: ndarray
+        Rotor angular position vector (Nt,)
+    is_close_femm: bool
+        True to close FEMM handler in the end
+    filename: str
+        Path to FEMM model to open
+    start_t: int
+        Index of first time step (0 by default, used for parallelization)
+    end_t: int
+        Index of last time step (Nt by default, used for parallelization)
 
-     Returns
-     -------
-     B: ndarray
-         3D Magnetic flux density for all time steps and each element (Nt, Nelem, 3) [T]
-     H : ndarray
-         3D Magnetic field for all time steps and each element (Nt, Nelem, 3) [A/m]
-     mu : ndarray
-         Magnetic relative permeability for all time steps and each element (Nt, Nelem) []
-     mesh: MeshMat
-         Object containing magnetic mesh at first time step
-     groups: dict
-         Dict whose values are group label and values are array of indices of related elements
+    Returns
+    -------
+    B: ndarray
+        3D Magnetic flux density for all time steps and each element (Nt, Nelem, 3) [T]
+    H : ndarray
+        3D Magnetic field for all time steps and each element (Nt, Nelem, 3) [A/m]
+    mu : ndarray
+        Magnetic relative permeability for all time steps and each element (Nt, Nelem) []
+    mesh: MeshMat
+        Object containing magnetic mesh at first time step
+    groups: dict
+        Dict whose values are group label and values are array of indices of related elements
 
     """
     # Open FEMM file if not None, else it is already open
@@ -112,7 +115,6 @@ def solve_FEMM(
     Rag = output.simu.machine.comp_Rgap_mec()
     L1 = output.simu.machine.stator.comp_length()
     save_path = self.get_path_save(output)
-    FEMM_dict = output.mag.FEA_dict
     is_internal_rotor = output.simu.machine.rotor.is_internal
     if "Phi_wind_stator" in out_dict:
         qs = output.simu.machine.stator.winding.qs  # Winding phase number
@@ -219,9 +221,5 @@ def solve_FEMM(
     # Close FEMM handler
     if is_close_femm:
         femm.closefemm()
-
-    # Store FEMM_dict in OutMag if FEMM file is not imported
-    if filename is None:
-        output.mag.FEA_dict = FEMM_dict
 
     return B_elem, H_elem, mu_elem, meshFEMM, groups

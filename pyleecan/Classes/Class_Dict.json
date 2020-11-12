@@ -4255,8 +4255,7 @@
             "get_meshsolution",
             "get_path_save_fea",
             "get_path_save",
-            "comp_axes",
-            "store_output"
+            "comp_axes"
         ],
         "mother": "Magnetics",
         "name": "MagElmer",
@@ -4381,9 +4380,7 @@
             "get_meshsolution",
             "get_path_save_fem",
             "build_meshsolution",
-            "solve_FEMM_parallel",
-            "comp_axes",
-            "store_output"
+            "solve_FEMM_parallel"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",
@@ -4430,7 +4427,7 @@
                 "desc": "To enforce user-defined values for FEMM main parameters ",
                 "max": "",
                 "min": "",
-                "name": "FEMM_dict",
+                "name": "FEMM_dict_enforced",
                 "type": "dict",
                 "unit": "",
                 "value": ""
@@ -4894,8 +4891,7 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_axes",
-            "store_output"
+            "comp_axes"
         ],
         "mother": "",
         "name": "Magnetics",
@@ -6655,7 +6651,8 @@
         "desc": "Gather the magnetic module outputs",
         "is_internal": false,
         "methods": [
-            "comp_emf"
+            "comp_emf",
+            "store"
         ],
         "mother": "",
         "name": "OutMag",
