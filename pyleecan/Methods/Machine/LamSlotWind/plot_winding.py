@@ -145,6 +145,6 @@ def plot_winding(self, wind_mat=None, all_slot=False, is_show_fig=True):
         label_leg.append(qs_name[q] + "-")
 
     legend(sym_leg, label_leg, ncol=2)
-    
+
     if is_show_fig:
         fig.show()

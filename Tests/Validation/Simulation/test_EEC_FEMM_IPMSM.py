@@ -66,7 +66,7 @@ def test_EEC_FEMM_IPMSM():
         "time",
         "phase",
         save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
-        is_show_fig=False
+        is_show_fig=False,
     )
 
     # from Yang et al, 2013

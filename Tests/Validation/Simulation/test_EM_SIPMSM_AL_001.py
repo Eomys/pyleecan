@@ -115,5 +115,5 @@ def test_Magnetic_FEMM_sym():
         data_list=[out3.mag.B],
         legend_list=["No symmetry", "MANATEE SDM"],
         save_path=join(save_path, "test_EM_SIPMSM_AL_001_SDM.png"),
-        is_show_fig=False
+        is_show_fig=False,
     )

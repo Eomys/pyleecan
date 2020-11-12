@@ -30,7 +30,7 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
         data_list=[MMF_U],
         fig=fig,
         color_list=color_list,
-        is_show_fig=is_show_fig
+        is_show_fig=is_show_fig,
     )
 
     plot_2D_Data(
@@ -40,5 +40,5 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
         data_list=[MMF_U],
         fig=fig,
         color_list=color_list,
-        is_show_fig=is_show_fig
+        is_show_fig=is_show_fig,
     )

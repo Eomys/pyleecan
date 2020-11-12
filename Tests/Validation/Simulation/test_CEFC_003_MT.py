@@ -71,14 +71,14 @@ def test_CEFC_003_t0(CEFC_Lam):
         "angle{rad}",
         component_list=["radial"],
         save_path=join(save_path, "test_CEFC_003_plot_force_space.png"),
-        is_show_fig=False
+        is_show_fig=False,
     )
     out.plot_2D_Data(
         "mag.B",
         "wavenumber=[0,78]",
         component_list=["radial"],
         save_path=join(save_path, "test_CEFC_003_plot_force_space_fft.png"),
-        is_show_fig=False
+        is_show_fig=False,
     )
 
     # ------------------------------------------------------

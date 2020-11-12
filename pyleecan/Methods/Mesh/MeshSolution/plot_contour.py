@@ -22,7 +22,7 @@ def plot_contour(
     group_names=None,
     save_path=None,
     itime=0,
-    is_show_fig=True
+    is_show_fig=True,
 ):
     """Plot the contour of a field on a mesh using pyvista plotter.
 

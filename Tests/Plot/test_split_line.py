@@ -27,13 +27,29 @@ class Test_split_line(object):
         plt.close("all")
         cut.plot(color="r", edgecolor="r", is_show_fig=False)
         fig = plt.gcf()
-        cut2.plot(fig=fig, color="g", edgecolor="g", is_disp_point_ref=True, is_show_fig=False)
-        circle.plot(fig=fig, color=(0, 0, 0, 0), edgecolor="k", linestyle="--", is_show_fig=False)
+        cut2.plot(
+            fig=fig, color="g", edgecolor="g", is_disp_point_ref=True, is_show_fig=False
+        )
+        circle.plot(
+            fig=fig,
+            color=(0, 0, 0, 0),
+            edgecolor="k",
+            linestyle="--",
+            is_show_fig=False,
+        )
         fig.savefig(join(save_path, "test_split_circle_1.png"))
 
         plt.close("all")
         cut.plot(color="r", edgecolor="r", is_show_fig=False)
         fig = plt.gcf()
-        cut3.plot(fig=fig, color="g", edgecolor="g", is_disp_point_ref=True, is_show_fig=False)
-        circle.plot(fig=fig, color=(0, 0, 0, 0), edgecolor="k", linestyle="--", is_show_fig=False)
+        cut3.plot(
+            fig=fig, color="g", edgecolor="g", is_disp_point_ref=True, is_show_fig=False
+        )
+        circle.plot(
+            fig=fig,
+            color=(0, 0, 0, 0),
+            edgecolor="k",
+            linestyle="--",
+            is_show_fig=False,
+        )
         fig.savefig(join(save_path, "test_split_circle_2.png"))

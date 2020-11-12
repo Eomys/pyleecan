@@ -4173,7 +4173,6 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "plot",
             "is_synchronous"
         ],
         "mother": "Machine",
@@ -7727,6 +7726,7 @@
         "daughters": [
             "Slot19",
             "SlotCirc",
+            "SlotDC",
             "SlotMFlat",
             "SlotMFlat2",
             "SlotMPolar",
@@ -9905,6 +9905,7 @@
         ],
         "daughters": [
             "SlotCirc",
+            "SlotDC",
             "SlotUD",
             "SlotW10",
             "SlotW11",

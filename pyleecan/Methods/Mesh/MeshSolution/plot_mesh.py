@@ -4,7 +4,13 @@ from ....Classes.MeshMat import MeshMat
 
 
 def plot_mesh(
-    self, label=None, index=None, indices=None, save_path=None, group_names=None, is_show_fig=True
+    self,
+    label=None,
+    index=None,
+    indices=None,
+    save_path=None,
+    group_names=None,
+    is_show_fig=True,
 ):
     """Plot the mesh using pyvista plotter.
 
