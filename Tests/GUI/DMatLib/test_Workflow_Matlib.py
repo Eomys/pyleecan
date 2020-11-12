@@ -67,6 +67,10 @@ class Test_Workflow_DMatLib(object):
 
         self.app.quit()
 
+        topLevelWidgets = QtWidgets.QApplication.topLevelWidgets()
+        for widget in topLevelWidgets:
+            widget.close()
+
         if is_clean_result:
             rmtree(work_path)
 
@@ -174,6 +178,8 @@ class Test_Workflow_DMatLib(object):
             self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.elec.rho
             == 1234.56789
         )
+
+        self.app.exit()
         # Close the Edit GUI and check Matlib modification
 
         # Doesn't Work

@@ -421,11 +421,11 @@ class TestSMHoleMag(object):
         setup["widget"] = SMHoleMag(
             machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
         )
-        setup["widget"].s_plot()
+        setup["widget"].s_plot(is_show_fig=False)
 
         assert setup["widget"].machine.rotor.hole[0].Zh == 8
 
         setup["widget"].machine.rotor.hole[0].W1 = 0.300
-        setup["widget"].s_plot()
+        setup["widget"].s_plot(is_show_fig=False)
 
         assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 45 °"
