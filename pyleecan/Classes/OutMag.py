@@ -21,6 +21,11 @@ try:
 except ImportError as error:
     comp_emf = error
 
+try:
+    from ..Methods.Output.OutMag.store import store
+except ImportError as error:
+    store = error
+
 
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
@@ -31,6 +36,7 @@ class OutMag(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Output.OutMag.comp_emf
     if isinstance(comp_emf, ImportError):
         comp_emf = property(
@@ -40,6 +46,15 @@ class OutMag(FrozenClass):
         )
     else:
         comp_emf = comp_emf
+    # cf Methods.Output.OutMag.store
+    if isinstance(store, ImportError):
+        store = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMag method store: " + str(store))
+            )
+        )
+    else:
+        store = store
     # save and copy methods are available in all object
     save = save
     copy = copy

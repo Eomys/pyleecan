@@ -12,6 +12,7 @@ def solve_FEMM_parallel(
     femm,
     output,
     out_dict,
+    FEMM_dict,
     sym,
     Nt,
     angle,
@@ -40,6 +41,8 @@ def solve_FEMM_parallel(
                 Electromagnetic torque over time (Nt,) [Nm]
             Phi_wind_stator : ndarray
                 Stator winding flux (qs,Nt) [Wb]
+    FEMM_dict : dict
+        Dict containing FEMM model parameters
     sym: int
         Spatial symmetry factor
     Nt: int
@@ -105,6 +108,7 @@ def solve_FEMM_parallel(
             femm,
             output,
             out_dict,
+            FEMM_dict,
             sym=sym,
             Nt=Nt,
             angle=angle,

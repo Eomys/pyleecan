@@ -6,15 +6,13 @@ from SciDataTool import DataTime, VectorField, Data1D
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
-def store_output(self, output, out_dict, axes_dict):
+def store(self, out_dict, axes_dict):
     """Store the standard outputs of Magnetics that are temporarily in out_dict as arrays into OutMag as Data object
 
     Parameters
     ----------
-    self : Magnetic
-        a Magnetic object
-    output : Output
-        an Output object (to update)
+    self : OutMag
+        the OutMag object to update
     out_dict : dict
         Dict containing all magnetic quantities that have been calculated in comp_flux_airgap
     axes_dict: {Data}
@@ -29,13 +27,13 @@ def store_output(self, output, out_dict, axes_dict):
     # Axes for each airgap flux component
     axis_list = [Time, axes_dict["Angle"]]
     # Create VectorField with empty components
-    output.mag.B = VectorField(
+    self.B = VectorField(
         name="Airgap flux density",
         symbol="B",
     )
     # Radial flux component
     if "Br" in out_dict:
-        output.mag.B.components["radial"] = DataTime(
+        self.B.components["radial"] = DataTime(
             name="Airgap radial flux density",
             unit="T",
             symbol="B_r",
@@ -44,7 +42,7 @@ def store_output(self, output, out_dict, axes_dict):
         )
     # Tangential flux component
     if "Bt" in out_dict:
-        output.mag.B.components["tangential"] = DataTime(
+        self.B.components["tangential"] = DataTime(
             name="Airgap tangential flux density",
             unit="T",
             symbol="B_t",
@@ -53,7 +51,7 @@ def store_output(self, output, out_dict, axes_dict):
         )
     # Axial flux component
     if "Bz" in out_dict:
-        output.mag.B.components["axial"] = DataTime(
+        self.B.components["axial"] = DataTime(
             name="Airgap axial flux density",
             unit="T",
             symbol="B_z",
@@ -66,7 +64,7 @@ def store_output(self, output, out_dict, axes_dict):
 
         Tem = out_dict.pop("Tem")
 
-        output.mag.Tem = DataTime(
+        self.Tem = DataTime(
             name="Electromagnetic torque",
             unit="Nm",
             symbol="T_{em}",
@@ -75,23 +73,23 @@ def store_output(self, output, out_dict, axes_dict):
         )
 
         # Calculate average torque in Nm
-        output.mag.Tem_av = mean(Tem)
-        self.get_logger().debug("Average Torque: " + str(output.mag.Tem_av) + " N.m")
+        self.Tem_av = mean(Tem)
+        self.get_logger().debug("Average Torque: " + str(self.Tem_av) + " N.m")
 
         # Calculate peak to peak torque in absolute value Nm
-        output.mag.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]
+        self.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]
 
         # Calculate torque ripple in percentage
-        if output.mag.Tem_av != 0:
-            output.mag.Tem_rip_norm = output.mag.Tem_rip_pp / output.mag.Tem_av  # []
+        if self.Tem_av != 0:
+            self.Tem_rip_norm = self.Tem_rip_pp / self.Tem_av  # []
         else:
-            output.mag.Tem_rip_norm = None
+            self.Tem_rip_norm = None
 
     # Store stator winding flux and calculate electromotive force
     if "Phi_wind_stator" in out_dict:
 
         # Store stator winding flux
-        qs = self.parent.machine.stator.winding.qs
+        qs = self.parent.simu.machine.stator.winding.qs
 
         Phase = Data1D(
             name="phase",
@@ -100,7 +98,7 @@ def store_output(self, output, out_dict, axes_dict):
             is_components=True,
         )
 
-        output.mag.Phi_wind_stator = DataTime(
+        self.Phi_wind_stator = DataTime(
             name="Stator Winding Flux",
             unit="Wb",
             symbol="Phi_{wind}",
@@ -109,4 +107,12 @@ def store_output(self, output, out_dict, axes_dict):
         )
 
         # Electromotive force computation
-        output.mag.comp_emf()
+        self.comp_emf()
+
+    # Store FEA dict object
+    if "FEA_dict" in out_dict:
+        self.FEA_dict = out_dict.pop("FEA_dict")
+
+    # Store MeshSolution object
+    if "meshsolution" in out_dict:
+        self.meshsolution = out_dict.pop("meshsolution")
