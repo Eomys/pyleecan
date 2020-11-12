@@ -288,11 +288,7 @@ class Test_InCurrent_meth(object):
         assert out.elec.Iq_ref == pytest.approx(test_dict["Iq"], abs=0.01)
 
         # Plot 3-phase current function of time
-        out.plot_2D_Data(
-            "elec.Is",
-            "time",
-            "phase",
-        )
+        out.plot_2D_Data("elec.Is", "time", "phase", is_show_fig=False)
 
         # Save picture
         title = "Id=" + str(test_dict["Id"]) + " Iq=" + str(test_dict["Iq"])
@@ -326,6 +322,7 @@ if __name__ == "__main__":
     #         "elec.Is",
     #         "time",
     #         "phase",
+    #         is_show_fig=False
     #     )
 
     # title = "Id=" + str(test_dict["Id"]) + " Iq=" + str(test_dict["Iq"])

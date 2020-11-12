@@ -76,6 +76,7 @@ def test_FEMM_import_model():
         data_list=[out2.mag.B],
         legend_list=["Creating .fem", "Importing .fem"],
         save_path=join(save_path, "FEMM_import_model_B.png"),
+        is_show_fig=False,
     )
 
     assert_array_almost_equal(

@@ -8,6 +8,7 @@
 
 from ...Functions.GMSH import boundary_prop
 
+
 def get_boundary_condition(line):
     """Returns
 

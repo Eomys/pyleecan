@@ -109,6 +109,7 @@ def test_Magnetic_FEMM_sym():
         data_list=[out2.mag.B],
         legend_list=["No symmetry", "1/2 symmetry"],
         save_path=join(save_path, "test_EM_SCIM_NL_006_sym.png"),
+        is_show_fig=False,
     )
 
     # Plot the result by comparing the two simulation (no sym / MANATEE)
@@ -121,6 +122,7 @@ def test_Magnetic_FEMM_sym():
         legend_list=["No symmetry", "MANATEE MMF"],
         component_list=["radial"],
         save_path=join(save_path, "test_EM_SCIM_NL_006_MMF.png"),
+        is_show_fig=False,
     )
 
     return out, out2, out3

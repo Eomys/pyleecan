@@ -95,13 +95,13 @@ class Test_notches_plot(object):
         test_obj.stator.notch = [notch]
 
         # Plot, save and check
-        test_obj.plot(sym=1)
+        test_obj.plot(sym=1, is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_notch_sym_1.png"))
         # Rotor + Stator + 1 for Shaft
         assert len(fig.axes[0].patches) == 53
 
-        test_obj.stator.plot(sym=2)
+        test_obj.stator.plot(sym=2, is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_notch_sym_2.png"))
         # Rotor + Stator + 2 for frame + 1 for Shaft
