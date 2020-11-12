@@ -19,6 +19,7 @@ from pyleecan.Functions.FEMM import GROUP_SC
 import pytest
 
 
+@pytest.mark.skip
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM

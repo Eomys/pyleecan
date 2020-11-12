@@ -31,6 +31,11 @@ try:
 except ImportError as error:
     get_Us = error
 
+try:
+    from ..Methods.Output.OutElec.comp_I_mag import comp_I_mag
+except ImportError as error:
+    comp_I_mag = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -69,6 +74,15 @@ class OutElec(FrozenClass):
         )
     else:
         get_Us = get_Us
+    # cf Methods.Output.OutElec.comp_I_mag
+    if isinstance(comp_I_mag, ImportError):
+        comp_I_mag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method comp_I_mag: " + str(comp_I_mag))
+            )
+        )
+    else:
+        comp_I_mag = comp_I_mag
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -384,7 +398,7 @@ class OutElec(FrozenClass):
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
-        doc=u"""Stator currents as a function of time (each column correspond to one phase)
+        doc=u"""Stator currents DataTime object
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,

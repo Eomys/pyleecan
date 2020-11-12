@@ -5,7 +5,7 @@ from SciDataTool import DataTime, Data1D, VectorField
 import numpy as np
 
 
-def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
+def build_meshsolution(self, Nt, meshFEMM, Time, B, H, mu, groups):
     """Build the MeshSolution objets from FEMM outputs.
 
     Parameters
@@ -26,12 +26,12 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
     """
 
     sollist = list()
-    cond = self.is_sliding_band or Nt_tot == 1
+    cond = self.is_sliding_band or Nt == 1
     if cond:
         indices_cell = meshFEMM[0].cell["triangle"].indice
-        Direction = Data1D(name="direction", values=["x", "y", "z"], is_components=True)
+        # Direction = Data1D(name="direction", values=["x", "y", "z"], is_components=True)
         Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=True)
-        Nodirection = Data1D(name="direction", values=["scalar"], is_components=False)
+        # Nodirection = Data1D(name="direction", values=["scalar"], is_components=False)
 
         # Store the results for B
         components = {}

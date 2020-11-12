@@ -124,3 +124,10 @@ def test_Magnetic_FEMM_sym():
         save_path=join(save_path, "test_EM_SCIM_NL_006_MMF.png"),
         is_show_fig=False
     )
+
+    return out, out2, out3
+
+
+# To run it without pytest
+if __name__ == "__main__":
+    out, out2, out3 = test_Magnetic_FEMM_sym()

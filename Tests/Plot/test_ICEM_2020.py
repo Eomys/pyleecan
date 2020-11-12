@@ -126,7 +126,8 @@ def test_gmsh_mesh_dict():
 
     # Definition of the number of each element on each line
     mesh_dict = {
-        "Tooth_Yoke_Side": 5,
+        "Tooth_Yoke_Side_Right": 5,
+        "Tooth_Yoke_Side_Left": 5,
         "Tooth_Yoke_Arc": 5,
         "Tooth_line_3": 2,
         "Tooth_line_4": 8,

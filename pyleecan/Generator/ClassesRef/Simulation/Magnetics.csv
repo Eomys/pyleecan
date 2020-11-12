@@ -1,10 +1,12 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
 is_remove_slotS,-,1 to artificially remove stator slotting effects in permeance mmf calculations,0,bool,0,,,,Simulation,,run,VERSION,1,Magnetic module abstract object,MagFEMM
-is_remove_slotR,-,1 to artificially remove rotor slotting effects in permeance mmf calculations,0,bool,0,,,,,,comp_time_angle,,,,
-is_remove_vent,-,1 to artificially remove the ventilations duct,0,bool,0,,,,,,comp_emf,,,,
+is_remove_slotR,-,1 to artificially remove rotor slotting effects in permeance mmf calculations,0,bool,0,,,,,,comp_axes,,,,MagElmer
+is_remove_vent,-,1 to artificially remove the ventilations duct,0,bool,0,,,,,,store_output,,,,
 is_mmfs,-,1 to compute the stator magnetomotive force / stator armature magnetic field,0,bool,1,,,,,,,,,,
 is_mmfr,-,1 to compute the rotor magnetomotive force / rotor magnetic field,0,bool,1,,,,,,,,,,
 type_BH_stator,-,"0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)",0,int,0,0,2,,,,,,,,
 type_BH_rotor,-,"0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)",0,int,0,0,2,,,,,,,,
 is_periodicity_t,-,True to compute only on one time periodicity (use periodicities defined in output.mag.Time),0,bool,0,,,,,,,,,,
 is_periodicity_a,-,True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle),0,bool,0,,,,,,,,,,
+angle_stator_shift,rad,Shift angle to appy to the stator in magnetic model,0,float,0,,,,,,,,,,
+angle_rotor_shift,rad,Shift angle to appy to the rotor in magnetic model,0,float,0,,,,,,,,,,

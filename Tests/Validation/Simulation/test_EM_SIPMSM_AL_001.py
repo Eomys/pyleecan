@@ -66,7 +66,7 @@ def test_Magnetic_FEMM_sym():
         is_periodicity_a=False,
         is_periodicity_t=False,
         is_mmfr=False,
-        angle_stator=-pi / 6,
+        angle_stator_shift=-pi / 6,
     )
     simu.force = None
     simu.struct = None

@@ -1229,8 +1229,8 @@
         "desc": "Forces module abstract object",
         "is_internal": false,
         "methods": [
-            "comp_time_angle",
-            "run"
+            "run",
+            "comp_axes"
         ],
         "mother": "",
         "name": "Force",
@@ -3831,6 +3831,8 @@
             "plot",
             "plot_anim_rotor",
             "get_lam_list",
+            "get_lam_list_label",
+            "get_lam_by_label",
             "get_pole_pair_number"
         ],
         "mother": "",
@@ -4254,7 +4256,8 @@
             "get_meshsolution",
             "get_path_save_fea",
             "get_path_save",
-            "comp_time_angle"
+            "comp_axes",
+            "store_output"
         ],
         "mother": "Magnetics",
         "name": "MagElmer",
@@ -4296,15 +4299,6 @@
                 "type": "dict",
                 "unit": "",
                 "value": ""
-            },
-            {
-                "desc": "Angular position shift of the stator",
-                "max": "",
-                "min": "",
-                "name": "angle_stator",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             },
             {
                 "desc": "To save FEA mesh for latter post-procesing ",
@@ -4389,8 +4383,8 @@
             "get_path_save_fem",
             "build_meshsolution",
             "solve_FEMM_parallel",
-            "get_meshsolution_parallel",
-            "comp_time_angle"
+            "comp_axes",
+            "store_output"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",
@@ -4441,15 +4435,6 @@
                 "type": "dict",
                 "unit": "",
                 "value": ""
-            },
-            {
-                "desc": "Angular position shift of the stator",
-                "max": "",
-                "min": "",
-                "name": "angle_stator",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             },
             {
                 "desc": "To save FEA mesh for latter post-procesing ",
@@ -4512,7 +4497,7 @@
                 "name": "import_file",
                 "type": "str",
                 "unit": "",
-                "value": ""
+                "value": "None"
             },
             {
                 "desc": "To close femm automatically after the simulation",
@@ -4910,8 +4895,8 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_time_angle",
-            "comp_emf"
+            "comp_axes",
+            "store_output"
         ],
         "mother": "",
         "name": "Magnetics",
@@ -4997,6 +4982,24 @@
                 "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Shift angle to appy to the stator in magnetic model",
+                "max": "",
+                "min": "",
+                "name": "angle_stator_shift",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            },
+            {
+                "desc": "Shift angle to appy to the rotor in magnetic model",
+                "max": "",
+                "min": "",
+                "name": "angle_rotor_shift",
+                "type": "float",
+                "unit": "rad",
                 "value": 0
             }
         ]
@@ -6182,7 +6185,8 @@
         "methods": [
             "get_Nr",
             "get_Is",
-            "get_Us"
+            "get_Us",
+            "comp_I_mag"
         ],
         "mother": "",
         "name": "OutElec",
@@ -6208,7 +6212,7 @@
                 "value": "None"
             },
             {
-                "desc": "Stator currents as a function of time (each column correspond to one phase)",
+                "desc": "Stator currents DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Is",
@@ -6651,7 +6655,9 @@
         "daughters": [],
         "desc": "Gather the magnetic module outputs",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "comp_emf"
+        ],
         "mother": "",
         "name": "OutMag",
         "package": "Output",
@@ -6676,7 +6682,7 @@
                 "value": "None"
             },
             {
-                "desc": "Airgap flux density components",
+                "desc": "Airgap flux density VectorField object",
                 "max": "",
                 "min": "",
                 "name": "B",
@@ -6685,7 +6691,7 @@
                 "value": "None"
             },
             {
-                "desc": "Electromagnetic torque",
+                "desc": "Electromagnetic torque DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Tem",
@@ -6721,7 +6727,7 @@
                 "value": null
             },
             {
-                "desc": "Stator winding flux",
+                "desc": "Stator winding flux DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Phi_wind_stator",
@@ -6730,13 +6736,13 @@
                 "value": "None"
             },
             {
-                "desc": "Electromotive force",
+                "desc": "Electromotive force DataTime object",
                 "max": "",
                 "min": "",
                 "name": "emf",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataTime.DataTime",
                 "unit": "V",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "FEA software mesh and solution",
@@ -7891,6 +7897,110 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.03
+            }
+        ]
+    },
+    "SlotDC": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Slot with two rods (for double squirrel cage)",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "get_surface_wind",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_wind",
+            "comp_surface",
+            "comp_surface_wind"
+        ],
+        "mother": "SlotWind",
+        "name": "SlotDC",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotDC.csv",
+        "properties": [
+            {
+                "desc": "Slot isthmus width.",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Distance upper rod center to bore",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Diameter upper rod",
+                "max": "",
+                "min": "0",
+                "name": "D1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Middle connection width",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Height between the first and second center",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Diameter upper section lower rod",
+                "max": "",
+                "min": "0",
+                "name": "D2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Length of lower rod",
+                "max": "",
+                "min": "0",
+                "name": "H3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Radius lower section lower rod",
+                "max": "",
+                "min": "0",
+                "name": "R3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
             }
         ]
     },
@@ -10003,7 +10113,7 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_time_angle"
+            "comp_axes"
         ],
         "mother": "",
         "name": "Structural",
@@ -10011,13 +10121,13 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Structural.csv",
         "properties": [
             {
-                "desc": "Force module",
+                "desc": "Structural module",
                 "max": "",
                 "min": "",
-                "name": "force",
-                "type": "Force",
+                "name": "structural",
+                "type": "int",
                 "unit": "-",
-                "value": ""
+                "value": 0
             }
         ]
     },
