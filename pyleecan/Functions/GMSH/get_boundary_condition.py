@@ -31,11 +31,5 @@ def get_boundary_condition(line):
     for bound_label in boundary_prop:
         if bound_label in line.label:
             propname = boundary_prop[bound_label]
-        elif line.label.find("Rotor_Yoke_Side") != -1:
-            print(line.label)
-            propname = boundary_prop["Rotor_Yoke_Side"]
-        elif line.label.find("Stator_Yoke_Side") != -1:
-            print(line.label)
-            propname = boundary_prop["Stator_Yoke_Side"]
 
     return propname

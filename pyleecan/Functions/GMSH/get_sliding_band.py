@@ -43,7 +43,7 @@ def get_sliding_band(sym, machine):
     Sor = lam_ext.Rext
     Wgap_mec = Rgap_mec_ext - Rgap_mec_int
     W_sb = Wgap_mec / 4  # Width sliding band
-    tol = 0.1e-3  # Tolerance
+    tol = 0.5e-3  # Tolerance
     max_radius_Airgap_ext = Rgap_mec_ext + wedge_height + tol
     min_radius_Airgap_int = Rgap_mec_int - tol
 
@@ -67,13 +67,14 @@ def get_sliding_band(sym, machine):
                         label=line.label,
                         is_trigo_direction=True,
                     )
-                    # if phi_p2 > phi_p1:
+                    #if phi_p2 > phi_p1:
                     #    line_copy.reverse()
                 else:
                     line_copy = Segment(begin=p1, end=p2, label=line.label)
-                    # if phi_p2 > phi_p1:
-                    #    line_copy.reverse()
+                # if phi_p2 < phi_p1:
+                #     line_copy.reverse()
                 stator_airgap_ext_lines.append(line_copy)
+
 
     # Find lines that are between Rotor Outer Diam and ...
     rotor_airgap_int_lines = list()
