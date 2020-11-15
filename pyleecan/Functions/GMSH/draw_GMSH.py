@@ -871,6 +871,7 @@ def draw_GMSH(
     gmsh.model.mesh.generate(2)
 
     # Save and close
+    # print("writing", path_save)
     gmsh.write(path_save)
     # gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()

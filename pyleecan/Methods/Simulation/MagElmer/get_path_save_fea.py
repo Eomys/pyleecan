@@ -33,6 +33,6 @@ def get_path_save_fea(self, output):
     #     file_name = output.simu.name + "_model.fem"
     # else:  # Default name
     #     file_name = "FEMM_simulation.fem"
-    file_name = ""
+    file_name = "ELMER_simulation"
 
     return join(save_dir, file_name)
