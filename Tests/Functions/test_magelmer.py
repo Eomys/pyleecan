@@ -54,6 +54,7 @@ mesh_dict = {
 def test_Elmer():
 
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    IPMSM_A.stator.slot.H1 = 1e-3
     simu = Simu1(name="elmer", machine=IPMSM_A)
     simu.machine.name = "fig_Elmer_sym"
 
