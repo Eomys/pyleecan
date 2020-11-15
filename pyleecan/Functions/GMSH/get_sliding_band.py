@@ -43,12 +43,13 @@ def get_sliding_band(sym, machine):
     Sor = lam_ext.Rext
     Wgap_mec = Rgap_mec_ext - Rgap_mec_int
     W_sb = Wgap_mec / 4  # Width sliding band
-    tol = 0.5e-3  # Tolerance
+    tol = 0.1e-3  # Tolerance
     max_radius_Airgap_ext = Rgap_mec_ext + wedge_height + tol
     min_radius_Airgap_int = Rgap_mec_int - tol
 
     # Find lines that are between Stator Inner Diam and slot wedge area
     stator_airgap_ext_lines = list()
+    first_points = list()               # To check the loop and find inverted lines
     for surf in stator_list:
         for line in surf.get_lines():
             p1 = line.get_begin()
@@ -71,9 +72,15 @@ def get_sliding_band(sym, machine):
                     #    line_copy.reverse()
                 else:
                     line_copy = Segment(begin=p1, end=p2, label=line.label)
-                # if phi_p2 < phi_p1:
-                #     line_copy.reverse()
+                new_p1 = p1
+                for p in first_points:
+                    if abs(p1.real - p.real) < tol and abs(p1.imag - p.imag) < tol:
+                        line_copy.reverse()
+                        new_p1 = p2
+                        break
                 stator_airgap_ext_lines.append(line_copy)
+                first_points.append(new_p1)
+
 
 
     # Find lines that are between Rotor Outer Diam and ...

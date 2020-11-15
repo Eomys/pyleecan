@@ -12,7 +12,6 @@ import sys
 import gmsh
 import cmath
 
-import numpy as np
 
 def _find_point_tag(d={}, p=complex(0.0, 0.0)):
     """Find a point in the GMSH dictionary
@@ -459,7 +458,7 @@ def draw_GMSH(
 
     # Start a new model
     gmsh.initialize(sys.argv)
-    gmsh.option.setNumber("General.Terminal", int(True))
+    gmsh.option.setNumber("General.Terminal", int(False))
     gmsh.option.setNumber("Geometry.CopyMeshingMethod", 1)
     gmsh.option.setNumber("Geometry.PointNumbers", 0)
     gmsh.option.setNumber("Geometry.LineNumbers", 0)
@@ -757,10 +756,6 @@ def draw_GMSH(
                     n_elements=n_elem,
                     bc=bc_name,
                 )
-            ppp1 =line.get_begin()
-            ppp2 = line.get_end()
-            vec = np.array([ppp2.real-ppp1.real,ppp2.imag-ppp1.imag])
-            print(line.label, np.cross(np.array([1,0]),vec))
 
     for s_id, s_data in gmsh_dict.items():
         lloop = []
@@ -778,7 +773,6 @@ def draw_GMSH(
                 continue
 
         if lloop:
-            print(s_data["label"], lloop)
             cloop = factory.addCurveLoop(lloop)
             s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
             pg = model.addPhysicalGroup(2, [s_data["tag"]])
@@ -878,7 +872,7 @@ def draw_GMSH(
 
     # Save and close
     gmsh.write(path_save)
-    gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
+    # gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()
 
     return gmsh_dict
