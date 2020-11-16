@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+
 def get_field(self, *args):
     """Get the value of variables stored in Solution.
 
@@ -20,14 +21,14 @@ def get_field(self, *args):
 
     axname, axsize = self.get_axis_list()
 
-    id=0
+    id = 0
     for name in axname:
         if name == "component":
             if axsize[id] == 2:
                 dim = 2
             else:
                 dim = 3
-        id+=1
+        id += 1
 
     if not args:
         field = np.zeros(axsize)

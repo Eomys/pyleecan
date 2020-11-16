@@ -33,7 +33,7 @@ class Test_get_field(TestCase):
 
         field = solution.get_field("time[0]", "indice[1,2]")
 
-        correction = np.array([[2,3]])
+        correction = np.array([[2, 3]])
         result = np.sum(np.abs(correction - field))
         msg = "Wrong result: returned " + str(field) + ", expected: " + str(correction)
         self.assertAlmostEqual(result, 0, msg=msg, delta=DELTA)
@@ -121,7 +121,7 @@ class Test_get_field(TestCase):
 
         field = solution.get_field("time[0]", "indice[1,2]")
 
-        correction = correction[0,1:3]
+        correction = correction[0, 1:3]
         result = np.sum(np.abs(correction - field))
         msg = "Wrong result: returned " + str(field) + ", expected: " + str(correction)
         self.assertAlmostEqual(result, 0, msg=msg, delta=DELTA)

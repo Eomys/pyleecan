@@ -40,7 +40,9 @@ def get_field(self, *args):
                         # Range of indices
                         if ":" in ind_str:
                             elems2 = ind_str.split(":")
-                            indices = [i for i in range(int(elems2[0]), int(elems2[1]) + 1)]
+                            indices = [
+                                i for i in range(int(elems2[0]), int(elems2[1]) + 1)
+                            ]
                         # List of indices
                         elif "," in ind_str:
                             indices = [int(x) for x in ind_str.split(",")]

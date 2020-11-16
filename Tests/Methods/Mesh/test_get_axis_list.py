@@ -26,7 +26,12 @@ class Test_get_axis_list(TestCase):
 
         axname, axsize = solution.get_axis_list()
 
-        msg = "Wrong result: returned " + str(axsize) + ", expected: " + str(solution.axis_size)
+        msg = (
+            "Wrong result: returned "
+            + str(axsize)
+            + ", expected: "
+            + str(solution.axis_size)
+        )
         self.assertAlmostEqual(axsize, solution.axis_size, msg=msg, delta=DELTA)
 
     def test_SolutionVector(self):
@@ -68,7 +73,7 @@ class Test_get_axis_list(TestCase):
 
         axname, axsize = solution.get_axis_list()
 
-        correction = [10,4,2]
+        correction = [10, 4, 2]
         msg = "Wrong result: returned " + str(axsize) + ", expected: " + str(correction)
         self.assertAlmostEqual(axsize, correction, msg=msg, delta=DELTA)
 
