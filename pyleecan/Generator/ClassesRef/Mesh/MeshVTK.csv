@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-mesh,,Pyvista object of the mesh (optional),,pyvista.core.pointset.UnstructuredGrid,None,,,,Mesh,Mesh,get_mesh_pv,VERSION,1,Gather the mesh storage format
+mesh,,Pyvista object of the mesh (optional),,pyvista.core.pointset.PointGrid,None,,,,Mesh,Mesh,get_mesh_pv,VERSION,1,Gather the mesh storage format
 is_pyvista_mesh,,Store the pyvista object,,bool,False,,,,,,get_point,,,
 format,,Format in which the mesh is stored,,str,vtk,,,,,,get_cell,,,
 path,,Path where the mesh is stored,,str,,,,,,,get_normals,,,

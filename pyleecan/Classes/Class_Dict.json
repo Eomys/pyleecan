@@ -5622,7 +5622,7 @@
                 "max": "",
                 "min": "",
                 "name": "mesh",
-                "type": "pyvista.core.pointset.UnstructuredGrid",
+                "type": "pyvista.core.pointset.PointGrid",
                 "unit": "",
                 "value": "None"
             },
