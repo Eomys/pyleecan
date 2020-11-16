@@ -16,9 +16,9 @@ def comp_radius(self):
     (Rmin,Rmax): tuple
         Radius of the circle that contains the hole [m]
     """
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
-    Rmax = Rbo - self.H1
-    Rmin = Rbo - self.H0 - self.H2
+    Rmax = Rext - self.H1
+    Rmin = Rext - self.H0 - self.H2
 
     return (Rmin, Rmax)

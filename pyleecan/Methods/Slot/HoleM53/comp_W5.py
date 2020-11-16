@@ -25,14 +25,14 @@ def comp_W5(self):
 
     """
 
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
-    Z7 = Rbo - self.H0 - 1j * self.W1 / 2
+    Z7 = Rext - self.H0 - 1j * self.W1 / 2
     Z8 = Z7 + (self.H2 - self.H3) * sin(self.W4)
     Z10 = (self.W2 + self.W3) * exp(-1j * self.W4) + Z8
 
     # Z1 and Z11 are defined as intersection between line and circle
-    Zlist = inter_line_circle(Z8, Z10, Rbo - self.H1)
+    Zlist = inter_line_circle(Z8, Z10, Rext - self.H1)
     if len(Zlist) == 2 and Zlist[0].imag < 0 and Zlist[0].real > 0:
         Z11 = Zlist[0]
     elif len(Zlist) == 2 and Zlist[1].imag < 0 and Zlist[1].real > 0:
