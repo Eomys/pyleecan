@@ -24,4 +24,4 @@ def run(self):
     out_dict = self.comp_flux_airgap(output, axes_dict)
 
     # Store magnetic quantities contained in out_dict in OutMag, as Data object if necessary
-    self.store_output(output, out_dict, axes_dict)
+    output.mag.store(out_dict, axes_dict)

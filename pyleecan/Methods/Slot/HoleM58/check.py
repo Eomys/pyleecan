@@ -40,7 +40,7 @@ def check(self):
     elif self.H2 is None:
         raise S58_NoneError("You must set H2 !")
 
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
     if self.W0 < self.W1 + self.W2:
         raise S58_WCheckError("You must have W1+W2 <= W0")

@@ -118,7 +118,7 @@ def test_gmsh_mesh_dict():
     )
 
     # Plot, check and save
-    stator.plot(is_lam_only=True)
+    stator.plot(is_lam_only=True, is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_10_ref_lamination.png"))
     fig.savefig(join(save_path, "fig_10_ref_lamination.svg"), format="svg")
@@ -194,7 +194,7 @@ def test_SlotMulti_sym():
     rotor.notch = [notch]
 
     # Plot, check and save
-    rotor.plot(sym=4)
+    rotor.plot(sym=4, is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_11_SlotMulti_sym.png"))
     fig.savefig(join(save_path, "fig_11_SlotMulti_sym.svg"), format="svg")
@@ -259,25 +259,20 @@ def test_MachineUD():
     machine.lam_list = [lam1, lam2, lam3, lam4]
 
     # Plot, check and save
-    machine.plot()
+    machine.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_12_MachineUD.png"))
     fig.savefig(join(save_path, "fig_12_MachineUD.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 56
+    assert len(fig.axes[0].patches) == 57
 
     machine.frame = None
     machine.name = None
 
-    machine.plot()
+    machine.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.png"))
     fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 56
-
-    """Check that plot raise an error when comp_machine is set for a MachineUD"""
-
-    with pytest.raises(ValueError) as context:
-        machine.plot(comp_machine=1564)
+    assert len(fig.axes[0].patches) == 57
 
     """Check that comp_connection_mat can raise a WindingT1DefMsError"""
 
@@ -352,7 +347,7 @@ def test_SlotMulti_rotor():
     rotor.notch = [notch]
 
     # Plot, check and save
-    rotor.plot()
+    rotor.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_13_LamSlotMulti_rotor.png"))
     fig.savefig(join(save_path, "fig_13_LamSlotMulti_rotor.svg"), format="svg")
@@ -390,7 +385,7 @@ def test_SlotMulti_stator():
     stator.notch = [notch]
 
     # Plot, check and save
-    stator.plot()
+    stator.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_13_LamSlotMulti_stator.png"))
     fig.savefig(join(save_path, "fig_13_LamSlotMulti_stator.svg"), format="svg")
@@ -443,7 +438,7 @@ def test_SlotUD():
     machine.rotor.slot.set_from_point_list(is_sym=True, point_list=point_list)
 
     # Plot, check and save
-    machine.plot()
+    machine.plot(is_show_fig=False)
     fig = plt.gcf()
     assert len(fig.axes[0].patches) == 83
     fig.savefig(join(save_path, "fig_14_SlotUD.png"))
@@ -487,7 +482,7 @@ def test_WindingUD():
     machine.frame = Frame(Rint=0.8, Rext=0.9, Lfra=1)
 
     # Plot, check and save
-    machine.plot()
+    machine.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_16_WindingUD.png"))
     fig.savefig(join(save_path, "fig_16_WindingUD.svg"), format="svg")
@@ -526,7 +521,7 @@ def test_BoreFlower():
     rotor.bore = BoreFlower(N=8, Rarc=0.05, alpha=pi / 8)
 
     # Plot, check and save
-    rotor.plot()
+    rotor.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_18_BoreFlower.png"))
     fig.savefig(join(save_path, "fig_18_BoreFlower.svg"), format="svg")
@@ -598,7 +593,7 @@ def test_ecc_FEMM():
     )
     # Plot, check, save
     out.mag.meshsolution.plot_mesh(
-        save_path=join(save_path, "fig_19_transform_list.png")
+        save_path=join(save_path, "fig_19_transform_list.png"), is_show_fig=False
     )
 
 
@@ -705,7 +700,7 @@ def test_Optimization_problem():
     output.simu.machine.rotor.slot.magnet[0].Wmag *= 0.98
 
     # FIG21 Display default machine
-    output.simu.machine.plot()
+    output.simu.machine.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_21_Machine_topology_before_optimization.png"))
     fig.savefig(
@@ -823,7 +818,7 @@ def test_Optimization_problem():
     simu2.machine.name = name2
 
     # plot the machine
-    simu1.machine.plot()
+    simu1.machine.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(
         join(save_path, "fig_21_Topology_to_maximize_average_torque.png"), format="png"
@@ -832,7 +827,7 @@ def test_Optimization_problem():
         join(save_path, "fig_21_Topology_to_maximize_average_torque.svg"), format="svg"
     )
 
-    simu2.machine.plot()
+    simu2.machine.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(
         join(save_path, "fig_21_Topology_to_minimize_torque_ripple.png"), format="png"

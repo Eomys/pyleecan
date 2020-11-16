@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from os.path import join
+
 from numpy import zeros
 
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
@@ -81,7 +83,7 @@ def comp_flux_airgap(self, output, axes_dict):
     femm = FEMMHandler(not self.is_close_femm)
     if self.import_file is None:
         self.get_logger().debug("Drawing machine in FEMM...")
-        output.mag.FEA_dict = draw_FEMM(
+        FEMM_dict = draw_FEMM(
             femm,
             output,
             is_mmfr=self.is_mmfr,
@@ -96,7 +98,7 @@ def comp_flux_airgap(self, output, axes_dict):
             type_BH_rotor=self.type_BH_rotor,
             kgeo_fineness=self.Kgeo_fineness,
             kmesh_fineness=self.Kmesh_fineness,
-            user_FEMM_dict=self.FEMM_dict,
+            user_FEMM_dict=self.FEMM_dict_enforced,
             path_save=self.get_path_save_fem(output),
             is_sliding_band=self.is_sliding_band,
             transform_list=self.transform_list,
@@ -105,7 +107,7 @@ def comp_flux_airgap(self, output, axes_dict):
         )
     else:
         self.get_logger().debug("Reusing the FEMM file: " + self.import_file)
-        output.mag.FEA_dict = self.FEMM_dict
+        FEMM_dict = self.FEMM_dict_enforced
 
     # Init flux arrays in out_dict
     out_dict["Br"] = zeros((Nt, Na))
@@ -127,6 +129,7 @@ def comp_flux_airgap(self, output, axes_dict):
             femm,
             output,
             out_dict,
+            FEMM_dict=FEMM_dict,
             sym=sym,
             Nt=Nt,
             angle=angle,
@@ -140,6 +143,7 @@ def comp_flux_airgap(self, output, axes_dict):
             femm,
             output,
             out_dict,
+            FEMM_dict=FEMM_dict,
             sym=sym,
             Nt=Nt,
             angle=angle,
@@ -150,11 +154,20 @@ def comp_flux_airgap(self, output, axes_dict):
             filename=self.import_file,
         )
 
+    # Store FEMM_dict in out_dict if FEMM file is not imported
+    if self.import_file is None:
+        out_dict["FEA_dict"] = FEMM_dict
+
     # Store FEMM mesh results in meshsolution
     if self.is_get_mesh:
-        # Build MeshSolution object and store it in OutMag
+        # Build MeshSolution object and store it in out_dict
         out_dict["meshsolution"] = self.build_meshsolution(
             Nt, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
         )
+        # Save meshsolution as .h5 on disk if requested
+        if self.is_save_FEA:
+            save_path = output.get_path_result()
+            save_path_fea = join(save_path, "MeshSolutionFEMM.h5")
+            out_dict["meshsolution"].save(save_path_fea)
 
     return out_dict
