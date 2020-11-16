@@ -166,8 +166,8 @@ def comp_flux_airgap(self, output, axes_dict):
         )
         # Save meshsolution as .h5 on disk if requested
         if self.is_save_FEA:
-            save_path = self.get_path_save(self.parent)
+            save_path = output.get_path_result()
             save_path_fea = join(save_path, "MeshSolutionFEMM.h5")
-            self.meshsolution.save(save_path_fea)
+            out_dict["meshsolution"].save(save_path_fea)
 
     return out_dict

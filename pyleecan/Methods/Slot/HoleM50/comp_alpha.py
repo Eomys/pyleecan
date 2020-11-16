@@ -16,9 +16,9 @@ def comp_alpha(self):
     alpha: float
         Cf schematics [rad]
     """
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
-    alpham = 2 * arcsin(self.W0 / (2 * (Rbo - self.H1)))
+    alpham = 2 * arcsin(self.W0 / (2 * (Rext - self.H1)))
 
-    Harc = (Rbo - self.H1) * (1 - cos(alpham / 2))
+    Harc = (Rext - self.H1) * (1 - cos(alpham / 2))
     return arctan((self.H0 - self.H1 - Harc) / (self.W0 / 2 - self.W1 / 2))

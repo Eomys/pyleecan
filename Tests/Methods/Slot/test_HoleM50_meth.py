@@ -347,8 +347,8 @@ class Test_HoleM50_meth(object):
                 H4=1e-3,
             )
         )
-        assert test_obj.comp_radius_mid_yoke() != 0.1661908960397621
-        assert test_obj.comp_radius_mid_yoke() == 0.1785605
+        # Hole is defined on Rext, so mid yoke is around Rext, Rext H1
+        assert test_obj.comp_radius_mid_yoke() == 0.324375
 
     def test_comp_surface_magnet_id(self):
         """check that id is 0"""

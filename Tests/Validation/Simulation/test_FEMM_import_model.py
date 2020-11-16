@@ -47,11 +47,7 @@ def test_FEMM_import_model():
     simu.input.N0 = 3000  # Rotor speed [rpm]
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
     out = simu.run()
 
     # Second simulation, importing femm file and FEMM_dict
@@ -63,7 +59,7 @@ def test_FEMM_import_model():
         is_periodicity_a=True,
         is_periodicity_t=False,
         import_file=out.simu.mag.get_path_save_fem(out),
-        FEMM_dict=out.mag.FEA_dict,
+        FEMM_dict_enforced=out.mag.FEA_dict,
     )
 
     out2 = simu2.run()
