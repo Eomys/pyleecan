@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-
-def get_field(self, args=None):
+def get_field(self, *args):
     """Get the value of variables stored in Solution.
 
     Parameters
     ----------
-    self : Solution
-        an Solution object
-    field_name : str
-        name of the field to return
+    self : SolutionVector
+        an SolutionVector object
+    *args: list of strings
+        List of axes requested by the user, their units and values (optional)
 
     Returns
     -------
@@ -19,55 +18,30 @@ def get_field(self, args=None):
 
     """
 
-    if args is None:
-        args = dict()
+    axname, axsize = self.get_axis_list()
 
-    field = list()
-    along_arg = list()
-    if "component" in args:
-        comp = self.field.components[args["component"]]
-        for axis in self.field.components[comp].axes:
-            if axis.name in args:
-                if isinstance(args[axis.name], int):
-                    along_arg.append(axis.name + "[" + str(args[axis.name]) + "]")
-                else:
-                    along_arg.append(axis.name + str(args[axis.name]))
+    id=0
+    for name in axname:
+        if name == "component":
+            if axsize[id] == 2:
+                dim = 2
             else:
-                along_arg.append(axis.name)
+                dim = 3
+        id+=1
 
-        field.append(
-            self.field.components[comp].get_along(tuple(along_arg))[
-                self.field.components[comp].symbol
-            ]
-        )
+    if not args:
+        field = np.zeros(axsize)
+        field_dict = self.field.get_xyz_along(tuple(axname))
     else:
-        for comp in self.field.components:
-            along_arg = list()
-            for axis in self.field.components[comp].axes:
-                if axis.name in args:
-                    if isinstance(args[axis.name], int):
-                        along_arg.append(axis.name + "[" + str(args[axis.name]) + "]")
-                    else:
-                        along_arg.append(axis.name + str(args[axis.name]))
-                else:
-                    along_arg.append(axis.name)
+        field_dict = self.field.get_xyz_along(args)
+        comp_x = field_dict["comp_x"]
+        size = np.hstack((comp_x.shape, dim))
+        field = np.zeros(size)
 
-            field.append(
-                self.field.components[comp].get_along(tuple(along_arg))[
-                    self.field.components[comp].symbol
-                ]
-            )
+    field[..., 0] = field_dict["comp_x"]
+    field[..., 1] = field_dict["comp_y"]
 
-    field = np.array(field)
-    field = np.moveaxis(field, 0, -1)  # put the component axis at the end
-
-    # add a 1 dimension axis for all axis
-    all_ax = self.get_axis()
-    pos = 0
-    for i in all_ax:
-        if all_ax[i] == 1:
-            field = field[..., np.newaxis]
-            field = np.moveaxis(field, -1, pos)
-        pos = pos + 1
+    if dim == 3:
+        field[..., 2] = field_dict["comp_z"]
 
     return field
