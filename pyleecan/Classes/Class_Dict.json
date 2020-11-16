@@ -1229,8 +1229,8 @@
         "desc": "Forces module abstract object",
         "is_internal": false,
         "methods": [
-            "comp_time_angle",
-            "run"
+            "run",
+            "comp_axes"
         ],
         "mother": "",
         "name": "Force",
@@ -1425,7 +1425,11 @@
             "get_Rbo",
             "has_magnet",
             "plot",
-            "comp_height"
+            "comp_height",
+            "get_magnet_by_id",
+            "set_magnet_by_id",
+            "get_magnet_dict",
+            "convert_to_UD"
         ],
         "mother": "",
         "name": "Hole",
@@ -2288,7 +2292,8 @@
             "build_geometry",
             "comp_surface_magnet_id",
             "has_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "check"
         ],
         "mother": "HoleMag",
         "name": "HoleUD",
@@ -3826,6 +3831,8 @@
             "plot",
             "plot_anim_rotor",
             "get_lam_list",
+            "get_lam_list_label",
+            "get_lam_by_label",
             "get_pole_pair_number"
         ],
         "mother": "",
@@ -4166,7 +4173,6 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "plot",
             "is_synchronous"
         ],
         "mother": "Machine",
@@ -4233,6 +4239,130 @@
             }
         ]
     },
+    "MagElmer": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Magnetic module: Finite Element model with Elmer",
+        "is_internal": false,
+        "methods": [
+            "comp_flux_airgap",
+            "solve_FEA",
+            "get_meshsolution",
+            "get_path_save_fea",
+            "get_path_save",
+            "comp_axes"
+        ],
+        "mother": "Magnetics",
+        "name": "MagElmer",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/MagElmer.csv",
+        "properties": [
+            {
+                "desc": "global coefficient to adjust mesh fineness (1 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kmesh_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "global coefficient to adjust geometry fineness (1 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kgeo_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Name of the file to save the Elmer model",
+                "max": "",
+                "min": "",
+                "name": "file_name",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To enforce user-defined values for Elmer main parameters ",
+                "max": "",
+                "min": "",
+                "name": "FEA_dict",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To save FEA mesh for latter post-procesing ",
+                "max": "",
+                "min": "",
+                "name": "is_get_mesh",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "To save FEA mesh and solution in a file",
+                "max": "",
+                "min": "",
+                "name": "is_save_FEA",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "max": "",
+                "min": "",
+                "name": "transform_list",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "To use a dxf version of the rotor instead of build_geometry",
+                "max": "",
+                "min": "",
+                "name": "rotor_dxf",
+                "type": "DXFImport",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "To use a dxf version of the rotor instead of build_geometry",
+                "max": "",
+                "min": "",
+                "name": "stator_dxf",
+                "type": "DXFImport",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "To import an existing simulation file",
+                "max": "",
+                "min": "",
+                "name": "import_file",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To run Elmer in parallel (the parallelization is on the time loop)",
+                "max": "",
+                "min": "",
+                "name": "nb_worker",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            }
+        ]
+    },
     "MagFEMM": {
         "constants": [
             {
@@ -4250,9 +4380,7 @@
             "get_meshsolution",
             "get_path_save_fem",
             "build_meshsolution",
-            "solve_FEMM_parallel",
-            "get_meshsolution_parallel",
-            "comp_time_angle"
+            "solve_FEMM_parallel"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",
@@ -4299,19 +4427,10 @@
                 "desc": "To enforce user-defined values for FEMM main parameters ",
                 "max": "",
                 "min": "",
-                "name": "FEMM_dict",
+                "name": "FEMM_dict_enforced",
                 "type": "dict",
                 "unit": "",
                 "value": ""
-            },
-            {
-                "desc": "Angular position shift of the stator",
-                "max": "",
-                "min": "",
-                "name": "angle_stator",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             },
             {
                 "desc": "To save FEA mesh for latter post-procesing ",
@@ -4374,7 +4493,7 @@
                 "name": "import_file",
                 "type": "str",
                 "unit": "",
-                "value": ""
+                "value": "None"
             },
             {
                 "desc": "To close femm automatically after the simulation",
@@ -4765,14 +4884,14 @@
             }
         ],
         "daughters": [
+            "MagElmer",
             "MagFEMM"
         ],
         "desc": "Magnetic module abstract object",
         "is_internal": false,
         "methods": [
             "run",
-            "comp_time_angle",
-            "comp_emf"
+            "comp_axes"
         ],
         "mother": "",
         "name": "Magnetics",
@@ -4858,6 +4977,24 @@
                 "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Shift angle to appy to the stator in magnetic model",
+                "max": "",
+                "min": "",
+                "name": "angle_stator_shift",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            },
+            {
+                "desc": "Shift angle to appy to the rotor in magnetic model",
+                "max": "",
+                "min": "",
+                "name": "angle_rotor_shift",
+                "type": "float",
+                "unit": "rad",
                 "value": 0
             }
         ]
@@ -6043,7 +6180,8 @@
         "methods": [
             "get_Nr",
             "get_Is",
-            "get_Us"
+            "get_Us",
+            "comp_I_mag"
         ],
         "mother": "",
         "name": "OutElec",
@@ -6069,7 +6207,7 @@
                 "value": "None"
             },
             {
-                "desc": "Stator currents as a function of time (each column correspond to one phase)",
+                "desc": "Stator currents DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Is",
@@ -6512,7 +6650,10 @@
         "daughters": [],
         "desc": "Gather the magnetic module outputs",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "comp_emf",
+            "store"
+        ],
         "mother": "",
         "name": "OutMag",
         "package": "Output",
@@ -6537,7 +6678,7 @@
                 "value": "None"
             },
             {
-                "desc": "Airgap flux density components",
+                "desc": "Airgap flux density VectorField object",
                 "max": "",
                 "min": "",
                 "name": "B",
@@ -6546,7 +6687,7 @@
                 "value": "None"
             },
             {
-                "desc": "Electromagnetic torque",
+                "desc": "Electromagnetic torque DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Tem",
@@ -6582,7 +6723,7 @@
                 "value": null
             },
             {
-                "desc": "Stator winding flux",
+                "desc": "Stator winding flux DataTime object",
                 "max": "",
                 "min": "",
                 "name": "Phi_wind_stator",
@@ -6591,13 +6732,13 @@
                 "value": "None"
             },
             {
-                "desc": "Electromotive force",
+                "desc": "Electromotive force DataTime object",
                 "max": "",
                 "min": "",
                 "name": "emf",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataTime.DataTime",
                 "unit": "V",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "FEA software mesh and solution",
@@ -6609,10 +6750,10 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing the main FEMM parameter",
+                "desc": "Dictionnary containing the main FEA parameter",
                 "max": "",
                 "min": "",
-                "name": "FEMM_dict",
+                "name": "FEA_dict",
                 "type": "dict",
                 "unit": "",
                 "value": null
@@ -7070,7 +7211,8 @@
         ],
         "daughters": [
             "PostFunction",
-            "PostMethod"
+            "PostMethod",
+            "PostPlot"
         ],
         "desc": "Abstract class for postprocessing",
         "is_internal": false,
@@ -7115,7 +7257,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "PostPlot"
+        ],
         "desc": "Abstract class for post-processing defined in the method run",
         "is_internal": false,
         "methods": [
@@ -7126,6 +7270,71 @@
         "package": "Post",
         "path": "pyleecan/Generator/ClassesRef/Post/PostMethod.csv",
         "properties": []
+    },
+    "PostPlot": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Post-processing to do a plot which is a method of Output or other class if attribute is not None",
+        "is_internal": false,
+        "methods": [
+            "run"
+        ],
+        "mother": "PostMethod",
+        "name": "PostPlot",
+        "package": "Post",
+        "path": "pyleecan/Generator/ClassesRef/Post/PostPlot.csv",
+        "properties": [
+            {
+                "desc": "Full path of the plot method to call except Output (ex: \"plot_2D_Data\", \"mag.meshsolution.plot_contour\")",
+                "max": "",
+                "min": "",
+                "name": "method",
+                "type": "str",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "desc": "Name of the plot to use when saving the figure after plotting",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "",
+                "value": "[]"
+            },
+            {
+                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "max": "",
+                "min": "",
+                "name": "param_list",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "max": "",
+                "min": "",
+                "name": "param_dict",
+                "type": "dict",
+                "unit": "",
+                "value": {}
+            },
+            {
+                "desc": "File format extension (\"png\", \"svg\", \"eps\") in which to save the figure. The PostPlot automatically saves the figure in the results folder. The user can specify a different folder by specifying \"save_path\"=path_str or not save the figure by specifying \"save_path\"=None in param_dict, if the plot_method enables it.",
+                "max": "",
+                "min": "",
+                "name": "save_format",
+                "type": "str",
+                "unit": "",
+                "value": "png"
+            }
+        ]
     },
     "RefCell": {
         "constants": [
@@ -7514,6 +7723,7 @@
         "daughters": [
             "Slot19",
             "SlotCirc",
+            "SlotDC",
             "SlotMFlat",
             "SlotMFlat2",
             "SlotMPolar",
@@ -7684,6 +7894,110 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.03
+            }
+        ]
+    },
+    "SlotDC": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Slot with two rods (for double squirrel cage)",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "get_surface_wind",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_wind",
+            "comp_surface",
+            "comp_surface_wind"
+        ],
+        "mother": "SlotWind",
+        "name": "SlotDC",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotDC.csv",
+        "properties": [
+            {
+                "desc": "Slot isthmus width.",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Distance upper rod center to bore",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Diameter upper rod",
+                "max": "",
+                "min": "0",
+                "name": "D1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Middle connection width",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Height between the first and second center",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Diameter upper section lower rod",
+                "max": "",
+                "min": "0",
+                "name": "D2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Length of lower rod",
+                "max": "",
+                "min": "0",
+                "name": "H3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Radius lower section lower rod",
+                "max": "",
+                "min": "0",
+                "name": "R3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
             }
         ]
     },
@@ -7942,31 +8256,52 @@
             }
         ],
         "daughters": [],
-        "desc": "\"User defined\" Slot from a point list. ",
+        "desc": "\"User defined\" Slot from a line list. ",
         "is_internal": false,
         "methods": [
-            "build_geometry"
+            "build_geometry",
+            "set_from_point_list",
+            "get_surface_wind",
+            "check"
         ],
-        "mother": "Slot",
+        "mother": "SlotWind",
         "name": "SlotUD",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotUD.csv",
         "properties": [
             {
-                "desc": "Coordinates of the slot points (will be connected in order with Segments)",
+                "desc": "list of line to draw the edges of the slot",
                 "max": "",
                 "min": "",
-                "name": "point_list",
-                "type": "list",
+                "name": "line_list",
+                "type": "[Line]",
                 "unit": "-",
-                "value": []
+                "value": ""
             },
             {
-                "desc": "True to enter only half of the point coordinates",
+                "desc": "Index of the first line to include in the winding",
                 "max": "",
                 "min": "",
-                "name": "is_sym",
-                "type": "bool",
+                "name": "wind_begin_index",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Index of the last line to include in the winding",
+                "max": "",
+                "min": "",
+                "name": "wind_end_index",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "0 to close winding with Segment, 1 for Arc1",
+                "max": "1",
+                "min": "0",
+                "name": "type_line_wind",
+                "type": "int",
                 "unit": "-",
                 "value": 0
             }
@@ -9567,6 +9902,8 @@
         ],
         "daughters": [
             "SlotCirc",
+            "SlotDC",
+            "SlotUD",
             "SlotW10",
             "SlotW11",
             "SlotW12",
@@ -9774,7 +10111,7 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_time_angle"
+            "comp_axes"
         ],
         "mother": "",
         "name": "Structural",
@@ -9782,13 +10119,13 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Structural.csv",
         "properties": [
             {
-                "desc": "Force module",
+                "desc": "Structural module",
                 "max": "",
                 "min": "",
-                "name": "force",
-                "type": "Force",
+                "name": "structural",
+                "type": "int",
                 "unit": "-",
-                "value": ""
+                "value": 0
             }
         ]
     },

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from ..init_fig import init_fig
 from .plot_4D import plot_4D
 from .plot_3D import plot_3D
 from . import unit_dict, norm_dict, axes_dict
@@ -23,6 +22,8 @@ def plot_3D_Data(
     is_2D_view=False,
     N_stem=100,
     fig=None,
+    ax=None,
+    is_show_fig=None,
 ):
     """Plots a field as a function of two axes
 
@@ -37,7 +38,7 @@ def plot_3D_Data(
     unit : str
         unit in which to plot the field
     save_path : str
-        path and name of the png file to save
+        full path including folder, name and extension of the file to save if save_path is not None
     x_min : float
         minimum value for the x-axis
     x_max : float
@@ -58,14 +59,14 @@ def plot_3D_Data(
         number of harmonics to plot (only for stem plots)
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        ax on which to plot the data
+    is_show_fig : bool
+        True to show figure after plot
     """
 
     if len(arg_list) == 1 and type(arg_list[0]) == tuple:
         arg_list = arg_list[0]  # if called from another script with *arg_list
-
-    # Set plot
-    is_show_fig = True if fig is None else False
-    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
 
     # Set unit
     if unit == "SI":
@@ -229,8 +230,10 @@ def plot_3D_Data(
                 ylabel=ylabel,
                 zlabel=zlabel,
                 fig=fig,
+                ax=ax,
                 type="scatter",
                 save_path=save_path,
+                is_show_fig=is_show_fig,
             )
         else:
             plot_3D(
@@ -238,6 +241,7 @@ def plot_3D_Data(
                 Y_flat,
                 Z_flat,
                 fig=fig,
+                ax=ax,
                 x_min=x_min,
                 x_max=x_max,
                 y_min=y_max,
@@ -250,6 +254,7 @@ def plot_3D_Data(
                 zlabel=zlabel,
                 type="stem",
                 save_path=save_path,
+                is_show_fig=is_show_fig,
             )
     else:
         if is_2D_view:
@@ -265,7 +270,10 @@ def plot_3D_Data(
                 title=title,
                 xticks=xticks,
                 fig=fig,
+                ax=ax,
                 type="pcolor",
+                save_path=save_path,
+                is_show_fig=is_show_fig,
             )
         else:
             plot_3D(
@@ -273,6 +281,7 @@ def plot_3D_Data(
                 Y_map,
                 Zdata,
                 fig=fig,
+                ax=ax,
                 x_min=x_min,
                 x_max=x_max,
                 y_min=y_min,
@@ -286,7 +295,5 @@ def plot_3D_Data(
                 yticks=yticks,
                 type="surf",
                 save_path=save_path,
+                is_show_fig=is_show_fig,
             )
-
-    if is_show_fig:
-        fig.show()

@@ -66,7 +66,7 @@ def test_Magnetic_FEMM_sym():
         is_periodicity_a=False,
         is_periodicity_t=False,
         is_mmfr=False,
-        angle_stator=-pi / 6,
+        angle_stator_shift=-pi / 6,
     )
     simu.force = None
     simu.struct = None
@@ -115,4 +115,5 @@ def test_Magnetic_FEMM_sym():
         data_list=[out3.mag.B],
         legend_list=["No symmetry", "MANATEE SDM"],
         save_path=join(save_path, "test_EM_SIPMSM_AL_001_SDM.png"),
+        is_show_fig=False,
     )

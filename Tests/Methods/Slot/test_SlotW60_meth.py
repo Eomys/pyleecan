@@ -7,6 +7,12 @@ from pyleecan.Classes.SlotW60 import SlotW60
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
+from pyleecan.Methods.Slot.SlotW60.build_geometry_wind import S60_WindError
+from pyleecan.Methods.Slot.SlotW60.check import (
+    S60_InnerCheckError,
+    S60_RCheckError,
+    S60_WindWError,
+)
 
 # For AlmostEqual
 DELTA = 1e-5
@@ -168,3 +174,69 @@ class Test_SlotW60_meth(object):
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW60_test)
+    def test_build_geometry_wind_is_stator_true(self, test_dict):
+        """Check that the computation of the average angle is correct"""
+
+        test_obj = test_dict["test_obj"]
+
+        result = test_obj.slot.build_geometry_wind(Nrad=1, Ntan=2)
+        a = result
+        assert "Wind_Stator_R0_T0_S0" == a[0].label
+
+    @pytest.mark.parametrize("test_dict", slotW60_test)
+    def test_build_geometry_error(self, test_dict):
+        """Check that the ERROR is raised"""
+
+        test_obj = test_dict["test_obj"]
+
+        with pytest.raises(S60_WindError) as context:
+            test_obj.slot.build_geometry_wind(Nrad=0, Ntan=0)
+
+    def test_check(self):
+        """Check that the check methods is correctly working"""
+        lam = LamSlot(is_internal=False, Rext=0.1325)
+        lam.slot = SlotW60(
+            Zs=12,
+            W1=25e-3,
+            W2=12.5e-3,
+            H1=20e-3,
+            H2=20e-3,
+            R1=0.1325,
+            H3=2e-3,
+            H4=1e-3,
+            W3=2e-3,
+        )
+
+        with pytest.raises(S60_InnerCheckError) as context:
+            lam.slot.check()
+
+        lam = LamSlot(is_internal=True, Rext=0.1325)
+        lam.slot = SlotW60(
+            Zs=12,
+            W1=25e-3,
+            W2=12.5e-3,
+            H1=20e-3,
+            H2=20e-3,
+            R1=0.919325,
+            H3=2e-3,
+            H4=1e-3,
+            W3=2e-3,
+        )
+        with pytest.raises(S60_RCheckError) as context:
+            lam.slot.check()
+
+        lam.slot = SlotW60(
+            Zs=12,
+            W1=25e-3,
+            W2=12.5e-3,
+            H1=20e-3,
+            H2=20e-3,
+            R1=0.1325,
+            H3=2e-3,
+            H4=1e-3,
+            W3=2,
+        )
+        with pytest.raises(S60_WindWError) as context:
+            lam.slot.check()

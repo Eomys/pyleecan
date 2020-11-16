@@ -3,3 +3,4 @@ surf_list,,"List of surface to draw the Hole. Surfaces must be ordered in trigo 
 magnet_dict,,"dictionnary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",,{Magnet},,,,,,,comp_surface_magnet_id,IS_SYMMETRICAL,1,
 ,,,,,,,,,,,has_magnet,,,
 ,,,,,,,,,,,remove_magnet,,,
+,,,,,,,,,,,check,,,

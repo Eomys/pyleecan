@@ -7,6 +7,9 @@ from pyleecan.Classes.SurfLine import SurfLine
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM52 import HoleM52
+from pyleecan.Classes.Magnet import Magnet
+from pyleecan.Methods.Slot.HoleM52.check import S52_NoneError, S52_W1CheckError
+
 from numpy import exp, arcsin, ndarray, pi
 
 # For AlmostEqual
@@ -18,6 +21,23 @@ test_obj = LamHole(is_internal=True, is_stator=False, hole=list(), Rext=0.1)
 test_obj.hole = list()
 test_obj.hole.append(HoleM52(Zh=8, W0=30e-3, W3=15e-3, H0=12e-3, H1=18e-3, H2=2e-3))
 HoleM52_test.append(
+    {
+        "test_obj": test_obj,
+        "S_exp": 8.059458e-4,
+        "SM_exp": 5.4e-4,
+        "Rmin": 6.587571e-2,
+        "Rmax": 8.8e-2,
+        "W1": 4.9971e-3,
+        "alpha": 0.614736,
+    }
+)
+
+HoleM52_test_stator = list()
+
+test_obj = LamHole(is_internal=True, is_stator=True, hole=list(), Rext=0.1)
+test_obj.hole = list()
+test_obj.hole.append(HoleM52(Zh=8, W0=30e-3, W3=15e-3, H0=12e-3, H1=18e-3, H2=2e-3))
+HoleM52_test_stator.append(
     {
         "test_obj": test_obj,
         "S_exp": 8.059458e-4,
@@ -127,3 +147,43 @@ class Test_Hole52_meth(object):
         assert result[0].label[:5] == "Hole_"
         assert result[0].label[-9:] == "_R0_T0_S0"
         assert len(result[0].line_list) == 8
+
+    @pytest.mark.parametrize("test_dict", HoleM52_test_stator)
+    def test_build_geometry_simplified_parallel(self, test_dict):
+        """Check that the build geometry method works"""
+
+        # is_simplified to True and magnetization Parallel
+
+        test_obj = test_dict["test_obj"]
+        test_obj.hole[0].magnet_0 = Magnet(type_magnetization=1)
+        a = test_obj.hole[0].build_geometry(is_simplified=True)
+
+        assert a[1].label == "HoleMagnet_Stator_Parallel_N_R0_T0_S0"
+        assert a[1].line_list[0] is not None
+        assert a[1].line_list[1] is not None
+        with pytest.raises(IndexError) as context:
+            a[1].line_list[2]
+
+    def test_check(self):
+        """Check that the check function can raise error"""
+        test_obj = LamHole(is_internal=True, is_stator=False, hole=list(), Rext=0.1)
+        test_obj.hole = [HoleM52(Zh=8, W0=None, W3=15e-3, H0=12e-3, H1=18e-3, H2=2e-3)]
+        with pytest.raises(S52_NoneError) as context:
+            test_obj.hole[0].check()
+        test_obj.hole = [HoleM52(Zh=8, W0=30e-3, W3=None, H0=12e-3, H1=18e-3, H2=2e-3)]
+        with pytest.raises(S52_NoneError) as context:
+            test_obj.hole[0].check()
+        test_obj.hole = [HoleM52(Zh=8, W0=30e-3, W3=15e-3, H0=None, H1=18e-3, H2=2e-3)]
+        with pytest.raises(S52_NoneError) as context:
+            test_obj.hole[0].check()
+        test_obj.hole = [HoleM52(Zh=8, W0=30e-3, W3=15e-3, H0=12e-3, H1=None, H2=2e-3)]
+        with pytest.raises(S52_NoneError) as context:
+            test_obj.hole[0].check()
+        test_obj.hole = [HoleM52(Zh=8, W0=30e-3, W3=15e-3, H0=12e-3, H1=18e-3, H2=None)]
+        with pytest.raises(S52_NoneError) as context:
+            test_obj.hole[0].check()
+        test_obj.hole = [
+            HoleM52(Zh=8, W0=0.9999999, W3=15e-3, H0=12e-3, H1=18e-3, H2=2e-3)
+        ]
+        with pytest.raises(S52_W1CheckError) as context:
+            test_obj.hole[0].check()

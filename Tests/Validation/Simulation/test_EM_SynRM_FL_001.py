@@ -110,6 +110,7 @@ def test_Magnetic_Phi0():
         type_BH_rotor=0,
         is_periodicity_a=True,
         is_periodicity_t=False,
+        nb_worker=3,
     )
     simu.force = None
     simu.struct = None
@@ -126,6 +127,7 @@ def test_Magnetic_Phi0():
         ylabel="Electrical torque [N.m]",
         title="Electrical torque vs current angle",
         save_path=join(save_path, "test_SynRM_Syr-e.png"),
+        is_show_fig=False,
     )
 
     return Xout

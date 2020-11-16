@@ -167,7 +167,7 @@ class PCondType12(Gen_PCondType12, QWidget):
 
         # Check that everything is set
         if self.cond.Nwppc is None:
-            return self.tr("You must set Nwpc1 !")
+            return self.tr("You must set Nwppc !")
         elif self.cond.Wwire is None:
             return self.tr("You must set Wwire !")
         elif self.cond.Wins_wire is None:

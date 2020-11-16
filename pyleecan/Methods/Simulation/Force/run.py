@@ -16,7 +16,7 @@ def run(self):
 
     # Compute and store time and angle axes from previous output
     # and returns additional axes in axes_dict
-    axes_dict = self.comp_time_angle(output)
+    axes_dict = self.comp_axes(output)
 
     # Compute the magnetic force according to the Force model
     self.comp_force(output, axes_dict)

@@ -69,6 +69,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
 
         self.dmatlib.saveNeeded.connect(self.save_needed)
 
+        self.qmessagebox_question = None
+
     def save_needed(self):
         """Set is_save_needed to True"""
         self.is_save_needed = True
@@ -95,7 +97,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 QMessageBox.Yes,
                 QMessageBox.No,
             )
-
+            self.qmessagebox_question = reply
             if reply == QMessageBox.Yes:
                 self.s_save()
 

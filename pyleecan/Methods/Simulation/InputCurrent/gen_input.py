@@ -82,6 +82,7 @@ def gen_input(self):
             Idq = n2dq(
                 transpose(output.Is.values),
                 2 * pi * output.felec * output.Time.get_values(is_oneperiod=False),
+                n=qs,
                 is_dq_rms=True,
             )
             output.Id_ref = mean(Idq[:, 0])

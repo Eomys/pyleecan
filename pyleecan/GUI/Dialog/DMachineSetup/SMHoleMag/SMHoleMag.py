@@ -121,7 +121,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             if self.machine.type_machine == 5:
                 hole.remove_magnet()
             else:
-                hole.magnet_0 = self.obj.hole[0].magnet_0
+                hole.set_magnet_by_id(0, self.obj.hole[0].get_magnet_by_id(0))
             hole.Zh = self.obj.hole[0].Zh
         else:
             hole_index = self.obj.hole.index(hole)
@@ -141,7 +141,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             self.tab_hole.removeTab(len(self.obj.hole) - 1)
             self.obj.hole.pop(-1)
 
-    def s_plot(self):
+    def s_plot(self, is_show_fig=True):
         """Try to plot the lamination
 
         Parameters
@@ -160,7 +160,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         if error:  # Error => Display it
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Plot the hole (No winding for LamSquirrelCage)
-            self.machine.plot()
+            self.machine.plot(is_show_fig=is_show_fig)
 
     @staticmethod
     def check(lamination):

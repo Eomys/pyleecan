@@ -18,6 +18,8 @@ from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.BoreFlower import BoreFlower
 from Tests import save_plot_path as save_path
 
+from pyleecan.Methods import ParentMissingError
+
 
 """unittest for Machine with Hole 50 plot"""
 
@@ -62,6 +64,7 @@ class Test_Hole_50_plot(object):
             Rint=0.078, Rext=0.104, is_internal=False, is_stator=True, L1=0.8
         )
         test_obj.stator.slot = None
+        test_obj.stator.winding = None
         test_obj.stator.axial_vent.append(
             VentilationPolar(Zh=8, H0=0.08, D0=0.01, W1=pi / 8, Alpha0=pi / 8)
         )
@@ -74,18 +77,18 @@ class Test_Hole_50_plot(object):
 
     def test_Lam_Hole_50_W01(self, machine):
         """Test machine plot hole 50 with W1 > 0 and both magnets"""
-        machine.plot()
+        machine.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s50_Machine.png"))
         assert len(fig.axes[0].patches) == 87
 
-        machine.rotor.plot()
+        machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s50_Rotor_W01.png"))
         # 2 for lam + (3*2)*8 for holes + 16 vents
         assert len(fig.axes[0].patches) == 66
 
-        machine.rotor.axial_vent[0].plot()
+        machine.rotor.axial_vent[0].plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_CircVent.png"))
         assert len(fig.axes[0].patches) == 8
@@ -95,7 +98,7 @@ class Test_Hole_50_plot(object):
         machine.rotor.hole[0].W1 = 0
         machine.rotor.hole[0].magnet_0 = Magnet()
         machine.rotor.hole[0].magnet_1 = Magnet()
-        machine.rotor.plot()
+        machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorN01.png"))
         # 2 for lam + 5*8 for holes + 16 vents
@@ -106,7 +109,7 @@ class Test_Hole_50_plot(object):
         machine.rotor.hole[0].W1 = 2e-3
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = Magnet()
-        machine.rotor.plot()
+        machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorWN1.png"))
         # 2 for lam + (1+3)*8 for holes + 16 vents
@@ -117,7 +120,7 @@ class Test_Hole_50_plot(object):
         machine.rotor.hole[0].W1 = 0
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = Magnet()
-        machine.rotor.plot()
+        machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorNN1.png"))
         # 2 for lam + 3*8 for holes + 16 vents
@@ -128,7 +131,7 @@ class Test_Hole_50_plot(object):
         machine.rotor.hole[0].W1 = 2e-3
         machine.rotor.hole[0].magnet_0 = Magnet()
         machine.rotor.hole[0].magnet_1 = None
-        machine.rotor.plot()
+        machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorW0N.png"))
         # 2 for lam + 4*8 for holes + 16 vents
@@ -139,7 +142,7 @@ class Test_Hole_50_plot(object):
         machine.rotor.hole[0].W1 = 0
         machine.rotor.hole[0].magnet_0 = Magnet()
         machine.rotor.hole[0].magnet_1 = None
-        machine.rotor.plot()
+        machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorN0N.png"))
         # 2 for lam + (1+2)*8 for holes + 16 vents
@@ -150,7 +153,7 @@ class Test_Hole_50_plot(object):
         machine.rotor.hole[0].W1 = 2e-3
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = None
-        machine.rotor.plot()
+        machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorWNN.png"))
         # 2 for lam + (1+1)*8 for holes + 16 vents
@@ -161,8 +164,26 @@ class Test_Hole_50_plot(object):
         machine.rotor.hole[0].W1 = 0
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = None
-        machine.rotor.plot()
+        machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorNNN.png"))
         # 2 for lam + 1*8 for holes + 16 vents
         assert len(fig.axes[0].patches) == 26
+
+    def test_get_bore_line(self):
+        """Test get_bore_line can return an error if the parent is missing"""
+        bf = BoreFlower(N=8, Rarc=0.05, alpha=pi / 8)
+        with pytest.raises(ParentMissingError) as context:
+            bf.get_bore_line()
+
+    def test_plot_stator_true(self, machine):
+        """Test if the plot is right with a stator LamHole"""
+        machine.rotor = LamHole(
+            is_internal=True, Rint=0.021, Rext=0.075, is_stator=True, L1=0.7
+        )
+        machine.plot(is_show_fig=False)
+
+        # The rotor will be blue
+
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Hole_s50_stator_true.png"))

@@ -2,8 +2,8 @@
 from ....Functions.Simulation.create_from_axis import create_from_axis
 
 
-def comp_time_angle(self, output):
-    """Compute the time and space discretization of the Force module
+def comp_axes(self, output):
+    """Compute the axes required in any Force module
 
     Parameters
     ----------

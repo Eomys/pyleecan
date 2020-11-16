@@ -8,6 +8,7 @@ from pyleecan.Classes.MagnetType14 import MagnetType14
 from numpy import pi, exp, sqrt
 from pyleecan.Methods.Machine.Magnet.comp_height import comp_height
 from pyleecan.Methods.Machine.Magnet.comp_surface import comp_surface
+from pyleecan.Methods import ParentMissingError
 
 Mag14_test = list()
 # Internal Slot inset
@@ -67,3 +68,27 @@ class Test_Magnet_Type_14_meth(object):
         b = test_dict["Ao"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+    def test_build_geometry(self):
+        """check that curve_list is correct"""
+
+        with pytest.raises(ParentMissingError) as context:
+            MagnetType14(Lmag=0.5, Hmag=0.02, Wmag=0.628, Rtop=0.04).build_geometry()
+
+        lam = LamSlotMag(Rint=40e-3, Rext=90e-3, is_internal=True)
+        lam.slot = SlotMPolar(Zs=4, W0=0.628, H0=0.02)
+        lam.slot.magnet = [MagnetType14(Lmag=0.5, Hmag=0.02, Wmag=0.125, Rtop=0.04)]
+
+        surface = lam.slot.magnet[0].build_geometry(is_simplified=True)
+
+        assert len(surface) == 1
+        assert surface[0].label == "MagnetRotorRadial_N_R0_T0_S0"
+
+        lam = LamSlotMag(Rint=40e-3, Rext=90e-3, is_internal=True)
+        lam.slot = SlotMPolar(Zs=4, W0=0.628, H0=0.01)
+        lam.slot.magnet = [MagnetType14(Lmag=0.5, Hmag=0.02, Wmag=0.628, Rtop=0.04)]
+
+        surface = lam.slot.magnet[0].build_geometry(is_simplified=True)
+
+        assert len(surface) == 1
+        assert surface[0].label == "MagnetRotorRadial_N_R0_T0_S0"

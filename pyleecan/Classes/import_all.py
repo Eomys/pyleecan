@@ -82,6 +82,7 @@ from ..Classes.MachineSyRM import MachineSyRM
 from ..Classes.MachineSync import MachineSync
 from ..Classes.MachineUD import MachineUD
 from ..Classes.MachineWRSM import MachineWRSM
+from ..Classes.MagElmer import MagElmer
 from ..Classes.MagFEMM import MagFEMM
 from ..Classes.Magnet import Magnet
 from ..Classes.MagnetFlat import MagnetFlat
@@ -126,6 +127,7 @@ from ..Classes.PolarArc import PolarArc
 from ..Classes.Post import Post
 from ..Classes.PostFunction import PostFunction
 from ..Classes.PostMethod import PostMethod
+from ..Classes.PostPlot import PostPlot
 from ..Classes.RefCell import RefCell
 from ..Classes.RefSegmentP1 import RefSegmentP1
 from ..Classes.RefTriangle3 import RefTriangle3
@@ -138,6 +140,7 @@ from ..Classes.Simulation import Simulation
 from ..Classes.Slot import Slot
 from ..Classes.Slot19 import Slot19
 from ..Classes.SlotCirc import SlotCirc
+from ..Classes.SlotDC import SlotDC
 from ..Classes.SlotMFlat import SlotMFlat
 from ..Classes.SlotMFlat2 import SlotMFlat2
 from ..Classes.SlotMPolar import SlotMPolar

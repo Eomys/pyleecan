@@ -1,5 +1,7 @@
 from numpy import ndarray, min as np_min, max as np_max
 
+from SciDataTool import VectorField, Data
+
 
 def run_single_simu(
     xoutput,
@@ -93,6 +95,18 @@ def run_single_simu(
                         ".8g",
                     )
                     + ")"
+                )
+            elif isinstance(
+                xoutput.xoutput_dict[datakeeper.symbol].result[index], Data
+            ) or isinstance(
+                xoutput.xoutput_dict[datakeeper.symbol].result[index], VectorField
+            ):
+                msg += (
+                    datakeeper.symbol
+                    + "="
+                    + type(
+                        xoutput.xoutput_dict[datakeeper.symbol].result[index]
+                    ).__name__
                 )
             else:
                 msg += (

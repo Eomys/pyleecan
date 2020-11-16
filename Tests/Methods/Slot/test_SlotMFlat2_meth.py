@@ -43,18 +43,18 @@ def test_SlotMFlat2_plot():
         magnet=list(),
     )
     lam.slot.magnet.append(MagnetType10(Wmag=4 * mm, Hmag=10 * mm))
-    lam.plot()
+    lam.plot(is_show_fig=False)
     #%%
     # W0 is rad
     lam.slot.W0_is_rad = True
     lam.slot.W0 = arcsin(4 * mm / lam.slot.get_Rbo())
-    lam.plot()
+    lam.plot(is_show_fig=False)
     # Wmag < W0
     lam.slot.magnet[0].Wmag = 2 * mm
-    lam.plot()
+    lam.plot(is_show_fig=False)
     # Hmag < H0
     lam.slot.magnet[0].Hmag = 2 * mm
-    lam.plot()
+    lam.plot(is_show_fig=False)
     #%%
     # Outward Slot
     lam = LamSlotMag(
@@ -76,17 +76,23 @@ def test_SlotMFlat2_plot():
         magnet=list(),
     )
     lam.slot.magnet.append(MagnetType10(Wmag=4 * mm, Hmag=10 * mm))
-    lam.plot()
+    lam.plot(is_show_fig=False)
     # W0 is rad
     lam.slot.W0_is_rad = True
     lam.slot.W0 = arcsin(4 * mm / lam.slot.get_Rbo())
-    lam.plot()
+    lam.plot(is_show_fig=False)
     # Wmag < W0
     lam.slot.magnet[0].Wmag = 2 * mm
-    lam.plot()
+    lam.plot(is_show_fig=False)
     # Hmag < H0
     lam.slot.magnet[0].Hmag = 2 * mm
-    lam.plot()
+    lam.plot(is_show_fig=False)
     # %%
 
     # %%
+    lam.slot.magnet.append(MagnetType10(Wmag=4 * mm, Hmag=10 * mm))
+    result = lam.slot.build_geometry()
+    assert len(result) == 15
+
+    lam.slot.magnet = list()
+    assert lam.slot.comp_angle_opening() == 0
