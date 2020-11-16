@@ -1423,6 +1423,7 @@
             "comp_surface",
             "get_is_stator",
             "get_Rbo",
+            "get_Rext",
             "has_magnet",
             "plot",
             "comp_height",

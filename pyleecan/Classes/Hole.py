@@ -37,6 +37,11 @@ except ImportError as error:
     get_Rbo = error
 
 try:
+    from ..Methods.Slot.Hole.get_Rext import get_Rext
+except ImportError as error:
+    get_Rext = error
+
+try:
     from ..Methods.Slot.Hole.has_magnet import has_magnet
 except ImportError as error:
     has_magnet = error
@@ -120,6 +125,15 @@ class Hole(FrozenClass):
         )
     else:
         get_Rbo = get_Rbo
+    # cf Methods.Slot.Hole.get_Rext
+    if isinstance(get_Rext, ImportError):
+        get_Rext = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method get_Rext: " + str(get_Rext))
+            )
+        )
+    else:
+        get_Rext = get_Rext
     # cf Methods.Slot.Hole.has_magnet
     if isinstance(has_magnet, ImportError):
         has_magnet = property(
