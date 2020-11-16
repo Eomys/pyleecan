@@ -12,9 +12,9 @@ def get_axis(self):
 
     Returns
     -------
-    axis_dict: dict
-        a dict of axis names containing axis sizes
+    axis_dict: list
+        a list of axis names containing axis sizes
 
     """
 
-    return self.axis
+    return self.axis_name, self.axis_size

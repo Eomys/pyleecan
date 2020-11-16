@@ -102,7 +102,8 @@ class Mode(SolutionMat):
         order_long=None,
         field=None,
         indice=None,
-        axis=None,
+        axis_name=None,
+        axis_size=None,
         type_cell="triangle",
         label=None,
         dimension=2,
@@ -134,8 +135,10 @@ class Mode(SolutionMat):
                 field = init_dict["field"]
             if "indice" in list(init_dict.keys()):
                 indice = init_dict["indice"]
-            if "axis" in list(init_dict.keys()):
-                axis = init_dict["axis"]
+            if "axis_name" in list(init_dict.keys()):
+                axis_name = init_dict["axis_name"]
+            if "axis_size" in list(init_dict.keys()):
+                axis_size = init_dict["axis_size"]
             if "type_cell" in list(init_dict.keys()):
                 type_cell = init_dict["type_cell"]
             if "label" in list(init_dict.keys()):
@@ -150,7 +153,8 @@ class Mode(SolutionMat):
         super(Mode, self).__init__(
             field=field,
             indice=indice,
-            axis=axis,
+            axis_name=axis_name,
+            axis_size=axis_size,
             type_cell=type_cell,
             label=label,
             dimension=dimension,

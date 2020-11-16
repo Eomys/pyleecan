@@ -10001,7 +10001,7 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axis"
+            "get_axis_list"
         ],
         "mother": "Solution",
         "name": "SolutionData",
@@ -10033,7 +10033,7 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axis"
+            "get_axis_list"
         ],
         "mother": "Solution",
         "name": "SolutionMat",
@@ -10059,11 +10059,20 @@
                 "value": null
             },
             {
-                "desc": "Dict of axis names storing axis sizes (e.g. time, direction )",
+                "desc": "List of axis names (e.g. \"time\", \"direction\")",
                 "max": "",
                 "min": "",
-                "name": "axis",
-                "type": "dict",
+                "name": "axis_name",
+                "type": "list",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "List of axis sizes",
+                "max": "",
+                "min": "",
+                "name": "axis_size",
+                "type": "list",
                 "unit": "-",
                 "value": null
             }
@@ -10081,7 +10090,7 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axis"
+            "get_axis_list"
         ],
         "mother": "Solution",
         "name": "SolutionVector",

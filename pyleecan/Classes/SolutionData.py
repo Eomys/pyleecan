@@ -22,9 +22,9 @@ except ImportError as error:
     get_field = error
 
 try:
-    from ..Methods.Mesh.SolutionData.get_axis import get_axis
+    from ..Methods.Mesh.SolutionData.get_axis_list import get_axis_list
 except ImportError as error:
-    get_axis = error
+    get_axis_list = error
 
 
 from ._check import InitUnKnowClassError
@@ -47,15 +47,17 @@ class SolutionData(Solution):
         )
     else:
         get_field = get_field
-    # cf Methods.Mesh.SolutionData.get_axis
-    if isinstance(get_axis, ImportError):
-        get_axis = property(
+    # cf Methods.Mesh.SolutionData.get_axis_list
+    if isinstance(get_axis_list, ImportError):
+        get_axis_list = property(
             fget=lambda x: raise_(
-                ImportError("Can't use SolutionData method get_axis: " + str(get_axis))
+                ImportError(
+                    "Can't use SolutionData method get_axis_list: " + str(get_axis_list)
+                )
             )
         )
     else:
-        get_axis = get_axis
+        get_axis_list = get_axis_list
     # save and copy methods are available in all object
     save = save
     copy = copy

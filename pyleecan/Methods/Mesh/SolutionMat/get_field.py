@@ -23,10 +23,13 @@ def get_field(self, args=None):
 
     field = self.field
     if self.axis is not None:
-        for key in self.axis:
-            ax = np.where(np.array(field.shape) == self.axis[key])[0][0]
-            if key in args:
-                ind = args[key]
+        nb_axis = len(self.axis_name)
+        for i in range(nb_axis):
+            ax = np.where(np.array(field.shape) == self.axis_size[i])[0][0]
+            ax_name = self.axis_name[i]
+
+            if ax_name in args:
+                ind = args[ax_name]
                 field = np.take(field, indices=ind, axis=ax)
 
     return field

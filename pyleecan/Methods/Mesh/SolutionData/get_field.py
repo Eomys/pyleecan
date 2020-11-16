@@ -32,10 +32,10 @@ def get_field(self, args=None):
 
     field = self.field.get_along(tuple(along_arg))[self.field.symbol]
 
-    all_ax = self.get_axis()
+    ax_name, ax_size = self.get_axis_list()
     pos = 0
-    for i in all_ax:
-        if all_ax[i] == 1:
+    for axs in ax_size:
+        if axs == 1:
             field = field[..., np.newaxis]
             field = np.moveaxis(field, -1, pos)
         pos = pos + 1
