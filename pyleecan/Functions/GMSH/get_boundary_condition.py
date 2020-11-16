@@ -6,8 +6,10 @@
 # from ...Classes.Segment import Segment
 # from ...Classes.SurfLine import SurfLine
 
+from ...Functions.GMSH import boundary_prop
 
-def get_boundary_condition(line, machine):
+
+def get_boundary_condition(line):
     """Returns the boundary name on a line that is used in FEA coupling
 
     Parameters
@@ -21,12 +23,9 @@ def get_boundary_condition(line, machine):
         boundary name
     """
 
-    # slot_height = machine.stator.slot.comp_height()
-    # winding_slot_height = machine.stator.slot.comp_height_wind()
+    propname = ""
+    for bound_label in boundary_prop:
+        if bound_label in line.label:
+            propname = boundary_prop[bound_label]
 
-    if "Yoke_Side" in line.label and "Rotor" in line.label:
-        label = "Rotor_Side"
-    else:
-        label = None
-
-    return label
+    return propname

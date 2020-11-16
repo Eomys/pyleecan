@@ -3,12 +3,16 @@ from ...Classes.Arc2 import Arc2
 from ...Classes.MachineSIPMSM import MachineSIPMSM
 
 from ...Functions.GMSH import InputError
+from ...Functions.GMSH import boundary_prop, boundary_list
 from ...Functions.GMSH.get_sliding_band import get_sliding_band
 from ...Functions.GMSH.get_boundary_condition import get_boundary_condition
 
 import sys
 import gmsh
 import cmath
+
+from os import rename
+from os.path import splitext
 
 
 def _find_point_tag(d={}, p=complex(0.0, 0.0)):
@@ -183,6 +187,7 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
 
         if not repeated:
             nline = len(d[idx]) - 2
+            arc_angle = cmath.phase(complex(ex, ey)) - cmath.phase(complex(bx, by))
             d[idx].update(
                 {
                     nline: {
@@ -192,6 +197,8 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
                         "begin": {"tag": btag, "coord": complex(bx, by)},
                         "end": {"tag": etag, "coord": complex(ex, ey)},
                         "cent": {"tag": ctag, "coord": complex(cx, cy)},
+                        "arc_angle": arc_angle,
+                        "line_angle": None,
                     }
                 }
             )
@@ -228,6 +235,9 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
 
         if not repeated:
             nline = len(d[idx]) - 2
+            line_angle = 0.5 * (
+                cmath.phase(complex(ex, ey)) + cmath.phase(complex(bx, by))
+            )
             d[idx].update(
                 {
                     nline: {
@@ -236,6 +246,8 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
                         "bc_name": bc,
                         "begin": {"tag": btag, "coord": complex(bx, by)},
                         "end": {"tag": etag, "coord": complex(ex, ey)},
+                        "arc_angle": None,
+                        "line_angle": line_angle,
                     }
                 }
             )
@@ -266,6 +278,7 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
     None
     """
 
+    # TO-DO: Allow repeated points for the rotor and stator sliding bands
     dlines = list()
     ltag = None
     btag, bx, by = _find_point_tag(d, line.get_begin())
@@ -315,6 +328,7 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
 
         if not repeated:
             nline = len(d[idx]) - 2
+            arc_angle = cmath.phase(complex(ex, ey)) - cmath.phase(complex(bx, by))
             d[idx].update(
                 {
                     nline: {
@@ -324,6 +338,8 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
                         "begin": {"tag": btag, "coord": complex(bx, by)},
                         "end": {"tag": etag, "coord": complex(ex, ey)},
                         "cent": {"tag": ctag, "coord": complex(cx, cy)},
+                        "arc_angle": arc_angle,
+                        "line_angle": None,
                     }
                 }
             )
@@ -360,6 +376,9 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
 
         if not repeated:
             nline = len(d[idx]) - 2
+            line_angle = 0.5 * (
+                cmath.phase(complex(ex, ey)) + cmath.phase(complex(bx, by))
+            )
             d[idx].update(
                 {
                     nline: {
@@ -368,6 +387,8 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
                         "bc_name": bc,
                         "begin": {"tag": btag, "coord": complex(bx, by)},
                         "end": {"tag": etag, "coord": complex(ex, ey)},
+                        "arc_angle": None,
+                        "line_angle": line_angle,
                     }
                 }
             )
@@ -432,6 +453,10 @@ def draw_GMSH(
     mesh_dict = {}
     tol = 1e-6
 
+    # Default stator mesh element size
+    mesh_size_S = machine.stator.Rext / 100.0
+    mesh_size_R = machine.rotor.Rext / 25.0
+
     # For readibility
     model = gmsh.model
     factory = model.geo
@@ -442,16 +467,19 @@ def draw_GMSH(
     gmsh.option.setNumber("Geometry.CopyMeshingMethod", 1)
     gmsh.option.setNumber("Geometry.PointNumbers", 0)
     gmsh.option.setNumber("Geometry.LineNumbers", 0)
+    gmsh.option.setNumber("Mesh.CharacteristicLengthMin", min(mesh_size_S, mesh_size_R))
+    gmsh.option.setNumber("Mesh.CharacteristicLengthMax", max(mesh_size_S, mesh_size_R))
     model.add("Pyleecan")
 
+    # build geometry
     rotor_list = list()
     rotor_list.extend(machine.shaft.build_geometry(sym=sym))
     rotor_list.extend(machine.rotor.build_geometry(sym=sym))
     stator_list = list()
     stator_list.extend(machine.stator.build_geometry(sym=sym))
 
+    # set origin
     oo = factory.addPoint(0, 0, 0, 0, tag=-1)
-
     gmsh_dict = {
         0: {
             "tag": 0,
@@ -464,12 +492,12 @@ def draw_GMSH(
                 "begin": {"tag": oo, "coord": complex(0.0, 0.0)},
                 "end": {"tag": None, "coord": None},
                 "cent": {"tag": None, "coord": None},
+                "arc_angle": None,
+                "line_angle": None,
             },
         }
     }
 
-    # Default rotor mesh element size
-    mesh_size = machine.rotor.Rext / 25.0
     nsurf = 0  # number of surfaces
     if not is_lam_only_S:
         for surf in rotor_list:
@@ -482,7 +510,7 @@ def draw_GMSH(
                 gmsh_dict[nsurf]["with_holes"] = False
 
             # comp. number of elements on the lines & override by user values in case
-            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
+            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_R)
             if user_mesh_dict:  # check if dict is not None nor empty
                 mesh_dict.update(user_mesh_dict)
 
@@ -493,7 +521,7 @@ def draw_GMSH(
                     continue
                 n_elem = mesh_dict.get(line.label)
                 n_elem = n_elem if n_elem is not None else 0
-                bc_name = get_boundary_condition(line, machine)
+                bc_name = get_boundary_condition(line)
 
                 # Gmsh built-in engine does not allow arcs larger than 180deg
                 # so arcs are split into two
@@ -520,7 +548,7 @@ def draw_GMSH(
                             line=arc,
                             d=gmsh_dict,
                             idx=nsurf,
-                            mesh_size=mesh_size,
+                            mesh_size=mesh_size_R,
                             n_elements=n_elem,
                             bc=bc_name,
                         )
@@ -535,7 +563,7 @@ def draw_GMSH(
                         line=line,
                         d=gmsh_dict,
                         idx=nsurf,
-                        mesh_size=mesh_size,
+                        mesh_size=mesh_size_R,
                         n_elements=n_elem,
                         bc=bc_name,
                     )
@@ -609,8 +637,6 @@ def draw_GMSH(
         }
     }
 
-    # Default stator mesh element size
-    mesh_size = machine.stator.Rext / 100.0
     # nsurf = 0
     if not is_lam_only_R:
         stator_cloops = []
@@ -623,7 +649,7 @@ def draw_GMSH(
                 gmsh_dict[nsurf]["with_holes"] = False
 
             # comp. number of elements on the lines & override by user values in case
-            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
+            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_S)
             if user_mesh_dict:  # check if dict is not None nor empty
                 mesh_dict.update(user_mesh_dict)
 
@@ -631,7 +657,7 @@ def draw_GMSH(
             for line in surf.get_lines():
                 n_elem = mesh_dict.get(line.label)
                 n_elem = n_elem if n_elem is not None else 0
-                bc_name = None  # get_boundary_condition(line, machine)
+                bc_name = get_boundary_condition(line)
 
                 # Gmsh built-in engine does not allow arcs larger than 180deg
                 # so arcs are split into two
@@ -658,7 +684,7 @@ def draw_GMSH(
                             line=arc,
                             d=gmsh_dict,
                             idx=nsurf,
-                            mesh_size=mesh_size,
+                            mesh_size=mesh_size_S,
                             n_elements=n_elem,
                             bc=bc_name,
                         )
@@ -668,7 +694,7 @@ def draw_GMSH(
                         line=line,
                         d=gmsh_dict,
                         idx=nsurf,
-                        mesh_size=mesh_size,
+                        mesh_size=mesh_size_S,
                         n_elements=n_elem,
                         bc=bc_name,
                     )
@@ -711,7 +737,7 @@ def draw_GMSH(
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
             n_elem = n_elem if n_elem is not None else 0
-
+            bc_name = get_boundary_condition(line)
             # Gmsh built-in engine does not allow arcs larger than 180deg
             # so arcs are split into two
             if (
@@ -739,7 +765,7 @@ def draw_GMSH(
                         idx=nsurf,
                         mesh_size=mesh_size,
                         n_elements=n_elem,
-                        bc=line.label,
+                        bc=bc_name,
                     )
             else:
                 _add_agline_to_dict(
@@ -749,23 +775,22 @@ def draw_GMSH(
                     idx=nsurf,
                     mesh_size=mesh_size,
                     n_elements=n_elem,
-                    bc=line.label,
+                    bc=bc_name,
                 )
 
-    for s_id, s_data in gmsh_dict.items():
+    for s_data in gmsh_dict.values():
         lloop = []
-        if s_id == 0:
+        # skip this surface dataset if it is the origin
+        if s_data["label"] == "origin" or not (
+            "Airgap" in s_data["label"] or "SlidingBand" in s_data["label"]
+        ):
             continue
+
+        # build a lineloop of the surfaces lines
         for lvalues in s_data.values():
-            if (
-                s_data["label"].find("Airgap") != -1
-                or s_data["label"].find("SlidingBand") != -1
-            ):
-                if type(lvalues) is not dict:
-                    continue
-                lloop.extend([lvalues["tag"]])
-            else:
+            if type(lvalues) is not dict:
                 continue
+            lloop.extend([lvalues["tag"]])
 
         if lloop:
             cloop = factory.addCurveLoop(lloop)
@@ -773,11 +798,53 @@ def draw_GMSH(
             pg = model.addPhysicalGroup(2, [s_data["tag"]])
             model.setPhysicalName(2, pg, s_data["label"])
 
-    factory.synchronize()
-    gmsh.model.mesh.generate(2)
+    # Set boundary conditions in gmsh lines
+    bc_master_stator_id = []
+    bc_slave_stator_id = []
+    bc_master_rotor_id = []
+    bc_slave_rotor_id = []
+    for propname in boundary_list:
+        # propname = boundary_prop[bound_label]
+        bc_id = []
+        for s_id, s_data in gmsh_dict.items():
+            for lvalues in s_data.values():
+                if type(lvalues) is not dict:
+                    continue
+                if lvalues["bc_name"] == propname:
+                    bc_id.extend([abs(lvalues["tag"])])
+        if bc_id:
+            pg = model.addPhysicalGroup(1, bc_id)
+            model.setPhysicalName(1, pg, propname)
 
-    # Save and close
-    gmsh.write(path_save)
+    if bc_master_stator_id:
+        pg = model.addPhysicalGroup(1, bc_master_stator_id)
+        model.setPhysicalName(1, pg, "MASTER_SATOR_BOUNDARY")
+        print("MASTER_STATOR_BOUNDARY", bc_master_stator_id)
+    if bc_slave_stator_id:
+        pg = model.addPhysicalGroup(1, bc_slave_stator_id)
+        model.setPhysicalName(1, pg, "SLAVE_SATOR_BOUNDARY")
+        print("SLAVE_STATOR_BOUNDARY", bc_slave_stator_id)
+    if bc_master_rotor_id:
+        pg = model.addPhysicalGroup(1, bc_master_rotor_id)
+        model.setPhysicalName(1, pg, "MASTER_ROTOR_BOUNDARY")
+        print("MASTER_ROTOR_BOUNDARY", bc_master_rotor_id)
+    if bc_slave_rotor_id:
+        pg = model.addPhysicalGroup(1, bc_slave_rotor_id)
+        model.setPhysicalName(1, pg, "SLAVE_ROTOR_BOUNDARY")
+        print("SLAVE_ROTOR_BOUNDARY", bc_slave_rotor_id)
+
+    factory.synchronize()
+
+    # save mesh or geo file depending on file extension
+    filename, file_extension = splitext(path_save)
+
+    if file_extension == ".geo":
+        gmsh.write(filename + ".geo_unrolled")
+        rename(filename + ".geo_unrolled", filename + file_extension)
+    else:
+        gmsh.model.mesh.generate(2)
+        gmsh.write(path_save)
+
     # gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()
 

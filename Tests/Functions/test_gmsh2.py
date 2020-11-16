@@ -3,7 +3,7 @@ import sys
 import json
 
 from os import makedirs
-from os.path import join, isdir
+from os.path import join
 from pyleecan.Functions.load import load
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
@@ -35,7 +35,7 @@ mesh_dict = {
 
 @pytest.mark.long
 @pytest.mark.GMSH
-def test_gmsh_2d():
+def test_gmsh_ipm():
     """Check generation of the 2D mesh with gmsh"""
     if isinstance(draw_GMSH, ImportError):
         raise ImportError("Fail to import draw_GMSH (gmsh package missing)")
@@ -44,8 +44,7 @@ def test_gmsh_2d():
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     IPMSM_A.stator.slot.H1 = 1e-3
     save_path = join(save_plot_path, "GMSH")
-    if not isdir(save_path):
-        makedirs(save_path)
+    makedirs(save_path)
     # Plot the machine
     # im = IPMSM_A.plot()
 
@@ -63,9 +62,9 @@ def test_gmsh_2d():
         path_save=join(save_path, "GSMH_model_ipm.msh"),
     )
 
+    with open("gmsh_test_ipm.json", "w") as fw:
+        json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
-#    with open("gmsh_test_ipm.json", "w") as fw:
-#        json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
 
 @pytest.mark.long
@@ -74,12 +73,11 @@ def test_gmsh_spm():
     """Check generation of the 2D mesh with gmsh"""
     if isinstance(draw_GMSH, ImportError):
         raise ImportError("Fail to import draw_GMSH (gmsh package missing)")
-
+        
     # Import the machine from a script
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
     save_path = join(save_plot_path, "GMSH")
-    if not isdir(save_path):
-        makedirs(save_path)
+    makedirs(save_path)
     # Plot the machine
     # im = PMSM_A.plot()
 
@@ -94,10 +92,10 @@ def test_gmsh_spm():
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
         is_sliding_band=True,
-        path_save=join(save_path, "GSMH_model_spm.msh"),
+        path_save=join(save_path, "GSMH_model_spm.msh")
     )
 
-    with open(join(save_path, "gmsh_test_spm.json"), "w") as fw:
+    with open("gmsh_test_spm.json", "w") as fw:
         json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
 
@@ -105,6 +103,6 @@ def encode_complex(z):
     if isinstance(z, complex):
         return (z.real, z.imag)
 
+if __name__ == '__main__':
+     sys.exit(test_gmsh_ipm())
 
-# if __name__ == '__main__':
-#     sys.exit(test_gmsh_ipm())
