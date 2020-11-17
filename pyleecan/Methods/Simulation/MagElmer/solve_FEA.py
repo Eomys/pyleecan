@@ -39,8 +39,8 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     # Loading parameters for readibility
     L1 = output.simu.machine.stator.comp_length()
     save_path = self.get_path_save(output)
-    FEM_dict = output.mag.FEM_dict
-
+    # FEM_dict = output.mag.FEM_dict
+    #
     if (
         hasattr(output.simu.machine.stator, "winding")
         and output.simu.machine.stator.winding is not None
@@ -53,7 +53,9 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     # Initialize results matrix
     Br = zeros((Nt, Na))
     Bt = zeros((Nt, Na))
+    Bz = zeros((Nt, Na))
     Tem = zeros((Nt))
+    # Phi_wind_stator = zeros((Nt, qs))
 
     # compute the data for each time step
     # TODO Other than FEMM, in Elmer I think it's possible to compute
@@ -78,9 +80,9 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     # Tem[ii] = comp_Elmer_torque(FEM_dict, sym=sym)
 
     # flux linkage computation
-    if Phi_wind_stator is not None:
-        # TODO
-        # Phi_wind[ii, :] = comp_Elmer_Phi_wind()
-        pass
+    # if Phi_wind_stator is not None:
+    #     # TODO
+    #     # Phi_wind[ii, :] = comp_Elmer_Phi_wind()
+    #     pass
 
-    return Br, Bt, Tem, Phi_wind_stator
+    return Br, Bt, Bz, Tem, Phi_wind_stator

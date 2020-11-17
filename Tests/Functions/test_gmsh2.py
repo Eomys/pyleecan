@@ -30,6 +30,9 @@ mesh_dict = {
     "int_sb_arc": 120,
     "ext_airgap_arc": 120,
     "ext_sb_arc": 120,
+    "airbox_line_1": 10,
+    "airbox_line_2": 10,
+    "airbox_arc": 20,
 }
 
 
@@ -60,6 +63,7 @@ def test_gmsh_ipm():
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
         is_sliding_band=True,
+        is_airbox=True,
         path_save=join(save_path, "GSMH_model_ipm.msh"),
     )
 
@@ -93,6 +97,7 @@ def test_gmsh_spm():
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
         is_sliding_band=True,
+        is_airbox=True,
         path_save=join(save_path, "GSMH_model_spm.msh"),
     )
 
