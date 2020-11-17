@@ -46,6 +46,11 @@ try:
 except ImportError as error:
     comp_axes = error
 
+try:
+    from ..Methods.Simulation.MagElmer.gen_elmer_mesh import gen_elmer_mesh
+except ImportError as error:
+    gen_elmer_mesh = error
+
 
 from ._check import InitUnKnowClassError
 from .DXFImport import DXFImport
@@ -122,6 +127,17 @@ class MagElmer(Magnetics):
         )
     else:
         comp_axes = comp_axes
+    # cf Methods.Simulation.MagElmer.gen_elmer_mesh
+    if isinstance(gen_elmer_mesh, ImportError):
+        gen_elmer_mesh = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagElmer method gen_elmer_mesh: " + str(gen_elmer_mesh)
+                )
+            )
+        )
+    else:
+        gen_elmer_mesh = gen_elmer_mesh
     # save and copy methods are available in all object
     save = save
     copy = copy
