@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 from numpy import array, linspace, ones, pi, zeros
 
 
-
 from Tests import save_plot_path
 
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -49,7 +48,7 @@ mesh_dict = {
 }
 
 
-@pytest.mark.ELMER
+@pytest.mark.MagElmer
 @pytest.mark.long
 def test_Elmer():
 
@@ -76,7 +75,9 @@ def test_Elmer():
 
     # Definition of the magnetic simulation
     # 2 sym + antiperiodicity = 1/4 Lamination
-    simu.mag = MagElmer(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True, FEA_dict=mesh_dict)
+    simu.mag = MagElmer(
+        type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True, FEA_dict=mesh_dict
+    )
     # Stop after magnetic computation
     simu.force = None
     simu.struct = None
