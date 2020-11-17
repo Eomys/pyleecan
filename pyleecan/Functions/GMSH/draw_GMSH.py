@@ -5,6 +5,7 @@ from ...Classes.MachineSIPMSM import MachineSIPMSM
 from ...Functions.GMSH import InputError
 from ...Functions.GMSH import boundary_prop, boundary_list
 from ...Functions.GMSH.get_sliding_band import get_sliding_band
+from ...Functions.GMSH.get_air_box import get_air_box
 from ...Functions.GMSH.get_boundary_condition import get_boundary_condition
 
 import sys
@@ -409,7 +410,8 @@ def draw_GMSH(
     kmesh_fineness=1,
     user_mesh_dict={},
     path_save="GMSH_model.msh",
-    is_sliding_band=True,
+    is_sliding_band=False,
+    is_airbox=False,
     transform_list=[],
 ):
     """Draws a machine mesh in GMSH format
@@ -463,7 +465,7 @@ def draw_GMSH(
 
     # Start a new model
     gmsh.initialize(sys.argv)
-    gmsh.option.setNumber("General.Terminal", int(True))
+    gmsh.option.setNumber("General.Terminal", int(False))
     gmsh.option.setNumber("Geometry.CopyMeshingMethod", 1)
     gmsh.option.setNumber("Geometry.PointNumbers", 0)
     gmsh.option.setNumber("Geometry.LineNumbers", 0)
@@ -798,13 +800,81 @@ def draw_GMSH(
             pg = model.addPhysicalGroup(2, [s_data["tag"]])
             model.setPhysicalName(2, pg, s_data["label"])
 
+    if is_airbox and (not is_lam_only_R) and (not is_lam_only_S):
+        ab_list = get_air_box(sym=sym, machine=machine)
+    else:
+        ab_list = []
+
+    # Default airbox mesh element size
+    mesh_size = machine.stator.Rext / 50.0
+    for surf in ab_list:
+        nsurf += 1
+        gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
+        for line in surf.get_lines():
+            n_elem = mesh_dict.get(line.label)
+            n_elem = n_elem if n_elem is not None else 0
+            bc_name = get_boundary_condition(line)
+
+            # Gmsh built-in engine does not allow arcs larger than 180deg
+            # so arcs are split into two
+            if (
+                isinstance(line, Arc)
+                and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
+            ):
+
+                rot_dir = 1 if line.get_angle() > 0 else -1
+                arc1 = Arc2(
+                    begin=line.get_begin(),
+                    center=line.get_center(),
+                    angle=rot_dir * cmath.pi / 2.0,
+                    label=line.label,
+                )
+                arc2 = Arc2(
+                    begin=arc1.get_end(),
+                    center=line.get_center(),
+                    angle=rot_dir * cmath.pi / 2.0,
+                    label=line.label,
+                )
+                for arc in [arc1, arc2]:
+                    _add_line_to_dict(
+                        geo=factory,
+                        line=arc,
+                        d=gmsh_dict,
+                        idx=nsurf,
+                        mesh_size=mesh_size,
+                        n_elements=n_elem,
+                        bc=bc_name,
+                    )
+            else:
+                _add_line_to_dict(
+                    geo=factory,
+                    line=line,
+                    d=gmsh_dict,
+                    idx=nsurf,
+                    mesh_size=mesh_size,
+                    n_elements=n_elem,
+                    bc=bc_name,
+                )
+
+    for s_id, s_data in gmsh_dict.items():
+        lloop = []
+        if s_id == 0:
+            continue
+        for lvalues in s_data.values():
+            if s_data["label"].find("Airbox") != -1:
+                if type(lvalues) is not dict:
+                    continue
+                lloop.extend([lvalues["tag"]])
+            else:
+                continue
+        if lloop:
+            cloop = factory.addCurveLoop(lloop)
+            s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
+            pg = model.addPhysicalGroup(2, [s_data["tag"]])
+            model.setPhysicalName(2, pg, s_data["label"])
+
     # Set boundary conditions in gmsh lines
-    bc_master_stator_id = []
-    bc_slave_stator_id = []
-    bc_master_rotor_id = []
-    bc_slave_rotor_id = []
     for propname in boundary_list:
-        # propname = boundary_prop[bound_label]
         bc_id = []
         for s_id, s_data in gmsh_dict.items():
             for lvalues in s_data.values():
@@ -815,23 +885,6 @@ def draw_GMSH(
         if bc_id:
             pg = model.addPhysicalGroup(1, bc_id)
             model.setPhysicalName(1, pg, propname)
-
-    if bc_master_stator_id:
-        pg = model.addPhysicalGroup(1, bc_master_stator_id)
-        model.setPhysicalName(1, pg, "MASTER_SATOR_BOUNDARY")
-        print("MASTER_STATOR_BOUNDARY", bc_master_stator_id)
-    if bc_slave_stator_id:
-        pg = model.addPhysicalGroup(1, bc_slave_stator_id)
-        model.setPhysicalName(1, pg, "SLAVE_SATOR_BOUNDARY")
-        print("SLAVE_STATOR_BOUNDARY", bc_slave_stator_id)
-    if bc_master_rotor_id:
-        pg = model.addPhysicalGroup(1, bc_master_rotor_id)
-        model.setPhysicalName(1, pg, "MASTER_ROTOR_BOUNDARY")
-        print("MASTER_ROTOR_BOUNDARY", bc_master_rotor_id)
-    if bc_slave_rotor_id:
-        pg = model.addPhysicalGroup(1, bc_slave_rotor_id)
-        model.setPhysicalName(1, pg, "SLAVE_ROTOR_BOUNDARY")
-        print("SLAVE_ROTOR_BOUNDARY", bc_slave_rotor_id)
 
     factory.synchronize()
 
