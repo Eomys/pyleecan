@@ -11,7 +11,7 @@ import sys
 import gmsh
 import cmath
 
-from os import rename
+from os import replace
 from os.path import splitext
 
 
@@ -840,7 +840,7 @@ def draw_GMSH(
 
     if file_extension == ".geo":
         gmsh.write(filename + ".geo_unrolled")
-        rename(filename + ".geo_unrolled", filename + file_extension)
+        replace(filename + ".geo_unrolled", filename + file_extension)
     else:
         gmsh.model.mesh.generate(2)
         gmsh.write(path_save)
