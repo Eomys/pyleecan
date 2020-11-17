@@ -778,7 +778,6 @@ def draw_GMSH(
             pg = model.addPhysicalGroup(2, [s_data["tag"]])
             model.setPhysicalName(2, pg, s_data["label"])
 
-
     if is_airbox and (not is_lam_only_R) and (not is_lam_only_S):
         ab_list = get_air_box(sym=sym, machine=machine)
     else:
@@ -797,8 +796,8 @@ def draw_GMSH(
             # Gmsh built-in engine does not allow arcs larger than 180deg
             # so arcs are split into two
             if (
-                        isinstance(line, Arc)
-                    and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
+                isinstance(line, Arc)
+                and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
             ):
 
                 rot_dir = 1 if line.get_angle() > 0 else -1
@@ -852,7 +851,6 @@ def draw_GMSH(
             pg = model.addPhysicalGroup(2, [s_data["tag"]])
             model.setPhysicalName(2, pg, s_data["label"])
 
-
     # Set boundary conditions in gmsh lines
     for propname in boundary_list:
         bc_id = []
@@ -865,7 +863,6 @@ def draw_GMSH(
         if bc_id:
             pg = model.addPhysicalGroup(1, bc_id)
             model.setPhysicalName(1, pg, propname)
-
 
     factory.synchronize()
     gmsh.model.mesh.generate(2)

@@ -28,7 +28,7 @@ def get_air_box(sym, machine):
     lam_ext = lam_list[1]
 
     R_ext = lam_ext.get_Ryoke()
-    R_ab = 1.5 * R_ext              # Default at 1.5 times external lam radius
+    R_ab = 1.5 * R_ext  # Default at 1.5 times external lam radius
 
     surf_list = list()
     if sym == 1:  # Complete machine
@@ -52,16 +52,22 @@ def get_air_box(sym, machine):
         airbox_lines = list()
         airbox_lines.append(Segment(begin=Z1, end=Z2, label="airbox_line_1"))
         airbox_lines.append(
-            Arc1( begin=Z2, end=Z3, radius=R_ab, label="airbox_arc", is_trigo_direction=True,)
+            Arc1(
+                begin=Z2,
+                end=Z3,
+                radius=R_ab,
+                label="airbox_arc",
+                is_trigo_direction=True,
+            )
         )
         airbox_lines.append(Segment(begin=Z3, end=Z0, label="airbox_line_2"))
         airbox_lines.append(
-            Arc2( begin=Z0, center=0.0, angle=-2 * pi / sym, label="lam_ext_arc")
+            Arc2(begin=Z0, center=0.0, angle=-2 * pi / sym, label="lam_ext_arc")
         )
         surf_list.append(
             SurfLine(
                 line_list=airbox_lines,
-                #point_ref=0.0 * Z2 * exp(1j * pi / sym),
+                # point_ref=0.0 * Z2 * exp(1j * pi / sym),
                 label="Airbox",
             )
         )
