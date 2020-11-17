@@ -87,8 +87,20 @@ def comp_flux_airgap(self, output, axes_dict):
     # self.gen_elmer_mesh(output)
 
     elmermesh_folder = self.get_path_save_fea(output)
-    cmd_elmergrid = ['ElmerGrid', '14', '2', gmsh_filename, '-2d', '-autoclean', '-names', '-out', elmermesh_folder]
-    process_elmergrid = subprocess.Popen(cmd_elmergrid, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    cmd_elmergrid = [
+        "ElmerGrid",
+        "14",
+        "2",
+        gmsh_filename,
+        "-2d",
+        "-autoclean",
+        "-names",
+        "-out",
+        elmermesh_folder,
+    ]
+    process_elmergrid = subprocess.Popen(
+        cmd_elmergrid, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
     (stdout, stderr) = process_elmergrid.communicate()
 
     process_elmergrid.wait()
@@ -96,7 +108,6 @@ def comp_flux_airgap(self, output, axes_dict):
         print(stdout)
         print(stderr)
         # pass
-
 
     # setup Elmer solver
     # TODO add respective functions or methods

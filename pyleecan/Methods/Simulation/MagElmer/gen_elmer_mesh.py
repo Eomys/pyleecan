@@ -21,8 +21,18 @@ def gen_elmer_mesh(self, output):
     """
     # ElmerGrid must be installed and in the PATH
 
-    cmd_elmergrid = ['ElmerGrid', '14', '2', 'stator.msh2', '-2d', '-autoclean', '-names']
-    process_elmergrid = subprocess.Popen(cmd_elmergrid, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    cmd_elmergrid = [
+        "ElmerGrid",
+        "14",
+        "2",
+        "stator.msh2",
+        "-2d",
+        "-autoclean",
+        "-names",
+    ]
+    process_elmergrid = subprocess.Popen(
+        cmd_elmergrid, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
     (stdout, stderr) = process_elmergrid.communicate()
 
     process_elmergrid.wait()
