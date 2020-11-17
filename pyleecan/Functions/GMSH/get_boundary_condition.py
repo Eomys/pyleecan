@@ -10,21 +10,17 @@ from ...Functions.GMSH import boundary_prop
 
 
 def get_boundary_condition(line):
-    """Returns
+    """Returns the boundary name on a line that is used in FEA coupling
 
     Parameters
     ----------
-    sym: int
-        Symmetry factor (1= full machine, 2= half of the machine...)
-    Rgap_mec_int: float
-        Internal lamination mechanic radius
-    Rgap_mec_ext: float
-        External lamination mechanic radius
+    line :
+        a line with a label
 
     Returns
     -------
-    surf_list: list
-        List of surface in the airgap including the sliding band surface
+    label : string
+        boundary name
     """
 
     propname = ""

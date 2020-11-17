@@ -48,7 +48,7 @@ mesh_dict = {
 }
 
 
-@pytest.mark.ELMER
+@pytest.mark.MagElmer
 @pytest.mark.long
 def test_Elmer():
 
