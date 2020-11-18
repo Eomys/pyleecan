@@ -66,7 +66,7 @@ class ImportGenMatrixSin(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, sin_list=-1, is_transpose=False, init_dict=None, init_str=None):
+    def __init__(self, sin_list=-1, is_transpose=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -103,9 +103,7 @@ class ImportGenMatrixSin(ImportMatrix):
             ImportGenMatrixSin_str += "sin_list = []" + linesep
         for ii in range(len(self.sin_list)):
             tmp = self.sin_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            ImportGenMatrixSin_str += (
-                "sin_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            ImportGenMatrixSin_str += "sin_list["+str(ii)+"] ="+ tmp + linesep + linesep
         return ImportGenMatrixSin_str
 
     def __eq__(self, other):
@@ -122,7 +120,8 @@ class ImportGenMatrixSin(ImportMatrix):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from ImportMatrix
         ImportGenMatrixSin_dict = super(ImportGenMatrixSin, self).as_dict()
@@ -158,9 +157,7 @@ class ImportGenMatrixSin(ImportMatrix):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "sin_list"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'sin_list')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()

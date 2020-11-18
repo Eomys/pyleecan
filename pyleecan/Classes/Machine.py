@@ -27,9 +27,7 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Machine.Machine.comp_angle_offset_initial import (
-        comp_angle_offset_initial,
-    )
+    from ..Methods.Machine.Machine.comp_angle_offset_initial import comp_angle_offset_initial
 except ImportError as error:
     comp_angle_offset_initial = error
 
@@ -39,9 +37,7 @@ except ImportError as error:
     comp_desc_dict = error
 
 try:
-    from ..Methods.Machine.Machine.comp_length_airgap_active import (
-        comp_length_airgap_active,
-    )
+    from ..Methods.Machine.Machine.comp_length_airgap_active import comp_length_airgap_active
 except ImportError as error:
     comp_length_airgap_active = error
 
@@ -218,8 +214,7 @@ class Machine(FrozenClass):
         comp_periodicity = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Machine method comp_periodicity: "
-                    + str(comp_periodicity)
+                    "Can't use Machine method comp_periodicity: " + str(comp_periodicity)
                 )
             )
         )
@@ -320,8 +315,7 @@ class Machine(FrozenClass):
         get_lam_by_label = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Machine method get_lam_by_label: "
-                    + str(get_lam_by_label)
+                    "Can't use Machine method get_lam_by_label: " + str(get_lam_by_label)
                 )
             )
         )
@@ -345,17 +339,7 @@ class Machine(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        frame=-1,
-        shaft=-1,
-        name="default_machine",
-        desc="",
-        type_machine=1,
-        logger_name="Pyleecan.Machine",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -405,12 +389,12 @@ class Machine(FrozenClass):
             Machine_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.frame is not None:
             tmp = self.frame.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Machine_str += "frame = " + tmp
+            Machine_str += "frame = "+ tmp
         else:
             Machine_str += "frame = None" + linesep + linesep
         if self.shaft is not None:
             tmp = self.shaft.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Machine_str += "shaft = " + tmp
+            Machine_str += "shaft = "+ tmp
         else:
             Machine_str += "shaft = None" + linesep + linesep
         Machine_str += 'name = "' + str(self.name) + '"' + linesep
@@ -439,7 +423,8 @@ class Machine(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         Machine_dict = dict()
         if self.frame is None:
@@ -478,10 +463,8 @@ class Machine(FrozenClass):
         """setter of frame"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "frame"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'frame')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Frame()
@@ -490,7 +473,6 @@ class Machine(FrozenClass):
 
         if self._frame is not None:
             self._frame.parent = self
-
     frame = property(
         fget=_get_frame,
         fset=_set_frame,
@@ -508,10 +490,8 @@ class Machine(FrozenClass):
         """setter of shaft"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "shaft"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'shaft')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Shaft()
@@ -520,7 +500,6 @@ class Machine(FrozenClass):
 
         if self._shaft is not None:
             self._shaft.parent = self
-
     shaft = property(
         fget=_get_shaft,
         fset=_set_shaft,

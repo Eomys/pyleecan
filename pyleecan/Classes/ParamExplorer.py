@@ -52,9 +52,7 @@ class ParamExplorer(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, name="", symbol="", unit="", setter=None, init_dict=None, init_str=None
-    ):
+    def __init__(self, name="", symbol="", unit="", setter=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -95,16 +93,14 @@ class ParamExplorer(FrozenClass):
         if self.parent is None:
             ParamExplorer_str += "parent = None " + linesep
         else:
-            ParamExplorer_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            ParamExplorer_str += "parent = " + str(type(self.parent)) + " object" + linesep
         ParamExplorer_str += 'name = "' + str(self.name) + '"' + linesep
         ParamExplorer_str += 'symbol = "' + str(self.symbol) + '"' + linesep
         ParamExplorer_str += 'unit = "' + str(self.unit) + '"' + linesep
         if self._setter_str is not None:
             ParamExplorer_str += "setter = " + self._setter_str + linesep
         elif self._setter_func is not None:
-            ParamExplorer_str += "setter = " + str(self._setter_func) + linesep
+            ParamExplorer_str += "setter = " + str(self._setter_func)+ linesep
         else:
             ParamExplorer_str += "setter = None" + linesep + linesep
         return ParamExplorer_str
@@ -125,7 +121,8 @@ class ParamExplorer(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         ParamExplorer_dict = dict()
         ParamExplorer_dict["name"] = self.name

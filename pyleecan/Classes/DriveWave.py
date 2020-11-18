@@ -46,15 +46,7 @@ class DriveWave(Drive):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        wave=-1,
-        Umax=800,
-        Imax=800,
-        is_current=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, wave=-1, Umax=800, Imax=800, is_current=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -93,7 +85,7 @@ class DriveWave(Drive):
         DriveWave_str += super(DriveWave, self).__str__()
         if self.wave is not None:
             tmp = self.wave.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            DriveWave_str += "wave = " + tmp
+            DriveWave_str += "wave = "+ tmp
         else:
             DriveWave_str += "wave = None" + linesep + linesep
         return DriveWave_str
@@ -112,7 +104,8 @@ class DriveWave(Drive):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Drive
         DriveWave_dict = super(DriveWave, self).as_dict()
@@ -141,8 +134,8 @@ class DriveWave(Drive):
         """setter of wave"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "wave")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'wave')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Import()
@@ -151,7 +144,6 @@ class DriveWave(Drive):
 
         if self._wave is not None:
             self._wave.parent = self
-
     wave = property(
         fget=_get_wave,
         fset=_set_wave,

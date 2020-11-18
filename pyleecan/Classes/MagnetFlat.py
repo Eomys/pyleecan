@@ -29,14 +29,7 @@ class MagnetFlat(Magnet):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        mat_type=-1,
-        type_magnetization=0,
-        Lmag=0.95,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, mat_type=-1, type_magnetization=0, Lmag=0.95, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -60,9 +53,7 @@ class MagnetFlat(Magnet):
                 Lmag = init_dict["Lmag"]
         # Set the properties (value check and convertion are done in setter)
         # Call Magnet init
-        super(MagnetFlat, self).__init__(
-            mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag
-        )
+        super(MagnetFlat, self).__init__(mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag)
         # The class is frozen (in Magnet init), for now it's impossible to
         # add new properties
 
@@ -86,7 +77,8 @@ class MagnetFlat(Magnet):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Magnet
         MagnetFlat_dict = super(MagnetFlat, self).as_dict()

@@ -29,19 +29,7 @@ class OutStruct(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Time=None,
-        Angle=None,
-        Nt_tot=None,
-        Na_tot=None,
-        logger_name="Pyleecan.OutStruct",
-        Yr=None,
-        Vr=None,
-        Ar=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Time=None, Angle=None, Nt_tot=None, Na_tot=None, logger_name="Pyleecan.OutStruct", Yr=None, Vr=None, Ar=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -95,26 +83,14 @@ class OutStruct(FrozenClass):
             OutStruct_str += "parent = None " + linesep
         else:
             OutStruct_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutStruct_str += (
-            "Time = "
-            + linesep
-            + str(self.Time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutStruct_str += (
-            "Angle = "
-            + linesep
-            + str(self.Angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutStruct_str += "Time = " + linesep + str(self.Time).replace(linesep, linesep + "\t") + linesep + linesep
+        OutStruct_str += "Angle = " + linesep + str(self.Angle).replace(linesep, linesep + "\t") + linesep + linesep
         OutStruct_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutStruct_str += "Na_tot = " + str(self.Na_tot) + linesep
         OutStruct_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OutStruct_str += "Yr = " + str(self.Yr) + linesep + linesep
-        OutStruct_str += "Vr = " + str(self.Vr) + linesep + linesep
-        OutStruct_str += "Ar = " + str(self.Ar) + linesep + linesep
+        OutStruct_str += "Yr = "+ str(self.Yr) + linesep + linesep
+        OutStruct_str += "Vr = "+ str(self.Vr) + linesep + linesep
+        OutStruct_str += "Ar = "+ str(self.Ar) + linesep + linesep
         return OutStruct_str
 
     def __eq__(self, other):
@@ -141,7 +117,8 @@ class OutStruct(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         OutStruct_dict = dict()
         if self.Time is None:
@@ -295,10 +272,8 @@ class OutStruct(FrozenClass):
         """setter of Yr"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Yr"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Yr')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -322,10 +297,8 @@ class OutStruct(FrozenClass):
         """setter of Vr"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Vr"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Vr')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -349,10 +322,8 @@ class OutStruct(FrozenClass):
         """setter of Ar"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Ar"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Ar')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()

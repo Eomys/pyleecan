@@ -62,15 +62,7 @@ class SolutionData(Solution):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        field=None,
-        type_cell="triangle",
-        label=None,
-        dimension=2,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, field=None, type_cell="triangle", label=None, dimension=2, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -97,9 +89,7 @@ class SolutionData(Solution):
         # Set the properties (value check and convertion are done in setter)
         self.field = field
         # Call Solution init
-        super(SolutionData, self).__init__(
-            type_cell=type_cell, label=label, dimension=dimension
-        )
+        super(SolutionData, self).__init__(type_cell=type_cell, label=label, dimension=dimension)
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
 
@@ -109,7 +99,7 @@ class SolutionData(Solution):
         SolutionData_str = ""
         # Get the properties inherited from Solution
         SolutionData_str += super(SolutionData, self).__str__()
-        SolutionData_str += "field = " + str(self.field) + linesep + linesep
+        SolutionData_str += "field = "+ str(self.field) + linesep + linesep
         return SolutionData_str
 
     def __eq__(self, other):
@@ -126,7 +116,8 @@ class SolutionData(Solution):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Solution
         SolutionData_dict = super(SolutionData, self).as_dict()
@@ -154,10 +145,8 @@ class SolutionData(Solution):
         """setter of field"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "field"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'field')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()

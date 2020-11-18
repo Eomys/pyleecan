@@ -66,19 +66,7 @@ class MachineDFIM(MachineAsync):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        rotor=-1,
-        stator=-1,
-        frame=-1,
-        shaft=-1,
-        name="default_machine",
-        desc="",
-        type_machine=1,
-        logger_name="Pyleecan.Machine",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, rotor=-1, stator=-1, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -114,14 +102,7 @@ class MachineDFIM(MachineAsync):
         self.rotor = rotor
         self.stator = stator
         # Call MachineAsync init
-        super(MachineDFIM, self).__init__(
-            frame=frame,
-            shaft=shaft,
-            name=name,
-            desc=desc,
-            type_machine=type_machine,
-            logger_name=logger_name,
-        )
+        super(MachineDFIM, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
         # The class is frozen (in MachineAsync init), for now it's impossible to
         # add new properties
 
@@ -133,12 +114,12 @@ class MachineDFIM(MachineAsync):
         MachineDFIM_str += super(MachineDFIM, self).__str__()
         if self.rotor is not None:
             tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MachineDFIM_str += "rotor = " + tmp
+            MachineDFIM_str += "rotor = "+ tmp
         else:
             MachineDFIM_str += "rotor = None" + linesep + linesep
         if self.stator is not None:
             tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MachineDFIM_str += "stator = " + tmp
+            MachineDFIM_str += "stator = "+ tmp
         else:
             MachineDFIM_str += "stator = None" + linesep + linesep
         return MachineDFIM_str
@@ -159,7 +140,8 @@ class MachineDFIM(MachineAsync):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from MachineAsync
         MachineDFIM_dict = super(MachineDFIM, self).as_dict()
@@ -194,10 +176,8 @@ class MachineDFIM(MachineAsync):
         """setter of rotor"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "rotor"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'rotor')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = LamSlotWind()
@@ -206,7 +186,6 @@ class MachineDFIM(MachineAsync):
 
         if self._rotor is not None:
             self._rotor.parent = self
-
     rotor = property(
         fget=_get_rotor,
         fset=_set_rotor,
@@ -224,10 +203,8 @@ class MachineDFIM(MachineAsync):
         """setter of stator"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "stator"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'stator')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = LamSlotWind()
@@ -236,7 +213,6 @@ class MachineDFIM(MachineAsync):
 
         if self._stator is not None:
             self._stator.parent = self
-
     stator = property(
         fget=_get_stator,
         fset=_set_stator,

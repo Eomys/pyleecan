@@ -42,9 +42,7 @@ except ImportError as error:
     comp_radius_mec = error
 
 try:
-    from ..Methods.Machine.Lamination.comp_surface_axial_vent import (
-        comp_surface_axial_vent,
-    )
+    from ..Methods.Machine.Lamination.comp_surface_axial_vent import comp_surface_axial_vent
 except ImportError as error:
     comp_surface_axial_vent = error
 
@@ -355,22 +353,7 @@ class Lamination(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=-1,
-        notch=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=-1, notch=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -436,7 +419,7 @@ class Lamination(FrozenClass):
         Lamination_str += "L1 = " + str(self.L1) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Lamination_str += "mat_type = " + tmp
+            Lamination_str += "mat_type = "+ tmp
         else:
             Lamination_str += "mat_type = None" + linesep + linesep
         Lamination_str += "Nrvd = " + str(self.Nrvd) + linesep
@@ -449,15 +432,13 @@ class Lamination(FrozenClass):
         if len(self.axial_vent) == 0:
             Lamination_str += "axial_vent = []" + linesep
         for ii in range(len(self.axial_vent)):
-            tmp = (
-                self.axial_vent[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            Lamination_str += "axial_vent[" + str(ii) + "] =" + tmp + linesep + linesep
+            tmp = self.axial_vent[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            Lamination_str += "axial_vent["+str(ii)+"] ="+ tmp + linesep + linesep
         if len(self.notch) == 0:
             Lamination_str += "notch = []" + linesep
         for ii in range(len(self.notch)):
             tmp = self.notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            Lamination_str += "notch[" + str(ii) + "] =" + tmp + linesep + linesep
+            Lamination_str += "notch["+str(ii)+"] ="+ tmp + linesep + linesep
         return Lamination_str
 
     def __eq__(self, other):
@@ -490,7 +471,8 @@ class Lamination(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         Lamination_dict = dict()
         Lamination_dict["L1"] = self.L1
@@ -567,10 +549,8 @@ class Lamination(FrozenClass):
         """setter of mat_type"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "mat_type"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mat_type')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Material()
@@ -579,7 +559,6 @@ class Lamination(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
-
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,
@@ -734,9 +713,7 @@ class Lamination(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "axial_vent"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'axial_vent')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -765,9 +742,7 @@ class Lamination(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "notch"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'notch')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()

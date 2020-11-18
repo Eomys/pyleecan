@@ -47,9 +47,7 @@ except ImportError as error:
     plot_deflection = error
 
 try:
-    from ..Methods.Mesh.MeshSolution.plot_deflection_animated import (
-        plot_deflection_animated,
-    )
+    from ..Methods.Mesh.MeshSolution.plot_deflection_animated import plot_deflection_animated
 except ImportError as error:
     plot_deflection_animated = error
 
@@ -181,17 +179,7 @@ class MeshSolution(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        label=None,
-        mesh=-1,
-        is_same_mesh=True,
-        solution=-1,
-        group=-1,
-        dimension=2,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, label=None, mesh=-1, is_same_mesh=True, solution=-1, group=-1, dimension=2, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -238,27 +226,23 @@ class MeshSolution(FrozenClass):
         if self.parent is None:
             MeshSolution_str += "parent = None " + linesep
         else:
-            MeshSolution_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            MeshSolution_str += "parent = " + str(type(self.parent)) + " object" + linesep
         MeshSolution_str += 'label = "' + str(self.label) + '"' + linesep
         if len(self.mesh) == 0:
             MeshSolution_str += "mesh = []" + linesep
         for ii in range(len(self.mesh)):
             tmp = self.mesh[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            MeshSolution_str += "mesh[" + str(ii) + "] =" + tmp + linesep + linesep
+            MeshSolution_str += "mesh["+str(ii)+"] ="+ tmp + linesep + linesep
         MeshSolution_str += "is_same_mesh = " + str(self.is_same_mesh) + linesep
         if len(self.solution) == 0:
             MeshSolution_str += "solution = []" + linesep
         for ii in range(len(self.solution)):
             tmp = self.solution[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
+            MeshSolution_str += "solution["+str(ii)+"] ="+ tmp + linesep + linesep
         if len(self.group) == 0:
             MeshSolution_str += "group = dict()"
         for key, obj in self.group.items():
-            MeshSolution_str += (
-                "group[" + key + "] = " + str(self.group[key]) + linesep + linesep
-            )
+            MeshSolution_str += "group["+key+"] = "+str(self.group[key]) + linesep + linesep
         MeshSolution_str += "dimension = " + str(self.dimension) + linesep
         return MeshSolution_str
 
@@ -281,16 +265,15 @@ class MeshSolution(FrozenClass):
             return False
         else:
             for key in other.group:
-                if key not in self.group or not array_equal(
-                    other.group[key], self.group[key]
-                ):
+                if key not in self.group or not array_equal(other.group[key], self.group[key]):
                     return False
         if other.dimension != self.dimension:
             return False
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         MeshSolution_dict = dict()
         MeshSolution_dict["label"] = self.label
@@ -361,9 +344,7 @@ class MeshSolution(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "mesh"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'mesh')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -410,9 +391,7 @@ class MeshSolution(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "solution"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'solution')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()

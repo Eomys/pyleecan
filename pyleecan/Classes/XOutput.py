@@ -349,8 +349,7 @@ class XOutput(Output):
         get_pareto_index = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use XOutput method get_pareto_index: "
-                    + str(get_pareto_index)
+                    "Can't use XOutput method get_pareto_index: " + str(get_pareto_index)
                 )
             )
         )
@@ -362,24 +361,7 @@ class XOutput(Output):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        paramexplorer_list=-1,
-        output_list=-1,
-        xoutput_dict=-1,
-        nb_simu=0,
-        simu=-1,
-        path_result="",
-        geo=-1,
-        elec=-1,
-        mag=-1,
-        struct=-1,
-        post=-1,
-        logger_name="Pyleecan.Output",
-        force=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, paramexplorer_list=-1, output_list=-1, xoutput_dict=-1, nb_simu=0, simu=-1, path_result="", geo=-1, elec=-1, mag=-1, struct=-1, post=-1, logger_name="Pyleecan.Output", force=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -427,17 +409,7 @@ class XOutput(Output):
         self.xoutput_dict = xoutput_dict
         self.nb_simu = nb_simu
         # Call Output init
-        super(XOutput, self).__init__(
-            simu=simu,
-            path_result=path_result,
-            geo=geo,
-            elec=elec,
-            mag=mag,
-            struct=struct,
-            post=post,
-            logger_name=logger_name,
-            force=force,
-        )
+        super(XOutput, self).__init__(simu=simu, path_result=path_result, geo=geo, elec=elec, mag=mag, struct=struct, post=post, logger_name=logger_name, force=force)
         # The class is frozen (in Output init), for now it's impossible to
         # add new properties
 
@@ -450,29 +422,18 @@ class XOutput(Output):
         if len(self.paramexplorer_list) == 0:
             XOutput_str += "paramexplorer_list = []" + linesep
         for ii in range(len(self.paramexplorer_list)):
-            tmp = (
-                self.paramexplorer_list[ii].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            XOutput_str += (
-                "paramexplorer_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            tmp = self.paramexplorer_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            XOutput_str += "paramexplorer_list["+str(ii)+"] ="+ tmp + linesep + linesep
         if len(self.output_list) == 0:
             XOutput_str += "output_list = []" + linesep
         for ii in range(len(self.output_list)):
-            tmp = (
-                self.output_list[ii].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            XOutput_str += "output_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            tmp = self.output_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            XOutput_str += "output_list["+str(ii)+"] ="+ tmp + linesep + linesep
         if len(self.xoutput_dict) == 0:
-            XOutput_str += "xoutput_dict = dict()" + linesep
+            XOutput_str += "xoutput_dict = dict()"+linesep
         for key, obj in self.xoutput_dict.items():
-            tmp = (
-                self.xoutput_dict[key].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            XOutput_str += "xoutput_dict[" + key + "] =" + tmp + linesep + linesep
+            tmp = self.xoutput_dict[key].__str__().replace(linesep, linesep + "\t")+ linesep 
+            XOutput_str += "xoutput_dict["+key+"] ="+ tmp + linesep + linesep
         XOutput_str += "nb_simu = " + str(self.nb_simu) + linesep
         return XOutput_str
 
@@ -496,7 +457,8 @@ class XOutput(Output):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Output
         XOutput_dict = super(XOutput, self).as_dict()
@@ -550,9 +512,7 @@ class XOutput(Output):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "paramexplorer_list"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'paramexplorer_list')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -581,9 +541,7 @@ class XOutput(Output):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "output_list"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'output_list')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -612,9 +570,7 @@ class XOutput(Output):
         if type(value) is dict:
             for key, obj in value.items():
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "xoutput_dict"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'xoutput_dict')
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()

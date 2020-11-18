@@ -156,7 +156,7 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Store FEMM_dict in out_dict if FEMM file is not imported
     if self.import_file is None:
-        out_dict["FEA_dict"] = FEMM_dict
+        output.mag.internal.FEMM_dict = FEMM_dict
 
     # Store FEMM mesh results in meshsolution
     if self.is_get_mesh:

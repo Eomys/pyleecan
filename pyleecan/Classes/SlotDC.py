@@ -176,20 +176,7 @@ class SlotDC(SlotWind):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        W1=0.0122,
-        H1=0.0122,
-        D1=0.001,
-        W2=0.0122,
-        H2=0.001,
-        D2=0.001,
-        H3=0.001,
-        R3=0.001,
-        Zs=36,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, W1=0.0122, H1=0.0122, D1=0.001, W2=0.0122, H2=0.001, D2=0.001, H3=0.001, R3=0.001, Zs=36, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -281,7 +268,8 @@ class SlotDC(SlotWind):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from SlotWind
         SlotDC_dict = super(SlotDC, self).as_dict()

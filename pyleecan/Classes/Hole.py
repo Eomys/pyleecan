@@ -211,7 +211,7 @@ class Hole(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Zh=36, mat_void=-1, init_dict=None, init_str=None):
+    def __init__(self, Zh=36, mat_void=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -250,7 +250,7 @@ class Hole(FrozenClass):
         Hole_str += "Zh = " + str(self.Zh) + linesep
         if self.mat_void is not None:
             tmp = self.mat_void.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Hole_str += "mat_void = " + tmp
+            Hole_str += "mat_void = "+ tmp
         else:
             Hole_str += "mat_void = None" + linesep + linesep
         return Hole_str
@@ -267,7 +267,8 @@ class Hole(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         Hole_dict = dict()
         Hole_dict["Zh"] = self.Zh
@@ -314,10 +315,8 @@ class Hole(FrozenClass):
         """setter of mat_void"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "mat_void"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mat_void')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Material()
@@ -326,7 +325,6 @@ class Hole(FrozenClass):
 
         if self._mat_void is not None:
             self._mat_void.parent = self
-
     mat_void = property(
         fget=_get_mat_void,
         fset=_set_mat_void,

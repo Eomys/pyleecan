@@ -6642,6 +6642,26 @@
             }
         ]
     },
+    "OutInternal": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "OutMagElmer",
+            "OutMagFEMM"
+        ],
+        "desc": "Abstract class whose childs enable to store outputs related to a specific model",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "OutInternal",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutInternal.csv",
+        "properties": []
+    },
     "OutMag": {
         "constants": [
             {
@@ -6752,15 +6772,6 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing the main FEA parameter",
-                "max": "",
-                "min": "",
-                "name": "FEA_dict",
-                "type": "dict",
-                "unit": "",
-                "value": null
-            },
-            {
                 "desc": "Name of the logger to use",
                 "max": "",
                 "min": "",
@@ -6768,6 +6779,69 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutMag"
+            },
+            {
+                "desc": "OutInternal object containg outputs related to a specific model",
+                "max": "",
+                "min": "",
+                "name": "internal",
+                "type": "OutInternal",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "OutMagElmer": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to store outputs related to MagElmer magnetic model",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OutInternal",
+        "name": "OutMagElmer",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutMagElmer.csv",
+        "properties": [
+            {
+                "desc": "Dictionnary containing the main FEA parameters",
+                "max": "",
+                "min": "",
+                "name": "FEA_dict",
+                "type": "dict",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "OutMagFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to store outputs related to MagFEMM magnetic model",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OutInternal",
+        "name": "OutMagFEMM",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutMagFEMM.csv",
+        "properties": [
+            {
+                "desc": "Dictionnary containing the main FEMM parameters",
+                "max": "",
+                "min": "",
+                "name": "FEMM_dict",
+                "type": "dict",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -10589,6 +10663,15 @@
                 "type": "[Post]",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Value to indicate how much Outputs are cleaned if is_keep_all_output using Output.clean() method",
+                "max": "4",
+                "min": "0",
+                "name": "clean_level",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },

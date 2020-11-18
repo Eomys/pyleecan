@@ -89,8 +89,7 @@ class VentilationTrap(Hole):
         comp_surface = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VentilationTrap method comp_surface: "
-                    + str(comp_surface)
+                    "Can't use VentilationTrap method comp_surface: " + str(comp_surface)
                 )
             )
         )
@@ -113,18 +112,7 @@ class VentilationTrap(Hole):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Alpha0=0,
-        D0=1,
-        H0=1,
-        W1=1,
-        W2=1,
-        Zh=36,
-        mat_void=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Alpha0=0, D0=1, H0=1, W1=1, W2=1, Zh=36, mat_void=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -200,7 +188,8 @@ class VentilationTrap(Hole):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Hole
         VentilationTrap_dict = super(VentilationTrap, self).as_dict()

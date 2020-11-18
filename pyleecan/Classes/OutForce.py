@@ -28,15 +28,7 @@ class OutForce(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Time=None,
-        Angle=None,
-        P=None,
-        logger_name="Pyleecan.OutForce",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Time=None, Angle=None, P=None, logger_name="Pyleecan.OutForce", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -78,9 +70,9 @@ class OutForce(FrozenClass):
             OutForce_str += "parent = None " + linesep
         else:
             OutForce_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutForce_str += "Time = " + str(self.Time) + linesep + linesep
-        OutForce_str += "Angle = " + str(self.Angle) + linesep + linesep
-        OutForce_str += "P = " + str(self.P) + linesep + linesep
+        OutForce_str += "Time = "+ str(self.Time) + linesep + linesep
+        OutForce_str += "Angle = "+ str(self.Angle) + linesep + linesep
+        OutForce_str += "P = "+ str(self.P) + linesep + linesep
         OutForce_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutForce_str
 
@@ -100,7 +92,8 @@ class OutForce(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         OutForce_dict = dict()
         if self.Time is None:
@@ -136,10 +129,8 @@ class OutForce(FrozenClass):
         """setter of Time"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Time"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Time')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Data()
@@ -163,10 +154,8 @@ class OutForce(FrozenClass):
         """setter of Angle"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Angle"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Angle')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Data()
@@ -190,8 +179,8 @@ class OutForce(FrozenClass):
         """setter of P"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("SciDataTool.Classes", value.get("__class__"), "P")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'P')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = VectorField()

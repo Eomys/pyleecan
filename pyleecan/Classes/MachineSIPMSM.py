@@ -67,19 +67,7 @@ class MachineSIPMSM(MachineSync):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        rotor=-1,
-        stator=-1,
-        frame=-1,
-        shaft=-1,
-        name="default_machine",
-        desc="",
-        type_machine=1,
-        logger_name="Pyleecan.Machine",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, rotor=-1, stator=-1, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -115,14 +103,7 @@ class MachineSIPMSM(MachineSync):
         self.rotor = rotor
         self.stator = stator
         # Call MachineSync init
-        super(MachineSIPMSM, self).__init__(
-            frame=frame,
-            shaft=shaft,
-            name=name,
-            desc=desc,
-            type_machine=type_machine,
-            logger_name=logger_name,
-        )
+        super(MachineSIPMSM, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
         # The class is frozen (in MachineSync init), for now it's impossible to
         # add new properties
 
@@ -134,12 +115,12 @@ class MachineSIPMSM(MachineSync):
         MachineSIPMSM_str += super(MachineSIPMSM, self).__str__()
         if self.rotor is not None:
             tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MachineSIPMSM_str += "rotor = " + tmp
+            MachineSIPMSM_str += "rotor = "+ tmp
         else:
             MachineSIPMSM_str += "rotor = None" + linesep + linesep
         if self.stator is not None:
             tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MachineSIPMSM_str += "stator = " + tmp
+            MachineSIPMSM_str += "stator = "+ tmp
         else:
             MachineSIPMSM_str += "stator = None" + linesep + linesep
         return MachineSIPMSM_str
@@ -160,7 +141,8 @@ class MachineSIPMSM(MachineSync):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from MachineSync
         MachineSIPMSM_dict = super(MachineSIPMSM, self).as_dict()
@@ -195,10 +177,8 @@ class MachineSIPMSM(MachineSync):
         """setter of rotor"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "rotor"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'rotor')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = LamSlotMag()
@@ -207,7 +187,6 @@ class MachineSIPMSM(MachineSync):
 
         if self._rotor is not None:
             self._rotor.parent = self
-
     rotor = property(
         fget=_get_rotor,
         fset=_set_rotor,
@@ -225,10 +204,8 @@ class MachineSIPMSM(MachineSync):
         """setter of stator"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "stator"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'stator')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = LamSlotWind()
@@ -237,7 +214,6 @@ class MachineSIPMSM(MachineSync):
 
         if self._stator is not None:
             self._stator.parent = self
-
     stator = property(
         fget=_get_stator,
         fset=_set_stator,

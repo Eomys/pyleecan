@@ -96,16 +96,7 @@ class EEC_PMSM(EEC):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        indmag=None,
-        fluxlink=None,
-        parameters=-1,
-        freq0=None,
-        drive=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, indmag=None, fluxlink=None, parameters=-1, freq0=None, drive=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -150,19 +141,19 @@ class EEC_PMSM(EEC):
         EEC_PMSM_str += super(EEC_PMSM, self).__str__()
         if self.indmag is not None:
             tmp = self.indmag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_PMSM_str += "indmag = " + tmp
+            EEC_PMSM_str += "indmag = "+ tmp
         else:
             EEC_PMSM_str += "indmag = None" + linesep + linesep
         if self.fluxlink is not None:
             tmp = self.fluxlink.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_PMSM_str += "fluxlink = " + tmp
+            EEC_PMSM_str += "fluxlink = "+ tmp
         else:
             EEC_PMSM_str += "fluxlink = None" + linesep + linesep
         EEC_PMSM_str += "parameters = " + str(self.parameters) + linesep
         EEC_PMSM_str += "freq0 = " + str(self.freq0) + linesep
         if self.drive is not None:
             tmp = self.drive.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_PMSM_str += "drive = " + tmp
+            EEC_PMSM_str += "drive = "+ tmp
         else:
             EEC_PMSM_str += "drive = None" + linesep + linesep
         return EEC_PMSM_str
@@ -189,7 +180,8 @@ class EEC_PMSM(EEC):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from EEC
         EEC_PMSM_dict = super(EEC_PMSM, self).as_dict()
@@ -201,9 +193,7 @@ class EEC_PMSM(EEC):
             EEC_PMSM_dict["fluxlink"] = None
         else:
             EEC_PMSM_dict["fluxlink"] = self.fluxlink.as_dict()
-        EEC_PMSM_dict["parameters"] = (
-            self.parameters.copy() if self.parameters is not None else None
-        )
+        EEC_PMSM_dict["parameters"] = self.parameters.copy() if self.parameters is not None else None
         EEC_PMSM_dict["freq0"] = self.freq0
         if self.drive is None:
             EEC_PMSM_dict["drive"] = None
@@ -236,10 +226,8 @@ class EEC_PMSM(EEC):
         """setter of indmag"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "indmag"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'indmag')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = IndMag()
@@ -248,7 +236,6 @@ class EEC_PMSM(EEC):
 
         if self._indmag is not None:
             self._indmag.parent = self
-
     indmag = property(
         fget=_get_indmag,
         fset=_set_indmag,
@@ -266,10 +253,8 @@ class EEC_PMSM(EEC):
         """setter of fluxlink"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "fluxlink"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'fluxlink')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = FluxLink()
@@ -278,7 +263,6 @@ class EEC_PMSM(EEC):
 
         if self._fluxlink is not None:
             self._fluxlink.parent = self
-
     fluxlink = property(
         fget=_get_fluxlink,
         fset=_set_fluxlink,
@@ -334,10 +318,8 @@ class EEC_PMSM(EEC):
         """setter of drive"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "drive"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'drive')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Drive()
@@ -346,7 +328,6 @@ class EEC_PMSM(EEC):
 
         if self._drive is not None:
             self._drive.parent = self
-
     drive = property(
         fget=_get_drive,
         fset=_set_drive,

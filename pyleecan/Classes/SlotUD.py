@@ -96,16 +96,7 @@ class SlotUD(SlotWind):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        line_list=-1,
-        wind_begin_index=None,
-        wind_end_index=None,
-        type_line_wind=0,
-        Zs=36,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, line_list=-1, wind_begin_index=None, wind_end_index=None, type_line_wind=0, Zs=36, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -150,10 +141,8 @@ class SlotUD(SlotWind):
         if len(self.line_list) == 0:
             SlotUD_str += "line_list = []" + linesep
         for ii in range(len(self.line_list)):
-            tmp = (
-                self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            SlotUD_str += "line_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            tmp = self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            SlotUD_str += "line_list["+str(ii)+"] ="+ tmp + linesep + linesep
         SlotUD_str += "wind_begin_index = " + str(self.wind_begin_index) + linesep
         SlotUD_str += "wind_end_index = " + str(self.wind_end_index) + linesep
         SlotUD_str += "type_line_wind = " + str(self.type_line_wind) + linesep
@@ -179,7 +168,8 @@ class SlotUD(SlotWind):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from SlotWind
         SlotUD_dict = super(SlotUD, self).as_dict()
@@ -221,9 +211,7 @@ class SlotUD(SlotWind):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "line_list"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'line_list')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()

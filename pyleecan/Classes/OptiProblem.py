@@ -37,18 +37,7 @@ class OptiProblem(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        simu=-1,
-        design_var=-1,
-        obj_func=-1,
-        eval_func=None,
-        constraint=-1,
-        preprocessing=None,
-        datakeeper_list=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, simu=-1, design_var=-1, obj_func=-1, eval_func=None, constraint=-1, preprocessing=None, datakeeper_list=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -98,57 +87,44 @@ class OptiProblem(FrozenClass):
         if self.parent is None:
             OptiProblem_str += "parent = None " + linesep
         else:
-            OptiProblem_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            OptiProblem_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.simu is not None:
             tmp = self.simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiProblem_str += "simu = " + tmp
+            OptiProblem_str += "simu = "+ tmp
         else:
             OptiProblem_str += "simu = None" + linesep + linesep
         if len(self.design_var) == 0:
             OptiProblem_str += "design_var = []" + linesep
         for ii in range(len(self.design_var)):
-            tmp = (
-                self.design_var[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            OptiProblem_str += "design_var[" + str(ii) + "] =" + tmp + linesep + linesep
+            tmp = self.design_var[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            OptiProblem_str += "design_var["+str(ii)+"] ="+ tmp + linesep + linesep
         if len(self.obj_func) == 0:
             OptiProblem_str += "obj_func = []" + linesep
         for ii in range(len(self.obj_func)):
             tmp = self.obj_func[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            OptiProblem_str += "obj_func[" + str(ii) + "] =" + tmp + linesep + linesep
+            OptiProblem_str += "obj_func["+str(ii)+"] ="+ tmp + linesep + linesep
         if self._eval_func_str is not None:
             OptiProblem_str += "eval_func = " + self._eval_func_str + linesep
         elif self._eval_func_func is not None:
-            OptiProblem_str += "eval_func = " + str(self._eval_func_func) + linesep
+            OptiProblem_str += "eval_func = " + str(self._eval_func_func)+ linesep
         else:
             OptiProblem_str += "eval_func = None" + linesep + linesep
         if len(self.constraint) == 0:
             OptiProblem_str += "constraint = []" + linesep
         for ii in range(len(self.constraint)):
-            tmp = (
-                self.constraint[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            OptiProblem_str += "constraint[" + str(ii) + "] =" + tmp + linesep + linesep
+            tmp = self.constraint[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            OptiProblem_str += "constraint["+str(ii)+"] ="+ tmp + linesep + linesep
         if self._preprocessing_str is not None:
             OptiProblem_str += "preprocessing = " + self._preprocessing_str + linesep
         elif self._preprocessing_func is not None:
-            OptiProblem_str += (
-                "preprocessing = " + str(self._preprocessing_func) + linesep
-            )
+            OptiProblem_str += "preprocessing = " + str(self._preprocessing_func)+ linesep
         else:
             OptiProblem_str += "preprocessing = None" + linesep + linesep
         if len(self.datakeeper_list) == 0:
             OptiProblem_str += "datakeeper_list = []" + linesep
         for ii in range(len(self.datakeeper_list)):
-            tmp = (
-                self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            OptiProblem_str += (
-                "datakeeper_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            tmp = self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            OptiProblem_str += "datakeeper_list["+str(ii)+"] ="+ tmp + linesep + linesep
         return OptiProblem_str
 
     def __eq__(self, other):
@@ -173,7 +149,8 @@ class OptiProblem(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         OptiProblem_dict = dict()
         if self.simu is None:
@@ -240,8 +217,8 @@ class OptiProblem(FrozenClass):
         """setter of simu"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "simu")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'simu')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Simulation()
@@ -250,7 +227,6 @@ class OptiProblem(FrozenClass):
 
         if self._simu is not None:
             self._simu.parent = self
-
     simu = property(
         fget=_get_simu,
         fset=_set_simu,
@@ -273,9 +249,7 @@ class OptiProblem(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "design_var"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'design_var')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -304,9 +278,7 @@ class OptiProblem(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "obj_func"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'obj_func')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -331,23 +303,19 @@ class OptiProblem(FrozenClass):
         if value is None:
             self._eval_func_str = None
             self._eval_func_func = None
-        elif isinstance(value, str) and "lambda" in value:
+        elif isinstance(value,str) and 'lambda' in value:
             self._eval_func_str = value
             self._eval_func_func = eval(value)
-        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+        elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':
             self._eval_func_str = value
-            f = open(value, "r")
-            exec(f.read(), globals())
+            f = open(value, 'r')
+            exec(f.read(),globals())
             self._eval_func_func = eval(basename(value[:-3]))
         elif callable(value):
             self._eval_func_str = None
             self._eval_func_func = value
         else:
-            raise CheckTypeError(
-                "For property eval_func Expected function or str (path to python file or lambda), got: "
-                + str(type(value))
-            )
-
+            raise CheckTypeError('For property eval_func Expected function or str (path to python file or lambda), got: '+str(type(value))) 
     eval_func = property(
         fget=_get_eval_func,
         fset=_set_eval_func,
@@ -370,9 +338,7 @@ class OptiProblem(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "constraint"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'constraint')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -397,23 +363,19 @@ class OptiProblem(FrozenClass):
         if value is None:
             self._preprocessing_str = None
             self._preprocessing_func = None
-        elif isinstance(value, str) and "lambda" in value:
+        elif isinstance(value,str) and 'lambda' in value:
             self._preprocessing_str = value
             self._preprocessing_func = eval(value)
-        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+        elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':
             self._preprocessing_str = value
-            f = open(value, "r")
-            exec(f.read(), globals())
+            f = open(value, 'r')
+            exec(f.read(),globals())
             self._preprocessing_func = eval(basename(value[:-3]))
         elif callable(value):
             self._preprocessing_str = None
             self._preprocessing_func = value
         else:
-            raise CheckTypeError(
-                "For property preprocessing Expected function or str (path to python file or lambda), got: "
-                + str(type(value))
-            )
-
+            raise CheckTypeError('For property preprocessing Expected function or str (path to python file or lambda), got: '+str(type(value))) 
     preprocessing = property(
         fget=_get_preprocessing,
         fset=_set_preprocessing,
@@ -436,9 +398,7 @@ class OptiProblem(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'datakeeper_list')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()

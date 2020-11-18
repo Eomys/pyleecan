@@ -95,15 +95,7 @@ class EEC_SCIM(EEC):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        indmag=None,
-        parameters=-1,
-        freq0=None,
-        drive=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, indmag=None, parameters=-1, freq0=None, drive=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -145,14 +137,14 @@ class EEC_SCIM(EEC):
         EEC_SCIM_str += super(EEC_SCIM, self).__str__()
         if self.indmag is not None:
             tmp = self.indmag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_SCIM_str += "indmag = " + tmp
+            EEC_SCIM_str += "indmag = "+ tmp
         else:
             EEC_SCIM_str += "indmag = None" + linesep + linesep
         EEC_SCIM_str += "parameters = " + str(self.parameters) + linesep
         EEC_SCIM_str += "freq0 = " + str(self.freq0) + linesep
         if self.drive is not None:
             tmp = self.drive.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_SCIM_str += "drive = " + tmp
+            EEC_SCIM_str += "drive = "+ tmp
         else:
             EEC_SCIM_str += "drive = None" + linesep + linesep
         return EEC_SCIM_str
@@ -177,7 +169,8 @@ class EEC_SCIM(EEC):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from EEC
         EEC_SCIM_dict = super(EEC_SCIM, self).as_dict()
@@ -185,9 +178,7 @@ class EEC_SCIM(EEC):
             EEC_SCIM_dict["indmag"] = None
         else:
             EEC_SCIM_dict["indmag"] = self.indmag.as_dict()
-        EEC_SCIM_dict["parameters"] = (
-            self.parameters.copy() if self.parameters is not None else None
-        )
+        EEC_SCIM_dict["parameters"] = self.parameters.copy() if self.parameters is not None else None
         EEC_SCIM_dict["freq0"] = self.freq0
         if self.drive is None:
             EEC_SCIM_dict["drive"] = None
@@ -218,10 +209,8 @@ class EEC_SCIM(EEC):
         """setter of indmag"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "indmag"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'indmag')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = IndMag()
@@ -230,7 +219,6 @@ class EEC_SCIM(EEC):
 
         if self._indmag is not None:
             self._indmag.parent = self
-
     indmag = property(
         fget=_get_indmag,
         fset=_set_indmag,
@@ -286,10 +274,8 @@ class EEC_SCIM(EEC):
         """setter of drive"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "drive"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'drive')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Drive()
@@ -298,7 +284,6 @@ class EEC_SCIM(EEC):
 
         if self._drive is not None:
             self._drive.parent = self
-
     drive = property(
         fget=_get_drive,
         fset=_set_drive,

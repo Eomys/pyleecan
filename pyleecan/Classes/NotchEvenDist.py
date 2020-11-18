@@ -49,7 +49,7 @@ class NotchEvenDist(Notch):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, alpha=0, notch_shape=-1, init_dict=None, init_str=None):
+    def __init__(self, alpha=0, notch_shape=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -85,10 +85,8 @@ class NotchEvenDist(Notch):
         NotchEvenDist_str += super(NotchEvenDist, self).__str__()
         NotchEvenDist_str += "alpha = " + str(self.alpha) + linesep
         if self.notch_shape is not None:
-            tmp = (
-                self.notch_shape.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            )
-            NotchEvenDist_str += "notch_shape = " + tmp
+            tmp = self.notch_shape.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            NotchEvenDist_str += "notch_shape = "+ tmp
         else:
             NotchEvenDist_str += "notch_shape = None" + linesep + linesep
         return NotchEvenDist_str
@@ -109,7 +107,8 @@ class NotchEvenDist(Notch):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Notch
         NotchEvenDist_dict = super(NotchEvenDist, self).as_dict()
@@ -158,10 +157,8 @@ class NotchEvenDist(Notch):
         """setter of notch_shape"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "notch_shape"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'notch_shape')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Slot()
@@ -170,7 +167,6 @@ class NotchEvenDist(Notch):
 
         if self._notch_shape is not None:
             self._notch_shape.parent = self
-
     notch_shape = property(
         fget=_get_notch_shape,
         fset=_set_notch_shape,

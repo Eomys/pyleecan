@@ -33,7 +33,7 @@ class PostFunction(Post):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, run=None, init_dict=None, init_str=None):
+    def __init__(self, run=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -67,7 +67,7 @@ class PostFunction(Post):
         if self._run_str is not None:
             PostFunction_str += "run = " + self._run_str + linesep
         elif self._run_func is not None:
-            PostFunction_str += "run = " + str(self._run_func) + linesep
+            PostFunction_str += "run = " + str(self._run_func)+ linesep
         else:
             PostFunction_str += "run = None" + linesep + linesep
         return PostFunction_str
@@ -86,7 +86,8 @@ class PostFunction(Post):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Post
         PostFunction_dict = super(PostFunction, self).as_dict()
@@ -115,23 +116,19 @@ class PostFunction(Post):
         if value is None:
             self._run_str = None
             self._run_func = None
-        elif isinstance(value, str) and "lambda" in value:
+        elif isinstance(value,str) and 'lambda' in value:
             self._run_str = value
             self._run_func = eval(value)
-        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+        elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':
             self._run_str = value
-            f = open(value, "r")
-            exec(f.read(), globals())
+            f = open(value, 'r')
+            exec(f.read(),globals())
             self._run_func = eval(basename(value[:-3]))
         elif callable(value):
             self._run_str = None
             self._run_func = value
         else:
-            raise CheckTypeError(
-                "For property run Expected function or str (path to python file or lambda), got: "
-                + str(type(value))
-            )
-
+            raise CheckTypeError('For property run Expected function or str (path to python file or lambda), got: '+str(type(value))) 
     run = property(
         fget=_get_run,
         fset=_set_run,

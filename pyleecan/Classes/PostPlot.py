@@ -45,16 +45,7 @@ class PostPlot(PostMethod):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        method=None,
-        name="[]",
-        param_list=-1,
-        param_dict=-1,
-        save_format="png",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, method=None, name="[]", param_list=-1, param_dict=-1, save_format="png", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -99,12 +90,7 @@ class PostPlot(PostMethod):
         PostPlot_str += super(PostPlot, self).__str__()
         PostPlot_str += 'method = "' + str(self.method) + '"' + linesep
         PostPlot_str += 'name = "' + str(self.name) + '"' + linesep
-        PostPlot_str += (
-            "param_list = "
-            + linesep
-            + str(self.param_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        PostPlot_str += "param_list = " + linesep + str(self.param_list).replace(linesep, linesep + "\t") + linesep
         PostPlot_str += "param_dict = " + str(self.param_dict) + linesep
         PostPlot_str += 'save_format = "' + str(self.save_format) + '"' + linesep
         return PostPlot_str
@@ -131,18 +117,15 @@ class PostPlot(PostMethod):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from PostMethod
         PostPlot_dict = super(PostPlot, self).as_dict()
         PostPlot_dict["method"] = self.method
         PostPlot_dict["name"] = self.name
-        PostPlot_dict["param_list"] = (
-            self.param_list.copy() if self.param_list is not None else None
-        )
-        PostPlot_dict["param_dict"] = (
-            self.param_dict.copy() if self.param_dict is not None else None
-        )
+        PostPlot_dict["param_list"] = self.param_list.copy() if self.param_list is not None else None
+        PostPlot_dict["param_dict"] = self.param_dict.copy() if self.param_dict is not None else None
         PostPlot_dict["save_format"] = self.save_format
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name

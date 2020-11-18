@@ -178,9 +178,7 @@ class MeshMat(Mesh):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, cell=-1, point=-1, label=None, dimension=2, init_dict=None, init_str=None
-    ):
+    def __init__(self, cell=-1, point=-1, label=None, dimension=2, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -219,13 +217,13 @@ class MeshMat(Mesh):
         # Get the properties inherited from Mesh
         MeshMat_str += super(MeshMat, self).__str__()
         if len(self.cell) == 0:
-            MeshMat_str += "cell = dict()" + linesep
+            MeshMat_str += "cell = dict()"+linesep
         for key, obj in self.cell.items():
-            tmp = self.cell[key].__str__().replace(linesep, linesep + "\t") + linesep
-            MeshMat_str += "cell[" + key + "] =" + tmp + linesep + linesep
+            tmp = self.cell[key].__str__().replace(linesep, linesep + "\t")+ linesep 
+            MeshMat_str += "cell["+key+"] ="+ tmp + linesep + linesep
         if self.point is not None:
             tmp = self.point.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MeshMat_str += "point = " + tmp
+            MeshMat_str += "point = "+ tmp
         else:
             MeshMat_str += "point = None" + linesep + linesep
         return MeshMat_str
@@ -246,7 +244,8 @@ class MeshMat(Mesh):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Mesh
         MeshMat_dict = super(MeshMat, self).as_dict()
@@ -288,9 +287,7 @@ class MeshMat(Mesh):
         if type(value) is dict:
             for key, obj in value.items():
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "cell"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'cell')
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
@@ -314,10 +311,8 @@ class MeshMat(Mesh):
         """setter of point"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "point"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'point')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = PointMat()
@@ -326,7 +321,6 @@ class MeshMat(Mesh):
 
         if self._point is not None:
             self._point.parent = self
-
     point = property(
         fget=_get_point,
         fset=_set_point,

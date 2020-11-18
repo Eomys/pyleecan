@@ -67,19 +67,7 @@ class MachineUD(Machine):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        lam_list=-1,
-        is_sync=True,
-        frame=-1,
-        shaft=-1,
-        name="default_machine",
-        desc="",
-        type_machine=1,
-        logger_name="Pyleecan.Machine",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, lam_list=-1, is_sync=True, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -115,14 +103,7 @@ class MachineUD(Machine):
         self.lam_list = lam_list
         self.is_sync = is_sync
         # Call Machine init
-        super(MachineUD, self).__init__(
-            frame=frame,
-            shaft=shaft,
-            name=name,
-            desc=desc,
-            type_machine=type_machine,
-            logger_name=logger_name,
-        )
+        super(MachineUD, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
         # The class is frozen (in Machine init), for now it's impossible to
         # add new properties
 
@@ -136,7 +117,7 @@ class MachineUD(Machine):
             MachineUD_str += "lam_list = []" + linesep
         for ii in range(len(self.lam_list)):
             tmp = self.lam_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            MachineUD_str += "lam_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            MachineUD_str += "lam_list["+str(ii)+"] ="+ tmp + linesep + linesep
         MachineUD_str += "is_sync = " + str(self.is_sync) + linesep
         return MachineUD_str
 
@@ -156,7 +137,8 @@ class MachineUD(Machine):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Machine
         MachineUD_dict = super(MachineUD, self).as_dict()
@@ -194,9 +176,7 @@ class MachineUD(Machine):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "lam_list"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'lam_list')
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
