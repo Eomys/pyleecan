@@ -19,7 +19,7 @@ def get_field(self, *args):
         an array of field values
 
     """
-    axname, axsize = self.get_axis_list()
+    axname, axsize = self.get_axes_list()
     symbol = self.field.symbol
 
     if not args:

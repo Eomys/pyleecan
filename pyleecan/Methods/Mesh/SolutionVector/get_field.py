@@ -19,7 +19,7 @@ def get_field(self, *args):
 
     """
 
-    axname, axsize = self.get_axis_list()
+    axname, axsize = self.get_axes_list()
 
     id = 0
     for name in axname:

@@ -13,7 +13,7 @@ from pyleecan.Classes.SolutionVector import SolutionVector
 
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
-class Test_get_axis_list(TestCase):
+class Test_get_axes_list(TestCase):
     """ Tests for get_axis_list method from Solution classes"""
 
     def test_SolutionMat(self):
@@ -24,7 +24,7 @@ class Test_get_axis_list(TestCase):
         solution.axis_name = ["time", "indice"]
         solution.axis_size = [2, 3]
 
-        axname, axsize = solution.get_axis_list()
+        axname, axsize = solution.get_axes_list()
 
         msg = (
             "Wrong result: returned "
@@ -71,7 +71,7 @@ class Test_get_axis_list(TestCase):
         vecH = VectorField(name="Magnetic Field", symbol="H", components=componentsH)
         solution = SolutionVector(field=vecH, type_cell="triangle", label="H")
 
-        axname, axsize = solution.get_axis_list()
+        axname, axsize = solution.get_axes_list()
 
         correction = [10, 4, 2]
         msg = "Wrong result: returned " + str(axsize) + ", expected: " + str(correction)
@@ -100,7 +100,7 @@ class Test_get_axis_list(TestCase):
 
         solution = SolutionData(field=H, type_cell="triangle", label="H")
 
-        axname, axsize = solution.get_axis_list()
+        axname, axsize = solution.get_axes_list()
 
         correction = [10, 4]
         msg = "Wrong result: returned " + str(axsize) + ", expected: " + str(correction)
