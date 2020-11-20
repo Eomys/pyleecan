@@ -4,7 +4,7 @@ from numpy import pi
 from ....Methods.Machine.LamSlot.build_geometry import build_geometry as build_geo
 
 
-def build_geometry(self, is_magnet=None, sym=1, alpha=0, delta=0, is_simplified=False):
+def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=False):
     """Build the geometry of the LamSlotMag
 
     Parameters
@@ -28,11 +28,6 @@ def build_geometry(self, is_magnet=None, sym=1, alpha=0, delta=0, is_simplified=
         list of surfaces needed to draw the lamination
 
     """
-    # check if there is a magnet in the slot
-    if is_magnet is None:
-        is_magnet = False
-        if self.slot.magnet is not None and any(self.slot.magnet):
-            is_magnet = True
 
     if self.is_stator:
         st = "Stator"
@@ -63,43 +58,42 @@ def build_geometry(self, is_magnet=None, sym=1, alpha=0, delta=0, is_simplified=
             alpha_s = ii * slot_pitch + slot_pitch / 2  # Angle to rotate
             # the magnet
             for jj in range(Nmag):  # for each subslot in the slot
-                if self.slot.magnet[jj] is not None:
-                    beta = alpha_s - Sw / 2 + Sw_mag / 2 + (Sw_mag + self.slot.W3) * jj
-                    mag_surf = self.slot.magnet[jj].build_geometry(
-                        alpha=beta, is_simplified=is_simplified
-                    )
-                    # Defining type of magnetization of the magnet
-                    if self.slot.magnet[jj].type_magnetization == 0:
-                        type_mag = "Radial"
-                    elif self.slot.magnet[jj].type_magnetization == 1:
-                        type_mag = "Parallel"
-                    elif self.slot.magnet[jj].type_magnetization == 2:
-                        type_mag = "Hallbach"
+                beta = alpha_s - Sw / 2 + Sw_mag / 2 + (Sw_mag + self.slot.W3) * jj
+                mag_surf = self.slot.magnet[jj].build_geometry(
+                    alpha=beta, is_simplified=is_simplified
+                )
+                # Defining type of magnetization of the magnet
+                if self.slot.magnet[jj].type_magnetization == 0:
+                    type_mag = "Radial"
+                elif self.slot.magnet[jj].type_magnetization == 1:
+                    type_mag = "Parallel"
+                elif self.slot.magnet[jj].type_magnetization == 2:
+                    type_mag = "Hallbach"
 
-                    surf_list.extend(mag_surf)
-                    # Adapt the label
-                    if ii % 2 != 0:  # South pole
-                        surf_list[-1].label = (
-                            "Magnet"
-                            + st
-                            + type_mag
-                            + "_S_R0"
-                            + "_T"
-                            + str(jj)
-                            + "_S"
-                            + str(ii)
-                        )
-                    else:  # North pole
-                        surf_list[-1].label = (
-                            "Magnet"
-                            + st
-                            + type_mag
-                            + "_N_R0"
-                            + "_T"
-                            + str(jj)
-                            + "_S"
-                            + str(ii)
-                        )
+                surf_list.extend(mag_surf)
+                # Adapt the label
+                if ii % 2 != 0:  # South pole
+                    surf_list[-1].label = (
+                        "Magnet"
+                        + st
+                        + type_mag
+                        + "_S_R0"
+                        + "_T"
+                        + str(jj)
+                        + "_S"
+                        + str(ii)
+                    )
+                else:  # North pole
+                    surf_list[-1].label = (
+                        "Magnet"
+                        + st
+                        + type_mag
+                        + "_N_R0"
+                        + "_T"
+                        + str(jj)
+                        + "_S"
+                        + str(ii)
+                    )
 
     # Apply the transformations
     for surf in surf_list:
