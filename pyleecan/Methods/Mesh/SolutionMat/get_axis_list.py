@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def get_axis(self):
+def get_axis_list(self):
     """Get the value of variables stored in Solution.
 
     Parameters
@@ -12,9 +12,9 @@ def get_axis(self):
 
     Returns
     -------
-    axis_dict: dict
-        a dict of axis names containing axis sizes
+    axis_dict: list
+        a list of axis names containing axis sizes
 
     """
 
-    return self.axis
+    return self.axis_name, self.axis_size
