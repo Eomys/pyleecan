@@ -49,8 +49,8 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         )
 
     # comp magnet bottom and top angle
-    R = sqrt(abs(Z1) ** 2 - (self.Wmag / 2) ** 2)
-    W_bottom = 2 * angle(R + 1j * self.Wmag / 2)
+    x = sqrt(abs(Z1) ** 2 - (self.Wmag / 2) ** 2)
+    W_bottom = 2 * angle(x + 1j * self.Wmag / 2)
 
     # comp point coordinate (in complex) for the bottom line
     if W0 > W_bottom:  # The magnet is smaller than the slot => center the mag
@@ -59,9 +59,11 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # compute coordinates for the top line
     sign = -1 if self.is_outwards() else 1
-
-    Z3 = Z1 + sign * self.Hmag
-    Z4 = Z2 + sign * self.Hmag
+    x = abs(Z1) - sign * (
+        -self.Hmag + self.Rtop - (self.Rtop ** 2 - self.Wmag ** 2 / 4) ** 0.5
+    )
+    Z3 = x - 1j * self.Wmag / 2
+    Z4 = x + 1j * self.Wmag / 2
     Zs3 = Z1 + sign * H0
     Zs4 = Z2 + sign * H0
     Zref = abs(Z1) + sign * self.Hmag / 2
