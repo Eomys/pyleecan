@@ -4,7 +4,7 @@ import numpy as np
 from pyleecan.Functions.make_ndarray_equal import make_ndarray_equal
 
 
-def get_axis_list(self):
+def get_axes_list(self):
     """Get the axis of variables stored in Solution.
 
     Parameters
