@@ -22,9 +22,9 @@ except ImportError as error:
     get_field = error
 
 try:
-    from ..Methods.Mesh.SolutionMat.get_axis_list import get_axis_list
+    from ..Methods.Mesh.SolutionMat.get_axes_list import get_axes_list
 except ImportError as error:
-    get_axis_list = error
+    get_axes_list = error
 
 
 from numpy import array, array_equal
@@ -46,17 +46,17 @@ class SolutionMat(Solution):
         )
     else:
         get_field = get_field
-    # cf Methods.Mesh.SolutionMat.get_axis_list
-    if isinstance(get_axis_list, ImportError):
-        get_axis_list = property(
+    # cf Methods.Mesh.SolutionMat.get_axes_list
+    if isinstance(get_axes_list, ImportError):
+        get_axes_list = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SolutionMat method get_axis_list: " + str(get_axis_list)
+                    "Can't use SolutionMat method get_axes_list: " + str(get_axes_list)
                 )
             )
         )
     else:
-        get_axis_list = get_axis_list
+        get_axes_list = get_axes_list
     # save and copy methods are available in all object
     save = save
     copy = copy

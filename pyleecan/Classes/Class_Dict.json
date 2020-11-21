@@ -10003,7 +10003,7 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axis_list"
+            "get_axes_list"
         ],
         "mother": "Solution",
         "name": "SolutionData",
@@ -10035,7 +10035,7 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axis_list"
+            "get_axes_list"
         ],
         "mother": "Solution",
         "name": "SolutionMat",
@@ -10092,7 +10092,7 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axis_list"
+            "get_axes_list"
         ],
         "mother": "Solution",
         "name": "SolutionVector",
