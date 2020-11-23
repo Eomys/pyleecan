@@ -22,5 +22,5 @@ def set_reused_data(self, simu, output):
             + output.mag.FEA_dict["path_save"]
             + ")"
         )
-        simu.mag.import_file = output.mag.FEA_dict["path_save"]
-        simu.mag.FEMM_dict_enforced = output.mag.FEA_dict
+        simu.mag.import_file = output.mag.internal.FEMM_dict["path_save"]
+        simu.mag.FEMM_dict_enforced = output.mag.internal.FEMM_dict
