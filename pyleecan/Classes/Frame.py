@@ -135,7 +135,9 @@ class Frame(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Lfra=0.35, Rint=0.2, Rext=0.2, mat_type=-1, init_dict = None, init_str = None):
+    def __init__(
+        self, Lfra=0.35, Rint=0.2, Rext=0.2, mat_type=-1, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -182,7 +184,7 @@ class Frame(FrozenClass):
         Frame_str += "Rext = " + str(self.Rext) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Frame_str += "mat_type = "+ tmp
+            Frame_str += "mat_type = " + tmp
         else:
             Frame_str += "mat_type = None" + linesep + linesep
         return Frame_str
@@ -203,8 +205,7 @@ class Frame(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Frame_dict = dict()
         Frame_dict["Lfra"] = self.Lfra
@@ -292,8 +293,10 @@ class Frame(FrozenClass):
         """setter of mat_type"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mat_type')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "mat_type"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Material()
@@ -302,6 +305,7 @@ class Frame(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,

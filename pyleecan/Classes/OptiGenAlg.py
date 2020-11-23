@@ -35,7 +35,22 @@ class OptiGenAlg(OptiSolver):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, selector=None, crossover=None, mutator=None, p_cross=0.9, p_mutate=0.1, size_pop=40, nb_gen=100, problem=-1, xoutput=-1, logger_name="Pyleecan.OptiSolver", is_keep_all_output=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        selector=None,
+        crossover=None,
+        mutator=None,
+        p_cross=0.9,
+        p_mutate=0.1,
+        size_pop=40,
+        nb_gen=100,
+        problem=-1,
+        xoutput=-1,
+        logger_name="Pyleecan.OptiSolver",
+        is_keep_all_output=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -82,7 +97,12 @@ class OptiGenAlg(OptiSolver):
         self.size_pop = size_pop
         self.nb_gen = nb_gen
         # Call OptiSolver init
-        super(OptiGenAlg, self).__init__(problem=problem, xoutput=xoutput, logger_name=logger_name, is_keep_all_output=is_keep_all_output)
+        super(OptiGenAlg, self).__init__(
+            problem=problem,
+            xoutput=xoutput,
+            logger_name=logger_name,
+            is_keep_all_output=is_keep_all_output,
+        )
         # The class is frozen (in OptiSolver init), for now it's impossible to
         # add new properties
 
@@ -95,19 +115,19 @@ class OptiGenAlg(OptiSolver):
         if self._selector_str is not None:
             OptiGenAlg_str += "selector = " + self._selector_str + linesep
         elif self._selector_func is not None:
-            OptiGenAlg_str += "selector = " + str(self._selector_func)+ linesep
+            OptiGenAlg_str += "selector = " + str(self._selector_func) + linesep
         else:
             OptiGenAlg_str += "selector = None" + linesep + linesep
         if self._crossover_str is not None:
             OptiGenAlg_str += "crossover = " + self._crossover_str + linesep
         elif self._crossover_func is not None:
-            OptiGenAlg_str += "crossover = " + str(self._crossover_func)+ linesep
+            OptiGenAlg_str += "crossover = " + str(self._crossover_func) + linesep
         else:
             OptiGenAlg_str += "crossover = None" + linesep + linesep
         if self._mutator_str is not None:
             OptiGenAlg_str += "mutator = " + self._mutator_str + linesep
         elif self._mutator_func is not None:
-            OptiGenAlg_str += "mutator = " + str(self._mutator_func)+ linesep
+            OptiGenAlg_str += "mutator = " + str(self._mutator_func) + linesep
         else:
             OptiGenAlg_str += "mutator = None" + linesep + linesep
         OptiGenAlg_str += "p_cross = " + str(self.p_cross) + linesep
@@ -142,8 +162,7 @@ class OptiGenAlg(OptiSolver):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from OptiSolver
         OptiGenAlg_dict = super(OptiGenAlg, self).as_dict()
@@ -190,19 +209,23 @@ class OptiGenAlg(OptiSolver):
         if value is None:
             self._selector_str = None
             self._selector_func = None
-        elif isinstance(value,str) and 'lambda' in value:
+        elif isinstance(value, str) and "lambda" in value:
             self._selector_str = value
             self._selector_func = eval(value)
-        elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._selector_str = value
-            f = open(value, 'r')
-            exec(f.read(),globals())
+            f = open(value, "r")
+            exec(f.read(), globals())
             self._selector_func = eval(basename(value[:-3]))
         elif callable(value):
             self._selector_str = None
             self._selector_func = value
         else:
-            raise CheckTypeError('For property selector Expected function or str (path to python file or lambda), got: '+str(type(value))) 
+            raise CheckTypeError(
+                "For property selector Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
+            )
+
     selector = property(
         fget=_get_selector,
         fset=_set_selector,
@@ -221,19 +244,23 @@ class OptiGenAlg(OptiSolver):
         if value is None:
             self._crossover_str = None
             self._crossover_func = None
-        elif isinstance(value,str) and 'lambda' in value:
+        elif isinstance(value, str) and "lambda" in value:
             self._crossover_str = value
             self._crossover_func = eval(value)
-        elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._crossover_str = value
-            f = open(value, 'r')
-            exec(f.read(),globals())
+            f = open(value, "r")
+            exec(f.read(), globals())
             self._crossover_func = eval(basename(value[:-3]))
         elif callable(value):
             self._crossover_str = None
             self._crossover_func = value
         else:
-            raise CheckTypeError('For property crossover Expected function or str (path to python file or lambda), got: '+str(type(value))) 
+            raise CheckTypeError(
+                "For property crossover Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
+            )
+
     crossover = property(
         fget=_get_crossover,
         fset=_set_crossover,
@@ -252,19 +279,23 @@ class OptiGenAlg(OptiSolver):
         if value is None:
             self._mutator_str = None
             self._mutator_func = None
-        elif isinstance(value,str) and 'lambda' in value:
+        elif isinstance(value, str) and "lambda" in value:
             self._mutator_str = value
             self._mutator_func = eval(value)
-        elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._mutator_str = value
-            f = open(value, 'r')
-            exec(f.read(),globals())
+            f = open(value, "r")
+            exec(f.read(), globals())
             self._mutator_func = eval(basename(value[:-3]))
         elif callable(value):
             self._mutator_str = None
             self._mutator_func = value
         else:
-            raise CheckTypeError('For property mutator Expected function or str (path to python file or lambda), got: '+str(type(value))) 
+            raise CheckTypeError(
+                "For property mutator Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
+            )
+
     mutator = property(
         fget=_get_mutator,
         fset=_set_mutator,

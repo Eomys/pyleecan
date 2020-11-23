@@ -14,6 +14,14 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .OutInternal import OutInternal
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Output.OutMagFEMM.clean import clean
+except ImportError as error:
+    clean = error
+
+
 from ._check import InitUnKnowClassError
 
 
@@ -22,13 +30,22 @@ class OutMagFEMM(OutInternal):
 
     VERSION = 1
 
+    # cf Methods.Output.OutMagFEMM.clean
+    if isinstance(clean, ImportError):
+        clean = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMagFEMM method clean: " + str(clean))
+            )
+        )
+    else:
+        clean = clean
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, FEMM_dict=None, init_dict = None, init_str = None):
+    def __init__(self, FEMM_dict=None, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -76,12 +93,13 @@ class OutMagFEMM(OutInternal):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from OutInternal
         OutMagFEMM_dict = super(OutMagFEMM, self).as_dict()
-        OutMagFEMM_dict["FEMM_dict"] = self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        OutMagFEMM_dict["FEMM_dict"] = (
+            self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OutMagFEMM_dict["__class__"] = "OutMagFEMM"

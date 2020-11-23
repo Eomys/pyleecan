@@ -33,7 +33,15 @@ class OptiConstraint(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", type_const="<=", value=0, get_variable=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        type_const="<=",
+        value=0,
+        get_variable=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -74,14 +82,18 @@ class OptiConstraint(FrozenClass):
         if self.parent is None:
             OptiConstraint_str += "parent = None " + linesep
         else:
-            OptiConstraint_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            OptiConstraint_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         OptiConstraint_str += 'name = "' + str(self.name) + '"' + linesep
         OptiConstraint_str += 'type_const = "' + str(self.type_const) + '"' + linesep
         OptiConstraint_str += "value = " + str(self.value) + linesep
         if self._get_variable_str is not None:
             OptiConstraint_str += "get_variable = " + self._get_variable_str + linesep
         elif self._get_variable_func is not None:
-            OptiConstraint_str += "get_variable = " + str(self._get_variable_func)+ linesep
+            OptiConstraint_str += (
+                "get_variable = " + str(self._get_variable_func) + linesep
+            )
         else:
             OptiConstraint_str += "get_variable = None" + linesep + linesep
         return OptiConstraint_str
@@ -102,8 +114,7 @@ class OptiConstraint(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OptiConstraint_dict = dict()
         OptiConstraint_dict["name"] = self.name
@@ -188,19 +199,23 @@ class OptiConstraint(FrozenClass):
         if value is None:
             self._get_variable_str = None
             self._get_variable_func = None
-        elif isinstance(value,str) and 'lambda' in value:
+        elif isinstance(value, str) and "lambda" in value:
             self._get_variable_str = value
             self._get_variable_func = eval(value)
-        elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._get_variable_str = value
-            f = open(value, 'r')
-            exec(f.read(),globals())
+            f = open(value, "r")
+            exec(f.read(), globals())
             self._get_variable_func = eval(basename(value[:-3]))
         elif callable(value):
             self._get_variable_str = None
             self._get_variable_func = value
         else:
-            raise CheckTypeError('For property get_variable Expected function or str (path to python file or lambda), got: '+str(type(value))) 
+            raise CheckTypeError(
+                "For property get_variable Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
+            )
+
     get_variable = property(
         fget=_get_get_variable,
         fset=_set_get_variable,

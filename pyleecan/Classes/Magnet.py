@@ -153,7 +153,14 @@ class Magnet(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, mat_type=-1, type_magnetization=0, Lmag=0.95, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        mat_type=-1,
+        type_magnetization=0,
+        Lmag=0.95,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -194,7 +201,7 @@ class Magnet(FrozenClass):
             Magnet_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Magnet_str += "mat_type = "+ tmp
+            Magnet_str += "mat_type = " + tmp
         else:
             Magnet_str += "mat_type = None" + linesep + linesep
         Magnet_str += "type_magnetization = " + str(self.type_magnetization) + linesep
@@ -215,8 +222,7 @@ class Magnet(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Magnet_dict = dict()
         if self.mat_type is None:
@@ -245,8 +251,10 @@ class Magnet(FrozenClass):
         """setter of mat_type"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mat_type')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "mat_type"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Material()
@@ -255,6 +263,7 @@ class Magnet(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,

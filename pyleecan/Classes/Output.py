@@ -17,7 +17,9 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.Output.getter.get_angle_offset_initial import get_angle_offset_initial
+    from ..Methods.Output.Output.getter.get_angle_offset_initial import (
+        get_angle_offset_initial,
+    )
 except ImportError as error:
     get_angle_offset_initial = error
 
@@ -42,7 +44,9 @@ except ImportError as error:
     get_path_result = error
 
 try:
-    from ..Methods.Output.Output.getter.get_machine_periodicity import get_machine_periodicity
+    from ..Methods.Output.Output.getter.get_machine_periodicity import (
+        get_machine_periodicity,
+    )
 except ImportError as error:
     get_machine_periodicity = error
 
@@ -232,7 +236,20 @@ class Output(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, simu=-1, path_result="", geo=-1, elec=-1, mag=-1, struct=-1, post=-1, logger_name="Pyleecan.Output", force=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        simu=-1,
+        path_result="",
+        geo=-1,
+        elec=-1,
+        mag=-1,
+        struct=-1,
+        post=-1,
+        logger_name="Pyleecan.Output",
+        force=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -291,39 +308,39 @@ class Output(FrozenClass):
             Output_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.simu is not None:
             tmp = self.simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "simu = "+ tmp
+            Output_str += "simu = " + tmp
         else:
             Output_str += "simu = None" + linesep + linesep
         Output_str += 'path_result = "' + str(self.path_result) + '"' + linesep
         if self.geo is not None:
             tmp = self.geo.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "geo = "+ tmp
+            Output_str += "geo = " + tmp
         else:
             Output_str += "geo = None" + linesep + linesep
         if self.elec is not None:
             tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "elec = "+ tmp
+            Output_str += "elec = " + tmp
         else:
             Output_str += "elec = None" + linesep + linesep
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "mag = "+ tmp
+            Output_str += "mag = " + tmp
         else:
             Output_str += "mag = None" + linesep + linesep
         if self.struct is not None:
             tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "struct = "+ tmp
+            Output_str += "struct = " + tmp
         else:
             Output_str += "struct = None" + linesep + linesep
         if self.post is not None:
             tmp = self.post.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "post = "+ tmp
+            Output_str += "post = " + tmp
         else:
             Output_str += "post = None" + linesep + linesep
         Output_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         if self.force is not None:
             tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "force = "+ tmp
+            Output_str += "force = " + tmp
         else:
             Output_str += "force = None" + linesep + linesep
         return Output_str
@@ -354,8 +371,7 @@ class Output(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Output_dict = dict()
         if self.simu is None:
@@ -420,8 +436,8 @@ class Output(FrozenClass):
         """setter of simu"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'simu')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "simu")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Simulation()
@@ -430,6 +446,7 @@ class Output(FrozenClass):
 
         if self._simu is not None:
             self._simu.parent = self
+
     simu = property(
         fget=_get_simu,
         fset=_set_simu,
@@ -465,8 +482,8 @@ class Output(FrozenClass):
         """setter of geo"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'geo')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "geo")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = OutGeo()
@@ -475,6 +492,7 @@ class Output(FrozenClass):
 
         if self._geo is not None:
             self._geo.parent = self
+
     geo = property(
         fget=_get_geo,
         fset=_set_geo,
@@ -492,8 +510,8 @@ class Output(FrozenClass):
         """setter of elec"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'elec')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = OutElec()
@@ -502,6 +520,7 @@ class Output(FrozenClass):
 
         if self._elec is not None:
             self._elec.parent = self
+
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
@@ -519,8 +538,8 @@ class Output(FrozenClass):
         """setter of mag"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mag')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = OutMag()
@@ -529,6 +548,7 @@ class Output(FrozenClass):
 
         if self._mag is not None:
             self._mag.parent = self
+
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
@@ -546,8 +566,10 @@ class Output(FrozenClass):
         """setter of struct"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'struct')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "struct"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = OutStruct()
@@ -556,6 +578,7 @@ class Output(FrozenClass):
 
         if self._struct is not None:
             self._struct.parent = self
+
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
@@ -573,8 +596,8 @@ class Output(FrozenClass):
         """setter of post"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'post')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "post")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = OutPost()
@@ -583,6 +606,7 @@ class Output(FrozenClass):
 
         if self._post is not None:
             self._post.parent = self
+
     post = property(
         fget=_get_post,
         fset=_set_post,
@@ -618,8 +642,10 @@ class Output(FrozenClass):
         """setter of force"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'force')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "force"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = OutForce()
@@ -628,6 +654,7 @@ class Output(FrozenClass):
 
         if self._force is not None:
             self._force.parent = self
+
     force = property(
         fget=_get_force,
         fset=_set_force,

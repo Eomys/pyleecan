@@ -94,7 +94,20 @@ class VarSimu(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", desc="", datakeeper_list=-1, is_keep_all_output=False, stop_if_error=False, ref_simu_index=None, nb_simu=0, is_reuse_femm_file=True, postproc_list=-1, clean_level=1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        desc="",
+        datakeeper_list=-1,
+        is_keep_all_output=False,
+        stop_if_error=False,
+        ref_simu_index=None,
+        nb_simu=0,
+        is_reuse_femm_file=True,
+        postproc_list=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -128,8 +141,6 @@ class VarSimu(FrozenClass):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
-            if "clean_level" in list(init_dict.keys()):
-                clean_level = init_dict["clean_level"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -141,7 +152,6 @@ class VarSimu(FrozenClass):
         self.nb_simu = nb_simu
         self.is_reuse_femm_file = is_reuse_femm_file
         self.postproc_list = postproc_list
-        self.clean_level = clean_level
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -159,8 +169,13 @@ class VarSimu(FrozenClass):
         if len(self.datakeeper_list) == 0:
             VarSimu_str += "datakeeper_list = []" + linesep
         for ii in range(len(self.datakeeper_list)):
-            tmp = self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            VarSimu_str += "datakeeper_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarSimu_str += (
+                "datakeeper_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         VarSimu_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
         VarSimu_str += "stop_if_error = " + str(self.stop_if_error) + linesep
         VarSimu_str += "ref_simu_index = " + str(self.ref_simu_index) + linesep
@@ -169,9 +184,11 @@ class VarSimu(FrozenClass):
         if len(self.postproc_list) == 0:
             VarSimu_str += "postproc_list = []" + linesep
         for ii in range(len(self.postproc_list)):
-            tmp = self.postproc_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            VarSimu_str += "postproc_list["+str(ii)+"] ="+ tmp + linesep + linesep
-        VarSimu_str += "clean_level = " + str(self.clean_level) + linesep
+            tmp = (
+                self.postproc_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarSimu_str += "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
         return VarSimu_str
 
     def __eq__(self, other):
@@ -197,13 +214,10 @@ class VarSimu(FrozenClass):
             return False
         if other.postproc_list != self.postproc_list:
             return False
-        if other.clean_level != self.clean_level:
-            return False
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         VarSimu_dict = dict()
         VarSimu_dict["name"] = self.name
@@ -225,7 +239,6 @@ class VarSimu(FrozenClass):
             VarSimu_dict["postproc_list"] = list()
             for obj in self.postproc_list:
                 VarSimu_dict["postproc_list"].append(obj.as_dict())
-        VarSimu_dict["clean_level"] = self.clean_level
         # The class name is added to the dict for deserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict
@@ -244,7 +257,6 @@ class VarSimu(FrozenClass):
         self.is_reuse_femm_file = None
         for obj in self.postproc_list:
             obj._set_None()
-        self.clean_level = None
 
     def _get_name(self):
         """getter of name"""
@@ -295,7 +307,9 @@ class VarSimu(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'datakeeper_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -415,7 +429,9 @@ class VarSimu(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'postproc_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "postproc_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -428,25 +444,5 @@ class VarSimu(FrozenClass):
         doc=u"""List of post-processing to run on XOutput after the multisimulation
 
         :Type: [Post]
-        """,
-    )
-
-    def _get_clean_level(self):
-        """getter of clean_level"""
-        return self._clean_level
-
-    def _set_clean_level(self, value):
-        """setter of clean_level"""
-        check_var("clean_level", value, "int", Vmin=0, Vmax=4)
-        self._clean_level = value
-
-    clean_level = property(
-        fget=_get_clean_level,
-        fset=_set_clean_level,
-        doc=u"""Value to indicate how much Outputs are cleaned if is_keep_all_output using Output.clean() method
-
-        :Type: int
-        :min: 0
-        :max: 4
         """,
     )

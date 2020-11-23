@@ -33,7 +33,17 @@ class DataKeeper(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", symbol="", unit="", keeper=None, error_keeper=None, result=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        symbol="",
+        unit="",
+        keeper=None,
+        error_keeper=None,
+        result=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -87,16 +97,21 @@ class DataKeeper(FrozenClass):
         if self._keeper_str is not None:
             DataKeeper_str += "keeper = " + self._keeper_str + linesep
         elif self._keeper_func is not None:
-            DataKeeper_str += "keeper = " + str(self._keeper_func)+ linesep
+            DataKeeper_str += "keeper = " + str(self._keeper_func) + linesep
         else:
             DataKeeper_str += "keeper = None" + linesep + linesep
         if self._error_keeper_str is not None:
             DataKeeper_str += "error_keeper = " + self._error_keeper_str + linesep
         elif self._error_keeper_func is not None:
-            DataKeeper_str += "error_keeper = " + str(self._error_keeper_func)+ linesep
+            DataKeeper_str += "error_keeper = " + str(self._error_keeper_func) + linesep
         else:
             DataKeeper_str += "error_keeper = None" + linesep + linesep
-        DataKeeper_str += "result = " + linesep + str(self.result).replace(linesep, linesep + "\t") + linesep
+        DataKeeper_str += (
+            "result = "
+            + linesep
+            + str(self.result).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return DataKeeper_str
 
     def __eq__(self, other):
@@ -119,8 +134,7 @@ class DataKeeper(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         DataKeeper_dict = dict()
         DataKeeper_dict["name"] = self.name
@@ -134,7 +148,9 @@ class DataKeeper(FrozenClass):
             DataKeeper_dict["error_keeper"] = self._error_keeper_str
         else:
             DataKeeper_dict["error_keeper"] = None
-        DataKeeper_dict["result"] = self.result.copy() if self.result is not None else None
+        DataKeeper_dict["result"] = (
+            self.result.copy() if self.result is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         DataKeeper_dict["__class__"] = "DataKeeper"
         return DataKeeper_dict
@@ -212,19 +228,23 @@ class DataKeeper(FrozenClass):
         if value is None:
             self._keeper_str = None
             self._keeper_func = None
-        elif isinstance(value,str) and 'lambda' in value:
+        elif isinstance(value, str) and "lambda" in value:
             self._keeper_str = value
             self._keeper_func = eval(value)
-        elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._keeper_str = value
-            f = open(value, 'r')
-            exec(f.read(),globals())
+            f = open(value, "r")
+            exec(f.read(), globals())
             self._keeper_func = eval(basename(value[:-3]))
         elif callable(value):
             self._keeper_str = None
             self._keeper_func = value
         else:
-            raise CheckTypeError('For property keeper Expected function or str (path to python file or lambda), got: '+str(type(value))) 
+            raise CheckTypeError(
+                "For property keeper Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
+            )
+
     keeper = property(
         fget=_get_keeper,
         fset=_set_keeper,
@@ -243,19 +263,23 @@ class DataKeeper(FrozenClass):
         if value is None:
             self._error_keeper_str = None
             self._error_keeper_func = None
-        elif isinstance(value,str) and 'lambda' in value:
+        elif isinstance(value, str) and "lambda" in value:
             self._error_keeper_str = value
             self._error_keeper_func = eval(value)
-        elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._error_keeper_str = value
-            f = open(value, 'r')
-            exec(f.read(),globals())
+            f = open(value, "r")
+            exec(f.read(), globals())
             self._error_keeper_func = eval(basename(value[:-3]))
         elif callable(value):
             self._error_keeper_str = None
             self._error_keeper_func = value
         else:
-            raise CheckTypeError('For property error_keeper Expected function or str (path to python file or lambda), got: '+str(type(value))) 
+            raise CheckTypeError(
+                "For property error_keeper Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
+            )
+
     error_keeper = property(
         fget=_get_error_keeper,
         fset=_set_error_keeper,

@@ -35,7 +35,8 @@ class FPGNTri(GaussPoint):
         get_gauss_points = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use FPGNTri method get_gauss_points: " + str(get_gauss_points)
+                    "Can't use FPGNTri method get_gauss_points: "
+                    + str(get_gauss_points)
                 )
             )
         )
@@ -47,7 +48,7 @@ class FPGNTri(GaussPoint):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, nb_gauss_point=3, init_dict = None, init_str = None):
+    def __init__(self, nb_gauss_point=3, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -95,8 +96,7 @@ class FPGNTri(GaussPoint):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from GaussPoint
         FPGNTri_dict = super(FPGNTri, self).as_dict()

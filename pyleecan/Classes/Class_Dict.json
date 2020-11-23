@@ -6673,8 +6673,9 @@
         "desc": "Gather the magnetic module outputs",
         "is_internal": false,
         "methods": [
-            "comp_emf",
-            "store"
+            "store",
+            "clean",
+            "comp_emf"
         ],
         "mother": "",
         "name": "OutMag",
@@ -6828,7 +6829,9 @@
         "daughters": [],
         "desc": "Class to store outputs related to MagFEMM magnetic model",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "clean"
+        ],
         "mother": "OutInternal",
         "name": "OutMagFEMM",
         "package": "Output",
@@ -10663,15 +10666,6 @@
                 "type": "[Post]",
                 "unit": "-",
                 "value": ""
-            },
-            {
-                "desc": "Value to indicate how much Outputs are cleaned if is_keep_all_output using Output.clean() method",
-                "max": "4",
-                "min": "0",
-                "name": "clean_level",
-                "type": "int",
-                "unit": "-",
-                "value": 1
             }
         ]
     },

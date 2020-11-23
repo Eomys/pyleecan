@@ -52,7 +52,16 @@ class ParamExplorerSet(ParamExplorer):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, value=-1, name="", symbol="", unit="", setter=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        value=-1,
+        name="",
+        symbol="",
+        unit="",
+        setter=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -81,7 +90,9 @@ class ParamExplorerSet(ParamExplorer):
         # Set the properties (value check and convertion are done in setter)
         self.value = value
         # Call ParamExplorer init
-        super(ParamExplorerSet, self).__init__(name=name, symbol=symbol, unit=unit, setter=setter)
+        super(ParamExplorerSet, self).__init__(
+            name=name, symbol=symbol, unit=unit, setter=setter
+        )
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties
 
@@ -91,7 +102,12 @@ class ParamExplorerSet(ParamExplorer):
         ParamExplorerSet_str = ""
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_str += super(ParamExplorerSet, self).__str__()
-        ParamExplorerSet_str += "value = " + linesep + str(self.value).replace(linesep, linesep + "\t") + linesep
+        ParamExplorerSet_str += (
+            "value = "
+            + linesep
+            + str(self.value).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return ParamExplorerSet_str
 
     def __eq__(self, other):
@@ -108,12 +124,13 @@ class ParamExplorerSet(ParamExplorer):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_dict = super(ParamExplorerSet, self).as_dict()
-        ParamExplorerSet_dict["value"] = self.value.copy() if self.value is not None else None
+        ParamExplorerSet_dict["value"] = (
+            self.value.copy() if self.value is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ParamExplorerSet_dict["__class__"] = "ParamExplorerSet"

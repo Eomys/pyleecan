@@ -101,7 +101,8 @@ class LamHole(Lamination):
         comp_height_yoke = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamHole method comp_height_yoke: " + str(comp_height_yoke)
+                    "Can't use LamHole method comp_height_yoke: "
+                    + str(comp_height_yoke)
                 )
             )
         )
@@ -197,7 +198,8 @@ class LamHole(Lamination):
         comp_periodicity = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamHole method comp_periodicity: " + str(comp_periodicity)
+                    "Can't use LamHole method comp_periodicity: "
+                    + str(comp_periodicity)
                 )
             )
         )
@@ -209,7 +211,24 @@ class LamHole(Lamination):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, hole=-1, bore=None, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=-1, notch=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        hole=-1,
+        bore=None,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=-1,
+        notch=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -255,7 +274,19 @@ class LamHole(Lamination):
         self.hole = hole
         self.bore = bore
         # Call Lamination init
-        super(LamHole, self).__init__(L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
+        super(LamHole, self).__init__(
+            L1=L1,
+            mat_type=mat_type,
+            Nrvd=Nrvd,
+            Wrvd=Wrvd,
+            Kf1=Kf1,
+            is_internal=is_internal,
+            Rint=Rint,
+            Rext=Rext,
+            is_stator=is_stator,
+            axial_vent=axial_vent,
+            notch=notch,
+        )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
 
@@ -269,10 +300,10 @@ class LamHole(Lamination):
             LamHole_str += "hole = []" + linesep
         for ii in range(len(self.hole)):
             tmp = self.hole[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            LamHole_str += "hole["+str(ii)+"] ="+ tmp + linesep + linesep
+            LamHole_str += "hole[" + str(ii) + "] =" + tmp + linesep + linesep
         if self.bore is not None:
             tmp = self.bore.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamHole_str += "bore = "+ tmp
+            LamHole_str += "bore = " + tmp
         else:
             LamHole_str += "bore = None" + linesep + linesep
         return LamHole_str
@@ -293,8 +324,7 @@ class LamHole(Lamination):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Lamination
         LamHole_dict = super(LamHole, self).as_dict()
@@ -336,7 +366,9 @@ class LamHole(Lamination):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'hole')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "hole"
+                    )
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -360,8 +392,8 @@ class LamHole(Lamination):
         """setter of bore"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'bore')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Bore()
@@ -370,6 +402,7 @@ class LamHole(Lamination):
 
         if self._bore is not None:
             self._bore.parent = self
+
     bore = property(
         fget=_get_bore,
         fset=_set_bore,

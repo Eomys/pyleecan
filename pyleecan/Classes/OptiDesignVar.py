@@ -33,7 +33,18 @@ class OptiDesignVar(ParamExplorer):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, type_var="interval", space=[0, 1], get_value=None, name="", symbol="", unit="", setter=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        type_var="interval",
+        space=[0, 1],
+        get_value=None,
+        name="",
+        symbol="",
+        unit="",
+        setter=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -68,7 +79,9 @@ class OptiDesignVar(ParamExplorer):
         self.space = space
         self.get_value = get_value
         # Call ParamExplorer init
-        super(OptiDesignVar, self).__init__(name=name, symbol=symbol, unit=unit, setter=setter)
+        super(OptiDesignVar, self).__init__(
+            name=name, symbol=symbol, unit=unit, setter=setter
+        )
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties
 
@@ -79,11 +92,16 @@ class OptiDesignVar(ParamExplorer):
         # Get the properties inherited from ParamExplorer
         OptiDesignVar_str += super(OptiDesignVar, self).__str__()
         OptiDesignVar_str += 'type_var = "' + str(self.type_var) + '"' + linesep
-        OptiDesignVar_str += "space = " + linesep + str(self.space).replace(linesep, linesep + "\t") + linesep
+        OptiDesignVar_str += (
+            "space = "
+            + linesep
+            + str(self.space).replace(linesep, linesep + "\t")
+            + linesep
+        )
         if self._get_value_str is not None:
             OptiDesignVar_str += "get_value = " + self._get_value_str + linesep
         elif self._get_value_func is not None:
-            OptiDesignVar_str += "get_value = " + str(self._get_value_func)+ linesep
+            OptiDesignVar_str += "get_value = " + str(self._get_value_func) + linesep
         else:
             OptiDesignVar_str += "get_value = None" + linesep + linesep
         return OptiDesignVar_str
@@ -106,13 +124,14 @@ class OptiDesignVar(ParamExplorer):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from ParamExplorer
         OptiDesignVar_dict = super(OptiDesignVar, self).as_dict()
         OptiDesignVar_dict["type_var"] = self.type_var
-        OptiDesignVar_dict["space"] = self.space.copy() if self.space is not None else None
+        OptiDesignVar_dict["space"] = (
+            self.space.copy() if self.space is not None else None
+        )
         if self._get_value_str is not None:
             OptiDesignVar_dict["get_value"] = self._get_value_str
         else:
@@ -178,19 +197,23 @@ class OptiDesignVar(ParamExplorer):
         if value is None:
             self._get_value_str = None
             self._get_value_func = None
-        elif isinstance(value,str) and 'lambda' in value:
+        elif isinstance(value, str) and "lambda" in value:
             self._get_value_str = value
             self._get_value_func = eval(value)
-        elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._get_value_str = value
-            f = open(value, 'r')
-            exec(f.read(),globals())
+            f = open(value, "r")
+            exec(f.read(), globals())
             self._get_value_func = eval(basename(value[:-3]))
         elif callable(value):
             self._get_value_str = None
             self._get_value_func = value
         else:
-            raise CheckTypeError('For property get_value Expected function or str (path to python file or lambda), got: '+str(type(value))) 
+            raise CheckTypeError(
+                "For property get_value Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
+            )
+
     get_value = property(
         fget=_get_get_value,
         fset=_set_get_value,
