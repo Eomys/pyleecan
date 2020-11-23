@@ -113,7 +113,15 @@ class HoleUD(HoleMag):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, surf_list=-1, magnet_dict=-1, Zh=36, mat_void=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        surf_list=-1,
+        magnet_dict=-1,
+        Zh=36,
+        mat_void=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -154,13 +162,18 @@ class HoleUD(HoleMag):
         if len(self.surf_list) == 0:
             HoleUD_str += "surf_list = []" + linesep
         for ii in range(len(self.surf_list)):
-            tmp = self.surf_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            HoleUD_str += "surf_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.surf_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            HoleUD_str += "surf_list[" + str(ii) + "] =" + tmp + linesep + linesep
         if len(self.magnet_dict) == 0:
-            HoleUD_str += "magnet_dict = dict()"+linesep
+            HoleUD_str += "magnet_dict = dict()" + linesep
         for key, obj in self.magnet_dict.items():
-            tmp = self.magnet_dict[key].__str__().replace(linesep, linesep + "\t")+ linesep 
-            HoleUD_str += "magnet_dict["+key+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.magnet_dict[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            HoleUD_str += "magnet_dict[" + key + "] =" + tmp + linesep + linesep
         return HoleUD_str
 
     def __eq__(self, other):
@@ -179,8 +192,7 @@ class HoleUD(HoleMag):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from HoleMag
         HoleUD_dict = super(HoleUD, self).as_dict()
@@ -224,7 +236,9 @@ class HoleUD(HoleMag):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'surf_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "surf_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -253,7 +267,9 @@ class HoleUD(HoleMag):
         if type(value) is dict:
             for key, obj in value.items():
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'magnet_dict')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "magnet_dict"
+                    )
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()

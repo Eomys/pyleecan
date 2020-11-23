@@ -2814,6 +2814,24 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "To read axes in first line/column",
+                "max": "",
+                "min": "",
+                "name": "axes_colrows",
+                "type": "dict",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "To read all sheets in a 3D matrix",
+                "max": "",
+                "min": "",
+                "name": "is_allsheets",
+                "type": "bool",
+                "unit": "-",
+                "value": false
             }
         ]
     },
@@ -3238,7 +3256,8 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "comp_felec"
+            "comp_felec",
+            "comp_axes"
         ],
         "mother": "Input",
         "name": "InputFlux",
@@ -3246,13 +3265,58 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
         "properties": [
             {
-                "desc": "Airgap flux density",
+                "desc": "Angle periodicity",
                 "max": "",
                 "min": "",
-                "name": "B",
-                "type": "ImportVectorField",
-                "unit": "T",
+                "name": "per_a",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Time periodicity",
+                "max": "",
+                "min": "",
+                "name": "per_t",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "If angle is antiperiodic",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            },
+            {
+                "desc": "If time is antiperiodic",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_t",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            },
+            {
+                "desc": "Dict of Import objects or lists for each component of the flux",
+                "max": "",
+                "min": "",
+                "name": "B_dict",
+                "type": "dict",
+                "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Unit of the flux if not T",
+                "max": "",
+                "min": "",
+                "name": "unit",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
             },
             {
                 "desc": "InputCurrent to define Operating Point (not mandatory)",
@@ -3261,6 +3325,15 @@
                 "name": "OP",
                 "type": "Input",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Rotation speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "float",
+                "unit": "rpm",
                 "value": null
             }
         ]
@@ -6673,8 +6746,9 @@
         "desc": "Gather the magnetic module outputs",
         "is_internal": false,
         "methods": [
-            "comp_emf",
-            "store"
+            "store",
+            "clean",
+            "comp_emf"
         ],
         "mother": "",
         "name": "OutMag",
@@ -7786,6 +7860,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "Value to indicate how much Outputs are cleaned if is_keep_all_output using Output.clean() method",
+                "max": "4",
+                "min": "0",
+                "name": "clean_level",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
@@ -10663,15 +10746,6 @@
                 "type": "[Post]",
                 "unit": "-",
                 "value": ""
-            },
-            {
-                "desc": "Value to indicate how much Outputs are cleaned if is_keep_all_output using Output.clean() method",
-                "max": "4",
-                "min": "0",
-                "name": "clean_level",
-                "type": "int",
-                "unit": "-",
-                "value": 1
             }
         ]
     },

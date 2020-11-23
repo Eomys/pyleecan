@@ -28,7 +28,7 @@ class GUIOption(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, unit=-1, init_dict = None, init_str = None):
+    def __init__(self, unit=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -63,7 +63,7 @@ class GUIOption(FrozenClass):
             GUIOption_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.unit is not None:
             tmp = self.unit.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            GUIOption_str += "unit = "+ tmp
+            GUIOption_str += "unit = " + tmp
         else:
             GUIOption_str += "unit = None" + linesep + linesep
         return GUIOption_str
@@ -78,8 +78,7 @@ class GUIOption(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         GUIOption_dict = dict()
         if self.unit is None:
@@ -104,8 +103,8 @@ class GUIOption(FrozenClass):
         """setter of unit"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'unit')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "unit")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Unit()
@@ -114,6 +113,7 @@ class GUIOption(FrozenClass):
 
         if self._unit is not None:
             self._unit.parent = self
+
     unit = property(
         fget=_get_unit,
         fset=_set_unit,

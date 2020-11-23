@@ -83,7 +83,21 @@ class VarParam(VarSimu):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, paramexplorer_list=-1, name="", desc="", datakeeper_list=-1, is_keep_all_output=False, stop_if_error=False, ref_simu_index=None, nb_simu=0, is_reuse_femm_file=True, postproc_list=-1, clean_level=1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        paramexplorer_list=-1,
+        name="",
+        desc="",
+        datakeeper_list=-1,
+        is_keep_all_output=False,
+        stop_if_error=False,
+        ref_simu_index=None,
+        nb_simu=0,
+        is_reuse_femm_file=True,
+        postproc_list=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -119,12 +133,20 @@ class VarParam(VarSimu):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
-            if "clean_level" in list(init_dict.keys()):
-                clean_level = init_dict["clean_level"]
         # Set the properties (value check and convertion are done in setter)
         self.paramexplorer_list = paramexplorer_list
         # Call VarSimu init
-        super(VarParam, self).__init__(name=name, desc=desc, datakeeper_list=datakeeper_list, is_keep_all_output=is_keep_all_output, stop_if_error=stop_if_error, ref_simu_index=ref_simu_index, nb_simu=nb_simu, is_reuse_femm_file=is_reuse_femm_file, postproc_list=postproc_list, clean_level=clean_level)
+        super(VarParam, self).__init__(
+            name=name,
+            desc=desc,
+            datakeeper_list=datakeeper_list,
+            is_keep_all_output=is_keep_all_output,
+            stop_if_error=stop_if_error,
+            ref_simu_index=ref_simu_index,
+            nb_simu=nb_simu,
+            is_reuse_femm_file=is_reuse_femm_file,
+            postproc_list=postproc_list,
+        )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
 
@@ -137,8 +159,13 @@ class VarParam(VarSimu):
         if len(self.paramexplorer_list) == 0:
             VarParam_str += "paramexplorer_list = []" + linesep
         for ii in range(len(self.paramexplorer_list)):
-            tmp = self.paramexplorer_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            VarParam_str += "paramexplorer_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.paramexplorer_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarParam_str += (
+                "paramexplorer_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return VarParam_str
 
     def __eq__(self, other):
@@ -155,8 +182,7 @@ class VarParam(VarSimu):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from VarSimu
         VarParam_dict = super(VarParam, self).as_dict()
@@ -192,7 +218,9 @@ class VarParam(VarSimu):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'paramexplorer_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "paramexplorer_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()

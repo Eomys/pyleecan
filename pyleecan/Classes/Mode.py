@@ -95,7 +95,20 @@ class Mode(SolutionMat):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, nat_freq=None, order_circ=None, order_long=None, field=None, indice=None, axis=None, type_cell="triangle", label=None, dimension=2, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        nat_freq=None,
+        order_circ=None,
+        order_long=None,
+        field=None,
+        indice=None,
+        axis=None,
+        type_cell="triangle",
+        label=None,
+        dimension=2,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -134,7 +147,14 @@ class Mode(SolutionMat):
         self.order_circ = order_circ
         self.order_long = order_long
         # Call SolutionMat init
-        super(Mode, self).__init__(field=field, indice=indice, axis=axis, type_cell=type_cell, label=label, dimension=dimension)
+        super(Mode, self).__init__(
+            field=field,
+            indice=indice,
+            axis=axis,
+            type_cell=type_cell,
+            label=label,
+            dimension=dimension,
+        )
         # The class is frozen (in SolutionMat init), for now it's impossible to
         # add new properties
 
@@ -167,8 +187,7 @@ class Mode(SolutionMat):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from SolutionMat
         Mode_dict = super(Mode, self).as_dict()

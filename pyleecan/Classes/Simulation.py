@@ -49,7 +49,21 @@ class Simulation(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", desc="", machine=-1, input=-1, logger_name="Pyleecan.Simulation", var_simu=None, postproc_list=-1, index=None, path_result=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        desc="",
+        machine=-1,
+        input=-1,
+        logger_name="Pyleecan.Simulation",
+        var_simu=None,
+        postproc_list=-1,
+        index=None,
+        path_result=None,
+        clean_level=1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -83,6 +97,8 @@ class Simulation(FrozenClass):
                 index = init_dict["index"]
             if "path_result" in list(init_dict.keys()):
                 path_result = init_dict["path_result"]
+            if "clean_level" in list(init_dict.keys()):
+                clean_level = init_dict["clean_level"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -94,6 +110,7 @@ class Simulation(FrozenClass):
         self.postproc_list = postproc_list
         self.index = index
         self.path_result = path_result
+        self.clean_level = clean_level
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -110,27 +127,33 @@ class Simulation(FrozenClass):
         Simulation_str += 'desc = "' + str(self.desc) + '"' + linesep
         if self.machine is not None:
             tmp = self.machine.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "machine = "+ tmp
+            Simulation_str += "machine = " + tmp
         else:
             Simulation_str += "machine = None" + linesep + linesep
         if self.input is not None:
             tmp = self.input.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "input = "+ tmp
+            Simulation_str += "input = " + tmp
         else:
             Simulation_str += "input = None" + linesep + linesep
         Simulation_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         if self.var_simu is not None:
             tmp = self.var_simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "var_simu = "+ tmp
+            Simulation_str += "var_simu = " + tmp
         else:
             Simulation_str += "var_simu = None" + linesep + linesep
         if len(self.postproc_list) == 0:
             Simulation_str += "postproc_list = []" + linesep
         for ii in range(len(self.postproc_list)):
-            tmp = self.postproc_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            Simulation_str += "postproc_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.postproc_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            Simulation_str += (
+                "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         Simulation_str += "index = " + str(self.index) + linesep
         Simulation_str += 'path_result = "' + str(self.path_result) + '"' + linesep
+        Simulation_str += "clean_level = " + str(self.clean_level) + linesep
         return Simulation_str
 
     def __eq__(self, other):
@@ -156,11 +179,12 @@ class Simulation(FrozenClass):
             return False
         if other.path_result != self.path_result:
             return False
+        if other.clean_level != self.clean_level:
+            return False
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Simulation_dict = dict()
         Simulation_dict["name"] = self.name
@@ -186,6 +210,7 @@ class Simulation(FrozenClass):
                 Simulation_dict["postproc_list"].append(obj.as_dict())
         Simulation_dict["index"] = self.index
         Simulation_dict["path_result"] = self.path_result
+        Simulation_dict["clean_level"] = self.clean_level
         # The class name is added to the dict for deserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
@@ -206,6 +231,7 @@ class Simulation(FrozenClass):
             obj._set_None()
         self.index = None
         self.path_result = None
+        self.clean_level = None
 
     def _get_name(self):
         """getter of name"""
@@ -251,8 +277,10 @@ class Simulation(FrozenClass):
         """setter of machine"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'machine')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "machine"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Machine()
@@ -261,6 +289,7 @@ class Simulation(FrozenClass):
 
         if self._machine is not None:
             self._machine.parent = self
+
     machine = property(
         fget=_get_machine,
         fset=_set_machine,
@@ -278,8 +307,10 @@ class Simulation(FrozenClass):
         """setter of input"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'input')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "input"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Input()
@@ -288,6 +319,7 @@ class Simulation(FrozenClass):
 
         if self._input is not None:
             self._input.parent = self
+
     input = property(
         fget=_get_input,
         fset=_set_input,
@@ -323,8 +355,10 @@ class Simulation(FrozenClass):
         """setter of var_simu"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'var_simu')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "var_simu"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = VarSimu()
@@ -333,6 +367,7 @@ class Simulation(FrozenClass):
 
         if self._var_simu is not None:
             self._var_simu.parent = self
+
     var_simu = property(
         fget=_get_var_simu,
         fset=_set_var_simu,
@@ -355,7 +390,9 @@ class Simulation(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'postproc_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "postproc_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -405,5 +442,25 @@ class Simulation(FrozenClass):
         doc=u"""Path to the Result folder to use (None to use default one)
 
         :Type: str
+        """,
+    )
+
+    def _get_clean_level(self):
+        """getter of clean_level"""
+        return self._clean_level
+
+    def _set_clean_level(self, value):
+        """setter of clean_level"""
+        check_var("clean_level", value, "int", Vmin=0, Vmax=4)
+        self._clean_level = value
+
+    clean_level = property(
+        fget=_get_clean_level,
+        fset=_set_clean_level,
+        doc=u"""Value to indicate how much Outputs are cleaned if is_keep_all_output using Output.clean() method
+
+        :Type: int
+        :min: 0
+        :max: 4
         """,
     )

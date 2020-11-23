@@ -27,7 +27,9 @@ except ImportError as error:
     comp_angle_opening = error
 
 try:
-    from ..Methods.Slot.SlotMFlat.comp_angle_opening_magnet import comp_angle_opening_magnet
+    from ..Methods.Slot.SlotMFlat.comp_angle_opening_magnet import (
+        comp_angle_opening_magnet,
+    )
 except ImportError as error:
     comp_angle_opening_magnet = error
 
@@ -148,7 +150,17 @@ class SlotMFlat(SlotMag):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, H0=0, W0=0.0122, W0_is_rad=False, magnet=-1, W3=0, Zs=36, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        H0=0,
+        W0=0.0122,
+        W0_is_rad=False,
+        magnet=-1,
+        W3=0,
+        Zs=36,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -199,7 +211,7 @@ class SlotMFlat(SlotMag):
             SlotMFlat_str += "magnet = []" + linesep
         for ii in range(len(self.magnet)):
             tmp = self.magnet[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            SlotMFlat_str += "magnet["+str(ii)+"] ="+ tmp + linesep + linesep
+            SlotMFlat_str += "magnet[" + str(ii) + "] =" + tmp + linesep + linesep
         return SlotMFlat_str
 
     def __eq__(self, other):
@@ -222,8 +234,7 @@ class SlotMFlat(SlotMag):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from SlotMag
         SlotMFlat_dict = super(SlotMFlat, self).as_dict()
@@ -321,7 +332,9 @@ class SlotMFlat(SlotMag):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'magnet')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "magnet"
+                    )
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()

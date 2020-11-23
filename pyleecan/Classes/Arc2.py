@@ -214,7 +214,15 @@ class Arc2(Arc):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, begin=0, center=0, angle=1.57079633, label="", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        begin=0,
+        center=0,
+        angle=1.57079633,
+        label="",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -276,8 +284,7 @@ class Arc2(Arc):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Arc
         Arc2_dict = super(Arc2, self).as_dict()
@@ -310,7 +317,7 @@ class Arc2(Arc):
 
     def _set_begin(self, value):
         """setter of begin"""
-        if isinstance(value,str):
+        if isinstance(value, str):
             value = complex(value)
         check_var("begin", value, "complex")
         self._begin = value
@@ -330,7 +337,7 @@ class Arc2(Arc):
 
     def _set_center(self, value):
         """setter of center"""
-        if isinstance(value,str):
+        if isinstance(value, str):
             value = complex(value)
         check_var("center", value, "complex")
         self._center = value

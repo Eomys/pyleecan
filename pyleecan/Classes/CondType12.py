@@ -126,7 +126,18 @@ class CondType12(Conductor):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Wwire=0.015, Wins_cond=0.015, Nwppc=1, Wins_wire=0, Kwoh=0.5, cond_mat=-1, ins_mat=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Wwire=0.015,
+        Wins_cond=0.015,
+        Nwppc=1,
+        Wins_wire=0,
+        Kwoh=0.5,
+        cond_mat=-1,
+        ins_mat=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -202,8 +213,7 @@ class CondType12(Conductor):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Conductor
         CondType12_dict = super(CondType12, self).as_dict()

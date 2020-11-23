@@ -37,7 +37,8 @@ class MachineSync(Machine):
         is_synchronous = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MachineSync method is_synchronous: " + str(is_synchronous)
+                    "Can't use MachineSync method is_synchronous: "
+                    + str(is_synchronous)
                 )
             )
         )
@@ -49,7 +50,17 @@ class MachineSync(Machine):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        frame=-1,
+        shaft=-1,
+        name="default_machine",
+        desc="",
+        type_machine=1,
+        logger_name="Pyleecan.Machine",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -79,7 +90,14 @@ class MachineSync(Machine):
                 logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         # Call Machine init
-        super(MachineSync, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
+        super(MachineSync, self).__init__(
+            frame=frame,
+            shaft=shaft,
+            name=name,
+            desc=desc,
+            type_machine=type_machine,
+            logger_name=logger_name,
+        )
         # The class is frozen (in Machine init), for now it's impossible to
         # add new properties
 
@@ -103,8 +121,7 @@ class MachineSync(Machine):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Machine
         MachineSync_dict = super(MachineSync, self).as_dict()

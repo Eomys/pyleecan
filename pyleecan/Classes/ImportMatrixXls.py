@@ -47,7 +47,18 @@ class ImportMatrixXls(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, file_path="", sheet="", skiprows=0, usecols=None, is_transpose=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        file_path="",
+        sheet="",
+        skiprows=0,
+        usecols=None,
+        axes_colrows=None,
+        is_allsheets=False,
+        is_transpose=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -71,6 +82,10 @@ class ImportMatrixXls(ImportMatrix):
                 skiprows = init_dict["skiprows"]
             if "usecols" in list(init_dict.keys()):
                 usecols = init_dict["usecols"]
+            if "axes_colrows" in list(init_dict.keys()):
+                axes_colrows = init_dict["axes_colrows"]
+            if "is_allsheets" in list(init_dict.keys()):
+                is_allsheets = init_dict["is_allsheets"]
             if "is_transpose" in list(init_dict.keys()):
                 is_transpose = init_dict["is_transpose"]
         # Set the properties (value check and convertion are done in setter)
@@ -78,6 +93,8 @@ class ImportMatrixXls(ImportMatrix):
         self.sheet = sheet
         self.skiprows = skiprows
         self.usecols = usecols
+        self.axes_colrows = axes_colrows
+        self.is_allsheets = is_allsheets
         # Call ImportMatrix init
         super(ImportMatrixXls, self).__init__(is_transpose=is_transpose)
         # The class is frozen (in ImportMatrix init), for now it's impossible to
@@ -93,6 +110,8 @@ class ImportMatrixXls(ImportMatrix):
         ImportMatrixXls_str += 'sheet = "' + str(self.sheet) + '"' + linesep
         ImportMatrixXls_str += "skiprows = " + str(self.skiprows) + linesep
         ImportMatrixXls_str += 'usecols = "' + str(self.usecols) + '"' + linesep
+        ImportMatrixXls_str += "axes_colrows = " + str(self.axes_colrows) + linesep
+        ImportMatrixXls_str += "is_allsheets = " + str(self.is_allsheets) + linesep
         return ImportMatrixXls_str
 
     def __eq__(self, other):
@@ -112,11 +131,14 @@ class ImportMatrixXls(ImportMatrix):
             return False
         if other.usecols != self.usecols:
             return False
+        if other.axes_colrows != self.axes_colrows:
+            return False
+        if other.is_allsheets != self.is_allsheets:
+            return False
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from ImportMatrix
         ImportMatrixXls_dict = super(ImportMatrixXls, self).as_dict()
@@ -124,6 +146,10 @@ class ImportMatrixXls(ImportMatrix):
         ImportMatrixXls_dict["sheet"] = self.sheet
         ImportMatrixXls_dict["skiprows"] = self.skiprows
         ImportMatrixXls_dict["usecols"] = self.usecols
+        ImportMatrixXls_dict["axes_colrows"] = (
+            self.axes_colrows.copy() if self.axes_colrows is not None else None
+        )
+        ImportMatrixXls_dict["is_allsheets"] = self.is_allsheets
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportMatrixXls_dict["__class__"] = "ImportMatrixXls"
@@ -136,6 +162,8 @@ class ImportMatrixXls(ImportMatrix):
         self.sheet = None
         self.skiprows = None
         self.usecols = None
+        self.axes_colrows = None
+        self.is_allsheets = None
         # Set to None the properties inherited from ImportMatrix
         super(ImportMatrixXls, self)._set_None()
 
@@ -209,5 +237,43 @@ class ImportMatrixXls(ImportMatrix):
         doc=u"""To select the range of column to use
 
         :Type: str
+        """,
+    )
+
+    def _get_axes_colrows(self):
+        """getter of axes_colrows"""
+        return self._axes_colrows
+
+    def _set_axes_colrows(self, value):
+        """setter of axes_colrows"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("axes_colrows", value, "dict")
+        self._axes_colrows = value
+
+    axes_colrows = property(
+        fget=_get_axes_colrows,
+        fset=_set_axes_colrows,
+        doc=u"""To read axes in first line/column
+
+        :Type: dict
+        """,
+    )
+
+    def _get_is_allsheets(self):
+        """getter of is_allsheets"""
+        return self._is_allsheets
+
+    def _set_is_allsheets(self, value):
+        """setter of is_allsheets"""
+        check_var("is_allsheets", value, "bool")
+        self._is_allsheets = value
+
+    is_allsheets = property(
+        fget=_get_is_allsheets,
+        fset=_set_is_allsheets,
+        doc=u"""To read all sheets in a 3D matrix
+
+        :Type: bool
         """,
     )
