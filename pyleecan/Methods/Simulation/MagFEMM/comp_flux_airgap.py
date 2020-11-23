@@ -38,7 +38,8 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Init output
     out_dict = dict()
-    output.mag.internal = OutMagFEMM()
+    if output.mag.internal is None:
+        output.mag.internal = OutMagFEMM()
 
     # Get time and angular axes
     Angle = axes_dict["Angle"]
