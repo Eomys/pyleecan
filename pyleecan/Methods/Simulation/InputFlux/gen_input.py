@@ -46,7 +46,7 @@ def gen_input(self):
     out_dict = {}
     for key in self.B_dict:
         comp = self.B_dict[key]
-        if isinstance(comp, ImportMatrixXls):
+        if isinstance(comp, ImportMatrixXls) and comp.axes_colrows is not None:
             B_comp, axes_values = comp.get_data()
         else:
             B_comp = comp.get_data()

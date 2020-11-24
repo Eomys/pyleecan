@@ -60,8 +60,6 @@ def get_data(self):
                         raise Exception(
                             "ERROR: axes_colrows should contain either '1' or 'A'"
                         )
-            else:
-                axes_dict = None
 
             # Transpose if necessary
             values = self.edit_matrix(values)
@@ -72,7 +70,10 @@ def get_data(self):
             else:
                 values_3d.append(values_3d, values[..., None], axis=-1)
 
-        return values_3d, axes_dict
+        if self.axes_colrows is not None:
+            return values_3d, axes_dict
+        else:
+            return values_3d
 
     else:
 
@@ -117,4 +118,7 @@ def get_data(self):
         # Transpose if necessary
         values = self.edit_matrix(values)
 
-        return values, axes_dict
+        if self.axes_colrows is not None:
+            return values, axes_dict
+        else:
+            return values
