@@ -2814,6 +2814,24 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "To read axes in first line/column",
+                "max": "",
+                "min": "",
+                "name": "axes_colrows",
+                "type": "dict",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "To read all sheets in a 3D matrix",
+                "max": "",
+                "min": "",
+                "name": "is_allsheets",
+                "type": "bool",
+                "unit": "-",
+                "value": false
             }
         ]
     },
@@ -3238,7 +3256,8 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "comp_felec"
+            "comp_felec",
+            "comp_axes"
         ],
         "mother": "Input",
         "name": "InputFlux",
@@ -3246,13 +3265,58 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
         "properties": [
             {
-                "desc": "Airgap flux density",
+                "desc": "Angle periodicity",
                 "max": "",
                 "min": "",
-                "name": "B",
-                "type": "ImportVectorField",
-                "unit": "T",
+                "name": "per_a",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Time periodicity",
+                "max": "",
+                "min": "",
+                "name": "per_t",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "If angle is antiperiodic",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            },
+            {
+                "desc": "If time is antiperiodic",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_t",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            },
+            {
+                "desc": "Dict of Import objects or lists for each component of the flux",
+                "max": "",
+                "min": "",
+                "name": "B_dict",
+                "type": "dict",
+                "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Unit of the flux if not T",
+                "max": "",
+                "min": "",
+                "name": "unit",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
             },
             {
                 "desc": "InputCurrent to define Operating Point (not mandatory)",
@@ -3261,6 +3325,15 @@
                 "name": "OP",
                 "type": "Input",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Rotation speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "float",
+                "unit": "rpm",
                 "value": null
             }
         ]
@@ -6642,6 +6715,26 @@
             }
         ]
     },
+    "OutInternal": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "OutMagElmer",
+            "OutMagFEMM"
+        ],
+        "desc": "Abstract class whose childs enable to store outputs related to a specific model",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "OutInternal",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutInternal.csv",
+        "properties": []
+    },
     "OutMag": {
         "constants": [
             {
@@ -6653,8 +6746,9 @@
         "desc": "Gather the magnetic module outputs",
         "is_internal": false,
         "methods": [
-            "comp_emf",
-            "store"
+            "store",
+            "clean",
+            "comp_emf"
         ],
         "mother": "",
         "name": "OutMag",
@@ -6752,15 +6846,6 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing the main FEA parameter",
-                "max": "",
-                "min": "",
-                "name": "FEA_dict",
-                "type": "dict",
-                "unit": "",
-                "value": null
-            },
-            {
                 "desc": "Name of the logger to use",
                 "max": "",
                 "min": "",
@@ -6768,6 +6853,73 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutMag"
+            },
+            {
+                "desc": "OutInternal object containg outputs related to a specific model",
+                "max": "",
+                "min": "",
+                "name": "internal",
+                "type": "OutInternal",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "OutMagElmer": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to store outputs related to MagElmer magnetic model",
+        "is_internal": false,
+        "methods": [
+            "clean"
+        ],
+        "mother": "OutInternal",
+        "name": "OutMagElmer",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutMagElmer.csv",
+        "properties": [
+            {
+                "desc": "Dictionnary containing the main FEA parameters",
+                "max": "",
+                "min": "",
+                "name": "FEA_dict",
+                "type": "dict",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "OutMagFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to store outputs related to MagFEMM magnetic model",
+        "is_internal": false,
+        "methods": [
+            "clean"
+        ],
+        "mother": "OutInternal",
+        "name": "OutMagFEMM",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutMagFEMM.csv",
+        "properties": [
+            {
+                "desc": "Dictionnary containing the main FEMM parameters",
+                "max": "",
+                "min": "",
+                "name": "FEMM_dict",
+                "type": "dict",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -6921,7 +7073,8 @@
             "getter.get_fund_harm",
             "plot.plot_A_quiver_2D",
             "plot.plot_3D_Data",
-            "plot.plot_A_time_space"
+            "plot.plot_A_time_space",
+            "getter.get_data_from_str"
         ],
         "mother": "",
         "name": "Output",

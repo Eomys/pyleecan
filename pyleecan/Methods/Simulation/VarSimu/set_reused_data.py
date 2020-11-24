@@ -19,8 +19,8 @@ def set_reused_data(self, simu, output):
     if self.is_reuse_femm_file and isinstance(simu.mag, MagFEMM):
         self.get_logger().info(
             "VarSimu: Using same FEMM file for all simulation ("
-            + output.mag.FEA_dict["path_save"]
+            + output.mag.internal.FEMM_dict["path_save"]
             + ")"
         )
-        simu.mag.import_file = output.mag.FEA_dict["path_save"]
-        simu.mag.FEMM_dict_enforced = output.mag.FEA_dict
+        simu.mag.import_file = output.mag.internal.FEMM_dict["path_save"]
+        simu.mag.FEMM_dict_enforced = output.mag.internal.FEMM_dict
