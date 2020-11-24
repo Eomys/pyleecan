@@ -14,6 +14,14 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .OutInternal import OutInternal
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Output.OutMagElmer.clean import clean
+except ImportError as error:
+    clean = error
+
+
 from ._check import InitUnKnowClassError
 
 
@@ -22,6 +30,15 @@ class OutMagElmer(OutInternal):
 
     VERSION = 1
 
+    # cf Methods.Output.OutMagElmer.clean
+    if isinstance(clean, ImportError):
+        clean = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMagElmer method clean: " + str(clean))
+            )
+        )
+    else:
+        clean = clean
     # save and copy methods are available in all object
     save = save
     copy = copy

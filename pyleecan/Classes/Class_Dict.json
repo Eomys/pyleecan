@@ -6875,7 +6875,9 @@
         "daughters": [],
         "desc": "Class to store outputs related to MagElmer magnetic model",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "clean"
+        ],
         "mother": "OutInternal",
         "name": "OutMagElmer",
         "package": "Output",

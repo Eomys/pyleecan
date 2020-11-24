@@ -5,6 +5,7 @@ import subprocess
 from ....Functions.GMSH.draw_GMSH import draw_GMSH
 from ....Classes.OutMagElmer import OutMagElmer
 
+
 def comp_flux_airgap(self, output, axes_dict):
     """Build and solve Elmer model to calculate and store magnetic quantities
 
