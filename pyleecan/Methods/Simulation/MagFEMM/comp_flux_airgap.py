@@ -5,6 +5,7 @@ from numpy import zeros
 
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Classes._FEMMHandler import FEMMHandler
+from ....Classes.OutMagFEMM import OutMagFEMM
 
 
 def comp_flux_airgap(self, output, axes_dict):
@@ -37,6 +38,8 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Init output
     out_dict = dict()
+    if output.mag.internal is None:
+        output.mag.internal = OutMagFEMM()
 
     # Get time and angular axes
     Angle = axes_dict["Angle"]
@@ -156,7 +159,7 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Store FEMM_dict in out_dict if FEMM file is not imported
     if self.import_file is None:
-        out_dict["FEA_dict"] = FEMM_dict
+        output.mag.internal.FEMM_dict = FEMM_dict
 
     # Store FEMM mesh results in meshsolution
     if self.is_get_mesh:

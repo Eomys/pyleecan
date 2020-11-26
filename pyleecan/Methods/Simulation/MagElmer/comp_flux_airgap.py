@@ -3,6 +3,7 @@ from os.path import join
 import subprocess
 
 from ....Functions.GMSH.draw_GMSH import draw_GMSH
+from ....Classes.OutMagElmer import OutMagElmer
 
 
 def comp_flux_airgap(self, output, axes_dict):
@@ -20,6 +21,8 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Init output dict
     out_dict = dict()
+    if output.mag.internal is None:
+        output.mag.internal = OutMagElmer()
 
     # Get time and angular axes
     Angle = axes_dict["Angle"]
@@ -65,7 +68,7 @@ def comp_flux_airgap(self, output, axes_dict):
     gmsh_filename = self.get_path_save_fea(output) + ".msh2"
     if not self.import_file:  # True if None or len == 0
         self.get_logger().debug("Drawing machine in GMSH...")
-        output.mag.FEA_dict = draw_GMSH(
+        output.mag.internal.FEA_dict = draw_GMSH(
             output=output,
             sym=sym,
             is_lam_only_S=False,
@@ -78,7 +81,7 @@ def comp_flux_airgap(self, output, axes_dict):
 
     else:
         self.get_logger().debug("Reusing the FEA file: " + self.import_file)
-        # output.mag.FEA_dict = self.FEA_dict
+        # output.mag.internal.FEA_dict = self.FEA_dict
         pass
 
     # post process GMSH mesh with ElmerGrid

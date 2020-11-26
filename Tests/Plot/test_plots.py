@@ -1,22 +1,20 @@
-from numpy import linspace, sin, squeeze
+from os.path import isfile
 from os.path import join
+
 import matplotlib.pyplot as plt
-from Tests import save_plot_path as save_path
 import pytest
-
-from pyleecan.Classes.Simu1 import Simu1
-
-from pyleecan.Classes.Output import Output
 from SciDataTool import DataTime, Data1D, DataLinspace, VectorField
+from numpy import linspace, sin, squeeze
+
 from Tests import TEST_DATA_DIR
+from Tests import save_plot_path as save_path
 from pyleecan.Classes.ImportMatlab import ImportMatlab
-from pyleecan.Classes.ImportData import ImportData
-from pyleecan.Classes.ImportVectorField import ImportVectorField
 from pyleecan.Classes.InputFlux import InputFlux
+from pyleecan.Classes.Output import Output
+from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
-from os.path import isfile
 
 
 @pytest.fixture(scope="module")
@@ -28,11 +26,6 @@ def import_data():
     mat_file_Br = join(TEST_DATA_DIR, "Plots/default_proj_Br.mat")
     mat_file_time = join(TEST_DATA_DIR, "Plots/default_proj_time.mat")
     mat_file_angle = join(TEST_DATA_DIR, "Plots/default_proj_angle.mat")
-    mat_file_MTr_freqs = join(TEST_DATA_DIR, "Plots/default_proj_MTr_freqs.mat")
-    mat_file_MTr_wavenumber = join(
-        TEST_DATA_DIR, "Plots/default_proj_MTr_wavenumber.mat"
-    )
-    mat_file_MTr = join(TEST_DATA_DIR, "Plots/default_proj_MTr.mat")
     mat_file_Br_cfft2 = join(TEST_DATA_DIR, "Plots/default_proj_Br_cfft2.mat")
     mat_file_Brfreqs = join(TEST_DATA_DIR, "Plots/default_proj_Brfreqs.mat")
     mat_file_Brwavenumber = join(TEST_DATA_DIR, "Plots/default_proj_Brwavenumber.mat")
@@ -54,35 +47,11 @@ def import_data():
     # Read input files from Manatee
     data["flux"] = ImportMatlab(mat_file_Br, var_name="XBr")
     data["time"] = ImportMatlab(mat_file_time, var_name="timec")
-    data["Time"] = ImportData(field=data["time"], unit="s", name="time")
     data["angle"] = ImportMatlab(mat_file_angle, var_name="alpha_radc")
-    data["Angle"] = ImportData(
-        field=data["angle"], unit="rad", name="angle", normalizations={"space_order": 3}
-    )
-    data["Br"] = ImportData(
-        axes=[data["Time"], data["Angle"]],
-        field=data["flux"],
-        unit="T",
-        name="Airgap radial flux density",
-        symbol="B_{rad}",
-    )
-    data["B"] = ImportVectorField(components={"radial": data["Br"]})
 
     data["flux_FT"] = ImportMatlab(mat_file_Br_cfft2, var_name="Fwr")
     data["freqs"] = ImportMatlab(mat_file_Brfreqs, var_name="freqs")
-    data["Freqs"] = ImportData(field=data["freqs"], unit="Hz", name="freqs")
     data["wavenumber"] = ImportMatlab(mat_file_Brwavenumber, var_name="orders")
-    data["Wavenumber"] = ImportData(
-        field=data["wavenumber"], unit="dimless", name="wavenumber"
-    )
-    data["Br_FT"] = ImportData(
-        axes=[data["Freqs"], data["Wavenumber"]],
-        field=data["flux"],
-        unit="T",
-        name="Airgap radial flux density",
-        symbol="B_{rad}",
-    )
-    data["B_FT"] = ImportVectorField(components={"radial": data["Br_FT"]})
     data["OP"] = InputCurrent(N0=2000, Id_ref=10, Iq_ref=-10)
     # Plot parameters
     data["freq_max"] = 2000
@@ -98,19 +67,11 @@ class Test_plots(object):
         SCIM_006 = import_data["SCIM_006"]
         simu = import_data["simu"]
         time = import_data["time"]
-        Time = import_data["Time"]
         angle = import_data["angle"]
-        Angle = import_data["Angle"]
-        Br = import_data["Br"]
         flux = import_data["flux"]
-        B = import_data["B"]
         flux_FT = import_data["flux_FT"]
         freqs = import_data["freqs"]
-        Freqs = import_data["Freqs"]
-        Wavenumber = import_data["Wavenumber"]
         wavenumber = import_data["wavenumber"]
-        Br_FT = import_data["Br_FT"]
-        B_FT = import_data["B_FT"]
         freq_max = import_data["freq_max"]
         r_max = import_data["r_max"]
         OP = import_data["OP"]
@@ -124,7 +85,7 @@ class Test_plots(object):
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
+        simu.input = InputFlux(B_dict={"Br": flux}, time=time, angle=angle, OP=OP)
         out = Output(simu=simu)
         simu.run()
 
@@ -178,6 +139,7 @@ class Test_plots(object):
             "freqs=[0," + str(freq_max) + "]",
             data_list=[out2.mag.B],
             legend_list=["Reference", "Periodic"],
+            is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_period_fft.png"),
             is_show_fig=False,
         )
@@ -225,13 +187,14 @@ class Test_plots(object):
         plt.close("all")
         out.plot_2D_Data(
             "mag.B",
-            "angle",
+            "angle{°}",
             data_list=[out3.mag.B],
             legend_list=["Reference", "Linspace"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_linspace.png"),
             is_show_fig=False,
         )
+        out.mag.B.components["radial"].axes[1].normalizations["space_order"] = 3
         out.plot_2D_Data(
             "mag.B",
             "wavenumber->space_order=[0,100]",
@@ -246,7 +209,7 @@ class Test_plots(object):
         simu4.mag = None
         simu4.force = None
         simu4.struct = None
-        simu4.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
+        simu4.input = InputFlux(B_dict={"Br": flux}, time=time, angle=angle, OP=OP)
         out4 = Output(simu=simu4)
         simu4.run()
         out4.post.legend_name = "Inverse FT"
@@ -256,7 +219,7 @@ class Test_plots(object):
 
         out.plot_2D_Data(
             "mag.B",
-            "angle",
+            "angle{°}",
             data_list=[out4.mag.B],
             legend_list=["Reference", "Inverse FFT"],
             is_auto_ticks=False,
@@ -322,19 +285,11 @@ class Test_plots(object):
         SCIM_006 = import_data["SCIM_006"]
         simu = import_data["simu"]
         time = import_data["time"]
-        Time = import_data["Time"]
         angle = import_data["angle"]
-        Angle = import_data["Angle"]
-        Br = import_data["Br"]
         flux = import_data["flux"]
-        B = import_data["B"]
         flux_FT = import_data["flux_FT"]
         freqs = import_data["freqs"]
-        Freqs = import_data["Freqs"]
-        Wavenumber = import_data["Wavenumber"]
         wavenumber = import_data["wavenumber"]
-        Br_FT = import_data["Br_FT"]
-        B_FT = import_data["B_FT"]
         freq_max = import_data["freq_max"]
         r_max = import_data["r_max"]
         OP = import_data["OP"]
@@ -342,7 +297,7 @@ class Test_plots(object):
         N_stem = 100
 
         simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
+        simu.input = InputFlux(B_dict={"Br": flux}, time=time, angle=angle, OP=OP)
         simu.mag = None
         simu.force = None
         simu.struct = None
@@ -356,6 +311,7 @@ class Test_plots(object):
             "freqs=[0," + str(freq_max) + "]",
             "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
             N_stem=N_stem,
+            is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_cfft2.png"),
             is_show_fig=False,
         )
@@ -364,19 +320,11 @@ class Test_plots(object):
         SCIM_006 = import_data["SCIM_006"]
         simu = import_data["simu"]
         time = import_data["time"]
-        Time = import_data["Time"]
         angle = import_data["angle"]
-        Angle = import_data["Angle"]
-        Br = import_data["Br"]
         flux = import_data["flux"]
-        B = import_data["B"]
         flux_FT = import_data["flux_FT"]
         freqs = import_data["freqs"]
-        Freqs = import_data["Freqs"]
-        Wavenumber = import_data["Wavenumber"]
         wavenumber = import_data["wavenumber"]
-        Br_FT = import_data["Br_FT"]
-        B_FT = import_data["B_FT"]
         freq_max = import_data["freq_max"]
         r_max = import_data["r_max"]
         OP = import_data["OP"]
@@ -385,7 +333,7 @@ class Test_plots(object):
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
+        simu.input = InputFlux(B_dict={"Br": flux}, time=time, angle=angle, OP=OP)
         out = Output(simu=simu)
         simu.run()
 
@@ -394,7 +342,7 @@ class Test_plots(object):
         out.plot_3D_Data(
             "mag.B",
             "time=[0,0.06]",
-            "angle",
+            "angle{°}",
             component_list=["radial"],
             save_path=join(save_path, "test_default_proj_Br_surf_dataobj.png"),
             is_2D_view=False,
@@ -405,19 +353,11 @@ class Test_plots(object):
         SCIM_006 = import_data["SCIM_006"]
         simu = import_data["simu"]
         time = import_data["time"]
-        Time = import_data["Time"]
         angle = import_data["angle"]
-        Angle = import_data["Angle"]
-        Br = import_data["Br"]
         flux = import_data["flux"]
-        B = import_data["B"]
         flux_FT = import_data["flux_FT"]
         freqs = import_data["freqs"]
-        Freqs = import_data["Freqs"]
-        Wavenumber = import_data["Wavenumber"]
         wavenumber = import_data["wavenumber"]
-        Br_FT = import_data["Br_FT"]
-        B_FT = import_data["B_FT"]
         freq_max = import_data["freq_max"]
         r_max = import_data["r_max"]
         OP = import_data["OP"]
@@ -426,7 +366,7 @@ class Test_plots(object):
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
+        simu.input = InputFlux(B_dict={"Br": flux}, time=time, angle=angle, OP=OP)
         out = Output(simu=simu)
         simu.run()
 
@@ -439,6 +379,7 @@ class Test_plots(object):
             "freqs=[0," + str(freq_max) + "]",
             "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
             is_2D_view=True,
+            is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_fft2_dataobj.png"),
             is_show_fig=False,
         )
@@ -447,19 +388,11 @@ class Test_plots(object):
         SCIM_006 = import_data["SCIM_006"]
         simu = import_data["simu"]
         time = import_data["time"]
-        Time = import_data["Time"]
         angle = import_data["angle"]
-        Angle = import_data["Angle"]
-        Br = import_data["Br"]
         flux = import_data["flux"]
-        B = import_data["B"]
         flux_FT = import_data["flux_FT"]
         freqs = import_data["freqs"]
-        Freqs = import_data["Freqs"]
-        Wavenumber = import_data["Wavenumber"]
         wavenumber = import_data["wavenumber"]
-        Br_FT = import_data["Br_FT"]
-        B_FT = import_data["B_FT"]
         freq_max = import_data["freq_max"]
         r_max = import_data["r_max"]
         OP = import_data["OP"]
@@ -468,17 +401,17 @@ class Test_plots(object):
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle, OP=OP)
+        simu.input = InputFlux(B_dict={"Br": flux}, time=time, angle=angle, OP=OP)
         out = Output(simu=simu)
         simu.run()
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_time_space(
+        out.plot_3D_Data(
             "mag.B",
-            freq_max=freq_max,
-            r_max=r_max,
-            is_auto_ticks=False,
+            "time",
+            "angle{°}",
+            is_2D_view=True,
             save_path=join(save_path, "test_default_proj_Br_time_space_dataobj.png"),
             is_show_fig=False,
         )

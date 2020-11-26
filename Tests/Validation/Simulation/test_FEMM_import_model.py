@@ -63,7 +63,7 @@ def test_FEMM_import_model():
         is_periodicity_a=True,
         is_periodicity_t=False,
         import_file=out.simu.mag.get_path_save_fem(out),
-        FEMM_dict_enforced=out.mag.FEA_dict,
+        FEMM_dict_enforced=out.mag.internal.FEMM_dict,
     )
 
     out2 = simu2.run()
@@ -90,3 +90,8 @@ def test_FEMM_import_model():
         decimal=3,
     )
     assert_array_almost_equal(out.mag.Tem.values, out2.mag.Tem.values, decimal=3)
+    
+    return out, out2
+    
+if __name__ == "__main__":
+    out, out2 = test_FEMM_import_model()

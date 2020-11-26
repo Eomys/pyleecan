@@ -79,28 +79,9 @@ def test_Magnetic_FEMM_sym():
     mat_file = join(TEST_DATA_DIR, "EM_SPMSM_FL_001_MANATEE_SDM.mat")
     Br = ImportMatlab(file_path=mat_file, var_name="XBr")
     Bt = ImportMatlab(file_path=mat_file, var_name="XBt")
-    Time = ImportData(field=time, unit="s", name="time")
-    Angle = ImportData(
-        field=ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False),
-        unit="rad",
-        name="angle",
+    simu_load.input = InputFlux(
+        time=time, Na_tot=Na_tot, B_dict={"Br": Br, "Bt": Bt}, OP=simu.input.copy()
     )
-    Br_data = ImportData(
-        axes=[Time, Angle],
-        field=Br,
-        unit="T",
-        name="Radial airgap flux density",
-        symbol="B_r",
-    )
-    Bt_data = ImportData(
-        axes=[Time, Angle],
-        field=Bt,
-        unit="T",
-        name="Tangential airgap flux density",
-        symbol="B_t",
-    )
-    B = ImportVectorField(components={"radial": Br_data, "tangential": Bt_data})
-    simu_load.input = InputFlux(time=time, Na_tot=Na_tot, B=B, OP=simu.input.copy())
     out = Output(simu=simu)
     simu.run()
 

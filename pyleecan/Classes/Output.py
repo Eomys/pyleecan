@@ -80,6 +80,11 @@ try:
 except ImportError as error:
     plot_A_time_space = error
 
+try:
+    from ..Methods.Output.Output.getter.get_data_from_str import get_data_from_str
+except ImportError as error:
+    get_data_from_str = error
+
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -230,6 +235,18 @@ class Output(FrozenClass):
         )
     else:
         plot_A_time_space = plot_A_time_space
+    # cf Methods.Output.Output.getter.get_data_from_str
+    if isinstance(get_data_from_str, ImportError):
+        get_data_from_str = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_data_from_str: "
+                    + str(get_data_from_str)
+                )
+            )
+        )
+    else:
+        get_data_from_str = get_data_from_str
     # save and copy methods are available in all object
     save = save
     copy = copy
