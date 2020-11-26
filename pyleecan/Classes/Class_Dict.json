@@ -10751,6 +10751,15 @@
                 "type": "[Post]",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "If not None, replace the reference simulation postproc_list in each generated simulation",
+                "max": "",
+                "min": "",
+                "name": "multi_simu_postproc_list",
+                "type": "[Post]",
+                "unit": "-",
+                "value": null
             }
         ]
     },

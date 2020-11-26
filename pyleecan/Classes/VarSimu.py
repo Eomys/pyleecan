@@ -105,6 +105,7 @@ class VarSimu(FrozenClass):
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
+        multi_simu_postproc_list=None,
         init_dict=None,
         init_str=None,
     ):
@@ -141,6 +142,8 @@ class VarSimu(FrozenClass):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
+            if "multi_simu_postproc_list" in list(init_dict.keys()):
+                multi_simu_postproc_list = init_dict["multi_simu_postproc_list"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -152,6 +155,7 @@ class VarSimu(FrozenClass):
         self.nb_simu = nb_simu
         self.is_reuse_femm_file = is_reuse_femm_file
         self.postproc_list = postproc_list
+        self.multi_simu_postproc_list = multi_simu_postproc_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -189,6 +193,18 @@ class VarSimu(FrozenClass):
                 + linesep
             )
             VarSimu_str += "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+        if len(self.multi_simu_postproc_list) == 0:
+            VarSimu_str += "multi_simu_postproc_list = []" + linesep
+        for ii in range(len(self.multi_simu_postproc_list)):
+            tmp = (
+                self.multi_simu_postproc_list[ii]
+                .__str__()
+                .replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarSimu_str += (
+                "multi_simu_postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return VarSimu_str
 
     def __eq__(self, other):
@@ -213,6 +229,8 @@ class VarSimu(FrozenClass):
         if other.is_reuse_femm_file != self.is_reuse_femm_file:
             return False
         if other.postproc_list != self.postproc_list:
+            return False
+        if other.multi_simu_postproc_list != self.multi_simu_postproc_list:
             return False
         return True
 
@@ -239,6 +257,12 @@ class VarSimu(FrozenClass):
             VarSimu_dict["postproc_list"] = list()
             for obj in self.postproc_list:
                 VarSimu_dict["postproc_list"].append(obj.as_dict())
+        if self.multi_simu_postproc_list is None:
+            VarSimu_dict["multi_simu_postproc_list"] = None
+        else:
+            VarSimu_dict["multi_simu_postproc_list"] = list()
+            for obj in self.multi_simu_postproc_list:
+                VarSimu_dict["multi_simu_postproc_list"].append(obj.as_dict())
         # The class name is added to the dict for deserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict
@@ -255,6 +279,7 @@ class VarSimu(FrozenClass):
         self.nb_simu = None
         self.is_reuse_femm_file = None
         self.postproc_list = None
+        self.multi_simu_postproc_list = None
 
     def _get_name(self):
         """getter of name"""
@@ -440,6 +465,39 @@ class VarSimu(FrozenClass):
         fget=_get_postproc_list,
         fset=_set_postproc_list,
         doc=u"""List of post-processing to run on XOutput after the multisimulation
+
+        :Type: [Post]
+        """,
+    )
+
+    def _get_multi_simu_postproc_list(self):
+        """getter of multi_simu_postproc_list"""
+        if self._multi_simu_postproc_list is not None:
+            for obj in self._multi_simu_postproc_list:
+                if obj is not None:
+                    obj.parent = self
+        return self._multi_simu_postproc_list
+
+    def _set_multi_simu_postproc_list(self, value):
+        """setter of multi_simu_postproc_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes",
+                        obj.get("__class__"),
+                        "multi_simu_postproc_list",
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
+        check_var("multi_simu_postproc_list", value, "[Post]")
+        self._multi_simu_postproc_list = value
+
+    multi_simu_postproc_list = property(
+        fget=_get_multi_simu_postproc_list,
+        fset=_set_multi_simu_postproc_list,
+        doc=u"""If not None, replace the reference simulation postproc_list in each generated simulation
 
         :Type: [Post]
         """,

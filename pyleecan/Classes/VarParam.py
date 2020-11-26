@@ -95,6 +95,7 @@ class VarParam(VarSimu):
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
+        multi_simu_postproc_list=None,
         init_dict=None,
         init_str=None,
     ):
@@ -133,6 +134,8 @@ class VarParam(VarSimu):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
+            if "multi_simu_postproc_list" in list(init_dict.keys()):
+                multi_simu_postproc_list = init_dict["multi_simu_postproc_list"]
         # Set the properties (value check and convertion are done in setter)
         self.paramexplorer_list = paramexplorer_list
         # Call VarSimu init
@@ -146,6 +149,7 @@ class VarParam(VarSimu):
             nb_simu=nb_simu,
             is_reuse_femm_file=is_reuse_femm_file,
             postproc_list=postproc_list,
+            multi_simu_postproc_list=multi_simu_postproc_list,
         )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
