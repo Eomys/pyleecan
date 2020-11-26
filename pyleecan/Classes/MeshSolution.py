@@ -187,7 +187,7 @@ class MeshSolution(FrozenClass):
         mesh=-1,
         is_same_mesh=True,
         solution=-1,
-        group=-1,
+        group=None,
         dimension=2,
         init_dict=None,
         init_str=None,
@@ -275,8 +275,12 @@ class MeshSolution(FrozenClass):
             return False
         if other.solution != self.solution:
             return False
-        if other.group is None and self.group is not None:
+        if (other.group is None and self.group is not None) or (
+            other.group is not None and self.group is None
+        ):
             return False
+        elif other.group is None and self.group is None:
+            return True
         elif len(other.group) != len(self.group):
             return False
         else:

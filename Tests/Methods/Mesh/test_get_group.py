@@ -30,7 +30,7 @@ class Test_get_group(object):
 
         self.meshsol = MeshSolution()
         self.meshsol.mesh = [mesh]
-        # self.meshsol.group = dict()
+        self.meshsol.group = dict()
         self.meshsol.group["stator"] = np.array([0, 1])
         self.meshsol.group["rotor"] = np.array([2])
         self.DELTA = 1e-10

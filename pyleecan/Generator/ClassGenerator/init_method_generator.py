@@ -44,6 +44,13 @@ def generate_init(gen_dict, class_dict):
                 arg_list += ", " + prop["name"] + "=" + str(prop["value"])
             else:
                 arg_list += ", " + prop["name"] + "=None"
+        elif prop["type"] in ["[ndarray]", "{ndarray}"]:
+            if prop["value"] in [None, "None"]:
+                arg_list += ", " + prop["name"] + "=None"
+            elif prop["value"] != "":
+                arg_list += ", " + prop["name"] + "=" + str(prop["value"])
+            else:
+                arg_list += ", " + prop["name"] + "=-1"
         elif prop["type"] == "list":
             if (
                 prop["value"] not in ["", None]

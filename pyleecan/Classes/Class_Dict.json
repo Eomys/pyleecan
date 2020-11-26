@@ -5582,7 +5582,7 @@
                 "name": "group",
                 "type": "{ndarray}",
                 "unit": "",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Dimension of the physical problem",
@@ -6072,7 +6072,7 @@
                 "name": "obj_func",
                 "type": "[DataKeeper]",
                 "unit": "",
-                "value": -1
+                "value": ""
             },
             {
                 "desc": "Function to evaluate before computing obj function and constraints",
@@ -6090,7 +6090,7 @@
                 "name": "constraint",
                 "type": "[OptiConstraint]",
                 "unit": "",
-                "value": -1
+                "value": ""
             },
             {
                 "desc": "Function to execute a preprocessing on the simulation right before it is run.",
@@ -6108,7 +6108,7 @@
                 "name": "datakeeper_list",
                 "type": "[DataKeeper]",
                 "unit": "",
-                "value": -1
+                "value": ""
             }
         ]
     },
