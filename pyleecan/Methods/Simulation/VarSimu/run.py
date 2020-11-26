@@ -100,6 +100,7 @@ def run(self):
             self.stop_if_error,
             self.ref_simu_index,
             self.is_keep_all_output,
+            post_keeper_postproc_list=self.post_keeper_postproc_list,
         )
 
         # Display simulation progress
