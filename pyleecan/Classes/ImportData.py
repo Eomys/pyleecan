@@ -176,8 +176,7 @@ class ImportData(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.axes:
-            obj._set_None()
+        self.axes = None
         if self.field is not None:
             self.field._set_None()
         self.unit = None

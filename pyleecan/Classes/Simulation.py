@@ -219,8 +219,7 @@ class Simulation(FrozenClass):
         self.logger_name = None
         if self.var_simu is not None:
             self.var_simu._set_None()
-        for obj in self.postproc_list:
-            obj._set_None()
+        self.postproc_list = None
         self.index = None
         self.path_result = None
 

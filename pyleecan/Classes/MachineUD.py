@@ -175,8 +175,7 @@ class MachineUD(Machine):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.lam_list:
-            obj._set_None()
+        self.lam_list = None
         self.is_sync = None
         # Set to None the properties inherited from Machine
         super(MachineUD, self)._set_None()

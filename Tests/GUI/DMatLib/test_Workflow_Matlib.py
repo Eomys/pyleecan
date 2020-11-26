@@ -117,6 +117,7 @@ class Test_Workflow_DMatLib(object):
         self.machine.stator = LamSlotWind()
         self.machine.rotor = LamHole()
         self.machine._set_None()
+        self.machine.rotor.hole = list()  # No hole
         self.machine.stator.winding.p = 4
         self.machine.type_machine = 8
         self.widget = SMHoleMag(

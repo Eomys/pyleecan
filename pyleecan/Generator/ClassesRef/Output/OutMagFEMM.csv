@@ -1,0 +1,2 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+FEMM_dict,,Dictionnary containing the main FEMM parameters,,dict,None,,,,Output,OutInternal,clean,VERSION,1,Class to store outputs related to MagFEMM magnetic model

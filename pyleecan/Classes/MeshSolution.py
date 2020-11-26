@@ -326,11 +326,9 @@ class MeshSolution(FrozenClass):
         """Set all the properties to None (except pyleecan object)"""
 
         self.label = None
-        for obj in self.mesh:
-            obj._set_None()
+        self.mesh = None
         self.is_same_mesh = None
-        for obj in self.solution:
-            obj._set_None()
+        self.solution = None
         self.group = None
         self.dimension = None
 

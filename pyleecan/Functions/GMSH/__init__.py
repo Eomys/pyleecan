@@ -4,7 +4,6 @@ class InputError(Exception):
     pass
 
 
-boundary_prop = dict()
 boundary_list = [
     "MASTER_ROTOR_BOUNDARY",
     "SLAVE_ROTOR_BOUNDARY",
@@ -16,6 +15,9 @@ boundary_list = [
     "VP0_BOUNDARY",
 ]
 
+# dictionary to match FEA boundary conditions (dict values)
+# with line labels (dict keys) that are set in the build_geometry methods
+boundary_prop = dict()
 boundary_prop["int_airgap_line_1"] = "MASTER_ROTOR_BOUNDARY"
 boundary_prop["int_airgap_line_2"] = "SLAVE_ROTOR_BOUNDARY"
 boundary_prop["int_sb_line_1"] = "MASTER_ROTOR_BOUNDARY"

@@ -308,8 +308,7 @@ class SlotMFlat2(SlotMag):
         self.W0 = None
         self.W0_is_rad = None
         self.W1 = None
-        for obj in self.magnet:
-            obj._set_None()
+        self.magnet = None
         # Set to None the properties inherited from SlotMag
         super(SlotMFlat2, self)._set_None()
 

@@ -105,7 +105,7 @@ def variable_to_hdf5(file, prefix, variable, name):
             # to http://docs.h5py.org/en/stable/strings.html#exceptions-for-python-3
             grp[name] = np.string_(variable.encode("ISO-8859-2"))
     # None
-    elif None == variable:
+    elif variable is None:
         # Create dataset
         grp = file[prefix]
         grp[name] = "NoneValue"

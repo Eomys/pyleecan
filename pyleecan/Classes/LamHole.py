@@ -346,8 +346,7 @@ class LamHole(Lamination):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.hole:
-            obj._set_None()
+        self.hole = None
         if self.bore is not None:
             self.bore._set_None()
         # Set to None the properties inherited from Lamination
