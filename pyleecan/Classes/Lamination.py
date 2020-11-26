@@ -534,10 +534,8 @@ class Lamination(FrozenClass):
         self.Rint = None
         self.Rext = None
         self.is_stator = None
-        for obj in self.axial_vent:
-            obj._set_None()
-        for obj in self.notch:
-            obj._set_None()
+        self.axial_vent = None
+        self.notch = None
 
     def _get_L1(self):
         """getter of L1"""

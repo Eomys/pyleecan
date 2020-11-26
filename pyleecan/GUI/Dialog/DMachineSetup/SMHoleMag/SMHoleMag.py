@@ -47,6 +47,8 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             self.obj = machine.stator
         else:
             self.obj = machine.rotor
+        if self.obj.hole is None:
+            self.obj.hole = list()
 
         # If the hole is not set, initialize it with a HoleM50
         if len(self.obj.hole) == 0:

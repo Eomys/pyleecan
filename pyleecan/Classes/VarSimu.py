@@ -248,15 +248,13 @@ class VarSimu(FrozenClass):
 
         self.name = None
         self.desc = None
-        for obj in self.datakeeper_list:
-            obj._set_None()
+        self.datakeeper_list = None
         self.is_keep_all_output = None
         self.stop_if_error = None
         self.ref_simu_index = None
         self.nb_simu = None
         self.is_reuse_femm_file = None
-        for obj in self.postproc_list:
-            obj._set_None()
+        self.postproc_list = None
 
     def _get_name(self):
         """getter of name"""
