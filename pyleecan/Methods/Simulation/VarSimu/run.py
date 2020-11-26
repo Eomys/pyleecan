@@ -68,6 +68,12 @@ def run(self):
     for simu in simulation_list:
         self.set_reused_data(simu, xoutput)
 
+    # Update the postprocessing list if needed
+    if self.multi_simu_postproc_list is not None:
+        # Different post between simu list and ref simu
+        for simu in simulation_list:
+            simu.postproc_list = self.multi_simu_postproc_list
+
     # Execute the other simulations
     nb_simu = self.nb_simu
     InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
