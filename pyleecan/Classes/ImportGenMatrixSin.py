@@ -140,8 +140,7 @@ class ImportGenMatrixSin(ImportMatrix):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.sin_list:
-            obj._set_None()
+        self.sin_list = None
         # Set to None the properties inherited from ImportMatrix
         super(ImportGenMatrixSin, self)._set_None()
 

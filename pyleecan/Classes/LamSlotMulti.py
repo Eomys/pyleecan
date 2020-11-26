@@ -318,8 +318,7 @@ class LamSlotMulti(Lamination):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.slot_list:
-            obj._set_None()
+        self.slot_list = None
         self.alpha = None
         # Set to None the properties inherited from Lamination
         super(LamSlotMulti, self)._set_None()

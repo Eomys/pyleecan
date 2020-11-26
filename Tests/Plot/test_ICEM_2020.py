@@ -155,6 +155,7 @@ def test_gmsh_mesh_dict():
     # opened in Gmsh
 
 
+@pytest.mark.skip
 @pytest.mark.GMSH
 @pytest.mark.long
 def test_SlotMulti_sym():
@@ -684,11 +685,7 @@ def test_Optimization_problem():
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
 
     simu.struct = None
 

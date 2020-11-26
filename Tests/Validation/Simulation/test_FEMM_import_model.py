@@ -47,11 +47,7 @@ def test_FEMM_import_model():
     simu.input.N0 = 3000  # Rotor speed [rpm]
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
     out = simu.run()
 
     # Second simulation, importing femm file and FEMM_dict
@@ -90,8 +86,9 @@ def test_FEMM_import_model():
         decimal=3,
     )
     assert_array_almost_equal(out.mag.Tem.values, out2.mag.Tem.values, decimal=3)
-    
+
     return out, out2
-    
+
+
 if __name__ == "__main__":
     out, out2 = test_FEMM_import_model()
