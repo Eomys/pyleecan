@@ -11,6 +11,7 @@ def run_single_simu(
     stop_if_error,
     ref_simu_index,
     is_keep_all_output,
+    post_keeper_postproc_list=None,
 ):
     """
     Execute a simulation and run datakeepers
@@ -31,6 +32,8 @@ def run_single_simu(
         Index of the reference simulation
     is_keep_all_output: bool
         store simulation output
+    post_keeper_postproc_list : list
+        list of postprocessing to run after the datakeeper
     """
     if stop_if_error:
         is_error = False
@@ -119,3 +122,8 @@ def run_single_simu(
             msg += ", "
         msg = msg[:-2]
         simulation.get_logger().info(msg)
+
+        # Run Post datakeeper post-processings
+        if post_keeper_postproc_list is not None:
+            for postproc in post_keeper_postproc_list:
+                postproc.run(result)
