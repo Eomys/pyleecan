@@ -16,6 +16,7 @@ from ._frozen import FrozenClass
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
+from .MeshSolution import MeshSolution
 
 
 class OutStruct(FrozenClass):
@@ -39,6 +40,8 @@ class OutStruct(FrozenClass):
         Yr=None,
         Vr=None,
         Ar=None,
+        meshsolution=-1,
+        FEA_dict=None,
         init_dict=None,
         init_str=None,
     ):
@@ -73,6 +76,10 @@ class OutStruct(FrozenClass):
                 Vr = init_dict["Vr"]
             if "Ar" in list(init_dict.keys()):
                 Ar = init_dict["Ar"]
+            if "meshsolution" in list(init_dict.keys()):
+                meshsolution = init_dict["meshsolution"]
+            if "FEA_dict" in list(init_dict.keys()):
+                FEA_dict = init_dict["FEA_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
@@ -83,6 +90,8 @@ class OutStruct(FrozenClass):
         self.Yr = Yr
         self.Vr = Vr
         self.Ar = Ar
+        self.meshsolution = meshsolution
+        self.FEA_dict = FEA_dict
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -115,6 +124,16 @@ class OutStruct(FrozenClass):
         OutStruct_str += "Yr = " + str(self.Yr) + linesep + linesep
         OutStruct_str += "Vr = " + str(self.Vr) + linesep + linesep
         OutStruct_str += "Ar = " + str(self.Ar) + linesep + linesep
+        if self.meshsolution is not None:
+            tmp = (
+                self.meshsolution.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            OutStruct_str += "meshsolution = " + tmp
+        else:
+            OutStruct_str += "meshsolution = None" + linesep + linesep
+        OutStruct_str += "FEA_dict = " + str(self.FEA_dict) + linesep
         return OutStruct_str
 
     def __eq__(self, other):
@@ -137,6 +156,10 @@ class OutStruct(FrozenClass):
         if other.Vr != self.Vr:
             return False
         if other.Ar != self.Ar:
+            return False
+        if other.meshsolution != self.meshsolution:
+            return False
+        if other.FEA_dict != self.FEA_dict:
             return False
         return True
 
@@ -167,6 +190,13 @@ class OutStruct(FrozenClass):
             OutStruct_dict["Ar"] = None
         else:
             OutStruct_dict["Ar"] = self.Ar.as_dict()
+        if self.meshsolution is None:
+            OutStruct_dict["meshsolution"] = None
+        else:
+            OutStruct_dict["meshsolution"] = self.meshsolution.as_dict()
+        OutStruct_dict["FEA_dict"] = (
+            self.FEA_dict.copy() if self.FEA_dict is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         OutStruct_dict["__class__"] = "OutStruct"
         return OutStruct_dict
@@ -182,6 +212,9 @@ class OutStruct(FrozenClass):
         self.Yr = None
         self.Vr = None
         self.Ar = None
+        if self.meshsolution is not None:
+            self.meshsolution._set_None()
+        self.FEA_dict = None
 
     def _get_Time(self):
         """getter of Time"""
@@ -365,5 +398,55 @@ class OutStruct(FrozenClass):
         doc=u"""Acceleration output
 
         :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
+
+    def _get_meshsolution(self):
+        """getter of meshsolution"""
+        return self._meshsolution
+
+    def _set_meshsolution(self, value):
+        """setter of meshsolution"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "meshsolution"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = MeshSolution()
+        check_var("meshsolution", value, "MeshSolution")
+        self._meshsolution = value
+
+        if self._meshsolution is not None:
+            self._meshsolution.parent = self
+
+    meshsolution = property(
+        fget=_get_meshsolution,
+        fset=_set_meshsolution,
+        doc=u"""FEA software mesh and solution
+
+        :Type: MeshSolution
+        """,
+    )
+
+    def _get_FEA_dict(self):
+        """getter of FEA_dict"""
+        return self._FEA_dict
+
+    def _set_FEA_dict(self, value):
+        """setter of FEA_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("FEA_dict", value, "dict")
+        self._FEA_dict = value
+
+    FEA_dict = property(
+        fget=_get_FEA_dict,
+        fset=_set_FEA_dict,
+        doc=u"""Dictionnary containing the main FEA parameter
+
+        :Type: dict
         """,
     )
