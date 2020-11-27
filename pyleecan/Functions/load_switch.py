@@ -171,6 +171,7 @@ load_switch = {
     "SolutionData": SolutionData,
     "SolutionMat": SolutionMat,
     "SolutionVector": SolutionVector,
+    "StructElmer": StructElmer,
     "Structural": Structural,
     "SurfLine": SurfLine,
     "SurfRing": SurfRing,

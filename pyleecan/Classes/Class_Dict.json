@@ -10133,7 +10133,8 @@
             "run",
             "get_meshsolution",
             "get_path_save_fea",
-            "solve_FEA"
+            "solve_FEA",
+            "init_model"
         ],
         "mother": "Structural",
         "name": "StructElmer",

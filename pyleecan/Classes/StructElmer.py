@@ -36,6 +36,11 @@ try:
 except ImportError as error:
     solve_FEA = error
 
+try:
+    from ..Methods.Simulation.StructElmer.init_model import init_model
+except ImportError as error:
+    init_model = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -88,6 +93,17 @@ class StructElmer(Structural):
         )
     else:
         solve_FEA = solve_FEA
+    # cf Methods.Simulation.StructElmer.init_model
+    if isinstance(init_model, ImportError):
+        init_model = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use StructElmer method init_model: " + str(init_model)
+                )
+            )
+        )
+    else:
+        init_model = init_model
     # save and copy methods are available in all object
     save = save
     copy = copy

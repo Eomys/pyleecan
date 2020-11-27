@@ -3,5 +3,5 @@ Kmesh_fineness,,"global coefficient to adjust mesh fineness in FEMM (1 : default
 file_name,,Name of the file to save the FEA model,0,str,,,,,,,get_meshsolution,,,,
 FEMM_dict_enforced,,To enforce user-defined values for FEA main parameters ,0,dict,,,,,,,get_path_save_fea,,,,
 is_get_mesh,,To save FEA mesh for latter post-procesing ,0,bool,0,,,,,,solve_FEA,,,,
-is_save_FEA,,To save FEA mesh and solution in .vtu file,0,bool,0,,,,,,,,,,
+is_save_FEA,,To save FEA mesh and solution in .vtu file,0,bool,0,,,,,,init_model,,,,
 transform_list,,"List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",0,list,[],,,,,,,,,,
