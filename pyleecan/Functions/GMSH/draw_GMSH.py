@@ -15,6 +15,8 @@ import cmath
 from os import replace
 from os.path import splitext
 
+from numpy import pi
+
 
 def _find_point_tag(d={}, p=complex(0.0, 0.0)):
     """Find a point in the GMSH dictionary
@@ -200,6 +202,7 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
                         "cent": {"tag": ctag, "coord": complex(cx, cy)},
                         "arc_angle": arc_angle,
                         "line_angle": None,
+                        "label": line.label,
                     }
                 }
             )
@@ -249,6 +252,7 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=N
                         "end": {"tag": etag, "coord": complex(ex, ey)},
                         "arc_angle": None,
                         "line_angle": line_angle,
+                        "label": line.label,
                     }
                 }
             )
@@ -413,6 +417,7 @@ def draw_GMSH(
     is_sliding_band=False,
     is_airbox=False,
     transform_list=[],
+    is_set_labels=False,
 ):
     """Draws a machine mesh in GMSH format
 
@@ -474,11 +479,12 @@ def draw_GMSH(
     model.add("Pyleecan")
 
     # build geometry
+    alpha = 0
     rotor_list = list()
-    rotor_list.extend(machine.shaft.build_geometry(sym=sym))
-    rotor_list.extend(machine.rotor.build_geometry(sym=sym))
+    rotor_list.extend(machine.shaft.build_geometry(sym=sym, alpha=alpha))
+    rotor_list.extend(machine.rotor.build_geometry(sym=sym, alpha=alpha))
     stator_list = list()
-    stator_list.extend(machine.stator.build_geometry(sym=sym))
+    stator_list.extend(machine.stator.build_geometry(sym=sym, alpha=alpha))
 
     # set origin
     oo = factory.addPoint(0, 0, 0, 0, tag=-1)
@@ -876,7 +882,7 @@ def draw_GMSH(
     # Set boundary conditions in gmsh lines
     for propname in boundary_list:
         bc_id = []
-        for s_id, s_data in gmsh_dict.items():
+        for s_data in gmsh_dict.values():
             for lvalues in s_data.values():
                 if type(lvalues) is not dict:
                     continue
@@ -885,6 +891,26 @@ def draw_GMSH(
         if bc_id:
             pg = model.addPhysicalGroup(1, bc_id)
             model.setPhysicalName(1, pg, propname)
+
+    # Set all line labels as physical groups
+    if is_set_labels:
+        groups = {}
+        for s_data in gmsh_dict.values():
+            for lvalues in s_data.values():
+                if (
+                    type(lvalues) is not dict
+                    or "label" not in lvalues
+                    or not lvalues["label"]
+                ):
+                    continue
+
+                if lvalues["label"] not in groups.keys():
+                    groups[lvalues["label"]] = []
+                groups[lvalues["label"]].append(abs(lvalues["tag"]))
+
+        for label, tags in groups.items():
+            pg = model.addPhysicalGroup(1, tags)
+            model.setPhysicalName(1, pg, label)
 
     factory.synchronize()
 
