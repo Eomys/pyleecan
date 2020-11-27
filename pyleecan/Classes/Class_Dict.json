@@ -10134,7 +10134,8 @@
             "get_meshsolution",
             "get_path_save_fea",
             "solve_FEA",
-            "init_model"
+            "init_model",
+            "preprocess_model"
         ],
         "mother": "Structural",
         "name": "StructElmer",
@@ -10151,10 +10152,10 @@
                 "value": 1
             },
             {
-                "desc": "Name of the file to save the FEA model",
+                "desc": "Name of the path to save the FEA model",
                 "max": "",
                 "min": "",
-                "name": "file_name",
+                "name": "path_name",
                 "type": "str",
                 "unit": "",
                 "value": ""

@@ -41,6 +41,11 @@ try:
 except ImportError as error:
     init_model = error
 
+try:
+    from ..Methods.Simulation.StructElmer.preprocess_model import preprocess_model
+except ImportError as error:
+    preprocess_model = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -104,6 +109,18 @@ class StructElmer(Structural):
         )
     else:
         init_model = init_model
+    # cf Methods.Simulation.StructElmer.preprocess_model
+    if isinstance(preprocess_model, ImportError):
+        preprocess_model = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use StructElmer method preprocess_model: "
+                    + str(preprocess_model)
+                )
+            )
+        )
+    else:
+        preprocess_model = preprocess_model
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -113,7 +130,7 @@ class StructElmer(Structural):
     def __init__(
         self,
         Kmesh_fineness=1,
-        file_name="",
+        path_name="",
         FEMM_dict_enforced=-1,
         is_get_mesh=False,
         is_save_FEA=False,
@@ -138,8 +155,8 @@ class StructElmer(Structural):
             # Overwrite default value with init_dict content
             if "Kmesh_fineness" in list(init_dict.keys()):
                 Kmesh_fineness = init_dict["Kmesh_fineness"]
-            if "file_name" in list(init_dict.keys()):
-                file_name = init_dict["file_name"]
+            if "path_name" in list(init_dict.keys()):
+                path_name = init_dict["path_name"]
             if "FEMM_dict_enforced" in list(init_dict.keys()):
                 FEMM_dict_enforced = init_dict["FEMM_dict_enforced"]
             if "is_get_mesh" in list(init_dict.keys()):
@@ -150,7 +167,7 @@ class StructElmer(Structural):
                 transform_list = init_dict["transform_list"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
-        self.file_name = file_name
+        self.path_name = path_name
         self.FEMM_dict_enforced = FEMM_dict_enforced
         self.is_get_mesh = is_get_mesh
         self.is_save_FEA = is_save_FEA
@@ -167,7 +184,7 @@ class StructElmer(Structural):
         # Get the properties inherited from Structural
         StructElmer_str += super(StructElmer, self).__str__()
         StructElmer_str += "Kmesh_fineness = " + str(self.Kmesh_fineness) + linesep
-        StructElmer_str += 'file_name = "' + str(self.file_name) + '"' + linesep
+        StructElmer_str += 'path_name = "' + str(self.path_name) + '"' + linesep
         StructElmer_str += (
             "FEMM_dict_enforced = " + str(self.FEMM_dict_enforced) + linesep
         )
@@ -192,7 +209,7 @@ class StructElmer(Structural):
             return False
         if other.Kmesh_fineness != self.Kmesh_fineness:
             return False
-        if other.file_name != self.file_name:
+        if other.path_name != self.path_name:
             return False
         if other.FEMM_dict_enforced != self.FEMM_dict_enforced:
             return False
@@ -210,7 +227,7 @@ class StructElmer(Structural):
         # Get the properties inherited from Structural
         StructElmer_dict = super(StructElmer, self).as_dict()
         StructElmer_dict["Kmesh_fineness"] = self.Kmesh_fineness
-        StructElmer_dict["file_name"] = self.file_name
+        StructElmer_dict["path_name"] = self.path_name
         StructElmer_dict["FEMM_dict_enforced"] = (
             self.FEMM_dict_enforced.copy()
             if self.FEMM_dict_enforced is not None
@@ -230,7 +247,7 @@ class StructElmer(Structural):
         """Set all the properties to None (except pyleecan object)"""
 
         self.Kmesh_fineness = None
-        self.file_name = None
+        self.path_name = None
         self.FEMM_dict_enforced = None
         self.is_get_mesh = None
         self.is_save_FEA = None
@@ -256,19 +273,19 @@ class StructElmer(Structural):
         """,
     )
 
-    def _get_file_name(self):
-        """getter of file_name"""
-        return self._file_name
+    def _get_path_name(self):
+        """getter of path_name"""
+        return self._path_name
 
-    def _set_file_name(self, value):
-        """setter of file_name"""
-        check_var("file_name", value, "str")
-        self._file_name = value
+    def _set_path_name(self, value):
+        """setter of path_name"""
+        check_var("path_name", value, "str")
+        self._path_name = value
 
-    file_name = property(
-        fget=_get_file_name,
-        fset=_set_file_name,
-        doc=u"""Name of the file to save the FEA model
+    path_name = property(
+        fget=_get_path_name,
+        fset=_set_path_name,
+        doc=u"""Name of the path to save the FEA model
 
         :Type: str
         """,
