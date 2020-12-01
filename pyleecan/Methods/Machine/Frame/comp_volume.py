@@ -19,4 +19,7 @@ def comp_volume(self):
     """
 
     Sfra = self.comp_surface()
-    return Sfra * self.Lfra
+    if self.Lfra is None:
+        return 0
+    else:
+        return Sfra * self.Lfra
