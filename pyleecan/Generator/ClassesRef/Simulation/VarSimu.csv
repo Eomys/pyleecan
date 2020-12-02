@@ -8,4 +8,5 @@ ref_simu_index,-,"Index of the reference simulation, if None the reference simul
 nb_simu,-,Number of simulations,0,int,0,,,,,,,,,
 is_reuse_femm_file,-,"True to reuse the femm file for each simulation (draw the machine only once, MagFEMM only)",0,bool,1,,,,,,,,,
 postproc_list,-,List of post-processing to run on XOutput after the multisimulation,0,[Post],,,,,,,,,,
-multi_simu_postproc_list,-,"If not None, replace the reference simulation postproc_list in each generated simulation",0,[Post],None,,,,,,,,,
+pre_keeper_postproc_list,-,"If not None, replace the reference simulation postproc_list in each generated simulation (run before datakeeper)",0,[Post],None,,,,,,,,,
+post_keeper_postproc_list,-,List of post-processing to run on output after each simulation (except reference one) after the datakeeper.,0,[Post],None,,,,,,,,,
