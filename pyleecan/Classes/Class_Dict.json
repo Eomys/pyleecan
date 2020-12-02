@@ -10755,10 +10755,19 @@
                 "value": ""
             },
             {
-                "desc": "If not None, replace the reference simulation postproc_list in each generated simulation",
+                "desc": "If not None, replace the reference simulation postproc_list in each generated simulation (run before datakeeper)",
                 "max": "",
                 "min": "",
-                "name": "multi_simu_postproc_list",
+                "name": "pre_keeper_postproc_list",
+                "type": "[Post]",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "List of post-processing to run on output after each simulation (except reference one) after the datakeeper.",
+                "max": "",
+                "min": "",
+                "name": "post_keeper_postproc_list",
                 "type": "[Post]",
                 "unit": "-",
                 "value": null
