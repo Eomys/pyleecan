@@ -7538,7 +7538,9 @@
             "jacobian",
             "grad_shape_function",
             "get_real_point",
-            "get_ref_point"
+            "is_inside",
+            "get_ref_point",
+            "get_normal"
         ],
         "mother": "RefCell",
         "name": "RefSegmentP1",
