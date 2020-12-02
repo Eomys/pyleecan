@@ -74,7 +74,6 @@ DELTA = 1e-4
 
 
 @pytest.mark.METHODS
-@pytest.mark.DEV
 class Test_Magnet_Type_15_meth(object):
     """unittest for MagnetType15 methods"""
 
