@@ -17,7 +17,7 @@ def get_notch_list(self, sym=1):
         list of dictionary with key: "begin_angle", "end_angle", "obj"
     """
 
-    if len(self.notch) == 0:  # No notch
+    if self.notch is None or len(self.notch) == 0:  # No notch
         return list()
     else:
         notch_list = self.notch[0].get_notch_list(sym=sym)
