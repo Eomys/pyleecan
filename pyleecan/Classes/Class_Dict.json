@@ -4900,7 +4900,8 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "comp_height"
+            "comp_height",
+            "comp_angle_opening"
         ],
         "mother": "MagnetPolar",
         "name": "MagnetType15",

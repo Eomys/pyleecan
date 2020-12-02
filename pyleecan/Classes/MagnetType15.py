@@ -26,6 +26,11 @@ try:
 except ImportError as error:
     comp_height = error
 
+try:
+    from ..Methods.Machine.MagnetType15.comp_angle_opening import comp_angle_opening
+except ImportError as error:
+    comp_angle_opening = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -62,6 +67,18 @@ class MagnetType15(MagnetPolar):
         )
     else:
         comp_height = comp_height
+    # cf Methods.Machine.MagnetType15.comp_angle_opening
+    if isinstance(comp_angle_opening, ImportError):
+        comp_angle_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagnetType15 method comp_angle_opening: "
+                    + str(comp_angle_opening)
+                )
+            )
+        )
+    else:
+        comp_angle_opening = comp_angle_opening
     # save and copy methods are available in all object
     save = save
     copy = copy
