@@ -3,4 +3,6 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 ,,,,,,,,,,,jacobian,,,
 ,,,,,,,,,,,grad_shape_function,,,
 ,,,,,,,,,,,get_real_point,,,
+,,,,,,,,,,,is_inside,,,
 ,,,,,,,,,,,get_ref_point,,,
+,,,,,,,,,,,get_normal,,,
