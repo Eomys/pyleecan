@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from ....Methods.Machine.Winding import WindingError
+from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
+from ....Functions.Winding.shift_wind_mat import shift_wind_mat
+
+from numpy import tile
 
 
 def comp_connection_mat(self, Zs=None):
@@ -48,11 +52,15 @@ def comp_connection_mat(self, Zs=None):
     wind_mat = self.user_wind_mat
 
     shape = wind_mat.shape
-    if shape[2] != Zs:
+    if Zs % shape[2]:
         raise WindingT0DefShapeError(
             "wrong winding definition, wrong "
             "user_wind_mat shape, must be (Nlay_rad, "
-            "Nlay_tan, Zs,qs), Zs = " + str(Zs) + " but " + str(shape) + " given !"
+            "Nlay_tan, integer*Zs,qs), Zs = "
+            + str(Zs)
+            + " but "
+            + str(shape)
+            + " given !"
         )
     elif shape[3] != self.qs:
         raise WindingT0DefShapeError(
@@ -66,6 +74,9 @@ def comp_connection_mat(self, Zs=None):
             "wrong winding definition, the sum of the "
             "element in user_wind_mat isn't null !"
         )
+
+    # tile
+    wind_mat = tile(wind_mat, [1, 1, Zs // wind_mat.shape[2], 1])
 
     # Apply the transformations
     if self.is_reverse_wind:
