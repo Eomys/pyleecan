@@ -6474,6 +6474,15 @@
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "V",
                 "value": "None"
+            },
+            {
+                "desc": "OutInternal object containg outputs related to a specific model",
+                "max": "",
+                "min": "",
+                "name": "internal",
+                "type": "OutInternal",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -6979,6 +6988,15 @@
                 "type": "dict",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "List of FEMM Handler (more than 1 if nb_worker >1)",
+                "max": "",
+                "min": "",
+                "name": "handler_list",
+                "type": "[_FEMMHandler]",
+                "unit": "",
+                "value": ""
             }
         ]
     },
