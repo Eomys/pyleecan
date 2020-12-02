@@ -290,10 +290,14 @@ class Arc2(Arc):
         Arc2_dict = super(Arc2, self).as_dict()
         if self.begin is None:
             Arc2_dict["begin"] = None
+        elif isinstance(self.begin, float):
+            Arc2_dict["begin"] = self.begin
         else:
             Arc2_dict["begin"] = str(self.begin)
         if self.center is None:
             Arc2_dict["center"] = None
+        elif isinstance(self.center, float):
+            Arc2_dict["center"] = self.center
         else:
             Arc2_dict["center"] = str(self.center)
         Arc2_dict["angle"] = self.angle

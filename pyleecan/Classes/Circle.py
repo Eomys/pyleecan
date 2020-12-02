@@ -242,6 +242,8 @@ class Circle(Surface):
         Circle_dict["radius"] = self.radius
         if self.center is None:
             Circle_dict["center"] = None
+        elif isinstance(self.center, float):
+            Circle_dict["center"] = self.center
         else:
             Circle_dict["center"] = str(self.center)
         Circle_dict["line_label"] = self.line_label
