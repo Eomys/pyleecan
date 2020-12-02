@@ -21,4 +21,7 @@ def comp_mass(self):
     Vfra = self.comp_volume()
 
     # Mass computation
-    return Vfra * self.mat_type.struct.rho
+    if Vfra == 0:
+        return 0
+    else:
+        return Vfra * self.mat_type.struct.rho

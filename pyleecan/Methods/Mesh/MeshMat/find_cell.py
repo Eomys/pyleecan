@@ -38,6 +38,7 @@ def find_cell(self, points, nb_pt, normal_t=None):
             cells = self.cell[key]
             ref_cell = cells.interpolation.ref_cell
             connect = cells.connectivity
+            nb_pt_per_cell = cells.nb_pt_per_cell
             # vertice0 = point_coord[connect[0]]
             # dist_ref = np.sqrt(
             #     np.square(vertice0[0, 0] - vertice0[1, 0])
@@ -46,13 +47,24 @@ def find_cell(self, points, nb_pt, normal_t=None):
 
             # compute the distance of all nodes to the current point 'pt'
             point_rep = np.tile(pt, (nb_tot_pt, 1))
-            dist_node = np.reshape(
-                np.sqrt(
-                    np.square(point_coord[:, 0] - point_rep[:, 0])
-                    + np.square(point_coord[:, 1] - point_rep[:, 1])
-                ),
-                (nb_tot_pt, 1),
-            )
+
+            if self.dimension == 3:
+                dist_node = np.reshape(
+                    np.sqrt(
+                        np.square(point_coord[:, 0] - point_rep[:, 0])
+                        + np.square(point_coord[:, 1] - point_rep[:, 1])
+                        + np.square(point_coord[:, 2] - point_rep[:, 2])
+                    ),
+                    (nb_tot_pt, 1),
+                )
+            else:
+                dist_node = np.reshape(
+                    np.sqrt(
+                        np.square(point_coord[:, 0] - point_rep[:, 0])
+                        + np.square(point_coord[:, 1] - point_rep[:, 1])
+                    ),
+                    (nb_tot_pt, 1),
+                )
             # min_dist = np.min(dist_node)
             # min_node = np.where(dist_node == min_dist)[0]
             Imin_node = np.argsort(dist_node, axis=0)
@@ -84,17 +96,30 @@ def find_cell(self, points, nb_pt, normal_t=None):
             # TODO first check if outside mesh
             if len(cell_prop) == 0:
                 # test all cells (sorted by center, i.e. mean of vertices)
-                vert_cent = (
-                    point_coord[connect[:, 0]]
-                    + point_coord[connect[:, 1]]
-                    + point_coord[connect[:, 2]]
-                ) / 3
-                dist_vert_cent = np.reshape(
-                    np.sqrt(
-                        (vert_cent[:, 0] - pt[0]) ** 2 + (vert_cent[:, 1] - pt[1]) ** 2
-                    ),
-                    (cells.nb_cell, 1),
-                )
+                vert_cent = np.zeros(pt.shape)
+                for icell in range(nb_pt_per_cell):
+                    vert_cent = (
+                        vert_cent + point_coord[connect[:, icell]] / nb_pt_per_cell
+                    )
+
+                if self.dimension == 3:
+                    dist_vert_cent = np.reshape(
+                        np.sqrt(
+                            (vert_cent[:, 0] - pt[0]) ** 2
+                            + (vert_cent[:, 1] - pt[1]) ** 2
+                            + (vert_cent[:, 2] - pt[2]) ** 2
+                        ),
+                        (cells.nb_cell, 1),
+                    )
+                else:
+                    dist_vert_cent = np.reshape(
+                        np.sqrt(
+                            (vert_cent[:, 0] - pt[0]) ** 2
+                            + (vert_cent[:, 1] - pt[1]) ** 2
+                        ),
+                        (cells.nb_cell, 1),
+                    )
+
                 Imin_vert_cent = np.argsort(dist_vert_cent, axis=0)[:, 0]
                 i = 0
                 is_inside = False

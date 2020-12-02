@@ -92,6 +92,7 @@ from ..Classes.MagnetType11 import MagnetType11
 from ..Classes.MagnetType12 import MagnetType12
 from ..Classes.MagnetType13 import MagnetType13
 from ..Classes.MagnetType14 import MagnetType14
+from ..Classes.MagnetType15 import MagnetType15
 from ..Classes.Magnetics import Magnetics
 from ..Classes.MatEconomical import MatEconomical
 from ..Classes.MatElectrical import MatElectrical

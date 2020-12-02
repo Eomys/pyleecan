@@ -94,6 +94,7 @@ load_switch = {
     "MagnetType12": MagnetType12,
     "MagnetType13": MagnetType13,
     "MagnetType14": MagnetType14,
+    "MagnetType15": MagnetType15,
     "Magnetics": Magnetics,
     "MatEconomical": MatEconomical,
     "MatElectrical": MatElectrical,
