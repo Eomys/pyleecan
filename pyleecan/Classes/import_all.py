@@ -18,14 +18,7 @@ from ..Classes.CondType21 import CondType21
 from ..Classes.CondType22 import CondType22
 from ..Classes.Conductor import Conductor
 from ..Classes.DXFImport import DXFImport
-from ..Classes.Data import Data
-from ..Classes.Data1D import Data1D
-from ..Classes.DataFreq import DataFreq
 from ..Classes.DataKeeper import DataKeeper
-from ..Classes.DataLinspace import DataLinspace
-from ..Classes.DataND import DataND
-from ..Classes.DataPattern import DataPattern
-from ..Classes.DataTime import DataTime
 from ..Classes.Drive import Drive
 from ..Classes.DriveWave import DriveWave
 from ..Classes.EEC import EEC
@@ -142,7 +135,6 @@ from ..Classes.PostPlot import PostPlot
 from ..Classes.RefCell import RefCell
 from ..Classes.RefSegmentP1 import RefSegmentP1
 from ..Classes.RefTriangle3 import RefTriangle3
-from ..Classes.RequestedAxis import RequestedAxis
 from ..Classes.ScalarProduct import ScalarProduct
 from ..Classes.ScalarProductL2 import ScalarProductL2
 from ..Classes.Segment import Segment
@@ -191,7 +183,6 @@ from ..Classes.VarLoad import VarLoad
 from ..Classes.VarLoadCurrent import VarLoadCurrent
 from ..Classes.VarParam import VarParam
 from ..Classes.VarSimu import VarSimu
-from ..Classes.VectorField import VectorField
 from ..Classes.VentilationCirc import VentilationCirc
 from ..Classes.VentilationPolar import VentilationPolar
 from ..Classes.VentilationTrap import VentilationTrap
