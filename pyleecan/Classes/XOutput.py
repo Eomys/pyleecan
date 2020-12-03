@@ -527,12 +527,9 @@ class XOutput(Output):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.paramexplorer_list:
-            obj._set_None()
-        for obj in self.output_list:
-            obj._set_None()
-        for key, obj in self.xoutput_dict.items():
-            obj._set_None()
+        self.paramexplorer_list = None
+        self.output_list = None
+        self.xoutput_dict = None
         self.nb_simu = None
         # Set to None the properties inherited from Output
         super(XOutput, self)._set_None()

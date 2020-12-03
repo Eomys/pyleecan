@@ -221,16 +221,12 @@ class OptiProblem(FrozenClass):
 
         if self.simu is not None:
             self.simu._set_None()
-        for obj in self.design_var:
-            obj._set_None()
-        for obj in self.obj_func:
-            obj._set_None()
+        self.design_var = None
+        self.obj_func = None
         self.eval_func = None
-        for obj in self.constraint:
-            obj._set_None()
+        self.constraint = None
         self.preprocessing = None
-        for obj in self.datakeeper_list:
-            obj._set_None()
+        self.datakeeper_list = None
 
     def _get_simu(self):
         """getter of simu"""

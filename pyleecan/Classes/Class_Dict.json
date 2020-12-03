@@ -2814,6 +2814,24 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "To read axes in first line/column",
+                "max": "",
+                "min": "",
+                "name": "axes_colrows",
+                "type": "dict",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "To read all sheets in a 3D matrix",
+                "max": "",
+                "min": "",
+                "name": "is_allsheets",
+                "type": "bool",
+                "unit": "-",
+                "value": false
             }
         ]
     },
@@ -3238,7 +3256,8 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "comp_felec"
+            "comp_felec",
+            "comp_axes"
         ],
         "mother": "Input",
         "name": "InputFlux",
@@ -3246,13 +3265,58 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
         "properties": [
             {
-                "desc": "Airgap flux density",
+                "desc": "Angle periodicity",
                 "max": "",
                 "min": "",
-                "name": "B",
-                "type": "ImportVectorField",
-                "unit": "T",
+                "name": "per_a",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Time periodicity",
+                "max": "",
+                "min": "",
+                "name": "per_t",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "If angle is antiperiodic",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            },
+            {
+                "desc": "If time is antiperiodic",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_t",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            },
+            {
+                "desc": "Dict of Import objects or lists for each component of the flux",
+                "max": "",
+                "min": "",
+                "name": "B_dict",
+                "type": "dict",
+                "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Unit of the flux if not T",
+                "max": "",
+                "min": "",
+                "name": "unit",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
             },
             {
                 "desc": "InputCurrent to define Operating Point (not mandatory)",
@@ -3261,6 +3325,15 @@
                 "name": "OP",
                 "type": "Input",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Rotation speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "float",
+                "unit": "rpm",
                 "value": null
             }
         ]
@@ -4531,7 +4604,8 @@
             "MagnetType11",
             "MagnetType12",
             "MagnetType13",
-            "MagnetType14"
+            "MagnetType14",
+            "MagnetType15"
         ],
         "desc": "abstract class of magnets",
         "is_internal": false,
@@ -4609,7 +4683,8 @@
         ],
         "daughters": [
             "MagnetType11",
-            "MagnetType14"
+            "MagnetType14",
+            "MagnetType15"
         ],
         "desc": "abstract class of magnets with polar base",
         "is_internal": false,
@@ -4856,6 +4931,63 @@
                 "name": "Wmag",
                 "type": "float",
                 "unit": "rad",
+                "value": 0.002
+            },
+            {
+                "desc": "magnet radial height [m]",
+                "max": "",
+                "min": "0",
+                "name": "Hmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "radius of the circular top shape [m]",
+                "max": "",
+                "min": "0",
+                "name": "Rtop",
+                "type": "float",
+                "unit": "m",
+                "value": 0.05
+            }
+        ]
+    },
+    "MagnetType15": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_FLAT_BOT",
+                "value": "0"
+            },
+            {
+                "name": "IS_FLAT_TOP",
+                "value": "0"
+            }
+        ],
+        "daughters": [],
+        "desc": "single magnet with polar base and curved-top shape and parallel sides",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "comp_height",
+            "comp_angle_opening"
+        ],
+        "mother": "MagnetPolar",
+        "name": "MagnetType15",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType15.csv",
+        "properties": [
+            {
+                "desc": "magnet width [m]",
+                "max": "",
+                "min": "0",
+                "name": "Wmag",
+                "type": "float",
+                "unit": "m",
                 "value": 0.002
             },
             {
@@ -5582,7 +5714,7 @@
                 "name": "group",
                 "type": "{ndarray}",
                 "unit": "",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Dimension of the physical problem",
@@ -5624,7 +5756,7 @@
                 "max": "",
                 "min": "",
                 "name": "mesh",
-                "type": "pyvista.core.pointset.UnstructuredGrid",
+                "type": "pyvista.core.pointset.PointGrid",
                 "unit": "",
                 "value": "None"
             },
@@ -6072,7 +6204,7 @@
                 "name": "obj_func",
                 "type": "[DataKeeper]",
                 "unit": "",
-                "value": -1
+                "value": ""
             },
             {
                 "desc": "Function to evaluate before computing obj function and constraints",
@@ -6090,7 +6222,7 @@
                 "name": "constraint",
                 "type": "[OptiConstraint]",
                 "unit": "",
-                "value": -1
+                "value": ""
             },
             {
                 "desc": "Function to execute a preprocessing on the simulation right before it is run.",
@@ -6108,7 +6240,7 @@
                 "name": "datakeeper_list",
                 "type": "[DataKeeper]",
                 "unit": "",
-                "value": -1
+                "value": ""
             }
         ]
     },
@@ -6642,6 +6774,26 @@
             }
         ]
     },
+    "OutInternal": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "OutMagElmer",
+            "OutMagFEMM"
+        ],
+        "desc": "Abstract class whose childs enable to store outputs related to a specific model",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "OutInternal",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutInternal.csv",
+        "properties": []
+    },
     "OutMag": {
         "constants": [
             {
@@ -6653,8 +6805,9 @@
         "desc": "Gather the magnetic module outputs",
         "is_internal": false,
         "methods": [
-            "comp_emf",
-            "store"
+            "store",
+            "clean",
+            "comp_emf"
         ],
         "mother": "",
         "name": "OutMag",
@@ -6752,15 +6905,6 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing the main FEA parameter",
-                "max": "",
-                "min": "",
-                "name": "FEA_dict",
-                "type": "dict",
-                "unit": "",
-                "value": null
-            },
-            {
                 "desc": "Name of the logger to use",
                 "max": "",
                 "min": "",
@@ -6768,6 +6912,73 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutMag"
+            },
+            {
+                "desc": "OutInternal object containg outputs related to a specific model",
+                "max": "",
+                "min": "",
+                "name": "internal",
+                "type": "OutInternal",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "OutMagElmer": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to store outputs related to MagElmer magnetic model",
+        "is_internal": false,
+        "methods": [
+            "clean"
+        ],
+        "mother": "OutInternal",
+        "name": "OutMagElmer",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutMagElmer.csv",
+        "properties": [
+            {
+                "desc": "Dictionnary containing the main FEA parameters",
+                "max": "",
+                "min": "",
+                "name": "FEA_dict",
+                "type": "dict",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "OutMagFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to store outputs related to MagFEMM magnetic model",
+        "is_internal": false,
+        "methods": [
+            "clean"
+        ],
+        "mother": "OutInternal",
+        "name": "OutMagFEMM",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutMagFEMM.csv",
+        "properties": [
+            {
+                "desc": "Dictionnary containing the main FEMM parameters",
+                "max": "",
+                "min": "",
+                "name": "FEMM_dict",
+                "type": "dict",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -6939,7 +7150,8 @@
             "getter.get_fund_harm",
             "plot.plot_A_quiver_2D",
             "plot.plot_3D_Data",
-            "plot.plot_A_time_space"
+            "plot.plot_A_time_space",
+            "getter.get_data_from_str"
         ],
         "mother": "",
         "name": "Output",
@@ -7403,7 +7615,9 @@
             "jacobian",
             "grad_shape_function",
             "get_real_point",
-            "get_ref_point"
+            "is_inside",
+            "get_ref_point",
+            "get_normal"
         ],
         "mother": "RefCell",
         "name": "RefSegmentP1",
@@ -10021,7 +10235,7 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axis"
+            "get_axes_list"
         ],
         "mother": "Solution",
         "name": "SolutionData",
@@ -10053,7 +10267,7 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axis"
+            "get_axes_list"
         ],
         "mother": "Solution",
         "name": "SolutionMat",
@@ -10079,11 +10293,20 @@
                 "value": null
             },
             {
-                "desc": "Dict of axis names storing axis sizes (e.g. time, direction )",
+                "desc": "List of axis names (e.g. \"time\", \"direction\")",
                 "max": "",
                 "min": "",
-                "name": "axis",
-                "type": "dict",
+                "name": "axis_name",
+                "type": "list",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "List of axis sizes",
+                "max": "",
+                "min": "",
+                "name": "axis_size",
+                "type": "list",
                 "unit": "-",
                 "value": null
             }
@@ -10101,7 +10324,7 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axis"
+            "get_axes_list"
         ],
         "mother": "Solution",
         "name": "SolutionVector",
@@ -10678,6 +10901,24 @@
                 "type": "[Post]",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "If not None, replace the reference simulation postproc_list in each generated simulation (run before datakeeper)",
+                "max": "",
+                "min": "",
+                "name": "pre_keeper_postproc_list",
+                "type": "[Post]",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "List of post-processing to run on output after each simulation (except reference one) after the datakeeper.",
+                "max": "",
+                "min": "",
+                "name": "post_keeper_postproc_list",
+                "type": "[Post]",
+                "unit": "-",
+                "value": null
             }
         ]
     },

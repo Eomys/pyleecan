@@ -155,6 +155,7 @@ def test_gmsh_mesh_dict():
     # opened in Gmsh
 
 
+@pytest.mark.skip
 @pytest.mark.GMSH
 @pytest.mark.long
 def test_SlotMulti_sym():

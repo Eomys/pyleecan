@@ -3,7 +3,7 @@ from ...Classes.Arc2 import Arc2
 from ...Classes.MachineSIPMSM import MachineSIPMSM
 
 from ...Functions.GMSH import InputError
-from ...Functions.GMSH import boundary_prop, boundary_list
+from ...Functions.GMSH import boundary_prop, boundary_list, surface_label
 from ...Functions.GMSH.get_sliding_band import get_sliding_band
 from ...Functions.GMSH.get_air_box import get_air_box
 from ...Functions.GMSH.get_boundary_condition import get_boundary_condition
@@ -510,7 +510,11 @@ def draw_GMSH(
     if not is_lam_only_S:
         for surf in rotor_list:
             nsurf += 1
-            gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
+            gmsh_dict.update({nsurf: {"tag": None,
+                                      "label": surface_label.get(surf.label, "UNKNOWN"),
+                                      }
+                              }
+                             )
             if "Lamination_Rotor" in surf.label:
                 gmsh_dict[nsurf]["with_holes"] = True
                 lam_rotor_surf_id = nsurf
@@ -593,18 +597,18 @@ def draw_GMSH(
             cloop = factory.addCurveLoop(lloop)
 
             # search for the holes to substract from rotor lam
-            if "Lamination_Rotor" in s_data["label"]:
+            if "ROTOR_LAM" in s_data["label"]:
                 ext_lam_loop = cloop
             else:
                 # MachineSIPSM does not have holes in rotor lam
                 # only shaft is taken out if symmetry is one
                 if isinstance(machine, MachineSIPMSM):
-                    if sym == 1 and s_data["label"] == "Shaft":
+                    if sym == 1 and s_data["label"] == "SHAFT":
                         lam_and_holes.extend([cloop])
                 else:
                     if sym == 1:
                         lam_and_holes.extend([cloop])
-                    elif s_data["label"] != "Shaft":
+                    elif s_data["label"] != "SHAFT":
                         lam_and_holes.extend([cloop])
                     else:
                         pass
@@ -650,7 +654,11 @@ def draw_GMSH(
         stator_cloops = []
         for surf in stator_list:
             nsurf += 1
-            gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
+            gmsh_dict.update({nsurf: {"tag": None,
+                                      "label": surface_label.get(surf.label, "UNKNOWN"),
+                                      }
+                              }
+                             )
             if surf.label.find("Lamination_Stator") != -1:
                 gmsh_dict[nsurf]["with_holes"] = True
             else:
@@ -722,7 +730,7 @@ def draw_GMSH(
             stator_cloops.append(cloop)
 
             # Winding surfaces are created
-            if (s_data["label"].find("Lamination_Stator") != -1) or (not is_lam_only_S):
+            if (s_data["label"].find("STATOR_LAM") != -1) or (not is_lam_only_S):
                 s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
                 pg = model.addPhysicalGroup(2, [s_data["tag"]])
                 model.setPhysicalName(2, pg, s_data["label"])
@@ -741,7 +749,11 @@ def draw_GMSH(
     # nsurf = 0
     for surf in sb_list:
         nsurf += 1
-        gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
+        gmsh_dict.update({nsurf: {"tag": None,
+                                  "label": surface_label.get(surf.label, "UNKNOWN"),
+                                  }
+                          }
+                         )
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
             n_elem = n_elem if n_elem is not None else 0
@@ -790,7 +802,7 @@ def draw_GMSH(
         lloop = []
         # skip this surface dataset if it is the origin
         if s_data["label"] == "origin" or not (
-            "Airgap" in s_data["label"] or "SlidingBand" in s_data["label"]
+            "AG_" in s_data["label"] or "SB_" in s_data["label"]
         ):
             continue
 
@@ -815,7 +827,11 @@ def draw_GMSH(
     mesh_size = machine.stator.Rext / 50.0
     for surf in ab_list:
         nsurf += 1
-        gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
+        gmsh_dict.update({nsurf: {"tag": None,
+                                  "label": surface_label.get(surf.label, "UNKNOWN"),
+                                  }
+                          }
+                         )
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
             n_elem = n_elem if n_elem is not None else 0
@@ -867,7 +883,7 @@ def draw_GMSH(
         if s_id == 0:
             continue
         for lvalues in s_data.values():
-            if s_data["label"].find("Airbox") != -1:
+            if s_data["label"].find("AIRBOX") != -1:
                 if type(lvalues) is not dict:
                     continue
                 lloop.extend([lvalues["tag"]])
@@ -926,5 +942,4 @@ def draw_GMSH(
 
     # gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()
-
     return gmsh_dict

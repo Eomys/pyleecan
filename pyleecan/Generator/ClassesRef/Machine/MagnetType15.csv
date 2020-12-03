@@ -1,0 +1,4 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Wmag,m,magnet width [m],0,float,2.00E-03,0,,,Machine,MagnetPolar,build_geometry,VERSION,1,single magnet with polar base and curved-top shape and parallel sides
+Hmag,m,magnet radial height [m],0,float,1.00E-03,0,,,,,comp_height,IS_FLAT_BOT,0,
+Rtop,m,radius of the circular top shape [m],0,float,5.00E-02,0,,,,,comp_angle_opening,IS_FLAT_TOP,0,

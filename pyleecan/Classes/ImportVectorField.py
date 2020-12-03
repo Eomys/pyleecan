@@ -137,8 +137,7 @@ class ImportVectorField(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for key, obj in self.components.items():
-            obj._set_None()
+        self.components = None
         self.name = None
         self.symbol = None
 

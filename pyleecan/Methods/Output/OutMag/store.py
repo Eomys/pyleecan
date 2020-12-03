@@ -109,10 +109,6 @@ def store(self, out_dict, axes_dict):
         # Electromotive force computation
         self.comp_emf()
 
-    # Store FEA dict object
-    if "FEA_dict" in out_dict:
-        self.FEA_dict = out_dict.pop("FEA_dict")
-
     # Store MeshSolution object
     if "meshsolution" in out_dict:
         self.meshsolution = out_dict.pop("meshsolution")

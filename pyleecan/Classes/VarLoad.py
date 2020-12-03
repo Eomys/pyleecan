@@ -96,6 +96,8 @@ class VarLoad(VarSimu):
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
+        pre_keeper_postproc_list=None,
+        post_keeper_postproc_list=None,
         init_dict=None,
         init_str=None,
     ):
@@ -132,6 +134,10 @@ class VarLoad(VarSimu):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
+            if "pre_keeper_postproc_list" in list(init_dict.keys()):
+                pre_keeper_postproc_list = init_dict["pre_keeper_postproc_list"]
+            if "post_keeper_postproc_list" in list(init_dict.keys()):
+                post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
         # Set the properties (value check and convertion are done in setter)
         # Call VarSimu init
         super(VarLoad, self).__init__(
@@ -144,6 +150,8 @@ class VarLoad(VarSimu):
             nb_simu=nb_simu,
             is_reuse_femm_file=is_reuse_femm_file,
             postproc_list=postproc_list,
+            pre_keeper_postproc_list=pre_keeper_postproc_list,
+            post_keeper_postproc_list=post_keeper_postproc_list,
         )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties

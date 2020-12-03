@@ -53,13 +53,26 @@ def generate_eq(gen_dict, class_dict):
         elif prop["type"] == "[ndarray]":
             eq_str += (
                 TAB2
-                + "if other."
+                + "if (other."
                 + prop["name"]
                 + " is None and self."
                 + prop["name"]
-                + " is not None:\n"
+                + " is not None) or (other."
+                + prop["name"]
+                + " is not None and self."
+                + prop["name"]
+                + " is None):\n"
             )
             eq_str += TAB3 + "return False\n"
+            eq_str += (
+                TAB2
+                + "elif other."
+                + prop["name"]
+                + " is None and self."
+                + prop["name"]
+                + " is None:\n"
+            )
+            eq_str += TAB3 + "return True\n"
             eq_str += (
                 TAB2
                 + "elif len(other."
@@ -83,13 +96,26 @@ def generate_eq(gen_dict, class_dict):
         elif prop["type"] == "{ndarray}":
             eq_str += (
                 TAB2
-                + "if other."
+                + "if (other."
                 + prop["name"]
                 + " is None and self."
                 + prop["name"]
-                + " is not None:\n"
+                + " is not None) or (other."
+                + prop["name"]
+                + " is not None and self."
+                + prop["name"]
+                + " is None):\n"
             )
             eq_str += TAB3 + "return False\n"
+            eq_str += (
+                TAB2
+                + "elif other."
+                + prop["name"]
+                + " is None and self."
+                + prop["name"]
+                + " is None:\n"
+            )
+            eq_str += TAB3 + "return True\n"
             eq_str += (
                 TAB2
                 + "elif len(other."

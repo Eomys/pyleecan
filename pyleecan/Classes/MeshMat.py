@@ -268,8 +268,7 @@ class MeshMat(Mesh):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for key, obj in self.cell.items():
-            obj._set_None()
+        self.cell = None
         if self.point is not None:
             self.point._set_None()
         # Set to None the properties inherited from Mesh
