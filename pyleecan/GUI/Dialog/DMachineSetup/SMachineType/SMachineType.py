@@ -125,8 +125,11 @@ class SMachineType(Gen_SMachineType, QWidget):
         if type(self.machine) is MachineSIPMSM:
             self.machine.rotor.slot.Zs = 2 * value
         elif type(self.machine) in [MachineIPMSM, MachineSyRM]:
-            for hole in self.machine.rotor.hole:
-                hole.Zh = 2 * value
+            if self.machine.rotor.hole is None:
+                self.machine.rotor.hole = list()
+            else:
+                for hole in self.machine.rotor.hole:
+                    hole.Zh = 2 * value
         elif self.machine.type_machine == 10:
             pass
         else:
@@ -170,7 +173,7 @@ class SMachineType(Gen_SMachineType, QWidget):
             self.set_p()
         # Update the GUI with the new machine
         self.parent().machine = self.machine
-        self.parent().update_nav()
+        self.parent().update_nav(next_step=0)
         if self.parent() is not None:
             self.parent().main_layout.removeWidget(self)
 

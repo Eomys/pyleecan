@@ -290,10 +290,14 @@ class Arc3(Arc):
         Arc3_dict = super(Arc3, self).as_dict()
         if self.begin is None:
             Arc3_dict["begin"] = None
+        elif isinstance(self.begin, float):
+            Arc3_dict["begin"] = self.begin
         else:
             Arc3_dict["begin"] = str(self.begin)
         if self.end is None:
             Arc3_dict["end"] = None
+        elif isinstance(self.end, float):
+            Arc3_dict["end"] = self.end
         else:
             Arc3_dict["end"] = str(self.end)
         Arc3_dict["is_trigo_direction"] = self.is_trigo_direction

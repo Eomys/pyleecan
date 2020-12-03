@@ -346,6 +346,20 @@ class TestSMachineType(object):
         assert setup["widget"].machine.stator.winding.type_connection == None
         assert setup["widget"].machine.stator.winding.Lewout == None
 
+    @pytest.mark.skip(reason="Need to have DMachineSetup as parent")
+    def test_set_type_ipmsm(self, setup):
+        """Check that you can define an IPMSM machine"""
+        setup["widget"].c_type.setCurrentText("IPMSM")
+        # Clear the field before writing the new value
+        setup["widget"].si_p.clear()
+        value = int(uniform(3, 100))
+        QTest.keyClicks(setup["widget"].si_p, str(value))
+        setup["widget"].si_p.editingFinished.emit()  # To trigger the slot
+
+        assert setup["widget"].machine.stator.winding.p == value
+        assert type(setup["widget"].machine) is MachineIPMSM
+        assert setup["widget"].machine.rotor.hole == list()
+
     # def test_set_c_type(self, setup):
     #     """Check that the Widget allow to update c_type when changing value in the combobox"""
     #     # SIPMSM

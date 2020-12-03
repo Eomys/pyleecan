@@ -308,10 +308,14 @@ class Segment(Line):
         Segment_dict = super(Segment, self).as_dict()
         if self.begin is None:
             Segment_dict["begin"] = None
+        elif isinstance(self.begin, float):
+            Segment_dict["begin"] = self.begin
         else:
             Segment_dict["begin"] = str(self.begin)
         if self.end is None:
             Segment_dict["end"] = None
+        elif isinstance(self.end, float):
+            Segment_dict["end"] = self.end
         else:
             Segment_dict["end"] = str(self.end)
         # The class name is added to the dict for deserialisation purpose
