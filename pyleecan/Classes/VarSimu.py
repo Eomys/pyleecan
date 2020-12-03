@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -251,6 +252,31 @@ class VarSimu(FrozenClass):
         if other.post_keeper_postproc_list != self.post_keeper_postproc_list:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.name)
+        S += getsizeof(self.desc)
+        if self.datakeeper_list is not None:
+            for value in self.datakeeper_list:
+                S += getsizeof(value)
+        S += getsizeof(self.is_keep_all_output)
+        S += getsizeof(self.stop_if_error)
+        S += getsizeof(self.ref_simu_index)
+        S += getsizeof(self.nb_simu)
+        S += getsizeof(self.is_reuse_femm_file)
+        if self.postproc_list is not None:
+            for value in self.postproc_list:
+                S += getsizeof(value)
+        if self.pre_keeper_postproc_list is not None:
+            for value in self.pre_keeper_postproc_list:
+                S += getsizeof(value)
+        if self.post_keeper_postproc_list is not None:
+            for value in self.post_keeper_postproc_list:
+                S += getsizeof(value)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

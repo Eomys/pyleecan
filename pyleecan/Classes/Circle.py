@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -233,6 +234,18 @@ class Circle(Surface):
         if other.line_label != self.line_label:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Surface
+        S += super(Circle, self).__sizeof__()
+        S += getsizeof(self.radius)
+        S += getsizeof(self.center)
+        S += getsizeof(self.line_label)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
