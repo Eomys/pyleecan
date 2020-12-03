@@ -139,7 +139,7 @@ def test_EM_FEMM_IPMSM_varload():
         is_show_fig=False,
     )
 
-    Xout.print_memory(detail_level=2)
+    Xout.print_memory(detail_level=4)
     return Xout
 
 
