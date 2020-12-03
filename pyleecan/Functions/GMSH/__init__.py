@@ -39,7 +39,8 @@ boundary_prop["ext_sb_arc"] = "SB_STATOR_BOUNDARY"
 boundary_prop["ext_airgap_arc_copy"] = "AIRGAP_ARC_BOUNDARY"
 boundary_prop["airbox_arc"] = "VP0_BOUNDARY"
 
-
+# dict for the translation of the actual surface labels into Elmer compatible labels,
+# i.e. max. 30 characters; key: actual label, value: Elmer label
 surface_label = dict()
 surface_label["Shaft"] = "SHAFT"
 surface_label["Lamination_Rotor_Bore_Radius_Ext"] = "ROTOR_LAM"
@@ -50,6 +51,7 @@ surface_label["SlidingBand_ext"] = "SB_EXT"
 surface_label["Airgap_ext"] = "AG_EXT"
 surface_label["Airbox"] = "AIRBOX"
 
+# TODO: use actual surface labels
 for rr in range(0,20):
     for tt in range(0,20):
         for ss in range(0,100):
