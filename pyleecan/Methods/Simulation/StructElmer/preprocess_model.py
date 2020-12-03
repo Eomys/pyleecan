@@ -82,7 +82,7 @@ def _get_names_physical(gmsh, dimtag):
 
 
 def preprocess_model(
-    file_in, file_out, is_get_lam=True, is_get_magnet=False, is_hole_air=True
+    self, file_in, file_out, is_get_lam=True, is_get_magnet=False, is_hole_air=True
 ):
 
     gmsh.initialize(sys.argv)

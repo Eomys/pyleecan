@@ -4,6 +4,7 @@ import subprocess
 
 from ....Methods.Simulation.Input import InputError
 from ....Functions.GMSH.draw_GMSH import draw_GMSH
+from ....Functions.get_path_binary import get_path_binary
 
 
 def init_model(self, output):
@@ -68,28 +69,28 @@ def init_model(self, output):
     )
 
     # preprocess GMSH model to get rotor lamination and magnet and set boundary names
-    file_gmsh_lam = join(save_dir, "lamination.msh")
-    file_gmsh_mag = join(save_dir, "magnets.msh")
+    lam_name = "lamination.msh"
+    mag_name = "magnets.msh"
 
     gmsh, grps, grp_names = self.preprocess_model(
-        file_in=file_gmsh_geo,
-        file_out=file_gmsh_lam,
+        file_gmsh_geo,
+        join(save_dir, lam_name),
         is_get_lam=True,
         is_get_magnet=False,
     )
 
     gmsh, grps, grp_names = self.preprocess_model(
-        file_in=file_gmsh_geo,
-        file_out=file_gmsh_mag,
+        file_gmsh_geo,
+        join(save_dir, mag_name),
         is_get_lam=False,
         is_get_magnet=True,
     )
 
     # convert to ElmerGrid mesh
-    _gen_mesh(save_dir, file_gmsh_lam, file_gmsh_mag)
+    _gen_mesh(save_dir, "Mesh", lam_name, mag_name, self.get_logger())
 
 
-def _gen_mesh(output_path, lamination_file, magnets_file):
+def _gen_mesh(cwd, out_name, lam_name, mag_name, logger):
     """Convert the GMSH mesh to ElmerGrid mesh
 
     Parameters
@@ -100,24 +101,36 @@ def _gen_mesh(output_path, lamination_file, magnets_file):
 
     """
     # ElmerGrid must be installed and in the PATH
-    # TODO add test
 
-    cmd_elmergrid = [
-        "ElmerGrid 14 2",
-        ' "' + lamination_file + '" ',
+    ElmerGrid_bin = get_path_binary("ElmerGrid")
+
+    cmd = [
+        '"' + ElmerGrid_bin + '"',
+        "14 2",
+        lam_name,
         "-in",
-        ' "' + magnets_file + '" ',
-        "-out" ' "' + output_path + '" ',
-        "-2d -autoclean -names",
+        mag_name,
+        "-unite -out",
+        out_name,
+        "-2d",
+        "-autoclean",
+        "-names",
     ]
-    process_elmergrid = subprocess.Popen(
-        cmd_elmergrid, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    (stdout, stderr) = process_elmergrid.communicate()
 
-    process_elmergrid.wait()
-    if process_elmergrid.returncode != 0:
-        print(stdout)
-        print(stderr)
+    logger.info("Calling ElmerGrid: " + " ".join(map(str, cmd)))
+
+    process = subprocess.Popen(
+        " ".join(cmd),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=True,
+        cwd=cwd,
+    )
+    (stdout, stderr) = process.communicate()
+
+    process.wait()
+    print(stdout.decode())
+    if process.returncode != 0:
+        print(stderr.decode())
 
     return True
