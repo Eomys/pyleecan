@@ -12,7 +12,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .MagnetPolar import MagnetPolar
+from .Magnet import Magnet
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -36,7 +36,7 @@ from ._check import InitUnKnowClassError
 from .Material import Material
 
 
-class MagnetType15(MagnetPolar):
+class MagnetType15(Magnet):
     """single magnet with polar base and curved-top shape and parallel sides"""
 
     VERSION = 1
@@ -127,18 +127,18 @@ class MagnetType15(MagnetPolar):
         self.Wmag = Wmag
         self.Hmag = Hmag
         self.Rtop = Rtop
-        # Call MagnetPolar init
+        # Call Magnet init
         super(MagnetType15, self).__init__(
             mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag
         )
-        # The class is frozen (in MagnetPolar init), for now it's impossible to
+        # The class is frozen (in Magnet init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         MagnetType15_str = ""
-        # Get the properties inherited from MagnetPolar
+        # Get the properties inherited from Magnet
         MagnetType15_str += super(MagnetType15, self).__str__()
         MagnetType15_str += "Wmag = " + str(self.Wmag) + linesep
         MagnetType15_str += "Hmag = " + str(self.Hmag) + linesep
@@ -151,7 +151,7 @@ class MagnetType15(MagnetPolar):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from MagnetPolar
+        # Check the properties inherited from Magnet
         if not super(MagnetType15, self).__eq__(other):
             return False
         if other.Wmag != self.Wmag:
@@ -165,7 +165,7 @@ class MagnetType15(MagnetPolar):
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        # Get the properties inherited from MagnetPolar
+        # Get the properties inherited from Magnet
         MagnetType15_dict = super(MagnetType15, self).as_dict()
         MagnetType15_dict["Wmag"] = self.Wmag
         MagnetType15_dict["Hmag"] = self.Hmag
@@ -181,7 +181,7 @@ class MagnetType15(MagnetPolar):
         self.Wmag = None
         self.Hmag = None
         self.Rtop = None
-        # Set to None the properties inherited from MagnetPolar
+        # Set to None the properties inherited from Magnet
         super(MagnetType15, self)._set_None()
 
     def _get_Wmag(self):

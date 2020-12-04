@@ -81,6 +81,11 @@ try:
 except ImportError as error:
     get_name_lam = error
 
+try:
+    from ..Methods.Slot.Slot.comp_radius import comp_radius
+except ImportError as error:
+    comp_radius = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -221,6 +226,15 @@ class Slot(FrozenClass):
         )
     else:
         get_name_lam = get_name_lam
+    # cf Methods.Slot.Slot.comp_radius
+    if isinstance(comp_radius, ImportError):
+        comp_radius = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method comp_radius: " + str(comp_radius))
+            )
+        )
+    else:
+        comp_radius = comp_radius
     # save and copy methods are available in all object
     save = save
     copy = copy

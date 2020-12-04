@@ -85,13 +85,6 @@ from ..Classes.MachineWRSM import MachineWRSM
 from ..Classes.MagElmer import MagElmer
 from ..Classes.MagFEMM import MagFEMM
 from ..Classes.Magnet import Magnet
-from ..Classes.MagnetFlat import MagnetFlat
-from ..Classes.MagnetPolar import MagnetPolar
-from ..Classes.MagnetType10 import MagnetType10
-from ..Classes.MagnetType11 import MagnetType11
-from ..Classes.MagnetType12 import MagnetType12
-from ..Classes.MagnetType13 import MagnetType13
-from ..Classes.MagnetType14 import MagnetType14
 from ..Classes.MagnetType15 import MagnetType15
 from ..Classes.Magnetics import Magnetics
 from ..Classes.MatEconomical import MatEconomical
@@ -146,10 +139,8 @@ from ..Classes.Slot19 import Slot19
 from ..Classes.SlotCirc import SlotCirc
 from ..Classes.SlotDC import SlotDC
 from ..Classes.SlotM10 import SlotM10
-from ..Classes.SlotMFlat import SlotMFlat
-from ..Classes.SlotMFlat2 import SlotMFlat2
-from ..Classes.SlotMPolar import SlotMPolar
-from ..Classes.SlotMag import SlotMag
+from ..Classes.SlotM11 import SlotM11
+from ..Classes.SlotM12 import SlotM12
 from ..Classes.SlotUD import SlotUD
 from ..Classes.SlotW10 import SlotW10
 from ..Classes.SlotW11 import SlotW11
