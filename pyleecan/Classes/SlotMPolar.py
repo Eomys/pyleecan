@@ -228,8 +228,7 @@ class SlotMPolar(SlotMag):
 
         self.W0 = None
         self.H0 = None
-        for obj in self.magnet:
-            obj._set_None()
+        self.magnet = None
         # Set to None the properties inherited from SlotMag
         super(SlotMPolar, self)._set_None()
 

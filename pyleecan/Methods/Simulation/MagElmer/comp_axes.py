@@ -20,17 +20,6 @@ def comp_axes(self, output):
     # Calculate standard axes from Magnetics model
     axes_dict = Magnetics.comp_axes(self, output)
 
-    # Add Time axis on which to calculate torque
-    # Copy from standard Time axis
-    Time_Tem = axes_dict["Time"].copy()
-
-    # Remove anti-periodicity if any
-    if "antiperiod" in Time_Tem.symmetries:
-        Time_Tem.symmetries["period"] = Time_Tem.symmetries.pop("antiperiod")
-
-    # Store in axis dict
-    axes_dict["Time_Tem"] = Time_Tem
-
     # Add other axes if requested by Elmer
     # TODO
 

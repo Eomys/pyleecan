@@ -216,10 +216,8 @@ class HoleUD(HoleMag):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.surf_list:
-            obj._set_None()
-        for key, obj in self.magnet_dict.items():
-            obj._set_None()
+        self.surf_list = None
+        self.magnet_dict = None
         # Set to None the properties inherited from HoleMag
         super(HoleUD, self)._set_None()
 

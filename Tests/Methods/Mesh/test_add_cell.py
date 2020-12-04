@@ -7,7 +7,7 @@ import numpy as np
 
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
-class Test_add_element(object):
+class Test_add_cell(object):
     """unittest for add_cell method in Mesh classes"""
 
     def setup_method(self, method):

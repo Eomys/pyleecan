@@ -18,5 +18,5 @@ def comp_width(self):
 
     """
 
-    Rbo = self.get_Rbo()
-    return 2 * sin(self.W1 / 2) * (Rbo - self.H1)
+    Rext = self.get_Rext()
+    return 2 * sin(self.W1 / 2) * (Rext - self.H1)

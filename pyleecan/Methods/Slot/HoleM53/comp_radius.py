@@ -18,10 +18,10 @@ def comp_radius(self):
 
     """
 
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
-    Rmax = Rbo - self.H1
-    Z7 = Rbo - self.H0 - 1j * self.W1 / 2
+    Rmax = Rext - self.H1
+    Z7 = Rext - self.H0 - 1j * self.W1 / 2
     Z6 = Z7 - 1j * (self.H2 - self.H3) * cos(self.W4)
     Z4 = (self.W2 - 1j * self.H3) * exp(-1j * self.W4) + Z6
 

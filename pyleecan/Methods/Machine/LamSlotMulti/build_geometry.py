@@ -93,7 +93,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         Zy1 = Ryoke
         Zy2 = Ryoke * exp(1j * 2 * pi / sym)
         bore_list.append(
-            Segment(Rbo * exp(1j * (2 * pi / sym)), Zy2, label=ll + "_Yoke_Side")
+            Segment(Rbo * exp(1j * (2 * pi / sym)), Zy2, label=ll + "_Yoke_Side_Right")
         )
         if Ryoke > 0:
             # For internal lamination Ryoke can be 0
@@ -106,7 +106,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
                     label=ll + "_Yoke_Radius",
                 )
             )
-        bore_list.append(Segment(Zy1, Rbo, label=ll + "_Yoke_Side"))
+        bore_list.append(Segment(Zy1, Rbo, label=ll + "_Yoke_Side_Left"))
         # Create a Surface for the slot
         if self.is_internal:
             point_ref = (Ryoke + H_yoke / 2) * exp(1j * pi / sym)

@@ -19,7 +19,7 @@ def comp_radius(self):
 
     """
 
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
     surf_list = self.build_geometry()
     point_list = list()
@@ -27,5 +27,5 @@ def comp_radius(self):
         point_list.extend(curve.discretize())
 
     Rmax = max([np_abs(point) for point in point_list])
-    Rmin = Rbo - self.H0 - self.H1
+    Rmin = Rext - self.H0 - self.H1
     return (Rmin, Rmax)

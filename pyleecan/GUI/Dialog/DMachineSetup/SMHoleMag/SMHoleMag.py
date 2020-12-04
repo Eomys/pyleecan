@@ -47,6 +47,8 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             self.obj = machine.stator
         else:
             self.obj = machine.rotor
+        if self.obj.hole is None:
+            self.obj.hole = list()
 
         # If the hole is not set, initialize it with a HoleM50
         if len(self.obj.hole) == 0:
@@ -141,7 +143,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             self.tab_hole.removeTab(len(self.obj.hole) - 1)
             self.obj.hole.pop(-1)
 
-    def s_plot(self):
+    def s_plot(self, is_show_fig=True):
         """Try to plot the lamination
 
         Parameters
@@ -160,7 +162,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         if error:  # Error => Display it
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Plot the hole (No winding for LamSquirrelCage)
-            self.machine.plot()
+            self.machine.plot(is_show_fig=is_show_fig)
 
     @staticmethod
     def check(lamination):

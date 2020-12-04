@@ -201,8 +201,7 @@ class SlotUD(SlotWind):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.line_list:
-            obj._set_None()
+        self.line_list = None
         self.wind_begin_index = None
         self.wind_end_index = None
         self.type_line_wind = None

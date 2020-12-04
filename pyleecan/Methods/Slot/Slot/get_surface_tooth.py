@@ -33,7 +33,7 @@ def get_surface_tooth(self):
     # Yoke lines
     Z1 = Ryoke * exp(1j * pi / self.Zs)
     Z2 = Ryoke * exp(-1j * pi / self.Zs)
-    curve_list.append(Segment(top_list[-1].get_end(), Z1, label="Tooth_Yoke_Side"))
+    curve_list.append(Segment(top_list[-1].get_end(), Z1, label="Tooth_Yoke_Side_Left"))
     if Ryoke > 0:
         curve_list.append(
             Arc1(
@@ -44,7 +44,9 @@ def get_surface_tooth(self):
                 label="Tooth_Yoke_Arc",
             )
         )
-    curve_list.append(Segment(Z2, bot_list[0].get_begin(), label="Tooth_Yoke_Side"))
+    curve_list.append(
+        Segment(Z2, bot_list[0].get_begin(), label="Tooth_Yoke_Side_Right")
+    )
     # Second half of the tooth
     curve_list.extend(bot_list)
     curve_list.extend(top_list)

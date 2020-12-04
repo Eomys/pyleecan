@@ -259,8 +259,7 @@ class SurfLine(Surface):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.line_list:
-            obj._set_None()
+        self.line_list = None
         # Set to None the properties inherited from Surface
         super(SurfLine, self)._set_None()
 

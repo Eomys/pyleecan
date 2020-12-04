@@ -31,7 +31,8 @@ is_middleag = 0  # 1 to draw an arc in the middle of the airgap for torque calcu
 # not necessary)
 acsolver = 0  # AC solver type 0 for successive approx, 1 for Newton
 
-# dictionary matching boundary condition with line in FEMM
+# dictionary to match FEMM boundary condition (value) with line labels (key)
+# actual FEMM boundary condition is set in Arc and Segment draw_FEMM methods
 boundary_prop = dict()
 boundary_prop["airgap_line_1"] = "bc_ag1"
 boundary_prop["sliding_line"] = "bc_ag2"

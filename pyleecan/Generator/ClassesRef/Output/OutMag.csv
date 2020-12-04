@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Time,s,Magnetic time Data object,Nt_tot,SciDataTool.Classes.DataND.Data,None,,,,Output,,comp_emf,VERSION,1,Gather the magnetic module outputs
-Angle,rad,Magnetic position Data object,Na_tot,SciDataTool.Classes.DataND.Data,None,,,,,,,,,
-B,H,Airgap flux density VectorField object,"(Nt_tot,Na_tot)",SciDataTool.Classes.VectorField.VectorField,None,,,,,,,,,
+Time,s,Magnetic time Data object,Nt_tot,SciDataTool.Classes.DataND.Data,None,,,,Output,,store,VERSION,1,Gather the magnetic module outputs
+Angle,rad,Magnetic position Data object,Na_tot,SciDataTool.Classes.DataND.Data,None,,,,,,clean,,,
+B,H,Airgap flux density VectorField object,"(Nt_tot,Na_tot)",SciDataTool.Classes.VectorField.VectorField,None,,,,,,comp_emf,,,
 Tem,N.m,Electromagnetic torque DataTime object,Nt_tot,SciDataTool.Classes.DataND.DataND,None,,,,,,,,,
 Tem_av,N.m,Average Electromagnetic torque,,float,None,,,,,,,,,
 Tem_rip_norm,-,Peak to Peak Torque ripple normalized according to average torque (None if average torque=0),,float,None,,,,,,,,,
@@ -9,5 +9,5 @@ Tem_rip_pp,N.m,Peak to Peak Torque ripple,,float,None,,,,,,,,,
 Phi_wind_stator,Wb,Stator winding flux DataTime object,"(Nt_tot, qs)",SciDataTool.Classes.DataTime.DataTime,None,,,,,,,,,
 emf,V,Electromotive force DataTime object,"(Nt_tot, qs)",SciDataTool.Classes.DataTime.DataTime,None,,,,,,,,,
 meshsolution,,FEA software mesh and solution,,MeshSolution,,,,,,,,,,
-FEA_dict,,Dictionnary containing the main FEA parameter,,dict,None,,,,,,,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.OutMag,,,,,,,,,
+internal,-,OutInternal object containg outputs related to a specific model,0,OutInternal,None,,,,,,,,,

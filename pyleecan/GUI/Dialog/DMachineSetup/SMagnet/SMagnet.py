@@ -77,6 +77,7 @@ class SMagnet(Ui_SMagnet, QDialog):
         # Set the GUI with the current values if provided
         if (
             type(self.machine.rotor.slot) is Slot
+            or self.machine.rotor.slot.magnet is None
             or type(self.machine.rotor.slot.magnet[0]) is Magnet
         ):
             # Magnet or slot not set
@@ -175,7 +176,8 @@ class SMagnet(Ui_SMagnet, QDialog):
         """
         # Save the mag
         slot = self.machine.rotor.slot
-        self.previous_mag[type(slot.magnet[0])] = slot
+        if slot.magnet is not None:
+            self.previous_mag[type(slot.magnet[0])] = slot
 
         if self.previous_mag[self.mag_type_index[index]] is None:
             # Set the slot

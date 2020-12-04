@@ -79,14 +79,22 @@ def test_class_init_default(class_dict):
                     + prop["name"],
                 )
         elif is_type_list(type_name):  # List of pyleecan type
-            assert result == list(), (
+            if prop["value"] == "":
+                value = []
+            else:
+                value = prop["value"]
+            assert result == value, (
                 "Error for class "
                 + class_dict["name"]
                 + " for property: "
                 + prop["name"],
             )
         elif is_type_dict(type_name):  # Dict of pyleecan type
-            assert result == dict(), (
+            if prop["value"] == "":
+                value = {}
+            else:
+                value = prop["value"]
+            assert result == value, (
                 "Error for class "
                 + class_dict["name"]
                 + " for property: "

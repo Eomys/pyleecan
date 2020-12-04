@@ -15,10 +15,30 @@ try:
 except:
     draw_GMSH = ImportError
 
+mesh_dict = {
+    "Lamination_Rotor_Bore_Radius_Ext": 180,
+    "surface_line_0": 5,
+    "surface_line_1": 10,
+    "surface_line_2": 5,
+    "surface_line_3": 5,
+    "surface_line_4": 10,
+    "surface_line_5": 5,
+    "Lamination_Stator_Bore_Radius_Int": 10,
+    "Lamination_Stator_Yoke_Side_Right": 30,
+    "Lamination_Stator_Yoke_Side_Left": 30,
+    "int_airgap_arc": 120,
+    "int_sb_arc": 120,
+    "ext_airgap_arc": 120,
+    "ext_sb_arc": 120,
+    "airbox_line_1": 10,
+    "airbox_line_2": 10,
+    "airbox_arc": 20,
+}
+
 
 @pytest.mark.long
 @pytest.mark.GMSH
-def test_gmsh_2d():
+def test_gmsh_ipm():
     """Check generation of the 2D mesh with gmsh"""
     if isinstance(draw_GMSH, ImportError):
         raise ImportError("Fail to import draw_GMSH (gmsh package missing)")
@@ -36,22 +56,6 @@ def test_gmsh_2d():
     mySimu = Simu1(name="EM_SIPMSM_AL_001", machine=IPMSM_A)
     myResults = Output(simu=mySimu)
 
-    mesh_dict = {
-        "Lamination_Rotor_Bore_Radius_Ext": 180,
-        "surface_line_0": 5,
-        "surface_line_1": 10,
-        "surface_line_2": 5,
-        "surface_line_3": 5,
-        "surface_line_4": 10,
-        "surface_line_5": 5,
-        "Lamination_Stator_Bore_Radius_Int": 10,
-        "Lamination_Stator_Yoke_Side": 30,
-        "int_airgap_arc": 120,
-        "int_sb_arc": 120,
-        "ext_airgap_arc": 120,
-        "ext_sb_arc": 120,
-    }
-
     gmsh_dict = draw_GMSH(
         output=myResults,
         sym=8,
@@ -59,12 +63,12 @@ def test_gmsh_2d():
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
         is_sliding_band=True,
+        is_airbox=True,
         path_save=join(save_path, "GSMH_model_ipm.msh"),
     )
 
-
-#    with open("gmsh_test_ipm.json", "w") as fw:
-#        json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
+    with open("gmsh_test_ipm.json", "w") as fw:
+        json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
 
 @pytest.mark.long
@@ -86,22 +90,6 @@ def test_gmsh_spm():
     mySimu = Simu1(name="EM_SPMSM_AL_001", machine=PMSM_A)
     myResults = Output(simu=mySimu)
 
-    mesh_dict = {
-        "Lamination_Rotor_Bore_Radius_Ext": 180,
-        "surface_line_0": 5,
-        "surface_line_1": 10,
-        "surface_line_2": 5,
-        "surface_line_3": 5,
-        "surface_line_4": 10,
-        "surface_line_5": 5,
-        "Lamination_Stator_Bore_Radius_Int": 10,
-        "Lamination_Stator_Yoke_Side": 30,
-        "int_airgap_arc": 120,
-        "int_sb_arc": 120,
-        "ext_airgap_arc": 120,
-        "ext_sb_arc": 120,
-    }
-
     gmsh_dict = draw_GMSH(
         output=myResults,
         sym=4,
@@ -109,10 +97,11 @@ def test_gmsh_spm():
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
         is_sliding_band=True,
+        is_airbox=True,
         path_save=join(save_path, "GSMH_model_spm.msh"),
     )
 
-    with open(join(save_path, "gmsh_test_spm.json"), "w") as fw:
+    with open("gmsh_test_spm.json", "w") as fw:
         json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
 
@@ -121,5 +110,5 @@ def encode_complex(z):
         return (z.real, z.imag)
 
 
-# if __name__ == '__main__':
-#     sys.exit(test_gmsh_ipm())
+if __name__ == "__main__":
+    sys.exit(test_gmsh_ipm())

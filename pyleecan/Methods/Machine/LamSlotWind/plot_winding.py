@@ -8,7 +8,7 @@ from ....Functions.Winding.comp_wind_periodicity import comp_wind_periodicity
 from ....Functions.Winding.gen_phase_list import gen_color, gen_name
 
 
-def plot_winding(self, wind_mat=None, all_slot=False):
+def plot_winding(self, wind_mat=None, all_slot=False, is_show_fig=True):
     """Plot the Winding in a matplotlib fig
 
     Parameters
@@ -19,7 +19,8 @@ def plot_winding(self, wind_mat=None, all_slot=False):
         Winding Matrix, if None will call comp_connection_mat (Default value = None)
     all_slot : bool
         True if we plot all slot and false when plotting only needed one(sym)
-
+    is_show_fig : bool
+        To call show at the end of the method
     Returns
     -------
     None
@@ -144,4 +145,6 @@ def plot_winding(self, wind_mat=None, all_slot=False):
         label_leg.append(qs_name[q] + "-")
 
     legend(sym_leg, label_leg, ncol=2)
-    fig.show()
+
+    if is_show_fig:
+        fig.show()

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from os.path import join
+import subprocess
 
 from ....Functions.GMSH.draw_GMSH import draw_GMSH
+from ....Classes.OutMagElmer import OutMagElmer
 
 
 def comp_flux_airgap(self, output, axes_dict):
@@ -18,6 +21,8 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Init output dict
     out_dict = dict()
+    if output.mag.internal is None:
+        output.mag.internal = OutMagElmer()
 
     # Get time and angular axes
     Angle = axes_dict["Angle"]
@@ -60,17 +65,51 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Setup the Elmer simulation
     # Geometry building
+    gmsh_filename = self.get_path_save_fea(output) + ".msh"
     if not self.import_file:  # True if None or len == 0
         self.get_logger().debug("Drawing machine in GMSH...")
-        # output.mag.FEA_dict = draw_GMSH() # TODO add inputs
-        pass
+        output.mag.internal.FEA_dict = draw_GMSH(
+            output=output,
+            sym=sym,
+            is_lam_only_S=False,
+            is_lam_only_R=False,
+            user_mesh_dict=self.FEA_dict,
+            is_sliding_band=True,
+            is_airbox=True,
+            path_save=gmsh_filename,
+        )
+
     else:
         self.get_logger().debug("Reusing the FEA file: " + self.import_file)
-        # output.mag.FEA_dict = self.FEA_dict
+        # output.mag.internal.FEA_dict = self.FEA_dict
         pass
 
     # post process GMSH mesh with ElmerGrid
-    # TODO add respective function (or method)
+    if not self.gen_elmer_mesh(output):
+        print("Something went wrong!")
+
+    # elmermesh_folder = self.get_path_save_fea(output)
+    # cmd_elmergrid = [
+    #     "ElmerGrid",
+    #     "14",
+    #     "2",
+    #     gmsh_filename,
+    #     "-2d",
+    #     "-autoclean",
+    #     "-names",
+    #     "-out",
+    #     elmermesh_folder,
+    # ]
+    # process_elmergrid = subprocess.Popen(
+    #     cmd_elmergrid, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    # )
+    # (stdout, stderr) = process_elmergrid.communicate()
+    #
+    # process_elmergrid.wait()
+    # if process_elmergrid.returncode != 0:
+    #     print(stdout)
+    #     print(stderr)
+    #     # pass
 
     # setup Elmer solver
     # TODO add respective functions or methods

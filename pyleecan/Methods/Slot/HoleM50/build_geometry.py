@@ -36,22 +36,22 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         st = "_Stator"
     else:
         st = "_Rotor"
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
     # magnet pole pitch angle, must be <2*pi/2*p
-    alpham = 2 * arcsin(self.W0 / (2 * (Rbo - self.H1)))  # angle (Z9,0,Z9')
+    alpham = 2 * arcsin(self.W0 / (2 * (Rext - self.H1)))  # angle (Z9,0,Z9')
 
-    Harc = (Rbo - self.H1) * (1 - cos(alpham / 2))
+    Harc = (Rext - self.H1) * (1 - cos(alpham / 2))
     # alpha on schematics
     gammam = arctan((self.H0 - self.H1 - Harc) / (self.W0 / 2.0 - self.W1 / 2.0))
     #  betam = pi/2-alpham/2-gammam;#40.5
     hssp = pi / self.Zh
 
     x78 = (self.H3 - self.H2) / cos(gammam)  # distance from 7 to 8
-    Z9 = Rbo - Harc - self.H1 - 1j * self.W0 / 2
-    Z8 = Rbo - self.H0 - 1j * self.W1 / 2
-    Z7 = Rbo - self.H0 - x78 - 1j * self.W1 / 2
-    Z1 = (Rbo - self.H1) * exp(1j * (-hssp + arcsin(self.W3 / (2 * (Rbo - self.H1)))))
+    Z9 = Rext - Harc - self.H1 - 1j * self.W0 / 2
+    Z8 = Rext - self.H0 - 1j * self.W1 / 2
+    Z7 = Rext - self.H0 - x78 - 1j * self.W1 / 2
+    Z1 = (Rext - self.H1) * exp(1j * (-hssp + arcsin(self.W3 / (2 * (Rext - self.H1)))))
     Z11 = (Z1 * exp(1j * hssp) + self.H4) * exp(-1j * hssp)
     Z10 = (Z9 * exp(1j * hssp) + self.H4) * exp(-1j * hssp)
 
@@ -102,7 +102,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z8c, Z9))
     if self.H4 > 0:
         curve_list.append(Segment(Z9, Z10))
-    curve_list.append(Arc1(Z10, Z11, -Rbo + self.H1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z10, Z11, -Rext + self.H1, is_trigo_direction=False))
     if self.H4 > 0:
         curve_list.append(Segment(Z11, Z1))
     point_ref = (Z1 + Z2 + Z3 + Z8c + Z9 + Z10 + Z11) / 7
@@ -153,7 +153,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z8cs, Z9s))
     if self.H4 > 0:
         curve_list.append(Segment(Z9s, Z10s))
-    curve_list.append(Arc1(Z10s, Z11s, Rbo - self.H1, is_trigo_direction=True))
+    curve_list.append(Arc1(Z10s, Z11s, Rext - self.H1, is_trigo_direction=True))
     if self.H4 > 0:
         curve_list.append(Segment(Z11s, Z1s))
     point_ref = (Z1s + Z2s + Z3s + Z8cs + Z9s + Z10s + Z11s) / 7
@@ -223,7 +223,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z8, Z9))
     if self.H4 > 0:
         curve_list.append(Segment(Z9, Z10))
-    curve_list.append(Arc1(Z10, Z11, -Rbo + self.H1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z10, Z11, -Rext + self.H1, is_trigo_direction=False))
     if self.H4 > 0:
         curve_list.append(Segment(Z11, Z1))
     point_ref = (Z1 + Z2 + Z3 + Z8c + Z9 + Z10 + Z11) / 7
@@ -243,7 +243,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z8s, Z9s))
     if self.H4 > 0:
         curve_list.append(Segment(Z9s, Z10s))
-    curve_list.append(Arc1(Z10s, Z11s, Rbo - self.H1, is_trigo_direction=True))
+    curve_list.append(Arc1(Z10s, Z11s, Rext - self.H1, is_trigo_direction=True))
     if self.H4 > 0:
         curve_list.append(Segment(Z11s, Z1s))
     point_ref = (Z1s + Z2s + Z3s + Z8cs + Z9s + Z10s + Z11s) / 7
@@ -267,7 +267,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z8s, Z9s))
     if self.H4 > 0:
         curve_list.append(Segment(Z9s, Z10s))
-    curve_list.append(Arc1(Z10s, Z11s, Rbo - self.H1, is_trigo_direction=True))
+    curve_list.append(Arc1(Z10s, Z11s, Rext - self.H1, is_trigo_direction=True))
     if self.H4 > 0:
         curve_list.append(Segment(Z11s, Z1s))
     point_ref = (Z1s + Z2s + Z3s + Z8cs + Z9s + Z10s + Z11s) / 7
@@ -291,7 +291,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z8, Z9))
     if self.H4 > 0:
         curve_list.append(Segment(Z9, Z10))
-    curve_list.append(Arc1(Z10, Z11, -Rbo + self.H1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z10, Z11, -Rext + self.H1, is_trigo_direction=False))
     if self.H4 > 0:
         curve_list.append(Segment(Z11, Z1))
     point_ref = (Z1 + Z2 + Z3 + Z8c + Z9 + Z10 + Z11) / 7
@@ -318,14 +318,14 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z2s, Z1s))
     if self.H4 > 0:
         curve_list.append(Segment(Z1s, Z11s))
-    curve_list.append(Arc1(Z11s, Z10s, -Rbo + self.H1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z11s, Z10s, -Rext + self.H1, is_trigo_direction=False))
     if self.H4 > 0:
         curve_list.append(Segment(Z10s, Z9s))
     curve_list.append(Segment(Z9s, Z8s))
     curve_list.append(Segment(Z8s, Z9))
     if self.H4 > 0:
         curve_list.append(Segment(Z9, Z10))
-    curve_list.append(Arc1(Z10, Z11, -Rbo + self.H1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z10, Z11, -Rext + self.H1, is_trigo_direction=False))
     if self.H4 > 0:
         curve_list.append(Segment(Z11, Z1))
 

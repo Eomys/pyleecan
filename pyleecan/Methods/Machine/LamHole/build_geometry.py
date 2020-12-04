@@ -100,11 +100,11 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         end = Rbore * exp(1j * alpha_end)
         Z_begin = Ryoke * exp(1j * alpha_begin)
         Z_end = Ryoke * exp(1j * alpha_end)
-        line_list = [Segment(Z_begin, begin, label=label + "_Yoke_Side")]
+        line_list = [Segment(Z_begin, begin, label=label + "_Yoke_Side_Right")]
         bore_line = self.get_bore_line(alpha_begin, alpha_end, label=label_bore)
         for line in bore_line:
             line_list.append(line)
-        line_list.append(Segment(end, Z_end, label=label + "_Yoke_Side"))
+        line_list.append(Segment(end, Z_end, label=label + "_Yoke_Side_Left"))
         if Ryoke > 0:
             line_list.append(
                 Arc1(

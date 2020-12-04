@@ -56,9 +56,9 @@ from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
 try:
-    from pyvista.core.pointset import UnstructuredGrid
+    from pyvista.core.pointset import PointGrid
 except ImportError:
-    UnstructuredGrid = ImportError
+    PointGrid = ImportError
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
@@ -314,7 +314,7 @@ class MeshVTK(Mesh):
 
     def _set_mesh(self, value):
         """setter of mesh"""
-        check_var("mesh", value, "UnstructuredGrid")
+        check_var("mesh", value, "PointGrid")
         self._mesh = value
 
     mesh = property(
@@ -322,7 +322,7 @@ class MeshVTK(Mesh):
         fset=_set_mesh,
         doc=u"""Pyvista object of the mesh (optional)
 
-        :Type: pyvista.core.pointset.UnstructuredGrid
+        :Type: pyvista.core.pointset.PointGrid
         """,
     )
 

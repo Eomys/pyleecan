@@ -105,6 +105,8 @@ class VarSimu(FrozenClass):
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
+        pre_keeper_postproc_list=None,
+        post_keeper_postproc_list=None,
         init_dict=None,
         init_str=None,
     ):
@@ -141,6 +143,10 @@ class VarSimu(FrozenClass):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
+            if "pre_keeper_postproc_list" in list(init_dict.keys()):
+                pre_keeper_postproc_list = init_dict["pre_keeper_postproc_list"]
+            if "post_keeper_postproc_list" in list(init_dict.keys()):
+                post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -152,6 +158,8 @@ class VarSimu(FrozenClass):
         self.nb_simu = nb_simu
         self.is_reuse_femm_file = is_reuse_femm_file
         self.postproc_list = postproc_list
+        self.pre_keeper_postproc_list = pre_keeper_postproc_list
+        self.post_keeper_postproc_list = post_keeper_postproc_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -189,6 +197,30 @@ class VarSimu(FrozenClass):
                 + linesep
             )
             VarSimu_str += "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+        if len(self.pre_keeper_postproc_list) == 0:
+            VarSimu_str += "pre_keeper_postproc_list = []" + linesep
+        for ii in range(len(self.pre_keeper_postproc_list)):
+            tmp = (
+                self.pre_keeper_postproc_list[ii]
+                .__str__()
+                .replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarSimu_str += (
+                "pre_keeper_postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
+        if len(self.post_keeper_postproc_list) == 0:
+            VarSimu_str += "post_keeper_postproc_list = []" + linesep
+        for ii in range(len(self.post_keeper_postproc_list)):
+            tmp = (
+                self.post_keeper_postproc_list[ii]
+                .__str__()
+                .replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarSimu_str += (
+                "post_keeper_postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return VarSimu_str
 
     def __eq__(self, other):
@@ -213,6 +245,10 @@ class VarSimu(FrozenClass):
         if other.is_reuse_femm_file != self.is_reuse_femm_file:
             return False
         if other.postproc_list != self.postproc_list:
+            return False
+        if other.pre_keeper_postproc_list != self.pre_keeper_postproc_list:
+            return False
+        if other.post_keeper_postproc_list != self.post_keeper_postproc_list:
             return False
         return True
 
@@ -239,6 +275,18 @@ class VarSimu(FrozenClass):
             VarSimu_dict["postproc_list"] = list()
             for obj in self.postproc_list:
                 VarSimu_dict["postproc_list"].append(obj.as_dict())
+        if self.pre_keeper_postproc_list is None:
+            VarSimu_dict["pre_keeper_postproc_list"] = None
+        else:
+            VarSimu_dict["pre_keeper_postproc_list"] = list()
+            for obj in self.pre_keeper_postproc_list:
+                VarSimu_dict["pre_keeper_postproc_list"].append(obj.as_dict())
+        if self.post_keeper_postproc_list is None:
+            VarSimu_dict["post_keeper_postproc_list"] = None
+        else:
+            VarSimu_dict["post_keeper_postproc_list"] = list()
+            for obj in self.post_keeper_postproc_list:
+                VarSimu_dict["post_keeper_postproc_list"].append(obj.as_dict())
         # The class name is added to the dict for deserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict
@@ -248,15 +296,15 @@ class VarSimu(FrozenClass):
 
         self.name = None
         self.desc = None
-        for obj in self.datakeeper_list:
-            obj._set_None()
+        self.datakeeper_list = None
         self.is_keep_all_output = None
         self.stop_if_error = None
         self.ref_simu_index = None
         self.nb_simu = None
         self.is_reuse_femm_file = None
-        for obj in self.postproc_list:
-            obj._set_None()
+        self.postproc_list = None
+        self.pre_keeper_postproc_list = None
+        self.post_keeper_postproc_list = None
 
     def _get_name(self):
         """getter of name"""
@@ -442,6 +490,72 @@ class VarSimu(FrozenClass):
         fget=_get_postproc_list,
         fset=_set_postproc_list,
         doc=u"""List of post-processing to run on XOutput after the multisimulation
+
+        :Type: [Post]
+        """,
+    )
+
+    def _get_pre_keeper_postproc_list(self):
+        """getter of pre_keeper_postproc_list"""
+        if self._pre_keeper_postproc_list is not None:
+            for obj in self._pre_keeper_postproc_list:
+                if obj is not None:
+                    obj.parent = self
+        return self._pre_keeper_postproc_list
+
+    def _set_pre_keeper_postproc_list(self, value):
+        """setter of pre_keeper_postproc_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes",
+                        obj.get("__class__"),
+                        "pre_keeper_postproc_list",
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
+        check_var("pre_keeper_postproc_list", value, "[Post]")
+        self._pre_keeper_postproc_list = value
+
+    pre_keeper_postproc_list = property(
+        fget=_get_pre_keeper_postproc_list,
+        fset=_set_pre_keeper_postproc_list,
+        doc=u"""If not None, replace the reference simulation postproc_list in each generated simulation (run before datakeeper)
+
+        :Type: [Post]
+        """,
+    )
+
+    def _get_post_keeper_postproc_list(self):
+        """getter of post_keeper_postproc_list"""
+        if self._post_keeper_postproc_list is not None:
+            for obj in self._post_keeper_postproc_list:
+                if obj is not None:
+                    obj.parent = self
+        return self._post_keeper_postproc_list
+
+    def _set_post_keeper_postproc_list(self, value):
+        """setter of post_keeper_postproc_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes",
+                        obj.get("__class__"),
+                        "post_keeper_postproc_list",
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
+        check_var("post_keeper_postproc_list", value, "[Post]")
+        self._post_keeper_postproc_list = value
+
+    post_keeper_postproc_list = property(
+        fget=_get_post_keeper_postproc_list,
+        fset=_set_post_keeper_postproc_list,
+        doc=u"""List of post-processing to run on output after each simulation (except reference one) after the datakeeper.
 
         :Type: [Post]
         """,

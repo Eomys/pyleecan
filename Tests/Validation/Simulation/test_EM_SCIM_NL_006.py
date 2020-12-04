@@ -79,17 +79,9 @@ def test_Magnetic_FEMM_sym():
     mat_file = join(TEST_DATA_DIR, "EM_SCIM_NL_006_MANATEE_MMF.mat")
     Br = ImportMatlab(file_path=mat_file, var_name="XBr")
     angle2 = ImportGenVectLin(start=0, stop=pi, num=4096 / 2, endpoint=False)
-    Time = ImportData(field=time, unit="s", name="time")
-    Angle = ImportData(field=angle2, unit="rad", name="angle")
-    Br_data = ImportData(
-        axes=[Time, Angle],
-        field=Br,
-        unit="T",
-        name="Radial airgap flux density",
-        symbol="B_r",
+    simu_load.input = InputFlux(
+        time=time, angle=angle2, B_dict={"Br": Br}, OP=simu.input.copy()
     )
-    B = ImportVectorField(components={"radial": Br_data})
-    simu_load.input = InputFlux(time=time, angle=angle2, B=B, OP=simu.input.copy())
 
     out = Output(simu=simu)
     simu.run()
@@ -109,6 +101,7 @@ def test_Magnetic_FEMM_sym():
         data_list=[out2.mag.B],
         legend_list=["No symmetry", "1/2 symmetry"],
         save_path=join(save_path, "test_EM_SCIM_NL_006_sym.png"),
+        is_show_fig=False,
     )
 
     # Plot the result by comparing the two simulation (no sym / MANATEE)
@@ -121,6 +114,7 @@ def test_Magnetic_FEMM_sym():
         legend_list=["No symmetry", "MANATEE MMF"],
         component_list=["radial"],
         save_path=join(save_path, "test_EM_SCIM_NL_006_MMF.png"),
+        is_show_fig=False,
     )
 
     return out, out2, out3

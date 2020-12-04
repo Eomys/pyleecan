@@ -52,32 +52,26 @@ load_preview_test = [SCIM_dict, IPMSM_dict]
 
 @pytest.mark.GUI
 class TestSPreview(object):
-    def setup_method(self, method):
-        """setup any state specific to the execution of the given module."""
+    @pytest.fixture
+    def setup(self):
+        """Run at the begining of every test to setup the gui"""
+
+        if not QtWidgets.QApplication.instance():
+            self.app = QtWidgets.QApplication(sys.argv)
+        else:
+            self.app = QtWidgets.QApplication.instance()
+
         # MatLib widget
         matlib = MatLib(matlib_path)
         dmatlib = DMatLib(matlib=matlib)
-        self.widget = DMachineSetup(dmatlib=dmatlib, machine_path=machine_path)
+        widget = DMachineSetup(dmatlib=dmatlib, machine_path=machine_path)
 
-    @classmethod
-    def setup_class(cls):
-        """setup any state specific to the execution of the given class (which
-        usually contains tests).
-        """
-        if not QtWidgets.QApplication.instance():
-            cls.app = QtWidgets.QApplication(sys.argv)
-        else:
-            cls.app = QtWidgets.QApplication.instance()
+        yield {"widget": widget}
 
-    @classmethod
-    def teardown_class(cls):
-        """teardown any state that was previously setup with a call to
-        setup_class.
-        """
-        cls.app.quit()
+        self.app.quit()
 
     @pytest.mark.parametrize("test_dict", load_preview_test)
-    def test_load(self, test_dict):
+    def test_load(self, setup, test_dict):
         """Check that you can load a machine"""
         assert isfile(test_dict["file_path"])
 
@@ -86,18 +80,20 @@ class TestSPreview(object):
             "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
-            self.widget.b_load.clicked.emit()
+            setup["widget"].b_load.clicked.emit()
 
         # Check load MachineType
-        assert type(self.widget.w_step) is SPreview
+        assert type(setup["widget"].w_step) is SPreview
         # Check the table
-        assert self.widget.w_step.tab_machine.tab_param.rowCount() == test_dict["Nrow"]
+        assert (
+            setup["widget"].w_step.tab_machine.tab_param.rowCount() == test_dict["Nrow"]
+        )
         for ii, content in enumerate(test_dict["table"]):
             assert (
-                self.widget.w_step.tab_machine.tab_param.item(ii, 0).text()
+                setup["widget"].w_step.tab_machine.tab_param.item(ii, 0).text()
                 == content[0]
             )
             assert (
-                self.widget.w_step.tab_machine.tab_param.item(ii, 1).text()
+                setup["widget"].w_step.tab_machine.tab_param.item(ii, 1).text()
                 == content[1]
             )
