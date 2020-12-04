@@ -7,7 +7,7 @@ from ....Functions.GMSH.draw_GMSH import draw_GMSH
 from ....Functions.get_path_binary import get_path_binary
 
 
-def init_model(self, output):
+def gen_mesh(self, output):
     """Initialize the FEA simulation model
 
     Parameters
@@ -72,14 +72,15 @@ def init_model(self, output):
     lam_name = "lamination.msh"
     mag_name = "magnets.msh"
 
-    gmsh, grps, grp_names = self.preprocess_model(
+    names = {}
+    _, _, names["Lamination"] = self.process_mesh(
         file_gmsh_geo,
         join(save_dir, lam_name),
         is_get_lam=True,
         is_get_magnet=False,
     )
 
-    gmsh, grps, grp_names = self.preprocess_model(
+    _, _, names["Magnets"] = self.process_mesh(
         file_gmsh_geo,
         join(save_dir, mag_name),
         is_get_lam=False,
@@ -89,9 +90,11 @@ def init_model(self, output):
     # convert to ElmerGrid mesh
     _gen_mesh(save_dir, "Mesh", lam_name, mag_name, self.get_logger())
 
+    return names
+
 
 def _gen_mesh(cwd, out_name, lam_name, mag_name, logger):
-    """Convert the GMSH mesh to ElmerGrid mesh
+    """Convert the mesh from GMSH format to ElmerGrid format
 
     Parameters
     ----------

@@ -37,14 +37,19 @@ except ImportError as error:
     solve_FEA = error
 
 try:
-    from ..Methods.Simulation.StructElmer.init_model import init_model
+    from ..Methods.Simulation.StructElmer.gen_mesh import gen_mesh
 except ImportError as error:
-    init_model = error
+    gen_mesh = error
 
 try:
-    from ..Methods.Simulation.StructElmer.preprocess_model import preprocess_model
+    from ..Methods.Simulation.StructElmer.gen_case import gen_case
 except ImportError as error:
-    preprocess_model = error
+    gen_case = error
+
+try:
+    from ..Methods.Simulation.StructElmer.process_mesh import process_mesh
+except ImportError as error:
+    process_mesh = error
 
 
 from ._check import InitUnKnowClassError
@@ -98,29 +103,35 @@ class StructElmer(Structural):
         )
     else:
         solve_FEA = solve_FEA
-    # cf Methods.Simulation.StructElmer.init_model
-    if isinstance(init_model, ImportError):
-        init_model = property(
+    # cf Methods.Simulation.StructElmer.gen_mesh
+    if isinstance(gen_mesh, ImportError):
+        gen_mesh = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use StructElmer method gen_mesh: " + str(gen_mesh))
+            )
+        )
+    else:
+        gen_mesh = gen_mesh
+    # cf Methods.Simulation.StructElmer.gen_case
+    if isinstance(gen_case, ImportError):
+        gen_case = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use StructElmer method gen_case: " + str(gen_case))
+            )
+        )
+    else:
+        gen_case = gen_case
+    # cf Methods.Simulation.StructElmer.process_mesh
+    if isinstance(process_mesh, ImportError):
+        process_mesh = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use StructElmer method init_model: " + str(init_model)
+                    "Can't use StructElmer method process_mesh: " + str(process_mesh)
                 )
             )
         )
     else:
-        init_model = init_model
-    # cf Methods.Simulation.StructElmer.preprocess_model
-    if isinstance(preprocess_model, ImportError):
-        preprocess_model = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use StructElmer method preprocess_model: "
-                    + str(preprocess_model)
-                )
-            )
-        )
-    else:
-        preprocess_model = preprocess_model
+        process_mesh = process_mesh
     # save and copy methods are available in all object
     save = save
     copy = copy

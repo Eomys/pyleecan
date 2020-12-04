@@ -18,8 +18,11 @@ def run(self):
 
     self.comp_axes(output)
 
-    # Init model, generate or import mechanical mesh
-    self.init_model(output)
+    # setup the mesh
+    self.setup_mesh(output)
+
+    # setup the Elmer case file
+    self.setup_case()
 
     # Compute the magnetic force according to the Force model
     self.solve_FEA(output)

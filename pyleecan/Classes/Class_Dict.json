@@ -7687,6 +7687,79 @@
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/ScalarProductL2.csv",
         "properties": []
     },
+    "Section": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to setup a section of an Elmer Solver Input File",
+        "is_internal": false,
+        "methods": [
+            "__delitem__",
+            "__getitem__",
+            "__iter__",
+            "__len__",
+            "__missing__",
+            "__reversed__",
+            "__setitem__",
+            "pop",
+            "keys"
+        ],
+        "mother": "",
+        "name": "Section",
+        "package": "Elmer",
+        "path": "pyleecan/Generator/ClassesRef/Elmer/Section.csv",
+        "properties": [
+            {
+                "desc": "Name of the section",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Index of a numbered section",
+                "max": "",
+                "min": "",
+                "name": "id",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Section global comment",
+                "max": "",
+                "min": "",
+                "name": "comment",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "internal dict to store the sections statements",
+                "max": "",
+                "min": "",
+                "name": "_statements",
+                "type": "{}",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "internal dict to store comments on single statements",
+                "max": "",
+                "min": "",
+                "name": "_comments",
+                "type": "{}",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "Segment": {
         "constants": [
             {
@@ -10342,6 +10415,23 @@
             }
         ]
     },
+    "SolverInputFile": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to setup the Elmer Solver Input File",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "SolverInputFile",
+        "package": "Elmer",
+        "path": "pyleecan/Generator/ClassesRef/Elmer/SolverInputFile.csv",
+        "properties": []
+    },
     "StructElmer": {
         "constants": [
             {
@@ -10357,8 +10447,9 @@
             "get_meshsolution",
             "get_path_save_fea",
             "solve_FEA",
-            "init_model",
-            "preprocess_model"
+            "gen_mesh",
+            "gen_case",
+            "process_mesh"
         ],
         "mother": "Structural",
         "name": "StructElmer",

@@ -81,21 +81,18 @@ def _get_names_physical(gmsh, dimtag):
     return names
 
 
-def preprocess_model(
+def process_mesh(
     self, file_in, file_out, is_get_lam=True, is_get_magnet=False, is_hole_air=True
 ):
+    """Preprocess the GMSH model, i.e. remove unused parts, rename boundaries, ..."""
+    # TODO utilize 'translation' dict
 
     gmsh.initialize(sys.argv)
     gmsh.open(file_in)
     gmsh.model.geo.removeAllDuplicates()
 
     # remove unused model parts
-    _remove_entities(
-        gmsh,
-        labels=[
-            "stator",
-        ],
-    )
+    _remove_entities(gmsh, labels=["stator", "w_sta"])
 
     # get group names
     grps = gmsh.model.getPhysicalGroups(-1)
@@ -104,7 +101,7 @@ def preprocess_model(
     # get lists of some surfaces by name
     magnet_list = []
     for grp, name in zip(grps, grp_names):
-        if "Magnet" in name:
+        if "magnet" in name.lower():
             entities = gmsh.model.getEntitiesForPhysicalGroup(*grp)
             if grp[0] == 2:
                 magnet_list.extend(entities.tolist())
@@ -112,7 +109,7 @@ def preprocess_model(
     if True:  # is_get_lam:
         lam_list = []
         for grp, name in zip(grps, grp_names):
-            if "Lamination" in name:
+            if "rotor_lam" in name.lower():
                 entities = gmsh.model.getEntitiesForPhysicalGroup(*grp)
                 if grp[0] == 2:
                     lam_list.extend(entities.tolist())
@@ -131,7 +128,7 @@ def preprocess_model(
                     line,
                 ],
             )
-            if any(["Hole" in name for name in names]):
+            if any(["h_rotor" in name.lower() for name in names]):
                 hole_lines.append(line)
 
     if is_get_lam and not is_get_magnet:
@@ -237,12 +234,12 @@ def preprocess_model(
     grp_names = [gmsh.model.getPhysicalName(*grp) for grp in grps]
 
     # delete unused surfaces
-    del_list = ["shaft", "hole_"]
+    del_list = ["shaft", "h_rotor"]
     if not is_get_magnet:
         del_list.append("magnet")
 
     if not is_get_lam:
-        del_list.append("lamination")
+        del_list.append("rotor_lam")
 
     for grp, name in zip(grps, grp_names):
         if any([n in name.lower() for n in del_list]):
@@ -322,8 +319,11 @@ def preprocess_model(
         gmsh.write(file_out)
 
     # gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
-    gmsh.finalize()
 
-    # gmsh.finalize()
+    # update group names once again
+    grps = gmsh.model.getPhysicalGroups(-1)
+    grp_names = [gmsh.model.getPhysicalName(*grp) for grp in grps]
+
+    gmsh.finalize()
 
     return gmsh, grps, grp_names

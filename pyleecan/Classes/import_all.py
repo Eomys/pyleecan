@@ -137,6 +137,7 @@ from ..Classes.RefSegmentP1 import RefSegmentP1
 from ..Classes.RefTriangle3 import RefTriangle3
 from ..Classes.ScalarProduct import ScalarProduct
 from ..Classes.ScalarProductL2 import ScalarProductL2
+from ..Classes.Section import Section
 from ..Classes.Segment import Segment
 from ..Classes.Shaft import Shaft
 from ..Classes.Simu1 import Simu1
@@ -173,6 +174,7 @@ from ..Classes.Solution import Solution
 from ..Classes.SolutionData import SolutionData
 from ..Classes.SolutionMat import SolutionMat
 from ..Classes.SolutionVector import SolutionVector
+from ..Classes.SolverInputFile import SolverInputFile
 from ..Classes.StructElmer import StructElmer
 from ..Classes.Structural import Structural
 from ..Classes.SurfLine import SurfLine

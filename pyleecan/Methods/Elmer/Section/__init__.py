@@ -1,0 +1,2 @@
+class ElmerSectionError(Exception):
+    pass

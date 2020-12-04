@@ -1,0 +1,10 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+name,,Name of the section,,str,,,,,Elmer,,__delitem__,VERSION,1,Class to setup a section of an Elmer Solver Input File,
+id,,Index of a numbered section,,int,None,,,,,,__getitem__,,,,
+comment,,Section global comment,,str,,,,,,,__iter__,,,,
+_statements,,internal dict to store the sections statements,,{},,,,,,,__len__,,,,
+_comments,,internal dict to store comments on single statements,,{},,,,,,,__missing__,,,,
+,,,,,,,,,,,__reversed__,,,,
+,,,,,,,,,,,__setitem__,,,,
+,,,,,,,,,,,pop,,,
+,,,,,,,,,,,keys,,,

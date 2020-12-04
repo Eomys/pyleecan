@@ -3,6 +3,8 @@
 from os import makedirs
 from os.path import join, exists
 
+# TODO improve path
+
 
 def get_path_save_fea(self, output):
     """Return the path to save the FEA simulation
