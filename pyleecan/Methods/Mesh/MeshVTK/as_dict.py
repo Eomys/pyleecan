@@ -5,7 +5,7 @@ def as_dict(self):
     """Convert this object in a json seriable dict (can be use in __init__)"""
 
     # Get the properties inherited from Mesh
-    MeshVTK_dict = super(MeshVTK, self).as_dict()
+    MeshVTK_dict = super(type(self), self).as_dict()
     MeshVTK_dict["mesh"] = None
     MeshVTK_dict["is_pyvista_mesh"] = self.is_pyvista_mesh
     MeshVTK_dict["format"] = self.format
