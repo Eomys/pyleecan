@@ -217,21 +217,8 @@ class Section(FrozenClass):
         Section_str += 'name = "' + str(self.name) + '"' + linesep
         Section_str += "id = " + str(self.id) + linesep
         Section_str += 'comment = "' + str(self.comment) + '"' + linesep
-        if len(self._statements) == 0:
-            Section_str += "_statements = dict()" + linesep
-        for key, obj in self._statements.items():
-            tmp = (
-                self._statements[key].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            Section_str += "_statements[" + key + "] =" + tmp + linesep + linesep
-        if len(self._comments) == 0:
-            Section_str += "_comments = dict()" + linesep
-        for key, obj in self._comments.items():
-            tmp = (
-                self._comments[key].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            Section_str += "_comments[" + key + "] =" + tmp + linesep + linesep
+        Section_str += "_statements = " + str(self._statements) + linesep
+        Section_str += "_comments = " + str(self._comments) + linesep
         return Section_str
 
     def __eq__(self, other):
@@ -258,18 +245,12 @@ class Section(FrozenClass):
         Section_dict["name"] = self.name
         Section_dict["id"] = self.id
         Section_dict["comment"] = self.comment
-        if self._statements is None:
-            Section_dict["_statements"] = None
-        else:
-            Section_dict["_statements"] = dict()
-            for key, obj in self._statements.items():
-                Section_dict["_statements"][key] = obj.as_dict()
-        if self._comments is None:
-            Section_dict["_comments"] = None
-        else:
-            Section_dict["_comments"] = dict()
-            for key, obj in self._comments.items():
-                Section_dict["_comments"][key] = obj.as_dict()
+        Section_dict["_statements"] = (
+            self._statements.copy() if self._statements is not None else None
+        )
+        Section_dict["_comments"] = (
+            self._comments.copy() if self._comments is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         Section_dict["__class__"] = "Section"
         return Section_dict
@@ -339,24 +320,13 @@ class Section(FrozenClass):
 
     def _get__statements(self):
         """getter of _statements"""
-        if self.__statements is not None:
-            for key, obj in self.__statements.items():
-                if obj is not None:
-                    obj.parent = self
         return self.__statements
 
     def _set__statements(self, value):
         """setter of _statements"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "_statements"
-                    )
-                    value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
-        check_var("_statements", value, "{}")
+        check_var("_statements", value, "dict")
         self.__statements = value
 
     _statements = property(
@@ -364,30 +334,19 @@ class Section(FrozenClass):
         fset=_set__statements,
         doc=u"""internal dict to store the sections statements
 
-        :Type: {}
+        :Type: dict
         """,
     )
 
     def _get__comments(self):
         """getter of _comments"""
-        if self.__comments is not None:
-            for key, obj in self.__comments.items():
-                if obj is not None:
-                    obj.parent = self
         return self.__comments
 
     def _set__comments(self, value):
         """setter of _comments"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "_comments"
-                    )
-                    value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
-        check_var("_comments", value, "{}")
+        check_var("_comments", value, "dict")
         self.__comments = value
 
     _comments = property(
@@ -395,6 +354,6 @@ class Section(FrozenClass):
         fset=_set__comments,
         doc=u"""internal dict to store comments on single statements
 
-        :Type: {}
+        :Type: dict
         """,
     )

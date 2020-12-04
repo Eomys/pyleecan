@@ -7745,7 +7745,7 @@
                 "max": "",
                 "min": "",
                 "name": "_statements",
-                "type": "{}",
+                "type": "dict",
                 "unit": "",
                 "value": ""
             },
@@ -7754,7 +7754,7 @@
                 "max": "",
                 "min": "",
                 "name": "_comments",
-                "type": "{}",
+                "type": "dict",
                 "unit": "",
                 "value": ""
             }
