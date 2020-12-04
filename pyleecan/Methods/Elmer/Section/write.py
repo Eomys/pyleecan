@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from io import StringIO
-from ..Section import File
+from ..Section import File, Variable, MATC
 
 # some constants definition
 WHITESPACE = " "
@@ -27,6 +27,7 @@ def write(self, stream=None):
     stream.write(NEWLINE)
     if self.comment:
         stream.write("! " + self.comment)
+        stream.write(NEWLINE)
     stream.write(self.section + " " + nbr)
 
     # write section entries
@@ -69,3 +70,9 @@ def _convert(value, get_type=True):
             get_type = True if idx == 0 else False
             val_str += _convert(val, get_type=get_type) + " "
         return val_str
+
+    if isinstance(value, Variable):
+        return "Variable " + value.name + NEWLINE + 2 * INDENT + _convert(value.value)
+
+    if isinstance(value, MATC):
+        return f'Real MATC "{value.expr}"'

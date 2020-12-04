@@ -11,6 +11,7 @@ END = "End"
 
 MESH_FILE = "Mesh"
 
+
 def write(self, stream=None):
     """Write the Elmer Solver Input File. If no stream is given, the method
     will return a StringIO.
