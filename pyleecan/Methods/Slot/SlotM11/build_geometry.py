@@ -19,6 +19,7 @@ def build_geometry(self):
         A list of 3 Segments
 
     """
+    Rbo = self.get_Rbo()
     [Z1, Z2, Z3, Z4, _, _, _, _] = self._comp_point_coordinate()
 
     # Creation of curve

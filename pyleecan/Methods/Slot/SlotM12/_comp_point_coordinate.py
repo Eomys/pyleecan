@@ -33,7 +33,7 @@ def _comp_point_coordinate(self):
     else:  # inward slot
         ZM0 = Z2.real + self.Hmag
     alpha2 = float(arcsin(self.Wmag / (2 * abs(ZM0))))
-    ZM2 = ZM1 * exp(-1j * alpha2)
+    ZM2 = ZM0 * exp(-1j * alpha2)
 
     # symetry
     Z3 = Z2.conjugate()

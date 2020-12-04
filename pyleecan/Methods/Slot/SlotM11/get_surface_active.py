@@ -27,10 +27,12 @@ def get_surface_active(self, alpha=0, delta=0):
 
     # get the name of the lamination
     st = self.get_name_lam()
+    Rbo = self.get_Rbo()
 
     [_, _, _, _, ZM1, ZM2, ZM3, ZM4] = self._comp_point_coordinate()
     curve_list = list()
     curve_list.append(Segment(ZM1, ZM2))
+
     if self.is_outwards():
         curve_list.append(
             Arc1(ZM2, ZM3, (Rbo + self.H0 - self.Hmag), is_trigo_direction=True)
@@ -39,11 +41,13 @@ def get_surface_active(self, alpha=0, delta=0):
         curve_list.append(
             Arc1(ZM2, ZM3, (Rbo - self.H0 + self.Hmag), is_trigo_direction=True)
         )
+
     curve_list.append(Segment(ZM3, ZM4))
+
     if self.is_outwards():
-        curve_list.append(Arc1(ZM4, ZM1, Rbo + self.H0, is_trigo_direction=True))
+        curve_list.append(Arc1(ZM4, ZM1, -Rbo - self.H0, is_trigo_direction=False))
     else:
-        curve_list.append(Arc1(ZM4, ZM1, Rbo - self.H0, is_trigo_direction=True))
+        curve_list.append(Arc1(ZM4, ZM1, -Rbo + self.H0, is_trigo_direction=False))
 
     Zmid = (ZM1 + ZM3) / 2
 

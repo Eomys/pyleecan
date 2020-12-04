@@ -49,11 +49,11 @@ def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=
     slot_pitch = 2 * pi / Zs
 
     # Add the magnet surface(s)
-    if is_magnet:
+    if is_magnet and self.magnet is not None:
         # for each magnet to draw
         for ii in range(Zs // sym):
-            mag_surf = self.slot.build_geometry(
-                alpha=slot_pitch * ii, is_simplified=is_simplified
+            mag_surf = self.slot.get_surface_active(
+                alpha=slot_pitch * ii + slot_pitch * 0.5
             )
             # Defining type of magnetization of the magnet
             if self.magnet.type_magnetization == 0:
@@ -63,7 +63,7 @@ def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=
             elif self.magnet.type_magnetization == 2:
                 type_mag = "Hallbach"
 
-            surf_list.extend(mag_surf)
+            surf_list.append(mag_surf)
             # Adapt the label
             if ii % 2 != 0:  # South pole
                 surf_list[-1].label = (

@@ -26,7 +26,7 @@ def _comp_point_coordinate(self):
         ZM2 = (Rbo + self.H0 - self.Hmag) * exp(-1j * self.Wmag / 2)
     else:  # inward slot
         Z2 = (Rbo - self.H0) * exp(-1j * self.W0 / 2)
-        ZM1 = (Rbo - self.H0) * exp(1j * self.Wmag / 2)
+        ZM1 = (Rbo - self.H0) * exp(-1j * self.Wmag / 2)
         ZM2 = (Rbo - self.H0 + self.Hmag) * exp(-1j * self.Wmag / 2)
 
     # symetry
