@@ -4,7 +4,7 @@ from numpy import exp
 
 
 def comp_radius(self):
-    """Compute the radius of the min and max circle that contains the hole
+    """Compute the radius of the min and max circle that contains the slot
 
     Parameters
     ----------
@@ -14,7 +14,7 @@ def comp_radius(self):
     Returns
     -------
     (Rmin,Rmax): tuple
-        Radius of the circle that contains the hole [m]
+        Radius of the circle that contains the slot [m]
 
     """
 
