@@ -5,7 +5,7 @@ import pytest
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.MagnetType10 import MagnetType10
+from pyleecan.Classes.Magnet import Magnet
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -193,7 +193,7 @@ class Test_HoleM50_meth(object):
                 H2=0.5e-3,
                 H3=6.8e-3,
                 H4=0,
-                magnet_0=MagnetType10(Wmag=0.01, Hmag=0.02),
+                magnet_0=Magnet(),
             )
         )
 
@@ -239,7 +239,7 @@ class Test_HoleM50_meth(object):
                 H2=0.5e-3,
                 H3=6.8e-3,
                 H4=1e-3,
-                magnet_0=MagnetType10(Wmag=0.01, Hmag=0.02),
+                magnet_0=Magnet(),
             )
         )
         result = test_obj.hole[0].build_geometry()
@@ -283,7 +283,7 @@ class Test_HoleM50_meth(object):
                 H2=0.5e-3,
                 H3=6.8e-3,
                 H4=1e-3,
-                magnet_0=MagnetType10(Wmag=0.01, Hmag=0.02),
+                magnet_0=Magnet(),
             )
         )
         result = test_obj.hole[0].build_geometry(is_simplified=True)
