@@ -7,7 +7,7 @@ from ....Classes.SurfLine import SurfLine
 
 
 def get_surface_active(self, alpha=0, delta=0):
-    """Return the full winding surface
+    """Return the full active surface
 
     Parameters
     ----------
@@ -20,8 +20,8 @@ def get_surface_active(self, alpha=0, delta=0):
 
     Returns
     -------
-    surf_wind: Surface
-        Surface corresponding to the Winding Area
+    surf_act: Surface
+        Surface corresponding to the Active Area
     """
 
     # get the name of the lamination

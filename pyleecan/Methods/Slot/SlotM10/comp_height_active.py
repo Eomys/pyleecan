@@ -4,7 +4,7 @@ from numpy import abs as np_abs
 
 
 def comp_height_active(self):
-    """Compute the height of the winding area
+    """Compute the height of the active area
 
     Parameters
     ----------
@@ -14,7 +14,7 @@ def comp_height_active(self):
     Returns
     -------
     Hwind: float
-        Height of the winding area [m]
+        Height of the active area [m]
 
     """
 

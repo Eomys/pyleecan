@@ -2,7 +2,7 @@
 
 
 def comp_surface_active(self):
-    """Compute the Slot inner surface for winding (by analytical computation)
+    """Compute the Slot active inner surface (by analytical computation)
 
     Parameters
     ----------
@@ -12,7 +12,7 @@ def comp_surface_active(self):
     Returns
     -------
     Swind: float
-        Slot inner surface for winding [m**2]
+        Slot active inner surface [m**2]
 
     """
 
