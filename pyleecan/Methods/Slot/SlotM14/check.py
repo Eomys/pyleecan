@@ -6,12 +6,12 @@ from ....Methods.Slot.Slot.check import SlotCheckError
 
 
 def check(self):
-    """Check that the SlotM10 object is correct
+    """Check that the SlotM11 object is correct
 
     Parameters
     ----------
-    self : SlotM10
-        A SlotM10 object
+    self : SlotM14
+        A SlotM14 object
 
     Returns
     -------

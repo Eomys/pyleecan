@@ -6,12 +6,12 @@ from ....Methods.Slot.Slot.check import SlotCheckError
 
 
 def check(self):
-    """Check that the SlotM10 object is correct
+    """Check that the SlotM13 object is correct
 
     Parameters
     ----------
-    self : SlotM10
-        A SlotM10 object
+    self : SlotM13
+        A SlotM13 object
 
     Returns
     -------
@@ -19,3 +19,5 @@ def check(self):
     """
     if self.W0 < self.Wmag:
         raise SlotCheckError("You must have Wmag <= W0")
+    if 2 * self.Rtopm < self.Wmag:
+        raise SlotCheckError("You must have Wmag <= 2*Rtopm")

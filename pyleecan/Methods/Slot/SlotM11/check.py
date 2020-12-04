@@ -18,4 +18,4 @@ def check(self):
     None
     """
     if self.W0 < self.Wmag:
-        raise SlotCheckError("You must have W0 <= Wmag")
+        raise SlotCheckError("You must have Wmag <= W0")
