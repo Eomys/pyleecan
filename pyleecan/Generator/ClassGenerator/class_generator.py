@@ -282,7 +282,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(generate_as_dict(gen_dict, class_dict) + "\n")
 
     # Add the _set_None method
-    if "set_None" not in class_dict["methods"]:
+    if "_set_None" not in class_dict["methods"]:
         class_file.write(generate_set_None(gen_dict, class_dict))
 
     # Add all the properties getter and setter
