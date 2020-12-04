@@ -7706,7 +7706,8 @@
             "__reversed__",
             "__setitem__",
             "pop",
-            "keys"
+            "keys",
+            "write"
         ],
         "mother": "",
         "name": "Section",
@@ -7717,7 +7718,7 @@
                 "desc": "Name of the section",
                 "max": "",
                 "min": "",
-                "name": "name",
+                "name": "section",
                 "type": "str",
                 "unit": "",
                 "value": ""
@@ -10425,12 +10426,24 @@
         "daughters": [],
         "desc": "Class to setup the Elmer Solver Input File",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "write"
+        ],
         "mother": "",
         "name": "SolverInputFile",
         "package": "Elmer",
         "path": "pyleecan/Generator/ClassesRef/Elmer/SolverInputFile.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "List of SIF sections",
+                "max": "",
+                "min": "",
+                "name": "sections",
+                "type": "list",
+                "unit": "",
+                "value": ""
+            }
+        ]
     },
     "StructElmer": {
         "constants": [

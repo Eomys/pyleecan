@@ -61,6 +61,11 @@ try:
 except ImportError as error:
     keys = error
 
+try:
+    from ..Methods.Elmer.Section.write import write
+except ImportError as error:
+    write = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -154,6 +159,15 @@ class Section(FrozenClass):
         )
     else:
         keys = keys
+    # cf Methods.Elmer.Section.write
+    if isinstance(write, ImportError):
+        write = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Section method write: " + str(write))
+            )
+        )
+    else:
+        write = write
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -162,7 +176,7 @@ class Section(FrozenClass):
 
     def __init__(
         self,
-        name="",
+        section="",
         id=None,
         comment="",
         _statements=-1,
@@ -185,8 +199,8 @@ class Section(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "name" in list(init_dict.keys()):
-                name = init_dict["name"]
+            if "section" in list(init_dict.keys()):
+                section = init_dict["section"]
             if "id" in list(init_dict.keys()):
                 id = init_dict["id"]
             if "comment" in list(init_dict.keys()):
@@ -197,7 +211,7 @@ class Section(FrozenClass):
                 _comments = init_dict["_comments"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.name = name
+        self.section = section
         self.id = id
         self.comment = comment
         self._statements = _statements
@@ -214,7 +228,7 @@ class Section(FrozenClass):
             Section_str += "parent = None " + linesep
         else:
             Section_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Section_str += 'name = "' + str(self.name) + '"' + linesep
+        Section_str += 'section = "' + str(self.section) + '"' + linesep
         Section_str += "id = " + str(self.id) + linesep
         Section_str += 'comment = "' + str(self.comment) + '"' + linesep
         Section_str += "_statements = " + str(self._statements) + linesep
@@ -226,7 +240,7 @@ class Section(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.name != self.name:
+        if other.section != self.section:
             return False
         if other.id != self.id:
             return False
@@ -242,7 +256,7 @@ class Section(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Section_dict = dict()
-        Section_dict["name"] = self.name
+        Section_dict["section"] = self.section
         Section_dict["id"] = self.id
         Section_dict["comment"] = self.comment
         Section_dict["_statements"] = (
@@ -258,24 +272,24 @@ class Section(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.name = None
+        self.section = None
         self.id = None
         self.comment = None
         self._statements = None
         self._comments = None
 
-    def _get_name(self):
-        """getter of name"""
-        return self._name
+    def _get_section(self):
+        """getter of section"""
+        return self._section
 
-    def _set_name(self, value):
-        """setter of name"""
-        check_var("name", value, "str")
-        self._name = value
+    def _set_section(self, value):
+        """setter of section"""
+        check_var("section", value, "str")
+        self._section = value
 
-    name = property(
-        fget=_get_name,
-        fset=_set_name,
+    section = property(
+        fget=_get_section,
+        fset=_set_section,
         doc=u"""Name of the section
 
         :Type: str

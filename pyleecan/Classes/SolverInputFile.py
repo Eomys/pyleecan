@@ -14,6 +14,14 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Elmer.SolverInputFile.write import write
+except ImportError as error:
+    write = error
+
+
 from ._check import InitUnKnowClassError
 
 
@@ -22,28 +30,44 @@ class SolverInputFile(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Elmer.SolverInputFile.write
+    if isinstance(write, ImportError):
+        write = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SolverInputFile method write: " + str(write))
+            )
+        )
+    else:
+        write = write
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, init_dict=None, init_str=None):
-        """Constructor of the class. Can be use in two ways :
+    def __init__(self, sections=-1, init_dict=None, init_str=None):
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
-            assert init_dict == {"__class__": "SolverInputFile"}
-        if init_str is not None:  # Initialisation by str
-            assert type(init_str) is str
-        # The class is frozen, for now it's impossible to add new properties
+            assert type(init_dict) is dict
+            # Overwrite default value with init_dict content
+            if "sections" in list(init_dict.keys()):
+                sections = init_dict["sections"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
+        self.sections = sections
+
+        # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
@@ -56,6 +80,12 @@ class SolverInputFile(FrozenClass):
             SolverInputFile_str += (
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
+        SolverInputFile_str += (
+            "sections = "
+            + linesep
+            + str(self.sections).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return SolverInputFile_str
 
     def __eq__(self, other):
@@ -63,15 +93,42 @@ class SolverInputFile(FrozenClass):
 
         if type(other) != type(self):
             return False
+        if other.sections != self.sections:
+            return False
         return True
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         SolverInputFile_dict = dict()
+        SolverInputFile_dict["sections"] = (
+            self.sections.copy() if self.sections is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         SolverInputFile_dict["__class__"] = "SolverInputFile"
         return SolverInputFile_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
+
+        self.sections = None
+
+    def _get_sections(self):
+        """getter of sections"""
+        return self._sections
+
+    def _set_sections(self, value):
+        """setter of sections"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("sections", value, "list")
+        self._sections = value
+
+    sections = property(
+        fget=_get_sections,
+        fset=_set_sections,
+        doc=u"""List of SIF sections
+
+        :Type: list
+        """,
+    )

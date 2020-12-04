@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 def __setitem__(self, key, value):
     """Called to implement assignment to self[key]."""
     if isinstance(value, tuple):
