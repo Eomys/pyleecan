@@ -1,3 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-W3,rad,Angle between magnet in the slot,0,float,0,,,,Slot,Slot,,VERSION,1,Slot for inset and surface magnet (abstract)
-,,,,,,,,,,,,,,
