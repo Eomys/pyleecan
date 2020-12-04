@@ -1,4 +1,3 @@
-from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
 
 
@@ -11,7 +10,7 @@ def comp_felec(self):
         Electrical frequency [Hz]
     """
 
-    if self.felec is not None:
+    if hasattr(self, "felec") and self.felec is not None:
         return self.felec  # TODO maybe add some checks?
     elif self.N0 is not None:
         # Get the phase number for verifications
@@ -20,12 +19,9 @@ def comp_felec(self):
                 "ERROR: InputCurrent object should be inside a Simulation object"
             )
         # get the simulation
-        if isinstance(self.parent, Simulation):
-            simu = self.parent
-        elif isinstance(self.parent.parent, Simulation):
-            simu = self.parent.parent
-        else:
-            raise InputError("Cannot find InputCurrent simulation.")
+        if self.parent is None:
+            raise InputError("ERROR: Input object should be inside a Simulation object")
+        simu = self.parent
 
         zp = simu.machine.stator.get_pole_pair_number()
         zp = zp if zp is not None else 1

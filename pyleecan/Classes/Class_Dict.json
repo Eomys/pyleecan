@@ -2993,7 +2993,8 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "comp_axes"
+            "comp_axes",
+            "comp_felec"
         ],
         "mother": "",
         "name": "Input",
@@ -3044,6 +3045,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 2048
+            },
+            {
+                "desc": "Rotor speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "float",
+                "unit": "rpm",
+                "value": null
             }
         ]
     },
@@ -3059,8 +3069,7 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_Id_Iq",
-            "comp_felec"
+            "set_Id_Iq"
         ],
         "mother": "Input",
         "name": "InputCurrent",
@@ -7039,18 +7048,18 @@
                 "max": "",
                 "min": "",
                 "name": "Time",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "s",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Structural position Data object",
                 "max": "",
                 "min": "",
                 "name": "Angle",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Length of the time vector",

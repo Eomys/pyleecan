@@ -26,11 +26,6 @@ try:
 except ImportError as error:
     set_Id_Iq = error
 
-try:
-    from ..Methods.Simulation.InputCurrent.comp_felec import comp_felec
-except ImportError as error:
-    comp_felec = error
-
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
@@ -68,17 +63,6 @@ class InputCurrent(Input):
         )
     else:
         set_Id_Iq = set_Id_Iq
-    # cf Methods.Simulation.InputCurrent.comp_felec
-    if isinstance(comp_felec, ImportError):
-        comp_felec = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use InputCurrent method comp_felec: " + str(comp_felec)
-                )
-            )
-        )
-    else:
-        comp_felec = comp_felec
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -102,6 +86,7 @@ class InputCurrent(Input):
         Nt_tot=2048,
         Nrev=1,
         Na_tot=2048,
+        N0=None,
         init_dict=None,
         init_str=None,
     ):
@@ -150,6 +135,8 @@ class InputCurrent(Input):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
+            if "N0" in list(init_dict.keys()):
+                N0 = init_dict["N0"]
         # Set the properties (value check and convertion are done in setter)
         self.Is = Is
         self.Ir = Ir
@@ -163,7 +150,7 @@ class InputCurrent(Input):
         self.felec = felec
         # Call Input init
         super(InputCurrent, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
+            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
         )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties

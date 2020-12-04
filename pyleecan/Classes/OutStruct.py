@@ -6,7 +6,7 @@
 
 from os import linesep
 from logging import getLogger
-from ._check import set_array, check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.copy import copy
@@ -14,7 +14,6 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
-from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
 
@@ -104,20 +103,8 @@ class OutStruct(FrozenClass):
             OutStruct_str += "parent = None " + linesep
         else:
             OutStruct_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutStruct_str += (
-            "Time = "
-            + linesep
-            + str(self.Time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutStruct_str += (
-            "Angle = "
-            + linesep
-            + str(self.Angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutStruct_str += "Time = " + str(self.Time) + linesep + linesep
+        OutStruct_str += "Angle = " + str(self.Angle) + linesep + linesep
         OutStruct_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutStruct_str += "Na_tot = " + str(self.Na_tot) + linesep
         OutStruct_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
@@ -141,9 +128,9 @@ class OutStruct(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if not array_equal(other.Time, self.Time):
+        if other.Time != self.Time:
             return False
-        if not array_equal(other.Angle, self.Angle):
+        if other.Angle != self.Angle:
             return False
         if other.Nt_tot != self.Nt_tot:
             return False
@@ -170,11 +157,11 @@ class OutStruct(FrozenClass):
         if self.Time is None:
             OutStruct_dict["Time"] = None
         else:
-            OutStruct_dict["Time"] = self.Time.tolist()
+            OutStruct_dict["Time"] = self.Time.as_dict()
         if self.Angle is None:
             OutStruct_dict["Angle"] = None
         else:
-            OutStruct_dict["Angle"] = self.Angle.tolist()
+            OutStruct_dict["Angle"] = self.Angle.as_dict()
         OutStruct_dict["Nt_tot"] = self.Nt_tot
         OutStruct_dict["Na_tot"] = self.Na_tot
         OutStruct_dict["logger_name"] = self.logger_name
@@ -222,14 +209,16 @@ class OutStruct(FrozenClass):
 
     def _set_Time(self, value):
         """setter of Time"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Time", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Time"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("Time", value, "Data")
         self._Time = value
 
     Time = property(
@@ -237,7 +226,7 @@ class OutStruct(FrozenClass):
         fset=_set_Time,
         doc=u"""Structural time Data object
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
@@ -247,14 +236,16 @@ class OutStruct(FrozenClass):
 
     def _set_Angle(self, value):
         """setter of Angle"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Angle", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Angle"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("Angle", value, "Data")
         self._Angle = value
 
     Angle = property(
@@ -262,7 +253,7 @@ class OutStruct(FrozenClass):
         fset=_set_Angle,
         doc=u"""Structural position Data object
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 

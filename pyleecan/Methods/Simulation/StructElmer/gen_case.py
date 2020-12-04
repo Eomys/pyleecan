@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from os.path import join, split
+from numpy import pi
 
 from ....Classes.Section import Section
 from ....Classes.SolverInputFile import SolverInputFile
@@ -8,36 +9,40 @@ from ....Methods.Elmer.Section import File, Variable, MATC
 
 
 # temp shortcut
-names = [
-    "Magnet_0_Body",
-    "Lamination_0_Body",
-    "Magnet_1_Body",
-    "Magnet_0_Right_Slave",
-    "Magnet_0_Bottom_Slave",
-    "Magnet_0_Left_Slave",
-    "Magnet_0_Top_Slave",
-    "Magnet_1_Left_Slave",
-    "Magnet_1_Bottom_Slave",
-    "Magnet_1_Right_Slave",
-    "Magnet_0_Right_Master",
-    "Magnet_0_Bottom_Master",
-    "Magnet_0_Left_Master",
-    "Magnet_0_Top_Master",
-    "Magnet_1_Left_Master",
-    "Magnet_1_Bottom_Master",
-    "Magnet_1_Right_Master",
-    "Magnet_1_Top_Master",
-    "Magnet_1_Top_Slave",
-    "MASTER_ROTOR_BOUNDARY",
-    "SLAVE_ROTOR_BOUNDARY",
-]
+# names = [
+#     "Magnet_0_Body",
+#     "Lamination_0_Body",
+#     "Magnet_1_Body",
+#     "Magnet_0_Right_Slave",
+#     "Magnet_0_Bottom_Slave",
+#     "Magnet_0_Left_Slave",
+#     "Magnet_0_Top_Slave",
+#     "Magnet_1_Left_Slave",
+#     "Magnet_1_Bottom_Slave",
+#     "Magnet_1_Right_Slave",
+#     "Magnet_0_Right_Master",
+#     "Magnet_0_Bottom_Master",
+#     "Magnet_0_Left_Master",
+#     "Magnet_0_Top_Master",
+#     "Magnet_1_Left_Master",
+#     "Magnet_1_Bottom_Master",
+#     "Magnet_1_Right_Master",
+#     "Magnet_1_Top_Master",
+#     "Magnet_1_Top_Slave",
+#     "MASTER_ROTOR_BOUNDARY",
+#     "SLAVE_ROTOR_BOUNDARY",
+# ]
 
 # constants
-ID_MAT_LAM = 1
-ID_MAT_MAG = 2
+# TODO set these constants in dependence of actual number of bodies, i.e. one set of
+#     respective sections per body
+# TODO set magnet material properties by utilizing label 'translation' dict
+#     therefore a 'get_material_by_label' function would be very handy (unite with FEMM)
+ID_LAM = 1
+ID_MAG = 2
 
 
-def gen_case(self, output):
+def gen_case(self, output, mesh_names):
     """Setup the Elmer Case file (.sif file)"""
 
     # get the save path
@@ -51,6 +56,11 @@ def gen_case(self, output):
     with open(start_file, "wt") as fout:
         fout.write(split(sif_file)[1])
 
+    # generate list of mesh names
+    names = []
+    for value in mesh_names.values():
+        names.extend(value)
+
     # --- prepare sections ---
     # bodies
     bodies = []
@@ -60,9 +70,9 @@ def gen_case(self, output):
             body["name"] = name
             body["Equation"] = 1
             if "Magnet" in name:
-                body["Material"] = ID_MAT_MAG
+                body["Material"] = ID_MAG
             elif "Lamination" in name:
-                body["Material"] = ID_MAT_LAM
+                body["Material"] = ID_LAM
             body["Body Force"] = 1
 
             bodies.append(body)
@@ -163,7 +173,7 @@ def gen_case(self, output):
     # Equation = "SaveMaterial"
     # Procedure = File "SaveData" "SaveMaterials"
 
-    # !Parameter 1 = String "Stress Bodyforce 1t"
+    # !Parameter 1 = String "Stress Bodyforce 1"
     # !Parameter 2 = String "Stress Bodyforce 2"
     # !Body Force Parameters = 1
 
@@ -180,17 +190,20 @@ def gen_case(self, output):
     lam_mat = output.simu.machine.rotor.mat_type
 
     mat = [
-        Section(section="Material", id=ID_MAT_LAM),
-        Section(section="Material", id=ID_MAT_MAG),
+        Section(section="Material", id=ID_LAM),
+        Section(section="Material", id=ID_MAG),
     ]
 
-    materials = [lam_mat, mag_mat]
+    materials = [None, None, None]  # one extra element since ID_xx starts with 1
+    materials[ID_LAM] = lam_mat
+    materials[ID_MAG] = mag_mat
 
     for idx in range(len(mat)):
-        mat[idx]["Name"] = materials[idx].name
-        mat[idx]["Density"] = float(materials[idx].struct.rho)
-        mat[idx]["Youngs modulus"] = float(materials[idx].struct.Ex)
-        mat[idx]["Poisson ratio"] = float(materials[idx].struct.nu_xy)
+        ID = mat[idx].id
+        mat[idx]["Name"] = materials[ID].name
+        mat[idx]["Density"] = float(materials[ID].struct.rho)
+        mat[idx]["Youngs modulus"] = float(materials[ID].struct.Ex)
+        mat[idx]["Poisson ratio"] = float(materials[ID].struct.nu_xy)
         # TODO check anisotropy
 
     # boundary conditions
@@ -245,16 +258,16 @@ def gen_case(self, output):
     boundaries.append(bnd)
 
     # body force
+    omega = 2 * pi * self.parent.input.N0
     bfs = []
-    i = 1
-    bf = Section(section="Body Force", id=i)
-    bf["Name"] = "Stress"
-    bf["Mesh Rotate 3"] = 0.0
-    var_1 = Variable(name="Coordinate 1", value=MATC(expr="7850*1047^2*tx(0)"))
-    var_2 = Variable(name="Coordinate 2", value=MATC(expr="7850*1047^2*tx(0)"))
-    bf["Stress Bodyforce 1"] = var_1
-    bf["Stress Bodyforce 2"] = var_2
-    bfs.append(bf)
+    for ID in [ID_LAM, ID_MAG]:
+        matc = MATC(expr=f"{materials[ID].struct.rho}*{omega}^2*tx(0)")
+        bf = Section(section="Body Force", id=ID)
+        bf["Name"] = "Stress"
+        bf["Mesh Rotate 3"] = 0.0
+        bf["Stress Bodyforce 1"] = Variable(name="Coordinate 1", value=matc)
+        bf["Stress Bodyforce 2"] = Variable(name="Coordinate 2", value=matc)
+        bfs.append(bf)
 
     # list of section - list need to be extended, single obj. can be appended
     sect_list = []

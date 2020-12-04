@@ -26,6 +26,11 @@ try:
 except ImportError as error:
     comp_axes = error
 
+try:
+    from ..Methods.Simulation.Input.comp_felec import comp_felec
+except ImportError as error:
+    comp_felec = error
+
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
@@ -58,6 +63,15 @@ class Input(FrozenClass):
         )
     else:
         comp_axes = comp_axes
+    # cf Methods.Simulation.Input.comp_felec
+    if isinstance(comp_felec, ImportError):
+        comp_felec = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Input method comp_felec: " + str(comp_felec))
+            )
+        )
+    else:
+        comp_felec = comp_felec
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -71,6 +85,7 @@ class Input(FrozenClass):
         Nt_tot=2048,
         Nrev=1,
         Na_tot=2048,
+        N0=None,
         init_dict=None,
         init_str=None,
     ):
@@ -99,6 +114,8 @@ class Input(FrozenClass):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
+            if "N0" in list(init_dict.keys()):
+                N0 = init_dict["N0"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.time = time
@@ -106,6 +123,7 @@ class Input(FrozenClass):
         self.Nt_tot = Nt_tot
         self.Nrev = Nrev
         self.Na_tot = Na_tot
+        self.N0 = N0
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -131,6 +149,7 @@ class Input(FrozenClass):
         Input_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         Input_str += "Nrev = " + str(self.Nrev) + linesep
         Input_str += "Na_tot = " + str(self.Na_tot) + linesep
+        Input_str += "N0 = " + str(self.N0) + linesep
         return Input_str
 
     def __eq__(self, other):
@@ -147,6 +166,8 @@ class Input(FrozenClass):
         if other.Nrev != self.Nrev:
             return False
         if other.Na_tot != self.Na_tot:
+            return False
+        if other.N0 != self.N0:
             return False
         return True
 
@@ -165,6 +186,7 @@ class Input(FrozenClass):
         Input_dict["Nt_tot"] = self.Nt_tot
         Input_dict["Nrev"] = self.Nrev
         Input_dict["Na_tot"] = self.Na_tot
+        Input_dict["N0"] = self.N0
         # The class name is added to the dict for deserialisation purpose
         Input_dict["__class__"] = "Input"
         return Input_dict
@@ -179,6 +201,7 @@ class Input(FrozenClass):
         self.Nt_tot = None
         self.Nrev = None
         self.Na_tot = None
+        self.N0 = None
 
     def _get_time(self):
         """getter of time"""
@@ -300,5 +323,23 @@ class Input(FrozenClass):
 
         :Type: int
         :min: 1
+        """,
+    )
+
+    def _get_N0(self):
+        """getter of N0"""
+        return self._N0
+
+    def _set_N0(self, value):
+        """setter of N0"""
+        check_var("N0", value, "float")
+        self._N0 = value
+
+    N0 = property(
+        fget=_get_N0,
+        fset=_set_N0,
+        doc=u"""Rotor speed
+
+        :Type: float
         """,
     )

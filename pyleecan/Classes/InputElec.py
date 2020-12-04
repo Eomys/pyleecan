@@ -92,6 +92,7 @@ class InputElec(Input):
         Nt_tot=2048,
         Nrev=1,
         Na_tot=2048,
+        N0=None,
         init_dict=None,
         init_str=None,
     ):
@@ -134,6 +135,8 @@ class InputElec(Input):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
+            if "N0" in list(init_dict.keys()):
+                N0 = init_dict["N0"]
         # Set the properties (value check and convertion are done in setter)
         self.N0 = N0
         self.rot_dir = rot_dir
@@ -144,7 +147,7 @@ class InputElec(Input):
         self.felec = felec
         # Call Input init
         super(InputElec, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
+            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
         )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties

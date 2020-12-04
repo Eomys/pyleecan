@@ -19,10 +19,10 @@ def run(self):
     self.comp_axes(output)
 
     # setup the mesh
-    self.setup_mesh(output)
+    mesh_names = self.gen_mesh(output)
 
     # setup the Elmer case file
-    self.setup_case()
+    self.gen_case(output, mesh_names)
 
     # Compute the magnetic force according to the Force model
     self.solve_FEA(output)
