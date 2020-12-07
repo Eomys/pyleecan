@@ -24,16 +24,7 @@ def get_path_save_fea(self, output):
     """
     path_res = output.get_path_result()
 
-    if self.path_name:
-        path_name = self.path_name
-    elif output.simu.machine.name:
-        path_name = output.simu.machine.name + "_Model"
-    elif output.simu.name:
-        path_name = output.simu.name + "_Model"
-    else:  # Default name
-        path_name = "FEA_Model.fem"
-
-    save_dir = join(path_res, "StructElmer", path_name)
+    save_dir = join(path_res, "Elmer_Elasticity")
     if not exists(save_dir):
         makedirs(save_dir)
 
