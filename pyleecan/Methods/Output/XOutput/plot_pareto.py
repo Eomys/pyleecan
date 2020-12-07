@@ -4,7 +4,7 @@ from ....Classes.DataKeeper import DataKeeper
 
 
 def plot_pareto(
-    self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, title=None
+    self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, title=None, grid=False
 ):
     """Plot the pareto front for 2 objective functions
 
@@ -145,6 +145,10 @@ def plot_pareto(
     ax.set_title("Pareto Front")
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
+
+    if grid:
+        ax.set_axisbelow(True)
+        ax.grid()
 
     # Add anotations in the plot see https://stackoverflow.com/a/47166787
     annot = ax.annotate(

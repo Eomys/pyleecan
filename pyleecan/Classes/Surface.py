@@ -147,6 +147,8 @@ class Surface(FrozenClass):
         Surface_dict = dict()
         if self.point_ref is None:
             Surface_dict["point_ref"] = None
+        elif isinstance(self.point_ref, float):
+            Surface_dict["point_ref"] = self.point_ref
         else:
             Surface_dict["point_ref"] = str(self.point_ref)
         Surface_dict["label"] = self.label

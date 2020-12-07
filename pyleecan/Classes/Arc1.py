@@ -297,10 +297,14 @@ class Arc1(Arc):
         Arc1_dict = super(Arc1, self).as_dict()
         if self.begin is None:
             Arc1_dict["begin"] = None
+        elif isinstance(self.begin, float):
+            Arc1_dict["begin"] = self.begin
         else:
             Arc1_dict["begin"] = str(self.begin)
         if self.end is None:
             Arc1_dict["end"] = None
+        elif isinstance(self.end, float):
+            Arc1_dict["end"] = self.end
         else:
             Arc1_dict["end"] = str(self.end)
         Arc1_dict["radius"] = self.radius
