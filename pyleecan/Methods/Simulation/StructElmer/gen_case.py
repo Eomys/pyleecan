@@ -8,31 +8,6 @@ from ....Classes.SolverInputFile import SolverInputFile
 from ....Methods.Elmer.Section import File, Variable, MATC
 
 
-# temp shortcut
-# names = [
-#     "Magnet_0_Body",
-#     "Lamination_0_Body",
-#     "Magnet_1_Body",
-#     "Magnet_0_Right_Slave",
-#     "Magnet_0_Bottom_Slave",
-#     "Magnet_0_Left_Slave",
-#     "Magnet_0_Top_Slave",
-#     "Magnet_1_Left_Slave",
-#     "Magnet_1_Bottom_Slave",
-#     "Magnet_1_Right_Slave",
-#     "Magnet_0_Right_Master",
-#     "Magnet_0_Bottom_Master",
-#     "Magnet_0_Left_Master",
-#     "Magnet_0_Top_Master",
-#     "Magnet_1_Left_Master",
-#     "Magnet_1_Bottom_Master",
-#     "Magnet_1_Right_Master",
-#     "Magnet_1_Top_Master",
-#     "Magnet_1_Top_Slave",
-#     "MASTER_ROTOR_BOUNDARY",
-#     "SLAVE_ROTOR_BOUNDARY",
-# ]
-
 # constants
 # TODO set these constants in dependence of actual number of bodies, i.e. one set of
 #     respective sections per body
@@ -135,24 +110,19 @@ def gen_case(self, output, mesh_names):
     # solver 3
     # i += 1
     # solver = Section(section='Solver', id=i)
-
     # Exec Solver = After Simulation
     # Equation = SaveScalars
     # Procedure = "SaveData" "SaveScalars"
     # Filename = forces.dat
-
     # Operator 1 = body force int
     # Variable 1 = Stress Bodyforce 1
     # Mask Name 1 = BodyForce
-
     # Operator 2 = boundary int
     # Variable 2 = Displacement Loads 1
     # Mask Name 2 = Top_0
-
     # Operator 3 = boundary int
     # Variable 3 = Displacement Loads 2
     # Mask Name 3 = Top_0
-
     # Operator 4 = boundary int
     # Variable 4 = Displacement Contact Load 1
     # Mask Name 4 = Top_0
@@ -173,12 +143,9 @@ def gen_case(self, output, mesh_names):
     # Solver 5
     # Equation = "SaveMaterial"
     # Procedure = File "SaveData" "SaveMaterials"
-
     # !Parameter 1 = String "Stress Bodyforce 1"
     # !Parameter 2 = String "Stress Bodyforce 2"
     # !Body Force Parameters = 1
-
-    # End
 
     # equations
     eqs = Section(section="Equation", id=1)
