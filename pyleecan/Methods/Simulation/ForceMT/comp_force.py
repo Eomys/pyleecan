@@ -1,5 +1,4 @@
 from numpy import pi, all as np_all
-from SciDataTool import DataTime, VectorField
 
 
 def comp_force(self, output, axes_dict):
@@ -13,7 +12,22 @@ def comp_force(self, output, axes_dict):
         an Output object (to update)
     axes_dict: {Data}
         Dict of axes used for force calculation
+
+    Returns
+    -------
+    out_dict: dict
+        Dict containing the following quantities:
+            AGSF_r : ndarray
+                Airgap radial Maxwell stress (Nt,Na,Nz) [N/m²]
+            AGSF_t : ndarray
+                Airgap tangential Maxwell stress (Nt,Na,Nz) [N/m²]
+            AGSF_z : ndarray
+                Airgap axial Maxwell stress (Nt,Na,Nz) [N/m²]
+
     """
+
+    # Init output dict
+    out_dict = dict()
 
     # Get time and angular axes
     Angle = axes_dict["Angle"]
@@ -40,59 +54,28 @@ def comp_force(self, output, axes_dict):
         axis_data={"time": time, "angle": angle},
     )
     Br = Brphiz["radial"]
-    Bt = Brphiz["tangential"]
-    Bz = Brphiz["axial"]
 
     # Magnetic void permeability
     mu_0 = 4 * pi * 1e-7
 
-    # Compute AGSF with MT formula
-    Prad = (Br * Br - Bt * Bt - Bz * Bz) / (2 * mu_0)
-    Ptan = Br * Bt / mu_0
-    Pz = Br * Bz / mu_0
+    # Get flux density component lists
+    comp_list = list(output.mag.B.components.keys())
 
-    # Store Maxwell Stress tensor P in VectorField
-    # Build axes list
-    axes_list = list()
-    for axe in output.mag.B.get_axes():
-        if axe.name == Angle.name:
-            axes_list.append(Angle)
-        elif axe.name == Time.name:
-            axes_list.append(Time)
-        else:
-            axes_list.append(axe)
+    # Calculate Maxwell Stress Tensor
+    if "radial" in comp_list:
+        if "tangential" not in comp_list and "axial" not in comp_list:
+            out_dict["AGSF_r"] = -Br * Br / (2 * mu_0)
 
-    # Build components list
-    components = {}
-    if not np_all((Prad == 0)):
-        Prad_data = DataTime(
-            name="Airgap radial surface force",
-            unit="N/m2",
-            symbol="P_r",
-            axes=axes_list,
-            values=Prad,
-        )
-        components["radial"] = Prad_data
-    if not np_all((Ptan == 0)):
-        Ptan_data = DataTime(
-            name="Airgap tangential surface force",
-            unit="N/m2",
-            symbol="P_t",
-            axes=axes_list,
-            values=Ptan,
-        )
-        components["tangential"] = Ptan_data
-    if not np_all((Pz == 0)):
-        Pz_data = DataTime(
-            name="Airgap axial surface force",
-            unit="N/m2",
-            symbol="P_z",
-            axes=axes_list,
-            values=Pz,
-        )
-        components["axial"] = Pz_data
+        elif "tangential" in comp_list:
+            Bt = Brphiz["tangential"]
+            out_dict["AGSF_t"] = -Br * Bt / mu_0
 
-    # Store components in VectorField
-    output.force.P = VectorField(
-        name="Magnetic airgap surface force", symbol="P", components=components
-    )
+            if "axial" not in comp_list:
+                out_dict["AGSF_r"] = -(Br * Br - Bt * Bt) / (2 * mu_0)
+
+            else:
+                Bz = Brphiz["axial"]
+                out_dict["AGSF_r"] = -(Br * Br - Bt * Bt - Bz * Bz) / (2 * mu_0)
+                out_dict["AGSF_z"] = -Br * Bz / mu_0
+
+    return out_dict
