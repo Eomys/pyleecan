@@ -158,16 +158,17 @@ def gen_case(self, output, mesh_names):
     # Mask Name 4 = Top_0
 
     # Solver 4
-    i += 1
-    solver = Section(section="Solver", id=i)
-    # solver["Exec Solver"] = "never"
-    solver["Equation"] = "result output"
-    solver["Procedure"] = [File("ResultOutputSolve"), File("ResultOutputSolver")]
-    solver["Output File Name"] = File("case")
-    solver["Vtu Format"] = True
-    solver["Displace Mesh"] = True
-    solver["Single Precision"] = False
-    solver_list.append(solver)
+    if self.is_save_FEA:
+        i += 1
+        solver = Section(section="Solver", id=i)
+        # solver["Exec Solver"] = "never"
+        solver["Equation"] = "result output"
+        solver["Procedure"] = [File("ResultOutputSolve"), File("ResultOutputSolver")]
+        solver["Output File Name"] = File("case")
+        solver["Vtu Format"] = True
+        solver["Displace Mesh"] = True
+        solver["Single Precision"] = False
+        solver_list.append(solver)
 
     # Solver 5
     # Equation = "SaveMaterial"
@@ -186,24 +187,22 @@ def gen_case(self, output, mesh_names):
 
     # materials
     # TODO get magnets materials is inconvienent
-    mag_mat = output.simu.machine.rotor.hole[0].magnet_0.mat_type
-    lam_mat = output.simu.machine.rotor.mat_type
-
-    mat = [
-        Section(section="Material", id=ID_LAM),
-        Section(section="Material", id=ID_MAG),
-    ]
-
     materials = [None, None, None]  # one extra element since ID_xx starts with 1
-    materials[ID_LAM] = lam_mat
-    materials[ID_MAG] = mag_mat
 
-    for idx in range(len(mat)):
-        ID = mat[idx].id
-        mat[idx]["Name"] = materials[ID].name
-        mat[idx]["Density"] = float(materials[ID].struct.rho)
-        mat[idx]["Youngs modulus"] = float(materials[ID].struct.Ex)
-        mat[idx]["Poisson ratio"] = float(materials[ID].struct.nu_xy)
+    mat_section = [Section(section="Material", id=ID_LAM)]
+    materials[ID_LAM] = output.simu.machine.rotor.mat_type
+
+    if self.include_magnets:
+        mat_section.append(Section(section="Material", id=ID_MAG))
+        materials[ID_MAG] = output.simu.machine.rotor.hole[0].magnet_0.mat_type
+
+    # add materials to material sections
+    for idx in range(len(mat_section)):
+        ID = mat_section[idx].id
+        mat_section[idx]["Name"] = materials[ID].name
+        mat_section[idx]["Density"] = float(materials[ID].struct.rho)
+        mat_section[idx]["Youngs modulus"] = float(materials[ID].struct.Ex)
+        mat_section[idx]["Poisson ratio"] = float(materials[ID].struct.nu_xy)
         # TODO check anisotropy
 
     # boundary conditions
@@ -258,9 +257,16 @@ def gen_case(self, output, mesh_names):
     boundaries.append(bnd)
 
     # body force
-    omega = 2 * pi * self.parent.input.N0
+    omega = 2 * pi * self.parent.input.N0 / 60
     bfs = []
-    for ID in [ID_LAM, ID_MAG]:
+
+    ID_list = [
+        ID_LAM,
+    ]
+    if self.include_magnets:
+        ID_list.append(ID_MAG)
+
+    for ID in ID_list:
         matc = MATC(expr=f"{materials[ID].struct.rho}*{omega}^2*tx(0)")
         bf = Section(section="Body Force", id=ID)
         bf["Name"] = "Stress"
@@ -274,7 +280,7 @@ def gen_case(self, output, mesh_names):
     sect_list.extend(bodies)
     sect_list.append(sim)
     sect_list.append(const)
-    sect_list.extend(mat)
+    sect_list.extend(mat_section)
     sect_list.extend(solver_list)
     sect_list.append(eqs)
     sect_list.extend(boundaries)

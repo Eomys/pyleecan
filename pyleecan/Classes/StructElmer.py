@@ -144,8 +144,9 @@ class StructElmer(Structural):
         path_name="",
         FEMM_dict_enforced=-1,
         is_get_mesh=False,
-        is_save_FEA=False,
+        is_save_FEA=True,
         transform_list=-1,
+        include_magnets=True,
         init_dict=None,
         init_str=None,
     ):
@@ -176,6 +177,8 @@ class StructElmer(Structural):
                 is_save_FEA = init_dict["is_save_FEA"]
             if "transform_list" in list(init_dict.keys()):
                 transform_list = init_dict["transform_list"]
+            if "include_magnets" in list(init_dict.keys()):
+                include_magnets = init_dict["include_magnets"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.path_name = path_name
@@ -183,6 +186,7 @@ class StructElmer(Structural):
         self.is_get_mesh = is_get_mesh
         self.is_save_FEA = is_save_FEA
         self.transform_list = transform_list
+        self.include_magnets = include_magnets
         # Call Structural init
         super(StructElmer, self).__init__()
         # The class is frozen (in Structural init), for now it's impossible to
@@ -207,6 +211,7 @@ class StructElmer(Structural):
             + str(self.transform_list).replace(linesep, linesep + "\t")
             + linesep
         )
+        StructElmer_str += "include_magnets = " + str(self.include_magnets) + linesep
         return StructElmer_str
 
     def __eq__(self, other):
@@ -230,6 +235,8 @@ class StructElmer(Structural):
             return False
         if other.transform_list != self.transform_list:
             return False
+        if other.include_magnets != self.include_magnets:
+            return False
         return True
 
     def as_dict(self):
@@ -249,6 +256,7 @@ class StructElmer(Structural):
         StructElmer_dict["transform_list"] = (
             self.transform_list.copy() if self.transform_list is not None else None
         )
+        StructElmer_dict["include_magnets"] = self.include_magnets
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         StructElmer_dict["__class__"] = "StructElmer"
@@ -263,6 +271,7 @@ class StructElmer(Structural):
         self.is_get_mesh = None
         self.is_save_FEA = None
         self.transform_list = None
+        self.include_magnets = None
         # Set to None the properties inherited from Structural
         super(StructElmer, self)._set_None()
 
@@ -375,5 +384,23 @@ class StructElmer(Structural):
         doc=u"""List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
 
         :Type: list
+        """,
+    )
+
+    def _get_include_magnets(self):
+        """getter of include_magnets"""
+        return self._include_magnets
+
+    def _set_include_magnets(self, value):
+        """setter of include_magnets"""
+        check_var("include_magnets", value, "bool")
+        self._include_magnets = value
+
+    include_magnets = property(
+        fget=_get_include_magnets,
+        fset=_set_include_magnets,
+        doc=u"""Switch to include magents in the structural simulation
+
+        :Type: bool
         """,
     )

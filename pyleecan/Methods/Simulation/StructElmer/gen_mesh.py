@@ -70,7 +70,7 @@ def gen_mesh(self, output):
 
     # preprocess GMSH model to get rotor lamination and magnet and set boundary names
     lam_name = "lamination.msh"
-    mag_name = "magnets.msh"
+    mag_name = "magnets.msh" if self.include_magnets else None
 
     names = {}
     _, _, names["Lamination"] = self.process_mesh(
@@ -80,12 +80,13 @@ def gen_mesh(self, output):
         is_get_magnet=False,
     )
 
-    _, _, names["Magnets"] = self.process_mesh(
-        file_gmsh_geo,
-        join(save_dir, mag_name),
-        is_get_lam=False,
-        is_get_magnet=True,
-    )
+    if self.include_magnets:
+        _, _, names["Magnets"] = self.process_mesh(
+            file_gmsh_geo,
+            join(save_dir, mag_name),
+            is_get_lam=False,
+            is_get_magnet=True,
+        )
 
     # convert to ElmerGrid mesh
     _gen_mesh(save_dir, "Mesh", lam_name, mag_name, self.get_logger())
@@ -93,7 +94,7 @@ def gen_mesh(self, output):
     return names
 
 
-def _gen_mesh(cwd, out_name, lam_name, mag_name, logger):
+def _gen_mesh(cwd, out_name, lam_name, mag_name=None, logger=None):
     """Convert the mesh from GMSH format to ElmerGrid format
 
     Parameters
@@ -107,20 +108,23 @@ def _gen_mesh(cwd, out_name, lam_name, mag_name, logger):
 
     ElmerGrid_bin = get_path_binary("ElmerGrid")
 
-    cmd = [
-        '"' + ElmerGrid_bin + '"',
-        "14 2",
-        lam_name,
-        "-in",
-        mag_name,
-        "-unite -out",
-        out_name,
-        "-2d",
-        "-autoclean",
-        "-names",
-    ]
+    cmd = []
+    cmd.append('"' + ElmerGrid_bin + '"')
+    cmd.append("14 2")
+    cmd.append(lam_name)
+    if mag_name is not None:
+        cmd.append("-in")
+        cmd.append(mag_name)
+        cmd.append("-unite")
 
-    logger.info("Calling ElmerGrid: " + " ".join(map(str, cmd)))
+    cmd.append("-out")
+    cmd.append(out_name)
+    cmd.append("-2d")
+    cmd.append("-autoclean")
+    cmd.append("-names")
+
+    if logger:
+        logger.info("Calling ElmerGrid: " + " ".join(map(str, cmd)))
 
     process = subprocess.Popen(
         " ".join(cmd),
