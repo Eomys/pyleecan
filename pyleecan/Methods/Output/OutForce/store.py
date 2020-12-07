@@ -16,9 +16,9 @@ def store(self, out_dict, axes_dict):
 
     """
 
-    # Store airgap flux as VectorField object
+    # Store air-gap surface force as VectorField object
 
-    # Axes for each airgap flux component
+    # Axes for each component
     axis_list = [axes_dict["Time"], axes_dict["Angle"]]
 
     # Create VectorField with empty components
@@ -26,7 +26,7 @@ def store(self, out_dict, axes_dict):
         name="Air gap Surface Force",
         symbol="AGSF",
     )
-    # Radial flux component
+    # Radial air-gap surface force component
     if "AGSF_r" in out_dict:
         self.AGSF.components["radial"] = DataTime(
             name="Radial AGSF",
@@ -35,7 +35,7 @@ def store(self, out_dict, axes_dict):
             axes=axis_list,
             values=out_dict.pop("AGSF_r"),
         )
-    # Tangential flux component
+    # Tangential air-gap surface force component
     if "AGSF_t" in out_dict:
         self.AGSF.components["tangential"] = DataTime(
             name="Tangential AGSF",
@@ -44,7 +44,7 @@ def store(self, out_dict, axes_dict):
             axes=axis_list,
             values=out_dict.pop("AGSF_t"),
         )
-    # Axial flux component
+    # Axial air-gap surface force component
     if "AGSF_z" in out_dict:
         self.AGSF.components["axial"] = DataTime(
             name="Axial AGSF",
