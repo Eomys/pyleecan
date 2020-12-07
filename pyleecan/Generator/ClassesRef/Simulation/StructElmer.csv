@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
 Kmesh_fineness,,"global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)",0,float,1,,,,Simulation,Structural,run,VERSION,1,Structural module: FEA model with Elmer,
 path_name,,Name of the path to save the FEA model,0,str,,,,,,,get_meshsolution,,,,
-FEMM_dict_enforced,,To enforce user-defined values for FEA main parameters ,0,dict,,,,,,,get_path_save_fea,,,,
+FEA_dict_enforced,,To enforce user-defined values for FEA main parameters ,0,dict,,,,,,,get_path_save_fea,,,,
 is_get_mesh,,To save FEA mesh for latter post-procesing ,0,bool,0,,,,,,solve_FEA,,,,
 is_save_FEA,,To save FEA mesh and solution in .vtu file,0,bool,1,,,,,,gen_mesh,,,,
 transform_list,,"List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",0,list,[],,,,,,gen_case,,,,

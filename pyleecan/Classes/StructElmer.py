@@ -142,7 +142,7 @@ class StructElmer(Structural):
         self,
         Kmesh_fineness=1,
         path_name="",
-        FEMM_dict_enforced=-1,
+        FEA_dict_enforced=-1,
         is_get_mesh=False,
         is_save_FEA=True,
         transform_list=-1,
@@ -169,8 +169,8 @@ class StructElmer(Structural):
                 Kmesh_fineness = init_dict["Kmesh_fineness"]
             if "path_name" in list(init_dict.keys()):
                 path_name = init_dict["path_name"]
-            if "FEMM_dict_enforced" in list(init_dict.keys()):
-                FEMM_dict_enforced = init_dict["FEMM_dict_enforced"]
+            if "FEA_dict_enforced" in list(init_dict.keys()):
+                FEA_dict_enforced = init_dict["FEA_dict_enforced"]
             if "is_get_mesh" in list(init_dict.keys()):
                 is_get_mesh = init_dict["is_get_mesh"]
             if "is_save_FEA" in list(init_dict.keys()):
@@ -182,7 +182,7 @@ class StructElmer(Structural):
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.path_name = path_name
-        self.FEMM_dict_enforced = FEMM_dict_enforced
+        self.FEA_dict_enforced = FEA_dict_enforced
         self.is_get_mesh = is_get_mesh
         self.is_save_FEA = is_save_FEA
         self.transform_list = transform_list
@@ -201,7 +201,7 @@ class StructElmer(Structural):
         StructElmer_str += "Kmesh_fineness = " + str(self.Kmesh_fineness) + linesep
         StructElmer_str += 'path_name = "' + str(self.path_name) + '"' + linesep
         StructElmer_str += (
-            "FEMM_dict_enforced = " + str(self.FEMM_dict_enforced) + linesep
+            "FEA_dict_enforced = " + str(self.FEA_dict_enforced) + linesep
         )
         StructElmer_str += "is_get_mesh = " + str(self.is_get_mesh) + linesep
         StructElmer_str += "is_save_FEA = " + str(self.is_save_FEA) + linesep
@@ -227,7 +227,7 @@ class StructElmer(Structural):
             return False
         if other.path_name != self.path_name:
             return False
-        if other.FEMM_dict_enforced != self.FEMM_dict_enforced:
+        if other.FEA_dict_enforced != self.FEA_dict_enforced:
             return False
         if other.is_get_mesh != self.is_get_mesh:
             return False
@@ -246,9 +246,9 @@ class StructElmer(Structural):
         StructElmer_dict = super(StructElmer, self).as_dict()
         StructElmer_dict["Kmesh_fineness"] = self.Kmesh_fineness
         StructElmer_dict["path_name"] = self.path_name
-        StructElmer_dict["FEMM_dict_enforced"] = (
-            self.FEMM_dict_enforced.copy()
-            if self.FEMM_dict_enforced is not None
+        StructElmer_dict["FEA_dict_enforced"] = (
+            self.FEA_dict_enforced.copy()
+            if self.FEA_dict_enforced is not None
             else None
         )
         StructElmer_dict["is_get_mesh"] = self.is_get_mesh
@@ -267,7 +267,7 @@ class StructElmer(Structural):
 
         self.Kmesh_fineness = None
         self.path_name = None
-        self.FEMM_dict_enforced = None
+        self.FEA_dict_enforced = None
         self.is_get_mesh = None
         self.is_save_FEA = None
         self.transform_list = None
@@ -311,20 +311,20 @@ class StructElmer(Structural):
         """,
     )
 
-    def _get_FEMM_dict_enforced(self):
-        """getter of FEMM_dict_enforced"""
-        return self._FEMM_dict_enforced
+    def _get_FEA_dict_enforced(self):
+        """getter of FEA_dict_enforced"""
+        return self._FEA_dict_enforced
 
-    def _set_FEMM_dict_enforced(self, value):
-        """setter of FEMM_dict_enforced"""
+    def _set_FEA_dict_enforced(self, value):
+        """setter of FEA_dict_enforced"""
         if type(value) is int and value == -1:
             value = dict()
-        check_var("FEMM_dict_enforced", value, "dict")
-        self._FEMM_dict_enforced = value
+        check_var("FEA_dict_enforced", value, "dict")
+        self._FEA_dict_enforced = value
 
-    FEMM_dict_enforced = property(
-        fget=_get_FEMM_dict_enforced,
-        fset=_set_FEMM_dict_enforced,
+    FEA_dict_enforced = property(
+        fget=_get_FEA_dict_enforced,
+        fset=_set_FEA_dict_enforced,
         doc=u"""To enforce user-defined values for FEA main parameters 
 
         :Type: dict

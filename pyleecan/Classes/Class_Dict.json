@@ -10500,7 +10500,7 @@
                 "desc": "To enforce user-defined values for FEA main parameters ",
                 "max": "",
                 "min": "",
-                "name": "FEMM_dict_enforced",
+                "name": "FEA_dict_enforced",
                 "type": "dict",
                 "unit": "",
                 "value": ""
