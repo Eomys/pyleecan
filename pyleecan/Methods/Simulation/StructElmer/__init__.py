@@ -36,5 +36,5 @@ def _execute(binary_name, cwd, logger, parameter=None):
     return_code = popen.wait()
     if return_code:
         raise ElmerProcessError(
-            "Elmer Process Error while executing {" ".join(cmd)}: \n" + return_code
+            f"Elmer Process Error while executing {' '.join(cmd)}: Return Code [{return_code}]"
         )
