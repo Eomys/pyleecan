@@ -6428,7 +6428,9 @@
         "daughters": [],
         "desc": "Gather the structural module outputs",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "store"
+        ],
         "mother": "",
         "name": "OutForce",
         "package": "Output",
@@ -6453,10 +6455,10 @@
                 "value": "None"
             },
             {
-                "desc": "Air-gap surface force",
+                "desc": "Air Gap Surface Force (mainly computed with Maxwell stress tensor)",
                 "max": "",
                 "min": "",
-                "name": "P",
+                "name": "AGSF",
                 "type": "SciDataTool.Classes.VectorField.VectorField",
                 "unit": "N.m^2",
                 "value": "None"
