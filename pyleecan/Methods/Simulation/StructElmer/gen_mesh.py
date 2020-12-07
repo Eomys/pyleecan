@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 from os.path import join
-import subprocess
 
-from ....Methods.Simulation.Input import InputError
 from ....Functions.GMSH.draw_GMSH import draw_GMSH
-from ....Functions.get_path_binary import get_path_binary
-
+from ....Methods.Simulation.StructElmer import _execute
 
 def gen_mesh(self, output):
     """Initialize the FEA simulation model
@@ -24,32 +21,9 @@ def gen_mesh(self, output):
     """
     # readability
     machine = output.simu.machine
-    sym, _, sym_r, is_antipert_r = machine.comp_periodicity()
+    _, _, sym_r, is_antipert_r = machine.comp_periodicity()
 
     sym_r = sym_r * (1 + is_antipert_r)
-
-    # temp. mesh settings
-
-    n1 = 3
-    n2 = 20
-
-    mesh_dict = {
-        "Magnet_0_Top": n2,
-        "Magnet_0_Bottom": n2,
-        "Magnet_0_Left": n1,
-        "Magnet_0_Right": n1,
-        "Magnet_1_Top": n2,
-        "Magnet_1_Bottom": n2,
-        "Magnet_1_Left": n1,
-        "Magnet_1_Right": n1,
-        "Hole_0_Top": 0,
-        "Hole_0_Left": n1,
-        "Hole_0_Right": n1,
-        "Hole_1_Top": 0,
-        "Hole_1_Left": n1,
-        "Tangential_Bridge": 10,
-        "Lamination_Rotor_Bore_Radius_Ext": 100,
-    }
 
     # get the save path and file names
     save_dir = self.get_path_save_fea(output)
@@ -63,7 +37,7 @@ def gen_mesh(self, output):
         is_lam_only_S=False,
         is_lam_only_R=False,
         is_sliding_band=False,
-        user_mesh_dict=mesh_dict,
+        user_mesh_dict=self.FEA_dict_enforced,
         path_save=file_gmsh_geo,
         is_set_labels=True,
     )
@@ -104,40 +78,23 @@ def _gen_mesh(cwd, out_name, lam_name, mag_name=None, logger=None):
     -------
 
     """
-    # ElmerGrid must be installed and in the PATH
-
-    ElmerGrid_bin = get_path_binary("ElmerGrid")
-
-    cmd = []
-    cmd.append('"' + ElmerGrid_bin + '"')
-    cmd.append("14 2")
-    cmd.append(lam_name)
+    # command line parameter to ElmerGrid
+    parameter = []
+    parameter.append("14 2")
+    parameter.append(lam_name)
     if mag_name is not None:
-        cmd.append("-in")
-        cmd.append(mag_name)
-        cmd.append("-unite")
+        parameter.append("-in")
+        parameter.append(mag_name)
+        parameter.append("-unite")
 
-    cmd.append("-out")
-    cmd.append(out_name)
-    cmd.append("-2d")
-    cmd.append("-autoclean")
-    cmd.append("-names")
+    parameter.append("-out")
+    parameter.append(out_name)
+    parameter.append("-2d")
+    parameter.append("-autoclean")
+    parameter.append("-names")
 
-    if logger:
-        logger.info("Calling ElmerGrid: " + " ".join(map(str, cmd)))
-
-    process = subprocess.Popen(
-        " ".join(cmd),
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        shell=True,
-        cwd=cwd,
-    )
-    (stdout, stderr) = process.communicate()
-
-    process.wait()
-    print(stdout.decode())
-    if process.returncode != 0:
-        print(stderr.decode())
-
+    # execute ElmerGrid
+    for info in _execute('ElmerGrid', cwd, logger, parameter=parameter):
+            print(info, end="")
+    
     return True
