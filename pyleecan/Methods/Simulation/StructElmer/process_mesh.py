@@ -221,9 +221,17 @@ def process_mesh(
 
     # add symmetry boundaries to keeper dict 'groups_dict'
     if is_get_lam:
+        keeper_list = [
+            "MASTER_ROTOR_BOUNDARY",
+            "SLAVE_ROTOR_BOUNDARY",
+            "Tangential_Bridge",
+            "Radial_Bridge",
+            "ROTOR_BORE_CURVE",
+        ]
+
         for line in lam_lines:
             names = _get_names_physical(gmsh, dimtag=[1, line])
-            for key in ["MASTER_ROTOR_BOUNDARY", "SLAVE_ROTOR_BOUNDARY"]:
+            for key in keeper_list:
                 if any([key in name for name in names]):
                     if key not in groups_dict:
                         groups_dict[key] = []

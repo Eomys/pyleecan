@@ -36,8 +36,8 @@ def gen_case(self, output, mesh_names):
     for value in mesh_names.values():
         names.extend(value)
 
-    # --- prepare sections ---
-    # bodies
+    # --- prepare sections ----------------------------------------------------------- #
+    # --- bodies --------------------------------------------------------------------- #
     bodies = []
     for name in names:
         if "Body" in name:
@@ -52,7 +52,7 @@ def gen_case(self, output, mesh_names):
 
             bodies.append(body)
 
-    # simulation
+    # --- simulation ----------------------------------------------------------------- #
     sim = Section(section="Simulation")
     sim["Max Output Level"] = 5
     sim["Coordinate System"] = "Cartesian 2D"
@@ -60,17 +60,17 @@ def gen_case(self, output, mesh_names):
     sim["Simulation Type"] = "Steady State"
     sim["Steady State Max Iterations"] = 1
     sim["Initialize Dirichlet Conditions"] = False
-    sim["Output File"] = File("simulation.result")
+    # sim["Output File"] = File("simulation.result")
     sim["Use Mesh Names"] = True
 
-    # constants
+    # --- constants ------------------------------------------------------------------ #
     const = Section(section="Constants")
     const["Gravity"] = [0.0, -1.0, 0.0, 9.82]
 
-    # --- solvers ---
+    # --- solvers -------------------------------------------------------------------- #
     solver_list = []
 
-    # solver 1
+    # solver - move mesh before simulation
     i = 1
     solver = Section(section="Solver", id=i)
     solver.comment = "Moves the magnets as defined in the body force section"
@@ -79,7 +79,7 @@ def gen_case(self, output, mesh_names):
     solver["Procedure"] = [File("RigidMeshMapper"), File("RigidMeshMapper")]
     solver_list.append(solver)
 
-    # solver 2
+    # solver - elasticity simulation
     i += 1
     solver = Section(section="Solver", id=i)
     solver["Equation"] = "Linear Elasticity"
@@ -90,7 +90,7 @@ def gen_case(self, output, mesh_names):
     solver["Linear System Residual Output"] = 10
     solver["Linear System Max Iterations"] = 400
     solver["Linear System Iterative Method"] = "GCR"
-    solver["Linear System Convergence Tolerance"] = 1.0e-12
+    solver["Linear System Convergence Tolerance"] = 1.0e-9
     solver["Linear System Abort Not Converged"] = False
     solver["Linear System Residual Mode"] = True
     solver["Nonlinear System Convergence Tolerance"] = 1.0e-7
@@ -107,14 +107,59 @@ def gen_case(self, output, mesh_names):
     solver["Optimize Bandwidth"] = True
     solver_list.append(solver)
 
-    # solver 3
-    # i += 1
-    # solver = Section(section='Solver', id=i)
-    # Exec Solver = After Simulation
-    # Equation = SaveScalars
-    # Procedure = "SaveData" "SaveScalars"
-    # Filename = forces.dat
-    # Operator 1 = body force int
+    # solver - save results as vtu if requested
+    i += 1
+    solver = Section(section="Solver", id=i)
+    solver["Exec Solver"] = "After Simulation" if self.is_save_FEA else "Never"
+    solver["Equation"] = "result output"
+    solver["Procedure"] = [File("ResultOutputSolve"), File("ResultOutputSolver")]
+    solver["Output Directory"] = File("Results")
+    solver["Output File Name"] = File("case")
+    solver["Vtu Format"] = True
+    solver["Displace Mesh"] = True
+    solver["Single Precision"] = False
+    solver_list.append(solver)
+
+    # solver - save statistical, integral, min, max, mean, ... values
+    i += 1
+    solver = Section(section="Solver", id=i)
+    solver["Exec Solver"] = "After Simulation"
+    solver["Equation"] = "SaveScalars"
+    solver["Procedure"] = [File("SaveData"), File("SaveScalars")]
+    solver["Output Directory"] = File("Results")
+    solver["Filename"] = File("Scalars.dat")
+    solver["Operator 1"] = "boundary int"
+    solver["Variable 1"] = "Principal Stress 1"
+    solver["Mask Name 1"] = "MASTER_ROTOR_BOUNDARY"
+    solver["Operator 2"] = "boundary int"
+    solver["Variable 2"] = "Principal Stress 2"
+    solver["Mask Name 2"] = "MASTER_ROTOR_BOUNDARY"
+    solver["Operator 3"] = "boundary int"
+    solver["Variable 3"] = "Principal Stress 1"
+    solver["Mask Name 3"] = "SLAVE_ROTOR_BOUNDARY"
+    solver["Operator 4"] = "boundary int"
+    solver["Variable 4"] = "Principal Stress 2"
+    solver["Mask Name 4"] = "SLAVE_ROTOR_BOUNDARY"
+    solver_list.append(solver)
+
+    # solver - save line values
+    # if no variable given, all variables are saved
+    i += 1
+    solver = Section(section="Solver", id=i)
+    solver["Exec Solver"] = "After Simulation"
+    solver["Equation"] = "SaveLineValues"
+    solver["Procedure"] = [File("SaveData"), File("SaveLine")]
+    solver["Output Directory"] = File("Results")
+    solver["Filename"] = File("LineValues.dat")
+    solver["Variable 1"] = "Displacement 1"
+    solver["Variable 2"] = "Displacement 2"
+    solver["Variable 3"] = "Principal Stress 1"
+    solver["Variable 4"] = "Principal Stress 2"
+    solver["Variable 5"] = "VonMises"
+    # solver["Save Mask 1"] = "MASTER_ROTOR_BOUNDARY"
+    # solver["Skip Boundary Info"] = Logical True
+    solver_list.append(solver)
+
     # Variable 1 = Stress Bodyforce 1
     # Mask Name 1 = BodyForce
     # Operator 2 = boundary int
@@ -127,19 +172,6 @@ def gen_case(self, output, mesh_names):
     # Variable 4 = Displacement Contact Load 1
     # Mask Name 4 = Top_0
 
-    # Solver 4
-    if self.is_save_FEA:
-        i += 1
-        solver = Section(section="Solver", id=i)
-        # solver["Exec Solver"] = "never"
-        solver["Equation"] = "result output"
-        solver["Procedure"] = [File("ResultOutputSolve"), File("ResultOutputSolver")]
-        solver["Output File Name"] = File("case")
-        solver["Vtu Format"] = True
-        solver["Displace Mesh"] = True
-        solver["Single Precision"] = False
-        solver_list.append(solver)
-
     # Solver 5
     # Equation = "SaveMaterial"
     # Procedure = File "SaveData" "SaveMaterials"
@@ -147,12 +179,12 @@ def gen_case(self, output, mesh_names):
     # !Parameter 2 = String "Stress Bodyforce 2"
     # !Body Force Parameters = 1
 
-    # equations
+    # --- equations ------------------------------------------------------------------ #
     eqs = Section(section="Equation", id=1)
     eqs["Name"] = "Equation"
     eqs["Active Solvers"] = [i + 1 for i in range(len(solver_list))]
 
-    # materials
+    # --- materials ------------------------------------------------------------------ #
     # TODO get magnets materials is inconvienent
     materials = [None, None, None]  # one extra element since ID_xx starts with 1
 
@@ -172,7 +204,7 @@ def gen_case(self, output, mesh_names):
         mat_section[idx]["Poisson ratio"] = float(materials[ID].struct.nu_xy)
         # TODO check anisotropy
 
-    # boundary conditions
+    # --- boundary conditions -------------------------------------------------------- #
 
     boundaries = []
     i = 0
@@ -214,6 +246,9 @@ def gen_case(self, output, mesh_names):
     bnd["Name"] = "MASTER_ROTOR_BOUNDARY"
     bnd["Displacement 1"] = 0.0
     bnd["Normal-Tangential Displacement"] = True
+    bnd["Save Line"] = True
+    bnd["Save Scalars"] = True
+    bnd["MASTER_ROTOR_BOUNDARY"] = True  # mask name for SaveLine and SaveScalar
     boundaries.append(bnd)
 
     i += 1
@@ -221,9 +256,20 @@ def gen_case(self, output, mesh_names):
     bnd["Name"] = "SLAVE_ROTOR_BOUNDARY"
     bnd["Displacement 1"] = 0.0
     bnd["Normal-Tangential Displacement"] = True
+    bnd["Save Line"] = True
+    bnd["Save Scalars"] = True
+    bnd["SLAVE_ROTOR_BOUNDARY"] = True  # mask name for SaveLine and SaveScalar
     boundaries.append(bnd)
 
-    # body force
+    i += 1  # Boundary to save line values
+    bnd = Section(section="Boundary Condition", id=i)
+    bnd["Name"] = "ROTOR_BORE_CURVE"
+    # bnd["Normal-Tangential Displacement"] = True
+    bnd["Save Line"] = True
+    bnd["Save Scalars"] = True
+    boundaries.append(bnd)
+
+    # --- body force ----------------------------------------------------------------- #
     omega = 2 * pi * self.parent.input.N0 / 60
     bfs = []
 
@@ -242,6 +288,7 @@ def gen_case(self, output, mesh_names):
         bf["Stress Bodyforce 2"] = Variable(name="Coordinate 2", value=matc)
         bfs.append(bf)
 
+    # -------------------------------------------------------------------------------- #
     # list of section - list need to be extended, single obj. can be appended
     sect_list = []
     sect_list.extend(bodies)
