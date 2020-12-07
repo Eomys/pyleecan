@@ -8,7 +8,7 @@ def check(self):
         self.line_list = list()
         
     if len(self.line_list) == 0:
-        raise SlotCheckError("SlotUD must have at least one surface")
+        raise SlotCheckError("SlotUD must have at least one line")
 
     for ii in range(len(self.line_list) - 1):
         if (
