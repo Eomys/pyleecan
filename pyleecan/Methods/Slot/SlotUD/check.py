@@ -4,6 +4,9 @@ from ....Methods.Slot.Slot.check import SlotCheckError
 def check(self):
     """Check that the SlotUD is correctly defined"""
 
+    if self.line_list is None:
+        self.line_list = list()
+        
     if len(self.line_list) == 0:
         raise SlotCheckError("SlotUD must have at least one surface")
 
