@@ -65,9 +65,9 @@ class ForceMT(Force):
 
     def __init__(
         self,
-        is_comp_nodal_force=False,
         is_periodicity_t=False,
         is_periodicity_a=False,
+        is_agsf_transfer=False,
         init_dict=None,
         init_str=None,
     ):
@@ -86,18 +86,18 @@ class ForceMT(Force):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "is_comp_nodal_force" in list(init_dict.keys()):
-                is_comp_nodal_force = init_dict["is_comp_nodal_force"]
             if "is_periodicity_t" in list(init_dict.keys()):
                 is_periodicity_t = init_dict["is_periodicity_t"]
             if "is_periodicity_a" in list(init_dict.keys()):
                 is_periodicity_a = init_dict["is_periodicity_a"]
+            if "is_agsf_transfer" in list(init_dict.keys()):
+                is_agsf_transfer = init_dict["is_agsf_transfer"]
         # Set the properties (value check and convertion are done in setter)
         # Call Force init
         super(ForceMT, self).__init__(
-            is_comp_nodal_force=is_comp_nodal_force,
             is_periodicity_t=is_periodicity_t,
             is_periodicity_a=is_periodicity_a,
+            is_agsf_transfer=is_agsf_transfer,
         )
         # The class is frozen (in Force init), for now it's impossible to
         # add new properties

@@ -25,3 +25,7 @@ def run(self):
 
     # Store force quantities contained in out_dict in OutForce, as Data object if necessary
     output.force.store(out_dict, axes_dict)
+
+    # Compute the air-gap surface force transfer if required
+    if self.is_agsf_transfer:
+        self.comp_AGSF_transfer(output)
