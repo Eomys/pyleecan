@@ -34,8 +34,8 @@ def gen_elmer_mesh(self, output):
         "2",
         gmsh_filename,
         "-2d",
-        #"-autoclean",
-        #"-names",
+        "-autoclean",
+        "-names",
         "-out",
         elmermesh_folder,
     ]
@@ -572,7 +572,7 @@ def gen_elmer_mesh(self, output):
                  "\tProcedure = \"SaveData\" \"SaveScalars\"\n"
                  "\tShow Norm Index = 1\n"
                  "End\n".format("scalars.dat"))
-        
+
         fo.write("\n!--- BOUNDARIES ---\n")
         for k, v in boundaries.items():
             if k == "VP0_BOUNDARY":
