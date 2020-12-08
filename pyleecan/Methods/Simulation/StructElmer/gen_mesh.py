@@ -4,6 +4,7 @@ from os.path import join
 from ....Functions.GMSH.draw_GMSH import draw_GMSH
 from ....Methods.Simulation.StructElmer import _execute
 
+
 def gen_mesh(self, output):
     """Initialize the FEA simulation model
 
@@ -94,7 +95,7 @@ def _gen_mesh(cwd, out_name, lam_name, mag_name=None, logger=None):
     parameter.append("-names")
 
     # execute ElmerGrid
-    for info in _execute('ElmerGrid', cwd, logger, parameter=parameter):
-            print(info, end="")
-    
+    for info in _execute("ElmerGrid", cwd, logger, parameter=parameter):
+        print(info, end="")
+
     return True
