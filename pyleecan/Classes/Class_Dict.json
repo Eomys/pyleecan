@@ -7294,7 +7294,8 @@
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,
         "methods": [
-            "get_value"
+            "get_value",
+            "as_dict"
         ],
         "mother": "ParamExplorer",
         "name": "ParamExplorerSet",
