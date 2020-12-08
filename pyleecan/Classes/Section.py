@@ -12,7 +12,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from ._frozen import FrozenClass
+from .Elmer import Elmer
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -70,7 +70,7 @@ except ImportError as error:
 from ._check import InitUnKnowClassError
 
 
-class Section(FrozenClass):
+class Section(Elmer):
     """Class to setup a section of an Elmer Solver Input File"""
 
     VERSION = 1
@@ -181,6 +181,7 @@ class Section(FrozenClass):
         comment="",
         _statements=-1,
         _comments=-1,
+        logger_name="Pyleecan.Elmer",
         init_dict=None,
         init_str=None,
     ):
@@ -209,25 +210,25 @@ class Section(FrozenClass):
                 _statements = init_dict["_statements"]
             if "_comments" in list(init_dict.keys()):
                 _comments = init_dict["_comments"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
-        self.parent = None
         self.section = section
         self.id = id
         self.comment = comment
         self._statements = _statements
         self._comments = _comments
-
-        # The class is frozen, for now it's impossible to add new properties
-        self._freeze()
+        # Call Elmer init
+        super(Section, self).__init__(logger_name=logger_name)
+        # The class is frozen (in Elmer init), for now it's impossible to
+        # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         Section_str = ""
-        if self.parent is None:
-            Section_str += "parent = None " + linesep
-        else:
-            Section_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        # Get the properties inherited from Elmer
+        Section_str += super(Section, self).__str__()
         Section_str += 'section = "' + str(self.section) + '"' + linesep
         Section_str += "id = " + str(self.id) + linesep
         Section_str += 'comment = "' + str(self.comment) + '"' + linesep
@@ -239,6 +240,10 @@ class Section(FrozenClass):
         """Compare two objects (skip parent)"""
 
         if type(other) != type(self):
+            return False
+
+        # Check the properties inherited from Elmer
+        if not super(Section, self).__eq__(other):
             return False
         if other.section != self.section:
             return False
@@ -255,7 +260,8 @@ class Section(FrozenClass):
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        Section_dict = dict()
+        # Get the properties inherited from Elmer
+        Section_dict = super(Section, self).as_dict()
         Section_dict["section"] = self.section
         Section_dict["id"] = self.id
         Section_dict["comment"] = self.comment
@@ -266,6 +272,7 @@ class Section(FrozenClass):
             self._comments.copy() if self._comments is not None else None
         )
         # The class name is added to the dict for deserialisation purpose
+        # Overwrite the mother class name
         Section_dict["__class__"] = "Section"
         return Section_dict
 
@@ -277,6 +284,8 @@ class Section(FrozenClass):
         self.comment = None
         self._statements = None
         self._comments = None
+        # Set to None the properties inherited from Elmer
+        super(Section, self)._set_None()
 
     def _get_section(self):
         """getter of section"""

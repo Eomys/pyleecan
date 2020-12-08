@@ -2,7 +2,7 @@
 
 
 def get_data(self):
-    """Method to return the Elmer simulation results 
+    """Method to return the Elmer simulation results
 
     Parameter
     ---------
@@ -14,4 +14,9 @@ def get_data(self):
         list of data
 
     """
-    pass
+    # check if data are loaded
+    if not self.data:
+        self.load_data()
+
+    # output data as SciDataTool data
+    # TODO

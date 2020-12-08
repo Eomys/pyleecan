@@ -1064,6 +1064,37 @@
             }
         ]
     },
+    "Elmer": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "ElmerResults",
+            "Section",
+            "SolverInputFile"
+        ],
+        "desc": "Abstract parent class for all Elmer related convienence classes",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "Elmer",
+        "package": "",
+        "path": "pyleecan/Generator/ClassesRef/Elmer/Elmer.csv",
+        "properties": [
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Elmer"
+            }
+        ]
+    },
     "ElmerResults": {
         "constants": [
             {
@@ -1079,7 +1110,7 @@
             "load_columns",
             "get_data"
         ],
-        "mother": "",
+        "mother": "Elmer",
         "name": "ElmerResults",
         "package": "Elmer",
         "path": "pyleecan/Generator/ClassesRef/Elmer/ElmerResults.csv",
@@ -1103,6 +1134,15 @@
                 "value": ""
             },
             {
+                "desc": "List integers (starting with 1) of columns to load. If usecols is not set all columns are loaded.",
+                "max": "",
+                "min": "",
+                "name": "usecols",
+                "type": "list",
+                "unit": "",
+                "value": ""
+            },
+            {
                 "desc": "List of columns data names",
                 "max": "",
                 "min": "",
@@ -1110,6 +1150,15 @@
                 "type": "list",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "Determin if data are 'SaveScalars' data, else 'SaveLine' data are assumed",
+                "max": "",
+                "min": "",
+                "name": "is_scalars",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -7634,8 +7683,12 @@
             }
         ],
         "daughters": [
+            "RefLine3",
+            "RefQuad4",
+            "RefQuad9",
             "RefSegmentP1",
-            "RefTriangle3"
+            "RefTriangle3",
+            "RefTriangle6"
         ],
         "desc": "Store shape functions definition in the reference element",
         "is_internal": false,
@@ -7658,7 +7711,31 @@
             }
         ]
     },
-    "RefSegmentP1": {
+    "RefLine3": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store line elements for 2D mesh",
+        "is_internal": false,
+        "methods": [
+            "shape_function",
+            "jacobian",
+            "grad_shape_function",
+            "get_real_point",
+            "get_ref_point",
+            "is_inside"
+        ],
+        "mother": "RefCell",
+        "name": "RefLine3",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefLine3.csv",
+        "properties": []
+    },
+    "RefQuad4": {
         "constants": [
             {
                 "name": "VERSION",
@@ -7667,6 +7744,54 @@
         ],
         "daughters": [],
         "desc": "Store triangle elements for 2D mesh",
+        "is_internal": false,
+        "methods": [
+            "shape_function",
+            "jacobian",
+            "grad_shape_function",
+            "get_real_point",
+            "get_ref_point",
+            "is_inside"
+        ],
+        "mother": "RefCell",
+        "name": "RefQuad4",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefQuad4.csv",
+        "properties": []
+    },
+    "RefQuad9": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store quadrangel elements for 2D mesh",
+        "is_internal": false,
+        "methods": [
+            "shape_function",
+            "jacobian",
+            "grad_shape_function",
+            "get_real_point",
+            "get_ref_point",
+            "is_inside"
+        ],
+        "mother": "RefCell",
+        "name": "RefQuad9",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefQuad9.csv",
+        "properties": []
+    },
+    "RefSegmentP1": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store segment elements for 2D mesh",
         "is_internal": false,
         "methods": [
             "shape_function",
@@ -7705,6 +7830,30 @@
         "name": "RefTriangle3",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle3.csv",
+        "properties": []
+    },
+    "RefTriangle6": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store triangle elements for 2D mesh",
+        "is_internal": false,
+        "methods": [
+            "shape_function",
+            "jacobian",
+            "grad_shape_function",
+            "get_real_point",
+            "get_ref_point",
+            "is_inside"
+        ],
+        "mother": "RefCell",
+        "name": "RefTriangle6",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle6.csv",
         "properties": []
     },
     "ScalarProduct": {
@@ -7767,7 +7916,7 @@
             "keys",
             "write"
         ],
-        "mother": "",
+        "mother": "Elmer",
         "name": "Section",
         "package": "Elmer",
         "path": "pyleecan/Generator/ClassesRef/Elmer/Section.csv",
@@ -10487,7 +10636,7 @@
         "methods": [
             "write"
         ],
-        "mother": "",
+        "mother": "Elmer",
         "name": "SolverInputFile",
         "package": "Elmer",
         "path": "pyleecan/Generator/ClassesRef/Elmer/SolverInputFile.csv",

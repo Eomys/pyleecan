@@ -3,4 +3,3 @@
 
 class ElmerResultsError(Exception):
     pass
-

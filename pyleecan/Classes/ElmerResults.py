@@ -12,7 +12,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from ._frozen import FrozenClass
+from .Elmer import Elmer
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -35,7 +35,7 @@ except ImportError as error:
 from ._check import InitUnKnowClassError
 
 
-class ElmerResults(FrozenClass):
+class ElmerResults(Elmer):
     """Class to get 'SaveScalars' and 'SaveLine' data"""
 
     VERSION = 1
@@ -78,7 +78,17 @@ class ElmerResults(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, data=-1, file="", columns=-1, init_dict=None, init_str=None):
+    def __init__(
+        self,
+        data=-1,
+        file="",
+        usecols=-1,
+        columns=-1,
+        is_scalars=False,
+        logger_name="Pyleecan.Elmer",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -98,35 +108,46 @@ class ElmerResults(FrozenClass):
                 data = init_dict["data"]
             if "file" in list(init_dict.keys()):
                 file = init_dict["file"]
+            if "usecols" in list(init_dict.keys()):
+                usecols = init_dict["usecols"]
             if "columns" in list(init_dict.keys()):
                 columns = init_dict["columns"]
+            if "is_scalars" in list(init_dict.keys()):
+                is_scalars = init_dict["is_scalars"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
-        self.parent = None
         self.data = data
         self.file = file
+        self.usecols = usecols
         self.columns = columns
-
-        # The class is frozen, for now it's impossible to add new properties
-        self._freeze()
+        self.is_scalars = is_scalars
+        # Call Elmer init
+        super(ElmerResults, self).__init__(logger_name=logger_name)
+        # The class is frozen (in Elmer init), for now it's impossible to
+        # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         ElmerResults_str = ""
-        if self.parent is None:
-            ElmerResults_str += "parent = None " + linesep
-        else:
-            ElmerResults_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+        # Get the properties inherited from Elmer
+        ElmerResults_str += super(ElmerResults, self).__str__()
         ElmerResults_str += "data = " + str(self.data) + linesep
         ElmerResults_str += 'file = "' + str(self.file) + '"' + linesep
+        ElmerResults_str += (
+            "usecols = "
+            + linesep
+            + str(self.usecols).replace(linesep, linesep + "\t")
+            + linesep
+        )
         ElmerResults_str += (
             "columns = "
             + linesep
             + str(self.columns).replace(linesep, linesep + "\t")
             + linesep
         )
+        ElmerResults_str += "is_scalars = " + str(self.is_scalars) + linesep
         return ElmerResults_str
 
     def __eq__(self, other):
@@ -134,24 +155,38 @@ class ElmerResults(FrozenClass):
 
         if type(other) != type(self):
             return False
+
+        # Check the properties inherited from Elmer
+        if not super(ElmerResults, self).__eq__(other):
+            return False
         if other.data != self.data:
             return False
         if other.file != self.file:
             return False
+        if other.usecols != self.usecols:
+            return False
         if other.columns != self.columns:
+            return False
+        if other.is_scalars != self.is_scalars:
             return False
         return True
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        ElmerResults_dict = dict()
+        # Get the properties inherited from Elmer
+        ElmerResults_dict = super(ElmerResults, self).as_dict()
         ElmerResults_dict["data"] = self.data.copy() if self.data is not None else None
         ElmerResults_dict["file"] = self.file
+        ElmerResults_dict["usecols"] = (
+            self.usecols.copy() if self.usecols is not None else None
+        )
         ElmerResults_dict["columns"] = (
             self.columns.copy() if self.columns is not None else None
         )
+        ElmerResults_dict["is_scalars"] = self.is_scalars
         # The class name is added to the dict for deserialisation purpose
+        # Overwrite the mother class name
         ElmerResults_dict["__class__"] = "ElmerResults"
         return ElmerResults_dict
 
@@ -160,7 +195,11 @@ class ElmerResults(FrozenClass):
 
         self.data = None
         self.file = None
+        self.usecols = None
         self.columns = None
+        self.is_scalars = None
+        # Set to None the properties inherited from Elmer
+        super(ElmerResults, self)._set_None()
 
     def _get_data(self):
         """getter of data"""
@@ -200,6 +239,26 @@ class ElmerResults(FrozenClass):
         """,
     )
 
+    def _get_usecols(self):
+        """getter of usecols"""
+        return self._usecols
+
+    def _set_usecols(self, value):
+        """setter of usecols"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("usecols", value, "list")
+        self._usecols = value
+
+    usecols = property(
+        fget=_get_usecols,
+        fset=_set_usecols,
+        doc=u"""List integers (starting with 1) of columns to load. If usecols is not set all columns are loaded.
+
+        :Type: list
+        """,
+    )
+
     def _get_columns(self):
         """getter of columns"""
         return self._columns
@@ -217,5 +276,23 @@ class ElmerResults(FrozenClass):
         doc=u"""List of columns data names
 
         :Type: list
+        """,
+    )
+
+    def _get_is_scalars(self):
+        """getter of is_scalars"""
+        return self._is_scalars
+
+    def _set_is_scalars(self, value):
+        """setter of is_scalars"""
+        check_var("is_scalars", value, "bool")
+        self._is_scalars = value
+
+    is_scalars = property(
+        fget=_get_is_scalars,
+        fset=_set_is_scalars,
+        doc=u"""Determin if data are 'SaveScalars' data, else 'SaveLine' data are assumed
+
+        :Type: bool
         """,
     )

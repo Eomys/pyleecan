@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Mesh/Interpolation/RefSegmentP1.csv
+# File generated according to Generator/ClassesRef/Mesh/Interpolation/RefLine3.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/RefSegmentP1
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/RefLine3
 """
 
 from os import linesep
@@ -17,128 +17,108 @@ from .RefCell import RefCell
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Mesh.RefSegmentP1.shape_function import shape_function
+    from ..Methods.Mesh.RefLine3.shape_function import shape_function
 except ImportError as error:
     shape_function = error
 
 try:
-    from ..Methods.Mesh.RefSegmentP1.jacobian import jacobian
+    from ..Methods.Mesh.RefLine3.jacobian import jacobian
 except ImportError as error:
     jacobian = error
 
 try:
-    from ..Methods.Mesh.RefSegmentP1.grad_shape_function import grad_shape_function
+    from ..Methods.Mesh.RefLine3.grad_shape_function import grad_shape_function
 except ImportError as error:
     grad_shape_function = error
 
 try:
-    from ..Methods.Mesh.RefSegmentP1.get_real_point import get_real_point
+    from ..Methods.Mesh.RefLine3.get_real_point import get_real_point
 except ImportError as error:
     get_real_point = error
 
 try:
-    from ..Methods.Mesh.RefSegmentP1.is_inside import is_inside
-except ImportError as error:
-    is_inside = error
-
-try:
-    from ..Methods.Mesh.RefSegmentP1.get_ref_point import get_ref_point
+    from ..Methods.Mesh.RefLine3.get_ref_point import get_ref_point
 except ImportError as error:
     get_ref_point = error
 
 try:
-    from ..Methods.Mesh.RefSegmentP1.get_normal import get_normal
+    from ..Methods.Mesh.RefLine3.is_inside import is_inside
 except ImportError as error:
-    get_normal = error
+    is_inside = error
 
 
 from ._check import InitUnKnowClassError
 
 
-class RefSegmentP1(RefCell):
-    """Store segment elements for 2D mesh"""
+class RefLine3(RefCell):
+    """Store line elements for 2D mesh"""
 
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.RefSegmentP1.shape_function
+    # cf Methods.Mesh.RefLine3.shape_function
     if isinstance(shape_function, ImportError):
         shape_function = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use RefSegmentP1 method shape_function: "
-                    + str(shape_function)
+                    "Can't use RefLine3 method shape_function: " + str(shape_function)
                 )
             )
         )
     else:
         shape_function = shape_function
-    # cf Methods.Mesh.RefSegmentP1.jacobian
+    # cf Methods.Mesh.RefLine3.jacobian
     if isinstance(jacobian, ImportError):
         jacobian = property(
             fget=lambda x: raise_(
-                ImportError("Can't use RefSegmentP1 method jacobian: " + str(jacobian))
+                ImportError("Can't use RefLine3 method jacobian: " + str(jacobian))
             )
         )
     else:
         jacobian = jacobian
-    # cf Methods.Mesh.RefSegmentP1.grad_shape_function
+    # cf Methods.Mesh.RefLine3.grad_shape_function
     if isinstance(grad_shape_function, ImportError):
         grad_shape_function = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use RefSegmentP1 method grad_shape_function: "
+                    "Can't use RefLine3 method grad_shape_function: "
                     + str(grad_shape_function)
                 )
             )
         )
     else:
         grad_shape_function = grad_shape_function
-    # cf Methods.Mesh.RefSegmentP1.get_real_point
+    # cf Methods.Mesh.RefLine3.get_real_point
     if isinstance(get_real_point, ImportError):
         get_real_point = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use RefSegmentP1 method get_real_point: "
-                    + str(get_real_point)
+                    "Can't use RefLine3 method get_real_point: " + str(get_real_point)
                 )
             )
         )
     else:
         get_real_point = get_real_point
-    # cf Methods.Mesh.RefSegmentP1.is_inside
-    if isinstance(is_inside, ImportError):
-        is_inside = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use RefSegmentP1 method is_inside: " + str(is_inside)
-                )
-            )
-        )
-    else:
-        is_inside = is_inside
-    # cf Methods.Mesh.RefSegmentP1.get_ref_point
+    # cf Methods.Mesh.RefLine3.get_ref_point
     if isinstance(get_ref_point, ImportError):
         get_ref_point = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use RefSegmentP1 method get_ref_point: " + str(get_ref_point)
+                    "Can't use RefLine3 method get_ref_point: " + str(get_ref_point)
                 )
             )
         )
     else:
         get_ref_point = get_ref_point
-    # cf Methods.Mesh.RefSegmentP1.get_normal
-    if isinstance(get_normal, ImportError):
-        get_normal = property(
+    # cf Methods.Mesh.RefLine3.is_inside
+    if isinstance(is_inside, ImportError):
+        is_inside = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use RefSegmentP1 method get_normal: " + str(get_normal)
-                )
+                ImportError("Can't use RefLine3 method is_inside: " + str(is_inside))
             )
         )
     else:
-        get_normal = get_normal
+        is_inside = is_inside
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -165,17 +145,17 @@ class RefSegmentP1(RefCell):
                 epsilon = init_dict["epsilon"]
         # Set the properties (value check and convertion are done in setter)
         # Call RefCell init
-        super(RefSegmentP1, self).__init__(epsilon=epsilon)
+        super(RefLine3, self).__init__(epsilon=epsilon)
         # The class is frozen (in RefCell init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
-        RefSegmentP1_str = ""
+        RefLine3_str = ""
         # Get the properties inherited from RefCell
-        RefSegmentP1_str += super(RefSegmentP1, self).__str__()
-        return RefSegmentP1_str
+        RefLine3_str += super(RefLine3, self).__str__()
+        return RefLine3_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -184,7 +164,7 @@ class RefSegmentP1(RefCell):
             return False
 
         # Check the properties inherited from RefCell
-        if not super(RefSegmentP1, self).__eq__(other):
+        if not super(RefLine3, self).__eq__(other):
             return False
         return True
 
@@ -192,14 +172,14 @@ class RefSegmentP1(RefCell):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from RefCell
-        RefSegmentP1_dict = super(RefSegmentP1, self).as_dict()
+        RefLine3_dict = super(RefLine3, self).as_dict()
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
-        RefSegmentP1_dict["__class__"] = "RefSegmentP1"
-        return RefSegmentP1_dict
+        RefLine3_dict["__class__"] = "RefLine3"
+        return RefLine3_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
         # Set to None the properties inherited from RefCell
-        super(RefSegmentP1, self)._set_None()
+        super(RefLine3, self)._set_None()
