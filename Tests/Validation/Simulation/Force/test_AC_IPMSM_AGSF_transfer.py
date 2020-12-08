@@ -71,7 +71,7 @@ def test_AC_IPMSM_AGSF_transfer():
         save_path=join(save_path, "test_FM_IPMSM_FL_001_AGSF_compare.png"),
         is_show_fig=False,
     )
-    
+
     max_r = 42
     out2.plot_2D_Data(
         "force.AGSF",
@@ -85,8 +85,7 @@ def test_AC_IPMSM_AGSF_transfer():
         is_show_fig=False,
         barwidth=600,
     )
-    
-    
+
     return out, out2
 
 

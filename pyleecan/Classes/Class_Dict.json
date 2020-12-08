@@ -1264,6 +1264,15 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification)",
+                "max": "",
+                "min": "",
+                "name": "max_wavenumber_transfer",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -4588,6 +4597,15 @@
                 "type": "int",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "To enforce a different radius value for air-gap outputs",
+                "max": "",
+                "min": "",
+                "name": "Rag_enforced",
+                "type": "float",
+                "unit": "m",
+                "value": null
             }
         ]
     },
@@ -6531,6 +6549,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutForce"
+            },
+            {
+                "desc": "Radius value for air-gap computation",
+                "max": "",
+                "min": "",
+                "name": "Rag",
+                "type": "float",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -6922,6 +6949,15 @@
                 "min": "",
                 "name": "internal",
                 "type": "OutInternal",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Radius value for air-gap computation",
+                "max": "",
+                "min": "",
+                "name": "Rag",
+                "type": "float",
                 "unit": "-",
                 "value": null
             }

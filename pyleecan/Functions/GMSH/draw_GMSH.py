@@ -504,11 +504,14 @@ def draw_GMSH(
     if not is_lam_only_S:
         for surf in rotor_list:
             nsurf += 1
-            gmsh_dict.update({nsurf: {"tag": None,
-                                      "label": surface_label.get(surf.label, "UNKNOWN"),
-                                      }
-                              }
-                             )
+            gmsh_dict.update(
+                {
+                    nsurf: {
+                        "tag": None,
+                        "label": surface_label.get(surf.label, "UNKNOWN"),
+                    }
+                }
+            )
             if "Lamination_Rotor" in surf.label:
                 gmsh_dict[nsurf]["with_holes"] = True
                 lam_rotor_surf_id = nsurf
@@ -648,11 +651,14 @@ def draw_GMSH(
         stator_cloops = []
         for surf in stator_list:
             nsurf += 1
-            gmsh_dict.update({nsurf: {"tag": None,
-                                      "label": surface_label.get(surf.label, "UNKNOWN"),
-                                      }
-                              }
-                             )
+            gmsh_dict.update(
+                {
+                    nsurf: {
+                        "tag": None,
+                        "label": surface_label.get(surf.label, "UNKNOWN"),
+                    }
+                }
+            )
             if surf.label.find("Lamination_Stator") != -1:
                 gmsh_dict[nsurf]["with_holes"] = True
             else:
@@ -743,11 +749,14 @@ def draw_GMSH(
     # nsurf = 0
     for surf in sb_list:
         nsurf += 1
-        gmsh_dict.update({nsurf: {"tag": None,
-                                  "label": surface_label.get(surf.label, "UNKNOWN"),
-                                  }
-                          }
-                         )
+        gmsh_dict.update(
+            {
+                nsurf: {
+                    "tag": None,
+                    "label": surface_label.get(surf.label, "UNKNOWN"),
+                }
+            }
+        )
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
             n_elem = n_elem if n_elem is not None else 0
@@ -821,11 +830,14 @@ def draw_GMSH(
     mesh_size = machine.stator.Rext / 50.0
     for surf in ab_list:
         nsurf += 1
-        gmsh_dict.update({nsurf: {"tag": None,
-                                  "label": surface_label.get(surf.label, "UNKNOWN"),
-                                  }
-                          }
-                         )
+        gmsh_dict.update(
+            {
+                nsurf: {
+                    "tag": None,
+                    "label": surface_label.get(surf.label, "UNKNOWN"),
+                }
+            }
+        )
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
             n_elem = n_elem if n_elem is not None else 0

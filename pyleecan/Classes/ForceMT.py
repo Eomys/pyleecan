@@ -68,6 +68,7 @@ class ForceMT(Force):
         is_periodicity_t=False,
         is_periodicity_a=False,
         is_agsf_transfer=False,
+        max_wavenumber_transfer=None,
         init_dict=None,
         init_str=None,
     ):
@@ -92,12 +93,15 @@ class ForceMT(Force):
                 is_periodicity_a = init_dict["is_periodicity_a"]
             if "is_agsf_transfer" in list(init_dict.keys()):
                 is_agsf_transfer = init_dict["is_agsf_transfer"]
+            if "max_wavenumber_transfer" in list(init_dict.keys()):
+                max_wavenumber_transfer = init_dict["max_wavenumber_transfer"]
         # Set the properties (value check and convertion are done in setter)
         # Call Force init
         super(ForceMT, self).__init__(
             is_periodicity_t=is_periodicity_t,
             is_periodicity_a=is_periodicity_a,
             is_agsf_transfer=is_agsf_transfer,
+            max_wavenumber_transfer=max_wavenumber_transfer,
         )
         # The class is frozen (in Force init), for now it's impossible to
         # add new properties

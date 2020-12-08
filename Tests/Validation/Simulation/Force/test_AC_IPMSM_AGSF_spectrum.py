@@ -128,7 +128,6 @@ def test_AC_IPMSM_AGSF_spectrum():
             )
 
     assert_array_almost_equal(XP_rad1, Prad, decimal=5)
-    
 
     arg_list = ["time", "angle"]
     result = AGSF.get_rphiz_along(*arg_list)
@@ -136,38 +135,36 @@ def test_AC_IPMSM_AGSF_spectrum():
     time = result["time"]
     angle = result["angle"]
     Xangle, Xtime = meshgrid(angle, time)
-    
+
     AGSF_freq = AGSF.components["radial"].time_to_freq()
     result_frq = AGSF_freq.get_along(*arg_list)
     Prad_frq = result_frq["AGSF_r"]
-    
+
     AGSF2 = AGSF_freq.freq_to_time()
     result2 = AGSF2.get_along(*arg_list)
     Prad2 = result2["AGSF_r"]
-    
+
     assert_array_almost_equal(Prad_frq, Prad, decimal=5)
     assert_array_almost_equal(Prad2, Prad, decimal=5)
-    
+
     arg_list = ["time[oneperiod]", "angle[oneperiod]"]
     result = AGSF.get_rphiz_along(*arg_list)
     Prad = result["radial"]
     time = result["time"]
     angle = result["angle"]
     Xangle, Xtime = meshgrid(angle, time)
-    
+
     AGSF_freq = AGSF.components["radial"].time_to_freq()
     result_frq = AGSF_freq.get_along(*arg_list)
     Prad_frq = result_frq["AGSF_r"]
-    
+
     AGSF2 = AGSF_freq.freq_to_time()
     result2 = AGSF2.get_along(*arg_list)
     Prad2 = result2["AGSF_r"]
-    
+
     assert_array_almost_equal(Prad_frq, Prad, decimal=5)
     assert_array_almost_equal(Prad2, Prad, decimal=5)
-    
-    
-    
+
     arg_list = ["freqs", "wavenumber"]
     result_freq = AGSF.get_rphiz_along(*arg_list)
     Prad_wr = result_freq["radial"]

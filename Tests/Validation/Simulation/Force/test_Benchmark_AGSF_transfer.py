@@ -40,7 +40,7 @@ def test_AC_IPMSM_AGSF_transfer():
         is_periodicity_t=True,
     )
 
-    # Run simulation
+    # Run simulation with Rag in the middle of the air-gap
     out = simu.run()
 
     # Test 2 : with transfer

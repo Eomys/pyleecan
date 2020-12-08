@@ -82,6 +82,7 @@ class Force(FrozenClass):
         is_periodicity_t=False,
         is_periodicity_a=False,
         is_agsf_transfer=False,
+        max_wavenumber_transfer=None,
         init_dict=None,
         init_str=None,
     ):
@@ -106,11 +107,14 @@ class Force(FrozenClass):
                 is_periodicity_a = init_dict["is_periodicity_a"]
             if "is_agsf_transfer" in list(init_dict.keys()):
                 is_agsf_transfer = init_dict["is_agsf_transfer"]
+            if "max_wavenumber_transfer" in list(init_dict.keys()):
+                max_wavenumber_transfer = init_dict["max_wavenumber_transfer"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_periodicity_t = is_periodicity_t
         self.is_periodicity_a = is_periodicity_a
         self.is_agsf_transfer = is_agsf_transfer
+        self.max_wavenumber_transfer = max_wavenumber_transfer
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -126,6 +130,9 @@ class Force(FrozenClass):
         Force_str += "is_periodicity_t = " + str(self.is_periodicity_t) + linesep
         Force_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
         Force_str += "is_agsf_transfer = " + str(self.is_agsf_transfer) + linesep
+        Force_str += (
+            "max_wavenumber_transfer = " + str(self.max_wavenumber_transfer) + linesep
+        )
         return Force_str
 
     def __eq__(self, other):
@@ -139,6 +146,8 @@ class Force(FrozenClass):
             return False
         if other.is_agsf_transfer != self.is_agsf_transfer:
             return False
+        if other.max_wavenumber_transfer != self.max_wavenumber_transfer:
+            return False
         return True
 
     def as_dict(self):
@@ -148,6 +157,7 @@ class Force(FrozenClass):
         Force_dict["is_periodicity_t"] = self.is_periodicity_t
         Force_dict["is_periodicity_a"] = self.is_periodicity_a
         Force_dict["is_agsf_transfer"] = self.is_agsf_transfer
+        Force_dict["max_wavenumber_transfer"] = self.max_wavenumber_transfer
         # The class name is added to the dict for deserialisation purpose
         Force_dict["__class__"] = "Force"
         return Force_dict
@@ -158,6 +168,7 @@ class Force(FrozenClass):
         self.is_periodicity_t = None
         self.is_periodicity_a = None
         self.is_agsf_transfer = None
+        self.max_wavenumber_transfer = None
 
     def _get_is_periodicity_t(self):
         """getter of is_periodicity_t"""
@@ -210,5 +221,23 @@ class Force(FrozenClass):
         doc=u"""True to compute the AGSF transfer from air-gap to stator bore radius.
 
         :Type: bool
+        """,
+    )
+
+    def _get_max_wavenumber_transfer(self):
+        """getter of max_wavenumber_transfer"""
+        return self._max_wavenumber_transfer
+
+    def _set_max_wavenumber_transfer(self, value):
+        """setter of max_wavenumber_transfer"""
+        check_var("max_wavenumber_transfer", value, "int")
+        self._max_wavenumber_transfer = value
+
+    max_wavenumber_transfer = property(
+        fget=_get_max_wavenumber_transfer,
+        fset=_set_max_wavenumber_transfer,
+        doc=u"""Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification)
+
+        :Type: int
         """,
     )
