@@ -78,6 +78,7 @@ def test_Elmer():
     simu.mag = MagElmer(
         type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True, FEA_dict=mesh_dict
     )
+
     # Stop after magnetic computation
     simu.force = None
     simu.struct = None

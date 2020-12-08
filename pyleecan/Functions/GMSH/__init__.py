@@ -45,6 +45,8 @@ surface_label = dict()
 surface_label["Shaft"] = "SHAFT"
 surface_label["Lamination_Rotor_Bore_Radius_Ext"] = "ROTOR_LAM"
 surface_label["Lamination_Stator_Bore_Radius_Int"] = "STATOR_LAM"
+surface_label["Lamination_Rotor"] = "ROTOR_LAM"
+surface_label["Lamination_Stator"] = "STATOR_LAM"
 surface_label["Airgap_int"] = "AG_INT"
 surface_label["SlidingBand_int"] = "SB_INT"
 surface_label["SlidingBand_ext"] = "SB_EXT"
@@ -71,5 +73,5 @@ for rr in range(0,20):
             new_label = "H_MAGNET_ROT_RAD_S_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
             surface_label[old_label] = new_label
             old_label = "Wind_Stator_R" + str(rr) + "_T" + str(tt) + "_S" + str(ss)
-            new_label = "W_STA_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
+            new_label = "W_STA_R" + str(rr) + "_T" + str(tt) + "_S" + str(ss)
             surface_label[old_label] = new_label
