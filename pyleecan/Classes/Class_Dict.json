@@ -1064,6 +1064,55 @@
             }
         ]
     },
+    "ElmerResults": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to get 'SaveScalars' and 'SaveLine' data",
+        "is_internal": false,
+        "methods": [
+            "load_data",
+            "load_columns",
+            "get_data"
+        ],
+        "mother": "",
+        "name": "ElmerResults",
+        "package": "Elmer",
+        "path": "pyleecan/Generator/ClassesRef/Elmer/ElmerResults.csv",
+        "properties": [
+            {
+                "desc": "Dict with simulation results",
+                "max": "",
+                "min": "",
+                "name": "data",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Filename of the results data file",
+                "max": "",
+                "min": "",
+                "name": "file",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "List of columns data names",
+                "max": "",
+                "min": "",
+                "name": "columns",
+                "type": "list",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "FPGNSeg": {
         "constants": [
             {

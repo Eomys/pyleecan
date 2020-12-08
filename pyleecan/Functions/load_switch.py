@@ -27,6 +27,7 @@ load_switch = {
     "EEC_PMSM": EEC_PMSM,
     "EEC_SCIM": EEC_SCIM,
     "Electrical": Electrical,
+    "ElmerResults": ElmerResults,
     "FPGNSeg": FPGNSeg,
     "FPGNTri": FPGNTri,
     "FluxLink": FluxLink,
