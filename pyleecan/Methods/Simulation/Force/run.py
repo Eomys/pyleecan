@@ -28,4 +28,4 @@ def run(self):
 
     # Compute the air-gap surface force transfer if required
     if self.is_agsf_transfer:
-        self.comp_AGSF_transfer(output)
+        self.comp_AGSF_transfer(output, self.max_wavenumber_transfer)

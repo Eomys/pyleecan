@@ -24,12 +24,12 @@ def comp_AGSF_transfer(self, output, rnoise=None):
 
     Rag = output.simu.machine.comp_Rgap_mec()
     Rsbo = output.simu.machine.stator.Rint
-    
+
     AGSF = output.force.AGSF
-    
+
     arg_list = ["freqs", "wavenumber"]
     result_freq = AGSF.get_rphiz_along(*arg_list)
-    Prad_wr = result_freq["radial"] 
+    Prad_wr = result_freq["radial"]
     Ptan_wr = result_freq["tangential"]
     wavenumber = result_freq["wavenumber"]
     freqs = result_freq["freqs"]
@@ -53,12 +53,12 @@ def comp_AGSF_transfer(self, output, rnoise=None):
     # Transfer law Eq. (45)
     Prad_wr_TR = multiply(XSn, Prad_wr) + 1j * multiply(XCn, Ptan_wr)
     Ptan_wr_TR = multiply(XSn, Ptan_wr) - 1j * multiply(XCn, Prad_wr)
-    
+
     Datafreqs = Data1D(name="freqs", values=freqs)
     Datawavenumbers = Data1D(name="wavenumber", values=wavenumber)
-    
+
     axes_list = [Datafreqs, Datawavenumbers]
-    
+
     AGSF_TR = VectorField(
         name="Air gap Surface Force",
         symbol="AGSF",
