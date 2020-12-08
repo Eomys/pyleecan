@@ -112,7 +112,10 @@ def solve_FEMM(
     Na = angle.size
 
     # Loading parameters for readibility
-    Rag = output.simu.machine.comp_Rgap_mec()
+    Rag = self.Rag_enforced
+    if Rag is None:
+        Rag = output.simu.machine.comp_Rgap_mec()
+
     L1 = output.simu.machine.stator.comp_length()
     save_path = self.get_path_save(output)
     is_internal_rotor = output.simu.machine.rotor.is_internal
@@ -221,5 +224,7 @@ def solve_FEMM(
     # Close FEMM handler
     if is_close_femm:
         femm.closefemm()
+
+    out_dict["Rag"] = Rag
 
     return B_elem, H_elem, mu_elem, meshFEMM, groups

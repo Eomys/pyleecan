@@ -164,6 +164,7 @@ class MagFEMM(Magnetics):
         import_file=None,
         is_close_femm=True,
         nb_worker=1,
+        Rag_enforced=None,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -221,6 +222,8 @@ class MagFEMM(Magnetics):
                 is_close_femm = init_dict["is_close_femm"]
             if "nb_worker" in list(init_dict.keys()):
                 nb_worker = init_dict["nb_worker"]
+            if "Rag_enforced" in list(init_dict.keys()):
+                Rag_enforced = init_dict["Rag_enforced"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -258,6 +261,7 @@ class MagFEMM(Magnetics):
         self.import_file = import_file
         self.is_close_femm = is_close_femm
         self.nb_worker = nb_worker
+        self.Rag_enforced = Rag_enforced
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -310,6 +314,7 @@ class MagFEMM(Magnetics):
         MagFEMM_str += 'import_file = "' + str(self.import_file) + '"' + linesep
         MagFEMM_str += "is_close_femm = " + str(self.is_close_femm) + linesep
         MagFEMM_str += "nb_worker = " + str(self.nb_worker) + linesep
+        MagFEMM_str += "Rag_enforced = " + str(self.Rag_enforced) + linesep
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -349,6 +354,8 @@ class MagFEMM(Magnetics):
             return False
         if other.nb_worker != self.nb_worker:
             return False
+        if other.Rag_enforced != self.Rag_enforced:
+            return False
         return True
 
     def as_dict(self):
@@ -382,6 +389,7 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["import_file"] = self.import_file
         MagFEMM_dict["is_close_femm"] = self.is_close_femm
         MagFEMM_dict["nb_worker"] = self.nb_worker
+        MagFEMM_dict["Rag_enforced"] = self.Rag_enforced
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -406,6 +414,7 @@ class MagFEMM(Magnetics):
         self.import_file = None
         self.is_close_femm = None
         self.nb_worker = None
+        self.Rag_enforced = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -688,5 +697,23 @@ class MagFEMM(Magnetics):
         doc=u"""To run FEMM in parallel (the parallelization is on the time loop)
 
         :Type: int
+        """,
+    )
+
+    def _get_Rag_enforced(self):
+        """getter of Rag_enforced"""
+        return self._Rag_enforced
+
+    def _set_Rag_enforced(self, value):
+        """setter of Rag_enforced"""
+        check_var("Rag_enforced", value, "float")
+        self._Rag_enforced = value
+
+    Rag_enforced = property(
+        fget=_get_Rag_enforced,
+        fset=_set_Rag_enforced,
+        doc=u"""To enforce a different radius value for air-gap outputs
+
+        :Type: float
         """,
     )

@@ -90,6 +90,7 @@ class OutMag(FrozenClass):
         meshsolution=-1,
         logger_name="Pyleecan.OutMag",
         internal=None,
+        Rag=None,
         init_dict=None,
         init_str=None,
     ):
@@ -132,6 +133,8 @@ class OutMag(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "internal" in list(init_dict.keys()):
                 internal = init_dict["internal"]
+            if "Rag" in list(init_dict.keys()):
+                Rag = init_dict["Rag"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
@@ -146,6 +149,7 @@ class OutMag(FrozenClass):
         self.meshsolution = meshsolution
         self.logger_name = logger_name
         self.internal = internal
+        self.Rag = Rag
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -184,6 +188,7 @@ class OutMag(FrozenClass):
             OutMag_str += "internal = " + tmp
         else:
             OutMag_str += "internal = None" + linesep + linesep
+        OutMag_str += "Rag = " + str(self.Rag) + linesep
         return OutMag_str
 
     def __eq__(self, other):
@@ -214,6 +219,8 @@ class OutMag(FrozenClass):
         if other.logger_name != self.logger_name:
             return False
         if other.internal != self.internal:
+            return False
+        if other.Rag != self.Rag:
             return False
         return True
 
@@ -257,6 +264,7 @@ class OutMag(FrozenClass):
             OutMag_dict["internal"] = None
         else:
             OutMag_dict["internal"] = self.internal.as_dict()
+        OutMag_dict["Rag"] = self.Rag
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -278,6 +286,7 @@ class OutMag(FrozenClass):
         self.logger_name = None
         if self.internal is not None:
             self.internal._set_None()
+        self.Rag = None
 
     def _get_Time(self):
         """getter of Time"""
@@ -568,5 +577,23 @@ class OutMag(FrozenClass):
         doc=u"""OutInternal object containg outputs related to a specific model
 
         :Type: OutInternal
+        """,
+    )
+
+    def _get_Rag(self):
+        """getter of Rag"""
+        return self._Rag
+
+    def _set_Rag(self, value):
+        """setter of Rag"""
+        check_var("Rag", value, "float")
+        self._Rag = value
+
+    Rag = property(
+        fget=_get_Rag,
+        fset=_set_Rag,
+        doc=u"""Radius value for air-gap computation
+
+        :Type: float
         """,
     )

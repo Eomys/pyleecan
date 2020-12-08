@@ -22,7 +22,7 @@ def comp_AGSF_transfer(self, output, rnoise=None):
 
     """
 
-    Rag = output.simu.machine.comp_Rgap_mec()
+    Rag = output.force.Rag
     Rsbo = output.simu.machine.stator.Rint
 
     AGSF = output.force.AGSF

@@ -53,3 +53,6 @@ def store(self, out_dict, axes_dict):
             axes=axis_list,
             values=out_dict.pop("AGSF_z"),
         )
+        
+    if "Rag" in out_dict:
+        self.Rag = out_dict.pop("Rag")

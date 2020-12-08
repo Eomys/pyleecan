@@ -51,6 +51,7 @@ class OutForce(FrozenClass):
         Angle=None,
         AGSF=None,
         logger_name="Pyleecan.OutForce",
+        Rag=None,
         init_dict=None,
         init_str=None,
     ):
@@ -77,12 +78,15 @@ class OutForce(FrozenClass):
                 AGSF = init_dict["AGSF"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "Rag" in list(init_dict.keys()):
+                Rag = init_dict["Rag"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
         self.Angle = Angle
         self.AGSF = AGSF
         self.logger_name = logger_name
+        self.Rag = Rag
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -99,6 +103,7 @@ class OutForce(FrozenClass):
         OutForce_str += "Angle = " + str(self.Angle) + linesep + linesep
         OutForce_str += "AGSF = " + str(self.AGSF) + linesep + linesep
         OutForce_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        OutForce_str += "Rag = " + str(self.Rag) + linesep
         return OutForce_str
 
     def __eq__(self, other):
@@ -113,6 +118,8 @@ class OutForce(FrozenClass):
         if other.AGSF != self.AGSF:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.Rag != self.Rag:
             return False
         return True
 
@@ -133,6 +140,7 @@ class OutForce(FrozenClass):
         else:
             OutForce_dict["AGSF"] = self.AGSF.as_dict()
         OutForce_dict["logger_name"] = self.logger_name
+        OutForce_dict["Rag"] = self.Rag
         # The class name is added to the dict for deserialisation purpose
         OutForce_dict["__class__"] = "OutForce"
         return OutForce_dict
@@ -144,6 +152,7 @@ class OutForce(FrozenClass):
         self.Angle = None
         self.AGSF = None
         self.logger_name = None
+        self.Rag = None
 
     def _get_Time(self):
         """getter of Time"""
@@ -241,5 +250,23 @@ class OutForce(FrozenClass):
         doc=u"""Name of the logger to use
 
         :Type: str
+        """,
+    )
+
+    def _get_Rag(self):
+        """getter of Rag"""
+        return self._Rag
+
+    def _set_Rag(self, value):
+        """setter of Rag"""
+        check_var("Rag", value, "float")
+        self._Rag = value
+
+    Rag = property(
+        fget=_get_Rag,
+        fset=_set_Rag,
+        doc=u"""Radius value for air-gap computation
+
+        :Type: float
         """,
     )
