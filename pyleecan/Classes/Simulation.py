@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -175,6 +176,23 @@ class Simulation(FrozenClass):
         if other.path_result != self.path_result:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.name)
+        S += getsizeof(self.desc)
+        S += getsizeof(self.machine)
+        S += getsizeof(self.input)
+        S += getsizeof(self.logger_name)
+        S += getsizeof(self.var_simu)
+        if self.postproc_list is not None:
+            for value in self.postproc_list:
+                S += getsizeof(value)
+        S += getsizeof(self.index)
+        S += getsizeof(self.path_result)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -162,6 +163,16 @@ class WindingUD(Winding):
         if not array_equal(other.user_wind_mat, self.user_wind_mat):
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Winding
+        S += super(WindingUD, self).__sizeof__()
+        S += getsizeof(self.user_wind_mat)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

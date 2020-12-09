@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -279,6 +280,23 @@ class SlotDC(SlotWind):
         if other.R3 != self.R3:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from SlotWind
+        S += super(SlotDC, self).__sizeof__()
+        S += getsizeof(self.W1)
+        S += getsizeof(self.H1)
+        S += getsizeof(self.D1)
+        S += getsizeof(self.W2)
+        S += getsizeof(self.H2)
+        S += getsizeof(self.D2)
+        S += getsizeof(self.H3)
+        S += getsizeof(self.R3)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -294,6 +295,19 @@ class LamSlotMulti(Lamination):
         if not array_equal(other.alpha, self.alpha):
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Lamination
+        S += super(LamSlotMulti, self).__sizeof__()
+        if self.slot_list is not None:
+            for value in self.slot_list:
+                S += getsizeof(value)
+        S += getsizeof(self.alpha)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
