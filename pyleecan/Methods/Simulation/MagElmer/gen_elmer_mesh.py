@@ -224,23 +224,6 @@ def gen_elmer_mesh(self, output):
                 bodies[label]['eq'] = 1
                 bodies[label]['bf'] = 1
                 bodies[label]['tg'] = 1
-            elif "AG_INT" in label and bodies.get(label, None) is not None:
-                bodies[label]['mat'] = 1
-                bodies[label]['eq'] = 1
-                bodies[label]['bf'] = 1
-            elif "SB_INT" in label and bodies.get(label, None) is not None:
-                bodies[label]['mat'] = 1
-                bodies[label]['eq'] = 1
-                bodies[label]['bf'] = 1
-            elif "SB_EXT" in label and bodies.get(label, None) is not None:
-                bodies[label]['mat'] = 1
-                bodies[label]['eq'] = 1
-            elif "AG_EXT" in label and bodies.get(label, None) is not None:
-                bodies[label]['mat'] = 1
-                bodies[label]['eq'] = 1
-            elif "AIRBOX" in label and bodies.get(label, None) is not None:
-                bodies[label]['mat'] = 1
-                bodies[label]['eq'] = 1
             elif "H_ROTOR" in label and bodies.get(label, None) is not None:
                 bodies[label]['mat'] = 1
                 bodies[label]['eq'] = 1
@@ -249,7 +232,9 @@ def gen_elmer_mesh(self, output):
             else:
                 pass
 
-
+        # The following bodies are not in the dictionary
+        bodies["AG_INT"]['bf'] = 1
+        bodies["SB_INT"]['bf'] = 1
 
         No_Magnets = pm_index - 6
         magnet_temp = 20.0  # Magnet Temperature Fixed for now

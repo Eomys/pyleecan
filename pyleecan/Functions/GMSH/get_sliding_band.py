@@ -170,7 +170,7 @@ def get_sliding_band(sym, machine):
         )
 
         # Internal Sliding Band
-        Z4 = Rgap_mec_int + 2 * W_sb
+        Z4 = Rgap_mec_int + 2 * W_sb - tol/10.0
         Z5 = Z4 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
         airgap_lines.append(Segment(begin=Z2, end=Z4, label="int_sb_line_1"))
@@ -201,7 +201,7 @@ def get_sliding_band(sym, machine):
         )
 
         # External Sliding Band
-        Z6 = Rgap_mec_int + 2 * W_sb
+        Z6 = Rgap_mec_int + 2 * W_sb + tol/10
         Z7 = Z6 * exp(1j * 2 * pi / sym)
         Z8 = Rgap_mec_int + 3 * W_sb
         Z9 = Z8 * exp(1j * 2 * pi / sym)
