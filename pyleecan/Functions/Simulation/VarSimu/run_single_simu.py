@@ -50,20 +50,10 @@ def run_single_simu(
 
     # The simulation is the reference one
     if index == ref_simu_index:
-        # Convert XOutput to Output
+        # Create new Output from XOutput content
         Output = import_class("pyleecan.Classes", "Output")
         result = Output(init_dict=Output.as_dict(result))
-        # Set the Output properties into XOutput
-        for attr in dir(result):
-            if (
-                # Not method
-                not callable(getattr(result, attr))
-                # Not private properties
-                and not attr.startswith("_")
-                # Not following properties
-                and attr not in ["VERSION", "logger_name", "parent"]
-            ):
-                setattr(xoutput, attr, getattr(result, attr))
+        # Output value are already in XOutput
 
     # Extract results
     if is_keep_all_output:
