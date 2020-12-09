@@ -17,6 +17,6 @@ def get_point(self, indices=None):
         Points coordinates
     """
 
-    mesh = self.get_mesh(indices=indices)
+    mesh = self.get_mesh_pv(indices=indices)
 
     return mesh.points
