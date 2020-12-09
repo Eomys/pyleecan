@@ -25,6 +25,8 @@ def test_FEMM_periodicity():
 
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
+    assert IPMSM_A.comp_periodicity() == (4, True, 4, True)
+
     simu = Simu1(name="FEMM_periodicity", machine=IPMSM_A)
 
     # Definition of the enforced output of the electrical module
@@ -66,6 +68,7 @@ def test_FEMM_periodicity():
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_B_time.png"),
+        is_show_fig=False,
     )
 
     out.plot_2D_Data(
@@ -75,6 +78,7 @@ def test_FEMM_periodicity():
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_B_space.png"),
+        is_show_fig=False,
     )
 
     out.plot_2D_Data(
@@ -83,6 +87,7 @@ def test_FEMM_periodicity():
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_B_space_fft.png"),
+        is_show_fig=False,
     )
 
     out.plot_2D_Data(
@@ -92,6 +97,7 @@ def test_FEMM_periodicity():
         data_list=[out2.force.P],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_time.png"),
+        is_show_fig=False,
     )
 
     out.plot_2D_Data(
@@ -101,6 +107,7 @@ def test_FEMM_periodicity():
         data_list=[out2.force.P],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_space.png"),
+        is_show_fig=False,
     )
 
     out.plot_2D_Data(
@@ -110,6 +117,7 @@ def test_FEMM_periodicity():
         data_list=[out2.force.P],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_space_fft.png"),
+        is_show_fig=False,
     )
 
     out.plot_2D_Data(
@@ -118,6 +126,7 @@ def test_FEMM_periodicity():
         data_list=[out2.mag.Tem],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Tem_time.png"),
+        is_show_fig=False,
     )
 
     out.plot_2D_Data(
@@ -127,6 +136,7 @@ def test_FEMM_periodicity():
         data_list=[out2.mag.Phi_wind_stator],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Phi_wind_stator_time.png"),
+        is_show_fig=False,
     )
 
     return out, out2

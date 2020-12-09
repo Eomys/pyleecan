@@ -43,6 +43,16 @@ def generate_as_dict(gen_dict, class_dict):
         elif prop["type"] == "complex":  # complex is not json serializable
             var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
             var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
+            var_str += TAB2 + "elif isinstance(self." + prop["name"] + ", float):\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"] = self.'
+                + prop["name"]
+                + "\n"
+            )
             var_str += TAB2 + "else:\n"
             var_str += (
                 TAB3

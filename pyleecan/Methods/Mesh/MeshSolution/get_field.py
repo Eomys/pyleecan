@@ -53,7 +53,12 @@ def get_field(
 
     # Get field
     solution = self.get_solution(label=label, index=index)
-    field = solution.get_field(args=args)
+
+    if args is not None:
+        field = solution.get_field(args)
+    else:
+        field = solution.get_field()
+
     field = squeeze(field)
 
     # Check dimensions

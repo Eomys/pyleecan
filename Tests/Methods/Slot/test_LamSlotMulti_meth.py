@@ -45,11 +45,11 @@ class TestLamSlotMulti(object):
     def test_build_geometry(self, setup):
         """Check that the build_geometry function"""
 
-        result = setup.build_geometry(sym = 2)
+        result = setup.build_geometry(sym=2)
         assert len(result) == 1
 
         setup.is_internal = False
         setup.is_stator = True
 
-        result = setup.build_geometry(sym = 2)
+        result = setup.build_geometry(sym=2)
         assert len(result) == 1

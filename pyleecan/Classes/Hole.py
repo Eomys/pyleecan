@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -35,6 +36,11 @@ try:
     from ..Methods.Slot.Hole.get_Rbo import get_Rbo
 except ImportError as error:
     get_Rbo = error
+
+try:
+    from ..Methods.Slot.Hole.get_Rext import get_Rext
+except ImportError as error:
+    get_Rext = error
 
 try:
     from ..Methods.Slot.Hole.has_magnet import has_magnet
@@ -120,6 +126,15 @@ class Hole(FrozenClass):
         )
     else:
         get_Rbo = get_Rbo
+    # cf Methods.Slot.Hole.get_Rext
+    if isinstance(get_Rext, ImportError):
+        get_Rext = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method get_Rext: " + str(get_Rext))
+            )
+        )
+    else:
+        get_Rext = get_Rext
     # cf Methods.Slot.Hole.has_magnet
     if isinstance(has_magnet, ImportError):
         has_magnet = property(
@@ -251,6 +266,14 @@ class Hole(FrozenClass):
         if other.mat_void != self.mat_void:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.Zh)
+        S += getsizeof(self.mat_void)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

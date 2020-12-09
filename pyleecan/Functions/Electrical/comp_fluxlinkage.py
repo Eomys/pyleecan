@@ -3,7 +3,8 @@ from os.path import join
 
 from ...Functions.FEMM.draw_FEMM import draw_FEMM
 from ...Functions.Electrical.coordinate_transformation import n2dq
-from ...Classes._FEMMHandler import FEMMHandler
+from ...Classes._FEMMHandler import _FEMMHandler
+from ...Classes.OutMagFEMM import OutMagFEMM
 from numpy import linspace, pi, split
 from SciDataTool.Classes.Data1D import Data1D
 
@@ -82,7 +83,10 @@ def comp_fluxlinkage(obj, output):
     output.elec.Is = output.elec.get_Is()  # TODO get_Is disregards initial rotor angle
 
     # Open FEMM
-    femm = FEMMHandler()
+    femm = _FEMMHandler()
+    if output.elec.internal is None:
+        output.elec.internal = OutMagFEMM()
+    output.elec.internal.handler_list.append(femm)
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
@@ -103,6 +107,7 @@ def comp_fluxlinkage(obj, output):
 
     # Close FEMM after simulation
     femm.closefemm()
+    output.elec.internal.handler_list.remove(femm)
 
     # Define d axis angle for the d,q transform
     d_angle = (angle_rotor - angle_offset_initial) * zp

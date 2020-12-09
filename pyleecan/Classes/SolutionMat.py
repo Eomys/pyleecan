@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -22,9 +23,9 @@ except ImportError as error:
     get_field = error
 
 try:
-    from ..Methods.Mesh.SolutionMat.get_axis import get_axis
+    from ..Methods.Mesh.SolutionMat.get_axes_list import get_axes_list
 except ImportError as error:
-    get_axis = error
+    get_axes_list = error
 
 
 from numpy import array, array_equal
@@ -46,15 +47,17 @@ class SolutionMat(Solution):
         )
     else:
         get_field = get_field
-    # cf Methods.Mesh.SolutionMat.get_axis
-    if isinstance(get_axis, ImportError):
-        get_axis = property(
+    # cf Methods.Mesh.SolutionMat.get_axes_list
+    if isinstance(get_axes_list, ImportError):
+        get_axes_list = property(
             fget=lambda x: raise_(
-                ImportError("Can't use SolutionMat method get_axis: " + str(get_axis))
+                ImportError(
+                    "Can't use SolutionMat method get_axes_list: " + str(get_axes_list)
+                )
             )
         )
     else:
-        get_axis = get_axis
+        get_axes_list = get_axes_list
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -65,7 +68,8 @@ class SolutionMat(Solution):
         self,
         field=None,
         indice=None,
-        axis=None,
+        axis_name=None,
+        axis_size=None,
         type_cell="triangle",
         label=None,
         dimension=2,
@@ -91,8 +95,10 @@ class SolutionMat(Solution):
                 field = init_dict["field"]
             if "indice" in list(init_dict.keys()):
                 indice = init_dict["indice"]
-            if "axis" in list(init_dict.keys()):
-                axis = init_dict["axis"]
+            if "axis_name" in list(init_dict.keys()):
+                axis_name = init_dict["axis_name"]
+            if "axis_size" in list(init_dict.keys()):
+                axis_size = init_dict["axis_size"]
             if "type_cell" in list(init_dict.keys()):
                 type_cell = init_dict["type_cell"]
             if "label" in list(init_dict.keys()):
@@ -102,7 +108,8 @@ class SolutionMat(Solution):
         # Set the properties (value check and convertion are done in setter)
         self.field = field
         self.indice = indice
-        self.axis = axis
+        self.axis_name = axis_name
+        self.axis_size = axis_size
         # Call Solution init
         super(SolutionMat, self).__init__(
             type_cell=type_cell, label=label, dimension=dimension
@@ -130,7 +137,18 @@ class SolutionMat(Solution):
             + linesep
             + linesep
         )
-        SolutionMat_str += "axis = " + str(self.axis) + linesep
+        SolutionMat_str += (
+            "axis_name = "
+            + linesep
+            + str(self.axis_name).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        SolutionMat_str += (
+            "axis_size = "
+            + linesep
+            + str(self.axis_size).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return SolutionMat_str
 
     def __eq__(self, other):
@@ -146,9 +164,28 @@ class SolutionMat(Solution):
             return False
         if not array_equal(other.indice, self.indice):
             return False
-        if other.axis != self.axis:
+        if other.axis_name != self.axis_name:
+            return False
+        if other.axis_size != self.axis_size:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Solution
+        S += super(SolutionMat, self).__sizeof__()
+        S += getsizeof(self.field)
+        S += getsizeof(self.indice)
+        if self.axis_name is not None:
+            for value in self.axis_name:
+                S += getsizeof(value)
+        if self.axis_size is not None:
+            for value in self.axis_size:
+                S += getsizeof(value)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
@@ -163,7 +200,12 @@ class SolutionMat(Solution):
             SolutionMat_dict["indice"] = None
         else:
             SolutionMat_dict["indice"] = self.indice.tolist()
-        SolutionMat_dict["axis"] = self.axis.copy() if self.axis is not None else None
+        SolutionMat_dict["axis_name"] = (
+            self.axis_name.copy() if self.axis_name is not None else None
+        )
+        SolutionMat_dict["axis_size"] = (
+            self.axis_size.copy() if self.axis_size is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SolutionMat_dict["__class__"] = "SolutionMat"
@@ -174,7 +216,8 @@ class SolutionMat(Solution):
 
         self.field = None
         self.indice = None
-        self.axis = None
+        self.axis_name = None
+        self.axis_size = None
         # Set to None the properties inherited from Solution
         super(SolutionMat, self)._set_None()
 
@@ -228,22 +271,42 @@ class SolutionMat(Solution):
         """,
     )
 
-    def _get_axis(self):
-        """getter of axis"""
-        return self._axis
+    def _get_axis_name(self):
+        """getter of axis_name"""
+        return self._axis_name
 
-    def _set_axis(self, value):
-        """setter of axis"""
+    def _set_axis_name(self, value):
+        """setter of axis_name"""
         if type(value) is int and value == -1:
-            value = dict()
-        check_var("axis", value, "dict")
-        self._axis = value
+            value = list()
+        check_var("axis_name", value, "list")
+        self._axis_name = value
 
-    axis = property(
-        fget=_get_axis,
-        fset=_set_axis,
-        doc=u"""Dict of axis names storing axis sizes (e.g. time, direction )
+    axis_name = property(
+        fget=_get_axis_name,
+        fset=_set_axis_name,
+        doc=u"""List of axis names (e.g. "time", "direction")
 
-        :Type: dict
+        :Type: list
+        """,
+    )
+
+    def _get_axis_size(self):
+        """getter of axis_size"""
+        return self._axis_size
+
+    def _set_axis_size(self, value):
+        """setter of axis_size"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("axis_size", value, "list")
+        self._axis_size = value
+
+    axis_size = property(
+        fget=_get_axis_size,
+        fset=_set_axis_size,
+        doc=u"""List of axis sizes
+
+        :Type: list
         """,
     )

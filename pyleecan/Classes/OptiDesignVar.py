@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -122,6 +123,20 @@ class OptiDesignVar(ParamExplorer):
         if other._get_value_str != self._get_value_str:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from ParamExplorer
+        S += super(OptiDesignVar, self).__sizeof__()
+        S += getsizeof(self.type_var)
+        if self.space is not None:
+            for value in self.space:
+                S += getsizeof(value)
+        S += getsizeof(self._get_value_str)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

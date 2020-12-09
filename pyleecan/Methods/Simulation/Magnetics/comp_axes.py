@@ -2,8 +2,8 @@
 from ....Functions.Simulation.create_from_axis import create_from_axis
 
 
-def comp_time_angle(self, output):
-    """Compute the time and space discretization of the Magnetics module
+def comp_axes(self, output):
+    """Compute the axes required in any Magnetics module
 
     Parameters
     ----------
@@ -76,6 +76,15 @@ def comp_time_angle(self, output):
             + "). Angular periodicity removed"
         )
 
-    axes_dict = {"Time": Time, "Angle": Angle}
+    # Add Time axis on which to calculate torque
+    # Copy from standard Time axis
+    Time_Tem = Time.copy()
+
+    # Remove anti-periodicity if any
+    if "antiperiod" in Time_Tem.symmetries:
+        Time_Tem.symmetries["period"] = Time_Tem.symmetries.pop("antiperiod")
+
+    # Store in axis dict
+    axes_dict = {"Time": Time, "Angle": Angle, "Time_Tem": Time_Tem}
 
     return axes_dict

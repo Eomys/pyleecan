@@ -16,20 +16,20 @@ def comp_radius(self):
     (Rmin,Rmax): tuple
         Radius of the circle that contains the slot [m]
     """
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
-    Rmax = Rbo - self.H1
+    Rmax = Rext - self.H1
 
     # magnet pole pitch angle, must be <2*pi/2*p
-    alpham = 2 * arcsin(self.W0 / (2 * (Rbo - self.H1)))
+    alpham = 2 * arcsin(self.W0 / (2 * (Rext - self.H1)))
 
-    Harc = (Rbo - self.H1) * (1 - cos(alpham / 2))
+    Harc = (Rext - self.H1) * (1 - cos(alpham / 2))
     gammam = arctan((self.H0 - self.H1 - Harc) / (self.W0 / 2.0 - self.W1 / 2.0))
 
     x78 = (self.H3 - self.H2) / cos(gammam)  # distance from 7 to 8
-    Z9 = Rbo - Harc - self.H1 - 1j * self.W0 / 2.0
-    Z8 = Rbo - self.H0 - 1j * self.W1 / 2.0
-    Z7 = Rbo - self.H0 - x78 - 1j * self.W1 / 2.0
+    Z9 = Rext - Harc - self.H1 - 1j * self.W0 / 2.0
+    Z8 = Rext - self.H0 - 1j * self.W1 / 2.0
+    Z7 = Rext - self.H0 - x78 - 1j * self.W1 / 2.0
 
     # Magnet coordinate with Z8 as center and x as the top edge of the magnet
     Z8b = self.W2

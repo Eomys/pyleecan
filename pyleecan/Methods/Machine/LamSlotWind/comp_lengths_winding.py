@@ -41,6 +41,9 @@ def comp_lengths_winding(self):
     Lwact = qb * Ntspc * self.winding.Npcpp * 2 * self.L1
 
     # length of lamination winding in the radial ventilation duct [m]
-    Lwvent = qb * Ntspc * self.winding.Npcpp * 2 * self.Nrvd * self.Wrvd
+    if self.Nrvd is None or self.Wrvd is None:
+        Lwvent = 0
+    else:
+        Lwvent = qb * Ntspc * self.winding.Npcpp * 2 * self.Nrvd * self.Wrvd
 
     return {"Lwtot": Lwtot, "Lwact": Lwact, "Lewt": Lewt, "Lwvent": Lwvent, "Lew": Lew}

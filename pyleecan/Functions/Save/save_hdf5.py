@@ -1,5 +1,6 @@
 import numpy as np
 import h5py
+from h5py import File as FileH5
 
 
 def pyleecan_dict_to_hdf5(file, obj):
@@ -105,7 +106,7 @@ def variable_to_hdf5(file, prefix, variable, name):
             # to http://docs.h5py.org/en/stable/strings.html#exceptions-for-python-3
             grp[name] = np.string_(variable.encode("ISO-8859-2"))
     # None
-    elif None == variable:
+    elif variable is None:
         # Create dataset
         grp = file[prefix]
         grp[name] = "NoneValue"
@@ -127,10 +128,12 @@ def save_hdf5(obj, save_path):
         file path
     """
 
+    file5 = None
     try:
-        file = h5py.File(save_path, "w")
-        pyleecan_dict_to_hdf5(file, obj)
-        file.close()
+        file5 = FileH5(save_path, "w")
+        pyleecan_dict_to_hdf5(file5, obj)
+        file5.close()
     except Exception as err:
-        file.close()
+        if file5:
+            file5.close()
         raise (err)

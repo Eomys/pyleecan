@@ -3,6 +3,8 @@ import sys
 from os.path import dirname, abspath, normpath, join, realpath
 from os import listdir, remove, system
 import json
+from datetime import datetime
+
 
 begin = len(normpath(abspath(join(dirname(__file__), "../.."))))
 end = len(normpath(abspath(join(dirname(__file__), ".."))))
@@ -110,3 +112,5 @@ if __name__ == "__main__":
             print("############################################\n")
     except ImportError:
         print("/!\\ Please install and run black (version 20) /!\\")
+    now = datetime.now()
+    print("End at: ", now.strftime("%H:%M:%S"))

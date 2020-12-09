@@ -32,15 +32,15 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     """
 
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
     # Compute point coordinates
-    Zc0 = Rbo - self.H0 + self.R1
+    Zc0 = Rext - self.H0 + self.R1
     Z1 = (self.R1 * exp(1j * (-pi + self.W0 / 2))) + Zc0
     Z2 = (self.R1 * exp(1j * (pi - self.W0 / 2))) + Zc0
     Z4 = ((self.R1 + self.H1) * exp(1j * (-pi + self.W0 / 2))) + Zc0
     Z3 = ((self.R1 + self.H1) * exp(1j * (pi - self.W0 / 2))) + Zc0
-    Zref = Rbo - self.H0 - self.H1 / 2
+    Zref = Rext - self.H0 - self.H1 / 2
 
     surf_list = list()
     curve_list = list()

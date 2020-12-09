@@ -24,8 +24,15 @@ tmp_folder = join(save_gui_path, "DMatLib", "tmp_matlib")
 class TestDMatLib(object):
     """Test that the widget DMatLib behave like it should"""
 
-    def setup_method(self, method):
+    @pytest.fixture
+    def setup(self):
         """Run at the begining of every test to setup the gui"""
+
+        if not QtWidgets.QApplication.instance():
+            self.app = QtWidgets.QApplication(sys.argv)
+        else:
+            self.app = QtWidgets.QApplication.instance()
+
         mat_lib = list()
         mat_lib.append(Material())
         mat_lib[0].name = "test_material_1"
@@ -67,42 +74,32 @@ class TestDMatLib(object):
         for mat in mat_lib:
             mat.save(tmp_folder + "/" + mat.name + ".json")
 
-        self.widget = DMatLib(matlib)
+        widget = DMatLib(matlib)
 
-    @classmethod
-    def setup_class(cls):
-        """Start the app for the test"""
-        print("\nStart Test DMatLib")
-        if not QtWidgets.QApplication.instance():
-            cls.app = QtWidgets.QApplication(sys.argv)
-        else:
-            cls.app = QtWidgets.QApplication.instance()
+        yield {"widget": widget}
 
-    @classmethod
-    def teardown_class(cls):
-        """Exit the app after the test"""
-        cls.app.quit()
+        self.app.quit()
         rmtree(tmp_folder)
 
-    def test_init(self):
+    def test_init(self, setup):
         """Check that the Widget spinbox initialise to the lamination value"""
-        assert self.widget.out_name.text() == "name: test_material_1"
-        assert self.widget.out_iso.text() == "type: isotropic"
-        assert self.widget.out_rho_elec.text() == "rho = 0.11 ohm.m"
-        assert self.widget.out_cost_unit.text() == u"cost_unit = 0.21 €/kg"
-        assert self.widget.out_Cp.text() == "Cp = 0.19 W/kg/K"
-        assert self.widget.out_alpha.text() == "alpha = 0.2"
-        assert self.widget.out_L.text() == "Lambda = 0.18 W/K"
-        assert self.widget.out_rho_meca.text() == "rho = 0.14 kg/m^3"
-        assert self.widget.out_E.text() == "E = 0.15 Pa"
-        assert self.widget.out_G.text() == "G = 0.17 Pa"
-        assert self.widget.out_nu.text() == "nu = 0.16"
-        assert self.widget.out_mur_lin.text() == "mur_lin = 0.12"
-        assert self.widget.out_wlam.text() == "wlam = 0.13 m"
+        assert setup["widget"].out_name.text() == "name: test_material_1"
+        assert setup["widget"].out_iso.text() == "type: isotropic"
+        assert setup["widget"].out_rho_elec.text() == "rho = 0.11 ohm.m"
+        assert setup["widget"].out_cost_unit.text() == u"cost_unit = 0.21 €/kg"
+        assert setup["widget"].out_Cp.text() == "Cp = 0.19 W/kg/K"
+        assert setup["widget"].out_alpha.text() == "alpha = 0.2"
+        assert setup["widget"].out_L.text() == "Lambda = 0.18 W/K"
+        assert setup["widget"].out_rho_meca.text() == "rho = 0.14 kg/m^3"
+        assert setup["widget"].out_E.text() == "E = 0.15 Pa"
+        assert setup["widget"].out_G.text() == "G = 0.17 Pa"
+        assert setup["widget"].out_nu.text() == "nu = 0.16"
+        assert setup["widget"].out_mur_lin.text() == "mur_lin = 0.12"
+        assert setup["widget"].out_wlam.text() == "wlam = 0.13 m"
 
         # Check list
-        assert self.widget.nav_mat.count() == 7
-        for ii in range(0, self.widget.nav_mat.count()):
-            assert self.widget.nav_mat.item(ii).text() == "00" + str(
+        assert setup["widget"].nav_mat.count() == 7
+        for ii in range(0, setup["widget"].nav_mat.count()):
+            assert setup["widget"].nav_mat.item(ii).text() == "00" + str(
                 ii + 1
             ) + " - test_material_" + str(ii + 1)

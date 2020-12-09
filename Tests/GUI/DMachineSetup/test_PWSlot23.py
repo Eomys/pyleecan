@@ -18,150 +18,146 @@ import pytest
 class TestPWSlot23(object):
     """Test that the widget PWSlot23 behave like it should"""
 
-    def setup_method(self, method):
+    @pytest.fixture
+    def setup(self):
         """Run at the begining of every test to setup the gui"""
 
-        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
-        self.test_obj.slot = SlotW23(
+        if not QtWidgets.QApplication.instance():
+            self.app = QtWidgets.QApplication(sys.argv)
+        else:
+            self.app = QtWidgets.QApplication.instance()
+
+        test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
+        test_obj.slot = SlotW23(
             H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        self.test_obj.slot.W3 = None
-        self.widget = PWSlot23(self.test_obj)
+        test_obj.slot.W3 = None
+        widget = PWSlot23(test_obj)
 
-    @classmethod
-    def setup_class(cls):
-        """Start the app for the test"""
-        print("\nStart Test PWSlot23")
-        if not QtWidgets.QApplication.instance():
-            cls.app = QtWidgets.QApplication(sys.argv)
-        else:
-            cls.app = QtWidgets.QApplication.instance()
+        yield {"widget": widget, "test_obj": test_obj}
 
-    @classmethod
-    def teardown_class(cls):
-        """Exit the app after the test"""
-        cls.app.quit()
+        self.app.quit()
 
-    def test_init(self):
+    def test_init(self, setup):
         """Check that the Widget spinbox initialise to the lamination value"""
 
-        assert self.widget.lf_H0.value() == 0.10
-        assert self.widget.lf_H1.value() == 0.11
-        assert self.widget.lf_H2.value() == 0.12
-        assert self.widget.lf_W0.value() == 0.13
-        assert self.widget.lf_W1.value() == 0.14
-        assert self.widget.lf_W2.value() == 0.15
+        assert setup["widget"].lf_H0.value() == 0.10
+        assert setup["widget"].lf_H1.value() == 0.11
+        assert setup["widget"].lf_H2.value() == 0.12
+        assert setup["widget"].lf_W0.value() == 0.13
+        assert setup["widget"].lf_W1.value() == 0.14
+        assert setup["widget"].lf_W2.value() == 0.15
 
-        self.test_obj.slot = SlotW23(
+        setup["test_obj"].slot = SlotW23(
             H0=0.20, H1=0.21, H2=0.22, W0=0.23, W1=0.24, W2=0.25, H1_is_rad=True
         )
-        self.test_obj.slot.W3 = None
-        self.widget = PWSlot23(self.test_obj)
-        assert self.widget.lf_H0.value() == 0.20
-        assert self.widget.lf_H1.value() == 0.21
-        assert self.widget.lf_H2.value() == 0.22
-        assert self.widget.lf_W0.value() == 0.23
-        assert self.widget.lf_W1.value() == 0.24
-        assert self.widget.lf_W2.value() == 0.25
+        setup["test_obj"].slot.W3 = None
+        setup["widget"] = PWSlot23(setup["test_obj"])
+        assert setup["widget"].lf_H0.value() == 0.20
+        assert setup["widget"].lf_H1.value() == 0.21
+        assert setup["widget"].lf_H2.value() == 0.22
+        assert setup["widget"].lf_W0.value() == 0.23
+        assert setup["widget"].lf_W1.value() == 0.24
+        assert setup["widget"].lf_W2.value() == 0.25
         # Index 1 is rad
-        # self.assertEqual(self.widget.c_H1_unit.currentIndex(),1)
+        # self.assertEqual(setup["widget"].c_H1_unit.currentIndex(),1)
 
-    def test_set_W0(self):
+    def test_set_W0(self, setup):
         """Check that the Widget allow to update W0"""
-        self.widget.lf_W0.clear()  # Clear the field before writing
-        QTest.keyClicks(self.widget.lf_W0, "0.31")
-        self.widget.lf_W0.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_W0.clear()  # Clear the field before writing
+        QTest.keyClicks(setup["widget"].lf_W0, "0.31")
+        setup["widget"].lf_W0.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.slot.W0 == 0.31
-        assert self.test_obj.slot.W0 == 0.31
+        assert setup["widget"].slot.W0 == 0.31
+        assert setup["test_obj"].slot.W0 == 0.31
 
-    def test_set_W1(self):
+    def test_set_W1(self, setup):
         """Check that the Widget allow to update W1"""
-        self.widget.lf_W1.clear()
-        QTest.keyClicks(self.widget.lf_W1, "0.32")
-        self.widget.lf_W1.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_W1.clear()
+        QTest.keyClicks(setup["widget"].lf_W1, "0.32")
+        setup["widget"].lf_W1.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.slot.W1 == 0.32
-        assert self.test_obj.slot.W1 == 0.32
+        assert setup["widget"].slot.W1 == 0.32
+        assert setup["test_obj"].slot.W1 == 0.32
 
-    def test_set_W2(self):
+    def test_set_W2(self, setup):
         """Check that the Widget allow to update W2"""
-        self.widget.lf_W2.clear()
-        QTest.keyClicks(self.widget.lf_W2, "0.33")
-        self.widget.lf_W2.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_W2.clear()
+        QTest.keyClicks(setup["widget"].lf_W2, "0.33")
+        setup["widget"].lf_W2.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.slot.W2 == 0.33
-        assert self.test_obj.slot.W2 == 0.33
+        assert setup["widget"].slot.W2 == 0.33
+        assert setup["test_obj"].slot.W2 == 0.33
 
-    def test_set_W3(self):
+    def test_set_W3(self, setup):
         """Check that the Widget allow to update W2"""
-        self.widget.lf_W3.setEnabled(True)
+        setup["widget"].lf_W3.setEnabled(True)
 
-        self.widget.lf_W3.clear()
-        QTest.keyClicks(self.widget.lf_W3, "0.99")
-        self.widget.lf_W3.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_W3.clear()
+        QTest.keyClicks(setup["widget"].lf_W3, "0.99")
+        setup["widget"].lf_W3.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.slot.W3 == 0.99
-        assert self.test_obj.slot.W3 == 0.99
+        assert setup["widget"].slot.W3 == 0.99
+        assert setup["test_obj"].slot.W3 == 0.99
 
-    def test_set_H0(self):
+    def test_set_H0(self, setup):
         """Check that the Widget allow to update H0"""
-        self.widget.lf_H0.clear()
-        QTest.keyClicks(self.widget.lf_H0, "0.34")
-        self.widget.lf_H0.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_H0.clear()
+        QTest.keyClicks(setup["widget"].lf_H0, "0.34")
+        setup["widget"].lf_H0.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.slot.H0 == 0.34
-        assert self.test_obj.slot.H0 == 0.34
+        assert setup["widget"].slot.H0 == 0.34
+        assert setup["test_obj"].slot.H0 == 0.34
 
-    def test_set_H1(self):
+    def test_set_H1(self, setup):
         """Check that the Widget allow to update H1"""
-        self.widget.lf_H1.clear()
-        QTest.keyClicks(self.widget.lf_H1, "0.35")
-        self.widget.lf_H1.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_H1.clear()
+        QTest.keyClicks(setup["widget"].lf_H1, "0.35")
+        setup["widget"].lf_H1.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.slot.H1 == 0.35
-        assert self.test_obj.slot.H1 == 0.35
+        assert setup["widget"].slot.H1 == 0.35
+        assert setup["test_obj"].slot.H1 == 0.35
 
         #    @pytest.mark.GUI
         #    def test_set_H1_is_rad(setUp):
         #        """Check that the Widget allow to update H1_is_rad
         #        """
-        #        self.assertTrue(not self.test_obj.slot.H1_is_rad)
+        #        self.assertTrue(not setup["test_obj"].slot.H1_is_rad)
         #
-        #        self.widget.c_H1_unit.setCurrentIndex(1)#Index 1 is rad
+        #        setup["widget"].c_H1_unit.setCurrentIndex(1)#Index 1 is rad
         #
-        #        self.assertTrue(self.test_obj.slot.H1_is_rad)
+        #        self.assertTrue(setup["test_obj"].slot.H1_is_rad)
 
-    def test_set_H2(self):
+    def test_set_H2(self, setup):
         """Check that the Widget allow to update H2"""
-        self.widget.lf_H2.clear()
-        QTest.keyClicks(self.widget.lf_H2, "0.36")
-        self.widget.lf_H2.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_H2.clear()
+        QTest.keyClicks(setup["widget"].lf_H2, "0.36")
+        setup["widget"].lf_H2.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.slot.H2 == 0.36
-        assert self.test_obj.slot.H2 == 0.36
+        assert setup["widget"].slot.H2 == 0.36
+        assert setup["test_obj"].slot.H2 == 0.36
 
-    def test_is_cst_tooth(self):
+    def test_is_cst_tooth(self, setup):
         """Check that the Widget allow be checked"""
-        assert self.widget.slot.W1 is not None
-        assert self.widget.slot.W2 is not None
-        QTest.mouseClick(self.widget.is_cst_tooth, Qt.LeftButton)
-        assert self.widget.is_cst_tooth.isChecked() == True
-        assert self.widget.slot.W1 is None
-        assert self.widget.slot.W2 is None
-        assert self.widget.lf_W1.isEnabled() == False
-        assert self.widget.lf_W2.isEnabled() == False
-        assert self.widget.lf_W3.isEnabled() == True
+        assert setup["widget"].slot.W1 is not None
+        assert setup["widget"].slot.W2 is not None
+        QTest.mouseClick(setup["widget"].is_cst_tooth, Qt.LeftButton)
+        assert setup["widget"].is_cst_tooth.isChecked() == True
+        assert setup["widget"].slot.W1 is None
+        assert setup["widget"].slot.W2 is None
+        assert setup["widget"].lf_W1.isEnabled() == False
+        assert setup["widget"].lf_W2.isEnabled() == False
+        assert setup["widget"].lf_W3.isEnabled() == True
 
-        QTest.mouseClick(self.widget.is_cst_tooth, Qt.LeftButton)
-        assert self.widget.is_cst_tooth.isChecked() == False
-        assert self.widget.lf_W1.isEnabled() == True
-        assert self.widget.lf_W2.isEnabled() == True
-        assert self.widget.lf_W3.isEnabled() == False
+        QTest.mouseClick(setup["widget"].is_cst_tooth, Qt.LeftButton)
+        assert setup["widget"].is_cst_tooth.isChecked() == False
+        assert setup["widget"].lf_W1.isEnabled() == True
+        assert setup["widget"].lf_W2.isEnabled() == True
+        assert setup["widget"].lf_W3.isEnabled() == False
 
-    def test_output_txt(self):
+    def test_output_txt(self, setup):
         """Check that the Output text is computed and correct"""
-        self.test_obj = LamSlotWind(
+        setup["test_obj"] = LamSlotWind(
             Rint=0,
             Rext=0.5,
             is_internal=True,
@@ -170,33 +166,33 @@ class TestPWSlot23(object):
             Nrvd=5,
             Wrvd=0.02,
         )
-        self.test_obj.slot = SlotW23(
+        setup["test_obj"].slot = SlotW23(
             Zs=6, W0=50e-3, W1=90e-3, W2=100e-3, H0=20e-3, H1=35e-3, H2=130e-3
         )
-        self.widget = PWSlot23(self.test_obj)
-        assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.1345 m"
+        setup["widget"] = PWSlot23(setup["test_obj"])
+        assert setup["widget"].w_out.out_slot_height.text() == "Slot height: 0.1345 m"
 
-    def test_check(self):
+    def test_check(self, setup):
         """Check that the check function is correctly returning error messages"""
-        self.test_obj = LamSlotWind(Rint=0.7, Rext=0.5)
-        self.test_obj.slot = SlotW23(
+        setup["test_obj"] = LamSlotWind(Rint=0.7, Rext=0.5)
+        setup["test_obj"].slot = SlotW23(
             H0=0.10, H1=0.11, H2=0.12, W0=None, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        self.widget = PWSlot23(self.test_obj)
-        assert self.widget.check(self.test_obj) == "PWSlot23 check"
-        self.test_obj.slot = SlotW23(
+        setup["widget"] = PWSlot23(setup["test_obj"])
+        assert setup["widget"].check(setup["test_obj"]) == "PWSlot23 check"
+        setup["test_obj"].slot = SlotW23(
             H0=None, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert self.widget.check(self.test_obj) == "PWSlot23 check"
-        self.test_obj.slot = SlotW23(
+        assert setup["widget"].check(setup["test_obj"]) == "PWSlot23 check"
+        setup["test_obj"].slot = SlotW23(
             H0=0.10, H1=None, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert self.widget.check(self.test_obj) == "PWSlot23 check"
-        self.test_obj.slot = SlotW23(
+        assert setup["widget"].check(setup["test_obj"]) == "PWSlot23 check"
+        setup["test_obj"].slot = SlotW23(
             H0=0.10, H1=0.11, H2=None, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert self.widget.check(self.test_obj) == "PWSlot23 check"
-        self.test_obj.slot = SlotW23(
+        assert setup["widget"].check(setup["test_obj"]) == "PWSlot23 check"
+        setup["test_obj"].slot = SlotW23(
             H0=0.10, H1=0.11, H2=0.12, W0=0.0011, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert self.widget.check(self.test_obj) == "PWSlot23 check"
+        assert setup["widget"].check(setup["test_obj"]) == "PWSlot23 check"

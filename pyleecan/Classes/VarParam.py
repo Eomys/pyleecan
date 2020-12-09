@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -95,6 +96,8 @@ class VarParam(VarSimu):
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
+        pre_keeper_postproc_list=None,
+        post_keeper_postproc_list=None,
         init_dict=None,
         init_str=None,
     ):
@@ -133,6 +136,10 @@ class VarParam(VarSimu):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
+            if "pre_keeper_postproc_list" in list(init_dict.keys()):
+                pre_keeper_postproc_list = init_dict["pre_keeper_postproc_list"]
+            if "post_keeper_postproc_list" in list(init_dict.keys()):
+                post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
         # Set the properties (value check and convertion are done in setter)
         self.paramexplorer_list = paramexplorer_list
         # Call VarSimu init
@@ -146,6 +153,8 @@ class VarParam(VarSimu):
             nb_simu=nb_simu,
             is_reuse_femm_file=is_reuse_femm_file,
             postproc_list=postproc_list,
+            pre_keeper_postproc_list=pre_keeper_postproc_list,
+            post_keeper_postproc_list=post_keeper_postproc_list,
         )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
@@ -181,6 +190,18 @@ class VarParam(VarSimu):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from VarSimu
+        S += super(VarParam, self).__sizeof__()
+        if self.paramexplorer_list is not None:
+            for value in self.paramexplorer_list:
+                S += getsizeof(value)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -200,8 +221,7 @@ class VarParam(VarSimu):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.paramexplorer_list:
-            obj._set_None()
+        self.paramexplorer_list = None
         # Set to None the properties inherited from VarSimu
         super(VarParam, self)._set_None()
 

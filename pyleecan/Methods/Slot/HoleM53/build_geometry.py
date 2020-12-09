@@ -35,9 +35,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         st = "_Stator"
     else:
         st = "_Rotor"
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
-    Z7 = Rbo - self.H0 - 1j * self.W1 / 2
+    Z7 = Rext - self.H0 - 1j * self.W1 / 2
     Z6 = Z7 - 1j * (self.H2 - self.H3) * cos(self.W4)
     Z8 = Z7 + (self.H2 - self.H3) * sin(self.W4)
 
@@ -50,7 +50,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     Z10 = (self.W2 + self.W3 + 1j * (self.H2 - self.H3)) * exp(-1j * self.W4) + Z6
 
     # Z1 and Z11 are defined as intersection between line and circle
-    Zlist = inter_line_circle(Z8, Z10, Rbo - self.H1)
+    Zlist = inter_line_circle(Z8, Z10, Rext - self.H1)
     if len(Zlist) == 2 and Zlist[0].imag < 0 and Zlist[0].real > 0:
         Z11 = Zlist[0]
     elif len(Zlist) == 2 and Zlist[1].imag < 0 and Zlist[1].real > 0:
@@ -58,7 +58,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     else:
         raise Slot53InterError("ERROR: Slot 53, Can't find Z11 coordinates")
 
-    Zlist = inter_line_circle(Z2, Z6, Rbo - self.H1)
+    Zlist = inter_line_circle(Z2, Z6, Rext - self.H1)
     if len(Zlist) == 2 and Zlist[0].imag < 0 and Zlist[0].real > 0:
         Z1 = Zlist[0]
     elif len(Zlist) == 2 and Zlist[1].imag < 0 and Zlist[1].real > 0:
@@ -85,7 +85,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z2, Z10))
     curve_list.append(Segment(Z10, Z11))
     curve_list.append(
-        Arc1(begin=Z11, end=Z1, radius=-Rbo + self.H1, is_trigo_direction=False)
+        Arc1(begin=Z11, end=Z1, radius=-Rext + self.H1, is_trigo_direction=False)
     )
     point_ref = (Z1 + Z2 + Z10 + Z11) / 4
     S1 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
@@ -132,7 +132,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z1s, Z2s))
     curve_list.append(Segment(Z2s, Z10s))
     curve_list.append(Segment(Z10s, Z11s))
-    curve_list.append(Arc1(Z11s, Z1s, Rbo - self.H1, is_trigo_direction=True))
+    curve_list.append(Arc1(Z11s, Z1s, Rext - self.H1, is_trigo_direction=True))
     point_ref = (Z1s + Z2s + Z10s + Z11s) / 4
     S4 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
@@ -201,7 +201,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z6, Z7))
     curve_list.append(Segment(Z7, Z8))
     curve_list.append(Segment(Z8, Z11))
-    curve_list.append(Arc1(Z11, Z1, -Rbo + self.H1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z11, Z1, -Rext + self.H1, is_trigo_direction=False))
     point_ref = (Z3 + Z4 + Z9 + Z10) / 4
     S8 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
@@ -218,7 +218,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z6s, Z7s))
     curve_list.append(Segment(Z7s, Z8s))
     curve_list.append(Segment(Z8s, Z11s))
-    curve_list.append(Arc1(Z11s, Z1s, -Rbo + self.H1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z11s, Z1s, -Rext + self.H1, is_trigo_direction=False))
     point_ref = (Z3s + Z4s + Z9s + Z10s) / 4
     S9 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
@@ -239,7 +239,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     if self.W2 > 0:
         curve_list.append(Segment(Z9, Z8))
     curve_list.append(Segment(Z8s, Z11s))
-    curve_list.append(Arc1(Z11s, Z1s, -Rbo + self.H1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z11s, Z1s, -Rext + self.H1, is_trigo_direction=False))
     point_ref = (Z3s + Z4s + Z9s + Z10s) / 4
     S10 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
@@ -260,16 +260,16 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     if self.W2 > 0:
         curve_list.append(Segment(Z9s, Z8s))
     curve_list.append(Segment(Z8, Z11))
-    curve_list.append(Arc1(Z11, Z1, -Rbo + self.H1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z11, Z1, -Rext + self.H1, is_trigo_direction=False))
     point_ref = (Z3 + Z4 + Z9 + Z10) / 4
     S11 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # No magnet and W1 = 0
     curve_list = list()
-    curve_list.append(Arc1(Z1, Z11, Rbo - self.H1, is_trigo_direction=True))
+    curve_list.append(Arc1(Z1, Z11, Rext - self.H1, is_trigo_direction=True))
     curve_list.append(Segment(Z11, Z8))
     curve_list.append(Segment(Z8, Z11s))
-    curve_list.append(Arc1(Z11s, Z1s, Rbo - self.H1, is_trigo_direction=True))
+    curve_list.append(Arc1(Z11s, Z1s, Rext - self.H1, is_trigo_direction=True))
     curve_list.append(Segment(Z1s, Z2s))
     if self.H3 > 0:
         curve_list.append(Segment(Z2s, Z3s))

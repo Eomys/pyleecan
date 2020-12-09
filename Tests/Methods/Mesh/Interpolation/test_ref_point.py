@@ -17,6 +17,7 @@ from pyleecan.Classes.FPGNSeg import FPGNSeg
 
 
 @pytest.mark.MeshSol
+@pytest.mark.METHODS
 class unittest_ref_points(TestCase):
     """ Tests for get_ref_point methods"""
 

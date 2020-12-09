@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -79,6 +80,16 @@ try:
     from ..Methods.Output.Output.plot.plot_A_time_space import plot_A_time_space
 except ImportError as error:
     plot_A_time_space = error
+
+try:
+    from ..Methods.Output.Output.getter.get_data_from_str import get_data_from_str
+except ImportError as error:
+    get_data_from_str = error
+
+try:
+    from ..Methods.Output.Output.print_memory import print_memory
+except ImportError as error:
+    print_memory = error
 
 
 from ._check import InitUnKnowClassError
@@ -230,6 +241,29 @@ class Output(FrozenClass):
         )
     else:
         plot_A_time_space = plot_A_time_space
+    # cf Methods.Output.Output.getter.get_data_from_str
+    if isinstance(get_data_from_str, ImportError):
+        get_data_from_str = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_data_from_str: "
+                    + str(get_data_from_str)
+                )
+            )
+        )
+    else:
+        get_data_from_str = get_data_from_str
+    # cf Methods.Output.Output.print_memory
+    if isinstance(print_memory, ImportError):
+        print_memory = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method print_memory: " + str(print_memory)
+                )
+            )
+        )
+    else:
+        print_memory = print_memory
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -369,6 +403,21 @@ class Output(FrozenClass):
         if other.force != self.force:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.simu)
+        S += getsizeof(self.path_result)
+        S += getsizeof(self.geo)
+        S += getsizeof(self.elec)
+        S += getsizeof(self.mag)
+        S += getsizeof(self.struct)
+        S += getsizeof(self.post)
+        S += getsizeof(self.logger_name)
+        S += getsizeof(self.force)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -172,6 +173,27 @@ class OptiProblem(FrozenClass):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.simu)
+        if self.design_var is not None:
+            for value in self.design_var:
+                S += getsizeof(value)
+        if self.obj_func is not None:
+            for value in self.obj_func:
+                S += getsizeof(value)
+        S += getsizeof(self._eval_func_str)
+        if self.constraint is not None:
+            for value in self.constraint:
+                S += getsizeof(value)
+        S += getsizeof(self._preprocessing_str)
+        if self.datakeeper_list is not None:
+            for value in self.datakeeper_list:
+                S += getsizeof(value)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -221,16 +243,12 @@ class OptiProblem(FrozenClass):
 
         if self.simu is not None:
             self.simu._set_None()
-        for obj in self.design_var:
-            obj._set_None()
-        for obj in self.obj_func:
-            obj._set_None()
+        self.design_var = None
+        self.obj_func = None
         self.eval_func = None
-        for obj in self.constraint:
-            obj._set_None()
+        self.constraint = None
         self.preprocessing = None
-        for obj in self.datakeeper_list:
-            obj._set_None()
+        self.datakeeper_list = None
 
     def _get_simu(self):
         """getter of simu"""
