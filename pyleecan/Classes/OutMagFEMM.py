@@ -24,6 +24,7 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
+from ._FEMMHandler import _FEMMHandler
 
 
 class OutMagFEMM(OutInternal):
@@ -46,7 +47,7 @@ class OutMagFEMM(OutInternal):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, FEMM_dict=None, init_dict=None, init_str=None):
+    def __init__(self, FEMM_dict=None, handler_list=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -64,8 +65,11 @@ class OutMagFEMM(OutInternal):
             # Overwrite default value with init_dict content
             if "FEMM_dict" in list(init_dict.keys()):
                 FEMM_dict = init_dict["FEMM_dict"]
+            if "handler_list" in list(init_dict.keys()):
+                handler_list = init_dict["handler_list"]
         # Set the properties (value check and convertion are done in setter)
         self.FEMM_dict = FEMM_dict
+        self.handler_list = handler_list
         # Call OutInternal init
         super(OutMagFEMM, self).__init__()
         # The class is frozen (in OutInternal init), for now it's impossible to
@@ -78,6 +82,16 @@ class OutMagFEMM(OutInternal):
         # Get the properties inherited from OutInternal
         OutMagFEMM_str += super(OutMagFEMM, self).__str__()
         OutMagFEMM_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
+        if len(self.handler_list) == 0:
+            OutMagFEMM_str += "handler_list = []" + linesep
+        for ii in range(len(self.handler_list)):
+            tmp = (
+                self.handler_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            OutMagFEMM_str += (
+                "handler_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return OutMagFEMM_str
 
     def __eq__(self, other):
@@ -91,6 +105,8 @@ class OutMagFEMM(OutInternal):
             return False
         if other.FEMM_dict != self.FEMM_dict:
             return False
+        if other.handler_list != self.handler_list:
+            return False
         return True
 
     def __sizeof__(self):
@@ -103,6 +119,9 @@ class OutMagFEMM(OutInternal):
         if self.FEMM_dict is not None:
             for key, value in self.FEMM_dict.items():
                 S += getsizeof(value) + getsizeof(key)
+        if self.handler_list is not None:
+            for value in self.handler_list:
+                S += getsizeof(value)
         return S
 
     def as_dict(self):
@@ -113,6 +132,12 @@ class OutMagFEMM(OutInternal):
         OutMagFEMM_dict["FEMM_dict"] = (
             self.FEMM_dict.copy() if self.FEMM_dict is not None else None
         )
+        if self.handler_list is None:
+            OutMagFEMM_dict["handler_list"] = None
+        else:
+            OutMagFEMM_dict["handler_list"] = list()
+            for obj in self.handler_list:
+                OutMagFEMM_dict["handler_list"].append(obj.as_dict())
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OutMagFEMM_dict["__class__"] = "OutMagFEMM"
@@ -122,6 +147,7 @@ class OutMagFEMM(OutInternal):
         """Set all the properties to None (except pyleecan object)"""
 
         self.FEMM_dict = None
+        self.handler_list = None
         # Set to None the properties inherited from OutInternal
         super(OutMagFEMM, self)._set_None()
 
@@ -142,5 +168,36 @@ class OutMagFEMM(OutInternal):
         doc=u"""Dictionnary containing the main FEMM parameters
 
         :Type: dict
+        """,
+    )
+
+    def _get_handler_list(self):
+        """getter of handler_list"""
+        if self._handler_list is not None:
+            for obj in self._handler_list:
+                if obj is not None:
+                    obj.parent = self
+        return self._handler_list
+
+    def _set_handler_list(self, value):
+        """setter of handler_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "handler_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
+        check_var("handler_list", value, "[_FEMMHandler]")
+        self._handler_list = value
+
+    handler_list = property(
+        fget=_get_handler_list,
+        fset=_set_handler_list,
+        doc=u"""List of FEMM Handler (more than 1 if nb_worker >1)
+
+        :Type: [_FEMMHandler]
         """,
     )

@@ -52,6 +52,11 @@ try:
 except ImportError as error:
     convert = error
 
+try:
+    from ..Methods.Mesh.MeshVTK.as_dict import as_dict
+except ImportError as error:
+    as_dict = error
+
 
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
@@ -141,6 +146,15 @@ class MeshVTK(Mesh):
         )
     else:
         convert = convert
+    # cf Methods.Mesh.MeshVTK.as_dict
+    if isinstance(as_dict, ImportError):
+        as_dict = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshVTK method as_dict: " + str(as_dict))
+            )
+        )
+    else:
+        as_dict = as_dict
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -278,39 +292,6 @@ class MeshVTK(Mesh):
         S += getsizeof(self.surf_path)
         S += getsizeof(self.surf_name)
         return S
-
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
-
-        # Get the properties inherited from Mesh
-        MeshVTK_dict = super(MeshVTK, self).as_dict()
-        if self.mesh is None:
-            MeshVTK_dict["mesh"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            MeshVTK_dict["mesh"] = {
-                "__class__": str(type(self._mesh)),
-                "__repr__": str(self._mesh.__repr__()),
-                "serialized": dumps(self._mesh).decode("ISO-8859-2"),
-            }
-        MeshVTK_dict["is_pyvista_mesh"] = self.is_pyvista_mesh
-        MeshVTK_dict["format"] = self.format
-        MeshVTK_dict["path"] = self.path
-        MeshVTK_dict["name"] = self.name
-        if self.surf is None:
-            MeshVTK_dict["surf"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            MeshVTK_dict["surf"] = {
-                "__class__": str(type(self._surf)),
-                "__repr__": str(self._surf.__repr__()),
-                "serialized": dumps(self._surf).decode("ISO-8859-2"),
-            }
-        MeshVTK_dict["is_vtk_surf"] = self.is_vtk_surf
-        MeshVTK_dict["surf_path"] = self.surf_path
-        MeshVTK_dict["surf_name"] = self.surf_name
-        # The class name is added to the dict for deserialisation purpose
-        # Overwrite the mother class name
-        MeshVTK_dict["__class__"] = "MeshVTK"
-        return MeshVTK_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

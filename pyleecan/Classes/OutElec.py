@@ -40,6 +40,7 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
+from .OutInternal import OutInternal
 
 
 class OutElec(FrozenClass):
@@ -109,6 +110,7 @@ class OutElec(FrozenClass):
         Pj_losses=None,
         Pem_av_ref=None,
         Us=None,
+        internal=None,
         init_dict=None,
         init_str=None,
     ):
@@ -161,6 +163,8 @@ class OutElec(FrozenClass):
                 Pem_av_ref = init_dict["Pem_av_ref"]
             if "Us" in list(init_dict.keys()):
                 Us = init_dict["Us"]
+            if "internal" in list(init_dict.keys()):
+                internal = init_dict["internal"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
@@ -180,6 +184,7 @@ class OutElec(FrozenClass):
         self.Pj_losses = Pj_losses
         self.Pem_av_ref = Pem_av_ref
         self.Us = Us
+        self.internal = internal
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -217,6 +222,11 @@ class OutElec(FrozenClass):
         OutElec_str += "Pj_losses = " + str(self.Pj_losses) + linesep
         OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         OutElec_str += "Us = " + str(self.Us) + linesep + linesep
+        if self.internal is not None:
+            tmp = self.internal.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OutElec_str += "internal = " + tmp
+        else:
+            OutElec_str += "internal = None" + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -258,6 +268,8 @@ class OutElec(FrozenClass):
             return False
         if other.Us != self.Us:
             return False
+        if other.internal != self.internal:
+            return False
         return True
 
     def __sizeof__(self):
@@ -281,6 +293,7 @@ class OutElec(FrozenClass):
         S += getsizeof(self.Pj_losses)
         S += getsizeof(self.Pem_av_ref)
         S += getsizeof(self.Us)
+        S += getsizeof(self.internal)
         return S
 
     def as_dict(self):
@@ -322,6 +335,10 @@ class OutElec(FrozenClass):
             OutElec_dict["Us"] = None
         else:
             OutElec_dict["Us"] = self.Us.as_dict()
+        if self.internal is None:
+            OutElec_dict["internal"] = None
+        else:
+            OutElec_dict["internal"] = self.internal.as_dict()
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -346,6 +363,8 @@ class OutElec(FrozenClass):
         self.Pj_losses = None
         self.Pem_av_ref = None
         self.Us = None
+        if self.internal is not None:
+            self.internal._set_None()
 
     def _get_Time(self):
         """getter of Time"""
@@ -702,5 +721,35 @@ class OutElec(FrozenClass):
         doc=u"""Stator voltage as a function of time (each column correspond to one phase)
 
         :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
+
+    def _get_internal(self):
+        """getter of internal"""
+        return self._internal
+
+    def _set_internal(self, value):
+        """setter of internal"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "internal"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutInternal()
+        check_var("internal", value, "OutInternal")
+        self._internal = value
+
+        if self._internal is not None:
+            self._internal.parent = self
+
+    internal = property(
+        fget=_get_internal,
+        fset=_set_internal,
+        doc=u"""OutInternal object containg outputs related to a specific model
+
+        :Type: OutInternal
         """,
     )

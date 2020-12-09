@@ -175,10 +175,11 @@ def generate_class(gen_dict, class_name, path_to_gen):
     # Import of all needed pyleecan type for empty init
     class_file.write("from ._check import InitUnKnowClassError\n")
     for pyleecan_type in import_type_list:
-        if "." not in pyleecan_type and pyleecan_type != "FrozenClass":
-            class_file.write(
-                "from ." + pyleecan_type + " import " + pyleecan_type + "\n"
-            )
+        if pyleecan_type:
+            if "." not in pyleecan_type and pyleecan_type != "FrozenClass":
+                class_file.write(
+                    "from ." + pyleecan_type + " import " + pyleecan_type + "\n"
+                )
 
     # Class declaration
     if class_dict["mother"] != "":
@@ -254,9 +255,12 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(TAB2 + ")\n")
         class_file.write(TAB + "else:\n")
         class_file.write(TAB2 + meth_name + " = " + meth_name + "\n")
+    # Save / copy methods
     class_file.write(TAB + "# save and copy methods are available in all object\n")
-    class_file.write(TAB + "save = save\n")
-    class_file.write(TAB + "copy = copy\n")
+    if "save" not in class_dict["methods"]:
+        class_file.write(TAB + "save = save\n")
+    if "copy" not in class_dict["methods"]:
+        class_file.write(TAB + "copy = copy\n")
 
     if IS_LOGGER:
         class_file.write(TAB + "# get_logger method is available in all object\n")
@@ -269,19 +273,23 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(generate_init(gen_dict, class_dict) + "\n")
 
     # Add the __str__ method
-    class_file.write(generate_str(gen_dict, class_dict) + "\n")
+    if "__str__" not in class_dict["methods"]:
+        class_file.write(generate_str(gen_dict, class_dict) + "\n")
 
     # Add the __eq__ method
-    class_file.write(generate_eq(gen_dict, class_dict) + "\n")
+    if "__eq__" not in class_dict["methods"]:
+        class_file.write(generate_eq(gen_dict, class_dict) + "\n")
 
     # Add the __sizeof__ method
     class_file.write(generate_size_of(gen_dict, class_dict))
 
     # Add the as_dict method
-    class_file.write(generate_as_dict(gen_dict, class_dict) + "\n")
+    if "as_dict" not in class_dict["methods"]:
+        class_file.write(generate_as_dict(gen_dict, class_dict) + "\n")
 
     # Add the _set_None method
-    class_file.write(generate_set_None(gen_dict, class_dict))
+    if "_set_None" not in class_dict["methods"]:
+        class_file.write(generate_set_None(gen_dict, class_dict))
 
     # Add all the properties getter and setter
     if len(class_dict["properties"]) > 0:

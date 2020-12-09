@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     get_value = error
 
+try:
+    from ..Methods.Simulation.ParamExplorerSet.as_dict import as_dict
+except ImportError as error:
+    as_dict = error
+
 
 from ntpath import basename
 from os.path import isfile
@@ -36,6 +41,7 @@ class ParamExplorerSet(ParamExplorer):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.ParamExplorerSet.get_value
     if isinstance(get_value, ImportError):
         get_value = property(
@@ -47,6 +53,17 @@ class ParamExplorerSet(ParamExplorer):
         )
     else:
         get_value = get_value
+    # cf Methods.Simulation.ParamExplorerSet.as_dict
+    if isinstance(as_dict, ImportError):
+        as_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ParamExplorerSet method as_dict: " + str(as_dict)
+                )
+            )
+        )
+    else:
+        as_dict = as_dict
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -135,19 +152,6 @@ class ParamExplorerSet(ParamExplorer):
             for value in self.value:
                 S += getsizeof(value)
         return S
-
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
-
-        # Get the properties inherited from ParamExplorer
-        ParamExplorerSet_dict = super(ParamExplorerSet, self).as_dict()
-        ParamExplorerSet_dict["value"] = (
-            self.value.copy() if self.value is not None else None
-        )
-        # The class name is added to the dict for deserialisation purpose
-        # Overwrite the mother class name
-        ParamExplorerSet_dict["__class__"] = "ParamExplorerSet"
-        return ParamExplorerSet_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
