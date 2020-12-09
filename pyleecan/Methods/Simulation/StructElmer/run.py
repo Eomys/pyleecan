@@ -28,3 +28,4 @@ def run(self):
     self.solve_FEA(output)
 
     # Post processing
+    self.get_meshsolution(output)
