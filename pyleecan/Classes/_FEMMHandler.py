@@ -5,16 +5,15 @@ import pythoncom
 from math import exp
 
 
-class FEMMHandler(object):
+class _FEMMHandler(object):
     """
     Object to handle FEMM
     enable to start FEMM and run commands in it
     """
 
-    def __init__(self, keep_open=False):
+    def __init__(self):
         object.__init__(self)
         self.HandleToFEMM = None
-        self.keep_open = keep_open
         pythoncom.CoInitialize()
 
     def fixpath(self, myPath):
@@ -25,18 +24,6 @@ class FEMMHandler(object):
             raise Exception("An instance FEMM is already open")
 
         self.HandleToFEMM = win32com.client.Dispatch("femm.ActiveFEMM")
-
-        # Define HandleToFEMM as global to keep the object open if needed
-        if self.keep_open:
-            global FEMM_instances  # List containing FEMM instances to keep open
-            # Check if the variable is already set
-            try:
-                FEMM_instances
-            except NameError:
-                FEMM_instances = [self.HandleToFEMM]
-            else:
-                if all([FI != self.HandleToFEMM for FI in FEMM_instances]):
-                    FEMM_instances.append(self.HandleToFEMM)
 
         # Call femm
         self.callfemm(
@@ -50,17 +37,6 @@ class FEMMHandler(object):
             return
 
     def closefemm(self):
-        if self.keep_open:
-            global FEMM_instances
-            # Delete the instance in the global variable to lose ref to the object
-            try:
-                FEMM_instances.remove(self.HandleToFEMM)
-            except (
-                NameError,
-                ValueError,
-            ):  # FEMM_instances is not define or it doesn't contain self.HandleToFEMM
-                pass
-
         self.HandleToFEMM = None  # no reference to the handler, femm is closed
 
     def callfemm(self, myString):
