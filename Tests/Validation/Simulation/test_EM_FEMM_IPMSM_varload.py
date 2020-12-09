@@ -32,7 +32,10 @@ def test_EM_FEMM_IPMSM_varload():
     simu = Simu1(name="EM_FEMM_IPMSM_varload", machine=IPMSM_A)
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
-    simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True,)
+    simu.mag = MagFEMM(
+        is_periodicity_a=True,
+        is_periodicity_t=True,
+    )
     # Run only Magnetic module
     simu.elec = None
     simu.force = None
