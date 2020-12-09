@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -223,6 +224,24 @@ class OutMag(FrozenClass):
         if other.Rag != self.Rag:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.Time)
+        S += getsizeof(self.Angle)
+        S += getsizeof(self.B)
+        S += getsizeof(self.Tem)
+        S += getsizeof(self.Tem_av)
+        S += getsizeof(self.Tem_rip_norm)
+        S += getsizeof(self.Tem_rip_pp)
+        S += getsizeof(self.Phi_wind_stator)
+        S += getsizeof(self.emf)
+        S += getsizeof(self.meshsolution)
+        S += getsizeof(self.logger_name)
+        S += getsizeof(self.internal)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

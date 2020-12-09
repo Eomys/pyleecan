@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -325,6 +326,30 @@ class MagElmer(Magnetics):
         if other.nb_worker != self.nb_worker:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Magnetics
+        S += super(MagElmer, self).__sizeof__()
+        S += getsizeof(self.Kmesh_fineness)
+        S += getsizeof(self.Kgeo_fineness)
+        S += getsizeof(self.file_name)
+        if self.FEA_dict is not None:
+            for key, value in self.FEA_dict.items():
+                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.is_get_mesh)
+        S += getsizeof(self.is_save_FEA)
+        if self.transform_list is not None:
+            for value in self.transform_list:
+                S += getsizeof(value)
+        S += getsizeof(self.rotor_dxf)
+        S += getsizeof(self.stator_dxf)
+        S += getsizeof(self.import_file)
+        S += getsizeof(self.nb_worker)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

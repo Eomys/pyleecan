@@ -15,6 +15,7 @@ from ...Generator.ClassGenerator.as_dict_method_generator import generate_as_dic
 from ...Generator.ClassGenerator.properties_generator import generate_properties
 from ...Generator.ClassGenerator.init_void_method_generator import generate_init_void
 from ...Generator.ClassGenerator.eq_method_generator import generate_eq
+from ...Generator.ClassGenerator.size_of_method_generator import generate_size_of
 from ...Generator.ClassGenerator.set_None_method_generator import generate_set_None
 
 IS_LOGGER = True  # False to remove logger related code
@@ -73,6 +74,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Import
     class_file.write("from os import linesep\n")
+    class_file.write("from sys import getsizeof\n")
     if IS_LOGGER:
         class_file.write("from logging import getLogger\n")
 
@@ -253,9 +255,12 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(TAB2 + ")\n")
         class_file.write(TAB + "else:\n")
         class_file.write(TAB2 + meth_name + " = " + meth_name + "\n")
+    # Save / copy methods
     class_file.write(TAB + "# save and copy methods are available in all object\n")
-    class_file.write(TAB + "save = save\n")
-    class_file.write(TAB + "copy = copy\n")
+    if "save" not in class_dict["methods"]:
+        class_file.write(TAB + "save = save\n")
+    if "copy" not in class_dict["methods"]:
+        class_file.write(TAB + "copy = copy\n")
 
     if IS_LOGGER:
         class_file.write(TAB + "# get_logger method is available in all object\n")
@@ -268,16 +273,23 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(generate_init(gen_dict, class_dict) + "\n")
 
     # Add the __str__ method
-    class_file.write(generate_str(gen_dict, class_dict) + "\n")
+    if "__str__" not in class_dict["methods"]:
+        class_file.write(generate_str(gen_dict, class_dict) + "\n")
 
     # Add the __eq__ method
-    class_file.write(generate_eq(gen_dict, class_dict) + "\n")
+    if "__eq__" not in class_dict["methods"]:
+        class_file.write(generate_eq(gen_dict, class_dict) + "\n")
+
+    # Add the __sizeof__ method
+    class_file.write(generate_size_of(gen_dict, class_dict))
 
     # Add the as_dict method
-    class_file.write(generate_as_dict(gen_dict, class_dict) + "\n")
+    if "as_dict" not in class_dict["methods"]:
+        class_file.write(generate_as_dict(gen_dict, class_dict) + "\n")
 
     # Add the _set_None method
-    class_file.write(generate_set_None(gen_dict, class_dict))
+    if "_set_None" not in class_dict["methods"]:
+        class_file.write(generate_set_None(gen_dict, class_dict))
 
     # Add all the properties getter and setter
     if len(class_dict["properties"]) > 0:
