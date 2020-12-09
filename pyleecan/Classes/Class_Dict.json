@@ -7764,7 +7764,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Store triangle elements for 2D mesh",
+        "desc": "Store quadrangel elements for 2D mesh",
         "is_internal": false,
         "methods": [
             "shape_function",
@@ -10725,7 +10725,7 @@
                 "value": ""
             },
             {
-                "desc": "To save FEA mesh for latter post-procesing ",
+                "desc": "To save FEA mesh for latter post-procesing (only possible with is_save_FEA set to True)",
                 "max": "",
                 "min": "",
                 "name": "is_get_mesh",

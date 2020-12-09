@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -239,6 +240,26 @@ class StructElmer(Structural):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Structural
+        S += super(StructElmer, self).__sizeof__()
+        S += getsizeof(self.Kmesh_fineness)
+        S += getsizeof(self.path_name)
+        if self.FEA_dict_enforced is not None:
+            for key, value in self.FEA_dict_enforced.items():
+                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.is_get_mesh)
+        S += getsizeof(self.is_save_FEA)
+        if self.transform_list is not None:
+            for value in self.transform_list:
+                S += getsizeof(value)
+        S += getsizeof(self.include_magnets)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -343,7 +364,7 @@ class StructElmer(Structural):
     is_get_mesh = property(
         fget=_get_is_get_mesh,
         fset=_set_is_get_mesh,
-        doc=u"""To save FEA mesh for latter post-procesing 
+        doc=u"""To save FEA mesh for latter post-procesing (only possible with is_save_FEA set to True)
 
         :Type: bool
         """,

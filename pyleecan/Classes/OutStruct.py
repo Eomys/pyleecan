@@ -163,6 +163,10 @@ class OutStruct(FrozenClass):
         S += getsizeof(self.Yr)
         S += getsizeof(self.Vr)
         S += getsizeof(self.Ar)
+        S += getsizeof(self.meshsolution)
+        if self.FEA_dict is not None:
+            for key, value in self.FEA_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self):

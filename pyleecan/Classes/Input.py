@@ -181,6 +181,7 @@ class Input(FrozenClass):
         S += getsizeof(self.Nt_tot)
         S += getsizeof(self.Nrev)
         S += getsizeof(self.Na_tot)
+        S += getsizeof(self.N0)
         return S
 
     def as_dict(self):

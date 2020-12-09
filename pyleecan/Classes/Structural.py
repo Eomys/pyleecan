@@ -100,7 +100,6 @@ class Structural(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.structural)
         return S
 
     def as_dict(self):
