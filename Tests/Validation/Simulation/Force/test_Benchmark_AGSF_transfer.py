@@ -16,8 +16,15 @@ DELTA = 1e-6
 
 
 @pytest.mark.Force
-def test_AC_IPMSM_AGSF_transfer():
-    """Validation of the AGSF spectrum calculation for IPMSM machine"""
+def test_Benchmark_AGSF_transfer():
+    """ Validation test using AGSF transfer for the 12s10p benchmark 
+        machine from publication: 
+            
+        DEVILLERS, Emile, HECQUET, Michel, CIMETIERE, 
+        Xavier, et al. Experimental benchmark for magnetic noise and vibrations 
+        analysis in electrical machines. In : 2018 XIII International Conference 
+        on Electrical Machines (ICEM). IEEE, 2018. p. 745-751.
+    """
 
     # Load machine
     Benchmark = load(join(DATA_DIR, "Machine", "Benchmark.json"))
@@ -26,18 +33,19 @@ def test_AC_IPMSM_AGSF_transfer():
     simu = Simu1(name="AC_IPMSM_plot", machine=Benchmark)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=5 * 2 ** 9, Nt_tot=5 * 2 ** 5, N0=1200
+        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=5 * 2 ** 9, Nt_tot=2, N0=1200
     )
 
     # Configure simulation
     simu.elec = None
     simu.mag = MagFEMM(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
+        is_periodicity_a=False,
+        is_periodicity_t=False,
+        is_sliding_band=False,
     )
     simu.force = ForceMT(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
+        is_periodicity_a=False,
+        is_periodicity_t=False,
     )
 
     # Run simulation with Rag in the middle of the air-gap
@@ -45,46 +53,43 @@ def test_AC_IPMSM_AGSF_transfer():
 
     # Test 2 : with transfer
     simu2 = simu.copy()
-
-    simu2.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=5 * 2 ** 9, Nt_tot=5 * 2 ** 5, N0=1200
-    )
-
-    simu2.mag = MagFEMM(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-    )
-    simu2.force = ForceMT(
-        is_agsf_transfer=True,
-        max_wavenumber_transfer=100,
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-    )
+    simu2.force.is_agsf_transfer=True
+    simu2.force.max_wavenumber_transfer=100
 
     out2 = simu2.run()
+    
+    # simu 3 directly at Rsbo
+    Rsbo = 0.0480
+    Rrbo= 0.0450
+    
+    k = 99.8
+    Rag = (Rsbo - Rrbo)*k/100 + Rrbo
+    simu3 = simu.copy()
+    simu3.mag.Rag_enforced = Rag
+    out3 = simu3.run()
 
     out2.plot_2D_Data(
         "force.AGSF",
-        "angle[oneperiod]",
+        "angle=[0,3.14]",
         "time=0",
-        data_list=[out.force.AGSF],
-        legend_list=["With Transfer", "No Transfer"],
-        save_path=join(save_path, "test_Benchmark_AGSF_compare.png"),
+        data_list=[out.force.AGSF, out3.force.AGSF],
+        legend_list=["Rag + Transfer", "Rag", "Rsbo"],
+        save_path=join(save_path, "test_Benchmark_AGSF_TR_compare.png"),
         is_show_fig=False,
     )
 
-    max_r = 42
     out2.plot_2D_Data(
         "force.AGSF",
         "wavenumber",
+        "tangential",
         "time=0",
-        x_min=-max_r,
-        x_max=+max_r,
-        data_list=[out.force.AGSF],
-        legend_list=["With Transfer", "No Transfer"],
-        save_path=join(save_path, "test_Benchmark_AGSF_compare_fft2.png"),
+        x_min=0,
+        x_max=24,
+        data_list=[out.force.AGSF, out3.force.AGSF],
+        legend_list=["Rag + Transfer", "Rag", "Rsbo"],
+        save_path=join(save_path, "test_Benchmark_AGSF_TR_compare_fft2.png"),
         is_show_fig=False,
-        barwidth=800,
+        barwidth=2000,
     )
 
     return out, out2
@@ -92,4 +97,4 @@ def test_AC_IPMSM_AGSF_transfer():
 
 if __name__ == "__main__":
 
-    out, out2 = test_AC_IPMSM_AGSF_transfer()
+    out, out2 = test_Benchmark_AGSF_transfer()

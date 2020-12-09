@@ -17,11 +17,15 @@ DELTA = 1e-6
 
 @pytest.mark.Force
 def test_Benchmark_AGSF_Rag():
-    """Comparison of AGSF at different radius for the 12s10p benchmark 
-    machine from publication: DEVILLERS, Emile, HECQUET, Michel, CIMETIERE, 
-    Xavier, et al. Experimental benchmark for magnetic noise and vibrations 
-    analysis in electrical machines. In : 2018 XIII International Conference 
-    on Electrical Machines (ICEM). IEEE, 2018. p. 745-751."""
+    """ Comparison of AGSF at different radius for the 12s10p benchmark 
+        machine from publication: 
+            
+        DEVILLERS, Emile, HECQUET, Michel, CIMETIERE, 
+        Xavier, et al. Experimental benchmark for magnetic noise and vibrations 
+        analysis in electrical machines. In : 2018 XIII International Conference 
+        on Electrical Machines (ICEM). IEEE, 2018. p. 745-751.
+    
+    """
 
     # Load machine
     Benchmark = load(join(DATA_DIR, "Machine", "Benchmark.json"))
@@ -49,6 +53,7 @@ def test_Benchmark_AGSF_Rag():
     
     Rsbo = 0.0480
     Rrbo= 0.0450
+    
     
     # Test 1 : at 10% of the air-gap
     K = [10, 50, 90]
