@@ -52,28 +52,30 @@ def test_AC_IPMSM_AGSF_spectrum_no_sym():
     AGSF = out.force.AGSF
     
     arg_list = ["time", "angle"]
-    result = AGSF.get_rphiz_along(*arg_list)
-    Prad = result["radial"]
-    time = result["time"]
-    angle = result["angle"]
+    result1 = AGSF.get_rphiz_along(*arg_list)
+    Prad = result1["radial"]
+    time = result1["time"]
+    angle = result1["angle"]
     Xangle, Xtime = meshgrid(angle, time)
-
-    AGSF_freq = AGSF.components["radial"].time_to_freq()
-    result_frq = AGSF_freq.get_along(*arg_list)
+    
+    # Check time_to_freq reversibility
+    AGSF_rad_freq = AGSF.components["radial"].time_to_freq()
+    result_frq = AGSF_rad_freq.get_along(*arg_list)
     Prad_frq = result_frq["AGSF_r"]
 
-    AGSF2 = AGSF_freq.freq_to_time()
+    AGSF2 = AGSF_rad_freq.freq_to_time()
     result2 = AGSF2.get_along(*arg_list)
     Prad2 = result2["AGSF_r"]
 
     assert_array_almost_equal(Prad_frq, Prad, decimal=5)
     assert_array_almost_equal(Prad2, Prad, decimal=5)
-
+    
+    # Check time-space reconstruction
     arg_list = ["time", "angle"]
-    result = AGSF.get_rphiz_along(*arg_list)
-    Prad = result["radial"]
-    time = result["time"]
-    angle = result["angle"]
+    result3 = AGSF.get_rphiz_along(*arg_list)
+    Prad = result3["radial"]
+    time = result3["time"]
+    angle = result3["angle"]
     Xangle, Xtime = meshgrid(angle, time)
 
     arg_list = ["freqs", "wavenumber"]
