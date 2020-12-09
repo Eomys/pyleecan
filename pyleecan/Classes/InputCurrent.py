@@ -75,7 +75,6 @@ class InputCurrent(Input):
         Is=None,
         Ir=None,
         angle_rotor=None,
-        N0=None,
         rot_dir=None,
         angle_rotor_initial=0,
         Tem_av_ref=None,
@@ -112,8 +111,6 @@ class InputCurrent(Input):
                 Ir = init_dict["Ir"]
             if "angle_rotor" in list(init_dict.keys()):
                 angle_rotor = init_dict["angle_rotor"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
@@ -142,7 +139,6 @@ class InputCurrent(Input):
         self.Is = Is
         self.Ir = Ir
         self.angle_rotor = angle_rotor
-        self.N0 = N0
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         self.Tem_av_ref = Tem_av_ref
@@ -179,7 +175,6 @@ class InputCurrent(Input):
             InputCurrent_str += "angle_rotor = " + tmp
         else:
             InputCurrent_str += "angle_rotor = None" + linesep + linesep
-        InputCurrent_str += "N0 = " + str(self.N0) + linesep
         InputCurrent_str += "rot_dir = " + str(self.rot_dir) + linesep
         InputCurrent_str += (
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
@@ -205,8 +200,6 @@ class InputCurrent(Input):
             return False
         if other.angle_rotor != self.angle_rotor:
             return False
-        if other.N0 != self.N0:
-            return False
         if other.rot_dir != self.rot_dir:
             return False
         if other.angle_rotor_initial != self.angle_rotor_initial:
@@ -231,7 +224,6 @@ class InputCurrent(Input):
         S += getsizeof(self.Is)
         S += getsizeof(self.Ir)
         S += getsizeof(self.angle_rotor)
-        S += getsizeof(self.N0)
         S += getsizeof(self.rot_dir)
         S += getsizeof(self.angle_rotor_initial)
         S += getsizeof(self.Tem_av_ref)
@@ -257,7 +249,6 @@ class InputCurrent(Input):
             InputCurrent_dict["angle_rotor"] = None
         else:
             InputCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict()
-        InputCurrent_dict["N0"] = self.N0
         InputCurrent_dict["rot_dir"] = self.rot_dir
         InputCurrent_dict["angle_rotor_initial"] = self.angle_rotor_initial
         InputCurrent_dict["Tem_av_ref"] = self.Tem_av_ref
@@ -278,7 +269,6 @@ class InputCurrent(Input):
             self.Ir._set_None()
         if self.angle_rotor is not None:
             self.angle_rotor._set_None()
-        self.N0 = None
         self.rot_dir = None
         self.angle_rotor_initial = None
         self.Tem_av_ref = None
@@ -379,24 +369,6 @@ class InputCurrent(Input):
         doc=u"""Rotor angular position as a function of time (if None computed according to Nr) to import
 
         :Type: Import
-        """,
-    )
-
-    def _get_N0(self):
-        """getter of N0"""
-        return self._N0
-
-    def _set_N0(self, value):
-        """setter of N0"""
-        check_var("N0", value, "float")
-        self._N0 = value
-
-    N0 = property(
-        fget=_get_N0,
-        fset=_set_N0,
-        doc=u"""Rotor speed
-
-        :Type: float
         """,
     )
 

@@ -3202,15 +3202,6 @@
                 "value": null
             },
             {
-                "desc": "Rotor speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "float",
-                "unit": "rpm",
-                "value": null
-            },
-            {
                 "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
                 "max": "1",
                 "min": "-1",
@@ -3286,15 +3277,6 @@
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputElec.csv",
         "properties": [
-            {
-                "desc": "Rotor speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "float",
-                "unit": "rpm",
-                "value": null
-            },
             {
                 "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
                 "max": "1",
@@ -3432,15 +3414,6 @@
                 "name": "OP",
                 "type": "Input",
                 "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Rotation speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "float",
-                "unit": "rpm",
                 "value": null
             }
         ]

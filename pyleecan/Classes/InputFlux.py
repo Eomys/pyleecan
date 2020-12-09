@@ -89,7 +89,6 @@ class InputFlux(Input):
         B_dict=None,
         unit=None,
         OP=None,
-        N0=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -128,8 +127,6 @@ class InputFlux(Input):
                 unit = init_dict["unit"]
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -150,7 +147,6 @@ class InputFlux(Input):
         self.B_dict = B_dict
         self.unit = unit
         self.OP = OP
-        self.N0 = N0
         # Call Input init
         super(InputFlux, self).__init__(
             time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
@@ -175,7 +171,6 @@ class InputFlux(Input):
             InputFlux_str += "OP = " + tmp
         else:
             InputFlux_str += "OP = None" + linesep + linesep
-        InputFlux_str += "N0 = " + str(self.N0) + linesep
         return InputFlux_str
 
     def __eq__(self, other):
@@ -201,8 +196,6 @@ class InputFlux(Input):
             return False
         if other.OP != self.OP:
             return False
-        if other.N0 != self.N0:
-            return False
         return True
 
     def __sizeof__(self):
@@ -221,7 +214,6 @@ class InputFlux(Input):
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.unit)
         S += getsizeof(self.OP)
-        S += getsizeof(self.N0)
         return S
 
     def as_dict(self):
@@ -241,7 +233,6 @@ class InputFlux(Input):
             InputFlux_dict["OP"] = None
         else:
             InputFlux_dict["OP"] = self.OP.as_dict()
-        InputFlux_dict["N0"] = self.N0
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputFlux_dict["__class__"] = "InputFlux"
@@ -258,7 +249,6 @@ class InputFlux(Input):
         self.unit = None
         if self.OP is not None:
             self.OP._set_None()
-        self.N0 = None
         # Set to None the properties inherited from Input
         super(InputFlux, self)._set_None()
 
@@ -397,23 +387,5 @@ class InputFlux(Input):
         doc=u"""InputCurrent to define Operating Point (not mandatory)
 
         :Type: Input
-        """,
-    )
-
-    def _get_N0(self):
-        """getter of N0"""
-        return self._N0
-
-    def _set_N0(self, value):
-        """setter of N0"""
-        check_var("N0", value, "float")
-        self._N0 = value
-
-    N0 = property(
-        fget=_get_N0,
-        fset=_set_N0,
-        doc=u"""Rotation speed
-
-        :Type: float
         """,
     )
