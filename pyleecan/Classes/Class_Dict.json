@@ -6898,6 +6898,15 @@
                 "value": "None"
             },
             {
+                "desc": "List of lamination winding flux DataTime objects",
+                "max": "",
+                "min": "",
+                "name": "Phi_wind",
+                "type": "[SciDataTool.Classes.DataTime.DataTime]",
+                "unit": "Wb",
+                "value": "None"
+            },
+            {
                 "desc": "Electromotive force DataTime object",
                 "max": "",
                 "min": "",

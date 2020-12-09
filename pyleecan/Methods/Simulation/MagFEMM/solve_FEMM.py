@@ -47,8 +47,8 @@ def solve_FEMM(
                 Airgap tangential flux density (Nt,Na) [T]
             Tem : ndarray
                 Electromagnetic torque over time (Nt,) [Nm]
-            Phi_wind_stator : ndarray
-                Stator winding flux (qs,Nt) [Wb]
+            Phi_wind : list of ndarray
+                List of winding flux with respect to Machine.get_lamlist (qs,Nt) [Wb]
     FEMM_dict : dict
         Dict containing FEMM model parameters
     sym: int
@@ -113,13 +113,21 @@ def solve_FEMM(
     Na = angle.size
 
     # Loading parameters for readibility
-    Rag = output.simu.machine.comp_Rgap_mec()
-    L1 = output.simu.machine.stator.comp_length()
+    machine = output.simu.machine
+    Rag = machine.comp_Rgap_mec()
+    L1 = machine.stator.comp_length()
     save_path = self.get_path_save(output)
-    is_internal_rotor = output.simu.machine.rotor.is_internal
-    if "Phi_wind_stator" in out_dict:
-        qs = output.simu.machine.stator.winding.qs  # Winding phase number
-        Npcpp = output.simu.machine.stator.winding.Npcpp
+    is_internal_rotor = machine.rotor.is_internal
+    if "Phi_wind" in out_dict:
+        qs = []
+        Npcpp = []
+        for idx, lam in enumerate(machine.get_lam_list()):
+            if out_dict["Phi_wind"][idx] is not None:
+                qs.append(lam.winding.qs)  # Winding phase number
+                Npcpp.append(lam.winding.Npcpp)  # parallel paths
+            else:
+                qs.append(None)
+                Npcpp.append(None)
 
     # Account for initial angular shift of stator and rotor and apply it to the sliding band
     angle_shift = self.angle_rotor_shift - self.angle_stator_shift
@@ -168,38 +176,30 @@ def solve_FEMM(
         # Compute the torque
         out_dict["Tem"][ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
 
-        if "Phi_wind_stator" in out_dict:
+        if "Phi_wind" in out_dict:
             # Phi_wind computation
-            out_dict["Phi_wind_stator"][ii, :] = comp_FEMM_Phi_wind(
-                femm,
-                qs,
-                Npcpp,
-                is_stator=True,
-                Lfemm=FEMM_dict["Lfemm"],
-                L1=L1,
-                sym=sym,
-            )
-
-        if (
-            hasattr(output.simu.machine.rotor, "winding")
-            and output.simu.machine.rotor.winding is not None
-        ):
-            # Phi_wind computation
-            Phi_wind_rotor[ii, :] = comp_FEMM_Phi_wind(
-                femm,
-                qs_rotor,
-                Npcpp_rotor,
-                is_stator=False,
-                Lfemm=FEMM_dict["Lfemm"],
-                L1=L1,
-                sym=sym,
-            )
+            # TODO fix inconsistency for multi lam machines here
+            for idx, lam in enumerate(machine.get_lam_list()):
+                if out_dict["Phi_wind"][idx] is not None:
+                    out_dict["Phi_wind"][idx][ii, :] = comp_FEMM_Phi_wind(
+                        femm,
+                        qs[idx],
+                        Npcpp[idx],
+                        is_stator=lam.is_stator,
+                        Lfemm=FEMM_dict["Lfemm"],
+                        L1=L1,
+                        sym=sym,
+                    )
 
         # Load mesh data & solution
         if (self.is_sliding_band or Nt == 1) and (self.is_get_mesh or self.is_save_FEA):
             # Get mesh data and magnetic quantities from .ans file
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
-                femm, save_path, j_t0=ii, id_worker=start_t, is_get_mesh=ii == start_t,
+                femm,
+                save_path,
+                j_t0=ii,
+                id_worker=start_t,
+                is_get_mesh=ii == start_t,
             )
 
             # Initialize mesh and magnetic quantities for first time step

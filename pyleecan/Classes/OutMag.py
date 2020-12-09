@@ -87,7 +87,7 @@ class OutMag(FrozenClass):
         Tem_rip_norm=None,
         Tem_rip_pp=None,
         Phi_wind_stator=None,
-        Phi_wind_rotor=None,
+        Phi_wind=None,
         emf=None,
         meshsolution=-1,
         logger_name="Pyleecan.OutMag",
@@ -126,8 +126,8 @@ class OutMag(FrozenClass):
                 Tem_rip_pp = init_dict["Tem_rip_pp"]
             if "Phi_wind_stator" in list(init_dict.keys()):
                 Phi_wind_stator = init_dict["Phi_wind_stator"]
-            if "Phi_wind_rotor" in list(init_dict.keys()):
-                Phi_wind_rotor = init_dict["Phi_wind_rotor"]
+            if "Phi_wind" in list(init_dict.keys()):
+                Phi_wind = init_dict["Phi_wind"]
             if "emf" in list(init_dict.keys()):
                 emf = init_dict["emf"]
             if "meshsolution" in list(init_dict.keys()):
@@ -146,7 +146,7 @@ class OutMag(FrozenClass):
         self.Tem_rip_norm = Tem_rip_norm
         self.Tem_rip_pp = Tem_rip_pp
         self.Phi_wind_stator = Phi_wind_stator
-        self.Phi_wind_rotor = Phi_wind_rotor
+        self.Phi_wind = Phi_wind
         self.emf = emf
         self.meshsolution = meshsolution
         self.logger_name = logger_name
@@ -173,6 +173,7 @@ class OutMag(FrozenClass):
         OutMag_str += (
             "Phi_wind_stator = " + str(self.Phi_wind_stator) + linesep + linesep
         )
+        OutMag_str += "Phi_wind = " + str(self.Phi_wind) + linesep + linesep
         OutMag_str += "emf = " + str(self.emf) + linesep + linesep
         if self.meshsolution is not None:
             tmp = (
@@ -212,6 +213,8 @@ class OutMag(FrozenClass):
             return False
         if other.Phi_wind_stator != self.Phi_wind_stator:
             return False
+        if other.Phi_wind != self.Phi_wind:
+            return False
         if other.emf != self.emf:
             return False
         if other.meshsolution != self.meshsolution:
@@ -234,6 +237,9 @@ class OutMag(FrozenClass):
         S += getsizeof(self.Tem_rip_norm)
         S += getsizeof(self.Tem_rip_pp)
         S += getsizeof(self.Phi_wind_stator)
+        if self.Phi_wind is not None:
+            for value in self.Phi_wind:
+                S += getsizeof(value)
         S += getsizeof(self.emf)
         S += getsizeof(self.meshsolution)
         S += getsizeof(self.logger_name)
@@ -267,10 +273,12 @@ class OutMag(FrozenClass):
             OutMag_dict["Phi_wind_stator"] = None
         else:
             OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.as_dict()
-        if self.Phi_wind_rotor is None:
-            OutMag_dict["Phi_wind_rotor"] = None
+        if self.Phi_wind is None:
+            OutMag_dict["Phi_wind"] = None
         else:
-            OutMag_dict["Phi_wind_rotor"] = self.Phi_wind_rotor.as_dict()
+            OutMag_dict["Phi_wind"] = list()
+            for obj in self.Phi_wind:
+                OutMag_dict["Phi_wind"].append(obj.as_dict())
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:
@@ -299,7 +307,7 @@ class OutMag(FrozenClass):
         self.Tem_rip_norm = None
         self.Tem_rip_pp = None
         self.Phi_wind_stator = None
-        self.Phi_wind_rotor = None
+        self.Phi_wind = None
         self.emf = None
         if self.meshsolution is not None:
             self.meshsolution._set_None()
@@ -494,30 +502,34 @@ class OutMag(FrozenClass):
         """,
     )
 
-    def _get_Phi_wind_rotor(self):
-        """getter of Phi_wind_rotor"""
-        return self._Phi_wind_rotor
+    def _get_Phi_wind(self):
+        """getter of Phi_wind"""
+        if self._Phi_wind is not None:
+            for obj in self._Phi_wind:
+                if obj is not None:
+                    obj.parent = self
+        return self._Phi_wind
 
-    def _set_Phi_wind_rotor(self, value):
-        """setter of Phi_wind_rotor"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Phi_wind_rotor"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = DataTime()
-        check_var("Phi_wind_rotor", value, "DataTime")
-        self._Phi_wind_rotor = value
+    def _set_Phi_wind(self, value):
+        """setter of Phi_wind"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "Phi_wind"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
+        check_var("Phi_wind", value, "[DataTime]")
+        self._Phi_wind = value
 
-    Phi_wind_rotor = property(
-        fget=_get_Phi_wind_rotor,
-        fset=_set_Phi_wind_rotor,
-        doc=u"""Rotor winding flux
+    Phi_wind = property(
+        fget=_get_Phi_wind,
+        fset=_set_Phi_wind,
+        doc=u"""List of lamination winding flux DataTime objects
 
-        :Type: SciDataTool.Classes.DataTime.DataTime
+        :Type: [SciDataTool.Classes.DataTime.DataTime]
         """,
     )
 
