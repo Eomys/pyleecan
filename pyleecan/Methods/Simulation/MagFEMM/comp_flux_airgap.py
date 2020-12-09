@@ -4,7 +4,7 @@ from os.path import join
 from numpy import zeros
 
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
-from ....Classes._FEMMHandler import FEMMHandler
+from ....Classes._FEMMHandler import _FEMMHandler
 from ....Classes.OutMagFEMM import OutMagFEMM
 
 
@@ -83,7 +83,8 @@ def comp_flux_airgap(self, output, axes_dict):
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
     # Instanciate a new FEMM
-    femm = FEMMHandler(not self.is_close_femm)
+    femm = _FEMMHandler()
+    output.mag.internal.handler_list.append(femm)
     if self.import_file is None:
         self.get_logger().debug("Drawing machine in FEMM...")
         FEMM_dict = draw_FEMM(

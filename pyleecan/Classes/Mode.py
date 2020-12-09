@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -189,6 +190,18 @@ class Mode(SolutionMat):
         if other.order_long != self.order_long:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from SolutionMat
+        S += super(Mode, self).__sizeof__()
+        S += getsizeof(self.nat_freq)
+        S += getsizeof(self.order_circ)
+        S += getsizeof(self.order_long)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

@@ -4,7 +4,7 @@ from numpy import zeros, pi, roll, cos, sin
 
 # from scipy.interpolate import interp1d
 
-from ....Classes._FEMMHandler import FEMMHandler
+from ....Classes._FEMMHandler import _FEMMHandler
 from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
@@ -35,7 +35,7 @@ def solve_FEMM(
     ----------
     self: MagFEMM
         A MagFEMM object
-    femm: FEMMHandler
+    femm: _FEMMHandler
         Object to handle FEMM
     output: Output
         An Output object
@@ -93,7 +93,8 @@ def solve_FEMM(
             femm.openfemm(1)
         except:
             # Create a new FEMM handler in case of parallelization on another FEMM instance
-            femm = FEMMHandler()
+            femm = _FEMMHandler()
+            output.mag.internal.handler_list.append(femm)
             # Open the document
             femm.openfemm(1)
 
@@ -183,11 +184,7 @@ def solve_FEMM(
         if (self.is_sliding_band or Nt == 1) and (self.is_get_mesh or self.is_save_FEA):
             # Get mesh data and magnetic quantities from .ans file
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
-                femm,
-                save_path,
-                j_t0=ii,
-                id_worker=start_t,
-                is_get_mesh=ii == start_t,
+                femm, save_path, j_t0=ii, id_worker=start_t, is_get_mesh=ii == start_t,
             )
 
             # Initialize mesh and magnetic quantities for first time step
@@ -221,5 +218,6 @@ def solve_FEMM(
     # Close FEMM handler
     if is_close_femm:
         femm.closefemm()
+        output.mag.internal.handler_list.remove(femm)
 
     return B_elem, H_elem, mu_elem, meshFEMM, groups

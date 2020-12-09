@@ -5851,7 +5851,8 @@
             "get_normals",
             "get_surf",
             "get_cell_area",
-            "convert"
+            "convert",
+            "as_dict"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",
@@ -6581,6 +6582,15 @@
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "V",
                 "value": "None"
+            },
+            {
+                "desc": "OutInternal object containg outputs related to a specific model",
+                "max": "",
+                "min": "",
+                "name": "internal",
+                "type": "OutInternal",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -7086,6 +7096,15 @@
                 "type": "dict",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "List of FEMM Handler (more than 1 if nb_worker >1)",
+                "max": "",
+                "min": "",
+                "name": "handler_list",
+                "type": "[_FEMMHandler]",
+                "unit": "",
+                "value": ""
             }
         ]
     },
@@ -7258,7 +7277,8 @@
             "plot.plot_A_quiver_2D",
             "plot.plot_3D_Data",
             "plot.plot_A_time_space",
-            "getter.get_data_from_str"
+            "getter.get_data_from_str",
+            "print_memory"
         ],
         "mother": "",
         "name": "Output",
@@ -7418,7 +7438,8 @@
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,
         "methods": [
-            "get_value"
+            "get_value",
+            "as_dict"
         ],
         "mother": "ParamExplorer",
         "name": "ParamExplorerSet",
@@ -11760,7 +11781,8 @@
             "plot_multi",
             "plot_pareto",
             "plot_generation",
-            "get_pareto_index"
+            "get_pareto_index",
+            "print_memory"
         ],
         "mother": "Output",
         "name": "XOutput",

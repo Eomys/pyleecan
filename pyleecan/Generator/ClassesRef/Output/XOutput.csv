@@ -21,3 +21,4 @@ nb_simu,-,Number of simulations excluding reference simulation,0,int,0,0,,,,,__l
 ,,,,,,,,,,,plot_pareto,,,
 ,,,,,,,,,,,plot_generation,,,
 ,,,,,,,,,,,get_pareto_index,,,
+,,,,,,,,,,,print_memory,,,

@@ -1,5 +1,6 @@
 import numpy as np
 import h5py
+from h5py import File as FileH5
 
 
 def pyleecan_dict_to_hdf5(file, obj):
@@ -127,10 +128,12 @@ def save_hdf5(obj, save_path):
         file path
     """
 
+    file5 = None
     try:
-        file = h5py.File(save_path, "w")
-        pyleecan_dict_to_hdf5(file, obj)
-        file.close()
+        file5 = FileH5(save_path, "w")
+        pyleecan_dict_to_hdf5(file5, obj)
+        file5.close()
     except Exception as err:
-        file.close()
+        if file5:
+            file5.close()
         raise (err)

@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -292,6 +293,24 @@ class MeshSolution(FrozenClass):
         if other.dimension != self.dimension:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.label)
+        if self.mesh is not None:
+            for value in self.mesh:
+                S += getsizeof(value)
+        S += getsizeof(self.is_same_mesh)
+        if self.solution is not None:
+            for value in self.solution:
+                S += getsizeof(value)
+        if self.group is not None:
+            for key, value in self.group.items():
+                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.dimension)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
