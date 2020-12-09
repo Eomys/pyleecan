@@ -3,7 +3,8 @@ from os.path import join
 import pytest
 from Tests import save_validation_path as save_path
 
-from numpy import exp, sqrt, pi
+from numpy import exp, sqrt, pi, meshgrid, zeros, real
+from numpy.testing import assert_array_almost_equal
 
 from pyleecan.Classes.Simu1 import Simu1
 
@@ -91,30 +92,30 @@ def test_FEMM_periodicity():
     )
 
     out.plot_2D_Data(
-        "force.P",
+        "force.AGSF",
         "time",
         "angle[0]{°}",
-        data_list=[out2.force.P],
+        data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_time.png"),
         is_show_fig=False,
     )
 
     out.plot_2D_Data(
-        "force.P",
+        "force.AGSF",
         "angle",
         "time[0]",
-        data_list=[out2.force.P],
+        data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_space.png"),
         is_show_fig=False,
     )
 
     out.plot_2D_Data(
-        "force.P",
+        "force.AGSF",
         "wavenumber=[0,100]",
         "time[0]",
-        data_list=[out2.force.P],
+        data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_space_fft.png"),
         is_show_fig=False,
@@ -138,7 +139,142 @@ def test_FEMM_periodicity():
         save_path=join(save_path, simu.name + "_Phi_wind_stator_time.png"),
         is_show_fig=False,
     )
+    
+    # Check Flux spatio-temporal reconstruction sym
+    Bflux = out.mag.B
+    arg_list = ["time", "angle"]
+    result = Bflux.get_rphiz_along(*arg_list)
+    Brad = result["radial"]
+    time = result["time"]
+    angle = result["angle"]
+    Xangle, Xtime = meshgrid(angle, time)
 
+    arg_list = ["freqs", "wavenumber"]
+    result_freq = Bflux.get_rphiz_along(*arg_list)
+    Brad_wr = result_freq["radial"]
+    freqs = result_freq["freqs"]
+    wavenumber = result_freq["wavenumber"]
+    Nf = len(freqs)
+    Nr = len(wavenumber)
+
+    XB_rad = zeros(Brad.shape)
+
+    for ir in range(Nr):
+        r = wavenumber[ir]
+        for ifrq in range(Nf):
+            frq = freqs[ifrq]
+            XB_rad = XB_rad + real(
+                Brad_wr[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime 
+                                        + 1j * r * Xangle)
+            )
+
+    test1 = abs(Brad - XB_rad)/abs(Brad).max()
+    assert_array_almost_equal(test1, 0, decimal=2)
+    assert_array_almost_equal(Brad,XB_rad, decimal=6)
+    
+
+    # Check Flux spatio-temporal reconstruction full
+    Bflux2 = out2.mag.B
+    arg_list = ["time", "angle"]
+    result2 = Bflux2.get_rphiz_along(*arg_list)
+    Brad2 = result2["radial"]
+    time = result2["time"]
+    angle = result2["angle"]
+    Xangle, Xtime = meshgrid(angle, time)
+
+    arg_list = ["freqs", "wavenumber"]
+    result_freq2 = Bflux2.get_rphiz_along(*arg_list)
+    Brad_wr2 = result_freq2["radial"]
+    freqs = result_freq2["freqs"]
+    wavenumber = result_freq2["wavenumber"]
+    Nf = len(freqs)
+    Nr = len(wavenumber)
+
+    XB_rad2 = zeros(Brad2.shape)
+
+    for ir in range(Nr):
+        r = wavenumber[ir]
+        for ifrq in range(Nf):
+            frq = freqs[ifrq]
+            XB_rad2 = XB_rad2 + real(
+                Brad_wr2[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime 
+                                        + 1j * r * Xangle)
+            )
+
+    test2 = abs(Brad2 - XB_rad2)/abs(Brad2).max()
+    assert_array_almost_equal(test2, 0, decimal=2)
+    assert_array_almost_equal(Brad2, XB_rad2, decimal=4)
+    
+    # Compare both simu
+    test11 = abs(Brad - Brad2)/abs(Brad).max()
+    assert_array_almost_equal(test11, 0, decimal=1)
+    
+    test22 = abs(XB_rad - XB_rad2)/abs(Brad).max()
+    assert_array_almost_equal(test22, 0, decimal=1)
+
+    # Check AGSF spatio-temporal reconstruction sym
+    AGSF = out.force.AGSF
+    arg_list = ["time", "angle"]
+    result_AGSF = AGSF.get_rphiz_along(*arg_list)
+    Prad = result_AGSF["radial"]
+    time = result_AGSF["time"]
+    angle = result_AGSF["angle"]
+    Xangle, Xtime = meshgrid(angle, time)
+
+    arg_list = ["freqs", "wavenumber"]
+    result_freq_agsf = AGSF.get_rphiz_along(*arg_list)
+    Prad_wr = result_freq_agsf["radial"]
+    freqs = result_freq_agsf["freqs"]
+    wavenumber = result_freq_agsf["wavenumber"]
+    Nf = len(freqs)
+    Nr = len(wavenumber)
+
+    XP_rad = zeros(Prad.shape)
+
+    for ir in range(Nr):
+        r = wavenumber[ir]
+        for ifrq in range(Nf):
+            frq = freqs[ifrq]
+            XP_rad = XP_rad + real(
+                Prad_wr[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime 
+                                        + 1j * r * Xangle)
+            )
+
+    test1 = abs(Prad - XP_rad)/abs(Prad).max()
+    assert_array_almost_equal(test1, 0, decimal=2)
+    
+    # Check AGSF spatio-temporal reconstruction full
+    AGSF2 = out2.force.AGSF
+    arg_list = ["time", "angle"]
+    result_AGSF2 = AGSF2.get_rphiz_along(*arg_list)
+    Prad2 = result_AGSF2["radial"]
+    time = result_AGSF2["time"]
+    angle = result_AGSF2["angle"]
+    Xangle, Xtime = meshgrid(angle, time)
+
+    arg_list = ["freqs", "wavenumber"]
+    result_freq_agsf2 = AGSF2.get_rphiz_along(*arg_list)
+    Prad_wr2 = result_freq_agsf2["radial"]
+    freqs = result_freq_agsf2["freqs"]
+    wavenumber = result_freq_agsf2["wavenumber"]
+    Nf = len(freqs)
+    Nr = len(wavenumber)
+
+    XP_rad2 = zeros(Prad2.shape)
+
+    for ir in range(Nr):
+        r = wavenumber[ir]
+        for ifrq in range(Nf):
+            frq = freqs[ifrq]
+            XP_rad2 = XP_rad2 + real(
+                Prad_wr2[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime 
+                                        + 1j * r * Xangle)
+            )
+
+    test1 = abs(Prad2 - XP_rad2)/abs(Prad2).max()
+    assert_array_almost_equal(test1, 0, decimal=0)
+    assert_array_almost_equal(Prad2, XP_rad2, decimal=0)
+    
     return out, out2
 
 
