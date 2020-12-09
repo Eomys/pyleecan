@@ -116,8 +116,10 @@ def gen_case(self, output, mesh_names):
     solver["Output Directory"] = File("Results")
     solver["Output File Name"] = File("case")
     solver["Vtu Format"] = True
+    # solver["Ascii Output"] = True  # to save vtu as ascii
+    solver["Save Geometry Ids"] = True
     solver["Displace Mesh"] = True
-    solver["Single Precision"] = False
+    solver["Single Precision"] = True  # default: False, False == 32 bit, True == 64 bit
     solver_list.append(solver)
 
     # solver - save statistical, integral, min, max, mean, ... values
