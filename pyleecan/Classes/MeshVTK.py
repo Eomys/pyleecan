@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -273,6 +274,24 @@ class MeshVTK(Mesh):
         if other.surf_name != self.surf_name:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Mesh
+        S += super(MeshVTK, self).__sizeof__()
+        S += getsizeof(self.mesh)
+        S += getsizeof(self.is_pyvista_mesh)
+        S += getsizeof(self.format)
+        S += getsizeof(self.path)
+        S += getsizeof(self.name)
+        S += getsizeof(self.surf)
+        S += getsizeof(self.is_vtk_surf)
+        S += getsizeof(self.surf_path)
+        S += getsizeof(self.surf_name)
+        return S
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -7152,7 +7152,8 @@
             "plot.plot_A_quiver_2D",
             "plot.plot_3D_Data",
             "plot.plot_A_time_space",
-            "getter.get_data_from_str"
+            "getter.get_data_from_str",
+            "print_memory"
         ],
         "mother": "",
         "name": "Output",
@@ -11371,7 +11372,8 @@
             "plot_multi",
             "plot_pareto",
             "plot_generation",
-            "get_pareto_index"
+            "get_pareto_index",
+            "print_memory"
         ],
         "mother": "Output",
         "name": "XOutput",

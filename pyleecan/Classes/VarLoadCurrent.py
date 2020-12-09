@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -246,6 +247,19 @@ class VarLoadCurrent(VarLoad):
         if other.is_power != self.is_power:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from VarLoad
+        S += super(VarLoadCurrent, self).__sizeof__()
+        S += getsizeof(self.OP_matrix)
+        S += getsizeof(self.type_OP_matrix)
+        S += getsizeof(self.is_torque)
+        S += getsizeof(self.is_power)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -190,6 +191,21 @@ class HoleUD(HoleMag):
         if other.magnet_dict != self.magnet_dict:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from HoleMag
+        S += super(HoleUD, self).__sizeof__()
+        if self.surf_list is not None:
+            for value in self.surf_list:
+                S += getsizeof(value)
+        if self.magnet_dict is not None:
+            for key, value in self.magnet_dict.items():
+                S += getsizeof(value) + getsizeof(key)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -112,6 +113,16 @@ class OptiConstraint(FrozenClass):
         if other._get_variable_str != self._get_variable_str:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.name)
+        S += getsizeof(self.type_const)
+        S += getsizeof(self.value)
+        S += getsizeof(self._get_variable_str)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

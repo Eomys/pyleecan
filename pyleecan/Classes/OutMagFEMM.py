@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -107,6 +108,21 @@ class OutMagFEMM(OutInternal):
         if other.handler_list != self.handler_list:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from OutInternal
+        S += super(OutMagFEMM, self).__sizeof__()
+        if self.FEMM_dict is not None:
+            for key, value in self.FEMM_dict.items():
+                S += getsizeof(value) + getsizeof(key)
+        if self.handler_list is not None:
+            for value in self.handler_list:
+                S += getsizeof(value)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

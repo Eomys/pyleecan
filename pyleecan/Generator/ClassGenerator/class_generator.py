@@ -15,6 +15,7 @@ from ...Generator.ClassGenerator.as_dict_method_generator import generate_as_dic
 from ...Generator.ClassGenerator.properties_generator import generate_properties
 from ...Generator.ClassGenerator.init_void_method_generator import generate_init_void
 from ...Generator.ClassGenerator.eq_method_generator import generate_eq
+from ...Generator.ClassGenerator.size_of_method_generator import generate_size_of
 from ...Generator.ClassGenerator.set_None_method_generator import generate_set_None
 
 IS_LOGGER = True  # False to remove logger related code
@@ -73,6 +74,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Import
     class_file.write("from os import linesep\n")
+    class_file.write("from sys import getsizeof\n")
     if IS_LOGGER:
         class_file.write("from logging import getLogger\n")
 
@@ -277,6 +279,9 @@ def generate_class(gen_dict, class_name, path_to_gen):
     # Add the __eq__ method
     if "__eq__" not in class_dict["methods"]:
         class_file.write(generate_eq(gen_dict, class_dict) + "\n")
+
+    # Add the __sizeof__ method
+    class_file.write(generate_size_of(gen_dict, class_dict))
 
     # Add the as_dict method
     if "as_dict" not in class_dict["methods"]:

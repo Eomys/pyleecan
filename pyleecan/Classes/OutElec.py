@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -270,6 +271,30 @@ class OutElec(FrozenClass):
         if other.internal != self.internal:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.Time)
+        S += getsizeof(self.Angle)
+        S += getsizeof(self.Is)
+        S += getsizeof(self.Ir)
+        S += getsizeof(self.angle_rotor)
+        S += getsizeof(self.N0)
+        S += getsizeof(self.angle_rotor_initial)
+        S += getsizeof(self.logger_name)
+        S += getsizeof(self.Tem_av_ref)
+        S += getsizeof(self.Id_ref)
+        S += getsizeof(self.Iq_ref)
+        S += getsizeof(self.felec)
+        S += getsizeof(self.Ud_ref)
+        S += getsizeof(self.Uq_ref)
+        S += getsizeof(self.Pj_losses)
+        S += getsizeof(self.Pem_av_ref)
+        S += getsizeof(self.Us)
+        S += getsizeof(self.internal)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

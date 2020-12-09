@@ -1,6 +1,7 @@
 from numpy import ndarray, min as np_min, max as np_max
 
 from SciDataTool import VectorField, Data
+from ....Functions.Load.import_class import import_class
 
 
 def run_single_simu(
@@ -47,13 +48,19 @@ def run_single_simu(
             print(err)
             is_error = True
 
+    # The simulation is the reference one
+    if index == ref_simu_index:
+        # Create new Output from XOutput content
+        Output = import_class("pyleecan.Classes", "Output")
+        result = Output(init_dict=Output.as_dict(result))
+        # Output value are already in XOutput
+
     # Extract results
     if is_keep_all_output:
         xoutput.output_list.append(result)
 
     # Datakeepers
-    if is_error:
-        # Execute error_keeper if error
+    if is_error:  # Execute error_keeper
         for datakeeper in datakeeper_list:
             if datakeeper.error_keeper is None:
                 xoutput.xoutput_dict[datakeeper.symbol].result[index] = None
@@ -61,20 +68,7 @@ def run_single_simu(
                 xoutput.xoutput_dict[datakeeper.symbol].result[
                     index
                 ] = datakeeper.error_keeper(simulation)
-    else:
-        if index == ref_simu_index:
-            for attr in dir(result):
-                if (
-                    # Not method
-                    not callable(getattr(result, attr))
-                    # Not private properties
-                    and not attr.startswith("_")
-                    # Not following properties
-                    and attr not in ["VERSION", "logger_name", "parent"]
-                ):
-                    setattr(xoutput, attr, getattr(result, attr))
-
-        # DataKeeper
+    else:  # Execute Normal DataKeeper
         msg = "Results: "
         for datakeeper in datakeeper_list:
             # Run and store Datakeeper
