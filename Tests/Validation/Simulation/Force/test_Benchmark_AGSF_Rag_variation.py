@@ -14,6 +14,7 @@ from Tests import save_validation_path as save_path
 
 DELTA = 1e-6
 
+
 @pytest.mark.validation
 @pytest.mark.Force
 def test_Benchmark_AGSF_Rag():
@@ -40,40 +41,33 @@ def test_Benchmark_AGSF_Rag():
     # Configure simulation
     simu.elec = None
 
-    simu.force = ForceMT(
-        is_periodicity_a=False,
-        is_periodicity_t=True,
-    )
-    
+    simu.force = ForceMT(is_periodicity_a=False, is_periodicity_t=True,)
+
     simu.mag = MagFEMM(
-        is_periodicity_a=False,
-        is_periodicity_t=True,
-        is_sliding_band=False,
+        is_periodicity_a=False, is_periodicity_t=True, is_sliding_band=False,
     )
-    
+
     Rsbo = 0.0480
-    Rrbo= 0.0450
-    
-    
+    Rrbo = 0.0450
+
     # Test 1 : at 10% of the air-gap
     K = [10, 50, 90]
     Nk = len(K)
-    
+
     simu_list = list()
     out_list = list()
     AGSF_list = list()
     legend_list = list()
     for ik in range(Nk):
         k = K[ik]
-        Rag = (Rsbo - Rrbo)*k/100 + Rrbo
-    
-    
+        Rag = (Rsbo - Rrbo) * k / 100 + Rrbo
+
         simu_list.append(simu.copy())
         simu_list[ik].mag.Rag_enforced = Rag
-        out_list.append( simu_list[ik].run() )
+        out_list.append(simu_list[ik].run())
         legend_list.append(str(k) + "%")
-        
-        if ik < Nk-1:
+
+        if ik < Nk - 1:
             AGSF_list.append(out_list[ik].force.AGSF)
 
     out_list[-1].plot_2D_Data(
@@ -100,9 +94,5 @@ def test_Benchmark_AGSF_Rag():
     )
 
 
-    return out, out2
-
-
 if __name__ == "__main__":
-
-    out, out2 = test_Benchmark_AGSF_Rag()
+    test_Benchmark_AGSF_Rag()
