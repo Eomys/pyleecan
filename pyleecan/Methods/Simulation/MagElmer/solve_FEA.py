@@ -1,4 +1,5 @@
 import numpy as np
+import subprocess
 
 from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
 from os.path import basename, splitext
@@ -32,6 +33,25 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     angle_rotor: ndarray
         Rotor angular position vector (Nt,)
     """
+    # setup Elmer solver
+    # ElmerSolver v8.4 must be installed and in the PATH
+    project_name = self.get_path_save_fea(output)
+    elmer_settings = join(project_name, "pyleecan_elmer.sif")
+    cmd_elmersolver = [
+        "ElmerSolver",
+        elmer_settings,
+    ]
+    self.get_logger().info("Calling ElmerSolver: " + ' '.join(map(str, cmd_elmersolver)))
+    elmersolver = subprocess.Popen(
+        cmd_elmersolver, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    (stdout, stderr) = elmersolver.communicate()
+    elmersolver.wait()
+    if elmersolver.returncode != 0:
+        self.get_logger().info("ElmerSolver [Error]: " + stderr.decode('UTF-8'))
+        return False
+    elmersolver.terminate()
+    self.get_logger().info("ElmerSolver call complete!")
 
     Na = angle.size
     Nt = time.size
