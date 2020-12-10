@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -168,6 +169,23 @@ class SolutionMat(Solution):
         if other.axis_size != self.axis_size:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Solution
+        S += super(SolutionMat, self).__sizeof__()
+        S += getsizeof(self.field)
+        S += getsizeof(self.indice)
+        if self.axis_name is not None:
+            for value in self.axis_name:
+                S += getsizeof(value)
+        if self.axis_size is not None:
+            for value in self.axis_size:
+                S += getsizeof(value)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
