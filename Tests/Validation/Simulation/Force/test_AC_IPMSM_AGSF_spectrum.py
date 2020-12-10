@@ -32,6 +32,7 @@ simu.input = InputCurrent(
 
 simu.elec = None
 
+@pytest.mark.validation
 @pytest.mark.Force
 def test_AC_IPMSM_AGSF_spectrum_no_sym():
     """Validation of the AGSF spectrum calculation for IPMSM machine"""
@@ -148,9 +149,9 @@ def test_AC_IPMSM_AGSF_spectrum_sym():
                 Prad_wr[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime + 1j * r * Xangle)
             )
 
-    test = abs(XP_rad1 - Prad)/abs(XP_rad1).max()
-    assert_array_almost_equal(test, 0, decimal=2)
-
+    assert_array_almost_equal(XP_rad1, Prad, decimal=3)
+    
+    # Check tim_to_freq 
     arg_list = ["time", "angle"]
     result = AGSF.get_rphiz_along(*arg_list)
     Prad = result["radial"]
@@ -168,7 +169,8 @@ def test_AC_IPMSM_AGSF_spectrum_sym():
 
     assert_array_almost_equal(Prad_frq, Prad, decimal=5)
     assert_array_almost_equal(Prad2, Prad, decimal=5)
-
+    
+    # Check tim_to_freq for one period
     arg_list = ["time[oneperiod]", "angle[oneperiod]"]
     result = AGSF.get_rphiz_along(*arg_list)
     Prad = result["radial"]
@@ -186,7 +188,8 @@ def test_AC_IPMSM_AGSF_spectrum_sym():
 
     assert_array_almost_equal(Prad_frq, Prad, decimal=5)
     assert_array_almost_equal(Prad2, Prad, decimal=5)
-
+    
+    # Check spatio-temporal reconstruction
     arg_list = ["freqs", "wavenumber"]
     result_freq = AGSF.get_rphiz_along(*arg_list)
     Prad_wr = result_freq["radial"]
@@ -206,7 +209,7 @@ def test_AC_IPMSM_AGSF_spectrum_sym():
                 Prad_wr[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime + 1j * r * Xangle)
             )
 
-    assert_array_almost_equal(XP_rad1, Prad, decimal=5)
+    assert_array_almost_equal(XP_rad1, Prad, decimal=3)
 
     return out
 

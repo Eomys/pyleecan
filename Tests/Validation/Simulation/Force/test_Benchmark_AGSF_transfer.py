@@ -14,7 +14,7 @@ from Tests import save_validation_path as save_path
 
 DELTA = 1e-6
 
-
+@pytest.mark.validation
 @pytest.mark.Force
 def test_Benchmark_AGSF_transfer():
     """ Validation test using AGSF transfer for the 12s10p benchmark 
