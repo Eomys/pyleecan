@@ -16,6 +16,7 @@ DELTA = 1e-6
 
 @pytest.mark.validation
 @pytest.mark.Force
+@pytest.mark.long
 def test_Benchmark_AGSF_transfer():
     """ Validation test using AGSF transfer for the 12s10p benchmark 
         machine from publication: 
@@ -92,9 +93,7 @@ def test_Benchmark_AGSF_transfer():
         barwidth=2000,
     )
 
-    return out, out2
-
 
 if __name__ == "__main__":
 
-    out, out2 = test_Benchmark_AGSF_transfer()
+    test_Benchmark_AGSF_transfer()
