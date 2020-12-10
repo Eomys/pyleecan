@@ -3908,6 +3908,7 @@
             "get_lam_list",
             "get_lam_list_label",
             "get_lam_by_label",
+            "get_lam_index",
             "get_pole_pair_number"
         ],
         "mother": "",
