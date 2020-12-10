@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import zeros, sqrt, pi, tile
+from multiprocessing import cpu_count
+
 from ....Functions.Electrical.coordinate_transformation import n2ab, ab2n
 
 
@@ -26,7 +28,7 @@ def comp_parameters(self, output):
 
     xi = machine.stator.winding.comp_winding_factor()
     Ntspc = machine.stator.winding.comp_Ntspc()
-    norm = (xi[0] * Ntspc) / (Zsr / 6)  # rotor - stator transformation norm
+    norm = (xi[0] * Ntspc) / (Zsr / 6)  # rotor - stator transformation factor
 
     self.parameters["norm"] = norm
 
@@ -34,10 +36,7 @@ def comp_parameters(self, output):
     Tws = 20 if "Tws" not in self.parameters else self.parameter["Tws"]
     Twr = 20 if "Twr" not in self.parameters else self.parameter["Twr"]
 
-    #
-    is_comp_ind = False
-
-    # Parameters to compute only once
+    # Parameters to compute only if they are not set
     if "Rs" not in self.parameters or self.parameters["Rs"] is None:
         self.parameters["Rs"] = machine.stator.comp_resistance_wind(T=Tws)
 
@@ -52,6 +51,9 @@ def comp_parameters(self, output):
         Ns = output.elec.felec / zp * 60
         self.parameters["slip"] = (Ns - Nr) / Ns
         # print(f"slip = {(Ns - Nr) / Ns}")
+
+    # check if inductances have to be calculated
+    is_comp_ind = False
 
     if "Lm" not in self.parameters or self.parameters["Lm"] is None:
         is_comp_ind = True
@@ -69,7 +71,7 @@ def comp_parameters(self, output):
         # setup a MagFEMM simulation to get the parameters
         # TODO utilize paralellization
         # TODO maybe use IndMagFEMM or FluxlinkageFEMM
-        # TODO but for now they are not suitable so I utilize 'normal' MagFEMM simu
+        #      but for now they are not suitable so I utilize 'normal' MagFEMM simu
         from ....Classes.Simu1 import Simu1
         from ....Classes.InputCurrent import InputCurrent
         from ....Classes.MagFEMM import MagFEMM
@@ -85,7 +87,8 @@ def comp_parameters(self, output):
         Ir = ImportMatrixVal(value=zeros((n_step, qsr)))
         time = ImportGenVectLin(start=0, stop=T, num=n_step, endpoint=False)
 
-        # estimate magnetizing current
+        # TODO estimate magnetizing current
+        # TODO compute magnetizing curve as function of I
         Imu = 2
 
         # setup the simu object
@@ -110,6 +113,7 @@ def comp_parameters(self, output):
             is_periodicity_t=False,
             Kgeo_fineness=0.5,
             Kmesh_fineness=0.5,
+            nb_worker=cpu_count(),
         )
         simu.force = None
         simu.struct = None
@@ -153,9 +157,11 @@ def comp_parameters(self, output):
 
 
 def _comp_flux_mean(out, qsr, sym):
-    # get the fluxlinkage
+    # get the fluxlinkages
+
     # TODO add fix for single time value
-    Phi = out.mag.Phi_wind_rotor.get_along("time", "phase")["Phi_{wind}"]
+    rid = out.simu.machine.get_lam_index("Rotor")
+    Phi = out.mag.Phi_wind[rid].get_along("time", "phase")["Phi_{wind}"]
 
     # compute mean value of periodic bar fluxlinkage
     qsr_eff = qsr // sym
@@ -169,7 +175,8 @@ def _comp_flux_mean(out, qsr, sym):
     Phi_r = abs(Phi_ab[:, 0] + 1j * Phi_ab[:, 1]).mean() / sqrt(2)
 
     # TODO add fix for single time value
-    Phi_ab = n2ab(out.mag.Phi_wind_stator.get_along("time", "phase")["Phi_{wind}"])
+    sid = out.simu.machine.get_lam_index("Stator")
+    Phi_ab = n2ab(out.mag.Phi_wind[sid].get_along("time", "phase")["Phi_{wind}"])
     Phi_s = abs(Phi_ab[:, 0] + 1j * Phi_ab[:, 1]).mean() / sqrt(2)
 
     return Phi_s, Phi_r
