@@ -82,3 +82,4 @@ def comp_AGSF_transfer(self, output, rnoise=None):
 
     # Replace original AGSF
     output.force.AGSF = AGSF_TR
+    output.force.Rag = Rsbo
