@@ -126,7 +126,7 @@ def comp_flux_airgap(self, output, axes_dict):
     for lam in machine.get_lam_list():
         if hasattr(lam, "winding") and lam.winding is not None:
             qs = lam.winding.qs  # Winding phase number
-            out_dict["Phi_wind"] = zeros((Nt, qs))
+            out_dict["Phi_wind"].append(zeros((Nt, qs)))
         else:
             out_dict["Phi_wind"].append(None)
 
@@ -179,7 +179,7 @@ def comp_flux_airgap(self, output, axes_dict):
             out_dict["meshsolution"].save(save_path_fea)
 
     # Store stator winding flux
-    id = machine.get_lam_by_label("Stator")
+    id = machine.get_lam_index("Stator")
     out_dict["Phi_wind_stator"] = out_dict["Phi_wind"][id]
 
     return out_dict

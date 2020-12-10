@@ -47,7 +47,7 @@ def solve_FEMM(
                 Airgap tangential flux density (Nt,Na) [T]
             Tem : ndarray
                 Electromagnetic torque over time (Nt,) [Nm]
-            Phi_wind : list of ndarray
+            Phi_wind : list of ndarray # TODO should it rather be a dict with lam label?
                 List of winding flux with respect to Machine.get_lamlist (qs,Nt) [Wb]
     FEMM_dict : dict
         Dict containing FEMM model parameters
