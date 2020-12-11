@@ -336,7 +336,7 @@ class LamHole(Lamination):
         if isinstance(bore, dict):
             # Check that the type is correct (including daughter)
             class_name = bore.get("__class__")
-            if class_name not in ["Bore", "BoreFlower"]:
+            if class_name not in ["Bore", "BoreFlower", "BoreLSRPM"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for bore"
                 )
@@ -350,7 +350,7 @@ class LamHole(Lamination):
             bore = load(bore)
             # Check that the type is correct (including daughter)
             class_name = bore.__class__.__name__
-            if class_name not in ["Bore", "BoreFlower"]:
+            if class_name not in ["Bore", "BoreFlower", "BoreLSRPM"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for bore"
                 )

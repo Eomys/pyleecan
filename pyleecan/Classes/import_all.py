@@ -10,6 +10,7 @@ from ..Classes.Arc2 import Arc2
 from ..Classes.Arc3 import Arc3
 from ..Classes.Bore import Bore
 from ..Classes.BoreFlower import BoreFlower
+from ..Classes.BoreLSRPM import BoreLSRPM
 from ..Classes.CellMat import CellMat
 from ..Classes.Circle import Circle
 from ..Classes.CondType11 import CondType11

@@ -58,7 +58,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         point_ref = (Zch + Z5 + Z6 + Z7 + Z8 + Zcl) / 6
         surface = SurfLine(
             line_list=[line1, line2, line3, line4, line5, line6],
-            #label="Wind" + st + "_R0_T0_S0",
+            # label="Wind" + st + "_R0_T0_S0",
             label="Wind" + st + "_R0_T1_S0",
             point_ref=point_ref,
         )
@@ -76,7 +76,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
 
         surface = SurfLine(
             line_list=[line1, line2, line3, line4, line5, line6],
-            #label="Wind" + st + "_R0_T1_S0",
+            # label="Wind" + st + "_R0_T1_S0",
             label="Wind" + st + "_R0_T0_S0",
             point_ref=point_ref,
         )

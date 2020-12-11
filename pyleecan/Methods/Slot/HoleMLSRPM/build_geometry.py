@@ -91,7 +91,6 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_mag.append(Segment(Z8, Z3))
 
     point_ref = (Z3 + Z4 + Z7 + Z8) / 4
-  
 
     # curve_list_mag = list()
     # curve_list_mag.append(
@@ -136,35 +135,35 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     S1 = SurfLine(line_list=curve_list_mag, label=magnet_label, point_ref=point_ref)
 
-
-    #Creation of the air curve (bottom)
+    # Creation of the air curve (bottom)
 
     curve_list_air = list()
     curve_list_air.append(
-         Arc1(begin=Z1, end=Z2, radius=self.R1, is_trigo_direction=True)
-        )
+        Arc1(begin=Z1, end=Z2, radius=self.R1, is_trigo_direction=True)
+    )
     curve_list_air.append(Segment(Z2, Z3))
     curve_list_air.append(Segment(Z3, Z8))
     curve_list_air.append(Segment(Z8, Z9))
     curve_list_air.append(
-         Arc1(begin=Z9, end=Z10, radius=self.R1, is_trigo_direction=True)
-        )
-    curve_list_air.append(Arc1(begin=Z10, end=Z1, radius=-self.R3, is_trigo_direction=False)
-        )
+        Arc1(begin=Z9, end=Z10, radius=self.R1, is_trigo_direction=True)
+    )
+    curve_list_air.append(
+        Arc1(begin=Z10, end=Z1, radius=-self.R3, is_trigo_direction=False)
+    )
     point_ref = (Z1 + Z2 + Z3 + Z8 + Z9 + Z10) / 6
 
     S2 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
-    #Creation of the second air curve (top)
+    # Creation of the second air curve (top)
     curve_list_air = list()
     curve_list_air.append(
-         Arc1(begin=Z4, end=Z5, radius=self.R1, is_trigo_direction=True)
-        )
+        Arc1(begin=Z4, end=Z5, radius=self.R1, is_trigo_direction=True)
+    )
     curve_list_air.append(Segment(Z5, Z6))
-    
+
     curve_list_air.append(
-         Arc1(begin=Z6, end=Z7, radius=self.R1, is_trigo_direction=True)
-        )
+        Arc1(begin=Z6, end=Z7, radius=self.R1, is_trigo_direction=True)
+    )
     curve_list_air.append(Segment(Z7, Z4))
 
     point_ref = (Z4 + Z5 + Z6 + Z7) / 4
@@ -175,28 +174,27 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_air = list()
     curve_list_air.append(
         Arc1(begin=Z1, end=Z2, radius=self.R1, is_trigo_direction=True)
-        )
+    )
     curve_list_air.append(Segment(Z2, Z3))
     curve_list_air.append(Segment(Z3, Z4))
     curve_list_air.append(
         Arc1(begin=Z4, end=Z5, radius=self.R1, is_trigo_direction=True)
-        )
+    )
     curve_list_air.append(Segment(Z5, Z6))
     curve_list_air.append(
         Arc1(begin=Z6, end=Z7, radius=self.R1, is_trigo_direction=True)
-        )
+    )
     curve_list_air.append(Segment(Z7, Z8))
     curve_list_air.append(Segment(Z8, Z9))
     curve_list_air.append(
         Arc1(begin=Z9, end=Z10, radius=self.R1, is_trigo_direction=True)
-        )
+    )
     curve_list_air.append(
         Arc1(begin=Z10, end=Z1, radius=-self.R3, is_trigo_direction=False)
-        )
+    )
     point_ref = (Z1 + Z2 + Z3 + Z4 + Z5 + Z6 + Z7 + Z8 + Z9 + Z10) / 10
 
     S4 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
-
 
     if self.magnet_0:
         S2.label = S2.label + "_R0_T0_S0"  # Hole
@@ -205,7 +203,6 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     else:
         S4.label = S4.label + "_R0_T0_S0"  # Hole
         surf_list = [S4]
-
 
     # Apply the transformations
     for surf in surf_list:

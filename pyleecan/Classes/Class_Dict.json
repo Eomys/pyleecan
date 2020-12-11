@@ -221,7 +221,8 @@
         ],
         "daughters": [
             "Bore",
-            "BoreFlower"
+            "BoreFlower",
+            "BoreLSRPM"
         ],
         "desc": "Abstract class for Bore shape",
         "is_internal": false,
@@ -270,6 +271,62 @@
             },
             {
                 "desc": "Angular offset for the arc",
+                "max": "",
+                "min": "",
+                "name": "alpha",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            }
+        ]
+    },
+    "BoreLSRPM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class for Bore LSRPM",
+        "is_internal": false,
+        "methods": [
+            "get_bore_line"
+        ],
+        "mother": "Bore",
+        "name": "BoreLSRPM",
+        "package": "Machine",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/BoreLSRPM.csv",
+        "properties": [
+            {
+                "desc": "Number of flower arc",
+                "max": "",
+                "min": "0",
+                "name": "N",
+                "type": "int",
+                "unit": "-",
+                "value": 8
+            },
+            {
+                "desc": "Radius of the flower arc",
+                "max": "",
+                "min": "0",
+                "name": "Rarc",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0375
+            },
+            {
+                "desc": "Width of segement",
+                "max": "",
+                "min": "",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0035
+            },
+            {
+                "desc": "Angular offset",
                 "max": "",
                 "min": "",
                 "name": "alpha",
@@ -2139,7 +2196,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.0023515058436089
+                "value": 0.0023734787
             },
             {
                 "desc": "Magnet top width",

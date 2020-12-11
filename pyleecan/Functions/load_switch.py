@@ -12,6 +12,7 @@ load_switch = {
     "Arc3": Arc3,
     "Bore": Bore,
     "BoreFlower": BoreFlower,
+    "BoreLSRPM": BoreLSRPM,
     "CellMat": CellMat,
     "Circle": Circle,
     "CondType11": CondType11,
