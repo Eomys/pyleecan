@@ -84,6 +84,7 @@ def test_EEC_FEMM_SCIM_010():
     assert abs(eec_scim.parameters["Rs"] - Rs) / Rs <= 0.02
 
     # TODO add stray parameter as soon as RMS is avialable
+    # TODO compare (joule) losses
 
     """
     # compute some quantites
