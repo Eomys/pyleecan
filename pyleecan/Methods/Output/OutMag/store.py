@@ -116,8 +116,8 @@ def store(self, out_dict, axes_dict):
             if lam.is_stator:  # TODO fix for multi stator
                 self.Phi_wind_stator = self.Phi_wind[idx]
 
-            # Electromotive force computation
-            self.comp_emf()
+        # Electromotive force computation
+        self.comp_emf()
 
         # remove from out_dict
         out_dict.pop("Phi_wind")
