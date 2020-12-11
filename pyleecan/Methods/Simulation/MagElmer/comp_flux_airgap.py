@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from os.path import join
-import subprocess
+
 
 from ....Functions.GMSH.draw_GMSH import draw_GMSH
 from ....Classes.OutMagElmer import OutMagElmer
@@ -65,7 +64,8 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Setup the Elmer simulation
     # Geometry building
-    gmsh_filename = self.get_path_save_fea(output) + ".msh"
+    project_name = self.get_path_save_fea(output)
+    gmsh_filename = project_name + ".msh"
     if not self.import_file:  # True if None or len == 0
         self.get_logger().debug("Drawing machine in GMSH...")
         output.mag.internal.FEA_dict = draw_GMSH(
@@ -89,8 +89,7 @@ def comp_flux_airgap(self, output, axes_dict):
         print("Something went wrong!")
 
 
-    # setup Elmer solver
-    # TODO add respective functions or methods
+
 
     # Solve for all time step and store all the results in output
     Br, Bt, Bz, Tem, Phi_wind_stator = self.solve_FEA(

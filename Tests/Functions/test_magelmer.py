@@ -59,10 +59,20 @@ def test_Elmer():
 
     # Definition of the enforced output of the electrical module
     N0 = 1500
-    Is = ImportMatrixVal(value=array([[20, -10, -10]]))
+    Is = ImportMatrixVal(value=array([[20, -10, -10],
+                                      [18, -9, -9],
+                                      [20, -10, -10],
+                                      [18, -9, -9],
+                                      [20, -10, -10],
+                                      [18, -9, -9],
+                                      [20, -10, -10],
+                                      [18, -9, -9],
+                                      [20, -10, -10],
+                                      [18, -9, -9],
+                                      ]))
     Ir = ImportMatrixVal(value=zeros((1, 28)))
-    Nt_tot = 1
-    Na_tot = 4096
+    Nt_tot = 10
+    Na_tot = 1024
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
