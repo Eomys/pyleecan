@@ -28,14 +28,14 @@ simu.elec = Electrical(
     eec=eec_scim,
 )
 
-eec_scim.parameters = {
-    "Lm": 0.6106,
-    # 'Lm_': 0.6077,
-    "Lr_norm": 0.0211,
-    "Ls": 0.0154,
-    "Rfe": None,
-    "slip": None,
-}
+# eec_scim.parameters = {
+#     "Lm": 0.6106,
+#     # 'Lm_': 0.6077,
+#     "Lr_norm": 0.0211,
+#     "Ls": 0.0154,
+#     "Rfe": None,
+#     "slip": None,
+# }
 
 # Run only Electrical module
 simu.mag = None
@@ -54,6 +54,7 @@ simu.input.Na_tot = 2048  # Spatial discretization
 simu.input.N0 = 1418  # 1363.63  # Rotor speed [rpm]
 simu.input.rot_dir = 1  # To enforce the rotation direction
 simu.input.Nrev = 5
+
 
 out = simu.run()
 
