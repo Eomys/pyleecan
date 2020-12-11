@@ -3,71 +3,85 @@
 import pytest
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Classes.MagnetType15 import MagnetType15
-from numpy import pi, exp, sqrt, arcsin
-from pyleecan.Methods.Machine.Magnet.comp_height import comp_height
-from pyleecan.Methods.Machine.Magnet.comp_surface import comp_surface
+from pyleecan.Classes.SlotM15 import SlotM15
+from numpy import pi, exp, sqrt, arcsin, angle
+from pyleecan.Methods.Slot.Slot.comp_height import comp_height
+from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
+from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
+from pyleecan.Methods.Slot.SlotWind.comp_height_active import comp_height_active
+from pyleecan.Methods.Slot.SlotWind.comp_surface_active import comp_surface_active
 from pyleecan.Methods import ParentMissingError
 
 mm = 1e-3
 
-
-def comp_surface_analytical(slot):
-    """compute the magnet surface analytically
-    based on integration of magnet height over magnet (half) width
-    magnet height: h(y) = sqrt(Rtop**2 - y**2) + x0 - sqrt(Rbottom**2 - y**2)
-    """
-    Z1, _ = slot.get_point_bottom()
-    Rbottom = abs(Z1)
-    Rtop = slot.magnet[0].Rtop
-    Wmag = slot.magnet[0].Wmag
-    Hmag = slot.magnet[0].Hmag
-
-    x0 = Rbottom + Hmag - Rtop  #  reference point, i.e. center of top curve
-    w = Wmag / 2
-
-    s0 = x0 * w
-    s1 = w / 2 * sqrt(Rtop ** 2 - w ** 2) + Rtop ** 2 / 2 * arcsin(w / Rtop)
-    s2 = w / 2 * sqrt(Rbottom ** 2 - w ** 2) + Rbottom ** 2 / 2 * arcsin(w / Rbottom)
-
-    surf = 2 * (s1 + s0 - s2)
-
-    return surf
-
-
 Mag15_test = list()
 # Internal Slot inset magnet with same top and bottom radius
 lam = LamSlotMag(Rint=40 * mm, Rext=110 * mm, is_internal=True)
-lam.slot = SlotMPolar(Zs=4, W0=80 * pi / 180, H0=10 * mm)
-lam.slot.magnet = [
-    MagnetType15(Lmag=500 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtop=100 * mm)
-]
-Mag15_test.append({"test_obj": lam, "Ao": 2 * arcsin(50 / 100), "H_exp": 20 * mm})
+lam.slot = SlotM15(
+    Zs=4, W0=80 * pi / 180, H0=10 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtopm=100 * mm
+)
+Mag15_test.append(
+    {
+        "test_obj": lam,
+        "Rmec": 120 * mm,
+        "S_exp": 1.46607e-3,
+        "SA_exp": 2e-3,
+        "HA_exp": 2,
+        "Ao": 1.39626,
+        "H_exp": 20 * mm,
+    }
+)
 
 # Internal Slot inset magnet with same top and bottom radius
 lam = LamSlotMag(Rint=40 * mm, Rext=110 * mm, is_internal=True)
-lam.slot = SlotMPolar(Zs=4, W0=80 * pi / 180, H0=20 * mm)
-lam.slot.magnet = [
-    MagnetType15(Lmag=500 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtop=100 * mm)
-]
-Mag15_test.append({"test_obj": lam, "Ao": 2 * arcsin(50 / 90), "H_exp": 20 * mm})
+lam.slot = SlotM15(
+    Zs=4, W0=80 * pi / 180, H0=20 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtopm=100 * mm
+)
+Mag15_test.append(
+    {
+        "test_obj": lam,
+        "Rmec": 110 * mm,
+        "S_exp": 2.7925e-3,
+        "SA_exp": 2.0533e-3,
+        "HA_exp": 2,
+        "Ao": 1.39626,
+        "H_exp": 20 * mm,
+    }
+)
 
 # Internal slot surface magnet with same top and bottom radius
 lam = LamSlotMag(Rint=40 * mm, Rext=100 * mm, is_internal=True)
-lam.slot = SlotMPolar(Zs=4, W0=80 * pi / 180, H0=0 * mm)
-lam.slot.magnet = [
-    MagnetType15(Lmag=500 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtop=100 * mm)
-]
-Mag15_test.append({"test_obj": lam, "Ao": 2 * arcsin(50 / 100), "H_exp": 20 * mm})
+lam.slot = SlotM15(
+    Zs=4, W0=80 * pi / 180, H0=0 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtopm=100 * mm
+)
+Mag15_test.append(
+    {
+        "test_obj": lam,
+        "Rmec": 120e-3,
+        "S_exp": 0,
+        "SA_exp": 2e-3,
+        "HA_exp": 2,
+        "Ao": 1.39626,
+        "H_exp": 20 * mm,
+    }
+)
 
 # Internal slot surface magnet with different top and bottom radius
 lam = LamSlotMag(Rint=40 * mm, Rext=100 * mm, is_internal=True)
-lam.slot = SlotMPolar(Zs=4, W0=80 * pi / 180, H0=0 * mm)
-lam.slot.magnet = [
-    MagnetType15(Lmag=500 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtop=65 * mm)
-]
-Mag15_test.append({"test_obj": lam, "Ao": 2 * arcsin(50 / 100), "H_exp": 20 * mm})
+lam.slot = SlotM15(
+    Zs=4, W0=80 * pi / 180, H0=0 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtopm=65 * mm
+)
+Mag15_test.append(
+    {
+        "test_obj": lam,
+        "Rmec": 120e-3,
+        "S_exp": 0,
+        "SA_exp": 1.7185e-3,
+        "HA_exp": 2,
+        "Ao": 1.39626,
+        "H_exp": 20 * mm,
+    }
+)
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -81,64 +95,136 @@ class Test_Magnet_Type_15_meth(object):
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.magnet[0].comp_surface()
+        result = test_obj.slot.comp_surface()
 
         a = result
-        b = comp_surface_analytical(test_obj.slot)
+        b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a - 0) < DELTA, msg
+        assert a == pytest.approx(b, rel=DELTA), msg
+
+        # Check that the analytical method returns the same result as the numerical one
+        b = comp_surface(test_obj.slot)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert a == pytest.approx(b, rel=DELTA), msg
+
+    @pytest.mark.parametrize("test_dict", Mag15_test)
+    def test_comp_surface_active(self, test_dict):
+        """Check that the computation of the active surface is correct"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.comp_surface_active()
+
+        a = result
+        b = test_dict["SA_exp"]
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert a == pytest.approx(b, rel=DELTA), msg
+
+        # Check that the analytical method returns the same result as the numerical one
+        b = comp_surface_active(test_obj.slot, Ndisc=5000)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert a == pytest.approx(b, rel=DELTA), msg
 
     @pytest.mark.parametrize("test_dict", Mag15_test)
     def test_comp_height(self, test_dict):
         """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.magnet[0].comp_height()
+        result = test_obj.slot.comp_height()
 
         a = result
         b = test_dict["H_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a - 0) < DELTA, msg
+        # assert a == pytest.approx(b, rel=DELTA), msg
 
-        # Compare numerical and analytical results
-        b = comp_height(test_obj.slot.magnet[0])
-        msg = "Analytical: " + str(a) + " Numerical " + str(b)
-        assert abs((a - b) / a - 0) < DELTA, msg
+        # Check that the analytical method returns the same result as the numerical one
+        b = comp_height(test_obj.slot)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert a == pytest.approx(b, rel=DELTA), msg
 
     @pytest.mark.parametrize("test_dict", Mag15_test)
-    def test_comp_angle_op(self, test_dict):
-        """Check that the computation of the opening angle is correct"""
+    def test_comp_height_active(self, test_dict):
+        """Check that the computation of the active height is correct"""
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.magnet[0].comp_angle_opening()
+        result = test_obj.slot.comp_height_active()
 
         a = result
-        b = test_dict["Ao"]
+        b = test_dict["HA_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a - 0) < DELTA, msg
+        # assert a == pytest.approx(b, rel=DELTA), msg
 
-    def test_build_geometry(self):
-        """check that curve_list is correct"""
+        # Check that the analytical method returns the same result as the numerical one
+        b = comp_height_active(test_obj.slot)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert a == pytest.approx(b, rel=DELTA), msg
 
-        with pytest.raises(ParentMissingError) as context:
-            MagnetType15(Lmag=0.5, Hmag=0.02, Wmag=0.04, Rtop=0.04).build_geometry()
+    @pytest.mark.parametrize("test_dict", Mag15_test)
+    def test_comp_angle_opening(self, test_dict):
+        """Check that the computation of the average opening angle is correct"""
+        test_obj = test_dict["test_obj"]
+        a = test_obj.slot.comp_angle_opening()
+        assert a == pytest.approx(test_dict["Ao"], rel=DELTA)
+        # Check that the analytical method returns the same result as the numerical one
+        b = comp_angle_opening(test_obj.slot)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert a == pytest.approx(b, rel=DELTA)
 
-        lam = LamSlotMag(Rint=40 * mm, Rext=90 * mm, is_internal=True)
-        lam.slot = SlotMPolar(Zs=4, W0=80 * pi / 180, H0=20 * mm)
-        lam.slot.magnet = [
-            MagnetType15(Lmag=500 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtop=100 * mm)
-        ]
+    @pytest.mark.parametrize("test_dict", Mag15_test)
+    def test_comp_width_opening(self, test_dict):
+        """Check that the computation of the average opening width is correct"""
+        test_obj = test_dict["test_obj"]
+        a = test_obj.slot.comp_width_opening()
+        point_dict = test_obj.slot._comp_point_coordinate()
+        assert a == pytest.approx(abs(point_dict["Z1"] - point_dict["Z4"]), rel=DELTA)
 
-        surface = lam.slot.magnet[0].build_geometry(is_simplified=True)
+    @pytest.mark.parametrize("test_dict", Mag15_test)
+    def test_comp_mec_radius(self, test_dict):
+        """Check that the computation of the mechanical radius is correct"""
+        test_obj = test_dict["test_obj"]
+        a = test_obj.comp_radius_mec()
+        assert a == pytest.approx(test_dict["Rmec"], rel=DELTA)
 
-        assert len(surface) == 1
-        assert surface[0].label == "MagnetRotorRadial_N_R0_T0_S0"
+    @pytest.mark.parametrize("test_dict", Mag15_test)
+    def test_comp_point_coordinate(self, test_dict):
+        """Check that the point coordinates are correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+        Z1 = point_dict["Z1"]
+        Z2 = point_dict["Z2"]
+        Z3 = point_dict["Z3"]
+        Z4 = point_dict["Z4"]
+        ZM0 = point_dict["ZM0"]
+        ZM1 = point_dict["ZM1"]
+        ZM2 = point_dict["ZM2"]
+        ZM3 = point_dict["ZM3"]
+        ZM4 = point_dict["ZM4"]
+        W0 = test_obj.slot.W0
+        H0 = test_obj.slot.H0
+        Wmag = test_obj.slot.Wmag
+        Hmag = test_obj.slot.Hmag
+        Rbo = test_obj.get_Rbo()
 
-        lam = LamSlotMag(Rint=40e-3, Rext=90e-3, is_internal=True)
-        lam.slot = SlotMPolar(Zs=4, W0=80 * pi / 180, H0=10 * mm)
-        lam.slot.magnet = [
-            MagnetType15(Lmag=500 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtop=100 * mm)
-        ]
+        # Polar Slot
+        assert abs(Z1) == pytest.approx(Rbo, rel=DELTA)
+        assert angle(Z1) == pytest.approx(-W0 / 2, rel=DELTA)
+        assert abs(Z4) == pytest.approx(Rbo, rel=DELTA)
+        assert angle(Z4) == pytest.approx(W0 / 2, rel=DELTA)
+        if test_obj.is_internal:
+            assert abs(Z2) == pytest.approx(Rbo - H0, rel=DELTA)
+            assert abs(Z3) == pytest.approx(Rbo - H0, rel=DELTA)
+        else:
+            assert abs(Z3) == pytest.approx(Rbo + H0, rel=DELTA)
+            assert abs(Z2) == pytest.approx(Rbo + H0, rel=DELTA)
+        assert angle(Z2) == pytest.approx(-W0 / 2, rel=DELTA)
+        assert angle(Z3) == pytest.approx(W0 / 2, rel=DELTA)
 
-        surface = lam.slot.magnet[0].build_geometry(is_simplified=True)
-
-        assert len(surface) == 1
-        assert surface[0].label == "MagnetRotorRadial_N_R0_T0_S0"
+        # Polar bottom for magnet
+        assert abs(Z2) == pytest.approx(abs(ZM1), rel=DELTA)
+        assert abs(Z2) == pytest.approx(abs(ZM4), rel=DELTA)
+        # Parallel side
+        assert ZM1.imag == pytest.approx(ZM2.imag, rel=DELTA)
+        assert ZM3.imag == pytest.approx(ZM4.imag, rel=DELTA)
+        assert ZM1.imag == pytest.approx(-Wmag / 2, rel=DELTA)
+        assert ZM3.imag == pytest.approx(Wmag / 2, rel=DELTA)
+        # Hmag def
+        if test_obj.is_internal:
+            assert ZM0 == pytest.approx(abs(Z2) + Hmag, rel=DELTA)
+        else:
+            assert ZM0 == pytest.approx(abs(Z2) - Hmag, rel=DELTA)
