@@ -13,6 +13,8 @@ from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.SlotM12 import SlotM12
 from pyleecan.Classes.SlotM13 import SlotM13
 from pyleecan.Classes.SlotM14 import SlotM14
+from pyleecan.Classes.SlotM15 import SlotM15
+from pyleecan.Classes.SlotM16 import SlotM16
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationTrap import VentilationTrap
@@ -417,3 +419,64 @@ class Test_Lam_Mag_inset_plot(object):
         fig = plt.gcf()
         assert len(fig.axes[0].patches) == 2
         fig.savefig(join(save_path, "test_Lam_Mag_14i_3-Rotor_no_mag.png"))
+
+    def test_Lam_Mag_15_inset(self):
+        """Test machine plot with Magnet 15 inset"""
+
+        plt.close("all")
+        mm = 1e-3
+        rotor = LamSlotMag(Rint=40 * mm, Rext=110 * mm, is_internal=True)
+        rotor.slot = SlotM15(
+            Zs=4,
+            W0=80 * pi / 180,
+            H0=10 * mm,
+            Hmag=20 * mm,
+            Wmag=100 * mm,
+            Rtopm=100 * mm,
+        )
+
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 6
+        fig.savefig(join(save_path, "test_Lam_Mag_15i_1-Rotor.png"))
+
+        rotor.slot.Wmag = rotor.slot.Wmag * 0.5
+        rotor.slot.Rtopm = rotor.slot.Rtopm * 0.5
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 6
+        fig.savefig(join(save_path, "test_Lam_Mag_15i_2-Rotor_missmatch.png"))
+
+        rotor.magnet = None
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 2
+        fig.savefig(join(save_path, "test_Lam_Mag_15i_3-Rotor_No_mag.png"))
+
+    def test_Lam_Mag_16_inset(self):
+        """Test machine plot with SlotM10 inset"""
+
+        plt.close("all")
+        rotor = LamSlotMag(Rint=80e-3, Rext=200e-3, is_internal=True, is_stator=False,)
+        rotor.slot = SlotM16(Zs=4, W0=0.02, H0=0.02, H1=0.08, W1=0.04)
+
+        stator = LamSlotMag(
+            Rint=220e-3, Rext=400e-3, is_internal=False, is_stator=True,
+        )
+        stator.slot = SlotM16(Zs=8, W0=0.02, H0=0.02, H1=0.08, W1=0.04)
+
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 6
+        fig.savefig(join(save_path, "test_Lam_Mag_16i_1-Rotor.png"))
+
+        stator.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 10
+        fig.savefig(join(save_path, "test_Lam_Mag_16i_2-Stator.png"))
+
+        rotor.magnet = None
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 2
+        fig.savefig(join(save_path, "test_Lam_Mag_16i_3-Rotor_no_mag.png"))
