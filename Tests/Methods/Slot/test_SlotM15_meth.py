@@ -26,9 +26,9 @@ Mag15_test.append(
         "Rmec": 120 * mm,
         "S_exp": 1.46607e-3,
         "SA_exp": 2e-3,
-        "HA_exp": 2,
+        "HA_exp": 0.02,
         "Ao": 1.39626,
-        "H_exp": 20 * mm,
+        "H_exp": 0.01,
     }
 )
 
@@ -43,7 +43,7 @@ Mag15_test.append(
         "Rmec": 110 * mm,
         "S_exp": 2.7925e-3,
         "SA_exp": 2.0533e-3,
-        "HA_exp": 2,
+        "HA_exp": 0.02,
         "Ao": 1.39626,
         "H_exp": 20 * mm,
     }
@@ -60,9 +60,9 @@ Mag15_test.append(
         "Rmec": 120e-3,
         "S_exp": 0,
         "SA_exp": 2e-3,
-        "HA_exp": 2,
+        "HA_exp": 0.02,
         "Ao": 1.39626,
-        "H_exp": 20 * mm,
+        "H_exp": 0,
     }
 )
 
@@ -77,9 +77,9 @@ Mag15_test.append(
         "Rmec": 120e-3,
         "S_exp": 0,
         "SA_exp": 1.7185e-3,
-        "HA_exp": 2,
+        "HA_exp": 0.02,
         "Ao": 1.39626,
-        "H_exp": 20 * mm,
+        "H_exp": 0,
     }
 )
 
@@ -119,7 +119,7 @@ class Test_Magnet_Type_15_meth(object):
         assert a == pytest.approx(b, rel=DELTA), msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_active(test_obj.slot, Ndisc=5000)
+        b = comp_surface_active(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 
@@ -132,7 +132,7 @@ class Test_Magnet_Type_15_meth(object):
         a = result
         b = test_dict["H_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        # assert a == pytest.approx(b, rel=DELTA), msg
+        assert a == pytest.approx(b, rel=DELTA), msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = comp_height(test_obj.slot)
@@ -148,7 +148,7 @@ class Test_Magnet_Type_15_meth(object):
         a = result
         b = test_dict["HA_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        # assert a == pytest.approx(b, rel=DELTA), msg
+        assert a == pytest.approx(b, rel=DELTA), msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = comp_height_active(test_obj.slot)
