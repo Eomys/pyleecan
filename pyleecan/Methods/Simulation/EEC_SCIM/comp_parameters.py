@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import zeros, sqrt, pi, tile
+from numpy import zeros, sqrt, pi, tile, isnan
 from multiprocessing import cpu_count
 
 from ....Functions.Electrical.coordinate_transformation import n2ab, ab2n
@@ -22,7 +22,6 @@ def comp_parameters(self, output):
     machine = output.simu.machine
     Zsr = machine.rotor.slot.Zs
     qsr = machine.rotor.winding.qs
-    p = machine.get_pole_pair_number()
     qss = machine.stator.winding.qs
     sym = machine.comp_periodicity()[0]
 
@@ -109,7 +108,7 @@ def comp_parameters(self, output):
         simu.mag = MagFEMM(
             type_BH_stator=0,
             type_BH_rotor=0,
-            is_periodicity_a=False,
+            is_periodicity_a=True,
             is_periodicity_t=False,
             Kgeo_fineness=0.5,
             Kmesh_fineness=0.5,
@@ -125,7 +124,7 @@ def comp_parameters(self, output):
 
         # compute average rotor and stator fluxlinkage
         # TODO check wind_mat that the i-th bars is in the i-th slots
-        Phi_s, Phi_r = _comp_flux_mean(out, qsr, sym)
+        Phi_s, Phi_r = _comp_flux_mean(self, out)
 
         self.parameters["Lm"] = (Phi_r * norm * Zsr / 3) / Imu
         self.parameters["Ls"] = (Phi_s - (Phi_r * norm * Zsr / 3)) / Imu
@@ -150,26 +149,64 @@ def comp_parameters(self, output):
 
         # compute average rotor and stator fluxlinkage
         # TODO check wind_mat that the i-th bars is in the i-th slots
-        Phi_s, Phi_r = _comp_flux_mean(out, qsr, sym)
+        Phi_s, Phi_r = _comp_flux_mean(self, out)
 
         self.parameters["Lm_"] = Phi_s / Imu
         self.parameters["Lr_norm"] = ((Phi_r * norm * Zsr / 3) - Phi_s) / Imu
 
 
-def _comp_flux_mean(out, qsr, sym):
-    # get the fluxlinkages
+def _comp_flux_mean(self, out):
+    # some readability
+    logger = self.get_logger()
+    machine = out.simu.machine
+    p = machine.rotor.winding.p
+    qsr = machine.rotor.winding.qs
+    sym, is_anti_per, _, _ = machine.comp_periodicity()
 
+    # get the fluxlinkages
     # TODO add fix for single time value
     rid = out.simu.machine.get_lam_index("Rotor")
     Phi = out.mag.Phi_wind[rid].get_along("time", "phase")["Phi_{wind}"]
 
+    # reconstruct fluxlinkage in case of (anti) periodicity
+    if out.simu.mag.is_periodicity_a:
+        # reconstruct anti periodicity
+        if is_anti_per:
+            qsr_eff = qsr // (sym * (1 + is_anti_per))
+            for ii in range(qsr_eff):
+                if not all(isnan(Phi[:, ii + qsr_eff]).tolist()):
+                    logger.warning(
+                        f"{type(self).__name__}: "
+                        + f"Rotor fluxlinkage of bar {ii + qsr_eff} will be overridden."
+                    )
+                Phi[:, ii + qsr_eff] = -Phi[:, ii]
+        # reconstruct periodicity
+        if sym != 1:
+            qsr_eff = qsr // sym
+            if not all(isnan(Phi[:, qsr_eff:]).tolist()):
+                logger.warning(
+                    f"{type(self).__name__}: "
+                    + f"Rotor fluxlinkage of bar "
+                    + "starting with {qsr_eff} will be overridden."
+                )
+            for ii in range(sym - 1):
+                id0 = qsr_eff * (ii + 1)
+                id1 = qsr_eff * (ii + 2)
+                Phi[:, id0:id1] = Phi[:, :qsr_eff]
+
+        # rescale
+        Phi = Phi / (sym * (1 + is_anti_per))
+
     # compute mean value of periodic bar fluxlinkage
-    qsr_eff = qsr // sym
     Phi_ab = zeros([Phi.shape[0], 2])
-    for ii in range(sym):
-        id0 = qsr_eff * ii
-        id1 = qsr_eff * (ii + 1)
-        Phi_ab += n2ab(Phi[:, id0:id1], n=qsr_eff) / sym
+    if (qsr % p) == 0:
+        qsr_per_pole = qsr // p
+        for ii in range(p):
+            id0 = qsr_per_pole * ii
+            id1 = qsr_per_pole * (ii + 1)
+            Phi_ab += n2ab(Phi[:, id0:id1], n=qsr_per_pole) / p
+    else:
+        logger.warning(f"{type(self).__name__}: " + "Not Implemented Yet")
 
     # compute rotor and stator fluxlinkage
     Phi_r = abs(Phi_ab[:, 0] + 1j * Phi_ab[:, 1]).mean() / sqrt(2)
