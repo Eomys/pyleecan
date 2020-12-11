@@ -4607,9 +4607,7 @@
                 "value": "1"
             }
         ],
-        "daughters": [
-            "MagnetType15"
-        ],
+        "daughters": [],
         "desc": "Magnet class",
         "is_internal": false,
         "methods": [],
@@ -4644,63 +4642,6 @@
                 "type": "float",
                 "unit": "-",
                 "value": 0.95
-            }
-        ]
-    },
-    "MagnetType15": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_FLAT_BOT",
-                "value": "0"
-            },
-            {
-                "name": "IS_FLAT_TOP",
-                "value": "0"
-            }
-        ],
-        "daughters": [],
-        "desc": "single magnet with polar base and curved-top shape and parallel sides",
-        "is_internal": false,
-        "methods": [
-            "build_geometry",
-            "comp_height",
-            "comp_angle_opening"
-        ],
-        "mother": "Magnet",
-        "name": "MagnetType15",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType15.csv",
-        "properties": [
-            {
-                "desc": "magnet width [m]",
-                "max": "",
-                "min": "0",
-                "name": "Wmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.002
-            },
-            {
-                "desc": "magnet radial height [m]",
-                "max": "",
-                "min": "0",
-                "name": "Hmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            },
-            {
-                "desc": "radius of the circular top shape [m]",
-                "max": "",
-                "min": "0",
-                "name": "Rtop",
-                "type": "float",
-                "unit": "m",
-                "value": 0.05
             }
         ]
     },
