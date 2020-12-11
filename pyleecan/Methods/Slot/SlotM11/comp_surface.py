@@ -19,7 +19,9 @@ def comp_surface(self):
 
     """
 
-    [Z1, Z2, _, _, _, _, _, _] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
 
     R1 = abs(Z1)
     R2 = abs(Z2)

@@ -17,7 +17,9 @@ def comp_surface_active(self):
 
     """
 
-    [_, _, _, _, ZM1, ZM2, _, _] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    ZM1 = point_dict["ZM1"]
+    ZM2 = point_dict["ZM2"]
 
     R1 = abs(ZM1)
     R2 = abs(ZM2)

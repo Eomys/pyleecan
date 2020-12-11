@@ -11,9 +11,8 @@ def _comp_point_coordinate(self):
 
     Returns
     -------
-    point_list: list
-        A list of the slot coordinates
-
+    point_dict: dict
+        A dict of the slot coordinates
     """
 
     Rbo = self.get_Rbo()
@@ -29,10 +28,16 @@ def _comp_point_coordinate(self):
         ZM1 = (Rbo - self.H0) * exp(-1j * self.Wmag / 2)
         ZM2 = (Rbo - self.H0 + self.Hmag) * exp(-1j * self.Wmag / 2)
 
+    point_dict = dict()
+    point_dict["Z1"] = Z1
+    point_dict["Z2"] = Z2
+    point_dict["ZM1"] = ZM1
+    point_dict["ZM2"] = ZM2
     # symetry
-    Z3 = Z2.conjugate()
-    Z4 = Z1.conjugate()
-    ZM3 = ZM2.conjugate()
-    ZM4 = ZM1.conjugate()
 
-    return [Z1, Z2, Z3, Z4, ZM1, ZM2, ZM3, ZM4]
+    point_dict["Z3"] = Z2.conjugate()
+    point_dict["Z4"] = Z1.conjugate()
+    point_dict["ZM3"] = ZM2.conjugate()
+    point_dict["ZM4"] = ZM1.conjugate()
+
+    return point_dict
