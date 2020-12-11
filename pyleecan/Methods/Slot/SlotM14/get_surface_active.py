@@ -29,7 +29,12 @@ def get_surface_active(self, alpha=0, delta=0):
     st = self.get_name_lam()
     Rbo = self.get_Rbo()
 
-    [_, _, _, _, ZM1, ZM2, ZM3, ZM4, _] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    ZM1 = point_dict["ZM1"]
+    ZM2 = point_dict["ZM2"]
+    ZM3 = point_dict["ZM3"]
+    ZM4 = point_dict["ZM4"]
+
     curve_list = list()
     curve_list.append(Segment(ZM1, ZM2))
 
