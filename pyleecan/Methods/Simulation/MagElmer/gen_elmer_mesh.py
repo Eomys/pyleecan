@@ -3,6 +3,7 @@ import subprocess
 
 from ....Classes.Magnetics import Magnetics
 from ....Functions.GMSH import surface_label
+from ....Functions.get_path_binary import get_path_binary
 from .... import __version__
 from os.path import join
 from numpy import angle, pi
@@ -27,8 +28,9 @@ def gen_elmer_mesh(self, output):
     project_name = self.get_path_save_fea(output)
     gmsh_filename = project_name + ".msh"
     elmermesh_folder = project_name
+    ElmerGrid_binary = get_path_binary("ElmerGrid")
     cmd_elmergrid = [
-        "ElmerGrid",
+        ElmerGrid_binary,
         "14",
         "2",
         gmsh_filename,
@@ -44,11 +46,13 @@ def gen_elmer_mesh(self, output):
     )
     (stdout, stderr) = elmergrid.communicate()
     elmergrid.wait()
+
+    self.get_logger().debug(stdout.decode("UTF-8"))
     if elmergrid.returncode != 0:
         self.get_logger().debug("ElmerGrid [Error]: " + stderr.decode("UTF-8"))
         return False
     elmergrid.terminate()
-    self.get_logger().debug("ElmerGrid call complete!")
+    self.get_logger().info("ElmerGrid call complete!")
 
     boundaries = {}
     bodies = {}
