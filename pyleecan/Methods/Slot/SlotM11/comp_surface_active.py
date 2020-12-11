@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from numpy import pi
 
 
 def comp_surface_active(self):
