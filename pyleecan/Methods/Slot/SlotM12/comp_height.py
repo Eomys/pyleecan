@@ -19,7 +19,11 @@ def comp_height(self):
 
     """
 
-    [Z1, Z2, Z3, Z4, _, _, _, _, _] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
 
     Rbo = self.get_Rbo()
 

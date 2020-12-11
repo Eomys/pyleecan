@@ -147,8 +147,8 @@ class Test_Magnet_Type_11_meth(object):
         """Check that the computation of the average opening width is correct"""
         test_obj = test_dict["test_obj"]
         a = test_obj.slot.comp_width_opening()
-        [Z1, Z2, Z3, Z4, ZM1, ZM2, ZM3, ZM4] = test_obj.slot._comp_point_coordinate()
-        assert a == pytest.approx(abs(Z1 - Z4), rel=DELTA)
+        point_dict = test_obj.slot._comp_point_coordinate()
+        assert a == pytest.approx(abs(point_dict["Z1"] - point_dict["Z4"]), rel=DELTA)
 
     @pytest.mark.parametrize("test_dict", Mag11_test)
     def test_comp_mec_radius(self, test_dict):
