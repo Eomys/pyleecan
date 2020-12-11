@@ -24,19 +24,19 @@ def comp_joule_losses(self, output):
 
     # compute rotor joule losses
     qr = output.simu.machine.rotor.winding.qs
-    sym = output.simu.machine.comp_periodicity()[0]
+    p = output.simu.machine.rotor.winding.p
     Rr = self.parameters["Rr_norm"] / self.parameters["norm"] ** 2
 
     # get the bar currents
     Ir = output.elec.Ir.get_along("time", "phase")["Ir"].T
 
     # transform rotor current to 2 phase equivalent
-    qr_eff = qr // sym
+    qr_eff = qr // p
     Ir_2ph = zeros([Ir.shape[0], 2])
-    for ii in range(sym):
+    for ii in range(p):
         id0 = qr_eff * ii
         id1 = qr_eff * (ii + 1)
-        Ir_2ph += n2ab(Ir[:, id0:id1], n=qr_eff) / sym
+        Ir_2ph += n2ab(Ir[:, id0:id1], n=qr_eff) / p
 
     Ir_mag = abs(Ir_2ph[:, 0] + 1j * Ir_2ph[:, 1])
 
