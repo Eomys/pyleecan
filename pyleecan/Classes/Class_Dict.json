@@ -7660,6 +7660,8 @@
             "SlotM12",
             "SlotM13",
             "SlotM14",
+            "SlotM15",
+            "SlotM16",
             "SlotUD",
             "SlotW10",
             "SlotW11",
@@ -8286,6 +8288,151 @@
                 "max": "",
                 "min": "0",
                 "name": "Rtopm",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            }
+        ]
+    },
+    "SlotM15": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "single magnet with polar base and curved-top shape and parallel sides",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_active",
+            "get_surface_active"
+        ],
+        "mother": "SlotWind",
+        "name": "SlotM15",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM15.csv",
+        "properties": [
+            {
+                "desc": "Slot isthmus angular width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "rad",
+                "value": 0.0122
+            },
+            {
+                "desc": "Slot isthmus height.",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "Wmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Magnet Height",
+                "max": "",
+                "min": "0",
+                "name": "Hmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Radius of the magnet top",
+                "max": "",
+                "min": "0",
+                "name": "Rtopm",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            }
+        ]
+    },
+    "SlotM16": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Rectangular Slot with isthmus for Rectangular magnet",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_active",
+            "get_surface_active"
+        ],
+        "mother": "SlotWind",
+        "name": "SlotM16",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM16.csv",
+        "properties": [
+            {
+                "desc": "Slot isthmus width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Slot isthmus height.",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Slot Width",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Slot Height",
+                "max": "",
+                "min": "0",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -9952,6 +10099,8 @@
             "SlotM12",
             "SlotM13",
             "SlotM14",
+            "SlotM15",
+            "SlotM16",
             "SlotUD",
             "SlotW10",
             "SlotW11",

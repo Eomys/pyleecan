@@ -293,6 +293,7 @@ class LamSlotMag(LamSlot):
 
         # Get size of the properties inherited from LamSlot
         S += super(LamSlotMag, self).__sizeof__()
+        S += getsizeof(self.magnet)
         return S
 
     def as_dict(self):
