@@ -59,9 +59,9 @@ def test_Elmer():
 
     # Definition of the enforced output of the electrical module
     N0 = 1500
-    Is = ImportMatrixVal(value=array([[20, -10, -10]]))
+    Is = ImportMatrixVal(value=array([[20, -10, -10],[20, -10, -10],[20, -10, -10]]))
     Ir = ImportMatrixVal(value=zeros((1, 28)))
-    Nt_tot = 1
+    Nt_tot = 3
     Na_tot = 4096
     simu.input = InputCurrent(
         Is=Is,
@@ -97,4 +97,4 @@ def test_Elmer():
 
 
 if __name__ == "__main__":
-    sys.exit(test_Elmer())
+    test_Elmer()
