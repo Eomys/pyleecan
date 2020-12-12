@@ -6,6 +6,7 @@ from SciDataTool import DataTime, VectorField, Data1D
 from os.path import join
 
 from ....Functions.Winding.gen_phase_list import gen_name
+from ....Functions.get_path_binary import get_path_binary
 
 
 def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
