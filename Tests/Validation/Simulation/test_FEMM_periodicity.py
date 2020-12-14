@@ -139,7 +139,7 @@ def test_FEMM_periodicity():
         save_path=join(save_path, simu.name + "_Phi_wind_stator_time.png"),
         is_show_fig=False,
     )
-    
+
     # Check Flux spatio-temporal reconstruction sym
     Bflux = out.mag.B
     arg_list = ["time", "angle"]
@@ -164,14 +164,12 @@ def test_FEMM_periodicity():
         for ifrq in range(Nf):
             frq = freqs[ifrq]
             XB_rad = XB_rad + real(
-                Brad_wr[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime 
-                                        + 1j * r * Xangle)
+                Brad_wr[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime + 1j * r * Xangle)
             )
 
-    test1 = abs(Brad - XB_rad)/abs(Brad).max()
+    test1 = abs(Brad - XB_rad) / abs(Brad).max()
     assert_array_almost_equal(test1, 0, decimal=2)
-    assert_array_almost_equal(Brad,XB_rad, decimal=6)
-    
+    assert_array_almost_equal(Brad, XB_rad, decimal=6)
 
     # Check Flux spatio-temporal reconstruction full
     Bflux2 = out2.mag.B
@@ -197,19 +195,18 @@ def test_FEMM_periodicity():
         for ifrq in range(Nf):
             frq = freqs[ifrq]
             XB_rad2 = XB_rad2 + real(
-                Brad_wr2[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime 
-                                        + 1j * r * Xangle)
+                Brad_wr2[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime + 1j * r * Xangle)
             )
 
-    test2 = abs(Brad2 - XB_rad2)/abs(Brad2).max()
+    test2 = abs(Brad2 - XB_rad2) / abs(Brad2).max()
     assert_array_almost_equal(test2, 0, decimal=2)
     assert_array_almost_equal(Brad2, XB_rad2, decimal=4)
-    
+
     # Compare both simu
-    test11 = abs(Brad - Brad2)/abs(Brad).max()
+    test11 = abs(Brad - Brad2) / abs(Brad).max()
     assert_array_almost_equal(test11, 0, decimal=1)
-    
-    test22 = abs(XB_rad - XB_rad2)/abs(Brad).max()
+
+    test22 = abs(XB_rad - XB_rad2) / abs(Brad).max()
     assert_array_almost_equal(test22, 0, decimal=1)
 
     # Check AGSF spatio-temporal reconstruction sym
@@ -236,13 +233,12 @@ def test_FEMM_periodicity():
         for ifrq in range(Nf):
             frq = freqs[ifrq]
             XP_rad = XP_rad + real(
-                Prad_wr[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime 
-                                        + 1j * r * Xangle)
+                Prad_wr[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime + 1j * r * Xangle)
             )
 
-    test1 = abs(Prad - XP_rad)/abs(Prad).max()
+    test1 = abs(Prad - XP_rad) / abs(Prad).max()
     assert_array_almost_equal(test1, 0, decimal=2)
-    
+
     # Check AGSF spatio-temporal reconstruction full
     AGSF2 = out2.force.AGSF
     arg_list = ["time", "angle"]
@@ -267,14 +263,13 @@ def test_FEMM_periodicity():
         for ifrq in range(Nf):
             frq = freqs[ifrq]
             XP_rad2 = XP_rad2 + real(
-                Prad_wr2[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime 
-                                        + 1j * r * Xangle)
+                Prad_wr2[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime + 1j * r * Xangle)
             )
 
-    test1 = abs(Prad2 - XP_rad2)/abs(Prad2).max()
+    test1 = abs(Prad2 - XP_rad2) / abs(Prad2).max()
     assert_array_almost_equal(test1, 0, decimal=0)
     assert_array_almost_equal(Prad2, XP_rad2, decimal=0)
-    
+
     return out, out2
 
 

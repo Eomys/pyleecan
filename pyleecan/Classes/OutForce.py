@@ -130,8 +130,9 @@ class OutForce(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.Time)
         S += getsizeof(self.Angle)
-        S += getsizeof(self.P)
+        S += getsizeof(self.AGSF)
         S += getsizeof(self.logger_name)
+        S += getsizeof(self.Rag)
         return S
 
     def as_dict(self):

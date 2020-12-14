@@ -14,17 +14,18 @@ from Tests import save_validation_path as save_path
 
 DELTA = 1e-6
 
+
 @pytest.mark.validation
 @pytest.mark.Force
 @pytest.mark.long
 def test_Benchmark_AGSF_transfer():
-    """ Validation test using AGSF transfer for the 12s10p benchmark 
-        machine from publication: 
-            
-        DEVILLERS, Emile, HECQUET, Michel, CIMETIERE, 
-        Xavier, et al. Experimental benchmark for magnetic noise and vibrations 
-        analysis in electrical machines. In : 2018 XIII International Conference 
-        on Electrical Machines (ICEM). IEEE, 2018. p. 745-751.
+    """Validation test using AGSF transfer for the 12s10p benchmark
+    machine from publication:
+
+    DEVILLERS, Emile, HECQUET, Michel, CIMETIERE,
+    Xavier, et al. Experimental benchmark for magnetic noise and vibrations
+    analysis in electrical machines. In : 2018 XIII International Conference
+    on Electrical Machines (ICEM). IEEE, 2018. p. 745-751.
     """
 
     # Load machine
@@ -54,17 +55,17 @@ def test_Benchmark_AGSF_transfer():
 
     # Test 2 : with transfer
     simu2 = simu.copy()
-    simu2.force.is_agsf_transfer=True
-    simu2.force.max_wavenumber_transfer=100
+    simu2.force.is_agsf_transfer = True
+    simu2.force.max_wavenumber_transfer = 100
 
     out2 = simu2.run()
-    
+
     # simu 3 directly at Rsbo
     Rsbo = 0.0480
-    Rrbo= 0.0450
-    
+    Rrbo = 0.0450
+
     k = 99.8
-    Rag = (Rsbo - Rrbo)*k/100 + Rrbo
+    Rag = (Rsbo - Rrbo) * k / 100 + Rrbo
     simu3 = simu.copy()
     simu3.mag.Rag_enforced = Rag
     out3 = simu3.run()

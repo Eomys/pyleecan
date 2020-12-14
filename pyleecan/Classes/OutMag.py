@@ -241,6 +241,7 @@ class OutMag(FrozenClass):
         S += getsizeof(self.meshsolution)
         S += getsizeof(self.logger_name)
         S += getsizeof(self.internal)
+        S += getsizeof(self.Rag)
         return S
 
     def as_dict(self):
