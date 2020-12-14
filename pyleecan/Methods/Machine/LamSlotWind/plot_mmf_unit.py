@@ -7,6 +7,7 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
     """Plot the winding unit mmf as a function of space
     Parameters
     ----------
+
     self : LamSlotWind
         an LamSlotWind object
     Na : int
@@ -16,6 +17,14 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
     is_show_fig : bool
         To call show at the end of the method
     """
+
+    name = ""
+    if self.parent is not None and self.parent.name not in [None, ""]:
+        name += self.parent.name + " "
+    if self.is_stator:
+        name += "Stator "
+    else:
+        name += "Rotor "
 
     # Compute the winding function and mmf
     wf = self.comp_wind_function(per_a=1)
@@ -31,6 +40,7 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
         fig=fig,
         color_list=color_list,
         is_show_fig=is_show_fig,
+        win_title=name + "Winding functions",
     )
 
     plot_2D_Data(
@@ -41,4 +51,5 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
         fig=fig,
         color_list=color_list,
         is_show_fig=is_show_fig,
+        win_title=name + "Winding function & MMF FFT",
     )
