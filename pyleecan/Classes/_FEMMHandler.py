@@ -11,10 +11,21 @@ class _FEMMHandler(object):
     enable to start FEMM and run commands in it
     """
 
-    def __init__(self):
+    def __init__(self, HandleToFEMM=None, init_dict=None):
         object.__init__(self)
-        self.HandleToFEMM = None
+        if init_dict is not None:  # Initialisation by dict
+            assert type(init_dict) is dict
+            # Overwrite default value with init_dict content
+            if "HandleToFEMM" in list(init_dict.keys()):
+                HandleToFEMM = init_dict["HandleToFEMM"]
+        self.HandleToFEMM = HandleToFEMM
         pythoncom.CoInitialize()
+
+    def as_dict(self):
+        _FEMMHandler_dict = dict()
+        _FEMMHandler_dict["__class__"] = "_FEMMHandler"
+        _FEMMHandler_dict["HandleToFEMM"] = None
+        return _FEMMHandler_dict
 
     def fixpath(self, myPath):
         return myPath.replace("\\", "/").replace("//", "/")
