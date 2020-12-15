@@ -41,17 +41,29 @@ def test_FEMM_periodicity():
         Id_ref=Id_ref,
         Iq_ref=Iq_ref,
         Na_tot=252 * 8,
-        Nt_tot=2 * 8,
+        Nt_tot=6 * 8,
         N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity
-    simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True, nb_worker=2)
+    simu.mag = MagFEMM(
+        type_BH_stator=1,
+        type_BH_rotor=1,
+        is_periodicity_a=True,
+        is_periodicity_t=True,
+        nb_worker=2,
+    )
     simu.force = ForceMT(is_periodicity_a=True, is_periodicity_t=True)
 
     # Definition of the magnetic simulation: no periodicity
     simu2 = simu.copy()
-    simu2.mag = MagFEMM(is_periodicity_a=False, is_periodicity_t=False, nb_worker=2)
+    simu2.mag = MagFEMM(
+        type_BH_stator=1,
+        type_BH_rotor=1,
+        is_periodicity_a=False,
+        is_periodicity_t=False,
+        nb_worker=2,
+    )
     simu2.force = ForceMT(is_periodicity_a=False, is_periodicity_t=False)
 
     # Run simulations
@@ -200,7 +212,7 @@ def test_FEMM_periodicity():
 
     test2 = abs(Brad2 - XB_rad2) / abs(Brad2).max()
     assert_array_almost_equal(test2, 0, decimal=2)
-    assert_array_almost_equal(Brad2, XB_rad2, decimal=4)
+    assert_array_almost_equal(Brad2, XB_rad2, decimal=2)
 
     # Compare both simu
     test11 = abs(Brad - Brad2) / abs(Brad).max()
@@ -236,8 +248,8 @@ def test_FEMM_periodicity():
                 Prad_wr[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime + 1j * r * Xangle)
             )
 
-    test1 = abs(Prad - XP_rad) / abs(Prad).max()
-    assert_array_almost_equal(test1, 0, decimal=2)
+    test1_AGSF = abs(Prad - XP_rad) / abs(Prad).max()
+    assert_array_almost_equal(test1_AGSF, 0, decimal=2)
 
     # Check AGSF spatio-temporal reconstruction full
     AGSF2 = out2.force.AGSF
@@ -266,9 +278,12 @@ def test_FEMM_periodicity():
                 Prad_wr2[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime + 1j * r * Xangle)
             )
 
-    test1 = abs(Prad2 - XP_rad2) / abs(Prad2).max()
-    assert_array_almost_equal(test1, 0, decimal=0)
-    assert_array_almost_equal(Prad2, XP_rad2, decimal=0)
+    test2_AGSF = abs(Prad2 - XP_rad2) / abs(Prad2).mean()
+    assert_array_almost_equal(test2_AGSF, 0, decimal=2)
+
+    # Reconstrcution results should be the same
+    test3_AGSF = abs(XP_rad - XP_rad2) / abs(XP_rad2).mean()
+    assert_array_almost_equal(test3_AGSF, 0, decimal=1)
 
     return out, out2
 
