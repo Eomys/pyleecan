@@ -113,7 +113,10 @@ def solve_FEMM(
     Na = angle.size
 
     # Loading parameters for readibility
-    Rag = output.simu.machine.comp_Rgap_mec()
+    Rag = self.Rag_enforced
+    if Rag is None:
+        Rag = output.simu.machine.comp_Rgap_mec()
+
     L1 = output.simu.machine.stator.comp_length()
     save_path = self.get_path_save(output)
     is_internal_rotor = output.simu.machine.rotor.is_internal
@@ -184,7 +187,11 @@ def solve_FEMM(
         if (self.is_sliding_band or Nt == 1) and (self.is_get_mesh or self.is_save_FEA):
             # Get mesh data and magnetic quantities from .ans file
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
-                femm, save_path, j_t0=ii, id_worker=start_t, is_get_mesh=ii == start_t,
+                femm,
+                save_path,
+                j_t0=ii,
+                id_worker=start_t,
+                is_get_mesh=ii == start_t,
             )
 
             # Initialize mesh and magnetic quantities for first time step
@@ -219,5 +226,7 @@ def solve_FEMM(
     if is_close_femm:
         femm.closefemm()
         output.mag.internal.handler_list.remove(femm)
+
+    out_dict["Rag"] = Rag
 
     return B_elem, H_elem, mu_elem, meshFEMM, groups

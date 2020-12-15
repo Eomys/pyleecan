@@ -1230,22 +1230,14 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_axes"
+            "comp_axes",
+            "comp_AGSF_transfer"
         ],
         "mother": "",
         "name": "Force",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/Force.csv",
         "properties": [
-            {
-                "desc": "1 to compute lumped tooth forces",
-                "max": "",
-                "min": "",
-                "name": "is_comp_nodal_force",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
             {
                 "desc": "True to compute only on one time periodicity (use periodicities defined in output.force.Time)",
                 "max": "",
@@ -1263,6 +1255,24 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "True to compute the AGSF transfer from air-gap to stator bore radius.",
+                "max": "",
+                "min": "",
+                "name": "is_agsf_transfer",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification)",
+                "max": "",
+                "min": "",
+                "name": "max_wavenumber_transfer",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -4587,6 +4597,15 @@
                 "type": "int",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "To enforce a different radius value for air-gap outputs",
+                "max": "",
+                "min": "",
+                "name": "Rag_enforced",
+                "type": "float",
+                "unit": "m",
+                "value": null
             }
         ]
     },
@@ -6497,7 +6516,9 @@
         "daughters": [],
         "desc": "Gather the structural module outputs",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "store"
+        ],
         "mother": "",
         "name": "OutForce",
         "package": "Output",
@@ -6522,10 +6543,10 @@
                 "value": "None"
             },
             {
-                "desc": "Air-gap surface force",
+                "desc": "Air Gap Surface Force (mainly computed with Maxwell stress tensor)",
                 "max": "",
                 "min": "",
-                "name": "P",
+                "name": "AGSF",
                 "type": "SciDataTool.Classes.VectorField.VectorField",
                 "unit": "N.m^2",
                 "value": "None"
@@ -6538,6 +6559,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutForce"
+            },
+            {
+                "desc": "Radius value for air-gap computation",
+                "max": "",
+                "min": "",
+                "name": "Rag",
+                "type": "float",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -6929,6 +6959,15 @@
                 "min": "",
                 "name": "internal",
                 "type": "OutInternal",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Radius value for air-gap computation",
+                "max": "",
+                "min": "",
+                "name": "Rag",
+                "type": "float",
                 "unit": "-",
                 "value": null
             }
