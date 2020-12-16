@@ -165,6 +165,7 @@ def comp_parameters(self, output):
 
 def _comp_flux_mean(self, out):
     # TODO add fix for single time value
+    # TODO add option to calculate RMS instead of mean fluxlinkage
 
     # some readability
     logger = self.get_logger()
