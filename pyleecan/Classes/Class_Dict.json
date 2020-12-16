@@ -6817,7 +6817,8 @@
         "methods": [
             "store",
             "clean",
-            "comp_emf"
+            "comp_emf",
+            "get_demag"
         ],
         "mother": "",
         "name": "OutMag",
