@@ -13,13 +13,14 @@ STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 def plot(
     self,
     fig=None,
+    ax=None,
     is_lam_only=False,
     sym=1,
     alpha=0,
     delta=0,
     is_edge_only=False,
     is_display=True,
-    is_show=True,
+    is_show_fig=True,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -27,9 +28,10 @@ def plot(
     ----------
     self : LamSlotMulti
         A LamSlotMulti object
-    fig :
-        if None, open a new fig and plot, else add to the
-        current one (Default value = None)
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
     is_lam_only: bool
         True to plot only the lamination
     sym : int
@@ -42,7 +44,7 @@ def plot(
         To plot transparent Patches
     is_display : bool
         False to return the patches
-    is_show : bool
+    is_show_fig : bool
         To call show at the end of the method
     Returns
     -------
@@ -55,7 +57,7 @@ def plot(
     else:
         lam_color = ROTOR_COLOR
 
-    (fig, axes, patch_leg, label_leg) = init_fig(fig)
+    (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
@@ -92,7 +94,7 @@ def plot(
                 axes.set_title("Rotor with empty slot")
 
             legend(patch_leg, label_leg)
-        if is_show:
+        if is_show_fig:
             fig.show()
     else:
         return patches

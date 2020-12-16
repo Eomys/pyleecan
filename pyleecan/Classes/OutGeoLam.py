@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -152,6 +153,24 @@ class OutGeoLam(FrozenClass):
         if other.is_antiper_t != self.is_antiper_t:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        if self.name_phase is not None:
+            for value in self.name_phase:
+                S += getsizeof(value)
+        S += getsizeof(self.BH_curve)
+        S += getsizeof(self.Ksfill)
+        S += getsizeof(self.S_slot)
+        S += getsizeof(self.S_slot_wind)
+        S += getsizeof(self.S_wind_act)
+        S += getsizeof(self.per_a)
+        S += getsizeof(self.is_antiper_a)
+        S += getsizeof(self.per_t)
+        S += getsizeof(self.is_antiper_t)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -38,8 +39,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .IndMag import IndMag
-from .Drive import Drive
 
 
 class EEC_SCIM(EEC):
@@ -97,10 +96,14 @@ class EEC_SCIM(EEC):
 
     def __init__(
         self,
-        indmag=None,
+        I=1,
         parameters=-1,
-        freq0=None,
-        drive=None,
+        is_periodicity_a=True,
+        nb_worker=None,
+        N0=None,
+        felec=None,
+        Nt_tot=32,
+        Nrev=1,
         init_dict=None,
         init_str=None,
     ):
@@ -119,19 +122,31 @@ class EEC_SCIM(EEC):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "indmag" in list(init_dict.keys()):
-                indmag = init_dict["indmag"]
+            if "I" in list(init_dict.keys()):
+                I = init_dict["I"]
             if "parameters" in list(init_dict.keys()):
                 parameters = init_dict["parameters"]
-            if "freq0" in list(init_dict.keys()):
-                freq0 = init_dict["freq0"]
-            if "drive" in list(init_dict.keys()):
-                drive = init_dict["drive"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
+            if "nb_worker" in list(init_dict.keys()):
+                nb_worker = init_dict["nb_worker"]
+            if "N0" in list(init_dict.keys()):
+                N0 = init_dict["N0"]
+            if "felec" in list(init_dict.keys()):
+                felec = init_dict["felec"]
+            if "Nt_tot" in list(init_dict.keys()):
+                Nt_tot = init_dict["Nt_tot"]
+            if "Nrev" in list(init_dict.keys()):
+                Nrev = init_dict["Nrev"]
         # Set the properties (value check and convertion are done in setter)
-        self.indmag = indmag
+        self.I = I
         self.parameters = parameters
-        self.freq0 = freq0
-        self.drive = drive
+        self.is_periodicity_a = is_periodicity_a
+        self.nb_worker = nb_worker
+        self.N0 = N0
+        self.felec = felec
+        self.Nt_tot = Nt_tot
+        self.Nrev = Nrev
         # Call EEC init
         super(EEC_SCIM, self).__init__()
         # The class is frozen (in EEC init), for now it's impossible to
@@ -143,18 +158,14 @@ class EEC_SCIM(EEC):
         EEC_SCIM_str = ""
         # Get the properties inherited from EEC
         EEC_SCIM_str += super(EEC_SCIM, self).__str__()
-        if self.indmag is not None:
-            tmp = self.indmag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_SCIM_str += "indmag = " + tmp
-        else:
-            EEC_SCIM_str += "indmag = None" + linesep + linesep
+        EEC_SCIM_str += "I = " + str(self.I) + linesep
         EEC_SCIM_str += "parameters = " + str(self.parameters) + linesep
-        EEC_SCIM_str += "freq0 = " + str(self.freq0) + linesep
-        if self.drive is not None:
-            tmp = self.drive.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_SCIM_str += "drive = " + tmp
-        else:
-            EEC_SCIM_str += "drive = None" + linesep + linesep
+        EEC_SCIM_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
+        EEC_SCIM_str += "nb_worker = " + str(self.nb_worker) + linesep
+        EEC_SCIM_str += "N0 = " + str(self.N0) + linesep
+        EEC_SCIM_str += "felec = " + str(self.felec) + linesep
+        EEC_SCIM_str += "Nt_tot = " + str(self.Nt_tot) + linesep
+        EEC_SCIM_str += "Nrev = " + str(self.Nrev) + linesep
         return EEC_SCIM_str
 
     def __eq__(self, other):
@@ -166,33 +177,58 @@ class EEC_SCIM(EEC):
         # Check the properties inherited from EEC
         if not super(EEC_SCIM, self).__eq__(other):
             return False
-        if other.indmag != self.indmag:
+        if other.I != self.I:
             return False
         if other.parameters != self.parameters:
             return False
-        if other.freq0 != self.freq0:
+        if other.is_periodicity_a != self.is_periodicity_a:
             return False
-        if other.drive != self.drive:
+        if other.nb_worker != self.nb_worker:
+            return False
+        if other.N0 != self.N0:
+            return False
+        if other.felec != self.felec:
+            return False
+        if other.Nt_tot != self.Nt_tot:
+            return False
+        if other.Nrev != self.Nrev:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from EEC
+        S += super(EEC_SCIM, self).__sizeof__()
+        S += getsizeof(self.I)
+        if self.parameters is not None:
+            for key, value in self.parameters.items():
+                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.is_periodicity_a)
+        S += getsizeof(self.nb_worker)
+        S += getsizeof(self.N0)
+        S += getsizeof(self.felec)
+        S += getsizeof(self.Nt_tot)
+        S += getsizeof(self.Nrev)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from EEC
         EEC_SCIM_dict = super(EEC_SCIM, self).as_dict()
-        if self.indmag is None:
-            EEC_SCIM_dict["indmag"] = None
-        else:
-            EEC_SCIM_dict["indmag"] = self.indmag.as_dict()
+        EEC_SCIM_dict["I"] = self.I
         EEC_SCIM_dict["parameters"] = (
             self.parameters.copy() if self.parameters is not None else None
         )
-        EEC_SCIM_dict["freq0"] = self.freq0
-        if self.drive is None:
-            EEC_SCIM_dict["drive"] = None
-        else:
-            EEC_SCIM_dict["drive"] = self.drive.as_dict()
+        EEC_SCIM_dict["is_periodicity_a"] = self.is_periodicity_a
+        EEC_SCIM_dict["nb_worker"] = self.nb_worker
+        EEC_SCIM_dict["N0"] = self.N0
+        EEC_SCIM_dict["felec"] = self.felec
+        EEC_SCIM_dict["Nt_tot"] = self.Nt_tot
+        EEC_SCIM_dict["Nrev"] = self.Nrev
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         EEC_SCIM_dict["__class__"] = "EEC_SCIM"
@@ -201,42 +237,32 @@ class EEC_SCIM(EEC):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.indmag is not None:
-            self.indmag._set_None()
+        self.I = None
         self.parameters = None
-        self.freq0 = None
-        if self.drive is not None:
-            self.drive._set_None()
+        self.is_periodicity_a = None
+        self.nb_worker = None
+        self.N0 = None
+        self.felec = None
+        self.Nt_tot = None
+        self.Nrev = None
         # Set to None the properties inherited from EEC
         super(EEC_SCIM, self)._set_None()
 
-    def _get_indmag(self):
-        """getter of indmag"""
-        return self._indmag
+    def _get_I(self):
+        """getter of I"""
+        return self._I
 
-    def _set_indmag(self, value):
-        """setter of indmag"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "indmag"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = IndMag()
-        check_var("indmag", value, "IndMag")
-        self._indmag = value
+    def _set_I(self, value):
+        """setter of I"""
+        check_var("I", value, "float")
+        self._I = value
 
-        if self._indmag is not None:
-            self._indmag.parent = self
+    I = property(
+        fget=_get_I,
+        fset=_set_I,
+        doc=u"""RMS current for parameter estimation
 
-    indmag = property(
-        fget=_get_indmag,
-        fset=_set_indmag,
-        doc=u"""Magnetic inductance
-
-        :Type: IndMag
+        :Type: float
         """,
     )
 
@@ -260,50 +286,112 @@ class EEC_SCIM(EEC):
         """,
     )
 
-    def _get_freq0(self):
-        """getter of freq0"""
-        return self._freq0
+    def _get_is_periodicity_a(self):
+        """getter of is_periodicity_a"""
+        return self._is_periodicity_a
 
-    def _set_freq0(self, value):
-        """setter of freq0"""
-        check_var("freq0", value, "float")
-        self._freq0 = value
+    def _set_is_periodicity_a(self, value):
+        """setter of is_periodicity_a"""
+        check_var("is_periodicity_a", value, "bool")
+        self._is_periodicity_a = value
 
-    freq0 = property(
-        fget=_get_freq0,
-        fset=_set_freq0,
-        doc=u"""Frequency
+    is_periodicity_a = property(
+        fget=_get_is_periodicity_a,
+        fset=_set_is_periodicity_a,
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)
+
+        :Type: bool
+        """,
+    )
+
+    def _get_nb_worker(self):
+        """getter of nb_worker"""
+        return self._nb_worker
+
+    def _set_nb_worker(self, value):
+        """setter of nb_worker"""
+        check_var("nb_worker", value, "int")
+        self._nb_worker = value
+
+    nb_worker = property(
+        fget=_get_nb_worker,
+        fset=_set_nb_worker,
+        doc=u"""To run FEMM in parallel (the parallelization is on the time loop)
+
+        :Type: int
+        """,
+    )
+
+    def _get_N0(self):
+        """getter of N0"""
+        return self._N0
+
+    def _set_N0(self, value):
+        """setter of N0"""
+        check_var("N0", value, "float")
+        self._N0 = value
+
+    N0 = property(
+        fget=_get_N0,
+        fset=_set_N0,
+        doc=u"""Rotor speed
 
         :Type: float
         """,
     )
 
-    def _get_drive(self):
-        """getter of drive"""
-        return self._drive
+    def _get_felec(self):
+        """getter of felec"""
+        return self._felec
 
-    def _set_drive(self, value):
-        """setter of drive"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "drive"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Drive()
-        check_var("drive", value, "Drive")
-        self._drive = value
+    def _set_felec(self, value):
+        """setter of felec"""
+        check_var("felec", value, "float")
+        self._felec = value
 
-        if self._drive is not None:
-            self._drive.parent = self
+    felec = property(
+        fget=_get_felec,
+        fset=_set_felec,
+        doc=u"""electrical frequency
 
-    drive = property(
-        fget=_get_drive,
-        fset=_set_drive,
-        doc=u"""Drive
+        :Type: float
+        """,
+    )
 
-        :Type: Drive
+    def _get_Nt_tot(self):
+        """getter of Nt_tot"""
+        return self._Nt_tot
+
+    def _set_Nt_tot(self, value):
+        """setter of Nt_tot"""
+        check_var("Nt_tot", value, "int", Vmin=1)
+        self._Nt_tot = value
+
+    Nt_tot = property(
+        fget=_get_Nt_tot,
+        fset=_set_Nt_tot,
+        doc=u"""Time discretization
+
+        :Type: int
+        :min: 1
+        """,
+    )
+
+    def _get_Nrev(self):
+        """getter of Nrev"""
+        return self._Nrev
+
+    def _set_Nrev(self, value):
+        """setter of Nrev"""
+        check_var("Nrev", value, "float", Vmin=0)
+        self._Nrev = value
+
+    Nrev = property(
+        fget=_get_Nrev,
+        fset=_set_Nrev,
+        doc=u"""Number of rotor revolution (to compute the final time)
+
+        :Type: float
+        :min: 0
         """,
     )

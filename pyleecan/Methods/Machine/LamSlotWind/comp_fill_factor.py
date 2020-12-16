@@ -1,6 +1,6 @@
 def comp_fill_factor(self):
     """Compute the fill factor of the winding"""
-    if self.winding is None:
+    if self.winding is None or self.winding.qs == 0:
         return 0
     else:
         (Nrad, Ntan) = self.winding.get_dim_wind()

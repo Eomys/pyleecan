@@ -5,6 +5,8 @@ from ....definitions import MAIN_DIR
 from ....Classes.MeshMat import MeshMat
 from ....Classes.CellMat import CellMat
 from ....Classes.PointMat import PointMat
+from ....Classes.RefTriangle3 import RefTriangle3
+
 from os.path import join
 
 from ....Functions.FEMM import (
@@ -27,7 +29,7 @@ from ....Functions.FEMM import (
 )
 
 
-def get_meshsolution(self, femm, save_path, j_t0):
+def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False):
     """Load the mesh data and solution data. FEMM must be working and a simulation must have been solved.
 
     Parameters
@@ -36,20 +38,31 @@ def get_meshsolution(self, femm, save_path, j_t0):
         a MagFEMM object
     femm : FEMMHandler
         client to send command to a FEMM instance
-    is_get_mesh : bool
-        1 to load the mesh and solution into the simulation
-    is_save_FEA : bool
-        1 to save the mesh and solution into a .json file
+    save_path: str
+        Full path to folder in which to save results
     j_t0 : int
-        Targeted time step
+        time step index
+    id_worker : int
+        worker index
+    is_get_mesh : bool
+        True to load and create the mesh or not
 
     Returns
     -------
-    res_path: str
-        path to the result folder
+    mesh: MeshMat
+        Object containing magnetic mesh
+    B: ndarray
+        3D Magnetic flux density for each element (Nelem, 3) [T]
+    H : ndarray
+        3D Magnetic field for each element (Nelem, 3) [A/m]
+    mu : ndarray
+        Magnetic relative permeability for each element (Nelem,1) []
+    groups: dict
+        Dict whose values are group label and values are array of indices of related elements
+
     """
 
-    idworker = "1"  # For parallelization TODO
+    idworker = str(id_worker)  # For parallelization TODO
 
     path_txt = join(MAIN_DIR, "Functions", "FEMM") + "\\"
     path_txt_lua = path_txt.replace("\\", "/")
@@ -108,7 +121,7 @@ def get_meshsolution(self, femm, save_path, j_t0):
     ## Create Mesh and Solution dictionaries
 
     # Save MeshMat for only 1 time step with sliding band
-    if j_t0 == 0:
+    if is_get_mesh:
         mesh = MeshMat()
         mesh.label = "FEMM"
         mesh.cell["triangle"] = CellMat(
@@ -117,6 +130,7 @@ def get_meshsolution(self, femm, save_path, j_t0):
             nb_pt_per_cell=3,
             indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
         )
+        mesh.cell["triangle"].interpolation.ref_cell = RefTriangle3(epsilon=1e-9)
         mesh.point = PointMat(
             coordinate=listNd[:, 0:2], nb_pt=NbNd, indice=np.linspace(0, NbNd - 1, NbNd)
         )

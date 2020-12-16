@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from deap import base, creator, tools
+from ....Classes.Output import Output
+from ....Classes.XOutput import XOutput
+from ....Classes.VarSimu import VarSimu
 
 
 def create_toolbox(self):
@@ -25,12 +28,22 @@ def create_toolbox(self):
 
     self.toolbox.register("creator", creator.Individual)
 
+    # Create default output
+    if isinstance(self.problem.simu.parent, Output):
+        output = self.problem.simu.parent
+    elif isinstance(
+        self.problem.simu.var_simu, VarSimu
+    ):  # Optimization of a multi-simulation
+        output = XOutput(simu=self.problem.simu.copy())
+    else:
+        output = Output(simu=self.problem.simu.copy())
+
     # Register individual and population
     self.toolbox.register(
         "individual",
         create_indiv,
         self.toolbox.creator,
-        self.problem.output,
+        output,
         self.problem.design_var,
     )
 

@@ -32,13 +32,13 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     """
 
     if self.get_is_stator():  # check if the slot is on the stator
-        st = "S"
+        st = "_Stator"
     else:
-        st = "R"
-    Rbo = self.get_Rbo()
+        st = "_Rotor"
+    Rext = self.get_Rext()
 
     # "Tooth" angle (P1',0,P1)
-    alpha_T = 2 * arcsin(self.W3 / (2 * (Rbo - self.H1)))
+    alpha_T = 2 * arcsin(self.W3 / (2 * (Rext - self.H1)))
     # magnet pole pitch angle (Z1,0,Z1')
     alpha_S = (2 * pi / self.Zh) - alpha_T
     # Angle (P1,P1',P4') and (P5',P4', )
@@ -46,8 +46,8 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # Half slot pitch
     hssp = pi / self.Zh
 
-    Z1 = (Rbo - self.H1) * exp(-1j * alpha_S / 2)
-    x11 = 2 * sin(alpha_S / 2) * (Rbo - self.H1)  # Distance from P1 to P1'
+    Z1 = (Rext - self.H1) * exp(-1j * alpha_S / 2)
+    x11 = 2 * sin(alpha_S / 2) * (Rext - self.H1)  # Distance from P1 to P1'
     # In rect triangle P4, P1, perp (P1,P1') with P4
     H = tan(alpha) * (x11 / 2 - self.W1 / 2)
     Z4 = Z1.real - H - 1j * self.W1 / 2
@@ -59,7 +59,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # In ref P4 center and P1 on X+ axis
     Z58 = (self.W4 - 1j * self.H2) * exp(1j * angle(Z1 - Z4)) + Z4
     # In the tooth ref
-    Z18 = (Rbo - self.H1 - self.H2 + 1j * self.W3 / 2) * exp(-1j * hssp)
+    Z18 = (Rext - self.H1 - self.H2 + 1j * self.W3 / 2) * exp(-1j * hssp)
     Z8 = inter_line_line(Z5, Z58, Z1, Z18)[0]
 
     # In ref "b" P4 center and P1 on X+ axis
@@ -122,7 +122,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list = set_name_line(curve_list, "magnet_1_line")
     point_ref = (Z2 + Z3 + Z6 + Z7) / 4
     S2 = SurfLine(
-        line_list=curve_list, label="Magnet" + st + "_N_R0_T0_S0", point_ref=point_ref,
+        line_list=curve_list,
+        label="Magnet" + st + "_N_R0_T0_S0",
+        point_ref=point_ref,
     )
 
     # Air surface with magnet_0 and W1 > 0
@@ -166,7 +168,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # initiating the label of the line on the magnet surface
     curve_list = set_name_line(curve_list, "magnet_2_line")
     S5 = SurfLine(
-        line_list=curve_list, label="Magnet" + st + "_N_R0_T1_S0", point_ref=point_ref,
+        line_list=curve_list,
+        label="Magnet" + st + "_N_R0_T1_S0",
+        point_ref=point_ref,
     )
 
     # Air surface with magnet_1 and W1 > 0

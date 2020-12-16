@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -125,6 +126,11 @@ try:
     from ..Methods.Output.XOutput.get_pareto_index import get_pareto_index
 except ImportError as error:
     get_pareto_index = error
+
+try:
+    from ..Methods.Output.XOutput.print_memory import print_memory
+except ImportError as error:
+    print_memory = error
 
 
 from ._check import InitUnKnowClassError
@@ -356,6 +362,17 @@ class XOutput(Output):
         )
     else:
         get_pareto_index = get_pareto_index
+    # cf Methods.Output.XOutput.print_memory
+    if isinstance(print_memory, ImportError):
+        print_memory = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method print_memory: " + str(print_memory)
+                )
+            )
+        )
+    else:
+        print_memory = print_memory
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -369,7 +386,7 @@ class XOutput(Output):
         xoutput_dict=-1,
         nb_simu=0,
         simu=-1,
-        path_res="",
+        path_result="",
         geo=-1,
         elec=-1,
         mag=-1,
@@ -405,8 +422,8 @@ class XOutput(Output):
                 nb_simu = init_dict["nb_simu"]
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
-            if "path_res" in list(init_dict.keys()):
-                path_res = init_dict["path_res"]
+            if "path_result" in list(init_dict.keys()):
+                path_result = init_dict["path_result"]
             if "geo" in list(init_dict.keys()):
                 geo = init_dict["geo"]
             if "elec" in list(init_dict.keys()):
@@ -429,7 +446,7 @@ class XOutput(Output):
         # Call Output init
         super(XOutput, self).__init__(
             simu=simu,
-            path_res=path_res,
+            path_result=path_result,
             geo=geo,
             elec=elec,
             mag=mag,
@@ -495,6 +512,25 @@ class XOutput(Output):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Output
+        S += super(XOutput, self).__sizeof__()
+        if self.paramexplorer_list is not None:
+            for value in self.paramexplorer_list:
+                S += getsizeof(value)
+        if self.output_list is not None:
+            for value in self.output_list:
+                S += getsizeof(value)
+        if self.xoutput_dict is not None:
+            for key, value in self.xoutput_dict.items():
+                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.nb_simu)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -527,12 +563,9 @@ class XOutput(Output):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.paramexplorer_list:
-            obj._set_None()
-        for obj in self.output_list:
-            obj._set_None()
-        for key, obj in self.xoutput_dict.items():
-            obj._set_None()
+        self.paramexplorer_list = None
+        self.output_list = None
+        self.xoutput_dict = None
         self.nb_simu = None
         # Set to None the properties inherited from Output
         super(XOutput, self)._set_None()

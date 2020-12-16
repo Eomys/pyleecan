@@ -25,7 +25,7 @@ def comp_distance(self, Z):
     A1 = self.get_angle()
     A2 = angle(Z2 * exp(-1j * angle(self.get_begin() - Zc)))
 
-    if sign(A1) == sign(A2) and abs(A1) < abs(A2):
+    if sign(A1) == sign(A2) and abs(A2) < abs(A1):
         # The point is on the correct side of the arc
         D1 = abs(sqrt(Z2.real ** 2 + Z2.imag ** 2) - self.comp_radius())
         return D1

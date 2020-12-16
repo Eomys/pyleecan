@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -20,11 +21,6 @@ try:
     from ..Methods.Machine.MachineSIPMSM.check import check
 except ImportError as error:
     check = error
-
-try:
-    from ..Methods.Machine.MachineSIPMSM.get_lam_list import get_lam_list
-except ImportError as error:
-    get_lam_list = error
 
 try:
     from ..Methods.Machine.MachineSIPMSM.get_machine_type import get_machine_type
@@ -54,17 +50,6 @@ class MachineSIPMSM(MachineSync):
         )
     else:
         check = check
-    # cf Methods.Machine.MachineSIPMSM.get_lam_list
-    if isinstance(get_lam_list, ImportError):
-        get_lam_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MachineSIPMSM method get_lam_list: " + str(get_lam_list)
-                )
-            )
-        )
-    else:
-        get_lam_list = get_lam_list
     # cf Methods.Machine.MachineSIPMSM.get_machine_type
     if isinstance(get_machine_type, ImportError):
         get_machine_type = property(
@@ -174,6 +159,17 @@ class MachineSIPMSM(MachineSync):
         if other.stator != self.stator:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from MachineSync
+        S += super(MachineSIPMSM, self).__sizeof__()
+        S += getsizeof(self.rotor)
+        S += getsizeof(self.stator)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

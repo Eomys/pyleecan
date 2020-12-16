@@ -4,6 +4,8 @@ from pyleecan.Classes.Arc2 import Arc2
 
 from pyleecan.Methods.Geometry.Arc2.check import PointArc2Error, AngleArc2Error
 from pyleecan.Methods.Geometry.Arc2.discretize import NbPointArc2DError
+from pyleecan.Methods.Geometry.Arc2.rotate import AngleRotationArc2Error
+from pyleecan.Methods.Geometry.Arc2.translate import PointTranslateArc2Error
 from numpy import pi, array, sqrt, exp, angle
 import pytest
 
@@ -351,6 +353,9 @@ class Test_Arc2_meth(object):
         arc = Arc2(0, 1, 0)
         with pytest.raises(AngleArc2Error):
             arc.check()
+        arc = Arc2(0, 1, 2 * pi)
+        with pytest.raises(AngleArc2Error):
+            arc.check()
 
     @pytest.mark.parametrize("test_dict", discretize_test)
     def test_dicretize(self, test_dict):
@@ -447,6 +452,13 @@ class Test_Arc2_meth(object):
         b = pi / 4
         assert abs((a - b) / a - 0) < DELTA
 
+        # The end point is to close from 0
+
+        test_obj = Arc2(0, 0.00000000000000000001, -pi / 6)
+        result = test_obj.get_end()
+
+        assert result == 0
+
     @pytest.mark.parametrize("test_dict", comp_mid_test)
     def test_get_middle(self, test_dict):
         """Check that the middle is computed correctly"""
@@ -457,6 +469,12 @@ class Test_Arc2_meth(object):
         )
         result = arc.get_middle()
         assert abs(abs(result - test_dict["expect"]) - 0) < 1e-3
+
+    def test_get_middle_zero(self):
+        """Checking that get_middle() can return 0"""
+        arc = Arc2(begin=0.000000001, center=0.000000002, angle=pi)
+        result = arc.get_middle()
+        assert result == 0
 
     @pytest.mark.parametrize("test_dict", comp_rotate_test)
     def test_rotate(self, test_dict):
@@ -511,3 +529,23 @@ class Test_Arc2_meth(object):
         assert round(abs(arc.begin - test_dict["N_begin"]), 7) == 0
         assert round(abs(arc.center - test_dict["N_center"]), 7) == 0
         assert round(abs(arc.angle - test_dict["N_angle"]), 7) == 0
+
+    def test_arc_rotate_error(self):
+        """Check that the arc3 rotate raise an error"""
+        arc = Arc2(
+            begin=1 - 5j,
+            center=3 + 2j,
+            angle=pi / 2,
+        )
+        with pytest.raises(AngleRotationArc2Error) as context:
+            arc.rotate("error")
+
+    def test_translate_error(self):
+        """Check that you can't translate an arc2 when an error occurs"""
+        arc = Arc2(
+            begin=1 - 5j,
+            center=3 + 2j,
+            angle=pi / 2,
+        )
+        with pytest.raises(PointTranslateArc2Error) as context:
+            arc.translate("error")

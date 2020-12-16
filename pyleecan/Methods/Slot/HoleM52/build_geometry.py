@@ -32,11 +32,11 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         st = "_Stator"
     else:
         st = "_Rotor"
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
     alpha1 = self.comp_alpha()
-    Z1 = (Rbo - self.H0) * exp(1j * alpha1 / 2)
-    Z9 = (Rbo - self.H0) * exp(-1j * alpha1 / 2)
+    Z1 = (Rext - self.H0) * exp(1j * alpha1 / 2)
+    Z9 = (Rext - self.H0) * exp(-1j * alpha1 / 2)
 
     Z0 = (Z1 + Z9) / 2
     Z5 = Z0 - self.H1

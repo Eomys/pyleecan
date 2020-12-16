@@ -96,32 +96,41 @@ def get_group(self, group_names):
         label_sol = sol.label
         type_cell_sol = sol.type_cell
         field_sol = sol.get_field()
-        axis_dct = sol.get_axis()
+        axis_name, axis_size = sol.get_axes_list()
 
         if type_cell_sol == "point":
-            axis_dct["indice"] = len(node_indice)
+            Iindice = np.where(axis_name == "indice")[0]
+            axis_size[Iindice] = len(node_indice)
+
             new_field_sol = field_sol[:, node_indice, :]
             new_sol = SolutionMat(
                 label=label_sol,
                 type_cell=type_cell_sol,
                 field=new_field_sol,
                 indice=node_indice,
-                axis=axis_dct,
+                axis_name=axis_name,
+                axis_size=axis_size,
             )
             sol_list.append(new_sol)
 
         elif not is_interface:  # Interface is only available for point solution.
-            if "component" in axis_dct:
-                new_field_sol = field_sol[:, indice_dict[type_cell_sol], :]
+
+            ind_cell = indice_dict[type_cell_sol]
+
+            if "component" in axis_name:
+                new_field_sol = field_sol[:, ind_cell, :]
             else:
-                new_field_sol = field_sol[:, indice_dict[type_cell_sol]]
-            axis_dct["indice"] = len(indice_dict[type_cell_sol])
+                new_field_sol = field_sol[:, ind_cell]
+
+            axis_size[axis_name.index("indice")] = len(ind_cell)
+
             new_sol = SolutionMat(
                 label=label_sol,
                 type_cell=type_cell_sol,
                 field=new_field_sol,
-                indice=indice_dict[type_cell_sol],
-                axis=axis_dct,
+                indice=ind_cell,
+                axis_name=axis_name,
+                axis_size=axis_size,
             )
 
             sol_list.append(new_sol)

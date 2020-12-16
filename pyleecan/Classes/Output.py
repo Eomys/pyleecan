@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -56,29 +57,14 @@ except ImportError as error:
     get_rot_dir = error
 
 try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
+    from ..Methods.Output.Output.plot.plot_2D_Data import plot_2D_Data
 except ImportError as error:
-    plot_B_space = error
+    plot_2D_Data = error
 
 try:
-    from ..Methods.Output.Output.plot.plot_A_cfft2 import plot_A_cfft2
+    from ..Methods.Output.Output.getter.get_fund_harm import get_fund_harm
 except ImportError as error:
-    plot_A_cfft2 = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_fft_space import plot_A_fft_space
-except ImportError as error:
-    plot_A_fft_space = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_fft_time import plot_A_fft_time
-except ImportError as error:
-    plot_A_fft_time = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_fft2 import plot_A_fft2
-except ImportError as error:
-    plot_A_fft2 = error
+    get_fund_harm = error
 
 try:
     from ..Methods.Output.Output.plot.plot_A_quiver_2D import plot_A_quiver_2D
@@ -86,19 +72,9 @@ except ImportError as error:
     plot_A_quiver_2D = error
 
 try:
-    from ..Methods.Output.Output.plot.plot_A_space import plot_A_space
+    from ..Methods.Output.Output.plot.plot_3D_Data import plot_3D_Data
 except ImportError as error:
-    plot_A_space = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_surf import plot_A_surf
-except ImportError as error:
-    plot_A_surf = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_time import plot_A_time
-except ImportError as error:
-    plot_A_time = error
+    plot_3D_Data = error
 
 try:
     from ..Methods.Output.Output.plot.plot_A_time_space import plot_A_time_space
@@ -106,11 +82,14 @@ except ImportError as error:
     plot_A_time_space = error
 
 try:
-    from ..Methods.Output.Output.plot.Structural.plot_force_space import (
-        plot_force_space,
-    )
+    from ..Methods.Output.Output.getter.get_data_from_str import get_data_from_str
 except ImportError as error:
-    plot_force_space = error
+    get_data_from_str = error
+
+try:
+    from ..Methods.Output.Output.print_memory import print_memory
+except ImportError as error:
+    print_memory = error
 
 
 from ._check import InitUnKnowClassError
@@ -206,59 +185,28 @@ class Output(FrozenClass):
         )
     else:
         get_rot_dir = get_rot_dir
-    # cf Methods.Output.Output.plot.Magnetic.plot_B_space
-    if isinstance(plot_B_space, ImportError):
-        plot_B_space = property(
+    # cf Methods.Output.Output.plot.plot_2D_Data
+    if isinstance(plot_2D_Data, ImportError):
+        plot_2D_Data = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method plot_B_space: " + str(plot_B_space)
+                    "Can't use Output method plot_2D_Data: " + str(plot_2D_Data)
                 )
             )
         )
     else:
-        plot_B_space = plot_B_space
-    # cf Methods.Output.Output.plot.plot_A_cfft2
-    if isinstance(plot_A_cfft2, ImportError):
-        plot_A_cfft2 = property(
+        plot_2D_Data = plot_2D_Data
+    # cf Methods.Output.Output.getter.get_fund_harm
+    if isinstance(get_fund_harm, ImportError):
+        get_fund_harm = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method plot_A_cfft2: " + str(plot_A_cfft2)
+                    "Can't use Output method get_fund_harm: " + str(get_fund_harm)
                 )
             )
         )
     else:
-        plot_A_cfft2 = plot_A_cfft2
-    # cf Methods.Output.Output.plot.plot_A_fft_space
-    if isinstance(plot_A_fft_space, ImportError):
-        plot_A_fft_space = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_A_fft_space: " + str(plot_A_fft_space)
-                )
-            )
-        )
-    else:
-        plot_A_fft_space = plot_A_fft_space
-    # cf Methods.Output.Output.plot.plot_A_fft_time
-    if isinstance(plot_A_fft_time, ImportError):
-        plot_A_fft_time = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_A_fft_time: " + str(plot_A_fft_time)
-                )
-            )
-        )
-    else:
-        plot_A_fft_time = plot_A_fft_time
-    # cf Methods.Output.Output.plot.plot_A_fft2
-    if isinstance(plot_A_fft2, ImportError):
-        plot_A_fft2 = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method plot_A_fft2: " + str(plot_A_fft2))
-            )
-        )
-    else:
-        plot_A_fft2 = plot_A_fft2
+        get_fund_harm = get_fund_harm
     # cf Methods.Output.Output.plot.plot_A_quiver_2D
     if isinstance(plot_A_quiver_2D, ImportError):
         plot_A_quiver_2D = property(
@@ -270,35 +218,17 @@ class Output(FrozenClass):
         )
     else:
         plot_A_quiver_2D = plot_A_quiver_2D
-    # cf Methods.Output.Output.plot.plot_A_space
-    if isinstance(plot_A_space, ImportError):
-        plot_A_space = property(
+    # cf Methods.Output.Output.plot.plot_3D_Data
+    if isinstance(plot_3D_Data, ImportError):
+        plot_3D_Data = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method plot_A_space: " + str(plot_A_space)
+                    "Can't use Output method plot_3D_Data: " + str(plot_3D_Data)
                 )
             )
         )
     else:
-        plot_A_space = plot_A_space
-    # cf Methods.Output.Output.plot.plot_A_surf
-    if isinstance(plot_A_surf, ImportError):
-        plot_A_surf = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method plot_A_surf: " + str(plot_A_surf))
-            )
-        )
-    else:
-        plot_A_surf = plot_A_surf
-    # cf Methods.Output.Output.plot.plot_A_time
-    if isinstance(plot_A_time, ImportError):
-        plot_A_time = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method plot_A_time: " + str(plot_A_time))
-            )
-        )
-    else:
-        plot_A_time = plot_A_time
+        plot_3D_Data = plot_3D_Data
     # cf Methods.Output.Output.plot.plot_A_time_space
     if isinstance(plot_A_time_space, ImportError):
         plot_A_time_space = property(
@@ -311,17 +241,29 @@ class Output(FrozenClass):
         )
     else:
         plot_A_time_space = plot_A_time_space
-    # cf Methods.Output.Output.plot.Structural.plot_force_space
-    if isinstance(plot_force_space, ImportError):
-        plot_force_space = property(
+    # cf Methods.Output.Output.getter.get_data_from_str
+    if isinstance(get_data_from_str, ImportError):
+        get_data_from_str = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method plot_force_space: " + str(plot_force_space)
+                    "Can't use Output method get_data_from_str: "
+                    + str(get_data_from_str)
                 )
             )
         )
     else:
-        plot_force_space = plot_force_space
+        get_data_from_str = get_data_from_str
+    # cf Methods.Output.Output.print_memory
+    if isinstance(print_memory, ImportError):
+        print_memory = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method print_memory: " + str(print_memory)
+                )
+            )
+        )
+    else:
+        print_memory = print_memory
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -331,7 +273,7 @@ class Output(FrozenClass):
     def __init__(
         self,
         simu=-1,
-        path_res="",
+        path_result="",
         geo=-1,
         elec=-1,
         mag=-1,
@@ -359,8 +301,8 @@ class Output(FrozenClass):
             # Overwrite default value with init_dict content
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
-            if "path_res" in list(init_dict.keys()):
-                path_res = init_dict["path_res"]
+            if "path_result" in list(init_dict.keys()):
+                path_result = init_dict["path_result"]
             if "geo" in list(init_dict.keys()):
                 geo = init_dict["geo"]
             if "elec" in list(init_dict.keys()):
@@ -378,7 +320,7 @@ class Output(FrozenClass):
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.simu = simu
-        self.path_res = path_res
+        self.path_result = path_result
         self.geo = geo
         self.elec = elec
         self.mag = mag
@@ -403,7 +345,7 @@ class Output(FrozenClass):
             Output_str += "simu = " + tmp
         else:
             Output_str += "simu = None" + linesep + linesep
-        Output_str += 'path_res = "' + str(self.path_res) + '"' + linesep
+        Output_str += 'path_result = "' + str(self.path_result) + '"' + linesep
         if self.geo is not None:
             tmp = self.geo.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Output_str += "geo = " + tmp
@@ -444,7 +386,7 @@ class Output(FrozenClass):
             return False
         if other.simu != self.simu:
             return False
-        if other.path_res != self.path_res:
+        if other.path_result != self.path_result:
             return False
         if other.geo != self.geo:
             return False
@@ -462,6 +404,21 @@ class Output(FrozenClass):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.simu)
+        S += getsizeof(self.path_result)
+        S += getsizeof(self.geo)
+        S += getsizeof(self.elec)
+        S += getsizeof(self.mag)
+        S += getsizeof(self.struct)
+        S += getsizeof(self.post)
+        S += getsizeof(self.logger_name)
+        S += getsizeof(self.force)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -470,7 +427,7 @@ class Output(FrozenClass):
             Output_dict["simu"] = None
         else:
             Output_dict["simu"] = self.simu.as_dict()
-        Output_dict["path_res"] = self.path_res
+        Output_dict["path_result"] = self.path_result
         if self.geo is None:
             Output_dict["geo"] = None
         else:
@@ -505,7 +462,7 @@ class Output(FrozenClass):
 
         if self.simu is not None:
             self.simu._set_None()
-        self.path_res = None
+        self.path_result = None
         if self.geo is not None:
             self.geo._set_None()
         if self.elec is not None:
@@ -548,18 +505,18 @@ class Output(FrozenClass):
         """,
     )
 
-    def _get_path_res(self):
-        """getter of path_res"""
-        return self._path_res
+    def _get_path_result(self):
+        """getter of path_result"""
+        return self._path_result
 
-    def _set_path_res(self, value):
-        """setter of path_res"""
-        check_var("path_res", value, "str")
-        self._path_res = value
+    def _set_path_result(self, value):
+        """setter of path_result"""
+        check_var("path_result", value, "str")
+        self._path_result = value
 
-    path_res = property(
-        fget=_get_path_res,
-        fset=_set_path_res,
+    path_result = property(
+        fget=_get_path_result,
+        fset=_set_path_result,
         doc=u"""Path to the folder to same the results
 
         :Type: str

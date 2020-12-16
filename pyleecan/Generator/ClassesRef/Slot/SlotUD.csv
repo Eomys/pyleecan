@@ -1,3 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-point_list,-,Coordinates of the slot points (will be connected in order with Segments),,list,[],,,,Slot,Slot,build_geometry,VERSION,1,"""User defined"" Slot from a point list. "
-is_sym,-,True to enter only half of the point coordinates,,bool,0,,,,,,,,,
+line_list,-,list of line to draw the edges of the slot,,[Line],,,,,Slot,SlotWind,build_geometry,VERSION,1,"""User defined"" Slot from a line list. "
+wind_begin_index,-,Index of the first line to include in the winding,,int,None,,,,,,set_from_point_list,,,
+wind_end_index,-,Index of the last line to include in the winding,,int,None,,,,,,get_surface_wind,,,
+type_line_wind,-,"0 to close winding with Segment, 1 for Arc1",,int,0,0,1,,,,check,,,

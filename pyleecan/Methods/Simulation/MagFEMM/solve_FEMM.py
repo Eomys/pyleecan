@@ -1,80 +1,150 @@
-import numpy as np
-
-from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
 from os.path import basename, splitext
-from SciDataTool import DataTime, VectorField, Data1D
-from os.path import join
 
+from numpy import zeros, pi, roll, cos, sin
+
+# from scipy.interpolate import interp1d
+
+from ....Classes._FEMMHandler import _FEMMHandler
 from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
-from ....Functions.Winding.gen_phase_list import gen_name
 
 
-def solve_FEMM(self, femm, output, sym):
+def solve_FEMM(
+    self,
+    femm,
+    output,
+    out_dict,
+    FEMM_dict,
+    sym,
+    Nt,
+    angle,
+    Is,
+    Ir,
+    angle_rotor,
+    is_close_femm,
+    filename=None,
+    start_t=0,
+    end_t=None,
+):
+    """
+    Solve FEMM model to calculate airgap flux density, torque instantaneous/average/ripple values,
+    flux induced in stator windings and flux density, field and permeability maps
 
-    # Get time and angular axes
-    Angle_comp, Time_comp = self.get_axes(output)
-    _, Time_comp_Tem = self.get_axes(output, is_remove_apert=True)
+    Parameters
+    ----------
+    self: MagFEMM
+        A MagFEMM object
+    femm: _FEMMHandler
+        Object to handle FEMM
+    output: Output
+        An Output object
+    out_dict: dict
+        Dict containing the following quantities to update for each time step:
+            Br : ndarray
+                Airgap radial flux density (Nt,Na) [T]
+            Bt : ndarray
+                Airgap tangential flux density (Nt,Na) [T]
+            Tem : ndarray
+                Electromagnetic torque over time (Nt,) [Nm]
+            Phi_wind : list of ndarray # TODO should it rather be a dict with lam label?
+                List of winding flux with respect to Machine.get_lamlist (qs,Nt) [Wb]
+    FEMM_dict : dict
+        Dict containing FEMM model parameters
+    sym: int
+        Spatial symmetry factor
+    Nt: int
+        Number of time steps for calculation
+    angle: ndarray
+        Angle vector for calculation
+    Is : ndarray
+        Stator current matrix (qs,Nt) [A]
+    Ir : ndarray
+        Stator current matrix (qs,Nt) [A]
+    angle_rotor: ndarray
+        Rotor angular position vector (Nt,)
+    is_close_femm: bool
+        True to close FEMM handler in the end
+    filename: str
+        Path to FEMM model to open
+    start_t: int
+        Index of first time step (0 by default, used for parallelization)
+    end_t: int
+        Index of last time step (Nt by default, used for parallelization)
 
-    # Check if the angular axis is anti-periodic
-    _, is_antiper_a = Angle_comp.get_periodicity()
+    Returns
+    -------
+    B: ndarray
+        3D Magnetic flux density for all time steps and each element (Nt, Nelem, 3) [T]
+    H : ndarray
+        3D Magnetic field for all time steps and each element (Nt, Nelem, 3) [A/m]
+    mu : ndarray
+        Magnetic relative permeability for all time steps and each element (Nt, Nelem) []
+    mesh: MeshMat
+        Object containing magnetic mesh at first time step
+    groups: dict
+        Dict whose values are group label and values are array of indices of related elements
 
-    # Import angular vector from Data object
-    angle = Angle_comp.get_values(
-        is_oneperiod=self.is_periodicity_a,
-        is_antiperiod=is_antiper_a and self.is_periodicity_a,
-    )
+    """
+    # Open FEMM file if not None, else it is already open
+    if filename is not None:
+        try:
+            # Open the document
+            femm.openfemm(1)
+        except:
+            # Create a new FEMM handler in case of parallelization on another FEMM instance
+            femm = _FEMMHandler()
+            output.mag.internal.handler_list.append(femm)
+            # Open the document
+            femm.openfemm(1)
+
+        # Import FEMM file
+        femm.opendocument(filename)
+
+    # Take last time step at Nt by default
+    if end_t is None:
+        end_t = Nt
+
+    # Init mesh solution as None since array allocation can only be done once
+    # number of elements is known, i.e. after first time step resolution
+    B_elem, H_elem, mu_elem, meshFEMM, groups = None, None, None, None, None
 
     # Number of angular steps
-    Na_comp = angle.size
-
-    # Check if the time axis is anti-periodic
-    _, is_antiper_t = Time_comp.get_periodicity()
-
-    # Number of time steps
-    Nt_comp = Time_comp.get_length(
-        is_oneperiod=True, is_antiperiod=is_antiper_t and self.is_periodicity_t,
-    )
+    Na = angle.size
 
     # Loading parameters for readibility
-    L1 = output.simu.machine.stator.comp_length()
+    machine = output.simu.machine
+    Rag = self.Rag_enforced
+    if Rag is None:
+        Rag = machine.comp_Rgap_mec()
+
+    L1 = machine.stator.comp_length()
     save_path = self.get_path_save(output)
-    FEMM_dict = output.mag.FEMM_dict
+    is_internal_rotor = machine.rotor.is_internal
+    if "Phi_wind" in out_dict:
+        qs = {}
+        Npcpp = {}
+        for key in out_dict["Phi_wind"].keys():
+            lam = machine.get_lam_by_label(key)
+            qs[key] = lam.winding.qs  # Winding phase number
+            Npcpp[key] = lam.winding.Npcpp  # parallel paths
 
-    if (
-        hasattr(output.simu.machine.stator, "winding")
-        and output.simu.machine.stator.winding is not None
-    ):
-        qs = output.simu.machine.stator.winding.qs  # Winding phase number
-        Npcpp = output.simu.machine.stator.winding.Npcpp
-        Phi_wind_stator = zeros((Nt_comp, qs))
-    else:
-        Phi_wind_stator = None
-
-    # Create the mesh
-    femm.mi_createmesh()
-
-    # Initialize results matrix
-    Br = zeros((Nt_comp, Na_comp))
-    Bt = zeros((Nt_comp, Na_comp))
-    Tem = zeros((Nt_comp))
-
-    Rag = output.simu.machine.comp_Rgap_mec()
+    # Account for initial angular shift of stator and rotor and apply it to the sliding band
+    angle_shift = self.angle_rotor_shift - self.angle_stator_shift
 
     # Compute the data for each time step
-    for ii in range(Nt_comp):
-        self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt_comp))
+    for ii in range(start_t, end_t):
+        self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt))
         # Update rotor position and currents
         update_FEMM_simulation(
             femm=femm,
-            output=output,
-            materials=FEMM_dict["materials"],
             circuits=FEMM_dict["circuits"],
-            is_mmfs=self.is_mmfs,
-            is_mmfr=self.is_mmfr,
-            j_t0=ii,
             is_sliding_band=self.is_sliding_band,
+            is_internal_rotor=is_internal_rotor,
+            angle_rotor=angle_rotor + angle_shift,
+            Is=Is,
+            Ir=Ir,
+            ii=ii,
         )
         # try "previous solution" for speed up of FEMM calculation
         if self.is_sliding_band:
@@ -87,147 +157,83 @@ def solve_FEMM(self, femm, output, sym):
 
         # Run the computation
         femm.mi_analyze()
+
+        # Load results
         femm.mi_loadsolution()
 
         # Get the flux result
         if self.is_sliding_band:
-            for jj in range(Na_comp):
-                Br[ii, jj], Bt[ii, jj] = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
+            for jj in range(Na):
+                out_dict["Br"][ii, jj], out_dict["Bt"][ii, jj] = femm.mo_getgapb(
+                    "bc_ag2", angle[jj] * 180 / pi
+                )
         else:
-            for jj in range(Na_comp):
-                B = femm.mo_getb(Rag * np.cos(angle[jj]), Rag * np.sin(angle[jj]))
-                Br[ii, jj] = B[0] * np.cos(angle[jj]) + B[1] * np.sin(angle[jj])
-                Bt[ii, jj] = -B[0] * np.sin(angle[jj]) + B[1] * np.cos(angle[jj])
+            for jj in range(Na):
+                B = femm.mo_getb(Rag * cos(angle[jj]), Rag * sin(angle[jj]))
+                out_dict["Br"][ii, jj] = B[0] * cos(angle[jj]) + B[1] * sin(angle[jj])
+                out_dict["Bt"][ii, jj] = -B[0] * sin(angle[jj]) + B[1] * cos(angle[jj])
 
         # Compute the torque
-        Tem[ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
+        out_dict["Tem"][ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
 
-        if (
-            hasattr(output.simu.machine.stator, "winding")
-            and output.simu.machine.stator.winding is not None
-        ):
+        if "Phi_wind" in out_dict:
             # Phi_wind computation
-            Phi_wind_stator[ii, :] = comp_FEMM_Phi_wind(
-                femm,
-                qs,
-                Npcpp,
-                is_stator=True,
-                Lfemm=FEMM_dict["Lfemm"],
-                L1=L1,
-                sym=sym,
-            )
+            # TODO fix inconsistency for multi lam machines here
+            for key in out_dict["Phi_wind"].keys():
+                out_dict["Phi_wind"][key][ii, :] = comp_FEMM_Phi_wind(
+                    femm,
+                    qs[key],
+                    Npcpp[key],
+                    is_stator=machine.get_lam_by_label(key).is_stator,
+                    Lfemm=FEMM_dict["Lfemm"],
+                    L1=L1,
+                    sym=sym,
+                )
 
         # Load mesh data & solution
-        if (self.is_sliding_band or Nt_comp == 1) and (
-            self.is_get_mesh or self.is_save_FEA
-        ):
+        if (self.is_sliding_band or Nt == 1) and (self.is_get_mesh or self.is_save_FEA):
+            # Get mesh data and magnetic quantities from .ans file
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
-                femm, save_path, ii
+                femm,
+                save_path,
+                j_t0=ii,
+                id_worker=start_t,
+                is_get_mesh=ii == start_t,
             )
 
-            if ii == 0:
+            # Initialize mesh and magnetic quantities for first time step
+            if ii == start_t:
                 meshFEMM = [tmpmeshFEMM]
                 groups = [tmpgroups]
-                B_elem = np.zeros([Nt_comp, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                H_elem = np.zeros([Nt_comp, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                mu_elem = np.zeros([Nt_comp, meshFEMM[ii].cell["triangle"].nb_cell])
+                Nelem = meshFEMM[0].cell["triangle"].nb_cell
+                Nt0 = end_t - start_t
+                B_elem = zeros([Nt0, Nelem, 3])
+                H_elem = zeros([Nt0, Nelem, 3])
+                mu_elem = zeros([Nt0, Nelem])
 
-            B_elem[ii, :, 0:2] = tmpB
-            H_elem[ii, :, 0:2] = tmpH
-            mu_elem[ii, :] = tmpmu
+            # Shift time index ii in case start_t is not 0 (parallelization)
+            ii0 = ii - start_t
+            # Store magnetic flux density, field and relative permeability for the current time step
+            B_elem[ii0, :, 0:2] = tmpB
+            H_elem[ii0, :, 0:2] = tmpH
+            mu_elem[ii0, :] = tmpmu
 
     # Shift to take into account stator position
-    roll_id = int(self.angle_stator * Na_comp / (2 * pi))
-    Br = roll(Br, roll_id, axis=1)
-    Bt = roll(Bt, roll_id, axis=1)
+    if self.angle_stator_shift != 0:
+        roll_id = int(self.angle_stator_shift * Na / (2 * pi))
+        out_dict["Br"] = roll(out_dict["Br"], roll_id, axis=1)
+        out_dict["Bt"] = roll(out_dict["Bt"], roll_id, axis=1)
 
-    # Store the results
-    sym_dict = dict()  # Define the periodicity
-    if self.is_periodicity_t:
-        sym_dict.update(Time_comp.symmetries)
-    if self.is_periodicity_a:
-        sym_dict.update(Angle_comp.symmetries)
+        # # Interpolate on updated angular position # TODO to improve accuracy
+        # angle_new = (angle - self.angle_stator_shift) % (2 * pi / sym)
+        # out_dict["Br"] = interp1d(append(angle, 2 * pi / sym), append(out_dict["Br"], out_dict["Br"][:,0]), axis=1)[angle_new]
+        # out_dict["Bt"] = interp1d(append(angle, 2 * pi / sym), append(out_dict["Bt"], out_dict["Bt"][:,0]), axis=1)[angle_new]
 
-    sym_dict_Tem = dict()
-    if self.is_periodicity_t:
-        sym_dict_Tem.update(Time_comp_Tem.symmetries)
-
-    Br_data = DataTime(
-        name="Airgap radial flux density",
-        unit="T",
-        symbol="B_r",
-        axes=[Time_comp, Angle_comp],
-        symmetries=sym_dict,
-        values=Br,
-    )
-    Bt_data = DataTime(
-        name="Airgap tangential flux density",
-        unit="T",
-        symbol="B_t",
-        axes=[Time_comp, Angle_comp],
-        symmetries=sym_dict,
-        values=Bt,
-    )
-    output.mag.B = VectorField(
-        name="Airgap flux density",
-        symbol="B",
-        components={"radial": Br_data, "tangential": Bt_data},
-    )
-
-    output.mag.Tem = DataTime(
-        name="Electromagnetic torque",
-        unit="Nm",
-        symbol="T_{em}",
-        axes=[Time_comp_Tem],
-        symmetries=sym_dict_Tem,
-        values=Tem,
-    )
-    output.mag.Tem_av = mean(Tem)
-    self.get_logger().debug("Average Torque: " + str(output.mag.Tem_av) + " N.m")
-    output.mag.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]
-    if output.mag.Tem_av != 0:
-        output.mag.Tem_rip_norm = output.mag.Tem_rip_pp / output.mag.Tem_av  # []
-    else:
-        output.mag.Tem_rip_norm = None
-
-    if (
-        hasattr(output.simu.machine.stator, "winding")
-        and output.simu.machine.stator.winding is not None
-    ):
-        Phase = Data1D(
-            name="phase",
-            unit="",
-            values=gen_name(qs, is_add_phase=True),
-            is_components=True,
-        )
-        output.mag.Phi_wind_stator = DataTime(
-            name="Stator Winding Flux",
-            unit="Wb",
-            symbol="Phi_{wind}",
-            axes=[Time_comp, Phase],
-            symmetries=sym_dict,
-            values=Phi_wind_stator,
-        )
-
-    output.mag.FEMM_dict = FEMM_dict
-
-    if self.is_get_mesh:
-        output.mag.meshsolution = self.build_meshsolution(
-            Nt_comp, meshFEMM, Time_comp, B_elem, H_elem, mu_elem, groups
-        )
-
-    if self.is_save_FEA:
-        save_path_fea = join(save_path, "MeshSolutionFEMM.h5")
-        output.mag.meshsolution.save(save_path_fea)
-
-    if (
-        hasattr(output.simu.machine.stator, "winding")
-        and output.simu.machine.stator.winding is not None
-    ):
-        # Electromotive forces computation (update output)
-        self.comp_emf()
-    else:
-        output.mag.emf = None
-
-    if self.is_close_femm:
+    # Close FEMM handler
+    if is_close_femm:
         femm.closefemm()
+        output.mag.internal.handler_list.remove(femm)
+
+    out_dict["Rag"] = Rag
+
+    return B_elem, H_elem, mu_elem, meshFEMM, groups

@@ -35,8 +35,6 @@ def test_opti_preprocessing():
     # Definition of the simulation
     simu = Simu1(name="Test_machine", machine=SCIM_001)
 
-    output = Output(simu=simu)
-
     # Design variable
     my_vars = [
         OptiDesignVar(
@@ -78,7 +76,7 @@ def test_opti_preprocessing():
 
     # Defining the problem
     my_prob = OptiProblem(
-        output=output,
+        simu=simu,
         design_var=my_vars,
         obj_func=objs,
         preprocessing=preprocessing,

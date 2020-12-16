@@ -24,11 +24,8 @@ def get_surface_wind(self, alpha=0, delta=0):
     surf_wind: Surface
         Surface corresponding to the Winding Area
     """
-    # check if the slot is on the stator
-    if self.get_is_stator():
-        st = "S"
-    else:
-        st = "R"
+    # get the name of the lamination
+    st = self.get_name_lam()
 
     # Compute point
     Rbo = self.get_Rbo()
@@ -52,7 +49,7 @@ def get_surface_wind(self, alpha=0, delta=0):
     curve_list.append(Arc1(begin=Z2, end=Z1, radius=-Rbo, is_trigo_direction=False))
     surf = SurfLine(
         line_list=curve_list,
-        label="Wind" + st + "_R0_T0_S0",
+        label="Wind_" + st + "_R0_T0_S0",
         point_ref=(Ztan1 + Ztan2) / 2,
     )
 

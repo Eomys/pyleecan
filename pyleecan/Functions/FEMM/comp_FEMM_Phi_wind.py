@@ -40,12 +40,15 @@ def comp_FEMM_Phi_wind(
 
     # For each phase/circuit
     for q in range(qs):
-        PropCirc = femm.mo_getcircuitproperties(label + str(q))
-        # rescaling to account for end winding flux
-        if is_rescale_flux:
-            Kphi = L1 / Lfemm
-        else:
-            Kphi = 1
-        # flux linkage of phase q in Wb=Vs=HA
-        Phi_wind[0, q] = sym * PropCirc[2] * Kphi / Npcpp
+        try:
+            PropCirc = femm.mo_getcircuitproperties(label + str(q))
+            # rescaling to account for end winding flux
+            if is_rescale_flux:
+                Kphi = L1 / Lfemm
+            else:
+                Kphi = 1
+            # flux linkage of phase q in Wb=Vs=HA
+            Phi_wind[0, q] = sym * PropCirc[2] * Kphi / Npcpp
+        except:
+            Phi_wind[0, q] = None
     return Phi_wind

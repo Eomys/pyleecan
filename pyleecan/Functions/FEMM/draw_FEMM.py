@@ -110,7 +110,7 @@ def draw_FEMM(
     femm.newdocument(0)
 
     # Minimize the main window for faster geometry creation.
-    femm.main_minimize()
+    # femm.main_minimize()
 
     # defining the problem
     femm.mi_probdef(0, "meters", FEMM_dict["pbtype"], FEMM_dict["precision"])

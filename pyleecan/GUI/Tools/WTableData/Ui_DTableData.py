@@ -45,6 +45,16 @@ class Ui_DTableData(object):
 
         self.horizontalLayout.addWidget(self.si_col)
 
+        self.b_export = QPushButton(DTableData)
+        self.b_export.setObjectName(u"b_export")
+
+        self.horizontalLayout.addWidget(self.b_export)
+
+        self.b_import = QPushButton(DTableData)
+        self.b_import.setObjectName(u"b_import")
+
+        self.horizontalLayout.addWidget(self.b_import)
+
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.w_tab = QTableWidget(DTableData)
@@ -74,6 +84,12 @@ class Ui_DTableData(object):
         self.in_row.setText(QCoreApplication.translate("DTableData", u"N_row: ", None))
         self.in_col.setText(
             QCoreApplication.translate("DTableData", u"N_column:", None)
+        )
+        self.b_export.setText(
+            QCoreApplication.translate("DTableData", u"Export to csv", None)
+        )
+        self.b_import.setText(
+            QCoreApplication.translate("DTableData", u"Import from csv", None)
         )
 
     # retranslateUi

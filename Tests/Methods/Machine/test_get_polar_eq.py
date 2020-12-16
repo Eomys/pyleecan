@@ -20,8 +20,8 @@ class Test_get_polar_eq(object):
         polar_eq = SCIM_001.get_polar_eq()
 
         plt.close("all")
-        SCIM_001.plot(comp_machine=polar_eq)
+        SCIM_001.plot(comp_machine=polar_eq, is_show_fig=False)
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_get_polar_eq_SCIM_001.png"))
-        assert len(fig.axes[0].patches) == 275
+        assert len(fig.axes[0].patches) == 219

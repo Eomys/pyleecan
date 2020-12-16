@@ -149,6 +149,8 @@ def test_comp_surface_rotor(test_dict):
         msg = "For Smag, Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 
+    a = result["Syoke"]
+
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_surface_stator(test_dict):
@@ -257,3 +259,11 @@ def test_comp_mass(test_dict):
     b = test_dict["Mmach"]
     msg = "Mmach, Return " + str(a) + " expected " + str(b)
     assert a == pytest.approx(b, rel=DELTA), msg
+
+
+def test_comp_mass_shaft_none():
+    """Check that the compytation of the mass is correct even if there is no shaft"""
+    test_obj.shaft = None
+    result = test_obj.comp_masses()
+
+    assert result["Msha"] == 0

@@ -79,7 +79,10 @@ class SWindPat(Gen_SWindPat, QWidget):
         # Set the current Winding pattern
         if self.obj.winding is None or type(self.obj.winding) is Winding:
             # The default type_winding is WindingCW2LT
-            self.obj.winding = WindingCW2LT(init_dict=self.obj.winding.as_dict())
+            if type(self.obj.winding) is Winding:
+                self.obj.winding = WindingCW2LT(init_dict=self.obj.winding.as_dict())
+            else:
+                self.obj.winding = WindingCW2LT()
             self.c_wind_type.setCurrentIndex(0)
         else:
             self.c_wind_type.setCurrentIndex(TYPE_INDEX.index(type(self.obj.winding)))

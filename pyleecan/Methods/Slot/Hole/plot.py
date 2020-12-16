@@ -5,11 +5,12 @@ from matplotlib.pyplot import axis, legend
 
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
+from ....Methods import ParentMissingError
 
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
 
-def plot(self, fig=None, display_magnet=True):
+def plot(self, fig=None, display_magnet=True, is_show_fig=True):
     """Plot the Hole in a matplotlib fig
 
     Parameters
@@ -52,12 +53,16 @@ def plot(self, fig=None, display_magnet=True):
 
     # Axis Setup
     axis("equal")
-    Lim = self.get_Rbo() * 1.2
-    axes.set_xlim(-Lim, Lim)
-    axes.set_ylim(-Lim, Lim)
+    try:
+        Lim = self.get_Rbo() * 1.2
+        axes.set_xlim(-Lim, Lim)
+        axes.set_ylim(-Lim, Lim)
+    except ParentMissingError:
+        pass
 
     if display_magnet and "Magnet" in [surf.label for surf in surf_hole]:
         patch_leg.append(Patch(color=MAGNET_COLOR))
         label_leg.append("Magnet")
         legend(patch_leg, label_leg)
-    fig.show()
+    if is_show_fig:
+        fig.show()

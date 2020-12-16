@@ -172,7 +172,7 @@ class PWSlot15(Gen_PWSlot15, QWidget):
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
-        
+
     @staticmethod
     def check(lam):
         """Check that the current lamination have all the needed field set

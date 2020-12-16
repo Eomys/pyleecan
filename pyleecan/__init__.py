@@ -6,4 +6,4 @@ from os.path import isdir
 
 dictConfig(LOGGING_CONFIG_CONSOLE)
 
-__version__ = "1.0.1.post1"
+__version__ = "1.0.4"

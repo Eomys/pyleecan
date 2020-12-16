@@ -21,151 +21,177 @@ import pytest
 class TestPHoleM58(object):
     """Test that the widget PHoleM58 behave like it should"""
 
-    def setup_method(self, method):
+    @pytest.fixture
+    def setup(self):
         """Run at the begining of every test to setup the gui"""
-        self.test_obj = LamHole(Rint=0.1, Rext=0.2)
-        self.test_obj.hole = list()
-        self.test_obj.hole.append(
+
+        if not QtWidgets.QApplication.instance():
+            self.app = QtWidgets.QApplication(sys.argv)
+        else:
+            self.app = QtWidgets.QApplication.instance()
+
+        test_obj = LamHole(Rint=0.1, Rext=0.2)
+        test_obj.hole = list()
+        test_obj.hole.append(
             HoleM58(
                 H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15, W3=0.17, R0=0.19
             )
         )
-        self.test_obj.hole[0].magnet_0.mat_type.name = "Magnet3"
+        test_obj.hole[0].magnet_0.mat_type.name = "Magnet3"
 
-        self.matlib = MatLib()
-        self.matlib.dict_mat["RefMatLib"] = [
+        matlib = MatLib()
+        matlib.dict_mat["RefMatLib"] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),
         ]
 
-        self.widget = PHoleM58(self.test_obj.hole[0], self.matlib)
+        widget = PHoleM58(test_obj.hole[0], matlib)
 
-    @classmethod
-    def setup_class(cls):
-        """Start the app for the test"""
-        print("\nStart Test PHoleM58")
-        if not QtWidgets.QApplication.instance():
-            cls.app = QtWidgets.QApplication(sys.argv)
-        else:
-            cls.app = QtWidgets.QApplication.instance()
+        yield {"widget": widget, "test_obj": test_obj, "matlib": matlib}
 
-    @classmethod
-    def teardown_class(cls):
-        """Exit the app after the test"""
-        cls.app.quit()
+        self.app.quit()
 
-    def test_init(self):
+    def test_init(self, setup):
         """Check that the Widget spinbox initialise to the lamination value"""
 
-        assert self.widget.lf_H0.value() == 0.10
-        assert self.widget.lf_H1.value() == 0.11
-        assert self.widget.lf_H2.value() == 0.12
-        assert self.widget.lf_W0.value() == 0.13
-        assert self.widget.lf_W1.value() == 0.14
-        assert self.widget.lf_W2.value() == 0.15
-        assert self.widget.lf_W3.value() == 0.17
-        assert self.widget.lf_R0.value() == 0.19
+        assert setup["widget"].lf_H0.value() == 0.10
+        assert setup["widget"].lf_H1.value() == 0.11
+        assert setup["widget"].lf_H2.value() == 0.12
+        assert setup["widget"].lf_W0.value() == 0.13
+        assert setup["widget"].lf_W1.value() == 0.14
+        assert setup["widget"].lf_W2.value() == 0.15
+        assert setup["widget"].lf_W3.value() == 0.17
+        assert setup["widget"].lf_R0.value() == 0.19
         # Check material
-        assert not self.widget.w_mat_1.isHidden()
-        assert self.widget.w_mat_1.c_mat_type.currentText() == "Magnet3"
-        assert self.widget.w_mat_1.c_mat_type.currentIndex() == 2
-        self.test_obj.hole[0] = HoleM58(
+        assert not setup["widget"].w_mat_1.isHidden()
+        assert setup["widget"].w_mat_1.c_mat_type.currentText() == "Magnet3"
+        assert setup["widget"].w_mat_1.c_mat_type.currentIndex() == 2
+        setup["test_obj"].hole[0] = HoleM58(
             H0=0.20, H1=0.21, H2=0.22, W0=0.23, W1=0.24, W2=0.25, W3=0.27, R0=0.29
         )
-        self.widget = PHoleM58(self.test_obj.hole[0], self.matlib)
-        assert self.widget.lf_H0.value() == 0.20
-        assert self.widget.lf_H1.value() == 0.21
-        assert self.widget.lf_H2.value() == 0.22
-        assert self.widget.lf_W0.value() == 0.23
-        assert self.widget.lf_W1.value() == 0.24
-        assert self.widget.lf_W2.value() == 0.25
-        assert self.widget.lf_W3.value() == 0.27
-        assert self.widget.lf_R0.value() == 0.29
+        setup["widget"] = PHoleM58(setup["test_obj"].hole[0], setup["matlib"])
+        assert setup["widget"].lf_H0.value() == 0.20
+        assert setup["widget"].lf_H1.value() == 0.21
+        assert setup["widget"].lf_H2.value() == 0.22
+        assert setup["widget"].lf_W0.value() == 0.23
+        assert setup["widget"].lf_W1.value() == 0.24
+        assert setup["widget"].lf_W2.value() == 0.25
+        assert setup["widget"].lf_W3.value() == 0.27
+        assert setup["widget"].lf_R0.value() == 0.29
 
-    def test_set_W0(self):
+    def test_set_W0(self, setup):
         """Check that the Widget allow to update W0"""
         # Clear the field before writing the new value
-        self.widget.lf_W0.clear()
-        QTest.keyClicks(self.widget.lf_W0, "0.31")
-        self.widget.lf_W0.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_W0.clear()
+        QTest.keyClicks(setup["widget"].lf_W0, "0.31")
+        setup["widget"].lf_W0.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.hole.W0 == 0.31
-        assert self.test_obj.hole[0].W0 == 0.31
+        assert setup["widget"].hole.W0 == 0.31
+        assert setup["test_obj"].hole[0].W0 == 0.31
 
-    def test_set_W1(self):
+    def test_set_W1(self, setup):
         """Check that the Widget allow to update W1"""
-        self.widget.lf_W1.clear()
-        QTest.keyClicks(self.widget.lf_W1, "0.32")
-        self.widget.lf_W1.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_W1.clear()
+        QTest.keyClicks(setup["widget"].lf_W1, "0.32")
+        setup["widget"].lf_W1.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.hole.W1 == 0.32
-        assert self.test_obj.hole[0].W1 == 0.32
+        assert setup["widget"].hole.W1 == 0.32
+        assert setup["test_obj"].hole[0].W1 == 0.32
 
-    def test_set_W2(self):
+    def test_set_W2(self, setup):
         """Check that the Widget allow to update W2"""
-        self.widget.lf_W2.clear()
-        QTest.keyClicks(self.widget.lf_W2, "0.33")
-        self.widget.lf_W2.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_W2.clear()
+        QTest.keyClicks(setup["widget"].lf_W2, "0.33")
+        setup["widget"].lf_W2.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.hole.W2 == 0.33
-        assert self.test_obj.hole[0].W2 == 0.33
+        assert setup["widget"].hole.W2 == 0.33
+        assert setup["test_obj"].hole[0].W2 == 0.33
 
-    def test_set_W3(self):
+    def test_set_W3(self, setup):
         """Check that the Widget allow to update W3"""
-        self.widget.lf_W3.clear()
-        QTest.keyClicks(self.widget.lf_W3, "0.323")
-        self.widget.lf_W3.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_W3.clear()
+        QTest.keyClicks(setup["widget"].lf_W3, "0.323")
+        setup["widget"].lf_W3.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.hole.W3 == 0.323
-        assert self.test_obj.hole[0].W3 == 0.323
+        assert setup["widget"].hole.W3 == 0.323
+        assert setup["test_obj"].hole[0].W3 == 0.323
 
-    def test_set_R0(self):
+    def test_set_R0(self, setup):
         """Check that the Widget allow to update R0"""
-        self.widget.lf_R0.clear()
-        QTest.keyClicks(self.widget.lf_R0, "0.334")
-        self.widget.lf_R0.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_R0.clear()
+        QTest.keyClicks(setup["widget"].lf_R0, "0.334")
+        setup["widget"].lf_R0.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.hole.R0 == 0.334
-        assert self.test_obj.hole[0].R0 == 0.334
+        assert setup["widget"].hole.R0 == 0.334
+        assert setup["test_obj"].hole[0].R0 == 0.334
 
-    def test_set_H0(self):
+    def test_set_H0(self, setup):
         """Check that the Widget allow to update H0"""
-        self.widget.lf_H0.clear()
-        QTest.keyClicks(self.widget.lf_H0, "0.34")
-        self.widget.lf_H0.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_H0.clear()
+        QTest.keyClicks(setup["widget"].lf_H0, "0.34")
+        setup["widget"].lf_H0.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.hole.H0 == 0.34
-        assert self.test_obj.hole[0].H0 == 0.34
+        assert setup["widget"].hole.H0 == 0.34
+        assert setup["test_obj"].hole[0].H0 == 0.34
 
-    def test_set_H1(self):
+    def test_set_H1(self, setup):
         """Check that the Widget allow to update H1"""
-        self.widget.lf_H1.clear()
-        QTest.keyClicks(self.widget.lf_H1, "0.35")
-        self.widget.lf_H1.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_H1.clear()
+        QTest.keyClicks(setup["widget"].lf_H1, "0.35")
+        setup["widget"].lf_H1.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.hole.H1 == 0.35
-        assert self.test_obj.hole[0].H1 == 0.35
+        assert setup["widget"].hole.H1 == 0.35
+        assert setup["test_obj"].hole[0].H1 == 0.35
 
-    def test_set_H2(self):
+    def test_set_H2(self, setup):
         """Check that the Widget allow to update H2"""
-        self.widget.lf_H2.clear()
-        QTest.keyClicks(self.widget.lf_H2, "0.36")
-        self.widget.lf_H2.editingFinished.emit()  # To trigger the slot
+        setup["widget"].lf_H2.clear()
+        QTest.keyClicks(setup["widget"].lf_H2, "0.36")
+        setup["widget"].lf_H2.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.hole.H2 == 0.36
-        assert self.test_obj.hole[0].H2 == 0.36
+        assert setup["widget"].hole.H2 == 0.36
+        assert setup["test_obj"].hole[0].H2 == 0.36
 
-    def test_set_material_0(self):
+    def test_set_material_0(self, setup):
         """Check that you can change the material of mat_void"""
-        self.widget.w_mat_0.c_mat_type.setCurrentIndex(0)
+        setup["widget"].w_mat_0.c_mat_type.setCurrentIndex(0)
 
-        assert self.widget.w_mat_0.c_mat_type.currentText() == "Magnet1"
-        assert self.test_obj.hole[0].mat_void.name == "Magnet1"
+        assert setup["widget"].w_mat_0.c_mat_type.currentText() == "Magnet1"
+        assert setup["test_obj"].hole[0].mat_void.name == "Magnet1"
 
-    def test_set_material_1(self):
+    def test_set_material_1(self, setup):
         """Check that you can change the material of magnet_0"""
-        self.widget.w_mat_1.c_mat_type.setCurrentIndex(0)
+        setup["widget"].w_mat_1.c_mat_type.setCurrentIndex(0)
 
-        assert self.widget.w_mat_1.c_mat_type.currentText() == "Magnet1"
-        assert self.test_obj.hole[0].magnet_0.mat_type.name == "Magnet1"
+        assert setup["widget"].w_mat_1.c_mat_type.currentText() == "Magnet1"
+        assert setup["test_obj"].hole[0].magnet_0.mat_type.name == "Magnet1"
+
+    def test_PHoleM58_None_Magnet(self, setup):
+        """Check that you can create PHoleM58 with None for magnet_0"""
+        setup["test_obj"].hole.append(
+            HoleM58(
+                H0=0.10,
+                H1=0.11,
+                H2=0.12,
+                W0=0.13,
+                W1=0.14,
+                W2=0.15,
+                W3=0.17,
+                R0=0.19,
+                magnet_0=None,
+            )
+        )
+
+        setup["matlib"] = MatLib()
+        setup["matlib"].dict_mat["RefMatLib"] = [
+            Material(name="Magnet1"),
+            Material(name="Magnet2"),
+            Material(name="Magnet3"),
+        ]
+
+        setup["widget"] = PHoleM58(setup["test_obj"].hole[1], setup["matlib"])
+
+        assert setup["widget"].W1 == 0
+        assert setup["widget"].W2 == 0
+        assert setup["widget"].w_mat_1.isHidden()

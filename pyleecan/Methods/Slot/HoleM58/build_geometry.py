@@ -34,9 +34,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         st = "_Stator"
     else:
         st = "_Rotor"
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
-    Z0 = Rbo - self.H0
+    Z0 = Rext - self.H0
     Z2 = Z0 + 1j * (self.W0 / 2)
     Z1 = Z2 - 1j * self.W2
     Z12 = Z1 - 1j * self.W1
@@ -46,7 +46,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     Z7 = Z6 - 1j * self.W1
     Z8 = Z5 - 1j * self.W0
 
-    Zc1 = (Rbo - self.H1 - self.R0) * exp(1j * self.W3 / 2)
+    Zc1 = (Rext - self.H1 - self.R0) * exp(1j * self.W3 / 2)
 
     # Z3 is the tangent point of the circle for (Z3,Z2)
     # (X3 - X2) * (X3 - Xc) + (Y3 - Y2) * (Y3 - Yc)
@@ -231,7 +231,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Arc1(begin=Z9, end=Z10, radius=R0, is_trigo_direction=True))
     curve_list.append(Segment(Z10, Z11))
     curve_list.append(Segment(Z11, Z2))
-    point_ref = Rbo - self.H0 - self.H2 / 2
+    point_ref = Rext - self.H0 - self.H2 / 2
     S4 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # Create the surface list by selecting the correct ones

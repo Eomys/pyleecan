@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -31,9 +32,15 @@ try:
 except ImportError as error:
     get_Us = error
 
+try:
+    from ..Methods.Output.OutElec.comp_I_mag import comp_I_mag
+except ImportError as error:
+    comp_I_mag = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
+from .OutInternal import OutInternal
 
 
 class OutElec(FrozenClass):
@@ -69,6 +76,15 @@ class OutElec(FrozenClass):
         )
     else:
         get_Us = get_Us
+    # cf Methods.Output.OutElec.comp_I_mag
+    if isinstance(comp_I_mag, ImportError):
+        comp_I_mag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method comp_I_mag: " + str(comp_I_mag))
+            )
+        )
+    else:
+        comp_I_mag = comp_I_mag
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -77,15 +93,14 @@ class OutElec(FrozenClass):
 
     def __init__(
         self,
-        time=None,
-        angle=None,
+        Time=None,
+        Angle=None,
         Is=None,
         Ir=None,
         angle_rotor=None,
         N0=None,
         angle_rotor_initial=0,
         logger_name="Pyleecan.OutElec",
-        mmf_unit=None,
         Tem_av_ref=None,
         Id_ref=None,
         Iq_ref=None,
@@ -95,6 +110,7 @@ class OutElec(FrozenClass):
         Pj_losses=None,
         Pem_av_ref=None,
         Us=None,
+        internal=None,
         init_dict=None,
         init_str=None,
     ):
@@ -113,10 +129,10 @@ class OutElec(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "time" in list(init_dict.keys()):
-                time = init_dict["time"]
-            if "angle" in list(init_dict.keys()):
-                angle = init_dict["angle"]
+            if "Time" in list(init_dict.keys()):
+                Time = init_dict["Time"]
+            if "Angle" in list(init_dict.keys()):
+                Angle = init_dict["Angle"]
             if "Is" in list(init_dict.keys()):
                 Is = init_dict["Is"]
             if "Ir" in list(init_dict.keys()):
@@ -129,8 +145,6 @@ class OutElec(FrozenClass):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-            if "mmf_unit" in list(init_dict.keys()):
-                mmf_unit = init_dict["mmf_unit"]
             if "Tem_av_ref" in list(init_dict.keys()):
                 Tem_av_ref = init_dict["Tem_av_ref"]
             if "Id_ref" in list(init_dict.keys()):
@@ -149,17 +163,18 @@ class OutElec(FrozenClass):
                 Pem_av_ref = init_dict["Pem_av_ref"]
             if "Us" in list(init_dict.keys()):
                 Us = init_dict["Us"]
+            if "internal" in list(init_dict.keys()):
+                internal = init_dict["internal"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.time = time
-        self.angle = angle
+        self.Time = Time
+        self.Angle = Angle
         self.Is = Is
         self.Ir = Ir
         self.angle_rotor = angle_rotor
         self.N0 = N0
         self.angle_rotor_initial = angle_rotor_initial
         self.logger_name = logger_name
-        self.mmf_unit = mmf_unit
         self.Tem_av_ref = Tem_av_ref
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
@@ -169,6 +184,7 @@ class OutElec(FrozenClass):
         self.Pj_losses = Pj_losses
         self.Pem_av_ref = Pem_av_ref
         self.Us = Us
+        self.internal = internal
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -181,8 +197,8 @@ class OutElec(FrozenClass):
             OutElec_str += "parent = None " + linesep
         else:
             OutElec_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutElec_str += "time = " + str(self.time) + linesep + linesep
-        OutElec_str += "angle = " + str(self.angle) + linesep + linesep
+        OutElec_str += "Time = " + str(self.Time) + linesep + linesep
+        OutElec_str += "Angle = " + str(self.Angle) + linesep + linesep
         OutElec_str += "Is = " + str(self.Is) + linesep + linesep
         OutElec_str += "Ir = " + str(self.Ir) + linesep + linesep
         OutElec_str += (
@@ -197,7 +213,6 @@ class OutElec(FrozenClass):
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OutElec_str += "mmf_unit = " + str(self.mmf_unit) + linesep + linesep
         OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         OutElec_str += "Id_ref = " + str(self.Id_ref) + linesep
         OutElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
@@ -207,6 +222,11 @@ class OutElec(FrozenClass):
         OutElec_str += "Pj_losses = " + str(self.Pj_losses) + linesep
         OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         OutElec_str += "Us = " + str(self.Us) + linesep + linesep
+        if self.internal is not None:
+            tmp = self.internal.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OutElec_str += "internal = " + tmp
+        else:
+            OutElec_str += "internal = None" + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -214,9 +234,9 @@ class OutElec(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.time != self.time:
+        if other.Time != self.Time:
             return False
-        if other.angle != self.angle:
+        if other.Angle != self.Angle:
             return False
         if other.Is != self.Is:
             return False
@@ -229,8 +249,6 @@ class OutElec(FrozenClass):
         if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
         if other.logger_name != self.logger_name:
-            return False
-        if other.mmf_unit != self.mmf_unit:
             return False
         if other.Tem_av_ref != self.Tem_av_ref:
             return False
@@ -250,20 +268,46 @@ class OutElec(FrozenClass):
             return False
         if other.Us != self.Us:
             return False
+        if other.internal != self.internal:
+            return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.Time)
+        S += getsizeof(self.Angle)
+        S += getsizeof(self.Is)
+        S += getsizeof(self.Ir)
+        S += getsizeof(self.angle_rotor)
+        S += getsizeof(self.N0)
+        S += getsizeof(self.angle_rotor_initial)
+        S += getsizeof(self.logger_name)
+        S += getsizeof(self.Tem_av_ref)
+        S += getsizeof(self.Id_ref)
+        S += getsizeof(self.Iq_ref)
+        S += getsizeof(self.felec)
+        S += getsizeof(self.Ud_ref)
+        S += getsizeof(self.Uq_ref)
+        S += getsizeof(self.Pj_losses)
+        S += getsizeof(self.Pem_av_ref)
+        S += getsizeof(self.Us)
+        S += getsizeof(self.internal)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutElec_dict = dict()
-        if self.time is None:
-            OutElec_dict["time"] = None
+        if self.Time is None:
+            OutElec_dict["Time"] = None
         else:
-            OutElec_dict["time"] = self.time.as_dict()
-        if self.angle is None:
-            OutElec_dict["angle"] = None
+            OutElec_dict["Time"] = self.Time.as_dict()
+        if self.Angle is None:
+            OutElec_dict["Angle"] = None
         else:
-            OutElec_dict["angle"] = self.angle.as_dict()
+            OutElec_dict["Angle"] = self.Angle.as_dict()
         if self.Is is None:
             OutElec_dict["Is"] = None
         else:
@@ -279,10 +323,6 @@ class OutElec(FrozenClass):
         OutElec_dict["N0"] = self.N0
         OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         OutElec_dict["logger_name"] = self.logger_name
-        if self.mmf_unit is None:
-            OutElec_dict["mmf_unit"] = None
-        else:
-            OutElec_dict["mmf_unit"] = self.mmf_unit.as_dict()
         OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
         OutElec_dict["Id_ref"] = self.Id_ref
         OutElec_dict["Iq_ref"] = self.Iq_ref
@@ -295,6 +335,10 @@ class OutElec(FrozenClass):
             OutElec_dict["Us"] = None
         else:
             OutElec_dict["Us"] = self.Us.as_dict()
+        if self.internal is None:
+            OutElec_dict["internal"] = None
+        else:
+            OutElec_dict["internal"] = self.internal.as_dict()
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -302,15 +346,14 @@ class OutElec(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.time = None
-        self.angle = None
+        self.Time = None
+        self.Angle = None
         self.Is = None
         self.Ir = None
         self.angle_rotor = None
         self.N0 = None
         self.angle_rotor_initial = None
         self.logger_name = None
-        self.mmf_unit = None
         self.Tem_av_ref = None
         self.Id_ref = None
         self.Iq_ref = None
@@ -320,56 +363,58 @@ class OutElec(FrozenClass):
         self.Pj_losses = None
         self.Pem_av_ref = None
         self.Us = None
+        if self.internal is not None:
+            self.internal._set_None()
 
-    def _get_time(self):
-        """getter of time"""
-        return self._time
+    def _get_Time(self):
+        """getter of Time"""
+        return self._Time
 
-    def _set_time(self, value):
-        """setter of time"""
+    def _set_Time(self, value):
+        """setter of Time"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "time"
+                "SciDataTool.Classes", value.get("__class__"), "Time"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Data()
-        check_var("time", value, "Data")
-        self._time = value
+        check_var("Time", value, "Data")
+        self._Time = value
 
-    time = property(
-        fget=_get_time,
-        fset=_set_time,
-        doc=u"""Electrical time vector (no symmetry)
+    Time = property(
+        fget=_get_Time,
+        fset=_set_Time,
+        doc=u"""Electrical time Data object
 
         :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
-    def _get_angle(self):
-        """getter of angle"""
-        return self._angle
+    def _get_Angle(self):
+        """getter of Angle"""
+        return self._Angle
 
-    def _set_angle(self, value):
-        """setter of angle"""
+    def _set_Angle(self, value):
+        """setter of Angle"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "angle"
+                "SciDataTool.Classes", value.get("__class__"), "Angle"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Data()
-        check_var("angle", value, "Data")
-        self._angle = value
+        check_var("Angle", value, "Data")
+        self._Angle = value
 
-    angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Electrical position vector (no symmetry)
+    Angle = property(
+        fget=_get_Angle,
+        fset=_set_Angle,
+        doc=u"""Electrical position Data object
 
         :Type: SciDataTool.Classes.DataND.Data
         """,
@@ -396,7 +441,7 @@ class OutElec(FrozenClass):
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
-        doc=u"""Stator currents as a function of time (each column correspond to one phase)
+        doc=u"""Stator currents DataTime object
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -508,33 +553,6 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_mmf_unit(self):
-        """getter of mmf_unit"""
-        return self._mmf_unit
-
-    def _set_mmf_unit(self, value):
-        """setter of mmf_unit"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "mmf_unit"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = DataND()
-        check_var("mmf_unit", value, "DataND")
-        self._mmf_unit = value
-
-    mmf_unit = property(
-        fget=_get_mmf_unit,
-        fset=_set_mmf_unit,
-        doc=u"""Unit magnetomotive force
-
-        :Type: SciDataTool.Classes.DataND.DataND
-        """,
-    )
-
     def _get_Tem_av_ref(self):
         """getter of Tem_av_ref"""
         return self._Tem_av_ref
@@ -565,7 +583,7 @@ class OutElec(FrozenClass):
     Id_ref = property(
         fget=_get_Id_ref,
         fset=_set_Id_ref,
-        doc=u"""d-axis current magnitude
+        doc=u"""Electrical time vector (no symmetry)
 
         :Type: float
         """,
@@ -703,5 +721,35 @@ class OutElec(FrozenClass):
         doc=u"""Stator voltage as a function of time (each column correspond to one phase)
 
         :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
+
+    def _get_internal(self):
+        """getter of internal"""
+        return self._internal
+
+    def _set_internal(self, value):
+        """setter of internal"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "internal"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutInternal()
+        check_var("internal", value, "OutInternal")
+        self._internal = value
+
+        if self._internal is not None:
+            self._internal.parent = self
+
+    internal = property(
+        fget=_get_internal,
+        fset=_set_internal,
+        doc=u"""OutInternal object containg outputs related to a specific model
+
+        :Type: OutInternal
         """,
     )

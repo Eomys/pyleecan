@@ -12,6 +12,7 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.SlotW21.check import S21_H1rCheckError
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -65,7 +66,7 @@ slotW21_test.append(
 
 
 @pytest.mark.METHODS
-class Test_SlowW21_meth(object):
+class Test_SlotW21_meth(object):
     """pytest for SlotW21 methods"""
 
     @pytest.mark.parametrize("test_dict", slotW21_test)
@@ -209,7 +210,7 @@ class Test_SlowW21_meth(object):
         curve_list.append(Segment(Z4, Z3))
         point_ref = (Z3 + Ztan1 + Ztan2 + Z4) / 4
         surface = SurfLine(
-            line_list=curve_list, point_ref=point_ref, label="WindS_R0_T0_S0"
+            line_list=curve_list, point_ref=point_ref, label="Wind_Stator_R0_T0_S0"
         )
         expected.append(surface)
 
@@ -221,7 +222,7 @@ class Test_SlowW21_meth(object):
         curve_list.append(Segment(Ztan2, Ztan1))
         point_ref = (Z5 + Ztan1 + Ztan2 + Z6) / 4
         surface = SurfLine(
-            line_list=curve_list, point_ref=point_ref, label="WindS_R0_T1_S0"
+            line_list=curve_list, point_ref=point_ref, label="Wind_Stator_R0_T1_S0"
         )
         expected.append(surface)
 
@@ -238,3 +239,21 @@ class Test_SlowW21_meth(object):
                 assert abs((a - b) / a - 0) < DELTA
 
             assert result[i].label == expected[i].label
+
+    def test_check_error(self):
+        """Check that the check method is correctly raising an error"""
+        lam = LamSlot(is_internal=True, Rext=0.1325)
+        lam.slot = SlotW21(Zs=69, H2=0.0015, H1_is_rad=True, H1=3.14)
+
+        with pytest.raises(S21_H1rCheckError) as context:
+            lam.slot.check()
+
+    def test_get_surface_wind(self):
+        """Check that the get_surface_wind works when stator = false"""
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW21(
+            Zs=36, H0=3e-3, H1=0, H1_is_rad=False, H2=20e-3, W0=3e-3, W1=13e-3, W2=10e-3
+        )
+        result = lam.slot.get_surface_wind()
+        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert len(result.get_lines()) == 4

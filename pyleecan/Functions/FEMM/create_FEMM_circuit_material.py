@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from numpy import linalg as LA, pi, sign, sqrt
+from numpy import pi, sign, sqrt
 
-from ...Functions.FEMM.comp_FEMM_Jcus import comp_FEMM_Jcus
 from ...Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
 from ...Functions.Winding.find_wind_phase_color import get_phase_id
 from ...Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
@@ -47,14 +46,13 @@ def create_FEMM_circuit_material(
     # Load parameter for readibility
     rho = lam.winding.conductor.cond_mat.elec.rho  # Resistivity at 20°C
     wind_mat = lam.winding.comp_connection_mat(lam.slot.Zs)
-    Npcpp = lam.winding.Npcpp  # number of parallel circuits  per phase (maximum 2p)
     Swire = lam.winding.conductor.comp_surface()
 
     # Decode the label
     st = label.split("_")
-    Nrad_id = int(st[1][1:])  # zone radial coordinate
-    Ntan_id = int(st[2][1:])  # zone tangential coordinate
-    Zs_id = int(st[3][1:])  # Zone slot number coordinate
+    Nrad_id = int(st[2][1:])  # zone radial coordinate
+    Ntan_id = int(st[3][1:])  # zone tangential coordinate
+    Zs_id = int(st[4][1:])  # Zone slot number coordinate
     # Get the phase value in the correct slot zone
     q_id = get_phase_id(wind_mat, Nrad_id, Ntan_id, Zs_id)
     s = sign(wind_mat[Nrad_id, Ntan_id, Zs_id, q_id])
@@ -64,7 +62,8 @@ def create_FEMM_circuit_material(
         Clabel = "Circr" + str(q_id)
     else:
         Clabel = "Circs" + str(q_id)
-    circuits = set_FEMM_circuit_prop(femm, circuits, Clabel, I, is_mmf, Npcpp, j_t0)
+
+    circuits = set_FEMM_circuit_prop(femm, circuits, Clabel, I=None)
 
     # definition of armature field current sources
     if "Rotor" in label:
@@ -76,10 +75,16 @@ def create_FEMM_circuit_material(
     else:
         cname = Jlabel + str(q_id) + "-"
 
+    # circuit definition
+    circuits = set_FEMM_circuit_prop(femm, circuits, Clabel, I=None)
+
     # adding new current source material if necessary
-    Jcus = comp_FEMM_Jcus(lam, cname, I, j_t0, is_mmf)
     materials = set_FEMM_wind_material(
-        femm, materials, cname, Jcus, is_eddies * 1e-6 / rho, sqrt(4 * Swire / pi)
+        femm,
+        materials,
+        cname=cname,
+        Cduct=is_eddies * 1e-6 / rho,
+        dwire=sqrt(4 * Swire / pi),
     )
 
     return cname, materials, circuits

@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -283,13 +284,35 @@ class Arc3(Arc):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Arc
+        S += super(Arc3, self).__sizeof__()
+        S += getsizeof(self.begin)
+        S += getsizeof(self.end)
+        S += getsizeof(self.is_trigo_direction)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Arc
         Arc3_dict = super(Arc3, self).as_dict()
-        Arc3_dict["begin"] = self.begin
-        Arc3_dict["end"] = self.end
+        if self.begin is None:
+            Arc3_dict["begin"] = None
+        elif isinstance(self.begin, float):
+            Arc3_dict["begin"] = self.begin
+        else:
+            Arc3_dict["begin"] = str(self.begin)
+        if self.end is None:
+            Arc3_dict["end"] = None
+        elif isinstance(self.end, float):
+            Arc3_dict["end"] = self.end
+        else:
+            Arc3_dict["end"] = str(self.end)
         Arc3_dict["is_trigo_direction"] = self.is_trigo_direction
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -311,6 +334,8 @@ class Arc3(Arc):
 
     def _set_begin(self, value):
         """setter of begin"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("begin", value, "complex")
         self._begin = value
 
@@ -329,6 +354,8 @@ class Arc3(Arc):
 
     def _set_end(self, value):
         """setter of end"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("end", value, "complex")
         self._end = value
 

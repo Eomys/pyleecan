@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -101,7 +102,7 @@ class CellMat(FrozenClass):
         nb_cell=0,
         nb_pt_per_cell=0,
         indice=[],
-        interpolation=None,
+        interpolation=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -192,6 +193,17 @@ class CellMat(FrozenClass):
         if other.interpolation != self.interpolation:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.connectivity)
+        S += getsizeof(self.nb_cell)
+        S += getsizeof(self.nb_pt_per_cell)
+        S += getsizeof(self.indice)
+        S += getsizeof(self.interpolation)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

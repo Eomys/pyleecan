@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -220,6 +221,23 @@ class CondType11(Conductor):
         if other.alpha_ew != self.alpha_ew:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Conductor
+        S += super(CondType11, self).__sizeof__()
+        S += getsizeof(self.Hwire)
+        S += getsizeof(self.Wwire)
+        S += getsizeof(self.Nwppc_rad)
+        S += getsizeof(self.Nwppc_tan)
+        S += getsizeof(self.Wins_wire)
+        S += getsizeof(self.Wins_coil)
+        S += getsizeof(self.type_winding_shape)
+        S += getsizeof(self.alpha_ew)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

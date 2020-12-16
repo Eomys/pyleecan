@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -75,6 +76,11 @@ try:
     from ..Methods.Slot.Slot.comp_width_opening import comp_width_opening
 except ImportError as error:
     comp_width_opening = error
+
+try:
+    from ..Methods.Slot.Slot.get_name_lam import get_name_lam
+except ImportError as error:
+    get_name_lam = error
 
 
 from ._check import InitUnKnowClassError
@@ -207,6 +213,15 @@ class Slot(FrozenClass):
         )
     else:
         comp_width_opening = comp_width_opening
+    # cf Methods.Slot.Slot.get_name_lam
+    if isinstance(get_name_lam, ImportError):
+        get_name_lam = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method get_name_lam: " + str(get_name_lam))
+            )
+        )
+    else:
+        get_name_lam = get_name_lam
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -257,6 +272,13 @@ class Slot(FrozenClass):
         if other.Zs != self.Zs:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.Zs)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

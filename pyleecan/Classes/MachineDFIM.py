@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -25,11 +26,6 @@ try:
     from ..Methods.Machine.MachineDFIM.get_machine_type import get_machine_type
 except ImportError as error:
     get_machine_type = error
-
-try:
-    from ..Methods.Machine.MachineDFIM.get_lam_list import get_lam_list
-except ImportError as error:
-    get_lam_list = error
 
 
 from ._check import InitUnKnowClassError
@@ -65,17 +61,6 @@ class MachineDFIM(MachineAsync):
         )
     else:
         get_machine_type = get_machine_type
-    # cf Methods.Machine.MachineDFIM.get_lam_list
-    if isinstance(get_lam_list, ImportError):
-        get_lam_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MachineDFIM method get_lam_list: " + str(get_lam_list)
-                )
-            )
-        )
-    else:
-        get_lam_list = get_lam_list
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -173,6 +158,17 @@ class MachineDFIM(MachineAsync):
         if other.stator != self.stator:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from MachineAsync
+        S += super(MachineDFIM, self).__sizeof__()
+        S += getsizeof(self.rotor)
+        S += getsizeof(self.stator)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

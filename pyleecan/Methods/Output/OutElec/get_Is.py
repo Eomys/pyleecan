@@ -1,15 +1,25 @@
-from ....Functions.Electrical.coordinate_transformation import dq2n
 from numpy import pi, array, transpose
+
 from SciDataTool import Data1D, DataTime
+
+from ....Functions.Electrical.coordinate_transformation import dq2n
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def get_Is(self):
-    """Return the stator current"""
+    """Return the stator current DataTime object
+
+    Parameters
+    ----------
+    self : OutElec
+        an OutElec object
+
+    """
+    # Calculate stator currents if Is is not in OutElec
     if self.Is is None:
         # Generate current according to Id/Iq
         Isdq = array([self.Id_ref, self.Iq_ref])
-        time = self.time.get_values(is_oneperiod=True)
+        time = self.Time.get_values(is_oneperiod=True)
         qs = self.parent.simu.machine.stator.winding.qs
         felec = self.felec
 
@@ -19,19 +29,17 @@ def get_Is(self):
         # Get stator current function of time
         Is = dq2n(Isdq, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_n_rms=False)
 
-        Time = self.time
         Phase = Data1D(
             name="phase",
             unit="",
-            values=gen_name(qs, is_add_phase=True),
+            values=gen_name(qs),
             is_components=True,
         )
         self.Is = DataTime(
             name="Stator current",
             unit="A",
             symbol="Is",
-            axes=[Phase, Time],
-            symmetries=self.time.symmetries,
+            axes=[Phase, self.Time.copy()],
             values=transpose(Is),
         )
     return self.Is

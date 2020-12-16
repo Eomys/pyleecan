@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -94,6 +95,31 @@ try:
     from ..Methods.Machine.Machine.plot_anim_rotor import plot_anim_rotor
 except ImportError as error:
     plot_anim_rotor = error
+
+try:
+    from ..Methods.Machine.Machine.get_lam_list import get_lam_list
+except ImportError as error:
+    get_lam_list = error
+
+try:
+    from ..Methods.Machine.Machine.get_lam_list_label import get_lam_list_label
+except ImportError as error:
+    get_lam_list_label = error
+
+try:
+    from ..Methods.Machine.Machine.get_lam_by_label import get_lam_by_label
+except ImportError as error:
+    get_lam_by_label = error
+
+try:
+    from ..Methods.Machine.Machine.get_lam_index import get_lam_index
+except ImportError as error:
+    get_lam_index = error
+
+try:
+    from ..Methods.Machine.Machine.get_pole_pair_number import get_pole_pair_number
+except ImportError as error:
+    get_pole_pair_number = error
 
 
 from ._check import InitUnKnowClassError
@@ -272,6 +298,64 @@ class Machine(FrozenClass):
         )
     else:
         plot_anim_rotor = plot_anim_rotor
+    # cf Methods.Machine.Machine.get_lam_list
+    if isinstance(get_lam_list, ImportError):
+        get_lam_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_list: " + str(get_lam_list)
+                )
+            )
+        )
+    else:
+        get_lam_list = get_lam_list
+    # cf Methods.Machine.Machine.get_lam_list_label
+    if isinstance(get_lam_list_label, ImportError):
+        get_lam_list_label = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_list_label: "
+                    + str(get_lam_list_label)
+                )
+            )
+        )
+    else:
+        get_lam_list_label = get_lam_list_label
+    # cf Methods.Machine.Machine.get_lam_by_label
+    if isinstance(get_lam_by_label, ImportError):
+        get_lam_by_label = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_by_label: "
+                    + str(get_lam_by_label)
+                )
+            )
+        )
+    else:
+        get_lam_by_label = get_lam_by_label
+    # cf Methods.Machine.Machine.get_lam_index
+    if isinstance(get_lam_index, ImportError):
+        get_lam_index = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_index: " + str(get_lam_index)
+                )
+            )
+        )
+    else:
+        get_lam_index = get_lam_index
+    # cf Methods.Machine.Machine.get_pole_pair_number
+    if isinstance(get_pole_pair_number, ImportError):
+        get_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_pole_pair_number: "
+                    + str(get_pole_pair_number)
+                )
+            )
+        )
+    else:
+        get_pole_pair_number = get_pole_pair_number
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -370,6 +454,18 @@ class Machine(FrozenClass):
         if other.logger_name != self.logger_name:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.frame)
+        S += getsizeof(self.shaft)
+        S += getsizeof(self.name)
+        S += getsizeof(self.desc)
+        S += getsizeof(self.type_machine)
+        S += getsizeof(self.logger_name)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

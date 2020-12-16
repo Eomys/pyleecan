@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import matplotlib.pyplot as plt
-from .plot_A_2D import plot_A_2D
-from .plot_A_3D import plot_A_3D
 from ...definitions import config_dict
-from numpy import meshgrid, max as np_max
+from ...Functions.Plot.plot_3D_Data import plot_3D_Data
+from ...Functions.Plot.plot_2D_Data import plot_2D_Data
 
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 
@@ -19,9 +18,11 @@ def plot_A_time_space(
     z_max=None,
     is_norm=False,
     unit="SI",
-    colormap=None,
     save_path=None,
     is_auto_ticks=True,
+    is_show_fig=None,
+    fig=None,
+    color_list=[],
 ):
     """Plots a field as a function of time and space (angle)
 
@@ -45,190 +46,124 @@ def plot_A_time_space(
         boolean indicating if the field must be normalized
     unit : str
         unit in which to plot the field
-    colormap : colormap object
-        colormap prescribed by user
     save_path : str
-        path and name of the png file to save
+        full path including folder, name and extension of the file to save if save_path is not None
     is_auto_ticks : bool
         in fft, adjust ticks to freqs and wavenumbers (deactivate if too close)
+    is_show_fig : bool
+        True to show figure after plot
+    color_list : list
+        list of colors to use for each curve
     """
+
+    if is_show_fig is None:
+        is_show_fig = True if fig is None else False
 
     # Set plot
     fig, axs = plt.subplots(3, 2, tight_layout=True, figsize=(20, 10))
     title = data.name + " over time and space"
-    if colormap is None:
-        colormap = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
-    color_list = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
     # pcolorplot
     if is_deg:
-        xlabel = "Angle [°]"
+        angle_str = "angle{°}"
     else:
-        xlabel = "Angle [rad]"
-    ylabel = "Time [s]"
-    if unit == "SI":
-        unit = data.unit
-    if is_norm:
-        zlabel = r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
-    else:
-        zlabel = r"$" + data.symbol + "\, [" + unit + "]$"
+        angle_str = "angle{rad}"
 
-    if is_deg:
-        results = data.get_along("time", "angle{°}", unit=unit, is_norm=is_norm)
-    else:
-        results = data.get_along("time", "angle", unit=unit, is_norm=is_norm)
-    angle = results["angle"]
-    if is_deg and round(np_max(angle) / 6) % 5 == 0:
-        xticks = [i * round(np_max(angle) / 6) for i in range(7)]
-    else:
-        xticks = None
-    time = results["time"]
-    A_t_s = results[data.symbol]
-    angle_map, time_map = meshgrid(angle, time)
-    if z_max is None:
-        z_max = np_max(A_t_s)
-    plot_A_3D(
-        angle_map,
-        time_map,
-        A_t_s,
+    plot_3D_Data(
+        data,
+        "time",
+        angle_str,
+        is_norm=is_norm,
+        unit=unit,
         z_max=z_max,
-        z_min=-z_max,
-        colormap=colormap,
-        xlabel=xlabel,
-        ylabel=ylabel,
-        zlabel=zlabel,
-        xticks=xticks,
         fig=fig,
-        subplot_index=0,
-        type="pcolor",
+        ax=axs[0, 0],
+        is_auto_ticks=is_auto_ticks,
+        is_show_fig=False,
+        is_2D_view=True,
     )
 
     # 2D plots
-
     # time
-    xlabel = "Time [s]"
-    if is_norm:
-        ylabel = r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
-    else:
-        ylabel = r"$" + data.symbol + "\, [" + unit + "]$"
-    results = data.compare_along("time", unit=unit, is_norm=is_norm)
-    time = results["time"]
-    Ydata = [results[data.symbol]]
-    # Plot the original graph
-    plot_A_2D(
-        time,
-        Ydata,
+    plot_2D_Data(
+        data,
+        "time",
         fig=fig,
-        subplot_index=2,
-        xlabel=xlabel,
-        ylabel=ylabel,
+        ax=axs[1, 0],
         color_list=color_list,
+        is_auto_ticks=is_auto_ticks,
+        is_show_fig=False,
     )
 
     # angle
-    if is_deg:
-        xlabel = "Angle [°]"
-    else:
-        xlabel = "Angle [rad]"
-    if is_deg:
-        results = data.compare_along("angle{°}", unit=unit, is_norm=is_norm)
-    else:
-        results = data.compare_along("angle", unit=unit, is_norm=is_norm)
-    angle = results["angle"]
-    Ydata = [results[data.symbol]]
-    # Plot the original graph
-    plot_A_2D(
-        angle,
-        Ydata,
+    plot_2D_Data(
+        data,
+        angle_str,
         fig=fig,
-        subplot_index=4,
-        xlabel=xlabel,
-        ylabel=ylabel,
-        xticks=xticks,
+        ax=axs[2, 0],
         color_list=color_list,
+        is_auto_ticks=is_auto_ticks,
+        is_show_fig=False,
     )
 
     # fft time
-    if "dB" in unit:
-        unit_str = (
-            "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
-        )
-    else:
-        unit_str = "[" + unit + "]"
-    if data.symbol == "Magnitude":
-        ylabel = "Magnitude [" + unit + "]"
-    else:
-        ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
     if is_elecorder:
-        elec_max = freq_max / data.normalizations.get("elec_order")
-        xlabel = "Electrical order []"
-        (freqs, Ydata) = data.compare_magnitude_along(
-            "freqs=[0," + str(elec_max) + "]{elec_order}", unit=unit, is_norm=False
-        )
-    else:
-        xlabel = "Frequency [Hz]"
-        results = data.compare_magnitude_along(
-            "freqs=[0," + str(freq_max) + "]", unit=unit, is_norm=False
-        )
-    freqs = results["freqs"]
-    Ydata = [results[data.symbol]]
+        elec_max = None
+        for ax in data.axes:
+            if ax.name == "time":
+                try:
+                    elec_max = freq_max / ax.normalizations["elec_order"]
+                except:
+                    pass
 
-    if is_auto_ticks:
-        indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y) > 0.01]
-        indices = [0] + list(set(indices))
-        xticks = freqs[indices]
+        if elec_max is None:
+            freq_str = "freqs=[0," + str(freq_max) + "]"
+        else:
+            freq_str = "freqs->elec_order[0," + str(elec_max) + "]"
     else:
-        xticks = None
+        freq_str = "freqs=[0," + str(freq_max) + "]"
 
-    plot_A_2D(
-        freqs,
-        Ydata,
+    plot_2D_Data(
+        data,
+        freq_str,
         fig=fig,
-        subplot_index=3,
-        xlabel=xlabel,
-        ylabel=ylabel,
-        type="bargraph",
-        xticks=xticks,
+        ax=axs[1, 1],
+        unit=unit,
         color_list=color_list,
+        is_auto_ticks=is_auto_ticks,
+        is_show_fig=False,
     )
 
     # fft space
     if is_spaceorder:
-        order_max = r_max / data.normalizations.get("space_order")
-        xlabel = "Space order []"
-        results = data.compare_magnitude_along(
-            "wavenumber=[0," + str(order_max) + "]{space_order}",
-            unit=unit,
-            is_norm=False,
-        )
-    else:
-        xlabel = "Wavenumber []"
-        results = data.compare_magnitude_along(
-            "wavenumber=[0," + str(r_max) + "]", unit=unit, is_norm=False
-        )
-    wavenumber = results["wavenumber"]
-    Ydata = [results[data.symbol]]
+        order_max = None
+        for ax in data.axes:
+            if ax.name == "angle":
+                try:
+                    order_max = r_max / ax.normalizations["space_order"]
+                except:
+                    pass
 
-    if is_auto_ticks:
-        indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y) > 0.01]
-        indices = [0] + list(set(indices))
-        xticks = wavenumber[indices]
+        if order_max is None:
+            wavenb_str = "wavenumber=[0," + str(r_max) + "]"
+        else:
+            wavenb_str = "wavenumber->space_order[0," + str(order_max) + "]"
     else:
-        xticks = None
+        wavenb_str = "wavenumber=[0," + str(r_max) + "]"
 
-    plot_A_2D(
-        wavenumber,
-        Ydata,
+    plot_2D_Data(
+        data,
+        wavenb_str,
         fig=fig,
-        subplot_index=5,
-        xlabel=xlabel,
-        ylabel=ylabel,
-        type="bargraph",
-        xticks=xticks,
+        ax=axs[2, 1],
+        unit=unit,
         color_list=color_list,
+        is_auto_ticks=is_auto_ticks,
+        is_show_fig=False,
     )
 
     axs[0, 1].axis("off")
+    axs[0, 1].set_title("")
 
     fig.canvas.set_window_title(title)
     fig.suptitle(title, x=0.65, fontsize=24, fontname=FONT_NAME)
@@ -236,6 +171,7 @@ def plot_A_time_space(
 
     if save_path is not None:
         fig.savefig(save_path)
-        # plt.close()
+        plt.close()
 
-    fig.show()
+    if is_show_fig:
+        fig.show()

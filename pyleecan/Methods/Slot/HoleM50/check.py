@@ -30,7 +30,7 @@ def check(self):
     S50_SpCheckError
         Slot pitch too small for the slot, reduce Zh, W3 or W0
     """
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
     # Check that everything is set
     if self.W0 is None:
@@ -66,8 +66,8 @@ def check(self):
     if self.comp_W5() < 0:
         raise S50_W5CheckError("You must have W5 >=0")
 
-    alpha_0 = 2 * arcsin(self.W0 / (2 * (Rbo - self.H1)))  # W0 in rad
-    alpha_3 = 2 * arcsin(self.W3 / (2 * (Rbo - self.H1)))  # W3 in rad
+    alpha_0 = 2 * arcsin(self.W0 / (2 * (Rext - self.H1)))  # W0 in rad
+    alpha_3 = 2 * arcsin(self.W3 / (2 * (Rext - self.H1)))  # W3 in rad
     if alpha_0 + alpha_3 > 2 * pi / self.Zh:
         raise S50_SpCheckError("Slot pitch too small for the slot, reduce Zh, W3 or W0")
 

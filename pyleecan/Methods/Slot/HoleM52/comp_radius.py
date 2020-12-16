@@ -18,12 +18,12 @@ def comp_radius(self):
 
     """
 
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
-    Rmax = Rbo - self.H0
+    Rmax = Rext - self.H0
 
     alpha = self.comp_alpha()
-    Z1 = (Rbo - self.H0) * exp(1j * alpha / 2)
+    Z1 = (Rext - self.H0) * exp(1j * alpha / 2)
     Z5 = Z1.real - self.H1
     Rmin = abs(Z5)
 

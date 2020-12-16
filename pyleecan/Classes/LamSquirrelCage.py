@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -47,6 +48,18 @@ try:
     from ..Methods.Machine.LamSquirrelCage.comp_periodicity import comp_periodicity
 except ImportError as error:
     comp_periodicity = error
+
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_surface_ring import comp_surface_ring
+except ImportError as error:
+    comp_surface_ring = error
+
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_resistance_wind import (
+        comp_resistance_wind,
+    )
+except ImportError as error:
+    comp_resistance_wind = error
 
 
 from ._check import InitUnKnowClassError
@@ -129,6 +142,30 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_periodicity = comp_periodicity
+    # cf Methods.Machine.LamSquirrelCage.comp_surface_ring
+    if isinstance(comp_surface_ring, ImportError):
+        comp_surface_ring = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_surface_ring: "
+                    + str(comp_surface_ring)
+                )
+            )
+        )
+    else:
+        comp_surface_ring = comp_surface_ring
+    # cf Methods.Machine.LamSquirrelCage.comp_resistance_wind
+    if isinstance(comp_resistance_wind, ImportError):
+        comp_resistance_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_resistance_wind: "
+                    + str(comp_resistance_wind)
+                )
+            )
+        )
+    else:
+        comp_resistance_wind = comp_resistance_wind
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -261,6 +298,18 @@ class LamSquirrelCage(LamSlotWind):
         if other.ring_mat != self.ring_mat:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from LamSlotWind
+        S += super(LamSquirrelCage, self).__sizeof__()
+        S += getsizeof(self.Hscr)
+        S += getsizeof(self.Lscr)
+        S += getsizeof(self.ring_mat)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from ....Methods.Simulation.Input import InputError
 
 
@@ -17,6 +16,12 @@ def run(self):
     self.get_logger().info("Starting Magnetic module")
     output = self.parent.parent
 
-    self.comp_time_angle(output)
+    # Compute and store time and angle axes from elec output
+    # and returns additional axes in axes_dict
+    axes_dict = self.comp_axes(output)
 
-    self.comp_flux_airgap(output)
+    # Calculate airgap flux
+    out_dict = self.comp_flux_airgap(output, axes_dict)
+
+    # Store magnetic quantities contained in out_dict in OutMag, as Data object if necessary
+    output.mag.store(out_dict, axes_dict)
