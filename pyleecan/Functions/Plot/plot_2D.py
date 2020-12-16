@@ -41,6 +41,7 @@ def plot_2D(
     save_path=None,
     barwidth=100,
     is_show_fig=None,
+    win_title=None,
 ):
     """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
@@ -94,6 +95,8 @@ def plot_2D(
         barwidth scaling factor, only if type_plot = "bargraph"
     is_show_fig : bool
         True to show figure after plot
+    win_title : str
+        Title of the plot window
     """
 
     # Set is_show_fig if is None
@@ -233,3 +236,6 @@ def plot_2D(
 
     if is_show_fig:
         fig.show()
+
+    if win_title:
+        fig.canvas.set_window_title(win_title)
