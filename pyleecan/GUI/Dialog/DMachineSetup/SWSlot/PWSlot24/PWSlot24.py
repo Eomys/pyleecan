@@ -99,9 +99,9 @@ class PWSlot24(Gen_PWSlot24, QWidget):
 
         # Check that everything is set
         if lam.slot.W3 is None:
-            return translate("You must set W3 !", "PWSlot24 check")
+            return "You must set W3 !"
         elif lam.slot.H2 is None:
-            return translate("You must set H2 !", "PWSlot24 check")
+            return "You must set H2 !"
 
         # Check that everything is set right
         # Constraints
@@ -114,10 +114,8 @@ class PWSlot24(Gen_PWSlot24, QWidget):
         try:
             yoke_height = lam.comp_height_yoke()
         except Exception as error:
-            return translate("Unable to compute yoke height:", "PWSlot24 check") + str(
+            return "Unable to compute yoke height:" + str(
                 error
             )
         if yoke_height <= 0:
-            return translate(
-                "The slot height is greater than the lamination !", "PWSlot24 check"
-            )
+            return "The slot height is greater than the lamination !"

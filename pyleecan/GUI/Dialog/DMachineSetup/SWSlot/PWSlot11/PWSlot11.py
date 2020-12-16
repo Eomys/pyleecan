@@ -222,21 +222,21 @@ class PWSlot11(Gen_PWSlot11, QWidget):
 
         # Check that everything is set
         if lam.slot.W0 is None:
-            return translate("You must set W0 !", "PWSlot11")
+            return "You must set W0 !"
         elif lam.slot.W1 is None:
-            return translate("You must set W1 !", "PWSlot11")
+            return "You must set W1 !"
         elif lam.slot.W2 is None:
-            return translate("You must set W2 !", "PWSlot11")
+            return "You must set W2 !"
         elif lam.slot.H0 is None:
-            return translate("You must set H0 !", "PWSlot11")
+            return "You must set H0 !"
         elif lam.slot.H1 is None:
-            return translate("You must set H1 !", "PWSlot11")
+            return "You must set H1 !"
         elif lam.slot.H2 is None:
-            return translate("You must set H2 !", "PWSlot11")
+            return "You must set H2 !"
         elif lam.slot.R1 is None:
-            return translate("You must set R1 !", "PWSlot11")
+            return "You must set R1 !"
         elif lam.slot.H1 >= pi / 2:
-            return translate("You must have H1 < 90°", "PWSlot11")
+            return "You must have H1 < 90°"
 
         # Constraints
         try:
@@ -248,8 +248,6 @@ class PWSlot11(Gen_PWSlot11, QWidget):
         try:
             yoke_height = lam.comp_height_yoke()
         except Exception as error:
-            return translate("Unable to compute yoke height:", "PWSlot11") + str(error)
+            return "Unable to compute yoke height:" + str(error)
         if yoke_height <= 0:
-            return translate(
-                "The slot height is greater than the lamination !", "PWSlot11"
-            )
+            return "The slot height is greater than the lamination !"
