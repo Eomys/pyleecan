@@ -114,12 +114,12 @@ class TestPWSlot16(object):
         setup["test_obj"] = LamSlotWind(Rint=92.5e-3, Rext=0.2, is_internal=False)
         setup["test_obj"].slot = SlotW16(H0=None, H2=0.12, W0=0.13, W3=0.14, R1=0.16)
         setup["widget"] = PWSlot16(setup["test_obj"])
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot16 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H0 !"
         setup["test_obj"].slot = SlotW16(H0=0.10, H2=None, W0=0.13, W3=0.14, R1=0.16)
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot16 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H2 !"
         setup["test_obj"].slot = SlotW16(H0=0.10, H2=0.12, W0=None, W3=0.14, R1=0.16)
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot16 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set W0 !"
         setup["test_obj"].slot = SlotW16(H0=0.10, H2=0.12, W0=0.13, W3=None, R1=0.16)
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot16 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set W3 !"
         setup["test_obj"].slot = SlotW16(H0=0.10, H2=0.12, W0=0.13, W3=0.14, R1=None)
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot16 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set R1 !"

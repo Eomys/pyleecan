@@ -83,8 +83,8 @@ class TestPWSlot24(object):
         setup["test_obj"] = LamSlotWind(Rint=0.7, Rext=0.5)
         setup["test_obj"].slot = SlotW24(H2=0.12, W3=None)
         setup["widget"] = PWSlot24(setup["test_obj"])
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot24 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set W3 !"
         setup["test_obj"].slot = SlotW24(H2=None, W3=0.13)
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot24 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H2 !"
         setup["test_obj"].slot = SlotW24(H2=0.12, W3=0.100e-3)
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot24 yoke"
+        assert setup["widget"].check(setup["test_obj"]) == "The slot height is greater than the lamination !"
