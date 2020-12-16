@@ -1,0 +1,2 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+sections,,List of SIF sections,,list,,,,,Elmer,Elmer,write,VERSION,1,Class to setup the Elmer Solver Input File,

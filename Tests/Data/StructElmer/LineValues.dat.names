@@ -1,0 +1,23 @@
+Variables in file: Results/LineValues.dat
+Elmer version: 8.4
+Elmer revision: Release
+Elmer compilation date: 2020-08-03
+Solver input file: case.sif
+File started at: 2020/12/08 13:15:35
+Number of data nodes for each step
+  bc nodes: 145
+  polyline nodes: 0
+  circle nodes: 0
+  isocurve nodes: 0
+Data on different columns
+  1: Iteration step
+  2: Boundary condition
+  3: Node index
+  4: coordinate 1
+  5: coordinate 2
+  6: coordinate 3
+  7: displacement 1
+  8: displacement 2
+  9: principal stress 1
+ 10: principal stress 2
+ 11: vonmises
