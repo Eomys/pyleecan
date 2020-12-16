@@ -10,6 +10,7 @@ _Internal/
 run_GUI_internal.py
 /Tests/logtest.txt
 **/.vscode
+**/.ipynb*
 /.spyproject/config/backups/codestyle.ini.bak
 /.spyproject/config/backups/encoding.ini.bak
 /.spyproject/config/backups/vcs.ini.bak
