@@ -174,8 +174,7 @@ def _comp_flux_mean(self, out):
     sym, is_anti_per, _, _ = machine.comp_periodicity()
 
     # get the fluxlinkages
-    rid = out.simu.machine.get_lam_index("Rotor")
-    Phi = out.mag.Phi_wind[rid].get_along("time", "phase")["Phi_{wind}"]
+    Phi = out.mag.Phi_wind["Rotor_0"].get_along("time", "phase")["Phi_{wind}"]
 
     # reconstruct fluxlinkage in case of (anti) periodicity
     if out.simu.mag.is_periodicity_a:
@@ -219,9 +218,7 @@ def _comp_flux_mean(self, out):
 
     # compute rotor and stator fluxlinkage
     Phi_r = abs(Phi_ab[:, 0] + 1j * Phi_ab[:, 1]).mean() / sqrt(2)
-
-    sid = out.simu.machine.get_lam_index("Stator")
-    Phi_ab = n2ab(out.mag.Phi_wind[sid].get_along("time", "phase")["Phi_{wind}"])
+    Phi_ab = n2ab(out.mag.Phi_wind["Stator_0"].get_along("time", "phase")["Phi_{wind}"])
     Phi_s = abs(Phi_ab[:, 0] + 1j * Phi_ab[:, 1]).mean() / sqrt(2)
 
     return Phi_s, Phi_r

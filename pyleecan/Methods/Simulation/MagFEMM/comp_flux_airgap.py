@@ -32,8 +32,8 @@ def comp_flux_airgap(self, output, axes_dict):
                 Electromagnetic torque over time (Nt,) [Nm]
             Phi_wind_stator : ndarray
                 Stator winding flux (qs,Nt) [Wb]
-            Phi_wind : list of ndarray
-                List of winding flux with respect to Machine.get_lamlist (qs,Nt) [Wb]
+            Phi_wind : dict
+                Dict of winding fluxlinkage with respect to Machine.get_lam_list_label (qs,Nt) [Wb]
             meshsolution: MeshSolution
                 MeshSolution object containing magnetic quantities B, H, mu for each time step
     """
@@ -122,13 +122,14 @@ def comp_flux_airgap(self, output, axes_dict):
     out_dict["Tem"] = zeros((Nt))
     # Init lamination winding flux list of arrays in out_dict
     machine = output.simu.machine
-    out_dict["Phi_wind"] = []
-    for lam in machine.get_lam_list():
+    out_dict["Phi_wind"] = {}
+    for label, lam in zip(machine.get_lam_list_label(), machine.get_lam_list()):
         if hasattr(lam, "winding") and lam.winding is not None:
             qs = lam.winding.qs  # Winding phase number
-            out_dict["Phi_wind"].append(zeros((Nt, qs)))
-        else:
-            out_dict["Phi_wind"].append(None)
+            out_dict["Phi_wind"][label] = zeros((Nt, qs))
+    # delete 'Phi_wind' if empty
+    if not out_dict["Phi_wind"]:
+        out_dict.pop("Phi_wind")
 
     # Solve for all time step and store all the results in out_dict
     if self.nb_worker > 1:
@@ -179,7 +180,7 @@ def comp_flux_airgap(self, output, axes_dict):
             out_dict["meshsolution"].save(save_path_fea)
 
     # Store stator winding flux
-    id = machine.get_lam_index("Stator")
-    out_dict["Phi_wind_stator"] = out_dict["Phi_wind"][id]
+    if "Stator_0" in out_dict["Phi_wind"].keys():
+        out_dict["Phi_wind_stator"] = out_dict["Phi_wind"]["Stator_0"]
 
     return out_dict

@@ -6935,11 +6935,11 @@
                 "value": "None"
             },
             {
-                "desc": "List of lamination winding flux DataTime objects",
+                "desc": "Dict of lamination winding fluxlinkage DataTime objects",
                 "max": "",
                 "min": "",
                 "name": "Phi_wind",
-                "type": "[SciDataTool.Classes.DataTime.DataTime]",
+                "type": "{SciDataTool.Classes.DataTime.DataTime}",
                 "unit": "Wb",
                 "value": "None"
             },

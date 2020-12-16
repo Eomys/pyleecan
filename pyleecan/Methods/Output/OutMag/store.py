@@ -85,36 +85,33 @@ def store(self, out_dict, axes_dict):
         else:
             self.Tem_rip_norm = None
 
-    # Store list of winding flux, stator winding flux and calculate electromotive force
+    # Store list of winding fluxlinkage, stator winding fluxlinkage
+    # and calculate electromotive force
     if "Phi_wind" in out_dict:
         machine = self.parent.simu.machine
-        self.Phi_wind = []
-        for idx, lam in enumerate(machine.get_lam_list()):
-            if out_dict["Phi_wind"][idx] is not None:
-                # Store stator winding flux
-                qs = lam.winding.qs
+        self.Phi_wind = {}
+        for key in out_dict["Phi_wind"].keys():
+            # Store stator winding flux
+            lam = machine.get_lam_by_label(key)
+            qs = lam.winding.qs
 
-                Phase = Data1D(
-                    name="phase",
-                    unit="",
-                    values=gen_name(qs),
-                    is_components=True,
-                )
-                prefix = "Stator" if lam.is_stator else "Rotor"
-                self.Phi_wind.append(
-                    DataTime(
-                        name=prefix + " Winding Flux",
-                        unit="Wb",
-                        symbol="Phi_{wind}",
-                        axes=[Time, Phase],
-                        values=out_dict["Phi_wind"][idx],
-                    )
-                )
-            else:
-                self.Phi_wind.append(None)
+            Phase = Data1D(
+                name="phase",
+                unit="",
+                values=gen_name(qs),
+                is_components=True,
+            )
+            prefix = "Stator" if lam.is_stator else "Rotor"
+            self.Phi_wind[key] = DataTime(
+                name=prefix + " Winding Flux",
+                unit="Wb",
+                symbol="Phi_{wind}",
+                axes=[Time, Phase],
+                values=out_dict["Phi_wind"][key],
+            )
 
-            if lam.is_stator:  # TODO fix for multi stator
-                self.Phi_wind_stator = self.Phi_wind[idx]
+        if "Stator_0" in out_dict["Phi_wind"].keys():  # TODO fix for multi stator
+            self.Phi_wind_stator = self.Phi_wind["Stator_0"]
 
         # Electromotive force computation
         self.comp_emf()

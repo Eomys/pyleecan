@@ -238,8 +238,8 @@ class OutMag(FrozenClass):
         S += getsizeof(self.Tem_rip_pp)
         S += getsizeof(self.Phi_wind_stator)
         if self.Phi_wind is not None:
-            for value in self.Phi_wind:
-                S += getsizeof(value)
+            for key, value in self.Phi_wind.items():
+                S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.emf)
         S += getsizeof(self.meshsolution)
         S += getsizeof(self.logger_name)
@@ -276,9 +276,9 @@ class OutMag(FrozenClass):
         if self.Phi_wind is None:
             OutMag_dict["Phi_wind"] = None
         else:
-            OutMag_dict["Phi_wind"] = list()
-            for obj in self.Phi_wind:
-                OutMag_dict["Phi_wind"].append(obj.as_dict())
+            OutMag_dict["Phi_wind"] = dict()
+            for key, obj in self.Phi_wind.items():
+                OutMag_dict["Phi_wind"][key] = obj.as_dict()
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:
@@ -505,31 +505,31 @@ class OutMag(FrozenClass):
     def _get_Phi_wind(self):
         """getter of Phi_wind"""
         if self._Phi_wind is not None:
-            for obj in self._Phi_wind:
+            for key, obj in self._Phi_wind.items():
                 if obj is not None:
                     obj.parent = self
         return self._Phi_wind
 
     def _set_Phi_wind(self, value):
         """setter of Phi_wind"""
-        if type(value) is list:
-            for ii, obj in enumerate(value):
+        if type(value) is dict:
+            for key, obj in value.items():
                 if type(obj) is dict:
                     class_obj = import_class(
                         "SciDataTool.Classes", obj.get("__class__"), "Phi_wind"
                     )
-                    value[ii] = class_obj(init_dict=obj)
-        if value == -1:
-            value = list()
-        check_var("Phi_wind", value, "[DataTime]")
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("Phi_wind", value, "{DataTime}")
         self._Phi_wind = value
 
     Phi_wind = property(
         fget=_get_Phi_wind,
         fset=_set_Phi_wind,
-        doc=u"""List of lamination winding flux DataTime objects
+        doc=u"""Dict of lamination winding fluxlinkage DataTime objects
 
-        :Type: [SciDataTool.Classes.DataTime.DataTime]
+        :Type: {SciDataTool.Classes.DataTime.DataTime}
         """,
     )
 

@@ -119,15 +119,12 @@ def solve_FEMM(
     save_path = self.get_path_save(output)
     is_internal_rotor = machine.rotor.is_internal
     if "Phi_wind" in out_dict:
-        qs = []
-        Npcpp = []
-        for idx, lam in enumerate(machine.get_lam_list()):
-            if out_dict["Phi_wind"][idx] is not None:
-                qs.append(lam.winding.qs)  # Winding phase number
-                Npcpp.append(lam.winding.Npcpp)  # parallel paths
-            else:
-                qs.append(None)
-                Npcpp.append(None)
+        qs = {}
+        Npcpp = {}
+        for key in out_dict["Phi_wind"].keys():
+            lam = machine.get_lam_by_label(key)
+            qs[key] = lam.winding.qs  # Winding phase number
+            Npcpp[key] = lam.winding.Npcpp  # parallel paths
 
     # Account for initial angular shift of stator and rotor and apply it to the sliding band
     angle_shift = self.angle_rotor_shift - self.angle_stator_shift
@@ -179,17 +176,16 @@ def solve_FEMM(
         if "Phi_wind" in out_dict:
             # Phi_wind computation
             # TODO fix inconsistency for multi lam machines here
-            for idx, lam in enumerate(machine.get_lam_list()):
-                if out_dict["Phi_wind"][idx] is not None:
-                    out_dict["Phi_wind"][idx][ii, :] = comp_FEMM_Phi_wind(
-                        femm,
-                        qs[idx],
-                        Npcpp[idx],
-                        is_stator=lam.is_stator,
-                        Lfemm=FEMM_dict["Lfemm"],
-                        L1=L1,
-                        sym=sym,
-                    )
+            for key in out_dict["Phi_wind"].keys():
+                out_dict["Phi_wind"][key][ii, :] = comp_FEMM_Phi_wind(
+                    femm,
+                    qs[key],
+                    Npcpp[key],
+                    is_stator=machine.get_lam_by_label(key).is_stator,
+                    Lfemm=FEMM_dict["Lfemm"],
+                    L1=L1,
+                    sym=sym,
+                )
 
         # Load mesh data & solution
         if (self.is_sliding_band or Nt == 1) and (self.is_get_mesh or self.is_save_FEA):
