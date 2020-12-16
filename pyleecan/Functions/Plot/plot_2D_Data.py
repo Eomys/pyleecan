@@ -30,6 +30,7 @@ def plot_2D_Data(
     type_plot=None,
     fund_harm_dict=None,
     is_show_fig=None,
+    win_title=None,
 ):
     """Plots a field as a function of time
 
@@ -81,7 +82,8 @@ def plot_2D_Data(
         Dict containing axis name as key and frequency/order/wavenumber of fundamental harmonic as value to display fundamental harmonic in red in the fft
     is_show_fig : bool
         True to show figure after plot
-
+    win_title : str
+        Title of the plot window
     """
     # Extract arg_list it the function called from another script with *arg_list
     if len(arg_list) == 1 and type(arg_list[0]) == tuple:
@@ -344,6 +346,7 @@ def plot_2D_Data(
             barwidth=barwidth,
             fund_harm=fund_harm,
             is_show_fig=is_show_fig,
+            win_title=win_title,
         )
 
     else:
@@ -375,4 +378,5 @@ def plot_2D_Data(
             linestyle_list=linestyle_list,
             save_path=save_path,
             is_show_fig=is_show_fig,
+            win_title=win_title,
         )

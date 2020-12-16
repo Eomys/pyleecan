@@ -113,9 +113,11 @@ def solve_FEMM(
     Na = angle.size
 
     # Loading parameters for readibility
-    machine = output.simu.machine
-    Rag = machine.comp_Rgap_mec()
-    L1 = machine.stator.comp_length()
+    Rag = self.Rag_enforced
+    if Rag is None:
+        Rag = output.simu.machine.comp_Rgap_mec()
+
+    L1 = output.simu.machine.stator.comp_length()
     save_path = self.get_path_save(output)
     is_internal_rotor = machine.rotor.is_internal
     if "Phi_wind" in out_dict:
@@ -230,5 +232,7 @@ def solve_FEMM(
     if is_close_femm:
         femm.closefemm()
         output.mag.internal.handler_list.remove(femm)
+
+    out_dict["Rag"] = Rag
 
     return B_elem, H_elem, mu_elem, meshFEMM, groups

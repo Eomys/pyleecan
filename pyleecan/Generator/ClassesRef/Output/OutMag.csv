@@ -12,3 +12,4 @@ emf,V,Electromotive force DataTime object,"(Nt_tot, qs)",SciDataTool.Classes.Dat
 meshsolution,,FEA software mesh and solution,,MeshSolution,,,,,,,,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.OutMag,,,,,,,,,
 internal,-,OutInternal object containg outputs related to a specific model,0,OutInternal,None,,,,,,,,,
+Rag,-,Radius value for air-gap computation,0,float,None,,,,,,,,,
