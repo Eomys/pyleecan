@@ -112,6 +112,11 @@ except ImportError as error:
     get_lam_by_label = error
 
 try:
+    from ..Methods.Machine.Machine.get_lam_index import get_lam_index
+except ImportError as error:
+    get_lam_index = error
+
+try:
     from ..Methods.Machine.Machine.get_pole_pair_number import get_pole_pair_number
 except ImportError as error:
     get_pole_pair_number = error
@@ -328,6 +333,17 @@ class Machine(FrozenClass):
         )
     else:
         get_lam_by_label = get_lam_by_label
+    # cf Methods.Machine.Machine.get_lam_index
+    if isinstance(get_lam_index, ImportError):
+        get_lam_index = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_index: " + str(get_lam_index)
+                )
+            )
+        )
+    else:
+        get_lam_index = get_lam_index
     # cf Methods.Machine.Machine.get_pole_pair_number
     if isinstance(get_pole_pair_number, ImportError):
         get_pole_pair_number = property(

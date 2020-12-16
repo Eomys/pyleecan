@@ -996,13 +996,13 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_SCIM.csv",
         "properties": [
             {
-                "desc": "Magnetic inductance",
+                "desc": "RMS current for parameter estimation",
                 "max": "",
                 "min": "",
-                "name": "indmag",
-                "type": "IndMag",
+                "name": "I",
+                "type": "float",
                 "unit": "-",
-                "value": null
+                "value": 1
             },
             {
                 "desc": "Parameters of the EEC: computed if empty, or enforced",
@@ -1014,22 +1014,58 @@
                 "value": {}
             },
             {
-                "desc": "Frequency",
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)",
                 "max": "",
                 "min": "",
-                "name": "freq0",
+                "name": "is_periodicity_a",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
+                "max": "",
+                "min": "",
+                "name": "nb_worker",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Rotor speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "float",
+                "unit": "rpm",
+                "value": null
+            },
+            {
+                "desc": "electrical frequency",
+                "max": "",
+                "min": "",
+                "name": "felec",
                 "type": "float",
                 "unit": "Hz",
                 "value": null
             },
             {
-                "desc": "Drive",
+                "desc": "Time discretization",
                 "max": "",
-                "min": "",
-                "name": "drive",
-                "type": "Drive",
+                "min": "1",
+                "name": "Nt_tot",
+                "type": "int",
                 "unit": "-",
-                "value": null
+                "value": 32
+            },
+            {
+                "desc": "Number of rotor revolution (to compute the final time)",
+                "max": "",
+                "min": "0",
+                "name": "Nrev",
+                "type": "float",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
@@ -3663,7 +3699,8 @@
             "plot",
             "comp_number_phase_eq",
             "comp_periodicity",
-            "comp_surface_ring"
+            "comp_surface_ring",
+            "comp_resistance_wind"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -3917,6 +3954,7 @@
             "get_lam_list",
             "get_lam_list_label",
             "get_lam_by_label",
+            "get_lam_index",
             "get_pole_pair_number"
         ],
         "mother": "",
@@ -6923,6 +6961,15 @@
                 "min": "",
                 "name": "Phi_wind_stator",
                 "type": "SciDataTool.Classes.DataTime.DataTime",
+                "unit": "Wb",
+                "value": "None"
+            },
+            {
+                "desc": "Dict of lamination winding fluxlinkage DataTime objects",
+                "max": "",
+                "min": "",
+                "name": "Phi_wind",
+                "type": "{SciDataTool.Classes.DataTime.DataTime}",
                 "unit": "Wb",
                 "value": "None"
             },
