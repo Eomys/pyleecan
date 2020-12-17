@@ -29,13 +29,16 @@ def get_mesh_pv(self, indices=None):
 
     # Read mesh file
     else:
-        if self.format != "vtk":
+        if self.format != "vtk" and self.format != "vtu":
             # Write vtk files with meshio
             mesh = read(self.path + "/" + self.name + "." + self.format)
             mesh.write(self.path + "/" + self.name + ".vtk")
+            use_this_format = ".vtk"
+        elif self.format == "vtu":
+            use_this_format = ".vtu"
 
         # Read .vtk file with pyvista
-        mesh = pv.read(self.path + "/" + self.name + ".vtk")
+        mesh = pv.read(self.path + "/" + self.name + use_this_format)
 
         # Extract submesh
         if indices is not None:

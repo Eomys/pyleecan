@@ -76,7 +76,11 @@ def test_Elmer():
     # Definition of the magnetic simulation
     # 2 sym + antiperiodicity = 1/4 Lamination
     simu.mag = MagElmer(
-        type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True, FEA_dict=mesh_dict
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=True,
+        FEA_dict=mesh_dict,
+        is_get_mesh=True,
     )
     # Stop after magnetic computation
     simu.force = None
@@ -84,6 +88,8 @@ def test_Elmer():
     # Run simulation
     out = Output(simu=simu)
     simu.run()
+    out.mag.meshsolution.plot_mesh(label="magnetic flux density e")
+    return out
 
     # FEMM files (mesh and results) are available in Results folder
     # copyfile(
@@ -97,4 +103,4 @@ def test_Elmer():
 
 
 if __name__ == "__main__":
-    test_Elmer()
+    out = test_Elmer()

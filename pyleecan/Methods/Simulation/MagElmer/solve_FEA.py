@@ -720,7 +720,66 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     elmersolver.terminate()
     self.get_logger().info("ElmerSolver call complete!")
 
-    self.get_meshsolution()
+    #####################################################
+    # This should be done in get_meshsolution
+    # self.get_meshsolution()
+
+    from ....Classes.MeshSolution import MeshSolution
+    from ....Classes.MeshVTK import MeshVTK
+    meshsol = MeshSolution(label="Elmer MagnetoDynamics")
+    if not self.is_get_mesh or not self.is_save_FEA:
+        self.get_logger().info("MagElmer: MeshSolution is not stored by request.")
+
+    meshvtk = MeshVTK(path=elmermesh_folder, name="step_t0001", format="vtu")
+    meshsol.mesh = [meshvtk]
+
+    from meshio import read
+    result_filename = join(elmermesh_folder, "step_t0001.vtu")
+    meshsolvtu = read(result_filename)
+    pt_data = meshsolvtu.point_data
+    cell_data = meshsolvtu.cell_data
+    from numpy import arange
+    indices = arange(meshsolvtu.points.shape[0])
+    from SciDataTool import Data1D
+    Indices = Data1D(name="indice", values=indices, is_components=True)
+
+    store_dict = {
+        "a": {
+            "name": "a",
+            "unit": "Wb",
+            "symbol": "a",
+            "norm": 1e-3,
+        },
+        "b": {
+            "name": "magnetic flux density",
+            "unit": "T",
+            "symbol": "b",
+            "norm": 1,
+        }
+    }
+    comp_ext = ["x", "y", "z"]
+    sol_list = []
+    for key, value in pt_data.items():
+        if key in store_dict.keys():
+            siz = value.shape[1]
+            if siz > 3:
+                print("Some Message")
+                siz = 3
+            components = []
+            comp_name = []
+            for i in range(siz):
+                if siz == 1:
+                    ext = ""
+                else:
+                    ext = comp_ext[i]
+
+                data = DataTime(
+                    name = store_dict
+                )
+
+    output.mag.meshsolution = meshsol
+
+    ####################################################
 
     Na = angle.size
     Nt = time.size

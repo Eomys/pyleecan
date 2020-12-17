@@ -22,12 +22,12 @@ def get_meshsolution(self):
     meshsol: MeshSolution
         a MeshSolution object with Elmer outputs at every time step
     """
+    logger = self.get_logger()
+    meshsol = MeshSolution(label="Elmer MagnetoDynamics")
 
-    meshsol = MeshSolution(
-        label="Elmer Solution",
-        # mesh=meshElmer,
-        # solution=sol_list,
-        # dimension=2,
-    )
+    if not self.is_get_mesh or not self.is_save_FEA:
+        logger.info("MagElmer: MeshSolution is not stored by request.")
+        return False
+
 
     return meshsol
