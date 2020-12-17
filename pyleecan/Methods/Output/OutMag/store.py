@@ -85,29 +85,39 @@ def store(self, out_dict, axes_dict):
         else:
             self.Tem_rip_norm = None
 
-    # Store stator winding flux and calculate electromotive force
-    if "Phi_wind_stator" in out_dict:
+    # Store list of winding fluxlinkage, stator winding fluxlinkage
+    # and calculate electromotive force
+    if "Phi_wind" in out_dict:
+        machine = self.parent.simu.machine
+        self.Phi_wind = {}
+        for key in out_dict["Phi_wind"].keys():
+            # Store stator winding flux
+            lam = machine.get_lam_by_label(key)
+            qs = lam.winding.qs
 
-        # Store stator winding flux
-        qs = self.parent.simu.machine.stator.winding.qs
+            Phase = Data1D(
+                name="phase",
+                unit="",
+                values=gen_name(qs),
+                is_components=True,
+            )
+            prefix = "Stator" if lam.is_stator else "Rotor"
+            self.Phi_wind[key] = DataTime(
+                name=prefix + " Winding Flux",
+                unit="Wb",
+                symbol="Phi_{wind}",
+                axes=[Time, Phase],
+                values=out_dict["Phi_wind"][key],
+            )
 
-        Phase = Data1D(
-            name="phase",
-            unit="",
-            values=gen_name(qs),
-            is_components=True,
-        )
-
-        self.Phi_wind_stator = DataTime(
-            name="Stator Winding Flux",
-            unit="Wb",
-            symbol="Phi_{wind}",
-            axes=[Time, Phase],
-            values=out_dict.pop("Phi_wind_stator"),
-        )
+        if "Stator_0" in out_dict["Phi_wind"].keys():  # TODO fix for multi stator
+            self.Phi_wind_stator = self.Phi_wind["Stator_0"]
 
         # Electromotive force computation
         self.comp_emf()
+
+        # remove from out_dict
+        out_dict.pop("Phi_wind")
 
     # Store MeshSolution object
     if "meshsolution" in out_dict:
