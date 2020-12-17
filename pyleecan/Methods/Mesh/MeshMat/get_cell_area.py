@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import abs, newaxis
+from numpy import abs, newaxis, array
 
 
 def get_cell_area(self, indices=None):
@@ -18,22 +18,18 @@ def get_cell_area(self, indices=None):
     areas: ndarray
         Area of the cells
     """
-    area = None
+    logger = self.get_logger()
+    area = []
 
     vertices_dict = self.get_vertice(indices=indices)
 
-    key = "triangle"
-    if key in vertices_dict:
-        vertices = vertices_dict[key]
-        if vertices.shape[-1] == 2:  # 2D - case
-            if len(vertices.shape) == 2:  # only one indice -> adapt array shape
-                vertices = vertices[newaxis, :, :]
+    for key, vertices in vertices_dict.items():
+        try:
+            A = self.cell[key].interpolation.ref_cell.get_cell_area(vertices)
+        except:
+            logger.warning(f'MeshMat: Reference Cell for "{key}" not found.')
+            A = [None for i in range(vertices.shape[0])]
 
-            a = vertices[:, 0, 0] - vertices[:, 1, 0]  # x1 - x2
-            b = vertices[:, 0, 1] - vertices[:, 2, 1]  # y1 - y3
-            c = vertices[:, 0, 0] - vertices[:, 2, 0]  # x1 - x3
-            d = vertices[:, 0, 1] - vertices[:, 1, 1]  # y1 - y2
+        area.extend(A.tolist())
 
-        area = 1 / 2 * abs(a * b - c * d)
-
-    return area
+    return array(area)
