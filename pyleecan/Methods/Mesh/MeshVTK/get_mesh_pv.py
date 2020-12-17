@@ -37,7 +37,7 @@ def get_mesh_pv(self, indices=None):
                 k.replace(" ", "_"): v for k, v in mesh.point_data.items()
             }
             mesh.write(self.path + "/" + self.name + ".vtk")
-            
+
         # Read .vtk file with pyvista
         mesh = pv.read(self.path + "/" + self.name + ".vtk")
 

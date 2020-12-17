@@ -33,8 +33,8 @@ def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
 
     # Make sure that the file exists
     if not isdir(split(path)[0]):
-            makedirs(split(path)[0])
-     
+        makedirs(split(path)[0])
+
     meshio.write_points_cells(filename=path, points=points, cells=cells_meshio)
 
     # Read .vtk file with pyvista

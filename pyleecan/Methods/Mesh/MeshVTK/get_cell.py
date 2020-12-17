@@ -33,7 +33,7 @@ def get_cell(self, indices=None):
     else:
         # Read mesh file with meshio (pyvista does not provide the correct cell format)
         mesh = read(self.path + "/" + self.name + "." + self.format)
-    
+
     cells = {}
     nb_cell = 0
     indice_dict = {}
