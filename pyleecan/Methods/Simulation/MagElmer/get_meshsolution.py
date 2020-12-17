@@ -1,33 +1,128 @@
-# import os
-# import numpy as np
-
-# from ....definitions import MAIN_DIR
-# from ....Classes.MeshMat import MeshMat
-# from ....Classes.CellMat import CellMat
-# from ....Classes.PointMat import PointMat
-# from ....Classes.RefTriangle3 import RefTriangle3
 from ....Classes.MeshSolution import MeshSolution
+from ....Classes.MeshVTK import MeshVTK
+from ....Classes.SolutionData import SolutionData
+from ....Classes.SolutionVector import SolutionVector
+from meshio import read
+from SciDataTool import Data1D, VectorField, DataTime
+from numpy import arange
+from os.path import join
 
 
-def get_meshsolution(self):
+def get_meshsolution(self, output):
     """Build the MeshSolution objects from the FEA outputs.
 
     Parameters
     ----------
     self : MagElmer
         a MagElmer object
+    output: Output
+        An Output object
 
     Returns
     -------
     meshsol: MeshSolution
         a MeshSolution object with Elmer outputs at every time step
     """
-    logger = self.get_logger()
+    project_name = self.get_path_save_fea(output)
+    elmermesh_folder = project_name
     meshsol = MeshSolution(label="Elmer MagnetoDynamics")
-
     if not self.is_get_mesh or not self.is_save_FEA:
-        logger.info("MagElmer: MeshSolution is not stored by request.")
+        self.get_logger().info("MagElmer: MeshSolution is not stored by request.")
         return False
 
+    meshvtk = MeshVTK(path=elmermesh_folder, name="step_t0001", format="vtu")
+    meshsol.mesh = [meshvtk]
 
-    return meshsol
+    result_filename = join(elmermesh_folder, "step_t0001.vtu")
+    meshsolvtu = read(result_filename)
+    pt_data = meshsolvtu.point_data
+    cell_data = meshsolvtu.cell_data
+
+    indices = arange(meshsolvtu.points.shape[0])
+
+    Indices = Data1D(name="indice", values=indices, is_components=True)
+
+    store_dict = {
+        "magnetic vector potential": {
+            "name": "Magnetic Vector Potential A",
+            "unit": "Wb",
+            "symbol": "A",
+            "norm": 1,
+        },
+        "magnetic flux density": {
+            "name": "Magnetic Flux Density B",
+            "unit": "T",
+            "symbol": "B",
+            "norm": 1,
+        },
+        "magnetic field strength": {
+            "name": "Magnetic Field H",
+            "unit": "A/m",
+            "symbol": "H",
+            "norm": 1,
+        },
+        "current density": {
+            "name": "Current Density J",
+            "unit": "A/mm2",
+            "symbol": "J",
+            "norm": 1,
+        }
+    }
+    comp_ext = ["x", "y", "z"]
+    sol_list = []
+    for key, value in pt_data.items():
+        if key in store_dict.keys():
+            siz = value.shape[1]
+            if siz > 3:
+                print("Some Message")
+                siz = 3
+            components = []
+            comp_name = []
+            for i in range(siz):
+                if siz == 1:
+                    ext = ""
+                else:
+                    ext = comp_ext[i]
+
+                data = DataTime(
+                    name=store_dict[key]["name"] + ext,
+                    unit=store_dict[key]["unit"],
+                    symbol=store_dict[key]["symbol"] + ext,
+                    axes=[Indices],
+                    values=value[:, i],
+                    normalizations={"ref": store_dict[key]["norm"]},
+                )
+                components.append(data)
+                comp_name.append("comp_" + ext)
+
+            if siz == 1:
+                field = components[0]
+                sol_list.append(
+                    SolutionData(
+                        field=field,
+                        type_cell="point",
+                        label=store_dict[key]["symbol"],
+                    )
+                )
+            else:
+                comps = {}
+                for i in range(siz):
+                    comps[comp_name[i]] = components[i]
+                field = VectorField(
+                    name=store_dict[key]["name"],
+                    symbol=store_dict[key]["symbol"],
+                    components=comps
+                )
+                sol_list.append(
+                    SolutionVector(
+                        field=field,
+                        type_cell="point",
+                        label=store_dict[key]["symbol"],
+                    )
+                )
+
+    meshsol.solution = sol_list
+    output.mag.meshsolution = meshsol
+
+
+    return True

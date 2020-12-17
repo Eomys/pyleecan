@@ -1,7 +1,7 @@
 import numpy as np
 import subprocess
 
-from numpy import zeros, pi, roll, mean, max as np_max, min as np_min, sign, angle as np_angle
+from numpy import zeros, pi, floor_divide, mean, max as np_max, min as np_min, sign, angle as np_angle
 from os.path import basename, splitext
 from SciDataTool import DataTime, VectorField, Data1D
 from os.path import join
@@ -14,6 +14,12 @@ from ....Functions.GMSH import surface_label
 from ....Functions.Winding.find_wind_phase_color import get_phase_id
 from .... import __version__
 from ....Functions.get_path_binary import get_path_binary
+
+from ....Classes.HoleM50 import HoleM50
+from ....Classes.HoleM51 import HoleM51
+from ....Classes.HoleM52 import HoleM52
+from ....Classes.HoleM53 import HoleM53
+from ....Methods import NotImplementedYetError
 
 
 def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
@@ -130,9 +136,61 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         Ncond_Eminus = 1
         Ncond_Fplus = 1
         Ncond_Fminus = 1
+        print(self.angle_rotor_shift)
+        print(self.angle_stator_shift)
+        print(machine.comp_angle_offset_initial())
+        print(machine.rotor.comp_angle_d_axis()*180/pi)
+        print(machine.rotor.comp_angle_q_axis() * 180 / pi)
+        print(machine.stator.comp_angle_d_axis() * 180 / pi)
+        print(machine.stator.comp_angle_q_axis() * 180 / pi)
         for surf in surf_list:
             label = surface_label.get(surf.label, "UNKNOWN")
-            if "MAGNET" in label:
+            if "H_MAGNET" in label:  # LamHole
+                if "PAR" in label:
+                    lam = machine.rotor
+                    magnetization_type = "parallel"
+                    point_ref = surf.point_ref
+                    # calculate pole angle and angle of pole middle
+                    alpha_p = 360 / lam.hole[0].Zh
+                    mag_0 = (
+                                    floor_divide(np_angle(point_ref, deg=True), alpha_p) + 0.5
+                            ) * alpha_p
+
+                    # HoleM50 or HoleM53
+                    if (type(lam.hole[0]) == HoleM50) or (type(lam.hole[0]) == HoleM53):
+                        if "T0" in label:
+                            mag = mag_0 + lam.hole[0].comp_alpha() * 180 / pi
+                        else:
+                            mag = mag_0 - lam.hole[0].comp_alpha() * 180 / pi
+
+                    # HoleM51
+                    if type(lam.hole[0]) == HoleM51:
+                        if "T0" in label:
+                            mag = mag_0 + lam.hole[0].comp_alpha() * 180 / pi
+                        elif "T1" in label:
+                            mag = mag_0
+                        else:
+                            mag = mag_0 - lam.hole[0].comp_alpha() * 180 / pi
+
+                    # HoleM52
+                    if type(lam.hole[0]) == HoleM52:
+                        mag = mag_0
+
+                    # modifiy magnetisation of south poles
+                    if "_S_" in label:
+                        mag = mag + 180
+                else:
+                    raise NotImplementedYetError(
+                        "Only parallele magnetization are available for HoleMagnet"
+                    )
+                if bodies.get(label, None) is not None:
+                    Mangle.append(mag)
+                    bodies[label]['mat'] = pm_index
+                    bodies[label]['eq'] = 1
+                    bodies[label]['bf'] = 1
+                    bodies[label]['tg'] = 1
+                    pm_index = pm_index + 1
+            elif "MAGNET" in label:
                 point_ref = surf.point_ref
                 if "RAD" in label and "_N_" in label:  # Radial magnetization
                     mag = "theta"  # North pole magnet
@@ -720,66 +778,8 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     elmersolver.terminate()
     self.get_logger().info("ElmerSolver call complete!")
 
-    #####################################################
-    # This should be done in get_meshsolution
-    # self.get_meshsolution()
 
-    from ....Classes.MeshSolution import MeshSolution
-    from ....Classes.MeshVTK import MeshVTK
-    meshsol = MeshSolution(label="Elmer MagnetoDynamics")
-    if not self.is_get_mesh or not self.is_save_FEA:
-        self.get_logger().info("MagElmer: MeshSolution is not stored by request.")
-
-    meshvtk = MeshVTK(path=elmermesh_folder, name="step_t0001", format="vtu")
-    meshsol.mesh = [meshvtk]
-
-    from meshio import read
-    result_filename = join(elmermesh_folder, "step_t0001.vtu")
-    meshsolvtu = read(result_filename)
-    pt_data = meshsolvtu.point_data
-    cell_data = meshsolvtu.cell_data
-    from numpy import arange
-    indices = arange(meshsolvtu.points.shape[0])
-    from SciDataTool import Data1D
-    Indices = Data1D(name="indice", values=indices, is_components=True)
-
-    store_dict = {
-        "a": {
-            "name": "a",
-            "unit": "Wb",
-            "symbol": "a",
-            "norm": 1e-3,
-        },
-        "b": {
-            "name": "magnetic flux density",
-            "unit": "T",
-            "symbol": "b",
-            "norm": 1,
-        }
-    }
-    comp_ext = ["x", "y", "z"]
-    sol_list = []
-    for key, value in pt_data.items():
-        if key in store_dict.keys():
-            siz = value.shape[1]
-            if siz > 3:
-                print("Some Message")
-                siz = 3
-            components = []
-            comp_name = []
-            for i in range(siz):
-                if siz == 1:
-                    ext = ""
-                else:
-                    ext = comp_ext[i]
-
-                data = DataTime(
-                    name = store_dict
-                )
-
-    output.mag.meshsolution = meshsol
-
-    ####################################################
+    self.get_meshsolution(output)
 
     Na = angle.size
     Nt = time.size

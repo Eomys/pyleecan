@@ -81,6 +81,7 @@ def test_Elmer():
         is_periodicity_a=True,
         FEA_dict=mesh_dict,
         is_get_mesh=True,
+        is_save_FEA=True,
     )
     # Stop after magnetic computation
     simu.force = None
@@ -88,7 +89,7 @@ def test_Elmer():
     # Run simulation
     out = Output(simu=simu)
     simu.run()
-    out.mag.meshsolution.plot_mesh(label="magnetic flux density e")
+    out.mag.meshsolution.plot_contour(label="B")
     return out
 
     # FEMM files (mesh and results) are available in Results folder
