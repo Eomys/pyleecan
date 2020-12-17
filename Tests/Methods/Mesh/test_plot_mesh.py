@@ -11,7 +11,7 @@ from os.path import join
 
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
-@pytest.mark.DEV
+# @pytest.mark.DEV
 def test_plot_mesh():
     mesh = MeshMat(dimension=3)
     mesh.point = PointMat()
