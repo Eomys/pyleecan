@@ -37,7 +37,11 @@ def test_PostPlot():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref, Iq_ref=Iq_ref, Na_tot=252 * 8, Nt_tot=20 * 8, N0=1000,
+        Id_ref=Id_ref,
+        Iq_ref=Iq_ref,
+        Na_tot=252 * 8,
+        Nt_tot=20 * 8,
+        N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -87,7 +91,11 @@ def test_PostPlot():
     plot_machine_Tem_time2 = PostPlot(
         method="plot_2D_Data",
         param_list=["mag.Tem", "time"],
-        param_dict={"is_show_fig": False, "fig": fig2, "ax": axes2[1],},
+        param_dict={
+            "is_show_fig": False,
+            "fig": fig2,
+            "ax": axes2[1],
+        },
         name="plot_machine_Tem_time",
         save_format="png",
     )
@@ -95,7 +103,10 @@ def test_PostPlot():
     plot_P_radial_space_svg = PostPlot(
         method="plot_2D_Data",
         param_list=["force.AGSF", "angle"],
-        param_dict={"component_list": ["radial"], "is_show_fig": False,},
+        param_dict={
+            "component_list": ["radial"],
+            "is_show_fig": False,
+        },
         name="plot_P_radial_space",
         save_format="svg",
     )

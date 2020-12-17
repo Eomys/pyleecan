@@ -152,4 +152,3 @@ class TestPWSlot15(object):
             H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=0.14, R1=0.15, R2=None
         )
         assert setup["widget"].check(setup["test_obj"]) == "You must set R2 !"
-

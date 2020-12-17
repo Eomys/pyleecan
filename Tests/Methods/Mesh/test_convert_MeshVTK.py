@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
 from pyleecan.Classes.MeshVTK import MeshVTK
+
 # from pyleecan.Classes.MeshSolution import MeshSolution
 from Tests import TEST_DATA_DIR
 import numpy as np

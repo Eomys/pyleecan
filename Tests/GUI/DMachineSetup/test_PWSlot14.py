@@ -110,4 +110,7 @@ class TestPWSlot14(object):
         setup["test_obj"].slot = SlotW14(H0=None, H3=0.11, H1=0.12, W0=0.31, W3=0.16)
         assert setup["widget"].check(setup["test_obj"]) == "You must set H0 !"
         setup["test_obj"].slot = SlotW14(H0=0.10, H3=0.11, H1=0.12, W0=0.31, W3=0.16)
-        assert setup["widget"].check(setup["test_obj"]) == "The slot height is greater than the lamination !"
+        assert (
+            setup["widget"].check(setup["test_obj"])
+            == "The slot height is greater than the lamination !"
+        )

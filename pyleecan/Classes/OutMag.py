@@ -32,6 +32,11 @@ try:
 except ImportError as error:
     comp_emf = error
 
+try:
+    from ..Methods.Output.OutMag.get_demag import get_demag
+except ImportError as error:
+    get_demag = error
+
 
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
@@ -71,6 +76,15 @@ class OutMag(FrozenClass):
         )
     else:
         comp_emf = comp_emf
+    # cf Methods.Output.OutMag.get_demag
+    if isinstance(get_demag, ImportError):
+        get_demag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMag method get_demag: " + str(get_demag))
+            )
+        )
+    else:
+        get_demag = get_demag
     # save and copy methods are available in all object
     save = save
     copy = copy

@@ -6885,7 +6885,8 @@
         "methods": [
             "store",
             "clean",
-            "comp_emf"
+            "comp_emf",
+            "get_demag"
         ],
         "mother": "",
         "name": "OutMag",
@@ -7730,7 +7731,8 @@
             "grad_shape_function",
             "get_real_point",
             "get_ref_point",
-            "is_inside"
+            "is_inside",
+            "get_cell_area"
         ],
         "mother": "RefCell",
         "name": "RefTriangle3",

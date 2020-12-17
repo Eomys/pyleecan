@@ -208,4 +208,7 @@ class TestPWSlot13(object):
         setup["test_obj"].slot = SlotW13(
             H0=0.10, H1=5.3, H2=0.12, W0=0.13, W1=0.14, W2=0.15, W3=0.6
         )
-        assert setup["widget"].check(setup["test_obj"]) == "With H1 in degree, you must have H1 < 90°"
+        assert (
+            setup["widget"].check(setup["test_obj"])
+            == "With H1 in degree, you must have H1 < 90°"
+        )
