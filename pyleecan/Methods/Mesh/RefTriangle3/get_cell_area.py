@@ -3,7 +3,8 @@ from numpy import abs, newaxis, array
 
 
 def get_cell_area(self, vertices):
-    """Return the array of the cells.
+    """Return the area of the cells.
+    https://en.wikipedia.org/wiki/Shoelace_formula
 
     Parameters
     ----------

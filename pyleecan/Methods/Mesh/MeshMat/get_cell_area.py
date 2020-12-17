@@ -5,7 +5,6 @@ from numpy import abs, newaxis, array
 def get_cell_area(self, indices=None):
     """
     Return the area of the cells on the outer surface.
-    Triangle: https://en.wikipedia.org/wiki/Shoelace_formula
     #TODO address multiple cell type issue, i.e. distracted indices
     Parameters
     ----------
