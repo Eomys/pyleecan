@@ -28,6 +28,7 @@ def clean(self, clean_level=1):
         # clean airgap flux density
         self.Tem = None
         self.Phi_wind_stator = None
+        self.Phi_wind = None
         self.emf = None
 
     if clean_level > 3:

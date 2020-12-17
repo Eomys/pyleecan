@@ -181,7 +181,16 @@ def solve_FEMM_parallel(
 
     # Remove temporary .fem and .ans files
     for w in range(nb_worker, 0, -1):
-        remove(fem_file[:-4] + "_" + str(w) + ".fem")
-        remove(fem_file[:-4] + "_" + str(w) + ".ans")
+        try:
+            remove(fem_file[:-4] + "_" + str(w) + ".fem")
+        except:
+            filename = fem_file[:-4] + "_" + str(w) + ".fem"
+            self.get_logger().warning("Could not remove file: " + filename)
+
+        try:
+            remove(fem_file[:-4] + "_" + str(w) + ".ans")
+        except:
+            filename = fem_file[:-4] + "_" + str(w) + ".ans"
+            self.get_logger().warning("Could not remove file: " + filename)
 
     return B_elem, H_elem, mu_elem, meshFEMM, groups

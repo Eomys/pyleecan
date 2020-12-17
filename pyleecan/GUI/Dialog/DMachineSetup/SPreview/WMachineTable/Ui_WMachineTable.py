@@ -48,6 +48,11 @@ class Ui_WMachineTable(object):
 
         self.verticalLayout.addWidget(self.tab_param)
 
+        self.b_plot_machine = QPushButton(WMachineTable)
+        self.b_plot_machine.setObjectName(u"b_plot_machine")
+
+        self.verticalLayout.addWidget(self.b_plot_machine)
+
         self.b_mmf = QPushButton(WMachineTable)
         self.b_mmf.setObjectName(u"b_mmf")
 
@@ -75,6 +80,9 @@ class Ui_WMachineTable(object):
         ___qtablewidgetitem1 = self.tab_param.horizontalHeaderItem(1)
         ___qtablewidgetitem1.setText(
             QCoreApplication.translate("WMachineTable", u"Value", None)
+        )
+        self.b_plot_machine.setText(
+            QCoreApplication.translate("WMachineTable", u"Plot Machine", None)
         )
         self.b_mmf.setText(
             QCoreApplication.translate("WMachineTable", u"Plot Stator Unit MMF", None)

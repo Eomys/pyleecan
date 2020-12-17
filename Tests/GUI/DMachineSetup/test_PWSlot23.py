@@ -179,20 +179,20 @@ class TestPWSlot23(object):
             H0=0.10, H1=0.11, H2=0.12, W0=None, W1=0.14, W2=0.15, H1_is_rad=False
         )
         setup["widget"] = PWSlot23(setup["test_obj"])
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot23 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set W0 !"
         setup["test_obj"].slot = SlotW23(
             H0=None, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot23 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H0 !"
         setup["test_obj"].slot = SlotW23(
             H0=0.10, H1=None, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot23 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H1 !"
         setup["test_obj"].slot = SlotW23(
             H0=0.10, H1=0.11, H2=None, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot23 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H2 !"
         setup["test_obj"].slot = SlotW23(
             H0=0.10, H1=0.11, H2=0.12, W0=0.0011, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot23 check"
+        assert setup["widget"].check(setup["test_obj"]) == "The slot height is greater than the lamination !"

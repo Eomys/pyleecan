@@ -15,6 +15,7 @@ from Tests import save_validation_path as save_path
 DELTA = 1e-6
 
 
+@pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.Force
 def test_AC_IPMSM_AGSF_transfer():
@@ -32,14 +33,8 @@ def test_AC_IPMSM_AGSF_transfer():
 
     # Configure simulation
     simu.elec = None
-    simu.mag = MagFEMM(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-    )
-    simu.force = ForceMT(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-    )
+    simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True,)
+    simu.force = ForceMT(is_periodicity_a=True, is_periodicity_t=True,)
 
     # Run simulation
     out = simu.run()
@@ -51,14 +46,9 @@ def test_AC_IPMSM_AGSF_transfer():
         Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 11, Nt_tot=2 ** 6, N0=1200
     )
 
-    simu2.mag = MagFEMM(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-    )
+    simu2.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True,)
     simu2.force = ForceMT(
-        is_agsf_transfer=True,
-        is_periodicity_a=True,
-        is_periodicity_t=True,
+        is_agsf_transfer=True, is_periodicity_a=True, is_periodicity_t=True,
     )
 
     out2 = simu2.run()

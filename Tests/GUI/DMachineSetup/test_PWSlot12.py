@@ -90,8 +90,8 @@ class TestPWSlot12(object):
         setup["test_obj"] = LamSlotWind(Rint=0.1, Rext=0.2)
         setup["test_obj"].slot = SlotW12(H0=0.10, H1=0.11, R1=0.12, R2=None)
         setup["widget"] = PWSlot12(setup["test_obj"])
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot12"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set R2 !"
         setup["test_obj"].slot = SlotW12(H0=None, H1=0.11, R1=0.12, R2=0.005)
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot12"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H0 !"
         setup["test_obj"].slot = SlotW12(H0=0.10, H1=None, R1=0.12, R2=0.005)
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot12"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H1 !"

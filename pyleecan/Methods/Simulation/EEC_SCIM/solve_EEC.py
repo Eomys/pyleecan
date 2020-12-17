@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from numpy import array, pi, real, imag
+from ....Functions.Electrical.coordinate_transformation import dq2n
+from ....Functions.Winding.gen_phase_list import gen_name
+
+from numpy import array, pi, real, imag, tile
 from scipy.linalg import solve
+from SciDataTool import Data1D, DataTime
 
 
 def solve_EEC(self, output):
@@ -28,13 +32,14 @@ def solve_EEC(self, output):
         an Output object
     """
     Rs = self.parameters["Rs"]
-    Rr = self.parameters["Rr"]
+    Rr = self.parameters["Rr_norm"]
     Rfe = self.parameters["Rfe"]
     Ls = self.parameters["Ls"]
-    Lr = self.parameters["Lr"]
+    Lr = self.parameters["Lr_norm"]
     Lm = self.parameters["Lm"]
+    norm = self.parameters["norm"]
 
-    s = self.parameters["s"]
+    slip = self.parameters["slip"]
 
     felec = output.elec.felec
     ws = 2 * pi * felec
@@ -43,7 +48,7 @@ def solve_EEC(self, output):
     Xm = ws * Lm
     Xr = ws * Lr
 
-    Rr_s = Rr / s if s != 0 else 1e16  # TODO modify system instead
+    Rr_s = Rr / slip if slip != 0 else 1e16  # TODO modify system instead
 
     # Prepare linear system
 
@@ -84,30 +89,52 @@ def solve_EEC(self, output):
         # print(A)
         X = solve(A.astype(float), b.astype(float))
 
-        Is = X[2] + 1j * X[3]
+        Ir_norm = array([X[6], X[7]])
 
-        """
-        Um = X[0] + 1j * X[1]
-        Ir_ = X[6] + 1j * X[7]
-        print(Um)
-        print(Is)
-        print(Ir_)
-        if Rfe is not None:
-            Ife = X[8] + 1j * X[9]
-            print(Ife)
-        """
         # TODO use logger for output of some quantities
 
-        output.elec.Id_ref = real(Is)  # use Id_ref / Iq_ref for now
-        output.elec.Iq_ref = imag(Is)
+        output.elec.Id_ref = X[2]  # use Id_ref / Iq_ref for now
+        output.elec.Iq_ref = X[3]
     else:
         pass
         # TODO
 
-    # Compute currents
+    # Compute stator currents
     output.elec.Is = None
     output.elec.Is = output.elec.get_Is()
 
-    # Compute voltage
+    # Compute stator voltage
     output.elec.Us = None
     output.elec.Us = output.elec.get_Us()
+
+    # Compute rotor currents
+    time = output.elec.Time.get_values(is_oneperiod=True)
+    Nt = time.size
+    qsr = output.simu.machine.rotor.winding.qs
+    sym = output.simu.machine.comp_periodicity()[0]
+
+    Ir_ = tile(Ir_norm, (Nt, 1)) * norm
+
+    w_slip = ws * slip
+
+    # Get rotation direction
+    rot_dir = output.get_rot_dir()
+
+    # compute actual rotor bar currents
+    # TODO fix: initial rotor pos. is disregarded for now
+    Ir = dq2n(Ir_, w_slip * time, n=qsr // sym, rot_dir=rot_dir, is_n_rms=False)
+    Ir = tile(Ir, (1, sym))
+
+    Phase = Data1D(
+        name="phase",
+        unit="",
+        values=gen_name(qsr),
+        is_components=True,
+    )
+    output.elec.Ir = DataTime(
+        name="Rotor current",
+        unit="A",
+        symbol="Ir",
+        axes=[Phase, output.elec.Time.copy()],
+        values=Ir.T,
+    )
