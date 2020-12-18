@@ -8,17 +8,7 @@ from numpy import concatenate
 
 
 def solve_FEMM_parallel(
-    self,
-    femm,
-    output,
-    out_dict,
-    FEMM_dict,
-    sym,
-    Nt,
-    angle,
-    Is,
-    Ir,
-    angle_rotor,
+    self, femm, output, out_dict, FEMM_dict, sym, Nt, angle, Is, Ir, angle_rotor,
 ):
     """
     Same as solve_FEMM including parallelization on several workers
@@ -139,6 +129,16 @@ def solve_FEMM_parallel(
                 nb_worker, cpu_count()
             )
         )
+    if nb_worker > Nt:
+        logger.debug(
+            str(nb_worker)
+            + " workers requested for "
+            + str(Nt)
+            + " time steps. Using "
+            + str(Nt)
+            + " workers instead"
+        )
+        nb_worker = Nt
 
     # Copy femm file and create lists to split the tasks
     nb_task_worker = []  # nb of task for each worker
