@@ -203,6 +203,7 @@ class Simu1(Simulation):
         S += getsizeof(self.mag)
         S += getsizeof(self.struct)
         S += getsizeof(self.force)
+        S += getsizeof(self.loss)
         return S
 
     def as_dict(self):

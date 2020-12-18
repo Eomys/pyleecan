@@ -121,8 +121,8 @@ from ..Classes.OutElec import OutElec
 from ..Classes.OutForce import OutForce
 from ..Classes.OutGeo import OutGeo
 from ..Classes.OutGeoLam import OutGeoLam
-from ..Classes.OutLoss import OutLoss
 from ..Classes.OutInternal import OutInternal
+from ..Classes.OutLoss import OutLoss
 from ..Classes.OutMag import OutMag
 from ..Classes.OutMagElmer import OutMagElmer
 from ..Classes.OutMagFEMM import OutMagFEMM

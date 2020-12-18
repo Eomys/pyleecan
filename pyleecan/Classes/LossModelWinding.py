@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -108,6 +109,17 @@ class LossModelWinding(LossModel):
         if other.lam != self.lam:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from LossModel
+        S += super(LossModelWinding, self).__sizeof__()
+        S += getsizeof(self.temperature)
+        S += getsizeof(self.lam)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

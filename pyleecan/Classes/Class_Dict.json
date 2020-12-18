@@ -7082,6 +7082,53 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutInternal.csv",
         "properties": []
     },
+    "OutLoss": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather the loss module outputs",
+        "is_internal": false,
+        "methods": [
+            "get_loss"
+        ],
+        "mother": "",
+        "name": "OutLoss",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
+        "properties": [
+            {
+                "desc": "List of the computed losses of SciDataTool's DataND type",
+                "max": "",
+                "min": "",
+                "name": "losses",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "list of FEA software mesh and post processing results",
+                "max": "",
+                "min": "",
+                "name": "meshsolutions",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutLoss"
+            }
+        ]
+    },
     "OutMag": {
         "constants": [
             {

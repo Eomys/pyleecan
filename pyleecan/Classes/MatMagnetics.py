@@ -177,6 +177,7 @@ class MatMagnetics(FrozenClass):
         S += getsizeof(self.alpha_Br)
         S += getsizeof(self.Wlam)
         S += getsizeof(self.BH_curve)
+        S += getsizeof(self.LossData)
         return S
 
     def as_dict(self):

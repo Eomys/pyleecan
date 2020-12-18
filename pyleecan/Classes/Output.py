@@ -429,6 +429,7 @@ class Output(FrozenClass):
         S += getsizeof(self.post)
         S += getsizeof(self.logger_name)
         S += getsizeof(self.force)
+        S += getsizeof(self.loss)
         return S
 
     def as_dict(self):
