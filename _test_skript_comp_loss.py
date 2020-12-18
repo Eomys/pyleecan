@@ -32,7 +32,7 @@ myWindingLoss = LossModelWinding()
 mySimu.loss = Loss()
 mySimu.loss.models = [myIronLoss, myWindingLoss]
 
-myWindingLoss.lam = "machine.stator"
+myWindingLoss.lam_id = 1
 
 myIronLoss.name = "Stator Iron Losses"
 myIronLoss.k_hy = None
@@ -41,8 +41,8 @@ myIronLoss.k_ed = None
 myIronLoss.alpha_ed = 2
 myIronLoss.k_ex = 0
 myIronLoss.alpha_ex = 1.5
-myIronLoss.lam = "machine.stator"
-myIronLoss.group = "stator core"
+myIronLoss.lam_id = 1  # could be substituted by lam list index
+myIronLoss.group = "stator core"  # this is the FEMM group name
 
 LossData = ImportMatrixXls()
 # LossData.file_path = "pyleecan\\pyleecan\\Data\\Material\\M400-50A.xlsx"
@@ -63,14 +63,14 @@ myLoss.run()
 #    label="B", group_names="stator", itime=0, clim=[0, 1.5]
 # )
 
-myResults.loss.meshsolutions[0].plot_contour(
+myResults.loss.meshsolution[0].plot_contour(
     label="LossDens",
     itime=7,
 )
-myResults.loss.meshsolutions[0].plot_contour(
+myResults.loss.meshsolution[0].plot_contour(
     label="LossDensSum",
     itime=0,
 )
 
-print(f"stator iron loss = {myResults.loss.losses[0].get_field([]).mean()} W")
-print(f"stator winding loss = {myResults.loss.losses[1].get_field([]).mean()} W")
+print(f"stator iron loss = {myResults.loss.lamination[1][0].get_field([]).mean()} W")
+print(f"stator winding loss = {myResults.loss.winding[1][0].get_field([]).mean()} W")

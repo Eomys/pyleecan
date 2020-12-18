@@ -4,31 +4,67 @@ from SciDataTool import DataFreq, Data1D, VectorField, DataTime
 from numpy import newaxis, abs
 
 
-def _get_data_(axes, components, field):
+def _get_field_comps(axes, components, field):
+    """Return a list of DataTime objects created by a field array with respective axes
+
+    Parameters
+    ----------
+    axes : list
+        list of Data1D axis objects
+    components : list
+        list of field components names
+    field : ndarray
+        ndarray of the field data with last dimension equals the number of components
+
+    Return
+    ------
+    comps : list
+        list of DataTime objects
+    """
     # only valid for field.shape.size == 3, i.e. 2 axes and >1 components
-    comps = {}
+    comps = []
     for idx, component in enumerate(components):
-        comp_data = DataTime(
+        data = DataTime(
             name=component + "Field",
             unit="",
             symbol="F" + component,
             axes=axes,
             values=field[:, :, idx],
         )
-        comps[component] = comp_data
+        comps.append(data)
 
-    field = VectorField(name="VectorField", symbol="F", components=comps)
-
-    return field
+    return comps
 
 
 def _get_axes_(meshsolution, indices, label):
+    """Get the axes of the first solution of a SolutionVector and the respective
+    components names. The SolutionVector is the solution with given label.
+    Further the indices axis is replaced by input indices.
+
+    Parameters
+    ----------
+    meshsolution : MeshSolution
+        MeshSolution
+    label : string
+        label of the solution that contains the requested axis
+    indices : ndarray
+        ndarray of indices to create the indices axes
+
+    Returns
+    -------
+    axes : list
+        list of Data1D axes
+    comp_names : list
+        list of components names of the SolutionVector components
+    """
     components = meshsolution.get_solution(label=label).field.components
 
+    comp_names = [comp for comp in components.keys()]
+
     axes = []
-    for axis in components["x"].axes:
+    for axis in components[comp_names[0]].axes:
         if axis.name != "indice":
-            axes.append(axis)  # TODO copy axis (dereferencing)
+            axes.append(axis.copy())
 
     inds = Data1D(
         name="indices",
@@ -36,13 +72,11 @@ def _get_axes_(meshsolution, indices, label):
         symbol="",
         values=indices,
         symmetries={},
-        is_components=False,
+        is_components=True,
     )
     axes.append(inds)
 
-    dirs = [comp for comp in components.keys()]
-
-    return axes, dirs
+    return axes, comp_names
 
 
 def comp_loss_norm(self, meshsolution):
@@ -76,32 +110,29 @@ def comp_loss_norm(self, meshsolution):
     F_REF = self.F_REF
     B_REF = self.B_REF
 
-    # filter needed mesh group
-    grp_sol = meshsolution.get_group(self.group)
+    # TODO temp. fix: MeshSolution.get_group() return data of type SolutionMat
+    #                 so appropriate component data have to be reconstructed
 
-    sol = grp_sol.get_solution(label="B")
-    fld = sol.get_field()  # have to use get_field TODO check shape
+    # filter needed mesh group
+    sol = meshsolution.get_group(self.group).get_solution(label="B")
+    fld = sol.get_field()
 
     # get data
-    # TODO temp. hotfix for axes (working with SolutionVector only)
     axes, comps = _get_axes_(meshsolution, sol.indice, label="B")
-    field = _get_data_(axes, comps, fld)
+    components = _get_field_comps(axes, comps, fld)
+    # TODO Calculate principle axes and transform for exponentials other than 2
+    # TODO maybe use rad. and tan. comp. as intermediate solution
 
-    # get components
-    components = []
-    for comp in field.components.values():
-        components.append(comp)
-
+    # loop over field components
     loss = None
     for component in components:
         axes_names = ["freqs" if x.name == "time" else x.name for x in component.axes]
 
+        # TODO add filter function to limit max. order of harmonics
         mag_dict = component.get_magnitude_along(*axes_names)
         symbol = component.symbol
-        # TODO assumption is that direction is 3rd axis
-        # TODO better data check (axis size, ...) and data handling
-        # TODO Calculate principle axes and transform for exponentials other than 2
-        # TODO Use rad. and tan. comp. as intermediate solution
+
+        # TODO better data check (axis size, ...)
 
         f_norm = abs(mag_dict["freqs"][:, newaxis] / F_REF)
         B_norm = (

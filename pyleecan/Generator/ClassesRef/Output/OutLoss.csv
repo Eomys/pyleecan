@@ -1,4 +1,8 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-losses,,List of the computed losses of SciDataTool's DataND type,,list,[],,,,Output,,get_loss,VERSION,1,Gather the loss module outputs
-meshsolutions,,list of FEA software mesh and post processing results,,list,[],,,,,get_loss_dist,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.OutLoss,,,,,,,,,
+lamination,,List of the computed lamination losses,,list,[],,,,Output,,get_loss,VERSION,1,Gather the loss module outputs
+winding,,List of the computed winding losses,,list,[],,,,,,get_loss_lam,,,
+magnet,,List of the computed magnet losses,,list,[],,,,,,get_loss_winding,,,
+meshsolution,,list of FEA software mesh and post processing results,,list,[],,,,,,get_loss_magnet,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.OutLoss,,,,,,get_loss_dist,,,
+mech,,List of the mechanical losses,,list,[],,,,,,,,,
+misc,,List of the miscellaneous losses,,list,[],,,,,,,,,
