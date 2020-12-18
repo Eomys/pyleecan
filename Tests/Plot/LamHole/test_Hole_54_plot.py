@@ -36,12 +36,12 @@ class Test_Hole_54_plot(object):
             HoleM54(Zh=8, W0=pi / 6, H0=25e-3, H1=10e-3, R1=100e-3)
         )
 
-        test_obj.rotor.plot()
+        test_obj.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s54-Rotor.png"))
         assert len(fig.axes[0].patches) == 18
 
-        test_obj.rotor.hole[0].plot()
+        test_obj.rotor.hole[0].plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s54-Rotor hole.png"))
         assert len(fig.axes[0].patches) == 1

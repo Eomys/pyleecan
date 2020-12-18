@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -96,6 +97,8 @@ class VarLoad(VarSimu):
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
+        pre_keeper_postproc_list=None,
+        post_keeper_postproc_list=None,
         init_dict=None,
         init_str=None,
     ):
@@ -132,6 +135,10 @@ class VarLoad(VarSimu):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
+            if "pre_keeper_postproc_list" in list(init_dict.keys()):
+                pre_keeper_postproc_list = init_dict["pre_keeper_postproc_list"]
+            if "post_keeper_postproc_list" in list(init_dict.keys()):
+                post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
         # Set the properties (value check and convertion are done in setter)
         # Call VarSimu init
         super(VarLoad, self).__init__(
@@ -144,6 +151,8 @@ class VarLoad(VarSimu):
             nb_simu=nb_simu,
             is_reuse_femm_file=is_reuse_femm_file,
             postproc_list=postproc_list,
+            pre_keeper_postproc_list=pre_keeper_postproc_list,
+            post_keeper_postproc_list=post_keeper_postproc_list,
         )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
@@ -166,6 +175,15 @@ class VarLoad(VarSimu):
         if not super(VarLoad, self).__eq__(other):
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from VarSimu
+        S += super(VarLoad, self).__sizeof__()
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

@@ -1,5 +1,9 @@
 import numpy as np
 import h5py
+from h5py import File as FileH5
+from ...definitions import PACKAGE_NAME
+from ... import __version__
+from datetime import datetime
 
 
 def pyleecan_dict_to_hdf5(file, obj):
@@ -13,6 +17,9 @@ def pyleecan_dict_to_hdf5(file, obj):
         object to save
     """
     obj_dict = obj.as_dict()
+    now = datetime.now()
+    obj_dict["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
+    obj_dict["__version__"] = PACKAGE_NAME + "_" + __version__
     for key, val in obj_dict.items():
         # Object that need groups
         if isinstance(val, dict) or isinstance(val, list):
@@ -60,11 +67,14 @@ def list_to_hdf5(file, group_name, name, list_to_save):
             variable_to_hdf5(file, group_name, element, "list_{}".format(i))
 
     else:  # Save as an array
-        grp = file[group_name]
-
-        grp[name] = array_list
-        # Add an attribute to load correctly
-        grp[name].attrs["array_list"] = True
+        if group_name == "":
+            file[name] = array_list
+            file[name].attrs["array_list"] = True
+        else:
+            grp = file[group_name]
+            grp[name] = array_list
+            # Add an attribute to load correctly
+            grp[name].attrs["array_list"] = True
 
 
 def dict_to_hdf5(file, prefix, dict_to_save):
@@ -102,7 +112,7 @@ def variable_to_hdf5(file, prefix, variable, name):
             # to http://docs.h5py.org/en/stable/strings.html#exceptions-for-python-3
             grp[name] = np.string_(variable.encode("ISO-8859-2"))
     # None
-    elif None == variable:
+    elif variable is None:
         # Create dataset
         grp = file[prefix]
         grp[name] = "NoneValue"
@@ -124,10 +134,12 @@ def save_hdf5(obj, save_path):
         file path
     """
 
+    file5 = None
     try:
-        file = h5py.File(save_path, "w")
-        pyleecan_dict_to_hdf5(file, obj)
-        file.close()
+        file5 = FileH5(save_path, "w")
+        pyleecan_dict_to_hdf5(file5, obj)
+        file5.close()
     except Exception as err:
-        file.close()
+        if file5:
+            file5.close()
         raise (err)

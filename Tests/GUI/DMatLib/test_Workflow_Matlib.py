@@ -31,51 +31,50 @@ import pytest
 class Test_Workflow_DMatLib(object):
     """Test that the widget DMatLib behave like it should when called from a Widget"""
 
-    def setup_method(self, method):
-        """Run at the begining of every test to create the workspace"""
-        self.work_path = join(save_path, "Material Workflow")
+    @pytest.fixture
+    def setup(self):
+        """Run at the begining of every test to setup the gui"""
+
+        if not QtWidgets.QApplication.instance():
+            self.app = QtWidgets.QApplication(sys.argv)
+        else:
+            self.app = QtWidgets.QApplication.instance()
+
+        work_path = join(save_path, "Material Workflow")
         # Delete old test if needed
-        if isdir(self.work_path):
-            rmtree(self.work_path)
-        mkdir(self.work_path)
+        if isdir(work_path):
+            rmtree(work_path)
+        mkdir(work_path)
         copyfile(
             join(TEST_DATA_DIR, "Material", "Magnet1.json"),
-            join(self.work_path, "Magnet1.json"),
+            join(work_path, "Magnet1.json"),
         )
         copyfile(
             join(TEST_DATA_DIR, "Material", "Copper1.json"),
-            join(self.work_path, "Copper1.json"),
+            join(work_path, "Copper1.json"),
         )
         copyfile(
             join(TEST_DATA_DIR, "Material", "Insulator1.json"),
-            join(self.work_path, "Insulator1.json"),
+            join(work_path, "Insulator1.json"),
         )
         copyfile(
             join(TEST_DATA_DIR, "Material", "M400-50A.json"),
-            join(self.work_path, "M400-50A.json"),
+            join(work_path, "M400-50A.json"),
         )
-        self.matlib = MatLib(self.work_path)
+        matlib = MatLib(work_path)
 
-    def teardown(self):
-        """Delete the workspace at the end of the tests"""
+        yield {"work_path": work_path, "matlib": matlib}
+
+        self.app.quit()
+
+        topLevelWidgets = QtWidgets.QApplication.topLevelWidgets()
+        for widget in topLevelWidgets:
+            widget.close()
+
         if is_clean_result:
-            rmtree(self.work_path)
+            rmtree(work_path)
 
-    @classmethod
-    def setup_class(cls):
-        """Start the app for the test"""
-        print("\nStart Test Workflow MatLib")
-        if not QtWidgets.QApplication.instance():
-            cls.app = QtWidgets.QApplication(sys.argv)
-        else:
-            cls.app = QtWidgets.QApplication.instance()
-
-    @classmethod
-    def teardown_class(cls):
-        """Exit the app after the test"""
-        cls.app.quit()
-
-    def test_init_empty(self):
+    def test_init_empty(self, setup):
         """Check that the widget can open with an unknown material"""
         self.machine = MachineIPMSM()
         self.machine.stator = LamSlotWind()
@@ -86,7 +85,7 @@ class Test_Workflow_DMatLib(object):
         self.machine.rotor.hole = [HoleM50()]
         self.machine.rotor.hole[0].magnet_0.mat_type.name = "Magnet_doesnot_exist"
         self.widget = SMHoleMag(
-            machine=self.machine, matlib=self.matlib, is_stator=False
+            machine=self.machine, matlib=setup["matlib"], is_stator=False
         )
         # Check default material
         assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.count() == 4
@@ -112,16 +111,17 @@ class Test_Workflow_DMatLib(object):
             == "001 - Copper1"
         )
 
-    def test_init(self):
+    def test_init(self, setup):
         """Check that the Widget spinbox initialise to the lamination value"""
         self.machine = MachineIPMSM()
         self.machine.stator = LamSlotWind()
         self.machine.rotor = LamHole()
         self.machine._set_None()
+        self.machine.rotor.hole = list()  # No hole
         self.machine.stator.winding.p = 4
         self.machine.type_machine = 8
         self.widget = SMHoleMag(
-            machine=self.machine, matlib=self.matlib, is_stator=False
+            machine=self.machine, matlib=setup["matlib"], is_stator=False
         )
 
         # Check default (hole is set to type 50)
@@ -179,6 +179,8 @@ class Test_Workflow_DMatLib(object):
             self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.elec.rho
             == 1234.56789
         )
+
+        self.app.exit()
         # Close the Edit GUI and check Matlib modification
 
         # Doesn't Work

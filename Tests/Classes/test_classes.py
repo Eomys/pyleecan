@@ -79,14 +79,22 @@ def test_class_init_default(class_dict):
                     + prop["name"],
                 )
         elif is_type_list(type_name):  # List of pyleecan type
-            assert result == list(), (
+            if prop["value"] == "":
+                value = []
+            else:
+                value = prop["value"]
+            assert result == value, (
                 "Error for class "
                 + class_dict["name"]
                 + " for property: "
                 + prop["name"],
             )
         elif is_type_dict(type_name):  # Dict of pyleecan type
-            assert result == dict(), (
+            if prop["value"] == "":
+                value = {}
+            else:
+                value = prop["value"]
+            assert result == value, (
                 "Error for class "
                 + class_dict["name"]
                 + " for property: "
@@ -162,6 +170,8 @@ def test_class_as_dict(class_dict):
             d[prop["name"]] = None
         elif type(prop["value"]) is str and "()" in prop["value"]:
             d[prop["name"]] = eval(prop["value"] + ".as_dict()")
+        elif prop["type"] == "complex":
+            d[prop["name"]] = str(prop["value"])
         elif prop["type"] == "dict":
             if prop["value"] == "":
                 d[prop["name"]] = {}

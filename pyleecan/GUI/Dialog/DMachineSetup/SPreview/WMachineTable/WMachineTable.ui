@@ -87,6 +87,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="b_plot_machine">
+     <property name="text">
+      <string>Plot Machine</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="b_mmf">
      <property name="text">
       <string>Plot Stator Unit MMF</string>

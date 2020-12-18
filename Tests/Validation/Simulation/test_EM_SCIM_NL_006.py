@@ -79,17 +79,9 @@ def test_Magnetic_FEMM_sym():
     mat_file = join(TEST_DATA_DIR, "EM_SCIM_NL_006_MANATEE_MMF.mat")
     Br = ImportMatlab(file_path=mat_file, var_name="XBr")
     angle2 = ImportGenVectLin(start=0, stop=pi, num=4096 / 2, endpoint=False)
-    Time = ImportData(field=time, unit="s", name="time")
-    Angle = ImportData(field=angle2, unit="rad", name="angle")
-    Br_data = ImportData(
-        axes=[Time, Angle],
-        field=Br,
-        unit="T",
-        name="Radial airgap flux density",
-        symbol="B_r",
+    simu_load.input = InputFlux(
+        time=time, angle=angle2, B_dict={"Br": Br}, OP=simu.input.copy()
     )
-    B = ImportVectorField(components={"radial": Br_data})
-    simu_load.input = InputFlux(time=time, angle=angle2, B=B)
 
     out = Output(simu=simu)
     simu.run()
@@ -102,21 +94,32 @@ def test_Magnetic_FEMM_sym():
 
     # Plot the result by comparing the two simulation (sym / no sym)
     plt.close("all")
-    out.plot_A_space(
-        "mag.B", data_list=[out2.mag.B], legend_list=["No symmetry", "1/2 symmetry"]
-    )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_EM_SCIM_NL_006_sym.png"))
+    out.plot_2D_Data(
+        "mag.B",
+        "angle",
+        data_list=[out2.mag.B],
+        legend_list=["No symmetry", "1/2 symmetry"],
+        save_path=join(save_path, "test_EM_SCIM_NL_006_sym.png"),
+        is_show_fig=False,
+    )
 
     # Plot the result by comparing the two simulation (no sym / MANATEE)
     plt.close("all")
-    out.plot_A_space(
+
+    out.plot_2D_Data(
         "mag.B",
+        "angle",
         data_list=[out3.mag.B],
         legend_list=["No symmetry", "MANATEE MMF"],
         component_list=["radial"],
+        save_path=join(save_path, "test_EM_SCIM_NL_006_MMF.png"),
+        is_show_fig=False,
     )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_EM_SCIM_NL_006_MMF.png"))
+    return out, out2, out3
+
+
+# To run it without pytest
+if __name__ == "__main__":
+    out, out2, out3 = test_Magnetic_FEMM_sym()

@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -22,9 +23,9 @@ except ImportError as error:
     get_field = error
 
 try:
-    from ..Methods.Mesh.SolutionData.get_axis import get_axis
+    from ..Methods.Mesh.SolutionData.get_axes_list import get_axes_list
 except ImportError as error:
-    get_axis = error
+    get_axes_list = error
 
 
 from ._check import InitUnKnowClassError
@@ -47,15 +48,17 @@ class SolutionData(Solution):
         )
     else:
         get_field = get_field
-    # cf Methods.Mesh.SolutionData.get_axis
-    if isinstance(get_axis, ImportError):
-        get_axis = property(
+    # cf Methods.Mesh.SolutionData.get_axes_list
+    if isinstance(get_axes_list, ImportError):
+        get_axes_list = property(
             fget=lambda x: raise_(
-                ImportError("Can't use SolutionData method get_axis: " + str(get_axis))
+                ImportError(
+                    "Can't use SolutionData method get_axes_list: " + str(get_axes_list)
+                )
             )
         )
     else:
-        get_axis = get_axis
+        get_axes_list = get_axes_list
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -124,6 +127,16 @@ class SolutionData(Solution):
         if other.field != self.field:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Solution
+        S += super(SolutionData, self).__sizeof__()
+        S += getsizeof(self.field)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

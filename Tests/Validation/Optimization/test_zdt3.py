@@ -74,8 +74,6 @@ def test_zdt3():
     # simu.mag.Kgeo_fineness=0.02
     simu.struct = None
 
-    output = Output(simu=simu)
-
     # ### Design variable
     my_vars = []
 
@@ -122,7 +120,7 @@ def test_zdt3():
 
     # ### Defining the problem
     my_prob = OptiProblem(
-        output=output, design_var=my_vars, obj_func=objs, eval_func=evaluate
+        simu=simu, design_var=my_vars, obj_func=objs, eval_func=evaluate
     )
 
     solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=40, nb_gen=100, p_mutate=0.5)

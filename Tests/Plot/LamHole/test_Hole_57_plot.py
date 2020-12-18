@@ -52,17 +52,18 @@ class Test_Hole_57_plot(object):
             Rint=0.078, Rext=0.104, is_internal=False, is_stator=True, L1=0.8
         )
         test_obj.stator.slot = None
+        test_obj.stator.winding = None
         test_obj.frame = Frame(Rint=0.104, Rext=0.114, Lfra=1)
         self.test_obj = test_obj
 
     def test_Lam_Hole_57_W01(self):
         """Test machine plot hole 57 with W1 > 0 and both magnets"""
-        self.test_obj.plot()
+        self.test_obj.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_57_s57_Machine.png"))
         assert len(fig.axes[0].patches) == 55
 
-        self.test_obj.rotor.plot()
+        self.test_obj.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_57_s57_Rotor_W01.png"))
         # 2 for lam + (3*2)*8 for holes + 16 vents
@@ -73,7 +74,7 @@ class Test_Hole_57_plot(object):
         self.test_obj.rotor.hole[0].W1 = 0
         self.test_obj.rotor.hole[0].magnet_0 = Magnet()
         self.test_obj.rotor.hole[0].magnet_1 = Magnet()
-        self.test_obj.rotor.plot()
+        self.test_obj.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_57_s57_RotorN01.png"))
         # 2 for lam + (3*2)*8 for holes + 16 vents

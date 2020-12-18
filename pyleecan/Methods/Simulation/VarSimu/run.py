@@ -1,10 +1,14 @@
 import numpy as np
 import itertools
 from ....Functions.Simulation.VarSimu.run_single_simu import run_single_simu
+from ....Functions.Load.import_class import import_class
 
 
 def run(self):
     """Run each simulation contained"""
+
+    logger = self.get_logger()
+
     # Check var_simu parameters
     self.check_param()
 
@@ -33,10 +37,10 @@ def run(self):
     ref_simu_in_multsim = isinstance(self.ref_simu_index, int)
 
     if ref_simu_in_multsim:
-        logger = self.get_logger()
         logger.info("Computing reference simulation")
 
         simulation = simulation_list.pop(ref_simu_index)
+        simulation.index = ref_simu_index
         index_list.pop(ref_simu_index)
         xoutput.simu = simulation
 
@@ -49,6 +53,7 @@ def run(self):
             self.stop_if_error,
             self.ref_simu_index,
             self.is_keep_all_output,
+            post_keeper_postproc_list=self.post_keeper_postproc_list,
         )
 
         # Set back the var_simu
@@ -64,9 +69,29 @@ def run(self):
     for simu in simulation_list:
         self.set_reused_data(simu, xoutput)
 
+    # Update the postprocessing list if needed
+    if self.pre_keeper_postproc_list is not None:
+        # Different post between simu list and ref simu
+        for simu in simulation_list:
+            simu.postproc_list = self.pre_keeper_postproc_list
+
     # Execute the other simulations
     nb_simu = self.nb_simu
+    InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
     for idx, [i, simulation] in zip(index_list, enumerate(simulation_list)):
+        simulation.index = idx  # For plot and save results
+        msg = "Running simulation " + str(idx + 1) + "/" + str(self.nb_simu) + " with "
+        for param_exp in simu_dict["paramexplorer_list"]:
+            if isinstance(param_exp.get_value()[idx], InputCurrent):
+                msg += "Id=" + format(param_exp.get_value()[idx].Id_ref, ".8g")
+                msg += ", Iq=" + format(param_exp.get_value()[idx].Iq_ref, ".8g") + ", "
+            else:
+                msg += param_exp.symbol
+                msg += "="
+                msg += format(param_exp.get_value()[idx], ".8g")
+                msg += ", "
+        msg = msg[:-2]
+        logger.info(msg)
         # Run the simulation handling errors
         run_single_simu(
             xoutput,
@@ -76,14 +101,15 @@ def run(self):
             self.stop_if_error,
             self.ref_simu_index,
             self.is_keep_all_output,
+            post_keeper_postproc_list=self.post_keeper_postproc_list,
         )
 
+        # Display simulation progress
         print(
             "\r["
             + "=" * (50 * (i + 1 + ref_simu_in_multsim) // (nb_simu))
             + " " * (50 - ((50 * (i + 1 + ref_simu_in_multsim)) // (nb_simu)))
-            + "] {:3d}%".format(((100 * (i + 1 + ref_simu_in_multsim)) // (nb_simu))),
-            end="",
+            + "] {:3d}%".format(((100 * (i + 1 + ref_simu_in_multsim)) // (nb_simu)))
         )
 
     # Running postprocessings

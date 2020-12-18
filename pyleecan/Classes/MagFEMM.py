@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -45,6 +46,11 @@ try:
     from ..Methods.Simulation.MagFEMM.build_meshsolution import build_meshsolution
 except ImportError as error:
     build_meshsolution = error
+
+try:
+    from ..Methods.Simulation.MagFEMM.solve_FEMM_parallel import solve_FEMM_parallel
+except ImportError as error:
+    solve_FEMM_parallel = error
 
 
 from ._check import InitUnKnowClassError
@@ -125,6 +131,18 @@ class MagFEMM(Magnetics):
         )
     else:
         build_meshsolution = build_meshsolution
+    # cf Methods.Simulation.MagFEMM.solve_FEMM_parallel
+    if isinstance(solve_FEMM_parallel, ImportError):
+        solve_FEMM_parallel = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method solve_FEMM_parallel: "
+                    + str(solve_FEMM_parallel)
+                )
+            )
+        )
+    else:
+        solve_FEMM_parallel = solve_FEMM_parallel
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -137,16 +155,17 @@ class MagFEMM(Magnetics):
         Kgeo_fineness=1,
         type_calc_leakage=0,
         file_name="",
-        FEMM_dict=-1,
-        angle_stator=0,
+        FEMM_dict_enforced=-1,
         is_get_mesh=False,
         is_save_FEA=False,
         is_sliding_band=True,
         transform_list=-1,
         rotor_dxf=None,
         stator_dxf=None,
-        import_file="",
+        import_file=None,
         is_close_femm=True,
+        nb_worker=1,
+        Rag_enforced=None,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -156,6 +175,8 @@ class MagFEMM(Magnetics):
         type_BH_rotor=0,
         is_periodicity_t=False,
         is_periodicity_a=False,
+        angle_stator_shift=0,
+        angle_rotor_shift=0,
         init_dict=None,
         init_str=None,
     ):
@@ -182,10 +203,8 @@ class MagFEMM(Magnetics):
                 type_calc_leakage = init_dict["type_calc_leakage"]
             if "file_name" in list(init_dict.keys()):
                 file_name = init_dict["file_name"]
-            if "FEMM_dict" in list(init_dict.keys()):
-                FEMM_dict = init_dict["FEMM_dict"]
-            if "angle_stator" in list(init_dict.keys()):
-                angle_stator = init_dict["angle_stator"]
+            if "FEMM_dict_enforced" in list(init_dict.keys()):
+                FEMM_dict_enforced = init_dict["FEMM_dict_enforced"]
             if "is_get_mesh" in list(init_dict.keys()):
                 is_get_mesh = init_dict["is_get_mesh"]
             if "is_save_FEA" in list(init_dict.keys()):
@@ -202,6 +221,10 @@ class MagFEMM(Magnetics):
                 import_file = init_dict["import_file"]
             if "is_close_femm" in list(init_dict.keys()):
                 is_close_femm = init_dict["is_close_femm"]
+            if "nb_worker" in list(init_dict.keys()):
+                nb_worker = init_dict["nb_worker"]
+            if "Rag_enforced" in list(init_dict.keys()):
+                Rag_enforced = init_dict["Rag_enforced"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -220,13 +243,16 @@ class MagFEMM(Magnetics):
                 is_periodicity_t = init_dict["is_periodicity_t"]
             if "is_periodicity_a" in list(init_dict.keys()):
                 is_periodicity_a = init_dict["is_periodicity_a"]
+            if "angle_stator_shift" in list(init_dict.keys()):
+                angle_stator_shift = init_dict["angle_stator_shift"]
+            if "angle_rotor_shift" in list(init_dict.keys()):
+                angle_rotor_shift = init_dict["angle_rotor_shift"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
         self.type_calc_leakage = type_calc_leakage
         self.file_name = file_name
-        self.FEMM_dict = FEMM_dict
-        self.angle_stator = angle_stator
+        self.FEMM_dict_enforced = FEMM_dict_enforced
         self.is_get_mesh = is_get_mesh
         self.is_save_FEA = is_save_FEA
         self.is_sliding_band = is_sliding_band
@@ -235,6 +261,8 @@ class MagFEMM(Magnetics):
         self.stator_dxf = stator_dxf
         self.import_file = import_file
         self.is_close_femm = is_close_femm
+        self.nb_worker = nb_worker
+        self.Rag_enforced = Rag_enforced
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -246,6 +274,8 @@ class MagFEMM(Magnetics):
             type_BH_rotor=type_BH_rotor,
             is_periodicity_t=is_periodicity_t,
             is_periodicity_a=is_periodicity_a,
+            angle_stator_shift=angle_stator_shift,
+            angle_rotor_shift=angle_rotor_shift,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
@@ -260,8 +290,7 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "Kgeo_fineness = " + str(self.Kgeo_fineness) + linesep
         MagFEMM_str += "type_calc_leakage = " + str(self.type_calc_leakage) + linesep
         MagFEMM_str += 'file_name = "' + str(self.file_name) + '"' + linesep
-        MagFEMM_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
-        MagFEMM_str += "angle_stator = " + str(self.angle_stator) + linesep
+        MagFEMM_str += "FEMM_dict_enforced = " + str(self.FEMM_dict_enforced) + linesep
         MagFEMM_str += "is_get_mesh = " + str(self.is_get_mesh) + linesep
         MagFEMM_str += "is_save_FEA = " + str(self.is_save_FEA) + linesep
         MagFEMM_str += "is_sliding_band = " + str(self.is_sliding_band) + linesep
@@ -285,6 +314,8 @@ class MagFEMM(Magnetics):
             MagFEMM_str += "stator_dxf = None" + linesep + linesep
         MagFEMM_str += 'import_file = "' + str(self.import_file) + '"' + linesep
         MagFEMM_str += "is_close_femm = " + str(self.is_close_femm) + linesep
+        MagFEMM_str += "nb_worker = " + str(self.nb_worker) + linesep
+        MagFEMM_str += "Rag_enforced = " + str(self.Rag_enforced) + linesep
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -304,9 +335,7 @@ class MagFEMM(Magnetics):
             return False
         if other.file_name != self.file_name:
             return False
-        if other.FEMM_dict != self.FEMM_dict:
-            return False
-        if other.angle_stator != self.angle_stator:
+        if other.FEMM_dict_enforced != self.FEMM_dict_enforced:
             return False
         if other.is_get_mesh != self.is_get_mesh:
             return False
@@ -324,7 +353,39 @@ class MagFEMM(Magnetics):
             return False
         if other.is_close_femm != self.is_close_femm:
             return False
+        if other.nb_worker != self.nb_worker:
+            return False
+        if other.Rag_enforced != self.Rag_enforced:
+            return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Magnetics
+        S += super(MagFEMM, self).__sizeof__()
+        S += getsizeof(self.Kmesh_fineness)
+        S += getsizeof(self.Kgeo_fineness)
+        S += getsizeof(self.type_calc_leakage)
+        S += getsizeof(self.file_name)
+        if self.FEMM_dict_enforced is not None:
+            for key, value in self.FEMM_dict_enforced.items():
+                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.is_get_mesh)
+        S += getsizeof(self.is_save_FEA)
+        S += getsizeof(self.is_sliding_band)
+        if self.transform_list is not None:
+            for value in self.transform_list:
+                S += getsizeof(value)
+        S += getsizeof(self.rotor_dxf)
+        S += getsizeof(self.stator_dxf)
+        S += getsizeof(self.import_file)
+        S += getsizeof(self.is_close_femm)
+        S += getsizeof(self.nb_worker)
+        S += getsizeof(self.Rag_enforced)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
@@ -335,10 +396,11 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["Kgeo_fineness"] = self.Kgeo_fineness
         MagFEMM_dict["type_calc_leakage"] = self.type_calc_leakage
         MagFEMM_dict["file_name"] = self.file_name
-        MagFEMM_dict["FEMM_dict"] = (
-            self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        MagFEMM_dict["FEMM_dict_enforced"] = (
+            self.FEMM_dict_enforced.copy()
+            if self.FEMM_dict_enforced is not None
+            else None
         )
-        MagFEMM_dict["angle_stator"] = self.angle_stator
         MagFEMM_dict["is_get_mesh"] = self.is_get_mesh
         MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
         MagFEMM_dict["is_sliding_band"] = self.is_sliding_band
@@ -355,6 +417,8 @@ class MagFEMM(Magnetics):
             MagFEMM_dict["stator_dxf"] = self.stator_dxf.as_dict()
         MagFEMM_dict["import_file"] = self.import_file
         MagFEMM_dict["is_close_femm"] = self.is_close_femm
+        MagFEMM_dict["nb_worker"] = self.nb_worker
+        MagFEMM_dict["Rag_enforced"] = self.Rag_enforced
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -367,8 +431,7 @@ class MagFEMM(Magnetics):
         self.Kgeo_fineness = None
         self.type_calc_leakage = None
         self.file_name = None
-        self.FEMM_dict = None
-        self.angle_stator = None
+        self.FEMM_dict_enforced = None
         self.is_get_mesh = None
         self.is_save_FEA = None
         self.is_sliding_band = None
@@ -379,6 +442,8 @@ class MagFEMM(Magnetics):
             self.stator_dxf._set_None()
         self.import_file = None
         self.is_close_femm = None
+        self.nb_worker = None
+        self.Rag_enforced = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -456,41 +521,23 @@ class MagFEMM(Magnetics):
         """,
     )
 
-    def _get_FEMM_dict(self):
-        """getter of FEMM_dict"""
-        return self._FEMM_dict
+    def _get_FEMM_dict_enforced(self):
+        """getter of FEMM_dict_enforced"""
+        return self._FEMM_dict_enforced
 
-    def _set_FEMM_dict(self, value):
-        """setter of FEMM_dict"""
+    def _set_FEMM_dict_enforced(self, value):
+        """setter of FEMM_dict_enforced"""
         if type(value) is int and value == -1:
             value = dict()
-        check_var("FEMM_dict", value, "dict")
-        self._FEMM_dict = value
+        check_var("FEMM_dict_enforced", value, "dict")
+        self._FEMM_dict_enforced = value
 
-    FEMM_dict = property(
-        fget=_get_FEMM_dict,
-        fset=_set_FEMM_dict,
+    FEMM_dict_enforced = property(
+        fget=_get_FEMM_dict_enforced,
+        fset=_set_FEMM_dict_enforced,
         doc=u"""To enforce user-defined values for FEMM main parameters 
 
         :Type: dict
-        """,
-    )
-
-    def _get_angle_stator(self):
-        """getter of angle_stator"""
-        return self._angle_stator
-
-    def _set_angle_stator(self, value):
-        """setter of angle_stator"""
-        check_var("angle_stator", value, "float")
-        self._angle_stator = value
-
-    angle_stator = property(
-        fget=_get_angle_stator,
-        fset=_set_angle_stator,
-        doc=u"""Angular position shift of the stator
-
-        :Type: float
         """,
     )
 
@@ -661,5 +708,41 @@ class MagFEMM(Magnetics):
         doc=u"""To close femm automatically after the simulation
 
         :Type: bool
+        """,
+    )
+
+    def _get_nb_worker(self):
+        """getter of nb_worker"""
+        return self._nb_worker
+
+    def _set_nb_worker(self, value):
+        """setter of nb_worker"""
+        check_var("nb_worker", value, "int")
+        self._nb_worker = value
+
+    nb_worker = property(
+        fget=_get_nb_worker,
+        fset=_set_nb_worker,
+        doc=u"""To run FEMM in parallel (the parallelization is on the time loop)
+
+        :Type: int
+        """,
+    )
+
+    def _get_Rag_enforced(self):
+        """getter of Rag_enforced"""
+        return self._Rag_enforced
+
+    def _set_Rag_enforced(self, value):
+        """setter of Rag_enforced"""
+        check_var("Rag_enforced", value, "float")
+        self._Rag_enforced = value
+
+    Rag_enforced = property(
+        fget=_get_Rag_enforced,
+        fset=_set_Rag_enforced,
+        doc=u"""To enforce a different radius value for air-gap outputs
+
+        :Type: float
         """,
     )

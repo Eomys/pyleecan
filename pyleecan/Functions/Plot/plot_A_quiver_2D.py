@@ -1,10 +1,20 @@
 # -*- coding: utf-8 -*-
 
 from ..init_fig import init_fig
-from .plot_A_2D import plot_A_2D
+from .plot_2D import plot_2D
 
 
-def plot_A_quiver_2D(data, t=None, t_index=0, is_norm=False, unit="SI"):
+def plot_A_quiver_2D(
+    data,
+    t=None,
+    t_index=0,
+    is_norm=False,
+    unit="SI",
+    is_show_fig=None,
+    save_path=None,
+    fig=None,
+    ax=None,
+):
     """Plots a 2D vector field
 
     Parameters
@@ -19,10 +29,20 @@ def plot_A_quiver_2D(data, t=None, t_index=0, is_norm=False, unit="SI"):
         boolean indicating if the field must be normalized
     unit : str
         unit in which to plot the field
+    is_show_fig : bool
+        True to show figure after plot
+    save_path : str
+        full path including folder, name and extension of the file to save if save_path is not None
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        ax on which to plot the data
     """
 
-    # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    # Set figure if needed
+    if fig is None and ax is None:
+        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle")
+
     xlabel = "x [m]"
     ylabel = "y [m]"
     # Prepare the extractions
@@ -38,8 +58,15 @@ def plot_A_quiver_2D(data, t=None, t_index=0, is_norm=False, unit="SI"):
     Ydata = results[data.symbol]
 
     # Plot the original graph
-    plot_A_2D(
-        xy, [Ydata], fig=fig, title=title, xlabel=xlabel, ylabel=ylabel, type="quiver"
+    plot_2D(
+        xy,
+        [Ydata],
+        fig=fig,
+        ax=ax,
+        title=title,
+        xlabel=xlabel,
+        ylabel=ylabel,
+        type="quiver",
+        is_show_fig=is_show_fig,
+        save_path=save_path,
     )
-
-    fig.show()

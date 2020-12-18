@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -22,19 +23,9 @@ except ImportError as error:
     run = error
 
 try:
-    from ..Methods.Simulation.Magnetics.comp_time_angle import comp_time_angle
+    from ..Methods.Simulation.Magnetics.comp_axes import comp_axes
 except ImportError as error:
-    comp_time_angle = error
-
-try:
-    from ..Methods.Simulation.Magnetics.comp_emf import comp_emf
-except ImportError as error:
-    comp_emf = error
-
-try:
-    from ..Methods.Simulation.Magnetics.get_axes import get_axes
-except ImportError as error:
-    get_axes = error
+    comp_axes = error
 
 
 from ._check import InitUnKnowClassError
@@ -55,36 +46,15 @@ class Magnetics(FrozenClass):
         )
     else:
         run = run
-    # cf Methods.Simulation.Magnetics.comp_time_angle
-    if isinstance(comp_time_angle, ImportError):
-        comp_time_angle = property(
+    # cf Methods.Simulation.Magnetics.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Magnetics method comp_time_angle: "
-                    + str(comp_time_angle)
-                )
+                ImportError("Can't use Magnetics method comp_axes: " + str(comp_axes))
             )
         )
     else:
-        comp_time_angle = comp_time_angle
-    # cf Methods.Simulation.Magnetics.comp_emf
-    if isinstance(comp_emf, ImportError):
-        comp_emf = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Magnetics method comp_emf: " + str(comp_emf))
-            )
-        )
-    else:
-        comp_emf = comp_emf
-    # cf Methods.Simulation.Magnetics.get_axes
-    if isinstance(get_axes, ImportError):
-        get_axes = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Magnetics method get_axes: " + str(get_axes))
-            )
-        )
-    else:
-        get_axes = get_axes
+        comp_axes = comp_axes
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -102,6 +72,8 @@ class Magnetics(FrozenClass):
         type_BH_rotor=0,
         is_periodicity_t=False,
         is_periodicity_a=False,
+        angle_stator_shift=0,
+        angle_rotor_shift=0,
         init_dict=None,
         init_str=None,
     ):
@@ -138,6 +110,10 @@ class Magnetics(FrozenClass):
                 is_periodicity_t = init_dict["is_periodicity_t"]
             if "is_periodicity_a" in list(init_dict.keys()):
                 is_periodicity_a = init_dict["is_periodicity_a"]
+            if "angle_stator_shift" in list(init_dict.keys()):
+                angle_stator_shift = init_dict["angle_stator_shift"]
+            if "angle_rotor_shift" in list(init_dict.keys()):
+                angle_rotor_shift = init_dict["angle_rotor_shift"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -149,6 +125,8 @@ class Magnetics(FrozenClass):
         self.type_BH_rotor = type_BH_rotor
         self.is_periodicity_t = is_periodicity_t
         self.is_periodicity_a = is_periodicity_a
+        self.angle_stator_shift = angle_stator_shift
+        self.angle_rotor_shift = angle_rotor_shift
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -170,6 +148,10 @@ class Magnetics(FrozenClass):
         Magnetics_str += "type_BH_rotor = " + str(self.type_BH_rotor) + linesep
         Magnetics_str += "is_periodicity_t = " + str(self.is_periodicity_t) + linesep
         Magnetics_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
+        Magnetics_str += (
+            "angle_stator_shift = " + str(self.angle_stator_shift) + linesep
+        )
+        Magnetics_str += "angle_rotor_shift = " + str(self.angle_rotor_shift) + linesep
         return Magnetics_str
 
     def __eq__(self, other):
@@ -195,7 +177,28 @@ class Magnetics(FrozenClass):
             return False
         if other.is_periodicity_a != self.is_periodicity_a:
             return False
+        if other.angle_stator_shift != self.angle_stator_shift:
+            return False
+        if other.angle_rotor_shift != self.angle_rotor_shift:
+            return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.is_remove_slotS)
+        S += getsizeof(self.is_remove_slotR)
+        S += getsizeof(self.is_remove_vent)
+        S += getsizeof(self.is_mmfs)
+        S += getsizeof(self.is_mmfr)
+        S += getsizeof(self.type_BH_stator)
+        S += getsizeof(self.type_BH_rotor)
+        S += getsizeof(self.is_periodicity_t)
+        S += getsizeof(self.is_periodicity_a)
+        S += getsizeof(self.angle_stator_shift)
+        S += getsizeof(self.angle_rotor_shift)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
@@ -210,6 +213,8 @@ class Magnetics(FrozenClass):
         Magnetics_dict["type_BH_rotor"] = self.type_BH_rotor
         Magnetics_dict["is_periodicity_t"] = self.is_periodicity_t
         Magnetics_dict["is_periodicity_a"] = self.is_periodicity_a
+        Magnetics_dict["angle_stator_shift"] = self.angle_stator_shift
+        Magnetics_dict["angle_rotor_shift"] = self.angle_rotor_shift
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -226,6 +231,8 @@ class Magnetics(FrozenClass):
         self.type_BH_rotor = None
         self.is_periodicity_t = None
         self.is_periodicity_a = None
+        self.angle_stator_shift = None
+        self.angle_rotor_shift = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -369,7 +376,7 @@ class Magnetics(FrozenClass):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.mag.time)
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.mag.Time)
 
         :Type: bool
         """,
@@ -387,8 +394,44 @@ class Magnetics(FrozenClass):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.angle)
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)
 
         :Type: bool
+        """,
+    )
+
+    def _get_angle_stator_shift(self):
+        """getter of angle_stator_shift"""
+        return self._angle_stator_shift
+
+    def _set_angle_stator_shift(self, value):
+        """setter of angle_stator_shift"""
+        check_var("angle_stator_shift", value, "float")
+        self._angle_stator_shift = value
+
+    angle_stator_shift = property(
+        fget=_get_angle_stator_shift,
+        fset=_set_angle_stator_shift,
+        doc=u"""Shift angle to appy to the stator in magnetic model
+
+        :Type: float
+        """,
+    )
+
+    def _get_angle_rotor_shift(self):
+        """getter of angle_rotor_shift"""
+        return self._angle_rotor_shift
+
+    def _set_angle_rotor_shift(self, value):
+        """setter of angle_rotor_shift"""
+        check_var("angle_rotor_shift", value, "float")
+        self._angle_rotor_shift = value
+
+    angle_rotor_shift = property(
+        fget=_get_angle_rotor_shift,
+        fset=_set_angle_rotor_shift,
+        doc=u"""Shift angle to appy to the rotor in magnetic model
+
+        :Type: float
         """,
     )

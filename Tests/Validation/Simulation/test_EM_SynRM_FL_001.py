@@ -8,7 +8,7 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
-from pyleecan.Functions.Plot.plot_A_2D import plot_A_2D
+from pyleecan.Functions.Plot.plot_2D import plot_2D
 from Tests import TEST_DATA_DIR
 from Tests import save_validation_path as save_path
 from pyleecan.definitions import config_dict
@@ -30,7 +30,6 @@ def test_Magnetic_Phi0():
     Nt_tot = 3  # Number of time step for each current angle Phi0
     Imax = 28.6878 / sqrt(2)  # RMS stator current magnitude [A]
     # to have one torque ripple period since torque ripple appears at multiple of 6*felec
-    Nrev = 1 / 6
     p = SynRM_001.stator.get_pole_pair_number()
     N0 = 60 * felec / p
 
@@ -111,6 +110,7 @@ def test_Magnetic_Phi0():
         type_BH_rotor=0,
         is_periodicity_a=True,
         is_periodicity_t=False,
+        nb_worker=3,
     )
     simu.force = None
     simu.struct = None
@@ -118,7 +118,7 @@ def test_Magnetic_Phi0():
     Xout = simu.run()
 
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
-    plot_A_2D(
+    plot_2D(
         array([x * 180 / pi for x in Xout.xoutput_dict["Phi0"].result]),
         [Xout.xoutput_dict["Tem_av"].result, Xout.xoutput_dict["Tem_av_ref"].result],
         color_list=curve_colors,
@@ -126,10 +126,12 @@ def test_Magnetic_Phi0():
         xlabel="Current angle [°]",
         ylabel="Electrical torque [N.m]",
         title="Electrical torque vs current angle",
+        save_path=join(save_path, "test_SynRM_Syr-e.png"),
+        is_show_fig=False,
     )
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_SynRM_Syr-e.png"))
+
+    return Xout
 
 
 if __name__ == "__main__":
-    test_Magnetic_Phi0()
+    Xout = test_Magnetic_Phi0()

@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -245,6 +246,19 @@ class MeshMat(Mesh):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Mesh
+        S += super(MeshMat, self).__sizeof__()
+        if self.cell is not None:
+            for key, value in self.cell.items():
+                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.point)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -268,8 +282,7 @@ class MeshMat(Mesh):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for key, obj in self.cell.items():
-            obj._set_None()
+        self.cell = None
         if self.point is not None:
             self.point._set_None()
         # Set to None the properties inherited from Mesh

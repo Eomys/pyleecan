@@ -5,7 +5,7 @@ from SciDataTool import DataTime, Data1D, VectorField
 import numpy as np
 
 
-def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
+def build_meshsolution(self, Nt, meshFEMM, Time, B, H, mu, groups):
     """Build the MeshSolution objets from FEMM outputs.
 
     Parameters
@@ -26,12 +26,12 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
     """
 
     sollist = list()
-    cond = self.is_sliding_band or Nt_tot == 1
+    cond = self.is_sliding_band or Nt == 1
     if cond:
         indices_cell = meshFEMM[0].cell["triangle"].indice
-        Direction = Data1D(name="direction", values=["x", "y", "z"], is_components=True)
-        Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=False)
-        Nodirection = Data1D(name="direction", values=["scalar"], is_components=False)
+        # Direction = Data1D(name="direction", values=["x", "y", "z"], is_components=True)
+        Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=True)
+        # Nodirection = Data1D(name="direction", values=["scalar"], is_components=False)
 
         # Store the results for B
         components = {}
@@ -43,7 +43,7 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
             axes=[Time, Indices_Cell],
             values=B[:, :, 0],
         )
-        components["x"] = Bx_data
+        components["comp_x"] = Bx_data
 
         By_data = DataTime(
             name="Magnetic Flux Density By",
@@ -52,7 +52,7 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
             axes=[Time, Indices_Cell],
             values=B[:, :, 1],
         )
-        components["y"] = By_data
+        components["comp_y"] = By_data
 
         if not np.all((B[:, :, 2] == 0)):
             Bz_data = DataTime(
@@ -62,7 +62,7 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
                 axes=[Time, Indices_Cell],
                 values=B[:, :, 2],
             )
-            components["z"] = Bz_data
+            components["comp_z"] = Bz_data
 
         solB = VectorField(
             name="Magnetic Flux Density", symbol="B", components=components
@@ -78,7 +78,7 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
             axes=[Time, Indices_Cell],
             values=H[:, :, 0],
         )
-        componentsH["x"] = Hx_data
+        componentsH["comp_x"] = Hx_data
 
         Hy_data = DataTime(
             name="Magnetic Field Hy",
@@ -87,7 +87,7 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
             axes=[Time, Indices_Cell],
             values=H[:, :, 1],
         )
-        componentsH["y"] = Hy_data
+        componentsH["comp_y"] = Hy_data
 
         if not np.all((H[:, :, 2] == 0)):
             Hz_data = DataTime(
@@ -97,7 +97,7 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
                 axes=[Time, Indices_Cell],
                 values=H[:, :, 2],
             )
-            componentsH["z"] = Hz_data
+            componentsH["comp_z"] = Hz_data
 
         solH = VectorField(name="Magnetic Field", symbol="H", components=componentsH)
 

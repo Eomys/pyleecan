@@ -24,7 +24,7 @@ def test_obj():
     wind_mat[0, 1, 0, 3] = -1
     wind_mat[1, 1, 0, 4] = -1
     wind_mat[2, 1, 0, 5] = -1
-    test_obj.winding = WindingUD(user_wind_mat=wind_mat)
+    test_obj.winding = WindingUD(user_wind_mat=wind_mat, qs=6)
     return test_obj
 
 
@@ -35,7 +35,7 @@ def test_slot(test_obj):
 
     sp = 2 * pi / test_obj.slot.Zs
     plt.close("all")
-    test_obj.plot(is_lam_only=True)
+    test_obj.plot(is_lam_only=True, is_show_fig=False)
 
     # Add Label
     fig = plt.gcf()
@@ -64,7 +64,7 @@ def test_rad_tan(test_obj):
     plt.close("all")
     # Plot first slot on X axis
     sp = 2 * pi / test_obj.slot.Zs
-    test_obj.plot(alpha=-sp / 2)
+    test_obj.plot(alpha=-sp / 2, is_show_fig=False)
 
     # # Add Label
     fig = plt.gcf()

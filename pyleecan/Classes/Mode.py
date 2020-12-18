@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -102,7 +103,8 @@ class Mode(SolutionMat):
         order_long=None,
         field=None,
         indice=None,
-        axis=None,
+        axis_name=None,
+        axis_size=None,
         type_cell="triangle",
         label=None,
         dimension=2,
@@ -134,8 +136,10 @@ class Mode(SolutionMat):
                 field = init_dict["field"]
             if "indice" in list(init_dict.keys()):
                 indice = init_dict["indice"]
-            if "axis" in list(init_dict.keys()):
-                axis = init_dict["axis"]
+            if "axis_name" in list(init_dict.keys()):
+                axis_name = init_dict["axis_name"]
+            if "axis_size" in list(init_dict.keys()):
+                axis_size = init_dict["axis_size"]
             if "type_cell" in list(init_dict.keys()):
                 type_cell = init_dict["type_cell"]
             if "label" in list(init_dict.keys()):
@@ -150,7 +154,8 @@ class Mode(SolutionMat):
         super(Mode, self).__init__(
             field=field,
             indice=indice,
-            axis=axis,
+            axis_name=axis_name,
+            axis_size=axis_size,
             type_cell=type_cell,
             label=label,
             dimension=dimension,
@@ -185,6 +190,18 @@ class Mode(SolutionMat):
         if other.order_long != self.order_long:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from SolutionMat
+        S += super(Mode, self).__sizeof__()
+        S += getsizeof(self.nat_freq)
+        S += getsizeof(self.order_circ)
+        S += getsizeof(self.order_long)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

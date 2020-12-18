@@ -9,15 +9,26 @@ from ....definitions import config_dict
 FRAME_COLOR = config_dict["PLOT"]["COLOR_DICT"]["FRAME_COLOR"]
 
 
-def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, is_show=True):
+def plot(
+    self,
+    fig=None,
+    ax=None,
+    sym=1,
+    alpha=0,
+    delta=0,
+    is_edge_only=False,
+    is_show_fig=True,
+):
     """Plot the Frame in a matplotlib fig
 
     Parameters
     ----------
     self : Frame
         A Frame object
-    fig :
-        if None, open a new fig and plot, else add to the gcf (Default value = None)
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
     sym : int
         Symmetry factor (1= plot full machine, 2= half of the machine...)
     alpha : float
@@ -26,7 +37,7 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, is_show=Tr
         Complex value for translation
     is_edge_only: bool
         To plot transparent Patches
-    is_show : bool
+    is_show_fig : bool
         To call show at the end of the method
 
     Returns
@@ -37,7 +48,7 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, is_show=Tr
 
     # plot only if the frame has a height >0
     if self.comp_height_eq() != 0:
-        (fig, axes, patch_leg, label_leg) = init_fig(fig)
+        (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
         surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
         patches = list()
         for surf in surf_list:
@@ -61,5 +72,5 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, is_show=Tr
             patch_leg.append(Patch(color=FRAME_COLOR))
             label_leg.append("Frame")
             axes.legend(patch_leg, label_leg)
-        if is_show:
+        if is_show_fig:
             fig.show()

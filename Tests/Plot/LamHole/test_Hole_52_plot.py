@@ -38,18 +38,21 @@ class Test_Hole_52_plot(object):
         test_obj.stator = LamSlotWind(
             Rint=0.09, Rext=0.12, is_internal=False, is_stator=True, L1=0.9, slot=None
         )
+        test_obj.stator.slot = None
+        test_obj.stator.winding = None
+
         test_obj.frame = Frame(Rint=0.12, Rext=0.12, Lfra=0.7)
         return test_obj
 
     def test_Lam_Hole_52(self, machine):
         """Test machine plot hole 52 with magnet"""
-        machine.plot()
+        machine.plot(is_show_fig=False)
         fig = plt.gcf()
         # Rotor + 2 for stator + 0 for frame + 1 for shaft
         assert len(fig.axes[0].patches) == 29
         fig.savefig(join(save_path, "test_Lam_Hole_s52_1-Machine.png"))
 
-        machine.rotor.plot()
+        machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s52_2-Rotor.png"))
         # 2 for lam + 3*8 for holes
@@ -58,7 +61,7 @@ class Test_Hole_52_plot(object):
     def test_Lam_Hole_52_no_mag(self, machine):
         """Test machine plot hole 52 without magnet"""
         machine.rotor.hole[0].magnet_0 = None
-        machine.rotor.plot()
+        machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         # 2 for lam + 1*8 for holes
         assert len(fig.axes[0].patches) == 10

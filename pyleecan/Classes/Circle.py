@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -234,13 +235,30 @@ class Circle(Surface):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Surface
+        S += super(Circle, self).__sizeof__()
+        S += getsizeof(self.radius)
+        S += getsizeof(self.center)
+        S += getsizeof(self.line_label)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Surface
         Circle_dict = super(Circle, self).as_dict()
         Circle_dict["radius"] = self.radius
-        Circle_dict["center"] = self.center
+        if self.center is None:
+            Circle_dict["center"] = None
+        elif isinstance(self.center, float):
+            Circle_dict["center"] = self.center
+        else:
+            Circle_dict["center"] = str(self.center)
         Circle_dict["line_label"] = self.line_label
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -281,6 +299,8 @@ class Circle(Surface):
 
     def _set_center(self, value):
         """setter of center"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("center", value, "complex")
         self._center = value
 

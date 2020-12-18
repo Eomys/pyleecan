@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -65,9 +66,10 @@ class ForceMT(Force):
 
     def __init__(
         self,
-        is_comp_nodal_force=False,
         is_periodicity_t=False,
         is_periodicity_a=False,
+        is_agsf_transfer=False,
+        max_wavenumber_transfer=None,
         init_dict=None,
         init_str=None,
     ):
@@ -86,18 +88,21 @@ class ForceMT(Force):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "is_comp_nodal_force" in list(init_dict.keys()):
-                is_comp_nodal_force = init_dict["is_comp_nodal_force"]
             if "is_periodicity_t" in list(init_dict.keys()):
                 is_periodicity_t = init_dict["is_periodicity_t"]
             if "is_periodicity_a" in list(init_dict.keys()):
                 is_periodicity_a = init_dict["is_periodicity_a"]
+            if "is_agsf_transfer" in list(init_dict.keys()):
+                is_agsf_transfer = init_dict["is_agsf_transfer"]
+            if "max_wavenumber_transfer" in list(init_dict.keys()):
+                max_wavenumber_transfer = init_dict["max_wavenumber_transfer"]
         # Set the properties (value check and convertion are done in setter)
         # Call Force init
         super(ForceMT, self).__init__(
-            is_comp_nodal_force=is_comp_nodal_force,
             is_periodicity_t=is_periodicity_t,
             is_periodicity_a=is_periodicity_a,
+            is_agsf_transfer=is_agsf_transfer,
+            max_wavenumber_transfer=max_wavenumber_transfer,
         )
         # The class is frozen (in Force init), for now it's impossible to
         # add new properties
@@ -120,6 +125,15 @@ class ForceMT(Force):
         if not super(ForceMT, self).__eq__(other):
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Force
+        S += super(ForceMT, self).__sizeof__()
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -223,6 +224,21 @@ class Winding(FrozenClass):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.is_reverse_wind)
+        S += getsizeof(self.Nslot_shift_wind)
+        S += getsizeof(self.qs)
+        S += getsizeof(self.Ntcoil)
+        S += getsizeof(self.Npcpp)
+        S += getsizeof(self.type_connection)
+        S += getsizeof(self.p)
+        S += getsizeof(self.Lewout)
+        S += getsizeof(self.conductor)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -299,7 +315,7 @@ class Winding(FrozenClass):
 
     def _set_qs(self, value):
         """setter of qs"""
-        check_var("qs", value, "int", Vmin=1, Vmax=100)
+        check_var("qs", value, "int", Vmin=0, Vmax=100)
         self._qs = value
 
     qs = property(
@@ -308,7 +324,7 @@ class Winding(FrozenClass):
         doc=u"""number of phases 
 
         :Type: int
-        :min: 1
+        :min: 0
         :max: 100
         """,
     )

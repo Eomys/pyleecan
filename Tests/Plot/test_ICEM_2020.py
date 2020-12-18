@@ -25,6 +25,11 @@ from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
+from pyleecan.Methods.Machine.Winding import WindingError
+from pyleecan.Methods.Machine.WindingCW2LT.comp_connection_mat import (
+    WindingT1DefMsError,
+)
+from pyleecan.Methods.Machine.WindingCW1L.comp_connection_mat import WindingT2DefNtError
 
 import numpy as np
 import random
@@ -80,11 +85,11 @@ def test_FEMM_sym():
 
     # FEMM files (mesh and results) are available in Results folder
     copyfile(
-        join(out.path_res, "Femm", "fig_09_FEMM_sym_model.ans"),
+        join(out.path_result, "Femm", "fig_09_FEMM_sym_model.ans"),
         join(save_path, "fig_09_FEMM_sym_model.ans"),
     )
     copyfile(
-        join(out.path_res, "Femm", "fig_09_FEMM_sym_model.fem"),
+        join(out.path_result, "Femm", "fig_09_FEMM_sym_model.fem"),
         join(save_path, "fig_09_FEMM_sym_model.fem"),
     )
 
@@ -113,7 +118,7 @@ def test_gmsh_mesh_dict():
     )
 
     # Plot, check and save
-    stator.plot(is_lam_only=True)
+    stator.plot(is_lam_only=True, is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_10_ref_lamination.png"))
     fig.savefig(join(save_path, "fig_10_ref_lamination.svg"), format="svg")
@@ -121,7 +126,8 @@ def test_gmsh_mesh_dict():
 
     # Definition of the number of each element on each line
     mesh_dict = {
-        "Tooth_Yoke_Side": 5,
+        "Tooth_Yoke_Side_Right": 5,
+        "Tooth_Yoke_Side_Left": 5,
         "Tooth_Yoke_Arc": 5,
         "Tooth_line_3": 2,
         "Tooth_line_4": 8,
@@ -149,6 +155,7 @@ def test_gmsh_mesh_dict():
     # opened in Gmsh
 
 
+@pytest.mark.skip
 @pytest.mark.GMSH
 @pytest.mark.long
 def test_SlotMulti_sym():
@@ -188,7 +195,7 @@ def test_SlotMulti_sym():
     rotor.notch = [notch]
 
     # Plot, check and save
-    rotor.plot(sym=4)
+    rotor.plot(sym=4, is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_11_SlotMulti_sym.png"))
     fig.savefig(join(save_path, "fig_11_SlotMulti_sym.svg"), format="svg")
@@ -253,15 +260,65 @@ def test_MachineUD():
     machine.lam_list = [lam1, lam2, lam3, lam4]
 
     # Plot, check and save
-    machine.plot()
+    machine.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_12_MachineUD.png"))
     fig.savefig(join(save_path, "fig_12_MachineUD.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 56
+    assert len(fig.axes[0].patches) == 57
+
+    machine.frame = None
+    machine.name = None
+
+    machine.plot(is_show_fig=False)
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.png"))
+    fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.svg"), format="svg")
+    assert len(fig.axes[0].patches) == 57
+
+    """Check that comp_connection_mat can raise a WindingT1DefMsError"""
+
+    lam4.winding = WindingCW2LT(qs=16, p=3)
+    with pytest.raises(WindingT1DefMsError) as context:
+        lam4.winding.comp_connection_mat(Zs=10)
+
+    """Check that comp_connection_mat can raise a WindingError"""
+    winding = WindingCW2LT(qs=3, p=3)
+
+    with pytest.raises(WindingError) as context:
+        winding.comp_connection_mat(Zs=None)
+
+    lam4.winding = WindingCW2LT(qs=3, p=3)
+    lam4.slot = None
+    with pytest.raises(WindingError) as context:
+        lam4.winding.comp_connection_mat(Zs=None)
+
+    # FOR WindingCW1L comp_connection_mat
+
+    """Check that comp_connection_mat can raise a WindingT2DefNtError"""
+
+    lam4.winding = WindingCW1L(qs=2, p=3)
+    lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
+    with pytest.raises(WindingT2DefNtError) as context:
+        lam4.winding.comp_connection_mat(Zs=17)
+
+    lam4.winding = WindingCW1L(qs=2, p=3)
+    lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
+    lam4.winding.comp_connection_mat(Zs=None)
+
+    """Check that comp_connection_mat can raise a WindingError"""
+
+    lam4.winding = WindingCW1L(qs=3, p=3)
+    lam4.slot = None
+    with pytest.raises(WindingError) as context:
+        lam4.winding.comp_connection_mat(Zs=None)
+
+    winding = WindingCW1L(qs=3, p=3)
+    with pytest.raises(WindingError) as context:
+        winding.comp_connection_mat(Zs=None)
 
 
-def test_SlotMulti():
-    """Figure 13: Check that you can plot a LamSlotMulti (two slots kind + notches)"""
+def test_SlotMulti_rotor():
+    """Figure 13: Check that you can plot a LamSlotMulti rotor (two slots kind + notches)"""
     plt.close("all")
     # Lamination main dimensions definition
     rotor = LamSlotMulti(Rint=0.2, Rext=0.7, is_internal=True, is_stator=False)
@@ -291,10 +348,48 @@ def test_SlotMulti():
     rotor.notch = [notch]
 
     # Plot, check and save
-    rotor.plot()
+    rotor.plot(is_show_fig=False)
     fig = plt.gcf()
-    fig.savefig(join(save_path, "fig_13_LamSlotMulti.png"))
-    fig.savefig(join(save_path, "fig_13_LamSlotMulti.svg"), format="svg")
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_rotor.png"))
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_rotor.svg"), format="svg")
+    assert len(fig.axes[0].patches) == 2
+
+
+def test_SlotMulti_stator():
+    """Figure 13: Check that you can plot a LamSlotMulti stator (two slots kind + notches)"""
+    plt.close("all")
+    # Lamination main dimensions definition
+    stator = LamSlotMulti(Rint=0.2, Rext=0.7, is_internal=False, is_stator=True)
+
+    # Reference slot definition
+    Slot1 = SlotW10(
+        Zs=10, W0=50e-3, H0=30e-3, W1=100e-3, H1=30e-3, H2=100e-3, W2=120e-3
+    )
+    Slot2 = SlotW22(Zs=12, W0=pi / 12, H0=50e-3, W2=pi / 6, H2=125e-3)
+
+    # Reference slot are duplicated to get 5 of each in alternance
+    slot_list = list()
+    for ii in range(5):
+        slot_list.append(SlotW10(init_dict=Slot1.as_dict()))
+        slot_list.append(SlotW22(init_dict=Slot2.as_dict()))
+
+    # Two slots in the list are modified (bigger than the others)
+    stator.slot_list = slot_list
+    stator.slot_list[0].H2 = 300e-3
+    stator.slot_list[7].H2 = 300e-3
+    # Set slots position
+    stator.alpha = array([0, 29, 60, 120, 150, 180, 210, 240, 300, 330]) * pi / 180
+
+    # Evenly distributed Notch definition
+    slot3 = SlotW10(Zs=12, W0=40e-3, W1=40e-3, W2=40e-3, H0=0, H1=0, H2=25e-3)
+    notch = NotchEvenDist(notch_shape=slot3, alpha=15 * pi / 180)
+    stator.notch = [notch]
+
+    # Plot, check and save
+    stator.plot(is_show_fig=False)
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_stator.png"))
+    fig.savefig(join(save_path, "fig_13_LamSlotMulti_stator.svg"), format="svg")
     assert len(fig.axes[0].patches) == 2
 
 
@@ -340,10 +435,11 @@ def test_SlotUD():
         0.0690858798800485 - 0.0283397459621556j,
         0.0569615242270663 - 0.0213397459621556j,
     ]
-    machine.rotor.slot = SlotUD(Zs=6, is_sym=True, point_list=point_list)
+    machine.rotor.slot = SlotUD(Zs=6)
+    machine.rotor.slot.set_from_point_list(is_sym=True, point_list=point_list)
 
     # Plot, check and save
-    machine.plot()
+    machine.plot(is_show_fig=False)
     fig = plt.gcf()
     assert len(fig.axes[0].patches) == 83
     fig.savefig(join(save_path, "fig_14_SlotUD.png"))
@@ -387,7 +483,7 @@ def test_WindingUD():
     machine.frame = Frame(Rint=0.8, Rext=0.9, Lfra=1)
 
     # Plot, check and save
-    machine.plot()
+    machine.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_16_WindingUD.png"))
     fig.savefig(join(save_path, "fig_16_WindingUD.svg"), format="svg")
@@ -426,7 +522,7 @@ def test_BoreFlower():
     rotor.bore = BoreFlower(N=8, Rarc=0.05, alpha=pi / 8)
 
     # Plot, check and save
-    rotor.plot()
+    rotor.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_18_BoreFlower.png"))
     fig.savefig(join(save_path, "fig_18_BoreFlower.svg"), format="svg")
@@ -489,16 +585,16 @@ def test_ecc_FEMM():
 
     # FEMM files (mesh and results) are available in Results folder
     copyfile(
-        join(out.path_res, "Femm", "fig_19_Transform_list_model.ans"),
+        join(out.path_result, "Femm", "fig_19_Transform_list_model.ans"),
         join(save_path, "fig_19_Transform_list_model.ans"),
     )
     copyfile(
-        join(out.path_res, "Femm", "fig_19_Transform_list_model.fem"),
+        join(out.path_result, "Femm", "fig_19_Transform_list_model.fem"),
         join(save_path, "fig_19_Transform_list_model.fem"),
     )
     # Plot, check, save
     out.mag.meshsolution.plot_mesh(
-        save_path=join(save_path, "fig_19_transform_list.png")
+        save_path=join(save_path, "fig_19_transform_list.png"), is_show_fig=False
     )
 
 
@@ -605,7 +701,7 @@ def test_Optimization_problem():
     output.simu.machine.rotor.slot.magnet[0].Wmag *= 0.98
 
     # FIG21 Display default machine
-    output.simu.machine.plot()
+    output.simu.machine.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_21_Machine_topology_before_optimization.png"))
     fig.savefig(
@@ -723,7 +819,7 @@ def test_Optimization_problem():
     simu2.machine.name = name2
 
     # plot the machine
-    simu1.machine.plot()
+    simu1.machine.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(
         join(save_path, "fig_21_Topology_to_maximize_average_torque.png"), format="png"
@@ -732,7 +828,7 @@ def test_Optimization_problem():
         join(save_path, "fig_21_Topology_to_maximize_average_torque.svg"), format="svg"
     )
 
-    simu2.machine.plot()
+    simu2.machine.plot(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(
         join(save_path, "fig_21_Topology_to_minimize_torque_ripple.png"), format="png"

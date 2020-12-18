@@ -8,6 +8,7 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.SlotW14.check import S14_Rbo1CheckError
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -111,3 +112,11 @@ class Test_SlotW14_meth(object):
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+    def test_check(self):
+        """Check that the check methods is correctly working"""
+        lam = LamSlot(is_internal=False, Rint=0.1325)
+        lam.slot = SlotW14(H0=5e-3, H1=5e-3, H3=25e-3, W0=5e-3, W3=10)
+
+        with pytest.raises(S14_Rbo1CheckError) as context:
+            lam.slot.check()

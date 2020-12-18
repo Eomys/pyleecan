@@ -18,6 +18,7 @@ import numpy as np
 import pytest
 
 
+@pytest.mark.skip
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
@@ -64,8 +65,19 @@ def test_CEFC_003_t0(CEFC_Lam):
     simu.run()
 
     # Plot the AGSF as a function of space with the spatial fft
-    r_max = 78
-    out.plot_A_space("force.P", is_fft=True, r_max=r_max, component_list=["radial"])
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_CEFC_003_plot_force_space"))
+    out.plot_2D_Data(
+        "mag.B",
+        "angle{rad}",
+        component_list=["radial"],
+        save_path=join(save_path, "test_CEFC_003_plot_force_space.png"),
+        is_show_fig=False,
+    )
+    out.plot_2D_Data(
+        "mag.B",
+        "wavenumber=[0,78]",
+        component_list=["radial"],
+        save_path=join(save_path, "test_CEFC_003_plot_force_space_fft.png"),
+        is_show_fig=False,
+    )
+
     # ------------------------------------------------------

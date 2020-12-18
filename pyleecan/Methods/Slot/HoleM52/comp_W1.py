@@ -18,7 +18,7 @@ def comp_W1(self):
 
     """
 
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
     alpha = self.comp_alpha()
 
@@ -27,7 +27,7 @@ def comp_W1(self):
     hsp = pi / self.Zh  # Half Slot Pitch
 
     # Distance P1,P9
-    D19 = ((Rbo - self.H0) * exp(1j * alpha / 2)).imag * 2
+    D19 = ((Rext - self.H0) * exp(1j * alpha / 2)).imag * 2
 
     # S is the intersectioni between (P1,P9) and the parallel to x passing by P2
     D1S = tan(hsp) * (self.H1 - self.H2)

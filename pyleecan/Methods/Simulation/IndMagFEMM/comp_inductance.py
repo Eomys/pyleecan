@@ -20,11 +20,4 @@ def comp_inductance(self, output):
     # compute the fluxlinkage
     fluxdq = comp_flx(self, output)
 
-    """ # org.
-    # D/Q transform
-    time = output.elec.time
-    felec = output.elec.felec
-    fluxdq = split(n2dq(Phi_wind, 2 * pi * felec * time, n=qs), 2, axis=1)
-    """
-
     return (mean(fluxdq[0]), mean(fluxdq[1]))

@@ -45,14 +45,14 @@ class Test_Lam_Mag_surface_plot(object):
         )
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         assert len(fig.axes[0].patches) == 10
         fig.savefig(join(save_path, "test_Lam_Mag_10s_2-Rotor.png"))
 
         magnet2 = [MagnetType10(Lmag=0.5, Hmag=0.02, Wmag=0.04)]
         rotor.slot = SlotMFlat(Zs=8, W0=0.04, W0_is_rad=False, magnet=magnet2)
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Mag_10s_5-Rotor 2.png"))
 
@@ -86,12 +86,12 @@ class Test_Lam_Mag_surface_plot(object):
         stator.slot = SlotMPolar(Zs=4, W0=pi / 4, magnet=magnet2)
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         assert len(fig.axes[0].patches) == 10
         fig.savefig(join(save_path, "test_Lam_Mag_11s_2-Rotor.png"))
 
-        stator.plot()
+        stator.plot(is_show_fig=False)
         fig = plt.gcf()
         patches = fig.axes[0].patches
         assert len(patches) == 6
@@ -133,12 +133,12 @@ class Test_Lam_Mag_surface_plot(object):
         )
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         assert len(fig.axes[0].patches) == 10
         fig.savefig(join(save_path, "test_Lam_Mag_12s_2-Rotor.png"))
 
-        stator.plot()
+        stator.plot(is_show_fig=False)
         fig = plt.gcf()
         assert len(fig.axes[0].patches) == 2
         fig.savefig(join(save_path, "test_Lam_Mag_12s_3-Stator.png"))
@@ -171,15 +171,29 @@ class Test_Lam_Mag_surface_plot(object):
         )
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         assert len(fig.axes[0].patches) == 6
         fig.savefig(join(save_path, "test_Lam_Mag_13s_2-Rotor.png"))
 
-        stator.plot()
+        stator.plot(is_show_fig=False)
         fig = plt.gcf()
         assert len(fig.axes[0].patches) == 2
         fig.savefig(join(save_path, "test_Lam_Mag_13s_3-Stator.png"))
+
+        rotor = Lamination(
+            Rint=130e-3,
+            Rext=0.2,
+            is_internal=False,
+            is_stator=False,
+            L1=0.35,
+            Nrvd=3,
+            Wrvd=0.05,
+        )
+        stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 2
 
     def test_Lam_Mag_14_surface(self):
         """Test machine plot with Magnet 14 surface"""
@@ -211,12 +225,12 @@ class Test_Lam_Mag_surface_plot(object):
         stator.slot = SlotMPolar(Zs=8, W0=0.628, magnet=magnet)
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         assert len(fig.axes[0].patches) == 10
         fig.savefig(join(save_path, "test_Lam_Mag_14s_2-Rotor.png"))
 
-        stator.plot()
+        stator.plot(is_show_fig=False)
         fig = plt.gcf()
         assert len(fig.axes[0].patches) == 10
         fig.savefig(join(save_path, "test_Lam_Mag_14s_3-Stator.png"))

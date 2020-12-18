@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -283,13 +284,35 @@ class Arc2(Arc):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Arc
+        S += super(Arc2, self).__sizeof__()
+        S += getsizeof(self.begin)
+        S += getsizeof(self.center)
+        S += getsizeof(self.angle)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Arc
         Arc2_dict = super(Arc2, self).as_dict()
-        Arc2_dict["begin"] = self.begin
-        Arc2_dict["center"] = self.center
+        if self.begin is None:
+            Arc2_dict["begin"] = None
+        elif isinstance(self.begin, float):
+            Arc2_dict["begin"] = self.begin
+        else:
+            Arc2_dict["begin"] = str(self.begin)
+        if self.center is None:
+            Arc2_dict["center"] = None
+        elif isinstance(self.center, float):
+            Arc2_dict["center"] = self.center
+        else:
+            Arc2_dict["center"] = str(self.center)
         Arc2_dict["angle"] = self.angle
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -311,6 +334,8 @@ class Arc2(Arc):
 
     def _set_begin(self, value):
         """setter of begin"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("begin", value, "complex")
         self._begin = value
 
@@ -329,6 +354,8 @@ class Arc2(Arc):
 
     def _set_center(self, value):
         """setter of center"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("center", value, "complex")
         self._center = value
 

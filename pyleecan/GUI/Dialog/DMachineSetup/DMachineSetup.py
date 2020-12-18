@@ -69,6 +69,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
 
         self.dmatlib.saveNeeded.connect(self.save_needed)
 
+        self.qmessagebox_question = None
+
     def save_needed(self):
         """Set is_save_needed to True"""
         self.is_save_needed = True
@@ -95,7 +97,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 QMessageBox.Yes,
                 QMessageBox.No,
             )
-
+            self.qmessagebox_question = reply
             if reply == QMessageBox.Yes:
                 self.s_save()
 
@@ -204,7 +206,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 return
             self.update_nav()
 
-    def update_nav(self):
+    def update_nav(self, next_step=None):
         """Update the nav list to match the step of the current machine"""
         mach_dict = mach_list[self.get_machine_index()]
         self.nav_step.blockSignals(True)
@@ -229,7 +231,10 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             self.nav_step.addItem(str(index) + ": " + SPreview.step_name)
         self.update_enable_nav()
         self.nav_step.blockSignals(False)
-        self.nav_step.setCurrentRow(self.last_index)
+        if next_step is None:
+            self.nav_step.setCurrentRow(self.last_index)
+        else:
+            self.nav_step.setCurrentRow(next_step)
 
     def update_enable_nav(self):
         # Load for readibility

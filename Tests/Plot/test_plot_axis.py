@@ -29,7 +29,7 @@ def CURVE_COLORS():
 def test_axis_LamSlotMag(CURVE_COLORS):
     """Axis convention for LamSlot with magnet"""
     SIPMSM_001 = load(join(DATA_DIR, "Machine", "SIPMSM_001.json"))
-    SIPMSM_001.rotor.plot()
+    SIPMSM_001.rotor.plot(is_show_fig=False)
     R1 = SIPMSM_001.rotor.Rext * 1.1
     R2 = SIPMSM_001.rotor.Rext * 1.2
     R3 = SIPMSM_001.rotor.Rext * 1.4
@@ -76,7 +76,7 @@ def test_axis_LamSlotMag(CURVE_COLORS):
 def test_axis_LamHoleMag(CURVE_COLORS):
     """Axis convention for LamHole with magnet"""
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    IPMSM_A.rotor.plot()
+    IPMSM_A.rotor.plot(is_show_fig=False)
     R1 = IPMSM_A.rotor.Rext * 1.1
     R2 = IPMSM_A.rotor.Rext * 1.2
     R3 = IPMSM_A.rotor.Rext * 1.4
@@ -123,7 +123,7 @@ def test_axis_LamHoleMag(CURVE_COLORS):
 def test_axis_LamHole(CURVE_COLORS):
     """Axis convention for LamHole"""
     SynRM_001 = load(join(DATA_DIR, "Machine", "SynRM_001.json"))
-    SynRM_001.rotor.plot()
+    SynRM_001.rotor.plot(is_show_fig=False)
     R1 = SynRM_001.rotor.Rext * 1.1
     R2 = SynRM_001.rotor.Rext * 1.2
     R3 = SynRM_001.rotor.Rext * 1.4
@@ -173,7 +173,7 @@ def test_axis_LamHole(CURVE_COLORS):
 def test_axis_LamWind(CURVE_COLORS):
     """Axis convention for LamWind"""
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
-    SCIM_001.stator.plot()
+    SCIM_001.stator.plot(is_show_fig=False)
     R1 = SCIM_001.stator.Rext * 1.1
     R2 = SCIM_001.stator.Rext * 1.2
     R3 = SCIM_001.stator.Rext * 1.4
@@ -214,12 +214,12 @@ def test_axis_LamWind(CURVE_COLORS):
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_axis_LamWind.png"))
 
-    SCIM_001.stator.plot_mmf_unit()
+    SCIM_001.stator.plot_mmf_unit(is_show_fig=False)
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_axis_LamWind_mmf.png"))
 
     # Plot maximum of the fundamental of the mmf
-    MMF = SCIM_001.stator.comp_mmf_unit(Na=600, Nt=1)
+    MMF = SCIM_001.stator.comp_mmf_unit(Na=600, Nt=1)[0]
     p = SCIM_001.stator.get_pole_pair_number()
     results = MMF.get_along("angle")
     angle_rotor = results["angle"]
@@ -284,9 +284,10 @@ def test_axis_LamWind(CURVE_COLORS):
     simu.run()
 
     plt.close("all")
-    out.plot_A_space("mag.B", is_deg=False)
+    out.plot_2D_Data("mag.B", "angle{rad}", is_show_fig=False)
+
     fig = plt.gcf()
-    Br = out.mag.B.get_rad_along("time", "angle")
+    Br = out.mag.B.components["radial"].get_along("time", "angle")
     fig.axes[0].plot(d_angle, max(max(Br)), "rx")
     fig.axes[0].text(d_angle, max(max(Br)), "Max of mmf")
     fig.savefig(join(save_path, "test_axis_LamWind_flux.png"))

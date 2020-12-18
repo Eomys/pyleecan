@@ -26,3 +26,7 @@ class MPLCanvas2(FigureCanvas):
         self.fig = Figure()
         self.axes = self.fig.add_subplot(111)
         super(MPLCanvas2, self).__init__(self.fig)
+
+    def refresh_fig(self):
+        self.fig = Figure()
+        self.axes = self.fig.add_subplot(111)

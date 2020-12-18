@@ -7,6 +7,7 @@ from os.path import join, abspath, isfile
 TUTO_DIR = abspath(join(TEST_DIR, "..", "Tutorials"))
 
 
+@pytest.mark.skip
 @pytest.mark.tutorial
 @pytest.mark.parametrize("tuto_name", ["tuto_Machine"])
 def test_short_tutorial(tuto_name):
@@ -20,6 +21,7 @@ def test_short_tutorial(tuto_name):
     ep.preprocess(nb, {"metadata": {"path": abspath(join(TEST_DIR, ".."))}})
 
 
+@pytest.mark.skip
 @pytest.mark.tutorial
 @pytest.mark.long
 @pytest.mark.parametrize(
