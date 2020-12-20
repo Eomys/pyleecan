@@ -47,9 +47,7 @@ class LossModelWinding(LossModel):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, temperature=20, lam_id=None, name="", init_dict=None, init_str=None
-    ):
+    def __init__(self, temperature=20, name="", init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -67,13 +65,10 @@ class LossModelWinding(LossModel):
             # Overwrite default value with init_dict content
             if "temperature" in list(init_dict.keys()):
                 temperature = init_dict["temperature"]
-            if "lam_id" in list(init_dict.keys()):
-                lam_id = init_dict["lam_id"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
         # Set the properties (value check and convertion are done in setter)
         self.temperature = temperature
-        self.lam_id = lam_id
         # Call LossModel init
         super(LossModelWinding, self).__init__(name=name)
         # The class is frozen (in LossModel init), for now it's impossible to
@@ -86,7 +81,6 @@ class LossModelWinding(LossModel):
         # Get the properties inherited from LossModel
         LossModelWinding_str += super(LossModelWinding, self).__str__()
         LossModelWinding_str += "temperature = " + str(self.temperature) + linesep
-        LossModelWinding_str += "lam_id = " + str(self.lam_id) + linesep
         return LossModelWinding_str
 
     def __eq__(self, other):
@@ -100,8 +94,6 @@ class LossModelWinding(LossModel):
             return False
         if other.temperature != self.temperature:
             return False
-        if other.lam_id != self.lam_id:
-            return False
         return True
 
     def as_dict(self):
@@ -110,7 +102,6 @@ class LossModelWinding(LossModel):
         # Get the properties inherited from LossModel
         LossModelWinding_dict = super(LossModelWinding, self).as_dict()
         LossModelWinding_dict["temperature"] = self.temperature
-        LossModelWinding_dict["lam_id"] = self.lam_id
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelWinding_dict["__class__"] = "LossModelWinding"
@@ -120,7 +111,6 @@ class LossModelWinding(LossModel):
         """Set all the properties to None (except pyleecan object)"""
 
         self.temperature = None
-        self.lam_id = None
         # Set to None the properties inherited from LossModel
         super(LossModelWinding, self)._set_None()
 
@@ -139,23 +129,5 @@ class LossModelWinding(LossModel):
         doc=u"""Winding temperature
 
         :Type: float
-        """,
-    )
-
-    def _get_lam_id(self):
-        """getter of lam_id"""
-        return self._lam_id
-
-    def _set_lam_id(self, value):
-        """setter of lam_id"""
-        check_var("lam_id", value, "int")
-        self._lam_id = value
-
-    lam_id = property(
-        fget=_get_lam_id,
-        fset=_set_lam_id,
-        doc=u"""Index of the corresponding lamination (of machine.get_lam_list method)
-
-        :Type: int
         """,
     )

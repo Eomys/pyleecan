@@ -3812,13 +3812,31 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
         "properties": [
             {
-                "desc": "List of models to compute the machines losses",
+                "desc": "Dict of the iron loss model (key is the lamination name)",
                 "max": "",
                 "min": "",
-                "name": "models",
-                "type": "[LossModel]",
+                "name": "iron",
+                "type": "dict",
                 "unit": "",
-                "value": []
+                "value": {}
+            },
+            {
+                "desc": "Dict of the winding loss model (key is the lamination name)",
+                "max": "",
+                "min": "",
+                "name": "winding",
+                "type": "dict",
+                "unit": "",
+                "value": {}
+            },
+            {
+                "desc": "Dict of the magnet loss model (key is the lamination name)",
+                "max": "",
+                "min": "",
+                "name": "magnet",
+                "type": "dict",
+                "unit": "",
+                "value": {}
             }
         ]
     },
@@ -3942,15 +3960,6 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
-            },
-            {
-                "desc": "Index of the corresponding lamination (of machine.get_lam_list method)",
-                "max": "",
-                "min": "",
-                "name": "lam_id",
-                "type": "int",
-                "unit": "-",
-                "value": null
             }
         ]
     },
@@ -3980,15 +3989,6 @@
                 "type": "float",
                 "unit": "\u00c2\u00b0C",
                 "value": 20
-            },
-            {
-                "desc": "Index of the corresponding lamination (of machine.get_lam_list method)",
-                "max": "",
-                "min": "",
-                "name": "lam_id",
-                "type": "int",
-                "unit": "-",
-                "value": null
             }
         ]
     },
@@ -6872,34 +6872,34 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
         "properties": [
             {
-                "desc": "List of the computed lamination losses",
+                "desc": "Dict of the computed iron losses (with dict key the name of the lamination)",
                 "max": "",
                 "min": "",
-                "name": "lamination",
-                "type": "list",
+                "name": "iron",
+                "type": "dict",
                 "unit": "",
-                "value": []
+                "value": {}
             },
             {
-                "desc": "List of the computed winding losses",
+                "desc": "Dict of the computed winding losses (with dict key the name of the lamination)",
                 "max": "",
                 "min": "",
                 "name": "winding",
-                "type": "list",
+                "type": "dict",
                 "unit": "",
-                "value": []
+                "value": {}
             },
             {
-                "desc": "List of the computed magnet losses",
+                "desc": "Dict of the computed magnet losses (with dict key the name of the lamination)",
                 "max": "",
                 "min": "",
                 "name": "magnet",
-                "type": "list",
+                "type": "dict",
                 "unit": "",
-                "value": []
+                "value": {}
             },
             {
-                "desc": "list of FEA software mesh and post processing results",
+                "desc": "List of FEA software mesh and post processing results",
                 "max": "",
                 "min": "",
                 "name": "meshsolution",
@@ -8034,7 +8034,6 @@
         "daughters": [
             "Slot19",
             "SlotCirc",
-            "SlotDC",
             "SlotMFlat",
             "SlotMFlat2",
             "SlotMPolar",
@@ -8205,104 +8204,6 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.03
-            }
-        ]
-    },
-    "SlotDC": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_SYMMETRICAL",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Slot with two rods (for double squirrel cage)",
-        "is_internal": false,
-        "methods": [
-            "_comp_point_coordinate",
-            "build_geometry",
-            "get_surface_wind"
-        ],
-        "mother": "SlotWind",
-        "name": "SlotDC",
-        "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotDC.csv",
-        "properties": [
-            {
-                "desc": "Slot isthmus width.",
-                "max": "",
-                "min": "0",
-                "name": "W1",
-                "type": "float",
-                "unit": "m",
-                "value": 0.0122
-            },
-            {
-                "desc": "Distance upper rod center to bore",
-                "max": "",
-                "min": "0",
-                "name": "H1",
-                "type": "float",
-                "unit": "m",
-                "value": 0.0122
-            },
-            {
-                "desc": "Diameter upper rod",
-                "max": "",
-                "min": "0",
-                "name": "D1",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            },
-            {
-                "desc": "Middle connection width",
-                "max": "",
-                "min": "0",
-                "name": "W2",
-                "type": "float",
-                "unit": "m",
-                "value": 0.0122
-            },
-            {
-                "desc": "Height between the first and second center",
-                "max": "",
-                "min": "0",
-                "name": "H2",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            },
-            {
-                "desc": "Diameter upper section lower rod",
-                "max": "",
-                "min": "0",
-                "name": "D2",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            },
-            {
-                "desc": "Length of lower rod",
-                "max": "",
-                "min": "0",
-                "name": "H3",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            },
-            {
-                "desc": "Radius lower section lower rod",
-                "max": "",
-                "min": "0",
-                "name": "R3",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
             }
         ]
     },
@@ -10207,7 +10108,6 @@
         ],
         "daughters": [
             "SlotCirc",
-            "SlotDC",
             "SlotUD",
             "SlotW10",
             "SlotW11",

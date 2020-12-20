@@ -23,7 +23,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .LossModel import LossModel
 
 
 class Loss(FrozenClass):
@@ -44,7 +43,7 @@ class Loss(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, models=-1, init_dict=None, init_str=None):
+    def __init__(self, iron=-1, winding=-1, magnet=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -60,11 +59,17 @@ class Loss(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "models" in list(init_dict.keys()):
-                models = init_dict["models"]
+            if "iron" in list(init_dict.keys()):
+                iron = init_dict["iron"]
+            if "winding" in list(init_dict.keys()):
+                winding = init_dict["winding"]
+            if "magnet" in list(init_dict.keys()):
+                magnet = init_dict["magnet"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.models = models
+        self.iron = iron
+        self.winding = winding
+        self.magnet = magnet
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -77,11 +82,9 @@ class Loss(FrozenClass):
             Loss_str += "parent = None " + linesep
         else:
             Loss_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        if len(self.models) == 0:
-            Loss_str += "models = []" + linesep
-        for ii in range(len(self.models)):
-            tmp = self.models[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            Loss_str += "models[" + str(ii) + "] =" + tmp + linesep + linesep
+        Loss_str += "iron = " + str(self.iron) + linesep
+        Loss_str += "winding = " + str(self.winding) + linesep
+        Loss_str += "magnet = " + str(self.magnet) + linesep
         return Loss_str
 
     def __eq__(self, other):
@@ -89,7 +92,11 @@ class Loss(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.models != self.models:
+        if other.iron != self.iron:
+            return False
+        if other.winding != self.winding:
+            return False
+        if other.magnet != self.magnet:
             return False
         return True
 
@@ -97,12 +104,9 @@ class Loss(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Loss_dict = dict()
-        if self.models is None:
-            Loss_dict["models"] = None
-        else:
-            Loss_dict["models"] = list()
-            for obj in self.models:
-                Loss_dict["models"].append(obj.as_dict())
+        Loss_dict["iron"] = self.iron.copy() if self.iron is not None else None
+        Loss_dict["winding"] = self.winding.copy() if self.winding is not None else None
+        Loss_dict["magnet"] = self.magnet.copy() if self.magnet is not None else None
         # The class name is added to the dict for deserialisation purpose
         Loss_dict["__class__"] = "Loss"
         return Loss_dict
@@ -110,36 +114,66 @@ class Loss(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.models:
-            obj._set_None()
+        self.iron = None
+        self.winding = None
+        self.magnet = None
 
-    def _get_models(self):
-        """getter of models"""
-        if self._models is not None:
-            for obj in self._models:
-                if obj is not None:
-                    obj.parent = self
-        return self._models
+    def _get_iron(self):
+        """getter of iron"""
+        return self._iron
 
-    def _set_models(self, value):
-        """setter of models"""
-        if type(value) is list:
-            for ii, obj in enumerate(value):
-                if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "models"
-                    )
-                    value[ii] = class_obj(init_dict=obj)
-        if value == -1:
-            value = list()
-        check_var("models", value, "[LossModel]")
-        self._models = value
+    def _set_iron(self, value):
+        """setter of iron"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("iron", value, "dict")
+        self._iron = value
 
-    models = property(
-        fget=_get_models,
-        fset=_set_models,
-        doc=u"""List of models to compute the machines losses
+    iron = property(
+        fget=_get_iron,
+        fset=_set_iron,
+        doc=u"""Dict of the iron loss model (key is the lamination name)
 
-        :Type: [LossModel]
+        :Type: dict
+        """,
+    )
+
+    def _get_winding(self):
+        """getter of winding"""
+        return self._winding
+
+    def _set_winding(self, value):
+        """setter of winding"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("winding", value, "dict")
+        self._winding = value
+
+    winding = property(
+        fget=_get_winding,
+        fset=_set_winding,
+        doc=u"""Dict of the winding loss model (key is the lamination name)
+
+        :Type: dict
+        """,
+    )
+
+    def _get_magnet(self):
+        """getter of magnet"""
+        return self._magnet
+
+    def _set_magnet(self, value):
+        """setter of magnet"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("magnet", value, "dict")
+        self._magnet = value
+
+    magnet = property(
+        fget=_get_magnet,
+        fset=_set_magnet,
+        doc=u"""Dict of the magnet loss model (key is the lamination name)
+
+        :Type: dict
         """,
     )

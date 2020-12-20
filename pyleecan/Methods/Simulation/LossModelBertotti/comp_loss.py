@@ -37,7 +37,7 @@ def _comp_loss_sum(meshsolution, L1=1, rho=7650, sym=1, logger=None):
     return loss.sum()
 
 
-def comp_loss(self):
+def comp_loss(self, lam):
     """Compute the Losses"""
     if self.parent is None:
         raise InputError(
@@ -65,8 +65,6 @@ def comp_loss(self):
     output.loss.meshsolution[-1].solution = []
 
     # get length and material
-    lam = simu.machine.get_lam_list()[self.lam_id]
-
     L1 = lam.L1
     mat_type = lam.mat_type
     rho = mat_type.struct.rho
@@ -143,4 +141,4 @@ def comp_loss(self):
             values=loss_sum * ones_like(Time.values),
         )
 
-        output.loss.lamination[self.lam_id].append(data)
+        return data

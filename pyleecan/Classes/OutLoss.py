@@ -113,7 +113,7 @@ class OutLoss(FrozenClass):
 
     def __init__(
         self,
-        lamination=-1,
+        iron=-1,
         winding=-1,
         magnet=-1,
         meshsolution=-1,
@@ -138,8 +138,8 @@ class OutLoss(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "lamination" in list(init_dict.keys()):
-                lamination = init_dict["lamination"]
+            if "iron" in list(init_dict.keys()):
+                iron = init_dict["iron"]
             if "winding" in list(init_dict.keys()):
                 winding = init_dict["winding"]
             if "magnet" in list(init_dict.keys()):
@@ -154,7 +154,7 @@ class OutLoss(FrozenClass):
                 misc = init_dict["misc"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.lamination = lamination
+        self.iron = iron
         self.winding = winding
         self.magnet = magnet
         self.meshsolution = meshsolution
@@ -173,24 +173,9 @@ class OutLoss(FrozenClass):
             OutLoss_str += "parent = None " + linesep
         else:
             OutLoss_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutLoss_str += (
-            "lamination = "
-            + linesep
-            + str(self.lamination).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        OutLoss_str += (
-            "winding = "
-            + linesep
-            + str(self.winding).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        OutLoss_str += (
-            "magnet = "
-            + linesep
-            + str(self.magnet).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        OutLoss_str += "iron = " + str(self.iron) + linesep
+        OutLoss_str += "winding = " + str(self.winding) + linesep
+        OutLoss_str += "magnet = " + str(self.magnet) + linesep
         OutLoss_str += (
             "meshsolution = "
             + linesep
@@ -217,7 +202,7 @@ class OutLoss(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.lamination != self.lamination:
+        if other.iron != self.iron:
             return False
         if other.winding != self.winding:
             return False
@@ -237,9 +222,7 @@ class OutLoss(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutLoss_dict = dict()
-        OutLoss_dict["lamination"] = (
-            self.lamination.copy() if self.lamination is not None else None
-        )
+        OutLoss_dict["iron"] = self.iron.copy() if self.iron is not None else None
         OutLoss_dict["winding"] = (
             self.winding.copy() if self.winding is not None else None
         )
@@ -257,7 +240,7 @@ class OutLoss(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.lamination = None
+        self.iron = None
         self.winding = None
         self.magnet = None
         self.meshsolution = None
@@ -265,23 +248,23 @@ class OutLoss(FrozenClass):
         self.mech = None
         self.misc = None
 
-    def _get_lamination(self):
-        """getter of lamination"""
-        return self._lamination
+    def _get_iron(self):
+        """getter of iron"""
+        return self._iron
 
-    def _set_lamination(self, value):
-        """setter of lamination"""
+    def _set_iron(self, value):
+        """setter of iron"""
         if type(value) is int and value == -1:
-            value = list()
-        check_var("lamination", value, "list")
-        self._lamination = value
+            value = dict()
+        check_var("iron", value, "dict")
+        self._iron = value
 
-    lamination = property(
-        fget=_get_lamination,
-        fset=_set_lamination,
-        doc=u"""List of the computed lamination losses
+    iron = property(
+        fget=_get_iron,
+        fset=_set_iron,
+        doc=u"""Dict of the computed iron losses (with dict key the name of the lamination)
 
-        :Type: list
+        :Type: dict
         """,
     )
 
@@ -292,16 +275,16 @@ class OutLoss(FrozenClass):
     def _set_winding(self, value):
         """setter of winding"""
         if type(value) is int and value == -1:
-            value = list()
-        check_var("winding", value, "list")
+            value = dict()
+        check_var("winding", value, "dict")
         self._winding = value
 
     winding = property(
         fget=_get_winding,
         fset=_set_winding,
-        doc=u"""List of the computed winding losses
+        doc=u"""Dict of the computed winding losses (with dict key the name of the lamination)
 
-        :Type: list
+        :Type: dict
         """,
     )
 
@@ -312,16 +295,16 @@ class OutLoss(FrozenClass):
     def _set_magnet(self, value):
         """setter of magnet"""
         if type(value) is int and value == -1:
-            value = list()
-        check_var("magnet", value, "list")
+            value = dict()
+        check_var("magnet", value, "dict")
         self._magnet = value
 
     magnet = property(
         fget=_get_magnet,
         fset=_set_magnet,
-        doc=u"""List of the computed magnet losses
+        doc=u"""Dict of the computed magnet losses (with dict key the name of the lamination)
 
-        :Type: list
+        :Type: dict
         """,
     )
 
@@ -339,7 +322,7 @@ class OutLoss(FrozenClass):
     meshsolution = property(
         fget=_get_meshsolution,
         fset=_set_meshsolution,
-        doc=u"""list of FEA software mesh and post processing results
+        doc=u"""List of FEA software mesh and post processing results
 
         :Type: list
         """,
