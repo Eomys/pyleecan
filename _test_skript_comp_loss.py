@@ -30,9 +30,12 @@ from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 myIronLoss = LossModelBertotti()
 myWindingLoss = LossModelWinding()
 mySimu.loss = Loss()
-mySimu.loss.models = [myIronLoss, myWindingLoss]
-
-myWindingLoss.lam_id = 1
+mySimu.loss.iron["Stator"] = [
+    myIronLoss,
+]
+mySimu.loss.winding["Stator"] = [
+    myWindingLoss,
+]
 
 myIronLoss.name = "Stator Iron Losses"
 myIronLoss.k_hy = None
@@ -41,7 +44,6 @@ myIronLoss.k_ed = None
 myIronLoss.alpha_ed = 2
 myIronLoss.k_ex = 0
 myIronLoss.alpha_ex = 1.5
-myIronLoss.lam_id = 1  # could be substituted by lam list index
 myIronLoss.group = "stator core"  # this is the FEMM group name
 
 LossData = ImportMatrixXls()
