@@ -106,7 +106,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
 
     # stator magnet region mesh and segments max element size parameter
     if type(machine.stator) == LamSlotMag:
-        Hmag = machine.stator.slot.magnet[0].Hmag
+        Hmag = machine.stator.slot.comp_height_active()
         FEMM_dict["meshsize_magnetS"] = Hmag / 4 / Kmesh_fineness
         FEMM_dict["elementsize_magnetS"] = Hmag / 4 / Kmesh_fineness
     else:
@@ -114,7 +114,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
 
     # rotor magnet region mesh and segments max element size parameter
     if type(machine.rotor) == LamSlotMag:
-        Hmag = machine.rotor.slot.magnet[0].Hmag
+        Hmag = machine.rotor.slot.comp_height_active()
         FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness
         FEMM_dict["elementsize_magnetR"] = Hmag / 4 / Kmesh_fineness
     elif type(machine.rotor) == LamHole:
