@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -37,9 +38,19 @@ except ImportError as error:
     get_real_point = error
 
 try:
+    from ..Methods.Mesh.RefSegmentP1.is_inside import is_inside
+except ImportError as error:
+    is_inside = error
+
+try:
     from ..Methods.Mesh.RefSegmentP1.get_ref_point import get_ref_point
 except ImportError as error:
     get_ref_point = error
+
+try:
+    from ..Methods.Mesh.RefSegmentP1.get_normal import get_normal
+except ImportError as error:
+    get_normal = error
 
 
 from ._check import InitUnKnowClassError
@@ -96,6 +107,17 @@ class RefSegmentP1(RefCell):
         )
     else:
         get_real_point = get_real_point
+    # cf Methods.Mesh.RefSegmentP1.is_inside
+    if isinstance(is_inside, ImportError):
+        is_inside = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use RefSegmentP1 method is_inside: " + str(is_inside)
+                )
+            )
+        )
+    else:
+        is_inside = is_inside
     # cf Methods.Mesh.RefSegmentP1.get_ref_point
     if isinstance(get_ref_point, ImportError):
         get_ref_point = property(
@@ -107,6 +129,17 @@ class RefSegmentP1(RefCell):
         )
     else:
         get_ref_point = get_ref_point
+    # cf Methods.Mesh.RefSegmentP1.get_normal
+    if isinstance(get_normal, ImportError):
+        get_normal = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use RefSegmentP1 method get_normal: " + str(get_normal)
+                )
+            )
+        )
+    else:
+        get_normal = get_normal
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -155,6 +188,15 @@ class RefSegmentP1(RefCell):
         if not super(RefSegmentP1, self).__eq__(other):
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from RefCell
+        S += super(RefSegmentP1, self).__sizeof__()
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

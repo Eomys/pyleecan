@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -20,11 +21,6 @@ try:
     from ..Methods.Machine.MachineUD.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
-
-try:
-    from ..Methods.Machine.MachineUD.plot import plot
-except ImportError as error:
-    plot = error
 
 try:
     from ..Methods.Machine.MachineUD.is_synchronous import is_synchronous
@@ -55,15 +51,6 @@ class MachineUD(Machine):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Machine.MachineUD.plot
-    if isinstance(plot, ImportError):
-        plot = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MachineUD method plot: " + str(plot))
-            )
-        )
-    else:
-        plot = plot
     # cf Methods.Machine.MachineUD.is_synchronous
     if isinstance(is_synchronous, ImportError):
         is_synchronous = property(
@@ -169,6 +156,19 @@ class MachineUD(Machine):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Machine
+        S += super(MachineUD, self).__sizeof__()
+        if self.lam_list is not None:
+            for value in self.lam_list:
+                S += getsizeof(value)
+        S += getsizeof(self.is_sync)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -189,8 +189,7 @@ class MachineUD(Machine):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.lam_list:
-            obj._set_None()
+        self.lam_list = None
         self.is_sync = None
         # Set to None the properties inherited from Machine
         super(MachineUD, self)._set_None()

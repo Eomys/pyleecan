@@ -552,4 +552,3 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.nu_yz = self.lf_nu_yz.value()
-

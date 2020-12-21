@@ -70,7 +70,7 @@ def test_PostPlot():
         param_list=["mag.B", "angle"],
         param_dict={
             "component_list": ["tangential"],
-            "is_show_fig": True,
+            "is_show_fig": False,
             "fig": fig1,
             "ax": axes1[1],
         },
@@ -92,7 +92,7 @@ def test_PostPlot():
         method="plot_2D_Data",
         param_list=["mag.Tem", "time"],
         param_dict={
-            "is_show_fig": True,
+            "is_show_fig": False,
             "fig": fig2,
             "ax": axes2[1],
         },
@@ -102,7 +102,7 @@ def test_PostPlot():
 
     plot_P_radial_space_svg = PostPlot(
         method="plot_2D_Data",
-        param_list=["force.P", "angle"],
+        param_list=["force.AGSF", "angle"],
         param_dict={
             "component_list": ["radial"],
             "is_show_fig": False,

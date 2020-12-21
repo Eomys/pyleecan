@@ -1,4 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe file
-is_comp_nodal_force,-,1 to compute lumped tooth forces,0,bool,0,,,,Simulation,,comp_time_angle,VERSION,1,Forces module abstract object,ForceMT
-is_periodicity_t,-,True to compute only on one time periodicity (use periodicities defined in output.force.Time),0,bool,0,,,,,,run,,,,
-is_periodicity_a,-,True to compute only on one angle periodicity (use periodicities defined in output.force.Angle),0,bool,0,,,,,,,,,,
+is_periodicity_t,-,True to compute only on one time periodicity (use periodicities defined in output.force.Time),0,bool,0,,,,Simulation,,run,VERSION,1,Forces module abstract object,ForceMT
+is_periodicity_a,-,True to compute only on one angle periodicity (use periodicities defined in output.force.Angle),0,bool,0,,,,,,comp_axes,,,,
+is_agsf_transfer,-,True to compute the AGSF transfer from air-gap to stator bore radius.,0,bool,0,,,,,,comp_AGSF_transfer,,,,
+max_wavenumber_transfer,-,Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification),0,int,None,,,,,,,,,,

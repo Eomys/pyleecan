@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -107,6 +108,17 @@ class NotchEvenDist(Notch):
         if other.notch_shape != self.notch_shape:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Notch
+        S += super(NotchEvenDist, self).__sizeof__()
+        S += getsizeof(self.alpha)
+        S += getsizeof(self.notch_shape)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

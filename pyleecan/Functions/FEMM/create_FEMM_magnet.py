@@ -27,15 +27,11 @@ def create_FEMM_magnet(femm, label, is_mmf, is_eddies, materials, lam):
 
     """
     # some if's and else's to find the correct material parameter from magnet label
+    idx_str = findall(r"_T\d+_", label)[0][2:-1]
     if "HoleMagnet" in label:
-        if "T0" in label:
-            magnet = lam.hole[0].magnet_0
-        elif "T1" in label:
-            magnet = lam.hole[0].magnet_1
-        elif "T2" in label:
-            magnet = lam.hole[0].magnet_2
+        magnet_dict = lam.hole[0].get_magnet_dict()
+        magnet = magnet_dict["magnet_" + idx_str]
     else:
-        idx_str = findall(r"_T\d+_", label)[0][2:-1]
         magnet = lam.slot.magnet[int(idx_str)]
         # pole_mag = "_" + label[12] + "_" + label[-4]
 

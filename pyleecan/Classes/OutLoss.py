@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -217,6 +218,31 @@ class OutLoss(FrozenClass):
         if other.misc != self.misc:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        if self.lamination is not None:
+            for value in self.lamination:
+                S += getsizeof(value)
+        if self.winding is not None:
+            for value in self.winding:
+                S += getsizeof(value)
+        if self.magnet is not None:
+            for value in self.magnet:
+                S += getsizeof(value)
+        if self.meshsolution is not None:
+            for value in self.meshsolution:
+                S += getsizeof(value)
+        S += getsizeof(self.logger_name)
+        if self.mech is not None:
+            for value in self.mech:
+                S += getsizeof(value)
+        if self.misc is not None:
+            for value in self.misc:
+                S += getsizeof(value)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

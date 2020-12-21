@@ -37,9 +37,9 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         end = begin * exp(1j * 2 * pi / sym)
         surface = SurfLine(
             line_list=[
-                Segment(0, begin),
-                Arc1(begin, end, self.Drsh / 2),
-                Segment(end, 0),
+                Segment(0, begin, label="Shaft_Side_Right"),
+                Arc1(begin, end, self.Drsh / 2, label="Shaft_Side_Arc"),
+                Segment(end, 0, label="Shaft_Side_Left"),
             ],
             label="Shaft",
             point_ref=0,

@@ -10,6 +10,7 @@ from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
 from numpy import ones, pi, array
 
 
+@pytest.mark.skip
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM

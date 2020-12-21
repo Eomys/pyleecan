@@ -6,26 +6,26 @@
 # from ...Classes.Segment import Segment
 # from ...Classes.SurfLine import SurfLine
 
+from ...Functions.GMSH import boundary_prop
 
-def get_boundary_condition(line, machine):
-    """Returns
+
+def get_boundary_condition(line):
+    """Returns the boundary name on a line that is used in FEA coupling
 
     Parameters
     ----------
-    sym: int
-        Symmetry factor (1= full machine, 2= half of the machine...)
-    Rgap_mec_int: float
-        Internal lamination mechanic radius
-    Rgap_mec_ext: float
-        External lamination mechanic radius
+    line :
+        a line with a label
 
     Returns
     -------
-    surf_list: list
-        List of surface in the airgap including the sliding band surface
+    label : string
+        boundary name
     """
 
-    slot_height = machine.stator.slot.comp_height()
-    winding_slot_height = machine.stator.slot.comp_height_wind()
+    propname = ""
+    for bound_label in boundary_prop:
+        if bound_label in line.label:
+            propname = boundary_prop[bound_label]
 
-    return None
+    return propname

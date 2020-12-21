@@ -77,7 +77,6 @@ def plot_generation(self, x_symbol, y_symbol, ax=None):
         ax.set_xlabel(x_label)
         ax.set_ylabel(y_label)
         ax.set_title("Fitness values for each individual")
-
         fig.show()
 
     else:

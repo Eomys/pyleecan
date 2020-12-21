@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -178,6 +179,21 @@ class SlotUD(SlotWind):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from SlotWind
+        S += super(SlotUD, self).__sizeof__()
+        if self.line_list is not None:
+            for value in self.line_list:
+                S += getsizeof(value)
+        S += getsizeof(self.wind_begin_index)
+        S += getsizeof(self.wind_end_index)
+        S += getsizeof(self.type_line_wind)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -200,8 +216,7 @@ class SlotUD(SlotWind):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.line_list:
-            obj._set_None()
+        self.line_list = None
         self.wind_begin_index = None
         self.wind_end_index = None
         self.type_line_wind = None

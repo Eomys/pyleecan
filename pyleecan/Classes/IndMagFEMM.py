@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -151,6 +152,23 @@ class IndMagFEMM(IndMag):
         if other.Kgeo_fineness != self.Kgeo_fineness:
             return False
         return True
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from IndMag
+        S += super(IndMagFEMM, self).__sizeof__()
+        if self.FEMM_dict is not None:
+            for key, value in self.FEMM_dict.items():
+                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.type_calc_leakage)
+        S += getsizeof(self.is_sliding_band)
+        S += getsizeof(self.is_periodicity_a)
+        S += getsizeof(self.Nt_tot)
+        S += getsizeof(self.Kgeo_fineness)
+        return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""

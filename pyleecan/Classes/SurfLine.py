@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -240,6 +241,18 @@ class SurfLine(Surface):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Surface
+        S += super(SurfLine, self).__sizeof__()
+        if self.line_list is not None:
+            for value in self.line_list:
+                S += getsizeof(value)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -259,8 +272,7 @@ class SurfLine(Surface):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.line_list:
-            obj._set_None()
+        self.line_list = None
         # Set to None the properties inherited from Surface
         super(SurfLine, self)._set_None()
 

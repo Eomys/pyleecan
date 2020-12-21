@@ -81,4 +81,5 @@ def test_EM_IPMSM_FL_002():
         data_list=[out2.mag.B],
         legend_list=["No symmetry", "1/2 symmetry"],
         save_path=join(save_path, "test_EM_IPMSM_FL_002_sym.png"),
+        is_show_fig=False,
     )

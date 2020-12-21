@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -205,6 +206,20 @@ class SlotMPolar(SlotMag):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from SlotMag
+        S += super(SlotMPolar, self).__sizeof__()
+        S += getsizeof(self.W0)
+        S += getsizeof(self.H0)
+        if self.magnet is not None:
+            for value in self.magnet:
+                S += getsizeof(value)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -228,8 +243,7 @@ class SlotMPolar(SlotMag):
 
         self.W0 = None
         self.H0 = None
-        for obj in self.magnet:
-            obj._set_None()
+        self.magnet = None
         # Set to None the properties inherited from SlotMag
         super(SlotMPolar, self)._set_None()
 

@@ -33,11 +33,9 @@ def generate_set_None(gen_dict, class_dict):
         ):
             var_str += TAB2 + "self." + prop["name"] + " = None\n"
         elif is_list_pyleecan_type(prop["type"]):
-            var_str += TAB2 + "for obj in self." + prop["name"] + ":\n"
-            var_str += TAB3 + "obj._set_None()\n"
+            var_str += TAB2 + "self." + prop["name"] + " = None\n"
         elif is_dict_pyleecan_type(prop["type"]):
-            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
-            var_str += TAB3 + "obj._set_None()\n"
+            var_str += TAB2 + "self." + prop["name"] + " = None\n"
         else:  # Pyleecan type
             var_str += TAB2 + "if self." + prop["name"] + " is not None:\n"
             var_str += TAB3 + "self." + prop["name"] + "._set_None()\n"

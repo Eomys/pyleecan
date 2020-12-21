@@ -99,15 +99,15 @@ def plot_3D(
     if is_show_fig is None:
         is_show_fig = True if fig is None else False
 
-    # Set figure if needed
-    if fig is None and ax is None:
-        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle", is_3d=True)
-
     # Set if figure is 3D
     if type != "pcolor" and type != "scatter":
         is_3d = True
     else:
         is_3d = False
+
+    # Set figure if needed
+    if fig is None and ax is None:
+        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle", is_3d=is_3d)
 
     # Plot
     if type == "stem":

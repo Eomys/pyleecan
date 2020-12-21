@@ -25,12 +25,7 @@ def get_fund_harm(self, data):
         # Init output dict
         fund_harm = dict()
 
-        # Extract first component in case of VectorField
-        if isinstance(data, VectorField):
-            comp_keys = list(data.components.keys())
-            axes_list = data.components[comp_keys[0]].axes
-        else:
-            axes_list = data.axes
+        axes_list = data.get_axes()
 
         # Get machine pole pair number
         p = self.simu.machine.get_pole_pair_number()

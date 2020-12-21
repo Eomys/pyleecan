@@ -68,8 +68,7 @@ def plot_3D_Data(
     """
 
     # Get Data object names
-    phys = getattr(self, Data_str.split(".")[0])
-    data = getattr(phys, Data_str.split(".")[1])
+    data = self.get_data_from_str(data_str=Data_str)
 
     # Call the plot function
     if isinstance(data, VectorField):

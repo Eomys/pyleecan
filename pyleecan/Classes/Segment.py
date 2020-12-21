@@ -5,6 +5,7 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
@@ -301,6 +302,17 @@ class Segment(Line):
             return False
         return True
 
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Line
+        S += super(Segment, self).__sizeof__()
+        S += getsizeof(self.begin)
+        S += getsizeof(self.end)
+        return S
+
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
@@ -308,10 +320,14 @@ class Segment(Line):
         Segment_dict = super(Segment, self).as_dict()
         if self.begin is None:
             Segment_dict["begin"] = None
+        elif isinstance(self.begin, float):
+            Segment_dict["begin"] = self.begin
         else:
             Segment_dict["begin"] = str(self.begin)
         if self.end is None:
             Segment_dict["end"] = None
+        elif isinstance(self.end, float):
+            Segment_dict["end"] = self.end
         else:
             Segment_dict["end"] = str(self.end)
         # The class name is added to the dict for deserialisation purpose
