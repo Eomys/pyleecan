@@ -220,7 +220,8 @@
             }
         ],
         "daughters": [
-            "BoreFlower"
+            "BoreFlower",
+            "BoreUD"
         ],
         "desc": "Abstract class for Bore shape",
         "is_internal": false,
@@ -275,6 +276,35 @@
                 "type": "float",
                 "unit": "rad",
                 "value": 0
+            }
+        ]
+    },
+    "BoreUD": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "User Defined Bore shape",
+        "is_internal": false,
+        "methods": [
+            "get_bore_line"
+        ],
+        "mother": "Bore",
+        "name": "BoreUD",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/BoreUD.csv",
+        "properties": [
+            {
+                "desc": "List of line to draw the full bore",
+                "max": "",
+                "min": "",
+                "name": "line_list",
+                "type": "[Line]",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -4607,9 +4637,7 @@
                 "value": "1"
             }
         ],
-        "daughters": [
-            "MagnetType15"
-        ],
+        "daughters": [],
         "desc": "Magnet class",
         "is_internal": false,
         "methods": [],
@@ -4644,63 +4672,6 @@
                 "type": "float",
                 "unit": "-",
                 "value": 0.95
-            }
-        ]
-    },
-    "MagnetType15": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_FLAT_BOT",
-                "value": "0"
-            },
-            {
-                "name": "IS_FLAT_TOP",
-                "value": "0"
-            }
-        ],
-        "daughters": [],
-        "desc": "single magnet with polar base and curved-top shape and parallel sides",
-        "is_internal": false,
-        "methods": [
-            "build_geometry",
-            "comp_height",
-            "comp_angle_opening"
-        ],
-        "mother": "Magnet",
-        "name": "MagnetType15",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType15.csv",
-        "properties": [
-            {
-                "desc": "magnet width [m]",
-                "max": "",
-                "min": "0",
-                "name": "Wmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.002
-            },
-            {
-                "desc": "magnet radial height [m]",
-                "max": "",
-                "min": "0",
-                "name": "Hmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            },
-            {
-                "desc": "radius of the circular top shape [m]",
-                "max": "",
-                "min": "0",
-                "name": "Rtop",
-                "type": "float",
-                "unit": "m",
-                "value": 0.05
             }
         ]
     },
@@ -7663,6 +7634,7 @@
             "SlotM15",
             "SlotM16",
             "SlotUD",
+            "SlotUD2",
             "SlotW10",
             "SlotW11",
             "SlotW12",
@@ -8495,6 +8467,46 @@
                 "type": "int",
                 "unit": "-",
                 "value": 0
+            }
+        ]
+    },
+    "SlotUD2": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "\"User defined\" Slot from a line list and a surface",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "get_surface_active",
+            "check"
+        ],
+        "mother": "SlotWind",
+        "name": "SlotUD2",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotUD2.csv",
+        "properties": [
+            {
+                "desc": "list of line to draw the edges of the slot",
+                "max": "",
+                "min": "",
+                "name": "line_list",
+                "type": "[Line]",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Active surface of the Slot",
+                "max": "",
+                "min": "",
+                "name": "active_surf",
+                "type": "Surface",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -10102,6 +10114,7 @@
             "SlotM15",
             "SlotM16",
             "SlotUD",
+            "SlotUD2",
             "SlotW10",
             "SlotW11",
             "SlotW12",

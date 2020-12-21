@@ -10,6 +10,7 @@ from ..Classes.Arc2 import Arc2
 from ..Classes.Arc3 import Arc3
 from ..Classes.Bore import Bore
 from ..Classes.BoreFlower import BoreFlower
+from ..Classes.BoreUD import BoreUD
 from ..Classes.CellMat import CellMat
 from ..Classes.Circle import Circle
 from ..Classes.CondType11 import CondType11
@@ -85,7 +86,6 @@ from ..Classes.MachineWRSM import MachineWRSM
 from ..Classes.MagElmer import MagElmer
 from ..Classes.MagFEMM import MagFEMM
 from ..Classes.Magnet import Magnet
-from ..Classes.MagnetType15 import MagnetType15
 from ..Classes.Magnetics import Magnetics
 from ..Classes.MatEconomical import MatEconomical
 from ..Classes.MatElectrical import MatElectrical
@@ -146,6 +146,7 @@ from ..Classes.SlotM14 import SlotM14
 from ..Classes.SlotM15 import SlotM15
 from ..Classes.SlotM16 import SlotM16
 from ..Classes.SlotUD import SlotUD
+from ..Classes.SlotUD2 import SlotUD2
 from ..Classes.SlotW10 import SlotW10
 from ..Classes.SlotW11 import SlotW11
 from ..Classes.SlotW12 import SlotW12
