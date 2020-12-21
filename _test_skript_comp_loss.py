@@ -65,14 +65,16 @@ myLoss.run()
 #    label="B", group_names="stator", itime=0, clim=[0, 1.5]
 # )
 
-myResults.loss.meshsolution[0].plot_contour(
+myResults.loss.meshsolution["Iron"]["Stator"].plot_contour(
     label="LossDens",
     itime=7,
 )
-myResults.loss.meshsolution[0].plot_contour(
+myResults.loss.meshsolution["Iron"]["Stator"].plot_contour(
     label="LossDensSum",
     itime=0,
 )
 
 print(f"stator iron loss = {myResults.loss.iron['Stator'][0].get_field([]).mean()} W")
-print(f"stator winding loss = {myResults.loss.winding['Stator'][0].get_field([]).mean()} W")
+print(
+    f"stator winding loss = {myResults.loss.winding['Stator'][0].get_field([]).mean()} W"
+)
