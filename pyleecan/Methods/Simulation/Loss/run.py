@@ -61,7 +61,9 @@ def run(self):
             loss_out[key] = [None for i in models]
             # compute models
             if lam is not None:
+                output.loss.meshsolution[loss_type][key] = [None for i in models]
                 for idx, model in enumerate(models):
                     data, mshsol = model.comp_loss(output, lam)
                     loss_out[key][idx] = data
-                    output.loss.meshsolution[loss_type][key] = mshsol
+                    # TODO make list of it and append
+                    output.loss.meshsolution[loss_type][key][idx] = mshsol

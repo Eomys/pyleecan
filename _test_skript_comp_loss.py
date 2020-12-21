@@ -65,11 +65,11 @@ myLoss.run()
 #    label="B", group_names="stator", itime=0, clim=[0, 1.5]
 # )
 
-myResults.loss.meshsolution["Iron"]["Stator"].plot_contour(
+myResults.loss.meshsolution["Iron"]["Stator"][0].plot_contour(
     label="LossDens",
     itime=7,
 )
-myResults.loss.meshsolution["Iron"]["Stator"].plot_contour(
+myResults.loss.meshsolution["Iron"]["Stator"][0].plot_contour(
     label="LossDensSum",
     itime=0,
 )
