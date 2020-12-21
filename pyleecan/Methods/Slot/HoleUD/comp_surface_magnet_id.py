@@ -17,6 +17,9 @@ def comp_surface_magnet_id(self, index):
         Surface of the Magnet [m**2]
     """
 
+    if self.magnet_dict is None:
+        self.magnet_dict = dict()
+
     label = "magnet_" + str(index)
     if label in self.magnet_dict:
         if self.magnet_dict[label] is None:  # Magnet disabled
