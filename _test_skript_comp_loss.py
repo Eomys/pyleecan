@@ -30,12 +30,8 @@ from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 myIronLoss = LossModelBertotti()
 myWindingLoss = LossModelWinding()
 mySimu.loss = Loss()
-mySimu.loss.iron["Stator"] = [
-    myIronLoss,
-]
-mySimu.loss.winding["Stator"] = [
-    myWindingLoss,
-]
+mySimu.loss.iron["Stator"] = [myIronLoss]
+mySimu.loss.winding["Stator"] = [myWindingLoss]
 
 myIronLoss.name = "Stator Iron Losses"
 myIronLoss.k_hy = None
@@ -74,7 +70,8 @@ myResults.loss.meshsolution["Iron"]["Stator"][0].plot_contour(
     itime=0,
 )
 
-print(f"stator iron loss = {myResults.loss.iron['Stator'][0].get_field([]).mean()} W")
-print(
-    f"stator winding loss = {myResults.loss.winding['Stator'][0].get_field([]).mean()} W"
-)
+loss_stator_iron = myResults.loss.get_loss(loss_type="Iron", label="Stator", index=0)
+loss_stator_wind = myResults.loss.get_loss(loss_type="Winding", label="Stator", index=0)
+
+print(f"stator iron loss = {loss_stator_iron.get_field([]).mean()} W")
+print(f"stator winding loss = {loss_stator_wind.get_field([]).mean()} W")
