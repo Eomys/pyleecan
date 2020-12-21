@@ -37,6 +37,7 @@ def test_FEMM_Loss():
     simu.input = InputCurrent(Id_ref=0, Iq_ref=0, Na_tot=2048, N0=rotor_speed)
 
     # time discretization [s]
+    # TODO without explicit time def. there is an error
     n_step = 16
 
     simu.input.time = ImportMatrixVal()
