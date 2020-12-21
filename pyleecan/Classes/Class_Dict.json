@@ -7732,7 +7732,8 @@
             "get_real_point",
             "get_ref_point",
             "is_inside",
-            "get_cell_area"
+            "get_cell_area",
+            "get_normal"
         ],
         "mother": "RefCell",
         "name": "RefTriangle3",
