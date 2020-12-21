@@ -41,7 +41,7 @@ def test_FEMM_periodicity():
         Id_ref=Id_ref,
         Iq_ref=Iq_ref,
         Na_tot=252 * 8,
-        Nt_tot=6 * 8,
+        Nt_tot=2 * 8,
         N0=1000,
     )
 

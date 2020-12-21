@@ -4,17 +4,16 @@ from numpy import array, nan, tile, newaxis, ones_like
 from SciDataTool import DataTime, DataFreq, Data1D
 
 from ....Classes.SolutionData import SolutionData
-from ....Methods.Simulation.Input import InputError
 from ....Functions.getattr_recursive import getattr_recursive
 
 from logging import getLogger
 
 
-def _store_solution(meshsolution, field, label=""):
-    solution = SolutionData()
-    solution.field = field
-    solution.label = label
-    meshsolution.solution.append(solution)
+def _append_solution(solution, field, label=""):
+    sol = SolutionData()
+    sol.field = field
+    sol.label = label
+    solution.append(sol)
 
 
 def _comp_loss_sum(meshsolution, L1=1, rho=7650, sym=1, logger=None):
@@ -37,36 +36,21 @@ def _comp_loss_sum(meshsolution, L1=1, rho=7650, sym=1, logger=None):
     return loss.sum()
 
 
-def comp_loss(self):
+def comp_loss(self, output, lam):
     """Compute the Losses"""
-    if self.parent is None:
-        raise InputError(
-            "ERROR: The LossModelBertotti object must be in a Loss object to run"
-        )
-    if self.parent.parent is None:
-        raise InputError(
-            "ERROR: The LossModel object must be in a Simulation object to run"
-        )
-
-    if self.parent.parent.parent is None:
-        raise InputError(
-            "ERROR: The LossModelBertotti object must be in an Output object to run"
-        )
     # get logger
     logger = self.get_logger()
 
     # get the simulation and output
-    simu = self.parent.parent
-    output = simu.parent
+    simu = output.simu
 
-    # setup meshsolution, clear solution
-    meshsolution = output.mag.meshsolution
-    output.loss.meshsolution.append(meshsolution.get_group(self.group))
-    output.loss.meshsolution[-1].solution = []
+    # setup meshsolution and solution list
+    solution = []
+    mag_meshsol = output.mag.meshsolution
+    meshsolution = mag_meshsol.get_group(self.group)
+    meshsolution.solution = solution
 
     # get length and material
-    lam = simu.machine.get_lam_list()[self.lam_id]
-
     L1 = lam.L1
     mat_type = lam.mat_type
     rho = mat_type.struct.rho
@@ -76,8 +60,8 @@ def comp_loss(self):
 
     if success:
         # compute loss density
-        LossDens = self.comp_loss_norm(meshsolution)
-        _store_solution(output.loss.meshsolution[-1], LossDens, label="LossDens")
+        LossDens = self.comp_loss_norm(mag_meshsol)
+        _append_solution(solution, LossDens, label="LossDens")
 
         # compute sum over frequencies
         axes_list = [axis.name for axis in LossDens.axes]
@@ -107,7 +91,7 @@ def comp_loss(self):
             values=tile(loss_sum, (2, 1)),
             # values=loss_sum[newaxis,:], # TODO squeeze issue
         )
-        _store_solution(output.loss.meshsolution[-1], loss_sum_, label="LossDensSum")
+        _append_solution(solution, loss_sum_, label="LossDensSum")
 
         # compute overall loss sum
         # Set the symmetry factor according to the machine
@@ -122,9 +106,7 @@ def comp_loss(self):
         sym = 1 if not output.simu.mag.is_symmetry_a else output.simu.mag.sym_a
         sym *= output.simu.mag.is_antiper_a + 1
         """
-        loss_sum = _comp_loss_sum(
-            output.loss.meshsolution[-1], L1=L1, rho=rho, sym=sym, logger=logger
-        )
+        loss_sum = _comp_loss_sum(meshsolution, L1=L1, rho=rho, sym=sym, logger=logger)
 
         Time = Data1D(
             name="time",
@@ -143,4 +125,4 @@ def comp_loss(self):
             values=loss_sum * ones_like(Time.values),
         )
 
-        output.loss.lamination[self.lam_id].append(data)
+        return data, meshsolution

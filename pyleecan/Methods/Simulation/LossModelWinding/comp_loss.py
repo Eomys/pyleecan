@@ -4,7 +4,6 @@ from numpy import array, nan, tile, newaxis, ones_like
 from SciDataTool import DataTime, Data1D
 
 from ....Classes.SolutionData import SolutionData
-from ....Methods.Simulation.Input import InputError
 from ....Functions.getattr_recursive import getattr_recursive
 
 from logging import getLogger
@@ -12,28 +11,13 @@ from logging import getLogger
 # TODO add the possibility to compute single (or group of) phase losses
 
 
-def comp_loss(self):
+def comp_loss(self, output, lam):
     """Compute the Losses"""
-    if self.parent is None:
-        raise InputError(
-            "ERROR: The LossModelWinding object must be in a Loss object to run"
-        )
-    if self.parent.parent is None:
-        raise InputError(
-            "ERROR: The LossModel object must be in a Simulation object to run"
-        )
-
-    if self.parent.parent.parent is None:
-        raise InputError(
-            "ERROR: The LossModelBertotti object must be in an Output object to run"
-        )
     # get logger
     logger = self.get_logger()
 
     # get length and material
-    simu = self.parent.parent
-    output = simu.parent
-    lam = simu.machine.get_lam_list()[self.lam_id]
+    simu = output.simu
 
     # check that lamination has a winding
     if hasattr(lam, "winding") and lam.winding is not None:
@@ -63,4 +47,4 @@ def comp_loss(self):
             values=lam.winding.qs * R * data_dict[name] ** 2,
         )
 
-        output.loss.winding[self.lam_id].append(data)
+        return data, None

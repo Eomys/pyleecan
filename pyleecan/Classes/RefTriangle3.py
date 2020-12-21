@@ -52,6 +52,11 @@ try:
 except ImportError as error:
     get_cell_area = error
 
+try:
+    from ..Methods.Mesh.RefTriangle3.get_normal import get_normal
+except ImportError as error:
+    get_normal = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -140,6 +145,17 @@ class RefTriangle3(RefCell):
         )
     else:
         get_cell_area = get_cell_area
+    # cf Methods.Mesh.RefTriangle3.get_normal
+    if isinstance(get_normal, ImportError):
+        get_normal = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use RefTriangle3 method get_normal: " + str(get_normal)
+                )
+            )
+        )
+    else:
+        get_normal = get_normal
     # save and copy methods are available in all object
     save = save
     copy = copy

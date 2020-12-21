@@ -6,3 +6,4 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 ,,,,,,,,,,,get_ref_point,,,
 ,,,,,,,,,,,is_inside,,,
 ,,,,,,,,,,,get_cell_area,,,
+,,,,,,,,,,,get_normal,,,

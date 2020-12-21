@@ -3933,13 +3933,31 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
         "properties": [
             {
-                "desc": "List of models to compute the machines losses",
+                "desc": "Dict of the iron loss model (key is the lamination name)",
                 "max": "",
                 "min": "",
-                "name": "models",
-                "type": "[LossModel]",
+                "name": "iron",
+                "type": "dict",
                 "unit": "",
-                "value": []
+                "value": {}
+            },
+            {
+                "desc": "Dict of the winding loss model (key is the lamination name)",
+                "max": "",
+                "min": "",
+                "name": "winding",
+                "type": "dict",
+                "unit": "",
+                "value": {}
+            },
+            {
+                "desc": "Dict of the magnet loss model (key is the lamination name)",
+                "max": "",
+                "min": "",
+                "name": "magnet",
+                "type": "dict",
+                "unit": "",
+                "value": {}
             }
         ]
     },
@@ -4063,15 +4081,6 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
-            },
-            {
-                "desc": "Index of the corresponding lamination (of machine.get_lam_list method)",
-                "max": "",
-                "min": "",
-                "name": "lam_id",
-                "type": "int",
-                "unit": "-",
-                "value": null
             }
         ]
     },
@@ -4101,15 +4110,6 @@
                 "type": "float",
                 "unit": "\u00c2\u00b0C",
                 "value": 20
-            },
-            {
-                "desc": "Index of the corresponding lamination (of machine.get_lam_list method)",
-                "max": "",
-                "min": "",
-                "name": "lam_id",
-                "type": "int",
-                "unit": "-",
-                "value": null
             }
         ]
     },
@@ -7092,9 +7092,6 @@
         "is_internal": false,
         "methods": [
             "get_loss",
-            "get_loss_lam",
-            "get_loss_winding",
-            "get_loss_magnet",
             "get_loss_dist"
         ],
         "mother": "",
@@ -7103,40 +7100,40 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
         "properties": [
             {
-                "desc": "List of the computed lamination losses",
+                "desc": "Dict of the computed iron losses (with dict key the name of the lamination)",
                 "max": "",
                 "min": "",
-                "name": "lamination",
-                "type": "list",
+                "name": "iron",
+                "type": "dict",
                 "unit": "",
-                "value": []
+                "value": {}
             },
             {
-                "desc": "List of the computed winding losses",
+                "desc": "Dict of the computed winding losses (with dict key the name of the lamination)",
                 "max": "",
                 "min": "",
                 "name": "winding",
-                "type": "list",
+                "type": "dict",
                 "unit": "",
-                "value": []
+                "value": {}
             },
             {
-                "desc": "List of the computed magnet losses",
+                "desc": "Dict of the computed magnet losses (with dict key the name of the lamination)",
                 "max": "",
                 "min": "",
                 "name": "magnet",
-                "type": "list",
+                "type": "dict",
                 "unit": "",
-                "value": []
+                "value": {}
             },
             {
-                "desc": "list of FEA software mesh and post processing results",
+                "desc": "Dict of FEA software mesh and post processing results",
                 "max": "",
                 "min": "",
                 "name": "meshsolution",
-                "type": "list",
+                "type": "dict",
                 "unit": "",
-                "value": []
+                "value": {}
             },
             {
                 "desc": "Name of the logger to use",
@@ -8036,7 +8033,8 @@
             "get_real_point",
             "get_ref_point",
             "is_inside",
-            "get_cell_area"
+            "get_cell_area",
+            "get_normal"
         ],
         "mother": "RefCell",
         "name": "RefTriangle3",

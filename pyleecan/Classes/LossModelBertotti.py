@@ -96,7 +96,6 @@ class LossModelBertotti(LossModel):
         alpha_ed=None,
         alpha_ex=None,
         group=None,
-        lam_id=None,
         name="",
         init_dict=None,
         init_str=None,
@@ -130,8 +129,6 @@ class LossModelBertotti(LossModel):
                 alpha_ex = init_dict["alpha_ex"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
-            if "lam_id" in list(init_dict.keys()):
-                lam_id = init_dict["lam_id"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
         # Set the properties (value check and convertion are done in setter)
@@ -142,7 +139,6 @@ class LossModelBertotti(LossModel):
         self.alpha_ed = alpha_ed
         self.alpha_ex = alpha_ex
         self.group = group
-        self.lam_id = lam_id
         # Call LossModel init
         super(LossModelBertotti, self).__init__(name=name)
         # The class is frozen (in LossModel init), for now it's impossible to
@@ -161,7 +157,6 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_str += "alpha_ed = " + str(self.alpha_ed) + linesep
         LossModelBertotti_str += "alpha_ex = " + str(self.alpha_ex) + linesep
         LossModelBertotti_str += 'group = "' + str(self.group) + '"' + linesep
-        LossModelBertotti_str += "lam_id = " + str(self.lam_id) + linesep
         return LossModelBertotti_str
 
     def __eq__(self, other):
@@ -187,8 +182,6 @@ class LossModelBertotti(LossModel):
             return False
         if other.group != self.group:
             return False
-        if other.lam_id != self.lam_id:
-            return False
         return True
 
     def __sizeof__(self):
@@ -205,7 +198,6 @@ class LossModelBertotti(LossModel):
         S += getsizeof(self.alpha_ed)
         S += getsizeof(self.alpha_ex)
         S += getsizeof(self.group)
-        S += getsizeof(self.lam_id)
         return S
 
     def as_dict(self):
@@ -220,7 +212,6 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_dict["alpha_ed"] = self.alpha_ed
         LossModelBertotti_dict["alpha_ex"] = self.alpha_ex
         LossModelBertotti_dict["group"] = self.group
-        LossModelBertotti_dict["lam_id"] = self.lam_id
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelBertotti_dict["__class__"] = "LossModelBertotti"
@@ -236,7 +227,6 @@ class LossModelBertotti(LossModel):
         self.alpha_ed = None
         self.alpha_ex = None
         self.group = None
-        self.lam_id = None
         # Set to None the properties inherited from LossModel
         super(LossModelBertotti, self)._set_None()
 
@@ -363,23 +353,5 @@ class LossModelBertotti(LossModel):
         doc=u"""Name of the coressponding mesh group
 
         :Type: str
-        """,
-    )
-
-    def _get_lam_id(self):
-        """getter of lam_id"""
-        return self._lam_id
-
-    def _set_lam_id(self, value):
-        """setter of lam_id"""
-        check_var("lam_id", value, "int")
-        self._lam_id = value
-
-    lam_id = property(
-        fget=_get_lam_id,
-        fset=_set_lam_id,
-        doc=u"""Index of the corresponding lamination (of machine.get_lam_list method)
-
-        :Type: int
         """,
     )
