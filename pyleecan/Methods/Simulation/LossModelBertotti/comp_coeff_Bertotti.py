@@ -70,6 +70,7 @@ def comp_coeff_Bertotti(self, mat):
 
     # fit the data
     # TODO Which normalization to use? 1/f or should it be user defined?
+    # TODO use constrained parameter estimation
     _comp_err = lambda Cx: (_comp_loss(self, C, Cx, f, B) - Loss) / (f)
     C0 = np.ones([n_est])  # initial values for the parameters
     result = optimize.least_squares(_comp_err, C0[:], method="lm")
@@ -78,7 +79,7 @@ def comp_coeff_Bertotti(self, mat):
     success = result.success
 
     if success is None:
-        logger.info(f"'{self.name}' LossModel: Parameter fitting failed.")
+        logger.warning(f"'{self.name}' LossModel: Parameter fitting failed.")
         return False
     else:
         ii = 0
