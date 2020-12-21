@@ -47,4 +47,4 @@ def comp_loss(self, output, lam):
             values=lam.winding.qs * R * data_dict[name] ** 2,
         )
 
-        return data
+        return data, None

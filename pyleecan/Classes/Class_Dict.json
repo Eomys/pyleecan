@@ -7092,9 +7092,6 @@
         "is_internal": false,
         "methods": [
             "get_loss",
-            "get_loss_lam",
-            "get_loss_winding",
-            "get_loss_magnet",
             "get_loss_dist"
         ],
         "mother": "",
@@ -7130,13 +7127,13 @@
                 "value": {}
             },
             {
-                "desc": "List of FEA software mesh and post processing results",
+                "desc": "Dict of FEA software mesh and post processing results",
                 "max": "",
                 "min": "",
                 "name": "meshsolution",
-                "type": "list",
+                "type": "dict",
                 "unit": "",
-                "value": []
+                "value": {}
             },
             {
                 "desc": "Name of the logger to use",

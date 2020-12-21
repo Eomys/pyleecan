@@ -43,15 +43,16 @@ def run(self):
     # get logger
     logger = self.get_logger()
 
-    # get output
+    # get output and clear meshsolution
     output = self.parent.parent
-    output.loss.meshsolution = []
+    output.loss.meshsolution = {}
 
     # iterate through the loss types and models and compute the losses
-    prop_list = [self.iron, self.magnet, self.winding]
-    out_list = [output.loss.iron, output.loss.magnet, output.loss.winding]
-    for loss_prop, loss_out in zip(prop_list, out_list):
-        for key, models in loss_prop.items():
+    type_list = ["Iron", "Magnet", "Winding"]
+    for loss_type in type_list:
+        output.loss.meshsolution[loss_type] = {}
+        loss_out = getattr(output.loss, loss_type.lower())
+        for key, models in getattr(self, loss_type.lower()).items():
             lam = output.simu.machine.get_lam_by_label(key)
             if not isinstance(models, list):
                 models = [models]
@@ -61,5 +62,6 @@ def run(self):
             # compute models
             if lam is not None:
                 for idx, model in enumerate(models):
-                    data = model.comp_loss(output, lam)
+                    data, mshsol = model.comp_loss(output, lam)
                     loss_out[key][idx] = data
+                    output.loss.meshsolution[loss_type][key] = mshsol

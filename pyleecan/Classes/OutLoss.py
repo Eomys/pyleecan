@@ -23,21 +23,6 @@ except ImportError as error:
     get_loss = error
 
 try:
-    from ..Methods.Output.OutLoss.get_loss_lam import get_loss_lam
-except ImportError as error:
-    get_loss_lam = error
-
-try:
-    from ..Methods.Output.OutLoss.get_loss_winding import get_loss_winding
-except ImportError as error:
-    get_loss_winding = error
-
-try:
-    from ..Methods.Output.OutLoss.get_loss_magnet import get_loss_magnet
-except ImportError as error:
-    get_loss_magnet = error
-
-try:
     from ..Methods.Output.OutLoss.get_loss_dist import get_loss_dist
 except ImportError as error:
     get_loss_dist = error
@@ -61,40 +46,6 @@ class OutLoss(FrozenClass):
         )
     else:
         get_loss = get_loss
-    # cf Methods.Output.OutLoss.get_loss_lam
-    if isinstance(get_loss_lam, ImportError):
-        get_loss_lam = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use OutLoss method get_loss_lam: " + str(get_loss_lam)
-                )
-            )
-        )
-    else:
-        get_loss_lam = get_loss_lam
-    # cf Methods.Output.OutLoss.get_loss_winding
-    if isinstance(get_loss_winding, ImportError):
-        get_loss_winding = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use OutLoss method get_loss_winding: "
-                    + str(get_loss_winding)
-                )
-            )
-        )
-    else:
-        get_loss_winding = get_loss_winding
-    # cf Methods.Output.OutLoss.get_loss_magnet
-    if isinstance(get_loss_magnet, ImportError):
-        get_loss_magnet = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use OutLoss method get_loss_magnet: " + str(get_loss_magnet)
-                )
-            )
-        )
-    else:
-        get_loss_magnet = get_loss_magnet
     # cf Methods.Output.OutLoss.get_loss_dist
     if isinstance(get_loss_dist, ImportError):
         get_loss_dist = property(
@@ -177,12 +128,7 @@ class OutLoss(FrozenClass):
         OutLoss_str += "iron = " + str(self.iron) + linesep
         OutLoss_str += "winding = " + str(self.winding) + linesep
         OutLoss_str += "magnet = " + str(self.magnet) + linesep
-        OutLoss_str += (
-            "meshsolution = "
-            + linesep
-            + str(self.meshsolution).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        OutLoss_str += "meshsolution = " + str(self.meshsolution) + linesep
         OutLoss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         OutLoss_str += (
             "mech = "
@@ -233,8 +179,8 @@ class OutLoss(FrozenClass):
             for key, value in self.magnet.items():
                 S += getsizeof(value) + getsizeof(key)
         if self.meshsolution is not None:
-            for value in self.meshsolution:
-                S += getsizeof(value)
+            for key, value in self.meshsolution.items():
+                S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.logger_name)
         if self.mech is not None:
             for value in self.mech:
@@ -341,16 +287,16 @@ class OutLoss(FrozenClass):
     def _set_meshsolution(self, value):
         """setter of meshsolution"""
         if type(value) is int and value == -1:
-            value = list()
-        check_var("meshsolution", value, "list")
+            value = dict()
+        check_var("meshsolution", value, "dict")
         self._meshsolution = value
 
     meshsolution = property(
         fget=_get_meshsolution,
         fset=_set_meshsolution,
-        doc=u"""List of FEA software mesh and post processing results
+        doc=u"""Dict of FEA software mesh and post processing results
 
-        :Type: list
+        :Type: dict
         """,
     )
 
