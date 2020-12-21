@@ -198,7 +198,6 @@ class LossModelBertotti(LossModel):
         S += getsizeof(self.alpha_ed)
         S += getsizeof(self.alpha_ex)
         S += getsizeof(self.group)
-        S += getsizeof(self.lam_id)
         return S
 
     def as_dict(self):

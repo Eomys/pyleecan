@@ -105,7 +105,6 @@ class LossModelWinding(LossModel):
         # Get size of the properties inherited from LossModel
         S += super(LossModelWinding, self).__sizeof__()
         S += getsizeof(self.temperature)
-        S += getsizeof(self.lam_id)
         return S
 
     def as_dict(self):

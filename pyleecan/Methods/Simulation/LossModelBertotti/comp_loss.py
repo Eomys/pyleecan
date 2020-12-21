@@ -4,7 +4,6 @@ from numpy import array, nan, tile, newaxis, ones_like
 from SciDataTool import DataTime, DataFreq, Data1D
 
 from ....Classes.SolutionData import SolutionData
-from ....Methods.Simulation.Input import InputError
 from ....Functions.getattr_recursive import getattr_recursive
 
 from logging import getLogger
@@ -37,27 +36,13 @@ def _comp_loss_sum(meshsolution, L1=1, rho=7650, sym=1, logger=None):
     return loss.sum()
 
 
-def comp_loss(self, lam):
+def comp_loss(self, output, lam):
     """Compute the Losses"""
-    if self.parent is None:
-        raise InputError(
-            "ERROR: The LossModelBertotti object must be in a Loss object to run"
-        )
-    if self.parent.parent is None:
-        raise InputError(
-            "ERROR: The LossModel object must be in a Simulation object to run"
-        )
-
-    if self.parent.parent.parent is None:
-        raise InputError(
-            "ERROR: The LossModelBertotti object must be in an Output object to run"
-        )
     # get logger
     logger = self.get_logger()
 
     # get the simulation and output
-    simu = self.parent.parent
-    output = simu.parent
+    simu = output.simu
 
     # setup meshsolution, clear solution
     meshsolution = output.mag.meshsolution

@@ -74,5 +74,5 @@ myResults.loss.meshsolution[0].plot_contour(
     itime=0,
 )
 
-print(f"stator iron loss = {myResults.loss.lamination[1][0].get_field([]).mean()} W")
-print(f"stator winding loss = {myResults.loss.winding[1][0].get_field([]).mean()} W")
+print(f"stator iron loss = {myResults.loss.iron['Stator'][0].get_field([]).mean()} W")
+print(f"stator winding loss = {myResults.loss.winding['Stator'][0].get_field([]).mean()} W")

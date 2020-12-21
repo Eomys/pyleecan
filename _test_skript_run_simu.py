@@ -59,7 +59,6 @@ mySimu.mag = MagFEMM(
     type_BH_rotor=0,  # 0 to use the B(H) curve,
     # 1 to use linear B(H) curve according to mur_lin,
     # 2 to enforce infinite permeability (mur_lin =100000)
-    angle_stator=0,  # Angular position shift of the stator
     file_name="",  # Name of the file to save the FEMM model
     Kmesh_fineness=1,  # mesh fineness (1:default ,>1: finner ,<1: less fine)
     Kgeo_fineness=1,  # geometry fineness (1:default ,>1: finner ,<1: less fine)

@@ -105,9 +105,15 @@ class Loss(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        if self.models is not None:
-            for value in self.models:
-                S += getsizeof(value)
+        if self.iron is not None:
+            for key, value in self.iron.items():
+                S += getsizeof(value) + getsizeof(key)
+        if self.winding is not None:
+            for key, value in self.winding.items():
+                S += getsizeof(value) + getsizeof(key)
+        if self.magnet is not None:
+            for key, value in self.magnet.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self):

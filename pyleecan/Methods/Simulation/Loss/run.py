@@ -54,14 +54,12 @@ def run(self):
         for key, models in loss_prop.items():
             lam = output.simu.machine.get_lam_by_label(key)
             if not isinstance(models, list):
-                models = [
-                    models,
-                ]
+                models = [models]
 
             # setup output
-            output.iron[key] = [None for i in models]
+            loss_out[key] = [None for i in models]
+            # compute models
             if lam is not None:
-                loss_out[key] = []
                 for idx, model in enumerate(models):
-                    data = model.comp_loss(lam)
+                    data = model.comp_loss(output, lam)
                     loss_out[key][idx] = data

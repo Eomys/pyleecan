@@ -223,15 +223,15 @@ class OutLoss(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        if self.lamination is not None:
-            for value in self.lamination:
-                S += getsizeof(value)
+        if self.iron is not None:
+            for key, value in self.iron.items():
+                S += getsizeof(value) + getsizeof(key)
         if self.winding is not None:
-            for value in self.winding:
-                S += getsizeof(value)
+            for key, value in self.winding.items():
+                S += getsizeof(value) + getsizeof(key)
         if self.magnet is not None:
-            for value in self.magnet:
-                S += getsizeof(value)
+            for key, value in self.magnet.items():
+                S += getsizeof(value) + getsizeof(key)
         if self.meshsolution is not None:
             for value in self.meshsolution:
                 S += getsizeof(value)
