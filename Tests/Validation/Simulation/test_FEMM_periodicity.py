@@ -38,7 +38,11 @@ def test_FEMM_periodicity():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref, Iq_ref=Iq_ref, Na_tot=252 * 8, Nt_tot=2 * 8, N0=1000,
+        Id_ref=Id_ref,
+        Iq_ref=Iq_ref,
+        Na_tot=252 * 8,
+        Nt_tot=2 * 8,
+        N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity

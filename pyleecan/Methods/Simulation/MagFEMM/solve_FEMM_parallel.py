@@ -8,7 +8,17 @@ from numpy import concatenate
 
 
 def solve_FEMM_parallel(
-    self, femm, output, out_dict, FEMM_dict, sym, Nt, angle, Is, Ir, angle_rotor,
+    self,
+    femm,
+    output,
+    out_dict,
+    FEMM_dict,
+    sym,
+    Nt,
+    angle,
+    Is,
+    Ir,
+    angle_rotor,
 ):
     """
     Same as solve_FEMM including parallelization on several workers
