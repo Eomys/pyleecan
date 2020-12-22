@@ -54,8 +54,8 @@ class WWSlotOut(QGroupBox):
         """
 
         lam = self.parent().lamination
-        WS_txt = self.tr("Winding surface: ")
-        TS_txt = self.tr("Total surface: ")
+        WS_txt = self.tr("Active surface: ")
+        TS_txt = self.tr("Slot surface: ")
         AO_txt = self.tr("Opening angle: ")
         SH_txt = self.tr("Slot height: ")
         YH_txt = self.tr("Yoke height: ")

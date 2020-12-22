@@ -12,7 +12,7 @@ from ....GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
 from ....GUI.Dialog.DMachineSetup.SWPole.SWPole import SWPole
 from ....GUI.Dialog.DMachineSetup.SBar.SBar import SBar
 from ....GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
-from ....GUI.Dialog.DMachineSetup.SMagnet.SMagnet import SMagnet
+from ....GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
 
 from ....Classes.Magnet import Magnet
 from ....Classes.LamHole import LamHole
@@ -27,12 +27,11 @@ from ....Classes.MachineSCIM import MachineSCIM
 from ....Classes.MachineSIPMSM import MachineSIPMSM
 from ....Classes.MachineWRSM import MachineWRSM
 from ....Classes.MachineSRM import MachineSRM
-from ....Classes.SlotMPolar import SlotMPolar
+from ....Classes.SlotM10 import SlotM10
 from ....Classes.HoleM50 import HoleM50
 from ....Classes.WindingDW2L import WindingDW2L
 from ....Classes.WindingCW2LT import WindingCW2LT
 from ....Classes.WindingSC import WindingSC
-from ....Classes.MagnetType11 import MagnetType11
 from ....GUI.Resources import pixmap_dict
 
 # Steps needed to setup a LamSlotWind
@@ -46,7 +45,7 @@ LH_step = [SLamParam, SMHoleMag]
 # Steps needed to setup a LamSlot
 LS_step = [SLamParam, SWSlot]
 # Steps needed to setup a LamSlotMag
-LSM_step = [SLamParam, SMagnet]
+LSM_step = [SLamParam, SMSlot]
 # Steps to start the design of a machine with 2 laminations
 S_step = [SMachineType, SMachineDimension]
 
@@ -83,19 +82,15 @@ machine5.type_machine = 5
 machine5.stator.is_stator = True
 machine5.rotor.is_stator = False
 
-machine6 = MachineSIPMSM()
-machine6.stator = LamSlotWind()
-machine6.stator.winding = WindingDW2L()
-machine6.rotor = LamSlotMag()
-machine6.rotor.slot = SlotMPolar()
-machine6.rotor.slot.magnet = [MagnetType11()]
-machine6._set_None()  # Empty machine
-machine6.type_machine = 6
-machine6.stator.is_stator = True
-machine6.rotor.is_stator = False
-
-machine7 = MachineSIPMSM(init_dict=machine6.as_dict())
+machine7 = MachineSIPMSM()
+machine7.stator = LamSlotWind()
+machine7.stator.winding = WindingDW2L()
+machine7.rotor = LamSlotMag()
+machine7.rotor.slot = SlotM10()
+machine7._set_None()  # Empty machine
 machine7.type_machine = 7
+machine7.stator.is_stator = True
+machine7.rotor.is_stator = False
 
 machine8 = MachineIPMSM()
 machine8.stator = LamSlotWind()
@@ -160,17 +155,6 @@ SyRM_dict = {
     "img": pixmap_dict["SyRM"],
     "txt": "SyRM (Synchronous Reluctance Machine) is type_machine = 5",
 }
-# Dictionnary with all the information to set a SPMSM
-SPMSM_dict = {
-    "machine_type": MachineSIPMSM,
-    "init_machine": machine6,
-    "start_step": S_step,
-    "stator_step": LSW_step,
-    "rotor_step": LSM_step,
-    "name": "SPMSM",
-    "img": pixmap_dict["SPMSM"],
-    "txt": "SPMSM (Surface Permanent Magnet Synchronous Machine) is type_machine = 6",
-}
 # Dictionnary with all the information to set a SIPMSM
 SIPMSM_dict = {
     "machine_type": MachineSIPMSM,
@@ -220,7 +204,6 @@ mach_list = [
     SCIM_dict,
     DFIM_dict,
     SyRM_dict,
-    SPMSM_dict,
     SIPMSM_dict,
     IPMSM_dict,
     WRSM_dict,

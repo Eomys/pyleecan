@@ -62,6 +62,8 @@ def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=
                 type_mag = "Parallel"
             elif self.magnet.type_magnetization == 2:
                 type_mag = "Hallbach"
+            else:
+                type_mag = ""
 
             surf_list.append(mag_surf)
             # Adapt the label

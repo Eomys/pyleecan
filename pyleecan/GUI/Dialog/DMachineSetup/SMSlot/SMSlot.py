@@ -6,66 +6,42 @@ from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
-from .....Classes.SlotW10 import SlotW10
+from .....Classes.SlotM10 import SlotM10
 from .....Classes.SlotWind import SlotWind
-from .....GUI.Dialog.DMachineSetup.SWSlot.Gen_SWSlot import Gen_SWSlot
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.PWSlotUD import PWSlotUD
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot10.PWSlot10 import PWSlot10
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.PWSlot11 import PWSlot11
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot12.PWSlot12 import PWSlot12
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot13.PWSlot13 import PWSlot13
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot14.PWSlot14 import PWSlot14
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot15.PWSlot15 import PWSlot15
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot16.PWSlot16 import PWSlot16
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot21.PWSlot21 import PWSlot21
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot22.PWSlot22 import PWSlot22
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot23.PWSlot23 import PWSlot23
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot24.PWSlot24 import PWSlot24
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot25.PWSlot25 import PWSlot25
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot26.PWSlot26 import PWSlot26
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot27.PWSlot27 import PWSlot27
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot28.PWSlot28 import PWSlot28
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot29.PWSlot29 import PWSlot29
+from .....GUI.Dialog.DMachineSetup.SMSlot.Ui_SMSlot import Ui_SMSlot
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot12.PMSlot12 import PMSlot12
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot13.PMSlot13 import PMSlot13
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot14.PMSlot14 import PMSlot14
 
 # List to convert index of combobox to slot type
 WIDGET_LIST = [
-    PWSlot10,
-    PWSlot11,
-    PWSlot12,
-    PWSlot13,
-    PWSlot14,
-    PWSlot15,
-    PWSlot16,
-    PWSlot21,
-    PWSlot22,
-    PWSlot23,
-    PWSlot24,
-    PWSlot25,
-    PWSlot26,
-    PWSlot27,
-    PWSlot28,
-    PWSlot29,
-    PWSlotUD,
+    PMSlot10,
+    PMSlot11,
+    PMSlot12,
+    PMSlot13,
+    PMSlot14,
 ]
 INIT_INDEX = [wid.slot_type for wid in WIDGET_LIST]
 SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]
 
 
-class SWSlot(Gen_SWSlot, QWidget):
+class SMSlot(Ui_SMSlot, QWidget):
     """Step to set the slot with winding"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
     # Information for DMachineSetup nav
-    step_name = "Slot"
+    step_name = "Magnet"
 
     def __init__(self, machine, matlib, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
         ----------
-        self : SWSlot
-            A SWSlot widget
+        self : SMSlot
+            A SMSlot widget
         machine : Machine
             current machine to edit
         matlib : MatLib
@@ -102,15 +78,20 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # If the Slot is not set, initialize it with a 1_0
         if self.obj.slot is None or type(self.obj.slot) in [SlotWind, Slot]:
-            self.obj.slot = SlotW10()
+            self.obj.slot = SlotM10()
             self.obj.slot._set_None()
 
-        if self.obj.slot.Zs is None:
-            self.si_Zs.clear()
-        else:
-            self.si_Zs.setValue(self.obj.slot.Zs)
-
         self.set_slot_pitch(self.obj.slot.Zs)
+
+        # Set magnetization
+        if self.obj.magnet.type_magnetization not in [0, 1, 2]:
+            self.obj.magnet.type_magnetization = 0  # Set default value
+        self.c_type_magnetization.setCurrentIndex(self.obj.magnet.type_magnetization)
+
+        # Set material
+        self.w_mat.setText(self.tr("mat_mag:"))
+        self.w_mat.def_mat = "Magnet1"
+        self.w_mat.update(self.machine.rotor.magnet, "mat_type", self.matlib)
 
         # Set the correct index for the type checkbox and display the object
         index = INIT_INDEX.index(type(self.obj.slot))
@@ -121,8 +102,11 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Connect the slot
         self.c_slot_type.currentIndexChanged.connect(self.s_change_slot)
-        self.si_Zs.editingFinished.connect(self.set_Zs)
+        self.c_type_magnetization.currentIndexChanged.connect(
+            self.s_set_type_magnetization
+        )
         self.b_plot.clicked.connect(self.s_plot)
+        self.w_mat.saveNeeded.connect(self.emit_save)
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""
@@ -133,8 +117,8 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         Parameters
         ----------
-        self : SWSlot
-            A SWSlot object
+        self : SMSlot
+            A SMSlot object
         index : int
             Index of the selected slot type in the list
         """
@@ -152,28 +136,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         else:  # Load the previous slot of this type
             self.obj.slot = self.previous_slot[INIT_INDEX[index]]
             if self.obj.slot.Zs is not None:
-                # Update Zs without trying to compute output
-                self.si_Zs.blockSignals(True)
-                self.si_Zs.setValue(self.obj.slot.Zs)
-                self.si_Zs.blockSignals(False)
-
                 self.set_slot_pitch(self.obj.slot.Zs)
-
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
-    def set_Zs(self):
-        """Signal to update the value of Zs according to the spinbox
-
-        Parameters
-        ----------
-        self : SWSlot
-            A SWSlot object
-        """
-        value = self.si_Zs.value()
-        self.obj.slot.Zs = value
-        self.set_slot_pitch(value)
-        self.w_slot.w_out.comp_output()
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -183,34 +146,45 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         Parameters
         ----------
-        self : SWSlot
-            A SWSlot object
+        self : SMSlot
+            A SMSlot object
         Zs : int
             The current value of Zs
         """
-        sp_txt = self.tr("Slot pitch = 360 / Zs = ")
+        sp_txt = self.tr("p = " + str(int(Zs / 2)) + " / Slot pitch = ")
 
-        if Zs in [None, 0]:
-            self.out_Slot_pitch.setText(sp_txt + "?")
-        else:
-            Slot_pitch = 360.0 / Zs
-            Slot_pitch_rad = Slot_pitch * pi / 180
+        Slot_pitch = 360.0 / Zs
+        Slot_pitch_rad = Slot_pitch * pi / 180
 
-            self.out_Slot_pitch.setText(
-                sp_txt
-                + "%.4g" % (Slot_pitch)
-                + u" ° ("
-                + "%.4g" % (Slot_pitch_rad)
-                + " rad)"
-            )
+        self.out_Slot_pitch.setText(
+            sp_txt
+            + "%.4g" % (Slot_pitch)
+            + u" ° ("
+            + "%.4g" % (Slot_pitch_rad)
+            + " rad)"
+        )
+
+    def s_set_type_magnetization(self, index):
+        """Signal to update the value of type_magnetization according to the combobox
+
+        Parameters
+        ----------
+        self : SMagnet
+            A SMagnet object
+        index : int
+            Current index of the combobox
+        """
+        self.machine.rotor.magnet.type_magnetization = index
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def s_update_slot(self):
         """Update the slot widget
 
         Parameters
         ----------
-        self : SWSlot
-            A SWSlot object
+        self : SMSlot
+            A SMSlot object
         """
 
         # Regenerate the pages with the new values
@@ -219,15 +193,15 @@ class SWSlot(Gen_SWSlot, QWidget):
         self.w_slot.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_slot)
-        self.main_layout.insertWidget(1, self.w_slot)
+        self.main_layout.insertWidget(2, self.w_slot)
 
     def s_change_slot(self, index):
         """Signal to update the slot object and widget
 
         Parameters
         ----------
-        self : SWSlot
-            A SWSlot object
+        self : SMSlot
+            A SMSlot object
         index : int
             Current index of the combobox
         """
@@ -240,8 +214,8 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         Parameters
         ----------
-        self : SWSlot
-            A SWSlot object
+        self : SMSlot
+            A SMSlot object
         """
         # We have to make sure the slot is right before trying to plot it
         error = self.check(self.obj)
@@ -249,11 +223,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         if error:  # Error => Display it
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Plot the slot (No winding for LamSquirrelCage)
-            if self.machine.type_machine == 10:
-                # For SRM, this is the last step => Plot the complete machine
-                self.machine.plot()
-            else:
-                self.obj.plot(is_lam_only=not (type(self.obj) is LamSlotWind))
+            self.obj.plot()
 
     @staticmethod
     def check(lam):
@@ -261,7 +231,7 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         Parameters
         ----------
-        lam: LamSlotWind
+        lam: LamSlotMag
             Lamination to check
 
         Returns
@@ -270,10 +240,6 @@ class SWSlot(Gen_SWSlot, QWidget):
             Error message (return None if no error)
         """
         try:
-            # Check that everything is set
-            if lam.slot.Zs is None:
-                return "You must set Zs !"
-
             # Call the check method of the slot (every slot type have a
             # different check method)
             index = INIT_INDEX.index(type(lam.slot))
