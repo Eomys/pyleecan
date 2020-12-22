@@ -185,7 +185,13 @@ class Test_Lam_Mag_inset_plot(object):
             Wrvd=0.05,
         )
         stator.magnet.Lmag = 0.35
-        stator.slot = SlotM11(Zs=4, W0=pi / 4, Hmag=0.03, Wmag=pi / 4, H0=0.02,)
+        stator.slot = SlotM11(
+            Zs=4,
+            W0=pi / 4,
+            Hmag=0.03,
+            Wmag=pi / 4,
+            H0=0.02,
+        )
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
         rotor.plot(is_show_fig=False)
@@ -457,11 +463,19 @@ class Test_Lam_Mag_inset_plot(object):
         """Test machine plot with SlotM10 inset"""
 
         plt.close("all")
-        rotor = LamSlotMag(Rint=80e-3, Rext=200e-3, is_internal=True, is_stator=False,)
+        rotor = LamSlotMag(
+            Rint=80e-3,
+            Rext=200e-3,
+            is_internal=True,
+            is_stator=False,
+        )
         rotor.slot = SlotM16(Zs=4, W0=0.02, H0=0.02, H1=0.08, W1=0.04)
 
         stator = LamSlotMag(
-            Rint=220e-3, Rext=400e-3, is_internal=False, is_stator=True,
+            Rint=220e-3,
+            Rext=400e-3,
+            is_internal=False,
+            is_stator=True,
         )
         stator.slot = SlotM16(Zs=8, W0=0.02, H0=0.02, H1=0.08, W1=0.04)
 

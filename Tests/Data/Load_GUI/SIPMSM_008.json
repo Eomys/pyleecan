@@ -109,61 +109,8 @@
         "slot": {
             "H0": null,
             "W0": null,
-            "W3": 0,
             "Zs": 8,
-            "__class__": "SlotMPolar",
-            "magnet": [
-                {
-                    "Hmag": null,
-                    "Lmag": null,
-                    "Wmag": null,
-                    "__class__": "MagnetType11",
-                    "mat_type": {
-                        "HT": {
-                            "Cp": null,
-                            "__class__": "MatHT",
-                            "alpha": null,
-                            "lambda_x": null,
-                            "lambda_y": null,
-                            "lambda_z": null
-                        },
-                        "__class__": "Material",
-                        "desc": null,
-                        "eco": {
-                            "__class__": "MatEconomical",
-                            "cost_unit": null,
-                            "unit_name": null
-                        },
-                        "elec": {
-                            "__class__": "MatElectrical",
-                            "alpha": null,
-                            "epsr": null,
-                            "rho": null
-                        },
-                        "is_isotropic": null,
-                        "mag": {
-                            "__class__": "MatMagnetics",
-                            "mur_lin": null
-                        },
-                        "name": null,
-                        "path": null,
-                        "struct": {
-                            "Ex": null,
-                            "Ey": null,
-                            "Ez": null,
-                            "Gxy": null,
-                            "Gxz": null,
-                            "Gyz": null,
-                            "__class__": "MatStructural",
-                            "nu_xy": null,
-                            "nu_xz": null,
-                            "nu_yz": null,
-                            "rho": null
-                        }
-                    },
-                    "type_magnetization": 0
-                }
-            ]
+            "__class__": "SlotM11"
         }
     },
     "shaft": {
