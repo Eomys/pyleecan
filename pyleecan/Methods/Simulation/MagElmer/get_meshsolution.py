@@ -4,7 +4,7 @@ from ....Classes.SolutionData import SolutionData
 from ....Classes.SolutionVector import SolutionVector
 from meshio import read
 from SciDataTool import Data1D, VectorField, DataTime
-from numpy import arange
+from numpy import arange, append as np_append
 from os.path import join
 
 
@@ -35,49 +35,78 @@ def get_meshsolution(self, output):
 
     result_filename = join(elmermesh_folder, "step_t0001.vtu")
     meshsolvtu = read(result_filename)
-    pt_data = meshsolvtu.point_data
+    #pt_data = meshsolvtu.point_data
     cell_data = meshsolvtu.cell_data
 
-    indices = arange(meshsolvtu.points.shape[0])
+    #indices = arange(meshsolvtu.points.shape[0])
+    indices = arange(meshsolvtu.cells[0].data.shape[0]+meshsolvtu.cells[1].data.shape[0])
 
     Indices = Data1D(name="indice", values=indices, is_components=True)
-
+    # store_dict = {
+    #     "magnetic vector potential": {
+    #         "name": "Magnetic Vector Potential A",
+    #         "unit": "Wb",
+    #         "symbol": "A",
+    #         "norm": 1,
+    #     },
+    #     "magnetic flux density": {
+    #         "name": "Magnetic Flux Density B",
+    #         "unit": "T",
+    #         "symbol": "B",
+    #         "norm": 1,
+    #     },
+    #     "magnetic field strength": {
+    #         "name": "Magnetic Field H",
+    #         "unit": "A/m",
+    #         "symbol": "H",
+    #         "norm": 1,
+    #     },
+    #     "current density": {
+    #         "name": "Current Density J",
+    #         "unit": "A/mm2",
+    #         "symbol": "J",
+    #         "norm": 1,
+    #     }
+    # }
     store_dict = {
-        "magnetic vector potential": {
-            "name": "Magnetic Vector Potential A",
-            "unit": "Wb",
-            "symbol": "A",
-            "norm": 1,
-        },
-        "magnetic flux density": {
+        "magnetic flux density e": {
             "name": "Magnetic Flux Density B",
             "unit": "T",
             "symbol": "B",
             "norm": 1,
         },
-        "magnetic field strength": {
+        "magnetic vector potential e": {
+            "name": "Magnetic Vector Potential A",
+            "unit": "Wb",
+            "symbol": "A",
+            "norm": 1,
+        },
+        "magnetic field strength e": {
             "name": "Magnetic Field H",
             "unit": "A/m",
             "symbol": "H",
             "norm": 1,
         },
-        "current density": {
+        "current density e": {
             "name": "Current Density J",
             "unit": "A/mm2",
             "symbol": "J",
             "norm": 1,
-        }
+        },
     }
     comp_ext = ["x", "y", "z"]
     sol_list = []
-    for key, value in pt_data.items():
+    #for key, value in pt_data.items():
+    for key, value in cell_data.items():
         if key in store_dict.keys():
-            siz = value.shape[1]
+            #siz = value.shape[1]
+            siz = value[0].shape[1]
             if siz > 3:
                 print("Some Message")
                 siz = 3
             components = []
             comp_name = []
+            values = np_append(value[0], value[1], axis=0)
             for i in range(siz):
                 if siz == 1:
                     ext = ""
@@ -89,9 +118,11 @@ def get_meshsolution(self, output):
                     unit=store_dict[key]["unit"],
                     symbol=store_dict[key]["symbol"] + ext,
                     axes=[Indices],
-                    values=value[:, i],
+                    #values=value[:, i],
+                    values=values[:, i],
                     normalizations={"ref": store_dict[key]["norm"]},
                 )
+
                 components.append(data)
                 comp_name.append("comp_" + ext)
 
@@ -100,7 +131,8 @@ def get_meshsolution(self, output):
                 sol_list.append(
                     SolutionData(
                         field=field,
-                        type_cell="point",
+                        #type_cell="point",
+                        type_cell="triangle",
                         label=store_dict[key]["symbol"],
                     )
                 )
@@ -116,7 +148,8 @@ def get_meshsolution(self, output):
                 sol_list.append(
                     SolutionVector(
                         field=field,
-                        type_cell="point",
+                        #type_cell="point",
+                        type_cell="triangle",
                         label=store_dict[key]["symbol"],
                     )
                 )

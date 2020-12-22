@@ -43,6 +43,8 @@ boundary_prop["airbox_arc"] = "VP0_BOUNDARY"
 # i.e. max. 30 characters; key: actual label, value: Elmer label
 surface_label = dict()
 surface_label["Shaft"] = "SHAFT"
+surface_label["Lamination_Rotor"] = "ROTOR_LAM"
+surface_label["Lamination_Stator"] = "STATOR_LAM"
 surface_label["Lamination_Rotor_Bore_Radius_Ext"] = "ROTOR_LAM"
 surface_label["Lamination_Stator_Bore_Radius_Int"] = "STATOR_LAM"
 surface_label["Airgap_int"] = "AG_INT"

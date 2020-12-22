@@ -70,6 +70,8 @@ def test_gmsh_ipm():
     with open("gmsh_test_ipm.json", "w") as fw:
         json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
+    return gmsh_dict
+
 
 @pytest.mark.long
 @pytest.mark.GMSH
@@ -104,6 +106,8 @@ def test_gmsh_spm():
     with open("gmsh_test_spm.json", "w") as fw:
         json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
+    return gmsh_dict
+
 
 def encode_complex(z):
     if isinstance(z, complex):
@@ -111,4 +115,4 @@ def encode_complex(z):
 
 
 if __name__ == "__main__":
-    sys.exit(test_gmsh_ipm())
+    gmsh_dict = test_gmsh_ipm()

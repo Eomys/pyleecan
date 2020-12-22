@@ -30,8 +30,8 @@ def gen_elmer_mesh(self, output):
         "2",
         gmsh_filename,
         "-2d",
-        # "-autoclean",
-        # "-names",
+        "-autoclean",
+        "-names",
         "-out",
         elmermesh_folder,
     ]

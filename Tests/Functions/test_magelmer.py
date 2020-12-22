@@ -5,7 +5,7 @@ import sys
 from shutil import copyfile
 
 import matplotlib.pyplot as plt
-from numpy import array, linspace, ones, pi, zeros
+from numpy import array, linspace, ones, pi, zeros, sqrt
 
 
 from Tests import save_plot_path
@@ -55,23 +55,32 @@ def test_Elmer():
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     IPMSM_A.stator.slot.H1 = 1e-3
     simu = Simu1(name="elmer", machine=IPMSM_A)
-    simu.machine.name = "fig_Elmer_sym"
 
     # Definition of the enforced output of the electrical module
-    N0 = 1500
-    Is = ImportMatrixVal(value=array([[20, -10, -10],[20, -10, -10],[20, -10, -10]]))
-    Ir = ImportMatrixVal(value=zeros((1, 28)))
-    Nt_tot = 3
-    Na_tot = 4096
-    simu.input = InputCurrent(
-        Is=Is,
-        Ir=Ir,  # zero current for the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
-        Nt_tot=Nt_tot,
-        Na_tot=Na_tot,
-        angle_rotor_initial=0.2244,
-    )
+    # N0 = 1500
+    # Is = ImportMatrixVal(value=array([[20, -10, -10],[20, -10, -10],[20, -10, -10]]))
+    # Ir = ImportMatrixVal(value=zeros((1, 28)))
+    # Nt_tot = 3
+    # Na_tot = 4096
+    # simu.input = InputCurrent(
+    #     Is=Is,
+    #     Ir=Ir,  # zero current for the rotor
+    #     N0=N0,
+    #     angle_rotor=None,  # Will be computed
+    #     Nt_tot=Nt_tot,
+    #     Na_tot=Na_tot,
+    #     angle_rotor_initial=0.2244,
+    # )
+
+    # Definition of a sinusoidal current
+    simu.input = InputCurrent()
+    #simu.input.Id_ref = 0  # [A]
+    #simu.input.Iq_ref = 250  # [A]
+    simu.input.Nt_tot = 2 * 8    # Number of time step
+    simu.input.Na_tot = 252 * 8  # Spatial discretization
+    simu.input.N0 = 1000  # Rotor speed [rpm]
+    simu.input.set_Id_Iq(I0=250/sqrt(2), Phi0=140*pi/180)
+
 
     # Definition of the magnetic simulation
     # 2 sym + antiperiodicity = 1/4 Lamination
@@ -79,6 +88,7 @@ def test_Elmer():
         type_BH_stator=2,
         type_BH_rotor=2,
         is_periodicity_a=True,
+        is_periodicity_t=True,
         FEA_dict=mesh_dict,
         is_get_mesh=True,
         is_save_FEA=True,
@@ -89,7 +99,12 @@ def test_Elmer():
     # Run simulation
     out = Output(simu=simu)
     simu.run()
+    out.plot_2D_Data("mag.Tem", "time")
+    out.plot_2D_Data("elec.Is", "time", "phase")
+    out.plot_2D_Data("mag.Tem", "time[smallestperiod]")
     out.mag.meshsolution.plot_contour(label="B")
+    out.mag.meshsolution.plot_contour(label="A")
+    out.mag.meshsolution.plot_contour(label="J")
     return out
 
     # FEMM files (mesh and results) are available in Results folder
