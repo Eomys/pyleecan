@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from SciDataTool import DataFreq, Data1D, VectorField, DataTime
 
-from numpy import newaxis, abs
+from numpy import newaxis, abs, sqrt
 
 
 def _get_field_comps(axes, components, field):
@@ -133,11 +133,13 @@ def comp_loss_norm(self, meshsolution):
         symbol = component.symbol
 
         # TODO better data check (axis size, ...)
-
-        f_norm = abs(mag_dict["freqs"][:, newaxis] / F_REF)
-        B_norm = (
-            1 / 2 * mag_dict[symbol] / B_REF
-        )  # factor 1/2 to account for SciDataTool FFT of double sided spectrum
+        freqs = mag_dict["freqs"]
+        # freqs[freqs<0] = 0 # to only regard positive freqs
+        k = 1 / sqrt(2)
+        f_norm = abs(freqs[:, newaxis] / F_REF)
+        B_norm = k * mag_dict[symbol] / B_REF
+        # factor 1 / sqrt(2) to account for SciDataTool FFT of double sided spectrum
+        # TODO is this factor also true for powers other than 2 ?
 
         HY = Coeff[0] * f_norm * B_norm ** Coeff[1]
         ED = Coeff[2] * (f_norm * B_norm) ** Coeff[3]
