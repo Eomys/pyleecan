@@ -195,7 +195,7 @@
         },
         "magnet": {
             "Lmag": 0.95,
-            "__class__": "MagnetType11",
+            "__class__": "Magnet",
             "mat_type": {
                 "HT": {
                     "Cp": 1,
