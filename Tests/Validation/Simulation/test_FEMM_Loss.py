@@ -22,7 +22,7 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
-@pytest.mark.DEV
+# @pytest.mark.DEV
 def test_FEMM_Loss():
     """Validation of the Loss implementaiton using MagFEMM and compare to
     FEMM example - https://www.femm.info/wiki/SPMLoss -
