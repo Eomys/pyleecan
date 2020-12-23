@@ -2,17 +2,17 @@
 
 
 def comp_radius_mid_active(self):
-    """Compute the radius at the middle of the winding part of the slot
+    """Compute the radius at the middle of the active part of the slot
 
     Parameters
     ----------
-    self : SlotWind
-        A SlotWind object
+    self : Slot
+        A Slot object
 
     Returns
     -------
     Rmw: float
-        Mid winding radius [m]
+        Mid active radius [m]
 
     """
 

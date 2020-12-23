@@ -2,13 +2,13 @@
 
 
 def comp_surface_active(self, Ndisc=200):
-    """Compute the Slot winding surface (by numerical computation).
+    """Compute the Slot active surface (by numerical computation).
     Caution, the bottom of the Slot is an Arc
 
     Parameters
     ----------
-    self : SlotWind
-        A SlotWind object
+    self : Slot
+        A Slot object
     Ndisc : int
         Number of point to discretize the lines
 

@@ -3,19 +3,19 @@ from numpy import array
 
 
 def comp_height_active(self, Ndisc=200):
-    """Compute the height of the winding area
+    """Compute the height of the active area
 
     Parameters
     ----------
-    self : SlotWind
-        A SlotWind object
+    self : Slot
+        A Slot object
     Ndisc : int
         Number of point to discretize the lines
 
     Returns
     -------
     Hwind: float
-        Height of the winding area [m]
+        Height of the active area [m]
 
     """
 

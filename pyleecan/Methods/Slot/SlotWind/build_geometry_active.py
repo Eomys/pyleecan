@@ -9,14 +9,14 @@ import matplotlib.pyplot as plt
 
 
 def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):
-    """Split the slot winding area in several zone
-    This method assume that the winding area is centered on X axis and symetrical
+    """Split the slot active area in several zone
+    This method assume that the active area is centered on X axis and symetrical
     Otherwise a dedicated build_geometry_active method must be provided
 
     Parameters
     ----------
-    self : SlotWind
-        A SlotWind object
+    self : Slot
+        A Slot object
     Nrad : int
         Number of radial layer
     Ntan : int
@@ -31,17 +31,17 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     Returns
     -------
     surf_list:
-        List of surface delimiting the winding zone
+        List of surface delimiting the active zone
 
     """
 
     assert Nrad in [1, 2]
 
-    surf_wind = self.get_surface_active()
+    surf_act = self.get_surface_active()
 
     # Find the two intersection point with Ox axis
     inter_list = list()
-    for line in surf_wind.get_lines():
+    for line in surf_act.get_lines():
         inter_list.extend(line.intersect_line(0, 100))
     # When the two lines at the bottom cross on X axis (ex SlotW14)
     if len(inter_list) == 3 and abs(inter_list[0] - inter_list[1]) < 1e-6:
@@ -59,13 +59,13 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     rad_list = list()
     if Nrad == 2:
         rad_list.append(
-            surf_wind.split_line(0, 100, is_top=False, is_join=True, label_join="")
+            surf_act.split_line(0, 100, is_top=False, is_join=True, label_join="")
         )
         rad_list.append(
-            surf_wind.split_line(0, 100, is_top=True, is_join=True, label_join="")
+            surf_act.split_line(0, 100, is_top=True, is_join=True, label_join="")
         )
     else:
-        rad_list = [surf_wind]
+        rad_list = [surf_act]
 
     # Tan split
     surf_list = list()

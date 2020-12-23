@@ -12,14 +12,14 @@ PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 
 
 def plot_active(self, wind_mat=None, fig=None, is_bar=False):
-    """Plot the winding area of the lamination according to the wind_mat
+    """Plot the active area of the lamination according to the wind_mat
 
     Parameters
     ----------
-    self : SlotWind
-        A SlotWind object
+    self : Slot
+        A Slot object
     wind_mat : numpy.ndarray
-        A matrix [Nrad,Ntan,Zs,qs] representing the winding (Default value = None)
+        A matrix [Nrad,Ntan,Zs,qs] representing the active (Default value = None)
     fig :
         if None, open a new fig and plot, else add to the current
         one (Default value = None)
