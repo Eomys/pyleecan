@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .SlotWind import SlotWind
+from .Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -38,7 +38,7 @@ from .Line import Line
 from .Surface import Surface
 
 
-class SlotUD2(SlotWind):
+class SlotUD2(Slot):
     """"User defined" Slot from a line list and a surface"""
 
     VERSION = 1
@@ -109,16 +109,16 @@ class SlotUD2(SlotWind):
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         self.active_surf = active_surf
-        # Call SlotWind init
+        # Call Slot init
         super(SlotUD2, self).__init__(Zs=Zs)
-        # The class is frozen (in SlotWind init), for now it's impossible to
+        # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         SlotUD2_str = ""
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotUD2_str += super(SlotUD2, self).__str__()
         if len(self.line_list) == 0:
             SlotUD2_str += "line_list = []" + linesep
@@ -142,7 +142,7 @@ class SlotUD2(SlotWind):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from SlotWind
+        # Check the properties inherited from Slot
         if not super(SlotUD2, self).__eq__(other):
             return False
         if other.line_list != self.line_list:
@@ -156,7 +156,7 @@ class SlotUD2(SlotWind):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from SlotWind
+        # Get size of the properties inherited from Slot
         S += super(SlotUD2, self).__sizeof__()
         if self.line_list is not None:
             for value in self.line_list:
@@ -167,7 +167,7 @@ class SlotUD2(SlotWind):
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotUD2_dict = super(SlotUD2, self).as_dict()
         if self.line_list is None:
             SlotUD2_dict["line_list"] = None
@@ -190,7 +190,7 @@ class SlotUD2(SlotWind):
         self.line_list = None
         if self.active_surf is not None:
             self.active_surf._set_None()
-        # Set to None the properties inherited from SlotWind
+        # Set to None the properties inherited from Slot
         super(SlotUD2, self)._set_None()
 
     def _get_line_list(self):

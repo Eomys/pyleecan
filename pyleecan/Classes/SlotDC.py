@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .SlotWind import SlotWind
+from .Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -66,7 +66,7 @@ except ImportError as error:
 from ._check import InitUnKnowClassError
 
 
-class SlotDC(SlotWind):
+class SlotDC(Slot):
     """Slot with two rods (for double squirrel cage)"""
 
     VERSION = 1
@@ -235,16 +235,16 @@ class SlotDC(SlotWind):
         self.D2 = D2
         self.H3 = H3
         self.R3 = R3
-        # Call SlotWind init
+        # Call Slot init
         super(SlotDC, self).__init__(Zs=Zs)
-        # The class is frozen (in SlotWind init), for now it's impossible to
+        # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         SlotDC_str = ""
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotDC_str += super(SlotDC, self).__str__()
         SlotDC_str += "W1 = " + str(self.W1) + linesep
         SlotDC_str += "H1 = " + str(self.H1) + linesep
@@ -262,7 +262,7 @@ class SlotDC(SlotWind):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from SlotWind
+        # Check the properties inherited from Slot
         if not super(SlotDC, self).__eq__(other):
             return False
         if other.W1 != self.W1:
@@ -288,7 +288,7 @@ class SlotDC(SlotWind):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from SlotWind
+        # Get size of the properties inherited from Slot
         S += super(SlotDC, self).__sizeof__()
         S += getsizeof(self.W1)
         S += getsizeof(self.H1)
@@ -303,7 +303,7 @@ class SlotDC(SlotWind):
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotDC_dict = super(SlotDC, self).as_dict()
         SlotDC_dict["W1"] = self.W1
         SlotDC_dict["H1"] = self.H1
@@ -329,7 +329,7 @@ class SlotDC(SlotWind):
         self.D2 = None
         self.H3 = None
         self.R3 = None
-        # Set to None the properties inherited from SlotWind
+        # Set to None the properties inherited from Slot
         super(SlotDC, self)._set_None()
 
     def _get_W1(self):

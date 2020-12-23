@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .SlotWind import SlotWind
+from .Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -66,7 +66,7 @@ except ImportError as error:
 from ._check import InitUnKnowClassError
 
 
-class SlotM15(SlotWind):
+class SlotM15(Slot):
     """single magnet with polar base and curved-top shape and parallel sides"""
 
     VERSION = 1
@@ -223,16 +223,16 @@ class SlotM15(SlotWind):
         self.Wmag = Wmag
         self.Hmag = Hmag
         self.Rtopm = Rtopm
-        # Call SlotWind init
+        # Call Slot init
         super(SlotM15, self).__init__(Zs=Zs)
-        # The class is frozen (in SlotWind init), for now it's impossible to
+        # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         SlotM15_str = ""
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotM15_str += super(SlotM15, self).__str__()
         SlotM15_str += "W0 = " + str(self.W0) + linesep
         SlotM15_str += "H0 = " + str(self.H0) + linesep
@@ -247,7 +247,7 @@ class SlotM15(SlotWind):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from SlotWind
+        # Check the properties inherited from Slot
         if not super(SlotM15, self).__eq__(other):
             return False
         if other.W0 != self.W0:
@@ -267,7 +267,7 @@ class SlotM15(SlotWind):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from SlotWind
+        # Get size of the properties inherited from Slot
         S += super(SlotM15, self).__sizeof__()
         S += getsizeof(self.W0)
         S += getsizeof(self.H0)
@@ -279,7 +279,7 @@ class SlotM15(SlotWind):
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotM15_dict = super(SlotM15, self).as_dict()
         SlotM15_dict["W0"] = self.W0
         SlotM15_dict["H0"] = self.H0
@@ -299,7 +299,7 @@ class SlotM15(SlotWind):
         self.Wmag = None
         self.Hmag = None
         self.Rtopm = None
-        # Set to None the properties inherited from SlotWind
+        # Set to None the properties inherited from Slot
         super(SlotM15, self)._set_None()
 
     def _get_W0(self):

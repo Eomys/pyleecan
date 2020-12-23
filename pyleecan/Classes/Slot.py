@@ -18,6 +18,11 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Slot.Slot.build_geometry_active import build_geometry_active
+except ImportError as error:
+    build_geometry_active = error
+
+try:
     from ..Methods.Slot.Slot.build_geometry_half_tooth import build_geometry_half_tooth
 except ImportError as error:
     build_geometry_half_tooth = error
@@ -26,6 +31,11 @@ try:
     from ..Methods.Slot.Slot.check import check
 except ImportError as error:
     check = error
+
+try:
+    from ..Methods.Slot.Slot.comp_angle_active_eq import comp_angle_active_eq
+except ImportError as error:
+    comp_angle_active_eq = error
 
 try:
     from ..Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
@@ -38,14 +48,44 @@ except ImportError as error:
     comp_height = error
 
 try:
+    from ..Methods.Slot.Slot.comp_height_active import comp_height_active
+except ImportError as error:
+    comp_height_active = error
+
+try:
+    from ..Methods.Slot.Slot.comp_radius import comp_radius
+except ImportError as error:
+    comp_radius = error
+
+try:
+    from ..Methods.Slot.Slot.comp_radius_mid_active import comp_radius_mid_active
+except ImportError as error:
+    comp_radius_mid_active = error
+
+try:
     from ..Methods.Slot.Slot.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
 
 try:
+    from ..Methods.Slot.Slot.comp_surface_active import comp_surface_active
+except ImportError as error:
+    comp_surface_active = error
+
+try:
+    from ..Methods.Slot.Slot.comp_width_opening import comp_width_opening
+except ImportError as error:
+    comp_width_opening = error
+
+try:
     from ..Methods.Slot.Slot.get_is_stator import get_is_stator
 except ImportError as error:
     get_is_stator = error
+
+try:
+    from ..Methods.Slot.Slot.get_name_lam import get_name_lam
+except ImportError as error:
+    get_name_lam = error
 
 try:
     from ..Methods.Slot.Slot.get_Rbo import get_Rbo
@@ -73,19 +113,9 @@ except ImportError as error:
     plot = error
 
 try:
-    from ..Methods.Slot.Slot.comp_width_opening import comp_width_opening
+    from ..Methods.Slot.Slot.plot_active import plot_active
 except ImportError as error:
-    comp_width_opening = error
-
-try:
-    from ..Methods.Slot.Slot.get_name_lam import get_name_lam
-except ImportError as error:
-    get_name_lam = error
-
-try:
-    from ..Methods.Slot.Slot.comp_radius import comp_radius
-except ImportError as error:
-    comp_radius = error
+    plot_active = error
 
 
 from ._check import InitUnKnowClassError
@@ -97,6 +127,18 @@ class Slot(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.Slot.build_geometry_active
+    if isinstance(build_geometry_active, ImportError):
+        build_geometry_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method build_geometry_active: "
+                    + str(build_geometry_active)
+                )
+            )
+        )
+    else:
+        build_geometry_active = build_geometry_active
     # cf Methods.Slot.Slot.build_geometry_half_tooth
     if isinstance(build_geometry_half_tooth, ImportError):
         build_geometry_half_tooth = property(
@@ -118,6 +160,18 @@ class Slot(FrozenClass):
         )
     else:
         check = check
+    # cf Methods.Slot.Slot.comp_angle_active_eq
+    if isinstance(comp_angle_active_eq, ImportError):
+        comp_angle_active_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_angle_active_eq: "
+                    + str(comp_angle_active_eq)
+                )
+            )
+        )
+    else:
+        comp_angle_active_eq = comp_angle_active_eq
     # cf Methods.Slot.Slot.comp_angle_opening
     if isinstance(comp_angle_opening, ImportError):
         comp_angle_opening = property(
@@ -139,6 +193,39 @@ class Slot(FrozenClass):
         )
     else:
         comp_height = comp_height
+    # cf Methods.Slot.Slot.comp_height_active
+    if isinstance(comp_height_active, ImportError):
+        comp_height_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_height_active: "
+                    + str(comp_height_active)
+                )
+            )
+        )
+    else:
+        comp_height_active = comp_height_active
+    # cf Methods.Slot.Slot.comp_radius
+    if isinstance(comp_radius, ImportError):
+        comp_radius = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method comp_radius: " + str(comp_radius))
+            )
+        )
+    else:
+        comp_radius = comp_radius
+    # cf Methods.Slot.Slot.comp_radius_mid_active
+    if isinstance(comp_radius_mid_active, ImportError):
+        comp_radius_mid_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_radius_mid_active: "
+                    + str(comp_radius_mid_active)
+                )
+            )
+        )
+    else:
+        comp_radius_mid_active = comp_radius_mid_active
     # cf Methods.Slot.Slot.comp_surface
     if isinstance(comp_surface, ImportError):
         comp_surface = property(
@@ -148,6 +235,30 @@ class Slot(FrozenClass):
         )
     else:
         comp_surface = comp_surface
+    # cf Methods.Slot.Slot.comp_surface_active
+    if isinstance(comp_surface_active, ImportError):
+        comp_surface_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_surface_active: "
+                    + str(comp_surface_active)
+                )
+            )
+        )
+    else:
+        comp_surface_active = comp_surface_active
+    # cf Methods.Slot.Slot.comp_width_opening
+    if isinstance(comp_width_opening, ImportError):
+        comp_width_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_width_opening: "
+                    + str(comp_width_opening)
+                )
+            )
+        )
+    else:
+        comp_width_opening = comp_width_opening
     # cf Methods.Slot.Slot.get_is_stator
     if isinstance(get_is_stator, ImportError):
         get_is_stator = property(
@@ -159,6 +270,15 @@ class Slot(FrozenClass):
         )
     else:
         get_is_stator = get_is_stator
+    # cf Methods.Slot.Slot.get_name_lam
+    if isinstance(get_name_lam, ImportError):
+        get_name_lam = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method get_name_lam: " + str(get_name_lam))
+            )
+        )
+    else:
+        get_name_lam = get_name_lam
     # cf Methods.Slot.Slot.get_Rbo
     if isinstance(get_Rbo, ImportError):
         get_Rbo = property(
@@ -206,36 +326,15 @@ class Slot(FrozenClass):
         )
     else:
         plot = plot
-    # cf Methods.Slot.Slot.comp_width_opening
-    if isinstance(comp_width_opening, ImportError):
-        comp_width_opening = property(
+    # cf Methods.Slot.Slot.plot_active
+    if isinstance(plot_active, ImportError):
+        plot_active = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Slot method comp_width_opening: "
-                    + str(comp_width_opening)
-                )
+                ImportError("Can't use Slot method plot_active: " + str(plot_active))
             )
         )
     else:
-        comp_width_opening = comp_width_opening
-    # cf Methods.Slot.Slot.get_name_lam
-    if isinstance(get_name_lam, ImportError):
-        get_name_lam = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Slot method get_name_lam: " + str(get_name_lam))
-            )
-        )
-    else:
-        get_name_lam = get_name_lam
-    # cf Methods.Slot.Slot.comp_radius
-    if isinstance(comp_radius, ImportError):
-        comp_radius = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Slot method comp_radius: " + str(comp_radius))
-            )
-        )
-    else:
-        comp_radius = comp_radius
+        plot_active = plot_active
     # save and copy methods are available in all object
     save = save
     copy = copy

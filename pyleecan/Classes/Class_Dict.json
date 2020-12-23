@@ -7741,26 +7741,31 @@
             "SlotW28",
             "SlotW29",
             "SlotW60",
-            "SlotW61",
-            "SlotWind"
+            "SlotW61"
         ],
         "desc": "Generic class for slot (abstract)",
         "is_internal": false,
         "methods": [
+            "build_geometry_active",
             "build_geometry_half_tooth",
             "check",
+            "comp_angle_active_eq",
             "comp_angle_opening",
             "comp_height",
+            "comp_height_active",
+            "comp_radius",
+            "comp_radius_mid_active",
             "comp_surface",
+            "comp_surface_active",
+            "comp_width_opening",
             "get_is_stator",
+            "get_name_lam",
             "get_Rbo",
             "get_surface",
             "get_surface_tooth",
             "is_outwards",
             "plot",
-            "comp_width_opening",
-            "get_name_lam",
-            "comp_radius"
+            "plot_active"
         ],
         "mother": "",
         "name": "Slot",
@@ -7868,7 +7873,7 @@
             "comp_surface",
             "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotCirc",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotCirc.csv",
@@ -7918,7 +7923,7 @@
             "comp_surface",
             "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotDC",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotDC.csv",
@@ -8022,7 +8027,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotM10",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotM10.csv",
@@ -8090,7 +8095,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotM11",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotM11.csv",
@@ -8158,7 +8163,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotM12",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotM12.csv",
@@ -8226,7 +8231,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotM13",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotM13.csv",
@@ -8303,7 +8308,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotM14",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotM14.csv",
@@ -8380,7 +8385,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotM15",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotM15.csv",
@@ -8457,7 +8462,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotM16",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotM16.csv",
@@ -8516,7 +8521,7 @@
             "get_surface_active",
             "check"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotUD",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotUD.csv",
@@ -8574,7 +8579,7 @@
             "get_surface_active",
             "check"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotUD2",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotUD2.csv",
@@ -8626,7 +8631,7 @@
             "get_surface_active",
             "get_H1"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW10",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW10.csv",
@@ -8722,7 +8727,7 @@
             "comp_surface_active",
             "get_H1"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW11",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW11.csv",
@@ -8825,7 +8830,7 @@
             "comp_surface",
             "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW12",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW12.csv",
@@ -8895,7 +8900,7 @@
             "get_surface_active",
             "get_H1"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW13",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW13.csv",
@@ -8999,7 +9004,7 @@
             "comp_surface",
             "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW14",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW14.csv",
@@ -9075,7 +9080,7 @@
             "comp_height_active",
             "comp_surface"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW15",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW15.csv",
@@ -9169,7 +9174,7 @@
             "comp_height_active",
             "comp_surface"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW16",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW16.csv",
@@ -9248,7 +9253,7 @@
             "build_geometry_active",
             "get_H1"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW21",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW21.csv",
@@ -9343,7 +9348,7 @@
             "comp_surface_active",
             "build_geometry_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW22",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW22.csv",
@@ -9413,7 +9418,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW23",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW23.csv",
@@ -9528,7 +9533,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW24",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW24.csv",
@@ -9579,7 +9584,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW25",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW25.csv",
@@ -9647,7 +9652,7 @@
             "comp_surface",
             "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW26",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW26.csv",
@@ -9724,7 +9729,7 @@
             "comp_surface",
             "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW27",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW27.csv",
@@ -9827,7 +9832,7 @@
             "comp_height_active",
             "comp_surface"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW28",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW28.csv",
@@ -9905,7 +9910,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW29",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW29.csv",
@@ -9992,7 +9997,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW60",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW60.csv",
@@ -10097,7 +10102,7 @@
             "comp_surface_active",
             "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW61",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW61.csv",
@@ -10184,60 +10189,6 @@
                 "value": 0
             }
         ]
-    },
-    "SlotWind": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "SlotCirc",
-            "SlotDC",
-            "SlotM10",
-            "SlotM11",
-            "SlotM12",
-            "SlotM13",
-            "SlotM14",
-            "SlotM15",
-            "SlotM16",
-            "SlotUD",
-            "SlotUD2",
-            "SlotW10",
-            "SlotW11",
-            "SlotW12",
-            "SlotW13",
-            "SlotW14",
-            "SlotW15",
-            "SlotW16",
-            "SlotW21",
-            "SlotW22",
-            "SlotW23",
-            "SlotW24",
-            "SlotW25",
-            "SlotW26",
-            "SlotW27",
-            "SlotW28",
-            "SlotW29",
-            "SlotW60",
-            "SlotW61"
-        ],
-        "desc": "Slot for winding (abstract)",
-        "is_internal": false,
-        "methods": [
-            "comp_angle_active_eq",
-            "comp_height_active",
-            "comp_radius_mid_active",
-            "comp_surface_active",
-            "plot_active",
-            "build_geometry_active"
-        ],
-        "mother": "Slot",
-        "name": "SlotWind",
-        "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotWind.csv",
-        "properties": []
     },
     "Solution": {
         "constants": [

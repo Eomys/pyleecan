@@ -167,7 +167,6 @@ load_switch = {
     "SlotW29": SlotW29,
     "SlotW60": SlotW60,
     "SlotW61": SlotW61,
-    "SlotWind": SlotWind,
     "Solution": Solution,
     "SolutionData": SolutionData,
     "SolutionMat": SolutionMat,
