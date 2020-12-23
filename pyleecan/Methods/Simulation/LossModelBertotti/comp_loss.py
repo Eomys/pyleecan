@@ -82,7 +82,8 @@ def comp_loss(self, output, lam):
         )
         # time = Data1D(name="time", unit="", values=array([0]), ) # TODO squeeze issue
         axes = [axis for axis in LossDens.axes if axis.name not in ["time", "freqs"]]
-
+        
+        # TODO utilize periodicity or use DataFreqs to reduce memory usage
         loss_sum_ = DataTime(
             name="Losses sum",
             unit="W/kg",
