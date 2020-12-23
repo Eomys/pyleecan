@@ -120,7 +120,8 @@ def test_FEMM_Loss():
     loss_stator_iron = loss.get_loss(loss_type="Iron", label="Stator", index=0)
     loss_rotor_iron = loss.get_loss(loss_type="Iron", label="Rotor", index=0)
     loss_stator_wind = loss.get_loss(loss_type="Winding", label="Stator", index=0)
-
+    
+    # TODO use get_along to ensure time values
     loss_stator_iron = loss_stator_iron.get_field([]).mean()
     loss_rotor_iron = loss_rotor_iron.get_field([]).mean()
 
