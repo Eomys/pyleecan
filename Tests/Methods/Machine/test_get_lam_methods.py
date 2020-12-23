@@ -15,6 +15,7 @@ machine.lam_list = [rotor_1, stator_1, rotor_0, stator_0]
 
 
 @pytest.mark.METHODS
+# @pytest.mark.DEV
 class Test_get_lam_methods(object):
     """unittest to test the Machine get_lam_xxx methods"""
 
@@ -59,3 +60,18 @@ class Test_get_lam_methods(object):
         assert machine.get_lam_by_label("Rotor") == rotor_0
         assert machine.get_lam_by_label("Rotor_0") == rotor_0
         assert machine.get_lam_by_label("Rotor_1") == rotor_1
+
+    def test_get_lam_index(self):
+        """Test Machine get_lam_index method"""
+        # ref. order [rotor_0, stator_0, stator_1, rotor_1]
+        assert machine.get_lam_index("Stator") == 1
+        assert machine.get_lam_index("Stator_0") == 1
+        assert machine.get_lam_index("Stator_1") == 2
+
+        assert machine.get_lam_index("Rotor") == 0
+        assert machine.get_lam_index("Rotor_0") == 0
+        assert machine.get_lam_index("Rotor_1") == 3
+
+        assert machine.get_lam_index("rotor") is None  # method is case sensitive
+        assert machine.get_lam_index("xyz") is None
+        assert machine.get_lam_index("Rotor_") is None  # this is also invalid

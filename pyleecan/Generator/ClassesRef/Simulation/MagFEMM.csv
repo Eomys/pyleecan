@@ -13,3 +13,4 @@ stator_dxf,,To use a dxf version of the rotor instead of build_geometry,,DXFImpo
 import_file,,To import an existing femm file,0,str,None,,,,,,,,,,
 is_close_femm,,To close femm automatically after the simulation,0,bool,1,,,,,,,,,,
 nb_worker,,To run FEMM in parallel (the parallelization is on the time loop),,int,1,,,,,,,,,,
+Rag_enforced,m,To enforce a different radius value for air-gap outputs,0,float,None,,,,,,,,,,

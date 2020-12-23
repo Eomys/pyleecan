@@ -2,7 +2,8 @@
 
 import pyvista as pv
 import meshio
-import os
+from os import makedirs, remove
+from os.path import isdir, split
 from pyleecan.definitions import RESULT_DIR
 
 
@@ -23,12 +24,16 @@ def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
     """
 
     points = self.get_point()
-    cells, nb_cell, indice_dict = self.get_cell()
+    cells, _, _ = self.get_cell()
 
     cells_meshio = list()
     for key in cells:
         cells_meshio.append((key, cells[key]))
         # Write .vtk file using meshio
+
+    # Make sure that the file exists
+    if not isdir(split(path)[0]):
+        makedirs(split(path)[0])
 
     meshio.write_points_cells(filename=path, points=points, cells=cells_meshio)
 
@@ -39,6 +44,6 @@ def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
     if indices is not None:
         mesh = mesh.extract_points(indices)
 
-    os.remove(path)
+    remove(path)
 
     return mesh

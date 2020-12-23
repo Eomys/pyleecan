@@ -117,6 +117,10 @@ def plot(
     ax.set_xlim(-Lim, Lim)
     ax.set_ylim(-Lim, Lim)
 
+    # Set Windows title
+    if self.name not in ["", None]:
+        fig.canvas.set_window_title(self.name + " plot machine")
+
     if save_path is not None:
         fig.savefig(save_path)
         plt.close()

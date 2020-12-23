@@ -99,5 +99,5 @@ for rr in range(0, 20):
             new_label = "H_MAGNET_ROT_RAD_S_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
             surface_label[old_label] = new_label
             old_label = "Wind_Stator_R" + str(rr) + "_T" + str(tt) + "_S" + str(ss)
-            new_label = "W_STA_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
+            new_label = "W_STA_R" + str(rr) + "_T" + str(tt) + "_S" + str(ss)
             surface_label[old_label] = new_label

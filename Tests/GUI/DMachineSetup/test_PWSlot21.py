@@ -165,28 +165,28 @@ class TestPWSlot21(object):
             H0=None, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
         )
         setup["widget"] = PWSlot21(setup["test_obj"])
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot21 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H0 !"
         setup["test_obj"].slot = SlotW21(
             H0=0.10, H1=None, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot21 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H1 !"
         setup["test_obj"].slot = SlotW21(
             H0=0.10, H1=0.11, H2=None, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot21 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H2 !"
         setup["test_obj"].slot = SlotW21(
             H0=0.10, H1=0.11, H2=0.12, W0=None, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot21 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set W0 !"
         setup["test_obj"].slot = SlotW21(
             H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=None, W2=0.15, H1_is_rad=False
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot21 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set W1 !"
         setup["test_obj"].slot = SlotW21(
             H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=None, H1_is_rad=False
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot21 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set W2 !"
         setup["test_obj"].slot = SlotW21(
             H0=0.10, H1=5.3, H2=0.12, W0=0.13, W1=0.14, W2=0.15, H1_is_rad=False
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot21 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must have H1 < 90°"
