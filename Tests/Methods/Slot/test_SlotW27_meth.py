@@ -8,7 +8,7 @@ from pyleecan.Classes.Segment import Segment
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.SlotWind.comp_surface_active import comp_surface_active
+from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
 from pyleecan.Methods.Slot.SlotW27.check import S27_W03CheckError
 
 # For AlmostEqual

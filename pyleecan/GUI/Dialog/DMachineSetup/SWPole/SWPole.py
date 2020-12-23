@@ -8,7 +8,7 @@ from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
 from .....Classes.SlotW60 import SlotW60
 from .....Classes.SlotW61 import SlotW61
-from .....Classes.SlotWind import SlotWind
+from .....Classes.Slot import Slot
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot60.PWSlot60 import PWSlot60
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot61.PWSlot61 import PWSlot61
 from .....GUI.Dialog.DMachineSetup.SWPole.Ui_SWPole import Ui_SWPole

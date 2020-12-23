@@ -7,7 +7,7 @@ from PySide2.QtWidgets import QMessageBox, QWidget
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
 from .....Classes.SlotM10 import SlotM10
-from .....Classes.SlotWind import SlotWind
+from .....Classes.Slot import Slot
 from .....GUI.Dialog.DMachineSetup.SMSlot.Ui_SMSlot import Ui_SMSlot
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
@@ -76,8 +76,8 @@ class SMSlot(Ui_SMSlot, QWidget):
         else:
             self.obj = machine.rotor
 
-        # If the Slot is not set, initialize it with a 1_0
-        if self.obj.slot is None or type(self.obj.slot) in [SlotWind, Slot]:
+        # If the Slot is not set, initialize it with a SlotM10
+        if self.obj.slot is None or type(self.obj.slot) is Slot:
             self.obj.slot = SlotM10()
             self.obj.slot._set_None()
 
