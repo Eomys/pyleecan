@@ -94,10 +94,7 @@ def get_group(self, group_names):
     # 4) select the corresponding solutions
     sol_list = list()
     for sol in self.solution:
-        label_sol = sol.label
         type_cell_sol = sol.type_cell
-        field_sol = sol.get_field()
-        axis_name, axis_size = sol.get_axes_list()
 
         if type_cell_sol == "point":
             new_indices = node_indice
@@ -105,19 +102,7 @@ def get_group(self, group_names):
         elif not is_interface:  # Interface is only available for point solution.
             new_indices = indice_dict[type_cell_sol]
 
-        Iindice = axis_name.index("indice")
-        axis_size[Iindice] = len(new_indices)
-        new_field_sol = np.take(field_sol, new_indices, axis=Iindice)
-
-        new_sol = SolutionMat(
-            label=label_sol,
-            type_cell=type_cell_sol,
-            field=new_field_sol,
-            indice=new_indices,
-            axis_name=axis_name,
-            axis_size=axis_size,
-        )
-
+        new_sol = sol.get_solution(indice=new_indices)
         sol_list.append(new_sol)
 
     # 5) Create the corresponding MeshSolution object
