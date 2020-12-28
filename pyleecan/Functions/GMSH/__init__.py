@@ -13,6 +13,7 @@ boundary_list = [
     "SB_STATOR_BOUNDARY",
     "AIRGAP_ARC_BOUNDARY",
     "VP0_BOUNDARY",
+    "ROTOR_BORE_CURVE",
 ]
 
 # dictionary to match FEA boundary conditions (dict values)
@@ -38,6 +39,7 @@ boundary_prop["Lamination_Stator_Yoke_Side_Left"] = "SLAVE_STATOR_BOUNDARY"
 boundary_prop["ext_sb_arc"] = "SB_STATOR_BOUNDARY"
 boundary_prop["ext_airgap_arc_copy"] = "AIRGAP_ARC_BOUNDARY"
 boundary_prop["airbox_arc"] = "VP0_BOUNDARY"
+boundary_prop["Lamination_Rotor_Bore_Radius_Ext"] = "ROTOR_BORE_CURVE"
 
 # dict for the translation of the actual surface labels into Elmer compatible labels,
 # i.e. max. 30 characters; key: actual label, value: Elmer label

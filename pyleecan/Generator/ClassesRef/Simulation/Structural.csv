@@ -1,3 +1,3 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-structural,-,Structural module,,int,0,,,,Simulation,,run,VERSION,1,Structural module abstract object,
+,,,,,,,,,Simulation,,run,VERSION,1,Structural module abstract object,
 ,,,,,,,,,,,comp_axes,,,,

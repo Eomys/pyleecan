@@ -57,7 +57,7 @@ from ._check import InitUnKnowClassError
 
 
 class RefSegmentP1(RefCell):
-    """Store triangle elements for 2D mesh"""
+    """Store segment elements for 2D mesh"""
 
     VERSION = 1
 

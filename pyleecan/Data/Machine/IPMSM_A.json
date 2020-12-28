@@ -69,14 +69,14 @@
                         "name": "MagnetPrius",
                         "path": "MagnetPrius.json",
                         "struct": {
-                            "Ex": null,
+                            "Ex": 15500000000,
                             "Ey": null,
                             "Ez": null,
                             "Gxy": null,
                             "Gxz": null,
                             "Gyz": null,
                             "__class__": "MatStructural",
-                            "nu_xy": null,
+                            "nu_xy": 0.3,
                             "nu_xz": null,
                             "nu_yz": null,
                             "rho": 7500.0
