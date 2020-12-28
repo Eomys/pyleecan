@@ -4081,6 +4081,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "Store the loss density",
+                "max": "",
+                "min": "",
+                "name": "get_meshsolution",
+                "type": "bool",
+                "unit": "-",
+                "value": false
             }
         ]
     },

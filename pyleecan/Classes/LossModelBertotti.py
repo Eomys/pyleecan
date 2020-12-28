@@ -96,6 +96,7 @@ class LossModelBertotti(LossModel):
         alpha_ed=None,
         alpha_ex=None,
         group=None,
+        get_meshsolution=False,
         name="",
         init_dict=None,
         init_str=None,
@@ -129,6 +130,8 @@ class LossModelBertotti(LossModel):
                 alpha_ex = init_dict["alpha_ex"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
+            if "get_meshsolution" in list(init_dict.keys()):
+                get_meshsolution = init_dict["get_meshsolution"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
         # Set the properties (value check and convertion are done in setter)
@@ -139,6 +142,7 @@ class LossModelBertotti(LossModel):
         self.alpha_ed = alpha_ed
         self.alpha_ex = alpha_ex
         self.group = group
+        self.get_meshsolution = get_meshsolution
         # Call LossModel init
         super(LossModelBertotti, self).__init__(name=name)
         # The class is frozen (in LossModel init), for now it's impossible to
@@ -157,6 +161,9 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_str += "alpha_ed = " + str(self.alpha_ed) + linesep
         LossModelBertotti_str += "alpha_ex = " + str(self.alpha_ex) + linesep
         LossModelBertotti_str += 'group = "' + str(self.group) + '"' + linesep
+        LossModelBertotti_str += (
+            "get_meshsolution = " + str(self.get_meshsolution) + linesep
+        )
         return LossModelBertotti_str
 
     def __eq__(self, other):
@@ -182,6 +189,8 @@ class LossModelBertotti(LossModel):
             return False
         if other.group != self.group:
             return False
+        if other.get_meshsolution != self.get_meshsolution:
+            return False
         return True
 
     def __sizeof__(self):
@@ -198,6 +207,7 @@ class LossModelBertotti(LossModel):
         S += getsizeof(self.alpha_ed)
         S += getsizeof(self.alpha_ex)
         S += getsizeof(self.group)
+        S += getsizeof(self.get_meshsolution)
         return S
 
     def as_dict(self):
@@ -212,6 +222,7 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_dict["alpha_ed"] = self.alpha_ed
         LossModelBertotti_dict["alpha_ex"] = self.alpha_ex
         LossModelBertotti_dict["group"] = self.group
+        LossModelBertotti_dict["get_meshsolution"] = self.get_meshsolution
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelBertotti_dict["__class__"] = "LossModelBertotti"
@@ -227,6 +238,7 @@ class LossModelBertotti(LossModel):
         self.alpha_ed = None
         self.alpha_ex = None
         self.group = None
+        self.get_meshsolution = None
         # Set to None the properties inherited from LossModel
         super(LossModelBertotti, self)._set_None()
 
@@ -353,5 +365,23 @@ class LossModelBertotti(LossModel):
         doc=u"""Name of the coressponding mesh group
 
         :Type: str
+        """,
+    )
+
+    def _get_get_meshsolution(self):
+        """getter of get_meshsolution"""
+        return self._get_meshsolution
+
+    def _set_get_meshsolution(self, value):
+        """setter of get_meshsolution"""
+        check_var("get_meshsolution", value, "bool")
+        self._get_meshsolution = value
+
+    get_meshsolution = property(
+        fget=_get_get_meshsolution,
+        fset=_set_get_meshsolution,
+        doc=u"""Store the loss density
+
+        :Type: bool
         """,
     )

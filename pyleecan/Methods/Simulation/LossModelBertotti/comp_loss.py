@@ -18,7 +18,7 @@ def _append_solution(solution, field, label=""):
 
 def _comp_loss_sum(meshsolution, L1=1, rho=7650, sym=1, logger=None):
     """
-    Compute losses sum
+    Compute the sum of the elemental losses
     """
     area = meshsolution.get_mesh().get_cell_area()
     loss_norm = meshsolution.get_field(label="LossDensSum")[0, :]
@@ -45,11 +45,9 @@ def comp_loss(self, output, lam):
     simu = output.simu
 
     # setup meshsolution and solution list
-    solution = []
     mag_meshsol = output.mag.meshsolution
     meshsolution = mag_meshsol.get_group(self.group)
-    meshsolution.solution = solution
-
+    
     # get length and material
     L1 = lam.L1
     mat_type = lam.mat_type
@@ -61,7 +59,6 @@ def comp_loss(self, output, lam):
     if success:
         # compute loss density
         LossDens = self.comp_loss_norm(mag_meshsol)
-        _append_solution(solution, LossDens, label="LossDens")
 
         # compute sum over frequencies
         axes_list = [axis.name for axis in LossDens.axes]
@@ -82,7 +79,7 @@ def comp_loss(self, output, lam):
         )
         # time = Data1D(name="time", unit="", values=array([0]), ) # TODO squeeze issue
         axes = [axis for axis in LossDens.axes if axis.name not in ["time", "freqs"]]
-        
+
         # TODO utilize periodicity or use DataFreqs to reduce memory usage
         loss_sum_ = DataTime(
             name="Losses sum",
@@ -92,8 +89,7 @@ def comp_loss(self, output, lam):
             values=tile(loss_sum, (2, 1)),
             # values=loss_sum[newaxis,:], # TODO squeeze issue
         )
-        _append_solution(solution, loss_sum_, label="LossDensSum")
-
+        
         # compute overall loss sum
         # Set the symmetry factor according to the machine
         if simu.mag.is_periodicity_a:
@@ -125,5 +121,13 @@ def comp_loss(self, output, lam):
             axes=[Time],
             values=loss_sum * ones_like(Time.values),
         )
-
-        return data, meshsolution
+        if self.get_meshsolution:
+            solution = []
+            meshsolution.solution = solution
+            _append_solution(solution, LossDens, label="LossDens")
+            _append_solution(solution, loss_sum_, label="LossDensSum")
+            return data, meshsolution
+        else:
+            return data, None
+    else:
+        return None, None

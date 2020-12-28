@@ -148,7 +148,7 @@ def comp_loss_norm(self, meshsolution):
         loss_ = HY + ED + EX
         loss = loss_ if loss is None else loss + loss_
 
-    Freq = Data1D(name="freqs", unit="", values=mag_dict["freqs"])
+    Freq = Data1D(name="freqs", unit="", values=freqs)
     axes = [Freq if x.name == "time" else x for x in component.axes]
 
     loss_data = DataFreq(
