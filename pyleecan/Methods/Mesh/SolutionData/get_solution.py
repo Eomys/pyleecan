@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 from numpy import take
+from SciDataTool import Data1D
 
 
-def get_solution(self, indices=None):
-    """Return a copy of the Solution with the option to only include specified indices.
+def get_solution(self, indice=None):
+    """Return a copy of the solution with the option to only include specified indice.
 
     Parameters
     ----------
     self : SolutionMat
         a SolutionMat object
-    indices : list
-        list of indices, if list is empty or None all indices are included
+    indice : list
+        list of indice, if list is empty or None all indice are included
 
     Returns
     -------
@@ -20,30 +21,42 @@ def get_solution(self, indices=None):
     """
     logger = self.get_logger()
 
-    field_sol = self.get_field()
-    axis_name, axis_size = self.get_axes_list()
+    # create copy to directly manipulate data
+    solution = self.copy()
 
-    if not indices:
-        indices = self.indices
-    else:
-        max_indice = max(self.indices)
-        if max_indice < max(indices):
+    if indice:
+        axes = solution.field.axes
+        axes_names = solution.get_axes_list()[0]
+        ax_idx = axes_names.index("indice")
+
+        org_indice = axes[ax_idx].get_values()
+
+        if set(indice) - set(org_indice):
             logger.warning(
-                "Given indices exceed Solution indices. Indices will be truncated."
+                "At least one input indice is not part of the solution. "
+                + "Respective indice will be skipped."
             )
-        indices = [i for i in indices if i <= max_indice]
 
-    Iindice = axis_name.index("indice")
-    axis_size[Iindice] = len(indices)
-    new_field_sol = take(field_sol, indices, axis=Iindice)
+        # skip indice that are not part of the solution
+        new_indice = [ii for ii in indice if ii in org_indice]
 
-    solution = type(self)(
-        label=self.label,
-        type_cell=self.type_cell,
-        field=new_field_sol,
-        indice=indices,
-        axis_name=axis_name,
-        axis_size=axis_size,
-    )
+        args = [name for name in axes_names]
+        args[ax_idx] += "=axis_data"
+
+        field_dict = solution.field.get_along(*args, axis_data={"indice": new_indice})
+
+        # set new indice axis
+        axes[ax_idx] = Data1D(
+            values=new_indice,
+            is_components=axes[ax_idx].is_components,
+            symmetries=axes[ax_idx].symmetries,
+            symbol=axes[ax_idx].symbol,
+            name=axes[ax_idx].name,
+            unit=axes[ax_idx].unit,
+            normalizations=axes[ax_idx].normalizations,
+        )
+
+        # set new field data
+        solution.field.values = field_dict[self.field.symbol]
 
     return solution

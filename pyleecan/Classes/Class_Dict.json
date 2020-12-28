@@ -10238,7 +10238,8 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axes_list"
+            "get_axes_list",
+            "get_solution"
         ],
         "mother": "Solution",
         "name": "SolutionData",
@@ -10328,7 +10329,8 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axes_list"
+            "get_axes_list",
+            "get_solution"
         ],
         "mother": "Solution",
         "name": "SolutionVector",
