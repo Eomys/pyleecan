@@ -27,6 +27,11 @@ try:
 except ImportError as error:
     get_axes_list = error
 
+try:
+    from ..Methods.Mesh.SolutionMat.get_solution import get_solution
+except ImportError as error:
+    get_solution = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -58,6 +63,17 @@ class SolutionMat(Solution):
         )
     else:
         get_axes_list = get_axes_list
+    # cf Methods.Mesh.SolutionMat.get_solution
+    if isinstance(get_solution, ImportError):
+        get_solution = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SolutionMat method get_solution: " + str(get_solution)
+                )
+            )
+        )
+    else:
+        get_solution = get_solution
     # save and copy methods are available in all object
     save = save
     copy = copy
