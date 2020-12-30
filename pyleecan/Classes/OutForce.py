@@ -15,6 +15,14 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Output.OutForce.store import store
+except ImportError as error:
+    store = error
+
+
 from ._check import InitUnKnowClassError
 
 
@@ -23,6 +31,15 @@ class OutForce(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Output.OutForce.store
+    if isinstance(store, ImportError):
+        store = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutForce method store: " + str(store))
+            )
+        )
+    else:
+        store = store
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -33,8 +50,9 @@ class OutForce(FrozenClass):
         self,
         Time=None,
         Angle=None,
-        P=None,
+        AGSF=None,
         logger_name="Pyleecan.OutForce",
+        Rag=None,
         init_dict=None,
         init_str=None,
     ):
@@ -57,16 +75,19 @@ class OutForce(FrozenClass):
                 Time = init_dict["Time"]
             if "Angle" in list(init_dict.keys()):
                 Angle = init_dict["Angle"]
-            if "P" in list(init_dict.keys()):
-                P = init_dict["P"]
+            if "AGSF" in list(init_dict.keys()):
+                AGSF = init_dict["AGSF"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "Rag" in list(init_dict.keys()):
+                Rag = init_dict["Rag"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
         self.Angle = Angle
-        self.P = P
+        self.AGSF = AGSF
         self.logger_name = logger_name
+        self.Rag = Rag
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -81,8 +102,9 @@ class OutForce(FrozenClass):
             OutForce_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutForce_str += "Time = " + str(self.Time) + linesep + linesep
         OutForce_str += "Angle = " + str(self.Angle) + linesep + linesep
-        OutForce_str += "P = " + str(self.P) + linesep + linesep
+        OutForce_str += "AGSF = " + str(self.AGSF) + linesep + linesep
         OutForce_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        OutForce_str += "Rag = " + str(self.Rag) + linesep
         return OutForce_str
 
     def __eq__(self, other):
@@ -94,9 +116,11 @@ class OutForce(FrozenClass):
             return False
         if other.Angle != self.Angle:
             return False
-        if other.P != self.P:
+        if other.AGSF != self.AGSF:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.Rag != self.Rag:
             return False
         return True
 
@@ -106,8 +130,9 @@ class OutForce(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.Time)
         S += getsizeof(self.Angle)
-        S += getsizeof(self.P)
+        S += getsizeof(self.AGSF)
         S += getsizeof(self.logger_name)
+        S += getsizeof(self.Rag)
         return S
 
     def as_dict(self):
@@ -122,11 +147,12 @@ class OutForce(FrozenClass):
             OutForce_dict["Angle"] = None
         else:
             OutForce_dict["Angle"] = self.Angle.as_dict()
-        if self.P is None:
-            OutForce_dict["P"] = None
+        if self.AGSF is None:
+            OutForce_dict["AGSF"] = None
         else:
-            OutForce_dict["P"] = self.P.as_dict()
+            OutForce_dict["AGSF"] = self.AGSF.as_dict()
         OutForce_dict["logger_name"] = self.logger_name
+        OutForce_dict["Rag"] = self.Rag
         # The class name is added to the dict for deserialisation purpose
         OutForce_dict["__class__"] = "OutForce"
         return OutForce_dict
@@ -136,8 +162,9 @@ class OutForce(FrozenClass):
 
         self.Time = None
         self.Angle = None
-        self.P = None
+        self.AGSF = None
         self.logger_name = None
+        self.Rag = None
 
     def _get_Time(self):
         """getter of Time"""
@@ -193,26 +220,28 @@ class OutForce(FrozenClass):
         """,
     )
 
-    def _get_P(self):
-        """getter of P"""
-        return self._P
+    def _get_AGSF(self):
+        """getter of AGSF"""
+        return self._AGSF
 
-    def _set_P(self, value):
-        """setter of P"""
+    def _set_AGSF(self, value):
+        """setter of AGSF"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("SciDataTool.Classes", value.get("__class__"), "P")
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "AGSF"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = VectorField()
-        check_var("P", value, "VectorField")
-        self._P = value
+        check_var("AGSF", value, "VectorField")
+        self._AGSF = value
 
-    P = property(
-        fget=_get_P,
-        fset=_set_P,
-        doc=u"""Air-gap surface force
+    AGSF = property(
+        fget=_get_AGSF,
+        fset=_set_AGSF,
+        doc=u"""Air Gap Surface Force (mainly computed with Maxwell stress tensor)
 
         :Type: SciDataTool.Classes.VectorField.VectorField
         """,
@@ -233,5 +262,23 @@ class OutForce(FrozenClass):
         doc=u"""Name of the logger to use
 
         :Type: str
+        """,
+    )
+
+    def _get_Rag(self):
+        """getter of Rag"""
+        return self._Rag
+
+    def _set_Rag(self, value):
+        """setter of Rag"""
+        check_var("Rag", value, "float")
+        self._Rag = value
+
+    Rag = property(
+        fget=_get_Rag,
+        fset=_set_Rag,
+        doc=u"""Radius value for air-gap computation
+
+        :Type: float
         """,
     )

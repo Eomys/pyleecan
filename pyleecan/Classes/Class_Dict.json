@@ -996,13 +996,13 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_SCIM.csv",
         "properties": [
             {
-                "desc": "Magnetic inductance",
+                "desc": "RMS current for parameter estimation",
                 "max": "",
                 "min": "",
-                "name": "indmag",
-                "type": "IndMag",
+                "name": "I",
+                "type": "float",
                 "unit": "-",
-                "value": null
+                "value": 1
             },
             {
                 "desc": "Parameters of the EEC: computed if empty, or enforced",
@@ -1014,22 +1014,58 @@
                 "value": {}
             },
             {
-                "desc": "Frequency",
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)",
                 "max": "",
                 "min": "",
-                "name": "freq0",
+                "name": "is_periodicity_a",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
+                "max": "",
+                "min": "",
+                "name": "nb_worker",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Rotor speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "float",
+                "unit": "rpm",
+                "value": null
+            },
+            {
+                "desc": "electrical frequency",
+                "max": "",
+                "min": "",
+                "name": "felec",
                 "type": "float",
                 "unit": "Hz",
                 "value": null
             },
             {
-                "desc": "Drive",
+                "desc": "Time discretization",
                 "max": "",
-                "min": "",
-                "name": "drive",
-                "type": "Drive",
+                "min": "1",
+                "name": "Nt_tot",
+                "type": "int",
                 "unit": "-",
-                "value": null
+                "value": 32
+            },
+            {
+                "desc": "Number of rotor revolution (to compute the final time)",
+                "max": "",
+                "min": "0",
+                "name": "Nrev",
+                "type": "float",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
@@ -1230,22 +1266,14 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_axes"
+            "comp_axes",
+            "comp_AGSF_transfer"
         ],
         "mother": "",
         "name": "Force",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/Force.csv",
         "properties": [
-            {
-                "desc": "1 to compute lumped tooth forces",
-                "max": "",
-                "min": "",
-                "name": "is_comp_nodal_force",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
             {
                 "desc": "True to compute only on one time periodicity (use periodicities defined in output.force.Time)",
                 "max": "",
@@ -1263,6 +1291,24 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "True to compute the AGSF transfer from air-gap to stator bore radius.",
+                "max": "",
+                "min": "",
+                "name": "is_agsf_transfer",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification)",
+                "max": "",
+                "min": "",
+                "name": "max_wavenumber_transfer",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -3653,7 +3699,8 @@
             "plot",
             "comp_number_phase_eq",
             "comp_periodicity",
-            "comp_surface_ring"
+            "comp_surface_ring",
+            "comp_resistance_wind"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -3907,6 +3954,7 @@
             "get_lam_list",
             "get_lam_list_label",
             "get_lam_by_label",
+            "get_lam_index",
             "get_pole_pair_number"
         ],
         "mother": "",
@@ -4587,6 +4635,15 @@
                 "type": "int",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "To enforce a different radius value for air-gap outputs",
+                "max": "",
+                "min": "",
+                "name": "Rag_enforced",
+                "type": "float",
+                "unit": "m",
+                "value": null
             }
         ]
     },
@@ -6497,7 +6554,9 @@
         "daughters": [],
         "desc": "Gather the structural module outputs",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "store"
+        ],
         "mother": "",
         "name": "OutForce",
         "package": "Output",
@@ -6522,10 +6581,10 @@
                 "value": "None"
             },
             {
-                "desc": "Air-gap surface force",
+                "desc": "Air Gap Surface Force (mainly computed with Maxwell stress tensor)",
                 "max": "",
                 "min": "",
-                "name": "P",
+                "name": "AGSF",
                 "type": "SciDataTool.Classes.VectorField.VectorField",
                 "unit": "N.m^2",
                 "value": "None"
@@ -6538,6 +6597,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutForce"
+            },
+            {
+                "desc": "Radius value for air-gap computation",
+                "max": "",
+                "min": "",
+                "name": "Rag",
+                "type": "float",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -6817,7 +6885,8 @@
         "methods": [
             "store",
             "clean",
-            "comp_emf"
+            "comp_emf",
+            "get_demag"
         ],
         "mother": "",
         "name": "OutMag",
@@ -6897,6 +6966,15 @@
                 "value": "None"
             },
             {
+                "desc": "Dict of lamination winding fluxlinkage DataTime objects",
+                "max": "",
+                "min": "",
+                "name": "Phi_wind",
+                "type": "{SciDataTool.Classes.DataTime.DataTime}",
+                "unit": "Wb",
+                "value": "None"
+            },
+            {
                 "desc": "Electromotive force DataTime object",
                 "max": "",
                 "min": "",
@@ -6929,6 +7007,15 @@
                 "min": "",
                 "name": "internal",
                 "type": "OutInternal",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Radius value for air-gap computation",
+                "max": "",
+                "min": "",
+                "name": "Rag",
+                "type": "float",
                 "unit": "-",
                 "value": null
             }
@@ -7644,7 +7731,9 @@
             "grad_shape_function",
             "get_real_point",
             "get_ref_point",
-            "is_inside"
+            "is_inside",
+            "get_cell_area",
+            "get_normal"
         ],
         "mother": "RefCell",
         "name": "RefTriangle3",

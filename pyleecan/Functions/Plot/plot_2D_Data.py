@@ -30,6 +30,7 @@ def plot_2D_Data(
     type_plot=None,
     fund_harm_dict=None,
     is_show_fig=None,
+    win_title=None,
 ):
     """Plots a field as a function of time
 
@@ -81,7 +82,8 @@ def plot_2D_Data(
         Dict containing axis name as key and frequency/order/wavenumber of fundamental harmonic as value to display fundamental harmonic in red in the fft
     is_show_fig : bool
         True to show figure after plot
-
+    win_title : str
+        Title of the plot window
     """
     # Extract arg_list it the function called from another script with *arg_list
     if len(arg_list) == 1 and type(arg_list[0]) == tuple:
@@ -262,7 +264,10 @@ def plot_2D_Data(
                     + unit
                     for j in range(n_curves)
                 ]
-                colors += [phase_colors[i * n_curves + j] for j in range(n_curves)]
+                colors += [
+                    phase_colors[(i * n_curves + j) % len(phase_colors)]
+                    for j in range(n_curves)
+                ]
                 linestyle_list += [line_styles[i] for j in range(n_curves)]
 
         if not is_overlay:
@@ -270,7 +275,7 @@ def plot_2D_Data(
             colors += [curve_colors[i]]
             linestyle_list += [line_styles[i]]
 
-    # Set colors_list to colors taht has just been built
+    # Set colors_list to colors that has just been built
     if color_list == []:
         color_list = colors
 
@@ -341,6 +346,7 @@ def plot_2D_Data(
             barwidth=barwidth,
             fund_harm=fund_harm,
             is_show_fig=is_show_fig,
+            win_title=win_title,
         )
 
     else:
@@ -372,4 +378,5 @@ def plot_2D_Data(
             linestyle_list=linestyle_list,
             save_path=save_path,
             is_show_fig=is_show_fig,
+            win_title=win_title,
         )

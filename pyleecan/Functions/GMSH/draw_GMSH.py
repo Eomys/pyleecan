@@ -750,7 +750,12 @@ def draw_GMSH(
     for surf in sb_list:
         nsurf += 1
         gmsh_dict.update(
-            {nsurf: {"tag": None, "label": surface_label.get(surf.label, "UNKNOWN"),}}
+            {
+                nsurf: {
+                    "tag": None,
+                    "label": surface_label.get(surf.label, "UNKNOWN"),
+                }
+            }
         )
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
@@ -826,7 +831,12 @@ def draw_GMSH(
     for surf in ab_list:
         nsurf += 1
         gmsh_dict.update(
-            {nsurf: {"tag": None, "label": surface_label.get(surf.label, "UNKNOWN"),}}
+            {
+                nsurf: {
+                    "tag": None,
+                    "label": surface_label.get(surf.label, "UNKNOWN"),
+                }
+            }
         )
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
