@@ -1,39 +1,10 @@
 # -*- coding: utf-8 -*-
-
 from numpy import array, nan, tile, newaxis, ones_like
 from SciDataTool import DataTime, DataFreq, Data1D
+from logging import getLogger
 
 from ....Classes.SolutionData import SolutionData
 from ....Functions.getattr_recursive import getattr_recursive
-
-from logging import getLogger
-
-
-def _append_solution(solution, field, label=""):
-    sol = SolutionData()
-    sol.field = field
-    sol.label = label
-    solution.append(sol)
-
-
-def _comp_loss_sum(meshsolution, L1=1, rho=7650, sym=1, logger=None):
-    """
-    Compute the sum of the elemental losses
-    """
-    area = meshsolution.get_mesh().get_cell_area()
-    loss_norm = meshsolution.get_field(label="LossDensSum")[0, :]
-
-    loss = area * loss_norm * L1 * rho * sym
-
-    mass = area.sum() * L1 * rho * sym
-
-    # Get logger
-    if logger is None:
-        logger = getLogger()
-
-    logger.debug(f"{meshsolution.label} mass = {mass} kg")
-
-    return loss.sum()
 
 
 def comp_loss(self, output, lam):
@@ -47,7 +18,7 @@ def comp_loss(self, output, lam):
     # setup meshsolution and solution list
     mag_meshsol = output.mag.meshsolution
     meshsolution = mag_meshsol.get_group(self.group)
-    
+
     # get length and material
     L1 = lam.L1
     mat_type = lam.mat_type
@@ -55,6 +26,8 @@ def comp_loss(self, output, lam):
 
     # compute needed model parameter from material data
     success = self.comp_coeff_Bertotti(mat_type)
+    if not success:
+        logger.warning('LossModelBertotti: Unable to estimate model coefficents.')
 
     if success:
         # compute loss density
@@ -72,11 +45,7 @@ def comp_loss(self, output, lam):
 
         loss_sum = LossDens.get_along(*axes_list)["LossDens"].sum(axis=freqs_idx[0])
 
-        time = Data1D(
-            name="time",
-            unit="",
-            values=array([0, 1]),
-        )
+        time = Data1D(name="time", unit="", values=array([0, 1]))
         # time = Data1D(name="time", unit="", values=array([0]), ) # TODO squeeze issue
         axes = [axis for axis in LossDens.axes if axis.name not in ["time", "freqs"]]
 
@@ -89,43 +58,29 @@ def comp_loss(self, output, lam):
             values=tile(loss_sum, (2, 1)),
             # values=loss_sum[newaxis,:], # TODO squeeze issue
         )
-        
-        # compute overall loss sum
+
         # Set the symmetry factor according to the machine
         if simu.mag.is_periodicity_a:
-            (sym, is_antiper_a, _, _) = output.get_machine_periodicity()
-            if is_antiper_a:
-                sym = sym * 2
+            sym, is_antiper_a, _, _ = output.get_machine_periodicity()
+            sym *= is_antiper_a + 1
         else:
             sym = 1
 
-        """
-        sym = 1 if not output.simu.mag.is_symmetry_a else output.simu.mag.sym_a
-        sym *= output.simu.mag.is_antiper_a + 1
-        """
-        loss_sum = _comp_loss_sum(meshsolution, L1=L1, rho=rho, sym=sym, logger=logger)
+        # compute the sum of the losses
+        area = meshsolution.get_mesh().get_cell_area()
+        t = output.simu.input.time.get_data()
+        loss_sum = (area * loss_sum * L1 * rho * sym).sum()
+        loss_sum *= ones_like(Time.values)
 
-        Time = Data1D(
-            name="time",
-            unit="s",
-            symbol="t",
-            values=output.simu.input.time.get_data(),
-            symmetries={},
-            is_components=False,
-        )
-
+        Time = Data1D(name="time", unit="s", symbol="t", values=t, is_components=False)
         data = DataTime(
-            name=self.name,
-            unit="W",
-            symbol="Loss",
-            axes=[Time],
-            values=loss_sum * ones_like(Time.values),
+            name=self.name, unit="W", symbol="Loss", axes=[Time], values=loss_sum
         )
         if self.get_meshsolution:
             solution = []
             meshsolution.solution = solution
-            _append_solution(solution, LossDens, label="LossDens")
-            _append_solution(solution, loss_sum_, label="LossDensSum")
+            solution.append(SolutionData(field=LossDens, label="LossDens"))
+            solution.append(SolutionData(field=loss_sum_, label="LossDensSum"))
             return data, meshsolution
         else:
             return data, None
