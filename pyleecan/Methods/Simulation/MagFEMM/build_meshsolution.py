@@ -42,6 +42,7 @@ def build_meshsolution(self, Nt, meshFEMM, Time, B, H, mu, groups):
             symbol="Bx",
             axes=[Time, Indices_Cell],
             values=B[:, :, 0],
+            is_real=True,
         )
         components["comp_x"] = Bx_data
 
@@ -51,6 +52,7 @@ def build_meshsolution(self, Nt, meshFEMM, Time, B, H, mu, groups):
             symbol="By",
             axes=[Time, Indices_Cell],
             values=B[:, :, 1],
+            is_real=True,
         )
         components["comp_y"] = By_data
 
@@ -61,6 +63,7 @@ def build_meshsolution(self, Nt, meshFEMM, Time, B, H, mu, groups):
                 symbol="Bz",
                 axes=[Time, Indices_Cell],
                 values=B[:, :, 2],
+                is_real=True,
             )
             components["comp_z"] = Bz_data
 
@@ -77,6 +80,7 @@ def build_meshsolution(self, Nt, meshFEMM, Time, B, H, mu, groups):
             symbol="Hx",
             axes=[Time, Indices_Cell],
             values=H[:, :, 0],
+            is_real=True,
         )
         componentsH["comp_x"] = Hx_data
 
@@ -86,6 +90,7 @@ def build_meshsolution(self, Nt, meshFEMM, Time, B, H, mu, groups):
             symbol="Hy",
             axes=[Time, Indices_Cell],
             values=H[:, :, 1],
+            is_real=True,
         )
         componentsH["comp_y"] = Hy_data
 
@@ -96,6 +101,7 @@ def build_meshsolution(self, Nt, meshFEMM, Time, B, H, mu, groups):
                 symbol="Hz",
                 axes=[Time, Indices_Cell],
                 values=H[:, :, 2],
+                is_real=True,
             )
             componentsH["comp_z"] = Hz_data
 
@@ -107,6 +113,7 @@ def build_meshsolution(self, Nt, meshFEMM, Time, B, H, mu, groups):
             symbol="\mu",
             axes=[Time, Indices_Cell],
             values=mu,
+            is_real=True,
         )
 
         sollist.append(
