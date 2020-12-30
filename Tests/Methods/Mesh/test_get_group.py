@@ -13,6 +13,7 @@ DELTA = 1e-10
 
 @pytest.mark.METHODS
 @pytest.mark.MeshSol
+# @pytest.mark.DEV
 def test_MeshMat_1group():
     """unittest for 1 group"""
 
