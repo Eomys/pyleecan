@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from SciDataTool import DataFreq, Data1D
-from numpy import newaxis, abs, sqrt
+from numpy import newaxis, abs, sqrt, stack
 
 
-def comp_loss_norm(self, meshsolution):
+def comp_loss_density(self, meshsolution):
     """
-    Compute the normalized (per kg) losses according to the following model equation:
+    Compute the losses density (per kg) according to the following model equation:
         Loss = C0*f*B^C1 + C2*(f*B)^C3 + C4*(f*B)^C4
 
     Parameters
@@ -17,7 +17,7 @@ def comp_loss_norm(self, meshsolution):
 
     Returns
     -------
-    loss_data: DataND
+    loss_density: DataND
         a DataND object of the normalized losses
     """
     # get the parameters
@@ -34,7 +34,7 @@ def comp_loss_norm(self, meshsolution):
     # TODO maybe use rad. and tan. comp. as intermediate solution
 
     # loop over field components
-    loss = None
+    HY, ED, EX = None, None, None
     for component in sol.field.components.values():
         axes_names = ["freqs" if x.name == "time" else x.name for x in component.axes]
 
@@ -45,24 +45,48 @@ def comp_loss_norm(self, meshsolution):
         # TODO better data check (axis size, ...)
         freqs = mag_dict["freqs"]
         # freqs[freqs<0] = 0 # to only regard positive freqs
-        k = 1 # 1 / sqrt(2)
+        k = 1  # 1 / sqrt(2)
         f_norm = abs(freqs[:, newaxis] / F_REF)
         B_norm = k * mag_dict[symbol] / B_REF
         # factor 1 / sqrt(2) to account for SciDataTool FFT of double sided spectrum
         # TODO is this factor also true for powers other than 2 ?
 
-        HY = Coeff[0] * f_norm * B_norm ** Coeff[1]
-        ED = Coeff[2] * (f_norm * B_norm) ** Coeff[3]
-        EX = Coeff[4] * (f_norm * B_norm) ** Coeff[5]
+        HY_ = Coeff[0] * f_norm * B_norm ** Coeff[1]
+        ED_ = Coeff[2] * (f_norm * B_norm) ** Coeff[3]
+        EX_ = Coeff[4] * (f_norm * B_norm) ** Coeff[5]
 
-        loss_ = HY + ED + EX
-        loss = loss_ if loss is None else loss + loss_
+        HY = HY_ if HY is None else HY + HY_
+        ED = ED_ if ED is None else ED + ED_
+        EX = EX_ if EX is None else EX + EX_
 
+    loss = HY + ED + EX
+
+    # setup loss density data
     Freq = Data1D(name="freqs", unit="", values=freqs)
     axes = [Freq if x.name == "time" else x for x in component.axes]
 
-    loss_data = DataFreq(
-        name="Loss Density", unit="T", symbol="LossDens", axes=axes, values=loss
+    loss_density = DataFreq(
+        name="Loss Density", unit="W/kg", symbol="LossDens", axes=axes, values=loss
     )
-    print(freqs)
-    return loss_data
+
+    # setup loss density components data
+    Comps = Data1D(
+        name="Components",
+        unit="W/kg",
+        values=["Hysteresis", "Eddy", "Excess"],
+        is_components=True,
+    )
+    axes = [axis.copy() for axis in axes]
+    axes.append(Comps)
+
+    comps_data = stack([HY, ED, EX], axis=len(axes) - 1)
+
+    loss_density_comps = DataFreq(
+        name="Loss Density Components",
+        unit="W/kg",
+        symbol="LossDensComps",
+        axes=axes,
+        values=comps_data,
+    )
+
+    return loss_density, loss_density_comps

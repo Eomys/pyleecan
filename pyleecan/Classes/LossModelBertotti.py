@@ -30,9 +30,11 @@ except ImportError as error:
     comp_coeff_Bertotti = error
 
 try:
-    from ..Methods.Simulation.LossModelBertotti.comp_loss_norm import comp_loss_norm
+    from ..Methods.Simulation.LossModelBertotti.comp_loss_density import (
+        comp_loss_density,
+    )
 except ImportError as error:
-    comp_loss_norm = error
+    comp_loss_density = error
 
 
 from ._check import InitUnKnowClassError
@@ -69,18 +71,18 @@ class LossModelBertotti(LossModel):
         )
     else:
         comp_coeff_Bertotti = comp_coeff_Bertotti
-    # cf Methods.Simulation.LossModelBertotti.comp_loss_norm
-    if isinstance(comp_loss_norm, ImportError):
-        comp_loss_norm = property(
+    # cf Methods.Simulation.LossModelBertotti.comp_loss_density
+    if isinstance(comp_loss_density, ImportError):
+        comp_loss_density = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LossModelBertotti method comp_loss_norm: "
-                    + str(comp_loss_norm)
+                    "Can't use LossModelBertotti method comp_loss_density: "
+                    + str(comp_loss_density)
                 )
             )
         )
     else:
-        comp_loss_norm = comp_loss_norm
+        comp_loss_density = comp_loss_density
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -97,6 +99,7 @@ class LossModelBertotti(LossModel):
         alpha_ex=None,
         group=None,
         get_meshsolution=False,
+        N0=-1,
         name="",
         init_dict=None,
         init_str=None,
@@ -132,6 +135,8 @@ class LossModelBertotti(LossModel):
                 group = init_dict["group"]
             if "get_meshsolution" in list(init_dict.keys()):
                 get_meshsolution = init_dict["get_meshsolution"]
+            if "N0" in list(init_dict.keys()):
+                N0 = init_dict["N0"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
         # Set the properties (value check and convertion are done in setter)
@@ -143,6 +148,7 @@ class LossModelBertotti(LossModel):
         self.alpha_ex = alpha_ex
         self.group = group
         self.get_meshsolution = get_meshsolution
+        self.N0 = N0
         # Call LossModel init
         super(LossModelBertotti, self).__init__(name=name)
         # The class is frozen (in LossModel init), for now it's impossible to
@@ -163,6 +169,9 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_str += 'group = "' + str(self.group) + '"' + linesep
         LossModelBertotti_str += (
             "get_meshsolution = " + str(self.get_meshsolution) + linesep
+        )
+        LossModelBertotti_str += (
+            "N0 = " + linesep + str(self.N0).replace(linesep, linesep + "\t") + linesep
         )
         return LossModelBertotti_str
 
@@ -191,6 +200,8 @@ class LossModelBertotti(LossModel):
             return False
         if other.get_meshsolution != self.get_meshsolution:
             return False
+        if other.N0 != self.N0:
+            return False
         return True
 
     def __sizeof__(self):
@@ -208,6 +219,9 @@ class LossModelBertotti(LossModel):
         S += getsizeof(self.alpha_ex)
         S += getsizeof(self.group)
         S += getsizeof(self.get_meshsolution)
+        if self.N0 is not None:
+            for value in self.N0:
+                S += getsizeof(value)
         return S
 
     def as_dict(self):
@@ -223,6 +237,7 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_dict["alpha_ex"] = self.alpha_ex
         LossModelBertotti_dict["group"] = self.group
         LossModelBertotti_dict["get_meshsolution"] = self.get_meshsolution
+        LossModelBertotti_dict["N0"] = self.N0.copy() if self.N0 is not None else None
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelBertotti_dict["__class__"] = "LossModelBertotti"
@@ -239,6 +254,7 @@ class LossModelBertotti(LossModel):
         self.alpha_ex = None
         self.group = None
         self.get_meshsolution = None
+        self.N0 = None
         # Set to None the properties inherited from LossModel
         super(LossModelBertotti, self)._set_None()
 
@@ -383,5 +399,25 @@ class LossModelBertotti(LossModel):
         doc=u"""Store the loss density
 
         :Type: bool
+        """,
+    )
+
+    def _get_N0(self):
+        """getter of N0"""
+        return self._N0
+
+    def _set_N0(self, value):
+        """setter of N0"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("N0", value, "list")
+        self._N0 = value
+
+    N0 = property(
+        fget=_get_N0,
+        fset=_set_N0,
+        doc=u"""List of rotor speeds to override actual speed
+
+        :Type: list
         """,
     )

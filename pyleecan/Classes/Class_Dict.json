@@ -4092,7 +4092,7 @@
         "methods": [
             "comp_loss",
             "comp_coeff_Bertotti",
-            "comp_loss_norm"
+            "comp_loss_density"
         ],
         "mother": "LossModel",
         "name": "LossModelBertotti",
@@ -4170,6 +4170,15 @@
                 "type": "bool",
                 "unit": "-",
                 "value": false
+            },
+            {
+                "desc": "List of rotor speeds to override actual speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "list",
+                "unit": "rpm",
+                "value": []
             }
         ]
     },
