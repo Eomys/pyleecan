@@ -45,7 +45,7 @@ def comp_loss_norm(self, meshsolution):
         # TODO better data check (axis size, ...)
         freqs = mag_dict["freqs"]
         # freqs[freqs<0] = 0 # to only regard positive freqs
-        k = 1 / sqrt(2)
+        k = 1 # 1 / sqrt(2)
         f_norm = abs(freqs[:, newaxis] / F_REF)
         B_norm = k * mag_dict[symbol] / B_REF
         # factor 1 / sqrt(2) to account for SciDataTool FFT of double sided spectrum
@@ -64,5 +64,5 @@ def comp_loss_norm(self, meshsolution):
     loss_data = DataFreq(
         name="Loss Density", unit="T", symbol="LossDens", axes=axes, values=loss
     )
-
+    print(freqs)
     return loss_data
