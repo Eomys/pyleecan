@@ -4,7 +4,6 @@ from SciDataTool import DataTime, DataFreq, Data1D
 from logging import getLogger
 
 from ....Classes.SolutionData import SolutionData
-from ....Functions.getattr_recursive import getattr_recursive
 
 
 def comp_loss(self, output, lam):
@@ -27,7 +26,7 @@ def comp_loss(self, output, lam):
     # compute needed model parameter from material data
     success = self.comp_coeff_Bertotti(mat_type)
     if not success:
-        logger.warning('LossModelBertotti: Unable to estimate model coefficents.')
+        logger.warning("LossModelBertotti: Unable to estimate model coefficents.")
 
     if success:
         # compute loss density
@@ -69,10 +68,10 @@ def comp_loss(self, output, lam):
         # compute the sum of the losses
         area = meshsolution.get_mesh().get_cell_area()
         t = output.simu.input.time.get_data()
+        Time = Data1D(name="time", unit="s", symbol="t", values=t, is_components=False)
+
         loss_sum = (area * loss_sum * L1 * rho * sym).sum()
         loss_sum *= ones_like(Time.values)
-
-        Time = Data1D(name="time", unit="s", symbol="t", values=t, is_components=False)
         data = DataTime(
             name=self.name, unit="W", symbol="Loss", axes=[Time], values=loss_sum
         )
