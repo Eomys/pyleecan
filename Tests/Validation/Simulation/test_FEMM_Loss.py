@@ -90,7 +90,7 @@ def test_FEMM_Loss():
     myIronLoss.alpha_ex = 1.5
     myIronLoss.group = "stator core"  # this is the FEMM group name
     myIronLoss.get_meshsolution = True  # to store loss density
-    myIronLoss.N0 = [4000, 6000]  # to store loss density
+    myIronLoss.N0 = [4000, 6000]  # list of speed to override actual speed
 
     # rotor
     simu.loss.iron["Rotor"] = [myIronLoss.copy()]
