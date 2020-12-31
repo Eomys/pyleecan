@@ -1,10 +1,7 @@
 from os import makedirs
 from os.path import join
 import pytest
-import sys
-from shutil import copyfile
 
-import matplotlib.pyplot as plt
 from numpy import array, linspace, ones, pi, zeros, sqrt, cos
 
 
@@ -118,16 +115,6 @@ def test_Elmer():
     out.mag.meshsolution.plot_contour(label="A")
     out.mag.meshsolution.plot_contour(label="J")
     return out
-
-    # FEMM files (mesh and results) are available in Results folder
-    # copyfile(
-    #     join(out.path_result, "Femm", "fig_09_FEMM_sym_model.ans"),
-    #     join(save_path, "fig_09_FEMM_sym_model.ans"),
-    # )
-    # copyfile(
-    #     join(out.path_result, "Femm", "fig_09_FEMM_sym_model.fem"),
-    #     join(save_path, "fig_09_FEMM_sym_model.fem"),
-    # )
 
 
 if __name__ == "__main__":

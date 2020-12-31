@@ -817,8 +817,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     Bt = zeros((Nt, Na))
     Bz = zeros((Nt, Na))
     Tem = tq * sym * L1
-    print(Nt)
-    print(Tem)
+
     # Phi_wind_stator = zeros((Nt, qs))
 
     # compute the data for each time step
