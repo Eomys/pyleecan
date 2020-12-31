@@ -1,21 +1,12 @@
 from os import makedirs
 from os.path import join
 import pytest
-
 from numpy import array, linspace, ones, pi, zeros, sqrt, cos
-
-
 from Tests import save_plot_path
-
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagElmer import MagElmer
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
-
-
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-
-
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 

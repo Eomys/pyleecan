@@ -801,6 +801,8 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     # im: inertial moment
     # tq: group 1 torque
 
+    # TODO Load Air gap flux density
+
     # FEM_dict = output.mag.FEM_dict
     #
     if (
