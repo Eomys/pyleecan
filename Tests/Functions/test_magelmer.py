@@ -5,7 +5,7 @@ import sys
 from shutil import copyfile
 
 import matplotlib.pyplot as plt
-from numpy import array, linspace, ones, pi, zeros, sqrt
+from numpy import array, linspace, ones, pi, zeros, sqrt, cos
 
 
 from Tests import save_plot_path
@@ -76,17 +76,29 @@ def test_Elmer():
     simu.input = InputCurrent()
     #simu.input.Id_ref = 0  # [A]
     #simu.input.Iq_ref = 250  # [A]
-    simu.input.Nt_tot = 2 * 8    # Number of time step
-    simu.input.Na_tot = 252 * 8  # Spatial discretization
-    simu.input.N0 = 1000  # Rotor speed [rpm]
-    simu.input.set_Id_Iq(I0=250/sqrt(2), Phi0=140*pi/180)
+    #simu.input.Nt_tot = 32 * 8    # Number of time step
+    #simu.input.Na_tot = 2048     # Spatial discretization
+    simu.input.N0 = 2000  # Rotor speed [rpm]
+    p = IPMSM_A.stator.winding.p
+    time = linspace(0, 60/simu.input.N0, num=32*p, endpoint=False)
+    simu.input.time = time
+    simu.input.angle = linspace(0, 2*pi, num=2048, endpoint=False)
+    I0 = 250
+    felec = p * simu.input.N0 / 60
+    rot_dir = simu.machine.stator.comp_rot_dir()
+    Phi0 = 140*pi/180
+    Ia = I0 * cos(2 * pi * felec * time + 0 * rot_dir * 2 * pi / 3 + Phi0)
+    Ib = I0 * cos(2 * pi * felec * time + 1 * rot_dir * 2 * pi / 3 + Phi0)
+    Ic = I0 * cos(2 * pi * felec * time + 2 * rot_dir * 2 * pi / 3 + Phi0)
+    #simu.input.set_Id_Iq(I0=250/sqrt(2), Phi0=140*pi/180)
+    simu.input.Is = array([Ia, Ib, Ic]).transpose()
 
 
     # Definition of the magnetic simulation
     # 2 sym + antiperiodicity = 1/4 Lamination
     simu.mag = MagElmer(
-        type_BH_stator=2,
-        type_BH_rotor=2,
+        type_BH_stator=0,
+        type_BH_rotor=0,
         is_periodicity_a=True,
         is_periodicity_t=True,
         FEA_dict=mesh_dict,

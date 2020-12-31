@@ -111,7 +111,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     elmer_sim_file = join(project_name, "pyleecan_elmer.sif")
     pp = machine.stator.winding.p
     wind_mat = machine.stator.winding.comp_connection_mat(machine.stator.slot.Zs)
-    surf_wire = machine.stator.winding.conductor.comp_surface()
+    surf_wind = machine.stator.slot.comp_surface_wind()
     ror = machine.rotor.comp_radius_mec()
     sir = machine.stator.comp_radius_mec()
     with open(elmer_sim_file, 'wt') as fo:
@@ -316,7 +316,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         fo.write("$ Cp = {0}                ! Parallel paths\n".format(Cp))
         fo.write("$ Is = {0}                ! Stator current [A]\n".format(0.0))
         fo.write("$ Aaxis = {0}             ! Axis Coil A [deg]\n".format(0.0))
-        fo.write("$ Carea = {0}             ! Coil Side Conductor Area [m2]\n".format(surf_wire))
+        fo.write("$ Carea = {0}             ! Coil Side Conductor Area [m2]\n".format(surf_wind))
 
         for mm in range(1, No_Magnets + 1):
             fo.write("$ Mangle{0} = {1}     ! Magnetization Angle [deg]\n".format(mm,
@@ -527,7 +527,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                  "\t\tReal\n"
                  "\t\t0.0\t\t0.0\n")
         for tt in range(1, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Ncond_Aplus*Is[0, tt-1]/surf_wire))
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Ncond_Aplus*Is[0, tt-1]/surf_wind))
         fo.write("\tEnd\n"
                  "End\n")
 
@@ -537,7 +537,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                  "\t\tReal\n"
                  "\t\t0.0\t\t0.0\n")
         for tt in range(1, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Ncond_Aminus*Is[0, tt-1]/surf_wire))
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Ncond_Aminus*Is[0, tt-1]/surf_wind))
         fo.write("\tEnd\n"
                  "End\n")
 
@@ -547,7 +547,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                  "\t\tReal\n"
                  "\t\t0.0\t\t0.0\n")
         for tt in range(1, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Ncond_Bplus*Is[1, tt-1]/surf_wire))
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Ncond_Bplus*Is[1, tt-1]/surf_wind))
         fo.write("\tEnd\n"
                  "End\n")
 
@@ -557,7 +557,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                  "\t\tReal\n"
                  "\t\t0.0\t\t0.0\n")
         for tt in range(1, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Ncond_Bminus*Is[1, tt-1]/surf_wire))
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Ncond_Bminus*Is[1, tt-1]/surf_wind))
         fo.write("\tEnd\n"
                  "End\n")
 
@@ -567,7 +567,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                  "\t\tReal\n"
                  "\t\t0.0\t\t0.0\n")
         for tt in range(1, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Ncond_Cplus*Is[2, tt-1]/surf_wire))
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Ncond_Cplus*Is[2, tt-1]/surf_wind))
         fo.write("\tEnd\n"
                  "End\n")
 
@@ -577,7 +577,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                  "\t\tReal\n"
                  "\t\t0.0\t\t0.0\n")
         for tt in range(1, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Ncond_Cminus*Is[2, tt-1]/surf_wire))
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Ncond_Cminus*Is[2, tt-1]/surf_wind))
         fo.write("\tEnd\n"
                  "End\n")
 
