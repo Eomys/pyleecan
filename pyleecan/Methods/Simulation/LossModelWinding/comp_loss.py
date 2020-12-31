@@ -8,8 +8,6 @@ from ....Functions.getattr_recursive import getattr_recursive
 
 from logging import getLogger
 
-# TODO add the possibility to compute single (or group of) phase losses
-
 
 def comp_loss(self, output, lam):
     """Compute the Losses"""
@@ -23,28 +21,19 @@ def comp_loss(self, output, lam):
     if hasattr(lam, "winding") and lam.winding is not None:
         R = lam.comp_resistance_wind(T=self.temperature)
         if lam.is_stator:
-            I = output.elec.get_Is()
-            name = "Is"  # TODO extract the data name instead
+            current = output.elec.get_Is()
         else:
-            I = output.elec.get_Ir()
-            name = "Ir"  # TODO extract the data name instead
+            current = output.elec.get_Ir()
 
-        data_dict = I.get_along("time")
-        Time = Data1D(
-            name="time",
-            unit="s",
-            symbol="t",
-            values=data_dict["time"],
-            symmetries={},
-            is_components=False,
-        )
+        axes_names = [axis.name for axis in current.axes]
+        data_dict = current.get_along(*axes_names)
 
         data = DataTime(
             name=self.name,
             unit="W",
             symbol="Loss",
-            axes=[Time],
-            values=lam.winding.qs * R * data_dict[name] ** 2,
+            axes=current.axes,
+            values=R * data_dict[current.symbol] ** 2,
         )
 
         return data, None

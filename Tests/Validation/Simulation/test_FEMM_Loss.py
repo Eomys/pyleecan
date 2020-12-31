@@ -48,6 +48,7 @@ def test_FEMM_Loss():
     # readability
     machine = load(join(DATA_DIR, "Machine", "SPMSM_020.json"))
     machine.stator.winding.is_reverse_wind = True
+    qs = machine.stator.winding.qs
     simu = Simu1(name="FEMM_IronLoss", machine=machine)
 
     # Definition of the enforced output of the electrical module
@@ -88,6 +89,8 @@ def test_FEMM_Loss():
     myIronLoss.k_ex = 0
     myIronLoss.alpha_ex = 1.5
     myIronLoss.group = "stator core"  # this is the FEMM group name
+    myIronLoss.get_meshsolution = True  # to store loss density
+    myIronLoss.N0 = [4000, 6000]  # to store loss density
 
     # rotor
     simu.loss.iron["Rotor"] = [myIronLoss.copy()]
@@ -121,19 +124,18 @@ def test_FEMM_Loss():
     loss_rotor_iron = loss.get_loss(loss_type="Iron", label="Rotor", index=0)
     loss_stator_wind = loss.get_loss(loss_type="Winding", label="Stator", index=0)
 
-    # TODO use get_along to ensure time values
-    loss_stator_iron = loss_stator_iron.get_field([]).mean()
-    loss_rotor_iron = loss_rotor_iron.get_field([]).mean()
+    loss_st_iron = loss_stator_iron.get_along("Speed=4000", "time")["Loss"].mean()
+    loss_st_wdg = loss_stator_wind.get_along("time", "phase")["Loss"].mean()
 
     print(f"mechanical power = {P_mech} W")
-    print(f"stator iron loss = {loss_stator_iron} W")
+    print(f"stator iron loss = {loss_st_iron} W")
     print(f"rotor iron loss = {loss_rotor_iron} W")
-    print(f"stator winding loss = {loss_stator_wind.get_field([]).mean()} W")
+    print(f"stator winding loss = {qs*loss_st_wdg} W")
 
     delta = 5 / 100  # arbitary allowed relative difference
 
     assert mshsol is not None
-    assert (abs(loss_stator_iron - stator_core_loss) / stator_core_loss) <= delta
+    assert (abs(loss_st_iron - stator_core_loss) / stator_core_loss) <= delta
     # rotor loss is disregarded since absolute value seems to be too small
     # assert abs(loss_rotor_iron - rotor_core_loss)/rotor_core_loss <= delta
     assert loss_stator_wind is not None
