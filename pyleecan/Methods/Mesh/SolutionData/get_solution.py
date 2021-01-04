@@ -8,8 +8,8 @@ def get_solution(self, indice=None):
 
     Parameters
     ----------
-    self : SolutionMat
-        a SolutionMat object
+    self : SolutionData
+        a SolutionData object
     indice : list
         list of indice, if list is empty or None all indice are included
 
