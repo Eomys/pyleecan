@@ -19,6 +19,7 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
+# @pytest.mark.DEV
 def test_FEMM_parallelization_mag():
     """test parallelization of FEMM to get B, Tem, PhiWind """
 
@@ -56,7 +57,14 @@ def test_FEMM_parallelization_mag():
             time1, simu2.mag.nb_worker, time2
         )
     )
-    # Plot the result by comparing the two simulation
+
+    # simlation with Nt_tot < nb_worker
+    simu3 = simu.copy()
+    simu3.mag.nb_worker = 8
+    simu3.input.Nt_tot = 4
+    simu3.run()
+
+    # Plot the result by comparing the first two simulation
     out.plot_2D_Data(
         "mag.B",
         "angle",

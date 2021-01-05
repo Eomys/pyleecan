@@ -102,7 +102,7 @@ def test_PostPlot():
 
     plot_P_radial_space_svg = PostPlot(
         method="plot_2D_Data",
-        param_list=["force.P", "angle"],
+        param_list=["force.AGSF", "angle"],
         param_dict={
             "component_list": ["radial"],
             "is_show_fig": False,

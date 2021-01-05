@@ -144,7 +144,9 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
         groups["stator_windings"] = mesh.cell["triangle"].indice[
             np.where(listElem0[:, 6] == GROUP_SW)[0]
         ]
-
+        groups["magnets"] = mesh.cell["triangle"].indice[
+            np.where(listElem0[:, 6] == GROUP_RW)[0]
+        ]
         # If necessary, other groups can be defined here
 
     else:

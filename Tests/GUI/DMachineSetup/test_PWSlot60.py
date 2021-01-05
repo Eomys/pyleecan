@@ -154,7 +154,7 @@ class TestPWSlot60(object):
             W3=2e-3,
         )
         setup["widget"] = PWSlot60(setup["test_obj"])
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot60 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set W1 !"
         setup["test_obj"].slot = SlotW60(
             W1=25e-3,
             W2=None,
@@ -165,7 +165,7 @@ class TestPWSlot60(object):
             H4=1e-3,
             W3=2e-3,
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot60 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set W2 !"
         setup["test_obj"].slot = SlotW60(
             W1=25e-3,
             W2=12.5e-3,
@@ -176,7 +176,7 @@ class TestPWSlot60(object):
             H4=1e-3,
             W3=2e-3,
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot60 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H1 !"
         setup["test_obj"].slot = SlotW60(
             W1=25e-3,
             W2=12.5e-3,
@@ -187,7 +187,7 @@ class TestPWSlot60(object):
             H4=1e-3,
             W3=2e-3,
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot60 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H2 !"
         setup["test_obj"].slot = SlotW60(
             W1=25e-3,
             W2=12.5e-3,
@@ -198,7 +198,7 @@ class TestPWSlot60(object):
             H4=1e-3,
             W3=2e-3,
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot60 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set R1 !"
         setup["test_obj"].slot = SlotW60(
             W1=25e-3,
             W2=12.5e-3,
@@ -209,7 +209,7 @@ class TestPWSlot60(object):
             H4=1e-3,
             W3=2e-3,
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot60 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H3 !"
         setup["test_obj"].slot = SlotW60(
             W1=25e-3,
             W2=12.5e-3,
@@ -220,7 +220,7 @@ class TestPWSlot60(object):
             H4=None,
             W3=2e-3,
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot60 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set H4 !"
         setup["test_obj"].slot = SlotW60(
             W1=25e-3,
             W2=12.5e-3,
@@ -231,7 +231,7 @@ class TestPWSlot60(object):
             H4=1e-3,
             W3=None,
         )
-        assert setup["widget"].check(setup["test_obj"]) == "PWSlot60 check"
+        assert setup["widget"].check(setup["test_obj"]) == "You must set W3 !"
 
         setup["test_obj"].slot = SlotW60(
             W1=25e-3,
@@ -243,4 +243,7 @@ class TestPWSlot60(object):
             H4=1e-3,
             W3=0.0000000005,
         )
-        assert setup["widget"].check(setup["test_obj"]) == "SWSlot_60 check"
+        assert (
+            setup["widget"].check(setup["test_obj"])
+            == "The slot height is greater than the lamination !"
+        )

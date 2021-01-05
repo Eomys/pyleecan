@@ -37,7 +37,7 @@ def convert(self, meshtype, scale):
     elif meshtype == "MeshMat":
         new_mesh = MeshMat(dimension=self.dimension)
 
-        connect_all = self.get_cell()
+        connect_all = self.get_cell()[0]
         point = array(self.get_point())
         nb_pt = point.shape[0]
 
@@ -64,6 +64,18 @@ def convert(self, meshtype, scale):
                 interp.ref_cell = RefSegmentP1()
                 interp.scalar_product = ScalarProductL2()
                 new_mesh.cell["line"].interpolation = interp
+            elif key == "line3":
+                new_mesh.cell["line3"] = CellMat(
+                    nb_pt_per_cell=3,
+                    connectivity=connect,
+                    nb_cell=nb_cell,
+                    indice=indices,
+                )
+                interp = Interpolation()
+                interp.gauss_point = None  # TODO
+                interp.ref_cell = None  # TODO
+                interp.scalar_product = None  # TODO
+                new_mesh.cell["line3"].interpolation = interp
             elif key == "triangle3":
                 new_mesh.cell["triangle"] = CellMat(
                     nb_pt_per_cell=3,
@@ -76,5 +88,17 @@ def convert(self, meshtype, scale):
                 interp.ref_cell = RefTriangle3()
                 interp.scalar_product = ScalarProductL2()
                 new_mesh.cell["triangle"].interpolation = interp
+            elif key == "quad9":
+                new_mesh.cell["quad9"] = CellMat(
+                    nb_pt_per_cell=9,
+                    connectivity=connect,
+                    nb_cell=nb_cell,
+                    indice=indices,
+                )
+                interp = Interpolation()
+                interp.gauss_point = None  # TODO
+                interp.ref_cell = None  # TODO
+                interp.scalar_product = None  # TODO
+                new_mesh.cell["quad9"].interpolation = interp
 
     return new_mesh

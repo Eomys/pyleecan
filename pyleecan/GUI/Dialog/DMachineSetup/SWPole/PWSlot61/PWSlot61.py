@@ -288,23 +288,23 @@ class PWSlot61(Gen_PWSlot61, QWidget):
         """
         # Check that everything is set
         if lam.slot.W0 is None:
-            return translate("You must set W0 !", "SWSlot_61 check")
+            return "You must set W0 !"
         elif lam.slot.W1 is None:
-            return translate("You must set W1 !", "SWSlot_61 check")
+            return "You must set W1 !"
         elif lam.slot.W2 is None:
-            return translate("You must set W2 !", "SWSlot_61 check")
+            return "You must set W2 !"
         elif lam.slot.H0 is None:
-            return translate("You must set H0 !", "SWSlot_61 check")
+            return "You must set H0 !"
         elif lam.slot.H1 is None:
-            return translate("You must set H1 !", "SWSlot_61 check")
+            return "You must set H1 !"
         elif lam.slot.H2 is None:
-            return translate("You must set H2 !", "SWSlot_61 check")
+            return "You must set H2 !"
         elif lam.slot.W3 is None:
-            return translate("You must set W3 !", "SWSlot_61 check")
+            return "You must set W3 !"
         elif lam.slot.H3 is None:
-            return translate("You must set H3 !", "SWSlot_61 check")
+            return "You must set H3 !"
         elif lam.slot.H4 is None:
-            return translate("You must set H4 !", "SWSlot_61 check")
+            return "You must set H4 !"
 
         # Constraints
         try:
@@ -316,10 +316,6 @@ class PWSlot61(Gen_PWSlot61, QWidget):
         try:
             yoke_height = lam.comp_height_yoke()
         except Exception as error:
-            return translate("Unable to compute yoke height:", "SWSlot_61 check") + str(
-                error
-            )
+            return "Unable to compute yoke height:" + str(error)
         if yoke_height <= 0:
-            return translate(
-                "The slot height is greater than the lamination !", "SWSlot_61 check"
-            )
+            return "The slot height is greater than the lamination !"

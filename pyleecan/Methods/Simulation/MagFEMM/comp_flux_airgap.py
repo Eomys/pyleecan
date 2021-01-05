@@ -32,6 +32,8 @@ def comp_flux_airgap(self, output, axes_dict):
                 Electromagnetic torque over time (Nt,) [Nm]
             Phi_wind_stator : ndarray
                 Stator winding flux (qs,Nt) [Wb]
+            Phi_wind : dict
+                Dict of winding fluxlinkage with respect to Machine.get_lam_list_label (qs,Nt) [Wb]
             meshsolution: MeshSolution
                 MeshSolution object containing magnetic quantities B, H, mu for each time step
     """
@@ -118,16 +120,22 @@ def comp_flux_airgap(self, output, axes_dict):
     out_dict["Bt"] = zeros((Nt, Na))
     # Init torque array in out_dict
     out_dict["Tem"] = zeros((Nt))
-    # Init stator winding flux array in out_dict
-    if (
-        hasattr(output.simu.machine.stator, "winding")
-        and output.simu.machine.stator.winding is not None
-    ):
-        qs = output.simu.machine.stator.winding.qs  # Winding phase number
-        out_dict["Phi_wind_stator"] = zeros((Nt, qs))
+    # Init lamination winding flux list of arrays in out_dict
+    machine = output.simu.machine
+    out_dict["Phi_wind"] = {}
+    for label, lam in zip(machine.get_lam_list_label(), machine.get_lam_list()):
+        if hasattr(lam, "winding") and lam.winding is not None:
+            qs = lam.winding.qs  # Winding phase number
+            out_dict["Phi_wind"][label] = zeros((Nt, qs))
+    # delete 'Phi_wind' if empty
+    if not out_dict["Phi_wind"]:
+        out_dict.pop("Phi_wind")
 
     # Solve for all time step and store all the results in out_dict
     if self.nb_worker > 1:
+        # A Femm handler will be created for each worker
+        femm.closefemm()
+        output.mag.internal.handler_list.remove(femm)
         # With parallelization
         B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM_parallel(
             femm,
@@ -173,5 +181,9 @@ def comp_flux_airgap(self, output, axes_dict):
             save_path = output.get_path_result()
             save_path_fea = join(save_path, "MeshSolutionFEMM.h5")
             out_dict["meshsolution"].save(save_path_fea)
+
+    # Store stator winding flux
+    if "Stator_0" in out_dict["Phi_wind"].keys():
+        out_dict["Phi_wind_stator"] = out_dict["Phi_wind"]["Stator_0"]
 
     return out_dict
