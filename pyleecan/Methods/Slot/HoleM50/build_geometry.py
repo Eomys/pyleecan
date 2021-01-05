@@ -98,8 +98,8 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list = list()
     curve_list.append(Segment(Z1, Z2, label=""))
     curve_list.append(Segment(Z2, Z3, label=""))
-    curve_list.append(Segment(Z3, Z8c, label="Hole_0_Right"))
-    curve_list.append(Segment(Z8c, Z9, label="Hole_0_Top"))
+    curve_list.append(Segment(Z3, Z8c, label="Rotor_Hole_0_Right"))
+    curve_list.append(Segment(Z8c, Z9, label="Rotor_Hole_0_Top"))
     if self.H4 > 0:
         curve_list.append(Segment(Z9, Z10, label=""))
     curve_list.append(
@@ -108,13 +108,13 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
             Z11,
             -Rext + self.H1,
             is_trigo_direction=False,
-            label="Tangential_Bridge",
+            label="Rotor_Tangential_Bridge",
         )
     )
     if self.H4 > 0:
         curve_list.append(Segment(Z11, Z1, label=""))
     point_ref = (Z1 + Z2 + Z3 + Z8c + Z9 + Z10 + Z11) / 7
-    S1 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
+    S1 = SurfLine(line_list=curve_list, label="Rotor_Hole" + st, point_ref=point_ref)
 
     # Magnet_0 surface
     curve_list = list()
@@ -123,13 +123,13 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list.append(Segment(Z6, Z8b, label=""))
     else:
         if Z3 != Z4:  # Z3 == Z4 if H2 = 0
-            curve_list.append(Segment(Z3, Z4, label="Magnet_0_Right"))
-        curve_list.append(Segment(Z4, Z5, label="Magnet_0_Bottom"))
+            curve_list.append(Segment(Z3, Z4, label="Rotor_Magnet_0_Right"))
+        curve_list.append(Segment(Z4, Z5, label="Rotor_Magnet_0_Bottom"))
         if Z5 != Z6:  # Z5 == Z6 if H2 = 0
-            curve_list.append(Segment(Z5, Z6, label="Magnet_0_Left"))
-        curve_list.append(Segment(Z6, Z8b, label="Magnet_0_Left"))
-        curve_list.append(Segment(Z8b, Z8c, label="Magnet_0_Top"))
-        curve_list.append(Segment(Z8c, Z3, label="Magnet_0_Right"))
+            curve_list.append(Segment(Z5, Z6, label="Rotor_Magnet_0_Left"))
+        curve_list.append(Segment(Z6, Z8b, label="Rotor_Magnet_0_Left"))
+        curve_list.append(Segment(Z8b, Z8c, label="Rotor_Magnet_0_Top"))
+        curve_list.append(Segment(Z8c, Z3, label="Rotor_Magnet_0_Right"))
     point_ref = (Z3 + Z4 + Z5 + Z6 + Z8b + Z8c) / 6
 
     # Defining type of magnetization of the magnet
@@ -146,10 +146,10 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # Air surface with magnet_0 and W1 > 0
     curve_list = list()
     curve_list.append(Segment(Z6, Z7, label=""))
-    curve_list.append(Segment(Z7, Z8, label="Radial_Bridge"))
+    curve_list.append(Segment(Z7, Z8, label="Rotor_Radial_Bridge"))
     if self.W2 > 0:  # if W2=0 Z8 = Z8b
         curve_list.append(Segment(Z8, Z8b, label=""))
-    curve_list.append(Segment(Z8b, Z6, label="Hole_0_Left"))
+    curve_list.append(Segment(Z8b, Z6, label="Rotor_Hole_0_Left"))
     point_ref = (Z6 + Z7 + Z8 + Z8b) / 4
 
     S3 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
@@ -158,8 +158,8 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list = list()
     curve_list.append(Segment(Z1s, Z2s, label=""))
     curve_list.append(Segment(Z2s, Z3s, label=""))
-    curve_list.append(Segment(Z3s, Z8cs, label="Hole_1_Left"))
-    curve_list.append(Segment(Z8cs, Z9s, label="Hole_1_Top"))
+    curve_list.append(Segment(Z3s, Z8cs, label="Rotor_Hole_1_Left"))
+    curve_list.append(Segment(Z8cs, Z9s, label="Rotor_Hole_1_Top"))
     if self.H4 > 0:
         curve_list.append(Segment(Z9s, Z10s, label=""))
     curve_list.append(
@@ -168,7 +168,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
             Z11s,
             Rext - self.H1,
             is_trigo_direction=True,
-            label="Tangential_Bridge",
+            label="Rotor_Tangential_Bridge",
         )
     )
     if self.H4 > 0:
@@ -184,13 +184,13 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list.append(Segment(Z6s, Z8bs, label=""))
     else:
         if Z3s != Z4s:  # Z3 == Z3 if H2 = 0
-            curve_list.append(Segment(Z3s, Z4s, label="Magnet_1_Left"))
-        curve_list.append(Segment(Z4s, Z5s, label="Magnet_1_Bottom"))
+            curve_list.append(Segment(Z3s, Z4s, label="Rotor_Magnet_1_Left"))
+        curve_list.append(Segment(Z4s, Z5s, label="Rotor_Magnet_1_Bottom"))
         if Z5s != Z6s:  # Z5 == Z6 if H2 = 0
-            curve_list.append(Segment(Z5s, Z6s, label="Magnet_1_Right"))
-        curve_list.append(Segment(Z6s, Z8bs, label="Magnet_1_Right"))
-        curve_list.append(Segment(Z8bs, Z8cs, label="Magnet_1_Top"))
-        curve_list.append(Segment(Z8cs, Z3s, label="Magnet_1_Left"))
+            curve_list.append(Segment(Z5s, Z6s, label="Rotor_Magnet_1_Right"))
+        curve_list.append(Segment(Z6s, Z8bs, label="Rotor_Magnet_1_Right"))
+        curve_list.append(Segment(Z8bs, Z8cs, label="Rotor_Magnet_1_Top"))
+        curve_list.append(Segment(Z8cs, Z3s, label="Rotor_Magnet_1_Left"))
     point_ref = (Z3s + Z4s + Z5s + Z6s + Z8bs + Z8cs) / 6
     # Defining type of magnetization of the magnet
     if self.magnet_1:
@@ -206,10 +206,10 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # Air surface with magnet_1 and W1 > 0
     curve_list = list()
     curve_list.append(Segment(Z6s, Z7s, label=""))
-    curve_list.append(Segment(Z7s, Z8s, label="Radial_Bridge"))  # rad. bridge
+    curve_list.append(Segment(Z7s, Z8s, label="Rotor_Radial_Bridge"))  # rad. bridge
     if self.W2 > 0:  # if W2=0: Z8s = Z8bs
-        curve_list.append(Segment(Z8s, Z8bs, label="Hole_1_Top"))
-    curve_list.append(Segment(Z8bs, Z6s, label="Hole_1_Right"))
+        curve_list.append(Segment(Z8s, Z8bs, label="Rotor_Hole_1_Top"))
+    curve_list.append(Segment(Z8bs, Z6s, label="Rotor_Hole_1_Right"))
     point_ref = (Z6s + Z7s + Z8s + Z8bs) / 4
 
     S6 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
@@ -218,11 +218,11 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list = list()
     curve_list.append(Segment(Z6, Z7, label=""))
     curve_list.append(Segment(Z7, Z6s, label=""))
-    curve_list.append(Segment(Z6s, Z8bs, label="Hole_1_Right"))
+    curve_list.append(Segment(Z6s, Z8bs, label="Rotor_Hole_1_Right"))
     if self.W2 > 0:  # If W2 = 0: Z8b = Z8 = Z8bs
-        curve_list.append(Segment(Z8bs, Z8s, label="Hole_1_Top"))
-        curve_list.append(Segment(Z8s, Z8b, label="Hole_0_Top"))
-    curve_list.append(Segment(Z8b, Z6, label="Hole_0_Left"))  # == Magnet_0_Left
+        curve_list.append(Segment(Z8bs, Z8s, label="Rotor_Hole_1_Top"))
+        curve_list.append(Segment(Z8s, Z8b, label="Rotor_Hole_0_Top"))
+    curve_list.append(Segment(Z8b, Z6, label="Rotor_Hole_0_Left"))  # == Magnet_0_Left
     point_ref = (Z6 + Z7 + Z6s + Z8s + Z8bs + Z8b) / 6
     S7 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 

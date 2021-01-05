@@ -213,10 +213,10 @@ def gen_case(self, output, mesh_names):
 
     # pair master and slave of Magnet_x_Top, Magnet_0_Right and Magnet_1_Left
     paired_bnds = [
-        "Magnet_0_Top",
-        "Magnet_1_Top",
-        "Magnet_0_Right",
-        "Magnet_1_Left",
+        "Rotor_Magnet_0_Top",
+        "Rotor_Magnet_1_Top",
+        "Rotor_Magnet_0_Right",
+        "Rotor_Magnet_1_Left",
     ]
 
     for name in paired_bnds:
