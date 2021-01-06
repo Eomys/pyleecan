@@ -10,6 +10,9 @@ PYLEECAN objective is to provide a **user-friendly, unified, flexible simulation
 It is meant to be used by researchers, R&D engineers and teachers in electrical engineering, both on standard topologies of electrical machines and on novel topologies (e.g. during a PhD work). 
 An objective of PYLEECAN is that **every PhD student should start with PYLEECAN instead of implementing his own scripts (e.g. coupling Scilab or Matlab with Femm)**.
 
+## Getting Started
+The procedure to install and use Pyleecan is detailed on [pyleecan website](https://www.pyleecan.org/get.pyleecan.html)
+
 ## Scope
 The initial scope of the project is to simulate the electromagnetic performances of the following 2D radial flux machines:
 * Interior, Surface and Surface Inset Permanent Magnet Synchronous Machines (IPMSM, SPMSM, SIPMSM) with inner or outer rotor

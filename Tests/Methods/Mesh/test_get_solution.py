@@ -2,6 +2,7 @@
 
 import pytest
 from numpy import array, zeros, abs as np_abs
+from random import randint
 from unittest import TestCase
 
 from SciDataTool import DataTime, Data1D, DataLinspace, VectorField
@@ -13,7 +14,7 @@ from pyleecan.Classes.SolutionVector import SolutionVector
 
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
-# @pytest.mark.DEV
+@pytest.mark.DEV
 class Test_get_soltution(TestCase):
     """ Tests for get_solution method from Solution classes"""
 
@@ -25,7 +26,7 @@ class Test_get_soltution(TestCase):
         solution.axis_name = ["time", "indice"]
         solution.axis_size = [2, 3]
 
-        # result without explicit solution indices
+        # result without explicit solution indices, i.e. solution.indice = None
         sol1 = solution.get_solution(indice=[0, 1])
         sol2 = solution.get_solution(indice=[0, 1, 2])
         sol3 = solution.get_solution(indice=[0, 1, 2, 3])
@@ -44,12 +45,15 @@ class Test_get_soltution(TestCase):
         msg = "Wrong result: returned " + str(sol3) + ", expected: " + str(expected)
         self.assertAlmostEqual(result, 0, msg=msg, delta=DELTA)
 
-        # result with explicit solution indieces
-        solution.indice = [0, 1, 2]
+        # set explicit solution indices
+        solution.indice = [999, 2000, 11857]
 
-        sol4 = solution.get_solution(indice=[0, 1])
-        sol5 = solution.get_solution(indice=[0, 1, 2])
-        sol6 = solution.get_solution(indice=[0, 1, 2, 3])
+        # request indices that are part of the solution
+        sol4 = solution.get_solution(indice=[999, 2000])
+        sol5 = solution.get_solution(indice=[999, 2000, 11857])
+        
+        # request an indice that is not part of the solution
+        sol6 = solution.get_solution(indice=[999, 2000, 11857, 1])
 
         expected = array([[1, 2], [2, 3]])
         result = np_abs(expected - sol4.field).sum()
