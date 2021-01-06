@@ -10,19 +10,19 @@ FEMM_GROUPS["GROUP_AGM"] = {"name": "airgap middle", "ID": 1}  # for torque calc
 # stator GROUPs
 FEMM_GROUPS["GROUP_SC"] = {"name": "stator core", "ID": 10}
 FEMM_GROUPS["GROUP_SW"] = {"name": "stator winding", "ID": 11}
-FEMM_GROUPS["GROUP_SM"] = {"name": "stator magnet", "ID": 12}
+FEMM_GROUPS["GROUP_SM"] = {"name": "stator magnets", "ID": 12}
 FEMM_GROUPS["GROUP_SN"] = {"name": "stator notches", "ID": 13}
 FEMM_GROUPS["GROUP_SV"] = {"name": "stator ventialtion duct", "ID": 14}
 FEMM_GROUPS["GROUP_SSI"] = {"name": "stator slot isthmus", "ID": 15}
-FEMM_GROUPS["GROUP_SH"] = {"name": "stator hole", "ID": 16}
+FEMM_GROUPS["GROUP_SH"] = {"name": "stator holes", "ID": 16}
 # rotor GROUPs
 FEMM_GROUPS["GROUP_RC"] = {"name": "rotor core", "ID": 20}
 FEMM_GROUPS["GROUP_RW"] = {"name": "rotor winding", "ID": 21}
-FEMM_GROUPS["GROUP_RM"] = {"name": "rotor magnet", "ID": 22}
+FEMM_GROUPS["GROUP_RM"] = {"name": "rotor magnets", "ID": 22}
 FEMM_GROUPS["GROUP_RN"] = {"name": "rotor notches", "ID": 23}
 FEMM_GROUPS["GROUP_RV"] = {"name": "rotor ventialtion duct", "ID": 24}
 FEMM_GROUPS["GROUP_RSI"] = {"name": "rotor slot isthmus", "ID": 25}
-FEMM_GROUPS["GROUP_RH"] = {"name": "rotor hole", "ID": 26}
+FEMM_GROUPS["GROUP_RH"] = {"name": "rotor holes", "ID": 26}
 # other GROUPs
 FEMM_GROUPS["GROUP_IN"] = {"name": "inner shaft", "ID": 30}
 FEMM_GROUPS["GROUP_FM"] = {"name": "fictitious magnets", "ID": 31}

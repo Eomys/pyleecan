@@ -63,11 +63,11 @@ def get_mesh_param(label, FEMM_dict):
         if "Stator" in label:  # if the Magnet is on the Stator
             mesh_dict["element_size"] = FEMM_dict["elementsize_magnetS"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_magnetS"]
-            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SW"]
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SM"]
         else:  # if the Magnet is on the Rotor
             mesh_dict["element_size"] = FEMM_dict["elementsize_magnetR"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_magnetR"]
-            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RW"]
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RM"]
     elif "airgap" in label.lower() or "sliding" in label:
         mesh_dict["automesh"] = FEMM_dict["automesh_airgap"]
         mesh_dict["element_size"] = FEMM_dict["elementsize_airgap"]
