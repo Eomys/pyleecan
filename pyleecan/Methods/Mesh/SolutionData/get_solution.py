@@ -8,8 +8,8 @@ def get_solution(self, indice=None):
 
     Parameters
     ----------
-    self : SolutionMat
-        a SolutionMat object
+    self : SolutionData
+        a SolutionData object
     indice : list
         list of indice, if list is empty or None all indice are included
 
@@ -40,9 +40,11 @@ def get_solution(self, indice=None):
         # skip indice that are not part of the solution
         new_indice = [ii for ii in indice if ii in org_indice]
 
+        # create requested axes list to get field values (see SciDataTool slicing ref.)
         args = [name for name in axes_names]
         args[ax_idx] += "=axis_data"
 
+        # get the field values
         field_dict = solution.field.get_along(*args, axis_data={"indice": new_indice})
 
         # set new indice axis
