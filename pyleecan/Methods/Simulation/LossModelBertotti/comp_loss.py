@@ -14,14 +14,14 @@ def _comp_loss_sum(self, LossDensComps, area, k_freq):
 
     # compute the sum over all frequencies and elements of the loss components
     comp_names = ["Hysteresis", "Eddy", "Excess"]
-    alphas = [1, self.alpha_ed, self.alpha_ex] # hyst. is propotional to freq.
+    alphas = [1, self.alpha_ed, self.alpha_ex]  # hyst. is propotional to freq.
 
     loss_dict = {}
     for comp_name in comp_names:
         axis_data = {"Components": comp_name}
         idx = LossDensComps.axes[comps_idx].values.tolist().index(comp_name)
         axes_list_ = [axis for axis in axes_list]
-        axes_list_[comps_idx] += f'[{idx}]'
+        axes_list_[comps_idx] += f"[{idx}]"
 
         data_dict = LossDensComps.get_along(*axes_list_, axis_data=axis_data)
         data_freq_sum = data_dict["LossDensComps"].sum(axis=freqs_idx)
@@ -101,16 +101,15 @@ def comp_loss(self, output, lam):
 
         # compute the sum of the losses
         area = meshsolution.get_mesh().get_cell_area()
-        t = output.simu.input.time.get_data()
         N0_list = self.N0 if self.N0 else [N0]
         k_freq = [n / N0 for n in N0_list]
 
-        Time = Data1D(name="time", unit="s", symbol="t", values=t)
+        Time = output.elec.Time
         Speed = Data1D(name="speed", unit="rpm", symbol="N0", values=N0_list)
 
-        loss_sum = _comp_loss_sum(self, LossDensComps, area, k_freq)[newaxis,:]
-        loss_sum = loss_sum * ones_like(Time.values)[:,newaxis]  # TODO use periodicity
-        loss_sum *= (L1 * rho * sym)
+        loss_sum = _comp_loss_sum(self, LossDensComps, area, k_freq)[newaxis, :]
+        loss_sum = loss_sum * ones_like(Time.values)[:, newaxis]  # TODO use periodicity
+        loss_sum *= L1 * rho * sym
         data = DataTime(
             name=self.name, unit="W", symbol="Loss", axes=[Time, Speed], values=loss_sum
         )
