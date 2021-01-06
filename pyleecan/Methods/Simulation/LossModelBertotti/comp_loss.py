@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import array, nan, tile, newaxis, ones_like
+from numpy import array, nan, tile, newaxis, ones
 from SciDataTool import DataTime, DataFreq, Data1D
 from logging import getLogger
 
@@ -108,7 +108,9 @@ def comp_loss(self, output, lam):
         Speed = Data1D(name="speed", unit="rpm", symbol="N0", values=N0_list)
 
         loss_sum = _comp_loss_sum(self, LossDensComps, area, k_freq)[newaxis, :]
-        loss_sum = loss_sum * ones_like(Time.values)[:, newaxis]  # TODO use periodicity
+        loss_sum = (
+            loss_sum * ones((Time.get_length(), 1))[:, newaxis]
+        )  # TODO use periodicity
         loss_sum *= L1 * rho * sym
         data = DataTime(
             name=self.name, unit="W", symbol="Loss", axes=[Time, Speed], values=loss_sum
