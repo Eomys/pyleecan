@@ -13,5 +13,6 @@ def comp_FEMM_torque(femm, FEMM_dict, sym=1):
     femm.mo_groupselectblock(FEMM_dict["groups"]["GROUP_RC"])
     femm.mo_groupselectblock(FEMM_dict["groups"]["GROUP_RH"])
     femm.mo_groupselectblock(FEMM_dict["groups"]["GROUP_RW"])
+    femm.mo_groupselectblock(FEMM_dict["groups"]["GROUP_RM"])
     # sym = 2 => Only half the machine
     return sym * femm.mo_blockintegral(22)
