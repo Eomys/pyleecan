@@ -3,7 +3,6 @@ from ...Classes.Arc2 import Arc2
 from ...Classes.MachineSIPMSM import MachineSIPMSM
 
 from ...Functions.GMSH import InputError
-from ...Functions.GMSH import boundary_prop, boundary_list, surface_label
 from ...Functions.GMSH.get_sliding_band import get_sliding_band
 from ...Functions.GMSH.get_air_box import get_air_box
 from ...Functions.GMSH.get_boundary_condition import get_boundary_condition
@@ -404,8 +403,8 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
 def draw_GMSH(
     output,
     sym,
-    boundary_prop, 
-    boundary_list, 
+    boundary_prop,
+    boundary_list,
     surface_label,
     is_antiper=False,
     is_remove_vent=False,

@@ -94,8 +94,8 @@ surface_label["Airbox"] = "AIRBOX"
 for rr in range(0, 20):
     for tt in range(0, 20):
         for ss in range(0, 100):
-            old_label = f"Hole_Rotor_R{rr}_T{tt}_S{ss}""
-            new_label = f"H_ROTOR_R{rr}T{tt}S{ss}""
+            old_label = f"Hole_Rotor_R{rr}_T{tt}_S{ss}"
+            new_label = f"H_ROTOR_R{rr}T{tt}S{ss}"
             surface_label[old_label] = new_label
             old_label = f"HoleMagnet_Rotor_Parallel_N_R{rr}_T{tt}_S{ss}"
             new_label = f"H_MAGNET_ROT_PAR_N_R{rr}T{tt}S{ss}"
@@ -109,6 +109,6 @@ for rr in range(0, 20):
             old_label = f"HoleMagnet_Rotor_Radial_S_R{rr}_T{tt}_S{ss}"
             new_label = f"H_MAGNET_ROT_RAD_S_R{rr}T{tt}S{ss}"
             surface_label[old_label] = new_label
-            old_label = f"Wind_Stator_R{rr}_T{tt}_S{"ss}"
-            new_label = f"W_STA_R{rr}_T{tt}_S{ss}""
+            old_label = f"Wind_Stator_R{rr}_T{tt}_S{ss}"
+            new_label = f"W_STA_R{rr}_T{tt}_S{ss}"
             surface_label[old_label] = new_label
