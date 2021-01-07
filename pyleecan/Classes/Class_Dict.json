@@ -1140,7 +1140,7 @@
                 "name": "usecols",
                 "type": "list",
                 "unit": "",
-                "value": ""
+                "value": []
             },
             {
                 "desc": "List of columns data names",
@@ -1149,7 +1149,7 @@
                 "name": "columns",
                 "type": "list",
                 "unit": "",
-                "value": ""
+                "value": []
             },
             {
                 "desc": "Determin if data are 'SaveScalars' data, else 'SaveLine' data are assumed",
@@ -10642,7 +10642,7 @@
                 "name": "sections",
                 "type": "list",
                 "unit": "",
-                "value": ""
+                "value": []
             }
         ]
     },
