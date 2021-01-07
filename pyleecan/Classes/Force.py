@@ -27,6 +27,11 @@ try:
 except ImportError as error:
     comp_axes = error
 
+try:
+    from ..Methods.Simulation.Force.comp_AGSF_transfer import comp_AGSF_transfer
+except ImportError as error:
+    comp_AGSF_transfer = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -55,6 +60,18 @@ class Force(FrozenClass):
         )
     else:
         comp_axes = comp_axes
+    # cf Methods.Simulation.Force.comp_AGSF_transfer
+    if isinstance(comp_AGSF_transfer, ImportError):
+        comp_AGSF_transfer = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Force method comp_AGSF_transfer: "
+                    + str(comp_AGSF_transfer)
+                )
+            )
+        )
+    else:
+        comp_AGSF_transfer = comp_AGSF_transfer
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -63,9 +80,10 @@ class Force(FrozenClass):
 
     def __init__(
         self,
-        is_comp_nodal_force=False,
         is_periodicity_t=False,
         is_periodicity_a=False,
+        is_agsf_transfer=False,
+        max_wavenumber_transfer=None,
         init_dict=None,
         init_str=None,
     ):
@@ -84,17 +102,20 @@ class Force(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "is_comp_nodal_force" in list(init_dict.keys()):
-                is_comp_nodal_force = init_dict["is_comp_nodal_force"]
             if "is_periodicity_t" in list(init_dict.keys()):
                 is_periodicity_t = init_dict["is_periodicity_t"]
             if "is_periodicity_a" in list(init_dict.keys()):
                 is_periodicity_a = init_dict["is_periodicity_a"]
+            if "is_agsf_transfer" in list(init_dict.keys()):
+                is_agsf_transfer = init_dict["is_agsf_transfer"]
+            if "max_wavenumber_transfer" in list(init_dict.keys()):
+                max_wavenumber_transfer = init_dict["max_wavenumber_transfer"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.is_comp_nodal_force = is_comp_nodal_force
         self.is_periodicity_t = is_periodicity_t
         self.is_periodicity_a = is_periodicity_a
+        self.is_agsf_transfer = is_agsf_transfer
+        self.max_wavenumber_transfer = max_wavenumber_transfer
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -107,9 +128,12 @@ class Force(FrozenClass):
             Force_str += "parent = None " + linesep
         else:
             Force_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Force_str += "is_comp_nodal_force = " + str(self.is_comp_nodal_force) + linesep
         Force_str += "is_periodicity_t = " + str(self.is_periodicity_t) + linesep
         Force_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
+        Force_str += "is_agsf_transfer = " + str(self.is_agsf_transfer) + linesep
+        Force_str += (
+            "max_wavenumber_transfer = " + str(self.max_wavenumber_transfer) + linesep
+        )
         return Force_str
 
     def __eq__(self, other):
@@ -117,11 +141,13 @@ class Force(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.is_comp_nodal_force != self.is_comp_nodal_force:
-            return False
         if other.is_periodicity_t != self.is_periodicity_t:
             return False
         if other.is_periodicity_a != self.is_periodicity_a:
+            return False
+        if other.is_agsf_transfer != self.is_agsf_transfer:
+            return False
+        if other.max_wavenumber_transfer != self.max_wavenumber_transfer:
             return False
         return True
 
@@ -129,18 +155,20 @@ class Force(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.is_comp_nodal_force)
         S += getsizeof(self.is_periodicity_t)
         S += getsizeof(self.is_periodicity_a)
+        S += getsizeof(self.is_agsf_transfer)
+        S += getsizeof(self.max_wavenumber_transfer)
         return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Force_dict = dict()
-        Force_dict["is_comp_nodal_force"] = self.is_comp_nodal_force
         Force_dict["is_periodicity_t"] = self.is_periodicity_t
         Force_dict["is_periodicity_a"] = self.is_periodicity_a
+        Force_dict["is_agsf_transfer"] = self.is_agsf_transfer
+        Force_dict["max_wavenumber_transfer"] = self.max_wavenumber_transfer
         # The class name is added to the dict for deserialisation purpose
         Force_dict["__class__"] = "Force"
         return Force_dict
@@ -148,27 +176,10 @@ class Force(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.is_comp_nodal_force = None
         self.is_periodicity_t = None
         self.is_periodicity_a = None
-
-    def _get_is_comp_nodal_force(self):
-        """getter of is_comp_nodal_force"""
-        return self._is_comp_nodal_force
-
-    def _set_is_comp_nodal_force(self, value):
-        """setter of is_comp_nodal_force"""
-        check_var("is_comp_nodal_force", value, "bool")
-        self._is_comp_nodal_force = value
-
-    is_comp_nodal_force = property(
-        fget=_get_is_comp_nodal_force,
-        fset=_set_is_comp_nodal_force,
-        doc=u"""1 to compute lumped tooth forces
-
-        :Type: bool
-        """,
-    )
+        self.is_agsf_transfer = None
+        self.max_wavenumber_transfer = None
 
     def _get_is_periodicity_t(self):
         """getter of is_periodicity_t"""
@@ -203,5 +214,41 @@ class Force(FrozenClass):
         doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.force.Angle)
 
         :Type: bool
+        """,
+    )
+
+    def _get_is_agsf_transfer(self):
+        """getter of is_agsf_transfer"""
+        return self._is_agsf_transfer
+
+    def _set_is_agsf_transfer(self, value):
+        """setter of is_agsf_transfer"""
+        check_var("is_agsf_transfer", value, "bool")
+        self._is_agsf_transfer = value
+
+    is_agsf_transfer = property(
+        fget=_get_is_agsf_transfer,
+        fset=_set_is_agsf_transfer,
+        doc=u"""True to compute the AGSF transfer from air-gap to stator bore radius.
+
+        :Type: bool
+        """,
+    )
+
+    def _get_max_wavenumber_transfer(self):
+        """getter of max_wavenumber_transfer"""
+        return self._max_wavenumber_transfer
+
+    def _set_max_wavenumber_transfer(self, value):
+        """setter of max_wavenumber_transfer"""
+        check_var("max_wavenumber_transfer", value, "int")
+        self._max_wavenumber_transfer = value
+
+    max_wavenumber_transfer = property(
+        fget=_get_max_wavenumber_transfer,
+        fset=_set_max_wavenumber_transfer,
+        doc=u"""Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification)
+
+        :Type: int
         """,
     )

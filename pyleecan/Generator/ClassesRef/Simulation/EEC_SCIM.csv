@@ -1,5 +1,9 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-indmag,-,Magnetic inductance,,IndMag,None,,,,Simulation,EEC,comp_parameters,VERSION,1,Electric module: Electrical Equivalent Circuit for Squirrel Cage Induction Machine,
+I,-,RMS current for parameter estimation,,float,1,,,,Simulation,EEC,comp_parameters,VERSION,1,Electric module: Electrical Equivalent Circuit for Squirrel Cage Induction Machine,
 parameters,-,"Parameters of the EEC: computed if empty, or enforced",,dict,{},,,,,,solve_EEC,,,,
-freq0,Hz,Frequency,,float,None,,,,,,gen_drive,,,,
-drive,-,Drive,,Drive,None,,,,,,comp_joule_losses,,,,
+is_periodicity_a,,True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle),,bool,1,,,,,,gen_drive,,,,
+nb_worker,,To run FEMM in parallel (the parallelization is on the time loop),,int,None,,,,,,comp_joule_losses,,,,
+N0,rpm,Rotor speed,1,float,None,,,,,,,,,
+felec,Hz,electrical frequency,1,float,None,,,,,,,,,
+Nt_tot,-,Time discretization,0,int,32,1,,,,,,,,
+Nrev,-,Number of rotor revolution (to compute the final time),,float,1,0,,,,,,,,

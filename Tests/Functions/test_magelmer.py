@@ -1,5 +1,5 @@
 from os import makedirs
-from os.path import join
+from os.path import join, isdir
 import pytest
 import sys
 from shutil import copyfile
@@ -24,7 +24,8 @@ from pyleecan.definitions import DATA_DIR
 
 # Gather results in the same folder
 save_path = join(save_plot_path, "Elmer")
-makedirs(save_path)
+if not isdir(save_path):
+    makedirs(save_path)
 
 
 mesh_dict = {
@@ -59,7 +60,7 @@ def test_Elmer():
 
     # Definition of the enforced output of the electrical module
     N0 = 1500
-    Is = ImportMatrixVal(value=array([[20, -10, -10],[20, -10, -10],[20, -10, -10]]))
+    Is = ImportMatrixVal(value=array([[20, -10, -10], [20, -10, -10], [20, -10, -10]]))
     Ir = ImportMatrixVal(value=zeros((1, 28)))
     Nt_tot = 3
     Na_tot = 4096

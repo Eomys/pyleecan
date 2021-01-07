@@ -50,6 +50,20 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="b_export">
+       <property name="text">
+        <string>Export to csv</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_import">
+       <property name="text">
+        <string>Import from csv</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

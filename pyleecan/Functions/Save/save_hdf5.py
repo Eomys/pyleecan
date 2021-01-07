@@ -1,6 +1,9 @@
 import numpy as np
 import h5py
 from h5py import File as FileH5
+from ...definitions import PACKAGE_NAME
+from ... import __version__
+from datetime import datetime
 
 
 def pyleecan_dict_to_hdf5(file, obj):
@@ -14,6 +17,9 @@ def pyleecan_dict_to_hdf5(file, obj):
         object to save
     """
     obj_dict = obj.as_dict()
+    now = datetime.now()
+    obj_dict["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
+    obj_dict["__version__"] = PACKAGE_NAME + "_" + __version__
     for key, val in obj_dict.items():
         # Object that need groups
         if isinstance(val, dict) or isinstance(val, list):
