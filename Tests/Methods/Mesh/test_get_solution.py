@@ -51,7 +51,7 @@ class Test_get_soltution(TestCase):
         # request indices that are part of the solution
         sol4 = solution.get_solution(indice=[999, 2000])
         sol5 = solution.get_solution(indice=[999, 2000, 11857])
-        
+
         # request an indice that is not part of the solution
         sol6 = solution.get_solution(indice=[999, 2000, 11857, 1])
 

@@ -142,8 +142,8 @@ class Test_HoleM50_meth(object):
         assert "R0_T0_S0" in result[0].label
         assert len(result[0].line_list) == 11
 
-        assert "Hole_"  in result[1].label
-        assert "R0_T1_S0" in result[1].label 
+        assert "Hole_" in result[1].label
+        assert "R0_T1_S0" in result[1].label
         assert len(result[1].line_list) == 11
 
     def test_build_geometry_one_hole_no_mag(self):
@@ -203,11 +203,11 @@ class Test_HoleM50_meth(object):
         for surf in result:
             assert type(surf) is SurfLine
 
-        assert "Hole_" in result[0].label 
+        assert "Hole_" in result[0].label
         assert "R0_T0_S0" in result[0].label
         assert len(result[0].line_list) == 5
 
-        assert "HoleMagnet_" in result[1].label 
+        assert "HoleMagnet_" in result[1].label
         assert "_N_R0_T0_S0" in result[1].label
         assert len(result[1].line_list) == 6
 
