@@ -13,7 +13,6 @@ boundary_list = [
     "SB_STATOR_BOUNDARY",
     "AIRGAP_ARC_BOUNDARY",
     "VP0_BOUNDARY",
-    "ROTOR_BORE_CURVE",
 ]
 
 # dictionary to match FEA boundary conditions (dict values)
@@ -39,7 +38,6 @@ boundary_prop["Lamination_Stator_Yoke_Side_Left"] = "SLAVE_STATOR_BOUNDARY"
 boundary_prop["ext_sb_arc"] = "SB_STATOR_BOUNDARY"
 boundary_prop["ext_airgap_arc_copy"] = "AIRGAP_ARC_BOUNDARY"
 boundary_prop["airbox_arc"] = "VP0_BOUNDARY"
-boundary_prop["Lamination_Rotor_Bore_Radius_Ext"] = "ROTOR_BORE_CURVE"
 
 # dict for the translation of the actual surface labels into Elmer compatible labels,
 # i.e. max. 30 characters; key: actual label, value: Elmer label
@@ -57,49 +55,21 @@ surface_label["Airbox"] = "AIRBOX"
 for rr in range(0, 20):
     for tt in range(0, 20):
         for ss in range(0, 100):
-            old_label = "Hole_Rotor_R" + str(rr) + "_T" + str(tt) + "_S" + str(ss)
-            new_label = "H_ROTOR_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
+            old_label = f"Hole_Rotor_R{rr}_T{tt}_S{ss}""
+            new_label = f"H_ROTOR_R{rr}T{tt}S{ss}""
             surface_label[old_label] = new_label
-            old_label = (
-                "HoleMagnet_Rotor_Parallel_N_R"
-                + str(rr)
-                + "_T"
-                + str(tt)
-                + "_S"
-                + str(ss)
-            )
-            new_label = "H_MAGNET_ROT_PAR_N_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
+            old_label = f"HoleMagnet_Rotor_Parallel_N_R{rr}_T{tt}_S{ss}"
+            new_label = f"H_MAGNET_ROT_PAR_N_R{rr}T{tt}S{ss}"
             surface_label[old_label] = new_label
-            old_label = (
-                "HoleMagnet_Rotor_Parallel_S_R"
-                + str(rr)
-                + "_T"
-                + str(tt)
-                + "_S"
-                + str(ss)
-            )
-            new_label = "H_MAGNET_ROT_PAR_S_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
+            old_label = f"HoleMagnet_Rotor_Parallel_S_R{rr}_T{tt}_S{ss}"
+            new_label = f"H_MAGNET_ROT_PAR_S_R{rr}T{tt}S{ss}"
             surface_label[old_label] = new_label
-            old_label = (
-                "HoleMagnet_Rotor_Radial_N_R"
-                + str(rr)
-                + "_T"
-                + str(tt)
-                + "_S"
-                + str(ss)
-            )
-            new_label = "H_MAGNET_ROT_RAD_N_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
+            old_label = f"HoleMagnet_Rotor_Radial_N_R{rr}_T{tt}_S{ss}"
+            new_label = f"H_MAGNET_ROT_RAD_N_R{rr}T{tt}S{ss}"
             surface_label[old_label] = new_label
-            old_label = (
-                "HoleMagnet_Rotor_Radial_S_R"
-                + str(rr)
-                + "_T"
-                + str(tt)
-                + "_S"
-                + str(ss)
-            )
-            new_label = "H_MAGNET_ROT_RAD_S_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
+            old_label = f"HoleMagnet_Rotor_Radial_S_R{rr}_T{tt}_S{ss}"
+            new_label = f"H_MAGNET_ROT_RAD_S_R{rr}T{tt}S{ss}"
             surface_label[old_label] = new_label
-            old_label = "Wind_Stator_R" + str(rr) + "_T" + str(tt) + "_S" + str(ss)
-            new_label = "W_STA_R" + str(rr) + "_T" + str(tt) + "_S" + str(ss)
+            old_label = f"Wind_Stator_R{rr}_T{tt}_S{"ss}"
+            new_label = f"W_STA_R{rr}_T{tt}_S{ss}""
             surface_label[old_label] = new_label

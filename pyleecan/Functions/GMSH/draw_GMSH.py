@@ -404,6 +404,9 @@ def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc
 def draw_GMSH(
     output,
     sym,
+    boundary_prop, 
+    boundary_list, 
+    surface_label,
     is_antiper=False,
     is_remove_vent=False,
     is_remove_slotS=False,
@@ -425,6 +428,14 @@ def draw_GMSH(
     ----------
     output : Output
         Output object
+    sym : int
+        the symmetry applied on the stator and the rotor (take into account antiperiodicity)
+    boundary_prop : dict
+        dictionary to match FEA boundary conditions (dict values) with line labels (dict keys) that are set in the build_geometry methods
+    boundary_list : list
+        list of boundary condition names
+    surface_label : dict
+        dict for the translation of the actual surface labels into FEA software compatible labels
     is_remove_vent : bool
         True to remove the ventilation ducts (Default value = False)
     is_remove_slotS : bool
@@ -435,8 +446,6 @@ def draw_GMSH(
         global coefficient to adjust geometry fineness
     kmesh_fineness : float
         global coefficient to adjust mesh fineness
-    sym : int
-        the symmetry applied on the stator and the rotor (take into account antiperiodicity)
     is_antiper: bool
         To apply antiperiodicity boundary conditions
     is_lam_only_S: bool
@@ -536,7 +545,7 @@ def draw_GMSH(
                     continue
                 n_elem = mesh_dict.get(line.label)
                 n_elem = n_elem if n_elem is not None else 0
-                bc_name = get_boundary_condition(line)
+                bc_name = get_boundary_condition(line, boundary_prop)
 
                 # Gmsh built-in engine does not allow arcs larger than 180deg
                 # so arcs are split into two
@@ -679,7 +688,7 @@ def draw_GMSH(
             for line in surf.get_lines():
                 n_elem = mesh_dict.get(line.label)
                 n_elem = n_elem if n_elem is not None else 0
-                bc_name = get_boundary_condition(line)
+                bc_name = get_boundary_condition(line, boundary_prop)
 
                 # Gmsh built-in engine does not allow arcs larger than 180deg
                 # so arcs are split into two
@@ -766,7 +775,7 @@ def draw_GMSH(
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
             n_elem = n_elem if n_elem is not None else 0
-            bc_name = get_boundary_condition(line)
+            bc_name = get_boundary_condition(line, boundary_prop)
             # Gmsh built-in engine does not allow arcs larger than 180deg
             # so arcs are split into two
             if (
@@ -847,7 +856,7 @@ def draw_GMSH(
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
             n_elem = n_elem if n_elem is not None else 0
-            bc_name = get_boundary_condition(line)
+            bc_name = get_boundary_condition(line, boundary_prop)
 
             # Gmsh built-in engine does not allow arcs larger than 180deg
             # so arcs are split into two
