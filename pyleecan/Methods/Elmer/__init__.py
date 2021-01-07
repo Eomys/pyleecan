@@ -1,2 +1,0 @@
-class ElmerError(Exception):
-    pass

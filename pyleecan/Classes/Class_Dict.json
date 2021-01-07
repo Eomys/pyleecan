@@ -1117,7 +1117,7 @@
         "methods": [],
         "mother": "",
         "name": "Elmer",
-        "package": "",
+        "package": "Elmer",
         "path": "pyleecan/Generator/ClassesRef/Elmer/Elmer.csv",
         "properties": [
             {
