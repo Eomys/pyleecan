@@ -39,6 +39,7 @@ def _execute(binary_name, cwd, logger, parameter=None):
             f"Elmer Process Error while executing {' '.join(cmd)}: Return Code [{return_code}]"
         )
 
+
 # --- some constants ---
 
 boundary_list = [
