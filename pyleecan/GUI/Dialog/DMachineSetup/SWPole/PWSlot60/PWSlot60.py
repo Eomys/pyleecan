@@ -297,8 +297,6 @@ class PWSlot60(Gen_PWSlot60, QWidget):
         try:
             yoke_height = lam.comp_height_yoke()
         except Exception as error:
-            return "Unable to compute yoke height:" + str(
-                error
-            )
+            return "Unable to compute yoke height:" + str(error)
         if yoke_height <= 0:
             return "The slot height is greater than the lamination !"

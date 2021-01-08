@@ -1309,6 +1309,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "To enforce the value of the radius for AGSF transfer",
+                "max": "",
+                "min": "",
+                "name": "Rsbo_enforced_transfer",
+                "type": "float",
+                "unit": "-",
+                "value": null
             }
         ]
     },
