@@ -1100,6 +1100,104 @@
             }
         ]
     },
+    "Elmer": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "ElmerResults",
+            "Section",
+            "SolverInputFile"
+        ],
+        "desc": "Abstract parent class for all Elmer related convienence classes",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "Elmer",
+        "package": "Elmer",
+        "path": "pyleecan/Generator/ClassesRef/Elmer/Elmer.csv",
+        "properties": [
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Elmer"
+            }
+        ]
+    },
+    "ElmerResults": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to get 'SaveScalars' and 'SaveLine' data",
+        "is_internal": false,
+        "methods": [
+            "load_data",
+            "load_columns",
+            "get_data"
+        ],
+        "mother": "Elmer",
+        "name": "ElmerResults",
+        "package": "Elmer",
+        "path": "pyleecan/Generator/ClassesRef/Elmer/ElmerResults.csv",
+        "properties": [
+            {
+                "desc": "Dict with simulation results",
+                "max": "",
+                "min": "",
+                "name": "data",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Filename of the results data file",
+                "max": "",
+                "min": "",
+                "name": "file",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "List integers (starting with 1) of columns to load. If usecols is not set all columns are loaded.",
+                "max": "",
+                "min": "",
+                "name": "usecols",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "List of columns data names",
+                "max": "",
+                "min": "",
+                "name": "columns",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "Determin if data are 'SaveScalars' data, else 'SaveLine' data are assumed",
+                "max": "",
+                "min": "",
+                "name": "is_scalars",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            }
+        ]
+    },
     "FPGNSeg": {
         "constants": [
             {
@@ -3039,7 +3137,8 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "comp_axes"
+            "comp_axes",
+            "comp_felec"
         ],
         "mother": "",
         "name": "Input",
@@ -3090,6 +3189,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 2048
+            },
+            {
+                "desc": "Rotor speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "float",
+                "unit": "rpm",
+                "value": null
             }
         ]
     },
@@ -3105,8 +3213,7 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_Id_Iq",
-            "comp_felec"
+            "set_Id_Iq"
         ],
         "mother": "Input",
         "name": "InputCurrent",
@@ -3138,15 +3245,6 @@
                 "name": "angle_rotor",
                 "type": "Import",
                 "unit": "rad",
-                "value": null
-            },
-            {
-                "desc": "Rotor speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "float",
-                "unit": "rpm",
                 "value": null
             },
             {
@@ -3225,15 +3323,6 @@
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputElec.csv",
         "properties": [
-            {
-                "desc": "Rotor speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "float",
-                "unit": "rpm",
-                "value": null
-            },
             {
                 "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
                 "max": "1",
@@ -3371,15 +3460,6 @@
                 "name": "OP",
                 "type": "Input",
                 "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Rotation speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "float",
-                "unit": "rpm",
                 "value": null
             }
         ]
@@ -7145,18 +7225,18 @@
                 "max": "",
                 "min": "",
                 "name": "Time",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "s",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Structural position Data object",
                 "max": "",
                 "min": "",
                 "name": "Angle",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Length of the time vector",
@@ -7211,6 +7291,24 @@
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "m/s^2",
                 "value": "None"
+            },
+            {
+                "desc": "FEA software mesh and solution",
+                "max": "",
+                "min": "",
+                "name": "meshsolution",
+                "type": "MeshSolution",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Dictionnary containing the main FEA parameter",
+                "max": "",
+                "min": "",
+                "name": "FEA_dict",
+                "type": "dict",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -7666,8 +7764,12 @@
             }
         ],
         "daughters": [
+            "RefLine3",
+            "RefQuad4",
+            "RefQuad9",
             "RefSegmentP1",
-            "RefTriangle3"
+            "RefTriangle3",
+            "RefTriangle6"
         ],
         "desc": "Store shape functions definition in the reference element",
         "is_internal": false,
@@ -7690,6 +7792,78 @@
             }
         ]
     },
+    "RefLine3": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store line elements for 2D mesh",
+        "is_internal": false,
+        "methods": [
+            "shape_function",
+            "jacobian",
+            "grad_shape_function",
+            "get_real_point",
+            "get_ref_point",
+            "is_inside"
+        ],
+        "mother": "RefCell",
+        "name": "RefLine3",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefLine3.csv",
+        "properties": []
+    },
+    "RefQuad4": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store quadrangel elements for 2D mesh",
+        "is_internal": false,
+        "methods": [
+            "shape_function",
+            "jacobian",
+            "grad_shape_function",
+            "get_real_point",
+            "get_ref_point",
+            "is_inside"
+        ],
+        "mother": "RefCell",
+        "name": "RefQuad4",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefQuad4.csv",
+        "properties": []
+    },
+    "RefQuad9": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store quadrangel elements for 2D mesh",
+        "is_internal": false,
+        "methods": [
+            "shape_function",
+            "jacobian",
+            "grad_shape_function",
+            "get_real_point",
+            "get_ref_point",
+            "is_inside"
+        ],
+        "mother": "RefCell",
+        "name": "RefQuad9",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefQuad9.csv",
+        "properties": []
+    },
     "RefSegmentP1": {
         "constants": [
             {
@@ -7698,7 +7872,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Store triangle elements for 2D mesh",
+        "desc": "Store segment elements for 2D mesh",
         "is_internal": false,
         "methods": [
             "shape_function",
@@ -7741,6 +7915,30 @@
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle3.csv",
         "properties": []
     },
+    "RefTriangle6": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store triangle elements for 2D mesh",
+        "is_internal": false,
+        "methods": [
+            "shape_function",
+            "jacobian",
+            "grad_shape_function",
+            "get_real_point",
+            "get_ref_point",
+            "is_inside"
+        ],
+        "mother": "RefCell",
+        "name": "RefTriangle6",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle6.csv",
+        "properties": []
+    },
     "ScalarProduct": {
         "constants": [
             {
@@ -7778,6 +7976,80 @@
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/ScalarProductL2.csv",
         "properties": []
+    },
+    "Section": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to setup a section of an Elmer Solver Input File",
+        "is_internal": false,
+        "methods": [
+            "__delitem__",
+            "__getitem__",
+            "__iter__",
+            "__len__",
+            "__missing__",
+            "__reversed__",
+            "__setitem__",
+            "pop",
+            "keys",
+            "write"
+        ],
+        "mother": "Elmer",
+        "name": "Section",
+        "package": "Elmer",
+        "path": "pyleecan/Generator/ClassesRef/Elmer/Section.csv",
+        "properties": [
+            {
+                "desc": "Name of the section",
+                "max": "",
+                "min": "",
+                "name": "section",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Index of a numbered section",
+                "max": "",
+                "min": "",
+                "name": "id",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Section global comment",
+                "max": "",
+                "min": "",
+                "name": "comment",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "internal dict to store the sections statements",
+                "max": "",
+                "min": "",
+                "name": "_statements",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "internal dict to store comments on single statements",
+                "max": "",
+                "min": "",
+                "name": "_comments",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            }
+        ]
     },
     "Segment": {
         "constants": [
@@ -10437,7 +10709,7 @@
             }
         ]
     },
-    "Structural": {
+    "SolverInputFile": {
         "constants": [
             {
                 "name": "VERSION",
@@ -10445,6 +10717,126 @@
             }
         ],
         "daughters": [],
+        "desc": "Class to setup the Elmer Solver Input File",
+        "is_internal": false,
+        "methods": [
+            "write"
+        ],
+        "mother": "Elmer",
+        "name": "SolverInputFile",
+        "package": "Elmer",
+        "path": "pyleecan/Generator/ClassesRef/Elmer/SolverInputFile.csv",
+        "properties": [
+            {
+                "desc": "List of SIF sections",
+                "max": "",
+                "min": "",
+                "name": "sections",
+                "type": "list",
+                "unit": "",
+                "value": []
+            }
+        ]
+    },
+    "StructElmer": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Structural module: FEA model with Elmer",
+        "is_internal": false,
+        "methods": [
+            "run",
+            "get_meshsolution",
+            "get_path_save_fea",
+            "solve_FEA",
+            "gen_mesh",
+            "gen_case",
+            "process_mesh"
+        ],
+        "mother": "Structural",
+        "name": "StructElmer",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/StructElmer.csv",
+        "properties": [
+            {
+                "desc": "global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kmesh_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Name of the path to save the FEA model",
+                "max": "",
+                "min": "",
+                "name": "path_name",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To enforce user-defined values for FEA main parameters ",
+                "max": "",
+                "min": "",
+                "name": "FEA_dict_enforced",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To save FEA mesh for latter post-procesing (only possible with is_save_FEA set to True)",
+                "max": "",
+                "min": "",
+                "name": "is_get_mesh",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "To save FEA mesh and solution in .vtu file",
+                "max": "",
+                "min": "",
+                "name": "is_save_FEA",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "max": "",
+                "min": "",
+                "name": "transform_list",
+                "type": "list",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "Switch to include magents in the structural simulation",
+                "max": "",
+                "min": "",
+                "name": "include_magnets",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            }
+        ]
+    },
+    "Structural": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "StructElmer"
+        ],
         "desc": "Structural module abstract object",
         "is_internal": false,
         "methods": [
@@ -10455,17 +10847,7 @@
         "name": "Structural",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/Structural.csv",
-        "properties": [
-            {
-                "desc": "Structural module",
-                "max": "",
-                "min": "",
-                "name": "structural",
-                "type": "int",
-                "unit": "-",
-                "value": 0
-            }
-        ]
+        "properties": []
     },
     "SurfLine": {
         "constants": [

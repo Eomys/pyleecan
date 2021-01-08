@@ -25,6 +25,8 @@ from ..Classes.EEC import EEC
 from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.EEC_SCIM import EEC_SCIM
 from ..Classes.Electrical import Electrical
+from ..Classes.Elmer import Elmer
+from ..Classes.ElmerResults import ElmerResults
 from ..Classes.FPGNSeg import FPGNSeg
 from ..Classes.FPGNTri import FPGNTri
 from ..Classes.FluxLink import FluxLink
@@ -133,10 +135,15 @@ from ..Classes.PostFunction import PostFunction
 from ..Classes.PostMethod import PostMethod
 from ..Classes.PostPlot import PostPlot
 from ..Classes.RefCell import RefCell
+from ..Classes.RefLine3 import RefLine3
+from ..Classes.RefQuad4 import RefQuad4
+from ..Classes.RefQuad9 import RefQuad9
 from ..Classes.RefSegmentP1 import RefSegmentP1
 from ..Classes.RefTriangle3 import RefTriangle3
+from ..Classes.RefTriangle6 import RefTriangle6
 from ..Classes.ScalarProduct import ScalarProduct
 from ..Classes.ScalarProductL2 import ScalarProductL2
+from ..Classes.Section import Section
 from ..Classes.Segment import Segment
 from ..Classes.Shaft import Shaft
 from ..Classes.Simu1 import Simu1
@@ -173,6 +180,8 @@ from ..Classes.Solution import Solution
 from ..Classes.SolutionData import SolutionData
 from ..Classes.SolutionMat import SolutionMat
 from ..Classes.SolutionVector import SolutionVector
+from ..Classes.SolverInputFile import SolverInputFile
+from ..Classes.StructElmer import StructElmer
 from ..Classes.Structural import Structural
 from ..Classes.SurfLine import SurfLine
 from ..Classes.SurfRing import SurfRing

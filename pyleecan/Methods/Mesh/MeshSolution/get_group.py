@@ -96,14 +96,14 @@ def get_group(self, group_names):
     for sol in self.solution:
         type_cell_sol = sol.type_cell
 
+        new_sol = None
         if type_cell_sol == "point":
-            new_indices = node_indice
-
+            new_sol = sol.get_solution(indice=node_indice)
         elif not is_interface:  # Interface is only available for point solution.
-            new_indices = indice_dict[type_cell_sol]
+            new_sol = sol.get_solution(indice=indice_dict[type_cell_sol])
 
-        new_sol = sol.get_solution(indice=new_indices)
-        sol_list.append(new_sol)
+        if new_sol is not None:
+            sol_list.append(new_sol)
 
     # 5) Create the corresponding MeshSolution object
     if is_interface:

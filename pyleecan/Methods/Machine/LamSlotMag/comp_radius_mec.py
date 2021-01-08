@@ -26,7 +26,7 @@ def comp_radius_mec(self):
     point_list = list()
     for surf in surf_list:
         point_list.extend(surf.discretize(50))
-    magnet_points = array(point_list)
+    magnet_points = array(point_list) if point_list else array([self.get_Rbo()])
 
     if self.is_internal:  # inward Slot
         # Top radius of the magnet
