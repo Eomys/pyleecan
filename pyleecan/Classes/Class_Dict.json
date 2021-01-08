@@ -18,7 +18,8 @@
             "intersect_line",
             "is_on_line",
             "split_line",
-            "comp_distance"
+            "comp_distance",
+            "plot"
         ],
         "mother": "Line",
         "name": "Arc",
@@ -7469,7 +7470,8 @@
             "split_line",
             "translate",
             "is_on_line",
-            "comp_distance"
+            "comp_distance",
+            "plot"
         ],
         "mother": "Line",
         "name": "Segment",
@@ -8629,7 +8631,8 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "get_H1"
+            "get_H1",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW10",
