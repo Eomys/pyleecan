@@ -11,7 +11,7 @@ from ....definitions import config_dict
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 
 
-def plot_active(self, wind_mat=None, fig=None, is_bar=False):
+def plot_active(self, wind_mat=None, fig=None, is_bar=False, is_show_fig=True):
     """Plot the active area of the lamination according to the wind_mat
 
     Parameters
@@ -25,19 +25,20 @@ def plot_active(self, wind_mat=None, fig=None, is_bar=False):
         one (Default value = None)
     is_bar : bool
         To adapt the legend text for squirrel cage bar (Default value = False)
+    is_show_fig : bool
+        To call show at the end of the method
 
     Returns
     -------
     None
     """
 
-    qs_name = gen_name(self.winding.qs)
-
     if wind_mat is None:  # Default : Only one zone monocolor
         Nrad, Ntan, qs = 1, 1, 1
         Zs = self.Zs
     else:
         (Nrad, Ntan, Zs, qs) = wind_mat.shape
+    qs_name = gen_name(qs)
 
     surf_list = self.build_geometry_active(Nrad, Ntan)
 
@@ -98,7 +99,8 @@ def plot_active(self, wind_mat=None, fig=None, is_bar=False):
                 label_leg.append("Phase " + qs_name[ii])
 
     legend(patch_leg, label_leg)
-    fig.show()
+    if is_show_fig:
+        fig.show()
 
 
 def get_color(wind_mat, Nrad, Ntan, Zs):
