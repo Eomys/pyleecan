@@ -97,7 +97,7 @@ class LossModelBertotti(LossModel):
         alpha_hy=None,
         alpha_ed=None,
         alpha_ex=None,
-        group=None,
+        group="core",
         get_meshsolution=False,
         N0=-1,
         name="",
@@ -378,7 +378,7 @@ class LossModelBertotti(LossModel):
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""Name of the coressponding mesh group
+        doc=u"""String to override default FEA group to apply model
 
         :Type: str
         """,

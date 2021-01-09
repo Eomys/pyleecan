@@ -51,15 +51,18 @@ def comp_loss(self, output, lam):
     # get the simulation and output
     simu = output.simu
 
-    # setup meshsolution and solution list
-    mag_meshsol = output.mag.meshsolution
-    meshsolution = mag_meshsol.get_group(self.group)
-
     # get length, material and speed
     L1 = lam.L1
     mat_type = lam.mat_type
     rho = mat_type.struct.rho
     N0 = output.elec.N0
+    if lam.is_stator:
+        group_name = "stator_" + self.group  # TODO unifiy FEA names
+    else:
+        group_name = "rotor_" + self.group
+
+    # setup meshsolution and solution list
+    meshsolution = output.mag.meshsolution.get_group(group_name)
 
     # compute needed model parameter from material data
     success = self.comp_coeff_Bertotti(mat_type)
@@ -68,7 +71,7 @@ def comp_loss(self, output, lam):
 
     if success:
         # compute loss density
-        LossDens, LossDensComps = self.comp_loss_density(mag_meshsol)
+        LossDens, LossDensComps = self.comp_loss_density(meshsolution)
 
         # compute sum over frequencies
         axes_list = [axis.name for axis in LossDens.axes]

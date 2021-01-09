@@ -1,4 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-iron,,Dict of the iron loss model (key is the lamination name),,dict,{},,,,Simulation,,run,VERSION,1,Losses module object that containt the loss models
-winding,,Dict of the winding loss model (key is the lamination name),,dict,{},,,,,,,,,
-magnet,,Dict of the magnet loss model (key is the lamination name),,dict,{},,,,,,,,,
+model_index,,Internal dict to strore model index,,dict,{},,,,Simulation,,run,VERSION,1,Losses module object that containt the loss models
+model_list,,Internal list of loss models,,[LossModel],[],,,,,,add_model,,,
+,,,,,,,,,,,remove_model,,,
