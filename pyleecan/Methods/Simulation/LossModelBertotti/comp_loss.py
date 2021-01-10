@@ -43,13 +43,22 @@ def _comp_loss_sum(self, LossDensComps, area, k_freq):
     return loss_sum
 
 
-def comp_loss(self, output, lam):
+def comp_loss(self, output, part_label):
     """Compute the Losses"""
     # get logger
     logger = self.get_logger()
 
-    # get the simulation and output
+    # check inpurt
+    if not "Stator" in part_label and not "Rotor" in part_label:
+        logger.warning(
+            f"LossModelBertotti.comp_loss(): 'part_label'"
+            + f" {part_label} not implemented yet."
+        )
+        return None, None
+
+    # get the simulation and the lamination
     simu = output.simu
+    lam = simu.machine.get_lam_by_label(part_label)
 
     # get length, material and speed
     L1 = lam.L1

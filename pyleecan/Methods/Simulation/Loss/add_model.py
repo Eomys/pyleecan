@@ -4,15 +4,15 @@ from ....Methods.Simulation.Loss import LossError
 
 """
 The loss models are stored in a list 'model_list'. The losses are categorized by the
-respective machine part 'part', e.g. stator, rotor or bearings. It has to corespond 
-to the first part of the name of the respective FEA group for FEA basedb loss models 
-to form the complete FEA group name together with the models group property.
+respective machine part 'part', e.g. 'Stator', 'Rotor' or 'Bearings'. It has to 
+corespond to the first part of the name of the respective FEA group for FEA based loss
+models to form the complete FEA group name together with the models 'group' property.
 
 To organize the stored models the 'model_list' is supplemented by 'model_index'
-property. 'model_index' is a triple stacked dict, where the first layer is for
-'part', the 2nd layer is for 'group' and the 3rd layer is for an optional index 
-(if one wants to e.g. have multiple stator core loss models). The reason to use a 
-dict with int keys is to have a kind of sparse list.
+property. 'model_index' is a double stacked dict, where the first layer is for
+'part', the 2nd layeris for an optional index (if one wants to e.g. have multiple 
+stator core loss models). The reason to use a dict with int keys is to have a kind
+of sparse list.
 
 To retrieve the model from the 'model_list' the 'model_index' stores the respective
 list index where the model is added.
@@ -33,10 +33,10 @@ def add_model(self, model, part, index=None):
         the model to add to the list of loss models
 
     part : str
-        Part of the machine to apply the model, e.g. "stator" or "rotor"
+        Part of the machine to apply the model, e.g. "Stator" or "Rotor"
 
     index : int
-        explicit index of the model, e.g. if there are multiple 'stator core'
+        explicit index of the model, e.g. if there are multiple 'Stator core'
         loss models one may give an index to each of them
 
     Return
@@ -57,12 +57,6 @@ def add_model(self, model, part, index=None):
     if not isinstance(model, LossModel):
         raise LossError("Input argument 'model' has to be of type 'LossModel'.")
 
-    # get group string
-    if hasattr(model, "group"):
-        group = model.group
-    else:
-        group = "None"
-
     # get actual index for model
     mdl_index = len(self.model_list)
 
@@ -70,22 +64,18 @@ def add_model(self, model, part, index=None):
     if part not in self.model_index.keys():
         self.model_index[part] = {}
 
-    # check if sub dict key exists
-    if group not in self.model_index[part].keys():
-        self.model_index[part][group] = {}
-
     # get next free index
     if index is None:
-        keys = [key for key in self.model_index[part][group].keys()]
+        keys = [key for key in self.model_index[part].keys()]
         if not keys:
             index = 0
         else:
             index = max(keys)
 
     # store the model and the index
-    if index in self.model_index[part][group].keys():
+    if index in self.model_index[part].keys():
         # override model by request
-        ii = self.model_index[part][group][index]
+        ii = self.model_index[part][index]
         logger.info(
             f"Loss.add_model(): Model '{self.model_list[ii].name}' "
             + f"overriden by model {model.name}."
@@ -94,4 +84,4 @@ def add_model(self, model, part, index=None):
     else:
         # append model
         self.model_list.append(model)
-        self.model_index[part][group][index] = mdl_index
+        self.model_index[part][index] = mdl_index
