@@ -30,10 +30,10 @@ def get_meshsolution(self, output):
         self.get_logger().info("MagElmer: MeshSolution is not stored by request.")
         return False
 
-    meshvtk = MeshVTK(path=elmermesh_folder, name="step_t0001", format="vtu")
+    meshvtk = MeshVTK(path=elmermesh_folder, name="step_t0002", format="vtu")
     meshsol.mesh = [meshvtk]
 
-    result_filename = join(elmermesh_folder, "step_t0001.vtu")
+    result_filename = join(elmermesh_folder, "step_t0002.vtu")
     meshsolvtu = read(result_filename)
     #pt_data = meshsolvtu.point_data
     cell_data = meshsolvtu.cell_data

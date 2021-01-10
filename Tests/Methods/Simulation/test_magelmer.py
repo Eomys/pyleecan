@@ -5,6 +5,8 @@ from numpy import array, linspace, ones, pi, zeros, sqrt, cos
 from Tests import save_plot_path
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagElmer import MagElmer
+from pyleecan.Classes.SlotMFlat import SlotMFlat
+from pyleecan.Classes.MagnetType10 import MagnetType10
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
@@ -38,11 +40,11 @@ mesh_dict = {
 
 @pytest.mark.MagElmer
 @pytest.mark.long
-def test_Elmer():
+def test_ipm_Elmer():
 
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     IPMSM_A.stator.slot.H1 = 1e-3
-    simu = Simu1(name="elmer", machine=IPMSM_A)
+    simu = Simu1(name="ipm_elmer", machine=IPMSM_A)
 
     # Definition of the enforced output of the electrical module
     # N0 = 1500
@@ -97,16 +99,75 @@ def test_Elmer():
     simu.force = None
     simu.struct = None
     # Run simulation
-    out = Output(simu=simu)
+    outp = Output(simu=simu)
     simu.run()
-    out.plot_2D_Data("mag.Tem", "time")
-    out.plot_2D_Data("elec.Is", "time", "phase")
-    out.plot_2D_Data("mag.Tem", "time[smallestperiod]")
-    out.mag.meshsolution.plot_contour(label="B")
-    out.mag.meshsolution.plot_contour(label="A")
-    out.mag.meshsolution.plot_contour(label="J")
-    return out
+    # outp.plot_2D_Data("mag.Tem", "time")
+    # outp.plot_2D_Data("elec.Is", "time", "phase")
+    # outp.plot_2D_Data("mag.Tem", "time[smallestperiod]")
+    # outp.mag.meshsolution.plot_contour(label="B")
+    # outp.mag.meshsolution.plot_contour(label="A")
+    # outp.mag.meshsolution.plot_contour(label="J")
+    return outp
 
+@pytest.mark.MagElmer
+@pytest.mark.long
+def test_spm_Elmer():
+    # Import the machine from a script
+    PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
+    PMSM_A.rotor.slot = SlotMFlat(H0=0.0, W0=15e-3, Zs=8)
+    PMSM_A.rotor.slot.magnet = [MagnetType10(Wmag=15e-3, Hmag=3e-3)]
+    mesh_dict["Lamination_Rotor_Bore_Radius_Ext"] = 20
+
+    # Create the Simulation
+    simu = Simu1(name="spm_elmer", machine=PMSM_A)
+
+    # Definition of a sinusoidal current
+    simu.input = InputCurrent()
+    # simu.input.Id_ref = 0  # [A]
+    # simu.input.Iq_ref = 250  # [A]
+    # simu.input.Nt_tot = 32 * 8    # Number of time step
+    # simu.input.Na_tot = 2048     # Spatial discretization
+    simu.input.N0 = 2000  # Rotor speed [rpm]
+    p = PMSM_A.stator.winding.p
+    time = linspace(0, 60 / simu.input.N0, num=32 * p, endpoint=False)
+    simu.input.time = time
+    simu.input.angle = linspace(0, 2 * pi, num=2048, endpoint=False)
+    I0 = 150
+    felec = p * simu.input.N0 / 60
+    rot_dir = simu.machine.stator.comp_rot_dir()
+    Phi0 = 140 * pi / 180
+    Ia = I0 * cos(2 * pi * felec * time + 0 * rot_dir * 2 * pi / 3 + Phi0)
+    Ib = I0 * cos(2 * pi * felec * time + 1 * rot_dir * 2 * pi / 3 + Phi0)
+    Ic = I0 * cos(2 * pi * felec * time + 2 * rot_dir * 2 * pi / 3 + Phi0)
+    # simu.input.set_Id_Iq(I0=250/sqrt(2), Phi0=140*pi/180)
+    simu.input.Is = array([Ia, Ib, Ic]).transpose()
+
+    # Definition of the magnetic simulation
+    # 2 sym + antiperiodicity = 1/4 Lamination
+    simu.mag = MagElmer(
+        type_BH_stator=0,
+        type_BH_rotor=0,
+        is_periodicity_a=True,
+        is_periodicity_t=True,
+        FEA_dict=mesh_dict,
+        is_get_mesh=True,
+        is_save_FEA=True,
+    )
+    # Stop after magnetic computation
+    simu.force = None
+    simu.struct = None
+    # Run simulation
+    outp = Output(simu=simu)
+    simu.run()
+    outp.plot_2D_Data("mag.Tem", "time")
+    outp.plot_2D_Data("elec.Is", "time", "phase")
+    outp.plot_2D_Data("mag.Tem", "time[smallestperiod]")
+    outp.mag.meshsolution.plot_contour(label="B")
+    outp.mag.meshsolution.plot_contour(label="A")
+    outp.mag.meshsolution.plot_contour(label="J")
+
+    return outp
 
 if __name__ == "__main__":
-    out = test_Elmer()
+    #out = test_ipm_Elmer()
+    out = test_spm_Elmer()

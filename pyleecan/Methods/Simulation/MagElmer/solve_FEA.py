@@ -19,6 +19,8 @@ from ....Classes.HoleM50 import HoleM50
 from ....Classes.HoleM51 import HoleM51
 from ....Classes.HoleM52 import HoleM52
 from ....Classes.HoleM53 import HoleM53
+from ....Classes.MachineSIPMSM import MachineSIPMSM
+from ....Classes.MachineIPMSM import MachineIPMSM
 from ....Methods import NotImplementedYetError
 
 
@@ -120,8 +122,16 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         fo.write("$ PP = {0}                ! Pole pairs\n".format(pp))
         fo.write("$ WE = PP*WM              ! Electrical Frequency [Hz]\n")
 
-        magnet_dict = machine.rotor.hole[0].get_magnet_dict()
-        magnet_0 = magnet_dict["magnet_0"]
+        if isinstance(machine, MachineSIPMSM):
+            magnet_0 = machine.rotor.slot.magnet[0]
+        elif isinstance(machine, MachineIPMSM):
+            magnet_dict = machine.rotor.hole[0].get_magnet_dict()
+            magnet_0 = magnet_dict["magnet_0"]
+        else:
+            self.get_logger().info("ElmerSolver [Error]: Unsupported Machine Geometry")
+            return False
+
+
         surf_list = machine.build_geometry(sym=sym)
         pm_index = 6
         Mangle = list()
@@ -206,7 +216,10 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                 else:
                     continue
                 if bodies.get(label, None) is not None:
-                    Mangle.append(mag)
+                    if magnetization_type is not "radial":
+                        Mangle.append(mag)
+                    else:
+                        Mangle.append(0)
                     bodies[label]['mat'] = pm_index
                     bodies[label]['eq'] = 1
                     bodies[label]['bf'] = 1
@@ -783,7 +796,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     self.get_logger().info("ElmerSolver call complete!")
 
 
-    self.get_meshsolution(output)
+    #self.get_meshsolution(output)
 
     Na = angle.size
     Nt = time.size - 1

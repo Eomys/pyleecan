@@ -579,6 +579,7 @@ def draw_GMSH(
 
         lam_and_holes = list()
         ext_lam_loop = None
+        rotor_cloops = list()
         # loop though all (surface) entries of the rotor lamination
         for s_data in gmsh_dict.values():
             lloop = []
@@ -592,6 +593,8 @@ def draw_GMSH(
                     continue
                 lloop.extend([lvalues["tag"]])
             cloop = factory.addCurveLoop(lloop)
+            if "MAGNET" in s_data["label"]:
+                rotor_cloops.extend([cloop])
 
             # search for the holes to substract from rotor lam
             if "ROTOR_LAM" in s_data["label"]:
@@ -817,7 +820,10 @@ def draw_GMSH(
 
         if lloop:
             cloop = factory.addCurveLoop(lloop)
-            s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
+            if "AG_INT" in s_data["label"] and isinstance(machine, MachineSIPMSM):
+                s_data["tag"] = factory.addPlaneSurface([cloop] + rotor_cloops, tag=-1)
+            else:
+                s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
             pg = model.addPhysicalGroup(2, [s_data["tag"]])
             model.setPhysicalName(2, pg, s_data["label"])
 
@@ -926,6 +932,6 @@ def draw_GMSH(
         gmsh.model.mesh.generate(2)
         gmsh.write(path_save)
 
-    # gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
+    #gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()
     return gmsh_dict

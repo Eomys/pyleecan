@@ -57,9 +57,11 @@ surface_label["Airbox"] = "AIRBOX"
 for rr in range(0, 20):
     for tt in range(0, 20):
         for ss in range(0, 100):
+            # Rotor Holes
             old_label = "Hole_Rotor_R" + str(rr) + "_T" + str(tt) + "_S" + str(ss)
             new_label = "H_ROTOR_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
             surface_label[old_label] = new_label
+            # Interior Magnets
             old_label = (
                 "HoleMagnet_Rotor_Parallel_N_R"
                 + str(rr)
@@ -100,6 +102,48 @@ for rr in range(0, 20):
             )
             new_label = "H_MAGNET_ROT_RAD_S_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
             surface_label[old_label] = new_label
+            # Surface Magnets
+            old_label = (
+                    "MagnetRotorParallel_N_R"
+                    + str(rr)
+                    + "_T"
+                    + str(tt)
+                    + "_S"
+                    + str(ss)
+            )
+            new_label = "MAGNET_ROT_PAR_N_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
+            surface_label[old_label] = new_label
+            old_label = (
+                    "MagnetRotorParallel_S_R"
+                    + str(rr)
+                    + "_T"
+                    + str(tt)
+                    + "_S"
+                    + str(ss)
+            )
+            new_label = "MAGNET_ROT_PAR_S_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
+            surface_label[old_label] = new_label
+            old_label = (
+                    "MagnetRotorRadial_N_R"
+                    + str(rr)
+                    + "_T"
+                    + str(tt)
+                    + "_S"
+                    + str(ss)
+            )
+            new_label = "MAGNET_ROT_RAD_N_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
+            surface_label[old_label] = new_label
+            old_label = (
+                    "MagnetRotorRadial_S_R"
+                    + str(rr)
+                    + "_T"
+                    + str(tt)
+                    + "_S"
+                    + str(ss)
+            )
+            new_label = "MAGNET_ROT_RAD_S_R" + str(rr) + "T" + str(tt) + "S" + str(ss)
+            surface_label[old_label] = new_label
+            # Windings
             old_label = "Wind_Stator_R" + str(rr) + "_T" + str(tt) + "_S" + str(ss)
             new_label = "W_STA_R" + str(rr) + "_T" + str(tt) + "_S" + str(ss)
             surface_label[old_label] = new_label
