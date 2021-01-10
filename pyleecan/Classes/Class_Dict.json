@@ -4002,7 +4002,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Losses module object that containt the loss models",
+        "desc": "Losses module object that containt the loss models. See method add_model for implementation details.",
         "is_internal": false,
         "methods": [
             "run",

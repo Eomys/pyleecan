@@ -38,7 +38,7 @@ from .LossModel import LossModel
 
 
 class Loss(FrozenClass):
-    """Losses module object that containt the loss models"""
+    """Losses module object that containt the loss models. See method add_model for implementation details."""
 
     VERSION = 1
 
