@@ -159,12 +159,12 @@ def test_spm_Elmer():
     # Run simulation
     outp = Output(simu=simu)
     simu.run()
-    outp.plot_2D_Data("mag.Tem", "time")
-    outp.plot_2D_Data("elec.Is", "time", "phase")
-    outp.plot_2D_Data("mag.Tem", "time[smallestperiod]")
-    outp.mag.meshsolution.plot_contour(label="B")
-    outp.mag.meshsolution.plot_contour(label="A")
-    outp.mag.meshsolution.plot_contour(label="J")
+    #outp.plot_2D_Data("mag.Tem", "time")
+    #outp.plot_2D_Data("elec.Is", "time", "phase")
+    #outp.plot_2D_Data("mag.Tem", "time[smallestperiod]")
+    #outp.mag.meshsolution.plot_contour(label="B")
+    #outp.mag.meshsolution.plot_contour(label="A")
+    #outp.mag.meshsolution.plot_contour(label="J")
 
     return outp
 

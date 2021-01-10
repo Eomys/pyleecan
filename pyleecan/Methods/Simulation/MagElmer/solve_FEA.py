@@ -229,7 +229,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                 else:
                     continue
                 if bodies.get(label, None) is not None:
-                    if magnetization_type is not "radial":
+                    if magnetization_type != "radial":
                         Mangle.append(mag)
                     else:
                         Mangle.append(0)
