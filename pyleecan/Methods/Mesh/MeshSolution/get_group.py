@@ -11,8 +11,8 @@ from pyleecan.definitions import PACKAGE_NAME
 
 
 def get_group(self, group_names):
-    """Return all attributes of a MeshSolution object with only the cells, points and corresponding solutions of
-    the group. Solutions are converted as SolutionMat.
+    """Return all attributes of a MeshSolution object with only the cells, points
+    and corresponding solutions of the group. Solutions are converted as SolutionMat.
 
      Parameters
      ----------
@@ -39,9 +39,9 @@ def get_group(self, group_names):
     sep_list = list()
     if isinstance(group_names, list):
         for grp in group_names:
-            if (
-                grp == "/"
-            ):  # The groups before and after "/" are stored in different lists to perform the interface.
+            if grp == "/":
+                # The groups before and after "/" are stored in different lists
+                # to perform the interface.
                 is_interface = True
                 group_indices_init = group_indices.copy()
                 group_indices = list()
@@ -80,7 +80,8 @@ def get_group(self, group_names):
 
         mesh_list.append(mesh_new)
 
-    # 3) if interface, create the corresponding new mesh (e.g. with triangle mesh, it creates only segment cells)
+    # 3) if interface, create the corresponding new mesh (e.g. with triangle mesh,
+    #    it creates only segment cells)
     if is_interface:
         mesh_interface = mesh_list[0].interface(mesh_list[1])
         connect_interface, nb_cell_interf, indices_interf = mesh_interface.get_cell()
@@ -93,46 +94,15 @@ def get_group(self, group_names):
     # 4) select the corresponding solutions
     sol_list = list()
     for sol in self.solution:
-        label_sol = sol.label
         type_cell_sol = sol.type_cell
-        field_sol = sol.get_field()
-        axis_name, axis_size = sol.get_axes_list()
 
+        new_sol = None
         if type_cell_sol == "point":
-            Iindice = np.where(axis_name == "indice")[0]
-            axis_size[Iindice] = len(node_indice)
-
-            new_field_sol = field_sol[:, node_indice, :]
-            new_sol = SolutionMat(
-                label=label_sol,
-                type_cell=type_cell_sol,
-                field=new_field_sol,
-                indice=node_indice,
-                axis_name=axis_name,
-                axis_size=axis_size,
-            )
-            sol_list.append(new_sol)
-
+            new_sol = sol.get_solution(indice=node_indice)
         elif not is_interface:  # Interface is only available for point solution.
+            new_sol = sol.get_solution(indice=indice_dict[type_cell_sol])
 
-            ind_cell = indice_dict[type_cell_sol]
-
-            if "component" in axis_name:
-                new_field_sol = field_sol[:, ind_cell, :]
-            else:
-                new_field_sol = field_sol[:, ind_cell]
-
-            axis_size[axis_name.index("indice")] = len(ind_cell)
-
-            new_sol = SolutionMat(
-                label=label_sol,
-                type_cell=type_cell_sol,
-                field=new_field_sol,
-                indice=ind_cell,
-                axis_name=axis_name,
-                axis_size=axis_size,
-            )
-
+        if new_sol is not None:
             sol_list.append(new_sol)
 
     # 5) Create the corresponding MeshSolution object

@@ -4,6 +4,7 @@ import subprocess
 
 from ....Functions.GMSH.draw_GMSH import draw_GMSH
 from ....Classes.OutMagElmer import OutMagElmer
+from ....Methods.Simulation.MagElmer import boundary_prop, boundary_list, surface_label
 
 
 def comp_flux_airgap(self, output, axes_dict):
@@ -73,6 +74,9 @@ def comp_flux_airgap(self, output, axes_dict):
         output.mag.internal.FEA_dict = draw_GMSH(
             output=output,
             sym=sym,
+            boundary_prop=boundary_prop,
+            boundary_list=boundary_list,
+            surface_label=surface_label,
             is_lam_only_S=False,
             is_lam_only_R=False,
             user_mesh_dict=self.FEA_dict,

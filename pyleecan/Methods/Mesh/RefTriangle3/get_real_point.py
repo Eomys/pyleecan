@@ -24,6 +24,7 @@ def get_real_point(self, vertice, ref_pt, nb_ref_pt=1):
 
     """
 
+    vert = vertice[:, 0:2]
     real_points = np.zeros((nb_ref_pt, 2))
 
     for ii in range(nb_ref_pt):
@@ -32,7 +33,7 @@ def get_real_point(self, vertice, ref_pt, nb_ref_pt=1):
         else:
             pt = ref_pt[ii, :]
 
-        [jacob, detJ] = self.jacobian(pt, vertice)
-        real_points[ii, :] = np.array(vertice[0, :] + np.dot(pt, jacob), dtype=float)
+        [jacob, detJ] = self.jacobian(pt, vert)
+        real_points[ii, :] = np.array(vert[0, :] + np.dot(pt, jacob), dtype=float)
 
     return real_points

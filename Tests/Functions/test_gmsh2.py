@@ -11,6 +11,11 @@ from pyleecan.Classes.SlotMFlat import SlotMFlat
 from pyleecan.Classes.MagnetType10 import MagnetType10
 from pyleecan.definitions import DATA_DIR
 from Tests import save_plot_path
+from pyleecan.Methods.Simulation.MagElmer import (
+    boundary_prop,
+    boundary_list,
+    surface_label,
+)
 
 try:
     from pyleecan.Functions.GMSH.draw_GMSH import draw_GMSH
@@ -61,6 +66,9 @@ def test_gmsh_ipm():
     gmsh_dict = draw_GMSH(
         output=myResults,
         sym=8,
+        boundary_prop=boundary_prop,
+        boundary_list=boundary_list,
+        surface_label=surface_label,
         is_lam_only_S=False,
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
@@ -102,6 +110,9 @@ def test_gmsh_spm():
     gmsh_dict = draw_GMSH(
         output=myResults,
         sym=4,
+        boundary_prop=boundary_prop,
+        boundary_list=boundary_list,
+        surface_label=surface_label,
         is_lam_only_S=False,
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,

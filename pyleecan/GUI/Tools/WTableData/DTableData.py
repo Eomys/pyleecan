@@ -187,10 +187,15 @@ class DTableData(Ui_DTableData, QDialog):
             )[0]
         )
         if isfile(load_path):
-            df = read_csv(load_path, header=None,)
+            df = read_csv(
+                load_path,
+                header=None,
+            )
             if type(df.values[0, 0]) is str:
                 # Load remove first line
-                df = read_csv(load_path,)
+                df = read_csv(
+                    load_path,
+                )
             val = df.values
             # Check Shape
             error = ""

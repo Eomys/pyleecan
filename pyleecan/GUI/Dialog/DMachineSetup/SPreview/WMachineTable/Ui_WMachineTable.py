@@ -39,6 +39,7 @@ class Ui_WMachineTable(object):
         self.tab_param.setMaximumSize(QSize(260, 16777215))
         self.tab_param.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.tab_param.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.tab_param.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tab_param.setAlternatingRowColors(True)
         self.tab_param.setColumnCount(2)
         self.tab_param.horizontalHeader().setCascadingSectionResizes(False)

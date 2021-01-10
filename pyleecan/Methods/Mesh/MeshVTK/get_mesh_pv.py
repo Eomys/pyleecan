@@ -31,7 +31,11 @@ def get_mesh_pv(self, indices=None):
     else:
         if self.format != "vtk" and self.format != "vtu":
             # Write vtk files with meshio
+            # in case replace whitespace in point data keys since vtk doesn't like it
             mesh = read(self.path + "/" + self.name + "." + self.format)
+            mesh.point_data = {
+                k.replace(" ", "_"): v for k, v in mesh.point_data.items()
+            }
             mesh.write(self.path + "/" + self.name + ".vtk")
             use_this_format = ".vtk"
         elif self.format == "vtu":

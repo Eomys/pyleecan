@@ -1,5 +1,6 @@
 from os.path import join
 import matplotlib.pyplot as plt
+from multiprocessing import cpu_count
 import pytest
 from numpy import array, cos, linspace, ones, pi, zeros, sqrt
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -17,6 +18,7 @@ from pyleecan.definitions import config_dict
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
+@pytest.mark.failed  # fails only sometimes with "UnboundLocalError: local variable 'result' referenced bef..."
 def test_Magnetic_Phi0():
     """Validation of a SynRM machine from Syr-e r29 open source software
     https://sourceforge.net/projects/syr-e/
@@ -110,7 +112,7 @@ def test_Magnetic_Phi0():
         type_BH_rotor=0,
         is_periodicity_a=True,
         is_periodicity_t=False,
-        nb_worker=3,
+        nb_worker=cpu_count(),
     )
     simu.force = None
     simu.struct = None

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
-
 
 def get_field(self, *args):
     """Get the value of variables stored in Solution.
@@ -19,7 +17,7 @@ def get_field(self, *args):
         an array of field values
 
     """
-    axname, axsize = self.get_axes_list()
+    axname, _ = self.get_axes_list()
     symbol = self.field.symbol
 
     if not args:
