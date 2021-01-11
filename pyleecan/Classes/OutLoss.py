@@ -167,13 +167,19 @@ class OutLoss(FrozenClass):
         else:
             OutLoss_dict["loss_list"] = list()
             for obj in self.loss_list:
-                OutLoss_dict["loss_list"].append(obj.as_dict())
+                if obj is not None:
+                    OutLoss_dict["loss_list"].append(obj.as_dict())
+                else:
+                    OutLoss_dict["loss_list"].append(None)
         if self.meshsol_list is None:
             OutLoss_dict["meshsol_list"] = None
         else:
             OutLoss_dict["meshsol_list"] = list()
             for obj in self.meshsol_list:
-                OutLoss_dict["meshsol_list"].append(obj.as_dict())
+                if obj is not None:
+                    OutLoss_dict["meshsol_list"].append(obj.as_dict())
+                else:
+                    OutLoss_dict["meshsol_list"].append(None)
         OutLoss_dict["loss_index"] = (
             self.loss_index.copy() if self.loss_index is not None else None
         )

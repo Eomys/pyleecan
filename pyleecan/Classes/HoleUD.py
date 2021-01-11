@@ -217,13 +217,19 @@ class HoleUD(HoleMag):
         else:
             HoleUD_dict["surf_list"] = list()
             for obj in self.surf_list:
-                HoleUD_dict["surf_list"].append(obj.as_dict())
+                if obj is not None:
+                    HoleUD_dict["surf_list"].append(obj.as_dict())
+                else:
+                    HoleUD_dict["surf_list"].append(None)
         if self.magnet_dict is None:
             HoleUD_dict["magnet_dict"] = None
         else:
             HoleUD_dict["magnet_dict"] = dict()
             for key, obj in self.magnet_dict.items():
-                HoleUD_dict["magnet_dict"][key] = obj.as_dict()
+                if obj is not None:
+                    HoleUD_dict["magnet_dict"][key] = obj.as_dict()
+                else:
+                    HoleUD_dict["magnet_dict"][key] = None
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         HoleUD_dict["__class__"] = "HoleUD"

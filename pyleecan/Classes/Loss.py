@@ -155,7 +155,10 @@ class Loss(FrozenClass):
         else:
             Loss_dict["model_list"] = list()
             for obj in self.model_list:
-                Loss_dict["model_list"].append(obj.as_dict())
+                if obj is not None:
+                    Loss_dict["model_list"].append(obj.as_dict())
+                else:
+                    Loss_dict["model_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
         Loss_dict["__class__"] = "Loss"
         return Loss_dict

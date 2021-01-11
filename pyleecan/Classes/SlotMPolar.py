@@ -232,7 +232,10 @@ class SlotMPolar(SlotMag):
         else:
             SlotMPolar_dict["magnet"] = list()
             for obj in self.magnet:
-                SlotMPolar_dict["magnet"].append(obj.as_dict())
+                if obj is not None:
+                    SlotMPolar_dict["magnet"].append(obj.as_dict())
+                else:
+                    SlotMPolar_dict["magnet"].append(None)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotMPolar_dict["__class__"] = "SlotMPolar"

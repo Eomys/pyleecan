@@ -546,19 +546,28 @@ class XOutput(Output):
         else:
             XOutput_dict["paramexplorer_list"] = list()
             for obj in self.paramexplorer_list:
-                XOutput_dict["paramexplorer_list"].append(obj.as_dict())
+                if obj is not None:
+                    XOutput_dict["paramexplorer_list"].append(obj.as_dict())
+                else:
+                    XOutput_dict["paramexplorer_list"].append(None)
         if self.output_list is None:
             XOutput_dict["output_list"] = None
         else:
             XOutput_dict["output_list"] = list()
             for obj in self.output_list:
-                XOutput_dict["output_list"].append(obj.as_dict())
+                if obj is not None:
+                    XOutput_dict["output_list"].append(obj.as_dict())
+                else:
+                    XOutput_dict["output_list"].append(None)
         if self.xoutput_dict is None:
             XOutput_dict["xoutput_dict"] = None
         else:
             XOutput_dict["xoutput_dict"] = dict()
             for key, obj in self.xoutput_dict.items():
-                XOutput_dict["xoutput_dict"][key] = obj.as_dict()
+                if obj is not None:
+                    XOutput_dict["xoutput_dict"][key] = obj.as_dict()
+                else:
+                    XOutput_dict["xoutput_dict"][key] = None
         XOutput_dict["nb_simu"] = self.nb_simu
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
