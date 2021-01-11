@@ -1117,7 +1117,7 @@
         "methods": [],
         "mother": "",
         "name": "Elmer",
-        "package": "",
+        "package": "Elmer",
         "path": "pyleecan/Generator/ClassesRef/Elmer/Elmer.csv",
         "properties": [
             {
@@ -1176,7 +1176,7 @@
                 "name": "usecols",
                 "type": "list",
                 "unit": "",
-                "value": ""
+                "value": []
             },
             {
                 "desc": "List of columns data names",
@@ -1185,7 +1185,7 @@
                 "name": "columns",
                 "type": "list",
                 "unit": "",
-                "value": ""
+                "value": []
             },
             {
                 "desc": "Determin if data are 'SaveScalars' data, else 'SaveLine' data are assumed",
@@ -11028,7 +11028,7 @@
                 "name": "sections",
                 "type": "list",
                 "unit": "",
-                "value": ""
+                "value": []
             }
         ]
     },

@@ -1,15 +1,7 @@
 # -*- coding: utf-8 -*-
-# from numpy import exp, pi
-
-# from ...Classes.Arc1 import Arc1
-# from ...Classes.Circle import Circle
-# from ...Classes.Segment import Segment
-# from ...Classes.SurfLine import SurfLine
-
-from ...Functions.GMSH import boundary_prop
 
 
-def get_boundary_condition(line):
+def get_boundary_condition(line, boundary_prop):
     """Returns the boundary name on a line that is used in FEA coupling
 
     Parameters
