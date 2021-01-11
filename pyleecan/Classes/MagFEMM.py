@@ -384,6 +384,7 @@ class MagFEMM(Magnetics):
         S += getsizeof(self.import_file)
         S += getsizeof(self.is_close_femm)
         S += getsizeof(self.nb_worker)
+        S += getsizeof(self.Rag_enforced)
         return S
 
     def as_dict(self):

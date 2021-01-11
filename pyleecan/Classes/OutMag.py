@@ -32,6 +32,11 @@ try:
 except ImportError as error:
     comp_emf = error
 
+try:
+    from ..Methods.Output.OutMag.get_demag import get_demag
+except ImportError as error:
+    get_demag = error
+
 
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
@@ -71,6 +76,15 @@ class OutMag(FrozenClass):
         )
     else:
         comp_emf = comp_emf
+    # cf Methods.Output.OutMag.get_demag
+    if isinstance(get_demag, ImportError):
+        get_demag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMag method get_demag: " + str(get_demag))
+            )
+        )
+    else:
+        get_demag = get_demag
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -87,6 +101,7 @@ class OutMag(FrozenClass):
         Tem_rip_norm=None,
         Tem_rip_pp=None,
         Phi_wind_stator=None,
+        Phi_wind=None,
         emf=None,
         meshsolution=-1,
         logger_name="Pyleecan.OutMag",
@@ -126,6 +141,8 @@ class OutMag(FrozenClass):
                 Tem_rip_pp = init_dict["Tem_rip_pp"]
             if "Phi_wind_stator" in list(init_dict.keys()):
                 Phi_wind_stator = init_dict["Phi_wind_stator"]
+            if "Phi_wind" in list(init_dict.keys()):
+                Phi_wind = init_dict["Phi_wind"]
             if "emf" in list(init_dict.keys()):
                 emf = init_dict["emf"]
             if "meshsolution" in list(init_dict.keys()):
@@ -146,6 +163,7 @@ class OutMag(FrozenClass):
         self.Tem_rip_norm = Tem_rip_norm
         self.Tem_rip_pp = Tem_rip_pp
         self.Phi_wind_stator = Phi_wind_stator
+        self.Phi_wind = Phi_wind
         self.emf = emf
         self.meshsolution = meshsolution
         self.logger_name = logger_name
@@ -173,6 +191,7 @@ class OutMag(FrozenClass):
         OutMag_str += (
             "Phi_wind_stator = " + str(self.Phi_wind_stator) + linesep + linesep
         )
+        OutMag_str += "Phi_wind = " + str(self.Phi_wind) + linesep + linesep
         OutMag_str += "emf = " + str(self.emf) + linesep + linesep
         if self.meshsolution is not None:
             tmp = (
@@ -213,6 +232,8 @@ class OutMag(FrozenClass):
             return False
         if other.Phi_wind_stator != self.Phi_wind_stator:
             return False
+        if other.Phi_wind != self.Phi_wind:
+            return False
         if other.emf != self.emf:
             return False
         if other.meshsolution != self.meshsolution:
@@ -237,10 +258,14 @@ class OutMag(FrozenClass):
         S += getsizeof(self.Tem_rip_norm)
         S += getsizeof(self.Tem_rip_pp)
         S += getsizeof(self.Phi_wind_stator)
+        if self.Phi_wind is not None:
+            for key, value in self.Phi_wind.items():
+                S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.emf)
         S += getsizeof(self.meshsolution)
         S += getsizeof(self.logger_name)
         S += getsizeof(self.internal)
+        S += getsizeof(self.Rag)
         return S
 
     def as_dict(self):
@@ -270,6 +295,12 @@ class OutMag(FrozenClass):
             OutMag_dict["Phi_wind_stator"] = None
         else:
             OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.as_dict()
+        if self.Phi_wind is None:
+            OutMag_dict["Phi_wind"] = None
+        else:
+            OutMag_dict["Phi_wind"] = dict()
+            for key, obj in self.Phi_wind.items():
+                OutMag_dict["Phi_wind"][key] = obj.as_dict()
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:
@@ -299,6 +330,7 @@ class OutMag(FrozenClass):
         self.Tem_rip_norm = None
         self.Tem_rip_pp = None
         self.Phi_wind_stator = None
+        self.Phi_wind = None
         self.emf = None
         if self.meshsolution is not None:
             self.meshsolution._set_None()
@@ -491,6 +523,37 @@ class OutMag(FrozenClass):
         doc=u"""Stator winding flux DataTime object
 
         :Type: SciDataTool.Classes.DataTime.DataTime
+        """,
+    )
+
+    def _get_Phi_wind(self):
+        """getter of Phi_wind"""
+        if self._Phi_wind is not None:
+            for key, obj in self._Phi_wind.items():
+                if obj is not None:
+                    obj.parent = self
+        return self._Phi_wind
+
+    def _set_Phi_wind(self, value):
+        """setter of Phi_wind"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "Phi_wind"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("Phi_wind", value, "{DataTime}")
+        self._Phi_wind = value
+
+    Phi_wind = property(
+        fget=_get_Phi_wind,
+        fset=_set_Phi_wind,
+        doc=u"""Dict of lamination winding fluxlinkage DataTime objects
+
+        :Type: {SciDataTool.Classes.DataTime.DataTime}
         """,
     )
 

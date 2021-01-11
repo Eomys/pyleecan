@@ -81,7 +81,6 @@ class InputElec(Input):
 
     def __init__(
         self,
-        N0=None,
         rot_dir=-1,
         Id_ref=None,
         Iq_ref=None,
@@ -93,6 +92,7 @@ class InputElec(Input):
         Nt_tot=2048,
         Nrev=1,
         Na_tot=2048,
+        N0=None,
         init_dict=None,
         init_str=None,
     ):
@@ -111,8 +111,6 @@ class InputElec(Input):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
             if "Id_ref" in list(init_dict.keys()):
@@ -135,8 +133,9 @@ class InputElec(Input):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
+            if "N0" in list(init_dict.keys()):
+                N0 = init_dict["N0"]
         # Set the properties (value check and convertion are done in setter)
-        self.N0 = N0
         self.rot_dir = rot_dir
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
@@ -145,7 +144,7 @@ class InputElec(Input):
         self.felec = felec
         # Call Input init
         super(InputElec, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
+            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
         )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
@@ -156,7 +155,6 @@ class InputElec(Input):
         InputElec_str = ""
         # Get the properties inherited from Input
         InputElec_str += super(InputElec, self).__str__()
-        InputElec_str += "N0 = " + str(self.N0) + linesep
         InputElec_str += "rot_dir = " + str(self.rot_dir) + linesep
         InputElec_str += "Id_ref = " + str(self.Id_ref) + linesep
         InputElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
@@ -173,8 +171,6 @@ class InputElec(Input):
 
         # Check the properties inherited from Input
         if not super(InputElec, self).__eq__(other):
-            return False
-        if other.N0 != self.N0:
             return False
         if other.rot_dir != self.rot_dir:
             return False
@@ -197,7 +193,6 @@ class InputElec(Input):
 
         # Get size of the properties inherited from Input
         S += super(InputElec, self).__sizeof__()
-        S += getsizeof(self.N0)
         S += getsizeof(self.rot_dir)
         S += getsizeof(self.Id_ref)
         S += getsizeof(self.Iq_ref)
@@ -211,7 +206,6 @@ class InputElec(Input):
 
         # Get the properties inherited from Input
         InputElec_dict = super(InputElec, self).as_dict()
-        InputElec_dict["N0"] = self.N0
         InputElec_dict["rot_dir"] = self.rot_dir
         InputElec_dict["Id_ref"] = self.Id_ref
         InputElec_dict["Iq_ref"] = self.Iq_ref
@@ -226,7 +220,6 @@ class InputElec(Input):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.N0 = None
         self.rot_dir = None
         self.Id_ref = None
         self.Iq_ref = None
@@ -235,24 +228,6 @@ class InputElec(Input):
         self.felec = None
         # Set to None the properties inherited from Input
         super(InputElec, self)._set_None()
-
-    def _get_N0(self):
-        """getter of N0"""
-        return self._N0
-
-    def _set_N0(self, value):
-        """setter of N0"""
-        check_var("N0", value, "float")
-        self._N0 = value
-
-    N0 = property(
-        fget=_get_N0,
-        fset=_set_N0,
-        doc=u"""Rotor speed
-
-        :Type: float
-        """,
-    )
 
     def _get_rot_dir(self):
         """getter of rot_dir"""

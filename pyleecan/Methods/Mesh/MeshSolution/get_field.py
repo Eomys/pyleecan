@@ -93,7 +93,7 @@ def get_field(
             mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
     # Get points coordinates if necessary
     if is_rthetaz:
-        points = mesh.get_points(indices=indices)
+        points = mesh.get_point(indices=indices)
     # Get normals if necessary
     if is_normal and is_center:
         # Get normals

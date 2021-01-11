@@ -28,10 +28,10 @@ def comp_force(self, output, axes_dict):
 
     # Init output dict
     out_dict = dict()
-    
+
     Rag = output.mag.Rag
     out_dict["Rag"] = Rag
-    
+
     # Get time and angular axes
     Angle = axes_dict["Angle"]
     Time = axes_dict["Time"]

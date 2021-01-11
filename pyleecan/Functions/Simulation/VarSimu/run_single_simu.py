@@ -62,57 +62,37 @@ def run_single_simu(
     # Datakeepers
     if is_error:  # Execute error_keeper
         for datakeeper in datakeeper_list:
+            # readability
+            dk_result = xoutput.xoutput_dict[datakeeper.symbol].result
             if datakeeper.error_keeper is None:
-                xoutput.xoutput_dict[datakeeper.symbol].result[index] = None
+                dk_result[index] = None
             else:
-                xoutput.xoutput_dict[datakeeper.symbol].result[
-                    index
-                ] = datakeeper.error_keeper(simulation)
+                dk_result[index] = datakeeper.error_keeper(simulation)
     else:  # Execute Normal DataKeeper
         msg = "Results: "
         for datakeeper in datakeeper_list:
+            # readability
+            dk_result = xoutput.xoutput_dict[datakeeper.symbol].result
             # Run and store Datakeeper
-            xoutput.xoutput_dict[datakeeper.symbol].result[index] = datakeeper.keeper(
-                result
-            )
+            dk_result[index] = datakeeper.keeper(result)
             # Format log
-            if isinstance(
-                xoutput.xoutput_dict[datakeeper.symbol].result[index], ndarray
-            ):
+            if isinstance(dk_result[index], ndarray):
                 msg += (
                     datakeeper.symbol
                     + "=array(min="
-                    + format(
-                        np_min(xoutput.xoutput_dict[datakeeper.symbol].result[index]),
-                        ".8g",
-                    )
+                    + format(np_min(dk_result[index]), ".8g")
                     + ",max="
-                    + format(
-                        np_max(xoutput.xoutput_dict[datakeeper.symbol].result[index]),
-                        ".8g",
-                    )
+                    + format(np_max(dk_result[index]), ".8g")
                     + ")"
                 )
-            elif isinstance(
-                xoutput.xoutput_dict[datakeeper.symbol].result[index], Data
-            ) or isinstance(
-                xoutput.xoutput_dict[datakeeper.symbol].result[index], VectorField
+            elif isinstance(dk_result[index], Data) or isinstance(
+                dk_result[index], VectorField
             ):
-                msg += (
-                    datakeeper.symbol
-                    + "="
-                    + type(
-                        xoutput.xoutput_dict[datakeeper.symbol].result[index]
-                    ).__name__
-                )
+                msg += datakeeper.symbol + "=" + type(dk_result[index]).__name__
+            elif dk_result[index] is None:
+                msg += datakeeper.symbol + "= None"
             else:
-                msg += (
-                    datakeeper.symbol
-                    + "="
-                    + format(
-                        xoutput.xoutput_dict[datakeeper.symbol].result[index], ".8g"
-                    )
-                )
+                msg += datakeeper.symbol + "=" + format(dk_result[index], ".8g")
             msg += ", "
         msg = msg[:-2]
         simulation.get_logger().info(msg)

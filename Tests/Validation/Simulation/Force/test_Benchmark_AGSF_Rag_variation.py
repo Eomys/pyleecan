@@ -18,14 +18,14 @@ DELTA = 1e-6
 @pytest.mark.validation
 @pytest.mark.Force
 def test_Benchmark_AGSF_Rag():
-    """ Comparison of AGSF at different radius for the 12s10p benchmark 
-        machine from publication: 
-            
-        DEVILLERS, Emile, HECQUET, Michel, CIMETIERE, 
-        Xavier, et al. Experimental benchmark for magnetic noise and vibrations 
-        analysis in electrical machines. In : 2018 XIII International Conference 
-        on Electrical Machines (ICEM). IEEE, 2018. p. 745-751.
-    
+    """Comparison of AGSF at different radius for the 12s10p benchmark
+    machine from publication:
+
+    DEVILLERS, Emile, HECQUET, Michel, CIMETIERE,
+    Xavier, et al. Experimental benchmark for magnetic noise and vibrations
+    analysis in electrical machines. In : 2018 XIII International Conference
+    on Electrical Machines (ICEM). IEEE, 2018. p. 745-751.
+
     """
 
     # Load machine
@@ -41,10 +41,15 @@ def test_Benchmark_AGSF_Rag():
     # Configure simulation
     simu.elec = None
 
-    simu.force = ForceMT(is_periodicity_a=False, is_periodicity_t=True,)
+    simu.force = ForceMT(
+        is_periodicity_a=False,
+        is_periodicity_t=True,
+    )
 
     simu.mag = MagFEMM(
-        is_periodicity_a=False, is_periodicity_t=True, is_sliding_band=False,
+        is_periodicity_a=False,
+        is_periodicity_t=True,
+        is_sliding_band=False,
     )
 
     Rsbo = 0.0480

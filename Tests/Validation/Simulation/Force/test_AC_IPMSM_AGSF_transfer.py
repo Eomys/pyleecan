@@ -14,6 +14,8 @@ from Tests import save_validation_path as save_path
 
 DELTA = 1e-6
 
+
+@pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.Force
 def test_AC_IPMSM_AGSF_transfer():
