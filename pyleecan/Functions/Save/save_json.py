@@ -105,7 +105,7 @@ def build_data(obj):
         return None
     # pyleecan classes, i.e. instances with as_dict method
     if has_as_dict(obj):
-        return obj.as_dict()
+        return build_data(obj.as_dict())
     if isinstance(obj, int32):  # int
         return int(obj)
     #
