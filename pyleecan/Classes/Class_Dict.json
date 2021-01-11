@@ -4030,7 +4030,7 @@
                 "name": "model_list",
                 "type": "[LossModel]",
                 "unit": "",
-                "value": []
+                "value": ""
             }
         ]
     },
@@ -7197,7 +7197,7 @@
                 "name": "loss_list",
                 "type": "[SciDataTool.Classes.DataND.DataND]",
                 "unit": "",
-                "value": "[]"
+                "value": "None"
             },
             {
                 "desc": "Internal list of loss meshsolutions",
@@ -7206,7 +7206,7 @@
                 "name": "meshsol_list",
                 "type": "[MeshSolution]",
                 "unit": "",
-                "value": []
+                "value": ""
             },
             {
                 "desc": "Internal dict to index losses",

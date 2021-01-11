@@ -26,7 +26,7 @@ def run(self):
     # replicate model_list for solutions with respective object types
     output.loss.meshsol_list = [None for ii in self.model_list]
     output.loss.loss_list = [None for ii in self.model_list]
-    
+
     # iterate through the loss models and compute losses
     for part_label in self.model_index.keys():
         if part_label not in output.loss.loss_index.keys():

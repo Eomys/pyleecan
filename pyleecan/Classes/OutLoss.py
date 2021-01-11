@@ -66,7 +66,7 @@ class OutLoss(FrozenClass):
 
     def __init__(
         self,
-        loss_list=[],
+        loss_list=None,
         meshsol_list=-1,
         loss_index=-1,
         logger_name="Pyleecan.OutLoss",

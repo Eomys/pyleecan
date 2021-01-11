@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import optimize
 
-from ....Methods.Simulation.LossModel import LossModelError
 
 # TODO define one loss calculation function to use everywhere in class
 def _comp_loss(self, C, Cx, f, B):
