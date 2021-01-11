@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-
-def get_loss_dist(self, loss_type="Iron", label="Stator", index=0):
+# TODO add a 'loss_type' info to model to get loss by type rather than index
+def get_loss_dist(self, part_label="Stator", index=None):
     """Convenience method to get some specific loss distribution component.
 
     Parameter
@@ -9,10 +9,7 @@ def get_loss_dist(self, loss_type="Iron", label="Stator", index=0):
     self : OutLoss
         an OutLoss object
 
-    loss_type : str
-        Type of loss, e.g. 'Iron', 'Magnet', 'Winding'
-
-    label : str
+    part_label : str
         Label of the machine part, e.g. 'Stator'
 
     index : int
@@ -24,11 +21,35 @@ def get_loss_dist(self, loss_type="Iron", label="Stator", index=0):
         MeshSoltution of the requested loss component
 
     """
-    # check if loss_type exists
-    loss_dict = self.meshsolution.get(loss_type, None)
-    if loss_dict is not None:
-        mshsol_list = loss_dict.get(label, None)
-        if -len(mshsol_list) <= index < len(mshsol_list):
-            return mshsol_list[index]
+    logger = self.get_logger()
 
-    return None
+    # check
+    if not part_label in self.loss_index.keys():
+        logger.warning(
+            f"OutLoss.get_loss_dist(): No part with label " + f"'{part_label}' found."
+        )
+        return None
+
+    # get the index
+    if self.loss_index[part_label].keys():
+        if index is None:
+            keys = [key for key in self.loss_index[part_label].keys()]
+            index = keys[0]
+
+        if index not in self.loss_index[part_label].keys():
+            logger.warning(
+                f"OutLoss.get_loss_dist(): Part '{part_label}' "
+                + f"got no loss index {index}."
+            )
+            return None
+
+        ii = self.loss_index[part_label][index]
+
+        return self.meshsol_list[ii]
+
+    # if there are no loss on the part
+    else:
+        logger.warning(
+            f"OutLoss.get_loss_dist(): Part '{part_label}' got no losses output."
+        )
+        return None

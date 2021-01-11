@@ -7195,7 +7195,7 @@
                 "max": "",
                 "min": "",
                 "name": "loss_list",
-                "type": "[SciDataTool.Classes.DataTime.DataTime]",
+                "type": "[SciDataTool.Classes.DataND.DataND]",
                 "unit": "",
                 "value": "[]"
             },

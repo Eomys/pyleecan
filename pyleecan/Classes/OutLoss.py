@@ -209,7 +209,7 @@ class OutLoss(FrozenClass):
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
-        check_var("loss_list", value, "[DataTime]")
+        check_var("loss_list", value, "[DataND]")
         self._loss_list = value
 
     loss_list = property(
@@ -217,7 +217,7 @@ class OutLoss(FrozenClass):
         fset=_set_loss_list,
         doc=u"""Internal list of loss data
 
-        :Type: [SciDataTool.Classes.DataTime.DataTime]
+        :Type: [SciDataTool.Classes.DataND.DataND]
         """,
     )
 

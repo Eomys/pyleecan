@@ -65,10 +65,7 @@ def comp_loss(self, output, part_label):
     mat_type = lam.mat_type
     rho = mat_type.struct.rho
     N0 = output.elec.N0
-    if lam.is_stator:
-        group_name = "stator_" + self.group  # TODO unifiy FEA names
-    else:
-        group_name = "rotor_" + self.group
+    group_name = part_label.lower() + " " + self.group  # TODO unifiy FEA names
 
     # setup meshsolution and solution list
     meshsolution = output.mag.meshsolution.get_group(group_name)

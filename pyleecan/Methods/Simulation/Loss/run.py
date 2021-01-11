@@ -2,6 +2,8 @@
 
 from ....Methods.Simulation.Input import InputError
 from ....Classes.LossModel import LossModel
+from ....Classes.MeshSolution import MeshSolution
+from SciDataTool import DataND
 
 
 # TODO case of 'part' string may be problematic -> check
@@ -21,15 +23,25 @@ def run(self):
     # get output
     output = self.parent.parent
 
-    # replicate model_list for solutions
-    output.loss.meshsol_list = [None for ii in self.model_list]
-    output.loss.loss_list = [None for ii in self.model_list]
+    # replicate model_list for solutions with respective object types
+    output.loss.meshsol_list = []
+    output.loss.loss_list = []
+    for ii in self.model_list:
+        output.loss.meshsol_list.append(None)
+        output.loss.loss_list.append(None)
 
     # iterate through the loss models and compute losses
-    for part in self.model_index.keys():
-        for index in self.model_index[part].values():
+    for part_label in self.model_index.keys():
+        if part_label not in output.loss.loss_index.keys():
+            output.loss.loss_index[part_label] = {}
+        for key, index in self.model_index[part_label].items():
+            if key not in output.loss.loss_index[part_label].keys():
+                output.loss.loss_index[part_label][key] = {}
             # run the loss model
-            data, mshsol = self.model_list[index].comp_loss(output, part)
+            output.loss.loss_index[part_label][key] = index
+            data, mshsol = self.model_list[index].comp_loss(output, part_label)
             # store the results
-            output.loss.meshsol_list[index] = mshsol
-            output.loss.loss_list[index] = mshsol
+            if data is not None:
+                output.loss.loss_list[index] = data
+            if mshsol is not None:
+                output.loss.meshsol_list[index] = mshsol

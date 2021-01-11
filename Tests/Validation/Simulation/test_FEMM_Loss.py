@@ -74,8 +74,8 @@ def test_FEMM_Loss():
     myIronLoss = LossModelBertotti()
     myWindingLoss = LossModelWinding()
 
-    simu.loss.iron["Stator"] = [myIronLoss]
-    simu.loss.winding["Stator"] = [myWindingLoss]
+    simu.loss.add_model(model=myIronLoss, part_label="Stator")
+    simu.loss.add_model(model=myWindingLoss, part_label="Stator")
 
     # FEMM ex. Ch = 143 W / m³ / T² / Hz --> k_hy = 2.089 W / kg @ F_REF, B_REF
     #          Ce = 0.53 W / m³ / T² / Hz² --> k_ed = 0.387 W / kg @ F_REF, B_REF
@@ -88,14 +88,16 @@ def test_FEMM_Loss():
     myIronLoss.alpha_ed = 2
     myIronLoss.k_ex = 0
     myIronLoss.alpha_ex = 1.5
-    myIronLoss.group = "stator core"  # this is the FEMM group name
+    myIronLoss.group = "core"  # this is the FEMM group name
     myIronLoss.get_meshsolution = True  # to store loss density
     myIronLoss.N0 = [4000, 6000]  # list of speed to override actual speed
 
     # rotor
-    simu.loss.iron["Rotor"] = [myIronLoss.copy()]
-    simu.loss.iron["Rotor"][0].name = "Rotor Iron Losses"
-    simu.loss.iron["Rotor"][0].group = "rotor core"
+    myRotorIronLoss = myIronLoss.copy()
+    myRotorIronLoss.name = "Rotor Iron Losses"
+    myRotorIronLoss.group = "core"
+
+    simu.loss.add_model(model=myRotorIronLoss, part_label="Rotor")
 
     # TODO load loss data with BH curve by default
     # TODO add M19 loss data to compare parameter estimates
@@ -113,23 +115,24 @@ def test_FEMM_Loss():
     simu.run()
 
     loss = out.loss
-    mshsol = loss.get_loss_dist(loss_type="Iron", label="Stator", index=0)
+    mshsol = loss.get_loss_dist(part_label="Stator", index=0)
 
     # mshsol.plot_contour(label="LossDens", itime=7)
     # mshsol.plot_contour(label="LossDensSum", itime=0)
 
     P_mech = 2 * pi * rotor_speed / 60 * out.mag.Tem_av
 
-    loss_stator_iron = loss.get_loss(loss_type="Iron", label="Stator", index=0)
-    loss_rotor_iron = loss.get_loss(loss_type="Iron", label="Rotor", index=0)
-    loss_stator_wind = loss.get_loss(loss_type="Winding", label="Stator", index=0)
+    loss_stator_iron = loss.get_loss(part_label="Stator", index=0)
+    loss_rotor_iron = loss.get_loss(part_label="Rotor", index=0)
+    loss_stator_wind = loss.get_loss(part_label="Stator", index=1)
 
     loss_st_iron = loss_stator_iron.get_along("Speed=4000", "time")["Loss"].mean()
+    loss_ro_iron = loss_rotor_iron.get_along("Speed=4000", "time")["Loss"].mean()
     loss_st_wdg = loss_stator_wind.get_along("time", "phase")["Loss"].mean()
 
     print(f"mechanical power = {P_mech} W")
     print(f"stator iron loss = {loss_st_iron} W")
-    print(f"rotor iron loss = {loss_rotor_iron} W")
+    print(f"rotor iron loss = {loss_ro_iron} W")
     print(f"stator winding loss = {qs*loss_st_wdg} W")
 
     delta = 5 / 100  # arbitary allowed relative difference
@@ -144,6 +147,35 @@ def test_FEMM_Loss():
     return out
 
 
+def test_Loss_methods():
+    """Test Loss methods add_model and remove_model"""
+    # create objects
+    loss = Loss()
+    mdl = LossModel()
+    mdl.name = "Test Loss Model"
+
+    # add models
+    loss.add_model(model=mdl, part_label="Stator")
+    loss.add_model(model=mdl, part_label="Stator", index=1)
+    loss.add_model(model=mdl, part_label="Stator", index=0)  # override
+    loss.add_model(model=mdl, part_label="Rotor")
+    loss.add_model(model=mdl, part_label="Frame")
+
+    assert len(loss.model_list) == 4
+
+    # remove models
+    loss.remove_model(part_label="Stator", index=1)
+
+    assert len(loss.model_list) == 4  # length stay the same
+    assert loss.model_list[1] is None
+
+    # try to remove non existing models -> only warning should occur
+    loss.remove_model(part_label="Shaft", index=1)
+    loss.remove_model(part_label="Stator", index=1)  # removed previously
+
+
 # To run it without pytest
 if __name__ == "__main__":
     out = test_FEMM_Loss()
+
+    test_Loss_methods()

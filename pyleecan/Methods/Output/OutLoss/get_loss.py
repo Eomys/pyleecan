@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def get_loss(self, loss_type="Iron", label="Stator", index=0):
+def get_loss(self, part_label="Stator", index=None):
     """Convenience method to get some specific loss component time data.
 
     Parameter
@@ -9,10 +9,7 @@ def get_loss(self, loss_type="Iron", label="Stator", index=0):
     self : OutLoss
         an OutLoss object
 
-    loss_type : str
-        Type of loss, e.g. 'Iron', 'Magnet', 'Winding'
-
-    label : str
+    part : str
         Label of the machine part, e.g. 'Stator'
 
     index : int
@@ -24,11 +21,32 @@ def get_loss(self, loss_type="Iron", label="Stator", index=0):
         Time data of the requested loss component
 
     """
-    # check if loss_type exists
-    loss_dict = getattr(self, loss_type.lower(), None)
-    if loss_dict is not None:
-        data_list = loss_dict.get(label, None)
-        if -len(data_list) <= index < len(data_list):
-            return data_list[index]
+    logger = self.get_logger()
 
-    return None
+    # check
+    if not part_label in self.loss_index.keys():
+        logger.warning(
+            f"OutLoss.get_loss(): No part with label " + f"'{part_label}' found."
+        )
+        return None
+
+    # get index
+    if self.loss_index[part_label].keys():
+        if index is None:
+            keys = [key for key in self.loss_index[part_label].keys()]
+            index = keys[0]
+
+        if index not in self.loss_index[part_label].keys():
+            logger.warning(
+                f"OutLoss.get_loss(): Part '{part_label}' got no loss index {index}."
+            )
+            return None
+
+        ii = self.loss_index[part_label][index]
+
+        return self.loss_list[ii]
+
+    # if there are no loss on the part
+    else:
+        logger.warning(f"OutLoss.get_loss(): Part '{part_label}' got no losses output.")
+        return None

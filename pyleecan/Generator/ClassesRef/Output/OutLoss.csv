@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-loss_list,,Internal list of loss data,,[SciDataTool.Classes.DataTime.DataTime],[],,,,Output,,get_loss,VERSION,1,Gather the loss module outputs
+loss_list,,Internal list of loss data,,[SciDataTool.Classes.DataND.DataND],[],,,,Output,,get_loss,VERSION,1,Gather the loss module outputs
 meshsol_list,,Internal list of loss meshsolutions,,[MeshSolution],[],,,,,,get_loss_dist,,,
 loss_index,"",Internal dict to index losses,,dict,{},,,,,,,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.OutLoss,,,,,,,,,
