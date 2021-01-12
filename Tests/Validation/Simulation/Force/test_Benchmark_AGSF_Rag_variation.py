@@ -17,6 +17,8 @@ DELTA = 1e-6
 
 @pytest.mark.validation
 @pytest.mark.Force
+@pytest.mark.FEMM
+@pytest.mark.long
 def test_Benchmark_AGSF_Rag():
     """Comparison of AGSF at different radius for the 12s10p benchmark
     machine from publication:
