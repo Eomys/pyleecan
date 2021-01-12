@@ -1,5 +1,5 @@
 from h5py import File, Group
-from numpy import bool_, int64, string_, array
+from numpy import bool_, int32, int64, string_, array
 from cloudpickle import loads
 
 
@@ -37,6 +37,8 @@ def construct_dict_from_group(group):
                     value = bool(value)
                 elif isinstance(value, int64):  # float
                     value = float(value)
+                elif isinstance(value, int32):  # int
+                    value = int(value)
                 elif isinstance(value, string_):  # String
                     value = value.decode("ISO-8859-2")
 

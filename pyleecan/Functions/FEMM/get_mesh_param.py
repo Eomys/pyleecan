@@ -78,4 +78,10 @@ def get_mesh_param(label, FEMM_dict):
         mesh_dict["element_size"] = 0
         mesh_dict["meshsize"] = 0
         mesh_dict["group"] = FEMM_dict["groups"]["GROUP_AG"]
+    elif "Stator" in label:  # if label don't belong to any of the other groups
+        mesh_dict["element_size"] = FEMM_dict["maxelementsize"]
+        mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SC"]
+    elif "Rotor" in label:  # if label don't belong to any of the other groups
+        mesh_dict["element_size"] = FEMM_dict["maxelementsize"]
+        mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RC"]
     return mesh_dict

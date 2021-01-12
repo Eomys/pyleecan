@@ -163,7 +163,7 @@ def process_mesh(
                             # replace number and add 'Slave'
                             s = name.split("_")
                             s.append(ext)  # add extension
-                            s[1] = str(id)  # renumber
+                            s[2] = str(id)  # renumber
                             key = "_".join(s)  # new name
                             if key not in groups_dict.keys():
                                 groups_dict[key] = []
@@ -224,8 +224,8 @@ def process_mesh(
         keeper_list = [
             "MASTER_ROTOR_BOUNDARY",
             "SLAVE_ROTOR_BOUNDARY",
-            "Tangential_Bridge",
-            "Radial_Bridge",
+            "Rotor_Tangential_Bridge",
+            "Rotor_Radial_Bridge",
             "ROTOR_BORE_CURVE",
         ]
 

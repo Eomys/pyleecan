@@ -2,7 +2,12 @@
 from os.path import join
 
 from ....Functions.GMSH.draw_GMSH import draw_GMSH
-from ....Methods.Simulation.StructElmer import _execute
+from ....Methods.Simulation.StructElmer import (
+    _execute,
+    boundary_prop,
+    boundary_list,
+    surface_label,
+)
 
 
 def gen_mesh(self, output):
@@ -35,6 +40,9 @@ def gen_mesh(self, output):
     draw_GMSH(
         output=output,
         sym=sym_r,  # TODO is it possible to have to use draw_GMSH with sym_r > sym ?
+        boundary_prop=boundary_prop,
+        boundary_list=boundary_list,
+        surface_label=surface_label,
         is_lam_only_S=False,
         is_lam_only_R=False,
         is_sliding_band=False,
