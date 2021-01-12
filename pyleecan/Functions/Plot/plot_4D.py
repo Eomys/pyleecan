@@ -123,7 +123,7 @@ def plot_4D(
     # Set figure if needed
     if fig is None and ax is None:
         (fig, ax, _, _) = init_fig(fig=None, shape="rectangle", is_3d=is_3d)
-    
+
     # Check logscale on z axis
     if is_logscale_z:
         Zdata = 10 * log10(np_abs(Zdata))

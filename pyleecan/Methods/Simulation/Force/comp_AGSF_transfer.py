@@ -22,8 +22,13 @@ def comp_AGSF_transfer(self, output, rnoise=None):
 
     """
 
+    # Inputs
     Rag = output.force.Rag
-    Rsbo = output.simu.machine.stator.Rint
+
+    if self.Rsbo_enforced_transfer is None:
+        Rsbo = output.simu.machine.stator.Rint
+    else:
+        Rsbo = self.Rsbo_enforced_transfer
 
     AGSF = output.force.AGSF
 
@@ -54,6 +59,7 @@ def comp_AGSF_transfer(self, output, rnoise=None):
     Prad_wr_TR = multiply(XSn, Prad_wr) + 1j * multiply(XCn, Ptan_wr)
     Ptan_wr_TR = multiply(XSn, Ptan_wr) - 1j * multiply(XCn, Prad_wr)
 
+    # Save results as Data objects
     Datafreqs = Data1D(name="freqs", values=freqs)
     Datawavenumbers = Data1D(name="wavenumber", values=wavenumber)
 
