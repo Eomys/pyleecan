@@ -89,7 +89,7 @@ def test_Benchmark_AGSF_Rag():
     out_list[-1].plot_2D_Data(
         "force.AGSF",
         "wavenumber",
-        "time=0",
+        "freqs=0",
         x_min=0,
         x_max=24,
         data_list=AGSF_list,
