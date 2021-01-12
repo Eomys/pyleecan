@@ -10,3 +10,4 @@ is_periodicity_t,-,True to compute only on one time periodicity (use periodiciti
 is_periodicity_a,-,True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle),0,bool,0,,,,,,,,,,
 angle_stator_shift,rad,Shift angle to appy to the stator in magnetic model,0,float,0,,,,,,,,,,
 angle_rotor_shift,rad,Shift angle to appy to the rotor in magnetic model,0,float,0,,,,,,,,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Magnetics,,,,,,,,,,
