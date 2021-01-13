@@ -8,11 +8,14 @@ The choice between LOGGING_CONFIG_CONSOLE and LOGGING_CONFIG_FILE is made in pyl
 
 # Default level in every loggers
 DEFAULT_LOG_NAME = "Pyleecan"
-CONSOLE_LEVEL = INFO
-FILE_LEVEL = DEBUG
-CONSOLE_FORMAT = "[%(asctime)s] %(message)s"
-FILE_FORMAT = "%(asctime)s-%(levelname)s-%(name)s: %(message)s"
+GUI_LOG_NAME = "Pyleecan.GUI"
 SUB_LOG_LIST = ["Machine", "Electrical", "Magnetics", "Force", "Structural"]
+
+CONSOLE_LEVEL = INFO
+CONSOLE_FORMAT = "[%(asctime)s] %(message)s"
+
+FILE_LEVEL = DEBUG
+FILE_FORMAT = "%(asctime)s-%(levelname)s-%(name)s: %(message)s"
 
 
 def gen_logger_config_dict(logger_name):
