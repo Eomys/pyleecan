@@ -53,6 +53,7 @@ def gen_logger_config_dict(logger_name):
             "console_formatter": {"format": CONSOLE_FORMAT, "datefmt": "%H:%M:%S"},
             "file_formatter": {"format": FILE_FORMAT},
         },
+        "disable_existing_loggers": False,
     }
 
     for log in SUB_LOG_LIST:
