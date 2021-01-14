@@ -84,6 +84,7 @@ class Force(FrozenClass):
         is_periodicity_a=False,
         is_agsf_transfer=False,
         max_wavenumber_transfer=None,
+        Rsbo_enforced_transfer=None,
         init_dict=None,
         init_str=None,
     ):
@@ -110,12 +111,15 @@ class Force(FrozenClass):
                 is_agsf_transfer = init_dict["is_agsf_transfer"]
             if "max_wavenumber_transfer" in list(init_dict.keys()):
                 max_wavenumber_transfer = init_dict["max_wavenumber_transfer"]
+            if "Rsbo_enforced_transfer" in list(init_dict.keys()):
+                Rsbo_enforced_transfer = init_dict["Rsbo_enforced_transfer"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_periodicity_t = is_periodicity_t
         self.is_periodicity_a = is_periodicity_a
         self.is_agsf_transfer = is_agsf_transfer
         self.max_wavenumber_transfer = max_wavenumber_transfer
+        self.Rsbo_enforced_transfer = Rsbo_enforced_transfer
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -134,6 +138,9 @@ class Force(FrozenClass):
         Force_str += (
             "max_wavenumber_transfer = " + str(self.max_wavenumber_transfer) + linesep
         )
+        Force_str += (
+            "Rsbo_enforced_transfer = " + str(self.Rsbo_enforced_transfer) + linesep
+        )
         return Force_str
 
     def __eq__(self, other):
@@ -149,6 +156,8 @@ class Force(FrozenClass):
             return False
         if other.max_wavenumber_transfer != self.max_wavenumber_transfer:
             return False
+        if other.Rsbo_enforced_transfer != self.Rsbo_enforced_transfer:
+            return False
         return True
 
     def __sizeof__(self):
@@ -159,6 +168,7 @@ class Force(FrozenClass):
         S += getsizeof(self.is_periodicity_a)
         S += getsizeof(self.is_agsf_transfer)
         S += getsizeof(self.max_wavenumber_transfer)
+        S += getsizeof(self.Rsbo_enforced_transfer)
         return S
 
     def as_dict(self):
@@ -169,6 +179,7 @@ class Force(FrozenClass):
         Force_dict["is_periodicity_a"] = self.is_periodicity_a
         Force_dict["is_agsf_transfer"] = self.is_agsf_transfer
         Force_dict["max_wavenumber_transfer"] = self.max_wavenumber_transfer
+        Force_dict["Rsbo_enforced_transfer"] = self.Rsbo_enforced_transfer
         # The class name is added to the dict for deserialisation purpose
         Force_dict["__class__"] = "Force"
         return Force_dict
@@ -180,6 +191,7 @@ class Force(FrozenClass):
         self.is_periodicity_a = None
         self.is_agsf_transfer = None
         self.max_wavenumber_transfer = None
+        self.Rsbo_enforced_transfer = None
 
     def _get_is_periodicity_t(self):
         """getter of is_periodicity_t"""
@@ -250,5 +262,23 @@ class Force(FrozenClass):
         doc=u"""Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification)
 
         :Type: int
+        """,
+    )
+
+    def _get_Rsbo_enforced_transfer(self):
+        """getter of Rsbo_enforced_transfer"""
+        return self._Rsbo_enforced_transfer
+
+    def _set_Rsbo_enforced_transfer(self, value):
+        """setter of Rsbo_enforced_transfer"""
+        check_var("Rsbo_enforced_transfer", value, "float")
+        self._Rsbo_enforced_transfer = value
+
+    Rsbo_enforced_transfer = property(
+        fget=_get_Rsbo_enforced_transfer,
+        fset=_set_Rsbo_enforced_transfer,
+        doc=u"""To enforce the value of the radius for AGSF transfer
+
+        :Type: float
         """,
     )
