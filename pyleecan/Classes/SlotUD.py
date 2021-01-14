@@ -204,7 +204,10 @@ class SlotUD(SlotWind):
         else:
             SlotUD_dict["line_list"] = list()
             for obj in self.line_list:
-                SlotUD_dict["line_list"].append(obj.as_dict())
+                if obj is not None:
+                    SlotUD_dict["line_list"].append(obj.as_dict())
+                else:
+                    SlotUD_dict["line_list"].append(None)
         SlotUD_dict["wind_begin_index"] = self.wind_begin_index
         SlotUD_dict["wind_end_index"] = self.wind_end_index
         SlotUD_dict["type_line_wind"] = self.type_line_wind

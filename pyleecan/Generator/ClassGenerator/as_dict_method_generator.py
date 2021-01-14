@@ -125,26 +125,25 @@ def generate_as_dict(gen_dict, class_dict):
             var_str += TAB2 + "else:\n"
             var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = list()\n'
             var_str += TAB3 + "for obj in self." + prop["name"] + ":\n"
+            var_str += TAB4 + "if obj is not None:"
             var_str += (
-                TAB4
-                + class_name
-                + '_dict["'
-                + prop["name"]
-                + '"].append(obj.as_dict())\n'
+                TAB5 + f'{class_name}_dict["{prop["name"]}"].append(obj.as_dict())\n'
             )
+            var_str += TAB4 + "else:"
+            var_str += TAB5 + f'{class_name}_dict["{prop["name"]}"].append(None)\n'
+
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
             var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
             var_str += TAB2 + "else:\n"
             var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
             var_str += TAB3 + "for key, obj in self." + prop["name"] + ".items():\n"
+            var_str += TAB4 + "if obj is not None:"
             var_str += (
-                TAB4
-                + class_name
-                + '_dict["'
-                + prop["name"]
-                + '"][key] = obj.as_dict()\n'
+                TAB5 + f'{class_name}_dict["{prop["name"]}"][key] = obj.as_dict()\n'
             )
+            var_str += TAB4 + "else:"
+            var_str += TAB5 + f'{class_name}_dict["{prop["name"]}"][key] = None\n'
         elif prop["type"] == "function":
             # Add => "class_name ["var_name"] = self._var_name" to
             # var_str

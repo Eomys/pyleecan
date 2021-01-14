@@ -28,7 +28,7 @@ def comp_loss_density(self, meshsolution):
     B_REF = self.B_REF
 
     # filter needed mesh group
-    sol = meshsolution.get_group(self.group).get_solution(label="B")
+    sol = meshsolution.get_solution(label="B")
 
     # TODO Calculate principle axes and transform for exponentials other than 2
     # TODO maybe use rad. and tan. comp. as intermediate solution

@@ -22,15 +22,27 @@ try:
 except ImportError as error:
     run = error
 
+try:
+    from ..Methods.Simulation.Loss.add_model import add_model
+except ImportError as error:
+    add_model = error
+
+try:
+    from ..Methods.Simulation.Loss.remove_model import remove_model
+except ImportError as error:
+    remove_model = error
+
 
 from ._check import InitUnKnowClassError
+from .LossModel import LossModel
 
 
 class Loss(FrozenClass):
-    """Losses module object that containt the loss models"""
+    """Losses module object that containt the loss models. See method add_model for implementation details."""
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Loss.run
     if isinstance(run, ImportError):
         run = property(
@@ -38,13 +50,31 @@ class Loss(FrozenClass):
         )
     else:
         run = run
+    # cf Methods.Simulation.Loss.add_model
+    if isinstance(add_model, ImportError):
+        add_model = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Loss method add_model: " + str(add_model))
+            )
+        )
+    else:
+        add_model = add_model
+    # cf Methods.Simulation.Loss.remove_model
+    if isinstance(remove_model, ImportError):
+        remove_model = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Loss method remove_model: " + str(remove_model))
+            )
+        )
+    else:
+        remove_model = remove_model
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, iron=-1, winding=-1, magnet=-1, init_dict=None, init_str=None):
+    def __init__(self, model_index=-1, model_list=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -60,17 +90,14 @@ class Loss(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "iron" in list(init_dict.keys()):
-                iron = init_dict["iron"]
-            if "winding" in list(init_dict.keys()):
-                winding = init_dict["winding"]
-            if "magnet" in list(init_dict.keys()):
-                magnet = init_dict["magnet"]
+            if "model_index" in list(init_dict.keys()):
+                model_index = init_dict["model_index"]
+            if "model_list" in list(init_dict.keys()):
+                model_list = init_dict["model_list"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.iron = iron
-        self.winding = winding
-        self.magnet = magnet
+        self.model_index = model_index
+        self.model_list = model_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -83,9 +110,14 @@ class Loss(FrozenClass):
             Loss_str += "parent = None " + linesep
         else:
             Loss_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Loss_str += "iron = " + str(self.iron) + linesep
-        Loss_str += "winding = " + str(self.winding) + linesep
-        Loss_str += "magnet = " + str(self.magnet) + linesep
+        Loss_str += "model_index = " + str(self.model_index) + linesep
+        if len(self.model_list) == 0:
+            Loss_str += "model_list = []" + linesep
+        for ii in range(len(self.model_list)):
+            tmp = (
+                self.model_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            Loss_str += "model_list[" + str(ii) + "] =" + tmp + linesep + linesep
         return Loss_str
 
     def __eq__(self, other):
@@ -93,11 +125,9 @@ class Loss(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.iron != self.iron:
+        if other.model_index != self.model_index:
             return False
-        if other.winding != self.winding:
-            return False
-        if other.magnet != self.magnet:
+        if other.model_list != self.model_list:
             return False
         return True
 
@@ -105,24 +135,30 @@ class Loss(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        if self.iron is not None:
-            for key, value in self.iron.items():
+        if self.model_index is not None:
+            for key, value in self.model_index.items():
                 S += getsizeof(value) + getsizeof(key)
-        if self.winding is not None:
-            for key, value in self.winding.items():
-                S += getsizeof(value) + getsizeof(key)
-        if self.magnet is not None:
-            for key, value in self.magnet.items():
-                S += getsizeof(value) + getsizeof(key)
+        if self.model_list is not None:
+            for value in self.model_list:
+                S += getsizeof(value)
         return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Loss_dict = dict()
-        Loss_dict["iron"] = self.iron.copy() if self.iron is not None else None
-        Loss_dict["winding"] = self.winding.copy() if self.winding is not None else None
-        Loss_dict["magnet"] = self.magnet.copy() if self.magnet is not None else None
+        Loss_dict["model_index"] = (
+            self.model_index.copy() if self.model_index is not None else None
+        )
+        if self.model_list is None:
+            Loss_dict["model_list"] = None
+        else:
+            Loss_dict["model_list"] = list()
+            for obj in self.model_list:
+                if obj is not None:
+                    Loss_dict["model_list"].append(obj.as_dict())
+                else:
+                    Loss_dict["model_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
         Loss_dict["__class__"] = "Loss"
         return Loss_dict
@@ -130,66 +166,56 @@ class Loss(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.iron = None
-        self.winding = None
-        self.magnet = None
+        self.model_index = None
+        self.model_list = None
 
-    def _get_iron(self):
-        """getter of iron"""
-        return self._iron
+    def _get_model_index(self):
+        """getter of model_index"""
+        return self._model_index
 
-    def _set_iron(self, value):
-        """setter of iron"""
+    def _set_model_index(self, value):
+        """setter of model_index"""
         if type(value) is int and value == -1:
             value = dict()
-        check_var("iron", value, "dict")
-        self._iron = value
+        check_var("model_index", value, "dict")
+        self._model_index = value
 
-    iron = property(
-        fget=_get_iron,
-        fset=_set_iron,
-        doc=u"""Dict of the iron loss model (key is the lamination name)
+    model_index = property(
+        fget=_get_model_index,
+        fset=_set_model_index,
+        doc=u"""Internal dict to strore model index
 
         :Type: dict
         """,
     )
 
-    def _get_winding(self):
-        """getter of winding"""
-        return self._winding
+    def _get_model_list(self):
+        """getter of model_list"""
+        if self._model_list is not None:
+            for obj in self._model_list:
+                if obj is not None:
+                    obj.parent = self
+        return self._model_list
 
-    def _set_winding(self, value):
-        """setter of winding"""
-        if type(value) is int and value == -1:
-            value = dict()
-        check_var("winding", value, "dict")
-        self._winding = value
+    def _set_model_list(self, value):
+        """setter of model_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "model_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
+        check_var("model_list", value, "[LossModel]")
+        self._model_list = value
 
-    winding = property(
-        fget=_get_winding,
-        fset=_set_winding,
-        doc=u"""Dict of the winding loss model (key is the lamination name)
+    model_list = property(
+        fget=_get_model_list,
+        fset=_set_model_list,
+        doc=u"""Internal list of loss models
 
-        :Type: dict
-        """,
-    )
-
-    def _get_magnet(self):
-        """getter of magnet"""
-        return self._magnet
-
-    def _set_magnet(self, value):
-        """setter of magnet"""
-        if type(value) is int and value == -1:
-            value = dict()
-        check_var("magnet", value, "dict")
-        self._magnet = value
-
-    magnet = property(
-        fget=_get_magnet,
-        fset=_set_magnet,
-        doc=u"""Dict of the magnet loss model (key is the lamination name)
-
-        :Type: dict
+        :Type: [LossModel]
         """,
     )

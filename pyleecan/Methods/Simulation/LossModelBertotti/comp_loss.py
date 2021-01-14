@@ -43,23 +43,32 @@ def _comp_loss_sum(self, LossDensComps, area, k_freq):
     return loss_sum
 
 
-def comp_loss(self, output, lam):
+def comp_loss(self, output, part_label):
     """Compute the Losses"""
     # get logger
     logger = self.get_logger()
 
-    # get the simulation and output
-    simu = output.simu
+    # check inpurt
+    if not "Stator" in part_label and not "Rotor" in part_label:
+        logger.warning(
+            f"LossModelBertotti.comp_loss(): 'part_label'"
+            + f" {part_label} not implemented yet."
+        )
+        return None, None
 
-    # setup meshsolution and solution list
-    mag_meshsol = output.mag.meshsolution
-    meshsolution = mag_meshsol.get_group(self.group)
+    # get the simulation and the lamination
+    simu = output.simu
+    lam = simu.machine.get_lam_by_label(part_label)
 
     # get length, material and speed
     L1 = lam.L1
     mat_type = lam.mat_type
     rho = mat_type.struct.rho
     N0 = output.elec.N0
+    group_name = part_label.lower() + " " + self.group  # TODO unifiy FEA names
+
+    # setup meshsolution and solution list
+    meshsolution = output.mag.meshsolution.get_group(group_name)
 
     # compute needed model parameter from material data
     success = self.comp_coeff_Bertotti(mat_type)
@@ -68,7 +77,7 @@ def comp_loss(self, output, lam):
 
     if success:
         # compute loss density
-        LossDens, LossDensComps = self.comp_loss_density(mag_meshsol)
+        LossDens, LossDensComps = self.comp_loss_density(meshsolution)
 
         # compute sum over frequencies
         axes_list = [axis.name for axis in LossDens.axes]

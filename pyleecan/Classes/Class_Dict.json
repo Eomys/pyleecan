@@ -1117,7 +1117,7 @@
         "methods": [],
         "mother": "",
         "name": "Elmer",
-        "package": "",
+        "package": "Elmer",
         "path": "pyleecan/Generator/ClassesRef/Elmer/Elmer.csv",
         "properties": [
             {
@@ -1176,7 +1176,7 @@
                 "name": "usecols",
                 "type": "list",
                 "unit": "",
-                "value": ""
+                "value": []
             },
             {
                 "desc": "List of columns data names",
@@ -1185,7 +1185,7 @@
                 "name": "columns",
                 "type": "list",
                 "unit": "",
-                "value": ""
+                "value": []
             },
             {
                 "desc": "Determin if data are 'SaveScalars' data, else 'SaveLine' data are assumed",
@@ -4002,10 +4002,12 @@
             }
         ],
         "daughters": [],
-        "desc": "Losses module object that containt the loss models",
+        "desc": "Losses module object that containt the loss models. See method add_model for implementation details.",
         "is_internal": false,
         "methods": [
-            "run"
+            "run",
+            "add_model",
+            "remove_model"
         ],
         "mother": "",
         "name": "Loss",
@@ -4013,31 +4015,22 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
         "properties": [
             {
-                "desc": "Dict of the iron loss model (key is the lamination name)",
+                "desc": "Internal dict to strore model index",
                 "max": "",
                 "min": "",
-                "name": "iron",
+                "name": "model_index",
                 "type": "dict",
                 "unit": "",
                 "value": {}
             },
             {
-                "desc": "Dict of the winding loss model (key is the lamination name)",
+                "desc": "Internal list of loss models",
                 "max": "",
                 "min": "",
-                "name": "winding",
-                "type": "dict",
+                "name": "model_list",
+                "type": "[LossModel]",
                 "unit": "",
-                "value": {}
-            },
-            {
-                "desc": "Dict of the magnet loss model (key is the lamination name)",
-                "max": "",
-                "min": "",
-                "name": "magnet",
-                "type": "dict",
-                "unit": "",
-                "value": {}
+                "value": ""
             }
         ]
     },
@@ -4154,13 +4147,13 @@
                 "value": null
             },
             {
-                "desc": "Name of the coressponding mesh group",
+                "desc": "String to override default FEA group to apply model",
                 "max": "",
                 "min": "",
                 "name": "group",
                 "type": "str",
                 "unit": "-",
-                "value": "None"
+                "value": "core"
             },
             {
                 "desc": "Store the loss density",
@@ -7198,37 +7191,28 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
         "properties": [
             {
-                "desc": "Dict of the computed iron losses (with dict key the name of the lamination)",
+                "desc": "Internal list of loss data",
                 "max": "",
                 "min": "",
-                "name": "iron",
-                "type": "dict",
+                "name": "loss_list",
+                "type": "[SciDataTool.Classes.DataND.DataND]",
                 "unit": "",
-                "value": {}
+                "value": "None"
             },
             {
-                "desc": "Dict of the computed winding losses (with dict key the name of the lamination)",
+                "desc": "Internal list of loss meshsolutions",
                 "max": "",
                 "min": "",
-                "name": "winding",
-                "type": "dict",
+                "name": "meshsol_list",
+                "type": "[MeshSolution]",
                 "unit": "",
-                "value": {}
+                "value": ""
             },
             {
-                "desc": "Dict of the computed magnet losses (with dict key the name of the lamination)",
+                "desc": "Internal dict to index losses",
                 "max": "",
                 "min": "",
-                "name": "magnet",
-                "type": "dict",
-                "unit": "",
-                "value": {}
-            },
-            {
-                "desc": "Dict of FEA software mesh and post processing results",
-                "max": "",
-                "min": "",
-                "name": "meshsolution",
+                "name": "loss_index",
                 "type": "dict",
                 "unit": "",
                 "value": {}
@@ -7241,24 +7225,6 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutLoss"
-            },
-            {
-                "desc": "List of the mechanical losses",
-                "max": "",
-                "min": "",
-                "name": "mech",
-                "type": "list",
-                "unit": "",
-                "value": []
-            },
-            {
-                "desc": "List of the miscellaneous losses",
-                "max": "",
-                "min": "",
-                "name": "misc",
-                "type": "list",
-                "unit": "",
-                "value": []
             }
         ]
     },
@@ -11062,7 +11028,7 @@
                 "name": "sections",
                 "type": "list",
                 "unit": "",
-                "value": ""
+                "value": []
             }
         ]
     },

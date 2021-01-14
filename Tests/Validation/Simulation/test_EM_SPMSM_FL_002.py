@@ -21,6 +21,7 @@ from Tests import save_validation_path as save_path
 @pytest.mark.validation
 @pytest.mark.FEMM
 @pytest.mark.MeshSol
+@pytest.mark.DEV
 def test_Magnetic_FEMM_sym():
     """Validation of a polar SIPMSM with surface magnet
     Linear lamination material
@@ -84,13 +85,13 @@ def test_Magnetic_FEMM_sym():
     )
 
     out.mag.meshsolution.plot_mesh(
-        group_names="stator",
+        group_names="stator core",
         save_path=join(save_path, "EM_SPMSM_FL_002_mesh_stator.png"),
         is_show_fig=False,
     )
 
     out.mag.meshsolution.plot_mesh(
-        group_names=["stator", "/", "airgap", "stator_windings"],
+        group_names=["stator core", "/", "airgap", "stator winding"],
         save_path=join(save_path, "EM_SPMSM_FL_002_mesh_stator_interface.png"),
         is_show_fig=False,
     )
@@ -109,7 +110,7 @@ def test_Magnetic_FEMM_sym():
 
     out.mag.meshsolution.plot_contour(
         label="H",
-        group_names="stator",
+        group_names="stator core",
         save_path=join(save_path, "EM_SPMSM_FL_002_H_stator.png"),
         is_show_fig=False,
     )

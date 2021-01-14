@@ -9,13 +9,22 @@ from ....Functions.getattr_recursive import getattr_recursive
 from logging import getLogger
 
 
-def comp_loss(self, output, lam):
+def comp_loss(self, output, part_label):
     """Compute the Losses"""
     # get logger
     logger = self.get_logger()
 
-    # get length and material
+    # check inpurt
+    if not "Stator" in part_label and not "Rotor" in part_label:
+        logger.warning(
+            f"LossModelWinding.comp_loss(): 'part_label'"
+            + f" {part_label} not implemented yet."
+        )
+        return None, None
+
+    # get the simulation and the lamination
     simu = output.simu
+    lam = simu.machine.get_lam_by_label(part_label)
 
     # check that lamination has a winding
     if hasattr(lam, "winding") and lam.winding is not None:
@@ -37,3 +46,7 @@ def comp_loss(self, output, lam):
         )
 
         return data, None
+
+    else:
+        logger.warning("LossModelWinding.comp_loss(): Lamination has no winding.")
+        return None, None
