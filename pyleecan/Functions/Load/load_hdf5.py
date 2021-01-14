@@ -3,6 +3,18 @@ from numpy import bool_, int64, string_, array
 from cloudpickle import loads
 
 
+def is_int(inputString):
+    """Check if a string is an int"""
+    # first check if string contains numbers
+    if any(char.isdigit() for char in inputString):
+        try:
+            int(inputString)
+            return True
+        except:
+            pass
+    return False
+
+
 def construct_dict_from_group(group):
     """
     construct_dict_from_group create a dictionnary and extract datasets and groups from the group
@@ -44,6 +56,9 @@ def construct_dict_from_group(group):
         return list_
     else:
         for key, val in group.items():
+            # Check if key is an int
+            if is_int(key):
+                key = int(key)
             # Check if val is a group or a dataset
             if isinstance(val, Group):  # Group
                 # Call the function recursively to load group
