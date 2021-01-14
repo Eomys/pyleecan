@@ -82,6 +82,8 @@ def dict_to_hdf5(file, prefix, dict_to_save):
     Save a list in the hdf5 file
     """
     for key, value in dict_to_save.items():
+        if isinstance(key, int):
+            key = str(key)
         variable_to_hdf5(file, prefix, value, key)
 
 
