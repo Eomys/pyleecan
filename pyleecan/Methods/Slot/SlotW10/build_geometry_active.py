@@ -39,16 +39,16 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     Z6 = point_dict["Z6"]
     Z7 = point_dict["Z7"]
 
-    X = linspace(Z7, Z6, Nrad + 1)
+    X = linspace(Z4, Z5, Nrad + 1)
     # Nrad+1 and Ntan+1 because 3 points => 2 zones
     Z = zeros((Nrad + 1, Ntan + 1), dtype=complex)
     for ii in range(Nrad + 1):
         Z[ii][:] = linspace(X[ii], X[ii].conjugate(), Ntan + 1)
 
-    assert Z[0][0] == Z7
-    assert Z[Nrad][0] == Z6
-    assert Z[0][Ntan] == Z4
-    assert Z[Nrad][Ntan] == Z5
+    assert Z[0][0] == Z4
+    assert Z[Nrad][0] == Z5
+    assert Z[0][Ntan] == Z7
+    assert Z[Nrad][Ntan] == Z6
 
     # We go thought the zone by Rad then Tan, starting by (0,0)
     surf_list = list()

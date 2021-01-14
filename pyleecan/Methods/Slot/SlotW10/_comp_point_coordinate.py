@@ -29,14 +29,14 @@ def _comp_point_coordinate(self):
 
     if self.is_outwards():
         Z2 = Z1 + self.H0
-        Z3 = Z2 + H1 - (self.W1 - self.W0) * 1j / 2.0
-        Z4 = Z3 + (self.W1 - self.W0) / 2.0 * 1j
-        Z5 = Z4 + self.H2 - (self.W2 - self.W0) / 2.0 * 1j
+        Z3 = Z2.real + H1 - 1j * self.W1 / 2.0
+        Z4 = Z2.real + H1 - 1j * self.W0 / 2.0
+        Z5 = Z2.real + H1 + self.H2 - 1j * self.W2 / 2.0
     else:  # inward slot
         Z2 = Z1 - self.H0
-        Z3 = Z2 - H1 - (self.W1 - self.W0) * 1j / 2.0
-        Z4 = Z3 + (self.W1 - self.W0) / 2.0 * 1j
-        Z5 = Z4 - self.H2 * (self.W2 - self.W0) / 2.0 * 1j
+        Z3 = Z2.real - H1 - 1j * self.W1 / 2.0
+        Z4 = Z2.real - H1 - 1j * self.W0 / 2.0
+        Z5 = Z2.real - H1 - self.H2 - 1j * self.W2 / 2.0
 
     point_dict = dict()
     # symetry
