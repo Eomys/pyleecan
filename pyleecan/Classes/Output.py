@@ -100,6 +100,7 @@ from .OutMag import OutMag
 from .OutStruct import OutStruct
 from .OutPost import OutPost
 from .OutForce import OutForce
+from .OutLoss import OutLoss
 
 
 class Output(FrozenClass):
@@ -281,6 +282,7 @@ class Output(FrozenClass):
         post=-1,
         logger_name="Pyleecan.Output",
         force=-1,
+        loss=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -317,6 +319,8 @@ class Output(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
+            if "loss" in list(init_dict.keys()):
+                loss = init_dict["loss"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.simu = simu
@@ -328,6 +332,7 @@ class Output(FrozenClass):
         self.post = post
         self.logger_name = logger_name
         self.force = force
+        self.loss = loss
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -377,6 +382,11 @@ class Output(FrozenClass):
             Output_str += "force = " + tmp
         else:
             Output_str += "force = None" + linesep + linesep
+        if self.loss is not None:
+            tmp = self.loss.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Output_str += "loss = " + tmp
+        else:
+            Output_str += "loss = None" + linesep + linesep
         return Output_str
 
     def __eq__(self, other):
@@ -402,6 +412,8 @@ class Output(FrozenClass):
             return False
         if other.force != self.force:
             return False
+        if other.loss != self.loss:
+            return False
         return True
 
     def __sizeof__(self):
@@ -417,6 +429,7 @@ class Output(FrozenClass):
         S += getsizeof(self.post)
         S += getsizeof(self.logger_name)
         S += getsizeof(self.force)
+        S += getsizeof(self.loss)
         return S
 
     def as_dict(self):
@@ -453,6 +466,10 @@ class Output(FrozenClass):
             Output_dict["force"] = None
         else:
             Output_dict["force"] = self.force.as_dict()
+        if self.loss is None:
+            Output_dict["loss"] = None
+        else:
+            Output_dict["loss"] = self.loss.as_dict()
         # The class name is added to the dict for deserialisation purpose
         Output_dict["__class__"] = "Output"
         return Output_dict
@@ -476,6 +493,8 @@ class Output(FrozenClass):
         self.logger_name = None
         if self.force is not None:
             self.force._set_None()
+        if self.loss is not None:
+            self.loss._set_None()
 
     def _get_simu(self):
         """getter of simu"""
@@ -710,5 +729,33 @@ class Output(FrozenClass):
         doc=u"""Force module output
 
         :Type: OutForce
+        """,
+    )
+
+    def _get_loss(self):
+        """getter of loss"""
+        return self._loss
+
+    def _set_loss(self, value):
+        """setter of loss"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "loss")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutLoss()
+        check_var("loss", value, "OutLoss")
+        self._loss = value
+
+        if self._loss is not None:
+            self._loss.parent = self
+
+    loss = property(
+        fget=_get_loss,
+        fset=_set_loss,
+        doc=u"""Loss module output
+
+        :Type: OutLoss
         """,
     )

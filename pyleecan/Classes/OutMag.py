@@ -300,7 +300,10 @@ class OutMag(FrozenClass):
         else:
             OutMag_dict["Phi_wind"] = dict()
             for key, obj in self.Phi_wind.items():
-                OutMag_dict["Phi_wind"][key] = obj.as_dict()
+                if obj is not None:
+                    OutMag_dict["Phi_wind"][key] = obj.as_dict()
+                else:
+                    OutMag_dict["Phi_wind"][key] = None
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:

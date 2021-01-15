@@ -141,8 +141,8 @@ def check_type(var_name, value, expect_type, type_value):
         expect_type = expect_type[1:-1]
         for element in value:
             type_value = type(element).__name__
-            # Check if it's the expected type
-            if not type_value == expect_type:
+            # Check if it's the expected type or None
+            if not type_value == expect_type and element is not None:
                 # Check if object inherit from the expected type
                 mother = element.__class__.__bases__  # List of inherited class
                 find = False  # Store the result of the research
@@ -172,8 +172,8 @@ def check_type(var_name, value, expect_type, type_value):
         for key, element in value.items():
             if element is not None:
                 type_value = type(element).__name__
-                # Check if it's the expected type
-                if not type_value == expect_type:
+                # Check if it's the expected type or None
+                if not type_value == expect_type and element is not None:
                     # Check if object inherit from the expected type
                     mother = element.__class__.__bases__  # List of inherited class
                     find = False  # Store the result of the research

@@ -212,7 +212,10 @@ class VarParam(VarSimu):
         else:
             VarParam_dict["paramexplorer_list"] = list()
             for obj in self.paramexplorer_list:
-                VarParam_dict["paramexplorer_list"].append(obj.as_dict())
+                if obj is not None:
+                    VarParam_dict["paramexplorer_list"].append(obj.as_dict())
+                else:
+                    VarParam_dict["paramexplorer_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VarParam_dict["__class__"] = "VarParam"

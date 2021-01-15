@@ -139,7 +139,10 @@ class ImportVectorField(FrozenClass):
         else:
             ImportVectorField_dict["components"] = dict()
             for key, obj in self.components.items():
-                ImportVectorField_dict["components"][key] = obj.as_dict()
+                if obj is not None:
+                    ImportVectorField_dict["components"][key] = obj.as_dict()
+                else:
+                    ImportVectorField_dict["components"][key] = None
         ImportVectorField_dict["name"] = self.name
         ImportVectorField_dict["symbol"] = self.symbol
         # The class name is added to the dict for deserialisation purpose

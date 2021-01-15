@@ -144,6 +144,7 @@ from .OutMag import OutMag
 from .OutStruct import OutStruct
 from .OutPost import OutPost
 from .OutForce import OutForce
+from .OutLoss import OutLoss
 
 
 class XOutput(Output):
@@ -394,6 +395,7 @@ class XOutput(Output):
         post=-1,
         logger_name="Pyleecan.Output",
         force=-1,
+        loss=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -438,6 +440,8 @@ class XOutput(Output):
                 logger_name = init_dict["logger_name"]
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
+            if "loss" in list(init_dict.keys()):
+                loss = init_dict["loss"]
         # Set the properties (value check and convertion are done in setter)
         self.paramexplorer_list = paramexplorer_list
         self.output_list = output_list
@@ -454,6 +458,7 @@ class XOutput(Output):
             post=post,
             logger_name=logger_name,
             force=force,
+            loss=loss,
         )
         # The class is frozen (in Output init), for now it's impossible to
         # add new properties
@@ -541,19 +546,28 @@ class XOutput(Output):
         else:
             XOutput_dict["paramexplorer_list"] = list()
             for obj in self.paramexplorer_list:
-                XOutput_dict["paramexplorer_list"].append(obj.as_dict())
+                if obj is not None:
+                    XOutput_dict["paramexplorer_list"].append(obj.as_dict())
+                else:
+                    XOutput_dict["paramexplorer_list"].append(None)
         if self.output_list is None:
             XOutput_dict["output_list"] = None
         else:
             XOutput_dict["output_list"] = list()
             for obj in self.output_list:
-                XOutput_dict["output_list"].append(obj.as_dict())
+                if obj is not None:
+                    XOutput_dict["output_list"].append(obj.as_dict())
+                else:
+                    XOutput_dict["output_list"].append(None)
         if self.xoutput_dict is None:
             XOutput_dict["xoutput_dict"] = None
         else:
             XOutput_dict["xoutput_dict"] = dict()
             for key, obj in self.xoutput_dict.items():
-                XOutput_dict["xoutput_dict"][key] = obj.as_dict()
+                if obj is not None:
+                    XOutput_dict["xoutput_dict"][key] = obj.as_dict()
+                else:
+                    XOutput_dict["xoutput_dict"][key] = None
         XOutput_dict["nb_simu"] = self.nb_simu
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name

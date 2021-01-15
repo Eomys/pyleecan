@@ -235,7 +235,10 @@ class Simulation(FrozenClass):
         else:
             Simulation_dict["postproc_list"] = list()
             for obj in self.postproc_list:
-                Simulation_dict["postproc_list"].append(obj.as_dict())
+                if obj is not None:
+                    Simulation_dict["postproc_list"].append(obj.as_dict())
+                else:
+                    Simulation_dict["postproc_list"].append(None)
         Simulation_dict["index"] = self.index
         Simulation_dict["path_result"] = self.path_result
         # The class name is added to the dict for deserialisation purpose

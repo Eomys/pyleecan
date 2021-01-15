@@ -4021,6 +4021,216 @@
             }
         ]
     },
+    "Loss": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Losses module object that containt the loss models. See method add_model for implementation details.",
+        "is_internal": false,
+        "methods": [
+            "run",
+            "add_model",
+            "remove_model"
+        ],
+        "mother": "",
+        "name": "Loss",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
+        "properties": [
+            {
+                "desc": "Internal dict to strore model index",
+                "max": "",
+                "min": "",
+                "name": "model_index",
+                "type": "dict",
+                "unit": "",
+                "value": {}
+            },
+            {
+                "desc": "Internal list of loss models",
+                "max": "",
+                "min": "",
+                "name": "model_list",
+                "type": "[LossModel]",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
+    "LossModel": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "LossModelBertotti",
+            "LossModelWinding"
+        ],
+        "desc": "Abstract Loss Model Class",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "LossModel",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModel.csv",
+        "properties": [
+            {
+                "desc": "Name of the loss simulation (has to be unique)",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
+    "LossModelBertotti": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "F_REF",
+                "value": "50"
+            },
+            {
+                "name": "B_REF",
+                "value": "1.5"
+            }
+        ],
+        "daughters": [],
+        "desc": "Bertotti Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_loss",
+            "comp_coeff_Bertotti",
+            "comp_loss_density"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelBertotti",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelBertotti.csv",
+        "properties": [
+            {
+                "desc": "Hysteresis loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_hy",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Eddy current loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_ed",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Excess loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_ex",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Hysteresis loss power coefficient",
+                "max": "",
+                "min": "",
+                "name": "alpha_hy",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Eddy current loss power coefficient",
+                "max": "",
+                "min": "",
+                "name": "alpha_ed",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Excess loss power coefficient",
+                "max": "",
+                "min": "",
+                "name": "alpha_ex",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "String to override default FEA group to apply model",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "str",
+                "unit": "-",
+                "value": "core"
+            },
+            {
+                "desc": "Store the loss density",
+                "max": "",
+                "min": "",
+                "name": "get_meshsolution",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            },
+            {
+                "desc": "List of rotor speeds to override actual speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "list",
+                "unit": "rpm",
+                "value": []
+            }
+        ]
+    },
+    "LossModelWinding": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Winding loss model",
+        "is_internal": false,
+        "methods": [
+            "comp_loss"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelWinding",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelWinding.csv",
+        "properties": [
+            {
+                "desc": "Winding temperature",
+                "max": "",
+                "min": "",
+                "name": "temperature",
+                "type": "float",
+                "unit": "\u00c2\u00b0C",
+                "value": 20
+            }
+        ]
+    },
     "Machine": {
         "constants": [
             {
@@ -5522,6 +5732,15 @@
                 "type": "ImportMatrix",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "specific loss data value triplets, i.e. B, f, P",
+                "max": "",
+                "min": "",
+                "name": "LossData",
+                "type": "ImportMatrix",
+                "unit": "W/kg",
+                "value": ""
             }
         ]
     },
@@ -6988,6 +7207,63 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutInternal.csv",
         "properties": []
     },
+    "OutLoss": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather the loss module outputs",
+        "is_internal": false,
+        "methods": [
+            "get_loss",
+            "get_loss_dist"
+        ],
+        "mother": "",
+        "name": "OutLoss",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
+        "properties": [
+            {
+                "desc": "Internal list of loss data",
+                "max": "",
+                "min": "",
+                "name": "loss_list",
+                "type": "[SciDataTool.Classes.DataND.DataND]",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "desc": "Internal list of loss meshsolutions",
+                "max": "",
+                "min": "",
+                "name": "meshsol_list",
+                "type": "[MeshSolution]",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Internal dict to index losses",
+                "max": "",
+                "min": "",
+                "name": "loss_index",
+                "type": "dict",
+                "unit": "",
+                "value": {}
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutLoss"
+            }
+        ]
+    },
     "OutMag": {
         "constants": [
             {
@@ -7459,6 +7735,15 @@
                 "min": "",
                 "name": "force",
                 "type": "OutForce",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Loss module output",
+                "max": "",
+                "min": "",
+                "name": "loss",
+                "type": "OutLoss",
                 "unit": "-",
                 "value": ""
             }
@@ -8239,6 +8524,15 @@
                 "min": "",
                 "name": "force",
                 "type": "Force",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Loss moduale",
+                "max": "",
+                "min": "",
+                "name": "loss",
+                "type": "Loss",
                 "unit": "-",
                 "value": null
             }
