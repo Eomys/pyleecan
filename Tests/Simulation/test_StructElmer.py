@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from os.path import join
-
+from numpy import pi
 import pytest
 from Tests import save_path, TEST_DATA_DIR
 from pyleecan.definitions import DATA_DIR
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.SlotMPolar import SlotMPolar
+from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.StructElmer import StructElmer
@@ -108,12 +108,13 @@ class Test_StructElmer(object):
         machine = MachineSIPMSM()
         machine.stator = machine_1.stator.copy()
         machine.rotor = LamSlotMag()
+        machine.rotor.magnet = None
 
         machine.rotor.Rint = machine_1.rotor.Rint
         machine.rotor.Rext = machine_1.rotor.Rext
         machine.rotor.mat_type = machine_1.rotor.mat_type.copy()
 
-        machine.rotor.slot = SlotMPolar()
+        machine.rotor.slot = SlotM11(H0=0, W0=pi / 16)
         machine.rotor.slot.Zs = 8
         machine.rotor.is_stator = False
 
