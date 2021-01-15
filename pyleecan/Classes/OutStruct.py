@@ -36,7 +36,7 @@ class OutStruct(FrozenClass):
         Angle=None,
         Nt_tot=None,
         Na_tot=None,
-        logger_name="Pyleecan.OutStruct",
+        logger_name="Pyleecan.Structural",
         Yr=None,
         Vr=None,
         Ar=None,

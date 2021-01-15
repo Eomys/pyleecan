@@ -69,7 +69,7 @@ class OutLoss(FrozenClass):
         loss_list=None,
         meshsol_list=-1,
         loss_index=-1,
-        logger_name="Pyleecan.OutLoss",
+        logger_name="Pyleecan.Loss",
         init_dict=None,
         init_str=None,
     ):

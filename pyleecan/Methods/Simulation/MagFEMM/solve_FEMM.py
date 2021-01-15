@@ -134,7 +134,12 @@ def solve_FEMM(
 
     # Compute the data for each time step
     for ii in range(start_t, end_t):
-        self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt))
+        if Nt > 1:
+            self.get_logger().info(
+                "Solving time step " + str(ii + 1) + " / " + str(Nt) + " in FEMM"
+            )
+        else:
+            self.get_logger().info("Computing Airgap Flux in FEMM")
         # Update rotor position and currents
         update_FEMM_simulation(
             femm=femm,
@@ -194,11 +199,7 @@ def solve_FEMM(
         if (self.is_sliding_band or Nt == 1) and (self.is_get_mesh or self.is_save_FEA):
             # Get mesh data and magnetic quantities from .ans file
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
-                femm,
-                save_path,
-                j_t0=ii,
-                id_worker=start_t,
-                is_get_mesh=ii == start_t,
+                femm, save_path, j_t0=ii, id_worker=start_t, is_get_mesh=ii == start_t,
             )
 
             # Initialize mesh and magnetic quantities for first time step

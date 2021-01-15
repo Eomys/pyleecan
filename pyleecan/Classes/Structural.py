@@ -61,22 +61,31 @@ class Structural(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, init_dict=None, init_str=None):
-        """Constructor of the class. Can be use in two ways :
+    def __init__(
+        self, logger_name="Pyleecan.Structural", init_dict=None, init_str=None
+    ):
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
-            assert init_dict == {"__class__": "Structural"}
-        if init_str is not None:  # Initialisation by str
-            assert type(init_str) is str
-        # The class is frozen, for now it's impossible to add new properties
+            assert type(init_dict) is dict
+            # Overwrite default value with init_dict content
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
+        self.logger_name = logger_name
+
+        # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
@@ -87,6 +96,7 @@ class Structural(FrozenClass):
             Structural_str += "parent = None " + linesep
         else:
             Structural_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        Structural_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return Structural_str
 
     def __eq__(self, other):
@@ -94,21 +104,45 @@ class Structural(FrozenClass):
 
         if type(other) != type(self):
             return False
+        if other.logger_name != self.logger_name:
+            return False
         return True
 
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
+        S += getsizeof(self.logger_name)
         return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Structural_dict = dict()
+        Structural_dict["logger_name"] = self.logger_name
         # The class name is added to the dict for deserialisation purpose
         Structural_dict["__class__"] = "Structural"
         return Structural_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
+
+        self.logger_name = None
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    logger_name = property(
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
+    )

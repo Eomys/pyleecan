@@ -1097,6 +1097,15 @@
                 "type": "EEC",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Electrical"
             }
         ]
     },
@@ -1416,6 +1425,15 @@
                 "type": "float",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Force"
             }
         ]
     },
@@ -4040,6 +4058,15 @@
                 "type": "[LossModel]",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Loss"
             }
         ]
     },
@@ -5486,6 +5513,15 @@
                 "type": "float",
                 "unit": "rad",
                 "value": 0
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Magnetics"
             }
         ]
     },
@@ -6758,7 +6794,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutElec"
+                "value": "Pyleecan.Electrical"
             },
             {
                 "desc": "Theorical Average Electromagnetic torque",
@@ -6904,7 +6940,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutForce"
+                "value": "Pyleecan.Force"
             },
             {
                 "desc": "Radius value for air-gap computation",
@@ -7233,7 +7269,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutLoss"
+                "value": "Pyleecan.Loss"
             }
         ]
     },
@@ -7364,7 +7400,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutMag"
+                "value": "Pyleecan.Magnetics"
             },
             {
                 "desc": "OutInternal object containg outputs related to a specific model",
@@ -7548,7 +7584,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutStruct"
+                "value": "Pyleecan.Structural"
             },
             {
                 "desc": "Displacement output",
@@ -8524,7 +8560,8 @@
         "desc": "Abstract class for the simulation",
         "is_internal": false,
         "methods": [
-            "run"
+            "run",
+            "init_logger"
         ],
         "mother": "",
         "name": "Simulation",
@@ -11150,7 +11187,17 @@
         "name": "Structural",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/Structural.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Structural"
+            }
+        ]
     },
     "SurfLine": {
         "constants": [

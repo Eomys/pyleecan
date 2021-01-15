@@ -1,6 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 name,-,Name of the simulation,0,str,,,,,Simulation,,run,VERSION,1,Abstract class for the simulation
-desc,-,Simulation description,0,str,,,,,,,,,,
+desc,-,Simulation description,0,str,,,,,,,init_logger,,,
 machine,-,Machine to simulate,0,Machine,,,,,,,,,,
 input,-,Input of the simulation,0,Input,,,,,,,,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.Simulation,,,,,,,,,

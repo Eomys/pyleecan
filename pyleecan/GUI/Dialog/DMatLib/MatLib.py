@@ -8,8 +8,8 @@ from ....Functions.Material.replace_material_pyleecan_obj import (
     replace_material_pyleecan_obj,
 )
 from ....definitions import config_dict
-from ....GUI import GUI_logger
-
+from ....loggers import GUI_LOG_NAME
+from logging import getLogger
 from PySide2.QtCore import QObject, Signal
 
 
@@ -218,7 +218,7 @@ class MatLib(QObject):
 
         # Delete the material file if the material is in the Reference Material Library
         if key == "RefMatLib":
-            GUI_logger.info("Deleting the material: " + mat_to_del.path)
+            getLogger(GUI_LOG_NAME).info("Deleting the material: " + mat_to_del.path)
             remove(
                 join(config_dict["MAIN"]["MATLIB_DIR"], mat_to_del.path)
             )  # Delete the file
@@ -315,7 +315,7 @@ class MatLib(QObject):
 
         material.path = material.name + ".json"
 
-        GUI_logger.info("Creating the material: " + material.path)
+        getLogger(GUI_LOG_NAME).info("Creating the material: " + material.path)
 
         # Saving the material
         material.save(join(config_dict["MAIN"]["MATLIB_DIR"], material.path))

@@ -100,7 +100,7 @@ class OutElec(FrozenClass):
         angle_rotor=None,
         N0=None,
         angle_rotor_initial=0,
-        logger_name="Pyleecan.OutElec",
+        logger_name="Pyleecan.Electrical",
         Tem_av_ref=None,
         Id_ref=None,
         Iq_ref=None,
