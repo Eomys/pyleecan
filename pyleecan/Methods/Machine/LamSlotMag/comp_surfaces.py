@@ -20,9 +20,7 @@ def comp_surfaces(self):
     """
 
     S_dict = LamSlot.comp_surfaces(self)
-    Smag = 0
-    for magnet in self.slot.magnet:
-        Smag += magnet.comp_surface()
+    Smag = self.slot.comp_surface_active()
 
     S_dict["Smag"] = Smag
 

@@ -64,6 +64,7 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
+from .Magnet import Magnet
 from .Slot import Slot
 from .Material import Material
 from .Hole import Hole
@@ -182,6 +183,7 @@ class LamSlotMag(LamSlot):
 
     def __init__(
         self,
+        magnet=-1,
         slot=-1,
         L1=0.35,
         mat_type=-1,
@@ -212,6 +214,8 @@ class LamSlotMag(LamSlot):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
+            if "magnet" in list(init_dict.keys()):
+                magnet = init_dict["magnet"]
             if "slot" in list(init_dict.keys()):
                 slot = init_dict["slot"]
             if "L1" in list(init_dict.keys()):
@@ -237,6 +241,7 @@ class LamSlotMag(LamSlot):
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
         # Set the properties (value check and convertion are done in setter)
+        self.magnet = magnet
         # Call LamSlot init
         super(LamSlotMag, self).__init__(
             slot=slot,
@@ -261,6 +266,11 @@ class LamSlotMag(LamSlot):
         LamSlotMag_str = ""
         # Get the properties inherited from LamSlot
         LamSlotMag_str += super(LamSlotMag, self).__str__()
+        if self.magnet is not None:
+            tmp = self.magnet.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            LamSlotMag_str += "magnet = " + tmp
+        else:
+            LamSlotMag_str += "magnet = None" + linesep + linesep
         return LamSlotMag_str
 
     def __eq__(self, other):
@@ -272,6 +282,8 @@ class LamSlotMag(LamSlot):
         # Check the properties inherited from LamSlot
         if not super(LamSlotMag, self).__eq__(other):
             return False
+        if other.magnet != self.magnet:
+            return False
         return True
 
     def __sizeof__(self):
@@ -281,6 +293,7 @@ class LamSlotMag(LamSlot):
 
         # Get size of the properties inherited from LamSlot
         S += super(LamSlotMag, self).__sizeof__()
+        S += getsizeof(self.magnet)
         return S
 
     def as_dict(self):
@@ -288,6 +301,10 @@ class LamSlotMag(LamSlot):
 
         # Get the properties inherited from LamSlot
         LamSlotMag_dict = super(LamSlotMag, self).as_dict()
+        if self.magnet is None:
+            LamSlotMag_dict["magnet"] = None
+        else:
+            LamSlotMag_dict["magnet"] = self.magnet.as_dict()
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotMag_dict["__class__"] = "LamSlotMag"
@@ -296,5 +313,37 @@ class LamSlotMag(LamSlot):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
+        if self.magnet is not None:
+            self.magnet._set_None()
         # Set to None the properties inherited from LamSlot
         super(LamSlotMag, self)._set_None()
+
+    def _get_magnet(self):
+        """getter of magnet"""
+        return self._magnet
+
+    def _set_magnet(self, value):
+        """setter of magnet"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "magnet"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Magnet()
+        check_var("magnet", value, "Magnet")
+        self._magnet = value
+
+        if self._magnet is not None:
+            self._magnet.parent = self
+
+    magnet = property(
+        fget=_get_magnet,
+        fset=_set_magnet,
+        doc=u"""Magnet of the lamination
+
+        :Type: Magnet
+        """,
+    )

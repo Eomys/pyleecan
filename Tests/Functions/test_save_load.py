@@ -14,12 +14,11 @@ from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.MagnetType11 import MagnetType11
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.SlotMPolar import SlotMPolar
+from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Functions.load import (
@@ -53,8 +52,7 @@ def test_save_load_machine():
     test_obj.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
     test_obj.stator.winding = WindingDW1L(qs=5)
     test_obj.rotor = LamSlotMag(L1=0.55)
-    test_obj.rotor.slot = SlotMPolar(W0=pi / 4)
-    test_obj.rotor.slot.magnet = [MagnetType11(Wmag=pi / 4, Hmag=3)]
+    test_obj.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
     test_obj.shaft = Shaft(Lshaft=0.65)
     test_obj.frame = None
 
@@ -86,19 +84,17 @@ def test_save_load_machine():
     assert type(result.rotor) is LamSlotMag
     assert result.rotor.L1 == 0.55
 
-    assert type(result.rotor.slot) is SlotMPolar
+    assert type(result.rotor.slot) is SlotM11
     assert result.rotor.slot.W0 == pi / 4
-    assert type(result.rotor.slot.magnet) is list
 
-    assert type(result.rotor.slot.magnet[0]) is MagnetType11
-    assert len(result.rotor.slot.magnet) == 1
-    assert result.rotor.slot.magnet[0].Wmag == pi / 4
-    assert result.rotor.slot.magnet[0].Hmag == 3
+    assert result.rotor.slot.Wmag == pi / 4
+    assert result.rotor.slot.Hmag == 3
 
     assert type(result.shaft) is Shaft
     assert result.shaft.Lshaft == 0.65
 
     assert result.frame == None
+
 
 def test_save_load_folder_path():
     """Save with a folder path"""
@@ -211,8 +207,7 @@ def test_save_load_list():
     test_obj_1.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
     test_obj_1.stator.winding = WindingDW1L(qs=5)
     test_obj_1.rotor = LamSlotMag(L1=0.55)
-    test_obj_1.rotor.slot = SlotMPolar(W0=pi / 4)
-    test_obj_1.rotor.slot.magnet = [MagnetType11(Wmag=pi / 4, Hmag=3)]
+    test_obj_1.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
     test_obj_1.shaft = Shaft(Lshaft=0.65)
     test_obj_1.frame = None
 
@@ -252,8 +247,7 @@ def test_save_load_dict():
     test_obj_1.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
     test_obj_1.stator.winding = WindingDW1L(qs=5)
     test_obj_1.rotor = LamSlotMag(L1=0.55)
-    test_obj_1.rotor.slot = SlotMPolar(W0=pi / 4)
-    test_obj_1.rotor.slot.magnet = [MagnetType11(Wmag=pi / 4, Hmag=3)]
+    test_obj_1.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
     test_obj_1.shaft = Shaft(Lshaft=0.65)
     test_obj_1.frame = None
 

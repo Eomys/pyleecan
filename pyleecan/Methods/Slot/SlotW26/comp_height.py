@@ -25,7 +25,7 @@ def comp_height(self):
     Harc = float(Rbo * (1 - cos(alpha)))
 
     # Height of the arc (P2,C1,P7)
-    Hwind = self.comp_height_wind()
+    Hwind = self.comp_height_active()
 
     if self.is_outwards():
         return self.H0 + Hwind - Harc

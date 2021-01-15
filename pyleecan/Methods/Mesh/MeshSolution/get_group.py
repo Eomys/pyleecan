@@ -50,6 +50,13 @@ def get_group(self, group_names):
                 group_indices.extend(self.group[grp])
                 label = label + grp + "_"
     elif isinstance(group_names, str):
+        if group_names not in self.group:
+            raise KeyError(
+                group_names
+                + " group doesn't exist (available groups: "
+                + str(list(self.group.keys()))
+                + ")"
+            )
         group_indices.extend(self.group[group_names])
         label = label + group_names
 

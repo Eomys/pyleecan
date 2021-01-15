@@ -10,7 +10,7 @@ from numpy import exp, arcsin, ndarray, pi
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -83,10 +83,10 @@ class Test_SlotDC_meth(object):
         assert a == pytest.approx(b, rel=DELTA), msg
 
     @pytest.mark.parametrize("test_dict", SlotDC_test)
-    def test_comp_surface_wind(self, test_dict):
+    def test_comp_surface_active(self, test_dict):
         """Check that the computation of the winding surface is correct"""
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.comp_surface_wind()
+        result = test_obj.slot.comp_surface_active()
 
         a = result
         b = test_dict["SW_exp"]
@@ -94,7 +94,7 @@ class Test_SlotDC_meth(object):
         assert a == pytest.approx(b, rel=DELTA), msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_wind(test_obj.slot, Ndisc=2000)
+        b = comp_surface_active(test_obj.slot, Ndisc=2000)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 

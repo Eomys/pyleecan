@@ -32,7 +32,7 @@ def create_FEMM_magnet(femm, label, is_mmf, is_eddies, materials, lam):
         magnet_dict = lam.hole[0].get_magnet_dict()
         magnet = magnet_dict["magnet_" + idx_str]
     else:
-        magnet = lam.slot.magnet[int(idx_str)]
+        magnet = lam.magnet
         # pole_mag = "_" + label[12] + "_" + label[-4]
 
     rho = magnet.mat_type.elec.rho  # Resistivity at 20°C

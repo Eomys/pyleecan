@@ -4,7 +4,7 @@ def comp_fill_factor(self):
         return 0
     else:
         (Nrad, Ntan) = self.winding.get_dim_wind()
-        S_slot_wind = self.slot.comp_surface_wind()
+        S_slot_wind = self.slot.comp_surface_active()
         S_wind_act = (
             self.winding.conductor.comp_surface_active()
             * self.winding.Ntcoil
