@@ -220,7 +220,7 @@ def test_FEMM_parallelization_meshsolution():
     )
 
     out2.mag.meshsolution.plot_mesh(
-        group_names="stator",
+        group_names="stator core",
         save_path=join(save_path, simu.name + "_mesh_stator_parallel.png"),
         is_show_fig=False,
     )
@@ -255,5 +255,5 @@ def test_FEMM_parallelization_meshsolution():
 
 if __name__ == "__main__":
 
-    out, out2 = test_FEMM_parallelization_mag()
+    # out, out2 = test_FEMM_parallelization_mag()
     out3, out4 = test_FEMM_parallelization_meshsolution()
