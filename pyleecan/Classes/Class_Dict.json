@@ -4058,6 +4058,15 @@
                 "type": "[LossModel]",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Loss"
             }
         ]
     },
@@ -7260,7 +7269,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutLoss"
+                "value": "Pyleecan.Loss"
             }
         ]
     },

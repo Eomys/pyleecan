@@ -9,13 +9,15 @@ The choice between LOGGING_CONFIG_CONSOLE and LOGGING_CONFIG_FILE is made in pyl
 # Default level in every loggers
 DEFAULT_LOG_NAME = "Pyleecan"
 GUI_LOG_NAME = "Pyleecan.GUI"
-SUB_LOG_LIST = ["Machine", "Electrical", "Magnetics", "Force", "Structural"]
+SUB_LOG_LIST = ["Machine", "Electrical", "Magnetics", "Force", "Structural", "Loss"]
 
 CONSOLE_LEVEL = INFO
 CONSOLE_FORMAT = "[%(asctime)s] %(message)s"
+CONSOLE_DATE_FORMAT = "%H:%M:%S"
 
 FILE_LEVEL = DEBUG
-FILE_FORMAT = "%(asctime)s-%(levelname)s-%(name)s: %(message)s"
+FILE_FORMAT = "%(asctime)s-%(levelname)7s: %(message)s [%(name)s]"
+FILE_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 def gen_logger_config_dict(logger_name):
@@ -50,8 +52,11 @@ def gen_logger_config_dict(logger_name):
         },
         # Define formatters
         "formatters": {
-            "console_formatter": {"format": CONSOLE_FORMAT, "datefmt": "%H:%M:%S"},
-            "file_formatter": {"format": FILE_FORMAT},
+            "console_formatter": {
+                "format": CONSOLE_FORMAT,
+                "datefmt": CONSOLE_DATE_FORMAT,
+            },
+            "file_formatter": {"format": FILE_FORMAT, "datefmt": FILE_DATE_FORMAT},
         },
         "disable_existing_loggers": False,
     }

@@ -74,7 +74,14 @@ class Loss(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, model_index=-1, model_list=-1, init_dict=None, init_str=None):
+    def __init__(
+        self,
+        model_index=-1,
+        model_list=-1,
+        logger_name="Pyleecan.Loss",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -94,10 +101,13 @@ class Loss(FrozenClass):
                 model_index = init_dict["model_index"]
             if "model_list" in list(init_dict.keys()):
                 model_list = init_dict["model_list"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.model_index = model_index
         self.model_list = model_list
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -118,6 +128,7 @@ class Loss(FrozenClass):
                 self.model_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
             Loss_str += "model_list[" + str(ii) + "] =" + tmp + linesep + linesep
+        Loss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return Loss_str
 
     def __eq__(self, other):
@@ -128,6 +139,8 @@ class Loss(FrozenClass):
         if other.model_index != self.model_index:
             return False
         if other.model_list != self.model_list:
+            return False
+        if other.logger_name != self.logger_name:
             return False
         return True
 
@@ -141,6 +154,7 @@ class Loss(FrozenClass):
         if self.model_list is not None:
             for value in self.model_list:
                 S += getsizeof(value)
+        S += getsizeof(self.logger_name)
         return S
 
     def as_dict(self):
@@ -159,6 +173,7 @@ class Loss(FrozenClass):
                     Loss_dict["model_list"].append(obj.as_dict())
                 else:
                     Loss_dict["model_list"].append(None)
+        Loss_dict["logger_name"] = self.logger_name
         # The class name is added to the dict for deserialisation purpose
         Loss_dict["__class__"] = "Loss"
         return Loss_dict
@@ -168,6 +183,7 @@ class Loss(FrozenClass):
 
         self.model_index = None
         self.model_list = None
+        self.logger_name = None
 
     def _get_model_index(self):
         """getter of model_index"""
@@ -217,5 +233,23 @@ class Loss(FrozenClass):
         doc=u"""Internal list of loss models
 
         :Type: [LossModel]
+        """,
+    )
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    logger_name = property(
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use
+
+        :Type: str
         """,
     )
