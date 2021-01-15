@@ -232,7 +232,7 @@ def plot_3D_Data(
                 X_flat,
                 Y_flat,
                 Z_flat,
-                Sis_same_size=True,
+                is_same_size=True,
                 z_max=z_max,
                 z_min=z_min,
                 title=title,
