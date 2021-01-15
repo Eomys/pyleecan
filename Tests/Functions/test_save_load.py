@@ -100,8 +100,6 @@ def test_save_load_machine():
 
     assert result.frame == None
 
-
-@pytest.mark.failed  # reason: magnet_1 mismatch in 'assert test_obj == test_obj2'
 def test_save_load_folder_path():
     """Save with a folder path"""
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
