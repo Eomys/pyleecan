@@ -17,6 +17,8 @@ DELTA = 1e-6
 
 @pytest.mark.validation
 @pytest.mark.Force
+@pytest.mark.FEMM
+@pytest.mark.long
 def test_Benchmark_AGSF_Rag():
     """Comparison of AGSF at different radius for the 12s10p benchmark
     machine from publication:
@@ -43,13 +45,14 @@ def test_Benchmark_AGSF_Rag():
 
     simu.force = ForceMT(
         is_periodicity_a=False,
-        is_periodicity_t=True,
+        is_periodicity_t=False,
     )
 
     simu.mag = MagFEMM(
         is_periodicity_a=False,
-        is_periodicity_t=True,
+        is_periodicity_t=False,
         is_sliding_band=False,
+        Kmesh_fineness=4,
     )
 
     Rsbo = 0.0480
@@ -88,7 +91,7 @@ def test_Benchmark_AGSF_Rag():
     out_list[-1].plot_2D_Data(
         "force.AGSF",
         "wavenumber",
-        "time=0",
+        "freqs=0",
         x_min=0,
         x_max=24,
         data_list=AGSF_list,

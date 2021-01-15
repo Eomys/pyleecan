@@ -174,7 +174,10 @@ class SlotUD2(Slot):
         else:
             SlotUD2_dict["line_list"] = list()
             for obj in self.line_list:
-                SlotUD2_dict["line_list"].append(obj.as_dict())
+                if obj is not None:
+                    SlotUD2_dict["line_list"].append(obj.as_dict())
+                else:
+                    SlotUD2_dict["line_list"].append(None)
         if self.active_surf is None:
             SlotUD2_dict["active_surf"] = None
         else:

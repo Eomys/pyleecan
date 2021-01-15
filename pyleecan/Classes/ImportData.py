@@ -175,7 +175,10 @@ class ImportData(FrozenClass):
         else:
             ImportData_dict["axes"] = list()
             for obj in self.axes:
-                ImportData_dict["axes"].append(obj.as_dict())
+                if obj is not None:
+                    ImportData_dict["axes"].append(obj.as_dict())
+                else:
+                    ImportData_dict["axes"].append(None)
         if self.field is None:
             ImportData_dict["field"] = None
         else:

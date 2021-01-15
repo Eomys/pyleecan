@@ -263,7 +263,10 @@ class SurfLine(Surface):
         else:
             SurfLine_dict["line_list"] = list()
             for obj in self.line_list:
-                SurfLine_dict["line_list"].append(obj.as_dict())
+                if obj is not None:
+                    SurfLine_dict["line_list"].append(obj.as_dict())
+                else:
+                    SurfLine_dict["line_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SurfLine_dict["__class__"] = "SurfLine"

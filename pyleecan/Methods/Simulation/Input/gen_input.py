@@ -13,18 +13,20 @@ def gen_input(self):
     self : Input
         An Input object
     """
-
-    output = OutElec()
-    self.comp_axes(machine=output.simu.machine, N0=self.N0)
-
-    # Get the phase number for verifications
+    # Get the simulation and check output
     if self.parent is None:
         raise InputError("ERROR: Input object should be inside a Simulation object")
     simu = self.parent
 
     if self.parent.parent is None:
         raise InputError(
-            "ERROR: Input parent error: The Simulation object must be in an Output object to run"
+            "ERROR: Input parent error:"
+            + " The Simulation object must be in an Output object to run"
         )
+
+    # Create the correct Output object
+    output = OutElec()
+    self.comp_axes(machine=simu.machine, N0=self.N0)
+
     # Save the Output in the correct place
     self.parent.parent.elec = output

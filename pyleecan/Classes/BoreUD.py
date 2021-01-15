@@ -124,7 +124,10 @@ class BoreUD(Bore):
         else:
             BoreUD_dict["line_list"] = list()
             for obj in self.line_list:
-                BoreUD_dict["line_list"].append(obj.as_dict())
+                if obj is not None:
+                    BoreUD_dict["line_list"].append(obj.as_dict())
+                else:
+                    BoreUD_dict["line_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         BoreUD_dict["__class__"] = "BoreUD"

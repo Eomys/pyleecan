@@ -10,6 +10,6 @@ Phi_wind_stator,Wb,Stator winding flux DataTime object,"(Nt_tot, qs)",SciDataToo
 Phi_wind,Wb,Dict of lamination winding fluxlinkage DataTime objects,"(Nt_tot, qs)",{SciDataTool.Classes.DataTime.DataTime},None,,,,,,,,,
 emf,V,Electromotive force DataTime object,"(Nt_tot, qs)",SciDataTool.Classes.DataTime.DataTime,None,,,,,,,,,
 meshsolution,,FEA software mesh and solution,,MeshSolution,,,,,,,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.OutMag,,,,,,,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Magnetics,,,,,,,,,
 internal,-,OutInternal object containg outputs related to a specific model,0,OutInternal,None,,,,,,,,,
 Rag,-,Radius value for air-gap computation,0,float,None,,,,,,,,,

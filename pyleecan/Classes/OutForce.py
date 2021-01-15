@@ -51,7 +51,7 @@ class OutForce(FrozenClass):
         Time=None,
         Angle=None,
         AGSF=None,
-        logger_name="Pyleecan.OutForce",
+        logger_name="Pyleecan.Force",
         Rag=None,
         init_dict=None,
         init_str=None,

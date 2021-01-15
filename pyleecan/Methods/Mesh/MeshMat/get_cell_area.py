@@ -23,12 +23,17 @@ def get_cell_area(self, indices=None):
     vertices_dict = self.get_vertice(indices=indices)
 
     for key, vertices in vertices_dict.items():
-        try:
-            A = self.cell[key].interpolation.ref_cell.get_cell_area(vertices)
-        except:
-            logger.warning(f'MeshMat: Reference Cell for "{key}" not found.')
-            A = [None for i in range(vertices.shape[0])]
+        if len(vertices) != 0:
+            try:
+                A = self.cell[key].interpolation.ref_cell.get_cell_area(vertices)
+                A = A.tolist()
+            except:
+                logger.warning(
+                    f'MeshMat: Reference Cell for "{key}" not found. '
+                    + "Respective area set to zero."
+                )
+                A = [0 for i in range(vertices.shape[0])]
 
-        area.extend(A.tolist())
+            area.extend(A)
 
     return array(area)
