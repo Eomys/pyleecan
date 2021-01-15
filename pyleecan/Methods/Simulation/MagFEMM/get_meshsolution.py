@@ -9,24 +9,7 @@ from ....Classes.RefTriangle3 import RefTriangle3
 
 from os.path import join
 
-from ....Functions.FEMM import (
-    GROUP_SC,
-    GROUP_AG,
-    GROUP_RC,
-    GROUP_SW,
-    GROUP_RW,
-    GROUP_AGM,
-    GROUP_IN,
-    GROUP_FM,
-    GROUP_SV,
-    GROUP_RV,
-    GROUP_SSI,
-    GROUP_RSI,
-    GROUP_SN,
-    GROUP_RN,
-    GROUP_SH,
-    GROUP_RH,
-)
+from ....Functions.FEMM import FEMM_GROUPS
 
 
 def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False):
@@ -134,21 +117,14 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
         mesh.point = PointMat(
             coordinate=listNd[:, 0:2], nb_pt=NbNd, indice=np.linspace(0, NbNd - 1, NbNd)
         )
+        # get all groups that are in the FEMM model
         groups = dict()
-        groups["stator"] = mesh.cell["triangle"].indice[
-            np.where(listElem0[:, 6] == GROUP_SC)[0]
-        ]
-        groups["airgap"] = mesh.cell["triangle"].indice[
-            np.where(listElem0[:, 6] == GROUP_AG)[0]
-        ]
-        groups["stator_windings"] = mesh.cell["triangle"].indice[
-            np.where(listElem0[:, 6] == GROUP_SW)[0]
-        ]
-        groups["magnets"] = mesh.cell["triangle"].indice[
-            np.where(listElem0[:, 6] == GROUP_RW)[0]
-        ]
-        # If necessary, other groups can be defined here
-
+        for grp in FEMM_GROUPS:
+            idx = FEMM_GROUPS[grp]["ID"]
+            name = FEMM_GROUPS[grp]["name"]
+            ind = np.where(listElem0[:, 6] == idx)[0]
+            if ind.size > 0:
+                groups[name] = mesh.cell["triangle"].indice[ind]
     else:
         mesh = None
         groups = None

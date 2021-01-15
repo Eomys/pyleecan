@@ -39,6 +39,8 @@ def run_single(self):
     # if self.ac is not None:
     #     self.ac.run()
 
+    if self.loss is not None:
+        self.loss.run()
     # Running postprocessings
 
     if self.postproc_list:

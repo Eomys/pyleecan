@@ -179,7 +179,10 @@ class MachineUD(Machine):
         else:
             MachineUD_dict["lam_list"] = list()
             for obj in self.lam_list:
-                MachineUD_dict["lam_list"].append(obj.as_dict())
+                if obj is not None:
+                    MachineUD_dict["lam_list"].append(obj.as_dict())
+                else:
+                    MachineUD_dict["lam_list"].append(None)
         MachineUD_dict["is_sync"] = self.is_sync
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name

@@ -319,7 +319,10 @@ class LamSlotMulti(Lamination):
         else:
             LamSlotMulti_dict["slot_list"] = list()
             for obj in self.slot_list:
-                LamSlotMulti_dict["slot_list"].append(obj.as_dict())
+                if obj is not None:
+                    LamSlotMulti_dict["slot_list"].append(obj.as_dict())
+                else:
+                    LamSlotMulti_dict["slot_list"].append(None)
         if self.alpha is None:
             LamSlotMulti_dict["alpha"] = None
         else:

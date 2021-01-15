@@ -144,7 +144,10 @@ class ImportGenMatrixSin(ImportMatrix):
         else:
             ImportGenMatrixSin_dict["sin_list"] = list()
             for obj in self.sin_list:
-                ImportGenMatrixSin_dict["sin_list"].append(obj.as_dict())
+                if obj is not None:
+                    ImportGenMatrixSin_dict["sin_list"].append(obj.as_dict())
+                else:
+                    ImportGenMatrixSin_dict["sin_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportGenMatrixSin_dict["__class__"] = "ImportGenMatrixSin"
