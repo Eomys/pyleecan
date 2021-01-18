@@ -1,5 +1,5 @@
 from os import makedirs
-from os.path import join
+from os.path import join, isdir
 import pytest
 from shutil import copyfile
 
@@ -38,7 +38,8 @@ from pyleecan.definitions import DATA_DIR
 
 # Gather results in the same folder
 save_path = join(save_plot_path, "ICEM_2020")
-makedirs(save_path)
+if not isdir(save_path):
+    makedirs(save_path)
 
 
 """This test gather all the images/project for the ICEM 2020 publication:
