@@ -4,6 +4,7 @@
 import pytest
 from numpy import array, pi
 from os.path import join
+from multiprocessing import cpu_count
 
 # Pyleecan import
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
@@ -67,6 +68,7 @@ def test_Magnetic_FEMM_sym():
         type_BH_rotor=2,
         is_periodicity_a=False,
         is_get_mesh=True,
+        nb_worker=cpu_count(),
     )
     simu.force = None
     simu.struct = None

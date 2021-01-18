@@ -18,7 +18,6 @@ from pyleecan.definitions import config_dict
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
-@pytest.mark.failed  # fails only sometimes with "UnboundLocalError: local variable 'result' referenced bef..."
 def test_Magnetic_Phi0():
     """Validation of a SynRM machine from Syr-e r29 open source software
     https://sourceforge.net/projects/syr-e/

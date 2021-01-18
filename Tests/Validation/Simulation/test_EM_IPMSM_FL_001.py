@@ -1,18 +1,16 @@
 from numpy import ones, pi, array, linspace
 from os.path import join
 import matplotlib.pyplot as plt
+from multiprocessing import cpu_count
+import pytest
+
 from Tests import save_validation_path as save_path
-
 from pyleecan.Classes.Simu1 import Simu1
-
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-import pytest
-
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
@@ -49,7 +47,9 @@ def test_EM_IPMSM_FL_001():
     simu.input.angle_rotor_initial = 0.5216 + pi  # Rotor position at t=0 [rad]
 
     # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=False)
+    simu.mag = MagFEMM(
+        type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=False, nb_worker=cpu_count()
+    )
     simu.force = None
     simu.struct = None
 
