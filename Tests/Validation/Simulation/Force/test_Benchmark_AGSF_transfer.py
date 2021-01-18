@@ -2,6 +2,7 @@
 import pytest
 
 from os.path import join
+from multiprocessing import cpu_count
 
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Simu1 import Simu1
@@ -44,6 +45,7 @@ def test_Benchmark_AGSF_transfer():
         is_periodicity_a=False,
         is_periodicity_t=False,
         is_sliding_band=False,
+        nb_worker=cpu_count(),
     )
     simu.force = ForceMT(
         is_periodicity_a=False,

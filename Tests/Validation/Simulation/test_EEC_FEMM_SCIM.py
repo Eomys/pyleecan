@@ -1,4 +1,6 @@
 from os.path import join
+from multiprocessing import cpu_count
+
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
@@ -34,7 +36,7 @@ def test_EEC_FEMM_SCIM_010():
     eec_scim.felec = 50
     eec_scim.Nrev = 1 / 6
     eec_scim.Nt_tot = 8
-    eec_scim.nb_worker = 4
+    eec_scim.nb_worker = cpu_count()
 
     simu.elec = Electrical(
         eec=eec_scim,

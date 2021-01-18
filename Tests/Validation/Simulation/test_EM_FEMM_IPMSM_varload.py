@@ -8,6 +8,7 @@ sys.path.insert(0, normpath(abspath(dirname(__file__))))
 import pytest
 
 from numpy import ones, zeros, linspace, pi, array, sqrt, arange, exp
+from multiprocessing import cpu_count
 
 from pyleecan.Functions.Plot.plot_2D import plot_2D
 from pyleecan.definitions import config_dict
@@ -35,6 +36,7 @@ def test_EM_FEMM_IPMSM_varload():
     simu.mag = MagFEMM(
         is_periodicity_a=True,
         is_periodicity_t=True,
+        nb_worker=cpu_count(),
     )
     # Run only Magnetic module
     simu.elec = None
