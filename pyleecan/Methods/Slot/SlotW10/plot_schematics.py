@@ -16,6 +16,7 @@ from ....Functions.Plot import (
     MAIN_LINE_COLOR,
     MAIN_LINE_STYLE,
     MAIN_LINE_WIDTH,
+    plot_quote,
 )
 
 
@@ -77,7 +78,10 @@ def plot_schematics(
         fig = plt.gcf()
         ax = plt.gca()
         point_dict = self._comp_point_coordinate()
-
+        if self.is_outwards():
+            sign = 1
+        else:
+            sign = -1
         # Adding point label
         if add_point_label:
             for name, Z in point_dict.items():
@@ -99,66 +103,35 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W0",
+                offset_label=self.H0 * 0.1 + 1j * self.W0 * 0.1,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
             # W1
             Zlim1 = point_dict["Z2"].real + 1j * point_dict["Z3"].imag
             Zlim2 = point_dict["Z9"].real + 1j * point_dict["Z8"].imag
-            line1 = Segment(point_dict["Z3"], Zlim1)
-            line2 = Segment(Zlim1, Zlim2)
-            line3 = Segment(Zlim2, point_dict["Z8"])
-            line1.plot(
+            plot_quote(
+                point_dict["Z3"],
+                Zlim1,
+                Zlim2,
+                point_dict["Z8"],
+                offset_label=self.get_H1() * 0.1 + 1j * self.W0 * 0.1,
                 fig=fig,
                 ax=ax,
-                color=SC_LINE_COLOR,
-                linestyle=SC_LINE_STYLE,
-                linewidth=SC_LINE_WIDTH,
-            )
-            line2.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
                 label="W1",
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            line3.plot(
-                fig=fig,
-                ax=ax,
-                color=SC_LINE_COLOR,
-                linestyle=SC_LINE_STYLE,
-                linewidth=SC_LINE_WIDTH,
             )
             # W2
-            Zlim1 = point_dict["Z5"] + 0.1 * self.H2
-            Zlim2 = point_dict["Z6"] + 0.1 * self.H2
-            line1 = Segment(point_dict["Z5"], Zlim1)
-            line2 = Segment(Zlim1, Zlim2)
-            line3 = Segment(Zlim2, point_dict["Z6"])
-            line1.plot(
+            Zlim1 = point_dict["Z5"] + sign * 0.1 * self.H2
+            Zlim2 = point_dict["Z6"] + sign * 0.1 * self.H2
+            plot_quote(
+                point_dict["Z5"],
+                Zlim1,
+                Zlim2,
+                point_dict["Z6"],
+                offset_label=sign * 0.05 * self.H2,
                 fig=fig,
                 ax=ax,
-                color=SC_LINE_COLOR,
-                linestyle=SC_LINE_STYLE,
-                linewidth=SC_LINE_WIDTH,
-            )
-            line2.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
                 label="W2",
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            line3.plot(
-                fig=fig,
-                ax=ax,
-                color=SC_LINE_COLOR,
-                linestyle=SC_LINE_STYLE,
-                linewidth=SC_LINE_WIDTH,
             )
             # H0
             line = Segment(point_dict["Z10"], point_dict["Z9"])
@@ -168,6 +141,7 @@ def plot_schematics(
                 label="H0",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
+                offset_label=1j * self.W0 * 0.1,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -179,6 +153,7 @@ def plot_schematics(
                 label="H1",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
+                offset_label=1j * self.W0 * 0.1,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -190,6 +165,7 @@ def plot_schematics(
                 label="H2",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
+                offset_label=1j * self.W0 * 0.1,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
