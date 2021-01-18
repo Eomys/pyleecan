@@ -6,6 +6,7 @@ from ...Classes.HoleM52 import HoleM52
 from ...Classes.HoleM53 import HoleM53
 from ...Methods import NotImplementedYetError
 from ...Functions.FEMM.get_mesh_param import get_mesh_param
+from ...Functions.Winding.find_wind_phase_color import get_phase_id
 
 
 def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
@@ -55,9 +56,16 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
                 Clabel = "Circr" + prop[:-1][2:]
             else:  # winding on the stator
                 Clabel = "Circs" + prop[:-1][2:]
-            Ntcoil = lam.winding.Ntcoil
-            if prop[-1] == "-":  # Adapt Ntcoil sign if needed
-                Ntcoil *= -1
+            # Decode the label
+            # TODO from create_FEMM_circuit_material -> move to decode/encode func.
+            wind_mat = lam.winding.comp_connection_mat(lam.slot.Zs)
+            st = label.split("_")
+            Nrad_id = int(st[2][1:])  # zone radial coordinate
+            Ntan_id = int(st[3][1:])  # zone tangential coordinate
+            Zs_id = int(st[4][1:])  # Zone slot number coordinate
+            # Get the phase value in the correct slot zone
+            q_id = get_phase_id(wind_mat, Nrad_id, Ntan_id, Zs_id)
+            Ntcoil = wind_mat[Nrad_id, Ntan_id, Zs_id, q_id]
         elif "HoleMagnet" in label:  # LamHole
             if "Parallel" in label:
                 # calculate pole angle and angle of pole middle
