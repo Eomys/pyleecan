@@ -44,6 +44,11 @@ slot_test.append(
 )
 slot_test.append(
     {
+        "test_obj": SlotM15(),
+    }
+)
+slot_test.append(
+    {
         "test_obj": SlotW10(),
     }
 )
