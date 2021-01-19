@@ -178,7 +178,7 @@ def plot_schematics(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-            # Arc
+            # Magnet Arc
             line = Segment(point_dict["Zc"], point_dict["ZM2"])
             line.plot(
                 fig=fig,

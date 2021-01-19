@@ -34,8 +34,8 @@ def plot_schematics(
 
     Parameters
     ----------
-    self : SlotM10
-        A SlotM10 object
+    self : SlotM16
+        A SlotM16 object
     is_default : bool
         True: plot default schematics, else use current slot values
     add_point_label : bool

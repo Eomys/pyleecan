@@ -55,7 +55,9 @@ def plot_schematics(
     # Use some default parameter
     if is_default:
         slot = type(self)(Zs=8, H0=20e-3, W0=45e-3, Hmag=17.5e-3, Wmag=30e-3)
-        lam = LamSlot(Rint=0.1, Rext=0.135, is_internal=True, is_stator=True, slot=slot)
+        lam = LamSlot(
+            Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
+        )
         slot.plot_schematics(
             is_default=False,
             add_point_label=add_point_label,

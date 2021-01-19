@@ -34,8 +34,8 @@ def plot_schematics(
 
     Parameters
     ----------
-    self : SlotM10
-        A SlotM10 object
+    self : SlotM11
+        A SlotM11 object
     is_default : bool
         True: plot default schematics, else use current slot values
     add_point_label : bool
@@ -55,7 +55,9 @@ def plot_schematics(
     # Use some default parameter
     if is_default:
         slot = type(self)(Zs=8, H0=20e-3, W0=pi / 8, Hmag=15e-3, Wmag=pi / 8 * 0.75)
-        lam = LamSlot(Rint=0.1, Rext=0.135, is_internal=True, is_stator=True, slot=slot)
+        lam = LamSlot(
+            Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
+        )
         slot.plot_schematics(
             is_default=False,
             add_point_label=add_point_label,
