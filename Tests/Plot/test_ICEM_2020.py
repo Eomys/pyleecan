@@ -665,7 +665,7 @@ def test_Optimization_problem():
         )
     )
     N0 = 400
-    Ir = ImportMatrixVal(value=np.zeros((Nt, 28)))
+    Ir = ImportMatrixVal(value=np.zeros((Nt_tot, 28)))
 
     SPMSM_001.name = (
         "Default SPMSM machine"  # Rename the machine to have the good plot title

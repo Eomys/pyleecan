@@ -2,9 +2,10 @@ from numpy import ones, pi, array
 from os.path import join
 import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
+from multiprocessing import cpu_count
+import pytest
 
 from pyleecan.Classes.Simu1 import Simu1
-
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.InputFlux import InputFlux
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
@@ -12,12 +13,9 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.ImportData import ImportData
 from pyleecan.Classes.ImportVectorField import ImportVectorField
-
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from Tests import TEST_DATA_DIR
-import pytest
-
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
@@ -65,7 +63,9 @@ def test_Magnetic_FEMM_sym():
     )
 
     # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=False)
+    simu.mag = MagFEMM(
+        type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=False, nb_worker=cpu_count()
+    )
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
