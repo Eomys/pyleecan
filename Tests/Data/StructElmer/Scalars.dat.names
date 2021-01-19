@@ -1,0 +1,13 @@
+Elmer version: 8.4
+Elmer revision: Release
+Elmer compilation date: 2020-08-03
+Solver input file: case.sif
+File started at: 2020/12/08 13:15:35
+ 
+Variables in columns of matrix: Results/Scalars.dat
+   1: boundary int: principal stress 1 over bc 1
+   2: boundary int:  over bc 2
+   3: boundary int:  over bc 3
+   4: boundary int: principal stress 2 over bc 1
+   5: boundary int: principal stress 1 over bc 2
+   6: boundary int: principal stress 2 over bc 2

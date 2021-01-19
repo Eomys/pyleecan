@@ -80,7 +80,9 @@ class Electrical(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, eec=None, init_dict=None, init_str=None):
+    def __init__(
+        self, eec=None, logger_name="Pyleecan.Electrical", init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -98,9 +100,12 @@ class Electrical(FrozenClass):
             # Overwrite default value with init_dict content
             if "eec" in list(init_dict.keys()):
                 eec = init_dict["eec"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.eec = eec
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -118,6 +123,7 @@ class Electrical(FrozenClass):
             Electrical_str += "eec = " + tmp
         else:
             Electrical_str += "eec = None" + linesep + linesep
+        Electrical_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return Electrical_str
 
     def __eq__(self, other):
@@ -127,6 +133,8 @@ class Electrical(FrozenClass):
             return False
         if other.eec != self.eec:
             return False
+        if other.logger_name != self.logger_name:
+            return False
         return True
 
     def __sizeof__(self):
@@ -134,6 +142,7 @@ class Electrical(FrozenClass):
 
         S = 0  # Full size of the object
         S += getsizeof(self.eec)
+        S += getsizeof(self.logger_name)
         return S
 
     def as_dict(self):
@@ -144,6 +153,7 @@ class Electrical(FrozenClass):
             Electrical_dict["eec"] = None
         else:
             Electrical_dict["eec"] = self.eec.as_dict()
+        Electrical_dict["logger_name"] = self.logger_name
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
@@ -153,6 +163,7 @@ class Electrical(FrozenClass):
 
         if self.eec is not None:
             self.eec._set_None()
+        self.logger_name = None
 
     def _get_eec(self):
         """getter of eec"""
@@ -179,5 +190,23 @@ class Electrical(FrozenClass):
         doc=u"""Electrical Equivalent Circuit
 
         :Type: EEC
+        """,
+    )
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    logger_name = property(
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use
+
+        :Type: str
         """,
     )

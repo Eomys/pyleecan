@@ -1,9 +1,11 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Time,s,Structural time Data object,Nt_tot,ndarray,None,,,,Output,,,VERSION,1,Gather the structural module outputs
-Angle,rad,Structural position Data object,Na_tot,ndarray,None,,,,,,,,,
+Time,s,Structural time Data object,Nt_tot,SciDataTool.Classes.DataND.Data,None,,,,Output,,,VERSION,1,Gather the structural module outputs
+Angle,rad,Structural position Data object,Na_tot,SciDataTool.Classes.DataND.Data,None,,,,,,,,,
 Nt_tot,-,Length of the time vector,,int,None,,,,,,,,,
 Na_tot,-,Length of the angle vector,,int,None,,,,,,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.OutStruct,,,,,,,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Structural,,,,,,,,,
 Yr,m,Displacement output,,SciDataTool.Classes.DataND.DataND,None,,,,,,,,,
 Vr,m/s,Velocity output,,SciDataTool.Classes.DataND.DataND,None,,,,,,,,,
 Ar,m/s^2,Acceleration output,,SciDataTool.Classes.DataND.DataND,None,,,,,,,,,
+meshsolution,,FEA software mesh and solution,,MeshSolution,,,,,,,,,,
+FEA_dict,,Dictionnary containing the main FEA parameter,,dict,None,,,,,,,,,

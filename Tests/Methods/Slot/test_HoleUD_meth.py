@@ -5,7 +5,6 @@ import pytest
 
 from pyleecan.Classes.HoleUD import HoleUD
 from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.MagnetType10 import MagnetType10
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load

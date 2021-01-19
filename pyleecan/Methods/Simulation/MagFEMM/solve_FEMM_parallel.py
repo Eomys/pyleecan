@@ -139,6 +139,16 @@ def solve_FEMM_parallel(
                 nb_worker, cpu_count()
             )
         )
+    if nb_worker > Nt:
+        logger.debug(
+            str(nb_worker)
+            + " workers requested for "
+            + str(Nt)
+            + " time steps. Using "
+            + str(Nt)
+            + " workers instead"
+        )
+        nb_worker = Nt
 
     # Copy femm file and create lists to split the tasks
     nb_task_worker = []  # nb of task for each worker

@@ -133,6 +133,9 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Solve for all time step and store all the results in out_dict
     if self.nb_worker > 1:
+        # A Femm handler will be created for each worker
+        femm.closefemm()
+        output.mag.internal.handler_list.remove(femm)
         # With parallelization
         B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM_parallel(
             femm,

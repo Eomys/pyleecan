@@ -42,6 +42,11 @@ try:
 except ImportError as error:
     comp_distance = error
 
+try:
+    from ..Methods.Geometry.Arc.plot import plot
+except ImportError as error:
+    plot = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -99,6 +104,15 @@ class Arc(Line):
         )
     else:
         comp_distance = comp_distance
+    # cf Methods.Geometry.Arc.plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # save and copy methods are available in all object
     save = save
     copy = copy

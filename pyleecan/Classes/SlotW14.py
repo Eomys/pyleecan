@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .SlotWind import SlotWind
+from .Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -28,9 +28,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotW14.get_surface_wind import get_surface_wind
+    from ..Methods.Slot.SlotW14.get_surface_active import get_surface_active
 except ImportError as error:
-    get_surface_wind = error
+    get_surface_active = error
 
 try:
     from ..Methods.Slot.SlotW14.check import check
@@ -48,9 +48,9 @@ except ImportError as error:
     comp_height = error
 
 try:
-    from ..Methods.Slot.SlotW14.comp_height_wind import comp_height_wind
+    from ..Methods.Slot.SlotW14.comp_height_active import comp_height_active
 except ImportError as error:
-    comp_height_wind = error
+    comp_height_active = error
 
 try:
     from ..Methods.Slot.SlotW14.comp_surface import comp_surface
@@ -58,15 +58,15 @@ except ImportError as error:
     comp_surface = error
 
 try:
-    from ..Methods.Slot.SlotW14.comp_surface_wind import comp_surface_wind
+    from ..Methods.Slot.SlotW14.comp_surface_active import comp_surface_active
 except ImportError as error:
-    comp_surface_wind = error
+    comp_surface_active = error
 
 
 from ._check import InitUnKnowClassError
 
 
-class SlotW14(SlotWind):
+class SlotW14(Slot):
 
     VERSION = 1
     IS_SYMMETRICAL = 1
@@ -95,18 +95,18 @@ class SlotW14(SlotWind):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW14.get_surface_wind
-    if isinstance(get_surface_wind, ImportError):
-        get_surface_wind = property(
+    # cf Methods.Slot.SlotW14.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW14 method get_surface_wind: "
-                    + str(get_surface_wind)
+                    "Can't use SlotW14 method get_surface_active: "
+                    + str(get_surface_active)
                 )
             )
         )
     else:
-        get_surface_wind = get_surface_wind
+        get_surface_active = get_surface_active
     # cf Methods.Slot.SlotW14.check
     if isinstance(check, ImportError):
         check = property(
@@ -137,18 +137,18 @@ class SlotW14(SlotWind):
         )
     else:
         comp_height = comp_height
-    # cf Methods.Slot.SlotW14.comp_height_wind
-    if isinstance(comp_height_wind, ImportError):
-        comp_height_wind = property(
+    # cf Methods.Slot.SlotW14.comp_height_active
+    if isinstance(comp_height_active, ImportError):
+        comp_height_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW14 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW14 method comp_height_active: "
+                    + str(comp_height_active)
                 )
             )
         )
     else:
-        comp_height_wind = comp_height_wind
+        comp_height_active = comp_height_active
     # cf Methods.Slot.SlotW14.comp_surface
     if isinstance(comp_surface, ImportError):
         comp_surface = property(
@@ -160,18 +160,18 @@ class SlotW14(SlotWind):
         )
     else:
         comp_surface = comp_surface
-    # cf Methods.Slot.SlotW14.comp_surface_wind
-    if isinstance(comp_surface_wind, ImportError):
-        comp_surface_wind = property(
+    # cf Methods.Slot.SlotW14.comp_surface_active
+    if isinstance(comp_surface_active, ImportError):
+        comp_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW14 method comp_surface_wind: "
-                    + str(comp_surface_wind)
+                    "Can't use SlotW14 method comp_surface_active: "
+                    + str(comp_surface_active)
                 )
             )
         )
     else:
-        comp_surface_wind = comp_surface_wind
+        comp_surface_active = comp_surface_active
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -222,16 +222,16 @@ class SlotW14(SlotWind):
         self.H1 = H1
         self.H3 = H3
         self.W3 = W3
-        # Call SlotWind init
+        # Call Slot init
         super(SlotW14, self).__init__(Zs=Zs)
-        # The class is frozen (in SlotWind init), for now it's impossible to
+        # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         SlotW14_str = ""
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotW14_str += super(SlotW14, self).__str__()
         SlotW14_str += "W0 = " + str(self.W0) + linesep
         SlotW14_str += "H0 = " + str(self.H0) + linesep
@@ -246,7 +246,7 @@ class SlotW14(SlotWind):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from SlotWind
+        # Check the properties inherited from Slot
         if not super(SlotW14, self).__eq__(other):
             return False
         if other.W0 != self.W0:
@@ -266,7 +266,7 @@ class SlotW14(SlotWind):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from SlotWind
+        # Get size of the properties inherited from Slot
         S += super(SlotW14, self).__sizeof__()
         S += getsizeof(self.W0)
         S += getsizeof(self.H0)
@@ -278,7 +278,7 @@ class SlotW14(SlotWind):
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotW14_dict = super(SlotW14, self).as_dict()
         SlotW14_dict["W0"] = self.W0
         SlotW14_dict["H0"] = self.H0
@@ -298,7 +298,7 @@ class SlotW14(SlotWind):
         self.H1 = None
         self.H3 = None
         self.W3 = None
-        # Set to None the properties inherited from SlotWind
+        # Set to None the properties inherited from Slot
         super(SlotW14, self)._set_None()
 
     def _get_W0(self):

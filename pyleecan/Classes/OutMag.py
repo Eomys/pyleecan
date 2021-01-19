@@ -32,6 +32,11 @@ try:
 except ImportError as error:
     comp_emf = error
 
+try:
+    from ..Methods.Output.OutMag.get_demag import get_demag
+except ImportError as error:
+    get_demag = error
+
 
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
@@ -71,6 +76,15 @@ class OutMag(FrozenClass):
         )
     else:
         comp_emf = comp_emf
+    # cf Methods.Output.OutMag.get_demag
+    if isinstance(get_demag, ImportError):
+        get_demag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMag method get_demag: " + str(get_demag))
+            )
+        )
+    else:
+        get_demag = get_demag
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -90,7 +104,7 @@ class OutMag(FrozenClass):
         Phi_wind=None,
         emf=None,
         meshsolution=-1,
-        logger_name="Pyleecan.OutMag",
+        logger_name="Pyleecan.Magnetics",
         internal=None,
         Rag=None,
         init_dict=None,
@@ -286,7 +300,10 @@ class OutMag(FrozenClass):
         else:
             OutMag_dict["Phi_wind"] = dict()
             for key, obj in self.Phi_wind.items():
-                OutMag_dict["Phi_wind"][key] = obj.as_dict()
+                if obj is not None:
+                    OutMag_dict["Phi_wind"][key] = obj.as_dict()
+                else:
+                    OutMag_dict["Phi_wind"][key] = None
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:

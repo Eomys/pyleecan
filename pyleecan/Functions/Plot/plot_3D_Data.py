@@ -18,6 +18,7 @@ def plot_3D_Data(
     y_max=None,
     z_min=None,
     z_max=None,
+    z_range=None,
     is_auto_ticks=True,
     is_2D_view=False,
     N_stem=100,
@@ -51,6 +52,8 @@ def plot_3D_Data(
         minimum value for the z-axis
     z_max : float
         maximum value for the z-axis
+    z_range : float
+        range to use for the z-axis
     is_auto_ticks : bool
         in fft, adjust ticks to freqs (deactivate if too close)
     is_2D_view : bool
@@ -129,11 +132,18 @@ def plot_3D_Data(
         y_min = np_min(Ydata)
     if y_max is None:
         y_max = np_max(Ydata)
-    if z_min is None:
-        z_min = np_min(Zdata)
-    if z_max is None:
-        z_max = np_max(Zdata)
-    size_flat = 500 * Z_flat / z_max
+    if z_range is None:
+        if z_min is None:
+            z_min = np_min(Zdata)
+        if z_max is None:
+            z_max = np_max(Zdata)
+    else:
+        if z_min is None and z_max is None:
+            z_max = np_max(Zdata)
+        if z_max is None:
+            z_max = z_min + z_range
+        if z_min is None:
+            z_min = z_max - z_range
 
     # Build labels and titles
     axis = axes_list[0]
@@ -222,7 +232,7 @@ def plot_3D_Data(
                 X_flat,
                 Y_flat,
                 Z_flat,
-                size_flat,
+                is_same_size=True,
                 z_max=z_max,
                 z_min=z_min,
                 title=title,

@@ -13,6 +13,8 @@ from pyleecan.definitions import DATA_DIR
 from Tests import save_validation_path as save_path
 
 
+@pytest.mark.FEMM
+@pytest.mark.long
 def test_AC_IPMSM_AGSF_transfer_compare_Rag_variation():
     """Validation of the AGSF transfer algorithm for SPMSM benchmark machine"""
 
@@ -105,6 +107,8 @@ def test_AC_IPMSM_AGSF_transfer_compare_Rag_variation():
         )
 
 
+@pytest.mark.FEMM
+@pytest.mark.long
 def test_AC_IPMSM_AGSF_transfer_Nmax_sensitivity():
     """Validation of the AGSF transfer algorithm for SPMSM benchmark machine: sensitivity to the maximum considered wavenumbers"""
 

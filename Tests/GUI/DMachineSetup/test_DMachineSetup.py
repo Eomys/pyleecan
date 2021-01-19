@@ -20,7 +20,7 @@ from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from Tests import save_gui_path as save_path
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.SMagnet import SMagnet
+from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
 from pyleecan.GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
 from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
@@ -40,19 +40,16 @@ load_test.append(  # 3
     {"type": "SyRM", "index": 2, "name": "SynRM_001", "p": 2, "count": 10}
 )
 load_test.append(  # 4
-    {"type": "SPMSM", "index": 3, "name": "SPMSM_001", "p": 4, "count": 10}
+    {"type": "SIPMSM", "index": 3, "name": "SIPMSM_008", "p": 4, "count": 10}
 )
 load_test.append(  # 5
-    {"type": "SIPMSM", "index": 4, "name": "SIPMSM_008", "p": 4, "count": 10}
+    {"type": "IPMSM", "index": 4, "name": "machine_IPMSM_A", "p": 5, "count": 10}
 )
 load_test.append(  # 6
-    {"type": "IPMSM", "index": 5, "name": "machine_IPMSM_A", "p": 5, "count": 10}
+    {"type": "WRSM", "index": 5, "name": "WRSM_001", "p": 6, "count": 13}
 )
 load_test.append(  # 7
-    {"type": "WRSM", "index": 6, "name": "WRSM_001", "p": 6, "count": 13}
-)
-load_test.append(  # 8
-    {"type": "SRM", "index": 7, "name": "SRM_test_load", "p": 10, "count": 10}
+    {"type": "SRM", "index": 6, "name": "SRM_test_load", "p": 10, "count": 10}
 )
 from PySide2.QtCore import Qt
 
@@ -104,7 +101,7 @@ class TestDMachineSetup(object):
             setup["widget"].b_load.clicked.emit()
         setup["widget"].nav_step.setCurrentRow(0)
         # To remember to update when adding a new machine type
-        assert setup["widget"].w_step.c_type.count() == 8
+        assert setup["widget"].w_step.c_type.count() == 7
         # Check load MachineType
         assert type(setup["widget"].w_step) == SMachineType
         assert setup["widget"].w_step.c_type.currentIndex() == test_dict["index"]
@@ -117,7 +114,7 @@ class TestDMachineSetup(object):
     def test_set_save_machine_type(self, setup):
         """Check that the Widget allow to change the machine type and save"""
         # Check that all the machine type are available
-        assert setup["widget"].w_step.c_type.count() == 8
+        assert setup["widget"].w_step.c_type.count() == 7
         # DFIM
         setup["widget"].w_step.c_type.setCurrentIndex(1)
         assert setup["widget"].w_step.c_type.currentText() == "DFIM"
@@ -128,28 +125,23 @@ class TestDMachineSetup(object):
         assert setup["widget"].w_step.c_type.currentText() == "SyRM"
         assert type(setup["widget"].machine) == MachineSyRM
         save_function(setup["widget"], "test_syrm_save")
-        # SPMSM
-        setup["widget"].w_step.c_type.setCurrentIndex(3)
-        assert setup["widget"].w_step.c_type.currentText() == "SPMSM"
-        assert type(setup["widget"].machine) == MachineSIPMSM
-        save_function(setup["widget"], "test_spmsm_save")
         # SIPMSM
-        setup["widget"].w_step.c_type.setCurrentIndex(4)
+        setup["widget"].w_step.c_type.setCurrentIndex(3)
         assert setup["widget"].w_step.c_type.currentText() == "SIPMSM"
         assert type(setup["widget"].machine) == MachineSIPMSM
         save_function(setup["widget"], "test_sipmsm_save")
         # IPMSM
-        setup["widget"].w_step.c_type.setCurrentIndex(5)
+        setup["widget"].w_step.c_type.setCurrentIndex(4)
         assert setup["widget"].w_step.c_type.currentText() == "IPMSM"
         assert type(setup["widget"].machine) == MachineIPMSM
         save_function(setup["widget"], "test_ipmsm_save")
         # WRSM
-        setup["widget"].w_step.c_type.setCurrentIndex(6)
+        setup["widget"].w_step.c_type.setCurrentIndex(5)
         assert setup["widget"].w_step.c_type.currentText() == "WRSM"
         assert type(setup["widget"].machine) == MachineWRSM
         save_function(setup["widget"], "test_wrsm_save")
         # SRM
-        setup["widget"].w_step.c_type.setCurrentIndex(7)
+        setup["widget"].w_step.c_type.setCurrentIndex(6)
         assert setup["widget"].w_step.c_type.currentText() == "SRM"
         assert type(setup["widget"].machine) == MachineSRM
         save_function(setup["widget"], "test_srm_save")

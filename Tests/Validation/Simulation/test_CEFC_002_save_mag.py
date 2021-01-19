@@ -14,7 +14,6 @@ from os.path import join
 import matplotlib.pyplot as plt
 import json
 import numpy as np
-from pyleecan.Functions.FEMM import GROUP_SC
 import pytest
 
 
@@ -77,7 +76,7 @@ def test_CEFC_002(CEFC_Lam):
 
     out.mag.meshsolution.plot_mesh(
         save_path=join(save_path, "CEFC_002_mesh_interface_save.png"),
-        group_names=["stator", "/", "airgap"],
+        group_names=["stator core", "/", "airgap"],
         is_show_fig=False,
     )
 
@@ -94,13 +93,13 @@ def test_CEFC_002(CEFC_Lam):
     )
     out.mag.meshsolution.plot_contour(
         label="H",
-        group_names="stator",
+        group_names="stator core",
         save_path=join(save_path, "CEFC_002_H_stator_save.png"),
         is_show_fig=False,
     )
     out.mag.meshsolution.plot_contour(
         label="\mu",
-        group_names=["stator", "airgap"],
+        group_names=["stator core", "airgap"],
         save_path=join(save_path, "CEFC_002_mu_stator_airgap_save.png"),
         is_show_fig=False,
     )
@@ -125,7 +124,7 @@ def test_CEFC_002_load():
 
     FEMM.mag.meshsolution.plot_contour(
         label="\mu",
-        group_names=["stator", "airgap"],
+        group_names=["stator core", "airgap"],
         save_path=join(save_path, "CEFC_002_mu_stator_airgap_load.png"),
         is_show_fig=False,
     )
@@ -134,11 +133,11 @@ def test_CEFC_002_load():
     )
     FEMM.mag.meshsolution.plot_contour(
         label="H",
-        group_names="stator",
+        group_names="stator core",
         save_path=join(save_path, "CEFC_002_H_stator_load.png"),
         is_show_fig=False,
     )
 
     FEMM.mag.meshsolution.plot_contour(
-        label="H", group_names=["stator", "airgap"], is_show_fig=False
+        label="H", group_names=["stator core", "airgap"], is_show_fig=False
     )

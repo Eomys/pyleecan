@@ -7,7 +7,7 @@ from PySide2.QtWidgets import QMessageBox, QWidget
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
 from .....Classes.SlotW10 import SlotW10
-from .....Classes.SlotWind import SlotWind
+from .....Classes.Slot import Slot
 from .....GUI.Dialog.DMachineSetup.SWSlot.Gen_SWSlot import Gen_SWSlot
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.PWSlotUD import PWSlotUD
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot10.PWSlot10 import PWSlot10
@@ -101,7 +101,7 @@ class SWSlot(Gen_SWSlot, QWidget):
             self.obj = machine.rotor
 
         # If the Slot is not set, initialize it with a 1_0
-        if self.obj.slot is None or type(self.obj.slot) in [SlotWind, Slot]:
+        if self.obj.slot is None or type(self.obj.slot) is Slot:
             self.obj.slot = SlotW10()
             self.obj.slot._set_None()
 
@@ -243,7 +243,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         self : SWSlot
             A SWSlot object
         """
-        # We have to make sure the slot is right before truing to plot it
+        # We have to make sure the slot is right before trying to plot it
         error = self.check(self.obj)
 
         if error:  # Error => Display it

@@ -207,13 +207,19 @@ class OptiProblem(FrozenClass):
         else:
             OptiProblem_dict["design_var"] = list()
             for obj in self.design_var:
-                OptiProblem_dict["design_var"].append(obj.as_dict())
+                if obj is not None:
+                    OptiProblem_dict["design_var"].append(obj.as_dict())
+                else:
+                    OptiProblem_dict["design_var"].append(None)
         if self.obj_func is None:
             OptiProblem_dict["obj_func"] = None
         else:
             OptiProblem_dict["obj_func"] = list()
             for obj in self.obj_func:
-                OptiProblem_dict["obj_func"].append(obj.as_dict())
+                if obj is not None:
+                    OptiProblem_dict["obj_func"].append(obj.as_dict())
+                else:
+                    OptiProblem_dict["obj_func"].append(None)
         if self._eval_func_str is not None:
             OptiProblem_dict["eval_func"] = self._eval_func_str
         else:
@@ -223,7 +229,10 @@ class OptiProblem(FrozenClass):
         else:
             OptiProblem_dict["constraint"] = list()
             for obj in self.constraint:
-                OptiProblem_dict["constraint"].append(obj.as_dict())
+                if obj is not None:
+                    OptiProblem_dict["constraint"].append(obj.as_dict())
+                else:
+                    OptiProblem_dict["constraint"].append(None)
         if self._preprocessing_str is not None:
             OptiProblem_dict["preprocessing"] = self._preprocessing_str
         else:
@@ -233,7 +242,10 @@ class OptiProblem(FrozenClass):
         else:
             OptiProblem_dict["datakeeper_list"] = list()
             for obj in self.datakeeper_list:
-                OptiProblem_dict["datakeeper_list"].append(obj.as_dict())
+                if obj is not None:
+                    OptiProblem_dict["datakeeper_list"].append(obj.as_dict())
+                else:
+                    OptiProblem_dict["datakeeper_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
         OptiProblem_dict["__class__"] = "OptiProblem"
         return OptiProblem_dict

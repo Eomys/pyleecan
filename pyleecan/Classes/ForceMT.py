@@ -71,6 +71,7 @@ class ForceMT(Force):
         is_agsf_transfer=False,
         max_wavenumber_transfer=None,
         Rsbo_enforced_transfer=None,
+        logger_name="Pyleecan.Force",
         init_dict=None,
         init_str=None,
     ):
@@ -99,6 +100,8 @@ class ForceMT(Force):
                 max_wavenumber_transfer = init_dict["max_wavenumber_transfer"]
             if "Rsbo_enforced_transfer" in list(init_dict.keys()):
                 Rsbo_enforced_transfer = init_dict["Rsbo_enforced_transfer"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         # Call Force init
         super(ForceMT, self).__init__(
@@ -107,6 +110,7 @@ class ForceMT(Force):
             is_agsf_transfer=is_agsf_transfer,
             max_wavenumber_transfer=max_wavenumber_transfer,
             Rsbo_enforced_transfer=Rsbo_enforced_transfer,
+            logger_name=logger_name,
         )
         # The class is frozen (in Force init), for now it's impossible to
         # add new properties

@@ -269,7 +269,10 @@ class MeshMat(Mesh):
         else:
             MeshMat_dict["cell"] = dict()
             for key, obj in self.cell.items():
-                MeshMat_dict["cell"][key] = obj.as_dict()
+                if obj is not None:
+                    MeshMat_dict["cell"][key] = obj.as_dict()
+                else:
+                    MeshMat_dict["cell"][key] = None
         if self.point is None:
             MeshMat_dict["point"] = None
         else:
