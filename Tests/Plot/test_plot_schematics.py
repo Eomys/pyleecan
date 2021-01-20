@@ -6,7 +6,9 @@ from pyleecan.Classes.SlotM13 import SlotM13
 from pyleecan.Classes.SlotM14 import SlotM14
 from pyleecan.Classes.SlotM15 import SlotM15
 from pyleecan.Classes.SlotM16 import SlotM16
+
 from pyleecan.Classes.SlotW10 import SlotW10
+from pyleecan.Classes.SlotW11 import SlotW11
 from Tests import save_plot_path as save_path
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -59,9 +61,16 @@ slot_test.append(
         "type_add_active": 2,
     }
 )
+
 slot_test.append(
     {
         "test_obj": SlotW10(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW11(),
         "type_add_active": 1,
     }
 )
