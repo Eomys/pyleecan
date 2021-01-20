@@ -20,41 +20,49 @@ slot_test = list()
 slot_test.append(
     {
         "test_obj": SlotM10(),
+        "type_add_active": 2,
     }
 )
 slot_test.append(
     {
         "test_obj": SlotM11(),
+        "type_add_active": 2,
     }
 )
 slot_test.append(
     {
         "test_obj": SlotM12(),
+        "type_add_active": 2,
     }
 )
 slot_test.append(
     {
         "test_obj": SlotM13(),
+        "type_add_active": 2,
     }
 )
 slot_test.append(
     {
         "test_obj": SlotM14(),
+        "type_add_active": 2,
     }
 )
 slot_test.append(
     {
         "test_obj": SlotM15(),
+        "type_add_active": 2,
     }
 )
 slot_test.append(
     {
         "test_obj": SlotM16(),
+        "type_add_active": 2,
     }
 )
 slot_test.append(
     {
         "test_obj": SlotW10(),
+        "type_add_active": 1,
     }
 )
 
@@ -72,10 +80,10 @@ class Test_plot_schematics(object):
         test_obj = test_dict["test_obj"]
         test_obj.plot_schematics(
             is_default=True,
-            add_point_label=False,
-            add_schematics=True,
-            add_main_line=True,
-            add_active=True,
+            is_add_point_label=False,
+            is_add_schematics=True,
+            is_add_main_line=True,
+            type_add_active=test_dict["type_add_active"],
             save_path=file_path,
             is_show_fig=False,
         )
@@ -92,10 +100,10 @@ class Test_plot_schematics(object):
         test_obj = test_dict["test_obj"]
         test_obj.plot_schematics(
             is_default=True,
-            add_point_label=True,
-            add_schematics=False,
-            add_main_line=True,
-            add_active=True,
+            is_add_point_label=True,
+            is_add_schematics=False,
+            is_add_main_line=True,
+            type_add_active=test_dict["type_add_active"],
             save_path=file_path,
             is_show_fig=False,
         )

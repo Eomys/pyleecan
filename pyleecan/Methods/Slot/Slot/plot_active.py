@@ -4,14 +4,21 @@ from matplotlib.patches import Patch, Polygon
 from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
 
+from ....definitions import config_dict
 from ....Functions.init_fig import init_fig
 from ....Functions.Winding.gen_phase_list import gen_name
-from ....definitions import config_dict
 
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 
 
-def plot_active(self, wind_mat=None, fig=None, is_bar=False, is_show_fig=True):
+def plot_active(
+    self,
+    wind_mat=None,
+    fig=None,
+    is_bar=False,
+    is_show_fig=True,
+    enforced_default_color=None,
+):
     """Plot the active area of the lamination according to the wind_mat
 
     Parameters
@@ -27,11 +34,15 @@ def plot_active(self, wind_mat=None, fig=None, is_bar=False, is_show_fig=True):
         To adapt the legend text for squirrel cage bar (Default value = False)
     is_show_fig : bool
         To call show at the end of the method
-
+    enforced_default_color : str
+        If not None enforce the active color (when wind_mat is None)
     Returns
     -------
     None
     """
+
+    if enforced_default_color is None:
+        enforced_default_color = PHASE_COLORS[0]
 
     if wind_mat is None:  # Default : Only one zone monocolor
         Nrad, Ntan, qs = 1, 1, 1
@@ -53,7 +64,7 @@ def plot_active(self, wind_mat=None, fig=None, is_bar=False, is_show_fig=True):
         for jj in range(Zs):
             if wind_mat is None or len(surf_list) != Ntan * Nrad:
                 x, y = point_list.real, point_list.imag
-                patches.append(Polygon(list(zip(x, y)), color=PHASE_COLORS[0]))
+                patches.append(Polygon(list(zip(x, y)), color=enforced_default_color))
             else:
                 # print "Nrad, Ntan, Zs : "+str((ii%Nrad,ii/Nrad,jj))
                 color = get_color(wind_mat, ii % Nrad, ii // Nrad, jj)

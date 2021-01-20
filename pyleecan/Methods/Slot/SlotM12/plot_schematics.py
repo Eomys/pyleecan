@@ -1,32 +1,36 @@
-from numpy import pi
+import matplotlib.pyplot as plt
+from numpy import pi, exp
+
+from ....Classes.Arc1 import Arc1
 from ....Classes.LamSlot import LamSlot
 from ....Classes.Segment import Segment
-from ....Classes.Arc1 import Arc1
-import matplotlib.pyplot as plt
-from ....Methods import ParentMissingError
+from ....definitions import config_dict
 from ....Functions.Plot import (
-    P_FONT_SIZE,
-    SC_FONT_SIZE,
-    TEXT_BOX,
-    ARROW_WIDTH,
     ARROW_COLOR,
-    SC_LINE_COLOR,
-    SC_LINE_STYLE,
-    SC_LINE_WIDTH,
+    ARROW_WIDTH,
     MAIN_LINE_COLOR,
     MAIN_LINE_STYLE,
     MAIN_LINE_WIDTH,
+    P_FONT_SIZE,
+    SC_FONT_SIZE,
+    SC_LINE_COLOR,
+    SC_LINE_STYLE,
+    SC_LINE_WIDTH,
+    TEXT_BOX,
     plot_quote,
 )
+from ....Methods import ParentMissingError
+
+MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
 
 def plot_schematics(
     self,
     is_default=False,
-    add_point_label=False,
-    add_schematics=True,
-    add_main_line=True,
-    add_active=True,
+    is_add_point_label=False,
+    is_add_schematics=True,
+    is_add_main_line=True,
+    type_add_active=True,
     save_path=None,
     is_show_fig=True,
 ):
@@ -38,14 +42,14 @@ def plot_schematics(
         A SlotM12 object
     is_default : bool
         True: plot default schematics, else use current slot values
-    add_point_label : bool
+    is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
-    add_schematics : bool
+    is_add_schematics : bool
         True to display the schematics information (W0, H0...)
-    add_main_line : bool
+    is_add_main_line : bool
         True to display "main lines" (slot opening and 0x axis)
-    add_active : bool
-        True to display the active surface
+    type_add_active : int
+        0: No active surface, 1: active surface as winding, 2: active surface as magnet
     save_path : str
         full path including folder, name and extension of the file to save if save_path is not None
     is_show_fig : bool
@@ -60,10 +64,10 @@ def plot_schematics(
         )
         slot.plot_schematics(
             is_default=False,
-            add_point_label=add_point_label,
-            add_schematics=add_schematics,
-            add_main_line=add_main_line,
-            add_active=add_active,
+            is_add_point_label=is_add_point_label,
+            is_add_schematics=is_add_schematics,
+            is_add_main_line=is_add_main_line,
+            type_add_active=type_add_active,
             save_path=save_path,
             is_show_fig=is_show_fig,
         )
@@ -82,7 +86,7 @@ def plot_schematics(
             sign = -1
 
         # Adding point label
-        if add_point_label:
+        if is_add_point_label:
             for name, Z in point_dict.items():
                 ax.text(
                     Z.real,
@@ -93,7 +97,7 @@ def plot_schematics(
                 )
 
         # Adding schematics
-        if add_schematics:
+        if is_add_schematics:
             # W0
             line = Segment(point_dict["Z3"], point_dict["Z2"])
             line.plot(
@@ -143,7 +147,7 @@ def plot_schematics(
                 fontsize=SC_FONT_SIZE,
             )
 
-        if add_main_line:
+        if is_add_main_line:
             # Ox axis
             line = Segment(0, lam.Rext * 1.5)
             line.plot(
@@ -182,8 +186,12 @@ def plot_schematics(
                 linewidth=MAIN_LINE_WIDTH,
             )
 
-        if add_active:
+        if type_add_active == 1:
             self.plot_active(fig=fig, is_show_fig=False)
+        elif type_add_active == 2:
+            self.plot_active(
+                fig=fig, is_show_fig=False, enforced_default_color=MAGNET_COLOR
+            )
 
         # Zooming and cleaning
         W = self.W0 / 2 * 1.4
