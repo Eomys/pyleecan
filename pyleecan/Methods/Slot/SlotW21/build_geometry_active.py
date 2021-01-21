@@ -34,18 +34,22 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     # get the name of the lamination
     st = self.get_name_lam()
 
-    [Z8, Z7, Z6, Z5, Z4, Z3, Z2, Z1] = self._comp_point_coordinate()
-    X = linspace(Z6, Z5, Nrad + 1)
+    point_dict = self._comp_point_coordinate()
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    X = linspace(Z3, Z4, Nrad + 1)
 
     # Nrad+1 and Ntan+1 because 3 points => 2 zones
     Z = zeros((Nrad + 1, Ntan + 1), dtype=complex)
     for ii in range(Nrad + 1):
         Z[ii][:] = linspace(X[ii], X[ii].conjugate(), Ntan + 1)
 
-    assert Z[0][0] == Z6
-    assert Z[Nrad][0] == Z5
-    assert Z[0][Ntan] == Z3
-    assert Z[Nrad][Ntan] == Z4
+    assert Z[0][0] == Z3
+    assert Z[Nrad][0] == Z4
+    assert Z[0][Ntan] == Z6
+    assert Z[Nrad][Ntan] == Z5
 
     # We go thought the zone by Rad then Tan, starting by (0,0)
     surf_list = list()
