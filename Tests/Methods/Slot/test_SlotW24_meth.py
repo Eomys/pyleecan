@@ -48,6 +48,57 @@ slotW24_test.append(
 class Test_SlotW24_meth(object):
     """pytest for SlotW24 methods"""
 
+    @pytest.mark.skip  # TODO: fix the schematics
+    @pytest.mark.parametrize("test_dict", slotW24_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H2
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
+            test_obj.slot.H2
+        )
+
+    @pytest.mark.parametrize("test_dict", slotW24_test)
+    def test_build_geometry_active(self, test_dict):
+        """Check that the active geometry is correctly split"""
+        test_obj = test_dict["test_obj"]
+        surf_list = test_obj.slot.build_geometry_active(Nrad=3, Ntan=2)
+
+        # Check label
+        assert surf_list[0].label == "Wind_Stator_R0_T0_S0"
+        assert surf_list[1].label == "Wind_Stator_R1_T0_S0"
+        assert surf_list[2].label == "Wind_Stator_R2_T0_S0"
+        assert surf_list[3].label == "Wind_Stator_R0_T1_S0"
+        assert surf_list[4].label == "Wind_Stator_R1_T1_S0"
+        assert surf_list[5].label == "Wind_Stator_R2_T1_S0"
+        # Check tangential position
+        assert surf_list[0].point_ref.imag < 0
+        assert surf_list[1].point_ref.imag < 0
+        assert surf_list[2].point_ref.imag < 0
+        assert surf_list[3].point_ref.imag > 0
+        assert surf_list[4].point_ref.imag > 0
+        assert surf_list[5].point_ref.imag > 0
+        # Check radial position
+        if test_obj.is_internal:
+            # Tan=0
+            assert surf_list[0].point_ref.real > surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real > surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real > surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real > surf_list[5].point_ref.real
+        else:
+            # Tan=0
+            assert surf_list[0].point_ref.real < surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real < surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real < surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real < surf_list[5].point_ref.real
+
     @pytest.mark.parametrize("test_dict", slotW24_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
@@ -135,13 +186,3 @@ class Test_SlotW24_meth(object):
         result = lam.slot.get_surface_active()
         assert result.label == "Wind_Rotor_R0_T0_S0"
         assert len(result.get_lines()) == 4
-
-    def test_build_geometry_active(self):
-        """Check if the build geometry of the winding works correctly"""
-        lam = LamSlot(is_internal=True, Rext=0.1325)
-        lam.slot = SlotW24(Zs=6, H2=30e-3, W3=12e-3)
-
-        result = lam.slot.build_geometry_active(Nrad=2, Ntan=4, is_simplified=True)
-        a = result
-        assert "Wind_Stator_R0_T0_S0" == a[0].label
-        assert len(a) == 8

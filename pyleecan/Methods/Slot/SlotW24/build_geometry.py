@@ -20,9 +20,15 @@ def build_geometry(self):
         A list of 2 Segment and 1 Arc
 
     """
-    (alpha_0, alpha_2) = self.comp_alphas()
-    [Z1, Z2, Z3, Z4] = self._comp_point_coordinate()
+    (_, alpha_2) = self.comp_alphas()
+
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
     Zc = 0
+
     # Creation of curve
     curve_list = list()
     curve_list.append(Segment(Z1, Z2))
