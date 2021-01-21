@@ -66,6 +66,78 @@ class Test_SlotW23_meth(object):
     """pytest for SlotW23 methods"""
 
     @pytest.mark.parametrize("test_dict", slotW23_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        # Check width
+        assert abs(point_dict["Z1"] - point_dict["Z8"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z6"]) == pytest.approx(
+            test_obj.slot.W1
+        )
+        assert abs(point_dict["Z4"] - point_dict["Z5"]) == pytest.approx(
+            test_obj.slot.W2
+        )
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z2"].real - point_dict["Z3"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
+            test_obj.slot.H2
+        )
+        assert abs(point_dict["Z8"] - point_dict["Z7"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z6"].real - point_dict["Z7"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z5"] - point_dict["Z6"]) == pytest.approx(
+            test_obj.slot.H2
+        )
+
+    @pytest.mark.parametrize("test_dict", slotW23_test)
+    def test_build_geometry_active(self, test_dict):
+        """Check that the active geometry is correctly split"""
+        test_obj = test_dict["test_obj"]
+        surf_list = test_obj.slot.build_geometry_active(Nrad=3, Ntan=2)
+
+        # Check label
+        assert surf_list[0].label == "Wind_Stator_R0_T0_S0"
+        assert surf_list[1].label == "Wind_Stator_R1_T0_S0"
+        assert surf_list[2].label == "Wind_Stator_R2_T0_S0"
+        assert surf_list[3].label == "Wind_Stator_R0_T1_S0"
+        assert surf_list[4].label == "Wind_Stator_R1_T1_S0"
+        assert surf_list[5].label == "Wind_Stator_R2_T1_S0"
+        # Check tangential position
+        assert surf_list[0].point_ref.imag < 0
+        assert surf_list[1].point_ref.imag < 0
+        assert surf_list[2].point_ref.imag < 0
+        assert surf_list[3].point_ref.imag > 0
+        assert surf_list[4].point_ref.imag > 0
+        assert surf_list[5].point_ref.imag > 0
+        # Check radial position
+        if test_obj.is_internal:
+            # Tan=0
+            assert surf_list[0].point_ref.real > surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real > surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real > surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real > surf_list[5].point_ref.real
+        else:
+            # Tan=0
+            assert surf_list[0].point_ref.real < surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real < surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real < surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real < surf_list[5].point_ref.real
+
+    @pytest.mark.parametrize("test_dict", slotW23_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
@@ -135,31 +207,6 @@ class Test_SlotW23_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
-    def test_comp_point_coordinate(self):
-        """Check that comp_point_coordinate can compute W1 and W2 if cstt_tooth is true correct"""
-        lam = LamSlot(is_internal=False, Rint=0.1325)
-        lam.slot = SlotW23(
-            H0=1e-3,
-            H1=pi / 4,
-            H1_is_rad=True,
-            H2=30e-3,
-            W0=12e-3,
-            W1=14e-3,
-            W2=12e-3,
-            is_cstt_tooth=True,
-        )
-        result = lam.slot._comp_point_coordinate()
-        assert result == [
-            (0.13236408123052115 - 0.006j),
-            (0.13336305542848736 - 0.006045283018867925j),
-            (0.9187612188259356 - 0.07510509283990814j),
-            (0.948647059768688 - 0.0777197651223379j),
-            (0.948647059768688 + 0.0777197651223379j),
-            (0.9187612188259356 + 0.07510509283990814j),
-            (0.13336305542848736 + 0.006045283018867925j),
-            (0.13236408123052115 + 0.006j),
-        ]
-
     def test_check_error(self):
         """Check that the check method is correctly raising an error"""
         lam = LamSlot(is_internal=True, Rext=0.1325)
@@ -195,15 +242,3 @@ class Test_SlotW23_meth(object):
         lam.slot._comp_W()
         assert lam.slot.W1 == 0.017303874301855315
         assert lam.slot.W2 == 0.022533218866714805
-
-    def test_build_geometry_active(self):
-        """Check if the build geometry of the winding works correctly"""
-        lam = LamSlot(is_internal=True, Rext=0.1325)
-        lam.slot = SlotW23(
-            H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
-        )
-
-        result = lam.slot.build_geometry_active(Nrad=2, Ntan=4, is_simplified=True)
-        a = result
-        assert "Wind_Stator_R0_T0_S0" == a[0].label
-        assert len(a) == 8
