@@ -31,7 +31,7 @@ slotW13_test.append(
 )
 
 # Outward Slot
-lam = LamSlot(is_internal=False, Rint=0.1325, is_stator=False)
+lam = LamSlot(is_internal=False, Rint=0.1325)
 lam.slot = SlotW13(
     H0=5e-3, H1=10e-3, H2=30e-3, W0=10e-3, W1=14e-3, W2=8e-3, W3=20e-3, H1_is_rad=False
 )
@@ -64,6 +64,90 @@ slotW13_test.append(
 @pytest.mark.METHODS
 class Test_SlotW13_meth(object):
     """pytest for SlotW13 methods"""
+
+    @pytest.mark.parametrize("test_dict", slotW13_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        # Check width
+        assert abs(point_dict["Z1"] - point_dict["Z10"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z2"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z8"]) == pytest.approx(
+            test_obj.slot.W1
+        )
+        assert abs(point_dict["Z4"] - point_dict["Z7"]) == pytest.approx(
+            test_obj.slot.W2
+        )
+        assert abs(point_dict["Z5"] - point_dict["Z6"]) == pytest.approx(
+            test_obj.slot.W3
+        )
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z2"].real - point_dict["Z4"].real) == pytest.approx(
+            test_obj.slot.get_H1()
+        )
+        assert abs(point_dict["Z2"].real - point_dict["Z3"].real) == pytest.approx(
+            test_obj.slot.get_H1()
+        )
+        assert abs(point_dict["Z4"].real - point_dict["Z5"].real) == pytest.approx(
+            test_obj.slot.H2
+        )
+        assert abs(point_dict["Z10"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z9"].real - point_dict["Z7"].real) == pytest.approx(
+            test_obj.slot.get_H1()
+        )
+        assert abs(point_dict["Z9"].real - point_dict["Z8"].real) == pytest.approx(
+            test_obj.slot.get_H1()
+        )
+        assert abs(point_dict["Z6"].real - point_dict["Z7"].real) == pytest.approx(
+            test_obj.slot.H2
+        )
+
+    @pytest.mark.parametrize("test_dict", slotW13_test)
+    def test_build_geometry_active(self, test_dict):
+        """Check that the active geometry is correctly split"""
+        test_obj = test_dict["test_obj"]
+        surf_list = test_obj.slot.build_geometry_active(Nrad=3, Ntan=2)
+
+        # Check label
+        assert surf_list[0].label == "Wind_Stator_R0_T0_S0"
+        assert surf_list[1].label == "Wind_Stator_R1_T0_S0"
+        assert surf_list[2].label == "Wind_Stator_R2_T0_S0"
+        assert surf_list[3].label == "Wind_Stator_R0_T1_S0"
+        assert surf_list[4].label == "Wind_Stator_R1_T1_S0"
+        assert surf_list[5].label == "Wind_Stator_R2_T1_S0"
+        # Check tangential position
+        assert surf_list[0].point_ref.imag < 0
+        assert surf_list[1].point_ref.imag < 0
+        assert surf_list[2].point_ref.imag < 0
+        assert surf_list[3].point_ref.imag > 0
+        assert surf_list[4].point_ref.imag > 0
+        assert surf_list[5].point_ref.imag > 0
+        # Check radial position
+        if test_obj.is_internal:
+            # Tan=0
+            assert surf_list[0].point_ref.real > surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real > surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real > surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real > surf_list[5].point_ref.real
+        else:
+            # Tan=0
+            assert surf_list[0].point_ref.real < surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real < surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real < surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real < surf_list[5].point_ref.real
 
     @pytest.mark.parametrize("test_dict", slotW13_test)
     def test_comp_surface(self, test_dict):
