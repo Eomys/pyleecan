@@ -2,7 +2,7 @@
 import pytest
 
 from pyleecan.Classes.SlotW25 import SlotW25
-from numpy import ndarray
+from numpy import ndarray, angle
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
@@ -47,6 +47,74 @@ slotW25_test.append(
 @pytest.mark.METHODS
 class Test_SlotW25_meth(object):
     """pytest for SlotW25 methods"""
+
+    @pytest.mark.parametrize("test_dict", slotW25_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        assert angle(point_dict["Z1"]) < 0
+        assert angle(point_dict["Z2"]) < 0
+        assert angle(point_dict["Z3"]) < 0
+        assert angle(point_dict["Z4"]) < 0
+        assert angle(point_dict["Z5"]) > 0
+        assert angle(point_dict["Z6"]) > 0
+        assert angle(point_dict["Z7"]) > 0
+        assert angle(point_dict["Z8"]) > 0
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
+            test_obj.slot.H2
+        )
+        assert abs(point_dict["Z8"] - point_dict["Z7"]) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z6"] - point_dict["Z5"]) == pytest.approx(
+            test_obj.slot.H2
+        )
+        # Radius
+        assert abs(point_dict["Z2"]) == pytest.approx(abs(point_dict["Z3"]))
+        assert abs(point_dict["Z3"]) == pytest.approx(abs(point_dict["Z6"]))
+        assert abs(point_dict["Z6"]) == pytest.approx(abs(point_dict["Z7"]))
+
+    @pytest.mark.parametrize("test_dict", slotW25_test)
+    def test_build_geometry_active(self, test_dict):
+        """Check that the active geometry is correctly split"""
+        test_obj = test_dict["test_obj"]
+        surf_list = test_obj.slot.build_geometry_active(Nrad=3, Ntan=2)
+
+        # Check label
+        assert surf_list[0].label == "Wind_Stator_R0_T0_S0"
+        assert surf_list[1].label == "Wind_Stator_R1_T0_S0"
+        assert surf_list[2].label == "Wind_Stator_R2_T0_S0"
+        assert surf_list[3].label == "Wind_Stator_R0_T1_S0"
+        assert surf_list[4].label == "Wind_Stator_R1_T1_S0"
+        assert surf_list[5].label == "Wind_Stator_R2_T1_S0"
+        # Check tangential position
+        assert surf_list[0].point_ref.imag < 0
+        assert surf_list[1].point_ref.imag < 0
+        assert surf_list[2].point_ref.imag < 0
+        assert surf_list[3].point_ref.imag > 0
+        assert surf_list[4].point_ref.imag > 0
+        assert surf_list[5].point_ref.imag > 0
+        # Check radial position
+        if test_obj.is_internal:
+            # Tan=0
+            assert surf_list[0].point_ref.real > surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real > surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real > surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real > surf_list[5].point_ref.real
+        else:
+            # Tan=0
+            assert surf_list[0].point_ref.real < surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real < surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real < surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real < surf_list[5].point_ref.real
 
     @pytest.mark.parametrize("test_dict", slotW25_test)
     def test_comp_surface(self, test_dict):
@@ -135,13 +203,3 @@ class Test_SlotW25_meth(object):
         result = lam.slot.get_surface_active()
         assert result.label == "Wind_Rotor_R0_T0_S0"
         assert len(result.get_lines()) == 6
-
-    def test_build_geometry_active(self):
-        """Check if the build geometry of the winding works correctly"""
-        lam = LamSlot(is_internal=True, Rext=0.1325)
-        lam.slot = SlotW25(Zs=10, H1=3e-3, H2=30e-3, W3=20e-3, W4=40e-3)
-
-        result = lam.slot.build_geometry_active(Nrad=2, Ntan=2, is_simplified=True)
-        a = result
-        assert "Wind_Stator_R0_T0_S0" == a[0].label
-        assert len(a) == 4
