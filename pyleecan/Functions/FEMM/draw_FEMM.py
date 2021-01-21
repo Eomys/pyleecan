@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from ...Classes.Lamination import Lamination
 from ...Classes.Circle import Circle
 from ...Functions.FEMM import is_eddies
@@ -231,3 +229,5 @@ def draw_FEMM(
 
 class FEMMError(Exception):
     """Raised when FEMM is not possible to run"""
+   pass
+
