@@ -18,14 +18,19 @@ from .Slot import Slot
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Slot.SlotW22._comp_point_coordinate import _comp_point_coordinate
+except ImportError as error:
+    _comp_point_coordinate = error
+
+try:
     from ..Methods.Slot.SlotW22.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotW22.get_surface_active import get_surface_active
+    from ..Methods.Slot.SlotW22.build_geometry_active import build_geometry_active
 except ImportError as error:
-    get_surface_active = error
+    build_geometry_active = error
 
 try:
     from ..Methods.Slot.SlotW22.check import check
@@ -58,9 +63,9 @@ except ImportError as error:
     comp_surface_active = error
 
 try:
-    from ..Methods.Slot.SlotW22.build_geometry_active import build_geometry_active
+    from ..Methods.Slot.SlotW22.get_surface_active import get_surface_active
 except ImportError as error:
-    build_geometry_active = error
+    get_surface_active = error
 
 
 from ._check import InitUnKnowClassError
@@ -73,6 +78,18 @@ class SlotW22(Slot):
     IS_SYMMETRICAL = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.SlotW22._comp_point_coordinate
+    if isinstance(_comp_point_coordinate, ImportError):
+        _comp_point_coordinate = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW22 method _comp_point_coordinate: "
+                    + str(_comp_point_coordinate)
+                )
+            )
+        )
+    else:
+        _comp_point_coordinate = _comp_point_coordinate
     # cf Methods.Slot.SlotW22.build_geometry
     if isinstance(build_geometry, ImportError):
         build_geometry = property(
@@ -84,18 +101,18 @@ class SlotW22(Slot):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW22.get_surface_active
-    if isinstance(get_surface_active, ImportError):
-        get_surface_active = property(
+    # cf Methods.Slot.SlotW22.build_geometry_active
+    if isinstance(build_geometry_active, ImportError):
+        build_geometry_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW22 method get_surface_active: "
-                    + str(get_surface_active)
+                    "Can't use SlotW22 method build_geometry_active: "
+                    + str(build_geometry_active)
                 )
             )
         )
     else:
-        get_surface_active = get_surface_active
+        build_geometry_active = build_geometry_active
     # cf Methods.Slot.SlotW22.check
     if isinstance(check, ImportError):
         check = property(
@@ -161,18 +178,18 @@ class SlotW22(Slot):
         )
     else:
         comp_surface_active = comp_surface_active
-    # cf Methods.Slot.SlotW22.build_geometry_active
-    if isinstance(build_geometry_active, ImportError):
-        build_geometry_active = property(
+    # cf Methods.Slot.SlotW22.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW22 method build_geometry_active: "
-                    + str(build_geometry_active)
+                    "Can't use SlotW22 method get_surface_active: "
+                    + str(get_surface_active)
                 )
             )
         )
     else:
-        build_geometry_active = build_geometry_active
+        get_surface_active = get_surface_active
     # save and copy methods are available in all object
     save = save
     copy = copy
