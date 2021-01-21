@@ -11,9 +11,8 @@ def _comp_point_coordinate(self):
 
     Returns
     -------
-    point_list: list
-        A list of 9 Points and W2
-
+    point_dict: dict
+        A dict of the slot point coordinates
     """
     Rbo = self.get_Rbo()
     hssp = pi / self.Zs
@@ -22,37 +21,43 @@ def _comp_point_coordinate(self):
     alpha = arcsin(self.W0 / (2 * Rbo))
     Harc = float(Rbo * (1 - cos(alpha)))
 
-    Z9 = Rbo * exp(-1j * alpha)
+    Z1 = Rbo * exp(-1j * alpha)
     if self.is_outwards():
         R1 = Rbo - Harc + self.H0 + self.H1
-        Z8 = Z9 + self.H0
+        Z2 = Z1 + self.H0
     else:
         R1 = Rbo - Harc - self.H0 - self.H1
-        Z8 = Z9 - self.H0
-    # In the slot ref: Z7=x7+j*y7 with x7 = R1
+        Z2 = Z1 - self.H0
+    # In the slot ref: Z3=x7+j*y7 with x7 = R1
     # In the tooth ref: Zt7 = xt7 + j*yt7 with yt7 = W3/2
-    # Zt7 = Z7 * exp(1j*hsp) = (x7+jy7)*(cos(hsp)+1j*sin(hsp))
+    # Zt7 = Z3 * exp(1j*hsp) = (x7+jy7)*(cos(hsp)+1j*sin(hsp))
     # yt7 = W3/2 = x7*sin(hsp)+y7*cos(hsp)
-    Z7 = R1 + 1j * (self.W3 / 2 - R1 * sin(hssp)) / cos(hssp)
+    Z3 = R1 + 1j * (self.W3 / 2 - R1 * sin(hssp)) / cos(hssp)
 
-    # Z7t is Z7 in tooth ref
-    Z7t = Z7 * exp(1j * hssp)
+    # Z3t is Z3 in tooth ref
+    Z3t = Z3 * exp(1j * hssp)
     if self.is_outwards():
-        Z6t = Z7t + self.H3
+        Z4t = Z3t + self.H3
     else:
-        Z6t = Z7t - self.H3
+        Z4t = Z3t - self.H3
     # In the slot ref: Z5=x5+j*y5 with y5 = 0
     # In the tooth ref: Zt5 = xt5 + j*yt5 with xt5 = xt6
     # Zt5 = Z5 * exp(1j*hsp) = x5*cos(hsp)+1j*x5*sin(hsp)
-    # x5 = real(Z6t)/cos(hsp)
+    # x5 = real(Z4t)/cos(hsp)
 
-    Z5 = Z6t.real / cos(hssp)
-    Z6 = Z6t * exp(-1j * hssp)
+    Z5 = Z4t.real / cos(hssp)
+    Z4 = Z4t * exp(-1j * hssp)
 
-    # Symmetry
-    Z4 = Z6.conjugate()
-    Z3 = Z7.conjugate()
-    Z2 = Z8.conjugate()
-    Z1 = Z9.conjugate()
+    point_dict = dict()
+    # symetry
+    point_dict["Z1"] = Z1
+    point_dict["Z2"] = Z2
+    point_dict["Z3"] = Z3
+    point_dict["Z4"] = Z4
+    point_dict["Z5"] = Z5
+    point_dict["Z6"] = Z4.conjugate()
+    point_dict["Z7"] = Z3.conjugate()
+    point_dict["Z8"] = Z2.conjugate()
+    point_dict["Z9"] = Z1.conjugate()
 
-    return [Z9, Z8, Z7, Z6, Z5, Z4, Z3, Z2, Z1]
+    return point_dict
