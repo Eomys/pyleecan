@@ -2,7 +2,7 @@
 import pytest
 
 from pyleecan.Classes.SlotW16 import SlotW16
-from numpy import ndarray, arcsin, pi
+from numpy import ndarray, arcsin, pi, angle
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
@@ -46,6 +46,42 @@ slotW16_wrong_test.append(
 @pytest.mark.METHODS
 class Test_SlotW16_meth(object):
     """pytest for SlotW16 methods"""
+
+    @pytest.mark.parametrize("test_dict", slotW16_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        # Check width
+        assert angle(point_dict["Z1"]) == pytest.approx(-test_obj.slot.W0 / 2)
+        assert angle(point_dict["Z10"]) == pytest.approx(test_obj.slot.W0 / 2)
+        assert abs(point_dict["Z1"]) == abs(point_dict["Z10"])
+
+        assert angle(point_dict["Z2"]) == pytest.approx(-test_obj.slot.W0 / 2)
+        assert angle(point_dict["Z9"]) == pytest.approx(test_obj.slot.W0 / 2)
+        assert abs(point_dict["Z2"]) == abs(point_dict["Z9"])
+
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z10"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        # Check radius
+        assert abs(point_dict["Z3"] - point_dict["Zc1"]) == pytest.approx(
+            test_obj.slot.R1
+        )
+        assert abs(point_dict["Z4"] - point_dict["Zc1"]) == pytest.approx(
+            test_obj.slot.R1
+        )
+        assert abs(point_dict["Z7"] - point_dict["Zc2"]) == pytest.approx(
+            test_obj.slot.R1
+        )
+        assert abs(point_dict["Z8"] - point_dict["Zc2"]) == pytest.approx(
+            test_obj.slot.R1
+        )
 
     @pytest.mark.parametrize("test_dict", slotW16_test)
     def test_comp_surface(self, test_dict):
