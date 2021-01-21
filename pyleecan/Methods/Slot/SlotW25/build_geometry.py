@@ -18,7 +18,6 @@ def build_geometry(self):
     -------
     curve_list: list
         A list of 4 Segment and 3 Arc
-
     """
     point_dict = self._comp_point_coordinate()
     Z1 = point_dict["Z1"]

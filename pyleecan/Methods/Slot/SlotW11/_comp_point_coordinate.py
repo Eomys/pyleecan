@@ -11,9 +11,8 @@ def _comp_point_coordinate(self):
 
     Returns
     -------
-    point_list: list
-        A list of 7 Points and rot_sign
-
+    point_dict: dict
+        A dict of the slot coordinates
     """
     Rbo = self.get_Rbo()
 
