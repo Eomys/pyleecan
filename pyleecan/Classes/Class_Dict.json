@@ -9444,14 +9444,15 @@
         "desc": "",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
             "comp_surface",
-            "comp_surface_active"
+            "comp_surface_active",
+            "get_surface_active"
         ],
         "mother": "Slot",
         "name": "SlotW12",
