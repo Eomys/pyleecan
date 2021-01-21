@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
 from pyleecan.Classes.SlotW26 import SlotW26
-from numpy import ndarray
+from numpy import ndarray, angle
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
@@ -45,6 +45,66 @@ slotW26_test.append(
 @pytest.mark.METHODS
 class Test_SlotW26_meth(object):
     """pytest for SlotW26 methods"""
+
+    @pytest.mark.parametrize("test_dict", slotW26_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        assert angle(point_dict["Z1"]) < 0
+        assert angle(point_dict["Z2"]) < 0
+        assert angle(point_dict["Z3"]) < 0
+        assert angle(point_dict["Z4"]) < 0
+        assert angle(point_dict["Z5"]) > 0
+        assert angle(point_dict["Z6"]) > 0
+        assert angle(point_dict["Z7"]) > 0
+        assert angle(point_dict["Z8"]) > 0
+        # Check width
+        assert abs(point_dict["Z1"] - point_dict["Z8"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z2"] - point_dict["Z7"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z4"] - point_dict["Z5"]) == pytest.approx(
+            2 * test_obj.slot.R2
+        )
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z3"].real - point_dict["Z4"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z8"] - point_dict["Z7"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z6"].real - point_dict["Z5"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Zc1"] - point_dict["Zc2"]) == pytest.approx(
+            test_obj.slot.H1
+        )
+        # Check radius
+        assert abs(point_dict["Z2"] - point_dict["Zc1"]) == pytest.approx(
+            test_obj.slot.R1
+        )
+        assert abs(point_dict["Z3"] - point_dict["Zc1"]) == pytest.approx(
+            test_obj.slot.R1
+        )
+        assert abs(point_dict["Z7"] - point_dict["Zc1"]) == pytest.approx(
+            test_obj.slot.R1
+        )
+        assert abs(point_dict["Z6"] - point_dict["Zc1"]) == pytest.approx(
+            test_obj.slot.R1
+        )
+        assert abs(point_dict["Z4"] - point_dict["Zc2"]) == pytest.approx(
+            test_obj.slot.R2
+        )
+        assert abs(point_dict["Z5"] - point_dict["Zc2"]) == pytest.approx(
+            test_obj.slot.R2
+        )
 
     @pytest.mark.parametrize("test_dict", slotW26_test)
     def test_comp_surface(self, test_dict):
