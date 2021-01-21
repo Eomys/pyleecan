@@ -48,6 +48,64 @@ class Test_SlotW15_meth(object):
     """pytest for SlotW15 methods"""
 
     @pytest.mark.parametrize("test_dict", slotW15_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        # Check width
+        assert abs(point_dict["Z1"] - point_dict["Z13"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z2"] - point_dict["Z12"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        # Check height
+        # assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+        #     test_obj.slot.H0
+        # )
+        # assert abs(point_dict["Z13"] - point_dict["Z12"]) == pytest.approx(
+        #     test_obj.slot.H0
+        # )
+        assert abs(point_dict["Z2"].real - point_dict["Zc1"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z12"].real - point_dict["Zc4"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z7"] - point_dict["Zc1"].real) == pytest.approx(
+            test_obj.slot.H2
+        )
+        assert abs(point_dict["Z7"] - point_dict["Zc4"].real) == pytest.approx(
+            test_obj.slot.H2
+        )
+        # Check radius
+        assert abs(point_dict["Z3"] - point_dict["Zc1"]) == pytest.approx(
+            test_obj.slot.R1
+        )
+        assert abs(point_dict["Z4"] - point_dict["Zc1"]) == pytest.approx(
+            test_obj.slot.R1
+        )
+        assert abs(point_dict["Z11"] - point_dict["Zc4"]) == pytest.approx(
+            test_obj.slot.R1
+        )
+        assert abs(point_dict["Z10"] - point_dict["Zc4"]) == pytest.approx(
+            test_obj.slot.R1
+        )
+        assert abs(point_dict["Z5"] - point_dict["Zc2"]) == pytest.approx(
+            test_obj.slot.R2
+        )
+        assert abs(point_dict["Z6"] - point_dict["Zc2"]) == pytest.approx(
+            test_obj.slot.R2
+        )
+        assert abs(point_dict["Z9"] - point_dict["Zc3"]) == pytest.approx(
+            test_obj.slot.R2
+        )
+        assert abs(point_dict["Z8"] - point_dict["Zc3"]) == pytest.approx(
+            test_obj.slot.R2
+        )
+
+    @pytest.mark.parametrize("test_dict", slotW15_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
