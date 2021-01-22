@@ -9,6 +9,11 @@ from pyleecan.Classes.SlotM16 import SlotM16
 
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.SlotW11 import SlotW11
+from pyleecan.Classes.SlotW12 import SlotW12
+from pyleecan.Classes.SlotW13 import SlotW13
+from pyleecan.Classes.SlotW14 import SlotW14
+from pyleecan.Classes.SlotW15 import SlotW15
+from pyleecan.Classes.SlotW16 import SlotW16
 from Tests import save_plot_path as save_path
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -20,59 +25,47 @@ if not isdir(SCHEMATICS_PATH):
 
 slot_test = list()
 slot_test.append(
-    {
-        "test_obj": SlotM10(),
-        "type_add_active": 2,
-    }
+    {"test_obj": SlotM10(), "type_add_active": 2,}
 )
 slot_test.append(
-    {
-        "test_obj": SlotM11(),
-        "type_add_active": 2,
-    }
+    {"test_obj": SlotM11(), "type_add_active": 2,}
 )
 slot_test.append(
-    {
-        "test_obj": SlotM12(),
-        "type_add_active": 2,
-    }
+    {"test_obj": SlotM12(), "type_add_active": 2,}
 )
 slot_test.append(
-    {
-        "test_obj": SlotM13(),
-        "type_add_active": 2,
-    }
+    {"test_obj": SlotM13(), "type_add_active": 2,}
 )
 slot_test.append(
-    {
-        "test_obj": SlotM14(),
-        "type_add_active": 2,
-    }
+    {"test_obj": SlotM14(), "type_add_active": 2,}
 )
 slot_test.append(
-    {
-        "test_obj": SlotM15(),
-        "type_add_active": 2,
-    }
+    {"test_obj": SlotM15(), "type_add_active": 2,}
 )
 slot_test.append(
-    {
-        "test_obj": SlotM16(),
-        "type_add_active": 2,
-    }
+    {"test_obj": SlotM16(), "type_add_active": 2,}
 )
 
 slot_test.append(
-    {
-        "test_obj": SlotW10(),
-        "type_add_active": 1,
-    }
+    {"test_obj": SlotW10(), "type_add_active": 1,}
 )
 slot_test.append(
-    {
-        "test_obj": SlotW11(),
-        "type_add_active": 1,
-    }
+    {"test_obj": SlotW11(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW12(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW13(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW14(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW15(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW16(), "type_add_active": 1,}
 )
 
 
