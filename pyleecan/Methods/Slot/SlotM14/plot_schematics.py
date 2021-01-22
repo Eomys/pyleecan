@@ -58,7 +58,9 @@ def plot_schematics(
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(Zs=4, W0=0.828, H0=0.02, Hmag=0.02, Wmag=0.628, Rtopm=0.06)
+        slot = type(self)(
+            Zs=4, W0=pi / 8, H0=0.02, Hmag=0.02, Wmag=pi / 8 * 0.75, Rtopm=0.06
+        )
         lam = LamSlot(
             Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
         )
@@ -90,11 +92,7 @@ def plot_schematics(
         if is_add_point_label:
             for name, Z in point_dict.items():
                 ax.text(
-                    Z.real,
-                    Z.imag,
-                    name,
-                    fontsize=P_FONT_SIZE,
-                    bbox=TEXT_BOX,
+                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
                 )
 
         # Adding schematics

@@ -357,9 +357,9 @@ def plot_schematics(
             )
 
         # Zooming and cleaning
-        W = (point_dict["Z5"] * exp(1j * sp)).imag * 1.2
-        Rint = min(point_dict["Z7"].real, point_dict["Z1"].real)
-        Rext = max(point_dict["Z7"].real, point_dict["Z1"].real)
+        W = (point_dict["Z7"] * exp(1j * sp)).imag * 1.2
+        Rint = min(point_dict["Z5"].real, point_dict["Z1"].real)
+        Rext = max(point_dict["Z5"].real, point_dict["Z1"].real)
 
         plt.axis("equal")
         ax.set_xlim(Rint, Rext)
