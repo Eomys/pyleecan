@@ -9,6 +9,15 @@ from pyleecan.Classes.SlotM16 import SlotM16
 
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.SlotW11 import SlotW11
+from pyleecan.Classes.SlotW21 import SlotW21
+from pyleecan.Classes.SlotW22 import SlotW22
+from pyleecan.Classes.SlotW23 import SlotW23
+from pyleecan.Classes.SlotW24 import SlotW24
+from pyleecan.Classes.SlotW25 import SlotW25
+from pyleecan.Classes.SlotW26 import SlotW26
+from pyleecan.Classes.SlotW27 import SlotW27
+from pyleecan.Classes.SlotW28 import SlotW28
+from pyleecan.Classes.SlotW29 import SlotW29
 from Tests import save_plot_path as save_path
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -71,6 +80,24 @@ slot_test.append(
 slot_test.append(
     {
         "test_obj": SlotW11(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW21(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW22(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW23(),
         "type_add_active": 1,
     }
 )
