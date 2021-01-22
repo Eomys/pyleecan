@@ -2,6 +2,7 @@
 import pytest
 
 from os.path import join
+from multiprocessing import cpu_count
 
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Simu1 import Simu1
@@ -53,6 +54,7 @@ def test_Benchmark_AGSF_Rag():
         is_periodicity_t=False,
         is_sliding_band=False,
         Kmesh_fineness=4,
+        nb_worker=cpu_count(),
     )
 
     Rsbo = 0.0480

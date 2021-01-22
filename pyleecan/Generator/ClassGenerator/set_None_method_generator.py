@@ -55,5 +55,8 @@ def generate_set_None(gen_dict, class_dict):
             + "\n"
         )
         None_str += TAB2 + "super(" + class_name + ", self)._set_None()\n"
+    elif len(class_dict["properties"]) == 0:
+        # No mother and no proprety => Nothing to do
+        None_str = None_str[:-1] + TAB2 + "pass\n"
 
     return None_str

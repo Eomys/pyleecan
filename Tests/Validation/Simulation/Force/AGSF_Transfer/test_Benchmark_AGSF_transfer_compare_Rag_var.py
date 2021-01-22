@@ -2,6 +2,7 @@
 import pytest
 
 from os.path import join
+from multiprocessing import cpu_count
 
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Simu1 import Simu1
@@ -38,6 +39,7 @@ def test_AC_IPMSM_AGSF_transfer_compare_Rag_variation():
         is_periodicity_t=False,
         is_sliding_band=False,
         Kmesh_fineness=4,
+        nb_worker=cpu_count(),
     )
 
     simu2 = simu.copy()
@@ -132,6 +134,7 @@ def test_AC_IPMSM_AGSF_transfer_Nmax_sensitivity():
         is_periodicity_t=False,
         is_sliding_band=False,
         Kmesh_fineness=4,
+        nb_worker=cpu_count(),
     )
 
     simu2 = simu.copy()
