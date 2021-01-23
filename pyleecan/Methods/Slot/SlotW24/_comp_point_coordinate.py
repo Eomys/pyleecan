@@ -1,4 +1,4 @@
-from numpy import exp
+from numpy import arcsin, exp, pi
 
 
 def _comp_point_coordinate(self):
@@ -16,20 +16,23 @@ def _comp_point_coordinate(self):
     """
     Rbo = self.get_Rbo()
 
-    (alpha_0, alpha_2) = self.comp_alphas()
+    # alpha_0 is the angle to have a W3 tooth width on the bore
+    alpha_0 = float(arcsin(self.W3 / (2 * Rbo)))
 
     # comp point coordinate (in complex)
-    Z1 = Rbo * exp(-1j * alpha_0 / 2.0)
+    Z0 = Rbo * exp(1j * 0)
+    Z1t = Z0 * exp(1j * alpha_0)
 
     if self.is_outwards():
-        Z2 = (Rbo + self.H2) * exp(-1j * alpha_2 / 2.0)
+        Z2t = Z1t + self.H2
     else:  # inward slot
-        Z2 = (Rbo - self.H2) * exp(-1j * alpha_2 / 2.0)
+        Z2t = Z1t - self.H2
+    hsp = pi / self.Zs
 
     point_dict = dict()
     # symetry
-    point_dict["Z1"] = Z1
-    point_dict["Z2"] = Z2
-    point_dict["Z3"] = Z2.conjugate()
-    point_dict["Z4"] = Z1.conjugate()
+    point_dict["Z1"] = Z1t * exp(-1j * hsp)
+    point_dict["Z2"] = Z2t * exp(-1j * hsp)
+    point_dict["Z3"] = point_dict["Z2"].conjugate()
+    point_dict["Z4"] = point_dict["Z1"].conjugate()
     return point_dict

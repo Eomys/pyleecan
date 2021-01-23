@@ -19,12 +19,13 @@ def comp_surface_active(self):
     """
 
     Rbo = self.get_Rbo()
+    point_dict = self._comp_point_coordinate()
 
     if self.is_outwards():
         Rint = Rbo
-        Rext = Rbo + self.H2
+        Rext = abs(point_dict["Z2"])
     else:
-        Rint = Rbo - self.H2
+        Rint = abs(point_dict["Z2"])
         Rext = Rbo
 
     # Surface of a slot pitch
@@ -42,4 +43,4 @@ def comp_surface_active(self):
     if self.is_outwards():
         return Sring - (St + Sarc_yoke - Sarc_bore)
     else:
-        return Sring - (St - Sarc_yoke + Sarc_bore)
+        return Sring - (St + Sarc_yoke - Sarc_bore)

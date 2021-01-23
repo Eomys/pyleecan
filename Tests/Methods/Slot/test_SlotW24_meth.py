@@ -2,7 +2,7 @@
 import pytest
 
 from pyleecan.Classes.SlotW24 import SlotW24
-from numpy import ndarray
+from numpy import ndarray, pi, exp
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
@@ -21,11 +21,11 @@ lam.slot = SlotW24(Zs=6, H2=30e-3, W3=12e-3)
 slotW24_test.append(
     {
         "test_obj": lam,
-        "S_exp": 3.33105250485e-3,
+        "S_exp": 3.327419e-3,
         "Ao": 0.9566,
         "Aw": 0.94497,
-        "SW_exp": 3.33105e-3,
-        "H_exp": 0.03,
+        "SW_exp": 3.327419e-3,
+        "H_exp": 0.02996,
     }
 )
 
@@ -35,11 +35,11 @@ lam.slot = SlotW24(Zs=6, H2=30e-3, W3=12e-3)
 slotW24_test.append(
     {
         "test_obj": lam,
-        "S_exp": 4.27405010925e-3,
+        "S_exp": 4.26977e-3,
         "Ao": 0.9566,
         "Aw": 0.965887,
-        "SW_exp": 4.27405e-3,
-        "H_exp": 0.03,
+        "SW_exp": 4.26977e-3,
+        "H_exp": 0.029974,
     }
 )
 
@@ -48,12 +48,16 @@ slotW24_test.append(
 class Test_SlotW24_meth(object):
     """pytest for SlotW24 methods"""
 
-    @pytest.mark.skip  # TODO: fix the schematics
     @pytest.mark.parametrize("test_dict", slotW24_test)
     def test_schematics(self, test_dict):
         """Check that the schematics is correct"""
         test_obj = test_dict["test_obj"]
         point_dict = test_obj.slot._comp_point_coordinate()
+
+        assert point_dict["Z1"].imag < 0
+        assert point_dict["Z2"].imag < 0
+        assert point_dict["Z3"].imag > 0
+        assert point_dict["Z4"].imag > 0
 
         # Check height
         assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
@@ -62,6 +66,13 @@ class Test_SlotW24_meth(object):
         assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
             test_obj.slot.H2
         )
+        # Check width
+        assert (
+            point_dict["Z1"] * exp(1j * pi / test_dict["test_obj"].slot.Zs)
+        ).imag == pytest.approx(test_dict["test_obj"].slot.W3 / 2)
+        assert (
+            point_dict["Z2"] * exp(1j * pi / test_dict["test_obj"].slot.Zs)
+        ).imag == pytest.approx(test_dict["test_obj"].slot.W3 / 2)
 
     @pytest.mark.parametrize("test_dict", slotW24_test)
     def test_build_geometry_active(self, test_dict):
