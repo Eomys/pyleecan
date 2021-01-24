@@ -136,7 +136,8 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         fo.write("$ WE = PP*WM              ! Electrical Frequency [Hz]\n")
 
         if isinstance(machine, MachineSIPMSM):
-            magnet_0 = machine.rotor.slot.magnet[0]
+            #magnet_0 = machine.rotor.slot.magnet[0]
+            magnet_0 = machine.rotor.magnet
         elif isinstance(machine, MachineIPMSM):
             magnet_dict = machine.rotor.hole[0].get_magnet_dict()
             magnet_0 = magnet_dict["magnet_0"]

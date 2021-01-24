@@ -5,8 +5,7 @@ from numpy import array, linspace, ones, pi, zeros, sqrt, cos
 from Tests import save_plot_path
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagElmer import MagElmer
-#from pyleecan.Classes.SlotMFlat import SlotMFlat
-#from pyleecan.Classes.MagnetType10 import MagnetType10
+from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
@@ -101,10 +100,10 @@ def test_ipm_Elmer():
     # Run simulation
     outp = Output(simu=simu)
     simu.run()
-    outp.plot_2D_Data("mag.Tem", "time")
+    # outp.plot_2D_Data("mag.Tem", "time")
     # outp.plot_2D_Data("elec.Is", "time", "phase")
     # outp.plot_2D_Data("mag.Tem", "time[smallestperiod]")
-    outp.mag.meshsolution.plot_contour(label="B")
+    # outp.mag.meshsolution.plot_contour(label="B")
     # outp.mag.meshsolution.plot_contour(label="A")
     # outp.mag.meshsolution.plot_contour(label="J")
     return outp
@@ -114,8 +113,9 @@ def test_ipm_Elmer():
 def test_spm_Elmer():
     # Import the machine from a script
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
-    PMSM_A.rotor.slot = SlotMFlat(H0=0.0, W0=15e-3, Zs=8)
-    PMSM_A.rotor.slot.magnet = [MagnetType10(Wmag=15e-3, Hmag=3e-3)]
+    PMSM_A.rotor.slot = SlotM10(Wmag=15e-3, Hmag=3e-3, H0=0.0, W0=15e-3, Zs=8)
+    # PMSM_A.rotor.slot = SlotMFlat(H0=0.0, W0=15e-3, Zs=8)
+    # PMSM_A.rotor.slot.magnet = [MagnetType10(Wmag=15e-3, Hmag=3e-3)]
     mesh_dict["Lamination_Rotor_Bore_Radius_Ext"] = 20
 
     # Create the Simulation
@@ -159,7 +159,7 @@ def test_spm_Elmer():
     # Run simulation
     outp = Output(simu=simu)
     simu.run()
-    #outp.plot_2D_Data("mag.Tem", "time")
+    outp.plot_2D_Data("mag.Tem", "time")
     #outp.plot_2D_Data("elec.Is", "time", "phase")
     #outp.plot_2D_Data("mag.Tem", "time[smallestperiod]")
     #outp.mag.meshsolution.plot_contour(label="B")
@@ -169,5 +169,5 @@ def test_spm_Elmer():
     return outp
 
 if __name__ == "__main__":
-    out = test_ipm_Elmer()
-    #out = test_spm_Elmer()
+    #out = test_ipm_Elmer()
+    out = test_spm_Elmer()
