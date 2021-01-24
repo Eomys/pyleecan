@@ -211,10 +211,10 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
             elif "MAGNET" in label:
                 point_ref = surf.point_ref
                 if "RAD" in label and "_N_" in label:  # Radial magnetization
-                    mag = "theta"  # North pole magnet
+                    mag = 0  # North pole magnet
                     magnetization_type = "radial"
                 elif "RAD" in label:
-                    mag = "theta + 180"  # South pole magnet
+                    mag = 180  # South pole magnet
                     magnetization_type = "radial"
                 elif "PAR" in label and "_N_" in label:
                     mag = np_angle(point_ref) * 180 / pi  # North pole magnet
@@ -229,10 +229,6 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                 else:
                     continue
                 if bodies.get(label, None) is not None:
-                    if magnetization_type != "radial":
-                        Mangle.append(mag)
-                    else:
-                        Mangle.append(0)
                     Mangle.append(mag)
                     bodies[label]["mat"] = pm_index
                     bodies[label]["eq"] = 1
@@ -445,17 +441,23 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                          "\tMagnetization 2 = Variable time, timestep size\n"
                          "\t\tReal MATC \"H_PM*sin(WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + (RotorInitPos + Mangle{1})*pi/180)\"\n"
                          "\tElectric Conductivity = {4}\n"
-                         "End\n".format(mat_number, m, magnet_permeability,
-                                        int((m - 1) / magnets_per_pole), round(conductivity_m, 2)))
+                         "End\n".format(
+                            mat_number,
+                            m,
+                            magnet_permeability,
+                            int((m - 1) / magnets_per_pole),
+                            round(conductivity_m, 2)
+                    )
+                )
             elif magnetization_type == "radial":
                 fo.write(
                     "\nMaterial {0}\n"
                     '\tName = "PM_{1}"\n'
                     "\tRelative Permeability = {2}\n"
                     "\tMagnetization 1 = Variable Coordinate\n"
-                    '\t\tReal MATC  "H_PM*cos(atan2(tx(1),tx(0)) + {3}*pi)"\n'
+                    '\t\tReal MATC  "H_PM*cos(atan2(tx(1),tx(0)) + {3}*pi + Mangle{1}*pi/180)"\n'
                     "\tMagnetization 2 = Variable Coordinate\n"
-                    '\t\tReal MATC "H_PM*sin(atan2(tx(1),tx(0)) + {3}*pi)"\n'
+                    '\t\tReal MATC "H_PM*sin(atan2(tx(1),tx(0)) + {3}*pi + Mangle{1}*pi/180)"\n'
                     "\tElectric Conductivity = {4}\n"
                     "End\n".format(
                         mat_number,
@@ -884,7 +886,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     self.get_logger().info("ElmerSolver call complete!")
 
 
-    #self.get_meshsolution(output)
+    self.get_meshsolution(output)
 
     Na = angle.size
     Nt = time.size - 1

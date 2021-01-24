@@ -150,8 +150,8 @@ def test_spm_Elmer():
         is_periodicity_a=True,
         is_periodicity_t=True,
         FEA_dict=mesh_dict,
-        is_get_mesh=True,
-        is_save_FEA=True,
+        is_get_mesh=False,
+        is_save_FEA=False,
     )
     # Stop after magnetic computation
     simu.force = None
