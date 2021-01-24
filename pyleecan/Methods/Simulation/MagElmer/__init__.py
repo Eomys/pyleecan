@@ -70,6 +70,12 @@ for rr in range(0, 20):
             new_label = f"H_MAGNET_ROT_RAD_S_R{rr}T{tt}S{ss}"
             surface_label[old_label] = new_label
 
+            # This is weird, added after SlotM upgrade
+            # not sure why this is different
+            old_label = f"Rotor_Hole_Rotor_R{rr}_T{tt}_S{ss}"
+            new_label = f"H_ROTOR_R{rr}T{tt}S{ss}"
+            surface_label[old_label] = new_label
+
             # Surface Permanent Magnets
             old_label = f"MagnetRotorParallel_N_R{rr}_T{tt}_S{ss}"
             new_label = f"MAGNET_ROT_PAR_N_R{rr}T{tt}S{ss}"

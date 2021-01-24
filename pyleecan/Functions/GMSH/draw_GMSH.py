@@ -518,6 +518,7 @@ def draw_GMSH(
     if not is_lam_only_S:
         for surf in rotor_list:
             nsurf += 1
+            #print(surf.label)
             gmsh_dict.update(
                 {
                     nsurf: {

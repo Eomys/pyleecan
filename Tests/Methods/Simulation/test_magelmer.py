@@ -5,8 +5,8 @@ from numpy import array, linspace, ones, pi, zeros, sqrt, cos
 from Tests import save_plot_path
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagElmer import MagElmer
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.MagnetType10 import MagnetType10
+#from pyleecan.Classes.SlotMFlat import SlotMFlat
+#from pyleecan.Classes.MagnetType10 import MagnetType10
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
@@ -101,10 +101,10 @@ def test_ipm_Elmer():
     # Run simulation
     outp = Output(simu=simu)
     simu.run()
-    # outp.plot_2D_Data("mag.Tem", "time")
+    outp.plot_2D_Data("mag.Tem", "time")
     # outp.plot_2D_Data("elec.Is", "time", "phase")
     # outp.plot_2D_Data("mag.Tem", "time[smallestperiod]")
-    # outp.mag.meshsolution.plot_contour(label="B")
+    outp.mag.meshsolution.plot_contour(label="B")
     # outp.mag.meshsolution.plot_contour(label="A")
     # outp.mag.meshsolution.plot_contour(label="J")
     return outp
@@ -169,5 +169,5 @@ def test_spm_Elmer():
     return outp
 
 if __name__ == "__main__":
-    #out = test_ipm_Elmer()
-    out = test_spm_Elmer()
+    out = test_ipm_Elmer()
+    #out = test_spm_Elmer()

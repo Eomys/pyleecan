@@ -124,7 +124,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     elmer_sim_file = join(project_name, "pyleecan_elmer.sif")
     pp = machine.stator.winding.p
     wind_mat = machine.stator.winding.comp_connection_mat(machine.stator.slot.Zs)
-    surf_wind = machine.stator.slot.comp_surface_wind()
+    surf_wind = machine.stator.slot.comp_surface_active()
     ror = machine.rotor.comp_radius_mec()
     sir = machine.stator.comp_radius_mec()
     with open(elmer_sim_file, "wt") as fo:
