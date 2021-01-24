@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     run = error
 
+try:
+    from ..Methods.Simulation.Simulation.init_logger import init_logger
+except ImportError as error:
+    init_logger = error
+
 
 from ._check import InitUnKnowClassError
 from .Machine import Machine
@@ -35,6 +40,7 @@ class Simulation(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Simulation.run
     if isinstance(run, ImportError):
         run = property(
@@ -44,6 +50,17 @@ class Simulation(FrozenClass):
         )
     else:
         run = run
+    # cf Methods.Simulation.Simulation.init_logger
+    if isinstance(init_logger, ImportError):
+        init_logger = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Simulation method init_logger: " + str(init_logger)
+                )
+            )
+        )
+    else:
+        init_logger = init_logger
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -218,7 +235,10 @@ class Simulation(FrozenClass):
         else:
             Simulation_dict["postproc_list"] = list()
             for obj in self.postproc_list:
-                Simulation_dict["postproc_list"].append(obj.as_dict())
+                if obj is not None:
+                    Simulation_dict["postproc_list"].append(obj.as_dict())
+                else:
+                    Simulation_dict["postproc_list"].append(None)
         Simulation_dict["index"] = self.index
         Simulation_dict["path_result"] = self.path_result
         # The class name is added to the dict for deserialisation purpose

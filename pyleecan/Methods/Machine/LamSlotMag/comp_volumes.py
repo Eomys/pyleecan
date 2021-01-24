@@ -20,9 +20,7 @@ def comp_volumes(self):
     """
 
     V_dict = LamSlot.comp_volumes(self)
-    Vmag = 0
-    for magnet in self.slot.magnet:
-        Vmag += magnet.comp_volume()
+    Vmag = self.slot.comp_surface_active() * self.magnet.Lmag
 
     V_dict["Vmag"] = Vmag
 

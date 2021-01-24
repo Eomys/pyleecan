@@ -6,6 +6,8 @@ from shutil import copyfile
 
 from numpy import concatenate
 
+from ....Classes._FEMMHandler import _FEMMHandler
+
 
 def solve_FEMM_parallel(
     self,
@@ -72,7 +74,7 @@ def solve_FEMM_parallel(
 
     # The following function must be in solve_FEMM_parallel to access
     # to its variable without passing them in arguments
-    def solve_FEMM_single(filename, start_t, end_t):
+    def solve_FEMM_single(femm_handler, filename, start_t, end_t):
         """
         Call FEMM to compute airgap flux density from start_t to end_t timesteps
 
@@ -82,6 +84,8 @@ def solve_FEMM_parallel(
         Parameters
         ----------
 
+        femm_handler : _FEMMHandler
+            FEMM handler
         filename : str
             .fem file path
         start_t : int
@@ -105,7 +109,7 @@ def solve_FEMM_parallel(
         """
 
         B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM(
-            femm,
+            femm_handler,
             output,
             out_dict,
             FEMM_dict,
@@ -135,18 +139,13 @@ def solve_FEMM_parallel(
     # Check method parameters
     if nb_worker > cpu_count():
         logger.warning(
-            "Parallelization is set on {} threads while your computer only has {}.".format(
-                nb_worker, cpu_count()
-            )
+            f"Parallelization is set on {nb_worker} threads while "
+            + f"your computer only has {cpu_count()}."
         )
     if nb_worker > Nt:
         logger.debug(
-            str(nb_worker)
-            + " workers requested for "
-            + str(Nt)
-            + " time steps. Using "
-            + str(Nt)
-            + " workers instead"
+            f"{nb_worker} workers requested for {Nt} time steps. "
+            + f"Using {Nt} workers instead"
         )
         nb_worker = Nt
 
@@ -162,10 +161,11 @@ def solve_FEMM_parallel(
         nb_task_to_split -= nb_task_worker[-1]
 
     # Define the argument lists:
+    #   - femm_handler
     #   - femm_file
     #   - start_time : index of the first time step to compute
     #   - end_time : index of the last time step to compute
-
+    femm_handler = [_FEMMHandler() for i in range(nb_worker)]
     femm_files = [
         fem_file[:-4] + "_" + str(i) + ".fem" for i in range(1, nb_worker + 1)
     ]
@@ -173,7 +173,13 @@ def solve_FEMM_parallel(
     end_time_list = [sum(nb_task_worker[: i + 1]) for i in range(nb_worker)]
 
     # Gathering the different arguments for each instance
-    args = [[i, j, k] for i, j, k in zip(femm_files, start_time_list, end_time_list)]
+    args = [
+        [i, j, k, l]
+        for i, j, k, l in zip(femm_handler, femm_files, start_time_list, end_time_list)
+    ]
+
+    # append femm_handler to handler_list
+    output.mag.internal.handler_list.extend(femm_handler)
 
     # Creating threads pool
     pool = Pool(nb_worker)

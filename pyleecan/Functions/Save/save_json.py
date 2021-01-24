@@ -6,6 +6,7 @@ from logging import getLogger
 from ...Classes._frozen import FrozenClass
 from ...definitions import PACKAGE_NAME
 from ... import __version__
+from numpy import int32
 
 
 def create_folder(logger, save_path):
@@ -104,7 +105,9 @@ def build_data(obj):
         return None
     # pyleecan classes, i.e. instances with as_dict method
     if has_as_dict(obj):
-        return obj.as_dict()
+        return build_data(obj.as_dict())
+    if isinstance(obj, int32):  # int
+        return int(obj)
     #
     if is_json_serializable(obj):
         return obj

@@ -4,7 +4,7 @@
 def get_lam_by_label(self, label):
     """Returns the lamination by its labels. Accepted labels are 'Stator_X' and
     'Rotor_X' with X the number of the lamination starting with 0.
-    For convienence also 'Stator' or 'Rotor' are allowed here to get respective first
+    For convenience also 'Stator' or 'Rotor' are allowed here to get respective first
     stator or rotor lamination.
 
     Parameters

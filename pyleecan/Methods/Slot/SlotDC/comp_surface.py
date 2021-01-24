@@ -37,7 +37,7 @@ def comp_surface(self):
 
     Rbo = self.get_Rbo()
 
-    Swind = self.comp_surface_wind()
+    Swind = self.comp_surface_active()
     # Rectangle Z12,Z11,Z2,Z1
     S6 = self.W1 * abs(Z12.real - Z11.real)
     # Top arc of the slot (on bore radius)

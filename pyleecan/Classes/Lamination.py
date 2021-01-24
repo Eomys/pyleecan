@@ -532,13 +532,19 @@ class Lamination(FrozenClass):
         else:
             Lamination_dict["axial_vent"] = list()
             for obj in self.axial_vent:
-                Lamination_dict["axial_vent"].append(obj.as_dict())
+                if obj is not None:
+                    Lamination_dict["axial_vent"].append(obj.as_dict())
+                else:
+                    Lamination_dict["axial_vent"].append(None)
         if self.notch is None:
             Lamination_dict["notch"] = None
         else:
             Lamination_dict["notch"] = list()
             for obj in self.notch:
-                Lamination_dict["notch"].append(obj.as_dict())
+                if obj is not None:
+                    Lamination_dict["notch"].append(obj.as_dict())
+                else:
+                    Lamination_dict["notch"].append(None)
         # The class name is added to the dict for deserialisation purpose
         Lamination_dict["__class__"] = "Lamination"
         return Lamination_dict

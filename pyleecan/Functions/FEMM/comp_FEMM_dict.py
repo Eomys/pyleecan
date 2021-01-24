@@ -8,17 +8,7 @@ from ...Classes.HoleM52 import HoleM52
 from ...Classes.HoleM53 import HoleM53
 from ...Classes.LamSlotMag import LamSlotMag
 from ...Functions.FEMM import acsolver, pbtype, precision, minangle
-from ...Functions.FEMM import (
-    GROUP_RC,
-    GROUP_RH,
-    GROUP_RV,
-    GROUP_RW,
-    GROUP_SC,
-    GROUP_SH,
-    GROUP_SV,
-    GROUP_SW,
-    GROUP_AG,
-)
+from ...Functions.FEMM import FEMM_GROUPS
 
 
 def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
@@ -106,7 +96,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
 
     # stator magnet region mesh and segments max element size parameter
     if type(machine.stator) == LamSlotMag:
-        Hmag = machine.stator.slot.magnet[0].Hmag
+        Hmag = machine.stator.slot.comp_height_active()
         FEMM_dict["meshsize_magnetS"] = Hmag / 4 / Kmesh_fineness
         FEMM_dict["elementsize_magnetS"] = Hmag / 4 / Kmesh_fineness
     else:
@@ -114,7 +104,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
 
     # rotor magnet region mesh and segments max element size parameter
     if type(machine.rotor) == LamSlotMag:
-        Hmag = machine.rotor.slot.magnet[0].Hmag
+        Hmag = machine.rotor.slot.comp_height_active()
         FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness
         FEMM_dict["elementsize_magnetR"] = Hmag / 4 / Kmesh_fineness
     elif type(machine.rotor) == LamHole:
@@ -136,14 +126,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
 
     # Set groups
     FEMM_dict["groups"] = dict()
-    FEMM_dict["groups"]["GROUP_RC"] = GROUP_RC
-    FEMM_dict["groups"]["GROUP_RH"] = GROUP_RH
-    FEMM_dict["groups"]["GROUP_RV"] = GROUP_RV
-    FEMM_dict["groups"]["GROUP_RW"] = GROUP_RW
-    FEMM_dict["groups"]["GROUP_SC"] = GROUP_SC
-    FEMM_dict["groups"]["GROUP_SH"] = GROUP_SH
-    FEMM_dict["groups"]["GROUP_SV"] = GROUP_SV
-    FEMM_dict["groups"]["GROUP_SW"] = GROUP_SW
-    FEMM_dict["groups"]["GROUP_AG"] = GROUP_AG
+    for grp in FEMM_GROUPS:
+        FEMM_dict["groups"][grp] = FEMM_GROUPS[grp]["ID"]
 
     return FEMM_dict

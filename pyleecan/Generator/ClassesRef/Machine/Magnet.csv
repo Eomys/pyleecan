@@ -1,9 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-mat_type,,The Magnet material,0,Material,,,,,Machine,,comp_angle_opening,VERSION,1,abstract class of magnets
-type_magnetization,-,"Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach",0,int,0,0,5,,,,comp_height,,,
-Lmag,-,Magnet axial length,0,float,0.95,0,,,,,comp_mass,,,
-,,,,,,,,,,,comp_ratio_opening,,,
-,,,,,,,,,,,comp_surface,,,
-,,,,,,,,,,,comp_volume,,,
-,,,,,,,,,,,is_outwards,,,
-,,,,,,,,,,,plot,,,
+mat_type,,The Magnet material,0,Material,,,,,Machine,,,VERSION,1,Magnet class
+type_magnetization,-,"Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach",0,int,0,0,5,,,,,,,
+Lmag,-,Magnet axial length,0,float,0.95,0,,,,,,,,

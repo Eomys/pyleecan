@@ -74,6 +74,7 @@ class Magnetics(FrozenClass):
         is_periodicity_a=False,
         angle_stator_shift=0,
         angle_rotor_shift=0,
+        logger_name="Pyleecan.Magnetics",
         init_dict=None,
         init_str=None,
     ):
@@ -114,6 +115,8 @@ class Magnetics(FrozenClass):
                 angle_stator_shift = init_dict["angle_stator_shift"]
             if "angle_rotor_shift" in list(init_dict.keys()):
                 angle_rotor_shift = init_dict["angle_rotor_shift"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -127,6 +130,7 @@ class Magnetics(FrozenClass):
         self.is_periodicity_a = is_periodicity_a
         self.angle_stator_shift = angle_stator_shift
         self.angle_rotor_shift = angle_rotor_shift
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -152,6 +156,7 @@ class Magnetics(FrozenClass):
             "angle_stator_shift = " + str(self.angle_stator_shift) + linesep
         )
         Magnetics_str += "angle_rotor_shift = " + str(self.angle_rotor_shift) + linesep
+        Magnetics_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return Magnetics_str
 
     def __eq__(self, other):
@@ -181,6 +186,8 @@ class Magnetics(FrozenClass):
             return False
         if other.angle_rotor_shift != self.angle_rotor_shift:
             return False
+        if other.logger_name != self.logger_name:
+            return False
         return True
 
     def __sizeof__(self):
@@ -198,6 +205,7 @@ class Magnetics(FrozenClass):
         S += getsizeof(self.is_periodicity_a)
         S += getsizeof(self.angle_stator_shift)
         S += getsizeof(self.angle_rotor_shift)
+        S += getsizeof(self.logger_name)
         return S
 
     def as_dict(self):
@@ -215,6 +223,7 @@ class Magnetics(FrozenClass):
         Magnetics_dict["is_periodicity_a"] = self.is_periodicity_a
         Magnetics_dict["angle_stator_shift"] = self.angle_stator_shift
         Magnetics_dict["angle_rotor_shift"] = self.angle_rotor_shift
+        Magnetics_dict["logger_name"] = self.logger_name
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -233,6 +242,7 @@ class Magnetics(FrozenClass):
         self.is_periodicity_a = None
         self.angle_stator_shift = None
         self.angle_rotor_shift = None
+        self.logger_name = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -433,5 +443,23 @@ class Magnetics(FrozenClass):
         doc=u"""Shift angle to appy to the rotor in magnetic model
 
         :Type: float
+        """,
+    )
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    logger_name = property(
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use
+
+        :Type: str
         """,
     )

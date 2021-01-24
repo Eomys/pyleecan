@@ -43,3 +43,4 @@ class Cond12CheckError(CondCheckError):
 
 class C12_WireDontFit(Cond12CheckError):
     """ """
+    pass

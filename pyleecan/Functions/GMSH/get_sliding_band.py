@@ -35,7 +35,7 @@ def get_sliding_band(sym, machine):
     stator_list = machine.stator.build_geometry(sym=sym)
     rotor_list = machine.rotor.build_geometry(sym=sym)
     slot_height = machine.stator.slot.comp_height()
-    wind_slot_height = machine.stator.slot.comp_height_wind()
+    wind_slot_height = machine.stator.slot.comp_height_active()
     wedge_height = slot_height - wind_slot_height
     Rgap_mec_int = lam_int.comp_radius_mec()
     Rgap_mec_ext = lam_ext.comp_radius_mec()

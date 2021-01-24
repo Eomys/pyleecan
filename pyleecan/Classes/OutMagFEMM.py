@@ -137,7 +137,10 @@ class OutMagFEMM(OutInternal):
         else:
             OutMagFEMM_dict["handler_list"] = list()
             for obj in self.handler_list:
-                OutMagFEMM_dict["handler_list"].append(obj.as_dict())
+                if obj is not None:
+                    OutMagFEMM_dict["handler_list"].append(obj.as_dict())
+                else:
+                    OutMagFEMM_dict["handler_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OutMagFEMM_dict["__class__"] = "OutMagFEMM"

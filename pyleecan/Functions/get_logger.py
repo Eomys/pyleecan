@@ -1,4 +1,5 @@
 from logging import getLogger
+from ..loggers import DEFAULT_LOG_NAME
 
 
 def get_logger(obj):
@@ -20,4 +21,4 @@ def get_logger(obj):
     elif obj.parent != None:  # Parent logger
         return obj.parent.get_logger()
     else:  # Default logger
-        return getLogger("Pyleecan")
+        return getLogger(DEFAULT_LOG_NAME)

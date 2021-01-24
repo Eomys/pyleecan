@@ -148,6 +148,7 @@ class StructElmer(Structural):
         is_save_FEA=True,
         transform_list=-1,
         include_magnets=True,
+        logger_name="Pyleecan.Structural",
         init_dict=None,
         init_str=None,
     ):
@@ -180,6 +181,8 @@ class StructElmer(Structural):
                 transform_list = init_dict["transform_list"]
             if "include_magnets" in list(init_dict.keys()):
                 include_magnets = init_dict["include_magnets"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.path_name = path_name
@@ -189,7 +192,7 @@ class StructElmer(Structural):
         self.transform_list = transform_list
         self.include_magnets = include_magnets
         # Call Structural init
-        super(StructElmer, self).__init__()
+        super(StructElmer, self).__init__(logger_name=logger_name)
         # The class is frozen (in Structural init), for now it's impossible to
         # add new properties
 

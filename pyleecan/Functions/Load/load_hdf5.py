@@ -1,6 +1,18 @@
 from h5py import File, Group
-from numpy import bool_, int64, string_, array
+from numpy import bool_, int32, int64, string_, array
 from cloudpickle import loads
+
+
+def is_int(inputString):
+    """Check if a string is an int"""
+    # first check if string contains numbers
+    if any(char.isdigit() for char in inputString):
+        try:
+            int(inputString)
+            return True
+        except:
+            pass
+    return False
 
 
 def construct_dict_from_group(group):
@@ -37,6 +49,8 @@ def construct_dict_from_group(group):
                     value = bool(value)
                 elif isinstance(value, int64):  # float
                     value = float(value)
+                elif isinstance(value, int32):  # int
+                    value = int(value)
                 elif isinstance(value, string_):  # String
                     value = value.decode("ISO-8859-2")
 
@@ -44,6 +58,9 @@ def construct_dict_from_group(group):
         return list_
     else:
         for key, val in group.items():
+            # Check if key is an int
+            if is_int(key):
+                key = int(key)
             # Check if val is a group or a dataset
             if isinstance(val, Group):  # Group
                 # Call the function recursively to load group

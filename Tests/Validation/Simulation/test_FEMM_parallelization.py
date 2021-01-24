@@ -183,13 +183,13 @@ def test_FEMM_parallelization_meshsolution():
     )
 
     out.mag.meshsolution.plot_mesh(
-        group_names="stator",
+        group_names="stator core",
         save_path=join(save_path, simu.name + "_mesh_stator_not_parallel.png"),
         is_show_fig=False,
     )
 
     out.mag.meshsolution.plot_mesh(
-        group_names=["stator", "/", "airgap", "stator_windings"],
+        group_names=["stator core", "/", "airgap", "stator winding"],
         save_path=join(
             save_path,
             simu.name + "_mesh_stator_interface_not_parallel.png",
@@ -220,13 +220,13 @@ def test_FEMM_parallelization_meshsolution():
     )
 
     out2.mag.meshsolution.plot_mesh(
-        group_names="stator",
+        group_names="stator core",
         save_path=join(save_path, simu.name + "_mesh_stator_parallel.png"),
         is_show_fig=False,
     )
 
     out2.mag.meshsolution.plot_mesh(
-        group_names=["stator", "/", "airgap", "stator_windings"],
+        group_names=["stator core", "/", "airgap", "stator winding"],
         save_path=join(
             save_path,
             simu.name + "_mesh_stator_interface_parallel.png",
@@ -255,5 +255,5 @@ def test_FEMM_parallelization_meshsolution():
 
 if __name__ == "__main__":
 
-    out, out2 = test_FEMM_parallelization_mag()
+    # out, out2 = test_FEMM_parallelization_mag()
     out3, out4 = test_FEMM_parallelization_meshsolution()

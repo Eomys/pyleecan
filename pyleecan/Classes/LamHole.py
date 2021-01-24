@@ -347,7 +347,10 @@ class LamHole(Lamination):
         else:
             LamHole_dict["hole"] = list()
             for obj in self.hole:
-                LamHole_dict["hole"].append(obj.as_dict())
+                if obj is not None:
+                    LamHole_dict["hole"].append(obj.as_dict())
+                else:
+                    LamHole_dict["hole"].append(None)
         if self.bore is None:
             LamHole_dict["bore"] = None
         else:

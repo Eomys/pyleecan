@@ -57,8 +57,6 @@ class SMachineType(Gen_SMachineType, QWidget):
         )
         # Update the GUI to the current machine type
         index = self.mach_index.index(type(self.machine))
-        if self.machine.type_machine == 7:
-            index += 1
         self.mach_dict = self.mach_list[index]
         self.txt_type_machine.setText(self.mach_dict["txt"])
         self.img_type_machine.setPixmap(QPixmap(self.mach_dict["img"]))

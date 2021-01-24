@@ -11,7 +11,6 @@ from ....Classes.ImportMatrixVal import ImportMatrixVal
 from ....Classes.ImportMatrixXls import ImportMatrixXls
 from ....Functions.load import load_matlib
 from ....Functions.path_tools import abs_file_path
-from ....GUI import GUI_logger
 from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 from ....GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
 

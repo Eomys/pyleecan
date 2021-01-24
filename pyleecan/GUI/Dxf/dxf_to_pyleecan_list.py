@@ -1,4 +1,5 @@
 from ...Classes.Segment import Segment
+from ...Classes.Arc1 import Arc1
 from ...Classes.Arc2 import Arc2
 from math import cos, sin, pi
 
@@ -32,8 +33,14 @@ def dxf_to_pyleecan_list(entities):
                 + dxf.radius * cos(start_angle)
                 + 1j * (dxf.center[1] + dxf.radius * sin(start_angle))
             )
-            angle = end_angle - start_angle
-            obj_list.append(Arc2(begin=begin, center=center, angle=angle))
+            end = (
+                dxf.center[0]
+                + dxf.radius * cos(end_angle)
+                + 1j * (dxf.center[1] + dxf.radius * sin(end_angle))
+            )
+            obj_list.append(
+                Arc1(begin=begin, end=end, radius=dxf.radius, is_trigo_direction=True)
+            )
         else:
             raise NotImplementedError
 

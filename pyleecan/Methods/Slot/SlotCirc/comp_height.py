@@ -18,4 +18,4 @@ def comp_height(self):
         Height of the slot [m]
     """
 
-    return self.comp_height_wind()
+    return self.comp_height_active()

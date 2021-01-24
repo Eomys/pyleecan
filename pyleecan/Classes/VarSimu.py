@@ -289,7 +289,10 @@ class VarSimu(FrozenClass):
         else:
             VarSimu_dict["datakeeper_list"] = list()
             for obj in self.datakeeper_list:
-                VarSimu_dict["datakeeper_list"].append(obj.as_dict())
+                if obj is not None:
+                    VarSimu_dict["datakeeper_list"].append(obj.as_dict())
+                else:
+                    VarSimu_dict["datakeeper_list"].append(None)
         VarSimu_dict["is_keep_all_output"] = self.is_keep_all_output
         VarSimu_dict["stop_if_error"] = self.stop_if_error
         VarSimu_dict["ref_simu_index"] = self.ref_simu_index
@@ -300,19 +303,28 @@ class VarSimu(FrozenClass):
         else:
             VarSimu_dict["postproc_list"] = list()
             for obj in self.postproc_list:
-                VarSimu_dict["postproc_list"].append(obj.as_dict())
+                if obj is not None:
+                    VarSimu_dict["postproc_list"].append(obj.as_dict())
+                else:
+                    VarSimu_dict["postproc_list"].append(None)
         if self.pre_keeper_postproc_list is None:
             VarSimu_dict["pre_keeper_postproc_list"] = None
         else:
             VarSimu_dict["pre_keeper_postproc_list"] = list()
             for obj in self.pre_keeper_postproc_list:
-                VarSimu_dict["pre_keeper_postproc_list"].append(obj.as_dict())
+                if obj is not None:
+                    VarSimu_dict["pre_keeper_postproc_list"].append(obj.as_dict())
+                else:
+                    VarSimu_dict["pre_keeper_postproc_list"].append(None)
         if self.post_keeper_postproc_list is None:
             VarSimu_dict["post_keeper_postproc_list"] = None
         else:
             VarSimu_dict["post_keeper_postproc_list"] = list()
             for obj in self.post_keeper_postproc_list:
-                VarSimu_dict["post_keeper_postproc_list"].append(obj.as_dict())
+                if obj is not None:
+                    VarSimu_dict["post_keeper_postproc_list"].append(obj.as_dict())
+                else:
+                    VarSimu_dict["post_keeper_postproc_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict

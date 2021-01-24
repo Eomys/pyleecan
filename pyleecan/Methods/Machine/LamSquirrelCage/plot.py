@@ -71,7 +71,7 @@ def plot(
     if not is_lam_only:
         patches = list()
 
-        Rmw = self.slot.comp_radius_mid_wind()
+        Rmw = self.slot.comp_radius_mid_active()
         patches.append(
             Wedge(
                 (0, 0), Rmw + self.Hscr / 2.0, 0, 360, width=self.Hscr, color=SCR_COLOR
