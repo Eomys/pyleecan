@@ -131,6 +131,12 @@ slot_test.append(
         "type_add_active": 1,
     }
 )
+slot_test.append(
+    {
+        "test_obj": SlotW29(),
+        "type_add_active": 1,
+    }
+)
 
 
 class Test_plot_schematics(object):

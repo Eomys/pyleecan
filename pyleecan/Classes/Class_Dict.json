@@ -9867,15 +9867,16 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_active",
+            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "build_geometry_active",
-            "get_H1"
+            "get_H1",
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW21",
@@ -9971,7 +9972,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW22",
@@ -10041,7 +10043,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW23",
@@ -10150,13 +10153,13 @@
             "build_geometry",
             "build_geometry_active",
             "check",
-            "comp_alphas",
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW24",
@@ -10207,7 +10210,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW25",
@@ -10275,7 +10279,8 @@
             "comp_height",
             "comp_height_active",
             "comp_surface",
-            "comp_surface_active"
+            "comp_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW26",
@@ -10352,7 +10357,8 @@
             "comp_height",
             "comp_height_active",
             "comp_surface",
-            "comp_surface_active"
+            "comp_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW27",
@@ -10455,7 +10461,8 @@
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
-            "comp_surface"
+            "comp_surface",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW28",
@@ -10533,7 +10540,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW29",
