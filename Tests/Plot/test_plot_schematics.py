@@ -26,6 +26,7 @@ from pyleecan.Classes.SlotW29 import SlotW29
 
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.HoleM51 import HoleM51
+from pyleecan.Classes.HoleM52 import HoleM52
 from Tests import save_plot_path as save_path
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -184,6 +185,12 @@ slot_test.append(
 slot_test.append(
     {
         "test_obj": HoleM51(),
+        "type_add_active": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": HoleM52(),
         "type_add_active": 2,
     }
 )
