@@ -200,17 +200,17 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # magnet_1 surface
     curve_list = list()
     if is_simplified:
-        curve_list.append(L_8cs_3s)
-        curve_list.append(L_6s_8bs)
+        curve_list.append(L_8cs_3s.copy())
+        curve_list.append(L_6s_8bs.copy())
     else:
         if Z3s != Z4s:  # Z3 == Z3 if H2 = 0
-            curve_list.append(L_3s_4s)
-        curve_list.append(L_4s_5s)
+            curve_list.append(L_3s_4s.copy())
+        curve_list.append(L_4s_5s.copy())
         if Z5s != Z6s:  # Z5 == Z6 if H2 = 0
-            curve_list.append(L_5s_6s)
-        curve_list.append(L_6s_8bs)
-        curve_list.append(L_8bs_8cs)
-        curve_list.append(L_8cs_3s)
+            curve_list.append(L_5s_6s.copy())
+        curve_list.append(L_6s_8bs.copy())
+        curve_list.append(L_8bs_8cs.copy())
+        curve_list.append(L_8cs_3s.copy())
     point_ref = (Z3s + Z4s + Z5s + Z6s + Z8bs + Z8cs) / 6
     # Defining type of magnetization of the magnet
     if self.magnet_1:
@@ -236,13 +236,13 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # Air surface both magnets and W1 = 0 (S6 + S3)
     curve_list = list()
-    curve_list.append(L_6_7)
-    curve_list.append(L_7_6s)
-    curve_list.append(L_6s_8bs)
+    curve_list.append(L_6_7.copy())
+    curve_list.append(L_7_6s.copy())
+    curve_list.append(L_6s_8bs.copy())
     if self.W2 > 0:  # If W2 = 0: Z8b = Z8 = Z8bs
-        curve_list.append(L_8bs_8s)
-        curve_list.append(L_8s_8b)
-    curve_list.append(L_8b_6)  # == Magnet_0_Left
+        curve_list.append(L_8bs_8s.copy())
+        curve_list.append(L_8s_8b.copy())
+    curve_list.append(L_8b_6.copy())  # == Magnet_0_Left
     point_ref = (Z6 + Z7 + Z6s + Z8s + Z8bs + Z8b) / 6
     S7 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
@@ -291,24 +291,24 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # Air surface with magnet_0 without magnet_1 and W1 = 0
     # (S4 + S5 + S7)
     curve_list = list()
-    curve_list.append(L_1s_2s)
-    curve_list.append(L_2s_3s)
+    curve_list.append(L_1s_2s.copy())
+    curve_list.append(L_2s_3s.copy())
     if self.H2 > 0:
-        curve_list.append(L_3s_4s)
-    curve_list.append(L_4s_5s)
+        curve_list.append(L_3s_4s.copy())
+    curve_list.append(L_4s_5s.copy())
     if self.H2 > 0:
-        curve_list.append(L_5s_6s)
-    curve_list.append(L_6s_7s)
-    curve_list.append(L_7s_6)
-    curve_list.append(L_6_8b)
+        curve_list.append(L_5s_6s.copy())
+    curve_list.append(L_6s_7s.copy())
+    curve_list.append(L_7s_6.copy())
+    curve_list.append(L_6_8b.copy())
     if Z8b != Z8s:
-        curve_list.append(L_8b_8s)
-    curve_list.append(L_8s_9s)
+        curve_list.append(L_8b_8s.copy())
+    curve_list.append(L_8s_9s.copy())
     if self.H4 > 0:
-        curve_list.append(L_9s_10s)
-    curve_list.append(L_10s_11s)
+        curve_list.append(L_9s_10s.copy())
+    curve_list.append(L_10s_11s.copy())
     if self.H4 > 0:
-        curve_list.append(L_11s_1s)
+        curve_list.append(L_11s_1s.copy())
     point_ref = (Z1s + Z2s + Z3s + Z8cs + Z9s + Z10s + Z11s) / 7
     S10 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
