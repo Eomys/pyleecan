@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ....Methods.Slot.VentilationCirc import *
 
 
 def check(self):
@@ -30,9 +31,3 @@ def check(self):
         raise VentilationCircInstanceError("D0 must be a float or int ")
     if not isinstance(self.Alpha0, float) and not isinstance(self.Alpha0, int):
         raise VentilationCircInstanceError("Alpha0 must be a float ot int")
-
-
-class VentilationCircInstanceError(Exception):
-    """ """
-
-    pass

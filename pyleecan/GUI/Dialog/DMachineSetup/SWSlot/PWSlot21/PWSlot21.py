@@ -9,7 +9,7 @@ from ......Classes.SlotW21 import SlotW21
 from ......GUI import gui_option
 
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot21.Gen_PWSlot21 import Gen_PWSlot21
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide2.QtCore.QCoreApplication.translate
 

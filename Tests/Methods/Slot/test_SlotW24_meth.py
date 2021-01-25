@@ -8,7 +8,7 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
-from pyleecan.Methods.Slot.SlotW24.check import S24_HWCheckError
+from pyleecan.Methods.Slot.SlotW24 import S24_HWCheckError
 
 # For AlmostEqual
 DELTA = 1e-4

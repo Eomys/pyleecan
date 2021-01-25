@@ -9,7 +9,7 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
-from pyleecan.Methods.Slot.SlotW28.check import (
+from pyleecan.Methods.Slot.SlotW28 import (
     S28_ZsCheckError,
     S28_RboW0CheckError,
     S28_R1R1CheckError,

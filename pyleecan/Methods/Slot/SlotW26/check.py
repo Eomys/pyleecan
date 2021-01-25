@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.SlotW26 import *
 
 
 def check(self):
@@ -22,9 +23,3 @@ def check(self):
     """
     if self.R1 * 2 <= self.W0:
         raise S26_WCheckError("You must have W0 < 2*R1")
-
-
-class S26_WCheckError(SlotCheckError):
-    """ """
-
-    pass

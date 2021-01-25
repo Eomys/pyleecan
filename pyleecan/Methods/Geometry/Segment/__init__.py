@@ -1,1 +1,4 @@
-# -*- coding: utf-8 -*-
+class PointSegmentError(Exception):
+    """ """
+
+    pass

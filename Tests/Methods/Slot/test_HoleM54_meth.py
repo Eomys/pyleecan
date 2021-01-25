@@ -9,7 +9,7 @@ from pyleecan.Classes.Arc3 import Arc3
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Methods.Slot.Hole.comp_surface import comp_surface
-from pyleecan.Methods.Slot.HoleM54.check import S54_NoneError
+from pyleecan.Methods.Slot.HoleM54 import S54_NoneError
 
 from numpy import exp, arcsin, ndarray, pi
 

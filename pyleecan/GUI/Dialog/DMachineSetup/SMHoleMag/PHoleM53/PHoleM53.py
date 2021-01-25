@@ -8,7 +8,7 @@ from ......Classes.HoleM53 import HoleM53
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.Gen_PHoleM53 import Gen_PHoleM53
 from ......GUI.Dialog.DMatLib.MatLib import MatLib
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PHoleM53(Gen_PHoleM53, QWidget):

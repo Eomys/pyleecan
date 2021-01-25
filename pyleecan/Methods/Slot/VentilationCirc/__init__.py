@@ -1,1 +1,4 @@
-# -*- coding: utf-8 -*-
+class VentilationCircInstanceError(Exception):
+    """ """
+
+    pass

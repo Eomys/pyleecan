@@ -2,7 +2,8 @@
 
 from numpy import pi
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.SlotW11 import *
 
 
 def check(self):
@@ -40,27 +41,3 @@ def check(self):
 
     if self.H1_is_rad and self.H1 >= pi / 2:
         raise S11_H1rCheckError("With H1 in radian, you must have H1 < pi/2")
-
-
-class S11_W01CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S11_RWCheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S11_RHCheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S11_H1rCheckError(SlotCheckError):
-    """ """
-
-    pass

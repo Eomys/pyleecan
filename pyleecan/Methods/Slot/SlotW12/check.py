@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.SlotW12 import *
 
 
 def check(self):
@@ -30,15 +31,3 @@ def check(self):
 
     if self.R2 / Rbo >= 1:
         raise S12_RboCheckError("You must have R2 < Rbo")
-
-
-class S12_R20CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S12_RboCheckError(SlotCheckError):
-    """ """
-
-    pass

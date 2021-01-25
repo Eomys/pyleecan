@@ -11,7 +11,7 @@ from ......Classes.HoleUD import HoleUD
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleMUD.Ui_PHoleMUD import Ui_PHoleMUD
 from ......GUI.Dialog.DMatLib.MatLib import MatLib
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dxf.DXF_Hole import DXF_Hole
 from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 
@@ -118,9 +118,7 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
             hole = load(self.w_path_json.get_path())
         except Exception as e:
             QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr("Error when loading file:\n" + str(e)),
+                self, self.tr("Error"), self.tr("Error when loading file:\n" + str(e)),
             )
             return
         # Check that the json file contain a HoleUD

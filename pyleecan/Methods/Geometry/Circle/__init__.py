@@ -1,1 +1,4 @@
-# -*- coding: utf-8 -*-
+class RadiusCircleError(Exception):
+    """ """
+
+    pass
