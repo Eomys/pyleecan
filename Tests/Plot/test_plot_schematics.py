@@ -14,6 +14,15 @@ from pyleecan.Classes.SlotW13 import SlotW13
 from pyleecan.Classes.SlotW14 import SlotW14
 from pyleecan.Classes.SlotW15 import SlotW15
 from pyleecan.Classes.SlotW16 import SlotW16
+from pyleecan.Classes.SlotW21 import SlotW21
+from pyleecan.Classes.SlotW22 import SlotW22
+from pyleecan.Classes.SlotW23 import SlotW23
+from pyleecan.Classes.SlotW24 import SlotW24
+from pyleecan.Classes.SlotW25 import SlotW25
+from pyleecan.Classes.SlotW26 import SlotW26
+from pyleecan.Classes.SlotW27 import SlotW27
+from pyleecan.Classes.SlotW28 import SlotW28
+from pyleecan.Classes.SlotW29 import SlotW29
 from Tests import save_plot_path as save_path
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -66,6 +75,33 @@ slot_test.append(
 )
 slot_test.append(
     {"test_obj": SlotW16(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW21(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW22(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW23(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW24(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW25(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW26(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW27(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW28(), "type_add_active": 1,}
+)
+slot_test.append(
+    {"test_obj": SlotW29(), "type_add_active": 1,}
 )
 
 

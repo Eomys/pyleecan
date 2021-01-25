@@ -28,9 +28,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotW21.get_surface_active import get_surface_active
+    from ..Methods.Slot.SlotW21.build_geometry_active import build_geometry_active
 except ImportError as error:
-    get_surface_active = error
+    build_geometry_active = error
 
 try:
     from ..Methods.Slot.SlotW21.check import check
@@ -63,14 +63,19 @@ except ImportError as error:
     comp_surface_active = error
 
 try:
-    from ..Methods.Slot.SlotW21.build_geometry_active import build_geometry_active
-except ImportError as error:
-    build_geometry_active = error
-
-try:
     from ..Methods.Slot.SlotW21.get_H1 import get_H1
 except ImportError as error:
     get_H1 = error
+
+try:
+    from ..Methods.Slot.SlotW21.get_surface_active import get_surface_active
+except ImportError as error:
+    get_surface_active = error
+
+try:
+    from ..Methods.Slot.SlotW21.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
 
 
 from ._check import InitUnKnowClassError
@@ -106,18 +111,18 @@ class SlotW21(Slot):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW21.get_surface_active
-    if isinstance(get_surface_active, ImportError):
-        get_surface_active = property(
+    # cf Methods.Slot.SlotW21.build_geometry_active
+    if isinstance(build_geometry_active, ImportError):
+        build_geometry_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW21 method get_surface_active: "
-                    + str(get_surface_active)
+                    "Can't use SlotW21 method build_geometry_active: "
+                    + str(build_geometry_active)
                 )
             )
         )
     else:
-        get_surface_active = get_surface_active
+        build_geometry_active = build_geometry_active
     # cf Methods.Slot.SlotW21.check
     if isinstance(check, ImportError):
         check = property(
@@ -183,18 +188,6 @@ class SlotW21(Slot):
         )
     else:
         comp_surface_active = comp_surface_active
-    # cf Methods.Slot.SlotW21.build_geometry_active
-    if isinstance(build_geometry_active, ImportError):
-        build_geometry_active = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotW21 method build_geometry_active: "
-                    + str(build_geometry_active)
-                )
-            )
-        )
-    else:
-        build_geometry_active = build_geometry_active
     # cf Methods.Slot.SlotW21.get_H1
     if isinstance(get_H1, ImportError):
         get_H1 = property(
@@ -204,6 +197,29 @@ class SlotW21(Slot):
         )
     else:
         get_H1 = get_H1
+    # cf Methods.Slot.SlotW21.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW21 method get_surface_active: "
+                    + str(get_surface_active)
+                )
+            )
+        )
+    else:
+        get_surface_active = get_surface_active
+    # cf Methods.Slot.SlotW21.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW21 method plot_schematics: " + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
     # save and copy methods are available in all object
     save = save
     copy = copy
