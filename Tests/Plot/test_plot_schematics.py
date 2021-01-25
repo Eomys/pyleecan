@@ -23,6 +23,8 @@ from pyleecan.Classes.SlotW26 import SlotW26
 from pyleecan.Classes.SlotW27 import SlotW27
 from pyleecan.Classes.SlotW28 import SlotW28
 from pyleecan.Classes.SlotW29 import SlotW29
+
+from pyleecan.Classes.HoleM50 import HoleM50
 from Tests import save_plot_path as save_path
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -34,74 +36,149 @@ if not isdir(SCHEMATICS_PATH):
 
 slot_test = list()
 slot_test.append(
-    {"test_obj": SlotM10(), "type_add_active": 2,}
+    {
+        "test_obj": SlotM10(),
+        "type_add_active": 2,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotM11(), "type_add_active": 2,}
+    {
+        "test_obj": SlotM11(),
+        "type_add_active": 2,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotM12(), "type_add_active": 2,}
+    {
+        "test_obj": SlotM12(),
+        "type_add_active": 2,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotM13(), "type_add_active": 2,}
+    {
+        "test_obj": SlotM13(),
+        "type_add_active": 2,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotM14(), "type_add_active": 2,}
+    {
+        "test_obj": SlotM14(),
+        "type_add_active": 2,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotM15(), "type_add_active": 2,}
+    {
+        "test_obj": SlotM15(),
+        "type_add_active": 2,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotM16(), "type_add_active": 2,}
+    {
+        "test_obj": SlotM16(),
+        "type_add_active": 2,
+    }
 )
 
 slot_test.append(
-    {"test_obj": SlotW10(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW10(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW11(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW11(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW12(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW12(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW13(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW13(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW14(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW14(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW15(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW15(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW16(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW16(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW21(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW21(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW22(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW22(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW23(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW23(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW24(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW24(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW25(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW25(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW26(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW26(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW27(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW27(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW28(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW28(),
+        "type_add_active": 1,
+    }
 )
 slot_test.append(
-    {"test_obj": SlotW29(), "type_add_active": 1,}
+    {
+        "test_obj": SlotW29(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": HoleM50(),
+        "type_add_active": 2,
+    }
 )
 
 

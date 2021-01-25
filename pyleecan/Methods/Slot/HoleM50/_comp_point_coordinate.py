@@ -37,6 +37,7 @@ def _comp_point_coordinate(self):
     Z10 = (Z9 * exp(1j * hssp) + self.H4) * exp(-1j * hssp)
 
     # Magnet coordinate with Z8 as center and x as the top edge of the magnet
+    Z8a = -1j * (self.H3 - self.H2)
     Z8b = self.W2
     Z8c = Z8b + self.W4
     Z5 = Z8b - 1j * self.H3
@@ -44,12 +45,12 @@ def _comp_point_coordinate(self):
     Z6 = Z5 + 1j * self.H2
     Z3 = Z4 + 1j * self.H2
 
-    Zmag = array([Z8b, Z6, Z5, Z4, Z3, Z8c])
+    Zmag = array([Z8a, Z8b, Z6, Z5, Z4, Z3, Z8c])
     Zmag = Zmag * exp(1j * angle(Z9 - Z8))
     Zmag = Zmag + Z8
 
     # final complex numbers Zmag=[Z8b Z6 Z5 Z4 Z3 Z8c]
-    (Z8b, Z6, Z5, Z4, Z3, Z8c) = Zmag
+    (Z8a, Z8b, Z6, Z5, Z4, Z3, Z8c) = Zmag
 
     # Rotation so [Z1,Z2] is parallel to the x axis
     Z3r, Z1r, Z6r = Z3 * exp(1j * hssp), Z1 * exp(1j * hssp), Z6 * exp(1j * hssp)
@@ -69,8 +70,10 @@ def _comp_point_coordinate(self):
     point_dict["Z9"] = Z9
     point_dict["Z10"] = Z10
     point_dict["Z11"] = Z11
-    point_dict["Z8c"] = Z8c
+    point_dict["Z8a"] = Z8a
     point_dict["Z8b"] = Z8b
+    point_dict["Z8c"] = Z8c
+
     # Symmetry
     point_dict["Z1s"] = Z1.conjugate()
     point_dict["Z2s"] = Z2.conjugate()
@@ -83,6 +86,7 @@ def _comp_point_coordinate(self):
     point_dict["Z9s"] = Z9.conjugate()
     point_dict["Z10s"] = Z10.conjugate()
     point_dict["Z11s"] = Z11.conjugate()
-    point_dict["Z8cs"] = Z8c.conjugate()
+    point_dict["Z8as"] = Z8a.conjugate()
     point_dict["Z8bs"] = Z8b.conjugate()
+    point_dict["Z8cs"] = Z8c.conjugate()
     return point_dict
