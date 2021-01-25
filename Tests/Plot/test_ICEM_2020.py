@@ -26,10 +26,8 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 from pyleecan.Methods.Machine.Winding import WindingError
-from pyleecan.Methods.Machine.WindingCW2LT.comp_connection_mat import (
-    WindingT1DefMsError,
-)
-from pyleecan.Methods.Machine.WindingCW1L.comp_connection_mat import WindingT2DefNtError
+from pyleecan.Methods.Machine.WindingCW2LT import WindingT1DefMsError
+from pyleecan.Methods.Machine.WindingCW1L import WindingT2DefNtError
 
 import numpy as np
 import random
@@ -686,11 +684,7 @@ def test_Optimization_problem():
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
 
     simu.struct = None
 

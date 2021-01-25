@@ -11,7 +11,7 @@ from ......Classes.SlotUD import SlotUD
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.Ui_PWSlotUD import Ui_PWSlotUD
 from ......GUI.Dialog.DMatLib.MatLib import MatLib
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dxf.DXF_Slot import DXF_Slot
 from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 
@@ -86,9 +86,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
             slot = load(self.w_path_json.get_path())
         except Exception as e:
             QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr("Error when loading file:\n" + str(e)),
+                self, self.tr("Error"), self.tr("Error when loading file:\n" + str(e)),
             )
             return
         # Check that the json file contain a SlotUD

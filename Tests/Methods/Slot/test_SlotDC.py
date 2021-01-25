@@ -7,10 +7,7 @@ from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.SlotDC import SlotDC
 from numpy import exp, arcsin, ndarray, pi
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
+from pyleecan.Classes.Slot import Slot
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -32,12 +29,7 @@ lam.slot = SlotDC(
 )
 
 SlotDC_test.append(
-    {
-        "test_obj": lam,
-        "S_exp": 4.8356e-3,
-        "SW_exp": 4.7291e-3,
-        "H_exp": 0.16003,
-    }
+    {"test_obj": lam, "S_exp": 4.8356e-3, "SW_exp": 4.7291e-3, "H_exp": 0.16003,}
 )
 # Outer lamination
 lam = LamSlot(is_stator=False, is_internal=False, Rext=0.4, Rint=0.2)
@@ -53,12 +45,7 @@ lam.slot = SlotDC(
     R3=10e-3,
 )
 SlotDC_test.append(
-    {
-        "test_obj": lam,
-        "S_exp": 4.835e-3,
-        "SW_exp": 4.7291e-3,
-        "H_exp": 0.15993,
-    }
+    {"test_obj": lam, "S_exp": 4.835e-3, "SW_exp": 4.7291e-3, "H_exp": 0.15993,}
 )
 
 
@@ -78,7 +65,7 @@ class Test_SlotDC_meth(object):
         assert a == pytest.approx(b, rel=DELTA), msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface(test_obj.slot, Ndisc=2000)
+        b = Slot.comp_surface(test_obj.slot, Ndisc=2000)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 
@@ -94,7 +81,7 @@ class Test_SlotDC_meth(object):
         assert a == pytest.approx(b, rel=DELTA), msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_active(test_obj.slot, Ndisc=2000)
+        b = Slot.comp_surface_active(test_obj.slot, Ndisc=2000)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 
@@ -110,7 +97,7 @@ class Test_SlotDC_meth(object):
         assert a == pytest.approx(b, rel=DELTA), msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 
@@ -121,7 +108,7 @@ class Test_SlotDC_meth(object):
         a = test_obj.slot.comp_angle_opening()
         assert a == 2 * arcsin(test_obj.slot.W1 / (2 * test_dict["test_obj"].get_Rbo()))
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 

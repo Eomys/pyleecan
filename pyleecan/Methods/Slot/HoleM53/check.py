@@ -2,7 +2,8 @@
 
 from numpy import pi
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.HoleM53 import *
 
 
 def check(self):
@@ -60,33 +61,3 @@ def check(self):
 
     if self.comp_W5() < 0:
         raise S53_W5CheckError("You must have W5 >=0")
-
-
-class S53_NoneError(SlotCheckError):
-    """Raised when a propery of HoleM53 is None"""
-
-    pass
-
-
-class S53_Rext0CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S53_Rext1CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S53_W4CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S53_W5CheckError(SlotCheckError):
-    """ """
-
-    pass

@@ -8,11 +8,8 @@ from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
-from pyleecan.Methods.Slot.SlotW11.check import S11_H1rCheckError
+from pyleecan.Classes.Slot import Slot
+from pyleecan.Methods.Slot.SlotW11 import S11_H1rCheckError
 
 # For AlmostEqual
 DELTA = 1e-6
@@ -122,7 +119,7 @@ class Test_SlotW11_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface(test_obj.slot)
+        b = Slot.comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < 1e-5, msg
 
@@ -137,7 +134,7 @@ class Test_SlotW11_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_active(test_obj.slot)
+        b = Slot.comp_surface_active(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < 1e-5, msg
 
@@ -152,7 +149,7 @@ class Test_SlotW11_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < 1e-5, msg
 
@@ -163,7 +160,7 @@ class Test_SlotW11_meth(object):
         a = test_obj.slot.comp_angle_opening()
         assert a == 2 * arcsin(test_obj.slot.W0 / (2 * 0.1325))
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 

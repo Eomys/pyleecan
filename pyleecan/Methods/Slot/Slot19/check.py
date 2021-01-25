@@ -2,7 +2,8 @@
 
 from numpy import pi
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.Slot19 import *
 
 
 def check(self):
@@ -27,15 +28,3 @@ def check(self):
     """
     if self.W1 < 0:
         raise S19_W1CheckError("W1 must be larger than zero")
-
-
-class S19_H2CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S19_W1CheckError(SlotCheckError):
-    """ """
-
-    pass

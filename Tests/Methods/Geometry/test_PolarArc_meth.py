@@ -5,7 +5,7 @@ from pyleecan.Classes.Segment import Segment
 from numpy import pi
 from mock import MagicMock
 from pyleecan.definitions import config_dict
-from pyleecan.Methods.Geometry.PolarArc.check import AnglePolarArcError
+from pyleecan.Methods.Geometry.PolarArc import AnglePolarArcError
 
 import pytest
 
@@ -96,12 +96,7 @@ class Test_PolarArc_meth(object):
 
     def test_check(self):
         """Check that you get the correct error on check"""
-        surface = PolarArc(
-            label="test",
-            point_ref=0.3j,
-            angle=0,
-            height=5,
-        )
+        surface = PolarArc(label="test", point_ref=0.3j, angle=0, height=5,)
 
         with pytest.raises(AnglePolarArcError) as context:
             surface.check()

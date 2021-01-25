@@ -3,8 +3,7 @@ import pytest
 
 from pyleecan.Classes.Segment import Segment
 
-from pyleecan.Methods.Geometry.Segment.check import PointSegmentError
-from pyleecan.Methods.Geometry.Segment.discretize import NbPointSegmentDError
+from pyleecan.Methods.Geometry.Segment import PointSegmentError, NbPointSegmentDError
 from numpy import pi, array, exp
 
 

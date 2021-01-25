@@ -5,11 +5,8 @@ from pyleecan.Classes.SlotW28 import SlotW28
 from numpy import ndarray, arcsin, exp
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Segment import Segment
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
-from pyleecan.Methods.Slot.SlotW28.check import (
+from pyleecan.Classes.Slot import Slot
+from pyleecan.Methods.Slot.SlotW28 import (
     S28_ZsCheckError,
     S28_RboW0CheckError,
     S28_R1R1CheckError,
@@ -92,7 +89,7 @@ class Test_SlotW28_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface(test_obj.slot)
+        b = Slot.comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -108,7 +105,7 @@ class Test_SlotW28_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_active(test_obj.slot)
+        b = Slot.comp_surface_active(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -124,7 +121,7 @@ class Test_SlotW28_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -137,7 +134,7 @@ class Test_SlotW28_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 

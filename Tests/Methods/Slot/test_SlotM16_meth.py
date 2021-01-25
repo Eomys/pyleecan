@@ -5,22 +5,13 @@ import pytest
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM16 import SlotM16
 from numpy import pi, exp, sqrt, arcsin, angle
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.Slot.comp_height_active import comp_height_active
-from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
+from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods import ParentMissingError
 
 
 Mag16_test = list()
 # Internal Slot inset magnet with same top and bottom radius
-lam = LamSlotMag(
-    Rint=80e-3,
-    Rext=200e-3,
-    is_internal=True,
-    is_stator=False,
-)
+lam = LamSlotMag(Rint=80e-3, Rext=200e-3, is_internal=True, is_stator=False,)
 lam.slot = SlotM16(Zs=4, W0=0.02, H0=0.02, H1=0.08, W1=0.04)
 
 Mag16_test.append(
@@ -36,12 +27,7 @@ Mag16_test.append(
 )
 
 # Internal Slot inset magnet with same top and bottom radius
-lam = LamSlotMag(
-    Rint=220e-3,
-    Rext=400e-3,
-    is_internal=False,
-    is_stator=True,
-)
+lam = LamSlotMag(Rint=220e-3, Rext=400e-3, is_internal=False, is_stator=True,)
 lam.slot = SlotM16(Zs=8, W0=0.02, H0=0.02, H1=0.08, W1=0.04)
 Mag16_test.append(
     {
@@ -75,7 +61,7 @@ class Test_Magnet_Type_16_meth(object):
         assert a == pytest.approx(b, rel=DELTA), msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface(test_obj.slot)
+        b = Slot.comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 
@@ -91,7 +77,7 @@ class Test_Magnet_Type_16_meth(object):
         assert a == pytest.approx(b, rel=DELTA), msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_active(test_obj.slot, Ndisc=5000)
+        b = Slot.comp_surface_active(test_obj.slot, Ndisc=5000)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 
@@ -107,7 +93,7 @@ class Test_Magnet_Type_16_meth(object):
         assert a == pytest.approx(b, rel=DELTA), msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 
@@ -123,7 +109,7 @@ class Test_Magnet_Type_16_meth(object):
         assert a == pytest.approx(b, rel=DELTA), msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_height_active(test_obj.slot)
+        b = Slot.comp_height_active(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 
@@ -134,7 +120,7 @@ class Test_Magnet_Type_16_meth(object):
         a = test_obj.slot.comp_angle_opening()
         assert a == pytest.approx(test_dict["Ao"], rel=DELTA)
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA)
 

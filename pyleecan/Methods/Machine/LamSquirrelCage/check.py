@@ -2,7 +2,7 @@
 
 from ....Classes.CondType21 import CondType21
 from ....Classes.LamSlotWind import LamSlotWind
-from ....Methods.Machine.LamSlotWind.check import Lam_WindCheckError
+from ....Methods.Machine.LamSquirrelCage import *
 
 
 def check(self):
@@ -32,21 +32,3 @@ def check(self):
 
     if not isinstance(self.winding.conductor, CondType21):
         raise SCC_WrongCond("A LamSquirrelCage's conductor must be " "a type 2_1")
-
-
-class SquirrelCageCheckError(Lam_WindCheckError):
-    """ """
-
-    pass
-
-
-class SCC_NotARotor(SquirrelCageCheckError):
-    """ """
-
-    pass
-
-
-class SCC_WrongCond(SquirrelCageCheckError):
-    """ """
-
-    pass

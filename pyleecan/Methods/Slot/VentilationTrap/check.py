@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ....Methods.Slot.VentilationTrap import *
 
 
 def check(self):
@@ -18,9 +19,3 @@ def check(self):
         raise VentilationTrapInstanceError("D0 must be a float or int")
     if not isinstance(self.Alpha0, float) and not isinstance(self.Alpha0, int):
         raise VentilationTrapInstanceError("Alpha0 must be a float or int")
-
-
-class VentilationTrapInstanceError(Exception):
-    """Raised when a Ventilation Trap parameter is not int or float"""
-
-    pass

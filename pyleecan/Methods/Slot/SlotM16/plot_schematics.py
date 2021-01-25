@@ -89,11 +89,7 @@ def plot_schematics(
         if is_add_point_label:
             for name, Z in point_dict.items():
                 ax.text(
-                    Z.real,
-                    Z.imag,
-                    name,
-                    fontsize=P_FONT_SIZE,
-                    bbox=TEXT_BOX,
+                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
                 )
 
         # Adding schematics
@@ -179,7 +175,7 @@ def plot_schematics(
             )
 
         # Zooming and cleaning
-        W = self.W1 / 2 * 1.2
+        W = self.W1 / 2 * 1.3
         Rint, Rext = self.comp_radius()
 
         plt.axis("equal")

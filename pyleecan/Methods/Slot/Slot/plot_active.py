@@ -18,6 +18,8 @@ def plot_active(
     is_bar=False,
     is_show_fig=True,
     enforced_default_color=None,
+    alpha=0,
+    delta=0,
 ):
     """Plot the active area of the lamination according to the wind_mat
 
@@ -36,6 +38,10 @@ def plot_active(
         To call show at the end of the method
     enforced_default_color : str
         If not None enforce the active color (when wind_mat is None)
+    alpha : float
+        Angle for rotation (Default value = 0) [rad]
+    delta : Complex
+        complex for translation (Default value = 0)
     Returns
     -------
     None
@@ -51,7 +57,7 @@ def plot_active(
         (Nrad, Ntan, Zs, qs) = wind_mat.shape
     qs_name = gen_name(qs)
 
-    surf_list = self.build_geometry_active(Nrad, Ntan)
+    surf_list = self.build_geometry_active(Nrad, Ntan, alpha=alpha, delta=delta)
 
     patches = list()
     for ii in range(len(surf_list)):

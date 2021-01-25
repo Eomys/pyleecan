@@ -9,7 +9,7 @@ from ......Classes.HoleM52 import HoleM52
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52.Gen_PHoleM52 import Gen_PHoleM52
 from ......GUI.Dialog.DMatLib.MatLib import MatLib
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PHoleM52(Gen_PHoleM52, QWidget):

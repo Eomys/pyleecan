@@ -7,7 +7,7 @@ from PySide2.QtWidgets import QWidget
 from ......Classes.HoleM57 import HoleM57
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.Gen_PHoleM57 import Gen_PHoleM57
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dialog.DMatLib.MatLib import MatLib
 
 

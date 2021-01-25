@@ -8,7 +8,7 @@ from PySide2.QtWidgets import QWidget
 from ......Classes.SlotM11 import SlotM11
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.Gen_PMSlot11 import Gen_PMSlot11
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide2.QtCore.QCoreApplication.translate
 

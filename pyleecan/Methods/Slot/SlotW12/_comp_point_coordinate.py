@@ -28,11 +28,13 @@ def _comp_point_coordinate(self):
         Z3 = Z2 + self.R1 * 2
         Z4 = Z3 + self.H1
         Zc1 = Z2 + self.R1
+        Zi2 = Z4.real + self.R2
     else:  # inward slot
         Z2 = Z1 - self.H0
         Z3 = Z2 - self.R1 * 2
         Z4 = Z3 - self.H1
         Zc1 = Z2 - self.R1
+        Zi2 = Z4.real - self.R2
     Zc2 = Z4.real
 
     point_dict = dict()
@@ -48,5 +50,8 @@ def _comp_point_coordinate(self):
     point_dict["Z7"] = Z2.conjugate()
     point_dict["Z8"] = Z1.conjugate()
     point_dict["Zc3"] = Zc1.conjugate()
+    point_dict["Zi1"] = Zc1 - 1j * self.R1
+    point_dict["Zi2"] = Zi2
+    point_dict["Zi3"] = point_dict["Zc3"] + 1j * self.R1
 
     return point_dict
