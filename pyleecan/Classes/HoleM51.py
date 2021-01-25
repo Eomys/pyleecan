@@ -18,6 +18,11 @@ from .HoleMag import HoleMag
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Slot.HoleM51._comp_point_coordinate import _comp_point_coordinate
+except ImportError as error:
+    _comp_point_coordinate = error
+
+try:
     from ..Methods.Slot.HoleM51.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
@@ -38,6 +43,11 @@ except ImportError as error:
     comp_radius = error
 
 try:
+    from ..Methods.Slot.HoleM51.comp_surface_magnet_id import comp_surface_magnet_id
+except ImportError as error:
+    comp_surface_magnet_id = error
+
+try:
     from ..Methods.Slot.HoleM51.comp_width import comp_width
 except ImportError as error:
     comp_width = error
@@ -48,14 +58,14 @@ except ImportError as error:
     has_magnet = error
 
 try:
+    from ..Methods.Slot.HoleM51.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
+
+try:
     from ..Methods.Slot.HoleM51.remove_magnet import remove_magnet
 except ImportError as error:
     remove_magnet = error
-
-try:
-    from ..Methods.Slot.HoleM51.comp_surface_magnet_id import comp_surface_magnet_id
-except ImportError as error:
-    comp_surface_magnet_id = error
 
 
 from ._check import InitUnKnowClassError
@@ -70,6 +80,18 @@ class HoleM51(HoleMag):
     IS_SYMMETRICAL = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.HoleM51._comp_point_coordinate
+    if isinstance(_comp_point_coordinate, ImportError):
+        _comp_point_coordinate = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM51 method _comp_point_coordinate: "
+                    + str(_comp_point_coordinate)
+                )
+            )
+        )
+    else:
+        _comp_point_coordinate = _comp_point_coordinate
     # cf Methods.Slot.HoleM51.build_geometry
     if isinstance(build_geometry, ImportError):
         build_geometry = property(
@@ -108,6 +130,18 @@ class HoleM51(HoleMag):
         )
     else:
         comp_radius = comp_radius
+    # cf Methods.Slot.HoleM51.comp_surface_magnet_id
+    if isinstance(comp_surface_magnet_id, ImportError):
+        comp_surface_magnet_id = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM51 method comp_surface_magnet_id: "
+                    + str(comp_surface_magnet_id)
+                )
+            )
+        )
+    else:
+        comp_surface_magnet_id = comp_surface_magnet_id
     # cf Methods.Slot.HoleM51.comp_width
     if isinstance(comp_width, ImportError):
         comp_width = property(
@@ -126,6 +160,17 @@ class HoleM51(HoleMag):
         )
     else:
         has_magnet = has_magnet
+    # cf Methods.Slot.HoleM51.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM51 method plot_schematics: " + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
     # cf Methods.Slot.HoleM51.remove_magnet
     if isinstance(remove_magnet, ImportError):
         remove_magnet = property(
@@ -137,18 +182,6 @@ class HoleM51(HoleMag):
         )
     else:
         remove_magnet = remove_magnet
-    # cf Methods.Slot.HoleM51.comp_surface_magnet_id
-    if isinstance(comp_surface_magnet_id, ImportError):
-        comp_surface_magnet_id = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM51 method comp_surface_magnet_id: "
-                    + str(comp_surface_magnet_id)
-                )
-            )
-        )
-    else:
-        comp_surface_magnet_id = comp_surface_magnet_id
     # save and copy methods are available in all object
     save = save
     copy = copy
