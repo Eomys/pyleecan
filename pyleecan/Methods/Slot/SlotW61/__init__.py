@@ -29,3 +29,22 @@ class S61_WindWError(SlotCheckError):
     """ """
 
     pass
+
+
+class S61_WindError(SlotCheckError):
+    """
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+
+    Raises
+    ------
+    winding
+
+
+    """
+
+    pass

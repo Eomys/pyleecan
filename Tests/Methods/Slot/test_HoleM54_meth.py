@@ -8,7 +8,7 @@ from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Arc3 import Arc3
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM54 import HoleM54
-from pyleecan.Methods.Slot.Hole.comp_surface import comp_surface
+from pyleecan.Classes.Hole import Hole
 from pyleecan.Methods.Slot.HoleM54 import S54_NoneError
 
 from numpy import exp, arcsin, ndarray, pi
@@ -42,7 +42,7 @@ class Test_HoleM54_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface(test_obj.hole[0])
+        b = Hole.comp_surface(test_obj.hole[0])
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < 1e-4, msg
 

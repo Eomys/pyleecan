@@ -2,10 +2,12 @@
 
 from pyleecan.Classes.Arc3 import Arc3
 from pyleecan.Classes.Arc2 import Arc2
-from pyleecan.Methods.Geometry.Arc3.rotate import AngleRotationArc3Error
-from pyleecan.Methods.Geometry.Arc3.discretize import NbPointArc3DError
-from pyleecan.Methods.Geometry.Arc3.translate import PointTranslateArc3Error
-from pyleecan.Methods.Geometry.Arc3.check import PointArc3Error
+from pyleecan.Methods.Geometry.Arc3 import (
+    AngleRotationArc3Error,
+    NbPointArc3DError,
+    PointTranslateArc3Error,
+    PointArc3Error,
+)
 from numpy import pi, exp, sqrt, linspace
 
 import pytest
@@ -276,11 +278,7 @@ class Test_Arc3_meth(object):
 
     def test_get_middle_zero(self):
         """Checking that get_middle() can return 0"""
-        arc = Arc3(
-            begin=0,
-            end=-0.0000000001j,
-            is_trigo_direction=True,
-        )
+        arc = Arc3(begin=0, end=-0.0000000001j, is_trigo_direction=True,)
         result = arc.get_middle()
         assert result == 0
 
@@ -336,21 +334,13 @@ class Test_Arc3_meth(object):
 
     def test_arc_rotate_error(self):
         """Check that the arc3 rotate raise an error"""
-        arc = Arc3(
-            begin=1 - 5j,
-            end=3 + 2j,
-            is_trigo_direction=True,
-        )
+        arc = Arc3(begin=1 - 5j, end=3 + 2j, is_trigo_direction=True,)
         with pytest.raises(AngleRotationArc3Error) as context:
             arc.rotate("error")
 
     def test_discretize_error(self):
         """Check that you can't discretize an arc3 when an error occurs"""
-        arc = Arc3(
-            begin=2,
-            end=-2,
-            is_trigo_direction=False,
-        )
+        arc = Arc3(begin=2, end=-2, is_trigo_direction=False,)
 
         with pytest.raises(NbPointArc3DError) as context:
             arc.discretize(0.12564)
@@ -359,22 +349,14 @@ class Test_Arc3_meth(object):
 
     def test_translate_error(self):
         """Check that you can't translate an arc3 when an error occurs"""
-        arc = Arc3(
-            begin=2,
-            end=-2,
-            is_trigo_direction=False,
-        )
+        arc = Arc3(begin=2, end=-2, is_trigo_direction=False,)
 
         with pytest.raises(PointTranslateArc3Error) as context:
             arc.translate("error")
 
     def test_check(self):
         """Check that you get the correct error on check"""
-        arc = Arc3(
-            begin=2,
-            end=2,
-            is_trigo_direction=False,
-        )
+        arc = Arc3(begin=2, end=2, is_trigo_direction=False,)
 
         with pytest.raises(PointArc3Error) as context:
             arc.check()
