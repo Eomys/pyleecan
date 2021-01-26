@@ -38,8 +38,8 @@ def plot_schematics(
 
     Parameters
     ----------
-    self : SlotW13
-        A SlotW13 object
+    self : SlotW16
+        A SlotW16 object
     is_default : bool
         True: plot default schematics, else use current slot values
     is_add_point_label : bool
@@ -88,7 +88,11 @@ def plot_schematics(
         if is_add_point_label:
             for name, Z in point_dict.items():
                 ax.text(
-                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
+                    Z.real,
+                    Z.imag,
+                    name,
+                    fontsize=P_FONT_SIZE,
+                    bbox=TEXT_BOX,
                 )
 
         # Adding schematics
