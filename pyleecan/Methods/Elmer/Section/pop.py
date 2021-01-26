@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ..Section import ElmerSectionError
+from ....Methods.Elmer.Section import ElmerSectionError
 
 
 def pop(self, key):
