@@ -56,6 +56,13 @@ class SBar(Gen_SBar, QWidget):
         for wid in wid_list:
             wid.setText(gui_option.unit.get_m_name())
 
+        # Update winding qs
+        if (
+            self.machine.rotor.slot.Zs is not None
+            and self.machine.rotor.winding.qs is None
+        ):
+            self.machine.rotor.winding.qs = self.machine.rotor.slot.Zs
+
         # Set materials
         self.w_mat.def_mat = "Copper1"
         self.w_mat.setText("Ring material:")
