@@ -1674,6 +1674,7 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_alpha",
@@ -1681,7 +1682,8 @@
             "comp_W5",
             "has_magnet",
             "remove_magnet",
-            "comp_surface_magnet_id"
+            "comp_surface_magnet_id",
+            "plot_schematics"
         ],
         "mother": "HoleMag",
         "name": "HoleM50",
@@ -1813,14 +1815,16 @@
         "desc": "3 magnets V hole",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_alpha",
             "comp_radius",
+            "comp_surface_magnet_id",
             "comp_width",
             "has_magnet",
-            "remove_magnet",
-            "comp_surface_magnet_id"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM51",
@@ -1970,15 +1974,17 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_alpha",
             "comp_radius",
             "comp_surface",
+            "comp_surface_magnet_id",
             "comp_W1",
             "has_magnet",
-            "remove_magnet",
-            "comp_surface_magnet_id"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM52",
@@ -2056,14 +2062,16 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_alpha",
             "comp_radius",
+            "comp_surface_magnet_id",
             "comp_W5",
             "has_magnet",
-            "remove_magnet",
-            "comp_surface_magnet_id"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM53",
@@ -2177,10 +2185,12 @@
         "desc": "Arc Hole for SyRM",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_radius",
-            "comp_surface"
+            "comp_surface",
+            "plot_schematics"
         ],
         "mother": "Hole",
         "name": "HoleM54",
@@ -2240,12 +2250,14 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_radius",
-            "remove_magnet",
+            "comp_surface_magnet_id",
             "has_magnet",
-            "comp_surface_magnet_id"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM57",
@@ -2350,12 +2362,14 @@
         "desc": "One magnet with circular notches",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_radius",
-            "remove_magnet",
+            "comp_surface_magnet_id",
             "has_magnet",
-            "comp_surface_magnet_id"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM58",
