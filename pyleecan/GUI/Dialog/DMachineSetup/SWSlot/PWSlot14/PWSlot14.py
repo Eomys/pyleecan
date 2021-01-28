@@ -55,7 +55,7 @@ class PWSlot14(Gen_PWSlot14, QWidget):
             self.unit_H3,
         ]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("["+gui_option.unit.get_m_name()+"]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)

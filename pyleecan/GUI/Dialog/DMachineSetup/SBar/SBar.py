@@ -54,7 +54,7 @@ class SBar(Gen_SBar, QWidget):
         # Set unit name (m ou mm)
         wid_list = [self.unit_Hscr, self.unit_Lscr, self.unit_Lewout]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("["+gui_option.unit.get_m_name()+"]")
 
         # Update winding qs
         if (

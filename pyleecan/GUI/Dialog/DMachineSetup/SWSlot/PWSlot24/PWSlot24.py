@@ -43,7 +43,7 @@ class PWSlot24(Gen_PWSlot24, QWidget):
         # Set unit name (m ou mm)
         wid_list = [self.unit_W3, self.unit_H2]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("["+gui_option.unit.get_m_name()+"]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W3.setValue(self.slot.W3)
