@@ -9,9 +9,9 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
+from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
 from ......GUI.Tools.WPathSelector.WPathSelector import WPathSelector
 from ......GUI.Tools.MPLCanvas import MPLCanvas2
-from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -30,9 +30,18 @@ class Ui_PWSlotUD(object):
 
         self.horizontalLayout.addWidget(self.w_viewer)
 
-        self.verticalLayout = QVBoxLayout()
+        self.widget = QWidget(PWSlotUD)
+        self.widget.setObjectName(u"widget")
+        self.widget.setMinimumSize(QSize(250, 0))
+        self.widget.setMaximumSize(QSize(250, 16777215))
+        self.verticalLayout = QVBoxLayout(self.widget)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.w_path_json = WPathSelector(PWSlotUD)
+        self.b_dxf = QPushButton(self.widget)
+        self.b_dxf.setObjectName(u"b_dxf")
+
+        self.verticalLayout.addWidget(self.b_dxf)
+
+        self.w_path_json = WPathSelector(self.widget)
         self.w_path_json.setObjectName(u"w_path_json")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -42,23 +51,18 @@ class Ui_PWSlotUD(object):
 
         self.verticalLayout.addWidget(self.w_path_json)
 
-        self.b_dxf = QPushButton(PWSlotUD)
-        self.b_dxf.setObjectName(u"b_dxf")
-
-        self.verticalLayout.addWidget(self.b_dxf)
-
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
-        self.w_out = WWSlotOut(PWSlotUD)
+        self.w_out = WWSlotOut(self.widget)
         self.w_out.setObjectName(u"w_out")
 
         self.verticalLayout.addWidget(self.w_out)
 
-        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.horizontalLayout.addWidget(self.widget)
 
         self.retranslateUi(PWSlotUD)
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>630</width>
+    <width>728</width>
     <height>470</height>
    </rect>
   </property>
@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/Slot_25.PNG</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW25.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -64,7 +64,7 @@
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>60</height>
+         <height>70</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -86,83 +86,110 @@ p, li { white-space: pre-wrap; }
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="in_W3">
-         <property name="text">
-          <string>W3 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="FloatEdit" name="lf_W3"/>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="unit_W3">
-         <property name="text">
-          <string>m</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="in_W4">
-         <property name="text">
-          <string>W4 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="FloatEdit" name="lf_W4"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLabel" name="unit_W4">
-         <property name="text">
-          <string>m</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="in_H1">
-         <property name="text">
-          <string>H1 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="FloatEdit" name="lf_H1"/>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="unit_H1">
-         <property name="text">
-          <string>m</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="in_H2">
-         <property name="text">
-          <string>H2 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="FloatEdit" name="lf_H2"/>
-       </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="unit_H2">
-         <property name="text">
-          <string>m</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="WWSlotOut" name="w_out" native="true"/>
-     </item>
-    </layout>
+    <widget class="QWidget" name="widget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>250</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>250</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="in_W3">
+          <property name="text">
+           <string>W3</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="FloatEdit" name="lf_W3"/>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="unit_W3">
+          <property name="text">
+           <string>m</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="in_W4">
+          <property name="text">
+           <string>W4</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="FloatEdit" name="lf_W4"/>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="unit_W4">
+          <property name="text">
+           <string>m</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="in_H1">
+          <property name="text">
+           <string>H1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="FloatEdit" name="lf_H1"/>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="unit_H1">
+          <property name="text">
+           <string>m</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="in_H2">
+          <property name="text">
+           <string>H2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="FloatEdit" name="lf_H2"/>
+        </item>
+        <item row="3" column="2">
+         <widget class="QLabel" name="unit_H2">
+          <property name="text">
+           <string>m</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="WWSlotOut" name="w_out" native="true"/>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -68,7 +68,9 @@ class PWSlot10(Gen_PWSlot10, QWidget):
 
         # Update the unit combobox with the current m unit name
         self.c_H1_unit.clear()
-        self.c_H1_unit.addItems([gui_option.unit.get_m_name(), "rad", "deg"])
+        self.c_H1_unit.addItems(
+            ["[" + gui_option.unit.get_m_name() + "]", "[rad]", "[deg]"]
+        )
         if self.slot.H1_is_rad:  # rad
             self.c_H1_unit.setCurrentIndex(1)
         else:

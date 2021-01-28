@@ -1,5 +1,21 @@
 <RCC>
   <qresource prefix="/images">
+    <file>images/MachineSetup/WSlot/SlotW10.png</file>
+    <file>images/MachineSetup/WSlot/SlotW11.png</file>
+    <file>images/MachineSetup/WSlot/SlotW12.png</file>
+    <file>images/MachineSetup/WSlot/SlotW13.png</file>
+    <file>images/MachineSetup/WSlot/SlotW14.png</file>
+    <file>images/MachineSetup/WSlot/SlotW15.png</file>
+    <file>images/MachineSetup/WSlot/SlotW16.png</file>
+    <file>images/MachineSetup/WSlot/SlotW21.png</file>
+    <file>images/MachineSetup/WSlot/SlotW22.png</file>
+    <file>images/MachineSetup/WSlot/SlotW23.png</file>
+    <file>images/MachineSetup/WSlot/SlotW24.png</file>
+    <file>images/MachineSetup/WSlot/SlotW25.png</file>
+    <file>images/MachineSetup/WSlot/SlotW26.png</file>
+    <file>images/MachineSetup/WSlot/SlotW27.png</file>
+    <file>images/MachineSetup/WSlot/SlotW28.png</file>
+    <file>images/MachineSetup/WSlot/SlotW29.png</file>
     <file>images/MachineSetup/WMSlot/SlotM10.png</file>
     <file>images/MachineSetup/WMSlot/SlotM11.png</file>
     <file>images/MachineSetup/WMSlot/SlotM12.png</file>
@@ -16,21 +32,11 @@
     <file>images/MachineSetup/SyRM.png</file>
     <file>images/MachineSetup/WSlot/Slot_60.PNG</file>
     <file>images/MachineSetup/WSlot/Slot_61.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 16.PNG</file>
     <file>images/MachineSetup/WSlot/Slot_53.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 15.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 28.PNG</file>
     <file>images/icon/help_16.png</file>
-    <file>images/MachineSetup/WSlot/Slot 14.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 29.PNG</file>
     <file>images/icon/search.png</file>
-    <file>images/MachineSetup/WSlot/Slot 13.PNG</file>
     <file>images/MachineSetup/LamParam/PolarVentDuct.png</file>
-    <file>images/MachineSetup/WSlot/Slot 12.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 27.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 26.PNG</file>
     <file>images/MachineSetup/WSlot/Slot_52.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot_25.PNG</file>
     <file>images/MachineSetup/WSlot/Slot_50.PNG</file>
     <file>images/MachineSetup/LamParam/CircVentDuct.png</file>
     <file>images/MachineSetup/LamParam/TrapVentDuct.png</file>
@@ -43,12 +49,6 @@
     <file>images/MachineSetup/WindingPattern/Type_Wind_3.PNG</file>
     <file>images/MachineSetup/WindingPattern/Type_Wind_4.PNG</file>
     <file>images/MachineSetup/WindingPattern/Type_Wind_5.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 22.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 23.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 24.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 21.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 11.PNG</file>
-    <file>images/MachineSetup/WSlot/Slot 10.PNG</file>
     <file>images/MachineSetup/LamParam/RadVentDuct.png</file>
     <file>images/MachineSetup/BPMSM.png</file>
     <file>images/MachineSetup/DFIM.png</file>
