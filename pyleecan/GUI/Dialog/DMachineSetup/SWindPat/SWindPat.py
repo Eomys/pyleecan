@@ -25,7 +25,7 @@ class SWindPat(Gen_SWindPat, QWidget):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
     # Information for DMachineSetup nav
-    step_name = "Winding Pattern"
+    step_name = "Wind. Pattern"
 
     def __init__(self, machine, matlib, is_stator=False):
         """Initialize the GUI according to machine

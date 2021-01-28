@@ -55,7 +55,7 @@ class PWSlot60(Gen_PWSlot60, QWidget):
             self.unit_H4,
         ]
         for wid in wid_list:
-            wid.setText("["+gui_option.unit.get_m_name()+"]")
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Setup the Widget only if the correct type is selected.
         self.lamination = lamination

@@ -56,7 +56,7 @@ class PWSlot11(Gen_PWSlot11, QWidget):
             self.unit_R1,
         ]
         for wid in wid_list:
-            wid.setText("["+gui_option.unit.get_m_name()+"]")
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Fill the fields with the lamination values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)

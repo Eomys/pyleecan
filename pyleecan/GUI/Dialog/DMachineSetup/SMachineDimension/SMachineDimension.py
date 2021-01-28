@@ -61,7 +61,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.unit_Lfra,
         ]
         for wid in wid_list:
-            wid.setText("["+gui_option.unit.get_m_name()+"]")
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Initialize the GUI with the current machine value
         self.lf_SRint.setValue(machine.stator.Rint)
