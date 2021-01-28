@@ -29,7 +29,12 @@ lam.slot = SlotDC(
 )
 
 SlotDC_test.append(
-    {"test_obj": lam, "S_exp": 4.8356e-3, "SW_exp": 4.7291e-3, "H_exp": 0.16003,}
+    {
+        "test_obj": lam,
+        "S_exp": 4.8356e-3,
+        "SW_exp": 4.7291e-3,
+        "H_exp": 0.16003,
+    }
 )
 # Outer lamination
 lam = LamSlot(is_stator=False, is_internal=False, Rext=0.4, Rint=0.2)
@@ -45,7 +50,12 @@ lam.slot = SlotDC(
     R3=10e-3,
 )
 SlotDC_test.append(
-    {"test_obj": lam, "S_exp": 4.835e-3, "SW_exp": 4.7291e-3, "H_exp": 0.15993,}
+    {
+        "test_obj": lam,
+        "S_exp": 4.835e-3,
+        "SW_exp": 4.7291e-3,
+        "H_exp": 0.15993,
+    }
 )
 
 

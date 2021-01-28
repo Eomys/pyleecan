@@ -96,7 +96,12 @@ class Test_PolarArc_meth(object):
 
     def test_check(self):
         """Check that you get the correct error on check"""
-        surface = PolarArc(label="test", point_ref=0.3j, angle=0, height=5,)
+        surface = PolarArc(
+            label="test",
+            point_ref=0.3j,
+            angle=0,
+            height=5,
+        )
 
         with pytest.raises(AnglePolarArcError) as context:
             surface.check()

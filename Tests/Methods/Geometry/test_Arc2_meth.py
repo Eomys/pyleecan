@@ -535,12 +535,20 @@ class Test_Arc2_meth(object):
 
     def test_arc_rotate_error(self):
         """Check that the arc3 rotate raise an error"""
-        arc = Arc2(begin=1 - 5j, center=3 + 2j, angle=pi / 2,)
+        arc = Arc2(
+            begin=1 - 5j,
+            center=3 + 2j,
+            angle=pi / 2,
+        )
         with pytest.raises(AngleRotationArc2Error) as context:
             arc.rotate("error")
 
     def test_translate_error(self):
         """Check that you can't translate an arc2 when an error occurs"""
-        arc = Arc2(begin=1 - 5j, center=3 + 2j, angle=pi / 2,)
+        arc = Arc2(
+            begin=1 - 5j,
+            center=3 + 2j,
+            angle=pi / 2,
+        )
         with pytest.raises(PointTranslateArc2Error) as context:
             arc.translate("error")

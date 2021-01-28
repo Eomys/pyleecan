@@ -11,7 +11,12 @@ from pyleecan.Methods import ParentMissingError
 
 Mag16_test = list()
 # Internal Slot inset magnet with same top and bottom radius
-lam = LamSlotMag(Rint=80e-3, Rext=200e-3, is_internal=True, is_stator=False,)
+lam = LamSlotMag(
+    Rint=80e-3,
+    Rext=200e-3,
+    is_internal=True,
+    is_stator=False,
+)
 lam.slot = SlotM16(Zs=4, W0=0.02, H0=0.02, H1=0.08, W1=0.04)
 
 Mag16_test.append(
@@ -27,7 +32,12 @@ Mag16_test.append(
 )
 
 # Internal Slot inset magnet with same top and bottom radius
-lam = LamSlotMag(Rint=220e-3, Rext=400e-3, is_internal=False, is_stator=True,)
+lam = LamSlotMag(
+    Rint=220e-3,
+    Rext=400e-3,
+    is_internal=False,
+    is_stator=True,
+)
 lam.slot = SlotM16(Zs=8, W0=0.02, H0=0.02, H1=0.08, W1=0.04)
 Mag16_test.append(
     {
