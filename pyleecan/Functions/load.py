@@ -2,6 +2,7 @@
 
 from os.path import isdir, join
 from os import walk, getcwd, chdir
+from .Load.retrocompatibility import convert_init_dict
 from .Load.load_json import load_json
 from .Load.load_hdf5 import load_hdf5
 from .Load.load_pkl import load_pkl
@@ -103,6 +104,9 @@ def load(file_path):
     # Check that the dictionay has a "__class__" key
     if "__class__" not in init_dict:
         raise LoadWrongDictClassError('Key "__class__" missing in loaded file')
+
+    # Retrocompatibility
+    init_dict = convert_init_dict(init_dict)
 
     return init_data(init_dict, file_path)
 

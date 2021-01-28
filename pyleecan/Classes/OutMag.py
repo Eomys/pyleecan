@@ -104,7 +104,7 @@ class OutMag(FrozenClass):
         Phi_wind=None,
         emf=None,
         meshsolution=-1,
-        logger_name="Pyleecan.OutMag",
+        logger_name="Pyleecan.Magnetics",
         internal=None,
         Rag=None,
         init_dict=None,

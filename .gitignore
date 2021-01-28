@@ -23,3 +23,6 @@ run_GUI_internal.py
 /.spyproject/config/encoding.ini
 /.spyproject/config/vcs.ini
 /.spyproject/config/workspace.ini
+/build
+/dist
+

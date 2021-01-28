@@ -175,7 +175,7 @@ class Test_Slot_10_plot(object):
         )
 
         lines = test_obj.stator.slot.build_geometry_half_tooth(is_top=False)
-        assert len(lines) == 9
+        assert len(lines) == 7
 
         # Testing comp_angle_d_axis
         test_obj.stator.winding = None

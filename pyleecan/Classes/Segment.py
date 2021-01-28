@@ -92,6 +92,11 @@ try:
 except ImportError as error:
     comp_distance = error
 
+try:
+    from ..Methods.Geometry.Segment.plot import plot
+except ImportError as error:
+    plot = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -241,6 +246,15 @@ class Segment(Line):
         )
     else:
         comp_distance = comp_distance
+    # cf Methods.Geometry.Segment.plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # save and copy methods are available in all object
     save = save
     copy = copy

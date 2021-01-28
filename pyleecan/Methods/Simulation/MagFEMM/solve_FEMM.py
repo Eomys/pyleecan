@@ -134,7 +134,12 @@ def solve_FEMM(
 
     # Compute the data for each time step
     for ii in range(start_t, end_t):
-        self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt))
+        if Nt > 1:
+            self.get_logger().info(
+                "Solving time step " + str(ii + 1) + " / " + str(Nt) + " in FEMM"
+            )
+        else:
+            self.get_logger().info("Computing Airgap Flux in FEMM")
         # Update rotor position and currents
         update_FEMM_simulation(
             femm=femm,

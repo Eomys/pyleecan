@@ -19,4 +19,4 @@ def comp_surface(self):
 
     """
 
-    return self.comp_surface_wind()
+    return self.comp_surface_active()

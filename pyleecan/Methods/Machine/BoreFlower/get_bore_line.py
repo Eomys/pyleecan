@@ -4,7 +4,7 @@ from ....Methods import ParentMissingError
 from numpy import pi, exp
 
 
-def get_bore_line(self, label=""):
+def get_bore_line(self, label=None):
     """Return the bore line description
 
     Parameters
@@ -21,8 +21,10 @@ def get_bore_line(self, label=""):
     if self.parent is not None:
         Rbo = self.parent.get_Rbo()
     else:
-        raise ParentMissingError("Error: The slot is not inside a Lamination")
+        raise ParentMissingError("Error: The Bore object is not inside a Lamination")
 
+    if label is None:
+        label = ""
     # Compute the shape
     (alpha_lim, z_top_left, z_top_right) = comp_flower_arc(
         2 * pi / self.N, self.Rarc, Rbo

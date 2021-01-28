@@ -1,4 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-model_index,,Internal dict to strore model index,,dict,{},,,,Simulation,,run,VERSION,1,"Losses module object that containt the loss models. See method add_model for implementation details."
+model_index,,Internal dict to strore model index,,dict,{},,,,Simulation,,run,VERSION,1,Losses module object that containt the loss models. See method add_model for implementation details.
 model_list,,Internal list of loss models,,[LossModel],,,,,,,add_model,,,
-,,,,,,,,,,,remove_model,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Loss,,,,,,remove_model,,,

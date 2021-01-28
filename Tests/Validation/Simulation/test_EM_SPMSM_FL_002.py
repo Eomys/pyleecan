@@ -22,7 +22,6 @@ from Tests import save_validation_path as save_path
 @pytest.mark.validation
 @pytest.mark.FEMM
 @pytest.mark.MeshSol
-@pytest.mark.DEV
 def test_Magnetic_FEMM_sym():
     """Validation of a polar SIPMSM with surface magnet
     Linear lamination material
