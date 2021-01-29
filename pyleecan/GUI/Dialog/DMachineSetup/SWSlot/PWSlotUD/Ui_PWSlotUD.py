@@ -10,7 +10,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
-from ......GUI.Tools.WPathSelector.WPathSelector import WPathSelector
+from ......GUI.Tools.WPathSelector.WPathSelectorV import WPathSelectorV
 from ......GUI.Tools.MPLCanvas import MPLCanvas2
 
 from pyleecan.GUI.Resources import pyleecan_rc
@@ -41,7 +41,7 @@ class Ui_PWSlotUD(object):
 
         self.verticalLayout.addWidget(self.b_dxf)
 
-        self.w_path_json = WPathSelector(self.widget)
+        self.w_path_json = WPathSelectorV(self.widget)
         self.w_path_json.setObjectName(u"w_path_json")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)

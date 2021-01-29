@@ -47,7 +47,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         # Setup Path selector for Json files
         self.w_path_json.obj = None
         self.w_path_json.param_name = None
-        self.w_path_json.verbose_name = "Import SlotUD.json"
+        self.w_path_json.verbose_name = "Load from json"
         self.w_path_json.extension = "JSON file (*.json)"
         self.w_path_json.update()
 
@@ -73,11 +73,11 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         lam.plot(fig=self.w_viewer.fig, is_show_fig=False)
 
         # Update the Graph
-        self.w_viewer.draw()
-        self.w_viewer.axes.axis("off")
-        self.w_viewer.axes.autoscale(enable=True, axis="both")
-        if self.w_viewer.axes.get_legend():
+        self.w_viewer.axes.set_axis_off()
+        self.w_viewer.axes.axis("equal")
+        if self.w_viewer.axes.get_legend() is not None:
             self.w_viewer.axes.get_legend().remove()
+        self.w_viewer.draw()
 
     def load_slot(self):
         """Load the selected json file and display the slot"""
@@ -86,9 +86,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
             slot = load(self.w_path_json.get_path())
         except Exception as e:
             QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr("Error when loading file:\n" + str(e)),
+                self, self.tr("Error"), self.tr("Error when loading file:\n" + str(e)),
             )
             return
         # Check that the json file contain a SlotUD
