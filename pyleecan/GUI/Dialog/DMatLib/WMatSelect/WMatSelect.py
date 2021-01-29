@@ -45,6 +45,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         self.matlib = list()  # Matlib
         self.matlib_path = ""  # Path to save the matlib
         self.def_mat = "M400-50A"  # Default material
+        self.is_hide_button = False  # To hide the "Edit material" button
 
         # Connect the
         self.c_mat_type.currentIndexChanged.connect(self.set_mat_type)
@@ -80,6 +81,11 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         self.mat_attr_name = mat_attr_name
         self.matlib = matlib
         self.matlib_path = matlib_path
+
+        if self.is_hide_button:
+            self.b_matlib.hide()
+        else:
+            self.b_matlib.show()
 
         # Update the list of materials
         self.c_mat_type.clear()

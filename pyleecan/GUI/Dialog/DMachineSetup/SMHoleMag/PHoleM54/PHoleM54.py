@@ -45,14 +45,15 @@ class PHoleM54(Gen_PHoleM54, QWidget):
         self.u = gui_option.unit
         wid_list = [self.unit_R1, self.unit_H0, self.unit_H1]
         for wid in wid_list:
-            wid.setText(self.u.get_m_name())
+            wid.setText("[" + self.u.get_m_name() + "]")
 
         self.matlib = matlib
         self.hole = hole
 
         # Set default materials
-        self.w_mat_0.setText("mat_void:")
+        self.w_mat_0.setText("mat_void")
         self.w_mat_0.def_mat = "Air"
+        self.w_mat_0.is_hide_button = True
 
         # Set current material
         self.w_mat_0.update(self.hole, "mat_void", self.matlib)

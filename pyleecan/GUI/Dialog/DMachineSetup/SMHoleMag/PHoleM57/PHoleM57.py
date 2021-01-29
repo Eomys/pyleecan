@@ -49,16 +49,21 @@ class PHoleM57(Gen_PHoleM57, QWidget):
         self.lf_H2.unit = "m"
 
         # Set default materials
-        self.w_mat_0.setText("mat_void:")
+        self.w_mat_0.setText("mat_void")
         self.w_mat_0.def_mat = "Air"
-        self.w_mat_1.setText("magnet_0:")
+        self.w_mat_0.is_hide_button = True
+
+        self.w_mat_1.setText("magnet_0")
         self.w_mat_1.def_mat = "Magnet1"
-        self.w_mat_2.setText("magnet_1:")
+        self.w_mat_1.is_hide_button = True
+
+        self.w_mat_2.setText("magnet_1")
         self.w_mat_2.def_mat = "Magnet1"
+        self.w_mat_2.is_hide_button = True
 
         if hole.magnet_0 is None:  # SyRM
             self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/WSlot/Slot_57_no_mag.PNG")
+                QPixmap(":/images/images/MachineSetup/SMHoleMag/HoleM57_no_mag.png")
             )
             self.w_mat_0.update(self.hole, "mat_void", self.matlib)
             self.w_mat_1.hide()
@@ -80,7 +85,7 @@ class PHoleM57(Gen_PHoleM57, QWidget):
             self.unit_H2,
         ]
         for wid in wid_list:
-            wid.setText(self.u.get_m_name())
+            wid.setText("[" + self.u.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.hole.W0)
