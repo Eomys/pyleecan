@@ -3,9 +3,11 @@ from numpy.testing import assert_almost_equal
 
 from Tests import save_validation_path as save_path
 from numpy import sqrt, pi
+from multiprocessing import cpu_count
+
+import pytest
+
 from pyleecan.Classes.Simu1 import Simu1
-
-
 from pyleecan.Classes.InputElec import InputElec
 from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_PMSM import EEC_PMSM
@@ -13,7 +15,6 @@ from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
 from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-import pytest
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
@@ -55,6 +56,7 @@ def test_EEC_FEMM_IPMSM():
         type_BH_stator=0,
         type_BH_rotor=0,
         is_periodicity_a=True,
+        nb_worker=cpu_count(),
     )
 
     out2 = Output(simu=simu2)

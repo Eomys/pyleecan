@@ -664,7 +664,7 @@ def test_Optimization_problem():
         )
     )
     N0 = 400
-    Ir = ImportMatrixVal(value=np.zeros((Nt, 28)))
+    Ir = ImportMatrixVal(value=np.zeros((Nt_tot, 28)))
 
     SPMSM_001.name = (
         "Default SPMSM machine"  # Rename the machine to have the good plot title
@@ -684,11 +684,7 @@ def test_Optimization_problem():
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
 
     simu.struct = None
 
