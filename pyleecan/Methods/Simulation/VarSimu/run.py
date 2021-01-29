@@ -85,10 +85,19 @@ def run(self):
             if isinstance(param_exp.get_value()[idx], InputCurrent):
                 msg += "Id=" + format(param_exp.get_value()[idx].Id_ref, ".8g")
                 msg += ", Iq=" + format(param_exp.get_value()[idx].Iq_ref, ".8g") + ", "
-            else:
+            elif isinstance(param_exp.get_value()[idx], (list, np.ndarray)):
                 msg += param_exp.symbol
                 msg += "="
-                msg += format(param_exp.get_value()[idx], ".8g")
+                msg += format(param_exp.get_value()[idx])
+                msg += ", "
+            else:
+                try:
+                    data_str = format(param_exp.get_value()[idx], ".8g")
+                except:
+                    data_str = "'NA'"
+                msg += param_exp.symbol
+                msg += "="
+                msg += data_str
                 msg += ", "
         msg = msg[:-2]
         logger.info(msg)
