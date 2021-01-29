@@ -99,9 +99,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list = set_name_line(curve_list, "magnet_1_line")
     point_ref = (Z2 + Z3 + Z6 + Z7) / 4
     S2 = SurfLine(
-        line_list=curve_list,
-        label="Magnet" + st + "_N_R0_T0_S0",
-        point_ref=point_ref,
+        line_list=curve_list, label="Magnet" + st + "_N_R0_T0_S0", point_ref=point_ref,
     )
 
     # Air surface with magnet_0 and W1 > 0
@@ -145,9 +143,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # initiating the label of the line on the magnet surface
     curve_list = set_name_line(curve_list, "magnet_2_line")
     S5 = SurfLine(
-        line_list=curve_list,
-        label="Magnet" + st + "_N_R0_T1_S0",
-        point_ref=point_ref,
+        line_list=curve_list, label="Magnet" + st + "_N_R0_T1_S0", point_ref=point_ref,
     )
 
     # Air surface with magnet_1 and W1 > 0
@@ -179,6 +175,47 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     S7 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
 
+    # Air surface without magnet_0 and W1 > 0
+    curve_list = list()
+    curve_list.append(Segment(Z1, Z8))
+    curve_list.append(Segment(Z8, Z5))
+    curve_list.append(Segment(Z5, Z4))
+    curve_list.append(Segment(Z4, Z1))
+
+    # initiating the label of the line on the air surface
+    curve_list = set_name_line(curve_list, "hole_1_line")
+    point_ref = (Z5 + Z1) / 2
+
+    S8 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+
+    # Air surface without magnet_1 and W1 > 0
+    curve_list = list()
+    curve_list.append(Segment(Z1s, Z8s))
+    curve_list.append(Segment(Z8s, Z5s))
+    curve_list.append(Segment(Z5s, Z4s))
+    curve_list.append(Segment(Z4s, Z1s))
+
+    # initiating the label of the line on the air surface
+    curve_list = set_name_line(curve_list, "hole_2_line")
+    point_ref = (Z5s + Z1s) / 2
+
+    S9 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+
+    # Air surface No magnet and W1 == 0
+    curve_list = list()
+    curve_list.append(Segment(Z4, Z1))
+    curve_list.append(Segment(Z1, Z8))
+    curve_list.append(Segment(Z8, Z5))
+    curve_list.append(Segment(Z5, Z8s))
+    curve_list.append(Segment(Z8s, Z1s))
+    curve_list.append(Segment(Z1s, Z4))
+
+    # initiating the label of the line on the air surface
+    curve_list = set_name_line(curve_list, "hole_1_line")
+    point_ref = (Z4 + Z5) / 2
+
+    S12 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+
     # Create the surface list by selecting the correct ones
     if self.magnet_0 and self.magnet_1 and self.W1 > 0:
         surf_list = [S1, S2, S3, S6, S5, S4]
@@ -192,10 +229,12 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     #     surf_list = [S8, S6, S5, S4]
     # elif not self.magnet_0 and self.magnet_1 and self.W1 == 0:
     #     surf_list = [S11, S5, S4]
-    # elif not self.magnet_0 and not self.magnet_1 and self.W1 > 0:
-    #     surf_list = [S8, S9]
-    # elif not self.magnet_0 and not self.magnet_1 and self.W1 == 0:
-    #     surf_list = [S12]
+    elif not self.magnet_0 and not self.magnet_1 and self.W1 > 0:
+        surf_list = [S8, S9]
+    elif not self.magnet_0 and not self.magnet_1 and self.W1 == 0:
+        surf_list = [S12]
+    else:
+        raise Exception("Not implemented Yet")
 
     # Apply the transformations
     for surf in surf_list:
