@@ -72,7 +72,7 @@ def plot_pareto(
     design_var_symbols = [pe.symbol for pe in self.paramexplorer_list]
 
     for idx, sim in enumerate(design_var_values.tolist()):
-        legend = f"Individual Nr. {idx_non_dom[idx]}\n"
+        legend = f"Individual Nr. {indx[0][idx_non_dom[idx]]}\n"
         for ii, symbol in enumerate(design_var_symbols):
             legend += "{:11.10}=".format(symbol)  # sim[d_var])
             if isinstance(sim[ii], float):
