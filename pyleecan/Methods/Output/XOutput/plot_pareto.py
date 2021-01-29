@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from ....Classes.OptiObjective import OptiObjective
 from ....Methods.Output.XOutput import _get_symbol_data_
 
+
 def plot_pareto(
     self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, title=None, grid=False
 ):
@@ -24,8 +25,6 @@ def plot_pareto(
 
     # Pyleecan colors
     pyleecan_color = (230 / 255, 175 / 255, 0)
-
-    idx = 0
 
     # Gather fitness results
     data = [
