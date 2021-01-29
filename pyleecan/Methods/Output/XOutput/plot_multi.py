@@ -13,7 +13,15 @@ class PlotError(Exception):
 
 
 def plot_multi(
-    self, x_symbol, y_symbol, plot_type="scatter", idx=None, ax=None, title=None
+    self,
+    x_symbol,
+    y_symbol,
+    c_symbol=None,
+    cmap=None,
+    plot_type="scatter",
+    idx=None,
+    ax=None,
+    title=None,
 ):
     """
     Plot data from a DataKeeper for a given parameter from a ParamExplorer
@@ -22,6 +30,10 @@ def plot_multi(
         ParamExplorer or DataKeeper symbol
     y_symbol: str
         ParamExplorer or DataKeeper symbol
+    c_symbol: str
+        optional symbol to set the plot colors
+    cmap: colormap
+        optional colormap
     plot_type: str
         scatter or plot to chose plot type
     idx: slice
@@ -49,30 +61,44 @@ def plot_multi(
     # get data and labels
     x_values, x_label = _get_symbol_data_(self, x_symbol, idx)
     y_values, y_label = _get_symbol_data_(self, y_symbol, idx)
+    c_values = _get_symbol_data_(self, c_symbol, idx)[0]
 
-    # Plot in new figure
+    if c_symbol is None:
+        colors = COLORS[0]
+    else:
+        # get the color data
+        c_values, _ = _get_symbol_data_(self, c_symbol, idx)
+        colors = c_values[:, np.newaxis]
+
+    if cmap is None:
+        cmap = plt.cm.jet
+
+    # create new figure or use existing axis
+    RET_FIG = False
     if ax is None:
         fig, ax = plt.subplots()
-        if plot_type == "scatter":
-            ax.scatter(x_values, y_values, c=COLORS[0])
-        elif plot_type == "plot":
-            sort_index = np.argsort(x_values)
-            ax.plot(x_values[sort_index], y_values[sort_index])
-
         fig.suptitle(title, fontname=FONT_NAME)
-        ax.set_xlabel(x_label, fontname=FONT_NAME)
-        ax.set_ylabel(y_label, fontname=FONT_NAME)
-        return fig
-
-    # Plot in ax
+        RET_FIG = True
     else:
-        if plot_type == "scatter":
-            ax.scatter(x_values, y_values)
-        elif plot_type == "plot":
-            sort_index = np.argsort(x_values)
-            ax.plot(x_values[sort_index], y_values[sort_index])
-
         ax.set_title(title, fontname=FONT_NAME)
-        ax.set_xlabel(x_label, fontname=FONT_NAME)
-        ax.set_ylabel(y_label, fontname=FONT_NAME)
+
+    # plot
+    if plot_type == "scatter":
+        plot = ax.scatter(x_values, y_values, c=colors)
+    elif plot_type == "plot":
+        sort_index = np.argsort(x_values)
+        plot = ax.plot(x_values[sort_index], y_values[sort_index], c=colors)
+
+    # add legend
+    if c_symbol is not None:
+        legend1 = ax.legend(*plot.legend_elements(), loc="upper right", title=c_symbol)
+        ax.add_artist(legend1)
+
+    ax.set_xlabel(x_label, fontname=FONT_NAME)
+    ax.set_ylabel(y_label, fontname=FONT_NAME)
+
+    # return
+    if RET_FIG:
+        return fig
+    else:
         return ax
