@@ -1,34 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ....Classes.DataKeeper import DataKeeper
-
-
-def _get_symbol_data_(self, symbol, index):
-    """Helper function to get data and label by symbol to avoid duplicate code."""
-    # Get the data
-    if symbol in self.keys():  # DataKeeper
-        data = self[symbol]
-        values = np.array(data.result)[index]
-    elif symbol in [pe.symbol for pe in self.paramexplorer_list]:  # ParamSetter
-        data = self.get_paramexplorer(symbol)
-        values = np.array(data.value)[index]
-    else:  # ParamSetter
-        symbol_ = next(iter(self.keys()))
-        self.get_logger().warning(
-            f"XOutput.plot_pareto(): Symbol '{symbol}' not found. "
-            + f"Using symbol '{symbol_}' instead."
-        )
-        symbol = symbol_
-        data = self[symbol]
-        values = np.array(data.result)[index]
-
-    # label definition
-    label = symbol
-    if data.unit not in ["", None]:
-        label += " [{}]".format(data.unit)
-
-    return values, label
-
+from ....Classes.OptiObjective import OptiObjective
+from ....Methods.Output.XOutput import _get_symbol_data_
 
 def plot_pareto(
     self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, title=None, grid=False
@@ -58,7 +31,7 @@ def plot_pareto(
     data = [
         val.result
         for _, val in self.xoutput_dict.items()
-        if isinstance(val, DataKeeper)
+        if isinstance(val, OptiObjective)
     ]
     fitness = np.array(data).T
 
