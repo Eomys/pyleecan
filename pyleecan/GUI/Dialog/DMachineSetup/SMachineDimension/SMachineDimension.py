@@ -72,9 +72,9 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         self.set_airgap()  # Update out_airgap if possible
 
         # Set default materials
-        self.w_mat_0.setText("mat_type:")
+        self.w_mat_0.setText("Shaft Material")
         self.w_mat_0.def_mat = "M400-50A"
-        self.w_mat_1.setText("mat_type:")
+        self.w_mat_1.setText("Frame Material")
         self.w_mat_1.def_mat = "M400-50A"
 
         if (
@@ -283,8 +283,6 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.w_mat_1.update(self.machine.frame, "mat_type", self.matlib)
             self.lf_Wfra.clear()
             self.lf_Lfra.clear()
-            self.in_Lfra.show()
-            self.unit_Lfra.show()
         else:
             self.machine.frame = None
         # Notify the machine GUI that the machine has changed

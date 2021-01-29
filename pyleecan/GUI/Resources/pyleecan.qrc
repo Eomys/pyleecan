@@ -43,9 +43,6 @@
         <file>images/MachineSetup/LamParam/RadVentDuct.png</file>
         <file>images/MachineSetup/BPMSM.png</file>
         <file>images/MachineSetup/DFIM.png</file>
-        <file>images/MachineSetup/MachineDimension/Dim_ER.png</file>
-        <file>images/MachineSetup/MachineDimension/Dim_IRNS.png</file>
-        <file>images/MachineSetup/MachineDimension/Dim_IRS.png</file>
         <file>images/MachineSetup/IPMSM.png</file>
         <file>images/MachineSetup/SCIM.png</file>
         <file>images/MachineSetup/SPMSM.png</file>
@@ -66,5 +63,8 @@
         <file>images/MachineSetup/SMHoleMag/HoleM57_no_mag.png</file>
         <file>images/MachineSetup/SMHoleMag/HoleM58.png</file>
         <file>images/MachineSetup/SMHoleMag/HoleM58_no_mag.png</file>
+        <file>images/MachineSetup/MachineDimension/Dimension_Rotor_Stator.png</file>
+        <file>images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator.png</file>
+        <file>images/MachineSetup/MachineDimension/Dimension_Stator_Rotor.png</file>
     </qresource>
 </RCC>
