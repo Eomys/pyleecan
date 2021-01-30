@@ -18,6 +18,6 @@ def comp_length_ring(self):
 
     """
 
-    Rmw = self.slot.comp_radius_mid_wind()
+    Rmw = self.slot.comp_radius_mid_active()
 
     return 2 * pi * Rmw

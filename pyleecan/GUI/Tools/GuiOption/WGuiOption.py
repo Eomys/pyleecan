@@ -11,7 +11,7 @@ from ....Functions.Material.replace_material_pyleecan_obj import (
 )
 from ....GUI.Tools.GuiOption.Ui_GuiOption import Ui_GUIOption
 from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-from ....GUI import GUI_logger, gui_option
+from ....GUI import gui_option
 from ....Functions.path_tools import abs_file_path
 from ....Functions.init_environment import save_config_dict
 from ....definitions import config_dict

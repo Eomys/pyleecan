@@ -39,7 +39,7 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0, per_a=1):
     Zs = self.slot.Zs  # Number of slot
     Zs0 = int(Zs / per_a)
 
-    slot_angle = self.slot.comp_angle_wind_eq()
+    slot_angle = self.slot.comp_angle_active_eq()
     slot_opening = self.slot.comp_angle_opening()
 
     wind_mat = self.winding.comp_connection_mat(Zs)

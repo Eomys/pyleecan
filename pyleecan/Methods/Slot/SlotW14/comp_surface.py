@@ -30,7 +30,7 @@ def comp_surface(self):
     alpha = self.comp_angle_opening()
     Sarc = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
 
-    Swind = self.comp_surface_wind()
+    Swind = self.comp_surface_active()
 
     if self.is_outwards():
         return S1 + S0 + Swind - Sarc

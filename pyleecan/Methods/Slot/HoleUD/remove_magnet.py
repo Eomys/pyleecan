@@ -10,5 +10,7 @@ def remove_magnet(self):
         a HoleUD object
     """
 
+    if self.magnet_dict is None:
+        self.magnet_dict = dict()
     for key in self.magnet_dict.keys():
         self.magnet_dict[key] = None

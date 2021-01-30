@@ -1,7 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Slot,Slot,comp_angle_wind_eq,VERSION,1,Slot for winding (abstract)
-,,,,,,,,,,,comp_height_wind,,,
-,,,,,,,,,,,comp_radius_mid_wind,,,
-,,,,,,,,,,,comp_surface_wind,,,
-,,,,,,,,,,,plot_wind,,,
-,,,,,,,,,,,build_geometry_wind,,,

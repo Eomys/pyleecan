@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .SlotWind import SlotWind
+from .Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -28,9 +28,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotW10.build_geometry_wind import build_geometry_wind
+    from ..Methods.Slot.SlotW10.build_geometry_active import build_geometry_active
 except ImportError as error:
-    build_geometry_wind = error
+    build_geometry_active = error
 
 try:
     from ..Methods.Slot.SlotW10.check import check
@@ -48,9 +48,9 @@ except ImportError as error:
     comp_height = error
 
 try:
-    from ..Methods.Slot.SlotW10.comp_height_wind import comp_height_wind
+    from ..Methods.Slot.SlotW10.comp_height_active import comp_height_active
 except ImportError as error:
-    comp_height_wind = error
+    comp_height_active = error
 
 try:
     from ..Methods.Slot.SlotW10.comp_surface import comp_surface
@@ -58,25 +58,30 @@ except ImportError as error:
     comp_surface = error
 
 try:
-    from ..Methods.Slot.SlotW10.comp_surface_wind import comp_surface_wind
+    from ..Methods.Slot.SlotW10.comp_surface_active import comp_surface_active
 except ImportError as error:
-    comp_surface_wind = error
+    comp_surface_active = error
 
 try:
-    from ..Methods.Slot.SlotW10.get_surface_wind import get_surface_wind
+    from ..Methods.Slot.SlotW10.get_surface_active import get_surface_active
 except ImportError as error:
-    get_surface_wind = error
+    get_surface_active = error
 
 try:
     from ..Methods.Slot.SlotW10.get_H1 import get_H1
 except ImportError as error:
     get_H1 = error
 
+try:
+    from ..Methods.Slot.SlotW10.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
+
 
 from ._check import InitUnKnowClassError
 
 
-class SlotW10(SlotWind):
+class SlotW10(Slot):
     """Open Rectangular or trapezoidal slot with wedge"""
 
     VERSION = 1
@@ -106,18 +111,18 @@ class SlotW10(SlotWind):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW10.build_geometry_wind
-    if isinstance(build_geometry_wind, ImportError):
-        build_geometry_wind = property(
+    # cf Methods.Slot.SlotW10.build_geometry_active
+    if isinstance(build_geometry_active, ImportError):
+        build_geometry_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW10 method build_geometry_wind: "
-                    + str(build_geometry_wind)
+                    "Can't use SlotW10 method build_geometry_active: "
+                    + str(build_geometry_active)
                 )
             )
         )
     else:
-        build_geometry_wind = build_geometry_wind
+        build_geometry_active = build_geometry_active
     # cf Methods.Slot.SlotW10.check
     if isinstance(check, ImportError):
         check = property(
@@ -148,18 +153,18 @@ class SlotW10(SlotWind):
         )
     else:
         comp_height = comp_height
-    # cf Methods.Slot.SlotW10.comp_height_wind
-    if isinstance(comp_height_wind, ImportError):
-        comp_height_wind = property(
+    # cf Methods.Slot.SlotW10.comp_height_active
+    if isinstance(comp_height_active, ImportError):
+        comp_height_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW10 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW10 method comp_height_active: "
+                    + str(comp_height_active)
                 )
             )
         )
     else:
-        comp_height_wind = comp_height_wind
+        comp_height_active = comp_height_active
     # cf Methods.Slot.SlotW10.comp_surface
     if isinstance(comp_surface, ImportError):
         comp_surface = property(
@@ -171,30 +176,30 @@ class SlotW10(SlotWind):
         )
     else:
         comp_surface = comp_surface
-    # cf Methods.Slot.SlotW10.comp_surface_wind
-    if isinstance(comp_surface_wind, ImportError):
-        comp_surface_wind = property(
+    # cf Methods.Slot.SlotW10.comp_surface_active
+    if isinstance(comp_surface_active, ImportError):
+        comp_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW10 method comp_surface_wind: "
-                    + str(comp_surface_wind)
+                    "Can't use SlotW10 method comp_surface_active: "
+                    + str(comp_surface_active)
                 )
             )
         )
     else:
-        comp_surface_wind = comp_surface_wind
-    # cf Methods.Slot.SlotW10.get_surface_wind
-    if isinstance(get_surface_wind, ImportError):
-        get_surface_wind = property(
+        comp_surface_active = comp_surface_active
+    # cf Methods.Slot.SlotW10.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW10 method get_surface_wind: "
-                    + str(get_surface_wind)
+                    "Can't use SlotW10 method get_surface_active: "
+                    + str(get_surface_active)
                 )
             )
         )
     else:
-        get_surface_wind = get_surface_wind
+        get_surface_active = get_surface_active
     # cf Methods.Slot.SlotW10.get_H1
     if isinstance(get_H1, ImportError):
         get_H1 = property(
@@ -204,6 +209,17 @@ class SlotW10(SlotWind):
         )
     else:
         get_H1 = get_H1
+    # cf Methods.Slot.SlotW10.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW10 method plot_schematics: " + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -262,16 +278,16 @@ class SlotW10(SlotWind):
         self.H2 = H2
         self.W2 = W2
         self.H1_is_rad = H1_is_rad
-        # Call SlotWind init
+        # Call Slot init
         super(SlotW10, self).__init__(Zs=Zs)
-        # The class is frozen (in SlotWind init), for now it's impossible to
+        # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         SlotW10_str = ""
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotW10_str += super(SlotW10, self).__str__()
         SlotW10_str += "W0 = " + str(self.W0) + linesep
         SlotW10_str += "H0 = " + str(self.H0) + linesep
@@ -288,7 +304,7 @@ class SlotW10(SlotWind):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from SlotWind
+        # Check the properties inherited from Slot
         if not super(SlotW10, self).__eq__(other):
             return False
         if other.W0 != self.W0:
@@ -312,7 +328,7 @@ class SlotW10(SlotWind):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from SlotWind
+        # Get size of the properties inherited from Slot
         S += super(SlotW10, self).__sizeof__()
         S += getsizeof(self.W0)
         S += getsizeof(self.H0)
@@ -326,7 +342,7 @@ class SlotW10(SlotWind):
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotW10_dict = super(SlotW10, self).as_dict()
         SlotW10_dict["W0"] = self.W0
         SlotW10_dict["H0"] = self.H0
@@ -350,7 +366,7 @@ class SlotW10(SlotWind):
         self.H2 = None
         self.W2 = None
         self.H1_is_rad = None
-        # Set to None the properties inherited from SlotWind
+        # Set to None the properties inherited from Slot
         super(SlotW10, self)._set_None()
 
     def _get_W0(self):

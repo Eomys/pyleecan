@@ -11,7 +11,7 @@ from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -54,10 +54,10 @@ class Test_SlotW22_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW22_test)
-    def test_comp_surface_wind(self, test_dict):
+    def test_comp_surface_active(self, test_dict):
         """Check that the computation of the winding surface is correct"""
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.comp_surface_wind()
+        result = test_obj.slot.comp_surface_active()
 
         a = result
         b = test_dict["SW_exp"]
@@ -65,7 +65,7 @@ class Test_SlotW22_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_wind(test_obj.slot)
+        b = comp_surface_active(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -97,10 +97,10 @@ class Test_SlotW22_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW22_test)
-    def test_comp_angle_wind_eq(self, test_dict):
+    def test_comp_angle_active_eq(self, test_dict):
         """Check that the computation of the average angle is correct"""
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.comp_angle_wind_eq()
+        result = test_obj.slot.comp_angle_active_eq()
 
         a = result
         b = test_obj.slot.W2
@@ -154,20 +154,20 @@ class Test_SlotW22_meth(object):
                 b = curve_list[i].angle
                 assert abs((a - b) / a - 0) < DELTA
 
-    def test_build_geometry_wind(self):
+    def test_build_geometry_active(self):
         """Check if the build geometry of the winding works correctly"""
         test_obj = SlotW22(W0=pi / 10, H0=0.1, W2=pi / 5, H2=0.1)
         lam = LamSlot(is_internal=False, slot=test_obj, Rint=1)
 
-        result = test_obj.build_geometry_wind(Nrad=2, Ntan=4, is_simplified=True)
+        result = test_obj.build_geometry_active(Nrad=2, Ntan=4, is_simplified=True)
         a = result
         assert "Wind_Stator_R0_T0_S0" == a[0].label
         assert len(a) == 8
 
-    def test_get_surface_wind(self):
-        """Check that the get_surface_wind works when stator = false"""
+    def test_get_surface_active(self):
+        """Check that the get_surface_active works when stator = false"""
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW22(Zs=36, W0=pi / 72, W2=pi / 36, H0=6e-3, H2=40e-3)
-        result = lam.slot.get_surface_wind()
+        result = lam.slot.get_surface_active()
         assert result.label == "Wind_Rotor_R0_T0_S0"
         assert len(result.get_lines()) == 6

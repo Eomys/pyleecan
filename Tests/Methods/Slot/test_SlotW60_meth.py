@@ -7,7 +7,7 @@ from pyleecan.Classes.SlotW60 import SlotW60
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.SlotW60.build_geometry_wind import S60_WindError
+from pyleecan.Methods.Slot.SlotW60.build_geometry_active import S60_WindError
 from pyleecan.Methods.Slot.SlotW60.check import (
     S60_InnerCheckError,
     S60_RCheckError,
@@ -88,7 +88,7 @@ class Test_SlotW60_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW60_test)
-    def test_comp_surface_wind(self, test_dict):
+    def test_comp_surface_active(self, test_dict):
         """Check that the computation of the winding surface is correct
 
         Parameters
@@ -101,7 +101,7 @@ class Test_SlotW60_meth(object):
 
         """
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.comp_surface_wind()
+        result = test_obj.slot.comp_surface_active()
 
         a = result
         b = test_dict["SW_exp"]
@@ -155,7 +155,7 @@ class Test_SlotW60_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW60_test)
-    def test_comp_angle_wind_eq(self, test_dict):
+    def test_comp_angle_active_eq(self, test_dict):
         """Check that the computation of the average angle is correct
 
         Parameters
@@ -168,7 +168,7 @@ class Test_SlotW60_meth(object):
 
         """
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.comp_angle_wind_eq()
+        result = test_obj.slot.comp_angle_active_eq()
 
         a = result
         b = test_dict["Aw"]
@@ -176,12 +176,12 @@ class Test_SlotW60_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW60_test)
-    def test_build_geometry_wind_is_stator_true(self, test_dict):
+    def test_build_geometry_active_is_stator_true(self, test_dict):
         """Check that the computation of the average angle is correct"""
 
         test_obj = test_dict["test_obj"]
 
-        result = test_obj.slot.build_geometry_wind(Nrad=1, Ntan=2)
+        result = test_obj.slot.build_geometry_active(Nrad=1, Ntan=2)
         a = result
         assert "Wind_Stator_R0_T0_S0" == a[0].label
 
@@ -192,7 +192,7 @@ class Test_SlotW60_meth(object):
         test_obj = test_dict["test_obj"]
 
         with pytest.raises(S60_WindError) as context:
-            test_obj.slot.build_geometry_wind(Nrad=0, Ntan=0)
+            test_obj.slot.build_geometry_active(Nrad=0, Ntan=0)
 
     def test_check(self):
         """Check that the check methods is correctly working"""

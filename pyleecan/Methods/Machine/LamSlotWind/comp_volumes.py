@@ -24,6 +24,6 @@ def comp_volumes(self):
     if self.slot is None:
         V_dict["Vwind"] = 0
     else:
-        V_dict["Vwind"] = Lf * self.get_Zs() * self.slot.comp_surface_wind()
+        V_dict["Vwind"] = Lf * self.get_Zs() * self.slot.comp_surface_active()
 
     return V_dict

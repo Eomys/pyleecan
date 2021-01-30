@@ -188,70 +188,67 @@
         "slot": {
             "H0": 0,
             "W0": 0.78539816,
-            "W3": 0,
+            "Hmag": 0.003,
+            "Wmag": 0.78539816,
             "Zs": 8,
-            "__class__": "SlotMPolar",
-            "magnet": [
-                {
-                    "Hmag": 0.003,
-                    "Lmag": 0.95,
-                    "Wmag": 0.78539816,
-                    "__class__": "MagnetType11",
-                    "mat_type": {
-                        "HT": {
-                            "Cp": 1,
-                            "__class__": "MatHT",
-                            "alpha": 0.00393,
-                            "lambda_x": 1,
-                            "lambda_y": 1,
-                            "lambda_z": 1
-                        },
-                        "__class__": "Material",
-                        "desc": "Lamination M400-50A",
-                        "eco": {
-                            "__class__": "MatEconomical",
-                            "cost_unit": 0.127,
-                            "unit_name": "$"
-                        },
-                        "elec": {
-                            "__class__": "MatElectrical",
-                            "alpha": 1,
-                            "epsr": 1,
-                            "rho": 1.6e-06
-                        },
-                        "is_isotropic": false,
-                        "mag": {
-                            "BH_curve": {
-                                "__class__": "ImportMatrix",
-                                "is_transpose": false
-                            },
-                            "Brm20": 1.2,
-                            "Hc": 909456.817667973,
-                            "Wlam": 0,
-                            "__class__": "MatMagnetics",
-                            "alpha_Br": 0.0,
-                            "mur_lin": 1.05
-                        },
-                        "name": "Magnet3",
-                        "path": "",
-                        "struct": {
-                            "Ex": 215000000000.0,
-                            "Ey": 215000000000.0,
-                            "Ez": 80000000000,
-                            "Gxy": 0,
-                            "Gxz": 2000000000,
-                            "Gyz": 2000000000,
-                            "__class__": "MatStructural",
-                            "nu_xy": 0.3,
-                            "nu_xz": 0.03,
-                            "nu_yz": 0.03,
-                            "rho": 7500.0
-                        }
-                    },
-                    "type_magnetization": 0
-                }
-            ]
-        }
+            "__class__": "SlotM11"
+        },
+		"magnet": {
+			"Lmag": 0.95,
+			"__class__": "Magnet",
+			"mat_type": {
+				"HT": {
+					"Cp": 1,
+					"__class__": "MatHT",
+					"alpha": 0.00393,
+					"lambda_x": 1,
+					"lambda_y": 1,
+					"lambda_z": 1
+				},
+				"__class__": "Material",
+				"desc": "Lamination M400-50A",
+				"eco": {
+					"__class__": "MatEconomical",
+					"cost_unit": 0.127,
+					"unit_name": "$"
+				},
+				"elec": {
+					"__class__": "MatElectrical",
+					"alpha": 1,
+					"epsr": 1,
+					"rho": 1.6e-06
+				},
+				"is_isotropic": false,
+				"mag": {
+					"BH_curve": {
+						"__class__": "ImportMatrix",
+						"is_transpose": false
+					},
+					"Brm20": 1.2,
+					"Hc": 909456.817667973,
+					"Wlam": 0,
+					"__class__": "MatMagnetics",
+					"alpha_Br": 0.0,
+					"mur_lin": 1.05
+				},
+				"name": "Magnet3",
+				"path": "",
+				"struct": {
+					"Ex": 215000000000.0,
+					"Ey": 215000000000.0,
+					"Ez": 80000000000,
+					"Gxy": 0,
+					"Gxz": 2000000000,
+					"Gyz": 2000000000,
+					"__class__": "MatStructural",
+					"nu_xy": 0.3,
+					"nu_xz": 0.03,
+					"nu_yz": 0.03,
+					"rho": 7500.0
+				}
+			},
+			"type_magnetization": 0
+		}
     },
     "shaft": {
         "Drsh": 0.023850000000000003,

@@ -18,7 +18,8 @@
             "intersect_line",
             "is_on_line",
             "split_line",
-            "comp_distance"
+            "comp_distance",
+            "plot"
         ],
         "mother": "Line",
         "name": "Arc",
@@ -220,7 +221,8 @@
             }
         ],
         "daughters": [
-            "BoreFlower"
+            "BoreFlower",
+            "BoreUD"
         ],
         "desc": "Abstract class for Bore shape",
         "is_internal": false,
@@ -275,6 +277,35 @@
                 "type": "float",
                 "unit": "rad",
                 "value": 0
+            }
+        ]
+    },
+    "BoreUD": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "User Defined Bore shape",
+        "is_internal": false,
+        "methods": [
+            "get_bore_line"
+        ],
+        "mother": "Bore",
+        "name": "BoreUD",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/BoreUD.csv",
+        "properties": [
+            {
+                "desc": "List of line to draw the full bore",
+                "max": "",
+                "min": "",
+                "name": "line_list",
+                "type": "[Line]",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -1097,6 +1128,15 @@
                 "type": "EEC",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Electrical"
             }
         ]
     },
@@ -1464,6 +1504,15 @@
                 "type": "float",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Force"
             }
         ]
     },
@@ -3711,7 +3760,17 @@
         "name": "LamSlotMag",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMag.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Magnet of the lamination",
+                "max": "",
+                "min": "",
+                "name": "magnet",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
     },
     "LamSlotMulti": {
         "constants": [
@@ -4059,10 +4118,12 @@
             }
         ],
         "daughters": [],
-        "desc": "Losses module object that containt the loss models",
+        "desc": "Losses module object that containt the loss models. See method add_model for implementation details.",
         "is_internal": false,
         "methods": [
-            "run"
+            "run",
+            "add_model",
+            "remove_model"
         ],
         "mother": "",
         "name": "Loss",
@@ -4070,31 +4131,31 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
         "properties": [
             {
-                "desc": "Dict of the iron loss model (key is the lamination name)",
+                "desc": "Internal dict to strore model index",
                 "max": "",
                 "min": "",
-                "name": "iron",
+                "name": "model_index",
                 "type": "dict",
                 "unit": "",
                 "value": {}
             },
             {
-                "desc": "Dict of the winding loss model (key is the lamination name)",
+                "desc": "Internal list of loss models",
                 "max": "",
                 "min": "",
-                "name": "winding",
-                "type": "dict",
+                "name": "model_list",
+                "type": "[LossModel]",
                 "unit": "",
-                "value": {}
+                "value": ""
             },
             {
-                "desc": "Dict of the magnet loss model (key is the lamination name)",
+                "desc": "Name of the logger to use",
                 "max": "",
                 "min": "",
-                "name": "magnet",
-                "type": "dict",
-                "unit": "",
-                "value": {}
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Loss"
             }
         ]
     },
@@ -4211,13 +4272,13 @@
                 "value": null
             },
             {
-                "desc": "Name of the coressponding mesh group",
+                "desc": "String to override default FEA group to apply model",
                 "max": "",
                 "min": "",
                 "name": "group",
                 "type": "str",
                 "unit": "-",
-                "value": "None"
+                "value": "core"
             },
             {
                 "desc": "Store the loss density",
@@ -5008,28 +5069,10 @@
                 "value": "1"
             }
         ],
-        "daughters": [
-            "MagnetFlat",
-            "MagnetPolar",
-            "MagnetType10",
-            "MagnetType11",
-            "MagnetType12",
-            "MagnetType13",
-            "MagnetType14",
-            "MagnetType15"
-        ],
-        "desc": "abstract class of magnets",
+        "daughters": [],
+        "desc": "Magnet class",
         "is_internal": false,
-        "methods": [
-            "comp_angle_opening",
-            "comp_height",
-            "comp_mass",
-            "comp_ratio_opening",
-            "comp_surface",
-            "comp_volume",
-            "is_outwards",
-            "plot"
-        ],
+        "methods": [],
         "mother": "",
         "name": "Magnet",
         "package": "Machine",
@@ -5061,363 +5104,6 @@
                 "type": "float",
                 "unit": "-",
                 "value": 0.95
-            }
-        ]
-    },
-    "MagnetFlat": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "MagnetType10",
-            "MagnetType12",
-            "MagnetType13"
-        ],
-        "desc": "abstract class of magnets with rectangular base",
-        "is_internal": false,
-        "methods": [],
-        "mother": "Magnet",
-        "name": "MagnetFlat",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetFlat.csv",
-        "properties": []
-    },
-    "MagnetPolar": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "MagnetType11",
-            "MagnetType14",
-            "MagnetType15"
-        ],
-        "desc": "abstract class of magnets with polar base",
-        "is_internal": false,
-        "methods": [],
-        "mother": "Magnet",
-        "name": "MagnetPolar",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetPolar.csv",
-        "properties": []
-    },
-    "MagnetType10": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_FLAT_BOT",
-                "value": "1"
-            },
-            {
-                "name": "IS_FLAT_TOP",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "single magnet with rectangular shape",
-        "is_internal": false,
-        "methods": [
-            "build_geometry",
-            "comp_height",
-            "comp_surface"
-        ],
-        "mother": "MagnetFlat",
-        "name": "MagnetType10",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType10.csv",
-        "properties": [
-            {
-                "desc": "magnet bottom width [m]",
-                "max": "",
-                "min": "0",
-                "name": "Wmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.002
-            },
-            {
-                "desc": "magnet radial height [m]",
-                "max": "",
-                "min": "0",
-                "name": "Hmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            }
-        ]
-    },
-    "MagnetType11": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_FLAT_BOT",
-                "value": "0"
-            },
-            {
-                "name": "IS_FLAT_TOP",
-                "value": "0"
-            }
-        ],
-        "daughters": [],
-        "desc": "single magnet with polar shape",
-        "is_internal": false,
-        "methods": [
-            "_comp_point_coordinate",
-            "build_geometry",
-            "comp_height",
-            "comp_surface"
-        ],
-        "mother": "MagnetPolar",
-        "name": "MagnetType11",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType11.csv",
-        "properties": [
-            {
-                "desc": "magnet bottom width [rad]",
-                "max": "",
-                "min": "0",
-                "name": "Wmag",
-                "type": "float",
-                "unit": "rad",
-                "value": 0.002
-            },
-            {
-                "desc": "magnet radial height [m]",
-                "max": "",
-                "min": "0",
-                "name": "Hmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            }
-        ]
-    },
-    "MagnetType12": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_FLAT_BOT",
-                "value": "1"
-            },
-            {
-                "name": "IS_FLAT_TOP",
-                "value": "0"
-            }
-        ],
-        "daughters": [],
-        "desc": "single magnet with rectangular base and polar top",
-        "is_internal": false,
-        "methods": [
-            "build_geometry",
-            "comp_height",
-            "comp_surface"
-        ],
-        "mother": "MagnetFlat",
-        "name": "MagnetType12",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType12.csv",
-        "properties": [
-            {
-                "desc": "magnet bottom width [m]",
-                "max": "",
-                "min": "0",
-                "name": "Wmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.002
-            },
-            {
-                "desc": "magnet radial height [m]",
-                "max": "",
-                "min": "0",
-                "name": "Hmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            }
-        ]
-    },
-    "MagnetType13": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_FLAT_BOT",
-                "value": "1"
-            },
-            {
-                "name": "IS_FLAT_TOP",
-                "value": "0"
-            }
-        ],
-        "daughters": [],
-        "desc": "single magnet with rectangular base and curved-top shape",
-        "is_internal": false,
-        "methods": [
-            "build_geometry",
-            "comp_height",
-            "comp_surface"
-        ],
-        "mother": "MagnetFlat",
-        "name": "MagnetType13",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType13.csv",
-        "properties": [
-            {
-                "desc": "magnet bottom width [m]",
-                "max": "",
-                "min": "0",
-                "name": "Wmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.002
-            },
-            {
-                "desc": "magnet radial height [m]",
-                "max": "",
-                "min": "0",
-                "name": "Hmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            },
-            {
-                "desc": "radius of the circular top shape [m]",
-                "max": "",
-                "min": "0",
-                "name": "Rtop",
-                "type": "float",
-                "unit": "m",
-                "value": 0.05
-            }
-        ]
-    },
-    "MagnetType14": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_FLAT_BOT",
-                "value": "0"
-            },
-            {
-                "name": "IS_FLAT_TOP",
-                "value": "0"
-            }
-        ],
-        "daughters": [],
-        "desc": "single magnet with polar base and curved-top shape ",
-        "is_internal": false,
-        "methods": [
-            "build_geometry",
-            "comp_height"
-        ],
-        "mother": "MagnetPolar",
-        "name": "MagnetType14",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType14.csv",
-        "properties": [
-            {
-                "desc": "magnet bottom width [rad]",
-                "max": "",
-                "min": "0",
-                "name": "Wmag",
-                "type": "float",
-                "unit": "rad",
-                "value": 0.002
-            },
-            {
-                "desc": "magnet radial height [m]",
-                "max": "",
-                "min": "0",
-                "name": "Hmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            },
-            {
-                "desc": "radius of the circular top shape [m]",
-                "max": "",
-                "min": "0",
-                "name": "Rtop",
-                "type": "float",
-                "unit": "m",
-                "value": 0.05
-            }
-        ]
-    },
-    "MagnetType15": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_FLAT_BOT",
-                "value": "0"
-            },
-            {
-                "name": "IS_FLAT_TOP",
-                "value": "0"
-            }
-        ],
-        "daughters": [],
-        "desc": "single magnet with polar base and curved-top shape and parallel sides",
-        "is_internal": false,
-        "methods": [
-            "build_geometry",
-            "comp_height",
-            "comp_angle_opening"
-        ],
-        "mother": "MagnetPolar",
-        "name": "MagnetType15",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType15.csv",
-        "properties": [
-            {
-                "desc": "magnet width [m]",
-                "max": "",
-                "min": "0",
-                "name": "Wmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.002
-            },
-            {
-                "desc": "magnet radial height [m]",
-                "max": "",
-                "min": "0",
-                "name": "Hmag",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            },
-            {
-                "desc": "radius of the circular top shape [m]",
-                "max": "",
-                "min": "0",
-                "name": "Rtop",
-                "type": "float",
-                "unit": "m",
-                "value": 0.05
             }
         ]
     },
@@ -5541,6 +5227,15 @@
                 "type": "float",
                 "unit": "rad",
                 "value": 0
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Magnetics"
             }
         ]
     },
@@ -6813,7 +6508,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutElec"
+                "value": "Pyleecan.Electrical"
             },
             {
                 "desc": "Theorical Average Electromagnetic torque",
@@ -6959,7 +6654,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutForce"
+                "value": "Pyleecan.Force"
             },
             {
                 "desc": "Radius value for air-gap computation",
@@ -7255,37 +6950,28 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
         "properties": [
             {
-                "desc": "Dict of the computed iron losses (with dict key the name of the lamination)",
+                "desc": "Internal list of loss data",
                 "max": "",
                 "min": "",
-                "name": "iron",
-                "type": "dict",
+                "name": "loss_list",
+                "type": "[SciDataTool.Classes.DataND.DataND]",
                 "unit": "",
-                "value": {}
+                "value": "None"
             },
             {
-                "desc": "Dict of the computed winding losses (with dict key the name of the lamination)",
+                "desc": "Internal list of loss meshsolutions",
                 "max": "",
                 "min": "",
-                "name": "winding",
-                "type": "dict",
+                "name": "meshsol_list",
+                "type": "[MeshSolution]",
                 "unit": "",
-                "value": {}
+                "value": ""
             },
             {
-                "desc": "Dict of the computed magnet losses (with dict key the name of the lamination)",
+                "desc": "Internal dict to index losses",
                 "max": "",
                 "min": "",
-                "name": "magnet",
-                "type": "dict",
-                "unit": "",
-                "value": {}
-            },
-            {
-                "desc": "Dict of FEA software mesh and post processing results",
-                "max": "",
-                "min": "",
-                "name": "meshsolution",
+                "name": "loss_index",
                 "type": "dict",
                 "unit": "",
                 "value": {}
@@ -7297,25 +6983,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutLoss"
-            },
-            {
-                "desc": "List of the mechanical losses",
-                "max": "",
-                "min": "",
-                "name": "mech",
-                "type": "list",
-                "unit": "",
-                "value": []
-            },
-            {
-                "desc": "List of the miscellaneous losses",
-                "max": "",
-                "min": "",
-                "name": "misc",
-                "type": "list",
-                "unit": "",
-                "value": []
+                "value": "Pyleecan.Loss"
             }
         ]
     },
@@ -7446,7 +7114,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutMag"
+                "value": "Pyleecan.Magnetics"
             },
             {
                 "desc": "OutInternal object containg outputs related to a specific model",
@@ -7630,7 +7298,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.OutStruct"
+                "value": "Pyleecan.Structural"
             },
             {
                 "desc": "Displacement output",
@@ -8452,7 +8120,8 @@
             "split_line",
             "translate",
             "is_on_line",
-            "comp_distance"
+            "comp_distance",
+            "plot"
         ],
         "mother": "Line",
         "name": "Segment",
@@ -8606,7 +8275,8 @@
         "desc": "Abstract class for the simulation",
         "is_internal": false,
         "methods": [
-            "run"
+            "run",
+            "init_logger"
         ],
         "mother": "",
         "name": "Simulation",
@@ -8707,11 +8377,15 @@
             "Slot19",
             "SlotCirc",
             "SlotDC",
-            "SlotMFlat",
-            "SlotMFlat2",
-            "SlotMPolar",
-            "SlotMag",
+            "SlotM10",
+            "SlotM11",
+            "SlotM12",
+            "SlotM13",
+            "SlotM14",
+            "SlotM15",
+            "SlotM16",
             "SlotUD",
+            "SlotUD2",
             "SlotW10",
             "SlotW11",
             "SlotW12",
@@ -8729,25 +8403,31 @@
             "SlotW28",
             "SlotW29",
             "SlotW60",
-            "SlotW61",
-            "SlotWind"
+            "SlotW61"
         ],
         "desc": "Generic class for slot (abstract)",
         "is_internal": false,
         "methods": [
+            "build_geometry_active",
             "build_geometry_half_tooth",
             "check",
+            "comp_angle_active_eq",
             "comp_angle_opening",
             "comp_height",
+            "comp_height_active",
+            "comp_radius",
+            "comp_radius_mid_active",
             "comp_surface",
+            "comp_surface_active",
+            "comp_width_opening",
             "get_is_stator",
+            "get_name_lam",
             "get_Rbo",
             "get_surface",
             "get_surface_tooth",
             "is_outwards",
             "plot",
-            "comp_width_opening",
-            "get_name_lam"
+            "plot_active"
         ],
         "mother": "",
         "name": "Slot",
@@ -8847,15 +8527,15 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotCirc",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotCirc.csv",
@@ -8897,15 +8577,15 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotDC",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotDC.csv",
@@ -8984,7 +8664,7 @@
             }
         ]
     },
-    "SlotMFlat": {
+    "SlotM10": {
         "constants": [
             {
                 "name": "VERSION",
@@ -8993,68 +8673,66 @@
             {
                 "name": "IS_SYMMETRICAL",
                 "value": "1"
-            },
-            {
-                "name": "IS_INSET",
-                "value": "1"
             }
         ],
         "daughters": [],
-        "desc": "Flat bottomed SlotMag",
+        "desc": "Rectangular Slot with Rectangular magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
+            "check",
             "comp_angle_opening",
-            "comp_angle_opening_magnet",
             "comp_height",
+            "comp_height_active",
             "comp_surface",
-            "comp_W0m",
-            "get_point_bottom"
+            "comp_surface_active",
+            "get_surface_active"
         ],
-        "mother": "SlotMag",
-        "name": "SlotMFlat",
+        "mother": "Slot",
+        "name": "SlotM10",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotMFlat.csv",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM10.csv",
         "properties": [
-            {
-                "desc": "Slot isthmus height",
-                "max": "",
-                "min": "0",
-                "name": "H0",
-                "type": "float",
-                "unit": "m",
-                "value": 0
-            },
             {
                 "desc": "Slot isthmus width.",
                 "max": "",
                 "min": "0",
                 "name": "W0",
                 "type": "float",
-                "unit": "m/rad",
+                "unit": "m",
                 "value": 0.0122
             },
             {
-                "desc": "W0 unit, 0 for m, 1 for rad",
+                "desc": "Slot isthmus height.",
                 "max": "",
-                "min": "",
-                "name": "W0_is_rad",
-                "type": "bool",
-                "unit": "",
-                "value": 0
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
             },
             {
-                "desc": "List of magnet",
+                "desc": "Magnet width",
                 "max": "",
-                "min": "",
-                "name": "magnet",
-                "type": "[MagnetFlat]",
-                "unit": "",
-                "value": ""
+                "min": "0",
+                "name": "Wmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Magnet Height",
+                "max": "",
+                "min": "0",
+                "name": "Hmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
             }
         ]
     },
-    "SlotMFlat2": {
+    "SlotM11": {
         "constants": [
             {
                 "name": "VERSION",
@@ -9066,168 +8744,426 @@
             }
         ],
         "daughters": [],
-        "desc": "Flat bottomed SlotMag with adjustable slot opening (for spoke type IPMSM)",
+        "desc": "Polar Slot with Polar magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
+            "check",
             "comp_angle_opening",
-            "comp_angle_magnet",
-            "comp_angle_opening_magnet",
             "comp_height",
+            "comp_height_active",
             "comp_surface",
-            "comp_H_arc",
-            "comp_W0m",
-            "get_point_bottom"
+            "comp_surface_active",
+            "get_surface_active"
         ],
-        "mother": "SlotMag",
-        "name": "SlotMFlat2",
+        "mother": "Slot",
+        "name": "SlotM11",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotMFlat2.csv",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM11.csv",
         "properties": [
             {
-                "desc": "Internal Slot height (for Magnet)",
+                "desc": "Slot isthmus angular width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "rad",
+                "value": 0.0122
+            },
+            {
+                "desc": "Slot isthmus height.",
                 "max": "",
                 "min": "0",
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": 0
+                "value": 0.001
             },
             {
-                "desc": "Slot opening height ",
+                "desc": "Magnet angular width",
                 "max": "",
                 "min": "0",
-                "name": "H1",
+                "name": "Wmag",
                 "type": "float",
-                "unit": "m",
-                "value": 0
+                "unit": "rad",
+                "value": 0.0122
             },
             {
-                "desc": "Inner slot width (for Magnet)",
+                "desc": "Magnet Height",
+                "max": "",
+                "min": "0",
+                "name": "Hmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            }
+        ]
+    },
+    "SlotM12": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Rectangular Slot with Rectangular magnet with polar top",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_active",
+            "get_surface_active"
+        ],
+        "mother": "Slot",
+        "name": "SlotM12",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM12.csv",
+        "properties": [
+            {
+                "desc": "Slot isthmus width.",
                 "max": "",
                 "min": "0",
                 "name": "W0",
                 "type": "float",
-                "unit": "m/rad",
+                "unit": "m",
                 "value": 0.0122
             },
             {
-                "desc": "W0 unit, 0 for m, 1 for rad",
+                "desc": "Slot isthmus height.",
                 "max": "",
-                "min": "",
-                "name": "W0_is_rad",
-                "type": "bool",
-                "unit": "",
-                "value": 0
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
             },
             {
-                "desc": "Slot opening width ",
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "Wmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Magnet Height",
+                "max": "",
+                "min": "0",
+                "name": "Hmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            }
+        ]
+    },
+    "SlotM13": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Rectangular Slot with Rectangular magnet with circular top",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_active",
+            "get_surface_active"
+        ],
+        "mother": "Slot",
+        "name": "SlotM13",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM13.csv",
+        "properties": [
+            {
+                "desc": "Slot isthmus width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Slot isthmus height.",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "Wmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Magnet Height",
+                "max": "",
+                "min": "0",
+                "name": "Hmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Radius of the magnet top",
+                "max": "",
+                "min": "0",
+                "name": "Rtopm",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            }
+        ]
+    },
+    "SlotM14": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Polar Slot with Polar magnet with circular top",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_active",
+            "get_surface_active"
+        ],
+        "mother": "Slot",
+        "name": "SlotM14",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM14.csv",
+        "properties": [
+            {
+                "desc": "Slot isthmus angular width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "rad",
+                "value": 0.0122
+            },
+            {
+                "desc": "Slot isthmus height.",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Magnet angular width",
+                "max": "",
+                "min": "0",
+                "name": "Wmag",
+                "type": "float",
+                "unit": "rad",
+                "value": 0.0122
+            },
+            {
+                "desc": "Magnet Height",
+                "max": "",
+                "min": "0",
+                "name": "Hmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Radius of the magnet top",
+                "max": "",
+                "min": "0",
+                "name": "Rtopm",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            }
+        ]
+    },
+    "SlotM15": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "single magnet with polar base and curved-top shape and parallel sides",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_active",
+            "get_surface_active"
+        ],
+        "mother": "Slot",
+        "name": "SlotM15",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM15.csv",
+        "properties": [
+            {
+                "desc": "Slot isthmus angular width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "rad",
+                "value": 0.0122
+            },
+            {
+                "desc": "Slot isthmus height.",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "Wmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Magnet Height",
+                "max": "",
+                "min": "0",
+                "name": "Hmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Radius of the magnet top",
+                "max": "",
+                "min": "0",
+                "name": "Rtopm",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            }
+        ]
+    },
+    "SlotM16": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Rectangular Slot with isthmus for Rectangular magnet",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_active",
+            "get_surface_active"
+        ],
+        "mother": "Slot",
+        "name": "SlotM16",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM16.csv",
+        "properties": [
+            {
+                "desc": "Slot isthmus width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "desc": "Slot isthmus height.",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "desc": "Slot Width",
                 "max": "",
                 "min": "0",
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.01
+                "value": 0.0122
             },
             {
-                "desc": "List of magnet",
-                "max": "",
-                "min": "",
-                "name": "magnet",
-                "type": "[MagnetFlat]",
-                "unit": "",
-                "value": ""
-            }
-        ]
-    },
-    "SlotMPolar": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_SYMMETRICAL",
-                "value": "1"
-            },
-            {
-                "name": "IS_INSET",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Polar bottomed SlotMag",
-        "is_internal": false,
-        "methods": [
-            "build_geometry",
-            "comp_angle_opening",
-            "comp_angle_opening_magnet",
-            "comp_height",
-            "comp_surface",
-            "get_point_bottom"
-        ],
-        "mother": "SlotMag",
-        "name": "SlotMPolar",
-        "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotMPolar.csv",
-        "properties": [
-            {
-                "desc": "Slot isthmus width.",
+                "desc": "Slot Height",
                 "max": "",
                 "min": "0",
-                "name": "W0",
-                "type": "float",
-                "unit": "rad",
-                "value": 0.314
-            },
-            {
-                "desc": "Slot isthmus height",
-                "max": "",
-                "min": "0",
-                "name": "H0",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": 0
-            },
-            {
-                "desc": "List of magnet",
-                "max": "",
-                "min": "",
-                "name": "magnet",
-                "type": "[MagnetPolar]",
-                "unit": "",
-                "value": ""
-            }
-        ]
-    },
-    "SlotMag": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "SlotMFlat",
-            "SlotMFlat2",
-            "SlotMPolar"
-        ],
-        "desc": "Slot for inset and surface magnet (abstract)",
-        "is_internal": false,
-        "methods": [],
-        "mother": "Slot",
-        "name": "SlotMag",
-        "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotMag.csv",
-        "properties": [
-            {
-                "desc": "Angle between magnet in the slot",
-                "max": "",
-                "min": "",
-                "name": "W3",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
+                "value": 0.001
             }
         ]
     },
@@ -9244,10 +9180,10 @@
         "methods": [
             "build_geometry",
             "set_from_point_list",
-            "get_surface_wind",
+            "get_surface_active",
             "check"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotUD",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotUD.csv",
@@ -9290,6 +9226,46 @@
             }
         ]
     },
+    "SlotUD2": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "\"User defined\" Slot from a line list and a surface",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "get_surface_active",
+            "check"
+        ],
+        "mother": "Slot",
+        "name": "SlotUD2",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotUD2.csv",
+        "properties": [
+            {
+                "desc": "list of line to draw the edges of the slot",
+                "max": "",
+                "min": "",
+                "name": "line_list",
+                "type": "[Line]",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Active surface of the Slot",
+                "max": "",
+                "min": "",
+                "name": "active_surf",
+                "type": "Surface",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "SlotW10": {
         "constants": [
             {
@@ -9307,17 +9283,18 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind",
-            "get_surface_wind",
-            "get_H1"
+            "comp_surface_active",
+            "get_surface_active",
+            "get_H1",
+            "plot_schematics"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW10",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW10.csv",
@@ -9404,16 +9381,16 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind",
+            "comp_surface_active",
             "get_H1"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW11",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW11.csv",
@@ -9508,15 +9485,15 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW12",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW12.csv",
@@ -9576,17 +9553,17 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind",
-            "get_surface_wind",
+            "comp_surface_active",
+            "get_surface_active",
             "get_H1"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW13",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW13.csv",
@@ -9682,15 +9659,15 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW14",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW14.csv",
@@ -9759,14 +9736,14 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW15",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW15.csv",
@@ -9853,14 +9830,14 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW16",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW16.csv",
@@ -9929,17 +9906,17 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind",
-            "build_geometry_wind",
+            "comp_surface_active",
+            "build_geometry_active",
             "get_H1"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW21",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW21.csv",
@@ -10025,16 +10002,16 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind",
-            "build_geometry_wind"
+            "comp_surface_active",
+            "build_geometry_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW22",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW22.csv",
@@ -10095,16 +10072,16 @@
             "_comp_W",
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind",
-            "get_surface_wind"
+            "comp_surface_active",
+            "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW23",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW23.csv",
@@ -10209,17 +10186,17 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "build_geometry_active",
             "check",
             "comp_alphas",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind",
-            "get_surface_wind"
+            "comp_surface_active",
+            "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW24",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW24.csv",
@@ -10261,16 +10238,16 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind",
-            "get_surface_wind"
+            "comp_surface_active",
+            "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW25",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW25.csv",
@@ -10330,15 +10307,15 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW26",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW26.csv",
@@ -10407,15 +10384,15 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW27",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW27.csv",
@@ -10511,14 +10488,14 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_wind",
+            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW28",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW28.csv",
@@ -10587,16 +10564,16 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind",
-            "get_surface_wind"
+            "comp_surface_active",
+            "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW29",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW29.csv",
@@ -10674,16 +10651,16 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind",
-            "get_surface_wind"
+            "comp_surface_active",
+            "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW60",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW60.csv",
@@ -10779,16 +10756,16 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",
-            "comp_height_wind",
+            "comp_height_active",
             "comp_surface",
-            "comp_surface_wind",
-            "get_surface_wind"
+            "comp_surface_active",
+            "get_surface_active"
         ],
-        "mother": "SlotWind",
+        "mother": "Slot",
         "name": "SlotW61",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW61.csv",
@@ -10875,52 +10852,6 @@
                 "value": 0
             }
         ]
-    },
-    "SlotWind": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "SlotCirc",
-            "SlotDC",
-            "SlotUD",
-            "SlotW10",
-            "SlotW11",
-            "SlotW12",
-            "SlotW13",
-            "SlotW14",
-            "SlotW15",
-            "SlotW16",
-            "SlotW21",
-            "SlotW22",
-            "SlotW23",
-            "SlotW24",
-            "SlotW25",
-            "SlotW26",
-            "SlotW27",
-            "SlotW28",
-            "SlotW29",
-            "SlotW60",
-            "SlotW61"
-        ],
-        "desc": "Slot for winding (abstract)",
-        "is_internal": false,
-        "methods": [
-            "comp_angle_wind_eq",
-            "comp_height_wind",
-            "comp_radius_mid_wind",
-            "comp_surface_wind",
-            "plot_wind",
-            "build_geometry_wind"
-        ],
-        "mother": "Slot",
-        "name": "SlotWind",
-        "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotWind.csv",
-        "properties": []
     },
     "Solution": {
         "constants": [
@@ -11232,7 +11163,17 @@
         "name": "Structural",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/Structural.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Structural"
+            }
+        ]
     },
     "SurfLine": {
         "constants": [

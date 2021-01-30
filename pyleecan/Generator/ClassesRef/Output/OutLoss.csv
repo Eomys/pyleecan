@@ -1,8 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-iron,,Dict of the computed iron losses (with dict key the name of the lamination),,dict,{},,,,Output,,get_loss,VERSION,1,Gather the loss module outputs
-winding,,Dict of the computed winding losses (with dict key the name of the lamination),,dict,{},,,,,,get_loss_dist,,,
-magnet,,Dict of the computed magnet losses (with dict key the name of the lamination),,dict,{},,,,,,,,,
-meshsolution,,Dict of FEA software mesh and post processing results,,dict,{},,,,,,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.OutLoss,,,,,,,,,
-mech,,List of the mechanical losses,,list,[],,,,,,,,,
-misc,,List of the miscellaneous losses,,list,[],,,,,,,,,
+loss_list,,Internal list of loss data,,[SciDataTool.Classes.DataND.DataND],None,,,,Output,,get_loss,VERSION,1,Gather the loss module outputs
+meshsol_list,,Internal list of loss meshsolutions,,[MeshSolution],,,,,,,get_loss_dist,,,
+loss_index,,Internal dict to index losses,,dict,{},,,,,,,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Loss,,,,,,,,,
