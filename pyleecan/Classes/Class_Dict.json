@@ -1210,7 +1210,7 @@
         "desc": "Class to get Elmer simulation results from a VTU file",
         "is_internal": false,
         "methods": [
-            "get_meshsolution"
+            "build_meshsolution"
         ],
         "mother": "Elmer",
         "name": "ElmerResultsVTU",
