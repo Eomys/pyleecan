@@ -1,16 +1,7 @@
 import numpy as np
 import subprocess
 
-from numpy import (
-    zeros,
-    pi,
-    roll,
-    mean,
-    max as np_max,
-    min as np_min,
-    sign,
-    angle as np_angle,
-)
+from numpy import zeros, pi, floor_divide, loadtxt, max as np_max, min as np_min, sign, angle as np_angle
 from os.path import basename, splitext
 from SciDataTool import DataTime, VectorField, Data1D
 from os.path import join
@@ -23,6 +14,14 @@ from ....Methods.Simulation.MagElmer import surface_label
 from ....Functions.Winding.find_wind_phase_color import get_phase_id
 from .... import __version__
 from ....Functions.get_path_binary import get_path_binary
+
+from ....Classes.HoleM50 import HoleM50
+from ....Classes.HoleM51 import HoleM51
+from ....Classes.HoleM52 import HoleM52
+from ....Classes.HoleM53 import HoleM53
+from ....Classes.MachineSIPMSM import MachineSIPMSM
+from ....Classes.MachineIPMSM import MachineIPMSM
+from ....Methods import NotImplementedYetError
 
 
 def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
@@ -50,6 +49,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         Rotor angular position vector (Nt,)
     """
 
+
     project_name = self.get_path_save_fea(output)
     elmermesh_folder = project_name
     mesh_names_file = join(project_name, "mesh.names")
@@ -68,6 +68,8 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     timesize_str = np.array2string(
         np.diff(time), separator=" ", formatter={"float_kind": lambda x: "%.2e" % x}
     )
+    time = np.append(time, time[1]+time[-1])
+    timesize_str = np.array2string(np.diff(time), separator=' ', formatter={'float_kind': lambda x: "%.2e" % x})
     timelen = len(time) - 1
     ones_str = np.array2string(
         np.ones(timelen), separator=" ", formatter={"int": lambda x: "%d" % x}
@@ -122,7 +124,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     elmer_sim_file = join(project_name, "pyleecan_elmer.sif")
     pp = machine.stator.winding.p
     wind_mat = machine.stator.winding.comp_connection_mat(machine.stator.slot.Zs)
-    Swire = machine.stator.winding.conductor.comp_surface()
+    surf_wind = machine.stator.slot.comp_surface_active()
     ror = machine.rotor.comp_radius_mec()
     sir = machine.stator.comp_radius_mec()
     with open(elmer_sim_file, "wt") as fo:
@@ -133,9 +135,18 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         fo.write("$ PP = {0}                ! Pole pairs\n".format(pp))
         fo.write("$ WE = PP*WM              ! Electrical Frequency [Hz]\n")
 
-        magnet_dict = machine.rotor.hole[0].get_magnet_dict()
-        magnet_0 = magnet_dict["magnet_0"]
-        surf_list = machine.build_geometry(sym=1)
+        if isinstance(machine, MachineSIPMSM):
+            #magnet_0 = machine.rotor.slot.magnet[0]
+            magnet_0 = machine.rotor.magnet
+        elif isinstance(machine, MachineIPMSM):
+            magnet_dict = machine.rotor.hole[0].get_magnet_dict()
+            magnet_0 = magnet_dict["magnet_0"]
+        else:
+            self.get_logger().info("ElmerSolver [Error]: Unsupported Machine Geometry")
+            return False
+
+
+        surf_list = machine.build_geometry(sym=sym)
         pm_index = 6
         Mangle = list()
         Ncond_Aplus = 1
@@ -150,15 +161,61 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         Ncond_Eminus = 1
         Ncond_Fplus = 1
         Ncond_Fminus = 1
+        Npcpp = machine.stator.winding.Npcpp
         for surf in surf_list:
             label = surface_label.get(surf.label, "UNKNOWN")
-            if "MAGNET" in label:
+            if "H_MAGNET" in label:  # LamHole
+                if "PAR" in label:
+                    lam = machine.rotor
+                    magnetization_type = "parallel"
+                    point_ref = surf.point_ref
+                    # calculate pole angle and angle of pole middle
+                    alpha_p = 360 / lam.hole[0].Zh
+                    mag_0 = (
+                                    floor_divide(np_angle(point_ref, deg=True), alpha_p) + 0.5
+                            ) * alpha_p
+
+                    # HoleM50 or HoleM53
+                    if (type(lam.hole[0]) == HoleM50) or (type(lam.hole[0]) == HoleM53):
+                        if "T0" in label:
+                            mag = mag_0 + lam.hole[0].comp_alpha() * 180 / pi
+                        else:
+                            mag = mag_0 - lam.hole[0].comp_alpha() * 180 / pi
+
+                    # HoleM51
+                    if type(lam.hole[0]) == HoleM51:
+                        if "T0" in label:
+                            mag = mag_0 + lam.hole[0].comp_alpha() * 180 / pi
+                        elif "T1" in label:
+                            mag = mag_0
+                        else:
+                            mag = mag_0 - lam.hole[0].comp_alpha() * 180 / pi
+
+                    # HoleM52
+                    if type(lam.hole[0]) == HoleM52:
+                        mag = mag_0
+
+                    # modifiy magnetisation of south poles
+                    if "_S_" in label:
+                        mag = mag + 180
+                else:
+                    raise NotImplementedYetError(
+                        "Only parallele magnetization are available for HoleMagnet"
+                    )
+                if bodies.get(label, None) is not None:
+                    Mangle.append(mag)
+                    bodies[label]['mat'] = pm_index
+                    bodies[label]['eq'] = 1
+                    bodies[label]['bf'] = 1
+                    bodies[label]['tg'] = 1
+                    pm_index = pm_index + 1
+            elif "MAGNET" in label:
                 point_ref = surf.point_ref
                 if "RAD" in label and "_N_" in label:  # Radial magnetization
-                    mag = "theta"  # North pole magnet
+                    mag = 0  # North pole magnet
                     magnetization_type = "radial"
                 elif "RAD" in label:
-                    mag = "theta + 180"  # South pole magnet
+                    mag = 180  # South pole magnet
                     magnetization_type = "radial"
                 elif "PAR" in label and "_N_" in label:
                     mag = np_angle(point_ref) * 180 / pi  # North pole magnet
@@ -264,13 +321,14 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         rho20_m = magnet_0.mat_type.elec.rho
         kt_m = 0.01  # Rho Temperature Coefficient fixed for now
         rho_m = rho20_m * (1 + kt_m * (magnet_temp - 20.0))
-        conductivity_m = 1.0 / rho_m
+        conductivity_m = 0.0*1.0 / rho_m
 
         skip_steps = 1  # Fixed for now
         degrees_step = 1  # Fixed for now
         current_angle = 0 - pp * degrees_step * skip_steps
         angle_shift = self.angle_rotor_shift - self.angle_stator_shift
-        rotor_init_pos = angle_shift - degrees_step * skip_steps
+        rotor_init_pos = machine.comp_angle_offset_initial() + angle_shift
+        rotor_d_axis = machine.rotor.comp_angle_d_axis() * 180.0 / pi
         Ncond = 1  # Fixed for Now
         Cp = 1  # Fixed for Now
         qs = len(machine.stator.get_name_phase())
@@ -288,25 +346,16 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         fo.write("$ Cp = {0}                ! Parallel paths\n".format(Cp))
         fo.write("$ Is = {0}                ! Stator current [A]\n".format(0.0))
         fo.write("$ Aaxis = {0}             ! Axis Coil A [deg]\n".format(0.0))
-        fo.write(
-            "$ Carea = {0}             ! Coil Side Conductor Area [m2]\n".format(Swire)
-        )
+        fo.write("$ Carea = {0}             ! Coil Side Conductor Area [m2]\n".format(surf_wind))
 
         for mm in range(1, No_Magnets + 1):
-            fo.write(
-                "$ Mangle{0} = {1}      ! Magnetization Angle [deg]\n".format(
-                    mm, round(Mangle[mm - 1], 2)
-                )
-            )
+            fo.write("$ Mangle{0} = {1}     ! Magnetization Angle [deg]\n".format(mm,
+                                                                                        round(Mangle[mm - 1], 2)))
 
         fo.write("$ Nsteps = {0}            !\n".format(2))
         fo.write("$ StepDegrees = {0}       !\n".format(degrees_step))
         fo.write("$ DegreesPerSec = WM*180.0/pi  !\n")
-        fo.write(
-            "$ RotorInitPos = Aaxis - 360 / (4*PP) + {}!\n".format(
-                round(rotor_init_pos, 2)
-            )
-        )
+        fo.write("$ RotorInitPos = {}!\n".format(round(rotor_init_pos*180.0/pi, 2)))
 
         fo.write(
             "\nHeader\n"
@@ -371,7 +420,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         rho20 = machine.stator.winding.conductor.cond_mat.elec.rho
         kt = 0.01  # Br Temperature Coefficient fixed for now
         rho = rho20 * (1 + kt * (winding_temp - 20.0))
-        conductivity = 1.0 / rho
+        conductivity = 0.0*1.0 / rho
 
         fo.write(
             "\nMaterial 5\n"
@@ -385,21 +434,20 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         for m in range(1, magnets_per_pole + 1):
             mat_number = 5 + m
             if magnetization_type == "parallel":
-                fo.write(
-                    "\nMaterial {0}\n"
-                    '\tName = "PM_{1}"\n'
-                    "\tRelative Permeability = {2}\n"
-                    "\tMagnetization 1 = Variable time, timestep size\n"
-                    '\t\tReal MATC  "H_PM*cos(WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + Aaxis*pi/180 + (Mangle{1}*pi/180))"\n'
-                    "\tMagnetization 2 = Variable time, timestep size\n"
-                    '\t\tReal MATC "H_PM*sin(WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + Aaxis*pi/180 + (Mangle{1}*pi/180))"\n'
-                    "\tElectric Conductivity = {4}\n"
-                    "End\n".format(
-                        mat_number,
-                        m,
-                        magnet_permeability,
-                        int((m - 1) / magnets_per_pole),
-                        round(conductivity_m, 2),
+                fo.write("\nMaterial {0}\n"
+                         "\tName = \"PM_{1}\"\n"
+                         "\tRelative Permeability = {2}\n"
+                         "\tMagnetization 1 = Variable time, timestep size\n"
+                         "\t\tReal MATC  \"H_PM*cos(WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + (RotorInitPos + Mangle{1})*pi/180)\"\n"
+                         "\tMagnetization 2 = Variable time, timestep size\n"
+                         "\t\tReal MATC \"H_PM*sin(WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + (RotorInitPos + Mangle{1})*pi/180)\"\n"
+                         "\tElectric Conductivity = {4}\n"
+                         "End\n".format(
+                            mat_number,
+                            m,
+                            magnet_permeability,
+                            int((m - 1) / magnets_per_pole),
+                            round(conductivity_m, 2)
                     )
                 )
             elif magnetization_type == "radial":
@@ -408,9 +456,9 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                     '\tName = "PM_{1}"\n'
                     "\tRelative Permeability = {2}\n"
                     "\tMagnetization 1 = Variable Coordinate\n"
-                    '\t\tReal MATC  "H_PM*cos(atan2(tx(1),tx(0)) + {3}*pi)"\n'
+                    '\t\tReal MATC  "H_PM*cos(atan2(tx(1),tx(0)) + {3}*pi + Mangle{1}*pi/180)"\n'
                     "\tMagnetization 2 = Variable Coordinate\n"
-                    '\t\tReal MATC "H_PM*sin(atan2(tx(1),tx(0)) + {3}*pi)"\n'
+                    '\t\tReal MATC "H_PM*sin(atan2(tx(1),tx(0)) + {3}*pi + Mangle{1}*pi/180)"\n'
                     "\tElectric Conductivity = {4}\n"
                     "End\n".format(
                         mat_number,
@@ -457,15 +505,15 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         #          "\tMesh Rotate 3 = Variable time, timestep size\n"
         #          "\t\tReal MATC \"omega*(tx(0)-tx(1)) + RotorInitPos\"\n"
         #          "End\n")
-        fo.write(
-            "Body Force 1\n"
-            '\tName = "BodyForce_Rotation"\n'
-            "\tMesh Rotate 3 = Variable time\n"
-            "\t\tReal\n"
-        )
-        for tt in range(0, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], angle[tt] * 180.0 / pi))
-        fo.write("\tEnd\n" "End\n")
+        fo.write("Body Force 1\n"
+                 "\tName = \"BodyForce_Rotation\"\n"
+                 "\tMesh Rotate 3 = Variable time\n"
+                 "\t\tReal\n"
+                 "\t\t0.0\t\t0.0\n")
+        for tt in range(1, timelen + 1):
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], angle_rotor[tt-1] * 180.0 / pi))
+        fo.write("\tEnd\n"
+                 "End\n")
 
         # fo.write("Body Force 2\n"
         #          "\tName = \"J_A_PLUS\"\n"
@@ -539,65 +587,65 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         #          "\t\tReal MATC \"-(Is/Carea) * ({0}/Cp) * sin(WE * (tx(0)-tx(1)) - 5*Shift + Gamma)\"\n"
         #          "End\n".format(Ncond_Fminus))
 
-        fo.write(
-            "Body Force 2\n"
-            '\tName = "J_A_PLUS"\n'
-            "\tCurrent Density = Variable time\n"
-            "\t\tReal\n"
-        )
-        for tt in range(0, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Is[0, tt]))
-        fo.write("\tEnd\n" "End\n")
+        fo.write("Body Force 2\n"
+                 "\tName = \"J_A_PLUS\"\n"
+                 "\tCurrent Density = Variable time\n"
+                 "\t\tReal\n"
+                 "\t\t0.0\t\t0.0\n")
+        for tt in range(1, timelen + 1):
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Ncond_Aplus*Is[0, tt-1]/surf_wind))
+        fo.write("\tEnd\n"
+                 "End\n")
 
-        fo.write(
-            "Body Force 3\n"
-            '\tName = "J_A_MINUS"\n'
-            "\tCurrent Density = Variable time\n"
-            "\t\tReal\n"
-        )
-        for tt in range(0, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Is[0, tt]))
-        fo.write("\tEnd\n" "End\n")
+        fo.write("Body Force 3\n"
+                 "\tName = \"J_A_MINUS\"\n"
+                 "\tCurrent Density = Variable time\n"
+                 "\t\tReal\n"
+                 "\t\t0.0\t\t0.0\n")
+        for tt in range(1, timelen + 1):
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Ncond_Aminus*Is[0, tt-1]/surf_wind))
+        fo.write("\tEnd\n"
+                 "End\n")
 
-        fo.write(
-            "Body Force 4\n"
-            '\tName = "J_B_PLUS"\n'
-            "\tCurrent Density = Variable time\n"
-            "\t\tReal\n"
-        )
-        for tt in range(0, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Is[1, tt]))
-        fo.write("\tEnd\n" "End\n")
+        fo.write("Body Force 4\n"
+                 "\tName = \"J_B_PLUS\"\n"
+                 "\tCurrent Density = Variable time\n"
+                 "\t\tReal\n"
+                 "\t\t0.0\t\t0.0\n")
+        for tt in range(1, timelen + 1):
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Ncond_Bplus*Is[1, tt-1]/surf_wind))
+        fo.write("\tEnd\n"
+                 "End\n")
 
-        fo.write(
-            "Body Force 5\n"
-            '\tName = "J_B_MINUS"\n'
-            "\tCurrent Density = Variable time\n"
-            "\t\tReal\n"
-        )
-        for tt in range(0, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Is[1, tt]))
-        fo.write("\tEnd\n" "End\n")
+        fo.write("Body Force 5\n"
+                 "\tName = \"J_B_MINUS\"\n"
+                 "\tCurrent Density = Variable time\n"
+                 "\t\tReal\n"
+                 "\t\t0.0\t\t0.0\n")
+        for tt in range(1, timelen + 1):
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Ncond_Bminus*Is[1, tt-1]/surf_wind))
+        fo.write("\tEnd\n"
+                 "End\n")
 
-        fo.write(
-            "Body Force 6\n"
-            '\tName = "J_C_PLUS"\n'
-            "\tCurrent Density = Variable time\n"
-            "\t\tReal\n"
-        )
-        for tt in range(0, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Is[2, tt]))
-        fo.write("\tEnd\n" "End\n")
+        fo.write("Body Force 6\n"
+                 "\tName = \"J_C_PLUS\"\n"
+                 "\tCurrent Density = Variable time\n"
+                 "\t\tReal\n"
+                 "\t\t0.0\t\t0.0\n")
+        for tt in range(1, timelen + 1):
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], Ncond_Cplus*Is[2, tt-1]/surf_wind))
+        fo.write("\tEnd\n"
+                 "End\n")
 
-        fo.write(
-            "Body Force 7\n"
-            '\tName = "J_C_MINUS"\n'
-            "\tCurrent Density = Variable time\n"
-            "\t\tReal\n"
-        )
-        for tt in range(0, timelen + 1):
-            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Is[2, tt]))
-        fo.write("\tEnd\n" "End\n")
+        fo.write("Body Force 7\n"
+                 "\tName = \"J_C_MINUS\"\n"
+                 "\tCurrent Density = Variable time\n"
+                 "\t\tReal\n"
+                 "\t\t0.0\t\t0.0\n")
+        for tt in range(1, timelen + 1):
+            fo.write("\t\t{:.2e}\t\t{:.3f}\n".format(time[tt], -Ncond_Cminus*Is[2, tt-1]/surf_wind))
+        fo.write("\tEnd\n"
+                 "End\n")
 
         fo.write("\n!--- BODIES ---\n")
         for k, v in bodies.items():
@@ -838,14 +886,27 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     elmersolver.terminate()
     self.get_logger().info("ElmerSolver call complete!")
 
-    self.get_meshsolution()
+
+    self.get_meshsolution(output)
 
     Na = angle.size
-    Nt = time.size
+    Nt = time.size - 1
 
     # Loading parameters for readibility
     L1 = output.simu.machine.stator.comp_length()
     save_path = self.get_path_save(output)
+
+    scalars_file = join( elmermesh_folder, "scalars.dat")
+    ecp, mfe, agt, iv, im, tq = loadtxt(scalars_file, unpack=True, usecols=(0,1,2,3,4,5))
+    # ecp: eddy current power
+    # mfe: magnetic field energy
+    # agt: air gap torque
+    # iv: inertial volume
+    # im: inertial moment
+    # tq: group 1 torque
+
+    # TODO Load Air gap flux density
+
     # FEM_dict = output.mag.FEM_dict
     #
     if (
@@ -861,7 +922,8 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     Br = zeros((Nt, Na))
     Bt = zeros((Nt, Na))
     Bz = zeros((Nt, Na))
-    Tem = zeros((Nt))
+    Tem = tq * sym * L1
+
     # Phi_wind_stator = zeros((Nt, qs))
 
     # compute the data for each time step
