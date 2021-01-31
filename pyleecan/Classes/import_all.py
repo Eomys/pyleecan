@@ -28,6 +28,7 @@ from ..Classes.EEC_SCIM import EEC_SCIM
 from ..Classes.Electrical import Electrical
 from ..Classes.Elmer import Elmer
 from ..Classes.ElmerResults import ElmerResults
+from ..Classes.ElmerResultsVTU import ElmerResultsVTU
 from ..Classes.FPGNSeg import FPGNSeg
 from ..Classes.FPGNTri import FPGNTri
 from ..Classes.FluxLink import FluxLink
