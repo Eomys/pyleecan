@@ -30,6 +30,7 @@ load_switch = {
     "Electrical": Electrical,
     "Elmer": Elmer,
     "ElmerResults": ElmerResults,
+    "ElmerResultsVTU": ElmerResultsVTU,
     "FPGNSeg": FPGNSeg,
     "FPGNTri": FPGNTri,
     "FluxLink": FluxLink,
