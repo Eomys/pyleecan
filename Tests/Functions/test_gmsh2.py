@@ -7,6 +7,7 @@ from os.path import join, isdir
 from pyleecan.Functions.load import load
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.definitions import DATA_DIR
 from Tests import save_plot_path
 from pyleecan.Methods.Simulation.MagElmer import (
@@ -78,6 +79,8 @@ def test_gmsh_ipm():
     with open("gmsh_test_ipm.json", "w") as fw:
         json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
+    return gmsh_dict
+
 
 @pytest.mark.long
 @pytest.mark.GMSH
@@ -88,15 +91,18 @@ def test_gmsh_spm():
 
     # Import the machine from a script
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
+    PMSM_A.rotor.slot = SlotM10(Wmag=15e-3, Hmag=3e-3, H0=0.0, W0=15e-3, Zs=8)
+
+    #PMSM_A.plot()
     save_path = join(save_plot_path, "GMSH")
     if not isdir(save_path):
         makedirs(save_path)
-    # Plot the machine
-    # im = PMSM_A.plot()
+
 
     # Create the Simulation
     mySimu = Simu1(name="EM_SPMSM_AL_001", machine=PMSM_A)
     myResults = Output(simu=mySimu)
+    mesh_dict["Lamination_Rotor_Bore_Radius_Ext"] = 20
 
     gmsh_dict = draw_GMSH(
         output=myResults,
@@ -115,6 +121,8 @@ def test_gmsh_spm():
     with open("gmsh_test_spm.json", "w") as fw:
         json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
+    return gmsh_dict
+
 
 def encode_complex(z):
     if isinstance(z, complex):
@@ -122,4 +130,5 @@ def encode_complex(z):
 
 
 if __name__ == "__main__":
-    sys.exit(test_gmsh_ipm())
+    gmsh_dict = test_gmsh_ipm()
+    #gmsh_dict = test_gmsh_spm()
