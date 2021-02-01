@@ -287,7 +287,7 @@ class SWindPat(Gen_SWindPat, QWidget):
             A SWindPat object
         """
         try:
-            self.obj.plot_activeing()
+            self.obj.plot_winding()
         except (AssertionError, WindingError) as e:
             QMessageBox().critical(self, self.tr("Error"), str(e))
 
