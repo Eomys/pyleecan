@@ -500,6 +500,6 @@ if __name__ == "__main__":
     
     out3, out4 = test_FEMM_periodicity_time()
     
-    #out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
+    out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
     
     
