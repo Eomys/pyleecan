@@ -1149,6 +1149,7 @@
         ],
         "daughters": [
             "ElmerResults",
+            "ElmerResultsVTU",
             "Section",
             "SolverInputFile"
         ],
@@ -1235,6 +1236,53 @@
                 "type": "bool",
                 "unit": "",
                 "value": 0
+            }
+        ]
+    },
+    "ElmerResultsVTU": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to get Elmer simulation results from a VTU file",
+        "is_internal": false,
+        "methods": [
+            "build_meshsolution"
+        ],
+        "mother": "Elmer",
+        "name": "ElmerResultsVTU",
+        "package": "Elmer",
+        "path": "pyleecan/Generator/ClassesRef/Elmer/ElmerResultsVTU.csv",
+        "properties": [
+            {
+                "desc": "Label of the resulting meshsolution",
+                "max": "",
+                "min": "",
+                "name": "label",
+                "type": "str",
+                "unit": "",
+                "value": "ElmerResults"
+            },
+            {
+                "desc": "Filename of the results VTU data file",
+                "max": "",
+                "min": "",
+                "name": "file_path",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Dict containing the data names to store",
+                "max": "",
+                "min": "",
+                "name": "store_dict",
+                "type": "dict",
+                "unit": "",
+                "value": ""
             }
         ]
     },

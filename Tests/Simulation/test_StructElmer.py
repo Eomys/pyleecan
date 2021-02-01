@@ -11,7 +11,6 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.StructElmer import StructElmer
 from pyleecan.Classes.Output import Output
-from pyleecan.Classes.ElmerResults import ElmerResults
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Functions.load import load
 
