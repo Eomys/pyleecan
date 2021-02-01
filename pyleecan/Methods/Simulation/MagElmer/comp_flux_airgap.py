@@ -42,7 +42,6 @@ def comp_flux_airgap(self, output, axes_dict):
     # Check if the time axis is anti-periodic
     _, is_antiper_t = Time.get_periodicity()
 
-
     # Number of time steps
     time = Time.get_values(
         is_oneperiod=self.is_periodicity_t,
@@ -64,7 +63,6 @@ def comp_flux_airgap(self, output, axes_dict):
         Ir = output.elec.comp_I_mag(time, is_stator=False)
     else:
         Ir = None
-
 
     # Setup the Elmer simulation
     # Geometry building

@@ -124,7 +124,7 @@ class Test_get_soltution(TestCase):
         msg = "Wrong result: returned " + str(field) + ", expected: " + str(expected)
         self.assertAlmostEqual(result, 0, msg=msg, delta=DELTA)
 
-		field = solution.get_solution(indice=[1, 2, 4, 5]).get_field()
+        field = solution.get_solution(indice=[1, 2, 4, 5]).get_field()
         result = np_abs(expected - field).sum()
         msg = "Wrong result: returned " + str(field) + ", expected: " + str(expected)
         self.assertAlmostEqual(result, 0, msg=msg, delta=DELTA)

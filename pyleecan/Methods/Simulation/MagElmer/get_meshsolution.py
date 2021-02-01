@@ -35,11 +35,13 @@ def get_meshsolution(self, output):
 
     result_filename = join(elmermesh_folder, "step_t0002.vtu")
     meshsolvtu = read(result_filename)
-    #pt_data = meshsolvtu.point_data
+    # pt_data = meshsolvtu.point_data
     cell_data = meshsolvtu.cell_data
 
-    #indices = arange(meshsolvtu.points.shape[0])
-    indices = arange(meshsolvtu.cells[0].data.shape[0]+meshsolvtu.cells[1].data.shape[0])
+    # indices = arange(meshsolvtu.points.shape[0])
+    indices = arange(
+        meshsolvtu.cells[0].data.shape[0] + meshsolvtu.cells[1].data.shape[0]
+    )
 
     Indices = Data1D(name="indice", values=indices, is_components=True)
     # store_dict = {
@@ -96,10 +98,10 @@ def get_meshsolution(self, output):
     }
     comp_ext = ["x", "y", "z"]
     sol_list = []
-    #for key, value in pt_data.items():
+    # for key, value in pt_data.items():
     for key, value in cell_data.items():
         if key in store_dict.keys():
-            #siz = value.shape[1]
+            # siz = value.shape[1]
             siz = value[0].shape[1]
             if siz > 3:
                 print("Some Message")
@@ -118,7 +120,7 @@ def get_meshsolution(self, output):
                     unit=store_dict[key]["unit"],
                     symbol=store_dict[key]["symbol"] + ext,
                     axes=[Indices],
-                    #values=value[:, i],
+                    # values=value[:, i],
                     values=values[:, i],
                     normalizations={"ref": store_dict[key]["norm"]},
                 )
@@ -131,7 +133,7 @@ def get_meshsolution(self, output):
                 sol_list.append(
                     SolutionData(
                         field=field,
-                        #type_cell="point",
+                        # type_cell="point",
                         type_cell="triangle",
                         label=store_dict[key]["symbol"],
                     )
@@ -143,12 +145,12 @@ def get_meshsolution(self, output):
                 field = VectorField(
                     name=store_dict[key]["name"],
                     symbol=store_dict[key]["symbol"],
-                    components=comps
+                    components=comps,
                 )
                 sol_list.append(
                     SolutionVector(
                         field=field,
-                        #type_cell="point",
+                        # type_cell="point",
                         type_cell="triangle",
                         label=store_dict[key]["symbol"],
                     )
@@ -156,6 +158,5 @@ def get_meshsolution(self, output):
 
     meshsol.solution = sol_list
     output.mag.meshsolution = meshsol
-
 
     return True
