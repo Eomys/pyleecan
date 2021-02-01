@@ -59,7 +59,14 @@ def plot_schematics(
     # Use some default parameter
     if is_default:
         hole = type(self)(
-            Zh=8, W0=pi * 0.8, W1=10e-3, W2=7.5e-3, W3=5e-3, W4=15e-3, H1=3e-3, H2=5e-3,
+            Zh=8,
+            W0=pi * 0.8,
+            W1=10e-3,
+            W2=7.5e-3,
+            W3=5e-3,
+            W4=15e-3,
+            H1=3e-3,
+            H2=5e-3,
         )
         lam = LamHole(
             Rint=0.078, Rext=0.104, is_internal=True, is_stator=False, hole=[hole]
@@ -108,7 +115,11 @@ def plot_schematics(
             for name, Z in point_dict.items():
                 Z = Z * exp(1j * alpha)
                 ax.text(
-                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
+                    Z.real,
+                    Z.imag,
+                    name,
+                    fontsize=P_FONT_SIZE,
+                    bbox=TEXT_BOX,
                 )
 
         # Adding schematics
@@ -266,7 +277,8 @@ def plot_schematics(
             )
             # W2 lines
             line = Segment(
-                point_dict["Z9"] * exp(1j * alpha), point_dict["Z8"] * exp(1j * alpha),
+                point_dict["Z9"] * exp(1j * alpha),
+                point_dict["Z8"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -288,7 +300,8 @@ def plot_schematics(
             )
             # Zc0 lines
             line = Segment(
-                point_dict["Zc0"] * exp(1j * alpha), point_dict["Z4"] * exp(1j * alpha),
+                point_dict["Zc0"] * exp(1j * alpha),
+                point_dict["Z4"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,

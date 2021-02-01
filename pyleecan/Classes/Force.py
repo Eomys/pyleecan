@@ -80,8 +80,8 @@ class Force(FrozenClass):
 
     def __init__(
         self,
-        is_periodicity_t=False,
-        is_periodicity_a=False,
+        is_periodicity_t=None,
+        is_periodicity_a=None,
         is_agsf_transfer=False,
         max_wavenumber_transfer=None,
         Rsbo_enforced_transfer=None,
@@ -215,7 +215,7 @@ class Force(FrozenClass):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.force.Time)
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.force.Time). If None, automatically calculated based on Magnetics periodicities.
 
         :Type: bool
         """,
@@ -233,7 +233,7 @@ class Force(FrozenClass):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.force.Angle)
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.force.Angle). If None, automatically calculated based on Magnetics periodicities.
 
         :Type: bool
         """,

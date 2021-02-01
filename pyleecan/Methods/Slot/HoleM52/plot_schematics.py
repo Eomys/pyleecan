@@ -106,7 +106,11 @@ def plot_schematics(
             for name, Z in point_dict.items():
                 Z = Z * exp(1j * alpha)
                 ax.text(
-                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
+                    Z.real,
+                    Z.imag,
+                    name,
+                    fontsize=P_FONT_SIZE,
+                    bbox=TEXT_BOX,
                 )
 
         # Adding schematics
@@ -159,7 +163,8 @@ def plot_schematics(
             )
             # H1
             line = Segment(
-                point_dict["Z11"] * exp(1j * alpha), point_dict["Z4"] * exp(1j * alpha),
+                point_dict["Z11"] * exp(1j * alpha),
+                point_dict["Z4"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -173,7 +178,8 @@ def plot_schematics(
             )
             # H2
             line = Segment(
-                point_dict["Z7"] * exp(1j * alpha), point_dict["Z6"] * exp(1j * alpha),
+                point_dict["Z7"] * exp(1j * alpha),
+                point_dict["Z6"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -253,7 +259,8 @@ def plot_schematics(
             )
             # Magnet line
             line = Segment(
-                point_dict["Z3"] * exp(1j * alpha), point_dict["Z7"] * exp(1j * alpha),
+                point_dict["Z3"] * exp(1j * alpha),
+                point_dict["Z7"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,

@@ -45,7 +45,10 @@ class Test_plot_dimensions(object):
         # Plot
         (fig, ax, _, _) = init_fig(shape="default")
         test_obj.plot(
-            fig=fig, ax=ax, is_show_fig=False, save_path=None,
+            fig=fig,
+            ax=ax,
+            is_show_fig=False,
+            save_path=None,
         )
         # Figure clean up
         W = frame.Rext * 1.1
@@ -159,7 +162,10 @@ class Test_plot_dimensions(object):
         # Plot
         (fig, ax, _, _) = init_fig(shape="default")
         test_obj.plot(
-            fig=fig, ax=ax, is_show_fig=False, save_path=None,
+            fig=fig,
+            ax=ax,
+            is_show_fig=False,
+            save_path=None,
         )
         # Figure clean up
         W = frame.Rext * 1.1
@@ -248,7 +254,10 @@ class Test_plot_dimensions(object):
         # Plot
         (fig, ax, _, _) = init_fig(shape="default")
         test_obj.plot(
-            fig=fig, ax=ax, is_show_fig=False, save_path=None,
+            fig=fig,
+            ax=ax,
+            is_show_fig=False,
+            save_path=None,
         )
         # Figure clean up
         W = rotor.Rext * 1.1

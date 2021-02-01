@@ -518,7 +518,7 @@ def draw_GMSH(
     if not is_lam_only_S:
         for surf in rotor_list:
             nsurf += 1
-            #print(surf.label)
+            # print(surf.label)
             gmsh_dict.update(
                 {
                     nsurf: {
@@ -967,6 +967,6 @@ def draw_GMSH(
         gmsh.model.mesh.generate(2)
         gmsh.write(path_save)
 
-    #gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
+    # gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()
     return gmsh_dict

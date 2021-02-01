@@ -116,7 +116,11 @@ def plot_schematics(
             for name, Z in point_dict.items():
                 Z = Z * exp(1j * alpha)
                 ax.text(
-                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
+                    Z.real,
+                    Z.imag,
+                    name,
+                    fontsize=P_FONT_SIZE,
+                    bbox=TEXT_BOX,
                 )
 
         # Adding schematics
@@ -184,7 +188,8 @@ def plot_schematics(
             )
             # H0
             line = Segment(
-                point_dict["Z7"].real * exp(1j * alpha), Rbo * exp(1j * alpha),
+                point_dict["Z7"].real * exp(1j * alpha),
+                Rbo * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -228,7 +233,8 @@ def plot_schematics(
             )
             # H3
             line = Segment(
-                point_dict["Z2"] * exp(1j * alpha), point_dict["Z3"] * exp(1j * alpha),
+                point_dict["Z2"] * exp(1j * alpha),
+                point_dict["Z3"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -267,7 +273,8 @@ def plot_schematics(
             )
             # W2 lines
             line = Segment(
-                point_dict["Z6"] * exp(1j * alpha), point_dict["Z8"] * exp(1j * alpha),
+                point_dict["Z6"] * exp(1j * alpha),
+                point_dict["Z8"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -289,7 +296,8 @@ def plot_schematics(
             )
             # H1 lines
             line = Segment(
-                0, Rbo * 1.3 * exp(1j * angle(point_dict["Z1s"])) * exp(1j * alpha),
+                0,
+                Rbo * 1.3 * exp(1j * angle(point_dict["Z1s"])) * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,

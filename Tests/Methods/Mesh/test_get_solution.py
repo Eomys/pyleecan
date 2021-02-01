@@ -117,9 +117,14 @@ class Test_get_soltution(TestCase):
 
         solution = SolutionData(field=H, type_cell="triangle", label="H")
 
-        field = solution.get_solution(indice=[1, 2, 4, 5]).get_field()
+        field = solution.get_solution(indice=[1, 2, 4]).get_field()
 
         expected = data[:, 1:]
+        result = np_abs(expected - field).sum()
+        msg = "Wrong result: returned " + str(field) + ", expected: " + str(expected)
+        self.assertAlmostEqual(result, 0, msg=msg, delta=DELTA)
+
+        field = solution.get_solution(indice=[1, 2, 4, 5]).get_field()
         result = np_abs(expected - field).sum()
         msg = "Wrong result: returned " + str(field) + ", expected: " + str(expected)
         self.assertAlmostEqual(result, 0, msg=msg, delta=DELTA)

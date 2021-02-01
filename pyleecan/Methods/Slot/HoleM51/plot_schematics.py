@@ -119,7 +119,11 @@ def plot_schematics(
             for name, Z in point_dict.items():
                 Z = Z * exp(1j * alpha)
                 ax.text(
-                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
+                    Z.real,
+                    Z.imag,
+                    name,
+                    fontsize=P_FONT_SIZE,
+                    bbox=TEXT_BOX,
                 )
 
         # Adding schematics
@@ -341,7 +345,8 @@ def plot_schematics(
             )
             # Triangle lines
             line = Segment(
-                point_dict["Z7"] * exp(1j * alpha), point_dict["Z5"] * exp(1j * alpha),
+                point_dict["Z7"] * exp(1j * alpha),
+                point_dict["Z5"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -351,7 +356,8 @@ def plot_schematics(
                 linewidth=MAIN_LINE_WIDTH,
             )
             line = Segment(
-                point_dict["Z2"] * exp(1j * alpha), point_dict["Z10"] * exp(1j * alpha),
+                point_dict["Z2"] * exp(1j * alpha),
+                point_dict["Z10"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -361,7 +367,8 @@ def plot_schematics(
                 linewidth=MAIN_LINE_WIDTH,
             )
             line = Segment(
-                point_dict["Z2"] * exp(1j * alpha), point_dict["Z12"] * exp(1j * alpha),
+                point_dict["Z2"] * exp(1j * alpha),
+                point_dict["Z12"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,

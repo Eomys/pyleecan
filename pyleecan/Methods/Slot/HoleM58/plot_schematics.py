@@ -116,14 +116,19 @@ def plot_schematics(
             for name, Z in point_dict.items():
                 Z = Z * exp(1j * alpha)
                 ax.text(
-                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
+                    Z.real,
+                    Z.imag,
+                    name,
+                    fontsize=P_FONT_SIZE,
+                    bbox=TEXT_BOX,
                 )
 
         # Adding schematics
         if is_add_schematics:
             # H0
             line = Segment(
-                point_dict["Z1"].real * exp(1j * alpha), Rbo * exp(1j * alpha),
+                point_dict["Z1"].real * exp(1j * alpha),
+                Rbo * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -197,7 +202,8 @@ def plot_schematics(
             )
             # W1
             line = Segment(
-                point_dict["Z6"] * exp(1j * alpha), point_dict["Z7"] * exp(1j * alpha),
+                point_dict["Z6"] * exp(1j * alpha),
+                point_dict["Z7"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -211,7 +217,8 @@ def plot_schematics(
             )
             # W2
             line = Segment(
-                point_dict["Z6"] * exp(1j * alpha), point_dict["Z5"] * exp(1j * alpha),
+                point_dict["Z6"] * exp(1j * alpha),
+                point_dict["Z5"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -295,7 +302,8 @@ def plot_schematics(
             )
             # Magnet lines
             line = Segment(
-                point_dict["Z2"] * exp(1j * alpha), point_dict["Z5"] * exp(1j * alpha),
+                point_dict["Z2"] * exp(1j * alpha),
+                point_dict["Z5"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -305,7 +313,8 @@ def plot_schematics(
                 linewidth=MAIN_LINE_WIDTH,
             )
             line = Segment(
-                point_dict["Z8"] * exp(1j * alpha), point_dict["Z11"] * exp(1j * alpha),
+                point_dict["Z8"] * exp(1j * alpha),
+                point_dict["Z11"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,

@@ -93,11 +93,10 @@ def test_gmsh_spm():
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
     PMSM_A.rotor.slot = SlotM10(Wmag=15e-3, Hmag=3e-3, H0=0.0, W0=15e-3, Zs=8)
 
-    #PMSM_A.plot()
+    # PMSM_A.plot()
     save_path = join(save_plot_path, "GMSH")
     if not isdir(save_path):
         makedirs(save_path)
-
 
     # Create the Simulation
     mySimu = Simu1(name="EM_SPMSM_AL_001", machine=PMSM_A)
@@ -131,4 +130,4 @@ def encode_complex(z):
 
 if __name__ == "__main__":
     gmsh_dict = test_gmsh_ipm()
-    #gmsh_dict = test_gmsh_spm()
+    # gmsh_dict = test_gmsh_spm()

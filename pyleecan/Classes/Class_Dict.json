@@ -1461,22 +1461,22 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Force.csv",
         "properties": [
             {
-                "desc": "True to compute only on one time periodicity (use periodicities defined in output.force.Time)",
+                "desc": "True to compute only on one time periodicity (use periodicities defined in output.force.Time). If None, automatically calculated based on Magnetics periodicities.",
                 "max": "",
                 "min": "",
                 "name": "is_periodicity_t",
                 "type": "bool",
                 "unit": "-",
-                "value": 0
+                "value": null
             },
             {
-                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.force.Angle)",
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.force.Angle). If None, automatically calculated based on Magnetics periodicities.",
                 "max": "",
                 "min": "",
                 "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "-",
-                "value": 0
+                "value": null
             },
             {
                 "desc": "True to compute the AGSF transfer from air-gap to stator bore radius.",
