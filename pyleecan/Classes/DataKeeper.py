@@ -24,7 +24,7 @@ from ._check import InitUnKnowClassError
 
 
 class DataKeeper(FrozenClass):
-    """Abstract class for the multi-simulation"""
+    """Class for defining data to keep on a multi-simulation"""
 
     VERSION = 1
 
