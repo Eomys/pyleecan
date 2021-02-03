@@ -5,7 +5,7 @@ from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
 
-from ......Classes.SlotM14 import SlotM14
+from ......Classes.SlotM15 import SlotM15
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot15.Gen_PMSlot15 import Gen_PMSlot15
 from ......Methods.Slot.Slot import SlotCheckError
