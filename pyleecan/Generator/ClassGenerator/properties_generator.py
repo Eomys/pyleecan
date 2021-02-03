@@ -192,6 +192,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
                 + "')\n"
             )
         set_str += TAB5 + "value[ii] = class_obj(init_dict=obj)\n"
+        set_str += TAB4 + "value[ii].parent = self\n"
         set_str += TAB2 + "if value == -1:\n"
         set_str += TAB3 + "value = list()\n"
     elif (

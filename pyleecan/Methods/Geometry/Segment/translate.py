@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+from ....Methods.Geometry.Segment import PointTranslateSegmentError
+
+
 def translate(self, Zt):
     """Translate the Segment object
 
@@ -29,9 +31,3 @@ def translate(self, Zt):
     # Modification from the translation of Segment
     self.begin = self.begin + Zt
     self.end = self.end + Zt
-
-
-class PointTranslateSegmentError(Exception):
-    """ """
-
-    pass

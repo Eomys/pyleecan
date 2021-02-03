@@ -601,6 +601,7 @@ class XOutput(Output):
                         "pyleecan.Classes", obj.get("__class__"), "paramexplorer_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                value[ii].parent = self
         if value == -1:
             value = list()
         check_var("paramexplorer_list", value, "[ParamExplorer]")
@@ -632,6 +633,7 @@ class XOutput(Output):
                         "pyleecan.Classes", obj.get("__class__"), "output_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                value[ii].parent = self
         if value == -1:
             value = list()
         check_var("output_list", value, "[Output]")

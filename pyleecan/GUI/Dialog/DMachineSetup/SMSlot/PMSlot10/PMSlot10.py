@@ -8,7 +8,7 @@ from PySide2.QtWidgets import QWidget
 from ......Classes.SlotM10 import SlotM10
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.Gen_PMSlot10 import Gen_PMSlot10
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -52,7 +52,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
             self.unit_Hmag,
         ]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)

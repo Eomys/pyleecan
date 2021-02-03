@@ -16,8 +16,10 @@ def comp_height_active(self):
 
     """
 
-    Rbo = self.get_Rbo()
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z6 = point_dict["Z6"]
 
     if self.is_outwards():
         return abs(Z4) - abs((Z3 + Z6) / 2)

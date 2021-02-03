@@ -68,15 +68,22 @@ def plot(
     (fig, axes, patch_leg, label_leg) = init_fig(fig)
 
     # setup the patch of the short circuit ring if needed
+    patches = list()
     if not is_lam_only:
-        patches = list()
-
-        Rmw = self.slot.comp_radius_mid_active()
-        patches.append(
-            Wedge(
-                (0, 0), Rmw + self.Hscr / 2.0, 0, 360, width=self.Hscr, color=SCR_COLOR
-            )
-        )  # Full ring
+        try:
+            Rmw = self.slot.comp_radius_mid_active()
+            patches.append(
+                Wedge(
+                    (0, 0),
+                    Rmw + self.Hscr / 2.0,
+                    0,
+                    360,
+                    width=self.Hscr,
+                    color=SCR_COLOR,
+                )
+            )  # Full ring
+        except:
+            pass
 
     # Display the result
     axes.set_xlabel("(m)")

@@ -11,7 +11,7 @@ from ......Classes.SlotUD import SlotUD
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.Ui_PWSlotUD import Ui_PWSlotUD
 from ......GUI.Dialog.DMatLib.MatLib import MatLib
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dxf.DXF_Slot import DXF_Slot
 from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 
@@ -47,7 +47,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         # Setup Path selector for Json files
         self.w_path_json.obj = None
         self.w_path_json.param_name = None
-        self.w_path_json.verbose_name = "Import SlotUD.json"
+        self.w_path_json.verbose_name = "Load from json"
         self.w_path_json.extension = "JSON file (*.json)"
         self.w_path_json.update()
 
@@ -73,11 +73,11 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         lam.plot(fig=self.w_viewer.fig, is_show_fig=False)
 
         # Update the Graph
-        self.w_viewer.draw()
-        self.w_viewer.axes.axis("off")
-        self.w_viewer.axes.autoscale(enable=True, axis="both")
-        if self.w_viewer.axes.get_legend():
+        self.w_viewer.axes.set_axis_off()
+        self.w_viewer.axes.axis("equal")
+        if self.w_viewer.axes.get_legend() is not None:
             self.w_viewer.axes.get_legend().remove()
+        self.w_viewer.draw()
 
     def load_slot(self):
         """Load the selected json file and display the slot"""

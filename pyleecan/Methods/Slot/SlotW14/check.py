@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.SlotW14 import *
 
 
 def check(self):
@@ -37,15 +38,3 @@ def check(self):
         raise S14_Rbo1CheckError(
             "W3 is too high comparing to the lamination bore radius (Rbo)"
         )
-
-
-class S14_Rbo0CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S14_Rbo1CheckError(SlotCheckError):
-    """ """
-
-    pass

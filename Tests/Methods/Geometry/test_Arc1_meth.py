@@ -5,10 +5,13 @@ import matplotlib.pyplot as plt
 from numpy import array, exp, pi, sqrt
 
 from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Methods.Geometry.Arc1.check import PointArc1Error, RadiusArc1Error
-from pyleecan.Methods.Geometry.Arc1.discretize import NbPointArc1DError
-from pyleecan.Methods.Geometry.Arc1.rotate import AngleRotationArc1Error
-from pyleecan.Methods.Geometry.Arc1.translate import PointTranslateArc1Error
+from pyleecan.Methods.Geometry.Arc1 import (
+    PointArc1Error,
+    RadiusArc1Error,
+    NbPointArc1DError,
+    AngleRotationArc1Error,
+    PointTranslateArc1Error,
+)
 from Tests import save_plot_path as save_path
 import pytest
 

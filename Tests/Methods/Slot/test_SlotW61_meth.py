@@ -4,12 +4,12 @@ import pytest
 
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.SlotW61 import SlotW61
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.SlotW61.build_geometry_active import S61_WindError
-from pyleecan.Methods.Slot.SlotW61.check import S61_InnerCheckError
-from pyleecan.Methods.Slot.SlotW61.check import S61_WindWError
+from pyleecan.Classes.Slot import Slot
+from pyleecan.Methods.Slot.SlotW61 import (
+    S61_InnerCheckError,
+    S61_WindError,
+    S61_WindWError,
+)
 
 
 # For AlmostEqual
@@ -83,7 +83,7 @@ class Test_SlotW61_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
-        b = comp_surface(test_obj.slot)
+        b = Slot.comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -109,7 +109,7 @@ class Test_SlotW61_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -123,7 +123,7 @@ class Test_SlotW61_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 

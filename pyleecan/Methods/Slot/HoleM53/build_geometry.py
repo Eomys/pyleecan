@@ -5,8 +5,6 @@ from numpy import cos, exp, sin
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
-from ....Functions.Geometry.inter_line_circle import inter_line_circle
-from ....Methods.Slot.HoleM53 import Slot53InterError
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):
@@ -35,49 +33,32 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         st = "_Stator"
     else:
         st = "_Rotor"
+    # Get all the points
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    Z7 = point_dict["Z7"]
+    Z8 = point_dict["Z8"]
+    Z9 = point_dict["Z9"]
+    Z10 = point_dict["Z10"]
+    Z11 = point_dict["Z11"]
+
+    Z1s = point_dict["Z1s"]
+    Z2s = point_dict["Z2s"]
+    Z3s = point_dict["Z3s"]
+    Z4s = point_dict["Z4s"]
+    Z5s = point_dict["Z5s"]
+    Z6s = point_dict["Z6s"]
+    Z7s = point_dict["Z7s"]
+    Z8s = point_dict["Z8s"]
+    Z9s = point_dict["Z9s"]
+    Z10s = point_dict["Z10s"]
+    Z11s = point_dict["Z11s"]
     Rext = self.get_Rext()
-
-    Z7 = Rext - self.H0 - 1j * self.W1 / 2
-    Z6 = Z7 - 1j * (self.H2 - self.H3) * cos(self.W4)
-    Z8 = Z7 + (self.H2 - self.H3) * sin(self.W4)
-
-    # Compute the coordinate in the ref of Z6 with rotation -W4
-    Z5 = self.W2 * exp(-1j * self.W4) + Z6
-    Z4 = (self.W2 - 1j * self.H3) * exp(-1j * self.W4) + Z6
-    Z3 = (self.W2 + self.W3 - 1j * self.H3) * exp(-1j * self.W4) + Z6
-    Z2 = (self.W2 + self.W3) * exp(-1j * self.W4) + Z6
-    Z9 = (self.W2 + 1j * (self.H2 - self.H3)) * exp(-1j * self.W4) + Z6
-    Z10 = (self.W2 + self.W3 + 1j * (self.H2 - self.H3)) * exp(-1j * self.W4) + Z6
-
-    # Z1 and Z11 are defined as intersection between line and circle
-    Zlist = inter_line_circle(Z8, Z10, Rext - self.H1)
-    if len(Zlist) == 2 and Zlist[0].imag < 0 and Zlist[0].real > 0:
-        Z11 = Zlist[0]
-    elif len(Zlist) == 2 and Zlist[1].imag < 0 and Zlist[1].real > 0:
-        Z11 = Zlist[1]
-    else:
-        raise Slot53InterError("ERROR: Slot 53, Can't find Z11 coordinates")
-
-    Zlist = inter_line_circle(Z2, Z6, Rext - self.H1)
-    if len(Zlist) == 2 and Zlist[0].imag < 0 and Zlist[0].real > 0:
-        Z1 = Zlist[0]
-    elif len(Zlist) == 2 and Zlist[1].imag < 0 and Zlist[1].real > 0:
-        Z1 = Zlist[1]
-    else:
-        raise Slot53InterError("ERROR: Slot 53, Can't find Z1 coordinates")
-
-    # Symmetry
-    Z1s = Z1.conjugate()
-    Z2s = Z2.conjugate()
-    Z3s = Z3.conjugate()
-    Z4s = Z4.conjugate()
-    Z5s = Z5.conjugate()
-    Z6s = Z6.conjugate()
-    Z7s = Z7.conjugate()
-    Z8s = Z8.conjugate()
-    Z9s = Z9.conjugate()
-    Z10s = Z10.conjugate()
-    Z11s = Z11.conjugate()
 
     # Air surface with magnet_0
     curve_list = list()

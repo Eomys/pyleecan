@@ -2,6 +2,7 @@
 from numpy import linspace
 
 from ....Methods.Machine import LINE_NPOINT_D
+from ....Methods.Geometry.Segment import NbPointSegmentDError
 
 
 def discretize(self, nb_point=LINE_NPOINT_D):
@@ -42,9 +43,3 @@ def discretize(self, nb_point=LINE_NPOINT_D):
 
     # Generate the points with the parametric representation of the line
     return z1 - (z1 - z2) * t
-
-
-class NbPointSegmentDError(Exception):
-    """ """
-
-    pass

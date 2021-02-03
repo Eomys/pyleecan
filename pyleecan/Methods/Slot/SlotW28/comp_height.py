@@ -20,7 +20,8 @@ def comp_height(self):
     """
     Rbo = self.get_Rbo()
 
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, rot_sign] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z5 = point_dict["Z5"]
     if self.is_outwards():
         Ztan2 = Z5 + Z5.imag * (1 - 1j)
         return Ztan2.real - Rbo

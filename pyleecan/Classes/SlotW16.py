@@ -57,6 +57,11 @@ try:
 except ImportError as error:
     comp_surface = error
 
+try:
+    from ..Methods.Slot.SlotW16.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -155,6 +160,17 @@ class SlotW16(Slot):
         )
     else:
         comp_surface = comp_surface
+    # cf Methods.Slot.SlotW16.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW16 method plot_schematics: " + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
     # save and copy methods are available in all object
     save = save
     copy = copy

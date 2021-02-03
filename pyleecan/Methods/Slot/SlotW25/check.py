@@ -2,7 +2,8 @@
 
 from numpy import arcsin, pi
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.SlotW25 import *
 
 
 def check(self):
@@ -35,15 +36,3 @@ def check(self):
         and 2 * arcsin(self.W3 / (2 * Rbo - self.H2 - self.H1)) > 2 * pi / self.Zs
     ):
         raise S25_HWCheckError("The teeth are too wide, reduce Zs, H2 or W3")
-
-
-class S25_W4CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S25_HWCheckError(SlotCheckError):
-    """ """
-
-    pass

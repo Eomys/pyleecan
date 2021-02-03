@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from pyleecan.Classes.Segment import Segment
 
-from pyleecan.Methods.Geometry.Segment.check import PointSegmentError
-from pyleecan.Methods.Geometry.Segment.discretize import NbPointSegmentDError
-from pyleecan.Methods.Geometry.Segment.rotate import AngleRotationSegmentError
-from pyleecan.Methods.Geometry.Segment.translate import PointTranslateSegmentError
+from pyleecan.Methods.Geometry.Segment import (
+    PointSegmentError,
+    NbPointSegmentDError,
+    AngleRotationSegmentError,
+    PointTranslateSegmentError,
+)
 from numpy import pi, array, exp, sqrt
 import pytest
 

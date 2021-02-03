@@ -16,4 +16,6 @@ def comp_height_active(self):
 
     """
 
-    return self.H2
+    point_dict = self._comp_point_coordinate()
+    Rbo = self.get_Rbo()
+    return abs(Rbo - abs(point_dict["Z2"]))

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import pi
 
-from ....Methods.Machine.LamSlot.build_geometry import build_geometry as build_geo
+from ....Classes.LamSlot import LamSlot
 
 
 def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -43,7 +43,7 @@ def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=
         + str(sym)
     )
     # getting the LamSlot surface
-    surf_list = build_geo(self, sym=sym)
+    surf_list = LamSlot.build_geometry(self, sym=sym)
 
     Zs = self.slot.Zs
     slot_pitch = 2 * pi / Zs
