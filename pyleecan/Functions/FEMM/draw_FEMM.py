@@ -229,5 +229,5 @@ def draw_FEMM(
 
 class FEMMError(Exception):
     """Raised when FEMM is not possible to run"""
-    pass
 
+    pass
