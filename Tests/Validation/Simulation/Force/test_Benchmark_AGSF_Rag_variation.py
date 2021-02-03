@@ -61,7 +61,7 @@ def test_Benchmark_AGSF_Rag():
     Rrbo = 0.0450
 
     # Test 1 : at 10% of the air-gap
-    K = [10, 50, 90]
+    K = [90, 50, 10]
     Nk = len(K)
 
     simu_list = list()
@@ -74,13 +74,14 @@ def test_Benchmark_AGSF_Rag():
 
         simu_list.append(simu.copy())
         simu_list[ik].mag.Rag_enforced = Rag
-        out_list.append(simu_list[ik].run())
+        out = simu_list[ik].run()
+        out_list.append(out)
         legend_list.append(str(k) + "%")
 
-        if ik < Nk - 1:
+        if ik > 0:
             AGSF_list.append(out_list[ik].force.AGSF)
 
-    out_list[-1].plot_2D_Data(
+    out_list[0].plot_2D_Data(
         "force.AGSF",
         "angle=[0,3.14]",
         "time=0",
@@ -90,7 +91,7 @@ def test_Benchmark_AGSF_Rag():
         is_show_fig=False,
     )
 
-    out_list[-1].plot_2D_Data(
+    out_list[0].plot_2D_Data(
         "force.AGSF",
         "wavenumber",
         "freqs=0",
@@ -103,6 +104,8 @@ def test_Benchmark_AGSF_Rag():
         barwidth=800,
     )
 
+    return out
+
 
 if __name__ == "__main__":
-    test_Benchmark_AGSF_Rag()
+    out = test_Benchmark_AGSF_Rag()

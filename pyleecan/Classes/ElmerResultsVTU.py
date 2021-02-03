@@ -18,9 +18,9 @@ from .Elmer import Elmer
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Elmer.ElmerResultsVTU.get_meshsolution import get_meshsolution
+    from ..Methods.Elmer.ElmerResultsVTU.build_meshsolution import build_meshsolution
 except ImportError as error:
-    get_meshsolution = error
+    build_meshsolution = error
 
 
 from ._check import InitUnKnowClassError
@@ -31,18 +31,18 @@ class ElmerResultsVTU(Elmer):
 
     VERSION = 1
 
-    # cf Methods.Elmer.ElmerResultsVTU.get_meshsolution
-    if isinstance(get_meshsolution, ImportError):
-        get_meshsolution = property(
+    # cf Methods.Elmer.ElmerResultsVTU.build_meshsolution
+    if isinstance(build_meshsolution, ImportError):
+        build_meshsolution = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ElmerResultsVTU method get_meshsolution: "
-                    + str(get_meshsolution)
+                    "Can't use ElmerResultsVTU method build_meshsolution: "
+                    + str(build_meshsolution)
                 )
             )
         )
     else:
-        get_meshsolution = get_meshsolution
+        build_meshsolution = build_meshsolution
     # save and copy methods are available in all object
     save = save
     copy = copy
