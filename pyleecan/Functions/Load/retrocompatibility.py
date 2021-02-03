@@ -1,10 +1,12 @@
 def _search_(obj, convert_list):
-    # check if the dict is of pyleecan type
-    if "__class__" in obj.keys():
-        # V 1.0.4 => 1.1.0: New definition for LamSlotMag + SlotMag
-        if obj["__class__"] == "MachineSIPMSM" and "magnet" not in obj["rotor"]:
-            # add to list for later conversion
-            convert_list.append(obj)
+    # V 1.0.4 => 1.1.0: New definition for LamSlotMag + SlotMag
+    if (
+        "__class__" in obj.keys()
+        and obj["__class__"] == "MachineSIPMSM"
+        and "magnet" not in obj["rotor"]
+    ):
+        # add to list for later conversion
+        convert_list.append(obj)
     else:
         # walk through the dict
         for value in obj.values():
