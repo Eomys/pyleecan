@@ -447,7 +447,8 @@
             "comp_height",
             "comp_surface",
             "comp_width",
-            "plot"
+            "plot",
+            "plot_schematics"
         ],
         "mother": "Conductor",
         "name": "CondType11",
@@ -544,7 +545,8 @@
             "comp_height",
             "comp_surface",
             "comp_width",
-            "plot"
+            "plot",
+            "plot_schematics"
         ],
         "mother": "Conductor",
         "name": "CondType12",

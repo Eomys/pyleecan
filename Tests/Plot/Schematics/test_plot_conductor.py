@@ -17,11 +17,11 @@ cond_test.append(
         "test_obj": CondType11(),
     }
 )
-# cond_test.append(
-#     {
-#         "test_obj": CondType12(),
-#     }
-# )
+cond_test.append(
+    {
+        "test_obj": CondType12(),
+    }
+)
 
 
 class Test_cond_schematics(object):
