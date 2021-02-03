@@ -47,9 +47,10 @@ def run_single_simu(
         except Exception as err:
             print(err)
             is_error = True
+            result = None
 
     # The simulation is the reference one
-    if index == ref_simu_index:
+    if index == ref_simu_index and not is_error:
         # Create new Output from XOutput content
         Output = import_class("pyleecan.Classes", "Output")
         result = Output(init_dict=Output.as_dict(result))
