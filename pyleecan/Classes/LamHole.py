@@ -386,7 +386,8 @@ class LamHole(Lamination):
                         "pyleecan.Classes", obj.get("__class__"), "hole"
                     )
                     value[ii] = class_obj(init_dict=obj)
-                value[ii].parent = self
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("hole", value, "[Hole]")
