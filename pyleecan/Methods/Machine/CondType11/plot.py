@@ -2,15 +2,21 @@
 
 from matplotlib.patches import Patch, Rectangle
 from matplotlib.pyplot import axis, legend, subplots
+from ....definitions import config_dict
+
+COND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][0]
+INS_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][1]
 
 
-def plot(self):
+def plot(self, is_show_fig=True):
     """Plot a Conductor in a matplotlib fig
 
     Parameters
     ----------
     self : CondType11
         A CondType11 object
+    is_show_fig : bool
+        To call show at the end of the method
 
     Returns
     -------
@@ -22,7 +28,7 @@ def plot(self):
     # Conductor insulation
     Wcond = self.comp_width()
     Hcond = self.comp_height()
-    patches_list.append(Rectangle((0, 0), Wcond, Hcond, color="y"))
+    patches_list.append(Rectangle((0, 0), Wcond, Hcond, color=COND_COLOR))
 
     # Wire conductor
     for ii in range(self.Nwppc_tan):
@@ -30,7 +36,9 @@ def plot(self):
             # Computation of bottom left corner coodinates
             x = self.Wins_wire + ii * (self.Wwire + 2 * self.Wins_wire)
             y = self.Wins_wire + jj * (self.Hwire + 2 * self.Wins_wire)
-            patches_list.append(Rectangle((x, y), self.Wwire, self.Hwire, color="r"))
+            patches_list.append(
+                Rectangle((x, y), self.Wwire, self.Hwire, color=INS_COLOR)
+            )
 
     # Display
     fig, ax = subplots()
@@ -55,4 +63,5 @@ def plot(self):
     label_leg.append("Active wire section")
 
     legend(patch_leg, label_leg)
-    fig.show()
+    if is_show_fig:
+        fig.show()
