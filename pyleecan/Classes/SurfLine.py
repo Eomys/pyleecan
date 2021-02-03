@@ -296,7 +296,8 @@ class SurfLine(Surface):
                         "pyleecan.Classes", obj.get("__class__"), "line_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-                value[ii].parent = self
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("line_list", value, "[Line]")
