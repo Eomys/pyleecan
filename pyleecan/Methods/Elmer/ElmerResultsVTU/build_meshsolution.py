@@ -16,7 +16,7 @@ from ....Methods.Elmer.ElmerResultsVTU import ElmerResultsVTUError
 # TODO add groups, see get_meshsolution of MagFEMM
 
 
-def get_meshsolution(self):
+def build_meshsolution(self):
     """Get the mesh and solution data from an Elmer VTU results file
 
     Parameters
@@ -63,7 +63,7 @@ def get_meshsolution(self):
             # only regard max. 3 components
             if siz > 3:
                 logger.warning(
-                    f'ElmerResultsVTU.get_meshsolution(): size of data "{key}" > 3'
+                    f'ElmerResultsVTU.build_meshsolution(): size of data "{key}" > 3'
                     + " - "
                     + "Data will be truncated."
                 )

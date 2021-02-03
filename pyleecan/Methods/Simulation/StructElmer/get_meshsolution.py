@@ -54,6 +54,6 @@ def get_meshsolution(self, output):
     ElmerVtu.label = "Elmer Structural"
     ElmerVtu.file_path = join(fea_path, "Results", "case_t0001.vtu")
 
-    output.struct.meshsolution = ElmerVtu.get_meshsolution()
+    output.struct.meshsolution = ElmerVtu.build_meshsolution()
 
     return True
