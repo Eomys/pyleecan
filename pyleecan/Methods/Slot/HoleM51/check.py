@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
 from numpy import pi
+from ....Methods.Slot.HoleM51 import *
 
 
 def check(self):
@@ -52,27 +53,3 @@ def check(self):
 
     if alpha > pi / 2:
         raise S51_AlphaCheckError("You must have alpha < pi/2")
-
-
-class S51_NoneError(SlotCheckError):
-    """Raised when a propery of HoleM51 is None"""
-
-    pass
-
-
-class S51_WCheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S51_RHCheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S51_AlphaCheckError(SlotCheckError):
-    """ """
-
-    pass

@@ -25,7 +25,7 @@ class SWindPat(Gen_SWindPat, QWidget):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
     # Information for DMachineSetup nav
-    step_name = "Winding Pattern"
+    step_name = "Winding (1)"
 
     def __init__(self, machine, matlib, is_stator=False):
         """Initialize the GUI according to machine
@@ -287,7 +287,7 @@ class SWindPat(Gen_SWindPat, QWidget):
             A SWindPat object
         """
         try:
-            self.obj.plot_activeing()
+            self.obj.plot_winding()
         except (AssertionError, WindingError) as e:
             QMessageBox().critical(self, self.tr("Error"), str(e))
 

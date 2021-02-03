@@ -4,11 +4,8 @@ import pytest
 from pyleecan.Classes.SlotW14 import SlotW14
 from numpy import ndarray, arcsin
 from pyleecan.Classes.LamSlot import LamSlot
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
-from pyleecan.Methods.Slot.SlotW14.check import S14_Rbo1CheckError
+from pyleecan.Classes.Slot import Slot
+from pyleecan.Methods.Slot.SlotW14 import S14_Rbo1CheckError
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -47,6 +44,39 @@ class Test_SlotW14_meth(object):
     """pytest for SlotW14 methods"""
 
     @pytest.mark.parametrize("test_dict", slotW14_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        # Check width
+        assert abs(point_dict["Z1"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z2"] - point_dict["Z8"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z2"].real - point_dict["Z3"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
+            test_obj.slot.H3
+        )
+        assert abs(point_dict["Z9"] - point_dict["Z8"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z8"].real - point_dict["Z7"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z7"] - point_dict["Z6"]) == pytest.approx(
+            test_obj.slot.H3
+        )
+
+    @pytest.mark.parametrize("test_dict", slotW14_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
@@ -57,7 +87,7 @@ class Test_SlotW14_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface(test_obj.slot)
+        b = Slot.comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < 1e-5, msg
 
@@ -72,7 +102,7 @@ class Test_SlotW14_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_active(test_obj.slot)
+        b = Slot.comp_surface_active(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < 1e-5, msg
 
@@ -87,7 +117,7 @@ class Test_SlotW14_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < 1e-5, msg
 
@@ -98,7 +128,7 @@ class Test_SlotW14_meth(object):
         a = test_obj.slot.comp_angle_opening()
         assert a == 2 * arcsin(test_obj.slot.W0 / (2 * 0.1325))
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 

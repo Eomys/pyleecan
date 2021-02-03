@@ -35,49 +35,26 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         st = "_Stator"
     else:
         st = "_Rotor"
-    Rext = self.get_Rext()
 
-    # "Tooth" angle (P1',0,P1)
-    alpha_T = 2 * arcsin(self.W3 / (2 * (Rext - self.H1)))
-    # magnet pole pitch angle (Z1,0,Z1')
-    alpha_S = (2 * pi / self.Zh) - alpha_T
-    # Angle (P1,P1',P4') and (P5',P4', )
-    alpha = (pi - self.W0) / 2
-    # Half slot pitch
-    hssp = pi / self.Zh
+    # Get all the points
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    Z7 = point_dict["Z7"]
+    Z8 = point_dict["Z8"]
 
-    Z1 = (Rext - self.H1) * exp(-1j * alpha_S / 2)
-    x11 = 2 * sin(alpha_S / 2) * (Rext - self.H1)  # Distance from P1 to P1'
-    # In rect triangle P4, P1, perp (P1,P1') with P4
-    H = tan(alpha) * (x11 / 2 - self.W1 / 2)
-    Z4 = Z1.real - H - 1j * self.W1 / 2
-
-    x45 = self.H2 / cos(alpha)  # distance from P4 to P5
-    Z5 = Z4 - x45
-
-    # Get coordinates of "random" points on (P5,P8) and (P1,P8)
-    # In ref P4 center and P1 on X+ axis
-    Z58 = (self.W4 - 1j * self.H2) * exp(1j * angle(Z1 - Z4)) + Z4
-    # In the tooth ref
-    Z18 = (Rext - self.H1 - self.H2 + 1j * self.W3 / 2) * exp(-1j * hssp)
-    Z8 = inter_line_line(Z5, Z58, Z1, Z18)[0]
-
-    # In ref "b" P4 center and P1 on X+ axis
-    Z8b = (Z8 - Z4) * exp(-1j * angle(Z1 - Z4))
-    Z2 = (Z8b + 1j * self.H2 - self.W2) * exp(1j * angle(Z1 - Z4)) + Z4
-    Z3 = (Z8b + 1j * self.H2 - self.W2 - self.W4) * exp(1j * angle(Z1 - Z4)) + Z4
-    Z7 = (Z8b - self.W2) * exp(1j * angle(Z1 - Z4)) + Z4
-    Z6 = (Z8b - self.W2 - self.W4) * exp(1j * angle(Z1 - Z4)) + Z4
-
-    # Symmetry
-    Z1s = Z1.conjugate()
-    Z2s = Z2.conjugate()
-    Z3s = Z3.conjugate()
-    Z4s = Z4.conjugate()
-    Z5s = Z5.conjugate()
-    Z6s = Z6.conjugate()
-    Z7s = Z7.conjugate()
-    Z8s = Z8.conjugate()
+    Z1s = point_dict["Z1s"]
+    Z2s = point_dict["Z2s"]
+    Z3s = point_dict["Z3s"]
+    Z4s = point_dict["Z4s"]
+    Z5s = point_dict["Z5s"]
+    Z6s = point_dict["Z6s"]
+    Z7s = point_dict["Z7s"]
+    Z8s = point_dict["Z8s"]
 
     surf_list = list()
     # Z_list = array([Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8])
@@ -202,6 +179,47 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     S7 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
 
+    # Air surface without magnet_0 and W1 > 0
+    curve_list = list()
+    curve_list.append(Segment(Z1, Z8))
+    curve_list.append(Segment(Z8, Z5))
+    curve_list.append(Segment(Z5, Z4))
+    curve_list.append(Segment(Z4, Z1))
+
+    # initiating the label of the line on the air surface
+    curve_list = set_name_line(curve_list, "hole_1_line")
+    point_ref = (Z5 + Z1) / 2
+
+    S8 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+
+    # Air surface without magnet_1 and W1 > 0
+    curve_list = list()
+    curve_list.append(Segment(Z1s, Z8s))
+    curve_list.append(Segment(Z8s, Z5s))
+    curve_list.append(Segment(Z5s, Z4s))
+    curve_list.append(Segment(Z4s, Z1s))
+
+    # initiating the label of the line on the air surface
+    curve_list = set_name_line(curve_list, "hole_2_line")
+    point_ref = (Z5s + Z1s) / 2
+
+    S9 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+
+    # Air surface No magnet and W1 == 0
+    curve_list = list()
+    curve_list.append(Segment(Z4, Z1))
+    curve_list.append(Segment(Z1, Z8))
+    curve_list.append(Segment(Z8, Z5))
+    curve_list.append(Segment(Z5, Z8s))
+    curve_list.append(Segment(Z8s, Z1s))
+    curve_list.append(Segment(Z1s, Z4))
+
+    # initiating the label of the line on the air surface
+    curve_list = set_name_line(curve_list, "hole_1_line")
+    point_ref = (Z4 + Z5) / 2
+
+    S12 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+
     # Create the surface list by selecting the correct ones
     if self.magnet_0 and self.magnet_1 and self.W1 > 0:
         surf_list = [S1, S2, S3, S6, S5, S4]
@@ -215,10 +233,12 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     #     surf_list = [S8, S6, S5, S4]
     # elif not self.magnet_0 and self.magnet_1 and self.W1 == 0:
     #     surf_list = [S11, S5, S4]
-    # elif not self.magnet_0 and not self.magnet_1 and self.W1 > 0:
-    #     surf_list = [S8, S9]
-    # elif not self.magnet_0 and not self.magnet_1 and self.W1 == 0:
-    #     surf_list = [S12]
+    elif not self.magnet_0 and not self.magnet_1 and self.W1 > 0:
+        surf_list = [S8, S9]
+    elif not self.magnet_0 and not self.magnet_1 and self.W1 == 0:
+        surf_list = [S12]
+    else:
+        raise Exception("Not implemented Yet")
 
     # Apply the transformations
     for surf in surf_list:

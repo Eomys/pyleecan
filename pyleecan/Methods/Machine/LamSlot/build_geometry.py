@@ -6,7 +6,7 @@ from ....Classes.SurfLine import SurfLine
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfRing import SurfRing
-from ....Methods.Machine.Lamination.build_geometry import build_geometry as build_geo
+from ....Classes.Lamination import Lamination
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0):
@@ -78,7 +78,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         for line in bore_list:
             line.label = label_bore
     else:  # No slot
-        return build_geo(self, sym=sym, alpha=alpha, delta=delta)
+        return Lamination.build_geometry(self, sym=sym, alpha=alpha, delta=delta)
 
     # Create the lamination surface(s)
     surf_list = list()

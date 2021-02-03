@@ -3,6 +3,7 @@
 from numpy import exp, pi
 
 from ....Classes.Trapeze import Trapeze
+from ....Methods.Slot.VentilationTrap import *
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_stator=True):
@@ -61,9 +62,3 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_stator=True):
             )
         )
     return surf_list
-
-
-class TrapezeBuildGeometryError(Exception):
-    """raised when the parameter have not good type"""
-
-    pass

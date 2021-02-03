@@ -13,6 +13,8 @@ from pyleecan.definitions import DATA_DIR
 from Tests import save_validation_path as save_path
 
 
+@pytest.mark.long
+@pytest.mark.FEMM
 def test_AC_IPMSM_AGSF_transfer_Kmesh():
     """Validation of the AGSF transfer algorithm for SPMSM benchmark machine: sensitivity to the maximum considered wavenumbers"""
 

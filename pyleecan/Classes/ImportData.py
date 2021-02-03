@@ -225,6 +225,7 @@ class ImportData(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "axes"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                value[ii].parent = self
         if value == -1:
             value = list()
         check_var("axes", value, "[ImportData]")

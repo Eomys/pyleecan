@@ -78,7 +78,7 @@ class TestSMSlot_inset(object):
         assert setup["widget"].w_mat.c_mat_type.currentIndex() == 2
         assert (
             setup["widget"].w_slot.w_out.out_wind_surface.text()
-            == "Active surface: 0.0003521 m²"
+            == "Active surface: 0.0003521 [m²]"
         )
 
     def test_set_material(self, setup):

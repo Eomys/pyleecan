@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import exp
+from ....Methods.Geometry.Arc2 import AngleRotationArc2Error
 
 
 def rotate(self, angle):
@@ -26,9 +27,3 @@ def rotate(self, angle):
     # Modification from the rotation  of the object
     self.begin = self.begin * exp(1j * angle)
     self.center = self.center * exp(1j * angle)
-
-
-class AngleRotationArc2Error(Exception):
-    """ """
-
-    pass

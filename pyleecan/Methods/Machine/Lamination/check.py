@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Machine import MachineCheckError
+from ....Methods.Machine.Lamination import *
 
 
 def check(self):
@@ -52,27 +52,3 @@ def check(self):
                 raise LC_VentYokeOut(
                     "The ventilation ducts cross the yoke " "external radius"
                 )
-
-
-class LaminationCheckError(MachineCheckError):
-    """ """
-
-    pass
-
-
-class LC_RadiusError(LaminationCheckError):
-    """  """
-
-    pass
-
-
-class LC_VentYokeOut(LaminationCheckError):
-    """ """
-
-    pass
-
-
-class LC_VentYokeIn(LaminationCheckError):
-    """ """
-
-    pass

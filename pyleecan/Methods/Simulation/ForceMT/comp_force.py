@@ -46,7 +46,7 @@ def comp_force(self, output, axes_dict):
         is_oneperiod=is_periodicity_a,
         is_antiperiod=is_antiper_a and is_periodicity_a,
     )
-	
+
     if self.is_periodicity_t is not None:
         is_periodicity_t = self.is_periodicity_t
 

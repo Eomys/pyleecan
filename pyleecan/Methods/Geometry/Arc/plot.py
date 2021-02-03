@@ -11,6 +11,7 @@ def plot(
     linewidth=1,
     color="black",
     label=None,
+    offset_label=0,
     fontsize=12,
 ):
     """Plot the Arc
@@ -31,6 +32,8 @@ def plot(
         Color of the line
     label : str
         To add a label at the middle of the line
+    offset_label : complex
+        Complex value to shift the label from the middle
     fontsize : int
         Size of the font for the label (if any)
     """
@@ -48,8 +51,8 @@ def plot(
     if label is not None:
         Zmid = self.get_middle()
         axes.text(
-            Zmid.real,
-            Zmid.imag,
+            Zmid.real + offset_label.real,
+            Zmid.imag + offset_label.imag,
             label,
             fontsize=fontsize,
             bbox=TEXT_BOX,

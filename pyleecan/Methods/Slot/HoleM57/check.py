@@ -2,7 +2,8 @@
 
 from numpy import arcsin, pi
 
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from pyleecan.Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.HoleM57 import *
 
 
 def check(self):
@@ -35,9 +36,3 @@ def check(self):
         raise S57_NoneError("You must set H1 !")
     elif self.H2 is None:
         raise S57_NoneError("You must set H2 !")
-
-
-class S57_NoneError(SlotCheckError):
-    """Raised when a propery of HoleM57 is None"""
-
-    pass

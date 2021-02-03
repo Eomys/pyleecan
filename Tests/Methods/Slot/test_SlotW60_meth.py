@@ -4,14 +4,12 @@ from numpy import pi
 
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.SlotW60 import SlotW60
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.SlotW60.build_geometry_active import S60_WindError
-from pyleecan.Methods.Slot.SlotW60.check import (
+from pyleecan.Classes.Slot import Slot
+from pyleecan.Methods.Slot.SlotW60 import (
     S60_InnerCheckError,
     S60_RCheckError,
     S60_WindWError,
+    S60_WindError,
 )
 
 # For AlmostEqual
@@ -83,7 +81,7 @@ class Test_SlotW60_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
-        b = comp_surface(test_obj.slot)
+        b = Slot.comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -129,7 +127,7 @@ class Test_SlotW60_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -150,7 +148,7 @@ class Test_SlotW60_meth(object):
         a = test_obj.slot.comp_angle_opening()
         assert a == 2 * pi / test_obj.slot.Zs
 
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 

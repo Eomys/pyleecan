@@ -8,7 +8,7 @@ from PySide2.QtWidgets import QWidget
 from ......Classes.SlotW11 import SlotW11
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.Gen_PWSlot11 import Gen_PWSlot11
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -56,7 +56,7 @@ class PWSlot11(Gen_PWSlot11, QWidget):
             self.unit_R1,
         ]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Fill the fields with the lamination values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
@@ -74,7 +74,9 @@ class PWSlot11(Gen_PWSlot11, QWidget):
 
         # Update the unit combobox with the current m unit name
         self.c_H1_unit.clear()
-        self.c_H1_unit.addItems([gui_option.unit.get_m_name(), "rad", "deg"])
+        self.c_H1_unit.addItems(
+            ["[" + gui_option.unit.get_m_name() + "]", "[rad]", "[deg]"]
+        )
         if self.slot.H1_is_rad:
             self.c_H1_unit.setCurrentIndex(1)  # Rad
         else:

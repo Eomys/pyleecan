@@ -3,6 +3,7 @@
 
 from ....Classes.Circle import Circle
 from numpy import exp, pi
+from ....Methods.Slot.VentilationCirc import *
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_stator=True):
@@ -69,15 +70,3 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_stator=True):
         )
 
     return surf_list
-
-
-class CircleBuildGeometryError(Exception):
-    """ """
-
-    pass
-
-
-class SymmetryError(Exception):
-    """ """
-
-    pass

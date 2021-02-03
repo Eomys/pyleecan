@@ -249,7 +249,7 @@ class TestPHoleM50(object):
 
         # Nan are there because the value are not correct for the sin, cos and tan methods. But with true values, it works.
 
-        assert setup["widget"].out_slot_surface.text() == "Slot suface (2 part): nan m²"
-        assert setup["widget"].out_magnet_surface.text() == "Magnet surface: 0.0608 m²"
-        assert setup["widget"].out_alpha.text() == "alpha: nan rad (nan°)"
-        assert setup["widget"].out_W5.text() == "W5: nan m"
+        assert setup["widget"].out_slot_surface.text() == "Slot surface: nan [m²]"
+        assert setup["widget"].out_magnet_surface.text() == "Magnet surf.: 0.0608 [m²]"
+        assert setup["widget"].out_alpha.text() == "alpha: nan [rad] (nan°)"
+        assert setup["widget"].out_W5.text() == "W5: nan [m]"

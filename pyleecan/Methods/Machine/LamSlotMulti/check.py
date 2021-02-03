@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Machine.Lamination.check import LaminationCheckError
+from ....Methods.Machine.LamSlotMulti import LamSlotMultiAlphaError
 from numpy import pi
 
 
@@ -41,9 +41,3 @@ def check(self):
         raise LamSlotMultiAlphaError(
             "Alpha should be an ordered array with values between 0 and 2*pi"
         )
-
-
-class LamSlotMultiAlphaError(LaminationCheckError):
-    """ """
-
-    pass

@@ -17,4 +17,4 @@ def comp_height(self):
 
     """
 
-    return self.H2
+    return self.comp_height_active()

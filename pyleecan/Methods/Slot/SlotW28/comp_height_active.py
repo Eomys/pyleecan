@@ -18,7 +18,10 @@ def comp_height_active(self):
 
     """
 
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, rot_sign] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z2 = point_dict["Z2"]
+    Z5 = point_dict["Z5"]
+    Z7 = point_dict["Z7"]
     if self.is_outwards():
         Ztan2 = Z5 + Z5.imag * (-1 - 1j)
     else:

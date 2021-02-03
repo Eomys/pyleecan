@@ -35,8 +35,12 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     # get the name of the lamination
     st = self.get_name_lam()
 
-    [Z8, Z7, Z6, Z5, Z4, Z3, Z2, Z1] = self._comp_point_coordinate()
-    X = linspace(Z6, Z5, Nrad + 1)
+    point_dict = self._comp_point_coordinate()
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    X = linspace(Z3, Z4, Nrad + 1)
 
     # Nrad+1 and Ntan+1 because 3 points => 2 zones
     Z = zeros((Nrad + 1, Ntan + 1), dtype=complex)
@@ -44,13 +48,13 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         Z[ii][:] = linspace(X[ii], X[ii].conjugate(), Ntan + 1)
 
     # The bottom and top are Arc and not a line
-    Z[0][:] = abs(Z6) * exp(1j * linspace(angle(Z6), angle(Z3), Ntan + 1))
-    Z[Nrad][:] = abs(Z5) * exp(1j * linspace(angle(Z5), angle(Z4), Ntan + 1))
+    Z[0][:] = abs(Z3) * exp(1j * linspace(angle(Z3), angle(Z6), Ntan + 1))
+    Z[Nrad][:] = abs(Z4) * exp(1j * linspace(angle(Z4), angle(Z5), Ntan + 1))
 
-    assert abs(Z[0][0] - Z6) < 1e-6
-    assert abs(Z[Nrad][0] - Z5) < 1e-6
-    assert abs(Z[0][Ntan] - Z3) < 1e-6
-    assert abs(Z[Nrad][Ntan] - Z4) < 1e-6
+    assert abs(Z[0][0] - Z3) < 1e-6
+    assert abs(Z[Nrad][0] - Z4) < 1e-6
+    assert abs(Z[0][Ntan] - Z6) < 1e-6
+    assert abs(Z[Nrad][Ntan] - Z5) < 1e-6
 
     Zc = 0  # Center of the machine
 

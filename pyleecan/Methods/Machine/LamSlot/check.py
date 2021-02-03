@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Machine.Lamination.check import LaminationCheckError
+from ....Methods.Machine.LamSlot import *
 
 
 def check(self):
@@ -38,33 +38,3 @@ def check(self):
     if Wt < 0:
         raise LSC_OverlappingSlot("The Lamination has overlapping slot")
     """
-
-
-class Lam_SlotCheckError(LaminationCheckError):
-    """ """
-
-    pass
-
-
-class LSC_OutSlotInLam(Lam_SlotCheckError):
-    """ """
-
-    pass
-
-
-class LSC_InSlotOutLam(Lam_SlotCheckError):
-    """ """
-
-    pass
-
-
-class LSC_SlotTooLong(Lam_SlotCheckError):
-    """ """
-
-    pass
-
-
-class LSC_OverlappingSlot(Lam_SlotCheckError):
-    """ """
-
-    pass

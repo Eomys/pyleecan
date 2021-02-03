@@ -8,7 +8,7 @@ from .....Classes.HoleM50 import HoleM50
 from .....Classes.Material import Material
 from .....GUI.Dialog.DMachineSetup.SMHoleMag.Ui_SMHoleMag import Ui_SMHoleMag
 from .....GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.WHoleMag import WHoleMag
-from .....Methods.Slot.Slot.check import SlotCheckError
+from .....Methods.Slot.Slot import SlotCheckError
 
 
 class SMHoleMag(Ui_SMHoleMag, QWidget):

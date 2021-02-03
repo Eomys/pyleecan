@@ -9,7 +9,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from ......GUI.Tools.WPathSelector.WPathSelector import WPathSelector
+from ......GUI.Tools.WPathSelector.WPathSelectorV import WPathSelectorV
 from ......GUI.Tools.MPLCanvas import MPLCanvas2
 from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 
@@ -20,7 +20,7 @@ class Ui_PHoleMUD(object):
     def setupUi(self, PHoleMUD):
         if not PHoleMUD.objectName():
             PHoleMUD.setObjectName(u"PHoleMUD")
-        PHoleMUD.resize(740, 440)
+        PHoleMUD.resize(813, 467)
         PHoleMUD.setMinimumSize(QSize(740, 440))
         PHoleMUD.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PHoleMUD)
@@ -30,9 +30,18 @@ class Ui_PHoleMUD(object):
 
         self.horizontalLayout.addWidget(self.w_viewer)
 
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.w_path_json = WPathSelector(PHoleMUD)
+        self.widget = QWidget(PHoleMUD)
+        self.widget.setObjectName(u"widget")
+        self.widget.setMinimumSize(QSize(250, 0))
+        self.widget.setMaximumSize(QSize(250, 16777215))
+        self.verticalLayout_2 = QVBoxLayout(self.widget)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.b_dxf = QPushButton(self.widget)
+        self.b_dxf.setObjectName(u"b_dxf")
+
+        self.verticalLayout_2.addWidget(self.b_dxf)
+
+        self.w_path_json = WPathSelectorV(self.widget)
         self.w_path_json.setObjectName(u"w_path_json")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -40,14 +49,9 @@ class Ui_PHoleMUD(object):
         sizePolicy.setHeightForWidth(self.w_path_json.sizePolicy().hasHeightForWidth())
         self.w_path_json.setSizePolicy(sizePolicy)
 
-        self.verticalLayout_3.addWidget(self.w_path_json)
+        self.verticalLayout_2.addWidget(self.w_path_json)
 
-        self.b_dxf = QPushButton(PHoleMUD)
-        self.b_dxf.setObjectName(u"b_dxf")
-
-        self.verticalLayout_3.addWidget(self.b_dxf)
-
-        self.g_mat = QGroupBox(PHoleMUD)
+        self.g_mat = QGroupBox(self.widget)
         self.g_mat.setObjectName(u"g_mat")
         self.g_mat_layout = QVBoxLayout(self.g_mat)
         self.g_mat_layout.setObjectName(u"g_mat_layout")
@@ -57,15 +61,15 @@ class Ui_PHoleMUD(object):
 
         self.g_mat_layout.addWidget(self.w_mat_0)
 
-        self.verticalLayout_3.addWidget(self.g_mat)
+        self.verticalLayout_2.addWidget(self.g_mat)
 
         self.verticalSpacer = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 179, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.verticalLayout_3.addItem(self.verticalSpacer)
+        self.verticalLayout_2.addItem(self.verticalSpacer)
 
-        self.g_output = QGroupBox(PHoleMUD)
+        self.g_output = QGroupBox(self.widget)
         self.g_output.setObjectName(u"g_output")
         self.g_output.setMinimumSize(QSize(200, 0))
         self.verticalLayout = QVBoxLayout(self.g_output)
@@ -90,9 +94,9 @@ class Ui_PHoleMUD(object):
 
         self.verticalLayout.addWidget(self.out_Rmax)
 
-        self.verticalLayout_3.addWidget(self.g_output)
+        self.verticalLayout_2.addWidget(self.g_output)
 
-        self.horizontalLayout.addLayout(self.verticalLayout_3)
+        self.horizontalLayout.addWidget(self.widget)
 
         self.retranslateUi(PHoleMUD)
 
@@ -103,7 +107,7 @@ class Ui_PHoleMUD(object):
     def retranslateUi(self, PHoleMUD):
         PHoleMUD.setWindowTitle(QCoreApplication.translate("PHoleMUD", u"Form", None))
         self.b_dxf.setText(
-            QCoreApplication.translate("PHoleMUD", u"Define Hole from DXF", None)
+            QCoreApplication.translate("PHoleMUD", u"Define Slot from DXF", None)
         )
         self.g_mat.setTitle(QCoreApplication.translate("PHoleMUD", u"Materials", None))
         self.g_output.setTitle(QCoreApplication.translate("PHoleMUD", u"Output", None))

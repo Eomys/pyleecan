@@ -50,7 +50,7 @@ def get_surface_active(self, alpha=0, delta=0):
     else:
         curve_list.append(Arc1(ZM4, ZM1, -Rbo + self.H0, is_trigo_direction=False))
 
-    Zmid = (ZM1 + ZM3) / 2
+    Zmid = (abs(ZM1) + abs(ZM3)) / 2  # ref. point on x-axis with respective radius
 
     surface = SurfLine(
         line_list=curve_list, label="Wind_" + st + "_R0_T0_S0", point_ref=Zmid

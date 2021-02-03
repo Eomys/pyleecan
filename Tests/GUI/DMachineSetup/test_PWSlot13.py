@@ -171,7 +171,9 @@ class TestPWSlot13(object):
             H1_is_rad=False,
         )
         setup["widget"] = PWSlot13(setup["test_obj"])
-        assert setup["widget"].w_out.out_slot_height.text() == "Slot height: 0.03502 m"
+        assert (
+            setup["widget"].w_out.out_slot_height.text() == "Slot height: 0.03502 [m]"
+        )
 
     def test_check(self, setup):
         """Check that the check is working correctly"""

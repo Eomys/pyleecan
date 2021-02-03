@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import array, mod, zeros
 
+from ....Methods.Machine.WindingCW2LT import WindingT1DefMsError
 from ....Methods.Machine.Winding import WindingError
 from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from ....Functions.Winding.shift_wind_mat import shift_wind_mat
@@ -13,8 +14,8 @@ def comp_connection_mat(self, Zs=None):
 
     Parameters
     ----------
-    self : Winding
-        A: Winding object
+    self : WindingCW2LT
+        A: WindingCW2LT object
     Zs : int
         Number of Slot (Integer >0)
 
@@ -103,22 +104,3 @@ def comp_connection_mat(self, Zs=None):
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
 
     return wind_mat
-
-
-class WindingT1DefMsError(WindingError):
-    """
-
-    Parameters
-    ----------
-
-    Returns
-    -------
-
-    Raises
-    ------
-    must
-        be 0
-
-    """
-
-    pass

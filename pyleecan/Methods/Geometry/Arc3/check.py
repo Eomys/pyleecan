@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ....Methods.Geometry.Arc3 import *
 
 
 def check(self):
@@ -25,9 +26,3 @@ def check(self):
         raise PointArc3Error(
             "The beginning point and the ending point of an " "Arc3 can't be the same"
         )
-
-
-class PointArc3Error(Exception):
-    """ """
-
-    pass

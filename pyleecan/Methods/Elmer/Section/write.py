@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from io import StringIO
-from ..Section import File, Variable, MATC
+from ....Methods.Elmer.Section import File, Variable, MATC
 
 # some constants definition
 WHITESPACE = " "
