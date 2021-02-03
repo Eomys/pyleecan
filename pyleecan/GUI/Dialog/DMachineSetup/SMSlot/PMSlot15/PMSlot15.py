@@ -5,16 +5,16 @@ from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
 
-from ......Classes.SlotM15 import SlotM15
+from ......Classes.SlotM14 import SlotM14
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot15.Gen_PMSlot15 import Gen_PMSlot15
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
 
 class PMSlot15(Gen_PMSlot15, QWidget):
-    """Page to set the Slot Magnet Type 15"""
+    """Page to set the Slot Magnet Type 14"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
@@ -52,7 +52,7 @@ class PMSlot15(Gen_PMSlot15, QWidget):
             self.unit_Rtopm,
         ]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
@@ -76,8 +76,8 @@ class PMSlot15(Gen_PMSlot15, QWidget):
 
         Parameters
         ----------
-        self : PMSlot14
-            A PMSlot14 object
+        self : PMSlot15
+            A PMSlot15 object
         """
         self.slot.W0 = self.lf_W0.value()
         self.w_out.comp_output()
