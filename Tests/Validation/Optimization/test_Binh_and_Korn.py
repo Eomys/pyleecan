@@ -15,7 +15,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.DataKeeper import DataKeeper
+from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
@@ -113,13 +113,13 @@ def test_Binh_and_Korn():
 
     # ### Objectives
     objs = [
-        DataKeeper(
+        OptiObjective(
             name="Maximization of the torque average",
             symbol="obj1",
             unit="N.m",
             keeper="lambda output: output.mag.Tem_av",
         ),
-        DataKeeper(
+        OptiObjective(
             name="Minimization of the torque ripple",
             symbol="obj2",
             unit="N.m",

@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ....Classes.DataKeeper import DataKeeper
+from ....Classes.OptiObjective import OptiObjective
+from ....Methods.Output.XOutput import _get_symbol_data_
 
 
 def plot_pareto(
@@ -25,19 +26,17 @@ def plot_pareto(
     # Pyleecan colors
     pyleecan_color = (230 / 255, 175 / 255, 0)
 
-    idx = 0
-
     # Gather fitness results
     data = [
         val.result
         for _, val in self.xoutput_dict.items()
-        if isinstance(val, DataKeeper)
+        if isinstance(val, OptiObjective)
     ]
     fitness = np.array(data).T
 
     # Get fitness values and ngen
     is_valid = np.array(self["is_valid"].result)
-    ngen = np.array(self["ngen"].result)
+    # ngen = np.array(self["ngen"].result)  # unused
 
     design_var_list = [pe.value for pe in self.paramexplorer_list]
     design_var = np.array(design_var_list).T
@@ -45,34 +44,12 @@ def plot_pareto(
     # Keep only valid values
     indx = np.where(is_valid)
     fitness = fitness[indx]
-    ngen = ngen[indx]
+    # ngen = ngen[indx]   # unused
     design_var = design_var[indx]
 
-    # Get x_data
-    if x_symbol in self.keys():  # DataKeeper
-        x_data = self[x_symbol]
-        x_values = np.array(x_data.result)[indx]
-    else:  # ParamSetter
-        x_data = self.get_paramexplorer(x_symbol)
-        x_values = np.array(x_data.value)[indx]
-
-    # x_label definition
-    x_label = x_symbol
-    if x_data.unit not in ["", None]:
-        x_label += " [{}]".format(x_data.unit)
-
-    # Get y_data
-    if y_symbol in self.keys():  # DataKeeper
-        y_data = self[y_symbol]
-        y_values = np.array(y_data.result)[indx]
-    else:  # ParamSetter
-        y_data = self.get_paramexplorer(y_symbol)
-        y_values = np.array(y_data.value)[indx]
-
-    # y_label definition
-    y_label = y_symbol
-    if y_data.unit not in ["", None]:
-        y_label += " [{}]".format(y_data.unit)
+    # get data and labels
+    x_values, x_label = _get_symbol_data_(self, x_symbol, indx)
+    y_values, y_label = _get_symbol_data_(self, y_symbol, indx)
 
     # Get pareto front
     pareto = fitness
@@ -95,7 +72,7 @@ def plot_pareto(
     design_var_symbols = [pe.symbol for pe in self.paramexplorer_list]
 
     for idx, sim in enumerate(design_var_values.tolist()):
-        legend = f"Individual Nr. {idx_non_dom[idx]}\n"
+        legend = f"Individual Nr. {indx[0][idx_non_dom[idx]]}\n"
         for ii, symbol in enumerate(design_var_symbols):
             legend += "{:11.10}=".format(symbol)  # sim[d_var])
             if isinstance(sim[ii], float):
@@ -113,13 +90,8 @@ def plot_pareto(
     if c_symbol is None:
         colors = pyleecan_color
     else:
-        # Get c_data
-        if c_symbol in self.keys():  # DataKeeper
-            c_data = self[c_symbol]
-            c_values = np.array(c_data.result)[indx]
-        else:  # ParamSetter
-            c_data = self.get_paramexplorer(c_symbol)
-            c_values = np.array(c_data.value)[indx]
+        # get the color data
+        c_values, _ = _get_symbol_data_(self, c_symbol, indx)
         colors = c_values[idx_non_dom][:, np.newaxis]
 
     if cmap is None:

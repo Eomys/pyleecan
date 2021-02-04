@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ....Classes.DataKeeper import DataKeeper
+from ....Classes.OptiObjective import OptiObjective
 
 
 def get_pareto_index(self):
@@ -20,7 +20,7 @@ def get_pareto_index(self):
     data = [
         val.result
         for _, val in self.xoutput_dict.items()
-        if isinstance(val, DataKeeper)
+        if isinstance(val, OptiObjective)
     ]
     fitness = np.array(data).T
 
