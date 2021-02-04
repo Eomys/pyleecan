@@ -37,17 +37,24 @@ def comp_force(self, output, axes_dict):
     Time = axes_dict["Time"]
 
     # Import angular vector from Angle Data object
-    _, is_antiper_a = Angle.get_periodicity()
+    is_periodicity_a, is_antiper_a = Angle.get_periodicity()
+
+    if self.is_periodicity_a is not None:
+        is_periodicity_a = self.is_periodicity_a
+
     angle = Angle.get_values(
-        is_oneperiod=self.is_periodicity_a,
-        is_antiperiod=is_antiper_a and self.is_periodicity_a,
+        is_oneperiod=is_periodicity_a,
+        is_antiperiod=is_antiper_a and is_periodicity_a,
     )
+	
+    if self.is_periodicity_t is not None:
+        is_periodicity_t = self.is_periodicity_t
 
     # Import time vector from Time Data object
-    _, is_antiper_t = Time.get_periodicity()
+    is_periodicity_t, is_antiper_t = Time.get_periodicity()
     time = Time.get_values(
-        is_oneperiod=self.is_periodicity_t,
-        is_antiperiod=is_antiper_t and self.is_periodicity_t,
+        is_oneperiod=is_periodicity_t,
+        is_antiperiod=is_antiper_t and is_periodicity_t,
     )
 
     # Load magnetic flux

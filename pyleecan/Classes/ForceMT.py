@@ -66,8 +66,8 @@ class ForceMT(Force):
 
     def __init__(
         self,
-        is_periodicity_t=False,
-        is_periodicity_a=False,
+        is_periodicity_t=None,
+        is_periodicity_a=None,
         is_agsf_transfer=False,
         max_wavenumber_transfer=None,
         Rsbo_enforced_transfer=None,
