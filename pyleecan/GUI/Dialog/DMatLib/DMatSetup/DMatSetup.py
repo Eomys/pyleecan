@@ -52,7 +52,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             self.b_add_matlib.setText("Add to machine")
 
         # Three button to close
-        self.b_cancel.clicked.connect(self.close)
+        self.b_cancel.clicked.connect(lambda: self.done(0))
         self.b_save.clicked.connect(lambda: self.done(1))
         self.b_add_matlib.clicked.connect(lambda: self.done(2))
 
@@ -170,6 +170,10 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             self.qmessagebox_question = reply
             if reply == QMessageBox.Yes:
                 self.done(1)
+            else:
+                self.done(0)
+        else:
+            self.done(0)
 
     def set_default(self, attr, attr_name):
         msg = QMessageBox()
