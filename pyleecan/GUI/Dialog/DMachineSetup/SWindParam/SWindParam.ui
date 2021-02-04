@@ -42,167 +42,181 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="in_Npcpp">
-           <property name="minimumSize">
-            <size>
-             <width>40</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Npcpp :</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="si_Npcpp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="value">
-            <number>99</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLabel" name="in_Ntcoil">
-           <property name="minimumSize">
-            <size>
-             <width>40</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Ntcoil :</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="si_Ntcoil">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="value">
-            <number>99</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="in_qs">
-         <property name="whatsThis">
-          <string>Number of phase</string>
-         </property>
-         <property name="text">
-          <string> qs : ?</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="in_Zs">
-         <property name="whatsThis">
-          <string>Number of slot</string>
-         </property>
-         <property name="text">
-          <string> Zs : ?</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="in_Nlay">
-         <property name="whatsThis">
-          <string>Number of winding layer in each slot</string>
-         </property>
-         <property name="text">
-          <string> Nlay : ?</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>Output</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
+      <widget class="QWidget" name="widget" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>250</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QLabel" name="out_Ntspc">
-            <property name="toolTip">
-             <string>Winding number of turns in series per phase</string>
-            </property>
-            <property name="whatsThis">
-             <string>Winding number of turns in series per phase</string>
+           <widget class="QLabel" name="in_Npcpp">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>0</height>
+             </size>
             </property>
             <property name="text">
-             <string>Ntsp1 : ?</string>
+             <string>Npcpp :</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="out_Ncspc">
-            <property name="whatsThis">
-             <string>Number of coils in series per parallel circuit</string>
+           <widget class="QSpinBox" name="si_Npcpp">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <property name="text">
-             <string>Ncspc1 : ?</string>
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="value">
+             <number>99</number>
             </property>
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="in_Ntcoil">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Ntcoil :</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="si_Ntcoil">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="value">
+             <number>99</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="in_qs">
+          <property name="whatsThis">
+           <string>Number of phase</string>
+          </property>
+          <property name="text">
+           <string> qs : ?</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="in_Zs">
+          <property name="whatsThis">
+           <string>Number of slot</string>
+          </property>
+          <property name="text">
+           <string> Zs : ?</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="in_Nlay">
+          <property name="whatsThis">
+           <string>Number of winding layer in each slot</string>
+          </property>
+          <property name="text">
+           <string> Nlay : ?</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>Output</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QLabel" name="out_Ntspc">
+             <property name="toolTip">
+              <string>Winding number of turns in series per phase</string>
+             </property>
+             <property name="whatsThis">
+              <string>Winding number of turns in series per phase</string>
+             </property>
+             <property name="text">
+              <string>Ntsp1 : ?</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="out_Ncspc">
+             <property name="whatsThis">
+              <string>Number of coils in series per parallel circuit</string>
+             </property>
+             <property name="text">
+              <string>Ncspc1 : ?</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>247</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
      </item>
     </layout>
    </item>
