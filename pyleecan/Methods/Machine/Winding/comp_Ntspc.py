@@ -31,6 +31,17 @@ def comp_Ntspc(self, Zs=None):
 
         Zs = self.parent.slot.Zs
 
-    Ncspc = self.comp_Ncspc(Zs)
+    # effective number of turns in series per phase from connection matrix
+    Ntspc_eff_ = (
+        abs(self.comp_connection_mat(Zs).sum(axis=(0, 1))).sum(axis=0) / self.Npcpp / 2
+    )
+    if Ntspc_eff_.std() != 0:
+        self.get_logger.warning(
+            "Winding.comp_Ntspc: "
+            "Uneven number of turns in series per phase. "
+            + "Mean number of turns will be used."
+        )
 
-    return Ncspc * self.Ntcoil
+    Ntspc_eff = Ntspc_eff_.mean()
+
+    return Ntspc_eff

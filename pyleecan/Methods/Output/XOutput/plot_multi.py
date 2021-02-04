@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ....definitions import config_dict
+from ....Methods.Output.XOutput import _get_symbol_data_
 
 COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
@@ -12,7 +13,15 @@ class PlotError(Exception):
 
 
 def plot_multi(
-    self, x_symbol, y_symbol, plot_type="scatter", idx=None, ax=None, title=None
+    self,
+    x_symbol,
+    y_symbol,
+    c_symbol=None,
+    cmap=None,
+    plot_type="scatter",
+    idx=None,
+    ax=None,
+    title=None,
 ):
     """
     Plot data from a DataKeeper for a given parameter from a ParamExplorer
@@ -21,6 +30,10 @@ def plot_multi(
         ParamExplorer or DataKeeper symbol
     y_symbol: str
         ParamExplorer or DataKeeper symbol
+    c_symbol: str
+        optional symbol to set the plot colors
+    cmap: colormap
+        optional colormap
     plot_type: str
         scatter or plot to chose plot type
     idx: slice
@@ -45,55 +58,47 @@ def plot_multi(
     if plot_type not in ["scatter", "plot"]:
         raise PlotError("Unknown plot_type {}.".format(plot_type))
 
-    # Get x_data
-    if x_symbol in self.keys():  # DataKeeper
-        x_data = self[x_symbol]
-        x_values = np.array(x_data.result)[idx]
-    else:  # ParamSetter
-        x_data = self.get_paramexplorer(x_symbol)
-        x_values = np.array(x_data.value)[idx]
+    # get data and labels
+    x_values, x_label = _get_symbol_data_(self, x_symbol, idx)
+    y_values, y_label = _get_symbol_data_(self, y_symbol, idx)
+    c_values = _get_symbol_data_(self, c_symbol, idx)[0]
 
-    # x_label definition
-    x_label = x_symbol
-    if x_data.unit not in ["", None]:
-        x_label += " [{}]".format(x_data.unit)
+    if c_symbol is None:
+        colors = COLORS[0]
+    else:
+        # get the color data
+        c_values, _ = _get_symbol_data_(self, c_symbol, idx)
+        colors = c_values[:, np.newaxis]
 
-    # Get y_data
-    if y_symbol in self.keys():  # DataKeeper
-        y_data = self[y_symbol]
-        y_values = np.array(y_data.result)[idx]
-    else:  # ParamSetter
-        y_data = self.get_paramexplorer(y_symbol)
-        y_values = np.array(y_data.value)[idx]
+    if cmap is None:
+        cmap = plt.cm.jet
 
-    # y_label definition
-    y_label = y_symbol
-    if y_data.unit not in ["", None]:
-        y_label += " [{}]".format(y_data.unit)
-
-    # Plot in new figure
+    # create new figure or use existing axis
+    RET_FIG = False
     if ax is None:
         fig, ax = plt.subplots()
-        if plot_type == "scatter":
-            ax.scatter(x_values, y_values, c=COLORS[0])
-        elif plot_type == "plot":
-            sort_index = np.argsort(x_values)
-            ax.plot(x_values[sort_index], y_values[sort_index])
-
         fig.suptitle(title, fontname=FONT_NAME)
-        ax.set_xlabel(x_label, fontname=FONT_NAME)
-        ax.set_ylabel(y_label, fontname=FONT_NAME)
-        return fig
-
-    # Plot in ax
+        RET_FIG = True
     else:
-        if plot_type == "scatter":
-            ax.scatter(x_values, y_values)
-        elif plot_type == "plot":
-            sort_index = np.argsort(x_values)
-            ax.plot(x_values[sort_index], y_values[sort_index])
-
         ax.set_title(title, fontname=FONT_NAME)
-        ax.set_xlabel(x_label, fontname=FONT_NAME)
-        ax.set_ylabel(y_label, fontname=FONT_NAME)
+
+    # plot
+    if plot_type == "scatter":
+        plot = ax.scatter(x_values, y_values, c=colors)
+    elif plot_type == "plot":
+        sort_index = np.argsort(x_values)
+        plot = ax.plot(x_values[sort_index], y_values[sort_index], c=colors)
+
+    # add legend
+    if c_symbol is not None:
+        legend1 = ax.legend(*plot.legend_elements(), loc="upper right", title=c_symbol)
+        ax.add_artist(legend1)
+
+    ax.set_xlabel(x_label, fontname=FONT_NAME)
+    ax.set_ylabel(y_label, fontname=FONT_NAME)
+
+    # return
+    if RET_FIG:
+        return fig
+    else:
         return ax
