@@ -1,5 +1,6 @@
 from numpy import array
 
+
 class XOutputError(Exception):
     pass
 

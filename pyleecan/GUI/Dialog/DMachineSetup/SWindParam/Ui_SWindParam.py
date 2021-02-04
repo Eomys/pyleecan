@@ -153,11 +153,9 @@ class Ui_SWindParam(object):
             QCoreApplication.translate("SWindParam", u"Form", None)
         )
         self.img_wind_geo.setText("")
-        self.in_Npcpp.setText(
-            QCoreApplication.translate("SWindParam", u"Npcpp :", None)
-        )
+        self.in_Npcpp.setText(QCoreApplication.translate("SWindParam", u"Npcpp", None))
         self.in_Ntcoil.setText(
-            QCoreApplication.translate("SWindParam", u"Ntcoil :", None)
+            QCoreApplication.translate("SWindParam", u"Ntcoil", None)
         )
         # if QT_CONFIG(whatsthis)
         self.in_qs.setWhatsThis(

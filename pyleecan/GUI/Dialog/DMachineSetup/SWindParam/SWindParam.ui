@@ -67,7 +67,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Npcpp :</string>
+             <string>Npcpp</string>
             </property>
            </widget>
           </item>
@@ -109,7 +109,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Ntcoil :</string>
+             <string>Ntcoil</string>
             </property>
            </widget>
           </item>
