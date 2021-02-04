@@ -106,7 +106,7 @@ def load(file_path):
         raise LoadWrongDictClassError('Key "__class__" missing in loaded file')
 
     # Retrocompatibility
-    init_dict = convert_init_dict(init_dict)
+    convert_init_dict(init_dict)
 
     return init_data(init_dict, file_path)
 
