@@ -12,7 +12,7 @@ import pytest
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.OptiObjective import DatOptiObjectiveaKeeper
+from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
