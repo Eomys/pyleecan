@@ -12,7 +12,6 @@ from .....Classes.WindingDW1L import WindingDW1L
 from .....Classes.WindingDW2L import WindingDW2L
 from .....Functions.Winding.comp_wind_periodicity import comp_wind_periodicity
 from .....GUI.Dialog.DMachineSetup.SWindPat.Gen_SWindPat import Gen_SWindPat
-from .....GUI.Resources import pixmap_dict
 from .....Methods.Machine.Winding import WindingError
 
 # For the Pattern combobox
@@ -47,8 +46,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         self.setupUi(self)
 
         # Set Help URL
-        self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
-        self.b_help.url += "how-to-set-up-the-winding"
+        self.b_help.url = "https://pyleecan.org/winding.convention.html"
 
         # Saving arguments
         self.machine = machine
@@ -86,7 +84,7 @@ class SWindPat(Gen_SWindPat, QWidget):
             self.c_wind_type.setCurrentIndex(0)
         else:
             self.c_wind_type.setCurrentIndex(TYPE_INDEX.index(type(self.obj.winding)))
-        self.update_image()
+        self.update_graph()
 
         if type(self.obj.winding) is WindingDW2L:
             if self.obj.winding.coil_pitch is None:
@@ -144,21 +142,9 @@ class SWindPat(Gen_SWindPat, QWidget):
         self.set_output()
         self.hide_coil_pitch()
         # Update image
-        self.update_image()
+        self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
-
-    def update_image(self):
-        """Update the schematics to the current winding pattern
-
-        Parameters
-        ----------
-        self : SWindPat
-            A SWindPat object
-        """
-        self.img_wind_pat.setPixmap(
-            QPixmap(pixmap_dict[type(self.obj.winding).__name__])
-        )
 
     def set_qs(self):
         """Signal to update the value of qs according to the spinbox
@@ -170,6 +156,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         """
         self.obj.winding.qs = self.si_qs.value()
         self.set_output()
+        self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -183,6 +170,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         """
         self.obj.winding.coil_pitch = self.si_coil_pitch.value()
         self.set_output()
+        self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -196,6 +184,7 @@ class SWindPat(Gen_SWindPat, QWidget):
             A SWindPat object
         """
         self.obj.winding.Nslot_shift_wind = self.si_Nslot.value()
+        self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -212,6 +201,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         """
 
         value = self.is_reverse.isChecked()
+        self.update_graph()
         self.obj.winding.is_reverse_wind = value
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -259,7 +249,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         else:
             qs = str(wind.qs) + "]"
 
-        self.out_shape.setText(self.tr("Winding Matrix shape: [") + Nlay + Zs + qs)
+        self.out_shape.setText(self.tr("Matrix shape [") + Nlay + Zs + qs)
 
         try:
             ms = str(self.obj.slot.Zs / (wind.p * wind.qs * 2.0))
@@ -277,6 +267,18 @@ class SWindPat(Gen_SWindPat, QWidget):
             Nperw = "?"
 
         self.out_Nperw.setText(self.tr("Nperw: ") + Nperw)
+
+    def update_graph(self):
+        """Plot the lamination with/without the winding"""
+        # Plot the lamination in the viewer fig
+        self.obj.plot(fig=self.w_viewer.fig, is_show_fig=False)
+
+        # Update the Graph
+        self.w_viewer.axes.set_axis_off()
+        self.w_viewer.axes.axis("equal")
+        if self.w_viewer.axes.get_legend() is not None:
+            self.w_viewer.axes.get_legend().remove()
+        self.w_viewer.draw()
 
     def s_plot(self):
         """Plot a preview of the winding in a popup

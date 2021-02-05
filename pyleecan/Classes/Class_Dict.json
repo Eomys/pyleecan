@@ -447,7 +447,8 @@
             "comp_height",
             "comp_surface",
             "comp_width",
-            "plot"
+            "plot",
+            "plot_schematics"
         ],
         "mother": "Conductor",
         "name": "CondType11",
@@ -544,7 +545,8 @@
             "comp_height",
             "comp_surface",
             "comp_width",
-            "plot"
+            "plot",
+            "plot_schematics"
         ],
         "mother": "Conductor",
         "name": "CondType12",
@@ -776,8 +778,10 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
-        "desc": "Abstract class for the multi-simulation",
+        "daughters": [
+            "OptiObjective"
+        ],
+        "desc": "Class for defining data to keep on a multi-simulation",
         "is_internal": false,
         "methods": [],
         "mother": "",
@@ -6293,6 +6297,23 @@
             }
         ]
     },
+    "OptiObjective": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to distinguish normal DataKeeper from optimization objectives ",
+        "is_internal": false,
+        "methods": [],
+        "mother": "DataKeeper",
+        "name": "OptiObjective",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiObjective.csv",
+        "properties": []
+    },
     "OptiProblem": {
         "constants": [
             {
@@ -6332,7 +6353,7 @@
                 "max": "",
                 "min": "",
                 "name": "obj_func",
-                "type": "[DataKeeper]",
+                "type": "[OptiObjective]",
                 "unit": "",
                 "value": ""
             },
