@@ -50,8 +50,8 @@ class TestSWindParam(object):
 
         assert setup["widget"].si_Npcpp.value() == 10
         assert setup["widget"].si_Ntcoil.value() == 11
-        assert setup["widget"].in_Npcpp.text() == "Npcpp :"
-        assert setup["widget"].in_Ntcoil.text() == "Ntcoil :"
+        assert setup["widget"].in_Npcpp.text() == "Npcpp"
+        assert setup["widget"].in_Ntcoil.text() == "Ntcoil"
         assert setup["widget"].in_Zs.text() == "Zs: 36"
         assert setup["widget"].in_qs.text() == "qs: 3"
         assert setup["widget"].out_Ncspc.text() == "Ncspc: ?"
@@ -59,8 +59,8 @@ class TestSWindParam(object):
 
         assert setup["widget2"].si_Npcpp.value() == 20
         assert setup["widget2"].si_Ntcoil.value() == 21
-        assert setup["widget2"].in_Npcpp.text() == "Npcpp :"
-        assert setup["widget2"].in_Ntcoil.text() == "Ntcoil :"
+        assert setup["widget2"].in_Npcpp.text() == "Npcpp"
+        assert setup["widget2"].in_Ntcoil.text() == "Ntcoil"
         assert setup["widget2"].in_Zs.text() == "Zs: 36"
         assert setup["widget2"].in_qs.text() == "qs: 3"
         assert setup["widget2"].out_Ncspc.text() == "Ncspc: ?"
