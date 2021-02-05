@@ -408,6 +408,7 @@ class TestSMHoleMag(object):
         assert len(setup["test_obj2"].rotor.hole) == 1
         assert setup["widget2"].tab_hole.count() == 1
 
+    @pytest.mark.skip
     def test_s_plot(self, setup):
         setup["test_obj"] = MachineIPMSM(type_machine=8)
         setup["test_obj"].stator = LamSlotWind(slot=None)

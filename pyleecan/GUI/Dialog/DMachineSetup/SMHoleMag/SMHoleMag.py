@@ -143,7 +143,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             self.tab_hole.removeTab(len(self.obj.hole) - 1)
             self.obj.hole.pop(-1)
 
-    def s_plot(self, is_show_fig=True):
+    def s_plot(self):
         """Try to plot the lamination
 
         Parameters
@@ -158,11 +158,10 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
 
         # We have to make sure the hole is right before truing to plot it
         error = self.check(self.obj)
-
         if error:  # Error => Display it
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Plot the hole (No winding for LamSquirrelCage)
-            self.machine.plot(is_show_fig=is_show_fig)
+            self.machine.plot(is_show_fig=True)
 
     @staticmethod
     def check(lamination):
