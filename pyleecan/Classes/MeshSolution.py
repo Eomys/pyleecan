@@ -392,6 +392,8 @@ class MeshSolution(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "mesh"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("mesh", value, "[Mesh]")
@@ -441,6 +443,8 @@ class MeshSolution(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "solution"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("solution", value, "[Solution]")

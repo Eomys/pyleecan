@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+from ....Methods.Geometry.Circle import *
+
+
 def check(self):
     """assert the Circle is correct (the radius > 0)
 
@@ -19,9 +21,3 @@ def check(self):
     """
     if self.radius < 0:
         raise RadiusCircleError("The radius of a circle must be >= 0")
-
-
-class RadiusCircleError(Exception):
-    """ """
-
-    pass

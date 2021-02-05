@@ -5,9 +5,7 @@ import pytest
 from numpy import pi
 
 from pyleecan.Classes.VentilationTrap import VentilationTrap
-from pyleecan.Methods.Slot.VentilationTrap.build_geometry import (
-    TrapezeBuildGeometryError,
-)
+from pyleecan.Methods.Slot.VentilationTrap import TrapezeBuildGeometryError
 
 
 """unittest for VentilationTrap"""

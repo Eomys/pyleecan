@@ -1,4 +1,5 @@
 from numpy import arcsin, exp, pi, sqrt
+from ....Classes.Arc1 import Arc1
 
 
 def _comp_point_coordinate(self):
@@ -11,9 +12,8 @@ def _comp_point_coordinate(self):
 
     Returns
     -------
-    point_list: list
-        A list of Points and rot_sign
-
+    point_dict: dict
+        A dict of the slot point coordinates
     """
     Rbo = self.get_Rbo()
 
@@ -45,7 +45,7 @@ def _comp_point_coordinate(self):
             + 1j * self.W3 / 2.0
         )
         Z5 = Z6 + self.H3
-        rot_sign = 1  # Rotation direction for Arc1
+        rot_sign = 1
     else:  # inward slot
         Z7 = Z8 - self.H0
         # Rotation to get the tooth on X axis
@@ -57,18 +57,29 @@ def _comp_point_coordinate(self):
             + 1j * self.W3 / 2.0
         )
         Z5 = Z6 - self.H3
-        rot_sign = -1  # Rotation direction for Arc1
-    Z8, Z7, Z6, Z5 = (
+        rot_sign = -1
+
+    # Tooth ref to slot
+    Z1, Z2, Z3, Z4 = (
         Z8 * exp(-1j * slot_pitch / 2),
         Z7 * exp(-1j * slot_pitch / 2),
         Z6 * exp(-1j * slot_pitch / 2),
         Z5 * exp(-1j * slot_pitch / 2),
     )
-    # symetry
-    Z4 = Z5.conjugate()
-    Z3 = Z6.conjugate()
-    Z2 = Z7.conjugate()
-    Z1 = Z8.conjugate()
 
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8] = [Z8, Z7, Z6, Z5, Z4, Z3, Z2, Z1]
-    return [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, rot_sign]
+    point_dict = dict()
+    point_dict["Z1"] = Z1
+    point_dict["Z2"] = Z2
+    point_dict["Z3"] = Z3
+    point_dict["Z4"] = Z4
+    # symetry
+    point_dict["Z5"] = Z4.conjugate()
+    point_dict["Z6"] = Z3.conjugate()
+    point_dict["Z7"] = Z2.conjugate()
+    point_dict["Z8"] = Z1.conjugate()
+    # Center
+    A = Arc1(Z2, Z3, rot_sign * self.R1, self.is_outwards())
+    point_dict["Zc1"] = A.get_center()
+    point_dict["Zc2"] = (point_dict["Z4"] + point_dict["Z5"]) / 2
+    point_dict["Zc3"] = point_dict["Zc1"].conjugate()
+    return point_dict

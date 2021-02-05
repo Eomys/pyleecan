@@ -23,27 +23,20 @@ def build_geometry(self):
         A list of 4 Segment and 3 Arc1
 
     """
-    Rbo = self.get_Rbo()
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    Z7 = point_dict["Z7"]
+    Z8 = point_dict["Z8"]
 
-    # getting all point coordinate
-    [
-        Z1,
-        Z2,
-        Z3,
-        Z4,
-        Z5,
-        Z6,
-        Z7,
-        Z8,
-        Ztan1,
-        Ztan2,
-        Zmid,
-        Zrad1,
-        Zrad2,
-        rot_sign,
-    ] = self._comp_point_coordinate()
-
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8] = [Z8, Z7, Z6, Z5, Z4, Z3, Z2, Z1]
+    if self.is_outwards():
+        rot_sign = 1  # Rotation direction for Arc1
+    else:  # inward slot
+        rot_sign = -1  # Rotation direction for Arc1
 
     # Creation of curve
     curve_list = list()
@@ -67,7 +60,7 @@ def build_geometry(self):
             Arc1(Z6, Z7, rot_sign * self.R1, is_trigo_direction=self.is_outwards())
         )
     else:  # Should never be called
-        raise (Slot26_H1, "H1 can't be <0")
+        raise Slot26_H1(Slot26_H1, "H1 can't be <0")
 
     curve_list.append(Segment(Z7, Z8))
 

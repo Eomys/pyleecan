@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
 
 
 class S15InnerError(SlotCheckError):

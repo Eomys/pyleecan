@@ -422,6 +422,8 @@ class Simulation(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "postproc_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("postproc_list", value, "[Post]")

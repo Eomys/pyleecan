@@ -1,1 +1,13 @@
-# -*- coding: utf-8 -*-
+from ....Methods.Slot.Slot import SlotCheckError
+
+
+class S29_W01CheckError(SlotCheckError):
+    """ """
+
+    pass
+
+
+class S29_W12CheckError(SlotCheckError):
+    """ """
+
+    pass

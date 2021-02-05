@@ -5,9 +5,7 @@ import pytest
 from numpy import pi
 
 from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Methods.Slot.VentilationPolar.build_geometry import (
-    PolarArcBuildGeometryError,
-)
+from pyleecan.Methods.Slot.VentilationPolar import PolarArcBuildGeometryError
 
 
 """unittest for VentilationPolar"""

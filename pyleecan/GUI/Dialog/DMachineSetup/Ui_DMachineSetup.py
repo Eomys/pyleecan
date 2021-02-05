@@ -16,7 +16,7 @@ class Ui_DMachineSetup(object):
     def setupUi(self, DMachineSetup):
         if not DMachineSetup.objectName():
             DMachineSetup.setObjectName(u"DMachineSetup")
-        DMachineSetup.resize(996, 711)
+        DMachineSetup.resize(1001, 721)
         self.horizontalLayout_2 = QHBoxLayout(DMachineSetup)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.nav_step = QListWidget(DMachineSetup)
@@ -26,7 +26,7 @@ class Ui_DMachineSetup(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.nav_step.sizePolicy().hasHeightForWidth())
         self.nav_step.setSizePolicy(sizePolicy)
-        self.nav_step.setMaximumSize(QSize(170, 16777215))
+        self.nav_step.setMaximumSize(QSize(190, 16777215))
 
         self.horizontalLayout_2.addWidget(self.nav_step)
 

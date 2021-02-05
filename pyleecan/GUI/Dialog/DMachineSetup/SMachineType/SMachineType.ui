@@ -116,7 +116,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/SCIM.png</pixmap>
+        <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/MachineType/machine_SCIM.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>

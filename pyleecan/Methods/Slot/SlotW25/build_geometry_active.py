@@ -34,7 +34,11 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     # get the name of the lamination
     st = self.get_name_lam()
 
-    [Z8, Z7, Z6, Z5, Z4, Z3, Z2, Z1] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
     X = linspace(Z3, Z4, Nrad + 1)
 
     # Nrad+1 and Ntan+1 because 3 points => 2 zones

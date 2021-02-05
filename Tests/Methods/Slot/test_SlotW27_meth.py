@@ -5,11 +5,8 @@ from pyleecan.Classes.SlotW27 import SlotW27
 from numpy import ndarray, arcsin, exp
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Segment import Segment
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
-from pyleecan.Methods.Slot.SlotW27.check import S27_W03CheckError
+from pyleecan.Classes.Slot import Slot
+from pyleecan.Methods.Slot.SlotW27 import S27_W03CheckError
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -54,6 +51,54 @@ class Test_SlotW27_meth(object):
     """pytest for SlotW27 methods"""
 
     @pytest.mark.parametrize("test_dict", slotW27_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        # Check width
+        assert abs(point_dict["Z1"] - point_dict["Z10"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z2"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z8"]) == pytest.approx(
+            test_obj.slot.W1
+        )
+        assert abs(point_dict["Z4"] - point_dict["Z7"]) == pytest.approx(
+            test_obj.slot.W2
+        )
+        assert abs(point_dict["Z5"] - point_dict["Z6"]) == pytest.approx(
+            test_obj.slot.W3
+        )
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z2"].real - point_dict["Z4"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z3"].real - point_dict["Z4"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z4"].real - point_dict["Z5"].real) == pytest.approx(
+            test_obj.slot.H2
+        )
+        assert abs(point_dict["Z10"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z9"].real - point_dict["Z7"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z8"].real - point_dict["Z7"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z7"].real - point_dict["Z6"].real) == pytest.approx(
+            test_obj.slot.H2
+        )
+
+    @pytest.mark.parametrize("test_dict", slotW27_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
@@ -65,7 +110,7 @@ class Test_SlotW27_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface(test_obj.slot)
+        b = Slot.comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -81,7 +126,7 @@ class Test_SlotW27_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_active(test_obj.slot)
+        b = Slot.comp_surface_active(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -97,7 +142,7 @@ class Test_SlotW27_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -110,7 +155,7 @@ class Test_SlotW27_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 

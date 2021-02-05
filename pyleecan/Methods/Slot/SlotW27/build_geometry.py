@@ -21,44 +21,17 @@ def build_geometry(self):
         A list of 9 Segment
 
     """
-    Rbo = self.get_Rbo()
-
-    # alpha is the angle to rotate Z0 so ||Z1,Z10|| = W0
-    alpha = float(arcsin(self.W0 / (2 * Rbo)))
-
-    # comp point coordinate (in complex)
-    Z0 = Rbo * exp(1j * 0)
-    Z1 = Z0 * exp(1j * alpha)
-
-    if self.is_outwards():
-        Z2 = Z1 + self.H0
-        Z3 = Z2 + (self.W1 - self.W0) * 1j / 2.0
-        Z4 = Z3 + self.H1 + (self.W2 - self.W1) / 2.0 * 1j
-        Z5 = Z4 + self.H2 + (self.W3 - self.W2) / 2.0 * 1j
-    else:  # inward slot
-        Z2 = Z1 - self.H0
-        Z3 = Z2 + (self.W1 - self.W0) * 1j / 2.0
-        Z4 = Z3 - self.H1 + (self.W2 - self.W1) / 2.0 * 1j
-        Z5 = Z4 - self.H2 + (self.W3 - self.W2) / 2.0 * 1j
-
-    # symetry
-    Z6 = Z5.conjugate()
-    Z7 = Z4.conjugate()
-    Z8 = Z3.conjugate()
-    Z9 = Z2.conjugate()
-    Z10 = Z1.conjugate()
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10] = [
-        Z10,
-        Z9,
-        Z8,
-        Z7,
-        Z6,
-        Z5,
-        Z4,
-        Z3,
-        Z2,
-        Z1,
-    ]
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    Z7 = point_dict["Z7"]
+    Z8 = point_dict["Z8"]
+    Z9 = point_dict["Z9"]
+    Z10 = point_dict["Z10"]
 
     # Creation of curve
     curve_list = list()

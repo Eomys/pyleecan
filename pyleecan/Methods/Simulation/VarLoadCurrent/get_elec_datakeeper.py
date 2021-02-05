@@ -1,7 +1,5 @@
 from ....Classes.DataKeeper import DataKeeper
-from ....Methods.Simulation.VarLoad.get_elec_datakeeper import (
-    get_elec_datakeeper as get_dk,
-)
+from ....Classes.VarLoad import VarLoad
 
 
 def get_elec_datakeeper(self):
@@ -17,7 +15,7 @@ def get_elec_datakeeper(self):
     dk_list: list
         list of DataKeeper
     """
-    dk_list = get_dk(self)
+    dk_list = VarLoad.get_elec_datakeeper(self)
     if self.type_OP_matrix == 0:  # I0 and Phi0
         # Save I0
         dk_list.append(

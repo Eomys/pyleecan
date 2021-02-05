@@ -58,7 +58,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
                 PHoleM53,
                 PHoleM57,
                 PHoleM58,
-                PHoleMUD,
+                # PHoleMUD,
             ]
         else:  # SyRM
             self.wid_list = [

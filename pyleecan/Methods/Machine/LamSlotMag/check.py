@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Machine.Lamination.check import LaminationCheckError
+from ....Methods.Machine.LamSlotMag import LMC_SlotTooLong
 
 
 def check(self):
@@ -26,9 +26,3 @@ def check(self):
 
     if self.comp_height_yoke() < 0:
         raise LMC_SlotTooLong("The Slot is too long for the lamination " "(HYoke <0)")
-
-
-class LMC_SlotTooLong(LaminationCheckError):
-    """ """
-
-    pass

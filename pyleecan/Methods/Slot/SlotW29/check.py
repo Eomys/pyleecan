@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.SlotW29 import *
 
 
 def check(self):
@@ -28,15 +29,3 @@ def check(self):
 
     if self.W2 <= self.W1:
         raise S29_W12CheckError("You must have W1 < W2")
-
-
-class S29_W01CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S29_W12CheckError(SlotCheckError):
-    """ """
-
-    pass

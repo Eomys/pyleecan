@@ -7,10 +7,7 @@ from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.SlotW29 import SlotW29
 from numpy import ndarray, arcsin, exp
 from pyleecan.Classes.LamSlot import LamSlot
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
+from pyleecan.Classes.Slot import Slot
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -51,6 +48,87 @@ class Test_SlotW29_meth(object):
     """pytest for SlotW29 methods"""
 
     @pytest.mark.parametrize("test_dict", slotW29_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        # Check width
+        assert abs(point_dict["Z1"] - point_dict["Z12"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z2"] - point_dict["Z11"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z10"]) == pytest.approx(
+            test_obj.slot.W1
+        )
+        assert abs(point_dict["Z4"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.W1
+        )
+        assert abs(point_dict["Z5"] - point_dict["Z8"]) == pytest.approx(
+            test_obj.slot.W2
+        )
+        assert abs(point_dict["Z6"] - point_dict["Z7"]) == pytest.approx(
+            test_obj.slot.W2
+        )
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z5"] - point_dict["Z6"]) == pytest.approx(
+            test_obj.slot.H2
+        )
+        assert abs(point_dict["Z12"] - point_dict["Z11"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z10"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z7"] - point_dict["Z8"]) == pytest.approx(
+            test_obj.slot.H2
+        )
+
+    @pytest.mark.parametrize("test_dict", slotW29_test)
+    def test_build_geometry_active(self, test_dict):
+        """Check that the computation of the average angle is correct"""
+        test_obj = test_dict["test_obj"]
+        surf_list = test_obj.slot.build_geometry_active(Nrad=3, Ntan=2)
+
+        # Check label
+        assert surf_list[0].label == "Wind_Stator_R0_T0_S0"
+        assert surf_list[1].label == "Wind_Stator_R1_T0_S0"
+        assert surf_list[2].label == "Wind_Stator_R2_T0_S0"
+        assert surf_list[3].label == "Wind_Stator_R0_T1_S0"
+        assert surf_list[4].label == "Wind_Stator_R1_T1_S0"
+        assert surf_list[5].label == "Wind_Stator_R2_T1_S0"
+        # Check tangential position
+        assert surf_list[0].point_ref.imag < 0
+        assert surf_list[1].point_ref.imag < 0
+        assert surf_list[2].point_ref.imag < 0
+        assert surf_list[3].point_ref.imag > 0
+        assert surf_list[4].point_ref.imag > 0
+        assert surf_list[5].point_ref.imag > 0
+        # Check radial position
+        if test_obj.is_internal:
+            # Tan=0
+            assert surf_list[0].point_ref.real > surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real > surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real > surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real > surf_list[5].point_ref.real
+        else:
+            # Tan=0
+            assert surf_list[0].point_ref.real < surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real < surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real < surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real < surf_list[5].point_ref.real
+
+    @pytest.mark.parametrize("test_dict", slotW29_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
@@ -62,7 +140,7 @@ class Test_SlotW29_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface(test_obj.slot)
+        b = Slot.comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -78,7 +156,7 @@ class Test_SlotW29_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_active(test_obj.slot)
+        b = Slot.comp_surface_active(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -94,7 +172,7 @@ class Test_SlotW29_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -105,7 +183,7 @@ class Test_SlotW29_meth(object):
         a = test_obj.slot.comp_angle_opening()
         assert a == 2 * arcsin(test_obj.slot.W0 / (2 * 0.1325))
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 

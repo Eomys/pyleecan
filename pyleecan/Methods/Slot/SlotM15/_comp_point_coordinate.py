@@ -30,8 +30,10 @@ def _comp_point_coordinate(self):
     ZM1 = abs(Z2) * exp(-1j * alpha_M)
     if self.is_outwards():
         ZM0 = abs(Z2) - self.Hmag
+        Zc = ZM0 + self.Rtopm
     else:  # inward slot
         ZM0 = abs(Z2) + self.Hmag
+        Zc = ZM0 - self.Rtopm
 
     sign = -1 if self.is_outwards() else 1
     x = abs(Z2) - sign * (
@@ -45,6 +47,7 @@ def _comp_point_coordinate(self):
     point_dict["ZM1"] = ZM1
     point_dict["ZM2"] = ZM2
     point_dict["ZM0"] = ZM0
+    point_dict["Zc"] = Zc
     # symetry
     point_dict["Z3"] = Z2.conjugate()
     point_dict["Z4"] = Z1.conjugate()

@@ -9,8 +9,8 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
-from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from .....GUI.Tools.FloatEdit import FloatEdit
+from .....GUI.Dialog.DMatLib.WMatSelect.WMatSelectV import WMatSelectV
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -19,24 +19,30 @@ class Ui_SMachineDimension(object):
     def setupUi(self, SMachineDimension):
         if not SMachineDimension.objectName():
             SMachineDimension.setObjectName(u"SMachineDimension")
-        SMachineDimension.resize(650, 550)
+        SMachineDimension.resize(919, 550)
         SMachineDimension.setMinimumSize(QSize(650, 550))
         self.horizontalLayout_2 = QHBoxLayout(SMachineDimension)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.img_machine = QLabel(SMachineDimension)
         self.img_machine.setObjectName(u"img_machine")
-        self.img_machine.setMinimumSize(QSize(400, 400))
+        self.img_machine.setMinimumSize(QSize(0, 0))
         self.img_machine.setMaximumSize(QSize(16777215, 16777215))
         self.img_machine.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/MachineDimension/Dim_IRS.png")
+            QPixmap(
+                u":/images/images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator.png"
+            )
         )
         self.img_machine.setScaledContents(True)
 
         self.horizontalLayout_2.addWidget(self.img_machine)
 
-        self.verticalLayout_3 = QVBoxLayout()
+        self.widget = QWidget(SMachineDimension)
+        self.widget.setObjectName(u"widget")
+        self.widget.setMinimumSize(QSize(250, 0))
+        self.widget.setMaximumSize(QSize(250, 16777215))
+        self.verticalLayout_3 = QVBoxLayout(self.widget)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.g_stator = QGroupBox(SMachineDimension)
+        self.g_stator = QGroupBox(self.widget)
         self.g_stator.setObjectName(u"g_stator")
         self.g_stator.setMinimumSize(QSize(150, 0))
         self.g_stator.setMaximumSize(QSize(16777215, 16777215))
@@ -85,7 +91,7 @@ class Ui_SMachineDimension(object):
 
         self.verticalLayout_3.addWidget(self.g_stator)
 
-        self.g_rotor = QGroupBox(SMachineDimension)
+        self.g_rotor = QGroupBox(self.widget)
         self.g_rotor.setObjectName(u"g_rotor")
         self.gridLayout_3 = QGridLayout(self.g_rotor)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
@@ -129,18 +135,18 @@ class Ui_SMachineDimension(object):
 
         self.verticalLayout_3.addWidget(self.g_rotor)
 
-        self.out_airgap = QLabel(SMachineDimension)
+        self.out_airgap = QLabel(self.widget)
         self.out_airgap.setObjectName(u"out_airgap")
 
         self.verticalLayout_3.addWidget(self.out_airgap)
 
-        self.g_shaft = QGroupBox(SMachineDimension)
+        self.g_shaft = QGroupBox(self.widget)
         self.g_shaft.setObjectName(u"g_shaft")
         self.g_shaft.setMinimumSize(QSize(0, 0))
         self.g_shaft.setCheckable(True)
         self.verticalLayout = QVBoxLayout(self.g_shaft)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.w_mat_0 = WMatSelect(self.g_shaft)
+        self.w_mat_0 = WMatSelectV(self.g_shaft)
         self.w_mat_0.setObjectName(u"w_mat_0")
         self.w_mat_0.setMinimumSize(QSize(100, 0))
 
@@ -153,12 +159,12 @@ class Ui_SMachineDimension(object):
 
         self.verticalLayout_3.addWidget(self.g_shaft)
 
-        self.g_frame = QGroupBox(SMachineDimension)
+        self.g_frame = QGroupBox(self.widget)
         self.g_frame.setObjectName(u"g_frame")
         self.g_frame.setCheckable(True)
         self.verticalLayout_2 = QVBoxLayout(self.g_frame)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.w_mat_1 = WMatSelect(self.g_frame)
+        self.w_mat_1 = WMatSelectV(self.g_frame)
         self.w_mat_1.setObjectName(u"w_mat_1")
         self.w_mat_1.setMinimumSize(QSize(100, 0))
 
@@ -216,19 +222,19 @@ class Ui_SMachineDimension(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
-        self.b_previous = QPushButton(SMachineDimension)
+        self.b_previous = QPushButton(self.widget)
         self.b_previous.setObjectName(u"b_previous")
 
         self.horizontalLayout.addWidget(self.b_previous)
 
-        self.b_next = QPushButton(SMachineDimension)
+        self.b_next = QPushButton(self.widget)
         self.b_next.setObjectName(u"b_next")
 
         self.horizontalLayout.addWidget(self.b_next)
 
         self.verticalLayout_3.addLayout(self.horizontalLayout)
 
-        self.horizontalLayout_2.addLayout(self.verticalLayout_3)
+        self.horizontalLayout_2.addWidget(self.widget)
 
         self.retranslateUi(SMachineDimension)
         self.g_shaft.toggled.connect(self.out_Drsh.setVisible)
@@ -255,7 +261,7 @@ class Ui_SMachineDimension(object):
         )
         # endif // QT_CONFIG(tooltip)
         self.in_SRext.setText(
-            QCoreApplication.translate("SMachineDimension", u"Rext:", None)
+            QCoreApplication.translate("SMachineDimension", u"Rext", None)
         )
         # if QT_CONFIG(tooltip)
         self.lf_SRext.setToolTip(
@@ -275,7 +281,7 @@ class Ui_SMachineDimension(object):
         )
         # endif // QT_CONFIG(tooltip)
         self.in_SRint.setText(
-            QCoreApplication.translate("SMachineDimension", u"Rint:", None)
+            QCoreApplication.translate("SMachineDimension", u"Rint", None)
         )
         # if QT_CONFIG(tooltip)
         self.lf_SRint.setToolTip(
@@ -298,7 +304,7 @@ class Ui_SMachineDimension(object):
         )
         # endif // QT_CONFIG(tooltip)
         self.in_RRext.setText(
-            QCoreApplication.translate("SMachineDimension", u"Rext:", None)
+            QCoreApplication.translate("SMachineDimension", u"Rext", None)
         )
         # if QT_CONFIG(tooltip)
         self.lf_RRext.setToolTip(
@@ -318,7 +324,7 @@ class Ui_SMachineDimension(object):
         )
         # endif // QT_CONFIG(tooltip)
         self.in_RRint.setText(
-            QCoreApplication.translate("SMachineDimension", u"Rint:", None)
+            QCoreApplication.translate("SMachineDimension", u"Rint", None)
         )
         # if QT_CONFIG(tooltip)
         self.lf_RRint.setToolTip(
@@ -379,7 +385,7 @@ class Ui_SMachineDimension(object):
         )
         # endif // QT_CONFIG(whatsthis)
         self.in_Lfra.setText(
-            QCoreApplication.translate("SMachineDimension", u"Lfra:", None)
+            QCoreApplication.translate("SMachineDimension", u"Lfra", None)
         )
         # if QT_CONFIG(tooltip)
         self.lf_Wfra.setToolTip(
@@ -402,7 +408,7 @@ class Ui_SMachineDimension(object):
         )
         # endif // QT_CONFIG(whatsthis)
         self.in_Wfra.setText(
-            QCoreApplication.translate("SMachineDimension", u"Wfra:", None)
+            QCoreApplication.translate("SMachineDimension", u"Wfra", None)
         )
         # if QT_CONFIG(tooltip)
         self.unit_Lfra.setToolTip(

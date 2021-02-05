@@ -2,7 +2,7 @@
 
 from numpy import pi, power
 
-from ....Methods.Machine.Conductor.check import CondCheckError
+from ....Methods.Machine.CondType12 import *
 
 
 def check(self):
@@ -33,15 +33,3 @@ def check(self):
             raise C12_WireDontFit("The wire is too big to fit in the conductor")
         else:
             raise C12_WireDontFit("The wires are too big to fit in the conductor")
-
-
-class Cond12CheckError(CondCheckError):
-    """ """
-
-    pass
-
-
-class C12_WireDontFit(Cond12CheckError):
-    """ """
-
-    pass

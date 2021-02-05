@@ -2,10 +2,13 @@
 
 from pyleecan.Classes.Arc2 import Arc2
 
-from pyleecan.Methods.Geometry.Arc2.check import PointArc2Error, AngleArc2Error
-from pyleecan.Methods.Geometry.Arc2.discretize import NbPointArc2DError
-from pyleecan.Methods.Geometry.Arc2.rotate import AngleRotationArc2Error
-from pyleecan.Methods.Geometry.Arc2.translate import PointTranslateArc2Error
+from pyleecan.Methods.Geometry.Arc2 import (
+    PointArc2Error,
+    AngleArc2Error,
+    NbPointArc2DError,
+    AngleRotationArc2Error,
+    PointTranslateArc2Error,
+)
 from numpy import pi, array, sqrt, exp, angle
 import pytest
 

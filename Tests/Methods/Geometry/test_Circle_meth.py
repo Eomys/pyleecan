@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from pyleecan.Classes.Circle import Circle
 from pyleecan.Classes.Arc3 import Arc3
-from pyleecan.Methods.Geometry.Circle.rotate import AngleRotationCircleError
-from pyleecan.Methods.Geometry.Circle.translate import PointTranslateCircleError
+from pyleecan.Methods.Geometry.Circle import (
+    AngleRotationCircleError,
+    PointTranslateCircleError,
+)
 from numpy import pi, sqrt, exp, linspace
 import pytest
 

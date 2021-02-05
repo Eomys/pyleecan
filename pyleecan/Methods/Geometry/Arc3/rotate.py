@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import exp
+from ....Methods.Geometry.Arc3 import AngleRotationArc3Error
 
 
 def rotate(self, angle):
@@ -27,9 +28,3 @@ def rotate(self, angle):
     # Modification from the rotation  of the object
     self.begin = self.begin * exp(1j * angle)
     self.end = self.end * exp(1j * angle)
-
-
-class AngleRotationArc3Error(Exception):
-    """ """
-
-    pass

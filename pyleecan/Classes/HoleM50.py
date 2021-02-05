@@ -18,6 +18,11 @@ from .HoleMag import HoleMag
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Slot.HoleM50._comp_point_coordinate import _comp_point_coordinate
+except ImportError as error:
+    _comp_point_coordinate = error
+
+try:
     from ..Methods.Slot.HoleM50.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
@@ -57,6 +62,11 @@ try:
 except ImportError as error:
     comp_surface_magnet_id = error
 
+try:
+    from ..Methods.Slot.HoleM50.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
+
 
 from ._check import InitUnKnowClassError
 from .Magnet import Magnet
@@ -70,6 +80,18 @@ class HoleM50(HoleMag):
     IS_SYMMETRICAL = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.HoleM50._comp_point_coordinate
+    if isinstance(_comp_point_coordinate, ImportError):
+        _comp_point_coordinate = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM50 method _comp_point_coordinate: "
+                    + str(_comp_point_coordinate)
+                )
+            )
+        )
+    else:
+        _comp_point_coordinate = _comp_point_coordinate
     # cf Methods.Slot.HoleM50.build_geometry
     if isinstance(build_geometry, ImportError):
         build_geometry = property(
@@ -149,6 +171,17 @@ class HoleM50(HoleMag):
         )
     else:
         comp_surface_magnet_id = comp_surface_magnet_id
+    # cf Methods.Slot.HoleM50.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM50 method plot_schematics: " + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
     # save and copy methods are available in all object
     save = save
     copy = copy

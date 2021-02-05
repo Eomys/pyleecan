@@ -18,7 +18,9 @@ def comp_surface_active(self):
 
     """
 
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z2 = point_dict["Z2"]
+    Z4 = point_dict["Z4"]
 
     if self.is_outwards():
         Rint = abs(Z2)

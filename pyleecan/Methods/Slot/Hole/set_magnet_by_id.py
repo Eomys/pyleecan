@@ -1,4 +1,4 @@
-from . import MagnetIndexError
+from ....Methods.Slot.Hole import MagnetIndexError
 
 
 def set_magnet_by_id(self, index, magnet):

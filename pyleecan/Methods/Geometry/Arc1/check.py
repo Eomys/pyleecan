@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ....Methods.Geometry.Arc1 import *
 
 
 def check(self):
@@ -31,15 +32,3 @@ def check(self):
         )
     if self.radius == 0:
         raise RadiusArc1Error("An Arc1 can't have a null radius")
-
-
-class PointArc1Error(Exception):
-    """ """
-
-    pass
-
-
-class RadiusArc1Error(Exception):
-    """ """
-
-    pass

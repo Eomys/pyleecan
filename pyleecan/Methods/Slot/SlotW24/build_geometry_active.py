@@ -35,9 +35,13 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     # get the name of the lamination
     st = self.get_name_lam()
 
-    [Z4, Z3, Z2, Z1] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
 
-    X = linspace(Z4, Z3, Nrad + 1)
+    X = linspace(Z1, Z2, Nrad + 1)
 
     # Nrad+1 and Ntan+1 because 3 points => 2 zones
     Z = zeros((Nrad + 1, Ntan + 1), dtype=complex)
@@ -46,10 +50,10 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
             1j * linspace(angle(X[ii]), angle(X[ii].conjugate()), Ntan + 1)
         )
 
-    assert abs(Z[0][0] - Z4) < 1e-6
-    assert abs(Z[Nrad][0] - Z3) < 1e-6
-    assert abs(Z[0][Ntan] - Z1) < 1e-6
-    assert abs(Z[Nrad][Ntan] - Z2) < 1e-6
+    assert abs(Z[0][0] - Z1) < 1e-6
+    assert abs(Z[Nrad][0] - Z2) < 1e-6
+    assert abs(Z[0][Ntan] - Z4) < 1e-6
+    assert abs(Z[Nrad][Ntan] - Z3) < 1e-6
 
     # We go thought the zone by Rad then Tan, starting by (0,0)
     surf_list = list()

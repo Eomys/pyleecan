@@ -1,3 +1,5 @@
+from ..Load.import_class import import_class
+
 unit_dict = {
     "time": "s",
     "angle": "rad",
@@ -50,3 +52,35 @@ SC_LINE_WIDTH = 1
 MAIN_LINE_COLOR = "0.5"  # Gray
 MAIN_LINE_STYLE = "dotted"
 MAIN_LINE_WIDTH = 1
+
+
+def plot_quote(Z1, Zlim1, Zlim2, Z2, offset_label=0, fig=None, ax=None, label=None):
+    """Function to plot a "quote" for the scematics"""
+    Segment = import_class("pyleecan.Classes", "Segment")
+    line1 = Segment(Z1, Zlim1)
+    line2 = Segment(Zlim1, Zlim2)
+    line3 = Segment(Zlim2, Z2)
+    line1.plot(
+        fig=fig,
+        ax=ax,
+        color=SC_LINE_COLOR,
+        linestyle=SC_LINE_STYLE,
+        linewidth=SC_LINE_WIDTH,
+    )
+    line2.plot(
+        fig=fig,
+        ax=ax,
+        color=ARROW_COLOR,
+        linewidth=ARROW_WIDTH,
+        label=label,
+        offset_label=offset_label,
+        is_arrow=True,
+        fontsize=SC_FONT_SIZE,
+    )
+    line3.plot(
+        fig=fig,
+        ax=ax,
+        color=SC_LINE_COLOR,
+        linestyle=SC_LINE_STYLE,
+        linewidth=SC_LINE_WIDTH,
+    )

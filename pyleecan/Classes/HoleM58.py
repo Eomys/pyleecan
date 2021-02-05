@@ -18,6 +18,11 @@ from .HoleMag import HoleMag
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Slot.HoleM58._comp_point_coordinate import _comp_point_coordinate
+except ImportError as error:
+    _comp_point_coordinate = error
+
+try:
     from ..Methods.Slot.HoleM58.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
@@ -33,9 +38,9 @@ except ImportError as error:
     comp_radius = error
 
 try:
-    from ..Methods.Slot.HoleM58.remove_magnet import remove_magnet
+    from ..Methods.Slot.HoleM58.comp_surface_magnet_id import comp_surface_magnet_id
 except ImportError as error:
-    remove_magnet = error
+    comp_surface_magnet_id = error
 
 try:
     from ..Methods.Slot.HoleM58.has_magnet import has_magnet
@@ -43,9 +48,14 @@ except ImportError as error:
     has_magnet = error
 
 try:
-    from ..Methods.Slot.HoleM58.comp_surface_magnet_id import comp_surface_magnet_id
+    from ..Methods.Slot.HoleM58.plot_schematics import plot_schematics
 except ImportError as error:
-    comp_surface_magnet_id = error
+    plot_schematics = error
+
+try:
+    from ..Methods.Slot.HoleM58.remove_magnet import remove_magnet
+except ImportError as error:
+    remove_magnet = error
 
 
 from ._check import InitUnKnowClassError
@@ -60,6 +70,18 @@ class HoleM58(HoleMag):
     IS_SYMMETRICAL = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.HoleM58._comp_point_coordinate
+    if isinstance(_comp_point_coordinate, ImportError):
+        _comp_point_coordinate = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM58 method _comp_point_coordinate: "
+                    + str(_comp_point_coordinate)
+                )
+            )
+        )
+    else:
+        _comp_point_coordinate = _comp_point_coordinate
     # cf Methods.Slot.HoleM58.build_geometry
     if isinstance(build_geometry, ImportError):
         build_geometry = property(
@@ -89,26 +111,6 @@ class HoleM58(HoleMag):
         )
     else:
         comp_radius = comp_radius
-    # cf Methods.Slot.HoleM58.remove_magnet
-    if isinstance(remove_magnet, ImportError):
-        remove_magnet = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM58 method remove_magnet: " + str(remove_magnet)
-                )
-            )
-        )
-    else:
-        remove_magnet = remove_magnet
-    # cf Methods.Slot.HoleM58.has_magnet
-    if isinstance(has_magnet, ImportError):
-        has_magnet = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use HoleM58 method has_magnet: " + str(has_magnet))
-            )
-        )
-    else:
-        has_magnet = has_magnet
     # cf Methods.Slot.HoleM58.comp_surface_magnet_id
     if isinstance(comp_surface_magnet_id, ImportError):
         comp_surface_magnet_id = property(
@@ -121,6 +123,37 @@ class HoleM58(HoleMag):
         )
     else:
         comp_surface_magnet_id = comp_surface_magnet_id
+    # cf Methods.Slot.HoleM58.has_magnet
+    if isinstance(has_magnet, ImportError):
+        has_magnet = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleM58 method has_magnet: " + str(has_magnet))
+            )
+        )
+    else:
+        has_magnet = has_magnet
+    # cf Methods.Slot.HoleM58.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM58 method plot_schematics: " + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
+    # cf Methods.Slot.HoleM58.remove_magnet
+    if isinstance(remove_magnet, ImportError):
+        remove_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM58 method remove_magnet: " + str(remove_magnet)
+                )
+            )
+        )
+    else:
+        remove_magnet = remove_magnet
     # save and copy methods are available in all object
     save = save
     copy = copy

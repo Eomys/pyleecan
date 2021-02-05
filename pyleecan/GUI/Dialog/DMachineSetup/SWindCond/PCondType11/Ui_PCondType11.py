@@ -19,7 +19,7 @@ class Ui_PCondType11(object):
     def setupUi(self, PCondType11):
         if not PCondType11.objectName():
             PCondType11.setObjectName(u"PCondType11")
-        PCondType11.resize(1154, 544)
+        PCondType11.resize(1243, 544)
         self.horizontalLayout = QHBoxLayout(PCondType11)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.img_cond = QLabel(PCondType11)
@@ -27,112 +27,131 @@ class Ui_PCondType11(object):
         self.img_cond.setMinimumSize(QSize(0, 0))
         self.img_cond.setMaximumSize(QSize(16777215, 16777215))
         self.img_cond.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WindParam/Cond_1_1.PNG")
+            QPixmap(u":/images/images/MachineSetup/WindParam/CondType11.png")
         )
         self.img_cond.setScaledContents(True)
 
         self.horizontalLayout.addWidget(self.img_cond)
 
-        self.verticalLayout = QVBoxLayout()
+        self.widget = QWidget(PCondType11)
+        self.widget.setObjectName(u"widget")
+        self.widget.setMinimumSize(QSize(250, 0))
+        self.widget.setMaximumSize(QSize(250, 16777215))
+        self.verticalLayout = QVBoxLayout(self.widget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.in_Nwpc1_tan = QLabel(PCondType11)
+        self.in_Nwpc1_tan = QLabel(self.widget)
         self.in_Nwpc1_tan.setObjectName(u"in_Nwpc1_tan")
-        self.in_Nwpc1_tan.setMinimumSize(QSize(60, 0))
+        self.in_Nwpc1_tan.setMinimumSize(QSize(70, 0))
 
         self.gridLayout.addWidget(self.in_Nwpc1_tan, 0, 0, 1, 1)
 
-        self.si_Nwpc1_tan = QSpinBox(PCondType11)
+        self.si_Nwpc1_tan = QSpinBox(self.widget)
         self.si_Nwpc1_tan.setObjectName(u"si_Nwpc1_tan")
-        self.si_Nwpc1_tan.setMinimumSize(QSize(70, 0))
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.si_Nwpc1_tan.sizePolicy().hasHeightForWidth())
+        self.si_Nwpc1_tan.setSizePolicy(sizePolicy)
+        self.si_Nwpc1_tan.setMinimumSize(QSize(0, 0))
         self.si_Nwpc1_tan.setValue(99)
 
         self.gridLayout.addWidget(self.si_Nwpc1_tan, 0, 1, 1, 1)
 
-        self.in_Nwpc1_rad = QLabel(PCondType11)
+        self.in_Nwpc1_rad = QLabel(self.widget)
         self.in_Nwpc1_rad.setObjectName(u"in_Nwpc1_rad")
-        self.in_Nwpc1_rad.setMinimumSize(QSize(40, 0))
+        self.in_Nwpc1_rad.setMinimumSize(QSize(70, 0))
 
         self.gridLayout.addWidget(self.in_Nwpc1_rad, 1, 0, 1, 1)
 
-        self.si_Nwpc1_rad = QSpinBox(PCondType11)
+        self.si_Nwpc1_rad = QSpinBox(self.widget)
         self.si_Nwpc1_rad.setObjectName(u"si_Nwpc1_rad")
+        sizePolicy.setHeightForWidth(self.si_Nwpc1_rad.sizePolicy().hasHeightForWidth())
+        self.si_Nwpc1_rad.setSizePolicy(sizePolicy)
         self.si_Nwpc1_rad.setValue(99)
 
         self.gridLayout.addWidget(self.si_Nwpc1_rad, 1, 1, 1, 1)
 
-        self.in_Wwire = QLabel(PCondType11)
+        self.in_Wwire = QLabel(self.widget)
         self.in_Wwire.setObjectName(u"in_Wwire")
         self.in_Wwire.setMinimumSize(QSize(40, 0))
 
         self.gridLayout.addWidget(self.in_Wwire, 2, 0, 1, 1)
 
-        self.lf_Wwire = FloatEdit(PCondType11)
+        self.lf_Wwire = FloatEdit(self.widget)
         self.lf_Wwire.setObjectName(u"lf_Wwire")
-        self.lf_Wwire.setMinimumSize(QSize(50, 0))
-        self.lf_Wwire.setMaximumSize(QSize(100, 100))
+        sizePolicy.setHeightForWidth(self.lf_Wwire.sizePolicy().hasHeightForWidth())
+        self.lf_Wwire.setSizePolicy(sizePolicy)
+        self.lf_Wwire.setMinimumSize(QSize(0, 0))
+        self.lf_Wwire.setMaximumSize(QSize(16777215, 100))
 
         self.gridLayout.addWidget(self.lf_Wwire, 2, 1, 1, 1)
 
-        self.unit_Wwire = QLabel(PCondType11)
+        self.unit_Wwire = QLabel(self.widget)
         self.unit_Wwire.setObjectName(u"unit_Wwire")
         self.unit_Wwire.setMinimumSize(QSize(0, 0))
 
         self.gridLayout.addWidget(self.unit_Wwire, 2, 2, 1, 1)
 
-        self.in_Hwire = QLabel(PCondType11)
+        self.in_Hwire = QLabel(self.widget)
         self.in_Hwire.setObjectName(u"in_Hwire")
         self.in_Hwire.setMinimumSize(QSize(40, 0))
 
         self.gridLayout.addWidget(self.in_Hwire, 3, 0, 1, 1)
 
-        self.lf_Hwire = FloatEdit(PCondType11)
+        self.lf_Hwire = FloatEdit(self.widget)
         self.lf_Hwire.setObjectName(u"lf_Hwire")
-        self.lf_Hwire.setMinimumSize(QSize(50, 0))
-        self.lf_Hwire.setMaximumSize(QSize(100, 100))
+        sizePolicy.setHeightForWidth(self.lf_Hwire.sizePolicy().hasHeightForWidth())
+        self.lf_Hwire.setSizePolicy(sizePolicy)
+        self.lf_Hwire.setMinimumSize(QSize(0, 0))
+        self.lf_Hwire.setMaximumSize(QSize(16777215, 100))
 
         self.gridLayout.addWidget(self.lf_Hwire, 3, 1, 1, 1)
 
-        self.unit_Hwire = QLabel(PCondType11)
+        self.unit_Hwire = QLabel(self.widget)
         self.unit_Hwire.setObjectName(u"unit_Hwire")
         self.unit_Hwire.setMinimumSize(QSize(0, 0))
 
         self.gridLayout.addWidget(self.unit_Hwire, 3, 2, 1, 1)
 
-        self.in_Wins_wire = QLabel(PCondType11)
+        self.in_Wins_wire = QLabel(self.widget)
         self.in_Wins_wire.setObjectName(u"in_Wins_wire")
         self.in_Wins_wire.setMinimumSize(QSize(40, 0))
 
         self.gridLayout.addWidget(self.in_Wins_wire, 4, 0, 1, 1)
 
-        self.lf_Wins_wire = FloatEdit(PCondType11)
+        self.lf_Wins_wire = FloatEdit(self.widget)
         self.lf_Wins_wire.setObjectName(u"lf_Wins_wire")
-        self.lf_Wins_wire.setMinimumSize(QSize(50, 0))
-        self.lf_Wins_wire.setMaximumSize(QSize(100, 100))
+        sizePolicy.setHeightForWidth(self.lf_Wins_wire.sizePolicy().hasHeightForWidth())
+        self.lf_Wins_wire.setSizePolicy(sizePolicy)
+        self.lf_Wins_wire.setMinimumSize(QSize(0, 0))
+        self.lf_Wins_wire.setMaximumSize(QSize(16777215, 100))
 
         self.gridLayout.addWidget(self.lf_Wins_wire, 4, 1, 1, 1)
 
-        self.unit_Wins_wire = QLabel(PCondType11)
+        self.unit_Wins_wire = QLabel(self.widget)
         self.unit_Wins_wire.setObjectName(u"unit_Wins_wire")
         self.unit_Wins_wire.setMinimumSize(QSize(0, 0))
 
         self.gridLayout.addWidget(self.unit_Wins_wire, 4, 2, 1, 1)
 
-        self.in_Lewout = QLabel(PCondType11)
+        self.in_Lewout = QLabel(self.widget)
         self.in_Lewout.setObjectName(u"in_Lewout")
         self.in_Lewout.setMinimumSize(QSize(40, 0))
 
         self.gridLayout.addWidget(self.in_Lewout, 5, 0, 1, 1)
 
-        self.lf_Lewout = FloatEdit(PCondType11)
+        self.lf_Lewout = FloatEdit(self.widget)
         self.lf_Lewout.setObjectName(u"lf_Lewout")
-        self.lf_Lewout.setMinimumSize(QSize(50, 0))
-        self.lf_Lewout.setMaximumSize(QSize(100, 100))
+        sizePolicy.setHeightForWidth(self.lf_Lewout.sizePolicy().hasHeightForWidth())
+        self.lf_Lewout.setSizePolicy(sizePolicy)
+        self.lf_Lewout.setMinimumSize(QSize(0, 0))
+        self.lf_Lewout.setMaximumSize(QSize(16777215, 100))
 
         self.gridLayout.addWidget(self.lf_Lewout, 5, 1, 1, 1)
 
-        self.unit_Lewout = QLabel(PCondType11)
+        self.unit_Lewout = QLabel(self.widget)
         self.unit_Lewout.setObjectName(u"unit_Lewout")
         self.unit_Lewout.setMinimumSize(QSize(0, 0))
 
@@ -140,18 +159,18 @@ class Ui_PCondType11(object):
 
         self.verticalLayout.addLayout(self.gridLayout)
 
-        self.w_out = WCondOut(PCondType11)
-        self.w_out.setObjectName(u"w_out")
-
-        self.verticalLayout.addWidget(self.w_out)
-
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
-        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.w_out = WCondOut(self.widget)
+        self.w_out.setObjectName(u"w_out")
+
+        self.verticalLayout.addWidget(self.w_out)
+
+        self.horizontalLayout.addWidget(self.widget)
 
         QWidget.setTabOrder(self.si_Nwpc1_tan, self.si_Nwpc1_rad)
         QWidget.setTabOrder(self.si_Nwpc1_rad, self.lf_Wwire)
@@ -170,21 +189,17 @@ class Ui_PCondType11(object):
         )
         self.img_cond.setText("")
         self.in_Nwpc1_tan.setText(
-            QCoreApplication.translate("PCondType11", u"Nwpc1_tan :", None)
+            QCoreApplication.translate("PCondType11", u"Nwppc_tan", None)
         )
         self.in_Nwpc1_rad.setText(
-            QCoreApplication.translate("PCondType11", u"Nwpc1_rad :", None)
+            QCoreApplication.translate("PCondType11", u"Nwppc_rad", None)
         )
-        self.in_Wwire.setText(
-            QCoreApplication.translate("PCondType11", u"Wwire :", None)
-        )
+        self.in_Wwire.setText(QCoreApplication.translate("PCondType11", u"Wwire", None))
         self.unit_Wwire.setText(QCoreApplication.translate("PCondType11", u"m", None))
-        self.in_Hwire.setText(
-            QCoreApplication.translate("PCondType11", u"Hwire :", None)
-        )
+        self.in_Hwire.setText(QCoreApplication.translate("PCondType11", u"Hwire", None))
         self.unit_Hwire.setText(QCoreApplication.translate("PCondType11", u"m", None))
         self.in_Wins_wire.setText(
-            QCoreApplication.translate("PCondType11", u"Wins_wire :", None)
+            QCoreApplication.translate("PCondType11", u"Wins_wire", None)
         )
         self.unit_Wins_wire.setText(
             QCoreApplication.translate("PCondType11", u"m", None)
@@ -204,7 +219,7 @@ class Ui_PCondType11(object):
         )
         # endif // QT_CONFIG(whatsthis)
         self.in_Lewout.setText(
-            QCoreApplication.translate("PCondType11", u"Lewout:", None)
+            QCoreApplication.translate("PCondType11", u"Lewout", None)
         )
         # if QT_CONFIG(tooltip)
         self.lf_Lewout.setToolTip(

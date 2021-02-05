@@ -32,17 +32,21 @@ class Ui_SWindParam(object):
 
         self.horizontalLayout_3.addWidget(self.img_wind_geo)
 
-        self.verticalLayout_2 = QVBoxLayout()
+        self.widget = QWidget(SWindParam)
+        self.widget.setObjectName(u"widget")
+        self.widget.setMinimumSize(QSize(250, 0))
+        self.widget.setMaximumSize(QSize(250, 16777215))
+        self.verticalLayout_2 = QVBoxLayout(self.widget)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.in_Npcpp = QLabel(SWindParam)
+        self.in_Npcpp = QLabel(self.widget)
         self.in_Npcpp.setObjectName(u"in_Npcpp")
         self.in_Npcpp.setMinimumSize(QSize(40, 0))
 
         self.horizontalLayout.addWidget(self.in_Npcpp)
 
-        self.si_Npcpp = QSpinBox(SWindParam)
+        self.si_Npcpp = QSpinBox(self.widget)
         self.si_Npcpp.setObjectName(u"si_Npcpp")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -59,13 +63,13 @@ class Ui_SWindParam(object):
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.in_Ntcoil = QLabel(SWindParam)
+        self.in_Ntcoil = QLabel(self.widget)
         self.in_Ntcoil.setObjectName(u"in_Ntcoil")
         self.in_Ntcoil.setMinimumSize(QSize(40, 0))
 
         self.horizontalLayout_2.addWidget(self.in_Ntcoil)
 
-        self.si_Ntcoil = QSpinBox(SWindParam)
+        self.si_Ntcoil = QSpinBox(self.widget)
         self.si_Ntcoil.setObjectName(u"si_Ntcoil")
         sizePolicy.setHeightForWidth(self.si_Ntcoil.sizePolicy().hasHeightForWidth())
         self.si_Ntcoil.setSizePolicy(sizePolicy)
@@ -77,22 +81,22 @@ class Ui_SWindParam(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
 
-        self.in_qs = QLabel(SWindParam)
+        self.in_qs = QLabel(self.widget)
         self.in_qs.setObjectName(u"in_qs")
 
         self.verticalLayout_2.addWidget(self.in_qs)
 
-        self.in_Zs = QLabel(SWindParam)
+        self.in_Zs = QLabel(self.widget)
         self.in_Zs.setObjectName(u"in_Zs")
 
         self.verticalLayout_2.addWidget(self.in_Zs)
 
-        self.in_Nlay = QLabel(SWindParam)
+        self.in_Nlay = QLabel(self.widget)
         self.in_Nlay.setObjectName(u"in_Nlay")
 
         self.verticalLayout_2.addWidget(self.in_Nlay)
 
-        self.groupBox = QGroupBox(SWindParam)
+        self.groupBox = QGroupBox(self.widget)
         self.groupBox.setObjectName(u"groupBox")
         self.verticalLayout = QVBoxLayout(self.groupBox)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -109,12 +113,12 @@ class Ui_SWindParam(object):
         self.verticalLayout_2.addWidget(self.groupBox)
 
         self.verticalSpacer = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 247, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
         self.verticalLayout_2.addItem(self.verticalSpacer)
 
-        self.horizontalLayout_3.addLayout(self.verticalLayout_2)
+        self.horizontalLayout_3.addWidget(self.widget)
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)
 
@@ -149,11 +153,9 @@ class Ui_SWindParam(object):
             QCoreApplication.translate("SWindParam", u"Form", None)
         )
         self.img_wind_geo.setText("")
-        self.in_Npcpp.setText(
-            QCoreApplication.translate("SWindParam", u"Npcpp :", None)
-        )
+        self.in_Npcpp.setText(QCoreApplication.translate("SWindParam", u"Npcpp", None))
         self.in_Ntcoil.setText(
-            QCoreApplication.translate("SWindParam", u"Ntcoil :", None)
+            QCoreApplication.translate("SWindParam", u"Ntcoil", None)
         )
         # if QT_CONFIG(whatsthis)
         self.in_qs.setWhatsThis(

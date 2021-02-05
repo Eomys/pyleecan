@@ -11,52 +11,45 @@ def _comp_point_coordinate(self):
 
     Returns
     -------
-    point_list: list
-        A list of PointS
-
+    point_dict: dict
+        A dict of the slot point coordinates
     """
     Rbo = self.get_Rbo()
 
     # We compute the point on the tooth, then rotation to get the slot
+    # Zxt is the equivalent of point Zx in tooth ref
 
     # alpha_0 is the angle to rotate Z0 so ||Z1,Z8|| = W4
     alpha_0 = float(arcsin(self.W4 / (2 * Rbo)))
 
     # comp point coordinate (in complex)
     Z0 = Rbo * exp(1j * 0)
-    Z1 = Z0 * exp(1j * alpha_0)
+    Z1t = Z0 * exp(1j * alpha_0)
 
     if self.is_outwards():
-        Z2 = Z1 + self.H1
-        # alpha_1 is the angle of Z3 so ||Z3,Z6|| = W3
-        alpha_1 = float(arcsin(self.W3 / (2 * abs(Z2))))
-        Z3 = abs(Z2) * exp(1j * alpha_1)
-        Z4 = Z3 + self.H2
+        Z2t = Z1t + self.H1
+        # alpha_1 is the angle of Z3t so ||Z3t,Z6t|| = W3
+        alpha_1 = float(arcsin(self.W3 / (2 * abs(Z2t))))
+        Z3t = abs(Z2t) * exp(1j * alpha_1)
+        Z4t = Z3t + self.H2
     else:  # inward slot
-        Z2 = Z1 - self.H1
-        # alpha_1 is the angle of Z3 so ||Z3,Z6|| = W3
-        alpha_1 = float(arcsin(self.W3 / (2 * abs(Z2))))
-        Z3 = abs(Z2) * exp(1j * alpha_1)
-        Z4 = Z3 - self.H2
+        Z2t = Z1t - self.H1
+        # alpha_1 is the angle of Z3t so ||Z3t,Z6t|| = W3
+        alpha_1 = float(arcsin(self.W3 / (2 * abs(Z2t))))
+        Z3t = abs(Z2t) * exp(1j * alpha_1)
+        Z4t = Z3t - self.H2
 
-    # symetry
-    Z5 = Z4.conjugate()
-    Z6 = Z3.conjugate()
-    Z7 = Z2.conjugate()
-    Z8 = Z1.conjugate()
-
-    # Creation of points
+    point_dict = dict()
     # Rotation to get the slot
     hssp = pi / self.Zs
-    # Left part
-    Z1 = Z1 * exp(-1j * hssp)
-    Z2 = Z2 * exp(-1j * hssp)
-    Z3 = Z3 * exp(-1j * hssp)
-    Z4 = Z4 * exp(-1j * hssp)
-    # Right part
-    Z5 = Z5 * exp(1j * hssp)
-    Z6 = Z6 * exp(1j * hssp)
-    Z7 = Z7 * exp(1j * hssp)
-    Z8 = Z8 * exp(1j * hssp)
+    point_dict["Z1"] = Z1t * exp(-1j * hssp)
+    point_dict["Z2"] = Z2t * exp(-1j * hssp)
+    point_dict["Z3"] = Z3t * exp(-1j * hssp)
+    point_dict["Z4"] = Z4t * exp(-1j * hssp)
+    # symetry
+    point_dict["Z5"] = point_dict["Z4"].conjugate()
+    point_dict["Z6"] = point_dict["Z3"].conjugate()
+    point_dict["Z7"] = point_dict["Z2"].conjugate()
+    point_dict["Z8"] = point_dict["Z1"].conjugate()
 
-    return [Z8, Z7, Z6, Z5, Z4, Z3, Z2, Z1]
+    return point_dict
