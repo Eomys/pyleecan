@@ -10,6 +10,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from pyleecan.GUI.Tools.HelpButton import HelpButton
+from .....GUI.Tools.MPLCanvas import MPLCanvas2
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -20,16 +21,10 @@ class Ui_SWindPat(object):
             SWindPat.setObjectName(u"SWindPat")
         SWindPat.resize(650, 550)
         SWindPat.setMinimumSize(QSize(650, 550))
-        self.verticalLayout_2 = QVBoxLayout(SWindPat)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_4 = QVBoxLayout(SWindPat)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalSpacer_7 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
-        )
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer_7)
-
         self.b_help = HelpButton(SWindPat)
         self.b_help.setObjectName(u"b_help")
         self.b_help.setPixmap(QPixmap(u":/images/images/icon/help_16.png"))
@@ -62,36 +57,31 @@ class Ui_SWindPat(object):
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer)
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
-
-        self.img_wind_pat = QLabel(SWindPat)
-        self.img_wind_pat.setObjectName(u"img_wind_pat")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.img_wind_pat.sizePolicy().hasHeightForWidth())
-        self.img_wind_pat.setSizePolicy(sizePolicy)
-        self.img_wind_pat.setMinimumSize(QSize(0, 0))
-        self.img_wind_pat.setMaximumSize(QSize(16777215, 250))
-        self.img_wind_pat.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WindingPattern/Type_Wind_6.png")
-        )
-        self.img_wind_pat.setScaledContents(True)
-
-        self.verticalLayout_2.addWidget(self.img_wind_pat)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_2)
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.w_viewer = MPLCanvas2(SWindPat)
+        self.w_viewer.setObjectName(u"w_viewer")
+
+        self.horizontalLayout_5.addWidget(self.w_viewer)
+
+        self.widget = QWidget(SWindPat)
+        self.widget.setObjectName(u"widget")
+        self.widget.setMinimumSize(QSize(250, 0))
+        self.widget.setMaximumSize(QSize(250, 16777215))
+        self.verticalLayout_2 = QVBoxLayout(self.widget)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.in_coil_pitch = QLabel(SWindPat)
+        self.in_coil_pitch = QLabel(self.widget)
         self.in_coil_pitch.setObjectName(u"in_coil_pitch")
 
         self.horizontalLayout.addWidget(self.in_coil_pitch)
 
-        self.si_coil_pitch = QSpinBox(SWindPat)
+        self.si_coil_pitch = QSpinBox(self.widget)
         self.si_coil_pitch.setObjectName(u"si_coil_pitch")
 
         self.horizontalLayout.addWidget(self.si_coil_pitch)
@@ -100,14 +90,14 @@ class Ui_SWindPat(object):
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.in_Nslot = QLabel(SWindPat)
+        self.in_Nslot = QLabel(self.widget)
         self.in_Nslot.setObjectName(u"in_Nslot")
         self.in_Nslot.setMinimumSize(QSize(0, 0))
         self.in_Nslot.setMaximumSize(QSize(16777215, 16777215))
 
         self.horizontalLayout_4.addWidget(self.in_Nslot)
 
-        self.si_Nslot = QSpinBox(SWindPat)
+        self.si_Nslot = QSpinBox(self.widget)
         self.si_Nslot.setObjectName(u"si_Nslot")
         self.si_Nslot.setMinimumSize(QSize(60, 0))
 
@@ -115,20 +105,20 @@ class Ui_SWindPat(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_4)
 
-        self.is_reverse = QCheckBox(SWindPat)
+        self.is_reverse = QCheckBox(self.widget)
         self.is_reverse.setObjectName(u"is_reverse")
 
         self.verticalLayout.addWidget(self.is_reverse)
 
-        self.horizontalLayout_5.addLayout(self.verticalLayout)
+        self.verticalLayout_2.addLayout(self.verticalLayout)
 
-        self.horizontalSpacer_4 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        self.verticalSpacer = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.horizontalLayout_5.addItem(self.horizontalSpacer_4)
+        self.verticalLayout_2.addItem(self.verticalSpacer)
 
-        self.groupBox = QGroupBox(SWindPat)
+        self.groupBox = QGroupBox(self.widget)
         self.groupBox.setObjectName(u"groupBox")
         self.groupBox.setMinimumSize(QSize(200, 200))
         self.verticalLayout_3 = QVBoxLayout(self.groupBox)
@@ -149,15 +139,11 @@ class Ui_SWindPat(object):
 
         self.verticalLayout_3.addWidget(self.out_Nperw)
 
-        self.horizontalLayout_5.addWidget(self.groupBox)
+        self.verticalLayout_2.addWidget(self.groupBox)
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
+        self.horizontalLayout_5.addWidget(self.widget)
 
-        self.verticalSpacer_2 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
-        )
-
-        self.verticalLayout_2.addItem(self.verticalSpacer_2)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_5)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -182,7 +168,7 @@ class Ui_SWindPat(object):
 
         self.horizontalLayout_3.addWidget(self.b_next)
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_3)
 
         self.retranslateUi(SWindPat)
 
@@ -217,12 +203,11 @@ class Ui_SWindPat(object):
         )
 
         self.in_qs.setText(QCoreApplication.translate("SWindPat", u"qs :", None))
-        self.img_wind_pat.setText("")
         self.in_coil_pitch.setText(
             QCoreApplication.translate("SWindPat", u"coil_pitch", None)
         )
         self.in_Nslot.setText(
-            QCoreApplication.translate("SWindPat", u"Nslot_shift :", None)
+            QCoreApplication.translate("SWindPat", u"Nslot_shift", None)
         )
         self.is_reverse.setText(
             QCoreApplication.translate("SWindPat", u"reverse", None)

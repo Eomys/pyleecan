@@ -48,7 +48,7 @@ class WCondOut(QGroupBox):
             A WCondOut object
         """
 
-        lam = self.parent().lam
+        lam = self.parent().parent().lam
         H_txt = self.tr("Hcond = ")
         W_txt = self.tr("Wcond = ")
         S_txt = self.tr("Scond = ")
@@ -58,7 +58,7 @@ class WCondOut(QGroupBox):
         else:
             K_txt = self.tr("Krfill = ")
         # We compute the output only if the slot is correctly set
-        if self.parent().check() is None:
+        if self.parent().parent().check() is None:
             # Compute all the needed output as string
             H = format(self.u.get_m(lam.winding.conductor.comp_height()), ".4g")
             W = format(self.u.get_m(lam.winding.conductor.comp_width()), ".4g")
@@ -72,10 +72,10 @@ class WCondOut(QGroupBox):
                 K = "?"
 
             # Update the GUI to display the Output
-            self.out_H.setText(H_txt + H + " " + self.u.get_m_name())
-            self.out_W.setText(W_txt + W + " " + self.u.get_m_name())
-            self.out_S.setText(S_txt + S + " " + self.u.get_m2_name())
-            self.out_Sact.setText(Sa_txt + Sact + " " + self.u.get_m2_name())
+            self.out_H.setText(H_txt + H + " [" + self.u.get_m_name() + "]")
+            self.out_W.setText(W_txt + W + " [" + self.u.get_m_name() + "]")
+            self.out_S.setText(S_txt + S + " [" + self.u.get_m2_name() + "]")
+            self.out_Sact.setText(Sa_txt + Sact + " [" + self.u.get_m2_name() + "]")
             self.out_K.setText(K_txt + K + " %")
         else:
             # We can't compute the output => We erase the previous version
