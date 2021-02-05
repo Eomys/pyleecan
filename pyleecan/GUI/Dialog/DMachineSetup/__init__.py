@@ -131,7 +131,7 @@ SCIM_dict = {
     "rotor_step": LSC_step,
     "name": "SCIM",
     "img": pixmap_dict["SCIM"],
-    "txt": "SCIM (Squirrel Cage Induction Machine) is type_machine = 1",
+    "txt": "SCIM (Squirrel Cage Induction Machine)",
 }
 # Dictionnary with all the information to set a DFIM
 DFIM_dict = {
@@ -142,18 +142,18 @@ DFIM_dict = {
     "rotor_step": LSW_step,
     "name": "DFIM",
     "img": pixmap_dict["DFIM"],
-    "txt": "DFIM (Doubly Fed Induction Machine) is type_machine = 4",
+    "txt": "DFIM (Doubly Fed Induction Machine)",
 }
-# Dictionnary with all the information to set a SyRM
-SyRM_dict = {
+# Dictionnary with all the information to set a SynRM
+SynRM_dict = {
     "machine_type": MachineSyRM,
     "init_machine": machine5,
     "start_step": S_step,
     "stator_step": LSW_step,
     "rotor_step": LH_step,
-    "name": "SyRM",
-    "img": pixmap_dict["SyRM"],
-    "txt": "SyRM (Synchronous Reluctance Machine) is type_machine = 5",
+    "name": "SynRM",
+    "img": pixmap_dict["SynRM"],
+    "txt": "SynRM (Synchronous Reluctance Machine)",
 }
 # Dictionnary with all the information to set a SIPMSM
 SIPMSM_dict = {
@@ -162,9 +162,9 @@ SIPMSM_dict = {
     "start_step": S_step,
     "stator_step": LSW_step,
     "rotor_step": LSM_step,
-    "name": "SIPMSM",
-    "img": pixmap_dict["IPMSM"],
-    "txt": "SIPMSM (Surface Inset Permanent Magnet Synchronous Machine) is type_machine = 7",
+    "name": "SPMSM",
+    "img": pixmap_dict["SPMSM"],
+    "txt": "SPMSM (Surface Permanent Magnet Synchronous Machine)",
 }
 # Dictionnary with all the information to set a IPMSM
 IPMSM_dict = {
@@ -174,8 +174,8 @@ IPMSM_dict = {
     "stator_step": LSW_step,
     "rotor_step": LH_step,
     "name": "IPMSM",
-    "img": pixmap_dict["BPMSM"],
-    "txt": "IPMSM (Interior Permanent Magnet Synchronous Machine) is type_machine = 8",
+    "img": pixmap_dict["IPMSM"],
+    "txt": "IPMSM (Interior Permanent Magnet Synchronous Machine)",
 }
 # Dictionnary with all the information to set a WRSM
 WRSM_dict = {
@@ -186,7 +186,7 @@ WRSM_dict = {
     "rotor_step": LP_step,
     "name": "WRSM",
     "img": pixmap_dict["WRSM"],
-    "txt": "WRSM (Wound Rotor Synchronous Machine) is type_machine = 9",
+    "txt": "WRSM (Wound Rotor Synchronous Machine)",
 }
 # Dictionnary with all the information to set a SCIM
 SRM_dict = {
@@ -197,13 +197,13 @@ SRM_dict = {
     "rotor_step": LS_step,
     "name": "SRM",
     "img": pixmap_dict["SCIM"],
-    "txt": "SRM (Switched Reluctance Machine) is type_machine = 10",
+    "txt": "SRM (Switched Reluctance Machine)",
 }
 # List of machine types available in the GUI
 mach_list = [
     SCIM_dict,
     DFIM_dict,
-    SyRM_dict,
+    SynRM_dict,
     SIPMSM_dict,
     IPMSM_dict,
     WRSM_dict,

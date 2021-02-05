@@ -39,7 +39,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         self.setupUi(self)
 
         # Create the property of the widget
-        self.mat_win = None  # DMatLib widget
+        self.current_dialog = None  # DMatLib widget
         self.obj = None  # object that has a material attribute
         self.mat_attr_name = ""  # material attribute name
         self.matlib = list()  # Matlib
@@ -176,10 +176,10 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         else:
             index = self.c_mat_type.currentIndex()
             key = "RefMatLib"
-        self.mat_win = DMatLib(self.matlib, key, index)
-        self.mat_win.accepted.connect(self.set_matlib)
-        self.mat_win.saveNeeded.connect(self.emit_save)
-        self.mat_win.show()
+        self.current_dialog = DMatLib(self.matlib, key, index)
+        self.current_dialog.accepted.connect(self.set_matlib)
+        self.current_dialog.saveNeeded.connect(self.emit_save)
+        self.current_dialog.show()
 
     def emit_save(self):
         """
@@ -201,18 +201,18 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         """
         # Empty and fill the list to keep the same object (to change it everywhere)
         # del self.matlib[:]
-        # self.matlib.extend(self.mat_win.matlib)
+        # self.matlib.extend(self.current_dialog.matlib)
         # Update the material
-        # index = int(self.mat_win.nav_mat.currentItem().text()[:3]) - 1
+        # index = int(self.current_dialog.nav_mat.currentItem().text()[:3]) - 1
 
         # not needed if machine materials are "connected" properly
-        # mat_dict = (self.mat_win.matlib[index]).as_dict()
+        # mat_dict = (self.current_dialog.matlib[index]).as_dict()
         # self.mat.__init__(init_dict=mat_dict)
 
         # Do not clear for now to keep editor (DMatLib) open
         # # Clear the window
-        # self.mat_win.deleteLater()
-        # self.mat_win = None
+        # self.current_dialog.deleteLater()
+        # self.current_dialog = None
 
         # Update the widget
         # Avoid trigger signal currentIndexChanged

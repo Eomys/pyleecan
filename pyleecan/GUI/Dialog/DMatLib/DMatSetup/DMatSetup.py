@@ -239,7 +239,6 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
-        print(self.mat.mag.BH_curve)
         self.mat.elec.rho = self.lf_rho_elec.value()
         self.is_save_needed = True
 

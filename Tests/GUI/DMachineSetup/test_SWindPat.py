@@ -61,7 +61,7 @@ class TestSWindPat(object):
         assert setup["widget"].si_Nslot.value() == 10
         assert setup["widget"].c_wind_type.currentIndex() == 2
         assert setup["widget"].is_reverse.checkState() == Qt.Checked
-        assert setup["widget"].out_shape.text() == "Winding Matrix shape: [2, 1, 36, 6]"
+        assert setup["widget"].out_shape.text() == "Matrix shape [2, 1, 36, 6]"
 
         setup["test_obj"] = MachineSCIM()
         setup["test_obj"].stator = LamSlotWind()
@@ -135,7 +135,7 @@ class TestSWindPat(object):
         assert setup["widget"].c_wind_type.currentIndex() == 2
         assert setup["widget"].c_wind_type.currentText() == "Double Layer Distributed"
         assert setup["widget"].is_reverse.checkState() == Qt.Unchecked
-        assert setup["widget"].out_shape.text() == "Winding Matrix shape: [2, 1, 36, 4]"
+        assert setup["widget"].out_shape.text() == "Matrix shape [2, 1, 36, 4]"
         # check result rotor
         assert type(setup["test_obj"].rotor.winding) == WindingCW2LT
         assert setup["test_obj"].rotor.winding.p == 8
@@ -150,31 +150,29 @@ class TestSWindPat(object):
             == "DC wound winding for salient pole"
         )
         assert setup["widget2"].is_reverse.checkState() == Qt.Unchecked
-        assert (
-            setup["widget2"].out_shape.text() == "Winding Matrix shape: [1, 2, 36, 1]"
-        )
+        assert setup["widget2"].out_shape.text() == "Matrix shape [1, 2, 36, 1]"
 
     def test_set_wind_type(self, setup):
         """Check that the Widget allow to update type_winding"""
         setup["widget"].c_wind_type.setCurrentIndex(0)
         assert type(setup["test_obj"].stator.winding) == WindingCW2LT
-        assert setup["widget"].out_shape.text() == "Winding Matrix shape: [1, 2, 36, 6]"
+        assert setup["widget"].out_shape.text() == "Matrix shape [1, 2, 36, 6]"
 
         setup["widget"].c_wind_type.setCurrentIndex(1)
         assert type(setup["test_obj"].stator.winding) == WindingCW1L
-        assert setup["widget"].out_shape.text() == "Winding Matrix shape: [1, 1, 36, 6]"
+        assert setup["widget"].out_shape.text() == "Matrix shape [1, 1, 36, 6]"
 
         setup["widget"].c_wind_type.setCurrentIndex(2)
         assert type(setup["test_obj"].stator.winding) == WindingDW2L
-        assert setup["widget"].out_shape.text() == "Winding Matrix shape: [2, 1, 36, 6]"
+        assert setup["widget"].out_shape.text() == "Matrix shape [2, 1, 36, 6]"
 
         setup["widget"].c_wind_type.setCurrentIndex(3)
         assert type(setup["test_obj"].stator.winding) == WindingDW1L
-        assert setup["widget"].out_shape.text() == "Winding Matrix shape: [1, 1, 36, 6]"
+        assert setup["widget"].out_shape.text() == "Matrix shape [1, 1, 36, 6]"
 
         setup["widget"].c_wind_type.setCurrentIndex(4)
         assert type(setup["test_obj"].stator.winding) == WindingCW2LR
-        assert setup["widget"].out_shape.text() == "Winding Matrix shape: [2, 1, 36, 6]"
+        assert setup["widget"].out_shape.text() == "Matrix shape [2, 1, 36, 6]"
 
     def test_set_qs(self, setup):
         """Check that the Widget allow to update qs"""
@@ -186,7 +184,7 @@ class TestSWindPat(object):
         assert setup["test_obj"].stator.winding.qs == value
         assert (
             setup["widget"].out_shape.text()
-            == "Winding Matrix shape: [2, 1, 36, " + str(value) + "]"
+            == "Matrix shape [2, 1, 36, " + str(value) + "]"
         )
 
     def test_set_is_reverse(self, setup):
@@ -225,7 +223,7 @@ class TestSWindPat(object):
             machine=setup["test_obj"], matlib=[], is_stator=False
         )
 
-        assert setup["widget"].out_shape.text() == "Winding Matrix shape: [1, 2, ?, 3]"
+        assert setup["widget"].out_shape.text() == "Matrix shape [1, 2, ?, 3]"
         assert setup["widget"].out_ms.text() == "ms = Zs / (2*p*qs) = ?"
 
     def test_check(self, setup):

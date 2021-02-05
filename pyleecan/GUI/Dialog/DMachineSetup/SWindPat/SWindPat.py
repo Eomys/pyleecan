@@ -120,7 +120,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         self.c_wind_type.currentIndexChanged.connect(self.set_type)
         self.si_qs.editingFinished.connect(self.set_qs)
         self.si_coil_pitch.editingFinished.connect(self.set_coil_pitch)
-        self.si_Nslot.editingFinished.connect(self.set_Nslot)
+        self.si_Nslot.valueChanged.connect(self.set_Nslot)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
         self.b_preview.clicked.connect(self.s_plot)
 
@@ -271,7 +271,10 @@ class SWindPat(Gen_SWindPat, QWidget):
     def update_graph(self):
         """Plot the lamination with/without the winding"""
         # Plot the lamination in the viewer fig
-        self.obj.plot(fig=self.w_viewer.fig, is_show_fig=False)
+        try:
+            self.obj.plot(fig=self.w_viewer.fig, is_show_fig=False)
+        except:
+            pass
 
         # Update the Graph
         self.w_viewer.axes.set_axis_off()

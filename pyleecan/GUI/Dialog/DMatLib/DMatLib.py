@@ -160,7 +160,6 @@ class DMatLib(Gen_DMatLib, QDialog):
         self.current_dialog.show()
 
     def validate_edit(self, return_code):
-        print(return_code)
         dict_key = self.current_dialog.dict_key
         mat_id = self.current_dialog.mat_id
         mat = self.current_dialog.mat
@@ -235,7 +234,6 @@ class DMatLib(Gen_DMatLib, QDialog):
         self.current_dialog.show()
 
     def validate_new(self, return_code):
-        print(return_code)
         mat = self.current_dialog.mat
         # Reset dialog
         self.current_dialog = None

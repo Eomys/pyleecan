@@ -306,6 +306,7 @@ def test_FEMM_periodicity_time():
     return out, out2
 
 
+@pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_FEMM_periodicity_angle():

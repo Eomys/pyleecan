@@ -16,7 +16,7 @@ def init_fig(fig=None, ax=None, shape="default", is_3d=False):
     ax : Matplotlib.axes.Axes object
         Axis on which to plot the data
     shape : str
-        Shape of the figure: "default" or "rectangle" for 20x10 figure
+        Shape of the figure: "default", "square" or "rectangle" for 20x10 figure
     is_3d : bool
         3D or 2D figure
 
@@ -37,6 +37,15 @@ def init_fig(fig=None, ax=None, shape="default", is_3d=False):
                 )
             else:
                 fig, axes = subplots(tight_layout=True, figsize=(8, 4))
+        elif shape == "square":
+            if is_3d:
+                fig, axes = subplots(
+                    tight_layout=True,
+                    figsize=(8, 8),
+                    subplot_kw=dict(projection="3d"),
+                )
+            else:
+                fig, axes = subplots(tight_layout=True, figsize=(8, 8))
         else:
             if is_3d:
                 fig, axes = subplots(

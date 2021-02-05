@@ -37,10 +37,10 @@ load_test.append(  # 2
     {"type": "DFIM", "index": 1, "name": "DFIM_001", "p": 2, "count": 13}
 )
 load_test.append(  # 3
-    {"type": "SyRM", "index": 2, "name": "SynRM_001", "p": 2, "count": 10}
+    {"type": "SynRM", "index": 2, "name": "SynRM_001", "p": 2, "count": 10}
 )
 load_test.append(  # 4
-    {"type": "SIPMSM", "index": 3, "name": "SIPMSM_008", "p": 4, "count": 10}
+    {"type": "SPMSM", "index": 3, "name": "SIPMSM_008", "p": 4, "count": 10}
 )
 load_test.append(  # 5
     {"type": "IPMSM", "index": 4, "name": "machine_IPMSM_A", "p": 5, "count": 10}
@@ -120,14 +120,14 @@ class TestDMachineSetup(object):
         assert setup["widget"].w_step.c_type.currentText() == "DFIM"
         assert type(setup["widget"].machine) == MachineDFIM
         save_function(setup["widget"], "test_dfim_save")
-        # SyRM
+        # SynRM
         setup["widget"].w_step.c_type.setCurrentIndex(2)
-        assert setup["widget"].w_step.c_type.currentText() == "SyRM"
+        assert setup["widget"].w_step.c_type.currentText() == "SynRM"
         assert type(setup["widget"].machine) == MachineSyRM
-        save_function(setup["widget"], "test_syrm_save")
+        save_function(setup["widget"], "test_synrm_save")
         # SIPMSM
         setup["widget"].w_step.c_type.setCurrentIndex(3)
-        assert setup["widget"].w_step.c_type.currentText() == "SIPMSM"
+        assert setup["widget"].w_step.c_type.currentText() == "SPMSM"
         assert type(setup["widget"].machine) == MachineSIPMSM
         save_function(setup["widget"], "test_sipmsm_save")
         # IPMSM
