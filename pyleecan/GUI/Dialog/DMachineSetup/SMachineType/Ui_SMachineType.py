@@ -60,7 +60,7 @@ class Ui_SMachineType(object):
         self.img_type_machine.setMinimumSize(QSize(300, 300))
         self.img_type_machine.setMaximumSize(QSize(400, 400))
         self.img_type_machine.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/SCIM.png")
+            QPixmap(u":/images/images/MachineSetup/MachineType/machine_SCIM.png")
         )
         self.img_type_machine.setScaledContents(True)
 
