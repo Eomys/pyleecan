@@ -64,7 +64,7 @@ class Ui_SBar(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.img_ring = QLabel(self.g_ring)
         self.img_ring.setObjectName(u"img_ring")
-        self.img_ring.setMaximumSize(QSize(300, 300))
+        self.img_ring.setMaximumSize(QSize(16777215, 16777215))
         self.img_ring.setPixmap(QPixmap(u":/images/images/MachineSetup/Bar/Ring.PNG"))
         self.img_ring.setScaledContents(True)
 
@@ -137,16 +137,16 @@ class Ui_SBar(object):
 
         self.verticalLayout_3.addLayout(self.gridLayout)
 
+        self.w_mat = WMatSelect(self.widget)
+        self.w_mat.setObjectName(u"w_mat")
+
+        self.verticalLayout_3.addWidget(self.w_mat)
+
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
         self.verticalLayout_3.addItem(self.verticalSpacer)
-
-        self.w_mat = WMatSelect(self.widget)
-        self.w_mat.setObjectName(u"w_mat")
-
-        self.verticalLayout_3.addWidget(self.w_mat)
 
         self.horizontalLayout_2.addWidget(self.widget)
 

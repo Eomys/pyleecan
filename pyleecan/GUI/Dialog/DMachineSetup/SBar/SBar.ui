@@ -92,8 +92,8 @@
        <widget class="QLabel" name="img_ring">
         <property name="maximumSize">
          <size>
-          <width>300</width>
-          <height>300</height>
+          <width>16777215</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="text">
@@ -253,6 +253,9 @@
           </layout>
          </item>
          <item>
+          <widget class="WMatSelect" name="w_mat" native="true"/>
+         </item>
+         <item>
           <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -264,9 +267,6 @@
             </size>
            </property>
           </spacer>
-         </item>
-         <item>
-          <widget class="WMatSelect" name="w_mat" native="true"/>
          </item>
         </layout>
        </widget>
