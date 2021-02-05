@@ -397,7 +397,8 @@ class VarSimu(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-                value[ii].parent = self
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("datakeeper_list", value, "[DataKeeper]")
@@ -520,7 +521,8 @@ class VarSimu(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "postproc_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-                value[ii].parent = self
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("postproc_list", value, "[Post]")
@@ -554,7 +556,8 @@ class VarSimu(FrozenClass):
                         "pre_keeper_postproc_list",
                     )
                     value[ii] = class_obj(init_dict=obj)
-                value[ii].parent = self
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("pre_keeper_postproc_list", value, "[Post]")
@@ -588,7 +591,8 @@ class VarSimu(FrozenClass):
                         "post_keeper_postproc_list",
                     )
                     value[ii] = class_obj(init_dict=obj)
-                value[ii].parent = self
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("post_keeper_postproc_list", value, "[Post]")
