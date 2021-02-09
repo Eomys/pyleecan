@@ -40,6 +40,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
+from .Simulation import Simulation
 from .Post import Post
 
 
@@ -102,6 +103,7 @@ class VarSimu(FrozenClass):
         datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
+        ref_simu=None,
         ref_simu_index=None,
         nb_simu=0,
         is_reuse_femm_file=True,
@@ -136,6 +138,8 @@ class VarSimu(FrozenClass):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
                 stop_if_error = init_dict["stop_if_error"]
+            if "ref_simu" in list(init_dict.keys()):
+                ref_simu = init_dict["ref_simu"]
             if "ref_simu_index" in list(init_dict.keys()):
                 ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
@@ -155,6 +159,7 @@ class VarSimu(FrozenClass):
         self.datakeeper_list = datakeeper_list
         self.is_keep_all_output = is_keep_all_output
         self.stop_if_error = stop_if_error
+        self.ref_simu = ref_simu
         self.ref_simu_index = ref_simu_index
         self.nb_simu = nb_simu
         self.is_reuse_femm_file = is_reuse_femm_file
@@ -187,6 +192,11 @@ class VarSimu(FrozenClass):
             )
         VarSimu_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
         VarSimu_str += "stop_if_error = " + str(self.stop_if_error) + linesep
+        if self.ref_simu is not None:
+            tmp = self.ref_simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            VarSimu_str += "ref_simu = " + tmp
+        else:
+            VarSimu_str += "ref_simu = None" + linesep + linesep
         VarSimu_str += "ref_simu_index = " + str(self.ref_simu_index) + linesep
         VarSimu_str += "nb_simu = " + str(self.nb_simu) + linesep
         VarSimu_str += "is_reuse_femm_file = " + str(self.is_reuse_femm_file) + linesep
@@ -239,6 +249,8 @@ class VarSimu(FrozenClass):
             return False
         if other.stop_if_error != self.stop_if_error:
             return False
+        if other.ref_simu != self.ref_simu:
+            return False
         if other.ref_simu_index != self.ref_simu_index:
             return False
         if other.nb_simu != self.nb_simu:
@@ -264,6 +276,7 @@ class VarSimu(FrozenClass):
                 S += getsizeof(value)
         S += getsizeof(self.is_keep_all_output)
         S += getsizeof(self.stop_if_error)
+        S += getsizeof(self.ref_simu)
         S += getsizeof(self.ref_simu_index)
         S += getsizeof(self.nb_simu)
         S += getsizeof(self.is_reuse_femm_file)
@@ -295,6 +308,10 @@ class VarSimu(FrozenClass):
                     VarSimu_dict["datakeeper_list"].append(None)
         VarSimu_dict["is_keep_all_output"] = self.is_keep_all_output
         VarSimu_dict["stop_if_error"] = self.stop_if_error
+        if self.ref_simu is None:
+            VarSimu_dict["ref_simu"] = None
+        else:
+            VarSimu_dict["ref_simu"] = self.ref_simu.as_dict()
         VarSimu_dict["ref_simu_index"] = self.ref_simu_index
         VarSimu_dict["nb_simu"] = self.nb_simu
         VarSimu_dict["is_reuse_femm_file"] = self.is_reuse_femm_file
@@ -337,6 +354,8 @@ class VarSimu(FrozenClass):
         self.datakeeper_list = None
         self.is_keep_all_output = None
         self.stop_if_error = None
+        if self.ref_simu is not None:
+            self.ref_simu._set_None()
         self.ref_simu_index = None
         self.nb_simu = None
         self.is_reuse_femm_file = None
@@ -444,6 +463,36 @@ class VarSimu(FrozenClass):
         doc=u"""Stop the multi-simulation if a simulation fails 
 
         :Type: bool
+        """,
+    )
+
+    def _get_ref_simu(self):
+        """getter of ref_simu"""
+        return self._ref_simu
+
+    def _set_ref_simu(self, value):
+        """setter of ref_simu"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "ref_simu"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Simulation()
+        check_var("ref_simu", value, "Simulation")
+        self._ref_simu = value
+
+        if self._ref_simu is not None:
+            self._ref_simu.parent = self
+
+    ref_simu = property(
+        fget=_get_ref_simu,
+        fset=_set_ref_simu,
+        doc=u"""The reference simulation that may be a multi-simulation
+
+        :Type: Simulation
         """,
     )
 

@@ -11599,6 +11599,15 @@
                 "value": false
             },
             {
+                "desc": "The reference simulation that may be a multi-simulation",
+                "max": "",
+                "min": "",
+                "name": "ref_simu",
+                "type": "Simulation",
+                "unit": "-",
+                "value": null
+            },
+            {
                 "desc": "Index of the reference simulation, if None the reference simulation is not in the multi-simulation",
                 "max": "",
                 "min": "0",
