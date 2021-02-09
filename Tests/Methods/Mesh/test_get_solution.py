@@ -129,6 +129,7 @@ class Test_get_soltution(TestCase):
         msg = "Wrong result: returned " + str(field) + ", expected: " + str(expected)
         self.assertAlmostEqual(result, 0, msg=msg, delta=DELTA)
 
+
 if __name__ == "__main__":
     test = Test_get_soltution()
     test.test_SolutionData()
