@@ -17,11 +17,14 @@ def run(self):
             results = XOutput(simu=self)
         else:
             if not isinstance(self.parent, XOutput):
-                raise TypeError(
-                    "A multisimulation has been defined, type XOutput expected for simu.parent, got {}".format(
-                        type(self.parent).__name__
-                    )
+                msg = (
+                    "Simulation.run: A multisimulation has been defined, "
+                    + "type XOutput expected for simu.parent, "
+                    + f"got {type(self.parent).__name__}. "
+                    + "Setting new parent XOutput for simu."
                 )
+                self.get_logger.warning(msg)
+                results = XOutput(simu=self)
             else:
                 results = self.parent
 
@@ -35,6 +38,7 @@ def run(self):
         # Compute the multisimulation
         self.var_simu.run()
 
+    # 'normal' simulation
     else:
         # Output initialization
         if self.parent is None:
