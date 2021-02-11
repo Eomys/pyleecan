@@ -49,7 +49,7 @@ class PCondType11(Gen_PCondType11, QWidget):
             self.unit_Lewout,
         ]
         for wid in wid_list:
-            wid.setText(self.u.get_m_name())
+            wid.setText("[" + self.u.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lam = lamination

@@ -23,8 +23,9 @@ import random
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
 from .OptiDesignVar import OptiDesignVar
-from .DataKeeper import DataKeeper
+from .OptiObjective import OptiObjective
 from .OptiConstraint import OptiConstraint
+from .DataKeeper import DataKeeper
 
 
 class OptiProblem(FrozenClass):
@@ -307,6 +308,8 @@ class OptiProblem(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "design_var"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("design_var", value, "[OptiDesignVar]")
@@ -338,9 +341,11 @@ class OptiProblem(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "obj_func"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
-        check_var("obj_func", value, "[DataKeeper]")
+        check_var("obj_func", value, "[OptiObjective]")
         self._obj_func = value
 
     obj_func = property(
@@ -348,7 +353,7 @@ class OptiProblem(FrozenClass):
         fset=_set_obj_func,
         doc=u"""List of objective functions
 
-        :Type: [DataKeeper]
+        :Type: [OptiObjective]
         """,
     )
 
@@ -404,6 +409,8 @@ class OptiProblem(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "constraint"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("constraint", value, "[OptiConstraint]")
@@ -470,6 +477,8 @@ class OptiProblem(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("datakeeper_list", value, "[DataKeeper]")

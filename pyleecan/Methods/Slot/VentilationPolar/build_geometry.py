@@ -3,6 +3,7 @@
 from numpy import exp, pi
 
 from ....Classes.PolarArc import PolarArc
+from ....Methods.Slot.VentilationPolar import *
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_stator=True):
@@ -70,9 +71,3 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_stator=True):
         )
 
     return surf_list
-
-
-class PolarArcBuildGeometryError(Exception):
-    """ """
-
-    pass

@@ -4,9 +4,7 @@ from os.path import join
 import pytest
 
 from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Methods.Slot.VentilationCirc.build_geometry import (
-    CircleBuildGeometryError,
-)
+from pyleecan.Methods.Slot.VentilationCirc import CircleBuildGeometryError
 
 
 """unittest for VentilationCirc"""

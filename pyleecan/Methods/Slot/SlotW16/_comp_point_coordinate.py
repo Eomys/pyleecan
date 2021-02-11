@@ -1,6 +1,7 @@
 from numpy import arcsin, exp, pi, sqrt
 
 from ....Methods.Slot.SlotW16 import S16OutterError
+from ....Classes.Arc1 import Arc1
 
 
 def _comp_point_coordinate(self):
@@ -13,9 +14,8 @@ def _comp_point_coordinate(self):
 
     Returns
     -------
-    point_list: list
-        A list of 10 Point
-
+    point_dict: dict
+        A dict of the slot point coordinates
     """
 
     Rbo = self.get_Rbo()
@@ -60,11 +60,20 @@ def _comp_point_coordinate(self):
     Z4 = Z4t * exp(-1j * hsp)
     Z3 = Z3t * exp(-1j * hsp)
 
+    point_dict = dict()
     # symetry
-    Z6 = Z5.conjugate()
-    Z7 = Z4.conjugate()
-    Z8 = Z3.conjugate()
-    Z9 = Z2.conjugate()
-    Z10 = Z1.conjugate()
-
-    return [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10]
+    point_dict["Z1"] = Z1
+    point_dict["Z2"] = Z2
+    point_dict["Z3"] = Z3
+    point_dict["Z4"] = Z4
+    point_dict["Z5"] = Z5
+    point_dict["Z6"] = Z5.conjugate()
+    point_dict["Z7"] = Z4.conjugate()
+    point_dict["Z8"] = Z3.conjugate()
+    point_dict["Z9"] = Z2.conjugate()
+    point_dict["Z10"] = Z1.conjugate()
+    # Compute center
+    A = Arc1(Z3, Z4, -self.R1, is_trigo_direction=False)
+    point_dict["Zc1"] = A.get_center()
+    point_dict["Zc2"] = point_dict["Zc1"].conjugate()
+    return point_dict

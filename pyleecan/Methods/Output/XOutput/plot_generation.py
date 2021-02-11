@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
+from ....Methods.Output.XOutput import _get_symbol_data_
 
 
 def plot_generation(self, x_symbol, y_symbol, ax=None):
@@ -10,9 +11,9 @@ def plot_generation(self, x_symbol, y_symbol, ax=None):
     ----------
     self : XOutput
     obj1 : str
-        symbol of the ParamExplorer or the DataKeeper
+        symbol of the ParamExplorer, the OptiObjective or the DataKeeper
     obj2 : str
-        symbol of the ParamExplorer or the DataKeeper
+        symbol of the ParamExplorer, the OptiObjective or the DataKeeper
     """
 
     # TODO define the colormap according to Pyleecan graphical chart
@@ -32,31 +33,9 @@ def plot_generation(self, x_symbol, y_symbol, ax=None):
 
     ngen = ngen[indx]
 
-    # Get x_data
-    if x_symbol in self.keys():  # DataKeeper
-        x_data = self[x_symbol]
-        x_values = np.array(x_data.result)[indx]
-    else:  # ParamSetter
-        x_data = self.get_paramexplorer(x_symbol)
-        x_values = np.array(x_data.value)[indx]
-
-    # x_label definition
-    x_label = x_symbol
-    if x_data.unit not in ["", None]:
-        x_label += " [{}]".format(x_data.unit)
-
-    # Get y_data
-    if y_symbol in self.keys():  # DataKeeper
-        y_data = self[y_symbol]
-        y_values = np.array(y_data.result)[indx]
-    else:  # ParamSetter
-        y_data = self.get_paramexplorer(y_symbol)
-        y_values = np.array(y_data.value)[indx]
-
-    # y_label definition
-    y_label = y_symbol
-    if y_data.unit not in ["", None]:
-        y_label += " [{}]".format(y_data.unit)
+    # get data and labels
+    x_values, x_label = _get_symbol_data_(self, x_symbol, indx)
+    y_values, y_label = _get_symbol_data_(self, y_symbol, indx)
 
     if ax is None:
         fig, ax = plt.subplots()

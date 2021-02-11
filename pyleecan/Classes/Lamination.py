@@ -764,6 +764,8 @@ class Lamination(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "axial_vent"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("axial_vent", value, "[Hole]")
@@ -795,6 +797,8 @@ class Lamination(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "notch"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("notch", value, "[Notch]")

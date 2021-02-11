@@ -8,8 +8,8 @@ def comp_radius(self):
 
     Parameters
     ----------
-    self : SlotM10
-        A SlotM10 object
+    self : Slot
+        A Slot object
 
     Returns
     -------

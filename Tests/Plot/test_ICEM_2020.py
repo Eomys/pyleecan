@@ -1,5 +1,5 @@
 from os import makedirs
-from os.path import join
+from os.path import join, isdir
 import pytest
 from shutil import copyfile
 
@@ -20,16 +20,14 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.DataKeeper import DataKeeper
+from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 from pyleecan.Methods.Machine.Winding import WindingError
-from pyleecan.Methods.Machine.WindingCW2LT.comp_connection_mat import (
-    WindingT1DefMsError,
-)
-from pyleecan.Methods.Machine.WindingCW1L.comp_connection_mat import WindingT2DefNtError
+from pyleecan.Methods.Machine.WindingCW2LT import WindingT1DefMsError
+from pyleecan.Methods.Machine.WindingCW1L import WindingT2DefNtError
 
 import numpy as np
 import random
@@ -38,7 +36,8 @@ from pyleecan.definitions import DATA_DIR
 
 # Gather results in the same folder
 save_path = join(save_plot_path, "ICEM_2020")
-makedirs(save_path)
+if not isdir(save_path):
+    makedirs(save_path)
 
 
 """This test gather all the images/project for the ICEM 2020 publication:
@@ -720,13 +719,13 @@ def test_Optimization_problem():
     Tem_rip_pp = "lambda output: abs(output.mag.Tem_rip_pp)"
 
     my_objs = [
-        DataKeeper(
+        OptiObjective(
             name="Maximization of the average torque",
             symbol="Tem_av",
             unit="N.m",
             keeper=tem_av,
         ),
-        DataKeeper(
+        OptiObjective(
             name="Minimization of the torque ripple",
             symbol="Tem_rip_pp",
             unit="N.m",

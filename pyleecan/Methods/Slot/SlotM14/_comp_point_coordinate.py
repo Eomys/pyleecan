@@ -30,6 +30,7 @@ def _comp_point_coordinate(self):
             abs(angle(ZM1) - angle(ZM4)), self.Rtopm, abs(ZM1) - self.Hmag
         )
         ZM0 = Rbo + self.H0 - self.Hmag
+        Zc = ZM0 + self.Rtopm
     else:
         Z2 = (Rbo - self.H0) * exp(-1j * self.W0 / 2)
         Z3 = (Rbo - self.H0) * exp(+1j * self.W0 / 2)
@@ -39,6 +40,7 @@ def _comp_point_coordinate(self):
             abs(angle(ZM1) - angle(ZM4)), self.Rtopm, abs(ZM1) + self.Hmag
         )
         ZM0 = Rbo - self.H0 + self.Hmag
+        Zc = ZM0 - self.Rtopm
 
     point_dict = dict()
     point_dict["Z1"] = Z1
@@ -46,6 +48,7 @@ def _comp_point_coordinate(self):
     point_dict["ZM1"] = ZM1
     point_dict["ZM2"] = ZM2
     point_dict["ZM0"] = ZM0
+    point_dict["Zc"] = Zc
     # symetry
     point_dict["Z3"] = Z3
     point_dict["Z4"] = Z4

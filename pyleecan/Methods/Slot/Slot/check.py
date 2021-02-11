@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Machine.Lamination.check import LaminationCheckError
-
 
 def check(self):
     """Check that the Slot object is correct
@@ -15,10 +13,4 @@ def check(self):
     -------
     None
     """
-    pass
-
-
-class SlotCheckError(LaminationCheckError):
-    """ """
-
     pass

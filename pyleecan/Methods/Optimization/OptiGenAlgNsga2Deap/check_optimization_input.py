@@ -1,6 +1,6 @@
 from logging import Logger, FileHandler, Formatter, INFO, NOTSET
 from datetime import datetime
-from ....Classes.DataKeeper import DataKeeper
+from ....Classes.OptiObjective import OptiObjective
 
 
 class OptimizationAttributeError(Exception):
@@ -46,9 +46,9 @@ def check_optimization_input(self):
 
     else:
         for obj_func in self.problem.obj_func:
-            if not isinstance(obj_func, DataKeeper):
+            if not isinstance(obj_func, OptiObjective):
                 raise TypeError(
-                    "Wrong obj_func type: DataKeeper expected, got {}".format(
+                    "Wrong obj_func type: OptiObjective expected, got {}".format(
                         type(obj_func).__name__
                     )
                 )

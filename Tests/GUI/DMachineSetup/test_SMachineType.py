@@ -79,8 +79,8 @@ class TestSMachineType(object):
         assert setup["widget"].c_type.currentText() == "DFIM"
         assert setup["widget"].is_inner_rotor.checkState() == Qt.Unchecked
 
-        # SyRM
-        setup["test_obj"] = MachineSyRM(name="test_machine_syrm", type_machine=5)
+        # SynRM
+        setup["test_obj"] = MachineSyRM(name="test_machine_synrm", type_machine=5)
         setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
@@ -92,14 +92,14 @@ class TestSMachineType(object):
             machine=setup["test_obj"], matlib=[], is_stator=False
         )
 
-        assert setup["widget"].le_name.text() == "test_machine_syrm"
+        assert setup["widget"].le_name.text() == "test_machine_synrm"
         assert setup["widget"].si_p.value() == 21
         assert setup["widget"].c_type.currentIndex() == 2
-        assert setup["widget"].c_type.currentText() == "SyRM"
+        assert setup["widget"].c_type.currentText() == "SynRM"
         assert setup["widget"].is_inner_rotor.checkState() == Qt.Unchecked
 
-        # SIPMSM
-        setup["test_obj"] = MachineSIPMSM(name="test_machine_sipmsm", type_machine=7)
+        # SPMSM
+        setup["test_obj"] = MachineSIPMSM(name="test_machine_spmsm", type_machine=7)
         setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=False, Rint=0.21, Rext=0.22
         )
@@ -111,10 +111,10 @@ class TestSMachineType(object):
             machine=setup["test_obj"], matlib=[], is_stator=False
         )
 
-        assert setup["widget"].le_name.text() == "test_machine_sipmsm"
+        assert setup["widget"].le_name.text() == "test_machine_spmsm"
         assert setup["widget"].si_p.value() == 9
         assert setup["widget"].c_type.currentIndex() == 3
-        assert setup["widget"].c_type.currentText() == "SIPMSM"
+        assert setup["widget"].c_type.currentText() == "SPMSM"
         assert setup["widget"].is_inner_rotor.checkState() == Qt.Checked
 
         # IPMSM

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import exp
+from ....Methods.Geometry.Circle import AngleRotationCircleError
 
 
 def rotate(self, angle):
@@ -32,9 +33,3 @@ def rotate(self, angle):
     self.center = self.center * exp(1j * angle)
     if self.point_ref is not None:
         self.point_ref = self.point_ref * exp(1j * angle)
-
-
-class AngleRotationCircleError(Exception):
-    """ """
-
-    pass

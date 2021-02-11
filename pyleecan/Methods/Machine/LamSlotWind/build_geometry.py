@@ -3,7 +3,7 @@ from numpy import pi
 
 from ....Classes.Winding import Winding
 from ....Methods import NotImplementedYetError
-from ....Methods.Machine.LamSlot.build_geometry import build_geometry as build_geo
+from ....Classes.LamSlot import LamSlot
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -29,7 +29,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
 
     """
     # getting the Lamination surface
-    surf_lam = build_geo(self, sym=sym, alpha=alpha, delta=delta)
+    surf_lam = LamSlot.build_geometry(self, sym=sym, alpha=alpha, delta=delta)
     surf_list = list()
     if self.slot is not None and self.slot.Zs != 0:
         # getting number of slot

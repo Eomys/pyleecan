@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+from ....Methods.Geometry.Arc3 import PointTranslateArc3Error
+
+
 def translate(self, Zt):
     """Translate the Arc3 object with
 
@@ -31,9 +33,3 @@ def translate(self, Zt):
     # Modification from the translation of Arc3
     self.begin = self.begin + Zt
     self.end = self.end + Zt
-
-
-class PointTranslateArc3Error(Exception):
-    """ """
-
-    pass

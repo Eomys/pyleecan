@@ -11,7 +11,7 @@ from ......Classes.HoleUD import HoleUD
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleMUD.Ui_PHoleMUD import Ui_PHoleMUD
 from ......GUI.Dialog.DMatLib.MatLib import MatLib
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dxf.DXF_Hole import DXF_Hole
 from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 
@@ -48,13 +48,14 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
         self.w_mat_dict = dict()  # For magnet materials
 
         # Setup void material
-        self.w_mat_0.setText("mat_void:")
+        self.w_mat_0.setText("mat_void")
         self.w_mat_0.def_mat = "Air"
+        self.w_mat_0.is_hide_button = True
 
         # Setup Path selector for Json files
         self.w_path_json.obj = None
         self.w_path_json.param_name = None
-        self.w_path_json.verbose_name = "Import HoleUD.json"
+        self.w_path_json.verbose_name = "Load from json"
         self.w_path_json.extension = "JSON file (*.json)"
         self.w_path_json.update()
 
@@ -85,8 +86,9 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
             self.w_mat_dict[key].setObjectName(u"w_mat_" + str(index))
             self.g_mat_layout.addWidget(self.w_mat_dict[key])
             # Setup Widget
-            self.w_mat_dict[key].setText("Magnet " + str(index) + ":")
+            self.w_mat_dict[key].setText("Magnet " + str(index) + "")
             self.w_mat_dict[key].def_mat = "MagnetPrius"
+            self.w_mat_dict[key].is_hide_button = True
             self.w_mat_dict[key].update(
                 self.hole.magnet_dict["magnet_" + str(index)], "mat_type", self.matlib
             )
@@ -105,11 +107,11 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
         lam.plot(fig=self.w_viewer.fig, is_show_fig=False)
 
         # Update the Graph
-        self.w_viewer.draw()
-        self.w_viewer.axes.axis("off")
-        self.w_viewer.axes.autoscale(enable=True, axis="both")
-        if self.w_viewer.axes.get_legend():
+        self.w_viewer.axes.set_axis_off()
+        self.w_viewer.axes.axis("equal")
+        if self.w_viewer.axes.get_legend() is not None:
             self.w_viewer.axes.get_legend().remove()
+        self.w_viewer.draw()
 
     def load_hole(self):
         """Load the selected json file and display the hole"""

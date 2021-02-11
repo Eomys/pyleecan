@@ -54,7 +54,7 @@ class PVentPolar(Gen_PVentPolar, QWidget):
         # Set unit name (m ou mm)
         wid_list = [self.unit_H0, self.unit_D0]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Connect the signal
         self.si_Zh.editingFinished.connect(self.set_Zh)

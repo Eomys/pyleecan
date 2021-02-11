@@ -61,9 +61,9 @@ def comp_connection_mat(self, Zs=None):
         # traditional non overlapping all teeth wound winding
         for q in range(0, self.qs):
             for k in range(0, Zs // self.qs):  # number of Ncgr coils
-                xenc = -(q) + array([1, 0]) - (k) * qs
-                wind_mat[0, 0, mod(xenc[0] - 1, Zs), q] = +Ntcoil  # right/top/2
-                wind_mat[1, 0, mod(xenc[1] - 1, Zs), q] = -Ntcoil  # left/bottom/1
+                xenc = q + array([1, 0]) + k * qs
+                wind_mat[0, 0, int(mod(xenc[0] - 1, Zs)), q] = +Ntcoil  # right/top/2
+                wind_mat[1, 0, int(mod(xenc[1] - 1, Zs)), q] = -Ntcoil  # left/bottom/1
     elif (
         ms != 0.5 and Ncgr % 1 == 0
     ):  # ms!=0.5 and Ncgr is an integer (ms>0.25 && ms<0.5)
@@ -71,19 +71,12 @@ def comp_connection_mat(self, Zs=None):
         for q in range(0, self.qs):
             for k in range(0, int((Zs // self.qs) // Ncgr)):  # number of Ncgr coils
                 for l in range(0, int(Ncgr)):
-                    wind_mat[
-                        1, 0, int(mod((q) * Ncgr + (k) * qs * Ncgr - 1 + (l), Zs)), q
-                    ] = (
-                        -((-1) ** (l + q - 1 + k)) * Ntcoil
-                    )  # left / bottom / 1
-                    wind_mat[
-                        0,
-                        0,
-                        int(mod((q) * Ncgr + 1 + (k) * qs * Ncgr - 1 + (l), Zs)),
-                        q,
-                    ] = (
-                        +((-1) ** (l + q - 1 + k)) * Ntcoil
-                    )  # right / top / 2
+                    id0 = int(mod(q * Ncgr + 0 + k * qs * Ncgr - 1 + l, Zs))
+                    id1 = int(mod(q * Ncgr + 1 + k * qs * Ncgr - 1 + l, Zs))
+                    # left / bottom / 1
+                    wind_mat[1, 0, id0, q] = -((-1) ** (l + q - 1 + k)) * Ntcoil
+                    # right / top / 2
+                    wind_mat[0, 0, id1, q] = +((-1) ** (l + q - 1 + k)) * Ntcoil
 
         wind_mat = wind_mat[:, :, ::-1, :]
     else:

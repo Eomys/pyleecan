@@ -213,6 +213,8 @@ class OutLoss(FrozenClass):
                         "SciDataTool.Classes", obj.get("__class__"), "loss_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("loss_list", value, "[DataND]")
@@ -244,6 +246,8 @@ class OutLoss(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "meshsol_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("meshsol_list", value, "[MeshSolution]")

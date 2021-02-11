@@ -8,7 +8,7 @@ from PySide2.QtWidgets import QWidget
 from ......Classes.SlotW10 import SlotW10
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot10.Gen_PWSlot10 import Gen_PWSlot10
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -54,7 +54,7 @@ class PWSlot10(Gen_PWSlot10, QWidget):
             self.unit_H2,
         ]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
@@ -68,7 +68,9 @@ class PWSlot10(Gen_PWSlot10, QWidget):
 
         # Update the unit combobox with the current m unit name
         self.c_H1_unit.clear()
-        self.c_H1_unit.addItems([gui_option.unit.get_m_name(), "rad", "deg"])
+        self.c_H1_unit.addItems(
+            ["[" + gui_option.unit.get_m_name() + "]", "[rad]", "[deg]"]
+        )
         if self.slot.H1_is_rad:  # rad
             self.c_H1_unit.setCurrentIndex(1)
         else:

@@ -1,0 +1,4 @@
+class TrapezeError(Exception):
+    """ """
+
+    pass

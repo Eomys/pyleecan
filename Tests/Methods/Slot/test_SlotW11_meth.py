@@ -8,16 +8,12 @@ from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
-from pyleecan.Methods.Slot.SlotW11.check import S11_H1rCheckError
+from pyleecan.Classes.Slot import Slot
+from pyleecan.Methods.Slot.SlotW11 import S11_H1rCheckError
 
 # For AlmostEqual
 DELTA = 1e-6
 slotW11_test = list()
-slotW11_H1_rad_test = list()
 
 # Internal Slot
 lam = LamSlot(is_internal=True, Rext=0.1325)
@@ -44,17 +40,18 @@ slotW11_test.append(
         "H_exp": 3.236711e-2,
     }
 )
+# H1 rad / outwards
 lam = LamSlot(is_internal=False, Rint=0.1325)
 lam.slot = SlotW11(
     H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3, R1=5e-3, H1_is_rad=True
 )
-slotW11_H1_rad_test.append(
+slotW11_test.append(
     {
         "test_obj": lam,
-        "S_exp": 4.04682446e-4,
-        "Aw": 0.0832448,
+        "S_exp": 3.852019e-4,
+        "Aw": 0.08408558,
         "SW_exp": 3.7427e-04,
-        "H_exp": 3.236711e-2,
+        "H_exp": 3.086864e-2,
     }
 )
 
@@ -62,6 +59,54 @@ slotW11_H1_rad_test.append(
 @pytest.mark.METHODS
 class Test_SlotW11_meth(object):
     """pytest for SlotW11 methods"""
+
+    @pytest.mark.parametrize("test_dict", slotW11_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        # Check width
+        assert abs(point_dict["Z1"] - point_dict["Z10"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z2"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z8"]) == pytest.approx(
+            test_obj.slot.W1
+        )
+        assert abs(point_dict["Z4"] - point_dict["Z7"]) == pytest.approx(
+            test_obj.slot.W2
+        )
+        assert abs(point_dict["Z5"] - point_dict["Z6"]) == pytest.approx(
+            test_obj.slot.W2 - 2 * test_obj.slot.R1
+        )
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z2"].real - point_dict["Z3"].real) == pytest.approx(
+            test_obj.slot.get_H1()
+        )
+        assert abs(point_dict["Z3"].real - point_dict["Z4"].real) == pytest.approx(
+            test_obj.slot.H2 - test_obj.slot.R1
+        )
+        assert abs(point_dict["Z3"].real - point_dict["Z5"].real) == pytest.approx(
+            test_obj.slot.H2
+        )
+        assert abs(point_dict["Z10"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z9"].real - point_dict["Z8"].real) == pytest.approx(
+            test_obj.slot.get_H1()
+        )
+        assert abs(point_dict["Z8"].real - point_dict["Z7"].real) == pytest.approx(
+            test_obj.slot.H2 - test_obj.slot.R1
+        )
+        assert abs(point_dict["Z8"].real - point_dict["Z6"].real) == pytest.approx(
+            test_obj.slot.H2
+        )
 
     @pytest.mark.parametrize("test_dict", slotW11_test)
     def test_comp_surface(self, test_dict):
@@ -74,7 +119,7 @@ class Test_SlotW11_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface(test_obj.slot)
+        b = Slot.comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < 1e-5, msg
 
@@ -89,7 +134,7 @@ class Test_SlotW11_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_active(test_obj.slot)
+        b = Slot.comp_surface_active(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < 1e-5, msg
 
@@ -104,7 +149,7 @@ class Test_SlotW11_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < 1e-5, msg
 
@@ -115,7 +160,7 @@ class Test_SlotW11_meth(object):
         a = test_obj.slot.comp_angle_opening()
         assert a == 2 * arcsin(test_obj.slot.W0 / (2 * 0.1325))
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
@@ -165,39 +210,6 @@ class Test_SlotW11_meth(object):
             # Tan=1
             assert surf_list[3].point_ref.real < surf_list[4].point_ref.real
             assert surf_list[4].point_ref.real < surf_list[5].point_ref.real
-
-    @pytest.mark.parametrize("test_dict", slotW11_H1_rad_test)
-    def test_comp_point_coordinate_rad(self, test_dict):
-        """Check that the error is well raised"""
-        test_obj = test_dict["test_obj"]
-        result = test_obj.slot._comp_point_coordinate()
-        assert result == [
-            (0.13236408123052115 - 0.006j),
-            (0.13336408123052115 - 0.006j),
-            (0.13336558123164616 - 0.007j),
-            (0.15836558123164615 - 0.006j),
-            (0.16336558123164616 - 0.001j),
-            (0.16336558123164616 + 0.001j),
-            (0.15836558123164615 + 0.006j),
-            (0.13336558123164616 + 0.007j),
-            (0.13336408123052115 + 0.006j),
-            (0.13236408123052115 + 0.006j),
-            1,
-        ]
-
-    @pytest.mark.parametrize("test_dict", slotW11_H1_rad_test)
-    def test_comp_surface_rad(self, test_dict):
-        """Check that the value is correct when rad is True """
-        test_obj = test_dict["test_obj"]
-        result = test_obj.slot.comp_surface()
-        assert result == 0.0003852019464390075
-
-    @pytest.mark.parametrize("test_dict", slotW11_H1_rad_test)
-    def test_comp_height(self, test_dict):
-        """Check that the value is correct when rad is True """
-        test_obj = test_dict["test_obj"]
-        result = test_obj.slot.comp_height()
-        assert result == 0.03086864182318949
 
     def test_SlotW11_check(self):
         """Check if the error S11_H1rCheckError is correctly raised in the check method"""

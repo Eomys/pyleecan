@@ -357,6 +357,8 @@ class LamSlotMulti(Lamination):
                         "pyleecan.Classes", obj.get("__class__"), "slot_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("slot_list", value, "[Slot]")

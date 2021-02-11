@@ -9,7 +9,7 @@ from ......Classes.HoleM58 import HoleM58
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM58.Gen_PHoleM58 import Gen_PHoleM58
 from ......GUI.Dialog.DMatLib.MatLib import MatLib
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PHoleM58(Gen_PHoleM58, QWidget):
@@ -51,15 +51,18 @@ class PHoleM58(Gen_PHoleM58, QWidget):
         self.lf_H2.unit = "m"
 
         # Set default materials
-        self.w_mat_0.setText("mat_void:")
+        self.w_mat_0.setText("mat_void")
         self.w_mat_0.def_mat = "Air"
-        self.w_mat_1.setText("magnet_0:")
+        self.w_mat_0.is_hide_button = True
+
+        self.w_mat_1.setText("magnet_0")
         self.w_mat_1.def_mat = "Magnet1"
+        self.w_mat_1.is_hide_button = True
 
         # Adapt GUI with/without magnet
         if hole.magnet_0 is None:  # SyRM
             self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/WSlot/Slot_58_no_mag.PNG")
+                QPixmap(":/images/images/MachineSetup/SMHoleMag/HoleM58_no_mag.png")
             )
             self.W1 = 0
             self.W2 = 0
@@ -82,7 +85,7 @@ class PHoleM58(Gen_PHoleM58, QWidget):
             self.unit_H2,
         ]
         for wid in wid_list:
-            wid.setText(self.u.get_m_name())
+            wid.setText("[" + self.u.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.hole.W0)

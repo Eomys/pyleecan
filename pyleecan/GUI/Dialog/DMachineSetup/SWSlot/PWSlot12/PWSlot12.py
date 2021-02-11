@@ -7,7 +7,7 @@ from PySide2.QtWidgets import QWidget
 from ......Classes.SlotW12 import SlotW12
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot12.Gen_PWSlot12 import Gen_PWSlot12
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -46,7 +46,7 @@ class PWSlot12(Gen_PWSlot12, QWidget):
         # Set unit name (m ou mm)
         wid_list = [self.unit_R1, self.unit_R2, self.unit_H0, self.unit_H1]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_R1.setValue(self.slot.R1)

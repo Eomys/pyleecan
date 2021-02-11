@@ -1,5 +1,5 @@
 from os import makedirs
-from os.path import join
+from os.path import join, isdir
 import pytest
 from numpy import array, linspace, ones, pi, zeros, sqrt, cos
 from Tests import save_plot_path
@@ -13,7 +13,8 @@ from pyleecan.definitions import DATA_DIR
 
 # Gather results in the same folder
 save_path = join(save_plot_path, "Elmer")
-makedirs(save_path)
+if not isdir(save_path):
+    makedirs(save_path)
 
 
 mesh_dict = {

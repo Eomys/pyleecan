@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import pi
+from ....Methods.Geometry.Arc2 import *
 
 
 def check(self):
@@ -30,15 +31,3 @@ def check(self):
         raise AngleArc2Error("An arc can't have a null opening angle")
     if self.angle == 2 * pi:
         raise AngleArc2Error("You can't draw a circle with an Arc2")
-
-
-class PointArc2Error(Exception):
-    """ """
-
-    pass
-
-
-class AngleArc2Error(Exception):
-    """ """
-
-    pass

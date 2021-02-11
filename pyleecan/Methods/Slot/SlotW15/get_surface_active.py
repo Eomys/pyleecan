@@ -34,7 +34,10 @@ def get_surface_active(self, alpha=0, delta=0):
         Segment(begin=curve_list[-1].get_end(), end=curve_list[0].get_begin())
     )
 
-    Zmid = self.get_Rbo() - self.H0 - self.H1 - self.H2 / 2
+    if self.is_outwards():
+        Zmid = self.get_Rbo() + self.H0 + self.H1 + self.H2 / 2
+    else:
+        Zmid = self.get_Rbo() - self.H0 - self.H1 - self.H2 / 2
     surface = SurfLine(
         line_list=curve_list, label="Wind_" + st + "_R0_T0_S0", point_ref=Zmid
     )

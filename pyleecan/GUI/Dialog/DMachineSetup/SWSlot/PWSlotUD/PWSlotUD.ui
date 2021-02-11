@@ -30,61 +30,75 @@
     <widget class="MPLCanvas2" name="w_viewer" native="true"/>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="WPathSelector" name="w_path_json" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_dxf">
-       <property name="text">
-        <string>Define Slot from DXF</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="WWSlotOut" name="w_out" native="true"/>
-     </item>
-    </layout>
+    <widget class="QWidget" name="widget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>250</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>250</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QPushButton" name="b_dxf">
+        <property name="text">
+         <string>Define Slot from DXF</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="WPathSelectorV" name="w_path_json" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="WWSlotOut" name="w_out" native="true"/>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WPathSelector</class>
+   <class>WWSlotOut</class>
    <extends>QWidget</extends>
-   <header>......GUI.Tools.WPathSelector.WPathSelector</header>
+   <header>......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WPathSelectorV</class>
+   <extends>QWidget</extends>
+   <header>......GUI.Tools.WPathSelector.WPathSelectorV</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>MPLCanvas2</class>
    <extends>QWidget</extends>
    <header>......GUI.Tools.MPLCanvas</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WWSlotOut</class>
-   <extends>QWidget</extends>
-   <header>......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

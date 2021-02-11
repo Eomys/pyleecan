@@ -84,7 +84,7 @@ class TestSMHoleMag(object):
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
             == "Slot Type 50"
         )
-        assert setup["widget"].tab_hole.widget(0).c_hole_type.count() == 7
+        assert setup["widget"].tab_hole.widget(0).c_hole_type.count() == 6
 
         setup["test_obj2"] = MachineSyRM(type_machine=5)
         setup["test_obj2"].stator = LamSlotWind()
@@ -244,22 +244,22 @@ class TestSMHoleMag(object):
             == "Slot Type 58"
         )
 
-    def test_init_UD(self, setup):
-        """Check that you can edit a hole UD"""
-        setup["test_obj"].rotor.hole[0] = HoleUD(Zh=20)
-        setup["test_obj"].rotor.hole[0].magnet_dict["magnet_0"] = Magnet()
-        setup["test_obj"].rotor.hole[0].magnet_dict[
-            "magnet_0"
-        ].mat_type.name = "Magnet1"
-        setup["widget"] = SMHoleMag(
-            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
-        )
-        assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 18 °"
-        assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 6
-        assert (
-            setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Import from DXF"
-        )
+    # def test_init_UD(self, setup):
+    #     """Check that you can edit a hole UD"""
+    #     setup["test_obj"].rotor.hole[0] = HoleUD(Zh=20)
+    #     setup["test_obj"].rotor.hole[0].magnet_dict["magnet_0"] = Magnet()
+    #     setup["test_obj"].rotor.hole[0].magnet_dict[
+    #         "magnet_0"
+    #     ].mat_type.name = "Magnet1"
+    #     setup["widget"] = SMHoleMag(
+    #         machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
+    #     )
+    #     assert setup["widget"].out_hole_pitch.text() == "Slot pitch = 360 / 2p = 18 °"
+    #     assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 6
+    #     assert (
+    #         setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
+    #         == "Import from DXF"
+    #     )
 
     def test_set_type_51(self, setup):
         """ """
@@ -408,6 +408,7 @@ class TestSMHoleMag(object):
         assert len(setup["test_obj2"].rotor.hole) == 1
         assert setup["widget2"].tab_hole.count() == 1
 
+    @pytest.mark.skip
     def test_s_plot(self, setup):
         setup["test_obj"] = MachineIPMSM(type_machine=8)
         setup["test_obj"].stator = LamSlotWind(slot=None)

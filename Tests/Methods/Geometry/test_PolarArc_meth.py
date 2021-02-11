@@ -5,7 +5,7 @@ from pyleecan.Classes.Segment import Segment
 from numpy import pi
 from mock import MagicMock
 from pyleecan.definitions import config_dict
-from pyleecan.Methods.Geometry.PolarArc.check import AnglePolarArcError
+from pyleecan.Methods.Geometry.PolarArc import AnglePolarArcError
 
 import pytest
 

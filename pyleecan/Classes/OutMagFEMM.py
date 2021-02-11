@@ -191,6 +191,8 @@ class OutMagFEMM(OutInternal):
                         "pyleecan.Classes", obj.get("__class__"), "handler_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
         if value == -1:
             value = list()
         check_var("handler_list", value, "[_FEMMHandler]")

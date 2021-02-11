@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
 from numpy import pi, exp
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
+from ....Methods.Slot.SlotW60 import S60_WindError
 
 
 def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):
@@ -96,22 +97,3 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         surf.translate(delta)
 
     return surf_list
-
-
-class S60_WindError(SlotCheckError):
-    """
-
-    Parameters
-    ----------
-
-    Returns
-    -------
-
-    Raises
-    ------
-    winding
-
-
-    """
-
-    pass

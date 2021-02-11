@@ -97,20 +97,25 @@ class Test_Workflow_DMatLib(object):
             == -1
         )
         # Click to open matlib
-        assert not hasattr(self.widget, "mat_win")
+        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.current_dialog is None
         self.widget.tab_hole.widget(0).w_hole.w_mat_1.b_matlib.clicked.emit()
-        assert type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win) == DMatLib
+        assert (
+            type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.current_dialog)
+            == DMatLib
+        )
         # Check Matlib init
         assert (
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.nav_mat.count() == 4
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.current_dialog.nav_mat.count()
+            == 4
         )
         assert (
             self.widget.tab_hole.widget(0)
-            .w_hole.w_mat_1.mat_win.nav_mat.currentItem()
+            .w_hole.w_mat_1.current_dialog.nav_mat.currentItem()
             .text()
             == "001 - Copper1"
         )
 
+    @pytest.mark.skip
     def test_init(self, setup):
         """Check that the Widget spinbox initialise to the lamination value"""
         self.machine = MachineIPMSM()
@@ -124,71 +129,40 @@ class Test_Workflow_DMatLib(object):
             machine=self.machine, matlib=setup["matlib"], is_stator=False
         )
 
+        wid = self.widget.tab_hole.widget(0).w_hole.w_mat_1
         # Check default (hole is set to type 50)
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.count() == 4
-        assert (
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentText()
-            == "Magnet1"
-        )
-        assert (
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentIndex() == 3
-        )
+        assert wid.c_mat_type.count() == 4
+        assert wid.c_mat_type.currentText() == "Magnet1"
+        assert wid.c_mat_type.currentIndex() == 3
 
         # Click to open matlib
-        assert not hasattr(self.widget, "mat_win")
-        self.widget.tab_hole.widget(0).w_hole.w_mat_1.b_matlib.clicked.emit()
-        assert type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win) == DMatLib
+        assert wid.current_dialog is None
+        wid.b_matlib.clicked.emit()
+        assert type(wid.current_dialog) == DMatLib
 
         # Check Matlib ini
-        assert (
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.nav_mat.count() == 4
-        )
-        assert (
-            self.widget.tab_hole.widget(0)
-            .w_hole.w_mat_1.mat_win.nav_mat.currentItem()
-            .text()
-            == "004 - Magnet1"
-        )
-        assert not hasattr(
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win, "mat_win"
-        )
-        self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.b_duplicate.clicked.emit()
-        assert (
-            type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win)
-            == DMatSetup
-        )
+        assert wid.current_dialog.nav_mat.count() == 4
+        assert wid.current_dialog.nav_mat.currentItem().text() == "004 - Magnet1"
+        assert wid.current_dialog.current_dialog is None
 
-        # Edit Magnet1 to Magnet_test
-        self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.le_name.setText(
-            "Magnet_test_python"
-        )
-        self.widget.tab_hole.widget(
-            0
-        ).w_hole.w_mat_1.mat_win.mat_win.le_name.editingFinished.emit()
-        assert (
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.name
-            == "Magnet_test_python"
-        )
-        self.widget.tab_hole.widget(
-            0
-        ).w_hole.w_mat_1.mat_win.mat_win.lf_rho_elec.setText("1234.56789")
-        self.widget.tab_hole.widget(
-            0
-        ).w_hole.w_mat_1.mat_win.mat_win.lf_rho_elec.editingFinished.emit()
-        assert (
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.elec.rho
-            == 1234.56789
-        )
+        # Duplicate Magnet1 to Magnet_test
+        assert wid.current_dialog.current_dialog is None
+        wid.current_dialog.b_duplicate.clicked.emit()
+        assert type(wid.current_dialog.current_dialog) == DMatSetup
+        wid.current_dialog.current_dialog.le_name.setText("Magnet_test_python")
+        wid.current_dialog.current_dialog.le_name.editingFinished.emit()
+        assert wid.current_dialog.current_dialog.mat.name == "Magnet_test_python"
+        wid.current_dialog.current_dialog.lf_rho_elec.setText("1234.56789")
+        wid.current_dialog.current_dialog.lf_rho_elec.editingFinished.emit()
+        assert wid.current_dialog.current_dialog.mat.elec.rho == 1234.56789
 
-        self.app.exit()
-        # Close the Edit GUI and check Matlib modification
-
-        # Doesn't Work
-        # self.widget.mat_win.mat_win.accept()
-        # self.widget.mat_win.mat_win.accepted()
-        # button = self.widget.mat_win.mat_win.b_close.button(QDialogButtonBox.Ok)
+        # Check creation
+        wid.current_dialog.current_dialog.done(1)
+        assert wid.current_dialog.nav_mat.count() == 5
+        # self.widget.current_dialog.current_dialog.accepted()
+        # button = self.widget.current_dialog.current_dialog.b_close.button(QDialogButtonBox.Ok)
         # QTest.mouseClick(button, Qt.LeftButton)
-        # self.assertEqual(self.widget.mat_win.nav_mat.count(), 93)
+        # self.assertEqual(self.widget.current_dialog.nav_mat.count(), 93)
         # self.assertEqual(
-        #     self.widget.mat_win.nav_mat.currentItem().text(), "094 - Magnet_test_python"
+        #     self.widget.current_dialog.nav_mat.currentItem().text(), "094 - Magnet_test_python"
         # )

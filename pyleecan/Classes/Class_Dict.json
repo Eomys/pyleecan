@@ -447,7 +447,8 @@
             "comp_height",
             "comp_surface",
             "comp_width",
-            "plot"
+            "plot",
+            "plot_schematics"
         ],
         "mother": "Conductor",
         "name": "CondType11",
@@ -544,7 +545,8 @@
             "comp_height",
             "comp_surface",
             "comp_width",
-            "plot"
+            "plot",
+            "plot_schematics"
         ],
         "mother": "Conductor",
         "name": "CondType12",
@@ -776,8 +778,10 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
-        "desc": "Abstract class for the multi-simulation",
+        "daughters": [
+            "OptiObjective"
+        ],
+        "desc": "Class for defining data to keep on a multi-simulation",
         "is_internal": false,
         "methods": [],
         "mother": "",
@@ -1722,6 +1726,7 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_alpha",
@@ -1729,7 +1734,8 @@
             "comp_W5",
             "has_magnet",
             "remove_magnet",
-            "comp_surface_magnet_id"
+            "comp_surface_magnet_id",
+            "plot_schematics"
         ],
         "mother": "HoleMag",
         "name": "HoleM50",
@@ -1861,14 +1867,16 @@
         "desc": "3 magnets V hole",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_alpha",
             "comp_radius",
+            "comp_surface_magnet_id",
             "comp_width",
             "has_magnet",
-            "remove_magnet",
-            "comp_surface_magnet_id"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM51",
@@ -2018,15 +2026,17 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_alpha",
             "comp_radius",
             "comp_surface",
+            "comp_surface_magnet_id",
             "comp_W1",
             "has_magnet",
-            "remove_magnet",
-            "comp_surface_magnet_id"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM52",
@@ -2104,14 +2114,16 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_alpha",
             "comp_radius",
+            "comp_surface_magnet_id",
             "comp_W5",
             "has_magnet",
-            "remove_magnet",
-            "comp_surface_magnet_id"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM53",
@@ -2225,10 +2237,12 @@
         "desc": "Arc Hole for SyRM",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_radius",
-            "comp_surface"
+            "comp_surface",
+            "plot_schematics"
         ],
         "mother": "Hole",
         "name": "HoleM54",
@@ -2288,12 +2302,14 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_radius",
-            "remove_magnet",
+            "comp_surface_magnet_id",
             "has_magnet",
-            "comp_surface_magnet_id"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM57",
@@ -2398,12 +2414,14 @@
         "desc": "One magnet with circular notches",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
             "comp_radius",
-            "remove_magnet",
+            "comp_surface_magnet_id",
             "has_magnet",
-            "comp_surface_magnet_id"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM58",
@@ -6279,6 +6297,23 @@
             }
         ]
     },
+    "OptiObjective": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to distinguish normal DataKeeper from optimization objectives ",
+        "is_internal": false,
+        "methods": [],
+        "mother": "DataKeeper",
+        "name": "OptiObjective",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiObjective.csv",
+        "properties": []
+    },
     "OptiProblem": {
         "constants": [
             {
@@ -6318,7 +6353,7 @@
                 "max": "",
                 "min": "",
                 "name": "obj_func",
-                "type": "[DataKeeper]",
+                "type": "[OptiObjective]",
                 "unit": "",
                 "value": ""
             },
@@ -8687,7 +8722,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotM10",
@@ -8755,7 +8791,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotM11",
@@ -8823,7 +8860,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotM12",
@@ -8891,7 +8929,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotM13",
@@ -8968,7 +9007,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotM14",
@@ -9045,7 +9085,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotM15",
@@ -9122,7 +9163,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotM16",
@@ -9388,7 +9430,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_H1"
+            "get_H1",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW11",
@@ -9484,14 +9527,16 @@
         "desc": "",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
             "comp_surface",
-            "comp_surface_active"
+            "comp_surface_active",
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW12",
@@ -9561,7 +9606,8 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "get_H1"
+            "get_H1",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW13",
@@ -9665,7 +9711,8 @@
             "comp_height",
             "comp_height_active",
             "comp_surface",
-            "comp_surface_active"
+            "comp_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW14",
@@ -9741,7 +9788,8 @@
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
-            "comp_surface"
+            "comp_surface",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW15",
@@ -9835,7 +9883,8 @@
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
-            "comp_surface"
+            "comp_surface",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW16",
@@ -9906,15 +9955,16 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_active",
+            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "build_geometry_active",
-            "get_H1"
+            "get_H1",
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW21",
@@ -10001,15 +10051,17 @@
         "desc": "semi-closed orthoradial without fillet without wedge",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_active",
+            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "build_geometry_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW22",
@@ -10079,7 +10131,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW23",
@@ -10188,13 +10241,13 @@
             "build_geometry",
             "build_geometry_active",
             "check",
-            "comp_alphas",
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW24",
@@ -10245,7 +10298,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW25",
@@ -10313,7 +10367,8 @@
             "comp_height",
             "comp_height_active",
             "comp_surface",
-            "comp_surface_active"
+            "comp_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW26",
@@ -10390,7 +10445,8 @@
             "comp_height",
             "comp_height_active",
             "comp_surface",
-            "comp_surface_active"
+            "comp_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW27",
@@ -10493,7 +10549,8 @@
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
-            "comp_surface"
+            "comp_surface",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW28",
@@ -10571,7 +10628,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW29",

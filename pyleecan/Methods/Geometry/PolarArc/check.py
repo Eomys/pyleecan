@@ -1,4 +1,4 @@
-# -*-- coding: utf-8 -*
+from ....Methods.Geometry.PolarArc import *
 
 
 def check(self):
@@ -21,9 +21,3 @@ def check(self):
     """
     if self.angle == 0:
         raise AnglePolarArcError("The angle of a polar arc must be different to 0")
-
-
-class AnglePolarArcError(Exception):
-    """ """
-
-    pass

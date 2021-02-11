@@ -38,8 +38,8 @@ def get_mesh_pv(self, indices=None):
             }
             mesh.write(self.path + "/" + self.name + ".vtk")
             use_this_format = ".vtk"
-        elif self.format == "vtu":
-            use_this_format = ".vtu"
+        else:
+            use_this_format = "." + self.format
 
         # Read .vtk file with pyvista
         mesh = pv.read(self.path + "/" + self.name + use_this_format)

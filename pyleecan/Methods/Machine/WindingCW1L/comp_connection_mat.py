@@ -2,6 +2,7 @@
 
 from numpy import array, power, zeros
 
+from ....Methods.Machine.WindingCW1L import WindingT2DefNtError
 from ....Methods.Machine.Winding import WindingError
 from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from ....Functions.Winding.shift_wind_mat import shift_wind_mat
@@ -14,8 +15,8 @@ def comp_connection_mat(self, Zs=None):
 
     Parameters
     ----------
-    self : Winding
-        A: Winding object
+    self : WindingCW1L
+        A: WindingCW1L object
     Zs : int
         Number of Slot (Integer >0)
 
@@ -69,13 +70,11 @@ def comp_connection_mat(self, Zs=None):
 
     for k in range(0, int(Nt)):  # winding alternatively the teeth
         for q in range(0, qs):
-            xenc = q * 2 + k * 2 * qs + array([1, 2])
-            wind_mat[0][0][int((xenc[0] - 1) % Zs)][q] = (
-                power(-1, xenc[0] + q + k + 1) * Ntcoil
-            )
-            wind_mat[0][0][(xenc[1] - 1) % Zs][q] = (
-                power(-1, xenc[1] + q + k + 1) * Ntcoil
-            )
+            xenc = q * 4 + k * 2 * qs + array([1, 2])
+            wind_mat[0][0][int((xenc[0] - 1) % Zs)][q] = power(-1, xenc[0] + k + 1)
+            wind_mat[0][0][int((xenc[1] - 1) % Zs)][q] = power(-1, xenc[1] + k + 1)
+
+    wind_mat *= Ntcoil
 
     # Apply the transformations
     if self.is_reverse_wind:
@@ -84,9 +83,3 @@ def comp_connection_mat(self, Zs=None):
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
 
     return wind_mat
-
-
-class WindingT2DefNtError(WindingError):
-    """ """
-
-    pass

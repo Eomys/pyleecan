@@ -18,4 +18,8 @@ def reverse_wind_mat(wind_mat):
     """
     assert len(wind_mat.shape) == 4, "wind_mat has a wrong shape (dim 4)"
 
-    return wind_mat[:, :, ::-1, :]
+    wind_mat = wind_mat[:, :, ::-1, :]
+    if wind_mat.shape[1] == 2:
+        wind_mat = wind_mat[:, ::-1, :, :]
+
+    return wind_mat
