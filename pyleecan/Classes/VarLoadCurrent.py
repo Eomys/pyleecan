@@ -50,7 +50,7 @@ except ImportError as error:
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
-from .Simulation import Simulation
+from .VarSimu import VarSimu
 from .Post import Post
 
 
@@ -136,7 +136,7 @@ class VarLoadCurrent(VarLoad):
         datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
-        ref_simu=None,
+        var_simu=None,
         ref_simu_index=None,
         nb_simu=0,
         is_reuse_femm_file=True,
@@ -179,8 +179,8 @@ class VarLoadCurrent(VarLoad):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
                 stop_if_error = init_dict["stop_if_error"]
-            if "ref_simu" in list(init_dict.keys()):
-                ref_simu = init_dict["ref_simu"]
+            if "var_simu" in list(init_dict.keys()):
+                var_simu = init_dict["var_simu"]
             if "ref_simu_index" in list(init_dict.keys()):
                 ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
@@ -205,7 +205,7 @@ class VarLoadCurrent(VarLoad):
             datakeeper_list=datakeeper_list,
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
-            ref_simu=ref_simu,
+            var_simu=var_simu,
             ref_simu_index=ref_simu_index,
             nb_simu=nb_simu,
             is_reuse_femm_file=is_reuse_femm_file,

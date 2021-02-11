@@ -11599,11 +11599,11 @@
                 "value": false
             },
             {
-                "desc": "The reference simulation that may be a multi-simulation",
+                "desc": "Multi-simulation of a Multi-simulation definition",
                 "max": "",
                 "min": "",
-                "name": "ref_simu",
-                "type": "Simulation",
+                "name": "var_simu",
+                "type": "VarSimu",
                 "unit": "-",
                 "value": null
             },
