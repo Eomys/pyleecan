@@ -52,10 +52,9 @@ def get_simulations(self):
         new_simu = ref_simu.copy()
 
         # set the next multisimulation layer
-        # TODO this will break the 'parent' prop., so this have to be investigated
-        # TODO maybe a copy of var_simu could solve this but it may break the setters
+        # we need to have a 1:1 copy of 'var_simu' here, not to break parent prop.
         if ref_simu.var_simu.var_simu is not None:
-            new_simu.var_simu = ref_simu.var_simu.var_simu
+            new_simu.var_simu = ref_simu.var_simu.var_simu.copy()
         else:
             new_simu.var_simu = None
 
@@ -74,7 +73,7 @@ def get_simulations(self):
     for _ in multisim_shape:
         slices += (slice(None),)
 
-    # Create ParamExplorerValue to be stored in XOutput
+    # Create ParamExplorerSet to be stored in XOutput
     for param_explorer in self.paramexplorer_list:
         multisim_dict["paramexplorer_list"].append(
             ParamExplorerSet(
