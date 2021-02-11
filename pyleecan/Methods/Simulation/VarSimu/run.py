@@ -42,7 +42,11 @@ def run(self):
         simulation = simulation_list.pop(ref_simu_index)
         simulation.index = ref_simu_index
         index_list.pop(ref_simu_index)
-        xoutput.simu = simulation
+        
+        # to store the result of simulation in the 'Output part' of xoutput
+        # if reference simulation is a single simulation
+        if simulation.var_simu is None:
+            xoutput.simu = simulation
 
         # Run the simulation handling errors
         run_single_simu(

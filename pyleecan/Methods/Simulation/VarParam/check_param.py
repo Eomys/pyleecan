@@ -1,5 +1,5 @@
 from ....Classes.ParamExplorerSet import ParamExplorerSet
-from ....Methods.Simulation.VarSimu import check_param as check_param_
+from ....Methods.Simulation.VarSimu.check_param import check_param as check_param_
 
 
 class ParamExplorerError(Exception):
