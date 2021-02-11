@@ -12,7 +12,7 @@ def run(self):
 
     # Multi-simulation
     if self.var_simu is not None:
-        # XOutput initialization
+        # make sure simulation output is of class XOutput
         if self.parent is None:
             results = XOutput(simu=self)
         else:
@@ -31,7 +31,7 @@ def run(self):
         # Logger setup
         self.init_logger(results)
 
-        # Compute the reference simulation
+        # Compute the reference simulation as a single simulation
         if self.var_simu.ref_simu_index is None:
             self.run_single()
 

@@ -28,8 +28,8 @@ def run(self):
         xoutput.xoutput_dict[datakeeper.symbol] = datakeeper
         datakeeper.result = [None] * self.nb_simu
 
-    # Execute the reference simulation it is included in the simulation list
-    # Otherwise, the reference simulation is already executed in the simulation.run method
+    # Execute the reference simulation if it is included in the multisimulation list
+    # Otherwise, the ref. simulation is already executed in the simulation.run method
     nb_simu = self.nb_simu
     ref_simu_index = self.ref_simu_index
     index_list = list(range(nb_simu))

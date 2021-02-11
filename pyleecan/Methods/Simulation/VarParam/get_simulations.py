@@ -9,7 +9,8 @@ def get_simulations(self):
     Returns
     -------
     multisim_dict : dict
-        dictionary containing simulation shape, setters, parameter values and simulations generated
+        dictionary containing simulation shape, setters, parameter values and
+        simulations generated
     """
     # Get reference simulation
     ref_simu = self.parent
@@ -50,11 +51,13 @@ def get_simulations(self):
         # Generate the simulation
         new_simu = ref_simu.copy()
 
-        # Remove its multisimulation to avoid infinite simulations
-        new_simu.var_simu = None
-
-        # Store simulation input_values and setters
-        input_values = []
+        # set the next multisimulation layer
+        # TODO this will break the 'parent' prop., so this have to be investigated
+        # TODO maybe a copy of var_simu could solve this but it may break the setters
+        if ref_simu.var_simu.var_simu is not None:
+            new_simu.var_simu = ref_simu.var_simu.var_simu
+        else:
+            new_simu.var_simu = None
 
         # Edit it using setter
         for setter, value, symbol in zip(

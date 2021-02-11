@@ -1,4 +1,5 @@
 from ....Classes.ParamExplorerSet import ParamExplorerSet
+from ....Methods.Simulation.VarSimu import check_param as check_param_
 
 
 class ParamExplorerError(Exception):
@@ -22,10 +23,8 @@ def check_param(self):
     VarParamError: Error in VarParam general setting
     DataKeeperError: Error in DataKeeper setting
     """
-
-    # Check the reference simulation
-    if self.parent == None:
-        raise VarParamError("VarParam object must be inside a Simulation object")
+    # run the base class check first
+    check_param_(self)
 
     # Check ParamExplorers
     for paramexplorer in self.paramexplorer_list:
