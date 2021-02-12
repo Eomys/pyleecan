@@ -1,3 +1,9 @@
+import sys
+
+from os.path import dirname, abspath, normpath, join
+
+sys.path.insert(0, normpath(abspath(join(dirname(__file__), "../../../.."))))
+
 # -*- coding: utf-8 -*-
 import pytest
 
@@ -5,6 +11,8 @@ from os.path import join
 from numpy import zeros, exp, pi, real, meshgrid, mean
 
 from numpy.testing import assert_array_almost_equal
+
+
 
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Simu1 import Simu1
@@ -51,10 +59,11 @@ def test_AC_IPMSM_AGSF_Tensor():
     # Run simulation
     out = simu.run()
 
+    
     out.plot_2D_Data(
         "force.AGSF",
-        "wavenumber",
-        "freqs=160",
+        "angle",
+        "time[1]",
         save_path=join(save_path, simu.name + "_AGSF_space_fft_freq160_no_sym.png"),
         is_show_fig=False,
     )
