@@ -232,8 +232,12 @@ class InputCurrent(Input):
         S += getsizeof(self.felec)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, keep_function=False):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional input parameter 'keep_function' is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Input
         InputCurrent_dict = super(InputCurrent, self).as_dict()

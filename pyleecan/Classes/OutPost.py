@@ -88,8 +88,12 @@ class OutPost(FrozenClass):
         S += getsizeof(self.line_color)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, keep_function=False):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional input parameter 'keep_function' is for internal use only
+        and may prevent json serializability.
+        """
 
         OutPost_dict = dict()
         OutPost_dict["legend_name"] = self.legend_name

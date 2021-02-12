@@ -391,8 +391,12 @@ class MagFEMM(Magnetics):
         S += getsizeof(self.Rag_enforced)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, keep_function=False):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional input parameter 'keep_function' is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Magnetics
         MagFEMM_dict = super(MagFEMM, self).as_dict()

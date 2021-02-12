@@ -96,15 +96,27 @@ class PostFunction(Post):
         S += getsizeof(self._run_str)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, keep_function=False):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional input parameter 'keep_function' is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Post
         PostFunction_dict = super(PostFunction, self).as_dict()
         if self._run_str is not None:
             PostFunction_dict["run"] = self._run_str
+        elif keep_function:
+            PostFunction_dict["run"] = self.run
         else:
             PostFunction_dict["run"] = None
+            if self.run is not None:
+                self.get_logger.warning(
+                    "PostFunction.as_dict(): "
+                    + f"Function {self.run.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         PostFunction_dict["__class__"] = "PostFunction"
@@ -146,7 +158,7 @@ class PostFunction(Post):
     run = property(
         fget=_get_run,
         fset=_set_run,
-        doc=u"""Post-processing that takes an output in argument
+        doc="""Post-processing that takes an output in argument
 
         :Type: function
         """,

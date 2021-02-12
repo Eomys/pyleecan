@@ -292,8 +292,12 @@ class SlotM14(Slot):
         S += getsizeof(self.Rtopm)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, keep_function=False):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional input parameter 'keep_function' is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Slot
         SlotM14_dict = super(SlotM14, self).as_dict()

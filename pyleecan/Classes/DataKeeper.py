@@ -148,8 +148,12 @@ class DataKeeper(FrozenClass):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, keep_function=False):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional input parameter 'keep_function' is for internal use only
+        and may prevent json serializability.
+        """
 
         DataKeeper_dict = dict()
         DataKeeper_dict["name"] = self.name
@@ -157,12 +161,28 @@ class DataKeeper(FrozenClass):
         DataKeeper_dict["unit"] = self.unit
         if self._keeper_str is not None:
             DataKeeper_dict["keeper"] = self._keeper_str
+        elif keep_function:
+            DataKeeper_dict["keeper"] = self.keeper
         else:
             DataKeeper_dict["keeper"] = None
+            if self.keeper is not None:
+                self.get_logger.warning(
+                    "DataKeeper.as_dict(): "
+                    + f"Function {self.keeper.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         if self._error_keeper_str is not None:
             DataKeeper_dict["error_keeper"] = self._error_keeper_str
+        elif keep_function:
+            DataKeeper_dict["error_keeper"] = self.error_keeper
         else:
             DataKeeper_dict["error_keeper"] = None
+            if self.error_keeper is not None:
+                self.get_logger.warning(
+                    "DataKeeper.as_dict(): "
+                    + f"Function {self.error_keeper.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         DataKeeper_dict["result"] = (
             self.result.copy() if self.result is not None else None
         )
@@ -192,7 +212,7 @@ class DataKeeper(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Data name
+        doc="""Data name
 
         :Type: str
         """,
@@ -210,7 +230,7 @@ class DataKeeper(FrozenClass):
     symbol = property(
         fget=_get_symbol,
         fset=_set_symbol,
-        doc=u"""Data symbol
+        doc="""Data symbol
 
         :Type: str
         """,
@@ -228,7 +248,7 @@ class DataKeeper(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Data unit
+        doc="""Data unit
 
         :Type: str
         """,
@@ -263,7 +283,7 @@ class DataKeeper(FrozenClass):
     keeper = property(
         fget=_get_keeper,
         fset=_set_keeper,
-        doc=u"""Function that takes an Output in argument and return a value
+        doc="""Function that takes an Output in argument and return a value
 
         :Type: function
         """,
@@ -298,7 +318,7 @@ class DataKeeper(FrozenClass):
     error_keeper = property(
         fget=_get_error_keeper,
         fset=_set_error_keeper,
-        doc=u"""Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices
+        doc="""Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices
 
         :Type: function
         """,
@@ -318,7 +338,7 @@ class DataKeeper(FrozenClass):
     result = property(
         fget=_get_result,
         fset=_set_result,
-        doc=u"""List containing datakeeper results for each simulation
+        doc="""List containing datakeeper results for each simulation
 
         :Type: list
         """,

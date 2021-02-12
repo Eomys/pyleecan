@@ -352,8 +352,12 @@ class HoleM50(HoleMag):
         S += getsizeof(self.magnet_1)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, keep_function=False):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional input parameter 'keep_function' is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from HoleMag
         HoleM50_dict = super(HoleM50, self).as_dict()

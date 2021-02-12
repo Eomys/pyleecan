@@ -70,8 +70,12 @@ class Bore(FrozenClass):
         S = 0  # Full size of the object
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, keep_function=False):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional input parameter 'keep_function' is for internal use only
+        and may prevent json serializability.
+        """
 
         Bore_dict = dict()
         # The class name is added to the dict for deserialisation purpose

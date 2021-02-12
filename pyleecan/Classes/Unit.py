@@ -182,8 +182,12 @@ class Unit(FrozenClass):
         S += getsizeof(self.unit_m2)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, keep_function=False):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional input parameter 'keep_function' is for internal use only
+        and may prevent json serializability.
+        """
 
         Unit_dict = dict()
         Unit_dict["unit_m"] = self.unit_m
