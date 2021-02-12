@@ -258,7 +258,9 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         OptiGenAlgNsga2Deap_dict = super(OptiGenAlgNsga2Deap, self).as_dict()
         if self.toolbox is None:
             OptiGenAlgNsga2Deap_dict["toolbox"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+        else:
+            # Store serialized data (using cloudpickle) and str
+            # to read it in json save files
             OptiGenAlgNsga2Deap_dict["toolbox"] = {
                 "__class__": str(type(self._toolbox)),
                 "__repr__": str(self._toolbox.__repr__()),

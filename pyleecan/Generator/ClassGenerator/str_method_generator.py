@@ -82,7 +82,7 @@ def generate_str(gen_dict, class_dict):
                 + prop["name"]
                 + ' = " + str(self._'
                 + prop["name"]
-                + "_func)+ linesep\n"
+                + "_func) + linesep\n"
             )
             var_str += TAB2 + "else:\n"
             var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = None"'
@@ -158,7 +158,7 @@ def generate_str(gen_dict, class_dict):
                 TAB3
                 + "tmp = self."
                 + prop["name"]
-                + '[key].__str__().replace(linesep, linesep + "\\t")+ linesep \n'
+                + '[key].__str__().replace(linesep, linesep + "\\t") + linesep \n'
             )
             var_str += (
                 TAB3 + class_name + '_str += "' + prop["name"] + '["+key+"] ="+ tmp'
