@@ -127,6 +127,23 @@ class InputForce(Input):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Input
+        diff_list.extend(super(InputForce, self).compare(other, name=name))
+        if (other.P is None and self.P is not None) or (
+            other.P is not None and self.P is None
+        ):
+            diff_list.append(name + ".P None mismatch")
+        elif self.P is not None:
+            diff_list.extend(self.P.compare(other.P, name=name + ".P"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

@@ -200,6 +200,27 @@ class VentilationTrap(Hole):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Hole
+        diff_list.extend(super(VentilationTrap, self).compare(other, name=name))
+        if other._Alpha0 != self._Alpha0:
+            diff_list.append(name + ".Alpha0")
+        if other._D0 != self._D0:
+            diff_list.append(name + ".D0")
+        if other._H0 != self._H0:
+            diff_list.append(name + ".H0")
+        if other._W1 != self._W1:
+            diff_list.append(name + ".W1")
+        if other._W2 != self._W2:
+            diff_list.append(name + ".W2")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

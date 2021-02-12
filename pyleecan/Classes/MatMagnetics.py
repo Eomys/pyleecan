@@ -167,6 +167,40 @@ class MatMagnetics(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._mur_lin != self._mur_lin:
+            diff_list.append(name + ".mur_lin")
+        if other._Hc != self._Hc:
+            diff_list.append(name + ".Hc")
+        if other._Brm20 != self._Brm20:
+            diff_list.append(name + ".Brm20")
+        if other._alpha_Br != self._alpha_Br:
+            diff_list.append(name + ".alpha_Br")
+        if other._Wlam != self._Wlam:
+            diff_list.append(name + ".Wlam")
+        if (other.BH_curve is None and self.BH_curve is not None) or (
+            other.BH_curve is not None and self.BH_curve is None
+        ):
+            diff_list.append(name + ".BH_curve None mismatch")
+        elif self.BH_curve is not None:
+            diff_list.extend(
+                self.BH_curve.compare(other.BH_curve, name=name + ".BH_curve")
+            )
+        if (other.LossData is None and self.LossData is not None) or (
+            other.LossData is not None and self.LossData is None
+        ):
+            diff_list.append(name + ".LossData None mismatch")
+        elif self.LossData is not None:
+            diff_list.extend(
+                self.LossData.compare(other.LossData, name=name + ".LossData")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

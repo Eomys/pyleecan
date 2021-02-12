@@ -294,6 +294,58 @@ class MeshSolution(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._label != self._label:
+            diff_list.append(name + ".label")
+        if (other.mesh is None and self.mesh is not None) or (
+            other.mesh is not None and self.mesh is None
+        ):
+            diff_list.append(name + ".mesh None mismatch")
+        elif len(other.mesh) != len(self.mesh):
+            diff_list.append("len(" + name + ".mesh)")
+        else:
+            for ii in range(len(other.mesh)):
+                diff_list.extend(
+                    self.mesh[ii].compare(
+                        other.mesh[ii], name=name + ".mesh[" + str(ii) + "]"
+                    )
+                )
+        if other._is_same_mesh != self._is_same_mesh:
+            diff_list.append(name + ".is_same_mesh")
+        if (other.solution is None and self.solution is not None) or (
+            other.solution is not None and self.solution is None
+        ):
+            diff_list.append(name + ".solution None mismatch")
+        elif len(other.solution) != len(self.solution):
+            diff_list.append("len(" + name + ".solution)")
+        else:
+            for ii in range(len(other.solution)):
+                diff_list.extend(
+                    self.solution[ii].compare(
+                        other.solution[ii], name=name + ".solution[" + str(ii) + "]"
+                    )
+                )
+        if (other.group is None and self.group is not None) or (
+            other.group is not None and self.group is None
+        ):
+            diff_list.append(name + ".group None mismatch")
+        elif len(other.group) != len(self.group):
+            diff_list.append("len(" + name + ".group)")
+        else:
+            for key in other.group:
+                if key not in self.group or not array_equal(
+                    other.group[key], self.group[key]
+                ):
+                    diff_list.append(name + ".group[" + str(key) + "]")
+        if other._dimension != self._dimension:
+            diff_list.append(name + ".dimension")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

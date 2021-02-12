@@ -151,6 +151,62 @@ class OutStruct(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.Time is None and self.Time is not None) or (
+            other.Time is not None and self.Time is None
+        ):
+            diff_list.append(name + ".Time None mismatch")
+        elif self.Time is not None:
+            diff_list.extend(self.Time.compare(other.Time, name=name + ".Time"))
+        if (other.Angle is None and self.Angle is not None) or (
+            other.Angle is not None and self.Angle is None
+        ):
+            diff_list.append(name + ".Angle None mismatch")
+        elif self.Angle is not None:
+            diff_list.extend(self.Angle.compare(other.Angle, name=name + ".Angle"))
+        if other._Nt_tot != self._Nt_tot:
+            diff_list.append(name + ".Nt_tot")
+        if other._Na_tot != self._Na_tot:
+            diff_list.append(name + ".Na_tot")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if (other.Yr is None and self.Yr is not None) or (
+            other.Yr is not None and self.Yr is None
+        ):
+            diff_list.append(name + ".Yr None mismatch")
+        elif self.Yr is not None:
+            diff_list.extend(self.Yr.compare(other.Yr, name=name + ".Yr"))
+        if (other.Vr is None and self.Vr is not None) or (
+            other.Vr is not None and self.Vr is None
+        ):
+            diff_list.append(name + ".Vr None mismatch")
+        elif self.Vr is not None:
+            diff_list.extend(self.Vr.compare(other.Vr, name=name + ".Vr"))
+        if (other.Ar is None and self.Ar is not None) or (
+            other.Ar is not None and self.Ar is None
+        ):
+            diff_list.append(name + ".Ar None mismatch")
+        elif self.Ar is not None:
+            diff_list.extend(self.Ar.compare(other.Ar, name=name + ".Ar"))
+        if (other.meshsolution is None and self.meshsolution is not None) or (
+            other.meshsolution is not None and self.meshsolution is None
+        ):
+            diff_list.append(name + ".meshsolution None mismatch")
+        elif self.meshsolution is not None:
+            diff_list.extend(
+                self.meshsolution.compare(
+                    other.meshsolution, name=name + ".meshsolution"
+                )
+            )
+        if other._FEA_dict != self._FEA_dict:
+            diff_list.append(name + ".FEA_dict")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

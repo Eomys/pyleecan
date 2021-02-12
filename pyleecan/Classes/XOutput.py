@@ -517,6 +517,60 @@ class XOutput(Output):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Output
+        diff_list.extend(super(XOutput, self).compare(other, name=name))
+        if (
+            other.paramexplorer_list is None and self.paramexplorer_list is not None
+        ) or (other.paramexplorer_list is not None and self.paramexplorer_list is None):
+            diff_list.append(name + ".paramexplorer_list None mismatch")
+        elif len(other.paramexplorer_list) != len(self.paramexplorer_list):
+            diff_list.append("len(" + name + ".paramexplorer_list)")
+        else:
+            for ii in range(len(other.paramexplorer_list)):
+                diff_list.extend(
+                    self.paramexplorer_list[ii].compare(
+                        other.paramexplorer_list[ii],
+                        name=name + ".paramexplorer_list[" + str(ii) + "]",
+                    )
+                )
+        if (other.output_list is None and self.output_list is not None) or (
+            other.output_list is not None and self.output_list is None
+        ):
+            diff_list.append(name + ".output_list None mismatch")
+        elif len(other.output_list) != len(self.output_list):
+            diff_list.append("len(" + name + ".output_list)")
+        else:
+            for ii in range(len(other.output_list)):
+                diff_list.extend(
+                    self.output_list[ii].compare(
+                        other.output_list[ii],
+                        name=name + ".output_list[" + str(ii) + "]",
+                    )
+                )
+        if (other.xoutput_dict is None and self.xoutput_dict is not None) or (
+            other.xoutput_dict is not None and self.xoutput_dict is None
+        ):
+            diff_list.append(name + ".xoutput_dict None mismatch")
+        elif len(other.xoutput_dict) != len(self.xoutput_dict):
+            diff_list.append("len(" + name + "xoutput_dict)")
+        else:
+            for key in self.xoutput_dict:
+                diff_list.extend(
+                    self.xoutput_dict[key].compare(
+                        other.xoutput_dict[key], name=name + ".xoutput_dict"
+                    )
+                )
+        if other._nb_simu != self._nb_simu:
+            diff_list.append(name + ".nb_simu")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

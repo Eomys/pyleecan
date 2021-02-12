@@ -186,6 +186,29 @@ class InputElec(Input):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Input
+        diff_list.extend(super(InputElec, self).compare(other, name=name))
+        if other._rot_dir != self._rot_dir:
+            diff_list.append(name + ".rot_dir")
+        if other._Id_ref != self._Id_ref:
+            diff_list.append(name + ".Id_ref")
+        if other._Iq_ref != self._Iq_ref:
+            diff_list.append(name + ".Iq_ref")
+        if other._Ud_ref != self._Ud_ref:
+            diff_list.append(name + ".Ud_ref")
+        if other._Uq_ref != self._Uq_ref:
+            diff_list.append(name + ".Uq_ref")
+        if other._felec != self._felec:
+            diff_list.append(name + ".felec")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

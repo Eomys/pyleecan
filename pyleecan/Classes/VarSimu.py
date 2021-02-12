@@ -253,6 +253,94 @@ class VarSimu(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._desc != self._desc:
+            diff_list.append(name + ".desc")
+        if (other.datakeeper_list is None and self.datakeeper_list is not None) or (
+            other.datakeeper_list is not None and self.datakeeper_list is None
+        ):
+            diff_list.append(name + ".datakeeper_list None mismatch")
+        elif len(other.datakeeper_list) != len(self.datakeeper_list):
+            diff_list.append("len(" + name + ".datakeeper_list)")
+        else:
+            for ii in range(len(other.datakeeper_list)):
+                diff_list.extend(
+                    self.datakeeper_list[ii].compare(
+                        other.datakeeper_list[ii],
+                        name=name + ".datakeeper_list[" + str(ii) + "]",
+                    )
+                )
+        if other._is_keep_all_output != self._is_keep_all_output:
+            diff_list.append(name + ".is_keep_all_output")
+        if other._stop_if_error != self._stop_if_error:
+            diff_list.append(name + ".stop_if_error")
+        if other._ref_simu_index != self._ref_simu_index:
+            diff_list.append(name + ".ref_simu_index")
+        if other._nb_simu != self._nb_simu:
+            diff_list.append(name + ".nb_simu")
+        if other._is_reuse_femm_file != self._is_reuse_femm_file:
+            diff_list.append(name + ".is_reuse_femm_file")
+        if (other.postproc_list is None and self.postproc_list is not None) or (
+            other.postproc_list is not None and self.postproc_list is None
+        ):
+            diff_list.append(name + ".postproc_list None mismatch")
+        elif len(other.postproc_list) != len(self.postproc_list):
+            diff_list.append("len(" + name + ".postproc_list)")
+        else:
+            for ii in range(len(other.postproc_list)):
+                diff_list.extend(
+                    self.postproc_list[ii].compare(
+                        other.postproc_list[ii],
+                        name=name + ".postproc_list[" + str(ii) + "]",
+                    )
+                )
+        if (
+            other.pre_keeper_postproc_list is None
+            and self.pre_keeper_postproc_list is not None
+        ) or (
+            other.pre_keeper_postproc_list is not None
+            and self.pre_keeper_postproc_list is None
+        ):
+            diff_list.append(name + ".pre_keeper_postproc_list None mismatch")
+        elif len(other.pre_keeper_postproc_list) != len(self.pre_keeper_postproc_list):
+            diff_list.append("len(" + name + ".pre_keeper_postproc_list)")
+        else:
+            for ii in range(len(other.pre_keeper_postproc_list)):
+                diff_list.extend(
+                    self.pre_keeper_postproc_list[ii].compare(
+                        other.pre_keeper_postproc_list[ii],
+                        name=name + ".pre_keeper_postproc_list[" + str(ii) + "]",
+                    )
+                )
+        if (
+            other.post_keeper_postproc_list is None
+            and self.post_keeper_postproc_list is not None
+        ) or (
+            other.post_keeper_postproc_list is not None
+            and self.post_keeper_postproc_list is None
+        ):
+            diff_list.append(name + ".post_keeper_postproc_list None mismatch")
+        elif len(other.post_keeper_postproc_list) != len(
+            self.post_keeper_postproc_list
+        ):
+            diff_list.append("len(" + name + ".post_keeper_postproc_list)")
+        else:
+            for ii in range(len(other.post_keeper_postproc_list)):
+                diff_list.extend(
+                    self.post_keeper_postproc_list[ii].compare(
+                        other.post_keeper_postproc_list[ii],
+                        name=name + ".post_keeper_postproc_list[" + str(ii) + "]",
+                    )
+                )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

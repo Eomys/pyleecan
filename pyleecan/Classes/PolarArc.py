@@ -226,6 +226,21 @@ class PolarArc(Surface):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Surface
+        diff_list.extend(super(PolarArc, self).compare(other, name=name))
+        if other._angle != self._angle:
+            diff_list.append(name + ".angle")
+        if other._height != self._height:
+            diff_list.append(name + ".height")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

@@ -192,6 +192,47 @@ class Simu1(Simulation):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Simulation
+        diff_list.extend(super(Simu1, self).compare(other, name=name))
+        if (other.elec is None and self.elec is not None) or (
+            other.elec is not None and self.elec is None
+        ):
+            diff_list.append(name + ".elec None mismatch")
+        elif self.elec is not None:
+            diff_list.extend(self.elec.compare(other.elec, name=name + ".elec"))
+        if (other.mag is None and self.mag is not None) or (
+            other.mag is not None and self.mag is None
+        ):
+            diff_list.append(name + ".mag None mismatch")
+        elif self.mag is not None:
+            diff_list.extend(self.mag.compare(other.mag, name=name + ".mag"))
+        if (other.struct is None and self.struct is not None) or (
+            other.struct is not None and self.struct is None
+        ):
+            diff_list.append(name + ".struct None mismatch")
+        elif self.struct is not None:
+            diff_list.extend(self.struct.compare(other.struct, name=name + ".struct"))
+        if (other.force is None and self.force is not None) or (
+            other.force is not None and self.force is None
+        ):
+            diff_list.append(name + ".force None mismatch")
+        elif self.force is not None:
+            diff_list.extend(self.force.compare(other.force, name=name + ".force"))
+        if (other.loss is None and self.loss is not None) or (
+            other.loss is not None and self.loss is None
+        ):
+            diff_list.append(name + ".loss None mismatch")
+        elif self.loss is not None:
+            diff_list.extend(self.loss.compare(other.loss, name=name + ".loss"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

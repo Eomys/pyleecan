@@ -155,6 +155,29 @@ class FluxLinkFEMM(FluxLink):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from FluxLink
+        diff_list.extend(super(FluxLinkFEMM, self).compare(other, name=name))
+        if other._FEMM_dict != self._FEMM_dict:
+            diff_list.append(name + ".FEMM_dict")
+        if other._type_calc_leakage != self._type_calc_leakage:
+            diff_list.append(name + ".type_calc_leakage")
+        if other._is_sliding_band != self._is_sliding_band:
+            diff_list.append(name + ".is_sliding_band")
+        if other._is_periodicity_a != self._is_periodicity_a:
+            diff_list.append(name + ".is_periodicity_a")
+        if other._Nt_tot != self._Nt_tot:
+            diff_list.append(name + ".Nt_tot")
+        if other._Kgeo_fineness != self._Kgeo_fineness:
+            diff_list.append(name + ".Kgeo_fineness")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

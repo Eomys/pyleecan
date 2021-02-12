@@ -164,6 +164,19 @@ class WindingUD(Winding):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Winding
+        diff_list.extend(super(WindingUD, self).compare(other, name=name))
+        if not array_equal(other.user_wind_mat, self.user_wind_mat):
+            diff_list.append(name + ".user_wind_mat")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

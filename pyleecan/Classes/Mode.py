@@ -191,6 +191,23 @@ class Mode(SolutionMat):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from SolutionMat
+        diff_list.extend(super(Mode, self).compare(other, name=name))
+        if other._nat_freq != self._nat_freq:
+            diff_list.append(name + ".nat_freq")
+        if other._order_circ != self._order_circ:
+            diff_list.append(name + ".order_circ")
+        if other._order_long != self._order_long:
+            diff_list.append(name + ".order_long")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
