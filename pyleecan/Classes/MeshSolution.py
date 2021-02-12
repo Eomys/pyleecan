@@ -281,7 +281,7 @@ class MeshSolution(FrozenClass):
         ):
             return False
         elif other.group is None and self.group is None:
-            return True
+            pass
         elif len(other.group) != len(self.group):
             return False
         else:
