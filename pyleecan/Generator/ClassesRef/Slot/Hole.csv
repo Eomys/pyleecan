@@ -1,13 +1,14 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Zh,-,Number of Hole around the circumference,0,int,36,0,1000,,Slot,,comp_radius,VERSION,1,Holes for lamination (abstract)
-mat_void,-,Material of the void part of the hole (Air in general),0,Material,,,,,,,comp_surface,,,
+Zh,-,Number of Hole around the circumference,0,int,36,0,1000,,Slot,,comp_height,VERSION,1,Holes for lamination (abstract)
+mat_void,-,Material of the void part of the hole (Air in general),0,Material,,,,,,,comp_magnetization_dict,,,
+magnetization_dict_enforced,-,"Dictionary to enforce the magnetization direction of the magnets (key=magnet_X, value=angle[rad])",0,dict,None,,,,,,comp_radius,,,
+,,,,,,,,,,,comp_surface,,,
+,,,,,,,,,,,convert_to_UD,,,
 ,,,,,,,,,,,get_is_stator,,,
+,,,,,,,,,,,get_magnet_by_id,,,
+,,,,,,,,,,,get_magnet_dict,,,
 ,,,,,,,,,,,get_Rbo,,,
 ,,,,,,,,,,,get_Rext,,,
 ,,,,,,,,,,,has_magnet,,,
 ,,,,,,,,,,,plot,,,
-,,,,,,,,,,,comp_height,,,
-,,,,,,,,,,,get_magnet_by_id,,,
 ,,,,,,,,,,,set_magnet_by_id,,,
-,,,,,,,,,,,get_magnet_dict,,,
-,,,,,,,,,,,convert_to_UD,,,

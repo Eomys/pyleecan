@@ -1673,18 +1673,19 @@
         "desc": "Holes for lamination (abstract)",
         "is_internal": false,
         "methods": [
+            "comp_height",
+            "comp_magnetization_dict",
             "comp_radius",
             "comp_surface",
+            "convert_to_UD",
             "get_is_stator",
+            "get_magnet_by_id",
+            "get_magnet_dict",
             "get_Rbo",
             "get_Rext",
             "has_magnet",
             "plot",
-            "comp_height",
-            "get_magnet_by_id",
-            "set_magnet_by_id",
-            "get_magnet_dict",
-            "convert_to_UD"
+            "set_magnet_by_id"
         ],
         "mother": "",
         "name": "Hole",
@@ -1708,6 +1709,15 @@
                 "type": "Material",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Dictionary to enforce the magnetization direction of the magnets (key=magnet_X, value=angle[rad])",
+                "max": "",
+                "min": "",
+                "name": "magnetization_dict_enforced",
+                "type": "dict",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -1730,12 +1740,13 @@
             "build_geometry",
             "check",
             "comp_alpha",
+            "comp_magnetization_dict",
             "comp_radius",
+            "comp_surface_magnet_id",
             "comp_W5",
             "has_magnet",
-            "remove_magnet",
-            "comp_surface_magnet_id",
-            "plot_schematics"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM50",
@@ -4111,7 +4122,9 @@
         ],
         "desc": "Abstract geometry class (A line between two points)",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "comp_normal"
+        ],
         "mother": "",
         "name": "Line",
         "package": "Geometry",

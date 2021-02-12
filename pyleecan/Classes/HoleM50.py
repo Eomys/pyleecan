@@ -38,9 +38,19 @@ except ImportError as error:
     comp_alpha = error
 
 try:
+    from ..Methods.Slot.HoleM50.comp_magnetization_dict import comp_magnetization_dict
+except ImportError as error:
+    comp_magnetization_dict = error
+
+try:
     from ..Methods.Slot.HoleM50.comp_radius import comp_radius
 except ImportError as error:
     comp_radius = error
+
+try:
+    from ..Methods.Slot.HoleM50.comp_surface_magnet_id import comp_surface_magnet_id
+except ImportError as error:
+    comp_surface_magnet_id = error
 
 try:
     from ..Methods.Slot.HoleM50.comp_W5 import comp_W5
@@ -53,19 +63,14 @@ except ImportError as error:
     has_magnet = error
 
 try:
-    from ..Methods.Slot.HoleM50.remove_magnet import remove_magnet
-except ImportError as error:
-    remove_magnet = error
-
-try:
-    from ..Methods.Slot.HoleM50.comp_surface_magnet_id import comp_surface_magnet_id
-except ImportError as error:
-    comp_surface_magnet_id = error
-
-try:
     from ..Methods.Slot.HoleM50.plot_schematics import plot_schematics
 except ImportError as error:
     plot_schematics = error
+
+try:
+    from ..Methods.Slot.HoleM50.remove_magnet import remove_magnet
+except ImportError as error:
+    remove_magnet = error
 
 
 from ._check import InitUnKnowClassError
@@ -121,6 +126,18 @@ class HoleM50(HoleMag):
         )
     else:
         comp_alpha = comp_alpha
+    # cf Methods.Slot.HoleM50.comp_magnetization_dict
+    if isinstance(comp_magnetization_dict, ImportError):
+        comp_magnetization_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM50 method comp_magnetization_dict: "
+                    + str(comp_magnetization_dict)
+                )
+            )
+        )
+    else:
+        comp_magnetization_dict = comp_magnetization_dict
     # cf Methods.Slot.HoleM50.comp_radius
     if isinstance(comp_radius, ImportError):
         comp_radius = property(
@@ -130,6 +147,18 @@ class HoleM50(HoleMag):
         )
     else:
         comp_radius = comp_radius
+    # cf Methods.Slot.HoleM50.comp_surface_magnet_id
+    if isinstance(comp_surface_magnet_id, ImportError):
+        comp_surface_magnet_id = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM50 method comp_surface_magnet_id: "
+                    + str(comp_surface_magnet_id)
+                )
+            )
+        )
+    else:
+        comp_surface_magnet_id = comp_surface_magnet_id
     # cf Methods.Slot.HoleM50.comp_W5
     if isinstance(comp_W5, ImportError):
         comp_W5 = property(
@@ -148,29 +177,6 @@ class HoleM50(HoleMag):
         )
     else:
         has_magnet = has_magnet
-    # cf Methods.Slot.HoleM50.remove_magnet
-    if isinstance(remove_magnet, ImportError):
-        remove_magnet = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM50 method remove_magnet: " + str(remove_magnet)
-                )
-            )
-        )
-    else:
-        remove_magnet = remove_magnet
-    # cf Methods.Slot.HoleM50.comp_surface_magnet_id
-    if isinstance(comp_surface_magnet_id, ImportError):
-        comp_surface_magnet_id = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM50 method comp_surface_magnet_id: "
-                    + str(comp_surface_magnet_id)
-                )
-            )
-        )
-    else:
-        comp_surface_magnet_id = comp_surface_magnet_id
     # cf Methods.Slot.HoleM50.plot_schematics
     if isinstance(plot_schematics, ImportError):
         plot_schematics = property(
@@ -182,6 +188,17 @@ class HoleM50(HoleMag):
         )
     else:
         plot_schematics = plot_schematics
+    # cf Methods.Slot.HoleM50.remove_magnet
+    if isinstance(remove_magnet, ImportError):
+        remove_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM50 method remove_magnet: " + str(remove_magnet)
+                )
+            )
+        )
+    else:
+        remove_magnet = remove_magnet
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -204,6 +221,7 @@ class HoleM50(HoleMag):
         magnet_1=-1,
         Zh=36,
         mat_void=-1,
+        magnetization_dict_enforced=None,
         init_dict=None,
         init_str=None,
     ):
@@ -250,6 +268,8 @@ class HoleM50(HoleMag):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
+            if "magnetization_dict_enforced" in list(init_dict.keys()):
+                magnetization_dict_enforced = init_dict["magnetization_dict_enforced"]
         # Set the properties (value check and convertion are done in setter)
         self.H0 = H0
         self.W0 = W0
@@ -264,7 +284,11 @@ class HoleM50(HoleMag):
         self.magnet_0 = magnet_0
         self.magnet_1 = magnet_1
         # Call HoleMag init
-        super(HoleM50, self).__init__(Zh=Zh, mat_void=mat_void)
+        super(HoleM50, self).__init__(
+            Zh=Zh,
+            mat_void=mat_void,
+            magnetization_dict_enforced=magnetization_dict_enforced,
+        )
         # The class is frozen (in HoleMag init), for now it's impossible to
         # add new properties
 

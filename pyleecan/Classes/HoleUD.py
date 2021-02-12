@@ -120,6 +120,7 @@ class HoleUD(HoleMag):
         magnet_dict=-1,
         Zh=36,
         mat_void=-1,
+        magnetization_dict_enforced=None,
         init_dict=None,
         init_str=None,
     ):
@@ -146,11 +147,17 @@ class HoleUD(HoleMag):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
+            if "magnetization_dict_enforced" in list(init_dict.keys()):
+                magnetization_dict_enforced = init_dict["magnetization_dict_enforced"]
         # Set the properties (value check and convertion are done in setter)
         self.surf_list = surf_list
         self.magnet_dict = magnet_dict
         # Call HoleMag init
-        super(HoleUD, self).__init__(Zh=Zh, mat_void=mat_void)
+        super(HoleUD, self).__init__(
+            Zh=Zh,
+            mat_void=mat_void,
+            magnetization_dict_enforced=magnetization_dict_enforced,
+        )
         # The class is frozen (in HoleMag init), for now it's impossible to
         # add new properties
 

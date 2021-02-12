@@ -18,6 +18,16 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Slot.Hole.comp_height import comp_height
+except ImportError as error:
+    comp_height = error
+
+try:
+    from ..Methods.Slot.Hole.comp_magnetization_dict import comp_magnetization_dict
+except ImportError as error:
+    comp_magnetization_dict = error
+
+try:
     from ..Methods.Slot.Hole.comp_radius import comp_radius
 except ImportError as error:
     comp_radius = error
@@ -28,9 +38,24 @@ except ImportError as error:
     comp_surface = error
 
 try:
+    from ..Methods.Slot.Hole.convert_to_UD import convert_to_UD
+except ImportError as error:
+    convert_to_UD = error
+
+try:
     from ..Methods.Slot.Hole.get_is_stator import get_is_stator
 except ImportError as error:
     get_is_stator = error
+
+try:
+    from ..Methods.Slot.Hole.get_magnet_by_id import get_magnet_by_id
+except ImportError as error:
+    get_magnet_by_id = error
+
+try:
+    from ..Methods.Slot.Hole.get_magnet_dict import get_magnet_dict
+except ImportError as error:
+    get_magnet_dict = error
 
 try:
     from ..Methods.Slot.Hole.get_Rbo import get_Rbo
@@ -53,29 +78,9 @@ except ImportError as error:
     plot = error
 
 try:
-    from ..Methods.Slot.Hole.comp_height import comp_height
-except ImportError as error:
-    comp_height = error
-
-try:
-    from ..Methods.Slot.Hole.get_magnet_by_id import get_magnet_by_id
-except ImportError as error:
-    get_magnet_by_id = error
-
-try:
     from ..Methods.Slot.Hole.set_magnet_by_id import set_magnet_by_id
 except ImportError as error:
     set_magnet_by_id = error
-
-try:
-    from ..Methods.Slot.Hole.get_magnet_dict import get_magnet_dict
-except ImportError as error:
-    get_magnet_dict = error
-
-try:
-    from ..Methods.Slot.Hole.convert_to_UD import convert_to_UD
-except ImportError as error:
-    convert_to_UD = error
 
 
 from ._check import InitUnKnowClassError
@@ -88,6 +93,27 @@ class Hole(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.Hole.comp_height
+    if isinstance(comp_height, ImportError):
+        comp_height = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method comp_height: " + str(comp_height))
+            )
+        )
+    else:
+        comp_height = comp_height
+    # cf Methods.Slot.Hole.comp_magnetization_dict
+    if isinstance(comp_magnetization_dict, ImportError):
+        comp_magnetization_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Hole method comp_magnetization_dict: "
+                    + str(comp_magnetization_dict)
+                )
+            )
+        )
+    else:
+        comp_magnetization_dict = comp_magnetization_dict
     # cf Methods.Slot.Hole.comp_radius
     if isinstance(comp_radius, ImportError):
         comp_radius = property(
@@ -106,6 +132,17 @@ class Hole(FrozenClass):
         )
     else:
         comp_surface = comp_surface
+    # cf Methods.Slot.Hole.convert_to_UD
+    if isinstance(convert_to_UD, ImportError):
+        convert_to_UD = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Hole method convert_to_UD: " + str(convert_to_UD)
+                )
+            )
+        )
+    else:
+        convert_to_UD = convert_to_UD
     # cf Methods.Slot.Hole.get_is_stator
     if isinstance(get_is_stator, ImportError):
         get_is_stator = property(
@@ -117,6 +154,28 @@ class Hole(FrozenClass):
         )
     else:
         get_is_stator = get_is_stator
+    # cf Methods.Slot.Hole.get_magnet_by_id
+    if isinstance(get_magnet_by_id, ImportError):
+        get_magnet_by_id = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Hole method get_magnet_by_id: " + str(get_magnet_by_id)
+                )
+            )
+        )
+    else:
+        get_magnet_by_id = get_magnet_by_id
+    # cf Methods.Slot.Hole.get_magnet_dict
+    if isinstance(get_magnet_dict, ImportError):
+        get_magnet_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Hole method get_magnet_dict: " + str(get_magnet_dict)
+                )
+            )
+        )
+    else:
+        get_magnet_dict = get_magnet_dict
     # cf Methods.Slot.Hole.get_Rbo
     if isinstance(get_Rbo, ImportError):
         get_Rbo = property(
@@ -153,26 +212,6 @@ class Hole(FrozenClass):
         )
     else:
         plot = plot
-    # cf Methods.Slot.Hole.comp_height
-    if isinstance(comp_height, ImportError):
-        comp_height = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Hole method comp_height: " + str(comp_height))
-            )
-        )
-    else:
-        comp_height = comp_height
-    # cf Methods.Slot.Hole.get_magnet_by_id
-    if isinstance(get_magnet_by_id, ImportError):
-        get_magnet_by_id = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Hole method get_magnet_by_id: " + str(get_magnet_by_id)
-                )
-            )
-        )
-    else:
-        get_magnet_by_id = get_magnet_by_id
     # cf Methods.Slot.Hole.set_magnet_by_id
     if isinstance(set_magnet_by_id, ImportError):
         set_magnet_by_id = property(
@@ -184,35 +223,20 @@ class Hole(FrozenClass):
         )
     else:
         set_magnet_by_id = set_magnet_by_id
-    # cf Methods.Slot.Hole.get_magnet_dict
-    if isinstance(get_magnet_dict, ImportError):
-        get_magnet_dict = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Hole method get_magnet_dict: " + str(get_magnet_dict)
-                )
-            )
-        )
-    else:
-        get_magnet_dict = get_magnet_dict
-    # cf Methods.Slot.Hole.convert_to_UD
-    if isinstance(convert_to_UD, ImportError):
-        convert_to_UD = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Hole method convert_to_UD: " + str(convert_to_UD)
-                )
-            )
-        )
-    else:
-        convert_to_UD = convert_to_UD
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Zh=36, mat_void=-1, init_dict=None, init_str=None):
+    def __init__(
+        self,
+        Zh=36,
+        mat_void=-1,
+        magnetization_dict_enforced=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -232,10 +256,13 @@ class Hole(FrozenClass):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
+            if "magnetization_dict_enforced" in list(init_dict.keys()):
+                magnetization_dict_enforced = init_dict["magnetization_dict_enforced"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Zh = Zh
         self.mat_void = mat_void
+        self.magnetization_dict_enforced = magnetization_dict_enforced
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -254,6 +281,11 @@ class Hole(FrozenClass):
             Hole_str += "mat_void = " + tmp
         else:
             Hole_str += "mat_void = None" + linesep + linesep
+        Hole_str += (
+            "magnetization_dict_enforced = "
+            + str(self.magnetization_dict_enforced)
+            + linesep
+        )
         return Hole_str
 
     def __eq__(self, other):
@@ -265,6 +297,8 @@ class Hole(FrozenClass):
             return False
         if other.mat_void != self.mat_void:
             return False
+        if other.magnetization_dict_enforced != self.magnetization_dict_enforced:
+            return False
         return True
 
     def __sizeof__(self):
@@ -273,6 +307,9 @@ class Hole(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.Zh)
         S += getsizeof(self.mat_void)
+        if self.magnetization_dict_enforced is not None:
+            for key, value in self.magnetization_dict_enforced.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self):
@@ -284,6 +321,11 @@ class Hole(FrozenClass):
             Hole_dict["mat_void"] = None
         else:
             Hole_dict["mat_void"] = self.mat_void.as_dict()
+        Hole_dict["magnetization_dict_enforced"] = (
+            self.magnetization_dict_enforced.copy()
+            if self.magnetization_dict_enforced is not None
+            else None
+        )
         # The class name is added to the dict for deserialisation purpose
         Hole_dict["__class__"] = "Hole"
         return Hole_dict
@@ -294,6 +336,7 @@ class Hole(FrozenClass):
         self.Zh = None
         if self.mat_void is not None:
             self.mat_void._set_None()
+        self.magnetization_dict_enforced = None
 
     def _get_Zh(self):
         """getter of Zh"""
@@ -342,5 +385,25 @@ class Hole(FrozenClass):
         doc=u"""Material of the void part of the hole (Air in general)
 
         :Type: Material
+        """,
+    )
+
+    def _get_magnetization_dict_enforced(self):
+        """getter of magnetization_dict_enforced"""
+        return self._magnetization_dict_enforced
+
+    def _set_magnetization_dict_enforced(self, value):
+        """setter of magnetization_dict_enforced"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("magnetization_dict_enforced", value, "dict")
+        self._magnetization_dict_enforced = value
+
+    magnetization_dict_enforced = property(
+        fget=_get_magnetization_dict_enforced,
+        fset=_set_magnetization_dict_enforced,
+        doc=u"""Dictionary to enforce the magnetization direction of the magnets (key=magnet_X, value=angle[rad])
+
+        :Type: dict
         """,
     )

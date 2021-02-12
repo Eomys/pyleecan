@@ -132,7 +132,14 @@ class HoleMag(Hole):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Zh=36, mat_void=-1, init_dict=None, init_str=None):
+    def __init__(
+        self,
+        Zh=36,
+        mat_void=-1,
+        magnetization_dict_enforced=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -152,9 +159,15 @@ class HoleMag(Hole):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
+            if "magnetization_dict_enforced" in list(init_dict.keys()):
+                magnetization_dict_enforced = init_dict["magnetization_dict_enforced"]
         # Set the properties (value check and convertion are done in setter)
         # Call Hole init
-        super(HoleMag, self).__init__(Zh=Zh, mat_void=mat_void)
+        super(HoleMag, self).__init__(
+            Zh=Zh,
+            mat_void=mat_void,
+            magnetization_dict_enforced=magnetization_dict_enforced,
+        )
         # The class is frozen (in Hole init), for now it's impossible to
         # add new properties
 
