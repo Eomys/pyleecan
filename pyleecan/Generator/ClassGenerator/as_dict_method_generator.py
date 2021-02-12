@@ -60,11 +60,18 @@ def generate_as_dict(gen_dict, class_dict):
             var_str += _get_else_type_str(cls, prop)
 
     # Code generation
-    dict_str += T1 + "def as_dict(self):"
+    dict_str += T1 + "def as_dict(self, keep_function=False):"
     dict_str += (
         T2
-        + '"""Convert this object in a json seriable dict (can be use in __init__)"""'
-        + "\n"
+        + '"""'
+        + T2
+        + "Convert this object in a json serializable dict (can be use in __init__)."
+        + T2
+        + "Optional input parameter 'keep_function' is for internal use only "
+        + T2
+        + "and may prevent json serializability."
+        + T2
+        + '"""\n'
     )
     if cls_mother != "":
         # Get the properties of the mother class (if needed)
@@ -115,8 +122,19 @@ def _get_function_str(cls, prop):
     var_str = ""
     var_str += T2 + f"if self._{prop}_str is not None:"
     var_str += T3 + f'{cls}_dict["{prop}"] = self._{prop}_str'
+    var_str += T2 + f"elif keep_function:"
+    var_str += T3 + f'{cls}_dict["{prop}"] = self.{prop}'
     var_str += T2 + f"else:"
     var_str += T3 + f'{cls}_dict["{prop}"] = None'
+    var_str += T3 + f"if self.{prop} is not None:"
+    var_str += T4 + f"self.get_logger.warning("
+    var_str += (
+        T5
+        + f'"{cls}.as_dict(): " +'
+        + f'f"Function {{self.{prop}.__name__}} is not serializable " + '
+        + '"and will be converted to None."'
+    )
+    var_str += T4 + ")"
     return var_str
 
 
