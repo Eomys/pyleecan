@@ -106,6 +106,30 @@ class Conductor(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.cond_mat is None and self.cond_mat is not None) or (
+            other.cond_mat is not None and self.cond_mat is None
+        ):
+            diff_list.append(name + ".cond_mat None mismatch")
+        elif self.cond_mat is not None:
+            diff_list.extend(
+                self.cond_mat.compare(other.cond_mat, name=name + ".cond_mat")
+            )
+        if (other.ins_mat is None and self.ins_mat is not None) or (
+            other.ins_mat is not None and self.ins_mat is None
+        ):
+            diff_list.append(name + ".ins_mat None mismatch")
+        elif self.ins_mat is not None:
+            diff_list.extend(
+                self.ins_mat.compare(other.ins_mat, name=name + ".ins_mat")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

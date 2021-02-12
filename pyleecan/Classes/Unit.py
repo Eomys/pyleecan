@@ -173,6 +173,20 @@ class Unit(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._unit_m != self._unit_m:
+            diff_list.append(name + ".unit_m")
+        if other._unit_rad != self._unit_rad:
+            diff_list.append(name + ".unit_rad")
+        if other._unit_m2 != self._unit_m2:
+            diff_list.append(name + ".unit_m2")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

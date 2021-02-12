@@ -119,6 +119,31 @@ class ImportVectorField(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.components is None and self.components is not None) or (
+            other.components is not None and self.components is None
+        ):
+            diff_list.append(name + ".components None mismatch")
+        elif len(other.components) != len(self.components):
+            diff_list.append("len(" + name + "components)")
+        else:
+            for key in self.components:
+                diff_list.extend(
+                    self.components[key].compare(
+                        other.components[key], name=name + ".components"
+                    )
+                )
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._symbol != self._symbol:
+            diff_list.append(name + ".symbol")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

@@ -455,6 +455,34 @@ class Machine(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.frame is None and self.frame is not None) or (
+            other.frame is not None and self.frame is None
+        ):
+            diff_list.append(name + ".frame None mismatch")
+        elif self.frame is not None:
+            diff_list.extend(self.frame.compare(other.frame, name=name + ".frame"))
+        if (other.shaft is None and self.shaft is not None) or (
+            other.shaft is not None and self.shaft is None
+        ):
+            diff_list.append(name + ".shaft None mismatch")
+        elif self.shaft is not None:
+            diff_list.extend(self.shaft.compare(other.shaft, name=name + ".shaft"))
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._desc != self._desc:
+            diff_list.append(name + ".desc")
+        if other._type_machine != self._type_machine:
+            diff_list.append(name + ".type_machine")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

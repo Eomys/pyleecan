@@ -363,6 +363,59 @@ class MagFEMM(Magnetics):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Magnetics
+        diff_list.extend(super(MagFEMM, self).compare(other, name=name))
+        if other._Kmesh_fineness != self._Kmesh_fineness:
+            diff_list.append(name + ".Kmesh_fineness")
+        if other._Kgeo_fineness != self._Kgeo_fineness:
+            diff_list.append(name + ".Kgeo_fineness")
+        if other._type_calc_leakage != self._type_calc_leakage:
+            diff_list.append(name + ".type_calc_leakage")
+        if other._file_name != self._file_name:
+            diff_list.append(name + ".file_name")
+        if other._FEMM_dict_enforced != self._FEMM_dict_enforced:
+            diff_list.append(name + ".FEMM_dict_enforced")
+        if other._is_get_mesh != self._is_get_mesh:
+            diff_list.append(name + ".is_get_mesh")
+        if other._is_save_FEA != self._is_save_FEA:
+            diff_list.append(name + ".is_save_FEA")
+        if other._is_sliding_band != self._is_sliding_band:
+            diff_list.append(name + ".is_sliding_band")
+        if other._transform_list != self._transform_list:
+            diff_list.append(name + ".transform_list")
+        if (other.rotor_dxf is None and self.rotor_dxf is not None) or (
+            other.rotor_dxf is not None and self.rotor_dxf is None
+        ):
+            diff_list.append(name + ".rotor_dxf None mismatch")
+        elif self.rotor_dxf is not None:
+            diff_list.extend(
+                self.rotor_dxf.compare(other.rotor_dxf, name=name + ".rotor_dxf")
+            )
+        if (other.stator_dxf is None and self.stator_dxf is not None) or (
+            other.stator_dxf is not None and self.stator_dxf is None
+        ):
+            diff_list.append(name + ".stator_dxf None mismatch")
+        elif self.stator_dxf is not None:
+            diff_list.extend(
+                self.stator_dxf.compare(other.stator_dxf, name=name + ".stator_dxf")
+            )
+        if other._import_file != self._import_file:
+            diff_list.append(name + ".import_file")
+        if other._is_close_femm != self._is_close_femm:
+            diff_list.append(name + ".is_close_femm")
+        if other._nb_worker != self._nb_worker:
+            diff_list.append(name + ".nb_worker")
+        if other._Rag_enforced != self._Rag_enforced:
+            diff_list.append(name + ".Rag_enforced")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

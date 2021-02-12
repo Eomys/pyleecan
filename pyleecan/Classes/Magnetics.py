@@ -190,6 +190,38 @@ class Magnetics(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._is_remove_slotS != self._is_remove_slotS:
+            diff_list.append(name + ".is_remove_slotS")
+        if other._is_remove_slotR != self._is_remove_slotR:
+            diff_list.append(name + ".is_remove_slotR")
+        if other._is_remove_vent != self._is_remove_vent:
+            diff_list.append(name + ".is_remove_vent")
+        if other._is_mmfs != self._is_mmfs:
+            diff_list.append(name + ".is_mmfs")
+        if other._is_mmfr != self._is_mmfr:
+            diff_list.append(name + ".is_mmfr")
+        if other._type_BH_stator != self._type_BH_stator:
+            diff_list.append(name + ".type_BH_stator")
+        if other._type_BH_rotor != self._type_BH_rotor:
+            diff_list.append(name + ".type_BH_rotor")
+        if other._is_periodicity_t != self._is_periodicity_t:
+            diff_list.append(name + ".is_periodicity_t")
+        if other._is_periodicity_a != self._is_periodicity_a:
+            diff_list.append(name + ".is_periodicity_a")
+        if other._angle_stator_shift != self._angle_stator_shift:
+            diff_list.append(name + ".angle_stator_shift")
+        if other._angle_rotor_shift != self._angle_rotor_shift:
+            diff_list.append(name + ".angle_rotor_shift")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

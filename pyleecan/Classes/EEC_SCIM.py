@@ -195,6 +195,33 @@ class EEC_SCIM(EEC):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from EEC
+        diff_list.extend(super(EEC_SCIM, self).compare(other, name=name))
+        if other._I != self._I:
+            diff_list.append(name + ".I")
+        if other._parameters != self._parameters:
+            diff_list.append(name + ".parameters")
+        if other._is_periodicity_a != self._is_periodicity_a:
+            diff_list.append(name + ".is_periodicity_a")
+        if other._nb_worker != self._nb_worker:
+            diff_list.append(name + ".nb_worker")
+        if other._N0 != self._N0:
+            diff_list.append(name + ".N0")
+        if other._felec != self._felec:
+            diff_list.append(name + ".felec")
+        if other._Nt_tot != self._Nt_tot:
+            diff_list.append(name + ".Nt_tot")
+        if other._Nrev != self._Nrev:
+            diff_list.append(name + ".Nrev")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

@@ -116,6 +116,40 @@ class Interpolation(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.ref_cell is None and self.ref_cell is not None) or (
+            other.ref_cell is not None and self.ref_cell is None
+        ):
+            diff_list.append(name + ".ref_cell None mismatch")
+        elif self.ref_cell is not None:
+            diff_list.extend(
+                self.ref_cell.compare(other.ref_cell, name=name + ".ref_cell")
+            )
+        if (other.gauss_point is None and self.gauss_point is not None) or (
+            other.gauss_point is not None and self.gauss_point is None
+        ):
+            diff_list.append(name + ".gauss_point None mismatch")
+        elif self.gauss_point is not None:
+            diff_list.extend(
+                self.gauss_point.compare(other.gauss_point, name=name + ".gauss_point")
+            )
+        if (other.scalar_product is None and self.scalar_product is not None) or (
+            other.scalar_product is not None and self.scalar_product is None
+        ):
+            diff_list.append(name + ".scalar_product None mismatch")
+        elif self.scalar_product is not None:
+            diff_list.extend(
+                self.scalar_product.compare(
+                    other.scalar_product, name=name + ".scalar_product"
+                )
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

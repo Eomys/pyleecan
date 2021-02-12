@@ -235,6 +235,23 @@ class Circle(Surface):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Surface
+        diff_list.extend(super(Circle, self).compare(other, name=name))
+        if other._radius != self._radius:
+            diff_list.append(name + ".radius")
+        if other._center != self._center:
+            diff_list.append(name + ".center")
+        if other._line_label != self._line_label:
+            diff_list.append(name + ".line_label")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

@@ -160,6 +160,29 @@ class MachineSyRM(MachineSync):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from MachineSync
+        diff_list.extend(super(MachineSyRM, self).compare(other, name=name))
+        if (other.rotor is None and self.rotor is not None) or (
+            other.rotor is not None and self.rotor is None
+        ):
+            diff_list.append(name + ".rotor None mismatch")
+        elif self.rotor is not None:
+            diff_list.extend(self.rotor.compare(other.rotor, name=name + ".rotor"))
+        if (other.stator is None and self.stator is not None) or (
+            other.stator is not None and self.stator is None
+        ):
+            diff_list.append(name + ".stator None mismatch")
+        elif self.stator is not None:
+            diff_list.extend(self.stator.compare(other.stator, name=name + ".stator"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

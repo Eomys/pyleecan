@@ -204,6 +204,35 @@ class LossModelBertotti(LossModel):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from LossModel
+        diff_list.extend(super(LossModelBertotti, self).compare(other, name=name))
+        if other._k_hy != self._k_hy:
+            diff_list.append(name + ".k_hy")
+        if other._k_ed != self._k_ed:
+            diff_list.append(name + ".k_ed")
+        if other._k_ex != self._k_ex:
+            diff_list.append(name + ".k_ex")
+        if other._alpha_hy != self._alpha_hy:
+            diff_list.append(name + ".alpha_hy")
+        if other._alpha_ed != self._alpha_ed:
+            diff_list.append(name + ".alpha_ed")
+        if other._alpha_ex != self._alpha_ex:
+            diff_list.append(name + ".alpha_ex")
+        if other._group != self._group:
+            diff_list.append(name + ".group")
+        if other._get_meshsolution != self._get_meshsolution:
+            diff_list.append(name + ".get_meshsolution")
+        if other._N0 != self._N0:
+            diff_list.append(name + ".N0")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

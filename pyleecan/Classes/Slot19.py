@@ -221,6 +221,25 @@ class Slot19(Slot):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Slot
+        diff_list.extend(super(Slot19, self).compare(other, name=name))
+        if other._W0 != self._W0:
+            diff_list.append(name + ".W0")
+        if other._H0 != self._H0:
+            diff_list.append(name + ".H0")
+        if other._W1 != self._W1:
+            diff_list.append(name + ".W1")
+        if other._Wx_is_rad != self._Wx_is_rad:
+            diff_list.append(name + ".Wx_is_rad")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

@@ -324,6 +324,36 @@ class LamHole(Lamination):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Lamination
+        diff_list.extend(super(LamHole, self).compare(other, name=name))
+        if (other.hole is None and self.hole is not None) or (
+            other.hole is not None and self.hole is None
+        ):
+            diff_list.append(name + ".hole None mismatch")
+        elif len(other.hole) != len(self.hole):
+            diff_list.append("len(" + name + ".hole)")
+        else:
+            for ii in range(len(other.hole)):
+                diff_list.extend(
+                    self.hole[ii].compare(
+                        other.hole[ii], name=name + ".hole[" + str(ii) + "]"
+                    )
+                )
+        if (other.bore is None and self.bore is not None) or (
+            other.bore is not None and self.bore is None
+        ):
+            diff_list.append(name + ".bore None mismatch")
+        elif self.bore is not None:
+            diff_list.extend(self.bore.compare(other.bore, name=name + ".bore"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

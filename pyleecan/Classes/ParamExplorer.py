@@ -125,6 +125,22 @@ class ParamExplorer(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._symbol != self._symbol:
+            diff_list.append(name + ".symbol")
+        if other._unit != self._unit:
+            diff_list.append(name + ".unit")
+        if other._setter_str != self._setter_str:
+            diff_list.append(name + ".setter")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

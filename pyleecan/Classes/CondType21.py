@@ -185,6 +185,23 @@ class CondType21(Conductor):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Conductor
+        diff_list.extend(super(CondType21, self).compare(other, name=name))
+        if other._Hbar != self._Hbar:
+            diff_list.append(name + ".Hbar")
+        if other._Wbar != self._Wbar:
+            diff_list.append(name + ".Wbar")
+        if other._Wins != self._Wins:
+            diff_list.append(name + ".Wins")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

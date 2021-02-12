@@ -90,6 +90,17 @@ class ScalarProductL2(ScalarProduct):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from ScalarProduct
+        diff_list.extend(super(ScalarProductL2, self).compare(other, name=name))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
