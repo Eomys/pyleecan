@@ -9,7 +9,7 @@ def as_dict(self, **kwargs):
     and may prevent json serializability.
     """
     # Get the properties inherited from ParamExplorer
-    ParamExplorerSet_dict = super(type(self), self).as_dict(keep_function=keep_function)
+    ParamExplorerSet_dict = super(type(self), self).as_dict(**kwargs)
     if self.value is None:
         ParamExplorerSet_dict["value"] = None
     else:
