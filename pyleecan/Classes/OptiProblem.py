@@ -195,10 +195,10 @@ class OptiProblem(FrozenClass):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -206,14 +206,14 @@ class OptiProblem(FrozenClass):
         if self.simu is None:
             OptiProblem_dict["simu"] = None
         else:
-            OptiProblem_dict["simu"] = self.simu.as_dict()
+            OptiProblem_dict["simu"] = self.simu.as_dict(**kwargs)
         if self.design_var is None:
             OptiProblem_dict["design_var"] = None
         else:
             OptiProblem_dict["design_var"] = list()
             for obj in self.design_var:
                 if obj is not None:
-                    OptiProblem_dict["design_var"].append(obj.as_dict())
+                    OptiProblem_dict["design_var"].append(obj.as_dict(**kwargs))
                 else:
                     OptiProblem_dict["design_var"].append(None)
         if self.obj_func is None:
@@ -222,17 +222,17 @@ class OptiProblem(FrozenClass):
             OptiProblem_dict["obj_func"] = list()
             for obj in self.obj_func:
                 if obj is not None:
-                    OptiProblem_dict["obj_func"].append(obj.as_dict())
+                    OptiProblem_dict["obj_func"].append(obj.as_dict(**kwargs))
                 else:
                     OptiProblem_dict["obj_func"].append(None)
         if self._eval_func_str is not None:
             OptiProblem_dict["eval_func"] = self._eval_func_str
-        elif keep_function:
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
             OptiProblem_dict["eval_func"] = self.eval_func
         else:
             OptiProblem_dict["eval_func"] = None
             if self.eval_func is not None:
-                self.get_logger.warning(
+                self.get_logger().warning(
                     "OptiProblem.as_dict(): "
                     + f"Function {self.eval_func.__name__} is not serializable "
                     + "and will be converted to None."
@@ -243,17 +243,17 @@ class OptiProblem(FrozenClass):
             OptiProblem_dict["constraint"] = list()
             for obj in self.constraint:
                 if obj is not None:
-                    OptiProblem_dict["constraint"].append(obj.as_dict())
+                    OptiProblem_dict["constraint"].append(obj.as_dict(**kwargs))
                 else:
                     OptiProblem_dict["constraint"].append(None)
         if self._preprocessing_str is not None:
             OptiProblem_dict["preprocessing"] = self._preprocessing_str
-        elif keep_function:
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
             OptiProblem_dict["preprocessing"] = self.preprocessing
         else:
             OptiProblem_dict["preprocessing"] = None
             if self.preprocessing is not None:
-                self.get_logger.warning(
+                self.get_logger().warning(
                     "OptiProblem.as_dict(): "
                     + f"Function {self.preprocessing.__name__} is not serializable "
                     + "and will be converted to None."
@@ -264,7 +264,7 @@ class OptiProblem(FrozenClass):
             OptiProblem_dict["datakeeper_list"] = list()
             for obj in self.datakeeper_list:
                 if obj is not None:
-                    OptiProblem_dict["datakeeper_list"].append(obj.as_dict())
+                    OptiProblem_dict["datakeeper_list"].append(obj.as_dict(**kwargs))
                 else:
                     OptiProblem_dict["datakeeper_list"].append(None)
         # The class name is added to the dict for deserialisation purpose

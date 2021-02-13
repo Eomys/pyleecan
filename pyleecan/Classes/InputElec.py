@@ -201,15 +201,15 @@ class InputElec(Input):
         S += getsizeof(self.felec)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Input
-        InputElec_dict = super(InputElec, self).as_dict()
+        InputElec_dict = super(InputElec, self).as_dict(**kwargs)
         InputElec_dict["rot_dir"] = self.rot_dir
         InputElec_dict["Id_ref"] = self.Id_ref
         InputElec_dict["Iq_ref"] = self.Iq_ref

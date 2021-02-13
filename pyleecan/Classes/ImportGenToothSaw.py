@@ -153,15 +153,15 @@ class ImportGenToothSaw(ImportMatrix):
         S += getsizeof(self.Dt)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ImportMatrix
-        ImportGenToothSaw_dict = super(ImportGenToothSaw, self).as_dict()
+        ImportGenToothSaw_dict = super(ImportGenToothSaw, self).as_dict(**kwargs)
         ImportGenToothSaw_dict["type_signal"] = self.type_signal
         ImportGenToothSaw_dict["f"] = self.f
         ImportGenToothSaw_dict["A"] = self.A

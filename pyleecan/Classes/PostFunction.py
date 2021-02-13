@@ -96,23 +96,23 @@ class PostFunction(Post):
         S += getsizeof(self._run_str)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Post
-        PostFunction_dict = super(PostFunction, self).as_dict()
+        PostFunction_dict = super(PostFunction, self).as_dict(**kwargs)
         if self._run_str is not None:
             PostFunction_dict["run"] = self._run_str
-        elif keep_function:
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
             PostFunction_dict["run"] = self.run
         else:
             PostFunction_dict["run"] = None
             if self.run is not None:
-                self.get_logger.warning(
+                self.get_logger().warning(
                     "PostFunction.as_dict(): "
                     + f"Function {self.run.__name__} is not serializable "
                     + "and will be converted to None."

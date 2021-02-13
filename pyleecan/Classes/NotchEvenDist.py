@@ -120,20 +120,20 @@ class NotchEvenDist(Notch):
         S += getsizeof(self.notch_shape)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Notch
-        NotchEvenDist_dict = super(NotchEvenDist, self).as_dict()
+        NotchEvenDist_dict = super(NotchEvenDist, self).as_dict(**kwargs)
         NotchEvenDist_dict["alpha"] = self.alpha
         if self.notch_shape is None:
             NotchEvenDist_dict["notch_shape"] = None
         else:
-            NotchEvenDist_dict["notch_shape"] = self.notch_shape.as_dict()
+            NotchEvenDist_dict["notch_shape"] = self.notch_shape.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         NotchEvenDist_dict["__class__"] = "NotchEvenDist"

@@ -148,10 +148,10 @@ class DataKeeper(FrozenClass):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -161,24 +161,24 @@ class DataKeeper(FrozenClass):
         DataKeeper_dict["unit"] = self.unit
         if self._keeper_str is not None:
             DataKeeper_dict["keeper"] = self._keeper_str
-        elif keep_function:
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
             DataKeeper_dict["keeper"] = self.keeper
         else:
             DataKeeper_dict["keeper"] = None
             if self.keeper is not None:
-                self.get_logger.warning(
+                self.get_logger().warning(
                     "DataKeeper.as_dict(): "
                     + f"Function {self.keeper.__name__} is not serializable "
                     + "and will be converted to None."
                 )
         if self._error_keeper_str is not None:
             DataKeeper_dict["error_keeper"] = self._error_keeper_str
-        elif keep_function:
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
             DataKeeper_dict["error_keeper"] = self.error_keeper
         else:
             DataKeeper_dict["error_keeper"] = None
             if self.error_keeper is not None:
-                self.get_logger.warning(
+                self.get_logger().warning(
                     "DataKeeper.as_dict(): "
                     + f"Function {self.error_keeper.__name__} is not serializable "
                     + "and will be converted to None."

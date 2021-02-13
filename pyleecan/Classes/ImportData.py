@@ -166,10 +166,10 @@ class ImportData(FrozenClass):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -180,13 +180,13 @@ class ImportData(FrozenClass):
             ImportData_dict["axes"] = list()
             for obj in self.axes:
                 if obj is not None:
-                    ImportData_dict["axes"].append(obj.as_dict())
+                    ImportData_dict["axes"].append(obj.as_dict(**kwargs))
                 else:
                     ImportData_dict["axes"].append(None)
         if self.field is None:
             ImportData_dict["field"] = None
         else:
-            ImportData_dict["field"] = self.field.as_dict()
+            ImportData_dict["field"] = self.field.as_dict(**kwargs)
         ImportData_dict["unit"] = self.unit
         ImportData_dict["name"] = self.name
         ImportData_dict["symbol"] = self.symbol

@@ -239,10 +239,10 @@ class Winding(FrozenClass):
         S += getsizeof(self.conductor)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -258,7 +258,7 @@ class Winding(FrozenClass):
         if self.conductor is None:
             Winding_dict["conductor"] = None
         else:
-            Winding_dict["conductor"] = self.conductor.as_dict()
+            Winding_dict["conductor"] = self.conductor.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         Winding_dict["__class__"] = "Winding"
         return Winding_dict

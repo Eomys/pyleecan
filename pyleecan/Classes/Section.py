@@ -276,15 +276,15 @@ class Section(Elmer):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Elmer
-        Section_dict = super(Section, self).as_dict()
+        Section_dict = super(Section, self).as_dict(**kwargs)
         Section_dict["section"] = self.section
         Section_dict["id"] = self.id
         Section_dict["comment"] = self.comment

@@ -157,10 +157,10 @@ class Loss(FrozenClass):
         S += getsizeof(self.logger_name)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -174,7 +174,7 @@ class Loss(FrozenClass):
             Loss_dict["model_list"] = list()
             for obj in self.model_list:
                 if obj is not None:
-                    Loss_dict["model_list"].append(obj.as_dict())
+                    Loss_dict["model_list"].append(obj.as_dict(**kwargs))
                 else:
                     Loss_dict["model_list"].append(None)
         Loss_dict["logger_name"] = self.logger_name

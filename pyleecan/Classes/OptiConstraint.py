@@ -124,10 +124,10 @@ class OptiConstraint(FrozenClass):
         S += getsizeof(self._get_variable_str)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -137,12 +137,12 @@ class OptiConstraint(FrozenClass):
         OptiConstraint_dict["value"] = self.value
         if self._get_variable_str is not None:
             OptiConstraint_dict["get_variable"] = self._get_variable_str
-        elif keep_function:
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
             OptiConstraint_dict["get_variable"] = self.get_variable
         else:
             OptiConstraint_dict["get_variable"] = None
             if self.get_variable is not None:
-                self.get_logger.warning(
+                self.get_logger().warning(
                     "OptiConstraint.as_dict(): "
                     + f"Function {self.get_variable.__name__} is not serializable "
                     + "and will be converted to None."

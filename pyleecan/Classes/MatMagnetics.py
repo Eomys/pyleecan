@@ -180,10 +180,10 @@ class MatMagnetics(FrozenClass):
         S += getsizeof(self.LossData)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -196,11 +196,11 @@ class MatMagnetics(FrozenClass):
         if self.BH_curve is None:
             MatMagnetics_dict["BH_curve"] = None
         else:
-            MatMagnetics_dict["BH_curve"] = self.BH_curve.as_dict()
+            MatMagnetics_dict["BH_curve"] = self.BH_curve.as_dict(**kwargs)
         if self.LossData is None:
             MatMagnetics_dict["LossData"] = None
         else:
-            MatMagnetics_dict["LossData"] = self.LossData.as_dict()
+            MatMagnetics_dict["LossData"] = self.LossData.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         MatMagnetics_dict["__class__"] = "MatMagnetics"
         return MatMagnetics_dict

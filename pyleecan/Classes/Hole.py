@@ -275,10 +275,10 @@ class Hole(FrozenClass):
         S += getsizeof(self.mat_void)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -287,7 +287,7 @@ class Hole(FrozenClass):
         if self.mat_void is None:
             Hole_dict["mat_void"] = None
         else:
-            Hole_dict["mat_void"] = self.mat_void.as_dict()
+            Hole_dict["mat_void"] = self.mat_void.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         Hole_dict["__class__"] = "Hole"
         return Hole_dict

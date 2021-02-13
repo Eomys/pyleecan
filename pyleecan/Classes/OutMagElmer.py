@@ -105,15 +105,15 @@ class OutMagElmer(OutInternal):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from OutInternal
-        OutMagElmer_dict = super(OutMagElmer, self).as_dict()
+        OutMagElmer_dict = super(OutMagElmer, self).as_dict(**kwargs)
         OutMagElmer_dict["FEA_dict"] = (
             self.FEA_dict.copy() if self.FEA_dict is not None else None
         )

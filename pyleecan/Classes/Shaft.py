@@ -150,10 +150,10 @@ class Shaft(FrozenClass):
         S += getsizeof(self.Drsh)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -162,7 +162,7 @@ class Shaft(FrozenClass):
         if self.mat_type is None:
             Shaft_dict["mat_type"] = None
         else:
-            Shaft_dict["mat_type"] = self.mat_type.as_dict()
+            Shaft_dict["mat_type"] = self.mat_type.as_dict(**kwargs)
         Shaft_dict["Drsh"] = self.Drsh
         # The class name is added to the dict for deserialisation purpose
         Shaft_dict["__class__"] = "Shaft"

@@ -174,10 +174,10 @@ class Material(FrozenClass):
         S += getsizeof(self.path)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -187,23 +187,23 @@ class Material(FrozenClass):
         if self.elec is None:
             Material_dict["elec"] = None
         else:
-            Material_dict["elec"] = self.elec.as_dict()
+            Material_dict["elec"] = self.elec.as_dict(**kwargs)
         if self.mag is None:
             Material_dict["mag"] = None
         else:
-            Material_dict["mag"] = self.mag.as_dict()
+            Material_dict["mag"] = self.mag.as_dict(**kwargs)
         if self.struct is None:
             Material_dict["struct"] = None
         else:
-            Material_dict["struct"] = self.struct.as_dict()
+            Material_dict["struct"] = self.struct.as_dict(**kwargs)
         if self.HT is None:
             Material_dict["HT"] = None
         else:
-            Material_dict["HT"] = self.HT.as_dict()
+            Material_dict["HT"] = self.HT.as_dict(**kwargs)
         if self.eco is None:
             Material_dict["eco"] = None
         else:
-            Material_dict["eco"] = self.eco.as_dict()
+            Material_dict["eco"] = self.eco.as_dict(**kwargs)
         Material_dict["desc"] = self.desc
         Material_dict["path"] = self.path
         # The class name is added to the dict for deserialisation purpose

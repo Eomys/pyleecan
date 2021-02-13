@@ -224,15 +224,15 @@ class LossModelBertotti(LossModel):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LossModel
-        LossModelBertotti_dict = super(LossModelBertotti, self).as_dict()
+        LossModelBertotti_dict = super(LossModelBertotti, self).as_dict(**kwargs)
         LossModelBertotti_dict["k_hy"] = self.k_hy
         LossModelBertotti_dict["k_ed"] = self.k_ed
         LossModelBertotti_dict["k_ex"] = self.k_ex

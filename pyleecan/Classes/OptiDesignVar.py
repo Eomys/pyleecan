@@ -138,27 +138,27 @@ class OptiDesignVar(ParamExplorer):
         S += getsizeof(self._get_value_str)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ParamExplorer
-        OptiDesignVar_dict = super(OptiDesignVar, self).as_dict()
+        OptiDesignVar_dict = super(OptiDesignVar, self).as_dict(**kwargs)
         OptiDesignVar_dict["type_var"] = self.type_var
         OptiDesignVar_dict["space"] = (
             self.space.copy() if self.space is not None else None
         )
         if self._get_value_str is not None:
             OptiDesignVar_dict["get_value"] = self._get_value_str
-        elif keep_function:
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
             OptiDesignVar_dict["get_value"] = self.get_value
         else:
             OptiDesignVar_dict["get_value"] = None
             if self.get_value is not None:
-                self.get_logger.warning(
+                self.get_logger().warning(
                     "OptiDesignVar.as_dict(): "
                     + f"Function {self.get_value.__name__} is not serializable "
                     + "and will be converted to None."

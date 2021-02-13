@@ -304,15 +304,15 @@ class Arc1(Arc):
         S += getsizeof(self.is_trigo_direction)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Arc
-        Arc1_dict = super(Arc1, self).as_dict()
+        Arc1_dict = super(Arc1, self).as_dict(**kwargs)
         if self.begin is None:
             Arc1_dict["begin"] = None
         elif isinstance(self.begin, float):

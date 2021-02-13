@@ -145,10 +145,10 @@ class Electrical(FrozenClass):
         S += getsizeof(self.logger_name)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -156,7 +156,7 @@ class Electrical(FrozenClass):
         if self.eec is None:
             Electrical_dict["eec"] = None
         else:
-            Electrical_dict["eec"] = self.eec.as_dict()
+            Electrical_dict["eec"] = self.eec.as_dict(**kwargs)
         Electrical_dict["logger_name"] = self.logger_name
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"

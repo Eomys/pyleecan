@@ -322,19 +322,19 @@ class LamSlot(Lamination):
         S += getsizeof(self.slot)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Lamination
-        LamSlot_dict = super(LamSlot, self).as_dict()
+        LamSlot_dict = super(LamSlot, self).as_dict(**kwargs)
         if self.slot is None:
             LamSlot_dict["slot"] = None
         else:
-            LamSlot_dict["slot"] = self.slot.as_dict()
+            LamSlot_dict["slot"] = self.slot.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlot_dict["__class__"] = "LamSlot"

@@ -244,15 +244,15 @@ class CondType12(Conductor):
         S += getsizeof(self.Kwoh)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Conductor
-        CondType12_dict = super(CondType12, self).as_dict()
+        CondType12_dict = super(CondType12, self).as_dict(**kwargs)
         CondType12_dict["Wwire"] = self.Wwire
         CondType12_dict["Wins_cond"] = self.Wins_cond
         CondType12_dict["Nwppc"] = self.Nwppc

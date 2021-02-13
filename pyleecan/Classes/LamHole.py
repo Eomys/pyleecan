@@ -337,28 +337,28 @@ class LamHole(Lamination):
         S += getsizeof(self.bore)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Lamination
-        LamHole_dict = super(LamHole, self).as_dict()
+        LamHole_dict = super(LamHole, self).as_dict(**kwargs)
         if self.hole is None:
             LamHole_dict["hole"] = None
         else:
             LamHole_dict["hole"] = list()
             for obj in self.hole:
                 if obj is not None:
-                    LamHole_dict["hole"].append(obj.as_dict())
+                    LamHole_dict["hole"].append(obj.as_dict(**kwargs))
                 else:
                     LamHole_dict["hole"].append(None)
         if self.bore is None:
             LamHole_dict["bore"] = None
         else:
-            LamHole_dict["bore"] = self.bore.as_dict()
+            LamHole_dict["bore"] = self.bore.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamHole_dict["__class__"] = "LamHole"

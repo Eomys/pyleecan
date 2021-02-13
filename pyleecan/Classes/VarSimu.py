@@ -290,10 +290,10 @@ class VarSimu(FrozenClass):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -306,7 +306,7 @@ class VarSimu(FrozenClass):
             VarSimu_dict["datakeeper_list"] = list()
             for obj in self.datakeeper_list:
                 if obj is not None:
-                    VarSimu_dict["datakeeper_list"].append(obj.as_dict())
+                    VarSimu_dict["datakeeper_list"].append(obj.as_dict(**kwargs))
                 else:
                     VarSimu_dict["datakeeper_list"].append(None)
         VarSimu_dict["is_keep_all_output"] = self.is_keep_all_output
@@ -314,7 +314,7 @@ class VarSimu(FrozenClass):
         if self.var_simu is None:
             VarSimu_dict["var_simu"] = None
         else:
-            VarSimu_dict["var_simu"] = self.var_simu.as_dict()
+            VarSimu_dict["var_simu"] = self.var_simu.as_dict(**kwargs)
         VarSimu_dict["ref_simu_index"] = self.ref_simu_index
         VarSimu_dict["nb_simu"] = self.nb_simu
         VarSimu_dict["is_reuse_femm_file"] = self.is_reuse_femm_file
@@ -324,7 +324,7 @@ class VarSimu(FrozenClass):
             VarSimu_dict["postproc_list"] = list()
             for obj in self.postproc_list:
                 if obj is not None:
-                    VarSimu_dict["postproc_list"].append(obj.as_dict())
+                    VarSimu_dict["postproc_list"].append(obj.as_dict(**kwargs))
                 else:
                     VarSimu_dict["postproc_list"].append(None)
         if self.pre_keeper_postproc_list is None:
@@ -333,7 +333,9 @@ class VarSimu(FrozenClass):
             VarSimu_dict["pre_keeper_postproc_list"] = list()
             for obj in self.pre_keeper_postproc_list:
                 if obj is not None:
-                    VarSimu_dict["pre_keeper_postproc_list"].append(obj.as_dict())
+                    VarSimu_dict["pre_keeper_postproc_list"].append(
+                        obj.as_dict(**kwargs)
+                    )
                 else:
                     VarSimu_dict["pre_keeper_postproc_list"].append(None)
         if self.post_keeper_postproc_list is None:
@@ -342,7 +344,9 @@ class VarSimu(FrozenClass):
             VarSimu_dict["post_keeper_postproc_list"] = list()
             for obj in self.post_keeper_postproc_list:
                 if obj is not None:
-                    VarSimu_dict["post_keeper_postproc_list"].append(obj.as_dict())
+                    VarSimu_dict["post_keeper_postproc_list"].append(
+                        obj.as_dict(**kwargs)
+                    )
                 else:
                     VarSimu_dict["post_keeper_postproc_list"].append(None)
         # The class name is added to the dict for deserialisation purpose

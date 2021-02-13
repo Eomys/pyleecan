@@ -207,22 +207,22 @@ class VarParam(VarSimu):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from VarSimu
-        VarParam_dict = super(VarParam, self).as_dict()
+        VarParam_dict = super(VarParam, self).as_dict(**kwargs)
         if self.paramexplorer_list is None:
             VarParam_dict["paramexplorer_list"] = None
         else:
             VarParam_dict["paramexplorer_list"] = list()
             for obj in self.paramexplorer_list:
                 if obj is not None:
-                    VarParam_dict["paramexplorer_list"].append(obj.as_dict())
+                    VarParam_dict["paramexplorer_list"].append(obj.as_dict(**kwargs))
                 else:
                     VarParam_dict["paramexplorer_list"].append(None)
         # The class name is added to the dict for deserialisation purpose

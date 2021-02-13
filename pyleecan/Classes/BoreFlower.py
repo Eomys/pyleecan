@@ -119,15 +119,15 @@ class BoreFlower(Bore):
         S += getsizeof(self.alpha)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Bore
-        BoreFlower_dict = super(BoreFlower, self).as_dict()
+        BoreFlower_dict = super(BoreFlower, self).as_dict(**kwargs)
         BoreFlower_dict["N"] = self.N
         BoreFlower_dict["Rarc"] = self.Rarc
         BoreFlower_dict["alpha"] = self.alpha

@@ -206,35 +206,35 @@ class Simu1(Simulation):
         S += getsizeof(self.loss)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Simulation
-        Simu1_dict = super(Simu1, self).as_dict()
+        Simu1_dict = super(Simu1, self).as_dict(**kwargs)
         if self.elec is None:
             Simu1_dict["elec"] = None
         else:
-            Simu1_dict["elec"] = self.elec.as_dict()
+            Simu1_dict["elec"] = self.elec.as_dict(**kwargs)
         if self.mag is None:
             Simu1_dict["mag"] = None
         else:
-            Simu1_dict["mag"] = self.mag.as_dict()
+            Simu1_dict["mag"] = self.mag.as_dict(**kwargs)
         if self.struct is None:
             Simu1_dict["struct"] = None
         else:
-            Simu1_dict["struct"] = self.struct.as_dict()
+            Simu1_dict["struct"] = self.struct.as_dict(**kwargs)
         if self.force is None:
             Simu1_dict["force"] = None
         else:
-            Simu1_dict["force"] = self.force.as_dict()
+            Simu1_dict["force"] = self.force.as_dict(**kwargs)
         if self.loss is None:
             Simu1_dict["loss"] = None
         else:
-            Simu1_dict["loss"] = self.loss.as_dict()
+            Simu1_dict["loss"] = self.loss.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Simu1_dict["__class__"] = "Simu1"

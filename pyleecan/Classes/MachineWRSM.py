@@ -170,23 +170,23 @@ class MachineWRSM(MachineSync):
         S += getsizeof(self.stator)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from MachineSync
-        MachineWRSM_dict = super(MachineWRSM, self).as_dict()
+        MachineWRSM_dict = super(MachineWRSM, self).as_dict(**kwargs)
         if self.rotor is None:
             MachineWRSM_dict["rotor"] = None
         else:
-            MachineWRSM_dict["rotor"] = self.rotor.as_dict()
+            MachineWRSM_dict["rotor"] = self.rotor.as_dict(**kwargs)
         if self.stator is None:
             MachineWRSM_dict["stator"] = None
         else:
-            MachineWRSM_dict["stator"] = self.stator.as_dict()
+            MachineWRSM_dict["stator"] = self.stator.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineWRSM_dict["__class__"] = "MachineWRSM"

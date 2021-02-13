@@ -171,23 +171,23 @@ class MachineIPMSM(MachineSync):
         S += getsizeof(self.stator)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from MachineSync
-        MachineIPMSM_dict = super(MachineIPMSM, self).as_dict()
+        MachineIPMSM_dict = super(MachineIPMSM, self).as_dict(**kwargs)
         if self.rotor is None:
             MachineIPMSM_dict["rotor"] = None
         else:
-            MachineIPMSM_dict["rotor"] = self.rotor.as_dict()
+            MachineIPMSM_dict["rotor"] = self.rotor.as_dict(**kwargs)
         if self.stator is None:
             MachineIPMSM_dict["stator"] = None
         else:
-            MachineIPMSM_dict["stator"] = self.stator.as_dict()
+            MachineIPMSM_dict["stator"] = self.stator.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineIPMSM_dict["__class__"] = "MachineIPMSM"

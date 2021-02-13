@@ -296,19 +296,19 @@ class LamSlotMag(LamSlot):
         S += getsizeof(self.magnet)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LamSlot
-        LamSlotMag_dict = super(LamSlotMag, self).as_dict()
+        LamSlotMag_dict = super(LamSlotMag, self).as_dict(**kwargs)
         if self.magnet is None:
             LamSlotMag_dict["magnet"] = None
         else:
-            LamSlotMag_dict["magnet"] = self.magnet.as_dict()
+            LamSlotMag_dict["magnet"] = self.magnet.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotMag_dict["__class__"] = "LamSlotMag"

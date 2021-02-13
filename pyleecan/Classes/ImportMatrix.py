@@ -105,15 +105,15 @@ class ImportMatrix(Import):
         S += getsizeof(self.is_transpose)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Import
-        ImportMatrix_dict = super(ImportMatrix, self).as_dict()
+        ImportMatrix_dict = super(ImportMatrix, self).as_dict(**kwargs)
         ImportMatrix_dict["is_transpose"] = self.is_transpose
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name

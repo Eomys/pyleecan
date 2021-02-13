@@ -259,28 +259,28 @@ class MeshMat(Mesh):
         S += getsizeof(self.point)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Mesh
-        MeshMat_dict = super(MeshMat, self).as_dict()
+        MeshMat_dict = super(MeshMat, self).as_dict(**kwargs)
         if self.cell is None:
             MeshMat_dict["cell"] = None
         else:
             MeshMat_dict["cell"] = dict()
             for key, obj in self.cell.items():
                 if obj is not None:
-                    MeshMat_dict["cell"][key] = obj.as_dict()
+                    MeshMat_dict["cell"][key] = obj.as_dict(**kwargs)
                 else:
                     MeshMat_dict["cell"][key] = None
         if self.point is None:
             MeshMat_dict["point"] = None
         else:
-            MeshMat_dict["point"] = self.point.as_dict()
+            MeshMat_dict["point"] = self.point.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MeshMat_dict["__class__"] = "MeshMat"

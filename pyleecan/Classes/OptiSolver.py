@@ -122,10 +122,10 @@ class OptiSolver(FrozenClass):
         S += getsizeof(self.is_keep_all_output)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -133,11 +133,11 @@ class OptiSolver(FrozenClass):
         if self.problem is None:
             OptiSolver_dict["problem"] = None
         else:
-            OptiSolver_dict["problem"] = self.problem.as_dict()
+            OptiSolver_dict["problem"] = self.problem.as_dict(**kwargs)
         if self.xoutput is None:
             OptiSolver_dict["xoutput"] = None
         else:
-            OptiSolver_dict["xoutput"] = self.xoutput.as_dict()
+            OptiSolver_dict["xoutput"] = self.xoutput.as_dict(**kwargs)
         OptiSolver_dict["logger_name"] = self.logger_name
         OptiSolver_dict["is_keep_all_output"] = self.is_keep_all_output
         # The class name is added to the dict for deserialisation purpose

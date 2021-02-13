@@ -220,15 +220,15 @@ class HoleM54(Hole):
         S += getsizeof(self.R1)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Hole
-        HoleM54_dict = super(HoleM54, self).as_dict()
+        HoleM54_dict = super(HoleM54, self).as_dict(**kwargs)
         HoleM54_dict["H0"] = self.H0
         HoleM54_dict["H1"] = self.H1
         HoleM54_dict["W0"] = self.W0

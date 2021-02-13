@@ -206,15 +206,15 @@ class VentilationPolar(Hole):
         S += getsizeof(self.W1)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Hole
-        VentilationPolar_dict = super(VentilationPolar, self).as_dict()
+        VentilationPolar_dict = super(VentilationPolar, self).as_dict(**kwargs)
         VentilationPolar_dict["Alpha0"] = self.Alpha0
         VentilationPolar_dict["D0"] = self.D0
         VentilationPolar_dict["H0"] = self.H0

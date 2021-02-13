@@ -143,15 +143,15 @@ class ForceMT(Force):
         S += super(ForceMT, self).__sizeof__()
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Force
-        ForceMT_dict = super(ForceMT, self).as_dict()
+        ForceMT_dict = super(ForceMT, self).as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ForceMT_dict["__class__"] = "ForceMT"

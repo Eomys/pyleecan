@@ -114,10 +114,10 @@ class Conductor(FrozenClass):
         S += getsizeof(self.ins_mat)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -125,11 +125,11 @@ class Conductor(FrozenClass):
         if self.cond_mat is None:
             Conductor_dict["cond_mat"] = None
         else:
-            Conductor_dict["cond_mat"] = self.cond_mat.as_dict()
+            Conductor_dict["cond_mat"] = self.cond_mat.as_dict(**kwargs)
         if self.ins_mat is None:
             Conductor_dict["ins_mat"] = None
         else:
-            Conductor_dict["ins_mat"] = self.ins_mat.as_dict()
+            Conductor_dict["ins_mat"] = self.ins_mat.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         Conductor_dict["__class__"] = "Conductor"
         return Conductor_dict

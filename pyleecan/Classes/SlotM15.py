@@ -292,15 +292,15 @@ class SlotM15(Slot):
         S += getsizeof(self.Rtopm)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Slot
-        SlotM15_dict = super(SlotM15, self).as_dict()
+        SlotM15_dict = super(SlotM15, self).as_dict(**kwargs)
         SlotM15_dict["W0"] = self.W0
         SlotM15_dict["H0"] = self.H0
         SlotM15_dict["Wmag"] = self.Wmag

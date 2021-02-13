@@ -232,27 +232,27 @@ class InputCurrent(Input):
         S += getsizeof(self.felec)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Input
-        InputCurrent_dict = super(InputCurrent, self).as_dict()
+        InputCurrent_dict = super(InputCurrent, self).as_dict(**kwargs)
         if self.Is is None:
             InputCurrent_dict["Is"] = None
         else:
-            InputCurrent_dict["Is"] = self.Is.as_dict()
+            InputCurrent_dict["Is"] = self.Is.as_dict(**kwargs)
         if self.Ir is None:
             InputCurrent_dict["Ir"] = None
         else:
-            InputCurrent_dict["Ir"] = self.Ir.as_dict()
+            InputCurrent_dict["Ir"] = self.Ir.as_dict(**kwargs)
         if self.angle_rotor is None:
             InputCurrent_dict["angle_rotor"] = None
         else:
-            InputCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict()
+            InputCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict(**kwargs)
         InputCurrent_dict["rot_dir"] = self.rot_dir
         InputCurrent_dict["angle_rotor_initial"] = self.angle_rotor_initial
         InputCurrent_dict["Tem_av_ref"] = self.Tem_av_ref

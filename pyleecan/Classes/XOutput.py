@@ -536,22 +536,22 @@ class XOutput(Output):
         S += getsizeof(self.nb_simu)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Output
-        XOutput_dict = super(XOutput, self).as_dict()
+        XOutput_dict = super(XOutput, self).as_dict(**kwargs)
         if self.paramexplorer_list is None:
             XOutput_dict["paramexplorer_list"] = None
         else:
             XOutput_dict["paramexplorer_list"] = list()
             for obj in self.paramexplorer_list:
                 if obj is not None:
-                    XOutput_dict["paramexplorer_list"].append(obj.as_dict())
+                    XOutput_dict["paramexplorer_list"].append(obj.as_dict(**kwargs))
                 else:
                     XOutput_dict["paramexplorer_list"].append(None)
         if self.output_list is None:
@@ -560,7 +560,7 @@ class XOutput(Output):
             XOutput_dict["output_list"] = list()
             for obj in self.output_list:
                 if obj is not None:
-                    XOutput_dict["output_list"].append(obj.as_dict())
+                    XOutput_dict["output_list"].append(obj.as_dict(**kwargs))
                 else:
                     XOutput_dict["output_list"].append(None)
         if self.xoutput_dict is None:
@@ -569,7 +569,7 @@ class XOutput(Output):
             XOutput_dict["xoutput_dict"] = dict()
             for key, obj in self.xoutput_dict.items():
                 if obj is not None:
-                    XOutput_dict["xoutput_dict"][key] = obj.as_dict()
+                    XOutput_dict["xoutput_dict"][key] = obj.as_dict(**kwargs)
                 else:
                     XOutput_dict["xoutput_dict"][key] = None
         XOutput_dict["nb_simu"] = self.nb_simu

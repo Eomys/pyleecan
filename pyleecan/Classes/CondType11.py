@@ -256,15 +256,15 @@ class CondType11(Conductor):
         S += getsizeof(self.alpha_ew)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Conductor
-        CondType11_dict = super(CondType11, self).as_dict()
+        CondType11_dict = super(CondType11, self).as_dict(**kwargs)
         CondType11_dict["Hwire"] = self.Hwire
         CondType11_dict["Wwire"] = self.Wwire
         CondType11_dict["Nwppc_rad"] = self.Nwppc_rad

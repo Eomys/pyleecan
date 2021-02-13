@@ -178,47 +178,47 @@ class OptiGenAlg(OptiSolver):
         S += getsizeof(self.nb_gen)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from OptiSolver
-        OptiGenAlg_dict = super(OptiGenAlg, self).as_dict()
+        OptiGenAlg_dict = super(OptiGenAlg, self).as_dict(**kwargs)
         if self._selector_str is not None:
             OptiGenAlg_dict["selector"] = self._selector_str
-        elif keep_function:
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
             OptiGenAlg_dict["selector"] = self.selector
         else:
             OptiGenAlg_dict["selector"] = None
             if self.selector is not None:
-                self.get_logger.warning(
+                self.get_logger().warning(
                     "OptiGenAlg.as_dict(): "
                     + f"Function {self.selector.__name__} is not serializable "
                     + "and will be converted to None."
                 )
         if self._crossover_str is not None:
             OptiGenAlg_dict["crossover"] = self._crossover_str
-        elif keep_function:
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
             OptiGenAlg_dict["crossover"] = self.crossover
         else:
             OptiGenAlg_dict["crossover"] = None
             if self.crossover is not None:
-                self.get_logger.warning(
+                self.get_logger().warning(
                     "OptiGenAlg.as_dict(): "
                     + f"Function {self.crossover.__name__} is not serializable "
                     + "and will be converted to None."
                 )
         if self._mutator_str is not None:
             OptiGenAlg_dict["mutator"] = self._mutator_str
-        elif keep_function:
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
             OptiGenAlg_dict["mutator"] = self.mutator
         else:
             OptiGenAlg_dict["mutator"] = None
             if self.mutator is not None:
-                self.get_logger.warning(
+                self.get_logger().warning(
                     "OptiGenAlg.as_dict(): "
                     + f"Function {self.mutator.__name__} is not serializable "
                     + "and will be converted to None."

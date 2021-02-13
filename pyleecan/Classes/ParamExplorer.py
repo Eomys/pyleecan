@@ -135,10 +135,10 @@ class ParamExplorer(FrozenClass):
         S += getsizeof(self._setter_str)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -148,12 +148,12 @@ class ParamExplorer(FrozenClass):
         ParamExplorer_dict["unit"] = self.unit
         if self._setter_str is not None:
             ParamExplorer_dict["setter"] = self._setter_str
-        elif keep_function:
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
             ParamExplorer_dict["setter"] = self.setter
         else:
             ParamExplorer_dict["setter"] = None
             if self.setter is not None:
-                self.get_logger.warning(
+                self.get_logger().warning(
                     "ParamExplorer.as_dict(): "
                     + f"Function {self.setter.__name__} is not serializable "
                     + "and will be converted to None."

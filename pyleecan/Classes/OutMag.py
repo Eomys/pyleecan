@@ -268,10 +268,10 @@ class OutMag(FrozenClass):
         S += getsizeof(self.Rag)
         return S
 
-    def as_dict(self, keep_function=False):
+    def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional input parameter 'keep_function' is for internal use only
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -315,12 +315,12 @@ class OutMag(FrozenClass):
         if self.meshsolution is None:
             OutMag_dict["meshsolution"] = None
         else:
-            OutMag_dict["meshsolution"] = self.meshsolution.as_dict()
+            OutMag_dict["meshsolution"] = self.meshsolution.as_dict(**kwargs)
         OutMag_dict["logger_name"] = self.logger_name
         if self.internal is None:
             OutMag_dict["internal"] = None
         else:
-            OutMag_dict["internal"] = self.internal.as_dict()
+            OutMag_dict["internal"] = self.internal.as_dict(**kwargs)
         OutMag_dict["Rag"] = self.Rag
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
