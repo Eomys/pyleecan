@@ -52,9 +52,9 @@ def get_simulations(self):
         new_simu = ref_simu.copy()
 
         # set the next multisimulation layer
-        # we need to have a 1:1 copy of 'var_simu' here, not to break parent prop.
+        # we need to have a 1:1 copy of 'var_simu' here, not to break its parent prop.
         if ref_simu.var_simu.var_simu is not None:
-            new_simu.var_simu = ref_simu.var_simu.var_simu.copy()
+            new_simu.var_simu = ref_simu.var_simu.var_simu.copy(keep_function=True)
         else:
             new_simu.var_simu = None
 
