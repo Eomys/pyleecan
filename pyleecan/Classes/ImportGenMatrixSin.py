@@ -122,6 +122,30 @@ class ImportGenMatrixSin(ImportMatrix):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from ImportMatrix
+        diff_list.extend(super(ImportGenMatrixSin, self).compare(other, name=name))
+        if (other.sin_list is None and self.sin_list is not None) or (
+            other.sin_list is not None and self.sin_list is None
+        ):
+            diff_list.append(name + ".sin_list None mismatch")
+        elif len(other.sin_list) != len(self.sin_list):
+            diff_list.append("len(" + name + ".sin_list)")
+        else:
+            for ii in range(len(other.sin_list)):
+                diff_list.extend(
+                    self.sin_list[ii].compare(
+                        other.sin_list[ii], name=name + ".sin_list[" + str(ii) + "]"
+                    )
+                )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

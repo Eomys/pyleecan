@@ -154,6 +154,34 @@ class OutGeoLam(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._name_phase != self._name_phase:
+            diff_list.append(name + ".name_phase")
+        if not array_equal(other.BH_curve, self.BH_curve):
+            diff_list.append(name + ".BH_curve")
+        if other._Ksfill != self._Ksfill:
+            diff_list.append(name + ".Ksfill")
+        if other._S_slot != self._S_slot:
+            diff_list.append(name + ".S_slot")
+        if other._S_slot_wind != self._S_slot_wind:
+            diff_list.append(name + ".S_slot_wind")
+        if other._S_wind_act != self._S_wind_act:
+            diff_list.append(name + ".S_wind_act")
+        if other._per_a != self._per_a:
+            diff_list.append(name + ".per_a")
+        if other._is_antiper_a != self._is_antiper_a:
+            diff_list.append(name + ".is_antiper_a")
+        if other._per_t != self._per_t:
+            diff_list.append(name + ".per_t")
+        if other._is_antiper_t != self._is_antiper_t:
+            diff_list.append(name + ".is_antiper_t")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

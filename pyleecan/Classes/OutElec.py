@@ -272,6 +272,76 @@ class OutElec(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.Time is None and self.Time is not None) or (
+            other.Time is not None and self.Time is None
+        ):
+            diff_list.append(name + ".Time None mismatch")
+        elif self.Time is not None:
+            diff_list.extend(self.Time.compare(other.Time, name=name + ".Time"))
+        if (other.Angle is None and self.Angle is not None) or (
+            other.Angle is not None and self.Angle is None
+        ):
+            diff_list.append(name + ".Angle None mismatch")
+        elif self.Angle is not None:
+            diff_list.extend(self.Angle.compare(other.Angle, name=name + ".Angle"))
+        if (other.Is is None and self.Is is not None) or (
+            other.Is is not None and self.Is is None
+        ):
+            diff_list.append(name + ".Is None mismatch")
+        elif self.Is is not None:
+            diff_list.extend(self.Is.compare(other.Is, name=name + ".Is"))
+        if (other.Ir is None and self.Ir is not None) or (
+            other.Ir is not None and self.Ir is None
+        ):
+            diff_list.append(name + ".Ir None mismatch")
+        elif self.Ir is not None:
+            diff_list.extend(self.Ir.compare(other.Ir, name=name + ".Ir"))
+        if not array_equal(other.angle_rotor, self.angle_rotor):
+            diff_list.append(name + ".angle_rotor")
+        if other._N0 != self._N0:
+            diff_list.append(name + ".N0")
+        if other._angle_rotor_initial != self._angle_rotor_initial:
+            diff_list.append(name + ".angle_rotor_initial")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if other._Tem_av_ref != self._Tem_av_ref:
+            diff_list.append(name + ".Tem_av_ref")
+        if other._Id_ref != self._Id_ref:
+            diff_list.append(name + ".Id_ref")
+        if other._Iq_ref != self._Iq_ref:
+            diff_list.append(name + ".Iq_ref")
+        if other._felec != self._felec:
+            diff_list.append(name + ".felec")
+        if other._Ud_ref != self._Ud_ref:
+            diff_list.append(name + ".Ud_ref")
+        if other._Uq_ref != self._Uq_ref:
+            diff_list.append(name + ".Uq_ref")
+        if other._Pj_losses != self._Pj_losses:
+            diff_list.append(name + ".Pj_losses")
+        if other._Pem_av_ref != self._Pem_av_ref:
+            diff_list.append(name + ".Pem_av_ref")
+        if (other.Us is None and self.Us is not None) or (
+            other.Us is not None and self.Us is None
+        ):
+            diff_list.append(name + ".Us None mismatch")
+        elif self.Us is not None:
+            diff_list.extend(self.Us.compare(other.Us, name=name + ".Us"))
+        if (other.internal is None and self.internal is not None) or (
+            other.internal is not None and self.internal is None
+        ):
+            diff_list.append(name + ".internal None mismatch")
+        elif self.internal is not None:
+            diff_list.extend(
+                self.internal.compare(other.internal, name=name + ".internal")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

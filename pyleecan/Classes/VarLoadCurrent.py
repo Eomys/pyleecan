@@ -253,6 +253,25 @@ class VarLoadCurrent(VarLoad):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from VarLoad
+        diff_list.extend(super(VarLoadCurrent, self).compare(other, name=name))
+        if not array_equal(other.OP_matrix, self.OP_matrix):
+            diff_list.append(name + ".OP_matrix")
+        if other._type_OP_matrix != self._type_OP_matrix:
+            diff_list.append(name + ".type_OP_matrix")
+        if other._is_torque != self._is_torque:
+            diff_list.append(name + ".is_torque")
+        if other._is_power != self._is_power:
+            diff_list.append(name + ".is_power")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

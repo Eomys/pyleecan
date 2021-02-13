@@ -82,6 +82,18 @@ class MatEconomical(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._cost_unit != self._cost_unit:
+            diff_list.append(name + ".cost_unit")
+        if other._unit_name != self._unit_name:
+            diff_list.append(name + ".unit_name")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

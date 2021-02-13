@@ -246,6 +246,95 @@ class OutMag(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.Time is None and self.Time is not None) or (
+            other.Time is not None and self.Time is None
+        ):
+            diff_list.append(name + ".Time None mismatch")
+        elif self.Time is not None:
+            diff_list.extend(self.Time.compare(other.Time, name=name + ".Time"))
+        if (other.Angle is None and self.Angle is not None) or (
+            other.Angle is not None and self.Angle is None
+        ):
+            diff_list.append(name + ".Angle None mismatch")
+        elif self.Angle is not None:
+            diff_list.extend(self.Angle.compare(other.Angle, name=name + ".Angle"))
+        if (other.B is None and self.B is not None) or (
+            other.B is not None and self.B is None
+        ):
+            diff_list.append(name + ".B None mismatch")
+        elif self.B is not None:
+            diff_list.extend(self.B.compare(other.B, name=name + ".B"))
+        if (other.Tem is None and self.Tem is not None) or (
+            other.Tem is not None and self.Tem is None
+        ):
+            diff_list.append(name + ".Tem None mismatch")
+        elif self.Tem is not None:
+            diff_list.extend(self.Tem.compare(other.Tem, name=name + ".Tem"))
+        if other._Tem_av != self._Tem_av:
+            diff_list.append(name + ".Tem_av")
+        if other._Tem_rip_norm != self._Tem_rip_norm:
+            diff_list.append(name + ".Tem_rip_norm")
+        if other._Tem_rip_pp != self._Tem_rip_pp:
+            diff_list.append(name + ".Tem_rip_pp")
+        if (other.Phi_wind_stator is None and self.Phi_wind_stator is not None) or (
+            other.Phi_wind_stator is not None and self.Phi_wind_stator is None
+        ):
+            diff_list.append(name + ".Phi_wind_stator None mismatch")
+        elif self.Phi_wind_stator is not None:
+            diff_list.extend(
+                self.Phi_wind_stator.compare(
+                    other.Phi_wind_stator, name=name + ".Phi_wind_stator"
+                )
+            )
+        if (other.Phi_wind is None and self.Phi_wind is not None) or (
+            other.Phi_wind is not None and self.Phi_wind is None
+        ):
+            diff_list.append(name + ".Phi_wind None mismatch")
+        elif len(other.Phi_wind) != len(self.Phi_wind):
+            diff_list.append("len(" + name + "Phi_wind)")
+        else:
+            for key in self.Phi_wind:
+                diff_list.extend(
+                    self.Phi_wind[key].compare(
+                        other.Phi_wind[key], name=name + ".Phi_wind"
+                    )
+                )
+        if (other.emf is None and self.emf is not None) or (
+            other.emf is not None and self.emf is None
+        ):
+            diff_list.append(name + ".emf None mismatch")
+        elif self.emf is not None:
+            diff_list.extend(self.emf.compare(other.emf, name=name + ".emf"))
+        if (other.meshsolution is None and self.meshsolution is not None) or (
+            other.meshsolution is not None and self.meshsolution is None
+        ):
+            diff_list.append(name + ".meshsolution None mismatch")
+        elif self.meshsolution is not None:
+            diff_list.extend(
+                self.meshsolution.compare(
+                    other.meshsolution, name=name + ".meshsolution"
+                )
+            )
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if (other.internal is None and self.internal is not None) or (
+            other.internal is not None and self.internal is None
+        ):
+            diff_list.append(name + ".internal None mismatch")
+        elif self.internal is not None:
+            diff_list.extend(
+                self.internal.compare(other.internal, name=name + ".internal")
+            )
+        if other._Rag != self._Rag:
+            diff_list.append(name + ".Rag")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

@@ -230,6 +230,27 @@ class CondType12(Conductor):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Conductor
+        diff_list.extend(super(CondType12, self).compare(other, name=name))
+        if other._Wwire != self._Wwire:
+            diff_list.append(name + ".Wwire")
+        if other._Wins_cond != self._Wins_cond:
+            diff_list.append(name + ".Wins_cond")
+        if other._Nwppc != self._Nwppc:
+            diff_list.append(name + ".Nwppc")
+        if other._Wins_wire != self._Wins_wire:
+            diff_list.append(name + ".Wins_wire")
+        if other._Kwoh != self._Kwoh:
+            diff_list.append(name + ".Kwoh")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

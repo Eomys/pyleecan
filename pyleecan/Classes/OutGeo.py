@@ -174,6 +174,48 @@ class OutGeo(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.stator is None and self.stator is not None) or (
+            other.stator is not None and self.stator is None
+        ):
+            diff_list.append(name + ".stator None mismatch")
+        elif self.stator is not None:
+            diff_list.extend(self.stator.compare(other.stator, name=name + ".stator"))
+        if (other.rotor is None and self.rotor is not None) or (
+            other.rotor is not None and self.rotor is None
+        ):
+            diff_list.append(name + ".rotor None mismatch")
+        elif self.rotor is not None:
+            diff_list.extend(self.rotor.compare(other.rotor, name=name + ".rotor"))
+        if other._Wgap_mec != self._Wgap_mec:
+            diff_list.append(name + ".Wgap_mec")
+        if other._Wgap_mag != self._Wgap_mag:
+            diff_list.append(name + ".Wgap_mag")
+        if other._Rgap_mec != self._Rgap_mec:
+            diff_list.append(name + ".Rgap_mec")
+        if other._Lgap != self._Lgap:
+            diff_list.append(name + ".Lgap")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if other._angle_offset_initial != self._angle_offset_initial:
+            diff_list.append(name + ".angle_offset_initial")
+        if other._rot_dir != self._rot_dir:
+            diff_list.append(name + ".rot_dir")
+        if other._per_a != self._per_a:
+            diff_list.append(name + ".per_a")
+        if other._is_antiper_a != self._is_antiper_a:
+            diff_list.append(name + ".is_antiper_a")
+        if other._per_t != self._per_t:
+            diff_list.append(name + ".per_t")
+        if other._is_antiper_t != self._is_antiper_t:
+            diff_list.append(name + ".is_antiper_t")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

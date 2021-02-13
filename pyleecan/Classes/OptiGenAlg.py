@@ -162,6 +162,31 @@ class OptiGenAlg(OptiSolver):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from OptiSolver
+        diff_list.extend(super(OptiGenAlg, self).compare(other, name=name))
+        if other._selector_str != self._selector_str:
+            diff_list.append(name + ".selector")
+        if other._crossover_str != self._crossover_str:
+            diff_list.append(name + ".crossover")
+        if other._mutator_str != self._mutator_str:
+            diff_list.append(name + ".mutator")
+        if other._p_cross != self._p_cross:
+            diff_list.append(name + ".p_cross")
+        if other._p_mutate != self._p_mutate:
+            diff_list.append(name + ".p_mutate")
+        if other._size_pop != self._size_pop:
+            diff_list.append(name + ".size_pop")
+        if other._nb_gen != self._nb_gen:
+            diff_list.append(name + ".nb_gen")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

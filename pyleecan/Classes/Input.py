@@ -172,6 +172,34 @@ class Input(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.time is None and self.time is not None) or (
+            other.time is not None and self.time is None
+        ):
+            diff_list.append(name + ".time None mismatch")
+        elif self.time is not None:
+            diff_list.extend(self.time.compare(other.time, name=name + ".time"))
+        if (other.angle is None and self.angle is not None) or (
+            other.angle is not None and self.angle is None
+        ):
+            diff_list.append(name + ".angle None mismatch")
+        elif self.angle is not None:
+            diff_list.extend(self.angle.compare(other.angle, name=name + ".angle"))
+        if other._Nt_tot != self._Nt_tot:
+            diff_list.append(name + ".Nt_tot")
+        if other._Nrev != self._Nrev:
+            diff_list.append(name + ".Nrev")
+        if other._Na_tot != self._Na_tot:
+            diff_list.append(name + ".Na_tot")
+        if other._N0 != self._N0:
+            diff_list.append(name + ".N0")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

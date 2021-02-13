@@ -267,6 +267,24 @@ class Hole(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._Zh != self._Zh:
+            diff_list.append(name + ".Zh")
+        if (other.mat_void is None and self.mat_void is not None) or (
+            other.mat_void is not None and self.mat_void is None
+        ):
+            diff_list.append(name + ".mat_void None mismatch")
+        elif self.mat_void is not None:
+            diff_list.extend(
+                self.mat_void.compare(other.mat_void, name=name + ".mat_void")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

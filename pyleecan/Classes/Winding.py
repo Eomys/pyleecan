@@ -224,6 +224,38 @@ class Winding(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._is_reverse_wind != self._is_reverse_wind:
+            diff_list.append(name + ".is_reverse_wind")
+        if other._Nslot_shift_wind != self._Nslot_shift_wind:
+            diff_list.append(name + ".Nslot_shift_wind")
+        if other._qs != self._qs:
+            diff_list.append(name + ".qs")
+        if other._Ntcoil != self._Ntcoil:
+            diff_list.append(name + ".Ntcoil")
+        if other._Npcpp != self._Npcpp:
+            diff_list.append(name + ".Npcpp")
+        if other._type_connection != self._type_connection:
+            diff_list.append(name + ".type_connection")
+        if other._p != self._p:
+            diff_list.append(name + ".p")
+        if other._Lewout != self._Lewout:
+            diff_list.append(name + ".Lewout")
+        if (other.conductor is None and self.conductor is not None) or (
+            other.conductor is not None and self.conductor is None
+        ):
+            diff_list.append(name + ".conductor None mismatch")
+        elif self.conductor is not None:
+            diff_list.extend(
+                self.conductor.compare(other.conductor, name=name + ".conductor")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

@@ -138,6 +138,29 @@ class ImportGenToothSaw(ImportMatrix):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from ImportMatrix
+        diff_list.extend(super(ImportGenToothSaw, self).compare(other, name=name))
+        if other._type_signal != self._type_signal:
+            diff_list.append(name + ".type_signal")
+        if other._f != self._f:
+            diff_list.append(name + ".f")
+        if other._A != self._A:
+            diff_list.append(name + ".A")
+        if other._N != self._N:
+            diff_list.append(name + ".N")
+        if other._Tf != self._Tf:
+            diff_list.append(name + ".Tf")
+        if other._Dt != self._Dt:
+            diff_list.append(name + ".Dt")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

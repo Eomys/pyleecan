@@ -189,6 +189,41 @@ class EEC_PMSM(EEC):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from EEC
+        diff_list.extend(super(EEC_PMSM, self).compare(other, name=name))
+        if (other.indmag is None and self.indmag is not None) or (
+            other.indmag is not None and self.indmag is None
+        ):
+            diff_list.append(name + ".indmag None mismatch")
+        elif self.indmag is not None:
+            diff_list.extend(self.indmag.compare(other.indmag, name=name + ".indmag"))
+        if (other.fluxlink is None and self.fluxlink is not None) or (
+            other.fluxlink is not None and self.fluxlink is None
+        ):
+            diff_list.append(name + ".fluxlink None mismatch")
+        elif self.fluxlink is not None:
+            diff_list.extend(
+                self.fluxlink.compare(other.fluxlink, name=name + ".fluxlink")
+            )
+        if other._parameters != self._parameters:
+            diff_list.append(name + ".parameters")
+        if other._freq0 != self._freq0:
+            diff_list.append(name + ".freq0")
+        if (other.drive is None and self.drive is not None) or (
+            other.drive is not None and self.drive is None
+        ):
+            diff_list.append(name + ".drive None mismatch")
+        elif self.drive is not None:
+            diff_list.extend(self.drive.compare(other.drive, name=name + ".drive"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

@@ -109,6 +109,27 @@ class NotchEvenDist(Notch):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Notch
+        diff_list.extend(super(NotchEvenDist, self).compare(other, name=name))
+        if other._alpha != self._alpha:
+            diff_list.append(name + ".alpha")
+        if (other.notch_shape is None and self.notch_shape is not None) or (
+            other.notch_shape is not None and self.notch_shape is None
+        ):
+            diff_list.append(name + ".notch_shape None mismatch")
+        elif self.notch_shape is not None:
+            diff_list.extend(
+                self.notch_shape.compare(other.notch_shape, name=name + ".notch_shape")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

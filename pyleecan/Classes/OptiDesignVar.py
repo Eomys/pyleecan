@@ -124,6 +124,23 @@ class OptiDesignVar(ParamExplorer):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from ParamExplorer
+        diff_list.extend(super(OptiDesignVar, self).compare(other, name=name))
+        if other._type_var != self._type_var:
+            diff_list.append(name + ".type_var")
+        if other._space != self._space:
+            diff_list.append(name + ".space")
+        if other._get_value_str != self._get_value_str:
+            diff_list.append(name + ".get_value")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

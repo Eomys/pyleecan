@@ -167,6 +167,26 @@ class Force(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._is_periodicity_t != self._is_periodicity_t:
+            diff_list.append(name + ".is_periodicity_t")
+        if other._is_periodicity_a != self._is_periodicity_a:
+            diff_list.append(name + ".is_periodicity_a")
+        if other._is_agsf_transfer != self._is_agsf_transfer:
+            diff_list.append(name + ".is_agsf_transfer")
+        if other._max_wavenumber_transfer != self._max_wavenumber_transfer:
+            diff_list.append(name + ".max_wavenumber_transfer")
+        if other._Rsbo_enforced_transfer != self._Rsbo_enforced_transfer:
+            diff_list.append(name + ".Rsbo_enforced_transfer")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

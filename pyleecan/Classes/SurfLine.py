@@ -241,6 +241,30 @@ class SurfLine(Surface):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Surface
+        diff_list.extend(super(SurfLine, self).compare(other, name=name))
+        if (other.line_list is None and self.line_list is not None) or (
+            other.line_list is not None and self.line_list is None
+        ):
+            diff_list.append(name + ".line_list None mismatch")
+        elif len(other.line_list) != len(self.line_list):
+            diff_list.append("len(" + name + ".line_list)")
+        else:
+            for ii in range(len(other.line_list)):
+                diff_list.extend(
+                    self.line_list[ii].compare(
+                        other.line_list[ii], name=name + ".line_list[" + str(ii) + "]"
+                    )
+                )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

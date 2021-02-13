@@ -331,6 +331,51 @@ class MagElmer(Magnetics):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Magnetics
+        diff_list.extend(super(MagElmer, self).compare(other, name=name))
+        if other._Kmesh_fineness != self._Kmesh_fineness:
+            diff_list.append(name + ".Kmesh_fineness")
+        if other._Kgeo_fineness != self._Kgeo_fineness:
+            diff_list.append(name + ".Kgeo_fineness")
+        if other._file_name != self._file_name:
+            diff_list.append(name + ".file_name")
+        if other._FEA_dict != self._FEA_dict:
+            diff_list.append(name + ".FEA_dict")
+        if other._is_get_mesh != self._is_get_mesh:
+            diff_list.append(name + ".is_get_mesh")
+        if other._is_save_FEA != self._is_save_FEA:
+            diff_list.append(name + ".is_save_FEA")
+        if other._transform_list != self._transform_list:
+            diff_list.append(name + ".transform_list")
+        if (other.rotor_dxf is None and self.rotor_dxf is not None) or (
+            other.rotor_dxf is not None and self.rotor_dxf is None
+        ):
+            diff_list.append(name + ".rotor_dxf None mismatch")
+        elif self.rotor_dxf is not None:
+            diff_list.extend(
+                self.rotor_dxf.compare(other.rotor_dxf, name=name + ".rotor_dxf")
+            )
+        if (other.stator_dxf is None and self.stator_dxf is not None) or (
+            other.stator_dxf is not None and self.stator_dxf is None
+        ):
+            diff_list.append(name + ".stator_dxf None mismatch")
+        elif self.stator_dxf is not None:
+            diff_list.extend(
+                self.stator_dxf.compare(other.stator_dxf, name=name + ".stator_dxf")
+            )
+        if other._import_file != self._import_file:
+            diff_list.append(name + ".import_file")
+        if other._nb_worker != self._nb_worker:
+            diff_list.append(name + ".nb_worker")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

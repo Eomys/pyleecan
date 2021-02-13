@@ -114,6 +114,22 @@ class OptiConstraint(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._type_const != self._type_const:
+            diff_list.append(name + ".type_const")
+        if other._value != self._value:
+            diff_list.append(name + ".value")
+        if other._get_variable_str != self._get_variable_str:
+            diff_list.append(name + ".get_variable")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

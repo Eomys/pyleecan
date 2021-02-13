@@ -96,6 +96,19 @@ class FPGNTri(GaussPoint):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from GaussPoint
+        diff_list.extend(super(FPGNTri, self).compare(other, name=name))
+        if other._nb_gauss_point != self._nb_gauss_point:
+            diff_list.append(name + ".nb_gauss_point")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

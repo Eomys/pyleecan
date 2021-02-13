@@ -72,7 +72,7 @@ def generate_eq(gen_dict, class_dict):
                 + prop["name"]
                 + " is None:\n"
             )
-            eq_str += TAB3 + "return True\n"
+            eq_str += TAB3 + "pass\n"
             eq_str += (
                 TAB2
                 + "elif len(other."
@@ -115,7 +115,7 @@ def generate_eq(gen_dict, class_dict):
                 + prop["name"]
                 + " is None:\n"
             )
-            eq_str += TAB3 + "return True\n"
+            eq_str += TAB3 + "pass\n"
             eq_str += (
                 TAB2
                 + "elif len(other."

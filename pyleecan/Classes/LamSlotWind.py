@@ -493,6 +493,27 @@ class LamSlotWind(LamSlot):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from LamSlot
+        diff_list.extend(super(LamSlotWind, self).compare(other, name=name))
+        if other._Ksfill != self._Ksfill:
+            diff_list.append(name + ".Ksfill")
+        if (other.winding is None and self.winding is not None) or (
+            other.winding is not None and self.winding is None
+        ):
+            diff_list.append(name + ".winding None mismatch")
+        elif self.winding is not None:
+            diff_list.extend(
+                self.winding.compare(other.winding, name=name + ".winding")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
