@@ -49,8 +49,8 @@ def run_single_simu(
             is_error = True
             result = None
 
-    # if the simulation is the reference one then create new Output 
-    # from XOutput content to store in the output_list, 
+    # if the simulation is the reference one then create new Output
+    # from XOutput content to store in the output_list,
     # i.e. get rid of the empty XOutput part
     if index == ref_simu_index and not is_error and simulation.var_simu is None:
         Output = import_class("pyleecan.Classes", "Output")
