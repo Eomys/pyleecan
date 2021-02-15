@@ -17,6 +17,8 @@ try:  # Import if pyleecan is installed with pip
     from .GUI.Tools.MachinePlotWidget import MachinePlotWidget
     from .GUI.Tools.TreeView import TreeView
     from .GUI.Tools.GuiOption.WGuiOption import WGuiOption
+    from .GUI.Tools.SimuWidget.SimuWidget import SimuWidget
+    
 
 except ImportError:  # Import for dev version
     from definitions import PACKAGE_NAME, ROOT_DIR, config_dict
@@ -39,6 +41,8 @@ except ImportError:  # Import for dev version
     )
     exec("from " + PACKAGE_NAME + ".GUI.Tools.TreeView import TreeView")
     exec("from " + PACKAGE_NAME + ".GUI.Tools.GuiOption.WGuiOption import WGuiOption")
+    exec("from " + PACKAGE_NAME + ".GUI.Tools.SimuWidget.SimuWidget import SimuWidget")
+    
 
 
 EXT_GUI = True
@@ -95,8 +99,13 @@ def run_GUI(argv):
 
         option = WGuiOption(machine_setup=c, matlib=matlib)
         window.addSubWindow("Option", option)
-        window.show()
 
+        simu = SimuWidget()
+        window.addSubWindow("Simulation", simu)
+
+
+        
+        window.show()
     else:
         # "Normal" GUI
         c.show()
