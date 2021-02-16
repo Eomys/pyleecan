@@ -70,6 +70,8 @@ def generate_compare(gen_dict, class_dict):
                 + " is None):\n"
             )
             compare_str += TAB3 + "diff_list.append(name+'" + prop["name"] + "')\n"
+            compare_str += TAB2 + "elif self." + prop["name"] + " is None:\n"
+            compare_str += TAB3 + "pass\n"
             compare_str += (
                 TAB2
                 + "elif len(other."
@@ -110,6 +112,8 @@ def generate_compare(gen_dict, class_dict):
             compare_str += (
                 TAB3 + "diff_list.append(name+'." + prop["name"] + " None mismatch')\n"
             )
+            compare_str += TAB2 + "elif self." + prop["name"] + " is None:\n"
+            compare_str += TAB3 + "pass\n"
             compare_str += (
                 TAB2
                 + "elif len(other."
@@ -167,6 +171,8 @@ def generate_compare(gen_dict, class_dict):
             compare_str += (
                 TAB3 + "diff_list.append(name+'." + prop["name"] + " None mismatch')\n"
             )
+            compare_str += TAB2 + "elif self." + prop["name"] + " is None:\n"
+            compare_str += TAB3 + "pass\n"
             compare_str += (
                 TAB2
                 + "elif len(other."
@@ -206,6 +212,8 @@ def generate_compare(gen_dict, class_dict):
             compare_str += (
                 TAB3 + "diff_list.append(name+'." + prop["name"] + " None mismatch')\n"
             )
+            compare_str += TAB2 + "elif self." + prop["name"] + " is None:\n"
+            compare_str += TAB3 + "pass\n"
             compare_str += (
                 TAB2
                 + "elif len(other."
