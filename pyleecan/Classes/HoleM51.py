@@ -38,6 +38,11 @@ except ImportError as error:
     comp_alpha = error
 
 try:
+    from ..Methods.Slot.HoleM51.comp_magnetization_dict import comp_magnetization_dict
+except ImportError as error:
+    comp_magnetization_dict = error
+
+try:
     from ..Methods.Slot.HoleM51.comp_radius import comp_radius
 except ImportError as error:
     comp_radius = error
@@ -121,6 +126,18 @@ class HoleM51(HoleMag):
         )
     else:
         comp_alpha = comp_alpha
+    # cf Methods.Slot.HoleM51.comp_magnetization_dict
+    if isinstance(comp_magnetization_dict, ImportError):
+        comp_magnetization_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM51 method comp_magnetization_dict: "
+                    + str(comp_magnetization_dict)
+                )
+            )
+        )
+    else:
+        comp_magnetization_dict = comp_magnetization_dict
     # cf Methods.Slot.HoleM51.comp_radius
     if isinstance(comp_radius, ImportError):
         comp_radius = property(
