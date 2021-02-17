@@ -2,6 +2,8 @@ from ...Classes.Segment import Segment
 from ...Classes.Arc1 import Arc1
 from ...Classes.Arc2 import Arc2
 from math import cos, sin, pi
+from logging import getLogger
+from ...loggers import GUI_LOG_NAME
 
 
 def dxf_to_pyleecan_list(entities):
@@ -11,15 +13,12 @@ def dxf_to_pyleecan_list(entities):
     """
     obj_list = []
     for entity in entities:
-
         dxftype = entity.dxftype()
         dxf = entity.dxf
         if dxftype == "LINE":  # {"LINE", "XLINE", "RAY"}:
             start = complex(*dxf.start[:-1])
             end = complex(*dxf.end[:-1])
             obj_list.append(Segment(start, end))
-        elif dxftype == "CIRCLE":
-            raise NotImplementedError
         elif dxftype == "ARC":
             start_angle = dxf.start_angle / 180 * pi
             end_angle = dxf.end_angle / 180 * pi
@@ -42,6 +41,6 @@ def dxf_to_pyleecan_list(entities):
                 Arc1(begin=begin, end=end, radius=dxf.radius, is_trigo_direction=True)
             )
         else:
-            raise NotImplementedError
+            getLogger(GUI_LOG_NAME).warning("Unable to load dxftype="+str(dxftype)". Removing element from preview")
 
     return obj_list
