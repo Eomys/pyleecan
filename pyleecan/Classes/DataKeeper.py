@@ -15,6 +15,14 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Simulation.DataKeeper.as_dict import as_dict
+except ImportError as error:
+    as_dict = error
+
+
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
@@ -28,6 +36,15 @@ class DataKeeper(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Simulation.DataKeeper.as_dict
+    if isinstance(as_dict, ImportError):
+        as_dict = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use DataKeeper method as_dict: " + str(as_dict))
+            )
+        )
+    else:
+        as_dict = as_dict
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -167,28 +184,6 @@ class DataKeeper(FrozenClass):
             for value in self.result:
                 S += getsizeof(value)
         return S
-
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
-
-        DataKeeper_dict = dict()
-        DataKeeper_dict["name"] = self.name
-        DataKeeper_dict["symbol"] = self.symbol
-        DataKeeper_dict["unit"] = self.unit
-        if self._keeper_str is not None:
-            DataKeeper_dict["keeper"] = self._keeper_str
-        else:
-            DataKeeper_dict["keeper"] = None
-        if self._error_keeper_str is not None:
-            DataKeeper_dict["error_keeper"] = self._error_keeper_str
-        else:
-            DataKeeper_dict["error_keeper"] = None
-        DataKeeper_dict["result"] = (
-            self.result.copy() if self.result is not None else None
-        )
-        # The class name is added to the dict for deserialisation purpose
-        DataKeeper_dict["__class__"] = "DataKeeper"
-        return DataKeeper_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
