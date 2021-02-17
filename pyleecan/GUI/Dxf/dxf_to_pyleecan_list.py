@@ -41,6 +41,10 @@ def dxf_to_pyleecan_list(entities):
                 Arc1(begin=begin, end=end, radius=dxf.radius, is_trigo_direction=True)
             )
         else:
-            getLogger(GUI_LOG_NAME).warning("Unable to load dxftype="+str(dxftype)". Removing element from preview")
+            getLogger(GUI_LOG_NAME).warning(
+                "Unable to load dxftype="
+                + str(dxftype)
+                + ". Removing element from preview"
+            )
 
     return obj_list
