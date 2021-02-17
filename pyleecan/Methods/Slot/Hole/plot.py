@@ -10,7 +10,7 @@ from ....Methods import ParentMissingError
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
 
-def plot(self, fig=None, display_magnet=True, is_show_fig=True):
+def plot(self, fig=None, display_magnet=True, is_add_arrow=False, is_show_fig=True):
     """Plot the Hole in a matplotlib fig
 
     Parameters
@@ -22,6 +22,8 @@ def plot(self, fig=None, display_magnet=True, is_show_fig=True):
         one (Default value = None)
     display_magnet : bool
         if True, plot the magnet inside the hole, if there is any (Default value = True)
+    is_add_arrow : bool
+        To add an arrow for the magnetization
 
     Returns
     -------
@@ -50,6 +52,17 @@ def plot(self, fig=None, display_magnet=True, is_show_fig=True):
     # Add all the hole (and magnet) to fig
     for patch in patches:
         axes.add_patch(patch)
+
+    # Magnetization
+    if is_add_arrow:
+        mag_dict = self.comp_magnetization_dict(return_type=0)
+        for Z_tuple in mag_dict.values():
+            axes.annotate(
+                text="",
+                xy=(Z_tuple[1].real, Z_tuple[1].imag),
+                xytext=(Z_tuple[0].real, Z_tuple[0].imag),
+                arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
+            )
 
     # Axis Setup
     axis("equal")
