@@ -124,6 +124,8 @@ class OutMagFEMM(OutInternal):
             other.handler_list is not None and self.handler_list is None
         ):
             diff_list.append(name + ".handler_list None mismatch")
+        elif self.handler_list is None:
+            pass
         elif len(other.handler_list) != len(self.handler_list):
             diff_list.append("len(" + name + ".handler_list)")
         else:

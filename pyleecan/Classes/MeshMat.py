@@ -259,6 +259,8 @@ class MeshMat(Mesh):
             other.cell is not None and self.cell is None
         ):
             diff_list.append(name + ".cell None mismatch")
+        elif self.cell is None:
+            pass
         elif len(other.cell) != len(self.cell):
             diff_list.append("len(" + name + "cell)")
         else:

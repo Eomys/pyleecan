@@ -135,6 +135,8 @@ class ImportGenMatrixSin(ImportMatrix):
             other.sin_list is not None and self.sin_list is None
         ):
             diff_list.append(name + ".sin_list None mismatch")
+        elif self.sin_list is None:
+            pass
         elif len(other.sin_list) != len(self.sin_list):
             diff_list.append("len(" + name + ".sin_list)")
         else:

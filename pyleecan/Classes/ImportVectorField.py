@@ -129,6 +129,8 @@ class ImportVectorField(FrozenClass):
             other.components is not None and self.components is None
         ):
             diff_list.append(name + ".components None mismatch")
+        elif self.components is None:
+            pass
         elif len(other.components) != len(self.components):
             diff_list.append("len(" + name + "components)")
         else:

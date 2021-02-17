@@ -306,6 +306,8 @@ class MeshSolution(FrozenClass):
             other.mesh is not None and self.mesh is None
         ):
             diff_list.append(name + ".mesh None mismatch")
+        elif self.mesh is None:
+            pass
         elif len(other.mesh) != len(self.mesh):
             diff_list.append("len(" + name + ".mesh)")
         else:
@@ -321,6 +323,8 @@ class MeshSolution(FrozenClass):
             other.solution is not None and self.solution is None
         ):
             diff_list.append(name + ".solution None mismatch")
+        elif self.solution is None:
+            pass
         elif len(other.solution) != len(self.solution):
             diff_list.append("len(" + name + ".solution)")
         else:
@@ -334,6 +338,8 @@ class MeshSolution(FrozenClass):
             other.group is not None and self.group is None
         ):
             diff_list.append(name + ".group None mismatch")
+        elif self.group is None:
+            pass
         elif len(other.group) != len(self.group):
             diff_list.append("len(" + name + ".group)")
         else:
