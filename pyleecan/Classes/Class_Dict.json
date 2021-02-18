@@ -1450,7 +1450,8 @@
             }
         ],
         "daughters": [
-            "ForceMT"
+            "ForceMT",
+            "ForceTensor"
         ],
         "desc": "Forces module abstract object",
         "is_internal": false,
@@ -1538,6 +1539,26 @@
         "name": "ForceMT",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/ForceMT.csv",
+        "properties": []
+    },
+    "ForceTensor": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Force various tensors (Maxwell, magnetostrictive) model for radial flux machines",
+        "is_internal": false,
+        "methods": [
+            "comp_force",
+            "comp_force_nodal"
+        ],
+        "mother": "Force",
+        "name": "ForceTensor",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/ForceTensor.csv",
         "properties": []
     },
     "Frame": {

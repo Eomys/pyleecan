@@ -1,4 +1,5 @@
 from numpy import pi, all as np_all
+from pyleecan.Methods.Simulation.ForceTensor import comp_force_nodal
 
 
 def comp_force(self, output, axes_dict):
@@ -25,6 +26,10 @@ def comp_force(self, output, axes_dict):
                 Airgap axial Maxwell stress (Nt,Na,Nz) [N/m²]
 
     """
+
+    # Test comp_force_nodal #
+
+    comp_force_nodal(self, output)
 
     # Init output dict
     out_dict = dict()

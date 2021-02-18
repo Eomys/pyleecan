@@ -37,6 +37,7 @@ load_switch = {
     "FluxLinkFEMM": FluxLinkFEMM,
     "Force": Force,
     "ForceMT": ForceMT,
+    "ForceTensor": ForceTensor,
     "Frame": Frame,
     "GUIOption": GUIOption,
     "GaussPoint": GaussPoint,

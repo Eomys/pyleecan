@@ -10,7 +10,7 @@ def comp_force_nodal(self, output):
     """Run the nodal forces calculation based on a tensor.
 
     from publications:
-        
+
 
     Parameters
     ----------
@@ -57,7 +57,7 @@ def comp_force_nodal(self, output):
         connect = mesh.cell[key].get_connectivity()
         nb_elem = len(connect)
 
-        nb_pt = mesh.point.nb_pt 
+        nb_pt = mesh.point.nb_pt
 
         # Nodal forces init
         fx = np.zeros((Nt_tot, nb_pt), dtype=np.float)
@@ -133,3 +133,4 @@ def comp_force_nodal(self, output):
     meshsolution.solution.append(solforce)
 
     output.force.vwp_nodal = meshsolution
+    pass

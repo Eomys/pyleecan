@@ -35,6 +35,7 @@ from ..Classes.FluxLink import FluxLink
 from ..Classes.FluxLinkFEMM import FluxLinkFEMM
 from ..Classes.Force import Force
 from ..Classes.ForceMT import ForceMT
+from ..Classes.ForceTensor import ForceTensor
 from ..Classes.Frame import Frame
 from ..Classes.GUIOption import GUIOption
 from ..Classes.GaussPoint import GaussPoint
