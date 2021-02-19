@@ -11507,7 +11507,7 @@
         "is_internal": false,
         "methods": [
             "get_input_list",
-            "get_simulations",
+            "generate_simulation_list",
             "gen_datakeeper_list",
             "check_param",
             "get_elec_datakeeper"
@@ -11567,7 +11567,7 @@
         "is_internal": false,
         "methods": [
             "check_param",
-            "get_simulations",
+            "generate_simulation_list",
             "get_simu_number"
         ],
         "mother": "VarSimu",
@@ -11604,7 +11604,7 @@
             "run",
             "set_reused_data",
             "check_param",
-            "get_simulations"
+            "generate_simulation_list"
         ],
         "mother": "",
         "name": "VarSimu",

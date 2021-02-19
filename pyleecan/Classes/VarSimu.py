@@ -33,9 +33,11 @@ except ImportError as error:
     check_param = error
 
 try:
-    from ..Methods.Simulation.VarSimu.get_simulations import get_simulations
+    from ..Methods.Simulation.VarSimu.generate_simulation_list import (
+        generate_simulation_list,
+    )
 except ImportError as error:
-    get_simulations = error
+    generate_simulation_list = error
 
 
 from ._check import InitUnKnowClassError
@@ -78,17 +80,18 @@ class VarSimu(FrozenClass):
         )
     else:
         check_param = check_param
-    # cf Methods.Simulation.VarSimu.get_simulations
-    if isinstance(get_simulations, ImportError):
-        get_simulations = property(
+    # cf Methods.Simulation.VarSimu.generate_simulation_list
+    if isinstance(generate_simulation_list, ImportError):
+        generate_simulation_list = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VarSimu method get_simulations: " + str(get_simulations)
+                    "Can't use VarSimu method generate_simulation_list: "
+                    + str(generate_simulation_list)
                 )
             )
         )
     else:
-        get_simulations = get_simulations
+        generate_simulation_list = generate_simulation_list
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -292,6 +295,14 @@ class VarSimu(FrozenClass):
             diff_list.append(name + ".is_keep_all_output")
         if other._stop_if_error != self._stop_if_error:
             diff_list.append(name + ".stop_if_error")
+        if (other.var_simu is None and self.var_simu is not None) or (
+            other.var_simu is not None and self.var_simu is None
+        ):
+            diff_list.append(name + ".var_simu None mismatch")
+        elif self.var_simu is not None:
+            diff_list.extend(
+                self.var_simu.compare(other.var_simu, name=name + ".var_simu")
+            )
         if other._ref_simu_index != self._ref_simu_index:
             diff_list.append(name + ".ref_simu_index")
         if other._nb_simu != self._nb_simu:

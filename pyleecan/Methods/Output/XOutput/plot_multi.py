@@ -61,7 +61,6 @@ def plot_multi(
     # get data and labels
     x_values, x_label = _get_symbol_data_(self, x_symbol, idx)
     y_values, y_label = _get_symbol_data_(self, y_symbol, idx)
-    c_values = _get_symbol_data_(self, c_symbol, idx)[0]
 
     if c_symbol is None:
         colors = COLORS[0]

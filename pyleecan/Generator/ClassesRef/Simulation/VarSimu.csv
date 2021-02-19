@@ -1,9 +1,9 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 name,-,Name of the multi-simulation,0,str,,,,,Simulation,,run,VERSION,1,Abstract class for the multi-simulation
 desc,-,Multi-simulation description,0,str,,,,,,,set_reused_data,,,
-datakeeper_list,-,"List containing DataKeepers to extract VarSimu results ",0,[DataKeeper],,,,,,,check_param,,,
-is_keep_all_output,-,True to store every output in a list,0,bool,False,,,,,,get_simulations,,,
-stop_if_error,-,"Stop the multi-simulation if a simulation fails ",0,bool,False,,,,,,,,,
+datakeeper_list,-,List containing DataKeepers to extract VarSimu results ,0,[DataKeeper],,,,,,,check_param,,,
+is_keep_all_output,-,True to store every output in a list,0,bool,False,,,,,,generate_simulation_list,,,
+stop_if_error,-,Stop the multi-simulation if a simulation fails ,0,bool,False,,,,,,,,,
 var_simu,-,Multi-simulation of a Multi-simulation definition,,VarSimu,None,,,,,,,,,
 ref_simu_index,-,"Index of the reference simulation, if None the reference simulation is not in the multi-simulation",0,int,None,0,,,,,,,,
 nb_simu,-,Number of simulations,0,int,0,,,,,,,,,

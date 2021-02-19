@@ -6,7 +6,7 @@ import numpy as np
 
 ## Reference simulation
 from pyleecan.Classes.Simu1 import Simu1
-from numpy import pi, ones, zeros, linspace
+from numpy import pi, ones, zeros, linspace, sqrt, exp
 from os.path import join
 import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
@@ -25,6 +25,7 @@ from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
 from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.DriveWave import DriveWave
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 
 # Load the machine
 from os.path import join
@@ -36,29 +37,30 @@ import pytest
 
 @pytest.mark.FEMM
 @pytest.mark.long
-def test_slot_scale():
+def test_multi_multi():
+    """Run a multi-simulation of multi-simulation"""
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    ref_simu = Simu1(name="E_IPMSM_FL_002", machine=IPMSM_A)
+    simu = Simu1(name="multi_multi", machine=IPMSM_A)
 
     # Definition of the enforced output of the electrical module
-    Is_mat = zeros((1, 3))
-    Is_mat[0, :] = np.array([0, 12.2474, -12.2474])
-    Is = ImportMatrixVal(value=Is_mat)
-    time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
-    Na_tot = 2048
+    I0_rms = 250 / sqrt(2)
+    Phi0 = 140 * pi / 180  # Maximum Torque Per Amp
 
-    ref_simu.input = InputCurrent(
-        Is=Is,
+    Id_ref = (I0_rms * exp(1j * Phi0)).real
+    Iq_ref = (I0_rms * exp(1j * Phi0)).imag
+    simu.input = InputCurrent(
+        Is=None,
         Ir=None,  # No winding on the rotor
-        N0=2504,
+        N0=2500,
+        Id_ref=Id_ref,
+        Iq_ref=Iq_ref,
         angle_rotor=None,  # Will be computed
-        time=time,
-        Na_tot=Na_tot,
-        angle_rotor_initial=0.86,
+        Nt_tot=2,
+        Na_tot=2048,
     )
 
     # Definition of the magnetic simulation
-    ref_simu.mag = MagFEMM(
+    simu.mag = MagFEMM(
         type_BH_stator=0,
         type_BH_rotor=0,
         is_periodicity_a=True,
@@ -70,10 +72,10 @@ def test_slot_scale():
     multisim = VarParam(
         stop_if_error=True,
         is_reuse_femm_file=False,
-        ref_simu_index=0,  # Reference simulation is set as the first simulation from var_simu
+        ref_simu_index=1,  # Reference simulation is set as the first simulation from var_simu
     )
 
-    ref_simu.var_simu = multisim
+    simu.var_simu = multisim
 
     def slot_scale(simu, scale_factor):
         """
@@ -99,45 +101,70 @@ def test_slot_scale():
             symbol="stat_slot",
             unit="",
             setter=slot_scale,
-            value=linspace(0.1, 1.1, 11).tolist(),
+            value=[0.5, 1, 1.1],
         )
     ]
 
     multisim.paramexplorer_list = paramexplorer_list
-
-    error_keeper_mag_flux = "lambda simu: np.nan * np.zeros(len(simu.mag.B.Time.get_values()), len(simu.mag.B.Angle.get_values()))"
+    multisim.is_keep_all_output = True
 
     # List of DataKeeper to store results
     datakeeper_list = [
+        DataKeeper(
+            name="Max Variable speed Torque",
+            unit="N.m",
+            symbol="Max_Tem_av",
+            keeper="lambda output: max(output.xoutput_dict['Tem_av'].result)",
+            error_keeper="lambda simu: np.nan",
+        ),
+        DataKeeper(
+            name="Variable speed Torque",
+            unit="N.m",
+            symbol="S_Tem_av",
+            keeper="lambda output: output.xoutput_dict['Tem_av'].result",
+            error_keeper="lambda simu: np.nan",
+        ),
+    ]
+    multisim.datakeeper_list = datakeeper_list
+
+    # Variable Speed Simulation
+    varload = VarLoadCurrent(is_reuse_femm_file=True, ref_simu_index=0)
+    varload.type_OP_matrix = 1  # Matrix N0, Id, Iq
+
+    N_simu = 4
+    OP_matrix = zeros((N_simu, 3))
+    OP_matrix[:, 0] = linspace(100, 8000, N_simu)
+    OP_matrix[:, 1] = Id_ref
+    OP_matrix[:, 2] = Iq_ref
+    varload.OP_matrix = OP_matrix
+    varload.datakeeper_list = [
         DataKeeper(
             name="Average Torque",
             unit="N.m",
             symbol="Tem_av",
             keeper="lambda output: output.mag.Tem_av",
             error_keeper="lambda simu: np.nan",
-        ),
-        DataKeeper(
-            name="Radial Airgap flux density",
-            unit="H",
-            symbol="B",
-            keeper="lambda output: output.mag.B.components['radial'].get_along('time','angle')['B_r']",
-            error_keeper=error_keeper_mag_flux,
-        ),
+        )
     ]
-
-    multisim.datakeeper_list = datakeeper_list
+    varload.is_keep_all_output = False
+    simu.var_simu.var_simu = varload
 
     # Execute every simulation
-    results = ref_simu.run()
+    results = simu.run()
 
     fig = results.plot_multi(
         x_symbol="stat_slot",
-        y_symbol="Tem_av",
+        y_symbol="Max_Tem_av",
         title="Average torque in function of the stator slot scale factor ",
     )
-
     fig.savefig(join(save_path, "test_slot_scale"))
+    plt.close()
+    for ii in range(3):
+        plt.plot(
+            linspace(100, 8000, N_simu), results.xoutput_dict["S_Tem_av"].result[ii]
+        )
+    plt.show()
 
 
 if __name__ == "__main__":
-    test_slot_scale()
+    test_multi_multi()

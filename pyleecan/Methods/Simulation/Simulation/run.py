@@ -31,10 +31,6 @@ def run(self):
         # Logger setup
         self.init_logger(results)
 
-        # Compute the reference simulation as a single simulation
-        if self.var_simu.ref_simu_index is None:
-            self.run_single()
-
         # Compute the multisimulation
         self.var_simu.run()
 

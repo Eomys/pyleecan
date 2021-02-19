@@ -1,5 +1,4 @@
 from ....Classes.ParamExplorerSet import ParamExplorerSet
-from ....Methods.Simulation.VarSimu.check_param import check_param as check_param_
 
 
 class ParamExplorerError(Exception):
@@ -24,7 +23,7 @@ def check_param(self):
     DataKeeperError: Error in DataKeeper setting
     """
     # run the base class check first
-    check_param_(self)
+    super(type(self), self).check_param()
 
     # Check ParamExplorers
     for paramexplorer in self.paramexplorer_list:

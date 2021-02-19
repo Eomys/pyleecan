@@ -23,9 +23,11 @@ except ImportError as error:
     get_input_list = error
 
 try:
-    from ..Methods.Simulation.VarLoadCurrent.get_simulations import get_simulations
+    from ..Methods.Simulation.VarLoadCurrent.generate_simulation_list import (
+        generate_simulation_list,
+    )
 except ImportError as error:
-    get_simulations = error
+    generate_simulation_list = error
 
 try:
     from ..Methods.Simulation.VarLoadCurrent.gen_datakeeper_list import (
@@ -72,18 +74,18 @@ class VarLoadCurrent(VarLoad):
         )
     else:
         get_input_list = get_input_list
-    # cf Methods.Simulation.VarLoadCurrent.get_simulations
-    if isinstance(get_simulations, ImportError):
-        get_simulations = property(
+    # cf Methods.Simulation.VarLoadCurrent.generate_simulation_list
+    if isinstance(generate_simulation_list, ImportError):
+        generate_simulation_list = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VarLoadCurrent method get_simulations: "
-                    + str(get_simulations)
+                    "Can't use VarLoadCurrent method generate_simulation_list: "
+                    + str(generate_simulation_list)
                 )
             )
         )
     else:
-        get_simulations = get_simulations
+        generate_simulation_list = generate_simulation_list
     # cf Methods.Simulation.VarLoadCurrent.gen_datakeeper_list
     if isinstance(gen_datakeeper_list, ImportError):
         gen_datakeeper_list = property(

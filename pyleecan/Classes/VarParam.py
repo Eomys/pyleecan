@@ -23,9 +23,11 @@ except ImportError as error:
     check_param = error
 
 try:
-    from ..Methods.Simulation.VarParam.get_simulations import get_simulations
+    from ..Methods.Simulation.VarParam.generate_simulation_list import (
+        generate_simulation_list,
+    )
 except ImportError as error:
-    get_simulations = error
+    generate_simulation_list = error
 
 try:
     from ..Methods.Simulation.VarParam.get_simu_number import get_simu_number
@@ -57,17 +59,18 @@ class VarParam(VarSimu):
         )
     else:
         check_param = check_param
-    # cf Methods.Simulation.VarParam.get_simulations
-    if isinstance(get_simulations, ImportError):
-        get_simulations = property(
+    # cf Methods.Simulation.VarParam.generate_simulation_list
+    if isinstance(generate_simulation_list, ImportError):
+        generate_simulation_list = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VarParam method get_simulations: " + str(get_simulations)
+                    "Can't use VarParam method generate_simulation_list: "
+                    + str(generate_simulation_list)
                 )
             )
         )
     else:
-        get_simulations = get_simulations
+        generate_simulation_list = generate_simulation_list
     # cf Methods.Simulation.VarParam.get_simu_number
     if isinstance(get_simu_number, ImportError):
         get_simu_number = property(
