@@ -31,6 +31,9 @@ def run(self):
         # Logger setup
         self.init_logger(results)
 
+        if self.layer is None:
+            self.layer = 0  # Top simulation
+
         # Compute the multisimulation
         self.var_simu.run()
 

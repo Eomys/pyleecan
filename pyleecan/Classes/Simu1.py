@@ -71,6 +71,7 @@ class Simu1(Simulation):
         postproc_list=-1,
         index=None,
         path_result=None,
+        layer=None,
         init_dict=None,
         init_str=None,
     ):
@@ -117,6 +118,8 @@ class Simu1(Simulation):
                 index = init_dict["index"]
             if "path_result" in list(init_dict.keys()):
                 path_result = init_dict["path_result"]
+            if "layer" in list(init_dict.keys()):
+                layer = init_dict["layer"]
         # Set the properties (value check and convertion are done in setter)
         self.elec = elec
         self.mag = mag
@@ -134,6 +137,7 @@ class Simu1(Simulation):
             postproc_list=postproc_list,
             index=index,
             path_result=path_result,
+            layer=layer,
         )
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties

@@ -8398,6 +8398,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "Layer of the simulation in a multi-simulation (0 is top simulation)",
+                "max": "",
+                "min": "0",
+                "name": "layer",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },

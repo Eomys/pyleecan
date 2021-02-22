@@ -78,6 +78,7 @@ class Simulation(FrozenClass):
         postproc_list=-1,
         index=None,
         path_result=None,
+        layer=None,
         init_dict=None,
         init_str=None,
     ):
@@ -114,6 +115,8 @@ class Simulation(FrozenClass):
                 index = init_dict["index"]
             if "path_result" in list(init_dict.keys()):
                 path_result = init_dict["path_result"]
+            if "layer" in list(init_dict.keys()):
+                layer = init_dict["layer"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -125,6 +128,7 @@ class Simulation(FrozenClass):
         self.postproc_list = postproc_list
         self.index = index
         self.path_result = path_result
+        self.layer = layer
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -167,6 +171,7 @@ class Simulation(FrozenClass):
             )
         Simulation_str += "index = " + str(self.index) + linesep
         Simulation_str += 'path_result = "' + str(self.path_result) + '"' + linesep
+        Simulation_str += "layer = " + str(self.layer) + linesep
         return Simulation_str
 
     def __eq__(self, other):
@@ -191,6 +196,8 @@ class Simulation(FrozenClass):
         if other.index != self.index:
             return False
         if other.path_result != self.path_result:
+            return False
+        if other.layer != self.layer:
             return False
         return True
 
@@ -246,6 +253,8 @@ class Simulation(FrozenClass):
             diff_list.append(name + ".index")
         if other._path_result != self._path_result:
             diff_list.append(name + ".path_result")
+        if other._layer != self._layer:
+            diff_list.append(name + ".layer")
         return diff_list
 
     def __sizeof__(self):
@@ -263,6 +272,7 @@ class Simulation(FrozenClass):
                 S += getsizeof(value)
         S += getsizeof(self.index)
         S += getsizeof(self.path_result)
+        S += getsizeof(self.layer)
         return S
 
     def as_dict(self, **kwargs):
@@ -299,6 +309,7 @@ class Simulation(FrozenClass):
                     Simulation_dict["postproc_list"].append(None)
         Simulation_dict["index"] = self.index
         Simulation_dict["path_result"] = self.path_result
+        Simulation_dict["layer"] = self.layer
         # The class name is added to the dict for deserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
@@ -318,6 +329,7 @@ class Simulation(FrozenClass):
         self.postproc_list = None
         self.index = None
         self.path_result = None
+        self.layer = None
 
     def _get_name(self):
         """getter of name"""
@@ -530,5 +542,24 @@ class Simulation(FrozenClass):
         doc=u"""Path to the Result folder to use (None to use default one)
 
         :Type: str
+        """,
+    )
+
+    def _get_layer(self):
+        """getter of layer"""
+        return self._layer
+
+    def _set_layer(self, value):
+        """setter of layer"""
+        check_var("layer", value, "int", Vmin=0)
+        self._layer = value
+
+    layer = property(
+        fget=_get_layer,
+        fset=_set_layer,
+        doc=u"""Layer of the simulation in a multi-simulation (0 is top simulation)
+
+        :Type: int
+        :min: 0
         """,
     )
