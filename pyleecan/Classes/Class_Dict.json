@@ -4935,7 +4935,6 @@
             "solve_FEMM",
             "get_meshsolution",
             "get_path_save_fem",
-            "build_meshsolution",
             "solve_FEMM_parallel"
         ],
         "mother": "Magnetics",
@@ -4989,19 +4988,19 @@
                 "value": ""
             },
             {
-                "desc": "To save FEA mesh for latter post-procesing ",
+                "desc": "To save FEA and mesh for latter post-procesing ",
                 "max": "",
                 "min": "",
-                "name": "is_get_mesh",
+                "name": "is_get_meshsolution",
                 "type": "bool",
                 "unit": "",
                 "value": 0
             },
             {
-                "desc": "To save FEA mesh and solution in .dat file",
+                "desc": "To save FEA and mesh as h5 files to save memory",
                 "max": "",
                 "min": "",
-                "name": "is_save_FEA",
+                "name": "is_save_meshsolution_as_file",
                 "type": "bool",
                 "unit": "",
                 "value": 0
@@ -5811,7 +5810,7 @@
                 "name": "label",
                 "type": "str",
                 "unit": "",
-                "value": "None"
+                "value": ""
             },
             {
                 "desc": "A list of Mesh objects. ",
@@ -5857,6 +5856,15 @@
                 "type": "int",
                 "unit": "",
                 "value": 2
+            },
+            {
+                "desc": "Path where the MeshSolution is stored as a file",
+                "max": "",
+                "min": "",
+                "name": "path",
+                "type": "str",
+                "unit": "",
+                "value": "None"
             }
         ]
     },

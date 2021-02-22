@@ -156,6 +156,8 @@ class Loss(FrozenClass):
             other.model_list is not None and self.model_list is None
         ):
             diff_list.append(name + ".model_list None mismatch")
+        elif self.model_list is None:
+            pass
         elif len(other.model_list) != len(self.model_list):
             diff_list.append("len(" + name + ".model_list)")
         else:

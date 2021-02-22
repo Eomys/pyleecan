@@ -184,12 +184,13 @@ class MeshSolution(FrozenClass):
 
     def __init__(
         self,
-        label=None,
+        label="",
         mesh=-1,
         is_same_mesh=True,
         solution=-1,
         group=None,
         dimension=2,
+        path=None,
         init_dict=None,
         init_str=None,
     ):
@@ -220,6 +221,8 @@ class MeshSolution(FrozenClass):
                 group = init_dict["group"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
+            if "path" in list(init_dict.keys()):
+                path = init_dict["path"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.label = label
@@ -228,6 +231,7 @@ class MeshSolution(FrozenClass):
         self.solution = solution
         self.group = group
         self.dimension = dimension
+        self.path = path
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -261,6 +265,7 @@ class MeshSolution(FrozenClass):
                 "group[" + key + "] = " + str(self.group[key]) + linesep + linesep
             )
         MeshSolution_str += "dimension = " + str(self.dimension) + linesep
+        MeshSolution_str += 'path = "' + str(self.path) + '"' + linesep
         return MeshSolution_str
 
     def __eq__(self, other):
@@ -292,6 +297,8 @@ class MeshSolution(FrozenClass):
                     return False
         if other.dimension != self.dimension:
             return False
+        if other.path != self.path:
+            return False
         return True
 
     def compare(self, other, name="self"):
@@ -306,6 +313,8 @@ class MeshSolution(FrozenClass):
             other.mesh is not None and self.mesh is None
         ):
             diff_list.append(name + ".mesh None mismatch")
+        elif self.mesh is None:
+            pass
         elif len(other.mesh) != len(self.mesh):
             diff_list.append("len(" + name + ".mesh)")
         else:
@@ -321,6 +330,8 @@ class MeshSolution(FrozenClass):
             other.solution is not None and self.solution is None
         ):
             diff_list.append(name + ".solution None mismatch")
+        elif self.solution is None:
+            pass
         elif len(other.solution) != len(self.solution):
             diff_list.append("len(" + name + ".solution)")
         else:
@@ -334,6 +345,8 @@ class MeshSolution(FrozenClass):
             other.group is not None and self.group is None
         ):
             diff_list.append(name + ".group None mismatch")
+        elif self.group is None:
+            pass
         elif len(other.group) != len(self.group):
             diff_list.append("len(" + name + ".group)")
         else:
@@ -344,6 +357,8 @@ class MeshSolution(FrozenClass):
                     diff_list.append(name + ".group[" + str(key) + "]")
         if other._dimension != self._dimension:
             diff_list.append(name + ".dimension")
+        if other._path != self._path:
+            diff_list.append(name + ".path")
         return diff_list
 
     def __sizeof__(self):
@@ -362,6 +377,7 @@ class MeshSolution(FrozenClass):
             for key, value in self.group.items():
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.dimension)
+        S += getsizeof(self.path)
         return S
 
     def as_dict(self):
@@ -395,6 +411,7 @@ class MeshSolution(FrozenClass):
             for key, obj in self.group.items():
                 MeshSolution_dict["group"][key] = obj.tolist()
         MeshSolution_dict["dimension"] = self.dimension
+        MeshSolution_dict["path"] = self.path
         # The class name is added to the dict for deserialisation purpose
         MeshSolution_dict["__class__"] = "MeshSolution"
         return MeshSolution_dict
@@ -408,6 +425,7 @@ class MeshSolution(FrozenClass):
         self.solution = None
         self.group = None
         self.dimension = None
+        self.path = None
 
     def _get_label(self):
         """getter of label"""
@@ -555,5 +573,23 @@ class MeshSolution(FrozenClass):
         :Type: int
         :min: 1
         :max: 3
+        """,
+    )
+
+    def _get_path(self):
+        """getter of path"""
+        return self._path
+
+    def _set_path(self, value):
+        """setter of path"""
+        check_var("path", value, "str")
+        self._path = value
+
+    path = property(
+        fget=_get_path,
+        fset=_set_path,
+        doc=u"""Path where the MeshSolution is stored as a file
+
+        :Type: str
         """,
     )

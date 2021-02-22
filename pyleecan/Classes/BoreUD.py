@@ -115,6 +115,8 @@ class BoreUD(Bore):
             other.line_list is not None and self.line_list is None
         ):
             diff_list.append(name + ".line_list None mismatch")
+        elif self.line_list is None:
+            pass
         elif len(other.line_list) != len(self.line_list):
             diff_list.append("len(" + name + ".line_list)")
         else:

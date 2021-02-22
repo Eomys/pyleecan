@@ -190,6 +190,8 @@ class OptiProblem(FrozenClass):
             other.design_var is not None and self.design_var is None
         ):
             diff_list.append(name + ".design_var None mismatch")
+        elif self.design_var is None:
+            pass
         elif len(other.design_var) != len(self.design_var):
             diff_list.append("len(" + name + ".design_var)")
         else:
@@ -203,6 +205,8 @@ class OptiProblem(FrozenClass):
             other.obj_func is not None and self.obj_func is None
         ):
             diff_list.append(name + ".obj_func None mismatch")
+        elif self.obj_func is None:
+            pass
         elif len(other.obj_func) != len(self.obj_func):
             diff_list.append("len(" + name + ".obj_func)")
         else:
@@ -218,6 +222,8 @@ class OptiProblem(FrozenClass):
             other.constraint is not None and self.constraint is None
         ):
             diff_list.append(name + ".constraint None mismatch")
+        elif self.constraint is None:
+            pass
         elif len(other.constraint) != len(self.constraint):
             diff_list.append("len(" + name + ".constraint)")
         else:
@@ -233,6 +239,8 @@ class OptiProblem(FrozenClass):
             other.datakeeper_list is not None and self.datakeeper_list is None
         ):
             diff_list.append(name + ".datakeeper_list None mismatch")
+        elif self.datakeeper_list is None:
+            pass
         elif len(other.datakeeper_list) != len(self.datakeeper_list):
             diff_list.append("len(" + name + ".datakeeper_list)")
         else:
