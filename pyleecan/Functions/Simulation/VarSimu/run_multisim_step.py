@@ -57,7 +57,20 @@ def run_multisim_step(
                 # readability
                 dk_result = datakeeper.result
                 # Run and store Datakeeper
-                dk_result[index] = datakeeper.keeper(result)
+                try:
+                    dk_result[index] = datakeeper.keeper(result)
+                except Exception as e:
+                    simulation.get_logger().error(
+                        "ERROR while calling DataKeeper "
+                        + datakeeper.name
+                        + " for simulation "
+                        + str(index)
+                        + ":\n"
+                        + str(e)
+                    )
+                    if stop_if_error:
+                        raise e
+                    dk_result[index] = datakeeper.error_keeper(simulation)
                 # Format log
                 if isinstance(dk_result[index], ndarray):
                     msg += (
