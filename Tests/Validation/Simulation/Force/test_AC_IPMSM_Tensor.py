@@ -48,6 +48,7 @@ def test_AC_IPMSM_AGSF_Tensor():
         type_BH_rotor=1,
         is_periodicity_a=True,
         is_periodicity_t=False,
+        is_save_FEA= True,
     )
     simu.force = ForceTensor(
         is_periodicity_a=True,

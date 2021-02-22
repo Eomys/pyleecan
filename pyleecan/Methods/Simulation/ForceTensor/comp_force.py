@@ -1,5 +1,5 @@
 from numpy import pi, all as np_all
-from pyleecan.Methods.Simulation.ForceTensor import comp_force_nodal
+
 
 
 def comp_force(self, output, axes_dict):
@@ -29,68 +29,6 @@ def comp_force(self, output, axes_dict):
 
     # Test comp_force_nodal #
 
-    comp_force_nodal(self, output)
+    self.comp_force_nodal(output)
 
-    # Init output dict
-    out_dict = dict()
-
-    Rag = output.mag.Rag
-    out_dict["Rag"] = Rag
-
-    # Get time and angular axes
-    Angle = axes_dict["Angle"]
-    Time = axes_dict["Time"]
-
-    # Import angular vector from Angle Data object
-    is_periodicity_a, is_antiper_a = Angle.get_periodicity()
-
-    if self.is_periodicity_a is not None:
-        is_periodicity_a = self.is_periodicity_a
-
-    angle = Angle.get_values(
-        is_oneperiod=is_periodicity_a,
-        is_antiperiod=is_antiper_a and is_periodicity_a,
-    )
-
-    if self.is_periodicity_t is not None:
-        is_periodicity_t = self.is_periodicity_t
-
-    # Import time vector from Time Data object
-    is_periodicity_t, is_antiper_t = Time.get_periodicity()
-    time = Time.get_values(
-        is_oneperiod=is_periodicity_t,
-        is_antiperiod=is_antiper_t and is_periodicity_t,
-    )
-
-    # Load magnetic flux
-    Brphiz = output.mag.B.get_rphiz_along(
-        "time=axis_data",
-        "angle=axis_data",
-        axis_data={"time": time, "angle": angle},
-    )
-    Br = Brphiz["radial"]
-
-    # Magnetic void permeability
-    mu_0 = 4 * pi * 1e-7
-
-    # Get flux density component lists
-    comp_list = list(output.mag.B.components.keys())
-
-    # Calculate Maxwell Stress Tensor
-    if "radial" in comp_list:
-        if "tangential" not in comp_list and "axial" not in comp_list:
-            out_dict["AGSF_r"] = -Br * Br / (2 * mu_0)
-
-        elif "tangential" in comp_list:
-            Bt = Brphiz["tangential"]
-            out_dict["AGSF_t"] = -Br * Bt / mu_0
-
-            if "axial" not in comp_list:
-                out_dict["AGSF_r"] = -(Br * Br - Bt * Bt) / (2 * mu_0)
-
-            else:
-                Bz = Brphiz["axial"]
-                out_dict["AGSF_r"] = -(Br * Br - Bt * Bt - Bz * Bz) / (2 * mu_0)
-                out_dict["AGSF_z"] = -Br * Bz / mu_0
-
-    return out_dict
+    pass
