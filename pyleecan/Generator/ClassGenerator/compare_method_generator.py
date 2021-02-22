@@ -69,7 +69,7 @@ def generate_compare(gen_dict, class_dict):
                 + prop["name"]
                 + " is None):\n"
             )
-            compare_str += TAB3 + "diff_list.append(name+'" + prop["name"] + "')\n"
+            compare_str += TAB3 + "diff_list.append(name+'." + prop["name"] + "')\n"
             compare_str += TAB2 + "elif self." + prop["name"] + " is None:\n"
             compare_str += TAB3 + "pass\n"
             compare_str += (
@@ -81,7 +81,7 @@ def generate_compare(gen_dict, class_dict):
                 + "):\n"
             )
             compare_str += (
-                TAB3 + "diff_list.append('len('+name+'" + prop["name"] + ")')\n"
+                TAB3 + "diff_list.append('len('+name+'." + prop["name"] + ")')\n"
             )
             compare_str += TAB2 + "else:\n"
             compare_str += TAB3 + "for ii in range(len(other." + prop["name"] + ")):\n"
@@ -94,7 +94,7 @@ def generate_compare(gen_dict, class_dict):
                 + "[ii]):\n"
             )
             compare_str += (
-                TAB5 + "diff_list.append(name+'." + prop["name"] + "'['+str(ii)+']')\n"
+                TAB5 + "diff_list.append(name+'." + prop["name"] + "['+str(ii)+']')\n"
             )
         elif prop["type"] == "{ndarray}":
             compare_str += (
