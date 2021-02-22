@@ -2,7 +2,7 @@
     "__class__": "MachineIPMSM",
     "__save_date__": "2021_02_22 16h25min22s ",
     "__version__": "pyleecan_1.1.0",
-    "desc": "Slotless machine from CEFC publication",
+    "desc": "Slotless machine with Toyota Prius Magnets",
     "frame": null,
     "logger_name": "Pyleecan.Machine",
     "name": "CEFC_Lam",

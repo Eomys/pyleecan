@@ -1,8 +1,3 @@
-import sys
-
-sys.path.append("C:/Users/Utilisateur/OneDrive/Documents/Github/pyleecan")
-
-from numpy import zeros, ones, pi, array
 
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
@@ -13,8 +8,10 @@ from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
+
 from Tests import save_load_path as save_path
 from os.path import join
+from numpy import zeros, ones, pi, array
 
 import matplotlib.pyplot as plt
 import json
@@ -22,19 +19,21 @@ import numpy as np
 import pytest
 
 
-@pytest.mark.skip
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
 @pytest.mark.MeshSol
 def test_Slotless_CEFC_002():
-    """Validation of magnetic air-gap surface force calculation based on Maxwell Tensor with an academic slotless machine.
+    """Validation of extracting FEMM data with MeshSolution.
 
-    from publication
+    Electrical machine is an academic slotless machine inspired
+    from [R. Pile et al., Application Limits of the Airgap Maxwell
+    Tensor, CEFC, 2018] but with interior magnet such as Toyota
+    Prius machine.
 
     """
     Slotless_CEFC = load(join(DATA_DIR, "Machine", "Slotless_CEFC.json"))
-    simu = Simu1(name="SM_CEFC_002_save_mag", machine=Slotless_CEFC)
+    simu = Simu1(name="EM_Slotless_CEFC_002_save_mag", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
         Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=2, N0=1200
@@ -90,13 +89,11 @@ def test_Slotless_CEFC_002():
 
     out.save(save_path=load_path)
 
-
-@pytest.mark.skip
-def test_Slotless_CEFC_002_load():
-
     # Test to load the Meshsolution object (inside the output):
     FEMM = load(join(save_path, "Slotless_CEFC_002.h5"))
 
+    # TODO : out.compare(FEMM) 
+    
     # [Important] To test that fields are still working after saving and loading
     FEMM.mag.meshsolution.plot_mesh(
         save_path=join(save_path, "CEFC_002_mesh_load.png"), is_show_fig=False
@@ -131,4 +128,3 @@ def test_Slotless_CEFC_002_load():
 if __name__ == "__main__":
 
     out = test_Slotless_CEFC_002()
-    test_Slotless_CEFC_002_load()
