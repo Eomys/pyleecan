@@ -7,7 +7,7 @@ import numpy as np
 ## Reference simulation
 from pyleecan.Classes.Simu1 import Simu1
 from numpy import pi, ones, zeros, linspace, sqrt, exp
-from os.path import join
+from os.path import join, dirname
 import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
 
@@ -25,6 +25,7 @@ from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
 from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.DriveWave import DriveWave
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 
 # Load the machine
@@ -39,13 +40,23 @@ import pytest
 @pytest.mark.long
 def test_multi_multi():
     """Run a multi-simulation of multi-simulation"""
+
+    # Main loop parameters
+    Nt_tot = 96  # Number of time step for each FEMM simulation
+    nb_worker = 3  # To parallelize FEMM
+
+    Nspeed = 5  # Number of speed for the Variable speed linspace
+
+    N1 = 4  # Number of parameters for first sensitivity parameter
+    # N2 = 2  # Number of parameters for second sensitivity parameter
+
+    # Reference simulation definition
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     simu = Simu1(name="multi_multi", machine=IPMSM_A)
 
-    # Definition of the enforced output of the electrical module
+    # Enforced sinusoïdal current (Maximum Torque Per Amp)
     I0_rms = 250 / sqrt(2)
-    Phi0 = 140 * pi / 180  # Maximum Torque Per Amp
-
+    Phi0 = 140 * pi / 180
     Id_ref = (I0_rms * exp(1j * Phi0)).real
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
     simu.input = InputCurrent(
@@ -55,7 +66,7 @@ def test_multi_multi():
         Id_ref=Id_ref,
         Iq_ref=Iq_ref,
         angle_rotor=None,  # Will be computed
-        Nt_tot=2,
+        Nt_tot=Nt_tot,
         Na_tot=2048,
     )
 
@@ -64,44 +75,69 @@ def test_multi_multi():
         type_BH_stator=0,
         type_BH_rotor=0,
         is_periodicity_a=True,
+        is_periodicity_t=True,
         Kgeo_fineness=0.2,
         Kmesh_fineness=0.2,
+        nb_worker=nb_worker,
+    )
+    simu.force = ForceMT(
+        is_periodicity_a=True,
+        is_periodicity_t=True,
     )
 
-    # Multi-simulation to variate the slot size
+    # VarSpeed Definition
+    varload = VarLoadCurrent(is_reuse_femm_file=True, ref_simu_index=0)
+    varload.type_OP_matrix = 1  # Matrix N0, Id, Iq
+
+    OP_matrix = zeros((Nspeed, 3))
+    OP_matrix[:, 0] = linspace(100, 5000, Nspeed)
+    OP_matrix[:, 1] = Id_ref
+    OP_matrix[:, 2] = Iq_ref
+    varload.OP_matrix = OP_matrix
+    varload.datakeeper_list = [
+        DataKeeper(
+            name="Average Torque",
+            unit="N.m",
+            symbol="Tem_av",
+            keeper="lambda output: output.mag.Tem_av",
+            error_keeper="lambda simu: np.nan",
+        ),
+        DataKeeper(
+            name="6f Harmonic",
+            unit="N.m^2",
+            symbol="6fs",
+            keeper="lambda output: output.force.AGSF.components['radial'].get_magnitude_along('freqs->elec_order=6','wavenumber=0')['AGSF_r']",
+            error_keeper="lambda simu: np.nan",
+        ),
+        DataKeeper(
+            name="12f Harmonic",
+            unit="N.m^2",
+            symbol="12fs",
+            keeper="lambda output: output.force.AGSF.components['radial'].get_magnitude_along('freqs->elec_order=12','wavenumber=0')['AGSF_r']",
+            error_keeper="lambda simu: np.nan",
+        ),
+    ]
+    varload.is_keep_all_output = False
+
+    # Multi-simulation to change machine parameters
     multisim = VarParam(
         stop_if_error=True,
         is_reuse_femm_file=False,
-        ref_simu_index=1,  # Reference simulation is set as the first simulation from var_simu
+        ref_simu_index=N1 - 1,
     )
 
     simu.var_simu = multisim
 
-    def slot_scale(simu, scale_factor):
-        """
-        Edit stator slot size according to a percentage
-
-        Parameters
-        ----------
-        simu: Simulation
-            simulation to modify
-        scale_factor: float
-            stator slot scale factor
-        """
-        simu.machine.stator.slot.W0 *= scale_factor
-        simu.machine.stator.slot.W1 *= scale_factor
-        simu.machine.stator.slot.W2 *= scale_factor
-        simu.machine.stator.slot.H0 *= scale_factor
-        simu.machine.stator.slot.H1 *= scale_factor
-
     # List of ParamExplorer to define multisimulation input values
     paramexplorer_list = [
         ParamExplorerSet(
-            name="Stator slot scale factor",
-            symbol="stat_slot",
-            unit="",
-            setter=slot_scale,
-            value=[0.5, 1, 1.1],
+            name="Stator slot opening",
+            symbol="W0s",
+            unit="m",
+            setter="simu.machine.stator.slot.W0",
+            value=(
+                IPMSM_A.stator.slot.W0 * linspace(0.1, 1, N1, endpoint=True)
+            ).tolist(),
         )
     ]
 
@@ -126,44 +162,16 @@ def test_multi_multi():
         ),
     ]
     multisim.datakeeper_list = datakeeper_list
+    multisim.var_simu = varload  # Setup Multisim of Multi_sim
 
-    # Variable Speed Simulation
-    varload = VarLoadCurrent(is_reuse_femm_file=True, ref_simu_index=0)
-    varload.type_OP_matrix = 1  # Matrix N0, Id, Iq
-
-    N_simu = 4
-    OP_matrix = zeros((N_simu, 3))
-    OP_matrix[:, 0] = linspace(100, 8000, N_simu)
-    OP_matrix[:, 1] = Id_ref
-    OP_matrix[:, 2] = Iq_ref
-    varload.OP_matrix = OP_matrix
-    varload.datakeeper_list = [
-        DataKeeper(
-            name="Average Torque",
-            unit="N.m",
-            symbol="Tem_av",
-            keeper="lambda output: output.mag.Tem_av",
-            error_keeper="lambda simu: np.nan",
-        )
-    ]
-    varload.is_keep_all_output = False
-    simu.var_simu.var_simu = varload
-
+    # Post-process
+    Post1 = PostFunction(join(dirname(__file__), "plot_save.py"))
+    simu.postproc_list = [Post1]  # For all simulation save a png
+    # Generate gif once all the simulation are done
+    Post2 = PostFunction(join(dirname(__file__), "make_gif.py"))
+    simu.var_simu.postproc_list = [Post2]
     # Execute every simulation
     results = simu.run()
-
-    fig = results.plot_multi(
-        x_symbol="stat_slot",
-        y_symbol="Max_Tem_av",
-        title="Average torque in function of the stator slot scale factor ",
-    )
-    fig.savefig(join(save_path, "test_slot_scale"))
-    plt.close()
-    for ii in range(3):
-        plt.plot(
-            linspace(100, 8000, N_simu), results.xoutput_dict["S_Tem_av"].result[ii]
-        )
-    plt.show()
 
 
 if __name__ == "__main__":
