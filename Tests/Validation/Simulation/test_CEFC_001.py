@@ -6,7 +6,6 @@ from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
 from numpy import ones, pi, array
 
 

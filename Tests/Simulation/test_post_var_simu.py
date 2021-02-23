@@ -29,10 +29,10 @@ class ExamplePostMethod(PostMethod):
     def run(self, output):
         output.simu.machine.stator.slot.W0 += 10
 
-    def copy(self):
+    def copy(self, **kwargs):
         return copy(self)
 
-    def as_dict(self):
+    def as_dict(self, **kwargs):
         return copy(self)
 
 
