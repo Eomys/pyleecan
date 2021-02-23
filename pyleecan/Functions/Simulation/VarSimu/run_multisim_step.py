@@ -76,18 +76,18 @@ def run_multisim_step(
                     msg += (
                         datakeeper.symbol
                         + "=array(min="
-                        + format(np_min(dk_result[index]), ".8g")
+                        + format(np_min(dk_result[index]), ".4g")
                         + ",max="
-                        + format(np_max(dk_result[index]), ".8g")
+                        + format(np_max(dk_result[index]), ".4g")
                         + ")"
                     )
                 elif isinstance(dk_result[index], list):
                     msg += (
                         datakeeper.symbol
                         + "=list(min="
-                        + format(np_min(dk_result[index]), ".8g")
+                        + format(np_min(dk_result[index]), ".4g")
                         + ",max="
-                        + format(np_max(dk_result[index]), ".8g")
+                        + format(np_max(dk_result[index]), ".4g")
                         + ")"
                     )
                 elif isinstance(dk_result[index], Data) or isinstance(
@@ -97,8 +97,11 @@ def run_multisim_step(
                 elif dk_result[index] is None:
                     msg += datakeeper.symbol + "= None"
                 else:
-                    msg += datakeeper.symbol + "=" + format(dk_result[index], ".8g")
-                msg += ", "
+                    msg += datakeeper.symbol + "=" + format(dk_result[index], ".4g")
+                if datakeeper.unit is not None:
+                    msg += " [" + datakeeper.unit + "], "
+                else:
+                    msg += ", "
             msg = msg[:-2]
             simulation.get_logger().info(msg)
 

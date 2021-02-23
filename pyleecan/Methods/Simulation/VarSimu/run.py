@@ -27,7 +27,7 @@ def run(self):
     ref_simu = self.parent.copy(keep_function=True)
     ref_simu.var_simu = self.var_simu  # var_simu default is None
     ref_simu.index = None
-    ref_simu.layer = self.parent.layer +1
+    ref_simu.layer = self.parent.layer + 1
 
     # Generate simulation list and ParamExplorerValue list
     simu_dict = self.generate_simulation_list(ref_simu)
@@ -141,9 +141,9 @@ def log_step_simu(index, nb_simu, paramexplorer_list, logger):
     for param_exp in paramexplorer_list:
         value = param_exp.get_value()[index]
         if isinstance(value, InputCurrent):
-            msg += "N0=" + format(value.N0, ".4g")
-            msg += ", Id=" + format(value.Id_ref, ".4g")
-            msg += ", Iq=" + format(value.Iq_ref, ".4g") + ", "
+            msg += "N0=" + format(value.N0, ".6g") + " [rpm]"
+            msg += ", Id=" + format(value.Id_ref, ".4g") + " [Arms]"
+            msg += ", Iq=" + format(value.Iq_ref, ".4g") + " [Arms], "
         elif isinstance(value, (list, np.ndarray)):
             msg += param_exp.symbol
             msg += "="
