@@ -107,7 +107,7 @@ def comp_force_nodal(self, output):
 
             Be = np.transpose(B[ie, :])
             He = np.transpose(H[ie, :])
-            mue = Mu[ie]
+            mue = mu_sol[ie]
 
             Me = Be/mue - He 
 
