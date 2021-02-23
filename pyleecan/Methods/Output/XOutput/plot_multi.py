@@ -22,6 +22,8 @@ def plot_multi(
     idx=None,
     ax=None,
     title=None,
+    is_show_fig=True,
+    save_path=None,
 ):
     """
     Plot data from a DataKeeper for a given parameter from a ParamExplorer
@@ -42,6 +44,10 @@ def plot_multi(
         To put the plot in a specific ax
     title: str
         Figure or subfigure title according to ax
+    is_show_fig : bool
+        True to show figure after plot
+    save_path : str
+        full path of the png file where the figure is saved if save_path is not None
 
     Returns
     -------
@@ -95,6 +101,13 @@ def plot_multi(
 
     ax.set_xlabel(x_label, fontname=FONT_NAME)
     ax.set_ylabel(y_label, fontname=FONT_NAME)
+
+    if save_path is not None:
+        fig.savefig(save_path)
+        plt.close()
+
+    if is_show_fig:
+        fig.show()
 
     # return
     if RET_FIG:
