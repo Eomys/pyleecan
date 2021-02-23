@@ -6,6 +6,10 @@ from numpy import zeros
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Classes._FEMMHandler import _FEMMHandler
 from ....Classes.OutMagFEMM import OutMagFEMM
+from ....Functions.MeshSolution.build_solution_data import build_solution_data
+from ....Functions.MeshSolution.build_meshsolution import build_meshsolution
+from ....Functions.MeshSolution.build_solution_vector import build_solution_vector
+from SciDataTool import Data1D
 
 
 def comp_flux_airgap(self, output, axes_dict):
@@ -151,7 +155,7 @@ def comp_flux_airgap(self, output, axes_dict):
         )
     else:
         # Without parallelization
-        self.solve_FEMM(
+        B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM(
             femm,
             output,
             out_dict,
@@ -173,5 +177,45 @@ def comp_flux_airgap(self, output, axes_dict):
     # Store stator winding flux
     if "Stator_0" in out_dict["Phi_wind"].keys():
         out_dict["Phi_wind_stator"] = out_dict["Phi_wind"]["Stator_0"]
+
+        # Store mesh data & solution
+    if self.is_get_meshsolution and B_elem is not None:
+
+        # Define axis
+        Time = Time.copy()
+        indices_cell = meshFEMM[0].cell["triangle"].indice
+        Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=True)
+        axis_list = [Time, Indices_Cell]
+
+        B_sol = build_solution_vector(
+            field=B_elem,
+            axis_list=axis_list,
+            name="Magnetic Flux Density",
+            symbol="B",
+            unit="T",
+        )
+        H_sol = build_solution_vector(
+            field=H_elem,
+            axis_list=axis_list,
+            name="Magnetic Field",
+            symbol="H",
+            unit="A/m",
+        )
+        mu_sol = build_solution_data(
+            field=mu_elem,
+            axis_list=axis_list,
+            name="Magnetic Permeability",
+            symbol="\mu",
+            unit="H/m",
+        )
+
+        list_solution = [B_sol, H_sol, mu_sol]
+
+        out_dict["meshsolution"] = build_meshsolution(
+            list_solution=list_solution,
+            label="FEMM 2D Magnetostatic",
+            list_mesh=meshFEMM,
+            group=groups,
+        )
 
     return out_dict
