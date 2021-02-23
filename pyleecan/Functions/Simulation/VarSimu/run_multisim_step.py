@@ -2,6 +2,8 @@ from numpy import ndarray, min as np_min, max as np_max
 
 from SciDataTool import VectorField, Data
 from ....Functions.Load.import_class import import_class
+from logging import WARNING
+from ....loggers import CONSOLE_LEVEL
 
 
 def run_multisim_step(
@@ -31,11 +33,18 @@ def run_multisim_step(
         To adapt the text ex: "Variable Load Results"
     """
     simulation.index = index
+    # Change console logger level from a specific layer (if requested)
+    if (
+        simulation.layer_log_warn is not None
+        and simulation.layer >= simulation.layer_log_warn
+    ):
+        simulation.get_logger().handlers[0].level = WARNING
+
+    # Run the simulation with/without error handling
     if stop_if_error:
         is_error = False
         result = simulation.run()
     else:
-        # Run simulation
         try:
             result = simulation.run()
             is_error = False
@@ -43,6 +52,9 @@ def run_multisim_step(
             print(err)
             is_error = True
             result = None
+
+    # Revert logger level
+    simulation.get_logger().handlers[0].level = CONSOLE_LEVEL
 
     # Datakeepers
     if index is not None:  # index == None => ref simu => No DataKeeper

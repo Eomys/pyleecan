@@ -8417,6 +8417,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Enable to set the log console_handler to warning starting from a particular layer. layer_log_warn=2 => layer 0 and 1 info, layer 2 warning",
+                "max": "",
+                "min": "0",
+                "name": "layer_log_warn",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },

@@ -72,6 +72,7 @@ class Simu1(Simulation):
         index=None,
         path_result=None,
         layer=None,
+        layer_log_warn=None,
         init_dict=None,
         init_str=None,
     ):
@@ -120,6 +121,8 @@ class Simu1(Simulation):
                 path_result = init_dict["path_result"]
             if "layer" in list(init_dict.keys()):
                 layer = init_dict["layer"]
+            if "layer_log_warn" in list(init_dict.keys()):
+                layer_log_warn = init_dict["layer_log_warn"]
         # Set the properties (value check and convertion are done in setter)
         self.elec = elec
         self.mag = mag
@@ -138,6 +141,7 @@ class Simu1(Simulation):
             index=index,
             path_result=path_result,
             layer=layer,
+            layer_log_warn=layer_log_warn,
         )
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties

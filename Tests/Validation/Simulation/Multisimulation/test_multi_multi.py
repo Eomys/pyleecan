@@ -113,7 +113,10 @@ def test_multi_multi():
     # Reference simulation definition
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     simu = Simu1(
-        name="multi_multi", machine=IPMSM_A, path_result=join(save_path, "multi_multi")
+        name="multi_multi",
+        machine=IPMSM_A,
+        path_result=join(save_path, "multi_multi"),
+        layer_log_warn=2,
     )
 
     # Enforced sinusoïdal current (Maximum Torque Per Amp)

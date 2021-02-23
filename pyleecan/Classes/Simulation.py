@@ -79,6 +79,7 @@ class Simulation(FrozenClass):
         index=None,
         path_result=None,
         layer=None,
+        layer_log_warn=None,
         init_dict=None,
         init_str=None,
     ):
@@ -117,6 +118,8 @@ class Simulation(FrozenClass):
                 path_result = init_dict["path_result"]
             if "layer" in list(init_dict.keys()):
                 layer = init_dict["layer"]
+            if "layer_log_warn" in list(init_dict.keys()):
+                layer_log_warn = init_dict["layer_log_warn"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -129,6 +132,7 @@ class Simulation(FrozenClass):
         self.index = index
         self.path_result = path_result
         self.layer = layer
+        self.layer_log_warn = layer_log_warn
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -172,6 +176,7 @@ class Simulation(FrozenClass):
         Simulation_str += "index = " + str(self.index) + linesep
         Simulation_str += 'path_result = "' + str(self.path_result) + '"' + linesep
         Simulation_str += "layer = " + str(self.layer) + linesep
+        Simulation_str += "layer_log_warn = " + str(self.layer_log_warn) + linesep
         return Simulation_str
 
     def __eq__(self, other):
@@ -198,6 +203,8 @@ class Simulation(FrozenClass):
         if other.path_result != self.path_result:
             return False
         if other.layer != self.layer:
+            return False
+        if other.layer_log_warn != self.layer_log_warn:
             return False
         return True
 
@@ -257,6 +264,8 @@ class Simulation(FrozenClass):
             diff_list.append(name + ".path_result")
         if other._layer != self._layer:
             diff_list.append(name + ".layer")
+        if other._layer_log_warn != self._layer_log_warn:
+            diff_list.append(name + ".layer_log_warn")
         return diff_list
 
     def __sizeof__(self):
@@ -275,6 +284,7 @@ class Simulation(FrozenClass):
         S += getsizeof(self.index)
         S += getsizeof(self.path_result)
         S += getsizeof(self.layer)
+        S += getsizeof(self.layer_log_warn)
         return S
 
     def as_dict(self, **kwargs):
@@ -312,6 +322,7 @@ class Simulation(FrozenClass):
         Simulation_dict["index"] = self.index
         Simulation_dict["path_result"] = self.path_result
         Simulation_dict["layer"] = self.layer
+        Simulation_dict["layer_log_warn"] = self.layer_log_warn
         # The class name is added to the dict for deserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
@@ -332,6 +343,7 @@ class Simulation(FrozenClass):
         self.index = None
         self.path_result = None
         self.layer = None
+        self.layer_log_warn = None
 
     def _get_name(self):
         """getter of name"""
@@ -560,6 +572,25 @@ class Simulation(FrozenClass):
         fget=_get_layer,
         fset=_set_layer,
         doc=u"""Layer of the simulation in a multi-simulation (0 is top simulation)
+
+        :Type: int
+        :min: 0
+        """,
+    )
+
+    def _get_layer_log_warn(self):
+        """getter of layer_log_warn"""
+        return self._layer_log_warn
+
+    def _set_layer_log_warn(self, value):
+        """setter of layer_log_warn"""
+        check_var("layer_log_warn", value, "int", Vmin=0)
+        self._layer_log_warn = value
+
+    layer_log_warn = property(
+        fget=_get_layer_log_warn,
+        fset=_set_layer_log_warn,
+        doc=u"""Enable to set the log console_handler to warning starting from a particular layer. layer_log_warn=2 => layer 0 and 1 info, layer 2 warning
 
         :Type: int
         :min: 0
