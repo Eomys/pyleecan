@@ -1,15 +1,17 @@
-from numpy import zeros, ones, pi, array
+
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
-
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from Tests import save_validation_path as save_path
+
+from Tests import save_load_path as save_path
 from os.path import join
+from numpy import zeros, ones, pi, array
 
 import matplotlib.pyplot as plt
 import json
@@ -17,58 +19,36 @@ import numpy as np
 import pytest
 
 
-@pytest.mark.skip
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
 @pytest.mark.MeshSol
-def test_CEFC_002(CEFC_Lam):
-    """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
-    50 kW peak, 400 Nm peak at 1500 rpm from publication
+def test_Slotless_CEFC_002():
+    """Validation of extracting FEMM data with MeshSolution.
 
-    from publication
-    Z. Yang, M. Krishnamurthy and I. P. Brown,
-    "Electromagnetic and vibrational characteristic of IPM over full torque-speed range,"
-    Electric Machines & Drives Conference (IEMDC), 2013 IEEE International, Chicago, IL, 2013, pp. 295-302.
+    Electrical machine is an academic slotless machine inspired
+    from [R. Pile et al., Application Limits of the Airgap Maxwell
+    Tensor, CEFC, 2018] but with interior magnet such as Toyota
+    Prius machine.
+
     """
-
-    simu = Simu1(name="SM_CEFC_002_save_mag", machine=CEFC_Lam, struct=None)
-
-    # Definition of the enforced output of the electrical module
-    N0 = 3000
-    Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
-    Nt_tot = 1
-    Na_tot = 1024
+    Slotless_CEFC = load(join(DATA_DIR, "Machine", "Slotless_CEFC.json"))
+    simu = Simu1(name="EM_Slotless_CEFC_002_save_mag", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
-        Is=Is,
-        Ir=None,  # No winding on the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
-        Nt_tot=Nt_tot,
-        Na_tot=Na_tot,
-        rot_dir=-1,
+        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=2, N0=1200
     )
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
         type_BH_stator=2,
         type_BH_rotor=2,
-        is_get_mesh=True,
-        is_periodicity_a=False,
-        is_save_FEA=False,
-        is_sliding_band=True,
+        is_get_meshsolution=True,
+        is_periodicity_a=True,
+        is_periodicity_t=False,
     )
-    simu.force = None
-    simu.struct = None
 
-    out = Output(simu=simu)
-    out.post.legend_name = "Slotless lamination"
-    simu.run()
-
-    # Test save with MeshSolution object in out
-    load_path = join(save_path, "Output.json")
-    out.save(save_path=load_path)
+    out = simu.run()
 
     out.mag.meshsolution.plot_mesh(
         save_path=join(save_path, "CEFC_002_mesh_save.png"), is_show_fig=False
@@ -104,22 +84,23 @@ def test_CEFC_002(CEFC_Lam):
         is_show_fig=False,
     )
 
+    # Test save with MeshSolution object in out
+    load_path = join(save_path, "Slotless_CEFC_002.h5")
 
-@pytest.mark.skip
-def test_CEFC_002_load():
-    load_path = join(save_path, "Output.json")
+    out.save(save_path=load_path)
+
     # Test to load the Meshsolution object (inside the output):
-    with open(load_path) as json_file:
-        json_tmp = json.load(json_file)
-        FEMM = Output(init_dict=json_tmp)
+    FEMM = load(join(save_path, "Slotless_CEFC_002.h5"))
 
+    # TODO : out.compare(FEMM) 
+    
     # [Important] To test that fields are still working after saving and loading
     FEMM.mag.meshsolution.plot_mesh(
         save_path=join(save_path, "CEFC_002_mesh_load.png"), is_show_fig=False
     )
 
     FEMM.mag.meshsolution.plot_mesh(
-        group_names=["stator", "/", "airgap"], is_show_fig=False
+        group_names=["stator core", "/", "airgap"], is_show_fig=False
     )
 
     FEMM.mag.meshsolution.plot_contour(
@@ -141,3 +122,9 @@ def test_CEFC_002_load():
     FEMM.mag.meshsolution.plot_contour(
         label="H", group_names=["stator core", "airgap"], is_show_fig=False
     )
+
+
+# To run it without pytest
+if __name__ == "__main__":
+
+    out = test_Slotless_CEFC_002()
