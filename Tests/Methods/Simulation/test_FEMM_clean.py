@@ -31,7 +31,7 @@ def test_FEMM_clean():
         type_BH_rotor=2,
         is_periodicity_a=True,
         is_periodicity_t=True,
-        is_get_mesh=True,
+        is_get_meshsolution=True,
     )
 
     out = simu.run()

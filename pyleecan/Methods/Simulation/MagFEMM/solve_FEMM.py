@@ -118,6 +118,12 @@ def solve_FEMM(
     # Account for initial angular shift of stator and rotor and apply it to the sliding band
     angle_shift = self.angle_rotor_shift - self.angle_stator_shift
 
+    B_elem = None
+    H_elem = None
+    mu_elem = None
+    meshFEMM = None
+    groups = None
+
     # Compute the data for each time step
     for ii in range(start_t, end_t):
         if Nt > 1:

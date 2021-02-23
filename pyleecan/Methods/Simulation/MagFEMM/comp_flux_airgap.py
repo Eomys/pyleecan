@@ -182,7 +182,7 @@ def comp_flux_airgap(self, output, axes_dict):
     if self.is_get_meshsolution and B_elem is not None:
 
         # Define axis
-        Time = output.mag.Time.copy()
+        Time = Time.copy()
         indices_cell = meshFEMM[0].cell["triangle"].indice
         Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=True)
         axis_list = [Time, Indices_Cell]
