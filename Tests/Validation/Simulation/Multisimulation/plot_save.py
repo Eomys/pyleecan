@@ -24,6 +24,8 @@ def plot_save(output):
         component_list=["radial"],
         ax=ax2,
         fig=fig,
+        y_min=0,
+        y_max=360000,
         is_show_fig=False,
     )
     # fig, (ax1, ax2) = plt.subplots(2)

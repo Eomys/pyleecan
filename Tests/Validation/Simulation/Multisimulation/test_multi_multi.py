@@ -35,6 +35,74 @@ from pyleecan.definitions import DATA_DIR
 
 import pytest
 
+# Prius MTPA
+N0_MTPA = [
+    500,
+    894.736842105263,
+    1289.47368421053,
+    1684.21052631579,
+    2078.94736842105,
+    2473.68421052632,
+    2868.42105263158,
+    3263.15789473684,
+    3657.89473684211,
+    4052.63157894737,
+    4447.36842105263,
+    4842.10526315790,
+    5236.84210526316,
+    5631.57894736842,
+    6026.31578947368,
+    6421.05263157895,
+    6815.78947368421,
+    7210.52631578947,
+    7605.26315789474,
+    8000,
+]
+Id_MTPA = [
+    -135.671342685371,
+    -135.671342685371,
+    -135.671342685371,
+    -155.310621242485,
+    -151.803607214429,
+    -128.657314629259,
+    -123.046092184369,
+    -113.927855711423,
+    -104.108216432866,
+    -99.8997995991984,
+    -94.9899799599199,
+    -94.9899799599199,
+    -92.1843687374750,
+    -92.1843687374750,
+    -88.6773547094188,
+    -87.2745490981964,
+    -87.2745490981964,
+    -88.6773547094188,
+    -84.4689378757515,
+    -88.6773547094188,
+]
+Iq_MTPA = [
+    113.226452905812,
+    113.226452905812,
+    113.226452905812,
+    83.6673346693387,
+    54.6092184368737,
+    45.0901803607214,
+    36.0721442885772,
+    30.5611222444890,
+    28.0561122244489,
+    25.5511022044088,
+    23.5470941883768,
+    21.5430861723447,
+    20.0400801603206,
+    18.5370741482966,
+    17.5350701402806,
+    16.5330661322645,
+    15.5310621242485,
+    14.5290581162325,
+    14.0280561122245,
+    13.0260521042084,
+]
+
 
 @pytest.mark.FEMM
 @pytest.mark.long
@@ -45,7 +113,7 @@ def test_multi_multi():
     Nt_tot = 96  # Number of time step for each FEMM simulation
     nb_worker = 3  # To parallelize FEMM
 
-    Nspeed = 5  # Number of speed for the Variable speed linspace
+    Nspeed = 7  # Number of speed for the Variable speed linspace
 
     N1 = 4  # Number of parameters for first sensitivity parameter
     # N2 = 2  # Number of parameters for second sensitivity parameter
@@ -90,9 +158,9 @@ def test_multi_multi():
     varload.type_OP_matrix = 1  # Matrix N0, Id, Iq
 
     OP_matrix = zeros((Nspeed, 3))
-    OP_matrix[:, 0] = linspace(100, 5000, Nspeed)
-    OP_matrix[:, 1] = Id_ref
-    OP_matrix[:, 2] = Iq_ref
+    OP_matrix[:, 0] = N0_MTPA[:Nspeed]
+    OP_matrix[:, 1] = Id_MTPA[:Nspeed]
+    OP_matrix[:, 2] = Iq_MTPA[:Nspeed]
     varload.OP_matrix = OP_matrix
     varload.datakeeper_list = [
         DataKeeper(
