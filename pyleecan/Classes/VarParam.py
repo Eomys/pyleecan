@@ -211,6 +211,8 @@ class VarParam(VarSimu):
             other.paramexplorer_list is None and self.paramexplorer_list is not None
         ) or (other.paramexplorer_list is not None and self.paramexplorer_list is None):
             diff_list.append(name + ".paramexplorer_list None mismatch")
+        elif self.paramexplorer_list is None:
+            pass
         elif len(other.paramexplorer_list) != len(self.paramexplorer_list):
             diff_list.append("len(" + name + ".paramexplorer_list)")
         else:

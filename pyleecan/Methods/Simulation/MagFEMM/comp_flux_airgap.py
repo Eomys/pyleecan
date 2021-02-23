@@ -151,7 +151,7 @@ def comp_flux_airgap(self, output, axes_dict):
         )
     else:
         # Without parallelization
-        B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM(
+        self.solve_FEMM(
             femm,
             output,
             out_dict,
@@ -169,18 +169,6 @@ def comp_flux_airgap(self, output, axes_dict):
     # Store FEMM_dict in out_dict if FEMM file is not imported
     if self.import_file is None:
         output.mag.internal.FEMM_dict = FEMM_dict
-
-    # Store FEMM mesh results in meshsolution
-    if self.is_get_mesh:
-        # Build MeshSolution object and store it in out_dict
-        out_dict["meshsolution"] = self.build_meshsolution(
-            Nt, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
-        )
-        # Save meshsolution as .h5 on disk if requested
-        if self.is_save_FEA:
-            save_path = output.get_path_result()
-            save_path_fea = join(save_path, "MeshSolutionFEMM.h5")
-            out_dict["meshsolution"].save(save_path_fea)
 
     # Store stator winding flux
     if "Stator_0" in out_dict["Phi_wind"].keys():

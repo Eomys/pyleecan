@@ -296,6 +296,8 @@ class OutMag(FrozenClass):
             other.Phi_wind is not None and self.Phi_wind is None
         ):
             diff_list.append(name + ".Phi_wind None mismatch")
+        elif self.Phi_wind is None:
+            pass
         elif len(other.Phi_wind) != len(self.Phi_wind):
             diff_list.append("len(" + name + "Phi_wind)")
         else:

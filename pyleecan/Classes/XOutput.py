@@ -530,6 +530,8 @@ class XOutput(Output):
             other.paramexplorer_list is None and self.paramexplorer_list is not None
         ) or (other.paramexplorer_list is not None and self.paramexplorer_list is None):
             diff_list.append(name + ".paramexplorer_list None mismatch")
+        elif self.paramexplorer_list is None:
+            pass
         elif len(other.paramexplorer_list) != len(self.paramexplorer_list):
             diff_list.append("len(" + name + ".paramexplorer_list)")
         else:
@@ -544,6 +546,8 @@ class XOutput(Output):
             other.output_list is not None and self.output_list is None
         ):
             diff_list.append(name + ".output_list None mismatch")
+        elif self.output_list is None:
+            pass
         elif len(other.output_list) != len(self.output_list):
             diff_list.append("len(" + name + ".output_list)")
         else:
@@ -558,6 +562,8 @@ class XOutput(Output):
             other.xoutput_dict is not None and self.xoutput_dict is None
         ):
             diff_list.append(name + ".xoutput_dict None mismatch")
+        elif self.xoutput_dict is None:
+            pass
         elif len(other.xoutput_dict) != len(self.xoutput_dict):
             diff_list.append("len(" + name + "xoutput_dict)")
         else:

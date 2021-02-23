@@ -157,6 +157,8 @@ class ImportData(FrozenClass):
             other.axes is not None and self.axes is None
         ):
             diff_list.append(name + ".axes None mismatch")
+        elif self.axes is None:
+            pass
         elif len(other.axes) != len(self.axes):
             diff_list.append("len(" + name + ".axes)")
         else:

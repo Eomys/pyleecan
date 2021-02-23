@@ -337,6 +337,8 @@ class LamHole(Lamination):
             other.hole is not None and self.hole is None
         ):
             diff_list.append(name + ".hole None mismatch")
+        elif self.hole is None:
+            pass
         elif len(other.hole) != len(self.hole):
             diff_list.append("len(" + name + ".hole)")
         else:

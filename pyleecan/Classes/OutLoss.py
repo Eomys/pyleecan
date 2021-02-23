@@ -152,6 +152,8 @@ class OutLoss(FrozenClass):
             other.loss_list is not None and self.loss_list is None
         ):
             diff_list.append(name + ".loss_list None mismatch")
+        elif self.loss_list is None:
+            pass
         elif len(other.loss_list) != len(self.loss_list):
             diff_list.append("len(" + name + ".loss_list)")
         else:
@@ -165,6 +167,8 @@ class OutLoss(FrozenClass):
             other.meshsol_list is not None and self.meshsol_list is None
         ):
             diff_list.append(name + ".meshsol_list None mismatch")
+        elif self.meshsol_list is None:
+            pass
         elif len(other.meshsol_list) != len(self.meshsol_list):
             diff_list.append("len(" + name + ".meshsol_list)")
         else:

@@ -309,6 +309,8 @@ class LamSlotMulti(Lamination):
             other.slot_list is not None and self.slot_list is None
         ):
             diff_list.append(name + ".slot_list None mismatch")
+        elif self.slot_list is None:
+            pass
         elif len(other.slot_list) != len(self.slot_list):
             diff_list.append("len(" + name + ".slot_list)")
         else:

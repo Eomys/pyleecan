@@ -169,6 +169,8 @@ class MachineUD(Machine):
             other.lam_list is not None and self.lam_list is None
         ):
             diff_list.append(name + ".lam_list None mismatch")
+        elif self.lam_list is None:
+            pass
         elif len(other.lam_list) != len(self.lam_list):
             diff_list.append("len(" + name + ".lam_list)")
         else:
