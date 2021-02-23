@@ -57,6 +57,7 @@ def run(self):
         logger.debug(
             "Using simulation " + str(ref_simu_index) + " as reference simulation"
         )
+        log_step_simu(ref_simu_index, nb_simu, xoutput.paramexplorer_list, logger)
         ref_simu = simulation_list[ref_simu_index]
         index_list.pop(ref_simu_index)  # Avoid to compute twice the simulation
     else:
@@ -70,6 +71,7 @@ def run(self):
         keeper_list,  # datakeeper.result will be updated (if needed)
         stop_if_error=True,  # Reference simulation must be correct
         post_keeper_postproc_list=self.post_keeper_postproc_list,
+        simu_type=self.NAME,
     )
     progress += 1
     print_progress_bar(nb_simu, progress)
@@ -107,6 +109,7 @@ def run(self):
             keeper_list,  # datakeeper.result will be updated (if needed)
             self.stop_if_error,
             post_keeper_postproc_list=self.post_keeper_postproc_list,
+            simu_type=self.NAME,
         )
         if self.is_keep_all_output:
             xoutput.output_list[idx] = xoutput_step

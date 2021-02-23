@@ -10,6 +10,7 @@ def run_multisim_step(
     datakeeper_list,
     stop_if_error,
     post_keeper_postproc_list=None,
+    simu_type=None,
 ):
     """
     Execute a simulation step of a multi-simulation and run datakeepers
@@ -26,6 +27,8 @@ def run_multisim_step(
         True: Raises an error if the simulation fails
     post_keeper_postproc_list : list
         list of postprocessing to run after the datakeeper
+    simu_type : str
+        To adapt the text ex: "Variable Load Results"
     """
     simulation.index = index
     if stop_if_error:
@@ -52,7 +55,10 @@ def run_multisim_step(
                 else:
                     dk_result[index] = datakeeper.error_keeper(simulation)
         else:  # Execute Normal DataKeeper
-            msg = "Results: "
+            if simu_type is not None:
+                msg = simu_type + " Results: "
+            else:
+                msg = "Results: "
             for datakeeper in datakeeper_list:
                 # readability
                 dk_result = datakeeper.result
