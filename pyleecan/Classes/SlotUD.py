@@ -180,6 +180,38 @@ class SlotUD(Slot):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Slot
+        diff_list.extend(super(SlotUD, self).compare(other, name=name))
+        if (other.line_list is None and self.line_list is not None) or (
+            other.line_list is not None and self.line_list is None
+        ):
+            diff_list.append(name + ".line_list None mismatch")
+        elif self.line_list is None:
+            pass
+        elif len(other.line_list) != len(self.line_list):
+            diff_list.append("len(" + name + ".line_list)")
+        else:
+            for ii in range(len(other.line_list)):
+                diff_list.extend(
+                    self.line_list[ii].compare(
+                        other.line_list[ii], name=name + ".line_list[" + str(ii) + "]"
+                    )
+                )
+        if other._wind_begin_index != self._wind_begin_index:
+            diff_list.append(name + ".wind_begin_index")
+        if other._wind_end_index != self._wind_end_index:
+            diff_list.append(name + ".wind_end_index")
+        if other._type_line_wind != self._type_line_wind:
+            diff_list.append(name + ".type_line_wind")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

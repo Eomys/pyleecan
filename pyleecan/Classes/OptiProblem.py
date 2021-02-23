@@ -174,6 +174,85 @@ class OptiProblem(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.simu is None and self.simu is not None) or (
+            other.simu is not None and self.simu is None
+        ):
+            diff_list.append(name + ".simu None mismatch")
+        elif self.simu is not None:
+            diff_list.extend(self.simu.compare(other.simu, name=name + ".simu"))
+        if (other.design_var is None and self.design_var is not None) or (
+            other.design_var is not None and self.design_var is None
+        ):
+            diff_list.append(name + ".design_var None mismatch")
+        elif self.design_var is None:
+            pass
+        elif len(other.design_var) != len(self.design_var):
+            diff_list.append("len(" + name + ".design_var)")
+        else:
+            for ii in range(len(other.design_var)):
+                diff_list.extend(
+                    self.design_var[ii].compare(
+                        other.design_var[ii], name=name + ".design_var[" + str(ii) + "]"
+                    )
+                )
+        if (other.obj_func is None and self.obj_func is not None) or (
+            other.obj_func is not None and self.obj_func is None
+        ):
+            diff_list.append(name + ".obj_func None mismatch")
+        elif self.obj_func is None:
+            pass
+        elif len(other.obj_func) != len(self.obj_func):
+            diff_list.append("len(" + name + ".obj_func)")
+        else:
+            for ii in range(len(other.obj_func)):
+                diff_list.extend(
+                    self.obj_func[ii].compare(
+                        other.obj_func[ii], name=name + ".obj_func[" + str(ii) + "]"
+                    )
+                )
+        if other._eval_func_str != self._eval_func_str:
+            diff_list.append(name + ".eval_func")
+        if (other.constraint is None and self.constraint is not None) or (
+            other.constraint is not None and self.constraint is None
+        ):
+            diff_list.append(name + ".constraint None mismatch")
+        elif self.constraint is None:
+            pass
+        elif len(other.constraint) != len(self.constraint):
+            diff_list.append("len(" + name + ".constraint)")
+        else:
+            for ii in range(len(other.constraint)):
+                diff_list.extend(
+                    self.constraint[ii].compare(
+                        other.constraint[ii], name=name + ".constraint[" + str(ii) + "]"
+                    )
+                )
+        if other._preprocessing_str != self._preprocessing_str:
+            diff_list.append(name + ".preprocessing")
+        if (other.datakeeper_list is None and self.datakeeper_list is not None) or (
+            other.datakeeper_list is not None and self.datakeeper_list is None
+        ):
+            diff_list.append(name + ".datakeeper_list None mismatch")
+        elif self.datakeeper_list is None:
+            pass
+        elif len(other.datakeeper_list) != len(self.datakeeper_list):
+            diff_list.append("len(" + name + ".datakeeper_list)")
+        else:
+            for ii in range(len(other.datakeeper_list)):
+                diff_list.extend(
+                    self.datakeeper_list[ii].compare(
+                        other.datakeeper_list[ii],
+                        name=name + ".datakeeper_list[" + str(ii) + "]",
+                    )
+                )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

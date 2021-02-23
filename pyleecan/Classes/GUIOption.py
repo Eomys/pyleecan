@@ -78,6 +78,20 @@ class GUIOption(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.unit is None and self.unit is not None) or (
+            other.unit is not None and self.unit is None
+        ):
+            diff_list.append(name + ".unit None mismatch")
+        elif self.unit is not None:
+            diff_list.extend(self.unit.compare(other.unit, name=name + ".unit"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

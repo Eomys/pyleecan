@@ -80,6 +80,18 @@ class OutPost(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._legend_name != self._legend_name:
+            diff_list.append(name + ".legend_name")
+        if other._line_color != self._line_color:
+            diff_list.append(name + ".line_color")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

@@ -155,6 +155,25 @@ class ImportGenVectLin(ImportMatrix):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from ImportMatrix
+        diff_list.extend(super(ImportGenVectLin, self).compare(other, name=name))
+        if other._start != self._start:
+            diff_list.append(name + ".start")
+        if other._stop != self._stop:
+            diff_list.append(name + ".stop")
+        if other._num != self._num:
+            diff_list.append(name + ".num")
+        if other._endpoint != self._endpoint:
+            diff_list.append(name + ".endpoint")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

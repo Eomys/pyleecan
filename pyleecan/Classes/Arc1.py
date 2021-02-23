@@ -291,6 +291,25 @@ class Arc1(Arc):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Arc
+        diff_list.extend(super(Arc1, self).compare(other, name=name))
+        if other._begin != self._begin:
+            diff_list.append(name + ".begin")
+        if other._end != self._end:
+            diff_list.append(name + ".end")
+        if other._radius != self._radius:
+            diff_list.append(name + ".radius")
+        if other._is_trigo_direction != self._is_trigo_direction:
+            diff_list.append(name + ".is_trigo_direction")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

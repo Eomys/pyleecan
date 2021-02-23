@@ -37,16 +37,22 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         # getting angle between Slot
         angle = 2 * pi / Zs
         # getting Nrad and Ntan
-        if type(self.winding) is Winding:
+        if (type(self.winding) is Winding) or (self.winding is None):
             Nrad, Ntan = 1, 1
+            surf_Wind = list()
         else:
             try:
                 Nrad, Ntan = self.winding.get_dim_wind()
             except NotImplementedYetError:
                 Nrad, Ntan = 1, 1
-        surf_Wind = self.slot.build_geometry_active(
-            Nrad=Nrad, Ntan=Ntan, is_simplified=is_simplified, alpha=alpha, delta=delta
-        )
+
+            surf_Wind = self.slot.build_geometry_active(
+                Nrad=Nrad,
+                Ntan=Ntan,
+                is_simplified=is_simplified,
+                alpha=alpha,
+                delta=delta,
+            )
 
         if self.is_stator:
             st = "Stator"

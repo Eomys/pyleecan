@@ -95,6 +95,19 @@ class ImportMatrix(Import):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Import
+        diff_list.extend(super(ImportMatrix, self).compare(other, name=name))
+        if other._is_transpose != self._is_transpose:
+            diff_list.append(name + ".is_transpose")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

@@ -43,11 +43,6 @@ except ImportError as error:
     get_path_save_fem = error
 
 try:
-    from ..Methods.Simulation.MagFEMM.build_meshsolution import build_meshsolution
-except ImportError as error:
-    build_meshsolution = error
-
-try:
     from ..Methods.Simulation.MagFEMM.solve_FEMM_parallel import solve_FEMM_parallel
 except ImportError as error:
     solve_FEMM_parallel = error
@@ -119,18 +114,6 @@ class MagFEMM(Magnetics):
         )
     else:
         get_path_save_fem = get_path_save_fem
-    # cf Methods.Simulation.MagFEMM.build_meshsolution
-    if isinstance(build_meshsolution, ImportError):
-        build_meshsolution = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MagFEMM method build_meshsolution: "
-                    + str(build_meshsolution)
-                )
-            )
-        )
-    else:
-        build_meshsolution = build_meshsolution
     # cf Methods.Simulation.MagFEMM.solve_FEMM_parallel
     if isinstance(solve_FEMM_parallel, ImportError):
         solve_FEMM_parallel = property(
@@ -156,8 +139,8 @@ class MagFEMM(Magnetics):
         type_calc_leakage=0,
         file_name="",
         FEMM_dict_enforced=-1,
-        is_get_mesh=False,
-        is_save_FEA=False,
+        is_get_meshsolution=False,
+        is_save_meshsolution_as_file=False,
         is_sliding_band=True,
         transform_list=-1,
         rotor_dxf=None,
@@ -206,10 +189,10 @@ class MagFEMM(Magnetics):
                 file_name = init_dict["file_name"]
             if "FEMM_dict_enforced" in list(init_dict.keys()):
                 FEMM_dict_enforced = init_dict["FEMM_dict_enforced"]
-            if "is_get_mesh" in list(init_dict.keys()):
-                is_get_mesh = init_dict["is_get_mesh"]
-            if "is_save_FEA" in list(init_dict.keys()):
-                is_save_FEA = init_dict["is_save_FEA"]
+            if "is_get_meshsolution" in list(init_dict.keys()):
+                is_get_meshsolution = init_dict["is_get_meshsolution"]
+            if "is_save_meshsolution_as_file" in list(init_dict.keys()):
+                is_save_meshsolution_as_file = init_dict["is_save_meshsolution_as_file"]
             if "is_sliding_band" in list(init_dict.keys()):
                 is_sliding_band = init_dict["is_sliding_band"]
             if "transform_list" in list(init_dict.keys()):
@@ -256,8 +239,8 @@ class MagFEMM(Magnetics):
         self.type_calc_leakage = type_calc_leakage
         self.file_name = file_name
         self.FEMM_dict_enforced = FEMM_dict_enforced
-        self.is_get_mesh = is_get_mesh
-        self.is_save_FEA = is_save_FEA
+        self.is_get_meshsolution = is_get_meshsolution
+        self.is_save_meshsolution_as_file = is_save_meshsolution_as_file
         self.is_sliding_band = is_sliding_band
         self.transform_list = transform_list
         self.rotor_dxf = rotor_dxf
@@ -295,8 +278,14 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "type_calc_leakage = " + str(self.type_calc_leakage) + linesep
         MagFEMM_str += 'file_name = "' + str(self.file_name) + '"' + linesep
         MagFEMM_str += "FEMM_dict_enforced = " + str(self.FEMM_dict_enforced) + linesep
-        MagFEMM_str += "is_get_mesh = " + str(self.is_get_mesh) + linesep
-        MagFEMM_str += "is_save_FEA = " + str(self.is_save_FEA) + linesep
+        MagFEMM_str += (
+            "is_get_meshsolution = " + str(self.is_get_meshsolution) + linesep
+        )
+        MagFEMM_str += (
+            "is_save_meshsolution_as_file = "
+            + str(self.is_save_meshsolution_as_file)
+            + linesep
+        )
         MagFEMM_str += "is_sliding_band = " + str(self.is_sliding_band) + linesep
         MagFEMM_str += (
             "transform_list = "
@@ -341,9 +330,9 @@ class MagFEMM(Magnetics):
             return False
         if other.FEMM_dict_enforced != self.FEMM_dict_enforced:
             return False
-        if other.is_get_mesh != self.is_get_mesh:
+        if other.is_get_meshsolution != self.is_get_meshsolution:
             return False
-        if other.is_save_FEA != self.is_save_FEA:
+        if other.is_save_meshsolution_as_file != self.is_save_meshsolution_as_file:
             return False
         if other.is_sliding_band != self.is_sliding_band:
             return False
@@ -363,6 +352,59 @@ class MagFEMM(Magnetics):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Magnetics
+        diff_list.extend(super(MagFEMM, self).compare(other, name=name))
+        if other._Kmesh_fineness != self._Kmesh_fineness:
+            diff_list.append(name + ".Kmesh_fineness")
+        if other._Kgeo_fineness != self._Kgeo_fineness:
+            diff_list.append(name + ".Kgeo_fineness")
+        if other._type_calc_leakage != self._type_calc_leakage:
+            diff_list.append(name + ".type_calc_leakage")
+        if other._file_name != self._file_name:
+            diff_list.append(name + ".file_name")
+        if other._FEMM_dict_enforced != self._FEMM_dict_enforced:
+            diff_list.append(name + ".FEMM_dict_enforced")
+        if other._is_get_meshsolution != self._is_get_meshsolution:
+            diff_list.append(name + ".is_get_meshsolution")
+        if other._is_save_meshsolution_as_file != self._is_save_meshsolution_as_file:
+            diff_list.append(name + ".is_save_meshsolution_as_file")
+        if other._is_sliding_band != self._is_sliding_band:
+            diff_list.append(name + ".is_sliding_band")
+        if other._transform_list != self._transform_list:
+            diff_list.append(name + ".transform_list")
+        if (other.rotor_dxf is None and self.rotor_dxf is not None) or (
+            other.rotor_dxf is not None and self.rotor_dxf is None
+        ):
+            diff_list.append(name + ".rotor_dxf None mismatch")
+        elif self.rotor_dxf is not None:
+            diff_list.extend(
+                self.rotor_dxf.compare(other.rotor_dxf, name=name + ".rotor_dxf")
+            )
+        if (other.stator_dxf is None and self.stator_dxf is not None) or (
+            other.stator_dxf is not None and self.stator_dxf is None
+        ):
+            diff_list.append(name + ".stator_dxf None mismatch")
+        elif self.stator_dxf is not None:
+            diff_list.extend(
+                self.stator_dxf.compare(other.stator_dxf, name=name + ".stator_dxf")
+            )
+        if other._import_file != self._import_file:
+            diff_list.append(name + ".import_file")
+        if other._is_close_femm != self._is_close_femm:
+            diff_list.append(name + ".is_close_femm")
+        if other._nb_worker != self._nb_worker:
+            diff_list.append(name + ".nb_worker")
+        if other._Rag_enforced != self._Rag_enforced:
+            diff_list.append(name + ".Rag_enforced")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -377,8 +419,8 @@ class MagFEMM(Magnetics):
         if self.FEMM_dict_enforced is not None:
             for key, value in self.FEMM_dict_enforced.items():
                 S += getsizeof(value) + getsizeof(key)
-        S += getsizeof(self.is_get_mesh)
-        S += getsizeof(self.is_save_FEA)
+        S += getsizeof(self.is_get_meshsolution)
+        S += getsizeof(self.is_save_meshsolution_as_file)
         S += getsizeof(self.is_sliding_band)
         if self.transform_list is not None:
             for value in self.transform_list:
@@ -405,8 +447,8 @@ class MagFEMM(Magnetics):
             if self.FEMM_dict_enforced is not None
             else None
         )
-        MagFEMM_dict["is_get_mesh"] = self.is_get_mesh
-        MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
+        MagFEMM_dict["is_get_meshsolution"] = self.is_get_meshsolution
+        MagFEMM_dict["is_save_meshsolution_as_file"] = self.is_save_meshsolution_as_file
         MagFEMM_dict["is_sliding_band"] = self.is_sliding_band
         MagFEMM_dict["transform_list"] = (
             self.transform_list.copy() if self.transform_list is not None else None
@@ -436,8 +478,8 @@ class MagFEMM(Magnetics):
         self.type_calc_leakage = None
         self.file_name = None
         self.FEMM_dict_enforced = None
-        self.is_get_mesh = None
-        self.is_save_FEA = None
+        self.is_get_meshsolution = None
+        self.is_save_meshsolution_as_file = None
         self.is_sliding_band = None
         self.transform_list = None
         if self.rotor_dxf is not None:
@@ -545,37 +587,37 @@ class MagFEMM(Magnetics):
         """,
     )
 
-    def _get_is_get_mesh(self):
-        """getter of is_get_mesh"""
-        return self._is_get_mesh
+    def _get_is_get_meshsolution(self):
+        """getter of is_get_meshsolution"""
+        return self._is_get_meshsolution
 
-    def _set_is_get_mesh(self, value):
-        """setter of is_get_mesh"""
-        check_var("is_get_mesh", value, "bool")
-        self._is_get_mesh = value
+    def _set_is_get_meshsolution(self, value):
+        """setter of is_get_meshsolution"""
+        check_var("is_get_meshsolution", value, "bool")
+        self._is_get_meshsolution = value
 
-    is_get_mesh = property(
-        fget=_get_is_get_mesh,
-        fset=_set_is_get_mesh,
-        doc=u"""To save FEA mesh for latter post-procesing 
+    is_get_meshsolution = property(
+        fget=_get_is_get_meshsolution,
+        fset=_set_is_get_meshsolution,
+        doc=u"""To save FEA and mesh for latter post-procesing 
 
         :Type: bool
         """,
     )
 
-    def _get_is_save_FEA(self):
-        """getter of is_save_FEA"""
-        return self._is_save_FEA
+    def _get_is_save_meshsolution_as_file(self):
+        """getter of is_save_meshsolution_as_file"""
+        return self._is_save_meshsolution_as_file
 
-    def _set_is_save_FEA(self, value):
-        """setter of is_save_FEA"""
-        check_var("is_save_FEA", value, "bool")
-        self._is_save_FEA = value
+    def _set_is_save_meshsolution_as_file(self, value):
+        """setter of is_save_meshsolution_as_file"""
+        check_var("is_save_meshsolution_as_file", value, "bool")
+        self._is_save_meshsolution_as_file = value
 
-    is_save_FEA = property(
-        fget=_get_is_save_FEA,
-        fset=_set_is_save_FEA,
-        doc=u"""To save FEA mesh and solution in .dat file
+    is_save_meshsolution_as_file = property(
+        fget=_get_is_save_meshsolution_as_file,
+        fset=_set_is_save_meshsolution_as_file,
+        doc=u"""To save FEA and mesh as h5 files to save memory
 
         :Type: bool
         """,

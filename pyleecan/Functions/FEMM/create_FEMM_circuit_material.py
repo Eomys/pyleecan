@@ -84,7 +84,7 @@ def create_FEMM_circuit_material(
         materials,
         cname=cname,
         Cduct=is_eddies * 1e-6 / rho,
-        dwire=sqrt(4 * Swire / pi),
+        dwire=sqrt(4 * Swire / pi) * 1e-3,
     )
 
     return cname, materials, circuits

@@ -490,6 +490,68 @@ class Lamination(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._L1 != self._L1:
+            diff_list.append(name + ".L1")
+        if (other.mat_type is None and self.mat_type is not None) or (
+            other.mat_type is not None and self.mat_type is None
+        ):
+            diff_list.append(name + ".mat_type None mismatch")
+        elif self.mat_type is not None:
+            diff_list.extend(
+                self.mat_type.compare(other.mat_type, name=name + ".mat_type")
+            )
+        if other._Nrvd != self._Nrvd:
+            diff_list.append(name + ".Nrvd")
+        if other._Wrvd != self._Wrvd:
+            diff_list.append(name + ".Wrvd")
+        if other._Kf1 != self._Kf1:
+            diff_list.append(name + ".Kf1")
+        if other._is_internal != self._is_internal:
+            diff_list.append(name + ".is_internal")
+        if other._Rint != self._Rint:
+            diff_list.append(name + ".Rint")
+        if other._Rext != self._Rext:
+            diff_list.append(name + ".Rext")
+        if other._is_stator != self._is_stator:
+            diff_list.append(name + ".is_stator")
+        if (other.axial_vent is None and self.axial_vent is not None) or (
+            other.axial_vent is not None and self.axial_vent is None
+        ):
+            diff_list.append(name + ".axial_vent None mismatch")
+        elif self.axial_vent is None:
+            pass
+        elif len(other.axial_vent) != len(self.axial_vent):
+            diff_list.append("len(" + name + ".axial_vent)")
+        else:
+            for ii in range(len(other.axial_vent)):
+                diff_list.extend(
+                    self.axial_vent[ii].compare(
+                        other.axial_vent[ii], name=name + ".axial_vent[" + str(ii) + "]"
+                    )
+                )
+        if (other.notch is None and self.notch is not None) or (
+            other.notch is not None and self.notch is None
+        ):
+            diff_list.append(name + ".notch None mismatch")
+        elif self.notch is None:
+            pass
+        elif len(other.notch) != len(self.notch):
+            diff_list.append("len(" + name + ".notch)")
+        else:
+            for ii in range(len(other.notch)):
+                diff_list.extend(
+                    self.notch[ii].compare(
+                        other.notch[ii], name=name + ".notch[" + str(ii) + "]"
+                    )
+                )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

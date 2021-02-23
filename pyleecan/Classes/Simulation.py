@@ -194,6 +194,62 @@ class Simulation(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._desc != self._desc:
+            diff_list.append(name + ".desc")
+        if (other.machine is None and self.machine is not None) or (
+            other.machine is not None and self.machine is None
+        ):
+            diff_list.append(name + ".machine None mismatch")
+        elif self.machine is not None:
+            diff_list.extend(
+                self.machine.compare(other.machine, name=name + ".machine")
+            )
+        if (other.input is None and self.input is not None) or (
+            other.input is not None and self.input is None
+        ):
+            diff_list.append(name + ".input None mismatch")
+        elif self.input is not None:
+            diff_list.extend(self.input.compare(other.input, name=name + ".input"))
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if (other.var_simu is None and self.var_simu is not None) or (
+            other.var_simu is not None and self.var_simu is None
+        ):
+            diff_list.append(name + ".var_simu None mismatch")
+        elif self.var_simu is not None:
+            diff_list.extend(
+                self.var_simu.compare(other.var_simu, name=name + ".var_simu")
+            )
+        if (other.postproc_list is None and self.postproc_list is not None) or (
+            other.postproc_list is not None and self.postproc_list is None
+        ):
+            diff_list.append(name + ".postproc_list None mismatch")
+        elif self.postproc_list is None:
+            pass
+        elif len(other.postproc_list) != len(self.postproc_list):
+            diff_list.append("len(" + name + ".postproc_list)")
+        else:
+            for ii in range(len(other.postproc_list)):
+                diff_list.extend(
+                    self.postproc_list[ii].compare(
+                        other.postproc_list[ii],
+                        name=name + ".postproc_list[" + str(ii) + "]",
+                    )
+                )
+        if other._index != self._index:
+            diff_list.append(name + ".index")
+        if other._path_result != self._path_result:
+            diff_list.append(name + ".path_result")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

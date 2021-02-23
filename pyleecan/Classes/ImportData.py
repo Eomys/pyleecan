@@ -147,6 +147,45 @@ class ImportData(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.axes is None and self.axes is not None) or (
+            other.axes is not None and self.axes is None
+        ):
+            diff_list.append(name + ".axes None mismatch")
+        elif self.axes is None:
+            pass
+        elif len(other.axes) != len(self.axes):
+            diff_list.append("len(" + name + ".axes)")
+        else:
+            for ii in range(len(other.axes)):
+                diff_list.extend(
+                    self.axes[ii].compare(
+                        other.axes[ii], name=name + ".axes[" + str(ii) + "]"
+                    )
+                )
+        if (other.field is None and self.field is not None) or (
+            other.field is not None and self.field is None
+        ):
+            diff_list.append(name + ".field None mismatch")
+        elif self.field is not None:
+            diff_list.extend(self.field.compare(other.field, name=name + ".field"))
+        if other._unit != self._unit:
+            diff_list.append(name + ".unit")
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._symbol != self._symbol:
+            diff_list.append(name + ".symbol")
+        if other._normalizations != self._normalizations:
+            diff_list.append(name + ".normalizations")
+        if other._symmetries != self._symmetries:
+            diff_list.append(name + ".symmetries")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

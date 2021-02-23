@@ -194,6 +194,32 @@ class CellMat(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if not array_equal(other.connectivity, self.connectivity):
+            diff_list.append(name + ".connectivity")
+        if other._nb_cell != self._nb_cell:
+            diff_list.append(name + ".nb_cell")
+        if other._nb_pt_per_cell != self._nb_pt_per_cell:
+            diff_list.append(name + ".nb_pt_per_cell")
+        if not array_equal(other.indice, self.indice):
+            diff_list.append(name + ".indice")
+        if (other.interpolation is None and self.interpolation is not None) or (
+            other.interpolation is not None and self.interpolation is None
+        ):
+            diff_list.append(name + ".interpolation None mismatch")
+        elif self.interpolation is not None:
+            diff_list.extend(
+                self.interpolation.compare(
+                    other.interpolation, name=name + ".interpolation"
+                )
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

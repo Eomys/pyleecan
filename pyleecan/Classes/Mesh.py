@@ -80,6 +80,18 @@ class Mesh(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._label != self._label:
+            diff_list.append(name + ".label")
+        if other._dimension != self._dimension:
+            diff_list.append(name + ".dimension")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

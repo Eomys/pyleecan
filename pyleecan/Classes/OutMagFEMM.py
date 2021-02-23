@@ -109,6 +109,35 @@ class OutMagFEMM(OutInternal):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from OutInternal
+        diff_list.extend(super(OutMagFEMM, self).compare(other, name=name))
+        if other._FEMM_dict != self._FEMM_dict:
+            diff_list.append(name + ".FEMM_dict")
+        if (other.handler_list is None and self.handler_list is not None) or (
+            other.handler_list is not None and self.handler_list is None
+        ):
+            diff_list.append(name + ".handler_list None mismatch")
+        elif self.handler_list is None:
+            pass
+        elif len(other.handler_list) != len(self.handler_list):
+            diff_list.append("len(" + name + ".handler_list)")
+        else:
+            for ii in range(len(other.handler_list)):
+                diff_list.extend(
+                    self.handler_list[ii].compare(
+                        other.handler_list[ii],
+                        name=name + ".handler_list[" + str(ii) + "]",
+                    )
+                )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

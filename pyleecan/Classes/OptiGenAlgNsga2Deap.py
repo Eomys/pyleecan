@@ -241,6 +241,25 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from OptiGenAlg
+        diff_list.extend(super(OptiGenAlgNsga2Deap, self).compare(other, name=name))
+        if (other.toolbox is None and self.toolbox is not None) or (
+            other.toolbox is not None and self.toolbox is None
+        ):
+            diff_list.append(name + ".toolbox None mismatch")
+        elif self.toolbox is not None:
+            diff_list.extend(
+                self.toolbox.compare(other.toolbox, name=name + ".toolbox")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

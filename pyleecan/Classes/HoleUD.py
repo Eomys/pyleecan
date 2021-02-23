@@ -192,6 +192,47 @@ class HoleUD(HoleMag):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from HoleMag
+        diff_list.extend(super(HoleUD, self).compare(other, name=name))
+        if (other.surf_list is None and self.surf_list is not None) or (
+            other.surf_list is not None and self.surf_list is None
+        ):
+            diff_list.append(name + ".surf_list None mismatch")
+        elif self.surf_list is None:
+            pass
+        elif len(other.surf_list) != len(self.surf_list):
+            diff_list.append("len(" + name + ".surf_list)")
+        else:
+            for ii in range(len(other.surf_list)):
+                diff_list.extend(
+                    self.surf_list[ii].compare(
+                        other.surf_list[ii], name=name + ".surf_list[" + str(ii) + "]"
+                    )
+                )
+        if (other.magnet_dict is None and self.magnet_dict is not None) or (
+            other.magnet_dict is not None and self.magnet_dict is None
+        ):
+            diff_list.append(name + ".magnet_dict None mismatch")
+        elif self.magnet_dict is None:
+            pass
+        elif len(other.magnet_dict) != len(self.magnet_dict):
+            diff_list.append("len(" + name + "magnet_dict)")
+        else:
+            for key in self.magnet_dict:
+                diff_list.extend(
+                    self.magnet_dict[key].compare(
+                        other.magnet_dict[key], name=name + ".magnet_dict"
+                    )
+                )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
