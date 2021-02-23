@@ -46,6 +46,7 @@ class VarParam(VarSimu):
     """Handle multisimulation by varying parameters"""
 
     VERSION = 1
+    NAME = "Parameter Sweep"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.VarParam.check_param

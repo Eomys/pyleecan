@@ -47,7 +47,7 @@ def run(self):
         keeper_list[-1].result = [None] * self.nb_simu
 
     # Run Reference simulation
-    logger.info("Computing reference simulation")
+    logger.info("Computing reference simulation for " + self.NAME)
     ref_simu_index = self.ref_simu_index
     index_list = list(range(nb_simu))
 
@@ -115,7 +115,7 @@ def run(self):
 
     # Running postprocessings
     if self.postproc_list:
-        logger.info("Running var_simu postprocessings...")
+        logger.info("Running " + self.NAME + " postprocessings...")
         for postproc in self.postproc_list:
             postproc.run(xoutput)
 

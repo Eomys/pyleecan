@@ -10,6 +10,9 @@ def run(self):
     from ....Classes.XOutput import XOutput
     from ....Classes.Output import Output
 
+    if self.layer is None:
+        self.layer = 0  # Top simulation
+
     # Multi-simulation
     if self.var_simu is not None:
         # make sure simulation output is of class XOutput
@@ -31,9 +34,6 @@ def run(self):
         # Logger setup
         self.init_logger(results)
 
-        if self.layer is None:
-            self.layer = 0  # Top simulation
-
         # Compute the multisimulation
         self.var_simu.run()
 
@@ -46,10 +46,7 @@ def run(self):
             results = self.parent
 
         # Logger setup
-        if self.index is None:
-            self.init_logger(results)
-        else:
-            self.init_logger(results, is_create=False, is_log_start=False)
+        self.init_logger(results)
 
         # Compute the simulation
         self.run_single()

@@ -43,6 +43,7 @@ class VarLoad(VarSimu):
     """Abstract class to generate multi-simulation by changing the operating point"""
 
     VERSION = 1
+    NAME = "Variable Load"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.VarLoad.get_elec_datakeeper
