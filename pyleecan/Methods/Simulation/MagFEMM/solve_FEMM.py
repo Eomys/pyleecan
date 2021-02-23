@@ -8,10 +8,6 @@ from ....Classes._FEMMHandler import _FEMMHandler
 from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
-from ....Functions.MeshSolution.build_solution_data import build_solution_data
-from ....Functions.MeshSolution.build_meshsolution import build_meshsolution
-from ....Functions.MeshSolution.build_solution_vector import build_solution_vector
-from SciDataTool import Data1D
 
 
 def solve_FEMM(
@@ -233,42 +229,4 @@ def solve_FEMM(
 
     out_dict["Rag"] = Rag
 
-    # Store mesh data & solution
-    if (self.is_sliding_band or Nt == 1) and self.is_get_meshsolution:
-
-        # Define axis
-        Time = output.mag.Time.copy()
-        indices_cell = meshFEMM[0].cell["triangle"].indice
-        Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=True)
-        axis_list = [Time, Indices_Cell]
-
-        B_sol = build_solution_vector(
-            field=B_elem,
-            axis_list=axis_list,
-            name="Magnetic Flux Density",
-            symbol="B",
-            unit="T",
-        )
-        H_sol = build_solution_vector(
-            field=H_elem,
-            axis_list=axis_list,
-            name="Magnetic Field",
-            symbol="H",
-            unit="A/m",
-        )
-        mu_sol = build_solution_data(
-            field=mu_elem,
-            axis_list=axis_list,
-            name="Magnetic Permeability",
-            symbol="\mu",
-            unit="H/m",
-        )
-
-        list_solution = [B_sol, H_sol, mu_sol]
-
-        out_dict["meshsolution"] = build_meshsolution(
-            list_solution=list_solution,
-            label="FEMM 2D Magnetostatic",
-            list_mesh=meshFEMM,
-            group=groups,
-        )
+    return B_elem, H_elem, mu_elem, meshFEMM, groups
