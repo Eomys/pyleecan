@@ -1,39 +1,31 @@
-# Multisimulation objects
-from pyleecan.Classes.VarParam import VarParam
-from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
-from pyleecan.Classes.DataKeeper import DataKeeper
-import numpy as np
+from os.path import dirname, join
 
-## Reference simulation
-from pyleecan.Classes.Simu1 import Simu1
-from numpy import pi, ones, zeros, linspace, sqrt, exp
-from os.path import join, dirname
 import matplotlib.pyplot as plt
-from Tests import save_validation_path as save_path
-
-from pyleecan.Classes.Simu1 import Simu1
-
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
-from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.ForceMT import ForceMT
+import numpy as np
+import pytest
+from numpy import exp, linspace, ones, pi, sqrt, zeros
+from pyleecan.Classes.DataKeeper import DataKeeper
+from pyleecan.Classes.DriveWave import DriveWave
 from pyleecan.Classes.EEC_PMSM import EEC_PMSM
 from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
+from pyleecan.Classes.ForceMT import ForceMT
+from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.IndMagFEMM import IndMagFEMM
-from pyleecan.Classes.DriveWave import DriveWave
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
 from pyleecan.Classes.PostFunction import PostFunction
+from pyleecan.Classes.PostPlot import PostPlot
+from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
-
-# Load the machine
-from os.path import join
-from pyleecan.Functions.load import load
+from pyleecan.Classes.VarParam import VarParam
 from pyleecan.definitions import DATA_DIR
-
-import pytest
+from pyleecan.Functions.load import load
+from Tests import save_validation_path as save_path
 
 # Prius MTPA
 N0_MTPA = [
@@ -120,7 +112,9 @@ def test_multi_multi():
 
     # Reference simulation definition
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="multi_multi", machine=IPMSM_A)
+    simu = Simu1(
+        name="multi_multi", machine=IPMSM_A, path_result=join(save_path, "multi_multi")
+    )
 
     # Enforced sinusoïdal current (Maximum Torque Per Amp)
     I0_rms = 250 / sqrt(2)
@@ -191,7 +185,7 @@ def test_multi_multi():
     multisim = VarParam(
         stop_if_error=True,
         is_reuse_femm_file=False,
-        ref_simu_index=N1 - 1,
+        ref_simu_index=0,
     )
 
     simu.var_simu = multisim
@@ -204,7 +198,7 @@ def test_multi_multi():
             unit="m",
             setter="simu.machine.stator.slot.W0",
             value=(
-                IPMSM_A.stator.slot.W0 * linspace(0.1, 1, N1, endpoint=True)
+                IPMSM_A.stator.slot.W0 * linspace(1, 0.1, N1, endpoint=True)
             ).tolist(),
         )
     ]
@@ -222,10 +216,17 @@ def test_multi_multi():
             error_keeper="lambda simu: np.nan",
         ),
         DataKeeper(
-            name="Variable speed Torque",
-            unit="N.m",
-            symbol="S_Tem_av",
-            keeper="lambda output: output.xoutput_dict['Tem_av'].result",
+            name="Max f6",
+            unit="N.m^2",
+            symbol="max(6fs)",
+            keeper="lambda output: max(output.xoutput_dict['6fs'].result)",
+            error_keeper="lambda simu: np.nan",
+        ),
+        DataKeeper(
+            name="Max f12",
+            unit="N.m^2",
+            symbol="max(12fs)",
+            keeper="lambda output: max(output.xoutput_dict['12fs'].result)",
             error_keeper="lambda simu: np.nan",
         ),
     ]
@@ -235,9 +236,27 @@ def test_multi_multi():
     # Post-process
     Post1 = PostFunction(join(dirname(__file__), "plot_save.py"))
     simu.postproc_list = [Post1]  # For all simulation save a png
+    # Plot Max(f6) = f(W0)
+    Post2 = PostPlot(
+        method="plot_multi",
+        param_list=["W0s", "max(6fs)"],
+        param_dict={
+            "save_path": join(save_path, "multi_multi", "Max_6fs.png"),
+            "is_show_fig": False,
+        },
+    )
+    # Plot Max(f12) = f(W0)
+    Post3 = PostPlot(
+        method="plot_multi",
+        param_list=["W0s", "max(12fs)"],
+        param_dict={
+            "save_path": join(save_path, "multi_multi", "Max_12fs.png"),
+            "is_show_fig": False,
+        },
+    )
     # Generate gif once all the simulation are done
-    Post2 = PostFunction(join(dirname(__file__), "make_gif.py"))
-    simu.var_simu.postproc_list = [Post2]
+    Post4 = PostFunction(join(dirname(__file__), "make_gif.py"))
+    simu.var_simu.postproc_list = [Post2, Post3, Post4]
     # Execute every simulation
     results = simu.run()
 
