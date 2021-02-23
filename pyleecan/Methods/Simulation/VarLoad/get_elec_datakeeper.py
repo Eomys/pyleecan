@@ -1,13 +1,16 @@
 from ....Classes.DataKeeper import DataKeeper
 
 
-def get_elec_datakeeper(self):
+def get_elec_datakeeper(self, symbol_list):
     """
     Generate DataKeepers to store by default results from electric module
 
     Parameters
     ----------
-    self: VarLoadFlux object
+    self: VarLoad
+        A VarLoad object
+    symbol_list : list
+        List of the existing datakeeper (to avoid duplicate)
 
     Returns
     -------
@@ -16,16 +19,24 @@ def get_elec_datakeeper(self):
     """
     dk_list = []
     # Save Id
-    dk_list.append(
-        DataKeeper(
-            name="Id", symbol="Id", unit="A", keeper="lambda output: output.elec.Id_ref"
+    if "Id" not in symbol_list:
+        dk_list.append(
+            DataKeeper(
+                name="Id",
+                symbol="Id",
+                unit="A",
+                keeper="lambda output: output.elec.Id_ref",
+            )
         )
-    )
     # Save Iq
-    dk_list.append(
-        DataKeeper(
-            name="Iq", symbol="Iq", unit="A", keeper="lambda output: output.elec.Iq_ref"
+    if "Iq" not in symbol_list:
+        dk_list.append(
+            DataKeeper(
+                name="Iq",
+                symbol="Iq",
+                unit="A",
+                keeper="lambda output: output.elec.Iq_ref",
+            )
         )
-    )
 
     return dk_list
