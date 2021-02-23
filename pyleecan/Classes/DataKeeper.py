@@ -15,6 +15,14 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Simulation.DataKeeper.as_dict import as_dict
+except ImportError as error:
+    as_dict = error
+
+
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
@@ -28,6 +36,15 @@ class DataKeeper(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Simulation.DataKeeper.as_dict
+    if isinstance(as_dict, ImportError):
+        as_dict = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use DataKeeper method as_dict: " + str(as_dict))
+            )
+        )
+    else:
+        as_dict = as_dict
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -168,48 +185,6 @@ class DataKeeper(FrozenClass):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self, **kwargs):
-        """
-        Convert this object in a json serializable dict (can be use in __init__).
-        Optional keyword input parameter is for internal use only
-        and may prevent json serializability.
-        """
-
-        DataKeeper_dict = dict()
-        DataKeeper_dict["name"] = self.name
-        DataKeeper_dict["symbol"] = self.symbol
-        DataKeeper_dict["unit"] = self.unit
-        if self._keeper_str is not None:
-            DataKeeper_dict["keeper"] = self._keeper_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
-            DataKeeper_dict["keeper"] = self.keeper
-        else:
-            DataKeeper_dict["keeper"] = None
-            if self.keeper is not None:
-                self.get_logger().warning(
-                    "DataKeeper.as_dict(): "
-                    + f"Function {self.keeper.__name__} is not serializable "
-                    + "and will be converted to None."
-                )
-        if self._error_keeper_str is not None:
-            DataKeeper_dict["error_keeper"] = self._error_keeper_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
-            DataKeeper_dict["error_keeper"] = self.error_keeper
-        else:
-            DataKeeper_dict["error_keeper"] = None
-            if self.error_keeper is not None:
-                self.get_logger().warning(
-                    "DataKeeper.as_dict(): "
-                    + f"Function {self.error_keeper.__name__} is not serializable "
-                    + "and will be converted to None."
-                )
-        DataKeeper_dict["result"] = (
-            self.result.copy() if self.result is not None else None
-        )
-        # The class name is added to the dict for deserialisation purpose
-        DataKeeper_dict["__class__"] = "DataKeeper"
-        return DataKeeper_dict
-
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -232,7 +207,7 @@ class DataKeeper(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc="""Data name
+        doc=u"""Data name
 
         :Type: str
         """,
@@ -250,7 +225,7 @@ class DataKeeper(FrozenClass):
     symbol = property(
         fget=_get_symbol,
         fset=_set_symbol,
-        doc="""Data symbol
+        doc=u"""Data symbol
 
         :Type: str
         """,
@@ -268,7 +243,7 @@ class DataKeeper(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc="""Data unit
+        doc=u"""Data unit
 
         :Type: str
         """,
@@ -303,7 +278,7 @@ class DataKeeper(FrozenClass):
     keeper = property(
         fget=_get_keeper,
         fset=_set_keeper,
-        doc="""Function that takes an Output in argument and return a value
+        doc=u"""Function that takes an Output in argument and return a value
 
         :Type: function
         """,
@@ -338,7 +313,7 @@ class DataKeeper(FrozenClass):
     error_keeper = property(
         fget=_get_error_keeper,
         fset=_set_error_keeper,
-        doc="""Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices
+        doc=u"""Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices
 
         :Type: function
         """,
@@ -358,7 +333,7 @@ class DataKeeper(FrozenClass):
     result = property(
         fget=_get_result,
         fset=_set_result,
-        doc="""List containing datakeeper results for each simulation
+        doc=u"""List containing datakeeper results for each simulation
 
         :Type: list
         """,
