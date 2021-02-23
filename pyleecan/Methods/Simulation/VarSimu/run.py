@@ -88,8 +88,9 @@ def run(self):
         xoutput.output_list[ref_simu_index] = xoutput_ref
 
     # Reuse some intermediate results from reference simulation (if requested)
-    for simu in simulation_list:
-        self.set_reused_data(simu, xoutput_ref)
+    for ii, simu in enumerate(simulation_list):
+        # Log only for first simulation
+        self.set_reused_data(simu, xoutput_ref, is_log=ii == 0)
 
     # Update the postprocessing list if needed
     if self.pre_keeper_postproc_list is not None:
