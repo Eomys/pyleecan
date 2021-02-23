@@ -232,6 +232,8 @@ class Simulation(FrozenClass):
             other.postproc_list is not None and self.postproc_list is None
         ):
             diff_list.append(name + ".postproc_list None mismatch")
+        elif self.postproc_list is None:
+            pass
         elif len(other.postproc_list) != len(self.postproc_list):
             diff_list.append("len(" + name + ".postproc_list)")
         else:

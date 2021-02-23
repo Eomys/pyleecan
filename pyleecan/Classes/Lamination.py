@@ -524,6 +524,8 @@ class Lamination(FrozenClass):
             other.axial_vent is not None and self.axial_vent is None
         ):
             diff_list.append(name + ".axial_vent None mismatch")
+        elif self.axial_vent is None:
+            pass
         elif len(other.axial_vent) != len(self.axial_vent):
             diff_list.append("len(" + name + ".axial_vent)")
         else:
@@ -537,6 +539,8 @@ class Lamination(FrozenClass):
             other.notch is not None and self.notch is None
         ):
             diff_list.append(name + ".notch None mismatch")
+        elif self.notch is None:
+            pass
         elif len(other.notch) != len(self.notch):
             diff_list.append("len(" + name + ".notch)")
         else:

@@ -267,6 +267,8 @@ class VarSimu(FrozenClass):
             other.datakeeper_list is not None and self.datakeeper_list is None
         ):
             diff_list.append(name + ".datakeeper_list None mismatch")
+        elif self.datakeeper_list is None:
+            pass
         elif len(other.datakeeper_list) != len(self.datakeeper_list):
             diff_list.append("len(" + name + ".datakeeper_list)")
         else:
@@ -291,6 +293,8 @@ class VarSimu(FrozenClass):
             other.postproc_list is not None and self.postproc_list is None
         ):
             diff_list.append(name + ".postproc_list None mismatch")
+        elif self.postproc_list is None:
+            pass
         elif len(other.postproc_list) != len(self.postproc_list):
             diff_list.append("len(" + name + ".postproc_list)")
         else:
@@ -309,6 +313,8 @@ class VarSimu(FrozenClass):
             and self.pre_keeper_postproc_list is None
         ):
             diff_list.append(name + ".pre_keeper_postproc_list None mismatch")
+        elif self.pre_keeper_postproc_list is None:
+            pass
         elif len(other.pre_keeper_postproc_list) != len(self.pre_keeper_postproc_list):
             diff_list.append("len(" + name + ".pre_keeper_postproc_list)")
         else:
@@ -327,6 +333,8 @@ class VarSimu(FrozenClass):
             and self.post_keeper_postproc_list is None
         ):
             diff_list.append(name + ".post_keeper_postproc_list None mismatch")
+        elif self.post_keeper_postproc_list is None:
+            pass
         elif len(other.post_keeper_postproc_list) != len(
             self.post_keeper_postproc_list
         ):

@@ -205,6 +205,8 @@ class HoleUD(HoleMag):
             other.surf_list is not None and self.surf_list is None
         ):
             diff_list.append(name + ".surf_list None mismatch")
+        elif self.surf_list is None:
+            pass
         elif len(other.surf_list) != len(self.surf_list):
             diff_list.append("len(" + name + ".surf_list)")
         else:
@@ -218,6 +220,8 @@ class HoleUD(HoleMag):
             other.magnet_dict is not None and self.magnet_dict is None
         ):
             diff_list.append(name + ".magnet_dict None mismatch")
+        elif self.magnet_dict is None:
+            pass
         elif len(other.magnet_dict) != len(self.magnet_dict):
             diff_list.append("len(" + name + "magnet_dict)")
         else:
