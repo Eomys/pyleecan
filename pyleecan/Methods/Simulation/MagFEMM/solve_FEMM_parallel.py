@@ -188,7 +188,7 @@ def solve_FEMM_parallel(
     results = pool.starmap(solve_FEMM_single, args)
 
     # Building mesh solution
-    if self.is_get_mesh:
+    if self.is_get_meshsolution:
         B_elem = concatenate([res[0] for res in results], axis=0)
         H_elem = concatenate([res[1] for res in results], axis=0)
         mu_elem = concatenate([res[2] for res in results], axis=0)

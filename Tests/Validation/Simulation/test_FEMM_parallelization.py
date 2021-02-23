@@ -163,7 +163,7 @@ def test_FEMM_parallelization_meshsolution():
         type_BH_rotor=2,
         is_periodicity_a=False,
         is_periodicity_t=False,
-        is_get_mesh=True,
+        is_get_meshsolution=True,
         nb_worker=1,
     )
     simu.force = None
