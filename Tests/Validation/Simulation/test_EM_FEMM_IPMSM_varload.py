@@ -124,10 +124,10 @@ def test_EM_FEMM_IPMSM_varload():
     print("\nPhi0 for each simulation:")
     print(Xout["Phi0"].result)
 
-    fig = Xout.plot_multi("Phi0", "Tem_av")
+    fig = Xout.plot_multi("Phi0", "Tem_av", is_show_fig=False)
     fig.savefig(join(save_path, "EM_FEMM_IPMSM_varload_Tem.png"))
 
-    fig = Xout.plot_multi("Id", "Iq")
+    fig = Xout.plot_multi("Id", "Iq", is_show_fig=False)
     fig.savefig(join(save_path, "EM_FEMM_IPMSM_varload_Id_Iq.png"))
 
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]

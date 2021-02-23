@@ -90,7 +90,7 @@ def test_Slotless_CEFC_002():
     # Test save with MeshSolution object in out
     load_path = join(save_load_path, "Slotless_CEFC_002.h5")
 
-    out.save(save_path=save_load_path)
+    out.save(save_path=load_path)
 
     # Test to load the Meshsolution object (inside the output):
     FEMM = load(join(save_load_path, "Slotless_CEFC_002.h5"))

@@ -130,13 +130,13 @@ def test_slot_scale():
     # Execute every simulation
     results = ref_simu.run()
 
-    fig = results.plot_multi(
+    results.plot_multi(
         x_symbol="stat_slot",
         y_symbol="Tem_av",
         title="Average torque in function of the stator slot scale factor ",
+        is_show_fig=False,
+        save_path=join(save_path, "test_slot_scale"),
     )
-
-    fig.savefig(join(save_path, "test_slot_scale"))
 
 
 if __name__ == "__main__":
