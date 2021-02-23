@@ -1,44 +1,58 @@
 # -*- coding: utf-8 -*-
 import pytest
+from os.path import join
+
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
-from numpy import ones, pi, array
+
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
 
 
-@pytest.mark.skip
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
-def test_CEFC_001(CEFC_Lam):
-    """Test compute the Flux in FEMM without slots and without sliding band."""
-    simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
+def test_Slotless_CEFC_001():
+    """Test to compute the Flux in FEMM without slots and without sliding band.
 
-    # Definition of the enforced output of the electrical module
-    N0 = 3000
-    Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
-    Nt_tot = 1
-    Na_tot = 1024
+    Electrical machine is an academic slotless machine inspired
+    from [R. Pile et al., Application Limits of the Airgap Maxwell
+    Tensor, CEFC, 2018] but with interior magnet such as Toyota
+    Prius machine.
+    """
+
+    Slotless_CEFC = load(join(DATA_DIR, "Machine", "Slotless_CEFC.json"))
+    simu = Simu1(name="EM_Slotless_CEFC_001", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
-        Is=Is,
-        Ir=None,  # No winding on the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
-        Nt_tot=Nt_tot,
-        Na_tot=Na_tot,
-        rot_dir=-1,
+        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=1, N0=1200
     )
 
-    # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=0, is_sliding_band=False)
-    simu.force = None
-    simu.struct = None
+    simu.mag = MagFEMM(
+        type_BH_stator=0,
+        type_BH_rotor=0,
+        is_get_meshsolution=True,
+        is_periodicity_a=True,
+        is_periodicity_t=False,
+    )
 
-    out = Output(simu=simu)
-    out.post.legend_name = "Slotless lamination"
-    simu.run()
+    out = simu.run()
+
+    simu.mag = MagFEMM(
+        type_BH_stator=0,
+        type_BH_rotor=0,
+        is_get_meshsolution=True,
+        is_periodicity_a=True,
+        is_periodicity_t=False,
+        is_sliding_band=False,
+    )
+
+    out = simu.run()
+
+
+# To run it without pytest
+if __name__ == "__main__":
+
+    out = test_Slotless_CEFC_001()
