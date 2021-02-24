@@ -1,8 +1,6 @@
-import sys
-
 from os.path import dirname, abspath, normpath, join
 
-sys.path.insert(0, normpath(abspath(join(dirname(__file__), "../../../.."))))
+
 
 # -*- coding: utf-8 -*-
 import pytest

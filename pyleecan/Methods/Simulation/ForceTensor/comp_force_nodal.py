@@ -187,7 +187,7 @@ def comp_force_nodal(self, output, axes_dict):
 
                 normal_to_edge = (edge_vector[1],-edge_vector[0])/L # normalized normal vector n
 
-                edge_force = np.dot(normal_to_edge,np.swapaxes(tme,0,1)) # need to swap bc of np.dot doc, this is equal to np.transpose(np.dot(np.transpose(b),np.transpose(tme)))
+                edge_force = np.dot(normal_to_edge,np.swapaxes(tme,0,1)) # need to swap bc of np.dot doc, this is equal to np.transpose(np.dot(np.transpose(edge_force),np.transpose(tme)))
 
             
                 fe = Ve0 * edge_force
@@ -200,30 +200,37 @@ def comp_force_nodal(self, output, axes_dict):
 
     indices_points = np.sort(np.unique(connect))
     Indices_Point = Data1D(name="indice", values=indices_points, is_components=True)
-    Time = B_sol.field.components["x"].axes[0]
+
+    # remettre temps en 1er
+
+    f = np.moveaxis(f,-1,0)
+
+
     components = {}
-    if not np.all((f[:,0,:] == 0)):
-        fx_data = DataTime(
-            name="Nodal force (x)",
-            unit="N",
-            symbol="Fx",
-            axes=[Time, Indices_Point],
-            values=f[:,0,:],
-        )
-        components["x"] = fx_data
-    if not np.all((f[:,1,:] == 0)):
-        fy_data = DataTime(
-            name="Nodal force (y)",
-            unit="N",
-            symbol="Fy",
-            axes=[Time, Indices_Point],
-            values=f[:,1,:],
-        )
-        components["y"] = fy_data
+    
+    fx_data = DataTime(
+        name="Nodal force (x)",
+        unit="N",
+        symbol="Fx",
+        axes=[Time, Indices_Point],
+        values=f[...,0],
+    )
+    components["comp_x"] = fx_data
+
+    fy_data = DataTime(
+        name="Nodal force (y)",
+        unit="N",
+        symbol="Fy",
+        axes=[Time, Indices_Point],
+        values=f[...,1],
+    )
+    components["comp_y"] = fy_data
 
     vec_force = VectorField(name="Nodal forces", symbol="F", components=components)
     solforce = SolutionVector(field=vec_force, type_cell="point", label="F")
     meshsolution.solution.append(solforce)
 
-    output.force.vwp_nodal = meshsolution
+    #output.force.vwp_nodal = meshsolution
+
+    meshsolution.plot_glyph()
     pass
