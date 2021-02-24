@@ -29,6 +29,6 @@ def comp_force(self, output, axes_dict):
 
     # Test comp_force_nodal #
 
-    self.comp_force_nodal(output)
+    self.comp_force_nodal(output, axes_dict)
 
     pass

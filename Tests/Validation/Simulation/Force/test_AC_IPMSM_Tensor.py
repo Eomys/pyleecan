@@ -38,7 +38,7 @@ def test_AC_IPMSM_AGSF_Tensor():
     simu = Simu1(name="AC_IPMSM_plot", machine=IPMSM_A)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=2, N0=1200
+        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=3, N0=1200
     )
 
     simu.elec = None
@@ -48,7 +48,7 @@ def test_AC_IPMSM_AGSF_Tensor():
         type_BH_rotor=1,
         is_periodicity_a=True,
         is_periodicity_t=False,
-        is_save_FEA= True,
+        is_get_meshsolution=True,
     )
     simu.force = ForceTensor(
         is_periodicity_a=True,
