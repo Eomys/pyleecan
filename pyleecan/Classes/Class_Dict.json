@@ -844,6 +844,15 @@
                 "type": "list",
                 "unit": "-",
                 "value": []
+            },
+            {
+                "desc": "Result for the reference simulation",
+                "max": "",
+                "min": "",
+                "name": "result_ref",
+                "type": "",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -11698,15 +11707,6 @@
                 "min": "",
                 "name": "var_simu",
                 "type": "VarSimu",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Index of the reference simulation, if None the reference simulation is not in the multi-simulation",
-                "max": "",
-                "min": "0",
-                "name": "ref_simu_index",
-                "type": "int",
                 "unit": "-",
                 "value": null
             },

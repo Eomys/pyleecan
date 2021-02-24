@@ -98,7 +98,6 @@ class VarParam(VarSimu):
         is_keep_all_output=False,
         stop_if_error=False,
         var_simu=None,
-        ref_simu_index=None,
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
@@ -136,8 +135,6 @@ class VarParam(VarSimu):
                 stop_if_error = init_dict["stop_if_error"]
             if "var_simu" in list(init_dict.keys()):
                 var_simu = init_dict["var_simu"]
-            if "ref_simu_index" in list(init_dict.keys()):
-                ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
             if "is_reuse_femm_file" in list(init_dict.keys()):
@@ -158,7 +155,6 @@ class VarParam(VarSimu):
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
             var_simu=var_simu,
-            ref_simu_index=ref_simu_index,
             nb_simu=nb_simu,
             is_reuse_femm_file=is_reuse_femm_file,
             postproc_list=postproc_list,

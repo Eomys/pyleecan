@@ -32,6 +32,17 @@ def run(self):
     # Generate simulation list and ParamExplorerValue list
     simu_dict = self.generate_simulation_list(ref_simu)
 
+    # Check if one of the simulation from the list matches the reference one
+    ref_simu_index = None
+    for ii, simu in enumerate(simu_dict["simulation_list"]):
+        if simu == ref_simu:
+            ref_simu_index = ii
+            break
+    if self.NAME == "Variable Load" and ref_simu_index is None:
+        logger.warning(
+            "Reference Operating point is not in OP_matrix, one extra simulation will be computed"
+        )
+
     # Fill/initialize input/output parameters
     nb_simu = len(simu_dict["simulation_list"])
     xoutput.nb_simu = nb_simu
@@ -48,27 +59,14 @@ def run(self):
 
     # Run Reference simulation
     logger.info("Computing reference simulation for " + self.NAME)
-    ref_simu_index = self.ref_simu_index
-    index_list = list(range(nb_simu))
 
     progress = 0  # For progress bar
-    if ref_simu_index is not None and ref_simu_index < self.nb_simu:
-        # Use one of the simulation from the list as reference simulation
-        logger.debug(
-            "Using simulation " + str(ref_simu_index) + " as reference simulation"
-        )
-        log_step_simu(ref_simu_index, nb_simu, xoutput.paramexplorer_list, logger)
-        ref_simu = simulation_list[ref_simu_index]
-        index_list.pop(ref_simu_index)  # Avoid to compute twice the simulation
-    else:
-        ref_simu_index = None
-        nb_simu += 1  # Count reference simulation is progress bar
+    nb_simu += 1  # Count reference simulation in progress bar
 
     # Run the simulation & call DataKeeper and post-proc handling errors
     xoutput_ref = run_multisim_step(
         ref_simu,
-        ref_simu_index,  # If None, skip DataKeeper
-        keeper_list,  # datakeeper.result will be updated (if needed)
+        datakeeper_list=keeper_list,  # datakeeper.result will be updated (if needed)
         stop_if_error=True,  # Reference simulation must be correct
         post_keeper_postproc_list=self.post_keeper_postproc_list,
         simu_type=self.NAME,
@@ -83,9 +81,6 @@ def run(self):
     ref_out_dict.pop("__class__")
     for key, value in ref_out_dict.items():
         setattr(xoutput, key, value)
-    # TODO compare simulation if ref_simu_index not None for plot warning
-    if ref_simu_index is not None and self.is_keep_all_output:
-        xoutput.output_list[ref_simu_index] = xoutput_ref
 
     # Reuse some intermediate results from reference simulation (if requested)
     for ii, simu in enumerate(simulation_list):
@@ -99,21 +94,28 @@ def run(self):
             simu.postproc_list = self.pre_keeper_postproc_list
 
     # Execute the simulation list
-    for idx in index_list:
-        simu_step = simulation_list[idx]
+    for idx, simu_step in enumerate(simulation_list):
         # Display simulation progress
         log_step_simu(idx, self.nb_simu, xoutput.paramexplorer_list, logger)
-        # Run the simulation & call DataKeeper and post-proc handling errors
-        xoutput_step = run_multisim_step(
-            simu_step,
-            idx,
-            keeper_list,  # datakeeper.result will be updated (if needed)
-            self.stop_if_error,
-            post_keeper_postproc_list=self.post_keeper_postproc_list,
-            simu_type=self.NAME,
-        )
-        if self.is_keep_all_output:
-            xoutput.output_list[idx] = xoutput_step
+        simu_step.index = idx
+        if idx != ref_simu_index:
+            # Run the simulation & call DataKeeper and post-proc handling errors
+            xoutput_step = run_multisim_step(
+                simu_step,
+                keeper_list,  # datakeeper.result will be updated (if needed)
+                self.stop_if_error,
+                post_keeper_postproc_list=self.post_keeper_postproc_list,
+                simu_type=self.NAME,
+            )
+            if self.is_keep_all_output:
+                xoutput.output_list[idx] = xoutput_step
+        else:
+            logger.info("Simulation matches reference one: Skipping computation")
+            # Copy results from reference
+            for keeper in keeper_list:
+                keeper.result[idx] = keeper.result_ref
+            if self.is_keep_all_output:
+                xoutput.output_list[idx] = xoutput_ref
         progress += 1
         print_progress_bar(nb_simu, progress)
 

@@ -8,7 +8,6 @@ from ....loggers import CONSOLE_LEVEL
 
 def run_multisim_step(
     simulation,
-    index,
     datakeeper_list,
     stop_if_error,
     post_keeper_postproc_list=None,
@@ -21,8 +20,6 @@ def run_multisim_step(
     -----------
     simulation: Simulation
         Simulation to run
-    index: int
-        Index of the simulation (if None:reference simu => Skip DataKeeper)
     datakeeper_list
         List of datakeeper to run and update results
     stop_if_error: bool
@@ -32,7 +29,6 @@ def run_multisim_step(
     simu_type : str
         To adapt the text ex: "Variable Load Results"
     """
-    simulation.index = index
     # Change console logger level from a specific layer (if requested)
     if (
         simulation.layer_log_warn is not None
@@ -57,74 +53,76 @@ def run_multisim_step(
     simulation.get_logger().handlers[0].level = CONSOLE_LEVEL
 
     # Datakeepers
-    if index is not None:  # index == None => ref simu => No DataKeeper
-        if is_error:  # Execute error_keeper
-            for datakeeper in datakeeper_list:
-                # readability
-                dk_result = datakeeper.result
-                if datakeeper.error_keeper is None:
-                    dk_result[index] = None
-                else:
-                    dk_result[index] = datakeeper.error_keeper(simulation)
-        else:  # Execute Normal DataKeeper
-            if simu_type is not None:
-                msg = simu_type + " Results: "
+    index = simulation.index
+    if is_error:  # Execute error_keeper
+        for datakeeper in datakeeper_list:
+            if datakeeper.error_keeper is None:
+                value = None
             else:
-                msg = "Results: "
-            for datakeeper in datakeeper_list:
-                # readability
-                dk_result = datakeeper.result
-                # Run and store Datakeeper
-                try:
-                    dk_result[index] = datakeeper.keeper(result)
-                except Exception as e:
-                    simulation.get_logger().error(
-                        "ERROR while calling DataKeeper "
-                        + datakeeper.name
-                        + " for simulation "
-                        + str(index)
-                        + ":\n"
-                        + str(e)
-                    )
-                    if stop_if_error:
-                        raise e
-                    dk_result[index] = datakeeper.error_keeper(simulation)
-                # Format log
-                if isinstance(dk_result[index], ndarray):
-                    msg += (
-                        datakeeper.symbol
-                        + "=array(min="
-                        + format(np_min(dk_result[index]), ".4g")
-                        + ",max="
-                        + format(np_max(dk_result[index]), ".4g")
-                        + ")"
-                    )
-                elif isinstance(dk_result[index], list):
-                    msg += (
-                        datakeeper.symbol
-                        + "=list(min="
-                        + format(np_min(dk_result[index]), ".4g")
-                        + ",max="
-                        + format(np_max(dk_result[index]), ".4g")
-                        + ")"
-                    )
-                elif isinstance(dk_result[index], Data) or isinstance(
-                    dk_result[index], VectorField
-                ):
-                    msg += datakeeper.symbol + "=" + type(dk_result[index]).__name__
-                elif dk_result[index] is None:
-                    msg += datakeeper.symbol + "= None"
-                else:
-                    msg += datakeeper.symbol + "=" + format(dk_result[index], ".4g")
-                if datakeeper.unit is not None:
-                    msg += " [" + datakeeper.unit + "], "
-                else:
-                    msg += ", "
-            msg = msg[:-2]
-            simulation.get_logger().info(msg)
+                value = datakeeper.error_keeper(simulation)
+            if simulation.index is None:  # index == None => ref simu
+                datakeeper.result_ref = value
+            else:
+                datakeeper.result[index] = value
+    else:  # Execute Normal DataKeeper
+        if simu_type is not None:
+            msg = simu_type + " Results: "
+        else:
+            msg = "Results: "
+        for datakeeper in datakeeper_list:
+            # Run and store Datakeeper
+            try:
+                value = datakeeper.keeper(result)
+            except Exception as e:
+                simulation.get_logger().error(
+                    "ERROR while calling DataKeeper "
+                    + datakeeper.name
+                    + " for simulation "
+                    + str(index)
+                    + ":\n"
+                    + str(e)
+                )
+                if stop_if_error:
+                    raise e
+                value = datakeeper.error_keeper(simulation)
+            if simulation.index is None:  # index == None => ref simu
+                datakeeper.result_ref = value
+            else:
+                datakeeper.result[index] = value
+            # Format log
+            if isinstance(value, ndarray):
+                msg += (
+                    datakeeper.symbol
+                    + "=array(min="
+                    + format(np_min(value), ".4g")
+                    + ",max="
+                    + format(np_max(value), ".4g")
+                    + ")"
+                )
+            elif isinstance(value, list):
+                msg += (
+                    datakeeper.symbol
+                    + "=list(min="
+                    + format(np_min(value), ".4g")
+                    + ",max="
+                    + format(np_max(value), ".4g")
+                    + ")"
+                )
+            elif isinstance(value, Data) or isinstance(value, VectorField):
+                msg += datakeeper.symbol + "=" + type(value).__name__
+            elif value is None:
+                msg += datakeeper.symbol + "=None"
+            else:
+                msg += datakeeper.symbol + "=" + format(value, ".4g")
+            if datakeeper.unit is not None:
+                msg += " [" + datakeeper.unit + "], "
+            else:
+                msg += ", "
+        msg = msg[:-2]
+        simulation.get_logger().info(msg)
 
-            # Run Post datakeeper post-processings
-            if post_keeper_postproc_list is not None:
-                for postproc in post_keeper_postproc_list:
-                    postproc.run(result)
+        # Run Post datakeeper post-processings
+        if post_keeper_postproc_list is not None:
+            for postproc in post_keeper_postproc_list:
+                postproc.run(result)
     return result

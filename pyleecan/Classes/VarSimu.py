@@ -106,7 +106,6 @@ class VarSimu(FrozenClass):
         is_keep_all_output=False,
         stop_if_error=False,
         var_simu=None,
-        ref_simu_index=None,
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
@@ -142,8 +141,6 @@ class VarSimu(FrozenClass):
                 stop_if_error = init_dict["stop_if_error"]
             if "var_simu" in list(init_dict.keys()):
                 var_simu = init_dict["var_simu"]
-            if "ref_simu_index" in list(init_dict.keys()):
-                ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
             if "is_reuse_femm_file" in list(init_dict.keys()):
@@ -162,7 +159,6 @@ class VarSimu(FrozenClass):
         self.is_keep_all_output = is_keep_all_output
         self.stop_if_error = stop_if_error
         self.var_simu = var_simu
-        self.ref_simu_index = ref_simu_index
         self.nb_simu = nb_simu
         self.is_reuse_femm_file = is_reuse_femm_file
         self.postproc_list = postproc_list
@@ -199,7 +195,6 @@ class VarSimu(FrozenClass):
             VarSimu_str += "var_simu = " + tmp
         else:
             VarSimu_str += "var_simu = None" + linesep + linesep
-        VarSimu_str += "ref_simu_index = " + str(self.ref_simu_index) + linesep
         VarSimu_str += "nb_simu = " + str(self.nb_simu) + linesep
         VarSimu_str += "is_reuse_femm_file = " + str(self.is_reuse_femm_file) + linesep
         if len(self.postproc_list) == 0:
@@ -253,8 +248,6 @@ class VarSimu(FrozenClass):
             return False
         if other.var_simu != self.var_simu:
             return False
-        if other.ref_simu_index != self.ref_simu_index:
-            return False
         if other.nb_simu != self.nb_simu:
             return False
         if other.is_reuse_femm_file != self.is_reuse_femm_file:
@@ -305,8 +298,6 @@ class VarSimu(FrozenClass):
             diff_list.extend(
                 self.var_simu.compare(other.var_simu, name=name + ".var_simu")
             )
-        if other._ref_simu_index != self._ref_simu_index:
-            diff_list.append(name + ".ref_simu_index")
         if other._nb_simu != self._nb_simu:
             diff_list.append(name + ".nb_simu")
         if other._is_reuse_femm_file != self._is_reuse_femm_file:
@@ -383,7 +374,6 @@ class VarSimu(FrozenClass):
         S += getsizeof(self.is_keep_all_output)
         S += getsizeof(self.stop_if_error)
         S += getsizeof(self.var_simu)
-        S += getsizeof(self.ref_simu_index)
         S += getsizeof(self.nb_simu)
         S += getsizeof(self.is_reuse_femm_file)
         if self.postproc_list is not None:
@@ -422,7 +412,6 @@ class VarSimu(FrozenClass):
             VarSimu_dict["var_simu"] = None
         else:
             VarSimu_dict["var_simu"] = self.var_simu.as_dict(**kwargs)
-        VarSimu_dict["ref_simu_index"] = self.ref_simu_index
         VarSimu_dict["nb_simu"] = self.nb_simu
         VarSimu_dict["is_reuse_femm_file"] = self.is_reuse_femm_file
         if self.postproc_list is None:
@@ -470,7 +459,6 @@ class VarSimu(FrozenClass):
         self.stop_if_error = None
         if self.var_simu is not None:
             self.var_simu._set_None()
-        self.ref_simu_index = None
         self.nb_simu = None
         self.is_reuse_femm_file = None
         self.postproc_list = None
@@ -609,25 +597,6 @@ class VarSimu(FrozenClass):
         doc=u"""Multi-simulation of a Multi-simulation definition
 
         :Type: VarSimu
-        """,
-    )
-
-    def _get_ref_simu_index(self):
-        """getter of ref_simu_index"""
-        return self._ref_simu_index
-
-    def _set_ref_simu_index(self, value):
-        """setter of ref_simu_index"""
-        check_var("ref_simu_index", value, "int", Vmin=0)
-        self._ref_simu_index = value
-
-    ref_simu_index = property(
-        fget=_get_ref_simu_index,
-        fset=_set_ref_simu_index,
-        doc=u"""Index of the reference simulation, if None the reference simulation is not in the multi-simulation
-
-        :Type: int
-        :min: 0
         """,
     )
 
