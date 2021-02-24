@@ -20,7 +20,7 @@ from ....Classes.Material import Material
 
 
 class WGuiOption(Ui_GUIOption, QDialog):
-    def __init__(self, machine_setup, matlib):
+    def __init__(self, machine_setup=None, matlib=None):
         """
         WGuiOption enable to modify some option in the GUI such as:
             - units
@@ -58,9 +58,11 @@ class WGuiOption(Ui_GUIOption, QDialog):
         matlib_path = self.w_matlib_path.get_path()
         config_dict["MAIN"]["MATLIB_DIR"] = matlib_path
         save_config_dict(config_dict)
-
-        self.matlib.load_mat_ref(matlib_path)
-        self.matlib.add_machine_mat(self.machine_setup.machine)
+        
+        if self.matlib is not None:
+            self.matlib.load_mat_ref(matlib_path)
+            if self.machine_setup is not None:
+                self.matlib.add_machine_mat(self.machine_setup.machine)
 
     def set_unit_m(self):
         """Update the value of unit_m"""
