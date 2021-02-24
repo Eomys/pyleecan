@@ -48,6 +48,8 @@ def generate_as_dict(gen_dict, class_dict):
             var_str += _get_list_of_ndarray_str(cls, prop)
         elif prop_type == "{ndarray}":
             var_str += _get_dict_of_ndarray_str(cls, prop)
+        elif prop_type in [None, ""]:
+            var_str += _get_no_type_str(cls, prop)
         elif is_list_pyleecan_type(prop_type):
             var_str += _get_list_of_pyleecan_str(cls, prop, prop_type)
         elif is_dict_pyleecan_type(prop_type):
@@ -234,4 +236,18 @@ def _get_python_type_str(cls, prop):
     # PYTHON_TYPE excluding list, dict and complex
     # Add => "cls ["var_name"] = self.var_name" to var_str
     var_str = T2 + f'{cls}_dict["{prop}"] = self.{prop}'
+    return var_str
+
+
+def _get_no_type_str(cls, prop):
+    # Add => "cls ["var_name"] = self.var_name.tolist()" to var_str
+    var_str = ""
+    var_str += T2 + f"if self.{prop} is None:"
+    var_str += T3 + f'{cls}_dict["{prop}"] = None'
+    var_str += T2 + f"elif isinstance(self.{prop}, np.ndarray):"
+    var_str += T3 + f'{cls}_dict["{prop}"] = self.{prop}.tolist()'
+    var_str += T2 + f"elif hasattr(self.{prop}, 'as_dict'):"
+    var_str += T3 + f'{cls}_dict["{prop}"] = self.{prop}.as_dict()'
+    var_str += T2 + f"else:"
+    var_str += T3 + f'{cls}_dict["{prop}"] = self.{prop}'
     return var_str

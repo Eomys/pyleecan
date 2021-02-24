@@ -196,6 +196,28 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB5 + "value[ii].parent = self\n"
         set_str += TAB2 + "if value == -1:\n"
         set_str += TAB3 + "value = list()\n"
+    elif prop["type"] in ["", None]:  # No type
+        set_str += TAB2 + "if isinstance(value, dict) and '__class__' in value:\n"
+        set_str += TAB3 + "try:\n"
+        set_str += (
+            TAB4
+            + "class_obj = import_class('pyleecan.Classes', value.get('__class__'), '"
+            + prop["name"]
+            + "')\n"
+        )
+        set_str += TAB3 + "except:\n"
+        set_str += (
+            TAB4
+            + "class_obj = import_class('SciDataTool.Classes', value.get('__class__'), '"
+            + prop["name"]
+            + "')\n"
+        )
+        set_str += TAB3 + "value = class_obj(init_dict=value)\n"
+        set_str += TAB2 + "elif type(value) is list:\n"
+        set_str += TAB3 + "try:\n"
+        set_str += TAB4 + "value = np.array(value)\n"
+        set_str += TAB3 + "except:\n"
+        set_str += TAB4 + "pass\n"
     elif (
         ("." not in prop["type"] or "SciDataTool" in prop["type"])
         and prop["type"] not in PYTHON_TYPE
