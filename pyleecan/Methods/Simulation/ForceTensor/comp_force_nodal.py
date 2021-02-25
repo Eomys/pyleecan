@@ -6,8 +6,7 @@ from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.SolutionVector import SolutionVector
 
 
-
-def comp_alpha_coeffs(mu,M):
+def comp_alpha_coeffs(mu, M):
     """compute alpha1 and alpha2 for magnetostrictive tensor. 
 
     from publications: IEEETranMagn2004
@@ -30,11 +29,11 @@ def comp_alpha_coeffs(mu,M):
     a22 = 0.114
     a24 = 0.004
 
-    M_norm = np.linalg.norm(M,axis=(0,1))
-    mu_times_Mnorm_squared = np.multiply(mu,M_norm)**2
+    M_norm = np.linalg.norm(M, axis=(0, 1))
+    mu_times_Mnorm_squared = np.multiply(mu, M_norm) ** 2
 
-    alpha1 = a10 + a12*mu_times_Mnorm_squared + a14*mu*mu_times_Mnorm_squared**2
-    alpha2 = a20 + a22*mu_times_Mnorm_squared + a24*mu*mu_times_Mnorm_squared**2
+    alpha1 = a10 + a12 * mu_times_Mnorm_squared + a14 * mu * mu_times_Mnorm_squared ** 2
+    alpha2 = a20 + a22 * mu_times_Mnorm_squared + a24 * mu * mu_times_Mnorm_squared ** 2
 
     return alpha1, alpha2
 
@@ -64,15 +63,15 @@ def comp_magnetrosctrictive_tensor(mu,M,Nt_tot):
     for ti in range(Nt_tot):
         mu_ti = mu[ti]
 
-        M_times_M = np.dot(M[:,:,ti],np.transpose(M[:,:,ti]))
+        M_times_M = np.dot(M[:, :, ti], np.transpose(M[:, :, ti]))
 
-        M_norm_squared = np.linalg.norm(M[:,:,ti])**2
-        I = np.eye(2,2)
-        
-        first_member = -alpha1[ti]*mu_ti*M_times_M
-        second_member = -alpha2[ti]*mu_ti*M_norm_squared*I
+        M_norm_squared = np.linalg.norm(M[:, :, ti]) ** 2
+        I = np.eye(2, 2)
 
-        magnetostric_tensor[:,:,ti] = first_member + second_member
+        first_member = -alpha1[ti] * mu_ti * M_times_M
+        second_member = -alpha2[ti] * mu_ti * M_norm_squared * I
+
+        magnetostric_tensor[:, :, ti] = first_member + second_member
 
     return magnetostric_tensor
 
@@ -85,35 +84,35 @@ def comp_force_nodal(self, output, axes_dict):
 
     Parameters
     ----------
-    self : ForceVWP
-        A ForceVWP object
+    self : ForceTensor
+        A ForceTensor object
 
     output : Output
         an Output object (to update)
 
     """
+
     dim = 2
-    Nt_tot = output.mag.Time.get_length()  # Number of time step
+    Time = axes_dict["Time"]
+    Nt_tot = Time.get_length()  # Number of time step
 
     meshsolution_mag = output.mag.meshsolution # Comes from FEMM simulation
-    mesh_mag = output.mag.meshsolution.mesh
+
+    # Select the target group (stator, rotor ...)
+    meshsolution_group = meshsolution_mag.get_group(self.group)
+
+    # TODO before: Check if is_same_mesh is True
+    mesh = meshsolution_group.get_mesh()
 
     # New meshsolution object for output, that could be different from the one inputed 
-    meshsolution = MeshSolution(
-        mesh=mesh_mag, is_same_mesh=True, dimension=meshsolution_mag.dimension
-    )
-    # Airgap, windings, stator, ...
-    meshsolution.group = meshsolution_mag.group
+    meshsolution = MeshSolution(mesh=[mesh.copy()], is_same_mesh=True, dimension=dim)
 
-    # output.struct.magnetic_mesh.is_same_mesh = meshsolution_mag.is_same_mesh
-
-    mesh = meshsolution.get_mesh(0)
-    B_sol = meshsolution_mag.get_solution(label="B")
-    H_sol = meshsolution_mag.get_solution(label="H")
-    mu_sol = meshsolution_mag.get_solution(label="\mu")
+    # Load magnetic flux B and H and mu objects
+    B_sol = meshsolution_group.get_solution(label="B")
+    H_sol = meshsolution_group.get_solution(label="H")
+    mu_sol = meshsolution_group.get_solution(label="\mu")
 
     # Import time vector from Time Data object
-    Time = axes_dict["Time"]
     if self.is_periodicity_t is not None:
         is_periodicity_t = self.is_periodicity_t
 
@@ -130,13 +129,10 @@ def comp_force_nodal(self, output, axes_dict):
         "time=axis_data",
         axis_data={"time": time},
     )
-
-   
-    indice = resultB["indice"]  #Store elements indices
-
+    indice = resultB["indice"] #Store elements indices
     Bx = resultB["comp_x"]
     By = resultB["comp_y"]
-    B = np.stack((Bx, By),axis=2)
+    B = np.stack((Bx, By), axis=2)
 
     resultH = H_sol.field.get_xyz_along(
         "indice",
@@ -145,7 +141,7 @@ def comp_force_nodal(self, output, axes_dict):
     )
     Hx = resultH["comp_x"]
     Hy = resultH["comp_y"]
-    H = np.stack((Hx, Hy),axis=2)
+    H = np.stack((Hx, Hy), axis=2)
 
     resultmu = mu_sol.field.get_along(
         "indice",
@@ -163,6 +159,7 @@ def comp_force_nodal(self, output, axes_dict):
     for key in mesh.cell:  
         
         
+
         # mesh.cell[key].interpolation = Interpolation()
         # mesh.cell[key].interpolation.init_key(key=key, nb_gauss=1)
 
@@ -176,46 +173,49 @@ def comp_force_nodal(self, output, axes_dict):
         f = np.zeros((nb_pt,dim,Nt_tot), dtype=np.float)
        
 
-        # ref_cell = mesh.cell[key].interpolation.ref_cell // pas besoin d'interpoler car tout est cst 
+        # ref_cell = mesh.cell[key].interpolation.ref_cell // pas besoin d'interpoler car tout est cst
 
         # Gauss points
         # pts_gauss, poidsGauss, nb_gauss = mesh.cell[
         #     key
         # ].interpolation.gauss_point.get_gauss_points()
 
-        #indice_elem = mesh.cell[key].indice
+        # indice_elem = mesh.cell[key].indice
 
-         
-        # Loop on element (elt)
-        for e_ind,e in enumerate(indice):
-            
-            point_indices = connect[e_ind, :] #elt nodes indices
+		# Loop on element (elt)
+        for e, e_ind in enumerate(
+            indice
+        ):  
+            point_indices = connect[e, :] #elt nodes indices
             vertice = mesh.get_vertice(e_ind)[key] #elt nodes coordonates
+			# elt physical fields values
+            Be = B[e, :, :]
+            He = H[e, :, :]
+            mue = mu[e, :]
 
-            # elt physical fields values
-            Be = B[e_ind, :, :]
-            He = H[e_ind, :, :]
-            mue = mu[e_ind, :]
-            Me = np.reshape(Be/mue - He,(dim,1,Nt_tot)) # reshaped for matrix product purpose 
+            Me = np.reshape(Be / mue - He, (dim, 1, Nt_tot)) # reshaped for matrix product purpose 
+			# elt magnetostrictive tensor
+            tme = comp_magnetrosctrictive_tensor(mue, Me, Nt_tot)
 
-            # elt magnetostrictive tensor
-            tme = comp_magnetrosctrictive_tensor(mue,Me,Nt_tot)
+            # Loop on edges
+            for n in range(
+                nb_pt_per_cell
+            ):  
 
+				# Get current node + next node indices (both needed since pression will be computed on edges because of Green Ostrogradski)
+                inode = point_indices[
+                    n % nb_pt_per_cell
+                ]  
+                next_inode = point_indices[(n + 1) % nb_pt_per_cell]
 
-            # Loop on nodes
-            for n in range(nb_pt_per_cell): 
+				# Edge cooordonates
+                edge_vector = (
+                    vertice[(n + 1) % nb_pt_per_cell] - vertice[n % nb_pt_per_cell]
+                )  # coordonées du vecteur nn+1
 
-
-                # Get current node + next node indices (both needed since pression will be computed on edges because of Green Ostrogradski)
-                inode = point_indices[n%nb_pt_per_cell] 
-                next_inode = point_indices[(n+1)%nb_pt_per_cell]
-
-                # Edge cooordonate
-                edge_vector = vertice[(n+1)%nb_pt_per_cell] - vertice[n%nb_pt_per_cell] 
-                
                 # Volume ratio (Green Ostrogradski), with a conventional 1/2 for a share between 2 nodes
                 L = np.linalg.norm(edge_vector)
-                Ve0 = L/2 
+                Ve0 = L / 2
 
                 # Normalized normal vector n
                 normal_to_edge = np.array((edge_vector[1],-edge_vector[0])/L).reshape(dim,1) 
@@ -225,11 +225,8 @@ def comp_force_nodal(self, output, axes_dict):
 
                 # Total edge force contribution, to be added to the 2 nodes that made the edge
                 fe = Ve0 * edge_force
-                f[inode,:,:] = f[inode,:,:] + fe
-                f[next_inode,:,:] = f[next_inode,:,:] + fe
-                
-
-              
+                f[inode, :, :] = f[inode, :, :] + fe
+                f[next_inode, :, :] = f[next_inode, :, :] + fe
 
     indices_points = np.sort(np.unique(connect))
     Indices_Point = Data1D(name="indice", values=indices_points, is_components=True)
@@ -239,13 +236,13 @@ def comp_force_nodal(self, output, axes_dict):
 
 
     components = {}
-    
+
     fx_data = DataTime(
         name="Nodal force (x)",
         unit="N",
         symbol="Fx",
         axes=[Time, Indices_Point],
-        values=f[...,0],
+        values=f[..., 0],
     )
     components["comp_x"] = fx_data
 
@@ -254,7 +251,7 @@ def comp_force_nodal(self, output, axes_dict):
         unit="N",
         symbol="Fy",
         axes=[Time, Indices_Point],
-        values=f[...,1],
+        values=f[..., 1],
     )
     components["comp_y"] = fy_data
 
@@ -262,7 +259,7 @@ def comp_force_nodal(self, output, axes_dict):
     solforce = SolutionVector(field=vec_force, type_cell="point", label="F")
     meshsolution.solution.append(solforce)
 
-    #output.force.vwp_nodal = meshsolution
+    out_dict = dict()
+    out_dict["meshsolution"] = meshsolution
 
-    meshsolution.plot_glyph()
-    pass
+    return out_dict

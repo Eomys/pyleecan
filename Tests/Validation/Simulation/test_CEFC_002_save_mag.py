@@ -1,4 +1,3 @@
-
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
@@ -92,8 +91,8 @@ def test_Slotless_CEFC_002():
     # Test to load the Meshsolution object (inside the output):
     FEMM = load(join(save_path, "Slotless_CEFC_002.h5"))
 
-    # TODO : out.compare(FEMM) 
-    
+    # TODO : out.compare(FEMM)
+
     # [Important] To test that fields are still working after saving and loading
     FEMM.mag.meshsolution.plot_mesh(
         save_path=join(save_path, "CEFC_002_mesh_load.png"), is_show_fig=False
