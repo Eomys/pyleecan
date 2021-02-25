@@ -12276,7 +12276,8 @@
             "plot_pareto",
             "plot_generation",
             "get_pareto_index",
-            "print_memory"
+            "print_memory",
+            "get_xoutput_ref"
         ],
         "mother": "Output",
         "name": "XOutput",
@@ -12293,7 +12294,7 @@
                 "value": ""
             },
             {
-                "desc": "List containing Output for each simulation",
+                "desc": "List containing Output (or Xoutput) for each simulation",
                 "max": "",
                 "min": "",
                 "name": "output_list",
@@ -12302,7 +12303,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing VarParam DataKeeper results in ndarray",
+                "desc": "Dictionnary containing DataKeeper",
                 "max": "",
                 "min": "",
                 "name": "xoutput_dict",
@@ -12318,6 +12319,24 @@
                 "type": "int",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "Xoutput (or Output) of the reference simulation (only if is_keep_all_output is True and not included in output_list)",
+                "max": "",
+                "min": "",
+                "name": "xoutput_ref",
+                "type": "XOutput",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Index of the Xoutput (or Output) of the reference simulation in the output_list (only if is_keep_all_output is True)",
+                "max": "",
+                "min": "",
+                "name": "xoutput_ref_index",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     }

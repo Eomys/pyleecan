@@ -77,6 +77,13 @@ def run(self):
         post_keeper_postproc_list=self.post_keeper_postproc_list,
         simu_type=self.NAME,
     )
+    # Save reference xoutput (if requested)
+    if self.is_keep_all_output:
+        if ref_simu_index is None:
+            xoutput.xoutput_ref = xoutput_ref
+        else:  # Avoid duplicating the XOutput
+            xoutput.xoutput_ref_index = ref_simu_index
+
     progress += 1
     print_progress_bar(nb_simu, progress, ref_simu.layer)
 
