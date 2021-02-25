@@ -834,8 +834,8 @@ class XOutput(Output):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            value = XOutput()
-        check_var("xoutput_ref", value, "XOutput")
+            value = Output()
+        check_var("xoutput_ref", value, "Output")
         self._xoutput_ref = value
 
         if self._xoutput_ref is not None:
@@ -846,7 +846,7 @@ class XOutput(Output):
         fset=_set_xoutput_ref,
         doc=u"""Xoutput (or Output) of the reference simulation (only if is_keep_all_output is True and not included in output_list)
 
-        :Type: XOutput
+        :Type: Output
         """,
     )
 

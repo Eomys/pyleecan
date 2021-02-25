@@ -12325,7 +12325,7 @@
                 "max": "",
                 "min": "",
                 "name": "xoutput_ref",
-                "type": "XOutput",
+                "type": "Output",
                 "unit": "-",
                 "value": null
             },
