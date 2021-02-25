@@ -8,6 +8,7 @@ from ....Classes.MeshMat import MeshMat
 
 def plot_glyph(
     self,
+    *arg_list,
     label=None,
     index=None,
     indices=None,
@@ -85,12 +86,9 @@ def plot_glyph(
         mesh_pv = mesh.get_mesh_pv(indices=indices)
 
         # Get the vector field
-        args = dict()
-        args["freq"] = [0]
-        args["time"] = [0]
-        vect_field = real(
-            self.get_field(label=label, index=index, indices=indices, args=args)
-        )
+        arg_list = ["time[0]", "indice"]
+
+        vect_field = real(self.get_field(*arg_list, label=label, index=index))
         # if len(vect_field.shape) == 3:
         #     # Third dimension is frequencies
         #     vect_field = vect_field[:, :, ifreq]
