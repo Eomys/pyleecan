@@ -24,7 +24,7 @@ def get_elec_datakeeper(self, symbol_list):
             DataKeeper(
                 name="Id",
                 symbol="Id",
-                unit="A",
+                unit="Arms",
                 keeper="lambda output: output.elec.Id_ref",
             )
         )
@@ -34,7 +34,7 @@ def get_elec_datakeeper(self, symbol_list):
             DataKeeper(
                 name="Iq",
                 symbol="Iq",
-                unit="A",
+                unit="Arms",
                 keeper="lambda output: output.elec.Iq_ref",
             )
         )
