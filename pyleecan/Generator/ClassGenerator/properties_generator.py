@@ -301,7 +301,11 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB2 + "self._" + prop["name"] + " = value\n\n"
 
     ## Update Parent
-    if (
+    if prop["type"] in ["", None]:
+        # No type
+        set_str += TAB2 + "if hasattr(self._" + prop["name"] + ", 'parent'):\n"
+        set_str += TAB3 + "self._" + prop["name"] + ".parent = self\n"
+    elif (
         prop["type"] not in PYTHON_TYPE
         and prop["type"] not in ["ndarray", "function", "{ndarray}", "[ndarray]"]
         and not is_dict_pyleecan_type(prop["type"])

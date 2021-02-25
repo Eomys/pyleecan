@@ -395,7 +395,7 @@ class DataKeeper(FrozenClass):
         check_var("result_ref", value, "")
         self._result_ref = value
 
-        if self._result_ref is not None:
+        if hasattr(self._result_ref, "parent"):
             self._result_ref.parent = self
 
     result_ref = property(
