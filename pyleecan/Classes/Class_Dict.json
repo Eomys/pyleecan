@@ -1559,7 +1559,17 @@
         "name": "ForceTensor",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/ForceTensor.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Name of the group selected for magnetic force computation. If None, all the domain is selected.",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "str",
+                "unit": "-",
+                "value": "stator core"
+            }
+        ]
     },
     "Frame": {
         "constants": [
@@ -6726,6 +6736,15 @@
                 "min": "",
                 "name": "Rag",
                 "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Force computed on a mesh",
+                "max": "",
+                "min": "",
+                "name": "meshsolution",
+                "type": "MeshSolution",
                 "unit": "-",
                 "value": null
             }

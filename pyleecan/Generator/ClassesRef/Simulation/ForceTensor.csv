@@ -1,3 +1,3 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe file
-,,,,,,,,,Simulation,Force,comp_force,VERSION,1,"Force various tensors (Maxwell, magnetostrictive) model for radial flux machines",
+group,-,"Name of the group selected for magnetic force computation. If None, all the domain is selected.",,str,stator core,,,,Simulation,Force,comp_force,VERSION,1,"Force various tensors (Maxwell, magnetostrictive) model for radial flux machines",
 ,,,,,,,,,,,comp_force_nodal,,,,

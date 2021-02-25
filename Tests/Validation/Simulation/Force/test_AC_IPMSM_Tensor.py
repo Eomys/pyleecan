@@ -1,13 +1,9 @@
-from os.path import dirname, abspath, normpath, join
-
-
-
 # -*- coding: utf-8 -*-
 import pytest
 
 from os.path import join
 from numpy import zeros, exp, pi, real, meshgrid, mean
-
+from multiprocessing import cpu_count
 from numpy.testing import assert_array_almost_equal
 
 
@@ -27,13 +23,13 @@ DELTA = 1e-6
 @pytest.mark.validation
 @pytest.mark.Force
 @pytest.mark.long
-def test_AC_IPMSM_AGSF_Tensor():
+def test_Benchmark_Tensor():
     """Validation of the AGSF spectrum calculation for IPMSM machine"""
 
     # Load machine
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    Benchmark = load(join(DATA_DIR, "Machine", "Benchmark.json"))
     # Prepare simulation
-    simu = Simu1(name="AC_IPMSM_plot", machine=IPMSM_A)
+    simu = Simu1(name="Benchmark_Tensor", machine=Benchmark)
 
     simu.input = InputCurrent(
         Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=3, N0=1200
@@ -47,6 +43,8 @@ def test_AC_IPMSM_AGSF_Tensor():
         is_periodicity_a=True,
         is_periodicity_t=False,
         is_get_meshsolution=True,
+        nb_worker=cpu_count(),
+        Kmesh_fineness=2,
     )
     simu.force = ForceTensor(
         is_periodicity_a=True,
@@ -56,17 +54,11 @@ def test_AC_IPMSM_AGSF_Tensor():
     # Run simulation
     out = simu.run()
 
-    out.plot_2D_Data(
-        "force.AGSF",
-        "angle",
-        "time[1]",
-        save_path=join(save_path, simu.name + "_AGSF_space_fft_freq160_no_sym.png"),
-        is_show_fig=False,
-    )
+    out.force.meshsolution.plot_glyph(label='F', is_point_arrow=True)
 
     return out
 
 
 if __name__ == "__main__":
 
-    out = test_AC_IPMSM_AGSF_Tensor()
+    out = test_Benchmark_Tensor()

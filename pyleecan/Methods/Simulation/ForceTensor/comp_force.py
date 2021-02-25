@@ -1,7 +1,6 @@
 from numpy import pi, all as np_all
 
 
-
 def comp_force(self, output, axes_dict):
     """Compute the air-gap surface force based on Maxwell Tensor (MT).
 
@@ -29,6 +28,6 @@ def comp_force(self, output, axes_dict):
 
     # Test comp_force_nodal #
 
-    self.comp_force_nodal(output, axes_dict)
+    out_dict = self.comp_force_nodal(output, axes_dict)
 
-    pass
+    return out_dict

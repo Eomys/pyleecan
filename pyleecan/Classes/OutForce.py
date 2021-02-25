@@ -24,6 +24,7 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
+from .MeshSolution import MeshSolution
 
 
 class OutForce(FrozenClass):
@@ -53,6 +54,7 @@ class OutForce(FrozenClass):
         AGSF=None,
         logger_name="Pyleecan.Force",
         Rag=None,
+        meshsolution=None,
         init_dict=None,
         init_str=None,
     ):
@@ -81,6 +83,8 @@ class OutForce(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "Rag" in list(init_dict.keys()):
                 Rag = init_dict["Rag"]
+            if "meshsolution" in list(init_dict.keys()):
+                meshsolution = init_dict["meshsolution"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
@@ -88,6 +92,7 @@ class OutForce(FrozenClass):
         self.AGSF = AGSF
         self.logger_name = logger_name
         self.Rag = Rag
+        self.meshsolution = meshsolution
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -105,6 +110,15 @@ class OutForce(FrozenClass):
         OutForce_str += "AGSF = " + str(self.AGSF) + linesep + linesep
         OutForce_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         OutForce_str += "Rag = " + str(self.Rag) + linesep
+        if self.meshsolution is not None:
+            tmp = (
+                self.meshsolution.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            OutForce_str += "meshsolution = " + tmp
+        else:
+            OutForce_str += "meshsolution = None" + linesep + linesep
         return OutForce_str
 
     def __eq__(self, other):
@@ -121,6 +135,8 @@ class OutForce(FrozenClass):
         if other.logger_name != self.logger_name:
             return False
         if other.Rag != self.Rag:
+            return False
+        if other.meshsolution != self.meshsolution:
             return False
         return True
 
@@ -152,6 +168,16 @@ class OutForce(FrozenClass):
             diff_list.append(name + ".logger_name")
         if other._Rag != self._Rag:
             diff_list.append(name + ".Rag")
+        if (other.meshsolution is None and self.meshsolution is not None) or (
+            other.meshsolution is not None and self.meshsolution is None
+        ):
+            diff_list.append(name + ".meshsolution None mismatch")
+        elif self.meshsolution is not None:
+            diff_list.extend(
+                self.meshsolution.compare(
+                    other.meshsolution, name=name + ".meshsolution"
+                )
+            )
         return diff_list
 
     def __sizeof__(self):
@@ -163,6 +189,7 @@ class OutForce(FrozenClass):
         S += getsizeof(self.AGSF)
         S += getsizeof(self.logger_name)
         S += getsizeof(self.Rag)
+        S += getsizeof(self.meshsolution)
         return S
 
     def as_dict(self):
@@ -183,6 +210,10 @@ class OutForce(FrozenClass):
             OutForce_dict["AGSF"] = self.AGSF.as_dict()
         OutForce_dict["logger_name"] = self.logger_name
         OutForce_dict["Rag"] = self.Rag
+        if self.meshsolution is None:
+            OutForce_dict["meshsolution"] = None
+        else:
+            OutForce_dict["meshsolution"] = self.meshsolution.as_dict()
         # The class name is added to the dict for deserialisation purpose
         OutForce_dict["__class__"] = "OutForce"
         return OutForce_dict
@@ -195,6 +226,8 @@ class OutForce(FrozenClass):
         self.AGSF = None
         self.logger_name = None
         self.Rag = None
+        if self.meshsolution is not None:
+            self.meshsolution._set_None()
 
     def _get_Time(self):
         """getter of Time"""
@@ -310,5 +343,35 @@ class OutForce(FrozenClass):
         doc=u"""Radius value for air-gap computation
 
         :Type: float
+        """,
+    )
+
+    def _get_meshsolution(self):
+        """getter of meshsolution"""
+        return self._meshsolution
+
+    def _set_meshsolution(self, value):
+        """setter of meshsolution"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "meshsolution"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = MeshSolution()
+        check_var("meshsolution", value, "MeshSolution")
+        self._meshsolution = value
+
+        if self._meshsolution is not None:
+            self._meshsolution.parent = self
+
+    meshsolution = property(
+        fget=_get_meshsolution,
+        fset=_set_meshsolution,
+        doc=u"""Force computed on a mesh
+
+        :Type: MeshSolution
         """,
     )
