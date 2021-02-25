@@ -39,12 +39,6 @@ def check_param(self):
 
     # Default simulation index
     N_simu = self.get_simu_number()
-    if self.ref_simu_index is not None:
-        assert self.ref_simu_index < N_simu, VarParamError(
-            "ref_simu_index must be less than {}, got {}".format(
-                N_simu, self.ref_simu_index
-            )
-        )
 
     # Keep every output if there is no DataKeeper defined
     if len(self.datakeeper_list) == 0 and self.is_keep_all_output is False:

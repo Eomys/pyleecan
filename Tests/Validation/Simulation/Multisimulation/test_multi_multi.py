@@ -120,16 +120,12 @@ def test_multi_multi():
     )
 
     # Enforced sinusoïdal current (Maximum Torque Per Amp)
-    I0_rms = 250 / sqrt(2)
-    Phi0 = 140 * pi / 180
-    Id_ref = (I0_rms * exp(1j * Phi0)).real
-    Iq_ref = (I0_rms * exp(1j * Phi0)).imag
     simu.input = InputCurrent(
         Is=None,
         Ir=None,  # No winding on the rotor
-        N0=2500,
-        Id_ref=Id_ref,
-        Iq_ref=Iq_ref,
+        N0=N0_MTPA[0],
+        Id_ref=Id_MTPA[0],
+        Iq_ref=Iq_MTPA[0],
         angle_rotor=None,  # Will be computed
         Nt_tot=Nt_tot,
         Na_tot=2048,
@@ -151,7 +147,7 @@ def test_multi_multi():
     )
 
     # VarSpeed Definition
-    varload = VarLoadCurrent(is_reuse_femm_file=True, ref_simu_index=0)
+    varload = VarLoadCurrent(is_reuse_femm_file=True)
     varload.type_OP_matrix = 1  # Matrix N0, Id, Iq
 
     OP_matrix = zeros((Nspeed, 3))
@@ -188,7 +184,6 @@ def test_multi_multi():
     multisim = VarParam(
         stop_if_error=True,
         is_reuse_femm_file=False,
-        ref_simu_index=0,
     )
 
     simu.var_simu = multisim
