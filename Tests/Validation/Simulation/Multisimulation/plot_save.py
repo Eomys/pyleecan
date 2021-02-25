@@ -64,6 +64,7 @@ def plot_save(output):
     else:  # Reference
         plt.title(
             "Reference Simulation",
-            fontsize=40,
+            fontsize=20,
         )
         fig.savefig(join(output.get_path_result(), "machine_ref.png"), dpi=100)
+    plt.close()  # Close after save
