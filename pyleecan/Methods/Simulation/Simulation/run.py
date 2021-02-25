@@ -51,7 +51,7 @@ def run(self):
         # Compute the simulation
         self.run_single()
 
-    if self.index is None:
+    if self.index is None and self.layer == 0:
         msg = "End of simulation"
         if self.name not in ["", None]:
             msg += " " + self.name

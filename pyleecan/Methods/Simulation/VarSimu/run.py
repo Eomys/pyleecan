@@ -61,7 +61,10 @@ def run(self):
         keeper_list[-1].result = [None] * self.nb_simu
 
     # Run Reference simulation
-    logger.info("Computing reference simulation for " + self.NAME)
+    if ref_simu.layer == 2:
+        logger.info("    Computing reference simulation for " + self.NAME)
+    else:
+        logger.info("Computing reference simulation for " + self.NAME)
 
     progress = 0  # For progress bar
     nb_simu += 1  # Count reference simulation in progress bar
@@ -75,7 +78,7 @@ def run(self):
         simu_type=self.NAME,
     )
     progress += 1
-    print_progress_bar(nb_simu, progress,ref_simu.layer)
+    print_progress_bar(nb_simu, progress, ref_simu.layer)
 
     # Store the Ouput part of the xoutput_ref into the main xoutput
     ref_out_dict = Output.as_dict(xoutput_ref)
@@ -88,7 +91,12 @@ def run(self):
     # Reuse some intermediate results from reference simulation (if requested)
     for ii, simu in enumerate(simulation_list):
         # Log only for first simulation
-        self.set_reused_data(simu, xoutput_ref, is_log=ii == 0)
+        self.set_reused_data(
+            simu,
+            xoutput_ref,
+            is_log=ii == 0,
+            simu_type=self.NAME,
+        )
 
     # Update the postprocessing list if needed
     if self.pre_keeper_postproc_list is not None:
@@ -99,7 +107,9 @@ def run(self):
     # Execute the simulation list
     for idx, simu_step in enumerate(simulation_list):
         # Display simulation progress
-        log_step_simu(idx, self.nb_simu, xoutput.paramexplorer_list, logger)
+        log_step_simu(
+            idx, self.nb_simu, xoutput.paramexplorer_list, logger, simu_step.layer
+        )
         simu_step.index = idx
         if idx != ref_simu_index:
             # Run the simulation & call DataKeeper and post-proc handling errors
@@ -113,7 +123,12 @@ def run(self):
             if self.is_keep_all_output:
                 xoutput.output_list[idx] = xoutput_step
         else:
-            logger.info("Simulation matches reference one: Skipping computation")
+            if simu_step.layer == 2:
+                logger.info(
+                    "    Simulation matches reference one: Skipping computation"
+                )
+            else:
+                logger.info("Simulation matches reference one: Skipping computation")
             # Copy results from reference
             for keeper in keeper_list:
                 keeper.result[idx] = keeper.result_ref
@@ -131,7 +146,7 @@ def run(self):
             postproc.run(xoutput)
 
 
-def log_step_simu(index, nb_simu, paramexplorer_list, logger):
+def log_step_simu(index, nb_simu, paramexplorer_list, logger, layer):
     """Add in the log some information about the simulation about to run
     Ex: "Running simulation 3/4 with Id=-135.41881, Iq=113.62987"
 
@@ -147,8 +162,12 @@ def log_step_simu(index, nb_simu, paramexplorer_list, logger):
         Logger to use (info)
     """
 
+    if layer == 2:
+        msg = "    "
+    else:
+        msg = ""
     InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
-    msg = "Running simulation " + str(index + 1) + "/" + str(nb_simu) + " with "
+    msg += "Running simulation " + str(index + 1) + "/" + str(nb_simu) + " with "
     for param_exp in paramexplorer_list:
         value = param_exp.get_value()[index]
         if isinstance(value, InputCurrent):
@@ -185,13 +204,14 @@ def print_progress_bar(Nsimu, index, layer):
         Index of the simulation about to run
     """
     if layer == 2:
-        msg = "    "
+        msg = "               "
     else:
         msg = ""
-    msg += (
-        "\r["
+    print(
+        "\r"
+        + msg
+        + "["
         + "=" * (50 * index // (Nsimu))
         + " " * (50 - ((50 * index) // (Nsimu)))
         + "] {:3d}%".format(((100 * index) // (Nsimu)))
     )
-    print(msg)
