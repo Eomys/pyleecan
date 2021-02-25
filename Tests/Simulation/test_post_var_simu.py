@@ -66,7 +66,6 @@ def test_post_var_simu():
     )
 
     simu1.var_simu = VarParam(
-        ref_simu_index=0,
         paramexplorer_list=[pe1],
         datakeeper_list=[dk1],
         stop_if_error=True,

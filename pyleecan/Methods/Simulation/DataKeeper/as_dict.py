@@ -43,6 +43,11 @@ def as_dict(self, **kwargs):
                 DataKeeper_dict["result"][ii] = DataKeeper_dict["result"][ii].as_dict()
             elif isinstance(DataKeeper_dict["result"][ii], ndarray):
                 DataKeeper_dict["result"][ii] = DataKeeper_dict["result"][ii].tolist()
+    DataKeeper_dict["result_ref"] = self.result_ref
+    if hasattr(DataKeeper_dict["result_ref"], "as_dict"):
+        DataKeeper_dict["result_ref"] = DataKeeper_dict["result_ref"].as_dict()
+    elif isinstance(DataKeeper_dict["result_ref"], ndarray):
+        DataKeeper_dict["result_ref"] = DataKeeper_dict["result_ref"].tolist()
     # The class name is added to the dict for deserialisation purpose
     DataKeeper_dict["__class__"] = "DataKeeper"
     return DataKeeper_dict

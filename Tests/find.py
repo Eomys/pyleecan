@@ -149,7 +149,7 @@ def is_type_list(type_name):
         True if the type is a list of pyleecan objects
 
     """
-    return type_name[0] == "[" and type_name[-1] == "]"
+    return type_name not in ["", None] and type_name[0] == "[" and type_name[-1] == "]"
 
 
 def is_type_dict(type_name):
@@ -166,7 +166,7 @@ def is_type_dict(type_name):
         True if the type is a dict of pyleecan objects
 
     """
-    return type_name[0] == "{" and type_name[-1] == "}"
+    return type_name not in ["", None] and type_name[0] == "{" and type_name[-1] == "}"
 
 
 class MissingTypeError(Exception):

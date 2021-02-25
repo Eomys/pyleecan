@@ -318,7 +318,7 @@ def test_class_type_float(class_dict):
     for prop in prop_list:
         value = find_test_value(prop, "float")
         # Check the doc to know if it should raise an error or not
-        if prop["type"] in ["float", "complex"]:
+        if prop["type"] in ["float", "complex", "", None]:
             # No error expected
             test_obj.__setattr__(prop["name"], value)
             assert test_obj.__getattribute__(prop["name"]) == value
