@@ -2,6 +2,9 @@ from numpy import ndarray, min as np_min, max as np_max
 
 from SciDataTool import VectorField, Data
 from ....Functions.Load.import_class import import_class
+from ....Functions.Simulation.VarSimu.log_datakeeper_step_result import (
+    log_datakeeper_step_result,
+)
 from logging import WARNING
 from ....loggers import CONSOLE_LEVEL
 
@@ -65,10 +68,6 @@ def run_multisim_step(
             else:
                 datakeeper.result[index] = value
     else:  # Execute Normal DataKeeper
-        if simu_type is not None:
-            msg = simu_type + " Results: "
-        else:
-            msg = "Results: "
         for datakeeper in datakeeper_list:
             # Run and store Datakeeper
             try:
@@ -89,37 +88,7 @@ def run_multisim_step(
                 datakeeper.result_ref = value
             else:
                 datakeeper.result[index] = value
-            # Format log
-            if isinstance(value, ndarray):
-                msg += (
-                    datakeeper.symbol
-                    + "=array(min="
-                    + format(np_min(value), ".4g")
-                    + ",max="
-                    + format(np_max(value), ".4g")
-                    + ")"
-                )
-            elif isinstance(value, list):
-                msg += (
-                    datakeeper.symbol
-                    + "=list(min="
-                    + format(np_min(value), ".4g")
-                    + ",max="
-                    + format(np_max(value), ".4g")
-                    + ")"
-                )
-            elif isinstance(value, Data) or isinstance(value, VectorField):
-                msg += datakeeper.symbol + "=" + type(value).__name__
-            elif value is None:
-                msg += datakeeper.symbol + "=None"
-            else:
-                msg += datakeeper.symbol + "=" + format(value, ".4g")
-            if datakeeper.unit is not None:
-                msg += " [" + datakeeper.unit + "], "
-            else:
-                msg += ", "
-        msg = msg[:-2]
-        simulation.get_logger().info(msg)
+        log_datakeeper_step_result(simulation, datakeeper_list, index, simu_type)
 
         # Run Post datakeeper post-processings
         if post_keeper_postproc_list is not None:

@@ -1,6 +1,9 @@
 import numpy as np
 import itertools
 from ....Functions.Simulation.VarSimu.run_multisim_step import run_multisim_step
+from ....Functions.Simulation.VarSimu.log_datakeeper_step_result import (
+    log_datakeeper_step_result,
+)
 from ....Functions.Load.import_class import import_class
 
 
@@ -72,7 +75,7 @@ def run(self):
         simu_type=self.NAME,
     )
     progress += 1
-    print_progress_bar(nb_simu, progress)
+    print_progress_bar(nb_simu, progress,ref_simu.layer)
 
     # Store the Ouput part of the xoutput_ref into the main xoutput
     ref_out_dict = Output.as_dict(xoutput_ref)
@@ -116,8 +119,10 @@ def run(self):
                 keeper.result[idx] = keeper.result_ref
             if self.is_keep_all_output:
                 xoutput.output_list[idx] = xoutput_ref
+            # Print DataKeeper content
+            log_datakeeper_step_result(simu_step, keeper_list, idx, self.NAME)
         progress += 1
-        print_progress_bar(nb_simu, progress)
+        print_progress_bar(nb_simu, progress, simu_step.layer)
 
     # Running postprocessings
     if self.postproc_list:
@@ -168,7 +173,7 @@ def log_step_simu(index, nb_simu, paramexplorer_list, logger):
     logger.info(msg)
 
 
-def print_progress_bar(Nsimu, index):
+def print_progress_bar(Nsimu, index, layer):
     """Print the progress bar
     Ex: "[=========================                         ]  50%"
 
@@ -179,9 +184,14 @@ def print_progress_bar(Nsimu, index):
     index : int
         Index of the simulation about to run
     """
-    print(
+    if layer == 2:
+        msg = "    "
+    else:
+        msg = ""
+    msg += (
         "\r["
         + "=" * (50 * index // (Nsimu))
         + " " * (50 - ((50 * index) // (Nsimu)))
         + "] {:3d}%".format(((100 * index) // (Nsimu)))
     )
+    print(msg)
