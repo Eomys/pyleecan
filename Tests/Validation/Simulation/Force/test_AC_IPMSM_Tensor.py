@@ -43,7 +43,7 @@ def test_Benchmark_Tensor():
         is_periodicity_a=True,
         is_periodicity_t=False,
         is_get_meshsolution=True,
-        nb_worker=cpu_count(),
+        #nb_worker=cpu_count(),
         Kmesh_fineness=2,
     )
     simu.force = ForceTensor(

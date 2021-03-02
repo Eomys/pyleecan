@@ -197,6 +197,9 @@ def comp_force_nodal(self, output, axes_dict):
 			# elt magnetostrictive tensor
             tme = comp_magnetrosctrictive_tensor(mue, Me, Nt_tot)
 
+            # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
+            orientation_sign = np.sign(np.cross(vertice[1]-vertice[0],vertice[2]-vertice[0]))
+
             # Loop on edges
             for n in range(
                 nb_pt_per_cell
@@ -217,8 +220,12 @@ def comp_force_nodal(self, output, axes_dict):
                 L = np.linalg.norm(edge_vector)
                 Ve0 = L / 2
 
-                # Normalized normal vector n
-                normal_to_edge = np.array((edge_vector[1],-edge_vector[0])/L).reshape(dim,1) 
+                # Normalized normal vector n, that has to point outside the element (i.e. normal ^ edge same sign as the orientation)
+                normal_to_edge_unoriented = np.array((edge_vector[1],-edge_vector[0]))/L 
+                normal_to_edge = normal_to_edge_unoriented * np.sign(np.cross(normal_to_edge_unoriented,edge_vector)) * orientation_sign
+                normal_to_edge.reshape(dim,1) 
+
+                print(np.sign(np.cross(normal_to_edge,edge_vector)) == orientation_sign)
 
                 # Green Ostrogradski <normal, tensor> scalar product  
                 edge_force = np.tensordot(normal_to_edge,tme,[[0],[0]]) # [[0],[0]] means sum product over rows for normal (which is vertical) and over rows for tme
