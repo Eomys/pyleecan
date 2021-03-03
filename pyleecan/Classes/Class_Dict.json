@@ -1292,6 +1292,54 @@
             }
         ]
     },
+    "EndWinding": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract Class of the machine's end winding",
+        "is_internal": false,
+        "methods": [
+            "comp_length_endwinding"
+        ],
+        "mother": "",
+        "name": "EndWinding",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/EndWinding.csv",
+        "properties": []
+    },
+    "EndWindingCirc": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class of the machine's end winding assuming a circular shape",
+        "is_internal": false,
+        "methods": [
+            "comp_length_endwinding"
+        ],
+        "mother": "",
+        "name": "EndWindingCirc",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/EndWindingCirc.csv",
+        "properties": [
+            {
+                "desc": "effective slot_pitch (override) for length calculation",
+                "max": "",
+                "min": "",
+                "name": "coil_pitch",
+                "type": "float",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
     "FPGNSeg": {
         "constants": [
             {
@@ -11914,6 +11962,7 @@
             }
         ],
         "daughters": [
+            "WindingCW",
             "WindingCW1L",
             "WindingCW2LR",
             "WindingCW2LT",
@@ -12016,8 +12065,38 @@
                 "type": "Conductor",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "End Winding's definition",
+                "max": "",
+                "min": "",
+                "name": "end_winding",
+                "type": "EndWinding",
+                "unit": "-",
+                "value": ""
             }
         ]
+    },
+    "WindingCW": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "WindingCW1L",
+            "WindingCW2LR",
+            "WindingCW2LT"
+        ],
+        "desc": "Abstract non-overlapping 'concentrated' tooth winding",
+        "is_internal": false,
+        "methods": [],
+        "mother": "Winding",
+        "name": "WindingCW",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW.csv",
+        "properties": []
     },
     "WindingCW1L": {
         "constants": [
@@ -12037,7 +12116,7 @@
             "comp_connection_mat",
             "get_dim_wind"
         ],
-        "mother": "Winding",
+        "mother": "WindingCW",
         "name": "WindingCW1L",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW1L.csv",
@@ -12061,7 +12140,7 @@
             "comp_connection_mat",
             "get_dim_wind"
         ],
-        "mother": "Winding",
+        "mother": "WindingCW",
         "name": "WindingCW2LR",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW2LR.csv",
@@ -12085,7 +12164,7 @@
             "comp_connection_mat",
             "get_dim_wind"
         ],
-        "mother": "Winding",
+        "mother": "WindingCW",
         "name": "WindingCW2LT",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW2LT.csv",

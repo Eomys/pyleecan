@@ -31,6 +31,7 @@ except ImportError as error:
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .Conductor import Conductor
+from .EndWinding import EndWinding
 
 
 class WindingUD(Winding):
@@ -81,6 +82,7 @@ class WindingUD(Winding):
         p=3,
         Lewout=0.015,
         conductor=-1,
+        end_winding=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -119,6 +121,8 @@ class WindingUD(Winding):
                 Lewout = init_dict["Lewout"]
             if "conductor" in list(init_dict.keys()):
                 conductor = init_dict["conductor"]
+            if "end_winding" in list(init_dict.keys()):
+                end_winding = init_dict["end_winding"]
         # Set the properties (value check and convertion are done in setter)
         self.user_wind_mat = user_wind_mat
         # Call Winding init
@@ -132,6 +136,7 @@ class WindingUD(Winding):
             p=p,
             Lewout=Lewout,
             conductor=conductor,
+            end_winding=end_winding,
         )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties

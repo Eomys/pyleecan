@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .Winding import Winding
+from .WindingCW import WindingCW
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -30,9 +30,10 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .Conductor import Conductor
+from .EndWinding import EndWinding
 
 
-class WindingCW2LR(Winding):
+class WindingCW2LR(WindingCW):
     """double layer non-overlapping "concentrated" tooth winding "all teeth wound", radial coil superposition"""
 
     VERSION = 1
@@ -79,6 +80,7 @@ class WindingCW2LR(Winding):
         p=3,
         Lewout=0.015,
         conductor=-1,
+        end_winding=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -115,8 +117,10 @@ class WindingCW2LR(Winding):
                 Lewout = init_dict["Lewout"]
             if "conductor" in list(init_dict.keys()):
                 conductor = init_dict["conductor"]
+            if "end_winding" in list(init_dict.keys()):
+                end_winding = init_dict["end_winding"]
         # Set the properties (value check and convertion are done in setter)
-        # Call Winding init
+        # Call WindingCW init
         super(WindingCW2LR, self).__init__(
             is_reverse_wind=is_reverse_wind,
             Nslot_shift_wind=Nslot_shift_wind,
@@ -127,15 +131,16 @@ class WindingCW2LR(Winding):
             p=p,
             Lewout=Lewout,
             conductor=conductor,
+            end_winding=end_winding,
         )
-        # The class is frozen (in Winding init), for now it's impossible to
+        # The class is frozen (in WindingCW init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         WindingCW2LR_str = ""
-        # Get the properties inherited from Winding
+        # Get the properties inherited from WindingCW
         WindingCW2LR_str += super(WindingCW2LR, self).__str__()
         return WindingCW2LR_str
 
@@ -145,7 +150,7 @@ class WindingCW2LR(Winding):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from Winding
+        # Check the properties inherited from WindingCW
         if not super(WindingCW2LR, self).__eq__(other):
             return False
         return True
@@ -157,7 +162,7 @@ class WindingCW2LR(Winding):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from Winding
+        # Check the properties inherited from WindingCW
         diff_list.extend(super(WindingCW2LR, self).compare(other, name=name))
         return diff_list
 
@@ -166,14 +171,14 @@ class WindingCW2LR(Winding):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from Winding
+        # Get size of the properties inherited from WindingCW
         S += super(WindingCW2LR, self).__sizeof__()
         return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        # Get the properties inherited from Winding
+        # Get the properties inherited from WindingCW
         WindingCW2LR_dict = super(WindingCW2LR, self).as_dict()
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -183,5 +188,5 @@ class WindingCW2LR(Winding):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        # Set to None the properties inherited from Winding
+        # Set to None the properties inherited from WindingCW
         super(WindingCW2LR, self)._set_None()

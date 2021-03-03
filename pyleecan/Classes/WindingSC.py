@@ -30,6 +30,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .Conductor import Conductor
+from .EndWinding import EndWinding
 
 
 class WindingSC(Winding):
@@ -79,6 +80,7 @@ class WindingSC(Winding):
         p=3,
         Lewout=0.015,
         conductor=-1,
+        end_winding=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -115,6 +117,8 @@ class WindingSC(Winding):
                 Lewout = init_dict["Lewout"]
             if "conductor" in list(init_dict.keys()):
                 conductor = init_dict["conductor"]
+            if "end_winding" in list(init_dict.keys()):
+                end_winding = init_dict["end_winding"]
         # Set the properties (value check and convertion are done in setter)
         # Call Winding init
         super(WindingSC, self).__init__(
@@ -127,6 +131,7 @@ class WindingSC(Winding):
             p=p,
             Lewout=Lewout,
             conductor=conductor,
+            end_winding=end_winding,
         )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties

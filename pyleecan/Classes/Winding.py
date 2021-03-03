@@ -45,6 +45,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .Conductor import Conductor
+from .EndWinding import EndWinding
 
 
 class Winding(FrozenClass):
@@ -125,6 +126,7 @@ class Winding(FrozenClass):
         p=3,
         Lewout=0.015,
         conductor=-1,
+        end_winding=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -161,6 +163,8 @@ class Winding(FrozenClass):
                 Lewout = init_dict["Lewout"]
             if "conductor" in list(init_dict.keys()):
                 conductor = init_dict["conductor"]
+            if "end_winding" in list(init_dict.keys()):
+                end_winding = init_dict["end_winding"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_reverse_wind = is_reverse_wind
@@ -172,6 +176,7 @@ class Winding(FrozenClass):
         self.p = p
         self.Lewout = Lewout
         self.conductor = conductor
+        self.end_winding = end_winding
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -197,6 +202,13 @@ class Winding(FrozenClass):
             Winding_str += "conductor = " + tmp
         else:
             Winding_str += "conductor = None" + linesep + linesep
+        if self.end_winding is not None:
+            tmp = (
+                self.end_winding.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            Winding_str += "end_winding = " + tmp
+        else:
+            Winding_str += "end_winding = None" + linesep + linesep
         return Winding_str
 
     def __eq__(self, other):
@@ -221,6 +233,8 @@ class Winding(FrozenClass):
         if other.Lewout != self.Lewout:
             return False
         if other.conductor != self.conductor:
+            return False
+        if other.end_winding != self.end_winding:
             return False
         return True
 
@@ -254,6 +268,14 @@ class Winding(FrozenClass):
             diff_list.extend(
                 self.conductor.compare(other.conductor, name=name + ".conductor")
             )
+        if (other.end_winding is None and self.end_winding is not None) or (
+            other.end_winding is not None and self.end_winding is None
+        ):
+            diff_list.append(name + ".end_winding None mismatch")
+        elif self.end_winding is not None:
+            diff_list.extend(
+                self.end_winding.compare(other.end_winding, name=name + ".end_winding")
+            )
         return diff_list
 
     def __sizeof__(self):
@@ -269,6 +291,7 @@ class Winding(FrozenClass):
         S += getsizeof(self.p)
         S += getsizeof(self.Lewout)
         S += getsizeof(self.conductor)
+        S += getsizeof(self.end_winding)
         return S
 
     def as_dict(self):
@@ -287,6 +310,10 @@ class Winding(FrozenClass):
             Winding_dict["conductor"] = None
         else:
             Winding_dict["conductor"] = self.conductor.as_dict()
+        if self.end_winding is None:
+            Winding_dict["end_winding"] = None
+        else:
+            Winding_dict["end_winding"] = self.end_winding.as_dict()
         # The class name is added to the dict for deserialisation purpose
         Winding_dict["__class__"] = "Winding"
         return Winding_dict
@@ -304,6 +331,8 @@ class Winding(FrozenClass):
         self.Lewout = None
         if self.conductor is not None:
             self.conductor._set_None()
+        if self.end_winding is not None:
+            self.end_winding._set_None()
 
     def _get_is_reverse_wind(self):
         """getter of is_reverse_wind"""
@@ -488,5 +517,35 @@ class Winding(FrozenClass):
         doc=u"""Winding's conductor
 
         :Type: Conductor
+        """,
+    )
+
+    def _get_end_winding(self):
+        """getter of end_winding"""
+        return self._end_winding
+
+    def _set_end_winding(self, value):
+        """setter of end_winding"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "end_winding"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = EndWinding()
+        check_var("end_winding", value, "EndWinding")
+        self._end_winding = value
+
+        if self._end_winding is not None:
+            self._end_winding.parent = self
+
+    end_winding = property(
+        fget=_get_end_winding,
+        fset=_set_end_winding,
+        doc=u"""End Winding's definition
+
+        :Type: EndWinding
         """,
     )

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Machine/WindingCW2LT.csv
+# File generated according to Generator/ClassesRef/Machine/WindingCW.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/WindingCW2LT
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/WindingCW
 """
 
 from os import linesep
@@ -13,56 +13,18 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .WindingCW import WindingCW
-
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Machine.WindingCW2LT.comp_connection_mat import comp_connection_mat
-except ImportError as error:
-    comp_connection_mat = error
-
-try:
-    from ..Methods.Machine.WindingCW2LT.get_dim_wind import get_dim_wind
-except ImportError as error:
-    get_dim_wind = error
-
+from .Winding import Winding
 
 from ._check import InitUnKnowClassError
 from .Conductor import Conductor
 from .EndWinding import EndWinding
 
 
-class WindingCW2LT(WindingCW):
-    """double layer non-overlapping "concentrated" tooth winding "all teeth wound", orthoradial coil superposition"""
+class WindingCW(Winding):
+    """Abstract non-overlapping 'concentrated' tooth winding"""
 
     VERSION = 1
-    NAME = "double layer concentrated (orthoradial)"
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Machine.WindingCW2LT.comp_connection_mat
-    if isinstance(comp_connection_mat, ImportError):
-        comp_connection_mat = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use WindingCW2LT method comp_connection_mat: "
-                    + str(comp_connection_mat)
-                )
-            )
-        )
-    else:
-        comp_connection_mat = comp_connection_mat
-    # cf Methods.Machine.WindingCW2LT.get_dim_wind
-    if isinstance(get_dim_wind, ImportError):
-        get_dim_wind = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use WindingCW2LT method get_dim_wind: " + str(get_dim_wind)
-                )
-            )
-        )
-    else:
-        get_dim_wind = get_dim_wind
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -120,8 +82,8 @@ class WindingCW2LT(WindingCW):
             if "end_winding" in list(init_dict.keys()):
                 end_winding = init_dict["end_winding"]
         # Set the properties (value check and convertion are done in setter)
-        # Call WindingCW init
-        super(WindingCW2LT, self).__init__(
+        # Call Winding init
+        super(WindingCW, self).__init__(
             is_reverse_wind=is_reverse_wind,
             Nslot_shift_wind=Nslot_shift_wind,
             qs=qs,
@@ -133,16 +95,16 @@ class WindingCW2LT(WindingCW):
             conductor=conductor,
             end_winding=end_winding,
         )
-        # The class is frozen (in WindingCW init), for now it's impossible to
+        # The class is frozen (in Winding init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
-        WindingCW2LT_str = ""
-        # Get the properties inherited from WindingCW
-        WindingCW2LT_str += super(WindingCW2LT, self).__str__()
-        return WindingCW2LT_str
+        WindingCW_str = ""
+        # Get the properties inherited from Winding
+        WindingCW_str += super(WindingCW, self).__str__()
+        return WindingCW_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -150,8 +112,8 @@ class WindingCW2LT(WindingCW):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from WindingCW
-        if not super(WindingCW2LT, self).__eq__(other):
+        # Check the properties inherited from Winding
+        if not super(WindingCW, self).__eq__(other):
             return False
         return True
 
@@ -162,8 +124,8 @@ class WindingCW2LT(WindingCW):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from WindingCW
-        diff_list.extend(super(WindingCW2LT, self).compare(other, name=name))
+        # Check the properties inherited from Winding
+        diff_list.extend(super(WindingCW, self).compare(other, name=name))
         return diff_list
 
     def __sizeof__(self):
@@ -171,22 +133,22 @@ class WindingCW2LT(WindingCW):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from WindingCW
-        S += super(WindingCW2LT, self).__sizeof__()
+        # Get size of the properties inherited from Winding
+        S += super(WindingCW, self).__sizeof__()
         return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        # Get the properties inherited from WindingCW
-        WindingCW2LT_dict = super(WindingCW2LT, self).as_dict()
+        # Get the properties inherited from Winding
+        WindingCW_dict = super(WindingCW, self).as_dict()
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
-        WindingCW2LT_dict["__class__"] = "WindingCW2LT"
-        return WindingCW2LT_dict
+        WindingCW_dict["__class__"] = "WindingCW"
+        return WindingCW_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        # Set to None the properties inherited from WindingCW
-        super(WindingCW2LT, self)._set_None()
+        # Set to None the properties inherited from Winding
+        super(WindingCW, self)._set_None()
