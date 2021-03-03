@@ -50,6 +50,6 @@ def comp_length_endwinding(self):
                 coil_pitch = Zs / p / 2
 
     # calculate the length as a half circle
-    end_wind_length = pi * Rmid * coil_pitch
+    end_wind_length = pi * Rmid * coil_pitch / Zs
 
     return end_wind_length
