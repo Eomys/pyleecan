@@ -1299,7 +1299,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "EndWindingCirc"
+        ],
         "desc": "Abstract Class of the machine's end winding",
         "is_internal": false,
         "methods": [
@@ -1324,7 +1326,7 @@
         "methods": [
             "comp_length_endwinding"
         ],
-        "mother": "",
+        "mother": "EndWinding",
         "name": "EndWindingCirc",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/EndWindingCirc.csv",

@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from ._frozen import FrozenClass
+from .EndWinding import EndWinding
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -28,7 +28,7 @@ except ImportError as error:
 from ._check import InitUnKnowClassError
 
 
-class EndWindingCirc(FrozenClass):
+class EndWindingCirc(EndWinding):
     """Class of the machine's end winding assuming a circular shape"""
 
     VERSION = 1
@@ -70,22 +70,18 @@ class EndWindingCirc(FrozenClass):
             if "coil_pitch" in list(init_dict.keys()):
                 coil_pitch = init_dict["coil_pitch"]
         # Set the properties (value check and convertion are done in setter)
-        self.parent = None
         self.coil_pitch = coil_pitch
-
-        # The class is frozen, for now it's impossible to add new properties
-        self._freeze()
+        # Call EndWinding init
+        super(EndWindingCirc, self).__init__()
+        # The class is frozen (in EndWinding init), for now it's impossible to
+        # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         EndWindingCirc_str = ""
-        if self.parent is None:
-            EndWindingCirc_str += "parent = None " + linesep
-        else:
-            EndWindingCirc_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+        # Get the properties inherited from EndWinding
+        EndWindingCirc_str += super(EndWindingCirc, self).__str__()
         EndWindingCirc_str += "coil_pitch = " + str(self.coil_pitch) + linesep
         return EndWindingCirc_str
 
@@ -93,6 +89,10 @@ class EndWindingCirc(FrozenClass):
         """Compare two objects (skip parent)"""
 
         if type(other) != type(self):
+            return False
+
+        # Check the properties inherited from EndWinding
+        if not super(EndWindingCirc, self).__eq__(other):
             return False
         if other.coil_pitch != self.coil_pitch:
             return False
@@ -104,6 +104,9 @@ class EndWindingCirc(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
+
+        # Check the properties inherited from EndWinding
+        diff_list.extend(super(EndWindingCirc, self).compare(other, name=name))
         if other._coil_pitch != self._coil_pitch:
             diff_list.append(name + ".coil_pitch")
         return diff_list
@@ -112,15 +115,20 @@ class EndWindingCirc(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
+
+        # Get size of the properties inherited from EndWinding
+        S += super(EndWindingCirc, self).__sizeof__()
         S += getsizeof(self.coil_pitch)
         return S
 
     def as_dict(self):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
-        EndWindingCirc_dict = dict()
+        # Get the properties inherited from EndWinding
+        EndWindingCirc_dict = super(EndWindingCirc, self).as_dict()
         EndWindingCirc_dict["coil_pitch"] = self.coil_pitch
         # The class name is added to the dict for deserialisation purpose
+        # Overwrite the mother class name
         EndWindingCirc_dict["__class__"] = "EndWindingCirc"
         return EndWindingCirc_dict
 
@@ -128,6 +136,8 @@ class EndWindingCirc(FrozenClass):
         """Set all the properties to None (except pyleecan object)"""
 
         self.coil_pitch = None
+        # Set to None the properties inherited from EndWinding
+        super(EndWindingCirc, self)._set_None()
 
     def _get_coil_pitch(self):
         """getter of coil_pitch"""
