@@ -27,6 +27,13 @@ try:
 except ImportError as error:
     comp_force_nodal = error
 
+try:
+    from ..Methods.Simulation.ForceTensor.comp_magnetrosctrictive_tensor import (
+        comp_magnetrosctrictive_tensor,
+    )
+except ImportError as error:
+    comp_magnetrosctrictive_tensor = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -60,6 +67,18 @@ class ForceTensor(Force):
         )
     else:
         comp_force_nodal = comp_force_nodal
+    # cf Methods.Simulation.ForceTensor.comp_magnetrosctrictive_tensor
+    if isinstance(comp_magnetrosctrictive_tensor, ImportError):
+        comp_magnetrosctrictive_tensor = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ForceTensor method comp_magnetrosctrictive_tensor: "
+                    + str(comp_magnetrosctrictive_tensor)
+                )
+            )
+        )
+    else:
+        comp_magnetrosctrictive_tensor = comp_magnetrosctrictive_tensor
     # save and copy methods are available in all object
     save = save
     copy = copy

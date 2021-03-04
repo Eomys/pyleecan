@@ -43,7 +43,7 @@ def test_Benchmark_Tensor():
         is_periodicity_a=True,
         is_periodicity_t=False,
         is_get_meshsolution=True,
-        #nb_worker=cpu_count(),
+        # nb_worker=cpu_count(),
         Kmesh_fineness=2,
     )
     simu.force = ForceTensor(
@@ -54,7 +54,7 @@ def test_Benchmark_Tensor():
     # Run simulation
     out = simu.run()
 
-    out.force.meshsolution.plot_glyph(label='F', is_point_arrow=True)
+    out.force.meshsolution.plot_glyph(label="F", is_point_arrow=True)
 
     return out
 

@@ -1553,7 +1553,8 @@
         "is_internal": false,
         "methods": [
             "comp_force",
-            "comp_force_nodal"
+            "comp_force_nodal",
+            "comp_magnetrosctrictive_tensor"
         ],
         "mother": "Force",
         "name": "ForceTensor",
