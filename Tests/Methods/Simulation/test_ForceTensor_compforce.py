@@ -5,6 +5,10 @@ from pyleecan.Classes.ForceTensor import ForceTensor
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OutMagFEMM import OutMagFEMM
 
+from pyleecan.Functions.MeshSolution.build_solution_vector import build_solution_vector
+from pyleecan.Functions.MeshSolution.build_solution_data import build_solution_data
+from SciDataTool import Data1D
+
 from pyleecan.Classes.PointMat import PointMat
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
@@ -16,7 +20,7 @@ import numpy as np
 
 # 'axes_dict' input
 axes_dict = {
-    "Time": [0, 0.1, 0.2],
+    "Time": [0],
     "Angle": [0],
 }
 
@@ -40,9 +44,16 @@ mesh.add_cell(points_test, "triangle3")
 
 # Mag object
 Time = axes_dict["Time"]
-indices_cell = meshFEMM[0].cell["triangle"].indice
+indices_cell = [0]
 Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=True)
 axis_list = [Time, Indices_Cell]
+
+mu = 1
+
+B_elem = np.array([[[mu/2,0]]])
+H_elem = np.array([[[1/2,0]]])
+mu_elem = np.array([[mu]])
+
 
 B_sol = build_solution_vector(
     field=B_elem,
