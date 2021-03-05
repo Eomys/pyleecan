@@ -21,7 +21,7 @@ file_list.append(
 )
 
 
-@pytest.mark.only
+# @pytest.mark.only
 @pytest.mark.parametrize("file_dict", file_list)
 def test_save_load_retro(file_dict):
     """Check that the convertion works"""
