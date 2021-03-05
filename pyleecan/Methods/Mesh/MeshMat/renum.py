@@ -3,7 +3,7 @@ import numpy as np
 import copy
 
 from pyleecan.Classes.CellMat import CellMat
-from pyleecan.Classes.PointMat import PointMat
+from pyleecan.Classes.NodeMat import NodeMat
 
 
 def renum(self):
@@ -37,15 +37,15 @@ def renum(self):
                 connect_dict[key] == node_indice[inode]
             ] = node_indice_new[inode]
 
-    self.point = PointMat(
-        coordinate=coord_init[node_indice, :], nb_pt=nb_node_new, indice=node_indice_new
+    self.point = NodeMat(
+        coordinate=coord_init[node_indice, :], nb_node=nb_node_new, indice=node_indice_new
     )
 
     for key in connect_dict:
         self.cell[key] = CellMat(
             connectivity=connect_dict_new[key],
             nb_cell=len(connect_dict_new[key]),
-            nb_pt_per_cell=self.cell[key].nb_pt_per_cell,
+            nb_node_per_cell=self.cell[key].nb_pt_per_cell,
             indice=self.cell[key].indice,
             interpolation=self.cell[key].interpolation,
         )
