@@ -115,7 +115,9 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
         )
         mesh.cell["triangle"].interpolation.ref_cell = RefTriangle3(epsilon=1e-9)
         mesh.node = NodeMat(
-            coordinate=listNd[:, 0:2], nb_node=NbNd, indice=np.linspace(0, NbNd - 1, NbNd)
+            coordinate=listNd[:, 0:2],
+            nb_node=NbNd,
+            indice=np.linspace(0, NbNd - 1, NbNd),
         )
         # get all groups that are in the FEMM model
         groups = dict()

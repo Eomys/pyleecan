@@ -27,6 +27,7 @@ def test_convert_MeshVTK():
     cells, _, _ = meshmat.get_cell()
     assert_array_almost_equal(cells_pv["quad9"], cells["quad9"], decimal=1)
 
+
 if __name__ == "__main__":
 
     test_convert_MeshVTK()

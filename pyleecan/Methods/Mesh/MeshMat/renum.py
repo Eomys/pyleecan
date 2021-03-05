@@ -38,7 +38,9 @@ def renum(self):
             ] = node_indice_new[inode]
 
     self.point = NodeMat(
-        coordinate=coord_init[node_indice, :], nb_node=nb_node_new, indice=node_indice_new
+        coordinate=coord_init[node_indice, :],
+        nb_node=nb_node_new,
+        indice=node_indice_new,
     )
 
     for key in connect_dict:
