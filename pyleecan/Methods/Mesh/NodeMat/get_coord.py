@@ -20,14 +20,13 @@ def get_coord(self, node_indice):
 
     """
 
-    nd_case = np.size(node_indice)
-    # coord = np.zeros((nd_case, 2))
-    if nd_case == 1:
-        coord = self.coordinate[node_indice, :]
-    else:
-        coord = self.coordinate[node_indice, :]
+    coord = list()
+    indices_all = self.indice
+    coordinate = self.coordinate
 
-    if np.size(coord) == 0:
-        return None
-    else:
-        return coord
+    for ind in node_indice:
+        Ipos = np.where(indices_all == ind)[0][0]
+        coord.append(self.coordinate[Ipos, :])
+ 
+    return np.array(coord)
+

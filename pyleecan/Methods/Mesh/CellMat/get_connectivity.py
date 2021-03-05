@@ -34,7 +34,7 @@ def get_connectivity(self, cell_indice=None):
                 return connect
             else:
                 return None
-        else:
+        else: 
             Ipos_select = np.where(ind == cell_indice)[0]
             if Ipos_select.size > 0:
                 return connect[Ipos_select[0], :]

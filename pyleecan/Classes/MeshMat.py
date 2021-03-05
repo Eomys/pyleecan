@@ -67,6 +67,16 @@ try:
 except ImportError as error:
     interface = error
 
+try:
+    from ..Methods.Mesh.MeshMat.clear_node import clear_node
+except ImportError as error:
+    clear_node = error
+
+try:
+    from ..Methods.Mesh.MeshMat.clear_cell import clear_cell
+except ImportError as error:
+    clear_cell = error
+
 
 from ._check import InitUnKnowClassError
 from .CellMat import CellMat
@@ -173,6 +183,24 @@ class MeshMat(Mesh):
         )
     else:
         interface = interface
+    # cf Methods.Mesh.MeshMat.clear_node
+    if isinstance(clear_node, ImportError):
+        clear_node = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method clear_node: " + str(clear_node))
+            )
+        )
+    else:
+        clear_node = clear_node
+    # cf Methods.Mesh.MeshMat.clear_cell
+    if isinstance(clear_cell, ImportError):
+        clear_cell = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method clear_cell: " + str(clear_cell))
+            )
+        )
+    else:
+        clear_cell = clear_cell
     # save and copy methods are available in all object
     save = save
     copy = copy

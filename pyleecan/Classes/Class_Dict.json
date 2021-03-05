@@ -5784,7 +5784,9 @@
             "get_node2cell",
             "renum",
             "find_cell",
-            "interface"
+            "interface",
+            "clear_node",
+            "clear_cell"
         ],
         "mother": "Mesh",
         "name": "MeshMat",

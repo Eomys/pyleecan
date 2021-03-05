@@ -114,10 +114,12 @@ def get_group(self, group_names, is_renum=False):
 
     # 5) Create the corresponding MeshSolution object
     if is_interface:
+        mesh_interface.clear_node()
         if is_renum:
             mesh_interface.renum()
         mesh = mesh_interface
     else:
+        mesh_new.clear_node()
         if is_renum:
             mesh_new.renum()
         mesh = mesh_new

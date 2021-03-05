@@ -90,7 +90,9 @@ def comp_force_nodal(self, output, axes_dict):
         # mesh.cell[key].interpolation = Interpolation()
         # mesh.cell[key].interpolation.init_key(key=key, nb_gauss=1)
 
-        nb_node_per_cell = mesh.cell[key].nb_node_per_cell  # Number of nodes per element
+        nb_node_per_cell = mesh.cell[
+            key
+        ].nb_node_per_cell  # Number of nodes per element
         connect = mesh.cell[key].get_connectivity()  # Each row of connect is an element
         nb_elem = len(connect)
 

@@ -24,7 +24,4 @@ def get_node(self, indices=None):
     if indices is None:
         return self.node.coordinate
     else:
-        if len(indices) == 0:
-            return indices  # empty ndarray
-        else:
-            return self.node.coordinate[indices, :]
+        return self.node.get_coord(indices)

@@ -25,6 +25,12 @@ def get_vertice(self, indices=None):
     cells, nb_cell, indices = self.get_cell(indices=indices)
     vertices = dict()
     for key in cells:
-        vertices[key] = self.get_node(cells[key])
+        if len(cells[key].shape) > 1:
+            vertices[key] = list()
+            for ii in range(cells[key].shape[0]):
+                vertices[key].append(self.get_node(cells[key][ii,:]))
+            vertices[key] = np.array(vertices[key])
+        else:
+            vertices[key] = self.get_node(cells[key])
 
     return vertices
