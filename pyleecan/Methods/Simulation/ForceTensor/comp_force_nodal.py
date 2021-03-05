@@ -6,7 +6,6 @@ from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.SolutionVector import SolutionVector
 
 
-
 def comp_force_nodal(self, output, axes_dict):
     """Run the nodal forces calculation based on a tensor.
 
@@ -155,7 +154,6 @@ def comp_force_nodal(self, output, axes_dict):
                     * orientation_sign
                 )
                 normal_to_edge.reshape(dim, 1)
-
 
                 # Green Ostrogradski <normal, tensor> scalar product
                 edge_force = np.tensordot(

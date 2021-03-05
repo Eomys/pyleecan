@@ -1,7 +1,13 @@
 import numpy as np
 
 
-def comp_magnetrosctrictive_tensor(self, mu, M, Nt_tot, polynomial_coeffs=[[0.719, -0.078, -0.042], [-0.391, 0.114, 0.004]]):
+def comp_magnetrosctrictive_tensor(
+    self,
+    mu,
+    M,
+    Nt_tot,
+    polynomial_coeffs=[[0.719, -0.078, -0.042], [-0.391, 0.114, 0.004]],
+):
     """compute magnetostrictive tensor.
 
     from publications: IEEETranMagn2004
@@ -17,8 +23,8 @@ def comp_magnetrosctrictive_tensor(self, mu, M, Nt_tot, polynomial_coeffs=[[0.71
     Nt_tot: scalar
         Number of time steps
 
-    polynomial_coeffs : 2x3 List, optional 
-        alpha(i,j) coeffs for polynomal expression of alpha1 and alpha2 
+    polynomial_coeffs : 2x3 List, optional
+        alpha(i,j) coeffs for polynomal expression of alpha1 and alpha2
 
     """
     # Coeffs from a reference material in IEEETranMagn2004
