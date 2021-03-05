@@ -34,6 +34,11 @@ try:
 except ImportError as error:
     comp_magnetrosctrictive_tensor = error
 
+try:
+    from ..Methods.Simulation.ForceTensor.element_loop import element_loop
+except ImportError as error:
+    element_loop = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -79,6 +84,17 @@ class ForceTensor(Force):
         )
     else:
         comp_magnetrosctrictive_tensor = comp_magnetrosctrictive_tensor
+    # cf Methods.Simulation.ForceTensor.element_loop
+    if isinstance(element_loop, ImportError):
+        element_loop = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ForceTensor method element_loop: " + str(element_loop)
+                )
+            )
+        )
+    else:
+        element_loop = element_loop
     # save and copy methods are available in all object
     save = save
     copy = copy
