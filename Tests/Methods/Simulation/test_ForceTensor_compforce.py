@@ -7,6 +7,7 @@ from pyleecan.Classes.OutMagFEMM import OutMagFEMM
 
 from pyleecan.Functions.MeshSolution.build_solution_vector import build_solution_vector
 from pyleecan.Functions.MeshSolution.build_solution_data import build_solution_data
+from pyleecan.Functions.MeshSolution.build_meshsolution import build_meshsolution
 from SciDataTool import Data1D
 
 from pyleecan.Classes.NodeMat import NodeMat
@@ -43,7 +44,7 @@ def test_Force_Tensor_compforce():
     mesh.add_cell(nodes_test, "triangle3")
 
     # Mag object
-    Time = axes_dict["Time"]
+    Time = Data1D(name="time", values=[0], is_components=True)
     indices_cell = [0]
     Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=True)
     axis_list = [Time, Indices_Cell]
