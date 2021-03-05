@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import pytest
+
 from pyleecan.Classes.ForceTensor import ForceTensor
+from pyleecan.Methods.Simulation.ForceTensor import element_loop
 
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OutMagFEMM import OutMagFEMM
@@ -87,6 +89,43 @@ def test_Force_Tensor_compforce():
     )
 
 
+def test_element_loop():
+    # 'axes_dict' input
+    axes_dict = {
+        "Time": [0],
+        "Angle": [0],
+    }
+
+    # 'output' input
+
+    # Mesh object
+
+    mesh = MeshMat()
+    mesh.cell["triangle3"] = CellMat(nb_node_per_cell=3)
+    mesh.node = NodeMat()
+
+    mesh.node.add_node(np.array([0, 0]))
+    mesh.node.add_node(np.array([0, 1]))
+    mesh.node.add_node(np.array([1, 0]))
+
+    nodes_test = np.array([0, 1, 2])
+    mesh.add_cell(nodes_test, "triangle3")
+
+    mu = 1
+
+    B = np.array([[[mu / 2, 0]]])
+    H = np.array([[[1 / 2, 0]]])
+    mu = np.array([[mu]])
+
+    indice = [0]
+    dim = 2
+    Nt_tot = 1
+
+    tensor = ForceTensor()
+
+    f, connect = tensor.element_loop(mesh, B, H, mu, indice, dim, Nt_tot)
+
+
 if __name__ == "__main__":
 
-    test_Force_Tensor_compforce()
+    test_element_loop()
