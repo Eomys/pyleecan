@@ -1,7 +1,6 @@
 from numpy import zeros, ones, pi, array
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
@@ -23,11 +22,7 @@ import pytest
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_CEFC_003_t0(CEFC_Lam):
-    """Validation of magnetic air-gap surface force calculation based on Maxwell Tensor with an academic slotless machine.
-
-    from publication
-
-    """
+    """Validation of magnetic air-gap surface force calculation based on Maxwell Tensor with an academic slotless machine."""
 
     simu = Simu1(name="FM_CEFC_003_MT", machine=CEFC_Lam, struct=None)
 
