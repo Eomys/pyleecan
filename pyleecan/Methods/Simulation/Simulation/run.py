@@ -26,7 +26,7 @@ def run(self):
                     + f"got {type(self.parent).__name__}. "
                     + "Setting new parent XOutput for simu."
                 )
-                self.get_logger.warning(msg)
+                self.get_logger().warning(msg)
                 results = XOutput(simu=self)
             else:
                 results = self.parent
