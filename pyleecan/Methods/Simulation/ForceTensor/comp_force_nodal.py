@@ -90,18 +90,18 @@ def comp_force_nodal(self, output, axes_dict):
         # mesh.cell[key].interpolation = Interpolation()
         # mesh.cell[key].interpolation.init_key(key=key, nb_gauss=1)
 
-        nb_pt_per_cell = mesh.cell[key].nb_pt_per_cell  # Number of nodes per element
+        nb_node_per_cell = mesh.cell[key].nb_node_per_cell  # Number of nodes per element
         connect = mesh.cell[key].get_connectivity()  # Each row of connect is an element
         nb_elem = len(connect)
 
-        nb_pt = mesh.point.nb_pt  # Total nodes number
+        nb_node = mesh.node.nb_node  # Total nodes number
 
         # Nodal forces init
-        f = np.zeros((nb_pt, dim, Nt_tot), dtype=np.float)
+        f = np.zeros((nb_node, dim, Nt_tot), dtype=np.float)
 
         # ref_cell = mesh.cell[key].interpolation.ref_cell // pas besoin d'interpoler car tout est cst
 
-        # Gauss points
+        # Gauss nodes
         # pts_gauss, poidsGauss, nb_gauss = mesh.cell[
         #     key
         # ].interpolation.gauss_point.get_gauss_points()
@@ -110,7 +110,7 @@ def comp_force_nodal(self, output, axes_dict):
 
         # Loop on element (elt)
         for e, e_ind in enumerate(indice):
-            point_indices = connect[e, :]  # elt nodes indices
+            node_indices = connect[e, :]  # elt nodes indices
             vertice = mesh.get_vertice(e_ind)[key]  # elt nodes coordonates
             # elt physical fields values
             Be = B[e, :, :]
@@ -129,22 +129,22 @@ def comp_force_nodal(self, output, axes_dict):
             )
 
             # Loop on edges
-            for n in range(nb_pt_per_cell):
+            for n in range(nb_node_per_cell):
 
                 # Get current node + next node indices (both needed since pression will be computed on edges because of Green Ostrogradski)
-                inode = point_indices[n % nb_pt_per_cell]
-                next_inode = point_indices[(n + 1) % nb_pt_per_cell]
+                inode = node_indices[n % nb_node_per_cell]
+                next_inode = node_indices[(n + 1) % nb_node_per_cell]
 
                 # Edge cooordonates
                 edge_vector = (
-                    vertice[(n + 1) % nb_pt_per_cell] - vertice[n % nb_pt_per_cell]
+                    vertice[(n + 1) % nb_node_per_cell] - vertice[n % nb_node_per_cell]
                 )  # coordonées du vecteur nn+1
 
                 # Volume ratio (Green Ostrogradski), with a conventional 1/2 for a share between 2 nodes
                 L = np.linalg.norm(edge_vector)
                 Ve0 = L / 2
 
-                # Normalized normal vector n, that has to point outside the element (i.e. normal ^ edge same sign as the orientation)
+                # Normalized normal vector n, that has to node outside the element (i.e. normal ^ edge same sign as the orientation)
                 normal_to_edge_unoriented = (
                     np.array((edge_vector[1], -edge_vector[0])) / L
                 )
@@ -165,8 +165,8 @@ def comp_force_nodal(self, output, axes_dict):
                 f[inode, :, :] = f[inode, :, :] + fe
                 f[next_inode, :, :] = f[next_inode, :, :] + fe
 
-    indices_points = np.sort(np.unique(connect))
-    Indices_Point = Data1D(name="indice", values=indices_points, is_components=True)
+    indices_nodes = np.sort(np.unique(connect))
+    Indices_Point = Data1D(name="indice", values=indices_nodes, is_components=True)
 
     # Time axis goes back to first axis
     f = np.moveaxis(f, -1, 0)
@@ -192,7 +192,7 @@ def comp_force_nodal(self, output, axes_dict):
     components["comp_y"] = fy_data
 
     vec_force = VectorField(name="Nodal forces", symbol="F", components=components)
-    solforce = SolutionVector(field=vec_force, type_cell="point", label="F")
+    solforce = SolutionVector(field=vec_force, type_cell="node", label="F")
     meshsolution.solution.append(solforce)
 
     out_dict = dict()
