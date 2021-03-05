@@ -15,7 +15,7 @@ def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
     self : MeshMat
         a MeshMat object
     indices : list
-        list of the points to extract (optional)
+        list of the nodes to extract (optional)
 
     Returns
     -------
@@ -23,7 +23,7 @@ def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
         a pyvista UnstructuredGrid object
     """
 
-    points = self.get_point()
+    nodes = self.get_node()
     cells, _, _ = self.get_cell()
 
     cells_meshio = list()
@@ -35,7 +35,7 @@ def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
     if not isdir(split(path)[0]):
         makedirs(split(path)[0])
 
-    meshio.write_points_cells(filename=path, points=points, cells=cells_meshio)
+    meshio.write_points_cells(filename=path, points=nodes, cells=cells_meshio)
 
     # Read .vtk file with pyvista
     mesh = pv.read(path)

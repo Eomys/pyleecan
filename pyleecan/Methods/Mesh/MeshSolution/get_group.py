@@ -5,13 +5,13 @@ import copy
 
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.PointMat import PointMat
+from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.SolutionMat import SolutionMat
 from pyleecan.definitions import PACKAGE_NAME
 
 
-def get_group(self, group_names):
-    """Return all attributes of a MeshSolution object with only the cells, points
+def get_group(self, group_names, is_renum=False):
+    """Return all attributes of a MeshSolution object with only the cells, nodes
     and corresponding solutions of the group. Solutions are converted as SolutionMat.
 
      Parameters
@@ -64,7 +64,7 @@ def get_group(self, group_names):
 
     # 2) extract the corresponding connectivity and create a new mesh
     mesh_init = self.get_mesh()
-    point_init = mesh_init.get_point()
+    node_init = mesh_init.get_node()
     mesh_list = list()
     for sep in sep_list:
         connect_dict, nb_cell, indice_dict = mesh_init.get_cell(sep)
@@ -76,13 +76,13 @@ def get_group(self, group_names):
             mesh_new.cell[key] = CellMat(
                 connectivity=connect_dict[key],
                 nb_cell=len(connect_dict[key]),
-                nb_pt_per_cell=mesh_init.cell[key].nb_pt_per_cell,
+                nb_node_per_cell=mesh_init.cell[key].nb_node_per_cell,
                 indice=indice_dict[key],
                 interpolation=mesh_init.cell[key].interpolation,
             )
         node_indice = np.unique(node_indice)
 
-        mesh_new.point = PointMat(init_dict=mesh_init.point.as_dict())
+        mesh_new.node = NodeMat(init_dict=mesh_init.node.as_dict())
         mesh_new.label = label
 
         mesh_list.append(mesh_new)
@@ -104,9 +104,9 @@ def get_group(self, group_names):
         type_cell_sol = sol.type_cell
 
         new_sol = None
-        if type_cell_sol == "point":
+        if type_cell_sol == "node":
             new_sol = sol.get_solution(indice=node_indice)
-        elif not is_interface:  # Interface is only available for point solution.
+        elif not is_interface:  # Interface is only available for node solution.
             new_sol = sol.get_solution(indice=indice_dict[type_cell_sol])
 
         if new_sol is not None:
@@ -114,10 +114,12 @@ def get_group(self, group_names):
 
     # 5) Create the corresponding MeshSolution object
     if is_interface:
-        mesh_interface.renum()
+        if is_renum:
+            mesh_interface.renum()
         mesh = mesh_interface
     else:
-        mesh_new.renum()
+        if is_renum:
+            mesh_new.renum()
         mesh = mesh_new
 
     meshsol_grp = self.copy()

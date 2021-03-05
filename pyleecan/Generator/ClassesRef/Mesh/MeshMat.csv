@@ -1,11 +1,11 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-cell,,Storing connectivity,,{CellMat},,,,,Mesh,Mesh,get_point,VERSION,1,Gather the mesh storage format
-point,,Storing nodes,,PointMat,,,,,,,get_cell,,,
+cell,,Storing connectivity,,{CellMat},,,,,Mesh,Mesh,get_node,VERSION,1,Gather the mesh storage format
+node,,Storing nodes,,NodeMat,,,,,,,get_cell,,,
 ,,,,,,,,,,,get_mesh_pv,,,
 ,,,,,,,,,,,get_cell_area,,,
 ,,,,,,,,,,,add_cell,,,
 ,,,,,,,,,,,get_vertice,,,
-,,,,,,,,,,,get_point2cell,,,
+,,,,,,,,,,,get_node2cell,,,
 ,,,,,,,,,,,renum,,,
 ,,,,,,,,,,,find_cell,,,
 ,,,,,,,,,,,interface,,,

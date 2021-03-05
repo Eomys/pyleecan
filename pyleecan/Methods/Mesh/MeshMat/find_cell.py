@@ -25,9 +25,9 @@ def find_cell(self, points, nb_pt, normal_t=None):
     cells_list = list()
     cell_prop = list()
 
-    point = self.point
-    point_coord = point.coordinate
-    nb_tot_pt = point.nb_pt
+    nodes = self.node
+    point_coord = nodes.coordinate
+    nb_tot_pt = nodes.nb_node
 
     for ii in range(nb_pt):
         if nb_pt == 1:
@@ -38,7 +38,7 @@ def find_cell(self, points, nb_pt, normal_t=None):
             cells = self.cell[key]
             ref_cell = cells.interpolation.ref_cell
             connect = cells.connectivity
-            nb_pt_per_cell = cells.nb_pt_per_cell
+            nb_node_per_cell = cells.nb_node_per_cell
             # vertice0 = point_coord[connect[0]]
             # dist_ref = np.sqrt(
             #     np.square(vertice0[0, 0] - vertice0[1, 0])
@@ -97,9 +97,9 @@ def find_cell(self, points, nb_pt, normal_t=None):
             if len(cell_prop) == 0:
                 # test all cells (sorted by center, i.e. mean of vertices)
                 vert_cent = np.zeros(pt.shape)
-                for icell in range(nb_pt_per_cell):
+                for icell in range(nb_node_per_cell):
                     vert_cent = (
-                        vert_cent + point_coord[connect[:, icell]] / nb_pt_per_cell
+                        vert_cent + point_coord[connect[:, icell]] / nb_node_per_cell
                     )
 
                 if self.dimension == 3:

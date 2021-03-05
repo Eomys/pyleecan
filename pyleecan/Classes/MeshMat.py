@@ -18,9 +18,9 @@ from .Mesh import Mesh
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Mesh.MeshMat.get_point import get_point
+    from ..Methods.Mesh.MeshMat.get_node import get_node
 except ImportError as error:
-    get_point = error
+    get_node = error
 
 try:
     from ..Methods.Mesh.MeshMat.get_cell import get_cell
@@ -48,9 +48,9 @@ except ImportError as error:
     get_vertice = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_point2cell import get_point2cell
+    from ..Methods.Mesh.MeshMat.get_node2cell import get_node2cell
 except ImportError as error:
-    get_point2cell = error
+    get_node2cell = error
 
 try:
     from ..Methods.Mesh.MeshMat.renum import renum
@@ -70,7 +70,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .CellMat import CellMat
-from .PointMat import PointMat
+from .NodeMat import NodeMat
 
 
 class MeshMat(Mesh):
@@ -79,15 +79,15 @@ class MeshMat(Mesh):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.MeshMat.get_point
-    if isinstance(get_point, ImportError):
-        get_point = property(
+    # cf Methods.Mesh.MeshMat.get_node
+    if isinstance(get_node, ImportError):
+        get_node = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_point: " + str(get_point))
+                ImportError("Can't use MeshMat method get_node: " + str(get_node))
             )
         )
     else:
-        get_point = get_point
+        get_node = get_node
     # cf Methods.Mesh.MeshMat.get_cell
     if isinstance(get_cell, ImportError):
         get_cell = property(
@@ -135,17 +135,17 @@ class MeshMat(Mesh):
         )
     else:
         get_vertice = get_vertice
-    # cf Methods.Mesh.MeshMat.get_point2cell
-    if isinstance(get_point2cell, ImportError):
-        get_point2cell = property(
+    # cf Methods.Mesh.MeshMat.get_node2cell
+    if isinstance(get_node2cell, ImportError):
+        get_node2cell = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MeshMat method get_point2cell: " + str(get_point2cell)
+                    "Can't use MeshMat method get_node2cell: " + str(get_node2cell)
                 )
             )
         )
     else:
-        get_point2cell = get_point2cell
+        get_node2cell = get_node2cell
     # cf Methods.Mesh.MeshMat.renum
     if isinstance(renum, ImportError):
         renum = property(
@@ -180,7 +180,7 @@ class MeshMat(Mesh):
     get_logger = get_logger
 
     def __init__(
-        self, cell=-1, point=-1, label=None, dimension=2, init_dict=None, init_str=None
+        self, cell=-1, node=-1, label=None, dimension=2, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -199,15 +199,15 @@ class MeshMat(Mesh):
             # Overwrite default value with init_dict content
             if "cell" in list(init_dict.keys()):
                 cell = init_dict["cell"]
-            if "point" in list(init_dict.keys()):
-                point = init_dict["point"]
+            if "node" in list(init_dict.keys()):
+                node = init_dict["node"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
         # Set the properties (value check and convertion are done in setter)
         self.cell = cell
-        self.point = point
+        self.node = node
         # Call Mesh init
         super(MeshMat, self).__init__(label=label, dimension=dimension)
         # The class is frozen (in Mesh init), for now it's impossible to
@@ -224,11 +224,11 @@ class MeshMat(Mesh):
         for key, obj in self.cell.items():
             tmp = self.cell[key].__str__().replace(linesep, linesep + "\t") + linesep
             MeshMat_str += "cell[" + key + "] =" + tmp + linesep + linesep
-        if self.point is not None:
-            tmp = self.point.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MeshMat_str += "point = " + tmp
+        if self.node is not None:
+            tmp = self.node.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MeshMat_str += "node = " + tmp
         else:
-            MeshMat_str += "point = None" + linesep + linesep
+            MeshMat_str += "node = None" + linesep + linesep
         return MeshMat_str
 
     def __eq__(self, other):
@@ -242,7 +242,7 @@ class MeshMat(Mesh):
             return False
         if other.cell != self.cell:
             return False
-        if other.point != self.point:
+        if other.node != self.node:
             return False
         return True
 
@@ -268,12 +268,12 @@ class MeshMat(Mesh):
                 diff_list.extend(
                     self.cell[key].compare(other.cell[key], name=name + ".cell")
                 )
-        if (other.point is None and self.point is not None) or (
-            other.point is not None and self.point is None
+        if (other.node is None and self.node is not None) or (
+            other.node is not None and self.node is None
         ):
-            diff_list.append(name + ".point None mismatch")
-        elif self.point is not None:
-            diff_list.extend(self.point.compare(other.point, name=name + ".point"))
+            diff_list.append(name + ".node None mismatch")
+        elif self.node is not None:
+            diff_list.extend(self.node.compare(other.node, name=name + ".node"))
         return diff_list
 
     def __sizeof__(self):
@@ -286,7 +286,7 @@ class MeshMat(Mesh):
         if self.cell is not None:
             for key, value in self.cell.items():
                 S += getsizeof(value) + getsizeof(key)
-        S += getsizeof(self.point)
+        S += getsizeof(self.node)
         return S
 
     def as_dict(self):
@@ -303,10 +303,10 @@ class MeshMat(Mesh):
                     MeshMat_dict["cell"][key] = obj.as_dict()
                 else:
                     MeshMat_dict["cell"][key] = None
-        if self.point is None:
-            MeshMat_dict["point"] = None
+        if self.node is None:
+            MeshMat_dict["node"] = None
         else:
-            MeshMat_dict["point"] = self.point.as_dict()
+            MeshMat_dict["node"] = self.node.as_dict()
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MeshMat_dict["__class__"] = "MeshMat"
@@ -316,8 +316,8 @@ class MeshMat(Mesh):
         """Set all the properties to None (except pyleecan object)"""
 
         self.cell = None
-        if self.point is not None:
-            self.point._set_None()
+        if self.node is not None:
+            self.node._set_None()
         # Set to None the properties inherited from Mesh
         super(MeshMat, self)._set_None()
 
@@ -352,32 +352,30 @@ class MeshMat(Mesh):
         """,
     )
 
-    def _get_point(self):
-        """getter of point"""
-        return self._point
+    def _get_node(self):
+        """getter of node"""
+        return self._node
 
-    def _set_point(self, value):
-        """setter of point"""
+    def _set_node(self, value):
+        """setter of node"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "point"
-            )
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "node")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            value = PointMat()
-        check_var("point", value, "PointMat")
-        self._point = value
+            value = NodeMat()
+        check_var("node", value, "NodeMat")
+        self._node = value
 
-        if self._point is not None:
-            self._point.parent = self
+        if self._node is not None:
+            self._node.parent = self
 
-    point = property(
-        fget=_get_point,
-        fset=_set_point,
+    node = property(
+        fget=_get_node,
+        fset=_set_node,
         doc=u"""Storing nodes
 
-        :Type: PointMat
+        :Type: NodeMat
         """,
     )

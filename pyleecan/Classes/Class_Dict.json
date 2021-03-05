@@ -322,7 +322,7 @@
         "methods": [
             "add_cell",
             "get_connectivity",
-            "get_point2cell",
+            "get_node2cell",
             "is_exist"
         ],
         "mother": "",
@@ -349,10 +349,10 @@
                 "value": 0
             },
             {
-                "desc": "Define the number of node per element",
+                "desc": "Define the number of node per cell",
                 "max": "",
                 "min": "",
-                "name": "nb_pt_per_cell",
+                "name": "nb_node_per_cell",
                 "type": "int",
                 "unit": "",
                 "value": 0
@@ -5773,13 +5773,13 @@
         "desc": "Gather the mesh storage format",
         "is_internal": false,
         "methods": [
-            "get_point",
+            "get_node",
             "get_cell",
             "get_mesh_pv",
             "get_cell_area",
             "add_cell",
             "get_vertice",
-            "get_point2cell",
+            "get_node2cell",
             "renum",
             "find_cell",
             "interface"
@@ -5802,8 +5802,8 @@
                 "desc": "Storing nodes",
                 "max": "",
                 "min": "",
-                "name": "point",
-                "type": "PointMat",
+                "name": "node",
+                "type": "NodeMat",
                 "unit": "",
                 "value": ""
             }
@@ -5912,7 +5912,7 @@
         "is_internal": false,
         "methods": [
             "get_mesh_pv",
-            "get_point",
+            "get_node",
             "get_cell",
             "get_normals",
             "get_surf",
@@ -5930,7 +5930,7 @@
                 "max": "",
                 "min": "",
                 "name": "mesh",
-                "type": "pyvista.core.pointset.PointGrid",
+                "type": "vtk.vtkPointSet",
                 "unit": "",
                 "value": "None"
             },
@@ -6055,6 +6055,65 @@
                 "type": "int",
                 "unit": "-",
                 "value": null
+            }
+        ]
+    },
+    "NodeMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to define nodes coordinates and getter.",
+        "is_internal": false,
+        "methods": [
+            "add_node",
+            "get_coord",
+            "get_group",
+            "is_exist"
+        ],
+        "mother": "",
+        "name": "NodeMat",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/NodeMat.csv",
+        "properties": [
+            {
+                "desc": "Nodes coordinates",
+                "max": "",
+                "min": "",
+                "name": "coordinate",
+                "type": "ndarray",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "Total number of nodes",
+                "max": "",
+                "min": "",
+                "name": "nb_node",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Sensibility for node searching",
+                "max": "",
+                "min": "",
+                "name": "delta",
+                "type": "float",
+                "unit": "",
+                "value": 1e-10
+            },
+            {
+                "desc": "Nodes unique indices",
+                "max": "",
+                "min": "",
+                "name": "indice",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
             }
         ]
     },
@@ -7642,65 +7701,6 @@
                 "type": "list",
                 "unit": "-",
                 "value": []
-            }
-        ]
-    },
-    "PointMat": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Class to define nodes coordinates and getter.",
-        "is_internal": false,
-        "methods": [
-            "add_point",
-            "get_coord",
-            "get_group",
-            "is_exist"
-        ],
-        "mother": "",
-        "name": "PointMat",
-        "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/PointMat.csv",
-        "properties": [
-            {
-                "desc": "Nodes coordinates",
-                "max": "",
-                "min": "",
-                "name": "coordinate",
-                "type": "ndarray",
-                "unit": "",
-                "value": []
-            },
-            {
-                "desc": "Total number of nodes",
-                "max": "",
-                "min": "",
-                "name": "nb_pt",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Sensibility for node searching",
-                "max": "",
-                "min": "",
-                "name": "delta",
-                "type": "float",
-                "unit": "",
-                "value": 1e-10
-            },
-            {
-                "desc": "Point indices",
-                "max": "",
-                "min": "",
-                "name": "indice",
-                "type": "ndarray",
-                "unit": "",
-                "value": ""
             }
         ]
     },
