@@ -32,7 +32,7 @@ def test_Force_Tensor_compforce():
     # Mesh object
 
     mesh = MeshMat()
-    mesh.cell["triangle3"] = CellMat(nb_pt_per_cell=3)
+    mesh.cell["triangle3"] = CellMat(nb_node_per_cell=3)
     mesh.node = NodeMat()
 
     mesh.node.add_node(np.array([0, 0]))
