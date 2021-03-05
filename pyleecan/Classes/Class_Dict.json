@@ -783,7 +783,9 @@
         ],
         "desc": "Class for defining data to keep on a multi-simulation",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "as_dict"
+        ],
         "mother": "",
         "name": "DataKeeper",
         "package": "Simulation",

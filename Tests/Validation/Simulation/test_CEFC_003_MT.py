@@ -1,15 +1,18 @@
-from numpy import zeros, ones, pi, array
+# -*- coding: utf-8 -*-
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
 
 from pyleecan.Classes.Simu1 import Simu1
-
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Output import Output
-from Tests import save_validation_path as save_path
+from pyleecan.Classes.ForceMT import ForceMT
+
+from Tests import save_plot_path
 from os.path import join
+from numpy import zeros, ones, pi, array
 
 import matplotlib.pyplot as plt
 import json
@@ -17,62 +20,58 @@ import numpy as np
 import pytest
 
 
-@pytest.mark.skip
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
-def test_CEFC_003_t0(CEFC_Lam):
-    """Validation of magnetic air-gap surface force calculation based on Maxwell Tensor with an academic slotless machine."""
+def test_Slotless_CEFC_003():
+    """Validation of AGSF calculation on slotless machine.
 
-    simu = Simu1(name="FM_CEFC_003_MT", machine=CEFC_Lam, struct=None)
+    Electrical machine is an academic slotless machine inspired
+    from [R. Pile et al., Application Limits of the Airgap Maxwell
+    Tensor, CEFC, 2018] but with interior magnet such as Toyota
+    Prius machine.
 
-    # Definition of the enforced output of the electrical module
-    N0 = 3000
-    Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
-    Nt_tot = 1
-    Na_tot = 1024
+    """
+    Slotless_CEFC = load(join(DATA_DIR, "Machine", "Slotless_CEFC.json"))
+    simu = Simu1(name="EM_Slotless_CEFC_002_save_mag", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
-        Is=Is,
-        Ir=None,  # No winding on the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
-        Nt_tot=Nt_tot,
-        Na_tot=Na_tot,
-        rot_dir=-1,
+        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=2, N0=1200
     )
 
-    # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_periodicity_a=False,
-        is_get_mesh=True,
-        is_save_FEA=True,
-        is_sliding_band=False,
+        type_BH_stator=0,
+        type_BH_rotor=0,
+        is_get_meshsolution=True,
+        is_periodicity_a=True,
+        is_periodicity_t=False,
     )
 
-    # Definition of the magnetic simulation (no symmetry)
     simu.force = ForceMT()
 
-    out = Output(simu=simu)
-    out.post.legend_name = "Slotless lamination"
-    simu.run()
+    out = simu.run()
 
     # Plot the AGSF as a function of space with the spatial fft
     out.plot_2D_Data(
-        "mag.B",
+        "force.AGSF",
         "angle{rad}",
         component_list=["radial"],
-        save_path=join(save_path, "test_CEFC_003_plot_force_space.png"),
-        is_show_fig=False,
-    )
-    out.plot_2D_Data(
-        "mag.B",
-        "wavenumber=[0,78]",
-        component_list=["radial"],
-        save_path=join(save_path, "test_CEFC_003_plot_force_space_fft.png"),
+        save_path=join(save_plot_path, "test_CEFC_003_plot_force_space.png"),
         is_show_fig=False,
     )
 
-    # ------------------------------------------------------
+    out.plot_2D_Data(
+        "force.AGSF",
+        "wavenumber=[0,78]",
+        component_list=["radial"],
+        save_path=join(save_plot_path, "test_CEFC_003_plot_force_space_fft.png"),
+        is_show_fig=False,
+    )
+
+    return out
+
+
+# To run it without pytest
+if __name__ == "__main__":
+
+    out = test_Slotless_CEFC_003()
