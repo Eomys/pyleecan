@@ -102,9 +102,9 @@ def test_Magnetic_Phi0():
         Nrev=1 / 6,
         Na_tot=Na_tot,
         felec=felec,
-        Tem_av_ref=OP_matrix[0, 3]
     )
-    simu.input.set_Id_Iq(I0=OP_matrix[0, 1], Phi0=OP_matrix[0, 2])
+    # Select first OP as reference
+    simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=varload.type_OP_matrix)
 
     # Definition of the magnetic simulation (1/2 symmetry)
     assert SynRM_001.comp_periodicity() == (2, True, 2, True)

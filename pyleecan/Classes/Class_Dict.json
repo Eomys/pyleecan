@@ -3348,7 +3348,8 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_Id_Iq"
+            "set_Id_Iq",
+            "set_OP_from_array"
         ],
         "mother": "Input",
         "name": "InputCurrent",
@@ -11568,7 +11569,7 @@
                 "value": null
             },
             {
-                "desc": "Select with kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) ",
+                "desc": "Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) ",
                 "max": "1",
                 "min": "0",
                 "name": "type_OP_matrix",

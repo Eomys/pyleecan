@@ -54,10 +54,6 @@ def test_EM_FEMM_IPMSM_varload():
     )  # Yang et al, 2013
     Phi0_ref = linspace(60 * pi / 180, 180 * pi / 180, Tem_av_ref.size)
 
-    simu.input.Id_ref = Id_ref  # [Arms]
-    simu.input.Iq_ref = Iq_ref  # [Arms]
-    simu.input.Tem_av_ref = 353
-
     # Choose which operating points to run
     step = 2  # step=1 to do all OP
     # step=2 to do 1 OP out of 2 (fastest)
@@ -85,9 +81,12 @@ def test_EM_FEMM_IPMSM_varload():
     OP_matrix[:, 3] = Tem_av_ref[I_simu]
 
     varload.OP_matrix = OP_matrix
-    print(OP_matrix)
-
     simu.var_simu = varload
+
+    # Use first OP as reference (to skip one computation)
+    simu.input.set_OP_from_array(
+        OP_matrix=OP_matrix, type_OP_matrix=varload.type_OP_matrix, index=2
+    )
 
     # Datakeepers
     # Airgap flux density Datakeeper

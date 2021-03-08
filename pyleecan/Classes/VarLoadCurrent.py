@@ -351,7 +351,7 @@ class VarLoadCurrent(VarLoad):
     type_OP_matrix = property(
         fget=_get_type_OP_matrix,
         fset=_set_type_OP_matrix,
-        doc=u"""Select with kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) 
+        doc=u"""Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) 
 
         :Type: int
         :min: 0
