@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot):
+def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot, polynomial_coeffs=[[0.719, -0.078, -0.042], [-0.391, 0.114, 0.004]]):
     """compute nodal forces with a loop on elements and nodes
 
     from publications:
@@ -14,6 +14,20 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot):
 
     mesh :
         A Mesh object
+
+    
+
+
+    polynomial_coeffs : 2x3 List, optional
+        alpha(i,j) coeffs for polynomal expression of alpha1 and alpha2
+
+    Return
+    ----------
+    f : (nb_nodes*dim*Nt_tot) array
+        nodal forces
+    
+    connect : (nb_element*nb_node_per_cell) array
+        table of mesh connectivity
 
     """
 
@@ -58,7 +72,7 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot):
                 Be / mue - He, (dim, 1, Nt_tot)
             )  # reshaped for matrix product purpose
             # elt magnetostrictive tensor
-            tme = self.comp_magnetrosctrictive_tensor(mue, Me, Nt_tot)
+            tme = self.comp_magnetrosctrictive_tensor(mue, Me, Nt_tot,polynomial_coeffs)
 
             # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
             orientation_sign = np.sign(
@@ -70,7 +84,9 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot):
 
                 # Get current node + next node indices (both needed since pression will be computed on edges because of Green Ostrogradski)
                 inode = node_indices[n % nb_node_per_cell]
+                
                 next_inode = node_indices[(n + 1) % nb_node_per_cell]
+                
 
                 # Edge cooordonates
                 edge_vector = (
@@ -81,7 +97,7 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot):
                 L = np.linalg.norm(edge_vector)
                 Ve0 = L / 2
 
-                # Normalized normal vector n, that has to node outside the element (i.e. normal ^ edge same sign as the orientation)
+                # Normalized normal vector n, that has to be directed outside the element (i.e. normal ^ edge same sign as the orientation)
                 normal_to_edge_unoriented = (
                     np.array((edge_vector[1], -edge_vector[0])) / L
                 )
