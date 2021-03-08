@@ -70,7 +70,6 @@ def test_slot_scale():
     multisim = VarParam(
         stop_if_error=True,
         is_reuse_femm_file=False,
-        ref_simu_index=0,  # Reference simulation is set as the first simulation from var_simu
     )
 
     ref_simu.var_simu = multisim

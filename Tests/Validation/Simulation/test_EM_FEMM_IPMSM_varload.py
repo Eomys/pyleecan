@@ -47,17 +47,16 @@ def test_EM_FEMM_IPMSM_varload():
     simu.input = InputCurrent()
     I0_rms = 250 / sqrt(2)
     Phi0 = 140 * pi / 180  # Maximum Torque Per Amp
-
     Id_ref = (I0_rms * exp(1j * Phi0)).real
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
-
-    simu.input.Id_ref = Id_ref  # [Arms]
-    simu.input.Iq_ref = Iq_ref  # [Arms]
-
     Tem_av_ref = array(
         [79, 125, 160, 192, 237, 281, 319, 343, 353, 332, 266, 164, 22]
     )  # Yang et al, 2013
     Phi0_ref = linspace(60 * pi / 180, 180 * pi / 180, Tem_av_ref.size)
+
+    simu.input.Id_ref = Id_ref  # [Arms]
+    simu.input.Iq_ref = Iq_ref  # [Arms]
+    simu.input.Tem_av_ref = 353
 
     # Choose which operating points to run
     step = 2  # step=1 to do all OP
@@ -71,7 +70,7 @@ def test_EM_FEMM_IPMSM_varload():
     simu.input.Na_tot = 2048  # Spatial discretization
     simu.input.N0 = 2000  # Rotor speed [rpm]
 
-    varload = VarLoadCurrent(is_torque=True, ref_simu_index=0)
+    varload = VarLoadCurrent(is_torque=True)
     varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref
 
     # creating the Operating point matrix

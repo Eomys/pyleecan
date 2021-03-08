@@ -82,17 +82,7 @@ def test_Magnetic_Phi0():
     simu = Simu1(name="EM_SynRM_FL_001", machine=SynRM_001)
     Na_tot = 2016
 
-    simu.input = InputCurrent(
-        Is=None,
-        Ir=None,  # No winding on the rotor
-        N0=N0,
-        Nt_tot=Nt_tot,
-        Nrev=1 / 6,
-        Na_tot=Na_tot,
-        felec=felec,
-    )
-
-    varload = VarLoadCurrent(is_reuse_femm_file=True, ref_simu_index=0, is_torque=True)
+    varload = VarLoadCurrent(is_reuse_femm_file=True, is_torque=True)
     varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref
 
     N_simu = Phi0.size
@@ -103,6 +93,18 @@ def test_Magnetic_Phi0():
     OP_matrix[:, 3] = Tem
     varload.OP_matrix = OP_matrix
     simu.var_simu = varload
+
+    simu.input = InputCurrent(
+        Is=None,
+        Ir=None,  # No winding on the rotor
+        N0=N0,
+        Nt_tot=Nt_tot,
+        Nrev=1 / 6,
+        Na_tot=Na_tot,
+        felec=felec,
+        Tem_av_ref=OP_matrix[0, 3]
+    )
+    simu.input.set_Id_Iq(I0=OP_matrix[0, 1], Phi0=OP_matrix[0, 2])
 
     # Definition of the magnetic simulation (1/2 symmetry)
     assert SynRM_001.comp_periodicity() == (2, True, 2, True)
