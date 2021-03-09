@@ -1,4 +1,4 @@
-from numpy import hstack, vstack, zeros, savetxt, array, newaxis
+from numpy import hstack, vstack, zeros, savetxt
 from PySide2.QtWidgets import QDialog, QFileDialog
 from pandas import read_csv
 from ....GUI.Tools.FloatEdit import FloatEdit
