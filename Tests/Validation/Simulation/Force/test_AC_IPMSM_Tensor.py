@@ -54,7 +54,7 @@ def test_Benchmark_Tensor():
     # Run simulation
     out = simu.run()
 
-    out.force.meshsolution.plot_glyph(label="F", is_point_arrow=True)
+    out.force.meshsolution.plot_glyph(label="F", is_point_arrow=True, save_path = "C:/Users/Utilisateur/Desktop/Jean-Guillaume/magneto/plot_glyph.png")
 
     return out
 

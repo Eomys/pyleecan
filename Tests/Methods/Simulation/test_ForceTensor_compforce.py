@@ -89,7 +89,7 @@ def test_Force_Tensor_compforce():
     )
 
 
-def test_element_loop():
+def test_element_loop_1cell():
     """Validation of element_loop method from ForceTensor module by comparing with analytical solution on an elementary triangle."""
 
     # Mesh object
@@ -141,7 +141,7 @@ def test_element_loop():
     return True 
 
 
-def test_comp_magnetostrictive_tensor():
+def test_comp_magnetostrictive_tensor_1cell():
     """Validation of comp_magnetostrictive_tensor method from ForceTensor module by comparing with analytical solution on an elementary triangle."""
 
     # Physical quantities

@@ -60,13 +60,16 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot, polynomial_coeffs=[[
         # indice_elem = mesh.cell[key].indice
 
         # Loop on element (elt)
-        for e, e_ind in enumerate(indice):
-            node_indices = mesh_cell_key.get_connectivity(e_ind)  # elt nodes indices
-            vertice = mesh.get_vertice(e_ind)[key]  # elt nodes coordonates
+        for elt_indice, elt_number in enumerate(indice):
+
+            node_number = mesh_cell_key.get_connectivity(elt_number)  # elt nodes numbers, can differ from indices
+            vertice = mesh.get_vertice(elt_number)[key]  # elt nodes coordonates
+
+
             # elt physical fields values
-            Be = B[e, :, :]
-            He = H[e, :, :]
-            mue = mu[e, :]
+            Be = B[elt_indice, :, :]
+            He = H[elt_indice, :, :]
+            mue = mu[elt_indice, :]
 
             Me = np.reshape(
                 Be / mue - He, (dim, 1, Nt_tot)
@@ -83,9 +86,9 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot, polynomial_coeffs=[[
             for n in range(nb_node_per_cell):
 
                 # Get current node + next node indices (both needed since pression will be computed on edges because of Green Ostrogradski)
-                inode = node_indices[n % nb_node_per_cell]
+                node_indice = np.where(mesh.node.indice == node_number[n])
                 
-                next_inode = node_indices[(n + 1) % nb_node_per_cell]
+                next_node_indice = np.where(mesh.node.indice == node_number[(n+1)%nb_node_per_cell])
                 
 
                 # Edge cooordonates
@@ -108,14 +111,15 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot, polynomial_coeffs=[[
                 )
                 normal_to_edge.reshape(dim, 1)
 
-                # Green Ostrogradski <normal, tensor> scalar product
+
+                # Green Ostrogradski <tensor, normal> scalar product
                 edge_force = np.tensordot(
-                    normal_to_edge, tme, [[0], [0]]
-                )  # [[0],[0]] means sum product over rows for normal (which is vertical) and over rows for tme
+                    tme, normal_to_edge, [[1], [0]]
+                )  # [[1],[0]] means sum product over rows for normal (which is vertical) and over rows for tme
 
                 # Total edge force contribution, to be added to the 2 nodes that made the edge
                 fe = Ve0 * edge_force
-                f[inode, :, :] = f[inode, :, :] + fe
-                f[next_inode, :, :] = f[next_inode, :, :] + fe
+                f[node_indice, :, :] = f[node_indice, :, :] + fe
+                f[next_node_indice, :, :] = f[next_node_indice, :, :] + fe
 
     return f, connect
