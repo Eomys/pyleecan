@@ -1,7 +1,17 @@
 import numpy as np
 
 
-def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot, polynomial_coeffs=[[0.719, -0.078, -0.042], [-0.391, 0.114, 0.004]]):
+def element_loop(
+    self,
+    mesh,
+    B,
+    H,
+    mu,
+    indice,
+    dim,
+    Nt_tot,
+    polynomial_coeffs=[[0.719, -0.078, -0.042], [-0.391, 0.114, 0.004]],
+):
     """compute nodal forces with a loop on elements and nodes
 
     from publications:
@@ -15,7 +25,7 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot, polynomial_coeffs=[[
     mesh :
         A Mesh object
 
-    
+
 
 
     polynomial_coeffs : 2x3 List, optional
@@ -25,7 +35,7 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot, polynomial_coeffs=[[
     ----------
     f : (nb_nodes*dim*Nt_tot) array
         nodal forces
-    
+
     connect : (nb_element*nb_node_per_cell) array
         table of mesh connectivity
 
@@ -62,9 +72,10 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot, polynomial_coeffs=[[
         # Loop on element (elt)
         for elt_indice, elt_number in enumerate(indice):
 
-            node_number = mesh_cell_key.get_connectivity(elt_number)  # elt nodes numbers, can differ from indices
+            node_number = mesh_cell_key.get_connectivity(
+                elt_number
+            )  # elt nodes numbers, can differ from indices
             vertice = mesh.get_vertice(elt_number)[key]  # elt nodes coordonates
-
 
             # elt physical fields values
             Be = B[elt_indice, :, :]
@@ -75,7 +86,9 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot, polynomial_coeffs=[[
                 Be / mue - He, (dim, 1, Nt_tot)
             )  # reshaped for matrix product purpose
             # elt magnetostrictive tensor
-            tme = self.comp_magnetrosctrictive_tensor(mue, Me, Nt_tot,polynomial_coeffs)
+            tme = self.comp_magnetrosctrictive_tensor(
+                mue, Me, Nt_tot, polynomial_coeffs
+            )
 
             # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
             orientation_sign = np.sign(
@@ -87,9 +100,10 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot, polynomial_coeffs=[[
 
                 # Get current node + next node indices (both needed since pression will be computed on edges because of Green Ostrogradski)
                 node_indice = np.where(mesh.node.indice == node_number[n])
-                
-                next_node_indice = np.where(mesh.node.indice == node_number[(n+1)%nb_node_per_cell])
-                
+
+                next_node_indice = np.where(
+                    mesh.node.indice == node_number[(n + 1) % nb_node_per_cell]
+                )
 
                 # Edge cooordonates
                 edge_vector = (
@@ -110,7 +124,6 @@ def element_loop(self, mesh, B, H, mu, indice, dim, Nt_tot, polynomial_coeffs=[[
                     * orientation_sign
                 )
                 normal_to_edge.reshape(dim, 1)
-
 
                 # Green Ostrogradski <tensor, normal> scalar product
                 edge_force = np.tensordot(

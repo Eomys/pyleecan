@@ -52,5 +52,6 @@ def test_MeshMat():
     msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
     assert abs(testA - 0) < DELTA, msg
 
+
 if __name__ == "__main__":
     test_MeshMat()

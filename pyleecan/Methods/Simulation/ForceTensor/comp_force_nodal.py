@@ -59,7 +59,7 @@ def comp_force_nodal(self, output, axes_dict):
         axis_data={"time": time},
     )
     indice = resultB["indice"]  # Store elements indices
-    
+
     Bx = resultB["comp_x"]
     By = resultB["comp_y"]
     B = np.stack((Bx, By), axis=2)

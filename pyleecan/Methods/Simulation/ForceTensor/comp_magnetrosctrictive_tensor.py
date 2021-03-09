@@ -26,11 +26,11 @@ def comp_magnetrosctrictive_tensor(
     polynomial_coeffs : 2x3 List, optional
         alpha(i,j) coeffs for polynomal expression of alpha1 and alpha2
 
-    
+
     Return
     ----------
     magnetostric_tensor : dim * dim * Nt_tot array
-        magnetrostictive tensor in the current element for differents time steps 
+        magnetrostictive tensor in the current element for differents time steps
 
 
     """

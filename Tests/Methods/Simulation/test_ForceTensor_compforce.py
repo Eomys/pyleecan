@@ -109,16 +109,15 @@ def test_element_loop_1cell():
     # Physical quantities
     dim = 2
     Nt_tot = 1
-    
 
     mu = 1
     Be = np.array([[[mu / 2, 0]]])
-    He = np.array([[[- 1 / 2, 0]]])
+    He = np.array([[[-1 / 2, 0]]])
     mue = np.array([[mu]])
 
     Me = np.reshape(Be / mue - He, (dim, 1, Nt_tot))
 
-    alphaij = [[1,0,0],[1,0,0]]
+    alphaij = [[1, 0, 0], [1, 0, 0]]
 
     alpha1 = 1
     alpha2 = 1
@@ -126,19 +125,19 @@ def test_element_loop_1cell():
     # Computation
     tensor = ForceTensor()
 
-    f, connect = tensor.element_loop(mesh, Be, He, mue, indice, dim, Nt_tot,alphaij)
+    f, connect = tensor.element_loop(mesh, Be, He, mue, indice, dim, Nt_tot, alphaij)
 
-    f1_analytic = 1/2*mu*np.array([  alpha1 + alpha2,  alpha2]) 
-    f2_analytic = 1/2*mu*np.array([  -(alpha1 + alpha2), 0 ])
-    f3_analytic = 1/2*mu*np.array([ 0,  -alpha2 ])
+    f1_analytic = 1 / 2 * mu * np.array([alpha1 + alpha2, alpha2])
+    f2_analytic = 1 / 2 * mu * np.array([-(alpha1 + alpha2), 0])
+    f3_analytic = 1 / 2 * mu * np.array([0, -alpha2])
 
-    assert (f[0,:,0] == f1_analytic).all()
-    assert (f[1,:,0] == f2_analytic).all()
-    assert (f[2,:,0] == f3_analytic).all()
+    assert (f[0, :, 0] == f1_analytic).all()
+    assert (f[1, :, 0] == f2_analytic).all()
+    assert (f[2, :, 0] == f3_analytic).all()
 
-    print('test_element_loop succeeded')
+    print("test_element_loop succeeded")
 
-    return True 
+    return True
 
 
 def test_comp_magnetostrictive_tensor_1cell():
@@ -150,31 +149,31 @@ def test_comp_magnetostrictive_tensor_1cell():
 
     mu = 1
     Be = np.array([[[mu / 2, 0]]])
-    He = np.array([[[- 1 / 2, 0]]])
+    He = np.array([[[-1 / 2, 0]]])
     mue = np.array([[mu]])
 
     Me = np.reshape(Be / mue - He, (dim, 1, Nt_tot))
 
-    alphaij = [[1,0,0],[1,0,0]]
+    alphaij = [[1, 0, 0], [1, 0, 0]]
 
     alpha1 = 1
     alpha2 = 1
-    
+
     # Computation
     tensor = ForceTensor()
 
-    
-    tensor_comp = tensor.comp_magnetrosctrictive_tensor(mue, Me, Nt_tot,alphaij) # Should be equal to -alpha1*mu*MM' - alpha2*mu*M²*I2
+    tensor_comp = tensor.comp_magnetrosctrictive_tensor(
+        mue, Me, Nt_tot, alphaij
+    )  # Should be equal to -alpha1*mu*MM' - alpha2*mu*M²*I2
 
-    assert tensor_comp[0,0,0] == -mu*(alpha1+alpha2)
-    assert tensor_comp[0,1,0] == 0
-    assert tensor_comp[1,0,0] == 0
-    assert tensor_comp[1,1,0] == -mu*alpha2
+    assert tensor_comp[0, 0, 0] == -mu * (alpha1 + alpha2)
+    assert tensor_comp[0, 1, 0] == 0
+    assert tensor_comp[1, 0, 0] == 0
+    assert tensor_comp[1, 1, 0] == -mu * alpha2
 
+    print("test_comp_magnetostrictive_tensor succeeded")
 
-    print('test_comp_magnetostrictive_tensor succeeded')
-
-    return True 
+    return True
 
 
 if __name__ == "__main__":
