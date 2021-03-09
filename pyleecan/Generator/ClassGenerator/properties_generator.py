@@ -196,6 +196,28 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB5 + "value[ii].parent = self\n"
         set_str += TAB2 + "if value == -1:\n"
         set_str += TAB3 + "value = list()\n"
+    elif prop["type"] in ["", None]:  # No type
+        set_str += TAB2 + "if isinstance(value, dict) and '__class__' in value:\n"
+        set_str += TAB3 + "try:\n"
+        set_str += (
+            TAB4
+            + "class_obj = import_class('pyleecan.Classes', value.get('__class__'), '"
+            + prop["name"]
+            + "')\n"
+        )
+        set_str += TAB3 + "except:\n"
+        set_str += (
+            TAB4
+            + "class_obj = import_class('SciDataTool.Classes', value.get('__class__'), '"
+            + prop["name"]
+            + "')\n"
+        )
+        set_str += TAB3 + "value = class_obj(init_dict=value)\n"
+        set_str += TAB2 + "elif type(value) is list:\n"
+        set_str += TAB3 + "try:\n"
+        set_str += TAB4 + "value = np.array(value)\n"
+        set_str += TAB3 + "except:\n"
+        set_str += TAB4 + "pass\n"
     elif (
         ("." not in prop["type"] or "SciDataTool" in prop["type"])
         and prop["type"] not in PYTHON_TYPE
@@ -233,16 +255,16 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB2 + "if value is None:\n"
         set_str += TAB3 + "self._" + prop["name"] + "_str = None\n"
         set_str += TAB3 + "self._" + prop["name"] + "_func = None\n"
-        set_str += TAB2 + "elif isinstance(value,str) and 'lambda' in value:\n"
+        set_str += TAB2 + 'elif isinstance(value, str) and "lambda" in value:\n'
         set_str += TAB3 + "self._" + prop["name"] + "_str = value\n"
         set_str += TAB3 + "self._" + prop["name"] + "_func = eval(value)\n"
         set_str += (
             TAB2
-            + "elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':\n"
+            + 'elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":\n'
         )
         set_str += TAB3 + "self._" + prop["name"] + "_str = value\n"
-        set_str += TAB3 + "f = open(value, 'r')\n"
-        set_str += TAB3 + "exec(f.read(),globals())\n"
+        set_str += TAB3 + 'f = open(value, "r")\n'
+        set_str += TAB3 + "exec(f.read(), globals())\n"
         set_str += (
             TAB3 + "self._" + prop["name"] + "_func = eval(basename(value[:-3]))\n"
         )
@@ -250,12 +272,15 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB3 + "self._" + prop["name"] + "_str = None\n"
         set_str += TAB3 + "self._" + prop["name"] + "_func = value\n"
         set_str += TAB2 + "else:\n"
+        set_str += TAB3 + "raise CheckTypeError(\n"
         set_str += (
-            TAB3
-            + "raise CheckTypeError('For property "
+            TAB4
+            + '"For property '
             + prop["name"]
-            + " Expected function or str (path to python file or lambda), got: '+str(type(value))) \n"
+            + ' Expected function or str (path to python file or lambda), got: "\n'
         )
+        set_str += TAB4 + "+ str(type(value))\n"
+        set_str += TAB3 + ")\n\n"
     else:
         if "." in prop["type"]:
             check_type = prop["type"].split(".")[-1]
@@ -276,7 +301,11 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB2 + "self._" + prop["name"] + " = value\n\n"
 
     ## Update Parent
-    if (
+    if prop["type"] in ["", None]:
+        # No type
+        set_str += TAB2 + "if hasattr(self._" + prop["name"] + ", 'parent'):\n"
+        set_str += TAB3 + "self._" + prop["name"] + ".parent = self\n"
+    elif (
         prop["type"] not in PYTHON_TYPE
         and prop["type"] not in ["ndarray", "function", "{ndarray}", "[ndarray]"]
         and not is_dict_pyleecan_type(prop["type"])

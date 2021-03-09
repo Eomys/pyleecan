@@ -331,11 +331,15 @@ class HoleM58(HoleMag):
         S += getsizeof(self.magnet_0)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from HoleMag
-        HoleM58_dict = super(HoleM58, self).as_dict()
+        HoleM58_dict = super(HoleM58, self).as_dict(**kwargs)
         HoleM58_dict["H0"] = self.H0
         HoleM58_dict["W0"] = self.W0
         HoleM58_dict["H1"] = self.H1
@@ -347,7 +351,7 @@ class HoleM58(HoleMag):
         if self.magnet_0 is None:
             HoleM58_dict["magnet_0"] = None
         else:
-            HoleM58_dict["magnet_0"] = self.magnet_0.as_dict()
+            HoleM58_dict["magnet_0"] = self.magnet_0.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         HoleM58_dict["__class__"] = "HoleM58"

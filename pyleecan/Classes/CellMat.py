@@ -231,8 +231,12 @@ class CellMat(FrozenClass):
         S += getsizeof(self.interpolation)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         CellMat_dict = dict()
         if self.connectivity is None:
@@ -248,7 +252,7 @@ class CellMat(FrozenClass):
         if self.interpolation is None:
             CellMat_dict["interpolation"] = None
         else:
-            CellMat_dict["interpolation"] = self.interpolation.as_dict()
+            CellMat_dict["interpolation"] = self.interpolation.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         CellMat_dict["__class__"] = "CellMat"
         return CellMat_dict

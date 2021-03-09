@@ -198,24 +198,28 @@ class SlotUD2(Slot):
         S += getsizeof(self.active_surf)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Slot
-        SlotUD2_dict = super(SlotUD2, self).as_dict()
+        SlotUD2_dict = super(SlotUD2, self).as_dict(**kwargs)
         if self.line_list is None:
             SlotUD2_dict["line_list"] = None
         else:
             SlotUD2_dict["line_list"] = list()
             for obj in self.line_list:
                 if obj is not None:
-                    SlotUD2_dict["line_list"].append(obj.as_dict())
+                    SlotUD2_dict["line_list"].append(obj.as_dict(**kwargs))
                 else:
                     SlotUD2_dict["line_list"].append(None)
         if self.active_surf is None:
             SlotUD2_dict["active_surf"] = None
         else:
-            SlotUD2_dict["active_surf"] = self.active_surf.as_dict()
+            SlotUD2_dict["active_surf"] = self.active_surf.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotUD2_dict["__class__"] = "SlotUD2"

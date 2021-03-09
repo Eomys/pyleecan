@@ -208,11 +208,15 @@ class VentilationCirc(Hole):
         S += getsizeof(self.H0)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Hole
-        VentilationCirc_dict = super(VentilationCirc, self).as_dict()
+        VentilationCirc_dict = super(VentilationCirc, self).as_dict(**kwargs)
         VentilationCirc_dict["Alpha0"] = self.Alpha0
         VentilationCirc_dict["D0"] = self.D0
         VentilationCirc_dict["H0"] = self.H0

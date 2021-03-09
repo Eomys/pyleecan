@@ -119,11 +119,15 @@ class FPGNSeg(GaussPoint):
         S += getsizeof(self.nb_gauss_point)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from GaussPoint
-        FPGNSeg_dict = super(FPGNSeg, self).as_dict()
+        FPGNSeg_dict = super(FPGNSeg, self).as_dict(**kwargs)
         FPGNSeg_dict["nb_gauss_point"] = self.nb_gauss_point
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name

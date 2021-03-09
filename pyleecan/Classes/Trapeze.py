@@ -257,11 +257,15 @@ class Trapeze(Surface):
         S += getsizeof(self.W1)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Surface
-        Trapeze_dict = super(Trapeze, self).as_dict()
+        Trapeze_dict = super(Trapeze, self).as_dict(**kwargs)
         Trapeze_dict["height"] = self.height
         Trapeze_dict["W2"] = self.W2
         Trapeze_dict["W1"] = self.W1

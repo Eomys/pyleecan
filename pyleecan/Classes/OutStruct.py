@@ -225,8 +225,12 @@ class OutStruct(FrozenClass):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutStruct_dict = dict()
         if self.Time is None:
@@ -255,7 +259,7 @@ class OutStruct(FrozenClass):
         if self.meshsolution is None:
             OutStruct_dict["meshsolution"] = None
         else:
-            OutStruct_dict["meshsolution"] = self.meshsolution.as_dict()
+            OutStruct_dict["meshsolution"] = self.meshsolution.as_dict(**kwargs)
         OutStruct_dict["FEA_dict"] = (
             self.FEA_dict.copy() if self.FEA_dict is not None else None
         )

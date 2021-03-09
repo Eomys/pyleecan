@@ -342,11 +342,15 @@ class Segment(Line):
         S += getsizeof(self.end)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Line
-        Segment_dict = super(Segment, self).as_dict()
+        Segment_dict = super(Segment, self).as_dict(**kwargs)
         if self.begin is None:
             Segment_dict["begin"] = None
         elif isinstance(self.begin, float):

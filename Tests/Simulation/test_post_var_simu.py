@@ -29,10 +29,10 @@ class ExamplePostMethod(PostMethod):
     def run(self, output):
         output.simu.machine.stator.slot.W0 += 10
 
-    def copy(self):
+    def copy(self, **kwargs):
         return copy(self)
 
-    def as_dict(self):
+    def as_dict(self, **kwargs):
         return copy(self)
 
 
@@ -66,7 +66,6 @@ def test_post_var_simu():
     )
 
     simu1.var_simu = VarParam(
-        ref_simu_index=0,
         paramexplorer_list=[pe1],
         datakeeper_list=[dk1],
         stop_if_error=True,

@@ -189,11 +189,15 @@ class RefLine3(RefCell):
         S += super(RefLine3, self).__sizeof__()
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from RefCell
-        RefLine3_dict = super(RefLine3, self).as_dict()
+        RefLine3_dict = super(RefLine3, self).as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         RefLine3_dict["__class__"] = "RefLine3"

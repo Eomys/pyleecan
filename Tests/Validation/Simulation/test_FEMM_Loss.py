@@ -66,7 +66,7 @@ def test_FEMM_Loss():
         type_BH_stator=0, type_BH_rotor=0, is_periodicity_a=True, nb_worker=4
     )
 
-    simu.mag.is_get_mesh = True  # To get FEA mesh for latter post-procesing
+    simu.mag.is_get_meshsolution = True  # To get FEA mesh for latter post-procesing
 
     # --- Setup the Loss Model ------------------------------------------------------- #
     simu.loss = Loss()

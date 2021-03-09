@@ -844,6 +844,15 @@
                 "type": "list",
                 "unit": "-",
                 "value": []
+            },
+            {
+                "desc": "Result for the reference simulation",
+                "max": "",
+                "min": "",
+                "name": "result_ref",
+                "type": "",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -3339,7 +3348,8 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_Id_Iq"
+            "set_Id_Iq",
+            "set_OP_from_array"
         ],
         "mother": "Input",
         "name": "InputCurrent",
@@ -8408,6 +8418,24 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "Layer of the simulation in a multi-simulation (0 is top simulation)",
+                "max": "",
+                "min": "0",
+                "name": "layer",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Enable to set the log console_handler to warning starting from a particular layer. layer_log_warn=2 => layer 0 and 1 info, layer 2 warning",
+                "max": "",
+                "min": "0",
+                "name": "layer_log_warn",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -11487,6 +11515,10 @@
             {
                 "name": "VERSION",
                 "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"Variable Load\""
             }
         ],
         "daughters": [
@@ -11517,7 +11549,7 @@
         "is_internal": false,
         "methods": [
             "get_input_list",
-            "get_simulations",
+            "generate_simulation_list",
             "gen_datakeeper_list",
             "check_param",
             "get_elec_datakeeper"
@@ -11537,7 +11569,7 @@
                 "value": null
             },
             {
-                "desc": "Select with kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) ",
+                "desc": "Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) ",
                 "max": "1",
                 "min": "0",
                 "name": "type_OP_matrix",
@@ -11570,6 +11602,10 @@
             {
                 "name": "VERSION",
                 "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"Parameter Sweep\""
             }
         ],
         "daughters": [],
@@ -11577,7 +11613,7 @@
         "is_internal": false,
         "methods": [
             "check_param",
-            "get_simulations",
+            "generate_simulation_list",
             "get_simu_number"
         ],
         "mother": "VarSimu",
@@ -11614,7 +11650,7 @@
             "run",
             "set_reused_data",
             "check_param",
-            "get_simulations"
+            "generate_simulation_list"
         ],
         "mother": "",
         "name": "VarSimu",
@@ -11667,11 +11703,11 @@
                 "value": false
             },
             {
-                "desc": "Index of the reference simulation, if None the reference simulation is not in the multi-simulation",
+                "desc": "Multi-simulation of a Multi-simulation definition",
                 "max": "",
-                "min": "0",
-                "name": "ref_simu_index",
-                "type": "int",
+                "min": "",
+                "name": "var_simu",
+                "type": "VarSimu",
                 "unit": "-",
                 "value": null
             },
@@ -12241,7 +12277,8 @@
             "plot_pareto",
             "plot_generation",
             "get_pareto_index",
-            "print_memory"
+            "print_memory",
+            "get_xoutput_ref"
         ],
         "mother": "Output",
         "name": "XOutput",
@@ -12258,7 +12295,7 @@
                 "value": ""
             },
             {
-                "desc": "List containing Output for each simulation",
+                "desc": "List containing Output (or Xoutput) for each simulation",
                 "max": "",
                 "min": "",
                 "name": "output_list",
@@ -12267,7 +12304,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing VarParam DataKeeper results in ndarray",
+                "desc": "Dictionnary containing DataKeeper",
                 "max": "",
                 "min": "",
                 "name": "xoutput_dict",
@@ -12283,6 +12320,24 @@
                 "type": "int",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "Xoutput (or Output) of the reference simulation (only if is_keep_all_output is True and not included in output_list)",
+                "max": "",
+                "min": "",
+                "name": "xoutput_ref",
+                "type": "Output",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Index of the Xoutput (or Output) of the reference simulation in the output_list (only if is_keep_all_output is True)",
+                "max": "",
+                "min": "",
+                "name": "xoutput_ref_index",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     }

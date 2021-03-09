@@ -279,18 +279,22 @@ class SurfLine(Surface):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Surface
-        SurfLine_dict = super(SurfLine, self).as_dict()
+        SurfLine_dict = super(SurfLine, self).as_dict(**kwargs)
         if self.line_list is None:
             SurfLine_dict["line_list"] = None
         else:
             SurfLine_dict["line_list"] = list()
             for obj in self.line_list:
                 if obj is not None:
-                    SurfLine_dict["line_list"].append(obj.as_dict())
+                    SurfLine_dict["line_list"].append(obj.as_dict(**kwargs))
                 else:
                     SurfLine_dict["line_list"].append(None)
         # The class name is added to the dict for deserialisation purpose

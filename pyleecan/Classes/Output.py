@@ -492,44 +492,48 @@ class Output(FrozenClass):
         S += getsizeof(self.loss)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Output_dict = dict()
         if self.simu is None:
             Output_dict["simu"] = None
         else:
-            Output_dict["simu"] = self.simu.as_dict()
+            Output_dict["simu"] = self.simu.as_dict(**kwargs)
         Output_dict["path_result"] = self.path_result
         if self.geo is None:
             Output_dict["geo"] = None
         else:
-            Output_dict["geo"] = self.geo.as_dict()
+            Output_dict["geo"] = self.geo.as_dict(**kwargs)
         if self.elec is None:
             Output_dict["elec"] = None
         else:
-            Output_dict["elec"] = self.elec.as_dict()
+            Output_dict["elec"] = self.elec.as_dict(**kwargs)
         if self.mag is None:
             Output_dict["mag"] = None
         else:
-            Output_dict["mag"] = self.mag.as_dict()
+            Output_dict["mag"] = self.mag.as_dict(**kwargs)
         if self.struct is None:
             Output_dict["struct"] = None
         else:
-            Output_dict["struct"] = self.struct.as_dict()
+            Output_dict["struct"] = self.struct.as_dict(**kwargs)
         if self.post is None:
             Output_dict["post"] = None
         else:
-            Output_dict["post"] = self.post.as_dict()
+            Output_dict["post"] = self.post.as_dict(**kwargs)
         Output_dict["logger_name"] = self.logger_name
         if self.force is None:
             Output_dict["force"] = None
         else:
-            Output_dict["force"] = self.force.as_dict()
+            Output_dict["force"] = self.force.as_dict(**kwargs)
         if self.loss is None:
             Output_dict["loss"] = None
         else:
-            Output_dict["loss"] = self.loss.as_dict()
+            Output_dict["loss"] = self.loss.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         Output_dict["__class__"] = "Output"
         return Output_dict

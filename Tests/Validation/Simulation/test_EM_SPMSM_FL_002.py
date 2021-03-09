@@ -66,7 +66,7 @@ def test_Magnetic_FEMM_sym():
         type_BH_stator=2,
         type_BH_rotor=2,
         is_periodicity_a=False,
-        is_get_mesh=True,
+        is_get_meshsolution=True,
         nb_worker=cpu_count(),
     )
     simu.force = None

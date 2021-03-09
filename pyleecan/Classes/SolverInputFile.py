@@ -127,11 +127,15 @@ class SolverInputFile(Elmer):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Elmer
-        SolverInputFile_dict = super(SolverInputFile, self).as_dict()
+        SolverInputFile_dict = super(SolverInputFile, self).as_dict(**kwargs)
         SolverInputFile_dict["sections"] = (
             self.sections.copy() if self.sections is not None else None
         )

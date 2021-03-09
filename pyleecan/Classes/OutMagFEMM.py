@@ -153,11 +153,15 @@ class OutMagFEMM(OutInternal):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from OutInternal
-        OutMagFEMM_dict = super(OutMagFEMM, self).as_dict()
+        OutMagFEMM_dict = super(OutMagFEMM, self).as_dict(**kwargs)
         OutMagFEMM_dict["FEMM_dict"] = (
             self.FEMM_dict.copy() if self.FEMM_dict is not None else None
         )
@@ -167,7 +171,7 @@ class OutMagFEMM(OutInternal):
             OutMagFEMM_dict["handler_list"] = list()
             for obj in self.handler_list:
                 if obj is not None:
-                    OutMagFEMM_dict["handler_list"].append(obj.as_dict())
+                    OutMagFEMM_dict["handler_list"].append(obj.as_dict(**kwargs))
                 else:
                     OutMagFEMM_dict["handler_list"].append(None)
         # The class name is added to the dict for deserialisation purpose

@@ -400,11 +400,15 @@ class MagElmer(Magnetics):
         S += getsizeof(self.nb_worker)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Magnetics
-        MagElmer_dict = super(MagElmer, self).as_dict()
+        MagElmer_dict = super(MagElmer, self).as_dict(**kwargs)
         MagElmer_dict["Kmesh_fineness"] = self.Kmesh_fineness
         MagElmer_dict["Kgeo_fineness"] = self.Kgeo_fineness
         MagElmer_dict["file_name"] = self.file_name
@@ -419,11 +423,11 @@ class MagElmer(Magnetics):
         if self.rotor_dxf is None:
             MagElmer_dict["rotor_dxf"] = None
         else:
-            MagElmer_dict["rotor_dxf"] = self.rotor_dxf.as_dict()
+            MagElmer_dict["rotor_dxf"] = self.rotor_dxf.as_dict(**kwargs)
         if self.stator_dxf is None:
             MagElmer_dict["stator_dxf"] = None
         else:
-            MagElmer_dict["stator_dxf"] = self.stator_dxf.as_dict()
+            MagElmer_dict["stator_dxf"] = self.stator_dxf.as_dict(**kwargs)
         MagElmer_dict["import_file"] = self.import_file
         MagElmer_dict["nb_worker"] = self.nb_worker
         # The class name is added to the dict for deserialisation purpose

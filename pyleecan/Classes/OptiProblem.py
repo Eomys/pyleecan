@@ -274,21 +274,25 @@ class OptiProblem(FrozenClass):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OptiProblem_dict = dict()
         if self.simu is None:
             OptiProblem_dict["simu"] = None
         else:
-            OptiProblem_dict["simu"] = self.simu.as_dict()
+            OptiProblem_dict["simu"] = self.simu.as_dict(**kwargs)
         if self.design_var is None:
             OptiProblem_dict["design_var"] = None
         else:
             OptiProblem_dict["design_var"] = list()
             for obj in self.design_var:
                 if obj is not None:
-                    OptiProblem_dict["design_var"].append(obj.as_dict())
+                    OptiProblem_dict["design_var"].append(obj.as_dict(**kwargs))
                 else:
                     OptiProblem_dict["design_var"].append(None)
         if self.obj_func is None:
@@ -297,33 +301,49 @@ class OptiProblem(FrozenClass):
             OptiProblem_dict["obj_func"] = list()
             for obj in self.obj_func:
                 if obj is not None:
-                    OptiProblem_dict["obj_func"].append(obj.as_dict())
+                    OptiProblem_dict["obj_func"].append(obj.as_dict(**kwargs))
                 else:
                     OptiProblem_dict["obj_func"].append(None)
         if self._eval_func_str is not None:
             OptiProblem_dict["eval_func"] = self._eval_func_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            OptiProblem_dict["eval_func"] = self.eval_func
         else:
             OptiProblem_dict["eval_func"] = None
+            if self.eval_func is not None:
+                self.get_logger().warning(
+                    "OptiProblem.as_dict(): "
+                    + f"Function {self.eval_func.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         if self.constraint is None:
             OptiProblem_dict["constraint"] = None
         else:
             OptiProblem_dict["constraint"] = list()
             for obj in self.constraint:
                 if obj is not None:
-                    OptiProblem_dict["constraint"].append(obj.as_dict())
+                    OptiProblem_dict["constraint"].append(obj.as_dict(**kwargs))
                 else:
                     OptiProblem_dict["constraint"].append(None)
         if self._preprocessing_str is not None:
             OptiProblem_dict["preprocessing"] = self._preprocessing_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            OptiProblem_dict["preprocessing"] = self.preprocessing
         else:
             OptiProblem_dict["preprocessing"] = None
+            if self.preprocessing is not None:
+                self.get_logger().warning(
+                    "OptiProblem.as_dict(): "
+                    + f"Function {self.preprocessing.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         if self.datakeeper_list is None:
             OptiProblem_dict["datakeeper_list"] = None
         else:
             OptiProblem_dict["datakeeper_list"] = list()
             for obj in self.datakeeper_list:
                 if obj is not None:
-                    OptiProblem_dict["datakeeper_list"].append(obj.as_dict())
+                    OptiProblem_dict["datakeeper_list"].append(obj.as_dict(**kwargs))
                 else:
                     OptiProblem_dict["datakeeper_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
@@ -364,7 +384,7 @@ class OptiProblem(FrozenClass):
     simu = property(
         fget=_get_simu,
         fset=_set_simu,
-        doc=u"""Default simulation
+        doc="""Default simulation
 
         :Type: Simulation
         """,
@@ -397,7 +417,7 @@ class OptiProblem(FrozenClass):
     design_var = property(
         fget=_get_design_var,
         fset=_set_design_var,
-        doc=u"""List of design variables
+        doc="""List of design variables
 
         :Type: [OptiDesignVar]
         """,
@@ -430,7 +450,7 @@ class OptiProblem(FrozenClass):
     obj_func = property(
         fget=_get_obj_func,
         fset=_set_obj_func,
-        doc=u"""List of objective functions
+        doc="""List of objective functions
 
         :Type: [OptiObjective]
         """,
@@ -465,7 +485,7 @@ class OptiProblem(FrozenClass):
     eval_func = property(
         fget=_get_eval_func,
         fset=_set_eval_func,
-        doc=u"""Function to evaluate before computing obj function and constraints
+        doc="""Function to evaluate before computing obj function and constraints
 
         :Type: function
         """,
@@ -498,7 +518,7 @@ class OptiProblem(FrozenClass):
     constraint = property(
         fget=_get_constraint,
         fset=_set_constraint,
-        doc=u"""List containing the constraints 
+        doc="""List containing the constraints 
 
         :Type: [OptiConstraint]
         """,
@@ -533,7 +553,7 @@ class OptiProblem(FrozenClass):
     preprocessing = property(
         fget=_get_preprocessing,
         fset=_set_preprocessing,
-        doc=u"""Function to execute a preprocessing on the simulation right before it is run.
+        doc="""Function to execute a preprocessing on the simulation right before it is run.
 
         :Type: function
         """,
@@ -566,7 +586,7 @@ class OptiProblem(FrozenClass):
     datakeeper_list = property(
         fget=_get_datakeeper_list,
         fset=_set_datakeeper_list,
-        doc=u"""List of DataKeepers to run on every output
+        doc="""List of DataKeepers to run on every output
 
         :Type: [DataKeeper]
         """,

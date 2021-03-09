@@ -11,7 +11,7 @@ def comp_fill_factor(self):
         Ncps = Ncps_.mean()
 
         if Ncps_.std() != 0:
-            self.get_logger.warning(
+            self.get_logger().warning(
                 "LamSlotWind.comp_fill_factor: "
                 "Uneven number of conductors per slot. "
                 + "Max. number of conductors will be used to compute slot fill factor."
