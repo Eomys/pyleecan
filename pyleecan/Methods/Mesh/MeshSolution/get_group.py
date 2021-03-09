@@ -117,11 +117,16 @@ def get_group(self, group_names, is_renum=False):
         mesh_interface.clear_node()
         if is_renum:
             mesh_interface.renum()
+        else:
+            mesh_interface._is_renum = True
+
         mesh = mesh_interface
     else:
         mesh_new.clear_node()
         if is_renum:
             mesh_new.renum()
+        else:
+            mesh_new._is_renum = True
         mesh = mesh_new
 
     meshsol_grp = self.copy()

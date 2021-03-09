@@ -5811,6 +5811,15 @@
                 "type": "NodeMat",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "To check if renumering the nodes and cells is useful when renum method is called",
+                "max": "",
+                "min": "",
+                "name": "_is_renum",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -6076,7 +6085,6 @@
         "methods": [
             "add_node",
             "get_coord",
-            "get_group",
             "is_exist"
         ],
         "mother": "",

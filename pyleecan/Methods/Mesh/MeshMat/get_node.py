@@ -22,6 +22,6 @@ def get_node(self, indices=None):
 
     """
     if indices is None:
-        return self.node.coordinate
+        return self.node.coordinate, self.node.indice
     else:
         return self.node.get_coord(indices)

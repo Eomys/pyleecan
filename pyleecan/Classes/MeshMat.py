@@ -208,7 +208,14 @@ class MeshMat(Mesh):
     get_logger = get_logger
 
     def __init__(
-        self, cell=-1, node=-1, label=None, dimension=2, init_dict=None, init_str=None
+        self,
+        cell=-1,
+        node=-1,
+        _is_renum=False,
+        label=None,
+        dimension=2,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -229,6 +236,8 @@ class MeshMat(Mesh):
                 cell = init_dict["cell"]
             if "node" in list(init_dict.keys()):
                 node = init_dict["node"]
+            if "_is_renum" in list(init_dict.keys()):
+                _is_renum = init_dict["_is_renum"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
@@ -236,6 +245,7 @@ class MeshMat(Mesh):
         # Set the properties (value check and convertion are done in setter)
         self.cell = cell
         self.node = node
+        self._is_renum = _is_renum
         # Call Mesh init
         super(MeshMat, self).__init__(label=label, dimension=dimension)
         # The class is frozen (in Mesh init), for now it's impossible to
@@ -257,6 +267,7 @@ class MeshMat(Mesh):
             MeshMat_str += "node = " + tmp
         else:
             MeshMat_str += "node = None" + linesep + linesep
+        MeshMat_str += "_is_renum = " + str(self._is_renum) + linesep
         return MeshMat_str
 
     def __eq__(self, other):
@@ -271,6 +282,8 @@ class MeshMat(Mesh):
         if other.cell != self.cell:
             return False
         if other.node != self.node:
+            return False
+        if other._is_renum != self._is_renum:
             return False
         return True
 
@@ -302,6 +315,8 @@ class MeshMat(Mesh):
             diff_list.append(name + ".node None mismatch")
         elif self.node is not None:
             diff_list.extend(self.node.compare(other.node, name=name + ".node"))
+        if other.__is_renum != self.__is_renum:
+            diff_list.append(name + "._is_renum")
         return diff_list
 
     def __sizeof__(self):
@@ -315,6 +330,7 @@ class MeshMat(Mesh):
             for key, value in self.cell.items():
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.node)
+        S += getsizeof(self._is_renum)
         return S
 
     def as_dict(self):
@@ -335,6 +351,7 @@ class MeshMat(Mesh):
             MeshMat_dict["node"] = None
         else:
             MeshMat_dict["node"] = self.node.as_dict()
+        MeshMat_dict["_is_renum"] = self._is_renum
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MeshMat_dict["__class__"] = "MeshMat"
@@ -346,6 +363,7 @@ class MeshMat(Mesh):
         self.cell = None
         if self.node is not None:
             self.node._set_None()
+        self._is_renum = None
         # Set to None the properties inherited from Mesh
         super(MeshMat, self)._set_None()
 
@@ -405,5 +423,23 @@ class MeshMat(Mesh):
         doc=u"""Storing nodes
 
         :Type: NodeMat
+        """,
+    )
+
+    def _get__is_renum(self):
+        """getter of _is_renum"""
+        return self.__is_renum
+
+    def _set__is_renum(self, value):
+        """setter of _is_renum"""
+        check_var("_is_renum", value, "bool")
+        self.__is_renum = value
+
+    _is_renum = property(
+        fget=_get__is_renum,
+        fset=_set__is_renum,
+        doc=u"""To check if renumering the nodes and cells is useful when renum method is called
+
+        :Type: bool
         """,
     )

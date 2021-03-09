@@ -83,7 +83,9 @@ def plot_glyph(
 
         # Get the mesh
         mesh = self.get_mesh(label=label, index=index)
-        mesh_pv = mesh.get_mesh_pv(indices=indices)
+        new_mesh = mesh.copy()
+        new_mesh.renum()
+        mesh_pv = new_mesh.get_mesh_pv(indices=indices)
 
         # Get the vector field
         arg_list = ["time[0]", "indice"]

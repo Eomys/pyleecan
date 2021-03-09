@@ -28,11 +28,6 @@ except ImportError as error:
     get_coord = error
 
 try:
-    from ..Methods.Mesh.NodeMat.get_group import get_group
-except ImportError as error:
-    get_group = error
-
-try:
     from ..Methods.Mesh.NodeMat.is_exist import is_exist
 except ImportError as error:
     is_exist = error
@@ -66,15 +61,6 @@ class NodeMat(FrozenClass):
         )
     else:
         get_coord = get_coord
-    # cf Methods.Mesh.NodeMat.get_group
-    if isinstance(get_group, ImportError):
-        get_group = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use NodeMat method get_group: " + str(get_group))
-            )
-        )
-    else:
-        get_group = get_group
     # cf Methods.Mesh.NodeMat.is_exist
     if isinstance(is_exist, ImportError):
         is_exist = property(

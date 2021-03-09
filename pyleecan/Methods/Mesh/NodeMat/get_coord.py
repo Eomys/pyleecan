@@ -27,6 +27,5 @@ def get_coord(self, node_indice):
     for ind in node_indice:
         Ipos = np.where(indices_all == ind)[0][0]
         coord.append(self.coordinate[Ipos, :])
- 
-    return np.array(coord)
 
+    return np.array(coord)
