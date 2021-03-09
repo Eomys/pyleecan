@@ -481,7 +481,9 @@ class DMatLib(Gen_DMatLib, QDialog):
             if isinstance(mat.mag.BH_curve, ImportMatrixXls):
                 BH_text = split(mat.mag.BH_curve.file_path)[1]
             elif isinstance(mat.mag.BH_curve, ImportMatrixVal):
-                BH_text = "Matrix " + str(mat.mag.BH_curve.get_data().shape)
+                data = mat.mag.BH_curve.get_data()
+                shape_str = str(data.shape) if data is not None else "(-,-)"
+                BH_text = "Matrix " + shape_str
             else:
                 BH_text = "-"
             self.out_BH.setText(BH_text)

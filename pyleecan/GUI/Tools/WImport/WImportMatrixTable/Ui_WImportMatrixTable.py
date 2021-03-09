@@ -66,7 +66,7 @@ class Ui_WImportMatrixTable(object):
             QCoreApplication.translate("WImportMatrixTable", u"Convert to Excel", None)
         )
         self.b_tab.setText(
-            QCoreApplication.translate("WImportMatrixTable", u"Preview Table", None)
+            QCoreApplication.translate("WImportMatrixTable", u"Edit Table", None)
         )
         self.b_plot.setText(
             QCoreApplication.translate("WImportMatrixTable", u"Preview Plot", None)

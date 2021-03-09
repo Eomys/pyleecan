@@ -55,7 +55,9 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
 
     def update(self):
         """Fill the widget with the current value of the data"""
-        self.in_matrix.setText("Matrix size: " + str(self.data.get_data().shape))
+        data = self.data.get_data()
+        shape_str = str(data.shape) if data is not None else "(-,-)"
+        self.in_matrix.setText("Matrix size: " + shape_str)
 
     def s_table(self):
         """display the data in a table"""
