@@ -4,10 +4,11 @@ from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.MeshSolution import MeshSolution
-from Tests import TEST_DATA_DIR
+
 import numpy as np
 from os.path import join
 
+from Tests import save_plot_path as save_path
 
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
@@ -28,4 +29,7 @@ def test_plot_mesh():
 
     MSol = MeshSolution(mesh=[mesh])
 
-    MSol.plot_mesh(is_show_fig=False)
+    MSol.plot_mesh(is_show_fig=False, save_path=save_path + "/plot_mesh.png")
+
+if __name__ == "__main__":
+    test_plot_mesh()

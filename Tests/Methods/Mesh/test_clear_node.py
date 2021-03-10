@@ -7,7 +7,6 @@ from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
-
 DELTA = 1e-10
 
 

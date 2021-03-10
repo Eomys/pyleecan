@@ -19,7 +19,8 @@ def clear_node(self):
 
     """
 
-    coord_init, node_indice_init = self.get_node()
+    coord_init = self.get_node()
+    node_indice_init = self.get_node_indice()
     connect_dict, nb_cell, indices = self.get_cell()
 
     node_indice = list()

@@ -20,7 +20,8 @@ def renum(self):
     """
 
     if self._is_renum:
-        coord_init, node_indice = self.get_node()
+        coord_init = self.get_node()
+        node_indice = self.get_node_indice()
         connect_dict, nb_cell, indices = self.get_cell()
 
         nb_node_new = len(node_indice)
@@ -31,7 +32,6 @@ def renum(self):
                 connect_dict_new[key][
                     connect_dict[key] == node_indice[inode]
                 ] = node_indice_new[inode]
-
 
         self.node.indice = node_indice_new
 
