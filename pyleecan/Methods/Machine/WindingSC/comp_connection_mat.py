@@ -60,6 +60,11 @@ def comp_connection_mat(self, Zs=None):
         # wind_mat[0, 0, (ii - 1) % Zs, ii] = 1
         wind_mat[0, 0, ii, ii] = 1
 
+    # Set default values
+    if self.is_reverse_wind is None:
+        self.is_reverse_wind = False
+    if self.Nslot_shift_wind is None:
+        self.Nslot_shift_wind = 0
     # Apply the transformations
     if self.is_reverse_wind:
         wind_mat = reverse_wind_mat(wind_mat)
