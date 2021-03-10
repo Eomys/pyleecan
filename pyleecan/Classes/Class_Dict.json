@@ -8507,6 +8507,7 @@
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
+            "comp_height_opening",
             "comp_radius",
             "comp_radius_mid_active",
             "comp_surface",
