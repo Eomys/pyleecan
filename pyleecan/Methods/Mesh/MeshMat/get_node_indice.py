@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def get_node(self, indices=None):
+def get_node_indice(self, coordinates=None):
     """Return a matrix of nodes coordinates.
 
     Parameters
@@ -21,7 +21,8 @@ def get_node(self, indices=None):
         nodes indices
 
     """
-    if indices is None:
-        return self.node.coordinate
+
+    if coordinates is None:
+        return self.node.get_indice()
     else:
-        return self.node.get_coord(indices)
+        pass  # TODO Search for indice of a node from coordiantes

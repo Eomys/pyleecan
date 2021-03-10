@@ -5777,12 +5777,13 @@
         "is_internal": false,
         "methods": [
             "get_node",
+            "get_node_indice",
             "get_cell",
             "get_mesh_pv",
             "get_cell_area",
-            "add_cell",
             "get_vertice",
             "get_node2cell",
+            "add_cell",
             "renum",
             "find_cell",
             "interface",
@@ -6085,7 +6086,8 @@
         "methods": [
             "add_node",
             "get_coord",
-            "is_exist"
+            "is_exist",
+            "get_indice"
         ],
         "mother": "",
         "name": "NodeMat",

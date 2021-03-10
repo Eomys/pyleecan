@@ -23,6 +23,11 @@ except ImportError as error:
     get_node = error
 
 try:
+    from ..Methods.Mesh.MeshMat.get_node_indice import get_node_indice
+except ImportError as error:
+    get_node_indice = error
+
+try:
     from ..Methods.Mesh.MeshMat.get_cell import get_cell
 except ImportError as error:
     get_cell = error
@@ -38,11 +43,6 @@ except ImportError as error:
     get_cell_area = error
 
 try:
-    from ..Methods.Mesh.MeshMat.add_cell import add_cell
-except ImportError as error:
-    add_cell = error
-
-try:
     from ..Methods.Mesh.MeshMat.get_vertice import get_vertice
 except ImportError as error:
     get_vertice = error
@@ -51,6 +51,11 @@ try:
     from ..Methods.Mesh.MeshMat.get_node2cell import get_node2cell
 except ImportError as error:
     get_node2cell = error
+
+try:
+    from ..Methods.Mesh.MeshMat.add_cell import add_cell
+except ImportError as error:
+    add_cell = error
 
 try:
     from ..Methods.Mesh.MeshMat.renum import renum
@@ -98,6 +103,17 @@ class MeshMat(Mesh):
         )
     else:
         get_node = get_node
+    # cf Methods.Mesh.MeshMat.get_node_indice
+    if isinstance(get_node_indice, ImportError):
+        get_node_indice = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshMat method get_node_indice: " + str(get_node_indice)
+                )
+            )
+        )
+    else:
+        get_node_indice = get_node_indice
     # cf Methods.Mesh.MeshMat.get_cell
     if isinstance(get_cell, ImportError):
         get_cell = property(
@@ -127,15 +143,6 @@ class MeshMat(Mesh):
         )
     else:
         get_cell_area = get_cell_area
-    # cf Methods.Mesh.MeshMat.add_cell
-    if isinstance(add_cell, ImportError):
-        add_cell = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method add_cell: " + str(add_cell))
-            )
-        )
-    else:
-        add_cell = add_cell
     # cf Methods.Mesh.MeshMat.get_vertice
     if isinstance(get_vertice, ImportError):
         get_vertice = property(
@@ -156,6 +163,15 @@ class MeshMat(Mesh):
         )
     else:
         get_node2cell = get_node2cell
+    # cf Methods.Mesh.MeshMat.add_cell
+    if isinstance(add_cell, ImportError):
+        add_cell = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method add_cell: " + str(add_cell))
+            )
+        )
+    else:
+        add_cell = add_cell
     # cf Methods.Mesh.MeshMat.renum
     if isinstance(renum, ImportError):
         renum = property(
