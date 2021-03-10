@@ -21,6 +21,11 @@ class Ui_DXF_Hole(object):
         if not DXF_Hole.objectName():
             DXF_Hole.setObjectName(u"DXF_Hole")
         DXF_Hole.resize(653, 360)
+        icon = QIcon()
+        icon.addFile(
+            u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+        )
+        DXF_Hole.setWindowIcon(icon)
         self.horizontalLayout = QHBoxLayout(DXF_Hole)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.w_viewer = MPLCanvas2(DXF_Hole)
@@ -174,7 +179,7 @@ class Ui_DXF_Hole(object):
 
     def retranslateUi(self, DXF_Hole):
         DXF_Hole.setWindowTitle(
-            QCoreApplication.translate("DXF_Hole", u"Material Library", None)
+            QCoreApplication.translate("DXF_Hole", u"Define Hole from DXF", None)
         )
         self.in_zh.setText(
             QCoreApplication.translate("DXF_Hole", u"Number of hole", None)

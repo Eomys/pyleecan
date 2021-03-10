@@ -10,8 +10,8 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from ...GUI.Tools.WPathSelector.WPathSelector import WPathSelector
-from ...GUI.Tools.FloatEdit import FloatEdit
 from ...GUI.Tools.MPLCanvas import MPLCanvas2
+from ...GUI.Tools.FloatEdit import FloatEdit
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -21,6 +21,11 @@ class Ui_DXF_Slot(object):
         if not DXF_Slot.objectName():
             DXF_Slot.setObjectName(u"DXF_Slot")
         DXF_Slot.resize(745, 486)
+        icon = QIcon()
+        icon.addFile(
+            u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+        )
+        DXF_Slot.setWindowIcon(icon)
         self.horizontalLayout = QHBoxLayout(DXF_Slot)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.w_viewer = MPLCanvas2(DXF_Slot)
@@ -183,7 +188,7 @@ class Ui_DXF_Slot(object):
 
     def retranslateUi(self, DXF_Slot):
         DXF_Slot.setWindowTitle(
-            QCoreApplication.translate("DXF_Slot", u"Material Library", None)
+            QCoreApplication.translate("DXF_Slot", u"Define Slot from DXF", None)
         )
         self.in_Zs.setText(
             QCoreApplication.translate("DXF_Slot", u"Number of slot", None)

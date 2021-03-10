@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Material Library</string>
+   <string>Define Slot from DXF</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../Resources/pyleecan.qrc">
+    <normaloff>:/images/images/icon/pyleecan_64.png</normaloff>:/images/images/icon/pyleecan_64.png</iconset>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -242,15 +246,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>FloatEdit</class>
-   <extends>QLineEdit</extends>
-   <header>...GUI/Tools/FloatEdit</header>
-  </customwidget>
-  <customwidget>
    <class>MPLCanvas2</class>
    <extends>QWidget</extends>
    <header>...GUI.Tools.MPLCanvas</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FloatEdit</class>
+   <extends>QLineEdit</extends>
+   <header>...GUI/Tools/FloatEdit</header>
   </customwidget>
  </customwidgets>
  <resources>
