@@ -284,6 +284,23 @@ class Arc2(Arc):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Arc
+        diff_list.extend(super(Arc2, self).compare(other, name=name))
+        if other._begin != self._begin:
+            diff_list.append(name + ".begin")
+        if other._center != self._center:
+            diff_list.append(name + ".center")
+        if other._angle != self._angle:
+            diff_list.append(name + ".angle")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -296,11 +313,15 @@ class Arc2(Arc):
         S += getsizeof(self.angle)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Arc
-        Arc2_dict = super(Arc2, self).as_dict()
+        Arc2_dict = super(Arc2, self).as_dict(**kwargs)
         if self.begin is None:
             Arc2_dict["begin"] = None
         elif isinstance(self.begin, float):

@@ -35,6 +35,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
+from .VarSimu import VarSimu
 from .Post import Post
 
 
@@ -42,6 +43,7 @@ class VarLoad(VarSimu):
     """Abstract class to generate multi-simulation by changing the operating point"""
 
     VERSION = 1
+    NAME = "Variable Load"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.VarLoad.get_elec_datakeeper
@@ -93,7 +95,7 @@ class VarLoad(VarSimu):
         datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
-        ref_simu_index=None,
+        var_simu=None,
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
@@ -127,8 +129,8 @@ class VarLoad(VarSimu):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
                 stop_if_error = init_dict["stop_if_error"]
-            if "ref_simu_index" in list(init_dict.keys()):
-                ref_simu_index = init_dict["ref_simu_index"]
+            if "var_simu" in list(init_dict.keys()):
+                var_simu = init_dict["var_simu"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
             if "is_reuse_femm_file" in list(init_dict.keys()):
@@ -147,7 +149,7 @@ class VarLoad(VarSimu):
             datakeeper_list=datakeeper_list,
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
-            ref_simu_index=ref_simu_index,
+            var_simu=var_simu,
             nb_simu=nb_simu,
             is_reuse_femm_file=is_reuse_femm_file,
             postproc_list=postproc_list,
@@ -176,6 +178,17 @@ class VarLoad(VarSimu):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from VarSimu
+        diff_list.extend(super(VarLoad, self).compare(other, name=name))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -185,11 +198,15 @@ class VarLoad(VarSimu):
         S += super(VarLoad, self).__sizeof__()
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from VarSimu
-        VarLoad_dict = super(VarLoad, self).as_dict()
+        VarLoad_dict = super(VarLoad, self).as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VarLoad_dict["__class__"] = "VarLoad"

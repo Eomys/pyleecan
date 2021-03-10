@@ -36,7 +36,7 @@ def comp_Ntspc(self, Zs=None):
         abs(self.comp_connection_mat(Zs).sum(axis=(0, 1))).sum(axis=0) / self.Npcpp / 2
     )
     if Ntspc_eff_.std() != 0:
-        self.get_logger.warning(
+        self.get_logger().warning(
             "Winding.comp_Ntspc: "
             "Uneven number of turns in series per phase. "
             + "Mean number of turns will be used."

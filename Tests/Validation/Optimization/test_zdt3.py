@@ -138,7 +138,7 @@ def test_zdt3():
     except (TypeError, ValueError):
         print("Pillow is needed to import jpg files")
 
-    res.plot_pareto("obj1", "obj2", ax=axs[0])
+    res.plot_pareto("obj1", "obj2", ax=axs[0], is_show_fig=False)
     axs[0].set_title("Pyleecan results")
     axs[0].set_xlabel(r"$f_1(x)$")
     axs[0].set_ylabel(r"$f_2(x)$")

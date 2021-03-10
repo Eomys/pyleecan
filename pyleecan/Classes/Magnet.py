@@ -98,6 +98,26 @@ class Magnet(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.mat_type is None and self.mat_type is not None) or (
+            other.mat_type is not None and self.mat_type is None
+        ):
+            diff_list.append(name + ".mat_type None mismatch")
+        elif self.mat_type is not None:
+            diff_list.extend(
+                self.mat_type.compare(other.mat_type, name=name + ".mat_type")
+            )
+        if other._type_magnetization != self._type_magnetization:
+            diff_list.append(name + ".type_magnetization")
+        if other._Lmag != self._Lmag:
+            diff_list.append(name + ".Lmag")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -107,14 +127,18 @@ class Magnet(FrozenClass):
         S += getsizeof(self.Lmag)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Magnet_dict = dict()
         if self.mat_type is None:
             Magnet_dict["mat_type"] = None
         else:
-            Magnet_dict["mat_type"] = self.mat_type.as_dict()
+            Magnet_dict["mat_type"] = self.mat_type.as_dict(**kwargs)
         Magnet_dict["type_magnetization"] = self.type_magnetization
         Magnet_dict["Lmag"] = self.Lmag
         # The class name is added to the dict for deserialisation purpose

@@ -27,6 +27,11 @@ try:
 except ImportError as error:
     set_Id_Iq = error
 
+try:
+    from ..Methods.Simulation.InputCurrent.set_OP_from_array import set_OP_from_array
+except ImportError as error:
+    set_OP_from_array = error
+
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
@@ -64,6 +69,18 @@ class InputCurrent(Input):
         )
     else:
         set_Id_Iq = set_Id_Iq
+    # cf Methods.Simulation.InputCurrent.set_OP_from_array
+    if isinstance(set_OP_from_array, ImportError):
+        set_OP_from_array = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use InputCurrent method set_OP_from_array: "
+                    + str(set_OP_from_array)
+                )
+            )
+        )
+    else:
+        set_OP_from_array = set_OP_from_array
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -214,6 +231,49 @@ class InputCurrent(Input):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Input
+        diff_list.extend(super(InputCurrent, self).compare(other, name=name))
+        if (other.Is is None and self.Is is not None) or (
+            other.Is is not None and self.Is is None
+        ):
+            diff_list.append(name + ".Is None mismatch")
+        elif self.Is is not None:
+            diff_list.extend(self.Is.compare(other.Is, name=name + ".Is"))
+        if (other.Ir is None and self.Ir is not None) or (
+            other.Ir is not None and self.Ir is None
+        ):
+            diff_list.append(name + ".Ir None mismatch")
+        elif self.Ir is not None:
+            diff_list.extend(self.Ir.compare(other.Ir, name=name + ".Ir"))
+        if (other.angle_rotor is None and self.angle_rotor is not None) or (
+            other.angle_rotor is not None and self.angle_rotor is None
+        ):
+            diff_list.append(name + ".angle_rotor None mismatch")
+        elif self.angle_rotor is not None:
+            diff_list.extend(
+                self.angle_rotor.compare(other.angle_rotor, name=name + ".angle_rotor")
+            )
+        if other._rot_dir != self._rot_dir:
+            diff_list.append(name + ".rot_dir")
+        if other._angle_rotor_initial != self._angle_rotor_initial:
+            diff_list.append(name + ".angle_rotor_initial")
+        if other._Tem_av_ref != self._Tem_av_ref:
+            diff_list.append(name + ".Tem_av_ref")
+        if other._Id_ref != self._Id_ref:
+            diff_list.append(name + ".Id_ref")
+        if other._Iq_ref != self._Iq_ref:
+            diff_list.append(name + ".Iq_ref")
+        if other._felec != self._felec:
+            diff_list.append(name + ".felec")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -232,23 +292,27 @@ class InputCurrent(Input):
         S += getsizeof(self.felec)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Input
-        InputCurrent_dict = super(InputCurrent, self).as_dict()
+        InputCurrent_dict = super(InputCurrent, self).as_dict(**kwargs)
         if self.Is is None:
             InputCurrent_dict["Is"] = None
         else:
-            InputCurrent_dict["Is"] = self.Is.as_dict()
+            InputCurrent_dict["Is"] = self.Is.as_dict(**kwargs)
         if self.Ir is None:
             InputCurrent_dict["Ir"] = None
         else:
-            InputCurrent_dict["Ir"] = self.Ir.as_dict()
+            InputCurrent_dict["Ir"] = self.Ir.as_dict(**kwargs)
         if self.angle_rotor is None:
             InputCurrent_dict["angle_rotor"] = None
         else:
-            InputCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict()
+            InputCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict(**kwargs)
         InputCurrent_dict["rot_dir"] = self.rot_dir
         InputCurrent_dict["angle_rotor_initial"] = self.angle_rotor_initial
         InputCurrent_dict["Tem_av_ref"] = self.Tem_av_ref

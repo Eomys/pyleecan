@@ -205,6 +205,28 @@ class Frame(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._Lfra != self._Lfra:
+            diff_list.append(name + ".Lfra")
+        if other._Rint != self._Rint:
+            diff_list.append(name + ".Rint")
+        if other._Rext != self._Rext:
+            diff_list.append(name + ".Rext")
+        if (other.mat_type is None and self.mat_type is not None) or (
+            other.mat_type is not None and self.mat_type is None
+        ):
+            diff_list.append(name + ".mat_type None mismatch")
+        elif self.mat_type is not None:
+            diff_list.extend(
+                self.mat_type.compare(other.mat_type, name=name + ".mat_type")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -215,8 +237,12 @@ class Frame(FrozenClass):
         S += getsizeof(self.mat_type)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Frame_dict = dict()
         Frame_dict["Lfra"] = self.Lfra
@@ -225,7 +251,7 @@ class Frame(FrozenClass):
         if self.mat_type is None:
             Frame_dict["mat_type"] = None
         else:
-            Frame_dict["mat_type"] = self.mat_type.as_dict()
+            Frame_dict["mat_type"] = self.mat_type.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         Frame_dict["__class__"] = "Frame"
         return Frame_dict

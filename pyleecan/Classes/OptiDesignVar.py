@@ -124,6 +124,23 @@ class OptiDesignVar(ParamExplorer):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from ParamExplorer
+        diff_list.extend(super(OptiDesignVar, self).compare(other, name=name))
+        if other._type_var != self._type_var:
+            diff_list.append(name + ".type_var")
+        if other._space != self._space:
+            diff_list.append(name + ".space")
+        if other._get_value_str != self._get_value_str:
+            diff_list.append(name + ".get_value")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -138,19 +155,31 @@ class OptiDesignVar(ParamExplorer):
         S += getsizeof(self._get_value_str)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from ParamExplorer
-        OptiDesignVar_dict = super(OptiDesignVar, self).as_dict()
+        OptiDesignVar_dict = super(OptiDesignVar, self).as_dict(**kwargs)
         OptiDesignVar_dict["type_var"] = self.type_var
         OptiDesignVar_dict["space"] = (
             self.space.copy() if self.space is not None else None
         )
         if self._get_value_str is not None:
             OptiDesignVar_dict["get_value"] = self._get_value_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            OptiDesignVar_dict["get_value"] = self.get_value
         else:
             OptiDesignVar_dict["get_value"] = None
+            if self.get_value is not None:
+                self.get_logger().warning(
+                    "OptiDesignVar.as_dict(): "
+                    + f"Function {self.get_value.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OptiDesignVar_dict["__class__"] = "OptiDesignVar"
@@ -177,7 +206,7 @@ class OptiDesignVar(ParamExplorer):
     type_var = property(
         fget=_get_type_var,
         fset=_set_type_var,
-        doc=u"""Type of the variable interval or set.
+        doc="""Type of the variable interval or set.
 
         :Type: str
         """,
@@ -197,7 +226,7 @@ class OptiDesignVar(ParamExplorer):
     space = property(
         fget=_get_space,
         fset=_set_space,
-        doc=u"""Space of the variable
+        doc="""Space of the variable
 
         :Type: list
         """,
@@ -232,7 +261,7 @@ class OptiDesignVar(ParamExplorer):
     get_value = property(
         fget=_get_get_value,
         fset=_set_get_value,
-        doc=u"""Function of the space to initiate the variable
+        doc="""Function of the space to initiate the variable
 
         :Type: function
         """,

@@ -3,16 +3,21 @@ import numpy as np
 from ....Classes.ParamExplorerSet import ParamExplorerSet
 
 
-def get_simulations(self):
-    """Create simulations and returns them
+def generate_simulation_list(self, ref_simu=None):
+    """Generate all the simulation for the multi-simulation
+
+    Parameters
+    ----------
+    self : VarSimu
+        A VarSimu object
+    ref_simu : Simulation
+        Reference simulation to copy / update
 
     Returns
     -------
     multisim_dict : dict
-        dictionary containing simulation shape, setters, parameter values and simulations generated
+        dictionary containing the simulation and paramexplorer list
     """
-    # Get reference simulation
-    ref_simu = self.parent
 
     # Build the list
     setter_list = []  # Store ParamExplorer setters
@@ -34,13 +39,7 @@ def get_simulations(self):
         params_value_list.append(values)
         multisim_shape.append(len(values))
 
-    if len(params_value_list) > 0:
-        self.nb_simu = 1
-        for values in params_value_list:
-            self.nb_simu *= len(values)
-
     multisim_dict = {
-        "nb_simu": self.nb_simu,  # Shape simulation
         "paramexplorer_list": [],  # Setter's values
         "simulation_list": [],
     }
@@ -48,13 +47,7 @@ def get_simulations(self):
     # Cartesian product to generate every simulation
     for simu_param_values in itertools.product(*params_value_list):
         # Generate the simulation
-        new_simu = ref_simu.copy()
-
-        # Remove its multisimulation to avoid infinite simulations
-        new_simu.var_simu = None
-
-        # Store simulation input_values and setters
-        input_values = []
+        new_simu = ref_simu.copy(keep_function=True)
 
         # Edit it using setter
         for setter, value, symbol in zip(
@@ -71,7 +64,7 @@ def get_simulations(self):
     for _ in multisim_shape:
         slices += (slice(None),)
 
-    # Create ParamExplorerValue to be stored in XOutput
+    # Create ParamExplorerSet to be stored in XOutput
     for param_explorer in self.paramexplorer_list:
         multisim_dict["paramexplorer_list"].append(
             ParamExplorerSet(

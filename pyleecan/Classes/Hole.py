@@ -301,6 +301,26 @@ class Hole(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._Zh != self._Zh:
+            diff_list.append(name + ".Zh")
+        if (other.mat_void is None and self.mat_void is not None) or (
+            other.mat_void is not None and self.mat_void is None
+        ):
+            diff_list.append(name + ".mat_void None mismatch")
+        elif self.mat_void is not None:
+            diff_list.extend(
+                self.mat_void.compare(other.mat_void, name=name + ".mat_void")
+            )
+        if other._magnetization_dict_enforced != self._magnetization_dict_enforced:
+            diff_list.append(name + ".magnetization_dict_enforced")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -312,15 +332,19 @@ class Hole(FrozenClass):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Hole_dict = dict()
         Hole_dict["Zh"] = self.Zh
         if self.mat_void is None:
             Hole_dict["mat_void"] = None
         else:
-            Hole_dict["mat_void"] = self.mat_void.as_dict()
+            Hole_dict["mat_void"] = self.mat_void.as_dict(**kwargs)
         Hole_dict["magnetization_dict_enforced"] = (
             self.magnetization_dict_enforced.copy()
             if self.magnetization_dict_enforced is not None

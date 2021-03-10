@@ -1,4 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 ,,,,,,,,,Simulation,VarSimu,get_elec_datakeeper,VERSION,1,Abstract class to generate multi-simulation by changing the operating point
-,,,,,,,,,,,get_mag_datakeeper,,,
+,,,,,,,,,,,get_mag_datakeeper,NAME,"""Variable Load""",
 ,,,,,,,,,,,get_force_datakeeper,,,

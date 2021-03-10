@@ -124,6 +124,36 @@ class OutForce(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.Time is None and self.Time is not None) or (
+            other.Time is not None and self.Time is None
+        ):
+            diff_list.append(name + ".Time None mismatch")
+        elif self.Time is not None:
+            diff_list.extend(self.Time.compare(other.Time, name=name + ".Time"))
+        if (other.Angle is None and self.Angle is not None) or (
+            other.Angle is not None and self.Angle is None
+        ):
+            diff_list.append(name + ".Angle None mismatch")
+        elif self.Angle is not None:
+            diff_list.extend(self.Angle.compare(other.Angle, name=name + ".Angle"))
+        if (other.AGSF is None and self.AGSF is not None) or (
+            other.AGSF is not None and self.AGSF is None
+        ):
+            diff_list.append(name + ".AGSF None mismatch")
+        elif self.AGSF is not None:
+            diff_list.extend(self.AGSF.compare(other.AGSF, name=name + ".AGSF"))
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if other._Rag != self._Rag:
+            diff_list.append(name + ".Rag")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -135,8 +165,12 @@ class OutForce(FrozenClass):
         S += getsizeof(self.Rag)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutForce_dict = dict()
         if self.Time is None:

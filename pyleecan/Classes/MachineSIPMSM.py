@@ -160,6 +160,29 @@ class MachineSIPMSM(MachineSync):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from MachineSync
+        diff_list.extend(super(MachineSIPMSM, self).compare(other, name=name))
+        if (other.rotor is None and self.rotor is not None) or (
+            other.rotor is not None and self.rotor is None
+        ):
+            diff_list.append(name + ".rotor None mismatch")
+        elif self.rotor is not None:
+            diff_list.extend(self.rotor.compare(other.rotor, name=name + ".rotor"))
+        if (other.stator is None and self.stator is not None) or (
+            other.stator is not None and self.stator is None
+        ):
+            diff_list.append(name + ".stator None mismatch")
+        elif self.stator is not None:
+            diff_list.extend(self.stator.compare(other.stator, name=name + ".stator"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -171,19 +194,23 @@ class MachineSIPMSM(MachineSync):
         S += getsizeof(self.stator)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from MachineSync
-        MachineSIPMSM_dict = super(MachineSIPMSM, self).as_dict()
+        MachineSIPMSM_dict = super(MachineSIPMSM, self).as_dict(**kwargs)
         if self.rotor is None:
             MachineSIPMSM_dict["rotor"] = None
         else:
-            MachineSIPMSM_dict["rotor"] = self.rotor.as_dict()
+            MachineSIPMSM_dict["rotor"] = self.rotor.as_dict(**kwargs)
         if self.stator is None:
             MachineSIPMSM_dict["stator"] = None
         else:
-            MachineSIPMSM_dict["stator"] = self.stator.as_dict()
+            MachineSIPMSM_dict["stator"] = self.stator.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineSIPMSM_dict["__class__"] = "MachineSIPMSM"

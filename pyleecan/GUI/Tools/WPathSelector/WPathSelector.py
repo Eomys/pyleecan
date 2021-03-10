@@ -104,7 +104,7 @@ class WPathSelector(Ui_WPathSelector, QWidget):
                 self, "Select " + self.verbose_name + " directory", default_path
             )
         # Update the path
-        if path is not None:
+        if path:  # check for empty string as well as None
             path = path.replace("\\", "/")
             self.le_path.setText(path)
             self.set_obj_path()

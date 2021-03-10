@@ -324,6 +324,38 @@ class LamHole(Lamination):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Lamination
+        diff_list.extend(super(LamHole, self).compare(other, name=name))
+        if (other.hole is None and self.hole is not None) or (
+            other.hole is not None and self.hole is None
+        ):
+            diff_list.append(name + ".hole None mismatch")
+        elif self.hole is None:
+            pass
+        elif len(other.hole) != len(self.hole):
+            diff_list.append("len(" + name + ".hole)")
+        else:
+            for ii in range(len(other.hole)):
+                diff_list.extend(
+                    self.hole[ii].compare(
+                        other.hole[ii], name=name + ".hole[" + str(ii) + "]"
+                    )
+                )
+        if (other.bore is None and self.bore is not None) or (
+            other.bore is not None and self.bore is None
+        ):
+            diff_list.append(name + ".bore None mismatch")
+        elif self.bore is not None:
+            diff_list.extend(self.bore.compare(other.bore, name=name + ".bore"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -337,24 +369,28 @@ class LamHole(Lamination):
         S += getsizeof(self.bore)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Lamination
-        LamHole_dict = super(LamHole, self).as_dict()
+        LamHole_dict = super(LamHole, self).as_dict(**kwargs)
         if self.hole is None:
             LamHole_dict["hole"] = None
         else:
             LamHole_dict["hole"] = list()
             for obj in self.hole:
                 if obj is not None:
-                    LamHole_dict["hole"].append(obj.as_dict())
+                    LamHole_dict["hole"].append(obj.as_dict(**kwargs))
                 else:
                     LamHole_dict["hole"].append(None)
         if self.bore is None:
             LamHole_dict["bore"] = None
         else:
-            LamHole_dict["bore"] = self.bore.as_dict()
+            LamHole_dict["bore"] = self.bore.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamHole_dict["__class__"] = "LamHole"

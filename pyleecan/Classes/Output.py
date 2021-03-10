@@ -416,6 +416,66 @@ class Output(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.simu is None and self.simu is not None) or (
+            other.simu is not None and self.simu is None
+        ):
+            diff_list.append(name + ".simu None mismatch")
+        elif self.simu is not None:
+            diff_list.extend(self.simu.compare(other.simu, name=name + ".simu"))
+        if other._path_result != self._path_result:
+            diff_list.append(name + ".path_result")
+        if (other.geo is None and self.geo is not None) or (
+            other.geo is not None and self.geo is None
+        ):
+            diff_list.append(name + ".geo None mismatch")
+        elif self.geo is not None:
+            diff_list.extend(self.geo.compare(other.geo, name=name + ".geo"))
+        if (other.elec is None and self.elec is not None) or (
+            other.elec is not None and self.elec is None
+        ):
+            diff_list.append(name + ".elec None mismatch")
+        elif self.elec is not None:
+            diff_list.extend(self.elec.compare(other.elec, name=name + ".elec"))
+        if (other.mag is None and self.mag is not None) or (
+            other.mag is not None and self.mag is None
+        ):
+            diff_list.append(name + ".mag None mismatch")
+        elif self.mag is not None:
+            diff_list.extend(self.mag.compare(other.mag, name=name + ".mag"))
+        if (other.struct is None and self.struct is not None) or (
+            other.struct is not None and self.struct is None
+        ):
+            diff_list.append(name + ".struct None mismatch")
+        elif self.struct is not None:
+            diff_list.extend(self.struct.compare(other.struct, name=name + ".struct"))
+        if (other.post is None and self.post is not None) or (
+            other.post is not None and self.post is None
+        ):
+            diff_list.append(name + ".post None mismatch")
+        elif self.post is not None:
+            diff_list.extend(self.post.compare(other.post, name=name + ".post"))
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if (other.force is None and self.force is not None) or (
+            other.force is not None and self.force is None
+        ):
+            diff_list.append(name + ".force None mismatch")
+        elif self.force is not None:
+            diff_list.extend(self.force.compare(other.force, name=name + ".force"))
+        if (other.loss is None and self.loss is not None) or (
+            other.loss is not None and self.loss is None
+        ):
+            diff_list.append(name + ".loss None mismatch")
+        elif self.loss is not None:
+            diff_list.extend(self.loss.compare(other.loss, name=name + ".loss"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -432,44 +492,48 @@ class Output(FrozenClass):
         S += getsizeof(self.loss)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Output_dict = dict()
         if self.simu is None:
             Output_dict["simu"] = None
         else:
-            Output_dict["simu"] = self.simu.as_dict()
+            Output_dict["simu"] = self.simu.as_dict(**kwargs)
         Output_dict["path_result"] = self.path_result
         if self.geo is None:
             Output_dict["geo"] = None
         else:
-            Output_dict["geo"] = self.geo.as_dict()
+            Output_dict["geo"] = self.geo.as_dict(**kwargs)
         if self.elec is None:
             Output_dict["elec"] = None
         else:
-            Output_dict["elec"] = self.elec.as_dict()
+            Output_dict["elec"] = self.elec.as_dict(**kwargs)
         if self.mag is None:
             Output_dict["mag"] = None
         else:
-            Output_dict["mag"] = self.mag.as_dict()
+            Output_dict["mag"] = self.mag.as_dict(**kwargs)
         if self.struct is None:
             Output_dict["struct"] = None
         else:
-            Output_dict["struct"] = self.struct.as_dict()
+            Output_dict["struct"] = self.struct.as_dict(**kwargs)
         if self.post is None:
             Output_dict["post"] = None
         else:
-            Output_dict["post"] = self.post.as_dict()
+            Output_dict["post"] = self.post.as_dict(**kwargs)
         Output_dict["logger_name"] = self.logger_name
         if self.force is None:
             Output_dict["force"] = None
         else:
-            Output_dict["force"] = self.force.as_dict()
+            Output_dict["force"] = self.force.as_dict(**kwargs)
         if self.loss is None:
             Output_dict["loss"] = None
         else:
-            Output_dict["loss"] = self.loss.as_dict()
+            Output_dict["loss"] = self.loss.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         Output_dict["__class__"] = "Output"
         return Output_dict

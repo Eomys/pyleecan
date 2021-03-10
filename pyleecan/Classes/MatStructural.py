@@ -144,6 +144,34 @@ class MatStructural(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._rho != self._rho:
+            diff_list.append(name + ".rho")
+        if other._Ex != self._Ex:
+            diff_list.append(name + ".Ex")
+        if other._Ey != self._Ey:
+            diff_list.append(name + ".Ey")
+        if other._Ez != self._Ez:
+            diff_list.append(name + ".Ez")
+        if other._nu_xy != self._nu_xy:
+            diff_list.append(name + ".nu_xy")
+        if other._nu_xz != self._nu_xz:
+            diff_list.append(name + ".nu_xz")
+        if other._nu_yz != self._nu_yz:
+            diff_list.append(name + ".nu_yz")
+        if other._Gxz != self._Gxz:
+            diff_list.append(name + ".Gxz")
+        if other._Gxy != self._Gxy:
+            diff_list.append(name + ".Gxy")
+        if other._Gyz != self._Gyz:
+            diff_list.append(name + ".Gyz")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -160,8 +188,12 @@ class MatStructural(FrozenClass):
         S += getsizeof(self.Gyz)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         MatStructural_dict = dict()
         MatStructural_dict["rho"] = self.rho

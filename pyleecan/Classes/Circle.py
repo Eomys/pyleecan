@@ -235,6 +235,23 @@ class Circle(Surface):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Surface
+        diff_list.extend(super(Circle, self).compare(other, name=name))
+        if other._radius != self._radius:
+            diff_list.append(name + ".radius")
+        if other._center != self._center:
+            diff_list.append(name + ".center")
+        if other._line_label != self._line_label:
+            diff_list.append(name + ".line_label")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -247,11 +264,15 @@ class Circle(Surface):
         S += getsizeof(self.line_label)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Surface
-        Circle_dict = super(Circle, self).as_dict()
+        Circle_dict = super(Circle, self).as_dict(**kwargs)
         Circle_dict["radius"] = self.radius
         if self.center is None:
             Circle_dict["center"] = None

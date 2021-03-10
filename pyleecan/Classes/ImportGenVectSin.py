@@ -131,6 +131,27 @@ class ImportGenVectSin(ImportMatrix):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from ImportMatrix
+        diff_list.extend(super(ImportGenVectSin, self).compare(other, name=name))
+        if other._f != self._f:
+            diff_list.append(name + ".f")
+        if other._A != self._A:
+            diff_list.append(name + ".A")
+        if other._Phi != self._Phi:
+            diff_list.append(name + ".Phi")
+        if other._N != self._N:
+            diff_list.append(name + ".N")
+        if other._Tf != self._Tf:
+            diff_list.append(name + ".Tf")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -145,11 +166,15 @@ class ImportGenVectSin(ImportMatrix):
         S += getsizeof(self.Tf)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from ImportMatrix
-        ImportGenVectSin_dict = super(ImportGenVectSin, self).as_dict()
+        ImportGenVectSin_dict = super(ImportGenVectSin, self).as_dict(**kwargs)
         ImportGenVectSin_dict["f"] = self.f
         ImportGenVectSin_dict["A"] = self.A
         ImportGenVectSin_dict["Phi"] = self.Phi

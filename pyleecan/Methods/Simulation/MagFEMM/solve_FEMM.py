@@ -74,16 +74,6 @@ def solve_FEMM(
 
     Returns
     -------
-    B: ndarray
-        3D Magnetic flux density for all time steps and each element (Nt, Nelem, 3) [T]
-    H : ndarray
-        3D Magnetic field for all time steps and each element (Nt, Nelem, 3) [A/m]
-    mu : ndarray
-        Magnetic relative permeability for all time steps and each element (Nt, Nelem) []
-    mesh: MeshMat
-        Object containing magnetic mesh at first time step
-    groups: dict
-        Dict whose values are group label and values are array of indices of related elements
 
     """
     # Open FEMM file if not None, else it is already open
@@ -104,10 +94,6 @@ def solve_FEMM(
     # Take last time step at Nt by default
     if end_t is None:
         end_t = Nt
-
-    # Init mesh solution as None since array allocation can only be done once
-    # number of elements is known, i.e. after first time step resolution
-    B_elem, H_elem, mu_elem, meshFEMM, groups = None, None, None, None, None
 
     # Number of angular steps
     Na = angle.size
@@ -131,6 +117,12 @@ def solve_FEMM(
 
     # Account for initial angular shift of stator and rotor and apply it to the sliding band
     angle_shift = self.angle_rotor_shift - self.angle_stator_shift
+
+    B_elem = None
+    H_elem = None
+    mu_elem = None
+    meshFEMM = None
+    groups = None
 
     # Compute the data for each time step
     for ii in range(start_t, end_t):
@@ -196,7 +188,7 @@ def solve_FEMM(
                 )
 
         # Load mesh data & solution
-        if (self.is_sliding_band or Nt == 1) and (self.is_get_mesh or self.is_save_FEA):
+        if (self.is_sliding_band or Nt == 1) and (self.is_get_meshsolution):
             # Get mesh data and magnetic quantities from .ans file
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
                 femm,
@@ -206,10 +198,12 @@ def solve_FEMM(
                 is_get_mesh=ii == start_t,
             )
 
+            # Store magnetic flux density, field and relative permeability for the current time step
+
             # Initialize mesh and magnetic quantities for first time step
             if ii == start_t:
                 meshFEMM = [tmpmeshFEMM]
-                groups = [tmpgroups]
+                groups = tmpgroups
                 Nelem = meshFEMM[0].cell["triangle"].nb_cell
                 Nt0 = end_t - start_t
                 B_elem = zeros([Nt0, Nelem, 3])
@@ -218,7 +212,7 @@ def solve_FEMM(
 
             # Shift time index ii in case start_t is not 0 (parallelization)
             ii0 = ii - start_t
-            # Store magnetic flux density, field and relative permeability for the current time step
+
             B_elem[ii0, :, 0:2] = tmpB
             H_elem[ii0, :, 0:2] = tmpH
             mu_elem[ii0, :] = tmpmu

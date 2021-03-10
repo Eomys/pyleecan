@@ -255,6 +255,33 @@ class SurfRing(Surface):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Surface
+        diff_list.extend(super(SurfRing, self).compare(other, name=name))
+        if (other.out_surf is None and self.out_surf is not None) or (
+            other.out_surf is not None and self.out_surf is None
+        ):
+            diff_list.append(name + ".out_surf None mismatch")
+        elif self.out_surf is not None:
+            diff_list.extend(
+                self.out_surf.compare(other.out_surf, name=name + ".out_surf")
+            )
+        if (other.in_surf is None and self.in_surf is not None) or (
+            other.in_surf is not None and self.in_surf is None
+        ):
+            diff_list.append(name + ".in_surf None mismatch")
+        elif self.in_surf is not None:
+            diff_list.extend(
+                self.in_surf.compare(other.in_surf, name=name + ".in_surf")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -266,19 +293,23 @@ class SurfRing(Surface):
         S += getsizeof(self.in_surf)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Surface
-        SurfRing_dict = super(SurfRing, self).as_dict()
+        SurfRing_dict = super(SurfRing, self).as_dict(**kwargs)
         if self.out_surf is None:
             SurfRing_dict["out_surf"] = None
         else:
-            SurfRing_dict["out_surf"] = self.out_surf.as_dict()
+            SurfRing_dict["out_surf"] = self.out_surf.as_dict(**kwargs)
         if self.in_surf is None:
             SurfRing_dict["in_surf"] = None
         else:
-            SurfRing_dict["in_surf"] = self.in_surf.as_dict()
+            SurfRing_dict["in_surf"] = self.in_surf.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SurfRing_dict["__class__"] = "SurfRing"

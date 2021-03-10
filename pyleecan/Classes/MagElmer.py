@@ -331,6 +331,51 @@ class MagElmer(Magnetics):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Magnetics
+        diff_list.extend(super(MagElmer, self).compare(other, name=name))
+        if other._Kmesh_fineness != self._Kmesh_fineness:
+            diff_list.append(name + ".Kmesh_fineness")
+        if other._Kgeo_fineness != self._Kgeo_fineness:
+            diff_list.append(name + ".Kgeo_fineness")
+        if other._file_name != self._file_name:
+            diff_list.append(name + ".file_name")
+        if other._FEA_dict != self._FEA_dict:
+            diff_list.append(name + ".FEA_dict")
+        if other._is_get_mesh != self._is_get_mesh:
+            diff_list.append(name + ".is_get_mesh")
+        if other._is_save_FEA != self._is_save_FEA:
+            diff_list.append(name + ".is_save_FEA")
+        if other._transform_list != self._transform_list:
+            diff_list.append(name + ".transform_list")
+        if (other.rotor_dxf is None and self.rotor_dxf is not None) or (
+            other.rotor_dxf is not None and self.rotor_dxf is None
+        ):
+            diff_list.append(name + ".rotor_dxf None mismatch")
+        elif self.rotor_dxf is not None:
+            diff_list.extend(
+                self.rotor_dxf.compare(other.rotor_dxf, name=name + ".rotor_dxf")
+            )
+        if (other.stator_dxf is None and self.stator_dxf is not None) or (
+            other.stator_dxf is not None and self.stator_dxf is None
+        ):
+            diff_list.append(name + ".stator_dxf None mismatch")
+        elif self.stator_dxf is not None:
+            diff_list.extend(
+                self.stator_dxf.compare(other.stator_dxf, name=name + ".stator_dxf")
+            )
+        if other._import_file != self._import_file:
+            diff_list.append(name + ".import_file")
+        if other._nb_worker != self._nb_worker:
+            diff_list.append(name + ".nb_worker")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -355,11 +400,15 @@ class MagElmer(Magnetics):
         S += getsizeof(self.nb_worker)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Magnetics
-        MagElmer_dict = super(MagElmer, self).as_dict()
+        MagElmer_dict = super(MagElmer, self).as_dict(**kwargs)
         MagElmer_dict["Kmesh_fineness"] = self.Kmesh_fineness
         MagElmer_dict["Kgeo_fineness"] = self.Kgeo_fineness
         MagElmer_dict["file_name"] = self.file_name
@@ -374,11 +423,11 @@ class MagElmer(Magnetics):
         if self.rotor_dxf is None:
             MagElmer_dict["rotor_dxf"] = None
         else:
-            MagElmer_dict["rotor_dxf"] = self.rotor_dxf.as_dict()
+            MagElmer_dict["rotor_dxf"] = self.rotor_dxf.as_dict(**kwargs)
         if self.stator_dxf is None:
             MagElmer_dict["stator_dxf"] = None
         else:
-            MagElmer_dict["stator_dxf"] = self.stator_dxf.as_dict()
+            MagElmer_dict["stator_dxf"] = self.stator_dxf.as_dict(**kwargs)
         MagElmer_dict["import_file"] = self.import_file
         MagElmer_dict["nb_worker"] = self.nb_worker
         # The class name is added to the dict for deserialisation purpose

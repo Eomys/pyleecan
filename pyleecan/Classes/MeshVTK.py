@@ -275,6 +275,43 @@ class MeshVTK(Mesh):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Mesh
+        diff_list.extend(super(MeshVTK, self).compare(other, name=name))
+        if (other.mesh is None and self.mesh is not None) or (
+            other.mesh is not None and self.mesh is None
+        ):
+            diff_list.append(name + ".mesh None mismatch")
+        elif self.mesh is not None:
+            diff_list.extend(self.mesh.compare(other.mesh, name=name + ".mesh"))
+        if other._is_pyvista_mesh != self._is_pyvista_mesh:
+            diff_list.append(name + ".is_pyvista_mesh")
+        if other._format != self._format:
+            diff_list.append(name + ".format")
+        if other._path != self._path:
+            diff_list.append(name + ".path")
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if (other.surf is None and self.surf is not None) or (
+            other.surf is not None and self.surf is None
+        ):
+            diff_list.append(name + ".surf None mismatch")
+        elif self.surf is not None:
+            diff_list.extend(self.surf.compare(other.surf, name=name + ".surf"))
+        if other._is_vtk_surf != self._is_vtk_surf:
+            diff_list.append(name + ".is_vtk_surf")
+        if other._surf_path != self._surf_path:
+            diff_list.append(name + ".surf_path")
+        if other._surf_name != self._surf_name:
+            diff_list.append(name + ".surf_name")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 

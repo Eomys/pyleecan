@@ -80,6 +80,18 @@ class OutPost(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._legend_name != self._legend_name:
+            diff_list.append(name + ".legend_name")
+        if other._line_color != self._line_color:
+            diff_list.append(name + ".line_color")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -88,8 +100,12 @@ class OutPost(FrozenClass):
         S += getsizeof(self.line_color)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutPost_dict = dict()
         OutPost_dict["legend_name"] = self.legend_name

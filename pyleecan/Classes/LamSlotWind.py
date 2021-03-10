@@ -493,6 +493,27 @@ class LamSlotWind(LamSlot):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from LamSlot
+        diff_list.extend(super(LamSlotWind, self).compare(other, name=name))
+        if other._Ksfill != self._Ksfill:
+            diff_list.append(name + ".Ksfill")
+        if (other.winding is None and self.winding is not None) or (
+            other.winding is not None and self.winding is None
+        ):
+            diff_list.append(name + ".winding None mismatch")
+        elif self.winding is not None:
+            diff_list.extend(
+                self.winding.compare(other.winding, name=name + ".winding")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -504,16 +525,20 @@ class LamSlotWind(LamSlot):
         S += getsizeof(self.winding)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from LamSlot
-        LamSlotWind_dict = super(LamSlotWind, self).as_dict()
+        LamSlotWind_dict = super(LamSlotWind, self).as_dict(**kwargs)
         LamSlotWind_dict["Ksfill"] = self.Ksfill
         if self.winding is None:
             LamSlotWind_dict["winding"] = None
         else:
-            LamSlotWind_dict["winding"] = self.winding.as_dict()
+            LamSlotWind_dict["winding"] = self.winding.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotWind_dict["__class__"] = "LamSlotWind"

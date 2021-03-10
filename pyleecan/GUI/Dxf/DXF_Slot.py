@@ -1,20 +1,23 @@
+from logging import getLogger
 from os.path import dirname, isfile
 
+import matplotlib.pyplot as plt
 from ezdxf import readfile
-from numpy import angle as np_angle, argmin
-from numpy import array
-from pyleecan.GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
-from pyleecan.GUI.Resources import pixmap_dict
+from numpy import angle as np_angle
+from numpy import argmin, array
 from PySide2.QtCore import QSize, Qt
 from PySide2.QtGui import QIcon, QPixmap
-from PySide2.QtWidgets import QComboBox, QFileDialog, QPushButton, QDialog
-import matplotlib.pyplot as plt
-from ...Classes.SlotUD import SlotUD
-from ...Classes.Magnet import Magnet
+from PySide2.QtWidgets import QComboBox, QDialog, QFileDialog, QMessageBox, QPushButton
+
 from ...Classes.LamSlot import LamSlot
-from ...GUI.Tools.MPLCanvas import MPLCanvas2
-from .Ui_DXF_Slot import Ui_DXF_Slot
+from ...Classes.Magnet import Magnet
+from ...Classes.SlotUD import SlotUD
 from ...definitions import config_dict
+from ...GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
+from ...GUI.Resources import pixmap_dict
+from ...GUI.Tools.MPLCanvas import MPLCanvas2
+from ...loggers import GUI_LOG_NAME
+from .Ui_DXF_Slot import Ui_DXF_Slot
 
 # Column index for table
 TYPE_COL = 0
@@ -91,14 +94,22 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             a DXF_Slot object
         """
 
+        getLogger(GUI_LOG_NAME).debug("Reading dxf file: " + self.dxf_path)
         # Read the DXF file
-        document = readfile(self.dxf_path)
-        modelspace = document.modelspace()
-        # Convert DXF to pyleecan objects
-        self.line_list = dxf_to_pyleecan_list(modelspace)
-        # Display
-        self.selected_list = [False for line in self.line_list]
-        self.update_graph()
+        try:
+            document = readfile(self.dxf_path)
+            modelspace = document.modelspace()
+            # Convert DXF to pyleecan objects
+            self.line_list = dxf_to_pyleecan_list(modelspace)
+            # Display
+            self.selected_list = [False for line in self.line_list]
+            self.update_graph()
+        except Exception as e:
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                self.tr("Error while reading dxf file:\n" + str(e)),
+            )
 
     def init_graph(self):
         """Initialize the viewer

@@ -144,6 +144,33 @@ class Loss(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._model_index != self._model_index:
+            diff_list.append(name + ".model_index")
+        if (other.model_list is None and self.model_list is not None) or (
+            other.model_list is not None and self.model_list is None
+        ):
+            diff_list.append(name + ".model_list None mismatch")
+        elif self.model_list is None:
+            pass
+        elif len(other.model_list) != len(self.model_list):
+            diff_list.append("len(" + name + ".model_list)")
+        else:
+            for ii in range(len(other.model_list)):
+                diff_list.extend(
+                    self.model_list[ii].compare(
+                        other.model_list[ii], name=name + ".model_list[" + str(ii) + "]"
+                    )
+                )
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -157,8 +184,12 @@ class Loss(FrozenClass):
         S += getsizeof(self.logger_name)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Loss_dict = dict()
         Loss_dict["model_index"] = (
@@ -170,7 +201,7 @@ class Loss(FrozenClass):
             Loss_dict["model_list"] = list()
             for obj in self.model_list:
                 if obj is not None:
-                    Loss_dict["model_list"].append(obj.as_dict())
+                    Loss_dict["model_list"].append(obj.as_dict(**kwargs))
                 else:
                     Loss_dict["model_list"].append(None)
         Loss_dict["logger_name"] = self.logger_name

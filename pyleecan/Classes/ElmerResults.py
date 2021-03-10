@@ -172,6 +172,27 @@ class ElmerResults(Elmer):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Elmer
+        diff_list.extend(super(ElmerResults, self).compare(other, name=name))
+        if other._data != self._data:
+            diff_list.append(name + ".data")
+        if other._file != self._file:
+            diff_list.append(name + ".file")
+        if other._usecols != self._usecols:
+            diff_list.append(name + ".usecols")
+        if other._columns != self._columns:
+            diff_list.append(name + ".columns")
+        if other._is_scalars != self._is_scalars:
+            diff_list.append(name + ".is_scalars")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -192,11 +213,15 @@ class ElmerResults(Elmer):
         S += getsizeof(self.is_scalars)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Elmer
-        ElmerResults_dict = super(ElmerResults, self).as_dict()
+        ElmerResults_dict = super(ElmerResults, self).as_dict(**kwargs)
         ElmerResults_dict["data"] = self.data.copy() if self.data is not None else None
         ElmerResults_dict["file"] = self.file
         ElmerResults_dict["usecols"] = (

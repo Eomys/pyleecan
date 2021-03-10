@@ -186,6 +186,25 @@ class SolutionMat(Solution):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Solution
+        diff_list.extend(super(SolutionMat, self).compare(other, name=name))
+        if not array_equal(other.field, self.field):
+            diff_list.append(name + ".field")
+        if not array_equal(other.indice, self.indice):
+            diff_list.append(name + ".indice")
+        if other._axis_name != self._axis_name:
+            diff_list.append(name + ".axis_name")
+        if other._axis_size != self._axis_size:
+            diff_list.append(name + ".axis_size")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -203,11 +222,15 @@ class SolutionMat(Solution):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Solution
-        SolutionMat_dict = super(SolutionMat, self).as_dict()
+        SolutionMat_dict = super(SolutionMat, self).as_dict(**kwargs)
         if self.field is None:
             SolutionMat_dict["field"] = None
         else:

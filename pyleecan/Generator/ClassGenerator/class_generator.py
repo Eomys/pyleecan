@@ -15,6 +15,7 @@ from ...Generator.ClassGenerator.as_dict_method_generator import generate_as_dic
 from ...Generator.ClassGenerator.properties_generator import generate_properties
 from ...Generator.ClassGenerator.init_void_method_generator import generate_init_void
 from ...Generator.ClassGenerator.eq_method_generator import generate_eq
+from ...Generator.ClassGenerator.compare_method_generator import generate_compare
 from ...Generator.ClassGenerator.size_of_method_generator import generate_size_of
 from ...Generator.ClassGenerator.set_None_method_generator import generate_set_None
 
@@ -279,6 +280,10 @@ def generate_class(gen_dict, class_name, path_to_gen):
     # Add the __eq__ method
     if "__eq__" not in class_dict["methods"]:
         class_file.write(generate_eq(gen_dict, class_dict) + "\n")
+
+    # Add the compare method
+    if "compare" not in class_dict["methods"]:
+        class_file.write(generate_compare(gen_dict, class_dict) + "\n")
 
     # Add the __sizeof__ method
     class_file.write(generate_size_of(gen_dict, class_dict))

@@ -301,6 +301,29 @@ class SlotW29(Slot):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Slot
+        diff_list.extend(super(SlotW29, self).compare(other, name=name))
+        if other._W0 != self._W0:
+            diff_list.append(name + ".W0")
+        if other._H0 != self._H0:
+            diff_list.append(name + ".H0")
+        if other._H1 != self._H1:
+            diff_list.append(name + ".H1")
+        if other._W1 != self._W1:
+            diff_list.append(name + ".W1")
+        if other._H2 != self._H2:
+            diff_list.append(name + ".H2")
+        if other._W2 != self._W2:
+            diff_list.append(name + ".W2")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -316,11 +339,15 @@ class SlotW29(Slot):
         S += getsizeof(self.W2)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Slot
-        SlotW29_dict = super(SlotW29, self).as_dict()
+        SlotW29_dict = super(SlotW29, self).as_dict(**kwargs)
         SlotW29_dict["W0"] = self.W0
         SlotW29_dict["H0"] = self.H0
         SlotW29_dict["H1"] = self.H1

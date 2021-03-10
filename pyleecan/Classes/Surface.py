@@ -142,6 +142,18 @@ class Surface(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._point_ref != self._point_ref:
+            diff_list.append(name + ".point_ref")
+        if other._label != self._label:
+            diff_list.append(name + ".label")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -150,8 +162,12 @@ class Surface(FrozenClass):
         S += getsizeof(self.label)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Surface_dict = dict()
         if self.point_ref is None:

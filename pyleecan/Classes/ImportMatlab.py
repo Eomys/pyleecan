@@ -108,6 +108,21 @@ class ImportMatlab(ImportMatrix):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from ImportMatrix
+        diff_list.extend(super(ImportMatlab, self).compare(other, name=name))
+        if other._file_path != self._file_path:
+            diff_list.append(name + ".file_path")
+        if other._var_name != self._var_name:
+            diff_list.append(name + ".var_name")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -119,11 +134,15 @@ class ImportMatlab(ImportMatrix):
         S += getsizeof(self.var_name)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from ImportMatrix
-        ImportMatlab_dict = super(ImportMatlab, self).as_dict()
+        ImportMatlab_dict = super(ImportMatlab, self).as_dict(**kwargs)
         ImportMatlab_dict["file_path"] = self.file_path
         ImportMatlab_dict["var_name"] = self.var_name
         # The class name is added to the dict for deserialisation purpose

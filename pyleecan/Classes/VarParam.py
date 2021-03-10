@@ -23,9 +23,11 @@ except ImportError as error:
     check_param = error
 
 try:
-    from ..Methods.Simulation.VarParam.get_simulations import get_simulations
+    from ..Methods.Simulation.VarParam.generate_simulation_list import (
+        generate_simulation_list,
+    )
 except ImportError as error:
-    get_simulations = error
+    generate_simulation_list = error
 
 try:
     from ..Methods.Simulation.VarParam.get_simu_number import get_simu_number
@@ -36,6 +38,7 @@ except ImportError as error:
 from ._check import InitUnKnowClassError
 from .ParamExplorer import ParamExplorer
 from .DataKeeper import DataKeeper
+from .VarSimu import VarSimu
 from .Post import Post
 
 
@@ -43,6 +46,7 @@ class VarParam(VarSimu):
     """Handle multisimulation by varying parameters"""
 
     VERSION = 1
+    NAME = "Parameter Sweep"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.VarParam.check_param
@@ -56,17 +60,18 @@ class VarParam(VarSimu):
         )
     else:
         check_param = check_param
-    # cf Methods.Simulation.VarParam.get_simulations
-    if isinstance(get_simulations, ImportError):
-        get_simulations = property(
+    # cf Methods.Simulation.VarParam.generate_simulation_list
+    if isinstance(generate_simulation_list, ImportError):
+        generate_simulation_list = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VarParam method get_simulations: " + str(get_simulations)
+                    "Can't use VarParam method generate_simulation_list: "
+                    + str(generate_simulation_list)
                 )
             )
         )
     else:
-        get_simulations = get_simulations
+        generate_simulation_list = generate_simulation_list
     # cf Methods.Simulation.VarParam.get_simu_number
     if isinstance(get_simu_number, ImportError):
         get_simu_number = property(
@@ -92,7 +97,7 @@ class VarParam(VarSimu):
         datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
-        ref_simu_index=None,
+        var_simu=None,
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
@@ -128,8 +133,8 @@ class VarParam(VarSimu):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
                 stop_if_error = init_dict["stop_if_error"]
-            if "ref_simu_index" in list(init_dict.keys()):
-                ref_simu_index = init_dict["ref_simu_index"]
+            if "var_simu" in list(init_dict.keys()):
+                var_simu = init_dict["var_simu"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
             if "is_reuse_femm_file" in list(init_dict.keys()):
@@ -149,7 +154,7 @@ class VarParam(VarSimu):
             datakeeper_list=datakeeper_list,
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
-            ref_simu_index=ref_simu_index,
+            var_simu=var_simu,
             nb_simu=nb_simu,
             is_reuse_femm_file=is_reuse_femm_file,
             postproc_list=postproc_list,
@@ -190,6 +195,33 @@ class VarParam(VarSimu):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from VarSimu
+        diff_list.extend(super(VarParam, self).compare(other, name=name))
+        if (
+            other.paramexplorer_list is None and self.paramexplorer_list is not None
+        ) or (other.paramexplorer_list is not None and self.paramexplorer_list is None):
+            diff_list.append(name + ".paramexplorer_list None mismatch")
+        elif self.paramexplorer_list is None:
+            pass
+        elif len(other.paramexplorer_list) != len(self.paramexplorer_list):
+            diff_list.append("len(" + name + ".paramexplorer_list)")
+        else:
+            for ii in range(len(other.paramexplorer_list)):
+                diff_list.extend(
+                    self.paramexplorer_list[ii].compare(
+                        other.paramexplorer_list[ii],
+                        name=name + ".paramexplorer_list[" + str(ii) + "]",
+                    )
+                )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -202,18 +234,22 @@ class VarParam(VarSimu):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from VarSimu
-        VarParam_dict = super(VarParam, self).as_dict()
+        VarParam_dict = super(VarParam, self).as_dict(**kwargs)
         if self.paramexplorer_list is None:
             VarParam_dict["paramexplorer_list"] = None
         else:
             VarParam_dict["paramexplorer_list"] = list()
             for obj in self.paramexplorer_list:
                 if obj is not None:
-                    VarParam_dict["paramexplorer_list"].append(obj.as_dict())
+                    VarParam_dict["paramexplorer_list"].append(obj.as_dict(**kwargs))
                 else:
                     VarParam_dict["paramexplorer_list"].append(None)
         # The class name is added to the dict for deserialisation purpose

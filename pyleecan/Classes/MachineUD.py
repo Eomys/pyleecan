@@ -156,6 +156,34 @@ class MachineUD(Machine):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Machine
+        diff_list.extend(super(MachineUD, self).compare(other, name=name))
+        if (other.lam_list is None and self.lam_list is not None) or (
+            other.lam_list is not None and self.lam_list is None
+        ):
+            diff_list.append(name + ".lam_list None mismatch")
+        elif self.lam_list is None:
+            pass
+        elif len(other.lam_list) != len(self.lam_list):
+            diff_list.append("len(" + name + ".lam_list)")
+        else:
+            for ii in range(len(other.lam_list)):
+                diff_list.extend(
+                    self.lam_list[ii].compare(
+                        other.lam_list[ii], name=name + ".lam_list[" + str(ii) + "]"
+                    )
+                )
+        if other._is_sync != self._is_sync:
+            diff_list.append(name + ".is_sync")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -169,18 +197,22 @@ class MachineUD(Machine):
         S += getsizeof(self.is_sync)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Machine
-        MachineUD_dict = super(MachineUD, self).as_dict()
+        MachineUD_dict = super(MachineUD, self).as_dict(**kwargs)
         if self.lam_list is None:
             MachineUD_dict["lam_list"] = None
         else:
             MachineUD_dict["lam_list"] = list()
             for obj in self.lam_list:
                 if obj is not None:
-                    MachineUD_dict["lam_list"].append(obj.as_dict())
+                    MachineUD_dict["lam_list"].append(obj.as_dict(**kwargs))
                 else:
                     MachineUD_dict["lam_list"].append(None)
         MachineUD_dict["is_sync"] = self.is_sync

@@ -1,6 +1,9 @@
+from pyleecan.Classes.Winding import Winding
+
+
 def comp_fill_factor(self):
     """Compute the fill factor of the winding"""
-    if self.winding is None or self.winding.qs == 0:
+    if self.winding is None or self.winding.qs == 0 or type(self.winding) is Winding:
         return 0
     else:
         # compute the number of conductors per slot
@@ -8,7 +11,7 @@ def comp_fill_factor(self):
         Ncps = Ncps_.mean()
 
         if Ncps_.std() != 0:
-            self.get_logger.warning(
+            self.get_logger().warning(
                 "LamSlotWind.comp_fill_factor: "
                 "Uneven number of conductors per slot. "
                 + "Max. number of conductors will be used to compute slot fill factor."

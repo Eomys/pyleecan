@@ -302,6 +302,41 @@ class HoleM58(HoleMag):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from HoleMag
+        diff_list.extend(super(HoleM58, self).compare(other, name=name))
+        if other._H0 != self._H0:
+            diff_list.append(name + ".H0")
+        if other._W0 != self._W0:
+            diff_list.append(name + ".W0")
+        if other._H1 != self._H1:
+            diff_list.append(name + ".H1")
+        if other._W1 != self._W1:
+            diff_list.append(name + ".W1")
+        if other._H2 != self._H2:
+            diff_list.append(name + ".H2")
+        if other._W2 != self._W2:
+            diff_list.append(name + ".W2")
+        if other._W3 != self._W3:
+            diff_list.append(name + ".W3")
+        if other._R0 != self._R0:
+            diff_list.append(name + ".R0")
+        if (other.magnet_0 is None and self.magnet_0 is not None) or (
+            other.magnet_0 is not None and self.magnet_0 is None
+        ):
+            diff_list.append(name + ".magnet_0 None mismatch")
+        elif self.magnet_0 is not None:
+            diff_list.extend(
+                self.magnet_0.compare(other.magnet_0, name=name + ".magnet_0")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -320,11 +355,15 @@ class HoleM58(HoleMag):
         S += getsizeof(self.magnet_0)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from HoleMag
-        HoleM58_dict = super(HoleM58, self).as_dict()
+        HoleM58_dict = super(HoleM58, self).as_dict(**kwargs)
         HoleM58_dict["H0"] = self.H0
         HoleM58_dict["W0"] = self.W0
         HoleM58_dict["H1"] = self.H1
@@ -336,7 +375,7 @@ class HoleM58(HoleMag):
         if self.magnet_0 is None:
             HoleM58_dict["magnet_0"] = None
         else:
-            HoleM58_dict["magnet_0"] = self.magnet_0.as_dict()
+            HoleM58_dict["magnet_0"] = self.magnet_0.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         HoleM58_dict["__class__"] = "HoleM58"

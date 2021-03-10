@@ -162,6 +162,31 @@ class OptiGenAlg(OptiSolver):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from OptiSolver
+        diff_list.extend(super(OptiGenAlg, self).compare(other, name=name))
+        if other._selector_str != self._selector_str:
+            diff_list.append(name + ".selector")
+        if other._crossover_str != self._crossover_str:
+            diff_list.append(name + ".crossover")
+        if other._mutator_str != self._mutator_str:
+            diff_list.append(name + ".mutator")
+        if other._p_cross != self._p_cross:
+            diff_list.append(name + ".p_cross")
+        if other._p_mutate != self._p_mutate:
+            diff_list.append(name + ".p_mutate")
+        if other._size_pop != self._size_pop:
+            diff_list.append(name + ".size_pop")
+        if other._nb_gen != self._nb_gen:
+            diff_list.append(name + ".nb_gen")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -178,23 +203,51 @@ class OptiGenAlg(OptiSolver):
         S += getsizeof(self.nb_gen)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from OptiSolver
-        OptiGenAlg_dict = super(OptiGenAlg, self).as_dict()
+        OptiGenAlg_dict = super(OptiGenAlg, self).as_dict(**kwargs)
         if self._selector_str is not None:
             OptiGenAlg_dict["selector"] = self._selector_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            OptiGenAlg_dict["selector"] = self.selector
         else:
             OptiGenAlg_dict["selector"] = None
+            if self.selector is not None:
+                self.get_logger().warning(
+                    "OptiGenAlg.as_dict(): "
+                    + f"Function {self.selector.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         if self._crossover_str is not None:
             OptiGenAlg_dict["crossover"] = self._crossover_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            OptiGenAlg_dict["crossover"] = self.crossover
         else:
             OptiGenAlg_dict["crossover"] = None
+            if self.crossover is not None:
+                self.get_logger().warning(
+                    "OptiGenAlg.as_dict(): "
+                    + f"Function {self.crossover.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         if self._mutator_str is not None:
             OptiGenAlg_dict["mutator"] = self._mutator_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            OptiGenAlg_dict["mutator"] = self.mutator
         else:
             OptiGenAlg_dict["mutator"] = None
+            if self.mutator is not None:
+                self.get_logger().warning(
+                    "OptiGenAlg.as_dict(): "
+                    + f"Function {self.mutator.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         OptiGenAlg_dict["p_cross"] = self.p_cross
         OptiGenAlg_dict["p_mutate"] = self.p_mutate
         OptiGenAlg_dict["size_pop"] = self.size_pop
@@ -246,7 +299,7 @@ class OptiGenAlg(OptiSolver):
     selector = property(
         fget=_get_selector,
         fset=_set_selector,
-        doc=u"""Selector of the genetic algorithm
+        doc="""Selector of the genetic algorithm
 
         :Type: function
         """,
@@ -281,7 +334,7 @@ class OptiGenAlg(OptiSolver):
     crossover = property(
         fget=_get_crossover,
         fset=_set_crossover,
-        doc=u"""Crossover of the genetic algorithm
+        doc="""Crossover of the genetic algorithm
 
         :Type: function
         """,
@@ -316,7 +369,7 @@ class OptiGenAlg(OptiSolver):
     mutator = property(
         fget=_get_mutator,
         fset=_set_mutator,
-        doc=u"""Mutator of the genetic algorithm
+        doc="""Mutator of the genetic algorithm
 
         :Type: function
         """,
@@ -334,7 +387,7 @@ class OptiGenAlg(OptiSolver):
     p_cross = property(
         fget=_get_p_cross,
         fset=_set_p_cross,
-        doc=u"""Probability of crossover
+        doc="""Probability of crossover
 
         :Type: float
         :min: 0
@@ -354,7 +407,7 @@ class OptiGenAlg(OptiSolver):
     p_mutate = property(
         fget=_get_p_mutate,
         fset=_set_p_mutate,
-        doc=u"""Probability of mutation 
+        doc="""Probability of mutation 
 
         :Type: float
         :min: 0
@@ -374,7 +427,7 @@ class OptiGenAlg(OptiSolver):
     size_pop = property(
         fget=_get_size_pop,
         fset=_set_size_pop,
-        doc=u"""Size of the population
+        doc="""Size of the population
 
         :Type: int
         :min: 1
@@ -393,7 +446,7 @@ class OptiGenAlg(OptiSolver):
     nb_gen = property(
         fget=_get_nb_gen,
         fset=_set_nb_gen,
-        doc=u"""Number of generations
+        doc="""Number of generations
 
         :Type: int
         :min: 1

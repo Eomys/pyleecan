@@ -112,6 +112,20 @@ class DXFImport(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._file_path != self._file_path:
+            diff_list.append(name + ".file_path")
+        if other._surf_dict != self._surf_dict:
+            diff_list.append(name + ".surf_dict")
+        if other._BC_list != self._BC_list:
+            diff_list.append(name + ".BC_list")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -125,8 +139,12 @@ class DXFImport(FrozenClass):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         DXFImport_dict = dict()
         DXFImport_dict["file_path"] = self.file_path

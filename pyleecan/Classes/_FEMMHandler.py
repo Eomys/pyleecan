@@ -21,7 +21,7 @@ class _FEMMHandler(object):
         self.HandleToFEMM = HandleToFEMM
         pythoncom.CoInitialize()
 
-    def as_dict(self):
+    def as_dict(self, **kwargs):
         _FEMMHandler_dict = dict()
         _FEMMHandler_dict["__class__"] = "_FEMMHandler"
         _FEMMHandler_dict["HandleToFEMM"] = None

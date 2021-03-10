@@ -71,6 +71,8 @@ class Simu1(Simulation):
         postproc_list=-1,
         index=None,
         path_result=None,
+        layer=None,
+        layer_log_warn=None,
         init_dict=None,
         init_str=None,
     ):
@@ -117,6 +119,10 @@ class Simu1(Simulation):
                 index = init_dict["index"]
             if "path_result" in list(init_dict.keys()):
                 path_result = init_dict["path_result"]
+            if "layer" in list(init_dict.keys()):
+                layer = init_dict["layer"]
+            if "layer_log_warn" in list(init_dict.keys()):
+                layer_log_warn = init_dict["layer_log_warn"]
         # Set the properties (value check and convertion are done in setter)
         self.elec = elec
         self.mag = mag
@@ -134,6 +140,8 @@ class Simu1(Simulation):
             postproc_list=postproc_list,
             index=index,
             path_result=path_result,
+            layer=layer,
+            layer_log_warn=layer_log_warn,
         )
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties
@@ -192,6 +200,47 @@ class Simu1(Simulation):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Simulation
+        diff_list.extend(super(Simu1, self).compare(other, name=name))
+        if (other.elec is None and self.elec is not None) or (
+            other.elec is not None and self.elec is None
+        ):
+            diff_list.append(name + ".elec None mismatch")
+        elif self.elec is not None:
+            diff_list.extend(self.elec.compare(other.elec, name=name + ".elec"))
+        if (other.mag is None and self.mag is not None) or (
+            other.mag is not None and self.mag is None
+        ):
+            diff_list.append(name + ".mag None mismatch")
+        elif self.mag is not None:
+            diff_list.extend(self.mag.compare(other.mag, name=name + ".mag"))
+        if (other.struct is None and self.struct is not None) or (
+            other.struct is not None and self.struct is None
+        ):
+            diff_list.append(name + ".struct None mismatch")
+        elif self.struct is not None:
+            diff_list.extend(self.struct.compare(other.struct, name=name + ".struct"))
+        if (other.force is None and self.force is not None) or (
+            other.force is not None and self.force is None
+        ):
+            diff_list.append(name + ".force None mismatch")
+        elif self.force is not None:
+            diff_list.extend(self.force.compare(other.force, name=name + ".force"))
+        if (other.loss is None and self.loss is not None) or (
+            other.loss is not None and self.loss is None
+        ):
+            diff_list.append(name + ".loss None mismatch")
+        elif self.loss is not None:
+            diff_list.extend(self.loss.compare(other.loss, name=name + ".loss"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -206,31 +255,35 @@ class Simu1(Simulation):
         S += getsizeof(self.loss)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Simulation
-        Simu1_dict = super(Simu1, self).as_dict()
+        Simu1_dict = super(Simu1, self).as_dict(**kwargs)
         if self.elec is None:
             Simu1_dict["elec"] = None
         else:
-            Simu1_dict["elec"] = self.elec.as_dict()
+            Simu1_dict["elec"] = self.elec.as_dict(**kwargs)
         if self.mag is None:
             Simu1_dict["mag"] = None
         else:
-            Simu1_dict["mag"] = self.mag.as_dict()
+            Simu1_dict["mag"] = self.mag.as_dict(**kwargs)
         if self.struct is None:
             Simu1_dict["struct"] = None
         else:
-            Simu1_dict["struct"] = self.struct.as_dict()
+            Simu1_dict["struct"] = self.struct.as_dict(**kwargs)
         if self.force is None:
             Simu1_dict["force"] = None
         else:
-            Simu1_dict["force"] = self.force.as_dict()
+            Simu1_dict["force"] = self.force.as_dict(**kwargs)
         if self.loss is None:
             Simu1_dict["loss"] = None
         else:
-            Simu1_dict["loss"] = self.loss.as_dict()
+            Simu1_dict["loss"] = self.loss.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Simu1_dict["__class__"] = "Simu1"

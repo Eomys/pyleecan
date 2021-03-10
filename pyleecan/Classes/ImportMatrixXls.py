@@ -138,6 +138,29 @@ class ImportMatrixXls(ImportMatrix):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from ImportMatrix
+        diff_list.extend(super(ImportMatrixXls, self).compare(other, name=name))
+        if other._file_path != self._file_path:
+            diff_list.append(name + ".file_path")
+        if other._sheet != self._sheet:
+            diff_list.append(name + ".sheet")
+        if other._skiprows != self._skiprows:
+            diff_list.append(name + ".skiprows")
+        if other._usecols != self._usecols:
+            diff_list.append(name + ".usecols")
+        if other._axes_colrows != self._axes_colrows:
+            diff_list.append(name + ".axes_colrows")
+        if other._is_allsheets != self._is_allsheets:
+            diff_list.append(name + ".is_allsheets")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -155,11 +178,15 @@ class ImportMatrixXls(ImportMatrix):
         S += getsizeof(self.is_allsheets)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from ImportMatrix
-        ImportMatrixXls_dict = super(ImportMatrixXls, self).as_dict()
+        ImportMatrixXls_dict = super(ImportMatrixXls, self).as_dict(**kwargs)
         ImportMatrixXls_dict["file_path"] = self.file_path
         ImportMatrixXls_dict["sheet"] = self.sheet
         ImportMatrixXls_dict["skiprows"] = self.skiprows

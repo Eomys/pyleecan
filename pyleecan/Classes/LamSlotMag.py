@@ -286,6 +286,23 @@ class LamSlotMag(LamSlot):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from LamSlot
+        diff_list.extend(super(LamSlotMag, self).compare(other, name=name))
+        if (other.magnet is None and self.magnet is not None) or (
+            other.magnet is not None and self.magnet is None
+        ):
+            diff_list.append(name + ".magnet None mismatch")
+        elif self.magnet is not None:
+            diff_list.extend(self.magnet.compare(other.magnet, name=name + ".magnet"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -296,15 +313,19 @@ class LamSlotMag(LamSlot):
         S += getsizeof(self.magnet)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from LamSlot
-        LamSlotMag_dict = super(LamSlotMag, self).as_dict()
+        LamSlotMag_dict = super(LamSlotMag, self).as_dict(**kwargs)
         if self.magnet is None:
             LamSlotMag_dict["magnet"] = None
         else:
-            LamSlotMag_dict["magnet"] = self.magnet.as_dict()
+            LamSlotMag_dict["magnet"] = self.magnet.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotMag_dict["__class__"] = "LamSlotMag"

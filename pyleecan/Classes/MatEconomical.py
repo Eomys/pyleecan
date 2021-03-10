@@ -82,6 +82,18 @@ class MatEconomical(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._cost_unit != self._cost_unit:
+            diff_list.append(name + ".cost_unit")
+        if other._unit_name != self._unit_name:
+            diff_list.append(name + ".unit_name")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -90,8 +102,12 @@ class MatEconomical(FrozenClass):
         S += getsizeof(self.unit_name)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         MatEconomical_dict = dict()
         MatEconomical_dict["cost_unit"] = self.cost_unit

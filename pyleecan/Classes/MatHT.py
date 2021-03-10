@@ -107,6 +107,24 @@ class MatHT(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._lambda_x != self._lambda_x:
+            diff_list.append(name + ".lambda_x")
+        if other._lambda_y != self._lambda_y:
+            diff_list.append(name + ".lambda_y")
+        if other._lambda_z != self._lambda_z:
+            diff_list.append(name + ".lambda_z")
+        if other._Cp != self._Cp:
+            diff_list.append(name + ".Cp")
+        if other._alpha != self._alpha:
+            diff_list.append(name + ".alpha")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -118,8 +136,12 @@ class MatHT(FrozenClass):
         S += getsizeof(self.alpha)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         MatHT_dict = dict()
         MatHT_dict["lambda_x"] = self.lambda_x

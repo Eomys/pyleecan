@@ -102,6 +102,19 @@ class SolverInputFile(Elmer):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Elmer
+        diff_list.extend(super(SolverInputFile, self).compare(other, name=name))
+        if other._sections != self._sections:
+            diff_list.append(name + ".sections")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -114,11 +127,15 @@ class SolverInputFile(Elmer):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Elmer
-        SolverInputFile_dict = super(SolverInputFile, self).as_dict()
+        SolverInputFile_dict = super(SolverInputFile, self).as_dict(**kwargs)
         SolverInputFile_dict["sections"] = (
             self.sections.copy() if self.sections is not None else None
         )

@@ -102,6 +102,32 @@ class BoreUD(Bore):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Bore
+        diff_list.extend(super(BoreUD, self).compare(other, name=name))
+        if (other.line_list is None and self.line_list is not None) or (
+            other.line_list is not None and self.line_list is None
+        ):
+            diff_list.append(name + ".line_list None mismatch")
+        elif self.line_list is None:
+            pass
+        elif len(other.line_list) != len(self.line_list):
+            diff_list.append("len(" + name + ".line_list)")
+        else:
+            for ii in range(len(other.line_list)):
+                diff_list.extend(
+                    self.line_list[ii].compare(
+                        other.line_list[ii], name=name + ".line_list[" + str(ii) + "]"
+                    )
+                )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -114,18 +140,22 @@ class BoreUD(Bore):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Bore
-        BoreUD_dict = super(BoreUD, self).as_dict()
+        BoreUD_dict = super(BoreUD, self).as_dict(**kwargs)
         if self.line_list is None:
             BoreUD_dict["line_list"] = None
         else:
             BoreUD_dict["line_list"] = list()
             for obj in self.line_list:
                 if obj is not None:
-                    BoreUD_dict["line_list"].append(obj.as_dict())
+                    BoreUD_dict["line_list"].append(obj.as_dict(**kwargs))
                 else:
                     BoreUD_dict["line_list"].append(None)
         # The class name is added to the dict for deserialisation purpose

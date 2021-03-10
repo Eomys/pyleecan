@@ -173,6 +173,22 @@ class PointMat(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if not array_equal(other.coordinate, self.coordinate):
+            diff_list.append(name + ".coordinate")
+        if other._nb_pt != self._nb_pt:
+            diff_list.append(name + ".nb_pt")
+        if other._delta != self._delta:
+            diff_list.append(name + ".delta")
+        if not array_equal(other.indice, self.indice):
+            diff_list.append(name + ".indice")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -183,8 +199,12 @@ class PointMat(FrozenClass):
         S += getsizeof(self.indice)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         PointMat_dict = dict()
         if self.coordinate is None:

@@ -107,6 +107,23 @@ class BoreFlower(Bore):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Bore
+        diff_list.extend(super(BoreFlower, self).compare(other, name=name))
+        if other._N != self._N:
+            diff_list.append(name + ".N")
+        if other._Rarc != self._Rarc:
+            diff_list.append(name + ".Rarc")
+        if other._alpha != self._alpha:
+            diff_list.append(name + ".alpha")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -119,11 +136,15 @@ class BoreFlower(Bore):
         S += getsizeof(self.alpha)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Bore
-        BoreFlower_dict = super(BoreFlower, self).as_dict()
+        BoreFlower_dict = super(BoreFlower, self).as_dict(**kwargs)
         BoreFlower_dict["N"] = self.N
         BoreFlower_dict["Rarc"] = self.Rarc
         BoreFlower_dict["alpha"] = self.alpha

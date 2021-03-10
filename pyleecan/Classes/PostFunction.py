@@ -86,6 +86,19 @@ class PostFunction(Post):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Post
+        diff_list.extend(super(PostFunction, self).compare(other, name=name))
+        if other._run_str != self._run_str:
+            diff_list.append(name + ".run")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -96,15 +109,27 @@ class PostFunction(Post):
         S += getsizeof(self._run_str)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Post
-        PostFunction_dict = super(PostFunction, self).as_dict()
+        PostFunction_dict = super(PostFunction, self).as_dict(**kwargs)
         if self._run_str is not None:
             PostFunction_dict["run"] = self._run_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            PostFunction_dict["run"] = self.run
         else:
             PostFunction_dict["run"] = None
+            if self.run is not None:
+                self.get_logger().warning(
+                    "PostFunction.as_dict(): "
+                    + f"Function {self.run.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         PostFunction_dict["__class__"] = "PostFunction"
@@ -146,7 +171,7 @@ class PostFunction(Post):
     run = property(
         fget=_get_run,
         fset=_set_run,
-        doc=u"""Post-processing that takes an output in argument
+        doc="""Post-processing that takes an output in argument
 
         :Type: function
         """,

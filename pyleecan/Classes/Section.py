@@ -258,6 +258,27 @@ class Section(Elmer):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Elmer
+        diff_list.extend(super(Section, self).compare(other, name=name))
+        if other._section != self._section:
+            diff_list.append(name + ".section")
+        if other._id != self._id:
+            diff_list.append(name + ".id")
+        if other._comment != self._comment:
+            diff_list.append(name + ".comment")
+        if other.__statements != self.__statements:
+            diff_list.append(name + "._statements")
+        if other.__comments != self.__comments:
+            diff_list.append(name + "._comments")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -276,11 +297,15 @@ class Section(Elmer):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Elmer
-        Section_dict = super(Section, self).as_dict()
+        Section_dict = super(Section, self).as_dict(**kwargs)
         Section_dict["section"] = self.section
         Section_dict["id"] = self.id
         Section_dict["comment"] = self.comment

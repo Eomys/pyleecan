@@ -72,7 +72,7 @@ def generate_eq(gen_dict, class_dict):
                 + prop["name"]
                 + " is None:\n"
             )
-            eq_str += TAB3 + "return True\n"
+            eq_str += TAB3 + "pass\n"
             eq_str += (
                 TAB2
                 + "elif len(other."
@@ -115,7 +115,7 @@ def generate_eq(gen_dict, class_dict):
                 + prop["name"]
                 + " is None:\n"
             )
-            eq_str += TAB3 + "return True\n"
+            eq_str += TAB3 + "pass\n"
             eq_str += (
                 TAB2
                 + "elif len(other."
@@ -138,6 +138,22 @@ def generate_eq(gen_dict, class_dict):
                 + "[key]):\n"
             )
             eq_str += TAB5 + "return False\n"
+        elif prop["type"] in [None, ""]:
+            eq_str += (
+                TAB2
+                + "if isinstance(self."
+                + prop["name"]
+                + ", np.ndarray) and not np.array_equal(other."
+                + prop["name"]
+                + ", self."
+                + prop["name"]
+                + "):\n"
+            )
+            eq_str += TAB3 + "return False\n"
+            eq_str += (
+                TAB2 + "elif other." + prop["name"] + " != self." + prop["name"] + ":\n"
+            )
+            eq_str += TAB3 + "return False\n"
         elif prop["type"] == "function":
             eq_str += (
                 TAB2

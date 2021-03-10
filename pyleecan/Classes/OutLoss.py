@@ -142,6 +142,49 @@ class OutLoss(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.loss_list is None and self.loss_list is not None) or (
+            other.loss_list is not None and self.loss_list is None
+        ):
+            diff_list.append(name + ".loss_list None mismatch")
+        elif self.loss_list is None:
+            pass
+        elif len(other.loss_list) != len(self.loss_list):
+            diff_list.append("len(" + name + ".loss_list)")
+        else:
+            for ii in range(len(other.loss_list)):
+                diff_list.extend(
+                    self.loss_list[ii].compare(
+                        other.loss_list[ii], name=name + ".loss_list[" + str(ii) + "]"
+                    )
+                )
+        if (other.meshsol_list is None and self.meshsol_list is not None) or (
+            other.meshsol_list is not None and self.meshsol_list is None
+        ):
+            diff_list.append(name + ".meshsol_list None mismatch")
+        elif self.meshsol_list is None:
+            pass
+        elif len(other.meshsol_list) != len(self.meshsol_list):
+            diff_list.append("len(" + name + ".meshsol_list)")
+        else:
+            for ii in range(len(other.meshsol_list)):
+                diff_list.extend(
+                    self.meshsol_list[ii].compare(
+                        other.meshsol_list[ii],
+                        name=name + ".meshsol_list[" + str(ii) + "]",
+                    )
+                )
+        if other._loss_index != self._loss_index:
+            diff_list.append(name + ".loss_index")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -158,8 +201,12 @@ class OutLoss(FrozenClass):
         S += getsizeof(self.logger_name)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutLoss_dict = dict()
         if self.loss_list is None:
@@ -177,7 +224,7 @@ class OutLoss(FrozenClass):
             OutLoss_dict["meshsol_list"] = list()
             for obj in self.meshsol_list:
                 if obj is not None:
-                    OutLoss_dict["meshsol_list"].append(obj.as_dict())
+                    OutLoss_dict["meshsol_list"].append(obj.as_dict(**kwargs))
                 else:
                     OutLoss_dict["meshsol_list"].append(None)
         OutLoss_dict["loss_index"] = (

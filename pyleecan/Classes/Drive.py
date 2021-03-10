@@ -88,6 +88,20 @@ class Drive(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._Umax != self._Umax:
+            diff_list.append(name + ".Umax")
+        if other._Imax != self._Imax:
+            diff_list.append(name + ".Imax")
+        if other._is_current != self._is_current:
+            diff_list.append(name + ".is_current")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -97,8 +111,12 @@ class Drive(FrozenClass):
         S += getsizeof(self.is_current)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Drive_dict = dict()
         Drive_dict["Umax"] = self.Umax

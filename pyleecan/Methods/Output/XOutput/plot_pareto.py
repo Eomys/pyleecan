@@ -5,7 +5,16 @@ from ....Methods.Output.XOutput import _get_symbol_data_
 
 
 def plot_pareto(
-    self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, title=None, grid=False
+    self,
+    x_symbol,
+    y_symbol,
+    c_symbol=None,
+    cmap=None,
+    ax=None,
+    title=None,
+    grid=False,
+    is_show_fig=True,
+    save_path=None,
 ):
     """Plot the pareto front for 2 objective functions
 
@@ -20,7 +29,10 @@ def plot_pareto(
         optional symbol to set the plot colors
     cmap: colormap
         optional colormap
-
+    is_show_fig : bool
+        True to show figure after plot
+    save_path : str
+        full path of the png file where the figure is saved if save_path is not None
     """
 
     # Pyleecan colors
@@ -160,6 +172,13 @@ def plot_pareto(
                     fig.canvas.draw_idle()
 
     fig.canvas.mpl_connect("motion_notify_event", hover)
+
+    if save_path is not None:
+        fig.savefig(save_path)
+        plt.close()
+
+    if is_show_fig:
+        fig.show()
 
     if return_ax:
         return ax

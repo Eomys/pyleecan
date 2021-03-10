@@ -159,6 +159,52 @@ class Material(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._is_isotropic != self._is_isotropic:
+            diff_list.append(name + ".is_isotropic")
+        if (other.elec is None and self.elec is not None) or (
+            other.elec is not None and self.elec is None
+        ):
+            diff_list.append(name + ".elec None mismatch")
+        elif self.elec is not None:
+            diff_list.extend(self.elec.compare(other.elec, name=name + ".elec"))
+        if (other.mag is None and self.mag is not None) or (
+            other.mag is not None and self.mag is None
+        ):
+            diff_list.append(name + ".mag None mismatch")
+        elif self.mag is not None:
+            diff_list.extend(self.mag.compare(other.mag, name=name + ".mag"))
+        if (other.struct is None and self.struct is not None) or (
+            other.struct is not None and self.struct is None
+        ):
+            diff_list.append(name + ".struct None mismatch")
+        elif self.struct is not None:
+            diff_list.extend(self.struct.compare(other.struct, name=name + ".struct"))
+        if (other.HT is None and self.HT is not None) or (
+            other.HT is not None and self.HT is None
+        ):
+            diff_list.append(name + ".HT None mismatch")
+        elif self.HT is not None:
+            diff_list.extend(self.HT.compare(other.HT, name=name + ".HT"))
+        if (other.eco is None and self.eco is not None) or (
+            other.eco is not None and self.eco is None
+        ):
+            diff_list.append(name + ".eco None mismatch")
+        elif self.eco is not None:
+            diff_list.extend(self.eco.compare(other.eco, name=name + ".eco"))
+        if other._desc != self._desc:
+            diff_list.append(name + ".desc")
+        if other._path != self._path:
+            diff_list.append(name + ".path")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -174,8 +220,12 @@ class Material(FrozenClass):
         S += getsizeof(self.path)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Material_dict = dict()
         Material_dict["name"] = self.name
@@ -183,23 +233,23 @@ class Material(FrozenClass):
         if self.elec is None:
             Material_dict["elec"] = None
         else:
-            Material_dict["elec"] = self.elec.as_dict()
+            Material_dict["elec"] = self.elec.as_dict(**kwargs)
         if self.mag is None:
             Material_dict["mag"] = None
         else:
-            Material_dict["mag"] = self.mag.as_dict()
+            Material_dict["mag"] = self.mag.as_dict(**kwargs)
         if self.struct is None:
             Material_dict["struct"] = None
         else:
-            Material_dict["struct"] = self.struct.as_dict()
+            Material_dict["struct"] = self.struct.as_dict(**kwargs)
         if self.HT is None:
             Material_dict["HT"] = None
         else:
-            Material_dict["HT"] = self.HT.as_dict()
+            Material_dict["HT"] = self.HT.as_dict(**kwargs)
         if self.eco is None:
             Material_dict["eco"] = None
         else:
-            Material_dict["eco"] = self.eco.as_dict()
+            Material_dict["eco"] = self.eco.as_dict(**kwargs)
         Material_dict["desc"] = self.desc
         Material_dict["path"] = self.path
         # The class name is added to the dict for deserialisation purpose

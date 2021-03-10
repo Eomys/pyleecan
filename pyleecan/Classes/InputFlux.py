@@ -198,6 +198,35 @@ class InputFlux(Input):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Input
+        diff_list.extend(super(InputFlux, self).compare(other, name=name))
+        if other._per_a != self._per_a:
+            diff_list.append(name + ".per_a")
+        if other._per_t != self._per_t:
+            diff_list.append(name + ".per_t")
+        if other._is_antiper_a != self._is_antiper_a:
+            diff_list.append(name + ".is_antiper_a")
+        if other._is_antiper_t != self._is_antiper_t:
+            diff_list.append(name + ".is_antiper_t")
+        if other._B_dict != self._B_dict:
+            diff_list.append(name + ".B_dict")
+        if other._unit != self._unit:
+            diff_list.append(name + ".unit")
+        if (other.OP is None and self.OP is not None) or (
+            other.OP is not None and self.OP is None
+        ):
+            diff_list.append(name + ".OP None mismatch")
+        elif self.OP is not None:
+            diff_list.extend(self.OP.compare(other.OP, name=name + ".OP"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -216,11 +245,15 @@ class InputFlux(Input):
         S += getsizeof(self.OP)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Input
-        InputFlux_dict = super(InputFlux, self).as_dict()
+        InputFlux_dict = super(InputFlux, self).as_dict(**kwargs)
         InputFlux_dict["per_a"] = self.per_a
         InputFlux_dict["per_t"] = self.per_t
         InputFlux_dict["is_antiper_a"] = self.is_antiper_a
@@ -232,7 +265,7 @@ class InputFlux(Input):
         if self.OP is None:
             InputFlux_dict["OP"] = None
         else:
-            InputFlux_dict["OP"] = self.OP.as_dict()
+            InputFlux_dict["OP"] = self.OP.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputFlux_dict["__class__"] = "InputFlux"

@@ -141,6 +141,26 @@ class Shaft(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._Lshaft != self._Lshaft:
+            diff_list.append(name + ".Lshaft")
+        if (other.mat_type is None and self.mat_type is not None) or (
+            other.mat_type is not None and self.mat_type is None
+        ):
+            diff_list.append(name + ".mat_type None mismatch")
+        elif self.mat_type is not None:
+            diff_list.extend(
+                self.mat_type.compare(other.mat_type, name=name + ".mat_type")
+            )
+        if other._Drsh != self._Drsh:
+            diff_list.append(name + ".Drsh")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -150,15 +170,19 @@ class Shaft(FrozenClass):
         S += getsizeof(self.Drsh)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Shaft_dict = dict()
         Shaft_dict["Lshaft"] = self.Lshaft
         if self.mat_type is None:
             Shaft_dict["mat_type"] = None
         else:
-            Shaft_dict["mat_type"] = self.mat_type.as_dict()
+            Shaft_dict["mat_type"] = self.mat_type.as_dict(**kwargs)
         Shaft_dict["Drsh"] = self.Drsh
         # The class name is added to the dict for deserialisation purpose
         Shaft_dict["__class__"] = "Shaft"

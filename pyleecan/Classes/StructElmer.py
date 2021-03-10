@@ -243,6 +243,31 @@ class StructElmer(Structural):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Structural
+        diff_list.extend(super(StructElmer, self).compare(other, name=name))
+        if other._Kmesh_fineness != self._Kmesh_fineness:
+            diff_list.append(name + ".Kmesh_fineness")
+        if other._path_name != self._path_name:
+            diff_list.append(name + ".path_name")
+        if other._FEA_dict_enforced != self._FEA_dict_enforced:
+            diff_list.append(name + ".FEA_dict_enforced")
+        if other._is_get_mesh != self._is_get_mesh:
+            diff_list.append(name + ".is_get_mesh")
+        if other._is_save_FEA != self._is_save_FEA:
+            diff_list.append(name + ".is_save_FEA")
+        if other._transform_list != self._transform_list:
+            diff_list.append(name + ".transform_list")
+        if other._include_magnets != self._include_magnets:
+            diff_list.append(name + ".include_magnets")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -263,11 +288,15 @@ class StructElmer(Structural):
         S += getsizeof(self.include_magnets)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Structural
-        StructElmer_dict = super(StructElmer, self).as_dict()
+        StructElmer_dict = super(StructElmer, self).as_dict(**kwargs)
         StructElmer_dict["Kmesh_fineness"] = self.Kmesh_fineness
         StructElmer_dict["path_name"] = self.path_name
         StructElmer_dict["FEA_dict_enforced"] = (

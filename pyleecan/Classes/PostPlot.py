@@ -131,6 +131,27 @@ class PostPlot(PostMethod):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from PostMethod
+        diff_list.extend(super(PostPlot, self).compare(other, name=name))
+        if other._method != self._method:
+            diff_list.append(name + ".method")
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._param_list != self._param_list:
+            diff_list.append(name + ".param_list")
+        if other._param_dict != self._param_dict:
+            diff_list.append(name + ".param_dict")
+        if other._save_format != self._save_format:
+            diff_list.append(name + ".save_format")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -149,11 +170,15 @@ class PostPlot(PostMethod):
         S += getsizeof(self.save_format)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from PostMethod
-        PostPlot_dict = super(PostPlot, self).as_dict()
+        PostPlot_dict = super(PostPlot, self).as_dict(**kwargs)
         PostPlot_dict["method"] = self.method
         PostPlot_dict["name"] = self.name
         PostPlot_dict["param_list"] = (

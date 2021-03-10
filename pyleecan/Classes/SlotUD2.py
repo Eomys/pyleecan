@@ -151,6 +151,40 @@ class SlotUD2(Slot):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Slot
+        diff_list.extend(super(SlotUD2, self).compare(other, name=name))
+        if (other.line_list is None and self.line_list is not None) or (
+            other.line_list is not None and self.line_list is None
+        ):
+            diff_list.append(name + ".line_list None mismatch")
+        elif self.line_list is None:
+            pass
+        elif len(other.line_list) != len(self.line_list):
+            diff_list.append("len(" + name + ".line_list)")
+        else:
+            for ii in range(len(other.line_list)):
+                diff_list.extend(
+                    self.line_list[ii].compare(
+                        other.line_list[ii], name=name + ".line_list[" + str(ii) + "]"
+                    )
+                )
+        if (other.active_surf is None and self.active_surf is not None) or (
+            other.active_surf is not None and self.active_surf is None
+        ):
+            diff_list.append(name + ".active_surf None mismatch")
+        elif self.active_surf is not None:
+            diff_list.extend(
+                self.active_surf.compare(other.active_surf, name=name + ".active_surf")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -164,24 +198,28 @@ class SlotUD2(Slot):
         S += getsizeof(self.active_surf)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Slot
-        SlotUD2_dict = super(SlotUD2, self).as_dict()
+        SlotUD2_dict = super(SlotUD2, self).as_dict(**kwargs)
         if self.line_list is None:
             SlotUD2_dict["line_list"] = None
         else:
             SlotUD2_dict["line_list"] = list()
             for obj in self.line_list:
                 if obj is not None:
-                    SlotUD2_dict["line_list"].append(obj.as_dict())
+                    SlotUD2_dict["line_list"].append(obj.as_dict(**kwargs))
                 else:
                     SlotUD2_dict["line_list"].append(None)
         if self.active_surf is None:
             SlotUD2_dict["active_surf"] = None
         else:
-            SlotUD2_dict["active_surf"] = self.active_surf.as_dict()
+            SlotUD2_dict["active_surf"] = self.active_surf.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotUD2_dict["__class__"] = "SlotUD2"

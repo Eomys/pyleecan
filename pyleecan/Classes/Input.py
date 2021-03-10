@@ -172,6 +172,34 @@ class Input(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.time is None and self.time is not None) or (
+            other.time is not None and self.time is None
+        ):
+            diff_list.append(name + ".time None mismatch")
+        elif self.time is not None:
+            diff_list.extend(self.time.compare(other.time, name=name + ".time"))
+        if (other.angle is None and self.angle is not None) or (
+            other.angle is not None and self.angle is None
+        ):
+            diff_list.append(name + ".angle None mismatch")
+        elif self.angle is not None:
+            diff_list.extend(self.angle.compare(other.angle, name=name + ".angle"))
+        if other._Nt_tot != self._Nt_tot:
+            diff_list.append(name + ".Nt_tot")
+        if other._Nrev != self._Nrev:
+            diff_list.append(name + ".Nrev")
+        if other._Na_tot != self._Na_tot:
+            diff_list.append(name + ".Na_tot")
+        if other._N0 != self._N0:
+            diff_list.append(name + ".N0")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -184,18 +212,22 @@ class Input(FrozenClass):
         S += getsizeof(self.N0)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Input_dict = dict()
         if self.time is None:
             Input_dict["time"] = None
         else:
-            Input_dict["time"] = self.time.as_dict()
+            Input_dict["time"] = self.time.as_dict(**kwargs)
         if self.angle is None:
             Input_dict["angle"] = None
         else:
-            Input_dict["angle"] = self.angle.as_dict()
+            Input_dict["angle"] = self.angle.as_dict(**kwargs)
         Input_dict["Nt_tot"] = self.Nt_tot
         Input_dict["Nrev"] = self.Nrev
         Input_dict["Na_tot"] = self.Na_tot

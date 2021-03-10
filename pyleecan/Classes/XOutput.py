@@ -132,6 +132,11 @@ try:
 except ImportError as error:
     print_memory = error
 
+try:
+    from ..Methods.Output.XOutput.get_xoutput_ref import get_xoutput_ref
+except ImportError as error:
+    get_xoutput_ref = error
+
 
 from ._check import InitUnKnowClassError
 from .ParamExplorer import ParamExplorer
@@ -374,6 +379,17 @@ class XOutput(Output):
         )
     else:
         print_memory = print_memory
+    # cf Methods.Output.XOutput.get_xoutput_ref
+    if isinstance(get_xoutput_ref, ImportError):
+        get_xoutput_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method get_xoutput_ref: " + str(get_xoutput_ref)
+                )
+            )
+        )
+    else:
+        get_xoutput_ref = get_xoutput_ref
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -386,6 +402,8 @@ class XOutput(Output):
         output_list=-1,
         xoutput_dict=-1,
         nb_simu=0,
+        xoutput_ref=None,
+        xoutput_ref_index=None,
         simu=-1,
         path_result="",
         geo=-1,
@@ -422,6 +440,10 @@ class XOutput(Output):
                 xoutput_dict = init_dict["xoutput_dict"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
+            if "xoutput_ref" in list(init_dict.keys()):
+                xoutput_ref = init_dict["xoutput_ref"]
+            if "xoutput_ref_index" in list(init_dict.keys()):
+                xoutput_ref_index = init_dict["xoutput_ref_index"]
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
             if "path_result" in list(init_dict.keys()):
@@ -447,6 +469,8 @@ class XOutput(Output):
         self.output_list = output_list
         self.xoutput_dict = xoutput_dict
         self.nb_simu = nb_simu
+        self.xoutput_ref = xoutput_ref
+        self.xoutput_ref_index = xoutput_ref_index
         # Call Output init
         super(XOutput, self).__init__(
             simu=simu,
@@ -496,6 +520,14 @@ class XOutput(Output):
             )
             XOutput_str += "xoutput_dict[" + key + "] =" + tmp + linesep + linesep
         XOutput_str += "nb_simu = " + str(self.nb_simu) + linesep
+        if self.xoutput_ref is not None:
+            tmp = (
+                self.xoutput_ref.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            XOutput_str += "xoutput_ref = " + tmp
+        else:
+            XOutput_str += "xoutput_ref = None" + linesep + linesep
+        XOutput_str += "xoutput_ref_index = " + str(self.xoutput_ref_index) + linesep
         return XOutput_str
 
     def __eq__(self, other):
@@ -515,7 +547,81 @@ class XOutput(Output):
             return False
         if other.nb_simu != self.nb_simu:
             return False
+        if other.xoutput_ref != self.xoutput_ref:
+            return False
+        if other.xoutput_ref_index != self.xoutput_ref_index:
+            return False
         return True
+
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Output
+        diff_list.extend(super(XOutput, self).compare(other, name=name))
+        if (
+            other.paramexplorer_list is None and self.paramexplorer_list is not None
+        ) or (other.paramexplorer_list is not None and self.paramexplorer_list is None):
+            diff_list.append(name + ".paramexplorer_list None mismatch")
+        elif self.paramexplorer_list is None:
+            pass
+        elif len(other.paramexplorer_list) != len(self.paramexplorer_list):
+            diff_list.append("len(" + name + ".paramexplorer_list)")
+        else:
+            for ii in range(len(other.paramexplorer_list)):
+                diff_list.extend(
+                    self.paramexplorer_list[ii].compare(
+                        other.paramexplorer_list[ii],
+                        name=name + ".paramexplorer_list[" + str(ii) + "]",
+                    )
+                )
+        if (other.output_list is None and self.output_list is not None) or (
+            other.output_list is not None and self.output_list is None
+        ):
+            diff_list.append(name + ".output_list None mismatch")
+        elif self.output_list is None:
+            pass
+        elif len(other.output_list) != len(self.output_list):
+            diff_list.append("len(" + name + ".output_list)")
+        else:
+            for ii in range(len(other.output_list)):
+                diff_list.extend(
+                    self.output_list[ii].compare(
+                        other.output_list[ii],
+                        name=name + ".output_list[" + str(ii) + "]",
+                    )
+                )
+        if (other.xoutput_dict is None and self.xoutput_dict is not None) or (
+            other.xoutput_dict is not None and self.xoutput_dict is None
+        ):
+            diff_list.append(name + ".xoutput_dict None mismatch")
+        elif self.xoutput_dict is None:
+            pass
+        elif len(other.xoutput_dict) != len(self.xoutput_dict):
+            diff_list.append("len(" + name + "xoutput_dict)")
+        else:
+            for key in self.xoutput_dict:
+                diff_list.extend(
+                    self.xoutput_dict[key].compare(
+                        other.xoutput_dict[key], name=name + ".xoutput_dict"
+                    )
+                )
+        if other._nb_simu != self._nb_simu:
+            diff_list.append(name + ".nb_simu")
+        if (other.xoutput_ref is None and self.xoutput_ref is not None) or (
+            other.xoutput_ref is not None and self.xoutput_ref is None
+        ):
+            diff_list.append(name + ".xoutput_ref None mismatch")
+        elif self.xoutput_ref is not None:
+            diff_list.extend(
+                self.xoutput_ref.compare(other.xoutput_ref, name=name + ".xoutput_ref")
+            )
+        if other._xoutput_ref_index != self._xoutput_ref_index:
+            diff_list.append(name + ".xoutput_ref_index")
+        return diff_list
 
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
@@ -534,20 +640,26 @@ class XOutput(Output):
             for key, value in self.xoutput_dict.items():
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.nb_simu)
+        S += getsizeof(self.xoutput_ref)
+        S += getsizeof(self.xoutput_ref_index)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Output
-        XOutput_dict = super(XOutput, self).as_dict()
+        XOutput_dict = super(XOutput, self).as_dict(**kwargs)
         if self.paramexplorer_list is None:
             XOutput_dict["paramexplorer_list"] = None
         else:
             XOutput_dict["paramexplorer_list"] = list()
             for obj in self.paramexplorer_list:
                 if obj is not None:
-                    XOutput_dict["paramexplorer_list"].append(obj.as_dict())
+                    XOutput_dict["paramexplorer_list"].append(obj.as_dict(**kwargs))
                 else:
                     XOutput_dict["paramexplorer_list"].append(None)
         if self.output_list is None:
@@ -556,7 +668,7 @@ class XOutput(Output):
             XOutput_dict["output_list"] = list()
             for obj in self.output_list:
                 if obj is not None:
-                    XOutput_dict["output_list"].append(obj.as_dict())
+                    XOutput_dict["output_list"].append(obj.as_dict(**kwargs))
                 else:
                     XOutput_dict["output_list"].append(None)
         if self.xoutput_dict is None:
@@ -565,10 +677,15 @@ class XOutput(Output):
             XOutput_dict["xoutput_dict"] = dict()
             for key, obj in self.xoutput_dict.items():
                 if obj is not None:
-                    XOutput_dict["xoutput_dict"][key] = obj.as_dict()
+                    XOutput_dict["xoutput_dict"][key] = obj.as_dict(**kwargs)
                 else:
                     XOutput_dict["xoutput_dict"][key] = None
         XOutput_dict["nb_simu"] = self.nb_simu
+        if self.xoutput_ref is None:
+            XOutput_dict["xoutput_ref"] = None
+        else:
+            XOutput_dict["xoutput_ref"] = self.xoutput_ref.as_dict(**kwargs)
+        XOutput_dict["xoutput_ref_index"] = self.xoutput_ref_index
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         XOutput_dict["__class__"] = "XOutput"
@@ -581,6 +698,9 @@ class XOutput(Output):
         self.output_list = None
         self.xoutput_dict = None
         self.nb_simu = None
+        if self.xoutput_ref is not None:
+            self.xoutput_ref._set_None()
+        self.xoutput_ref_index = None
         # Set to None the properties inherited from Output
         super(XOutput, self)._set_None()
 
@@ -644,7 +764,7 @@ class XOutput(Output):
     output_list = property(
         fget=_get_output_list,
         fset=_set_output_list,
-        doc=u"""List containing Output for each simulation
+        doc=u"""List containing Output (or Xoutput) for each simulation
 
         :Type: [Output]
         """,
@@ -675,7 +795,7 @@ class XOutput(Output):
     xoutput_dict = property(
         fget=_get_xoutput_dict,
         fset=_set_xoutput_dict,
-        doc=u"""Dictionnary containing VarParam DataKeeper results in ndarray
+        doc=u"""Dictionnary containing DataKeeper
 
         :Type: {DataKeeper}
         """,
@@ -697,5 +817,53 @@ class XOutput(Output):
 
         :Type: int
         :min: 0
+        """,
+    )
+
+    def _get_xoutput_ref(self):
+        """getter of xoutput_ref"""
+        return self._xoutput_ref
+
+    def _set_xoutput_ref(self, value):
+        """setter of xoutput_ref"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "xoutput_ref"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Output()
+        check_var("xoutput_ref", value, "Output")
+        self._xoutput_ref = value
+
+        if self._xoutput_ref is not None:
+            self._xoutput_ref.parent = self
+
+    xoutput_ref = property(
+        fget=_get_xoutput_ref,
+        fset=_set_xoutput_ref,
+        doc=u"""Xoutput (or Output) of the reference simulation (only if is_keep_all_output is True and not included in output_list)
+
+        :Type: Output
+        """,
+    )
+
+    def _get_xoutput_ref_index(self):
+        """getter of xoutput_ref_index"""
+        return self._xoutput_ref_index
+
+    def _set_xoutput_ref_index(self, value):
+        """setter of xoutput_ref_index"""
+        check_var("xoutput_ref_index", value, "int")
+        self._xoutput_ref_index = value
+
+    xoutput_ref_index = property(
+        fget=_get_xoutput_ref_index,
+        fset=_set_xoutput_ref_index,
+        doc=u"""Index of the Xoutput (or Output) of the reference simulation in the output_list (only if is_keep_all_output is True)
+
+        :Type: int
         """,
     )

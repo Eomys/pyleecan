@@ -33,9 +33,11 @@ except ImportError as error:
     check_param = error
 
 try:
-    from ..Methods.Simulation.VarSimu.get_simulations import get_simulations
+    from ..Methods.Simulation.VarSimu.generate_simulation_list import (
+        generate_simulation_list,
+    )
 except ImportError as error:
-    get_simulations = error
+    generate_simulation_list = error
 
 
 from ._check import InitUnKnowClassError
@@ -78,17 +80,18 @@ class VarSimu(FrozenClass):
         )
     else:
         check_param = check_param
-    # cf Methods.Simulation.VarSimu.get_simulations
-    if isinstance(get_simulations, ImportError):
-        get_simulations = property(
+    # cf Methods.Simulation.VarSimu.generate_simulation_list
+    if isinstance(generate_simulation_list, ImportError):
+        generate_simulation_list = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VarSimu method get_simulations: " + str(get_simulations)
+                    "Can't use VarSimu method generate_simulation_list: "
+                    + str(generate_simulation_list)
                 )
             )
         )
     else:
-        get_simulations = get_simulations
+        generate_simulation_list = generate_simulation_list
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -102,7 +105,7 @@ class VarSimu(FrozenClass):
         datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
-        ref_simu_index=None,
+        var_simu=None,
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
@@ -136,8 +139,8 @@ class VarSimu(FrozenClass):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
                 stop_if_error = init_dict["stop_if_error"]
-            if "ref_simu_index" in list(init_dict.keys()):
-                ref_simu_index = init_dict["ref_simu_index"]
+            if "var_simu" in list(init_dict.keys()):
+                var_simu = init_dict["var_simu"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
             if "is_reuse_femm_file" in list(init_dict.keys()):
@@ -155,7 +158,7 @@ class VarSimu(FrozenClass):
         self.datakeeper_list = datakeeper_list
         self.is_keep_all_output = is_keep_all_output
         self.stop_if_error = stop_if_error
-        self.ref_simu_index = ref_simu_index
+        self.var_simu = var_simu
         self.nb_simu = nb_simu
         self.is_reuse_femm_file = is_reuse_femm_file
         self.postproc_list = postproc_list
@@ -187,7 +190,11 @@ class VarSimu(FrozenClass):
             )
         VarSimu_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
         VarSimu_str += "stop_if_error = " + str(self.stop_if_error) + linesep
-        VarSimu_str += "ref_simu_index = " + str(self.ref_simu_index) + linesep
+        if self.var_simu is not None:
+            tmp = self.var_simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            VarSimu_str += "var_simu = " + tmp
+        else:
+            VarSimu_str += "var_simu = None" + linesep + linesep
         VarSimu_str += "nb_simu = " + str(self.nb_simu) + linesep
         VarSimu_str += "is_reuse_femm_file = " + str(self.is_reuse_femm_file) + linesep
         if len(self.postproc_list) == 0:
@@ -239,7 +246,7 @@ class VarSimu(FrozenClass):
             return False
         if other.stop_if_error != self.stop_if_error:
             return False
-        if other.ref_simu_index != self.ref_simu_index:
+        if other.var_simu != self.var_simu:
             return False
         if other.nb_simu != self.nb_simu:
             return False
@@ -253,6 +260,108 @@ class VarSimu(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._desc != self._desc:
+            diff_list.append(name + ".desc")
+        if (other.datakeeper_list is None and self.datakeeper_list is not None) or (
+            other.datakeeper_list is not None and self.datakeeper_list is None
+        ):
+            diff_list.append(name + ".datakeeper_list None mismatch")
+        elif self.datakeeper_list is None:
+            pass
+        elif len(other.datakeeper_list) != len(self.datakeeper_list):
+            diff_list.append("len(" + name + ".datakeeper_list)")
+        else:
+            for ii in range(len(other.datakeeper_list)):
+                diff_list.extend(
+                    self.datakeeper_list[ii].compare(
+                        other.datakeeper_list[ii],
+                        name=name + ".datakeeper_list[" + str(ii) + "]",
+                    )
+                )
+        if other._is_keep_all_output != self._is_keep_all_output:
+            diff_list.append(name + ".is_keep_all_output")
+        if other._stop_if_error != self._stop_if_error:
+            diff_list.append(name + ".stop_if_error")
+        if (other.var_simu is None and self.var_simu is not None) or (
+            other.var_simu is not None and self.var_simu is None
+        ):
+            diff_list.append(name + ".var_simu None mismatch")
+        elif self.var_simu is not None:
+            diff_list.extend(
+                self.var_simu.compare(other.var_simu, name=name + ".var_simu")
+            )
+        if other._nb_simu != self._nb_simu:
+            diff_list.append(name + ".nb_simu")
+        if other._is_reuse_femm_file != self._is_reuse_femm_file:
+            diff_list.append(name + ".is_reuse_femm_file")
+        if (other.postproc_list is None and self.postproc_list is not None) or (
+            other.postproc_list is not None and self.postproc_list is None
+        ):
+            diff_list.append(name + ".postproc_list None mismatch")
+        elif self.postproc_list is None:
+            pass
+        elif len(other.postproc_list) != len(self.postproc_list):
+            diff_list.append("len(" + name + ".postproc_list)")
+        else:
+            for ii in range(len(other.postproc_list)):
+                diff_list.extend(
+                    self.postproc_list[ii].compare(
+                        other.postproc_list[ii],
+                        name=name + ".postproc_list[" + str(ii) + "]",
+                    )
+                )
+        if (
+            other.pre_keeper_postproc_list is None
+            and self.pre_keeper_postproc_list is not None
+        ) or (
+            other.pre_keeper_postproc_list is not None
+            and self.pre_keeper_postproc_list is None
+        ):
+            diff_list.append(name + ".pre_keeper_postproc_list None mismatch")
+        elif self.pre_keeper_postproc_list is None:
+            pass
+        elif len(other.pre_keeper_postproc_list) != len(self.pre_keeper_postproc_list):
+            diff_list.append("len(" + name + ".pre_keeper_postproc_list)")
+        else:
+            for ii in range(len(other.pre_keeper_postproc_list)):
+                diff_list.extend(
+                    self.pre_keeper_postproc_list[ii].compare(
+                        other.pre_keeper_postproc_list[ii],
+                        name=name + ".pre_keeper_postproc_list[" + str(ii) + "]",
+                    )
+                )
+        if (
+            other.post_keeper_postproc_list is None
+            and self.post_keeper_postproc_list is not None
+        ) or (
+            other.post_keeper_postproc_list is not None
+            and self.post_keeper_postproc_list is None
+        ):
+            diff_list.append(name + ".post_keeper_postproc_list None mismatch")
+        elif self.post_keeper_postproc_list is None:
+            pass
+        elif len(other.post_keeper_postproc_list) != len(
+            self.post_keeper_postproc_list
+        ):
+            diff_list.append("len(" + name + ".post_keeper_postproc_list)")
+        else:
+            for ii in range(len(other.post_keeper_postproc_list)):
+                diff_list.extend(
+                    self.post_keeper_postproc_list[ii].compare(
+                        other.post_keeper_postproc_list[ii],
+                        name=name + ".post_keeper_postproc_list[" + str(ii) + "]",
+                    )
+                )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -264,7 +373,7 @@ class VarSimu(FrozenClass):
                 S += getsizeof(value)
         S += getsizeof(self.is_keep_all_output)
         S += getsizeof(self.stop_if_error)
-        S += getsizeof(self.ref_simu_index)
+        S += getsizeof(self.var_simu)
         S += getsizeof(self.nb_simu)
         S += getsizeof(self.is_reuse_femm_file)
         if self.postproc_list is not None:
@@ -278,8 +387,12 @@ class VarSimu(FrozenClass):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         VarSimu_dict = dict()
         VarSimu_dict["name"] = self.name
@@ -290,12 +403,15 @@ class VarSimu(FrozenClass):
             VarSimu_dict["datakeeper_list"] = list()
             for obj in self.datakeeper_list:
                 if obj is not None:
-                    VarSimu_dict["datakeeper_list"].append(obj.as_dict())
+                    VarSimu_dict["datakeeper_list"].append(obj.as_dict(**kwargs))
                 else:
                     VarSimu_dict["datakeeper_list"].append(None)
         VarSimu_dict["is_keep_all_output"] = self.is_keep_all_output
         VarSimu_dict["stop_if_error"] = self.stop_if_error
-        VarSimu_dict["ref_simu_index"] = self.ref_simu_index
+        if self.var_simu is None:
+            VarSimu_dict["var_simu"] = None
+        else:
+            VarSimu_dict["var_simu"] = self.var_simu.as_dict(**kwargs)
         VarSimu_dict["nb_simu"] = self.nb_simu
         VarSimu_dict["is_reuse_femm_file"] = self.is_reuse_femm_file
         if self.postproc_list is None:
@@ -304,7 +420,7 @@ class VarSimu(FrozenClass):
             VarSimu_dict["postproc_list"] = list()
             for obj in self.postproc_list:
                 if obj is not None:
-                    VarSimu_dict["postproc_list"].append(obj.as_dict())
+                    VarSimu_dict["postproc_list"].append(obj.as_dict(**kwargs))
                 else:
                     VarSimu_dict["postproc_list"].append(None)
         if self.pre_keeper_postproc_list is None:
@@ -313,7 +429,9 @@ class VarSimu(FrozenClass):
             VarSimu_dict["pre_keeper_postproc_list"] = list()
             for obj in self.pre_keeper_postproc_list:
                 if obj is not None:
-                    VarSimu_dict["pre_keeper_postproc_list"].append(obj.as_dict())
+                    VarSimu_dict["pre_keeper_postproc_list"].append(
+                        obj.as_dict(**kwargs)
+                    )
                 else:
                     VarSimu_dict["pre_keeper_postproc_list"].append(None)
         if self.post_keeper_postproc_list is None:
@@ -322,7 +440,9 @@ class VarSimu(FrozenClass):
             VarSimu_dict["post_keeper_postproc_list"] = list()
             for obj in self.post_keeper_postproc_list:
                 if obj is not None:
-                    VarSimu_dict["post_keeper_postproc_list"].append(obj.as_dict())
+                    VarSimu_dict["post_keeper_postproc_list"].append(
+                        obj.as_dict(**kwargs)
+                    )
                 else:
                     VarSimu_dict["post_keeper_postproc_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
@@ -337,7 +457,8 @@ class VarSimu(FrozenClass):
         self.datakeeper_list = None
         self.is_keep_all_output = None
         self.stop_if_error = None
-        self.ref_simu_index = None
+        if self.var_simu is not None:
+            self.var_simu._set_None()
         self.nb_simu = None
         self.is_reuse_femm_file = None
         self.postproc_list = None
@@ -449,22 +570,33 @@ class VarSimu(FrozenClass):
         """,
     )
 
-    def _get_ref_simu_index(self):
-        """getter of ref_simu_index"""
-        return self._ref_simu_index
+    def _get_var_simu(self):
+        """getter of var_simu"""
+        return self._var_simu
 
-    def _set_ref_simu_index(self, value):
-        """setter of ref_simu_index"""
-        check_var("ref_simu_index", value, "int", Vmin=0)
-        self._ref_simu_index = value
+    def _set_var_simu(self, value):
+        """setter of var_simu"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "var_simu"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = VarSimu()
+        check_var("var_simu", value, "VarSimu")
+        self._var_simu = value
 
-    ref_simu_index = property(
-        fget=_get_ref_simu_index,
-        fset=_set_ref_simu_index,
-        doc=u"""Index of the reference simulation, if None the reference simulation is not in the multi-simulation
+        if self._var_simu is not None:
+            self._var_simu.parent = self
 
-        :Type: int
-        :min: 0
+    var_simu = property(
+        fget=_get_var_simu,
+        fset=_set_var_simu,
+        doc=u"""Multi-simulation of a Multi-simulation definition
+
+        :Type: VarSimu
         """,
     )
 

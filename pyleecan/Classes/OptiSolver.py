@@ -112,6 +112,34 @@ class OptiSolver(FrozenClass):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.problem is None and self.problem is not None) or (
+            other.problem is not None and self.problem is None
+        ):
+            diff_list.append(name + ".problem None mismatch")
+        elif self.problem is not None:
+            diff_list.extend(
+                self.problem.compare(other.problem, name=name + ".problem")
+            )
+        if (other.xoutput is None and self.xoutput is not None) or (
+            other.xoutput is not None and self.xoutput is None
+        ):
+            diff_list.append(name + ".xoutput None mismatch")
+        elif self.xoutput is not None:
+            diff_list.extend(
+                self.xoutput.compare(other.xoutput, name=name + ".xoutput")
+            )
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if other._is_keep_all_output != self._is_keep_all_output:
+            diff_list.append(name + ".is_keep_all_output")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -122,18 +150,22 @@ class OptiSolver(FrozenClass):
         S += getsizeof(self.is_keep_all_output)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OptiSolver_dict = dict()
         if self.problem is None:
             OptiSolver_dict["problem"] = None
         else:
-            OptiSolver_dict["problem"] = self.problem.as_dict()
+            OptiSolver_dict["problem"] = self.problem.as_dict(**kwargs)
         if self.xoutput is None:
             OptiSolver_dict["xoutput"] = None
         else:
-            OptiSolver_dict["xoutput"] = self.xoutput.as_dict()
+            OptiSolver_dict["xoutput"] = self.xoutput.as_dict(**kwargs)
         OptiSolver_dict["logger_name"] = self.logger_name
         OptiSolver_dict["is_keep_all_output"] = self.is_keep_all_output
         # The class name is added to the dict for deserialisation purpose

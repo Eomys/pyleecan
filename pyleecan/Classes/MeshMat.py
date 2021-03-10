@@ -246,6 +246,36 @@ class MeshMat(Mesh):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Mesh
+        diff_list.extend(super(MeshMat, self).compare(other, name=name))
+        if (other.cell is None and self.cell is not None) or (
+            other.cell is not None and self.cell is None
+        ):
+            diff_list.append(name + ".cell None mismatch")
+        elif self.cell is None:
+            pass
+        elif len(other.cell) != len(self.cell):
+            diff_list.append("len(" + name + "cell)")
+        else:
+            for key in self.cell:
+                diff_list.extend(
+                    self.cell[key].compare(other.cell[key], name=name + ".cell")
+                )
+        if (other.point is None and self.point is not None) or (
+            other.point is not None and self.point is None
+        ):
+            diff_list.append(name + ".point None mismatch")
+        elif self.point is not None:
+            diff_list.extend(self.point.compare(other.point, name=name + ".point"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -259,24 +289,28 @@ class MeshMat(Mesh):
         S += getsizeof(self.point)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Mesh
-        MeshMat_dict = super(MeshMat, self).as_dict()
+        MeshMat_dict = super(MeshMat, self).as_dict(**kwargs)
         if self.cell is None:
             MeshMat_dict["cell"] = None
         else:
             MeshMat_dict["cell"] = dict()
             for key, obj in self.cell.items():
                 if obj is not None:
-                    MeshMat_dict["cell"][key] = obj.as_dict()
+                    MeshMat_dict["cell"][key] = obj.as_dict(**kwargs)
                 else:
                     MeshMat_dict["cell"][key] = None
         if self.point is None:
             MeshMat_dict["point"] = None
         else:
-            MeshMat_dict["point"] = self.point.as_dict()
+            MeshMat_dict["point"] = self.point.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MeshMat_dict["__class__"] = "MeshMat"

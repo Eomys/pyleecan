@@ -373,6 +373,63 @@ class HoleM51(HoleMag):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from HoleMag
+        diff_list.extend(super(HoleM51, self).compare(other, name=name))
+        if other._H0 != self._H0:
+            diff_list.append(name + ".H0")
+        if other._H1 != self._H1:
+            diff_list.append(name + ".H1")
+        if other._H2 != self._H2:
+            diff_list.append(name + ".H2")
+        if other._W0 != self._W0:
+            diff_list.append(name + ".W0")
+        if other._W1 != self._W1:
+            diff_list.append(name + ".W1")
+        if other._W2 != self._W2:
+            diff_list.append(name + ".W2")
+        if other._W3 != self._W3:
+            diff_list.append(name + ".W3")
+        if other._W4 != self._W4:
+            diff_list.append(name + ".W4")
+        if other._W5 != self._W5:
+            diff_list.append(name + ".W5")
+        if other._W6 != self._W6:
+            diff_list.append(name + ".W6")
+        if other._W7 != self._W7:
+            diff_list.append(name + ".W7")
+        if (other.magnet_0 is None and self.magnet_0 is not None) or (
+            other.magnet_0 is not None and self.magnet_0 is None
+        ):
+            diff_list.append(name + ".magnet_0 None mismatch")
+        elif self.magnet_0 is not None:
+            diff_list.extend(
+                self.magnet_0.compare(other.magnet_0, name=name + ".magnet_0")
+            )
+        if (other.magnet_1 is None and self.magnet_1 is not None) or (
+            other.magnet_1 is not None and self.magnet_1 is None
+        ):
+            diff_list.append(name + ".magnet_1 None mismatch")
+        elif self.magnet_1 is not None:
+            diff_list.extend(
+                self.magnet_1.compare(other.magnet_1, name=name + ".magnet_1")
+            )
+        if (other.magnet_2 is None and self.magnet_2 is not None) or (
+            other.magnet_2 is not None and self.magnet_2 is None
+        ):
+            diff_list.append(name + ".magnet_2 None mismatch")
+        elif self.magnet_2 is not None:
+            diff_list.extend(
+                self.magnet_2.compare(other.magnet_2, name=name + ".magnet_2")
+            )
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -396,11 +453,15 @@ class HoleM51(HoleMag):
         S += getsizeof(self.magnet_2)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from HoleMag
-        HoleM51_dict = super(HoleM51, self).as_dict()
+        HoleM51_dict = super(HoleM51, self).as_dict(**kwargs)
         HoleM51_dict["H0"] = self.H0
         HoleM51_dict["H1"] = self.H1
         HoleM51_dict["H2"] = self.H2
@@ -415,15 +476,15 @@ class HoleM51(HoleMag):
         if self.magnet_0 is None:
             HoleM51_dict["magnet_0"] = None
         else:
-            HoleM51_dict["magnet_0"] = self.magnet_0.as_dict()
+            HoleM51_dict["magnet_0"] = self.magnet_0.as_dict(**kwargs)
         if self.magnet_1 is None:
             HoleM51_dict["magnet_1"] = None
         else:
-            HoleM51_dict["magnet_1"] = self.magnet_1.as_dict()
+            HoleM51_dict["magnet_1"] = self.magnet_1.as_dict(**kwargs)
         if self.magnet_2 is None:
             HoleM51_dict["magnet_2"] = None
         else:
-            HoleM51_dict["magnet_2"] = self.magnet_2.as_dict()
+            HoleM51_dict["magnet_2"] = self.magnet_2.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         HoleM51_dict["__class__"] = "HoleM51"

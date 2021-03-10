@@ -312,6 +312,23 @@ class LamSlot(Lamination):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Lamination
+        diff_list.extend(super(LamSlot, self).compare(other, name=name))
+        if (other.slot is None and self.slot is not None) or (
+            other.slot is not None and self.slot is None
+        ):
+            diff_list.append(name + ".slot None mismatch")
+        elif self.slot is not None:
+            diff_list.extend(self.slot.compare(other.slot, name=name + ".slot"))
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -322,15 +339,19 @@ class LamSlot(Lamination):
         S += getsizeof(self.slot)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Lamination
-        LamSlot_dict = super(LamSlot, self).as_dict()
+        LamSlot_dict = super(LamSlot, self).as_dict(**kwargs)
         if self.slot is None:
             LamSlot_dict["slot"] = None
         else:
-            LamSlot_dict["slot"] = self.slot.as_dict()
+            LamSlot_dict["slot"] = self.slot.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlot_dict["__class__"] = "LamSlot"

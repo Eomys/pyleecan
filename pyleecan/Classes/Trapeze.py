@@ -228,6 +228,23 @@ class Trapeze(Surface):
             return False
         return True
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Surface
+        diff_list.extend(super(Trapeze, self).compare(other, name=name))
+        if other._height != self._height:
+            diff_list.append(name + ".height")
+        if other._W2 != self._W2:
+            diff_list.append(name + ".W2")
+        if other._W1 != self._W1:
+            diff_list.append(name + ".W1")
+        return diff_list
+
     def __sizeof__(self):
         """Return the size in memory of the object (including all subobject)"""
 
@@ -240,11 +257,15 @@ class Trapeze(Surface):
         S += getsizeof(self.W1)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Surface
-        Trapeze_dict = super(Trapeze, self).as_dict()
+        Trapeze_dict = super(Trapeze, self).as_dict(**kwargs)
         Trapeze_dict["height"] = self.height
         Trapeze_dict["W2"] = self.W2
         Trapeze_dict["W1"] = self.W1
