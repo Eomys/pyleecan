@@ -22,6 +22,8 @@ TYPE_COL = 0
 DEL_COL = 1
 HL_COL = 2
 ICON_SIZE = 24
+# Unselected, selected, selected-bottom-mag
+COLOR_LIST = ["k", "r", "c"]
 
 
 class DXF_Hole(Ui_DXF_Hole, QDialog):
@@ -67,6 +69,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.line_list = list()  # List of line from DXF
         self.selected_list = list()  # List of currently selected lines
         self.surf_list = list()  # List of defined surfaces
+        self.bottom_line_list = list()  # List of bottom lines index for magnetization
         self.lf_center_x.setValue(0)
         self.lf_center_y.setValue(0)
 
@@ -113,7 +116,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             # Convert DXF to pyleecan objects
             self.line_list = dxf_to_pyleecan_list(modelspace)
             # Display
-            self.selected_list = [False for line in self.line_list]
+            # selected line: 0: unselected, 1:selected, 2: selected bottom magnet
+            self.selected_list = [0 for line in self.line_list]
             self.update_graph()
         except Exception as e:
             QMessageBox().critical(
@@ -148,13 +152,22 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                     closest_id = ii
                     min_dist = line_dist
             # Select/unselect line
-            self.selected_list[closest_id] = not self.selected_list[closest_id]
+            if self.selected_list[closest_id] == 0:  # Unselected to selected
+                self.selected_list[closest_id] = 1
+            elif self.selected_list[closest_id] == 1:  # Selected to selected bottom mag
+                if 2 in self.selected_list:
+                    current_bot_mag = self.selected_list.index(2)
+                    # Only one selected bottom mag line at the time
+                    point_list = array(self.line_list[current_bot_mag].discretize(20))
+                    self.selected_list[current_bot_mag] = 1
+                    axes.plot(point_list.real, point_list.imag, COLOR_LIST[1], zorder=2)
+                self.selected_list[closest_id] = 2
+            elif self.selected_list[closest_id] == 2:
+                # selected bottom mag to Unselected
+                self.selected_list[closest_id] = 0
             # Change line color
             point_list = array(self.line_list[closest_id].discretize(20))
-            if self.selected_list[closest_id]:
-                color = "r"
-            else:
-                color = "k"
+            color = COLOR_LIST[self.selected_list[closest_id]]
             axes.plot(point_list.real, point_list.imag, color, zorder=2)
             self.w_viewer.draw()
 
@@ -215,10 +228,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # Draw the lines in the correct color
         for ii, line in enumerate(self.line_list):
             point_list = array(line.discretize(20))
-            if self.selected_list[ii]:
-                color = "r"
-            else:
-                color = "k"
+            color = COLOR_LIST[self.selected_list[ii]]
             axes.plot(point_list.real, point_list.imag, color, zorder=1)
 
         self.w_viewer.draw()
@@ -287,6 +297,10 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # Create the Surface object
         self.surf_list.append(SurfLine(line_list=curve_list))
         self.surf_list[-1].comp_point_ref(is_set=True)
+        if 2 in self.selected_list:
+            self.bottom_line_list.append(self.selected_list.index(2))
+        else:
+            self.bottom_line_list.append(None)
 
         # Update the GUI
         nrows = self.w_surface_list.rowCount()
@@ -295,18 +309,16 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         combobox = QComboBox()
         combobox.addItems(["Hole", "Magnet"])
         self.w_surface_list.setCellWidget(
-            nrows,
-            TYPE_COL,
-            combobox,
+            nrows, TYPE_COL, combobox,
         )
+        if 2 in self.selected_list:
+            combobox.setCurrentIndex(1)  # Magnet
         # Adding Delete button
         del_button = QPushButton("Delete")
         del_button.setIcon(QIcon(self.delete_icon))
         del_button.pressed.connect(self.delete_surface)
         self.w_surface_list.setCellWidget(
-            nrows,
-            DEL_COL,
-            del_button,
+            nrows, DEL_COL, del_button,
         )
 
         # Adding Highlight button
@@ -314,13 +326,11 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         HL_button.setIcon(QIcon(self.highlight_icon))
         HL_button.pressed.connect(self.highlight_surface)
         self.w_surface_list.setCellWidget(
-            nrows,
-            HL_COL,
-            HL_button,
+            nrows, HL_COL, HL_button,
         )
 
         # Remove selection
-        self.selected_list = [False for line in self.line_list]
+        self.selected_list = [0 for line in self.line_list]
         self.update_graph()
 
     def get_hole(self):
@@ -355,12 +365,29 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         angles = [np_angle(surf.point_ref) for surf in hole.surf_list]
         idx = sorted(range(len(angles)), key=lambda k: angles[k])
         surf_list_sorted = [hole.surf_list[ii] for ii in idx]
+        bottom_line_list_sorted = [self.bottom_line_list[ii] for ii in idx]
         hole.surf_list = surf_list_sorted
 
         # Rotation
         Zref = sum([surf.point_ref for surf in hole.surf_list])
         for surf in hole.surf_list:
             surf.rotate(-1 * np_angle(Zref))
+
+        # Magnetization dict
+        mag_dict = dict()
+        Nmag = 0
+        for ii in range(len(hole.surf_list)):
+            if "Magnet" in hole.surf_list[ii].label:
+                if bottom_line_list_sorted[ii] is None:
+                    mag_dict["magnet_" + str(Nmag)] = (
+                        hole.surf_list[ii].get_lines()[0].comp_normal(return_type=2)
+                    )
+                else:
+                    line = self.line_list[bottom_line_list_sorted[ii]].copy()
+                    line.rotate(-1 * np_angle(Zref))
+                    mag_dict["magnet_" + str(Nmag)] = line.comp_normal(return_type=2)
+                Nmag += 1
+        hole.magnetization_dict_enforced = mag_dict
 
         # Set metadata
         hole.Zh = self.si_Zh.value()
@@ -383,7 +410,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             a DXF_Hole object
         """
         hole = self.get_hole()
-        hole.plot()
+        hole.plot(is_add_arrow=True)
 
     def delete_surface(self):
         """Delete a selected surface
@@ -405,14 +432,14 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self : DXF_Hole
             a DXF_Hole object
         """
-        self.selected_list = [False for line in self.line_list]
+        self.selected_list = [0 for line in self.line_list]
         surf = self.surf_list[self.w_surface_list.currentRow()]
         # Find the index of the surface line in self.line_list
         for surf_line in surf.line_list:
             mid = surf_line.get_middle()
             for ii, line in enumerate(self.line_list):
                 if abs(mid - line.get_middle()) < 1e-6:
-                    self.selected_list[ii] = True
+                    self.selected_list[ii] = 1
         self.update_graph()
 
     def save(self):
