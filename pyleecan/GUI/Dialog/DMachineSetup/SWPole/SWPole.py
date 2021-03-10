@@ -51,8 +51,7 @@ class SWPole(Ui_SWPole, QWidget):
         self.matlib = matlib
         self.is_stator = is_stator
 
-        self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
-        self.b_help.url += "how-to-set-up-the-slots"
+        self.b_help.hide()
 
         # Avoid erase all the parameters when navigating though the slots
         self.previous_slot = {SlotW60: None, SlotW61: None}

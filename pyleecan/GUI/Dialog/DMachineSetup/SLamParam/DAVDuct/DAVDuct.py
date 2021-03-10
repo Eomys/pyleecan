@@ -44,8 +44,7 @@ class DAVDuct(Ui_DAVDuct, QDialog):
         self.tab_vent.setCurrentIndex(0)
 
         # Set Help URL
-        self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
-        self.b_help.url += "how-to-add-ventilation-ducts"
+        self.b_help.hide()
 
         self.b_new.clicked.connect(self.s_add)
         self.b_remove.clicked.connect(self.s_remove)
