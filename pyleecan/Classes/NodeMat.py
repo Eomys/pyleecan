@@ -32,6 +32,11 @@ try:
 except ImportError as error:
     is_exist = error
 
+try:
+    from ..Methods.Mesh.NodeMat.get_indice import get_indice
+except ImportError as error:
+    get_indice = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -70,6 +75,15 @@ class NodeMat(FrozenClass):
         )
     else:
         is_exist = is_exist
+    # cf Methods.Mesh.NodeMat.get_indice
+    if isinstance(get_indice, ImportError):
+        get_indice = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use NodeMat method get_indice: " + str(get_indice))
+            )
+        )
+    else:
+        get_indice = get_indice
     # save and copy methods are available in all object
     save = save
     copy = copy
