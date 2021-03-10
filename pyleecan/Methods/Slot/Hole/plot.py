@@ -2,6 +2,7 @@
 
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
+from numpy import exp
 
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
@@ -55,12 +56,23 @@ def plot(self, fig=None, display_magnet=True, is_add_arrow=False, is_show_fig=Tr
 
     # Magnetization
     if is_add_arrow:
-        mag_dict = self.comp_magnetization_dict(return_type=0)
-        for Z_tuple in mag_dict.values():
+        H = self.comp_height()
+        mag_dict = self.comp_magnetization_dict()
+        for magnet_name, mag_dir in mag_dict.items():
+            # Get the correct surface
+            mag_surf = None
+            mag_id = magnet_name.split("_")[-1]
+            for surf in surf_hole:
+                if "Magnet" in surf.label and "_T" + mag_id in surf.label:
+                    mag_surf = surf
+                    break
+            # Create arrow coordinates
+            Z1 = mag_surf.point_ref
+            Z2 = mag_surf.point_ref + H / 5 * exp(1j * mag_dir)
             axes.annotate(
                 text="",
-                xy=(Z_tuple[1].real, Z_tuple[1].imag),
-                xytext=(Z_tuple[0].real, Z_tuple[0].imag),
+                xy=(Z2.real, Z2.imag),
+                xytext=(Z1.real, Z1.imag),
                 arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
             )
 

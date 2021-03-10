@@ -28,11 +28,6 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Slot.HoleUD.comp_magnetization_dict import comp_magnetization_dict
-except ImportError as error:
-    comp_magnetization_dict = error
-
-try:
     from ..Methods.Slot.HoleUD.comp_surface_magnet_id import comp_surface_magnet_id
 except ImportError as error:
     comp_surface_magnet_id = error
@@ -81,18 +76,6 @@ class HoleUD(HoleMag):
         )
     else:
         check = check
-    # cf Methods.Slot.HoleUD.comp_magnetization_dict
-    if isinstance(comp_magnetization_dict, ImportError):
-        comp_magnetization_dict = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleUD method comp_magnetization_dict: "
-                    + str(comp_magnetization_dict)
-                )
-            )
-        )
-    else:
-        comp_magnetization_dict = comp_magnetization_dict
     # cf Methods.Slot.HoleUD.comp_surface_magnet_id
     if isinstance(comp_surface_magnet_id, ImportError):
         comp_surface_magnet_id = property(

@@ -2588,7 +2588,6 @@
         "methods": [
             "build_geometry",
             "check",
-            "comp_magnetization_dict",
             "comp_surface_magnet_id",
             "has_magnet",
             "remove_magnet"
