@@ -12,6 +12,7 @@ PATCH_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PATCH_COLOR"]
 def plot(
     self,
     fig=None,
+    ax=None,
     color=PATCH_COLOR,
     edgecolor=PATCH_EDGE,
     is_edge_only=False,
@@ -46,7 +47,7 @@ def plot(
     None
     """
 
-    (fig, axes, patch_leg, label_leg) = init_fig(fig)
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, ax)
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
 
@@ -59,7 +60,7 @@ def plot(
     if is_disp_point_ref:
         axes.plot(self.point_ref.real, self.point_ref.imag, "kx")
     # Axis Setup
-    axis("equal")
+    axes.axis("equal")
 
     if is_show_fig:
         fig.show()

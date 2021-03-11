@@ -356,11 +356,13 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             else:
                 lam = self.lam.copy()
                 lam.slot = slot
-            slot.plot()
+            fig, (ax1, ax2) = plt.subplots(1, 2)
+            slot.plot(fig=fig, ax=ax1)
             # Add the winding if defined
             if slot.wind_begin_index is not None:
                 surf_wind = slot.get_surface_active()
-                surf_wind.plot(fig=plt.gcf(), color=WIND_COLOR, is_show_fig=False)
+                surf_wind.plot(fig=fig, ax=ax1, color=WIND_COLOR, is_show_fig=False)
+            lam.plot(fig=fig, ax=ax2)
 
     def save(self):
         """Save the SlotUD object in a json file
