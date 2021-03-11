@@ -11,7 +11,9 @@ from ....Methods import ParentMissingError
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
 
-def plot(self, fig=None, display_magnet=True, is_add_arrow=False, is_show_fig=True):
+def plot(
+    self, fig=None, ax=None, display_magnet=True, is_add_arrow=False, is_show_fig=True
+):
     """Plot the Hole in a matplotlib fig
 
     Parameters
@@ -45,7 +47,7 @@ def plot(self, fig=None, display_magnet=True, is_add_arrow=False, is_show_fig=Tr
             patches.extend(surf.get_patches(color=color))
 
     # Display the result
-    (fig, axes, patch_leg, label_leg) = init_fig(fig)
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, ax)
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
     axes.set_title("Hole")
@@ -77,7 +79,7 @@ def plot(self, fig=None, display_magnet=True, is_add_arrow=False, is_show_fig=Tr
             )
 
     # Axis Setup
-    axis("equal")
+    axes.axis("equal")
     try:
         Lim = self.get_Rbo() * 1.2
         axes.set_xlim(-Lim, Lim)

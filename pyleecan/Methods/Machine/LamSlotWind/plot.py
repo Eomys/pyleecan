@@ -99,7 +99,7 @@ def plot(
         for patch in patches:
             axes.add_patch(patch)
         # Axis Setup
-        axis("equal")
+        axes.axis("equal")
 
         # The Lamination is centered in the figure
         Lim = self.Rext * 1.5
