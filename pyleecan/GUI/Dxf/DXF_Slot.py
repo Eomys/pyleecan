@@ -59,6 +59,8 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.in_axe_angle.hide()
         self.lf_center_x.setValue(0)
         self.lf_center_y.setValue(0)
+        self.lf_scaling.validator().setBottom(0)
+        self.lf_scaling.setValue(1)
 
         # Set default values
         if Zs is not None:
@@ -270,14 +272,19 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             User defined slot according to selected lines
         """
 
+        if self.lf_scaling.value() == 0:  # Avoid error
+            self.lf_scaling.setValue(1)
+
         # Get all the selected lines
         line_list = list()
         point_list = list()
         for ii, line in enumerate(self.line_list):
             if self.selected_list[ii]:
                 line_list.append(line.copy())
-                point_list.append(line.get_begin())
-                point_list.append(line.get_end())
+                line_list[-1].scale(self.lf_scaling.value())
+                point_list.append(line_list[-1].get_begin())
+                point_list.append(line_list[-1].get_end())
+
         # Find begin point
         single_list = list()
         for p1 in point_list:

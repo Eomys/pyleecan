@@ -73,6 +73,11 @@ except ImportError as error:
     rotate = error
 
 try:
+    from ..Methods.Geometry.Arc3.scale import scale
+except ImportError as error:
+    scale = error
+
+try:
     from ..Methods.Geometry.Arc3.split_half import split_half
 except ImportError as error:
     split_half = error
@@ -191,6 +196,15 @@ class Arc3(Arc):
         )
     else:
         rotate = rotate
+    # cf Methods.Geometry.Arc3.scale
+    if isinstance(scale, ImportError):
+        scale = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc3 method scale: " + str(scale))
+            )
+        )
+    else:
+        scale = scale
     # cf Methods.Geometry.Arc3.split_half
     if isinstance(split_half, ImportError):
         split_half = property(

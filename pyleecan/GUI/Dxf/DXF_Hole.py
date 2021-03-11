@@ -87,6 +87,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.surf_list = list()  # List of defined surfaces
         self.lf_center_x.setValue(0)
         self.lf_center_y.setValue(0)
+        self.lf_scaling.validator().setBottom(0)
+        self.lf_scaling.setValue(1)
 
         # Load the DXF file if provided
         self.dxf_path = dxf_path
@@ -415,6 +417,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             User defined hole according to selected surfaces
         """
 
+        if self.lf_scaling.value() == 0:  # Avoid error
+            self.lf_scaling.setValue(1)
         hole = HoleUD(surf_list=[])
         bottom_list = list()
         offset_list = list()
@@ -422,6 +426,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         Nmag = 0
         for ii in range(self.w_surface_list.rowCount()):
             hole.surf_list.append(self.surf_list[ii].copy())
+            hole.surf_list[ii].scale(self.lf_scaling.value())
             if self.w_surface_list.cellWidget(ii, TYPE_COL).currentIndex() == 0:
                 hole.surf_list[ii].label = "Hole"
             else:

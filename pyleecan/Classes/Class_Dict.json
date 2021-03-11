@@ -49,6 +49,7 @@
             "get_middle",
             "reverse",
             "rotate",
+            "scale",
             "split_half",
             "translate"
         ],
@@ -117,6 +118,7 @@
             "get_middle",
             "reverse",
             "rotate",
+            "scale",
             "split_half",
             "translate"
         ],
@@ -145,8 +147,8 @@
             },
             {
                 "desc": "opening angle of the arc",
-                "max": "6.2831853071796",
-                "min": "-6.2831853071796",
+                "max": "6.283185307",
+                "min": "-6.283185307",
                 "name": "angle",
                 "type": "float",
                 "unit": "rad",
@@ -176,6 +178,7 @@
             "get_middle",
             "reverse",
             "rotate",
+            "scale",
             "split_half",
             "translate"
         ],
@@ -8181,6 +8184,7 @@
         "is_internal": false,
         "methods": [
             "check",
+            "comp_distance",
             "comp_length",
             "discretize",
             "draw_FEMM",
@@ -8188,14 +8192,14 @@
             "get_end",
             "get_middle",
             "intersect_line",
+            "is_on_line",
+            "plot",
             "reverse",
             "rotate",
+            "scale",
             "split_half",
             "split_line",
-            "translate",
-            "is_on_line",
-            "comp_distance",
-            "plot"
+            "translate"
         ],
         "mother": "Line",
         "name": "Segment",
@@ -11302,16 +11306,17 @@
         "desc": "SurfLine defined by list of lines that delimit it, label and point reference.",
         "is_internal": false,
         "methods": [
-            "get_lines",
-            "rotate",
-            "translate",
             "check",
             "comp_length",
-            "get_patches",
-            "discretize",
+            "comp_point_ref",
             "comp_surface",
+            "discretize",
+            "get_lines",
+            "get_patches",
             "plot_lines",
-            "comp_point_ref"
+            "rotate",
+            "scale",
+            "translate"
         ],
         "mother": "Surface",
         "name": "SurfLine",
