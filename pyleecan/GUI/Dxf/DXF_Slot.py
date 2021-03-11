@@ -81,6 +81,8 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.w_path_selector.pathChanged.connect(self.open_document)
         self.b_save.pressed.connect(self.save)
         self.b_plot.pressed.connect(self.plot)
+        self.b_reset.pressed.connect(self.update_graph)
+        self.b_cancel.pressed.connect(self.remove_selection)
 
         # Display the GUI
         self.show()
@@ -248,6 +250,11 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 return False
 
         return True
+
+    def remove_selection(self):
+        # Remove selection
+        self.selected_list = [False for line in self.line_list]
+        self.update_graph()
 
     def get_slot(self):
         """Generate the SlotUD object corresponding to the selected lines

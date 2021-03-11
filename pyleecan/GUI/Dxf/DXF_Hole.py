@@ -1,6 +1,6 @@
 from logging import getLogger
 from os.path import dirname, isfile
-
+import matplotlib.pyplot as plt
 from ezdxf import readfile
 from numpy import angle as np_angle
 from numpy import array, pi
@@ -41,7 +41,7 @@ COLOR_LIST = ["k", "r", "c"]
 class DXF_Hole(Ui_DXF_Hole, QDialog):
     """Dialog to create HoleUD objects from DXF files"""
 
-    def __init__(self, dxf_path=None, Zh=None, Lmag=None):
+    def __init__(self, dxf_path=None, Zh=None, Lmag=None, lam=None):
         """Initialize the Dialog
 
         Parameters
@@ -76,6 +76,10 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             self.si_Zh.setValue(Zh)
         if Lmag is not None:
             self.lf_mag_len.setValue(Lmag)
+        if lam is None:
+            self.lam = lam
+        else:
+            self.lam = lam.copy()
 
         # Init properties
         self.line_list = list()  # List of line from DXF
@@ -323,7 +327,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         combobox = QComboBox()
         combobox.addItems(["Hole", "Magnet"])
         self.w_surface_list.setCellWidget(
-            nrows, TYPE_COL, combobox,
+            nrows,
+            TYPE_COL,
+            combobox,
         )
         if 2 in self.selected_list:
             combobox.setCurrentIndex(1)  # Magnet
@@ -334,7 +340,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         del_button.setIcon(QIcon(self.delete_icon))
         del_button.pressed.connect(self.delete_surface)
         self.w_surface_list.setCellWidget(
-            nrows, DEL_COL, del_button,
+            nrows,
+            DEL_COL,
+            del_button,
         )
 
         # Adding Highlight button
@@ -342,14 +350,18 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         HL_button.setIcon(QIcon(self.highlight_icon))
         HL_button.pressed.connect(self.highlight_surface)
         self.w_surface_list.setCellWidget(
-            nrows, HL_COL, HL_button,
+            nrows,
+            HL_COL,
+            HL_button,
         )
 
         # Add reference combobox
         combobox = QComboBox()
         combobox.addItems(index_list)
         self.w_surface_list.setCellWidget(
-            nrows, REF_COL, combobox,
+            nrows,
+            REF_COL,
+            combobox,
         )
         if 2 in self.selected_list:
             combobox.setCurrentIndex(
@@ -366,7 +378,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # lf_off.setText("0")
         lf_off.setEnabled(2 in self.selected_list)
         self.w_surface_list.setCellWidget(
-            nrows, OFF_COL, lf_off,
+            nrows,
+            OFF_COL,
+            lf_off,
         )
 
         # Remove selection to start new one
@@ -470,7 +484,13 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             a DXF_Hole object
         """
         hole = self.get_hole()
-        hole.plot(is_add_arrow=True)
+        if self.lam is None:
+            hole.plot(is_add_arrow=True)
+        else:
+            fig, (ax1, ax2) = plt.subplots(1, 2)
+            hole.plot(fig=fig, ax=ax1, is_add_arrow=True)
+            self.lam.hole = [hole]
+            self.lam.plot(fig=fig, ax=ax2)
 
     def delete_surface(self):
         """Delete a selected surface
