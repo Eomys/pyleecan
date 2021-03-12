@@ -15,3 +15,4 @@ def scale(self, scale_factor):
 
     self.begin = self.begin * scale_factor
     self.end = self.end * scale_factor
+    self.radius = self.radius * scale_factor

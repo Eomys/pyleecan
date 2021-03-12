@@ -14,3 +14,4 @@ def scale(self, scale_factor):
     """
 
     self.begin = self.begin * scale_factor
+    self.center = self.center * scale_factor
