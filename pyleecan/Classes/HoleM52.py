@@ -231,7 +231,7 @@ class HoleM52(HoleMag):
         magnet_0=-1,
         Zh=36,
         mat_void=-1,
-        magnetization_dict_enforced=None,
+        magnetization_dict_offset=None,
         init_dict=None,
         init_str=None,
     ):
@@ -266,8 +266,8 @@ class HoleM52(HoleMag):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
-            if "magnetization_dict_enforced" in list(init_dict.keys()):
-                magnetization_dict_enforced = init_dict["magnetization_dict_enforced"]
+            if "magnetization_dict_offset" in list(init_dict.keys()):
+                magnetization_dict_offset = init_dict["magnetization_dict_offset"]
         # Set the properties (value check and convertion are done in setter)
         self.H0 = H0
         self.W0 = W0
@@ -279,7 +279,7 @@ class HoleM52(HoleMag):
         super(HoleM52, self).__init__(
             Zh=Zh,
             mat_void=mat_void,
-            magnetization_dict_enforced=magnetization_dict_enforced,
+            magnetization_dict_offset=magnetization_dict_offset,
         )
         # The class is frozen (in HoleMag init), for now it's impossible to
         # add new properties

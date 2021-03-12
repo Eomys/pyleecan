@@ -104,16 +104,16 @@ class Test_Line_normal(object):
         test_obj = test_dict["test_obj"]
 
         if "result_2" in test_dict:
-            result = test_obj.comp_normal(return_type=2)
+            result = test_obj.comp_normal()
             assert isinstance(result, float)
             assert result == pytest.approx(test_dict["result_2"])
-        if "result_1" in test_dict:
-            result = test_obj.comp_normal(return_type=1)
-            assert isinstance(result, complex)
-            assert abs(result - test_dict["result_1"]) < DELTA
-        if "result_0" in test_dict:
-            result = test_obj.comp_normal(return_type=0)
-            assert isinstance(result, tuple)
-            assert len(result) == 2
-            assert abs(result[0] - test_dict["result_0"][0]) < DELTA
-            assert abs(result[1] - test_dict["result_0"][1]) < DELTA
+        # if "result_1" in test_dict:
+        #     result = test_obj.comp_normal(return_type=1)
+        #     assert isinstance(result, complex)
+        #     assert abs(result - test_dict["result_1"]) < DELTA
+        # if "result_0" in test_dict:
+        #     result = test_obj.comp_normal(return_type=0)
+        #     assert isinstance(result, tuple)
+        #     assert len(result) == 2
+        #     assert abs(result[0] - test_dict["result_0"][0]) < DELTA
+        #     assert abs(result[1] - test_dict["result_0"][1]) < DELTA

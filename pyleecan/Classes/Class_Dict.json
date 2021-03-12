@@ -1725,10 +1725,10 @@
                 "value": ""
             },
             {
-                "desc": "Dictionary to enforce the magnetization direction of the magnets (key=magnet_X, value=angle[rad])",
+                "desc": "Dictionary add an offset to the magnetization direction of the magnets (key=magnet_X, value=angle[rad])",
                 "max": "",
                 "min": "",
-                "name": "magnetization_dict_enforced",
+                "name": "magnetization_dict_offset",
                 "type": "dict",
                 "unit": "-",
                 "value": null

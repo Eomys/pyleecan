@@ -1,7 +1,7 @@
 from numpy import angle, exp
 
 
-def comp_normal(self, return_type=2):
+def comp_normal(self):
     """Compute the normal direction of the Line
     Normal point is "on top" (begin=O and end on Ox)
 
@@ -9,15 +9,11 @@ def comp_normal(self, return_type=2):
     ----------
     self : Line
         a Line object
-    return_type: int
-        0: (Zbegin+Zend)/2 (even for arc) and the normal point as tuple
-        1: Z2 - Z1 (with Z1 and Z2 the points from return_type 0)
-        2: the angle of the vector of return_type 1 according to Ox [rad]
 
     Returns
     -------
-    normal: tuple, complex, float
-        cf return_type
+    normal: float
+        Angle of the vector between (Zbegin+Zend)/2 (even for arc) and the normal point [rad]
     """
 
     Zb = self.get_begin()
@@ -31,9 +27,4 @@ def comp_normal(self, return_type=2):
 
     Zn = Zn2 * exp(1j * angle(Ze - Zb)) + Zb
 
-    if return_type == 0:
-        return (Zm, Zn)
-    elif return_type == 1:
-        return Zn - Zm
-    else:
-        return angle(Zn - Zm)
+    return angle(Zn - Zm)

@@ -233,7 +233,7 @@ class Hole(FrozenClass):
         self,
         Zh=36,
         mat_void=-1,
-        magnetization_dict_enforced=None,
+        magnetization_dict_offset=None,
         init_dict=None,
         init_str=None,
     ):
@@ -256,13 +256,13 @@ class Hole(FrozenClass):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
-            if "magnetization_dict_enforced" in list(init_dict.keys()):
-                magnetization_dict_enforced = init_dict["magnetization_dict_enforced"]
+            if "magnetization_dict_offset" in list(init_dict.keys()):
+                magnetization_dict_offset = init_dict["magnetization_dict_offset"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Zh = Zh
         self.mat_void = mat_void
-        self.magnetization_dict_enforced = magnetization_dict_enforced
+        self.magnetization_dict_offset = magnetization_dict_offset
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -282,8 +282,8 @@ class Hole(FrozenClass):
         else:
             Hole_str += "mat_void = None" + linesep + linesep
         Hole_str += (
-            "magnetization_dict_enforced = "
-            + str(self.magnetization_dict_enforced)
+            "magnetization_dict_offset = "
+            + str(self.magnetization_dict_offset)
             + linesep
         )
         return Hole_str
@@ -297,7 +297,7 @@ class Hole(FrozenClass):
             return False
         if other.mat_void != self.mat_void:
             return False
-        if other.magnetization_dict_enforced != self.magnetization_dict_enforced:
+        if other.magnetization_dict_offset != self.magnetization_dict_offset:
             return False
         return True
 
@@ -317,8 +317,8 @@ class Hole(FrozenClass):
             diff_list.extend(
                 self.mat_void.compare(other.mat_void, name=name + ".mat_void")
             )
-        if other._magnetization_dict_enforced != self._magnetization_dict_enforced:
-            diff_list.append(name + ".magnetization_dict_enforced")
+        if other._magnetization_dict_offset != self._magnetization_dict_offset:
+            diff_list.append(name + ".magnetization_dict_offset")
         return diff_list
 
     def __sizeof__(self):
@@ -327,8 +327,8 @@ class Hole(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.Zh)
         S += getsizeof(self.mat_void)
-        if self.magnetization_dict_enforced is not None:
-            for key, value in self.magnetization_dict_enforced.items():
+        if self.magnetization_dict_offset is not None:
+            for key, value in self.magnetization_dict_offset.items():
                 S += getsizeof(value) + getsizeof(key)
         return S
 
@@ -345,9 +345,9 @@ class Hole(FrozenClass):
             Hole_dict["mat_void"] = None
         else:
             Hole_dict["mat_void"] = self.mat_void.as_dict(**kwargs)
-        Hole_dict["magnetization_dict_enforced"] = (
-            self.magnetization_dict_enforced.copy()
-            if self.magnetization_dict_enforced is not None
+        Hole_dict["magnetization_dict_offset"] = (
+            self.magnetization_dict_offset.copy()
+            if self.magnetization_dict_offset is not None
             else None
         )
         # The class name is added to the dict for deserialisation purpose
@@ -360,7 +360,7 @@ class Hole(FrozenClass):
         self.Zh = None
         if self.mat_void is not None:
             self.mat_void._set_None()
-        self.magnetization_dict_enforced = None
+        self.magnetization_dict_offset = None
 
     def _get_Zh(self):
         """getter of Zh"""
@@ -412,21 +412,21 @@ class Hole(FrozenClass):
         """,
     )
 
-    def _get_magnetization_dict_enforced(self):
-        """getter of magnetization_dict_enforced"""
-        return self._magnetization_dict_enforced
+    def _get_magnetization_dict_offset(self):
+        """getter of magnetization_dict_offset"""
+        return self._magnetization_dict_offset
 
-    def _set_magnetization_dict_enforced(self, value):
-        """setter of magnetization_dict_enforced"""
+    def _set_magnetization_dict_offset(self, value):
+        """setter of magnetization_dict_offset"""
         if type(value) is int and value == -1:
             value = dict()
-        check_var("magnetization_dict_enforced", value, "dict")
-        self._magnetization_dict_enforced = value
+        check_var("magnetization_dict_offset", value, "dict")
+        self._magnetization_dict_offset = value
 
-    magnetization_dict_enforced = property(
-        fget=_get_magnetization_dict_enforced,
-        fset=_set_magnetization_dict_enforced,
-        doc=u"""Dictionary to enforce the magnetization direction of the magnets (key=magnet_X, value=angle[rad])
+    magnetization_dict_offset = property(
+        fget=_get_magnetization_dict_offset,
+        fset=_set_magnetization_dict_offset,
+        doc=u"""Dictionary add an offset to the magnetization direction of the magnets (key=magnet_X, value=angle[rad])
 
         :Type: dict
         """,

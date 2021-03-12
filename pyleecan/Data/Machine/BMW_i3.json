@@ -202,7 +202,7 @@
                         "type_magnetization": 0
                     }
                 },
-                "magnetization_dict_enforced": {
+                "magnetization_dict_offset": {
                     "magnet_0": 0.0,
                     "magnet_1": 0.0
                 },
