@@ -152,11 +152,11 @@ class Test_HoleUD_meth(object):
         assert "magnet_1" in hole.magnet_dict
         assert isinstance(hole.magnet_dict["magnet_1"], Magnet)
         assert hole.Zh == 8
-        assert len(hole.magnetization_dict_enforced) == 2
-        assert "magnet_0" in hole.magnetization_dict_enforced
-        assert isinstance(hole.magnetization_dict_enforced["magnet_0"], float)
-        assert "magnet_1" in hole.magnetization_dict_enforced
-        assert isinstance(hole.magnetization_dict_enforced["magnet_1"], float)
+        assert len(hole.magnetization_dict_offset) == 2
+        assert "magnet_0" in hole.magnetization_dict_offset
+        assert isinstance(hole.magnetization_dict_offset["magnet_0"], float)
+        assert "magnet_1" in hole.magnetization_dict_offset
+        assert isinstance(hole.magnetization_dict_offset["magnet_1"], float)
         simu_UD.machine.rotor.hole[0] = hole
 
         (R1, R2) = simu.machine.rotor.hole[0].comp_radius()

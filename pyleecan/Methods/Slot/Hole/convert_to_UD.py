@@ -13,5 +13,5 @@ def convert_to_UD(self):
         magnet_dict=magnet_dict,
         Zh=self.Zh,
         mat_void=self.mat_void,
-        magnetization_dict_enforced=magnetization_dict,
+        magnetization_dict_offset=magnetization_dict,
     )
