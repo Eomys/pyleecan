@@ -117,7 +117,7 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
         mesh.node = NodeMat(
             coordinate=listNd[:, 0:2],
             nb_node=NbNd,
-            indice=np.linspace(0, NbNd - 1, NbNd),
+            indice=np.linspace(0, NbNd - 1, NbNd, dtype=int),
         )
         # get all groups that are in the FEMM model
         groups = dict()

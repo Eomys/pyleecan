@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 cell,,Storing connectivity,,{CellMat},,,,,Mesh,Mesh,get_node,VERSION,1,Gather the mesh storage format
 node,,Storing nodes,,NodeMat,,,,,,,get_node_indice,,,
-_is_renum,,To check if renumering the nodes and cells is useful when renum method is called,,bool,0,,,,,,get_cell,,,
+_is_renum,,True if renumering the nodes and cells is useful when renum method is called (saving calculation time),,bool,0,,,,,,get_cell,,,
 ,,,,,,,,,,,get_mesh_pv,,,
 ,,,,,,,,,,,get_cell_area,,,
 ,,,,,,,,,,,get_vertice,,,

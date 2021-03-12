@@ -7,7 +7,7 @@ from pyleecan.Classes.NodeMat import NodeMat
 
 
 def renum(self):
-    """Remove non-used points, restart point indices from 0, and update connectivity. Indices of cells stay the same.
+    """Restart point indices from 0, and update connectivity. Indices of cells stay the same.
 
     Parameters
     ----------
@@ -43,3 +43,5 @@ def renum(self):
                 indice=self.cell[key].indice,
                 interpolation=self.cell[key].interpolation,
             )
+        
+        self._is_renum = False

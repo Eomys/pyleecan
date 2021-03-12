@@ -58,7 +58,7 @@ def plot_contour(
     -------
     """
     if group_names is not None:
-        meshsol_grp = self.get_group(group_names)
+        meshsol_grp = self.get_group(group_names, is_renum=True)
         meshsol_grp.plot_contour(
             label=label,
             index=index,
@@ -101,19 +101,23 @@ def plot_contour(
             is_center=is_center,
         )
 
-        # Extract time index
-        if len(field.shape) > 2:
-            # Extract time index
-            if field.shape[1] > 3:
-                field = field[itime, ...]
-            # Compute norm
-            if field.shape[-1] == 2 or field.shape[-1] == 3:
-                field = norm(field, axis=-1)
+        solution = self.get_solution(
+            label=label,
+            index=index,
+        )
 
-        elif len(field.shape) > 1:
-            # Extract time index
-            if field.shape[1] > 3:
-                field = field[itime, :]
+        axes_list = solution.get_axes_list()
+
+        is_timefreq = False
+        if "time" in axes_list[0]:
+            ind = axes_list[0].index("time")
+            is_timefreq = True
+        elif "freqs" in axes_list[0]:
+            ind = axes_list[0].index("freqs")
+            is_timefreq = True
+        
+        if is_timefreq:
+            field = field.take((itime), axis=ind)
 
         if field_name is None:
             if label is not None:
@@ -158,5 +162,5 @@ def plot_contour(
             p.view_xy()
         if save_path is None and is_show_fig:
             p.show()
-        elif save_path is not None and is_show_fig:
+        elif save_path is not None:
             p.show(interactive=False, screenshot=save_path)

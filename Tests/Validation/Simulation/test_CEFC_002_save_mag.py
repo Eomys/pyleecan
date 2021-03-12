@@ -40,7 +40,7 @@ def test_Slotless_CEFC_002():
     )
 
     simu.mag = MagFEMM(
-        type_BH_stator=0,
+        type_BH_stator=2,
         type_BH_rotor=0,
         is_get_meshsolution=True,
         is_periodicity_a=True,
@@ -51,6 +51,12 @@ def test_Slotless_CEFC_002():
 
     out.mag.meshsolution.plot_mesh(
         save_path=join(save_plot_path, "CEFC_002_mesh_save.png"), is_show_fig=False
+    )
+
+    out.mag.meshsolution.plot_mesh(
+        group_names=["stator core", "airgap"],
+        save_path=join(save_plot_path, "CEFC_002_mesh_stator_airgap_save.png"),
+        is_show_fig=False,
     )
 
     out.mag.meshsolution.plot_mesh(
@@ -87,13 +93,20 @@ def test_Slotless_CEFC_002():
         is_show_fig=False,
     )
 
+    out.mag.meshsolution.plot_contour(
+        label="\mu",
+        group_names=["rotor core", "rotor magnets"],
+        save_path=join(save_plot_path, "CEFC_002_mu_stator_airgap_save.png"),
+        is_show_fig=False,
+    )
+
     # Test save with MeshSolution object in out
     load_path = join(save_load_path, "Slotless_CEFC_002.h5")
 
-    out.save(save_path=save_load_path)
+    out.save(save_path=load_path)
 
     # Test to load the Meshsolution object (inside the output):
-    FEMM = load(join(save_load_path, "Slotless_CEFC_002.h5"))
+    FEMM = load(load_path)
 
     # TODO : out.compare(FEMM)
 

@@ -20,10 +20,10 @@ def get_field(self, *args):
     axname, _ = self.get_axes_list()
     symbol = self.field.symbol
 
-    if not args:
+    if len(args) == 0 :
         field_dict = self.field.get_along(tuple(axname))
     else:
-        field_dict = self.field.get_along(args)
+        field_dict = self.field.get_along(*args)
 
     field = field_dict[symbol]
 

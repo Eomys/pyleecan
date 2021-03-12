@@ -30,7 +30,7 @@ def plot_mesh(
     -------
     """
     if group_names is not None:
-        meshsol_grp = self.get_group(group_names)
+        meshsol_grp = self.get_group(group_names, is_renum=True)
         meshsol_grp.plot_mesh(label, index, indices, save_path, None)
     else:
 
@@ -76,5 +76,5 @@ def plot_mesh(
             p.view_xy()
         if save_path is None and is_show_fig:
             p.show()
-        elif save_path is not None and is_show_fig:
+        elif save_path is not None:
             p.show(interactive=False, screenshot=save_path)

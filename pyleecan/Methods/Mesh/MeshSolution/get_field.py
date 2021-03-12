@@ -56,7 +56,7 @@ def get_field(
     # Get field
     solution = self.get_solution(label=label, index=index)
 
-    field = solution.get_field(args_list)
+    field = solution.get_field(*args_list)
 
     field = squeeze(field)
 
