@@ -147,8 +147,8 @@
             },
             {
                 "desc": "opening angle of the arc",
-                "max": "6.283185307",
-                "min": "-6.283185307",
+                "max": "6.283185308",
+                "min": "-6.283185308",
                 "name": "angle",
                 "type": "float",
                 "unit": "rad",

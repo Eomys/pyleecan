@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 begin,-,begin point of the arc,0,complex,0,,,,Geometry,Arc,check,VERSION,1,An arc between two points (defined by the begin  point and a center and angle)
 center,-,center of the arc,0,complex,0,,,,,,comp_length,,,
-angle,rad,opening angle of the arc,0,float,1.57079633,-6.283185307,6.283185307,,,,comp_radius,,,
+angle,rad,opening angle of the arc,0,float,1.57079633,-6.283185308,6.283185308,,,,comp_radius,,,
 ,,,,,,,,,,,discretize,,,
 ,,,,,,,,,,,get_angle,,,
 ,,,,,,,,,,,get_begin,,,

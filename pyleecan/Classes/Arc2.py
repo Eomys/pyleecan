@@ -409,7 +409,7 @@ class Arc2(Arc):
 
     def _set_angle(self, value):
         """setter of angle"""
-        check_var("angle", value, "float", Vmin=-6.283185307, Vmax=6.283185307)
+        check_var("angle", value, "float", Vmin=-6.283185308, Vmax=6.283185308)
         self._angle = value
 
     angle = property(
@@ -418,7 +418,7 @@ class Arc2(Arc):
         doc=u"""opening angle of the arc
 
         :Type: float
-        :min: -6.283185307
-        :max: 6.283185307
+        :min: -6.283185308
+        :max: 6.283185308
         """,
     )
