@@ -161,6 +161,7 @@ load_switch = {
     "SlotM14": SlotM14,
     "SlotM15": SlotM15,
     "SlotM16": SlotM16,
+    "SlotM17": SlotM17,
     "SlotUD": SlotUD,
     "SlotUD2": SlotUD2,
     "SlotW10": SlotW10,
