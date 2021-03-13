@@ -67,7 +67,7 @@ class PMSlot17(Gen_PMSlot17, QWidget):
         self : PMSlot17
             A PMSlot17 object
         """
-        self.slot.Lmag = self.lf_Lmag.value()
+        self.lamination.magnet.Lmag = self.lf_Lmag.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
