@@ -73,6 +73,11 @@ except ImportError as error:
     rotate = error
 
 try:
+    from ..Methods.Geometry.Arc2.scale import scale
+except ImportError as error:
+    scale = error
+
+try:
     from ..Methods.Geometry.Arc2.split_half import split_half
 except ImportError as error:
     split_half = error
@@ -191,6 +196,15 @@ class Arc2(Arc):
         )
     else:
         rotate = rotate
+    # cf Methods.Geometry.Arc2.scale
+    if isinstance(scale, ImportError):
+        scale = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc2 method scale: " + str(scale))
+            )
+        )
+    else:
+        scale = scale
     # cf Methods.Geometry.Arc2.split_half
     if isinstance(split_half, ImportError):
         split_half = property(
@@ -395,7 +409,7 @@ class Arc2(Arc):
 
     def _set_angle(self, value):
         """setter of angle"""
-        check_var("angle", value, "float", Vmin=-6.2831853071796, Vmax=6.2831853071796)
+        check_var("angle", value, "float", Vmin=-6.283185308, Vmax=6.283185308)
         self._angle = value
 
     angle = property(
@@ -404,7 +418,7 @@ class Arc2(Arc):
         doc=u"""opening angle of the arc
 
         :Type: float
-        :min: -6.2831853071796
-        :max: 6.2831853071796
+        :min: -6.283185308
+        :max: 6.283185308
         """,
     )

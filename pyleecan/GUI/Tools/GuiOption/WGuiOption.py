@@ -58,7 +58,7 @@ class WGuiOption(Ui_GUIOption, QDialog):
         matlib_path = self.w_matlib_path.get_path()
         config_dict["MAIN"]["MATLIB_DIR"] = matlib_path
         save_config_dict(config_dict)
-        
+
         if self.matlib is not None:
             self.matlib.load_mat_ref(matlib_path)
             if self.machine_setup is not None:

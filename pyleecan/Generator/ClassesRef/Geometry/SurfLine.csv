@@ -1,11 +1,12 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-line_list,-,List of Lines ,0,[Line],[],,,,Geometry,Surface,get_lines,VERSION,1,"SurfLine defined by list of lines that delimit it, label and point reference."
-,,,,,,,,,,,rotate,,,
-,,,,,,,,,,,translate,,,
-,,,,,,,,,,,check,,,
+line_list,-,List of Lines ,0,[Line],[],,,,Geometry,Surface,check,VERSION,1,"SurfLine defined by list of lines that delimit it, label and point reference."
 ,,,,,,,,,,,comp_length,,,
-,,,,,,,,,,,get_patches,,,
-,,,,,,,,,,,discretize,,,
-,,,,,,,,,,,comp_surface,,,
-,,,,,,,,,,,plot_lines,,,
 ,,,,,,,,,,,comp_point_ref,,,
+,,,,,,,,,,,comp_surface,,,
+,,,,,,,,,,,discretize,,,
+,,,,,,,,,,,get_lines,,,
+,,,,,,,,,,,get_patches,,,
+,,,,,,,,,,,plot_lines,,,
+,,,,,,,,,,,rotate,,,
+,,,,,,,,,,,scale,,,
+,,,,,,,,,,,translate,,,

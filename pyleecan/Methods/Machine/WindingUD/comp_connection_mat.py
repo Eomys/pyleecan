@@ -78,6 +78,11 @@ def comp_connection_mat(self, Zs=None):
     # tile
     wind_mat = tile(wind_mat, [1, 1, Zs // wind_mat.shape[2], 1])
 
+    # Set default values
+    if self.is_reverse_wind is None:
+        self.is_reverse_wind = False
+    if self.Nslot_shift_wind is None:
+        self.Nslot_shift_wind = 0
     # Apply the transformations
     if self.is_reverse_wind:
         wind_mat = reverse_wind_mat(wind_mat)

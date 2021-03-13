@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from os.path import isfile, join
 import pytest
 
@@ -8,6 +7,12 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.Magnet import Magnet
+from Tests import save_validation_path as save_path
+import matplotlib.pyplot as plt
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -105,3 +110,75 @@ class Test_HoleUD_meth(object):
         for surf in surf_list:
             surf.label = ""
         assert IPMSM_C.rotor.hole[0].comp_surface_magnet_id(0) == 0
+
+    @pytest.mark.long
+    @pytest.mark.MagFEMM
+    def test_convert_UD(self):
+        """Check that the simulation is the same with the usual hole and the UD equivalent"""
+        IPMSM_A = load(mach_path)
+        simu = Simu1(name="Simu_Hole_normal", machine=IPMSM_A)
+
+        # Definition of the enforced output of the electrical module
+        N0 = 2500
+        Nt_tot = 1
+        Na_tot = 2048
+
+        simu.input = InputCurrent(
+            Is=None,
+            Ir=None,  # No winding on the rotor
+            N0=N0,
+            Nt_tot=Nt_tot,
+            Na_tot=Na_tot,
+            Id_ref=50,
+            Iq_ref=0,
+        )
+
+        # Definition of the magnetic simulation (no symmetry)
+        simu.mag = MagFEMM(
+            type_BH_stator=0,
+            type_BH_rotor=0,
+            is_periodicity_a=True,
+            Kgeo_fineness=0.75,
+        )
+        simu.force = None
+        simu.struct = None
+
+        simu_UD = simu.copy()
+        hole = IPMSM_A.rotor.hole[0].convert_to_UD()
+        assert len(hole.surf_list) == 5
+        assert len(hole.magnet_dict) == 2
+        assert "magnet_0" in hole.magnet_dict
+        assert isinstance(hole.magnet_dict["magnet_0"], Magnet)
+        assert "magnet_1" in hole.magnet_dict
+        assert isinstance(hole.magnet_dict["magnet_1"], Magnet)
+        assert hole.Zh == 8
+        assert len(hole.magnetization_dict_offset) == 2
+        assert "magnet_0" in hole.magnetization_dict_offset
+        assert isinstance(hole.magnetization_dict_offset["magnet_0"], float)
+        assert "magnet_1" in hole.magnetization_dict_offset
+        assert isinstance(hole.magnetization_dict_offset["magnet_1"], float)
+        simu_UD.machine.rotor.hole[0] = hole
+
+        (R1, R2) = simu.machine.rotor.hole[0].comp_radius()
+        (R3, R4) = simu_UD.machine.rotor.hole[0].comp_radius()
+        assert R1 == pytest.approx(R3)
+        assert R2 == pytest.approx(R4)
+        out = simu.run()
+        out2 = simu_UD.run()
+
+        # Plot the result by comparing the two simulation
+        plt.close("all")
+
+        out.plot_2D_Data(
+            "mag.B",
+            "angle",
+            data_list=[out2.mag.B],
+            legend_list=["Normal", "User-Defined"],
+            save_path=join(save_path, "test_HoleUD.png"),
+            is_show_fig=False,
+        )
+
+
+if __name__ == "__main__":
+    a = Test_HoleUD_meth()
+    a.test_convert_UD()

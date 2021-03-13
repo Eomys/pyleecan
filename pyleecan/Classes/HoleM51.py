@@ -38,6 +38,11 @@ except ImportError as error:
     comp_alpha = error
 
 try:
+    from ..Methods.Slot.HoleM51.comp_magnetization_dict import comp_magnetization_dict
+except ImportError as error:
+    comp_magnetization_dict = error
+
+try:
     from ..Methods.Slot.HoleM51.comp_radius import comp_radius
 except ImportError as error:
     comp_radius = error
@@ -121,6 +126,18 @@ class HoleM51(HoleMag):
         )
     else:
         comp_alpha = comp_alpha
+    # cf Methods.Slot.HoleM51.comp_magnetization_dict
+    if isinstance(comp_magnetization_dict, ImportError):
+        comp_magnetization_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM51 method comp_magnetization_dict: "
+                    + str(comp_magnetization_dict)
+                )
+            )
+        )
+    else:
+        comp_magnetization_dict = comp_magnetization_dict
     # cf Methods.Slot.HoleM51.comp_radius
     if isinstance(comp_radius, ImportError):
         comp_radius = property(
@@ -206,6 +223,7 @@ class HoleM51(HoleMag):
         magnet_2=-1,
         Zh=36,
         mat_void=-1,
+        magnetization_dict_offset=None,
         init_dict=None,
         init_str=None,
     ):
@@ -256,6 +274,8 @@ class HoleM51(HoleMag):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
+            if "magnetization_dict_offset" in list(init_dict.keys()):
+                magnetization_dict_offset = init_dict["magnetization_dict_offset"]
         # Set the properties (value check and convertion are done in setter)
         self.H0 = H0
         self.H1 = H1
@@ -272,7 +292,11 @@ class HoleM51(HoleMag):
         self.magnet_1 = magnet_1
         self.magnet_2 = magnet_2
         # Call HoleMag init
-        super(HoleM51, self).__init__(Zh=Zh, mat_void=mat_void)
+        super(HoleM51, self).__init__(
+            Zh=Zh,
+            mat_void=mat_void,
+            magnetization_dict_offset=magnetization_dict_offset,
+        )
         # The class is frozen (in HoleMag init), for now it's impossible to
         # add new properties
 

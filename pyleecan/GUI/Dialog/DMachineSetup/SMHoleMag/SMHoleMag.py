@@ -68,8 +68,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         self.tab_hole.setCurrentIndex(0)
 
         # Set Help URL
-        self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
-        self.b_help.url += "how-to-set-up-the-slots"
+        self.b_help.hide()
 
         # Connect the slot
         self.b_add.clicked.connect(self.s_add)

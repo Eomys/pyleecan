@@ -122,6 +122,7 @@ class VentilationPolar(Hole):
         W1=1,
         Zh=36,
         mat_void=-1,
+        magnetization_dict_offset=None,
         init_dict=None,
         init_str=None,
     ):
@@ -152,13 +153,19 @@ class VentilationPolar(Hole):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
+            if "magnetization_dict_offset" in list(init_dict.keys()):
+                magnetization_dict_offset = init_dict["magnetization_dict_offset"]
         # Set the properties (value check and convertion are done in setter)
         self.Alpha0 = Alpha0
         self.D0 = D0
         self.H0 = H0
         self.W1 = W1
         # Call Hole init
-        super(VentilationPolar, self).__init__(Zh=Zh, mat_void=mat_void)
+        super(VentilationPolar, self).__init__(
+            Zh=Zh,
+            mat_void=mat_void,
+            magnetization_dict_offset=magnetization_dict_offset,
+        )
         # The class is frozen (in Hole init), for now it's impossible to
         # add new properties
 

@@ -91,7 +91,7 @@ def plot(
     axes.set_title("Squirrel Cage Rotor")
 
     # Axis Setup
-    axis("equal")
+    axes.axis("equal")
     Lim = self.Rext * 1.5
     axes.set_xlim(-Lim, Lim)
     axes.set_ylim(-Lim, Lim)

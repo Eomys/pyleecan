@@ -49,6 +49,7 @@
             "get_middle",
             "reverse",
             "rotate",
+            "scale",
             "split_half",
             "translate"
         ],
@@ -117,6 +118,7 @@
             "get_middle",
             "reverse",
             "rotate",
+            "scale",
             "split_half",
             "translate"
         ],
@@ -145,8 +147,8 @@
             },
             {
                 "desc": "opening angle of the arc",
-                "max": "6.2831853071796",
-                "min": "-6.2831853071796",
+                "max": "6.283185308",
+                "min": "-6.283185308",
                 "name": "angle",
                 "type": "float",
                 "unit": "rad",
@@ -176,6 +178,7 @@
             "get_middle",
             "reverse",
             "rotate",
+            "scale",
             "split_half",
             "translate"
         ],
@@ -1684,18 +1687,19 @@
         "desc": "Holes for lamination (abstract)",
         "is_internal": false,
         "methods": [
+            "comp_height",
+            "comp_magnetization_dict",
             "comp_radius",
             "comp_surface",
+            "convert_to_UD",
             "get_is_stator",
+            "get_magnet_by_id",
+            "get_magnet_dict",
             "get_Rbo",
             "get_Rext",
             "has_magnet",
             "plot",
-            "comp_height",
-            "get_magnet_by_id",
-            "set_magnet_by_id",
-            "get_magnet_dict",
-            "convert_to_UD"
+            "set_magnet_by_id"
         ],
         "mother": "",
         "name": "Hole",
@@ -1719,6 +1723,15 @@
                 "type": "Material",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Dictionary add an offset to the magnetization direction of the magnets (key=magnet_X, value=angle[rad])",
+                "max": "",
+                "min": "",
+                "name": "magnetization_dict_offset",
+                "type": "dict",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -1741,12 +1754,13 @@
             "build_geometry",
             "check",
             "comp_alpha",
+            "comp_magnetization_dict",
             "comp_radius",
+            "comp_surface_magnet_id",
             "comp_W5",
             "has_magnet",
-            "remove_magnet",
-            "comp_surface_magnet_id",
-            "plot_schematics"
+            "plot_schematics",
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM50",
@@ -1882,6 +1896,7 @@
             "build_geometry",
             "check",
             "comp_alpha",
+            "comp_magnetization_dict",
             "comp_radius",
             "comp_surface_magnet_id",
             "comp_width",
@@ -2041,6 +2056,7 @@
             "build_geometry",
             "check",
             "comp_alpha",
+            "comp_magnetization_dict",
             "comp_radius",
             "comp_surface",
             "comp_surface_magnet_id",
@@ -2129,6 +2145,7 @@
             "build_geometry",
             "check",
             "comp_alpha",
+            "comp_magnetization_dict",
             "comp_radius",
             "comp_surface_magnet_id",
             "comp_W5",
@@ -2251,6 +2268,7 @@
             "_comp_point_coordinate",
             "build_geometry",
             "check",
+            "comp_magnetization_dict",
             "comp_radius",
             "comp_surface",
             "plot_schematics"
@@ -2316,6 +2334,7 @@
             "_comp_point_coordinate",
             "build_geometry",
             "check",
+            "comp_magnetization_dict",
             "comp_radius",
             "comp_surface_magnet_id",
             "has_magnet",
@@ -2428,6 +2447,7 @@
             "_comp_point_coordinate",
             "build_geometry",
             "check",
+            "comp_magnetization_dict",
             "comp_radius",
             "comp_surface_magnet_id",
             "has_magnet",
@@ -2570,10 +2590,10 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
+            "check",
             "comp_surface_magnet_id",
             "has_magnet",
-            "remove_magnet",
-            "check"
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleUD",
@@ -4123,7 +4143,9 @@
         ],
         "desc": "Abstract geometry class (A line between two points)",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "comp_normal"
+        ],
         "mother": "",
         "name": "Line",
         "package": "Geometry",
@@ -8162,6 +8184,7 @@
         "is_internal": false,
         "methods": [
             "check",
+            "comp_distance",
             "comp_length",
             "discretize",
             "draw_FEMM",
@@ -8169,14 +8192,14 @@
             "get_end",
             "get_middle",
             "intersect_line",
+            "is_on_line",
+            "plot",
             "reverse",
             "rotate",
+            "scale",
             "split_half",
             "split_line",
-            "translate",
-            "is_on_line",
-            "comp_distance",
-            "plot"
+            "translate"
         ],
         "mother": "Line",
         "name": "Segment",
@@ -8488,6 +8511,7 @@
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
+            "comp_height_opening",
             "comp_radius",
             "comp_radius_mid_active",
             "comp_surface",
@@ -11282,16 +11306,17 @@
         "desc": "SurfLine defined by list of lines that delimit it, label and point reference.",
         "is_internal": false,
         "methods": [
-            "get_lines",
-            "rotate",
-            "translate",
             "check",
             "comp_length",
-            "get_patches",
-            "discretize",
+            "comp_point_ref",
             "comp_surface",
+            "discretize",
+            "get_lines",
+            "get_patches",
             "plot_lines",
-            "comp_point_ref"
+            "rotate",
+            "scale",
+            "translate"
         ],
         "mother": "Surface",
         "name": "SurfLine",

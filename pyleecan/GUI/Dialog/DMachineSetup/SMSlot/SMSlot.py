@@ -61,8 +61,7 @@ class SMSlot(Ui_SMSlot, QWidget):
         self.matlib = matlib
         self.is_stator = is_stator
 
-        self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
-        self.b_help.url += "how-to-set-up-the-slots"
+        self.b_help.hide()
 
         # Fill the combobox with the available slot
         self.c_slot_type.clear()
