@@ -29,7 +29,7 @@ def interface(self, other_mesh):
     # Dynamic import
     new_mesh = self.copy()
     new_mesh._is_renum = True
-    
+
     # new_mesh.node = NodeMat()
     new_mesh.cell = dict()
 

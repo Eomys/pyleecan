@@ -115,7 +115,15 @@ class VentilationCirc(Hole):
     get_logger = get_logger
 
     def __init__(
-        self, Alpha0=0, D0=1, H0=1, Zh=36, mat_void=-1, init_dict=None, init_str=None
+        self,
+        Alpha0=0,
+        D0=1,
+        H0=1,
+        Zh=36,
+        mat_void=-1,
+        magnetization_dict_offset=None,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -142,12 +150,18 @@ class VentilationCirc(Hole):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
+            if "magnetization_dict_offset" in list(init_dict.keys()):
+                magnetization_dict_offset = init_dict["magnetization_dict_offset"]
         # Set the properties (value check and convertion are done in setter)
         self.Alpha0 = Alpha0
         self.D0 = D0
         self.H0 = H0
         # Call Hole init
-        super(VentilationCirc, self).__init__(Zh=Zh, mat_void=mat_void)
+        super(VentilationCirc, self).__init__(
+            Zh=Zh,
+            mat_void=mat_void,
+            magnetization_dict_offset=magnetization_dict_offset,
+        )
         # The class is frozen (in Hole init), for now it's impossible to
         # add new properties
 
@@ -208,11 +222,15 @@ class VentilationCirc(Hole):
         S += getsizeof(self.H0)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Hole
-        VentilationCirc_dict = super(VentilationCirc, self).as_dict()
+        VentilationCirc_dict = super(VentilationCirc, self).as_dict(**kwargs)
         VentilationCirc_dict["Alpha0"] = self.Alpha0
         VentilationCirc_dict["D0"] = self.D0
         VentilationCirc_dict["H0"] = self.H0

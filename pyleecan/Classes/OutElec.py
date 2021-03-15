@@ -366,8 +366,12 @@ class OutElec(FrozenClass):
         S += getsizeof(self.internal)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutElec_dict = dict()
         if self.Time is None:
@@ -408,7 +412,7 @@ class OutElec(FrozenClass):
         if self.internal is None:
             OutElec_dict["internal"] = None
         else:
-            OutElec_dict["internal"] = self.internal.as_dict()
+            OutElec_dict["internal"] = self.internal.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict

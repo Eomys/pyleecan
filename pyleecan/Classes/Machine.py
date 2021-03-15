@@ -495,18 +495,22 @@ class Machine(FrozenClass):
         S += getsizeof(self.logger_name)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Machine_dict = dict()
         if self.frame is None:
             Machine_dict["frame"] = None
         else:
-            Machine_dict["frame"] = self.frame.as_dict()
+            Machine_dict["frame"] = self.frame.as_dict(**kwargs)
         if self.shaft is None:
             Machine_dict["shaft"] = None
         else:
-            Machine_dict["shaft"] = self.shaft.as_dict()
+            Machine_dict["shaft"] = self.shaft.as_dict(**kwargs)
         Machine_dict["name"] = self.name
         Machine_dict["desc"] = self.desc
         Machine_dict["type_machine"] = self.type_machine

@@ -93,7 +93,9 @@ def check_type(var_name, value, expect_type, type_value):
 
     """
 
-    if expect_type == "float":  # float variable can take int value
+    if expect_type in [None, ""]:
+        pass
+    elif expect_type == "float":  # float variable can take int value
         if not (
             (isinstance(value, int32) and not isinstance(value, bool))
             or (isinstance(value, int) and not isinstance(value, bool))

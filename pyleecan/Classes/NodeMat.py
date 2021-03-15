@@ -199,8 +199,12 @@ class NodeMat(FrozenClass):
         S += getsizeof(self.indice)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         NodeMat_dict = dict()
         if self.coordinate is None:

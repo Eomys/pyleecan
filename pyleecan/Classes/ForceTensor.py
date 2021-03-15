@@ -201,11 +201,15 @@ class ForceTensor(Force):
         S += getsizeof(self.group)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Force
-        ForceTensor_dict = super(ForceTensor, self).as_dict()
+        ForceTensor_dict = super(ForceTensor, self).as_dict(**kwargs)
         ForceTensor_dict["group"] = self.group
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name

@@ -18,21 +18,6 @@ from .Surface import Surface
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Geometry.SurfLine.get_lines import get_lines
-except ImportError as error:
-    get_lines = error
-
-try:
-    from ..Methods.Geometry.SurfLine.rotate import rotate
-except ImportError as error:
-    rotate = error
-
-try:
-    from ..Methods.Geometry.SurfLine.translate import translate
-except ImportError as error:
-    translate = error
-
-try:
     from ..Methods.Geometry.SurfLine.check import check
 except ImportError as error:
     check = error
@@ -43,14 +28,9 @@ except ImportError as error:
     comp_length = error
 
 try:
-    from ..Methods.Geometry.SurfLine.get_patches import get_patches
+    from ..Methods.Geometry.SurfLine.comp_point_ref import comp_point_ref
 except ImportError as error:
-    get_patches = error
-
-try:
-    from ..Methods.Geometry.SurfLine.discretize import discretize
-except ImportError as error:
-    discretize = error
+    comp_point_ref = error
 
 try:
     from ..Methods.Geometry.SurfLine.comp_surface import comp_surface
@@ -58,14 +38,39 @@ except ImportError as error:
     comp_surface = error
 
 try:
+    from ..Methods.Geometry.SurfLine.discretize import discretize
+except ImportError as error:
+    discretize = error
+
+try:
+    from ..Methods.Geometry.SurfLine.get_lines import get_lines
+except ImportError as error:
+    get_lines = error
+
+try:
+    from ..Methods.Geometry.SurfLine.get_patches import get_patches
+except ImportError as error:
+    get_patches = error
+
+try:
     from ..Methods.Geometry.SurfLine.plot_lines import plot_lines
 except ImportError as error:
     plot_lines = error
 
 try:
-    from ..Methods.Geometry.SurfLine.comp_point_ref import comp_point_ref
+    from ..Methods.Geometry.SurfLine.rotate import rotate
 except ImportError as error:
-    comp_point_ref = error
+    rotate = error
+
+try:
+    from ..Methods.Geometry.SurfLine.scale import scale
+except ImportError as error:
+    scale = error
+
+try:
+    from ..Methods.Geometry.SurfLine.translate import translate
+except ImportError as error:
+    translate = error
 
 
 from ._check import InitUnKnowClassError
@@ -78,33 +83,6 @@ class SurfLine(Surface):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Geometry.SurfLine.get_lines
-    if isinstance(get_lines, ImportError):
-        get_lines = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method get_lines: " + str(get_lines))
-            )
-        )
-    else:
-        get_lines = get_lines
-    # cf Methods.Geometry.SurfLine.rotate
-    if isinstance(rotate, ImportError):
-        rotate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method rotate: " + str(rotate))
-            )
-        )
-    else:
-        rotate = rotate
-    # cf Methods.Geometry.SurfLine.translate
-    if isinstance(translate, ImportError):
-        translate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method translate: " + str(translate))
-            )
-        )
-    else:
-        translate = translate
     # cf Methods.Geometry.SurfLine.check
     if isinstance(check, ImportError):
         check = property(
@@ -125,46 +103,6 @@ class SurfLine(Surface):
         )
     else:
         comp_length = comp_length
-    # cf Methods.Geometry.SurfLine.get_patches
-    if isinstance(get_patches, ImportError):
-        get_patches = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SurfLine method get_patches: " + str(get_patches)
-                )
-            )
-        )
-    else:
-        get_patches = get_patches
-    # cf Methods.Geometry.SurfLine.discretize
-    if isinstance(discretize, ImportError):
-        discretize = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method discretize: " + str(discretize))
-            )
-        )
-    else:
-        discretize = discretize
-    # cf Methods.Geometry.SurfLine.comp_surface
-    if isinstance(comp_surface, ImportError):
-        comp_surface = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SurfLine method comp_surface: " + str(comp_surface)
-                )
-            )
-        )
-    else:
-        comp_surface = comp_surface
-    # cf Methods.Geometry.SurfLine.plot_lines
-    if isinstance(plot_lines, ImportError):
-        plot_lines = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method plot_lines: " + str(plot_lines))
-            )
-        )
-    else:
-        plot_lines = plot_lines
     # cf Methods.Geometry.SurfLine.comp_point_ref
     if isinstance(comp_point_ref, ImportError):
         comp_point_ref = property(
@@ -176,6 +114,82 @@ class SurfLine(Surface):
         )
     else:
         comp_point_ref = comp_point_ref
+    # cf Methods.Geometry.SurfLine.comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SurfLine method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
+    else:
+        comp_surface = comp_surface
+    # cf Methods.Geometry.SurfLine.discretize
+    if isinstance(discretize, ImportError):
+        discretize = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SurfLine method discretize: " + str(discretize))
+            )
+        )
+    else:
+        discretize = discretize
+    # cf Methods.Geometry.SurfLine.get_lines
+    if isinstance(get_lines, ImportError):
+        get_lines = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SurfLine method get_lines: " + str(get_lines))
+            )
+        )
+    else:
+        get_lines = get_lines
+    # cf Methods.Geometry.SurfLine.get_patches
+    if isinstance(get_patches, ImportError):
+        get_patches = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SurfLine method get_patches: " + str(get_patches)
+                )
+            )
+        )
+    else:
+        get_patches = get_patches
+    # cf Methods.Geometry.SurfLine.plot_lines
+    if isinstance(plot_lines, ImportError):
+        plot_lines = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SurfLine method plot_lines: " + str(plot_lines))
+            )
+        )
+    else:
+        plot_lines = plot_lines
+    # cf Methods.Geometry.SurfLine.rotate
+    if isinstance(rotate, ImportError):
+        rotate = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SurfLine method rotate: " + str(rotate))
+            )
+        )
+    else:
+        rotate = rotate
+    # cf Methods.Geometry.SurfLine.scale
+    if isinstance(scale, ImportError):
+        scale = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SurfLine method scale: " + str(scale))
+            )
+        )
+    else:
+        scale = scale
+    # cf Methods.Geometry.SurfLine.translate
+    if isinstance(translate, ImportError):
+        translate = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SurfLine method translate: " + str(translate))
+            )
+        )
+    else:
+        translate = translate
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -279,18 +293,22 @@ class SurfLine(Surface):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Surface
-        SurfLine_dict = super(SurfLine, self).as_dict()
+        SurfLine_dict = super(SurfLine, self).as_dict(**kwargs)
         if self.line_list is None:
             SurfLine_dict["line_list"] = None
         else:
             SurfLine_dict["line_list"] = list()
             for obj in self.line_list:
                 if obj is not None:
-                    SurfLine_dict["line_list"].append(obj.as_dict())
+                    SurfLine_dict["line_list"].append(obj.as_dict(**kwargs))
                 else:
                     SurfLine_dict["line_list"].append(None)
         # The class name is added to the dict for deserialisation purpose

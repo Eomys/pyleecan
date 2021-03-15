@@ -151,7 +151,9 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
     def open_dxf_hole(self):
         """Open the GUI to define the HoleUD"""
         # Init GUI with lamination parameters
-        self.dxf_gui = DXF_Hole(Zh=self.hole.Zh, Lmag=self.hole.parent.L1)
+        self.dxf_gui = DXF_Hole(
+            Zh=self.hole.Zh, Lmag=self.hole.parent.L1, lam=self.hole.parent
+        )
         self.dxf_gui.setWindowFlags(Qt.Window)  # To maximize the GUI
         self.dxf_gui.show()
         # Update the hole when saving

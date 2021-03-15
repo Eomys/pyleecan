@@ -193,19 +193,23 @@ class MachineDFIM(MachineAsync):
         S += getsizeof(self.stator)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from MachineAsync
-        MachineDFIM_dict = super(MachineDFIM, self).as_dict()
+        MachineDFIM_dict = super(MachineDFIM, self).as_dict(**kwargs)
         if self.rotor is None:
             MachineDFIM_dict["rotor"] = None
         else:
-            MachineDFIM_dict["rotor"] = self.rotor.as_dict()
+            MachineDFIM_dict["rotor"] = self.rotor.as_dict(**kwargs)
         if self.stator is None:
             MachineDFIM_dict["stator"] = None
         else:
-            MachineDFIM_dict["stator"] = self.stator.as_dict()
+            MachineDFIM_dict["stator"] = self.stator.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineDFIM_dict["__class__"] = "MachineDFIM"

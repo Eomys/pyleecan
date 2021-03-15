@@ -117,7 +117,7 @@ def plot_contour(
             ind = axes_list[0].index("freqs")
             if axes_list[1][ind] > 1:
                 is_timefreq = True
-        
+
         if is_timefreq:
             field = field.take((itime), axis=ind)
 

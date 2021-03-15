@@ -192,8 +192,12 @@ class OutForce(FrozenClass):
         S += getsizeof(self.meshsolution)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutForce_dict = dict()
         if self.Time is None:
@@ -213,7 +217,7 @@ class OutForce(FrozenClass):
         if self.meshsolution is None:
             OutForce_dict["meshsolution"] = None
         else:
-            OutForce_dict["meshsolution"] = self.meshsolution.as_dict()
+            OutForce_dict["meshsolution"] = self.meshsolution.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         OutForce_dict["__class__"] = "OutForce"
         return OutForce_dict

@@ -78,6 +78,8 @@ class Simulation(FrozenClass):
         postproc_list=-1,
         index=None,
         path_result=None,
+        layer=None,
+        layer_log_warn=None,
         init_dict=None,
         init_str=None,
     ):
@@ -114,6 +116,10 @@ class Simulation(FrozenClass):
                 index = init_dict["index"]
             if "path_result" in list(init_dict.keys()):
                 path_result = init_dict["path_result"]
+            if "layer" in list(init_dict.keys()):
+                layer = init_dict["layer"]
+            if "layer_log_warn" in list(init_dict.keys()):
+                layer_log_warn = init_dict["layer_log_warn"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -125,6 +131,8 @@ class Simulation(FrozenClass):
         self.postproc_list = postproc_list
         self.index = index
         self.path_result = path_result
+        self.layer = layer
+        self.layer_log_warn = layer_log_warn
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -167,6 +175,8 @@ class Simulation(FrozenClass):
             )
         Simulation_str += "index = " + str(self.index) + linesep
         Simulation_str += 'path_result = "' + str(self.path_result) + '"' + linesep
+        Simulation_str += "layer = " + str(self.layer) + linesep
+        Simulation_str += "layer_log_warn = " + str(self.layer_log_warn) + linesep
         return Simulation_str
 
     def __eq__(self, other):
@@ -191,6 +201,10 @@ class Simulation(FrozenClass):
         if other.index != self.index:
             return False
         if other.path_result != self.path_result:
+            return False
+        if other.layer != self.layer:
+            return False
+        if other.layer_log_warn != self.layer_log_warn:
             return False
         return True
 
@@ -248,6 +262,10 @@ class Simulation(FrozenClass):
             diff_list.append(name + ".index")
         if other._path_result != self._path_result:
             diff_list.append(name + ".path_result")
+        if other._layer != self._layer:
+            diff_list.append(name + ".layer")
+        if other._layer_log_warn != self._layer_log_warn:
+            diff_list.append(name + ".layer_log_warn")
         return diff_list
 
     def __sizeof__(self):
@@ -265,10 +283,16 @@ class Simulation(FrozenClass):
                 S += getsizeof(value)
         S += getsizeof(self.index)
         S += getsizeof(self.path_result)
+        S += getsizeof(self.layer)
+        S += getsizeof(self.layer_log_warn)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Simulation_dict = dict()
         Simulation_dict["name"] = self.name
@@ -276,27 +300,29 @@ class Simulation(FrozenClass):
         if self.machine is None:
             Simulation_dict["machine"] = None
         else:
-            Simulation_dict["machine"] = self.machine.as_dict()
+            Simulation_dict["machine"] = self.machine.as_dict(**kwargs)
         if self.input is None:
             Simulation_dict["input"] = None
         else:
-            Simulation_dict["input"] = self.input.as_dict()
+            Simulation_dict["input"] = self.input.as_dict(**kwargs)
         Simulation_dict["logger_name"] = self.logger_name
         if self.var_simu is None:
             Simulation_dict["var_simu"] = None
         else:
-            Simulation_dict["var_simu"] = self.var_simu.as_dict()
+            Simulation_dict["var_simu"] = self.var_simu.as_dict(**kwargs)
         if self.postproc_list is None:
             Simulation_dict["postproc_list"] = None
         else:
             Simulation_dict["postproc_list"] = list()
             for obj in self.postproc_list:
                 if obj is not None:
-                    Simulation_dict["postproc_list"].append(obj.as_dict())
+                    Simulation_dict["postproc_list"].append(obj.as_dict(**kwargs))
                 else:
                     Simulation_dict["postproc_list"].append(None)
         Simulation_dict["index"] = self.index
         Simulation_dict["path_result"] = self.path_result
+        Simulation_dict["layer"] = self.layer
+        Simulation_dict["layer_log_warn"] = self.layer_log_warn
         # The class name is added to the dict for deserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
@@ -316,6 +342,8 @@ class Simulation(FrozenClass):
         self.postproc_list = None
         self.index = None
         self.path_result = None
+        self.layer = None
+        self.layer_log_warn = None
 
     def _get_name(self):
         """getter of name"""
@@ -528,5 +556,43 @@ class Simulation(FrozenClass):
         doc=u"""Path to the Result folder to use (None to use default one)
 
         :Type: str
+        """,
+    )
+
+    def _get_layer(self):
+        """getter of layer"""
+        return self._layer
+
+    def _set_layer(self, value):
+        """setter of layer"""
+        check_var("layer", value, "int", Vmin=0)
+        self._layer = value
+
+    layer = property(
+        fget=_get_layer,
+        fset=_set_layer,
+        doc=u"""Layer of the simulation in a multi-simulation (0 is top simulation)
+
+        :Type: int
+        :min: 0
+        """,
+    )
+
+    def _get_layer_log_warn(self):
+        """getter of layer_log_warn"""
+        return self._layer_log_warn
+
+    def _set_layer_log_warn(self, value):
+        """setter of layer_log_warn"""
+        check_var("layer_log_warn", value, "int", Vmin=0)
+        self._layer_log_warn = value
+
+    layer_log_warn = property(
+        fget=_get_layer_log_warn,
+        fset=_set_layer_log_warn,
+        doc=u"""Enable to set the log console_handler to warning starting from a particular layer. layer_log_warn=2 => layer 0 and 1 info, layer 2 warning
+
+        :Type: int
+        :min: 0
         """,
     )

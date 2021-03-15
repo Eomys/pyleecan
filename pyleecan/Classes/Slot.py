@@ -53,6 +53,11 @@ except ImportError as error:
     comp_height_active = error
 
 try:
+    from ..Methods.Slot.Slot.comp_height_opening import comp_height_opening
+except ImportError as error:
+    comp_height_opening = error
+
+try:
     from ..Methods.Slot.Slot.comp_radius import comp_radius
 except ImportError as error:
     comp_radius = error
@@ -205,6 +210,18 @@ class Slot(FrozenClass):
         )
     else:
         comp_height_active = comp_height_active
+    # cf Methods.Slot.Slot.comp_height_opening
+    if isinstance(comp_height_opening, ImportError):
+        comp_height_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_height_opening: "
+                    + str(comp_height_opening)
+                )
+            )
+        )
+    else:
+        comp_height_opening = comp_height_opening
     # cf Methods.Slot.Slot.comp_radius
     if isinstance(comp_radius, ImportError):
         comp_radius = property(
@@ -403,8 +420,12 @@ class Slot(FrozenClass):
         S += getsizeof(self.Zs)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Slot_dict = dict()
         Slot_dict["Zs"] = self.Zs

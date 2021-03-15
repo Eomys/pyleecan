@@ -132,7 +132,14 @@ class HoleMag(Hole):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Zh=36, mat_void=-1, init_dict=None, init_str=None):
+    def __init__(
+        self,
+        Zh=36,
+        mat_void=-1,
+        magnetization_dict_offset=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -152,9 +159,15 @@ class HoleMag(Hole):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
+            if "magnetization_dict_offset" in list(init_dict.keys()):
+                magnetization_dict_offset = init_dict["magnetization_dict_offset"]
         # Set the properties (value check and convertion are done in setter)
         # Call Hole init
-        super(HoleMag, self).__init__(Zh=Zh, mat_void=mat_void)
+        super(HoleMag, self).__init__(
+            Zh=Zh,
+            mat_void=mat_void,
+            magnetization_dict_offset=magnetization_dict_offset,
+        )
         # The class is frozen (in Hole init), for now it's impossible to
         # add new properties
 
@@ -197,11 +210,15 @@ class HoleMag(Hole):
         S += super(HoleMag, self).__sizeof__()
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Hole
-        HoleMag_dict = super(HoleMag, self).as_dict()
+        HoleMag_dict = super(HoleMag, self).as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         HoleMag_dict["__class__"] = "HoleMag"

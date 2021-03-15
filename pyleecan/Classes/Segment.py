@@ -23,6 +23,11 @@ except ImportError as error:
     check = error
 
 try:
+    from ..Methods.Geometry.Segment.comp_distance import comp_distance
+except ImportError as error:
+    comp_distance = error
+
+try:
     from ..Methods.Geometry.Segment.comp_length import comp_length
 except ImportError as error:
     comp_length = error
@@ -58,6 +63,16 @@ except ImportError as error:
     intersect_line = error
 
 try:
+    from ..Methods.Geometry.Segment.is_on_line import is_on_line
+except ImportError as error:
+    is_on_line = error
+
+try:
+    from ..Methods.Geometry.Segment.plot import plot
+except ImportError as error:
+    plot = error
+
+try:
     from ..Methods.Geometry.Segment.reverse import reverse
 except ImportError as error:
     reverse = error
@@ -66,6 +81,11 @@ try:
     from ..Methods.Geometry.Segment.rotate import rotate
 except ImportError as error:
     rotate = error
+
+try:
+    from ..Methods.Geometry.Segment.scale import scale
+except ImportError as error:
+    scale = error
 
 try:
     from ..Methods.Geometry.Segment.split_half import split_half
@@ -81,21 +101,6 @@ try:
     from ..Methods.Geometry.Segment.translate import translate
 except ImportError as error:
     translate = error
-
-try:
-    from ..Methods.Geometry.Segment.is_on_line import is_on_line
-except ImportError as error:
-    is_on_line = error
-
-try:
-    from ..Methods.Geometry.Segment.comp_distance import comp_distance
-except ImportError as error:
-    comp_distance = error
-
-try:
-    from ..Methods.Geometry.Segment.plot import plot
-except ImportError as error:
-    plot = error
 
 
 from ._check import InitUnKnowClassError
@@ -116,6 +121,17 @@ class Segment(Line):
         )
     else:
         check = check
+    # cf Methods.Geometry.Segment.comp_distance
+    if isinstance(comp_distance, ImportError):
+        comp_distance = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Segment method comp_distance: " + str(comp_distance)
+                )
+            )
+        )
+    else:
+        comp_distance = comp_distance
     # cf Methods.Geometry.Segment.comp_length
     if isinstance(comp_length, ImportError):
         comp_length = property(
@@ -181,6 +197,24 @@ class Segment(Line):
         )
     else:
         intersect_line = intersect_line
+    # cf Methods.Geometry.Segment.is_on_line
+    if isinstance(is_on_line, ImportError):
+        is_on_line = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method is_on_line: " + str(is_on_line))
+            )
+        )
+    else:
+        is_on_line = is_on_line
+    # cf Methods.Geometry.Segment.plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # cf Methods.Geometry.Segment.reverse
     if isinstance(reverse, ImportError):
         reverse = property(
@@ -199,6 +233,15 @@ class Segment(Line):
         )
     else:
         rotate = rotate
+    # cf Methods.Geometry.Segment.scale
+    if isinstance(scale, ImportError):
+        scale = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method scale: " + str(scale))
+            )
+        )
+    else:
+        scale = scale
     # cf Methods.Geometry.Segment.split_half
     if isinstance(split_half, ImportError):
         split_half = property(
@@ -226,35 +269,6 @@ class Segment(Line):
         )
     else:
         translate = translate
-    # cf Methods.Geometry.Segment.is_on_line
-    if isinstance(is_on_line, ImportError):
-        is_on_line = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method is_on_line: " + str(is_on_line))
-            )
-        )
-    else:
-        is_on_line = is_on_line
-    # cf Methods.Geometry.Segment.comp_distance
-    if isinstance(comp_distance, ImportError):
-        comp_distance = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Segment method comp_distance: " + str(comp_distance)
-                )
-            )
-        )
-    else:
-        comp_distance = comp_distance
-    # cf Methods.Geometry.Segment.plot
-    if isinstance(plot, ImportError):
-        plot = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method plot: " + str(plot))
-            )
-        )
-    else:
-        plot = plot
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -342,11 +356,15 @@ class Segment(Line):
         S += getsizeof(self.end)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Line
-        Segment_dict = super(Segment, self).as_dict()
+        Segment_dict = super(Segment, self).as_dict(**kwargs)
         if self.begin is None:
             Segment_dict["begin"] = None
         elif isinstance(self.begin, float):

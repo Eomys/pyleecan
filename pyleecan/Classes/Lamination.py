@@ -573,15 +573,19 @@ class Lamination(FrozenClass):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Lamination_dict = dict()
         Lamination_dict["L1"] = self.L1
         if self.mat_type is None:
             Lamination_dict["mat_type"] = None
         else:
-            Lamination_dict["mat_type"] = self.mat_type.as_dict()
+            Lamination_dict["mat_type"] = self.mat_type.as_dict(**kwargs)
         Lamination_dict["Nrvd"] = self.Nrvd
         Lamination_dict["Wrvd"] = self.Wrvd
         Lamination_dict["Kf1"] = self.Kf1
@@ -595,7 +599,7 @@ class Lamination(FrozenClass):
             Lamination_dict["axial_vent"] = list()
             for obj in self.axial_vent:
                 if obj is not None:
-                    Lamination_dict["axial_vent"].append(obj.as_dict())
+                    Lamination_dict["axial_vent"].append(obj.as_dict(**kwargs))
                 else:
                     Lamination_dict["axial_vent"].append(None)
         if self.notch is None:
@@ -604,7 +608,7 @@ class Lamination(FrozenClass):
             Lamination_dict["notch"] = list()
             for obj in self.notch:
                 if obj is not None:
-                    Lamination_dict["notch"].append(obj.as_dict())
+                    Lamination_dict["notch"].append(obj.as_dict(**kwargs))
                 else:
                     Lamination_dict["notch"].append(None)
         # The class name is added to the dict for deserialisation purpose

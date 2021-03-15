@@ -151,8 +151,12 @@ class ParamExplorer(FrozenClass):
         S += getsizeof(self._setter_str)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         ParamExplorer_dict = dict()
         ParamExplorer_dict["name"] = self.name
@@ -160,8 +164,16 @@ class ParamExplorer(FrozenClass):
         ParamExplorer_dict["unit"] = self.unit
         if self._setter_str is not None:
             ParamExplorer_dict["setter"] = self._setter_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            ParamExplorer_dict["setter"] = self.setter
         else:
             ParamExplorer_dict["setter"] = None
+            if self.setter is not None:
+                self.get_logger().warning(
+                    "ParamExplorer.as_dict(): "
+                    + f"Function {self.setter.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         # The class name is added to the dict for deserialisation purpose
         ParamExplorer_dict["__class__"] = "ParamExplorer"
         return ParamExplorer_dict
@@ -186,7 +198,7 @@ class ParamExplorer(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Parameter name
+        doc="""Parameter name
 
         :Type: str
         """,
@@ -204,7 +216,7 @@ class ParamExplorer(FrozenClass):
     symbol = property(
         fget=_get_symbol,
         fset=_set_symbol,
-        doc=u"""Parameter symbol
+        doc="""Parameter symbol
 
         :Type: str
         """,
@@ -222,7 +234,7 @@ class ParamExplorer(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Parameter unit
+        doc="""Parameter unit
 
         :Type: str
         """,
@@ -235,7 +247,7 @@ class ParamExplorer(FrozenClass):
     setter = property(
         fget=_get_setter,
         fset=_set_setter,
-        doc=u"""Function that takes a Simulation and a value in argument and modifiers the simulation
+        doc="""Function that takes a Simulation and a value in argument and modifiers the simulation
 
         :Type: function
         """,

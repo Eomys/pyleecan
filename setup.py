@@ -33,7 +33,7 @@ python_requires = ">= 3.6"
 install_requires = [
     "setuptools",
     "cloudpickle>=1.3.0",
-    "matplotlib>=3.2.1",
+    "matplotlib>=3.3.2",
     "numpy==1.19.3",
     "pandas>=1.0.3",
     'pyfemm>=0.1.1;platform_system=="Windows"',

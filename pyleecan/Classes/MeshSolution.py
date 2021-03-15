@@ -380,8 +380,12 @@ class MeshSolution(FrozenClass):
         S += getsizeof(self.path)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         MeshSolution_dict = dict()
         MeshSolution_dict["label"] = self.label
@@ -391,7 +395,7 @@ class MeshSolution(FrozenClass):
             MeshSolution_dict["mesh"] = list()
             for obj in self.mesh:
                 if obj is not None:
-                    MeshSolution_dict["mesh"].append(obj.as_dict())
+                    MeshSolution_dict["mesh"].append(obj.as_dict(**kwargs))
                 else:
                     MeshSolution_dict["mesh"].append(None)
         MeshSolution_dict["is_same_mesh"] = self.is_same_mesh
@@ -401,7 +405,7 @@ class MeshSolution(FrozenClass):
             MeshSolution_dict["solution"] = list()
             for obj in self.solution:
                 if obj is not None:
-                    MeshSolution_dict["solution"].append(obj.as_dict())
+                    MeshSolution_dict["solution"].append(obj.as_dict(**kwargs))
                 else:
                     MeshSolution_dict["solution"].append(None)
         if self.group is None:

@@ -170,11 +170,15 @@ class WindingCW2LR(Winding):
         S += super(WindingCW2LR, self).__sizeof__()
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Winding
-        WindingCW2LR_dict = super(WindingCW2LR, self).as_dict()
+        WindingCW2LR_dict = super(WindingCW2LR, self).as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         WindingCW2LR_dict["__class__"] = "WindingCW2LR"

@@ -54,6 +54,7 @@ def test_MeshMat_1group():
     msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
     assert testA == pytest.approx(0, rel=DELTA), msg
 
+
 def test_MeshMat_2group():
     """unittest for 1 group"""
 
@@ -81,7 +82,9 @@ def test_MeshMat_2group():
     mesh.cell["triangle"].indice = np.array([11, 12, 13, 98, 100, 101])
 
     solution = SolutionMat()
-    solution.field = np.array([[1, 2, 3], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [7, 8, 9]])
+    solution.field = np.array(
+        [[1, 2, 3], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [7, 8, 9]]
+    )
     solution.axis_name = ["indice", "time"]
     solution.axis_size = [6, 3]
     solution.indice = np.array([11, 12, 13, 98, 100, 101])
@@ -108,6 +111,7 @@ def test_MeshMat_2group():
     testA = np.sum(abs(solution - field))
     msg = "Wrong output: returned " + str(field) + ", expected: " + str(solution)
     assert testA == pytest.approx(0, rel=DELTA), msg
+
 
 if __name__ == "__main__":
     Xout = test_MeshMat_2group()

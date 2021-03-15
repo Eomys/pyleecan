@@ -91,11 +91,9 @@ class SWindPat(Gen_SWindPat, QWidget):
                 self.obj.winding.coil_pitch = 0
             self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
 
-        if self.obj.winding.Nslot_shift_wind is not None:
-            self.si_Nslot.setValue(self.obj.winding.Nslot_shift_wind)
-        else:
-            self.si_Nslot.setValue(0)
+        if self.obj.winding.Nslot_shift_wind is None:
             self.obj.winding.Nslot_shift_wind = 0
+        self.si_Nslot.setValue(self.obj.winding.Nslot_shift_wind)
 
         if self.obj.winding.qs is None:  # default value
             self.obj.winding.qs = 3
@@ -104,13 +102,12 @@ class SWindPat(Gen_SWindPat, QWidget):
         if self.obj.winding.Ntcoil is None:
             self.obj.winding.Ntcoil = 1  # Default value for preview
 
-        if self.obj.winding.is_reverse_wind is not None:
-            if self.obj.winding.is_reverse_wind:
-                self.is_reverse.setCheckState(Qt.Checked)
-            else:
-                self.is_reverse.setCheckState(Qt.Unchecked)
-        else:
+        if self.obj.winding.is_reverse_wind is None:
             self.obj.winding.is_reverse_wind = False
+        if self.obj.winding.is_reverse_wind:
+            self.is_reverse.setCheckState(Qt.Checked)
+        else:
+            self.is_reverse.setCheckState(Qt.Unchecked)
 
         # Display shape of wind_mat
         self.set_output()
@@ -314,5 +311,9 @@ class SWindPat(Gen_SWindPat, QWidget):
             # Check that everything is set
             if lamination.winding.qs is None:
                 return "You must set qs !"
+            if lamination.winding.Nslot_shift_wind is None:
+                lamination.winding.Nslot_shift_wind = 0
+            if lamination.winding.is_reverse_wind is None:
+                lamination.winding.is_reverse_wind = False
         except Exception as e:
             return str(e)

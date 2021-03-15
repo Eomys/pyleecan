@@ -220,11 +220,15 @@ class Mode(SolutionMat):
         S += getsizeof(self.order_long)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from SolutionMat
-        Mode_dict = super(Mode, self).as_dict()
+        Mode_dict = super(Mode, self).as_dict(**kwargs)
         Mode_dict["nat_freq"] = self.nat_freq
         Mode_dict["order_circ"] = self.order_circ
         Mode_dict["order_long"] = self.order_long

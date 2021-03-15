@@ -563,8 +563,7 @@ def test_ecc_FEMM():
         is_sliding_band=False,  # Ecc => No sliding band
         is_periodicity_a=False,
         is_mmfs=False,
-        is_get_mesh=True,
-        is_save_FEA=True,
+        is_get_meshsolution=True,
     )
     simu.force = None
     simu.struct = None

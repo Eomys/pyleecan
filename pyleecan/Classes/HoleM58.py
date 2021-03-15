@@ -33,6 +33,11 @@ except ImportError as error:
     check = error
 
 try:
+    from ..Methods.Slot.HoleM58.comp_magnetization_dict import comp_magnetization_dict
+except ImportError as error:
+    comp_magnetization_dict = error
+
+try:
     from ..Methods.Slot.HoleM58.comp_radius import comp_radius
 except ImportError as error:
     comp_radius = error
@@ -102,6 +107,18 @@ class HoleM58(HoleMag):
         )
     else:
         check = check
+    # cf Methods.Slot.HoleM58.comp_magnetization_dict
+    if isinstance(comp_magnetization_dict, ImportError):
+        comp_magnetization_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM58 method comp_magnetization_dict: "
+                    + str(comp_magnetization_dict)
+                )
+            )
+        )
+    else:
+        comp_magnetization_dict = comp_magnetization_dict
     # cf Methods.Slot.HoleM58.comp_radius
     if isinstance(comp_radius, ImportError):
         comp_radius = property(
@@ -173,6 +190,7 @@ class HoleM58(HoleMag):
         magnet_0=-1,
         Zh=36,
         mat_void=-1,
+        magnetization_dict_offset=None,
         init_dict=None,
         init_str=None,
     ):
@@ -213,6 +231,8 @@ class HoleM58(HoleMag):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
+            if "magnetization_dict_offset" in list(init_dict.keys()):
+                magnetization_dict_offset = init_dict["magnetization_dict_offset"]
         # Set the properties (value check and convertion are done in setter)
         self.H0 = H0
         self.W0 = W0
@@ -224,7 +244,11 @@ class HoleM58(HoleMag):
         self.R0 = R0
         self.magnet_0 = magnet_0
         # Call HoleMag init
-        super(HoleM58, self).__init__(Zh=Zh, mat_void=mat_void)
+        super(HoleM58, self).__init__(
+            Zh=Zh,
+            mat_void=mat_void,
+            magnetization_dict_offset=magnetization_dict_offset,
+        )
         # The class is frozen (in HoleMag init), for now it's impossible to
         # add new properties
 
@@ -331,11 +355,15 @@ class HoleM58(HoleMag):
         S += getsizeof(self.magnet_0)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from HoleMag
-        HoleM58_dict = super(HoleM58, self).as_dict()
+        HoleM58_dict = super(HoleM58, self).as_dict(**kwargs)
         HoleM58_dict["H0"] = self.H0
         HoleM58_dict["W0"] = self.W0
         HoleM58_dict["H1"] = self.H1
@@ -347,7 +375,7 @@ class HoleM58(HoleMag):
         if self.magnet_0 is None:
             HoleM58_dict["magnet_0"] = None
         else:
-            HoleM58_dict["magnet_0"] = self.magnet_0.as_dict()
+            HoleM58_dict["magnet_0"] = self.magnet_0.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         HoleM58_dict["__class__"] = "HoleM58"

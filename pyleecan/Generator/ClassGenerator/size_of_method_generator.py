@@ -42,7 +42,16 @@ def generate_size_of(gen_dict, class_dict):
         so_str += TAB2 + "S += super(" + class_name + ", self).__sizeof__()\n"
     # Check that all the propoperties (except parent) are equal
     for prop in class_dict["properties"]:
-        if prop["type"] in ["float", "int", "str", "bool", "complex", "ndarray"]:
+        if prop["type"] in [
+            "float",
+            "int",
+            "str",
+            "bool",
+            "complex",
+            "ndarray",
+            None,
+            "",
+        ]:
             so_str += TAB2 + "S += getsizeof(self." + prop["name"] + ")\n"
         elif prop["type"] in ["[ndarray]", "list", "tuple"] or is_list_pyleecan_type(
             prop["type"]

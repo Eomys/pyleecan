@@ -235,18 +235,22 @@ class OutGeo(FrozenClass):
         S += getsizeof(self.is_antiper_t)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutGeo_dict = dict()
         if self.stator is None:
             OutGeo_dict["stator"] = None
         else:
-            OutGeo_dict["stator"] = self.stator.as_dict()
+            OutGeo_dict["stator"] = self.stator.as_dict(**kwargs)
         if self.rotor is None:
             OutGeo_dict["rotor"] = None
         else:
-            OutGeo_dict["rotor"] = self.rotor.as_dict()
+            OutGeo_dict["rotor"] = self.rotor.as_dict(**kwargs)
         OutGeo_dict["Wgap_mec"] = self.Wgap_mec
         OutGeo_dict["Wgap_mag"] = self.Wgap_mag
         OutGeo_dict["Rgap_mec"] = self.Rgap_mec

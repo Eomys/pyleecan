@@ -11,6 +11,7 @@ from os.path import join
 
 from Tests import save_plot_path as save_path
 
+
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
 # @pytest.mark.DEV
@@ -41,7 +42,12 @@ def test_plot_contour_1group():
     MSol.group = {"stator core": np.array([11, 12])}
 
     MSol.plot_contour(is_show_fig=False, save_path=save_path + "/plot_mesh.png")
-    MSol.plot_contour(group_names="stator core", is_show_fig=False, save_path=save_path + "/plot_mesh_stator.png")
+    MSol.plot_contour(
+        group_names="stator core",
+        is_show_fig=False,
+        save_path=save_path + "/plot_mesh_stator.png",
+    )
+
 
 def test_plot_contour_2group():
     mesh = MeshMat()
@@ -68,7 +74,9 @@ def test_plot_contour_2group():
     mesh.cell["triangle"].indice = np.array([11, 12, 13, 98, 100, 101])
 
     solution = SolutionMat()
-    solution.field = np.array([[1, 2, 3], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [7, 8, 9]])
+    solution.field = np.array(
+        [[1, 2, 3], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [7, 8, 9]]
+    )
     solution.axis_name = ["indice", "time"]
     solution.axis_size = [6, 3]
     solution.indice = np.array([11, 12, 13, 98, 100, 101])
@@ -83,9 +91,13 @@ def test_plot_contour_2group():
     meshsol.group["rotor"] = np.array([98, 100, 101])
 
     meshsol.plot_contour(is_show_fig=False, save_path=save_path + "/plot_mesh.png")
-    meshsol.plot_contour(group_names=["stator", "rotor"], is_show_fig=False, save_path=save_path + "/plot_mesh_stator.png")
+    meshsol.plot_contour(
+        group_names=["stator", "rotor"],
+        is_show_fig=False,
+        save_path=save_path + "/plot_mesh_stator.png",
+    )
 
 
 if __name__ == "__main__":
-    #test_plot_contour_1group()
+    # test_plot_contour_1group()
     test_plot_contour_2group()

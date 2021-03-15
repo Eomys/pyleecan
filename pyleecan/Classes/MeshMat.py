@@ -349,24 +349,28 @@ class MeshMat(Mesh):
         S += getsizeof(self._is_renum)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Mesh
-        MeshMat_dict = super(MeshMat, self).as_dict()
+        MeshMat_dict = super(MeshMat, self).as_dict(**kwargs)
         if self.cell is None:
             MeshMat_dict["cell"] = None
         else:
             MeshMat_dict["cell"] = dict()
             for key, obj in self.cell.items():
                 if obj is not None:
-                    MeshMat_dict["cell"][key] = obj.as_dict()
+                    MeshMat_dict["cell"][key] = obj.as_dict(**kwargs)
                 else:
                     MeshMat_dict["cell"][key] = None
         if self.node is None:
             MeshMat_dict["node"] = None
         else:
-            MeshMat_dict["node"] = self.node.as_dict()
+            MeshMat_dict["node"] = self.node.as_dict(**kwargs)
         MeshMat_dict["_is_renum"] = self._is_renum
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -454,7 +458,7 @@ class MeshMat(Mesh):
     _is_renum = property(
         fget=_get__is_renum,
         fset=_set__is_renum,
-        doc=u"""To check if renumering the nodes and cells is useful when renum method is called
+        doc=u"""True if renumering the nodes and cells is useful when renum method is called (saving calculation time)
 
         :Type: bool
         """,

@@ -3,14 +3,23 @@ from logging.config import dictConfig
 from os.path import join
 
 
-def init_logger(self, output, is_create=True, is_log_start=True):
-    """Create all the logger for the simulation"""
+def init_logger(self, output):
+    """Create all the logger for the simulation
+
+    Parameters
+    ----------
+    self : Simulation
+        A Simulation object
+    output : XOuput
+        XOutput or Output object
+    """
+
     if self.name in [None, ""]:
         log_name = DEFAULT_LOG_NAME
     else:
         log_name = self.name
 
-    if is_create:
+    if self.layer == 0:  # Create logger only once for top simulation
         log_dict = gen_logger_config_dict(log_name)
 
         # Update log file
@@ -37,8 +46,8 @@ def init_logger(self, output, is_create=True, is_log_start=True):
     output.force.logger_name = log_name + ".Force"
     output.struct.logger_name = log_name + ".Structural"
 
-    if is_log_start:
-        # Display start of simulation
+    if self.layer == 0:
+        # Display start of top simulation
         msg = "Starting running simulation"
         if self.name not in ["", None]:
             msg += " " + self.name
