@@ -60,7 +60,7 @@ def get_group(self, group_names, is_renum=False):
         group_indices.extend(self.group[group_names])
         label = label + group_names
 
-    sep_list.append(group_indices)
+    sep_list.append(np.sort(group_indices))
 
     # 2) extract the corresponding connectivity and create a new mesh
     mesh_init = self.get_mesh()
