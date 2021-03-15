@@ -36,7 +36,7 @@ def test_Slotless_CEFC_002():
     simu = Simu1(name="EM_Slotless_CEFC_002_save_mag", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=2, N0=1200
+        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=1, N0=1200
     )
 
     simu.mag = MagFEMM(
@@ -96,7 +96,7 @@ def test_Slotless_CEFC_002():
     out.mag.meshsolution.plot_contour(
         label="\mu",
         group_names=["rotor core", "rotor magnets"],
-        save_path=join(save_plot_path, "CEFC_002_mu_stator_airgap_save.png"),
+        save_path=join(save_plot_path, "CEFC_002_mu_rotor_save.png"),
         is_show_fig=False,
     )
 
@@ -115,37 +115,18 @@ def test_Slotless_CEFC_002():
         save_path=join(save_plot_path, "CEFC_002_mesh_load.png"), is_show_fig=False
     )
 
-    FEMM.mag.meshsolution.plot_mesh(
-        group_names=["stator core", "/", "airgap"],
-        save_path=join(save_plot_path, "CEFC_002_interface_mesh_load.png"),
-        is_show_fig=False,
-    )
-
-    FEMM.mag.meshsolution.plot_contour(
-        label="\mu",
-        group_names=["stator core", "airgap"],
-        save_path=join(save_plot_path, "CEFC_002_mu_stator_airgap_load.png"),
-        is_show_fig=False,
-    )
     FEMM.mag.meshsolution.plot_contour(
         label="B",
         save_path=join(save_plot_path, "CEFC_002_B_load.png"),
         is_show_fig=False,
     )
-    FEMM.mag.meshsolution.plot_contour(
-        label="H",
-        group_names="stator core",
-        save_path=join(save_plot_path, "CEFC_002_H_stator_load.png"),
-        is_show_fig=False,
-    )
 
     FEMM.mag.meshsolution.plot_contour(
-        label="H",
-        group_names=["stator core", "airgap"],
+        label="\mu",
+        group_names=["rotor core", "rotor magnets"],
+        save_path=join(save_plot_path, "CEFC_002_mu_rotor_load.png"),
         is_show_fig=False,
-        save_path=join(save_plot_path, "CEFC_002_H_stator_airgap_load.png"),
     )
-
 
 # To run it without pytest
 if __name__ == "__main__":
