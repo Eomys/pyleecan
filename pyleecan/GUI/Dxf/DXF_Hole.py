@@ -329,7 +329,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         combobox = QComboBox()
         combobox.addItems(["Hole", "Magnet"])
         self.w_surface_list.setCellWidget(
-            nrows, TYPE_COL, combobox,
+            nrows,
+            TYPE_COL,
+            combobox,
         )
         if 2 in self.selected_list:
             combobox.setCurrentIndex(1)  # Magnet
@@ -340,7 +342,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         del_button.setIcon(QIcon(self.delete_icon))
         del_button.pressed.connect(self.delete_surface)
         self.w_surface_list.setCellWidget(
-            nrows, DEL_COL, del_button,
+            nrows,
+            DEL_COL,
+            del_button,
         )
 
         # Adding Highlight button
@@ -348,14 +352,18 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         HL_button.setIcon(QIcon(self.highlight_icon))
         HL_button.pressed.connect(self.highlight_surface)
         self.w_surface_list.setCellWidget(
-            nrows, HL_COL, HL_button,
+            nrows,
+            HL_COL,
+            HL_button,
         )
 
         # Add reference combobox
         combobox = QComboBox()
         combobox.addItems(index_list)
         self.w_surface_list.setCellWidget(
-            nrows, REF_COL, combobox,
+            nrows,
+            REF_COL,
+            combobox,
         )
         if 2 in self.selected_list:
             combobox.setCurrentIndex(
@@ -372,7 +380,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # lf_off.setText("0")
         lf_off.setEnabled(2 in self.selected_list)
         self.w_surface_list.setCellWidget(
-            nrows, OFF_COL, lf_off,
+            nrows,
+            OFF_COL,
+            lf_off,
         )
 
         # Remove selection to start new one
@@ -431,7 +441,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # Create magnet objects
         hole.magnet_dict = dict()
         for ii in range(Nmag):
-            hole.magnet_dict["magnet_" + str(ii)] = Magnet()
+            hole.magnet_dict["magnet_" + str(ii)] = Magnet(type_magnetization=1)
 
         # Sort the surfaces
         angles = [np_angle(surf.point_ref) for surf in hole.surf_list]

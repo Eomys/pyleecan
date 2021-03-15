@@ -139,7 +139,7 @@
                                 "rho": 7500.0
                             }
                         },
-                        "type_magnetization": 0
+                        "type_magnetization": 1
                     },
                     "magnet_1": {
                         "Lmag": 0.132,
@@ -199,7 +199,7 @@
                                 "rho": 7500.0
                             }
                         },
-                        "type_magnetization": 0
+                        "type_magnetization": 1
                     }
                 },
                 "magnetization_dict_offset": {
