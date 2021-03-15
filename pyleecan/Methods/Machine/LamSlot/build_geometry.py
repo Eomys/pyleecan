@@ -93,8 +93,10 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         surf_yoke = Circle(
             radius=Ryoke, label=label_yoke, line_label=label_yoke, center=0
         )
-        if self.Rint == 0:
+        if self.Rint == 0 and len(bore_list) > 0:
             surf_list = [surf_slot]
+        elif self.Rint == 0 and len(bore_list) == 0:
+            surf_list = list()
         elif self.is_internal:
             surf_list.append(
                 SurfRing(

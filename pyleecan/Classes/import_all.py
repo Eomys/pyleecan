@@ -159,6 +159,7 @@ from ..Classes.SlotM13 import SlotM13
 from ..Classes.SlotM14 import SlotM14
 from ..Classes.SlotM15 import SlotM15
 from ..Classes.SlotM16 import SlotM16
+from ..Classes.SlotM17 import SlotM17
 from ..Classes.SlotUD import SlotUD
 from ..Classes.SlotUD2 import SlotUD2
 from ..Classes.SlotW10 import SlotW10

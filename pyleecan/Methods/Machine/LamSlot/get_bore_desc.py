@@ -57,7 +57,7 @@ def get_bore_desc(self, sym=1):
             bore_desc.append(bore_dict)
 
     # Add last bore line
-    if sym == 1:
+    if sym == 1 and abs(op - 2 * pi / Zs) > 1e-6:
         bore_dict = dict()
         bore_dict["begin_angle"] = merged_list[-1]["end_angle"]
         bore_dict["end_angle"] = merged_list[0]["begin_angle"]
@@ -73,7 +73,7 @@ def get_bore_desc(self, sym=1):
         else:
             # First element is a bore line
             bore_desc.insert(0, bore_dict)
-    else:  # With symmetry
+    elif sym != 1 and abs(op - 2 * pi / Zs) > 1e-6:  # With symmetry
         # Add last bore line
         bore_dict = dict()
         bore_dict["begin_angle"] = merged_list[-1]["end_angle"]
