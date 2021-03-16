@@ -212,11 +212,10 @@ def plot_2D(
     if is_logscale_y:
         ax.set_yscale("log")
 
-    if is_disp_title:
+    if is_disp_title and title not in [None, ""]:
         ax.set_title(title)
 
-    if is_grid:
-        ax.grid()
+    ax.grid(is_grid)
 
     if ndatas > 1 and not no_legend:
         ax.legend(prop={"family": FONT_NAME, "size": FONT_SIZE_LEGEND})
