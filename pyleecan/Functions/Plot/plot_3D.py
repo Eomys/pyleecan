@@ -209,7 +209,7 @@ def plot_3D(
     if is_logscale_y:
         ax.yscale("log")
 
-    if is_disp_title:
+    if is_disp_title and title not in [None, ""]:
         ax.set_title(title)
 
     if is_3d:
