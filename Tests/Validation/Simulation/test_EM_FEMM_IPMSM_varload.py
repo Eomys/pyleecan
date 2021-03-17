@@ -10,7 +10,7 @@ import pytest
 from numpy import ones, zeros, linspace, pi, array, sqrt, arange, exp
 from multiprocessing import cpu_count
 
-from SciDataTool import plot_2D
+from SciDataTool.Functions.Plot.plot_2D import plot_2D
 from pyleecan.definitions import config_dict
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
