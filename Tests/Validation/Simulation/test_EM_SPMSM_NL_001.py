@@ -19,6 +19,7 @@ from Tests import TEST_DATA_DIR
 import pytest
 
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -85,11 +86,11 @@ def test_Magnetic_FEMM_sym():
 
     plt.close("all")
 
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         data_list=[out3.mag.B],
         legend_list=["Symmetry", "MANATEE SDM"],
         save_path=join(save_path, "test_EM_SPMSM_NL_001_SDM.png"),
         is_show_fig=False,
+        **dict_2D
     )

@@ -14,6 +14,7 @@ from pyleecan.Classes.Output import Output
 import pytest
 
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
@@ -70,13 +71,13 @@ def test_FEMM_import_model():
 
     # Plot the result by comparing the two simulation
     plt.close("all")
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         data_list=[out2.mag.B],
         legend_list=["Creating .fem", "Importing .fem"],
         save_path=join(save_path, "FEMM_import_model_B.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     assert_array_almost_equal(

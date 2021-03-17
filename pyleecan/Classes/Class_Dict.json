@@ -7444,11 +7444,7 @@
             "getter.get_path_result",
             "getter.get_machine_periodicity",
             "getter.get_rot_dir",
-            "plot.plot_2D_Data",
             "getter.get_fund_harm",
-            "plot.plot_A_quiver_2D",
-            "plot.plot_3D_Data",
-            "plot.plot_A_time_space",
             "getter.get_data_from_str",
             "print_memory"
         ],

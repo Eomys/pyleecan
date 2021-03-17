@@ -10,7 +10,7 @@ import pytest
 from numpy import ones, zeros, linspace, pi, array, sqrt, arange, exp
 from multiprocessing import cpu_count
 
-from pyleecan.Functions.Plot.plot_2D import plot_2D
+from SciDataTool import plot_2D
 from pyleecan.definitions import config_dict
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
@@ -128,7 +128,7 @@ def test_EM_FEMM_IPMSM_varload():
     fig = Xout.plot_multi("Id", "Iq", is_show_fig=False)
     fig.savefig(join(save_path, "EM_FEMM_IPMSM_varload_Id_Iq.png"))
 
-    curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
+    curve_colors = config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"]
 
     plot_2D(
         array([x * 180 / pi for x in Xout.xoutput_dict["Phi0"].result]),
