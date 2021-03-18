@@ -30,10 +30,10 @@ def get_data(self):
         raise Exception(splitext(self.file_path)[1] + " files are not supported")
 
     # Define MeshMat object
-    if min(nodes[:, 0]) == 0 and max(nodes[:, 0]) == len(nodes[:, 0])-1:
-        is_renum=False
+    if min(nodes[:, 0]) == 0 and max(nodes[:, 0]) == len(nodes[:, 0]) - 1:
+        is_renum = False
     else:
-        is_renum=True
+        is_renum = True
 
     mesh = MeshMat(_is_renum=is_renum)
     mesh.label = "Imported mesh"

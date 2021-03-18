@@ -31,20 +31,22 @@ def get_data(self):
         # If nodes dataset
         if dataset["type"] == 15:
             nodes = vstack(
-                ([int(x) for x in dataset["node_nums"]], dataset["x"], dataset["y"], dataset["z"])
+                (
+                    [int(x) for x in dataset["node_nums"]],
+                    dataset["x"],
+                    dataset["y"],
+                    dataset["z"],
+                )
             ).T
 
         # If element dataset
         elif dataset["type"] == 2412:
-            # Look for the different types of elements stored in the dataset
-            elements_type = list(set(dataset["num_nodes"]))
-            element_type_dict = {"3": "triangle", "4": "quad"}
             # Store connectivities
             elements = dict()
-            for element_type in elements_type:
-                ind = where(np_array(dataset["num_nodes"]) == element_type)[0]
-                elements[element_type_dict[str(element_type)]] = vstack(
-                    (dataset["element_nums"], np_array(dataset["nodes_nums"])[ind].T)
-                ).T
+            for elt_type, elt_dict in dataset.items():
+                if elt_type != "type":
+                    elements[elt_type] = vstack(
+                        (elt_dict["element_nums"], np_array(elt_dict["nodes_nums"]).T)
+                    ).T
 
     return nodes, elements

@@ -43,7 +43,10 @@ def get_solution(self, indice=None):
             new_indice = [ii for ii in indice if ii in org_indice]
 
             # create requested axes list to get field values (see SciDataTool ref.)
-            args = [name + "[smallestperiod]" if name != "indice" else name for name in axes_names]
+            args = [
+                name + "[smallestperiod]" if name != "indice" else name
+                for name in axes_names
+            ]
             args[ax_idx] += "=axis_data"
 
             # get the field values
