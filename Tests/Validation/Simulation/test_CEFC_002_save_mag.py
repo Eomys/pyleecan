@@ -59,6 +59,13 @@ def test_Slotless_CEFC_002():
         is_show_fig=False,
     )
 
+    test_meshsol = out.mag.meshsolution.get_group(["stator core", "airgap"])
+    test_meshsol.plot_mesh(
+        group_names=["stator core"],
+        save_path=join(save_plot_path, "CEFC_002_mesh_stator_bis_save.png"),
+        is_show_fig=False
+    )
+
     out.mag.meshsolution.plot_mesh(
         save_path=join(save_plot_path, "CEFC_002_mesh_interface_save.png"),
         group_names=["stator core", "/", "airgap"],
@@ -86,6 +93,14 @@ def test_Slotless_CEFC_002():
         save_path=join(save_plot_path, "CEFC_002_H_stator_save.png"),
         is_show_fig=False,
     )
+
+    test_meshsol.plot_contour(
+        label="H",
+        group_names="stator core",
+        save_path=join(save_plot_path, "CEFC_002_H_stator_bis_save.png"),
+        is_show_fig=False,
+    )
+
     out.mag.meshsolution.plot_contour(
         label="\mu",
         group_names=["stator core", "airgap"],
