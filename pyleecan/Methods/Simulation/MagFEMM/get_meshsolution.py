@@ -4,7 +4,7 @@ import numpy as np
 from ....definitions import MAIN_DIR
 from ....Classes.MeshMat import MeshMat
 from ....Classes.CellMat import CellMat
-from ....Classes.PointMat import PointMat
+from ....Classes.NodeMat import NodeMat
 from ....Classes.RefTriangle3 import RefTriangle3
 
 from os.path import join
@@ -110,12 +110,14 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
         mesh.cell["triangle"] = CellMat(
             connectivity=listElem,
             nb_cell=NbElem,
-            nb_pt_per_cell=3,
+            nb_node_per_cell=3,
             indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
         )
         mesh.cell["triangle"].interpolation.ref_cell = RefTriangle3(epsilon=1e-9)
-        mesh.point = PointMat(
-            coordinate=listNd[:, 0:2], nb_pt=NbNd, indice=np.linspace(0, NbNd - 1, NbNd)
+        mesh.node = NodeMat(
+            coordinate=listNd[:, 0:2],
+            nb_node=NbNd,
+            indice=np.linspace(0, NbNd - 1, NbNd, dtype=int),
         )
         # get all groups that are in the FEMM model
         groups = dict()

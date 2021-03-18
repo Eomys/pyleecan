@@ -18,6 +18,8 @@ def get_field(self, *args):
         an array of field values
 
     """
+    if len(args) == 1 and type(args[0]) == tuple:
+        args = args[0]
 
     axname, axsize = self.get_axes_list()
 

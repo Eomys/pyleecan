@@ -3,7 +3,7 @@
 import pytest
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
-from pyleecan.Classes.PointMat import PointMat
+from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
 
@@ -14,19 +14,19 @@ class Test_get_cell_MeshMat(object):
 
     def setup_method(self, method):
         self.mesh = MeshMat()
-        self.mesh.cell["triangle3"] = CellMat(nb_pt_per_cell=3)
-        self.mesh.cell["segment2"] = CellMat(nb_pt_per_cell=2)
+        self.mesh.cell["triangle3"] = CellMat(nb_node_per_cell=3)
+        self.mesh.cell["segment2"] = CellMat(nb_node_per_cell=2)
         self.mesh.add_cell([2, 1, 0], "triangle3")
         self.mesh.add_cell([1, 2, 3], "triangle3")
         self.mesh.add_cell([3, 1, 4], "triangle3")
         self.mesh.add_cell([0, 1], "segment2")
 
-        self.mesh.point = PointMat()
-        self.mesh.point.add_point([0, 0])
-        self.mesh.point.add_point([1, 0])
-        self.mesh.point.add_point([0, 1])
-        self.mesh.point.add_point([1, -1])
-        self.mesh.point.add_point([2, -1])
+        self.mesh.node = NodeMat()
+        self.mesh.node.add_node([0, 0])
+        self.mesh.node.add_node([1, 0])
+        self.mesh.node.add_node([0, 1])
+        self.mesh.node.add_node([1, -1])
+        self.mesh.node.add_node([2, -1])
 
     def test_MeshMat_all(self):
         """unittest MeshMat return all cells"""

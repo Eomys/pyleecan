@@ -8,8 +8,8 @@ def is_exist(self, new_coord, dim=2):
 
     Parameters
     ----------
-    self : PointMat
-        an PointMat object
+    self : NodeMat
+        an NodeMat object
     coord : ndarray
         coordinate of the node
 
@@ -20,7 +20,7 @@ def is_exist(self, new_coord, dim=2):
     """
     # Check the existence of the element
     delta = self.delta
-    nb_node = self.nb_pt
+    nb_node = self.nb_node
     coords = self.coordinate
 
     if nb_node == 0:
