@@ -24,11 +24,23 @@ def get_mesh_field_pv(
         an index
     indices : list
         list of indices
+    is_radial : bool
+        radial component only
+    is_center : bool
+        field at cell centers
+    field_name : str
+        label of the field to return
+    itimefreq : int
+        if the field depends has a time/freqs axis, return the timefreq-th slice.
 
     Returns
     -------
-    mesh: Mesh
-        a Mesh object
+    mesh_pv: vtk.vtkPointSet
+        a pyvista mesh object
+    field : ndarray
+        an extracted field
+    field_name : str
+        name of the extracted field (useful if not specified as input)
 
     """
 
@@ -57,12 +69,10 @@ def get_mesh_field_pv(
     is_timefreq = False
     if "time" in axes_list[0]:
         ind = axes_list[0].index("time")
-        if axes_list[1][ind] > 1:
-            is_timefreq = True
+        is_timefreq = True
     elif "freqs" in axes_list[0]:
         ind = axes_list[0].index("freqs")
-        if axes_list[1][ind] > 1:
-            is_timefreq = True
+        is_timefreq = True
 
     if is_timefreq:
         field = field.take((itimefreq), axis=ind)
