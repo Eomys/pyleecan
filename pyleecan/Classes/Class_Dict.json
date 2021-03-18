@@ -5870,12 +5870,13 @@
             "get_mesh",
             "get_solution",
             "get_field",
+            "get_group",
+            "get_mesh_field_pv",
             "plot_mesh",
             "plot_contour",
             "plot_deflection",
             "plot_deflection_animated",
-            "plot_glyph",
-            "get_group"
+            "plot_glyph"
         ],
         "mother": "",
         "name": "MeshSolution",
