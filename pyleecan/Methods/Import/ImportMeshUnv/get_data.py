@@ -6,7 +6,7 @@ import pyuff
 
 
 def get_data(self):
-    """Return mesh data (points and elements) from a .unv file
+    """Return mesh data (nodes and elements) from a .unv file
 
     Parameters
     ----------
@@ -15,8 +15,8 @@ def get_data(self):
 
     Returns
     -------
-    points: ndarray
-        The points id and coordinates (one line = id, 3 coordinates)
+    nodes: ndarray
+        The nodes id and coordinates (one line = id, 3 coordinates)
     elements: dict
         The elements id and connectivity per element type (one line = id, n node ids)
 
@@ -28,10 +28,10 @@ def get_data(self):
 
     # Scan datasets
     for dataset in datasets:
-        # If points dataset
+        # If nodes dataset
         if dataset["type"] == 15:
-            points = vstack(
-                (dataset["node_nums"], dataset["x"], dataset["y"], dataset["z"])
+            nodes = vstack(
+                ([int(x) for x in dataset["node_nums"]], dataset["x"], dataset["y"], dataset["z"])
             ).T
 
         # If element dataset
@@ -47,4 +47,4 @@ def get_data(self):
                     (dataset["element_nums"], np_array(dataset["nodes_nums"])[ind].T)
                 ).T
 
-    return points, elements
+    return nodes, elements

@@ -3,9 +3,16 @@
 # TODO: debug mesh with mix of elements (not handled in pyuff)
 
 import pytest
+from os import mkdir
+from os.path import isdir, join, basename, splitext
 
 from pyleecan.Classes.ImportMeshMat import ImportMeshMat
 from pyleecan.Classes.MeshSolution import MeshSolution
+from Tests import save_plot_path as save_path
+
+save_path = join(save_path, "Import")
+if not isdir(save_path):
+    mkdir(save_path)
 
 list_param = [
     {
@@ -53,9 +60,13 @@ def test_import_mesh_unv(unv_file):
     # for elt_type, n_elt in zip(unv_file["element_types"], unv_file["n_elements"]):
     #     assert elements[elt_type].shape[0] == n_elt
 
-    meshsol = MeshSolution()
+    meshsol = MeshSolution(dimension=3)
     meshsol.mesh = [mesh]
-    meshsol.plot_mesh(save_path='D:/test.png', is_show_fig=False)
+    meshsol.plot_mesh(
+        save_path=join(save_path, splitext(basename(unv_file["path"]))[0] + '.png'), 
+        is_show_axes=True, 
+        is_show_fig=False,
+    )
 
 if __name__ == "__main__":
     for param in list_param:
