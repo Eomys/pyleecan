@@ -10,20 +10,19 @@ from pyleecan.Classes.SolutionMat import SolutionMat
 
 def get_group(self, group_names):
     """Return all attributes of a MeshSolution object with only the cells, nodes
-    and corresponding solutions of the group. Solutions are converted as SolutionMat.
+    and corresponding solutions of the group.
 
      Parameters
      ----------
      self : MeshSolution
          an MeshSolution object
-     group_name : str
-         the name of the group (e.g. "stator")
+     group_name : [str]
+         list of the name of the group(s) (e.g. ["stator"])
 
      Returns
      -------
-     grp_cells: dict
-         a dict sorted by cell type containing connectivity of the group
-
+     meshsol_grp: MeshSolution
+         a new MeshSolution object which is subpart of self
     """
 
     is_same_mesh = self.is_same_mesh
