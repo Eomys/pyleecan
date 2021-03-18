@@ -15,25 +15,22 @@ def run(self, output):
     """
 
     output.get_logger().info("Running Post-processing: " + self.name)
-    list_names = self.method.split(".")
-
     try:
-        if len(list_names) == 1:
-            # Getting the name of the plot method of the output or the object given by attribute
-            plot_method = getattr(output, self.method)
-        else:
+        if self.quantity is not None:
+            list_names = self.quantity.split(".")
             # Find object which contains the plot method if attribute is not None
             obj = output
-
             # Get successive objects to reach the one containing the method
-            for i in range(len(list_names) - 1):
+            for i in range(len(list_names)):
                 if "get_" in list_names[i]:
                     obj = getattr(obj, list_names[i])()
                 else:
                     obj = getattr(obj, list_names[i])
+        else:
+            obj = output
 
-            # Getting the name of the plot method of the output or the object given by attribute
-            plot_method = getattr(obj, list_names[-1])
+        # Get plot method
+        plot_method = getattr(obj, self.method)
 
         # Path to save the figure if save_path is not already in param_dict and is an argument of the plot method
         if "save_path" not in self.param_dict and "save_path" in str(
@@ -61,6 +58,7 @@ def run(self, output):
             *self.param_list,
             **self.param_dict,
         )
+
     except Exception as e:
         output.get_logger().error(
             "Error while running Post-processing: " + self.name + "\n" + str(e)

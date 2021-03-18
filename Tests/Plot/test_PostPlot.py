@@ -55,7 +55,8 @@ def test_PostPlot():
     fig2, axes2 = plt.subplots(1, 2)
 
     plot_B_rad_tan_space1 = PostPlot(
-        method="mag.B.plot_2D_Data",
+        method="plot_2D_Data",
+        quantity="mag.B",
         param_list=["angle"],
         param_dict=dict(
             {
@@ -70,7 +71,8 @@ def test_PostPlot():
     )
 
     plot_B_rad_tan_space2 = PostPlot(
-        method="mag.B.plot_2D_Data",
+        method="plot_2D_Data",
+        quantity="mag.B",
         param_list=["angle"],
         param_dict=dict(
             {
@@ -86,7 +88,8 @@ def test_PostPlot():
     )
 
     plot_machine_Tem_time1 = PostPlot(
-        method="simu.machine.plot",
+        method="plot",
+        quantity="simu.machine",
         param_dict={
             "is_show_fig": False,
             "save_path": None,
@@ -96,7 +99,8 @@ def test_PostPlot():
     )
 
     plot_machine_Tem_time2 = PostPlot(
-        method="mag.Tem.plot_2D_Data",
+        method="plot_2D_Data",
+        quantity="mag.Tem",
         param_list=["time"],
         param_dict=dict(
             {
@@ -111,7 +115,8 @@ def test_PostPlot():
     )
 
     plot_P_radial_space_svg = PostPlot(
-        method="force.AGSF.plot_2D_Data",
+        method="plot_2D_Data",
+        quantity="force.AGSF",
         param_list=["angle"],
         param_dict=dict(
             {
@@ -124,12 +129,27 @@ def test_PostPlot():
         save_format="svg",
     )
 
+    plot_Is = PostPlot(
+        method="plot_2D_Data",
+        quantity="elec.get_Is",
+        param_list=["time", "phase"],
+        param_dict=dict(
+            {
+                "is_show_fig": False,
+            },
+            **dict_2D
+        ),
+        name="plot_Is",
+        save_format="png",
+    )
+
     simu.postproc_list = [
         plot_B_rad_tan_space1,
         plot_B_rad_tan_space2,
         plot_machine_Tem_time1,
         plot_machine_Tem_time2,
         plot_P_radial_space_svg,
+        plot_Is,
     ]
 
     # Run simulations
