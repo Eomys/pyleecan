@@ -60,6 +60,8 @@ load_switch = {
     "ImportMatrix": ImportMatrix,
     "ImportMatrixVal": ImportMatrixVal,
     "ImportMatrixXls": ImportMatrixXls,
+    "ImportMeshMat": ImportMeshMat,
+    "ImportMeshUnv": ImportMeshUnv,
     "ImportVectorField": ImportVectorField,
     "IndMag": IndMag,
     "IndMagFEMM": IndMagFEMM,

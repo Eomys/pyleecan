@@ -2635,7 +2635,9 @@
             "ImportMatlab",
             "ImportMatrix",
             "ImportMatrixVal",
-            "ImportMatrixXls"
+            "ImportMatrixXls",
+            "ImportMeshMat",
+            "ImportMeshUnv"
         ],
         "desc": "Abstract class for Data Import/Generation",
         "is_internal": false,
@@ -3131,6 +3133,64 @@
                 "type": "bool",
                 "unit": "-",
                 "value": false
+            }
+        ]
+    },
+    "ImportMeshMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Import mesh as meshMat",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "Import",
+        "name": "ImportMeshMat",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportMeshMat.csv",
+        "properties": [
+            {
+                "desc": "Path of the file to load",
+                "max": "",
+                "min": "",
+                "name": "file_path",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "ImportMeshUnv": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Import mesh data from an unv file",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "Import",
+        "name": "ImportMeshUnv",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportMeshUnv.csv",
+        "properties": [
+            {
+                "desc": "Path of the file to load",
+                "max": "",
+                "min": "",
+                "name": "file_path",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
