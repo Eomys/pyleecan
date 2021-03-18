@@ -8,6 +8,7 @@ from numpy import einsum, sqrt, zeros, squeeze, real, imag, sum as np_sum, abs a
 
 def get_field(
     self,
+    *args_list,
     label=None,
     index=None,
     indices=None,
@@ -17,7 +18,6 @@ def get_field(
     is_rms=False,
     is_center=False,
     is_surf=False,
-    args=None,
 ):
     """Return the solution corresponding to label or an index.
 
@@ -50,26 +50,27 @@ def get_field(
         field
 
     """
+    if len(args_list) == 1 and type(args_list[0]) == tuple:
+        args_list = args_list[0]  # if called from another script with *arg_list
 
     # Get field
     solution = self.get_solution(label=label, index=index)
 
-    if args is not None:
-        field = solution.get_field(args)
-    else:
-        field = solution.get_field()
+    field = solution.get_field(*args_list, is_squeeze=False)
 
-    field = squeeze(field)
+    axes_list = solution.get_axes_list()
 
     # Check dimensions
     shape = field.shape
     is_other_dim = False
     is_1d_input = False
     is_1d_output = False
-    if len(shape) != 1 and shape[-1] > 3:
-        is_other_dim = True
-    if len(shape) == 1 or (len(shape) == 2 and is_other_dim):
+
+    if not "component" in axes_list[0]:
         is_1d_input = True
+    if len(axes_list[1]) == 3 or (len(axes_list[1]) == 2 and is_1d_input):
+        is_other_dim = True
+
     if is_radial:
         is_rthetaz = True
     if is_radial or is_1d_input or is_normal:

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from ....Classes.MeshMat import MeshMat
-from ....Classes.PointMat import PointMat
+from ....Classes.NodeMat import NodeMat
 from ....Classes.CellMat import CellMat
 from ....Classes.Interpolation import Interpolation
 from ....Classes.FPGNSeg import FPGNSeg
@@ -38,11 +38,13 @@ def convert(self, meshtype, scale):
         new_mesh = MeshMat(dimension=self.dimension)
 
         connect_all = self.get_cell()[0]
-        point = array(self.get_point())
-        nb_pt = point.shape[0]
+        nodes = array(self.get_node())
+        nb_node = nodes.shape[0]
 
-        new_mesh.point = PointMat(
-            coordinate=scale * point, nb_pt=nb_pt, indice=linspace(0, nb_pt - 1, nb_pt)
+        new_mesh.node = NodeMat(
+            coordinate=scale * nodes,
+            nb_node=nb_node,
+            indice=linspace(0, nb_node - 1, nb_node),
         )
 
         min_indice = 0
@@ -54,7 +56,7 @@ def convert(self, meshtype, scale):
 
             if key == "line":
                 new_mesh.cell["line"] = CellMat(
-                    nb_pt_per_cell=2,
+                    nb_node_per_cell=2,
                     connectivity=connect,
                     nb_cell=nb_cell,
                     indice=indices,
@@ -66,7 +68,7 @@ def convert(self, meshtype, scale):
                 new_mesh.cell["line"].interpolation = interp
             elif key == "line3":
                 new_mesh.cell["line3"] = CellMat(
-                    nb_pt_per_cell=3,
+                    nb_node_per_cell=3,
                     connectivity=connect,
                     nb_cell=nb_cell,
                     indice=indices,
@@ -78,7 +80,7 @@ def convert(self, meshtype, scale):
                 new_mesh.cell["line3"].interpolation = interp
             elif key == "triangle3":
                 new_mesh.cell["triangle"] = CellMat(
-                    nb_pt_per_cell=3,
+                    nb_node_per_cell=3,
                     connectivity=connect,
                     nb_cell=nb_cell,
                     indice=indices,
@@ -90,7 +92,7 @@ def convert(self, meshtype, scale):
                 new_mesh.cell["triangle"].interpolation = interp
             elif key == "quad9":
                 new_mesh.cell["quad9"] = CellMat(
-                    nb_pt_per_cell=9,
+                    nb_node_per_cell=9,
                     connectivity=connect,
                     nb_cell=nb_cell,
                     indice=indices,

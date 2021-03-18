@@ -33,6 +33,16 @@ except ImportError as error:
     get_field = error
 
 try:
+    from ..Methods.Mesh.MeshSolution.get_group import get_group
+except ImportError as error:
+    get_group = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.get_mesh_field_pv import get_mesh_field_pv
+except ImportError as error:
+    get_mesh_field_pv = error
+
+try:
     from ..Methods.Mesh.MeshSolution.plot_mesh import plot_mesh
 except ImportError as error:
     plot_mesh = error
@@ -60,9 +70,9 @@ except ImportError as error:
     plot_glyph = error
 
 try:
-    from ..Methods.Mesh.MeshSolution.get_group import get_group
+    from ..Methods.Mesh.MeshSolution.plot_glyph_animated import plot_glyph_animated
 except ImportError as error:
-    get_group = error
+    plot_glyph_animated = error
 
 
 from numpy import array, array_equal
@@ -108,6 +118,29 @@ class MeshSolution(FrozenClass):
         )
     else:
         get_field = get_field
+    # cf Methods.Mesh.MeshSolution.get_group
+    if isinstance(get_group, ImportError):
+        get_group = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method get_group: " + str(get_group)
+                )
+            )
+        )
+    else:
+        get_group = get_group
+    # cf Methods.Mesh.MeshSolution.get_mesh_field_pv
+    if isinstance(get_mesh_field_pv, ImportError):
+        get_mesh_field_pv = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method get_mesh_field_pv: "
+                    + str(get_mesh_field_pv)
+                )
+            )
+        )
+    else:
+        get_mesh_field_pv = get_mesh_field_pv
     # cf Methods.Mesh.MeshSolution.plot_mesh
     if isinstance(plot_mesh, ImportError):
         plot_mesh = property(
@@ -165,17 +198,18 @@ class MeshSolution(FrozenClass):
         )
     else:
         plot_glyph = plot_glyph
-    # cf Methods.Mesh.MeshSolution.get_group
-    if isinstance(get_group, ImportError):
-        get_group = property(
+    # cf Methods.Mesh.MeshSolution.plot_glyph_animated
+    if isinstance(plot_glyph_animated, ImportError):
+        plot_glyph_animated = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MeshSolution method get_group: " + str(get_group)
+                    "Can't use MeshSolution method plot_glyph_animated: "
+                    + str(plot_glyph_animated)
                 )
             )
         )
     else:
-        get_group = get_group
+        plot_glyph_animated = plot_glyph_animated
     # save and copy methods are available in all object
     save = save
     copy = copy
