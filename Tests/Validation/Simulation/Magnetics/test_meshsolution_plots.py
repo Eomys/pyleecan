@@ -18,6 +18,103 @@ import json
 import numpy as np
 import pytest
 
+@pytest.mark.long
+@pytest.mark.validation
+@pytest.mark.FEMM
+@pytest.mark.MeshSol
+def test_SIPMSM_003():
+    """Validation of a polar SIPMSM with surface magnet
+    Linear lamination material
+
+    From publication
+    Lubin, S. Mezani, and A. Rezzoug,
+    “2-D Exact Analytical Model for Surface-Mounted Permanent-Magnet Motors with Semi-Closed Slots,”
+    IEEE Trans. Magn., vol. 47, no. 2, pp. 479–492, 2011.
+    Test compute the Flux in FEMM, with and without symmetry
+    and with MANATEE semi-analytical subdomain model
+    """
+    SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
+    simu = Simu1(name="test_SIPMSM_003", machine=SPMSM_003)
+
+    # Definition of the enforced output of the electrical module
+    N0 = 3000
+    Is = ImportMatrixVal(
+        value=array(
+            [
+                [6.97244193e-06, 2.25353053e02, -2.25353060e02],
+                [-2.60215295e02, 1.30107654e02, 1.30107642e02],
+                [-6.97244208e-06, -2.25353053e02, 2.25353060e02],
+                [2.60215295e02, -1.30107654e02, -1.30107642e02],
+            ]
+        )
+    )
+    time = ImportGenVectLin(start=0, stop=0.015, num=4, endpoint=True)
+    Na_tot = 1024
+
+    simu.input = InputCurrent(
+        Is=Is,
+        Ir=None,  # No winding on the rotor
+        N0=N0,
+        angle_rotor=None,  # Will be computed
+        time=time,
+        Na_tot=Na_tot,
+        angle_rotor_initial=0.5216 + pi,
+    )
+
+    # Definition of the magnetic simulation (no symmetry)
+    simu.mag = MagFEMM(
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=False,
+        is_get_meshsolution=True,
+        nb_worker=cpu_count(),
+    )
+    simu.force = None
+    simu.struct = None
+    # Copy the simu and activate the symmetry
+    assert SPMSM_003.comp_periodicity() == (1, True, 1, True)
+    simu_sym = Simu1(init_dict=simu.as_dict())
+    simu_sym.mag.is_periodicity_a = True
+
+    out = Output(simu=simu_sym)
+    simu_sym.run()
+
+    out.mag.meshsolution.plot_mesh(
+        save_path=join(save_path, simu.name + "_mesh.png"), is_show_fig=False
+    )
+
+    out.mag.meshsolution.plot_mesh(
+        group_names="stator core",
+        save_path=join(save_path, simu.name + "_mesh_stator.png"),
+        is_show_fig=False,
+    )
+
+    out.mag.meshsolution.plot_mesh(
+        group_names=["stator core", "/", "airgap", "stator winding"],
+        save_path=join(save_path, simu.name + "_mesh_stator_interface.png"),
+        is_show_fig=False,
+    )
+
+    out.mag.meshsolution.plot_contour(
+        label="\mu",
+        save_path=join(save_path, simu.name + "_mu.png"),
+        is_show_fig=False,
+    )
+    out.mag.meshsolution.plot_contour(
+        label="B", save_path=join(save_path, simu.name + "_B.png"), is_show_fig=False
+    )
+    out.mag.meshsolution.plot_contour(
+        label="H", save_path=join(save_path, simu.name + "_H.png"), is_show_fig=False
+    )
+
+    out.mag.meshsolution.plot_contour(
+        label="H",
+        group_names="stator core",
+        save_path=join(save_path, simu.name + "_H_stator.png"),
+        is_show_fig=False,
+    )
+
+    return out
 
 @pytest.mark.long
 @pytest.mark.validation
