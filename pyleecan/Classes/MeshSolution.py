@@ -291,11 +291,7 @@ class MeshSolution(FrozenClass):
         for ii in range(len(self.solution)):
             tmp = self.solution[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
-        if len(self.group) == 0:
-            MeshSolution_str += "group = dict()" + linesep
-        for key, obj in self.group.items():
-            tmp = self.group[key].__str__().replace(linesep, linesep + "\t") + linesep
-            MeshSolution_str += "group[" + key + "] =" + tmp + linesep + linesep
+        MeshSolution_str += "group = " + str(self.group) + linesep
         MeshSolution_str += "dimension = " + str(self.dimension) + linesep
         MeshSolution_str += 'path = "' + str(self.path) + '"' + linesep
         return MeshSolution_str
@@ -361,19 +357,8 @@ class MeshSolution(FrozenClass):
                         other.solution[ii], name=name + ".solution[" + str(ii) + "]"
                     )
                 )
-        if (other.group is None and self.group is not None) or (
-            other.group is not None and self.group is None
-        ):
-            diff_list.append(name + ".group None mismatch")
-        elif self.group is None:
-            pass
-        elif len(other.group) != len(self.group):
-            diff_list.append("len(" + name + "group)")
-        else:
-            for key in self.group:
-                diff_list.extend(
-                    self.group[key].compare(other.group[key], name=name + ".group")
-                )
+        if other._group != self._group:
+            diff_list.append(name + ".group")
         if other._dimension != self._dimension:
             diff_list.append(name + ".dimension")
         if other._path != self._path:
@@ -427,15 +412,9 @@ class MeshSolution(FrozenClass):
                     MeshSolution_dict["solution"].append(obj.as_dict(**kwargs))
                 else:
                     MeshSolution_dict["solution"].append(None)
-        if self.group is None:
-            MeshSolution_dict["group"] = None
-        else:
-            MeshSolution_dict["group"] = dict()
-            for key, obj in self.group.items():
-                if obj is not None:
-                    MeshSolution_dict["group"][key] = obj.as_dict(**kwargs)
-                else:
-                    MeshSolution_dict["group"][key] = None
+        MeshSolution_dict["group"] = (
+            self.group.copy() if self.group is not None else None
+        )
         MeshSolution_dict["dimension"] = self.dimension
         MeshSolution_dict["path"] = self.path
         # The class name is added to the dict for deserialisation purpose
@@ -557,24 +536,13 @@ class MeshSolution(FrozenClass):
 
     def _get_group(self):
         """getter of group"""
-        if self._group is not None:
-            for key, obj in self._group.items():
-                if obj is not None:
-                    obj.parent = self
         return self._group
 
     def _set_group(self, value):
         """setter of group"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "group"
-                    )
-                    value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
-        check_var("group", value, "{list}")
+        check_var("group", value, "dict")
         self._group = value
 
     group = property(
@@ -582,7 +550,7 @@ class MeshSolution(FrozenClass):
         fset=_set_group,
         doc=u"""Dict sorted by groups name with list of cells indices. 
 
-        :Type: {list}
+        :Type: dict
         """,
     )
 

@@ -95,8 +95,8 @@ def test_MeshMat_2group():
     meshsol.mesh = [mesh]
     meshsol.solution = [solution]
     meshsol.group = dict()
-    meshsol.group["stator"] = np.array([11, 12])
-    meshsol.group["rotor"] = np.array([98, 100, 101])
+    meshsol.group["stator"] = [11, 12]
+    meshsol.group["rotor"] = [98, 100, 101]
 
     MS_grp = meshsol.get_group(["stator", "rotor"])
     cells_grp, nb_cell, indices = MS_grp.get_mesh().get_cell()

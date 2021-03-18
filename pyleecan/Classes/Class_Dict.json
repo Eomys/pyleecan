@@ -5985,7 +5985,7 @@
                 "max": "",
                 "min": "",
                 "name": "group",
-                "type": "{list}",
+                "type": "dict",
                 "unit": "",
                 "value": null
             },

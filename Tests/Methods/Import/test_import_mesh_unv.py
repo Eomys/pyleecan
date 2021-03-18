@@ -55,7 +55,8 @@ def test_import_mesh_unv(unv_file):
 
     meshsol = MeshSolution()
     meshsol.mesh = [mesh]
-    meshsol.plot_mesh(save_path='D:/test.png', is_show_fig=False)
+    meshsol.plot_mesh(save_path="D:/test.png", is_show_fig=False)
+
 
 if __name__ == "__main__":
     for param in list_param:
