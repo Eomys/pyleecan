@@ -58,6 +58,8 @@ def get_field(
 
     field = solution.get_field(*args_list)
 
+    axes_list = solution.get_axes_list()
+
     field = squeeze(field)
 
     # Check dimensions
@@ -65,10 +67,12 @@ def get_field(
     is_other_dim = False
     is_1d_input = False
     is_1d_output = False
-    if len(shape) != 1 and shape[-1] > 3:
-        is_other_dim = True
-    if len(shape) == 1 or (len(shape) == 2 and is_other_dim):
+
+    if not "component" in axes_list[0]:
         is_1d_input = True
+    if len(axes_list[1]) == 3 or (len(axes_list[1]) == 2 and is_1d_input):
+        is_other_dim = True
+
     if is_radial:
         is_rthetaz = True
     if is_radial or is_1d_input or is_normal:
