@@ -50,12 +50,14 @@ def plot_contour(
         a list of str corresponding to group name(s)
     save_path : str
         path to save the figure
-    itime : int
-        index of the time step to be plotted
+    itimefreq : int
+        index of the time step (or frequency) to be plotted
     is_show_fig : bool
         To call show at the end of the method
+
     Returns
     -------
+
     """
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
