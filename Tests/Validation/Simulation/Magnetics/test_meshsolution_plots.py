@@ -63,7 +63,7 @@ def test_Slotless_CEFC():
     test_meshsol.plot_mesh(
         group_names=["stator core"],
         save_path=join(save_plot_path, simu.name + "_mesh_stator_bis_save.png"),
-        is_show_fig=False
+        is_show_fig=False,
     )
 
     out.mag.meshsolution.plot_mesh(
@@ -143,17 +143,16 @@ def test_Slotless_CEFC():
         is_show_fig=False,
     )
 
+
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
 @pytest.mark.MeshSol
 def test_Toyota_Prius():
-    """Validation of extracting FEMM data with MeshSolution with Toyota Prius electrical machine.
-
-    """
+    """Validation of extracting FEMM data with MeshSolution with Toyota Prius electrical machine."""
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     simu = Simu1(name="test_Toyota_Prius", machine=IPMSM_A)
-    
+
     # Definition of the enforced output of the electrical module
     N0 = 2504
     Is_mat = zeros((1, 3))
@@ -196,7 +195,7 @@ def test_Toyota_Prius():
     test_meshsol.plot_mesh(
         group_names=["stator core"],
         save_path=join(save_plot_path, simu.name + "_mesh_stator_bis_save.png"),
-        is_show_fig=False
+        is_show_fig=False,
     )
 
     out.mag.meshsolution.plot_mesh(
@@ -280,5 +279,5 @@ def test_Toyota_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    #out = test_Slotless_CEFC()
+    # out = test_Slotless_CEFC()
     out = test_Toyota_Prius()

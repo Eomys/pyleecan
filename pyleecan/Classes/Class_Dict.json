@@ -5981,11 +5981,11 @@
                 "value": ""
             },
             {
-                "desc": "Dict sorted by groups name with cells indices. ",
+                "desc": "Dict sorted by groups name with list of cells indices. ",
                 "max": "",
                 "min": "",
                 "name": "group",
-                "type": "{ndarray}",
+                "type": "{list}",
                 "unit": "",
                 "value": null
             },

@@ -24,11 +24,10 @@ def get_data(self):
     """
 
     # Get mesh data (points and elements)
-    if splitext(self.file_path)[1] == '.unv':
+    if splitext(self.file_path)[1] == ".unv":
         points, elements = ImportMeshUnv(self.file_path).get_data()
     else:
-        raise Exception(splitext(self.file_path)[1] + " files are not supported") 
-
+        raise Exception(splitext(self.file_path)[1] + " files are not supported")
 
     # Define MeshMat object
     mesh = MeshMat()
@@ -46,7 +45,7 @@ def get_data(self):
         mesh.cell[elt_type] = CellMat(
             connectivity=elt[:, 1:],
             nb_cell=elt.shape[0],
-            nb_pt_per_cell=elt.shape[1]-1,
+            nb_pt_per_cell=elt.shape[1] - 1,
             indice=elt[:, 0],
         )
 

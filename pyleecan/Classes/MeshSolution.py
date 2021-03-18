@@ -75,7 +75,6 @@ except ImportError as error:
     plot_glyph_animated = error
 
 
-from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .Mesh import Mesh
 from .Solution import Solution
@@ -293,11 +292,10 @@ class MeshSolution(FrozenClass):
             tmp = self.solution[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
         if len(self.group) == 0:
-            MeshSolution_str += "group = dict()"
+            MeshSolution_str += "group = dict()" + linesep
         for key, obj in self.group.items():
-            MeshSolution_str += (
-                "group[" + key + "] = " + str(self.group[key]) + linesep + linesep
-            )
+            tmp = self.group[key].__str__().replace(linesep, linesep + "\t") + linesep
+            MeshSolution_str += "group[" + key + "] =" + tmp + linesep + linesep
         MeshSolution_str += "dimension = " + str(self.dimension) + linesep
         MeshSolution_str += 'path = "' + str(self.path) + '"' + linesep
         return MeshSolution_str
@@ -315,20 +313,8 @@ class MeshSolution(FrozenClass):
             return False
         if other.solution != self.solution:
             return False
-        if (other.group is None and self.group is not None) or (
-            other.group is not None and self.group is None
-        ):
+        if other.group != self.group:
             return False
-        elif other.group is None and self.group is None:
-            pass
-        elif len(other.group) != len(self.group):
-            return False
-        else:
-            for key in other.group:
-                if key not in self.group or not array_equal(
-                    other.group[key], self.group[key]
-                ):
-                    return False
         if other.dimension != self.dimension:
             return False
         if other.path != self.path:
@@ -382,13 +368,12 @@ class MeshSolution(FrozenClass):
         elif self.group is None:
             pass
         elif len(other.group) != len(self.group):
-            diff_list.append("len(" + name + ".group)")
+            diff_list.append("len(" + name + "group)")
         else:
-            for key in other.group:
-                if key not in self.group or not array_equal(
-                    other.group[key], self.group[key]
-                ):
-                    diff_list.append(name + ".group[" + str(key) + "]")
+            for key in self.group:
+                diff_list.extend(
+                    self.group[key].compare(other.group[key], name=name + ".group")
+                )
         if other._dimension != self._dimension:
             diff_list.append(name + ".dimension")
         if other._path != self._path:
@@ -447,7 +432,10 @@ class MeshSolution(FrozenClass):
         else:
             MeshSolution_dict["group"] = dict()
             for key, obj in self.group.items():
-                MeshSolution_dict["group"][key] = obj.tolist()
+                if obj is not None:
+                    MeshSolution_dict["group"][key] = obj.as_dict(**kwargs)
+                else:
+                    MeshSolution_dict["group"][key] = None
         MeshSolution_dict["dimension"] = self.dimension
         MeshSolution_dict["path"] = self.path
         # The class name is added to the dict for deserialisation purpose
@@ -569,28 +557,32 @@ class MeshSolution(FrozenClass):
 
     def _get_group(self):
         """getter of group"""
+        if self._group is not None:
+            for key, obj in self._group.items():
+                if obj is not None:
+                    obj.parent = self
         return self._group
 
     def _set_group(self, value):
         """setter of group"""
         if type(value) is dict:
             for key, obj in value.items():
-                if type(obj) is list:
-                    try:
-                        value[key] = array(obj)
-                    except:
-                        pass
-        elif type(value) is int and value == -1:
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "group"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
             value = dict()
-        check_var("group", value, "{ndarray}")
+        check_var("group", value, "{list}")
         self._group = value
 
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""Dict sorted by groups name with cells indices. 
+        doc=u"""Dict sorted by groups name with list of cells indices. 
 
-        :Type: {ndarray}
+        :Type: {list}
         """,
     )
 
