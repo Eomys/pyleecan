@@ -18,6 +18,7 @@ import json
 import numpy as np
 import pytest
 
+
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
@@ -115,6 +116,7 @@ def test_SIPMSM_003():
     )
 
     return out
+
 
 @pytest.mark.long
 @pytest.mark.validation
