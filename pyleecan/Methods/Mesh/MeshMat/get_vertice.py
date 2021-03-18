@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from numpy import array
 
 def get_vertice(self, indices=None):
     """Return a connectivity matrix where the nodes indices are replaced by their coordinates.
@@ -10,12 +11,12 @@ def get_vertice(self, indices=None):
         an MeshMat object
     cell_type : str
         a key corresponding to an element type
-    group : numpy.array
+    group : ndarray
         One or several group numbers to be returned
 
     Returns
     -------
-    vertice: numpy.array
+    vertice: ndarray
         Selected vertices
 
     """
@@ -27,7 +28,7 @@ def get_vertice(self, indices=None):
             vertices[key] = list()
             for ii in range(cells[key].shape[0]):
                 vertices[key].append(self.get_node(cells[key][ii, :]))
-            vertices[key] = np.array(vertices[key])
+            vertices[key] = array(vertices[key])
         else:
             vertices[key] = self.get_node(cells[key])
 
