@@ -70,7 +70,7 @@ def plot_contour(
             field_name=field_name,
             group_names=None,
             save_path=save_path,
-            itime=itime,
+            itimefreq=itimefreq,
         )
     else:
         if save_path is None:
