@@ -20,9 +20,9 @@ def test_MeshMat():
     mesh.node.add_node(np.array([2, 3]))
     mesh.node.add_node(np.array([3, 3]))
 
-    mesh.add_cell(np.array([0, 1, 2]), "triangle", group_name="stator")
-    mesh.add_cell(np.array([1, 2, 3]), "triangle", group_name="stator")
-    mesh.add_cell(np.array([4, 2, 3]), "triangle", group_name="rotor")
+    mesh.add_cell(np.array([0, 1, 2]), "triangle")
+    mesh.add_cell(np.array([1, 2, 3]), "triangle")
+    mesh.add_cell(np.array([4, 2, 3]), "triangle")
     mesh.add_cell(np.array([4, 2]), "segment")
     DELTA = 1e-10
 
