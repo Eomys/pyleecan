@@ -5876,7 +5876,8 @@
             "plot_contour",
             "plot_deflection",
             "plot_deflection_animated",
-            "plot_glyph"
+            "plot_glyph",
+            "plot_glyph_animated"
         ],
         "mother": "",
         "name": "MeshSolution",
