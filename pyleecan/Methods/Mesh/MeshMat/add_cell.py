@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 
 
 def add_cell(self, pt_indice, cell_type, group_name=None):

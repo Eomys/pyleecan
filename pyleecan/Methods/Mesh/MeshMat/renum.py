@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import copy
+
+import numpy as np
 
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.NodeMat import NodeMat

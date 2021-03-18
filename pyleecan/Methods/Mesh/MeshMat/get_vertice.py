@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
-
 
 def get_vertice(self, indices=None):
     """Return a connectivity matrix where the nodes indices are replaced by their coordinates.
