@@ -23,9 +23,9 @@ except ImportError as error:
     get_mesh_pv = error
 
 try:
-    from ..Methods.Mesh.MeshVTK.get_point import get_point
+    from ..Methods.Mesh.MeshVTK.get_node import get_node
 except ImportError as error:
-    get_point = error
+    get_node = error
 
 try:
     from ..Methods.Mesh.MeshVTK.get_cell import get_cell
@@ -62,9 +62,9 @@ from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
 try:
-    from pyvista.core.pointset import PointGrid
+    from vtk import vtkPointSet
 except ImportError:
-    PointGrid = ImportError
+    vtkPointSet = ImportError
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
@@ -90,15 +90,15 @@ class MeshVTK(Mesh):
         )
     else:
         get_mesh_pv = get_mesh_pv
-    # cf Methods.Mesh.MeshVTK.get_point
-    if isinstance(get_point, ImportError):
-        get_point = property(
+    # cf Methods.Mesh.MeshVTK.get_node
+    if isinstance(get_node, ImportError):
+        get_node = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshVTK method get_point: " + str(get_point))
+                ImportError("Can't use MeshVTK method get_node: " + str(get_node))
             )
         )
     else:
-        get_point = get_point
+        get_node = get_node
     # cf Methods.Mesh.MeshVTK.get_cell
     if isinstance(get_cell, ImportError):
         get_cell = property(
@@ -351,7 +351,7 @@ class MeshVTK(Mesh):
 
     def _set_mesh(self, value):
         """setter of mesh"""
-        check_var("mesh", value, "PointGrid")
+        check_var("mesh", value, "vtkPointSet")
         self._mesh = value
 
     mesh = property(
@@ -359,7 +359,7 @@ class MeshVTK(Mesh):
         fset=_set_mesh,
         doc=u"""Pyvista object of the mesh (optional)
 
-        :Type: pyvista.core.pointset.PointGrid
+        :Type: vtk.vtkPointSet
         """,
     )
 

@@ -7,7 +7,7 @@ from unittest import TestCase
 from pyleecan.Classes.CellMat import CellMat
 
 from pyleecan.Classes.MeshSolution import MeshSolution
-from pyleecan.Classes.PointMat import PointMat
+from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.MeshMat import MeshMat
 
 from pyleecan.Classes.ScalarProductL2 import ScalarProductL2
@@ -25,13 +25,13 @@ class unittest_scalar_product(TestCase):
         DELTA = 1e-10
 
         mesh = MeshMat()
-        mesh.cell["line"] = CellMat(nb_pt_per_cell=2)
-        mesh.point = PointMat()
-        mesh.point.add_point(np.array([-1, 0]))
-        mesh.point.add_point(np.array([1, 0]))
-        mesh.point.add_point(np.array([-1, 1]))
-        mesh.point.add_point(np.array([2, 3]))
-        mesh.point.add_point(np.array([3, 3]))
+        mesh.cell["line"] = CellMat(nb_node_per_cell=2)
+        mesh.node = NodeMat()
+        mesh.node.add_node(np.array([-1, 0]))
+        mesh.node.add_node(np.array([1, 0]))
+        mesh.node.add_node(np.array([-1, 1]))
+        mesh.node.add_node(np.array([2, 3]))
+        mesh.node.add_node(np.array([3, 3]))
 
         mesh.add_cell(np.array([0, 1]), "line")
         mesh.add_cell(np.array([0, 2]), "line")

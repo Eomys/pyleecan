@@ -325,7 +325,7 @@
         "methods": [
             "add_cell",
             "get_connectivity",
-            "get_point2cell",
+            "get_node2cell",
             "is_exist"
         ],
         "mother": "",
@@ -352,10 +352,10 @@
                 "value": 0
             },
             {
-                "desc": "Define the number of node per element",
+                "desc": "Define the number of node per cell",
                 "max": "",
                 "min": "",
-                "name": "nb_pt_per_cell",
+                "name": "nb_node_per_cell",
                 "type": "int",
                 "unit": "",
                 "value": 0
@@ -1464,7 +1464,8 @@
             }
         ],
         "daughters": [
-            "ForceMT"
+            "ForceMT",
+            "ForceTensor"
         ],
         "desc": "Forces module abstract object",
         "is_internal": false,
@@ -1553,6 +1554,38 @@
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/ForceMT.csv",
         "properties": []
+    },
+    "ForceTensor": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Force various tensors (Maxwell, magnetostrictive) model for radial flux machines",
+        "is_internal": false,
+        "methods": [
+            "comp_force",
+            "comp_force_nodal",
+            "comp_magnetrosctrictive_tensor",
+            "element_loop"
+        ],
+        "mother": "Force",
+        "name": "ForceTensor",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/ForceTensor.csv",
+        "properties": [
+            {
+                "desc": "Name of the group selected for magnetic force computation. If None, all the domain is selected.",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "str",
+                "unit": "-",
+                "value": "stator core"
+            }
+        ]
     },
     "Frame": {
         "constants": [
@@ -5775,16 +5808,19 @@
         "desc": "Gather the mesh storage format",
         "is_internal": false,
         "methods": [
-            "get_point",
+            "get_node",
+            "get_node_indice",
             "get_cell",
             "get_mesh_pv",
             "get_cell_area",
-            "add_cell",
             "get_vertice",
-            "get_point2cell",
+            "get_node2cell",
+            "add_cell",
             "renum",
             "find_cell",
-            "interface"
+            "interface",
+            "clear_node",
+            "clear_cell"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
@@ -5804,10 +5840,19 @@
                 "desc": "Storing nodes",
                 "max": "",
                 "min": "",
-                "name": "point",
-                "type": "PointMat",
+                "name": "node",
+                "type": "NodeMat",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "True if renumering the nodes and cells is useful when renum method is called (saving calculation time)",
+                "max": "",
+                "min": "",
+                "name": "_is_renum",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -5914,7 +5959,7 @@
         "is_internal": false,
         "methods": [
             "get_mesh_pv",
-            "get_point",
+            "get_node",
             "get_cell",
             "get_normals",
             "get_surf",
@@ -5932,7 +5977,7 @@
                 "max": "",
                 "min": "",
                 "name": "mesh",
-                "type": "pyvista.core.pointset.PointGrid",
+                "type": "vtk.vtkPointSet",
                 "unit": "",
                 "value": "None"
             },
@@ -6057,6 +6102,65 @@
                 "type": "int",
                 "unit": "-",
                 "value": null
+            }
+        ]
+    },
+    "NodeMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to define nodes coordinates and getter.",
+        "is_internal": false,
+        "methods": [
+            "add_node",
+            "get_coord",
+            "is_exist",
+            "get_indice"
+        ],
+        "mother": "",
+        "name": "NodeMat",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/NodeMat.csv",
+        "properties": [
+            {
+                "desc": "Nodes coordinates",
+                "max": "",
+                "min": "",
+                "name": "coordinate",
+                "type": "ndarray",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "Total number of nodes",
+                "max": "",
+                "min": "",
+                "name": "nb_node",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Sensibility for node searching",
+                "max": "",
+                "min": "",
+                "name": "delta",
+                "type": "float",
+                "unit": "",
+                "value": 1e-10
+            },
+            {
+                "desc": "Nodes unique indices",
+                "max": "",
+                "min": "",
+                "name": "indice",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
             }
         ]
     },
@@ -6739,6 +6843,15 @@
                 "min": "",
                 "name": "Rag",
                 "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Force computed on a mesh",
+                "max": "",
+                "min": "",
+                "name": "meshsolution",
+                "type": "MeshSolution",
                 "unit": "-",
                 "value": null
             }
@@ -7635,65 +7748,6 @@
                 "type": "list",
                 "unit": "-",
                 "value": []
-            }
-        ]
-    },
-    "PointMat": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Class to define nodes coordinates and getter.",
-        "is_internal": false,
-        "methods": [
-            "add_point",
-            "get_coord",
-            "get_group",
-            "is_exist"
-        ],
-        "mother": "",
-        "name": "PointMat",
-        "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/PointMat.csv",
-        "properties": [
-            {
-                "desc": "Nodes coordinates",
-                "max": "",
-                "min": "",
-                "name": "coordinate",
-                "type": "ndarray",
-                "unit": "",
-                "value": []
-            },
-            {
-                "desc": "Total number of nodes",
-                "max": "",
-                "min": "",
-                "name": "nb_pt",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Sensibility for node searching",
-                "max": "",
-                "min": "",
-                "name": "delta",
-                "type": "float",
-                "unit": "",
-                "value": 1e-10
-            },
-            {
-                "desc": "Point indices",
-                "max": "",
-                "min": "",
-                "name": "indice",
-                "type": "ndarray",
-                "unit": "",
-                "value": ""
             }
         ]
     },

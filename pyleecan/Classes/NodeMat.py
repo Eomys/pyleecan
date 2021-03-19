@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Mesh/PointMat.csv
+# File generated according to Generator/ClassesRef/Mesh/NodeMat.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/PointMat
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/NodeMat
 """
 
 from os import linesep
@@ -18,72 +18,72 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Mesh.PointMat.add_point import add_point
+    from ..Methods.Mesh.NodeMat.add_node import add_node
 except ImportError as error:
-    add_point = error
+    add_node = error
 
 try:
-    from ..Methods.Mesh.PointMat.get_coord import get_coord
+    from ..Methods.Mesh.NodeMat.get_coord import get_coord
 except ImportError as error:
     get_coord = error
 
 try:
-    from ..Methods.Mesh.PointMat.get_group import get_group
-except ImportError as error:
-    get_group = error
-
-try:
-    from ..Methods.Mesh.PointMat.is_exist import is_exist
+    from ..Methods.Mesh.NodeMat.is_exist import is_exist
 except ImportError as error:
     is_exist = error
+
+try:
+    from ..Methods.Mesh.NodeMat.get_indice import get_indice
+except ImportError as error:
+    get_indice = error
 
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
 
-class PointMat(FrozenClass):
+class NodeMat(FrozenClass):
     """Class to define nodes coordinates and getter."""
 
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.PointMat.add_point
-    if isinstance(add_point, ImportError):
-        add_point = property(
+    # cf Methods.Mesh.NodeMat.add_node
+    if isinstance(add_node, ImportError):
+        add_node = property(
             fget=lambda x: raise_(
-                ImportError("Can't use PointMat method add_point: " + str(add_point))
+                ImportError("Can't use NodeMat method add_node: " + str(add_node))
             )
         )
     else:
-        add_point = add_point
-    # cf Methods.Mesh.PointMat.get_coord
+        add_node = add_node
+    # cf Methods.Mesh.NodeMat.get_coord
     if isinstance(get_coord, ImportError):
         get_coord = property(
             fget=lambda x: raise_(
-                ImportError("Can't use PointMat method get_coord: " + str(get_coord))
+                ImportError("Can't use NodeMat method get_coord: " + str(get_coord))
             )
         )
     else:
         get_coord = get_coord
-    # cf Methods.Mesh.PointMat.get_group
-    if isinstance(get_group, ImportError):
-        get_group = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use PointMat method get_group: " + str(get_group))
-            )
-        )
-    else:
-        get_group = get_group
-    # cf Methods.Mesh.PointMat.is_exist
+    # cf Methods.Mesh.NodeMat.is_exist
     if isinstance(is_exist, ImportError):
         is_exist = property(
             fget=lambda x: raise_(
-                ImportError("Can't use PointMat method is_exist: " + str(is_exist))
+                ImportError("Can't use NodeMat method is_exist: " + str(is_exist))
             )
         )
     else:
         is_exist = is_exist
+    # cf Methods.Mesh.NodeMat.get_indice
+    if isinstance(get_indice, ImportError):
+        get_indice = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use NodeMat method get_indice: " + str(get_indice))
+            )
+        )
+    else:
+        get_indice = get_indice
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -93,7 +93,7 @@ class PointMat(FrozenClass):
     def __init__(
         self,
         coordinate=[],
-        nb_pt=0,
+        nb_node=0,
         delta=1e-10,
         indice=None,
         init_dict=None,
@@ -116,8 +116,8 @@ class PointMat(FrozenClass):
             # Overwrite default value with init_dict content
             if "coordinate" in list(init_dict.keys()):
                 coordinate = init_dict["coordinate"]
-            if "nb_pt" in list(init_dict.keys()):
-                nb_pt = init_dict["nb_pt"]
+            if "nb_node" in list(init_dict.keys()):
+                nb_node = init_dict["nb_node"]
             if "delta" in list(init_dict.keys()):
                 delta = init_dict["delta"]
             if "indice" in list(init_dict.keys()):
@@ -125,7 +125,7 @@ class PointMat(FrozenClass):
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.coordinate = coordinate
-        self.nb_pt = nb_pt
+        self.nb_node = nb_node
         self.delta = delta
         self.indice = indice
 
@@ -135,28 +135,28 @@ class PointMat(FrozenClass):
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
-        PointMat_str = ""
+        NodeMat_str = ""
         if self.parent is None:
-            PointMat_str += "parent = None " + linesep
+            NodeMat_str += "parent = None " + linesep
         else:
-            PointMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        PointMat_str += (
+            NodeMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        NodeMat_str += (
             "coordinate = "
             + linesep
             + str(self.coordinate).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
-        PointMat_str += "nb_pt = " + str(self.nb_pt) + linesep
-        PointMat_str += "delta = " + str(self.delta) + linesep
-        PointMat_str += (
+        NodeMat_str += "nb_node = " + str(self.nb_node) + linesep
+        NodeMat_str += "delta = " + str(self.delta) + linesep
+        NodeMat_str += (
             "indice = "
             + linesep
             + str(self.indice).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
-        return PointMat_str
+        return NodeMat_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -165,7 +165,7 @@ class PointMat(FrozenClass):
             return False
         if not array_equal(other.coordinate, self.coordinate):
             return False
-        if other.nb_pt != self.nb_pt:
+        if other.nb_node != self.nb_node:
             return False
         if other.delta != self.delta:
             return False
@@ -181,8 +181,8 @@ class PointMat(FrozenClass):
         diff_list = list()
         if not array_equal(other.coordinate, self.coordinate):
             diff_list.append(name + ".coordinate")
-        if other._nb_pt != self._nb_pt:
-            diff_list.append(name + ".nb_pt")
+        if other._nb_node != self._nb_node:
+            diff_list.append(name + ".nb_node")
         if other._delta != self._delta:
             diff_list.append(name + ".delta")
         if not array_equal(other.indice, self.indice):
@@ -194,7 +194,7 @@ class PointMat(FrozenClass):
 
         S = 0  # Full size of the object
         S += getsizeof(self.coordinate)
-        S += getsizeof(self.nb_pt)
+        S += getsizeof(self.nb_node)
         S += getsizeof(self.delta)
         S += getsizeof(self.indice)
         return S
@@ -206,26 +206,26 @@ class PointMat(FrozenClass):
         and may prevent json serializability.
         """
 
-        PointMat_dict = dict()
+        NodeMat_dict = dict()
         if self.coordinate is None:
-            PointMat_dict["coordinate"] = None
+            NodeMat_dict["coordinate"] = None
         else:
-            PointMat_dict["coordinate"] = self.coordinate.tolist()
-        PointMat_dict["nb_pt"] = self.nb_pt
-        PointMat_dict["delta"] = self.delta
+            NodeMat_dict["coordinate"] = self.coordinate.tolist()
+        NodeMat_dict["nb_node"] = self.nb_node
+        NodeMat_dict["delta"] = self.delta
         if self.indice is None:
-            PointMat_dict["indice"] = None
+            NodeMat_dict["indice"] = None
         else:
-            PointMat_dict["indice"] = self.indice.tolist()
+            NodeMat_dict["indice"] = self.indice.tolist()
         # The class name is added to the dict for deserialisation purpose
-        PointMat_dict["__class__"] = "PointMat"
-        return PointMat_dict
+        NodeMat_dict["__class__"] = "NodeMat"
+        return NodeMat_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
         self.coordinate = None
-        self.nb_pt = None
+        self.nb_node = None
         self.delta = None
         self.indice = None
 
@@ -254,18 +254,18 @@ class PointMat(FrozenClass):
         """,
     )
 
-    def _get_nb_pt(self):
-        """getter of nb_pt"""
-        return self._nb_pt
+    def _get_nb_node(self):
+        """getter of nb_node"""
+        return self._nb_node
 
-    def _set_nb_pt(self, value):
-        """setter of nb_pt"""
-        check_var("nb_pt", value, "int")
-        self._nb_pt = value
+    def _set_nb_node(self, value):
+        """setter of nb_node"""
+        check_var("nb_node", value, "int")
+        self._nb_node = value
 
-    nb_pt = property(
-        fget=_get_nb_pt,
-        fset=_set_nb_pt,
+    nb_node = property(
+        fget=_get_nb_node,
+        fset=_set_nb_node,
         doc=u"""Total number of nodes
 
         :Type: int
@@ -309,7 +309,7 @@ class PointMat(FrozenClass):
     indice = property(
         fget=_get_indice,
         fset=_set_indice,
-        doc=u"""Point indices
+        doc=u"""Nodes unique indices
 
         :Type: ndarray
         """,

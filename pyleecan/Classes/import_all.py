@@ -35,6 +35,7 @@ from ..Classes.FluxLink import FluxLink
 from ..Classes.FluxLinkFEMM import FluxLinkFEMM
 from ..Classes.Force import Force
 from ..Classes.ForceMT import ForceMT
+from ..Classes.ForceTensor import ForceTensor
 from ..Classes.Frame import Frame
 from ..Classes.GUIOption import GUIOption
 from ..Classes.GaussPoint import GaussPoint
@@ -105,6 +106,7 @@ from ..Classes.MeshMat import MeshMat
 from ..Classes.MeshSolution import MeshSolution
 from ..Classes.MeshVTK import MeshVTK
 from ..Classes.Mode import Mode
+from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
 from ..Classes.OptiConstraint import OptiConstraint
@@ -128,7 +130,6 @@ from ..Classes.OutStruct import OutStruct
 from ..Classes.Output import Output
 from ..Classes.ParamExplorer import ParamExplorer
 from ..Classes.ParamExplorerSet import ParamExplorerSet
-from ..Classes.PointMat import PointMat
 from ..Classes.PolarArc import PolarArc
 from ..Classes.Post import Post
 from ..Classes.PostFunction import PostFunction
