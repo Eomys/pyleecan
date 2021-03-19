@@ -13,4 +13,4 @@ log_dict["loggers"][GUI_LOG_NAME] = {
 }
 dictConfig(log_dict)
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
