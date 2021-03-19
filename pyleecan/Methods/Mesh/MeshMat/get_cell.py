@@ -20,23 +20,28 @@ def get_cell(self, indices=None):
         Dict of connectivities
 
     """
-    if not isinstance(indices, collections.Iterable):
+    if not isinstance(indices, collections.Iterable) and indices is not None:
         indices = (indices,)
 
     cells = dict()
     indice_dict = dict()
     nb_cell = 0
     for key in self.cell:
-        cells[key] = list()
-        indice_dict[key] = list()
+        if indices is None:
+            cells[key] = self.cell[key].get_connectivity()
+            indice_dict[key] = self.cell[key].indice
+            nb_cell = self.cell[key].nb_cell
+        else:
+            cells[key] = list()
+            indice_dict[key] = list()
 
-        for ind in indices:
-            connect = self.cell[key].get_connectivity(ind)
-            if connect is not None:
-                cells[key].append(connect)
-                nb_cell = nb_cell + len(connect)
-                indice_dict[key].append(ind)
+            for ind in indices:
+                connect = self.cell[key].get_connectivity(ind)
+                if connect is not None:
+                    cells[key].append(connect)
+                    nb_cell = nb_cell + len(connect)
+                    indice_dict[key].append(ind)
 
-        cells[key] = np.squeeze(np.array(cells[key]))
+            cells[key] = np.squeeze(np.array(cells[key]))
 
     return cells, nb_cell, indice_dict

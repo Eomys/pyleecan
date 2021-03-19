@@ -15,24 +15,24 @@ if not isdir(save_path):
     mkdir(save_path)
 
 list_param = [
-    # {
-    #     "path": "Tests\Data\Mesh\mesh_test_quad_consecutive.unv",
-    #     "n_points": 8,
-    #     "element_types": ["quad"],
-    #     "n_elements": [6],
-    # },
-    # {
-    #     "path": "Tests\Data\Mesh\mesh_test_quad.unv",
-    #     "n_points": 8,
-    #     "element_types": ["quad"],
-    #     "n_elements": [6],
-    # },
-    # {
-    #     "path": "Tests\Data\Mesh\mesh_test_tri.unv",
-    #     "n_points": 4,
-    #     "element_types": ["triangle"],
-    #     "n_elements": [4],
-    # },
+    {
+        "path": "Tests\Data\Mesh\mesh_test_quad_consecutive.unv",
+        "n_points": 8,
+        "element_types": ["quad"],
+        "n_elements": [6],
+    },
+    {
+        "path": "Tests\Data\Mesh\mesh_test_quad.unv",
+        "n_points": 8,
+        "element_types": ["quad"],
+        "n_elements": [6],
+    },
+    {
+        "path": "Tests\Data\Mesh\mesh_test_tri.unv",
+        "n_points": 4,
+        "element_types": ["triangle"],
+        "n_elements": [4],
+    },
     {
         "path": "Tests\Data\Mesh\mesh_test_mixte.unv",
         "n_points": 5,
