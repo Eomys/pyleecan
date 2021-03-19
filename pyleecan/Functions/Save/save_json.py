@@ -73,7 +73,7 @@ def has_as_dict(obj):
     return hasattr(obj, "as_dict") and callable(getattr(obj, "as_dict", None))
 
 
-def build_data(obj):
+def build_data(obj, logger):
     """
     Build a json serializable data structure of lists, dicts and pyleecan objects.
     Data that can not be serialized will be set to None. Tuples will also be None.
@@ -100,19 +100,23 @@ def build_data(obj):
         for key in obj:
             data[key] = build_data(obj[key])
         return data
-    # tuples (excluded)
-    if isinstance(obj, tuple):
-        return None
     # pyleecan classes, i.e. instances with as_dict method
     if has_as_dict(obj):
         return build_data(obj.as_dict())
     if isinstance(obj, int32):  # int
         return int(obj)
-    #
+    # other allowed types
     if is_json_serializable(obj):
         return obj
-    else:
-        return None
+    # tuples (excluded)
+    if isinstance(obj, tuple):
+        pass  # TODO Do we need tuples? If we do, add pyleecan tuple helper class.
+
+    logger.warning(
+        f"build_data(): Objects of type {type(obj).__name__} can not be "
+        + "serialized for now and will be saved as None."
+    )
+    return None
 
 
 def save_split_obj(classes_tuple, obj, folder_path, logger):
@@ -251,7 +255,7 @@ def save_json(obj, save_path="", is_folder=False):
     save_path = fix_file_name(save_path, obj, is_folder, logger)
 
     # save
-    obj = build_data(obj)
+    obj = build_data(obj, logger)
     now = datetime.now()
     obj["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
     obj["__version__"] = PACKAGE_NAME + "_" + __version__
