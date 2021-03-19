@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
-def get_point(self, indices=None):
-    """Return the array of the points coordinates.
+def get_node(self, indices=None):
+    """Return the array of the nodes coordinates.
 
     Parameters
     ----------
     self : MeshVTK
         a MeshVTK object
     indices : list
-        list of the points to extract (optional)
+        list of the nodes to extract (optional)
 
     Returns
     -------
-    points: ndarray
+    nodes: ndarray
         Points coordinates
     """
 

@@ -21,7 +21,7 @@ def add_cell(self, pt_indice, new_ind):
             False if the element already exist or if it is not possible to add the element
     """
     # Check the existence of the element
-    if len(np.unique(pt_indice)) != self.nb_pt_per_cell:
+    if len(np.unique(pt_indice)) != self.nb_node_per_cell:
         return False
 
     if self.is_exist(pt_indice):

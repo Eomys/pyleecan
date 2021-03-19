@@ -12,8 +12,8 @@ class Test_add_cell(object):
 
     def setup_method(self, method):
         self.mesh = MeshMat()
-        self.mesh.cell["triangle3"] = CellMat(nb_pt_per_cell=3)
-        self.mesh.cell["segment2"] = CellMat(nb_pt_per_cell=2)
+        self.mesh.cell["triangle3"] = CellMat(nb_node_per_cell=3)
+        self.mesh.cell["segment2"] = CellMat(nb_node_per_cell=2)
         self.DELTA = 1e-10
 
     def test_MeshMat_add_1cell(self):
