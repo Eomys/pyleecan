@@ -1,12 +1,15 @@
-from json import dump, load
-from os.path import join, basename, isdir, isfile
-from os import mkdir
 from datetime import datetime
+from json import dump
 from logging import getLogger
+from os import mkdir
+from os.path import basename, isdir, isfile, join
+
+from numpy import int32
+
+from ... import __version__
+from ...Classes import get_class_dict
 from ...Classes._frozen import FrozenClass
 from ...definitions import PACKAGE_NAME
-from ... import __version__
-from numpy import int32
 
 
 def create_folder(logger, save_path):
@@ -41,7 +44,7 @@ def fix_file_name(save_path, obj, is_folder, logger):
     obj:
         Pyleecan object to save
     is_folder: bool
-        object is saved if folder mode (splitting Materials, Machine, Simulation in different files)
+        object is saved if folder mode
     """
     if not save_path:
         if is_folder:  # Create the folder
@@ -92,17 +95,17 @@ def build_data(obj, logger):
     if isinstance(obj, list):
         data = []
         for elem in obj:
-            data.append(build_data(elem))
+            data.append(build_data(elem, logger))
         return data
     # dicts
     if isinstance(obj, dict):
         data = {}
         for key in obj:
-            data[key] = build_data(obj[key])
+            data[key] = build_data(obj[key], logger)
         return data
     # pyleecan classes, i.e. instances with as_dict method
     if has_as_dict(obj):
-        return build_data(obj.as_dict())
+        return build_data(obj.as_dict(), logger)
     if isinstance(obj, int32):  # int
         return int(obj)
     # other allowed types
@@ -112,10 +115,12 @@ def build_data(obj, logger):
     if isinstance(obj, tuple):
         pass  # TODO Do we need tuples? If we do, add pyleecan tuple helper class.
 
-    logger.warning(
-        f"build_data(): Objects of type {type(obj).__name__} can not be "
-        + "serialized for now and will be saved as None."
-    )
+    if obj is not None:
+        logger.warning(
+            f"build_data(): Objects of type {type(obj).__name__} can not be "
+            + "serialized for now and will be saved as None."
+        )
+
     return None
 
 
@@ -233,7 +238,12 @@ def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
     return obj_dict
 
 
-def save_json(obj, save_path="", is_folder=False):
+def save_json(
+    obj,
+    save_path="",
+    is_folder=False,
+    class_to_split=("Simulation", "Machine", "Material"),
+):
     """Save the object to the save_path
 
     Parameters
@@ -243,7 +253,9 @@ def save_json(obj, save_path="", is_folder=False):
     save_path: str
         path to the folder to save the object
     is_folder: bool
-        to split the object in different files: separate simulation machine and materials
+        to split the object in different files
+    class_to_split: list
+        list of classes (and daughter classes) that should be split
     """
     if isinstance(obj, FrozenClass):  # Pyleecan obj
         # Get the object logger
@@ -260,15 +272,9 @@ def save_json(obj, save_path="", is_folder=False):
     obj["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
     obj["__version__"] = PACKAGE_NAME + "_" + __version__
     if is_folder:
-        # Tuple containing classes to save separately
-        class_to_split = ("Simulation", "Machine", "Material")
-
         # Add the classes daughters
         class_to_add = []
-        with open(
-            __file__[: __file__.rfind("Functions")] + "Classes/Class_Dict.json"
-        ) as class_dict_file:
-            class_dict = load(class_dict_file)
+        class_dict = get_class_dict()
 
         for class_name in class_to_split:
             class_to_add.extend(class_dict[class_name]["daughters"])
