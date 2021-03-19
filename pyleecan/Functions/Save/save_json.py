@@ -238,7 +238,7 @@ def save_json(obj, save_path="", is_folder=False):
 
     Parameters
     ----------
-    self :
+    obj :
         A pyleecan object
     save_path: str
         path to the folder to save the object
@@ -259,7 +259,7 @@ def save_json(obj, save_path="", is_folder=False):
     now = datetime.now()
     obj["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
     obj["__version__"] = PACKAGE_NAME + "_" + __version__
-    if isinstance(obj, dict) and is_folder:
+    if is_folder:
         # Tuple containing classes to save separately
         class_to_split = ("Simulation", "Machine", "Material")
 
