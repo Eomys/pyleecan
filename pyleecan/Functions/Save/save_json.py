@@ -123,15 +123,12 @@ def build_data(obj, logger):
     return None
 
 
-def save_split_obj(classes_tuple, obj, folder_path, logger):
+def save_split_obj(obj, folder_path, logger):
     """
     Scan the object attribute and save the object in a dedicated file
 
     Parameters
     ----------
-
-    classes_tuple: tuple
-        tuple containing the classe names to save separately
 
     obj: dict
         object dictionnary to save
@@ -147,15 +144,14 @@ def save_split_obj(classes_tuple, obj, folder_path, logger):
     name : str
         name of the file containing the object
     """
-    # Call save_separated_obj to save the sub object into files
-    save_separated_obj(classes_tuple, obj, folder_path, logger)
-
     if "name" in obj.keys() and obj["name"] != "" and obj["name"] != None:
         name = obj["name"] + ".json"
         if not isfile(join(folder_path, name)):
             with open(join(folder_path, name), "w") as json_file:
-                logger.info("Saving " + obj["name"] + " in " + join(folder_path, name))
+                msg = "Saving " + obj["name"] + " in " + join(folder_path, name)
                 dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
+        else:
+            msg = "Skipping " + obj["name"] + " in " + join(folder_path, name)
     else:
         zeros = "0000"
         num = 1
@@ -170,14 +166,12 @@ def save_split_obj(classes_tuple, obj, folder_path, logger):
 
         # Save the file
         name += ".json"
-        logger.info(
-            "Saving unamed object of class",
-            obj["__class__"],
-            "in",
-            join(folder_path, name),
-        )
-        with open(join(folder_path, name), "w") as json_file:
+        file_path = join(folder_path, name)
+        msg = f"Saving unamed object of class {obj['__class__']} in {file_path}"
+        with open(file_path, "w") as json_file:
             dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
+
+    logger.info(msg)
 
     return name  # Set the name to load the file
 
@@ -223,12 +217,12 @@ def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
 
 def _split_(val, classes_tuple, folder_path, logger):
     if "__class__" in val.keys() and val["__class__"] in classes_tuple:
-        # Call save_split_obj to save the obj and its attributes
-        obj = save_split_obj(
-            classes_tuple, val, folder_path, logger
-        )  # Set the name to load the file
+        # Call save_separated_obj to save the sub object into files
+        save_separated_obj(classes_tuple, val, folder_path, logger)
+        # Save this object and get the file name
+        obj = save_split_obj(val, folder_path, logger)
     else:
-        # Call save_separed_obj to scan the attributes
+        # Scan the dicts attributes
         obj = save_separated_obj(classes_tuple, val, folder_path, logger)
     return obj
 
