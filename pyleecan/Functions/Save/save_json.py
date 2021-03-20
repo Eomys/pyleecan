@@ -289,7 +289,6 @@ def save_json(
             save_path += save_path[i:]
         else:
             save_path += "/" + save_path
-    if is_folder:
         save_path += ".json"
 
     logger.info("Saving in " + save_path)
