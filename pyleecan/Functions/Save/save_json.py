@@ -184,7 +184,8 @@ def save_split_obj(classes_tuple, obj, folder_path, logger):
 
 def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
     """
-    Save classes_tuple objects contained in obj_dict in separated files and modify obj_dict
+    Save classes_tuple objects contained in obj_dict in separated files and modify
+    obj_dict.
 
     Parameters
     ----------
@@ -209,32 +210,27 @@ def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
 
     for key, val in obj_dict.items():
         if isinstance(val, dict):
-            if "__class__" in val.keys() and val["__class__"] in classes_tuple:
-                # Call save_split_obj to save the obj and its attributes
-                obj_dict[key] = save_split_obj(
-                    classes_tuple, val, folder_path, logger
-                )  # Set the name to load the file
-            else:
-                # Call save_separed_obj to scan the attributes
-                obj_dict[key] = save_separated_obj(
-                    classes_tuple, val, folder_path, logger
-                )
+            obj_dict[key] = _split_(val, classes_tuple, folder_path, logger)
+
         elif isinstance(val, list):
             for idx, list_val in enumerate(val):
-                # Pyleecan obj
-                if isinstance(list_val, dict) and "__class__" in list_val.keys():
-                    # Object to split
-                    if list_val["__class__"] in classes_tuple:
-                        # Call save_split_obj to save the obj and its attributes
-                        obj_dict[key][idx] = save_split_obj(
-                            classes_tuple, list_val, folder_path, logger
-                        )  # Set the name to load the file
-                    else:
-                        # Call save_separed_obj to scan the attributes
-                        obj_dict[key][idx] = save_separated_obj(
-                            classes_tuple, list_val, folder_path, logger
-                        )
+                # Pyleecan obj and normal dict (to unify code)
+                if isinstance(list_val, dict):
+                    val[idx] = _split_(list_val, classes_tuple, folder_path, logger)
+
     return obj_dict
+
+
+def _split_(val, classes_tuple, folder_path, logger):
+    if "__class__" in val.keys() and val["__class__"] in classes_tuple:
+        # Call save_split_obj to save the obj and its attributes
+        obj = save_split_obj(
+            classes_tuple, val, folder_path, logger
+        )  # Set the name to load the file
+    else:
+        # Call save_separed_obj to scan the attributes
+        obj = save_separated_obj(classes_tuple, val, folder_path, logger)
+    return obj
 
 
 def save_json(
