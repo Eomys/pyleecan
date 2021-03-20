@@ -12,20 +12,20 @@ from ...Classes._frozen import FrozenClass
 from ...definitions import PACKAGE_NAME
 
 
-def create_folder(logger, save_path):
+def create_folder(name, logger):
     """
-    Create the folder: "YYYY_mm_dd HH_MM_SS save_path"
+    Create the folder: "YYYY_mm_dd HH_MM_SS name"
     """
     # datetime object containing current date and time
     now = datetime.now()
     dt_string = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
-    path = dt_string + save_path
+    path = dt_string + name
 
     # Check if the directory exists
     while isdir(path):
         now = datetime.now()
         dt_string = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
-        path = dt_string + save_path
+        path = dt_string + name
 
     logger.info("Creating folder " + path + " to save the object.")
     mkdir(path)
@@ -35,7 +35,8 @@ def create_folder(logger, save_path):
 
 def fix_file_name(save_path, obj, is_folder, logger):
     """
-    Check save_path and modify it according to is_folder
+    Check save_path and modify or create it if needed, i.e. add or remove file extension
+    .json or create new name based on class name.
 
     Parameters
     ----------
@@ -48,18 +49,16 @@ def fix_file_name(save_path, obj, is_folder, logger):
     """
     if not save_path:
         if is_folder:  # Create the folder
-            save_path = create_folder(logger, type(obj).__name__)
+            save_path = create_folder(type(obj).__name__, logger)
         else:
-            save_path = join(save_path, type(obj).__name__ + ".json")
-    elif ".json" != basename(save_path)[-5:] and not is_folder:
+            save_path = join(type(obj).__name__ + ".json")
+    elif not save_path.endswith(".json") and not is_folder:
         save_path = save_path + ".json"
     elif is_folder:
         if save_path.endswith(".json"):
             save_path = save_path[:-5]
         if not isdir(save_path):
             mkdir(save_path)
-    else:
-        save_path = save_path
 
     return save_path
 
