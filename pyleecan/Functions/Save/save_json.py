@@ -125,7 +125,7 @@ def build_data(obj, logger):
 
 def save_split_obj(obj, folder_path, logger):
     """
-    Scan the object attribute and save the object in a dedicated file
+    Save the split object in a dedicated file
 
     Parameters
     ----------
@@ -150,7 +150,7 @@ def save_split_obj(obj, folder_path, logger):
             with open(join(folder_path, name), "w") as json_file:
                 msg = "Saving " + obj["name"] + " in " + join(folder_path, name)
                 dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
-        else:
+        else:  # TODO avoid skipping
             msg = "Skipping " + obj["name"] + " in " + join(folder_path, name)
     else:
         zeros = "0000"
@@ -176,7 +176,7 @@ def save_split_obj(obj, folder_path, logger):
     return name  # Set the name to load the file
 
 
-def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
+def save_separated_obj(cls_tupel, obj_dict, folder, split_list, logger):
     """
     Save classes_tuple objects contained in obj_dict in separated files and modify
     obj_dict.
@@ -204,26 +204,27 @@ def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
 
     for key, val in obj_dict.items():
         if isinstance(val, dict):
-            obj_dict[key] = _split_(val, classes_tuple, folder_path, logger)
+            obj_dict[key] = _split_(val, cls_tupel, folder, split_list, logger)
 
         elif isinstance(val, list):
             for idx, list_val in enumerate(val):
                 # Pyleecan obj and normal dict (to unify code)
                 if isinstance(list_val, dict):
-                    val[idx] = _split_(list_val, classes_tuple, folder_path, logger)
+                    val[idx] = _split_(list_val, cls_tupel, folder, split_list, logger)
 
     return obj_dict
 
 
-def _split_(val, classes_tuple, folder_path, logger):
-    if "__class__" in val.keys() and val["__class__"] in classes_tuple:
+def _split_(val, cls_tupel, folder, split_list, logger):
+    if "__class__" in val.keys() and val["__class__"] in cls_tupel:
         # Call save_separated_obj to save the sub object into files
-        save_separated_obj(classes_tuple, val, folder_path, logger)
+        save_separated_obj(cls_tupel, val, folder, split_list, logger)
         # Save this object and get the file name
-        obj = save_split_obj(val, folder_path, logger)
+        obj = save_split_obj(val, folder, logger)
+        split_list.append({obj: val})
     else:
         # Scan the dicts attributes
-        obj = save_separated_obj(classes_tuple, val, folder_path, logger)
+        obj = save_separated_obj(cls_tupel, val, folder, split_list, logger)
     return obj
 
 
@@ -271,7 +272,8 @@ def save_json(
         class_to_split += tuple(class_to_add)
 
         # Call ref_objects to save the objects separately
-        obj = save_separated_obj(class_to_split, obj, save_path, logger)
+        split_list = [{(save_path + ".json"): obj}]
+        obj = save_separated_obj(class_to_split, obj, save_path, split_list, logger)
 
         i = max(save_path.rfind("/"), save_path.rfind("\\"))
         if i != -1:
