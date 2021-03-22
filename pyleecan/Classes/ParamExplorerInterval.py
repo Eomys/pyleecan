@@ -22,6 +22,21 @@ try:
 except ImportError as error:
     get_value = error
 
+try:
+    from ..Methods.Simulation.ParamExplorerInterval.get_min import get_min
+except ImportError as error:
+    get_min = error
+
+try:
+    from ..Methods.Simulation.ParamExplorerInterval.get_max import get_max
+except ImportError as error:
+    get_max = error
+
+try:
+    from ..Methods.Simulation.ParamExplorerInterval.get_N import get_N
+except ImportError as error:
+    get_N = error
+
 
 from ntpath import basename
 from os.path import isfile
@@ -36,6 +51,7 @@ class ParamExplorerInterval(ParamExplorer):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.ParamExplorerInterval.get_value
     if isinstance(get_value, ImportError):
         get_value = property(
@@ -48,6 +64,39 @@ class ParamExplorerInterval(ParamExplorer):
         )
     else:
         get_value = get_value
+    # cf Methods.Simulation.ParamExplorerInterval.get_min
+    if isinstance(get_min, ImportError):
+        get_min = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ParamExplorerInterval method get_min: " + str(get_min)
+                )
+            )
+        )
+    else:
+        get_min = get_min
+    # cf Methods.Simulation.ParamExplorerInterval.get_max
+    if isinstance(get_max, ImportError):
+        get_max = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ParamExplorerInterval method get_max: " + str(get_max)
+                )
+            )
+        )
+    else:
+        get_max = get_max
+    # cf Methods.Simulation.ParamExplorerInterval.get_N
+    if isinstance(get_N, ImportError):
+        get_N = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ParamExplorerInterval method get_N: " + str(get_N)
+                )
+            )
+        )
+    else:
+        get_N = get_N
     # save and copy methods are available in all object
     save = save
     copy = copy

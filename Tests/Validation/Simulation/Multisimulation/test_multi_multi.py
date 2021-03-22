@@ -17,6 +17,7 @@ from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.ParamExplorerInterval import ParamExplorerInterval
 from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
 from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.PostPlot import PostPlot
@@ -141,10 +142,7 @@ def test_multi_multi():
         Kmesh_fineness=0.2,
         nb_worker=nb_worker,
     )
-    simu.force = ForceMT(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-    )
+    simu.force = ForceMT(is_periodicity_a=True, is_periodicity_t=True,)
 
     # VarSpeed Definition
     varload = VarLoadCurrent(is_reuse_femm_file=True)
@@ -181,23 +179,20 @@ def test_multi_multi():
     varload.is_keep_all_output = False
 
     # Multi-simulation to change machine parameters
-    multisim = VarParam(
-        stop_if_error=True,
-        is_reuse_femm_file=False,
-    )
+    multisim = VarParam(stop_if_error=True, is_reuse_femm_file=False,)
 
     simu.var_simu = multisim
 
     # List of ParamExplorer to define multisimulation input values
     paramexplorer_list = [
-        ParamExplorerSet(
+        ParamExplorerInterval(
             name="Stator slot opening",
             symbol="W0s",
             unit="m",
             setter="simu.machine.stator.slot.W0",
-            value=(
-                IPMSM_A.stator.slot.W0 * linspace(1, 0.1, N1, endpoint=True)
-            ).tolist(),
+            min_value=0.1 * IPMSM_A.stator.slot.W0,
+            max_value=IPMSM_A.stator.slot.W0,
+            N=N1,
         )
     ]
 

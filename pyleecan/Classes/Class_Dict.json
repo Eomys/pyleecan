@@ -7733,7 +7733,10 @@
         "desc": "Define a set of value (for parameter sweep) on interval",
         "is_internal": false,
         "methods": [
-            "get_value"
+            "get_value",
+            "get_min",
+            "get_max",
+            "get_N"
         ],
         "mother": "ParamExplorer",
         "name": "ParamExplorerInterval",
@@ -7799,7 +7802,10 @@
         "is_internal": false,
         "methods": [
             "get_value",
-            "as_dict"
+            "as_dict",
+            "get_min",
+            "get_max",
+            "get_N"
         ],
         "mother": "ParamExplorer",
         "name": "ParamExplorerSet",
