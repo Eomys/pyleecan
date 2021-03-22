@@ -37,7 +37,7 @@ from ._check import InitUnKnowClassError
 
 
 class ParamExplorerSet(ParamExplorer):
-    """Abstract class for the multi-simulation"""
+    """Define a parameter set (for parameter sweep) from a list"""
 
     VERSION = 1
 

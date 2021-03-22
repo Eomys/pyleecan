@@ -131,6 +131,7 @@ load_switch = {
     "OutStruct": OutStruct,
     "Output": Output,
     "ParamExplorer": ParamExplorer,
+    "ParamExplorerInterval": ParamExplorerInterval,
     "ParamExplorerSet": ParamExplorerSet,
     "PolarArc": PolarArc,
     "Post": Post,
