@@ -1,6 +1,8 @@
 from inspect import signature
 from os.path import join
 
+from ....Functions.Plot import dict_2D, dict_3D
+
 
 def run(self, output):
     """Execute the plot contained in the PostPlot object and save it to save_path
@@ -17,15 +19,7 @@ def run(self, output):
     output.get_logger().info("Running Post-processing: " + self.name)
     try:
         if self.quantity is not None:
-            list_names = self.quantity.split(".")
-            # Find object which contains the plot method if attribute is not None
-            obj = output
-            # Get successive objects to reach the one containing the method
-            for i in range(len(list_names)):
-                if "get_" in list_names[i]:
-                    obj = getattr(obj, list_names[i])()
-                else:
-                    obj = getattr(obj, list_names[i])
+            obj = output.get_data_from_str(self.quantity)
         else:
             obj = output
 
@@ -52,6 +46,12 @@ def run(self, output):
             self.param_dict["is_show_fig"] = False
         # Add window title
         self.param_dict["win_title"] = self.name
+        # Adding colors and fonts
+        if self.method == "plot_2D_Data":
+            self.param_dict = dict(self.param_dict, **dict_2D)
+            self.param_dict["fund_harm_dict"] = output.get_fund_harm(obj)
+        elif self.method == "plot_3D_Data":
+            self.param_dict = dict(self.param_dict, **dict_3D)
 
         # Execute plot method
         plot_method(
