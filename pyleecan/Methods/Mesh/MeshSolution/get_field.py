@@ -8,6 +8,7 @@ from numpy import einsum, sqrt, zeros, squeeze, real, imag, sum as np_sum, abs a
 
 def get_field(
     self,
+    *args_list,
     label=None,
     index=None,
     indices=None,
@@ -17,7 +18,6 @@ def get_field(
     is_rms=False,
     is_center=False,
     is_surf=False,
-    args=None,
 ):
     """Return the solution corresponding to label or an index.
 
@@ -50,14 +50,13 @@ def get_field(
         field
 
     """
+    if len(args_list) == 1 and type(args_list[0]) == tuple:
+        args_list = args_list[0]  # if called from another script with *arg_list
 
     # Get field
     solution = self.get_solution(label=label, index=index)
 
-    if args is not None:
-        field = solution.get_field(args)
-    else:
-        field = solution.get_field()
+    field = solution.get_field(*args_list)
 
     field = squeeze(field)
 

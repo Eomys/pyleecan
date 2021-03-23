@@ -15,7 +15,7 @@
     "mag": {
         "Brm20": 1.0,
         "Hc": null,
-        "__class__": "MatMagnet",
+        "__class__": "MatMagnetics",
         "alpha_Br": 0.0,
         "mur_lin": 1.05
     },
