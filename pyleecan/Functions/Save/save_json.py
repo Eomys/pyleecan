@@ -123,7 +123,7 @@ def build_data(obj, logger):
     return None
 
 
-def save_split_obj(obj, folder_path, logger):
+def save_split_obj(obj, folder, logger):
     """
     Save the split object in a dedicated file
 
@@ -144,36 +144,30 @@ def save_split_obj(obj, folder_path, logger):
     name : str
         name of the file containing the object
     """
+    # Define the file name
     if "name" in obj.keys() and obj["name"] != "" and obj["name"] != None:
-        name = obj["name"] + ".json"
-        if not isfile(join(folder_path, name)):
-            with open(join(folder_path, name), "w") as json_file:
-                msg = "Saving " + obj["name"] + " in " + join(folder_path, name)
-                dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
-        else:  # TODO avoid skipping
-            msg = "Skipping " + obj["name"] + " in " + join(folder_path, name)
+        name = obj["name"]
+        msg = f"Saving {name} in "
     else:
-        zeros = "0000"
-        num = 1
-        prefix = zeros[: -len(str(num))] + str(num)
-        name = obj["__class__"] + prefix
+        name = obj["__class__"]
+        msg = f"Saving unnamed object of class {name} in "
 
-        # Define the file name
-        while isfile(join(folder_path, name + ".json")):
-            num += 1
-            prefix = zeros[: -len(str(num))] + str(num)
-            name = obj["__class__"] + prefix
+    # Add prefix to get a file name that doesn't exists
+    num = 0
+    new_name = name
+    while isfile(join(folder, new_name + ".json")):
+        num += 1
+        new_name = name + "{:05d}".format(num)
 
-        # Save the file
-        name += ".json"
-        file_path = join(folder_path, name)
-        msg = f"Saving unamed object of class {obj['__class__']} in {file_path}"
-        with open(file_path, "w") as json_file:
-            dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
+    # Save the file
+    new_name += ".json"
+    file_path = join(folder, new_name)
+    with open(file_path, "w") as json_file:
+        dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
 
-    logger.info(msg)
+    logger.info(msg + file_path)
 
-    return name  # Set the name to load the file
+    return new_name  # Set the name to load the file
 
 
 def save_separated_obj(cls_tupel, obj_dict, folder, split_list, logger):
