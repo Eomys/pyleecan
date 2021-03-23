@@ -1,14 +1,9 @@
 from logging import Filter, DEBUG, INFO, WARNING, ERROR, CRITICAL
-from .definitions import USER_DIR
-
-"""
-File containing every Pyleecan loggers.
-The choice between LOGGING_CONFIG_CONSOLE and LOGGING_CONFIG_FILE is made in pyleecan.__init__.py
-"""
+from logging.config import dictConfig
 
 # Default level in every loggers
 DEFAULT_LOG_NAME = "Pyleecan"
-GUI_LOG_NAME = "Pyleecan.GUI"
+GUI_LOG_NAME = DEFAULT_LOG_NAME + ".GUI"
 SUB_LOG_LIST = ["Machine", "Electrical", "Magnetics", "Force", "Structural", "Loss"]
 
 CONSOLE_LEVEL = INFO
@@ -21,6 +16,10 @@ FILE_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 def gen_logger_config_dict(logger_name):
+    module = __import__(
+        "pyleecan", globals=globals(), locals=locals(), fromlist=["USER_DIR"], level=0,
+    )
+    USER_DIR = module.USER_DIR
     log_config_dict = {
         "version": 1,
         # Define loggers
@@ -68,3 +67,15 @@ def gen_logger_config_dict(logger_name):
             "handlers": [],
         }
     return log_config_dict
+
+
+def init_default_log():
+    # Init default loggers
+    log_dict = gen_logger_config_dict(DEFAULT_LOG_NAME)
+    log_dict["loggers"][""] = {"level": "NOTSET", "handlers": []}  # root logger
+    log_dict["loggers"][GUI_LOG_NAME] = {
+        "level": "DEBUG",
+        "propagate": True,
+        "handlers": [],
+    }
+    dictConfig(log_dict)

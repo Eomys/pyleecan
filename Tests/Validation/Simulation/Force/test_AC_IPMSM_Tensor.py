@@ -57,7 +57,8 @@ def test_Benchmark_Tensor():
     out.force.meshsolution.plot_glyph(
         label="F",
         is_point_arrow=True,
-        save_path="C:/Users/Utilisateur/Desktop/Jean-Guillaume/magneto/plot_glyph.png",
+        is_show_fig=False,
+        save_path=join(save_path,"magneto_plot_glyph.png"),
     )
 
     return out

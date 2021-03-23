@@ -4,6 +4,7 @@ from PySide2.QtCore import Signal
 from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QMessageBox, QWidget
 
+from .....Classes.Shaft import Shaft
 from .....Classes.Frame import Frame
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SMachineDimension.Ui_SMachineDimension import (
@@ -83,13 +84,13 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             or machine.frame.Rext is None
             or machine.frame.comp_height_eq() == 0
         ):
+            machine.frame = None
             self.g_frame.setChecked(False)
             self.lf_Wfra.clear()  # Empty spinbox
             self.lf_Lfra.clear()  # Empty spinbox
         else:
             self.g_frame.setChecked(True)
-            Wfra = machine.frame.comp_height_eq()
-            self.lf_Wfra.setText(format(gui_option.unit.get_m(Wfra), ".6g"))
+            self.lf_Wfra.setValue(machine.frame.comp_height_eq())
             if machine.frame.Lfra is not None:
                 self.lf_Lfra.setValue(machine.frame.Lfra)
             self.w_mat_1.update(self.machine.frame, "mat_type", self.matlib)
@@ -105,6 +106,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             or machine.shaft.Drsh == 0
         ):
             # Internal Rotor without shaft
+            machine.shaft = None
             self.g_shaft.show()
             self.g_frame.show()
             self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft"]))
@@ -119,13 +121,14 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.g_frame.show()
             self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
             self.g_shaft.setChecked(True)
-            if machine.shaft.Drsh is not None:
-                self.out_Drsh.setText(
-                    self.tr("Drsh = 2*Rotor.Rint = ")
-                    + str(2000 * self.machine.rotor.Rint)
-                    + " mm"
-                )
-
+            machine.shaft.Drsh = self.machine.rotor.Rint * 2
+            self.out_Drsh.setText(
+                self.tr("Drsh = 2*Rotor.Rint = ")
+                + str(1000 * machine.shaft.Drsh)
+                + " ["
+                + gui_option.unit.get_m_name()
+                + "]"
+            )
             self.w_mat_0.update(self.machine.shaft, "mat_type", self.matlib)
 
         # Connect the widget
@@ -302,19 +305,22 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         if is_checked:  # If there is a shaft
             # Set the corresponding image
             self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
-            self.w_mat_0.update(self.machine.shaft, "mat_type", self.matlib)
             # Set Drsh if machine.rotor.Rint is set
             if self.machine.rotor.Rint is not None:
+                self.machine.shaft = Shaft()
+                self.machine.shaft._set_None()
+                self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
                 self.out_Drsh.setText(
                     self.tr("Drsh = 2*Rotor.Rint = ")
-                    + str(2000 * self.machine.rotor.Rint)
-                    + " mm"
+                    + str(1000 * self.machine.shaft.Drsh)
+                    + " ["
+                    + gui_option.unit.get_m_name()
+                    + "]"
                 )
-                self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
             else:
                 self.out_Drsh.setText(self.tr("Drsh = 2*Rotor.Rint = "))
                 self.machine.shaft.Drsh = None
-
+            self.w_mat_0.update(self.machine.shaft, "mat_type", self.matlib)
             # machine.rotor.Rint editable only if there is a shaft
             self.lf_RRint.setEnabled(True)
 
@@ -322,7 +328,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             # Set the corresponding image
             self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft"]))
 
-            self.machine.shaft.Drsh = 0
+            self.machine.shaft = None
             self.machine.rotor.Rint = 0
             self.lf_RRint.setValue(0)
 
@@ -388,6 +394,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             return self.tr("You must set Rotor.Rint !")
         if machine.rotor.Rint is None and not self.g_shaft.isChecked():
             machine.rotor.Rint = 0
+            machine.shaft = None
         if self.g_frame.isChecked() and machine.frame.Rint is None:
             return self.tr("You must set Wfra or unchecked Frame !")
         if not self.g_frame.isChecked():

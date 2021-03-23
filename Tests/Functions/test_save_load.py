@@ -41,7 +41,7 @@ load_file_1 = join(TEST_DATA_DIR, "test_wrong_slot_load_1.json")
 load_file_2 = join(TEST_DATA_DIR, "test_wrong_slot_load_2.json")
 logger.info(save_path)
 
-"""test for save and load fonctions"""
+"""test for save and load functions"""
 
 
 def test_save_load_machine():
