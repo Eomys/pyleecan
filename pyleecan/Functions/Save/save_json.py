@@ -123,9 +123,9 @@ def build_data(obj, logger):
     return None
 
 
-def save_split_obj(obj, folder, logger):
+def get_filename(obj, folder, split_list, logger):
     """
-    Save the split object in a dedicated file
+    Get a filename for the object that doesn't exists.
 
     Parameters
     ----------
@@ -136,6 +136,9 @@ def save_split_obj(obj, folder, logger):
     folder_path: str
         directory to save all the files
 
+    split_list: list
+        list of objects to be saved seperately
+
     logger: logging.Logger
         logger to display information
 
@@ -145,26 +148,28 @@ def save_split_obj(obj, folder, logger):
         name of the file containing the object
     """
     # Define the file name
-    if "name" in obj.keys() and obj["name"] != "" and obj["name"] != None:
+    if "name" in obj.keys() and obj["name"] not in ["", None]:
         name = obj["name"]
         msg = f"Saving {name} in "
     else:
         name = obj["__class__"]
         msg = f"Saving unnamed object of class {name} in "
 
+    # get list of names that will be created with this save to folder
+    name_list = []
+    for elem in split_list:
+        name_list.append(list(elem.keys())[0])
+
     # Add prefix to get a file name that doesn't exists
     num = 0
     new_name = name
-    while isfile(join(folder, new_name + ".json")):
+    while isfile(join(folder, new_name + ".json")) or (new_name + ".json") in name_list:
         num += 1
-        new_name = name + "{:05d}".format(num)
-
-    # Save the file
+        new_name = name + "_{:05d}".format(num)
     new_name += ".json"
-    file_path = join(folder, new_name)
-    with open(file_path, "w") as json_file:
-        dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
 
+    # logging
+    file_path = join(folder, new_name)
     logger.info(msg + file_path)
 
     return new_name  # Set the name to load the file
@@ -210,16 +215,15 @@ def save_separated_obj(cls_tupel, obj_dict, folder, split_list, logger):
 
 
 def _split_(val, cls_tupel, folder, split_list, logger):
+    # Futher split the object ...
+    obj = save_separated_obj(cls_tupel, val, folder, split_list, logger)
     if "__class__" in val.keys() and val["__class__"] in cls_tupel:
-        # Call save_separated_obj to save the sub object into files
-        save_separated_obj(cls_tupel, val, folder, split_list, logger)
-        # Save this object and get the file name
-        obj = save_split_obj(val, folder, logger)
-        split_list.append({obj: val})
+        # and also add it to the list of objects to be saved
+        name = get_filename(val, folder, split_list, logger)
+        split_list.append({name: val})
+        return name
     else:
-        # Scan the dicts attributes
-        obj = save_separated_obj(cls_tupel, val, folder, split_list, logger)
-    return obj
+        return obj
 
 
 def save_json(
@@ -255,7 +259,18 @@ def save_json(
     now = datetime.now()
     obj["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
     obj["__version__"] = PACKAGE_NAME + "_" + __version__
+
+    # create name for the base file
+    i = max(save_path.rfind("/"), save_path.rfind("\\"))
+    name = save_path[i:] if i != -1 else save_path
+
     if is_folder:
+        name += ".json"
+
+    split_list = [{name: obj}]
+
+    if is_folder:
+        folder = save_path
         # Add the classes daughters
         class_to_add = []
         class_dict = get_class_dict()
@@ -266,18 +281,22 @@ def save_json(
         class_to_split += tuple(class_to_add)
 
         # Call ref_objects to save the objects separately
-        split_list = [{(save_path + ".json"): obj}]
-        obj = save_separated_obj(class_to_split, obj, save_path, split_list, logger)
+        save_separated_obj(class_to_split, obj, folder, split_list, logger)
+    else:
+        folder = ""
 
-        i = max(save_path.rfind("/"), save_path.rfind("\\"))
-        if i != -1:
-            save_path += save_path[i:]
-        else:
-            save_path += "/" + save_path
-        save_path += ".json"
-
+    # save all objects from the split list
     logger.info("Saving in " + save_path)
-    with open(save_path, "w") as json_file:
-        dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
+    for elem in split_list:
+        file_name = list(elem.keys())[0]
+        file_path = join(folder, file_name)
+        with open(file_path, "w") as json_file:
+            dump(
+                elem[file_name],
+                json_file,
+                sort_keys=True,
+                indent=4,
+                separators=(",", ": "),
+            )
 
     return obj
