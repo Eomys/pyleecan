@@ -11,7 +11,7 @@ def plot_mesh(
     save_path=None,
     group_names=None,
     node_label=None,
-    is_show_axes=True,
+    is_show_axes=False,
     is_show_fig=True,
 ):
     """Plot the mesh using pyvista plotter.
@@ -76,6 +76,8 @@ def plot_mesh(
             edge_color="white",
             line_width=1,
         )
+        if is_show_axes:
+            p.add_axes()
         if self.dimension == 2:
             p.view_xy()
         if save_path is None and is_show_fig:

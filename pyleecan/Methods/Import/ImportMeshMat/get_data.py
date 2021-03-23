@@ -5,7 +5,7 @@ from os.path import splitext
 from pyleecan.Classes.ImportMeshUnv import ImportMeshUnv
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
-from pyleecan.Classes.PointMat import PointMat
+from pyleecan.Classes.NodeMat import NodeMat
 
 
 def get_data(self):
@@ -23,21 +23,26 @@ def get_data(self):
 
     """
 
-    # Get mesh data (points and elements)
+    # Get mesh data (nodes and elements)
     if splitext(self.file_path)[1] == ".unv":
-        points, elements = ImportMeshUnv(self.file_path).get_data()
+        nodes, elements = ImportMeshUnv(self.file_path).get_data()
     else:
         raise Exception(splitext(self.file_path)[1] + " files are not supported")
 
     # Define MeshMat object
-    mesh = MeshMat()
+    if min(nodes[:, 0]) == 0 and max(nodes[:, 0]) == len(nodes[:, 0]) - 1:
+        is_renum = False
+    else:
+        is_renum = True
+
+    mesh = MeshMat(_is_renum=is_renum)
     mesh.label = "Imported mesh"
 
-    # Define PointMat object
-    mesh.point = PointMat(
-        coordinate=points[:, 1:],
-        nb_pt=points.shape[0],
-        indice=points[:, 0],
+    # Define NodeMat object
+    mesh.node = NodeMat(
+        coordinate=nodes[:, 1:],
+        nb_node=nodes.shape[0],
+        indice=nodes[:, 0],
     )
 
     # Define CellMat objects
@@ -45,7 +50,7 @@ def get_data(self):
         mesh.cell[elt_type] = CellMat(
             connectivity=elt[:, 1:],
             nb_cell=elt.shape[0],
-            nb_pt_per_cell=elt.shape[1] - 1,
+            nb_node_per_cell=elt.shape[1] - 1,
             indice=elt[:, 0],
         )
 

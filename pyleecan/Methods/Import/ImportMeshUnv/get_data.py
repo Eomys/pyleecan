@@ -6,7 +6,7 @@ import pyuff
 
 
 def get_data(self):
-    """Return mesh data (points and elements) from a .unv file
+    """Return mesh data (nodes and elements) from a .unv file
 
     Parameters
     ----------
@@ -15,8 +15,8 @@ def get_data(self):
 
     Returns
     -------
-    points: ndarray
-        The points id and coordinates (one line = id, 3 coordinates)
+    nodes: ndarray
+        The nodes id and coordinates (one line = id, 3 coordinates)
     elements: dict
         The elements id and connectivity per element type (one line = id, n node ids)
 
@@ -28,23 +28,25 @@ def get_data(self):
 
     # Scan datasets
     for dataset in datasets:
-        # If points dataset
+        # If nodes dataset
         if dataset["type"] == 15:
-            points = vstack(
-                (dataset["node_nums"], dataset["x"], dataset["y"], dataset["z"])
+            nodes = vstack(
+                (
+                    [int(x) for x in dataset["node_nums"]],
+                    dataset["x"],
+                    dataset["y"],
+                    dataset["z"],
+                )
             ).T
 
         # If element dataset
         elif dataset["type"] == 2412:
-            # Look for the different types of elements stored in the dataset
-            elements_type = list(set(dataset["num_nodes"]))
-            element_type_dict = {"3": "triangle", "4": "quad"}
             # Store connectivities
             elements = dict()
-            for element_type in elements_type:
-                ind = where(np_array(dataset["num_nodes"]) == element_type)[0]
-                elements[element_type_dict[str(element_type)]] = vstack(
-                    (dataset["element_nums"], np_array(dataset["nodes_nums"])[ind].T)
-                ).T
+            for elt_type, elt_dict in dataset.items():
+                if elt_type != "type":
+                    elements[elt_type] = vstack(
+                        (elt_dict["element_nums"], np_array(elt_dict["nodes_nums"]).T)
+                    ).T
 
-    return points, elements
+    return nodes, elements
