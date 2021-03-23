@@ -46,7 +46,10 @@ def test_Benchmark_Tensor():
         # nb_worker=cpu_count(),
         Kmesh_fineness=2,
     )
-    simu.force = ForceTensor(is_periodicity_a=True, is_periodicity_t=False,)
+    simu.force = ForceTensor(
+        is_periodicity_a=True,
+        is_periodicity_t=False,
+    )
 
     # Run simulation
     out = simu.run()
