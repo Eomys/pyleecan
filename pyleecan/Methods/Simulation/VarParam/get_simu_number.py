@@ -14,6 +14,6 @@ def get_simu_number(self):
 
     nb_simu = 1
     for paramexplorer in self.paramexplorer_list:
-        nb_simu *= len(paramexplorer.value)
+        nb_simu *= paramexplorer.get_N()
 
     return nb_simu

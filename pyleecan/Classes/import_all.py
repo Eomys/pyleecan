@@ -129,6 +129,7 @@ from ..Classes.OutPost import OutPost
 from ..Classes.OutStruct import OutStruct
 from ..Classes.Output import Output
 from ..Classes.ParamExplorer import ParamExplorer
+from ..Classes.ParamExplorerInterval import ParamExplorerInterval
 from ..Classes.ParamExplorerSet import ParamExplorerSet
 from ..Classes.PolarArc import PolarArc
 from ..Classes.Post import Post

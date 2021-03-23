@@ -245,11 +245,11 @@ def get_config_dict():
         config_dict["PLOT"]["FONT_NAME"] = DEFAULT_FONT  # Default font
 
     # Update config_dict content
-    if ["MACHINE_DIR"] not in config_dict["MAIN"] or not isdir(
+    if "MACHINE_DIR" not in config_dict["MAIN"] or not isdir(
         config_dict["MAIN"]["MACHINE_DIR"]
     ):
         config_dict["MAIN"]["MACHINE_DIR"] = join(USER_DIR, "Machine")
-    if ["MATLIB_DIR"] not in config_dict["MAIN"] or not isdir(
+    if "MATLIB_DIR" not in config_dict["MAIN"] or not isdir(
         config_dict["MAIN"]["MATLIB_DIR"]
     ):
         config_dict["MAIN"]["MATLIB_DIR"] = join(USER_DIR, "Material")

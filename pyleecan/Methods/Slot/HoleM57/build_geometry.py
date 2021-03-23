@@ -53,7 +53,6 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     else:
         type_mag_1 = "None"
 
-
     # Get all the points
     point_dict = self._comp_point_coordinate()
     Z1 = point_dict["Z1"]
@@ -284,4 +283,3 @@ def set_name_line(hole_lines, name):
     for ii in range(len(hole_lines)):
         hole_lines[ii].label = name + "_" + str(ii)
     return hole_lines
-

@@ -7671,6 +7671,7 @@
         ],
         "daughters": [
             "OptiDesignVar",
+            "ParamExplorerInterval",
             "ParamExplorerSet"
         ],
         "desc": "Abstract class for the multi-simulation",
@@ -7721,6 +7722,74 @@
             }
         ]
     },
+    "ParamExplorerInterval": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define a set of value (for parameter sweep) on interval",
+        "is_internal": false,
+        "methods": [
+            "get_value",
+            "get_min",
+            "get_max",
+            "get_N"
+        ],
+        "mother": "ParamExplorer",
+        "name": "ParamExplorerInterval",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/ParamExplorerInterval.csv",
+        "properties": [
+            {
+                "desc": "Minumum value of the interval",
+                "max": "",
+                "min": "",
+                "name": "min_value",
+                "type": "float",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Maximum value of the interval",
+                "max": "",
+                "min": "",
+                "name": "max_value",
+                "type": "float",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Number of value to take in the interval",
+                "max": "",
+                "min": "2",
+                "name": "N",
+                "type": "int",
+                "unit": "-",
+                "value": 4
+            },
+            {
+                "desc": "How to generate the value list. 0: linspace, 1: random (Not available yet)",
+                "max": "0",
+                "min": "0",
+                "name": "type_value_gen",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Type of the value: 0:float, 1:int",
+                "max": "1",
+                "min": "0",
+                "name": "type_value",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            }
+        ]
+    },
     "ParamExplorerSet": {
         "constants": [
             {
@@ -7729,11 +7798,14 @@
             }
         ],
         "daughters": [],
-        "desc": "Abstract class for the multi-simulation",
+        "desc": "Define a parameter set (for parameter sweep) from a list",
         "is_internal": false,
         "methods": [
             "get_value",
-            "as_dict"
+            "as_dict",
+            "get_min",
+            "get_max",
+            "get_N"
         ],
         "mother": "ParamExplorer",
         "name": "ParamExplorerSet",
