@@ -7677,7 +7677,9 @@
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,
         "methods": [
-            "_set_setter"
+            "_set_setter",
+            "_set_getter",
+            "get_desc"
         ],
         "mother": "",
         "name": "ParamExplorer",
@@ -7716,6 +7718,15 @@
                 "max": "",
                 "min": "",
                 "name": "setter",
+                "type": "function",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Function to return the reference value (simulation as argument)",
+                "max": "",
+                "min": "",
+                "name": "getter",
                 "type": "function",
                 "unit": "-",
                 "value": null

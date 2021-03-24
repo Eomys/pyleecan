@@ -142,7 +142,10 @@ def test_multi_multi():
         Kmesh_fineness=0.2,
         nb_worker=nb_worker,
     )
-    simu.force = ForceMT(is_periodicity_a=True, is_periodicity_t=True,)
+    simu.force = ForceMT(
+        is_periodicity_a=True,
+        is_periodicity_t=True,
+    )
 
     # VarSpeed Definition
     varload = VarLoadCurrent(is_reuse_femm_file=True)
@@ -179,7 +182,10 @@ def test_multi_multi():
     varload.is_keep_all_output = False
 
     # Multi-simulation to change machine parameters
-    multisim = VarParam(stop_if_error=True, is_reuse_femm_file=False,)
+    multisim = VarParam(
+        stop_if_error=True,
+        is_reuse_femm_file=False,
+    )
 
     simu.var_simu = multisim
 
@@ -190,12 +196,16 @@ def test_multi_multi():
             symbol="W0s",
             unit="m",
             setter="simu.machine.stator.slot.W0",
+            getter="simu.machine.stator.slot.W0",
             min_value=0.1 * IPMSM_A.stator.slot.W0,
             max_value=IPMSM_A.stator.slot.W0,
             N=N1,
         )
     ]
-
+    assert (
+        paramexplorer_list[0].get_desc(simu)
+        == "W0s: " + str(N1) + " values from 0.000193 to 0.00193 (ref=0.00193) [m]"
+    )
     multisim.paramexplorer_list = paramexplorer_list
     multisim.is_keep_all_output = True
 

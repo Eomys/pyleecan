@@ -114,6 +114,7 @@ class ParamExplorerInterval(ParamExplorer):
         symbol="",
         unit="",
         setter=None,
+        getter=None,
         init_dict=None,
         init_str=None,
     ):
@@ -150,6 +151,8 @@ class ParamExplorerInterval(ParamExplorer):
                 unit = init_dict["unit"]
             if "setter" in list(init_dict.keys()):
                 setter = init_dict["setter"]
+            if "getter" in list(init_dict.keys()):
+                getter = init_dict["getter"]
         # Set the properties (value check and convertion are done in setter)
         self.min_value = min_value
         self.max_value = max_value
@@ -158,7 +161,7 @@ class ParamExplorerInterval(ParamExplorer):
         self.type_value = type_value
         # Call ParamExplorer init
         super(ParamExplorerInterval, self).__init__(
-            name=name, symbol=symbol, unit=unit, setter=setter
+            name=name, symbol=symbol, unit=unit, setter=setter, getter=getter
         )
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties
