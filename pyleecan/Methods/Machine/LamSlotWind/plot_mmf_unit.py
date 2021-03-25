@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from ....Functions.Plot.plot_2D_Data import plot_2D_Data
+import matplotlib.pyplot as plt
+
+from ....Functions.Plot import dict_2D
 from ....definitions import config_dict
 
 
@@ -31,25 +33,32 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
     qs = self.winding.qs
     MMF_U, WF = self.comp_mmf_unit(Nt=1, Na=wf.shape[1])
 
-    color_list = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][: qs + 1]
-    plot_2D_Data(
-        WF,
-        "angle",
+    color_list = config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"][:qs]
+
+    fig, axs = plt.subplots(2, 1, tight_layout=True, figsize=(8, 8))
+
+    dict_2D_0 = dict_2D.copy()
+    dict_2D_0["color_list"] = color_list + ["k"]
+
+    WF.plot_2D_Data(
+        "angle{°}",
         "phase",
         data_list=[MMF_U],
         fig=fig,
-        color_list=color_list,
+        ax=axs[0],
         is_show_fig=is_show_fig,
         win_title=name + "Winding functions",
+        **dict_2D_0,
     )
 
-    plot_2D_Data(
-        WF,
+    dict_2D_0["color_list"] = [color_list[0], "k"]
+
+    WF.plot_2D_Data(
         "wavenumber=[0," + str(r_max) + "]",
-        "phase[0]",
         data_list=[MMF_U],
         fig=fig,
-        color_list=color_list,
+        ax=axs[1],
         is_show_fig=is_show_fig,
-        win_title=name + "Winding function & MMF FFT",
+        win_title=name + "Winding functions & MMF FFT",
+        **dict_2D_0,
     )

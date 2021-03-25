@@ -10,6 +10,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
 
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 from Tests import save_validation_path as save_path
 
@@ -81,8 +82,7 @@ def test_AC_IPMSM_AGSF_transfer_compare_Rag_variation():
         legend_list2.append(str(k) + "%")
         AGSF_list2.append(out_list2[ik].force.AGSF)
 
-        out_list[ik].plot_2D_Data(
-            "force.AGSF",
+        out_list[ik].force.AGSF.plot_2D_Data(
             "angle=[0,3.14]",
             "time=0",
             data_list=[AGSF_list2[ik]],
@@ -91,10 +91,10 @@ def test_AC_IPMSM_AGSF_transfer_compare_Rag_variation():
                 save_path, "test_Benchmark_AGSF_var_Rag_compare_" + str(k) + ".png"
             ),
             is_show_fig=False,
+            **dict_2D
         )
 
-        out_list[ik].plot_2D_Data(
-            "force.AGSF",
+        out_list[ik].force.AGSF.plot_2D_Data(
             "wavenumber",
             "freqs=0",
             x_min=0,
@@ -106,6 +106,7 @@ def test_AC_IPMSM_AGSF_transfer_compare_Rag_variation():
             ),
             is_show_fig=False,
             barwidth=800,
+            **dict_2D
         )
 
 
@@ -168,14 +169,14 @@ def test_AC_IPMSM_AGSF_transfer_Nmax_sensitivity():
         legend_list.append("Transfert (Nmax=" + str(k) + ")")
         AGSF_list.append(out_tmp.force.AGSF)
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "angle=[0,3.14]",
         "time=0",
         data_list=AGSF_list,
         legend_list=legend_list,
         save_path=join(save_path, "test_Benchmark_AGSF_var_Nmax_" + str(k) + ".png"),
         is_show_fig=False,
+        **dict_2D
     )
 
 

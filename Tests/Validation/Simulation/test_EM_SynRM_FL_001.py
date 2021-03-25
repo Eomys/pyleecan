@@ -9,7 +9,7 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
-from pyleecan.Functions.Plot.plot_2D import plot_2D
+from SciDataTool.Functions.Plot.plot_2D import plot_2D
 from Tests import TEST_DATA_DIR
 from Tests import save_validation_path as save_path
 from pyleecan.definitions import config_dict

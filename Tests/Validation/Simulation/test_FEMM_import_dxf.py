@@ -10,6 +10,7 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 import pytest
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -78,11 +79,11 @@ def test_FEMM_import_dxf():
     out2 = simu2.run()
 
     # Plot/compare the flux
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         data_list=[out2.mag.B],
         legend_list=["Rotor from DXF", "Rotor from pyleecan"],
         save_path=join(save_path, "FEMM_import_dxf_B.png"),
         is_show_fig=False,
+        **dict_2D
     )

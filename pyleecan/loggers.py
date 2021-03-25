@@ -19,7 +19,11 @@ FILE_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def gen_logger_config_dict(logger_name):
     module = __import__(
-        "pyleecan", globals=globals(), locals=locals(), fromlist=["USER_DIR"], level=0,
+        "pyleecan",
+        globals=globals(),
+        locals=locals(),
+        fromlist=["USER_DIR"],
+        level=0,
     )
     USER_DIR = module.USER_DIR
     if not isdir(USER_DIR):
