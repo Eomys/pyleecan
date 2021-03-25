@@ -787,7 +787,8 @@
         "desc": "Class for defining data to keep on a multi-simulation",
         "is_internal": false,
         "methods": [
-            "as_dict"
+            "as_dict",
+            "_set_result"
         ],
         "mother": "",
         "name": "DataKeeper",
