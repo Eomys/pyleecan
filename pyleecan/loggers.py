@@ -1,5 +1,7 @@
 from logging import Filter, DEBUG, INFO, WARNING, ERROR, CRITICAL
 from logging.config import dictConfig
+from os import makedirs
+from os.path import isdir
 
 # Default level in every loggers
 DEFAULT_LOG_NAME = "Pyleecan"
@@ -20,6 +22,8 @@ def gen_logger_config_dict(logger_name):
         "pyleecan", globals=globals(), locals=locals(), fromlist=["USER_DIR"], level=0,
     )
     USER_DIR = module.USER_DIR
+    if not isdir(USER_DIR):
+        makedirs(USER_DIR)
     log_config_dict = {
         "version": 1,
         # Define loggers
