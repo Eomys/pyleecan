@@ -1,3 +1,7 @@
+from ....Functions.Load.import_class import import_class
+from ....Classes._check import check_var
+
+
 def _set_result(self, value):
     """setter of result"""
     if type(value) is int and value == -1:
