@@ -19,6 +19,7 @@ import pytest
 import json
 
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D, dict_3D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -84,38 +85,38 @@ def test_Magnetic_AGSF():
 
     # Plot the AGSF as a function of space with the spatial fft
     r_max = 78
-    out.plot_2D_Data(
-        "force.AGSF",
-        "angle",
+    out.force.AGSF.plot_2D_Data(
+        "angle{°}",
         "time[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "wavenumber=[0," + str(r_max) + "]",
         "time[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     # Plot the AGSF as a function of time with the time fft
     freq_max = 1000
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "time",
         "angle[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_time.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "freqs=[0," + str(freq_max) + "]",
         "angle[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_time_fft.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     # ------------------------------------------------------
@@ -129,74 +130,76 @@ def test_Magnetic_AGSF():
 
     # Plot the AGSF as a function of space with the spatial fft
     r_max = 78
-    out.plot_2D_Data(
-        "force.AGSF",
-        "angle",
+    out.force.AGSF.plot_2D_Data(
+        "angle{°}",
         "time[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space2.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "wavenumber=[0," + str(r_max) + "]",
         "time[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft2.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     # Plot the AGSF as a function of time with the time fft
     freq_max = 1000
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "time",
         "angle[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space2.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "freqs=[0," + str(freq_max) + "]",
         "angle[0]",
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft2.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_3D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_3D_Data(
         "freqs=[0," + str(freq_max) + "]",
         "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
         component_list=["radial"],
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_fft2.png"),
         is_show_fig=False,
         is_2D_view=True,
+        **dict_3D
     )
 
-    out.plot_3D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_3D_Data(
         "freqs=[0," + str(freq_max) + "]",
         "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
         component_list=["radial"],
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_cfft2.png"),
         is_show_fig=False,
+        **dict_3D
     )
 
-    out.plot_A_time_space(
-        "force.AGSF",
+    out.force.AGSF.plot_3D_Data(
+        "time",
+        "angle{°}",
         component_list=["radial"],
-        freq_max=freq_max,
-        r_max=r_max,
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_time_space"),
         is_show_fig=False,
+        is_2D_view=True,
+        **dict_3D
     )
-    out.plot_A_time_space(
-        "mag.B",
+    out.mag.B.plot_3D_Data(
+        "time",
+        "angle{°}",
         component_list=["radial"],
-        freq_max=freq_max,
-        r_max=r_max,
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_flux_time_space"),
         is_show_fig=False,
+        is_2D_view=True,
+        **dict_3D
     )
 
     return out

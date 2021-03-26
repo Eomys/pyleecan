@@ -14,6 +14,7 @@ from pyleecan.Classes.Output import Output
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D, dict_3D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -124,8 +125,7 @@ class Test_plots(object):
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
 
-        out.plot_2D_Data(
-            "mag.B",
+        out.mag.B.plot_2D_Data(
             "time",
             "angle[0]{°}",
             data_list=[out2.mag.B],
@@ -133,15 +133,16 @@ class Test_plots(object):
             legend_list=["Reference", "Periodic"],
             save_path=join(save_path, "test_default_proj_Br_dataobj_period.png"),
             is_show_fig=False,
+            **dict_2D,
         )
-        out.plot_2D_Data(
-            "mag.B",
+        out.mag.B.plot_2D_Data(
             "freqs=[0," + str(freq_max) + "]",
             data_list=[out2.mag.B],
             legend_list=["Reference", "Periodic"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_period_fft.png"),
             is_show_fig=False,
+            **dict_2D,
         )
 
         out3 = Output(simu=simu)
@@ -185,24 +186,24 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (Data1D / DataLinspace)
         plt.close("all")
-        out.plot_2D_Data(
-            "mag.B",
+        out.mag.B.plot_2D_Data(
             "angle{°}",
             data_list=[out3.mag.B],
             legend_list=["Reference", "Linspace"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_linspace.png"),
             is_show_fig=False,
+            **dict_2D,
         )
         out.mag.B.components["radial"].axes[1].normalizations["space_order"] = 3
-        out.plot_2D_Data(
-            "mag.B",
+        out.mag.B.plot_2D_Data(
             "wavenumber->space_order=[0,100]",
             data_list=[out3.mag.B],
             legend_list=["Reference", "Linspace"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_linspace_fft.png"),
             is_show_fig=False,
+            **dict_2D,
         )
 
         simu4 = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
@@ -217,23 +218,23 @@ class Test_plots(object):
         # Plot the result by comparing the two simulation (direct / ifft)
         plt.close("all")
 
-        out.plot_2D_Data(
-            "mag.B",
+        out.mag.B.plot_2D_Data(
             "angle{°}",
             data_list=[out4.mag.B],
             legend_list=["Reference", "Inverse FFT"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_ift.png"),
             is_show_fig=False,
+            **dict_2D,
         )
-        out.plot_2D_Data(
-            "mag.B",
+        out.mag.B.plot_2D_Data(
             "wavenumber=[0,100]",
             data_list=[out4.mag.B],
             legend_list=["Reference", "Inverse FFT"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_ift_fft.png"),
             is_show_fig=False,
+            **dict_2D,
         )
 
         out5 = Output(simu=simu)
@@ -270,8 +271,7 @@ class Test_plots(object):
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
 
-        out.plot_2D_Data(
-            "mag.B",
+        out.mag.B.plot_2D_Data(
             "time",
             "angle[0]{°}",
             data_list=[out5.mag.B],
@@ -279,6 +279,7 @@ class Test_plots(object):
             save_path=join(save_path, "test_default_proj_Br_compare.png"),
             is_auto_ticks=False,
             is_show_fig=False,
+            **dict_2D,
         )
 
     def test_default_proj_Br_cfft2(self, import_data):
@@ -306,14 +307,14 @@ class Test_plots(object):
 
         # Plot the 2D FFT of flux density as stem plot
         plt.close("all")
-        out.plot_3D_Data(
-            "mag.B",
+        out.mag.B.plot_3D_Data(
             "freqs=[0," + str(freq_max) + "]",
             "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
             N_stem=N_stem,
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_cfft2.png"),
             is_show_fig=False,
+            **dict_3D,
         )
 
     def test_default_proj_surf(self, import_data):
@@ -339,14 +340,14 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_3D_Data(
-            "mag.B",
+        out.mag.B.plot_3D_Data(
             "time=[0,0.06]",
             "angle{°}",
             component_list=["radial"],
             save_path=join(save_path, "test_default_proj_Br_surf_dataobj.png"),
             is_2D_view=False,
             is_show_fig=False,
+            **dict_3D,
         )
 
     def test_default_proj_fft2(self, import_data):
@@ -374,14 +375,14 @@ class Test_plots(object):
         plt.close("all")
         freq_max = 500
         r_max = 20
-        out.plot_3D_Data(
-            "mag.B",
+        out.mag.B.plot_3D_Data(
             "freqs=[0," + str(freq_max) + "]",
             "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
             is_2D_view=True,
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_fft2_dataobj.png"),
             is_show_fig=False,
+            **dict_3D,
         )
 
     def test_default_proj_time_space(self, import_data):
@@ -407,11 +408,11 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_3D_Data(
-            "mag.B",
+        out.mag.B.plot_3D_Data(
             "time",
             "angle{°}",
             is_2D_view=True,
             save_path=join(save_path, "test_default_proj_Br_time_space_dataobj.png"),
             is_show_fig=False,
+            **dict_3D,
         )

@@ -53,6 +53,7 @@ class PostPlot(PostMethod):
         param_list=-1,
         param_dict=-1,
         save_format="png",
+        quantity=None,
         init_dict=None,
         init_str=None,
     ):
@@ -81,12 +82,15 @@ class PostPlot(PostMethod):
                 param_dict = init_dict["param_dict"]
             if "save_format" in list(init_dict.keys()):
                 save_format = init_dict["save_format"]
+            if "quantity" in list(init_dict.keys()):
+                quantity = init_dict["quantity"]
         # Set the properties (value check and convertion are done in setter)
         self.method = method
         self.name = name
         self.param_list = param_list
         self.param_dict = param_dict
         self.save_format = save_format
+        self.quantity = quantity
         # Call PostMethod init
         super(PostPlot, self).__init__()
         # The class is frozen (in PostMethod init), for now it's impossible to
@@ -108,6 +112,7 @@ class PostPlot(PostMethod):
         )
         PostPlot_str += "param_dict = " + str(self.param_dict) + linesep
         PostPlot_str += 'save_format = "' + str(self.save_format) + '"' + linesep
+        PostPlot_str += 'quantity = "' + str(self.quantity) + '"' + linesep
         return PostPlot_str
 
     def __eq__(self, other):
@@ -128,6 +133,8 @@ class PostPlot(PostMethod):
         if other.param_dict != self.param_dict:
             return False
         if other.save_format != self.save_format:
+            return False
+        if other.quantity != self.quantity:
             return False
         return True
 
@@ -150,6 +157,8 @@ class PostPlot(PostMethod):
             diff_list.append(name + ".param_dict")
         if other._save_format != self._save_format:
             diff_list.append(name + ".save_format")
+        if other._quantity != self._quantity:
+            diff_list.append(name + ".quantity")
         return diff_list
 
     def __sizeof__(self):
@@ -168,6 +177,7 @@ class PostPlot(PostMethod):
             for key, value in self.param_dict.items():
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.save_format)
+        S += getsizeof(self.quantity)
         return S
 
     def as_dict(self, **kwargs):
@@ -188,6 +198,7 @@ class PostPlot(PostMethod):
             self.param_dict.copy() if self.param_dict is not None else None
         )
         PostPlot_dict["save_format"] = self.save_format
+        PostPlot_dict["quantity"] = self.quantity
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         PostPlot_dict["__class__"] = "PostPlot"
@@ -201,6 +212,7 @@ class PostPlot(PostMethod):
         self.param_list = None
         self.param_dict = None
         self.save_format = None
+        self.quantity = None
         # Set to None the properties inherited from PostMethod
         super(PostPlot, self)._set_None()
 
@@ -216,7 +228,7 @@ class PostPlot(PostMethod):
     method = property(
         fget=_get_method,
         fset=_set_method,
-        doc=u"""Full path of the plot method to call except Output (ex: "plot_2D_Data", "mag.meshsolution.plot_contour")
+        doc=u"""Name of the plot method to call (e.g. plot_2D_Data, plot_contour, plot_multi)
 
         :Type: str
         """,
@@ -293,6 +305,24 @@ class PostPlot(PostMethod):
         fget=_get_save_format,
         fset=_set_save_format,
         doc=u"""File format extension ("png", "svg", "eps") in which to save the figure. The PostPlot automatically saves the figure in the results folder. The user can specify a different folder by specifying "save_path"=path_str or not save the figure by specifying "save_path"=None in param_dict, if the plot_method enables it.
+
+        :Type: str
+        """,
+    )
+
+    def _get_quantity(self):
+        """getter of quantity"""
+        return self._quantity
+
+    def _set_quantity(self, value):
+        """setter of quantity"""
+        check_var("quantity", value, "str")
+        self._quantity = value
+
+    quantity = property(
+        fget=_get_quantity,
+        fset=_set_quantity,
+        doc=u"""Full path to the quantity to which apply the plot_method except Output (e.g. mag.B, elec.get_Is, mag.meshsolution)
 
         :Type: str
         """,

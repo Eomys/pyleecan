@@ -21,6 +21,7 @@ from pyleecan.Classes.Output import Output
 from Tests import TEST_DATA_DIR
 import pytest
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -95,26 +96,26 @@ def test_Magnetic_FEMM_sym():
     # Plot the result by comparing the two simulation (sym / no sym)
     plt.close("all")
 
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         data_list=[out2.mag.B],
         legend_list=["No symmetry", "1/2 symmetry"],
         save_path=join(save_path, "test_EM_SCIM_NL_006_sym.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     # Plot the result by comparing the two simulation (no sym / MANATEE)
     plt.close("all")
 
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         data_list=[out3.mag.B],
         legend_list=["No symmetry", "MANATEE MMF"],
         component_list=["radial"],
         save_path=join(save_path, "test_EM_SCIM_NL_006_MMF.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     return out, out2, out3

@@ -12,6 +12,7 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -66,11 +67,11 @@ def test_EM_IPMSM_FL_001():
 
     # Plot the result by comparing the two simulation
     plt.close("all")
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         data_list=[out2.mag.B],
         legend_list=["No symmetry", "1/4 symmetry"],
         save_path=join(save_path, "test_EM_IPMSM_FL_001_sym.png"),
         is_show_fig=False,
+        **dict_2D
     )

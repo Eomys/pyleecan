@@ -14,6 +14,7 @@ def plot(
     comp_machine=None,
     is_show_fig=True,
     save_path=None,
+    win_title=None,
 ):
     """Plot the Machine in a matplotlib fig
 
@@ -127,3 +128,6 @@ def plot(
 
     if is_show_fig:
         fig.show()
+
+    if win_title:
+        fig.canvas.set_window_title(win_title)

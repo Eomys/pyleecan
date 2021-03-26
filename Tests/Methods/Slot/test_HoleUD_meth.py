@@ -7,6 +7,7 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -169,13 +170,13 @@ class Test_HoleUD_meth(object):
         # Plot the result by comparing the two simulation
         plt.close("all")
 
-        out.plot_2D_Data(
-            "mag.B",
+        out.mag.B.plot_2D_Data(
             "angle",
             data_list=[out2.mag.B],
             legend_list=["Normal", "User-Defined"],
             save_path=join(save_path, "test_HoleUD.png"),
             is_show_fig=False,
+            **dict_2D,
         )
 
 

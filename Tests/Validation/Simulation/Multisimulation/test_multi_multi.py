@@ -17,6 +17,7 @@ from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.ParamExplorerInterval import ParamExplorerInterval
 from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
 from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.PostPlot import PostPlot
@@ -190,14 +191,14 @@ def test_multi_multi():
 
     # List of ParamExplorer to define multisimulation input values
     paramexplorer_list = [
-        ParamExplorerSet(
+        ParamExplorerInterval(
             name="Stator slot opening",
             symbol="W0s",
             unit="m",
             setter="simu.machine.stator.slot.W0",
-            value=(
-                IPMSM_A.stator.slot.W0 * linspace(1, 0.1, N1, endpoint=True)
-            ).tolist(),
+            min_value=0.1 * IPMSM_A.stator.slot.W0,
+            max_value=IPMSM_A.stator.slot.W0,
+            N=N1,
         )
     ]
 

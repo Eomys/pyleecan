@@ -13,6 +13,7 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -65,43 +66,43 @@ def test_FEMM_parallelization_mag():
     simu3.run()
 
     # Plot the result by comparing the first two simulation
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         "time[0]",
         data_list=[out2.mag.B],
         legend_list=["Serial", "Parallelization"],
         save_path=join(save_path, simu.name + "_B_t0.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         "time[0]",
         data_list=[out2.mag.B],
         legend_list=["Serial", "Parallelization"],
         save_path=join(save_path, simu.name + "_B_t1.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.Tem",
+    out.mag.Tem.plot_2D_Data(
         "time",
         data_list=[out2.mag.Tem],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Tem.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.Phi_wind_stator",
+    out.mag.Phi_wind_stator.plot_2D_Data(
         "time",
         "phase",
         data_list=[out2.mag.Phi_wind_stator],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Phi_wind_stator.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     assert_allclose(

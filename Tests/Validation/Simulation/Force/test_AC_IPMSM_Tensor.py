@@ -58,7 +58,7 @@ def test_Benchmark_Tensor():
         label="F",
         is_point_arrow=True,
         is_show_fig=False,
-        save_path=join(save_path,"magneto_plot_glyph.png"),
+        save_path=join(save_path, "magneto_plot_glyph.png"),
     )
 
     return out

@@ -7619,11 +7619,7 @@
             "getter.get_path_result",
             "getter.get_machine_periodicity",
             "getter.get_rot_dir",
-            "plot.plot_2D_Data",
             "getter.get_fund_harm",
-            "plot.plot_A_quiver_2D",
-            "plot.plot_3D_Data",
-            "plot.plot_A_time_space",
             "getter.get_data_from_str",
             "print_memory"
         ],
@@ -7733,6 +7729,7 @@
         ],
         "daughters": [
             "OptiDesignVar",
+            "ParamExplorerInterval",
             "ParamExplorerSet"
         ],
         "desc": "Abstract class for the multi-simulation",
@@ -7783,6 +7780,74 @@
             }
         ]
     },
+    "ParamExplorerInterval": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define a set of value (for parameter sweep) on interval",
+        "is_internal": false,
+        "methods": [
+            "get_value",
+            "get_min",
+            "get_max",
+            "get_N"
+        ],
+        "mother": "ParamExplorer",
+        "name": "ParamExplorerInterval",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/ParamExplorerInterval.csv",
+        "properties": [
+            {
+                "desc": "Minumum value of the interval",
+                "max": "",
+                "min": "",
+                "name": "min_value",
+                "type": "float",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Maximum value of the interval",
+                "max": "",
+                "min": "",
+                "name": "max_value",
+                "type": "float",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Number of value to take in the interval",
+                "max": "",
+                "min": "2",
+                "name": "N",
+                "type": "int",
+                "unit": "-",
+                "value": 4
+            },
+            {
+                "desc": "How to generate the value list. 0: linspace, 1: random (Not available yet)",
+                "max": "0",
+                "min": "0",
+                "name": "type_value_gen",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Type of the value: 0:float, 1:int",
+                "max": "1",
+                "min": "0",
+                "name": "type_value",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            }
+        ]
+    },
     "ParamExplorerSet": {
         "constants": [
             {
@@ -7791,11 +7856,14 @@
             }
         ],
         "daughters": [],
-        "desc": "Abstract class for the multi-simulation",
+        "desc": "Define a parameter set (for parameter sweep) from a list",
         "is_internal": false,
         "methods": [
             "get_value",
-            "as_dict"
+            "as_dict",
+            "get_min",
+            "get_max",
+            "get_N"
         ],
         "mother": "ParamExplorer",
         "name": "ParamExplorerSet",
@@ -7947,7 +8015,7 @@
         "path": "pyleecan/Generator/ClassesRef/Post/PostPlot.csv",
         "properties": [
             {
-                "desc": "Full path of the plot method to call except Output (ex: \"plot_2D_Data\", \"mag.meshsolution.plot_contour\")",
+                "desc": "Name of the plot method to call (e.g. plot_2D_Data, plot_contour, plot_multi)",
                 "max": "",
                 "min": "",
                 "name": "method",
@@ -7990,6 +8058,15 @@
                 "type": "str",
                 "unit": "",
                 "value": "png"
+            },
+            {
+                "desc": "Full path to the quantity to which apply the plot_method except Output (e.g. mag.B, elec.get_Is, mag.meshsolution)",
+                "max": "",
+                "min": "",
+                "name": "quantity",
+                "type": "str",
+                "unit": "",
+                "value": "None"
             }
         ]
     },
