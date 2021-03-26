@@ -330,7 +330,7 @@ class ParamExplorerInterval(ParamExplorer):
 
     def _set_type_value_gen(self, value):
         """setter of type_value_gen"""
-        check_var("type_value_gen", value, "int", Vmin=0, Vmax=0)
+        check_var("type_value_gen", value, "int", Vmin=0, Vmax=1)
         self._type_value_gen = value
 
     type_value_gen = property(
@@ -340,7 +340,7 @@ class ParamExplorerInterval(ParamExplorer):
 
         :Type: int
         :min: 0
-        :max: 0
+        :max: 1
         """,
     )
 

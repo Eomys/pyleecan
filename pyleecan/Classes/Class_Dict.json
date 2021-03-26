@@ -7842,7 +7842,7 @@
             },
             {
                 "desc": "How to generate the value list. 0: linspace, 1: random (Not available yet)",
-                "max": "0",
+                "max": "1",
                 "min": "0",
                 "name": "type_value_gen",
                 "type": "int",

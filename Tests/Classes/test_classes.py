@@ -317,14 +317,19 @@ def test_class_type_float(class_dict):
     prop_list = get_mother_attr(gen_dict, class_dict, "properties")[0]
     for prop in prop_list:
         value = find_test_value(prop, "float")
+        msg = "Error for class " + class_dict["name"] + " with " + prop["name"]
         # Check the doc to know if it should raise an error or not
         if prop["type"] in ["float", "complex", "", None]:
             # No error expected
             test_obj.__setattr__(prop["name"], value)
-            assert test_obj.__getattribute__(prop["name"]) == value
+
+            assert test_obj.__getattribute__(prop["name"]) == value, msg
         else:
             # CheckTypeError expected
-            with pytest.raises(CheckTypeError):
+            with pytest.raises(
+                CheckTypeError,
+            ):
+                # print(msg)
                 test_obj.__setattr__(prop["name"], value)
 
 
