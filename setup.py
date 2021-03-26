@@ -21,7 +21,7 @@ import platform
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.2.0"
+PYLEECAN_VERSION = "1.2.1"
 
 
 with open("README.md", "r") as fh:
@@ -41,7 +41,7 @@ install_requires = [
     "scipy>=1.4.1",
     "xlrd>=1.2.0",
     "deap>=1.3.1",
-    "SciDataTool>=1.3.6",
+    "SciDataTool>=1.3.7",
     "pyvista>=0.25.3",
     "meshio>=4.0.15",
     "h5py==2.10.0",
@@ -50,6 +50,7 @@ install_requires = [
     "quadpy",
     "ezdxf>=0.14.2",
     "pytest-qt>=3.3.0",
+    "pyuff>=1.25",
 ]
 
 
