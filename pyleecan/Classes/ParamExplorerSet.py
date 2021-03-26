@@ -123,6 +123,7 @@ class ParamExplorerSet(ParamExplorer):
         symbol="",
         unit="",
         setter=None,
+        getter=None,
         init_dict=None,
         init_str=None,
     ):
@@ -151,11 +152,13 @@ class ParamExplorerSet(ParamExplorer):
                 unit = init_dict["unit"]
             if "setter" in list(init_dict.keys()):
                 setter = init_dict["setter"]
+            if "getter" in list(init_dict.keys()):
+                getter = init_dict["getter"]
         # Set the properties (value check and convertion are done in setter)
         self.value = value
         # Call ParamExplorer init
         super(ParamExplorerSet, self).__init__(
-            name=name, symbol=symbol, unit=unit, setter=setter
+            name=name, symbol=symbol, unit=unit, setter=setter, getter=getter
         )
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties

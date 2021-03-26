@@ -1,22 +1,20 @@
-from pyleecan.Functions.load import load
-from pyleecan.definitions import DATA_DIR
-
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Output import Output
-
-from Tests import save_plot_path
-from Tests import save_load_path
+import json
+from multiprocessing import cpu_count
 from os.path import join
-from numpy import zeros, ones, pi, array
 
 import matplotlib.pyplot as plt
-import json
 import numpy as np
 import pytest
+from numpy import array, ones, pi, zeros
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.Output import Output
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
+from Tests import save_load_path, save_plot_path
 
 
 @pytest.mark.long
@@ -81,37 +79,41 @@ def test_SIPMSM_003():
     simu_sym.run()
 
     out.mag.meshsolution.plot_mesh(
-        save_path=join(save_path, simu.name + "_mesh.png"), is_show_fig=False
+        save_path=join(save_plot_path, simu.name + "_mesh.png"), is_show_fig=False
     )
 
     out.mag.meshsolution.plot_mesh(
         group_names="stator core",
-        save_path=join(save_path, simu.name + "_mesh_stator.png"),
+        save_path=join(save_plot_path, simu.name + "_mesh_stator.png"),
         is_show_fig=False,
     )
 
     out.mag.meshsolution.plot_mesh(
         group_names=["stator core", "/", "airgap", "stator winding"],
-        save_path=join(save_path, simu.name + "_mesh_stator_interface.png"),
+        save_path=join(save_plot_path, simu.name + "_mesh_stator_interface.png"),
         is_show_fig=False,
     )
 
     out.mag.meshsolution.plot_contour(
         label="\mu",
-        save_path=join(save_path, simu.name + "_mu.png"),
+        save_path=join(save_plot_path, simu.name + "_mu.png"),
         is_show_fig=False,
     )
     out.mag.meshsolution.plot_contour(
-        label="B", save_path=join(save_path, simu.name + "_B.png"), is_show_fig=False
+        label="B",
+        save_path=join(save_plot_path, simu.name + "_B.png"),
+        is_show_fig=False,
     )
     out.mag.meshsolution.plot_contour(
-        label="H", save_path=join(save_path, simu.name + "_H.png"), is_show_fig=False
+        label="H",
+        save_path=join(save_plot_path, simu.name + "_H.png"),
+        is_show_fig=False,
     )
 
     out.mag.meshsolution.plot_contour(
         label="H",
         group_names="stator core",
-        save_path=join(save_path, simu.name + "_H_stator.png"),
+        save_path=join(save_plot_path, simu.name + "_H_stator.png"),
         is_show_fig=False,
     )
 

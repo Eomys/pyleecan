@@ -20,6 +20,7 @@ def plot_deflection(
     ifreq=0,
     save_path=None,
     title="",
+    win_title=None,
     is_surf=True,
 ):
     """Plot the operational deflection shape using pyvista plotter.
@@ -74,6 +75,11 @@ def plot_deflection(
         import pyvista as pv
 
         is_pyvistaqt = False
+
+    if title != "" and win_title == "":
+        win_title = title
+    elif win_title != "" and title == "":
+        title = win_title
 
     # Get the mesh
     mesh = self.get_mesh(label=label, index=index)
@@ -131,7 +137,7 @@ def plot_deflection(
         p.set_background("white")
     else:
         pv.set_plot_theme("document")
-        p = pv.Plotter(notebook=False, title=title)
+        p = pv.Plotter(notebook=False, title=win_title)
     sargs = dict(
         interactive=True,
         title_font_size=20,

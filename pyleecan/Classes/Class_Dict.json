@@ -787,7 +787,8 @@
         "desc": "Class for defining data to keep on a multi-simulation",
         "is_internal": false,
         "methods": [
-            "as_dict"
+            "as_dict",
+            "_set_result"
         ],
         "mother": "",
         "name": "DataKeeper",
@@ -7735,7 +7736,9 @@
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,
         "methods": [
-            "_set_setter"
+            "_set_setter",
+            "_set_getter",
+            "get_desc"
         ],
         "mother": "",
         "name": "ParamExplorer",
@@ -7774,6 +7777,15 @@
                 "max": "",
                 "min": "",
                 "name": "setter",
+                "type": "function",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Function to return the reference value (simulation as argument)",
+                "max": "",
+                "min": "",
+                "name": "getter",
                 "type": "function",
                 "unit": "-",
                 "value": null
@@ -7830,7 +7842,7 @@
             },
             {
                 "desc": "How to generate the value list. 0: linspace, 1: random (Not available yet)",
-                "max": "0",
+                "max": "1",
                 "min": "0",
                 "name": "type_value_gen",
                 "type": "int",

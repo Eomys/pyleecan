@@ -72,6 +72,7 @@ def generate_simulation_list(self, ref_simu=None):
                 symbol=param_explorer.symbol,
                 unit=param_explorer.unit,
                 setter=param_explorer.setter,
+                getter=param_explorer.getter,
                 value=params_value_dict[param_explorer.symbol],
             )
         )

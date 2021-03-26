@@ -66,6 +66,10 @@ def run(self):
     else:
         logger.info("Computing reference simulation for " + self.NAME)
 
+    if self.NAME == "Parameter Sweep":
+        for param in simu_dict["paramexplorer_list"]:
+            logger.info(param.get_desc(ref_simu))
+
     progress = 0  # For progress bar
     nb_simu += 1  # Count reference simulation in progress bar
 

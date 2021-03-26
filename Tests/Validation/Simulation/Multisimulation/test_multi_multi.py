@@ -196,12 +196,16 @@ def test_multi_multi():
             symbol="W0s",
             unit="m",
             setter="simu.machine.stator.slot.W0",
+            getter="simu.machine.stator.slot.W0",
             min_value=0.1 * IPMSM_A.stator.slot.W0,
             max_value=IPMSM_A.stator.slot.W0,
             N=N1,
         )
     ]
-
+    assert (
+        paramexplorer_list[0].get_desc(simu)
+        == "W0s: " + str(N1) + " values from 0.000193 to 0.00193 (ref=0.00193) [m]"
+    )
     multisim.paramexplorer_list = paramexplorer_list
     multisim.is_keep_all_output = True
 
