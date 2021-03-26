@@ -121,10 +121,10 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.g_frame.show()
             self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
             self.g_shaft.setChecked(True)
-            machine.shaft.Drsh = self.machine.rotor.Rint * 2
+            self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
             self.out_Drsh.setText(
                 self.tr("Drsh = 2*Rotor.Rint = ")
-                + format(gui_option.unit.get_m(machine.shaft.Drsh), ".4g")
+                + format(gui_option.unit.get_m(self.machine.shaft.Drsh), ".4g")
                 + " ["
                 + gui_option.unit.get_m_name()
                 + "]"
@@ -312,7 +312,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
                 self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
                 self.out_Drsh.setText(
                     self.tr("Drsh = 2*Rotor.Rint = ")
-                    + format(gui_option.unit.get_m(machine.shaft.Drsh), ".4g")
+                    + format(gui_option.unit.get_m(self.machine.shaft.Drsh), ".4g")
                     + " ["
                     + gui_option.unit.get_m_name()
                     + "]"
