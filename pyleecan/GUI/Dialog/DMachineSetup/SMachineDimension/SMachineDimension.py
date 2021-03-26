@@ -124,7 +124,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             machine.shaft.Drsh = self.machine.rotor.Rint * 2
             self.out_Drsh.setText(
                 self.tr("Drsh = 2*Rotor.Rint = ")
-                + str(1000 * machine.shaft.Drsh)
+                + format(gui_option.unit.get_m(machine.shaft.Drsh), ".4g")
                 + " ["
                 + gui_option.unit.get_m_name()
                 + "]"
@@ -312,7 +312,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
                 self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
                 self.out_Drsh.setText(
                     self.tr("Drsh = 2*Rotor.Rint = ")
-                    + str(1000 * self.machine.shaft.Drsh)
+                    + format(gui_option.unit.get_m(machine.shaft.Drsh), ".4g")
                     + " ["
                     + gui_option.unit.get_m_name()
                     + "]"
