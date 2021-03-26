@@ -16,6 +16,7 @@ from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.PostPlot import PostPlot
 
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -55,31 +56,40 @@ def test_PostPlot():
 
     plot_B_rad_tan_space1 = PostPlot(
         method="plot_2D_Data",
-        param_list=["mag.B", "angle"],
-        param_dict={
-            "component_list": ["radial"],
-            "is_show_fig": False,
-            "save_path": None,
-            "fig": fig1,
-            "ax": axes1[0],
-        },
+        quantity="mag.B",
+        param_list=["angle"],
+        param_dict=dict(
+            {
+                "component_list": ["radial"],
+                "is_show_fig": False,
+                "save_path": None,
+                "fig": fig1,
+                "ax": axes1[0],
+            },
+            **dict_2D
+        ),
     )
 
     plot_B_rad_tan_space2 = PostPlot(
         method="plot_2D_Data",
-        param_list=["mag.B", "angle"],
-        param_dict={
-            "component_list": ["tangential"],
-            "is_show_fig": False,
-            "fig": fig1,
-            "ax": axes1[1],
-        },
+        quantity="mag.B",
+        param_list=["angle"],
+        param_dict=dict(
+            {
+                "component_list": ["tangential"],
+                "is_show_fig": False,
+                "fig": fig1,
+                "ax": axes1[1],
+            },
+            **dict_2D
+        ),
         name="plot_B_rad_tan_space",
         save_format="png",
     )
 
     plot_machine_Tem_time1 = PostPlot(
-        method="simu.machine.plot",
+        method="plot",
+        quantity="simu.machine",
         param_dict={
             "is_show_fig": False,
             "save_path": None,
@@ -90,25 +100,47 @@ def test_PostPlot():
 
     plot_machine_Tem_time2 = PostPlot(
         method="plot_2D_Data",
-        param_list=["mag.Tem", "time"],
-        param_dict={
-            "is_show_fig": False,
-            "fig": fig2,
-            "ax": axes2[1],
-        },
+        quantity="mag.Tem",
+        param_list=["time"],
+        param_dict=dict(
+            {
+                "is_show_fig": False,
+                "fig": fig2,
+                "ax": axes2[1],
+            },
+            **dict_2D
+        ),
         name="plot_machine_Tem_time",
         save_format="png",
     )
 
     plot_P_radial_space_svg = PostPlot(
         method="plot_2D_Data",
-        param_list=["force.AGSF", "angle"],
-        param_dict={
-            "component_list": ["radial"],
-            "is_show_fig": False,
-        },
+        quantity="force.AGSF",
+        param_list=["angle"],
+        param_dict=dict(
+            {
+                "component_list": ["radial"],
+                "is_show_fig": False,
+            },
+            **dict_2D
+        ),
         name="plot_P_radial_space",
         save_format="svg",
+    )
+
+    plot_Is = PostPlot(
+        method="plot_2D_Data",
+        quantity="elec.get_Is",
+        param_list=["time", "phase"],
+        param_dict=dict(
+            {
+                "is_show_fig": False,
+            },
+            **dict_2D
+        ),
+        name="plot_Is",
+        save_format="png",
     )
 
     simu.postproc_list = [
@@ -117,6 +149,7 @@ def test_PostPlot():
         plot_machine_Tem_time1,
         plot_machine_Tem_time2,
         plot_P_radial_space_svg,
+        plot_Is,
     ]
 
     # Run simulations

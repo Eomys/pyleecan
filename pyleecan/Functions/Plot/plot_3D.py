@@ -1,13 +1,8 @@
-# -*- coding: utf-8 -*-
-
-import matplotlib.pyplot as plt
-import mpl_toolkits.mplot3d.art3d as art3d
-
-from ...Functions.init_fig import init_fig
+from SciDataTool.Functions.Plot.plot_3D import plot_3D as plot_3D_fct
 from ...definitions import config_dict
 
 # Import values from config dict
-COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
+COLOR_LIST = config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"]
 COLORMAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
@@ -37,9 +32,13 @@ def plot_3D(
     is_logscale_y=False,
     is_logscale_z=False,
     is_disp_title=True,
-    type="stem",
+    type_plot="stem",
+    color_list=None,
+    colormap=None,
     save_path=None,
     is_show_fig=None,
+    win_title=None,
+    is_switch_axes=False,
 ):
     """Plots a 3D graph ("stem", "surf" or "pcolor")
 
@@ -95,145 +94,47 @@ def plot_3D(
         True to show figure after plot
     """
 
-    # Set if figure must be shown if is_show_fig is None
-    if is_show_fig is None:
-        is_show_fig = True if fig is None else False
+    print(
+        "WARNING: plot_3D function is deprecated and will be removed from the next release. Please use SciDataTool.Functions.Plot.plot_3D instead."
+    )
 
-    # Set if figure is 3D
-    if type != "pcolor" and type != "scatter":
-        is_3d = True
-    else:
-        is_3d = False
+    if color_list is None:
+        color_list = COLOR_LIST
+    if colormap is None:
+        colormap = COLORMAP
 
-    # Set figure if needed
-    if fig is None and ax is None:
-        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle", is_3d=is_3d)
-
-    # Plot
-    if type == "stem":
-        for xi, yi, zi in zip(Xdata, Ydata, Zdata):
-            line = art3d.Line3D(
-                *zip((xi, yi, 0), (xi, yi, zi)),
-                linewidth=2.0,
-                marker="o",
-                markersize=3.0,
-                markevery=(1, 1),
-                color=COLORS[0]
-            )
-            ax.add_line(line)
-        ax.set_xlim3d(x_max, x_min)
-        ax.set_ylim3d(y_min, y_max)
-        ax.set_zlim3d(z_min, z_max)
-        # set correct angle
-        ax.view_init(elev=20.0, azim=45)
-        ax.zaxis.set_rotate_label(False)
-        ax.set_zlabel(zlabel, rotation=0)
-        ax.xaxis.labelpad = 5
-        ax.yaxis.labelpad = 5
-        ax.zaxis.labelpad = 5
-        if xticks is not None:
-            ax.xaxis.set_ticks(xticks)
-        if yticks is not None:
-            ax.yaxis.set_ticks(yticks)
-        # white background
-        ax.xaxis.pane.fill = False
-        ax.yaxis.pane.fill = False
-        ax.zaxis.pane.fill = False
-        ax.xaxis.pane.set_edgecolor("w")
-        ax.yaxis.pane.set_edgecolor("w")
-        ax.zaxis.pane.set_edgecolor("w")
-        if is_logscale_z:
-            ax.zscale("log")
-    elif type == "surf":
-        ax.plot_surface(Xdata, Ydata, Zdata, cmap=COLORMAP)
-        ax.set_xlim3d(x_max, x_min)
-        ax.set_ylim3d(y_min, y_max)
-        ax.set_zlim3d(z_min, z_max)
-        ax.zaxis.set_rotate_label(False)
-        ax.set_zlabel(zlabel, rotation=0)
-        ax.xaxis.labelpad = 5
-        ax.yaxis.labelpad = 5
-        ax.zaxis.labelpad = 5
-        if xticks is not None:
-            ax.xaxis.set_ticks(xticks)
-        if yticks is not None:
-            ax.yaxis.set_ticks(yticks)
-        # white background
-        ax.xaxis.pane.fill = False
-        ax.yaxis.pane.fill = False
-        ax.zaxis.pane.fill = False
-        ax.xaxis.pane.set_edgecolor("w")
-        ax.yaxis.pane.set_edgecolor("w")
-        ax.zaxis.pane.set_edgecolor("w")
-        if is_logscale_z:
-            ax.zscale("log")
-    elif type == "pcolor":
-        c = ax.pcolormesh(
-            Xdata,
-            Ydata,
-            Zdata,
-            cmap=COLORMAP,
-            vmin=z_min,
-            vmax=z_max,
-            shading="gouraud",
-        )
-        clb = fig.colorbar(c, ax=ax)
-        clb.ax.set_title(zlabel, fontsize=FONT_SIZE_LEGEND, fontname=FONT_NAME)
-        clb.ax.tick_params(labelsize=FONT_SIZE_LEGEND)
-        for l in clb.ax.yaxis.get_ticklabels():
-            l.set_family(FONT_NAME)
-        if xticks is not None:
-            ax.xaxis.set_ticks(xticks)
-        if yticks is not None:
-            ax.yaxis.set_ticks(yticks)
-    elif type == "scatter":
-        c = ax.scatter(
-            Xdata, Ydata, c=Zdata, marker="s", cmap=COLORMAP, vmin=z_min, vmax=z_max
-        )
-        clb = fig.colorbar(c, ax=ax)
-        clb.ax.set_title(zlabel, fontsize=FONT_SIZE_LEGEND, fontname=FONT_NAME)
-        clb.ax.tick_params(labelsize=FONT_SIZE_LEGEND)
-        for l in clb.ax.yaxis.get_ticklabels():
-            l.set_family(FONT_NAME)
-        if xticks is not None:
-            ax.xaxis.set_ticks(xticks)
-        if yticks is not None:
-            ax.yaxis.set_ticks(yticks)
-
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
-
-    if is_logscale_x:
-        ax.xscale("log")
-
-    if is_logscale_y:
-        ax.yscale("log")
-
-    if is_disp_title and title not in [None, ""]:
-        ax.set_title(title)
-
-    if is_3d:
-        for item in (
-            [ax.xaxis.label, ax.yaxis.label, ax.zaxis.label]
-            + ax.get_xticklabels()
-            + ax.get_yticklabels()
-            + ax.get_zticklabels()
-        ):
-            item.set_fontsize(FONT_SIZE_LABEL)
-    else:
-        for item in (
-            [ax.xaxis.label, ax.yaxis.label]
-            + ax.get_xticklabels()
-            + ax.get_yticklabels()
-        ):
-            item.set_fontsize(FONT_SIZE_LABEL)
-            item.set_fontname(FONT_NAME)
-    ax.title.set_fontsize(FONT_SIZE_TITLE)
-    ax.title.set_fontname(FONT_NAME)
-
-    if save_path is not None:
-        fig.savefig(save_path)
-        plt.close()
-
-    if is_show_fig:
-        fig.show()
+    # Call SciDataTool plot function
+    plot_3D_fct(
+        Xdata,
+        Ydata,
+        Zdata,
+        colormap=colormap,
+        color_list=color_list,
+        x_min=x_min,
+        x_max=x_max,
+        y_min=y_min,
+        y_max=y_max,
+        z_min=z_min,
+        z_max=z_max,
+        title=title,
+        xlabel=xlabel,
+        ylabel=ylabel,
+        zlabel=zlabel,
+        xticks=xticks,
+        yticks=yticks,
+        fig=fig,
+        ax=ax,
+        is_logscale_x=is_logscale_x,
+        is_logscale_y=is_logscale_y,
+        is_logscale_z=is_logscale_z,
+        is_disp_title=is_disp_title,
+        type_plot=type_plot,
+        save_path=save_path,
+        is_show_fig=is_show_fig,
+        is_switch_axes=is_switch_axes,
+        win_title=win_title,
+        font_name=FONT_NAME,
+        font_size_title=FONT_SIZE_TITLE,
+        font_size_label=FONT_SIZE_LABEL,
+        font_size_legend=FONT_SIZE_LEGEND,
+    )

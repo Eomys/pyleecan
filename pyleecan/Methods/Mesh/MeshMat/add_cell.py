@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 
 
-def add_cell(self, pt_indice, cell_type, group_name=None):
-    """Add a new cell defined by a point indices
+def add_cell(self, node_indices, cell_type):
+    """Add a new cell defined by node indices and cell type.
 
     Parameters
     ----------
     self : MeshMat
         an Mesh object
-    pt_indice : ndarray
+    node_indices : ndarray
         a ndarray of points indices
-    group_name : str
-        name of the group
+    cell_type : str
+        Define the type of cell.
 
     Returns
     -------
     new_ind : int
-        Tag of the created element. None if the element already exist
+        indice of the newly created cell. None if the cell already exists.
     """
 
     # Create the new element
@@ -28,14 +27,9 @@ def add_cell(self, pt_indice, cell_type, group_name=None):
             new_ind = max(new_ind, tmp_ind)
             new_ind += 1
 
-    test_exist = self.cell[cell_type].add_cell(pt_indice, new_ind)
+    test_exist = self.cell[cell_type].add_cell(node_indices, new_ind)
 
     if test_exist:
-        # if group_name in self.group:
-        #     self.group[group_name] = np.append(self.group[group_name], new_ind)
-        # else:
-        #     self.group[group_name] = np.array([new_ind])
-
         return new_ind
     else:
         return None

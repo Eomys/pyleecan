@@ -10,6 +10,8 @@ def plot_mesh(
     indices=None,
     save_path=None,
     group_names=None,
+    node_label=None,
+    is_show_axes=False,
     is_show_fig=True,
 ):
     """Plot the mesh using pyvista plotter.
@@ -30,7 +32,7 @@ def plot_mesh(
     -------
     """
     if group_names is not None:
-        meshsol_grp = self.get_group(group_names, is_renum=True)
+        meshsol_grp = self.get_group(group_names)
         meshsol_grp.plot_mesh(label, index, indices, save_path, None)
     else:
 
@@ -53,7 +55,9 @@ def plot_mesh(
         # Get the mesh
         mesh_obj = self.get_mesh(label=label, index=index)
         if isinstance(mesh_obj, MeshMat):
-            mesh = mesh_obj.get_mesh_pv(indices=indices)
+            new_mesh = mesh_obj.copy()
+            new_mesh.renum()
+            mesh = new_mesh.get_mesh_pv(indices=indices)
         else:
             mesh = mesh_obj.get_mesh_pv(indices=indices)
 
@@ -72,6 +76,8 @@ def plot_mesh(
             edge_color="white",
             line_width=1,
         )
+        if is_show_axes:
+            p.add_axes()
         if self.dimension == 2:
             p.view_xy()
         if save_path is None and is_show_fig:

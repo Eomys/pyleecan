@@ -15,10 +15,11 @@ def plot_glyph(
     clim=None,
     factor=None,
     field_name=None,
-    ifreq=0,
+    itimefreq=0,
     save_path=None,
     is_point_arrow=False,
     group_names=None,
+    is_show_fig=True,
 ):
     """Plot the vector field as a glyph (or quiver) over the mesh.
 
@@ -54,16 +55,16 @@ def plot_glyph(
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
         meshsol_grp.plot_glyph(
-            label,
-            index,
-            indices,
-            clim,
-            factor,
-            field_name,
-            ifreq,
-            save_path,
-            is_point_arrow,
-            None,
+            label=label,
+            index=index,
+            indices=indices,
+            clim=clim,
+            factor=factor,
+            field_name=field_name,
+            itimefreq=itimefreq,
+            save_path=save_path,
+            is_point_arrow=is_point_arrow,
+            group_names=None,
         )
     else:
 
@@ -82,18 +83,14 @@ def plot_glyph(
             is_pyvistaqt = False
 
         # Get the mesh
-        mesh = self.get_mesh(label=label, index=index)
-        new_mesh = mesh.copy()
-        new_mesh.renum()
-        mesh_pv = new_mesh.get_mesh_pv(indices=indices)
+        mesh_pv, field, field_name = self.get_mesh_field_pv(
+            label=label,
+            index=index,
+            indices=indices,
+            field_name=field_name,
+        )
 
-        # Get the vector field
-        arg_list = ["time[0]", "indice"]
-
-        vect_field = real(self.get_field(*arg_list, label=label, index=index))
-        # if len(vect_field.shape) == 3:
-        #     # Third dimension is frequencies
-        #     vect_field = vect_field[:, :, ifreq]
+        vect_field = real(field)
 
         # Compute factor
         if factor is None:
@@ -127,7 +124,7 @@ def plot_glyph(
         p.add_mesh(arrows_plt, color="red")
         if self.dimension:
             p.view_xy()
-        if save_path is None:
+        if save_path is None and is_show_fig:
             p.show()
         else:
             p.show(interactive=False, screenshot=save_path)

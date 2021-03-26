@@ -9,6 +9,7 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.ForceMT import ForceMT
+from pyleecan.Functions.Plot import dict_2D
 
 from Tests import save_plot_path
 from os.path import join
@@ -52,20 +53,20 @@ def test_Slotless_CEFC_003():
     out = simu.run()
 
     # Plot the AGSF as a function of space with the spatial fft
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "angle{rad}",
         component_list=["radial"],
         save_path=join(save_plot_path, "test_CEFC_003_plot_force_space.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "wavenumber=[0,78]",
         component_list=["radial"],
         save_path=join(save_plot_path, "test_CEFC_003_plot_force_space_fft.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     return out

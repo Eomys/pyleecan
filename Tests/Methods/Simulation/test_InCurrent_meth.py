@@ -30,6 +30,7 @@ from pyleecan.Classes.Output import Output
 from pyleecan.Classes.Simulation import Simulation
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.Methods.Simulation.Input import InputError
 import pytest
 from Tests import save_plot_path as save_path
@@ -288,7 +289,8 @@ class Test_InCurrent_meth(object):
         assert out.elec.Iq_ref == pytest.approx(test_dict["Iq"], abs=0.01)
 
         # Plot 3-phase current function of time
-        out.plot_2D_Data("elec.Is", "time", "phase", is_show_fig=False)
+        # out.plot_2D_Data("elec.Is", "time", "phase", is_show_fig=False)
+        out.elec.get_Is().plot_2D_Data("time", "phase", is_show_fig=False, **dict_2D)
 
         # Save picture
         title = "Id=" + str(test_dict["Id"]) + " Iq=" + str(test_dict["Iq"])

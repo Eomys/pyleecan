@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import pyvista as pv
-import meshio
 from os import makedirs, remove
-from os.path import isdir, split
-from pyleecan.definitions import RESULT_DIR
+from os.path import isdir, split, dirname
+
+import meshio
+import pyvista as pv
+
+from pyleecan.definitions import ROOT_DIR
 
 
-def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
+def get_mesh_pv(self, path=ROOT_DIR + "/temp.vtk", indices=None):
     """Return the pyvista mesh object (or submesh).
 
     Parameters
@@ -32,8 +34,8 @@ def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
         # Write .vtk file using meshio
 
     # Make sure that the file exists
-    if not isdir(split(path)[0]):
-        makedirs(split(path)[0])
+    if not isdir(dirname(path)):
+        makedirs(dirname(path))
 
     meshio.write_points_cells(filename=path, points=nodes, cells=cells_meshio)
 

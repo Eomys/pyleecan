@@ -1,31 +1,28 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import copy
 
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.SolutionMat import SolutionMat
-from pyleecan.definitions import PACKAGE_NAME
 
 
-def get_group(self, group_names, is_renum=False):
+def get_group(self, group_names):
     """Return all attributes of a MeshSolution object with only the cells, nodes
-    and corresponding solutions of the group. Solutions are converted as SolutionMat.
+    and corresponding solutions of the group.
 
      Parameters
      ----------
      self : MeshSolution
          an MeshSolution object
-     group_name : str
-         the name of the group (e.g. "stator")
+     group_name : [str]
+         list of the name of the group(s) (e.g. ["stator"])
 
      Returns
      -------
-     grp_cells: dict
-         a dict sorted by cell type containing connectivity of the group
-
+     meshsol_grp: MeshSolution
+         a new MeshSolution object which is subpart of self
     """
 
     is_same_mesh = self.is_same_mesh
@@ -105,7 +102,7 @@ def get_group(self, group_names, is_renum=False):
 
         new_sol = None
         if type_cell_sol == "node":
-            new_sol = sol.get_solution(indice=node_indice)
+            new_sol = sol.get_solution(indice=node_indice.tolist())
         elif not is_interface:  # Interface is only available for node solution.
             new_sol = sol.get_solution(indice=indice_dict[type_cell_sol])
 
@@ -115,17 +112,9 @@ def get_group(self, group_names, is_renum=False):
     # 5) Create the corresponding MeshSolution object
     if is_interface:
         mesh_interface.clear_node()
-        if is_renum:
-            mesh_interface.renum()
-        else:
-            mesh_interface._is_renum = True
-
         mesh = mesh_interface
     else:
         mesh_new.clear_node()
-        if is_renum:
-            mesh_new.renum()
-
         mesh = mesh_new
 
     meshsol_grp = self.copy()
@@ -134,5 +123,6 @@ def get_group(self, group_names, is_renum=False):
     meshsol_grp.is_same_mesh = is_same_mesh
     meshsol_grp.solution = sol_list
     meshsol_grp.dimension = dimension
+    meshsol_grp.group = self.group
 
     return meshsol_grp

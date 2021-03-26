@@ -10,6 +10,7 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 import pytest
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -17,13 +18,8 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_FEMM_import_dxf():
-    """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
-    50 kW peak, 400 Nm peak at 1500 rpm from publication
+    """Validation of the TOYOTA Prius electrical machine.
 
-    from publication
-    Z. Yang, M. Krishnamurthy and I. P. Brown,
-    "Electromagnetic and vibrational characteristic of IPM over full torque-speed range,"
-    Electric Machines & Drives Conference (IEMDC), 2013 IEEE International, Chicago, IL, 2013, pp. 295-302.
     Test compute the Flux in FEMM, with and without DXF Import
     """
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
@@ -78,11 +74,11 @@ def test_FEMM_import_dxf():
     out2 = simu2.run()
 
     # Plot/compare the flux
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         data_list=[out2.mag.B],
         legend_list=["Rotor from DXF", "Rotor from pyleecan"],
         save_path=join(save_path, "FEMM_import_dxf_B.png"),
         is_show_fig=False,
+        **dict_2D
     )

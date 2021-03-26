@@ -20,3 +20,4 @@ nbconvert
 quadpy
 ezdxf>=0.14.2
 pytest-qt>=3.3.0
+pyuff>=1.25

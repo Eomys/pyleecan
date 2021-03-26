@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def get_field(self, *args):
+def get_field(self, *args, is_squeeze=False):
     """Get the value of variables stored in Solution.
 
     Parameters
@@ -34,9 +34,9 @@ def get_field(self, *args):
 
     if not args:
         field = np.zeros(axsize)
-        field_dict = self.field.get_xyz_along(tuple(axname))
+        field_dict = self.field.get_xyz_along(tuple(axname), is_squeeze=is_squeeze)
     else:
-        field_dict = self.field.get_xyz_along(args)
+        field_dict = self.field.get_xyz_along(args, is_squeeze=is_squeeze)
         comp_x = field_dict["comp_x"]
         size = np.hstack((comp_x.shape, dim))
         field = np.zeros(size)

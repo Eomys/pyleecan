@@ -10,6 +10,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
 
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 from Tests import save_validation_path as save_path
 
@@ -72,18 +73,17 @@ def test_Benchmark_AGSF_transfer():
     simu3.mag.Rag_enforced = Rag
     out3 = simu3.run()
 
-    out2.plot_2D_Data(
-        "force.AGSF",
+    out2.force.AGSF.plot_2D_Data(
         "angle=[0,3.14]",
         "time=0",
         data_list=[out.force.AGSF, out3.force.AGSF],
         legend_list=["Rag + Transfer", "Rag", "Rsbo"],
         save_path=join(save_path, "test_Benchmark_AGSF_TR_compare.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out2.plot_2D_Data(
-        "force.AGSF",
+    out2.force.AGSF.plot_2D_Data(
         "wavenumber",
         "tangential",
         "time=0",
@@ -94,6 +94,7 @@ def test_Benchmark_AGSF_transfer():
         save_path=join(save_path, "test_Benchmark_AGSF_TR_compare_fft2.png"),
         is_show_fig=False,
         barwidth=2000,
+        **dict_2D
     )
 
 

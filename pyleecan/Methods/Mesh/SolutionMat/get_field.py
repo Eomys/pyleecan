@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def get_field(self, *args):
+def get_field(self, *args, is_squeeze=False):
     """Get the value of variables stored in Solution.
 
     Parameters
@@ -51,5 +51,7 @@ def get_field(self, *args):
                             indices = [int(ind_str)]
 
                         field = np.take(field, indices=indices, axis=ax)
+        if is_squeeze:
+            field = np.squeeze(is_squeeze)
 
         return field

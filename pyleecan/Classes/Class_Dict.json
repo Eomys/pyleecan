@@ -2669,7 +2669,9 @@
             "ImportMatlab",
             "ImportMatrix",
             "ImportMatrixVal",
-            "ImportMatrixXls"
+            "ImportMatrixXls",
+            "ImportMeshMat",
+            "ImportMeshUnv"
         ],
         "desc": "Abstract class for Data Import/Generation",
         "is_internal": false,
@@ -3165,6 +3167,64 @@
                 "type": "bool",
                 "unit": "-",
                 "value": false
+            }
+        ]
+    },
+    "ImportMeshMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Import mesh as meshMat",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "Import",
+        "name": "ImportMeshMat",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportMeshMat.csv",
+        "properties": [
+            {
+                "desc": "Path of the file to load",
+                "max": "",
+                "min": "",
+                "name": "file_path",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "ImportMeshUnv": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Import mesh data from an unv file",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "Import",
+        "name": "ImportMeshUnv",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportMeshUnv.csv",
+        "properties": [
+            {
+                "desc": "Path of the file to load",
+                "max": "",
+                "min": "",
+                "name": "file_path",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -5871,12 +5931,14 @@
             "get_mesh",
             "get_solution",
             "get_field",
+            "get_group",
+            "get_mesh_field_pv",
             "plot_mesh",
             "plot_contour",
             "plot_deflection",
             "plot_deflection_animated",
             "plot_glyph",
-            "get_group"
+            "plot_glyph_animated"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -5920,11 +5982,11 @@
                 "value": ""
             },
             {
-                "desc": "Dict sorted by groups name with cells indices. ",
+                "desc": "Dict sorted by groups name with list of cells indices. ",
                 "max": "",
                 "min": "",
                 "name": "group",
-                "type": "{ndarray}",
+                "type": "dict",
                 "unit": "",
                 "value": null
             },
@@ -7558,11 +7620,7 @@
             "getter.get_path_result",
             "getter.get_machine_periodicity",
             "getter.get_rot_dir",
-            "plot.plot_2D_Data",
             "getter.get_fund_harm",
-            "plot.plot_A_quiver_2D",
-            "plot.plot_3D_Data",
-            "plot.plot_A_time_space",
             "getter.get_data_from_str",
             "print_memory"
         ],
@@ -7969,7 +8027,7 @@
         "path": "pyleecan/Generator/ClassesRef/Post/PostPlot.csv",
         "properties": [
             {
-                "desc": "Full path of the plot method to call except Output (ex: \"plot_2D_Data\", \"mag.meshsolution.plot_contour\")",
+                "desc": "Name of the plot method to call (e.g. plot_2D_Data, plot_contour, plot_multi)",
                 "max": "",
                 "min": "",
                 "name": "method",
@@ -8012,6 +8070,15 @@
                 "type": "str",
                 "unit": "",
                 "value": "png"
+            },
+            {
+                "desc": "Full path to the quantity to which apply the plot_method except Output (e.g. mag.B, elec.get_Is, mag.meshsolution)",
+                "max": "",
+                "min": "",
+                "name": "quantity",
+                "type": "str",
+                "unit": "",
+                "value": "None"
             }
         ]
     },

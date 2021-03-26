@@ -103,7 +103,7 @@ def test_EEC_FEMM_SCIM_010():
     print("Tem: " + str(out.elec.Tem_av_ref))
 
     # Plot the currents and plot the voltages
-    out.plot_2D_Data("elec.Is", "time", "phase")
-    out.plot_2D_Data("elec.Ir", "time", "phase[0]")
-    out.plot_2D_Data("elec.Us", "time", "phase")
+    out.elec.get_Is().plot_2D_Data("time", "phase")
+    out.elec.Ir.plot_2D_Data("time", "phase[0]")
+    out.elec.Us.plot_2D_Data("time", "phase")
     """

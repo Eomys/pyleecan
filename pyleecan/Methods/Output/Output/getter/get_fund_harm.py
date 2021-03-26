@@ -20,7 +20,7 @@ def get_fund_harm(self, data):
 
     """
 
-    if data.symbol in ["B", "P", "Is", "Phi_{wind}"]:
+    if data.symbol in ["B", "AGSF", "Is", "Phi_{wind}"]:
 
         # Init output dict
         fund_harm = dict()
@@ -38,22 +38,29 @@ def get_fund_harm(self, data):
         for axe in axes_list:
             # Init fundamental value to None for current axis
             coeff = None
+            is_match = False
 
             # Search if the current axis in SciDataTool axis dictionnary
             if axe.name in fft_dict.keys():
                 # If yes, find the axis name of the fft
                 axe_fft = fft_dict[axe.name]
+                is_match = True
+            elif axe.name in fft_dict.values():
+                axe_fft = axe.name
+                is_match = True
 
+            if is_match:
                 # Assign fundamental value depending on axis name
-                if axe.name == "time":
+                if axe_fft == "freqs":
                     coeff = f_elec
-                elif axe.name == "angle":
+                    axe_fft = "frequency"
+                elif axe_fft == "wavenumber":
                     coeff = p
 
                 # Add in fund_harm dict the values with different normalizations
                 if coeff is not None:
                     # Assign fundamental value depending on physical quantity
-                    if data.symbol == "P":
+                    if data.symbol == "AGSF":
                         coeff = 2 * coeff
                     # Store value in dict
                     fund_harm[axe_fft] = coeff

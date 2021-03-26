@@ -16,6 +16,7 @@ from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -63,12 +64,12 @@ def test_EEC_FEMM_IPMSM():
     simu2.run()
 
     # Plot 3-phase current function of time
-    out.plot_2D_Data(
-        "elec.Is",
+    out.elec.get_Is().plot_2D_Data(
         "time",
         "phase",
         save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     # from Yang et al, 2013

@@ -19,6 +19,7 @@ from Tests import TEST_DATA_DIR
 import pytest
 
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -26,55 +27,59 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_Magnetic_FEMM_sym():
-    """Validation of outer rotor SPMSM
-    Open circuit (Null Stator currents)
+    """Validation of a polar SIPMSM with inset magnet
+    Armature load (magnet field canceled by is_mmfr=False)
 
-    Machine B from Vu Xuan Hung thesis
-    "Modeling of exterior rotor permanent magnet machines with concentrated windings"
-    Hanoi university of science and technology 2012
+    from publication
+    A. Rahideh and T. Korakianitis,
+    “Analytical Magnetic Field Calculation of Slotted Brushless Permanent-Magnet Machines With Surface Inset Magnets,”
+    vol. 48, no. 10, pp. 2633–2649, 2012.
     Test compute the Flux in FEMM, with and without symmetry
     and with MANATEE semi-analytical subdomain model
     """
-
-    SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
-    simu = Simu1(name="EM_SPMSM_NL_001", machine=SPMSM_015)
+    SIPMSM_001 = load(join(DATA_DIR, "Machine", "SIPMSM_001.json"))
+    simu = Simu1(name="EM_SIPMSM_AL_001", machine=SIPMSM_001)
 
     # Definition of the enforced output of the electrical module
-    N0 = 3000
-    Is = ImportMatrixVal(value=array([[0, 0, 0]]))
-    time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=True)
-    angle = ImportGenVectLin(start=0, stop=2 * 2 * pi / 9, num=2043, endpoint=False)
+    N0 = 150
+    Is = ImportMatrixVal(
+        value=array([[14.1421, -7.0711, -7.0711], [-14.1421, 7.0711, 7.0711]])
+    )
+    time = ImportGenVectLin(start=0, stop=0.1, num=2, endpoint=True)
+    Na_tot = 1024
 
+    Ar = ImportMatrixVal(value=array([2.5219, 0.9511]) + pi / 6)
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
         N0=N0,
-        angle_rotor=None,
+        angle_rotor=Ar,  # Will be computed
         time=time,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0,
     )
 
     # Definition of the magnetic simulation (is_mmfr=False => no flux from the magnets)
-    assert SPMSM_015.comp_periodicity() == (9, False, 9, True)
+    assert SIPMSM_001.comp_periodicity() == (1, False, 2, True)
     simu.mag = MagFEMM(
-        type_BH_stator=0,
-        type_BH_rotor=0,
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=False,
         is_periodicity_t=False,
-        is_periodicity_a=True,
-        is_mmfs=False,
+        is_mmfr=False,
+        angle_stator_shift=-pi / 6,
+        nb_worker=2,
     )
     simu.force = None
     simu.struct = None
     # Just load the Output and ends (we could also have directly filled the Output object)
     simu_load = Simu1(init_dict=simu.as_dict())
     simu_load.mag = None
-    mat_file = join(TEST_DATA_DIR, "EM_SPMSM_NL_001_MANATEE_SDM.mat")
-    Br = ImportMatlab(file_path=mat_file, var_name="Br")
-    Bt = ImportMatlab(file_path=mat_file, var_name="Bt")
-    angle2 = ImportGenVectLin(start=0, stop=2 * pi / 9, num=2048 / 9, endpoint=False)
+    mat_file = join(TEST_DATA_DIR, "EM_SIPMSM_AL_001_MANATEE_SDM.mat")
+    Br = ImportMatlab(file_path=mat_file, var_name="XBr")
+    Bt = ImportMatlab(file_path=mat_file, var_name="XBt")
     simu_load.input = InputFlux(
-        time=time, angle=angle2, B_dict={"Br": Br, "Bt": Bt}, OP=simu.input.copy()
+        time=time, Na_tot=Na_tot, B_dict={"Br": Br, "Bt": Bt}, OP=simu.input.copy()
     )
 
     out = Output(simu=simu)
@@ -83,13 +88,14 @@ def test_Magnetic_FEMM_sym():
     out3 = Output(simu=simu_load)
     simu_load.run()
 
+    # Plot the result by comparing the two simulation (no sym / MANATEE SDM)
     plt.close("all")
 
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         data_list=[out3.mag.B],
-        legend_list=["Symmetry", "MANATEE SDM"],
-        save_path=join(save_path, "test_EM_SPMSM_NL_001_SDM.png"),
+        legend_list=["No symmetry", "MANATEE SDM"],
+        save_path=join(save_path, "test_EM_SIPMSM_AL_001_SDM.png"),
         is_show_fig=False,
+        **dict_2D
     )

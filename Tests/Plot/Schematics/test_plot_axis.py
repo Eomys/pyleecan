@@ -17,6 +17,7 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.init_fig import init_subplot
 
@@ -284,7 +285,7 @@ def test_axis_LamWind(CURVE_COLORS):
     simu.run()
 
     plt.close("all")
-    out.plot_2D_Data("mag.B", "angle{rad}", is_show_fig=False)
+    out.mag.B.plot_2D_Data("angle{rad}", is_show_fig=False, **dict_2D)
 
     fig = plt.gcf()
     Br = out.mag.B.components["radial"].get_along("time", "angle")

@@ -59,6 +59,8 @@ from ..Classes.ImportMatlab import ImportMatlab
 from ..Classes.ImportMatrix import ImportMatrix
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from ..Classes.ImportMatrixXls import ImportMatrixXls
+from ..Classes.ImportMeshMat import ImportMeshMat
+from ..Classes.ImportMeshUnv import ImportMeshUnv
 from ..Classes.ImportVectorField import ImportVectorField
 from ..Classes.IndMag import IndMag
 from ..Classes.IndMagFEMM import IndMagFEMM

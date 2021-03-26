@@ -18,6 +18,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
 
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 from Tests import save_validation_path as save_path
 
@@ -181,12 +182,12 @@ if __name__ == "__main__":
     out = test_AC_IPMSM_AGSF_spectrum_sym()
     out2 = test_AC_IPMSM_AGSF_spectrum_no_sym()
 
-    out2.plot_2D_Data(
-        "force.AGSF",
+    out2.force.AGSF.plot_2D_Data(
         "wavenumber",
         "freqs=160",
         data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_AGSF_space_fft_freq160_no_sym.png"),
         is_show_fig=False,
+        **dict_2D
     )
