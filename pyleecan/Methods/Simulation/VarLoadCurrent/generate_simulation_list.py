@@ -52,7 +52,4 @@ def generate_simulation_list(self, ref_simu=None):
         )
     )
 
-    # Generate default datakeeper
-    self.gen_datakeeper_list()
-
     return multisim_dict
