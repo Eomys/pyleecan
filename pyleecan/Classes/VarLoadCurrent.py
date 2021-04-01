@@ -30,13 +30,6 @@ except ImportError as error:
     generate_simulation_list = error
 
 try:
-    from ..Methods.Simulation.VarLoadCurrent.gen_datakeeper_list import (
-        gen_datakeeper_list,
-    )
-except ImportError as error:
-    gen_datakeeper_list = error
-
-try:
     from ..Methods.Simulation.VarLoadCurrent.check_param import check_param
 except ImportError as error:
     check_param = error
@@ -86,18 +79,6 @@ class VarLoadCurrent(VarLoad):
         )
     else:
         generate_simulation_list = generate_simulation_list
-    # cf Methods.Simulation.VarLoadCurrent.gen_datakeeper_list
-    if isinstance(gen_datakeeper_list, ImportError):
-        gen_datakeeper_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoadCurrent method gen_datakeeper_list: "
-                    + str(gen_datakeeper_list)
-                )
-            )
-        )
-    else:
-        gen_datakeeper_list = gen_datakeeper_list
     # cf Methods.Simulation.VarLoadCurrent.check_param
     if isinstance(check_param, ImportError):
         check_param = property(
