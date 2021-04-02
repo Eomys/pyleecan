@@ -108,6 +108,11 @@ from ..Classes.MeshMat import MeshMat
 from ..Classes.MeshSolution import MeshSolution
 from ..Classes.MeshVTK import MeshVTK
 from ..Classes.Mode import Mode
+from ..Classes.ModelBH import ModelBH
+from ..Classes.ModelBH_Langevin import ModelBH_Langevin
+from ..Classes.ModelBH_arctangent import ModelBH_arctangent
+from ..Classes.ModelBH_exponential import ModelBH_exponential
+from ..Classes.ModelBH_linear_sat import ModelBH_linear_sat
 from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
