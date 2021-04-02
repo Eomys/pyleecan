@@ -30,6 +30,7 @@ def save_json(
         to split the object in different files
     class_to_split: list
         list of classes (and daughter classes) that should be split
+        only for is_folder == True
     """
     if isinstance(obj, FrozenClass):  # Pyleecan obj
         # Get the object logger
@@ -65,9 +66,7 @@ def save_json(
             class_to_add.extend(class_dict[class_name]["daughters"])
 
         class_to_split += tuple(class_to_add)
-
-        # Call ref_objects to save the objects separately
-        save_separated_obj(class_to_split, obj, folder, split_list, logger)
+        split_obj_dict(class_to_split, obj, folder, split_list, logger)
     else:
         folder = ""
 
@@ -90,8 +89,8 @@ def save_json(
 
 def fix_file_name(save_path, obj, is_folder, logger):
     """
-    Check save_path and modify or create it if needed, i.e. add or remove file extension
-    .json or create new name based on class name.
+    Check save_path and modify or create it if needed, i.e. add or remove
+    file extension .json or create new name based on class name.
 
     Parameters
     ----------
@@ -146,7 +145,7 @@ def build_data(obj, logger):
             data[key] = build_data(obj[key], logger)
         return data
     # pyleecan classes, i.e. instances with as_dict method
-    if has_as_dict(obj):
+    if hasattr(obj, "as_dict") and callable(getattr(obj, "as_dict", None)):
         return build_data(obj.as_dict(), logger)
     if isinstance(obj, int32):  # int
         return int(obj)
@@ -166,10 +165,10 @@ def build_data(obj, logger):
     return None
 
 
-def save_separated_obj(cls_tupel, obj_dict, folder, split_list, logger):
+def split_obj_dict(cls_tupel, obj_dict, folder, split_list, logger):
     """
-    Save classes_tuple objects contained in obj_dict in separated files and modify
-    obj_dict.
+    Store classes_tuple objects contained in obj_dict in split_list and modify
+    the obj_dict.
 
     Parameters
     ----------
@@ -191,30 +190,23 @@ def save_separated_obj(cls_tupel, obj_dict, folder, split_list, logger):
     obj_dict : dict
         object dictionnary to save
     """
+    if isinstance(obj_dict, dict):
+        for key, val in obj_dict.items():
+            val[key] = split_obj_dict(cls_tupel, val, folder, split_list, logger)
 
-    for key, val in obj_dict.items():
-        if isinstance(val, dict):
-            obj_dict[key] = _split_(val, cls_tupel, folder, split_list, logger)
+        if "__class__" in obj_dict.keys() and obj_dict["__class__"] in cls_tupel:
+            # and also add it to the list of objects to be saved
+            name = get_filename(obj_dict, folder, split_list, logger)
+            split_list.append({name: obj_dict})
+            return name
 
-        elif isinstance(val, list):
-            for idx, list_val in enumerate(val):
-                # Pyleecan obj and normal dict (to unify code)
-                if isinstance(list_val, dict):
-                    val[idx] = _split_(list_val, cls_tupel, folder, split_list, logger)
+    elif isinstance(obj_dict, list):
+        for idx, list_val in enumerate(obj_dict):
+            obj_dict[idx] = split_obj_dict(
+                cls_tupel, list_val, folder, split_list, logger
+            )
 
     return obj_dict
-
-
-def _split_(val, cls_tupel, folder, split_list, logger):
-    # Futher split the object ...
-    obj = save_separated_obj(cls_tupel, val, folder, split_list, logger)
-    if "__class__" in val.keys() and val["__class__"] in cls_tupel:
-        # and also add it to the list of objects to be saved
-        name = get_filename(val, folder, split_list, logger)
-        split_list.append({name: val})
-        return name
-    else:
-        return obj
 
 
 def create_folder(name, logger):
@@ -243,11 +235,6 @@ def is_json_serializable(obj):
         return True
     else:
         return False
-
-
-def has_as_dict(obj):
-    """Check if object has 'as_dict' method."""
-    return hasattr(obj, "as_dict") and callable(getattr(obj, "as_dict", None))
 
 
 def get_filename(obj, folder, split_list, logger):
