@@ -16,6 +16,7 @@ from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Output import Output
 
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
@@ -69,63 +70,63 @@ def test_FEMM_periodicity_time_no_periodicity_a():
     simu2.run()
 
     # Plot the result
-    out.plot_2D_Data(
-        "mag.B",
+    out.mag.B.plot_2D_Data(
         "time",
         "angle[0]{°}",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_B_time.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         "time[1]",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_B_space.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "wavenumber=[0,100]",
         "time[0]",
         data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_space_fft.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "freqs",
         "angle[0]",
         data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_fft2.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.Tem",
+    out.mag.Tem.plot_2D_Data(
         "time",
         data_list=[out2.mag.Tem],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Tem_time.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.Phi_wind_stator",
+    out.mag.Phi_wind_stator.plot_2D_Data(
         "time",
         "phase",
         data_list=[out2.mag.Phi_wind_stator],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Phi_wind_stator_time.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     Bflux = out.mag.B
@@ -213,63 +214,63 @@ def test_FEMM_periodicity_time():
     simu2.run()
 
     # Plot the result
-    out.plot_2D_Data(
-        "mag.B",
+    out.mag.B.plot_2D_Data(
         "time",
         "angle[0]{°}",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_B_time.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         "time[1]",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_B_space.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "wavenumber=[0,100]",
         "time[0]",
         data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_space_fft.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "freqs",
         "angle[0]",
         data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_fft2.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.Tem",
+    out.mag.Tem.plot_2D_Data(
         "time",
         data_list=[out2.mag.Tem],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Tem_time.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.Phi_wind_stator",
+    out.mag.Phi_wind_stator.plot_2D_Data(
         "time",
         "phase",
         data_list=[out2.mag.Phi_wind_stator],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Phi_wind_stator_time.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     # Compare both simu with B
@@ -359,63 +360,63 @@ def test_FEMM_periodicity_angle():
     simu2.run()
 
     # Plot the result
-    out.plot_2D_Data(
-        "mag.B",
+    out.mag.B.plot_2D_Data(
         "time",
         "angle[0]{°}",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_B_time.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.B",
-        "angle",
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
         "time[1]",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_B_space.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "wavenumber=[0,100]",
         "time[0]",
         data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_space_fft.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "force.AGSF",
+    out.force.AGSF.plot_2D_Data(
         "freqs",
         "angle[0]",
         data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_P_fft2.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.Tem",
+    out.mag.Tem.plot_2D_Data(
         "time",
         data_list=[out2.mag.Tem],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Tem_time.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
-    out.plot_2D_Data(
-        "mag.Phi_wind_stator",
+    out.mag.Phi_wind_stator.plot_2D_Data(
         "time",
         "phase",
         data_list=[out2.mag.Phi_wind_stator],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Phi_wind_stator_time.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     # Compare both simu

@@ -9,6 +9,7 @@ from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 # Gather results in the same folder
@@ -100,9 +101,9 @@ def test_ipm_Elmer():
     # Run simulation
     outp = Output(simu=simu)
     simu.run()
-    # outp.plot_2D_Data("mag.Tem", "time")
-    # outp.plot_2D_Data("elec.Is", "time", "phase")
-    # outp.plot_2D_Data("mag.Tem", "time[smallestperiod]")
+    # outp.mag.Tem.plot_2D_Data("time", **dict_2D)
+    # outp.elec.get_Is().plot_2D_Data("time", "phase", **dict_2D)
+    # outp.mag.Tem.plot_2D_Data("time[smallestperiod]", **dict_2D)
     # outp.mag.meshsolution.plot_contour(label="B")
     # outp.mag.meshsolution.plot_contour(label="A")
     # outp.mag.meshsolution.plot_contour(label="J")
@@ -160,9 +161,9 @@ def test_spm_Elmer():
     # Run simulation
     outp = Output(simu=simu)
     simu.run()
-    outp.plot_2D_Data("mag.Tem", "time")
-    # outp.plot_2D_Data("elec.Is", "time", "phase")
-    # outp.plot_2D_Data("mag.Tem", "time[smallestperiod]")
+    outp.mag.Tem.plot_2D_Data("time", **dict_2D)
+    # outp.elec.get_Is().plot_2D_Data("time", "phase", **dict_2D)
+    # outp.mag.Tem.plot_2D_Data("time[smallestperiod]", **dict_2D)
     # outp.mag.meshsolution.plot_contour(label="B")
     # outp.mag.meshsolution.plot_contour(label="A")
     # outp.mag.meshsolution.plot_contour(label="J")

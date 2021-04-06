@@ -1,5 +1,7 @@
 from logging import Filter, DEBUG, INFO, WARNING, ERROR, CRITICAL
 from logging.config import dictConfig
+from os import makedirs
+from os.path import isdir
 
 # Default level in every loggers
 DEFAULT_LOG_NAME = "Pyleecan"
@@ -17,9 +19,15 @@ FILE_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def gen_logger_config_dict(logger_name):
     module = __import__(
-        "pyleecan", globals=globals(), locals=locals(), fromlist=["USER_DIR"], level=0,
+        "pyleecan",
+        globals=globals(),
+        locals=locals(),
+        fromlist=["USER_DIR"],
+        level=0,
     )
     USER_DIR = module.USER_DIR
+    if not isdir(USER_DIR):
+        makedirs(USER_DIR)
     log_config_dict = {
         "version": 1,
         # Define loggers

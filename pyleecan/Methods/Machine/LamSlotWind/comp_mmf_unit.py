@@ -72,7 +72,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
     )
     MMF_U = DataTime(
         name="Unit MMF",
-        unit="p.u.",
+        unit="A",
         symbol="Magnitude",
         axes=[Time, Angle],
         values=mmf_u,
@@ -80,7 +80,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
 
     WF = DataTime(
         name="Winding Functions",
-        unit="p.u.",
+        unit="A",
         symbol="Magnitude",
         axes=[Phase, Angle],
         values=wf,

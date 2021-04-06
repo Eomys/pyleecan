@@ -244,7 +244,9 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += (
             TAB2 + "elif type(value) is int and value == -1:  # Default constructor\n"
         )
-        if "SciDataTool" in prop["type"]:
+        if prop["value"] is not None and "()" in prop["value"]:
+            set_str += TAB3 + "value = " + prop["value"] + "\n"
+        elif "SciDataTool" in prop["type"]:
             set_str += TAB3 + "value = " + prop["type"].split(".")[-1] + "()\n"
         else:
             set_str += TAB3 + "value = " + prop["type"] + "()\n"

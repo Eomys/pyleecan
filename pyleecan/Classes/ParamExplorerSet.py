@@ -27,6 +27,21 @@ try:
 except ImportError as error:
     as_dict = error
 
+try:
+    from ..Methods.Simulation.ParamExplorerSet.get_min import get_min
+except ImportError as error:
+    get_min = error
+
+try:
+    from ..Methods.Simulation.ParamExplorerSet.get_max import get_max
+except ImportError as error:
+    get_max = error
+
+try:
+    from ..Methods.Simulation.ParamExplorerSet.get_N import get_N
+except ImportError as error:
+    get_N = error
+
 
 from ntpath import basename
 from os.path import isfile
@@ -37,7 +52,7 @@ from ._check import InitUnKnowClassError
 
 
 class ParamExplorerSet(ParamExplorer):
-    """Abstract class for the multi-simulation"""
+    """Define a parameter set (for parameter sweep) from a list"""
 
     VERSION = 1
 
@@ -64,6 +79,37 @@ class ParamExplorerSet(ParamExplorer):
         )
     else:
         as_dict = as_dict
+    # cf Methods.Simulation.ParamExplorerSet.get_min
+    if isinstance(get_min, ImportError):
+        get_min = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ParamExplorerSet method get_min: " + str(get_min)
+                )
+            )
+        )
+    else:
+        get_min = get_min
+    # cf Methods.Simulation.ParamExplorerSet.get_max
+    if isinstance(get_max, ImportError):
+        get_max = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ParamExplorerSet method get_max: " + str(get_max)
+                )
+            )
+        )
+    else:
+        get_max = get_max
+    # cf Methods.Simulation.ParamExplorerSet.get_N
+    if isinstance(get_N, ImportError):
+        get_N = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ParamExplorerSet method get_N: " + str(get_N))
+            )
+        )
+    else:
+        get_N = get_N
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -77,6 +123,7 @@ class ParamExplorerSet(ParamExplorer):
         symbol="",
         unit="",
         setter=None,
+        getter=None,
         init_dict=None,
         init_str=None,
     ):
@@ -105,11 +152,13 @@ class ParamExplorerSet(ParamExplorer):
                 unit = init_dict["unit"]
             if "setter" in list(init_dict.keys()):
                 setter = init_dict["setter"]
+            if "getter" in list(init_dict.keys()):
+                getter = init_dict["getter"]
         # Set the properties (value check and convertion are done in setter)
         self.value = value
         # Call ParamExplorer init
         super(ParamExplorerSet, self).__init__(
-            name=name, symbol=symbol, unit=unit, setter=setter
+            name=name, symbol=symbol, unit=unit, setter=setter, getter=getter
         )
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties

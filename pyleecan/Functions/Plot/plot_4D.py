@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
-
-import matplotlib.pyplot as plt
-from numpy import log10, abs as np_abs, min as np_min, max as np_max, NaN
-
-from ...Functions.init_fig import init_fig
+from SciDataTool.Functions.Plot.plot_4D import plot_4D as plot_4D_fct
 from ...definitions import config_dict
 
-FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
+# Import values from config dict
+COLOR_LIST = config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"]
 COLORMAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
+FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
 FONT_SIZE_LABEL = config_dict["PLOT"]["FONT_SIZE_LABEL"]
 FONT_SIZE_LEGEND = config_dict["PLOT"]["FONT_SIZE_LEGEND"]
@@ -34,15 +31,20 @@ def plot_4D(
     xticklabels=None,
     yticklabels=None,
     annotations=None,
+    color_list=None,
+    colormap=None,
     fig=None,
     ax=None,
     is_logscale_x=False,
     is_logscale_y=False,
     is_logscale_z=False,
     is_disp_title=True,
-    type="scatter",
+    type_plot="scatter",
     save_path=None,
     is_show_fig=None,
+    is_switch_axes=False,
+    win_title=None,
+    is_grid=False,
 ):
     """Plots a 4D graph
 
@@ -110,110 +112,52 @@ def plot_4D(
         True to show figure after plot
     """
 
-    # Set figure/subplot
-    if is_show_fig is None:
-        is_show_fig = True if fig is None else False
+    print(
+        "WARNING: plot_3D function is deprecated and will be removed from the next release. Please use SciDataTool.Functions.Plot.plot_3D instead."
+    )
 
-    # Set if figure is 3D
-    if type != "scatter":
-        is_3d = True
-    else:
-        is_3d = False
+    if color_list is None:
+        color_list = COLOR_LIST
+    if colormap is None:
+        colormap = COLORMAP
 
-    # Set figure if needed
-    if fig is None and ax is None:
-        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle", is_3d=is_3d)
-
-    # Check logscale on z axis
-    if is_logscale_z:
-        Zdata = 10 * log10(np_abs(Zdata))
-        clb_format = "%0.0f"
-    else:
-        clb_format = "%.0e"
-
-    # Calculate z limits
-    if z_max is None:
-        z_max = np_max(Zdata)
-    if z_min is None:
-        if is_logscale_z:
-            z_min = 0
-        else:
-            z_min = z_max / 1e4
-
-    Zdata[Zdata < z_min] = NaN
-
-    if is_same_size:
-        Sdata = 20
-    elif Sdata is None:
-        Sdata = 500 * Zdata / z_max
-
-    # Plot
-    if type == "scatter":
-        c = ax.scatter(
-            Xdata,
-            Ydata,
-            c=Zdata,
-            s=Sdata,
-            marker="s",
-            cmap=COLORMAP,
-            vmin=z_min,
-            vmax=z_max,
-        )
-        clb = fig.colorbar(c, ax=ax, format=clb_format)
-        clb.ax.set_title(zlabel, fontsize=FONT_SIZE_LEGEND, fontname=FONT_NAME)
-        clb.ax.tick_params(labelsize=FONT_SIZE_LEGEND)
-        for l in clb.ax.yaxis.get_ticklabels():
-            l.set_family(FONT_NAME)
-        if xticks is not None:
-            ax.xaxis.set_ticks(xticks)
-        if xticklabels is not None:
-            ax.set_xticklabels(xticklabels, rotation=90)
-        if yticks is not None:
-            ax.yaxis.set_ticks(yticks)
-        if yticklabels is not None:
-            ax.set_yticklabels(yticklabels)
-        if annotations is not None:
-            for i, txt in enumerate(annotations):
-                if Zdata[i] > z_max * 0.01:
-                    ax.annotate(txt, (Xdata[i], Ydata[i]))
-
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
-    ax.set_xlim([x_min, x_max])
-    ax.set_ylim([y_min, y_max])
-
-    if is_logscale_x:
-        ax.xscale("log")
-
-    if is_logscale_y:
-        ax.yscale("log")
-
-    if is_disp_title and title not in [None, ""]:
-        ax.set_title(title)
-
-    if is_3d:
-        for item in (
-            [ax.xaxis.label, ax.yaxis.label, ax.zaxis.label]
-            + ax.get_xticklabels()
-            + ax.get_yticklabels()
-            + ax.get_zticklabels()
-        ):
-            item.set_fontsize(FONT_SIZE_LABEL)
-    else:
-        for item in (
-            [ax.xaxis.label, ax.yaxis.label]
-            + ax.get_xticklabels()
-            + ax.get_yticklabels()
-        ):
-            item.set_fontsize(FONT_SIZE_LABEL)
-            item.set_fontname(FONT_NAME)
-    ax.title.set_fontsize(FONT_SIZE_TITLE)
-    ax.title.set_fontname(FONT_NAME)
-
-    if save_path is not None:
-        save_path = save_path.replace("\\", "/")
-        fig.savefig(save_path)
-        plt.close()
-
-    if is_show_fig:
-        fig.show()
+    # Call SciDataTool plot function
+    plot_4D_fct(
+        Xdata,
+        Ydata,
+        Zdata,
+        Sdata=Sdata,
+        is_same_size=is_same_size,
+        colormap=colormap,
+        x_min=x_min,
+        x_max=x_max,
+        y_min=y_min,
+        y_max=y_max,
+        z_min=z_min,
+        z_max=z_max,
+        title=title,
+        xlabel=xlabel,
+        ylabel=ylabel,
+        zlabel=zlabel,
+        xticks=xticks,
+        yticks=yticks,
+        xticklabels=xticklabels,
+        yticklabels=yticklabels,
+        annotations=annotations,
+        fig=fig,
+        ax=ax,
+        is_logscale_x=is_logscale_x,
+        is_logscale_y=is_logscale_y,
+        is_logscale_z=is_logscale_z,
+        is_disp_title=is_disp_title,
+        type_plot=type_plot,
+        save_path=save_path,
+        is_show_fig=is_show_fig,
+        is_switch_axes=is_switch_axes,
+        win_title=win_title,
+        font_name=FONT_NAME,
+        font_size_title=FONT_SIZE_TITLE,
+        font_size_label=FONT_SIZE_LABEL,
+        font_size_legend=FONT_SIZE_LEGEND,
+        is_grid=is_grid,
+    )

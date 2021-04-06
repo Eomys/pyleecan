@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from os.path import join
+from pyleecan.Functions.Plot import dict_2D
 
 
 def plot_save(output):
@@ -17,8 +18,7 @@ def plot_save(output):
 
     # Plot forces
     ax2 = fig.add_subplot(2, 1, 2)
-    output.plot_2D_Data(
-        "force.AGSF",
+    output.force.AGSF.plot_2D_Data(
         "freqs->elec_order",
         "wavenumber=0",
         component_list=["radial"],
@@ -27,19 +27,20 @@ def plot_save(output):
         y_min=0,
         y_max=360000,
         is_show_fig=False,
+        **dict_2D
     )
     # fig, (ax1, ax2) = plt.subplots(2)
     # # Plot machine
     # output.simu.machine.plot(fig=fig, ax=ax1, is_show_fig=False)
     # ax1.set_axis_off()
     # # Plot forces
-    # output.plot_2D_Data(
-    #     "force.AGSF",
+    # output.force.AGSF.plot_2D_Data(
     #     "freqs->elec_order",
     #     "wavenumber=0",
     #     fig=fig,
     #     ax=ax2,
     #     is_show_fig=False,
+    #     **dict_2D
     # )
     # Set title and save
     if output.simu.index is not None:

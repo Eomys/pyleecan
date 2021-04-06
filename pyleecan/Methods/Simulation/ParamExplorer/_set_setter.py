@@ -33,6 +33,6 @@ def _set_setter(self, value):
         self._setter_func = value
     else:
         raise CheckTypeError(
-            "For property keeper Expected function or str (path to python file or lambda), got: "
+            "For property setter Expected function or str (path to python file or lambda), got: "
             + str(type(value))
         )

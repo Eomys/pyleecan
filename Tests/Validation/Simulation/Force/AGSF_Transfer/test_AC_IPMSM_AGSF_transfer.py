@@ -9,6 +9,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
 
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 from Tests import save_validation_path as save_path
 
@@ -64,19 +65,18 @@ def test_AC_IPMSM_AGSF_transfer():
 
     out2 = simu2.run()
 
-    out2.plot_2D_Data(
-        "force.AGSF",
+    out2.force.AGSF.plot_2D_Data(
         "angle[oneperiod]",
         "time=0",
         data_list=[out.force.AGSF],
         legend_list=["With Transfer", "No Transfer"],
         save_path=join(save_path, "test_FM_IPMSM_FL_001_AGSF_compare.png"),
         is_show_fig=False,
+        **dict_2D
     )
 
     max_r = 42
-    out2.plot_2D_Data(
-        "force.AGSF",
+    out2.force.AGSF.plot_2D_Data(
         "wavenumber",
         "time=0",
         x_min=-max_r,
@@ -86,6 +86,7 @@ def test_AC_IPMSM_AGSF_transfer():
         save_path=join(save_path, "test_FM_IPMSM_FL_001_AGSF_compare_fft2.png"),
         is_show_fig=False,
         barwidth=600,
+        **dict_2D
     )
 
     return out, out2
