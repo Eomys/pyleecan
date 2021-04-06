@@ -126,6 +126,13 @@ def test_SIPMSM_003():
         is_show_fig=False,
     )
 
+    out.mag.meshsolution.plot_contour(
+        "freqs[1]",
+        label="H",
+        save_path=join(save_plot_path, simu.name + "_H_freqs1.png"),
+        is_show_fig=False,
+    )
+
     return out
 
 
