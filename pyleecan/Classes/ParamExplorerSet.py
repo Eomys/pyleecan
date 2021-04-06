@@ -42,6 +42,11 @@ try:
 except ImportError as error:
     get_N = error
 
+try:
+    from ..Methods.Simulation.ParamExplorerSet._set_value import _set_value
+except ImportError as error:
+    _set_value = error
+
 
 from ntpath import basename
 from os.path import isfile
@@ -110,6 +115,17 @@ class ParamExplorerSet(ParamExplorer):
         )
     else:
         get_N = get_N
+    # cf Methods.Simulation.ParamExplorerSet._set_value
+    if isinstance(_set_value, ImportError):
+        _set_value = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ParamExplorerSet method _set_value: " + str(_set_value)
+                )
+            )
+        )
+    else:
+        _set_value = _set_value
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -225,13 +241,6 @@ class ParamExplorerSet(ParamExplorer):
     def _get_value(self):
         """getter of value"""
         return self._value
-
-    def _set_value(self, value):
-        """setter of value"""
-        if type(value) is int and value == -1:
-            value = list()
-        check_var("value", value, "list")
-        self._value = value
 
     value = property(
         fget=_get_value,
