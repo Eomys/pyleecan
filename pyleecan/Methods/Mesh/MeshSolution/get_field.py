@@ -80,7 +80,7 @@ def get_field(
     axes_list = solution.get_axes_list()
 
     # Enforce indice from those contained in MeshSolution if not None
-    if self.node_indice is not None and indices is None:
+    if "output_nodes" in self.group and indices is None:
         indices_normals = self.group["output_nodes"]
     else:
         indices_normals = indices
