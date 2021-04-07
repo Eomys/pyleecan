@@ -34,7 +34,7 @@ SCIM_dict = {
     "Nrow": 9,
 }
 IPMSM_dict = {
-    "file_path": join(machine_path, "IPMSM_A.json").replace("\\", "/"),
+    "file_path": join(machine_path, "Toyota_Prius.json").replace("\\", "/"),
     "table": [
         ("Machine Type", "IPMSM"),
         ("Stator slot number", "48"),

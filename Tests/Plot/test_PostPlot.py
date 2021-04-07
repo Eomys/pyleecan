@@ -26,9 +26,9 @@ from pyleecan.definitions import DATA_DIR
 def test_PostPlot():
     """Validation of the PostPlot class to plot airgap flux automatically as postprocessing at the end of the simulation"""
 
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    simu = Simu1(name="PostPlot", machine=IPMSM_A)
+    simu = Simu1(name="PostPlot", machine=Toyota_Prius)
 
     # Definition of the enforced output of the electrical module
     I0_rms = 250 / sqrt(2)

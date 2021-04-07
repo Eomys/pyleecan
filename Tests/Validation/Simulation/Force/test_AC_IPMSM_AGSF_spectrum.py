@@ -25,9 +25,9 @@ from Tests import save_validation_path as save_path
 DELTA = 1e-6
 
 # Load machine
-IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 # Prepare simulation
-simu = Simu1(name="AC_IPMSM_plot", machine=IPMSM_A)
+simu = Simu1(name="AC_IPMSM_plot", machine=Toyota_Prius)
 
 simu.input = InputCurrent(
     Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=4 * 2 ** 4, N0=1200

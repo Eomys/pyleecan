@@ -76,11 +76,11 @@ def test_axis_LamSlotMag(CURVE_COLORS):
 
 def test_axis_LamHoleMag(CURVE_COLORS):
     """Axis convention for LamHole with magnet"""
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    IPMSM_A.rotor.plot(is_show_fig=False)
-    R1 = IPMSM_A.rotor.Rext * 1.1
-    R2 = IPMSM_A.rotor.Rext * 1.2
-    R3 = IPMSM_A.rotor.Rext * 1.4
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    Toyota_Prius.rotor.plot(is_show_fig=False)
+    R1 = Toyota_Prius.rotor.Rext * 1.1
+    R2 = Toyota_Prius.rotor.Rext * 1.2
+    R3 = Toyota_Prius.rotor.Rext * 1.4
     axes = plt.gca()
 
     # X axis
@@ -96,14 +96,14 @@ def test_axis_LamHoleMag(CURVE_COLORS):
     axes.text(Zly.real, Zly.imag, "Y axis")
 
     # D axis
-    D_axis = IPMSM_A.rotor.comp_angle_d_axis()
+    D_axis = Toyota_Prius.rotor.comp_angle_d_axis()
     Zd = R1 * exp(1j * D_axis)
     plt.arrow(0, 0, Zd.real, Zd.imag, color=CURVE_COLORS[1])
     Zld = R2 * exp(1j * D_axis)
     axes.text(Zld.real, Zld.imag, "D axis")
 
     # Q axis
-    Q_axis = IPMSM_A.rotor.comp_angle_q_axis()
+    Q_axis = Toyota_Prius.rotor.comp_angle_q_axis()
     Zq = R1 * exp(1j * Q_axis)
     plt.arrow(0, 0, Zq.real, Zq.imag, color=CURVE_COLORS[1])
     Zlq = R2 * exp(1j * Q_axis)

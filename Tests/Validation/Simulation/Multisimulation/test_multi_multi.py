@@ -112,10 +112,10 @@ def test_multi_multi():
     # N2 = 2  # Number of parameters for second sensitivity parameter
 
     # Reference simulation definition
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     simu = Simu1(
         name="multi_multi",
-        machine=IPMSM_A,
+        machine=Toyota_Prius,
         path_result=join(save_path, "multi_multi"),
         layer_log_warn=2,
     )
@@ -142,7 +142,10 @@ def test_multi_multi():
         Kmesh_fineness=0.2,
         nb_worker=nb_worker,
     )
-    simu.force = ForceMT(is_periodicity_a=True, is_periodicity_t=True,)
+    simu.force = ForceMT(
+        is_periodicity_a=True,
+        is_periodicity_t=True,
+    )
 
     # VarSpeed Definition
     varload = VarLoadCurrent(is_reuse_femm_file=True)
@@ -179,7 +182,10 @@ def test_multi_multi():
     varload.is_keep_all_output = False
 
     # Multi-simulation to change machine parameters
-    multisim = VarParam(stop_if_error=True, is_reuse_femm_file=False,)
+    multisim = VarParam(
+        stop_if_error=True,
+        is_reuse_femm_file=False,
+    )
 
     simu.var_simu = multisim
 
@@ -191,8 +197,8 @@ def test_multi_multi():
             unit="m",
             setter="simu.machine.stator.slot.W0",
             getter="simu.machine.stator.slot.W0",
-            min_value=0.1 * IPMSM_A.stator.slot.W0,
-            max_value=IPMSM_A.stator.slot.W0,
+            min_value=0.1 * Toyota_Prius.stator.slot.W0,
+            max_value=Toyota_Prius.stator.slot.W0,
             N=N1,
         )
     ]

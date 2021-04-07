@@ -16,7 +16,7 @@ from pyleecan.Functions.load import load
 
 
 # get the machine
-machine_1 = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+machine_1 = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
 # mesh settings, original line label names have to be used (not the translated)
 n1 = 3
@@ -137,7 +137,7 @@ class Test_StructElmer(object):
 if __name__ == "__main__":
     # create test object
     obj = Test_StructElmer()
-    # test IPMSM_A (HoleM50-Rotor) with minor modification
+    # test Toyota_Prius (HoleM50-Rotor) with minor modification
     out = obj.test_HoleM50()
     # out = obj.test_HoleM50_wo_magnets()
 

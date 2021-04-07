@@ -96,10 +96,12 @@ def test_save_load_machine():
     assert result.frame == None
 
 
+@pytest.mark.IPMSM
+@pytest.mark.MagFEMM
 def test_save_load_folder_path():
     """Save with a folder path"""
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="SM_CEFC_001", machine=IPMSM_A, struct=None)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="test_save_load_folder_path", machine=Toyota_Prius, struct=None)
 
     # Definition of the enforced output of the electrical module
     N0 = 3000
@@ -144,7 +146,7 @@ def test_save_load_folder_path():
     assert isfile(file_path)
     assert isfile(join(loc_save_path, "Material.json"))
     assert isfile(join(loc_save_path, "M400-50A.json"))
-    assert isfile(join(loc_save_path, "IPMSM_A.json"))
+    assert isfile(join(loc_save_path, "Toyota_Prius.json"))
     assert isfile(join(loc_save_path, "SM_CEFC_001.json"))
     test_obj2 = load(loc_save_path)
     assert test_obj == test_obj2
@@ -278,7 +280,7 @@ def test_save_load_dict():
     assert result_dict == test_dict
 
 
-@pytest.mark.long
+@pytest.mark.MagFEMM
 @pytest.mark.FEMM
 @pytest.mark.parametrize("type_file", ["json", "h5", "pkl"])
 def test_save_load_simu(type_file):

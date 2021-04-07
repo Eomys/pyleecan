@@ -28,8 +28,8 @@ def test_EEC_FEMM_IPMSM():
     Compute Torque from EEC results and compare with Yang et al, 2013
     """
 
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="EEC_FEMM_IPMSM", machine=IPMSM_A)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="EEC_FEMM_IPMSM", machine=Toyota_Prius)
 
     # Definition of the input
     simu.input = InputElec(N0=2000, Nt_tot=10, Na_tot=2048)

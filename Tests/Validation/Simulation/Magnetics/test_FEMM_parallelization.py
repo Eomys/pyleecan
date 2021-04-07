@@ -24,9 +24,9 @@ from pyleecan.definitions import DATA_DIR
 def test_FEMM_parallelization_mag():
     """test parallelization of FEMM to get B, Tem, PhiWind """
 
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    simu = Simu1(name="FEMM_parallelization_mag", machine=IPMSM_A)
+    simu = Simu1(name="FEMM_parallelization_mag", machine=Toyota_Prius)
 
     # Definition of a sinusoidal current
     simu.input = InputCurrent()

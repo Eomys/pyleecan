@@ -31,8 +31,8 @@ def test_EM_IPMSM_FL_002():
     Electric Machines & Drives Conference (IEMDC), 2013 IEEE International, Chicago, IL, 2013, pp. 295-302.
     Test compute the Flux in FEMM, with and without symmetry
     """
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="EM_IPMSM_FL_002", machine=IPMSM_A)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="EM_IPMSM_FL_002", machine=Toyota_Prius)
 
     # Definition of the enforced output of the electrical module
     N0 = 2504
@@ -63,7 +63,7 @@ def test_EM_IPMSM_FL_002():
     simu.struct = None
     # simu.struct.force = ForceMT()
     # Copy the simu and activate the symmetry
-    assert IPMSM_A.comp_periodicity() == (4, True, 4, True)
+    assert Toyota_Prius.comp_periodicity() == (4, True, 4, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 

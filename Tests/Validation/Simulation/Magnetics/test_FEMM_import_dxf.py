@@ -22,9 +22,9 @@ def test_FEMM_import_dxf():
 
     Test compute the Flux in FEMM, with and without DXF Import
     """
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    simu = Simu1(name="FEMM_import_dxf", machine=IPMSM_A)
+    simu = Simu1(name="FEMM_import_dxf", machine=Toyota_Prius)
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
     simu.mag = MagFEMM(

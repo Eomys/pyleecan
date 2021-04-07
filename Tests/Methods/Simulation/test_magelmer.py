@@ -43,9 +43,9 @@ mesh_dict = {
 @pytest.mark.long
 def test_ipm_Elmer():
 
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    IPMSM_A.stator.slot.H1 = 1e-3
-    simu = Simu1(name="ipm_elmer", machine=IPMSM_A)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    Toyota_Prius.stator.slot.H1 = 1e-3
+    simu = Simu1(name="ipm_elmer", machine=Toyota_Prius)
 
     # Definition of the enforced output of the electrical module
     # N0 = 1500
@@ -70,7 +70,7 @@ def test_ipm_Elmer():
     # simu.input.Nt_tot = 32 * 8    # Number of time step
     # simu.input.Na_tot = 2048     # Spatial discretization
     simu.input.N0 = 2000  # Rotor speed [rpm]
-    p = IPMSM_A.stator.winding.p
+    p = Toyota_Prius.stator.winding.p
     time = linspace(0, 60 / simu.input.N0, num=32 * p, endpoint=False)
     simu.input.time = time
     simu.input.angle = linspace(0, 2 * pi, num=2048, endpoint=False)

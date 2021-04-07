@@ -37,8 +37,8 @@ import pytest
 @pytest.mark.FEMM
 @pytest.mark.long
 def test_slot_scale():
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    ref_simu = Simu1(name="E_IPMSM_FL_002", machine=IPMSM_A)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    ref_simu = Simu1(name="E_IPMSM_FL_002", machine=Toyota_Prius)
 
     # Definition of the enforced output of the electrical module
     Is_mat = zeros((1, 3))

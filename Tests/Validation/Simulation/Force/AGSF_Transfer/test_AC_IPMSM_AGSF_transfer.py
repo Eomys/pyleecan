@@ -23,10 +23,10 @@ def test_AC_IPMSM_AGSF_transfer():
     """Validation of the AGSF spectrum calculation for IPMSM machine"""
 
     # Load machine
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     # Prepare simulation
-    simu = Simu1(name="AC_IPMSM_plot", machine=IPMSM_A)
+    simu = Simu1(name="AC_IPMSM_plot", machine=Toyota_Prius)
 
     simu.input = InputCurrent(
         Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 11, Nt_tot=2 ** 6, N0=1200

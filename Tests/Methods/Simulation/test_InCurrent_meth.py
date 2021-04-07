@@ -35,7 +35,7 @@ from pyleecan.Methods.Simulation.Input import InputError
 import pytest
 from Tests import save_plot_path as save_path
 
-IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 InputCurrent_Error_test = list()
 time_wrong = ImportMatrixVal(value=zeros((10, 2)))
 time = ImportGenVectLin(0, 10, 100)
@@ -76,13 +76,13 @@ M3.rotor.winding.qs = 2
 
 
 # Wrong time
-test_obj = Simulation(machine=IPMSM_A)
+test_obj = Simulation(machine=Toyota_Prius)
 test_obj.input = InputCurrent(time=None)
 InputCurrent_Error_test.append(
     {"test_obj": test_obj, "exp": "ERROR: InputCurrent.time missing"}
 )
 # Wong time shape
-test_obj = Simulation(machine=IPMSM_A)
+test_obj = Simulation(machine=Toyota_Prius)
 test_obj.input = InputCurrent(time=time_wrong)
 InputCurrent_Error_test.append(
     {
@@ -91,7 +91,7 @@ InputCurrent_Error_test.append(
     }
 )
 # Wrong angle shape
-test_obj = Simulation(machine=IPMSM_A)
+test_obj = Simulation(machine=Toyota_Prius)
 test_obj.input = InputCurrent(time=time, angle=angle_wrong)
 InputCurrent_Error_test.append(
     {
@@ -200,7 +200,7 @@ class Test_InCurrent_meth(object):
     @pytest.mark.parametrize("test_dict", idq_test)
     def test_InputCurrent_DQ(self, test_dict):
         """Enforce Id/Iq, check Is then enforce Is, check Id/Iq"""
-        test_obj = Simulation(machine=IPMSM_A)
+        test_obj = Simulation(machine=Toyota_Prius)
         output = Output(simu=test_obj)
         Nt_tot = 70
         Na_tot = 20
@@ -213,11 +213,11 @@ class Test_InCurrent_meth(object):
         # Compute expected current
         A_rms = np_abs(Id_ref + 1j * Iq_ref)
         Phi0 = np_angle(Id_ref + 1j * Iq_ref)
-        qs = IPMSM_A.stator.winding.qs
-        p = IPMSM_A.stator.get_pole_pair_number()
+        qs = Toyota_Prius.stator.winding.qs
+        p = Toyota_Prius.stator.get_pole_pair_number()
         time_exp = linspace(0, 60 / N0, Nt_tot, endpoint=False)
         felec = p * N0 / 60
-        rot_dir = IPMSM_A.stator.comp_rot_dir()
+        rot_dir = Toyota_Prius.stator.comp_rot_dir()
         Ia = (
             A_rms
             * sqrt(2)
@@ -236,7 +236,7 @@ class Test_InCurrent_meth(object):
         Is_exp = array([Ia, Ib, Ic])
 
         # Compute expected rotor position
-        angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
+        angle_rotor_initial = Toyota_Prius.comp_angle_offset_initial()
         # rot_dir is the rotation direction of the fundamental magnetic field
         # Then rotor position is -1 * rot_dir
         angle_rotor_exp = (

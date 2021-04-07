@@ -27,10 +27,10 @@ from Tests import save_validation_path as save_path
 @pytest.mark.long
 def test_EM_FEMM_IPMSM_varload():
 
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     # Initialization of the Simulation
-    simu = Simu1(name="EM_FEMM_IPMSM_varload", machine=IPMSM_A)
+    simu = Simu1(name="EM_FEMM_IPMSM_varload", machine=Toyota_Prius)
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
     simu.mag = MagFEMM(

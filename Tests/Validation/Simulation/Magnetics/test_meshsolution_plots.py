@@ -251,8 +251,8 @@ def test_Slotless_CEFC():
 @pytest.mark.MeshSol
 def test_Toyota_Prius():
     """Validation of extracting FEMM data with MeshSolution with Toyota Prius electrical machine."""
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="test_Toyota_Prius", machine=IPMSM_A)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="test_Toyota_Prius", machine=Toyota_Prius)
 
     # Definition of the enforced output of the electrical module
     N0 = 2504

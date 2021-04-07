@@ -43,7 +43,7 @@ load_test.append(  # 4
     {"type": "SPMSM", "index": 3, "name": "SIPMSM_008", "p": 4, "count": 10}
 )
 load_test.append(  # 5
-    {"type": "IPMSM", "index": 4, "name": "machine_IPMSM_A", "p": 5, "count": 10}
+    {"type": "IPMSM", "index": 4, "name": "machine_Toyota_Prius", "p": 5, "count": 10}
 )
 load_test.append(  # 6
     {"type": "WRSM", "index": 5, "name": "WRSM_001", "p": 6, "count": 13}
