@@ -88,6 +88,8 @@ def construct_dict_from_group(group):
                     value = bool(value)
                 elif isinstance(value, int64):  # float
                     value = float(value)
+                elif isinstance(value, int32):  # int
+                    value = int(value)
                 elif isinstance(value, (string_, bytes)):  # String
                     value = value.decode("ISO-8859-2")
                     # None is not available in H5 => we use a string
