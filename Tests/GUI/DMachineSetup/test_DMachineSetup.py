@@ -62,7 +62,6 @@ import pytest
 matlib_path = join(TEST_DATA_DIR, "Material")
 
 
-@pytest.mark.GUI
 class TestDMachineSetup(object):
     """Test that the widget DMachineSetup behave like it should"""
 

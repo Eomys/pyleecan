@@ -40,7 +40,6 @@ slotW16_wrong_test.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_SlotW16_meth(object):
     """pytest for SlotW16 methods"""
 

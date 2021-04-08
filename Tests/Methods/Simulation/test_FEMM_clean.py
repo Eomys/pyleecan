@@ -10,12 +10,15 @@ from pyleecan.definitions import DATA_DIR
 
 
 @pytest.mark.FEMM
+@pytest.mark.IPMSM
+@pytest.mark.MagFEMM
+@pytest.mark.SingleOP
 def test_FEMM_clean():
     """test clean of MagFEMM """
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    simu = Simu1(name="MagFEMM_clean", machine=Toyota_Prius)
+    simu = Simu1(name="test_FEMM_clean", machine=Toyota_Prius)
 
     # Definition of a sinusoidal current
     simu.input = InputCurrent()

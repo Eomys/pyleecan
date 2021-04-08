@@ -16,7 +16,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWPole.SWPole import SWPole
 import pytest
 
 
-@pytest.mark.GUI
 class TestSWPole(object):
     """Test that the widget SWPole behave like it should"""
 

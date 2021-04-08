@@ -7,7 +7,6 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
 class Test_get_node2cell(object):
     """unittest to get cell containing specific node"""
 

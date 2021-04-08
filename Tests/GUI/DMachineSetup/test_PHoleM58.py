@@ -17,7 +17,6 @@ from pyleecan.Classes.Material import Material
 import pytest
 
 
-@pytest.mark.GUI
 class TestPHoleM58(object):
     """Test that the widget PHoleM58 behave like it should"""
 

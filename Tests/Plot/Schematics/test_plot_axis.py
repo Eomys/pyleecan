@@ -169,7 +169,8 @@ def test_axis_LamHole(CURVE_COLORS):
     plt.close("all")
 
 
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.SCIM
 @pytest.mark.long
 def test_axis_LamWind(CURVE_COLORS):
     """Axis convention for LamWind"""

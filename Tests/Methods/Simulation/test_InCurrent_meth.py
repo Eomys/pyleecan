@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from os import chdir
-
-chdir("../../..")
 
 from os.path import join
 
@@ -81,7 +78,7 @@ test_obj.input = InputCurrent(time=None)
 InputCurrent_Error_test.append(
     {"test_obj": test_obj, "exp": "ERROR: InputCurrent.time missing"}
 )
-# Wong time shape
+# Wrong time shape
 test_obj = Simulation(machine=Toyota_Prius)
 test_obj.input = InputCurrent(time=time_wrong)
 InputCurrent_Error_test.append(
@@ -185,7 +182,6 @@ idq_test.append({"Id": 0, "Iq": 2})
 idq_test.append({"Id": sqrt(2), "Iq": sqrt(2)})
 
 
-@pytest.mark.METHODS
 class Test_InCurrent_meth(object):
     """unittest for InputCurrent object methods"""
 

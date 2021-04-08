@@ -47,7 +47,7 @@ if isfile(mach_path):
     IPMSM_C.rotor.is_stator = True
 
 
-@pytest.mark.METHODS
+@pytest.mark.HoleUD
 class Test_HoleUD_meth(object):
     def test_comp_magnet_surface(self):
         """Check that the computation of the magnet surface"""

@@ -282,11 +282,13 @@ def test_save_load_dict():
 
 @pytest.mark.MagFEMM
 @pytest.mark.FEMM
+@pytest.mark.IPMSM
+@pytest.mark.SingleOP
 @pytest.mark.parametrize("type_file", ["json", "h5", "pkl"])
 def test_save_load_simu(type_file):
     """Save in hdf5 file"""
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="SM_CEFC_001", machine=IPMSM_A, struct=None)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="test_save_load_simu", machine=Toyota_Prius, struct=None)
 
     # Definition of the enforced output of the electrical module
     N0 = 3000

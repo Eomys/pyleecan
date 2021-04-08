@@ -41,11 +41,13 @@ mesh_dict = {
 
 @pytest.mark.MagElmer
 @pytest.mark.long
+@pytest.mark.IPMSM
+@pytest.mark.SingleOP
 def test_ipm_Elmer():
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     Toyota_Prius.stator.slot.H1 = 1e-3
-    simu = Simu1(name="ipm_elmer", machine=Toyota_Prius)
+    simu = Simu1(name="test_ipm_Elmer", machine=Toyota_Prius)
 
     # Definition of the enforced output of the electrical module
     # N0 = 1500
@@ -112,6 +114,8 @@ def test_ipm_Elmer():
 
 @pytest.mark.MagElmer
 @pytest.mark.long
+@pytest.mark.SPMSM
+@pytest.mark.SingleOP
 def test_spm_Elmer():
     # Import the machine from a script
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
@@ -121,7 +125,7 @@ def test_spm_Elmer():
     mesh_dict["Lamination_Rotor_Bore_Radius_Ext"] = 20
 
     # Create the Simulation
-    simu = Simu1(name="spm_elmer", machine=PMSM_A)
+    simu = Simu1(name="test_spm_Elmer", machine=PMSM_A)
 
     # Definition of a sinusoidal current
     simu.input = InputCurrent()

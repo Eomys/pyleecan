@@ -17,7 +17,7 @@ def Toyota_Prius():
     return Toyota_Prius
 
 
-@pytest.mark.METHODS
+@pytest.mark.IPMSM
 class Test_Electrical(object):
     def test_resistance(self, Toyota_Prius):
         """Check that resistance computation is correct"""

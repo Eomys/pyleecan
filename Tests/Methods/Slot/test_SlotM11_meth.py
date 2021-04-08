@@ -59,7 +59,6 @@ Mag11_test.append(
 DELTA = 1e-4
 
 
-@pytest.mark.METHODS
 class Test_Magnet_Type_11_meth(object):
     """unittest for MagnetType11 methods"""
 

@@ -46,7 +46,8 @@ on Pyleecan open-source object-oriented software"
 """
 
 
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.SCIM
 @pytest.mark.long
 def test_FEMM_sym():
     """Figure 9: Check that the FEMM can handle symmetry
@@ -213,6 +214,7 @@ def test_SlotMulti_sym():
     # opened in Gmsh
 
 
+@pytest.mark.MachineUD
 def test_MachineUD():
     """Figure 12: Check that you can plot a machine with 4 laminations"""
     machine = MachineUD()
@@ -392,6 +394,7 @@ def test_SlotMulti_stator():
     assert len(fig.axes[0].patches) == 2
 
 
+@pytest.mark.SlotUD
 def test_SlotUD():
     """Figure 14: User Defined slot "snowflake" """
 
@@ -529,7 +532,7 @@ def test_BoreFlower():
     assert len(fig.axes[0].patches) == 42
 
 
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
 @pytest.mark.long
 def test_ecc_FEMM():
     """Figure 19: transfrom_list in FEMM for eccentricities"""

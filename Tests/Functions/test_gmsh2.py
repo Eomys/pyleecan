@@ -77,7 +77,7 @@ def test_gmsh_ipm():
         path_save=join(save_path, "GSMH_model_ipm.msh"),
     )
 
-    with open("gmsh_test_ipm.json", "w") as fw:
+    with open("test_gmsh_ipm.json", "w") as fw:
         json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
     return gmsh_dict
@@ -119,7 +119,7 @@ def test_gmsh_spm():
         path_save=join(save_path, "GSMH_model_spm.msh"),
     )
 
-    with open("gmsh_test_spm.json", "w") as fw:
+    with open("test_gmsh_spm.json", "w") as fw:
         json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
     return gmsh_dict

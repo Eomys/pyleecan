@@ -17,7 +17,6 @@ import pytest
 """Test that the widget PWSlot22 behave like it should"""
 
 
-@pytest.mark.GUI
 class TestPWSlot22(object):
     """Test that the widget PWSlot22 behave like it should"""
 

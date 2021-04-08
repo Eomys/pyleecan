@@ -4,8 +4,7 @@ from pyleecan.Classes.Loss import Loss
 from pyleecan.Classes.LossModel import LossModel
 
 
-@pytest.mark.METHODS
-# @pytest.mark.DEV
+# @pytest.mark.dev
 def test_Loss_methods():
     """Test Loss methods add_model and remove_model"""
     # create objects

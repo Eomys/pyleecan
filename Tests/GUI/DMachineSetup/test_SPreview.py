@@ -50,7 +50,6 @@ IPMSM_dict = {
 load_preview_test = [SCIM_dict, IPMSM_dict]
 
 
-@pytest.mark.GUI
 class TestSPreview(object):
     @pytest.fixture
     def setup(self):

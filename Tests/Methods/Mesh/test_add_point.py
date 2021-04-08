@@ -6,7 +6,6 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
 class Test_add_node(object):
     """unittest for nodes getter methods"""
 

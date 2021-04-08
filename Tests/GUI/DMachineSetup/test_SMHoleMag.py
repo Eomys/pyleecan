@@ -25,7 +25,6 @@ from pyleecan.Classes.Material import Material
 import pytest
 
 
-@pytest.mark.GUI
 class TestSMHoleMag(object):
     """Test that the widget SMHoleMag behave like it should"""
 

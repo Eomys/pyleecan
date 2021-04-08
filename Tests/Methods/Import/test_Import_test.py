@@ -175,7 +175,6 @@ ImportMatrix_test.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_Import_test(object):
     """unittest for Import object methods"""
 

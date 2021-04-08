@@ -10,7 +10,6 @@ import numpy as np
 DELTA = 1e-10
 
 
-@pytest.mark.METHODS
 @pytest.mark.MeshSol
 # @pytest.mark.DEV
 def test_MeshMat():
