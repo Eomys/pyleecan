@@ -142,10 +142,7 @@ def test_multi_multi():
         Kmesh_fineness=0.2,
         nb_worker=nb_worker,
     )
-    simu.force = ForceMT(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-    )
+    simu.force = ForceMT(is_periodicity_a=True, is_periodicity_t=True,)
 
     # VarSpeed Definition
     varload = VarLoadCurrent(is_reuse_femm_file=True)
@@ -182,10 +179,7 @@ def test_multi_multi():
     varload.is_keep_all_output = False
 
     # Multi-simulation to change machine parameters
-    multisim = VarParam(
-        stop_if_error=True,
-        is_reuse_femm_file=False,
-    )
+    multisim = VarParam(stop_if_error=True, is_reuse_femm_file=False,)
 
     simu.var_simu = multisim
 
@@ -262,6 +256,8 @@ def test_multi_multi():
     simu.var_simu.postproc_list = [Post2, Post3, Post4]
     # Execute every simulation
     results = simu.run()
+    assert len(simu.var_simu.datakeeper_list) == 5
+    assert len(simu.var_simu.var_simu.datakeeper_list) == 8
 
 
 if __name__ == "__main__":

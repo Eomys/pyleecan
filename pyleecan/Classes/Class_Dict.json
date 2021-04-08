@@ -7875,7 +7875,8 @@
             "as_dict",
             "get_min",
             "get_max",
-            "get_N"
+            "get_N",
+            "_set_value"
         ],
         "mother": "ParamExplorer",
         "name": "ParamExplorerSet",
@@ -11788,11 +11789,7 @@
         ],
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
         "is_internal": false,
-        "methods": [
-            "get_elec_datakeeper",
-            "get_mag_datakeeper",
-            "get_force_datakeeper"
-        ],
+        "methods": [],
         "mother": "VarSimu",
         "name": "VarLoad",
         "package": "Simulation",
@@ -11812,7 +11809,6 @@
         "methods": [
             "get_input_list",
             "generate_simulation_list",
-            "gen_datakeeper_list",
             "check_param",
             "get_elec_datakeeper"
         ],
@@ -11912,7 +11908,11 @@
             "run",
             "set_reused_data",
             "check_param",
-            "generate_simulation_list"
+            "generate_simulation_list",
+            "gen_datakeeper_list",
+            "get_elec_datakeeper",
+            "get_mag_datakeeper",
+            "get_force_datakeeper"
         ],
         "mother": "",
         "name": "VarSimu",

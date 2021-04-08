@@ -34,6 +34,8 @@ def run(self):
 
     # Generate simulation list and ParamExplorerValue list
     simu_dict = self.generate_simulation_list(ref_simu)
+    # Generate default datakeeper
+    self.gen_datakeeper_list(ref_simu)
 
     # Check if one of the simulation from the list matches the reference one
     ref_simu_index = None
@@ -103,10 +105,7 @@ def run(self):
     for ii, simu in enumerate(simulation_list):
         # Log only for first simulation
         self.set_reused_data(
-            simu,
-            xoutput_ref,
-            is_log=ii == 0,
-            simu_type=self.NAME,
+            simu, xoutput_ref, is_log=ii == 0, simu_type=self.NAME,
         )
 
     # Update the postprocessing list if needed
