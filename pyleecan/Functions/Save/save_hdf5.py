@@ -6,6 +6,29 @@ from ... import __version__
 from datetime import datetime
 
 
+def save_hdf5(obj, save_path):
+    """
+    Save a pyleecan obj in hdf5 format
+
+    Parameters
+    ----------
+    obj: Pyleecan object
+        object to save
+    save_path: str
+        file path
+    """
+
+    file5 = None
+    try:
+        file5 = FileH5(save_path, "w")
+        pyleecan_dict_to_hdf5(file5, obj)
+        file5.close()
+    except Exception as err:
+        if file5:
+            file5.close()
+        raise (err)
+
+
 def pyleecan_dict_to_hdf5(file, obj):
     """
     Save a dict from a pyleecan object in the hdf5 file
@@ -26,7 +49,10 @@ def pyleecan_dict_to_hdf5(file, obj):
             variable_to_hdf5(file, "", val, key)
         # Dataset
         elif val == None:
-            file[key] = "NoneValue"
+            # None is not available in H5 => we use a string
+            file[key] = np.string_("NoneValue".encode("ISO-8859-2"))
+        elif isinstance(val, str):
+            file[key] = np.string_(val.encode("ISO-8859-2"))
         else:
             file[key] = val
 
@@ -122,26 +148,3 @@ def variable_to_hdf5(file, prefix, variable, name):
         # Create dataset
         grp = file[prefix]
         grp[name] = variable
-
-
-def save_hdf5(obj, save_path):
-    """
-    Save a pyleecan obj in hdf5 format
-
-    Parameters
-    ----------
-    obj: Pyleecan object
-        object to save
-    save_path: str
-        file path
-    """
-
-    file5 = None
-    try:
-        file5 = FileH5(save_path, "w")
-        pyleecan_dict_to_hdf5(file5, obj)
-        file5.close()
-    except Exception as err:
-        if file5:
-            file5.close()
-        raise (err)
