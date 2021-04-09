@@ -45,7 +45,7 @@ class Test_get_lam_methods(object):
 
     def test_get_lam_list_label(self):
         """Test Machine get_lam_list_label method"""
-        expected = ["Rotor_0", "Stator_0", "Stator_1", "Rotor_1"]
+        expected = ["Rotor-0", "Stator-0", "Stator-1", "Rotor-1"]
         actual = machine.get_lam_list_label()
 
         assert len(actual) == len(expected)
@@ -54,23 +54,23 @@ class Test_get_lam_methods(object):
     def test_get_lam_by_label(self):
         """Test Machine get_lam_by_label method"""
         assert machine.get_lam_by_label("Stator") == stator_0
-        assert machine.get_lam_by_label("Stator_0") == stator_0
-        assert machine.get_lam_by_label("Stator_1") == stator_1
+        assert machine.get_lam_by_label("Stator-0") == stator_0
+        assert machine.get_lam_by_label("Stator-1") == stator_1
 
         assert machine.get_lam_by_label("Rotor") == rotor_0
-        assert machine.get_lam_by_label("Rotor_0") == rotor_0
-        assert machine.get_lam_by_label("Rotor_1") == rotor_1
+        assert machine.get_lam_by_label("Rotor-0") == rotor_0
+        assert machine.get_lam_by_label("Rotor-1") == rotor_1
 
     def test_get_lam_index(self):
         """Test Machine get_lam_index method"""
         # ref. order [rotor_0, stator_0, stator_1, rotor_1]
         assert machine.get_lam_index("Stator") == 1
-        assert machine.get_lam_index("Stator_0") == 1
-        assert machine.get_lam_index("Stator_1") == 2
+        assert machine.get_lam_index("Stator-0") == 1
+        assert machine.get_lam_index("Stator-1") == 2
 
         assert machine.get_lam_index("Rotor") == 0
-        assert machine.get_lam_index("Rotor_0") == 0
-        assert machine.get_lam_index("Rotor_1") == 3
+        assert machine.get_lam_index("Rotor-0") == 0
+        assert machine.get_lam_index("Rotor-1") == 3
 
         assert machine.get_lam_index("rotor") is None  # method is case sensitive
         assert machine.get_lam_index("xyz") is None

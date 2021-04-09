@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ....Functions.labels import STATOR_LAB, ROTOR_LAB
 
 
 def get_lam_list_label(self):
@@ -23,10 +24,10 @@ def get_lam_list_label(self):
     IDr = 0
     for lam in lam_list:
         if lam.is_stator:
-            label_list.append("Stator_" + str(IDs))
+            label_list.append(STATOR_LAB + "-" + str(IDs))
             IDs += 1
         else:
-            label_list.append("Rotor_" + str(IDr))
+            label_list.append(ROTOR_LAB + "-" + str(IDr))
             IDr += 1
 
     return label_list
