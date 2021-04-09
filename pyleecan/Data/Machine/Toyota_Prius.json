@@ -3,7 +3,7 @@
     "desc": "TOYOTA Prius 2004 interior magnet (V shape) with distributed winding",
     "frame": null,
     "logger_name": "Pyleecan.Machine",
-    "name": "IPMSM_A",
+    "name": "Toyota_Prius",
     "rotor": {
         "Kf1": 0.95,
         "L1": 0.08382,
