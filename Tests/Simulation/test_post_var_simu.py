@@ -36,6 +36,8 @@ class ExamplePostMethod(PostMethod):
         return copy(self)
 
 
+@pytest.mark.IPMSM
+@pytest.mark.VarParam
 def test_post_var_simu():
     """Test the simulation.var_simu.post_list"""
 

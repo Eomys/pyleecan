@@ -14,6 +14,7 @@ class ExamplePostMethod(PostMethod):
         output.simu.machine.stator.slot.W0 += 2
 
 
+@pytest.mark.IPMSM
 def test_post_simu():
     """Test the simulation.post_list"""
 
