@@ -14,10 +14,10 @@ import pytest
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
-# @pytest.mark.DEV
-def test_EEC_FEMM_SCIM_010():
+@pytest.mark.EEC_SCIM
+@pytest.mark.SCIM
+# @pytest.mark.dev
+def test_EEC_SCIM():
     """Validation of the SCIM Electrical Equivalent Circuit with the 3kW SCIM
     from 'Berechnung elektrischer Maschinen' (ISBN: 978-3-527-40525-1)
     Note: conductor properties have been set to operation point temperature condition,
@@ -26,7 +26,7 @@ def test_EEC_FEMM_SCIM_010():
     SCIM = load(join(DATA_DIR, "Machine", "SCIM_010.json"))
 
     # Definition of the electrical simulation
-    simu = Simu1(name="test_elec_eec_scim", machine=SCIM)
+    simu = Simu1(name="test_EEC_SCIM", machine=SCIM)
 
     # electrical parameter estimation (N0, felec, ... are independent of elec. simu.)
     eec_scim = EEC_SCIM()

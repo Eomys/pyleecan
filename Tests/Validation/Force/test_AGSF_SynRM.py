@@ -24,9 +24,10 @@ from pyleecan.definitions import DATA_DIR
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
-def test_Magnetic_AGSF():
+@pytest.mark.MagFEMM
+@pytest.mark.ForceMT
+@pytest.mark.SynRM
+def test_AGSF_SynRM():
     """Validation of a SynRM machine from Syr-e r29 open source software
     https://sourceforge.net/projects/syr-e/
     Test compute air-gap surface force with Maxwell Tensor and load the results
@@ -48,7 +49,7 @@ def test_Magnetic_AGSF():
         Is[:, q] = Imax * cos(2 * pi * freq0 * time - q * 2 * pi / qs)
 
     # Definition of the main simulation
-    simu = Simu1(name="FM_SynRM_FL_001", machine=SynRM_001)
+    simu = Simu1(name="test_AGSF_SynRM", machine=SynRM_001)
     time_obj = ImportMatrixVal(value=time)
     Na_tot = 2016
     alpha_rotor = ImportGenVectLin(start=0, stop=2 * pi, num=Nt_tot, endpoint=False)
@@ -210,4 +211,4 @@ def test_Magnetic_AGSF():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_Magnetic_AGSF()
+    out = test_AGSF_SynRM()

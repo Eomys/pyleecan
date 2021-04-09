@@ -21,15 +21,16 @@ from pyleecan.definitions import DATA_DIR
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
-def test_EEC_FEMM_IPMSM():
+@pytest.mark.MagFEMM
+@pytest.mark.EEC_PMSM
+@pytest.mark.IPMSM
+def test_EEC_PMSM():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine
     Compute Torque from EEC results and compare with Yang et al, 2013
     """
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    simu = Simu1(name="EEC_FEMM_IPMSM", machine=Toyota_Prius)
+    simu = Simu1(name="test_EEC_PMSM", machine=Toyota_Prius)
 
     # Definition of the input
     simu.input = InputElec(N0=2000, Nt_tot=10, Na_tot=2048)
@@ -81,4 +82,4 @@ def test_EEC_FEMM_IPMSM():
 
 # To run it without pytest
 if __name__ == "__main__":
-    out, out2 = test_EEC_FEMM_IPMSM()
+    out, out2 = test_EEC_PMSM()

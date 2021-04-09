@@ -22,9 +22,9 @@ import pytest
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
-def test_Slotless_CEFC_003():
+@pytest.mark.MagFEMM
+@pytest.mark.ForceMT
+def test_AGSF_slotless():
     """Validation of AGSF calculation on slotless machine.
 
     Electrical machine is an academic slotless machine inspired
@@ -34,7 +34,7 @@ def test_Slotless_CEFC_003():
 
     """
     Slotless_CEFC = load(join(DATA_DIR, "Machine", "Slotless_CEFC.json"))
-    simu = Simu1(name="EM_Slotless_CEFC_002_save_mag", machine=Slotless_CEFC)
+    simu = Simu1(name="test_AGSF_slotless", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
         Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=2, N0=1200
@@ -56,7 +56,7 @@ def test_Slotless_CEFC_003():
     out.force.AGSF.plot_2D_Data(
         "angle{rad}",
         component_list=["radial"],
-        save_path=join(save_plot_path, "test_CEFC_003_plot_force_space.png"),
+        save_path=join(save_plot_path, "test_AGSF_slotless_plot_force_space.png"),
         is_show_fig=False,
         **dict_2D
     )
@@ -64,7 +64,7 @@ def test_Slotless_CEFC_003():
     out.force.AGSF.plot_2D_Data(
         "wavenumber=[0,78]",
         component_list=["radial"],
-        save_path=join(save_plot_path, "test_CEFC_003_plot_force_space_fft.png"),
+        save_path=join(save_plot_path, "test_AGSF_slotless_plot_force_space_fft.png"),
         is_show_fig=False,
         **dict_2D
     )
@@ -75,4 +75,4 @@ def test_Slotless_CEFC_003():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_Slotless_CEFC_003()
+    out = test_AGSF_slotless()

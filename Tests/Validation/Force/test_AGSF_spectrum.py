@@ -27,7 +27,7 @@ DELTA = 1e-6
 # Load machine
 Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 # Prepare simulation
-simu = Simu1(name="AC_IPMSM_plot", machine=Toyota_Prius)
+simu = Simu1(name="test_AGSF_spectrum", machine=Toyota_Prius)
 
 simu.input = InputCurrent(
     Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=4 * 2 ** 4, N0=1200
@@ -47,11 +47,14 @@ simu.force = ForceMT(
 )
 
 
-@pytest.mark.validation
-@pytest.mark.Force
+@pytest.mark.MagFEMM
+@pytest.mark.ForceMT
 @pytest.mark.long
-def test_AC_IPMSM_AGSF_spectrum_no_sym():
+@pytest.mark.IPMSM
+def test_IPMSM_AGSF_spectrum_no_sym():
     """Validation of the AGSF spectrum calculation for IPMSM machine"""
+
+    simu.name = "test_IPMSM_AGSF_spectrum_no_sym"
 
     # Run simulation
     out = simu.run()
@@ -112,14 +115,17 @@ def test_AC_IPMSM_AGSF_spectrum_no_sym():
     return out
 
 
-@pytest.mark.validation
-@pytest.mark.Force
+@pytest.mark.MagFEMM
+@pytest.mark.ForceMT
 @pytest.mark.long
-def test_AC_IPMSM_AGSF_spectrum_sym():
-    """Validation of the AGSF spectrum calculation for IPMSM machine"""
+@pytest.mark.IPMSM
+@pytest.mark.periodicity
+def test_IPMSM_AGSF_spectrum_sym():
+    """Validation of the AGSF spectrum calculation for IPMSM machine with symmetries"""
 
     # Test 2 : With sym
     simu2 = simu.copy()
+    simu2.name = "test_IPMSM_AGSF_spectrum_sym"
 
     simu2.mag.is_periodicity_a = True
     simu2.mag.is_periodicity_t = True
@@ -179,15 +185,15 @@ def test_AC_IPMSM_AGSF_spectrum_sym():
 
 if __name__ == "__main__":
 
-    out = test_AC_IPMSM_AGSF_spectrum_sym()
-    out2 = test_AC_IPMSM_AGSF_spectrum_no_sym()
+    out = test_IPMSM_AGSF_spectrum_sym()
+    out2 = test_IPMSM_AGSF_spectrum_no_sym()
 
-    out2.force.AGSF.plot_2D_Data(
+    out.force.AGSF.plot_2D_Data(
         "wavenumber",
         "freqs=160",
         data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, simu.name + "_AGSF_space_fft_freq160_no_sym.png"),
+        save_path=join(save_path, simu.name + "_space_fft_freq160.png"),
         is_show_fig=False,
         **dict_2D
     )

@@ -15,16 +15,18 @@ from pyleecan.definitions import DATA_DIR
 from Tests import save_validation_path as save_path
 
 
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.ForceMT
+@pytest.mark.SIPMSM
 @pytest.mark.long
-def test_AC_IPMSM_AGSF_transfer_compare_Rag_variation():
-    """Validation of the AGSF transfer algorithm for SPMSM benchmark machine"""
+def test_compare_Rag_variation():
+    """Validation of the AGSF transfer algorithm for SIPMSM benchmark machine"""
 
     # Load machine
     Benchmark = load(join(DATA_DIR, "Machine", "Benchmark.json"))
 
     # Prepare simulation
-    simu = Simu1(name="AC_IPMSM_plot", machine=Benchmark)
+    simu = Simu1(name="test_compare_Rag_variation_direct", machine=Benchmark)
 
     simu.input = InputCurrent(
         Id_ref=0, Iq_ref=0, Ir=None, Na_tot=5 * 2 ** 8, Nt_tot=2, N0=1200
@@ -44,6 +46,7 @@ def test_AC_IPMSM_AGSF_transfer_compare_Rag_variation():
     )
 
     simu2 = simu.copy()
+    simu2.name = "test_compare_Rag_variation_transfer"
     simu2.force.is_agsf_transfer = True
     simu2.force.max_wavenumber_transfer = 70
 
@@ -70,14 +73,18 @@ def test_AC_IPMSM_AGSF_transfer_compare_Rag_variation():
         k = K[ik]
         Rag = (Rsbo - Rrbo) * k / 100 + Rrbo
 
-        simu_list.append(simu.copy())
-        simu_list[ik].mag.Rag_enforced = Rag
+        simu_ik = simu.copy()
+        simu_ik.name += "_" + str(k)
+        simu_ik.mag.Rag_enforced = Rag
+        simu_list.append(simu_ik)
         out_list.append(simu_list[ik].run())
         legend_list.append(str(k) + "%")
         AGSF_list.append(out_list[ik].force.AGSF)
 
-        simu_list2.append(simu2.copy())
-        simu_list2[ik].force.Rsbo_enforced_transfer = Rag
+        simu2_ik = simu2.copy()
+        simu2_ik.name += "_" + str(k)
+        simu2_ik.force.Rsbo_enforced_transfer = Rag
+        simu_list2.append(simu2_ik)
         out_list2.append(simu_list2[ik].run())
         legend_list2.append(str(k) + "%")
         AGSF_list2.append(out_list2[ik].force.AGSF)
@@ -105,21 +112,24 @@ def test_AC_IPMSM_AGSF_transfer_compare_Rag_variation():
                 save_path, "test_Benchmark_AGSF_var_Rag_compare_fft_" + str(k) + ".png"
             ),
             is_show_fig=False,
-            barwidth=800,
             **dict_2D
         )
 
 
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.ForceMT
+@pytest.mark.SIPMSM
 @pytest.mark.long
-def test_AC_IPMSM_AGSF_transfer_Nmax_sensitivity():
+def test_compare_Rag_variation_Nmax_sensitivity():
     """Validation of the AGSF transfer algorithm for SPMSM benchmark machine: sensitivity to the maximum considered wavenumbers"""
 
     # Load machine
     Benchmark = load(join(DATA_DIR, "Machine", "Benchmark.json"))
 
     # Prepare simulation
-    simu = Simu1(name="AC_IPMSM_plot", machine=Benchmark)
+    simu = Simu1(
+        name="test_compare_Rag_variation_Nmax_sensitivity_direct", machine=Benchmark
+    )
 
     simu.input = InputCurrent(
         Id_ref=0, Iq_ref=0, Ir=None, Na_tot=5 * 2 ** 8, Nt_tot=2, N0=1200
@@ -139,6 +149,7 @@ def test_AC_IPMSM_AGSF_transfer_Nmax_sensitivity():
     )
 
     simu2 = simu.copy()
+    simu2.name = "test_compare_Rag_variation_Nmax_sensitivity_transfer"
     simu2.force.is_agsf_transfer = True
 
     Rsbo = 0.0480
@@ -164,9 +175,10 @@ def test_AC_IPMSM_AGSF_transfer_Nmax_sensitivity():
         k = K[ik]
 
         sim = simu2.copy()
+        sim.name += "_" + str(k)
         sim.force.max_wavenumber_transfer = k
         out_tmp = sim.run()
-        legend_list.append("Transfert (Nmax=" + str(k) + ")")
+        legend_list.append("Transfer (Nmax=" + str(k) + ")")
         AGSF_list.append(out_tmp.force.AGSF)
 
     out.force.AGSF.plot_2D_Data(
@@ -174,7 +186,9 @@ def test_AC_IPMSM_AGSF_transfer_Nmax_sensitivity():
         "time=0",
         data_list=AGSF_list,
         legend_list=legend_list,
-        save_path=join(save_path, "test_Benchmark_AGSF_var_Nmax_" + str(k) + ".png"),
+        save_path=join(
+            save_path, "test_compare_Rag_variation_Nmax_sensitivity_" + str(k) + ".png"
+        ),
         is_show_fig=False,
         **dict_2D
     )
@@ -184,6 +198,6 @@ if __name__ == "__main__":
 
     # test_AC_IPMSM_AGSF_transfer_compare_Rag_variation()
 
-    test_AC_IPMSM_AGSF_transfer_Nmax_sensitivity()
+    test_compare_Rag_variation()
 
-    test_AC_IPMSM_AGSF_transfer_compare_Rag_variation()
+    test_compare_Rag_variation_Nmax_sensitivity()
