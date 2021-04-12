@@ -5,7 +5,6 @@ import pytest
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.Interpolation import Interpolation
 from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.RefSegmentP1 import RefSegmentP1
 from pyleecan.Classes.RefTriangle3 import RefTriangle3
@@ -30,9 +29,6 @@ def test_line():
 
     c_line.interpolation = Interpolation()
     c_line.interpolation.ref_cell = RefSegmentP1()
-
-    meshsol = MeshSolution()
-    meshsol.mesh = [mesh]
 
     # This node is inside
     test_pt = np.array([0.7, 0])
@@ -76,9 +72,6 @@ def test_triangle3():
     c_tgl = mesh.cell["triangle"]
     c_tgl.interpolation = Interpolation()
     c_tgl.interpolation.ref_cell = RefTriangle3()
-
-    meshsol = MeshSolution()
-    meshsol.mesh = [mesh]
 
     # This node is inside cell 0
     test_pt = np.array([1, 0.5])

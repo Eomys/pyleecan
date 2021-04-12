@@ -1,30 +1,25 @@
 # -*- coding: utf-8 -*-
 
-from os.path import join, isdir
-from os import remove, chdir, listdir
+from os import chdir, listdir, remove
+from os.path import isdir, join
 
 import pytest
-from importlib import import_module
-import matplotlib.pyplot as plt
-from numpy import array_equal, empty, array
-from pyleecan.Generator.read_fct import read_all
-from pyleecan.Generator.ClassGenerator.init_method_generator import get_mother_attr
-from pyleecan.definitions import DOC_DIR, MAIN_DIR
-from Tests.find import find_test_value, is_type_list, is_type_dict, MissingTypeError
-from pyleecan.Generator import PYTHON_TYPE
 from cloudpickle import dumps
-from Tests import save_path
-from pyleecan.Classes._check import CheckMinError, CheckTypeError, CheckMaxError
-from pyleecan.Classes._check import NotADictError
+from numpy import array, array_equal
+from pyleecan.Classes._check import CheckMaxError, CheckMinError, CheckTypeError
 from pyleecan.Classes._frozen import FrozenClass, FrozenError
+from pyleecan.Classes.import_all import *
+from pyleecan.definitions import DOC_DIR, MAIN_DIR
+from pyleecan.Generator import PYTHON_TYPE
+from pyleecan.Generator.ClassGenerator.init_method_generator import get_mother_attr
+from pyleecan.Generator.read_fct import read_all
+from Tests import save_path
+from Tests.find import find_test_value, is_type_dict, is_type_list
 
 # Get the dict of all the classes and their information
 gen_dict = read_all(DOC_DIR)  # dict of class dict
 # Remove one list level (packages Machine, Simulation, Material...)
 class_list = list(gen_dict.values())
-
-from pyleecan.Classes.import_all import *
-
 
 """
 This test check that all the classes matches the current documentation
@@ -213,7 +208,14 @@ def test_class_as_dict(class_dict):
             + ", returned: "
             + str(result_dict[key]),
         )
-    assert d.keys() == result_dict.keys()
+    assert d.keys() == result_dict.keys(), (
+        "Wrong as_dict keys for class "
+        + class_dict["name"]
+        + " returned "
+        + str(result_dict.keys())
+        + " expected "
+        + str(d.keys())
+    )
 
 
 @pytest.mark.parametrize("class_dict", class_list)
@@ -306,6 +308,9 @@ def test_class_uncleaned_methods(class_dict):
                 + " method folder contains a file not referenced in the csv: "
                 + file_name
             )
+        assert len(set(class_dict["methods"])) == len(class_dict["methods"]), (
+            class_dict["name"] + " check for duplicate method in csv"
+        )
     # else : no method and no folder => Ok
 
 
@@ -326,9 +331,7 @@ def test_class_type_float(class_dict):
             assert test_obj.__getattribute__(prop["name"]) == value, msg
         else:
             # CheckTypeError expected
-            with pytest.raises(
-                CheckTypeError,
-            ):
+            with pytest.raises(CheckTypeError,):
                 # print(msg)
                 test_obj.__setattr__(prop["name"], value)
 
@@ -413,3 +416,7 @@ def test_class_copy(class_dict):
     test_obj = eval(class_dict["name"] + "()")
     result = test_obj.copy()
     assert test_obj == result
+
+
+if __name__ == "__main__":
+    test_class_as_dict(class_list[144])

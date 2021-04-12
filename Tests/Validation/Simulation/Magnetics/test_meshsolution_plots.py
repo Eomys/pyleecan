@@ -104,16 +104,32 @@ def test_SIPMSM_003():
         save_path=join(save_plot_path, simu.name + "_B.png"),
         is_show_fig=False,
     )
-    out.mag.meshsolution.plot_contour(
-        label="H",
-        save_path=join(save_plot_path, simu.name + "_H.png"),
-        is_show_fig=False,
-    )
 
     out.mag.meshsolution.plot_contour(
         label="H",
         group_names="stator core",
         save_path=join(save_plot_path, simu.name + "_H_stator.png"),
+        is_show_fig=False,
+    )
+
+    out.mag.meshsolution.plot_contour(
+        "time[2]",
+        label="H",
+        save_path=join(save_plot_path, simu.name + "_H_time2.png"),
+        is_show_fig=False,
+    )
+
+    out.mag.meshsolution.plot_contour(
+        "time[3]",
+        label="H",
+        save_path=join(save_plot_path, simu.name + "_H_time3.png"),
+        is_show_fig=False,
+    )
+
+    out.mag.meshsolution.plot_contour(
+        "freqs[1]",
+        label="H",
+        save_path=join(save_plot_path, simu.name + "_H_freqs1.png"),
         is_show_fig=False,
     )
 
@@ -381,4 +397,5 @@ def test_Toyota_Prius():
 if __name__ == "__main__":
 
     # out = test_Slotless_CEFC()
-    out = test_Toyota_Prius()
+    # out = test_Toyota_Prius()
+    out = test_SIPMSM_003()

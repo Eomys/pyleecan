@@ -17,4 +17,4 @@ def get_axes_list(self):
 
     """
 
-    return self.axis_name, self.axis_size
+    return self.axis_name.copy(), self.axis_size.copy()

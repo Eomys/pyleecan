@@ -3,6 +3,7 @@
 
 def get_mesh_field_pv(
     self,
+    *args,
     label=None,
     index=None,
     indices=None,
@@ -18,6 +19,8 @@ def get_mesh_field_pv(
     ----------
     self : MeshSolution
         an MeshSolution object
+    *args: list of strings
+        List of axes requested by the user, their units and values (optional)
     label : str
         a label
     index : int
@@ -56,7 +59,15 @@ def get_mesh_field_pv(
         index=index,
     )
 
+    args_list = list()
+    args_list.append("indice")
+    args_list.append("components")
+    if len(args) > 0:
+        for a in args:
+            args_list.append(a)
+
     field = self.get_field(
+        *args_list,
         label=label,
         index=index,
         indices=indices,
@@ -64,18 +75,6 @@ def get_mesh_field_pv(
         is_radial=is_radial,
         is_center=is_center,
     )
-    axes_list = solution.get_axes_list()
-
-    is_timefreq = False
-    if "time" in axes_list[0]:
-        ind = axes_list[0].index("time")
-        is_timefreq = True
-    elif "freqs" in axes_list[0]:
-        ind = axes_list[0].index("freqs")
-        is_timefreq = True
-
-    if is_timefreq:
-        field = field.take((itimefreq), axis=ind)
 
     if field_name is None:
         if label is not None:

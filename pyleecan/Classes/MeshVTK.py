@@ -7,7 +7,7 @@
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import check_var, raise_
+from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.copy import copy
@@ -58,6 +58,7 @@ except ImportError as error:
     as_dict = error
 
 
+from numpy import array, array_equal
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
@@ -171,7 +172,8 @@ class MeshVTK(Mesh):
         surf=None,
         is_vtk_surf=False,
         surf_path="",
-        surf_name="surf",
+        surf_name="",
+        node_normals=None,
         label=None,
         dimension=2,
         init_dict=None,
@@ -210,6 +212,8 @@ class MeshVTK(Mesh):
                 surf_path = init_dict["surf_path"]
             if "surf_name" in list(init_dict.keys()):
                 surf_name = init_dict["surf_name"]
+            if "node_normals" in list(init_dict.keys()):
+                node_normals = init_dict["node_normals"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
@@ -224,6 +228,7 @@ class MeshVTK(Mesh):
         self.is_vtk_surf = is_vtk_surf
         self.surf_path = surf_path
         self.surf_name = surf_name
+        self.node_normals = node_normals
         # Call Mesh init
         super(MeshVTK, self).__init__(label=label, dimension=dimension)
         # The class is frozen (in Mesh init), for now it's impossible to
@@ -244,6 +249,13 @@ class MeshVTK(Mesh):
         MeshVTK_str += "is_vtk_surf = " + str(self.is_vtk_surf) + linesep
         MeshVTK_str += 'surf_path = "' + str(self.surf_path) + '"' + linesep
         MeshVTK_str += 'surf_name = "' + str(self.surf_name) + '"' + linesep
+        MeshVTK_str += (
+            "node_normals = "
+            + linesep
+            + str(self.node_normals).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return MeshVTK_str
 
     def __eq__(self, other):
@@ -272,6 +284,8 @@ class MeshVTK(Mesh):
         if other.surf_path != self.surf_path:
             return False
         if other.surf_name != self.surf_name:
+            return False
+        if not array_equal(other.node_normals, self.node_normals):
             return False
         return True
 
@@ -310,6 +324,8 @@ class MeshVTK(Mesh):
             diff_list.append(name + ".surf_path")
         if other._surf_name != self._surf_name:
             diff_list.append(name + ".surf_name")
+        if not array_equal(other.node_normals, self.node_normals):
+            diff_list.append(name + ".node_normals")
         return diff_list
 
     def __sizeof__(self):
@@ -328,6 +344,7 @@ class MeshVTK(Mesh):
         S += getsizeof(self.is_vtk_surf)
         S += getsizeof(self.surf_path)
         S += getsizeof(self.surf_name)
+        S += getsizeof(self.node_normals)
         return S
 
     def _set_None(self):
@@ -342,6 +359,7 @@ class MeshVTK(Mesh):
         self.is_vtk_surf = None
         self.surf_path = None
         self.surf_name = None
+        self.node_normals = None
         # Set to None the properties inherited from Mesh
         super(MeshVTK, self)._set_None()
 
@@ -504,5 +522,30 @@ class MeshVTK(Mesh):
         doc=u"""Name of the outer surface file
 
         :Type: str
+        """,
+    )
+
+    def _get_node_normals(self):
+        """getter of node_normals"""
+        return self._node_normals
+
+    def _set_node_normals(self, value):
+        """setter of node_normals"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("node_normals", value, "ndarray")
+        self._node_normals = value
+
+    node_normals = property(
+        fget=_get_node_normals,
+        fset=_set_node_normals,
+        doc=u"""Array of normals to nodes (cell vertices)
+
+        :Type: ndarray
         """,
     )

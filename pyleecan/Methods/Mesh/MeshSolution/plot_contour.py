@@ -11,6 +11,7 @@ COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 def plot_contour(
     self,
+    *args,
     label=None,
     index=None,
     indices=None,
@@ -30,6 +31,8 @@ def plot_contour(
     ----------
     self : MeshSolution
         a MeshSolution object
+    *args: list of strings
+        List of axes requested by the user, their units and values (optional)
     label : str
         a label
     index : int
@@ -50,8 +53,6 @@ def plot_contour(
         a list of str corresponding to group name(s)
     save_path : str
         path to save the figure
-    itimefreq : int
-        index of the time step (or frequency) to be plotted
     is_show_fig : bool
         To call show at the end of the method
 
@@ -62,6 +63,7 @@ def plot_contour(
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
         meshsol_grp.plot_contour(
+            *args,
             label=label,
             index=index,
             indices=indices,
@@ -91,6 +93,7 @@ def plot_contour(
 
         # Get the mesh_pv and field
         mesh_pv, field, field_name = self.get_mesh_field_pv(
+            *args,
             label=label,
             index=index,
             indices=indices,
