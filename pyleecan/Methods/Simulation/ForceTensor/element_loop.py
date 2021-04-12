@@ -95,22 +95,26 @@ def element_loop(
                 np.cross(vertice[1] - vertice[0], vertice[2] - vertice[0])
             )
 
+            node_indice_set = set(())
+
             # Loop on edges
             for n in range(nb_node_per_cell):
 
                 # Get current node + next node indices (both needed since pression will be computed on edges because of Green Ostrogradski)
-                node_indice = np.where(mesh.node.indice == node_number[n])
+                node_indice = np.where(mesh.node.indice == node_number[n])[0][0]
 
                 next_node_indice = np.where(
                     mesh.node.indice == node_number[(n + 1) % nb_node_per_cell]
-                )
+                )[0][0]
+
+                node_indice_set.add(node_indice)
 
                 # Edge cooordonates
                 edge_vector = (
                     vertice[(n + 1) % nb_node_per_cell] - vertice[n % nb_node_per_cell]
                 )  # coordonées du vecteur nn+1
 
-                # Volume ratio (Green Ostrogradski), with a conventional 1/2 for a share between 2 nodes
+                # Volume ratio (Green Ostrogradski)
                 L = np.linalg.norm(edge_vector)
                 Ve0 = L / 2
 
@@ -131,8 +135,11 @@ def element_loop(
                 )  # [[1],[0]] means sum product over rows for normal (which is vertical) and over rows for tme
 
                 # Total edge force contribution, to be added to the 2 nodes that made the edge
-                fe = Ve0 * edge_force
+                fe = -Ve0 * edge_force / 2
                 f[node_indice, :, :] = f[node_indice, :, :] + fe
                 f[next_node_indice, :, :] = f[next_node_indice, :, :] + fe
+         
+
+        
 
     return f, connect

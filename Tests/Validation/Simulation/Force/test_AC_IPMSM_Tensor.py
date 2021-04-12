@@ -32,22 +32,22 @@ def test_Benchmark_Tensor():
     simu = Simu1(name="Benchmark_Tensor", machine=Benchmark)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=3, N0=1200
+        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=1, N0=1200
     )
 
     simu.elec = None
 
     simu.mag = MagFEMM(
-        type_BH_stator=1,
+        type_BH_stator=1, #0 for saturated
         type_BH_rotor=1,
-        is_periodicity_a=True,
+        is_periodicity_a=False,
         is_periodicity_t=False,
         is_get_meshsolution=True,
         # nb_worker=cpu_count(),
-        Kmesh_fineness=2,
+        Kmesh_fineness=1,
     )
     simu.force = ForceTensor(
-        is_periodicity_a=True,
+        is_periodicity_a=False,
         is_periodicity_t=False,
     )
 
@@ -57,8 +57,8 @@ def test_Benchmark_Tensor():
     out.force.meshsolution.plot_glyph(
         label="F",
         is_point_arrow=True,
-        is_show_fig=False,
-        save_path=join(save_path,"magneto_plot_glyph.png"),
+        #is_show_fig=True,
+        #save_path=join(save_path,"magneto_plot_glyph.png"),
     )
 
     return out

@@ -42,25 +42,27 @@ def comp_magnetrosctrictive_tensor(
     a22 = polynomial_coeffs[1][1]
     a24 = polynomial_coeffs[1][2]
 
-    M_norm = np.linalg.norm(M, axis=(0, 1))  # M matrices are in the first two axes
-    mu_times_Mnorm_squared = np.multiply(mu, M_norm) ** 2
+    mu_0 = 4*np.pi*1e-7
 
-    alpha1 = a10 + a12 * mu_times_Mnorm_squared + a14 * mu * mu_times_Mnorm_squared ** 2
-    alpha2 = a20 + a22 * mu_times_Mnorm_squared + a24 * mu * mu_times_Mnorm_squared ** 2
+    M_norm = np.linalg.norm(M, axis=(0, 1))  # M matrices are in the first two axes
+    mu_times_Mnorm_squared = np.multiply(mu_0, M_norm) ** 2
+
+    alpha1 = a10 + a12 * mu_times_Mnorm_squared + a14 * mu_times_Mnorm_squared ** 2
+    alpha2 = a20 + a22 * mu_times_Mnorm_squared + a24 * mu_times_Mnorm_squared ** 2
 
     magnetostric_tensor = np.zeros((2, 2, Nt_tot))
 
     # Iteration over time step
     for ti in range(Nt_tot):
-        mu_ti = mu[ti]
+        
 
         M_times_M = np.dot(M[:, :, ti], np.transpose(M[:, :, ti]))
 
         M_norm_squared = np.linalg.norm(M[:, :, ti]) ** 2
         I = np.eye(2, 2)
 
-        first_member = -alpha1[ti] * mu_ti * M_times_M
-        second_member = -alpha2[ti] * mu_ti * M_norm_squared * I
+        first_member = -alpha1[ti] * mu_0 * M_times_M
+        second_member = -alpha2[ti] * mu_0 * M_norm_squared * I
 
         magnetostric_tensor[:, :, ti] = first_member + second_member
 
