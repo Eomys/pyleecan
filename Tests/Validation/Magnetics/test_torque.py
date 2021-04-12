@@ -16,9 +16,11 @@ from pyleecan.definitions import config_dict
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
-def test_Magnetic_Phi0():
+@pytest.mark.MagFEMM
+@pytest.mark.SynRM
+@pytest.mark.VarLoadCurrent
+@pytest.mark.periodicity
+def test_torque():
     """Validation of a SynRM machine from Syr-e r29 open source software
     https://sourceforge.net/projects/syr-e/
     Test compute the Torque in FEMM as a function of Phi0
@@ -79,7 +81,7 @@ def test_Magnetic_Phi0():
     ]
 
     # Definition of the main simulation
-    simu = Simu1(name="EM_SynRM_FL_001", machine=SynRM_001)
+    simu = Simu1(name="test_torque", machine=SynRM_001)
     Na_tot = 2016
 
     varload = VarLoadCurrent(is_reuse_femm_file=True, is_torque=True)
@@ -129,7 +131,7 @@ def test_Magnetic_Phi0():
         xlabel="Current angle [°]",
         ylabel="Electrical torque [N.m]",
         title="Electrical torque vs current angle",
-        save_path=join(save_path, "test_SynRM_Syr-e.png"),
+        save_path=join(save_path, "test_torque.png"),
         is_show_fig=False,
     )
 
@@ -137,4 +139,4 @@ def test_Magnetic_Phi0():
 
 
 if __name__ == "__main__":
-    Xout = test_Magnetic_Phi0()
+    Xout = test_torque()

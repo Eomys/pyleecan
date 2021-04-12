@@ -12,9 +12,8 @@ from pyleecan.definitions import DATA_DIR
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
-def test_Slotless_CEFC_001():
+@pytest.mark.MagFEMM
+def test_FEMM_slotless():
     """Test to compute the Flux in FEMM without slots and without sliding band.
 
     Electrical machine is an academic slotless machine inspired
@@ -24,21 +23,11 @@ def test_Slotless_CEFC_001():
     """
 
     Slotless_CEFC = load(join(DATA_DIR, "Machine", "Slotless_CEFC.json"))
-    simu = Simu1(name="EM_Slotless_CEFC_001", machine=Slotless_CEFC)
+    simu = Simu1(name="test_FEMM_slotless", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
         Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=1, N0=1200
     )
-
-    simu.mag = MagFEMM(
-        type_BH_stator=0,
-        type_BH_rotor=0,
-        is_get_meshsolution=True,
-        is_periodicity_a=True,
-        is_periodicity_t=False,
-    )
-
-    out = simu.run()
 
     simu.mag = MagFEMM(
         type_BH_stator=0,
@@ -55,4 +44,4 @@ def test_Slotless_CEFC_001():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_Slotless_CEFC_001()
+    out = test_FEMM_slotless()

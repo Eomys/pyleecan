@@ -15,8 +15,8 @@ from pyleecan.definitions import DATA_DIR
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.IPMSM
 def test_FEMM_import_dxf():
     """Validation of the TOYOTA Prius electrical machine.
 
@@ -24,7 +24,7 @@ def test_FEMM_import_dxf():
     """
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    simu = Simu1(name="FEMM_import_dxf", machine=Toyota_Prius)
+    simu = Simu1(name="test_FEMM_import_dxf", machine=Toyota_Prius)
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
     simu.mag = MagFEMM(
@@ -78,7 +78,7 @@ def test_FEMM_import_dxf():
         "angle{°}",
         data_list=[out2.mag.B],
         legend_list=["Rotor from DXF", "Rotor from pyleecan"],
-        save_path=join(save_path, "FEMM_import_dxf_B.png"),
+        save_path=join(save_path, "test_FEMM_import_dxf_B.png"),
         is_show_fig=False,
         **dict_2D
     )

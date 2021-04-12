@@ -18,15 +18,16 @@ from pyleecan.definitions import DATA_DIR
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
-# @pytest.mark.DEV
+@pytest.mark.MagFEMM
+@pytest.mark.IPMSM
+@pytest.mark.parallel
+# @pytest.mark.dev
 def test_FEMM_parallelization_mag():
     """test parallelization of FEMM to get B, Tem, PhiWind """
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    simu = Simu1(name="FEMM_parallelization_mag", machine=Toyota_Prius)
+    simu = Simu1(name="test_FEMM_parallelization_mag", machine=Toyota_Prius)
 
     # Definition of a sinusoidal current
     simu.input = InputCurrent()
@@ -125,13 +126,15 @@ def test_FEMM_parallelization_mag():
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.SPMSM
+@pytest.mark.parallel
+@pytest.mark.MeshSol
 def test_FEMM_parallelization_meshsolution():
     """test parallelization of FEMM to get meshsolution"""
 
     SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
-    simu = Simu1(name="FEMM_parallelization_meshsolution", machine=SPMSM_003)
+    simu = Simu1(name="test_FEMM_parallelization_meshsolution", machine=SPMSM_003)
 
     # Definition of the enforced output of the electrical module
     N0 = 3000

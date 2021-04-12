@@ -18,10 +18,10 @@ from Tests import save_load_path, save_plot_path
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
+@pytest.mark.SPMSM
+@pytest.mark.MagFEMM
 @pytest.mark.MeshSol
-def test_SIPMSM_003():
+def test_SPMSM():
     """Validation of a polar SIPMSM with surface magnet
     Linear lamination material
 
@@ -33,7 +33,7 @@ def test_SIPMSM_003():
     and with MANATEE semi-analytical subdomain model
     """
     SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
-    simu = Simu1(name="test_SIPMSM_003", machine=SPMSM_003)
+    simu = Simu1(name="test_meshsolution_plots_SPMSM", machine=SPMSM_003)
 
     # Definition of the enforced output of the electrical module
     N0 = 3000
@@ -121,10 +121,9 @@ def test_SIPMSM_003():
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
 @pytest.mark.MeshSol
-def test_Slotless_CEFC():
+def test_slotless():
     """Validation of extracting FEMM data with MeshSolution.
 
     Electrical machine is an academic slotless machine inspired
@@ -134,7 +133,7 @@ def test_Slotless_CEFC():
 
     """
     Slotless_CEFC = load(join(DATA_DIR, "Machine", "Slotless_CEFC.json"))
-    simu = Simu1(name="test_Slotless_CEFC", machine=Slotless_CEFC)
+    simu = Simu1(name="test_meshsolution_plots_slotless", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
         Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=1, N0=1200
@@ -246,13 +245,13 @@ def test_Slotless_CEFC():
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
 @pytest.mark.MeshSol
+@pytest.mark.IPMSM
 def test_Toyota_Prius():
     """Validation of extracting FEMM data with MeshSolution with Toyota Prius electrical machine."""
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    simu = Simu1(name="test_Toyota_Prius", machine=Toyota_Prius)
+    simu = Simu1(name="test_meshsolution_plots_Toyota_Prius", machine=Toyota_Prius)
 
     # Definition of the enforced output of the electrical module
     N0 = 2504
@@ -380,5 +379,5 @@ def test_Toyota_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_Slotless_CEFC()
+    # out = test_slotless()
     out = test_Toyota_Prius()

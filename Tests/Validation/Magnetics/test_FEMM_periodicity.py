@@ -21,8 +21,9 @@ from pyleecan.definitions import DATA_DIR
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.SPMSM
+@pytest.mark.periodicity
 def test_FEMM_periodicity_time_no_periodicity_a():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
@@ -30,7 +31,7 @@ def test_FEMM_periodicity_time_no_periodicity_a():
 
     assert SPMSM_015.comp_periodicity() == (9, False, 9, True)
 
-    simu = Simu1(name="FEMM_periodicity_angle", machine=SPMSM_015)
+    simu = Simu1(name="test_FEMM_periodicity_time_no_periodicity_a", machine=SPMSM_015)
 
     # Definition of the enforced output of the electrical module
     I0_rms = 250 / sqrt(2)
@@ -165,8 +166,9 @@ def test_FEMM_periodicity_time_no_periodicity_a():
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.SPMSM
+@pytest.mark.periodicity
 def test_FEMM_periodicity_time():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
@@ -174,7 +176,7 @@ def test_FEMM_periodicity_time():
 
     assert SPMSM_015.comp_periodicity() == (9, False, 9, True)
 
-    simu = Simu1(name="FEMM_periodicity_angle", machine=SPMSM_015)
+    simu = Simu1(name="test_FEMM_periodicity_time", machine=SPMSM_015)
 
     # Definition of the enforced output of the electrical module
     I0_rms = 250 / sqrt(2)
@@ -308,8 +310,9 @@ def test_FEMM_periodicity_time():
 
 
 @pytest.mark.long
-@pytest.mark.validation
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.SPMSM
+@pytest.mark.periodicity
 def test_FEMM_periodicity_angle():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
@@ -317,7 +320,7 @@ def test_FEMM_periodicity_angle():
 
     assert SPMSM_015.comp_periodicity() == (9, False, 9, True)
 
-    simu = Simu1(name="FEMM_periodicity_angle", machine=SPMSM_015)
+    simu = Simu1(name="test_FEMM_periodicity_angle", machine=SPMSM_015)
 
     # Definition of the enforced output of the electrical module
     I0_rms = 250 / sqrt(2)

@@ -20,13 +20,13 @@ from pyleecan.definitions import DATA_DIR
 IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
 
 
-@pytest.mark.validation
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
 @pytest.mark.long
+@pytest.mark.IPMSM
 def test_FEMM_import_model():
     """Test to compute a simulation with/without reusing femm file"""
     # First simulation creating femm file
-    simu = Simu1(name="FEMM_import_model", machine=IPMSM_xxx)
+    simu = Simu1(name="test_FEMM_import_model", machine=IPMSM_xxx)
 
     # Initialization of the simulation starting point
     simu.input = InputCurrent()
@@ -75,7 +75,7 @@ def test_FEMM_import_model():
         "angle{°}",
         data_list=[out2.mag.B],
         legend_list=["Creating .fem", "Importing .fem"],
-        save_path=join(save_path, "FEMM_import_model_B.png"),
+        save_path=join(save_path, "test_FEMM_import_model_B.png"),
         is_show_fig=False,
         **dict_2D
     )
