@@ -48,7 +48,7 @@ def test_SolutionMat():
 
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
-def test_SolutionVector(self):
+def test_SolutionVector():
     DELTA = 1e-10
 
     Indices_Cell = Data1D(name="indice", values=[0, 1, 2, 4], is_components=True)
@@ -101,7 +101,7 @@ def test_SolutionVector(self):
 
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
-def test_SolutionData(self):
+def test_SolutionData():
     DELTA = 1e-10
 
     Indices_Cell = Data1D(name="indice", values=[0, 1, 2, 4], is_components=True)
@@ -140,4 +140,6 @@ def test_SolutionData(self):
 
 if __name__ == "__main__":
     test_SolutionMat()
+    test_SolutionData()
+    test_SolutionVector()
     #test_plot_contour_2group()
