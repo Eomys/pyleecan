@@ -23,14 +23,17 @@ from pyleecan.Classes.DataKeeper import DataKeeper
 from Tests import save_validation_path as save_path
 
 
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.ForceMT
 @pytest.mark.long
-def test_EM_FEMM_IPMSM_varload():
+@pytest.mark.IPMSM
+@pytest.mark.VarLoadCurrent
+def test_varload():
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     # Initialization of the Simulation
-    simu = Simu1(name="EM_FEMM_IPMSM_varload", machine=Toyota_Prius)
+    simu = Simu1(name="test_varload", machine=Toyota_Prius)
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
     simu.mag = MagFEMM(
@@ -157,4 +160,4 @@ def test_EM_FEMM_IPMSM_varload():
 
 
 if __name__ == "__main__":
-    Xout = test_EM_FEMM_IPMSM_varload()
+    Xout = test_varload()

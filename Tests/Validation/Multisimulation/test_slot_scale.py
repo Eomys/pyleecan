@@ -34,11 +34,13 @@ from pyleecan.definitions import DATA_DIR
 import pytest
 
 
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
 @pytest.mark.long
+@pytest.mark.IPMSM
+@pytest.mark.VarParam
 def test_slot_scale():
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    ref_simu = Simu1(name="E_IPMSM_FL_002", machine=Toyota_Prius)
+    ref_simu = Simu1(name="test_slot_scale", machine=Toyota_Prius)
 
     # Definition of the enforced output of the electrical module
     Is_mat = zeros((1, 3))

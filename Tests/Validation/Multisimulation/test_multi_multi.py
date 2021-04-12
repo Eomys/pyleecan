@@ -97,8 +97,12 @@ Iq_MTPA = [
 ]
 
 
-@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.ForceMT
 @pytest.mark.long
+@pytest.mark.IPMSM
+@pytest.mark.VarLoadCurrent
+@pytest.mark.VarParam
 def test_multi_multi():
     """Run a multi-simulation of multi-simulation"""
 
@@ -114,9 +118,9 @@ def test_multi_multi():
     # Reference simulation definition
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     simu = Simu1(
-        name="multi_multi",
+        name="test_multi_multi",
         machine=Toyota_Prius,
-        path_result=join(save_path, "multi_multi"),
+        path_result=join(save_path, "test_multi_multi"),
         layer_log_warn=2,
     )
 

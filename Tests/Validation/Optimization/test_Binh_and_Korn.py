@@ -32,9 +32,9 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR, TEST_DIR
 
 
-@pytest.mark.validation
 @pytest.mark.long
-@pytest.mark.DEAP
+@pytest.mark.SCIM
+@pytest.mark.MagFEMM
 def test_Binh_and_Korn():
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     # Defining reference Output
@@ -57,7 +57,7 @@ def test_Binh_and_Korn():
     Na_tot = 64
 
     # Definition of the simulation
-    simu = Simu1(name="Test_machine", machine=SCIM_001)
+    simu = Simu1(name="test_Binh_and_Korn", machine=SCIM_001)
 
     simu.input = InputCurrent(
         Is=Is,

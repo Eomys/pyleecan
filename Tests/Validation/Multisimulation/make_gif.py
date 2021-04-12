@@ -1,5 +1,6 @@
 import imageio
 from os import listdir
+from os.path import join
 
 
 def make_gif(xoutput):

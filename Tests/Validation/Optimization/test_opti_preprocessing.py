@@ -26,14 +26,15 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR, TEST_DIR
 
 
-@pytest.mark.DEAP
+@pytest.mark.SCIM
+@pytest.mark.MagFEMM
 def test_opti_preprocessing():
     # Defining reference Output
     # Definition of the enforced output of the electrical module
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
     # Definition of the simulation
-    simu = Simu1(name="Test_machine", machine=SCIM_001)
+    simu = Simu1(name="test_opti_preprocessing", machine=SCIM_001)
 
     # Design variable
     my_vars = [
