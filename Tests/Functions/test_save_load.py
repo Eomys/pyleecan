@@ -147,7 +147,7 @@ def test_save_load_folder_path():
     assert isfile(join(loc_save_path, "Material.json"))
     assert isfile(join(loc_save_path, "M400-50A.json"))
     assert isfile(join(loc_save_path, "Toyota_Prius.json"))
-    assert isfile(join(loc_save_path, "SM_CEFC_001.json"))
+    assert isfile(join(loc_save_path, "test_save_load_folder_path.json"))
     test_obj2 = load(loc_save_path)
     assert test_obj == test_obj2
     assert callable(test_obj.simu.postproc_list[0]._run_func)
