@@ -85,6 +85,7 @@ class TestDMachineSetup(object):
 
         self.app.quit()
 
+    @pytest.mark.skip
     @pytest.mark.parametrize("test_dict", load_test)
     def test_load(self, setup, test_dict):
         """Check that you can load a machine"""
