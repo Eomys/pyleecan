@@ -19,10 +19,25 @@ def get_normals(self, indices=None, loc="center"):
         Normals coordinates
     """
 
-    surf = self.get_surf(indices=indices)
+    # Get surfaces
+    surf = self.get_surf()
 
     if loc == "center":
-        return surf.cell_normals
+
+        normals = surf.cell_normals
+
     elif loc == "point":
-        surf.compute_normals(cell_normals=False, point_normals=True, inplace=True)
-        return surf["Normals"]
+        if self.node_normals is None:
+            self.surf.compute_normals(
+                cell_normals=False, point_normals=True, inplace=True
+            )
+
+            self.node_normals = self.surf["Normals"]
+
+        normals = self.node_normals
+
+    if indices is None:
+        return normals
+
+    else:
+        return normals[indices, :]

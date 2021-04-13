@@ -3,16 +3,28 @@ from numpy import bool_, int32, int64, string_, array
 from cloudpickle import loads
 
 
-def is_int(inputString):
-    """Check if a string is an int"""
-    # first check if string contains numbers
-    if any(char.isdigit() for char in inputString):
-        try:
-            int(inputString)
-            return True
-        except:
-            pass
-    return False
+def load_hdf5(file_path):
+    """
+    Load pyleecan object from h5 file
+
+    Parameters
+    ----------
+
+    file_path: str
+        file path
+
+    Returns
+    -------
+
+    file_path: str
+    obj_dict: dict
+        dictionnary to instanciate Pyleecan obj
+    """
+    with File(file_path, "r") as file:
+        # file is a group
+        obj_dict = construct_dict_from_group(file)
+
+    return file_path, obj_dict
 
 
 def construct_dict_from_group(group):
@@ -43,8 +55,6 @@ def construct_dict_from_group(group):
                 value = dataset[()]
                 if "array_list" in dataset.attrs.keys():  # List saved as an array
                     value = value.tolist()
-                elif value == "NoneValue":  # Handle None values
-                    value = None
                 elif isinstance(value, bool_):  # bool
                     value = bool(value)
                 elif isinstance(value, int64):  # float
@@ -53,6 +63,9 @@ def construct_dict_from_group(group):
                     value = int(value)
                 elif isinstance(value, string_):  # String
                     value = value.decode("ISO-8859-2")
+                    # None is not available in H5 => we use a string
+                    if value == "NoneValue":
+                        value = None
 
                 list_.append(value)
         return list_
@@ -75,31 +88,24 @@ def construct_dict_from_group(group):
                     value = bool(value)
                 elif isinstance(value, int64):  # float
                     value = float(value)
-                elif isinstance(value, string_):  # String
+                elif isinstance(value, int32):  # int
+                    value = int(value)
+                elif isinstance(value, (string_, bytes)):  # String
                     value = value.decode("ISO-8859-2")
+                    # None is not available in H5 => we use a string
+                    if value == "NoneValue":
+                        value = None
                 dict_[key] = value
         return dict_
 
 
-def load_hdf5(file_path):
-    """
-    Load pyleecan object from h5 file
-
-    Parameters
-    ----------
-
-    file_path: str
-        file path
-
-    Returns
-    -------
-
-    file_path: str
-    obj_dict: dict
-        dictionnary to instanciate Pyleecan obj
-    """
-    with File(file_path, "r") as file:
-        # file is a group
-        obj_dict = construct_dict_from_group(file)
-
-    return file_path, obj_dict
+def is_int(inputString):
+    """Check if a string is an int"""
+    # first check if string contains numbers
+    if any(char.isdigit() for char in inputString):
+        try:
+            int(inputString)
+            return True
+        except:
+            pass
+    return False

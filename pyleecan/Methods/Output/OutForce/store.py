@@ -30,7 +30,7 @@ def store(self, out_dict, axes_dict):
     if "AGSF_r" in out_dict:
         self.AGSF.components["radial"] = DataTime(
             name="Radial air gap surface force",
-            unit="N/m²",
+            unit="N/m^2",
             symbol="AGSF_r",
             axes=axis_list,
             values=out_dict.pop("AGSF_r"),
@@ -39,7 +39,7 @@ def store(self, out_dict, axes_dict):
     if "AGSF_t" in out_dict:
         self.AGSF.components["tangential"] = DataTime(
             name="Tangential air gap surface force",
-            unit="N/m²",
+            unit="N/m^2",
             symbol="AGSF_t",
             axes=axis_list,
             values=out_dict.pop("AGSF_t"),
@@ -48,7 +48,7 @@ def store(self, out_dict, axes_dict):
     if "AGSF_z" in out_dict:
         self.AGSF.components["axial"] = DataTime(
             name="Axial air gap surface force",
-            unit="N/m²",
+            unit="N/m^2",
             symbol="AGSF_z",
             axes=axis_list,
             values=out_dict.pop("AGSF_z"),

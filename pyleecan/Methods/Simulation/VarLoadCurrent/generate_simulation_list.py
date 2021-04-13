@@ -1,7 +1,6 @@
 import itertools
 import numpy as np
 from ....Classes.ParamExplorerSet import ParamExplorerSet
-from ....Functions.Simulation.VarLoad.setter_simu import setter_simu
 
 
 def generate_simulation_list(self, ref_simu=None):
@@ -34,8 +33,7 @@ def generate_simulation_list(self, ref_simu=None):
         new_simu = ref_simu.copy(keep_function=True)
 
         # Edit simulation
-        # setter current
-        setter_simu(new_simu, input_obj)
+        new_simu.input = input_obj
         # Add simulation to the list
         multisim_dict["simulation_list"].append(new_simu)
 
@@ -45,9 +43,10 @@ def generate_simulation_list(self, ref_simu=None):
     multisim_dict["paramexplorer_list"].append(
         ParamExplorerSet(
             name="InputCurrent",
-            symbol="",
-            unit="",
-            setter=setter_simu,
+            symbol="In",
+            unit="-",
+            setter="simu.input",
+            getter="simu.input",
             value=list_input,
         )
     )
