@@ -20,9 +20,13 @@ from Tests import save_validation_path as save_path
 DELTA = 1e-6
 
 
-@pytest.mark.validation
-@pytest.mark.Force
+@pytest.mark.SIPMSM
+@pytest.mark.periodicity
+@pytest.mark.ForceMT
 @pytest.mark.long
+@pytest.mark.ForceTensor
+@pytest.mark.MeshSol
+@pytest.mark.SingleOP
 def test_Benchmark_Tensor():
     """Validation of the AGSF spectrum calculation for IPMSM machine"""
 

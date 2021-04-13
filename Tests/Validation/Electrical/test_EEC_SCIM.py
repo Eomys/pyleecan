@@ -16,6 +16,8 @@ import pytest
 @pytest.mark.long
 @pytest.mark.EEC_SCIM
 @pytest.mark.SCIM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 # @pytest.mark.dev
 def test_EEC_SCIM():
     """Validation of the SCIM Electrical Equivalent Circuit with the 3kW SCIM

@@ -17,6 +17,8 @@ from pyleecan.definitions import DATA_DIR
 
 @pytest.mark.MagFEMM
 @pytest.mark.IPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_compare():
     """Test the compare method"""
     # Create reference object

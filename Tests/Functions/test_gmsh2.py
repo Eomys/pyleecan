@@ -45,6 +45,7 @@ mesh_dict = {
 @pytest.mark.long_5s
 @pytest.mark.GMSH
 @pytest.mark.IPMSM
+@pytest.mark.SingleOP
 def test_gmsh_ipm():
     """Check generation of the 2D mesh with gmsh"""
     if isinstance(draw_GMSH, ImportError):
@@ -86,6 +87,7 @@ def test_gmsh_ipm():
 @pytest.mark.long_5s
 @pytest.mark.GMSH
 @pytest.mark.SPMSM
+@pytest.mark.SingleOP
 def test_gmsh_spm():
     """Check generation of the 2D mesh with gmsh"""
     if isinstance(draw_GMSH, ImportError):

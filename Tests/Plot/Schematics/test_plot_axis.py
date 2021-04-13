@@ -172,6 +172,8 @@ def test_axis_LamHole(CURVE_COLORS):
 @pytest.mark.MagFEMM
 @pytest.mark.SCIM
 @pytest.mark.long
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_axis_LamWind(CURVE_COLORS):
     """Axis convention for LamWind"""
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))

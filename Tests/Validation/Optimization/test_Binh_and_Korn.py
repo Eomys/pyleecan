@@ -35,6 +35,8 @@ from pyleecan.definitions import DATA_DIR, TEST_DIR
 @pytest.mark.long
 @pytest.mark.SCIM
 @pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_Binh_and_Korn():
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     # Defining reference Output

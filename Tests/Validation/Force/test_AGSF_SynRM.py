@@ -27,6 +27,8 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.MagFEMM
 @pytest.mark.ForceMT
 @pytest.mark.SynRM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_AGSF_SynRM():
     """Validation of a SynRM machine from Syr-e r29 open source software
     https://sourceforge.net/projects/syr-e/

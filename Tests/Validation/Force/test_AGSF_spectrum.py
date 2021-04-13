@@ -51,6 +51,8 @@ simu.force = ForceMT(
 @pytest.mark.ForceMT
 @pytest.mark.long
 @pytest.mark.IPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_IPMSM_AGSF_spectrum_no_sym():
     """Validation of the AGSF spectrum calculation for IPMSM machine"""
 
@@ -120,6 +122,7 @@ def test_IPMSM_AGSF_spectrum_no_sym():
 @pytest.mark.long
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_IPMSM_AGSF_spectrum_sym():
     """Validation of the AGSF spectrum calculation for IPMSM machine with symmetries"""
 

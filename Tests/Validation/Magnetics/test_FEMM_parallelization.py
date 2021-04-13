@@ -21,6 +21,8 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.MagFEMM
 @pytest.mark.IPMSM
 @pytest.mark.parallel
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 # @pytest.mark.dev
 def test_FEMM_parallelization_mag():
     """test parallelization of FEMM to get B, Tem, PhiWind """
@@ -130,6 +132,8 @@ def test_FEMM_parallelization_mag():
 @pytest.mark.SPMSM
 @pytest.mark.parallel
 @pytest.mark.MeshSol
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_FEMM_parallelization_meshsolution():
     """test parallelization of FEMM to get meshsolution"""
 

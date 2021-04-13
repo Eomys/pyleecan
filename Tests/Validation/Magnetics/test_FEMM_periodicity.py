@@ -24,6 +24,7 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_FEMM_periodicity_time_no_periodicity_a():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
@@ -169,6 +170,7 @@ def test_FEMM_periodicity_time_no_periodicity_a():
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_FEMM_periodicity_time():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
@@ -313,6 +315,7 @@ def test_FEMM_periodicity_time():
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_FEMM_periodicity_angle():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 

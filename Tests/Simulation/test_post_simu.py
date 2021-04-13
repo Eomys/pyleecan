@@ -15,6 +15,7 @@ class ExamplePostMethod(PostMethod):
 
 
 @pytest.mark.IPMSM
+@pytest.mark.SingleOP
 def test_post_simu():
     """Test the simulation.post_list"""
 

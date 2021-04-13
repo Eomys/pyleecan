@@ -17,10 +17,12 @@ from Tests import save_validation_path as save_path
 DELTA = 1e-6
 
 
-@pytest.mark.validation
-@pytest.mark.Force
-@pytest.mark.FEMM
+@pytest.mark.SIPMSM
+@pytest.mark.ForceMT
+@pytest.mark.MagFEMM
 @pytest.mark.long
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_Benchmark_AGSF_Rag():
     """Comparison of AGSF at different radius for the 12s10p benchmark
     machine from publication:

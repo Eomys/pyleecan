@@ -13,6 +13,7 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.IPMSM
 @pytest.mark.MagFEMM
 @pytest.mark.SingleOP
+@pytest.mark.periodicity
 def test_FEMM_clean():
     """test clean of MagFEMM """
 

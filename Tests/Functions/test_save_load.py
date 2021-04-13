@@ -98,6 +98,8 @@ def test_save_load_machine():
 
 @pytest.mark.IPMSM
 @pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_save_load_folder_path():
     """Save with a folder path"""
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
@@ -284,6 +286,7 @@ def test_save_load_dict():
 @pytest.mark.FEMM
 @pytest.mark.IPMSM
 @pytest.mark.SingleOP
+@pytest.mark.periodicity
 @pytest.mark.parametrize("type_file", ["json", "h5", "pkl"])
 def test_save_load_simu(type_file):
     """Save in hdf5 file"""

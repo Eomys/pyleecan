@@ -103,6 +103,7 @@ Iq_MTPA = [
 @pytest.mark.IPMSM
 @pytest.mark.VarLoadCurrent
 @pytest.mark.VarParam
+@pytest.mark.periodicity
 def test_multi_multi():
     """Run a multi-simulation of multi-simulation"""
 

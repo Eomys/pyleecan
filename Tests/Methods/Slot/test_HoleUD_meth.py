@@ -114,6 +114,9 @@ class Test_HoleUD_meth(object):
 
     @pytest.mark.long
     @pytest.mark.MagFEMM
+    @pytest.mark.periodicity
+    @pytest.mark.IPMSM
+    @pytest.mark.SingleOP
     def test_convert_UD(self):
         """Check that the simulation is the same with the usual hole and the UD equivalent"""
         Toyota_Prius = load(mach_path)

@@ -22,6 +22,9 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.long
 @pytest.mark.FEMM
 @pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SPMSM
+@pytest.mark.SingleOP
 # @pytest.mark.dev
 def test_FEMM_Loss():
     """Validation of the Loss implementation using MagFEMM and compare to

@@ -49,6 +49,8 @@ on Pyleecan open-source object-oriented software"
 @pytest.mark.MagFEMM
 @pytest.mark.SCIM
 @pytest.mark.long
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_FEMM_sym():
     """Figure 9: Check that the FEMM can handle symmetry
     From pyleecan/Tests/Validation/Simulation/test_EM_SCIM_NL_006.py
@@ -532,8 +534,11 @@ def test_BoreFlower():
     assert len(fig.axes[0].patches) == 42
 
 
+@pytest.mark.SPMSM
 @pytest.mark.MagFEMM
 @pytest.mark.long
+@pytest.mark.SingleOP
+@pytest.mark.periodicity
 def test_ecc_FEMM():
     """Figure 19: transfrom_list in FEMM for eccentricities"""
     SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
@@ -601,7 +606,9 @@ def test_ecc_FEMM():
 
 @pytest.mark.skip
 @pytest.mark.long
-@pytest.mark.DEAP
+@pytest.mark.SPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_Optimization_problem():
     """
     Figure19: Machine topology before optimization

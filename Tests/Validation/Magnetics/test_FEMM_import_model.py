@@ -23,6 +23,8 @@ IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
 @pytest.mark.MagFEMM
 @pytest.mark.long
 @pytest.mark.IPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_FEMM_import_model():
     """Test to compute a simulation with/without reusing femm file"""
     # First simulation creating femm file

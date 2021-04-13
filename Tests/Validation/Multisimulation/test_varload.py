@@ -28,6 +28,7 @@ from Tests import save_validation_path as save_path
 @pytest.mark.long
 @pytest.mark.IPMSM
 @pytest.mark.VarLoadCurrent
+@pytest.mark.periodicity
 def test_varload():
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))

@@ -24,6 +24,7 @@ from Tests import TEST_DATA_DIR
 @pytest.mark.MagFEMM
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_IPMSM_xxx():
     """Test compute the Flux in FEMM of machine IPMSM_xxx, with and without symmetry"""
     IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
@@ -86,6 +87,7 @@ def test_IPMSM_xxx():
 @pytest.mark.MagFEMM
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_Toyota_Prius():
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication
@@ -154,6 +156,8 @@ def test_Toyota_Prius():
 @pytest.mark.long
 @pytest.mark.MagFEMM
 @pytest.mark.SCIM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_SCIM():
     """Validation of the FEMM model of a polar SCIM machine
     Only one time step
@@ -249,6 +253,7 @@ def test_SCIM():
 @pytest.mark.MagFEMM
 @pytest.mark.SIPMSM
 @pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_SIPMSM():
     """Validation of a polar SIPMSM with inset magnet
     Armature load (magnet field canceled by is_mmfr=False)
@@ -328,6 +333,7 @@ def test_SIPMSM():
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_SPMSM_load():
     """Validation of a polar SPMSM with surface magnet
     Linear lamination material
@@ -425,6 +431,7 @@ def test_SPMSM_load():
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_SPMSM_noload():
     """Validation of outer rotor SPMSM
     Open circuit (Null Stator currents)

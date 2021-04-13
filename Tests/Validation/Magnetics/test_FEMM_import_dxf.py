@@ -17,6 +17,8 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.long
 @pytest.mark.MagFEMM
 @pytest.mark.IPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_FEMM_import_dxf():
     """Validation of the TOYOTA Prius electrical machine.
 

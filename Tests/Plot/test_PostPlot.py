@@ -23,6 +23,8 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.IPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_PostPlot():
     """Validation of the PostPlot class to plot airgap flux automatically as postprocessing at the end of the simulation"""
 

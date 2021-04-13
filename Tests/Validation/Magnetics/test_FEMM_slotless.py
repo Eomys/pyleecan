@@ -13,6 +13,9 @@ from pyleecan.definitions import DATA_DIR
 
 @pytest.mark.long
 @pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.IPMSM
+@pytest.mark.SingleOP
 def test_FEMM_slotless():
     """Test to compute the Flux in FEMM without slots and without sliding band.
 

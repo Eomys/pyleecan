@@ -19,6 +19,8 @@ from Tests import save_validation_path as save_path
 @pytest.mark.ForceMT
 @pytest.mark.SIPMSM
 @pytest.mark.long
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_compare_Rag_variation():
     """Validation of the AGSF transfer algorithm for SIPMSM benchmark machine"""
 
@@ -120,6 +122,8 @@ def test_compare_Rag_variation():
 @pytest.mark.ForceMT
 @pytest.mark.SIPMSM
 @pytest.mark.long
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_compare_Rag_variation_Nmax_sensitivity():
     """Validation of the AGSF transfer algorithm for SPMSM benchmark machine: sensitivity to the maximum considered wavenumbers"""
 

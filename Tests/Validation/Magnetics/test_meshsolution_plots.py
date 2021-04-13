@@ -21,6 +21,8 @@ from Tests import save_load_path, save_plot_path
 @pytest.mark.SPMSM
 @pytest.mark.MagFEMM
 @pytest.mark.MeshSol
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_SPMSM():
     """Validation of a polar SIPMSM with surface magnet
     Linear lamination material
@@ -139,6 +141,9 @@ def test_SPMSM():
 @pytest.mark.long
 @pytest.mark.MagFEMM
 @pytest.mark.MeshSol
+@pytest.mark.periodicity
+@pytest.mark.IPMSM
+@pytest.mark.SingleOP
 def test_slotless():
     """Validation of extracting FEMM data with MeshSolution.
 
@@ -264,6 +269,8 @@ def test_slotless():
 @pytest.mark.MagFEMM
 @pytest.mark.MeshSol
 @pytest.mark.IPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_Toyota_Prius():
     """Validation of extracting FEMM data with MeshSolution with Toyota Prius electrical machine."""
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))

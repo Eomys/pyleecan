@@ -18,6 +18,8 @@ from Tests import save_validation_path as save_path
 @pytest.mark.MagFEMM
 @pytest.mark.ForceMT
 @pytest.mark.SIPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_compare_Kmesh():
     """Validation of the AGSF transfer algorithm for SPMSM benchmark machine: sensitivity to the maximum considered wavenumbers"""
 

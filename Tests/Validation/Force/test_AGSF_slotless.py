@@ -24,6 +24,9 @@ import pytest
 @pytest.mark.long
 @pytest.mark.MagFEMM
 @pytest.mark.ForceMT
+@pytest.mark.periodicity
+@pytest.mark.IPMSM
+@pytest.mark.SingleOP
 def test_AGSF_slotless():
     """Validation of AGSF calculation on slotless machine.
 

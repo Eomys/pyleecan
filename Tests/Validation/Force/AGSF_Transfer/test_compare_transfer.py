@@ -22,6 +22,7 @@ DELTA = 1e-6
 @pytest.mark.ForceMT
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_IPMSM():
     """Validation of the AGSF transfer calculation for IPMSM machine"""
 
@@ -101,6 +102,8 @@ def test_IPMSM():
 @pytest.mark.ForceMT
 @pytest.mark.SIPMSM
 @pytest.mark.parallel
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_Benchmark():
     """Validation test using AGSF transfer for the 12s10p benchmark
     machine from publication:

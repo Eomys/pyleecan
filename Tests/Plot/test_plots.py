@@ -59,7 +59,8 @@ def import_data():
     data["r_max"] = 78
     return data
 
-
+@pytest.mark.SingleOP
+@pytest.mark.SCIM
 class Test_plots(object):
     @pytest.mark.long_5s
     def test_default_proj_Br_time_space(self, import_data):

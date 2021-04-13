@@ -28,6 +28,7 @@ from pyleecan.definitions import DATA_DIR, TEST_DIR
 
 @pytest.mark.SCIM
 @pytest.mark.MagFEMM
+@pytest.mark.SingleOP
 def test_opti_preprocessing():
     # Defining reference Output
     # Definition of the enforced output of the electrical module
