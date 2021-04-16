@@ -21,8 +21,8 @@ from Tests import TEST_DIR
     Csv file with columns for differents types of markers.
 """
 
-df = pd.read_excel(join(TEST_DIR, "excel_report_post_process.xlsx"))
-df.to_csv(join(TEST_DIR, "csv_report_post_process.csv")) 
+df = pd.read_excel(join(TEST_DIR, "report.xlsx"))
+df.to_csv(join(TEST_DIR, "report.csv")) 
 
 # Additionnal tolerance time in seconds for the time marker verification
 DELTA_TIME = 1
@@ -50,9 +50,9 @@ dict_time = {
 if __name__ == "__main__":
 
     nb_row = 0
-    with open(join(TEST_DIR, "csv_report_post_process.csv"), "r", encoding="utf8") as source:
+    with open(join(TEST_DIR, "report.csv"), "r", encoding="utf8") as source:
         reader = csv.reader(source)     # Return n independent iterators from a single iterable.
-        with open(join(TEST_DIR, "test_report.csv"), "w", newline="", encoding="utf8") as result:
+        with open(join(TEST_DIR, "converted_report.csv"), "w", newline="", encoding="utf8") as result:
             writer = csv.writer(result, delimiter=';')
             for row in reader:
 
