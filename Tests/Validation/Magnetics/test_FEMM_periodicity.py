@@ -20,7 +20,8 @@ from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
@@ -167,7 +168,7 @@ def test_FEMM_periodicity_time_no_periodicity_a():
     return out, out2
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
@@ -313,7 +314,8 @@ def test_FEMM_periodicity_time():
     return out, out2
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.periodicity

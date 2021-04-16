@@ -18,7 +18,8 @@ from Tests import save_validation_path as save_path
 @pytest.mark.MagFEMM
 @pytest.mark.ForceMT
 @pytest.mark.SIPMSM
-@pytest.mark.long
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_compare_Rag_variation():
@@ -121,7 +122,8 @@ def test_compare_Rag_variation():
 @pytest.mark.MagFEMM
 @pytest.mark.ForceMT
 @pytest.mark.SIPMSM
-@pytest.mark.long
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_compare_Rag_variation_Nmax_sensitivity():

@@ -17,7 +17,7 @@ from pyleecan.Functions.load import load
 from Tests import save_load_path, save_plot_path
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.SPMSM
 @pytest.mark.MagFEMM
 @pytest.mark.MeshSol
@@ -138,7 +138,7 @@ def test_SPMSM():
     return out
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.MeshSol
 @pytest.mark.periodicity
@@ -265,7 +265,7 @@ def test_slotless():
     )
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.MeshSol
 @pytest.mark.IPMSM

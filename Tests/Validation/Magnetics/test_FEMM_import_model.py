@@ -21,7 +21,6 @@ IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
 
 
 @pytest.mark.MagFEMM
-@pytest.mark.long
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP

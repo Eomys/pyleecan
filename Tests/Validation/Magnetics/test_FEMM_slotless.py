@@ -11,7 +11,7 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.periodicity
 @pytest.mark.IPMSM

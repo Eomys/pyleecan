@@ -40,7 +40,7 @@ mesh_dict = {
 
 
 @pytest.mark.MagElmer
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.IPMSM
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
@@ -114,7 +114,7 @@ def test_ipm_Elmer():
 
 
 @pytest.mark.MagElmer
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.SPMSM
 @pytest.mark.SingleOP
 @pytest.mark.periodicity

@@ -43,7 +43,7 @@ mesh_dict_1 = {
 }
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.StructElmer
 @pytest.mark.IPMSM
 @pytest.mark.SingleOP

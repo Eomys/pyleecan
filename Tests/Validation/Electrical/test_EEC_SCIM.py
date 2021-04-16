@@ -13,7 +13,7 @@ from numpy import angle, cos
 import pytest
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.EEC_SCIM
 @pytest.mark.SCIM
 @pytest.mark.periodicity

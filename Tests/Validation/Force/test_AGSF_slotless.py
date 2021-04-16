@@ -21,7 +21,7 @@ import numpy as np
 import pytest
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.ForceMT
 @pytest.mark.periodicity

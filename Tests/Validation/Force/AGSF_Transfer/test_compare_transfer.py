@@ -17,7 +17,7 @@ from Tests import save_validation_path as save_path
 DELTA = 1e-6
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.ForceMT
 @pytest.mark.IPMSM
@@ -97,7 +97,7 @@ def test_IPMSM():
     return out, out2
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.ForceMT
 @pytest.mark.SIPMSM

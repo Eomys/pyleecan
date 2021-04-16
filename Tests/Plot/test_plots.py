@@ -59,10 +59,11 @@ def import_data():
     data["r_max"] = 78
     return data
 
-@pytest.mark.SingleOP
-@pytest.mark.SCIM
+
 class Test_plots(object):
     @pytest.mark.long_5s
+    @pytest.mark.SingleOP
+    @pytest.mark.SCIM
     def test_default_proj_Br_time_space(self, import_data):
         SCIM_006 = import_data["SCIM_006"]
         simu = import_data["simu"]
@@ -281,6 +282,8 @@ class Test_plots(object):
             **dict_2D,
         )
 
+    @pytest.mark.SingleOP
+    @pytest.mark.SCIM
     def test_default_proj_Br_cfft2(self, import_data):
         SCIM_006 = import_data["SCIM_006"]
         simu = import_data["simu"]
@@ -316,6 +319,8 @@ class Test_plots(object):
             **dict_3D,
         )
 
+    @pytest.mark.SingleOP
+    @pytest.mark.SCIM
     def test_default_proj_surf(self, import_data):
         SCIM_006 = import_data["SCIM_006"]
         simu = import_data["simu"]
@@ -349,6 +354,8 @@ class Test_plots(object):
             **dict_3D,
         )
 
+    @pytest.mark.SingleOP
+    @pytest.mark.SCIM
     def test_default_proj_fft2(self, import_data):
         SCIM_006 = import_data["SCIM_006"]
         simu = import_data["simu"]
@@ -384,6 +391,8 @@ class Test_plots(object):
             **dict_3D,
         )
 
+    @pytest.mark.SingleOP
+    @pytest.mark.SCIM
     def test_default_proj_time_space(self, import_data):
         SCIM_006 = import_data["SCIM_006"]
         simu = import_data["simu"]

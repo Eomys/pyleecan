@@ -20,7 +20,8 @@ DELTA = 1e-6
 @pytest.mark.SIPMSM
 @pytest.mark.ForceMT
 @pytest.mark.MagFEMM
-@pytest.mark.long
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_Benchmark_AGSF_Rag():

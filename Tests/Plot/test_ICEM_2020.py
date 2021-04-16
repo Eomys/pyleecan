@@ -48,7 +48,6 @@ on Pyleecan open-source object-oriented software"
 
 @pytest.mark.MagFEMM
 @pytest.mark.SCIM
-@pytest.mark.long
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_FEMM_sym():
@@ -97,7 +96,6 @@ def test_FEMM_sym():
 
 
 @pytest.mark.GMSH
-@pytest.mark.long
 def test_gmsh_mesh_dict():
     """Figure 10: Generate a 3D mesh with Gmsh by setting the
     number of element on each lines
@@ -159,7 +157,6 @@ def test_gmsh_mesh_dict():
 
 @pytest.mark.skip
 @pytest.mark.GMSH
-@pytest.mark.long
 def test_SlotMulti_sym():
     """Figure 11: Genera
     te a 3D mesh with GMSH for a lamination
@@ -536,7 +533,7 @@ def test_BoreFlower():
 
 @pytest.mark.SPMSM
 @pytest.mark.MagFEMM
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
 def test_ecc_FEMM():
@@ -605,7 +602,7 @@ def test_ecc_FEMM():
 
 
 @pytest.mark.skip
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP

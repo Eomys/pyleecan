@@ -35,7 +35,7 @@ import pytest
 
 
 @pytest.mark.MagFEMM
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.IPMSM
 @pytest.mark.VarParam
 @pytest.mark.periodicity
