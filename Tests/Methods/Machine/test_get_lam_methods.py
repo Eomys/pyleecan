@@ -14,7 +14,6 @@ machine = MachineUD()
 machine.lam_list = [rotor_1, stator_1, rotor_0, stator_0]
 
 
-# @pytest.mark.dev
 @pytest.mark.MachineUD
 class Test_get_lam_methods(object):
     """unittest to test the Machine get_lam_xxx methods"""

@@ -47,7 +47,6 @@ mesh_dict_1 = {
 @pytest.mark.StructElmer
 @pytest.mark.IPMSM
 @pytest.mark.SingleOP
-# @pytest.mark.dev
 class Test_StructElmer(object):
     """Test some basic workflow of StructElmer simulations"""
 

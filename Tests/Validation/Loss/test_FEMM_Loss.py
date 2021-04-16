@@ -26,7 +26,7 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.periodicity
 @pytest.mark.SPMSM
 @pytest.mark.SingleOP
-# @pytest.mark.dev
+@pytest.mark.Loss
 def test_FEMM_Loss():
     """Validation of the Loss implementation using MagFEMM and compare to
     FEMM example - https://www.femm.info/wiki/SPMLoss -

@@ -13,7 +13,6 @@ from pyleecan.Classes.SolutionVector import SolutionVector
 
 
 @pytest.mark.MeshSol
-# @pytest.mark.dev
 class Test_get_soltution(TestCase):
     """ Tests for get_solution method from Solution classes"""
 
