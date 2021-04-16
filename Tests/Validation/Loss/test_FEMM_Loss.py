@@ -53,7 +53,7 @@ def test_FEMM_Loss():
     machine = load(join(DATA_DIR, "Machine", "SPMSM_020.json"))
     machine.stator.winding.is_reverse_wind = True
     qs = machine.stator.winding.qs
-    simu = Simu1(name="FEMM_IronLoss", machine=machine)
+    simu = Simu1(name="test_FEMM_Loss", machine=machine)
 
     # Definition of the enforced output of the electrical module
     simu.input = InputCurrent(Id_ref=Id_ref, Iq_ref=Iq_ref, Na_tot=2048, N0=rotor_speed)

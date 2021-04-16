@@ -75,6 +75,7 @@ def test_post_var_simu():
 
     # simu2, postprocessing 1 PostFunction, 1 PostMethod
     simu2 = simu1.copy()
+    simu2.name = "test_post_simu2"
 
     # Create the postprocessings and add it
     # xoutput.simu.machine.stator.slot.H0 += 1

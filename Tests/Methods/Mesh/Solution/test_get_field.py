@@ -12,14 +12,13 @@ from pyleecan.Classes.SolutionVector import SolutionVector
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
 def test_SolutionMat():
     """ Tests for get_field method from SolutionMat class"""
     DELTA = 1e-10
-    
-    field = np.zeros((2,3,2))
-    field[:,:,0] = np.array([[1, 2, 3], [2, 3, 4]])
-    field[:,:,1] = np.array([[11, 21, 31], [21, 31, 41]])
+
+    field = np.zeros((2, 3, 2))
+    field[:, :, 0] = np.array([[1, 2, 3], [2, 3, 4]])
+    field[:, :, 1] = np.array([[11, 21, 31], [21, 31, 41]])
 
     solution = SolutionMat()
     solution.field = field
@@ -40,11 +39,12 @@ def test_SolutionMat():
     msg = "Wrong result: returned " + str(field) + ", expected: " + str(correction)
     np.testing.assert_almost_equal(result, 0, err_msg=msg)
 
-    field = solution.get_field("z[1]","indice[1,2]", is_squeeze=True)
+    field = solution.get_field("z[1]", "indice[1,2]", is_squeeze=True)
     correction = np.array([[21, 31]])
     result = np.sum(np.abs(correction - field))
     msg = "Wrong result: returned " + str(field) + ", expected: " + str(correction)
     np.testing.assert_almost_equal(result, 0, err_msg=msg)
+
 
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
@@ -99,6 +99,7 @@ def test_SolutionVector():
     msg = "Wrong result: returned " + str(field) + ", expected: " + str(correction)
     np.testing.assert_almost_equal(result, 0, err_msg=msg)
 
+
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
 def test_SolutionData():
@@ -138,8 +139,9 @@ def test_SolutionData():
     msg = "Wrong result: returned " + str(field) + ", expected: " + str(correction)
     np.testing.assert_almost_equal(result, 0, err_msg=msg)
 
+
 if __name__ == "__main__":
     test_SolutionMat()
     test_SolutionData()
     test_SolutionVector()
-    #test_plot_contour_2group()
+    # test_plot_contour_2group()

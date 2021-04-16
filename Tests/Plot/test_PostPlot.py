@@ -31,7 +31,7 @@ def test_PostPlot():
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    simu = Simu1(name="PostPlot", machine=Toyota_Prius)
+    simu = Simu1(name="test_PostPlot", machine=Toyota_Prius)
 
     # Definition of the enforced output of the electrical module
     I0_rms = 250 / sqrt(2)

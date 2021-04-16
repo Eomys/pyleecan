@@ -40,6 +40,7 @@ def test_EEC_PMSM():
 
     # Define second simu for FEMM comparison
     simu2 = simu.copy()
+    simu2.name = "test_EEC_PMSM_FEMM"
 
     # Definition of the electrical simulation (FEMM)
     simu.elec = Electrical()
