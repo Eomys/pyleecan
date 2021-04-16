@@ -13,7 +13,7 @@ from Tests import TEST_DIR
     Parameters
     ----------
 
-    File at Test folder root named by excel_report_post_process.xlsx
+    File at Test folder root named by report.xlsx
 
     Returns
     ---------
