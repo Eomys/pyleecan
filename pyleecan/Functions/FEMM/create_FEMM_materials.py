@@ -5,6 +5,8 @@ from numpy import exp, pi
 from ...Functions.FEMM.create_FEMM_bar import create_FEMM_bar
 from ...Functions.FEMM.create_FEMM_circuit_material import create_FEMM_circuit_material
 from ...Functions.FEMM.create_FEMM_magnet import create_FEMM_magnet
+from ...Functions.labels import LAM_LAB, STATOR_LAB, get_obj_from_label
+from ...Functions.FEMM import LAM_MAT_NAME, AIRGAP_MAT_NAME
 
 
 def create_FEMM_materials(
@@ -68,34 +70,38 @@ def create_FEMM_materials(
     circuits = list()
     # Starting creation of properties for each surface of the machine
     for surf in surf_list:
-        label = surf.label
-        if "Lamination_Stator" in label:  # Stator
+        label_dict = decode_label(surf.label)
+        if LAM_LAB in label_dict["surf_type"] and STATOR_LAB in label_dict["lam_type"]:
+            lam_obj = get_obj_from_label(machine, label_dict=label_dict)
             if type_BH_stator == 2:
                 mu_is = 100000  # Infinite permeability
             else:
-                mu_is = stator.mat_type.mag.mur_lin  # Relative
+                mu_is = lam_obj.mat_type.mag.mur_lin  # Relative
             # Check if the property already exist in FEMM
-            if "Stator Iron" not in materials:
+            mat_name = label_dict["lam_label"] + " " + LAM_MAT_NAME
+            if mat_name not in materials:
                 # magnetic permeability
                 femm.mi_addmaterial(
-                    "Stator Iron", mu_is, mu_is, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0
+                    mat_name, mu_is, mu_is, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0
                 )
-                materials.append("Stator Iron")
-            prop_dict[label] = "Stator Iron"
-        elif "Lamination_Rotor" in label:  # Rotor
+                materials.append(mat_name)
+            prop_dict[label] = mat_name
+        elif LAM_LAB in label_dict["surf_type"] and ROTOR_LAB in label_dict["lam_type"]:
+            lam_obj = get_obj_from_label(machine, label_dict=label_dict)
             # Initialisation from the rotor of the machine
             if type_BH_rotor == 2:
                 mu_ir = 100000  # Infinite permeability
             else:
                 mu_ir = rotor.mat_type.mag.mur_lin  # Relative
             # Check if the property already exist in FEMM
-            if "Rotor Iron" not in materials:
+            mat_name = label_dict["lam_label"] + " " + LAM_MAT_NAME
+            if mat_name not in materials:
                 # magnetic permeability
                 femm.mi_addmaterial(
-                    "Rotor Iron", mu_ir, mu_ir, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0
+                    mat_name, mu_ir, mu_ir, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0
                 )
-                materials.append("Rotor Iron")
-            prop_dict[label] = "Rotor Iron"
+                materials.append(mat_name)
+            prop_dict[label] = mat_name
         elif "Airgap" in label:  # Airgap surface
             if "Airgap" not in materials:
                 femm.mi_addmaterial("Airgap", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)

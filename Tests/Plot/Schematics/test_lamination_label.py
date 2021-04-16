@@ -67,6 +67,8 @@ def test_MachineUD():
     assert label_list[1] == "Rotor-0"
     assert label_list[2] == "Rotor-1"
     assert label_list[3] == "Stator-1"
+    for ii, lam in enumerate(lam_list):
+        assert lam.get_label() == label_list[ii]
 
     machine.plot(is_show_fig=False)
     fig = plt.gcf()

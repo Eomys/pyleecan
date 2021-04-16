@@ -9,7 +9,7 @@ from ...Functions.FEMM.create_FEMM_boundary_conditions import (
 from ...Functions.FEMM.create_FEMM_materials import create_FEMM_materials
 from ...Functions.FEMM.get_sliding_band import get_sliding_band
 from ...Functions.FEMM.get_airgap_surface import get_airgap_surface
-
+from ...Functions.labels import NO_MESH_LAB
 
 def draw_FEMM(
     femm,
@@ -133,7 +133,8 @@ def draw_FEMM(
 
     # Adding no_mesh for shaft if needed
     if lam_int.Rint > 0 and sym == 1:
-        surf_list.append(Circle(point_ref=0, radius=lam_int.Rint, label="No_mesh"))
+        label_int = lam_int.get_label()
+        surf_list.append(Circle(point_ref=0, radius=lam_int.Rint, label=label_int+"_"+NO_MESH_LAB))
 
     # adding the Airgap surface
     if is_sliding_band:

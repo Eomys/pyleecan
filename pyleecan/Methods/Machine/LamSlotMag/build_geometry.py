@@ -2,6 +2,7 @@
 from numpy import pi
 
 from ....Classes.LamSlot import LamSlot
+from ....Functions.labels import LAM_LAB, BORE_LAB, YOKE_LAB
 
 
 def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -29,10 +30,7 @@ def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=
 
     """
 
-    if self.is_stator:
-        st = "Stator"
-    else:
-        st = "Rotor"
+    st = self.get_label()
 
     assert (self.slot.Zs % sym) == 0, (
         "ERROR, Wrong symmetry for "

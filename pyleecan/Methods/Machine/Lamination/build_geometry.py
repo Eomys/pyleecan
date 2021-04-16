@@ -6,6 +6,7 @@ from ....Classes.Circle import Circle
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Classes.SurfRing import SurfRing
+from ....Functions.labels import LAM_LAB, BORE_LAB, YOKE_LAB
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0):
@@ -27,21 +28,17 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         list of surfaces needed to draw the lamination
 
     """
-    # Lamination label
-    if self.is_stator:
-        label = "Lamination_Stator"
-    else:
-        label = "Lamination_Rotor"
-
-    label_bore = label + "_Bore_Radius"
-    label_yoke = label + "_Yoke_Radius"
-
+    # Label setup
+    label = self.get_label()
+    label_lam = label + "_" + LAM_LAB
+    label_bore = label + "_" + BORE_LAB
+    label_yoke = label + "_" + YOKE_LAB
     if self.is_internal:
-        label_int = label_yoke + "_Int"  # internal label is yoke
-        label_ext = label_bore + "_Ext"  # external label is bore
+        label_ext = label_bore
+        label_int = label_yoke
     else:
-        label_int = label_bore + "_Int"  # internal label is bore
-        label_ext = label_yoke + "_Ext"  # external label is yoke
+        label_ext = label_yoke
+        label_int = label_bore
 
     surf_list = list()
     if sym == 1:  # Complete lamination
@@ -57,11 +54,12 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
                 SurfRing(
                     out_surf=out_surf,
                     in_surf=in_surf,
-                    label=label,
+                    label=label_lam,
                     point_ref=self.Rint + (self.Rext - self.Rint) / 2,
                 )
             )
         else:
+            out_surf.label = label_lam
             surf_list.append(out_surf)
     else:  # Part of the lamination by symmetry
         Z0 = self.Rint
@@ -92,7 +90,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             )
         surf_yoke = SurfLine(
             line_list=curve_list,
-            label=label + "_Ext",
+            label=label_lam,
             point_ref=(self.Rint + (self.Rext - self.Rint) / 2) * exp(1j * pi / sym),
         )
         surf_list.append(surf_yoke)

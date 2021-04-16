@@ -7,6 +7,7 @@ from ...Classes.HoleM53 import HoleM53
 from ...Methods import NotImplementedYetError
 from ...Functions.FEMM.get_mesh_param import get_mesh_param
 from ...Functions.Winding.find_wind_phase_color import get_phase_id
+from ...Functions.labels import decode_label
 
 
 def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
@@ -31,8 +32,10 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
 
     """
 
-    mesh_dict = get_mesh_param(surf.label, FEMM_dict)
     label = surf.label
+    label_dict = decode_label(label)
+    mesh_dict = get_mesh_param(label_dict, FEMM_dict)
+
     Clabel = 0  # By default no circuit
     Ntcoil = 0  # By default no circuit
     mag = 0  # By default no magnetization

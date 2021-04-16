@@ -49,3 +49,6 @@ boundary_prop["Rotor_Yoke_Radius"] = "bc_A0"
 boundary_prop["Stator_Yoke_Radius"] = "bc_A0"
 boundary_prop["Rotor_Yoke_Side"] = "bc_r1"
 boundary_prop["Stator_Yoke_Side"] = "bc_s1"
+
+LAM_MAT_NAME = "Iron"
+AIRGAP_MAT_NAME = "Airgap"

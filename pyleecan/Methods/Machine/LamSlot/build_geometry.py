@@ -7,6 +7,7 @@ from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfRing import SurfRing
 from ....Classes.Lamination import Lamination
+from ....Functions.labels import LAM_LAB, BORE_LAB, YOKE_LAB
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0):
@@ -30,18 +31,17 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
 
     """
 
-    if self.is_stator:
-        label = "Lamination_Stator"  # Label lamination
-    else:
-        label = "Lamination_Rotor"
+    # Label setup
+    label = self.get_label()
+    label_lam = label + "_" + LAM_LAB
+    label_bore = label + "_" + BORE_LAB
+    label_yoke = label + "_" + YOKE_LAB
     if self.is_internal:
-        lb = "Ext"  # label for the bore
-        ly = "Int"  # label for the yoke
+        label_ext = label_bore
+        label_int = label_yoke
     else:
-        lb = "Int"
-        ly = "Ext"
-    label_bore = label + "_Bore_Radius_" + lb
-    label_yoke = label + "_Yoke_Radius_" + ly
+        label_ext = label_yoke
+        label_int = label_bore
 
     Ryoke = self.get_Ryoke()
     H_yoke = self.comp_height_yoke()
@@ -94,6 +94,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             radius=Ryoke, label=label_yoke, line_label=label_yoke, center=0
         )
         if self.Rint == 0 and len(bore_list) > 0:
+            surf_slot.label = label_lam
             surf_list = [surf_slot]
         elif self.Rint == 0 and len(bore_list) == 0:
             surf_list = list()
@@ -102,7 +103,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
                 SurfRing(
                     out_surf=surf_slot,
                     in_surf=surf_yoke,
-                    label=label,
+                    label=label_lam,
                     point_ref=point_ref,
                 )
             )
@@ -111,7 +112,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
                 SurfRing(
                     out_surf=surf_yoke,
                     in_surf=surf_slot,
-                    label=label,
+                    label=label_lam,
                     point_ref=point_ref,
                 )
             )
@@ -140,7 +141,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             point_ref = (Ryoke + H_yoke / 2) * exp(1j * pi / sym)
         else:
             point_ref = (Ryoke - H_yoke / 2) * exp(1j * pi / sym)
-        surf_slot = SurfLine(line_list=bore_list, label=label_bore, point_ref=point_ref)
+        surf_slot = SurfLine(line_list=bore_list, label=label_lam, point_ref=point_ref)
         surf_list.append(surf_slot)
 
     # Apply the transformations

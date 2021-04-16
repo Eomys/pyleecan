@@ -3,8 +3,10 @@ from numpy import pi, angle, exp
 
 from ....Classes.Circle import Circle
 from ....Classes.SurfLine import SurfLine
+from ....Classes.SurfRing import SurfRing
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
+from ....Functions.labels import LAM_LAB, BORE_LAB, YOKE_LAB
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0):
@@ -34,16 +36,17 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     # Check for symmetry
     assert (Zs % sym) == 0
 
-    if self.is_stator:
-        ll = "Stator"  # Label lamination
-    else:
-        ll = "Rotor"
+    # Label setup
+    label = self.get_label()
+    label_lam = label + "_" + LAM_LAB
+    label_bore = label + "_" + BORE_LAB
+    label_yoke = label + "_" + YOKE_LAB
     if self.is_internal:
-        ls = "Ext"  # label for the slot
-        ly = "Int"  # label for the yoke
+        label_ext = label_bore
+        label_int = label_yoke
     else:
-        ls = "Int"
-        ly = "Ext"
+        label_ext = label_yoke
+        label_int = label_bore
 
     Ryoke = self.get_Ryoke()
     Rbo = self.get_Rbo()
@@ -64,36 +67,49 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     surf_list = list()
     if sym == 1:  # Complete lamination
         # Create Slot surface
-        surf_slot = SurfLine(
-            line_list=bore_list, label="Lamination_" + ll + "_Bore_" + ls
-        )
+        surf_slot = SurfLine(line_list=bore_list, label=label_bore)
         if self.is_internal:
-            surf_slot.point_ref = Ryoke + (H_yoke / 2)
+            point_ref = Ryoke + (H_yoke / 2)
         else:
-            surf_slot.point_ref = Ryoke - (H_yoke / 2)
+            point_ref = Ryoke - (H_yoke / 2)
+        surf_slot.point_ref = point_ref
         # Create yoke circle surface
-        if Ryoke > 0:
-            surf_yoke = Circle(
-                radius=Ryoke,
-                label="Lamination_" + ll + "_Yoke_" + ly,
-                line_label=ll + "_Yoke_Radius",
-                center=0,
+        surf_yoke = Circle(
+            radius=Ryoke, label=label_yoke, line_label=label_yoke, center=0
+        )
+        if self.Rint == 0 and len(bore_list) > 0:
+            surf_slot.label = label_lam
+            surf_list = [surf_slot]
+        elif self.Rint == 0 and len(bore_list) == 0:
+            surf_list = list()
+        elif self.is_internal:
+            surf_list.append(
+                SurfRing(
+                    out_surf=surf_slot,
+                    in_surf=surf_yoke,
+                    label=label_lam,
+                    point_ref=point_ref,
+                )
             )
-        # The order matters when plotting
-        if self.is_internal:
-            surf_list.append(surf_slot)
-            if Ryoke > 0:
-                surf_list.append(surf_yoke)
         else:
-            surf_yoke.point_ref = None  # No need to set the surface
-            surf_list.append(surf_yoke)
-            surf_list.append(surf_slot)
+            surf_list.append(
+                SurfRing(
+                    out_surf=surf_yoke,
+                    in_surf=surf_slot,
+                    label=label_lam,
+                    point_ref=point_ref,
+                )
+            )
     else:  # Only one surface
         # Add the Yoke part
         Zy1 = Ryoke
         Zy2 = Ryoke * exp(1j * 2 * pi / sym)
         bore_list.append(
-            Segment(Rbo * exp(1j * (2 * pi / sym)), Zy2, label=ll + "_Yoke_Side_Right")
+            Segment(
+                Rbo * exp(1j * (2 * pi / sym)),
+                Zy2,
+                label=label_lam + "_Yoke_Side_Right",
+            )
         )
         if Ryoke > 0:
             # For internal lamination Ryoke can be 0
@@ -103,10 +119,10 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
                     end=Zy1,
                     radius=-Ryoke,
                     is_trigo_direction=False,
-                    label=ll + "_Yoke_Radius",
+                    label=label_lam + "_Yoke_Radius",
                 )
             )
-        bore_list.append(Segment(Zy1, Rbo, label=ll + "_Yoke_Side_Left"))
+        bore_list.append(Segment(Zy1, Rbo, label=label_lam + "_Yoke_Side_Left"))
         # Create a Surface for the slot
         if self.is_internal:
             point_ref = (Ryoke + H_yoke / 2) * exp(1j * pi / sym)
@@ -114,7 +130,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             point_ref = (Ryoke - H_yoke / 2) * exp(1j * pi / sym)
         surf_slot = SurfLine(
             line_list=bore_list,
-            label="Lamination_" + ll + "_Bore_" + ls,
+            label=label_lam,
             point_ref=point_ref,
         )
         surf_list.append(surf_slot)

@@ -28,6 +28,16 @@ except ImportError as error:
     check = error
 
 try:
+    from ..Methods.Machine.Lamination.comp_angle_q_axis import comp_angle_q_axis
+except ImportError as error:
+    comp_angle_q_axis = error
+
+try:
+    from ..Methods.Machine.Lamination.comp_height_yoke import comp_height_yoke
+except ImportError as error:
+    comp_height_yoke = error
+
+try:
     from ..Methods.Machine.Lamination.comp_length import comp_length
 except ImportError as error:
     comp_length = error
@@ -38,9 +48,19 @@ except ImportError as error:
     comp_masses = error
 
 try:
+    from ..Methods.Machine.Lamination.comp_output_geo import comp_output_geo
+except ImportError as error:
+    comp_output_geo = error
+
+try:
     from ..Methods.Machine.Lamination.comp_radius_mec import comp_radius_mec
 except ImportError as error:
     comp_radius_mec = error
+
+try:
+    from ..Methods.Machine.Lamination.comp_radius_mid_yoke import comp_radius_mid_yoke
+except ImportError as error:
+    comp_radius_mid_yoke = error
 
 try:
     from ..Methods.Machine.Lamination.comp_surface_axial_vent import (
@@ -65,6 +85,26 @@ except ImportError as error:
     get_bore_line = error
 
 try:
+    from ..Methods.Machine.Lamination.get_label import get_label
+except ImportError as error:
+    get_label = error
+
+try:
+    from ..Methods.Machine.Lamination.get_name_phase import get_name_phase
+except ImportError as error:
+    get_name_phase = error
+
+try:
+    from ..Methods.Machine.Lamination.get_notch_list import get_notch_list
+except ImportError as error:
+    get_notch_list = error
+
+try:
+    from ..Methods.Machine.Lamination.get_polar_eq import get_polar_eq
+except ImportError as error:
+    get_polar_eq = error
+
+try:
     from ..Methods.Machine.Lamination.get_Rbo import get_Rbo
 except ImportError as error:
     get_Rbo = error
@@ -75,49 +115,14 @@ except ImportError as error:
     get_Ryoke = error
 
 try:
-    from ..Methods.Machine.Lamination.get_name_phase import get_name_phase
-except ImportError as error:
-    get_name_phase = error
-
-try:
-    from ..Methods.Machine.Lamination.plot import plot
-except ImportError as error:
-    plot = error
-
-try:
-    from ..Methods.Machine.Lamination.comp_output_geo import comp_output_geo
-except ImportError as error:
-    comp_output_geo = error
-
-try:
-    from ..Methods.Machine.Lamination.get_polar_eq import get_polar_eq
-except ImportError as error:
-    get_polar_eq = error
-
-try:
     from ..Methods.Machine.Lamination.is_outwards import is_outwards
 except ImportError as error:
     is_outwards = error
 
 try:
-    from ..Methods.Machine.Lamination.comp_height_yoke import comp_height_yoke
+    from ..Methods.Machine.Lamination.plot import plot
 except ImportError as error:
-    comp_height_yoke = error
-
-try:
-    from ..Methods.Machine.Lamination.get_notch_list import get_notch_list
-except ImportError as error:
-    get_notch_list = error
-
-try:
-    from ..Methods.Machine.Lamination.comp_angle_q_axis import comp_angle_q_axis
-except ImportError as error:
-    comp_angle_q_axis = error
-
-try:
-    from ..Methods.Machine.Lamination.comp_radius_mid_yoke import comp_radius_mid_yoke
-except ImportError as error:
-    comp_radius_mid_yoke = error
+    plot = error
 
 
 from ._check import InitUnKnowClassError
@@ -152,6 +157,30 @@ class Lamination(FrozenClass):
         )
     else:
         check = check
+    # cf Methods.Machine.Lamination.comp_angle_q_axis
+    if isinstance(comp_angle_q_axis, ImportError):
+        comp_angle_q_axis = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_angle_q_axis: "
+                    + str(comp_angle_q_axis)
+                )
+            )
+        )
+    else:
+        comp_angle_q_axis = comp_angle_q_axis
+    # cf Methods.Machine.Lamination.comp_height_yoke
+    if isinstance(comp_height_yoke, ImportError):
+        comp_height_yoke = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_height_yoke: "
+                    + str(comp_height_yoke)
+                )
+            )
+        )
+    else:
+        comp_height_yoke = comp_height_yoke
     # cf Methods.Machine.Lamination.comp_length
     if isinstance(comp_length, ImportError):
         comp_length = property(
@@ -174,6 +203,18 @@ class Lamination(FrozenClass):
         )
     else:
         comp_masses = comp_masses
+    # cf Methods.Machine.Lamination.comp_output_geo
+    if isinstance(comp_output_geo, ImportError):
+        comp_output_geo = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_output_geo: "
+                    + str(comp_output_geo)
+                )
+            )
+        )
+    else:
+        comp_output_geo = comp_output_geo
     # cf Methods.Machine.Lamination.comp_radius_mec
     if isinstance(comp_radius_mec, ImportError):
         comp_radius_mec = property(
@@ -186,6 +227,18 @@ class Lamination(FrozenClass):
         )
     else:
         comp_radius_mec = comp_radius_mec
+    # cf Methods.Machine.Lamination.comp_radius_mid_yoke
+    if isinstance(comp_radius_mid_yoke, ImportError):
+        comp_radius_mid_yoke = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_radius_mid_yoke: "
+                    + str(comp_radius_mid_yoke)
+                )
+            )
+        )
+    else:
+        comp_radius_mid_yoke = comp_radius_mid_yoke
     # cf Methods.Machine.Lamination.comp_surface_axial_vent
     if isinstance(comp_surface_axial_vent, ImportError):
         comp_surface_axial_vent = property(
@@ -231,6 +284,48 @@ class Lamination(FrozenClass):
         )
     else:
         get_bore_line = get_bore_line
+    # cf Methods.Machine.Lamination.get_label
+    if isinstance(get_label, ImportError):
+        get_label = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Lamination method get_label: " + str(get_label))
+            )
+        )
+    else:
+        get_label = get_label
+    # cf Methods.Machine.Lamination.get_name_phase
+    if isinstance(get_name_phase, ImportError):
+        get_name_phase = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_name_phase: " + str(get_name_phase)
+                )
+            )
+        )
+    else:
+        get_name_phase = get_name_phase
+    # cf Methods.Machine.Lamination.get_notch_list
+    if isinstance(get_notch_list, ImportError):
+        get_notch_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_notch_list: " + str(get_notch_list)
+                )
+            )
+        )
+    else:
+        get_notch_list = get_notch_list
+    # cf Methods.Machine.Lamination.get_polar_eq
+    if isinstance(get_polar_eq, ImportError):
+        get_polar_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_polar_eq: " + str(get_polar_eq)
+                )
+            )
+        )
+    else:
+        get_polar_eq = get_polar_eq
     # cf Methods.Machine.Lamination.get_Rbo
     if isinstance(get_Rbo, ImportError):
         get_Rbo = property(
@@ -249,49 +344,6 @@ class Lamination(FrozenClass):
         )
     else:
         get_Ryoke = get_Ryoke
-    # cf Methods.Machine.Lamination.get_name_phase
-    if isinstance(get_name_phase, ImportError):
-        get_name_phase = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method get_name_phase: " + str(get_name_phase)
-                )
-            )
-        )
-    else:
-        get_name_phase = get_name_phase
-    # cf Methods.Machine.Lamination.plot
-    if isinstance(plot, ImportError):
-        plot = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Lamination method plot: " + str(plot))
-            )
-        )
-    else:
-        plot = plot
-    # cf Methods.Machine.Lamination.comp_output_geo
-    if isinstance(comp_output_geo, ImportError):
-        comp_output_geo = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method comp_output_geo: "
-                    + str(comp_output_geo)
-                )
-            )
-        )
-    else:
-        comp_output_geo = comp_output_geo
-    # cf Methods.Machine.Lamination.get_polar_eq
-    if isinstance(get_polar_eq, ImportError):
-        get_polar_eq = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method get_polar_eq: " + str(get_polar_eq)
-                )
-            )
-        )
-    else:
-        get_polar_eq = get_polar_eq
     # cf Methods.Machine.Lamination.is_outwards
     if isinstance(is_outwards, ImportError):
         is_outwards = property(
@@ -303,53 +355,15 @@ class Lamination(FrozenClass):
         )
     else:
         is_outwards = is_outwards
-    # cf Methods.Machine.Lamination.comp_height_yoke
-    if isinstance(comp_height_yoke, ImportError):
-        comp_height_yoke = property(
+    # cf Methods.Machine.Lamination.plot
+    if isinstance(plot, ImportError):
+        plot = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method comp_height_yoke: "
-                    + str(comp_height_yoke)
-                )
+                ImportError("Can't use Lamination method plot: " + str(plot))
             )
         )
     else:
-        comp_height_yoke = comp_height_yoke
-    # cf Methods.Machine.Lamination.get_notch_list
-    if isinstance(get_notch_list, ImportError):
-        get_notch_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method get_notch_list: " + str(get_notch_list)
-                )
-            )
-        )
-    else:
-        get_notch_list = get_notch_list
-    # cf Methods.Machine.Lamination.comp_angle_q_axis
-    if isinstance(comp_angle_q_axis, ImportError):
-        comp_angle_q_axis = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method comp_angle_q_axis: "
-                    + str(comp_angle_q_axis)
-                )
-            )
-        )
-    else:
-        comp_angle_q_axis = comp_angle_q_axis
-    # cf Methods.Machine.Lamination.comp_radius_mid_yoke
-    if isinstance(comp_radius_mid_yoke, ImportError):
-        comp_radius_mid_yoke = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method comp_radius_mid_yoke: "
-                    + str(comp_radius_mid_yoke)
-                )
-            )
-        )
-    else:
-        comp_radius_mid_yoke = comp_radius_mid_yoke
+        plot = plot
     # save and copy methods are available in all object
     save = save
     copy = copy

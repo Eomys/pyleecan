@@ -105,7 +105,10 @@ def run(self):
     for ii, simu in enumerate(simulation_list):
         # Log only for first simulation
         self.set_reused_data(
-            simu, xoutput_ref, is_log=ii == 0, simu_type=self.NAME,
+            simu,
+            xoutput_ref,
+            is_log=ii == 0,
+            simu_type=self.NAME,
         )
 
     # Update the postprocessing list if needed

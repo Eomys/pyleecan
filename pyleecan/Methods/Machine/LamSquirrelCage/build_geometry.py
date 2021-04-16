@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ....Functions.labels import LAM_LAB, BORE_LAB, YOKE_LAB
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):

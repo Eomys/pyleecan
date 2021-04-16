@@ -6,6 +6,7 @@ from ....Classes.SurfLine import SurfLine
 from ....Classes.SurfRing import SurfRing
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
+from ....Functions.labels import LAM_LAB, BORE_LAB, YOKE_LAB
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -31,25 +32,18 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
 
     """
 
-    # Lamination label
-    if self.is_stator:
-        label = "Lamination_Stator"
-    else:
-        label = "Lamination_Rotor"
+    # Label setup
+    label = self.get_label()
+    label_lam = label + "_" + LAM_LAB
+    label_bore = label + "_" + BORE_LAB
+    label_yoke = label + "_" + YOKE_LAB
 
     if self.is_internal:
         Ryoke = self.Rint
-        Rbore = self.Rext
-        label1 = "Ext"
-        label2 = "Int"
+        Rbo = self.Rext
     else:
         Ryoke = self.Rext
-        Rbore = self.Rint
-        label2 = "Ext"
-        label1 = "Int"
-
-    label_bore = label + "_Bore_Radius_" + label1
-    label_yoke = label + "_Yoke_Radius_" + label2
+        Rbo = self.Rint
 
     ref_point = self.comp_radius_mid_yoke() * exp(1j * pi / sym)
 
@@ -77,7 +71,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
                     SurfRing(
                         out_surf=bore_surf,
                         in_surf=yoke_surf,
-                        label=label,
+                        label=label_lam,
                         point_ref=ref_point,
                     )
                 )
@@ -86,18 +80,19 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
                     SurfRing(
                         out_surf=yoke_surf,
                         in_surf=bore_surf,
-                        label=label,
+                        label=label_lam,
                         point_ref=ref_point,
                     )
                 )
         else:
+            bore_surf.label = label_lam
             surf_list.append(bore_surf)
 
     else:  # Symmetry lamination
         alpha_begin = 0
         alpha_end = 2 * pi / sym
-        begin = Rbore * exp(1j * alpha_begin)
-        end = Rbore * exp(1j * alpha_end)
+        begin = Rbo * exp(1j * alpha_begin)
+        end = Rbo * exp(1j * alpha_end)
         Z_begin = Ryoke * exp(1j * alpha_begin)
         Z_end = Ryoke * exp(1j * alpha_end)
         line_list = [Segment(Z_begin, begin, label=label + "_Yoke_Side_Right")]
@@ -116,7 +111,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
                 )
             )
         surf_list.append(
-            SurfLine(line_list=line_list, label=label_bore, point_ref=ref_point)
+            SurfLine(line_list=line_list, label=label_lam, point_ref=ref_point)
         )
 
     # Holes surface(s)
