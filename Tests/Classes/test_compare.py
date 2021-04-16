@@ -59,6 +59,7 @@ def test_compare():
 
     # Create the differences
     simu2 = simu.copy()
+    simu2.name = "test_compare2"
     simu2.machine.stator.L1 = 2  # float
     simu2.machine.rotor.hole[0].magnet_0.mat_type.name = "Test "  # str
     simu2.input.Nt_tot = 1234  # int

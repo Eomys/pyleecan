@@ -20,7 +20,7 @@ from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.EEC_PMSM
 @pytest.mark.IPMSM
@@ -40,6 +40,7 @@ def test_EEC_PMSM():
 
     # Define second simu for FEMM comparison
     simu2 = simu.copy()
+    simu2.name = "test_EEC_PMSM_FEMM"
 
     # Definition of the electrical simulation (FEMM)
     simu.elec = Electrical()

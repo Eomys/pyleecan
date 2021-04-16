@@ -21,7 +21,7 @@ def test_short_tutorial(tuto_name):
 
 
 @pytest.mark.skip
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.parametrize(
     "tuto_name",
     ["tuto_Simulation_FEMM", "tuto_Force", "tuto_Plots", "tuto_Optimization"],

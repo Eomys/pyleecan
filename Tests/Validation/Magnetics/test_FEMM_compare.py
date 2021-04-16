@@ -20,7 +20,7 @@ from pyleecan.definitions import DATA_DIR
 from Tests import TEST_DATA_DIR
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
@@ -83,7 +83,6 @@ def test_IPMSM_xxx():
     )
 
 
-@pytest.mark.long
 @pytest.mark.MagFEMM
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
@@ -153,7 +152,7 @@ def test_Toyota_Prius():
     )
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.SCIM
 @pytest.mark.periodicity
@@ -249,7 +248,6 @@ def test_SCIM():
     )
 
 
-@pytest.mark.long
 @pytest.mark.MagFEMM
 @pytest.mark.SIPMSM
 @pytest.mark.periodicity
@@ -329,7 +327,7 @@ def test_SIPMSM():
     )
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
@@ -427,7 +425,6 @@ def test_SPMSM_load():
     )
 
 
-@pytest.mark.long
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.periodicity

@@ -17,13 +17,12 @@ from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.IPMSM
 @pytest.mark.parallel
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-# @pytest.mark.dev
 def test_FEMM_parallelization_mag():
     """test parallelization of FEMM to get B, Tem, PhiWind """
 
@@ -127,7 +126,7 @@ def test_FEMM_parallelization_mag():
     return out, out2
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.parallel

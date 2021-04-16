@@ -171,7 +171,7 @@ def test_axis_LamHole(CURVE_COLORS):
 
 @pytest.mark.MagFEMM
 @pytest.mark.SCIM
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_axis_LamWind(CURVE_COLORS):

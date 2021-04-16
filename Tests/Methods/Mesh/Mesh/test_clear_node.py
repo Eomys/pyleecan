@@ -11,7 +11,6 @@ DELTA = 1e-10
 
 
 @pytest.mark.MeshSol
-# @pytest.mark.DEV
 def test_MeshMat():
     """ Test for 1 group"""
 

@@ -112,7 +112,6 @@ class Test_HoleUD_meth(object):
             surf.label = ""
         assert IPMSM_C.rotor.hole[0].comp_surface_magnet_id(0) == 0
 
-    @pytest.mark.long
     @pytest.mark.MagFEMM
     @pytest.mark.periodicity
     @pytest.mark.IPMSM

@@ -23,7 +23,7 @@ DELTA = 1e-6
 @pytest.mark.SIPMSM
 @pytest.mark.periodicity
 @pytest.mark.ForceMT
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.ForceTensor
 @pytest.mark.MeshSol
 @pytest.mark.SingleOP

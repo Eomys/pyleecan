@@ -48,7 +48,6 @@ on Pyleecan open-source object-oriented software"
 
 @pytest.mark.MagFEMM
 @pytest.mark.SCIM
-@pytest.mark.long
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_FEMM_sym():
@@ -56,7 +55,7 @@ def test_FEMM_sym():
     From pyleecan/Tests/Validation/Simulation/test_EM_SCIM_NL_006.py
     """
     SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
-    simu = Simu1(name="ICEM_2020", machine=SCIM_006)
+    simu = Simu1(name="test_ICEM_2020", machine=SCIM_006)
     simu.machine.name = "fig_09_FEMM_sym"
 
     # Definition of the enforced output of the electrical module
@@ -97,7 +96,6 @@ def test_FEMM_sym():
 
 
 @pytest.mark.GMSH
-@pytest.mark.long
 def test_gmsh_mesh_dict():
     """Figure 10: Generate a 3D mesh with Gmsh by setting the
     number of element on each lines
@@ -159,7 +157,6 @@ def test_gmsh_mesh_dict():
 
 @pytest.mark.skip
 @pytest.mark.GMSH
-@pytest.mark.long
 def test_SlotMulti_sym():
     """Figure 11: Genera
     te a 3D mesh with GMSH for a lamination
@@ -536,13 +533,13 @@ def test_BoreFlower():
 
 @pytest.mark.SPMSM
 @pytest.mark.MagFEMM
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
 def test_ecc_FEMM():
     """Figure 19: transfrom_list in FEMM for eccentricities"""
     SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
-    simu = Simu1(name="ICEM_2020", machine=SPMSM_015)
+    simu = Simu1(name="test_ICEM_2020_ecc", machine=SPMSM_015)
     simu.machine.name = "fig_19_Transform_list"
 
     # Modify stator Rext to get more convincing translation
@@ -605,7 +602,7 @@ def test_ecc_FEMM():
 
 
 @pytest.mark.skip
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
@@ -680,7 +677,7 @@ def test_Optimization_problem():
     )
 
     # Definition of the simulation
-    simu = Simu1(name="Default simulation", machine=SPMSM_001)
+    simu = Simu1(name="test_Optimization_problem", machine=SPMSM_001)
 
     simu.input = InputCurrent(
         Is=Is,

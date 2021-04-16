@@ -8,7 +8,6 @@ from pyleecan.Classes.ElmerResults import ElmerResults
 
 
 @pytest.mark.StructElmer
-# @pytest.mark.dev
 class Test_ElmerResults(object):
     def test_ElmerResults(self):
         """Test that load_data method is working"""

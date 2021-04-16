@@ -15,7 +15,8 @@ from Tests import save_validation_path as save_path
 from pyleecan.definitions import config_dict
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.MagFEMM
 @pytest.mark.SynRM
 @pytest.mark.VarLoadCurrent

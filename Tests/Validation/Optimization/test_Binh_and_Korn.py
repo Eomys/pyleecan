@@ -32,7 +32,7 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR, TEST_DIR
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.SCIM
 @pytest.mark.MagFEMM
 @pytest.mark.periodicity
