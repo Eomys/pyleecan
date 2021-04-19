@@ -5,6 +5,7 @@ from numpy import angle, exp, linspace, zeros
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
+from ....Functions.labels import WIND_LAB
 
 
 def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):
@@ -33,7 +34,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     """
 
     # get the name of the lamination
-    st = self.get_name_lam()
+    lam_label = self.parent.get_label()
 
     point_dict = self._comp_point_coordinate()
     Z1 = point_dict["Z1"]
@@ -75,7 +76,14 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
                     curve_list.append(Arc1(Z3, Z4, -abs(Z3), is_trigo_direction=False))
                 surface = SurfLine(
                     line_list=curve_list,
-                    label="Wind_" + st + "_R" + str(ii) + "_T" + str(jj) + "_S0",
+                    label=lam_label
+                    + "_"
+                    + WIND_LAB
+                    + "_R"
+                    + str(ii)
+                    + "-T"
+                    + str(jj)
+                    + "-S0",
                     point_ref=point_ref,
                 )
             else:
@@ -86,7 +94,14 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
                 curve_list.append(Segment(Z4, Z1))
                 surface = SurfLine(
                     line_list=curve_list,
-                    label="Wind_" + st + "_R" + str(ii) + "_T" + str(jj) + "_S0",
+                    label=lam_label
+                    + "_"
+                    + WIND_LAB
+                    + "_R"
+                    + str(ii)
+                    + "-T"
+                    + str(jj)
+                    + "-S0",
                     point_ref=point_ref,
                 )
             surf_list.append(surface)
