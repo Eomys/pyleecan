@@ -145,7 +145,15 @@ def create_FEMM_materials(
             is_mmf = is_mmfs if is_stator else is_mmfr
             lam_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop, materials, circuits = create_FEMM_circuit_material(
-                femm, circuits, label, is_eddies, lam_obj, I, is_mmf, j_t0, materials
+                femm,
+                circuits,
+                label_dict,
+                is_eddies,
+                lam_obj,
+                I,
+                is_mmf,
+                j_t0,
+                materials,
             )
             prop_dict[label_dict["full"]] = prop
         elif MAG_LAB in label_dict["surf_type"] or HOLEM_LAB in label_dict["surf_type"]:
@@ -153,7 +161,7 @@ def create_FEMM_materials(
             is_mmf = is_mmfs if is_stator else is_mmfr
             mag_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop, materials = create_FEMM_magnet(
-                femm, label, is_mmf, is_eddies, materials, mag_obj
+                femm, is_mmf, is_eddies, materials, mag_obj
             )
             prop_dict[label_dict["full"]] = prop
         elif (

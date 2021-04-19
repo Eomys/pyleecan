@@ -56,13 +56,15 @@ def get_obj_from_label(machine, label=None, label_dict=None):
     lam_obj = machine.get_lam_by_label(label_dict["lam_label"])
     if LAM_LAB in label_dict["surf_type"]:
         return lam_obj
+    elif WIND_LAB in label_dict["surf_type"]:
+        return lam_obj
     elif VENT_LAB in label_dict["surf_type"]:
         return lam_obj.axial_vent[label_dict["R_id"]]
     elif HOLEV_LAB in label_dict["surf_type"]:
         return lam_obj.hole[label_dict["R_id"]]
     elif HOLEM_LAB in label_dict["surf_type"]:
         hole = lam_obj.hole[label_dict["R_id"]]
-        return hole.get_magnet_dict()["magnet_" + "T_id"]
+        return hole.get_magnet_dict()["magnet_" + str(label_dict["T_id"])]
     elif MAG_LAB in label_dict["surf_type"]:
         return lam_obj.magnet
     raise NotImplementedError(label_dict["full"] + " is not available yet")

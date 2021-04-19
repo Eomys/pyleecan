@@ -30,7 +30,7 @@ def get_mesh_param(label_dict, FEMM_dict):
             mesh_dict["element_size"] = FEMM_dict["elementsize_yokeS"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_yokeS"]
         mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SC"]
-    elif LAM_LAB in label_dict["surf_type"] and STATOR_LAB in label_dict["lam_type"]:
+    elif LAM_LAB in label_dict["surf_type"] and ROTOR_LAB in label_dict["lam_type"]:
         # Rotor Lamination
         if "line_label" in label_dict and BORE_LAB in label_dict["line_label"]:
             mesh_dict["element_size"] = FEMM_dict["elementsize_slotR"]
