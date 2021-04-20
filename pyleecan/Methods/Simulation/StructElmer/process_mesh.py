@@ -87,7 +87,7 @@ def process_mesh(
     """Preprocess the GMSH model, i.e. remove unused parts, rename boundaries, ..."""
     # TODO utilize 'translation' dict
 
-    gmsh.initialize(sys.argv)
+    gmsh.initialize()
     gmsh.open(file_in)
     gmsh.model.geo.removeAllDuplicates()
 

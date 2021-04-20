@@ -12,7 +12,6 @@ from pyleecan.Classes.SolutionVector import SolutionVector
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
 class Test_get_axes_list(TestCase):
     """ Tests for get_axis_list method from Solution classes"""
 

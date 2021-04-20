@@ -111,7 +111,6 @@ split_list.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_Segment_Split(object):
     """unittest for Segment split methods"""
 

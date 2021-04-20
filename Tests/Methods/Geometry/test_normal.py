@@ -94,7 +94,6 @@ norm_list.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_Line_normal(object):
     """unittest for Line comp_normal method"""
 

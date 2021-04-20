@@ -21,7 +21,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
 import pytest
 
 
-@pytest.mark.GUI
 class TestSBar(object):
     """Test that the widget SBar behave like it should"""
 

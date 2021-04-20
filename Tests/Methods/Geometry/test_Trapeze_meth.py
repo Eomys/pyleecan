@@ -8,7 +8,6 @@ from numpy import pi
 from pyleecan.definitions import config_dict
 
 
-@pytest.mark.METHODS
 class Test_Trapeze_meth(object):
     """Unittest for the Trapeze methods"""
 

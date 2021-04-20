@@ -43,7 +43,7 @@ load_test.append(  # 4
     {"type": "SPMSM", "index": 3, "name": "SIPMSM_008", "p": 4, "count": 10}
 )
 load_test.append(  # 5
-    {"type": "IPMSM", "index": 4, "name": "machine_IPMSM_A", "p": 5, "count": 10}
+    {"type": "IPMSM", "index": 4, "name": "machine_Toyota_Prius", "p": 5, "count": 10}
 )
 load_test.append(  # 6
     {"type": "WRSM", "index": 5, "name": "WRSM_001", "p": 6, "count": 13}
@@ -62,7 +62,6 @@ import pytest
 matlib_path = join(TEST_DATA_DIR, "Material")
 
 
-@pytest.mark.GUI
 class TestDMachineSetup(object):
     """Test that the widget DMachineSetup behave like it should"""
 
@@ -86,6 +85,7 @@ class TestDMachineSetup(object):
 
         self.app.quit()
 
+    @pytest.mark.skip
     @pytest.mark.parametrize("test_dict", load_test)
     def test_load(self, setup, test_dict):
         """Check that you can load a machine"""

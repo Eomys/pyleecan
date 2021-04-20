@@ -13,7 +13,6 @@ from Tests import save_gui_path as save_path
 import pytest
 
 
-@pytest.mark.GUI
 class TestDTableData(object):
     """Test that the widget DTableData behave like it should"""
 

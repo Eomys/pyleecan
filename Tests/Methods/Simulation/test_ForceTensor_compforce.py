@@ -20,7 +20,7 @@ import numpy as np
 
 
 @pytest.mark.skip
-@pytest.mark.Force
+@pytest.mark.ForceTensor
 def test_Force_Tensor_compforce():
     """Validation of compforce method from ForceTensor module by comparing with analytical solution on an elementary triangle."""
 
@@ -89,6 +89,7 @@ def test_Force_Tensor_compforce():
     )
 
 
+@pytest.mark.ForceTensor
 def test_element_loop_1cell():
     """Validation of element_loop method from ForceTensor module by comparing with analytical solution on an elementary triangle."""
 
@@ -140,6 +141,7 @@ def test_element_loop_1cell():
     return True
 
 
+@pytest.mark.ForceTensor
 def test_comp_magnetostrictive_tensor_1cell():
     """Validation of comp_magnetostrictive_tensor method from ForceTensor module by comparing with analytical solution on an elementary triangle."""
 
@@ -178,4 +180,4 @@ def test_comp_magnetostrictive_tensor_1cell():
 
 if __name__ == "__main__":
 
-    test_element_loop()
+    test_element_loop_1cell()

@@ -21,7 +21,6 @@ from pyleecan.Classes.HoleM57 import HoleM57
 from Tests import save_plot_path as save_path
 
 
-@pytest.mark.PLOT
 class Test_Hole_57_plot(object):
 
     """pytest for Machine with Hole 57 plot"""

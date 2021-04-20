@@ -8,7 +8,6 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
 class Test_interface(object):
     """unittest for elements and nodes getter methods"""
 

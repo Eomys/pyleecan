@@ -7,7 +7,6 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
 def test_MeshMat():
     """unittest with Meshmat object"""
     mesh = MeshMat()

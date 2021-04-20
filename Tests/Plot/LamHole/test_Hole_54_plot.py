@@ -16,7 +16,6 @@ from pyleecan.Classes.HoleM54 import HoleM54
 from Tests import save_plot_path as save_path
 
 
-@pytest.mark.PLOT
 class Test_Hole_54_plot(object):
     """pytest for Lamination with Hole plot"""
 

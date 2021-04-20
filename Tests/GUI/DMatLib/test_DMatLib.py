@@ -20,7 +20,6 @@ import pytest
 tmp_folder = join(save_gui_path, "DMatLib", "tmp_matlib")
 
 
-@pytest.mark.GUI
 class TestDMatLib(object):
     """Test that the widget DMatLib behave like it should"""
 

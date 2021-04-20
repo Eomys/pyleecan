@@ -28,7 +28,6 @@ def test_obj():
     return test_obj
 
 
-@pytest.mark.PLOT
 def test_slot(test_obj):
     """Schematics for slot number"""
     CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
@@ -57,7 +56,6 @@ def test_slot(test_obj):
     fig.savefig(join(save_path, "test_Wind_Slot.png"))
 
 
-@pytest.mark.PLOT
 def test_rad_tan(test_obj):
     """Schematics for rad/tan layer"""
 

@@ -14,13 +14,15 @@ class ExamplePostMethod(PostMethod):
         output.simu.machine.stator.slot.W0 += 2
 
 
+@pytest.mark.IPMSM
+@pytest.mark.SingleOP
 def test_post_simu():
     """Test the simulation.post_list"""
 
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     # simu1, simu without postprocessing
-    simu1 = Simu1(name="test_post_simu", machine=IPMSM_A)
+    simu1 = Simu1(name="test_post_simu", machine=Toyota_Prius)
     # Definition of the input
     simu1.input = InputElec(
         N0=2000, Id_ref=-100, Iq_ref=200, Nt_tot=10, Na_tot=2048, rot_dir=1
@@ -28,6 +30,7 @@ def test_post_simu():
 
     # simu2, postprocessing 1 PostFunction, 1 PostMethod
     simu2 = simu1.copy()
+    simu2.name = "test_post_simu2"
 
     def example_post(output):
         output.simu.machine.stator.slot.H0 += 1

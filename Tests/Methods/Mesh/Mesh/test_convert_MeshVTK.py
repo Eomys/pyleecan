@@ -9,8 +9,6 @@ from os.path import join
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
-# @pytest.mark.DEV
 def test_convert_MeshVTK():
     """test convert method of MeshVTK with some vtu file"""
     mesh = MeshVTK(

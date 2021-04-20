@@ -8,7 +8,6 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
 class Test_get_cell_MeshMat(object):
     """unittest for Mesh get_cell methods. Indirect test add_element """
 
