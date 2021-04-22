@@ -21,6 +21,7 @@ COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 def plot_deflection_animated(
     self,
+    *args,
     label=None,
     index=None,
     indices=None,
@@ -28,7 +29,6 @@ def plot_deflection_animated(
     factor=None,
     field_name=None,
     is_time=False,
-    ifreq=None,
     gif_name="animation.gif",
     gif_path="./",
     title="",
@@ -65,46 +65,48 @@ def plot_deflection_animated(
     if group_names is not None:
         meshsol_grp = self.get_mesh(group_names)
         meshsol_grp.plot_deflection_animated(
-            label,
-            index,
-            indices,
-            clim,
-            factor,
-            field_name,
-            is_time,
-            ifreq,
-            gif_name,
-            gif_path,
-            title,
-            None,
+            *args,
+            label=label,
+            index=index,
+            indices=indices,
+            clim=clim,
+            factor=factor,
+            field_name=field_name,
+            is_time=is_time,
+            gif_name=gif_name,
+            gif_path=gif_path,
+            is_show_fig=is_show_fig,
+            title=title,
+            group_names=None,
         )
     else:
-        # Get the mesh
-        mesh = self.get_mesh(label=label, index=index)
-        if isinstance(mesh, MeshMat):
-            mesh_pv = mesh.get_mesh_pv(indices=indices)
-            mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
 
-        # Get the field
-        field = self.get_field(
-            label=label, index=index, indices=indices, is_radial=True
+        # Get mesh and field
+        mesh_pv, field, field_name = self.get_mesh_field_pv(
+            *args,
+            label=label,
+            index=index,
+            indices=indices,
+            field_name=field_name,
+            is_radial=True,
         )
-        vect_field = self.get_field(label=label, index=index, indices=indices)
+        mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
+        _, vect_field, _ = self.get_mesh_field_pv(
+            *args,
+            label=label,
+            index=index,
+            indices=indices,
+            field_name=field_name,
+            is_radial=False,
+        )
+
         if is_time:
             field_data = real(field[:, 0])
             vect_field_data = real(vect_field[:, :, 0])
-        elif len(field.shape) == 2:
-            if ifreq is None:
-                # Find frequency with highest response
-                ifreq = argmax(np_sum(real(field), axis=0))
-            field = field[:, ifreq]
-            vect_field = vect_field[:, :, ifreq]
-            field_data = real(field)
-            vect_field_data = real(vect_field)
-
         else:
             field_data = real(field)
             vect_field_data = real(vect_field)
+        
         if field_name is None:
             if label is not None:
                 field_name = label
@@ -122,7 +124,8 @@ def plot_deflection_animated(
 
         # Compute deformation factor
         if factor is None:
-            factor = 1 / (100 * clim[1])
+            # factor = 1 / (100 * clim[1])
+            factor = 1 / clim[1] * 10
 
         # Extract surface
         surf = mesh.get_surf(indices=indices)
@@ -147,21 +150,29 @@ def plot_deflection_animated(
             color="black",
         )
         p.add_mesh(
+            mesh_pv, color="grey", opacity=1, show_edges=True, edge_color="white"
+        )
+        p.set_position((0.2, 0.2, 0.5))
+        p.reset_camera()
+        p.clear()
+        p.add_mesh(
             surf_warp,
             scalars=field_name,
-            opacity=1,
             show_edges=False,
             cmap=COLOR_MAP,
             clim=clim,
             scalar_bar_args=sargs,
         )
         p.add_text(title, position="upper_edge")
+        p.add_axes()
+
         p.show(auto_close=False)
         # p.show(use_panel=False, auto_close=False)
 
         # GIF
         if is_time:
             p.open_gif(gif_path + "/" + gif_name)
+            p.clear()
             for tind in range(field.shape[2]):
                 field_data = real(field[:, tind])
                 vect_field_data = real(vect_field[:, :, tind])
@@ -183,6 +194,7 @@ def plot_deflection_animated(
         else:
             nframe = 25
             p.open_gif(gif_path + "/" + gif_name)
+            p.clear()
             for t in linspace(0.0, 1.0, nframe + 1)[:nframe]:
                 vect_field_data = real(vect_field * exp(1j * 2 * pi * t))
                 field_data = real(field * exp(1j * 2 * pi * t))

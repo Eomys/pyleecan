@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+from ....Functions.Structural.conversions import pol2cart                                                         
 
-def get_field(self, *args, is_squeeze=False):
+def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
     """Get the value of variables stored in Solution.
 
     Parameters
@@ -11,6 +12,10 @@ def get_field(self, *args, is_squeeze=False):
         an SolutionVector object
     *args: list of strings
         List of axes requested by the user, their units and values (optional)
+    nodes : array of float
+        Node of the mesh (optional)
+    is_rthetaz : bool
+        cylindrical coordinates
 
     Returns
     -------
@@ -32,19 +37,70 @@ def get_field(self, *args, is_squeeze=False):
                 dim = 3
         id += 1
 
-    if not args:
-        field = np.zeros(axsize)
-        field_dict = self.field.get_xyz_along(tuple(axname), is_squeeze=is_squeeze)
+    # Case of unstructured mesh
+    components = self.field.components
+    if node is not None:
+        if "radial" in components:
+            comp_zero = np.zeros(
+                components["radial"].get_along(args)[components["radial"].symbol].shape
+            )
+            if "axial" in components:
+                field_pol = np.stack(
+                    (
+                        components["radial"].get_along(args)[
+                            components["radial"].symbol
+                        ],
+                        components["circ"].get_along(args)[components["circ"].symbol],
+                        components["axial"].get_along(args)[components["axial"].symbol],
+                    ),
+                    axis=-1,
+                )
+            elif "circ" in components:
+                field_pol = np.stack(
+                    (
+                        components["radial"].get_along(args)[
+                            components["radial"].symbol
+                        ],
+                        components["circ"].get_along(args)[components["circ"].symbol],
+                        comp_zero,
+                    ),
+                    axis=-1,
+                )
+            else:
+                field_pol = np.stack(
+                    (
+                        components["radial"].get_along(args)[
+                            components["radial"].symbol
+                        ],
+                        comp_zero,
+                        comp_zero,
+                    ),
+                    axis=-1,
+                )
+            if len(field_pol.shape) == 1:
+                field_pol = field_pol[np.newaxis,:]
+            if is_rthetaz:
+                field = field_pol
+            else:
+                field = pol2cart(field_pol, node)
+        else:
+            # TODO
+            pass
     else:
-        field_dict = self.field.get_xyz_along(args, is_squeeze=is_squeeze)
-        comp_x = field_dict["comp_x"]
-        size = np.hstack((comp_x.shape, dim))
-        field = np.zeros(size)
+        if not args:
+            field = np.zeros(axsize)
+            field_dict = self.field.get_xyz_along(tuple(axname), is_squeeze=is_squeeze)
+        else:
+            field_dict = self.field.get_xyz_along(args, is_squeeze=is_squeeze)
+            comp_x = field_dict["comp_x"]
+            size = np.hstack((comp_x.shape, dim))
+            field = np.zeros(size)
 
-    field[..., 0] = field_dict["comp_x"]
-    field[..., 1] = field_dict["comp_y"]
+        field[..., 0] = field_dict["comp_x"]
+        field[..., 1] = field_dict["comp_y"]
 
-    if dim == 3:
-        field[..., 2] = field_dict["comp_z"]
+        if dim == 3:
+            field[..., 2] = field_dict["comp_z"]
 
+        # TODO: cart2pol if is_rthetaz                              
     return field

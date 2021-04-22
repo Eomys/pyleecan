@@ -25,7 +25,14 @@ def get_axes_list(self):
     ax_name = list()
     ax_size = list()
 
-    comp = self.field.components["comp_x"]
+    if "comp_x" in self.field.components:
+        comp = self.field.components["comp_x"]
+    elif "radial" in self.field.components:
+        comp = self.field.components["radial"]
+    else:
+        raise Exception(
+            "self.field.components shall have either " "comp_x" " or " "radial" " key"
+        )
     for axis in comp.axes:
         ax_name.append(axis.name)
         ax_size.append(axis.get_length())

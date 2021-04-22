@@ -11,13 +11,13 @@ COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 def plot_deflection(
     self,
+    *args,
     label=None,
     index=None,
     indices=None,
     clim=None,
     factor=None,
     field_name=None,
-    ifreq=0,
     save_path=None,
     title="",
     win_title=None,
@@ -41,8 +41,6 @@ def plot_deflection(
         factor to multiply vector field
     field_name : str
         title of the field to display on plot
-    ifreq : int
-        index of the frequency to use for plot (if exists)
 
     Returns
     -------
@@ -81,23 +79,25 @@ def plot_deflection(
     elif win_title != "" and title == "":
         title = win_title
 
-    # Get the mesh
-    mesh = self.get_mesh(label=label, index=index)
-    if isinstance(mesh, MeshMat):
-        mesh_pv = mesh.get_mesh_pv(indices=indices)
-        mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
-
-    # Get the field
-    field = real(
-        self.get_field(
-            label=label, index=index, indices=indices, is_surf=is_surf, is_radial=True
-        )
+    # Get mesh and field
+    mesh_pv, field, field_name = self.get_mesh_field_pv(
+        *args,
+        label=label,
+        index=index,
+        indices=indices,
+        field_name=field_name,
+        is_radial=True,
     )
-    vect_field = real(self.get_field(label=label, index=index, indices=indices))
-    if len(field.shape) == 2:
-        # Third dimension is frequencies
-        field = field[:, ifreq]
-        vect_field = vect_field[:, :, ifreq]
+    mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
+    _, vect_field, _ = self.get_mesh_field_pv(
+        *args,
+        label=label,
+        index=index,
+        indices=indices,
+        field_name=field_name,
+        is_radial=False,
+    )
+    
     if field_name is None:
         if label is not None:
             field_name = label
@@ -110,11 +110,13 @@ def plot_deflection(
     if clim is None:
         clim = [np_min(real(field)), np_max(real(field))]
         if (clim[1] - clim[0]) / clim[1] < 0.01:
-            clim[0] = -clim[1]
+            clim[0] = -abs(clim[1])
+            clim[1] = abs(clim[1])
 
     # Compute deformation factor
     if factor is None:
-        factor = 1 / (100 * clim[1])
+        # factor = 1 / (100 * clim[1])
+        factor = 1 / clim[1] * 10
 
     # Extract surface
     if is_surf:
@@ -146,6 +148,12 @@ def plot_deflection(
         color="black",
     )
     p.add_mesh(
+        mesh_pv, color="grey", opacity=1, show_edges=True, edge_color="white"
+    )
+    p.set_position((0.2, 0.2, 0.5))
+    p.reset_camera()
+    p.clear()
+    p.add_mesh(
         surf_warp,
         scalars=field_name,
         opacity=1,
@@ -155,6 +163,7 @@ def plot_deflection(
         scalar_bar_args=sargs,
     )
     p.add_text(title, position="upper_edge")
+    p.add_axes()
     if self.dimension == 2:
         p.view_xy()
     if save_path is None:
