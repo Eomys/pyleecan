@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ....Functions.Structural.conversions import pol2cart                                                         
+from ....Functions.Structural.conversions import pol2cart
+
 
 def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
     """Get the value of variables stored in Solution.
@@ -78,7 +79,7 @@ def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
                     axis=-1,
                 )
             if len(field_pol.shape) == 1:
-                field_pol = field_pol[np.newaxis,:]
+                field_pol = field_pol[np.newaxis, :]
             if is_rthetaz:
                 field = field_pol
             else:
@@ -102,5 +103,5 @@ def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
         if dim == 3:
             field[..., 2] = field_dict["comp_z"]
 
-        # TODO: cart2pol if is_rthetaz                              
+        # TODO: cart2pol if is_rthetaz
     return field

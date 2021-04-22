@@ -86,8 +86,8 @@ def get_field(
             node=self.mesh[0].get_node(),
         )
         if is_radial:
-            result = result[:,0]
-    else:                                                         
+            result = result[:, 0]
+    else:
         field = solution.get_field(
             *args_list, is_squeeze=False
         )  # Don't use is_squeeze = is_squeeze here!

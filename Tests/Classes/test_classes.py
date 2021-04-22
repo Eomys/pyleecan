@@ -331,7 +331,9 @@ def test_class_type_float(class_dict):
             assert test_obj.__getattribute__(prop["name"]) == value, msg
         else:
             # CheckTypeError expected
-            with pytest.raises(CheckTypeError,):
+            with pytest.raises(
+                CheckTypeError,
+            ):
                 # print(msg)
                 test_obj.__setattr__(prop["name"], value)
 

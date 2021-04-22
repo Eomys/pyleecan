@@ -75,7 +75,6 @@ def plot_deflection_animated(
             is_time=is_time,
             gif_name=gif_name,
             gif_path=gif_path,
-            is_show_fig=is_show_fig,
             title=title,
             group_names=None,
         )
@@ -106,7 +105,7 @@ def plot_deflection_animated(
         else:
             field_data = real(field)
             vect_field_data = real(vect_field)
-        
+
         if field_name is None:
             if label is not None:
                 field_name = label

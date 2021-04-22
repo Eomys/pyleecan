@@ -12,6 +12,7 @@ from pyleecan.Classes.SolutionVector import SolutionVector
 from pyleecan.Classes.MeshSolution import MeshSolution
 from Tests import save_plot_path as save_path
 
+
 @pytest.fixture(scope="module")
 def fixture_gen_mesh():
     mesh = MeshMat(dimension=3)
@@ -43,8 +44,9 @@ def fixture_gen_mesh():
     mesh.add_cell([6, 14, 15, 7], "quad")
     mesh.add_cell([7, 15, 8, 0], "quad")
     mesh.cell["quad"].indice = np.array([1, 2, 3, 4, 5, 6, 7, 8])
-    
+
     return mesh
+
 
 @pytest.fixture(scope="module")
 def fixture_gen_field():
@@ -87,9 +89,10 @@ def fixture_gen_field():
 
     return solution
 
+
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
-# @pytest.mark.DEV
+@pytest.mark.DEV
 def test_plot_glyph(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
@@ -99,15 +102,16 @@ def test_plot_glyph(fixture_gen_mesh, fixture_gen_field):
         dimension=3,
     )
     MSol.plot_glyph(
-        is_show_fig=False, 
+        is_show_fig=False,
         is_point_arrow=True,
         factor=0.2,
         save_path=save_path + "/plot_glyph.png",
     )
 
+
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
-# @pytest.mark.DEV
+@pytest.mark.DEV
 def test_plot_glyph_animated(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
@@ -123,9 +127,10 @@ def test_plot_glyph_animated(fixture_gen_mesh, fixture_gen_field):
         gif_path=save_path,
     )
 
+
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
-# @pytest.mark.DEV
+@pytest.mark.DEV
 def test_plot_deflection(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
@@ -137,11 +142,13 @@ def test_plot_deflection(fixture_gen_mesh, fixture_gen_field):
     MSol.plot_deflection(
         factor=0.2,
         save_path=save_path + "/plot_deflection.png",
+        is_show_fig=False,
     )
+
 
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
-# @pytest.mark.DEV
+@pytest.mark.DEV
 def test_plot_deflection_animated(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
@@ -152,6 +159,6 @@ def test_plot_deflection_animated(fixture_gen_mesh, fixture_gen_field):
     )
     MSol.plot_deflection_animated(
         factor=0.2,
-        gif_name="plot_glyph_animated.gif",
+        gif_name="plot_deflection_animated.gif",
         gif_path=save_path,
     )
