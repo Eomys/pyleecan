@@ -91,8 +91,6 @@ def fixture_gen_field():
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
-@pytest.mark.DEV
 def test_plot_glyph(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
@@ -110,8 +108,6 @@ def test_plot_glyph(fixture_gen_mesh, fixture_gen_field):
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
-@pytest.mark.DEV
 def test_plot_glyph_animated(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
@@ -129,8 +125,6 @@ def test_plot_glyph_animated(fixture_gen_mesh, fixture_gen_field):
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
-@pytest.mark.DEV
 def test_plot_deflection(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
@@ -147,8 +141,6 @@ def test_plot_deflection(fixture_gen_mesh, fixture_gen_field):
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
-@pytest.mark.DEV
 def test_plot_deflection_animated(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
