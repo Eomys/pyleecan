@@ -78,18 +78,19 @@ def get_field(
     axes_list = solution.get_axes_list()
     ax_names = axes_list[0]
     #ax_names = [ax.name for ax in solution.field.get_axes()]
-    if "angle" not in ax_names:
-        # If arbitrary mesh (no angle in the solution axes) the nodes
-        # coordinate shall be specified to get_field()
-        result = solution.get_field(
-            *args_list,
-            is_squeeze=False,
-            is_rthetaz=is_rthetaz or is_radial,
-            node=self.mesh[0].get_node(),
-        )
-        if is_radial:
-            result = result[:, 0]
-    else:
+    # if "angle" not in ax_names:
+    #     # If arbitrary mesh (no angle in the solution axes) the nodes
+    #     # coordinate shall be specified to get_field()
+    #     result = solution.get_field(
+    #         *args_list,
+    #         is_squeeze=False,
+    #         is_rthetaz=is_rthetaz or is_radial,
+    #         node=self.mesh[0].get_node(),
+    #     )
+    #     if is_radial:
+    #         result = result[:, 0]
+    # else:
+    if True:
         field = solution.get_field(
             *args_list, is_squeeze=False
         )  # Don't use is_squeeze = is_squeeze here!
