@@ -1,4 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-eec,-,Electrical Equivalent Circuit,,EEC,None,,,,Simulation,,run,VERSION,1,Electric module abstract object,
-,,,,,,,,,,,comp_power,,,,
+eec,-,Electrical Equivalent Circuit,,EEC,None,,,,Simulation,,run,VERSION,1,Electric module object for electrical equivalent circuit simulation,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Electrical,,,,,,comp_power,,,,
 ,,,,,,,,,,,comp_torque,,,,

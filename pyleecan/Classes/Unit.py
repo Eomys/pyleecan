@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -106,39 +110,25 @@ class Unit(FrozenClass):
         )
     else:
         set_m2 = set_m2
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(self, unit_m=0, unit_rad=0, unit_m2=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            unit_m = obj.unit_m
-            unit_rad = obj.unit_rad
-            unit_m2 = obj.unit_m2
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -148,7 +138,7 @@ class Unit(FrozenClass):
                 unit_rad = init_dict["unit_rad"]
             if "unit_m2" in list(init_dict.keys()):
                 unit_m2 = init_dict["unit_m2"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.unit_m = unit_m
         self.unit_rad = unit_rad
@@ -158,7 +148,7 @@ class Unit(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Unit_str = ""
         if self.parent is None:
@@ -183,14 +173,41 @@ class Unit(FrozenClass):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._unit_m != self._unit_m:
+            diff_list.append(name + ".unit_m")
+        if other._unit_rad != self._unit_rad:
+            diff_list.append(name + ".unit_rad")
+        if other._unit_m2 != self._unit_m2:
+            diff_list.append(name + ".unit_m2")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.unit_m)
+        S += getsizeof(self.unit_rad)
+        S += getsizeof(self.unit_m2)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Unit_dict = dict()
         Unit_dict["unit_m"] = self.unit_m
         Unit_dict["unit_rad"] = self.unit_rad
         Unit_dict["unit_m2"] = self.unit_m2
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Unit_dict["__class__"] = "Unit"
         return Unit_dict
 

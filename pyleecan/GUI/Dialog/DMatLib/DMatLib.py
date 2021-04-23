@@ -4,14 +4,13 @@ from os import getcwd, remove, rename
 from os.path import abspath, dirname, join, split
 from re import match
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QDialog, QFileDialog, QListWidget, QMessageBox
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QDialog, QFileDialog, QListWidget, QMessageBox
 
 from ....Classes.ImportMatrixVal import ImportMatrixVal
 from ....Classes.ImportMatrixXls import ImportMatrixXls
 from ....Functions.load import load_matlib
 from ....Functions.path_tools import abs_file_path
-from ....GUI import GUI_logger
 from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 from ....GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
 
@@ -20,7 +19,7 @@ class DMatLib(Gen_DMatLib, QDialog):
     """Material Library Dialog to view and modify material data."""
 
     # Signal to W_MachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
 
     def __init__(self, matlib, key="RefMatLib", selected=0):
         """Init the Matlib GUI
@@ -46,6 +45,7 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         # Load the material library
         self.matlib = matlib
+        self.current_dialog = None
 
         # bool to know if the material selected is in MatLib
         self.mat_selected_in_matlib = True
@@ -146,17 +146,29 @@ class DMatLib(Gen_DMatLib, QDialog):
             mat_id = 0
             dict_key = "RefMatLib"
 
-        # Open the setup GUI
+        # Close previous window if needed
+        if self.current_dialog is not None:
+            self.current_dialog.close()
+
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
-        self.mat_win = DMatSetup(
+        self.current_dialog = DMatSetup(
             self.matlib.dict_mat[dict_key][mat_id], self.mat_selected_in_matlib
         )
-        return_code = self.mat_win.exec_()
+        self.current_dialog.finished.connect(self.validate_edit)
+        self.current_dialog.dict_key = dict_key
+        self.current_dialog.mat_id = mat_id
+        self.current_dialog.show()
 
+    def validate_edit(self, return_code):
+        dict_key = self.current_dialog.dict_key
+        mat_id = self.current_dialog.mat_id
+        mat = self.current_dialog.mat
+        # Reset dialog
+        self.current_dialog = None
         if return_code > 0:
             # Change the material
             is_change = self.matlib.replace_material(
-                dict_key, mat_id, self.mat_win.mat, save=return_code == 1
+                dict_key, mat_id, mat, save=return_code == 1
             )
 
             # Emit saveNeeded if the machine has been change
@@ -210,12 +222,21 @@ class DMatLib(Gen_DMatLib, QDialog):
             mat_id = self.nav_mat_mach.currentRow()
             dict_key = "MachineMatLib"
 
-        # Open the setup GUI
+        # Close previous window if needed
+        if self.current_dialog is not None:
+            self.current_dialog.close()
+
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
-        self.mat_win = DMatSetup(
+        self.current_dialog = DMatSetup(
             self.matlib.dict_mat[dict_key][mat_id], self.mat_selected_in_matlib
         )
-        return_code = self.mat_win.exec_()
+        self.current_dialog.finished.connect(self.validate_new)
+        self.current_dialog.show()
+
+    def validate_new(self, return_code):
+        mat = self.current_dialog.mat
+        # Reset dialog
+        self.current_dialog = None
         if return_code > 0:
             # Update the material only if the user validate at the end
             if (self.mat_selected_in_matlib and return_code == 1) or (
@@ -224,7 +245,7 @@ class DMatLib(Gen_DMatLib, QDialog):
                 self.mat_selected_in_matlib = True
 
                 # Add the material to the mat_ref
-                self.matlib.add_new_mat_ref(self.mat_win.mat)
+                self.matlib.add_new_mat_ref(mat)
 
                 self.update_list_mat()
                 self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
@@ -232,7 +253,7 @@ class DMatLib(Gen_DMatLib, QDialog):
 
             else:
                 # Add the material to the machine materials
-                self.matlib.add_new_mat_mach(self.mat_win.mat)
+                self.matlib.add_new_mat_mach(mat)
 
                 self.update_list_mat()
                 self.nav_mat_mach.setCurrentRow(self.nav_mat_mach.count() - 1)
@@ -460,10 +481,26 @@ class DMatLib(Gen_DMatLib, QDialog):
             if isinstance(mat.mag.BH_curve, ImportMatrixXls):
                 BH_text = split(mat.mag.BH_curve.file_path)[1]
             elif isinstance(mat.mag.BH_curve, ImportMatrixVal):
-                BH_text = "Matrix " + str(mat.mag.BH_curve.get_data().shape)
+                data = mat.mag.BH_curve.get_data()
+                shape_str = str(data.shape) if data is not None else "(-,-)"
+                BH_text = "Matrix " + shape_str
             else:
                 BH_text = "-"
             self.out_BH.setText(BH_text)
+
+    def closeEvent(self, event):
+        """Display a message before leaving
+
+        Parameters
+        ----------
+        self : DMatSetup
+            A DMatSetup object
+        event :
+            The closing event
+        """
+        # Close popup if needed
+        if self.current_dialog is not None:
+            self.current_dialog.close()
 
 
 def update_text(label, name, value, unit):

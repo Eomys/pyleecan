@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -55,14 +59,9 @@ class MatMagnetics(FrozenClass):
         )
     else:
         plot_BH = plot_BH
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -74,35 +73,22 @@ class MatMagnetics(FrozenClass):
         alpha_Br=0,
         Wlam=0,
         BH_curve=-1,
+        LossData=-1,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if BH_curve == -1:
-            BH_curve = ImportMatrix()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            mur_lin = obj.mur_lin
-            Hc = obj.Hc
-            Brm20 = obj.Brm20
-            alpha_Br = obj.alpha_Br
-            Wlam = obj.Wlam
-            BH_curve = obj.BH_curve
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -118,62 +104,23 @@ class MatMagnetics(FrozenClass):
                 Wlam = init_dict["Wlam"]
             if "BH_curve" in list(init_dict.keys()):
                 BH_curve = init_dict["BH_curve"]
-        # Initialisation by argument
+            if "LossData" in list(init_dict.keys()):
+                LossData = init_dict["LossData"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.mur_lin = mur_lin
         self.Hc = Hc
         self.Brm20 = Brm20
         self.alpha_Br = alpha_Br
         self.Wlam = Wlam
-        # BH_curve can be None, a ImportMatrix object or a dict
-        if isinstance(BH_curve, dict):
-            # Check that the type is correct (including daughter)
-            class_name = BH_curve.get("__class__")
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for BH_curve"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.BH_curve = class_obj(init_dict=BH_curve)
-        elif isinstance(BH_curve, str):
-            from ..Functions.load import load
-
-            BH_curve = load(BH_curve)
-            # Check that the type is correct (including daughter)
-            class_name = BH_curve.__class__.__name__
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for BH_curve"
-                )
-            self.BH_curve = BH_curve
-        else:
-            self.BH_curve = BH_curve
+        self.BH_curve = BH_curve
+        self.LossData = LossData
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         MatMagnetics_str = ""
         if self.parent is None:
@@ -192,6 +139,11 @@ class MatMagnetics(FrozenClass):
             MatMagnetics_str += "BH_curve = " + tmp
         else:
             MatMagnetics_str += "BH_curve = None" + linesep + linesep
+        if self.LossData is not None:
+            tmp = self.LossData.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MatMagnetics_str += "LossData = " + tmp
+        else:
+            MatMagnetics_str += "LossData = None" + linesep + linesep
         return MatMagnetics_str
 
     def __eq__(self, other):
@@ -211,10 +163,63 @@ class MatMagnetics(FrozenClass):
             return False
         if other.BH_curve != self.BH_curve:
             return False
+        if other.LossData != self.LossData:
+            return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._mur_lin != self._mur_lin:
+            diff_list.append(name + ".mur_lin")
+        if other._Hc != self._Hc:
+            diff_list.append(name + ".Hc")
+        if other._Brm20 != self._Brm20:
+            diff_list.append(name + ".Brm20")
+        if other._alpha_Br != self._alpha_Br:
+            diff_list.append(name + ".alpha_Br")
+        if other._Wlam != self._Wlam:
+            diff_list.append(name + ".Wlam")
+        if (other.BH_curve is None and self.BH_curve is not None) or (
+            other.BH_curve is not None and self.BH_curve is None
+        ):
+            diff_list.append(name + ".BH_curve None mismatch")
+        elif self.BH_curve is not None:
+            diff_list.extend(
+                self.BH_curve.compare(other.BH_curve, name=name + ".BH_curve")
+            )
+        if (other.LossData is None and self.LossData is not None) or (
+            other.LossData is not None and self.LossData is None
+        ):
+            diff_list.append(name + ".LossData None mismatch")
+        elif self.LossData is not None:
+            diff_list.extend(
+                self.LossData.compare(other.LossData, name=name + ".LossData")
+            )
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.mur_lin)
+        S += getsizeof(self.Hc)
+        S += getsizeof(self.Brm20)
+        S += getsizeof(self.alpha_Br)
+        S += getsizeof(self.Wlam)
+        S += getsizeof(self.BH_curve)
+        S += getsizeof(self.LossData)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         MatMagnetics_dict = dict()
         MatMagnetics_dict["mur_lin"] = self.mur_lin
@@ -225,8 +230,12 @@ class MatMagnetics(FrozenClass):
         if self.BH_curve is None:
             MatMagnetics_dict["BH_curve"] = None
         else:
-            MatMagnetics_dict["BH_curve"] = self.BH_curve.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+            MatMagnetics_dict["BH_curve"] = self.BH_curve.as_dict(**kwargs)
+        if self.LossData is None:
+            MatMagnetics_dict["LossData"] = None
+        else:
+            MatMagnetics_dict["LossData"] = self.LossData.as_dict(**kwargs)
+        # The class name is added to the dict for deserialisation purpose
         MatMagnetics_dict["__class__"] = "MatMagnetics"
         return MatMagnetics_dict
 
@@ -240,6 +249,8 @@ class MatMagnetics(FrozenClass):
         self.Wlam = None
         if self.BH_curve is not None:
             self.BH_curve._set_None()
+        if self.LossData is not None:
+            self.LossData._set_None()
 
     def _get_mur_lin(self):
         """getter of mur_lin"""
@@ -340,10 +351,19 @@ class MatMagnetics(FrozenClass):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
+        elif value == -1:
+            value = ImportMatrix()
+        elif isinstance(value, dict):
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "BH_curve"
+            )
+            value = class_obj(init_dict=value)
         check_var("BH_curve", value, "ImportMatrix")
         self._BH_curve = value
 
@@ -354,6 +374,40 @@ class MatMagnetics(FrozenClass):
         fget=_get_BH_curve,
         fset=_set_BH_curve,
         doc=u"""nonlinear B(H) curve (two columns matrix, H and B(H))
+
+        :Type: ImportMatrix
+        """,
+    )
+
+    def _get_LossData(self):
+        """getter of LossData"""
+        return self._LossData
+
+    def _set_LossData(self, value):
+        """setter of LossData"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, ndarray):
+            value = ImportMatrixVal(value=value)
+        elif isinstance(value, list):
+            value = ImportMatrixVal(value=array(value))
+        elif value == -1:
+            value = ImportMatrix()
+        elif isinstance(value, dict):
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "LossData"
+            )
+            value = class_obj(init_dict=value)
+        check_var("LossData", value, "ImportMatrix")
+        self._LossData = value
+
+        if self._LossData is not None:
+            self._LossData.parent = self
+
+    LossData = property(
+        fget=_get_LossData,
+        fset=_set_LossData,
+        doc=u"""specific loss data value triplets, i.e. B, f, P
 
         :Type: ImportMatrix
         """,

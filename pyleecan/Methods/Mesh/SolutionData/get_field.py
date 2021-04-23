@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 
 
-def get_field(self, args=None):
+def get_field(self, *args, is_squeeze=False):
     """Get the value of variables stored in Solution.
 
     Parameters
     ----------
-    self : Solution
-        an Solution object
-    field_name : str
-        name of the field to return
+    self : SolutionData
+        an SolutionData object
+    *args: list of strings
+        List of axes requested by the user, their units and values (optional)
 
     Returns
     -------
@@ -18,20 +17,14 @@ def get_field(self, args=None):
         an array of field values
 
     """
-    if args is None:
-        args = dict()
+    axname, _ = self.get_axes_list()
+    symbol = self.field.symbol
 
-    along_arg = list()
-    for axis in self.field.axes:
-        if axis.name in args:
-            along_arg.append(axis.name + "[" + str(args[axis.name]) + "]")
-        else:
-            along_arg.append(axis.name)
+    if len(args) == 0:
+        field_dict = self.field.get_along(tuple(axname), is_squeeze=is_squeeze)
+    else:
+        field_dict = self.field.get_along(*args, is_squeeze=is_squeeze)
 
-    field = self.field.get_along(tuple(along_arg))[self.field.symbol]
-
-    ## HOTFIX: Remove for next SCIDATATOOL release
-    if self.parent.parent.Nt_tot == 1:
-        field = field[np.newaxis, :]
+    field = field_dict[symbol]
 
     return field

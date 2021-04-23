@@ -2,15 +2,15 @@
 import numpy as np
 
 
-def get_field(self, args=None):
+def get_field(self, *args, is_squeeze=False):
     """Get the value of variables stored in Solution.
 
     Parameters
     ----------
-    self : Solution
-        an Solution object
-    field_name : str
-        name of the field to return
+    self : SolutionVector
+        an SolutionVector object
+    *args: list of strings
+        List of axes requested by the user, their units and values (optional)
 
     Returns
     -------
@@ -18,31 +18,33 @@ def get_field(self, args=None):
         an array of field values
 
     """
-    # if args is None:
-    #    args = dict()
+    if len(args) == 1 and type(args[0]) == tuple:
+        args = args[0]
 
-    # along_arg = list()
-    # comp = list(self.field.components.values())[0]
-    # for axis in comp.axes:
-    #     if axis.name in args:
-    #         along_arg.append(axis.name + "[" + str(args[axis.name]) + "]")
-    #     else:
-    #         along_arg.append(axis.name)
-    #
-    #
-    # field = self.field.get_along_xyz(tuple(along_arg))[self.field.symbol]
-    comp = dict()
-    j = 0
-    for key in self.field.components:
-        comp[j] = self.field.components[key].values
-        j = j + 1
+    axname, axsize = self.get_axes_list()
 
-    s = comp[0].shape
-    vector = np.zeros(np.append(s, j))
+    id = 0
+    for name in axname:
+        if name == "component":
+            if axsize[id] == 2:
+                dim = 2
+            else:
+                dim = 3
+        id += 1
 
-    j = 0
-    for key in self.field.components:
-        vector[..., j] = comp[j]
-        j = j + 1
+    if not args:
+        field = np.zeros(axsize)
+        field_dict = self.field.get_xyz_along(tuple(axname), is_squeeze=is_squeeze)
+    else:
+        field_dict = self.field.get_xyz_along(args, is_squeeze=is_squeeze)
+        comp_x = field_dict["comp_x"]
+        size = np.hstack((comp_x.shape, dim))
+        field = np.zeros(size)
 
-    return vector
+    field[..., 0] = field_dict["comp_x"]
+    field[..., 1] = field_dict["comp_y"]
+
+    if dim == 3:
+        field[..., 2] = field_dict["comp_z"]
+
+    return field

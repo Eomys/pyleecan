@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-import matplotlib.pyplot as plt
-from numpy import pi, linspace, zeros, ones, sqrt, dot, array, squeeze
-from SciDataTool import Data1D, DataLinspace, DataTime
+from numpy import pi, linspace, zeros, ones, dot, squeeze
+from SciDataTool import Data1D, DataTime
 from ....Functions.Electrical.coordinate_transformation import dq2n
 from ....Functions.Winding.gen_phase_list import gen_name
-from ....Functions.check_parent import check_parent
+from pyleecan.Classes.Winding import Winding
 
 
-def comp_mmf_unit(self, Na=2048, Nt=50):
+def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
     """Compute the winding Unit magnetomotive force
 
     Parameters
@@ -18,71 +17,73 @@ def comp_mmf_unit(self, Na=2048, Nt=50):
         Space discretization for offline computation (otherwise use out.elec.angle)
     Nt : int
         Time discretization for offline computation (otherwise use out.elec.time)
+    freq : float
+        Stator current frequency to consider
+
     Returns
     -------
-    mmf_unit : SciDataTool.Classes.DataND.DataND
-        Unit magnetomotive force (Na)
+    MMF_U : SciDataTool.Classes.DataND.DataND
+        Unit magnetomotive force (Na,Nt)
+    WF : SciDataTool.Classes.DataND.DataND
+        Winding functions (qs,Na)
+
     """
 
-    # Check if the lamination is within an output object
-    is_out = check_parent(self, 3)
-
-    # Check if the result is already available
-    if is_out and self.parent.parent.parent.elec.mmf_unit is not None:
-        return self.parent.parent.parent.elec.mmf_unit
-
-    # Define the space dicretization
-    if (
-        is_out
-        and self.parent.parent.parent.elec.angle is not None
-        and self.parent.parent.parent.elec.angle.size > 0
-    ):
-        # Use Electrical module discretization
-        angle = self.parent.parent.parent.elec.angle
-        Na = angle.size
-    else:
-        angle = linspace(0, 2 * pi, Na, endpoint=False)
-
-    # Define the time dicretization
-    if (
-        is_out
-        and self.parent.parent.parent.elec.time is not None
-        and self.parent.parent.parent.elec.time.size > 1
-    ):
-        time = self.parent.parent.parent.elec.time
-        Nt = time.size
-    else:
-        time = linspace(0, 1 / 50, Nt, endpoint=False)  # freq = 50Hz
-
-    # Compute the winding function and mmf
-    wf = self.comp_wind_function(angle=angle)
+    # Get stator winding number of phases
     qs = self.winding.qs
 
-    # Compute unit mmf
+    # Get spatial symmetry
+    per_a, _, _, _ = self.comp_periodicity()
+
+    # Define the space dicretization
+    angle = linspace(0, 2 * pi / per_a, Na, endpoint=False)
+
+    # Define the time dicretization
+    time = linspace(0, 1 / freq, Nt, endpoint=False)
+
+    # Compute the winding function and mmf
+    if self.winding is None or type(self.winding) is Winding:
+        wf = zeros((qs, Na))
+    else:
+        wf = self.comp_wind_function(angle=angle, per_a=per_a)
+
+    # Compute unit current function of time applying constant Id=1 Arms, Iq=0
     Idq = zeros((Nt, 2))
     Idq[:, 0] = ones(Nt)
-    I = dq2n(Idq, 0, n=qs)
+    I = dq2n(Idq, 2 * pi * freq * time, n=qs, is_n_rms=False)
+
+    # Compute unit mmf
     mmf_u = squeeze(dot(I, wf))
 
     # Create a Data object
     Time = Data1D(name="time", unit="s", values=time)
-    Angle = DataLinspace(
+    Angle = Data1D(
         name="angle",
         unit="rad",
-        symmetries={},
-        initial=0,
-        final=2 * pi,
-        number=Na,
-        include_endpoint=False,
+        symmetries={"period": per_a},
+        values=angle,
+        normalizations={"space_order": self.get_pole_pair_number()},
     )
-    MMF = DataTime(
+    Phase = Data1D(
+        name="phase",
+        unit="",
+        values=gen_name(qs),
+        is_components=True,
+    )
+    MMF_U = DataTime(
         name="Unit MMF",
-        unit="p.u.",
+        unit="A",
         symbol="Magnitude",
         axes=[Time, Angle],
         values=mmf_u,
     )
 
-    if is_out:  # Store the result if the Output is available
-        self.parent.parent.parent.elec.mmf_unit = MMF
-    return MMF
+    WF = DataTime(
+        name="Winding Functions",
+        unit="A",
+        symbol="Magnitude",
+        axes=[Phase, Angle],
+        values=wf,
+    )
+
+    return MMF_U, WF

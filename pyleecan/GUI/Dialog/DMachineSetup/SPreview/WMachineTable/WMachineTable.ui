@@ -56,6 +56,9 @@
      <property name="sizeAdjustPolicy">
       <enum>QAbstractScrollArea::AdjustToContents</enum>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
@@ -84,6 +87,13 @@
        <string>Value</string>
       </property>
      </column>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="b_plot_machine">
+     <property name="text">
+      <string>Plot Machine</string>
+     </property>
     </widget>
    </item>
    <item>

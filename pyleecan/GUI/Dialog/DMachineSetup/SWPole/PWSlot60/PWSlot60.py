@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-import PyQt5.QtCore
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+import PySide2.QtCore
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.SlotW60 import SlotW60
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWPole.PWSlot60.Gen_PWSlot60 import Gen_PWSlot60
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
-translate = PyQt5.QtCore.QCoreApplication.translate
+translate = PySide2.QtCore.QCoreApplication.translate
 
 
 class PWSlot60(Gen_PWSlot60, QWidget):
     """Page to set the Slot Type 60"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
 
     def __init__(self, lamination=None):
         """Initialize the widget according to lamination
@@ -55,7 +55,7 @@ class PWSlot60(Gen_PWSlot60, QWidget):
             self.unit_H4,
         ]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Setup the Widget only if the correct type is selected.
         self.lamination = lamination
@@ -215,7 +215,7 @@ class PWSlot60(Gen_PWSlot60, QWidget):
 
             # Compute all the needed output as string
             w_surf = format(
-                gui_option.unit.get_m2(self.slot.comp_surface_wind()), ".4g"
+                gui_option.unit.get_m2(self.slot.comp_surface_active()), ".4g"
             )
             tot_surf = format(gui_option.unit.get_m2(self.slot.comp_surface()), ".4g")
             op_angle = "%.4g" % self.slot.comp_angle_opening()
@@ -271,21 +271,21 @@ class PWSlot60(Gen_PWSlot60, QWidget):
 
         # Check that everything is set
         if lam.slot.R1 is None:
-            return translate("You must set R1 !", "SWSlot_60 check")
+            return "You must set R1 !"
         elif lam.slot.W1 is None:
-            return translate("You must set W1 !", "SWSlot_60 check")
+            return "You must set W1 !"
         elif lam.slot.W2 is None:
-            return translate("You must set W2 !", "SWSlot_60 check")
+            return "You must set W2 !"
         elif lam.slot.H1 is None:
-            return translate("You must set H1 !", "SWSlot_60 check")
+            return "You must set H1 !"
         elif lam.slot.H2 is None:
-            return translate("You must set H2 !", "SWSlot_60 check")
+            return "You must set H2 !"
         elif lam.slot.W3 is None:
-            return translate("You must set W3 !", "SWSlot_60 check")
+            return "You must set W3 !"
         elif lam.slot.H3 is None:
-            return translate("You must set H3 !", "SWSlot_60 check")
+            return "You must set H3 !"
         elif lam.slot.H4 is None:
-            return translate("You must set H4 !", "SWSlot_60 check")
+            return "You must set H4 !"
 
         # Constraints
         try:
@@ -297,10 +297,6 @@ class PWSlot60(Gen_PWSlot60, QWidget):
         try:
             yoke_height = lam.comp_height_yoke()
         except Exception as error:
-            return translate("Unable to compute yoke height:", "SWSlot_60 check") + str(
-                error
-            )
+            return "Unable to compute yoke height:" + str(error)
         if yoke_height <= 0:
-            return translate(
-                "The slot height is greater than the lamination !", "SWSlot_60 check"
-            )
+            return "The slot height is greater than the lamination !"

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.CondType11 import CondType11
 from .....Classes.CondType12 import CondType12
@@ -20,9 +20,9 @@ class SWindCond(Ui_SWindCond, QWidget):
     """Step to define the winding conductor"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup nav
-    step_name = "Winding Conductor"
+    step_name = "Conductor"
 
     def __init__(self, machine, matlib, is_stator=False):
         """Initialize the GUI according to machine

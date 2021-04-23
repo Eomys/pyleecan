@@ -5,84 +5,31 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .VarSimu import VarSimu
-
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Simulation.VarLoad.get_elec_datakeeper import get_elec_datakeeper
-except ImportError as error:
-    get_elec_datakeeper = error
-
-try:
-    from ..Methods.Simulation.VarLoad.get_mag_datakeeper import get_mag_datakeeper
-except ImportError as error:
-    get_mag_datakeeper = error
-
-try:
-    from ..Methods.Simulation.VarLoad.get_force_datakeeper import get_force_datakeeper
-except ImportError as error:
-    get_force_datakeeper = error
-
 
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
+from .VarSimu import VarSimu
+from .Post import Post
 
 
 class VarLoad(VarSimu):
     """Abstract class to generate multi-simulation by changing the operating point"""
 
     VERSION = 1
+    NAME = "Variable Load"
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.VarLoad.get_elec_datakeeper
-    if isinstance(get_elec_datakeeper, ImportError):
-        get_elec_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoad method get_elec_datakeeper: "
-                    + str(get_elec_datakeeper)
-                )
-            )
-        )
-    else:
-        get_elec_datakeeper = get_elec_datakeeper
-    # cf Methods.Simulation.VarLoad.get_mag_datakeeper
-    if isinstance(get_mag_datakeeper, ImportError):
-        get_mag_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoad method get_mag_datakeeper: "
-                    + str(get_mag_datakeeper)
-                )
-            )
-        )
-    else:
-        get_mag_datakeeper = get_mag_datakeeper
-    # cf Methods.Simulation.VarLoad.get_force_datakeeper
-    if isinstance(get_force_datakeeper, ImportError):
-        get_force_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoad method get_force_datakeeper: "
-                    + str(get_force_datakeeper)
-                )
-            )
-        )
-    else:
-        get_force_datakeeper = get_force_datakeeper
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -90,41 +37,30 @@ class VarLoad(VarSimu):
         self,
         name="",
         desc="",
-        datakeeper_list=list(),
-        nb_proc=1,
+        datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
-        ref_simu_index=None,
+        var_simu=None,
         nb_simu=0,
+        is_reuse_femm_file=True,
+        postproc_list=-1,
+        pre_keeper_postproc_list=None,
+        post_keeper_postproc_list=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            name = obj.name
-            desc = obj.desc
-            datakeeper_list = obj.datakeeper_list
-            nb_proc = obj.nb_proc
-            is_keep_all_output = obj.is_keep_all_output
-            stop_if_error = obj.stop_if_error
-            ref_simu_index = obj.ref_simu_index
-            nb_simu = obj.nb_simu
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -134,33 +70,42 @@ class VarLoad(VarSimu):
                 desc = init_dict["desc"]
             if "datakeeper_list" in list(init_dict.keys()):
                 datakeeper_list = init_dict["datakeeper_list"]
-            if "nb_proc" in list(init_dict.keys()):
-                nb_proc = init_dict["nb_proc"]
             if "is_keep_all_output" in list(init_dict.keys()):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
                 stop_if_error = init_dict["stop_if_error"]
-            if "ref_simu_index" in list(init_dict.keys()):
-                ref_simu_index = init_dict["ref_simu_index"]
+            if "var_simu" in list(init_dict.keys()):
+                var_simu = init_dict["var_simu"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
-        # Initialisation by argument
+            if "is_reuse_femm_file" in list(init_dict.keys()):
+                is_reuse_femm_file = init_dict["is_reuse_femm_file"]
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
+            if "pre_keeper_postproc_list" in list(init_dict.keys()):
+                pre_keeper_postproc_list = init_dict["pre_keeper_postproc_list"]
+            if "post_keeper_postproc_list" in list(init_dict.keys()):
+                post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
+        # Set the properties (value check and convertion are done in setter)
         # Call VarSimu init
         super(VarLoad, self).__init__(
             name=name,
             desc=desc,
             datakeeper_list=datakeeper_list,
-            nb_proc=nb_proc,
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
-            ref_simu_index=ref_simu_index,
+            var_simu=var_simu,
             nb_simu=nb_simu,
+            is_reuse_femm_file=is_reuse_femm_file,
+            postproc_list=postproc_list,
+            pre_keeper_postproc_list=pre_keeper_postproc_list,
+            post_keeper_postproc_list=post_keeper_postproc_list,
         )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         VarLoad_str = ""
         # Get the properties inherited from VarSimu
@@ -178,12 +123,36 @@ class VarLoad(VarSimu):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from VarSimu
+        diff_list.extend(super(VarLoad, self).compare(other, name=name))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from VarSimu
+        S += super(VarLoad, self).__sizeof__()
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from VarSimu
-        VarLoad_dict = super(VarLoad, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        VarLoad_dict = super(VarLoad, self).as_dict(**kwargs)
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VarLoad_dict["__class__"] = "VarLoad"
         return VarLoad_dict

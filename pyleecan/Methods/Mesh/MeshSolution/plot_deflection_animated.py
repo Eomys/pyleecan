@@ -32,6 +32,7 @@ def plot_deflection_animated(
     gif_name="animation.gif",
     gif_path="./",
     title="",
+    group_names=None,
 ):
     """Create the gif of the animated operational deflection shape.
 
@@ -55,129 +56,150 @@ def plot_deflection_animated(
         name of the gif file (should end with .gif)
     gif_path : str
         path where gif will be saved
+    group_names : [str]
+        plot is restricted to the group(s) corresponding to this list of group names.
 
     Returns
     -------
     """
-
-    # Get the mesh
-    mesh = self.get_mesh(label=label, index=index)
-    if isinstance(mesh, MeshMat):
-        mesh_pv = mesh.get_mesh_pv(indices=indices)
-        mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
-
-    # Get the field
-    field = self.get_field(label=label, index=index, indices=indices, is_radial=True)
-    vect_field = self.get_field(label=label, index=index, indices=indices)
-    if is_time:
-        field_data = real(field[:, 0])
-        vect_field_data = real(vect_field[:, :, 0])
-    elif len(field.shape) == 2:
-        if ifreq is None:
-            # Find frequency with highest response
-            ifreq = argmax(np_sum(real(field), axis=0))
-        field = field[:, ifreq]
-        vect_field = vect_field[:, :, ifreq]
-        field_data = real(field)
-        vect_field_data = real(vect_field)
-
+    if group_names is not None:
+        meshsol_grp = self.get_mesh(group_names)
+        meshsol_grp.plot_deflection_animated(
+            label,
+            index,
+            indices,
+            clim,
+            factor,
+            field_name,
+            is_time,
+            ifreq,
+            gif_name,
+            gif_path,
+            title,
+            None,
+        )
     else:
-        field_data = real(field)
-        vect_field_data = real(vect_field)
-    if field_name is None:
-        if label is not None:
-            field_name = label
-        elif self.get_solution(index=index).label is not None:
-            field_name = self.get_solution(index=index).label
+        # Get the mesh
+        mesh = self.get_mesh(label=label, index=index)
+        if isinstance(mesh, MeshMat):
+            mesh_pv = mesh.get_mesh_pv(indices=indices)
+            mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
+
+        # Get the field
+        field = self.get_field(
+            label=label, index=index, indices=indices, is_radial=True
+        )
+        vect_field = self.get_field(label=label, index=index, indices=indices)
+        if is_time:
+            field_data = real(field[:, 0])
+            vect_field_data = real(vect_field[:, :, 0])
+        elif len(field.shape) == 2:
+            if ifreq is None:
+                # Find frequency with highest response
+                ifreq = argmax(np_sum(real(field), axis=0))
+            field = field[:, ifreq]
+            vect_field = vect_field[:, :, ifreq]
+            field_data = real(field)
+            vect_field_data = real(vect_field)
+
         else:
-            field_name = "Field"
+            field_data = real(field)
+            vect_field_data = real(vect_field)
+        if field_name is None:
+            if label is not None:
+                field_name = label
+            elif self.get_solution(index=index).label is not None:
+                field_name = self.get_solution(index=index).label
+            else:
+                field_name = "Field"
 
-    # Compute colorbar boundaries
-    if clim is None:
-        clim = [np_min(real(field)), np_max(real(field))]
-        if (clim[1] - clim[0]) / clim[1] < 0.01:
-            clim[0] = -abs(clim[1])
-            clim[1] = abs(clim[1])
+        # Compute colorbar boundaries
+        if clim is None:
+            clim = [np_min(real(field)), np_max(real(field))]
+            if (clim[1] - clim[0]) / clim[1] < 0.01:
+                clim[0] = -abs(clim[1])
+                clim[1] = abs(clim[1])
 
-    # Compute deformation factor
-    if factor is None:
-        factor = 1 / (100 * clim[1])
+        # Compute deformation factor
+        if factor is None:
+            factor = 1 / (100 * clim[1])
 
-    # Extract surface
-    surf = mesh.get_surf(indices=indices)
+        # Extract surface
+        surf = mesh.get_surf(indices=indices)
 
-    # Add field to surf
-    surf.vectors = real(vect_field_data) * factor
+        # Add field to surf
+        surf.vectors = real(vect_field_data) * factor
 
-    # Warp by vectors
-    surf_warp = surf.warp_by_vector()
+        # Warp by vectors
+        surf_warp = surf.warp_by_vector()
 
-    # Add radial field
-    surf_warp[field_name] = real(field_data)
+        # Add radial field
+        surf_warp[field_name] = real(field_data)
 
-    # Configure plot
-    pv.set_plot_theme("document")
-    p = pv.Plotter(notebook=False, title=title)
-    sargs = dict(
-        interactive=True,
-        title_font_size=20,
-        label_font_size=16,
-        font_family="arial",
-        color="black",
-    )
-    p.add_mesh(
-        surf_warp,
-        scalars=field_name,
-        opacity=1,
-        show_edges=False,
-        cmap=COLOR_MAP,
-        clim=clim,
-        scalar_bar_args=sargs,
-    )
-    p.add_text(title, position="upper_edge")
-    p.show(use_panel=False, auto_close=False)
+        # Configure plot
+        pv.set_plot_theme("document")
+        p = pv.Plotter(notebook=False, title=title)
+        sargs = dict(
+            interactive=True,
+            title_font_size=20,
+            label_font_size=16,
+            font_family="arial",
+            color="black",
+        )
+        p.add_mesh(
+            surf_warp,
+            scalars=field_name,
+            opacity=1,
+            show_edges=False,
+            cmap=COLOR_MAP,
+            clim=clim,
+            scalar_bar_args=sargs,
+        )
+        p.add_text(title, position="upper_edge")
+        p.show(auto_close=False)
+        # p.show(use_panel=False, auto_close=False)
 
-    # GIF
-    if is_time:
-        p.open_gif(gif_path + "/" + gif_name)
-        for tind in range(field.shape[2]):
-            field_data = real(field[:, tind])
-            vect_field_data = real(vect_field[:, :, tind])
-            surf.vectors = vect_field_data * factor
-            surf_warp = surf.warp_by_vector()
-            surf_warp[field_name] = field_data
-            p.add_mesh(
-                surf_warp,
-                scalars=field_name,
-                show_edges=False,
-                cmap=COLOR_MAP,
-                clim=clim,
-                scalar_bar_args=sargs,
-            )
-            p.add_text(title, position="upper_edge")
-            p.write_frame()
-            p.clear()
+        # GIF
+        if is_time:
+            p.open_gif(gif_path + "/" + gif_name)
+            for tind in range(field.shape[2]):
+                field_data = real(field[:, tind])
+                vect_field_data = real(vect_field[:, :, tind])
+                surf.vectors = vect_field_data * factor
+                surf_warp = surf.warp_by_vector()
+                surf_warp[field_name] = field_data
+                p.add_mesh(
+                    surf_warp,
+                    scalars=field_name,
+                    show_edges=False,
+                    cmap=COLOR_MAP,
+                    clim=clim,
+                    scalar_bar_args=sargs,
+                )
+                p.add_text(title, position="upper_edge")
+                p.write_frame()
+                p.clear()
 
-    else:
-        nframe = 25
-        p.open_gif(gif_path + "/" + gif_name)
-        for t in linspace(0.0, 1.0, nframe + 1)[:nframe]:
-            vect_field_data = real(vect_field * exp(1j * 2 * pi * t))
-            field_data = real(field * exp(1j * 2 * pi * t))
-            surf.vectors = vect_field_data * factor
-            surf_warp = surf.warp_by_vector()
-            surf_warp[field_name] = field_data
-            p.add_mesh(
-                surf_warp,
-                scalars=field_name,
-                show_edges=False,
-                cmap=COLOR_MAP,
-                clim=clim,
-                scalar_bar_args=sargs,
-            )
-            p.add_text(title, position="upper_edge")
-            p.write_frame()
-            p.clear()
+        else:
+            nframe = 25
+            p.open_gif(gif_path + "/" + gif_name)
+            for t in linspace(0.0, 1.0, nframe + 1)[:nframe]:
+                vect_field_data = real(vect_field * exp(1j * 2 * pi * t))
+                field_data = real(field * exp(1j * 2 * pi * t))
+                surf.vectors = vect_field_data * factor
+                surf_warp = surf.warp_by_vector()
+                surf_warp[field_name] = field_data
+                p.add_mesh(
+                    surf_warp,
+                    scalars=field_name,
+                    show_edges=False,
+                    cmap=COLOR_MAP,
+                    clim=clim,
+                    scalar_bar_args=sargs,
+                )
+                p.add_text(title, position="upper_edge")
+                p.write_frame()
+                p.clear()
 
-    # Close movie and delete object
-    p.close()
+        # Close movie and delete object
+        p.close()

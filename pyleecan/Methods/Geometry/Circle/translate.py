@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+from ....Methods.Geometry.Circle import PointTranslateCircleError
+
+
 def translate(self, Zt):
     """Translate the Circle object
 
@@ -37,9 +39,3 @@ def translate(self, Zt):
     if self.point_ref is not None:
         self.point_ref = self.point_ref + Zt
     self.center = self.center + Zt
-
-
-class PointTranslateCircleError(Exception):
-    """ """
-
-    pass

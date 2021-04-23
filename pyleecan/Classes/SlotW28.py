@@ -5,11 +5,15 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from .SlotWind import SlotWind
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
+from .Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -24,9 +28,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotW28.build_geometry_wind import build_geometry_wind
+    from ..Methods.Slot.SlotW28.get_surface_active import get_surface_active
 except ImportError as error:
-    build_geometry_wind = error
+    get_surface_active = error
 
 try:
     from ..Methods.Slot.SlotW28.check import check
@@ -44,20 +48,25 @@ except ImportError as error:
     comp_height = error
 
 try:
-    from ..Methods.Slot.SlotW28.comp_height_wind import comp_height_wind
+    from ..Methods.Slot.SlotW28.comp_height_active import comp_height_active
 except ImportError as error:
-    comp_height_wind = error
+    comp_height_active = error
 
 try:
     from ..Methods.Slot.SlotW28.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
 
+try:
+    from ..Methods.Slot.SlotW28.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
+
 
 from ._check import InitUnKnowClassError
 
 
-class SlotW28(SlotWind):
+class SlotW28(Slot):
 
     VERSION = 1
     IS_SYMMETRICAL = 1
@@ -86,18 +95,18 @@ class SlotW28(SlotWind):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW28.build_geometry_wind
-    if isinstance(build_geometry_wind, ImportError):
-        build_geometry_wind = property(
+    # cf Methods.Slot.SlotW28.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW28 method build_geometry_wind: "
-                    + str(build_geometry_wind)
+                    "Can't use SlotW28 method get_surface_active: "
+                    + str(get_surface_active)
                 )
             )
         )
     else:
-        build_geometry_wind = build_geometry_wind
+        get_surface_active = get_surface_active
     # cf Methods.Slot.SlotW28.check
     if isinstance(check, ImportError):
         check = property(
@@ -128,18 +137,18 @@ class SlotW28(SlotWind):
         )
     else:
         comp_height = comp_height
-    # cf Methods.Slot.SlotW28.comp_height_wind
-    if isinstance(comp_height_wind, ImportError):
-        comp_height_wind = property(
+    # cf Methods.Slot.SlotW28.comp_height_active
+    if isinstance(comp_height_active, ImportError):
+        comp_height_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW28 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW28 method comp_height_active: "
+                    + str(comp_height_active)
                 )
             )
         )
     else:
-        comp_height_wind = comp_height_wind
+        comp_height_active = comp_height_active
     # cf Methods.Slot.SlotW28.comp_surface
     if isinstance(comp_surface, ImportError):
         comp_surface = property(
@@ -151,14 +160,20 @@ class SlotW28(SlotWind):
         )
     else:
         comp_surface = comp_surface
-    # save method is available in all object
+    # cf Methods.Slot.SlotW28.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW28 method plot_schematics: " + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -175,28 +190,16 @@ class SlotW28(SlotWind):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            W0 = obj.W0
-            H0 = obj.H0
-            R1 = obj.R1
-            W3 = obj.W3
-            H3 = obj.H3
-            Zs = obj.Zs
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -212,22 +215,22 @@ class SlotW28(SlotWind):
                 H3 = init_dict["H3"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
         self.R1 = R1
         self.W3 = W3
         self.H3 = H3
-        # Call SlotWind init
+        # Call Slot init
         super(SlotW28, self).__init__(Zs=Zs)
-        # The class is frozen (in SlotWind init), for now it's impossible to
+        # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         SlotW28_str = ""
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotW28_str += super(SlotW28, self).__str__()
         SlotW28_str += "W0 = " + str(self.W0) + linesep
         SlotW28_str += "H0 = " + str(self.H0) + linesep
@@ -242,7 +245,7 @@ class SlotW28(SlotWind):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from SlotWind
+        # Check the properties inherited from Slot
         if not super(SlotW28, self).__eq__(other):
             return False
         if other.W0 != self.W0:
@@ -257,17 +260,56 @@ class SlotW28(SlotWind):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
 
-        # Get the properties inherited from SlotWind
-        SlotW28_dict = super(SlotW28, self).as_dict()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Slot
+        diff_list.extend(super(SlotW28, self).compare(other, name=name))
+        if other._W0 != self._W0:
+            diff_list.append(name + ".W0")
+        if other._H0 != self._H0:
+            diff_list.append(name + ".H0")
+        if other._R1 != self._R1:
+            diff_list.append(name + ".R1")
+        if other._W3 != self._W3:
+            diff_list.append(name + ".W3")
+        if other._H3 != self._H3:
+            diff_list.append(name + ".H3")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Slot
+        S += super(SlotW28, self).__sizeof__()
+        S += getsizeof(self.W0)
+        S += getsizeof(self.H0)
+        S += getsizeof(self.R1)
+        S += getsizeof(self.W3)
+        S += getsizeof(self.H3)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
+
+        # Get the properties inherited from Slot
+        SlotW28_dict = super(SlotW28, self).as_dict(**kwargs)
         SlotW28_dict["W0"] = self.W0
         SlotW28_dict["H0"] = self.H0
         SlotW28_dict["R1"] = self.R1
         SlotW28_dict["W3"] = self.W3
         SlotW28_dict["H3"] = self.H3
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotW28_dict["__class__"] = "SlotW28"
         return SlotW28_dict
@@ -280,7 +322,7 @@ class SlotW28(SlotWind):
         self.R1 = None
         self.W3 = None
         self.H3 = None
-        # Set to None the properties inherited from SlotWind
+        # Set to None the properties inherited from Slot
         super(SlotW28, self)._set_None()
 
     def _get_W0(self):

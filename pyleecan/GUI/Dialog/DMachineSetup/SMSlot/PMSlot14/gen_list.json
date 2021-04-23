@@ -1,0 +1,38 @@
+[
+    {
+        "cls": "SlotM14",
+        "name": "W0",
+        "widget": [
+            "in_W0",
+            "lf_W0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "SlotM14",
+        "name": "Wmag",
+        "widget": [
+            "in_Wmag",
+            "lf_Wmag"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "SlotM14",
+        "name": "H0",
+        "widget": [
+            "in_H0",
+            "lf_H0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "SlotM14",
+        "name": "Hmag",
+        "widget": [
+            "in_Hmag",
+            "lf_Hmag"
+        ],
+        "xls": "Slot"
+    }
+]

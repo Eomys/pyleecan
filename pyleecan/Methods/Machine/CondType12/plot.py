@@ -4,14 +4,26 @@ from matplotlib.patches import Circle, Patch
 from matplotlib.pyplot import axis, legend, subplots
 from numpy import exp, pi, sqrt
 
+from ....definitions import config_dict
 
-def plot(self):
+COND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][0].copy()
+INS_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][1].copy()
+COND_INS_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][2].copy()
+# Remove alpha from phases
+COND_COLOR[3] = 1
+INS_COLOR[3] = 1
+COND_INS_COLOR[3] = 1
+
+
+def plot(self, is_show_fig=True):
     """Plot a Conductor in a matplotlib fig
 
     Parameters
     ----------
     self : CondType12
         A CondType12 object
+    is_show_fig : bool
+        To call show at the end of the method
 
     Returns
     -------
@@ -26,7 +38,7 @@ def plot(self):
     patches_list = []
 
     # Conductor insultation
-    patches_list.append(Circle((0, 0), self.Wins_cond / 2, color="g"))
+    patches_list.append(Circle((0, 0), self.Wins_cond / 2, color=COND_INS_COLOR))
 
     # Computation of the center of the wire
     center_list = []
@@ -60,9 +72,11 @@ def plot(self):
     # Creation of the wires
     for center in center_list:
         # Wire insulation
-        patches_list.append(Circle(center, self.Wwire / 2 + self.Wins_wire, color="y"))
+        patches_list.append(
+            Circle(center, self.Wwire / 2 + self.Wins_wire, color=INS_COLOR)
+        )
         # Wire conductor
-        patches_list.append(Circle(center, self.Wwire / 2, color="r"))
+        patches_list.append(Circle(center, self.Wwire / 2, color=COND_COLOR))
 
     # Display
     fig, ax = subplots()
@@ -80,15 +94,16 @@ def plot(self):
     # Legend
     patch_leg = list()  # Symbol
     label_leg = list()  # Text
-    patch_leg.append(Patch(color="g"))
+    patch_leg.append(Patch(color=COND_INS_COLOR))
     label_leg.append("Coil insulation")
-    patch_leg.append(Patch(color="y"))
+    patch_leg.append(Patch(color=INS_COLOR))
     label_leg.append("Wire insulation")
-    patch_leg.append(Patch(color="r"))
+    patch_leg.append(Patch(color=COND_COLOR))
     label_leg.append("Active wire section")
 
     legend(patch_leg, label_leg)
-    fig.show()
+    if is_show_fig:
+        fig.show()
 
 
 class NotPlotableError(Exception):

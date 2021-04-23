@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.Winding import Winding
 from .....Classes.WindingCW1L import WindingCW1L
@@ -10,9 +10,8 @@ from .....Classes.WindingCW2LR import WindingCW2LR
 from .....Classes.WindingCW2LT import WindingCW2LT
 from .....Classes.WindingDW1L import WindingDW1L
 from .....Classes.WindingDW2L import WindingDW2L
-from .....Functions.Winding.comp_wind_sym import comp_wind_sym
+from .....Functions.Winding.comp_wind_periodicity import comp_wind_periodicity
 from .....GUI.Dialog.DMachineSetup.SWindPat.Gen_SWindPat import Gen_SWindPat
-from .....GUI.Resources import pixmap_dict
 from .....Methods.Machine.Winding import WindingError
 
 # For the Pattern combobox
@@ -23,9 +22,9 @@ class SWindPat(Gen_SWindPat, QWidget):
     """Step to define the winding pattern"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup nav
-    step_name = "Winding Pattern"
+    step_name = "Winding (1)"
 
     def __init__(self, machine, matlib, is_stator=False):
         """Initialize the GUI according to machine
@@ -47,8 +46,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         self.setupUi(self)
 
         # Set Help URL
-        self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
-        self.b_help.url += "how-to-set-up-the-winding"
+        self.b_help.url = "https://pyleecan.org/winding.convention.html"
 
         # Saving arguments
         self.machine = machine
@@ -79,22 +77,23 @@ class SWindPat(Gen_SWindPat, QWidget):
         # Set the current Winding pattern
         if self.obj.winding is None or type(self.obj.winding) is Winding:
             # The default type_winding is WindingCW2LT
-            self.obj.winding = WindingCW2LT(init_dict=self.obj.winding.as_dict())
+            if type(self.obj.winding) is Winding:
+                self.obj.winding = WindingCW2LT(init_dict=self.obj.winding.as_dict())
+            else:
+                self.obj.winding = WindingCW2LT()
             self.c_wind_type.setCurrentIndex(0)
         else:
             self.c_wind_type.setCurrentIndex(TYPE_INDEX.index(type(self.obj.winding)))
-        self.update_image()
+        self.update_graph()
 
         if type(self.obj.winding) is WindingDW2L:
             if self.obj.winding.coil_pitch is None:
                 self.obj.winding.coil_pitch = 0
             self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
 
-        if self.obj.winding.Nslot_shift_wind is not None:
-            self.si_Nslot.setValue(self.obj.winding.Nslot_shift_wind)
-        else:
-            self.si_Nslot.setValue(0)
+        if self.obj.winding.Nslot_shift_wind is None:
             self.obj.winding.Nslot_shift_wind = 0
+        self.si_Nslot.setValue(self.obj.winding.Nslot_shift_wind)
 
         if self.obj.winding.qs is None:  # default value
             self.obj.winding.qs = 3
@@ -103,13 +102,12 @@ class SWindPat(Gen_SWindPat, QWidget):
         if self.obj.winding.Ntcoil is None:
             self.obj.winding.Ntcoil = 1  # Default value for preview
 
-        if self.obj.winding.is_reverse_wind is not None:
-            if self.obj.winding.is_reverse_wind:
-                self.is_reverse.setCheckState(Qt.Checked)
-            else:
-                self.is_reverse.setCheckState(Qt.Unchecked)
-        else:
+        if self.obj.winding.is_reverse_wind is None:
             self.obj.winding.is_reverse_wind = False
+        if self.obj.winding.is_reverse_wind:
+            self.is_reverse.setCheckState(Qt.Checked)
+        else:
+            self.is_reverse.setCheckState(Qt.Unchecked)
 
         # Display shape of wind_mat
         self.set_output()
@@ -119,7 +117,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         self.c_wind_type.currentIndexChanged.connect(self.set_type)
         self.si_qs.editingFinished.connect(self.set_qs)
         self.si_coil_pitch.editingFinished.connect(self.set_coil_pitch)
-        self.si_Nslot.editingFinished.connect(self.set_Nslot)
+        self.si_Nslot.valueChanged.connect(self.set_Nslot)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
         self.b_preview.clicked.connect(self.s_plot)
 
@@ -141,21 +139,9 @@ class SWindPat(Gen_SWindPat, QWidget):
         self.set_output()
         self.hide_coil_pitch()
         # Update image
-        self.update_image()
+        self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
-
-    def update_image(self):
-        """Update the schematics to the current winding pattern
-
-        Parameters
-        ----------
-        self : SWindPat
-            A SWindPat object
-        """
-        self.img_wind_pat.setPixmap(
-            QPixmap(pixmap_dict[type(self.obj.winding).__name__])
-        )
 
     def set_qs(self):
         """Signal to update the value of qs according to the spinbox
@@ -167,6 +153,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         """
         self.obj.winding.qs = self.si_qs.value()
         self.set_output()
+        self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -180,6 +167,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         """
         self.obj.winding.coil_pitch = self.si_coil_pitch.value()
         self.set_output()
+        self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -193,6 +181,7 @@ class SWindPat(Gen_SWindPat, QWidget):
             A SWindPat object
         """
         self.obj.winding.Nslot_shift_wind = self.si_Nslot.value()
+        self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -209,6 +198,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         """
 
         value = self.is_reverse.isChecked()
+        self.update_graph()
         self.obj.winding.is_reverse_wind = value
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -256,7 +246,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         else:
             qs = str(wind.qs) + "]"
 
-        self.out_shape.setText(self.tr("Winding Matrix shape: [") + Nlay + Zs + qs)
+        self.out_shape.setText(self.tr("Matrix shape [") + Nlay + Zs + qs)
 
         try:
             ms = str(self.obj.slot.Zs / (wind.p * wind.qs * 2.0))
@@ -269,11 +259,26 @@ class SWindPat(Gen_SWindPat, QWidget):
 
         try:
             wind_mat = wind.comp_connection_mat(self.obj.slot.Zs)
-            Nperw = str(comp_wind_sym(wind_mat)[0])
+            Nperw = str(comp_wind_periodicity(wind_mat)[0])
         except Exception:  # Unable to compution the connection matrix
             Nperw = "?"
 
         self.out_Nperw.setText(self.tr("Nperw: ") + Nperw)
+
+    def update_graph(self):
+        """Plot the lamination with/without the winding"""
+        # Plot the lamination in the viewer fig
+        try:
+            self.obj.plot(fig=self.w_viewer.fig, is_show_fig=False)
+        except:
+            pass
+
+        # Update the Graph
+        self.w_viewer.axes.set_axis_off()
+        self.w_viewer.axes.axis("equal")
+        if self.w_viewer.axes.get_legend() is not None:
+            self.w_viewer.axes.get_legend().remove()
+        self.w_viewer.draw()
 
     def s_plot(self):
         """Plot a preview of the winding in a popup
@@ -306,5 +311,9 @@ class SWindPat(Gen_SWindPat, QWidget):
             # Check that everything is set
             if lamination.winding.qs is None:
                 return "You must set qs !"
+            if lamination.winding.Nslot_shift_wind is None:
+                lamination.winding.Nslot_shift_wind = 0
+            if lamination.winding.is_reverse_wind is None:
+                lamination.winding.is_reverse_wind = False
         except Exception as e:
             return str(e)

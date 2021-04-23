@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-import PyQt5.QtCore
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+import PySide2.QtCore
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.SlotW28 import SlotW28
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot28.Gen_PWSlot28 import Gen_PWSlot28
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
-translate = PyQt5.QtCore.QCoreApplication.translate
+translate = PySide2.QtCore.QCoreApplication.translate
 
 
 class PWSlot28(Gen_PWSlot28, QWidget):
     """Page to set the Slot Type 28"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for Slot combobox
     slot_name = "Slot Type 28"
     slot_type = SlotW28
@@ -52,7 +52,7 @@ class PWSlot28(Gen_PWSlot28, QWidget):
             self.unit_R1,
         ]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
@@ -153,15 +153,15 @@ class PWSlot28(Gen_PWSlot28, QWidget):
 
         # Check that everything is set
         if lam.slot.W0 is None:
-            return translate("You must set W0 !", "PWSlot28 check")
+            return "You must set W0 !"
         elif lam.slot.W3 is None:
-            return translate("You must set W3 !", "PWSlot28 check")
+            return "You must set W3 !"
         elif lam.slot.R1 is None:
-            return translate("You must set R1 !", "PWSlot28 check")
+            return "You must set R1 !"
         elif lam.slot.H0 is None:
-            return translate("You must set H0 !", "PWSlot28 check")
+            return "You must set H0 !"
         elif lam.slot.H3 is None:
-            return translate("You must set H3 !", "PWSlot28 check")
+            return "You must set H3 !"
 
         # Check that everything is set right
         # Constraints
@@ -174,11 +174,7 @@ class PWSlot28(Gen_PWSlot28, QWidget):
         try:
             yoke_height = lam.comp_height_yoke()
         except Exception as error:
-            return translate("Unable to compute yoke height:", "PWSlot28 check") + str(
-                error
-            )
+            return "Unable to compute yoke height:" + str(error)
 
         if yoke_height <= 0:
-            return translate(
-                "The slot height is greater than the lamination !", "PWSlot28 check"
-            )
+            return "The slot height is greater than the lamination !"

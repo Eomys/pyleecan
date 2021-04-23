@@ -4,6 +4,9 @@ from os import mkdir
 from datetime import datetime
 from logging import getLogger
 from ...Classes._frozen import FrozenClass
+from ...definitions import PACKAGE_NAME
+from ... import __version__
+from numpy import int32
 
 
 def create_folder(logger, save_path):
@@ -102,7 +105,9 @@ def build_data(obj):
         return None
     # pyleecan classes, i.e. instances with as_dict method
     if has_as_dict(obj):
-        return obj.as_dict()
+        return build_data(obj.as_dict())
+    if isinstance(obj, int32):  # int
+        return int(obj)
     #
     if is_json_serializable(obj):
         return obj
@@ -247,6 +252,9 @@ def save_json(obj, save_path="", is_folder=False):
 
     # save
     obj = build_data(obj)
+    now = datetime.now()
+    obj["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
+    obj["__version__"] = PACKAGE_NAME + "_" + __version__
     if isinstance(obj, dict) and is_folder:
         # Tuple containing classes to save separately
         class_to_split = ("Simulation", "Machine", "Material")

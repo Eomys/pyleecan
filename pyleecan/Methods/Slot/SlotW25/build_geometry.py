@@ -18,16 +18,23 @@ def build_geometry(self):
     -------
     curve_list: list
         A list of 4 Segment and 3 Arc
-
     """
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    Z7 = point_dict["Z7"]
+    Z8 = point_dict["Z8"]
     # Creation of curve
     curve_list = list()
-    curve_list.append(Segment(Z8, Z7))
-    curve_list.append(Arc1(Z7, Z6, -abs(Z2), is_trigo_direction=False))
-    curve_list.append(Segment(Z6, Z5))
-    curve_list.append(Arc1(Z5, Z4, abs(Z5)))
-    curve_list.append(Segment(Z4, Z3))
-    curve_list.append(Arc1(Z3, Z2, -abs(Z2), is_trigo_direction=False))
-    curve_list.append(Segment(Z2, Z1))
+    curve_list.append(Segment(Z1, Z2))
+    curve_list.append(Arc1(Z2, Z3, -abs(Z2), is_trigo_direction=False))
+    curve_list.append(Segment(Z3, Z4))
+    curve_list.append(Arc1(Z4, Z5, abs(Z5)))
+    curve_list.append(Segment(Z5, Z6))
+    curve_list.append(Arc1(Z6, Z7, -abs(Z2), is_trigo_direction=False))
+    curve_list.append(Segment(Z7, Z8))
     return curve_list

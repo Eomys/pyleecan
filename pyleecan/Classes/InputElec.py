@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Input import Input
 
 # Import all class method
@@ -69,71 +73,44 @@ class InputElec(Input):
         )
     else:
         set_Id_Iq = set_Id_Iq
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        N0=None,
         rot_dir=-1,
         Id_ref=None,
         Iq_ref=None,
         Ud_ref=None,
         Uq_ref=None,
+        felec=None,
         time=None,
         angle=None,
         Nt_tot=2048,
         Nrev=1,
         Na_tot=2048,
+        N0=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if time == -1:
-            time = ImportMatrix()
-        if angle == -1:
-            angle = ImportMatrix()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            N0 = obj.N0
-            rot_dir = obj.rot_dir
-            Id_ref = obj.Id_ref
-            Iq_ref = obj.Iq_ref
-            Ud_ref = obj.Ud_ref
-            Uq_ref = obj.Uq_ref
-            time = obj.time
-            angle = obj.angle
-            Nt_tot = obj.Nt_tot
-            Nrev = obj.Nrev
-            Na_tot = obj.Na_tot
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
             if "Id_ref" in list(init_dict.keys()):
@@ -144,6 +121,8 @@ class InputElec(Input):
                 Ud_ref = init_dict["Ud_ref"]
             if "Uq_ref" in list(init_dict.keys()):
                 Uq_ref = init_dict["Uq_ref"]
+            if "felec" in list(init_dict.keys()):
+                felec = init_dict["felec"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -154,32 +133,34 @@ class InputElec(Input):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-        # Initialisation by argument
-        self.N0 = N0
+            if "N0" in list(init_dict.keys()):
+                N0 = init_dict["N0"]
+        # Set the properties (value check and convertion are done in setter)
         self.rot_dir = rot_dir
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
         self.Ud_ref = Ud_ref
         self.Uq_ref = Uq_ref
+        self.felec = felec
         # Call Input init
         super(InputElec, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
+            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
         )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         InputElec_str = ""
         # Get the properties inherited from Input
         InputElec_str += super(InputElec, self).__str__()
-        InputElec_str += "N0 = " + str(self.N0) + linesep
         InputElec_str += "rot_dir = " + str(self.rot_dir) + linesep
         InputElec_str += "Id_ref = " + str(self.Id_ref) + linesep
         InputElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
         InputElec_str += "Ud_ref = " + str(self.Ud_ref) + linesep
         InputElec_str += "Uq_ref = " + str(self.Uq_ref) + linesep
+        InputElec_str += "felec = " + str(self.felec) + linesep
         return InputElec_str
 
     def __eq__(self, other):
@@ -191,8 +172,6 @@ class InputElec(Input):
         # Check the properties inherited from Input
         if not super(InputElec, self).__eq__(other):
             return False
-        if other.N0 != self.N0:
-            return False
         if other.rot_dir != self.rot_dir:
             return False
         if other.Id_ref != self.Id_ref:
@@ -203,20 +182,64 @@ class InputElec(Input):
             return False
         if other.Uq_ref != self.Uq_ref:
             return False
+        if other.felec != self.felec:
+            return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Input
+        diff_list.extend(super(InputElec, self).compare(other, name=name))
+        if other._rot_dir != self._rot_dir:
+            diff_list.append(name + ".rot_dir")
+        if other._Id_ref != self._Id_ref:
+            diff_list.append(name + ".Id_ref")
+        if other._Iq_ref != self._Iq_ref:
+            diff_list.append(name + ".Iq_ref")
+        if other._Ud_ref != self._Ud_ref:
+            diff_list.append(name + ".Ud_ref")
+        if other._Uq_ref != self._Uq_ref:
+            diff_list.append(name + ".Uq_ref")
+        if other._felec != self._felec:
+            diff_list.append(name + ".felec")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Input
+        S += super(InputElec, self).__sizeof__()
+        S += getsizeof(self.rot_dir)
+        S += getsizeof(self.Id_ref)
+        S += getsizeof(self.Iq_ref)
+        S += getsizeof(self.Ud_ref)
+        S += getsizeof(self.Uq_ref)
+        S += getsizeof(self.felec)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Input
-        InputElec_dict = super(InputElec, self).as_dict()
-        InputElec_dict["N0"] = self.N0
+        InputElec_dict = super(InputElec, self).as_dict(**kwargs)
         InputElec_dict["rot_dir"] = self.rot_dir
         InputElec_dict["Id_ref"] = self.Id_ref
         InputElec_dict["Iq_ref"] = self.Iq_ref
         InputElec_dict["Ud_ref"] = self.Ud_ref
         InputElec_dict["Uq_ref"] = self.Uq_ref
-        # The class name is added to the dict fordeserialisation purpose
+        InputElec_dict["felec"] = self.felec
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputElec_dict["__class__"] = "InputElec"
         return InputElec_dict
@@ -224,32 +247,14 @@ class InputElec(Input):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.N0 = None
         self.rot_dir = None
         self.Id_ref = None
         self.Iq_ref = None
         self.Ud_ref = None
         self.Uq_ref = None
+        self.felec = None
         # Set to None the properties inherited from Input
         super(InputElec, self)._set_None()
-
-    def _get_N0(self):
-        """getter of N0"""
-        return self._N0
-
-    def _set_N0(self, value):
-        """setter of N0"""
-        check_var("N0", value, "float")
-        self._N0 = value
-
-    N0 = property(
-        fget=_get_N0,
-        fset=_set_N0,
-        doc=u"""Rotor speed
-
-        :Type: float
-        """,
-    )
 
     def _get_rot_dir(self):
         """getter of rot_dir"""
@@ -338,6 +343,24 @@ class InputElec(Input):
         fget=_get_Uq_ref,
         fset=_set_Uq_ref,
         doc=u"""q-axis voltage magnitude
+
+        :Type: float
+        """,
+    )
+
+    def _get_felec(self):
+        """getter of felec"""
+        return self._felec
+
+    def _set_felec(self, value):
+        """setter of felec"""
+        check_var("felec", value, "float")
+        self._felec = value
+
+    felec = property(
+        fget=_get_felec,
+        fset=_set_felec,
+        doc=u"""electrical frequency
 
         :Type: float
         """,

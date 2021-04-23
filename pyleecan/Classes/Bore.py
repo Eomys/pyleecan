@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
@@ -19,14 +23,9 @@ class Bore(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -49,7 +48,7 @@ class Bore(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Bore_str = ""
         if self.parent is None:
@@ -65,13 +64,32 @@ class Bore(FrozenClass):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Bore_dict = dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Bore_dict["__class__"] = "Bore"
         return Bore_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
+        pass

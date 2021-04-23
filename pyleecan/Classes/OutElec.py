@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -28,16 +32,15 @@ try:
 except ImportError as error:
     get_Us = error
 
+try:
+    from ..Methods.Output.OutElec.comp_I_mag import comp_I_mag
+except ImportError as error:
+    comp_I_mag = error
+
 
 from numpy import array, array_equal
-from cloudpickle import dumps, loads
-from ._check import CheckTypeError
-
-try:
-    from SciDataTool.Classes.DataND import DataND
-except ImportError:
-    DataND = ImportError
 from ._check import InitUnKnowClassError
+from .OutInternal import OutInternal
 
 
 class OutElec(FrozenClass):
@@ -73,29 +76,31 @@ class OutElec(FrozenClass):
         )
     else:
         get_Us = get_Us
-    # save method is available in all object
+    # cf Methods.Output.OutElec.comp_I_mag
+    if isinstance(comp_I_mag, ImportError):
+        comp_I_mag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method comp_I_mag: " + str(comp_I_mag))
+            )
+        )
+    else:
+        comp_I_mag = comp_I_mag
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        time=None,
-        angle=None,
+        Time=None,
+        Angle=None,
         Is=None,
         Ir=None,
         angle_rotor=None,
         N0=None,
-        rot_dir=-1,
         angle_rotor_initial=0,
-        logger_name="Pyleecan.OutElec",
-        mmf_unit=None,
+        logger_name="Pyleecan.Electrical",
         Tem_av_ref=None,
         Id_ref=None,
         Iq_ref=None,
@@ -105,53 +110,29 @@ class OutElec(FrozenClass):
         Pj_losses=None,
         Pem_av_ref=None,
         Us=None,
+        internal=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            time = obj.time
-            angle = obj.angle
-            Is = obj.Is
-            Ir = obj.Ir
-            angle_rotor = obj.angle_rotor
-            N0 = obj.N0
-            rot_dir = obj.rot_dir
-            angle_rotor_initial = obj.angle_rotor_initial
-            logger_name = obj.logger_name
-            mmf_unit = obj.mmf_unit
-            Tem_av_ref = obj.Tem_av_ref
-            Id_ref = obj.Id_ref
-            Iq_ref = obj.Iq_ref
-            felec = obj.felec
-            Ud_ref = obj.Ud_ref
-            Uq_ref = obj.Uq_ref
-            Pj_losses = obj.Pj_losses
-            Pem_av_ref = obj.Pem_av_ref
-            Us = obj.Us
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "time" in list(init_dict.keys()):
-                time = init_dict["time"]
-            if "angle" in list(init_dict.keys()):
-                angle = init_dict["angle"]
+            if "Time" in list(init_dict.keys()):
+                Time = init_dict["Time"]
+            if "Angle" in list(init_dict.keys()):
+                Angle = init_dict["Angle"]
             if "Is" in list(init_dict.keys()):
                 Is = init_dict["Is"]
             if "Ir" in list(init_dict.keys()):
@@ -160,14 +141,10 @@ class OutElec(FrozenClass):
                 angle_rotor = init_dict["angle_rotor"]
             if "N0" in list(init_dict.keys()):
                 N0 = init_dict["N0"]
-            if "rot_dir" in list(init_dict.keys()):
-                rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-            if "mmf_unit" in list(init_dict.keys()):
-                mmf_unit = init_dict["mmf_unit"]
             if "Tem_av_ref" in list(init_dict.keys()):
                 Tem_av_ref = init_dict["Tem_av_ref"]
             if "Id_ref" in list(init_dict.keys()):
@@ -186,24 +163,18 @@ class OutElec(FrozenClass):
                 Pem_av_ref = init_dict["Pem_av_ref"]
             if "Us" in list(init_dict.keys()):
                 Us = init_dict["Us"]
-        # Initialisation by argument
+            if "internal" in list(init_dict.keys()):
+                internal = init_dict["internal"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # time can be None, a ndarray or a list
-        set_array(self, "time", time)
-        # angle can be None, a ndarray or a list
-        set_array(self, "angle", angle)
-        # Check if the type DataND has been imported with success
-        if isinstance(DataND, ImportError):
-            raise ImportError("Unknown type DataND please install SciDataTool")
+        self.Time = Time
+        self.Angle = Angle
         self.Is = Is
         self.Ir = Ir
-        # angle_rotor can be None, a ndarray or a list
-        set_array(self, "angle_rotor", angle_rotor)
+        self.angle_rotor = angle_rotor
         self.N0 = N0
-        self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         self.logger_name = logger_name
-        self.mmf_unit = mmf_unit
         self.Tem_av_ref = Tem_av_ref
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
@@ -213,32 +184,21 @@ class OutElec(FrozenClass):
         self.Pj_losses = Pj_losses
         self.Pem_av_ref = Pem_av_ref
         self.Us = Us
+        self.internal = internal
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         OutElec_str = ""
         if self.parent is None:
             OutElec_str += "parent = None " + linesep
         else:
             OutElec_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutElec_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutElec_str += "Time = " + str(self.Time) + linesep + linesep
+        OutElec_str += "Angle = " + str(self.Angle) + linesep + linesep
         OutElec_str += "Is = " + str(self.Is) + linesep + linesep
         OutElec_str += "Ir = " + str(self.Ir) + linesep + linesep
         OutElec_str += (
@@ -249,12 +209,10 @@ class OutElec(FrozenClass):
             + linesep
         )
         OutElec_str += "N0 = " + str(self.N0) + linesep
-        OutElec_str += "rot_dir = " + str(self.rot_dir) + linesep
         OutElec_str += (
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OutElec_str += "mmf_unit = " + str(self.mmf_unit) + linesep + linesep
         OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         OutElec_str += "Id_ref = " + str(self.Id_ref) + linesep
         OutElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
@@ -264,6 +222,11 @@ class OutElec(FrozenClass):
         OutElec_str += "Pj_losses = " + str(self.Pj_losses) + linesep
         OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         OutElec_str += "Us = " + str(self.Us) + linesep + linesep
+        if self.internal is not None:
+            tmp = self.internal.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OutElec_str += "internal = " + tmp
+        else:
+            OutElec_str += "internal = None" + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -271,9 +234,9 @@ class OutElec(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if not array_equal(other.time, self.time):
+        if other.Time != self.Time:
             return False
-        if not array_equal(other.angle, self.angle):
+        if other.Angle != self.Angle:
             return False
         if other.Is != self.Is:
             return False
@@ -283,13 +246,9 @@ class OutElec(FrozenClass):
             return False
         if other.N0 != self.N0:
             return False
-        if other.rot_dir != self.rot_dir:
-            return False
         if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
         if other.logger_name != self.logger_name:
-            return False
-        if other.mmf_unit != self.mmf_unit:
             return False
         if other.Tem_av_ref != self.Tem_av_ref:
             return False
@@ -309,52 +268,135 @@ class OutElec(FrozenClass):
             return False
         if other.Us != self.Us:
             return False
+        if other.internal != self.internal:
+            return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.Time is None and self.Time is not None) or (
+            other.Time is not None and self.Time is None
+        ):
+            diff_list.append(name + ".Time None mismatch")
+        elif self.Time is not None:
+            diff_list.extend(self.Time.compare(other.Time, name=name + ".Time"))
+        if (other.Angle is None and self.Angle is not None) or (
+            other.Angle is not None and self.Angle is None
+        ):
+            diff_list.append(name + ".Angle None mismatch")
+        elif self.Angle is not None:
+            diff_list.extend(self.Angle.compare(other.Angle, name=name + ".Angle"))
+        if (other.Is is None and self.Is is not None) or (
+            other.Is is not None and self.Is is None
+        ):
+            diff_list.append(name + ".Is None mismatch")
+        elif self.Is is not None:
+            diff_list.extend(self.Is.compare(other.Is, name=name + ".Is"))
+        if (other.Ir is None and self.Ir is not None) or (
+            other.Ir is not None and self.Ir is None
+        ):
+            diff_list.append(name + ".Ir None mismatch")
+        elif self.Ir is not None:
+            diff_list.extend(self.Ir.compare(other.Ir, name=name + ".Ir"))
+        if not array_equal(other.angle_rotor, self.angle_rotor):
+            diff_list.append(name + ".angle_rotor")
+        if other._N0 != self._N0:
+            diff_list.append(name + ".N0")
+        if other._angle_rotor_initial != self._angle_rotor_initial:
+            diff_list.append(name + ".angle_rotor_initial")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if other._Tem_av_ref != self._Tem_av_ref:
+            diff_list.append(name + ".Tem_av_ref")
+        if other._Id_ref != self._Id_ref:
+            diff_list.append(name + ".Id_ref")
+        if other._Iq_ref != self._Iq_ref:
+            diff_list.append(name + ".Iq_ref")
+        if other._felec != self._felec:
+            diff_list.append(name + ".felec")
+        if other._Ud_ref != self._Ud_ref:
+            diff_list.append(name + ".Ud_ref")
+        if other._Uq_ref != self._Uq_ref:
+            diff_list.append(name + ".Uq_ref")
+        if other._Pj_losses != self._Pj_losses:
+            diff_list.append(name + ".Pj_losses")
+        if other._Pem_av_ref != self._Pem_av_ref:
+            diff_list.append(name + ".Pem_av_ref")
+        if (other.Us is None and self.Us is not None) or (
+            other.Us is not None and self.Us is None
+        ):
+            diff_list.append(name + ".Us None mismatch")
+        elif self.Us is not None:
+            diff_list.extend(self.Us.compare(other.Us, name=name + ".Us"))
+        if (other.internal is None and self.internal is not None) or (
+            other.internal is not None and self.internal is None
+        ):
+            diff_list.append(name + ".internal None mismatch")
+        elif self.internal is not None:
+            diff_list.extend(
+                self.internal.compare(other.internal, name=name + ".internal")
+            )
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.Time)
+        S += getsizeof(self.Angle)
+        S += getsizeof(self.Is)
+        S += getsizeof(self.Ir)
+        S += getsizeof(self.angle_rotor)
+        S += getsizeof(self.N0)
+        S += getsizeof(self.angle_rotor_initial)
+        S += getsizeof(self.logger_name)
+        S += getsizeof(self.Tem_av_ref)
+        S += getsizeof(self.Id_ref)
+        S += getsizeof(self.Iq_ref)
+        S += getsizeof(self.felec)
+        S += getsizeof(self.Ud_ref)
+        S += getsizeof(self.Uq_ref)
+        S += getsizeof(self.Pj_losses)
+        S += getsizeof(self.Pem_av_ref)
+        S += getsizeof(self.Us)
+        S += getsizeof(self.internal)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutElec_dict = dict()
-        if self.time is None:
-            OutElec_dict["time"] = None
+        if self.Time is None:
+            OutElec_dict["Time"] = None
         else:
-            OutElec_dict["time"] = self.time.tolist()
-        if self.angle is None:
-            OutElec_dict["angle"] = None
+            OutElec_dict["Time"] = self.Time.as_dict()
+        if self.Angle is None:
+            OutElec_dict["Angle"] = None
         else:
-            OutElec_dict["angle"] = self.angle.tolist()
+            OutElec_dict["Angle"] = self.Angle.as_dict()
         if self.Is is None:
             OutElec_dict["Is"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["Is"] = {
-                "__class__": str(type(self._Is)),
-                "__repr__": str(self._Is.__repr__()),
-                "serialized": dumps(self._Is).decode("ISO-8859-2"),
-            }
+        else:
+            OutElec_dict["Is"] = self.Is.as_dict()
         if self.Ir is None:
             OutElec_dict["Ir"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["Ir"] = {
-                "__class__": str(type(self._Ir)),
-                "__repr__": str(self._Ir.__repr__()),
-                "serialized": dumps(self._Ir).decode("ISO-8859-2"),
-            }
+        else:
+            OutElec_dict["Ir"] = self.Ir.as_dict()
         if self.angle_rotor is None:
             OutElec_dict["angle_rotor"] = None
         else:
             OutElec_dict["angle_rotor"] = self.angle_rotor.tolist()
         OutElec_dict["N0"] = self.N0
-        OutElec_dict["rot_dir"] = self.rot_dir
         OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         OutElec_dict["logger_name"] = self.logger_name
-        if self.mmf_unit is None:
-            OutElec_dict["mmf_unit"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["mmf_unit"] = {
-                "__class__": str(type(self._mmf_unit)),
-                "__repr__": str(self._mmf_unit.__repr__()),
-                "serialized": dumps(self._mmf_unit).decode("ISO-8859-2"),
-            }
         OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
         OutElec_dict["Id_ref"] = self.Id_ref
         OutElec_dict["Iq_ref"] = self.Iq_ref
@@ -365,29 +407,27 @@ class OutElec(FrozenClass):
         OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
         if self.Us is None:
             OutElec_dict["Us"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["Us"] = {
-                "__class__": str(type(self._Us)),
-                "__repr__": str(self._Us.__repr__()),
-                "serialized": dumps(self._Us).decode("ISO-8859-2"),
-            }
-        # The class name is added to the dict fordeserialisation purpose
+        else:
+            OutElec_dict["Us"] = self.Us.as_dict()
+        if self.internal is None:
+            OutElec_dict["internal"] = None
+        else:
+            OutElec_dict["internal"] = self.internal.as_dict(**kwargs)
+        # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.time = None
-        self.angle = None
+        self.Time = None
+        self.Angle = None
         self.Is = None
         self.Ir = None
         self.angle_rotor = None
         self.N0 = None
-        self.rot_dir = None
         self.angle_rotor_initial = None
         self.logger_name = None
-        self.mmf_unit = None
         self.Tem_av_ref = None
         self.Id_ref = None
         self.Iq_ref = None
@@ -397,54 +437,60 @@ class OutElec(FrozenClass):
         self.Pj_losses = None
         self.Pem_av_ref = None
         self.Us = None
+        if self.internal is not None:
+            self.internal._set_None()
 
-    def _get_time(self):
-        """getter of time"""
-        return self._time
+    def _get_Time(self):
+        """getter of Time"""
+        return self._Time
 
-    def _set_time(self, value):
-        """setter of time"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("time", value, "ndarray")
-        self._time = value
+    def _set_Time(self, value):
+        """setter of Time"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Time"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("Time", value, "Data")
+        self._Time = value
 
-    time = property(
-        fget=_get_time,
-        fset=_set_time,
-        doc=u"""Electrical time vector (no symmetry)
+    Time = property(
+        fget=_get_Time,
+        fset=_set_Time,
+        doc=u"""Electrical time Data object
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
-    def _get_angle(self):
-        """getter of angle"""
-        return self._angle
+    def _get_Angle(self):
+        """getter of Angle"""
+        return self._Angle
 
-    def _set_angle(self, value):
-        """setter of angle"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("angle", value, "ndarray")
-        self._angle = value
+    def _set_Angle(self, value):
+        """setter of Angle"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Angle"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("Angle", value, "Data")
+        self._Angle = value
 
-    angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Electrical position vector (no symmetry)
+    Angle = property(
+        fget=_get_Angle,
+        fset=_set_Angle,
+        doc=u"""Electrical position Data object
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
@@ -454,22 +500,22 @@ class OutElec(FrozenClass):
 
     def _set_Is(self, value):
         """setter of Is"""
-        try:  # Check the type
-            check_var("Is", value, "dict")
-        except CheckTypeError:
-            check_var("Is", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Is = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Is = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Is"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("Is", value, "DataND")
+        self._Is = value
 
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
-        doc=u"""Stator currents as a function of time (each column correspond to one phase)
+        doc=u"""Stator currents DataTime object
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -481,17 +527,17 @@ class OutElec(FrozenClass):
 
     def _set_Ir(self, value):
         """setter of Ir"""
-        try:  # Check the type
-            check_var("Ir", value, "dict")
-        except CheckTypeError:
-            check_var("Ir", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Ir = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Ir = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Ir"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("Ir", value, "DataND")
+        self._Ir = value
 
     Ir = property(
         fget=_get_Ir,
@@ -508,7 +554,7 @@ class OutElec(FrozenClass):
 
     def _set_angle_rotor(self, value):
         """setter of angle_rotor"""
-        if value is None:
+        if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
             try:
@@ -542,26 +588,6 @@ class OutElec(FrozenClass):
         doc=u"""Rotor speed
 
         :Type: float
-        """,
-    )
-
-    def _get_rot_dir(self):
-        """getter of rot_dir"""
-        return self._rot_dir
-
-    def _set_rot_dir(self, value):
-        """setter of rot_dir"""
-        check_var("rot_dir", value, "float", Vmin=-1, Vmax=1)
-        self._rot_dir = value
-
-    rot_dir = property(
-        fget=_get_rot_dir,
-        fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise
-
-        :Type: float
-        :min: -1
-        :max: 1
         """,
     )
 
@@ -601,33 +627,6 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_mmf_unit(self):
-        """getter of mmf_unit"""
-        return self._mmf_unit
-
-    def _set_mmf_unit(self, value):
-        """setter of mmf_unit"""
-        try:  # Check the type
-            check_var("mmf_unit", value, "dict")
-        except CheckTypeError:
-            check_var("mmf_unit", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._mmf_unit = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._mmf_unit = value
-
-    mmf_unit = property(
-        fget=_get_mmf_unit,
-        fset=_set_mmf_unit,
-        doc=u"""Unit magnetomotive force
-
-        :Type: SciDataTool.Classes.DataND.DataND
-        """,
-    )
-
     def _get_Tem_av_ref(self):
         """getter of Tem_av_ref"""
         return self._Tem_av_ref
@@ -658,7 +657,7 @@ class OutElec(FrozenClass):
     Id_ref = property(
         fget=_get_Id_ref,
         fset=_set_Id_ref,
-        doc=u"""d-axis current magnitude
+        doc=u"""Electrical time vector (no symmetry)
 
         :Type: float
         """,
@@ -778,17 +777,17 @@ class OutElec(FrozenClass):
 
     def _set_Us(self, value):
         """setter of Us"""
-        try:  # Check the type
-            check_var("Us", value, "dict")
-        except CheckTypeError:
-            check_var("Us", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Us = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Us = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Us"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("Us", value, "DataND")
+        self._Us = value
 
     Us = property(
         fget=_get_Us,
@@ -796,5 +795,35 @@ class OutElec(FrozenClass):
         doc=u"""Stator voltage as a function of time (each column correspond to one phase)
 
         :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
+
+    def _get_internal(self):
+        """getter of internal"""
+        return self._internal
+
+    def _set_internal(self, value):
+        """setter of internal"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "internal"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutInternal()
+        check_var("internal", value, "OutInternal")
+        self._internal = value
+
+        if self._internal is not None:
+            self._internal.parent = self
+
+    internal = property(
+        fget=_get_internal,
+        fset=_set_internal,
+        doc=u"""OutInternal object containg outputs related to a specific model
+
+        :Type: OutInternal
         """,
     )

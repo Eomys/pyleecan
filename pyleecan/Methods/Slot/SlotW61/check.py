@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.SlotW61 import *
 
 
 def check(self):
@@ -37,33 +38,3 @@ def check(self):
 
     if self.W3 >= (self.W1 - self.W2) / 2:
         raise S61_WindWError("You must have W3 < (W1-W2)/2")
-
-
-class S61_InnerCheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S61_W21CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S61_RCheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S61_WindHError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S61_WindWError(SlotCheckError):
-    """ """
-
-    pass

@@ -1,16 +1,6 @@
-# -*- coding: utf-8 -*-
-
-import femm
 from ...Classes.Lamination import Lamination
 from ...Classes.Circle import Circle
-from ...Functions.FEMM import (
-    hidebc,
-    is_eddies,
-    is_middleag,
-    pbtype,
-    precision,
-    type_yokeS,
-)
+from ...Functions.FEMM import is_eddies
 from ...Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
 from ...Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
 from ...Functions.FEMM.create_FEMM_boundary_conditions import (
@@ -22,6 +12,7 @@ from ...Functions.FEMM.get_airgap_surface import get_airgap_surface
 
 
 def draw_FEMM(
+    femm,
     output,
     is_mmfr,
     is_mmfs,
@@ -46,6 +37,8 @@ def draw_FEMM(
 
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     output : Output
         Output object
     is_mmfr : bool
@@ -104,7 +97,7 @@ def draw_FEMM(
 
     # The package must be initialized with the openfemm command.
     try:
-        femm.openfemm()
+        femm.openfemm(1)  # 1 == open in background, 0 == open normally
     except Exception as e:
         raise FEMMError(
             "ERROR: Unable to open FEMM, please check that FEMM is correctly installed\n"
@@ -115,7 +108,7 @@ def draw_FEMM(
     femm.newdocument(0)
 
     # Minimize the main window for faster geometry creation.
-    femm.main_minimize()
+    # femm.main_minimize()
 
     # defining the problem
     femm.mi_probdef(0, "meters", FEMM_dict["pbtype"], FEMM_dict["precision"])
@@ -161,15 +154,16 @@ def draw_FEMM(
         surf_list.extend(machine.stator.build_geometry(sym=sym))
 
     # Applying user defined modifications
-    for transfrom in transform_list:
+    for transform in transform_list:
         for surf in surf_list:
-            if transfrom["label"] in surf.label and transfrom["type"] == "rotate":
-                surf.rotate(transfrom["value"])
-            elif transfrom["label"] in surf.label and transfrom["type"] == "translate":
-                surf.translate(transfrom["value"])
+            if transform["label"] in surf.label and transform["type"] == "rotate":
+                surf.rotate(transform["value"])
+            elif transform["label"] in surf.label and transform["type"] == "translate":
+                surf.translate(transform["value"])
 
     # Creation of all the materials and circuit in FEMM
     prop_dict, materials, circuits = create_FEMM_materials(
+        femm,
         machine,
         surf_list,
         Is,
@@ -183,13 +177,14 @@ def draw_FEMM(
         is_eddies,
         j_t0=0,
     )
-    create_FEMM_boundary_conditions(sym=sym, is_antiper=is_antiper)
+    create_FEMM_boundary_conditions(femm=femm, sym=sym, is_antiper=is_antiper)
 
     # Draw and assign all the surfaces of the machine
     for surf in surf_list:
         label = surf.label
         # Get the correct element size and group according to the label
         surf.draw_FEMM(
+            femm=femm,
             nodeprop="None",
             maxseg=FEMM_dict["arcspan"],  # max span of arc element in degrees
             propname="None",
@@ -197,7 +192,7 @@ def draw_FEMM(
             hide=False,
         )
         assign_FEMM_surface(
-            surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
+            femm, surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
         )
 
     # Apply BC for DXF import
@@ -211,7 +206,7 @@ def draw_FEMM(
                 femm.mi_setsegmentprop(BC[2], None, None, False, None)
             femm.mi_clearselected()
 
-    femm.mi_zoomnatural()  # Zoom out
+    # femm.mi_zoomnatural()  # Zoom out
     femm.mi_probdef(
         FEMM_dict["freqpb"],
         "meters",
@@ -221,8 +216,9 @@ def draw_FEMM(
         FEMM_dict["minangle"],
         FEMM_dict["acsolver"],
     )
-    femm.smartmesh(FEMM_dict["smart_mesh"])
+    femm.mi_smartmesh(FEMM_dict["smart_mesh"])
     femm.mi_saveas(path_save)  # Save
+    FEMM_dict["path_save"] = path_save
     # femm.mi_close()
 
     FEMM_dict["materials"] = materials
@@ -233,3 +229,5 @@ def draw_FEMM(
 
 class FEMMError(Exception):
     """Raised when FEMM is not possible to run"""
+
+    pass

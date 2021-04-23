@@ -2,8 +2,8 @@ from os.path import isfile
 
 import matplotlib.pyplot as plt
 from pandas import DataFrame, ExcelFile, read_excel
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QWidget
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtWidgets import QDialog, QFileDialog, QMessageBox, QWidget
 
 from .....Classes.ImportMatrixVal import ImportMatrixVal
 from .....Classes.ImportMatrixXls import ImportMatrixXls
@@ -19,8 +19,8 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
 
     import_name = "Defined as a Matrix"
     import_type = ImportMatrixVal
-    saveNeeded = pyqtSignal()
-    dataTypeChanged = pyqtSignal()
+    saveNeeded = Signal()
+    dataTypeChanged = Signal()
 
     def __init__(self, parent=None, data=None, verbose_name="", expected_shape=None):
         """Initialization of the widget
@@ -55,7 +55,9 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
 
     def update(self):
         """Fill the widget with the current value of the data"""
-        self.in_matrix.setText("Matrix size: " + str(self.data.get_data().shape))
+        data = self.data.get_data()
+        shape_str = str(data.shape) if data is not None else "(-,-)"
+        self.in_matrix.setText("Matrix size: " + shape_str)
 
     def s_table(self):
         """display the data in a table"""

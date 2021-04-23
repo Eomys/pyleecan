@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Lamination import Lamination
 
 # Import all class method
@@ -64,9 +68,9 @@ except ImportError as error:
     comp_angle_d_axis = error
 
 try:
-    from ..Methods.Machine.LamHole.comp_sym import comp_sym
+    from ..Methods.Machine.LamHole.comp_periodicity import comp_periodicity
 except ImportError as error:
-    comp_sym = error
+    comp_periodicity = error
 
 
 from ._check import InitUnKnowClassError
@@ -190,29 +194,27 @@ class LamHole(Lamination):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
-    # cf Methods.Machine.LamHole.comp_sym
-    if isinstance(comp_sym, ImportError):
-        comp_sym = property(
+    # cf Methods.Machine.LamHole.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LamHole method comp_sym: " + str(comp_sym))
+                ImportError(
+                    "Can't use LamHole method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
             )
         )
     else:
-        comp_sym = comp_sym
-    # save method is available in all object
+        comp_periodicity = comp_periodicity
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        hole=list(),
+        hole=-1,
         bore=None,
         L1=0.35,
         mat_type=-1,
@@ -223,46 +225,23 @@ class LamHole(Lamination):
         Rint=0,
         Rext=1,
         is_stator=True,
-        axial_vent=list(),
-        notch=list(),
+        axial_vent=-1,
+        notch=-1,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if bore == -1:
-            bore = Bore()
-        if mat_type == -1:
-            mat_type = Material()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            hole = obj.hole
-            bore = obj.bore
-            L1 = obj.L1
-            mat_type = obj.mat_type
-            Nrvd = obj.Nrvd
-            Wrvd = obj.Wrvd
-            Kf1 = obj.Kf1
-            is_internal = obj.is_internal
-            Rint = obj.Rint
-            Rext = obj.Rext
-            is_stator = obj.is_stator
-            axial_vent = obj.axial_vent
-            notch = obj.notch
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -292,71 +271,9 @@ class LamHole(Lamination):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
-        # Initialisation by argument
-        # hole can be None or a list of Hole object
-        self.hole = list()
-        if type(hole) is list:
-            for obj in hole:
-                if obj is None:  # Default value
-                    self.hole.append(Hole())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Hole",
-                        "HoleM50",
-                        "HoleM51",
-                        "HoleM52",
-                        "HoleM53",
-                        "HoleM54",
-                        "HoleM57",
-                        "HoleM58",
-                        "HoleMLSRPM",
-                        "HoleMag",
-                        "VentilationCirc",
-                        "VentilationPolar",
-                        "VentilationTrap",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name " + class_name + " in init_dict for hole"
-                        )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.hole.append(class_obj(init_dict=obj))
-                else:
-                    self.hole.append(obj)
-        elif hole is None:
-            self.hole = list()
-        else:
-            self.hole = hole
-        # bore can be None, a Bore object or a dict
-        if isinstance(bore, dict):
-            # Check that the type is correct (including daughter)
-            class_name = bore.get("__class__")
-            if class_name not in ["Bore", "BoreFlower", "BoreLSRPM"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for bore"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.bore = class_obj(init_dict=bore)
-        elif isinstance(bore, str):
-            from ..Functions.load import load
-
-            bore = load(bore)
-            # Check that the type is correct (including daughter)
-            class_name = bore.__class__.__name__
-            if class_name not in ["Bore", "BoreFlower", "BoreLSRPM"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for bore"
-                )
-            self.bore = bore
-        else:
-            self.bore = bore
+        # Set the properties (value check and convertion are done in setter)
+        self.hole = hole
+        self.bore = bore
         # Call Lamination init
         super(LamHole, self).__init__(
             L1=L1,
@@ -375,7 +292,7 @@ class LamHole(Lamination):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         LamHole_str = ""
         # Get the properties inherited from Lamination
@@ -407,19 +324,74 @@ class LamHole(Lamination):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Lamination
+        diff_list.extend(super(LamHole, self).compare(other, name=name))
+        if (other.hole is None and self.hole is not None) or (
+            other.hole is not None and self.hole is None
+        ):
+            diff_list.append(name + ".hole None mismatch")
+        elif self.hole is None:
+            pass
+        elif len(other.hole) != len(self.hole):
+            diff_list.append("len(" + name + ".hole)")
+        else:
+            for ii in range(len(other.hole)):
+                diff_list.extend(
+                    self.hole[ii].compare(
+                        other.hole[ii], name=name + ".hole[" + str(ii) + "]"
+                    )
+                )
+        if (other.bore is None and self.bore is not None) or (
+            other.bore is not None and self.bore is None
+        ):
+            diff_list.append(name + ".bore None mismatch")
+        elif self.bore is not None:
+            diff_list.extend(self.bore.compare(other.bore, name=name + ".bore"))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Lamination
+        S += super(LamHole, self).__sizeof__()
+        if self.hole is not None:
+            for value in self.hole:
+                S += getsizeof(value)
+        S += getsizeof(self.bore)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Lamination
-        LamHole_dict = super(LamHole, self).as_dict()
-        LamHole_dict["hole"] = list()
-        for obj in self.hole:
-            LamHole_dict["hole"].append(obj.as_dict())
+        LamHole_dict = super(LamHole, self).as_dict(**kwargs)
+        if self.hole is None:
+            LamHole_dict["hole"] = None
+        else:
+            LamHole_dict["hole"] = list()
+            for obj in self.hole:
+                if obj is not None:
+                    LamHole_dict["hole"].append(obj.as_dict(**kwargs))
+                else:
+                    LamHole_dict["hole"].append(None)
         if self.bore is None:
             LamHole_dict["bore"] = None
         else:
-            LamHole_dict["bore"] = self.bore.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+            LamHole_dict["bore"] = self.bore.as_dict(**kwargs)
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamHole_dict["__class__"] = "LamHole"
         return LamHole_dict
@@ -427,8 +399,7 @@ class LamHole(Lamination):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.hole:
-            obj._set_None()
+        self.hole = None
         if self.bore is not None:
             self.bore._set_None()
         # Set to None the properties inherited from Lamination
@@ -436,19 +407,27 @@ class LamHole(Lamination):
 
     def _get_hole(self):
         """getter of hole"""
-        for obj in self._hole:
-            if obj is not None:
-                obj.parent = self
+        if self._hole is not None:
+            for obj in self._hole:
+                if obj is not None:
+                    obj.parent = self
         return self._hole
 
     def _set_hole(self, value):
         """setter of hole"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "hole"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
+        if value == -1:
+            value = list()
         check_var("hole", value, "[Hole]")
         self._hole = value
-
-        for obj in self._hole:
-            if obj is not None:
-                obj.parent = self
 
     hole = property(
         fget=_get_hole,
@@ -465,6 +444,13 @@ class LamHole(Lamination):
 
     def _set_bore(self, value):
         """setter of bore"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Bore()
         check_var("bore", value, "Bore")
         self._bore = value
 

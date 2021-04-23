@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 
 from .....GUI.Dialog.DMachineSetup.SPreview.Ui_SPreview import Ui_SPreview
@@ -12,7 +12,7 @@ class SPreview(Ui_SPreview, QWidget):
     """Step to define the winding conductor"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup nav
     step_name = "Machine Summary"
 
@@ -39,8 +39,16 @@ class SPreview(Ui_SPreview, QWidget):
         # Update the preview
         self.tab_machine.update_tab(self.machine)
 
-        self.machine.plot(fig=self.w_plot.fig, sym=1, alpha=0, delta=0, is_show=False)
+        self.machine.plot(
+            fig=self.w_plot.fig,
+            ax=self.w_plot.axes,
+            sym=1,
+            alpha=0,
+            delta=0,
+            is_show_fig=False,
+        )
         self.w_plot.axes.set_axis_off()
+        self.w_plot.axes.axis("equal")
         if self.w_plot.axes.get_legend() is not None:
             self.w_plot.axes.get_legend().remove()
         self.w_plot.draw()

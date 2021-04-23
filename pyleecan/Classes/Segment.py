@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Line import Line
 
 # Import all class method
@@ -17,6 +21,11 @@ try:
     from ..Methods.Geometry.Segment.check import check
 except ImportError as error:
     check = error
+
+try:
+    from ..Methods.Geometry.Segment.comp_distance import comp_distance
+except ImportError as error:
+    comp_distance = error
 
 try:
     from ..Methods.Geometry.Segment.comp_length import comp_length
@@ -54,6 +63,16 @@ except ImportError as error:
     intersect_line = error
 
 try:
+    from ..Methods.Geometry.Segment.is_on_line import is_on_line
+except ImportError as error:
+    is_on_line = error
+
+try:
+    from ..Methods.Geometry.Segment.plot import plot
+except ImportError as error:
+    plot = error
+
+try:
     from ..Methods.Geometry.Segment.reverse import reverse
 except ImportError as error:
     reverse = error
@@ -62,6 +81,11 @@ try:
     from ..Methods.Geometry.Segment.rotate import rotate
 except ImportError as error:
     rotate = error
+
+try:
+    from ..Methods.Geometry.Segment.scale import scale
+except ImportError as error:
+    scale = error
 
 try:
     from ..Methods.Geometry.Segment.split_half import split_half
@@ -77,16 +101,6 @@ try:
     from ..Methods.Geometry.Segment.translate import translate
 except ImportError as error:
     translate = error
-
-try:
-    from ..Methods.Geometry.Segment.is_on_line import is_on_line
-except ImportError as error:
-    is_on_line = error
-
-try:
-    from ..Methods.Geometry.Segment.comp_distance import comp_distance
-except ImportError as error:
-    comp_distance = error
 
 
 from ._check import InitUnKnowClassError
@@ -107,6 +121,17 @@ class Segment(Line):
         )
     else:
         check = check
+    # cf Methods.Geometry.Segment.comp_distance
+    if isinstance(comp_distance, ImportError):
+        comp_distance = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Segment method comp_distance: " + str(comp_distance)
+                )
+            )
+        )
+    else:
+        comp_distance = comp_distance
     # cf Methods.Geometry.Segment.comp_length
     if isinstance(comp_length, ImportError):
         comp_length = property(
@@ -172,6 +197,24 @@ class Segment(Line):
         )
     else:
         intersect_line = intersect_line
+    # cf Methods.Geometry.Segment.is_on_line
+    if isinstance(is_on_line, ImportError):
+        is_on_line = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method is_on_line: " + str(is_on_line))
+            )
+        )
+    else:
+        is_on_line = is_on_line
+    # cf Methods.Geometry.Segment.plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # cf Methods.Geometry.Segment.reverse
     if isinstance(reverse, ImportError):
         reverse = property(
@@ -190,6 +233,15 @@ class Segment(Line):
         )
     else:
         rotate = rotate
+    # cf Methods.Geometry.Segment.scale
+    if isinstance(scale, ImportError):
+        scale = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method scale: " + str(scale))
+            )
+        )
+    else:
+        scale = scale
     # cf Methods.Geometry.Segment.split_half
     if isinstance(split_half, ImportError):
         split_half = property(
@@ -217,59 +269,25 @@ class Segment(Line):
         )
     else:
         translate = translate
-    # cf Methods.Geometry.Segment.is_on_line
-    if isinstance(is_on_line, ImportError):
-        is_on_line = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method is_on_line: " + str(is_on_line))
-            )
-        )
-    else:
-        is_on_line = is_on_line
-    # cf Methods.Geometry.Segment.comp_distance
-    if isinstance(comp_distance, ImportError):
-        comp_distance = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Segment method comp_distance: " + str(comp_distance)
-                )
-            )
-        )
-    else:
-        comp_distance = comp_distance
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(self, begin=0, end=0, label="", init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            begin = obj.begin
-            end = obj.end
-            label = obj.label
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -279,7 +297,7 @@ class Segment(Line):
                 end = init_dict["end"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.begin = begin
         self.end = end
         # Call Line init
@@ -288,7 +306,7 @@ class Segment(Line):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Segment_str = ""
         # Get the properties inherited from Line
@@ -312,14 +330,54 @@ class Segment(Line):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Line
+        diff_list.extend(super(Segment, self).compare(other, name=name))
+        if other._begin != self._begin:
+            diff_list.append(name + ".begin")
+        if other._end != self._end:
+            diff_list.append(name + ".end")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Line
+        S += super(Segment, self).__sizeof__()
+        S += getsizeof(self.begin)
+        S += getsizeof(self.end)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Line
-        Segment_dict = super(Segment, self).as_dict()
-        Segment_dict["begin"] = self.begin
-        Segment_dict["end"] = self.end
-        # The class name is added to the dict fordeserialisation purpose
+        Segment_dict = super(Segment, self).as_dict(**kwargs)
+        if self.begin is None:
+            Segment_dict["begin"] = None
+        elif isinstance(self.begin, float):
+            Segment_dict["begin"] = self.begin
+        else:
+            Segment_dict["begin"] = str(self.begin)
+        if self.end is None:
+            Segment_dict["end"] = None
+        elif isinstance(self.end, float):
+            Segment_dict["end"] = self.end
+        else:
+            Segment_dict["end"] = str(self.end)
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Segment_dict["__class__"] = "Segment"
         return Segment_dict
@@ -338,6 +396,8 @@ class Segment(Line):
 
     def _set_begin(self, value):
         """setter of begin"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("begin", value, "complex")
         self._begin = value
 
@@ -356,6 +416,8 @@ class Segment(Line):
 
     def _set_end(self, value):
         """setter of end"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("end", value, "complex")
         self._end = value
 

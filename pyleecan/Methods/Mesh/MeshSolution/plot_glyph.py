@@ -8,16 +8,18 @@ from ....Classes.MeshMat import MeshMat
 
 def plot_glyph(
     self,
+    *arg_list,
     label=None,
     index=None,
     indices=None,
     clim=None,
     factor=None,
     field_name=None,
-    ifreq=0,
+    itimefreq=0,
     save_path=None,
     is_point_arrow=False,
     group_names=None,
+    is_show_fig=True,
 ):
     """Plot the vector field as a glyph (or quiver) over the mesh.
 
@@ -53,17 +55,16 @@ def plot_glyph(
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
         meshsol_grp.plot_glyph(
-            self,
-            label,
-            index,
-            indices,
-            clim,
-            factor,
-            field_name,
-            ifreq,
-            save_path,
-            is_point_arrow,
-            None,
+            label=label,
+            index=index,
+            indices=indices,
+            clim=clim,
+            factor=factor,
+            field_name=field_name,
+            itimefreq=itimefreq,
+            save_path=save_path,
+            is_point_arrow=is_point_arrow,
+            group_names=None,
         )
     else:
 
@@ -82,17 +83,14 @@ def plot_glyph(
             is_pyvistaqt = False
 
         # Get the mesh
-        mesh = self.get_mesh(label=label, index=index)
-        if isinstance(mesh, MeshMat):
-            mesh_pv = mesh.get_mesh_pv(indices=indices)
-        else:
-            mesh_pv = mesh.get_mesh(indices=indices)
+        mesh_pv, field, field_name = self.get_mesh_field_pv(
+            label=label,
+            index=index,
+            indices=indices,
+            field_name=field_name,
+        )
 
-        # Get the vector field
-        vect_field = real(self.get_field(label=label, index=index, indices=indices))
-        if len(vect_field.shape) == 3:
-            # Third dimension is frequencies
-            vect_field = vect_field[:, :, ifreq]
+        vect_field = real(field)
 
         # Compute factor
         if factor is None:
@@ -100,10 +98,6 @@ def plot_glyph(
 
         if self.dimension == 2:
             vect_field = np.hstack((vect_field, np.zeros((vect_field.shape[0], 1))))
-
-        # Compute factor
-        if factor is None:
-            factor = 1 / (100 * np_max(vect_field))
 
         # Add field to mesh
         if is_point_arrow:
@@ -130,7 +124,7 @@ def plot_glyph(
         p.add_mesh(arrows_plt, color="red")
         if self.dimension:
             p.view_xy()
-        if save_path is None:
+        if save_path is None and is_show_fig:
             p.show()
         else:
             p.show(interactive=False, screenshot=save_path)

@@ -1,9 +1,9 @@
 ﻿# -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QDialog, QMessageBox, QSpinBox, QTableWidgetItem
+from PySide2.QtCore import QSize
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QDialog, QMessageBox, QSpinBox, QTableWidgetItem
 
 from ......Classes.Lamination import Lamination
 from ......Classes.VentilationCirc import VentilationCirc
@@ -44,8 +44,7 @@ class DAVDuct(Ui_DAVDuct, QDialog):
         self.tab_vent.setCurrentIndex(0)
 
         # Set Help URL
-        self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
-        self.b_help.url += "how-to-add-ventilation-ducts"
+        self.b_help.hide()
 
         self.b_new.clicked.connect(self.s_add)
         self.b_remove.clicked.connect(self.s_remove)

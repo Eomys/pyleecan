@@ -14,12 +14,13 @@ STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 def plot(
     self,
     fig=None,
+    ax=None,
     is_lam_only=False,
     sym=1,
     alpha=0,
     delta=0,
     is_edge_only=False,
-    is_show=True,
+    is_show_fig=True,
 ):
     """Plot a Lamination with Magnets in a matplotlib fig
 
@@ -27,9 +28,10 @@ def plot(
     ----------
     self : LamSlotMag
         A LamSlotMag object
-    fig :
-        if None, open a new fig and plot, else add to the
-        current one (Default value = None)
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
     is_lam_only : bool
         True to plot only the lamination (remove the magnet)
     sym : int
@@ -40,7 +42,7 @@ def plot(
         Complex value for translation
     is_edge_only: bool
         To plot transparent Patches
-    is_show : bool
+    is_show_fig : bool
         To call show at the end of the method
 
     Returns
@@ -53,7 +55,7 @@ def plot(
     else:
         lam_color = ROTOR_COLOR
 
-    (fig, axes, patch_leg, label_leg) = init_fig(fig)
+    (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
     # Get the lamination surfaces
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
@@ -76,7 +78,7 @@ def plot(
         axes.add_patch(patch)
 
     # Axis Setup
-    axis("equal")
+    axes.axis("equal")
 
     # The Lamination is centered in the figure
     Lim = self.Rext * 1.5
@@ -97,5 +99,5 @@ def plot(
             patch_leg.append(Patch(color=MAGNET_COLOR))
             label_leg.append("Magnet")
         legend(patch_leg, label_leg)
-    if is_show:
+    if is_show_fig:
         fig.show()

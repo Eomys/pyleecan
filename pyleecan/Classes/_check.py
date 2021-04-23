@@ -21,9 +21,7 @@ def set_array(obj, prop, value):
     None
 
     """
-    if value is None:  # Default value
-        value = empty(0)
-    elif isinstance(value, list):
+    if isinstance(value, list):
         value = array(value)
     setattr(obj, prop, value)
 
@@ -95,7 +93,9 @@ def check_type(var_name, value, expect_type, type_value):
 
     """
 
-    if expect_type == "float":  # float variable can take int value
+    if expect_type in [None, ""]:
+        pass
+    elif expect_type == "float":  # float variable can take int value
         if not (
             (isinstance(value, int32) and not isinstance(value, bool))
             or (isinstance(value, int) and not isinstance(value, bool))
@@ -143,8 +143,8 @@ def check_type(var_name, value, expect_type, type_value):
         expect_type = expect_type[1:-1]
         for element in value:
             type_value = type(element).__name__
-            # Check if it's the expected type
-            if not type_value == expect_type:
+            # Check if it's the expected type or None
+            if not type_value == expect_type and element is not None:
                 # Check if object inherit from the expected type
                 mother = element.__class__.__bases__  # List of inherited class
                 find = False  # Store the result of the research
@@ -169,31 +169,32 @@ def check_type(var_name, value, expect_type, type_value):
             raise CheckTypeError(
                 "For " + var_name + " : Dict expected, " + type_value + " given"
             )
-        # Check type of value element
+        # Check type of value element (None or expected type)
         expect_type = expect_type[1:-1]
         for key, element in value.items():
-            type_value = type(element).__name__
-            # Check if it's the expected type
-            if not type_value == expect_type:
-                # Check if object inherit from the expected type
-                mother = element.__class__.__bases__  # List of inherited class
-                find = False  # Store the result of the research
-                while mother != ():  # Every class inherit from FrozenClass
-                    if mother[0].__name__ == expect_type:
-                        find = True
-                        break
-                    else:
-                        mother = mother[0].__bases__
-                if not find:  # Not the good type
-                    raise CheckTypeError(
-                        "For "
-                        + var_name
-                        + " : "
-                        + expect_type
-                        + " expected, "
-                        + type_value
-                        + " given"
-                    )
+            if element is not None:
+                type_value = type(element).__name__
+                # Check if it's the expected type or None
+                if not type_value == expect_type and element is not None:
+                    # Check if object inherit from the expected type
+                    mother = element.__class__.__bases__  # List of inherited class
+                    find = False  # Store the result of the research
+                    while mother != ():  # Every class inherit from FrozenClass
+                        if mother[0].__name__ == expect_type:
+                            find = True
+                            break
+                        else:
+                            mother = mother[0].__bases__
+                    if not find:  # Not the good type
+                        raise CheckTypeError(
+                            "For "
+                            + var_name
+                            + " : "
+                            + expect_type
+                            + " expected, "
+                            + type_value
+                            + " given"
+                        )
     elif "." in expect_type:
         # Imported type
         module_to_import = import_module(expect_type[: expect_type.rfind(".")])

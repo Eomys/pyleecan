@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from numpy import arange
+
 from ....Classes.OutMag import OutMag
+from ....Classes.Simulation import Simulation
+from ....Classes.ImportMatrixXls import ImportMatrixXls
 from ....Methods.Simulation.Input import InputError
-from numpy import ndarray
 
 
 def gen_input(self):
@@ -15,54 +18,60 @@ def gen_input(self):
     """
 
     output = OutMag()
-    # Load and check time
-    if self.time is None:
-        raise InputError("ERROR: InFlux.time missing")
-    output.time = self.time.get_data()
 
-    if (
-        not isinstance(output.time, ndarray)
-        or len(output.time.shape) > 2
-        or (len(output.time.shape) == 2 and output.time.shape[0] != 1)
-    ):
-        # time should be a vector
+    # get the simulation
+    if isinstance(self.parent, Simulation):
+        simu = self.parent
+    elif isinstance(self.parent.parent, Simulation):
+        simu = self.parent.parent
+    else:
         raise InputError(
-            "ERROR: InFlux.time should be a vector, "
-            + str(output.time.shape)
-            + " shape found"
+            "ERROR: InputCurrent object should be inside a Simulation object"
         )
 
-    # Load and check angle
-    if self.angle is None:
-        raise InputError("ERROR: InFlux.angle missing")
-    output.angle = self.angle.get_data()
-    if (
-        not isinstance(output.angle, ndarray)
-        or len(output.angle.shape) > 2
-        or (len(output.angle.shape) == 2 and output.angle.shape[0] != 1)
-    ):
-        # angle should be a vector
-        raise InputError(
-            "ERROR: InFlux.angle should be a vector, "
-            + str(output.angle.shape)
-            + " shape found"
-        )
+    # Set discretization
+    if self.N0 is None:
+        if self.OP is None:
+            N0 = None  # N0 can be None if time isn't
+        else:
+            N0 = self.OP.N0
+    else:
+        N0 = self.N0
 
-    if self.B is None:
-        raise InputError("ERROR: InFlux.B missing")
-    if self.B.name is None:
-        self.B.name = "Airgap flux density"
-    if self.B.symbol is None:
-        self.B.symbol = "B"
-    B = self.B.get_data()
-    output.B = B
+    # Import flux components
+    per_a = self.per_a
+    per_t = self.per_t
+    is_antiper_a = self.is_antiper_a
+    is_antiper_t = self.is_antiper_t
+    out_dict = {}
+    for key in self.B_dict:
+        comp = self.B_dict[key]
+        if isinstance(comp, ImportMatrixXls) and comp.axes_colrows is not None:
+            B_comp, axes_values = comp.get_data()
+        else:
+            B_comp = comp.get_data()
+            axes_values = {}
+        out_dict[key] = B_comp
 
-    if self.parent.parent is None:
+    axes_dict = self.comp_axes(
+        axes_values,
+        N0=N0,
+        per_a=per_a,
+        is_antiper_a=is_antiper_a,
+        per_t=per_t,
+        is_antiper_t=is_antiper_t,
+    )
+
+    if simu.parent is None:
         raise InputError(
             "ERROR: The Simulation object must be in an Output object to run"
         )
     # Save the Output in the correct place
-    self.parent.parent.mag = output
+    if N0 is not None:
+        simu.parent.elec.N0 = N0
+    output = OutMag()
+    output.store(out_dict=out_dict, axes_dict=axes_dict)
+    simu.parent.mag = output
 
     # Define the electrical Output to set the Operating Point
     if self.OP is not None:

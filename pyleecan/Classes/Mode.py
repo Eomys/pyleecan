@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .SolutionMat import SolutionMat
 
 # Import all class method
@@ -86,14 +90,9 @@ class Mode(SolutionMat):
         )
     else:
         get_shape_pol = get_shape_pol
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -104,38 +103,26 @@ class Mode(SolutionMat):
         order_long=None,
         field=None,
         indice=None,
-        axis=None,
+        axis_name=None,
+        axis_size=None,
         type_cell="triangle",
         label=None,
+        dimension=2,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            nat_freq = obj.nat_freq
-            order_circ = obj.order_circ
-            order_long = obj.order_long
-            field = obj.field
-            indice = obj.indice
-            axis = obj.axis
-            type_cell = obj.type_cell
-            label = obj.label
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -149,25 +136,35 @@ class Mode(SolutionMat):
                 field = init_dict["field"]
             if "indice" in list(init_dict.keys()):
                 indice = init_dict["indice"]
-            if "axis" in list(init_dict.keys()):
-                axis = init_dict["axis"]
+            if "axis_name" in list(init_dict.keys()):
+                axis_name = init_dict["axis_name"]
+            if "axis_size" in list(init_dict.keys()):
+                axis_size = init_dict["axis_size"]
             if "type_cell" in list(init_dict.keys()):
                 type_cell = init_dict["type_cell"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
-        # Initialisation by argument
+            if "dimension" in list(init_dict.keys()):
+                dimension = init_dict["dimension"]
+        # Set the properties (value check and convertion are done in setter)
         self.nat_freq = nat_freq
         self.order_circ = order_circ
         self.order_long = order_long
         # Call SolutionMat init
         super(Mode, self).__init__(
-            field=field, indice=indice, axis=axis, type_cell=type_cell, label=label
+            field=field,
+            indice=indice,
+            axis_name=axis_name,
+            axis_size=axis_size,
+            type_cell=type_cell,
+            label=label,
+            dimension=dimension,
         )
         # The class is frozen (in SolutionMat init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Mode_str = ""
         # Get the properties inherited from SolutionMat
@@ -194,15 +191,48 @@ class Mode(SolutionMat):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from SolutionMat
+        diff_list.extend(super(Mode, self).compare(other, name=name))
+        if other._nat_freq != self._nat_freq:
+            diff_list.append(name + ".nat_freq")
+        if other._order_circ != self._order_circ:
+            diff_list.append(name + ".order_circ")
+        if other._order_long != self._order_long:
+            diff_list.append(name + ".order_long")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from SolutionMat
+        S += super(Mode, self).__sizeof__()
+        S += getsizeof(self.nat_freq)
+        S += getsizeof(self.order_circ)
+        S += getsizeof(self.order_long)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from SolutionMat
-        Mode_dict = super(Mode, self).as_dict()
+        Mode_dict = super(Mode, self).as_dict(**kwargs)
         Mode_dict["nat_freq"] = self.nat_freq
         Mode_dict["order_circ"] = self.order_circ
         Mode_dict["order_long"] = self.order_long
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Mode_dict["__class__"] = "Mode"
         return Mode_dict

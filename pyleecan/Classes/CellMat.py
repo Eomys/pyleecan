@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -24,9 +28,9 @@ except ImportError as error:
     get_connectivity = error
 
 try:
-    from ..Methods.Mesh.CellMat.get_point2cell import get_point2cell
+    from ..Methods.Mesh.CellMat.get_node2cell import get_node2cell
 except ImportError as error:
-    get_point2cell = error
+    get_node2cell = error
 
 try:
     from ..Methods.Mesh.CellMat.is_exist import is_exist
@@ -36,6 +40,7 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
+from .Interpolation import Interpolation
 
 
 class CellMat(FrozenClass):
@@ -65,17 +70,17 @@ class CellMat(FrozenClass):
         )
     else:
         get_connectivity = get_connectivity
-    # cf Methods.Mesh.CellMat.get_point2cell
-    if isinstance(get_point2cell, ImportError):
-        get_point2cell = property(
+    # cf Methods.Mesh.CellMat.get_node2cell
+    if isinstance(get_node2cell, ImportError):
+        get_node2cell = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use CellMat method get_point2cell: " + str(get_point2cell)
+                    "Can't use CellMat method get_node2cell: " + str(get_node2cell)
                 )
             )
         )
     else:
-        get_point2cell = get_point2cell
+        get_node2cell = get_node2cell
     # cf Methods.Mesh.CellMat.is_exist
     if isinstance(is_exist, ImportError):
         is_exist = property(
@@ -85,48 +90,34 @@ class CellMat(FrozenClass):
         )
     else:
         is_exist = is_exist
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        connectivity=None,
+        connectivity=[],
         nb_cell=0,
-        nb_pt_per_cell=0,
-        indice=None,
+        nb_node_per_cell=0,
+        indice=[],
+        interpolation=-1,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            connectivity = obj.connectivity
-            nb_cell = obj.nb_cell
-            nb_pt_per_cell = obj.nb_pt_per_cell
-            indice = obj.indice
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -134,24 +125,25 @@ class CellMat(FrozenClass):
                 connectivity = init_dict["connectivity"]
             if "nb_cell" in list(init_dict.keys()):
                 nb_cell = init_dict["nb_cell"]
-            if "nb_pt_per_cell" in list(init_dict.keys()):
-                nb_pt_per_cell = init_dict["nb_pt_per_cell"]
+            if "nb_node_per_cell" in list(init_dict.keys()):
+                nb_node_per_cell = init_dict["nb_node_per_cell"]
             if "indice" in list(init_dict.keys()):
                 indice = init_dict["indice"]
-        # Initialisation by argument
+            if "interpolation" in list(init_dict.keys()):
+                interpolation = init_dict["interpolation"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # connectivity can be None, a ndarray or a list
-        set_array(self, "connectivity", connectivity)
+        self.connectivity = connectivity
         self.nb_cell = nb_cell
-        self.nb_pt_per_cell = nb_pt_per_cell
-        # indice can be None, a ndarray or a list
-        set_array(self, "indice", indice)
+        self.nb_node_per_cell = nb_node_per_cell
+        self.indice = indice
+        self.interpolation = interpolation
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         CellMat_str = ""
         if self.parent is None:
@@ -166,7 +158,7 @@ class CellMat(FrozenClass):
             + linesep
         )
         CellMat_str += "nb_cell = " + str(self.nb_cell) + linesep
-        CellMat_str += "nb_pt_per_cell = " + str(self.nb_pt_per_cell) + linesep
+        CellMat_str += "nb_node_per_cell = " + str(self.nb_node_per_cell) + linesep
         CellMat_str += (
             "indice = "
             + linesep
@@ -174,6 +166,15 @@ class CellMat(FrozenClass):
             + linesep
             + linesep
         )
+        if self.interpolation is not None:
+            tmp = (
+                self.interpolation.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            CellMat_str += "interpolation = " + tmp
+        else:
+            CellMat_str += "interpolation = None" + linesep + linesep
         return CellMat_str
 
     def __eq__(self, other):
@@ -185,14 +186,57 @@ class CellMat(FrozenClass):
             return False
         if other.nb_cell != self.nb_cell:
             return False
-        if other.nb_pt_per_cell != self.nb_pt_per_cell:
+        if other.nb_node_per_cell != self.nb_node_per_cell:
             return False
         if not array_equal(other.indice, self.indice):
             return False
+        if other.interpolation != self.interpolation:
+            return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if not array_equal(other.connectivity, self.connectivity):
+            diff_list.append(name + ".connectivity")
+        if other._nb_cell != self._nb_cell:
+            diff_list.append(name + ".nb_cell")
+        if other._nb_node_per_cell != self._nb_node_per_cell:
+            diff_list.append(name + ".nb_node_per_cell")
+        if not array_equal(other.indice, self.indice):
+            diff_list.append(name + ".indice")
+        if (other.interpolation is None and self.interpolation is not None) or (
+            other.interpolation is not None and self.interpolation is None
+        ):
+            diff_list.append(name + ".interpolation None mismatch")
+        elif self.interpolation is not None:
+            diff_list.extend(
+                self.interpolation.compare(
+                    other.interpolation, name=name + ".interpolation"
+                )
+            )
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.connectivity)
+        S += getsizeof(self.nb_cell)
+        S += getsizeof(self.nb_node_per_cell)
+        S += getsizeof(self.indice)
+        S += getsizeof(self.interpolation)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         CellMat_dict = dict()
         if self.connectivity is None:
@@ -200,12 +244,16 @@ class CellMat(FrozenClass):
         else:
             CellMat_dict["connectivity"] = self.connectivity.tolist()
         CellMat_dict["nb_cell"] = self.nb_cell
-        CellMat_dict["nb_pt_per_cell"] = self.nb_pt_per_cell
+        CellMat_dict["nb_node_per_cell"] = self.nb_node_per_cell
         if self.indice is None:
             CellMat_dict["indice"] = None
         else:
             CellMat_dict["indice"] = self.indice.tolist()
-        # The class name is added to the dict fordeserialisation purpose
+        if self.interpolation is None:
+            CellMat_dict["interpolation"] = None
+        else:
+            CellMat_dict["interpolation"] = self.interpolation.as_dict(**kwargs)
+        # The class name is added to the dict for deserialisation purpose
         CellMat_dict["__class__"] = "CellMat"
         return CellMat_dict
 
@@ -214,8 +262,10 @@ class CellMat(FrozenClass):
 
         self.connectivity = None
         self.nb_cell = None
-        self.nb_pt_per_cell = None
+        self.nb_node_per_cell = None
         self.indice = None
+        if self.interpolation is not None:
+            self.interpolation._set_None()
 
     def _get_connectivity(self):
         """getter of connectivity"""
@@ -223,7 +273,7 @@ class CellMat(FrozenClass):
 
     def _set_connectivity(self, value):
         """setter of connectivity"""
-        if value is None:
+        if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
             try:
@@ -260,19 +310,19 @@ class CellMat(FrozenClass):
         """,
     )
 
-    def _get_nb_pt_per_cell(self):
-        """getter of nb_pt_per_cell"""
-        return self._nb_pt_per_cell
+    def _get_nb_node_per_cell(self):
+        """getter of nb_node_per_cell"""
+        return self._nb_node_per_cell
 
-    def _set_nb_pt_per_cell(self, value):
-        """setter of nb_pt_per_cell"""
-        check_var("nb_pt_per_cell", value, "int")
-        self._nb_pt_per_cell = value
+    def _set_nb_node_per_cell(self, value):
+        """setter of nb_node_per_cell"""
+        check_var("nb_node_per_cell", value, "int")
+        self._nb_node_per_cell = value
 
-    nb_pt_per_cell = property(
-        fget=_get_nb_pt_per_cell,
-        fset=_set_nb_pt_per_cell,
-        doc=u"""Define the number of node per element
+    nb_node_per_cell = property(
+        fget=_get_nb_node_per_cell,
+        fset=_set_nb_node_per_cell,
+        doc=u"""Define the number of node per cell
 
         :Type: int
         """,
@@ -284,7 +334,7 @@ class CellMat(FrozenClass):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value is None:
+        if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
             try:
@@ -300,5 +350,35 @@ class CellMat(FrozenClass):
         doc=u"""Element indices
 
         :Type: ndarray
+        """,
+    )
+
+    def _get_interpolation(self):
+        """getter of interpolation"""
+        return self._interpolation
+
+    def _set_interpolation(self, value):
+        """setter of interpolation"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "interpolation"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Interpolation()
+        check_var("interpolation", value, "Interpolation")
+        self._interpolation = value
+
+        if self._interpolation is not None:
+            self._interpolation.parent = self
+
+    interpolation = property(
+        fget=_get_interpolation,
+        fset=_set_interpolation,
+        doc=u"""Define FEA interpolation
+
+        :Type: Interpolation
         """,
     )

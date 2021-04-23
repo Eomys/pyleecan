@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PySide2 import QtWidgets, QtGui, QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.pyplot import subplots
 from matplotlib.figure import Figure
@@ -26,3 +26,7 @@ class MPLCanvas2(FigureCanvas):
         self.fig = Figure()
         self.axes = self.fig.add_subplot(111)
         super(MPLCanvas2, self).__init__(self.fig)
+
+    def refresh_fig(self):
+        self.fig = Figure()
+        self.axes = self.fig.add_subplot(111)

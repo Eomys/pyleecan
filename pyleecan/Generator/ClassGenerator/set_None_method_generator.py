@@ -28,18 +28,19 @@ def generate_set_None(gen_dict, class_dict):
     for prop in class_dict["properties"]:
         if (
             prop["type"] in PYTHON_TYPE
-            or prop["type"] in ["ndarray", "function"]
+            or prop["type"] in ["ndarray", "{ndarray}", "[ndarray]", "function"]
             or "." in prop["type"]
         ):
             var_str += TAB2 + "self." + prop["name"] + " = None\n"
         elif is_list_pyleecan_type(prop["type"]):
-            var_str += TAB2 + "for obj in self." + prop["name"] + ":\n"
-            var_str += TAB3 + "obj._set_None()\n"
-        elif prop["type"] == "{ndarray}":
-            var_str += TAB2 + "self." + prop["name"] + " = dict()\n"
+            var_str += TAB2 + "self." + prop["name"] + " = None\n"
         elif is_dict_pyleecan_type(prop["type"]):
-            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
-            var_str += TAB3 + "obj._set_None()\n"
+            var_str += TAB2 + "self." + prop["name"] + " = None\n"
+        elif prop["type"] in ["", None]:  # No type
+            var_str += TAB2 + "if hasattr(self." + prop["name"] + ", '_set_None'):\n"
+            var_str += TAB3 + "self." + prop["name"] + "._set_None()\n"
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + "self." + prop["name"] + " = None\n"
         else:  # Pyleecan type
             var_str += TAB2 + "if self." + prop["name"] + " is not None:\n"
             var_str += TAB3 + "self." + prop["name"] + "._set_None()\n"
@@ -59,5 +60,8 @@ def generate_set_None(gen_dict, class_dict):
             + "\n"
         )
         None_str += TAB2 + "super(" + class_name + ", self)._set_None()\n"
+    elif len(class_dict["properties"]) == 0:
+        # No mother and no proprety => Nothing to do
+        None_str = None_str[:-1] + TAB2 + "pass\n"
 
     return None_str

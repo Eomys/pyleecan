@@ -11,6 +11,7 @@ except ImportError:  # Install setuptools if needed
 
 import platform
 
+
 # /!\ Increase the number before a release
 # See https://www.python.org/dev/peps/pep-0440/
 # Examples :
@@ -20,7 +21,7 @@ import platform
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.0.0"
+PYLEECAN_VERSION = "1.2.1"
 
 
 with open("README.md", "r") as fh:
@@ -32,19 +33,24 @@ python_requires = ">= 3.6"
 install_requires = [
     "setuptools",
     "cloudpickle>=1.3.0",
-    "matplotlib>=3.2.1",
-    "numpy>=1.18.2",
+    "matplotlib>=3.3.2",
+    "numpy==1.19.3",
     "pandas>=1.0.3",
-    "PyQt5>=5.14.1",
-    "PyQt5-sip>=12.7.1",
+    'pyfemm>=0.1.1;platform_system=="Windows"',
+    "PySide2>=5.15.1",
     "scipy>=1.4.1",
     "xlrd>=1.2.0",
     "deap>=1.3.1",
-    "SciDataTool>=1.1.1",
+    "SciDataTool>=1.3.7",
     "pyvista>=0.25.3",
     "meshio>=4.0.15",
-    "h5py>=2.10.0",
-    'pyfemm >= 0.1.0;platform_system=="Windows"',
+    "h5py==2.10.0",
+    "nbformat",
+    "nbconvert",
+    "quadpy",
+    "ezdxf>=0.14.2",
+    "pytest-qt>=3.3.0",
+    "pyuff>=1.25",
 ]
 
 
@@ -59,7 +65,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Eomys/pyleecan",
-    download_url="https://github.com/Eomys/pyleecan/SciDataTool/archive/"
+    download_url="https://github.com/Eomys/pyleecan/archive/"
     + PYLEECAN_VERSION
     + ".tar.gz",
     packages=setuptools.find_packages(exclude=["Tests*", "Tutorials*"]),

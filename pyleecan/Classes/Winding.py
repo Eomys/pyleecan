@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -27,11 +31,6 @@ try:
     from ..Methods.Machine.Winding.comp_phasor_angle import comp_phasor_angle
 except ImportError as error:
     comp_phasor_angle = error
-
-try:
-    from ..Methods.Machine.Winding.comp_resistance_norm import comp_resistance_norm
-except ImportError as error:
-    comp_resistance_norm = error
 
 try:
     from ..Methods.Machine.Winding.comp_winding_factor import comp_winding_factor
@@ -85,18 +84,6 @@ class Winding(FrozenClass):
         )
     else:
         comp_phasor_angle = comp_phasor_angle
-    # cf Methods.Machine.Winding.comp_resistance_norm
-    if isinstance(comp_resistance_norm, ImportError):
-        comp_resistance_norm = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Winding method comp_resistance_norm: "
-                    + str(comp_resistance_norm)
-                )
-            )
-        )
-    else:
-        comp_resistance_norm = comp_resistance_norm
     # cf Methods.Machine.Winding.comp_winding_factor
     if isinstance(comp_winding_factor, ImportError):
         comp_winding_factor = property(
@@ -121,14 +108,9 @@ class Winding(FrozenClass):
         )
     else:
         comp_length_endwinding = comp_length_endwinding
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -148,33 +130,16 @@ class Winding(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if conductor == -1:
-            conductor = Conductor()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            is_reverse_wind = obj.is_reverse_wind
-            Nslot_shift_wind = obj.Nslot_shift_wind
-            qs = obj.qs
-            Ntcoil = obj.Ntcoil
-            Npcpp = obj.Npcpp
-            type_connection = obj.type_connection
-            p = obj.p
-            Lewout = obj.Lewout
-            conductor = obj.conductor
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -196,7 +161,7 @@ class Winding(FrozenClass):
                 Lewout = init_dict["Lewout"]
             if "conductor" in list(init_dict.keys()):
                 conductor = init_dict["conductor"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_reverse_wind = is_reverse_wind
         self.Nslot_shift_wind = Nslot_shift_wind
@@ -206,49 +171,13 @@ class Winding(FrozenClass):
         self.type_connection = type_connection
         self.p = p
         self.Lewout = Lewout
-        # conductor can be None, a Conductor object or a dict
-        if isinstance(conductor, dict):
-            # Check that the type is correct (including daughter)
-            class_name = conductor.get("__class__")
-            if class_name not in [
-                "Conductor",
-                "CondType11",
-                "CondType12",
-                "CondType21",
-                "CondType22",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for conductor"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.conductor = class_obj(init_dict=conductor)
-        elif isinstance(conductor, str):
-            from ..Functions.load import load
-
-            conductor = load(conductor)
-            # Check that the type is correct (including daughter)
-            class_name = conductor.__class__.__name__
-            if class_name not in [
-                "Conductor",
-                "CondType11",
-                "CondType12",
-                "CondType21",
-                "CondType22",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for conductor"
-                )
-            self.conductor = conductor
-        else:
-            self.conductor = conductor
+        self.conductor = conductor
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Winding_str = ""
         if self.parent is None:
@@ -295,8 +224,59 @@ class Winding(FrozenClass):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._is_reverse_wind != self._is_reverse_wind:
+            diff_list.append(name + ".is_reverse_wind")
+        if other._Nslot_shift_wind != self._Nslot_shift_wind:
+            diff_list.append(name + ".Nslot_shift_wind")
+        if other._qs != self._qs:
+            diff_list.append(name + ".qs")
+        if other._Ntcoil != self._Ntcoil:
+            diff_list.append(name + ".Ntcoil")
+        if other._Npcpp != self._Npcpp:
+            diff_list.append(name + ".Npcpp")
+        if other._type_connection != self._type_connection:
+            diff_list.append(name + ".type_connection")
+        if other._p != self._p:
+            diff_list.append(name + ".p")
+        if other._Lewout != self._Lewout:
+            diff_list.append(name + ".Lewout")
+        if (other.conductor is None and self.conductor is not None) or (
+            other.conductor is not None and self.conductor is None
+        ):
+            diff_list.append(name + ".conductor None mismatch")
+        elif self.conductor is not None:
+            diff_list.extend(
+                self.conductor.compare(other.conductor, name=name + ".conductor")
+            )
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.is_reverse_wind)
+        S += getsizeof(self.Nslot_shift_wind)
+        S += getsizeof(self.qs)
+        S += getsizeof(self.Ntcoil)
+        S += getsizeof(self.Npcpp)
+        S += getsizeof(self.type_connection)
+        S += getsizeof(self.p)
+        S += getsizeof(self.Lewout)
+        S += getsizeof(self.conductor)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Winding_dict = dict()
         Winding_dict["is_reverse_wind"] = self.is_reverse_wind
@@ -310,8 +290,8 @@ class Winding(FrozenClass):
         if self.conductor is None:
             Winding_dict["conductor"] = None
         else:
-            Winding_dict["conductor"] = self.conductor.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+            Winding_dict["conductor"] = self.conductor.as_dict(**kwargs)
+        # The class name is added to the dict for deserialisation purpose
         Winding_dict["__class__"] = "Winding"
         return Winding_dict
 
@@ -371,7 +351,7 @@ class Winding(FrozenClass):
 
     def _set_qs(self, value):
         """setter of qs"""
-        check_var("qs", value, "int", Vmin=1, Vmax=100)
+        check_var("qs", value, "int", Vmin=0, Vmax=100)
         self._qs = value
 
     qs = property(
@@ -380,7 +360,7 @@ class Winding(FrozenClass):
         doc=u"""number of phases 
 
         :Type: int
-        :min: 1
+        :min: 0
         :max: 100
         """,
     )
@@ -491,6 +471,15 @@ class Winding(FrozenClass):
 
     def _set_conductor(self, value):
         """setter of conductor"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "conductor"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Conductor()
         check_var("conductor", value, "Conductor")
         self._conductor = value
 

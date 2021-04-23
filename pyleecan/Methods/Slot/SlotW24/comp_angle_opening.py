@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from numpy import arcsin, pi
 
 
 def comp_angle_opening(self):
@@ -16,5 +17,5 @@ def comp_angle_opening(self):
 
     """
 
-    (alpha_0, alpha_2) = self.comp_alphas()
-    return alpha_0
+    alpha = float(arcsin(self.W3 / (2 * self.get_Rbo())))
+    return 2 * pi / self.Zs - 2 * alpha

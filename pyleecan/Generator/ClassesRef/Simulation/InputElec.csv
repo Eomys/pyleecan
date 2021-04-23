@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-N0,rpm,Rotor speed,1,float,None,,,,Simulation,Input,gen_input,VERSION,1,Input to skip the electrical module and start with the magnetic one
-rot_dir,-,"Rotation direction of the rotor 1 trigo, -1 clockwise",,float,-1,-1,1,,,,comp_felec,,,
-Id_ref,A,d-axis current magnitude,1,float,None,,,,,,set_Id_Iq,,,
-Iq_ref,A,q-axis current magnitude,1,float,None,,,,,,,,,
+rot_dir,-,"Rotation direction of the rotor 1 trigo, -1 clockwise",,float,-1,-1,1,,Simulation,Input,gen_input,VERSION,1,Input to skip the electrical module and start with the magnetic one
+Id_ref,A,d-axis current magnitude,1,float,None,,,,,,comp_felec,,,
+Iq_ref,A,q-axis current magnitude,1,float,None,,,,,,set_Id_Iq,,,
 Ud_ref,V,d-axis voltage magnitude,1,float,None,,,,,,,,,
 Uq_ref,V,q-axis voltage magnitude,1,float,None,,,,,,,,,
+felec,Hz,electrical frequency,1,float,None,,,,,,,,,

@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import pyvista as pv
+from os import makedirs, remove
+from os.path import isdir, split, dirname
+
 import meshio
-import os
+import pyvista as pv
+
+from pyleecan.definitions import RESULT_DIR
 
 
-def get_mesh_pv(self, path="temp.vtk", indices=None):
+def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
     """Return the pyvista mesh object (or submesh).
 
     Parameters
@@ -13,7 +17,7 @@ def get_mesh_pv(self, path="temp.vtk", indices=None):
     self : MeshMat
         a MeshMat object
     indices : list
-        list of the points to extract (optional)
+        list of the nodes to extract (optional)
 
     Returns
     -------
@@ -21,15 +25,23 @@ def get_mesh_pv(self, path="temp.vtk", indices=None):
         a pyvista UnstructuredGrid object
     """
 
-    points = self.get_point()
-    cells, nb_cell, indice_dict = self.get_cell()
+    # Numbering and indices compatible with pyvista
+    mesh_renum = self.copy()
+    mesh_renum.renum()
 
-    # for key in cells:
+    nodes = mesh_renum.get_node()
+    cells, _, _ = mesh_renum.get_cell()
+
+    cells_meshio = list()
     for key in cells:
-        cells_meshio = [(key, cells[key])]  # TODO : Generalize to any cell type
-
+        cells_meshio.append((key, cells[key]))
         # Write .vtk file using meshio
-        meshio.write_points_cells(filename=path, points=points, cells=cells_meshio)
+
+    # Make sure that the file exists
+    if not isdir(dirname(path)):
+        makedirs(dirname(path))
+
+    meshio.write_points_cells(filename=path, points=nodes, cells=cells_meshio)
 
     # Read .vtk file with pyvista
     mesh = pv.read(path)
@@ -38,6 +50,6 @@ def get_mesh_pv(self, path="temp.vtk", indices=None):
     if indices is not None:
         mesh = mesh.extract_points(indices)
 
-    os.remove(path)
+    remove(path)
 
     return mesh

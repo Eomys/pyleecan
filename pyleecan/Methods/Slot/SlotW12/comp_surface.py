@@ -24,7 +24,7 @@ def comp_surface(self):
     S1 = self.H0 * 2 * self.R2
     S2 = 4 * self.R1 * self.R2
     S3 = pi * self.R1 ** 2
-    Swind = self.comp_surface_wind()
+    Swind = self.comp_surface_active()
 
     # The bottom is an arc
     alpha = self.comp_angle_opening()

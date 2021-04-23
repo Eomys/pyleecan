@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .ImportMatrix import ImportMatrix
 
 # Import all class method
@@ -38,14 +42,9 @@ class ImportGenToothSaw(ImportMatrix):
         )
     else:
         get_data = get_data
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -63,29 +62,16 @@ class ImportGenToothSaw(ImportMatrix):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            type_signal = obj.type_signal
-            f = obj.f
-            A = obj.A
-            N = obj.N
-            Tf = obj.Tf
-            Dt = obj.Dt
-            is_transpose = obj.is_transpose
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -103,7 +89,7 @@ class ImportGenToothSaw(ImportMatrix):
                 Dt = init_dict["Dt"]
             if "is_transpose" in list(init_dict.keys()):
                 is_transpose = init_dict["is_transpose"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.type_signal = type_signal
         self.f = f
         self.A = A
@@ -116,7 +102,7 @@ class ImportGenToothSaw(ImportMatrix):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         ImportGenToothSaw_str = ""
         # Get the properties inherited from ImportMatrix
@@ -152,18 +138,60 @@ class ImportGenToothSaw(ImportMatrix):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from ImportMatrix
+        diff_list.extend(super(ImportGenToothSaw, self).compare(other, name=name))
+        if other._type_signal != self._type_signal:
+            diff_list.append(name + ".type_signal")
+        if other._f != self._f:
+            diff_list.append(name + ".f")
+        if other._A != self._A:
+            diff_list.append(name + ".A")
+        if other._N != self._N:
+            diff_list.append(name + ".N")
+        if other._Tf != self._Tf:
+            diff_list.append(name + ".Tf")
+        if other._Dt != self._Dt:
+            diff_list.append(name + ".Dt")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from ImportMatrix
+        S += super(ImportGenToothSaw, self).__sizeof__()
+        S += getsizeof(self.type_signal)
+        S += getsizeof(self.f)
+        S += getsizeof(self.A)
+        S += getsizeof(self.N)
+        S += getsizeof(self.Tf)
+        S += getsizeof(self.Dt)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from ImportMatrix
-        ImportGenToothSaw_dict = super(ImportGenToothSaw, self).as_dict()
+        ImportGenToothSaw_dict = super(ImportGenToothSaw, self).as_dict(**kwargs)
         ImportGenToothSaw_dict["type_signal"] = self.type_signal
         ImportGenToothSaw_dict["f"] = self.f
         ImportGenToothSaw_dict["A"] = self.A
         ImportGenToothSaw_dict["N"] = self.N
         ImportGenToothSaw_dict["Tf"] = self.Tf
         ImportGenToothSaw_dict["Dt"] = self.Dt
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportGenToothSaw_dict["__class__"] = "ImportGenToothSaw"
         return ImportGenToothSaw_dict

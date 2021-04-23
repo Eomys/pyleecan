@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtWidgets import QWidget
 
 from ....Classes.ImportGenVectLin import ImportGenVectLin
 from ....GUI.Tools.WImport.Ui_WImport import Ui_WImport
@@ -11,7 +11,7 @@ from ....GUI.Tools.WImport.WImportMatrixTable.WImportMatrixTable import (
 
 
 class WImport(Ui_WImport, QWidget):
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
 
     def __init__(self, parent=None):
         """Widget to define an ImportLinspace"""

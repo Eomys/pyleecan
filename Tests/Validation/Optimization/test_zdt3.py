@@ -11,7 +11,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.DataKeeper import DataKeeper
+from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
@@ -26,14 +26,15 @@ import random
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR, TEST_DIR
 
-SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
-
-@pytest.mark.validation
-@pytest.mark.long
-@pytest.mark.DEAP
+@pytest.mark.long_5s
+@pytest.mark.SCIM
+@pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_zdt3():
     # ### Defining reference Output
+    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
     # Definition of the enforced output of the electrical module
     Nt = 2
@@ -50,12 +51,10 @@ def test_zdt3():
     )
     Ir = ImportMatrixVal(value=np.zeros(30))
     time = ImportGenVectLin(start=0, stop=0.015, num=Nt, endpoint=True)
-    angle = ImportGenVectLin(
-        start=0, stop=2 * np.pi, num=64, endpoint=False
-    )  # num=1024
+    Na_tot = 64
 
     # Definition of the simulation
-    simu = Simu1(name="Test_machine", machine=SCIM_001)
+    simu = Simu1(name="test_zdt3", machine=SCIM_001)
 
     simu.input = InputCurrent(
         Is=Is,
@@ -63,20 +62,19 @@ def test_zdt3():
         N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + np.pi,
     )
 
     # Definition of the magnetic simulation
     simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=True, is_antiper_a=False
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=True,
     )
     simu.mag.Kmesh_fineness = 0.01
     # simu.mag.Kgeo_fineness=0.02
-    simu.mag.sym_a = 4
     simu.struct = None
-
-    output = Output(simu=simu)
 
     # ### Design variable
     my_vars = []
@@ -101,15 +99,15 @@ def test_zdt3():
 
     # ### Objectives
     objs = [
-        DataKeeper(
+        OptiObjective(
             symbol="obj1",
             name="Maximization of the torque average",
-            keeper=lambda output: output.mag.Tem_av,
+            keeper="lambda output: output.mag.Tem_av",
         ),
-        DataKeeper(
+        OptiObjective(
             symbol="obj2",
             name="Minimization of the torque ripple",
-            keeper=lambda output: output.mag.Tem_rip_norm,
+            keeper="lambda output: output.mag.Tem_rip_norm",
         ),
     ]
 
@@ -124,7 +122,7 @@ def test_zdt3():
 
     # ### Defining the problem
     my_prob = OptiProblem(
-        output=output, design_var=my_vars, obj_func=objs, eval_func=evaluate
+        simu=simu, design_var=my_vars, obj_func=objs, eval_func=evaluate
     )
 
     solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=40, nb_gen=100, p_mutate=0.5)
@@ -142,7 +140,7 @@ def test_zdt3():
     except (TypeError, ValueError):
         print("Pillow is needed to import jpg files")
 
-    res.plot_pareto("obj1", "obj2", ax=axs[0])
+    res.plot_pareto("obj1", "obj2", ax=axs[0], is_show_fig=False)
     axs[0].set_title("Pyleecan results")
     axs[0].set_xlabel(r"$f_1(x)$")
     axs[0].set_ylabel(r"$f_2(x)$")

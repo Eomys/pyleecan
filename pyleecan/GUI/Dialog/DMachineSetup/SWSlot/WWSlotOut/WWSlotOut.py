@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
+from PySide2.QtCore import QSize
+from PySide2.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
 
 from ......GUI import gui_option
 
@@ -10,7 +10,7 @@ class WWSlotOut(QGroupBox):
     def __init__(self, parent=None):
         """Initialize the widget"""
 
-        QWidget.__init__(self, parent)
+        QGroupBox.__init__(self, parent)
         # Set main widget
         self.setTitle(self.tr("Output"))
         self.setMinimumSize(QSize(200, 0))
@@ -53,20 +53,36 @@ class WWSlotOut(QGroupBox):
             A WWSlotOut object
         """
 
-        lam = self.parent().lamination
-        WS_txt = self.tr("Winding surface: ")
-        TS_txt = self.tr("Total surface: ")
+        if self.parent() is not None and hasattr(self.parent(), "lamination"):
+            parent = self.parent()
+            lam = self.parent().lamination
+        else:
+            parent = self.parent().parent()
+            lam = self.parent().parent().lamination
+        if lam.is_stator:
+            lam_name = "Stator"
+        else:
+            lam_name = "Rotor"
+
+        WS_txt = self.tr("Active surface: ")
+        TS_txt = self.tr("Slot surface: ")
         AO_txt = self.tr("Opening angle: ")
         SH_txt = self.tr("Slot height: ")
         YH_txt = self.tr("Yoke height: ")
 
         Wlam = format(gui_option.unit.get_m(lam.Rext - lam.Rint), ".4g")
         self.out_Wlam.setText(
-            self.tr("Lamination width: ") + Wlam + " " + gui_option.unit.get_m_name()
+            self.tr(lam_name + " width: ")
+            + Wlam
+            + " ["
+            + gui_option.unit.get_m_name()
+            + "]"
         )
-        if self.parent().check(lam) is None:
+        if parent.check(lam) is None:
             # Compute all the needed output as string
-            w_surf = format(gui_option.unit.get_m2(lam.slot.comp_surface_wind()), ".4g")
+            w_surf = format(
+                gui_option.unit.get_m2(lam.slot.comp_surface_active()), ".4g"
+            )
             tot_surf = format(gui_option.unit.get_m2(lam.slot.comp_surface()), ".4g")
             op_angle = "%.4g" % lam.slot.comp_angle_opening()
             slot_height = format(gui_option.unit.get_m(lam.slot.comp_height()), ".4g")
@@ -74,17 +90,17 @@ class WWSlotOut(QGroupBox):
 
             # Update the GUI to display the Output
             self.out_wind_surface.setText(
-                WS_txt + w_surf + " " + gui_option.unit.get_m2_name()
+                WS_txt + w_surf + " [" + gui_option.unit.get_m2_name() + "]"
             )
             self.out_tot_surface.setText(
-                TS_txt + tot_surf + " " + gui_option.unit.get_m2_name()
+                TS_txt + tot_surf + " [" + gui_option.unit.get_m2_name() + "]"
             )
-            self.out_op_angle.setText(AO_txt + op_angle + u" rad")
+            self.out_op_angle.setText(AO_txt + op_angle + u" [rad]")
             self.out_slot_height.setText(
-                SH_txt + slot_height + " " + gui_option.unit.get_m_name()
+                SH_txt + slot_height + " [" + gui_option.unit.get_m_name() + "]"
             )
             self.out_yoke_height.setText(
-                YH_txt + yoke_height + " " + gui_option.unit.get_m_name()
+                YH_txt + yoke_height + " [" + gui_option.unit.get_m_name() + "]"
             )
         else:
             # We can't compute the output => We erase the previous version

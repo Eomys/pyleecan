@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .MachineSync import MachineSync
 
 # Import all class method
@@ -17,11 +21,6 @@ try:
     from ..Methods.Machine.MachineSyRM.check import check
 except ImportError as error:
     check = error
-
-try:
-    from ..Methods.Machine.MachineSyRM.get_lam_list import get_lam_list
-except ImportError as error:
-    get_lam_list = error
 
 try:
     from ..Methods.Machine.MachineSyRM.get_machine_type import get_machine_type
@@ -51,17 +50,6 @@ class MachineSyRM(MachineSync):
         )
     else:
         check = check
-    # cf Methods.Machine.MachineSyRM.get_lam_list
-    if isinstance(get_lam_list, ImportError):
-        get_lam_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MachineSyRM method get_lam_list: " + str(get_lam_list)
-                )
-            )
-        )
-    else:
-        get_lam_list = get_lam_list
     # cf Methods.Machine.MachineSyRM.get_machine_type
     if isinstance(get_machine_type, ImportError):
         get_machine_type = property(
@@ -74,14 +62,9 @@ class MachineSyRM(MachineSync):
         )
     else:
         get_machine_type = get_machine_type
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -100,38 +83,16 @@ class MachineSyRM(MachineSync):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if rotor == -1:
-            rotor = LamHole()
-        if stator == -1:
-            stator = LamSlotWind()
-        if frame == -1:
-            frame = Frame()
-        if shaft == -1:
-            shaft = Shaft()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            rotor = obj.rotor
-            stator = obj.stator
-            frame = obj.frame
-            shaft = obj.shaft
-            name = obj.name
-            desc = obj.desc
-            type_machine = obj.type_machine
-            logger_name = obj.logger_name
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -151,41 +112,9 @@ class MachineSyRM(MachineSync):
                 type_machine = init_dict["type_machine"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-        # Initialisation by argument
-        # rotor can be None, a LamHole object or a dict
-        if isinstance(rotor, dict):
-            self.rotor = LamHole(init_dict=rotor)
-        elif isinstance(rotor, str):
-            from ..Functions.load import load
-
-            self.rotor = load(rotor)
-        else:
-            self.rotor = rotor
-        # stator can be None, a LamSlotWind object or a dict
-        if isinstance(stator, dict):
-            # Check that the type is correct (including daughter)
-            class_name = stator.get("__class__")
-            if class_name not in ["LamSlotWind", "LamSquirrelCage"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for stator"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.stator = class_obj(init_dict=stator)
-        elif isinstance(stator, str):
-            from ..Functions.load import load
-
-            stator = load(stator)
-            # Check that the type is correct (including daughter)
-            class_name = stator.__class__.__name__
-            if class_name not in ["LamSlotWind", "LamSquirrelCage"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for stator"
-                )
-            self.stator = stator
-        else:
-            self.stator = stator
+        # Set the properties (value check and convertion are done in setter)
+        self.rotor = rotor
+        self.stator = stator
         # Call MachineSync init
         super(MachineSyRM, self).__init__(
             frame=frame,
@@ -199,7 +128,7 @@ class MachineSyRM(MachineSync):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         MachineSyRM_str = ""
         # Get the properties inherited from MachineSync
@@ -231,20 +160,58 @@ class MachineSyRM(MachineSync):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from MachineSync
+        diff_list.extend(super(MachineSyRM, self).compare(other, name=name))
+        if (other.rotor is None and self.rotor is not None) or (
+            other.rotor is not None and self.rotor is None
+        ):
+            diff_list.append(name + ".rotor None mismatch")
+        elif self.rotor is not None:
+            diff_list.extend(self.rotor.compare(other.rotor, name=name + ".rotor"))
+        if (other.stator is None and self.stator is not None) or (
+            other.stator is not None and self.stator is None
+        ):
+            diff_list.append(name + ".stator None mismatch")
+        elif self.stator is not None:
+            diff_list.extend(self.stator.compare(other.stator, name=name + ".stator"))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from MachineSync
+        S += super(MachineSyRM, self).__sizeof__()
+        S += getsizeof(self.rotor)
+        S += getsizeof(self.stator)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from MachineSync
-        MachineSyRM_dict = super(MachineSyRM, self).as_dict()
+        MachineSyRM_dict = super(MachineSyRM, self).as_dict(**kwargs)
         if self.rotor is None:
             MachineSyRM_dict["rotor"] = None
         else:
-            MachineSyRM_dict["rotor"] = self.rotor.as_dict()
+            MachineSyRM_dict["rotor"] = self.rotor.as_dict(**kwargs)
         if self.stator is None:
             MachineSyRM_dict["stator"] = None
         else:
-            MachineSyRM_dict["stator"] = self.stator.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+            MachineSyRM_dict["stator"] = self.stator.as_dict(**kwargs)
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineSyRM_dict["__class__"] = "MachineSyRM"
         return MachineSyRM_dict
@@ -265,6 +232,15 @@ class MachineSyRM(MachineSync):
 
     def _set_rotor(self, value):
         """setter of rotor"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "rotor"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = LamHole()
         check_var("rotor", value, "LamHole")
         self._rotor = value
 
@@ -286,6 +262,15 @@ class MachineSyRM(MachineSync):
 
     def _set_stator(self, value):
         """setter of stator"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "stator"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = LamSlotWind()
         check_var("stator", value, "LamSlotWind")
         self._stator = value
 

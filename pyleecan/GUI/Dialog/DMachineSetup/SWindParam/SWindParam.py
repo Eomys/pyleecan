@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....GUI.Dialog.DMachineSetup.SWindParam.Gen_SWindParam import Gen_SWindParam
 
@@ -10,9 +10,9 @@ class SWindParam(Gen_SWindParam, QWidget):
     """Step to define the winding parameters"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup nav
-    step_name = "Winding Parameter"
+    step_name = "Winding (2)"
 
     def __init__(self, machine, matlib, is_stator=False):
         """Initialize the GUI according to machine

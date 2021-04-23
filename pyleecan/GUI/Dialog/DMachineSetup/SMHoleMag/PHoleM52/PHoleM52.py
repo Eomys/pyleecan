@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.HoleM52 import HoleM52
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52.Gen_PHoleM52 import Gen_PHoleM52
 from ......GUI.Dialog.DMatLib.MatLib import MatLib
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PHoleM52(Gen_PHoleM52, QWidget):
     """Page to set the Hole Type 52"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for WHoleMag
     hole_name = "Slot Type 52"
     hole_type = HoleM52
@@ -48,10 +48,13 @@ class PHoleM52(Gen_PHoleM52, QWidget):
         self.lf_H2.unit = "m"
 
         # Set default materials
-        self.w_mat_0.setText("mat_void:")
+        self.w_mat_0.setText("mat_void")
         self.w_mat_0.def_mat = "Air"
-        self.w_mat_1.setText("magnet_0:")
+        self.w_mat_0.is_hide_button = True
+
+        self.w_mat_1.setText("magnet_0")
         self.w_mat_1.def_mat = "Magnet1"
+        self.w_mat_1.is_hide_button = True
 
         # Set unit name (m ou mm)
         self.u = gui_option.unit
@@ -63,12 +66,12 @@ class PHoleM52(Gen_PHoleM52, QWidget):
             self.unit_H2,
         ]
         for wid in wid_list:
-            wid.setText(self.u.get_m_name())
+            wid.setText("[" + self.u.get_m_name() + "]")
 
         # Adapt GUI with/without magnet
         if hole.magnet_0 is None:  # SyRM
             self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/WSlot/Slot_52_no_mag.PNG")
+                QPixmap(":/images/images/MachineSetup/SMHoleMag/HoleM52_no_mag.png")
             )
             self.w_mat_0.update(self.hole, "mat_void", self.matlib)
             self.w_mat_1.hide()

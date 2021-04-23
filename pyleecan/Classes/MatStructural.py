@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
@@ -19,14 +23,9 @@ class MatStructural(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -47,32 +46,16 @@ class MatStructural(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            rho = obj.rho
-            Ex = obj.Ex
-            Ey = obj.Ey
-            Ez = obj.Ez
-            nu_xy = obj.nu_xy
-            nu_xz = obj.nu_xz
-            nu_yz = obj.nu_yz
-            Gxz = obj.Gxz
-            Gxy = obj.Gxy
-            Gyz = obj.Gyz
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -96,7 +79,7 @@ class MatStructural(FrozenClass):
                 Gxy = init_dict["Gxy"]
             if "Gyz" in list(init_dict.keys()):
                 Gyz = init_dict["Gyz"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.rho = rho
         self.Ex = Ex
@@ -113,7 +96,7 @@ class MatStructural(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         MatStructural_str = ""
         if self.parent is None:
@@ -161,8 +144,56 @@ class MatStructural(FrozenClass):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._rho != self._rho:
+            diff_list.append(name + ".rho")
+        if other._Ex != self._Ex:
+            diff_list.append(name + ".Ex")
+        if other._Ey != self._Ey:
+            diff_list.append(name + ".Ey")
+        if other._Ez != self._Ez:
+            diff_list.append(name + ".Ez")
+        if other._nu_xy != self._nu_xy:
+            diff_list.append(name + ".nu_xy")
+        if other._nu_xz != self._nu_xz:
+            diff_list.append(name + ".nu_xz")
+        if other._nu_yz != self._nu_yz:
+            diff_list.append(name + ".nu_yz")
+        if other._Gxz != self._Gxz:
+            diff_list.append(name + ".Gxz")
+        if other._Gxy != self._Gxy:
+            diff_list.append(name + ".Gxy")
+        if other._Gyz != self._Gyz:
+            diff_list.append(name + ".Gyz")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.rho)
+        S += getsizeof(self.Ex)
+        S += getsizeof(self.Ey)
+        S += getsizeof(self.Ez)
+        S += getsizeof(self.nu_xy)
+        S += getsizeof(self.nu_xz)
+        S += getsizeof(self.nu_yz)
+        S += getsizeof(self.Gxz)
+        S += getsizeof(self.Gxy)
+        S += getsizeof(self.Gyz)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         MatStructural_dict = dict()
         MatStructural_dict["rho"] = self.rho
@@ -175,7 +206,7 @@ class MatStructural(FrozenClass):
         MatStructural_dict["Gxz"] = self.Gxz
         MatStructural_dict["Gxy"] = self.Gxy
         MatStructural_dict["Gyz"] = self.Gyz
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         MatStructural_dict["__class__"] = "MatStructural"
         return MatStructural_dict
 

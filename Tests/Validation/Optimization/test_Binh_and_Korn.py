@@ -15,7 +15,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.DataKeeper import DataKeeper
+from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
@@ -31,15 +31,17 @@ from Tests import save_validation_path as save_path
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR, TEST_DIR
 
-SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
-
-@pytest.mark.validation
-@pytest.mark.long
-@pytest.mark.DEAP
+@pytest.mark.long_5s
+@pytest.mark.SCIM
+@pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_Binh_and_Korn():
+    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     # Defining reference Output
     # Definition of the enforced output of the electrical module
+    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     Nt = 2
     N0 = 3000
     Is = ImportMatrixVal(
@@ -54,12 +56,10 @@ def test_Binh_and_Korn():
     )
     Ir = ImportMatrixVal(value=np.zeros(30))
     time = ImportGenVectLin(start=0, stop=0.015, num=Nt, endpoint=True)
-    angle = ImportGenVectLin(
-        start=0, stop=2 * np.pi, num=64, endpoint=False
-    )  # num=1024
+    Na_tot = 64
 
     # Definition of the simulation
-    simu = Simu1(name="Test_machine", machine=SCIM_001)
+    simu = Simu1(name="test_Binh_and_Korn", machine=SCIM_001)
 
     simu.input = InputCurrent(
         Is=Is,
@@ -67,20 +67,15 @@ def test_Binh_and_Korn():
         N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + np.pi,
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=True, is_antiper_a=False
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True)
     simu.mag.Kmesh_fineness = 0.01
     # simu.mag.Kgeo_fineness=0.02
-    simu.mag.sym_a = 4
     simu.struct = None
-
-    output = Output(simu=simu)
 
     # ### Design variable
     my_vars = [
@@ -89,7 +84,7 @@ def test_Binh_and_Korn():
             symbol="RH0",
             type_var="interval",
             space=[0, 5],  # May generate error in FEMM
-            get_value=lambda space: random.uniform(*space),
+            get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.rotor.slot.H0",
         ),
         OptiDesignVar(
@@ -97,7 +92,7 @@ def test_Binh_and_Korn():
             symbol="SH0",
             type_var="interval",
             space=[0, 3],  # May generate error in FEMM
-            get_value=lambda space: random.uniform(*space),
+            get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.stator.slot.H0",
         ),
     ]
@@ -106,15 +101,13 @@ def test_Binh_and_Korn():
     cstrs = [
         OptiConstraint(
             name="first",
-            get_variable=lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2
-            + output.simu.machine.stator.slot.H0 ** 2,
+            get_variable="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + output.simu.machine.stator.slot.H0 ** 2",
             type_const="<=",
             value=25,
         ),
         OptiConstraint(
             name="second",
-            get_variable=lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2
-            + (output.simu.machine.stator.slot.H0 + 3) ** 2,
+            get_variable="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + (output.simu.machine.stator.slot.H0 + 3) ** 2",
             type_const=">=",
             value=7.7,
         ),
@@ -122,17 +115,17 @@ def test_Binh_and_Korn():
 
     # ### Objectives
     objs = [
-        DataKeeper(
+        OptiObjective(
             name="Maximization of the torque average",
             symbol="obj1",
             unit="N.m",
-            keeper=lambda output: output.mag.Tem_av,
+            keeper="lambda output: output.mag.Tem_av",
         ),
-        DataKeeper(
+        OptiObjective(
             name="Minimization of the torque ripple",
             symbol="obj2",
             unit="N.m",
-            keeper=lambda output: output.mag.Tem_rip_norm,
+            keeper="lambda output: output.mag.Tem_rip_norm",
         ),
     ]
 
@@ -146,7 +139,7 @@ def test_Binh_and_Korn():
     # ### Defining the problem
 
     my_prob = OptiProblem(
-        output=output,
+        simu=simu,
         design_var=my_vars,
         obj_func=objs,
         constraint=cstrs,
@@ -172,5 +165,9 @@ def test_Binh_and_Korn():
     except (TypeError, ValueError):
         print("Pillow is needed to import jpg files")
 
-    res.plot_pareto("obj1", "obj2", axs[0])
+    res.plot_pareto(x_symbol="obj1", y_symbol="obj2", ax=axs[0], is_show_fig=False)
     fig.savefig(join(save_path, "test_Binh_and_Korn.png"))
+
+
+if __name__ == "__main__":
+    test_Binh_and_Korn()

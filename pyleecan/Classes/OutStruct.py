@@ -5,21 +5,18 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
-from ._check import set_array, check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
-from numpy import array, array_equal
-from cloudpickle import dumps, loads
-from ._check import CheckTypeError
-
-try:
-    from SciDataTool.Classes.DataND import DataND
-except ImportError:
-    DataND = ImportError
 from ._check import InitUnKnowClassError
+from .MeshSolution import MeshSolution
 
 
 class OutStruct(FrozenClass):
@@ -27,63 +24,46 @@ class OutStruct(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        time=None,
-        angle=None,
+        Time=None,
+        Angle=None,
         Nt_tot=None,
         Na_tot=None,
-        logger_name="Pyleecan.OutStruct",
+        logger_name="Pyleecan.Structural",
         Yr=None,
         Vr=None,
         Ar=None,
+        meshsolution=-1,
+        FEA_dict=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            time = obj.time
-            angle = obj.angle
-            Nt_tot = obj.Nt_tot
-            Na_tot = obj.Na_tot
-            logger_name = obj.logger_name
-            Yr = obj.Yr
-            Vr = obj.Vr
-            Ar = obj.Ar
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "time" in list(init_dict.keys()):
-                time = init_dict["time"]
-            if "angle" in list(init_dict.keys()):
-                angle = init_dict["angle"]
+            if "Time" in list(init_dict.keys()):
+                Time = init_dict["Time"]
+            if "Angle" in list(init_dict.keys()):
+                Angle = init_dict["Angle"]
             if "Nt_tot" in list(init_dict.keys()):
                 Nt_tot = init_dict["Nt_tot"]
             if "Na_tot" in list(init_dict.keys()):
@@ -96,53 +76,52 @@ class OutStruct(FrozenClass):
                 Vr = init_dict["Vr"]
             if "Ar" in list(init_dict.keys()):
                 Ar = init_dict["Ar"]
-        # Initialisation by argument
+            if "meshsolution" in list(init_dict.keys()):
+                meshsolution = init_dict["meshsolution"]
+            if "FEA_dict" in list(init_dict.keys()):
+                FEA_dict = init_dict["FEA_dict"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # time can be None, a ndarray or a list
-        set_array(self, "time", time)
-        # angle can be None, a ndarray or a list
-        set_array(self, "angle", angle)
+        self.Time = Time
+        self.Angle = Angle
         self.Nt_tot = Nt_tot
         self.Na_tot = Na_tot
         self.logger_name = logger_name
-        # Check if the type DataND has been imported with success
-        if isinstance(DataND, ImportError):
-            raise ImportError("Unknown type DataND please install SciDataTool")
         self.Yr = Yr
         self.Vr = Vr
         self.Ar = Ar
+        self.meshsolution = meshsolution
+        self.FEA_dict = FEA_dict
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         OutStruct_str = ""
         if self.parent is None:
             OutStruct_str += "parent = None " + linesep
         else:
             OutStruct_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutStruct_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutStruct_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutStruct_str += "Time = " + str(self.Time) + linesep + linesep
+        OutStruct_str += "Angle = " + str(self.Angle) + linesep + linesep
         OutStruct_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutStruct_str += "Na_tot = " + str(self.Na_tot) + linesep
         OutStruct_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         OutStruct_str += "Yr = " + str(self.Yr) + linesep + linesep
         OutStruct_str += "Vr = " + str(self.Vr) + linesep + linesep
         OutStruct_str += "Ar = " + str(self.Ar) + linesep + linesep
+        if self.meshsolution is not None:
+            tmp = (
+                self.meshsolution.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            OutStruct_str += "meshsolution = " + tmp
+        else:
+            OutStruct_str += "meshsolution = None" + linesep + linesep
+        OutStruct_str += "FEA_dict = " + str(self.FEA_dict) + linesep
         return OutStruct_str
 
     def __eq__(self, other):
@@ -150,9 +129,9 @@ class OutStruct(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if not array_equal(other.time, self.time):
+        if other.Time != self.Time:
             return False
-        if not array_equal(other.angle, self.angle):
+        if other.Angle != self.Angle:
             return False
         if other.Nt_tot != self.Nt_tot:
             return False
@@ -166,110 +145,194 @@ class OutStruct(FrozenClass):
             return False
         if other.Ar != self.Ar:
             return False
+        if other.meshsolution != self.meshsolution:
+            return False
+        if other.FEA_dict != self.FEA_dict:
+            return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.Time is None and self.Time is not None) or (
+            other.Time is not None and self.Time is None
+        ):
+            diff_list.append(name + ".Time None mismatch")
+        elif self.Time is not None:
+            diff_list.extend(self.Time.compare(other.Time, name=name + ".Time"))
+        if (other.Angle is None and self.Angle is not None) or (
+            other.Angle is not None and self.Angle is None
+        ):
+            diff_list.append(name + ".Angle None mismatch")
+        elif self.Angle is not None:
+            diff_list.extend(self.Angle.compare(other.Angle, name=name + ".Angle"))
+        if other._Nt_tot != self._Nt_tot:
+            diff_list.append(name + ".Nt_tot")
+        if other._Na_tot != self._Na_tot:
+            diff_list.append(name + ".Na_tot")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if (other.Yr is None and self.Yr is not None) or (
+            other.Yr is not None and self.Yr is None
+        ):
+            diff_list.append(name + ".Yr None mismatch")
+        elif self.Yr is not None:
+            diff_list.extend(self.Yr.compare(other.Yr, name=name + ".Yr"))
+        if (other.Vr is None and self.Vr is not None) or (
+            other.Vr is not None and self.Vr is None
+        ):
+            diff_list.append(name + ".Vr None mismatch")
+        elif self.Vr is not None:
+            diff_list.extend(self.Vr.compare(other.Vr, name=name + ".Vr"))
+        if (other.Ar is None and self.Ar is not None) or (
+            other.Ar is not None and self.Ar is None
+        ):
+            diff_list.append(name + ".Ar None mismatch")
+        elif self.Ar is not None:
+            diff_list.extend(self.Ar.compare(other.Ar, name=name + ".Ar"))
+        if (other.meshsolution is None and self.meshsolution is not None) or (
+            other.meshsolution is not None and self.meshsolution is None
+        ):
+            diff_list.append(name + ".meshsolution None mismatch")
+        elif self.meshsolution is not None:
+            diff_list.extend(
+                self.meshsolution.compare(
+                    other.meshsolution, name=name + ".meshsolution"
+                )
+            )
+        if other._FEA_dict != self._FEA_dict:
+            diff_list.append(name + ".FEA_dict")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.Time)
+        S += getsizeof(self.Angle)
+        S += getsizeof(self.Nt_tot)
+        S += getsizeof(self.Na_tot)
+        S += getsizeof(self.logger_name)
+        S += getsizeof(self.Yr)
+        S += getsizeof(self.Vr)
+        S += getsizeof(self.Ar)
+        S += getsizeof(self.meshsolution)
+        if self.FEA_dict is not None:
+            for key, value in self.FEA_dict.items():
+                S += getsizeof(value) + getsizeof(key)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutStruct_dict = dict()
-        if self.time is None:
-            OutStruct_dict["time"] = None
+        if self.Time is None:
+            OutStruct_dict["Time"] = None
         else:
-            OutStruct_dict["time"] = self.time.tolist()
-        if self.angle is None:
-            OutStruct_dict["angle"] = None
+            OutStruct_dict["Time"] = self.Time.as_dict()
+        if self.Angle is None:
+            OutStruct_dict["Angle"] = None
         else:
-            OutStruct_dict["angle"] = self.angle.tolist()
+            OutStruct_dict["Angle"] = self.Angle.as_dict()
         OutStruct_dict["Nt_tot"] = self.Nt_tot
         OutStruct_dict["Na_tot"] = self.Na_tot
         OutStruct_dict["logger_name"] = self.logger_name
         if self.Yr is None:
             OutStruct_dict["Yr"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutStruct_dict["Yr"] = {
-                "__class__": str(type(self._Yr)),
-                "__repr__": str(self._Yr.__repr__()),
-                "serialized": dumps(self._Yr).decode("ISO-8859-2"),
-            }
+        else:
+            OutStruct_dict["Yr"] = self.Yr.as_dict()
         if self.Vr is None:
             OutStruct_dict["Vr"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutStruct_dict["Vr"] = {
-                "__class__": str(type(self._Vr)),
-                "__repr__": str(self._Vr.__repr__()),
-                "serialized": dumps(self._Vr).decode("ISO-8859-2"),
-            }
+        else:
+            OutStruct_dict["Vr"] = self.Vr.as_dict()
         if self.Ar is None:
             OutStruct_dict["Ar"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutStruct_dict["Ar"] = {
-                "__class__": str(type(self._Ar)),
-                "__repr__": str(self._Ar.__repr__()),
-                "serialized": dumps(self._Ar).decode("ISO-8859-2"),
-            }
-        # The class name is added to the dict fordeserialisation purpose
+        else:
+            OutStruct_dict["Ar"] = self.Ar.as_dict()
+        if self.meshsolution is None:
+            OutStruct_dict["meshsolution"] = None
+        else:
+            OutStruct_dict["meshsolution"] = self.meshsolution.as_dict(**kwargs)
+        OutStruct_dict["FEA_dict"] = (
+            self.FEA_dict.copy() if self.FEA_dict is not None else None
+        )
+        # The class name is added to the dict for deserialisation purpose
         OutStruct_dict["__class__"] = "OutStruct"
         return OutStruct_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.time = None
-        self.angle = None
+        self.Time = None
+        self.Angle = None
         self.Nt_tot = None
         self.Na_tot = None
         self.logger_name = None
         self.Yr = None
         self.Vr = None
         self.Ar = None
+        if self.meshsolution is not None:
+            self.meshsolution._set_None()
+        self.FEA_dict = None
 
-    def _get_time(self):
-        """getter of time"""
-        return self._time
+    def _get_Time(self):
+        """getter of Time"""
+        return self._Time
 
-    def _set_time(self, value):
-        """setter of time"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("time", value, "ndarray")
-        self._time = value
+    def _set_Time(self, value):
+        """setter of Time"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Time"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("Time", value, "Data")
+        self._Time = value
 
-    time = property(
-        fget=_get_time,
-        fset=_set_time,
-        doc=u"""Structural time vector (no symmetry)
+    Time = property(
+        fget=_get_Time,
+        fset=_set_Time,
+        doc=u"""Structural time Data object
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
-    def _get_angle(self):
-        """getter of angle"""
-        return self._angle
+    def _get_Angle(self):
+        """getter of Angle"""
+        return self._Angle
 
-    def _set_angle(self, value):
-        """setter of angle"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("angle", value, "ndarray")
-        self._angle = value
+    def _set_Angle(self, value):
+        """setter of Angle"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Angle"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("Angle", value, "Data")
+        self._Angle = value
 
-    angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Structural position vector (no symmetry)
+    Angle = property(
+        fget=_get_Angle,
+        fset=_set_Angle,
+        doc=u"""Structural position Data object
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
@@ -333,17 +396,17 @@ class OutStruct(FrozenClass):
 
     def _set_Yr(self, value):
         """setter of Yr"""
-        try:  # Check the type
-            check_var("Yr", value, "dict")
-        except CheckTypeError:
-            check_var("Yr", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Yr = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Yr = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Yr"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("Yr", value, "DataND")
+        self._Yr = value
 
     Yr = property(
         fget=_get_Yr,
@@ -360,17 +423,17 @@ class OutStruct(FrozenClass):
 
     def _set_Vr(self, value):
         """setter of Vr"""
-        try:  # Check the type
-            check_var("Vr", value, "dict")
-        except CheckTypeError:
-            check_var("Vr", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Vr = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Vr = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Vr"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("Vr", value, "DataND")
+        self._Vr = value
 
     Vr = property(
         fget=_get_Vr,
@@ -387,17 +450,17 @@ class OutStruct(FrozenClass):
 
     def _set_Ar(self, value):
         """setter of Ar"""
-        try:  # Check the type
-            check_var("Ar", value, "dict")
-        except CheckTypeError:
-            check_var("Ar", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Ar = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Ar = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Ar"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("Ar", value, "DataND")
+        self._Ar = value
 
     Ar = property(
         fget=_get_Ar,
@@ -405,5 +468,55 @@ class OutStruct(FrozenClass):
         doc=u"""Acceleration output
 
         :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
+
+    def _get_meshsolution(self):
+        """getter of meshsolution"""
+        return self._meshsolution
+
+    def _set_meshsolution(self, value):
+        """setter of meshsolution"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "meshsolution"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = MeshSolution()
+        check_var("meshsolution", value, "MeshSolution")
+        self._meshsolution = value
+
+        if self._meshsolution is not None:
+            self._meshsolution.parent = self
+
+    meshsolution = property(
+        fget=_get_meshsolution,
+        fset=_set_meshsolution,
+        doc=u"""FEA software mesh and solution
+
+        :Type: MeshSolution
+        """,
+    )
+
+    def _get_FEA_dict(self):
+        """getter of FEA_dict"""
+        return self._FEA_dict
+
+    def _set_FEA_dict(self, value):
+        """setter of FEA_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("FEA_dict", value, "dict")
+        self._FEA_dict = value
+
+    FEA_dict = property(
+        fget=_get_FEA_dict,
+        fset=_set_FEA_dict,
+        doc=u"""Dictionnary containing the main FEA parameter
+
+        :Type: dict
         """,
     )

@@ -1,6 +1,6 @@
 from logging import Logger, FileHandler, Formatter, INFO, NOTSET
 from datetime import datetime
-from ....Classes.DataKeeper import DataKeeper
+from ....Classes.OptiObjective import OptiObjective
 
 
 class OptimizationAttributeError(Exception):
@@ -46,9 +46,9 @@ def check_optimization_input(self):
 
     else:
         for obj_func in self.problem.obj_func:
-            if not isinstance(obj_func, DataKeeper):
+            if not isinstance(obj_func, OptiObjective):
                 raise TypeError(
-                    "Wrong obj_func type: DataKeeper expected, got {}".format(
+                    "Wrong obj_func type: OptiObjective expected, got {}".format(
                         type(obj_func).__name__
                     )
                 )
@@ -57,6 +57,18 @@ def check_optimization_input(self):
                     obj_func.name
                 )
                 raise OptimizationAttributeError(mess)
+
+        # Check if objectives and other datakeepers have different symbol
+        if isinstance(self.problem.datakeeper_list, list):
+            symbol_list = [of.symbol for of in self.problem.obj_func] + [
+                dk.symbol for dk in self.problem.datakeeper_list
+            ]
+        else:
+            symbol_list = [of.symbol for of in self.problem.obj_func]
+
+        if len(symbol_list) != len(set(symbol_list)):
+            mess = "Every objective function and datakeeper must have a unique symbol."
+            raise OptimizationAttributeError(mess)
 
     # Check the problem contains at least one objective function
     if self.problem.design_var == None or (

@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
-from ddt import ddt, data
+import pytest
 
 
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.SlotW61 import SlotW61
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
+from pyleecan.Classes.Slot import Slot
+from pyleecan.Methods.Slot.SlotW61 import (
+    S61_InnerCheckError,
+    S61_WindError,
+    S61_WindWError,
+)
+
 
 # For AlmostEqual
 DELTA = 1e-5
 
-SlotW61_test = list()
+slotW61_test = list()
 
 # Internal Slot
 lam = LamSlot(is_internal=True, Rext=0.1325)
@@ -28,7 +31,7 @@ lam.slot = SlotW61(
     H4=0,
     W3=0,
 )
-SlotW61_test.append(
+slotW61_test.append(
     {
         "test_obj": lam,
         "S_exp": 1.69308e-3,
@@ -53,7 +56,7 @@ lam.slot = SlotW61(
     H4=2e-3,
     W3=3e-3,
 )
-SlotW61_test.append(
+slotW61_test.append(
     {
         "test_obj": lam,
         "S_exp": 1.69308e-3,
@@ -65,11 +68,10 @@ SlotW61_test.append(
 )
 
 
-@ddt
-class test_SlotW61_meth(TestCase):
-    """unittest for SlotW61 methods"""
+class Test_SlotW61_meth(object):
+    """pytest for SlotW61 methods"""
 
-    @data(*SlotW61_test)
+    @pytest.mark.parametrize("test_dict", slotW61_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
@@ -78,24 +80,24 @@ class test_SlotW61_meth(TestCase):
         a = result
         b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-        b = comp_surface(test_obj.slot)
+        b = Slot.comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*SlotW61_test)
-    def test_comp_surface_wind(self, test_dict):
+    @pytest.mark.parametrize("test_dict", slotW61_test)
+    def test_comp_surface_active(self, test_dict):
         """Check that the computation of the winding surface is correct"""
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.comp_surface_wind()
+        result = test_obj.slot.comp_surface_active()
 
         a = result
         b = test_dict["SW_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*SlotW61_test)
+    @pytest.mark.parametrize("test_dict", slotW61_test)
     def test_comp_height(self, test_dict):
         """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
@@ -104,32 +106,71 @@ class test_SlotW61_meth(TestCase):
         a = result
         b = test_dict["H_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*SlotW61_test)
+    @pytest.mark.parametrize("test_dict", slotW61_test)
     def test_comp_angle_opening(self, test_dict):
         """Check that the computation of the average opening angle iscorrect"""
         test_obj = test_dict["test_obj"]
         a = test_obj.slot.comp_angle_opening()
+
         b = test_dict["Ao"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*SlotW61_test)
-    def test_comp_angle_wind_eq(self, test_dict):
+    @pytest.mark.parametrize("test_dict", slotW61_test)
+    def test_comp_angle_active_eq(self, test_dict):
         """Check that the computation of the average angle is correct"""
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.comp_angle_wind_eq()
+        result = test_obj.slot.comp_angle_active_eq()
 
         a = result
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW61_test)
+    def test_build_geometry_active_is_stator_true(self, test_dict):
+        """Check that the computation of the average angle is correct"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.build_geometry_active(Nrad=1, Ntan=2)
+        a = result
+        assert "Wind_Stator_R0_T0_S0" == a[0].label
+
+    @pytest.mark.parametrize("test_dict", slotW61_test)
+    def test_build_geometry_active_error(self, test_dict):
+        """Check that the ERROR is raised"""
+
+        test_obj = test_dict["test_obj"]
+
+        with pytest.raises(S61_WindError) as context:
+            test_obj.slot.build_geometry_active(Nrad=0, Ntan=0)
+
+    @pytest.mark.parametrize("test_dict", slotW61_test)
+    def test_check_Inner_error(self, test_dict):
+        """Check that the ERROR is raised"""
+
+        test_obj = test_dict["test_obj"]
+
+        test_obj.is_internal = False
+        with pytest.raises(S61_InnerCheckError) as context:
+            test_obj.slot.check()
+
+    @pytest.mark.parametrize("test_dict", slotW61_test)
+    def test_check_Wind_error(self, test_dict):
+        """Check that the ERROR is raised"""
+
+        test_obj = test_dict["test_obj"]
+
+        test_obj.slot.W3 = 50
+        test_obj.is_internal = True
+        with pytest.raises(S61_WindWError) as context:
+            test_obj.slot.check()

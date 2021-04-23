@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
 from .....Classes.SlotW60 import SlotW60
 from .....Classes.SlotW61 import SlotW61
-from .....Classes.SlotWind import SlotWind
+from .....Classes.Slot import Slot
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot60.PWSlot60 import PWSlot60
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot61.PWSlot61 import PWSlot61
 from .....GUI.Dialog.DMachineSetup.SWPole.Ui_SWPole import Ui_SWPole
@@ -23,7 +23,7 @@ class SWPole(Ui_SWPole, QWidget):
     """Step to set the lamination pole (for WRSM)"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup
     step_name = "Pole"
 
@@ -51,8 +51,7 @@ class SWPole(Ui_SWPole, QWidget):
         self.matlib = matlib
         self.is_stator = is_stator
 
-        self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
-        self.b_help.url += "how-to-set-up-the-slots"
+        self.b_help.hide()
 
         # Avoid erase all the parameters when navigating though the slots
         self.previous_slot = {SlotW60: None, SlotW61: None}
@@ -189,7 +188,7 @@ class SWPole(Ui_SWPole, QWidget):
         if error:  # Error => Display it
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Plot the slot (No winding for LamSquirrelCage)
-            self.obj.plot(plot_winding=(type(self.obj) is LamSlotWind))
+            self.obj.plot(plot_activeing=(type(self.obj) is LamSlotWind))
 
     @staticmethod
     def check(lam):

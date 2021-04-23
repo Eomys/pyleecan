@@ -18,9 +18,9 @@ def comp_radius(self):
 
     """
 
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
-    Rmax = Rbo - self.H1
-    Rmin = Rbo - self.H0 - self.H2
+    Rmax = Rext - self.H1
+    Rmin = Rext - self.H0 - self.H2
 
     return (Rmin, Rmax)

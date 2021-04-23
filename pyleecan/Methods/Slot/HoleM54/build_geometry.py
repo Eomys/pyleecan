@@ -32,15 +32,13 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     """
 
-    Rbo = self.get_Rbo()
-
-    # Compute point coordinates
-    Zc0 = Rbo - self.H0 + self.R1
-    Z1 = (self.R1 * exp(1j * (-pi + self.W0 / 2))) + Zc0
-    Z2 = (self.R1 * exp(1j * (pi - self.W0 / 2))) + Zc0
-    Z4 = ((self.R1 + self.H1) * exp(1j * (-pi + self.W0 / 2))) + Zc0
-    Z3 = ((self.R1 + self.H1) * exp(1j * (pi - self.W0 / 2))) + Zc0
-    Zref = Rbo - self.H0 - self.H1 / 2
+    Rext = self.get_Rext()
+    # Get all the points
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
 
     surf_list = list()
     curve_list = list()
@@ -53,6 +51,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         st = "_Stator"
     else:
         st = "_Rotor"
+    Zref = Rext - self.H0 - self.H1 / 2
     surf_list.append(
         SurfLine(line_list=curve_list, label="Hole" + st + "_R0_T0_S0", point_ref=Zref)
     )

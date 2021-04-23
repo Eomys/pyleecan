@@ -2,6 +2,7 @@
 from numpy import angle as np_angle, exp, linspace
 
 from ....Methods.Machine import ARC_NPOINT_D
+from ....Methods.Geometry.Arc2 import NbPointArc2DError
 
 
 def discretize(self, nb_point=ARC_NPOINT_D):
@@ -47,9 +48,3 @@ def discretize(self, nb_point=ARC_NPOINT_D):
     list_point = list_point * exp(1j * np_angle(z1 - zc)) + zc
 
     return list_point
-
-
-class NbPointArc2DError(Exception):
-    """ """
-
-    pass

@@ -29,6 +29,7 @@ def get_data(self):
                 name=axis.name,
                 unit=axis.unit,
                 symmetries=axis.symmetries,
+                normalizations=axis.normalizations,
             )
         )
 
@@ -40,7 +41,6 @@ def get_data(self):
             symbol=self.symbol,
             unit=self.unit,
             normalizations=self.normalizations,
-            symmetries=self.symmetries,
         )
     else:
         Data = DataTime(
@@ -50,7 +50,6 @@ def get_data(self):
             symbol=self.symbol,
             unit=self.unit,
             normalizations=self.normalizations,
-            symmetries=self.symmetries,
         )
 
     return Data

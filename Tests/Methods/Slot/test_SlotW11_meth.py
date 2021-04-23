@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
-from ddt import ddt, data
+import pytest
 
 from pyleecan.Classes.SlotW11 import SlotW11
 from numpy import ndarray, arcsin, exp, angle
@@ -9,10 +8,8 @@ from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Methods.Slot.Slot.comp_height import comp_height
-from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Classes.Slot import Slot
+from pyleecan.Methods.Slot.SlotW11 import S11_H1rCheckError
 
 # For AlmostEqual
 DELTA = 1e-6
@@ -43,13 +40,74 @@ slotW11_test.append(
         "H_exp": 3.236711e-2,
     }
 )
+# H1 rad / outwards
+lam = LamSlot(is_internal=False, Rint=0.1325)
+lam.slot = SlotW11(
+    H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3, R1=5e-3, H1_is_rad=True
+)
+slotW11_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 3.852019e-4,
+        "Aw": 0.08408558,
+        "SW_exp": 3.7427e-04,
+        "H_exp": 3.086864e-2,
+    }
+)
 
 
-@ddt
-class test_SlotW11_meth(TestCase):
-    """unittest for SlotW11 methods"""
+class Test_SlotW11_meth(object):
+    """pytest for SlotW11 methods"""
 
-    @data(*slotW11_test)
+    @pytest.mark.parametrize("test_dict", slotW11_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        # Check width
+        assert abs(point_dict["Z1"] - point_dict["Z10"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z2"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z8"]) == pytest.approx(
+            test_obj.slot.W1
+        )
+        assert abs(point_dict["Z4"] - point_dict["Z7"]) == pytest.approx(
+            test_obj.slot.W2
+        )
+        assert abs(point_dict["Z5"] - point_dict["Z6"]) == pytest.approx(
+            test_obj.slot.W2 - 2 * test_obj.slot.R1
+        )
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z2"].real - point_dict["Z3"].real) == pytest.approx(
+            test_obj.slot.get_H1()
+        )
+        assert abs(point_dict["Z3"].real - point_dict["Z4"].real) == pytest.approx(
+            test_obj.slot.H2 - test_obj.slot.R1
+        )
+        assert abs(point_dict["Z3"].real - point_dict["Z5"].real) == pytest.approx(
+            test_obj.slot.H2
+        )
+        assert abs(point_dict["Z10"] - point_dict["Z9"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z9"].real - point_dict["Z8"].real) == pytest.approx(
+            test_obj.slot.get_H1()
+        )
+        assert abs(point_dict["Z8"].real - point_dict["Z7"].real) == pytest.approx(
+            test_obj.slot.H2 - test_obj.slot.R1
+        )
+        assert abs(point_dict["Z8"].real - point_dict["Z6"].real) == pytest.approx(
+            test_obj.slot.H2
+        )
+
+    @pytest.mark.parametrize("test_dict", slotW11_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
@@ -58,28 +116,28 @@ class test_SlotW11_meth(TestCase):
         a = result
         b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface(test_obj.slot)
+        b = Slot.comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=1e-5, msg=msg)
+        assert abs((a - b) / a - 0) < 1e-5, msg
 
-    @data(*slotW11_test)
-    def test_comp_surface_wind(self, test_dict):
+    @pytest.mark.parametrize("test_dict", slotW11_test)
+    def test_comp_surface_active(self, test_dict):
         """Check that the computation of the winding surface is correct"""
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.comp_surface_wind()
+        result = test_obj.slot.comp_surface_active()
 
         a = result
         b = test_dict["SW_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_surface_wind(test_obj.slot)
+        b = Slot.comp_surface_active(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=1e-5, msg=msg)
+        assert abs((a - b) / a - 0) < 1e-5, msg
 
-    @data(*slotW11_test)
+    @pytest.mark.parametrize("test_dict", slotW11_test)
     def test_comp_height(self, test_dict):
         """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
@@ -88,115 +146,83 @@ class test_SlotW11_meth(TestCase):
         a = result
         b = test_dict["H_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_height(test_obj.slot)
+        b = Slot.comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=1e-5, msg=msg)
+        assert abs((a - b) / a - 0) < 1e-5, msg
 
-    @data(*slotW11_test)
+    @pytest.mark.parametrize("test_dict", slotW11_test)
     def test_comp_angle_opening(self, test_dict):
         """Check that the computation of the average opening angle iscorrect"""
         test_obj = test_dict["test_obj"]
         a = test_obj.slot.comp_angle_opening()
-        self.assertEqual(a, 2 * arcsin(test_obj.slot.W0 / (2 * 0.1325)))
+        assert a == 2 * arcsin(test_obj.slot.W0 / (2 * 0.1325))
         # Check that the analytical method returns the same result as the numerical one
-        b = comp_angle_opening(test_obj.slot)
+        b = Slot.comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*slotW11_test)
-    def test_comp_angle_wind_eq(self, test_dict):
+    @pytest.mark.parametrize("test_dict", slotW11_test)
+    def test_comp_angle_active_eq(self, test_dict):
         """Check that the computation of the average angle is correct"""
         test_obj = test_dict["test_obj"]
-        result = test_obj.slot.comp_angle_wind_eq()
+        result = test_obj.slot.comp_angle_active_eq()
 
         a = result
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    def test_build_geometry_wind(self):
-        """Check if the winding surface is correct"""
-        test_obj = SlotW11(
-            H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3, R1=5e-3
+    @pytest.mark.parametrize("test_dict", slotW11_test)
+    def test_build_geometry_active(self, test_dict):
+        """Check that the active geometry is correctly split"""
+        test_obj = test_dict["test_obj"]
+        surf_list = test_obj.slot.build_geometry_active(Nrad=3, Ntan=2)
+
+        # Check label
+        assert surf_list[0].label == "Wind_Stator_R0_T0_S0"
+        assert surf_list[1].label == "Wind_Stator_R1_T0_S0"
+        assert surf_list[2].label == "Wind_Stator_R2_T0_S0"
+        assert surf_list[3].label == "Wind_Stator_R0_T1_S0"
+        assert surf_list[4].label == "Wind_Stator_R1_T1_S0"
+        assert surf_list[5].label == "Wind_Stator_R2_T1_S0"
+        # Check tangential position
+        assert surf_list[0].point_ref.imag < 0
+        assert surf_list[1].point_ref.imag < 0
+        assert surf_list[2].point_ref.imag < 0
+        assert surf_list[3].point_ref.imag > 0
+        assert surf_list[4].point_ref.imag > 0
+        assert surf_list[5].point_ref.imag > 0
+        # Check radial position
+        if test_obj.is_internal:
+            # Tan=0
+            assert surf_list[0].point_ref.real > surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real > surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real > surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real > surf_list[5].point_ref.real
+        else:
+            # Tan=0
+            assert surf_list[0].point_ref.real < surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real < surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real < surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real < surf_list[5].point_ref.real
+
+    def test_SlotW11_check(self):
+        """Check if the error S11_H1rCheckError is correctly raised in the check method"""
+        lam = LamSlot(is_internal=False, Rint=0.1325)
+        lam.slot = SlotW11(
+            H0=1e-3,
+            H1=3,
+            H2=30e-3,
+            W0=12e-3,
+            W1=14e-3,
+            W2=12e-3,
+            R1=5e-3,
+            H1_is_rad=True,
         )
 
-        lam = LamSlot(is_internal=False, slot=test_obj, Rint=1, is_stator=True)
-        Z1 = exp(1j * (float(arcsin(12e-3 / 2.0))))
-        Z2 = Z1 + 1e-3
-        Z3 = Z2 + 1.5e-3 + (14e-3 - 12e-3) * 1j / 2.0
-        Z4 = Z3 + (30e-3 - 5e-3) + (12e-3 - 14e-3) / 2.0 * 1j
-        Z5 = Z4 + 5e-3 - 5e-3 * 1j
-        Z6 = Z5.conjugate()
-        Z7 = Z4.conjugate()
-        Z8 = Z3.conjugate()
-        Ztan1 = (Z3 + Z8) / 2.0
-        Ztan2 = (Z5 + Z6) / 2.0
-        Zmid = (Ztan1 + Ztan2) / 2.0
-        x = fsolve(
-            lambda x: angle((Z7 - (Zmid + 1j * x)) / (Z7 - Z8)), -(12e-3 + 14e-3) / 4.0
-        )
-        st = "S"
-        Zrad1 = Zmid + 1j * x[0]
-        Zrad2 = Zrad1.conjugate()
-        expected = list()
-        # Part 1 (0,0)
-        curve_list = list()
-        curve_list.append(Segment(Z8, Ztan1))
-        curve_list.append(Segment(Ztan1, Zmid))
-        curve_list.append(Segment(Zmid, Zrad1))
-        curve_list.append(Segment(Zrad1, Z8))
-        point_ref = (Z8 + Ztan1 + Zmid + Zrad1) / 4
-        surface = SurfLine(
-            line_list=curve_list, label="Wind" + st + "_R0_T0_S0", point_ref=point_ref
-        )
-        expected.append(surface)
-        # Part2 (1,0)
-        curve_list = list()
-        curve_list.append(Segment(Zrad1, Zmid))
-        curve_list.append(Segment(Zmid, Ztan2))
-        curve_list.append(Segment(Ztan2, Z6))
-        curve_list.append(Arc1(Z6, Z7, -1 * 5e-3))
-        curve_list.append(Segment(Z7, Zrad1))
-        point_ref = (Zrad1 + Zmid + Ztan2 + Z6 + Z7) / 5
-        surface = SurfLine(
-            line_list=curve_list, label="Wind" + st + "_R1_T0_S0", point_ref=point_ref
-        )
-        expected.append(surface)
-        # Part3 (0,1)
-        curve_list = list()
-        curve_list.append(Segment(Ztan1, Z3))
-        curve_list.append(Segment(Z3, Zrad2))
-        curve_list.append(Segment(Zrad2, Zmid))
-        curve_list.append(Segment(Zmid, Ztan1))
-        point_ref = (Ztan1 + Z3 + Zrad2 + Zmid) / 4
-        surface = SurfLine(
-            line_list=curve_list, label="Wind" + st + "_R0_T1_S0", point_ref=point_ref
-        )
-        expected.append(surface)
-        # Part4 (1,1)
-        curve_list = list()
-        curve_list.append(Segment(Zmid, Zrad2))
-        curve_list.append(Segment(Zrad2, Z4))
-        curve_list.append(Arc1(Z4, Z5, -1 * 5e-3))
-        curve_list.append(Segment(Z5, Ztan2))
-        curve_list.append(Segment(Ztan2, Zmid))
-        point_ref = (Zmid + Zrad2 + Z4 + Z5 + Ztan2) / 5
-        surface = SurfLine(
-            line_list=curve_list, label="Wind" + st + "_R1_T1_S0", point_ref=point_ref
-        )
-        expected.append(surface)
-        result = test_obj.build_geometry_wind(Nrad=2, Ntan=2)
-        self.assertEqual(len(result), len(expected))
-        for i in range(0, len(result)):
-            for jj in range(len(result[i].line_list)):
-                a = result[i].line_list[jj].begin
-                b = expected[i].line_list[jj].begin
-                self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
-
-                a = result[i].line_list[jj].end
-                b = expected[i].line_list[jj].end
-                self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
-
-            self.assertTrue(result[i].label == expected[i].label)
+        with pytest.raises(S11_H1rCheckError) as context:
+            lam.slot.check()

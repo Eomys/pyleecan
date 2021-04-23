@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Arc import Arc
 
 # Import all class method
@@ -67,6 +71,11 @@ try:
     from ..Methods.Geometry.Arc2.rotate import rotate
 except ImportError as error:
     rotate = error
+
+try:
+    from ..Methods.Geometry.Arc2.scale import scale
+except ImportError as error:
+    scale = error
 
 try:
     from ..Methods.Geometry.Arc2.split_half import split_half
@@ -187,6 +196,15 @@ class Arc2(Arc):
         )
     else:
         rotate = rotate
+    # cf Methods.Geometry.Arc2.scale
+    if isinstance(scale, ImportError):
+        scale = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc2 method scale: " + str(scale))
+            )
+        )
+    else:
+        scale = scale
     # cf Methods.Geometry.Arc2.split_half
     if isinstance(split_half, ImportError):
         split_half = property(
@@ -205,14 +223,9 @@ class Arc2(Arc):
         )
     else:
         translate = translate
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -227,26 +240,16 @@ class Arc2(Arc):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            begin = obj.begin
-            center = obj.center
-            angle = obj.angle
-            label = obj.label
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -258,7 +261,7 @@ class Arc2(Arc):
                 angle = init_dict["angle"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.begin = begin
         self.center = center
         self.angle = angle
@@ -268,7 +271,7 @@ class Arc2(Arc):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Arc2_str = ""
         # Get the properties inherited from Arc
@@ -295,15 +298,58 @@ class Arc2(Arc):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Arc
+        diff_list.extend(super(Arc2, self).compare(other, name=name))
+        if other._begin != self._begin:
+            diff_list.append(name + ".begin")
+        if other._center != self._center:
+            diff_list.append(name + ".center")
+        if other._angle != self._angle:
+            diff_list.append(name + ".angle")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Arc
+        S += super(Arc2, self).__sizeof__()
+        S += getsizeof(self.begin)
+        S += getsizeof(self.center)
+        S += getsizeof(self.angle)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Arc
-        Arc2_dict = super(Arc2, self).as_dict()
-        Arc2_dict["begin"] = self.begin
-        Arc2_dict["center"] = self.center
+        Arc2_dict = super(Arc2, self).as_dict(**kwargs)
+        if self.begin is None:
+            Arc2_dict["begin"] = None
+        elif isinstance(self.begin, float):
+            Arc2_dict["begin"] = self.begin
+        else:
+            Arc2_dict["begin"] = str(self.begin)
+        if self.center is None:
+            Arc2_dict["center"] = None
+        elif isinstance(self.center, float):
+            Arc2_dict["center"] = self.center
+        else:
+            Arc2_dict["center"] = str(self.center)
         Arc2_dict["angle"] = self.angle
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Arc2_dict["__class__"] = "Arc2"
         return Arc2_dict
@@ -323,6 +369,8 @@ class Arc2(Arc):
 
     def _set_begin(self, value):
         """setter of begin"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("begin", value, "complex")
         self._begin = value
 
@@ -341,6 +389,8 @@ class Arc2(Arc):
 
     def _set_center(self, value):
         """setter of center"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("center", value, "complex")
         self._center = value
 
@@ -359,7 +409,7 @@ class Arc2(Arc):
 
     def _set_angle(self, value):
         """setter of angle"""
-        check_var("angle", value, "float", Vmin=-6.2831853071796, Vmax=6.2831853071796)
+        check_var("angle", value, "float", Vmin=-6.283185308, Vmax=6.283185308)
         self._angle = value
 
     angle = property(
@@ -368,7 +418,7 @@ class Arc2(Arc):
         doc=u"""opening angle of the arc
 
         :Type: float
-        :min: -6.2831853071796
-        :max: 6.2831853071796
+        :min: -6.283185308
+        :max: 6.283185308
         """,
     )

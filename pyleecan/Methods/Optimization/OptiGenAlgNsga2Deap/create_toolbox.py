@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from ....Classes.Output import Output
 from deap import base, creator, tools
+from ....Classes.Output import Output
+from ....Classes.XOutput import XOutput
+from ....Classes.VarSimu import VarSimu
 
 
 def create_toolbox(self):
@@ -20,18 +22,28 @@ def create_toolbox(self):
 
     # Create Fitness and individual
     creator.create(
-        "FitnessMin", base.Fitness, weights=[-1 for _ in self.problem.design_var]
+        "FitnessMin", base.Fitness, weights=[-1 for _ in self.problem.obj_func]
     )
     creator.create("Individual", list, typecode="d", fitness=creator.FitnessMin)
 
     self.toolbox.register("creator", creator.Individual)
+
+    # Create default output
+    if isinstance(self.problem.simu.parent, Output):
+        output = self.problem.simu.parent
+    elif isinstance(
+        self.problem.simu.var_simu, VarSimu
+    ):  # Optimization of a multi-simulation
+        output = XOutput(simu=self.problem.simu.copy())
+    else:
+        output = Output(simu=self.problem.simu.copy())
 
     # Register individual and population
     self.toolbox.register(
         "individual",
         create_indiv,
         self.toolbox.creator,
-        self.problem.output,
+        output,
         self.problem.design_var,
     )
 
@@ -83,6 +95,6 @@ def create_indiv(create, output, design_var_list):
     ind.cstr_viol = 0
 
     # Output with the design variables set
-    ind.output = Output(simu=output.simu.as_dict())
+    ind.output = type(output)(simu=output.simu.as_dict())
 
     return ind

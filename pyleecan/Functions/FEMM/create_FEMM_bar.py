@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import femm
 
-
-def create_FEMM_bar(is_mmfr, rho, materials):
+def create_FEMM_bar(femm, is_mmfr, rho, materials):
     """Create the property for LamSquirrel cage on the rotor
 
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     is_mmfr : bool
         1 to compute the rotor magnetomotive force / rotor magnetic field
     rho : float

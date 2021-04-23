@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from pyleecan.Classes.CellMat import CellMat
-from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.PointMat import PointMat
 
 
 def get_mesh(self, label=None, index=None):
@@ -15,8 +12,6 @@ def get_mesh(self, label=None, index=None):
         a label
     index : int
         an index
-    group : list
-        list of indices of part(s) of the mesh
 
     Returns
     -------
@@ -31,8 +26,8 @@ def get_mesh(self, label=None, index=None):
         if index is None:
             index = 0
             if label is not None:
-                for i, solution in enumerate(self.solution):
-                    if solution.label == label:
+                for i, mesh in enumerate(self.mesh):
+                    if mesh.label == label:
                         index = i
         tmpmesh = self.mesh[index]
 

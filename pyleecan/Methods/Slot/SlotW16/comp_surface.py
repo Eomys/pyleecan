@@ -18,7 +18,7 @@ def comp_surface(self):
     """
     Rbo = self.get_Rbo()
 
-    Swind = self.comp_surface_wind()
+    Swind = self.comp_surface_active()
     S0 = (pi * Rbo ** 2 - pi * (Rbo - self.H0) ** 2) * self.W0 / (2 * pi)
 
     return Swind + S0

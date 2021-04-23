@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-import PyQt5.QtCore
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+import PySide2.QtCore
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.SlotW16 import SlotW16
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot16.Gen_PWSlot16 import Gen_PWSlot16
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
-translate = PyQt5.QtCore.QCoreApplication.translate
+translate = PySide2.QtCore.QCoreApplication.translate
 
 
 class PWSlot16(Gen_PWSlot16, QWidget):
     """Page to set the Slot Type 16"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for Slot combobox
     slot_name = "Slot Type 16"
     slot_type = SlotW16
@@ -48,7 +48,7 @@ class PWSlot16(Gen_PWSlot16, QWidget):
         # Set unit name (m ou mm)
         wid_list = [self.unit_W3, self.unit_H0, self.unit_H2, self.unit_R1]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
@@ -149,15 +149,15 @@ class PWSlot16(Gen_PWSlot16, QWidget):
 
         # Check that everything is set
         if lam.slot.W0 is None:
-            return translate("You must set W0 !", "PWSlot16")
+            return "You must set W0 !"
         elif lam.slot.W3 is None:
-            return translate("You must set W3 !", "PWSlot16")
+            return "You must set W3 !"
         elif lam.slot.H0 is None:
-            return translate("You must set H0 !", "PWSlot16")
+            return "You must set H0 !"
         elif lam.slot.H2 is None:
-            return translate("You must set H2 !", "PWSlot16")
+            return "You must set H2 !"
         elif lam.slot.R1 is None:
-            return translate("You must set R1 !", "PWSlot16")
+            return "You must set R1 !"
 
         # Check that everything is set right
         # Constraints
@@ -170,8 +170,6 @@ class PWSlot16(Gen_PWSlot16, QWidget):
         try:
             yoke_height = lam.comp_height_yoke()
         except Exception as error:
-            return translate("Unable to compute yoke height:", "PWSlot16") + str(error)
+            return "Unable to compute yoke height:" + str(error)
         if yoke_height <= 0:
-            return translate(
-                "The slot height is greater than the lamination !", "PWSlot16"
-            )
+            return "The slot height is greater than the lamination !"

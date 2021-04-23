@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -18,11 +22,17 @@ try:
 except ImportError as error:
     run = error
 
+try:
+    from ..Methods.Simulation.Simulation.init_logger import init_logger
+except ImportError as error:
+    init_logger = error
+
 
 from ._check import InitUnKnowClassError
 from .Machine import Machine
 from .Input import Input
 from .VarSimu import VarSimu
+from .Post import Post
 
 
 class Simulation(FrozenClass):
@@ -30,6 +40,7 @@ class Simulation(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Simulation.run
     if isinstance(run, ImportError):
         run = property(
@@ -39,14 +50,20 @@ class Simulation(FrozenClass):
         )
     else:
         run = run
-    # save method is available in all object
+    # cf Methods.Simulation.Simulation.init_logger
+    if isinstance(init_logger, ImportError):
+        init_logger = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Simulation method init_logger: " + str(init_logger)
+                )
+            )
+        )
+    else:
+        init_logger = init_logger
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -58,39 +75,26 @@ class Simulation(FrozenClass):
         input=-1,
         logger_name="Pyleecan.Simulation",
         var_simu=None,
+        postproc_list=-1,
+        index=None,
+        path_result=None,
+        layer=None,
+        layer_log_warn=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if machine == -1:
-            machine = Machine()
-        if input == -1:
-            input = Input()
-        if var_simu == -1:
-            var_simu = VarSimu()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            name = obj.name
-            desc = obj.desc
-            machine = obj.machine
-            input = obj.input
-            logger_name = obj.logger_name
-            var_simu = obj.var_simu
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -106,128 +110,35 @@ class Simulation(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "var_simu" in list(init_dict.keys()):
                 var_simu = init_dict["var_simu"]
-        # Initialisation by argument
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
+            if "index" in list(init_dict.keys()):
+                index = init_dict["index"]
+            if "path_result" in list(init_dict.keys()):
+                path_result = init_dict["path_result"]
+            if "layer" in list(init_dict.keys()):
+                layer = init_dict["layer"]
+            if "layer_log_warn" in list(init_dict.keys()):
+                layer_log_warn = init_dict["layer_log_warn"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.desc = desc
-        # machine can be None, a Machine object or a dict
-        if isinstance(machine, dict):
-            # Check that the type is correct (including daughter)
-            class_name = machine.get("__class__")
-            if class_name not in [
-                "Machine",
-                "MachineAsync",
-                "MachineDFIM",
-                "MachineIPMSM",
-                "MachineSCIM",
-                "MachineSIPMSM",
-                "MachineSRM",
-                "MachineSyRM",
-                "MachineSync",
-                "MachineUD",
-                "MachineWRSM",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for machine"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.machine = class_obj(init_dict=machine)
-        elif isinstance(machine, str):
-            from ..Functions.load import load
-
-            machine = load(machine)
-            # Check that the type is correct (including daughter)
-            class_name = machine.__class__.__name__
-            if class_name not in [
-                "Machine",
-                "MachineAsync",
-                "MachineDFIM",
-                "MachineIPMSM",
-                "MachineSCIM",
-                "MachineSIPMSM",
-                "MachineSRM",
-                "MachineSyRM",
-                "MachineSync",
-                "MachineUD",
-                "MachineWRSM",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for machine"
-                )
-            self.machine = machine
-        else:
-            self.machine = machine
-        # input can be None, a Input object or a dict
-        if isinstance(input, dict):
-            # Check that the type is correct (including daughter)
-            class_name = input.get("__class__")
-            if class_name not in [
-                "Input",
-                "InputCurrent",
-                "InputElec",
-                "InputFlux",
-                "InputForce",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for input"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.input = class_obj(init_dict=input)
-        elif isinstance(input, str):
-            from ..Functions.load import load
-
-            input = load(input)
-            # Check that the type is correct (including daughter)
-            class_name = input.__class__.__name__
-            if class_name not in [
-                "Input",
-                "InputCurrent",
-                "InputElec",
-                "InputFlux",
-                "InputForce",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for input"
-                )
-            self.input = input
-        else:
-            self.input = input
+        self.machine = machine
+        self.input = input
         self.logger_name = logger_name
-        # var_simu can be None, a VarSimu object or a dict
-        if isinstance(var_simu, dict):
-            # Check that the type is correct (including daughter)
-            class_name = var_simu.get("__class__")
-            if class_name not in ["VarSimu", "VarLoad", "VarLoadCurrent", "VarParam"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for var_simu"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.var_simu = class_obj(init_dict=var_simu)
-        elif isinstance(var_simu, str):
-            from ..Functions.load import load
-
-            var_simu = load(var_simu)
-            # Check that the type is correct (including daughter)
-            class_name = var_simu.__class__.__name__
-            if class_name not in ["VarSimu", "VarLoad", "VarLoadCurrent", "VarParam"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for var_simu"
-                )
-            self.var_simu = var_simu
-        else:
-            self.var_simu = var_simu
+        self.var_simu = var_simu
+        self.postproc_list = postproc_list
+        self.index = index
+        self.path_result = path_result
+        self.layer = layer
+        self.layer_log_warn = layer_log_warn
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Simulation_str = ""
         if self.parent is None:
@@ -252,6 +163,20 @@ class Simulation(FrozenClass):
             Simulation_str += "var_simu = " + tmp
         else:
             Simulation_str += "var_simu = None" + linesep + linesep
+        if len(self.postproc_list) == 0:
+            Simulation_str += "postproc_list = []" + linesep
+        for ii in range(len(self.postproc_list)):
+            tmp = (
+                self.postproc_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            Simulation_str += (
+                "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
+        Simulation_str += "index = " + str(self.index) + linesep
+        Simulation_str += 'path_result = "' + str(self.path_result) + '"' + linesep
+        Simulation_str += "layer = " + str(self.layer) + linesep
+        Simulation_str += "layer_log_warn = " + str(self.layer_log_warn) + linesep
         return Simulation_str
 
     def __eq__(self, other):
@@ -271,10 +196,103 @@ class Simulation(FrozenClass):
             return False
         if other.var_simu != self.var_simu:
             return False
+        if other.postproc_list != self.postproc_list:
+            return False
+        if other.index != self.index:
+            return False
+        if other.path_result != self.path_result:
+            return False
+        if other.layer != self.layer:
+            return False
+        if other.layer_log_warn != self.layer_log_warn:
+            return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._desc != self._desc:
+            diff_list.append(name + ".desc")
+        if (other.machine is None and self.machine is not None) or (
+            other.machine is not None and self.machine is None
+        ):
+            diff_list.append(name + ".machine None mismatch")
+        elif self.machine is not None:
+            diff_list.extend(
+                self.machine.compare(other.machine, name=name + ".machine")
+            )
+        if (other.input is None and self.input is not None) or (
+            other.input is not None and self.input is None
+        ):
+            diff_list.append(name + ".input None mismatch")
+        elif self.input is not None:
+            diff_list.extend(self.input.compare(other.input, name=name + ".input"))
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if (other.var_simu is None and self.var_simu is not None) or (
+            other.var_simu is not None and self.var_simu is None
+        ):
+            diff_list.append(name + ".var_simu None mismatch")
+        elif self.var_simu is not None:
+            diff_list.extend(
+                self.var_simu.compare(other.var_simu, name=name + ".var_simu")
+            )
+        if (other.postproc_list is None and self.postproc_list is not None) or (
+            other.postproc_list is not None and self.postproc_list is None
+        ):
+            diff_list.append(name + ".postproc_list None mismatch")
+        elif self.postproc_list is None:
+            pass
+        elif len(other.postproc_list) != len(self.postproc_list):
+            diff_list.append("len(" + name + ".postproc_list)")
+        else:
+            for ii in range(len(other.postproc_list)):
+                diff_list.extend(
+                    self.postproc_list[ii].compare(
+                        other.postproc_list[ii],
+                        name=name + ".postproc_list[" + str(ii) + "]",
+                    )
+                )
+        if other._index != self._index:
+            diff_list.append(name + ".index")
+        if other._path_result != self._path_result:
+            diff_list.append(name + ".path_result")
+        if other._layer != self._layer:
+            diff_list.append(name + ".layer")
+        if other._layer_log_warn != self._layer_log_warn:
+            diff_list.append(name + ".layer_log_warn")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.name)
+        S += getsizeof(self.desc)
+        S += getsizeof(self.machine)
+        S += getsizeof(self.input)
+        S += getsizeof(self.logger_name)
+        S += getsizeof(self.var_simu)
+        if self.postproc_list is not None:
+            for value in self.postproc_list:
+                S += getsizeof(value)
+        S += getsizeof(self.index)
+        S += getsizeof(self.path_result)
+        S += getsizeof(self.layer)
+        S += getsizeof(self.layer_log_warn)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Simulation_dict = dict()
         Simulation_dict["name"] = self.name
@@ -282,17 +300,30 @@ class Simulation(FrozenClass):
         if self.machine is None:
             Simulation_dict["machine"] = None
         else:
-            Simulation_dict["machine"] = self.machine.as_dict()
+            Simulation_dict["machine"] = self.machine.as_dict(**kwargs)
         if self.input is None:
             Simulation_dict["input"] = None
         else:
-            Simulation_dict["input"] = self.input.as_dict()
+            Simulation_dict["input"] = self.input.as_dict(**kwargs)
         Simulation_dict["logger_name"] = self.logger_name
         if self.var_simu is None:
             Simulation_dict["var_simu"] = None
         else:
-            Simulation_dict["var_simu"] = self.var_simu.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+            Simulation_dict["var_simu"] = self.var_simu.as_dict(**kwargs)
+        if self.postproc_list is None:
+            Simulation_dict["postproc_list"] = None
+        else:
+            Simulation_dict["postproc_list"] = list()
+            for obj in self.postproc_list:
+                if obj is not None:
+                    Simulation_dict["postproc_list"].append(obj.as_dict(**kwargs))
+                else:
+                    Simulation_dict["postproc_list"].append(None)
+        Simulation_dict["index"] = self.index
+        Simulation_dict["path_result"] = self.path_result
+        Simulation_dict["layer"] = self.layer
+        Simulation_dict["layer_log_warn"] = self.layer_log_warn
+        # The class name is added to the dict for deserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
 
@@ -308,6 +339,11 @@ class Simulation(FrozenClass):
         self.logger_name = None
         if self.var_simu is not None:
             self.var_simu._set_None()
+        self.postproc_list = None
+        self.index = None
+        self.path_result = None
+        self.layer = None
+        self.layer_log_warn = None
 
     def _get_name(self):
         """getter of name"""
@@ -351,6 +387,15 @@ class Simulation(FrozenClass):
 
     def _set_machine(self, value):
         """setter of machine"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "machine"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Machine()
         check_var("machine", value, "Machine")
         self._machine = value
 
@@ -372,6 +417,15 @@ class Simulation(FrozenClass):
 
     def _set_input(self, value):
         """setter of input"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "input"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Input()
         check_var("input", value, "Input")
         self._input = value
 
@@ -411,6 +465,15 @@ class Simulation(FrozenClass):
 
     def _set_var_simu(self, value):
         """setter of var_simu"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "var_simu"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = VarSimu()
         check_var("var_simu", value, "VarSimu")
         self._var_simu = value
 
@@ -423,5 +486,113 @@ class Simulation(FrozenClass):
         doc=u"""Multi-simulation definition
 
         :Type: VarSimu
+        """,
+    )
+
+    def _get_postproc_list(self):
+        """getter of postproc_list"""
+        if self._postproc_list is not None:
+            for obj in self._postproc_list:
+                if obj is not None:
+                    obj.parent = self
+        return self._postproc_list
+
+    def _set_postproc_list(self, value):
+        """setter of postproc_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "postproc_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
+        if value == -1:
+            value = list()
+        check_var("postproc_list", value, "[Post]")
+        self._postproc_list = value
+
+    postproc_list = property(
+        fget=_get_postproc_list,
+        fset=_set_postproc_list,
+        doc=u"""List of postprocessings to run on Output after the simulation
+
+        :Type: [Post]
+        """,
+    )
+
+    def _get_index(self):
+        """getter of index"""
+        return self._index
+
+    def _set_index(self, value):
+        """setter of index"""
+        check_var("index", value, "int", Vmin=0)
+        self._index = value
+
+    index = property(
+        fget=_get_index,
+        fset=_set_index,
+        doc=u"""Index of the simulation (if part of a multi-simulation)
+
+        :Type: int
+        :min: 0
+        """,
+    )
+
+    def _get_path_result(self):
+        """getter of path_result"""
+        return self._path_result
+
+    def _set_path_result(self, value):
+        """setter of path_result"""
+        check_var("path_result", value, "str")
+        self._path_result = value
+
+    path_result = property(
+        fget=_get_path_result,
+        fset=_set_path_result,
+        doc=u"""Path to the Result folder to use (None to use default one)
+
+        :Type: str
+        """,
+    )
+
+    def _get_layer(self):
+        """getter of layer"""
+        return self._layer
+
+    def _set_layer(self, value):
+        """setter of layer"""
+        check_var("layer", value, "int", Vmin=0)
+        self._layer = value
+
+    layer = property(
+        fget=_get_layer,
+        fset=_set_layer,
+        doc=u"""Layer of the simulation in a multi-simulation (0 is top simulation)
+
+        :Type: int
+        :min: 0
+        """,
+    )
+
+    def _get_layer_log_warn(self):
+        """getter of layer_log_warn"""
+        return self._layer_log_warn
+
+    def _set_layer_log_warn(self, value):
+        """setter of layer_log_warn"""
+        check_var("layer_log_warn", value, "int", Vmin=0)
+        self._layer_log_warn = value
+
+    layer_log_warn = property(
+        fget=_get_layer_log_warn,
+        fset=_set_layer_log_warn,
+        doc=u"""Enable to set the log console_handler to warning starting from a particular layer. layer_log_warn=2 => layer 0 and 1 info, layer 2 warning
+
+        :Type: int
+        :min: 0
         """,
     )

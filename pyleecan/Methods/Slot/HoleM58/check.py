@@ -2,7 +2,8 @@
 
 from numpy import arcsin, pi
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.HoleM58 import *
 
 
 def check(self):
@@ -40,19 +41,7 @@ def check(self):
     elif self.H2 is None:
         raise S58_NoneError("You must set H2 !")
 
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
     if self.W0 < self.W1 + self.W2:
         raise S58_WCheckError("You must have W1+W2 <= W0")
-
-
-class S58_NoneError(SlotCheckError):
-    """Raised when a propery of HoleM58 is None"""
-
-    pass
-
-
-class S58_WCheckError(SlotCheckError):
-    """ """
-
-    pass

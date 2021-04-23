@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from os.path import join, dirname, split
-from PyQt5.QtWidgets import QDialog, QMessageBox, QFileDialog
-from PyQt5.QtCore import Qt
+from PySide2.QtWidgets import QDialog, QMessageBox, QFileDialog
+from PySide2.QtCore import Qt
 
 from .....GUI.Dialog.DMatLib.DMatSetup.Gen_DMatSetup import Gen_DMatSetup
 from .....GUI.Tools.MPLCanvas import MPLCanvas
@@ -32,6 +32,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         QDialog.__init__(self)
         self.setupUi(self)
 
+        self.is_save_needed = False
+
         # Copy to set the modification only if validated
         self.mat = Material(init_dict=material.as_dict())
 
@@ -50,7 +52,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             self.b_add_matlib.setText("Add to machine")
 
         # Three button to close
-        self.b_cancel.clicked.connect(self.close)
+        self.b_cancel.clicked.connect(lambda: self.done(0))
         self.b_save.clicked.connect(lambda: self.done(1))
         self.b_add_matlib.clicked.connect(lambda: self.done(2))
 
@@ -143,6 +145,36 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_nu_xz.editingFinished.connect(self.set_nu_xz)
         self.lf_nu_yz.editingFinished.connect(self.set_nu_yz)
 
+    def closeEvent(self, event):
+        """Display a message before leaving
+
+        Parameters
+        ----------
+        self : DMatSetup
+            A DMatSetup object
+        event :
+            The closing event
+        """
+
+        if self.is_save_needed:
+            quit_msg = self.tr(
+                "Unsaved changes will be lost.\nDo you want to save the material?"
+            )
+            reply = QMessageBox.question(
+                self,
+                self.tr("Please save before closing"),
+                quit_msg,
+                QMessageBox.Yes,
+                QMessageBox.No,
+            )
+            self.qmessagebox_question = reply
+            if reply == QMessageBox.Yes:
+                self.done(1)
+            else:
+                self.done(0)
+        else:
+            self.done(0)
+
     def set_default(self, attr, attr_name):
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Critical)
@@ -160,7 +192,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
 
         Parameters
         ----------
-        self :
+        self : DMatSetup
             A DMatSetup object
 
         Returns
@@ -175,6 +207,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.mat.path = rel_file_path(
             join(dirname(self.mat.path), file_name + ".json"), "MATLIB_DIR"
         )
+        self.is_save_needed = True
 
     def set_is_isotropic(self, is_checked):
         """Signal to update the value of is_isotropic according to the checkbox
@@ -206,8 +239,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
-        print(self.mat.mag.BH_curve)
         self.mat.elec.rho = self.lf_rho_elec.value()
+        self.is_save_needed = True
 
     def set_mur_lin(self):
         """Signal to update the value of mur_lin according to the line edit
@@ -222,6 +255,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.mag.mur_lin = self.lf_mur_lin.value()
+        self.is_save_needed = True
 
     def set_Brm20(self):
         """Signal to update the value of Brm20 according to the line edit
@@ -236,6 +270,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.mag.Brm20 = self.lf_Brm20.value()
+        self.is_save_needed = True
 
     def set_alpha_Br(self):
         """Signal to update the value of alpha_Br according to the line edit
@@ -250,6 +285,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.mag.alpha_Br = self.lf_alpha_Br.value()
+        self.is_save_needed = True
 
     def set_Wlam(self):
         """Signal to update the value of Wlam according to the line edit
@@ -264,6 +300,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.mag.Wlam = self.lf_Wlam.value()
+        self.is_save_needed = True
 
     def set_cost_unit(self):
         """Signal to update the value of cost_unit according to the line edit
@@ -278,6 +315,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.eco.cost_unit = self.lf_cost_unit.value()
+        self.is_save_needed = True
 
     def set_Cp(self):
         """Signal to update the value of Cp according to the line edit
@@ -292,6 +330,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.HT.Cp = self.lf_Cp.value()
+        self.is_save_needed = True
 
     def set_alpha(self):
         """Signal to update the value of alpha according to the line edit
@@ -306,6 +345,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.HT.alpha = self.lf_alpha.value()
+        self.is_save_needed = True
 
     def set_lambda(self):
         """Signal to update the value of lambda according to the line edit
@@ -322,6 +362,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.mat.HT.lambda_x = self.lf_L.value()
         self.mat.HT.lambda_y = self.lf_L.value()
         self.mat.HT.lambda_z = self.lf_L.value()
+        self.is_save_needed = True
 
     def set_lambda_x(self):
         """Signal to update the value of lambda_x according to the line edit
@@ -336,6 +377,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.HT.lambda_x = self.lf_Lx.value()
+        self.is_save_needed = True
 
     def set_lambda_y(self):
         """Signal to update the value of lambda_y according to the line edit
@@ -350,6 +392,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.HT.lambda_y = self.lf_Ly.value()
+        self.is_save_needed = True
 
     def set_lambda_z(self):
         """Signal to update the value of lambda_z according to the line edit
@@ -364,6 +407,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.HT.lambda_z = self.lf_Lz.value()
+        self.is_save_needed = True
 
     def set_rho_meca(self):
         """Signal to update the value of rho_meca according to the line edit
@@ -378,6 +422,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.rho = self.lf_rho_meca.value()
+        self.is_save_needed = True
 
     def set_E(self):
         """Signal to update the value of Ex according to the line edit
@@ -394,6 +439,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.mat.struct.Ex = self.lf_E.value()
         self.mat.struct.Ey = self.lf_E.value()
         self.mat.struct.Ez = self.lf_E.value()
+        self.is_save_needed = True
 
     def set_Ex(self):
         """Signal to update the value of Ex according to the line edit
@@ -408,6 +454,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.Ex = self.lf_Ex.value()
+        self.is_save_needed = True
 
     def set_Ey(self):
         """Signal to update the value of Ey according to the line edit
@@ -422,6 +469,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.Ey = self.lf_Ey.value()
+        self.is_save_needed = True
 
     def set_Ez(self):
         """Signal to update the value of Ez according to the line edit
@@ -436,6 +484,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.Ez = self.lf_Ez.value()
+        self.is_save_needed = True
 
     def set_G(self):
         """Signal to update the value of G according to the line edit
@@ -452,6 +501,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.mat.struct.Gxy = self.lf_G.value()
         self.mat.struct.Gxz = self.lf_G.value()
         self.mat.struct.Gyz = self.lf_G.value()
+        self.is_save_needed = True
 
     def set_Gxy(self):
         """Signal to update the value of Gxy according to the line edit
@@ -466,6 +516,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.Gxy = self.lf_Gxy.value()
+        self.is_save_needed = True
 
     def set_Gxz(self):
         """Signal to update the value of Gxz according to the line edit
@@ -480,6 +531,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.Gxz = self.lf_Gxz.value()
+        self.is_save_needed = True
 
     def set_Gyz(self):
         """Signal to update the value of Gyz according to the line edit
@@ -494,6 +546,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.Gyz = self.lf_Gyz.value()
+        self.is_save_needed = True
 
     def set_nu(self):
         """Signal to update the value of nu_xy according to the line edit
@@ -510,6 +563,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.mat.struct.nu_xy = self.lf_nu.value()
         self.mat.struct.nu_xz = self.lf_nu.value()
         self.mat.struct.nu_yz = self.lf_nu.value()
+        self.is_save_needed = True
 
     def set_nu_xy(self):
         """Signal to update the value of nu_xy according to the line edit
@@ -524,6 +578,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.nu_xy = self.lf_nu_xy.value()
+        self.is_save_needed = True
 
     def set_nu_xz(self):
         """Signal to update the value of nu_xz according to the line edit
@@ -538,6 +593,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.nu_xz = self.lf_nu_xz.value()
+        self.is_save_needed = True
 
     def set_nu_yz(self):
         """Signal to update the value of nu_yz according to the line edit
@@ -552,11 +608,4 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.nu_yz = self.lf_nu_yz.value()
-
-    def save(self):
-        """Signal to save the material"""
-        return 1
-
-    def add_matlib(self):
-        """Signal to save the material in the Material Library"""
-        return 2
+        self.is_save_needed = True

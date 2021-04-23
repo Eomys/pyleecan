@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SBar.Gen_SBar import Gen_SBar
@@ -19,7 +19,7 @@ class SBar(Gen_SBar, QWidget):
     """Step to setup the Rotor Bar for SCIM machine"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for the DMachineSetup nav
     step_name = "Bar"
 
@@ -54,12 +54,20 @@ class SBar(Gen_SBar, QWidget):
         # Set unit name (m ou mm)
         wid_list = [self.unit_Hscr, self.unit_Lscr, self.unit_Lewout]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
+
+        # Update winding qs
+        if (
+            self.machine.rotor.slot.Zs is not None
+            and self.machine.rotor.winding.qs is None
+        ):
+            self.machine.rotor.winding.qs = self.machine.rotor.slot.Zs
 
         # Set materials
         self.w_mat.def_mat = "Copper1"
         self.w_mat.setText("Ring material:")
         self.w_mat.update(self.machine.rotor, "ring_mat", self.matlib)
+        self.w_mat.b_matlib.hide()
 
         # Initialize the GUI with the current machine value
         self.lf_Hscr.setValue(machine.rotor.Hscr)

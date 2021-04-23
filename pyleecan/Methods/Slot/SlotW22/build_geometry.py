@@ -22,25 +22,15 @@ def build_geometry(self):
         A list of 5 Segment and 3 Arc2
 
     """
-    Rbo = self.get_Rbo()
-
-    # comp point coordinate (in complex)
-    Z1 = Rbo * exp(-1j * self.W0 / 2)
-    if self.is_outwards():
-        R1 = Rbo + self.H0
-        R2 = Rbo + self.H0 + self.H2
-    else:  # inward slot
-        R1 = Rbo - self.H0
-        R2 = Rbo - self.H0 - self.H2
-    Z2 = R1 * exp(-1j * self.W0 / 2.0)
-    Z3 = R1 * exp(-1j * self.W2 / 2.0)
-    Z4 = R2 * exp(-1j * self.W2 / 2.0)
-
-    # symetry
-    Z5 = Z4.conjugate()
-    Z6 = Z3.conjugate()
-    Z7 = Z2.conjugate()
-    Z8 = Z1.conjugate()
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    Z7 = point_dict["Z7"]
+    Z8 = point_dict["Z8"]
     Zc = 0
 
     # Creation of curve

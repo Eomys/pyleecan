@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.HoleM50 import HoleM50
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.Gen_PHoleM50 import Gen_PHoleM50
 from ......GUI.Dialog.DMatLib.MatLib import MatLib
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PHoleM50(Gen_PHoleM50, QWidget):
     """Page to set the Hole Type 50"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for WHoleMag
     hole_name = "Slot Type 50"
     hole_type = HoleM50
@@ -53,17 +53,20 @@ class PHoleM50(Gen_PHoleM50, QWidget):
         self.lf_H4.unit = "m"
 
         # Set default materials
-        self.w_mat_0.setText("mat_void:")
+        self.w_mat_0.setText("mat_void")
         self.w_mat_0.def_mat = "Air"
-        self.w_mat_1.setText("magnet_0:")
+        self.w_mat_0.is_hide_button = True
+        self.w_mat_1.setText("magnet_0")
         self.w_mat_1.def_mat = "Magnet1"
-        self.w_mat_2.setText("magnet_1:")
+        self.w_mat_1.is_hide_button = True
+        self.w_mat_2.setText("magnet_1")
         self.w_mat_2.def_mat = "Magnet1"
+        self.w_mat_2.is_hide_button = True
 
         # Adapt GUI with/without magnet
         if hole.magnet_0 is None:  # SyRM
             self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/WSlot/Slot_50_no_mag.PNG")
+                QPixmap(":/images/images/MachineSetup/SMHoleMag/HoleM50_no_mag.png")
             )
             self.w_mat_0.update(self.hole, "mat_void", self.matlib)
             self.w_mat_1.hide()
@@ -89,7 +92,7 @@ class PHoleM50(Gen_PHoleM50, QWidget):
             self.unit_H4,
         ]
         for wid in wid_list:
-            wid.setText(self.u.get_m_name())
+            wid.setText("[" + self.u.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.hole.W0)
@@ -273,15 +276,15 @@ class PHoleM50(Gen_PHoleM50, QWidget):
 
                 # Update the GUI to display the Output
                 self.out_slot_surface.setText(
-                    "Slot suface (2 part): " + s_surf + " " + self.u.get_m2_name()
+                    "Slot surface: " + s_surf + " [" + self.u.get_m2_name() + "]"
                 )
                 self.out_magnet_surface.setText(
-                    "Magnet surface: " + m_surf + " " + self.u.get_m2_name()
+                    "Magnet surf.: " + m_surf + " [" + self.u.get_m2_name() + "]"
                 )
                 self.out_alpha.setText(
-                    "alpha: " + alpha_rad + u" rad (" + alpha_deg + u"°)"
+                    "alpha: " + alpha_rad + u" [rad] (" + alpha_deg + u"°)"
                 )
-                self.out_W5.setText("W5: " + W5 + " " + self.u.get_m_name())
+                self.out_W5.setText("W5: " + W5 + " [" + self.u.get_m_name() + "]")
                 is_set = True
             except:
                 pass
@@ -289,8 +292,8 @@ class PHoleM50(Gen_PHoleM50, QWidget):
         if not is_set:
             # We can't compute the output => We erase the previous version
             # (that way the user know that something is wrong)
-            self.out_slot_surface.setText("Slot suface (2 part): ?")
-            self.out_magnet_surface.setText("Magnet surface: ?")
+            self.out_slot_surface.setText("Slot suface: ?")
+            self.out_magnet_surface.setText("Magnet surf.: ?")
             self.out_alpha.setText("alpha: ?")
             self.out_W5.setText("W5: ?")
 

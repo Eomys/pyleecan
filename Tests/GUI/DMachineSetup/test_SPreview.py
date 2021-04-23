@@ -4,8 +4,8 @@ from os.path import join, isfile
 import mock
 
 import pytest
-from PyQt5 import QtWidgets
-from PyQt5.QtTest import QTest
+from PySide2 import QtWidgets
+from PySide2.QtTest import QTest
 
 
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
@@ -34,7 +34,7 @@ SCIM_dict = {
     "Nrow": 9,
 }
 IPMSM_dict = {
-    "file_path": join(machine_path, "IPMSM_A.json").replace("\\", "/"),
+    "file_path": join(machine_path, "Toyota_Prius.json").replace("\\", "/"),
     "table": [
         ("Machine Type", "IPMSM"),
         ("Stator slot number", "48"),
@@ -50,51 +50,49 @@ IPMSM_dict = {
 load_preview_test = [SCIM_dict, IPMSM_dict]
 
 
-@pytest.mark.GUI
 class TestSPreview(object):
-    def setup_method(self, method):
-        """setup any state specific to the execution of the given module."""
+    @pytest.fixture
+    def setup(self):
+        """Run at the begining of every test to setup the gui"""
+
+        if not QtWidgets.QApplication.instance():
+            self.app = QtWidgets.QApplication(sys.argv)
+        else:
+            self.app = QtWidgets.QApplication.instance()
+
         # MatLib widget
         matlib = MatLib(matlib_path)
         dmatlib = DMatLib(matlib=matlib)
-        self.widget = DMachineSetup(dmatlib=dmatlib, machine_path=machine_path)
+        widget = DMachineSetup(dmatlib=dmatlib, machine_path=machine_path)
 
-    @classmethod
-    def setup_class(cls):
-        """setup any state specific to the execution of the given class (which
-        usually contains tests).
-        """
-        cls.app = QtWidgets.QApplication(sys.argv)
+        yield {"widget": widget}
 
-    @classmethod
-    def teardown_class(cls):
-        """teardown any state that was previously setup with a call to
-        setup_class.
-        """
-        cls.app.quit()
+        self.app.quit()
 
     @pytest.mark.parametrize("test_dict", load_preview_test)
-    def test_load(self, test_dict):
+    def test_load(self, setup, test_dict):
         """Check that you can load a machine"""
         assert isfile(test_dict["file_path"])
 
         return_value = (test_dict["file_path"], "Json (*.json)")
         with mock.patch(
-            "PyQt5.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+            "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
-            self.widget.b_load.clicked.emit(True)
+            setup["widget"].b_load.clicked.emit()
 
         # Check load MachineType
-        assert type(self.widget.w_step) is SPreview
+        assert type(setup["widget"].w_step) is SPreview
         # Check the table
-        assert self.widget.w_step.tab_machine.tab_param.rowCount() == test_dict["Nrow"]
+        assert (
+            setup["widget"].w_step.tab_machine.tab_param.rowCount() == test_dict["Nrow"]
+        )
         for ii, content in enumerate(test_dict["table"]):
             assert (
-                self.widget.w_step.tab_machine.tab_param.item(ii, 0).text()
+                setup["widget"].w_step.tab_machine.tab_param.item(ii, 0).text()
                 == content[0]
             )
             assert (
-                self.widget.w_step.tab_machine.tab_param.item(ii, 1).text()
+                setup["widget"].w_step.tab_machine.tab_param.item(ii, 1).text()
                 == content[1]
             )

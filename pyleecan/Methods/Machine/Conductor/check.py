@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Machine.LamSlotWind.check import Lam_WindCheckError
-
 
 def check(self):
     """Check that the Conductor object is correct
@@ -15,10 +13,4 @@ def check(self):
     -------
     None
     """
-    pass
-
-
-class CondCheckError(Lam_WindCheckError):
-    """ """
-
     pass

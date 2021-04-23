@@ -5,7 +5,6 @@ from numpy import exp, pi, cos, sin, tan
 from ....Classes.Segment import Segment
 from ....Classes.Arc1 import Arc1
 from ....Classes.SurfLine import SurfLine
-from ....Functions.Geometry.inter_line_circle import inter_line_circle
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):
@@ -34,61 +33,36 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         st = "_Stator"
     else:
         st = "_Rotor"
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
-    # comp point coordinate (in complex)
-    alpha = self.comp_alpha()
-
-    Wslot = 2 * sin(self.W1 / 2) * (Rbo - self.H1)
-    L = 0.5 * (Wslot - self.W0) / cos(alpha)  # ||P2,P5||
-
-    # Center of the hole
-    Z0 = Rbo - self.H0
-    Z2 = Z0 + 1j * self.W0 / 2
-    Z25 = Z0 - 1j * self.W0 / 2
-    Z15 = Z25 - self.H2
-    Z1 = Z2 - 1j * self.W2
-    Z26 = Z1 - 1j * self.W3
-    Z12 = Z2 - self.H2
-    Z13 = Z12 - 1j * self.W2
-    Z14 = Z13 - 1j * self.W3
-    Z11 = Z12 + 1j * tan(alpha / 2) * self.H2
-    Z16 = Z15 - 1j * tan(alpha / 2) * self.H2
-
-    # Draw the left side with center P2, and X axis =(P2,P5), Y axis=(P2,P10)
-    Z3 = self.W4 * exp(1j * (pi / 2 - alpha)) + Z2
-    Z4 = (self.W4 + self.W5) * exp(1j * (pi / 2 - alpha)) + Z2
-    Z5 = (Rbo - self.H1) * exp(1j * self.W1 / 2)
-    Z10 = (1j * self.H2) * exp(1j * (pi / 2 - alpha)) + Z2
-    Z9 = (1j * self.H2 + self.W4) * exp(1j * (pi / 2 - alpha)) + Z2
-    Z8 = (1j * self.H2 + self.W4 + self.W5) * exp(1j * (pi / 2 - alpha)) + Z2
-    Z7 = (1j * self.H2 + L) * exp(1j * (pi / 2 - alpha)) + Z2
-
-    # Draw the right side with center P25, X axis (P25,P23), Y axis(P25,P17)
-    Z24 = self.W6 * exp(-1j * (pi / 2 - alpha)) + Z25
-    Z23 = (self.W6 + self.W7) * exp(-1j * (pi / 2 - alpha)) + Z25
-    Z22 = (Rbo - self.H1) * exp(-1j * self.W1 / 2)
-    Z17 = (1j * self.H2) * exp(-1j * (pi / 2 - alpha)) + Z25
-    Z18 = (-1j * self.H2 + self.W6) * exp(-1j * (pi / 2 - alpha)) + Z25
-    Z19 = (-1j * self.H2 + self.W6 + self.W7) * exp(-1j * (pi / 2 - alpha)) + Z25
-    Z20 = (-1j * self.H2 + L) * exp(-1j * (pi / 2 - alpha)) + Z25
-
-    # Z6 is the intersection of the line [Z7,Z10] and Circle centre
-    # (0,0) radius Rbo - H1
-    Zint = inter_line_circle(Z7, Z10, Rbo - self.H1)
-
-    # Select the point with Re(Z) > 0
-    if Zint[0].real > 0:
-        Z6 = Zint[0]
-    else:
-        Z6 = Zint[1]
-    Z21 = Z6.conjugate()
+    # Get all the points
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    Z8 = point_dict["Z8"]
+    Z9 = point_dict["Z9"]
+    Z11 = point_dict["Z11"]
+    Z13 = point_dict["Z13"]
+    Z14 = point_dict["Z14"]
+    Z16 = point_dict["Z16"]
+    Z18 = point_dict["Z18"]
+    Z19 = point_dict["Z19"]
+    Z21 = point_dict["Z21"]
+    Z22 = point_dict["Z22"]
+    Z23 = point_dict["Z23"]
+    Z24 = point_dict["Z24"]
+    Z25 = point_dict["Z25"]
+    Z26 = point_dict["Z26"]
 
     surf_list = list()
     # Create all the surfaces for all the cases
     # Air surface bore around magnet_0
     curve_list = list()
-    curve_list.append(Arc1(Z21, Z22, Rbo - self.H1))
+    curve_list.append(Arc1(Z21, Z22, Rext - self.H1))
     curve_list.append(Segment(Z22, Z23))
     curve_list.append(Segment(Z23, Z19))
     curve_list.append(Segment(Z19, Z21))
@@ -185,7 +159,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # Air surface bore around magnet_2
     curve_list = list()
-    curve_list.append(Arc1(Z5, Z6, Rbo - self.H1))
+    curve_list.append(Arc1(Z5, Z6, Rext - self.H1))
     curve_list.append(Segment(Z6, Z8))
     curve_list.append(Segment(Z8, Z4))
     curve_list.append(Segment(Z4, Z5))
@@ -194,7 +168,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # Air surface bore around magnet_2 (no magnet_2 and magnet_1)
     curve_list = list()
-    curve_list.append(Arc1(Z5, Z6, Rbo - self.H1))
+    curve_list.append(Arc1(Z5, Z6, Rext - self.H1))
     curve_list.append(Segment(Z6, Z11))
     curve_list.append(Segment(Z11, Z13))
     curve_list.append(Segment(Z13, Z1))
@@ -205,7 +179,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # Air surface bore around magnet_0 (no magnet_0 and magnet_1)
     curve_list = list()
-    curve_list.append(Arc1(Z21, Z22, Rbo - self.H1))
+    curve_list.append(Arc1(Z21, Z22, Rext - self.H1))
     curve_list.append(Segment(Z22, Z25))
     curve_list.append(Segment(Z25, Z26))
     curve_list.append(Segment(Z26, Z14))
@@ -229,7 +203,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # Air surface bore around magnet_1 (no magnet_1 and no magnet_0 and magnet_2)
     curve_list = list()
-    curve_list.append(Arc1(Z21, Z22, Rbo - self.H1))
+    curve_list.append(Arc1(Z21, Z22, Rext - self.H1))
     curve_list.append(Segment(Z22, Z25))
     curve_list.append(Segment(Z25, Z2))
     curve_list.append(Segment(Z2, Z3))
@@ -242,7 +216,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # Air surface bore around magnet_1 (no magnet_1 and magnet_0 and no magnet_2)
     curve_list = list()
-    curve_list.append(Arc1(Z5, Z6, Rbo - self.H1))
+    curve_list.append(Arc1(Z5, Z6, Rext - self.H1))
     curve_list.append(Segment(Z6, Z11))
     curve_list.append(Segment(Z11, Z16))
     curve_list.append(Segment(Z16, Z18))
@@ -255,11 +229,11 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # Air surface No magnet
     curve_list = list()
-    curve_list.append(Arc1(Z5, Z6, Rbo - self.H1))
+    curve_list.append(Arc1(Z5, Z6, Rext - self.H1))
     curve_list.append(Segment(Z6, Z11))
     curve_list.append(Segment(Z11, Z16))
     curve_list.append(Segment(Z16, Z21))
-    curve_list.append(Arc1(Z21, Z22, Rbo - self.H1))
+    curve_list.append(Arc1(Z21, Z22, Rext - self.H1))
     curve_list.append(Segment(Z22, Z25))
     curve_list.append(Segment(Z25, Z2))
     curve_list.append(Segment(Z2, Z5))

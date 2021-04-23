@@ -3,3 +3,4 @@ elec,-,Electrical module,0,Electrical,None,,,,Simulation,Simulation,run_single,V
 mag,-,Magnetic module,0,Magnetics,None,,,,,,,,,
 struct,-,Structural module,0,Structural,None,,,,,,,,,
 force,-,Force moduale,0,Force,None,,,,,,,,,
+loss,-,Loss moduale,0,Loss,None,,,,,,,,,

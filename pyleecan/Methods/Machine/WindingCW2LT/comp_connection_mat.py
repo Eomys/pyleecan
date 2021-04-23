@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import array, mod, zeros
 
+from ....Methods.Machine.WindingCW2LT import WindingT1DefMsError
 from ....Methods.Machine.Winding import WindingError
 from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from ....Functions.Winding.shift_wind_mat import shift_wind_mat
@@ -13,8 +14,8 @@ def comp_connection_mat(self, Zs=None):
 
     Parameters
     ----------
-    self : Winding
-        A: Winding object
+    self : WindingCW2LT
+        A: WindingCW2LT object
     Zs : int
         Number of Slot (Integer >0)
 
@@ -62,40 +63,34 @@ def comp_connection_mat(self, Zs=None):
         # traditional non overlapping all teeth wound winding
         for q in range(0, int(qs)):
             for k in range(0, int(Zs / qs)):  # number of Ncgr coils
-                xenc = -(q) + array([1, 0]) - (k) * qs
-                wind_mat[
-                    0, 0, int(mod(xenc[0] - 1, Zs)), q
-                ] = +Ntcoil  # right / top / 2
-                wind_mat[
-                    0, 1, int(mod(xenc[1] - 1, Zs)), q
-                ] = -Ntcoil  # left / bottom / 1
+                xenc = q + array([1, 0]) + k * qs
+                wind_mat[0, 0, int(mod(xenc[0] - 1, Zs)), q] = +Ntcoil  # right/top/2
+                wind_mat[0, 1, int(mod(xenc[1] - 1, Zs)), q] = -Ntcoil  # left/bottom/1
     elif ms != 0.5 and Ncgr % 1 == 0:
         # ms!=0.5 and Ncgr is an integer (ms>0.25 && ms<0.5)
         # new algorithm to reverse the coils
         for q in range(0, int(qs)):
             for k in range(0, int(nlay)):  # number of Ncgr coils
                 for l in range(0, int(Ncgr)):
-                    wind_mat[
-                        0, 1, int(mod((q) * Ncgr + (k) * qs * Ncgr - 1 + (l), Zs)), q
-                    ] = (
-                        -((-1) ** (l + q - 1 + k)) * Ntcoil
-                    )  # left / bottom / 1
-                    wind_mat[
-                        0,
-                        0,
-                        int(mod((q) * Ncgr + 1 + (k) * qs * Ncgr - 1 + (l), Zs)),
-                        q,
-                    ] = (
-                        +((-1) ** (l + q - 1 + k)) * Ntcoil
-                    )  # right / top / 2
+                    id0 = int(mod(q * Ncgr + 0 + k * qs * Ncgr - 1 + l, Zs))
+                    id1 = int(mod(q * Ncgr + 1 + k * qs * Ncgr - 1 + l, Zs))
+                    # left / bottom / 1
+                    wind_mat[0, 1, id0, q] = -((-1) ** (l + q - 1 + k)) * Ntcoil
+                    # right / top / 2
+                    wind_mat[0, 0, id1, q] = +((-1) ** (l + q - 1 + k)) * Ntcoil
 
     else:
         raise WindingT1DefMsError(
-            "Winding geometry not handled yet, enter "
-            "your own winding matrix with type_winding=0"
+            "Winding geometry not handled yet. Enter "
+            "your own winding matrix with WindingUD"
             " and contact EOMYS"
         )
 
+    # Set default values
+    if self.is_reverse_wind is None:
+        self.is_reverse_wind = False
+    if self.Nslot_shift_wind is None:
+        self.Nslot_shift_wind = 0
     # Apply the transformations
     if self.is_reverse_wind:
         wind_mat = reverse_wind_mat(wind_mat)
@@ -103,22 +98,3 @@ def comp_connection_mat(self, Zs=None):
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
 
     return wind_mat
-
-
-class WindingT1DefMsError(WindingError):
-    """
-
-    Parameters
-    ----------
-
-    Returns
-    -------
-
-    Raises
-    ------
-    must
-        be 0
-
-    """
-
-    pass

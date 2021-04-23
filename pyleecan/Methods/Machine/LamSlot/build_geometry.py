@@ -6,7 +6,7 @@ from ....Classes.SurfLine import SurfLine
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfRing import SurfRing
-from ....Methods.Machine.Lamination.build_geometry import build_geometry as build_geo
+from ....Classes.Lamination import Lamination
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0):
@@ -78,7 +78,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         for line in bore_list:
             line.label = label_bore
     else:  # No slot
-        return build_geo(self, sym=sym, alpha=alpha, delta=delta)
+        return Lamination.build_geometry(self, sym=sym, alpha=alpha, delta=delta)
 
     # Create the lamination surface(s)
     surf_list = list()
@@ -93,8 +93,10 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         surf_yoke = Circle(
             radius=Ryoke, label=label_yoke, line_label=label_yoke, center=0
         )
-        if self.Rint == 0:
+        if self.Rint == 0 and len(bore_list) > 0:
             surf_list = [surf_slot]
+        elif self.Rint == 0 and len(bore_list) == 0:
+            surf_list = list()
         elif self.is_internal:
             surf_list.append(
                 SurfRing(
@@ -118,7 +120,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         Zy1 = Ryoke
         Zy2 = Ryoke * exp(1j * 2 * pi / sym)
         bore_list.append(
-            Segment(bore_list[-1].get_end(), Zy2, label=label + "_Yoke_Side")
+            Segment(bore_list[-1].get_end(), Zy2, label=label + "_Yoke_Side_Left")
         )
         if Ryoke > 0:  # For internal lamination
             bore_list.append(
@@ -131,7 +133,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
                 )
             )
         bore_list.append(
-            Segment(Zy1, bore_list[0].get_begin(), label=label + "_Yoke_Side")
+            Segment(Zy1, bore_list[0].get_begin(), label=label + "_Yoke_Side_Right")
         )
         # Create a Surface for the slot
         if self.is_internal:

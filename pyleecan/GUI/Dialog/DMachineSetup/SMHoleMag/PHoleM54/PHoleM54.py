@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.HoleM54 import HoleM54
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.Gen_PHoleM54 import Gen_PHoleM54
 from ......GUI.Dialog.DMatLib.MatLib import MatLib
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PHoleM54(Gen_PHoleM54, QWidget):
     """Page to set the Hole Type 54"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for WHoleMag
     hole_name = "Slot Type 54"
     hole_type = HoleM54
@@ -45,14 +45,15 @@ class PHoleM54(Gen_PHoleM54, QWidget):
         self.u = gui_option.unit
         wid_list = [self.unit_R1, self.unit_H0, self.unit_H1]
         for wid in wid_list:
-            wid.setText(self.u.get_m_name())
+            wid.setText("[" + self.u.get_m_name() + "]")
 
         self.matlib = matlib
         self.hole = hole
 
         # Set default materials
-        self.w_mat_0.setText("mat_void:")
+        self.w_mat_0.setText("mat_void")
         self.w_mat_0.def_mat = "Air"
+        self.w_mat_0.is_hide_button = True
 
         # Set current material
         self.w_mat_0.update(self.hole, "mat_void", self.matlib)

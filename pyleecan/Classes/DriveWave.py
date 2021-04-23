@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Drive import Drive
 
 # Import all class method
@@ -37,14 +41,9 @@ class DriveWave(Drive):
         )
     else:
         get_wave = get_wave
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -59,28 +58,16 @@ class DriveWave(Drive):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if wave == -1:
-            wave = Import()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            wave = obj.wave
-            Umax = obj.Umax
-            Imax = obj.Imax
-            is_current = obj.is_current
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -92,59 +79,15 @@ class DriveWave(Drive):
                 Imax = init_dict["Imax"]
             if "is_current" in list(init_dict.keys()):
                 is_current = init_dict["is_current"]
-        # Initialisation by argument
-        # wave can be None, a Import object or a dict
-        if isinstance(wave, dict):
-            # Check that the type is correct (including daughter)
-            class_name = wave.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for wave"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.wave = class_obj(init_dict=wave)
-        elif isinstance(wave, str):
-            from ..Functions.load import load
-
-            wave = load(wave)
-            # Check that the type is correct (including daughter)
-            class_name = wave.__class__.__name__
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for wave"
-                )
-            self.wave = wave
-        else:
-            self.wave = wave
+        # Set the properties (value check and convertion are done in setter)
+        self.wave = wave
         # Call Drive init
         super(DriveWave, self).__init__(Umax=Umax, Imax=Imax, is_current=is_current)
         # The class is frozen (in Drive init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         DriveWave_str = ""
         # Get the properties inherited from Drive
@@ -169,16 +112,47 @@ class DriveWave(Drive):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Drive
+        diff_list.extend(super(DriveWave, self).compare(other, name=name))
+        if (other.wave is None and self.wave is not None) or (
+            other.wave is not None and self.wave is None
+        ):
+            diff_list.append(name + ".wave None mismatch")
+        elif self.wave is not None:
+            diff_list.extend(self.wave.compare(other.wave, name=name + ".wave"))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Drive
+        S += super(DriveWave, self).__sizeof__()
+        S += getsizeof(self.wave)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Drive
-        DriveWave_dict = super(DriveWave, self).as_dict()
+        DriveWave_dict = super(DriveWave, self).as_dict(**kwargs)
         if self.wave is None:
             DriveWave_dict["wave"] = None
         else:
-            DriveWave_dict["wave"] = self.wave.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+            DriveWave_dict["wave"] = self.wave.as_dict(**kwargs)
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         DriveWave_dict["__class__"] = "DriveWave"
         return DriveWave_dict
@@ -197,6 +171,13 @@ class DriveWave(Drive):
 
     def _set_wave(self, value):
         """setter of wave"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "wave")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Import()
         check_var("wave", value, "Import")
         self._wave = value
 

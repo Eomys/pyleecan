@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ....Methods.Slot.VentilationPolar import *
 
 
 def check(self):
@@ -30,9 +31,3 @@ def check(self):
         raise VentilationPolarInstanceError("D0 must be a float or int")
     if not isinstance(self.Alpha0, float) and not isinstance(self.Alpha0, int):
         raise VentilationPolarInstanceError("Alpha0 must be a float or int")
-
-
-class VentilationPolarInstanceError(Exception):
-    """ """
-
-    pass

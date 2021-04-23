@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
@@ -20,14 +24,9 @@ class OutGeo(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -42,40 +41,25 @@ class OutGeo(FrozenClass):
         logger_name="Pyleecan.OutGeo",
         angle_offset_initial=None,
         rot_dir=None,
+        per_a=None,
+        is_antiper_a=None,
+        per_t=None,
+        is_antiper_t=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if stator == -1:
-            stator = OutGeoLam()
-        if rotor == -1:
-            rotor = OutGeoLam()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            stator = obj.stator
-            rotor = obj.rotor
-            Wgap_mec = obj.Wgap_mec
-            Wgap_mag = obj.Wgap_mag
-            Rgap_mec = obj.Rgap_mec
-            Lgap = obj.Lgap
-            logger_name = obj.logger_name
-            angle_offset_initial = obj.angle_offset_initial
-            rot_dir = obj.rot_dir
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -97,26 +81,18 @@ class OutGeo(FrozenClass):
                 angle_offset_initial = init_dict["angle_offset_initial"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
-        # Initialisation by argument
+            if "per_a" in list(init_dict.keys()):
+                per_a = init_dict["per_a"]
+            if "is_antiper_a" in list(init_dict.keys()):
+                is_antiper_a = init_dict["is_antiper_a"]
+            if "per_t" in list(init_dict.keys()):
+                per_t = init_dict["per_t"]
+            if "is_antiper_t" in list(init_dict.keys()):
+                is_antiper_t = init_dict["is_antiper_t"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # stator can be None, a OutGeoLam object or a dict
-        if isinstance(stator, dict):
-            self.stator = OutGeoLam(init_dict=stator)
-        elif isinstance(stator, str):
-            from ..Functions.load import load
-
-            self.stator = load(stator)
-        else:
-            self.stator = stator
-        # rotor can be None, a OutGeoLam object or a dict
-        if isinstance(rotor, dict):
-            self.rotor = OutGeoLam(init_dict=rotor)
-        elif isinstance(rotor, str):
-            from ..Functions.load import load
-
-            self.rotor = load(rotor)
-        else:
-            self.rotor = rotor
+        self.stator = stator
+        self.rotor = rotor
         self.Wgap_mec = Wgap_mec
         self.Wgap_mag = Wgap_mag
         self.Rgap_mec = Rgap_mec
@@ -124,12 +100,16 @@ class OutGeo(FrozenClass):
         self.logger_name = logger_name
         self.angle_offset_initial = angle_offset_initial
         self.rot_dir = rot_dir
+        self.per_a = per_a
+        self.is_antiper_a = is_antiper_a
+        self.per_t = per_t
+        self.is_antiper_t = is_antiper_t
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         OutGeo_str = ""
         if self.parent is None:
@@ -155,6 +135,10 @@ class OutGeo(FrozenClass):
             "angle_offset_initial = " + str(self.angle_offset_initial) + linesep
         )
         OutGeo_str += "rot_dir = " + str(self.rot_dir) + linesep
+        OutGeo_str += "per_a = " + str(self.per_a) + linesep
+        OutGeo_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
+        OutGeo_str += "per_t = " + str(self.per_t) + linesep
+        OutGeo_str += "is_antiper_t = " + str(self.is_antiper_t) + linesep
         return OutGeo_str
 
     def __eq__(self, other):
@@ -180,20 +164,93 @@ class OutGeo(FrozenClass):
             return False
         if other.rot_dir != self.rot_dir:
             return False
+        if other.per_a != self.per_a:
+            return False
+        if other.is_antiper_a != self.is_antiper_a:
+            return False
+        if other.per_t != self.per_t:
+            return False
+        if other.is_antiper_t != self.is_antiper_t:
+            return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.stator is None and self.stator is not None) or (
+            other.stator is not None and self.stator is None
+        ):
+            diff_list.append(name + ".stator None mismatch")
+        elif self.stator is not None:
+            diff_list.extend(self.stator.compare(other.stator, name=name + ".stator"))
+        if (other.rotor is None and self.rotor is not None) or (
+            other.rotor is not None and self.rotor is None
+        ):
+            diff_list.append(name + ".rotor None mismatch")
+        elif self.rotor is not None:
+            diff_list.extend(self.rotor.compare(other.rotor, name=name + ".rotor"))
+        if other._Wgap_mec != self._Wgap_mec:
+            diff_list.append(name + ".Wgap_mec")
+        if other._Wgap_mag != self._Wgap_mag:
+            diff_list.append(name + ".Wgap_mag")
+        if other._Rgap_mec != self._Rgap_mec:
+            diff_list.append(name + ".Rgap_mec")
+        if other._Lgap != self._Lgap:
+            diff_list.append(name + ".Lgap")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        if other._angle_offset_initial != self._angle_offset_initial:
+            diff_list.append(name + ".angle_offset_initial")
+        if other._rot_dir != self._rot_dir:
+            diff_list.append(name + ".rot_dir")
+        if other._per_a != self._per_a:
+            diff_list.append(name + ".per_a")
+        if other._is_antiper_a != self._is_antiper_a:
+            diff_list.append(name + ".is_antiper_a")
+        if other._per_t != self._per_t:
+            diff_list.append(name + ".per_t")
+        if other._is_antiper_t != self._is_antiper_t:
+            diff_list.append(name + ".is_antiper_t")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.stator)
+        S += getsizeof(self.rotor)
+        S += getsizeof(self.Wgap_mec)
+        S += getsizeof(self.Wgap_mag)
+        S += getsizeof(self.Rgap_mec)
+        S += getsizeof(self.Lgap)
+        S += getsizeof(self.logger_name)
+        S += getsizeof(self.angle_offset_initial)
+        S += getsizeof(self.rot_dir)
+        S += getsizeof(self.per_a)
+        S += getsizeof(self.is_antiper_a)
+        S += getsizeof(self.per_t)
+        S += getsizeof(self.is_antiper_t)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutGeo_dict = dict()
         if self.stator is None:
             OutGeo_dict["stator"] = None
         else:
-            OutGeo_dict["stator"] = self.stator.as_dict()
+            OutGeo_dict["stator"] = self.stator.as_dict(**kwargs)
         if self.rotor is None:
             OutGeo_dict["rotor"] = None
         else:
-            OutGeo_dict["rotor"] = self.rotor.as_dict()
+            OutGeo_dict["rotor"] = self.rotor.as_dict(**kwargs)
         OutGeo_dict["Wgap_mec"] = self.Wgap_mec
         OutGeo_dict["Wgap_mag"] = self.Wgap_mag
         OutGeo_dict["Rgap_mec"] = self.Rgap_mec
@@ -201,7 +258,11 @@ class OutGeo(FrozenClass):
         OutGeo_dict["logger_name"] = self.logger_name
         OutGeo_dict["angle_offset_initial"] = self.angle_offset_initial
         OutGeo_dict["rot_dir"] = self.rot_dir
-        # The class name is added to the dict fordeserialisation purpose
+        OutGeo_dict["per_a"] = self.per_a
+        OutGeo_dict["is_antiper_a"] = self.is_antiper_a
+        OutGeo_dict["per_t"] = self.per_t
+        OutGeo_dict["is_antiper_t"] = self.is_antiper_t
+        # The class name is added to the dict for deserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
 
@@ -219,6 +280,10 @@ class OutGeo(FrozenClass):
         self.logger_name = None
         self.angle_offset_initial = None
         self.rot_dir = None
+        self.per_a = None
+        self.is_antiper_a = None
+        self.per_t = None
+        self.is_antiper_t = None
 
     def _get_stator(self):
         """getter of stator"""
@@ -226,6 +291,15 @@ class OutGeo(FrozenClass):
 
     def _set_stator(self, value):
         """setter of stator"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "stator"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutGeoLam()
         check_var("stator", value, "OutGeoLam")
         self._stator = value
 
@@ -247,6 +321,15 @@ class OutGeo(FrozenClass):
 
     def _set_rotor(self, value):
         """setter of rotor"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "rotor"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutGeoLam()
         check_var("rotor", value, "OutGeoLam")
         self._rotor = value
 
@@ -382,10 +465,82 @@ class OutGeo(FrozenClass):
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""Rotation direction
+        doc=u"""rotation direction of the magnetic field fundamental !! WARNING: rot_dir = -1 to have positive rotor rotating direction, i.e. rotor position moves towards positive angle
 
         :Type: int
         :min: -1
         :max: 1
+        """,
+    )
+
+    def _get_per_a(self):
+        """getter of per_a"""
+        return self._per_a
+
+    def _set_per_a(self, value):
+        """setter of per_a"""
+        check_var("per_a", value, "int")
+        self._per_a = value
+
+    per_a = property(
+        fget=_get_per_a,
+        fset=_set_per_a,
+        doc=u"""Number of spatial periodicities of the machine
+
+        :Type: int
+        """,
+    )
+
+    def _get_is_antiper_a(self):
+        """getter of is_antiper_a"""
+        return self._is_antiper_a
+
+    def _set_is_antiper_a(self, value):
+        """setter of is_antiper_a"""
+        check_var("is_antiper_a", value, "bool")
+        self._is_antiper_a = value
+
+    is_antiper_a = property(
+        fget=_get_is_antiper_a,
+        fset=_set_is_antiper_a,
+        doc=u"""True if an spatial anti-periodicity is possible after the periodicities
+
+        :Type: bool
+        """,
+    )
+
+    def _get_per_t(self):
+        """getter of per_t"""
+        return self._per_t
+
+    def _set_per_t(self, value):
+        """setter of per_t"""
+        check_var("per_t", value, "int")
+        self._per_t = value
+
+    per_t = property(
+        fget=_get_per_t,
+        fset=_set_per_t,
+        doc=u"""Number of time periodicities of the machine
+
+        :Type: int
+        """,
+    )
+
+    def _get_is_antiper_t(self):
+        """getter of is_antiper_t"""
+        return self._is_antiper_t
+
+    def _set_is_antiper_t(self, value):
+        """setter of is_antiper_t"""
+        check_var("is_antiper_t", value, "bool")
+        self._is_antiper_t = value
+
+    is_antiper_t = property(
+        fget=_get_is_antiper_t,
+        fset=_set_is_antiper_t,
+        doc=u"""True if an time anti-periodicity is possible after the periodicities
+
+        :Type: bool
         """,
     )

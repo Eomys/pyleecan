@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import sin, tan
+from numpy import sin
 
 
 def comp_surface(self):
@@ -22,14 +22,11 @@ def comp_surface(self):
     Rbo = self.get_Rbo()
 
     S1 = self.H0 * self.W0
-    if self.H1_is_rad:  # H1 in rad
-        H1 = (self.W1 - self.W0) / 2.0 * tan(self.H1)  # H1 in m
-    else:  # H1 in m
-        H1 = self.H1
+    H1 = self.get_H1()
 
     S2 = 0.5 * (self.W0 + self.W1) * H1
 
-    Swind = self.comp_surface_wind()
+    Swind = self.comp_surface_active()
 
     # The bottom is an arc
     alpha = self.comp_angle_opening()

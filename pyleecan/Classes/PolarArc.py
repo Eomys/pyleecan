@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Surface import Surface
 
 # Import all class method
@@ -157,14 +161,9 @@ class PolarArc(Surface):
         )
     else:
         comp_point_ref = comp_point_ref
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -173,26 +172,16 @@ class PolarArc(Surface):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            angle = obj.angle
-            height = obj.height
-            point_ref = obj.point_ref
-            label = obj.label
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -204,7 +193,7 @@ class PolarArc(Surface):
                 point_ref = init_dict["point_ref"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.angle = angle
         self.height = height
         # Call Surface init
@@ -213,7 +202,7 @@ class PolarArc(Surface):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         PolarArc_str = ""
         # Get the properties inherited from Surface
@@ -237,14 +226,44 @@ class PolarArc(Surface):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Surface
+        diff_list.extend(super(PolarArc, self).compare(other, name=name))
+        if other._angle != self._angle:
+            diff_list.append(name + ".angle")
+        if other._height != self._height:
+            diff_list.append(name + ".height")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Surface
+        S += super(PolarArc, self).__sizeof__()
+        S += getsizeof(self.angle)
+        S += getsizeof(self.height)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Surface
-        PolarArc_dict = super(PolarArc, self).as_dict()
+        PolarArc_dict = super(PolarArc, self).as_dict(**kwargs)
         PolarArc_dict["angle"] = self.angle
         PolarArc_dict["height"] = self.height
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         PolarArc_dict["__class__"] = "PolarArc"
         return PolarArc_dict

@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .FluxLink import FluxLink
 
 # Import all class method
@@ -56,54 +60,35 @@ class FluxLinkFEMM(FluxLink):
         )
     else:
         solve_FEMM = solve_FEMM
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        FEMM_dict={},
+        FEMM_dict=-1,
         type_calc_leakage=0,
         is_sliding_band=True,
-        is_symmetry_a=False,
-        sym_a=1,
-        is_antiper_a=False,
+        is_periodicity_a=False,
         Nt_tot=5,
+        Kgeo_fineness=0.5,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            FEMM_dict = obj.FEMM_dict
-            type_calc_leakage = obj.type_calc_leakage
-            is_sliding_band = obj.is_sliding_band
-            is_symmetry_a = obj.is_symmetry_a
-            sym_a = obj.sym_a
-            is_antiper_a = obj.is_antiper_a
-            Nt_tot = obj.Nt_tot
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -113,29 +98,26 @@ class FluxLinkFEMM(FluxLink):
                 type_calc_leakage = init_dict["type_calc_leakage"]
             if "is_sliding_band" in list(init_dict.keys()):
                 is_sliding_band = init_dict["is_sliding_band"]
-            if "is_symmetry_a" in list(init_dict.keys()):
-                is_symmetry_a = init_dict["is_symmetry_a"]
-            if "sym_a" in list(init_dict.keys()):
-                sym_a = init_dict["sym_a"]
-            if "is_antiper_a" in list(init_dict.keys()):
-                is_antiper_a = init_dict["is_antiper_a"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
             if "Nt_tot" in list(init_dict.keys()):
                 Nt_tot = init_dict["Nt_tot"]
-        # Initialisation by argument
+            if "Kgeo_fineness" in list(init_dict.keys()):
+                Kgeo_fineness = init_dict["Kgeo_fineness"]
+        # Set the properties (value check and convertion are done in setter)
         self.FEMM_dict = FEMM_dict
         self.type_calc_leakage = type_calc_leakage
         self.is_sliding_band = is_sliding_band
-        self.is_symmetry_a = is_symmetry_a
-        self.sym_a = sym_a
-        self.is_antiper_a = is_antiper_a
+        self.is_periodicity_a = is_periodicity_a
         self.Nt_tot = Nt_tot
+        self.Kgeo_fineness = Kgeo_fineness
         # Call FluxLink init
         super(FluxLinkFEMM, self).__init__()
         # The class is frozen (in FluxLink init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         FluxLinkFEMM_str = ""
         # Get the properties inherited from FluxLink
@@ -145,10 +127,9 @@ class FluxLinkFEMM(FluxLink):
             "type_calc_leakage = " + str(self.type_calc_leakage) + linesep
         )
         FluxLinkFEMM_str += "is_sliding_band = " + str(self.is_sliding_band) + linesep
-        FluxLinkFEMM_str += "is_symmetry_a = " + str(self.is_symmetry_a) + linesep
-        FluxLinkFEMM_str += "sym_a = " + str(self.sym_a) + linesep
-        FluxLinkFEMM_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
+        FluxLinkFEMM_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
         FluxLinkFEMM_str += "Nt_tot = " + str(self.Nt_tot) + linesep
+        FluxLinkFEMM_str += "Kgeo_fineness = " + str(self.Kgeo_fineness) + linesep
         return FluxLinkFEMM_str
 
     def __eq__(self, other):
@@ -166,29 +147,72 @@ class FluxLinkFEMM(FluxLink):
             return False
         if other.is_sliding_band != self.is_sliding_band:
             return False
-        if other.is_symmetry_a != self.is_symmetry_a:
-            return False
-        if other.sym_a != self.sym_a:
-            return False
-        if other.is_antiper_a != self.is_antiper_a:
+        if other.is_periodicity_a != self.is_periodicity_a:
             return False
         if other.Nt_tot != self.Nt_tot:
             return False
+        if other.Kgeo_fineness != self.Kgeo_fineness:
+            return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from FluxLink
+        diff_list.extend(super(FluxLinkFEMM, self).compare(other, name=name))
+        if other._FEMM_dict != self._FEMM_dict:
+            diff_list.append(name + ".FEMM_dict")
+        if other._type_calc_leakage != self._type_calc_leakage:
+            diff_list.append(name + ".type_calc_leakage")
+        if other._is_sliding_band != self._is_sliding_band:
+            diff_list.append(name + ".is_sliding_band")
+        if other._is_periodicity_a != self._is_periodicity_a:
+            diff_list.append(name + ".is_periodicity_a")
+        if other._Nt_tot != self._Nt_tot:
+            diff_list.append(name + ".Nt_tot")
+        if other._Kgeo_fineness != self._Kgeo_fineness:
+            diff_list.append(name + ".Kgeo_fineness")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from FluxLink
+        S += super(FluxLinkFEMM, self).__sizeof__()
+        if self.FEMM_dict is not None:
+            for key, value in self.FEMM_dict.items():
+                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.type_calc_leakage)
+        S += getsizeof(self.is_sliding_band)
+        S += getsizeof(self.is_periodicity_a)
+        S += getsizeof(self.Nt_tot)
+        S += getsizeof(self.Kgeo_fineness)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from FluxLink
-        FluxLinkFEMM_dict = super(FluxLinkFEMM, self).as_dict()
-        FluxLinkFEMM_dict["FEMM_dict"] = self.FEMM_dict
+        FluxLinkFEMM_dict = super(FluxLinkFEMM, self).as_dict(**kwargs)
+        FluxLinkFEMM_dict["FEMM_dict"] = (
+            self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        )
         FluxLinkFEMM_dict["type_calc_leakage"] = self.type_calc_leakage
         FluxLinkFEMM_dict["is_sliding_band"] = self.is_sliding_band
-        FluxLinkFEMM_dict["is_symmetry_a"] = self.is_symmetry_a
-        FluxLinkFEMM_dict["sym_a"] = self.sym_a
-        FluxLinkFEMM_dict["is_antiper_a"] = self.is_antiper_a
+        FluxLinkFEMM_dict["is_periodicity_a"] = self.is_periodicity_a
         FluxLinkFEMM_dict["Nt_tot"] = self.Nt_tot
-        # The class name is added to the dict fordeserialisation purpose
+        FluxLinkFEMM_dict["Kgeo_fineness"] = self.Kgeo_fineness
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         FluxLinkFEMM_dict["__class__"] = "FluxLinkFEMM"
         return FluxLinkFEMM_dict
@@ -199,10 +223,9 @@ class FluxLinkFEMM(FluxLink):
         self.FEMM_dict = None
         self.type_calc_leakage = None
         self.is_sliding_band = None
-        self.is_symmetry_a = None
-        self.sym_a = None
-        self.is_antiper_a = None
+        self.is_periodicity_a = None
         self.Nt_tot = None
+        self.Kgeo_fineness = None
         # Set to None the properties inherited from FluxLink
         super(FluxLinkFEMM, self)._set_None()
 
@@ -212,6 +235,8 @@ class FluxLinkFEMM(FluxLink):
 
     def _set_FEMM_dict(self, value):
         """setter of FEMM_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 
@@ -262,56 +287,19 @@ class FluxLinkFEMM(FluxLink):
         """,
     )
 
-    def _get_is_symmetry_a(self):
-        """getter of is_symmetry_a"""
-        return self._is_symmetry_a
+    def _get_is_periodicity_a(self):
+        """getter of is_periodicity_a"""
+        return self._is_periodicity_a
 
-    def _set_is_symmetry_a(self, value):
-        """setter of is_symmetry_a"""
-        check_var("is_symmetry_a", value, "bool")
-        self._is_symmetry_a = value
+    def _set_is_periodicity_a(self, value):
+        """setter of is_periodicity_a"""
+        check_var("is_periodicity_a", value, "bool")
+        self._is_periodicity_a = value
 
-    is_symmetry_a = property(
-        fget=_get_is_symmetry_a,
-        fset=_set_is_symmetry_a,
-        doc=u"""0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a
-
-        :Type: bool
-        """,
-    )
-
-    def _get_sym_a(self):
-        """getter of sym_a"""
-        return self._sym_a
-
-    def _set_sym_a(self, value):
-        """setter of sym_a"""
-        check_var("sym_a", value, "int", Vmin=1)
-        self._sym_a = value
-
-    sym_a = property(
-        fget=_get_sym_a,
-        fset=_set_sym_a,
-        doc=u"""Number of symmetry for the angle vector
-
-        :Type: int
-        :min: 1
-        """,
-    )
-
-    def _get_is_antiper_a(self):
-        """getter of is_antiper_a"""
-        return self._is_antiper_a
-
-    def _set_is_antiper_a(self, value):
-        """setter of is_antiper_a"""
-        check_var("is_antiper_a", value, "bool")
-        self._is_antiper_a = value
-
-    is_antiper_a = property(
-        fget=_get_is_antiper_a,
-        fset=_set_is_antiper_a,
-        doc=u"""To add an antiperiodicity to the angle vector
+    is_periodicity_a = property(
+        fget=_get_is_periodicity_a,
+        fset=_set_is_periodicity_a,
+        doc=u"""True to take into account the spatial periodicity of the machine
 
         :Type: bool
         """,
@@ -332,5 +320,23 @@ class FluxLinkFEMM(FluxLink):
         doc=u"""Number of time steps for the FEMM simulation
 
         :Type: int
+        """,
+    )
+
+    def _get_Kgeo_fineness(self):
+        """getter of Kgeo_fineness"""
+        return self._Kgeo_fineness
+
+    def _set_Kgeo_fineness(self, value):
+        """setter of Kgeo_fineness"""
+        check_var("Kgeo_fineness", value, "float")
+        self._Kgeo_fineness = value
+
+    Kgeo_fineness = property(
+        fget=_get_Kgeo_fineness,
+        fset=_set_Kgeo_fineness,
+        doc=u"""global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)
+
+        :Type: float
         """,
     )

@@ -1,47 +1,47 @@
 # -*- coding: utf-8 -*-
 
-from os import remove, getcwd
+from os import getcwd, remove
 from os.path import isfile, join
-import pytest
 from unittest.mock import patch  # for unittest of input
 
-from numpy import ones, pi, array
-
+import pytest
+from numpy import array, ones, pi
+from pyleecan.Classes._check import InitUnKnowClassError
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
-from pyleecan.Classes.MagnetType11 import MagnetType11
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Classes.SlotW10 import SlotW10
-from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Classes.Shaft import Shaft
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-
+from pyleecan.Classes.PostFunction import PostFunction
+from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
-
-from Tests import TEST_DATA_DIR, save_load_path as save_path, x as logger
+from pyleecan.Classes.SlotM11 import SlotM11
+from pyleecan.Classes.SlotW10 import SlotW10
+from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Functions.load import (
-    load,
-    load_list,
-    load_dict,
+    LoadSwitchError,
     LoadWrongDictClassError,
     LoadWrongTypeError,
-    LoadSwitchError,
+    load,
+    load_dict,
+    load_list,
 )
-from pyleecan.Functions.Save.save_json import save_json
 from pyleecan.Functions.Load.load_json import LoadMissingFileError
+from pyleecan.Functions.Save.save_json import save_json
+from Tests import TEST_DATA_DIR
+from Tests import save_load_path as save_path
+from Tests import x as logger
+
+from pyleecan.definitions import DATA_DIR
 
 load_file_1 = join(TEST_DATA_DIR, "test_wrong_slot_load_1.json")
 load_file_2 = join(TEST_DATA_DIR, "test_wrong_slot_load_2.json")
-load_file_3 = join(TEST_DATA_DIR, "test_wrong_slot_load_3.json")
 logger.info(save_path)
 
-"""test for save and load fonctions"""
+"""test for save and load functions"""
 
 
 def test_save_load_machine():
@@ -52,8 +52,7 @@ def test_save_load_machine():
     test_obj.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
     test_obj.stator.winding = WindingDW1L(qs=5)
     test_obj.rotor = LamSlotMag(L1=0.55)
-    test_obj.rotor.slot = SlotMPolar(W0=pi / 4)
-    test_obj.rotor.slot.magnet = [MagnetType11(Wmag=pi / 4, Hmag=3)]
+    test_obj.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
     test_obj.shaft = Shaft(Lshaft=0.65)
     test_obj.frame = None
 
@@ -85,14 +84,11 @@ def test_save_load_machine():
     assert type(result.rotor) is LamSlotMag
     assert result.rotor.L1 == 0.55
 
-    assert type(result.rotor.slot) is SlotMPolar
+    assert type(result.rotor.slot) is SlotM11
     assert result.rotor.slot.W0 == pi / 4
-    assert type(result.rotor.slot.magnet) is list
 
-    assert type(result.rotor.slot.magnet[0]) is MagnetType11
-    assert len(result.rotor.slot.magnet) == 1
-    assert result.rotor.slot.magnet[0].Wmag == pi / 4
-    assert result.rotor.slot.magnet[0].Hmag == 3
+    assert result.rotor.slot.Wmag == pi / 4
+    assert result.rotor.slot.Hmag == 3
 
     assert type(result.shaft) is Shaft
     assert result.shaft.Lshaft == 0.65
@@ -100,9 +96,14 @@ def test_save_load_machine():
     assert result.frame == None
 
 
+@pytest.mark.IPMSM
+@pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_save_load_folder_path():
     """Save with a folder path"""
-    simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="test_save_load_folder_path", machine=Toyota_Prius, struct=None)
 
     # Definition of the enforced output of the electrical module
     N0 = 3000
@@ -117,12 +118,19 @@ def test_save_load_folder_path():
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
+        rot_dir=-1,
     )
 
     # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=0, is_sliding_band=False)
+    simu.mag = MagFEMM(
+        type_BH_stator=2, type_BH_rotor=0, is_periodicity_a=True, is_sliding_band=False
+    )
     simu.force = None
     simu.struct = None
+
+    post1 = PostFunction(run="lambda x:x+2")
+    post2 = PostFunction(run=join(TEST_DATA_DIR, "example_post.py"))
+    simu.postproc_list = [post1, post2]
 
     test_obj = Output(simu=simu)
     test_obj.post.legend_name = "Slotless lamination"
@@ -140,10 +148,12 @@ def test_save_load_folder_path():
     assert isfile(file_path)
     assert isfile(join(loc_save_path, "Material.json"))
     assert isfile(join(loc_save_path, "M400-50A.json"))
-    assert isfile(join(loc_save_path, "CEFC_Lam.json"))
-    assert isfile(join(loc_save_path, "SM_CEFC_001.json"))
+    assert isfile(join(loc_save_path, "Toyota_Prius.json"))
+    assert isfile(join(loc_save_path, "test_save_load_folder_path.json"))
     test_obj2 = load(loc_save_path)
     assert test_obj == test_obj2
+    assert callable(test_obj.simu.postproc_list[0]._run_func)
+    assert callable(test_obj.simu.postproc_list[1]._run_func)
 
 
 def test_save_load_just_name():
@@ -158,7 +168,7 @@ def test_save_load_just_name():
     test_obj.save("test_slot")
     assert isfile(file_path)
 
-    result = load("test_slot")
+    result = load("test_slot.json")
     assert type(result) is SlotW10
     assert result.Zs == 10
     # remove(file_path)
@@ -173,11 +183,7 @@ def test_load_error_missing():
 def test_load_error_wrong_type():
     """Test that the load function can detect wrong type"""
     with pytest.raises(LoadWrongTypeError):
-        load(load_file_3)
-    with pytest.raises(LoadWrongTypeError):
         load_list(load_file_2)
-    with pytest.raises(LoadWrongTypeError):
-        load_dict(load_file_3)
 
 
 def test_load_error_missing_class():
@@ -191,18 +197,12 @@ def test_load_error_missing_class():
 def test_load_error_wrong_class():
     """Test that the load function can detect wrong __class__"""
     with pytest.raises(
-        LoadWrongDictClassError, match="SlotDoesntExist is not a pyleecan class"
+        InitUnKnowClassError, match="Unknow class name SlotDoesntExist when loading"
     ):
         load(load_file_2)
 
 
-@patch.dict("pyleecan.Functions.load_switch.load_switch", {"list": None})
-def test_load_switch():
-    """Test that the load function can detect wrong load_switch dict"""
-    with pytest.raises(LoadSwitchError):
-        load_list(load_file_3)
-
-
+@pytest.mark.skip
 def test_save_load_list():
     """Test the save and load function of data structures"""
     # SetUp
@@ -211,8 +211,7 @@ def test_save_load_list():
     test_obj_1.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
     test_obj_1.stator.winding = WindingDW1L(qs=5)
     test_obj_1.rotor = LamSlotMag(L1=0.55)
-    test_obj_1.rotor.slot = SlotMPolar(W0=pi / 4)
-    test_obj_1.rotor.slot.magnet = [MagnetType11(Wmag=pi / 4, Hmag=3)]
+    test_obj_1.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
     test_obj_1.shaft = Shaft(Lshaft=0.65)
     test_obj_1.frame = None
 
@@ -243,6 +242,7 @@ def test_save_load_list():
     assert result_list == test_list
 
 
+@pytest.mark.skip
 def test_save_load_dict():
     """Test the save and load function of data structures"""
     # SetUp
@@ -251,8 +251,7 @@ def test_save_load_dict():
     test_obj_1.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
     test_obj_1.stator.winding = WindingDW1L(qs=5)
     test_obj_1.rotor = LamSlotMag(L1=0.55)
-    test_obj_1.rotor.slot = SlotMPolar(W0=pi / 4)
-    test_obj_1.rotor.slot.magnet = [MagnetType11(Wmag=pi / 4, Hmag=3)]
+    test_obj_1.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
     test_obj_1.shaft = Shaft(Lshaft=0.65)
     test_obj_1.frame = None
 
@@ -283,12 +282,16 @@ def test_save_load_dict():
     assert result_dict == test_dict
 
 
-@pytest.mark.long
+@pytest.mark.MagFEMM
 @pytest.mark.FEMM
+@pytest.mark.IPMSM
+@pytest.mark.SingleOP
+@pytest.mark.periodicity
 @pytest.mark.parametrize("type_file", ["json", "h5", "pkl"])
 def test_save_load_simu(type_file):
     """Save in hdf5 file"""
-    simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="test_save_load_simu", machine=Toyota_Prius, struct=None)
 
     # Definition of the enforced output of the electrical module
     N0 = 3000
@@ -303,10 +306,13 @@ def test_save_load_simu(type_file):
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
+        rot_dir=-1,
     )
 
     # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=0, is_sliding_band=False)
+    simu.mag = MagFEMM(
+        type_BH_stator=2, type_BH_rotor=0, is_periodicity_a=True, is_sliding_band=False
+    )
     simu.force = None
     simu.struct = None
 

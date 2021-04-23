@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
 from .....Classes.SlotW10 import SlotW10
-from .....Classes.SlotWind import SlotWind
+from .....Classes.Slot import Slot
 from .....GUI.Dialog.DMachineSetup.SWSlot.Gen_SWSlot import Gen_SWSlot
+from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.PWSlotUD import PWSlotUD
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot10.PWSlot10 import PWSlot10
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.PWSlot11 import PWSlot11
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot12.PWSlot12 import PWSlot12
@@ -44,6 +45,7 @@ WIDGET_LIST = [
     PWSlot27,
     PWSlot28,
     PWSlot29,
+    PWSlotUD,
 ]
 INIT_INDEX = [wid.slot_type for wid in WIDGET_LIST]
 SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]
@@ -53,7 +55,7 @@ class SWSlot(Gen_SWSlot, QWidget):
     """Step to set the slot with winding"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup nav
     step_name = "Slot"
 
@@ -81,8 +83,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         self.matlib = matlib
         self.is_stator = is_stator
 
-        self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
-        self.b_help.url += "how-to-set-up-the-slots"
+        self.b_help.hide()
 
         # Fill the combobox with the available slot
         self.c_slot_type.clear()
@@ -99,7 +100,7 @@ class SWSlot(Gen_SWSlot, QWidget):
             self.obj = machine.rotor
 
         # If the Slot is not set, initialize it with a 1_0
-        if self.obj.slot is None or type(self.obj.slot) in [SlotWind, Slot]:
+        if self.obj.slot is None or type(self.obj.slot) is Slot:
             self.obj.slot = SlotW10()
             self.obj.slot._set_None()
 
@@ -197,9 +198,9 @@ class SWSlot(Gen_SWSlot, QWidget):
             self.out_Slot_pitch.setText(
                 sp_txt
                 + "%.4g" % (Slot_pitch)
-                + u" ° ("
+                + u" [°] ("
                 + "%.4g" % (Slot_pitch_rad)
-                + " rad)"
+                + " [rad])"
             )
 
     def s_update_slot(self):
@@ -241,7 +242,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         self : SWSlot
             A SWSlot object
         """
-        # We have to make sure the slot is right before truing to plot it
+        # We have to make sure the slot is right before trying to plot it
         error = self.check(self.obj)
 
         if error:  # Error => Display it

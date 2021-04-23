@@ -5,11 +5,15 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from .SlotWind import SlotWind
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
+from .Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -19,9 +23,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotCirc.build_geometry_wind import build_geometry_wind
+    from ..Methods.Slot.SlotCirc.get_surface_active import get_surface_active
 except ImportError as error:
-    build_geometry_wind = error
+    get_surface_active = error
 
 try:
     from ..Methods.Slot.SlotCirc.check import check
@@ -39,9 +43,9 @@ except ImportError as error:
     comp_height = error
 
 try:
-    from ..Methods.Slot.SlotCirc.comp_height_wind import comp_height_wind
+    from ..Methods.Slot.SlotCirc.comp_height_active import comp_height_active
 except ImportError as error:
-    comp_height_wind = error
+    comp_height_active = error
 
 try:
     from ..Methods.Slot.SlotCirc.comp_surface import comp_surface
@@ -49,15 +53,15 @@ except ImportError as error:
     comp_surface = error
 
 try:
-    from ..Methods.Slot.SlotCirc.comp_surface_wind import comp_surface_wind
+    from ..Methods.Slot.SlotCirc.comp_surface_active import comp_surface_active
 except ImportError as error:
-    comp_surface_wind = error
+    comp_surface_active = error
 
 
 from ._check import InitUnKnowClassError
 
 
-class SlotCirc(SlotWind):
+class SlotCirc(Slot):
     """Circular slot (for notches)"""
 
     VERSION = 1
@@ -75,18 +79,18 @@ class SlotCirc(SlotWind):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotCirc.build_geometry_wind
-    if isinstance(build_geometry_wind, ImportError):
-        build_geometry_wind = property(
+    # cf Methods.Slot.SlotCirc.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotCirc method build_geometry_wind: "
-                    + str(build_geometry_wind)
+                    "Can't use SlotCirc method get_surface_active: "
+                    + str(get_surface_active)
                 )
             )
         )
     else:
-        build_geometry_wind = build_geometry_wind
+        get_surface_active = get_surface_active
     # cf Methods.Slot.SlotCirc.check
     if isinstance(check, ImportError):
         check = property(
@@ -119,18 +123,18 @@ class SlotCirc(SlotWind):
         )
     else:
         comp_height = comp_height
-    # cf Methods.Slot.SlotCirc.comp_height_wind
-    if isinstance(comp_height_wind, ImportError):
-        comp_height_wind = property(
+    # cf Methods.Slot.SlotCirc.comp_height_active
+    if isinstance(comp_height_active, ImportError):
+        comp_height_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotCirc method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotCirc method comp_height_active: "
+                    + str(comp_height_active)
                 )
             )
         )
     else:
-        comp_height_wind = comp_height_wind
+        comp_height_active = comp_height_active
     # cf Methods.Slot.SlotCirc.comp_surface
     if isinstance(comp_surface, ImportError):
         comp_surface = property(
@@ -142,51 +146,37 @@ class SlotCirc(SlotWind):
         )
     else:
         comp_surface = comp_surface
-    # cf Methods.Slot.SlotCirc.comp_surface_wind
-    if isinstance(comp_surface_wind, ImportError):
-        comp_surface_wind = property(
+    # cf Methods.Slot.SlotCirc.comp_surface_active
+    if isinstance(comp_surface_active, ImportError):
+        comp_surface_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotCirc method comp_surface_wind: "
-                    + str(comp_surface_wind)
+                    "Can't use SlotCirc method comp_surface_active: "
+                    + str(comp_surface_active)
                 )
             )
         )
     else:
-        comp_surface_wind = comp_surface_wind
-    # save method is available in all object
+        comp_surface_active = comp_surface_active
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(self, W0=0.01, H0=0.03, Zs=36, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            W0 = obj.W0
-            H0 = obj.H0
-            Zs = obj.Zs
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -196,19 +186,19 @@ class SlotCirc(SlotWind):
                 H0 = init_dict["H0"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
-        # Call SlotWind init
+        # Call Slot init
         super(SlotCirc, self).__init__(Zs=Zs)
-        # The class is frozen (in SlotWind init), for now it's impossible to
+        # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         SlotCirc_str = ""
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotCirc_str += super(SlotCirc, self).__str__()
         SlotCirc_str += "W0 = " + str(self.W0) + linesep
         SlotCirc_str += "H0 = " + str(self.H0) + linesep
@@ -220,7 +210,7 @@ class SlotCirc(SlotWind):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from SlotWind
+        # Check the properties inherited from Slot
         if not super(SlotCirc, self).__eq__(other):
             return False
         if other.W0 != self.W0:
@@ -229,14 +219,44 @@ class SlotCirc(SlotWind):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
 
-        # Get the properties inherited from SlotWind
-        SlotCirc_dict = super(SlotCirc, self).as_dict()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Slot
+        diff_list.extend(super(SlotCirc, self).compare(other, name=name))
+        if other._W0 != self._W0:
+            diff_list.append(name + ".W0")
+        if other._H0 != self._H0:
+            diff_list.append(name + ".H0")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Slot
+        S += super(SlotCirc, self).__sizeof__()
+        S += getsizeof(self.W0)
+        S += getsizeof(self.H0)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
+
+        # Get the properties inherited from Slot
+        SlotCirc_dict = super(SlotCirc, self).as_dict(**kwargs)
         SlotCirc_dict["W0"] = self.W0
         SlotCirc_dict["H0"] = self.H0
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotCirc_dict["__class__"] = "SlotCirc"
         return SlotCirc_dict
@@ -246,7 +266,7 @@ class SlotCirc(SlotWind):
 
         self.W0 = None
         self.H0 = None
-        # Set to None the properties inherited from SlotWind
+        # Set to None the properties inherited from Slot
         super(SlotCirc, self)._set_None()
 
     def _get_W0(self):

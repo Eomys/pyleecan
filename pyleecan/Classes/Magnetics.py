@@ -5,10 +5,14 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -19,14 +23,9 @@ except ImportError as error:
     run = error
 
 try:
-    from ..Methods.Simulation.Magnetics.comp_time_angle import comp_time_angle
+    from ..Methods.Simulation.Magnetics.comp_axes import comp_axes
 except ImportError as error:
-    comp_time_angle = error
-
-try:
-    from ..Methods.Simulation.Magnetics.comp_emf import comp_emf
-except ImportError as error:
-    comp_emf = error
+    comp_axes = error
 
 
 from ._check import InitUnKnowClassError
@@ -47,35 +46,18 @@ class Magnetics(FrozenClass):
         )
     else:
         run = run
-    # cf Methods.Simulation.Magnetics.comp_time_angle
-    if isinstance(comp_time_angle, ImportError):
-        comp_time_angle = property(
+    # cf Methods.Simulation.Magnetics.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Magnetics method comp_time_angle: "
-                    + str(comp_time_angle)
-                )
+                ImportError("Can't use Magnetics method comp_axes: " + str(comp_axes))
             )
         )
     else:
-        comp_time_angle = comp_time_angle
-    # cf Methods.Simulation.Magnetics.comp_emf
-    if isinstance(comp_emf, ImportError):
-        comp_emf = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Magnetics method comp_emf: " + str(comp_emf))
-            )
-        )
-    else:
-        comp_emf = comp_emf
-    # save method is available in all object
+        comp_axes = comp_axes
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -88,46 +70,26 @@ class Magnetics(FrozenClass):
         is_mmfr=True,
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_symmetry_t=False,
-        sym_t=1,
-        is_antiper_t=False,
-        is_symmetry_a=False,
-        sym_a=1,
-        is_antiper_a=False,
+        is_periodicity_t=False,
+        is_periodicity_a=False,
+        angle_stator_shift=0,
+        angle_rotor_shift=0,
+        logger_name="Pyleecan.Magnetics",
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            is_remove_slotS = obj.is_remove_slotS
-            is_remove_slotR = obj.is_remove_slotR
-            is_remove_vent = obj.is_remove_vent
-            is_mmfs = obj.is_mmfs
-            is_mmfr = obj.is_mmfr
-            type_BH_stator = obj.type_BH_stator
-            type_BH_rotor = obj.type_BH_rotor
-            is_symmetry_t = obj.is_symmetry_t
-            sym_t = obj.sym_t
-            is_antiper_t = obj.is_antiper_t
-            is_symmetry_a = obj.is_symmetry_a
-            sym_a = obj.sym_a
-            is_antiper_a = obj.is_antiper_a
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -145,19 +107,17 @@ class Magnetics(FrozenClass):
                 type_BH_stator = init_dict["type_BH_stator"]
             if "type_BH_rotor" in list(init_dict.keys()):
                 type_BH_rotor = init_dict["type_BH_rotor"]
-            if "is_symmetry_t" in list(init_dict.keys()):
-                is_symmetry_t = init_dict["is_symmetry_t"]
-            if "sym_t" in list(init_dict.keys()):
-                sym_t = init_dict["sym_t"]
-            if "is_antiper_t" in list(init_dict.keys()):
-                is_antiper_t = init_dict["is_antiper_t"]
-            if "is_symmetry_a" in list(init_dict.keys()):
-                is_symmetry_a = init_dict["is_symmetry_a"]
-            if "sym_a" in list(init_dict.keys()):
-                sym_a = init_dict["sym_a"]
-            if "is_antiper_a" in list(init_dict.keys()):
-                is_antiper_a = init_dict["is_antiper_a"]
-        # Initialisation by argument
+            if "is_periodicity_t" in list(init_dict.keys()):
+                is_periodicity_t = init_dict["is_periodicity_t"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
+            if "angle_stator_shift" in list(init_dict.keys()):
+                angle_stator_shift = init_dict["angle_stator_shift"]
+            if "angle_rotor_shift" in list(init_dict.keys()):
+                angle_rotor_shift = init_dict["angle_rotor_shift"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
         self.is_remove_slotR = is_remove_slotR
@@ -166,18 +126,17 @@ class Magnetics(FrozenClass):
         self.is_mmfr = is_mmfr
         self.type_BH_stator = type_BH_stator
         self.type_BH_rotor = type_BH_rotor
-        self.is_symmetry_t = is_symmetry_t
-        self.sym_t = sym_t
-        self.is_antiper_t = is_antiper_t
-        self.is_symmetry_a = is_symmetry_a
-        self.sym_a = sym_a
-        self.is_antiper_a = is_antiper_a
+        self.is_periodicity_t = is_periodicity_t
+        self.is_periodicity_a = is_periodicity_a
+        self.angle_stator_shift = angle_stator_shift
+        self.angle_rotor_shift = angle_rotor_shift
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Magnetics_str = ""
         if self.parent is None:
@@ -191,12 +150,13 @@ class Magnetics(FrozenClass):
         Magnetics_str += "is_mmfr = " + str(self.is_mmfr) + linesep
         Magnetics_str += "type_BH_stator = " + str(self.type_BH_stator) + linesep
         Magnetics_str += "type_BH_rotor = " + str(self.type_BH_rotor) + linesep
-        Magnetics_str += "is_symmetry_t = " + str(self.is_symmetry_t) + linesep
-        Magnetics_str += "sym_t = " + str(self.sym_t) + linesep
-        Magnetics_str += "is_antiper_t = " + str(self.is_antiper_t) + linesep
-        Magnetics_str += "is_symmetry_a = " + str(self.is_symmetry_a) + linesep
-        Magnetics_str += "sym_a = " + str(self.sym_a) + linesep
-        Magnetics_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
+        Magnetics_str += "is_periodicity_t = " + str(self.is_periodicity_t) + linesep
+        Magnetics_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
+        Magnetics_str += (
+            "angle_stator_shift = " + str(self.angle_stator_shift) + linesep
+        )
+        Magnetics_str += "angle_rotor_shift = " + str(self.angle_rotor_shift) + linesep
+        Magnetics_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return Magnetics_str
 
     def __eq__(self, other):
@@ -218,22 +178,74 @@ class Magnetics(FrozenClass):
             return False
         if other.type_BH_rotor != self.type_BH_rotor:
             return False
-        if other.is_symmetry_t != self.is_symmetry_t:
+        if other.is_periodicity_t != self.is_periodicity_t:
             return False
-        if other.sym_t != self.sym_t:
+        if other.is_periodicity_a != self.is_periodicity_a:
             return False
-        if other.is_antiper_t != self.is_antiper_t:
+        if other.angle_stator_shift != self.angle_stator_shift:
             return False
-        if other.is_symmetry_a != self.is_symmetry_a:
+        if other.angle_rotor_shift != self.angle_rotor_shift:
             return False
-        if other.sym_a != self.sym_a:
-            return False
-        if other.is_antiper_a != self.is_antiper_a:
+        if other.logger_name != self.logger_name:
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._is_remove_slotS != self._is_remove_slotS:
+            diff_list.append(name + ".is_remove_slotS")
+        if other._is_remove_slotR != self._is_remove_slotR:
+            diff_list.append(name + ".is_remove_slotR")
+        if other._is_remove_vent != self._is_remove_vent:
+            diff_list.append(name + ".is_remove_vent")
+        if other._is_mmfs != self._is_mmfs:
+            diff_list.append(name + ".is_mmfs")
+        if other._is_mmfr != self._is_mmfr:
+            diff_list.append(name + ".is_mmfr")
+        if other._type_BH_stator != self._type_BH_stator:
+            diff_list.append(name + ".type_BH_stator")
+        if other._type_BH_rotor != self._type_BH_rotor:
+            diff_list.append(name + ".type_BH_rotor")
+        if other._is_periodicity_t != self._is_periodicity_t:
+            diff_list.append(name + ".is_periodicity_t")
+        if other._is_periodicity_a != self._is_periodicity_a:
+            diff_list.append(name + ".is_periodicity_a")
+        if other._angle_stator_shift != self._angle_stator_shift:
+            diff_list.append(name + ".angle_stator_shift")
+        if other._angle_rotor_shift != self._angle_rotor_shift:
+            diff_list.append(name + ".angle_rotor_shift")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.is_remove_slotS)
+        S += getsizeof(self.is_remove_slotR)
+        S += getsizeof(self.is_remove_vent)
+        S += getsizeof(self.is_mmfs)
+        S += getsizeof(self.is_mmfr)
+        S += getsizeof(self.type_BH_stator)
+        S += getsizeof(self.type_BH_rotor)
+        S += getsizeof(self.is_periodicity_t)
+        S += getsizeof(self.is_periodicity_a)
+        S += getsizeof(self.angle_stator_shift)
+        S += getsizeof(self.angle_rotor_shift)
+        S += getsizeof(self.logger_name)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Magnetics_dict = dict()
         Magnetics_dict["is_remove_slotS"] = self.is_remove_slotS
@@ -243,13 +255,12 @@ class Magnetics(FrozenClass):
         Magnetics_dict["is_mmfr"] = self.is_mmfr
         Magnetics_dict["type_BH_stator"] = self.type_BH_stator
         Magnetics_dict["type_BH_rotor"] = self.type_BH_rotor
-        Magnetics_dict["is_symmetry_t"] = self.is_symmetry_t
-        Magnetics_dict["sym_t"] = self.sym_t
-        Magnetics_dict["is_antiper_t"] = self.is_antiper_t
-        Magnetics_dict["is_symmetry_a"] = self.is_symmetry_a
-        Magnetics_dict["sym_a"] = self.sym_a
-        Magnetics_dict["is_antiper_a"] = self.is_antiper_a
-        # The class name is added to the dict fordeserialisation purpose
+        Magnetics_dict["is_periodicity_t"] = self.is_periodicity_t
+        Magnetics_dict["is_periodicity_a"] = self.is_periodicity_a
+        Magnetics_dict["angle_stator_shift"] = self.angle_stator_shift
+        Magnetics_dict["angle_rotor_shift"] = self.angle_rotor_shift
+        Magnetics_dict["logger_name"] = self.logger_name
+        # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
 
@@ -263,12 +274,11 @@ class Magnetics(FrozenClass):
         self.is_mmfr = None
         self.type_BH_stator = None
         self.type_BH_rotor = None
-        self.is_symmetry_t = None
-        self.sym_t = None
-        self.is_antiper_t = None
-        self.is_symmetry_a = None
-        self.sym_a = None
-        self.is_antiper_a = None
+        self.is_periodicity_t = None
+        self.is_periodicity_a = None
+        self.angle_stator_shift = None
+        self.angle_rotor_shift = None
+        self.logger_name = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -400,112 +410,92 @@ class Magnetics(FrozenClass):
         """,
     )
 
-    def _get_is_symmetry_t(self):
-        """getter of is_symmetry_t"""
-        return self._is_symmetry_t
+    def _get_is_periodicity_t(self):
+        """getter of is_periodicity_t"""
+        return self._is_periodicity_t
 
-    def _set_is_symmetry_t(self, value):
-        """setter of is_symmetry_t"""
-        check_var("is_symmetry_t", value, "bool")
-        self._is_symmetry_t = value
+    def _set_is_periodicity_t(self, value):
+        """setter of is_periodicity_t"""
+        check_var("is_periodicity_t", value, "bool")
+        self._is_periodicity_t = value
 
-    is_symmetry_t = property(
-        fget=_get_is_symmetry_t,
-        fset=_set_is_symmetry_t,
-        doc=u"""0 Compute on the complete time vector, 1 compute according to sym_t and is_antiper_t
-
-        :Type: bool
-        """,
-    )
-
-    def _get_sym_t(self):
-        """getter of sym_t"""
-        return self._sym_t
-
-    def _set_sym_t(self, value):
-        """setter of sym_t"""
-        check_var("sym_t", value, "int", Vmin=1)
-        self._sym_t = value
-
-    sym_t = property(
-        fget=_get_sym_t,
-        fset=_set_sym_t,
-        doc=u"""Number of symmetry for the time vector
-
-        :Type: int
-        :min: 1
-        """,
-    )
-
-    def _get_is_antiper_t(self):
-        """getter of is_antiper_t"""
-        return self._is_antiper_t
-
-    def _set_is_antiper_t(self, value):
-        """setter of is_antiper_t"""
-        check_var("is_antiper_t", value, "bool")
-        self._is_antiper_t = value
-
-    is_antiper_t = property(
-        fget=_get_is_antiper_t,
-        fset=_set_is_antiper_t,
-        doc=u"""To add an antiperiodicity to the time vector
+    is_periodicity_t = property(
+        fget=_get_is_periodicity_t,
+        fset=_set_is_periodicity_t,
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.mag.Time)
 
         :Type: bool
         """,
     )
 
-    def _get_is_symmetry_a(self):
-        """getter of is_symmetry_a"""
-        return self._is_symmetry_a
+    def _get_is_periodicity_a(self):
+        """getter of is_periodicity_a"""
+        return self._is_periodicity_a
 
-    def _set_is_symmetry_a(self, value):
-        """setter of is_symmetry_a"""
-        check_var("is_symmetry_a", value, "bool")
-        self._is_symmetry_a = value
+    def _set_is_periodicity_a(self, value):
+        """setter of is_periodicity_a"""
+        check_var("is_periodicity_a", value, "bool")
+        self._is_periodicity_a = value
 
-    is_symmetry_a = property(
-        fget=_get_is_symmetry_a,
-        fset=_set_is_symmetry_a,
-        doc=u"""0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a
+    is_periodicity_a = property(
+        fget=_get_is_periodicity_a,
+        fset=_set_is_periodicity_a,
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)
 
         :Type: bool
         """,
     )
 
-    def _get_sym_a(self):
-        """getter of sym_a"""
-        return self._sym_a
+    def _get_angle_stator_shift(self):
+        """getter of angle_stator_shift"""
+        return self._angle_stator_shift
 
-    def _set_sym_a(self, value):
-        """setter of sym_a"""
-        check_var("sym_a", value, "int", Vmin=1)
-        self._sym_a = value
+    def _set_angle_stator_shift(self, value):
+        """setter of angle_stator_shift"""
+        check_var("angle_stator_shift", value, "float")
+        self._angle_stator_shift = value
 
-    sym_a = property(
-        fget=_get_sym_a,
-        fset=_set_sym_a,
-        doc=u"""Number of symmetry for the angle vector
+    angle_stator_shift = property(
+        fget=_get_angle_stator_shift,
+        fset=_set_angle_stator_shift,
+        doc=u"""Shift angle to appy to the stator in magnetic model
 
-        :Type: int
-        :min: 1
+        :Type: float
         """,
     )
 
-    def _get_is_antiper_a(self):
-        """getter of is_antiper_a"""
-        return self._is_antiper_a
+    def _get_angle_rotor_shift(self):
+        """getter of angle_rotor_shift"""
+        return self._angle_rotor_shift
 
-    def _set_is_antiper_a(self, value):
-        """setter of is_antiper_a"""
-        check_var("is_antiper_a", value, "bool")
-        self._is_antiper_a = value
+    def _set_angle_rotor_shift(self, value):
+        """setter of angle_rotor_shift"""
+        check_var("angle_rotor_shift", value, "float")
+        self._angle_rotor_shift = value
 
-    is_antiper_a = property(
-        fget=_get_is_antiper_a,
-        fset=_set_is_antiper_a,
-        doc=u"""To add an antiperiodicity to the angle vector
+    angle_rotor_shift = property(
+        fget=_get_angle_rotor_shift,
+        fset=_set_angle_rotor_shift,
+        doc=u"""Shift angle to appy to the rotor in magnetic model
 
-        :Type: bool
+        :Type: float
+        """,
+    )
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    logger_name = property(
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use
+
+        :Type: str
         """,
     )

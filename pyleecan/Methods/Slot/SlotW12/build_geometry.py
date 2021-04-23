@@ -8,13 +8,13 @@ from ....Classes.Segment import Segment
 
 def build_geometry(self):
     """Compute the curve (Line) needed to plot the object.
-    The ending point of a curve is the starting point of the next curve in
-    the list
+    The ending point of a curve is the starting point of the next curve
+    in the list
 
     Parameters
     ----------
     self : SlotW12
-        A SlotW12	object
+        A SlotW12 object
 
     Returns
     -------
@@ -23,31 +23,20 @@ def build_geometry(self):
 
     """
 
-    Rbo = self.get_Rbo()
-
-    # alpha is the angle to rotate Z0 so ||Z1,Z8|| = 2*R2
-    alpha = float(arcsin(self.R2 / Rbo))
-
-    # comp point coordinate (in complex)
-    Z0 = Rbo * exp(1j * 0)
-    Z1 = Z0 * exp(-1j * alpha)
-
     if self.is_outwards():
-        Z2 = Z1 + self.H0
-        Z3 = Z2 + self.R1 * 2
-        Z4 = Z3 + self.H1
         rot_sign = True
     else:  # inward slot
-        Z2 = Z1 - self.H0
-        Z3 = Z2 - self.R1 * 2
-        Z4 = Z3 - self.H1
         rot_sign = False
 
-    # symetry
-    Z5 = Z4.conjugate()
-    Z6 = Z3.conjugate()
-    Z7 = Z2.conjugate()
-    Z8 = Z1.conjugate()
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    Z7 = point_dict["Z7"]
+    Z8 = point_dict["Z8"]
 
     # Creation of curve
     curve_list = list()

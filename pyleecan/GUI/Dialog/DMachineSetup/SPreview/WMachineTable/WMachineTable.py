@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem
+from PySide2.QtWidgets import QWidget, QTableWidgetItem
 from ......GUI.Dialog.DMachineSetup.SPreview.WMachineTable.Ui_WMachineTable import (
     Ui_WMachineTable,
 )
@@ -27,6 +27,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
 
         # Connect the widget
         self.b_mmf.clicked.connect(self.plot_mmf)
+        self.b_plot_machine.clicked.connect(self.plot_machine)
 
     def update_tab(self, machine):
         """Update the table to match the machine
@@ -63,7 +64,9 @@ class WMachineTable(Ui_WMachineTable, QWidget):
     def plot_mmf(self):
         """Plot the unit mmf of the stator"""
         if self.machine is not None:
-            fig, axes = plt.subplots()
-            axes.set_visible(False)
-            self.machine.stator.plot_mmf_unit(fig=fig)
-            fig.show()
+            self.machine.stator.plot_mmf_unit(is_show_fig=True)
+
+    def plot_machine(self):
+        """Plot the machine"""
+        if self.machine is not None:
+            self.machine.plot()

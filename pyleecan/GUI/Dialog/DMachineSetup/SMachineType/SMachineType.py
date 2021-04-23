@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import Gen_SMachineType
 from .....Classes.Winding import Winding
@@ -16,7 +16,7 @@ class SMachineType(Gen_SMachineType, QWidget):
     """First Step to setup the Machine Type"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for the DMachineSetup nav
     step_name = "Machine Type"
 
@@ -57,8 +57,6 @@ class SMachineType(Gen_SMachineType, QWidget):
         )
         # Update the GUI to the current machine type
         index = self.mach_index.index(type(self.machine))
-        if self.machine.type_machine == 7:
-            index += 1
         self.mach_dict = self.mach_list[index]
         self.txt_type_machine.setText(self.mach_dict["txt"])
         self.img_type_machine.setPixmap(QPixmap(self.mach_dict["img"]))
@@ -125,8 +123,11 @@ class SMachineType(Gen_SMachineType, QWidget):
         if type(self.machine) is MachineSIPMSM:
             self.machine.rotor.slot.Zs = 2 * value
         elif type(self.machine) in [MachineIPMSM, MachineSyRM]:
-            for hole in self.machine.rotor.hole:
-                hole.Zh = 2 * value
+            if self.machine.rotor.hole is None:
+                self.machine.rotor.hole = list()
+            else:
+                for hole in self.machine.rotor.hole:
+                    hole.Zh = 2 * value
         elif self.machine.type_machine == 10:
             pass
         else:
@@ -170,7 +171,7 @@ class SMachineType(Gen_SMachineType, QWidget):
             self.set_p()
         # Update the GUI with the new machine
         self.parent().machine = self.machine
-        self.parent().update_nav()
+        self.parent().update_nav(next_step=0)
         if self.parent() is not None:
             self.parent().main_layout.removeWidget(self)
 

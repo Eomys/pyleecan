@@ -19,6 +19,9 @@ def plot_deflection(
     field_name=None,
     ifreq=0,
     save_path=None,
+    title="",
+    win_title=None,
+    is_surf=True,
 ):
     """Plot the operational deflection shape using pyvista plotter.
 
@@ -59,6 +62,25 @@ def plot_deflection(
 
         is_pyvistaqt = False
 
+    if save_path is None:
+        try:
+            import pyvistaqt as pv
+
+            is_pyvistaqt = True
+        except:
+            import pyvista as pv
+
+            is_pyvistaqt = False
+    else:
+        import pyvista as pv
+
+        is_pyvistaqt = False
+
+    if title != "" and win_title == "":
+        win_title = title
+    elif win_title != "" and title == "":
+        title = win_title
+
     # Get the mesh
     mesh = self.get_mesh(label=label, index=index)
     if isinstance(mesh, MeshMat):
@@ -68,7 +90,7 @@ def plot_deflection(
     # Get the field
     field = real(
         self.get_field(
-            label=label, index=index, indices=indices, is_surf=True, is_radial=True
+            label=label, index=index, indices=indices, is_surf=is_surf, is_radial=True
         )
     )
     vect_field = real(self.get_field(label=label, index=index, indices=indices))
@@ -95,7 +117,10 @@ def plot_deflection(
         factor = 1 / (100 * clim[1])
 
     # Extract surface
-    surf = mesh.get_surf(indices=indices)
+    if is_surf:
+        surf = mesh.get_surf(indices=indices)
+    else:
+        surf = mesh.get_mesh_pv(indices=indices)
 
     # Add field to surf
     surf.vectors = real(vect_field) * factor
@@ -112,7 +137,7 @@ def plot_deflection(
         p.set_background("white")
     else:
         pv.set_plot_theme("document")
-        p = pv.Plotter(notebook=False)
+        p = pv.Plotter(notebook=False, title=win_title)
     sargs = dict(
         interactive=True,
         title_font_size=20,
@@ -129,6 +154,7 @@ def plot_deflection(
         clim=clim,
         scalar_bar_args=sargs,
     )
+    p.add_text(title, position="upper_edge")
     if self.dimension == 2:
         p.view_xy()
     if save_path is None:
