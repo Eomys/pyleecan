@@ -157,7 +157,3 @@ def test_plot_deflection_animated(fixture_gen_mesh, fixture_gen_field):
         gif_path=save_path,
     )
 
-
-# To run it without pytest
-if __name__ == "__main__":
-    test_plot_deflection(fixture_gen_mesh(), fixture_gen_field())

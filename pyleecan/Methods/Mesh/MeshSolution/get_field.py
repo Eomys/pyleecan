@@ -75,178 +75,166 @@ def get_field(
     # Get field
     solution = self.get_solution(label=label, index=index)
 
-    # Manage unstructured mesh
-    # In this case, the field data shall be defined for each node
     axes_list = solution.get_axes_list(*args_list)
     ax_names = axes_list[0]
-    #ax_names = [ax.name for ax in solution.field.get_axes()]
-    # if "angle" not in ax_names:
-    #     # If arbitrary mesh (no angle in the solution axes) the nodes
-    #     # coordinate shall be specified to get_field()
-    #     result = solution.get_field(
-    #         *args_list,
-    #         is_squeeze=False,
-    #         is_rthetaz=is_rthetaz or is_radial,
-    #         node=self.mesh[0].get_node(),
-    #     )
-    #     if is_radial:
-    #         result = result[:, 0]
-    # else:
-    if True:
-        field = solution.get_field(
-            *args_list, is_squeeze=False
-        )  # Don't use is_squeeze = is_squeeze here!
 
-        if isinstance(solution, SolutionVector) and not "comp_x" in solution.field.components:
-            is_pol2cart = True
+    field = solution.get_field(
+        *args_list, is_squeeze=False
+    )  # Don't use is_squeeze = is_squeeze here!
 
-        # Enforce indice from those contained in MeshSolution if not None
-        if self.group is not None and "output_nodes" in self.group and indices is None:
-            indices_normals = self.group["output_nodes"]
+    if (
+        isinstance(solution, SolutionVector)
+        and not "comp_x" in solution.field.components
+    ):
+        is_pol2cart = True
+
+    # Enforce indice from those contained in MeshSolution if not None
+    if self.group is not None and "output_nodes" in self.group and indices is None:
+        indices_normals = self.group["output_nodes"]
+    else:
+        indices_normals = indices
+
+    # Check dimensions
+    shape = field.shape
+    is_other_dim = False
+
+    ## Check the existing axes and put indice and component in first position to ease transformation.
+    if axes_list[0] is not None:
+
+        # Swap axis indice position
+        if "indice" in axes_list[0]:
+            ind_indices0 = axes_list[0].index("indice")
+            axes_list[0][0], axes_list[0][ind_indices0] = (
+                axes_list[0][ind_indices0],
+                axes_list[0][0],
+            )  # names swap
+            axes_list[1][0], axes_list[1][ind_indices0] = (
+                axes_list[1][ind_indices0],
+                axes_list[1][0],
+            )  # length swap
+            field = swapaxes(field, 0, ind_indices0)  # field axis swap
+            ind_indices = 0
+
         else:
-            indices_normals = indices
-
-        # Check dimensions
-        shape = field.shape
-        is_other_dim = False
-
-        ## Check the existing axes and put indice and component in first position to ease transformation.
-        if axes_list[0] is not None:
-
-            # Swap axis indice position
-            if "indice" in axes_list[0]:
-                ind_indices0 = axes_list[0].index("indice")
-                axes_list[0][0], axes_list[0][ind_indices0] = (
-                    axes_list[0][ind_indices0],
-                    axes_list[0][0],
-                )  # names swap
-                axes_list[1][0], axes_list[1][ind_indices0] = (
-                    axes_list[1][ind_indices0],
-                    axes_list[1][0],
-                )  # length swap
-                field = swapaxes(field, 0, ind_indices0)  # field axis swap
-                ind_indices = 0
-
-            else:
-                raise Exception(
-                    "ERROR, MeshSolution axes list should contain 'indice' axis"
-                )
-
-            if "component" in axes_list[0]:
-                # Index of component axis (degree of freedom)
-                ind_component0 = axes_list[0].index("component")
-                axes_list[0][1], axes_list[0][ind_component0] = (
-                    axes_list[0][ind_component0],
-                    axes_list[0][1],
-                )  # names swap
-                axes_list[1][1], axes_list[1][ind_component0] = (
-                    axes_list[1][ind_component0],
-                    axes_list[1][1],
-                )  # length swap
-                field = swapaxes(field, 1, ind_component0)  # field axis swap
-                ind_component = 1
-            else:
-                ind_component = None
-
-            # Init list of indices of axes that are not "component", "indice",
-            ind_otherdim = [i for i in range(len(axes_list[1]))]
-            ind_otherdim.pop(ind_indices)
-            if ind_component is not None:
-                ind_otherdim.pop(ind_component - 1)
-
-        ## Define the type of transformation
-        is_recursive = False  # If there is at least one transformation, switch to true.
-
-        if is_radial:
-            is_rthetaz = True
-            is_recursive = True
-
-        if is_rms:
-            is_center = True
-            is_normal = True
-            is_recursive = True
-        # if is_normal:
-        #     is_surf = True
-        if is_rthetaz or is_normal:
-            if ind_component is None:
-                raise DimError("The field should be a vector field")
-
-        # Get mesh if necessary
-        if is_center or is_normal or is_rthetaz or is_surf or is_pol2cart:
-            is_recursive = True
-            # Get the mesh
-            mesh = self.get_mesh(label=label, index=indices_normals)
-            mesh_pv = mesh.get_mesh_pv(indices=indices_normals)
-            if isinstance(mesh, MeshMat):
-                mesh_pv = mesh.get_mesh_pv(indices=indices_normals)
-                mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
-        else:
-            mesh, mesh_pv = None, None
-        # Get nodes coordinates if necessary
-        if is_rthetaz or is_pol2cart:
-            is_recursive = True
-            points = mesh.get_node(indices=indices)
-        else:
-            points = None
-        # Get normals if necessary
-        if is_normal and is_center:
-            is_recursive = True
-            # Get normals
-            normals = mesh.get_normals(indices=indices_normals)
-        elif is_normal:
-            is_recursive = True
-            normals = mesh.get_normals(indices=indices_normals, loc="point")
-        else:
-            normals = None
-        # Get cell area if necessary
-        if is_rms:
-            cell_area = mesh.get_cell_area(indices=indices)
-        else:
-            cell_area = None
-
-        ## Perform the transformation
-        if is_recursive:
-            shape_result = axes_list[1]
-            if is_center:
-                shape_result[ind_indices] = mesh_pv.n_cells
-            elif indices_normals is not None:
-                shape_result[ind_indices] = len(indices_normals)
-
-            if is_rms:
-                shape_result[ind_indices] = 1
-
-            if is_radial or is_rms or is_normal:
-                shape_result[ind_component] = 1
-
-            shape_otherdim = [shape_result[ii] for ii in ind_otherdim]
-
-            result = apply_normal_center_surf_vectorfield(
-                field,
-                ind_otherdim,
-                shape_otherdim,
-                is_center,
-                is_normal,
-                is_surf,
-                is_rms,
-                is_rthetaz,
-                is_radial,
-                is_pol2cart,
-                mesh_pv,
-                normals,
-                points,
-                cell_area,
-                shape_result,
-                field.dtype,
-                indices,
-                ind_indices,
+            raise Exception(
+                "ERROR, MeshSolution axes list should contain 'indice' axis"
             )
-        else:
-            result = field  # No transformation
 
-        # Reverse axes swaps (to match with get_axes_list)
+        if "component" in axes_list[0]:
+            # Index of component axis (degree of freedom)
+            ind_component0 = axes_list[0].index("component")
+            axes_list[0][1], axes_list[0][ind_component0] = (
+                axes_list[0][ind_component0],
+                axes_list[0][1],
+            )  # names swap
+            axes_list[1][1], axes_list[1][ind_component0] = (
+                axes_list[1][ind_component0],
+                axes_list[1][1],
+            )  # length swap
+            field = swapaxes(field, 1, ind_component0)  # field axis swap
+            ind_component = 1
+        else:
+            ind_component = None
+
+        # Init list of indices of axes that are not "component", "indice",
+        ind_otherdim = [i for i in range(len(axes_list[1]))]
+        ind_otherdim.pop(ind_indices)
         if ind_component is not None:
-            result = swapaxes(result, 1, ind_component0)
-        result = swapaxes(result, 0, ind_indices0)
+            ind_otherdim.pop(ind_component - 1)
+
+    ## Define the type of transformation
+    is_recursive = False  # If there is at least one transformation, switch to true.
+
+    if is_radial:
+        is_rthetaz = True
+        is_recursive = True
+
+    if is_rms:
+        is_center = True
+        is_normal = True
+        is_recursive = True
+    # if is_normal:
+    #     is_surf = True
+    if is_rthetaz or is_normal:
+        if ind_component is None:
+            raise DimError("The field should be a vector field")
+
+    # Get mesh if necessary
+    if is_center or is_normal or is_rthetaz or is_surf or is_pol2cart:
+        is_recursive = True
+        # Get the mesh
+        mesh = self.get_mesh(label=label, index=indices_normals)
+        mesh_pv = mesh.get_mesh_pv(indices=indices_normals)
+        if isinstance(mesh, MeshMat):
+            mesh_pv = mesh.get_mesh_pv(indices=indices_normals)
+            mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
+    else:
+        mesh, mesh_pv = None, None
+    # Get nodes coordinates if necessary
+    if is_rthetaz or is_pol2cart:
+        is_recursive = True
+        points = mesh.get_node(indices=indices)
+    else:
+        points = None
+    # Get normals if necessary
+    if is_normal and is_center:
+        is_recursive = True
+        # Get normals
+        normals = mesh.get_normals(indices=indices_normals)
+    elif is_normal:
+        is_recursive = True
+        normals = mesh.get_normals(indices=indices_normals, loc="point")
+    else:
+        normals = None
+    # Get cell area if necessary
+    if is_rms:
+        cell_area = mesh.get_cell_area(indices=indices)
+    else:
+        cell_area = None
+
+    ## Perform the transformation
+    if is_recursive:
+        shape_result = axes_list[1]
+        if is_center:
+            shape_result[ind_indices] = mesh_pv.n_cells
+        elif indices_normals is not None:
+            shape_result[ind_indices] = len(indices_normals)
+
+        if is_rms:
+            shape_result[ind_indices] = 1
+
+        if is_radial or is_rms or is_normal:
+            shape_result[ind_component] = 1
+
+        shape_otherdim = [shape_result[ii] for ii in ind_otherdim]
+
+        result = apply_normal_center_surf_vectorfield(
+            field,
+            ind_otherdim,
+            shape_otherdim,
+            is_center,
+            is_normal,
+            is_surf,
+            is_rms,
+            is_rthetaz,
+            is_radial,
+            is_pol2cart,
+            mesh_pv,
+            normals,
+            points,
+            cell_area,
+            shape_result,
+            field.dtype,
+            indices,
+            ind_indices,
+        )
+    else:
+        result = field  # No transformation
+
+    # Reverse axes swaps (to match with get_axes_list)
+    if ind_component is not None:
+        result = swapaxes(result, 1, ind_component0)
+    result = swapaxes(result, 0, ind_indices0)
 
     if is_squeeze:
         result = squeeze(result)
@@ -348,7 +336,7 @@ def apply_normal_center_surf_vectorfield(
             field = cart2pol(field, points)
         if is_radial:
             field = field[:, 0]
-        if is_pol2cart:
+        if is_pol2cart and not is_radial:
             field = pol2cart(field, points)
 
         field = reshape(field, shape_result)

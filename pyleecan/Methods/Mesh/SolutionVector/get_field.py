@@ -34,10 +34,10 @@ def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
     field_list = list()
     if "comp_x" in components:
         results = self.field.get_xyz_along(args)
-        
+
         if "comp_x" in results:
             field_list.append(results["comp_x"])
-        
+
         if "comp_y" in results:
             field_list.append(results["comp_y"])
 
@@ -52,7 +52,7 @@ def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
 
         if "axial" in results and self.dimension == 3:
             field_list.append(results["axial"])
-        
+
         # if "circ" in results:
         #     field_dict["1"] = results["circ"]
 
