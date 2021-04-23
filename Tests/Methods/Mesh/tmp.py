@@ -82,7 +82,6 @@ solution = SolutionVector(
 MSol = MeshSolution(
     mesh=[mesh],
     solution=[solution],
-    dimension=3,
 )
 MSol.plot_glyph(
     is_show_fig=False,
