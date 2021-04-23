@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from ....Classes.SolutionVector import SolutionVector
 from ....Classes.MeshMat import MeshMat
 from ....Classes.MeshVTK import MeshVTK
-from ....Functions.Structural.conversions import DimError, cart2pol
+from ....Functions.Structural.conversions import DimError, cart2pol, pol2cart
 from numpy import (
     einsum,
     sqrt,
@@ -25,6 +26,7 @@ def get_field(
     index=None,
     indices=None,
     is_rthetaz=False,
+    is_pol2cart=False,
     is_radial=False,
     is_normal=False,
     is_rms=False,
@@ -67,15 +69,15 @@ def get_field(
         field
 
     """
-    if len(args_list) == 1 and type(args_list[0]) == tuple:
-        args_list = args_list[0]  # if called from another script with *arg_list
+    # if len(args_list) == 1 and type(args_list[0]) == tuple:
+    #     args_list = args_list[0]  # if called from another script with *arg_list
 
     # Get field
     solution = self.get_solution(label=label, index=index)
 
     # Manage unstructured mesh
     # In this case, the field data shall be defined for each node
-    axes_list = solution.get_axes_list()
+    axes_list = solution.get_axes_list(*args_list)
     ax_names = axes_list[0]
     #ax_names = [ax.name for ax in solution.field.get_axes()]
     # if "angle" not in ax_names:
@@ -95,8 +97,11 @@ def get_field(
             *args_list, is_squeeze=False
         )  # Don't use is_squeeze = is_squeeze here!
 
+        if isinstance(solution, SolutionVector) and not "comp_x" in solution.field.components:
+            is_pol2cart = True
+
         # Enforce indice from those contained in MeshSolution if not None
-        if "output_nodes" in self.group and indices is None:
+        if self.group is not None and "output_nodes" in self.group and indices is None:
             indices_normals = self.group["output_nodes"]
         else:
             indices_normals = indices
@@ -167,7 +172,7 @@ def get_field(
                 raise DimError("The field should be a vector field")
 
         # Get mesh if necessary
-        if is_center or is_normal or is_rthetaz or is_surf:
+        if is_center or is_normal or is_rthetaz or is_surf or is_pol2cart:
             is_recursive = True
             # Get the mesh
             mesh = self.get_mesh(label=label, index=indices_normals)
@@ -178,7 +183,7 @@ def get_field(
         else:
             mesh, mesh_pv = None, None
         # Get nodes coordinates if necessary
-        if is_rthetaz:
+        if is_rthetaz or is_pol2cart:
             is_recursive = True
             points = mesh.get_node(indices=indices)
         else:
@@ -225,6 +230,7 @@ def get_field(
                 is_rms,
                 is_rthetaz,
                 is_radial,
+                is_pol2cart,
                 mesh_pv,
                 normals,
                 points,
@@ -258,6 +264,7 @@ def apply_normal_center_surf_vectorfield(
     is_rms,
     is_rthetaz,
     is_radial,
+    is_pol2cart,
     mesh_pv,
     normals,
     points,
@@ -341,6 +348,8 @@ def apply_normal_center_surf_vectorfield(
             field = cart2pol(field, points)
         if is_radial:
             field = field[:, 0]
+        if is_pol2cart:
+            field = pol2cart(field, points)
 
         field = reshape(field, shape_result)
 
@@ -370,6 +379,7 @@ def apply_normal_center_surf_vectorfield(
                 is_rms,
                 is_rthetaz,
                 is_radial,
+                is_pol2cart,
                 mesh_pv,
                 normals,
                 points,

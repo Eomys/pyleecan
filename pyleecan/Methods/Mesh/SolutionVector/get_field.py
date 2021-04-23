@@ -27,81 +27,39 @@ def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
     if len(args) == 1 and type(args[0]) == tuple:
         args = args[0]
 
-    axname, axsize = self.get_axes_list()
-
-    id = 0
-    for name in axname:
-        if name == "component":
-            if axsize[id] == 2:
-                dim = 2
-            else:
-                dim = 3
-        id += 1
-
-    # Case of unstructured mesh
+    axname, axsize = self.get_axes_list(*args)
     components = self.field.components
-    if node is not None:
-        if "radial" in components:
-            comp_zero = np.zeros(
-                components["radial"].get_along(args)[components["radial"].symbol].shape
-            )
-            if "axial" in components:
-                field_pol = np.stack(
-                    (
-                        components["radial"].get_along(args)[
-                            components["radial"].symbol
-                        ],
-                        components["circ"].get_along(args)[components["circ"].symbol],
-                        components["axial"].get_along(args)[components["axial"].symbol],
-                    ),
-                    axis=-1,
-                )
-            elif "circ" in components:
-                field_pol = np.stack(
-                    (
-                        components["radial"].get_along(args)[
-                            components["radial"].symbol
-                        ],
-                        components["circ"].get_along(args)[components["circ"].symbol],
-                        comp_zero,
-                    ),
-                    axis=-1,
-                )
-            else:
-                field_pol = np.stack(
-                    (
-                        components["radial"].get_along(args)[
-                            components["radial"].symbol
-                        ],
-                        comp_zero,
-                        comp_zero,
-                    ),
-                    axis=-1,
-                )
-            if len(field_pol.shape) == 1:
-                field_pol = field_pol[np.newaxis, :]
-            if is_rthetaz:
-                field = field_pol
-            else:
-                field = pol2cart(field_pol, node)
-        else:
-            # TODO
-            pass
+    ind_0 = axname.index("component")
+
+    field_list = list()
+    if "comp_x" in components:
+        results = self.field.get_xyz_along(args)
+        
+        if "comp_x" in results:
+            field_list.append(results["comp_x"])
+        
+        if "comp_y" in results:
+            field_list.append(results["comp_y"])
+
+        if "comp_z" in results and self.dimension == 3:
+            field_list.append(results["comp_z"])
+
     else:
-        if not args:
-            field = np.zeros(axsize)
-            field_dict = self.field.get_xyz_along(tuple(axname), is_squeeze=is_squeeze)
-        else:
-            field_dict = self.field.get_xyz_along(args, is_squeeze=is_squeeze)
-            comp_x = field_dict["comp_x"]
-            size = np.hstack((comp_x.shape, dim))
-            field = np.zeros(size)
+        results = self.field.get_rphiz_along(args)
 
-        field[..., 0] = field_dict["comp_x"]
-        field[..., 1] = field_dict["comp_y"]
+        if "radial" in results:
+            field_list.append(results["radial"])
 
-        if dim == 3:
-            field[..., 2] = field_dict["comp_z"]
+        if "axial" in results and self.dimension == 3:
+            field_list.append(results["axial"])
+        
+        # if "circ" in results:
+        #     field_dict["1"] = results["circ"]
 
-        # TODO: cart2pol if is_rthetaz
+        if "tangential" in results:
+            field_list.append(results["tangential"])
+
+    field = np.array(field_list)
+    field = np.swapaxes(field, 0, ind_0)
+
     return field
