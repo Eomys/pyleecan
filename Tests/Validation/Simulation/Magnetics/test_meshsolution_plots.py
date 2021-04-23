@@ -75,8 +75,7 @@ def test_SIPMSM_003():
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 
-    out = Output(simu=simu_sym)
-    simu_sym.run()
+    out = simu_sym.run()
 
     out.mag.meshsolution.plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh.png"), is_show_fig=False
