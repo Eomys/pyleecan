@@ -75,7 +75,9 @@ def get_field(
 
     # Manage unstructured mesh
     # In this case, the field data shall be defined for each node
-    ax_names = [ax.name for ax in solution.field.get_axes()]
+    axes_list = solution.get_axes_list()
+    ax_names = axes_list[0]
+    #ax_names = [ax.name for ax in solution.field.get_axes()]
     if "angle" not in ax_names:
         # If arbitrary mesh (no angle in the solution axes) the nodes
         # coordinate shall be specified to get_field()
@@ -91,8 +93,6 @@ def get_field(
         field = solution.get_field(
             *args_list, is_squeeze=False
         )  # Don't use is_squeeze = is_squeeze here!
-
-        axes_list = solution.get_axes_list()
 
         # Enforce indice from those contained in MeshSolution if not None
         if "output_nodes" in self.group and indices is None:
