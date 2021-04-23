@@ -99,5 +99,5 @@ def test_plot_contour_2group():
 
 
 if __name__ == "__main__":
-    # test_plot_contour_1group()
-    test_plot_contour_2group()
+    test_plot_contour_1group()
+    # test_plot_contour_2group()
