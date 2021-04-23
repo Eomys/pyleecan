@@ -26,19 +26,19 @@ def perm_coord(
 
     """
     # convert into MeshMat object
-    mesh_mat = self.convert(meshtype="MeshMat")
+    mesh_mat = self.convert(meshtype="MeshMat", scale=1)
 
     # extract nodes en elements
-    mesh_mat_point = mesh_mat.get_point()
+    mesh_mat_node = mesh_mat.get_node()
     mesh_mat_cell = mesh_mat.get_cell()
 
     # swap axis
-    mesh_mat_point = mesh_mat_point.T[perm_coord_list].T
+    mesh_mat_node = mesh_mat_node.T[perm_coord_list].T
 
     # create new object
     # 1. create NodeMat
-    nb_pt = len(mesh_mat_point)
-    pointmat = NodeMat(coordinate=mesh_mat_point, nb_pt=nb_pt)
+    nb_node = len(mesh_mat_node)
+    nodemat = NodeMat(coordinate=mesh_mat_node, nb_node=nb_node)
 
     # 2. create CellMat
     cellMat = CellMat()
@@ -53,7 +53,7 @@ def perm_coord(
         CellMatDict[key] = cellMat
 
     # 3. create MeshMat
-    meshmat = MeshMat(cell=CellMatDict, point=pointmat)
+    meshmat = MeshMat(cell=CellMatDict, node=nodemat)
 
     # convert and save into vtk
     mesh_pv = meshmat.get_mesh_pv()
