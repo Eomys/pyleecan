@@ -90,11 +90,6 @@ def plot_glyph(
             field_name=field_name,
         )
 
-        solution = self.get_solution(
-            label=label,
-            index=index,
-        )
-
         vect_field = real(field)
 
         # Compute factor
@@ -102,6 +97,11 @@ def plot_glyph(
             # factor = 1 / (100 * np_max(vect_field))
             factor = 1 / np_max(vect_field) * 10
 
+        # Add third dimension if needed
+        solution = self.get_solution(
+            label=label,
+            index=index,
+        )
         if solution.dimension == 2:
             vect_field = np.hstack((vect_field, np.zeros((vect_field.shape[0], 1))))
 

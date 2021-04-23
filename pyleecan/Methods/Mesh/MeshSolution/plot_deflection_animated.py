@@ -7,6 +7,8 @@ from numpy import (
     exp,
     pi,
     argmax,
+    zeros,
+    hstack,
     sum as np_sum,
     min as np_min,
     max as np_max,
@@ -125,6 +127,17 @@ def plot_deflection_animated(
         if factor is None:
             # factor = 1 / (100 * clim[1])
             factor = 1 / clim[1] * 10
+
+        # Add third dimension if needed
+        solution = self.get_solution(
+            label=label,
+            index=index,
+        )
+        if solution.dimension == 2:
+            vect_field = hstack((vect_field, zeros((vect_field.shape[0], 1))))
+            vect_field_data = hstack(
+                (vect_field_data, zeros((vect_field_data.shape[0], 1)))
+            )
 
         # Extract surface
         surf = mesh.get_surf(indices=indices)
