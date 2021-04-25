@@ -24,16 +24,20 @@ def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
         an array of field values
 
     """
-    if len(args) == 1 and type(args[0]) == tuple:
-        args = args[0]
+    # if len(args) == 1 and type(args[0]) == tuple:
+    #     args = args[0]
 
-    axname, axsize = self.get_axes_list(*args)
+    if is_squeeze:
+        axname, axsize = self.get_axes_list(*args)
+    else:
+        axname, axsize = self.get_axes_list()
+
     components = self.field.components
     ind_0 = axname.index("component")
 
     field_list = list()
     if "comp_x" in components:
-        results = self.field.get_xyz_along(args)
+        results = self.field.get_xyz_along(args, is_squeeze=is_squeeze)
         
         if "comp_x" in results:
             field_list.append(results["comp_x"])
@@ -45,7 +49,7 @@ def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
             field_list.append(results["comp_z"])
 
     else:
-        results = self.field.get_rphiz_along(args)
+        results = self.field.get_rphiz_along(args, is_squeeze=is_squeeze)
 
         if "radial" in results:
             field_list.append(results["radial"])

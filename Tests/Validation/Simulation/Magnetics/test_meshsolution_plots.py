@@ -395,6 +395,6 @@ def test_Toyota_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_Slotless_CEFC()
-    # out = test_Toyota_Prius()
+    #out = test_Slotless_CEFC()
+    out = test_Toyota_Prius()
     # out = test_SIPMSM_003()
