@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import real, min as np_min, max as np_max
+from numpy import real, min as np_min, max as np_max, zeros, hstack
 
 from ....Classes.MeshMat import MeshMat
 from ....Classes.MeshVTK import MeshVTK
@@ -138,6 +138,14 @@ def plot_deflection(
         if factor is None:
             # factor = 1 / (100 * clim[1])
             factor = 1 / clim[1] * 10
+
+        # Add third dimension if needed
+        solution = self.get_solution(
+            label=label,
+            index=index,
+        )
+        if solution.dimension == 2:
+            vect_field = hstack((vect_field, zeros((vect_field.shape[0], 1))))
 
         # Extract surface
         if is_surf:

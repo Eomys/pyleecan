@@ -110,6 +110,17 @@ def plot_glyph_animated(
             # factor = 1 / (100 * np_max(np_abs(vect_field)))
             factor = 1 / np_max(vect_field_data) * 10
 
+        # Add third dimension if needed
+        solution = self.get_solution(
+            label=label,
+            index=index,
+        )
+        if solution.dimension == 2:
+            vect_field = np.hstack((vect_field, np.zeros((vect_field.shape[0], 1))))
+            vect_field_data = np.hstack(
+                (vect_field_data, np.zeros((vect_field_data.shape[0], 1)))
+            )
+
         # Add field to mesh
         if is_point_arrow:
             mesh_pv.vectors = vect_field_data * factor
