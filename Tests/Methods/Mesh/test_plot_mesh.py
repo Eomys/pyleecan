@@ -12,8 +12,6 @@ from Tests import save_plot_path as save_path
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
-# @pytest.mark.DEV
 def test_plot_mesh():
     mesh = MeshMat(dimension=3)
     mesh.node = NodeMat()

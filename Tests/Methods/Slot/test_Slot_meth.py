@@ -9,7 +9,6 @@ from pyleecan.Methods import ParentMissingError
 import pytest
 
 
-@pytest.mark.METHODS
 class TestSlot(object):
     """Test that the methods of Slot behave like it should"""
 

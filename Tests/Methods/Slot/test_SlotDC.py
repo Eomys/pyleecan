@@ -59,7 +59,6 @@ SlotDC_test.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_SlotDC_meth(object):
     """pytest for SlotDC methods"""
 

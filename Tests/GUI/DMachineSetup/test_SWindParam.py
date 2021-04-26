@@ -16,7 +16,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
 import pytest
 
 
-@pytest.mark.GUI
 class TestSWindParam(object):
     """Test that the widget SWindParam behave like it should"""
 

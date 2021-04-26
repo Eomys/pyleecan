@@ -21,7 +21,6 @@ from Tests import save_load_path as save_path
 import pytest
 
 
-@pytest.mark.GUI
 class Testsave_load_matlib(object):
     """Test that the widget DMachineSetup and DMatLib can save/load the MatLib (old and new)"""
 

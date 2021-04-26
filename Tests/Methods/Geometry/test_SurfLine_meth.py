@@ -8,7 +8,6 @@ from pyleecan.Classes.SurfLine import SurfLine
 from numpy import pi
 
 
-@pytest.mark.METHODS
 class Test_SurfLine_meth(object):
     """Unittest for SurfLine methods"""
 

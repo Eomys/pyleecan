@@ -15,11 +15,15 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
 
+@pytest.mark.MagFEMM
+@pytest.mark.IPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_compare():
     """Test the compare method"""
     # Create reference object
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="test_compare", machine=IPMSM_A)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="test_compare", machine=Toyota_Prius)
 
     # Initialization of the simulation starting point
     simu.input = InputCurrent()
@@ -55,6 +59,7 @@ def test_compare():
 
     # Create the differences
     simu2 = simu.copy()
+    simu2.name = "test_compare2"
     simu2.machine.stator.L1 = 2  # float
     simu2.machine.rotor.hole[0].magnet_0.mat_type.name = "Test "  # str
     simu2.input.Nt_tot = 1234  # int

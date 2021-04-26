@@ -12,7 +12,6 @@ from pyleecan.Classes.SolutionVector import SolutionVector
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
 def test_SolutionMat():
     """ Tests for get_field method from SolutionMat class"""
     DELTA = 1e-10
@@ -48,7 +47,6 @@ def test_SolutionMat():
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
 def test_SolutionVector():
     DELTA = 1e-10
 
@@ -102,7 +100,6 @@ def test_SolutionVector():
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
 def test_SolutionData():
     DELTA = 1e-10
 

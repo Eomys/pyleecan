@@ -25,7 +25,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWindPat.SWindPat import SWindPat
 import pytest
 
 
-@pytest.mark.GUI
 class TestSWindPat(object):
     """Test that the widget SWindPat behave like it should"""
 

@@ -17,4 +17,14 @@ def get_axes_list(self, *args):
 
     """
 
-    return self.axis_name.copy(), self.axis_size.copy()
+    if self.axis_name is not None:
+        axis_name = self.axis_name.copy()
+    else:
+        axis_name = None
+
+    if self.axis_size is not None:
+        axis_size = self.axis_size.copy()
+    else:
+        axis_size = None
+
+    return axis_name, axis_size

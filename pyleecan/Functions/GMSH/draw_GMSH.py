@@ -477,7 +477,7 @@ def draw_GMSH(
     factory = model.geo
 
     # Start a new model
-    gmsh.initialize(sys.argv)
+    gmsh.initialize()
     gmsh.option.setNumber("General.Terminal", int(False))
     gmsh.option.setNumber("Geometry.CopyMeshingMethod", 1)
     gmsh.option.setNumber("Geometry.PointNumbers", 0)

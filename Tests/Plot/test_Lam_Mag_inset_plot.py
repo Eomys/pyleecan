@@ -22,7 +22,6 @@ from pyleecan.Classes.MatMagnetics import MatMagnetics
 from Tests import save_plot_path as save_path
 
 
-@pytest.mark.PLOT
 class Test_Lam_Mag_inset_plot(object):
     """pytest for Lamination with inset magnet plot"""
 
