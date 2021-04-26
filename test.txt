@@ -1,2 +1,9 @@
+<<<<<<< HEAD
 This is a test
 for the Manate/ Pyleecan Session
+||||||| cc22b888
+This is a test
+=======
+This is a test
+for the afternoongauthier
+>>>>>>> d26560d2276abcdb91c5f8ca8a23a4c859dd905d
