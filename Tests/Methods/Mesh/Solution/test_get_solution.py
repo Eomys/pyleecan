@@ -15,7 +15,7 @@ from pyleecan.Classes.SolutionVector import SolutionVector
 @pytest.mark.MeshSol
 @pytest.mark.METHODS
 # @pytest.mark.DEV
-class Test_get_soltution(TestCase):
+class Test_get_solution(TestCase):
     """ Tests for get_solution method from Solution classes"""
 
     def test_SolutionMat(self):
@@ -97,7 +97,7 @@ class Test_get_soltution(TestCase):
         solution = SolutionVector(field=vecH, type_cell="triangle", label="H")
 
         sol = solution.get_solution(indice=[1, 2, 4])
-        field = sol.get_field()
+        field = sol.get_field("time", "indice", "component")
 
         expected = H[:, 1:, :]
         result = np_abs(expected - field).sum()
@@ -131,7 +131,7 @@ class Test_get_soltution(TestCase):
 
 
 if __name__ == "__main__":
-    test = Test_get_soltution()
+    test = Test_get_solution()
     test.test_SolutionData()
     test.test_SolutionMat()
     test.test_SolutionVector()

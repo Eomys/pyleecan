@@ -64,6 +64,6 @@ def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
             field_list.append(results["tangential"])
 
     field = np.array(field_list)
-    field = np.swapaxes(field, 0, ind_0)
+    field = np.moveaxis(field, 0, ind_0)
 
     return field
