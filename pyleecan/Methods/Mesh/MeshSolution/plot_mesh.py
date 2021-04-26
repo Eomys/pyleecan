@@ -76,6 +76,8 @@ def plot_mesh(
             edge_color="white",
             line_width=1,
         )
+        p.set_position((0.2, 0.2, 0.5))
+        p.reset_camera()
         if is_show_axes:
             p.add_axes()
         if self.dimension == 2:

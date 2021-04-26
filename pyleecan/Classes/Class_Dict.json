@@ -5938,7 +5938,8 @@
             "plot_deflection",
             "plot_deflection_animated",
             "plot_glyph",
-            "plot_glyph_animated"
+            "plot_glyph_animated",
+            "perm_coord"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -6028,7 +6029,8 @@
             "get_surf",
             "get_cell_area",
             "convert",
-            "as_dict"
+            "as_dict",
+            "perm_coord"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",

@@ -29,8 +29,10 @@ def get_cell(self, indices=None):
         mesh = read(self.path + "/temp.vtk")
         # Remove the temporary .vtk file
         remove(self.path + "/temp.vtk")
-
     else:
+        if self.is_pyvista_mesh:
+            mesh = self.get_mesh_pv()
+            mesh.save(self.path + "/mesh.vtk")
         # Read mesh file with meshio (pyvista does not provide the correct cell format)
         mesh = read(self.path + "/" + self.name + "." + self.format)
 
