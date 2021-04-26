@@ -54,38 +54,18 @@ def fixture_gen_field():
     k = -2
     field = np.exp(1j * k * alpha)
     field = np.hstack((field.T, field.T))
-    Indice = DataLinspace(
-        name="indice",
-        initial=0,
-        final=15,
-        number=16,
-    )
+    Indice = DataLinspace(name="indice", initial=0, final=15, number=16,)
     field_rad = DataFreq(
-        name="Radial field",
-        unit="",
-        symbol="F_{rad}",
-        axes=[Indice],
-        values=field,
+        name="Radial field", unit="", symbol="F_{rad}", axes=[Indice], values=field,
     )
     field_circ = DataFreq(
-        name="Circ. field",
-        unit="",
-        symbol="F_{circ}",
-        axes=[Indice],
-        values=field,
+        name="Circ. field", unit="", symbol="F_{circ}", axes=[Indice], values=field,
     )
     components = {}
     components["radial"] = field_rad
     components["circ"] = field_circ
-    vectorfield = VectorField(
-        name="Field",
-        symbol="F",
-        components=components,
-    )
-    solution = SolutionVector(
-        field=vectorfield,
-        label="Field",
-    )
+    vectorfield = VectorField(name="Field", symbol="F", components=components,)
+    solution = SolutionVector(field=vectorfield, label="Field",)
 
     return solution
 
@@ -94,11 +74,7 @@ def fixture_gen_field():
 def test_plot_glyph(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
-    MSol = MeshSolution(
-        mesh=[mesh],
-        solution=[solution],
-        dimension=3,
-    )
+    MSol = MeshSolution(mesh=[mesh], solution=[solution], dimension=3,)
     MSol.plot_glyph(
         is_show_fig=False,
         is_point_arrow=True,
@@ -112,11 +88,7 @@ def test_plot_glyph(fixture_gen_mesh, fixture_gen_field):
 def test_plot_glyph_animated(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
-    MSol = MeshSolution(
-        mesh=[mesh],
-        solution=[solution],
-        dimension=3,
-    )
+    MSol = MeshSolution(mesh=[mesh], solution=[solution], dimension=3,)
     MSol.plot_glyph_animated(
         is_point_arrow=True,
         factor=0.2,
@@ -129,15 +101,9 @@ def test_plot_glyph_animated(fixture_gen_mesh, fixture_gen_field):
 def test_plot_deflection(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
-    MSol = MeshSolution(
-        mesh=[mesh],
-        solution=[solution],
-        dimension=3,
-    )
+    MSol = MeshSolution(mesh=[mesh], solution=[solution], dimension=3,)
     MSol.plot_deflection(
-        factor=0.2,
-        save_path=save_path + "/plot_deflection.png",
-        is_show_fig=False,
+        factor=0.2, save_path=save_path + "/plot_deflection.png", is_show_fig=False,
     )
 
 
@@ -146,14 +112,7 @@ def test_plot_deflection(fixture_gen_mesh, fixture_gen_field):
 def test_plot_deflection_animated(fixture_gen_mesh, fixture_gen_field):
     mesh = fixture_gen_mesh
     solution = fixture_gen_field
-    MSol = MeshSolution(
-        mesh=[mesh],
-        solution=[solution],
-        dimension=3,
-    )
+    MSol = MeshSolution(mesh=[mesh], solution=[solution], dimension=3,)
     MSol.plot_deflection_animated(
-        factor=0.2,
-        gif_name="plot_deflection_animated.gif",
-        gif_path=save_path,
+        factor=0.2, gif_name="plot_deflection_animated.gif", gif_path=save_path,
     )
-
