@@ -15,19 +15,6 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .ModelBH import ModelBH
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Material.ModelBH_arctangent.get_BH import get_BH
-except ImportError as error:
-    get_BH = error
-
-try:
-    from ..Methods.Material.ModelBH_arctangent.fit_model import fit_model
-except ImportError as error:
-    fit_model = error
-
-
 from ._check import InitUnKnowClassError
 
 
@@ -36,29 +23,6 @@ class ModelBH_arctangent(ModelBH):
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Material.ModelBH_arctangent.get_BH
-    if isinstance(get_BH, ImportError):
-        get_BH = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ModelBH_arctangent method get_BH: " + str(get_BH)
-                )
-            )
-        )
-    else:
-        get_BH = get_BH
-    # cf Methods.Material.ModelBH_arctangent.fit_model
-    if isinstance(fit_model, ImportError):
-        fit_model = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ModelBH_arctangent method fit_model: " + str(fit_model)
-                )
-            )
-        )
-    else:
-        fit_model = fit_model
     # save and copy methods are available in all object
     save = save
     copy = copy

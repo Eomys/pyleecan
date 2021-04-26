@@ -6316,10 +6316,7 @@
         "daughters": [],
         "desc": "Abstract class for BH curve model ",
         "is_internal": false,
-        "methods": [
-            "get_BH",
-            "fit_model"
-        ],
+        "methods": [],
         "mother": "ModelBH",
         "name": "ModelBH_arctangent",
         "package": "Material",
@@ -6355,10 +6352,7 @@
         "daughters": [],
         "desc": "Abstract class for BH curve model ",
         "is_internal": false,
-        "methods": [
-            "get_BH",
-            "fit_model"
-        ],
+        "methods": [],
         "mother": "",
         "name": "ModelBH_exponential",
         "package": "Material",
