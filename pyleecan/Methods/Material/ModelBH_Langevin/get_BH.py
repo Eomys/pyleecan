@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+
 def get_BH(self):
     """
     Return the B(H) curve of the material according to Langevin model.
@@ -31,7 +32,7 @@ def get_BH(self):
 
         else:
             Hmax = self.Hmax
-        
+
         if Hmax is not None:
             H = np.linspace(H0, Hmax, 200)
             B = self.BH_func(H, self.Bs, self.a)
