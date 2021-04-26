@@ -4113,7 +4113,8 @@
             "comp_height_yoke",
             "get_notch_list",
             "comp_angle_q_axis",
-            "comp_radius_mid_yoke"
+            "comp_radius_mid_yoke",
+            "get_yoke_desc"
         ],
         "mother": "",
         "name": "Lamination",
@@ -4215,6 +4216,15 @@
                 "max": "",
                 "min": "",
                 "name": "notch",
+                "type": "[Notch]",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Lamination yoke notches",
+                "max": "",
+                "min": "",
+                "name": "yoke_notch",
                 "type": "[Notch]",
                 "unit": "-",
                 "value": ""

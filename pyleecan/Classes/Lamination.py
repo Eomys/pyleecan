@@ -119,6 +119,11 @@ try:
 except ImportError as error:
     comp_radius_mid_yoke = error
 
+try:
+    from ..Methods.Machine.Lamination.get_yoke_desc import get_yoke_desc
+except ImportError as error:
+    get_yoke_desc = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -350,6 +355,17 @@ class Lamination(FrozenClass):
         )
     else:
         comp_radius_mid_yoke = comp_radius_mid_yoke
+    # cf Methods.Machine.Lamination.get_yoke_desc
+    if isinstance(get_yoke_desc, ImportError):
+        get_yoke_desc = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_yoke_desc: " + str(get_yoke_desc)
+                )
+            )
+        )
+    else:
+        get_yoke_desc = get_yoke_desc
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -369,6 +385,7 @@ class Lamination(FrozenClass):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        yoke_notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -409,6 +426,8 @@ class Lamination(FrozenClass):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.L1 = L1
@@ -422,6 +441,7 @@ class Lamination(FrozenClass):
         self.is_stator = is_stator
         self.axial_vent = axial_vent
         self.notch = notch
+        self.yoke_notch = yoke_notch
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -459,6 +479,13 @@ class Lamination(FrozenClass):
         for ii in range(len(self.notch)):
             tmp = self.notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
             Lamination_str += "notch[" + str(ii) + "] =" + tmp + linesep + linesep
+        if len(self.yoke_notch) == 0:
+            Lamination_str += "yoke_notch = []" + linesep
+        for ii in range(len(self.yoke_notch)):
+            tmp = (
+                self.yoke_notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            Lamination_str += "yoke_notch[" + str(ii) + "] =" + tmp + linesep + linesep
         return Lamination_str
 
     def __eq__(self, other):
@@ -487,6 +514,8 @@ class Lamination(FrozenClass):
         if other.axial_vent != self.axial_vent:
             return False
         if other.notch != self.notch:
+            return False
+        if other.yoke_notch != self.yoke_notch:
             return False
         return True
 
@@ -550,6 +579,21 @@ class Lamination(FrozenClass):
                         other.notch[ii], name=name + ".notch[" + str(ii) + "]"
                     )
                 )
+        if (other.yoke_notch is None and self.yoke_notch is not None) or (
+            other.yoke_notch is not None and self.yoke_notch is None
+        ):
+            diff_list.append(name + ".yoke_notch None mismatch")
+        elif self.yoke_notch is None:
+            pass
+        elif len(other.yoke_notch) != len(self.yoke_notch):
+            diff_list.append("len(" + name + ".yoke_notch)")
+        else:
+            for ii in range(len(other.yoke_notch)):
+                diff_list.extend(
+                    self.yoke_notch[ii].compare(
+                        other.yoke_notch[ii], name=name + ".yoke_notch[" + str(ii) + "]"
+                    )
+                )
         return diff_list
 
     def __sizeof__(self):
@@ -570,6 +614,9 @@ class Lamination(FrozenClass):
                 S += getsizeof(value)
         if self.notch is not None:
             for value in self.notch:
+                S += getsizeof(value)
+        if self.yoke_notch is not None:
+            for value in self.yoke_notch:
                 S += getsizeof(value)
         return S
 
@@ -611,6 +658,15 @@ class Lamination(FrozenClass):
                     Lamination_dict["notch"].append(obj.as_dict(**kwargs))
                 else:
                     Lamination_dict["notch"].append(None)
+        if self.yoke_notch is None:
+            Lamination_dict["yoke_notch"] = None
+        else:
+            Lamination_dict["yoke_notch"] = list()
+            for obj in self.yoke_notch:
+                if obj is not None:
+                    Lamination_dict["yoke_notch"].append(obj.as_dict(**kwargs))
+                else:
+                    Lamination_dict["yoke_notch"].append(None)
         # The class name is added to the dict for deserialisation purpose
         Lamination_dict["__class__"] = "Lamination"
         return Lamination_dict
@@ -630,6 +686,7 @@ class Lamination(FrozenClass):
         self.is_stator = None
         self.axial_vent = None
         self.notch = None
+        self.yoke_notch = None
 
     def _get_L1(self):
         """getter of L1"""
@@ -874,6 +931,39 @@ class Lamination(FrozenClass):
         fget=_get_notch,
         fset=_set_notch,
         doc=u"""Lamination bore notches
+
+        :Type: [Notch]
+        """,
+    )
+
+    def _get_yoke_notch(self):
+        """getter of yoke_notch"""
+        if self._yoke_notch is not None:
+            for obj in self._yoke_notch:
+                if obj is not None:
+                    obj.parent = self
+        return self._yoke_notch
+
+    def _set_yoke_notch(self, value):
+        """setter of yoke_notch"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "yoke_notch"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
+        if value == -1:
+            value = list()
+        check_var("yoke_notch", value, "[Notch]")
+        self._yoke_notch = value
+
+    yoke_notch = property(
+        fget=_get_yoke_notch,
+        fset=_set_yoke_notch,
+        doc=u"""Lamination yoke notches
 
         :Type: [Notch]
         """,

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from numpy import pi, angle, exp
+from numpy import pi, exp
 
-from ....Classes.Circle import Circle
-from ....Classes.SurfLine import SurfLine
 from ....Classes.Arc1 import Arc1
+from ....Classes.Circle import Circle
 from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
 from ....Classes.SurfRing import SurfRing
 from ....Classes.Lamination import Lamination
 
@@ -80,6 +80,45 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     else:  # No slot
         return Lamination.build_geometry(self, sym=sym, alpha=alpha, delta=delta)
 
+    # Get Yoke lines (including notches)
+    if self.yoke_notch is not None and len(self.yoke_notch) > 0:
+        yoke_desc = self.get_yoke_desc(sym=sym)
+        yoke_list = list()
+        for yoke in yoke_desc:
+            if type(yoke["obj"]) is Arc1:
+                yoke_list.append(yoke["obj"])
+            elif "lines" in yoke:  # Duplicated slot
+                for line in yoke["lines"]:
+                    yoke_list.append(type(line)(init_dict=line.as_dict()))
+                    yoke_list[-1].rotate((yoke["begin_angle"] + yoke["end_angle"]) / 2)
+            else:  # Notches
+                self.is_internal = not self.is_internal
+                lines = yoke["obj"].build_geometry()
+                self.is_internal = not self.is_internal
+                for line in lines:
+                    line.rotate((yoke["begin_angle"] + yoke["end_angle"]) / 2)
+                yoke_list.extend(lines)
+        # Set line label
+        for line in yoke_list:
+            line.label = label_yoke
+        surf_yoke = SurfLine(line_list=yoke_list, label=label_yoke, point_ref=None)
+    elif sym == 1:
+        surf_yoke = Circle(
+            radius=Ryoke, label=label_yoke, line_label=label_yoke, center=0
+        )
+    elif Ryoke > 0:  # For internal lamination
+        yoke_list = [
+            Arc1(
+                begin=Zy2,
+                end=Zy1,
+                radius=-Ryoke,
+                is_trigo_direction=False,
+                label=label_yoke,
+            )
+        ]
+    else:
+        yoke_list = list()
+
     # Create the lamination surface(s)
     surf_list = list()
     if sym == 1:  # Complete lamination
@@ -89,10 +128,6 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             point_ref = Ryoke - (H_yoke / 2)
         # Create Slot surface
         surf_slot = SurfLine(line_list=bore_list, label=label_bore, point_ref=point_ref)
-        # Create yoke circle surface
-        surf_yoke = Circle(
-            radius=Ryoke, label=label_yoke, line_label=label_yoke, center=0
-        )
         if self.Rint == 0 and len(bore_list) > 0:
             surf_list = [surf_slot]
         elif self.Rint == 0 and len(bore_list) == 0:
@@ -122,16 +157,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         bore_list.append(
             Segment(bore_list[-1].get_end(), Zy2, label=label + "_Yoke_Side_Left")
         )
-        if Ryoke > 0:  # For internal lamination
-            bore_list.append(
-                Arc1(
-                    begin=Zy2,
-                    end=Zy1,
-                    radius=-Ryoke,
-                    is_trigo_direction=False,
-                    label=label_yoke,
-                )
-            )
+        bore_list.extend(yoke_list)
         bore_list.append(
             Segment(Zy1, bore_list[0].get_begin(), label=label + "_Yoke_Side_Right")
         )
