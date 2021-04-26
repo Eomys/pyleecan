@@ -27,11 +27,11 @@ def get_notch_list(self, sym=1, is_yoke=False):
     if notch_list is None or len(notch_list) == 0:  # No notch
         return list()
     else:
-        desc_list = notch_list[0].get_notch_list(sym=sym)
+        desc_list = notch_list[0].get_notch_list(sym=sym, is_yoke=is_yoke)
         # If more than one notch list, we need to merge in order the description
         # (check if notches are coliding)
         for ii in range(len(notch_list) - 1):
             desc_list = merge_notch_list(
-                desc_list, notch_list[ii + 1].get_notch_list(sym=sym)
+                desc_list, notch_list[ii + 1].get_notch_list(sym=sym, is_yoke=is_yoke)
             )
         return desc_list

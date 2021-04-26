@@ -841,3 +841,7 @@ def test_Optimization_problem():
     fig.savefig(
         join(save_path, "fig_21_Topology_to_minimize_torque_ripple.svg"), format="svg"
     )
+
+
+if __name__ == "__main__":
+    test_FEMM_sym()

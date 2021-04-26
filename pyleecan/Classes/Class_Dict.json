@@ -3851,7 +3851,6 @@
         "desc": "Lamination with empty Slot",
         "is_internal": false,
         "methods": [
-            "build_geometry",
             "check",
             "comp_radius_mec",
             "comp_surfaces",
@@ -3859,9 +3858,9 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc",
             "comp_radius_mid_yoke",
-            "comp_periodicity"
+            "comp_periodicity",
+            "get_bore_desc"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -4114,7 +4113,8 @@
             "get_notch_list",
             "comp_angle_q_axis",
             "comp_radius_mid_yoke",
-            "get_yoke_desc"
+            "get_yoke_desc",
+            "get_bore_desc"
         ],
         "mother": "",
         "name": "Lamination",

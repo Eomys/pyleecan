@@ -95,19 +95,19 @@ def test_Lam_evenly_dist():
     test_obj.stator.yoke_notch = [notch]
 
     # Plot, save and check
-    test_obj.plot(sym=1, is_show_fig=False)
-    fig = plt.gcf()
-    plt.show()
-    fig.savefig(join(save_path, "test_Lam_notch_sym_1.png"))
-    # Rotor + Stator + 1 for Shaft
-    assert len(fig.axes[0].patches) == 53
+    test_obj.plot(
+        sym=1, is_show_fig=False, save_path=join(save_path, "test_Lam_notch_sym_1.png")
+    )
 
-    test_obj.stator.plot(sym=2, is_show_fig=False)
-    fig = plt.gcf()
-    plt.show()
-    fig.savefig(join(save_path, "test_Lam_notch_sym_2.png"))
-    # Rotor + Stator + 2 for frame + 1 for Shaft
-    assert len(fig.axes[0].patches) == 13
+    test_obj.stator.plot(
+        sym=2, is_show_fig=False, save_path=join(save_path, "test_Lam_notch_sym_2.png")
+    )
+
+    test_obj.rotor.notch[0].alpha = 0.5 * pi / 6
+    test_obj.rotor.yoke_notch[0].alpha = 0.5 * pi / 6
+    test_obj.rotor.plot(
+        sym=2, is_show_fig=False, save_path=join(save_path, "test_Lam_notch_sym_3.png")
+    )
 
 
 if __name__ == "__main__":

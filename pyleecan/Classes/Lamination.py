@@ -124,6 +124,11 @@ try:
 except ImportError as error:
     get_yoke_desc = error
 
+try:
+    from ..Methods.Machine.Lamination.get_bore_desc import get_bore_desc
+except ImportError as error:
+    get_bore_desc = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -366,6 +371,17 @@ class Lamination(FrozenClass):
         )
     else:
         get_yoke_desc = get_yoke_desc
+    # cf Methods.Machine.Lamination.get_bore_desc
+    if isinstance(get_bore_desc, ImportError):
+        get_bore_desc = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_bore_desc: " + str(get_bore_desc)
+                )
+            )
+        )
+    else:
+        get_bore_desc = get_bore_desc
     # save and copy methods are available in all object
     save = save
     copy = copy
