@@ -5619,6 +5619,24 @@
                 "type": "ImportMatrix",
                 "unit": "W/kg",
                 "value": ""
+            },
+            {
+                "desc": "a model of BH curve with an analytical expression",
+                "max": "",
+                "min": "",
+                "name": "ModelBH",
+                "type": "ModelBH",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "1 to use ModelBH to fit input data and extrapolate BH curve",
+                "max": "",
+                "min": "",
+                "name": "is_BH_extrapolate",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
             }
         ]
     },
@@ -5948,7 +5966,8 @@
             "plot_deflection",
             "plot_deflection_animated",
             "plot_glyph",
-            "plot_glyph_animated"
+            "plot_glyph_animated",
+            "perm_coord"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -6038,7 +6057,8 @@
             "get_surf",
             "get_cell_area",
             "convert",
-            "as_dict"
+            "as_dict",
+            "perm_coord"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",
@@ -6184,6 +6204,244 @@
                 "type": "int",
                 "unit": "-",
                 "value": null
+            }
+        ]
+    },
+    "ModelBH": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "ModelBH_Langevin",
+            "ModelBH_arctangent",
+            "ModelBH_linear_sat"
+        ],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [
+            "get_BH",
+            "fit_model"
+        ],
+        "mother": "",
+        "name": "ModelBH",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH.csv",
+        "properties": [
+            {
+                "desc": "Max value of H for extrapolation",
+                "max": "",
+                "min": "",
+                "name": "Bmax",
+                "type": "float",
+                "unit": "-",
+                "value": 2.31
+            },
+            {
+                "desc": "Max value of B for extrapolation",
+                "max": "",
+                "min": "",
+                "name": "Hmax",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Step value for H",
+                "max": "",
+                "min": "",
+                "name": "delta",
+                "type": "float",
+                "unit": "-",
+                "value": 100
+            }
+        ]
+    },
+    "ModelBH_Langevin": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [
+            "get_BH",
+            "BH_func"
+        ],
+        "mother": "ModelBH",
+        "name": "ModelBH_Langevin",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_Langevin.csv",
+        "properties": [
+            {
+                "desc": "To enforc Saturation flux density",
+                "max": "",
+                "min": "",
+                "name": "Bs",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "To enforce Saturation parameter a",
+                "max": "",
+                "min": "",
+                "name": "a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Init value for Bs for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param1",
+                "type": "float",
+                "unit": "-",
+                "value": 1.89
+            },
+            {
+                "desc": "Init value for a for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param2",
+                "type": "float",
+                "unit": "-",
+                "value": 240
+            }
+        ]
+    },
+    "ModelBH_arctangent": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [],
+        "mother": "ModelBH",
+        "name": "ModelBH_arctangent",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_arctangent.csv",
+        "properties": [
+            {
+                "desc": "BH curve parameter",
+                "max": "",
+                "min": "",
+                "name": "k",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "Saturation permeability parameter",
+                "max": "",
+                "min": "",
+                "name": "mu_a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "ModelBH_exponential": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "ModelBH_exponential",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_exponential.csv",
+        "properties": [
+            {
+                "desc": "BH curve parameter",
+                "max": "",
+                "min": "",
+                "name": "Bs",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "Saturation permeability parameter",
+                "max": "",
+                "min": "",
+                "name": "mu_a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "ModelBH_linear_sat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [
+            "get_BH",
+            "BH_func"
+        ],
+        "mother": "ModelBH",
+        "name": "ModelBH_linear_sat",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_linear_sat.csv",
+        "properties": [
+            {
+                "desc": "Saturation flux density",
+                "max": "",
+                "min": "",
+                "name": "Bs",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "Linear permeability",
+                "max": "",
+                "min": "",
+                "name": "mu_a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Init value for Bs for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param1",
+                "type": "float",
+                "unit": "-",
+                "value": 1.89
+            },
+            {
+                "desc": "Init value for mu_a for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param2",
+                "type": "float",
+                "unit": "-",
+                "value": 240
             }
         ]
     },

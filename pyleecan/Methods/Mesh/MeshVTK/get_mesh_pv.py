@@ -24,7 +24,14 @@ def get_mesh_pv(self, indices=None):
     if self.mesh is not None:
         # Extract submesh
         if indices is not None:
-            mesh = self.mesh.extract_points(indices)
+            mesh = self.mesh
+            mesh["mask"] = zeros(mesh.points.shape)
+            mesh["mask"][indices] = 1
+            mesh.set_active_scalars("mask")
+            thresh = mesh.threshold(1)
+            mesh = thresh
+        else:
+            mesh = self.mesh
         return mesh
 
     # Read mesh file
