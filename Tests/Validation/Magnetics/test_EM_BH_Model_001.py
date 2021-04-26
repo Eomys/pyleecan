@@ -21,10 +21,13 @@ from pyleecan.definitions import DATA_DIR
 
 import matplotlib.pyplot as plt
 
-@pytest.mark.long
-@pytest.mark.validation
+
+@pytest.mark.long_5s
+@pytest.mark.IPMSM
 @pytest.mark.FEMM
-def test_EM_BH_Model_001_IPMSM_A():
+@pytest.mark.MagFEMM
+@pytest.mark.SingleOP
+def test_EM_BH_Model_001_Toyota_Prius():
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication
 
@@ -34,8 +37,8 @@ def test_EM_BH_Model_001_IPMSM_A():
     Electric Machines & Drives Conference (IEMDC), 2013 IEEE International, Chicago, IL, 2013, pp. 295-302.
     Test compute the Flux in FEMM, with and without symmetry
     """
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="test_EM_BH_Model_001_IPMSM_A", machine=IPMSM_A)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="test_EM_BH_Model_001_Toyota_Prius", machine=Toyota_Prius)
 
     # Definition of the enforced output of the electrical module
     N0 = 2504
@@ -57,10 +60,7 @@ def test_EM_BH_Model_001_IPMSM_A():
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
-        type_BH_stator=0,
-        type_BH_rotor=0,
-        is_periodicity_a=True,
-        Kgeo_fineness=0.75,
+        type_BH_stator=0, type_BH_rotor=0, is_periodicity_a=True, Kgeo_fineness=0.75,
     )
     simu.force = None
     simu.struct = None
@@ -70,14 +70,14 @@ def test_EM_BH_Model_001_IPMSM_A():
         Bs=1.46, a=1000, Hmax=8000, Bmax=None,
     )
 
-    fig = simu.machine.stator.mat_type.mag.plot_BH(color='b')
+    fig = simu.machine.stator.mat_type.mag.plot_BH(color="b")
 
     simu2 = simu.copy()
     simu2.machine.stator.mat_type.mag.ModelBH = ModelBH_Langevin(
         Bs=1.46, a=25, Hmax=8000, Bmax=None,
     )
 
-    simu2.machine.stator.mat_type.mag.plot_BH(fig=fig, color='r')
+    simu2.machine.stator.mat_type.mag.plot_BH(fig=fig, color="r")
     plt.legend(["a=1000", "a=25"])
     plt.savefig(join(save_path, simu.name + "_sat_curve.png"))
 
@@ -100,4 +100,4 @@ def test_EM_BH_Model_001_IPMSM_A():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_EM_BH_Model_001_IPMSM_A()
+    out = test_EM_BH_Model_001_Toyota_Prius()
