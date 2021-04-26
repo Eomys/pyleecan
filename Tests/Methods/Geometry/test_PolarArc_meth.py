@@ -30,7 +30,6 @@ translate_test.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_PolarArc_meth(object):
     """Unittest for PolarArc methods"""
 

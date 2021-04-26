@@ -5956,7 +5956,8 @@
             "plot_deflection",
             "plot_deflection_animated",
             "plot_glyph",
-            "plot_glyph_animated"
+            "plot_glyph_animated",
+            "perm_coord"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -6046,7 +6047,8 @@
             "get_surf",
             "get_cell_area",
             "convert",
-            "as_dict"
+            "as_dict",
+            "perm_coord"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",
@@ -6132,7 +6134,16 @@
                 "name": "surf_name",
                 "type": "str",
                 "unit": "",
-                "value": "surf"
+                "value": ""
+            },
+            {
+                "desc": "Array of normals to nodes (cell vertices)",
+                "max": "",
+                "min": "",
+                "name": "node_normals",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -8137,7 +8148,8 @@
             "as_dict",
             "get_min",
             "get_max",
-            "get_N"
+            "get_N",
+            "_set_value"
         ],
         "mother": "ParamExplorer",
         "name": "ParamExplorerSet",
@@ -12786,22 +12798,23 @@
             "__next__",
             "__reversed__",
             "__setitem__",
-            "count",
-            "insert",
-            "pop",
-            "remove",
             "append",
-            "get_simu",
-            "keys",
-            "items",
+            "count",
             "get_param_simu",
             "get_paramexplorer",
+            "get_pareto_index",
+            "get_simu",
+            "get_symbol_list",
+            "get_xoutput_ref",
+            "insert",
+            "items",
+            "keys",
+            "plot_generation",
             "plot_multi",
             "plot_pareto",
-            "plot_generation",
-            "get_pareto_index",
+            "pop",
             "print_memory",
-            "get_xoutput_ref"
+            "remove"
         ],
         "mother": "Output",
         "name": "XOutput",

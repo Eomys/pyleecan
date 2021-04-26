@@ -18,7 +18,6 @@ from Tests import save_load_path as save_path, TEST_DATA_DIR
 import pytest
 
 
-@pytest.mark.GUI
 class TestDMatSetup(object):
     """Test that the widget DMatSetup behave like it should"""
 

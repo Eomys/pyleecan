@@ -23,7 +23,6 @@ from pyleecan.Classes.HoleM50 import HoleM50
 import pytest
 
 
-@pytest.mark.GUI
 class TestSMachineType(object):
     """Test that the widget SMachineType behave like it should"""
 

@@ -11,8 +11,6 @@ from pyleecan.Classes.Magnet import Magnet
 DELTA = 1e-4
 
 
-@pytest.mark.METHODS
-# @pytest.mark.DEV
 class Test_HoleM50_meth(object):
     """pytest for HoleM50 methods"""
 

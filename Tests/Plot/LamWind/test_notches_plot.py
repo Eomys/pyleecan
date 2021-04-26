@@ -29,7 +29,6 @@ from Tests.Plot.LamWind import wind_mat
 """unittest for Lamination with notches plot"""
 
 
-@pytest.mark.PLOT
 class Test_notches_plot(object):
     def test_Lam_evenly_dist(self):
         """Test machine plot with evenly distributed notches (sym and no sym)"""

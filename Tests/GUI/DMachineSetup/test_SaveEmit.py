@@ -18,7 +18,6 @@ import pytest
 matlib_path = join(TEST_DATA_DIR, "Material")
 
 
-@pytest.mark.GUI
 class TestSaveEmit(object):
     """Test that the save_needed behave like it should"""
 

@@ -211,7 +211,6 @@ split_half_test.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_Arc3_meth(object):
     """unittest for Arc3 methods"""
 

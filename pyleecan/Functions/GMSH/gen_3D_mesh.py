@@ -51,7 +51,7 @@ def gen_3D_mesh(
     L = lamination.L1  # Lamination length
 
     # Start a new model
-    gmsh.initialize(sys.argv)
+    gmsh.initialize()
 
     gmsh.option.setNumber("General.Terminal", int(display))
 

@@ -17,7 +17,6 @@ from pyleecan.Classes.FPGNSeg import FPGNSeg
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
 class unittest_scalar_product(TestCase):
     """ Tests for scalar_product methods"""
 

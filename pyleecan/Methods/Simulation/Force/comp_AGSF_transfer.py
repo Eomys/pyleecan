@@ -72,7 +72,7 @@ def comp_AGSF_transfer(self, output, rnoise=None):
 
     AGSF_TR.components["radial"] = DataFreq(
         name="Radial AGSF",
-        unit="N/m²",
+        unit="N/m^2",
         symbol="AGSF_r",
         axes=axes_list,
         values=Prad_wr_TR,
@@ -80,7 +80,7 @@ def comp_AGSF_transfer(self, output, rnoise=None):
 
     AGSF_TR.components["tangential"] = DataFreq(
         name="Tangential AGSF",
-        unit="N/m²",
+        unit="N/m^2",
         symbol="AGSF_t",
         axes=axes_list,
         values=Ptan_wr_TR,

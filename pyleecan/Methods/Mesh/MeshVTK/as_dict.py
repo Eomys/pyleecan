@@ -15,6 +15,9 @@ def as_dict(self):
     MeshVTK_dict["is_vtk_surf"] = self.is_vtk_surf
     MeshVTK_dict["surf_path"] = self.surf_path
     MeshVTK_dict["surf_name"] = self.surf_name
+    MeshVTK_dict["node_normals"] = (
+        self.node_normals.tolist() if self.node_normals is not None else None
+    )
     # The class name is added to the dict for deserialisation purpose
     # Overwrite the mother class name
     MeshVTK_dict["__class__"] = "MeshVTK"

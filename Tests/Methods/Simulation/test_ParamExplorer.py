@@ -59,7 +59,6 @@ param_test.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_ParamExplorer(object):
     @pytest.mark.parametrize("test_dict", param_test)
     def test_get_value(self, test_dict):

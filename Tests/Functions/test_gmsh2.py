@@ -42,24 +42,26 @@ mesh_dict = {
 }
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.GMSH
+@pytest.mark.IPMSM
+@pytest.mark.SingleOP
 def test_gmsh_ipm():
     """Check generation of the 2D mesh with gmsh"""
     if isinstance(draw_GMSH, ImportError):
         raise ImportError("Fail to import draw_GMSH (gmsh package missing)")
 
     # Import the machine from a script
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    IPMSM_A.stator.slot.H1 = 1e-3
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    Toyota_Prius.stator.slot.H1 = 1e-3
     save_path = join(save_plot_path, "GMSH")
     if not isdir(save_path):
         makedirs(save_path)
     # Plot the machine
-    # im = IPMSM_A.plot()
+    # im = Toyota_Prius.plot()
 
     # Create the Simulation
-    mySimu = Simu1(name="EM_SIPMSM_AL_001", machine=IPMSM_A)
+    mySimu = Simu1(name="test_gmsh_ipm", machine=Toyota_Prius)
     myResults = Output(simu=mySimu)
 
     gmsh_dict = draw_GMSH(
@@ -76,14 +78,16 @@ def test_gmsh_ipm():
         path_save=join(save_path, "GSMH_model_ipm.msh"),
     )
 
-    with open("gmsh_test_ipm.json", "w") as fw:
+    with open("test_gmsh_ipm.json", "w") as fw:
         json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
     return gmsh_dict
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.GMSH
+@pytest.mark.SPMSM
+@pytest.mark.SingleOP
 def test_gmsh_spm():
     """Check generation of the 2D mesh with gmsh"""
     if isinstance(draw_GMSH, ImportError):
@@ -99,7 +103,7 @@ def test_gmsh_spm():
         makedirs(save_path)
 
     # Create the Simulation
-    mySimu = Simu1(name="EM_SPMSM_AL_001", machine=PMSM_A)
+    mySimu = Simu1(name="test_gmsh_spm", machine=PMSM_A)
     myResults = Output(simu=mySimu)
     mesh_dict["Lamination_Rotor_Bore_Radius_Ext"] = 20
 
@@ -117,7 +121,7 @@ def test_gmsh_spm():
         path_save=join(save_path, "GSMH_model_spm.msh"),
     )
 
-    with open("gmsh_test_spm.json", "w") as fw:
+    with open("test_gmsh_spm.json", "w") as fw:
         json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
 
     return gmsh_dict

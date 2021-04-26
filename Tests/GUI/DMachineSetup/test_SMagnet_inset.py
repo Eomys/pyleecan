@@ -27,7 +27,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot14.PMSlot14 import PMSlot14
 import pytest
 
 
-@pytest.mark.GUI
 class TestSMSlot_inset(object):
     """Test that the widget SMSlot behave like it should (for SIPMSM)"""
 

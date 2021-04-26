@@ -26,7 +26,6 @@ from Tests.Plot.LamWind import wind_mat, wind_mat2
 """pytest for Lamination with winding plot"""
 
 
-@pytest.mark.PLOT
 class Test_Slot_16_plot(object):
     @pytest.fixture
     def machine(self):
