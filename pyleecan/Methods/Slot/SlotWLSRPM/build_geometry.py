@@ -16,7 +16,7 @@ def build_geometry(self):
 
     Returns
     -------
-    curve_list: llist
+    curve_list: list
         A list of 5 Segments and 2 Arcs
 
     """

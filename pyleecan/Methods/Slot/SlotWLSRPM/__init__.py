@@ -1,4 +1,4 @@
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
 
 
 class SLSRPMOutterError(SlotCheckError):

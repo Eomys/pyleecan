@@ -5,11 +5,15 @@
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from .SlotWind import SlotWind
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
+from .Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -24,9 +28,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotWLSRPM.build_geometry_wind import build_geometry_wind
+    from ..Methods.Slot.SlotWLSRPM.build_geometry_active import build_geometry_active
 except ImportError as error:
-    build_geometry_wind = error
+    build_geometry_active = error
 
 try:
     from ..Methods.Slot.SlotWLSRPM.check import check
@@ -37,7 +41,7 @@ except ImportError as error:
 from ._check import InitUnKnowClassError
 
 
-class SlotWLSRPM(SlotWind):
+class SlotWLSRPM(Slot):
     """Open Rectangular or trapezoidal slot with wedge"""
 
     VERSION = 1
@@ -67,18 +71,18 @@ class SlotWLSRPM(SlotWind):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotWLSRPM.build_geometry_wind
-    if isinstance(build_geometry_wind, ImportError):
-        build_geometry_wind = property(
+    # cf Methods.Slot.SlotWLSRPM.build_geometry_active
+    if isinstance(build_geometry_active, ImportError):
+        build_geometry_active = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotWLSRPM method build_geometry_wind: "
-                    + str(build_geometry_wind)
+                    "Can't use SlotWLSRPM method build_geometry_active: "
+                    + str(build_geometry_active)
                 )
             )
         )
     else:
-        build_geometry_wind = build_geometry_wind
+        build_geometry_active = build_geometry_active
     # cf Methods.Slot.SlotWLSRPM.check
     if isinstance(check, ImportError):
         check = property(
@@ -88,14 +92,9 @@ class SlotWLSRPM(SlotWind):
         )
     else:
         check = check
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -105,33 +104,23 @@ class SlotWLSRPM(SlotWind):
         W3=0.0116,
         H2=0.0148,
         R1=0.00075,
+        H3=0.001,
         Zs=36,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            W1 = obj.W1
-            W3 = obj.W3
-            H2 = obj.H2
-            R1 = obj.R1
-            Zs = obj.Zs
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -143,28 +132,32 @@ class SlotWLSRPM(SlotWind):
                 H2 = init_dict["H2"]
             if "R1" in list(init_dict.keys()):
                 R1 = init_dict["R1"]
+            if "H3" in list(init_dict.keys()):
+                H3 = init_dict["H3"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.W1 = W1
         self.W3 = W3
         self.H2 = H2
         self.R1 = R1
-        # Call SlotWind init
+        self.H3 = H3
+        # Call Slot init
         super(SlotWLSRPM, self).__init__(Zs=Zs)
-        # The class is frozen (in SlotWind init), for now it's impossible to
+        # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         SlotWLSRPM_str = ""
-        # Get the properties inherited from SlotWind
+        # Get the properties inherited from Slot
         SlotWLSRPM_str += super(SlotWLSRPM, self).__str__()
         SlotWLSRPM_str += "W1 = " + str(self.W1) + linesep
         SlotWLSRPM_str += "W3 = " + str(self.W3) + linesep
         SlotWLSRPM_str += "H2 = " + str(self.H2) + linesep
         SlotWLSRPM_str += "R1 = " + str(self.R1) + linesep
+        SlotWLSRPM_str += "H3 = " + str(self.H3) + linesep
         return SlotWLSRPM_str
 
     def __eq__(self, other):
@@ -173,7 +166,7 @@ class SlotWLSRPM(SlotWind):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from SlotWind
+        # Check the properties inherited from Slot
         if not super(SlotWLSRPM, self).__eq__(other):
             return False
         if other.W1 != self.W1:
@@ -184,18 +177,60 @@ class SlotWLSRPM(SlotWind):
             return False
         if other.R1 != self.R1:
             return False
+        if other.H3 != self.H3:
+            return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
 
-        # Get the properties inherited from SlotWind
-        SlotWLSRPM_dict = super(SlotWLSRPM, self).as_dict()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Slot
+        diff_list.extend(super(SlotWLSRPM, self).compare(other, name=name))
+        if other._W1 != self._W1:
+            diff_list.append(name + ".W1")
+        if other._W3 != self._W3:
+            diff_list.append(name + ".W3")
+        if other._H2 != self._H2:
+            diff_list.append(name + ".H2")
+        if other._R1 != self._R1:
+            diff_list.append(name + ".R1")
+        if other._H3 != self._H3:
+            diff_list.append(name + ".H3")
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Slot
+        S += super(SlotWLSRPM, self).__sizeof__()
+        S += getsizeof(self.W1)
+        S += getsizeof(self.W3)
+        S += getsizeof(self.H2)
+        S += getsizeof(self.R1)
+        S += getsizeof(self.H3)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
+
+        # Get the properties inherited from Slot
+        SlotWLSRPM_dict = super(SlotWLSRPM, self).as_dict(**kwargs)
         SlotWLSRPM_dict["W1"] = self.W1
         SlotWLSRPM_dict["W3"] = self.W3
         SlotWLSRPM_dict["H2"] = self.H2
         SlotWLSRPM_dict["R1"] = self.R1
-        # The class name is added to the dict fordeserialisation purpose
+        SlotWLSRPM_dict["H3"] = self.H3
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotWLSRPM_dict["__class__"] = "SlotWLSRPM"
         return SlotWLSRPM_dict
@@ -207,7 +242,8 @@ class SlotWLSRPM(SlotWind):
         self.W3 = None
         self.H2 = None
         self.R1 = None
-        # Set to None the properties inherited from SlotWind
+        self.H3 = None
+        # Set to None the properties inherited from Slot
         super(SlotWLSRPM, self)._set_None()
 
     def _get_W1(self):
@@ -280,6 +316,25 @@ class SlotWLSRPM(SlotWind):
         fget=_get_R1,
         fset=_set_R1,
         doc=u"""Top radius
+
+        :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_H3(self):
+        """getter of H3"""
+        return self._H3
+
+    def _set_H3(self, value):
+        """setter of H3"""
+        check_var("H3", value, "float", Vmin=0)
+        self._H3 = value
+
+    H3 = property(
+        fget=_get_H3,
+        fset=_set_H3,
+        doc=u"""damper winding height
 
         :Type: float
         :min: 0

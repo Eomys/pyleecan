@@ -8,8 +8,8 @@ from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 
 
-def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):
-    """Split the slot winding area in several zone
+def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):
+    """Split the slot active area in several zone
 
     Parameters
     ----------
@@ -29,14 +29,14 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
     Returns
     -------
     surf_list:
-        List of surface delimiting the winding zone
+        List of surface delimiting the active zone
 
     """
 
     if self.get_is_stator():  # check if the slot is on the stator
-        st = "S"
+        st = "Stator"
     else:
-        st = "R"
+        st = "Rotor"
     Rbo = self.get_Rbo()
 
     [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10] = self._comp_point_coordinate()
@@ -61,7 +61,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         surface = SurfLine(
             line_list=[line1, line2, line3, line4, line5, line6],
             # label="Wind" + st + "_R0_T1_S0",
-            label="Wind" + st + "_R0_T0_S0",
+            label="Wind_" + st + "_R0_T0_S0",
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -76,7 +76,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         point_ref = (Zch + Z5 + Z6 + Z7 + Z8 + Zcl) / 6
         surface = SurfLine(
             line_list=[line1, line2, line3, line4, line5, line6],
-            label="Wind" + st + "_R0_T1_S0",
+            label="Wind_" + st + "_R0_T1_S0",
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -94,7 +94,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         surface = SurfLine(
             line_list=[line1, line2, line3, line4, line5, line6],
             # label="Wind" + st + "_R0_T1_S0",
-            label="Wind" + st + "_R0_T0_S0",
+            label="Wind_" + st + "_R0_T0_S0",
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -109,7 +109,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         point_ref = (Zch + Z5 + Z6 + Z7 + Z10 + Zcm) / 6
         surface = SurfLine(
             line_list=[line1, line2, line3, line4, line5, line6],
-            label="Wind" + st + "_R0_T1_S0",
+            label="Wind_" + st + "_R0_T1_S0",
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -122,7 +122,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         point_ref = (Zcm + Z10 + Z8 + Zcl) / 4
         surface = SurfLine(
             line_list=[line1, line2, line3, line4],
-            label="Wind" + st + "_R1_T1_S0",
+            label="Wind_" + st + "_R1_T1_S0",
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -135,7 +135,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         point_ref = (Z9 + Zcm + Zcl + Z1) / 4
         surface = SurfLine(
             line_list=[line1, line2, line3, line4],
-            label="Wind" + st + "_R1_T0_S0",
+            label="Wind_" + st + "_R1_T0_S0",
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -146,15 +146,12 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         # Add a line to close the winding area
         lines = [
             Arc1(
-                curve_list[-1].end,
-                curve_list[0].begin,
-                -Rbo,
-                is_trigo_direction=False,
+                curve_list[-1].end, curve_list[0].begin, -Rbo, is_trigo_direction=False,
             )
         ]
         lines.extend(curve_list)
         surface = SurfLine(
-            line_list=lines, label="Wind" + st + "_R0_T0_S0", point_ref=Zmid
+            line_list=lines, label="Wind_" + st + "_R0_T0_S0", point_ref=Zmid
         )
         surf_list.append(surface)
 
