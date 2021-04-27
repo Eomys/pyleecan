@@ -23,7 +23,7 @@ def build_geometry(self):
 
     Rbo = self.get_Rbo()
 
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8] = self._comp_point_coordinate()
+    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10] = self._comp_point_coordinate()
 
     # Creation of curve
     curve_list = list()
