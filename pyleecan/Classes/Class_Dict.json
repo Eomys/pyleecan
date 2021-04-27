@@ -6538,7 +6538,8 @@
         "desc": "Class for evenly distributed notches (according to Zs)",
         "is_internal": false,
         "methods": [
-            "get_notch_list"
+            "get_notch_list",
+            "comp_surface"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
