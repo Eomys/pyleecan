@@ -56,7 +56,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         _, ext_line = self.get_yoke_desc(
             sym=sym, is_reversed=True, line_label=label_ext
         )
-        _, int_line = self.get_bore_desc(sym=sym, line_label=label_ext)
+        _, int_line = self.get_bore_desc(sym=sym, line_label=label_int)
 
     # Create the surfaces
     if self.is_internal:
