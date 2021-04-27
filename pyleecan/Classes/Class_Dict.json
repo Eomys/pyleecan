@@ -6058,7 +6058,8 @@
             "get_cell_area",
             "convert",
             "as_dict",
-            "perm_coord"
+            "perm_coord",
+            "get_path"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",
@@ -6099,7 +6100,7 @@
                 "name": "path",
                 "type": "str",
                 "unit": "",
-                "value": ""
+                "value": "None"
             },
             {
                 "desc": "Name of the mesh file",

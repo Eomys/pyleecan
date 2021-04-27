@@ -62,6 +62,11 @@ try:
 except ImportError as error:
     perm_coord = error
 
+try:
+    from ..Methods.Mesh.MeshVTK.get_path import get_path
+except ImportError as error:
+    get_path = error
+
 
 from numpy import array, array_equal
 from cloudpickle import dumps, loads
@@ -170,6 +175,15 @@ class MeshVTK(Mesh):
         )
     else:
         perm_coord = perm_coord
+    # cf Methods.Mesh.MeshVTK.get_path
+    if isinstance(get_path, ImportError):
+        get_path = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshVTK method get_path: " + str(get_path))
+            )
+        )
+    else:
+        get_path = get_path
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -181,7 +195,7 @@ class MeshVTK(Mesh):
         mesh=None,
         is_pyvista_mesh=False,
         format="vtk",
-        path="",
+        path=None,
         name="mesh",
         surf=None,
         is_vtk_surf=False,

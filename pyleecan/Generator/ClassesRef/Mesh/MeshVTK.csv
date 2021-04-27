@@ -2,10 +2,10 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 mesh,,Pyvista object of the mesh (optional),,vtk.vtkPointSet,None,,,,Mesh,Mesh,get_mesh_pv,VERSION,1,Gather the mesh storage format
 is_pyvista_mesh,,Store the pyvista object,,bool,False,,,,,,get_node,,,
 format,,Format in which the mesh is stored,,str,vtk,,,,,,get_cell,,,
-path,,Path where the mesh is stored,,str,,,,,,,get_normals,,,
+path,,Path where the mesh is stored,,str,None,,,,,,get_normals,,,
 name,,Name of the mesh file,,str,mesh,,,,,,get_surf,,,
 surf,,Pyvista object of the outer surface,,pyvista.core.pointset.PolyData,None,,,,,,get_cell_area,,,
 is_vtk_surf,,Save the surface mesh in a vtk file,,bool,False,,,,,,convert,,,
 surf_path,,Path where the outer surface is stored,,str,,,,,,,as_dict,,,
 surf_name,,Name of the outer surface file,,str,,,,,,,perm_coord,,,
-node_normals,,Array of normals to nodes (cell vertices),,ndarray,None,,,,,,,,,
+node_normals,,Array of normals to nodes (cell vertices),,ndarray,None,,,,,,get_path,,,
