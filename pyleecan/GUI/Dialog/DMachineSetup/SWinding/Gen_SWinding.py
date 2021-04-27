@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-"""File generated according to SWindPat/gen_list.json
+"""File generated according to SWinding/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-from pyleecan.GUI.Dialog.DMachineSetup.SWindPat.Ui_SWindPat import Ui_SWindPat
+from pyleecan.GUI.Dialog.DMachineSetup.SWinding.Ui_SWinding import Ui_SWinding
 
 
-class Gen_SWindPat(Ui_SWindPat):
-    def setupUi(self, SWindPat):
+class Gen_SWinding(Ui_SWinding):
+    def setupUi(self, SWinding):
         """Abstract class to update the widget according to the csv doc"""
-        Ui_SWindPat.setupUi(self, SWindPat)
+        Ui_SWinding.setupUi(self, SWinding)
         # Setup of in_qs
         txt = self.tr(u"""number of phases """)
         self.in_qs.setWhatsThis(txt)
@@ -43,3 +43,27 @@ class Gen_SWindPat(Ui_SWindPat):
         )
         self.si_Nslot.setWhatsThis(txt)
         self.si_Nslot.setToolTip(txt)
+
+        # Setup of in_Ntcoil
+        txt = self.tr(u"""number of turns per coil""")
+        self.in_Ntcoil.setWhatsThis(txt)
+        self.in_Ntcoil.setToolTip(txt)
+
+        # Setup of si_Ntcoil
+        self.si_Ntcoil.setMinimum(1)
+        self.si_Ntcoil.setMaximum(1000)
+        txt = self.tr(u"""number of turns per coil""")
+        self.si_Ntcoil.setWhatsThis(txt)
+        self.si_Ntcoil.setToolTip(txt)
+
+        # Setup of in_Npcpp
+        txt = self.tr(u"""number of parallel circuits per phase (maximum 2p)""")
+        self.in_Npcpp.setWhatsThis(txt)
+        self.in_Npcpp.setToolTip(txt)
+
+        # Setup of si_Npcpp
+        self.si_Npcpp.setMinimum(1)
+        self.si_Npcpp.setMaximum(1000)
+        txt = self.tr(u"""number of parallel circuits per phase (maximum 2p)""")
+        self.si_Npcpp.setWhatsThis(txt)
+        self.si_Npcpp.setToolTip(txt)
