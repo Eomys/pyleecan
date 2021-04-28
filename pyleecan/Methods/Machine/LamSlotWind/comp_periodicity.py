@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from ....Functions.Winding.comp_wind_periodicity import comp_wind_periodicity
 from ....Classes.Winding import Winding
 
 
@@ -24,7 +23,7 @@ def comp_periodicity(self):
     """
 
     if self.winding is not None and type(self.winding) is not Winding:
-        sym_a, is_antisym_a = comp_wind_periodicity(self.winding.get_connection_mat())
+        sym_a, is_antisym_a = self.winding.get_periodicity()
     else:
         sym_a, is_antisym_a = 1, False
 

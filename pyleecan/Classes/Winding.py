@@ -57,6 +57,11 @@ try:
 except ImportError as error:
     get_connection_mat = error
 
+try:
+    from ..Methods.Machine.Winding.comp_periodicity import comp_periodicity
+except ImportError as error:
+    comp_periodicity = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -159,6 +164,18 @@ class Winding(FrozenClass):
         )
     else:
         get_connection_mat = get_connection_mat
+    # cf Methods.Machine.Winding.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
+            )
+        )
+    else:
+        comp_periodicity = comp_periodicity
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -179,6 +196,8 @@ class Winding(FrozenClass):
         coil_pitch=0,
         wind_mat=None,
         Nlayer=1,
+        per_a=None,
+        is_aper_a=None,
         init_dict=None,
         init_str=None,
     ):
@@ -221,6 +240,10 @@ class Winding(FrozenClass):
                 wind_mat = init_dict["wind_mat"]
             if "Nlayer" in list(init_dict.keys()):
                 Nlayer = init_dict["Nlayer"]
+            if "per_a" in list(init_dict.keys()):
+                per_a = init_dict["per_a"]
+            if "is_aper_a" in list(init_dict.keys()):
+                is_aper_a = init_dict["is_aper_a"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_reverse_wind = is_reverse_wind
@@ -235,6 +258,8 @@ class Winding(FrozenClass):
         self.coil_pitch = coil_pitch
         self.wind_mat = wind_mat
         self.Nlayer = Nlayer
+        self.per_a = per_a
+        self.is_aper_a = is_aper_a
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -269,6 +294,8 @@ class Winding(FrozenClass):
             + linesep
         )
         Winding_str += "Nlayer = " + str(self.Nlayer) + linesep
+        Winding_str += "per_a = " + str(self.per_a) + linesep
+        Winding_str += "is_aper_a = " + str(self.is_aper_a) + linesep
         return Winding_str
 
     def __eq__(self, other):
@@ -299,6 +326,10 @@ class Winding(FrozenClass):
         if not array_equal(other.wind_mat, self.wind_mat):
             return False
         if other.Nlayer != self.Nlayer:
+            return False
+        if other.per_a != self.per_a:
+            return False
+        if other.is_aper_a != self.is_aper_a:
             return False
         return True
 
@@ -338,6 +369,10 @@ class Winding(FrozenClass):
             diff_list.append(name + ".wind_mat")
         if other._Nlayer != self._Nlayer:
             diff_list.append(name + ".Nlayer")
+        if other._per_a != self._per_a:
+            diff_list.append(name + ".per_a")
+        if other._is_aper_a != self._is_aper_a:
+            diff_list.append(name + ".is_aper_a")
         return diff_list
 
     def __sizeof__(self):
@@ -356,6 +391,8 @@ class Winding(FrozenClass):
         S += getsizeof(self.coil_pitch)
         S += getsizeof(self.wind_mat)
         S += getsizeof(self.Nlayer)
+        S += getsizeof(self.per_a)
+        S += getsizeof(self.is_aper_a)
         return S
 
     def as_dict(self, **kwargs):
@@ -384,6 +421,8 @@ class Winding(FrozenClass):
         else:
             Winding_dict["wind_mat"] = self.wind_mat.tolist()
         Winding_dict["Nlayer"] = self.Nlayer
+        Winding_dict["per_a"] = self.per_a
+        Winding_dict["is_aper_a"] = self.is_aper_a
         # The class name is added to the dict for deserialisation purpose
         Winding_dict["__class__"] = "Winding"
         return Winding_dict
@@ -404,6 +443,8 @@ class Winding(FrozenClass):
         self.coil_pitch = None
         self.wind_mat = None
         self.Nlayer = None
+        self.per_a = None
+        self.is_aper_a = None
 
     def _get_is_reverse_wind(self):
         """getter of is_reverse_wind"""
@@ -650,5 +691,42 @@ class Winding(FrozenClass):
 
         :Type: int
         :min: 1
+        """,
+    )
+
+    def _get_per_a(self):
+        """getter of per_a"""
+        return self._per_a
+
+    def _set_per_a(self, value):
+        """setter of per_a"""
+        check_var("per_a", value, "int", Vmin=1)
+        self._per_a = value
+
+    per_a = property(
+        fget=_get_per_a,
+        fset=_set_per_a,
+        doc=u"""Number of spatial periods of the winding
+
+        :Type: int
+        :min: 1
+        """,
+    )
+
+    def _get_is_aper_a(self):
+        """getter of is_aper_a"""
+        return self._is_aper_a
+
+    def _set_is_aper_a(self, value):
+        """setter of is_aper_a"""
+        check_var("is_aper_a", value, "bool")
+        self._is_aper_a = value
+
+    is_aper_a = property(
+        fget=_get_is_aper_a,
+        fset=_set_is_aper_a,
+        doc=u"""True if the winding is anti-periodic over space
+
+        :Type: bool
         """,
     )

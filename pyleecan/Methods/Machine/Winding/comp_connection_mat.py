@@ -80,6 +80,10 @@ def comp_connection_mat(self, Zs=None, p=None):
     # get connexion matrix from swat-em
     wind_mat_swat = wdg.get_phases()
 
+    # perform checks
+    assert p == wdg.get_num_polepairs(), "number of pole pairs is not as requested"
+    assert qs == wdg.get_num_phases(), "number of phases is not as requested"
+
     # convert swat-em connexion matrix to pyleecan connexion matrix
     for qq, phase in enumerate(wind_mat_swat):
         for ll, layer in enumerate(phase):
@@ -112,6 +116,15 @@ def comp_connection_mat(self, Zs=None, p=None):
         self.get_logger().info(
             "Requested number of layers is not feasible, assign it to: "
             + str(Nlayer_actual)
+        )
+
+    # get periodicities
+    self.per_a = wdg.get_periodicity_t()
+    self.is_aper_a = wdg.get_is_symmetric()
+    per_a, is_aper_a = self.comp_periodicity(wind_mat=wind_mat)
+    if self.per_a != per_a or self.is_aper_a != is_aper_a:
+        self.get_logger().warning(
+            "(Anti-)periodicity calculated by pyleecan and SWAT_EM differs"
         )
 
     # Set default values

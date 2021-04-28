@@ -6,7 +6,6 @@ from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.Winding import Winding
 from .....Classes.WindingUD import WindingUD
-from .....Functions.Winding.comp_wind_periodicity import comp_wind_periodicity
 from .....GUI.Dialog.DMachineSetup.SWinding.Gen_SWinding import Gen_SWinding
 from .....Methods.Machine.Winding import WindingError
 
@@ -280,10 +279,11 @@ class SWinding(Gen_SWinding, QWidget):
             self.out_ms.setText(self.tr("ms = Zr / (2*p*qr) = ") + ms)
 
         try:
-            wind_mat = wind.get_connection_mat(self.obj.slot.Zs)
-            Nperw = str(comp_wind_periodicity(wind_mat)[0])
+            Nperw, _ = wind.get_periodicity()
+
         except Exception:  # Unable to compution the connection matrix
             Nperw = "?"
+
         self.out_Nperw.setText(self.tr("Nperw: ") + Nperw)
 
         try:

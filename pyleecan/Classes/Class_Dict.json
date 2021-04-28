@@ -12234,7 +12234,8 @@
             "comp_length_endwinding",
             "comp_connection_mat",
             "get_dim_wind",
-            "get_connection_mat"
+            "get_connection_mat",
+            "comp_periodicity"
         ],
         "mother": "",
         "name": "Winding",
@@ -12348,6 +12349,24 @@
                 "type": "int",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "Number of spatial periods of the winding",
+                "max": "",
+                "min": "1",
+                "name": "per_a",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "True if the winding is anti-periodic over space",
+                "max": "",
+                "min": "",
+                "name": "is_aper_a",
+                "type": "bool",
+                "unit": "",
+                "value": null
             }
         ]
     },

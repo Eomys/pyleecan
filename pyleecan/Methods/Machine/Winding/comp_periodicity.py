@@ -1,23 +1,29 @@
-# -*- coding: utf-8 -*-
-
-from numpy import array_equal, roll, squeeze, sum as np_sum
+from numpy import array_equal, roll, squeeze, sum as np_sum, lcm
 from numpy.linalg import norm
 
 
-def comp_wind_periodicity(wind_mat):
-    """Computes the winding pattern periodicity and symmetries
+def comp_periodicity(self, wind_mat=None):
+    """Computes the winding matrix (anti-)periodicity
 
     Parameters
     ----------
+    self : Winding
+        A Winding object
     wind_mat : ndarray
-        Matrix of the Winding
+        Winding connection matrix
 
     Returns
     -------
-    Nperw: int
-        Number of electrical period of the winding
+    per_a: int
+        Number of spatial periods of the winding
+    is_aper_a: bool
+        True if the winding is anti-periodic over space
 
     """
+
+    if wind_mat is None:
+        wind_mat = self.get_connection_mat()
+
     assert len(wind_mat.shape) == 4, "dim 4 expected for wind_mat"
 
     # Summing on all the layers (Nlay_r and Nlay_theta)
@@ -58,47 +64,9 @@ def comp_wind_periodicity(wind_mat):
         )
         == 0
     ):
-        is_aper_wind = True
+        is_aper_a = True
         Nperw = Nperw * 2
     else:
-        is_aper_wind = False
+        is_aper_a = False
 
-    return int(Nperw), is_aper_wind
-
-
-def gcd(a, b):
-    """Return the greatest common divisor of a and b
-
-    Parameters
-    ----------
-    a : int
-        first number
-    b : int
-        second number
-
-    Returns
-    -------
-    gcd : int
-        greatest common divisor of a and b
-    """
-    while b:
-        a, b = b, a % b
-    return a
-
-
-def lcm(a, b):
-    """Return the least common multiple of a and b
-
-    Parameters
-    ----------
-    a : int
-        first number
-    b : int
-        second number
-
-    Returns
-    -------
-    lcm : int
-        least common multiple of a and b
-    """
-    return a * b // gcd(a, b)
+    return int(Nperw), is_aper_a

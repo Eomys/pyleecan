@@ -83,6 +83,8 @@ class WindingSC(Winding):
         coil_pitch=0,
         wind_mat=None,
         Nlayer=1,
+        per_a=None,
+        is_aper_a=None,
         init_dict=None,
         init_str=None,
     ):
@@ -125,6 +127,10 @@ class WindingSC(Winding):
                 wind_mat = init_dict["wind_mat"]
             if "Nlayer" in list(init_dict.keys()):
                 Nlayer = init_dict["Nlayer"]
+            if "per_a" in list(init_dict.keys()):
+                per_a = init_dict["per_a"]
+            if "is_aper_a" in list(init_dict.keys()):
+                is_aper_a = init_dict["is_aper_a"]
         # Set the properties (value check and convertion are done in setter)
         # Call Winding init
         super(WindingSC, self).__init__(
@@ -140,6 +146,8 @@ class WindingSC(Winding):
             coil_pitch=coil_pitch,
             wind_mat=wind_mat,
             Nlayer=Nlayer,
+            per_a=per_a,
+            is_aper_a=is_aper_a,
         )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties
