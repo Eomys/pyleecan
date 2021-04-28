@@ -24,5 +24,23 @@
             "si_Nslot"
         ],
         "xls": "Machine"
+    },
+    {
+        "cls": "Winding",
+        "name": "Ntcoil",
+        "widget": [
+            "in_Ntcoil",
+            "si_Ntcoil"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Winding",
+        "name": "Npcp",
+        "widget": [
+            "in_Npcp",
+            "si_Npcp"
+        ],
+        "xls": "Machine"
     }
 ]
