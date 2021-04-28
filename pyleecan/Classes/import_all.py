@@ -76,6 +76,7 @@ from ..Classes.LamSlotMag import LamSlotMag
 from ..Classes.LamSlotMulti import LamSlotMulti
 from ..Classes.LamSlotWind import LamSlotWind
 from ..Classes.LamSquirrelCage import LamSquirrelCage
+from ..Classes.LamSquirrelCageMag import LamSquirrelCageMag
 from ..Classes.Lamination import Lamination
 from ..Classes.Line import Line
 from ..Classes.Loss import Loss

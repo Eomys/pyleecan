@@ -3846,7 +3846,8 @@
         "daughters": [
             "LamSlotMag",
             "LamSlotWind",
-            "LamSquirrelCage"
+            "LamSquirrelCage",
+            "LamSquirrelCageMag"
         ],
         "desc": "Lamination with empty Slot",
         "is_internal": false,
@@ -3970,7 +3971,8 @@
             }
         ],
         "daughters": [
-            "LamSquirrelCage"
+            "LamSquirrelCage",
+            "LamSquirrelCageMag"
         ],
         "desc": "Lamination with Slot filled with winding",
         "is_internal": false,
@@ -4076,6 +4078,85 @@
             }
         ]
     },
+    "LamSquirrelCageMag": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Rotor lamination for LSPM",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_length_ring",
+            "plot",
+            "comp_number_phase_eq",
+            "comp_periodicity",
+            "comp_surface_ring",
+            "comp_resistance_wind",
+            "comp_height_yoke",
+            "comp_masses",
+            "comp_surfaces",
+            "comp_volumes",
+            "get_pole_pair_number",
+            "comp_radius_mid_yoke",
+            "has_magnet"
+        ],
+        "mother": "LamSlotWind",
+        "name": "LamSquirrelCageMag",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSquirrelCageMag.csv",
+        "properties": [
+            {
+                "desc": "short circuit ring section radial height [m]",
+                "max": "",
+                "min": "0",
+                "name": "Hscr",
+                "type": "float",
+                "unit": "m",
+                "value": 0.03
+            },
+            {
+                "desc": "short circuit ring section axial length",
+                "max": "",
+                "min": "0",
+                "name": "Lscr",
+                "type": "float",
+                "unit": "m",
+                "value": 0.015
+            },
+            {
+                "desc": "Material of the Rotor short circuit ring",
+                "max": "",
+                "min": "",
+                "name": "ring_mat",
+                "type": "Material",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "lamination Hole",
+                "max": "",
+                "min": "",
+                "name": "hole",
+                "type": "[Hole]",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Bore Shape",
+                "max": "",
+                "min": "",
+                "name": "bore",
+                "type": "Bore",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
     "Lamination": {
         "constants": [
             {
@@ -4089,7 +4170,8 @@
             "LamSlotMag",
             "LamSlotMulti",
             "LamSlotWind",
-            "LamSquirrelCage"
+            "LamSquirrelCage",
+            "LamSquirrelCageMag"
         ],
         "desc": "abstract class for lamination",
         "is_internal": false,
