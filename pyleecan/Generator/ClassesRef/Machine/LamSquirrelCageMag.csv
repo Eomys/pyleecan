@@ -1,0 +1,5 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+hole,,lamination Hole,1,[Hole],,,,,Machine,LamSquirrelCage,build_geometry,VERSION,1,Rotor lamination for LSPM
+bore,,Bore Shape,,Bore,None,,,,,,check,,,
+,,,,,,,,,,,comp_surfaces,,,
+,,,,,,,,,,,plot,,,
