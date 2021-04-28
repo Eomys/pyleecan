@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .LamSlotWind import LamSlotWind
+from .LamSquirrelCage import LamSquirrelCage
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -28,89 +28,26 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCageMag.comp_length_ring import comp_length_ring
+    from ..Methods.Machine.LamSquirrelCageMag.comp_surfaces import comp_surfaces
 except ImportError as error:
-    comp_length_ring = error
+    comp_surfaces = error
 
 try:
     from ..Methods.Machine.LamSquirrelCageMag.plot import plot
 except ImportError as error:
     plot = error
 
-try:
-    from ..Methods.Machine.LamSquirrelCageMag.comp_number_phase_eq import (
-        comp_number_phase_eq,
-    )
-except ImportError as error:
-    comp_number_phase_eq = error
-
-try:
-    from ..Methods.Machine.LamSquirrelCageMag.comp_periodicity import comp_periodicity
-except ImportError as error:
-    comp_periodicity = error
-
-try:
-    from ..Methods.Machine.LamSquirrelCageMag.comp_surface_ring import comp_surface_ring
-except ImportError as error:
-    comp_surface_ring = error
-
-try:
-    from ..Methods.Machine.LamSquirrelCageMag.comp_resistance_wind import (
-        comp_resistance_wind,
-    )
-except ImportError as error:
-    comp_resistance_wind = error
-
-try:
-    from ..Methods.Machine.LamSquirrelCageMag.comp_height_yoke import comp_height_yoke
-except ImportError as error:
-    comp_height_yoke = error
-
-try:
-    from ..Methods.Machine.LamSquirrelCageMag.comp_masses import comp_masses
-except ImportError as error:
-    comp_masses = error
-
-try:
-    from ..Methods.Machine.LamSquirrelCageMag.comp_surfaces import comp_surfaces
-except ImportError as error:
-    comp_surfaces = error
-
-try:
-    from ..Methods.Machine.LamSquirrelCageMag.comp_volumes import comp_volumes
-except ImportError as error:
-    comp_volumes = error
-
-try:
-    from ..Methods.Machine.LamSquirrelCageMag.get_pole_pair_number import (
-        get_pole_pair_number,
-    )
-except ImportError as error:
-    get_pole_pair_number = error
-
-try:
-    from ..Methods.Machine.LamSquirrelCageMag.comp_radius_mid_yoke import (
-        comp_radius_mid_yoke,
-    )
-except ImportError as error:
-    comp_radius_mid_yoke = error
-
-try:
-    from ..Methods.Machine.LamSquirrelCageMag.has_magnet import has_magnet
-except ImportError as error:
-    has_magnet = error
-
 
 from ._check import InitUnKnowClassError
-from .Material import Material
 from .Hole import Hole
 from .Bore import Bore
+from .Material import Material
 from .Winding import Winding
 from .Slot import Slot
 from .Notch import Notch
 
 
-class LamSquirrelCageMag(LamSlotWind):
+class LamSquirrelCageMag(LamSquirrelCage):
     """Rotor lamination for LSPM"""
 
     VERSION = 1
@@ -137,99 +74,6 @@ class LamSquirrelCageMag(LamSlotWind):
         )
     else:
         check = check
-    # cf Methods.Machine.LamSquirrelCageMag.comp_length_ring
-    if isinstance(comp_length_ring, ImportError):
-        comp_length_ring = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCageMag method comp_length_ring: "
-                    + str(comp_length_ring)
-                )
-            )
-        )
-    else:
-        comp_length_ring = comp_length_ring
-    # cf Methods.Machine.LamSquirrelCageMag.plot
-    if isinstance(plot, ImportError):
-        plot = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LamSquirrelCageMag method plot: " + str(plot))
-            )
-        )
-    else:
-        plot = plot
-    # cf Methods.Machine.LamSquirrelCageMag.comp_number_phase_eq
-    if isinstance(comp_number_phase_eq, ImportError):
-        comp_number_phase_eq = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCageMag method comp_number_phase_eq: "
-                    + str(comp_number_phase_eq)
-                )
-            )
-        )
-    else:
-        comp_number_phase_eq = comp_number_phase_eq
-    # cf Methods.Machine.LamSquirrelCageMag.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCageMag method comp_periodicity: "
-                    + str(comp_periodicity)
-                )
-            )
-        )
-    else:
-        comp_periodicity = comp_periodicity
-    # cf Methods.Machine.LamSquirrelCageMag.comp_surface_ring
-    if isinstance(comp_surface_ring, ImportError):
-        comp_surface_ring = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCageMag method comp_surface_ring: "
-                    + str(comp_surface_ring)
-                )
-            )
-        )
-    else:
-        comp_surface_ring = comp_surface_ring
-    # cf Methods.Machine.LamSquirrelCageMag.comp_resistance_wind
-    if isinstance(comp_resistance_wind, ImportError):
-        comp_resistance_wind = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCageMag method comp_resistance_wind: "
-                    + str(comp_resistance_wind)
-                )
-            )
-        )
-    else:
-        comp_resistance_wind = comp_resistance_wind
-    # cf Methods.Machine.LamSquirrelCageMag.comp_height_yoke
-    if isinstance(comp_height_yoke, ImportError):
-        comp_height_yoke = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCageMag method comp_height_yoke: "
-                    + str(comp_height_yoke)
-                )
-            )
-        )
-    else:
-        comp_height_yoke = comp_height_yoke
-    # cf Methods.Machine.LamSquirrelCageMag.comp_masses
-    if isinstance(comp_masses, ImportError):
-        comp_masses = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCageMag method comp_masses: "
-                    + str(comp_masses)
-                )
-            )
-        )
-    else:
-        comp_masses = comp_masses
     # cf Methods.Machine.LamSquirrelCageMag.comp_surfaces
     if isinstance(comp_surfaces, ImportError):
         comp_surfaces = property(
@@ -242,53 +86,15 @@ class LamSquirrelCageMag(LamSlotWind):
         )
     else:
         comp_surfaces = comp_surfaces
-    # cf Methods.Machine.LamSquirrelCageMag.comp_volumes
-    if isinstance(comp_volumes, ImportError):
-        comp_volumes = property(
+    # cf Methods.Machine.LamSquirrelCageMag.plot
+    if isinstance(plot, ImportError):
+        plot = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCageMag method comp_volumes: "
-                    + str(comp_volumes)
-                )
+                ImportError("Can't use LamSquirrelCageMag method plot: " + str(plot))
             )
         )
     else:
-        comp_volumes = comp_volumes
-    # cf Methods.Machine.LamSquirrelCageMag.get_pole_pair_number
-    if isinstance(get_pole_pair_number, ImportError):
-        get_pole_pair_number = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCageMag method get_pole_pair_number: "
-                    + str(get_pole_pair_number)
-                )
-            )
-        )
-    else:
-        get_pole_pair_number = get_pole_pair_number
-    # cf Methods.Machine.LamSquirrelCageMag.comp_radius_mid_yoke
-    if isinstance(comp_radius_mid_yoke, ImportError):
-        comp_radius_mid_yoke = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCageMag method comp_radius_mid_yoke: "
-                    + str(comp_radius_mid_yoke)
-                )
-            )
-        )
-    else:
-        comp_radius_mid_yoke = comp_radius_mid_yoke
-    # cf Methods.Machine.LamSquirrelCageMag.has_magnet
-    if isinstance(has_magnet, ImportError):
-        has_magnet = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCageMag method has_magnet: " + str(has_magnet)
-                )
-            )
-        )
-    else:
-        has_magnet = has_magnet
+        plot = plot
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -297,11 +103,11 @@ class LamSquirrelCageMag(LamSlotWind):
 
     def __init__(
         self,
+        hole=-1,
+        bore=None,
         Hscr=0.03,
         Lscr=0.015,
         ring_mat=-1,
-        hole=-1,
-        bore=None,
         Ksfill=None,
         winding=-1,
         slot=-1,
@@ -334,16 +140,16 @@ class LamSquirrelCageMag(LamSlotWind):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
+            if "hole" in list(init_dict.keys()):
+                hole = init_dict["hole"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
             if "Hscr" in list(init_dict.keys()):
                 Hscr = init_dict["Hscr"]
             if "Lscr" in list(init_dict.keys()):
                 Lscr = init_dict["Lscr"]
             if "ring_mat" in list(init_dict.keys()):
                 ring_mat = init_dict["ring_mat"]
-            if "hole" in list(init_dict.keys()):
-                hole = init_dict["hole"]
-            if "bore" in list(init_dict.keys()):
-                bore = init_dict["bore"]
             if "Ksfill" in list(init_dict.keys()):
                 Ksfill = init_dict["Ksfill"]
             if "winding" in list(init_dict.keys()):
@@ -373,13 +179,13 @@ class LamSquirrelCageMag(LamSlotWind):
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
         # Set the properties (value check and convertion are done in setter)
-        self.Hscr = Hscr
-        self.Lscr = Lscr
-        self.ring_mat = ring_mat
         self.hole = hole
         self.bore = bore
-        # Call LamSlotWind init
+        # Call LamSquirrelCage init
         super(LamSquirrelCageMag, self).__init__(
+            Hscr=Hscr,
+            Lscr=Lscr,
+            ring_mat=ring_mat,
             Ksfill=Ksfill,
             winding=winding,
             slot=slot,
@@ -395,22 +201,15 @@ class LamSquirrelCageMag(LamSlotWind):
             axial_vent=axial_vent,
             notch=notch,
         )
-        # The class is frozen (in LamSlotWind init), for now it's impossible to
+        # The class is frozen (in LamSquirrelCage init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         LamSquirrelCageMag_str = ""
-        # Get the properties inherited from LamSlotWind
+        # Get the properties inherited from LamSquirrelCage
         LamSquirrelCageMag_str += super(LamSquirrelCageMag, self).__str__()
-        LamSquirrelCageMag_str += "Hscr = " + str(self.Hscr) + linesep
-        LamSquirrelCageMag_str += "Lscr = " + str(self.Lscr) + linesep
-        if self.ring_mat is not None:
-            tmp = self.ring_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamSquirrelCageMag_str += "ring_mat = " + tmp
-        else:
-            LamSquirrelCageMag_str += "ring_mat = None" + linesep + linesep
         if len(self.hole) == 0:
             LamSquirrelCageMag_str += "hole = []" + linesep
         for ii in range(len(self.hole)):
@@ -431,14 +230,8 @@ class LamSquirrelCageMag(LamSlotWind):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from LamSlotWind
+        # Check the properties inherited from LamSquirrelCage
         if not super(LamSquirrelCageMag, self).__eq__(other):
-            return False
-        if other.Hscr != self.Hscr:
-            return False
-        if other.Lscr != self.Lscr:
-            return False
-        if other.ring_mat != self.ring_mat:
             return False
         if other.hole != self.hole:
             return False
@@ -453,20 +246,8 @@ class LamSquirrelCageMag(LamSlotWind):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from LamSlotWind
+        # Check the properties inherited from LamSquirrelCage
         diff_list.extend(super(LamSquirrelCageMag, self).compare(other, name=name))
-        if other._Hscr != self._Hscr:
-            diff_list.append(name + ".Hscr")
-        if other._Lscr != self._Lscr:
-            diff_list.append(name + ".Lscr")
-        if (other.ring_mat is None and self.ring_mat is not None) or (
-            other.ring_mat is not None and self.ring_mat is None
-        ):
-            diff_list.append(name + ".ring_mat None mismatch")
-        elif self.ring_mat is not None:
-            diff_list.extend(
-                self.ring_mat.compare(other.ring_mat, name=name + ".ring_mat")
-            )
         if (other.hole is None and self.hole is not None) or (
             other.hole is not None and self.hole is None
         ):
@@ -495,11 +276,8 @@ class LamSquirrelCageMag(LamSlotWind):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from LamSlotWind
+        # Get size of the properties inherited from LamSquirrelCage
         S += super(LamSquirrelCageMag, self).__sizeof__()
-        S += getsizeof(self.Hscr)
-        S += getsizeof(self.Lscr)
-        S += getsizeof(self.ring_mat)
         if self.hole is not None:
             for value in self.hole:
                 S += getsizeof(value)
@@ -513,14 +291,8 @@ class LamSquirrelCageMag(LamSlotWind):
         and may prevent json serializability.
         """
 
-        # Get the properties inherited from LamSlotWind
+        # Get the properties inherited from LamSquirrelCage
         LamSquirrelCageMag_dict = super(LamSquirrelCageMag, self).as_dict(**kwargs)
-        LamSquirrelCageMag_dict["Hscr"] = self.Hscr
-        LamSquirrelCageMag_dict["Lscr"] = self.Lscr
-        if self.ring_mat is None:
-            LamSquirrelCageMag_dict["ring_mat"] = None
-        else:
-            LamSquirrelCageMag_dict["ring_mat"] = self.ring_mat.as_dict(**kwargs)
         if self.hole is None:
             LamSquirrelCageMag_dict["hole"] = None
         else:
@@ -542,83 +314,11 @@ class LamSquirrelCageMag(LamSlotWind):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Hscr = None
-        self.Lscr = None
-        if self.ring_mat is not None:
-            self.ring_mat._set_None()
         self.hole = None
         if self.bore is not None:
             self.bore._set_None()
-        # Set to None the properties inherited from LamSlotWind
+        # Set to None the properties inherited from LamSquirrelCage
         super(LamSquirrelCageMag, self)._set_None()
-
-    def _get_Hscr(self):
-        """getter of Hscr"""
-        return self._Hscr
-
-    def _set_Hscr(self, value):
-        """setter of Hscr"""
-        check_var("Hscr", value, "float", Vmin=0)
-        self._Hscr = value
-
-    Hscr = property(
-        fget=_get_Hscr,
-        fset=_set_Hscr,
-        doc=u"""short circuit ring section radial height [m]
-
-        :Type: float
-        :min: 0
-        """,
-    )
-
-    def _get_Lscr(self):
-        """getter of Lscr"""
-        return self._Lscr
-
-    def _set_Lscr(self, value):
-        """setter of Lscr"""
-        check_var("Lscr", value, "float", Vmin=0)
-        self._Lscr = value
-
-    Lscr = property(
-        fget=_get_Lscr,
-        fset=_set_Lscr,
-        doc=u"""short circuit ring section axial length
-
-        :Type: float
-        :min: 0
-        """,
-    )
-
-    def _get_ring_mat(self):
-        """getter of ring_mat"""
-        return self._ring_mat
-
-    def _set_ring_mat(self, value):
-        """setter of ring_mat"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "ring_mat"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Material()
-        check_var("ring_mat", value, "Material")
-        self._ring_mat = value
-
-        if self._ring_mat is not None:
-            self._ring_mat.parent = self
-
-    ring_mat = property(
-        fget=_get_ring_mat,
-        fset=_set_ring_mat,
-        doc=u"""Material of the Rotor short circuit ring
-
-        :Type: Material
-        """,
-    )
 
     def _get_hole(self):
         """getter of hole"""
