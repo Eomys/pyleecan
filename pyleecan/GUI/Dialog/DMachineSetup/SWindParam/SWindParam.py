@@ -53,18 +53,18 @@ class SWindParam(Gen_SWindParam, QWidget):
         if not is_stator and machine.type_machine == 9:
             self.in_Zs.hide()
             self.in_Nlay.hide()
-            self.obj.winding.Npcpp = 1  # Enforce the value
-            self.si_Npcpp.setEnabled(False)
+            self.obj.winding.Npcp = 1  # Enforce the value
+            self.si_Npcp.setEnabled(False)
 
-        if self.obj.winding.Npcpp is None:
-            self.obj.winding.Npcpp = 1  # Default value
+        if self.obj.winding.Npcp is None:
+            self.obj.winding.Npcp = 1  # Default value
 
         self.comp_output()
-        self.si_Npcpp.setValue(self.obj.winding.Npcpp)
+        self.si_Npcp.setValue(self.obj.winding.Npcp)
 
         # Connect the widget
         self.si_Ntcoil.editingFinished.connect(self.set_Ntcoil)
-        self.si_Npcpp.editingFinished.connect(self.set_Npcp)
+        self.si_Npcp.editingFinished.connect(self.set_Npcp)
 
     def set_Ntcoil(self):
         """Signal to update the value of Ntcoil according to the line edit
@@ -87,7 +87,7 @@ class SWindParam(Gen_SWindParam, QWidget):
         self : SWindParam
             A SWindParam object
         """
-        self.obj.winding.Npcpp = self.si_Npcpp.value()
+        self.obj.winding.Npcp = self.si_Npcp.value()
         self.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -105,7 +105,7 @@ class SWindParam(Gen_SWindParam, QWidget):
         qs = self.obj.winding.qs
 
         try:
-            Ntspc = str(self.obj.winding.comp_Ntspc(Zs))
+            Ntspc = str(self.obj.winding.comp_Ntsp(Zs))
         except:
             Ntspc = "?"
         try:
@@ -145,7 +145,7 @@ class SWindParam(Gen_SWindParam, QWidget):
             # Check that everything is set
             if obj.Ntcoil is None:
                 return "You must set Ntcoil !"
-            if obj.Npcpp is None:
-                return "You must set Npcpp !"
+            if obj.Npcp is None:
+                return "You must set Npcp !"
         except Exception as e:
             return str(e)

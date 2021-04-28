@@ -21,14 +21,14 @@ class Gen_SWindParam(Ui_SWindParam):
         self.si_Ntcoil.setWhatsThis(txt)
         self.si_Ntcoil.setToolTip(txt)
 
-        # Setup of in_Npcpp
+        # Setup of in_Npcp
         txt = self.tr(u"""number of parallel circuits per phase (maximum 2p)""")
-        self.in_Npcpp.setWhatsThis(txt)
-        self.in_Npcpp.setToolTip(txt)
+        self.in_Npcp.setWhatsThis(txt)
+        self.in_Npcp.setToolTip(txt)
 
-        # Setup of si_Npcpp
-        self.si_Npcpp.setMinimum(1)
-        self.si_Npcpp.setMaximum(1000)
+        # Setup of si_Npcp
+        self.si_Npcp.setMinimum(1)
+        self.si_Npcp.setMaximum(1000)
         txt = self.tr(u"""number of parallel circuits per phase (maximum 2p)""")
-        self.si_Npcpp.setWhatsThis(txt)
-        self.si_Npcpp.setToolTip(txt)
+        self.si_Npcp.setWhatsThis(txt)
+        self.si_Npcp.setToolTip(txt)

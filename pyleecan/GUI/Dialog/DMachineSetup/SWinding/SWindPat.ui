@@ -213,14 +213,14 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
-              <widget class="QLabel" name="in_Npcpp">
+              <widget class="QLabel" name="in_Npcp">
                <property name="text">
                 <string>Parallel circuits per phase</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="si_Npcpp">
+              <widget class="QSpinBox" name="si_Npcp">
                <property name="maximum">
                 <number>999999999</number>
                </property>

@@ -1,7 +1,7 @@
 def comp_FEMM_Jcus(lam, cname, I, j_t0, is_mmf):
     """Compute the current density for FEMM [A/mm2]"""
 
-    Npcpp = lam.winding.Npcpp  # number of parallel circuits  per phase (maximum 2p)
+    Npcp = lam.winding.Npcp  # number of parallel circuits  per phase (maximum 2p)
     (Nrad, Ntan) = lam.winding.get_dim_wind()
     Nwpc = Nrad * Ntan  # total number of wires / strands in parallel per coil
     Ksfill = lam.comp_fill_factor()
@@ -16,6 +16,6 @@ def comp_FEMM_Jcus(lam, cname, I, j_t0, is_mmf):
     if I is None:
         Jcus = 0
     else:
-        Jcus = s * 1e-6 * Ksfill * (I[q_id, j_t0] / Npcpp) * is_mmf / Swire / Nwpc
+        Jcus = s * 1e-6 * Ksfill * (I[q_id, j_t0] / Npcp) * is_mmf / Swire / Nwpc
 
     return Jcus

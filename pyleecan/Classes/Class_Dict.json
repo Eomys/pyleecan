@@ -12214,10 +12214,6 @@
             {
                 "name": "VERSION",
                 "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"Abstract Winding\""
             }
         ],
         "daughters": [
@@ -12229,14 +12225,16 @@
             "WindingSC",
             "WindingUD"
         ],
-        "desc": "Winding abstract class",
+        "desc": "Winding class generating connection matrix using Star of Slots method (coupling with SWAT-EM)",
         "is_internal": false,
         "methods": [
             "comp_Ncspc",
-            "comp_Ntspc",
+            "comp_Ntsp",
             "comp_phasor_angle",
             "comp_winding_factor",
-            "comp_length_endwinding"
+            "comp_length_endwinding",
+            "comp_connection_mat",
+            "get_dim_wind"
         ],
         "mother": "",
         "name": "Winding",
@@ -12283,7 +12281,7 @@
                 "desc": "number of parallel circuits per phase (maximum 2p)",
                 "max": "1000",
                 "min": "1",
-                "name": "Npcpp",
+                "name": "Npcp",
                 "type": "int",
                 "unit": "-",
                 "value": 2
@@ -12321,6 +12319,24 @@
                 "min": "",
                 "name": "conductor",
                 "type": "Conductor",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Coil pitch (or coil span)",
+                "max": "",
+                "min": "",
+                "name": "coil_pitch",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Winding matrix calculated with SWAT_EM",
+                "max": "",
+                "min": "",
+                "name": "wind_mat",
+                "type": "ndarray",
                 "unit": "-",
                 "value": ""
             }

@@ -10,10 +10,10 @@
     },
     {
         "cls": "Winding",
-        "name": "Npcpp",
+        "name": "Npcp",
         "widget": [
-            "in_Npcpp",
-            "si_Npcpp"
+            "in_Npcp",
+            "si_Npcp"
         ],
         "xls": "Machine"
     }

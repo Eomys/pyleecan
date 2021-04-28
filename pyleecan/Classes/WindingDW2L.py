@@ -7,7 +7,7 @@
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import check_var, raise_
+from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.copy import copy
@@ -23,6 +23,7 @@ except ImportError as error:
     get_dim_wind = error
 
 
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .Conductor import Conductor
 
@@ -50,21 +51,7 @@ class WindingDW2L(WindingDW1L):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        coil_pitch=5,
-        is_reverse_wind=False,
-        Nslot_shift_wind=0,
-        qs=3,
-        Ntcoil=7,
-        Npcpp=2,
-        type_connection=0,
-        p=3,
-        Lewout=0.015,
-        conductor=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, coil_pitch=5, is_reverse_wind=False, Nslot_shift_wind=0, qs=3, Ntcoil=7, Npcp=2, type_connection=0, p=3, Lewout=0.015, conductor=-1, coil_pitch=0, wind_mat=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -90,8 +77,8 @@ class WindingDW2L(WindingDW1L):
                 qs = init_dict["qs"]
             if "Ntcoil" in list(init_dict.keys()):
                 Ntcoil = init_dict["Ntcoil"]
-            if "Npcpp" in list(init_dict.keys()):
-                Npcpp = init_dict["Npcpp"]
+            if "Npcp" in list(init_dict.keys()):
+                Npcp = init_dict["Npcp"]
             if "type_connection" in list(init_dict.keys()):
                 type_connection = init_dict["type_connection"]
             if "p" in list(init_dict.keys()):
@@ -100,20 +87,13 @@ class WindingDW2L(WindingDW1L):
                 Lewout = init_dict["Lewout"]
             if "conductor" in list(init_dict.keys()):
                 conductor = init_dict["conductor"]
+            if "coil_pitch" in list(init_dict.keys()):
+                coil_pitch = init_dict["coil_pitch"]
+            if "wind_mat" in list(init_dict.keys()):
+                wind_mat = init_dict["wind_mat"]
         # Set the properties (value check and convertion are done in setter)
         # Call WindingDW1L init
-        super(WindingDW2L, self).__init__(
-            coil_pitch=coil_pitch,
-            is_reverse_wind=is_reverse_wind,
-            Nslot_shift_wind=Nslot_shift_wind,
-            qs=qs,
-            Ntcoil=Ntcoil,
-            Npcpp=Npcpp,
-            type_connection=type_connection,
-            p=p,
-            Lewout=Lewout,
-            conductor=conductor,
-        )
+        super(WindingDW2L, self).__init__(coil_pitch=coil_pitch, is_reverse_wind=is_reverse_wind, Nslot_shift_wind=Nslot_shift_wind, qs=qs, Ntcoil=Ntcoil, Npcp=Npcp, type_connection=type_connection, p=p, Lewout=Lewout, conductor=conductor, coil_pitch=coil_pitch, wind_mat=wind_mat)
         # The class is frozen (in WindingDW1L init), for now it's impossible to
         # add new properties
 
@@ -136,15 +116,15 @@ class WindingDW2L(WindingDW1L):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name='self'):
         """Compare two objects and return list of differences"""
 
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from WindingDW1L
-        diff_list.extend(super(WindingDW2L, self).compare(other, name=name))
+        diff_list.extend(super(WindingDW2L, self).compare(other,name=name))
         return diff_list
 
     def __sizeof__(self):
@@ -159,7 +139,7 @@ class WindingDW2L(WindingDW1L):
     def as_dict(self, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 

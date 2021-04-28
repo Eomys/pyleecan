@@ -76,11 +76,13 @@ class WindingUD(Winding):
         Nslot_shift_wind=0,
         qs=3,
         Ntcoil=7,
-        Npcpp=2,
+        Npcp=2,
         type_connection=0,
         p=3,
         Lewout=0.015,
         conductor=-1,
+        coil_pitch=0,
+        wind_mat=None,
         init_dict=None,
         init_str=None,
     ):
@@ -109,8 +111,8 @@ class WindingUD(Winding):
                 qs = init_dict["qs"]
             if "Ntcoil" in list(init_dict.keys()):
                 Ntcoil = init_dict["Ntcoil"]
-            if "Npcpp" in list(init_dict.keys()):
-                Npcpp = init_dict["Npcpp"]
+            if "Npcp" in list(init_dict.keys()):
+                Npcp = init_dict["Npcp"]
             if "type_connection" in list(init_dict.keys()):
                 type_connection = init_dict["type_connection"]
             if "p" in list(init_dict.keys()):
@@ -119,6 +121,10 @@ class WindingUD(Winding):
                 Lewout = init_dict["Lewout"]
             if "conductor" in list(init_dict.keys()):
                 conductor = init_dict["conductor"]
+            if "coil_pitch" in list(init_dict.keys()):
+                coil_pitch = init_dict["coil_pitch"]
+            if "wind_mat" in list(init_dict.keys()):
+                wind_mat = init_dict["wind_mat"]
         # Set the properties (value check and convertion are done in setter)
         self.user_wind_mat = user_wind_mat
         # Call Winding init
@@ -127,11 +133,13 @@ class WindingUD(Winding):
             Nslot_shift_wind=Nslot_shift_wind,
             qs=qs,
             Ntcoil=Ntcoil,
-            Npcpp=Npcpp,
+            Npcp=Npcp,
             type_connection=type_connection,
             p=p,
             Lewout=Lewout,
             conductor=conductor,
+            coil_pitch=coil_pitch,
+            wind_mat=wind_mat,
         )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties

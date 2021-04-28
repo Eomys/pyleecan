@@ -1393,7 +1393,7 @@
         },
         "winding": {
             "Lewout": 0.001,
-            "Npcpp": 2,
+            "Npcp": 2,
             "Nslot_shift_wind": 0,
             "Ntcoil": 6,
             "__class__": "WindingDW1L",

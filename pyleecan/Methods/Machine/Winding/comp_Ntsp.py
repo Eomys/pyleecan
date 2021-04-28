@@ -2,7 +2,7 @@
 from ....Methods.Machine.Winding import WindingError
 
 
-def comp_Ntspc(self, Zs=None):
+def comp_Ntsp(self, Zs=None):
     """Compute the number of turns in series per phase
 
     Parameters
@@ -33,11 +33,11 @@ def comp_Ntspc(self, Zs=None):
 
     # effective number of turns in series per phase from connection matrix
     Ntspc_eff_ = (
-        abs(self.comp_connection_mat(Zs).sum(axis=(0, 1))).sum(axis=0) / self.Npcpp / 2
+        abs(self.comp_connection_mat(Zs).sum(axis=(0, 1))).sum(axis=0) / self.Npcp / 2
     )
     if Ntspc_eff_.std() != 0:
         self.get_logger().warning(
-            "Winding.comp_Ntspc: "
+            "Winding.comp_Ntsp: "
             "Uneven number of turns in series per phase. "
             + "Mean number of turns will be used."
         )

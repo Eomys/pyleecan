@@ -51,7 +51,7 @@ def comp_connection_mat(self, Zs=None):
     p = float(self.p)
     Ncgr = Zs / nlay / qs
     ms = Zs / 2.0 / p / qs
-    # Ncspc= Zs/(2.0*qs*self.Npcpp/nlay)  # number of coils in series per parallel circuit
+    # Ncspc= Zs/(2.0*qs*self.Npcp/nlay)  # number of coils in series per parallel circuit
     # Ntspc = self.Ntcoil * Ncspc #Number of turns in series per phase
     Ntcoil = self.Ntcoil  # Number of turns per coils
 

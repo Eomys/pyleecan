@@ -186,7 +186,7 @@ class Test_Winding_plot(object):
             Zs=36, H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
         )
         stator.winding = WindingDW2L(
-            qs=3, Lewout=15e-3, p=3, coil_pitch=5, Ntcoil=7, Npcpp=2
+            qs=3, Lewout=15e-3, p=3, coil_pitch=5, Ntcoil=7, Npcp=2
         )
         stator.plot_mmf_unit(is_show_fig=False)
         fig = plt.gcf()

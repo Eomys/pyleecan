@@ -33,10 +33,10 @@ def comp_I_mag(self, time, is_stator, phase=None):
     if hasattr(lam, "winding") and lam.winding is not None:
 
         # Get the number of parallel circuit per phase of winding
-        if hasattr(lam.winding, "Npcpp") and lam.winding.Npcpp is not None:
-            Npcpp = lam.winding.Npcpp
+        if hasattr(lam.winding, "Npcp") and lam.winding.Npcp is not None:
+            Npcp = lam.winding.Npcp
         else:
-            Npcpp = 1
+            Npcp = 1
 
         # Get current DataTime
         if is_stator:
@@ -57,7 +57,7 @@ def comp_I_mag(self, time, is_stator, phase=None):
                 str_phase,
                 axis_data={"time": time},
             )[I_data.symbol]
-            / Npcpp
+            / Npcp
         )
 
         # Add time dimension if Is is calculated only for one time step

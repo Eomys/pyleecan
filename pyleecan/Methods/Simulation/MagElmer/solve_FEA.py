@@ -170,7 +170,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         Ncond_Eminus = 1
         Ncond_Fplus = 1
         Ncond_Fminus = 1
-        Npcpp = machine.stator.winding.Npcpp
+        Npcp = machine.stator.winding.Npcp
         for surf in surf_list:
             label = surface_label.get(surf.label, "UNKNOWN")
             if "H_MAGNET" in label:  # LamHole

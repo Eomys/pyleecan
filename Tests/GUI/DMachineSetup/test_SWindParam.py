@@ -31,11 +31,11 @@ class TestSWindParam(object):
         test_obj = MachineSCIM()
         test_obj.stator = LamSlotWind(is_stator=True)
         test_obj.stator.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
-        test_obj.stator.winding = Winding(Npcpp=10, Ntcoil=11)
+        test_obj.stator.winding = Winding(Npcp=10, Ntcoil=11)
 
         test_obj.rotor = LamSlotWind(is_stator=False)
         test_obj.rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
-        test_obj.rotor.winding = Winding(Npcpp=20, Ntcoil=21)
+        test_obj.rotor.winding = Winding(Npcp=20, Ntcoil=21)
 
         widget = SWindParam(machine=test_obj, matlib=[], is_stator=True)
         widget2 = SWindParam(machine=test_obj, matlib=[], is_stator=False)
@@ -47,18 +47,18 @@ class TestSWindParam(object):
     def test_init(self, setup):
         """Check that the Widget spinbox initialise to the lamination value"""
 
-        assert setup["widget"].si_Npcpp.value() == 10
+        assert setup["widget"].si_Npcp.value() == 10
         assert setup["widget"].si_Ntcoil.value() == 11
-        assert setup["widget"].in_Npcpp.text() == "Npcpp"
+        assert setup["widget"].in_Npcp.text() == "Npcp"
         assert setup["widget"].in_Ntcoil.text() == "Ntcoil"
         assert setup["widget"].in_Zs.text() == "Zs: 36"
         assert setup["widget"].in_qs.text() == "qs: 3"
         assert setup["widget"].out_Ncspc.text() == "Ncspc: ?"
         assert setup["widget"].out_Ntspc.text() == "Ntspc: ?"
 
-        assert setup["widget2"].si_Npcpp.value() == 20
+        assert setup["widget2"].si_Npcp.value() == 20
         assert setup["widget2"].si_Ntcoil.value() == 21
-        assert setup["widget2"].in_Npcpp.text() == "Npcpp"
+        assert setup["widget2"].in_Npcp.text() == "Npcp"
         assert setup["widget2"].in_Ntcoil.text() == "Ntcoil"
         assert setup["widget2"].in_Zs.text() == "Zs: 36"
         assert setup["widget2"].in_qs.text() == "qs: 3"
@@ -67,7 +67,7 @@ class TestSWindParam(object):
         setup["test_obj"] = MachineSCIM()
         setup["test_obj"].rotor = LamSlotWind(is_stator=False)
         setup["test_obj"].rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
-        setup["test_obj"].rotor.winding = Winding(Npcpp=20, Ntcoil=None)
+        setup["test_obj"].rotor.winding = Winding(Npcp=20, Ntcoil=None)
 
         setup["test_obj"].type_machine = 9
 
@@ -81,22 +81,22 @@ class TestSWindParam(object):
     def test_set_Npcp1(self, setup):
         """Check that the Widget allow to update Npcp1"""
         # Clear the field before writing the new value
-        setup["widget"].si_Npcpp.clear()
+        setup["widget"].si_Npcp.clear()
         value = int(uniform(5, 100))
-        QTest.keyClicks(setup["widget"].si_Npcpp, str(value))
-        setup["widget"].si_Npcpp.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(setup["widget"].si_Npcp, str(value))
+        setup["widget"].si_Npcp.editingFinished.emit()  # To trigger the slot
 
-        assert setup["test_obj"].stator.winding.Npcpp == value
+        assert setup["test_obj"].stator.winding.Npcp == value
 
     def test_set_Npcp2(self, setup):
         """Check that the Widget allow to update Npcp2"""
         # Clear the field before writing the new value
-        setup["widget2"].si_Npcpp.clear()
+        setup["widget2"].si_Npcp.clear()
         value = int(uniform(5, 100))
-        QTest.keyClicks(setup["widget2"].si_Npcpp, str(value))
-        setup["widget2"].si_Npcpp.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(setup["widget2"].si_Npcp, str(value))
+        setup["widget2"].si_Npcp.editingFinished.emit()  # To trigger the slot
 
-        assert setup["test_obj"].rotor.winding.Npcpp == value
+        assert setup["test_obj"].rotor.winding.Npcp == value
 
     def test_set_Ntcoil1(self, setup):
         """Check that the Widget allow to update Ntcoil1"""
@@ -125,6 +125,6 @@ class TestSWindParam(object):
         assert rotor.comp_fill_factor() == 0
 
         rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
-        rotor.winding = Winding(Npcpp=20, Ntcoil=None)
+        rotor.winding = Winding(Npcp=20, Ntcoil=None)
 
         assert setup["widget"].check(rotor) == "You must set Ntcoil !"
