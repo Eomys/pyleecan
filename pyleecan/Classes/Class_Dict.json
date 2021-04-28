@@ -12217,11 +12217,6 @@
             }
         ],
         "daughters": [
-            "WindingCW1L",
-            "WindingCW2LR",
-            "WindingCW2LT",
-            "WindingDW1L",
-            "WindingDW2L",
             "WindingSC",
             "WindingUD"
         ],
@@ -12234,7 +12229,11 @@
             "comp_winding_factor",
             "comp_length_endwinding",
             "comp_connection_mat",
-            "get_dim_wind"
+            "get_dim_wind",
+            "comp_connection_mat_CW1L",
+            "comp_connection_mat_CW2LR",
+            "comp_connection_mat_CW2LT",
+            "comp_connection_mat_DWL"
         ],
         "mother": "",
         "name": "Winding",
@@ -12341,137 +12340,6 @@
                 "value": ""
             }
         ]
-    },
-    "WindingCW1L": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"single layer concentrated\""
-            }
-        ],
-        "daughters": [],
-        "desc": "single layer non-overlapping 'concentrated' tooth winding 'alternate teeth wound'",
-        "is_internal": false,
-        "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
-        ],
-        "mother": "Winding",
-        "name": "WindingCW1L",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW1L.csv",
-        "properties": []
-    },
-    "WindingCW2LR": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"double layer concentrated (radial)\""
-            }
-        ],
-        "daughters": [],
-        "desc": "double layer non-overlapping \"concentrated\" tooth winding \"all teeth wound\", radial coil superposition",
-        "is_internal": false,
-        "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
-        ],
-        "mother": "Winding",
-        "name": "WindingCW2LR",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW2LR.csv",
-        "properties": []
-    },
-    "WindingCW2LT": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"double layer concentrated (orthoradial)\""
-            }
-        ],
-        "daughters": [],
-        "desc": "double layer non-overlapping \"concentrated\" tooth winding \"all teeth wound\", orthoradial coil superposition",
-        "is_internal": false,
-        "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
-        ],
-        "mother": "Winding",
-        "name": "WindingCW2LT",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW2LT.csv",
-        "properties": []
-    },
-    "WindingDW1L": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"single layer distributed\""
-            }
-        ],
-        "daughters": [
-            "WindingDW2L"
-        ],
-        "desc": "single layer overlapping integral distributed winding",
-        "is_internal": false,
-        "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
-        ],
-        "mother": "Winding",
-        "name": "WindingDW1L",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingDW1L.csv",
-        "properties": [
-            {
-                "desc": "winding coil pitch or coil span expressed in slots (coil_pitch1=Zs/(2p)->full-pitch distributed winding, coil_pitch1<Zs/(2p)->chorded/shorted-pitch distributed winding, coil_pitch1=1->tooth-winding). Coil pitch is sometimes written 1/9 means Input.Magnetics.coil_pitch1=9-1=8",
-                "max": "1000",
-                "min": "0",
-                "name": "coil_pitch",
-                "type": "int",
-                "unit": "-",
-                "value": 5
-            }
-        ]
-    },
-    "WindingDW2L": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"double layer distributed\""
-            }
-        ],
-        "daughters": [],
-        "desc": "double layer overlapping integral distributed winding, radial coil superposition",
-        "is_internal": false,
-        "methods": [
-            "get_dim_wind"
-        ],
-        "mother": "WindingDW1L",
-        "name": "WindingDW2L",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingDW2L.csv",
-        "properties": []
     },
     "WindingSC": {
         "constants": [

@@ -204,11 +204,6 @@ from ..Classes.VentilationCirc import VentilationCirc
 from ..Classes.VentilationPolar import VentilationPolar
 from ..Classes.VentilationTrap import VentilationTrap
 from ..Classes.Winding import Winding
-from ..Classes.WindingCW1L import WindingCW1L
-from ..Classes.WindingCW2LR import WindingCW2LR
-from ..Classes.WindingCW2LT import WindingCW2LT
-from ..Classes.WindingDW1L import WindingDW1L
-from ..Classes.WindingDW2L import WindingDW2L
 from ..Classes.WindingSC import WindingSC
 from ..Classes.WindingUD import WindingUD
 from ..Classes.XOutput import XOutput

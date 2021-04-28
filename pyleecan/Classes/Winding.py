@@ -52,6 +52,34 @@ try:
 except ImportError as error:
     get_dim_wind = error
 
+try:
+    from ..Methods.Machine.Winding.comp_connection_mat_CW1L import (
+        comp_connection_mat_CW1L,
+    )
+except ImportError as error:
+    comp_connection_mat_CW1L = error
+
+try:
+    from ..Methods.Machine.Winding.comp_connection_mat_CW2LR import (
+        comp_connection_mat_CW2LR,
+    )
+except ImportError as error:
+    comp_connection_mat_CW2LR = error
+
+try:
+    from ..Methods.Machine.Winding.comp_connection_mat_CW2LT import (
+        comp_connection_mat_CW2LT,
+    )
+except ImportError as error:
+    comp_connection_mat_CW2LT = error
+
+try:
+    from ..Methods.Machine.Winding.comp_connection_mat_DWL import (
+        comp_connection_mat_DWL,
+    )
+except ImportError as error:
+    comp_connection_mat_DWL = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -141,6 +169,54 @@ class Winding(FrozenClass):
         )
     else:
         get_dim_wind = get_dim_wind
+    # cf Methods.Machine.Winding.comp_connection_mat_CW1L
+    if isinstance(comp_connection_mat_CW1L, ImportError):
+        comp_connection_mat_CW1L = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_connection_mat_CW1L: "
+                    + str(comp_connection_mat_CW1L)
+                )
+            )
+        )
+    else:
+        comp_connection_mat_CW1L = comp_connection_mat_CW1L
+    # cf Methods.Machine.Winding.comp_connection_mat_CW2LR
+    if isinstance(comp_connection_mat_CW2LR, ImportError):
+        comp_connection_mat_CW2LR = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_connection_mat_CW2LR: "
+                    + str(comp_connection_mat_CW2LR)
+                )
+            )
+        )
+    else:
+        comp_connection_mat_CW2LR = comp_connection_mat_CW2LR
+    # cf Methods.Machine.Winding.comp_connection_mat_CW2LT
+    if isinstance(comp_connection_mat_CW2LT, ImportError):
+        comp_connection_mat_CW2LT = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_connection_mat_CW2LT: "
+                    + str(comp_connection_mat_CW2LT)
+                )
+            )
+        )
+    else:
+        comp_connection_mat_CW2LT = comp_connection_mat_CW2LT
+    # cf Methods.Machine.Winding.comp_connection_mat_DWL
+    if isinstance(comp_connection_mat_DWL, ImportError):
+        comp_connection_mat_DWL = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_connection_mat_DWL: "
+                    + str(comp_connection_mat_DWL)
+                )
+            )
+        )
+    else:
+        comp_connection_mat_DWL = comp_connection_mat_DWL
     # save and copy methods are available in all object
     save = save
     copy = copy
