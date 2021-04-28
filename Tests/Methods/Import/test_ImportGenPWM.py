@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import pytest
 from os import mkdir
 from os.path import isdir, join
 
-from numpy import linspace
 import matplotlib.pyplot as plt
-
+import pytest
+from numpy import linspace
 from pyleecan.Classes.ImportGenPWM import ImportGenPWM
 from Tests import save_plot_path as save_path
-
 
 save_path = join(save_path, "Import")
 if not isdir(save_path):
@@ -45,7 +43,16 @@ def testSPWM():
                 plt.plot(time, result[:, 1])
                 fig = plt.gcf()
                 fig.savefig(
-                    join(save_path, "test" + str(ii) + str(jj) + str(hh) + "SPWM.png")
+                    join(
+                        save_path,
+                        "test_ImportGenPWM_"
+                        + str(ii)
+                        + "_"
+                        + str(jj)
+                        + "_"
+                        + str(hh)
+                        + "_SPWM.png",
+                    )
                 )
 
 
@@ -75,6 +82,9 @@ def testDPWM():
         plt.close("all")
         plt.plot(time, result[:, 1])
         fig = plt.gcf()
-        fig.savefig(join(save_path, "test_" + str(ii) + ".png"))
+        fig.savefig(join(save_path, "test_ImportGenPWM_" + str(ii) + ".png"))
 
-    # Check the signal
+
+if __name__ == "__main__":
+    testDPWM()
+    testSPWM()
