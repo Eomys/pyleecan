@@ -72,7 +72,7 @@ def plot(
             qs = 1
         else:
             try:
-                wind_mat = self.winding.comp_connection_mat(self.get_Zs())
+                wind_mat = self.winding.get_connection_mat(self.get_Zs())
                 qs = self.winding.qs
             except:
                 wind_mat = None

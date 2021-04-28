@@ -16,7 +16,7 @@ def plot_winding(self, wind_mat=None, all_slot=False, is_show_fig=True):
     self : LamSlotWind
         A: LamSlotWind object
     wind_mat : numpy.ndarray
-        Winding Matrix, if None will call comp_connection_mat (Default value = None)
+        Winding Matrix, if None will call get_connection_mat (Default value = None)
     all_slot : bool
         True if we plot all slot and false when plotting only needed one(sym)
     is_show_fig : bool
@@ -28,7 +28,7 @@ def plot_winding(self, wind_mat=None, all_slot=False, is_show_fig=True):
 
     # We compute the wind_mat only if needed
     if wind_mat is None:
-        wind_mat = self.winding.comp_connection_mat(self.slot.Zs)
+        wind_mat = self.winding.get_connection_mat(self.slot.Zs)
 
     # Number of point on rad and tan direction
     Nrad, Ntan = self.winding.get_dim_wind()

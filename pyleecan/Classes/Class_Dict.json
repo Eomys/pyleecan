@@ -12233,7 +12233,8 @@
             "comp_winding_factor",
             "comp_length_endwinding",
             "comp_connection_mat",
-            "get_dim_wind"
+            "get_dim_wind",
+            "get_connection_mat"
         ],
         "mother": "",
         "name": "Winding",
@@ -12338,6 +12339,15 @@
                 "type": "ndarray",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Number of layers per slots",
+                "max": "",
+                "min": "1",
+                "name": "Nlayer",
+                "type": "int",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -12381,7 +12391,6 @@
         "is_internal": false,
         "methods": [
             "comp_connection_mat",
-            "get_dim_wind",
             "init_as_CW1L",
             "init_as_CW2LR",
             "init_as_CW2LT",
@@ -12391,17 +12400,7 @@
         "name": "WindingUD",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/WindingUD.csv",
-        "properties": [
-            {
-                "desc": "user defined Winding matrix",
-                "max": "",
-                "min": "",
-                "name": "user_wind_mat",
-                "type": "ndarray",
-                "unit": "-",
-                "value": ""
-            }
-        ]
+        "properties": []
     },
     "XOutput": {
         "constants": [

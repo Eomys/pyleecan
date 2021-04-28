@@ -54,9 +54,7 @@ class Test_notches_plot(object):
             H2=130e-3,
             H1_is_rad=False,
         )
-        test_obj.rotor.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
         test_obj.stator = LamSlotWind(
@@ -78,9 +76,7 @@ class Test_notches_plot(object):
             H2=140e-3,
             H1_is_rad=False,
         )
-        test_obj.stator.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.stator.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
 
         test_obj.frame = None
 

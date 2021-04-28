@@ -7,7 +7,7 @@ def comp_fill_factor(self):
         return 0
     else:
         # compute the number of conductors per slot
-        Ncps_ = abs(self.winding.comp_connection_mat().sum(axis=(0, 1))).sum(axis=1)
+        Ncps_ = abs(self.winding.get_connection_mat().sum(axis=(0, 1))).sum(axis=1)
         Ncps = Ncps_.mean()
 
         if Ncps_.std() != 0:

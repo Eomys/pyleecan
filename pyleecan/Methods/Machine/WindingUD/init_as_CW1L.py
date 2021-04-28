@@ -81,7 +81,7 @@ def init_as_CW1L(self, Zs=None):
     if self.Nslot_shift_wind > 0:
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
 
-    self.user_wind_mat = wind_mat
+    self.wind_mat = wind_mat
 
 
 class WindingT2DefNtError(WindingError):

@@ -33,102 +33,96 @@ def comp_connection_mat(self, Zs=None, p=None):
 
     """
 
-    # Calculate winding matrix using SWAT_EM
-    if self.wind_mat is None:
-
-        if Zs is None:
-            if self.parent is None:
-                raise WindingError(
-                    "ERROR: The Winding object must be in a Lamination object."
-                )
-
-            if self.parent.slot is None:
-                raise WindingError(
-                    "ERROR: The Winding object must be in a Lamination object with Slot."
-                )
-
-            Zs = self.parent.slot.Zs
-
-        if p is None:
-            if self.parent is None:
-                raise WindingError(
-                    "ERROR: The Winding object must be in a Lamination object."
-                )
-
-            p = self.parent.get_pole_pair_number()
-
-        assert Zs > 0, "Zs must be >0"
-        assert Zs % 1 == 0, "Zs must be an integer"
-
-        assert p > 0, "p must be >0"
-        assert p % 1 == 0, "p must be an integer"
-
-        qs = self.qs  # Phase Number
-
-        Ntcoil = self.Ntcoil  # number of turns per coils
-
-        Nlayer = self.Nlayer  # number of layers
-
-        coil_pitch = self.coil_pitch  # coil pitch (coil span)
-
-        # generate a datamodel for the winding
-        wdg = datamodel()
-
-        # generate winding from inputs
-        wdg.genwdg(Q=Zs, P=2 * p, m=qs, layers=Nlayer, turns=Ntcoil, w=coil_pitch)
-
-        # init connexion matrix
-        wind_mat = zeros((Nlayer, 1, Zs, qs))
-
-        # get connexion matrix from swat-em
-        wind_mat_swat = wdg.get_phases()
-
-        # convert swat-em connexion matrix to pyleecan connexion matrix
-        for qq, phase in enumerate(wind_mat_swat):
-            for ll, layer in enumerate(phase):
-                if len(layer) > 0:
-                    for cond in layer:
-                        wind_mat[Nlayer - ll - 1, 0, abs(cond) - 1, qq] = (
-                            sign(cond) * Ntcoil
-                        )
-
-        # permute radial and tangential layers if coil span is 1
-        if wdg.get_coilspan() == 1:
-            wind_mat = swapaxes(wind_mat, 0, 1)
-
-        # check that requested number of parallel connections is feasible
-        Npcp_list = wdg.get_parallel_connections()
-        if self.Npcp not in Npcp_list:
-
-            if self.Npcp is not None:
-                self.get_logger().warning(
-                    "Requested number of parallel circuits per phase is not feasible, assign it to: "
-                    + str(Npcp_list[0])
-                )
-
-            self.Npcp = Npcp_list[0]
-
-        # enforce the number of layers if it is not as requested
-        Nlayer_actual = wdg.get_num_layers()
-        if self.Nlayer != Nlayer_actual:
-            self.Nlayer = Nlayer_actual
-            self.get_logger().info(
-                "Requested number of layers is not feasible, assign it to: "
-                + str(Nlayer_actual)
+    if Zs is None:
+        if self.parent is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object."
             )
 
-        # Set default values
-        if self.is_reverse_wind is None:
-            self.is_reverse_wind = False
-        if self.Nslot_shift_wind is None:
-            self.Nslot_shift_wind = 0
-        # Apply the transformations
-        if self.is_reverse_wind:
-            wind_mat = reverse_wind_mat(wind_mat)
-        if self.Nslot_shift_wind > 0:
-            wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
+        if self.parent.slot is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object with Slot."
+            )
 
-        # Assign winding matrix
-        self.wind_mat = wind_mat
+        Zs = self.parent.slot.Zs
 
-    return self.wind_mat
+    if p is None:
+        if self.parent is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object."
+            )
+
+        p = self.parent.get_pole_pair_number()
+
+    assert Zs > 0, "Zs must be >0"
+    assert Zs % 1 == 0, "Zs must be an integer"
+
+    assert p > 0, "p must be >0"
+    assert p % 1 == 0, "p must be an integer"
+
+    qs = self.qs  # Phase Number
+
+    Ntcoil = self.Ntcoil  # number of turns per coils
+
+    Nlayer = self.Nlayer  # number of layers
+
+    coil_pitch = self.coil_pitch  # coil pitch (coil span)
+
+    # generate a datamodel for the winding
+    wdg = datamodel()
+
+    # generate winding from inputs
+    wdg.genwdg(Q=Zs, P=2 * p, m=qs, layers=Nlayer, turns=Ntcoil, w=coil_pitch)
+
+    # init connexion matrix
+    wind_mat = zeros((Nlayer, 1, Zs, qs))
+
+    # get connexion matrix from swat-em
+    wind_mat_swat = wdg.get_phases()
+
+    # convert swat-em connexion matrix to pyleecan connexion matrix
+    for qq, phase in enumerate(wind_mat_swat):
+        for ll, layer in enumerate(phase):
+            if len(layer) > 0:
+                for cond in layer:
+                    wind_mat[Nlayer - ll - 1, 0, abs(cond) - 1, qq] = (
+                        sign(cond) * Ntcoil
+                    )
+
+    # permute radial and tangential layers if coil span is 1
+    if wdg.get_coilspan() == 1:
+        wind_mat = swapaxes(wind_mat, 0, 1)
+
+    # check that requested number of parallel connections is feasible
+    Npcp_list = wdg.get_parallel_connections()
+    if self.Npcp not in Npcp_list:
+
+        if self.Npcp is not None:
+            self.get_logger().warning(
+                "Requested number of parallel circuits per phase is not feasible, assign it to: "
+                + str(Npcp_list[0])
+            )
+
+        self.Npcp = Npcp_list[0]
+
+    # enforce the number of layers if it is not as requested
+    Nlayer_actual = wdg.get_num_layers()
+    if self.Nlayer != Nlayer_actual:
+        self.Nlayer = Nlayer_actual
+        self.get_logger().info(
+            "Requested number of layers is not feasible, assign it to: "
+            + str(Nlayer_actual)
+        )
+
+    # Set default values
+    if self.is_reverse_wind is None:
+        self.is_reverse_wind = False
+    if self.Nslot_shift_wind is None:
+        self.Nslot_shift_wind = 0
+    # Apply the transformations
+    if self.is_reverse_wind:
+        wind_mat = reverse_wind_mat(wind_mat)
+    if self.Nslot_shift_wind > 0:
+        wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
+
+    return wind_mat

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from numpy import mod, zeros, arange, sign
+from numpy import zeros, arange, sign
 
 from ....Methods.Machine.Winding import WindingError
 from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
@@ -98,7 +98,7 @@ def init_as_DWL(self, Zs=None, nlay=1):
     if self.Nslot_shift_wind > 0:
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
 
-    self.user_wind_mat = wind_mat
+    self.wind_mat = wind_mat
 
 
 class WindingDefMsError(WindingError):

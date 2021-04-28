@@ -24,7 +24,7 @@ def comp_periodicity(self):
     """
 
     if self.winding is not None and type(self.winding) is not Winding:
-        sym_a, is_antisym_a = comp_wind_periodicity(self.winding.comp_connection_mat())
+        sym_a, is_antisym_a = comp_wind_periodicity(self.winding.get_connection_mat())
     else:
         sym_a, is_antisym_a = 1, False
 

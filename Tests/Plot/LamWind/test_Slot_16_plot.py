@@ -49,7 +49,7 @@ class Test_Slot_16_plot(object):
     def test_Lam_Wind_16_wind_22(self, machine):
         """Test machine plot with Slot 16 and winding rad=2, tan=2"""
         print("\nTest plot Slot 16")
-        machine.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+        machine.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
         machine.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s16_1-4-wind.png"))
@@ -67,7 +67,7 @@ class Test_Slot_16_plot(object):
 
     def test_Lam_Wind_16_wind_rad(self, machine):
         """Test machine plot with Slot 16 and winding rad=2, tan=1"""
-        machine.winding = WindingUD(user_wind_mat=wind_mat2, qs=3, p=3, Lewout=60e-3)
+        machine.winding = WindingUD(wind_mat=wind_mat2, qs=3, p=3, Lewout=60e-3)
         machine.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s16_3-rad-wind.png"))

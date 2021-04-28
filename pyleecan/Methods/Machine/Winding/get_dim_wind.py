@@ -16,4 +16,6 @@ def get_dim_wind(self):
 
     """
 
-    return self.wind_mat.shape[0:2]
+    wind_mat = self.get_connection_mat()
+
+    return wind_mat.shape[0:2]

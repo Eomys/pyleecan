@@ -52,6 +52,11 @@ try:
 except ImportError as error:
     get_dim_wind = error
 
+try:
+    from ..Methods.Machine.Winding.get_connection_mat import get_connection_mat
+except ImportError as error:
+    get_connection_mat = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -142,6 +147,18 @@ class Winding(FrozenClass):
         )
     else:
         get_dim_wind = get_dim_wind
+    # cf Methods.Machine.Winding.get_connection_mat
+    if isinstance(get_connection_mat, ImportError):
+        get_connection_mat = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method get_connection_mat: "
+                    + str(get_connection_mat)
+                )
+            )
+        )
+    else:
+        get_connection_mat = get_connection_mat
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -161,6 +178,7 @@ class Winding(FrozenClass):
         conductor=-1,
         coil_pitch=0,
         wind_mat=None,
+        Nlayer=1,
         init_dict=None,
         init_str=None,
     ):
@@ -201,6 +219,8 @@ class Winding(FrozenClass):
                 coil_pitch = init_dict["coil_pitch"]
             if "wind_mat" in list(init_dict.keys()):
                 wind_mat = init_dict["wind_mat"]
+            if "Nlayer" in list(init_dict.keys()):
+                Nlayer = init_dict["Nlayer"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_reverse_wind = is_reverse_wind
@@ -214,6 +234,7 @@ class Winding(FrozenClass):
         self.conductor = conductor
         self.coil_pitch = coil_pitch
         self.wind_mat = wind_mat
+        self.Nlayer = Nlayer
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -247,6 +268,7 @@ class Winding(FrozenClass):
             + linesep
             + linesep
         )
+        Winding_str += "Nlayer = " + str(self.Nlayer) + linesep
         return Winding_str
 
     def __eq__(self, other):
@@ -275,6 +297,8 @@ class Winding(FrozenClass):
         if other.coil_pitch != self.coil_pitch:
             return False
         if not array_equal(other.wind_mat, self.wind_mat):
+            return False
+        if other.Nlayer != self.Nlayer:
             return False
         return True
 
@@ -312,6 +336,8 @@ class Winding(FrozenClass):
             diff_list.append(name + ".coil_pitch")
         if not array_equal(other.wind_mat, self.wind_mat):
             diff_list.append(name + ".wind_mat")
+        if other._Nlayer != self._Nlayer:
+            diff_list.append(name + ".Nlayer")
         return diff_list
 
     def __sizeof__(self):
@@ -329,6 +355,7 @@ class Winding(FrozenClass):
         S += getsizeof(self.conductor)
         S += getsizeof(self.coil_pitch)
         S += getsizeof(self.wind_mat)
+        S += getsizeof(self.Nlayer)
         return S
 
     def as_dict(self, **kwargs):
@@ -356,6 +383,7 @@ class Winding(FrozenClass):
             Winding_dict["wind_mat"] = None
         else:
             Winding_dict["wind_mat"] = self.wind_mat.tolist()
+        Winding_dict["Nlayer"] = self.Nlayer
         # The class name is added to the dict for deserialisation purpose
         Winding_dict["__class__"] = "Winding"
         return Winding_dict
@@ -375,6 +403,7 @@ class Winding(FrozenClass):
             self.conductor._set_None()
         self.coil_pitch = None
         self.wind_mat = None
+        self.Nlayer = None
 
     def _get_is_reverse_wind(self):
         """getter of is_reverse_wind"""
@@ -602,5 +631,24 @@ class Winding(FrozenClass):
         doc=u"""Winding matrix calculated with Star of slots (from SWAT_EM package)
 
         :Type: ndarray
+        """,
+    )
+
+    def _get_Nlayer(self):
+        """getter of Nlayer"""
+        return self._Nlayer
+
+    def _set_Nlayer(self, value):
+        """setter of Nlayer"""
+        check_var("Nlayer", value, "int", Vmin=1)
+        self._Nlayer = value
+
+    Nlayer = property(
+        fget=_get_Nlayer,
+        fset=_set_Nlayer,
+        doc=u"""Number of layers per slots
+
+        :Type: int
+        :min: 1
         """,
     )

@@ -23,11 +23,6 @@ except ImportError as error:
     comp_connection_mat = error
 
 try:
-    from ..Methods.Machine.WindingUD.get_dim_wind import get_dim_wind
-except ImportError as error:
-    get_dim_wind = error
-
-try:
     from ..Methods.Machine.WindingUD.init_as_CW1L import init_as_CW1L
 except ImportError as error:
     init_as_CW1L = error
@@ -72,17 +67,6 @@ class WindingUD(Winding):
         )
     else:
         comp_connection_mat = comp_connection_mat
-    # cf Methods.Machine.WindingUD.get_dim_wind
-    if isinstance(get_dim_wind, ImportError):
-        get_dim_wind = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use WindingUD method get_dim_wind: " + str(get_dim_wind)
-                )
-            )
-        )
-    else:
-        get_dim_wind = get_dim_wind
     # cf Methods.Machine.WindingUD.init_as_CW1L
     if isinstance(init_as_CW1L, ImportError):
         init_as_CW1L = property(
@@ -135,7 +119,6 @@ class WindingUD(Winding):
 
     def __init__(
         self,
-        user_wind_mat=None,
         is_reverse_wind=False,
         Nslot_shift_wind=0,
         qs=3,
@@ -147,6 +130,7 @@ class WindingUD(Winding):
         conductor=-1,
         coil_pitch=0,
         wind_mat=None,
+        Nlayer=1,
         init_dict=None,
         init_str=None,
     ):
@@ -165,8 +149,6 @@ class WindingUD(Winding):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "user_wind_mat" in list(init_dict.keys()):
-                user_wind_mat = init_dict["user_wind_mat"]
             if "is_reverse_wind" in list(init_dict.keys()):
                 is_reverse_wind = init_dict["is_reverse_wind"]
             if "Nslot_shift_wind" in list(init_dict.keys()):
@@ -189,8 +171,9 @@ class WindingUD(Winding):
                 coil_pitch = init_dict["coil_pitch"]
             if "wind_mat" in list(init_dict.keys()):
                 wind_mat = init_dict["wind_mat"]
+            if "Nlayer" in list(init_dict.keys()):
+                Nlayer = init_dict["Nlayer"]
         # Set the properties (value check and convertion are done in setter)
-        self.user_wind_mat = user_wind_mat
         # Call Winding init
         super(WindingUD, self).__init__(
             is_reverse_wind=is_reverse_wind,
@@ -204,6 +187,7 @@ class WindingUD(Winding):
             conductor=conductor,
             coil_pitch=coil_pitch,
             wind_mat=wind_mat,
+            Nlayer=Nlayer,
         )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties
@@ -214,13 +198,6 @@ class WindingUD(Winding):
         WindingUD_str = ""
         # Get the properties inherited from Winding
         WindingUD_str += super(WindingUD, self).__str__()
-        WindingUD_str += (
-            "user_wind_mat = "
-            + linesep
-            + str(self.user_wind_mat).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
         return WindingUD_str
 
     def __eq__(self, other):
@@ -231,8 +208,6 @@ class WindingUD(Winding):
 
         # Check the properties inherited from Winding
         if not super(WindingUD, self).__eq__(other):
-            return False
-        if not array_equal(other.user_wind_mat, self.user_wind_mat):
             return False
         return True
 
@@ -245,8 +220,6 @@ class WindingUD(Winding):
 
         # Check the properties inherited from Winding
         diff_list.extend(super(WindingUD, self).compare(other, name=name))
-        if not array_equal(other.user_wind_mat, self.user_wind_mat):
-            diff_list.append(name + ".user_wind_mat")
         return diff_list
 
     def __sizeof__(self):
@@ -256,7 +229,6 @@ class WindingUD(Winding):
 
         # Get size of the properties inherited from Winding
         S += super(WindingUD, self).__sizeof__()
-        S += getsizeof(self.user_wind_mat)
         return S
 
     def as_dict(self, **kwargs):
@@ -268,10 +240,6 @@ class WindingUD(Winding):
 
         # Get the properties inherited from Winding
         WindingUD_dict = super(WindingUD, self).as_dict(**kwargs)
-        if self.user_wind_mat is None:
-            WindingUD_dict["user_wind_mat"] = None
-        else:
-            WindingUD_dict["user_wind_mat"] = self.user_wind_mat.tolist()
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         WindingUD_dict["__class__"] = "WindingUD"
@@ -280,31 +248,5 @@ class WindingUD(Winding):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.user_wind_mat = None
         # Set to None the properties inherited from Winding
         super(WindingUD, self)._set_None()
-
-    def _get_user_wind_mat(self):
-        """getter of user_wind_mat"""
-        return self._user_wind_mat
-
-    def _set_user_wind_mat(self, value):
-        """setter of user_wind_mat"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("user_wind_mat", value, "ndarray")
-        self._user_wind_mat = value
-
-    user_wind_mat = property(
-        fget=_get_user_wind_mat,
-        fset=_set_user_wind_mat,
-        doc=u"""user defined Winding matrix
-
-        :Type: ndarray
-        """,
-    )

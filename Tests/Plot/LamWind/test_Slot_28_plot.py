@@ -102,9 +102,7 @@ class Test_Slot_28_plot(object):
         test_obj.rotor.slot = SlotW28(
             Zs=6, W0=20e-3, R1=25e-3, H0=10e-3, H3=50e-3, W3=15e-3
         )
-        test_obj.rotor.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
         test_obj.stator = LamSlotWind(
@@ -122,9 +120,7 @@ class Test_Slot_28_plot(object):
         test_obj.stator.slot = SlotW28(
             Zs=6, W0=40e-3, R1=50e-3, H0=10e-3, H3=70e-3, W3=85e-3
         )
-        test_obj.stator.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.stator.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
 
         test_obj.plot(is_show_fig=False)
         fig = plt.gcf()

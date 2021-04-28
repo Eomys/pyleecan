@@ -48,9 +48,7 @@ class Test_Slot_26_plot(object):
         test_obj.rotor.slot = SlotW26(
             Zs=6, W0=20e-3, R1=30e-3, R2=20e-3, H0=20e-3, H1=20e-3
         )
-        test_obj.rotor.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
         test_obj.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 

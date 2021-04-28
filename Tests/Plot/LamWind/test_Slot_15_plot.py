@@ -44,7 +44,7 @@ class Test_Slot_15_plot(object):
         test_obj.slot = SlotW15(
             Zs=6, W0=10e-3, W3=30e-3, H0=5e-3, H1=20e-3, H2=50e-3, R1=15e-3, R2=10e-3
         )
-        test_obj.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+        test_obj.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
 
         test_obj.plot(is_show_fig=False)
         fig = plt.gcf()

@@ -280,7 +280,7 @@ class SWinding(Gen_SWinding, QWidget):
             self.out_ms.setText(self.tr("ms = Zr / (2*p*qr) = ") + ms)
 
         try:
-            wind_mat = wind.comp_connection_mat(self.obj.slot.Zs)
+            wind_mat = wind.get_connection_mat(self.obj.slot.Zs)
             Nperw = str(comp_wind_periodicity(wind_mat)[0])
         except Exception:  # Unable to compution the connection matrix
             Nperw = "?"
