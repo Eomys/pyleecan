@@ -2,28 +2,22 @@
 
 from numpy import array, power, zeros
 
-from ....Methods.Machine.WindingCW1L import WindingT2DefNtError
 from ....Methods.Machine.Winding import WindingError
 from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from ....Functions.Winding.shift_wind_mat import shift_wind_mat
 
 
-def comp_connection_mat_CW1L(self, Zs=None):
+def init_as_CW1L(self, Zs=None):
     """Compute the Winding Matrix (for winding type 2)
     type 2 : TOOTH WINDING, SINGLE LAYER ALTERNATE TEETH WOUND
     (Nlay_rad=1,Nlay_tan=1)
 
     Parameters
     ----------
-    self : Winding
-        A: Winding object
+    self : WindingUD
+        A: WindingUD object
     Zs : int
         Number of Slot (Integer >0)
-
-    Returns
-    -------
-    wind_mat: numpy.ndarray
-        Winding Matrix (1, 1, Zs, qs)
 
     Raises
     ------
@@ -87,4 +81,23 @@ def comp_connection_mat_CW1L(self, Zs=None):
     if self.Nslot_shift_wind > 0:
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
 
-    return wind_mat
+    self.user_wind_mat = wind_mat
+
+
+class WindingT2DefNtError(WindingError):
+    """
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+
+    Raises
+    ------
+    must
+        be 0
+
+    """
+
+    pass

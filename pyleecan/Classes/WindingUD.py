@@ -27,6 +27,26 @@ try:
 except ImportError as error:
     get_dim_wind = error
 
+try:
+    from ..Methods.Machine.WindingUD.init_as_CW1L import init_as_CW1L
+except ImportError as error:
+    init_as_CW1L = error
+
+try:
+    from ..Methods.Machine.WindingUD.init_as_CW2LR import init_as_CW2LR
+except ImportError as error:
+    init_as_CW2LR = error
+
+try:
+    from ..Methods.Machine.WindingUD.init_as_CW2LT import init_as_CW2LT
+except ImportError as error:
+    init_as_CW2LT = error
+
+try:
+    from ..Methods.Machine.WindingUD.init_as_DWL import init_as_DWL
+except ImportError as error:
+    init_as_DWL = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -63,6 +83,50 @@ class WindingUD(Winding):
         )
     else:
         get_dim_wind = get_dim_wind
+    # cf Methods.Machine.WindingUD.init_as_CW1L
+    if isinstance(init_as_CW1L, ImportError):
+        init_as_CW1L = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use WindingUD method init_as_CW1L: " + str(init_as_CW1L)
+                )
+            )
+        )
+    else:
+        init_as_CW1L = init_as_CW1L
+    # cf Methods.Machine.WindingUD.init_as_CW2LR
+    if isinstance(init_as_CW2LR, ImportError):
+        init_as_CW2LR = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use WindingUD method init_as_CW2LR: " + str(init_as_CW2LR)
+                )
+            )
+        )
+    else:
+        init_as_CW2LR = init_as_CW2LR
+    # cf Methods.Machine.WindingUD.init_as_CW2LT
+    if isinstance(init_as_CW2LT, ImportError):
+        init_as_CW2LT = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use WindingUD method init_as_CW2LT: " + str(init_as_CW2LT)
+                )
+            )
+        )
+    else:
+        init_as_CW2LT = init_as_CW2LT
+    # cf Methods.Machine.WindingUD.init_as_DWL
+    if isinstance(init_as_DWL, ImportError):
+        init_as_DWL = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use WindingUD method init_as_DWL: " + str(init_as_DWL)
+                )
+            )
+        )
+    else:
+        init_as_DWL = init_as_DWL
     # save and copy methods are available in all object
     save = save
     copy = copy

@@ -8,23 +8,18 @@ from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from ....Functions.Winding.shift_wind_mat import shift_wind_mat
 
 
-def comp_connection_mat_DWL(self, Zs=None, nlay=1):
+def init_as_DWL(self, Zs=None, nlay=1):
     """Compute the Winding Matrix (for winding type 3 or 4) (Nlay_rad=1 or 2,Nlay_tan=1)
     type 3 or 4 : DISTRIBUTED SHORTED PITCH INTEGRAL WINDING
 
     Parameters
     ----------
-    self : Winding
-        A: Winding object
+    self : WindingUD
+        A: WindingUD object
     Zs : int
         Number of Slot (Integer >0)
     nlay: int
         Number of layers
-
-    Returns
-    -------
-    wind_mat: numpy.ndarray
-        Winding Matrix (1 or 2, 1, Zs, qs)
 
     Raises
     ------
@@ -47,6 +42,7 @@ def comp_connection_mat_DWL(self, Zs=None, nlay=1):
 
     assert Zs > 0, "Zs must be >0"
     assert Zs % 1 == 0, "Zs must be an integer"
+    assert nlay in [1, 2], "Number of layer must be 1 or 2"
 
     coil_pitch = self.coil_pitch
     p = self.p
@@ -102,7 +98,7 @@ def comp_connection_mat_DWL(self, Zs=None, nlay=1):
     if self.Nslot_shift_wind > 0:
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
 
-    return wind_mat
+    self.user_wind_mat = wind_mat
 
 
 class WindingDefMsError(WindingError):

@@ -52,34 +52,6 @@ try:
 except ImportError as error:
     get_dim_wind = error
 
-try:
-    from ..Methods.Machine.Winding.comp_connection_mat_CW1L import (
-        comp_connection_mat_CW1L,
-    )
-except ImportError as error:
-    comp_connection_mat_CW1L = error
-
-try:
-    from ..Methods.Machine.Winding.comp_connection_mat_CW2LR import (
-        comp_connection_mat_CW2LR,
-    )
-except ImportError as error:
-    comp_connection_mat_CW2LR = error
-
-try:
-    from ..Methods.Machine.Winding.comp_connection_mat_CW2LT import (
-        comp_connection_mat_CW2LT,
-    )
-except ImportError as error:
-    comp_connection_mat_CW2LT = error
-
-try:
-    from ..Methods.Machine.Winding.comp_connection_mat_DWL import (
-        comp_connection_mat_DWL,
-    )
-except ImportError as error:
-    comp_connection_mat_DWL = error
-
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -87,9 +59,10 @@ from .Conductor import Conductor
 
 
 class Winding(FrozenClass):
-    """Winding class generating connection matrix using Star of Slots method (coupling with SWAT-EM)"""
+    """Winding class generating connection matrix using Star of slots method (coupling with SWAT-EM)"""
 
     VERSION = 1
+    NAME = "Star of slots"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Winding.comp_Ncspc
@@ -169,54 +142,6 @@ class Winding(FrozenClass):
         )
     else:
         get_dim_wind = get_dim_wind
-    # cf Methods.Machine.Winding.comp_connection_mat_CW1L
-    if isinstance(comp_connection_mat_CW1L, ImportError):
-        comp_connection_mat_CW1L = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Winding method comp_connection_mat_CW1L: "
-                    + str(comp_connection_mat_CW1L)
-                )
-            )
-        )
-    else:
-        comp_connection_mat_CW1L = comp_connection_mat_CW1L
-    # cf Methods.Machine.Winding.comp_connection_mat_CW2LR
-    if isinstance(comp_connection_mat_CW2LR, ImportError):
-        comp_connection_mat_CW2LR = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Winding method comp_connection_mat_CW2LR: "
-                    + str(comp_connection_mat_CW2LR)
-                )
-            )
-        )
-    else:
-        comp_connection_mat_CW2LR = comp_connection_mat_CW2LR
-    # cf Methods.Machine.Winding.comp_connection_mat_CW2LT
-    if isinstance(comp_connection_mat_CW2LT, ImportError):
-        comp_connection_mat_CW2LT = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Winding method comp_connection_mat_CW2LT: "
-                    + str(comp_connection_mat_CW2LT)
-                )
-            )
-        )
-    else:
-        comp_connection_mat_CW2LT = comp_connection_mat_CW2LT
-    # cf Methods.Machine.Winding.comp_connection_mat_DWL
-    if isinstance(comp_connection_mat_DWL, ImportError):
-        comp_connection_mat_DWL = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Winding method comp_connection_mat_DWL: "
-                    + str(comp_connection_mat_DWL)
-                )
-            )
-        )
-    else:
-        comp_connection_mat_DWL = comp_connection_mat_DWL
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -674,7 +599,7 @@ class Winding(FrozenClass):
     wind_mat = property(
         fget=_get_wind_mat,
         fset=_set_wind_mat,
-        doc=u"""Winding matrix calculated with SWAT_EM
+        doc=u"""Winding matrix calculated with Star of slots (from SWAT_EM package)
 
         :Type: ndarray
         """,
