@@ -8,15 +8,15 @@ from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from ....Functions.Winding.shift_wind_mat import shift_wind_mat
 
 
-def comp_connection_mat(self, Zs=None):
+def comp_connection_mat_CW1L(self, Zs=None):
     """Compute the Winding Matrix (for winding type 2)
     type 2 : TOOTH WINDING, SINGLE LAYER ALTERNATE TEETH WOUND
     (Nlay_rad=1,Nlay_tan=1)
 
     Parameters
     ----------
-    self : WindingCW1L
-        A: WindingCW1L object
+    self : Winding
+        A: Winding object
     Zs : int
         Number of Slot (Integer >0)
 

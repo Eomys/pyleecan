@@ -8,7 +8,7 @@ from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from ....Functions.Winding.shift_wind_mat import shift_wind_mat
 
 
-def comp_connection_mat(self, Zs=None):
+def comp_connection_mat_DWL(self, Zs=None, nlay=1):
     """Compute the Winding Matrix (for winding type 3 or 4) (Nlay_rad=1 or 2,Nlay_tan=1)
     type 3 or 4 : DISTRIBUTED SHORTED PITCH INTEGRAL WINDING
 
@@ -18,6 +18,8 @@ def comp_connection_mat(self, Zs=None):
         A: Winding object
     Zs : int
         Number of Slot (Integer >0)
+    nlay: int
+        Number of layers
 
     Returns
     -------
@@ -48,7 +50,6 @@ def comp_connection_mat(self, Zs=None):
 
     coil_pitch = self.coil_pitch
     p = self.p
-    nlay = self.get_dim_wind()[0]
     qs = self.qs
     ms = Zs / 2.0 / float(p) / float(qs)
     tausp = Zs / 2.0 / float(p)
