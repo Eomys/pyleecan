@@ -22,7 +22,7 @@ def comp_periodicity(self):
         True if an time anti-periodicity is possible after the periodicities
     """
 
-    if self.winding is not None and type(self.winding) is not Winding:
+    if self.winding is not None:
         sym_a, is_antisym_a = self.winding.get_periodicity()
     else:
         sym_a, is_antisym_a = 1, False

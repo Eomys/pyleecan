@@ -55,58 +55,52 @@ class Ui_SWinding(object):
 
         self.verticalLayout_6.addWidget(self.c_wind_type)
 
-        self.in_Zsp = QLabel(self.g_pattern)
-        self.in_Zsp.setObjectName(u"in_Zsp")
+        self.in_Zs = QLabel(self.g_pattern)
+        self.in_Zs.setObjectName(u"in_Zs")
 
-        self.verticalLayout_6.addWidget(self.in_Zsp)
+        self.verticalLayout_6.addWidget(self.in_Zs)
+
+        self.in_p = QLabel(self.g_pattern)
+        self.in_p.setObjectName(u"in_p")
+
+        self.verticalLayout_6.addWidget(self.in_p)
 
         self.stack_wind_type = QStackedWidget(self.g_pattern)
         self.stack_wind_type.setObjectName(u"stack_wind_type")
         self.page = QWidget()
         self.page.setObjectName(u"page")
-        self.verticalLayout_4 = QVBoxLayout(self.page)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.gridLayout_2 = QGridLayout(self.page)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.in_qs = QLabel(self.page)
         self.in_qs.setObjectName(u"in_qs")
 
-        self.horizontalLayout_2.addWidget(self.in_qs)
+        self.gridLayout_2.addWidget(self.in_qs, 0, 0, 1, 1)
 
         self.si_qs = QSpinBox(self.page)
         self.si_qs.setObjectName(u"si_qs")
 
-        self.horizontalLayout_2.addWidget(self.si_qs)
+        self.gridLayout_2.addWidget(self.si_qs, 0, 1, 1, 1)
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_2)
-
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.in_Nlayer = QLabel(self.page)
         self.in_Nlayer.setObjectName(u"in_Nlayer")
 
-        self.horizontalLayout_5.addWidget(self.in_Nlayer)
+        self.gridLayout_2.addWidget(self.in_Nlayer, 1, 0, 1, 1)
 
         self.si_Nlayer = QSpinBox(self.page)
         self.si_Nlayer.setObjectName(u"si_Nlayer")
+        self.si_Nlayer.setMinimum(1)
 
-        self.horizontalLayout_5.addWidget(self.si_Nlayer)
+        self.gridLayout_2.addWidget(self.si_Nlayer, 1, 1, 1, 1)
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_5)
-
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.in_coil_pitch = QLabel(self.page)
         self.in_coil_pitch.setObjectName(u"in_coil_pitch")
 
-        self.horizontalLayout.addWidget(self.in_coil_pitch)
+        self.gridLayout_2.addWidget(self.in_coil_pitch, 2, 0, 1, 1)
 
         self.si_coil_pitch = QSpinBox(self.page)
         self.si_coil_pitch.setObjectName(u"si_coil_pitch")
 
-        self.horizontalLayout.addWidget(self.si_coil_pitch)
-
-        self.verticalLayout_4.addLayout(self.horizontalLayout)
+        self.gridLayout_2.addWidget(self.si_coil_pitch, 2, 1, 1, 1)
 
         self.stack_wind_type.addWidget(self.page)
         self.page_2 = QWidget()
@@ -148,37 +142,29 @@ class Ui_SWinding(object):
 
         self.g_circuit = QGroupBox(self.widget)
         self.g_circuit.setObjectName(u"g_circuit")
-        self.verticalLayout = QVBoxLayout(self.g_circuit)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.horizontalLayout_7 = QHBoxLayout()
-        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.gridLayout = QGridLayout(self.g_circuit)
+        self.gridLayout.setObjectName(u"gridLayout")
         self.in_Ntcoil = QLabel(self.g_circuit)
         self.in_Ntcoil.setObjectName(u"in_Ntcoil")
 
-        self.horizontalLayout_7.addWidget(self.in_Ntcoil)
+        self.gridLayout.addWidget(self.in_Ntcoil, 0, 0, 1, 1)
 
         self.si_Ntcoil = QSpinBox(self.g_circuit)
         self.si_Ntcoil.setObjectName(u"si_Ntcoil")
 
-        self.horizontalLayout_7.addWidget(self.si_Ntcoil)
+        self.gridLayout.addWidget(self.si_Ntcoil, 0, 1, 1, 1)
 
-        self.verticalLayout.addLayout(self.horizontalLayout_7)
-
-        self.horizontalLayout_6 = QHBoxLayout()
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.in_Npcp = QLabel(self.g_circuit)
         self.in_Npcp.setObjectName(u"in_Npcp")
 
-        self.horizontalLayout_6.addWidget(self.in_Npcp)
+        self.gridLayout.addWidget(self.in_Npcp, 1, 0, 1, 1)
 
         self.si_Npcp = QSpinBox(self.g_circuit)
         self.si_Npcp.setObjectName(u"si_Npcp")
         self.si_Npcp.setMaximum(999999999)
         self.si_Npcp.setValue(12345)
 
-        self.horizontalLayout_6.addWidget(self.si_Npcp)
-
-        self.verticalLayout.addLayout(self.horizontalLayout_6)
+        self.gridLayout.addWidget(self.si_Npcp, 1, 1, 1, 1)
 
         self.verticalLayout_2.addWidget(self.g_circuit)
 
@@ -262,7 +248,7 @@ class Ui_SWinding(object):
 
         self.retranslateUi(SWinding)
 
-        self.stack_wind_type.setCurrentIndex(1)
+        self.stack_wind_type.setCurrentIndex(0)
 
         QMetaObject.connectSlotsByName(SWinding)
 
@@ -281,10 +267,11 @@ class Ui_SWinding(object):
             1, QCoreApplication.translate("SWinding", u"User Defined", None)
         )
 
-        self.in_Zsp.setText(
-            QCoreApplication.translate(
-                "SWinding", u"Slot number=123, pole pair number = 8", None
-            )
+        self.in_Zs.setText(
+            QCoreApplication.translate("SWinding", u"Slot number=123", None)
+        )
+        self.in_p.setText(
+            QCoreApplication.translate("SWinding", u"Pole pair number=32", None)
         )
         self.in_qs.setText(
             QCoreApplication.translate("SWinding", u"Phases number", None)
@@ -308,10 +295,10 @@ class Ui_SWinding(object):
             QCoreApplication.translate("SWinding", u"Circuit", None)
         )
         self.in_Ntcoil.setText(
-            QCoreApplication.translate("SWinding", u"Number of turns per coil", None)
+            QCoreApplication.translate("SWinding", u"Turns per coil", None)
         )
         self.in_Npcp.setText(
-            QCoreApplication.translate("SWinding", u"Parallel circuits per phase", None)
+            QCoreApplication.translate("SWinding", u"Parallel circuits", None)
         )
         self.b_edit_wind_mat.setText(
             QCoreApplication.translate("SWinding", u"Edit Winding Matrix", None)

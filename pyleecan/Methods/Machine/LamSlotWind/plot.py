@@ -125,7 +125,7 @@ def plot(
                 if isinstance(self.winding, WindingSC):
                     patch_leg.append(Patch(color=PHASE_COLORS[0]))
                     label_leg.append(prefix + "Bar")
-                elif self.winding is not None and not type(self.winding) is Winding:
+                elif self.winding is not None:
                     phase_name = [prefix + n for n in gen_name(qs, is_add_phase=True)]
                     for ii in range(qs):
                         if not phase_name[ii] in label_leg:

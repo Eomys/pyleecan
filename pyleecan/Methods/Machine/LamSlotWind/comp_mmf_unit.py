@@ -42,7 +42,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
     time = linspace(0, 1 / freq, Nt, endpoint=False)
 
     # Compute the winding function and mmf
-    if self.winding is None or type(self.winding) is Winding:
+    if self.winding is None:
         wf = zeros((qs, Na))
     else:
         wf = self.comp_wind_function(angle=angle, per_a=per_a)

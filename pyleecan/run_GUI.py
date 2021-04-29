@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from PySide2 import QtWidgets, QtGui, QtCore
+from matplotlib.backends.backend_qt5agg import FigureCanvas
+
 import sys
 from os.path import dirname, join, isfile
 from sys import argv, exit
