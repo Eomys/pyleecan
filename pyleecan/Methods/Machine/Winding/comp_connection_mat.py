@@ -3,8 +3,7 @@
 from numpy import zeros, swapaxes, sign
 
 from ....Methods.Machine.Winding import WindingError
-from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
-from ....Functions.Winding.shift_wind_mat import shift_wind_mat
+
 
 from swat_em import datamodel
 
@@ -134,10 +133,5 @@ def comp_connection_mat(self, Zs=None, p=None):
         self.is_reverse_wind = False
     if self.Nslot_shift_wind is None:
         self.Nslot_shift_wind = 0
-    # Apply the transformations
-    if self.is_reverse_wind:
-        wind_mat = reverse_wind_mat(wind_mat)
-    if self.Nslot_shift_wind > 0:
-        wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
 
     return wind_mat
