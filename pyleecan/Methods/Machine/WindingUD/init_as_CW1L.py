@@ -75,6 +75,7 @@ def init_as_CW1L(self, Zs=None):
         self.is_reverse_wind = False
     if self.Nslot_shift_wind is None:
         self.Nslot_shift_wind = 0
+    self.Nlayer = 1
     # Apply the transformations
     if self.is_reverse_wind:
         wind_mat = reverse_wind_mat(wind_mat)

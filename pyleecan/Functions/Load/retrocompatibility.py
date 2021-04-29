@@ -142,3 +142,4 @@ def convert_Winding(wind_dict):
         elif old_class == "WindingDW2L":
             new_wind.init_as_DWL(Zs=wind_dict["Zs"], nlay=2)
         wind_dict["wind_mat"] = new_wind.wind_mat.tolist()
+        wind_dict["Nlayer"] = new_wind.Nlayer

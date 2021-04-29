@@ -92,6 +92,7 @@ def init_as_DWL(self, Zs=None, nlay=1):
         self.is_reverse_wind = False
     if self.Nslot_shift_wind is None:
         self.Nslot_shift_wind = 0
+    self.Nlayer = nlay
     # Apply the transformations
     if self.is_reverse_wind:
         wind_mat = reverse_wind_mat(wind_mat)
