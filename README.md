@@ -18,14 +18,14 @@ The procedure to install and use Pyleecan is detailed on [pyleecan website](http
 [EOMYS ENGINEERING](https://eomys.com/?lang=en) initiated this open-source project in 2018 for the study of electric motors. The project is now backed by [Green Forge Coop](https://www.linkedin.com/company/greenforgecoop/) non profit organization, who also supports the development of [Mosqito](https://github.com/Eomys/MoSQITo) for sound quality and [SciDataTool](https://github.com/Eomys/SciDataTool) for efficient scientific data exploitation. 
 
 **Main Models and Couplings:**
-* PYLEECAN is fully coupled to [FEMM](http://www.femm.info) to carry **non-linear magnetostatic** analysis including sliding band and symmetries. For now this coupling is available [only on Windows OS]. 
+* PYLEECAN is fully coupled to [FEMM](http://www.femm.info) to carry **non-linear magnetostatic** analysis including sliding band and symmetries. For now this coupling is available (only on Windows OS). 
 * PYLEECAN includes an iron losses model (based on FEMM coupling output).
 * PYLEECAN includes an electrical model to solve the equivalent circuit of PMSM and SCIM machines.
 * PYLEECAN is coupled to [GMSH](http://gmsh.info/) **2D/3D finite element mesh generator** to run third-party multiphysic solvers. 
 * PYLEECAN is coupled to a **multiobjective optimization** library to carry design optimization of electrical machines.
 * PYLEECAN enables to define **Parameter Sweep** of variable speed simulations.
 
-**Main Topologies Features:*
+**Main Topologies Features:**
 * PYLEECAN includes a **Graphical User Interface** to define main 2D radial flux topologies parametrized geometries (**SPMSM, IPMSM, SCIM, DFIM, WRSM, SRM, SynRM**) including material library.
 * Possibility to import Slot or Hole from DXF files
 * User Defined Winding or automatic algorithm
