@@ -64,7 +64,7 @@ def comp_skin_effect(self, T=20):
             phip_skin = self.comp_phip_skin(ksi)
             psip_skin = self.comp_psip_skin(ksi)
 
-            Xkr_skinS = phi_skin + ((Nwppc_rad ^ 2 - 1) / 3) * psi_skin
+            Xkr_skinS = phi_skin + ((Nwppc_rad **2 2 - 1) / 3) * psi_skin
             Xke_skinS = (1 / Nwppc_rad ** 2) * phip_skin + (
                 1 - 1 / Nwppc_rad ** 2
             ) * psip_skin
