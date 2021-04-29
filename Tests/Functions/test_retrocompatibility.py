@@ -19,9 +19,15 @@ file_list.append(
         "old": join(TEST_DATA_DIR, "Retrocompatibility", "SPMSM_001.json"),
     }
 )
+# 2: Winding convertion (star of slot)
+file_list.append(
+    {
+        "ref": join(DATA_DIR, "Machine", "SCIM_006.json"),
+        "old": join(TEST_DATA_DIR, "Retrocompatibility", "SCIM_006.json"),
+    }
+)
 
 
-# @pytest.mark.only
 @pytest.mark.parametrize("file_dict", file_list)
 def test_save_load_retro(file_dict):
     """Check that the convertion works"""
