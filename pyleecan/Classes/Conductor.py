@@ -22,6 +22,31 @@ try:
 except ImportError as error:
     check = error
 
+try:
+    from ..Methods.Machine.Conductor.comp_phi_skin import comp_phi_skin
+except ImportError as error:
+    comp_phi_skin = error
+
+try:
+    from ..Methods.Machine.Conductor.comp_psi_skin import comp_psi_skin
+except ImportError as error:
+    comp_psi_skin = error
+
+try:
+    from ..Methods.Machine.Conductor.comp_phip_skin import comp_phip_skin
+except ImportError as error:
+    comp_phip_skin = error
+
+try:
+    from ..Methods.Machine.Conductor.comp_psip_skin import comp_psip_skin
+except ImportError as error:
+    comp_psip_skin = error
+
+try:
+    from ..Methods.Machine.Conductor.comp_skin_effect import comp_skin_effect
+except ImportError as error:
+    comp_skin_effect = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -32,6 +57,7 @@ class Conductor(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Conductor.check
     if isinstance(check, ImportError):
         check = property(
@@ -41,6 +67,62 @@ class Conductor(FrozenClass):
         )
     else:
         check = check
+    # cf Methods.Machine.Conductor.comp_phi_skin
+    if isinstance(comp_phi_skin, ImportError):
+        comp_phi_skin = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Conductor method comp_phi_skin: " + str(comp_phi_skin)
+                )
+            )
+        )
+    else:
+        comp_phi_skin = comp_phi_skin
+    # cf Methods.Machine.Conductor.comp_psi_skin
+    if isinstance(comp_psi_skin, ImportError):
+        comp_psi_skin = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Conductor method comp_psi_skin: " + str(comp_psi_skin)
+                )
+            )
+        )
+    else:
+        comp_psi_skin = comp_psi_skin
+    # cf Methods.Machine.Conductor.comp_phip_skin
+    if isinstance(comp_phip_skin, ImportError):
+        comp_phip_skin = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Conductor method comp_phip_skin: " + str(comp_phip_skin)
+                )
+            )
+        )
+    else:
+        comp_phip_skin = comp_phip_skin
+    # cf Methods.Machine.Conductor.comp_psip_skin
+    if isinstance(comp_psip_skin, ImportError):
+        comp_psip_skin = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Conductor method comp_psip_skin: " + str(comp_psip_skin)
+                )
+            )
+        )
+    else:
+        comp_psip_skin = comp_psip_skin
+    # cf Methods.Machine.Conductor.comp_skin_effect
+    if isinstance(comp_skin_effect, ImportError):
+        comp_skin_effect = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Conductor method comp_skin_effect: "
+                    + str(comp_skin_effect)
+                )
+            )
+        )
+    else:
+        comp_skin_effect = comp_skin_effect
     # save and copy methods are available in all object
     save = save
     copy = copy

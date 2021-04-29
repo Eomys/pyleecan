@@ -14,10 +14,16 @@ def comp_parameters(self, output):
     # TODO maybe set currents to small value if I is 0 to compute inductance
 
     PAR = self.parameters
+    Cond = self.parent.parent.machine.stator.winding.conductor
 
+    # compute skin_effect
+    Xkr_skinS, Xke_skinS = Cond.comp_skin_effect(T=20)
+    # Xkr_skinS=1
+    # Xke_skinS=1
     # Parameters to compute only once
     if "R20" not in PAR:
         PAR["R20"] = output.simu.machine.stator.comp_resistance_wind()
+        PAR["R20"] = PAR["R20"] * Xkr_skinS
     if "phi" not in PAR:
         PAR["phi"] = self.fluxlink.comp_fluxlinkage(output)
 
@@ -40,6 +46,7 @@ def comp_parameters(self, output):
     # compute inductance if necessary
     if is_comp_ind:
         (phid, phiq) = self.indmag.comp_inductance(output)
+        (phid, phiq) = tuple([z * Xke_skinS for z in (phid, phiq)])
         if PAR["Id"] != 0:
             PAR["Ld"] = (phid - PAR["phi"]) / PAR["Id"]
         else:
