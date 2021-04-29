@@ -39,25 +39,18 @@ def save_json(
         logger = getLogger("Pyleecan")
 
     # correct file name if needed
-    save_path = fix_file_name(save_path, obj, is_folder, logger)
+    # create name for the base file
+    file_path, base_file_name = setup_save_path(save_path, obj, is_folder, logger)
 
-    # save
+    # prepare data for dumping and split if needed
     obj = build_data(obj, logger)
     now = datetime.now()
     obj["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
     obj["__version__"] = PACKAGE_NAME + "_" + __version__
 
-    # create name for the base file
-    i = max(save_path.rfind("/"), save_path.rfind("\\"))
-    name = save_path[i:] if i != -1 else save_path
+    split_list = [{base_file_name: obj}]
 
     if is_folder:
-        name += ".json"
-
-    split_list = [{name: obj}]
-
-    if is_folder:
-        folder = save_path
         # Add the classes daughters
         class_to_add = []
         class_dict = get_class_dict()
@@ -66,16 +59,13 @@ def save_json(
             class_to_add.extend(class_dict[class_name]["daughters"])
 
         class_to_split += tuple(class_to_add)
-        split_obj_dict(class_to_split, obj, folder, split_list, logger)
-    else:
-        folder = ""
+        split_obj_dict(class_to_split, obj, file_path, split_list, logger)
 
     # save all objects from the split list
-    logger.info("Saving in " + save_path)
+    logger.info("Saving in " + file_path)
     for elem in split_list:
         file_name = list(elem.keys())[0]
-        file_path = join(folder, file_name)
-        with open(file_path, "w") as json_file:
+        with open(join(file_path, file_name), "w") as json_file:
             dump(
                 elem[file_name],
                 json_file,
@@ -87,8 +77,9 @@ def save_json(
     return obj
 
 
-def fix_file_name(save_path, obj, is_folder, logger):
+def setup_save_path(save_path, obj, is_folder, logger):
     """
+
     Check save_path and modify or create it if needed, i.e. add or remove
     file extension .json or create new name based on class name.
 
@@ -101,11 +92,12 @@ def fix_file_name(save_path, obj, is_folder, logger):
     is_folder: bool
         object is saved if folder mode
     """
+    # generate or correct file and path if needed
     if not save_path:
         if is_folder:  # Create the folder
             save_path = create_folder(type(obj).__name__, logger)
         else:
-            save_path = join(type(obj).__name__ + ".json")
+            save_path = type(obj).__name__ + ".json"
     elif not save_path.endswith(".json") and not is_folder:
         save_path = save_path + ".json"
     elif is_folder:
@@ -114,7 +106,15 @@ def fix_file_name(save_path, obj, is_folder, logger):
         if not isdir(save_path):
             mkdir(save_path)
 
-    return save_path
+    # split file and path
+    i = max(save_path.rfind("/"), save_path.rfind("\\"))
+    file_name = save_path[i:] if i != -1 else save_path
+    file_path = save_path[:i] if i != -1 else ""
+
+    if is_folder:
+        file_name += ".json"
+
+    return file_path, file_name
 
 
 def build_data(obj, logger):
@@ -192,7 +192,7 @@ def split_obj_dict(cls_tupel, obj_dict, folder, split_list, logger):
     """
     if isinstance(obj_dict, dict):
         for key, val in obj_dict.items():
-            val[key] = split_obj_dict(cls_tupel, val, folder, split_list, logger)
+            obj_dict[key] = split_obj_dict(cls_tupel, val, folder, split_list, logger)
 
         if "__class__" in obj_dict.keys() and obj_dict["__class__"] in cls_tupel:
             # and also add it to the list of objects to be saved
@@ -210,9 +210,7 @@ def split_obj_dict(cls_tupel, obj_dict, folder, split_list, logger):
 
 
 def create_folder(name, logger):
-    """
-    Create the folder: "YYYY_mm_dd HH_MM_SS name"
-    """
+    """Create the folder: "YYYY_mm_dd HH_MM_SS name"""
     # datetime object containing current date and time
     now = datetime.now()
     dt_string = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
