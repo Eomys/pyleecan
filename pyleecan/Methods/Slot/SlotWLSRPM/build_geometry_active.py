@@ -39,12 +39,22 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         st = "Rotor"
     Rbo = self.get_Rbo()
 
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    Z7 = point_dict["Z7"]
+    Z8 = point_dict["Z8"]
+    Z9 = point_dict["Z9"]
+    Z10 = point_dict["Z10"]
 
-    Zcl = Rbo
-    Zcm = Rbo + self.H3
-    Zch = Rbo + self.H2
-    Zmid = (Zcl + Zch) / 2.0
+    Zcl = point_dict["Zcl"]
+    Zcm = point_dict["Zcm"]
+    Zch = point_dict["Zch"]
+    Zmid = point_dict["Zmid"]
 
     # Creation of curve
     surf_list = list()
