@@ -142,6 +142,7 @@ class SWinding(Gen_SWinding, QWidget):
                 self.obj.winding.qs = 3
             self.si_qs.setValue(self.obj.winding.qs)
             self.si_Nlayer.setValue(self.obj.winding.Nlayer)
+            self.obj.winding.wind_mat = None  # ­ Enforce new computation
             self.stack_wind_type.setCurrentIndex(0)
         else:
             self.obj.winding = WindingUD(init_dict=init_dict)
@@ -164,12 +165,15 @@ class SWinding(Gen_SWinding, QWidget):
         self : SWinding
             A SWinding object
         """
-        self.obj.winding.qs = self.si_qs.value()
-        self.obj.winding.wind_mat = None  # Enforce now computation
-        self.comp_output()
-        self.update_graph()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
+
+        value = self.si_qs.value()
+        if value != self.obj.winding.qs:
+            self.obj.winding.qs = value
+            self.obj.winding.wind_mat = None  # Enforce now computation
+            self.comp_output()
+            self.update_graph()
+            # Notify the machine GUI that the machine has changed
+            self.saveNeeded.emit()
 
     def set_Nlayer(self):
         """Signal to update the value of Nlayer according to the spinbox
@@ -179,12 +183,14 @@ class SWinding(Gen_SWinding, QWidget):
         self : SWinding
             A SWinding object
         """
-        self.obj.winding.Nlayer = self.si_Nlayer.value()
-        self.obj.winding.wind_mat = None  # Enforce now computation
-        self.comp_output()
-        self.update_graph()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
+        value = self.si_Nlayer.value()
+        if value != self.obj.winding.Nlayer:
+            self.obj.winding.Nlayer = value
+            self.obj.winding.wind_mat = None  # Enforce now computation
+            self.comp_output()
+            self.update_graph()
+            # Notify the machine GUI that the machine has changed
+            self.saveNeeded.emit()
 
     def set_coil_pitch(self):
         """Signal to update the value of coil_pitch according to the spinbox
@@ -194,12 +200,14 @@ class SWinding(Gen_SWinding, QWidget):
         self : SWinding
             A SWinding object
         """
-        self.obj.winding.coil_pitch = self.si_coil_pitch.value()
-        self.obj.winding.wind_mat = None  # Enforce now computation
-        self.comp_output()
-        self.update_graph()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
+        value = self.si_coil_pitch.value()
+        if value != self.obj.winding.coil_pitch:
+            self.obj.winding.coil_pitch = value
+            self.obj.winding.wind_mat = None  # Enforce now computation
+            self.comp_output()
+            self.update_graph()
+            # Notify the machine GUI that the machine has changed
+            self.saveNeeded.emit()
 
     def set_Nslot(self):
         """Signal to update the value of Nslot_shift_wind according to the
@@ -302,14 +310,16 @@ class SWinding(Gen_SWinding, QWidget):
         except Exception:  # Unable to compution the connection matrix
             Nperw = "?"
 
-        self.out_Nperw.setText(self.tr("Nperw: ") + Nperw)
+        self.out_Nperw.setText(self.tr("Nperw: ") + str(Nperw))
 
         try:
-            Ntspc = str(self.obj.winding.comp_Ntsp(Zs))
+            Ntspc = str(self.obj.winding.comp_Ntsp(self.obj.slot.Zs))
+            Ntspc = Ntspc[:-2] if Ntspc[-2:] == ".0" else Ntspc
         except:
             Ntspc = "?"
         try:
-            Ncspc = str(self.obj.winding.comp_Ncspc(Zs))
+            Ncspc = str(self.obj.winding.comp_Ncspc(self.obj.slot.Zs))
+            Ncspc = Ncspc[:-2] if Ncspc[-2:] == ".0" else Ncspc
         except:
             Ncspc = "?"
         self.out_Ncspc.setText(self.tr("Ncspc: ") + Ncspc)
@@ -365,9 +375,9 @@ class SWinding(Gen_SWinding, QWidget):
                 lamination.winding.Nslot_shift_wind = 0
             if lamination.winding.is_reverse_wind is None:
                 lamination.winding.is_reverse_wind = False
-            if lamination.Ntcoil is None:
+            if lamination.winding.Ntcoil is None:
                 return "You must set Ntcoil !"
-            if lamination.Npcp is None:
+            if lamination.winding.Npcp is None:
                 return "You must set Npcp !"
         except Exception as e:
             return str(e)
