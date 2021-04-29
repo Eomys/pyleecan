@@ -77,60 +77,59 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="in_Zsp">
+            <widget class="QLabel" name="in_Zs">
              <property name="text">
-              <string>Slot number=123, pole pair number = 8</string>
+              <string>Slot number=123</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="in_p">
+             <property name="text">
+              <string>Pole pair number=32</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QStackedWidget" name="stack_wind_type">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="page">
-              <layout class="QVBoxLayout" name="verticalLayout_4">
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_2">
-                 <item>
-                  <widget class="QLabel" name="in_qs">
-                   <property name="text">
-                    <string>Phases number</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QSpinBox" name="si_qs"/>
-                 </item>
-                </layout>
+              <layout class="QGridLayout" name="gridLayout_2">
+               <item row="0" column="0">
+                <widget class="QLabel" name="in_qs">
+                 <property name="text">
+                  <string>Phases number</string>
+                 </property>
+                </widget>
                </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_5">
-                 <item>
-                  <widget class="QLabel" name="in_Nlayer">
-                   <property name="text">
-                    <string>Layer number</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QSpinBox" name="si_Nlayer"/>
-                 </item>
-                </layout>
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="si_qs"/>
                </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout">
-                 <item>
-                  <widget class="QLabel" name="in_coil_pitch">
-                   <property name="text">
-                    <string>Coil pitch</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QSpinBox" name="si_coil_pitch"/>
-                 </item>
-                </layout>
+               <item row="1" column="0">
+                <widget class="QLabel" name="in_Nlayer">
+                 <property name="text">
+                  <string>Layer number</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QSpinBox" name="si_Nlayer">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="in_coil_pitch">
+                 <property name="text">
+                  <string>Coil pitch</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QSpinBox" name="si_coil_pitch"/>
                </item>
               </layout>
              </widget>
@@ -195,41 +194,33 @@
           <property name="title">
            <string>Circuit</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
-             <item>
-              <widget class="QLabel" name="in_Ntcoil">
-               <property name="text">
-                <string>Number of turns per coil</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="si_Ntcoil"/>
-             </item>
-            </layout>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="in_Ntcoil">
+             <property name="text">
+              <string>Turns per coil</string>
+             </property>
+            </widget>
            </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
-             <item>
-              <widget class="QLabel" name="in_Npcp">
-               <property name="text">
-                <string>Parallel circuits per phase</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="si_Npcp">
-               <property name="maximum">
-                <number>999999999</number>
-               </property>
-               <property name="value">
-                <number>12345</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
+           <item row="0" column="1">
+            <widget class="QSpinBox" name="si_Ntcoil"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="in_Npcp">
+             <property name="text">
+              <string>Parallel circuits</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QSpinBox" name="si_Npcp">
+             <property name="maximum">
+              <number>999999999</number>
+             </property>
+             <property name="value">
+              <number>12345</number>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

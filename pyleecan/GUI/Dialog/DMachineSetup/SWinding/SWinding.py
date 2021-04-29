@@ -38,7 +38,7 @@ class SWinding(Gen_SWinding, QWidget):
         self.setupUi(self)
 
         # Set Help URL
-        self.b_help.url = "https://pyleecan.org/winding.convention.html"
+        # self.b_help.url = "https://pyleecan.org/winding.convention.html"
 
         # Saving arguments
         self.machine = machine
@@ -50,12 +50,8 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj = machine.stator
         else:
             self.obj = machine.rotor
-        self.in_Zsp.setText(
-            "Slot number="
-            + str(self.obj.get_Zs())
-            + ", Pole pair numer="
-            + str(self.obj.get_pole_pair_number())
-        )
+        self.in_Zs.setText("Slot number=" + str(self.obj.get_Zs()))
+        self.in_p.setText("Pole pair numer=" + str(self.obj.get_pole_pair_number()))
 
         # if machine.type_machine == 9 and not self.is_stator:
         #     # Enforce tooth winding for WRSM rotor
@@ -75,11 +71,14 @@ class SWinding(Gen_SWinding, QWidget):
             if self.obj.winding.coil_pitch is None:
                 self.obj.winding.coil_pitch = 0
             self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
+            if self.obj.winding.Nlayer is None:
+                self.obj.winding.Nlayer = 1
+            self.si_Nlayer.setValue(self.obj.winding.Nlayer)
             if self.obj.winding.qs is None:  # default value
                 self.obj.winding.qs = 3
             self.si_qs.setValue(self.obj.winding.qs)
-        else:  # WindingUD
-            self.c_wind_type.setCurrentIndex(0)
+        elif type(self.obj.winding) is WindingUD:  # WindingUD
+            self.c_wind_type.setCurrentIndex(1)
             self.stack_wind_type.setCurrentIndex(1)
 
         if self.obj.winding.is_reverse_wind is None:
@@ -110,6 +109,7 @@ class SWinding(Gen_SWinding, QWidget):
         self.si_coil_pitch.editingFinished.connect(self.set_coil_pitch)
         self.si_Ntcoil.editingFinished.connect(self.set_Ntcoil)
         self.si_Npcp.editingFinished.connect(self.set_Npcp)
+        self.si_Nlayer.editingFinished.connect(self.set_Nlayer)
         self.si_Nslot.valueChanged.connect(self.set_Nslot)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
 
@@ -141,6 +141,7 @@ class SWinding(Gen_SWinding, QWidget):
             if self.obj.winding.qs is None:  # default value
                 self.obj.winding.qs = 3
             self.si_qs.setValue(self.obj.winding.qs)
+            self.si_Nlayer.setValue(self.obj.winding.Nlayer)
             self.stack_wind_type.setCurrentIndex(0)
         else:
             self.obj.winding = WindingUD(init_dict=init_dict)
@@ -164,6 +165,22 @@ class SWinding(Gen_SWinding, QWidget):
             A SWinding object
         """
         self.obj.winding.qs = self.si_qs.value()
+        self.obj.winding.wind_mat = None  # Enforce now computation
+        self.comp_output()
+        self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_Nlayer(self):
+        """Signal to update the value of Nlayer according to the spinbox
+
+        Parameters
+        ----------
+        self : SWinding
+            A SWinding object
+        """
+        self.obj.winding.Nlayer = self.si_Nlayer.value()
+        self.obj.winding.wind_mat = None  # Enforce now computation
         self.comp_output()
         self.update_graph()
         # Notify the machine GUI that the machine has changed
@@ -178,6 +195,7 @@ class SWinding(Gen_SWinding, QWidget):
             A SWinding object
         """
         self.obj.winding.coil_pitch = self.si_coil_pitch.value()
+        self.obj.winding.wind_mat = None  # Enforce now computation
         self.comp_output()
         self.update_graph()
         # Notify the machine GUI that the machine has changed
