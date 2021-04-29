@@ -12227,15 +12227,16 @@
         "desc": "Winding class generating connection matrix using Star of slots method (coupling with SWAT-EM)",
         "is_internal": false,
         "methods": [
+            "comp_connection_mat",
+            "comp_length_endwinding",
             "comp_Ncspc",
             "comp_Ntsp",
+            "comp_periodicity",
             "comp_phasor_angle",
             "comp_winding_factor",
-            "comp_length_endwinding",
-            "comp_connection_mat",
-            "get_dim_wind",
             "get_connection_mat",
-            "comp_periodicity"
+            "get_dim_wind",
+            "get_periodicity"
         ],
         "mother": "",
         "name": "Winding",

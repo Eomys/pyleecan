@@ -18,6 +18,16 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Machine.Winding.comp_connection_mat import comp_connection_mat
+except ImportError as error:
+    comp_connection_mat = error
+
+try:
+    from ..Methods.Machine.Winding.comp_length_endwinding import comp_length_endwinding
+except ImportError as error:
+    comp_length_endwinding = error
+
+try:
     from ..Methods.Machine.Winding.comp_Ncspc import comp_Ncspc
 except ImportError as error:
     comp_Ncspc = error
@@ -26,6 +36,11 @@ try:
     from ..Methods.Machine.Winding.comp_Ntsp import comp_Ntsp
 except ImportError as error:
     comp_Ntsp = error
+
+try:
+    from ..Methods.Machine.Winding.comp_periodicity import comp_periodicity
+except ImportError as error:
+    comp_periodicity = error
 
 try:
     from ..Methods.Machine.Winding.comp_phasor_angle import comp_phasor_angle
@@ -38,14 +53,9 @@ except ImportError as error:
     comp_winding_factor = error
 
 try:
-    from ..Methods.Machine.Winding.comp_length_endwinding import comp_length_endwinding
+    from ..Methods.Machine.Winding.get_connection_mat import get_connection_mat
 except ImportError as error:
-    comp_length_endwinding = error
-
-try:
-    from ..Methods.Machine.Winding.comp_connection_mat import comp_connection_mat
-except ImportError as error:
-    comp_connection_mat = error
+    get_connection_mat = error
 
 try:
     from ..Methods.Machine.Winding.get_dim_wind import get_dim_wind
@@ -53,14 +63,9 @@ except ImportError as error:
     get_dim_wind = error
 
 try:
-    from ..Methods.Machine.Winding.get_connection_mat import get_connection_mat
+    from ..Methods.Machine.Winding.get_periodicity import get_periodicity
 except ImportError as error:
-    get_connection_mat = error
-
-try:
-    from ..Methods.Machine.Winding.comp_periodicity import comp_periodicity
-except ImportError as error:
-    comp_periodicity = error
+    get_periodicity = error
 
 
 from numpy import array, array_equal
@@ -75,6 +80,30 @@ class Winding(FrozenClass):
     NAME = "Star of slots"
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Machine.Winding.comp_connection_mat
+    if isinstance(comp_connection_mat, ImportError):
+        comp_connection_mat = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_connection_mat: "
+                    + str(comp_connection_mat)
+                )
+            )
+        )
+    else:
+        comp_connection_mat = comp_connection_mat
+    # cf Methods.Machine.Winding.comp_length_endwinding
+    if isinstance(comp_length_endwinding, ImportError):
+        comp_length_endwinding = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_length_endwinding: "
+                    + str(comp_length_endwinding)
+                )
+            )
+        )
+    else:
+        comp_length_endwinding = comp_length_endwinding
     # cf Methods.Machine.Winding.comp_Ncspc
     if isinstance(comp_Ncspc, ImportError):
         comp_Ncspc = property(
@@ -93,6 +122,18 @@ class Winding(FrozenClass):
         )
     else:
         comp_Ntsp = comp_Ntsp
+    # cf Methods.Machine.Winding.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
+            )
+        )
+    else:
+        comp_periodicity = comp_periodicity
     # cf Methods.Machine.Winding.comp_phasor_angle
     if isinstance(comp_phasor_angle, ImportError):
         comp_phasor_angle = property(
@@ -117,41 +158,6 @@ class Winding(FrozenClass):
         )
     else:
         comp_winding_factor = comp_winding_factor
-    # cf Methods.Machine.Winding.comp_length_endwinding
-    if isinstance(comp_length_endwinding, ImportError):
-        comp_length_endwinding = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Winding method comp_length_endwinding: "
-                    + str(comp_length_endwinding)
-                )
-            )
-        )
-    else:
-        comp_length_endwinding = comp_length_endwinding
-    # cf Methods.Machine.Winding.comp_connection_mat
-    if isinstance(comp_connection_mat, ImportError):
-        comp_connection_mat = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Winding method comp_connection_mat: "
-                    + str(comp_connection_mat)
-                )
-            )
-        )
-    else:
-        comp_connection_mat = comp_connection_mat
-    # cf Methods.Machine.Winding.get_dim_wind
-    if isinstance(get_dim_wind, ImportError):
-        get_dim_wind = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Winding method get_dim_wind: " + str(get_dim_wind)
-                )
-            )
-        )
-    else:
-        get_dim_wind = get_dim_wind
     # cf Methods.Machine.Winding.get_connection_mat
     if isinstance(get_connection_mat, ImportError):
         get_connection_mat = property(
@@ -164,18 +170,28 @@ class Winding(FrozenClass):
         )
     else:
         get_connection_mat = get_connection_mat
-    # cf Methods.Machine.Winding.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
+    # cf Methods.Machine.Winding.get_dim_wind
+    if isinstance(get_dim_wind, ImportError):
+        get_dim_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Winding method comp_periodicity: "
-                    + str(comp_periodicity)
+                    "Can't use Winding method get_dim_wind: " + str(get_dim_wind)
                 )
             )
         )
     else:
-        comp_periodicity = comp_periodicity
+        get_dim_wind = get_dim_wind
+    # cf Methods.Machine.Winding.get_periodicity
+    if isinstance(get_periodicity, ImportError):
+        get_periodicity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method get_periodicity: " + str(get_periodicity)
+                )
+            )
+        )
+    else:
+        get_periodicity = get_periodicity
     # save and copy methods are available in all object
     save = save
     copy = copy
