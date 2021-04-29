@@ -52,6 +52,7 @@ from ..Classes.HoleUD import HoleUD
 from ..Classes.Import import Import
 from ..Classes.ImportData import ImportData
 from ..Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from ..Classes.ImportGenPWM import ImportGenPWM
 from ..Classes.ImportGenToothSaw import ImportGenToothSaw
 from ..Classes.ImportGenVectLin import ImportGenVectLin
 from ..Classes.ImportGenVectSin import ImportGenVectSin

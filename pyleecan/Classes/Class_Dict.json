@@ -2677,6 +2677,7 @@
         ],
         "daughters": [
             "ImportGenMatrixSin",
+            "ImportGenPWM",
             "ImportGenToothSaw",
             "ImportGenVectLin",
             "ImportGenVectSin",
@@ -2806,6 +2807,134 @@
                 "type": "[ImportGenVectSin]",
                 "unit": "-",
                 "value": ""
+            }
+        ]
+    },
+    "ImportGenPWM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "To generate a PWM voltage matrix",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "ImportMatrix",
+        "name": "ImportGenPWM",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportGenPWM.csv",
+        "properties": [
+            {
+                "desc": "sample frequency",
+                "max": "",
+                "min": "0",
+                "name": "fs",
+                "type": "float",
+                "unit": "Hz",
+                "value": 96000
+            },
+            {
+                "desc": "duration",
+                "max": "",
+                "min": "0",
+                "name": "duration",
+                "type": "int",
+                "unit": "s",
+                "value": 10
+            },
+            {
+                "desc": "fundamental frequency",
+                "max": "",
+                "min": "0",
+                "name": "f",
+                "type": "float",
+                "unit": "Hz",
+                "value": 50
+            },
+            {
+                "desc": "maximal fundamental frequency",
+                "max": "",
+                "min": "0",
+                "name": "fmax",
+                "type": "float",
+                "unit": "Hz",
+                "value": 0
+            },
+            {
+                "desc": "speed mode: 0: Fixed speed, 1: Variable speed",
+                "max": "",
+                "min": "0",
+                "name": "fmode",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "switch mode: 0:Fixed fswi, 1:Variable fswi",
+                "max": "",
+                "min": "",
+                "name": "fswimode",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "switching frequency",
+                "max": "",
+                "min": "",
+                "name": "fswi",
+                "type": "float",
+                "unit": "Hz",
+                "value": 1000
+            },
+            {
+                "desc": "maximal switching frequency",
+                "max": "",
+                "min": "",
+                "name": "fswi_max",
+                "type": "int",
+                "unit": "Hz",
+                "value": 3000
+            },
+            {
+                "desc": "0: GDPWM 1: DPWMMIN 2: DPWMMAX 3: DPWM0 4: DPWM1 5: DPWM2 6: DPWM3 7: SVPWM 8: SPWM",
+                "max": "",
+                "min": "",
+                "name": "typePWM",
+                "type": "int",
+                "unit": "",
+                "value": 8
+            },
+            {
+                "desc": "DC BUS voltage",
+                "max": "",
+                "min": "",
+                "name": "Vdc1",
+                "type": "float",
+                "unit": "V",
+                "value": 2
+            },
+            {
+                "desc": "reference voltage",
+                "max": "",
+                "min": "",
+                "name": "U0",
+                "type": "float",
+                "unit": "V",
+                "value": 1
+            },
+            {
+                "desc": "1: forward toothsaw carrier 2: backwards toothsaw carrier 3: toothsaw carrier else: symetrical toothsaw carrier",
+                "max": "",
+                "min": "",
+                "name": "type_carrier",
+                "type": "int",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -3053,6 +3182,7 @@
         ],
         "daughters": [
             "ImportGenMatrixSin",
+            "ImportGenPWM",
             "ImportGenToothSaw",
             "ImportGenVectLin",
             "ImportGenVectSin",

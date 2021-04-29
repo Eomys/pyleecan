@@ -54,6 +54,7 @@ load_switch = {
     "Import": Import,
     "ImportData": ImportData,
     "ImportGenMatrixSin": ImportGenMatrixSin,
+    "ImportGenPWM": ImportGenPWM,
     "ImportGenToothSaw": ImportGenToothSaw,
     "ImportGenVectLin": ImportGenVectLin,
     "ImportGenVectSin": ImportGenVectSin,
