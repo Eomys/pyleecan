@@ -126,6 +126,11 @@ def convert_Winding(wind_dict):
         wind_dict["__class__"] = "WindingUD"
         WindingUD = import_class("pyleecan.Classes", "WindingUD")
         new_wind = WindingUD()
+        if "coil_pitch" in wind_dict.keys():
+            new_wind.coil_pitch = wind_dict["coil_pitch"]
+        else:
+            new_wind.coil_pitch = 0
+        # Generate Winding matrix
         if old_class == "WindingCW1L":
             new_wind.init_as_CW1L(Zs=wind_dict["Zs"])
         elif old_class == "WindingCW2LR":
