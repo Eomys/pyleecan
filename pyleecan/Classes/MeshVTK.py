@@ -330,8 +330,8 @@ class MeshVTK(Mesh):
             other.mesh is not None and self.mesh is None
         ):
             diff_list.append(name + ".mesh None mismatch")
-        elif self.mesh is not None:
-            diff_list.extend(self.mesh.compare(other.mesh, name=name + ".mesh"))
+        elif self.mesh is not None and self.mesh != other.mesh:
+            diff_list.append(name + ".mesh")
         if other._is_pyvista_mesh != self._is_pyvista_mesh:
             diff_list.append(name + ".is_pyvista_mesh")
         if other._format != self._format:
@@ -344,8 +344,8 @@ class MeshVTK(Mesh):
             other.surf is not None and self.surf is None
         ):
             diff_list.append(name + ".surf None mismatch")
-        elif self.surf is not None:
-            diff_list.extend(self.surf.compare(other.surf, name=name + ".surf"))
+        elif self.surf is not None and self.surf != other.surf:
+            diff_list.append(name + ".surf")
         if other._is_vtk_surf != self._is_vtk_surf:
             diff_list.append(name + ".is_vtk_surf")
         if other._surf_path != self._surf_path:
