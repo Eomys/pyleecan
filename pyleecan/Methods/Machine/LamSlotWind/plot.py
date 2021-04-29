@@ -66,7 +66,7 @@ def plot(
 
     patches = list()
     # getting the number of phases and winding connection matrix
-    if self.winding is not None and not type(self.winding) is Winding:
+    if self.winding is not None:
         if isinstance(self.winding, WindingSC):  # plot only one phase for WindingSC
             wind_mat = None
             qs = 1
