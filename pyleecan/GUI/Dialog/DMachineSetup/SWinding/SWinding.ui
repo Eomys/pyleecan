@@ -296,6 +296,15 @@
            </item>
            <item>
             <widget class="QLabel" name="out_Ntspc">
+             <property name="toolTip">
+              <string>Winding number of turns in series per phase</string>
+             </property>
+             <property name="statusTip">
+              <string>Winding number of turns in series per phase</string>
+             </property>
+             <property name="whatsThis">
+              <string>Winding number of turns in series per phase</string>
+             </property>
              <property name="text">
               <string>Ntspc: </string>
              </property>
@@ -303,6 +312,15 @@
            </item>
            <item>
             <widget class="QLabel" name="out_Ncspc">
+             <property name="toolTip">
+              <string>Number of coils in series per parallel circuit</string>
+             </property>
+             <property name="statusTip">
+              <string>Number of coils in series per parallel circuit</string>
+             </property>
+             <property name="whatsThis">
+              <string>Number of coils in series per parallel circuit</string>
+             </property>
              <property name="text">
               <string>Ncspc:</string>
              </property>

@@ -319,7 +319,49 @@ class Ui_SWinding(object):
         )
         # endif // QT_CONFIG(tooltip)
         self.out_Nperw.setText(QCoreApplication.translate("SWinding", u"Nperw", None))
+        # if QT_CONFIG(tooltip)
+        self.out_Ntspc.setToolTip(
+            QCoreApplication.translate(
+                "SWinding", u"Winding number of turns in series per phase", None
+            )
+        )
+        # endif // QT_CONFIG(tooltip)
+        # if QT_CONFIG(statustip)
+        self.out_Ntspc.setStatusTip(
+            QCoreApplication.translate(
+                "SWinding", u"Winding number of turns in series per phase", None
+            )
+        )
+        # endif // QT_CONFIG(statustip)
+        # if QT_CONFIG(whatsthis)
+        self.out_Ntspc.setWhatsThis(
+            QCoreApplication.translate(
+                "SWinding", u"Winding number of turns in series per phase", None
+            )
+        )
+        # endif // QT_CONFIG(whatsthis)
         self.out_Ntspc.setText(QCoreApplication.translate("SWinding", u"Ntspc: ", None))
+        # if QT_CONFIG(tooltip)
+        self.out_Ncspc.setToolTip(
+            QCoreApplication.translate(
+                "SWinding", u"Number of coils in series per parallel circuit", None
+            )
+        )
+        # endif // QT_CONFIG(tooltip)
+        # if QT_CONFIG(statustip)
+        self.out_Ncspc.setStatusTip(
+            QCoreApplication.translate(
+                "SWinding", u"Number of coils in series per parallel circuit", None
+            )
+        )
+        # endif // QT_CONFIG(statustip)
+        # if QT_CONFIG(whatsthis)
+        self.out_Ncspc.setWhatsThis(
+            QCoreApplication.translate(
+                "SWinding", u"Number of coils in series per parallel circuit", None
+            )
+        )
+        # endif // QT_CONFIG(whatsthis)
         self.out_Ncspc.setText(QCoreApplication.translate("SWinding", u"Ncspc:", None))
         self.b_preview.setText(QCoreApplication.translate("SWinding", u"Preview", None))
         self.b_previous.setText(
