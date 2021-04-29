@@ -3981,7 +3981,6 @@
         "desc": "Lamination with empty Slot",
         "is_internal": false,
         "methods": [
-            "build_geometry",
             "check",
             "comp_radius_mec",
             "comp_surfaces",
@@ -3989,9 +3988,9 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc",
             "comp_radius_mid_yoke",
-            "comp_periodicity"
+            "comp_periodicity",
+            "get_bore_desc"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -4243,7 +4242,9 @@
             "comp_height_yoke",
             "get_notch_list",
             "comp_angle_q_axis",
-            "comp_radius_mid_yoke"
+            "comp_radius_mid_yoke",
+            "get_yoke_desc",
+            "get_bore_desc"
         ],
         "mother": "",
         "name": "Lamination",
@@ -4345,6 +4346,15 @@
                 "max": "",
                 "min": "",
                 "name": "notch",
+                "type": "[Notch]",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Lamination yoke notches",
+                "max": "",
+                "min": "",
+                "name": "yoke_notch",
                 "type": "[Notch]",
                 "unit": "-",
                 "value": ""
@@ -6178,7 +6188,8 @@
             "get_cell_area",
             "convert",
             "as_dict",
-            "perm_coord"
+            "perm_coord",
+            "get_path"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",
@@ -6219,7 +6230,7 @@
                 "name": "path",
                 "type": "str",
                 "unit": "",
-                "value": ""
+                "value": "None"
             },
             {
                 "desc": "Name of the mesh file",
@@ -6657,7 +6668,8 @@
         "desc": "Class for evenly distributed notches (according to Zs)",
         "is_internal": false,
         "methods": [
-            "get_notch_list"
+            "get_notch_list",
+            "comp_surface"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",

@@ -24,17 +24,17 @@ def get_cell(self, indices=None):
         # Extract submesh
         mesh = self.get_mesh_pv(indices=indices)
         # Write submesh in .vtk file
-        mesh.save(self.path + "/temp.vtk")
+        mesh.save(self.get_path(name="temp"))
         # Read mesh file with meshio (pyvista does not provide the correct cell format)
-        mesh = read(self.path + "/temp.vtk")
+        mesh = read(self.get_path(name="temp"))
         # Remove the temporary .vtk file
-        remove(self.path + "/temp.vtk")
+        remove(self.get_path(name="temp"))
     else:
         if self.is_pyvista_mesh:
             mesh = self.get_mesh_pv()
-            mesh.save(self.path + "/mesh.vtk")
+            mesh.save(self.get_path(name="mesh"))
         # Read mesh file with meshio (pyvista does not provide the correct cell format)
-        mesh = read(self.path + "/" + self.name + "." + self.format)
+        mesh = read(self.get_path(name=self.name, file_format=self.format))
 
     cells = {}
     nb_cell = 0

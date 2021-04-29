@@ -18,11 +18,6 @@ from .Lamination import Lamination
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Machine.LamSlot.build_geometry import build_geometry
-except ImportError as error:
-    build_geometry = error
-
-try:
     from ..Methods.Machine.LamSlot.check import check
 except ImportError as error:
     check = error
@@ -58,11 +53,6 @@ except ImportError as error:
     get_Zs = error
 
 try:
-    from ..Methods.Machine.LamSlot.get_bore_desc import get_bore_desc
-except ImportError as error:
-    get_bore_desc = error
-
-try:
     from ..Methods.Machine.LamSlot.comp_radius_mid_yoke import comp_radius_mid_yoke
 except ImportError as error:
     comp_radius_mid_yoke = error
@@ -71,6 +61,11 @@ try:
     from ..Methods.Machine.LamSlot.comp_periodicity import comp_periodicity
 except ImportError as error:
     comp_periodicity = error
+
+try:
+    from ..Methods.Machine.LamSlot.get_bore_desc import get_bore_desc
+except ImportError as error:
+    get_bore_desc = error
 
 
 from ._check import InitUnKnowClassError
@@ -86,17 +81,6 @@ class LamSlot(Lamination):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Machine.LamSlot.build_geometry
-    if isinstance(build_geometry, ImportError):
-        build_geometry = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlot method build_geometry: " + str(build_geometry)
-                )
-            )
-        )
-    else:
-        build_geometry = build_geometry
     # cf Methods.Machine.LamSlot.check
     if isinstance(check, ImportError):
         check = property(
@@ -170,17 +154,6 @@ class LamSlot(Lamination):
         )
     else:
         get_Zs = get_Zs
-    # cf Methods.Machine.LamSlot.get_bore_desc
-    if isinstance(get_bore_desc, ImportError):
-        get_bore_desc = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlot method get_bore_desc: " + str(get_bore_desc)
-                )
-            )
-        )
-    else:
-        get_bore_desc = get_bore_desc
     # cf Methods.Machine.LamSlot.comp_radius_mid_yoke
     if isinstance(comp_radius_mid_yoke, ImportError):
         comp_radius_mid_yoke = property(
@@ -205,6 +178,17 @@ class LamSlot(Lamination):
         )
     else:
         comp_periodicity = comp_periodicity
+    # cf Methods.Machine.LamSlot.get_bore_desc
+    if isinstance(get_bore_desc, ImportError):
+        get_bore_desc = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method get_bore_desc: " + str(get_bore_desc)
+                )
+            )
+        )
+    else:
+        get_bore_desc = get_bore_desc
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -225,6 +209,7 @@ class LamSlot(Lamination):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        yoke_notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -267,6 +252,8 @@ class LamSlot(Lamination):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
         # Set the properties (value check and convertion are done in setter)
         self.slot = slot
         # Call Lamination init
@@ -282,6 +269,7 @@ class LamSlot(Lamination):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            yoke_notch=yoke_notch,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
