@@ -18,8 +18,7 @@ def comp_parameters(self, output):
 
     # compute skin_effect
     Xkr_skinS, Xke_skinS = Cond.comp_skin_effect(T=20)
-    # Xkr_skinS=1
-    # Xke_skinS=1
+
     # Parameters to compute only once
     if "R20" not in PAR:
         PAR["R20"] = output.simu.machine.stator.comp_resistance_wind()
