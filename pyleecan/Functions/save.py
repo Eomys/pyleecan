@@ -8,7 +8,7 @@ class FormatError(Exception):
     pass
 
 
-def save(self, save_path="", is_folder=False, is_compression=None):
+def save(self, save_path="", is_folder=False, compression=None):
     """Save the object to the save_path
 
     Parameters
@@ -39,7 +39,7 @@ def save(self, save_path="", is_folder=False, is_compression=None):
             self,
             save_path=save_path,
             is_folder=is_folder,
-            is_compression=is_compression,
+            compression=compression,
         )
     # Save in hdf5
     elif save_path.endswith(".h5"):

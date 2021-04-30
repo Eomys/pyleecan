@@ -1,9 +1,9 @@
+import gzip
 from datetime import datetime
 from json import dump
-import gzip
 from logging import getLogger
 from os import makedirs
-from os.path import split, isdir, isfile, join
+from os.path import isdir, isfile, join, split
 
 from numpy import int32
 
@@ -17,7 +17,7 @@ def save_json(
     obj,
     save_path="",
     is_folder=False,
-    is_compression=None,
+    compression=None,
     class_to_split=("Simulation", "Machine", "Material"),
 ):
     """Save the object to the save_path
@@ -42,11 +42,8 @@ def save_json(
 
     # init
     file_ext = ".json"
-    if is_compression == "gzip":
+    if compression == "gzip":
         file_ext += ".gz"
-
-    if save_path.endswith(".json"):
-        save_path = save_path[:-5]
 
     # create path and name for the base file
     file_path, base_name = setup_save_path(save_path, obj, is_folder, file_ext, logger)
@@ -73,7 +70,7 @@ def save_json(
     # logging
     cls_name = obj["__class__"]
     if is_folder:
-        msg = f"Saving {cls_name} in folder '{file_path}' ({len(split_list)} files)."
+        msg = f"Saving {cls_name} to folder '{file_path}' ({len(split_list)} files)."
     else:
         msg = f"Saving {cls_name} to file '{join(file_path, base_name)}'."
     logger.info(msg)
@@ -86,10 +83,10 @@ def save_json(
         json_kwargs = dict(sort_keys=True, indent=4, separators=(",", ": "))
         json_file = join(file_path, file_name)
 
-        if is_compression == "gzip":
+        if compression == "gzip":
             fp = gzip.open(json_file, mode="wt", encoding="utf-8")
         else:
-            fp = open(json_file, "w", encoding="utf-8")
+            fp = open(json_file, "w")
 
         with fp:
             dump(save_obj, fp, **json_kwargs)
@@ -124,11 +121,25 @@ def setup_save_path(save_path, obj, is_folder, file_ext, logger):
             file_name = get_filename(obj, file_path, [], file_ext, logger)
 
     else:  # correct
-        if not save_path.endswith(file_ext):
-            save_path += file_ext
-        file_path, file_name = split(save_path)
-        if not file_path and is_folder:
-            file_path = file_name[: -len(file_ext)]  # remove ".json"
+        # remove old extension in case
+        if save_path.endswith(".json"):
+            save_path = save_path[:-5]
+            if is_folder:
+                logger.warning(
+                    f"Removed '.json' from save_path '{save_path}' in folder mode."
+                )
+
+        # file mode
+        if not is_folder:
+            if not save_path.endswith(file_ext):
+                save_path += file_ext
+            file_path, file_name = split(save_path)
+
+        # folder mode
+        else:
+            file_path, file_name = split(save_path)
+            file_path = join(file_path, file_name)
+            file_name += file_ext
 
     if file_path and not isdir(file_path):
         makedirs(file_path)
