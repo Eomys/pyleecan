@@ -118,7 +118,7 @@ def setup_save_path(save_path, obj, is_folder, file_ext, logger):
     if not save_path:  # generate
         if is_folder:
             file_path = create_folder(type(obj).__name__, logger)
-            file_name = type(obj).__name__ + file_ext
+            file_name = file_path + file_ext
         else:
             file_path = ""
             file_name = get_filename(obj, file_path, [], file_ext, logger)
