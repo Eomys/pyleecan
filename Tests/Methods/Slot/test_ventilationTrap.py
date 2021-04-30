@@ -11,7 +11,6 @@ from pyleecan.Methods.Slot.VentilationTrap import TrapezeBuildGeometryError
 """unittest for VentilationTrap"""
 
 
-@pytest.mark.METHODS
 class Test_VentilationTrap(object):
     @pytest.fixture
     def vent(self):

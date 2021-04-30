@@ -7,8 +7,7 @@ from Tests import save_path, TEST_DATA_DIR
 from pyleecan.Classes.ElmerResults import ElmerResults
 
 
-@pytest.mark.METHODS
-# @pytest.mark.DEV
+@pytest.mark.StructElmer
 class Test_ElmerResults(object):
     def test_ElmerResults(self):
         """Test that load_data method is working"""

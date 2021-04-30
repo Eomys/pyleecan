@@ -7,6 +7,7 @@ from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.Classes.LamHole import LamHole
 
 
+@pytest.mark.SCIM
 def test_desc_SCIM():
     """Check that the description of a SCIM is correct"""
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
@@ -40,10 +41,11 @@ def test_desc_SCIM():
     assert desc_dict[8]["value"] == pytest.approx(328.1, rel=0.1)
 
 
+@pytest.mark.IPMSM
 def test_desc_IPMSM():
     """Check that the description of an IPMSM is correct"""
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    desc_dict = IPMSM_A.comp_desc_dict()
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    desc_dict = Toyota_Prius.comp_desc_dict()
     assert len(desc_dict) == 8
     assert desc_dict[0]["name"] == "Type"
     assert desc_dict[0]["value"] == "IPMSM"
@@ -70,6 +72,7 @@ def test_desc_IPMSM():
     assert desc_dict[7]["value"] == pytest.approx(33.37, rel=0.1)
 
 
+@pytest.mark.outer_rotor
 def test_desc_Outer_Rotor():
     """Check that the description with Outer Rotor is correct"""
 

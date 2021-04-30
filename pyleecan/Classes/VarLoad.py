@@ -15,24 +15,6 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .VarSimu import VarSimu
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Simulation.VarLoad.get_elec_datakeeper import get_elec_datakeeper
-except ImportError as error:
-    get_elec_datakeeper = error
-
-try:
-    from ..Methods.Simulation.VarLoad.get_mag_datakeeper import get_mag_datakeeper
-except ImportError as error:
-    get_mag_datakeeper = error
-
-try:
-    from ..Methods.Simulation.VarLoad.get_force_datakeeper import get_force_datakeeper
-except ImportError as error:
-    get_force_datakeeper = error
-
-
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
 from .VarSimu import VarSimu
@@ -45,43 +27,6 @@ class VarLoad(VarSimu):
     VERSION = 1
     NAME = "Variable Load"
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.VarLoad.get_elec_datakeeper
-    if isinstance(get_elec_datakeeper, ImportError):
-        get_elec_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoad method get_elec_datakeeper: "
-                    + str(get_elec_datakeeper)
-                )
-            )
-        )
-    else:
-        get_elec_datakeeper = get_elec_datakeeper
-    # cf Methods.Simulation.VarLoad.get_mag_datakeeper
-    if isinstance(get_mag_datakeeper, ImportError):
-        get_mag_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoad method get_mag_datakeeper: "
-                    + str(get_mag_datakeeper)
-                )
-            )
-        )
-    else:
-        get_mag_datakeeper = get_mag_datakeeper
-    # cf Methods.Simulation.VarLoad.get_force_datakeeper
-    if isinstance(get_force_datakeeper, ImportError):
-        get_force_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoad method get_force_datakeeper: "
-                    + str(get_force_datakeeper)
-                )
-            )
-        )
-    else:
-        get_force_datakeeper = get_force_datakeeper
     # save and copy methods are available in all object
     save = save
     copy = copy

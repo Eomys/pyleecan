@@ -20,7 +20,7 @@ mach_test.append(
     {"json_path": join(MACH_PATH, "SCIM_001.json"), "machine_name": "SCIM"}
 )
 mach_test.append(
-    {"json_path": join(MACH_PATH, "IPMSM_A.json"), "machine_name": "IPMSM"}
+    {"json_path": join(MACH_PATH, "Toyota_Prius.json"), "machine_name": "IPMSM"}
 )
 mach_test.append(
     {"json_path": join(MACH_PATH, "SynRM_001.json"), "machine_name": "SynRM"}

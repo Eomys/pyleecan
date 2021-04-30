@@ -1,9 +1,12 @@
-# -*- coding: utf-8 -*-
+from ...definitions import config_dict
 
-from .plot_4D import plot_4D
-from .plot_3D import plot_3D
-from . import unit_dict, norm_dict, axes_dict
-from numpy import where, meshgrid, max as np_max, min as np_min
+# Import values from config dict
+COLOR_LIST = config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"]
+COLORMAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
+FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
+FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
+FONT_SIZE_LABEL = config_dict["PLOT"]["FONT_SIZE_LABEL"]
+FONT_SIZE_LEGEND = config_dict["PLOT"]["FONT_SIZE_LEGEND"]
 
 
 def plot_3D_Data(
@@ -19,12 +22,22 @@ def plot_3D_Data(
     z_min=None,
     z_max=None,
     z_range=None,
+    color_list=None,
+    colormap=None,
     is_auto_ticks=True,
     is_2D_view=False,
     N_stem=100,
     fig=None,
     ax=None,
     is_show_fig=None,
+    is_auto_range=True,
+    is_same_size=False,
+    is_logscale_x=False,
+    is_logscale_y=False,
+    is_logscale_z=False,
+    thresh=0.02,
+    is_switch_axes=False,
+    win_title=None,
 ):
     """Plots a field as a function of two axes
 
@@ -68,242 +81,49 @@ def plot_3D_Data(
         True to show figure after plot
     """
 
+    print(
+        "WARNING: plot_2D_Data function is deprecated and will be removed from the next release. Please use SciDataTool plot_2D_Data method instead."
+    )
+
+    # Extract arg_list it the function called from another script with *arg_list
     if len(arg_list) == 1 and type(arg_list[0]) == tuple:
-        arg_list = arg_list[0]  # if called from another script with *arg_list
+        arg_list = arg_list[0]
 
-    # Set unit
-    if unit == "SI":
-        unit = data.unit
+    if color_list is None:
+        color_list = COLOR_LIST
+    if colormap is None:
+        colormap = COLORMAP
 
-    # Detect fft
-    is_fft = False
-    if any("wavenumber" in s for s in arg_list) or any("freqs" in s for s in arg_list):
-        is_fft = True
-        if "dB" in unit:
-            unit_str = (
-                "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
-            )
-        else:
-            unit_str = "[" + unit + "]"
-        if data.symbol == "Magnitude":
-            zlabel = "Magnitude " + unit_str
-        else:
-            zlabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
-        title1 = "FFT2 of " + data.name.lower() + " "
-    else:
-        if is_norm:
-            zlabel = (
-                r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
-            )
-        else:
-            zlabel = r"$" + data.symbol + "\, [" + unit + "]$"
-        title1 = "Surface plot of " + data.name.lower() + " "
-
-    # Extract field and axes
-    if is_fft:
-        if is_2D_view:
-            result = data.get_magnitude_along(arg_list, unit=unit, is_norm=is_norm)
-        else:
-            result = data.get_harmonics(
-                N_stem, arg_list, unit=unit, is_norm=is_norm, is_flat=True
-            )
-    else:
-        result = data.get_along(arg_list, unit=unit, is_norm=is_norm)
-    axes_list = result["axes_list"]
-    axes_dict_other = result["axes_dict_other"]
-    Xdata = result[axes_list[0].name]
-    Ydata = result[axes_list[1].name]
-    Zdata = result[data.symbol]
-    if is_fft and not is_2D_view:
-        X_flat = Xdata
-        Y_flat = Ydata
-        Z_flat = Zdata
-
-    else:
-        Y_map, X_map = meshgrid(Ydata, Xdata)
-        X_flat = X_map.flatten()
-        Y_flat = Y_map.flatten()
-        Z_flat = Zdata.flatten()
-    if x_min is None:
-        x_min = np_min(Xdata)
-    if x_max is None:
-        x_max = np_max(Xdata)
-    if y_min is None:
-        y_min = np_min(Ydata)
-    if y_max is None:
-        y_max = np_max(Ydata)
-    if z_range is None:
-        if z_min is None:
-            z_min = np_min(Zdata)
-        if z_max is None:
-            z_max = np_max(Zdata)
-    else:
-        if z_min is None and z_max is None:
-            z_max = np_max(Zdata)
-        if z_max is None:
-            z_max = z_min + z_range
-        if z_min is None:
-            z_min = z_max - z_range
-
-    # Build labels and titles
-    axis = axes_list[0]
-    if axis.name in axes_dict:
-        name = axes_dict[axis.name]
-    else:
-        name = axis.name
-    title2 = "over " + axis.name.lower()
-    if axis.unit == "SI":
-        unit = unit_dict[axis.name]
-        xlabel = name.capitalize() + " [" + unit + "]"
-    elif axis.unit in norm_dict:
-        xlabel = norm_dict[axis.unit]
-    else:
-        unit = axis.unit
-        xlabel = name.capitalize() + " [" + unit + "]"
-    if (
-        axis.name == "angle"
-        and axis.unit == "°"
-        and round(np_max(axis.values) / 6) % 5 == 0
-    ):
-        xticks = [i * round(np_max(axis.values) / 6) for i in range(7)]
-    else:
-        xticks = None
-
-    axis = axes_list[1]
-    if axis.name in axes_dict:
-        name = axes_dict[axis.name]
-    else:
-        name = axis.name
-    title3 = " and " + axis.name.lower()
-    if axis.unit == "SI":
-        unit = unit_dict[axis.name]
-        ylabel = name.capitalize() + " [" + unit + "]"
-    elif axis.unit in norm_dict:
-        ylabel = norm_dict[axis.unit]
-    else:
-        unit = axis.unit
-        ylabel = name.capitalize() + " [" + unit + "]"
-    if (
-        axis.name == "angle"
-        and axis.unit == "°"
-        and round(np_max(axis.values) / 6) % 5 == 0
-    ):
-        yticks = [i * round(np_max(axis.values) / 6) for i in range(7)]
-    else:
-        yticks = None
-
-    title4 = ""
-    for axis in axes_list[2:]:
-        if axis.unit == "SI":
-            unit = unit_dict[axis.name]
-        elif axis.unit in norm_dict:
-            unit = norm_dict[axis.unit]
-        else:
-            unit = axis.unit
-        title4 = " for " + axis.name + "=" + str(result[axis.name]) + " " + unit + ", "
-    title5 = ""
-    for axis_name in axes_dict_other:
-        title5 += (
-            axis_name
-            + "="
-            + str(axes_dict_other[axis_name][0])
-            + " "
-            + axes_dict_other[axis_name][1]
-            + ", "
-        )
-
-    if title4 == " for " and title5 == "":
-        title4 = ""
-
-    title = title1 + title2 + title3 + title4 + title5
-    title = title.rstrip(", ")
-
-    # Call generic plot function
-    if is_fft:
-        if is_auto_ticks:
-            indices = where(Z_flat > abs(0.01 * z_max))[0]
-            xticks = X_flat[indices]
-            yticks = Y_flat[indices]
-        else:
-            xticks = None
-            yticks = None
-        if is_2D_view:
-            plot_4D(
-                X_flat,
-                Y_flat,
-                Z_flat,
-                is_same_size=True,
-                z_max=z_max,
-                z_min=z_min,
-                title=title,
-                xlabel=xlabel,
-                ylabel=ylabel,
-                zlabel=zlabel,
-                fig=fig,
-                ax=ax,
-                type="scatter",
-                save_path=save_path,
-                is_show_fig=is_show_fig,
-            )
-        else:
-            plot_3D(
-                X_flat,
-                Y_flat,
-                Z_flat,
-                fig=fig,
-                ax=ax,
-                x_min=x_min,
-                x_max=x_max,
-                y_min=y_max,
-                y_max=y_min,
-                z_min=z_min,
-                z_max=z_max,
-                title=title,
-                xlabel=xlabel,
-                ylabel=ylabel,
-                zlabel=zlabel,
-                type="stem",
-                save_path=save_path,
-                is_show_fig=is_show_fig,
-            )
-    else:
-        if is_2D_view:
-            plot_3D(
-                X_map,
-                Y_map,
-                Zdata,
-                z_max=z_max,
-                z_min=z_min,
-                xlabel=xlabel,
-                ylabel=ylabel,
-                zlabel=zlabel,
-                title=title,
-                xticks=xticks,
-                fig=fig,
-                ax=ax,
-                type="pcolor",
-                save_path=save_path,
-                is_show_fig=is_show_fig,
-            )
-        else:
-            plot_3D(
-                X_map,
-                Y_map,
-                Zdata,
-                fig=fig,
-                ax=ax,
-                x_min=x_min,
-                x_max=x_max,
-                y_min=y_min,
-                y_max=y_max,
-                z_min=z_min,
-                z_max=z_max,
-                title=title,
-                xlabel=xlabel,
-                ylabel=ylabel,
-                zlabel=zlabel,
-                yticks=yticks,
-                type="surf",
-                save_path=save_path,
-                is_show_fig=is_show_fig,
-            )
+    # Call SciDataTool method
+    data.plot_3D_Data(
+        *arg_list,
+        is_norm=is_norm,
+        unit=unit,
+        save_path=save_path,
+        x_min=x_min,
+        x_max=x_max,
+        y_min=y_min,
+        y_max=y_max,
+        z_min=z_min,
+        z_max=z_max,
+        z_range=z_range,
+        is_auto_ticks=is_auto_ticks,
+        is_auto_range=is_auto_range,
+        is_2D_view=is_2D_view,
+        is_same_size=is_same_size,
+        N_stem=N_stem,
+        fig=fig,
+        ax=ax,
+        is_show_fig=is_show_fig,
+        is_logscale_x=is_logscale_x,
+        is_logscale_y=is_logscale_y,
+        is_logscale_z=is_logscale_z,
+        thresh=thresh,
+        is_switch_axes=is_switch_axes,
+        colormap=colormap,
+        win_title=win_title,
+        font_name=FONT_NAME,
+        font_size_title=FONT_SIZE_TITLE,
+        font_size_label=FONT_SIZE_LABEL,
+        font_size_legend=FONT_SIZE_LEGEND,
+    )

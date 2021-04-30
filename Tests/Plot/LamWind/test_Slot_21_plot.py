@@ -28,7 +28,6 @@ import pytest
 """pytest for Lamination with winding plot"""
 
 
-@pytest.mark.PLOT
 class Test_Slot_21_plot(object):
     def test_Lam_Wind_21_wind_22(self):
         """Test machine plot with Slot 21 and winding rad=2, tan=2"""

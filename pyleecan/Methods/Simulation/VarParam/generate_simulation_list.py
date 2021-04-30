@@ -67,13 +67,10 @@ def generate_simulation_list(self, ref_simu=None):
     # Create ParamExplorerSet to be stored in XOutput
     for param_explorer in self.paramexplorer_list:
         multisim_dict["paramexplorer_list"].append(
-            ParamExplorerSet(
-                name=param_explorer.name,
-                symbol=param_explorer.symbol,
-                unit=param_explorer.unit,
-                setter=param_explorer.setter,
-                value=params_value_dict[param_explorer.symbol],
-            )
+            ParamExplorerSet(init_dict=param_explorer.as_dict())
         )
+        multisim_dict["paramexplorer_list"][-1].value = params_value_dict[
+            param_explorer.symbol
+        ]
 
     return multisim_dict

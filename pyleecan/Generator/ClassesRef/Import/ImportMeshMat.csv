@@ -1,0 +1,2 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+file_path,-,Path of the file to load,0,str,,,,,Import,Import,get_data,VERSION,1,Import mesh as meshMat

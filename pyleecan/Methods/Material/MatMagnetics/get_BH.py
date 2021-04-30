@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import array, linspace, pi
+import numpy as np
+from scipy.optimize import curve_fit, root_scalar
 
 
 def get_BH(self):
@@ -18,6 +20,7 @@ def get_BH(self):
         B(H) values (two colums matrix: H and B(H))
 
     """
+
     if self.BH_curve is not None:
         BH = self.BH_curve.get_data()
 
@@ -31,12 +34,14 @@ def get_BH(self):
                 "BH must be a two colums matrix: H and B(H). Return shape: "
                 + str(BH.shape)
             )
-    elif self.mur_lin is not None:  # todo: update for magnets
-        Hmax = 1e6  # 1000 kA/m should high be enough
-        H = linspace(0, Hmax, 10, endpoint=True)
-        B = 4 * pi * 1e-7 * self.mur_lin * H
-        BH = array([H, B]).T
+
+        if self.is_BH_extrapolate:
+            BH = self.ModelBH.fit_model(BH=BH)
+
     else:
+        BH = self.ModelBH.get_BH()
+
+    if self.mur_lin is None and BH is None:
         raise BHShapeError("There are no BH data availible. Check input data.")
 
     return BH

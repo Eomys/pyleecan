@@ -24,7 +24,6 @@ from pyleecan.Methods import ParentMissingError
 """unittest for Machine with Hole 50 plot"""
 
 
-@pytest.mark.PLOT
 class Test_Hole_50_plot(object):
     @pytest.fixture
     def machine(self):

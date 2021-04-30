@@ -10,7 +10,6 @@ from pyleecan.Classes.SlotW22 import SlotW22
 import pytest
 
 
-@pytest.mark.METHODS
 class TestLamSlotMulti(object):
     """Test that the methods of LamSlotMulti behave like it should"""
 

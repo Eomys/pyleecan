@@ -42,7 +42,6 @@ HoleM58_test.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_HoleM58_meth(object):
     """Test machine plot hole 58"""
 

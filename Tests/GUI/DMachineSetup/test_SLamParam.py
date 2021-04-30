@@ -22,7 +22,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
 import pytest
 
 
-@pytest.mark.GUI
 class TestSLamParam(object):
     """Test that the widget SLamParam behave like it should"""
 

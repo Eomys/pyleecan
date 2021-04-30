@@ -30,7 +30,6 @@ slotW22_test.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_SlotW22_meth(object):
     """pytest for SlotW22 methods"""
 

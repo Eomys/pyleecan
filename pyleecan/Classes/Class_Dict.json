@@ -325,7 +325,7 @@
         "methods": [
             "add_cell",
             "get_connectivity",
-            "get_point2cell",
+            "get_node2cell",
             "is_exist"
         ],
         "mother": "",
@@ -352,10 +352,10 @@
                 "value": 0
             },
             {
-                "desc": "Define the number of node per element",
+                "desc": "Define the number of node per cell",
                 "max": "",
                 "min": "",
-                "name": "nb_pt_per_cell",
+                "name": "nb_node_per_cell",
                 "type": "int",
                 "unit": "",
                 "value": 0
@@ -787,7 +787,8 @@
         "desc": "Class for defining data to keep on a multi-simulation",
         "is_internal": false,
         "methods": [
-            "as_dict"
+            "as_dict",
+            "_set_result"
         ],
         "mother": "",
         "name": "DataKeeper",
@@ -1464,7 +1465,8 @@
             }
         ],
         "daughters": [
-            "ForceMT"
+            "ForceMT",
+            "ForceTensor"
         ],
         "desc": "Forces module abstract object",
         "is_internal": false,
@@ -1553,6 +1555,38 @@
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/ForceMT.csv",
         "properties": []
+    },
+    "ForceTensor": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Force various tensors (Maxwell, magnetostrictive) model for radial flux machines",
+        "is_internal": false,
+        "methods": [
+            "comp_force",
+            "comp_force_nodal",
+            "comp_magnetrosctrictive_tensor",
+            "element_loop"
+        ],
+        "mother": "Force",
+        "name": "ForceTensor",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/ForceTensor.csv",
+        "properties": [
+            {
+                "desc": "Name of the group selected for magnetic force computation. If None, all the domain is selected.",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "str",
+                "unit": "-",
+                "value": "stator core"
+            }
+        ]
     },
     "Frame": {
         "constants": [
@@ -2629,13 +2663,16 @@
         ],
         "daughters": [
             "ImportGenMatrixSin",
+            "ImportGenPWM",
             "ImportGenToothSaw",
             "ImportGenVectLin",
             "ImportGenVectSin",
             "ImportMatlab",
             "ImportMatrix",
             "ImportMatrixVal",
-            "ImportMatrixXls"
+            "ImportMatrixXls",
+            "ImportMeshMat",
+            "ImportMeshUnv"
         ],
         "desc": "Abstract class for Data Import/Generation",
         "is_internal": false,
@@ -2756,6 +2793,134 @@
                 "type": "[ImportGenVectSin]",
                 "unit": "-",
                 "value": ""
+            }
+        ]
+    },
+    "ImportGenPWM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "To generate a PWM voltage matrix",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "ImportMatrix",
+        "name": "ImportGenPWM",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportGenPWM.csv",
+        "properties": [
+            {
+                "desc": "sample frequency",
+                "max": "",
+                "min": "0",
+                "name": "fs",
+                "type": "float",
+                "unit": "Hz",
+                "value": 96000
+            },
+            {
+                "desc": "duration",
+                "max": "",
+                "min": "0",
+                "name": "duration",
+                "type": "int",
+                "unit": "s",
+                "value": 10
+            },
+            {
+                "desc": "fundamental frequency",
+                "max": "",
+                "min": "0",
+                "name": "f",
+                "type": "float",
+                "unit": "Hz",
+                "value": 50
+            },
+            {
+                "desc": "maximal fundamental frequency",
+                "max": "",
+                "min": "0",
+                "name": "fmax",
+                "type": "float",
+                "unit": "Hz",
+                "value": 0
+            },
+            {
+                "desc": "speed mode: 0: Fixed speed, 1: Variable speed",
+                "max": "",
+                "min": "0",
+                "name": "fmode",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "switch mode: 0:Fixed fswi, 1:Variable fswi",
+                "max": "",
+                "min": "",
+                "name": "fswimode",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "switching frequency",
+                "max": "",
+                "min": "",
+                "name": "fswi",
+                "type": "float",
+                "unit": "Hz",
+                "value": 1000
+            },
+            {
+                "desc": "maximal switching frequency",
+                "max": "",
+                "min": "",
+                "name": "fswi_max",
+                "type": "int",
+                "unit": "Hz",
+                "value": 3000
+            },
+            {
+                "desc": "0: GDPWM 1: DPWMMIN 2: DPWMMAX 3: DPWM0 4: DPWM1 5: DPWM2 6: DPWM3 7: SVPWM 8: SPWM",
+                "max": "",
+                "min": "",
+                "name": "typePWM",
+                "type": "int",
+                "unit": "",
+                "value": 8
+            },
+            {
+                "desc": "DC BUS voltage",
+                "max": "",
+                "min": "",
+                "name": "Vdc1",
+                "type": "float",
+                "unit": "V",
+                "value": 2
+            },
+            {
+                "desc": "reference voltage",
+                "max": "",
+                "min": "",
+                "name": "U0",
+                "type": "float",
+                "unit": "V",
+                "value": 1
+            },
+            {
+                "desc": "1: forward toothsaw carrier 2: backwards toothsaw carrier 3: toothsaw carrier else: symetrical toothsaw carrier",
+                "max": "",
+                "min": "",
+                "name": "type_carrier",
+                "type": "int",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -3003,6 +3168,7 @@
         ],
         "daughters": [
             "ImportGenMatrixSin",
+            "ImportGenPWM",
             "ImportGenToothSaw",
             "ImportGenVectLin",
             "ImportGenVectSin",
@@ -3131,6 +3297,64 @@
                 "type": "bool",
                 "unit": "-",
                 "value": false
+            }
+        ]
+    },
+    "ImportMeshMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Import mesh as meshMat",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "Import",
+        "name": "ImportMeshMat",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportMeshMat.csv",
+        "properties": [
+            {
+                "desc": "Path of the file to load",
+                "max": "",
+                "min": "",
+                "name": "file_path",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "ImportMeshUnv": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Import mesh data from an unv file",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "Import",
+        "name": "ImportMeshUnv",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportMeshUnv.csv",
+        "properties": [
+            {
+                "desc": "Path of the file to load",
+                "max": "",
+                "min": "",
+                "name": "file_path",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -3757,7 +3981,6 @@
         "desc": "Lamination with empty Slot",
         "is_internal": false,
         "methods": [
-            "build_geometry",
             "check",
             "comp_radius_mec",
             "comp_surfaces",
@@ -3765,9 +3988,9 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc",
             "comp_radius_mid_yoke",
-            "comp_periodicity"
+            "comp_periodicity",
+            "get_bore_desc"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -4019,7 +4242,9 @@
             "comp_height_yoke",
             "get_notch_list",
             "comp_angle_q_axis",
-            "comp_radius_mid_yoke"
+            "comp_radius_mid_yoke",
+            "get_yoke_desc",
+            "get_bore_desc"
         ],
         "mother": "",
         "name": "Lamination",
@@ -4121,6 +4346,15 @@
                 "max": "",
                 "min": "",
                 "name": "notch",
+                "type": "[Notch]",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Lamination yoke notches",
+                "max": "",
+                "min": "",
+                "name": "yoke_notch",
                 "type": "[Notch]",
                 "unit": "-",
                 "value": ""
@@ -5515,6 +5749,24 @@
                 "type": "ImportMatrix",
                 "unit": "W/kg",
                 "value": ""
+            },
+            {
+                "desc": "a model of BH curve with an analytical expression",
+                "max": "",
+                "min": "",
+                "name": "ModelBH",
+                "type": "ModelBH",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "1 to use ModelBH to fit input data and extrapolate BH curve",
+                "max": "",
+                "min": "",
+                "name": "is_BH_extrapolate",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
             }
         ]
     },
@@ -5775,16 +6027,19 @@
         "desc": "Gather the mesh storage format",
         "is_internal": false,
         "methods": [
-            "get_point",
+            "get_node",
+            "get_node_indice",
             "get_cell",
             "get_mesh_pv",
             "get_cell_area",
-            "add_cell",
             "get_vertice",
-            "get_point2cell",
+            "get_node2cell",
+            "add_cell",
             "renum",
             "find_cell",
-            "interface"
+            "interface",
+            "clear_node",
+            "clear_cell"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
@@ -5804,10 +6059,19 @@
                 "desc": "Storing nodes",
                 "max": "",
                 "min": "",
-                "name": "point",
-                "type": "PointMat",
+                "name": "node",
+                "type": "NodeMat",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "True if renumering the nodes and cells is useful when renum method is called (saving calculation time)",
+                "max": "",
+                "min": "",
+                "name": "_is_renum",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -5825,12 +6089,15 @@
             "get_mesh",
             "get_solution",
             "get_field",
+            "get_group",
+            "get_mesh_field_pv",
             "plot_mesh",
             "plot_contour",
             "plot_deflection",
             "plot_deflection_animated",
             "plot_glyph",
-            "get_group"
+            "plot_glyph_animated",
+            "perm_coord"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -5874,11 +6141,11 @@
                 "value": ""
             },
             {
-                "desc": "Dict sorted by groups name with cells indices. ",
+                "desc": "Dict sorted by groups name with list of cells indices. ",
                 "max": "",
                 "min": "",
                 "name": "group",
-                "type": "{ndarray}",
+                "type": "dict",
                 "unit": "",
                 "value": null
             },
@@ -5914,13 +6181,15 @@
         "is_internal": false,
         "methods": [
             "get_mesh_pv",
-            "get_point",
+            "get_node",
             "get_cell",
             "get_normals",
             "get_surf",
             "get_cell_area",
             "convert",
-            "as_dict"
+            "as_dict",
+            "perm_coord",
+            "get_path"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",
@@ -5932,7 +6201,7 @@
                 "max": "",
                 "min": "",
                 "name": "mesh",
-                "type": "pyvista.core.pointset.PointGrid",
+                "type": "vtk.vtkPointSet",
                 "unit": "",
                 "value": "None"
             },
@@ -5961,7 +6230,7 @@
                 "name": "path",
                 "type": "str",
                 "unit": "",
-                "value": ""
+                "value": "None"
             },
             {
                 "desc": "Name of the mesh file",
@@ -6006,7 +6275,16 @@
                 "name": "surf_name",
                 "type": "str",
                 "unit": "",
-                "value": "surf"
+                "value": ""
+            },
+            {
+                "desc": "Array of normals to nodes (cell vertices)",
+                "max": "",
+                "min": "",
+                "name": "node_normals",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -6060,6 +6338,303 @@
             }
         ]
     },
+    "ModelBH": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "ModelBH_Langevin",
+            "ModelBH_arctangent",
+            "ModelBH_linear_sat"
+        ],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [
+            "get_BH",
+            "fit_model"
+        ],
+        "mother": "",
+        "name": "ModelBH",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH.csv",
+        "properties": [
+            {
+                "desc": "Max value of H for extrapolation",
+                "max": "",
+                "min": "",
+                "name": "Bmax",
+                "type": "float",
+                "unit": "-",
+                "value": 2.31
+            },
+            {
+                "desc": "Max value of B for extrapolation",
+                "max": "",
+                "min": "",
+                "name": "Hmax",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Step value for H",
+                "max": "",
+                "min": "",
+                "name": "delta",
+                "type": "float",
+                "unit": "-",
+                "value": 100
+            }
+        ]
+    },
+    "ModelBH_Langevin": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [
+            "get_BH",
+            "BH_func"
+        ],
+        "mother": "ModelBH",
+        "name": "ModelBH_Langevin",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_Langevin.csv",
+        "properties": [
+            {
+                "desc": "To enforc Saturation flux density",
+                "max": "",
+                "min": "",
+                "name": "Bs",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "To enforce Saturation parameter a",
+                "max": "",
+                "min": "",
+                "name": "a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Init value for Bs for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param1",
+                "type": "float",
+                "unit": "-",
+                "value": 1.89
+            },
+            {
+                "desc": "Init value for a for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param2",
+                "type": "float",
+                "unit": "-",
+                "value": 240
+            }
+        ]
+    },
+    "ModelBH_arctangent": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [],
+        "mother": "ModelBH",
+        "name": "ModelBH_arctangent",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_arctangent.csv",
+        "properties": [
+            {
+                "desc": "BH curve parameter",
+                "max": "",
+                "min": "",
+                "name": "k",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "Saturation permeability parameter",
+                "max": "",
+                "min": "",
+                "name": "mu_a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "ModelBH_exponential": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "ModelBH_exponential",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_exponential.csv",
+        "properties": [
+            {
+                "desc": "BH curve parameter",
+                "max": "",
+                "min": "",
+                "name": "Bs",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "Saturation permeability parameter",
+                "max": "",
+                "min": "",
+                "name": "mu_a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "ModelBH_linear_sat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [
+            "get_BH",
+            "BH_func"
+        ],
+        "mother": "ModelBH",
+        "name": "ModelBH_linear_sat",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_linear_sat.csv",
+        "properties": [
+            {
+                "desc": "Saturation flux density",
+                "max": "",
+                "min": "",
+                "name": "Bs",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "Linear permeability",
+                "max": "",
+                "min": "",
+                "name": "mu_a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Init value for Bs for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param1",
+                "type": "float",
+                "unit": "-",
+                "value": 1.89
+            },
+            {
+                "desc": "Init value for mu_a for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param2",
+                "type": "float",
+                "unit": "-",
+                "value": 240
+            }
+        ]
+    },
+    "NodeMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to define nodes coordinates and getter.",
+        "is_internal": false,
+        "methods": [
+            "add_node",
+            "get_coord",
+            "is_exist",
+            "get_indice"
+        ],
+        "mother": "",
+        "name": "NodeMat",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/NodeMat.csv",
+        "properties": [
+            {
+                "desc": "Nodes coordinates",
+                "max": "",
+                "min": "",
+                "name": "coordinate",
+                "type": "ndarray",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "Total number of nodes",
+                "max": "",
+                "min": "",
+                "name": "nb_node",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Sensibility for node searching",
+                "max": "",
+                "min": "",
+                "name": "delta",
+                "type": "float",
+                "unit": "",
+                "value": 1e-10
+            },
+            {
+                "desc": "Nodes unique indices",
+                "max": "",
+                "min": "",
+                "name": "indice",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "Notch": {
         "constants": [
             {
@@ -6093,7 +6668,8 @@
         "desc": "Class for evenly distributed notches (according to Zs)",
         "is_internal": false,
         "methods": [
-            "get_notch_list"
+            "get_notch_list",
+            "comp_surface"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
@@ -6739,6 +7315,15 @@
                 "min": "",
                 "name": "Rag",
                 "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Force computed on a mesh",
+                "max": "",
+                "min": "",
+                "name": "meshsolution",
+                "type": "MeshSolution",
                 "unit": "-",
                 "value": null
             }
@@ -7444,11 +8029,7 @@
             "getter.get_path_result",
             "getter.get_machine_periodicity",
             "getter.get_rot_dir",
-            "plot.plot_2D_Data",
             "getter.get_fund_harm",
-            "plot.plot_A_quiver_2D",
-            "plot.plot_3D_Data",
-            "plot.plot_A_time_space",
             "getter.get_data_from_str",
             "print_memory"
         ],
@@ -7558,12 +8139,15 @@
         ],
         "daughters": [
             "OptiDesignVar",
+            "ParamExplorerInterval",
             "ParamExplorerSet"
         ],
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,
         "methods": [
-            "_set_setter"
+            "_set_setter",
+            "_set_getter",
+            "get_desc"
         ],
         "mother": "",
         "name": "ParamExplorer",
@@ -7605,6 +8189,83 @@
                 "type": "function",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Function to return the reference value (simulation as argument)",
+                "max": "",
+                "min": "",
+                "name": "getter",
+                "type": "function",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "ParamExplorerInterval": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define a set of value (for parameter sweep) on interval",
+        "is_internal": false,
+        "methods": [
+            "get_value",
+            "get_min",
+            "get_max",
+            "get_N"
+        ],
+        "mother": "ParamExplorer",
+        "name": "ParamExplorerInterval",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/ParamExplorerInterval.csv",
+        "properties": [
+            {
+                "desc": "Minumum value of the interval",
+                "max": "",
+                "min": "",
+                "name": "min_value",
+                "type": "float",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Maximum value of the interval",
+                "max": "",
+                "min": "",
+                "name": "max_value",
+                "type": "float",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Number of value to take in the interval",
+                "max": "",
+                "min": "2",
+                "name": "N",
+                "type": "int",
+                "unit": "-",
+                "value": 4
+            },
+            {
+                "desc": "How to generate the value list. 0: linspace, 1: random (Not available yet)",
+                "max": "1",
+                "min": "0",
+                "name": "type_value_gen",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Type of the value: 0:float, 1:int",
+                "max": "1",
+                "min": "0",
+                "name": "type_value",
+                "type": "int",
+                "unit": "-",
+                "value": 0
             }
         ]
     },
@@ -7616,11 +8277,15 @@
             }
         ],
         "daughters": [],
-        "desc": "Abstract class for the multi-simulation",
+        "desc": "Define a parameter set (for parameter sweep) from a list",
         "is_internal": false,
         "methods": [
             "get_value",
-            "as_dict"
+            "as_dict",
+            "get_min",
+            "get_max",
+            "get_N",
+            "_set_value"
         ],
         "mother": "ParamExplorer",
         "name": "ParamExplorerSet",
@@ -7635,65 +8300,6 @@
                 "type": "list",
                 "unit": "-",
                 "value": []
-            }
-        ]
-    },
-    "PointMat": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Class to define nodes coordinates and getter.",
-        "is_internal": false,
-        "methods": [
-            "add_point",
-            "get_coord",
-            "get_group",
-            "is_exist"
-        ],
-        "mother": "",
-        "name": "PointMat",
-        "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/PointMat.csv",
-        "properties": [
-            {
-                "desc": "Nodes coordinates",
-                "max": "",
-                "min": "",
-                "name": "coordinate",
-                "type": "ndarray",
-                "unit": "",
-                "value": []
-            },
-            {
-                "desc": "Total number of nodes",
-                "max": "",
-                "min": "",
-                "name": "nb_pt",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Sensibility for node searching",
-                "max": "",
-                "min": "",
-                "name": "delta",
-                "type": "float",
-                "unit": "",
-                "value": 1e-10
-            },
-            {
-                "desc": "Point indices",
-                "max": "",
-                "min": "",
-                "name": "indice",
-                "type": "ndarray",
-                "unit": "",
-                "value": ""
             }
         ]
     },
@@ -7831,7 +8437,7 @@
         "path": "pyleecan/Generator/ClassesRef/Post/PostPlot.csv",
         "properties": [
             {
-                "desc": "Full path of the plot method to call except Output (ex: \"plot_2D_Data\", \"mag.meshsolution.plot_contour\")",
+                "desc": "Name of the plot method to call (e.g. plot_2D_Data, plot_contour, plot_multi)",
                 "max": "",
                 "min": "",
                 "name": "method",
@@ -7874,6 +8480,15 @@
                 "type": "str",
                 "unit": "",
                 "value": "png"
+            },
+            {
+                "desc": "Full path to the quantity to which apply the plot_method except Output (e.g. mag.B, elec.get_Is, mag.meshsolution)",
+                "max": "",
+                "min": "",
+                "name": "quantity",
+                "type": "str",
+                "unit": "",
+                "value": "None"
             }
         ]
     },
@@ -11583,11 +12198,7 @@
         ],
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
         "is_internal": false,
-        "methods": [
-            "get_elec_datakeeper",
-            "get_mag_datakeeper",
-            "get_force_datakeeper"
-        ],
+        "methods": [],
         "mother": "VarSimu",
         "name": "VarLoad",
         "package": "Simulation",
@@ -11607,7 +12218,6 @@
         "methods": [
             "get_input_list",
             "generate_simulation_list",
-            "gen_datakeeper_list",
             "check_param",
             "get_elec_datakeeper"
         ],
@@ -11707,7 +12317,11 @@
             "run",
             "set_reused_data",
             "check_param",
-            "generate_simulation_list"
+            "generate_simulation_list",
+            "gen_datakeeper_list",
+            "get_elec_datakeeper",
+            "get_mag_datakeeper",
+            "get_force_datakeeper"
         ],
         "mother": "",
         "name": "VarSimu",
@@ -12320,22 +12934,23 @@
             "__next__",
             "__reversed__",
             "__setitem__",
-            "count",
-            "insert",
-            "pop",
-            "remove",
             "append",
-            "get_simu",
-            "keys",
-            "items",
+            "count",
             "get_param_simu",
             "get_paramexplorer",
+            "get_pareto_index",
+            "get_simu",
+            "get_symbol_list",
+            "get_xoutput_ref",
+            "insert",
+            "items",
+            "keys",
+            "plot_generation",
             "plot_multi",
             "plot_pareto",
-            "plot_generation",
-            "get_pareto_index",
+            "pop",
             "print_memory",
-            "get_xoutput_ref"
+            "remove"
         ],
         "mother": "Output",
         "name": "XOutput",

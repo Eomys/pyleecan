@@ -11,6 +11,7 @@ COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 def plot_contour(
     self,
+    *args,
     label=None,
     index=None,
     indices=None,
@@ -21,7 +22,7 @@ def plot_contour(
     field_name=None,
     group_names=None,
     save_path=None,
-    itime=0,
+    itimefreq=0,
     is_show_fig=True,
 ):
     """Plot the contour of a field on a mesh using pyvista plotter.
@@ -30,6 +31,8 @@ def plot_contour(
     ----------
     self : MeshSolution
         a MeshSolution object
+    *args: list of strings
+        List of axes requested by the user, their units and values (optional)
     label : str
         a label
     index : int
@@ -50,16 +53,17 @@ def plot_contour(
         a list of str corresponding to group name(s)
     save_path : str
         path to save the figure
-    itime : int
-        index of the time step to be plotted
     is_show_fig : bool
         To call show at the end of the method
+
     Returns
     -------
+
     """
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
         meshsol_grp.plot_contour(
+            *args,
             label=label,
             index=index,
             indices=indices,
@@ -70,7 +74,7 @@ def plot_contour(
             field_name=field_name,
             group_names=None,
             save_path=save_path,
-            itime=itime,
+            itimefreq=itimefreq,
         )
     else:
         if save_path is None:
@@ -87,41 +91,17 @@ def plot_contour(
 
             is_pyvistaqt = False
 
-        # Get the mesh
-        mesh = self.get_mesh(label=label, index=index)
-        mesh_pv = mesh.get_mesh_pv()
-
-        # Get the field
-        field = self.get_field(
+        # Get the mesh_pv and field
+        mesh_pv, field, field_name = self.get_mesh_field_pv(
+            *args,
             label=label,
             index=index,
             indices=indices,
             is_surf=is_surf,
             is_radial=is_radial,
             is_center=is_center,
+            field_name=field_name,
         )
-
-        # Extract time index
-        if len(field.shape) > 2:
-            # Extract time index
-            if field.shape[1] > 3:
-                field = field[itime, ...]
-            # Compute norm
-            if field.shape[-1] == 2 or field.shape[-1] == 3:
-                field = norm(field, axis=-1)
-
-        elif len(field.shape) > 1:
-            # Extract time index
-            if field.shape[1] > 3:
-                field = field[itime, :]
-
-        if field_name is None:
-            if label is not None:
-                field_name = label
-            elif self.get_solution(index=index).label is not None:
-                field_name = self.get_solution(index=index).label
-            else:
-                field_name = "Field"
 
         # Add field to mesh
         if is_surf:
@@ -158,5 +138,5 @@ def plot_contour(
             p.view_xy()
         if save_path is None and is_show_fig:
             p.show()
-        elif save_path is not None and is_show_fig:
+        elif save_path is not None:
             p.show(interactive=False, screenshot=save_path)

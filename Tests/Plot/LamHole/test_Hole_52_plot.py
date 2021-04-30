@@ -19,7 +19,6 @@ from Tests import save_plot_path as save_path
 """pytest for Lamination with Hole 52 plot"""
 
 
-@pytest.mark.PLOT
 class Test_Hole_52_plot(object):
     @pytest.fixture
     def machine(self):

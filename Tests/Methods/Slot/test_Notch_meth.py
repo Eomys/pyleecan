@@ -10,7 +10,6 @@ from pyleecan.Methods import ParentMissingError
 import pytest
 
 
-@pytest.mark.METHODS
 class TestNotch(object):
     """Test that the methods of Notch behave like it should"""
 

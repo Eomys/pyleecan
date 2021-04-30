@@ -22,6 +22,16 @@ try:
 except ImportError as error:
     _set_setter = error
 
+try:
+    from ..Methods.Simulation.ParamExplorer._set_getter import _set_getter
+except ImportError as error:
+    _set_getter = error
+
+try:
+    from ..Methods.Simulation.ParamExplorer.get_desc import get_desc
+except ImportError as error:
+    get_desc = error
+
 
 from ntpath import basename
 from os.path import isfile
@@ -36,6 +46,7 @@ class ParamExplorer(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.ParamExplorer._set_setter
     if isinstance(_set_setter, ImportError):
         _set_setter = property(
@@ -47,6 +58,26 @@ class ParamExplorer(FrozenClass):
         )
     else:
         _set_setter = _set_setter
+    # cf Methods.Simulation.ParamExplorer._set_getter
+    if isinstance(_set_getter, ImportError):
+        _set_getter = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ParamExplorer method _set_getter: " + str(_set_getter)
+                )
+            )
+        )
+    else:
+        _set_getter = _set_getter
+    # cf Methods.Simulation.ParamExplorer.get_desc
+    if isinstance(get_desc, ImportError):
+        get_desc = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ParamExplorer method get_desc: " + str(get_desc))
+            )
+        )
+    else:
+        get_desc = get_desc
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -54,7 +85,14 @@ class ParamExplorer(FrozenClass):
     get_logger = get_logger
 
     def __init__(
-        self, name="", symbol="", unit="", setter=None, init_dict=None, init_str=None
+        self,
+        name="",
+        symbol="",
+        unit="",
+        setter=None,
+        getter=None,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -79,12 +117,15 @@ class ParamExplorer(FrozenClass):
                 unit = init_dict["unit"]
             if "setter" in list(init_dict.keys()):
                 setter = init_dict["setter"]
+            if "getter" in list(init_dict.keys()):
+                getter = init_dict["getter"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.symbol = symbol
         self.unit = unit
         self.setter = setter
+        self.getter = getter
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -108,6 +149,12 @@ class ParamExplorer(FrozenClass):
             ParamExplorer_str += "setter = " + str(self._setter_func) + linesep
         else:
             ParamExplorer_str += "setter = None" + linesep + linesep
+        if self._getter_str is not None:
+            ParamExplorer_str += "getter = " + self._getter_str + linesep
+        elif self._getter_func is not None:
+            ParamExplorer_str += "getter = " + str(self._getter_func) + linesep
+        else:
+            ParamExplorer_str += "getter = None" + linesep + linesep
         return ParamExplorer_str
 
     def __eq__(self, other):
@@ -122,6 +169,8 @@ class ParamExplorer(FrozenClass):
         if other.unit != self.unit:
             return False
         if other._setter_str != self._setter_str:
+            return False
+        if other._getter_str != self._getter_str:
             return False
         return True
 
@@ -139,6 +188,8 @@ class ParamExplorer(FrozenClass):
             diff_list.append(name + ".unit")
         if other._setter_str != self._setter_str:
             diff_list.append(name + ".setter")
+        if other._getter_str != self._getter_str:
+            diff_list.append(name + ".getter")
         return diff_list
 
     def __sizeof__(self):
@@ -149,6 +200,7 @@ class ParamExplorer(FrozenClass):
         S += getsizeof(self.symbol)
         S += getsizeof(self.unit)
         S += getsizeof(self._setter_str)
+        S += getsizeof(self._getter_str)
         return S
 
     def as_dict(self, **kwargs):
@@ -174,6 +226,18 @@ class ParamExplorer(FrozenClass):
                     + f"Function {self.setter.__name__} is not serializable "
                     + "and will be converted to None."
                 )
+        if self._getter_str is not None:
+            ParamExplorer_dict["getter"] = self._getter_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            ParamExplorer_dict["getter"] = self.getter
+        else:
+            ParamExplorer_dict["getter"] = None
+            if self.getter is not None:
+                self.get_logger().warning(
+                    "ParamExplorer.as_dict(): "
+                    + f"Function {self.getter.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         # The class name is added to the dict for deserialisation purpose
         ParamExplorer_dict["__class__"] = "ParamExplorer"
         return ParamExplorer_dict
@@ -185,6 +249,7 @@ class ParamExplorer(FrozenClass):
         self.symbol = None
         self.unit = None
         self.setter = None
+        self.getter = None
 
     def _get_name(self):
         """getter of name"""
@@ -248,6 +313,19 @@ class ParamExplorer(FrozenClass):
         fget=_get_setter,
         fset=_set_setter,
         doc="""Function that takes a Simulation and a value in argument and modifiers the simulation
+
+        :Type: function
+        """,
+    )
+
+    def _get_getter(self):
+        """getter of getter"""
+        return self._getter_func
+
+    getter = property(
+        fget=_get_getter,
+        fset=_set_getter,
+        doc="""Function to return the reference value (simulation as argument)
 
         :Type: function
         """,

@@ -19,7 +19,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import 
 from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 
 
-@pytest.mark.GUI
 class TestSWindCond(object):
     @pytest.fixture
     def setup(self):

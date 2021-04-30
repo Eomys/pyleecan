@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def get_field(self, *args):
+def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
     """Get the value of variables stored in Solution.
 
     Parameters
@@ -20,10 +20,10 @@ def get_field(self, *args):
     axname, _ = self.get_axes_list()
     symbol = self.field.symbol
 
-    if not args:
-        field_dict = self.field.get_along(tuple(axname))
+    if len(args) == 0:
+        field_dict = self.field.get_along(tuple(axname), is_squeeze=is_squeeze)
     else:
-        field_dict = self.field.get_along(args)
+        field_dict = self.field.get_along(*args, is_squeeze=is_squeeze)
 
     field = field_dict[symbol]
 

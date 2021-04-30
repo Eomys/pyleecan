@@ -71,7 +71,6 @@ HoleM53_test_error.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_HoleM53_meth(object):
     """pytest for holeB53 methods"""
 

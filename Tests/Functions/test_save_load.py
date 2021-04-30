@@ -41,7 +41,7 @@ load_file_1 = join(TEST_DATA_DIR, "test_wrong_slot_load_1.json")
 load_file_2 = join(TEST_DATA_DIR, "test_wrong_slot_load_2.json")
 logger.info(save_path)
 
-"""test for save and load fonctions"""
+"""test for save and load functions"""
 
 
 def test_save_load_machine():
@@ -96,10 +96,14 @@ def test_save_load_machine():
     assert result.frame == None
 
 
+@pytest.mark.IPMSM
+@pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_save_load_folder_path():
     """Save with a folder path"""
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="SM_CEFC_001", machine=IPMSM_A, struct=None)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="test_save_load_folder_path", machine=Toyota_Prius, struct=None)
 
     # Definition of the enforced output of the electrical module
     N0 = 3000
@@ -144,8 +148,8 @@ def test_save_load_folder_path():
     assert isfile(file_path)
     assert isfile(join(loc_save_path, "Material.json"))
     assert isfile(join(loc_save_path, "M400-50A.json"))
-    assert isfile(join(loc_save_path, "IPMSM_A.json"))
-    assert isfile(join(loc_save_path, "SM_CEFC_001.json"))
+    assert isfile(join(loc_save_path, "Toyota_Prius.json"))
+    assert isfile(join(loc_save_path, "test_save_load_folder_path.json"))
     test_obj2 = load(loc_save_path)
     assert test_obj == test_obj2
     assert callable(test_obj.simu.postproc_list[0]._run_func)
@@ -278,13 +282,16 @@ def test_save_load_dict():
     assert result_dict == test_dict
 
 
-@pytest.mark.long
+@pytest.mark.MagFEMM
 @pytest.mark.FEMM
+@pytest.mark.IPMSM
+@pytest.mark.SingleOP
+@pytest.mark.periodicity
 @pytest.mark.parametrize("type_file", ["json", "h5", "pkl"])
 def test_save_load_simu(type_file):
     """Save in hdf5 file"""
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="SM_CEFC_001", machine=IPMSM_A, struct=None)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="test_save_load_simu", machine=Toyota_Prius, struct=None)
 
     # Definition of the enforced output of the electrical module
     N0 = 3000

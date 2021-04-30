@@ -20,7 +20,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension impor
 import pytest
 
 
-@pytest.mark.GUI
 class TestSMachineDimension(object):
     """Test that the widget SMachineDimension behave like it should"""
 
@@ -68,7 +67,7 @@ class TestSMachineDimension(object):
         assert setup["widget"].lf_Lfra.value() == 0.25
         assert setup["widget"].g_frame.isChecked() == True
         assert setup["widget"].g_shaft.isChecked() == True
-        assert setup["widget"].out_Drsh.text() == "Drsh = 2*Rotor.Rint = 220.0 mm"
+        assert setup["widget"].out_Drsh.text() == "Drsh = 2*Rotor.Rint = 0.22 [m]"
 
     def test_init_no_shaft(self, setup):
         """Check that the Widget spinbox initialise to the lamination value"""
