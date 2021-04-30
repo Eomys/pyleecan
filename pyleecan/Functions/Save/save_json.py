@@ -1,5 +1,6 @@
 from datetime import datetime
 from json import dump
+import gzip
 from logging import getLogger
 from os import makedirs
 from os.path import split, isdir, isfile, join
@@ -16,6 +17,7 @@ def save_json(
     obj,
     save_path="",
     is_folder=False,
+    is_compression=None,
     class_to_split=("Simulation", "Machine", "Material"),
 ):
     """Save the object to the save_path
@@ -38,9 +40,16 @@ def save_json(
     else:
         logger = getLogger("Pyleecan")
 
-    # correct file name if needed
-    # create name for the base file
-    file_path, base_file_name = setup_save_path(save_path, obj, is_folder, logger)
+    # init
+    file_ext = ".json"
+    if is_compression == "gzip":
+        file_ext += ".gz"
+
+    if save_path.endswith(".json"):
+        save_path = save_path[:-5]
+
+    # create path and name for the base file
+    file_path, base_name = setup_save_path(save_path, obj, is_folder, file_ext, logger)
 
     # prepare data for dumping and split if needed
     obj = build_data(obj, logger)
@@ -48,7 +57,7 @@ def save_json(
     obj["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
     obj["__version__"] = PACKAGE_NAME + "_" + __version__
 
-    split_list = [{base_file_name: obj}]
+    split_list = [{base_name: obj}]
 
     if is_folder:
         # Add the classes daughters
@@ -59,33 +68,36 @@ def save_json(
             class_to_add.extend(class_dict[class_name]["daughters"])
 
         class_to_split += tuple(class_to_add)
-        split_obj_dict(class_to_split, obj, file_path, split_list, logger)
+        split_obj_dict(class_to_split, obj, file_path, split_list, file_ext, logger)
 
     # logging
     cls_name = obj["__class__"]
     if is_folder:
         msg = f"Saving {cls_name} in folder '{file_path}' ({len(split_list)} files)."
     else:
-        msg = f"Saving {cls_name} to file '{join(file_path, base_file_name)}'."
+        msg = f"Saving {cls_name} to file '{join(file_path, base_name)}'."
     logger.info(msg)
     print(msg)
 
     # save all objects from the split list
     for elem in split_list:
         file_name = list(elem.keys())[0]
-        with open(join(file_path, file_name), "w") as json_file:
-            dump(
-                elem[file_name],
-                json_file,
-                sort_keys=True,
-                indent=4,
-                separators=(",", ": "),
-            )
+        save_obj = elem[file_name]
+        json_kwargs = dict(sort_keys=True, indent=4, separators=(",", ": "))
+        json_file = join(file_path, file_name)
+
+        if is_compression == "gzip":
+            fp = gzip.open(json_file, mode="wt", encoding="utf-8")
+        else:
+            fp = open(json_file, "w", encoding="utf-8")
+
+        with fp:
+            dump(save_obj, fp, **json_kwargs)
 
     return obj
 
 
-def setup_save_path(save_path, obj, is_folder, logger):
+def setup_save_path(save_path, obj, is_folder, file_ext, logger):
     """
 
     Check save_path and modify or create it if needed, i.e. add or remove
@@ -99,22 +111,24 @@ def setup_save_path(save_path, obj, is_folder, logger):
         Pyleecan object to save
     is_folder: bool
         object is saved if folder mode
+    file_ext: str
+        File extension e.g. ".json"
     """
     # generate or correct file and path if needed
     if not save_path:  # generate
         if is_folder:
             file_path = create_folder(type(obj).__name__, logger)
-            file_name = type(obj).__name__ + ".json"
+            file_name = type(obj).__name__ + file_ext
         else:
             file_path = ""
-            file_name = get_filename(obj, file_path, [], logger)
+            file_name = get_filename(obj, file_path, [], file_ext, logger)
 
     else:  # correct
-        if not save_path.endswith(".json"):
-            save_path += ".json"
+        if not save_path.endswith(file_ext):
+            save_path += file_ext
         file_path, file_name = split(save_path)
         if not file_path and is_folder:
-            file_path = file_name[:-5]  # remove ".json"
+            file_path = file_name[: -len(file_ext)]  # remove ".json"
 
     if file_path and not isdir(file_path):
         makedirs(file_path)
@@ -170,7 +184,7 @@ def build_data(obj, logger):
     return None
 
 
-def split_obj_dict(cls_tupel, obj_dict, folder, split_list, logger):
+def split_obj_dict(cls_tupel, obj_dict, folder, split_list, file_ext, logger):
     """
     Store classes_tuple objects contained in obj_dict in split_list and modify
     the obj_dict.
@@ -197,18 +211,20 @@ def split_obj_dict(cls_tupel, obj_dict, folder, split_list, logger):
     """
     if isinstance(obj_dict, dict):
         for key, val in obj_dict.items():
-            obj_dict[key] = split_obj_dict(cls_tupel, val, folder, split_list, logger)
+            obj_dict[key] = split_obj_dict(
+                cls_tupel, val, folder, split_list, file_ext, logger
+            )
 
         if "__class__" in obj_dict.keys() and obj_dict["__class__"] in cls_tupel:
             # and also add it to the list of objects to be saved
-            name = get_filename(obj_dict, folder, split_list, logger)
+            name = get_filename(obj_dict, folder, split_list, file_ext, logger)
             split_list.append({name: obj_dict})
             return name
 
     elif isinstance(obj_dict, list):
         for idx, list_val in enumerate(obj_dict):
             obj_dict[idx] = split_obj_dict(
-                cls_tupel, list_val, folder, split_list, logger
+                cls_tupel, list_val, folder, split_list, file_ext, logger
             )
 
     return obj_dict
@@ -240,7 +256,7 @@ def is_json_serializable(obj):
         return False
 
 
-def get_filename(obj, folder, split_list, logger):
+def get_filename(obj, folder, split_list, file_ext, logger):
     """
     Get a filename for the object that doesn't exists.
 
@@ -279,11 +295,10 @@ def get_filename(obj, folder, split_list, logger):
 
     # Add prefix to get a file name that doesn't exists
     num = 0
-    new_name = name
-    while isfile(join(folder, new_name + ".json")) or (new_name + ".json") in name_list:
+    new_name = name + file_ext
+    while isfile(join(folder, new_name)) or new_name in name_list:
         num += 1
-        new_name = name + "_{:05d}".format(num)
-    new_name += ".json"
+        new_name = name + "_{:05d}".format(num) + file_ext
 
     # logging
     file_path = join(folder, new_name)

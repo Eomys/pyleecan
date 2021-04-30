@@ -8,7 +8,7 @@ class FormatError(Exception):
     pass
 
 
-def save(self, save_path="", is_folder=False):
+def save(self, save_path="", is_folder=False, is_compression=None):
     """Save the object to the save_path
 
     Parameters
@@ -35,7 +35,12 @@ def save(self, save_path="", is_folder=False):
     save_path = save_path.replace("\\", "/")
     # Save in json
     if save_path.endswith(".json") or is_folder:
-        save_json(self, save_path=save_path, is_folder=is_folder)
+        save_json(
+            self,
+            save_path=save_path,
+            is_folder=is_folder,
+            is_compression=is_compression,
+        )
     # Save in hdf5
     elif save_path.endswith(".h5"):
         save_hdf5(self, save_path=save_path)
