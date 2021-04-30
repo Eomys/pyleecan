@@ -10,7 +10,7 @@ PYLEECAN project provides a **user-friendly, unified, flexible simulation framew
 The main objective of PYLEECAN is to boost **reproducible research** and **open-science** in electrical engineering. Thus, it is intended for researchers, R&D engineers and teachers in electrical engineering, both on standard and novel topologies of electrical machines. 
 
 For example, PhD students should start with PYLEECAN:
-* You can same a lot of time by using existing algorithms dedicated to electrical engineering (e.g. coupling Scilab or Matlab with Femm),
+* You can save a lot of time by using existing algorithms dedicated to electrical engineering (e.g. coupling Scilab or Matlab with Femm),
 * You can benefit from the community expertise for your research.
 * You can contribute to the project to make sure your code is maintained and to enable other researchers to easily reproduce your results.
 
