@@ -37,8 +37,8 @@ def comp_parameters(self, output):
 
     # Parameters to compute only if they are not set
     if "Rs" not in self.parameters or self.parameters["Rs"] is None:
-        self.parameters["Rs"] = machine.stator.comp_resistance_wind(T=Tws)
-        self.parameters["Rs"] = self.parameters["Rs"] * Xkr_skinS
+        Rs = machine.stator.comp_resistance_wind(T=Tws)
+        self.parameters["Rs"] = Rs * Xkr_skinS
 
     if "Rr_norm" not in self.parameters or self.parameters["Rr_norm"] is None:
         # 3 phase equivalent rotor resistance
@@ -140,8 +140,8 @@ def comp_parameters(self, output):
         Phi_s, Phi_r = _comp_flux_mean(self, out)
 
         self.parameters["Lm"] = (Phi_r * norm * Zsr / 3) / self.I
-        self.parameters["Ls"] = (Phi_s - (Phi_r * norm * Zsr / 3)) / self.I
-        self.parameters["Ls"] = self.parameters["Ls"] * Xke_skinS
+        Ls = (Phi_s - (Phi_r * norm * Zsr / 3)) / self.I
+        self.parameters["Ls"] = Ls * Xke_skinS
         # --- compute the main inductance and rotor stray inductance ---
         # set new output
         out = Output(simu=simu)

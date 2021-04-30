@@ -49,13 +49,6 @@ def comp_skin_effect(self, T=20):
             Nwppc_tan = self.Nwppc
             Nwppc_rad = self.Nwppc
             W2s = Slot.W2
-            # ksi=Hwire*sqrt((1/2)*ws*mu0*sigmar*Nwppc_tan*Wwire/W2s)
-
-            # nsw=length(ws)
-            # kr_skin=ones(self.Nwppc_rad,nsw)
-
-            # for k in self.Nwppc_rad
-            #     kr_skin(k,:)=phi_skin(ksi)+k*(k-1)*psi_skin(ksi)
 
             # average resistance factor over the slot
             ksi = Hwire * sqrt((1 / 2) * ws * mu0 * sigmar * Nwppc_tan * Wwire / W2s)

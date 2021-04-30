@@ -21,8 +21,8 @@ def comp_parameters(self, output):
 
     # Parameters to compute only once
     if "R20" not in PAR:
-        PAR["R20"] = output.simu.machine.stator.comp_resistance_wind()
-        PAR["R20"] = PAR["R20"] * Xkr_skinS
+        R20 = output.simu.machine.stator.comp_resistance_wind()
+        PAR["R20"] = R20 * Xkr_skinS
     if "phi" not in PAR:
         PAR["phi"] = self.fluxlink.comp_fluxlinkage(output)
 
