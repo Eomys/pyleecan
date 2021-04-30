@@ -5,11 +5,16 @@
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 ## Presentation
-PYLEECAN objective is to provide a **user-friendly, unified, flexible simulation framework for the multiphysic design and optimization of electrical machines and drives**.
+PYLEECAN project provides a **user-friendly, unified, flexible simulation framework for the multiphysic design and optimization of electrical machines and drives**.
 
-It is meant to be used by researchers, R&D engineers and teachers in electrical engineering, both on standard topologies of electrical machines and on novel topologies (e.g. during a PhD work). Pyleecan is **open source** with a very permissive license (Apache V2 license).
+The main objective of PYLEECAN is to boost **reproducible research** and **open-science** in electrical engineering. Thus, it is intended for researchers, R&D engineers and teachers in electrical engineering, both on standard and novel topologies of electrical machines. 
 
-The main objective of PYLEECAN is to boost **reproduicible research** and **open-science** in electrical engineering. For example, every PhD student should start with PYLEECAN. Instead of implementing your own scripts on your side (e.g. coupling Scilab or Matlab with Femm), you could benefit from the community support to help you in your research.  
+For example, PhD students should start with PYLEECAN:
+* You can same a lot of time by using existing algorithms dedicated to electrical engineering (e.g. coupling Scilab or Matlab with Femm),
+* You can benefit from the community expertise for your research.
+* You can contribute to the project to make sure your code is maintained and to enable other researchers to easily reproduce your results.
+
+To achieve all of that, Pyleecan is **open source** with a very permissive license (Apache V2 license).
 
 ## Getting Started
 The procedure to install and use Pyleecan is detailed on [pyleecan website](https://www.pyleecan.org/get.pyleecan.html)
