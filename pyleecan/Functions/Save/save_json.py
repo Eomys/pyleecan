@@ -1,8 +1,8 @@
 from datetime import datetime
 from json import dump
 from logging import getLogger
-from os import mkdir
-from os.path import basename, isdir, isfile, join
+from os import makedirs
+from os.path import split, isdir, isfile, join
 
 from numpy import int32
 
@@ -61,8 +61,16 @@ def save_json(
         class_to_split += tuple(class_to_add)
         split_obj_dict(class_to_split, obj, file_path, split_list, logger)
 
+    # logging
+    cls_name = obj["__class__"]
+    if is_folder:
+        msg = f"Saving {cls_name} in folder '{file_path}' ({len(split_list)} files)."
+    else:
+        msg = f"Saving {cls_name} to file '{join(file_path, base_file_name)}'."
+    logger.info(msg)
+    print(msg)
+
     # save all objects from the split list
-    logger.info("Saving in " + file_path)
     for elem in split_list:
         file_name = list(elem.keys())[0]
         with open(join(file_path, file_name), "w") as json_file:
@@ -93,26 +101,23 @@ def setup_save_path(save_path, obj, is_folder, logger):
         object is saved if folder mode
     """
     # generate or correct file and path if needed
-    if not save_path:
-        if is_folder:  # Create the folder
-            save_path = create_folder(type(obj).__name__, logger)
+    if not save_path:  # generate
+        if is_folder:
+            file_path = create_folder(type(obj).__name__, logger)
+            file_name = type(obj).__name__ + ".json"
         else:
-            save_path = type(obj).__name__ + ".json"
-    elif not save_path.endswith(".json") and not is_folder:
-        save_path = save_path + ".json"
-    elif is_folder:
-        if save_path.endswith(".json"):
-            save_path = save_path[:-5]
-        if not isdir(save_path):
-            mkdir(save_path)
+            file_path = ""
+            file_name = get_filename(obj, file_path, [], logger)
 
-    # split file and path
-    i = max(save_path.rfind("/"), save_path.rfind("\\"))
-    file_name = save_path[i:] if i != -1 else save_path
-    file_path = save_path[:i] if i != -1 else ""
+    else:  # correct
+        if not save_path.endswith(".json"):
+            save_path += ".json"
+        file_path, file_name = split(save_path)
+        if not file_path and is_folder:
+            file_path = file_name[:-5]  # remove ".json"
 
-    if is_folder:
-        file_name += ".json"
+    if file_path and not isdir(file_path):
+        makedirs(file_path)
 
     return file_path, file_name
 
@@ -210,20 +215,20 @@ def split_obj_dict(cls_tupel, obj_dict, folder, split_list, logger):
 
 
 def create_folder(name, logger):
-    """Create the folder: "YYYY_mm_dd HH_MM_SS name"""
+    """Create a new non existing the folder: "YYYY_mm_dd-HH_MM_SS-name". """
     # datetime object containing current date and time
     now = datetime.now()
-    dt_string = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
+    dt_string = now.strftime("%Y_%m_%d-%Hh%Mmin%Ss-")
     path = dt_string + name
 
     # Check if the directory exists
     while isdir(path):
         now = datetime.now()
-        dt_string = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
+        dt_string = now.strftime("%Y_%m_%d-%Hh%Mmin%Ss-")
         path = dt_string + name
 
     logger.info("Creating folder " + path + " to save the object.")
-    mkdir(path)
+    makedirs(path)
 
     return path
 
