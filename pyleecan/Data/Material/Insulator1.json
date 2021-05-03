@@ -8,7 +8,7 @@
         "lambda_z": 0.2
     },
     "__class__": "Material",
-    "__save_date__": "2021_05_03 14h28min49s ",
+    "__save_date__": "2021_05_03 14h38min33s ",
     "__version__": "pyleecan_1.2.1",
     "desc": "INSULATOR1",
     "eco": {

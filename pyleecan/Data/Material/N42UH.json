@@ -8,7 +8,7 @@
         "lambda_z": 8.5
     },
     "__class__": "Material",
-    "__save_date__": "2021_05_03 14h28min57s ",
+    "__save_date__": "2021_05_03 14h38min34s ",
     "__version__": "pyleecan_1.2.1",
     "desc": "MAGNET1 for SIPMSM",
     "eco": {
@@ -40,9 +40,16 @@
             "__class__": "ImportMatrix",
             "is_transpose": false
         },
+        "ModelBH": {
+            "Bmax": 2.31,
+            "Hmax": null,
+            "__class__": "ModelBH",
+            "delta": 100
+        },
         "Wlam": 0,
         "__class__": "MatMagnetics",
         "alpha_Br": -0.0011,
+        "is_BH_extrapolate": false,
         "mur_lin": 1.0277
     },
     "name": "N42UH",
