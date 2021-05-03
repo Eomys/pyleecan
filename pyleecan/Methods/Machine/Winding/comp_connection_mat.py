@@ -80,8 +80,20 @@ def comp_connection_mat(self, Zs=None, p=None):
     wind_mat_swat = wdg.get_phases()
 
     # perform checks
-    assert p == wdg.get_num_polepairs(), "number of pole pairs is not as requested"
-    assert qs == wdg.get_num_phases(), "number of phases is not as requested"
+    assert p == wdg.get_num_polepairs(), (
+        "number of pole pairs is not as requested (returned "
+        + str(wdg.get_num_polepairs())
+        + " expected "
+        + str(p)
+        + ")"
+    )
+    assert qs == wdg.get_num_phases(), (
+        "number of phases is not as requested (returned "
+        + str(wdg.get_num_phases())
+        + " expected "
+        + str(qs)
+        + ")"
+    )
 
     # convert swat-em connexion matrix to pyleecan connexion matrix
     for qq, phase in enumerate(wind_mat_swat):
