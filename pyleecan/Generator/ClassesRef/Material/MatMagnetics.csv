@@ -6,3 +6,5 @@ alpha_Br,-,temperature coefficient for remanent flux density /degC compared to 2
 Wlam,m,lamination sheet width without insulation [m] (0 == not laminated),0,float,0,0,,,,,,,,
 BH_curve,-,"nonlinear B(H) curve (two columns matrix, H and B(H))",0,ImportMatrix,,,,,,,,,,
 LossData,W/kg,"specific loss data value triplets, i.e. B, f, P",0,ImportMatrix,,,,,,,,,,
+ModelBH,-,a model of BH curve with an analytical expression,0,ModelBH,,,,,,,,,,
+is_BH_extrapolate,-,1 to use ModelBH to fit input data and extrapolate BH curve,0,bool,0,,,,,,,,,

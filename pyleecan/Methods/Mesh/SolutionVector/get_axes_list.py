@@ -4,7 +4,7 @@ import numpy as np
 from pyleecan.Functions.make_ndarray_equal import make_ndarray_equal
 
 
-def get_axes_list(self):
+def get_axes_list(self, *args):
     """Get the axis of variables stored in Solution.
 
     Parameters
@@ -25,8 +25,18 @@ def get_axes_list(self):
     ax_name = list()
     ax_size = list()
 
-    comp = self.field.components["comp_x"]
-    for axis in comp.axes:
+    axes = self.field.get_axes(*args)
+
+    if "comp_x" in self.field.components:
+        comp = self.field.components["comp_x"]
+    elif "radial" in self.field.components:
+        comp = self.field.components["radial"]
+    else:
+        raise Exception(
+            "self.field.components shall have either " "comp_x" " or " "radial" " key"
+        )
+
+    for axis in axes:
         ax_name.append(axis.name)
         ax_size.append(axis.get_length())
 

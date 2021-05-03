@@ -690,11 +690,7 @@ def test_Optimization_problem():
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
 
     simu.struct = None
 
@@ -841,3 +837,7 @@ def test_Optimization_problem():
     fig.savefig(
         join(save_path, "fig_21_Topology_to_minimize_torque_ripple.svg"), format="svg"
     )
+
+
+if __name__ == "__main__":
+    test_FEMM_sym()
