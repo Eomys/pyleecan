@@ -126,6 +126,14 @@ def convert_Winding(wind_dict):
         wind_dict["__class__"] = "WindingUD"
         WindingUD = import_class("pyleecan.Classes", "WindingUD")
         new_wind = WindingUD()
+        if "qs" in wind_dict.keys():
+            new_wind.qs = wind_dict["qs"]
+        else:
+            new_wind.qs = 3
+        if "p" in wind_dict.keys():
+            new_wind.p = wind_dict["p"]
+        else:
+            new_wind.p = 3
         if "coil_pitch" in wind_dict.keys():
             new_wind.coil_pitch = wind_dict["coil_pitch"]
         else:

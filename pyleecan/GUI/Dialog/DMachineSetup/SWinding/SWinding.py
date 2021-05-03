@@ -317,6 +317,7 @@ class SWinding(Gen_SWinding, QWidget):
 
     def update_graph(self, is_lam_only=False):
         """Plot the lamination with/without the winding"""
+        self.w_viewer.axes.clear()
         # Plot the lamination in the viewer fig
         try:
             self.obj.plot(
