@@ -8,6 +8,8 @@
         "lambda_z": 0.0257
     },
     "__class__": "Material",
+    "__save_date__": "2021_05_03 14h28min46s ",
+    "__version__": "pyleecan_1.2.1",
     "desc": "Air",
     "eco": {
         "__class__": "MatEconomical",
@@ -28,6 +30,10 @@
         },
         "Brm20": 0,
         "Hc": 0,
+        "LossData": {
+            "__class__": "ImportMatrix",
+            "is_transpose": false
+        },
         "Wlam": 0,
         "__class__": "MatMagnetics",
         "alpha_Br": 0,

@@ -8,8 +8,8 @@
         "lambda_z": 1
     },
     "__class__": "Material",
-    "__save_date__": "2020_12_22 21h30min26s ",
-    "__version__": "pyleecan_1.0.4",
+    "__save_date__": "2021_05_03 14h28min49s ",
+    "__version__": "pyleecan_1.2.1",
     "desc": "Lamination M400-50A",
     "eco": {
         "__class__": "MatEconomical",

@@ -1,18 +1,31 @@
 {
+    "HT": {
+        "Cp": 671.0,
+        "__class__": "MatHT",
+        "alpha": null,
+        "lambda_x": 0.2,
+        "lambda_y": 0.2,
+        "lambda_z": 0.2
+    },
     "__class__": "Material",
+    "__save_date__": "2021_05_03 14h28min49s ",
+    "__version__": "pyleecan_1.2.1",
     "desc": "INSULATOR1",
     "eco": {
-        "unit_name": "$",
         "__class__": "MatEconomical",
-        "cost_unit": null
+        "cost_unit": null,
+        "unit_name": "$"
     },
     "elec": {
         "__class__": "MatElectrical",
+        "alpha": 1,
         "epsr": null,
         "rho": null
     },
     "is_isotropic": true,
     "mag": null,
+    "name": "Insulator1",
+    "path": null,
     "struct": {
         "Ex": null,
         "Ey": null,
@@ -25,15 +38,5 @@
         "nu_xz": null,
         "nu_yz": null,
         "rho": 1200.0
-    },
-    "name": "Insulator1",
-    "path": null,
-    "HT": {
-        "Cp": 671.0,
-        "__class__": "MatHT",
-        "alpha": null,
-        "lambda_x": 0.2,
-        "lambda_y": 0.2,
-        "lambda_z": 0.2
     }
 }

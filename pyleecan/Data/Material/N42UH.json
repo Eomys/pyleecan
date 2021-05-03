@@ -8,8 +8,8 @@
         "lambda_z": 8.5
     },
     "__class__": "Material",
-    "__save_date__": "2020_12_22 20h36min47s ",
-    "__version__": "pyleecan_1.0.4",
+    "__save_date__": "2021_05_03 14h28min57s ",
+    "__version__": "pyleecan_1.2.1",
     "desc": "MAGNET1 for SIPMSM",
     "eco": {
         "__class__": "MatEconomical",
