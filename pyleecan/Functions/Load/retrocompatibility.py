@@ -137,6 +137,10 @@ def convert_Winding(wind_dict):
             new_wind.coil_pitch = wind_dict["coil_pitch"]
         else:
             new_wind.coil_pitch = 0
+        if "Ntcoil" in wind_dict.keys():
+            new_wind.Ntcoil = wind_dict["Ntcoil"]
+        else:
+            new_wind.Ntcoil = 1
         # Generate Winding matrix
         if old_class == "WindingCW1L":
             new_wind.init_as_CW1L(Zs=wind_dict["Zs"])
