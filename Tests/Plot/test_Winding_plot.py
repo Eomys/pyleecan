@@ -9,11 +9,7 @@ from numpy import pi, linspace
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingCW1L import WindingCW1L
-from pyleecan.Classes.WindingDW2L import WindingDW2L
-from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Classes.WindingCW2LR import WindingCW2LR
+from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingSC import WindingSC
 from pyleecan.Classes.SlotW21 import SlotW21
 from pyleecan.Classes.SlotW22 import SlotW22
