@@ -49,17 +49,16 @@ def is_LamSlotMag_dict(obj_dict):
     """Check if the object need to be updated for LamSlotMag"""
     return (
         "__class__" in obj_dict.keys()
-        and obj_dict["__class__"] == "MachineSIPMSM"
-        and "magnet" not in obj_dict["rotor"]
+        and obj_dict["__class__"] == "LamSlotMag"
+        and "magnet" not in obj_dict.keys()
     )
 
 
-def convert_LamSlotMag(machine_dict):
+def convert_LamSlotMag(lam_dict):
     """Update the content of the dict"""
     print("Old machine version detected, Updating the LamSlotMag object")
     # readability
-    rotor = machine_dict["rotor"]
-    slot = machine_dict["rotor"]["slot"]
+    slot = lam_dict["slot"]
 
     # Moving the magnet (use only one magnet)
     if len(slot["magnet"]) > 1:
@@ -67,17 +66,17 @@ def convert_LamSlotMag(machine_dict):
             "LamSlotMag with more than one magnet per pole "
             + "is not available for now. Only keeping first magnet."
         )
-    rotor["magnet"] = slot["magnet"][0]
+    lam_dict["magnet"] = slot["magnet"][0]
     slot.pop("magnet")
 
     # Update the slot with the magnet parameters
-    if rotor["magnet"] is not None:
-        slot["__class__"] = "SlotM" + rotor["magnet"]["__class__"][-2:]
-        slot["Wmag"] = rotor["magnet"]["Wmag"]
-        slot["Hmag"] = rotor["magnet"]["Hmag"]
-        if "Rtop" in rotor["magnet"]:
-            slot["Rtopm"] = rotor["magnet"]["Rtop"]
-        rotor["magnet"]["__class__"] = "Magnet"
+    if lam_dict["magnet"] is not None:
+        slot["__class__"] = "SlotM" + lam_dict["magnet"]["__class__"][-2:]
+        slot["Wmag"] = lam_dict["magnet"]["Wmag"]
+        slot["Hmag"] = lam_dict["magnet"]["Hmag"]
+        if "Rtop" in lam_dict["magnet"]:
+            slot["Rtopm"] = lam_dict["magnet"]["Rtop"]
+        lam_dict["magnet"]["__class__"] = "Magnet"
 
 
 ######################
