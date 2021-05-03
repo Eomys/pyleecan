@@ -42,147 +42,136 @@ class Ui_SWinding(object):
         self.widget.setObjectName(u"widget")
         self.widget.setMinimumSize(QSize(250, 0))
         self.widget.setMaximumSize(QSize(250, 16777215))
-        self.verticalLayout_2 = QVBoxLayout(self.widget)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_4 = QVBoxLayout(self.widget)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.g_pattern = QGroupBox(self.widget)
         self.g_pattern.setObjectName(u"g_pattern")
-        self.verticalLayout_6 = QVBoxLayout(self.g_pattern)
-        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.verticalLayout_2 = QVBoxLayout(self.g_pattern)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.c_wind_type = QComboBox(self.g_pattern)
         self.c_wind_type.addItem("")
         self.c_wind_type.addItem("")
         self.c_wind_type.setObjectName(u"c_wind_type")
 
-        self.verticalLayout_6.addWidget(self.c_wind_type)
+        self.verticalLayout_2.addWidget(self.c_wind_type)
 
         self.in_Zs = QLabel(self.g_pattern)
         self.in_Zs.setObjectName(u"in_Zs")
 
-        self.verticalLayout_6.addWidget(self.in_Zs)
+        self.verticalLayout_2.addWidget(self.in_Zs)
 
         self.in_p = QLabel(self.g_pattern)
         self.in_p.setObjectName(u"in_p")
 
-        self.verticalLayout_6.addWidget(self.in_p)
+        self.verticalLayout_2.addWidget(self.in_p)
 
-        self.stack_wind_type = QStackedWidget(self.g_pattern)
-        self.stack_wind_type.setObjectName(u"stack_wind_type")
-        self.page = QWidget()
-        self.page.setObjectName(u"page")
-        self.gridLayout_2 = QGridLayout(self.page)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.in_qs = QLabel(self.page)
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.in_qs = QLabel(self.g_pattern)
         self.in_qs.setObjectName(u"in_qs")
 
-        self.gridLayout_2.addWidget(self.in_qs, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_qs, 0, 0, 1, 1)
 
-        self.si_qs = QSpinBox(self.page)
+        self.si_qs = QSpinBox(self.g_pattern)
         self.si_qs.setObjectName(u"si_qs")
 
-        self.gridLayout_2.addWidget(self.si_qs, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.si_qs, 0, 1, 1, 1)
 
-        self.in_Nlayer = QLabel(self.page)
+        self.in_Nlayer = QLabel(self.g_pattern)
         self.in_Nlayer.setObjectName(u"in_Nlayer")
 
-        self.gridLayout_2.addWidget(self.in_Nlayer, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_Nlayer, 1, 0, 1, 1)
 
-        self.si_Nlayer = QSpinBox(self.page)
+        self.si_Nlayer = QSpinBox(self.g_pattern)
         self.si_Nlayer.setObjectName(u"si_Nlayer")
         self.si_Nlayer.setMinimum(1)
 
-        self.gridLayout_2.addWidget(self.si_Nlayer, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.si_Nlayer, 1, 1, 1, 1)
 
-        self.in_coil_pitch = QLabel(self.page)
+        self.in_coil_pitch = QLabel(self.g_pattern)
         self.in_coil_pitch.setObjectName(u"in_coil_pitch")
 
-        self.gridLayout_2.addWidget(self.in_coil_pitch, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_coil_pitch, 2, 0, 1, 1)
 
-        self.si_coil_pitch = QSpinBox(self.page)
+        self.si_coil_pitch = QSpinBox(self.g_pattern)
         self.si_coil_pitch.setObjectName(u"si_coil_pitch")
 
-        self.gridLayout_2.addWidget(self.si_coil_pitch, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.si_coil_pitch, 2, 1, 1, 1)
 
-        self.stack_wind_type.addWidget(self.page)
-        self.page_2 = QWidget()
-        self.page_2.setObjectName(u"page_2")
-        self.verticalLayout_7 = QVBoxLayout(self.page_2)
-        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.b_import_csv = QPushButton(self.page_2)
-        self.b_import_csv.setObjectName(u"b_import_csv")
+        self.in_Ntcoil = QLabel(self.g_pattern)
+        self.in_Ntcoil.setObjectName(u"in_Ntcoil")
 
-        self.verticalLayout_7.addWidget(self.b_import_csv)
+        self.gridLayout.addWidget(self.in_Ntcoil, 3, 0, 1, 1)
 
-        self.stack_wind_type.addWidget(self.page_2)
+        self.si_Ntcoil = QSpinBox(self.g_pattern)
+        self.si_Ntcoil.setObjectName(u"si_Ntcoil")
 
-        self.verticalLayout_6.addWidget(self.stack_wind_type)
+        self.gridLayout.addWidget(self.si_Ntcoil, 3, 1, 1, 1)
 
+        self.in_Npcp = QLabel(self.g_pattern)
+        self.in_Npcp.setObjectName(u"in_Npcp")
+
+        self.gridLayout.addWidget(self.in_Npcp, 4, 0, 1, 1)
+
+        self.si_Npcp = QSpinBox(self.g_pattern)
+        self.si_Npcp.setObjectName(u"si_Npcp")
+        self.si_Npcp.setMaximum(999999999)
+        self.si_Npcp.setValue(12345)
+
+        self.gridLayout.addWidget(self.si_Npcp, 4, 1, 1, 1)
+
+        self.verticalLayout_2.addLayout(self.gridLayout)
+
+        self.b_generate = QPushButton(self.g_pattern)
+        self.b_generate.setObjectName(u"b_generate")
+
+        self.verticalLayout_2.addWidget(self.b_generate)
+
+        self.b_import = QPushButton(self.g_pattern)
+        self.b_import.setObjectName(u"b_import")
+
+        self.verticalLayout_2.addWidget(self.b_import)
+
+        self.verticalLayout_4.addWidget(self.g_pattern)
+
+        self.g_edit = QGroupBox(self.widget)
+        self.g_edit.setObjectName(u"g_edit")
+        self.verticalLayout = QVBoxLayout(self.g_edit)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.in_Nslot = QLabel(self.g_pattern)
+        self.in_Nslot = QLabel(self.g_edit)
         self.in_Nslot.setObjectName(u"in_Nslot")
         self.in_Nslot.setMinimumSize(QSize(0, 0))
         self.in_Nslot.setMaximumSize(QSize(16777215, 16777215))
 
         self.horizontalLayout_4.addWidget(self.in_Nslot)
 
-        self.si_Nslot = QSpinBox(self.g_pattern)
+        self.si_Nslot = QSpinBox(self.g_edit)
         self.si_Nslot.setObjectName(u"si_Nslot")
         self.si_Nslot.setMinimumSize(QSize(60, 0))
 
         self.horizontalLayout_4.addWidget(self.si_Nslot)
 
-        self.verticalLayout_6.addLayout(self.horizontalLayout_4)
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
 
-        self.is_reverse = QCheckBox(self.g_pattern)
+        self.is_reverse = QCheckBox(self.g_edit)
         self.is_reverse.setObjectName(u"is_reverse")
 
-        self.verticalLayout_6.addWidget(self.is_reverse)
+        self.verticalLayout.addWidget(self.is_reverse)
 
-        self.verticalLayout_2.addWidget(self.g_pattern)
+        self.b_edit_wind_mat = QPushButton(self.g_edit)
+        self.b_edit_wind_mat.setObjectName(u"b_edit_wind_mat")
 
-        self.g_circuit = QGroupBox(self.widget)
-        self.g_circuit.setObjectName(u"g_circuit")
-        self.gridLayout = QGridLayout(self.g_circuit)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.in_Ntcoil = QLabel(self.g_circuit)
-        self.in_Ntcoil.setObjectName(u"in_Ntcoil")
+        self.verticalLayout.addWidget(self.b_edit_wind_mat)
 
-        self.gridLayout.addWidget(self.in_Ntcoil, 0, 0, 1, 1)
-
-        self.si_Ntcoil = QSpinBox(self.g_circuit)
-        self.si_Ntcoil.setObjectName(u"si_Ntcoil")
-
-        self.gridLayout.addWidget(self.si_Ntcoil, 0, 1, 1, 1)
-
-        self.in_Npcp = QLabel(self.g_circuit)
-        self.in_Npcp.setObjectName(u"in_Npcp")
-
-        self.gridLayout.addWidget(self.in_Npcp, 1, 0, 1, 1)
-
-        self.si_Npcp = QSpinBox(self.g_circuit)
-        self.si_Npcp.setObjectName(u"si_Npcp")
-        self.si_Npcp.setMaximum(999999999)
-        self.si_Npcp.setValue(12345)
-
-        self.gridLayout.addWidget(self.si_Npcp, 1, 1, 1, 1)
-
-        self.verticalLayout_2.addWidget(self.g_circuit)
+        self.verticalLayout_4.addWidget(self.g_edit)
 
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.verticalLayout_2.addItem(self.verticalSpacer)
-
-        self.b_edit_wind_mat = QPushButton(self.widget)
-        self.b_edit_wind_mat.setObjectName(u"b_edit_wind_mat")
-
-        self.verticalLayout_2.addWidget(self.b_edit_wind_mat)
-
-        self.b_export_csv = QPushButton(self.widget)
-        self.b_export_csv.setObjectName(u"b_export_csv")
-
-        self.verticalLayout_2.addWidget(self.b_export_csv)
+        self.verticalLayout_4.addItem(self.verticalSpacer)
 
         self.g_output = QGroupBox(self.widget)
         self.g_output.setObjectName(u"g_output")
@@ -215,7 +204,12 @@ class Ui_SWinding(object):
 
         self.verticalLayout_3.addWidget(self.out_Ncspc)
 
-        self.verticalLayout_2.addWidget(self.g_output)
+        self.b_export = QPushButton(self.g_output)
+        self.b_export.setObjectName(u"b_export")
+
+        self.verticalLayout_3.addWidget(self.b_export)
+
+        self.verticalLayout_4.addWidget(self.g_output)
 
         self.horizontalLayout_8.addWidget(self.widget)
 
@@ -247,8 +241,6 @@ class Ui_SWinding(object):
         self.verticalLayout_5.addLayout(self.horizontalLayout_3)
 
         self.retranslateUi(SWinding)
-
-        self.stack_wind_type.setCurrentIndex(0)
 
         QMetaObject.connectSlotsByName(SWinding)
 
@@ -282,29 +274,27 @@ class Ui_SWinding(object):
         self.in_coil_pitch.setText(
             QCoreApplication.translate("SWinding", u"Coil pitch", None)
         )
-        self.b_import_csv.setText(
-            QCoreApplication.translate("SWinding", u"Import from CSV", None)
-        )
-        self.in_Nslot.setText(
-            QCoreApplication.translate("SWinding", u"Slot shift", None)
-        )
-        self.is_reverse.setText(
-            QCoreApplication.translate("SWinding", u"Reversed winding", None)
-        )
-        self.g_circuit.setTitle(
-            QCoreApplication.translate("SWinding", u"Circuit", None)
-        )
         self.in_Ntcoil.setText(
             QCoreApplication.translate("SWinding", u"Turns per coil", None)
         )
         self.in_Npcp.setText(
             QCoreApplication.translate("SWinding", u"Parallel circuits", None)
         )
+        self.b_generate.setText(
+            QCoreApplication.translate("SWinding", u"Generate", None)
+        )
+        self.b_import.setText(
+            QCoreApplication.translate("SWinding", u"Import from CSV", None)
+        )
+        self.g_edit.setTitle(QCoreApplication.translate("SWinding", u"Edit", None))
+        self.in_Nslot.setText(
+            QCoreApplication.translate("SWinding", u"Slot shift", None)
+        )
+        self.is_reverse.setText(
+            QCoreApplication.translate("SWinding", u"Reversed winding", None)
+        )
         self.b_edit_wind_mat.setText(
             QCoreApplication.translate("SWinding", u"Edit Winding Matrix", None)
-        )
-        self.b_export_csv.setText(
-            QCoreApplication.translate("SWinding", u"Export to CSV", None)
         )
         self.g_output.setTitle(QCoreApplication.translate("SWinding", u"Output", None))
         self.out_shape.setText(
@@ -363,6 +353,9 @@ class Ui_SWinding(object):
         )
         # endif // QT_CONFIG(whatsthis)
         self.out_Ncspc.setText(QCoreApplication.translate("SWinding", u"Ncspc:", None))
+        self.b_export.setText(
+            QCoreApplication.translate("SWinding", u"Export to CSV", None)
+        )
         self.b_preview.setText(QCoreApplication.translate("SWinding", u"Preview", None))
         self.b_previous.setText(
             QCoreApplication.translate("SWinding", u"Previous", None)

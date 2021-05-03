@@ -43,7 +43,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         else:
             try:
                 Nrad, Ntan = self.winding.get_dim_wind()
-            except NotImplementedYetError:
+            except Exception:
                 Nrad, Ntan = 1, 1
 
             surf_Wind = self.slot.build_geometry_active(

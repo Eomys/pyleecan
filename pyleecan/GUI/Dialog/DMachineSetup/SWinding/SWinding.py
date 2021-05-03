@@ -62,25 +62,37 @@ class SWinding(Gen_SWinding, QWidget):
         #     self.c_wind_type.setEnabled(False)
         #     self.c_wind_type.setCurrentIndex(0)
 
-        # Set the current Winding pattern
+        # Pattern Group setup
         if self.obj.winding is None:
-            self.obj.winding = Winding()
-        if type(self.obj.winding) is Winding:
+            self.obj.winding = Winding()  # Default is Star of Slot
+        if type(self.obj.winding) is Winding:  # Star of Slot
             self.c_wind_type.setCurrentIndex(0)
-            self.stack_wind_type.setCurrentIndex(0)
-            if self.obj.winding.coil_pitch is None:
-                self.obj.winding.coil_pitch = 0
-            self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
-            if self.obj.winding.Nlayer is None:
-                self.obj.winding.Nlayer = 1
-            self.si_Nlayer.setValue(self.obj.winding.Nlayer)
+            self.hide_star_widget(False)
+            # qs
             if self.obj.winding.qs is None:  # default value
                 self.obj.winding.qs = 3
             self.si_qs.setValue(self.obj.winding.qs)
+            # Nlayer
+            if self.obj.winding.Nlayer is None:
+                self.obj.winding.Nlayer = 1
+            self.si_Nlayer.setValue(self.obj.winding.Nlayer)
+            # Coil_pitch
+            if self.obj.winding.coil_pitch is None:
+                self.obj.winding.coil_pitch = 0
+            self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
+            # Ntcoil
+            if self.obj.winding.Ntcoil is None:
+                self.obj.winding.Ntcoil = 1
+            self.si_Ntcoil.setValue(self.obj.winding.Ntcoil)
         elif type(self.obj.winding) is WindingUD:  # WindingUD
             self.c_wind_type.setCurrentIndex(1)
-            self.stack_wind_type.setCurrentIndex(1)
+            self.hide_star_widget(True)
+        # Npcp
+        if self.obj.winding.Npcp is None:
+            self.obj.winding.Npcp = 1  # Default value
+        self.si_Npcp.setValue(self.obj.winding.Npcp)
 
+        # Edit Group setup
         if self.obj.winding.is_reverse_wind is None:
             self.obj.winding.is_reverse_wind = False
         if self.obj.winding.is_reverse_wind:
@@ -91,25 +103,13 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj.winding.Nslot_shift_wind = 0
         self.si_Nslot.setValue(self.obj.winding.Nslot_shift_wind)
 
-        # Circuit parameter setup
-        if self.obj.winding.Ntcoil is None:
-            self.obj.winding.Ntcoil = 1
-        self.si_Ntcoil.setValue(self.obj.winding.Ntcoil)
-        if self.obj.winding.Npcp is None:
-            self.obj.winding.Npcp = 1  # Default value
-        self.si_Npcp.setValue(self.obj.winding.Npcp)
-
         # Update the GUI
         self.update_graph()
         self.comp_output()
 
         # Connect the signal/slot
         self.c_wind_type.currentIndexChanged.connect(self.set_type)
-        self.si_qs.editingFinished.connect(self.set_qs)
-        self.si_coil_pitch.editingFinished.connect(self.set_coil_pitch)
-        self.si_Ntcoil.editingFinished.connect(self.set_Ntcoil)
         self.si_Npcp.editingFinished.connect(self.set_Npcp)
-        self.si_Nlayer.editingFinished.connect(self.set_Nlayer)
         self.si_Nslot.valueChanged.connect(self.set_Nslot)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
 
@@ -117,9 +117,60 @@ class SWinding(Gen_SWinding, QWidget):
         # self.b_import_csv.clicked.connect(self.s_import_csv)
         # self.b_export_csv.clicked.connect(self.s_export_csv)
         self.b_edit_wind_mat.setEnabled(False)
-        self.b_import_csv.setEnabled(False)
-        self.b_export_csv.setEnabled(False)
+        self.b_import.setEnabled(False)
+        self.b_export.setEnabled(False)
+        self.b_generate.clicked.connect(self.s_generate)
         self.b_preview.clicked.connect(self.s_plot)
+
+    def hide_star_widget(self, is_hide=True):
+        """To display/hide the star of slot widgets"""
+        if is_hide:
+            self.in_Nlayer.hide()
+            self.in_Ntcoil.hide()
+            self.in_coil_pitch.hide()
+            self.in_qs.hide()
+            self.si_Nlayer.hide()
+            self.si_Ntcoil.hide()
+            self.si_coil_pitch.hide()
+            self.si_qs.hide()
+            self.b_generate.hide()
+            self.b_import.show()
+        else:
+            self.in_Nlayer.show()
+            self.in_Ntcoil.show()
+            self.in_coil_pitch.show()
+            self.in_qs.show()
+            self.si_Nlayer.show()
+            self.si_Ntcoil.show()
+            self.si_coil_pitch.show()
+            self.si_qs.show()
+            self.b_generate.show()
+            self.b_import.hide()
+
+    def s_generate(self):
+        # Update winding object
+        self.obj.winding.qs = self.si_qs.value()
+        self.obj.winding.Nlayer = self.si_Nlayer.value()
+        self.obj.winding.coil_pitch = self.si_coil_pitch.value()
+        self.obj.winding.Ntcoil = self.si_Ntcoil.value()
+        self.obj.winding.wind_mat = None  # Enforce now computation
+
+        # Check winding
+        try:
+            self.obj.winding.get_connection_mat()
+        except Exception as e:
+            QMessageBox().critical(
+                self, self.tr("Error"), "Error while creating the winding:\n" + str(e)
+            )
+            self.comp_output()
+            self.update_graph(is_lam_only=True)
+            return
+
+        # Update GUI
+        self.comp_output()
+        self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_type(self, index):
         """Signal to update the winding type
@@ -133,81 +184,28 @@ class SWinding(Gen_SWinding, QWidget):
         """
 
         init_dict = self.obj.winding.as_dict()
-        if index == 0:
+        if index == 0:  # Star of Slot
             self.obj.winding = Winding(init_dict=init_dict)
+            # coil_pitch
             if self.obj.winding.coil_pitch is None:
                 self.obj.winding.coil_pitch = 0
             self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
-            if self.obj.winding.qs is None:  # default value
+            # qs
+            if self.obj.winding.qs is None:
                 self.obj.winding.qs = 3
             self.si_qs.setValue(self.obj.winding.qs)
+            # Ntcoil
+            if self.obj.winding.Ntcoil is None:
+                self.obj.winding.Ntcoil = 1
+            self.si_Ntcoil.setValue(self.obj.winding.Ntcoil)
+
             self.si_Nlayer.setValue(self.obj.winding.Nlayer)
             self.obj.winding.wind_mat = None  # ­ Enforce new computation
-            self.stack_wind_type.setCurrentIndex(0)
-        else:
+            self.hide_star_widget(False)
+        else:  # User Defined
             self.obj.winding = WindingUD(init_dict=init_dict)
-            self.stack_wind_type.setCurrentIndex(1)
-        self.obj.winding.Ntcoil = self.si_Ntcoil.value()
+            self.hide_star_widget(True)
         self.obj.winding.Npcp = self.si_Npcp.value()
-
-        # Update out_shape
-        self.comp_output()
-        # Update image
-        self.update_graph()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
-    def set_qs(self):
-        """Signal to update the value of qs according to the spinbox
-
-        Parameters
-        ----------
-        self : SWinding
-            A SWinding object
-        """
-
-        value = self.si_qs.value()
-        if value != self.obj.winding.qs:
-            self.obj.winding.qs = value
-            self.obj.winding.wind_mat = None  # Enforce now computation
-            self.comp_output()
-            self.update_graph()
-            # Notify the machine GUI that the machine has changed
-            self.saveNeeded.emit()
-
-    def set_Nlayer(self):
-        """Signal to update the value of Nlayer according to the spinbox
-
-        Parameters
-        ----------
-        self : SWinding
-            A SWinding object
-        """
-        value = self.si_Nlayer.value()
-        if value != self.obj.winding.Nlayer:
-            self.obj.winding.Nlayer = value
-            self.obj.winding.wind_mat = None  # Enforce now computation
-            self.comp_output()
-            self.update_graph()
-            # Notify the machine GUI that the machine has changed
-            self.saveNeeded.emit()
-
-    def set_coil_pitch(self):
-        """Signal to update the value of coil_pitch according to the spinbox
-
-        Parameters
-        ----------
-        self : SWinding
-            A SWinding object
-        """
-        value = self.si_coil_pitch.value()
-        if value != self.obj.winding.coil_pitch:
-            self.obj.winding.coil_pitch = value
-            self.obj.winding.wind_mat = None  # Enforce now computation
-            self.comp_output()
-            self.update_graph()
-            # Notify the machine GUI that the machine has changed
-            self.saveNeeded.emit()
 
     def set_Nslot(self):
         """Signal to update the value of Nslot_shift_wind according to the
@@ -241,19 +239,6 @@ class SWinding(Gen_SWinding, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Ntcoil(self):
-        """Signal to update the value of Ntcoil according to the line edit
-
-        Parameters
-        ----------
-        self : SWindParam
-            A SWindParam object
-        """
-        self.obj.winding.Ntcoil = self.si_Ntcoil.value()
-        self.comp_output()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
     def set_Npcp(self):
         """Signal to update the value of Npcp according to the line edit
 
@@ -278,8 +263,13 @@ class SWinding(Gen_SWinding, QWidget):
 
         wind = self.obj.winding  # For readability
         # Wind_matrix is a matrix of dimension [Nlay_rad, Nlay_tan, Zs, qs]
-        # Nlay_rad and Nlay_tan depend of the winding type
-        (Nrad, Ntan) = wind.get_dim_wind()
+        # Nlay_rad and Nlay_tan depend of the winding
+        try:
+            (Nrad, Ntan) = wind.get_dim_wind()
+        except Exception:  # Unable to compution the connection matrix
+            Nrad = "?"
+            Ntan = "?"
+
         Nlay = str(Nrad) + ", " + str(Ntan) + ", "
 
         # Zs should be set, but to be sure:
@@ -325,11 +315,13 @@ class SWinding(Gen_SWinding, QWidget):
         self.out_Ncspc.setText(self.tr("Ncspc: ") + Ncspc)
         self.out_Ntspc.setText(self.tr("Ntspc: ") + Ntspc)
 
-    def update_graph(self):
+    def update_graph(self, is_lam_only=False):
         """Plot the lamination with/without the winding"""
         # Plot the lamination in the viewer fig
         try:
-            self.obj.plot(fig=self.w_viewer.fig, is_show_fig=False)
+            self.obj.plot(
+                fig=self.w_viewer.fig, is_show_fig=False, is_lam_only=is_lam_only
+            )
         except:
             pass
 
@@ -368,7 +360,13 @@ class SWinding(Gen_SWinding, QWidget):
             Error message (return None if no error)
         """
         try:
+            wind_mat = lamination.winding.get_connection_mat()
+        except Exception as e:
+            return "Error in winding matrix generation:\n" + str(e)
+        try:
             # Check that everything is set
+            if wind_mat is None:
+                return "You must set the winding connection matrix !"
             if lamination.winding.qs is None:
                 return "You must set qs !"
             if lamination.winding.Nslot_shift_wind is None:
