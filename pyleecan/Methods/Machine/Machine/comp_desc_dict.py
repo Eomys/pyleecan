@@ -89,20 +89,6 @@ def comp_desc_dict(self):
             }
         )
     )
-    # Stator winding type
-    desc_dict.append(
-        dict(
-            {
-                "name": "Winding",
-                "path": "machine.stator.winding.NAME",
-                "verbose": "Stator winding type",
-                "type": str,
-                "unit": "",
-                "is_input": False,
-                "value": self.stator.winding.NAME,
-            }
-        )
-    )
     # Stator winding resistance
     try:
         Rwind = self.stator.comp_resistance_wind()
