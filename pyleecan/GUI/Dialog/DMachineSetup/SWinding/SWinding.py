@@ -51,7 +51,7 @@ class SWinding(Gen_SWinding, QWidget):
         else:
             self.obj = machine.rotor
         self.in_Zs.setText("Slot number=" + str(self.obj.get_Zs()))
-        self.in_p.setText("Pole pair numer=" + str(self.obj.get_pole_pair_number()))
+        self.in_p.setText("Pole pair number=" + str(self.obj.get_pole_pair_number()))
 
         # if machine.type_machine == 9 and not self.is_stator:
         #     # Enforce tooth winding for WRSM rotor
