@@ -121,36 +121,53 @@ def convert_Winding(wind_dict):
         "WindingDW1L",
         "WindingDW2L",
     ]:
-        old_class = wind_dict["__class__"]
-        wind_dict["__class__"] = "WindingUD"
-        WindingUD = import_class("pyleecan.Classes", "WindingUD")
-        new_wind = WindingUD()
+        # Load Winding main parameters
         if "qs" in wind_dict.keys():
-            new_wind.qs = wind_dict["qs"]
+            qs = wind_dict["qs"]
         else:
-            new_wind.qs = 3
+            qs = 3
         if "p" in wind_dict.keys():
-            new_wind.p = wind_dict["p"]
+            p = wind_dict["p"]
         else:
-            new_wind.p = 3
+            p = 3
         if "coil_pitch" in wind_dict.keys():
-            new_wind.coil_pitch = wind_dict["coil_pitch"]
+            coil_pitch = wind_dict["coil_pitch"]
         else:
-            new_wind.coil_pitch = 0
+            coil_pitch = 0
         if "Ntcoil" in wind_dict.keys():
-            new_wind.Ntcoil = wind_dict["Ntcoil"]
+            Ntcoil = wind_dict["Ntcoil"]
         else:
-            new_wind.Ntcoil = 1
-        # Generate Winding matrix
-        if old_class == "WindingCW1L":
-            new_wind.init_as_CW1L(Zs=wind_dict["Zs"])
-        elif old_class == "WindingCW2LR":
-            new_wind.init_as_CW2LR(Zs=wind_dict["Zs"])
-        elif old_class == "WindingCW2LT":
-            new_wind.init_as_CW2LT(Zs=wind_dict["Zs"])
-        elif old_class == "WindingDW1L":
-            new_wind.init_as_DWL(Zs=wind_dict["Zs"], nlay=1)
-        elif old_class == "WindingDW2L":
-            new_wind.init_as_DWL(Zs=wind_dict["Zs"], nlay=2)
-        wind_dict["wind_mat"] = new_wind.wind_mat.tolist()
-        wind_dict["Nlayer"] = new_wind.Nlayer
+            Ntcoil = 1
+
+        if (
+            qs is None
+            or p is None
+            or coil_pitch is None
+            or "Zs" not in wind_dict
+            or wind_dict["Zs"] is None
+        ):
+            # Winding not fully defined => Use Star of slot
+            wind_dict["__class__"] = "Winding"
+        else:
+            # Generate old Winding matrix as UD
+            old_class = wind_dict["__class__"]
+            WindingUD = import_class("pyleecan.Classes", "WindingUD")
+            new_wind = WindingUD(qs=qs, p=p, Ntcoil=Ntcoil, coil_pitch=coil_pitch)
+            try:
+                if old_class == "WindingCW1L":
+                    new_wind.init_as_CW1L(Zs=wind_dict["Zs"])
+                elif old_class == "WindingCW2LR":
+                    new_wind.init_as_CW2LR(Zs=wind_dict["Zs"])
+                elif old_class == "WindingCW2LT":
+                    new_wind.init_as_CW2LT(Zs=wind_dict["Zs"])
+                elif old_class == "WindingDW1L":
+                    new_wind.init_as_DWL(Zs=wind_dict["Zs"], nlay=1)
+                elif old_class == "WindingDW2L":
+                    new_wind.init_as_DWL(Zs=wind_dict["Zs"], nlay=2)
+                # Updating dict
+                wind_dict["wind_mat"] = new_wind.wind_mat.tolist()
+                wind_dict["__class__"] = "WindingUD"
+                wind_dict["Nlayer"] = new_wind.Nlayer
+            except Exception:
+                # Not able to generate winding matrix => Star of Slot
+                wind_dict["__class__"] = "Winding"
