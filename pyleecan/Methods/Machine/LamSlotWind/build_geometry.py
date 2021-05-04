@@ -37,7 +37,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         # getting angle between Slot
         angle = 2 * pi / Zs
         # getting Nrad and Ntan
-        if self.winding is None:
+        if self.winding is None or self.winding.conductor is None:
             Nrad, Ntan = 1, 1
             surf_Wind = list()
         else:
