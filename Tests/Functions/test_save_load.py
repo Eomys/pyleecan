@@ -148,7 +148,7 @@ def test_save_load_folder_path():
     assert isfile(file_path) == False
     test_obj.save(loc_save_path, is_folder=True)
     assert isfile(file_path)
-    assert isfile(join(loc_save_path, "Material.json"))
+    assert isfile(join(loc_save_path, "MagnetPrius.json"))
     assert isfile(join(loc_save_path, "M400-50A.json"))
     assert isfile(join(loc_save_path, "Toyota_Prius.json"))
     assert isfile(join(loc_save_path, "test_save_load_folder_path.json"))
@@ -333,3 +333,7 @@ def test_save_load_simu(type_file):
     assert isfile(file_path)
     test_obj2 = load(file_path)
     assert test_obj == test_obj2
+
+
+if __name__ == "__main__":
+    test_save_load_folder_path()

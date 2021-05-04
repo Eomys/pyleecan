@@ -231,7 +231,8 @@ def test_MachineUD():
     lam1.slot = SlotW22(
         Zs=12, W0=2 * pi / 12 * 0.75, W2=2 * pi / 12 * 0.75, H0=0, H2=W1 * 0.65
     )
-    lam1.winding = WindingCW2LT(qs=3, p=3)
+    lam1.winding = WindingUD(qs=3, p=3)
+    lam1.winding.init_as_CW2LT()
     # Outer rotor
     lam2 = LamSlot(
         Rext=lam1.Rint - A1, Rint=lam1.Rint - A1 - W2, is_internal=True, is_stator=False
@@ -252,7 +253,8 @@ def test_MachineUD():
         Rext=lam3.Rint - A3, Rint=lam3.Rint - A3 - W4, is_internal=True, is_stator=True
     )
     lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
-    lam4.winding = WindingCW2LT(qs=3, p=3)
+    lam4.winding = WindingUD(qs=3, p=3)
+    lam4.winding.init_as_CW2LT()
     # Machine definition
     machine.lam_list = [lam1, lam2, lam3, lam4]
 
@@ -365,7 +367,8 @@ def test_SlotUD():
     machine.stator.slot = SlotW21(
         Zs=36, W0=7e-3, H0=10e-3, H1=0, H2=70e-3, W1=30e-3, W2=0.1e-3
     )
-    machine.stator.winding = WindingDW2L(qs=3, p=3, coil_pitch=5)
+    machine.stator.winding = WindingUD(qs=3, p=3, coil_pitch=5)
+    machine.stator.winding.init_as_DWL(nlay=2)
 
     # Rotor definition
     machine.rotor = LamSlot(Rint=0.02, Rext=Rrotor, is_internal=True, is_stator=False)
@@ -432,7 +435,8 @@ def test_WindingUD():
     )
     machine.stator.slot = SlotW12(Zs=18, R2=25e-3, H0=30e-3, R1=0, H1=150e-3)
     machine.stator.winding.Lewout = 60e-3
-    machine.stator.winding = WindingDW2L(qs=3, p=3)
+    machine.stator.winding = WindingUD(qs=3, p=3)
+    machine.stator.winding.init_as_DWL(nlay=2)
     machine.stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
     # Shaft & frame
