@@ -29,7 +29,7 @@
             "is_transpose": false
         },
         "Brm20": 1.0,
-        "Hc": null,
+        "Hc": 757880.681389978,
         "LossData": {
             "__class__": "ImportMatrix",
             "is_transpose": false

@@ -1080,10 +1080,10 @@
                     }
                 }
             },
-            "is_aper_a": true,
+            "is_aper_a": null,
             "is_reverse_wind": false,
             "p": 4,
-            "per_a": 4,
+            "per_a": null,
             "qs": 3,
             "type_connection": 0,
             "wind_mat": null

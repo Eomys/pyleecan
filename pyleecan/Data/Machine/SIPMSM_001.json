@@ -49,7 +49,7 @@
                         "is_transpose": false
                     },
                     "Brm20": 1.0,
-                    "Hc": null,
+                    "Hc": 757880.681389978,
                     "LossData": {
                         "__class__": "ImportMatrix",
                         "is_transpose": false
@@ -937,10 +937,10 @@
                     }
                 }
             },
-            "is_aper_a": true,
+            "is_aper_a": null,
             "is_reverse_wind": false,
             "p": 2,
-            "per_a": 1,
+            "per_a": null,
             "qs": 3,
             "type_connection": 0,
             "wind_mat": null

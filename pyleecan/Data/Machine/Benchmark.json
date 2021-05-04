@@ -940,10 +940,10 @@
                 },
                 "type_winding_shape": null
             },
-            "is_aper_a": true,
+            "is_aper_a": null,
             "is_reverse_wind": false,
             "p": 5,
-            "per_a": 1,
+            "per_a": null,
             "qs": 3,
             "type_connection": null,
             "wind_mat": null
