@@ -77,7 +77,7 @@ class Test_Winding_plot(object):
 
         test_obj.slot.Zs = 20
         test_obj.winding.qs = 5
-        
+
         test_obj.winding.init_as_CW1L()
         test_obj.plot(
             is_show_fig=False, save_path=join(save_path, "test_Wind_CW1L_lam2.png")

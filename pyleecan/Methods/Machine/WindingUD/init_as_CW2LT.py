@@ -94,8 +94,9 @@ def init_as_CW2LT(self, Zs=None):
 
     self.wind_mat = wind_mat
     # Matrix changed, compute again periodicity
-    self.per_a=None
-    self.is_aper_a=None
+    self.per_a = None
+    self.is_aper_a = None
+
 
 class WindingT1DefMsError(WindingError):
     """

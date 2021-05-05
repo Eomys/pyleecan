@@ -1,6 +1,7 @@
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.Conductor import Conductor
 
+
 def comp_fill_factor(self):
     """Compute the fill factor of the winding"""
     if self.winding is None or self.winding.qs == 0 or self.winding.conductor is None:
