@@ -2,7 +2,6 @@
 from numpy import pi
 
 from ....Classes.LamSlotWind import LamSlotWind
-from ....Classes.WindingCW import WindingCW
 
 
 def comp_length_endwinding(self):
@@ -37,17 +36,18 @@ def comp_length_endwinding(self):
     Zs = self.parent.parent.slot.Zs
     p = self.parent.p
 
-    # get the slot pitch (with some fall backs), first from the user definition
+    # get the coil pitch (with some fall backs), first from the user definition
+    # TODO utiliue swat_em coil pitch calc.
     coil_pitch = self.coil_pitch
     if coil_pitch is None:
         # try to get coil_pitch of winding
         coil_pitch = getattr(self.parent, "coil_pitch", None)
         if coil_pitch is None:
-            if isinstance(self.parent, WindingCW):
-                coil_pitch = 1
-            else:
-                # finally use one pole pitch as coil pitch
-                coil_pitch = Zs / p / 2
+            coil_pitch = Zs / p / 2
+            self.get_logger().warning(
+                "EndWindingCirc.comp_lenght_endwinding():"
+                + "Using a coil pitch of one pole pitch for EW length calculation."
+            )
 
     # calculate the length as a half circle
     end_wind_length = pi * Rmid * coil_pitch / Zs / 2
