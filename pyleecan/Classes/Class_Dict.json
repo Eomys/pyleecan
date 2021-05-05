@@ -1332,7 +1332,7 @@
         "path": "pyleecan/Generator/ClassesRef/Machine/EndWindingCirc.csv",
         "properties": [
             {
-                "desc": "effective slot_pitch (override) for length calculation",
+                "desc": "effective coil pitch (override) for length calculation",
                 "max": "",
                 "min": "",
                 "name": "coil_pitch",
