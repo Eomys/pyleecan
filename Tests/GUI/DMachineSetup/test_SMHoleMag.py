@@ -25,7 +25,6 @@ from pyleecan.Classes.Material import Material
 import pytest
 
 
-@pytest.mark.GUI
 class TestSMHoleMag(object):
     """Test that the widget SMHoleMag behave like it should"""
 
@@ -84,7 +83,7 @@ class TestSMHoleMag(object):
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
             == "Slot Type 50"
         )
-        assert setup["widget"].tab_hole.widget(0).c_hole_type.count() == 6
+        assert setup["widget"].tab_hole.widget(0).c_hole_type.count() == 7
 
         setup["test_obj2"] = MachineSyRM(type_machine=5)
         setup["test_obj2"].stator = LamSlotWind()

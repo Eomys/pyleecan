@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/images">
+    <file>images/MachineSetup/WMSlot/SlotM17.png</file>
     <file>images/icon/help_16.png</file>
     <file>images/icon/search.png</file>
     <file>images/icon/check.png</file>
@@ -60,5 +61,6 @@
     <file>images/MachineSetup/MachineDimension/Dimension_Rotor_Stator.png</file>
     <file>images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator.png</file>
     <file>images/MachineSetup/MachineDimension/Dimension_Stator_Rotor.png</file>
+    <file>images/icon/pyleecan_64.png</file>
   </qresource>
 </RCC>

@@ -159,11 +159,15 @@ class MachineAsync(Machine):
         S += super(MachineAsync, self).__sizeof__()
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Machine
-        MachineAsync_dict = super(MachineAsync, self).as_dict()
+        MachineAsync_dict = super(MachineAsync, self).as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineAsync_dict["__class__"] = "MachineAsync"

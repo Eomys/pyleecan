@@ -225,11 +225,15 @@ class RefTriangle3(RefCell):
         S += super(RefTriangle3, self).__sizeof__()
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from RefCell
-        RefTriangle3_dict = super(RefTriangle3, self).as_dict()
+        RefTriangle3_dict = super(RefTriangle3, self).as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         RefTriangle3_dict["__class__"] = "RefTriangle3"

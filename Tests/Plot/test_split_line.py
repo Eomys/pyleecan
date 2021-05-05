@@ -7,7 +7,6 @@ from pyleecan.Classes.Circle import Circle
 from Tests import save_plot_path as save_path
 
 
-@pytest.mark.PLOT
 class Test_split_line(object):
     """unittest for splitting surface with lines"""
 

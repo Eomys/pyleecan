@@ -397,6 +397,7 @@ class LamSlotWind(LamSlot):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        yoke_notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -443,6 +444,8 @@ class LamSlotWind(LamSlot):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
         # Set the properties (value check and convertion are done in setter)
         self.Ksfill = Ksfill
         self.winding = winding
@@ -460,6 +463,7 @@ class LamSlotWind(LamSlot):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            yoke_notch=yoke_notch,
         )
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties
@@ -525,16 +529,20 @@ class LamSlotWind(LamSlot):
         S += getsizeof(self.winding)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from LamSlot
-        LamSlotWind_dict = super(LamSlotWind, self).as_dict()
+        LamSlotWind_dict = super(LamSlotWind, self).as_dict(**kwargs)
         LamSlotWind_dict["Ksfill"] = self.Ksfill
         if self.winding is None:
             LamSlotWind_dict["winding"] = None
         else:
-            LamSlotWind_dict["winding"] = self.winding.as_dict()
+            LamSlotWind_dict["winding"] = self.winding.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotWind_dict["__class__"] = "LamSlotWind"

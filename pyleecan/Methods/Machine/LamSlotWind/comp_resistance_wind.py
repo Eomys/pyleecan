@@ -18,7 +18,7 @@ def comp_resistance_wind(self, T=20):
     """
 
     Zs = self.slot.Zs
-    Ntspc = self.winding.comp_Ntspc(Zs)
+    Ntspc = self.winding.comp_Ntsp(Zs)
     # length of the stack including ventilation ducts
     L1vd = self.comp_length()
 
@@ -39,6 +39,6 @@ def comp_resistance_wind(self, T=20):
     rhow = rhow20 * (1 + alpha * (T - 20))
 
     # DC winding resistance per phase at specified temperature
-    R = (1.0 / self.winding.Npcpp) * rhow * (Ntspc * 2 * Lwht) / (Sact)
+    R = (1.0 / self.winding.Npcp) * rhow * (Ntspc * 2 * Lwht) / (Sact)
 
     return R

@@ -14,7 +14,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot26.PWSlot26 import PWSlot26
 import pytest
 
 
-@pytest.mark.GUI
 class TestPWSlot26(object):
     """Test that the widget PWSlot26 behave like it should"""
 

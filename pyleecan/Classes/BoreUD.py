@@ -140,18 +140,22 @@ class BoreUD(Bore):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Bore
-        BoreUD_dict = super(BoreUD, self).as_dict()
+        BoreUD_dict = super(BoreUD, self).as_dict(**kwargs)
         if self.line_list is None:
             BoreUD_dict["line_list"] = None
         else:
             BoreUD_dict["line_list"] = list()
             for obj in self.line_list:
                 if obj is not None:
-                    BoreUD_dict["line_list"].append(obj.as_dict())
+                    BoreUD_dict["line_list"].append(obj.as_dict(**kwargs))
                 else:
                     BoreUD_dict["line_list"].append(None)
         # The class name is added to the dict for deserialisation purpose

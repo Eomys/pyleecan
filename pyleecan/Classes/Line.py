@@ -15,6 +15,14 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Geometry.Line.comp_normal import comp_normal
+except ImportError as error:
+    comp_normal = error
+
+
 from ._check import InitUnKnowClassError
 
 
@@ -23,6 +31,15 @@ class Line(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Geometry.Line.comp_normal
+    if isinstance(comp_normal, ImportError):
+        comp_normal = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Line method comp_normal: " + str(comp_normal))
+            )
+        )
+    else:
+        comp_normal = comp_normal
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -91,8 +108,12 @@ class Line(FrozenClass):
         S += getsizeof(self.label)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Line_dict = dict()
         Line_dict["label"] = self.label

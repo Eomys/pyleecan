@@ -33,7 +33,7 @@ def get_surf(self, indices=None):
 
         if self.is_vtk_surf:
             surf.save(self.surf_path + "/" + self.surf_name + ".vtk")
-        else:
-            self.surf = surf
+
+        self.surf = surf
 
         return surf

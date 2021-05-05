@@ -1,0 +1,10 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+,,,,,,,,,Slot,Slot,build_geometry,VERSION,1,Full rotor magnet
+,,,,,,,,,,,check,IS_SYMMETRICAL,1,
+,,,,,,,,,,,comp_angle_opening,,,
+,,,,,,,,,,,comp_height,,,
+,,,,,,,,,,,comp_height_active,,,
+,,,,,,,,,,,comp_surface,,,
+,,,,,,,,,,,comp_surface_active,,,
+,,,,,,,,,,,get_surface_active,,,
+,,,,,,,,,,,plot_schematics,,,

@@ -37,6 +37,7 @@ from ..Classes.FluxLink import FluxLink
 from ..Classes.FluxLinkFEMM import FluxLinkFEMM
 from ..Classes.Force import Force
 from ..Classes.ForceMT import ForceMT
+from ..Classes.ForceTensor import ForceTensor
 from ..Classes.Frame import Frame
 from ..Classes.GUIOption import GUIOption
 from ..Classes.GaussPoint import GaussPoint
@@ -53,6 +54,7 @@ from ..Classes.HoleUD import HoleUD
 from ..Classes.Import import Import
 from ..Classes.ImportData import ImportData
 from ..Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from ..Classes.ImportGenPWM import ImportGenPWM
 from ..Classes.ImportGenToothSaw import ImportGenToothSaw
 from ..Classes.ImportGenVectLin import ImportGenVectLin
 from ..Classes.ImportGenVectSin import ImportGenVectSin
@@ -60,6 +62,8 @@ from ..Classes.ImportMatlab import ImportMatlab
 from ..Classes.ImportMatrix import ImportMatrix
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from ..Classes.ImportMatrixXls import ImportMatrixXls
+from ..Classes.ImportMeshMat import ImportMeshMat
+from ..Classes.ImportMeshUnv import ImportMeshUnv
 from ..Classes.ImportVectorField import ImportVectorField
 from ..Classes.IndMag import IndMag
 from ..Classes.IndMagFEMM import IndMagFEMM
@@ -107,6 +111,12 @@ from ..Classes.MeshMat import MeshMat
 from ..Classes.MeshSolution import MeshSolution
 from ..Classes.MeshVTK import MeshVTK
 from ..Classes.Mode import Mode
+from ..Classes.ModelBH import ModelBH
+from ..Classes.ModelBH_Langevin import ModelBH_Langevin
+from ..Classes.ModelBH_arctangent import ModelBH_arctangent
+from ..Classes.ModelBH_exponential import ModelBH_exponential
+from ..Classes.ModelBH_linear_sat import ModelBH_linear_sat
+from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
 from ..Classes.OptiConstraint import OptiConstraint
@@ -129,8 +139,8 @@ from ..Classes.OutPost import OutPost
 from ..Classes.OutStruct import OutStruct
 from ..Classes.Output import Output
 from ..Classes.ParamExplorer import ParamExplorer
+from ..Classes.ParamExplorerInterval import ParamExplorerInterval
 from ..Classes.ParamExplorerSet import ParamExplorerSet
-from ..Classes.PointMat import PointMat
 from ..Classes.PolarArc import PolarArc
 from ..Classes.Post import Post
 from ..Classes.PostFunction import PostFunction
@@ -161,6 +171,7 @@ from ..Classes.SlotM13 import SlotM13
 from ..Classes.SlotM14 import SlotM14
 from ..Classes.SlotM15 import SlotM15
 from ..Classes.SlotM16 import SlotM16
+from ..Classes.SlotM17 import SlotM17
 from ..Classes.SlotUD import SlotUD
 from ..Classes.SlotUD2 import SlotUD2
 from ..Classes.SlotW10 import SlotW10
@@ -205,8 +216,6 @@ from ..Classes.WindingCW import WindingCW
 from ..Classes.WindingCW1L import WindingCW1L
 from ..Classes.WindingCW2LR import WindingCW2LR
 from ..Classes.WindingCW2LT import WindingCW2LT
-from ..Classes.WindingDW1L import WindingDW1L
-from ..Classes.WindingDW2L import WindingDW2L
 from ..Classes.WindingSC import WindingSC
 from ..Classes.WindingUD import WindingUD
 from ..Classes.XOutput import XOutput

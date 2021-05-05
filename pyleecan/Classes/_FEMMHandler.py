@@ -21,11 +21,15 @@ class _FEMMHandler(object):
         self.HandleToFEMM = HandleToFEMM
         pythoncom.CoInitialize()
 
-    def as_dict(self):
+    def as_dict(self, **kwargs):
         _FEMMHandler_dict = dict()
         _FEMMHandler_dict["__class__"] = "_FEMMHandler"
         _FEMMHandler_dict["HandleToFEMM"] = None
         return _FEMMHandler_dict
+
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+        return list()
 
     def fixpath(self, myPath):
         return myPath.replace("\\", "/").replace("//", "/")

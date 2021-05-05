@@ -171,11 +171,15 @@ class SolutionData(Solution):
         S += getsizeof(self.field)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Solution
-        SolutionData_dict = super(SolutionData, self).as_dict()
+        SolutionData_dict = super(SolutionData, self).as_dict(**kwargs)
         if self.field is None:
             SolutionData_dict["field"] = None
         else:

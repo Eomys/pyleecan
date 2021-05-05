@@ -59,6 +59,8 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.in_axe_angle.hide()
         self.lf_center_x.setValue(0)
         self.lf_center_y.setValue(0)
+        self.lf_scaling.validator().setBottom(0)
+        self.lf_scaling.setValue(1)
 
         # Set default values
         if Zs is not None:
@@ -81,6 +83,8 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.w_path_selector.pathChanged.connect(self.open_document)
         self.b_save.pressed.connect(self.save)
         self.b_plot.pressed.connect(self.plot)
+        self.b_reset.pressed.connect(self.update_graph)
+        self.b_cancel.pressed.connect(self.remove_selection)
 
         # Display the GUI
         self.show()
@@ -249,6 +253,11 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
 
         return True
 
+    def remove_selection(self):
+        # Remove selection
+        self.selected_list = [False for line in self.line_list]
+        self.update_graph()
+
     def get_slot(self):
         """Generate the SlotUD object corresponding to the selected lines
 
@@ -263,14 +272,19 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             User defined slot according to selected lines
         """
 
+        if self.lf_scaling.value() == 0:  # Avoid error
+            self.lf_scaling.setValue(1)
+
         # Get all the selected lines
         line_list = list()
         point_list = list()
         for ii, line in enumerate(self.line_list):
             if self.selected_list[ii]:
                 line_list.append(line.copy())
-                point_list.append(line.get_begin())
-                point_list.append(line.get_end())
+                line_list[-1].scale(self.lf_scaling.value())
+                point_list.append(line_list[-1].get_begin())
+                point_list.append(line_list[-1].get_end())
+
         # Find begin point
         single_list = list()
         for p1 in point_list:
@@ -349,11 +363,13 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             else:
                 lam = self.lam.copy()
                 lam.slot = slot
-            slot.plot()
+            fig, (ax1, ax2) = plt.subplots(1, 2)
+            slot.plot(fig=fig, ax=ax1)
             # Add the winding if defined
             if slot.wind_begin_index is not None:
                 surf_wind = slot.get_surface_active()
-                surf_wind.plot(fig=plt.gcf(), color=WIND_COLOR, is_show_fig=False)
+                surf_wind.plot(fig=fig, ax=ax1, color=WIND_COLOR, is_show_fig=False)
+            lam.plot(fig=fig, ax=ax2)
 
     def save(self):
         """Save the SlotUD object in a json file

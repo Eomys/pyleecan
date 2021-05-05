@@ -36,6 +36,11 @@ def generate_set_None(gen_dict, class_dict):
             var_str += TAB2 + "self." + prop["name"] + " = None\n"
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + "self." + prop["name"] + " = None\n"
+        elif prop["type"] in ["", None]:  # No type
+            var_str += TAB2 + "if hasattr(self." + prop["name"] + ", '_set_None'):\n"
+            var_str += TAB3 + "self." + prop["name"] + "._set_None()\n"
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + "self." + prop["name"] + " = None\n"
         else:  # Pyleecan type
             var_str += TAB2 + "if self." + prop["name"] + " is not None:\n"
             var_str += TAB3 + "self." + prop["name"] + "._set_None()\n"

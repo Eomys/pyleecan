@@ -477,7 +477,7 @@ def draw_GMSH(
     factory = model.geo
 
     # Start a new model
-    gmsh.initialize(sys.argv)
+    gmsh.initialize()
     gmsh.option.setNumber("General.Terminal", int(False))
     gmsh.option.setNumber("Geometry.CopyMeshingMethod", 1)
     gmsh.option.setNumber("Geometry.PointNumbers", 0)
@@ -637,9 +637,10 @@ def draw_GMSH(
         # Finally rotor lamination is built
         if ext_lam_loop is not None:
             lam_and_holes.insert(0, ext_lam_loop)
-        gmsh_dict[lam_rotor_surf_id]["tag"] = factory.addPlaneSurface(
-            lam_and_holes, tag=-1
-        )
+        if len(lam_and_holes) > 0:
+            gmsh_dict[lam_rotor_surf_id]["tag"] = factory.addPlaneSurface(
+                lam_and_holes, tag=-1
+            )
         pg = model.addPhysicalGroup(2, [gmsh_dict[lam_rotor_surf_id]["tag"]])
         model.setPhysicalName(2, pg, gmsh_dict[lam_rotor_surf_id]["label"])
         # rotor_cloops = lam_and_holes

@@ -23,16 +23,11 @@ except ImportError as error:
     get_input_list = error
 
 try:
-    from ..Methods.Simulation.VarLoadCurrent.get_simulations import get_simulations
-except ImportError as error:
-    get_simulations = error
-
-try:
-    from ..Methods.Simulation.VarLoadCurrent.gen_datakeeper_list import (
-        gen_datakeeper_list,
+    from ..Methods.Simulation.VarLoadCurrent.generate_simulation_list import (
+        generate_simulation_list,
     )
 except ImportError as error:
-    gen_datakeeper_list = error
+    generate_simulation_list = error
 
 try:
     from ..Methods.Simulation.VarLoadCurrent.check_param import check_param
@@ -50,6 +45,7 @@ except ImportError as error:
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
+from .VarSimu import VarSimu
 from .Post import Post
 
 
@@ -71,30 +67,18 @@ class VarLoadCurrent(VarLoad):
         )
     else:
         get_input_list = get_input_list
-    # cf Methods.Simulation.VarLoadCurrent.get_simulations
-    if isinstance(get_simulations, ImportError):
-        get_simulations = property(
+    # cf Methods.Simulation.VarLoadCurrent.generate_simulation_list
+    if isinstance(generate_simulation_list, ImportError):
+        generate_simulation_list = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VarLoadCurrent method get_simulations: "
-                    + str(get_simulations)
+                    "Can't use VarLoadCurrent method generate_simulation_list: "
+                    + str(generate_simulation_list)
                 )
             )
         )
     else:
-        get_simulations = get_simulations
-    # cf Methods.Simulation.VarLoadCurrent.gen_datakeeper_list
-    if isinstance(gen_datakeeper_list, ImportError):
-        gen_datakeeper_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoadCurrent method gen_datakeeper_list: "
-                    + str(gen_datakeeper_list)
-                )
-            )
-        )
-    else:
-        gen_datakeeper_list = gen_datakeeper_list
+        generate_simulation_list = generate_simulation_list
     # cf Methods.Simulation.VarLoadCurrent.check_param
     if isinstance(check_param, ImportError):
         check_param = property(
@@ -135,7 +119,7 @@ class VarLoadCurrent(VarLoad):
         datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
-        ref_simu_index=None,
+        var_simu=None,
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
@@ -177,8 +161,8 @@ class VarLoadCurrent(VarLoad):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
                 stop_if_error = init_dict["stop_if_error"]
-            if "ref_simu_index" in list(init_dict.keys()):
-                ref_simu_index = init_dict["ref_simu_index"]
+            if "var_simu" in list(init_dict.keys()):
+                var_simu = init_dict["var_simu"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
             if "is_reuse_femm_file" in list(init_dict.keys()):
@@ -201,7 +185,7 @@ class VarLoadCurrent(VarLoad):
             datakeeper_list=datakeeper_list,
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
-            ref_simu_index=ref_simu_index,
+            var_simu=var_simu,
             nb_simu=nb_simu,
             is_reuse_femm_file=is_reuse_femm_file,
             postproc_list=postproc_list,
@@ -280,11 +264,15 @@ class VarLoadCurrent(VarLoad):
         S += getsizeof(self.is_power)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from VarLoad
-        VarLoadCurrent_dict = super(VarLoadCurrent, self).as_dict()
+        VarLoadCurrent_dict = super(VarLoadCurrent, self).as_dict(**kwargs)
         if self.OP_matrix is None:
             VarLoadCurrent_dict["OP_matrix"] = None
         else:
@@ -344,7 +332,7 @@ class VarLoadCurrent(VarLoad):
     type_OP_matrix = property(
         fget=_get_type_OP_matrix,
         fset=_set_type_OP_matrix,
-        doc=u"""Select with kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) 
+        doc=u"""Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) 
 
         :Type: int
         :min: 0

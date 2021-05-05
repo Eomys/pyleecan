@@ -27,6 +27,11 @@ try:
 except ImportError as error:
     set_Id_Iq = error
 
+try:
+    from ..Methods.Simulation.InputCurrent.set_OP_from_array import set_OP_from_array
+except ImportError as error:
+    set_OP_from_array = error
+
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
@@ -64,6 +69,18 @@ class InputCurrent(Input):
         )
     else:
         set_Id_Iq = set_Id_Iq
+    # cf Methods.Simulation.InputCurrent.set_OP_from_array
+    if isinstance(set_OP_from_array, ImportError):
+        set_OP_from_array = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use InputCurrent method set_OP_from_array: "
+                    + str(set_OP_from_array)
+                )
+            )
+        )
+    else:
+        set_OP_from_array = set_OP_from_array
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -275,23 +292,27 @@ class InputCurrent(Input):
         S += getsizeof(self.felec)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Input
-        InputCurrent_dict = super(InputCurrent, self).as_dict()
+        InputCurrent_dict = super(InputCurrent, self).as_dict(**kwargs)
         if self.Is is None:
             InputCurrent_dict["Is"] = None
         else:
-            InputCurrent_dict["Is"] = self.Is.as_dict()
+            InputCurrent_dict["Is"] = self.Is.as_dict(**kwargs)
         if self.Ir is None:
             InputCurrent_dict["Ir"] = None
         else:
-            InputCurrent_dict["Ir"] = self.Ir.as_dict()
+            InputCurrent_dict["Ir"] = self.Ir.as_dict(**kwargs)
         if self.angle_rotor is None:
             InputCurrent_dict["angle_rotor"] = None
         else:
-            InputCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict()
+            InputCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict(**kwargs)
         InputCurrent_dict["rot_dir"] = self.rot_dir
         InputCurrent_dict["angle_rotor_initial"] = self.angle_rotor_initial
         InputCurrent_dict["Tem_av_ref"] = self.Tem_av_ref

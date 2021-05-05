@@ -42,6 +42,7 @@ class OptiObjective(DataKeeper):
         keeper=None,
         error_keeper=None,
         result=-1,
+        result_ref=None,
         init_dict=None,
         init_str=None,
     ):
@@ -72,6 +73,8 @@ class OptiObjective(DataKeeper):
                 error_keeper = init_dict["error_keeper"]
             if "result" in list(init_dict.keys()):
                 result = init_dict["result"]
+            if "result_ref" in list(init_dict.keys()):
+                result_ref = init_dict["result_ref"]
         # Set the properties (value check and convertion are done in setter)
         # Call DataKeeper init
         super(OptiObjective, self).__init__(
@@ -81,6 +84,7 @@ class OptiObjective(DataKeeper):
             keeper=keeper,
             error_keeper=error_keeper,
             result=result,
+            result_ref=result_ref,
         )
         # The class is frozen (in DataKeeper init), for now it's impossible to
         # add new properties
@@ -124,11 +128,15 @@ class OptiObjective(DataKeeper):
         S += super(OptiObjective, self).__sizeof__()
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from DataKeeper
-        OptiObjective_dict = super(OptiObjective, self).as_dict()
+        OptiObjective_dict = super(OptiObjective, self).as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OptiObjective_dict["__class__"] = "OptiObjective"

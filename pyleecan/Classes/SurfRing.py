@@ -293,19 +293,23 @@ class SurfRing(Surface):
         S += getsizeof(self.in_surf)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Surface
-        SurfRing_dict = super(SurfRing, self).as_dict()
+        SurfRing_dict = super(SurfRing, self).as_dict(**kwargs)
         if self.out_surf is None:
             SurfRing_dict["out_surf"] = None
         else:
-            SurfRing_dict["out_surf"] = self.out_surf.as_dict()
+            SurfRing_dict["out_surf"] = self.out_surf.as_dict(**kwargs)
         if self.in_surf is None:
             SurfRing_dict["in_surf"] = None
         else:
-            SurfRing_dict["in_surf"] = self.in_surf.as_dict()
+            SurfRing_dict["in_surf"] = self.in_surf.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SurfRing_dict["__class__"] = "SurfRing"

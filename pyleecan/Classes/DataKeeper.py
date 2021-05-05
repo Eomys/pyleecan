@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     as_dict = error
 
+try:
+    from ..Methods.Simulation.DataKeeper._set_result import _set_result
+except ImportError as error:
+    _set_result = error
+
 
 from ntpath import basename
 from os.path import isfile
@@ -36,6 +41,7 @@ class DataKeeper(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.DataKeeper.as_dict
     if isinstance(as_dict, ImportError):
         as_dict = property(
@@ -45,6 +51,17 @@ class DataKeeper(FrozenClass):
         )
     else:
         as_dict = as_dict
+    # cf Methods.Simulation.DataKeeper._set_result
+    if isinstance(_set_result, ImportError):
+        _set_result = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use DataKeeper method _set_result: " + str(_set_result)
+                )
+            )
+        )
+    else:
+        _set_result = _set_result
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -59,6 +76,7 @@ class DataKeeper(FrozenClass):
         keeper=None,
         error_keeper=None,
         result=-1,
+        result_ref=None,
         init_dict=None,
         init_str=None,
     ):
@@ -89,6 +107,8 @@ class DataKeeper(FrozenClass):
                 error_keeper = init_dict["error_keeper"]
             if "result" in list(init_dict.keys()):
                 result = init_dict["result"]
+            if "result_ref" in list(init_dict.keys()):
+                result_ref = init_dict["result_ref"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -97,6 +117,7 @@ class DataKeeper(FrozenClass):
         self.keeper = keeper
         self.error_keeper = error_keeper
         self.result = result
+        self.result_ref = result_ref
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -130,6 +151,7 @@ class DataKeeper(FrozenClass):
             + str(self.result).replace(linesep, linesep + "\t")
             + linesep
         )
+        DataKeeper_str += "result_ref = " + str(self.result_ref) + linesep + linesep
         return DataKeeper_str
 
     def __eq__(self, other):
@@ -148,6 +170,12 @@ class DataKeeper(FrozenClass):
         if other._error_keeper_str != self._error_keeper_str:
             return False
         if other.result != self.result:
+            return False
+        if isinstance(self.result_ref, np.ndarray) and not np.array_equal(
+            other.result_ref, self.result_ref
+        ):
+            return False
+        elif other.result_ref != self.result_ref:
             return False
         return True
 
@@ -169,6 +197,22 @@ class DataKeeper(FrozenClass):
             diff_list.append(name + ".error_keeper")
         if other._result != self._result:
             diff_list.append(name + ".result")
+        if (other.result_ref is None and self.result_ref is not None) or (
+            other.result_ref is not None and self.result_ref is None
+        ):
+            diff_list.append(name + ".result_ref")
+        elif self.result_ref is None:
+            pass
+        elif isinstance(self.result_ref, np.ndarray) and not np.array_equal(
+            other.result_ref, self.result_ref
+        ):
+            diff_list.append(name + ".result_ref")
+        elif hasattr(self.result_ref, "compare"):
+            diff_list.extend(
+                self.result_ref.compare(other.result_ref, name=name + ".result_ref")
+            )
+        elif other._result_ref != self._result_ref:
+            diff_list.append(name + ".result_ref")
         return diff_list
 
     def __sizeof__(self):
@@ -183,6 +227,7 @@ class DataKeeper(FrozenClass):
         if self.result is not None:
             for value in self.result:
                 S += getsizeof(value)
+        S += getsizeof(self.result_ref)
         return S
 
     def _set_None(self):
@@ -194,6 +239,10 @@ class DataKeeper(FrozenClass):
         self.keeper = None
         self.error_keeper = None
         self.result = None
+        if hasattr(self.result_ref, "_set_None"):
+            self.result_ref._set_None()
+        else:
+            self.result_ref = None
 
     def _get_name(self):
         """getter of name"""
@@ -323,18 +372,47 @@ class DataKeeper(FrozenClass):
         """getter of result"""
         return self._result
 
-    def _set_result(self, value):
-        """setter of result"""
-        if type(value) is int and value == -1:
-            value = list()
-        check_var("result", value, "list")
-        self._result = value
-
     result = property(
         fget=_get_result,
         fset=_set_result,
         doc=u"""List containing datakeeper results for each simulation
 
         :Type: list
+        """,
+    )
+
+    def _get_result_ref(self):
+        """getter of result_ref"""
+        return self._result_ref
+
+    def _set_result_ref(self, value):
+        """setter of result_ref"""
+        if isinstance(value, dict) and "__class__" in value:
+            try:
+                class_obj = import_class(
+                    "pyleecan.Classes", value.get("__class__"), "result_ref"
+                )
+            except:
+                class_obj = import_class(
+                    "SciDataTool.Classes", value.get("__class__"), "result_ref"
+                )
+            value = class_obj(init_dict=value)
+        elif type(value) is list:
+            try:
+                value = np.array(value)
+            except:
+                pass
+        check_var("result_ref", value, "")
+        self._result_ref = value
+
+        if hasattr(self._result_ref, "parent"):
+            self._result_ref.parent = self
+
+    result_ref = property(
+        fget=_get_result_ref,
+        fset=_set_result_ref,
+        doc=u"""Result for the reference simulation
+
+        :Type: 
         """,
     )

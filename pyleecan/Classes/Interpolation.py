@@ -159,22 +159,26 @@ class Interpolation(FrozenClass):
         S += getsizeof(self.scalar_product)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         Interpolation_dict = dict()
         if self.ref_cell is None:
             Interpolation_dict["ref_cell"] = None
         else:
-            Interpolation_dict["ref_cell"] = self.ref_cell.as_dict()
+            Interpolation_dict["ref_cell"] = self.ref_cell.as_dict(**kwargs)
         if self.gauss_point is None:
             Interpolation_dict["gauss_point"] = None
         else:
-            Interpolation_dict["gauss_point"] = self.gauss_point.as_dict()
+            Interpolation_dict["gauss_point"] = self.gauss_point.as_dict(**kwargs)
         if self.scalar_product is None:
             Interpolation_dict["scalar_product"] = None
         else:
-            Interpolation_dict["scalar_product"] = self.scalar_product.as_dict()
+            Interpolation_dict["scalar_product"] = self.scalar_product.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         Interpolation_dict["__class__"] = "Interpolation"
         return Interpolation_dict

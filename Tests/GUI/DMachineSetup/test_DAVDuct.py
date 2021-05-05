@@ -21,7 +21,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.PVentTrap imp
 import pytest
 
 
-@pytest.mark.GUI
 class TestDAVDuct(object):
     """Test that the widget DAVDuct behave like it should"""
 

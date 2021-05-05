@@ -15,6 +15,8 @@ from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot12.PMSlot12 import PMSlot12
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot13.PMSlot13 import PMSlot13
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot14.PMSlot14 import PMSlot14
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot15.PMSlot15 import PMSlot15
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
 
 # List to convert index of combobox to slot type
 WIDGET_LIST = [
@@ -24,6 +26,8 @@ WIDGET_LIST = [
     PMSlot13,
     PMSlot14,
     PMSlot15,
+    PMSlot16,
+    PMSlot17,
 ]
 INIT_INDEX = [wid.slot_type for wid in WIDGET_LIST]
 SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]
@@ -61,8 +65,7 @@ class SMSlot(Ui_SMSlot, QWidget):
         self.matlib = matlib
         self.is_stator = is_stator
 
-        self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
-        self.b_help.url += "how-to-set-up-the-slots"
+        self.b_help.hide()
 
         # Fill the combobox with the available slot
         self.c_slot_type.clear()

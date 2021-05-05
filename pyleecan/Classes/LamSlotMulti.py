@@ -195,6 +195,7 @@ class LamSlotMulti(Lamination):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        yoke_notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -239,6 +240,8 @@ class LamSlotMulti(Lamination):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
         # Set the properties (value check and convertion are done in setter)
         self.slot_list = slot_list
         self.alpha = alpha
@@ -255,6 +258,7 @@ class LamSlotMulti(Lamination):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            yoke_notch=yoke_notch,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
@@ -337,18 +341,22 @@ class LamSlotMulti(Lamination):
         S += getsizeof(self.alpha)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Lamination
-        LamSlotMulti_dict = super(LamSlotMulti, self).as_dict()
+        LamSlotMulti_dict = super(LamSlotMulti, self).as_dict(**kwargs)
         if self.slot_list is None:
             LamSlotMulti_dict["slot_list"] = None
         else:
             LamSlotMulti_dict["slot_list"] = list()
             for obj in self.slot_list:
                 if obj is not None:
-                    LamSlotMulti_dict["slot_list"].append(obj.as_dict())
+                    LamSlotMulti_dict["slot_list"].append(obj.as_dict(**kwargs))
                 else:
                     LamSlotMulti_dict["slot_list"].append(None)
         if self.alpha is None:

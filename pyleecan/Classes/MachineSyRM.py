@@ -194,19 +194,23 @@ class MachineSyRM(MachineSync):
         S += getsizeof(self.stator)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from MachineSync
-        MachineSyRM_dict = super(MachineSyRM, self).as_dict()
+        MachineSyRM_dict = super(MachineSyRM, self).as_dict(**kwargs)
         if self.rotor is None:
             MachineSyRM_dict["rotor"] = None
         else:
-            MachineSyRM_dict["rotor"] = self.rotor.as_dict()
+            MachineSyRM_dict["rotor"] = self.rotor.as_dict(**kwargs)
         if self.stator is None:
             MachineSyRM_dict["stator"] = None
         else:
-            MachineSyRM_dict["stator"] = self.stator.as_dict()
+            MachineSyRM_dict["stator"] = self.stator.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineSyRM_dict["__class__"] = "MachineSyRM"

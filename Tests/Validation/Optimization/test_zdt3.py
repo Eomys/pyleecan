@@ -27,9 +27,11 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR, TEST_DIR
 
 
-@pytest.mark.validation
-@pytest.mark.long
-@pytest.mark.DEAP
+@pytest.mark.long_5s
+@pytest.mark.SCIM
+@pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_zdt3():
     # ### Defining reference Output
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
@@ -52,7 +54,7 @@ def test_zdt3():
     Na_tot = 64
 
     # Definition of the simulation
-    simu = Simu1(name="Test_machine", machine=SCIM_001)
+    simu = Simu1(name="test_zdt3", machine=SCIM_001)
 
     simu.input = InputCurrent(
         Is=Is,
@@ -138,7 +140,7 @@ def test_zdt3():
     except (TypeError, ValueError):
         print("Pillow is needed to import jpg files")
 
-    res.plot_pareto("obj1", "obj2", ax=axs[0])
+    res.plot_pareto("obj1", "obj2", ax=axs[0], is_show_fig=False)
     axs[0].set_title("Pyleecan results")
     axs[0].set_xlabel(r"$f_1(x)$")
     axs[0].set_ylabel(r"$f_2(x)$")

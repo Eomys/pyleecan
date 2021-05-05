@@ -201,8 +201,12 @@ class OutLoss(FrozenClass):
         S += getsizeof(self.logger_name)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutLoss_dict = dict()
         if self.loss_list is None:
@@ -220,7 +224,7 @@ class OutLoss(FrozenClass):
             OutLoss_dict["meshsol_list"] = list()
             for obj in self.meshsol_list:
                 if obj is not None:
-                    OutLoss_dict["meshsol_list"].append(obj.as_dict())
+                    OutLoss_dict["meshsol_list"].append(obj.as_dict(**kwargs))
                 else:
                     OutLoss_dict["meshsol_list"].append(None)
         OutLoss_dict["loss_index"] = (

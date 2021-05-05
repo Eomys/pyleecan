@@ -22,10 +22,8 @@ def check_param(self):
     VarParamError: Error in VarParam general setting
     DataKeeperError: Error in DataKeeper setting
     """
-
-    # Check the reference simulation
-    if self.parent == None:
-        raise VarParamError("VarParam object must be inside a Simulation object")
+    # run the base class check first
+    super(type(self), self).check_param()
 
     # Check ParamExplorers
     for paramexplorer in self.paramexplorer_list:
@@ -41,12 +39,6 @@ def check_param(self):
 
     # Default simulation index
     N_simu = self.get_simu_number()
-    if self.ref_simu_index is not None:
-        assert self.ref_simu_index < N_simu, VarParamError(
-            "ref_simu_index must be less than {}, got {}".format(
-                N_simu, self.ref_simu_index
-            )
-        )
 
     # Keep every output if there is no DataKeeper defined
     if len(self.datakeeper_list) == 0 and self.is_keep_all_output is False:

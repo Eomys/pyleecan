@@ -9,7 +9,6 @@ from pyleecan.Classes.SlotW22 import SlotW22
 import pytest
 
 
-@pytest.mark.METHODS
 class TestLamSlotWind(object):
     """Test that the methods of LamSlotWind behave like it should"""
 
@@ -33,7 +32,7 @@ class TestLamSlotWind(object):
 
         assert setup.get_name_phase() == []
 
-        setup.winding = Winding(Npcpp=10, Ntcoil=11)
+        setup.winding = Winding(Npcp=10, Ntcoil=11)
 
         assert setup.get_name_phase() == ["A", "B", "C"]
 

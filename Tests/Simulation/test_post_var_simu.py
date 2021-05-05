@@ -29,20 +29,22 @@ class ExamplePostMethod(PostMethod):
     def run(self, output):
         output.simu.machine.stator.slot.W0 += 10
 
-    def copy(self):
+    def copy(self, **kwargs):
         return copy(self)
 
-    def as_dict(self):
+    def as_dict(self, **kwargs):
         return copy(self)
 
 
+@pytest.mark.IPMSM
+@pytest.mark.VarParam
 def test_post_var_simu():
     """Test the simulation.var_simu.post_list"""
 
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     # simu1, simu without postprocessing
-    simu1 = Simu1(name="test_post_simu", machine=IPMSM_A)
+    simu1 = Simu1(name="test_post_simu", machine=Toyota_Prius)
     # Definition of the input
     simu1.input = InputElec(
         N0=2000, Id_ref=-100, Iq_ref=200, Nt_tot=10, Na_tot=2048, rot_dir=1
@@ -66,7 +68,6 @@ def test_post_var_simu():
     )
 
     simu1.var_simu = VarParam(
-        ref_simu_index=0,
         paramexplorer_list=[pe1],
         datakeeper_list=[dk1],
         stop_if_error=True,
@@ -74,6 +75,7 @@ def test_post_var_simu():
 
     # simu2, postprocessing 1 PostFunction, 1 PostMethod
     simu2 = simu1.copy()
+    simu2.name = "test_post_simu2"
 
     # Create the postprocessings and add it
     # xoutput.simu.machine.stator.slot.H0 += 1

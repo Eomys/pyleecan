@@ -55,7 +55,6 @@ Mag16_test.append(
 DELTA = 1e-4
 
 
-@pytest.mark.METHODS
 class Test_Magnet_Type_16_meth(object):
     """unittest for MagnetType16 methods"""
 

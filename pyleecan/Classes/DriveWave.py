@@ -139,15 +139,19 @@ class DriveWave(Drive):
         S += getsizeof(self.wave)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Drive
-        DriveWave_dict = super(DriveWave, self).as_dict()
+        DriveWave_dict = super(DriveWave, self).as_dict(**kwargs)
         if self.wave is None:
             DriveWave_dict["wave"] = None
         else:
-            DriveWave_dict["wave"] = self.wave.as_dict()
+            DriveWave_dict["wave"] = self.wave.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         DriveWave_dict["__class__"] = "DriveWave"

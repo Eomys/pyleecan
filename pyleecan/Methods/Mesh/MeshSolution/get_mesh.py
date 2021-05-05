@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from pyleecan.Classes.CellMat import CellMat
-from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.PointMat import PointMat
 
 
 def get_mesh(self, label=None, index=None):
@@ -15,8 +12,6 @@ def get_mesh(self, label=None, index=None):
         a label
     index : int
         an index
-    group : list
-        list of indices of part(s) of the mesh
 
     Returns
     -------

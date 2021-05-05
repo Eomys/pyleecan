@@ -157,8 +157,12 @@ class ImportVectorField(FrozenClass):
         S += getsizeof(self.symbol)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         ImportVectorField_dict = dict()
         if self.components is None:
@@ -167,7 +171,7 @@ class ImportVectorField(FrozenClass):
             ImportVectorField_dict["components"] = dict()
             for key, obj in self.components.items():
                 if obj is not None:
-                    ImportVectorField_dict["components"][key] = obj.as_dict()
+                    ImportVectorField_dict["components"][key] = obj.as_dict(**kwargs)
                 else:
                     ImportVectorField_dict["components"][key] = None
         ImportVectorField_dict["name"] = self.name

@@ -32,9 +32,11 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR, TEST_DIR
 
 
-@pytest.mark.validation
-@pytest.mark.long
-@pytest.mark.DEAP
+@pytest.mark.long_5s
+@pytest.mark.SCIM
+@pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_Binh_and_Korn():
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     # Defining reference Output
@@ -57,7 +59,7 @@ def test_Binh_and_Korn():
     Na_tot = 64
 
     # Definition of the simulation
-    simu = Simu1(name="Test_machine", machine=SCIM_001)
+    simu = Simu1(name="test_Binh_and_Korn", machine=SCIM_001)
 
     simu.input = InputCurrent(
         Is=Is,
@@ -163,7 +165,7 @@ def test_Binh_and_Korn():
     except (TypeError, ValueError):
         print("Pillow is needed to import jpg files")
 
-    res.plot_pareto(x_symbol="obj1", y_symbol="obj2", ax=axs[0])
+    res.plot_pareto(x_symbol="obj1", y_symbol="obj2", ax=axs[0], is_show_fig=False)
     fig.savefig(join(save_path, "test_Binh_and_Korn.png"))
 
 

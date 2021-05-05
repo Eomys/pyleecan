@@ -10,7 +10,6 @@ from pyleecan.Methods.Slot.VentilationCirc import CircleBuildGeometryError
 """unittest for VentilationCirc"""
 
 
-@pytest.mark.METHODS
 class Test_VentilationCirc(object):
     @pytest.fixture
     def vent(self):

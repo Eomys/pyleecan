@@ -134,11 +134,15 @@ class ImportMatlab(ImportMatrix):
         S += getsizeof(self.var_name)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from ImportMatrix
-        ImportMatlab_dict = super(ImportMatlab, self).as_dict()
+        ImportMatlab_dict = super(ImportMatlab, self).as_dict(**kwargs)
         ImportMatlab_dict["file_path"] = self.file_path
         ImportMatlab_dict["var_name"] = self.var_name
         # The class name is added to the dict for deserialisation purpose

@@ -154,15 +154,19 @@ class InputForce(Input):
         S += getsizeof(self.P)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Input
-        InputForce_dict = super(InputForce, self).as_dict()
+        InputForce_dict = super(InputForce, self).as_dict(**kwargs)
         if self.P is None:
             InputForce_dict["P"] = None
         else:
-            InputForce_dict["P"] = self.P.as_dict()
+            InputForce_dict["P"] = self.P.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputForce_dict["__class__"] = "InputForce"

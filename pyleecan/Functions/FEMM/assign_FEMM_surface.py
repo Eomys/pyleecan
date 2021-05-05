@@ -58,7 +58,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
                 Clabel = "Circs" + prop[:-1][2:]
             # Decode the label
             # TODO from create_FEMM_circuit_material -> move to decode/encode func.
-            wind_mat = lam.winding.comp_connection_mat(lam.slot.Zs)
+            wind_mat = lam.winding.get_connection_mat(lam.slot.Zs)
             st = label.split("_")
             Nrad_id = int(st[2][1:])  # zone radial coordinate
             Ntan_id = int(st[3][1:])  # zone tangential coordinate
@@ -69,30 +69,17 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
         elif "HoleMagnet" in label:  # LamHole
             if "Parallel" in label:
                 # calculate pole angle and angle of pole middle
-                alpha_p = 360 / lam.hole[0].Zh
+                # label like 'HoleMagnet_Rotor_Parallel_N_R0_T0_S0'
+                label_split = label.split("_")
+                R_id = int(label_split[-3][1:])
+                T_id = int(label_split[-2][1:])
+                alpha_p = 360 / lam.hole[R_id].Zh
                 mag_0 = (
                     floor_divide(angle(point_ref, deg=True), alpha_p) + 0.5
                 ) * alpha_p
 
-                # HoleM50 or HoleM53
-                if (type(lam.hole[0]) == HoleM50) or (type(lam.hole[0]) == HoleM53):
-                    if "_T0_" in label:
-                        mag = mag_0 + lam.hole[0].comp_alpha() * 180 / pi
-                    else:
-                        mag = mag_0 - lam.hole[0].comp_alpha() * 180 / pi
-
-                # HoleM51
-                if type(lam.hole[0]) == HoleM51:
-                    if "_T0_" in label:
-                        mag = mag_0 + lam.hole[0].comp_alpha() * 180 / pi
-                    elif "_T1_" in label:
-                        mag = mag_0
-                    else:
-                        mag = mag_0 - lam.hole[0].comp_alpha() * 180 / pi
-
-                # HoleM52
-                if type(lam.hole[0]) == HoleM52:
-                    mag = mag_0
+                mag_dict = lam.hole[R_id].comp_magnetization_dict()
+                mag = mag_0 + mag_dict["magnet_" + str(T_id)] * 180 / pi
 
                 # modifiy magnetisation of south poles
                 if "_S_" in label:

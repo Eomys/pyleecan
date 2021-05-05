@@ -295,11 +295,15 @@ class SlotW12(Slot):
         S += getsizeof(self.R2)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Slot
-        SlotW12_dict = super(SlotW12, self).as_dict()
+        SlotW12_dict = super(SlotW12, self).as_dict(**kwargs)
         SlotW12_dict["H0"] = self.H0
         SlotW12_dict["H1"] = self.H1
         SlotW12_dict["R1"] = self.R1

@@ -241,11 +241,15 @@ class EEC_SCIM(EEC):
         S += getsizeof(self.Nrev)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from EEC
-        EEC_SCIM_dict = super(EEC_SCIM, self).as_dict()
+        EEC_SCIM_dict = super(EEC_SCIM, self).as_dict(**kwargs)
         EEC_SCIM_dict["I"] = self.I
         EEC_SCIM_dict["parameters"] = (
             self.parameters.copy() if self.parameters is not None else None

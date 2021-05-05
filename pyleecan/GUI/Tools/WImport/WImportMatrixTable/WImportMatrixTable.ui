@@ -43,7 +43,7 @@
    <item>
     <widget class="QPushButton" name="b_tab">
      <property name="text">
-      <string>Preview Table</string>
+      <string>Edit Table</string>
      </property>
     </widget>
    </item>

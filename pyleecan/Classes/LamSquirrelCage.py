@@ -191,6 +191,7 @@ class LamSquirrelCage(LamSlotWind):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        yoke_notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -243,6 +244,8 @@ class LamSquirrelCage(LamSlotWind):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
         # Set the properties (value check and convertion are done in setter)
         self.Hscr = Hscr
         self.Lscr = Lscr
@@ -263,6 +266,7 @@ class LamSquirrelCage(LamSlotWind):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            yoke_notch=yoke_notch,
         )
         # The class is frozen (in LamSlotWind init), for now it's impossible to
         # add new properties
@@ -334,17 +338,21 @@ class LamSquirrelCage(LamSlotWind):
         S += getsizeof(self.ring_mat)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from LamSlotWind
-        LamSquirrelCage_dict = super(LamSquirrelCage, self).as_dict()
+        LamSquirrelCage_dict = super(LamSquirrelCage, self).as_dict(**kwargs)
         LamSquirrelCage_dict["Hscr"] = self.Hscr
         LamSquirrelCage_dict["Lscr"] = self.Lscr
         if self.ring_mat is None:
             LamSquirrelCage_dict["ring_mat"] = None
         else:
-            LamSquirrelCage_dict["ring_mat"] = self.ring_mat.as_dict()
+            LamSquirrelCage_dict["ring_mat"] = self.ring_mat.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSquirrelCage_dict["__class__"] = "LamSquirrelCage"

@@ -11,7 +11,7 @@ class DTableData(Ui_DTableData, QDialog):
     def __init__(
         self,
         parent=None,
-        data=zeros((1, 1)),
+        data=None,
         Vmin=-999999999,
         Vmax=999999999,
         title=None,
@@ -40,7 +40,7 @@ class DTableData(Ui_DTableData, QDialog):
         """
         QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.data = data
+        self.data = data if data is not None else zeros((1, 2))
         self.Vmin = Vmin
         self.Vmax = Vmax
         self.title = title  # To change the dialog title

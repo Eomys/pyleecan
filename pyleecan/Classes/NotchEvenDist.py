@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     get_notch_list = error
 
+try:
+    from ..Methods.Machine.NotchEvenDist.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
 
 from ._check import InitUnKnowClassError
 from .Slot import Slot
@@ -32,6 +37,7 @@ class NotchEvenDist(Notch):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.NotchEvenDist.get_notch_list
     if isinstance(get_notch_list, ImportError):
         get_notch_list = property(
@@ -44,6 +50,17 @@ class NotchEvenDist(Notch):
         )
     else:
         get_notch_list = get_notch_list
+    # cf Methods.Machine.NotchEvenDist.comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
+    else:
+        comp_surface = comp_surface
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -141,16 +158,20 @@ class NotchEvenDist(Notch):
         S += getsizeof(self.notch_shape)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Notch
-        NotchEvenDist_dict = super(NotchEvenDist, self).as_dict()
+        NotchEvenDist_dict = super(NotchEvenDist, self).as_dict(**kwargs)
         NotchEvenDist_dict["alpha"] = self.alpha
         if self.notch_shape is None:
             NotchEvenDist_dict["notch_shape"] = None
         else:
-            NotchEvenDist_dict["notch_shape"] = self.notch_shape.as_dict()
+            NotchEvenDist_dict["notch_shape"] = self.notch_shape.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         NotchEvenDist_dict["__class__"] = "NotchEvenDist"

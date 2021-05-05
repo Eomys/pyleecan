@@ -200,8 +200,12 @@ class OutGeoLam(FrozenClass):
         S += getsizeof(self.is_antiper_t)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         OutGeoLam_dict = dict()
         OutGeoLam_dict["name_phase"] = (

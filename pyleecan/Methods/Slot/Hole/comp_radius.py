@@ -21,8 +21,9 @@ def comp_radius(self):
 
     surf_list = self.build_geometry()
     point_list = list()
-    for curve in surf_list[0].line_list:
-        point_list.extend(curve.discretize())
+    for surf in surf_list:
+        for curve in surf.get_lines():
+            point_list.extend(curve.discretize())
 
     abs_list = [np_abs(point) for point in point_list]
     Rmax = max(abs_list)

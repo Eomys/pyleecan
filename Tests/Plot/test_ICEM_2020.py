@@ -25,9 +25,6 @@ from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
-from pyleecan.Methods.Machine.Winding import WindingError
-from pyleecan.Methods.Machine.WindingCW2LT import WindingT1DefMsError
-from pyleecan.Methods.Machine.WindingCW1L import WindingT2DefNtError
 
 import numpy as np
 import random
@@ -46,14 +43,16 @@ on Pyleecan open-source object-oriented software"
 """
 
 
-@pytest.mark.FEMM
-@pytest.mark.long
+@pytest.mark.MagFEMM
+@pytest.mark.SCIM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_FEMM_sym():
     """Figure 9: Check that the FEMM can handle symmetry
     From pyleecan/Tests/Validation/Simulation/test_EM_SCIM_NL_006.py
     """
     SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
-    simu = Simu1(name="ICEM_2020", machine=SCIM_006)
+    simu = Simu1(name="test_ICEM_2020", machine=SCIM_006)
     simu.machine.name = "fig_09_FEMM_sym"
 
     # Definition of the enforced output of the electrical module
@@ -94,7 +93,6 @@ def test_FEMM_sym():
 
 
 @pytest.mark.GMSH
-@pytest.mark.long
 def test_gmsh_mesh_dict():
     """Figure 10: Generate a 3D mesh with Gmsh by setting the
     number of element on each lines
@@ -156,7 +154,6 @@ def test_gmsh_mesh_dict():
 
 @pytest.mark.skip
 @pytest.mark.GMSH
-@pytest.mark.long
 def test_SlotMulti_sym():
     """Figure 11: Genera
     te a 3D mesh with GMSH for a lamination
@@ -213,6 +210,7 @@ def test_SlotMulti_sym():
     # opened in Gmsh
 
 
+@pytest.mark.MachineUD
 def test_MachineUD():
     """Figure 12: Check that you can plot a machine with 4 laminations"""
     machine = MachineUD()
@@ -233,7 +231,8 @@ def test_MachineUD():
     lam1.slot = SlotW22(
         Zs=12, W0=2 * pi / 12 * 0.75, W2=2 * pi / 12 * 0.75, H0=0, H2=W1 * 0.65
     )
-    lam1.winding = WindingCW2LT(qs=3, p=3)
+    lam1.winding = WindingUD(qs=3, p=3)
+    lam1.winding.init_as_CW2LT()
     # Outer rotor
     lam2 = LamSlot(
         Rext=lam1.Rint - A1, Rint=lam1.Rint - A1 - W2, is_internal=True, is_stator=False
@@ -254,7 +253,8 @@ def test_MachineUD():
         Rext=lam3.Rint - A3, Rint=lam3.Rint - A3 - W4, is_internal=True, is_stator=True
     )
     lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
-    lam4.winding = WindingCW2LT(qs=3, p=3)
+    lam4.winding = WindingUD(qs=3, p=3)
+    lam4.winding.init_as_CW2LT()
     # Machine definition
     machine.lam_list = [lam1, lam2, lam3, lam4]
 
@@ -273,47 +273,6 @@ def test_MachineUD():
     fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.png"))
     fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.svg"), format="svg")
     assert len(fig.axes[0].patches) == 57
-
-    """Check that comp_connection_mat can raise a WindingT1DefMsError"""
-
-    lam4.winding = WindingCW2LT(qs=16, p=3)
-    with pytest.raises(WindingT1DefMsError) as context:
-        lam4.winding.comp_connection_mat(Zs=10)
-
-    """Check that comp_connection_mat can raise a WindingError"""
-    winding = WindingCW2LT(qs=3, p=3)
-
-    with pytest.raises(WindingError) as context:
-        winding.comp_connection_mat(Zs=None)
-
-    lam4.winding = WindingCW2LT(qs=3, p=3)
-    lam4.slot = None
-    with pytest.raises(WindingError) as context:
-        lam4.winding.comp_connection_mat(Zs=None)
-
-    # FOR WindingCW1L comp_connection_mat
-
-    """Check that comp_connection_mat can raise a WindingT2DefNtError"""
-
-    lam4.winding = WindingCW1L(qs=2, p=3)
-    lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
-    with pytest.raises(WindingT2DefNtError) as context:
-        lam4.winding.comp_connection_mat(Zs=17)
-
-    lam4.winding = WindingCW1L(qs=2, p=3)
-    lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
-    lam4.winding.comp_connection_mat(Zs=None)
-
-    """Check that comp_connection_mat can raise a WindingError"""
-
-    lam4.winding = WindingCW1L(qs=3, p=3)
-    lam4.slot = None
-    with pytest.raises(WindingError) as context:
-        lam4.winding.comp_connection_mat(Zs=None)
-
-    winding = WindingCW1L(qs=3, p=3)
-    with pytest.raises(WindingError) as context:
-        winding.comp_connection_mat(Zs=None)
 
 
 def test_SlotMulti_rotor():
@@ -392,6 +351,7 @@ def test_SlotMulti_stator():
     assert len(fig.axes[0].patches) == 2
 
 
+@pytest.mark.SlotUD
 def test_SlotUD():
     """Figure 14: User Defined slot "snowflake" """
 
@@ -407,7 +367,8 @@ def test_SlotUD():
     machine.stator.slot = SlotW21(
         Zs=36, W0=7e-3, H0=10e-3, H1=0, H2=70e-3, W1=30e-3, W2=0.1e-3
     )
-    machine.stator.winding = WindingDW2L(qs=3, p=3, coil_pitch=5)
+    machine.stator.winding = WindingUD(qs=3, p=3, coil_pitch=5)
+    machine.stator.winding.init_as_DWL(nlay=2)
 
     # Rotor definition
     machine.rotor = LamSlot(Rint=0.02, Rext=Rrotor, is_internal=True, is_stator=False)
@@ -460,7 +421,7 @@ def test_WindingUD():
         VentilationPolar(Zh=6, Alpha0=pi / 6, W1=pi / 6, D0=100e-3, H0=0.3)
     ]
     machine.rotor.slot = SlotW12(Zs=6, R2=35e-3, H0=20e-3, R1=17e-3, H1=130e-3)
-    machine.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+    machine.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
     machine.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
     # Stator definion
     machine.stator = LamSlotWind(
@@ -474,7 +435,8 @@ def test_WindingUD():
     )
     machine.stator.slot = SlotW12(Zs=18, R2=25e-3, H0=30e-3, R1=0, H1=150e-3)
     machine.stator.winding.Lewout = 60e-3
-    machine.stator.winding = WindingDW2L(qs=3, p=3)
+    machine.stator.winding = WindingUD(qs=3, p=3)
+    machine.stator.winding.init_as_DWL(nlay=2)
     machine.stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
     # Shaft & frame
@@ -529,12 +491,15 @@ def test_BoreFlower():
     assert len(fig.axes[0].patches) == 42
 
 
-@pytest.mark.FEMM
-@pytest.mark.long
+@pytest.mark.SPMSM
+@pytest.mark.MagFEMM
+@pytest.mark.long_5s
+@pytest.mark.SingleOP
+@pytest.mark.periodicity
 def test_ecc_FEMM():
     """Figure 19: transfrom_list in FEMM for eccentricities"""
     SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
-    simu = Simu1(name="ICEM_2020", machine=SPMSM_015)
+    simu = Simu1(name="test_ICEM_2020_ecc", machine=SPMSM_015)
     simu.machine.name = "fig_19_Transform_list"
 
     # Modify stator Rext to get more convincing translation
@@ -563,8 +528,7 @@ def test_ecc_FEMM():
         is_sliding_band=False,  # Ecc => No sliding band
         is_periodicity_a=False,
         is_mmfs=False,
-        is_get_mesh=True,
-        is_save_FEA=True,
+        is_get_meshsolution=True,
     )
     simu.force = None
     simu.struct = None
@@ -598,8 +562,10 @@ def test_ecc_FEMM():
 
 
 @pytest.mark.skip
-@pytest.mark.long
-@pytest.mark.DEAP
+@pytest.mark.long_5s
+@pytest.mark.SPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_Optimization_problem():
     """
     Figure19: Machine topology before optimization
@@ -671,7 +637,7 @@ def test_Optimization_problem():
     )
 
     # Definition of the simulation
-    simu = Simu1(name="Default simulation", machine=SPMSM_001)
+    simu = Simu1(name="test_Optimization_problem", machine=SPMSM_001)
 
     simu.input = InputCurrent(
         Is=Is,
@@ -835,3 +801,7 @@ def test_Optimization_problem():
     fig.savefig(
         join(save_path, "fig_21_Topology_to_minimize_torque_ripple.svg"), format="svg"
     )
+
+
+if __name__ == "__main__":
+    test_FEMM_sym()

@@ -15,26 +15,9 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .VarSimu import VarSimu
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Simulation.VarLoad.get_elec_datakeeper import get_elec_datakeeper
-except ImportError as error:
-    get_elec_datakeeper = error
-
-try:
-    from ..Methods.Simulation.VarLoad.get_mag_datakeeper import get_mag_datakeeper
-except ImportError as error:
-    get_mag_datakeeper = error
-
-try:
-    from ..Methods.Simulation.VarLoad.get_force_datakeeper import get_force_datakeeper
-except ImportError as error:
-    get_force_datakeeper = error
-
-
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
+from .VarSimu import VarSimu
 from .Post import Post
 
 
@@ -42,44 +25,8 @@ class VarLoad(VarSimu):
     """Abstract class to generate multi-simulation by changing the operating point"""
 
     VERSION = 1
+    NAME = "Variable Load"
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.VarLoad.get_elec_datakeeper
-    if isinstance(get_elec_datakeeper, ImportError):
-        get_elec_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoad method get_elec_datakeeper: "
-                    + str(get_elec_datakeeper)
-                )
-            )
-        )
-    else:
-        get_elec_datakeeper = get_elec_datakeeper
-    # cf Methods.Simulation.VarLoad.get_mag_datakeeper
-    if isinstance(get_mag_datakeeper, ImportError):
-        get_mag_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoad method get_mag_datakeeper: "
-                    + str(get_mag_datakeeper)
-                )
-            )
-        )
-    else:
-        get_mag_datakeeper = get_mag_datakeeper
-    # cf Methods.Simulation.VarLoad.get_force_datakeeper
-    if isinstance(get_force_datakeeper, ImportError):
-        get_force_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoad method get_force_datakeeper: "
-                    + str(get_force_datakeeper)
-                )
-            )
-        )
-    else:
-        get_force_datakeeper = get_force_datakeeper
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -93,7 +40,7 @@ class VarLoad(VarSimu):
         datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
-        ref_simu_index=None,
+        var_simu=None,
         nb_simu=0,
         is_reuse_femm_file=True,
         postproc_list=-1,
@@ -127,8 +74,8 @@ class VarLoad(VarSimu):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
                 stop_if_error = init_dict["stop_if_error"]
-            if "ref_simu_index" in list(init_dict.keys()):
-                ref_simu_index = init_dict["ref_simu_index"]
+            if "var_simu" in list(init_dict.keys()):
+                var_simu = init_dict["var_simu"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
             if "is_reuse_femm_file" in list(init_dict.keys()):
@@ -147,7 +94,7 @@ class VarLoad(VarSimu):
             datakeeper_list=datakeeper_list,
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
-            ref_simu_index=ref_simu_index,
+            var_simu=var_simu,
             nb_simu=nb_simu,
             is_reuse_femm_file=is_reuse_femm_file,
             postproc_list=postproc_list,
@@ -196,11 +143,15 @@ class VarLoad(VarSimu):
         S += super(VarLoad, self).__sizeof__()
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from VarSimu
-        VarLoad_dict = super(VarLoad, self).as_dict()
+        VarLoad_dict = super(VarLoad, self).as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VarLoad_dict["__class__"] = "VarLoad"

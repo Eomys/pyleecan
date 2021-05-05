@@ -5,8 +5,7 @@ from ....GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
     SMachineDimension,
 )
 from ....GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
-from ....GUI.Dialog.DMachineSetup.SWindPat.SWindPat import SWindPat
-from ....GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
+from ....GUI.Dialog.DMachineSetup.SWinding.SWinding import SWinding
 from ....GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
 from ....GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
 from ....GUI.Dialog.DMachineSetup.SWPole.SWPole import SWPole
@@ -29,15 +28,14 @@ from ....Classes.MachineWRSM import MachineWRSM
 from ....Classes.MachineSRM import MachineSRM
 from ....Classes.SlotM10 import SlotM10
 from ....Classes.HoleM50 import HoleM50
-from ....Classes.WindingDW2L import WindingDW2L
-from ....Classes.WindingCW2LT import WindingCW2LT
+from ....Classes.Winding import Winding
 from ....Classes.WindingSC import WindingSC
 from ....GUI.Resources import pixmap_dict
 
 # Steps needed to setup a LamSlotWind
-LSW_step = [SLamParam, SWSlot, SWindPat, SWindParam, SWindCond]
+LSW_step = [SLamParam, SWSlot, SWinding, SWindCond]
 # Steps needed to setup a LamSlotWind for the rotor of a WRSM
-LP_step = [SLamParam, SWPole, SWindPat, SWindParam, SWindCond]
+LP_step = [SLamParam, SWPole, SWinding, SWindCond]
 # Steps needed to setup a LamSquirrelCage
 LSC_step = [SLamParam, SWSlot, SBar]
 # Steps needed to setup a LamHole
@@ -50,9 +48,9 @@ LSM_step = [SLamParam, SMSlot]
 S_step = [SMachineType, SMachineDimension]
 
 # Defaut machine for initialization
-machine1 = MachineSCIM()
+machine1 = MachineSCIM(frame=None, shaft=None)
 machine1.stator = LamSlotWind()
-machine1.stator.winding = WindingDW2L()
+machine1.stator.winding = Winding()
 machine1.rotor = LamSquirrelCage()
 machine1.rotor.winding = WindingSC()
 machine1._set_None()  # Empty machine
@@ -60,19 +58,19 @@ machine1.type_machine = 1
 machine1.stator.is_stator = True
 machine1.rotor.is_stator = False
 
-machine4 = MachineDFIM()
+machine4 = MachineDFIM(frame=None, shaft=None)
 machine4.stator = LamSlotWind()
-machine4.stator.winding = WindingDW2L()
+machine4.stator.winding = Winding()
 machine4.rotor = LamSlotWind()
-machine4.rotor.winding = WindingDW2L()
+machine4.rotor.winding = Winding()
 machine4._set_None()  # Empty machine
 machine4.type_machine = 4
 machine4.stator.is_stator = True
 machine4.rotor.is_stator = False
 
-machine5 = MachineSyRM()
+machine5 = MachineSyRM(frame=None, shaft=None)
 machine5.stator = LamSlotWind()
-machine5.stator.winding = WindingDW2L()
+machine5.stator.winding = Winding()
 machine5.rotor = LamHole()
 machine5.rotor.hole = list()
 machine5.rotor.hole.append(HoleM50())
@@ -82,9 +80,9 @@ machine5.type_machine = 5
 machine5.stator.is_stator = True
 machine5.rotor.is_stator = False
 
-machine7 = MachineSIPMSM()
+machine7 = MachineSIPMSM(frame=None, shaft=None)
 machine7.stator = LamSlotWind()
-machine7.stator.winding = WindingDW2L()
+machine7.stator.winding = Winding()
 machine7.rotor = LamSlotMag()
 machine7.rotor.slot = SlotM10()
 machine7._set_None()  # Empty machine
@@ -92,9 +90,9 @@ machine7.type_machine = 7
 machine7.stator.is_stator = True
 machine7.rotor.is_stator = False
 
-machine8 = MachineIPMSM()
+machine8 = MachineIPMSM(frame=None, shaft=None)
 machine8.stator = LamSlotWind()
-machine8.stator.winding = WindingDW2L()
+machine8.stator.winding = Winding()
 machine8.rotor = LamHole()
 machine8.rotor.hole = list()
 machine8.rotor.hole.append(HoleM50())
@@ -103,19 +101,19 @@ machine8.type_machine = 8
 machine8.stator.is_stator = True
 machine8.rotor.is_stator = False
 
-machine9 = MachineWRSM()
+machine9 = MachineWRSM(frame=None, shaft=None)
 machine9.stator = LamSlotWind()
-machine9.stator.winding = WindingDW2L()
+machine9.stator.winding = Winding()
 machine9.rotor = LamSlotWind()
-machine9.rotor.winding = WindingCW2LT()
+machine9.rotor.winding = Winding()
 machine9._set_None()  # Empty machine
 machine9.type_machine = 9
 machine9.stator.is_stator = True
 machine9.rotor.is_stator = False
 
-machine10 = MachineSRM()
+machine10 = MachineSRM(frame=None, shaft=None)
 machine10.stator = LamSlotWind()
-machine10.stator.winding = WindingDW2L()
+machine10.stator.winding = Winding()
 machine10.rotor = LamSlot()
 machine10._set_None()  # Empty machine
 machine10.type_machine = 10

@@ -227,6 +227,7 @@ class LamHole(Lamination):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        yoke_notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -271,6 +272,8 @@ class LamHole(Lamination):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
         # Set the properties (value check and convertion are done in setter)
         self.hole = hole
         self.bore = bore
@@ -287,6 +290,7 @@ class LamHole(Lamination):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            yoke_notch=yoke_notch,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
@@ -369,24 +373,28 @@ class LamHole(Lamination):
         S += getsizeof(self.bore)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Lamination
-        LamHole_dict = super(LamHole, self).as_dict()
+        LamHole_dict = super(LamHole, self).as_dict(**kwargs)
         if self.hole is None:
             LamHole_dict["hole"] = None
         else:
             LamHole_dict["hole"] = list()
             for obj in self.hole:
                 if obj is not None:
-                    LamHole_dict["hole"].append(obj.as_dict())
+                    LamHole_dict["hole"].append(obj.as_dict(**kwargs))
                 else:
                     LamHole_dict["hole"].append(None)
         if self.bore is None:
             LamHole_dict["bore"] = None
         else:
-            LamHole_dict["bore"] = self.bore.as_dict()
+            LamHole_dict["bore"] = self.bore.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamHole_dict["__class__"] = "LamHole"

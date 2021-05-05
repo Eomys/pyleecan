@@ -18,11 +18,21 @@ def get_data_from_str(self, data_str):
     # Get Data object names
     phys = getattr(self, data_str.split(".")[0])
     if "get_" in data_str.split(".")[1]:  # get method
-        data = getattr(phys, data_str.split(".")[1])()
+        if "[" in data_str.split(".")[1]:  # dict
+            d = getattr(phys, data_str.split(".")[1].split("[")[0])()
+            data = d[data_str.split("[")[1].rstrip("]")]
+        else:
+            data = getattr(phys, data_str.split(".")[1])()
     elif "[" in data_str.split(".")[1]:  # dict
         d = getattr(phys, data_str.split(".")[1].split("[")[0])
         data = d[data_str.split(".")[1].split("[")[1].rstrip("]")]
     else:
         data = getattr(phys, data_str.split(".")[1])
 
-    return data
+    # If dict with no specified key -> take first key
+    if isinstance(data, dict):
+        data2 = data[list(data.keys())[0]]
+    else:
+        data2 = data
+
+    return data2

@@ -19,7 +19,6 @@ from Tests.GUI import gui_option  # Set unit to m
 import pytest
 
 
-@pytest.mark.GUI
 class TestPHoleM57(object):
     """Test that the widget PHoleM57 behave like it should"""
 

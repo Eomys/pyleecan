@@ -288,11 +288,15 @@ class StructElmer(Structural):
         S += getsizeof(self.include_magnets)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         # Get the properties inherited from Structural
-        StructElmer_dict = super(StructElmer, self).as_dict()
+        StructElmer_dict = super(StructElmer, self).as_dict(**kwargs)
         StructElmer_dict["Kmesh_fineness"] = self.Kmesh_fineness
         StructElmer_dict["path_name"] = self.path_name
         StructElmer_dict["FEA_dict_enforced"] = (

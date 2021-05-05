@@ -28,9 +28,9 @@ except ImportError as error:
     get_connectivity = error
 
 try:
-    from ..Methods.Mesh.CellMat.get_point2cell import get_point2cell
+    from ..Methods.Mesh.CellMat.get_node2cell import get_node2cell
 except ImportError as error:
-    get_point2cell = error
+    get_node2cell = error
 
 try:
     from ..Methods.Mesh.CellMat.is_exist import is_exist
@@ -70,17 +70,17 @@ class CellMat(FrozenClass):
         )
     else:
         get_connectivity = get_connectivity
-    # cf Methods.Mesh.CellMat.get_point2cell
-    if isinstance(get_point2cell, ImportError):
-        get_point2cell = property(
+    # cf Methods.Mesh.CellMat.get_node2cell
+    if isinstance(get_node2cell, ImportError):
+        get_node2cell = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use CellMat method get_point2cell: " + str(get_point2cell)
+                    "Can't use CellMat method get_node2cell: " + str(get_node2cell)
                 )
             )
         )
     else:
-        get_point2cell = get_point2cell
+        get_node2cell = get_node2cell
     # cf Methods.Mesh.CellMat.is_exist
     if isinstance(is_exist, ImportError):
         is_exist = property(
@@ -100,7 +100,7 @@ class CellMat(FrozenClass):
         self,
         connectivity=[],
         nb_cell=0,
-        nb_pt_per_cell=0,
+        nb_node_per_cell=0,
         indice=[],
         interpolation=-1,
         init_dict=None,
@@ -125,8 +125,8 @@ class CellMat(FrozenClass):
                 connectivity = init_dict["connectivity"]
             if "nb_cell" in list(init_dict.keys()):
                 nb_cell = init_dict["nb_cell"]
-            if "nb_pt_per_cell" in list(init_dict.keys()):
-                nb_pt_per_cell = init_dict["nb_pt_per_cell"]
+            if "nb_node_per_cell" in list(init_dict.keys()):
+                nb_node_per_cell = init_dict["nb_node_per_cell"]
             if "indice" in list(init_dict.keys()):
                 indice = init_dict["indice"]
             if "interpolation" in list(init_dict.keys()):
@@ -135,7 +135,7 @@ class CellMat(FrozenClass):
         self.parent = None
         self.connectivity = connectivity
         self.nb_cell = nb_cell
-        self.nb_pt_per_cell = nb_pt_per_cell
+        self.nb_node_per_cell = nb_node_per_cell
         self.indice = indice
         self.interpolation = interpolation
 
@@ -158,7 +158,7 @@ class CellMat(FrozenClass):
             + linesep
         )
         CellMat_str += "nb_cell = " + str(self.nb_cell) + linesep
-        CellMat_str += "nb_pt_per_cell = " + str(self.nb_pt_per_cell) + linesep
+        CellMat_str += "nb_node_per_cell = " + str(self.nb_node_per_cell) + linesep
         CellMat_str += (
             "indice = "
             + linesep
@@ -186,7 +186,7 @@ class CellMat(FrozenClass):
             return False
         if other.nb_cell != self.nb_cell:
             return False
-        if other.nb_pt_per_cell != self.nb_pt_per_cell:
+        if other.nb_node_per_cell != self.nb_node_per_cell:
             return False
         if not array_equal(other.indice, self.indice):
             return False
@@ -204,8 +204,8 @@ class CellMat(FrozenClass):
             diff_list.append(name + ".connectivity")
         if other._nb_cell != self._nb_cell:
             diff_list.append(name + ".nb_cell")
-        if other._nb_pt_per_cell != self._nb_pt_per_cell:
-            diff_list.append(name + ".nb_pt_per_cell")
+        if other._nb_node_per_cell != self._nb_node_per_cell:
+            diff_list.append(name + ".nb_node_per_cell")
         if not array_equal(other.indice, self.indice):
             diff_list.append(name + ".indice")
         if (other.interpolation is None and self.interpolation is not None) or (
@@ -226,13 +226,17 @@ class CellMat(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.connectivity)
         S += getsizeof(self.nb_cell)
-        S += getsizeof(self.nb_pt_per_cell)
+        S += getsizeof(self.nb_node_per_cell)
         S += getsizeof(self.indice)
         S += getsizeof(self.interpolation)
         return S
 
-    def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
 
         CellMat_dict = dict()
         if self.connectivity is None:
@@ -240,7 +244,7 @@ class CellMat(FrozenClass):
         else:
             CellMat_dict["connectivity"] = self.connectivity.tolist()
         CellMat_dict["nb_cell"] = self.nb_cell
-        CellMat_dict["nb_pt_per_cell"] = self.nb_pt_per_cell
+        CellMat_dict["nb_node_per_cell"] = self.nb_node_per_cell
         if self.indice is None:
             CellMat_dict["indice"] = None
         else:
@@ -248,7 +252,7 @@ class CellMat(FrozenClass):
         if self.interpolation is None:
             CellMat_dict["interpolation"] = None
         else:
-            CellMat_dict["interpolation"] = self.interpolation.as_dict()
+            CellMat_dict["interpolation"] = self.interpolation.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         CellMat_dict["__class__"] = "CellMat"
         return CellMat_dict
@@ -258,7 +262,7 @@ class CellMat(FrozenClass):
 
         self.connectivity = None
         self.nb_cell = None
-        self.nb_pt_per_cell = None
+        self.nb_node_per_cell = None
         self.indice = None
         if self.interpolation is not None:
             self.interpolation._set_None()
@@ -306,19 +310,19 @@ class CellMat(FrozenClass):
         """,
     )
 
-    def _get_nb_pt_per_cell(self):
-        """getter of nb_pt_per_cell"""
-        return self._nb_pt_per_cell
+    def _get_nb_node_per_cell(self):
+        """getter of nb_node_per_cell"""
+        return self._nb_node_per_cell
 
-    def _set_nb_pt_per_cell(self, value):
-        """setter of nb_pt_per_cell"""
-        check_var("nb_pt_per_cell", value, "int")
-        self._nb_pt_per_cell = value
+    def _set_nb_node_per_cell(self, value):
+        """setter of nb_node_per_cell"""
+        check_var("nb_node_per_cell", value, "int")
+        self._nb_node_per_cell = value
 
-    nb_pt_per_cell = property(
-        fget=_get_nb_pt_per_cell,
-        fset=_set_nb_pt_per_cell,
-        doc=u"""Define the number of node per element
+    nb_node_per_cell = property(
+        fget=_get_nb_node_per_cell,
+        fset=_set_nb_node_per_cell,
+        doc=u"""Define the number of node per cell
 
         :Type: int
         """,

@@ -2,6 +2,7 @@
 
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
+import matplotlib.pyplot as plt
 
 from ....Functions.Winding.find_wind_phase_color import find_wind_phase_color
 from ....Functions.Winding.gen_phase_list import gen_name
@@ -26,6 +27,7 @@ def plot(
     is_edge_only=False,
     is_display=True,
     is_show_fig=True,
+    save_path=None,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -51,6 +53,8 @@ def plot(
         False to return the patches
     is_show_fig : bool
         To call show at the end of the method
+    save_path : str
+        full path including folder, name and extension of the file to save if save_path is not None
     Returns
     -------
     patches : list
@@ -66,13 +70,13 @@ def plot(
 
     patches = list()
     # getting the number of phases and winding connection matrix
-    if self.winding is not None and not type(self.winding) is Winding:
+    if self.winding is not None:
         if isinstance(self.winding, WindingSC):  # plot only one phase for WindingSC
             wind_mat = None
             qs = 1
         else:
             try:
-                wind_mat = self.winding.comp_connection_mat(self.get_Zs())
+                wind_mat = self.winding.get_connection_mat(self.get_Zs())
                 qs = self.winding.qs
             except:
                 wind_mat = None
@@ -99,7 +103,7 @@ def plot(
         for patch in patches:
             axes.add_patch(patch)
         # Axis Setup
-        axis("equal")
+        axes.axis("equal")
 
         # The Lamination is centered in the figure
         Lim = self.Rext * 1.5
@@ -125,7 +129,7 @@ def plot(
                 if isinstance(self.winding, WindingSC):
                     patch_leg.append(Patch(color=PHASE_COLORS[0]))
                     label_leg.append(prefix + "Bar")
-                elif self.winding is not None and not type(self.winding) is Winding:
+                elif self.winding is not None:
                     phase_name = [prefix + n for n in gen_name(qs, is_add_phase=True)]
                     for ii in range(qs):
                         if not phase_name[ii] in label_leg:
@@ -134,6 +138,9 @@ def plot(
                             patch_leg.append(Patch(color=PHASE_COLORS[index]))
                             label_leg.append(phase_name[ii])
             legend(patch_leg, label_leg)
+        if save_path is not None:
+            fig.savefig(save_path)
+            plt.close()
         if is_show_fig:
             fig.show()
     else:

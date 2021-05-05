@@ -56,6 +56,55 @@ def generate_compare(gen_dict, class_dict):
                 + "):\n"
             )
             compare_str += TAB3 + "diff_list.append(name+'." + prop["name"] + "')\n"
+        elif prop["type"] in [None, ""]:
+            compare_str += (
+                TAB2
+                + "if (other."
+                + prop["name"]
+                + " is None and self."
+                + prop["name"]
+                + " is not None) or (other."
+                + prop["name"]
+                + " is not None and self."
+                + prop["name"]
+                + " is None):\n"
+            )
+            compare_str += TAB3 + "diff_list.append(name+'." + prop["name"] + "')\n"
+            compare_str += TAB2 + "elif self." + prop["name"] + " is None:\n"
+            compare_str += TAB3 + "pass\n"
+            compare_str += (
+                TAB2
+                + "elif isinstance(self."
+                + prop["name"]
+                + ", np.ndarray) and not np.array_equal(other."
+                + prop["name"]
+                + ", self."
+                + prop["name"]
+                + "):\n"
+            )
+            compare_str += TAB3 + "diff_list.append(name+'." + prop["name"] + "')\n"
+            compare_str += (
+                TAB2 + "elif hasattr(self." + prop["name"] + ", 'compare'):\n"
+            )
+            compare_str += (
+                TAB3
+                + "diff_list.extend(self."
+                + prop["name"]
+                + ".compare(other."
+                + prop["name"]
+                + ",name=name+'."
+                + prop["name"]
+                + "'))\n"
+            )
+            compare_str += (
+                TAB2
+                + "elif other._"
+                + prop["name"]
+                + " != self._"
+                + prop["name"]
+                + ":\n"
+            )
+            compare_str += TAB3 + "diff_list.append(name+'." + prop["name"] + "')\n"
         elif prop["type"] == "[ndarray]":
             compare_str += (
                 TAB2
@@ -237,6 +286,34 @@ def generate_compare(gen_dict, class_dict):
                 + prop["name"]
                 + "'))\n"
             )
+        elif "." in prop["type"] and "SciDataTool" not in prop["type"]:
+            # External type
+            compare_str += (
+                TAB2
+                + "if (other."
+                + prop["name"]
+                + " is None and self."
+                + prop["name"]
+                + " is not None) or (other."
+                + prop["name"]
+                + " is not None and self."
+                + prop["name"]
+                + " is None):\n"
+            )
+            compare_str += (
+                TAB3 + "diff_list.append(name+'." + prop["name"] + " None mismatch')\n"
+            )
+            compare_str += (
+                TAB2
+                + "elif self."
+                + prop["name"]
+                + " is not None and self."
+                + prop["name"]
+                + " != other."
+                + prop["name"]
+                + ":\n"
+            )
+            compare_str += TAB3 + "diff_list.append(name+'." + prop["name"] + "')\n"
         else:  # pyleecan type
             compare_str += (
                 TAB2
