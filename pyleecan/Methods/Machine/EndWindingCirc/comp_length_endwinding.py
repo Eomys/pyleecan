@@ -37,7 +37,7 @@ def comp_length_endwinding(self):
     p = self.parent.p
 
     # get the coil pitch (with some fall backs), first from the user definition
-    # TODO utiliue swat_em coil pitch calc.
+    # TODO utilize swat_em coil pitch calc.
     coil_pitch = self.coil_pitch
     if coil_pitch is None:
         # try to get coil_pitch of winding
@@ -49,7 +49,9 @@ def comp_length_endwinding(self):
                 + "Using a coil pitch of one pole pitch for EW length calculation."
             )
 
-    # calculate the length as a half circle
-    end_wind_length = pi * Rmid * coil_pitch / Zs / 2
+    # calculate the EW length as a quarter circle base on the circumferential length
+    # TODO do better aprox. based on tooth width / slot width for tooth coil winding
+    circ_length = 2 * pi * Rmid * coil_pitch / Zs
+    end_wind_length = pi * circ_length / 4
 
     return end_wind_length
