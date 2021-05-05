@@ -67,24 +67,25 @@ class Test_Winding_plot(object):
         test_obj.winding = WindingUD(p=3, qs=3)
         test_obj.winding.init_as_CW1L()
 
-        test_obj.plot(is_show_fig=False)
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Wind_CW1L_lam.png"))
+        test_obj.plot(
+            is_show_fig=False, save_path=join(save_path, "test_Wind_CW1L_lam.png")
+        )
 
-        test_obj.plot_winding(is_show_fig=False)
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Wind_CW1L_wind.png"))
+        test_obj.plot_winding(
+            is_show_fig=False, save_path=join(save_path, "test_Wind_CW1L_wind.png")
+        )
 
         test_obj.slot.Zs = 20
         test_obj.winding.qs = 5
+        
         test_obj.winding.init_as_CW1L()
-        test_obj.plot(is_show_fig=False)
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Wind_CW1L_lam2.png"))
+        test_obj.plot(
+            is_show_fig=False, save_path=join(save_path, "test_Wind_CW1L_lam2.png")
+        )
 
-        test_obj.plot_winding(is_show_fig=False)
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Wind_CW1L_wind2.png"))
+        test_obj.plot_winding(
+            is_show_fig=False, save_path=join(save_path, "test_Wind_CW1L_wind2.png")
+        )
 
     def test_type_wind_DW2L(self):
         """Test Winding matrix plot for type_winding DW2L"""
@@ -199,3 +200,8 @@ class Test_Winding_plot(object):
         stator.plot_mmf_unit(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_unit_mmf.png"))
+
+
+if __name__ == "__main__":
+    a = Test_Winding_plot()
+    a.test_type_wind_CW1L()

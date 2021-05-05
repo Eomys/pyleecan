@@ -435,7 +435,7 @@ def test_WindingUD():
     )
     machine.stator.slot = SlotW12(Zs=18, R2=25e-3, H0=30e-3, R1=0, H1=150e-3)
     machine.stator.winding.Lewout = 60e-3
-    machine.stator.winding = WindingUD(qs=3, p=3)
+    machine.stator.winding = WindingUD(qs=3, p=3, coil_pitch=1)
     machine.stator.winding.init_as_DWL(nlay=2)
     machine.stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
@@ -804,4 +804,4 @@ def test_Optimization_problem():
 
 
 if __name__ == "__main__":
-    test_FEMM_sym()
+    test_WindingUD()

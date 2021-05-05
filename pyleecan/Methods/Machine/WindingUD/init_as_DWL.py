@@ -100,6 +100,9 @@ def init_as_DWL(self, Zs=None, nlay=1):
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
 
     self.wind_mat = wind_mat
+    # Matrix changed, compute again periodicity
+    self.per_a = None
+    self.is_aper_a = None
 
 
 class WindingDefMsError(WindingError):
