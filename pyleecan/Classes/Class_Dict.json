@@ -12689,9 +12689,9 @@
                 "value": 2
             },
             {
-                "desc": "Winding connection : 0 star (Y), 1 triangle (delta)",
+                "desc": "Winding connection : 0 star (Y), 1 triangle (delta), -1 no connection",
                 "max": "1",
-                "min": "0",
+                "min": "-1",
                 "name": "type_connection",
                 "type": "int",
                 "unit": "-",
@@ -12768,6 +12768,24 @@
                 "type": "bool",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "1 to reverse the layers (rad from 0 to Nrad-1 => Nrad-1 to 0)",
+                "max": "",
+                "min": "",
+                "name": "is_reverse_layer",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "1 to change the layer from radial to tangential or tangential to radial",
+                "max": "",
+                "min": "",
+                "name": "is_change_layer",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
             }
         ]
     },

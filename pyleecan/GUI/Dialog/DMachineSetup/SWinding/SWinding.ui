@@ -219,6 +219,20 @@
             </widget>
            </item>
            <item>
+            <widget class="QCheckBox" name="is_reverse_layer">
+             <property name="text">
+              <string>Reversed layer</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="is_change_layer">
+             <property name="text">
+              <string>Change layer</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="b_edit_wind_mat">
              <property name="text">
               <string>Edit Winding Matrix</string>

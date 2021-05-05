@@ -1,4 +1,8 @@
-from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
+from ....Functions.Winding.reverse_wind_mat import (
+    reverse_wind_mat,
+    reverse_layer,
+    change_layer,
+)
 from ....Functions.Winding.shift_wind_mat import shift_wind_mat
 
 
@@ -31,5 +35,8 @@ def get_connection_mat(self, Zs=None, p=None):
         wind_mat = reverse_wind_mat(wind_mat)
     if self.Nslot_shift_wind > 0:
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
-
+    if self.is_reverse_layer:
+        wind_mat = reverse_layer(wind_mat)
+    if self.is_change_layer:
+        wind_mat = change_layer(wind_mat)
     return wind_mat

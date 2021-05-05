@@ -99,9 +99,24 @@ class SWinding(Gen_SWinding, QWidget):
             self.is_reverse.setCheckState(Qt.Checked)
         else:
             self.is_reverse.setCheckState(Qt.Unchecked)
+        # Nslot_shift_wind
         if self.obj.winding.Nslot_shift_wind is None:
             self.obj.winding.Nslot_shift_wind = 0
         self.si_Nslot.setValue(self.obj.winding.Nslot_shift_wind)
+        # is_reverse_layer
+        if self.obj.winding.is_reverse_layer is None:
+            self.obj.winding.is_reverse_layer = False
+        if self.obj.winding.is_reverse_layer:
+            self.is_reverse_layer.setCheckState(Qt.Checked)
+        else:
+            self.is_reverse_layer.setCheckState(Qt.Unchecked)
+        # is_change_layer
+        if self.obj.winding.is_change_layer is None:
+            self.obj.winding.is_change_layer = False
+        if self.obj.winding.is_change_layer:
+            self.is_change_layer.setCheckState(Qt.Checked)
+        else:
+            self.is_change_layer.setCheckState(Qt.Unchecked)
 
         # Update the GUI
         self.update_graph()
@@ -112,6 +127,8 @@ class SWinding(Gen_SWinding, QWidget):
         self.si_Npcp.editingFinished.connect(self.set_Npcp)
         self.si_Nslot.valueChanged.connect(self.set_Nslot)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
+        self.is_reverse_layer.stateChanged.connect(self.set_is_reverse_layer)
+        self.is_change_layer.stateChanged.connect(self.set_is_change_layer)
 
         # self.b_edit_wind_mat.clicked.connect(self.s_edit_wind_mat)
         # self.b_import_csv.clicked.connect(self.s_import_csv)
@@ -234,8 +251,44 @@ class SWinding(Gen_SWinding, QWidget):
         """
 
         value = self.is_reverse.isChecked()
-        self.update_graph()
         self.obj.winding.is_reverse_wind = value
+        self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_is_reverse_layer(self, value):
+        """Signal to update the value of is_reverse_layer according to the
+        widget
+
+        Parameters
+        ----------
+        self : SWinding
+            A SWinding object
+        value :
+            New value of is_reverse_layer
+        """
+
+        value = self.is_reverse_layer.isChecked()
+        self.obj.winding.is_reverse_layer = value
+        self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_is_change_layer(self, value):
+        """Signal to update the value of is_change_layer according to the
+        widget
+
+        Parameters
+        ----------
+        self : SWinding
+            A SWinding object
+        value :
+            New value of is_change_layer
+        """
+
+        value = self.is_change_layer.isChecked()
+        self.obj.winding.is_change_layer = value
+        self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
