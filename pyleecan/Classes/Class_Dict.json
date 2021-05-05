@@ -12671,10 +12671,6 @@
             }
         ],
         "daughters": [
-            "WindingCW",
-            "WindingCW1L",
-            "WindingCW2LR",
-            "WindingCW2LT",
             "WindingSC",
             "WindingUD"
         ],
@@ -12833,99 +12829,6 @@
                 "value": ""
             }
         ]
-    },
-    "WindingCW": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "WindingCW1L",
-            "WindingCW2LR",
-            "WindingCW2LT"
-        ],
-        "desc": "Abstract non-overlapping 'concentrated' tooth winding",
-        "is_internal": false,
-        "methods": [],
-        "mother": "Winding",
-        "name": "WindingCW",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW.csv",
-        "properties": []
-    },
-    "WindingCW1L": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"single layer concentrated\""
-            }
-        ],
-        "daughters": [],
-        "desc": "single layer non-overlapping 'concentrated' tooth winding 'alternate teeth wound'",
-        "is_internal": false,
-        "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
-        ],
-        "mother": "WindingCW",
-        "name": "WindingCW1L",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW1L.csv",
-        "properties": []
-    },
-    "WindingCW2LR": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"double layer concentrated (radial)\""
-            }
-        ],
-        "daughters": [],
-        "desc": "double layer non-overlapping \"concentrated\" tooth winding \"all teeth wound\", radial coil superposition",
-        "is_internal": false,
-        "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
-        ],
-        "mother": "WindingCW",
-        "name": "WindingCW2LR",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW2LR.csv",
-        "properties": []
-    },
-    "WindingCW2LT": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"double layer concentrated (orthoradial)\""
-            }
-        ],
-        "daughters": [],
-        "desc": "double layer non-overlapping \"concentrated\" tooth winding \"all teeth wound\", orthoradial coil superposition",
-        "is_internal": false,
-        "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
-        ],
-        "mother": "WindingCW",
-        "name": "WindingCW2LT",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW2LT.csv",
-        "properties": []
     },
     "WindingSC": {
         "constants": [
