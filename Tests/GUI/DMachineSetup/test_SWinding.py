@@ -1,21 +1,22 @@
 # -*- coding: utf-8 -*-
 
 import sys
+from os.path import join, isfile
 from random import uniform
 
-from PySide2 import QtWidgets
-from PySide2.QtCore import Qt
-from PySide2.QtTest import QTest
-
-from pyleecan.Classes.Winding import Winding
-from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.GUI.Dialog.DMachineSetup.SWinding.SWinding import SWinding
+import mock
+import pytest
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.Classes.MachineWRSM import MachineWRSM
 from pyleecan.Classes.SlotW22 import SlotW22
-
-import pytest
+from pyleecan.Classes.Winding import Winding
+from pyleecan.Classes.WindingUD import WindingUD
+from pyleecan.GUI.Dialog.DMachineSetup.SWinding.SWinding import SWinding
+from PySide2 import QtWidgets
+from PySide2.QtCore import Qt
+from PySide2.QtTest import QTest
+from Tests import save_gui_path
 
 
 class TestSWinding(object):
@@ -121,6 +122,27 @@ class TestSWinding(object):
         assert setup["widget"].out_Nperw.text() == "Nperw: 6"
         assert setup["widget"].out_Ncspc.text() == "Ncspc: 12"
         assert setup["widget"].out_Ntspc.text() == "Ntspc: 108"
+
+    def test_export_import(self, setup):
+        return_value = (
+            join(save_gui_path, "test_SWinding_export.csv"),
+            "CSV (*.csv)",
+        )
+
+        assert not isfile(return_value[0])
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+        ):
+            # To trigger the slot
+            setup["widget"].b_export.clicked.emit()
+
+        assert isfile(return_value[0])
+
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+        ):
+            # To trigger the slot
+            setup["widget"].b_import.clicked.emit()
 
     def test_set_is_reverse(self, setup):
         """Check that the Widget allow to update is_reverse_wind"""

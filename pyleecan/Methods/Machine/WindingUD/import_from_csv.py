@@ -46,7 +46,13 @@ def import_from_csv(self, file_path=None):
             wind_shape = (Nrad + 1, Ntan + 1, Zs + 1, qs)
 
         if self.parent is not None and self.parent.slot is not None:
-            assert self.parent.slot.Zs == Zs
+            assert self.parent.slot.Zs == wind_shape[2], (
+                "Mismatch between Lamination Zs ("
+                + str(self.parent.slot.Zs)
+                + ") and imported winding Zs ("
+                + str(wind_shape[2])
+                + ")"
+            )
         self.wind_mat = zeros(wind_shape)
 
         # Load matrix
@@ -54,7 +60,7 @@ def import_from_csv(self, file_path=None):
         if is_header:  # Remove first line
             line_list.pop(0)
         for line in line_list:
-            if len(line) == 0:
+            if len(line) == 0 or line[ZS_COL + offset] == "":
                 qs_id += 1
             else:
                 Rad_id = int(float(line[RAD_COL + offset]))
