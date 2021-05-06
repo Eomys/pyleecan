@@ -67,6 +67,11 @@ try:
 except ImportError as error:
     get_periodicity = error
 
+try:
+    from ..Methods.Machine.Winding.export_to_csv import export_to_csv
+except ImportError as error:
+    export_to_csv = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -192,6 +197,17 @@ class Winding(FrozenClass):
         )
     else:
         get_periodicity = get_periodicity
+    # cf Methods.Machine.Winding.export_to_csv
+    if isinstance(export_to_csv, ImportError):
+        export_to_csv = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method export_to_csv: " + str(export_to_csv)
+                )
+            )
+        )
+    else:
+        export_to_csv = export_to_csv
     # save and copy methods are available in all object
     save = save
     copy = copy

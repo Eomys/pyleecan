@@ -42,6 +42,11 @@ try:
 except ImportError as error:
     init_as_DWL = error
 
+try:
+    from ..Methods.Machine.WindingUD.import_from_csv import import_from_csv
+except ImportError as error:
+    import_from_csv = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -111,6 +116,18 @@ class WindingUD(Winding):
         )
     else:
         init_as_DWL = init_as_DWL
+    # cf Methods.Machine.WindingUD.import_from_csv
+    if isinstance(import_from_csv, ImportError):
+        import_from_csv = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use WindingUD method import_from_csv: "
+                    + str(import_from_csv)
+                )
+            )
+        )
+    else:
+        import_from_csv = import_from_csv
     # save and copy methods are available in all object
     save = save
     copy = copy

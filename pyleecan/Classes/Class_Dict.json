@@ -12636,7 +12636,8 @@
             "comp_winding_factor",
             "get_connection_mat",
             "get_dim_wind",
-            "get_periodicity"
+            "get_periodicity",
+            "export_to_csv"
         ],
         "mother": "",
         "name": "Winding",
@@ -12832,7 +12833,8 @@
             "init_as_CW1L",
             "init_as_CW2LR",
             "init_as_CW2LT",
-            "init_as_DWL"
+            "init_as_DWL",
+            "import_from_csv"
         ],
         "mother": "Winding",
         "name": "WindingUD",

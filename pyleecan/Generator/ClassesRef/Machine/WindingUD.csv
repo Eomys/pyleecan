@@ -4,3 +4,4 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 ,,,,,,,,,,,init_as_CW2LR,,,
 ,,,,,,,,,,,init_as_CW2LT,,,
 ,,,,,,,,,,,init_as_DWL,,,
+,,,,,,,,,,,import_from_csv,,,
