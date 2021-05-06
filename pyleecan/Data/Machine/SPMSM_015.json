@@ -1,5 +1,7 @@
 {
     "__class__": "MachineSIPMSM",
+    "__save_date__": "2021_05_03 21h57min41s ",
+    "__version__": "pyleecan_1.2.1",
     "desc": "outer rotor SPMSM Machine B from Vu Xuan Hung thesis",
     "frame": null,
     "logger_name": "Pyleecan.Machine",
@@ -15,184 +17,6 @@
         "axial_vent": [],
         "is_internal": false,
         "is_stator": false,
-        "mat_type": {
-            "HT": {
-                "Cp": 1,
-                "__class__": "MatHT",
-                "alpha": 0.00393,
-                "lambda_x": 1,
-                "lambda_y": 1,
-                "lambda_z": 1
-            },
-            "__class__": "Material",
-            "desc": "Lamination M400-50A",
-            "eco": {
-                "__class__": "MatEconomical",
-                "cost_unit": 0.127,
-                "unit_name": "$"
-            },
-            "elec": {
-                "__class__": "MatElectrical",
-                "alpha": 1,
-                "epsr": 1,
-                "rho": 1
-            },
-            "is_isotropic": false,
-            "mag": {
-                "BH_curve": {
-                    "__class__": "ImportMatrixVal",
-                    "is_transpose": false,
-                    "value": [
-                        [
-                            0,
-                            0
-                        ],
-                        [
-                            10,
-                            0.016
-                        ],
-                        [
-                            15,
-                            0.027
-                        ],
-                        [
-                            20,
-                            0.039
-                        ],
-                        [
-                            25,
-                            0.054
-                        ],
-                        [
-                            30,
-                            0.072
-                        ],
-                        [
-                            40,
-                            0.122
-                        ],
-                        [
-                            50,
-                            0.199
-                        ],
-                        [
-                            60,
-                            0.307
-                        ],
-                        [
-                            70,
-                            0.432
-                        ],
-                        [
-                            80,
-                            0.563
-                        ],
-                        [
-                            90,
-                            0.677
-                        ],
-                        [
-                            100,
-                            0.777
-                        ],
-                        [
-                            125,
-                            0.956
-                        ],
-                        [
-                            150,
-                            1.067
-                        ],
-                        [
-                            175,
-                            1.141
-                        ],
-                        [
-                            200,
-                            1.192
-                        ],
-                        [
-                            250,
-                            1.258
-                        ],
-                        [
-                            350,
-                            1.333
-                        ],
-                        [
-                            500,
-                            1.389
-                        ],
-                        [
-                            750,
-                            1.436
-                        ],
-                        [
-                            1000,
-                            1.464
-                        ],
-                        [
-                            1250,
-                            1.485
-                        ],
-                        [
-                            1500,
-                            1.503
-                        ],
-                        [
-                            2000,
-                            1.531
-                        ],
-                        [
-                            2500,
-                            1.556
-                        ],
-                        [
-                            5000,
-                            1.643
-                        ],
-                        [
-                            7500,
-                            1.707
-                        ],
-                        [
-                            10000,
-                            1.761
-                        ]
-                    ]
-                },
-                "Brm20": 0,
-                "Hc": 0,
-                "Wlam": 0.0005,
-                "__class__": "MatMagnetics",
-                "alpha_Br": 0,
-                "mur_lin": 2500.0
-            },
-            "name": "M400-50A",
-            "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/M400-50A.json",
-            "struct": {
-                "Ex": 215000000000.0,
-                "Ey": 215000000000.0,
-                "Ez": 80000000000.0,
-                "Gxy": 0.0,
-                "Gxz": 2000000000.0,
-                "Gyz": 2000000000.0,
-                "__class__": "MatStructural",
-                "nu_xy": 0.3,
-                "nu_xz": 0.03,
-                "nu_yz": 0.03,
-                "rho": 7650.0
-            }
-        },
-        "notch": [],
-        "slot": {
-            "H0": 0,
-            "W0": 0.23529412,
-            "Hmag": 0.002,
-            "Wmag": 0.23529412,
-            "Zs": 18,
-            "__class__": "SlotM11"
-        },
         "magnet": {
             "Lmag": 0.95,
             "__class__": "Magnet",
@@ -226,13 +50,24 @@
                     },
                     "Brm20": 1.21,
                     "Hc": 917035.624481873,
+                    "LossData": {
+                        "__class__": "ImportMatrix",
+                        "is_transpose": false
+                    },
+                    "ModelBH": {
+                        "Bmax": 2.31,
+                        "Hmax": null,
+                        "__class__": "ModelBH",
+                        "delta": 100
+                    },
                     "Wlam": 0,
                     "__class__": "MatMagnetics",
                     "alpha_Br": 0.0,
+                    "is_BH_extrapolate": false,
                     "mur_lin": 1.05
                 },
                 "name": "Magnet5",
-                "path": "",
+                "path": "Magnet5.json",
                 "struct": {
                     "Ex": 215000000000.0,
                     "Ey": 215000000000.0,
@@ -248,7 +83,257 @@
                 }
             },
             "type_magnetization": 0
-        }
+        },
+        "mat_type": {
+            "HT": {
+                "Cp": 1,
+                "__class__": "MatHT",
+                "alpha": 0.00393,
+                "lambda_x": 1,
+                "lambda_y": 1,
+                "lambda_z": 1
+            },
+            "__class__": "Material",
+            "desc": "Lamination M400-50A",
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": 0.127,
+                "unit_name": "$"
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": 1,
+                "epsr": 1,
+                "rho": 1
+            },
+            "is_isotropic": false,
+            "mag": {
+                "BH_curve": {
+                    "__class__": "ImportMatrixVal",
+                    "is_transpose": false,
+                    "value": [
+                        [
+                            0.0,
+                            0.0
+                        ],
+                        [
+                            100.0,
+                            0.5
+                        ],
+                        [
+                            150.0,
+                            0.7
+                        ],
+                        [
+                            180.0,
+                            0.8
+                        ],
+                        [
+                            200.0,
+                            0.9
+                        ],
+                        [
+                            250.0,
+                            1.0
+                        ],
+                        [
+                            300.0,
+                            1.05
+                        ],
+                        [
+                            350.0,
+                            1.1
+                        ],
+                        [
+                            450.0,
+                            1.15
+                        ],
+                        [
+                            550.0,
+                            1.2
+                        ],
+                        [
+                            650.0,
+                            1.225
+                        ],
+                        [
+                            750.0,
+                            1.25
+                        ],
+                        [
+                            850.0,
+                            1.275
+                        ],
+                        [
+                            950.0,
+                            1.3
+                        ],
+                        [
+                            1100.0,
+                            1.325
+                        ],
+                        [
+                            1250.0,
+                            1.35
+                        ],
+                        [
+                            1400.0,
+                            1.375
+                        ],
+                        [
+                            1550.0,
+                            1.4
+                        ],
+                        [
+                            1700.0,
+                            1.425
+                        ],
+                        [
+                            1900.0,
+                            1.45
+                        ],
+                        [
+                            2150.0,
+                            1.475
+                        ],
+                        [
+                            2450.0,
+                            1.5
+                        ],
+                        [
+                            2750.0,
+                            1.525
+                        ],
+                        [
+                            3150.0,
+                            1.55
+                        ],
+                        [
+                            3600.0,
+                            1.575
+                        ],
+                        [
+                            4100.0,
+                            1.6
+                        ],
+                        [
+                            4700.0,
+                            1.625
+                        ],
+                        [
+                            5250.0,
+                            1.65
+                        ],
+                        [
+                            6000.0,
+                            1.675
+                        ],
+                        [
+                            6700.0,
+                            1.7
+                        ],
+                        [
+                            7500.0,
+                            1.725
+                        ],
+                        [
+                            8650.0,
+                            1.75
+                        ],
+                        [
+                            9500.0,
+                            1.775
+                        ],
+                        [
+                            10750.0,
+                            1.8
+                        ],
+                        [
+                            14500.0,
+                            1.85
+                        ],
+                        [
+                            19500.0,
+                            1.9
+                        ],
+                        [
+                            25000.0,
+                            1.95
+                        ],
+                        [
+                            33000.0,
+                            2.0
+                        ],
+                        [
+                            44000.0,
+                            2.05
+                        ],
+                        [
+                            57000.0,
+                            2.1
+                        ],
+                        [
+                            74000.0,
+                            2.15
+                        ],
+                        [
+                            96000.0,
+                            2.2
+                        ],
+                        [
+                            130000.0,
+                            2.25
+                        ],
+                        [
+                            170000.0,
+                            2.3
+                        ]
+                    ]
+                },
+                "Brm20": 0,
+                "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
+                "Wlam": 0.0005,
+                "__class__": "MatMagnetics",
+                "alpha_Br": 0,
+                "is_BH_extrapolate": false,
+                "mur_lin": 2500.0
+            },
+            "name": "M400-50A",
+            "path": "M400-50A.json",
+            "struct": {
+                "Ex": 215000000000.0,
+                "Ey": 215000000000.0,
+                "Ez": 80000000000.0,
+                "Gxy": 0.0,
+                "Gxz": 2000000000.0,
+                "Gyz": 2000000000.0,
+                "__class__": "MatStructural",
+                "nu_xy": 0.3,
+                "nu_xz": 0.03,
+                "nu_yz": 0.03,
+                "rho": 7650.0
+            }
+        },
+        "notch": [],
+        "slot": {
+            "H0": 0,
+            "Hmag": 0.002,
+            "W0": 0.23529412,
+            "Wmag": 0.23529412,
+            "Zs": 18,
+            "__class__": "SlotM11"
+        },
+        "yoke_notch": []
     },
     "shaft": null,
     "stator": {
@@ -292,132 +377,203 @@
                     "is_transpose": false,
                     "value": [
                         [
-                            0,
-                            0
+                            0.0,
+                            0.0
                         ],
                         [
-                            10,
-                            0.016
+                            100.0,
+                            0.5
                         ],
                         [
-                            15,
-                            0.027
+                            150.0,
+                            0.7
                         ],
                         [
-                            20,
-                            0.039
+                            180.0,
+                            0.8
                         ],
                         [
-                            25,
-                            0.054
+                            200.0,
+                            0.9
                         ],
                         [
-                            30,
-                            0.072
+                            250.0,
+                            1.0
                         ],
                         [
-                            40,
-                            0.122
+                            300.0,
+                            1.05
                         ],
                         [
-                            50,
-                            0.199
+                            350.0,
+                            1.1
                         ],
                         [
-                            60,
-                            0.307
+                            450.0,
+                            1.15
                         ],
                         [
-                            70,
-                            0.432
+                            550.0,
+                            1.2
                         ],
                         [
-                            80,
-                            0.563
+                            650.0,
+                            1.225
                         ],
                         [
-                            90,
-                            0.677
+                            750.0,
+                            1.25
                         ],
                         [
-                            100,
-                            0.777
+                            850.0,
+                            1.275
                         ],
                         [
-                            125,
-                            0.956
+                            950.0,
+                            1.3
                         ],
                         [
-                            150,
-                            1.067
+                            1100.0,
+                            1.325
                         ],
                         [
-                            175,
-                            1.141
+                            1250.0,
+                            1.35
                         ],
                         [
-                            200,
-                            1.192
+                            1400.0,
+                            1.375
                         ],
                         [
-                            250,
-                            1.258
+                            1550.0,
+                            1.4
                         ],
                         [
-                            350,
-                            1.333
+                            1700.0,
+                            1.425
                         ],
                         [
-                            500,
-                            1.389
+                            1900.0,
+                            1.45
                         ],
                         [
-                            750,
-                            1.436
+                            2150.0,
+                            1.475
                         ],
                         [
-                            1000,
-                            1.464
+                            2450.0,
+                            1.5
                         ],
                         [
-                            1250,
-                            1.485
+                            2750.0,
+                            1.525
                         ],
                         [
-                            1500,
-                            1.503
+                            3150.0,
+                            1.55
                         ],
                         [
-                            2000,
-                            1.531
+                            3600.0,
+                            1.575
                         ],
                         [
-                            2500,
-                            1.556
+                            4100.0,
+                            1.6
                         ],
                         [
-                            5000,
-                            1.643
+                            4700.0,
+                            1.625
                         ],
                         [
-                            7500,
-                            1.707
+                            5250.0,
+                            1.65
                         ],
                         [
-                            10000,
-                            1.761
+                            6000.0,
+                            1.675
+                        ],
+                        [
+                            6700.0,
+                            1.7
+                        ],
+                        [
+                            7500.0,
+                            1.725
+                        ],
+                        [
+                            8650.0,
+                            1.75
+                        ],
+                        [
+                            9500.0,
+                            1.775
+                        ],
+                        [
+                            10750.0,
+                            1.8
+                        ],
+                        [
+                            14500.0,
+                            1.85
+                        ],
+                        [
+                            19500.0,
+                            1.9
+                        ],
+                        [
+                            25000.0,
+                            1.95
+                        ],
+                        [
+                            33000.0,
+                            2.0
+                        ],
+                        [
+                            44000.0,
+                            2.05
+                        ],
+                        [
+                            57000.0,
+                            2.1
+                        ],
+                        [
+                            74000.0,
+                            2.15
+                        ],
+                        [
+                            96000.0,
+                            2.2
+                        ],
+                        [
+                            130000.0,
+                            2.25
+                        ],
+                        [
+                            170000.0,
+                            2.3
                         ]
                     ]
                 },
                 "Brm20": 0,
                 "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0.0005,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 2500.0
             },
             "name": "M400-50A",
-            "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/M400-50A.json",
+            "path": "M400-50A.json",
             "struct": {
                 "Ex": 215000000000.0,
                 "Ey": 215000000000.0,
@@ -448,10 +604,12 @@
         },
         "winding": {
             "Lewout": 0.015,
-            "Npcpp": 3,
-            "Nslot_shift_wind": 0,
+            "Nlayer": 2,
+            "Npcp": 1,
+            "Nslot_shift_wind": 2,
             "Ntcoil": 57,
-            "__class__": "WindingCW2LT",
+            "__class__": "Winding",
+            "coil_pitch": 1,
             "conductor": {
                 "Kwoh": 0.5,
                 "Nwppc": 1,
@@ -484,7 +642,7 @@
                     "is_isotropic": true,
                     "mag": null,
                     "name": "Copper1",
-                    "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/Copper1.json",
+                    "path": "Copper1.json",
                     "struct": {
                         "Ex": 115000000000.0,
                         "Ey": 115000000000.0,
@@ -524,7 +682,7 @@
                     "is_isotropic": true,
                     "mag": null,
                     "name": "Insulator1",
-                    "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/Insulator1.json",
+                    "path": "Insulator1.json",
                     "struct": {
                         "Ex": null,
                         "Ey": null,
@@ -540,11 +698,15 @@
                     }
                 }
             },
+            "is_aper_a": null,
             "is_reverse_wind": false,
             "p": 9,
+            "per_a": null,
             "qs": 3,
-            "type_connection": 0
-        }
+            "type_connection": 0,
+            "wind_mat": null
+        },
+        "yoke_notch": []
     },
     "type_machine": 1
 }

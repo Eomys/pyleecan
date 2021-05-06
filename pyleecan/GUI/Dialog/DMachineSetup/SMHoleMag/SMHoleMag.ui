@@ -65,14 +65,14 @@
      <item>
       <widget class="QPushButton" name="b_add">
        <property name="text">
-        <string>Add new slots</string>
+        <string>Add new holes</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="b_remove">
        <property name="text">
-        <string>Remove last slot</string>
+        <string>Remove last hole</string>
        </property>
       </widget>
      </item>

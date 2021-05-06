@@ -217,6 +217,7 @@ def draw_FEMM(
         FEMM_dict["acsolver"],
     )
     femm.mi_smartmesh(FEMM_dict["smart_mesh"])
+    output.get_logger().debug("Saving FEMM file at: " + path_save)
     femm.mi_saveas(path_save)  # Save
     FEMM_dict["path_save"] = path_save
     # femm.mi_close()

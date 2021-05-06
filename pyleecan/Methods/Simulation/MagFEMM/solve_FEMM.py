@@ -109,11 +109,11 @@ def solve_FEMM(
     is_internal_rotor = machine.rotor.is_internal
     if "Phi_wind" in out_dict:
         qs = {}
-        Npcpp = {}
+        Npcp = {}
         for key in out_dict["Phi_wind"].keys():
             lam = machine.get_lam_by_label(key)
             qs[key] = lam.winding.qs  # Winding phase number
-            Npcpp[key] = lam.winding.Npcpp  # parallel paths
+            Npcp[key] = lam.winding.Npcp  # parallel paths
 
     # Account for initial angular shift of stator and rotor and apply it to the sliding band
     angle_shift = self.angle_rotor_shift - self.angle_stator_shift
@@ -180,7 +180,7 @@ def solve_FEMM(
                 out_dict["Phi_wind"][key][ii, :] = comp_FEMM_Phi_wind(
                     femm,
                     qs[key],
-                    Npcpp[key],
+                    Npcp[key],
                     is_stator=machine.get_lam_by_label(key).is_stator,
                     Lfemm=FEMM_dict["Lfemm"],
                     L1=L1,

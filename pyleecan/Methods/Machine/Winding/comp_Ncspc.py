@@ -32,6 +32,6 @@ def comp_Ncspc(self, Zs=None):
         Zs = self.parent.slot.Zs
 
     (Nrad, Ntan) = self.get_dim_wind()
-    Ncspc = Zs * Nrad * Ntan / (2.0 * self.qs * self.Npcpp)
+    Ncspc = Zs * Nrad * Ntan / (2.0 * self.qs * self.Npcp)
 
     return Ncspc

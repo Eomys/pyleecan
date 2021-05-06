@@ -32,7 +32,7 @@ class TestLamSlotWind(object):
 
         assert setup.get_name_phase() == []
 
-        setup.winding = Winding(Npcpp=10, Ntcoil=11)
+        setup.winding = Winding(Npcp=10, Ntcoil=11)
 
         assert setup.get_name_phase() == ["A", "B", "C"]
 

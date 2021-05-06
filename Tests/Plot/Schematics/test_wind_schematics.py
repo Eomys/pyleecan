@@ -24,7 +24,7 @@ def test_obj():
     wind_mat[0, 1, 0, 3] = -1
     wind_mat[1, 1, 0, 4] = -1
     wind_mat[2, 1, 0, 5] = -1
-    test_obj.winding = WindingUD(user_wind_mat=wind_mat, qs=6)
+    test_obj.winding = WindingUD(wind_mat=wind_mat, qs=6)
     return test_obj
 
 

@@ -17,7 +17,7 @@ class PHoleM57(Gen_PHoleM57, QWidget):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
     # Information for WHoleMag
-    hole_name = "Slot Type 57"
+    hole_name = "Hole Type 57"
     hole_type = HoleM57
 
     def __init__(self, hole=None, matlib=MatLib()):

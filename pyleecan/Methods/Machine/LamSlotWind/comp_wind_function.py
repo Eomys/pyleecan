@@ -42,7 +42,7 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0, per_a=1):
     slot_angle = self.slot.comp_angle_active_eq()
     slot_opening = self.slot.comp_angle_opening()
 
-    wind_mat = self.winding.comp_connection_mat(Zs)
+    wind_mat = self.winding.get_connection_mat(Zs)
     # sum wind_mat along Nlay_rad axis
     wind_mat = np_sum(wind_mat, axis=0)
 

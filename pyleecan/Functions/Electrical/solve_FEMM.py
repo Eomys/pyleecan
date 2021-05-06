@@ -15,7 +15,7 @@ def solve_FEMM(obj, femm, output, sym, FEMM_dict):
         and output.simu.machine.stator.winding is not None
     ):
         qs = output.simu.machine.stator.winding.qs  # Winding phase number
-        Npcpp = output.simu.machine.stator.winding.Npcpp
+        Npcp = output.simu.machine.stator.winding.Npcp
         Phi_wind_stator = zeros((Nt_tot, qs))
     else:
         Phi_wind_stator = None
@@ -64,7 +64,7 @@ def solve_FEMM(obj, femm, output, sym, FEMM_dict):
             Phi_wind_stator[ii, :] = comp_FEMM_Phi_wind(
                 femm,
                 qs,
-                Npcpp,
+                Npcp,
                 is_stator=True,
                 Lfemm=FEMM_dict["Lfemm"],
                 L1=L1,

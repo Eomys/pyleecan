@@ -300,7 +300,7 @@ class TestSMachineType(object):
         assert setup["widget"].machine.stator.winding.Nslot_shift_wind == None
         assert setup["widget"].machine.stator.winding.qs == None
         assert setup["widget"].machine.stator.winding.Ntcoil == None
-        assert setup["widget"].machine.stator.winding.Npcpp == None
+        assert setup["widget"].machine.stator.winding.Npcp == None
         assert setup["widget"].machine.stator.winding.type_connection == None
         assert setup["widget"].machine.stator.winding.Lewout == None
 

@@ -9,16 +9,17 @@ from matplotlib.colors import ListedColormap
 from matplotlib.cm import get_cmap, register_cmap
 from numpy import load as np_load
 from matplotlib import font_manager
-from pyleecan import PACKAGE_NAME, USER_DIR
 
 ROOT_DIR = normpath(abspath(join(dirname(__file__), ".."))).replace("\\", "/")
 # Further import
 try:
     from .Functions.init_environment import get_config_dict
+    from pyleecan import PACKAGE_NAME, USER_DIR
 except ImportError:
     # Add root dir to python path
     sys.path.insert(0, ROOT_DIR)
     exec("from pyleecan.Functions.init_environment import get_config_dict")
+    exec("from pyleecan import PACKAGE_NAME, USER_DIR")
 
 MAIN_DIR = dirname(realpath(__file__)).replace("\\", "/")
 

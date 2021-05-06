@@ -121,10 +121,10 @@ class Ui_SMHoleMag(object):
             QCoreApplication.translate("SMHoleMag", u"Slot pitch = 2*Pi / Zs = ", None)
         )
         self.b_add.setText(
-            QCoreApplication.translate("SMHoleMag", u"Add new slots", None)
+            QCoreApplication.translate("SMHoleMag", u"Add new holes", None)
         )
         self.b_remove.setText(
-            QCoreApplication.translate("SMHoleMag", u"Remove last slot", None)
+            QCoreApplication.translate("SMHoleMag", u"Remove last hole", None)
         )
         self.b_plot.setText(QCoreApplication.translate("SMHoleMag", u"Preview", None))
         self.b_previous.setText(

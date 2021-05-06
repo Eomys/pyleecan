@@ -27,11 +27,10 @@ SCIM_dict = {
         ("Pole pair number", "3"),
         ("Topology", "Inner Rotor"),
         ("Stator phase number", "3"),
-        ("Stator winding type", "double layer distributed"),
         ("Stator winding resistance", "0.02392 Ohm"),
         ("Machine total mass", "328.1 kg"),
     ],
-    "Nrow": 9,
+    "Nrow": 8,
 }
 IPMSM_dict = {
     "file_path": join(machine_path, "Toyota_Prius.json").replace("\\", "/"),
@@ -41,11 +40,10 @@ IPMSM_dict = {
         ("Pole pair number", "4"),
         ("Topology", "Inner Rotor"),
         ("Stator phase number", "3"),
-        ("Stator winding type", "single layer distributed"),
         ("Stator winding resistance", "0.03595 Ohm"),
         ("Machine total mass", "33.38 kg"),
     ],
-    "Nrow": 8,
+    "Nrow": 7,
 }
 load_preview_test = [SCIM_dict, IPMSM_dict]
 

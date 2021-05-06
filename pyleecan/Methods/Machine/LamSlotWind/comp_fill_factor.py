@@ -1,13 +1,14 @@
 from pyleecan.Classes.Winding import Winding
+from pyleecan.Classes.Conductor import Conductor
 
 
 def comp_fill_factor(self):
     """Compute the fill factor of the winding"""
-    if self.winding is None or self.winding.qs == 0 or type(self.winding) is Winding:
+    if self.winding is None or self.winding.qs == 0 or self.winding.conductor is None:
         return 0
     else:
         # compute the number of conductors per slot
-        Ncps_ = abs(self.winding.comp_connection_mat().sum(axis=(0, 1))).sum(axis=1)
+        Ncps_ = abs(self.winding.get_connection_mat().sum(axis=(0, 1))).sum(axis=1)
         Ncps = Ncps_.mean()
 
         if Ncps_.std() != 0:

@@ -278,7 +278,7 @@
         },
         "winding": {
             "Lewout": null,
-            "Npcpp": null,
+            "Npcp": null,
             "Nslot_shift_wind": null,
             "Ntcoil": null,
             "__class__": "WindingDW2L",

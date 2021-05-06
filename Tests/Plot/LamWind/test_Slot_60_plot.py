@@ -14,8 +14,6 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.SlotW60 import SlotW60
 
 from Tests import save_plot_path as save_path
@@ -46,7 +44,8 @@ class Test_Slot_60_plot(object):
             H4=1e-3,
             W3=2e-3,
         )
-        test_obj.rotor.winding = WindingCW2LT(qs=3, p=3, Lewout=60e-3)
+        test_obj.rotor.winding = WindingUD(qs=3, p=3, Lewout=60e-3)
+        test_obj.rotor.winding.init_as_CW2LT()
         plt.close("all")
 
         test_obj.rotor.plot(is_show_fig=False)
@@ -68,3 +67,8 @@ class Test_Slot_60_plot(object):
         tooth.plot(color="r", is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s60_Tooth_in.png"))
+
+
+if __name__ == "__main__":
+    a = Test_Slot_60_plot()
+    a.test_Lam_Wind_60()
