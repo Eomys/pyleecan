@@ -2,7 +2,7 @@
 
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QMessageBox, QWidget
+from PySide2.QtWidgets import QMessageBox, QWidget, QFileDialog
 
 from .....Classes.Winding import Winding
 from .....Classes.WindingUD import WindingUD
@@ -99,9 +99,24 @@ class SWinding(Gen_SWinding, QWidget):
             self.is_reverse.setCheckState(Qt.Checked)
         else:
             self.is_reverse.setCheckState(Qt.Unchecked)
+        # Nslot_shift_wind
         if self.obj.winding.Nslot_shift_wind is None:
             self.obj.winding.Nslot_shift_wind = 0
         self.si_Nslot.setValue(self.obj.winding.Nslot_shift_wind)
+        # is_reverse_layer
+        if self.obj.winding.is_reverse_layer is None:
+            self.obj.winding.is_reverse_layer = False
+        if self.obj.winding.is_reverse_layer:
+            self.is_reverse_layer.setCheckState(Qt.Checked)
+        else:
+            self.is_reverse_layer.setCheckState(Qt.Unchecked)
+        # is_change_layer
+        if self.obj.winding.is_change_layer is None:
+            self.obj.winding.is_change_layer = False
+        if self.obj.winding.is_change_layer:
+            self.is_change_layer.setCheckState(Qt.Checked)
+        else:
+            self.is_change_layer.setCheckState(Qt.Unchecked)
 
         # Update the GUI
         self.update_graph()
@@ -112,13 +127,13 @@ class SWinding(Gen_SWinding, QWidget):
         self.si_Npcp.editingFinished.connect(self.set_Npcp)
         self.si_Nslot.valueChanged.connect(self.set_Nslot)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
+        self.is_reverse_layer.stateChanged.connect(self.set_is_reverse_layer)
+        self.is_change_layer.stateChanged.connect(self.set_is_change_layer)
 
         # self.b_edit_wind_mat.clicked.connect(self.s_edit_wind_mat)
-        # self.b_import_csv.clicked.connect(self.s_import_csv)
-        # self.b_export_csv.clicked.connect(self.s_export_csv)
-        self.b_edit_wind_mat.setEnabled(False)
-        self.b_import.setEnabled(False)
-        self.b_export.setEnabled(False)
+        self.b_import.clicked.connect(self.s_import_csv)
+        self.b_export.clicked.connect(self.s_export_csv)
+        self.b_edit_wind_mat.hide()
         self.b_generate.clicked.connect(self.s_generate)
         self.b_preview.clicked.connect(self.s_plot)
 
@@ -234,8 +249,44 @@ class SWinding(Gen_SWinding, QWidget):
         """
 
         value = self.is_reverse.isChecked()
-        self.update_graph()
         self.obj.winding.is_reverse_wind = value
+        self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_is_reverse_layer(self, value):
+        """Signal to update the value of is_reverse_layer according to the
+        widget
+
+        Parameters
+        ----------
+        self : SWinding
+            A SWinding object
+        value :
+            New value of is_reverse_layer
+        """
+
+        value = self.is_reverse_layer.isChecked()
+        self.obj.winding.is_reverse_layer = value
+        self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_is_change_layer(self, value):
+        """Signal to update the value of is_change_layer according to the
+        widget
+
+        Parameters
+        ----------
+        self : SWinding
+            A SWinding object
+        value :
+            New value of is_change_layer
+        """
+
+        value = self.is_change_layer.isChecked()
+        self.obj.winding.is_change_layer = value
+        self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -251,6 +302,48 @@ class SWinding(Gen_SWinding, QWidget):
         self.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
+
+    def s_export_csv(self):
+        """Export the winding matrix to csv"""
+        if self.machine.name is not None:
+            name =self.machine.name+"_Winding.csv"
+        else:
+            name ="Winding.csv"
+        save_file_path = QFileDialog.getSaveFileName(
+            self, self.tr("Save file"), name, "CSV (*.csv);;All files (*.*)"
+        )[0]
+        try:
+            self.obj.winding.export_to_csv(
+                file_path=save_file_path, is_add_header=True, is_skip_empty=False
+            )
+        except Exception as e:
+            QMessageBox().critical(
+                self, self.tr("Error"), "Error while exporting the winding:\n" + str(e)
+            )
+            return
+
+    def s_import_csv(self):
+        """Import the winding matrix to csv"""
+        load_path = str(
+            QFileDialog.getOpenFileName(
+                self, self.tr("Load file"), None, "CSV (*.csv);;All files (*.*)"
+            )[0]
+        )
+        if load_path != "":
+            try:
+                self.obj.winding.import_from_csv(file_path=load_path)
+                # Update GUI
+                self.comp_output()
+                self.update_graph()
+                # Notify the machine GUI that the machine has changed
+                self.saveNeeded.emit()
+            except Exception as e:
+                QMessageBox().critical(
+                    self,
+                    self.tr("Error"),
+                    "Error while importing the winding:\n" + str(e),
+                )
+                return
 
     def comp_output(self):
         """Update the shape and period Label to match the current winding setup

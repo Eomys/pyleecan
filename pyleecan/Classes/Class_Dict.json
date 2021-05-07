@@ -12686,7 +12686,8 @@
             "comp_winding_factor",
             "get_connection_mat",
             "get_dim_wind",
-            "get_periodicity"
+            "get_periodicity",
+            "export_to_csv"
         ],
         "mother": "",
         "name": "Winding",
@@ -12739,9 +12740,9 @@
                 "value": 2
             },
             {
-                "desc": "Winding connection : 0 star (Y), 1 triangle (delta)",
+                "desc": "Winding connection : 0 star (Y), 1 triangle (delta), -1 no connection",
                 "max": "1",
-                "min": "0",
+                "min": "-1",
                 "name": "type_connection",
                 "type": "int",
                 "unit": "-",
@@ -12827,6 +12828,24 @@
                 "type": "EndWinding",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "1 to reverse the layers (rad from 0 to Nrad-1 => Nrad-1 to 0)",
+                "max": "",
+                "min": "",
+                "name": "is_reverse_layer",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "1 to change the layer from radial to tangential or tangential to radial",
+                "max": "",
+                "min": "",
+                "name": "is_change_layer",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
             }
         ]
     },
@@ -12873,7 +12892,8 @@
             "init_as_CW1L",
             "init_as_CW2LR",
             "init_as_CW2LT",
-            "init_as_DWL"
+            "init_as_DWL",
+            "import_from_csv"
         ],
         "mother": "Winding",
         "name": "WindingUD",

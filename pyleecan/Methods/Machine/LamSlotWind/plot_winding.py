@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from matplotlib.lines import Line2D
+import matplotlib.pyplot as plt
 from matplotlib.pyplot import axis, legend, plot, subplots, title
 from numpy import array, linspace, meshgrid
 
 from ....Functions.Winding.gen_phase_list import gen_color, gen_name
 
 
-def plot_winding(self, wind_mat=None, all_slot=False, is_show_fig=True):
+def plot_winding(self, wind_mat=None, all_slot=False, is_show_fig=True, save_path=None):
     """Plot the Winding in a matplotlib fig
 
     Parameters
@@ -20,6 +21,8 @@ def plot_winding(self, wind_mat=None, all_slot=False, is_show_fig=True):
         True if we plot all slot and false when plotting only needed one(sym)
     is_show_fig : bool
         To call show at the end of the method
+    save_path : str
+        full path including folder, name and extension of the file to save if save_path is not None
     Returns
     -------
     None
@@ -147,3 +150,7 @@ def plot_winding(self, wind_mat=None, all_slot=False, is_show_fig=True):
 
     if is_show_fig:
         fig.show()
+
+    if save_path is not None:
+        fig.savefig(save_path)
+        plt.close()

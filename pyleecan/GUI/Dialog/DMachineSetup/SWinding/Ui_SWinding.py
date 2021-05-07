@@ -160,6 +160,16 @@ class Ui_SWinding(object):
 
         self.verticalLayout.addWidget(self.is_reverse)
 
+        self.is_reverse_layer = QCheckBox(self.g_edit)
+        self.is_reverse_layer.setObjectName(u"is_reverse_layer")
+
+        self.verticalLayout.addWidget(self.is_reverse_layer)
+
+        self.is_change_layer = QCheckBox(self.g_edit)
+        self.is_change_layer.setObjectName(u"is_change_layer")
+
+        self.verticalLayout.addWidget(self.is_change_layer)
+
         self.b_edit_wind_mat = QPushButton(self.g_edit)
         self.b_edit_wind_mat.setObjectName(u"b_edit_wind_mat")
 
@@ -292,6 +302,12 @@ class Ui_SWinding(object):
         )
         self.is_reverse.setText(
             QCoreApplication.translate("SWinding", u"Reversed winding", None)
+        )
+        self.is_reverse_layer.setText(
+            QCoreApplication.translate("SWinding", u"Reversed layer", None)
+        )
+        self.is_change_layer.setText(
+            QCoreApplication.translate("SWinding", u"Change layer", None)
         )
         self.b_edit_wind_mat.setText(
             QCoreApplication.translate("SWinding", u"Edit Winding Matrix", None)

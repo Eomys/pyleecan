@@ -1,21 +1,22 @@
 # -*- coding: utf-8 -*-
 
 import sys
+from os.path import join, isfile
 from random import uniform
 
-from PySide2 import QtWidgets
-from PySide2.QtCore import Qt
-from PySide2.QtTest import QTest
-
-from pyleecan.Classes.Winding import Winding
-from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.GUI.Dialog.DMachineSetup.SWinding.SWinding import SWinding
+import mock
+import pytest
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.Classes.MachineWRSM import MachineWRSM
 from pyleecan.Classes.SlotW22 import SlotW22
-
-import pytest
+from pyleecan.Classes.Winding import Winding
+from pyleecan.Classes.WindingUD import WindingUD
+from pyleecan.GUI.Dialog.DMachineSetup.SWinding.SWinding import SWinding
+from PySide2 import QtWidgets
+from PySide2.QtCore import Qt
+from PySide2.QtTest import QTest
+from Tests import save_gui_path
 
 
 class TestSWinding(object):
@@ -40,6 +41,8 @@ class TestSWinding(object):
         test_obj.stator.winding.Nslot_shift_wind = 10
         test_obj.stator.winding.Npcp = 22
         test_obj.stator.winding.is_reverse_wind = True
+        test_obj.stator.winding.is_reverse_layer = True
+        test_obj.stator.winding.is_change_layer = True
 
         widget = SWinding(machine=test_obj, matlib=[], is_stator=True)
 
@@ -59,7 +62,9 @@ class TestSWinding(object):
         assert setup["widget"].c_wind_type.currentIndex() == 0
         assert setup["widget"].c_wind_type.currentText() == "Star of Slot"
         assert setup["widget"].is_reverse.checkState() == Qt.Checked
-        assert setup["widget"].out_shape.text() == "Matrix shape [9, 1, 36, 6]"
+        assert setup["widget"].is_reverse_layer.checkState() == Qt.Checked
+        assert setup["widget"].is_change_layer.checkState() == Qt.Checked
+        assert setup["widget"].out_shape.text() == "Matrix shape [1, 9, 36, 6]"
 
         setup["test_obj"] = MachineSCIM()
         setup["test_obj"].stator = LamSlotWind()
@@ -112,11 +117,32 @@ class TestSWinding(object):
 
         setup["widget"].b_generate.clicked.emit()
         assert setup["widget"].obj.winding.wind_mat.shape == (2, 1, 36, 3)
-        assert setup["widget"].out_shape.text() == "Matrix shape [2, 1, 36, 3]"
+        assert setup["widget"].out_shape.text() == "Matrix shape [1, 2, 36, 3]"
         assert setup["widget"].out_ms.text() == "ms = Zs / (2*p*qs) = 2.0"
         assert setup["widget"].out_Nperw.text() == "Nperw: 6"
         assert setup["widget"].out_Ncspc.text() == "Ncspc: 12"
         assert setup["widget"].out_Ntspc.text() == "Ntspc: 108"
+
+    def test_export_import(self, setup):
+        return_value = (
+            join(save_gui_path, "test_SWinding_export.csv"),
+            "CSV (*.csv)",
+        )
+
+        assert not isfile(return_value[0])
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+        ):
+            # To trigger the slot
+            setup["widget"].b_export.clicked.emit()
+
+        assert isfile(return_value[0])
+
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+        ):
+            # To trigger the slot
+            setup["widget"].b_import.clicked.emit()
 
     def test_set_is_reverse(self, setup):
         """Check that the Widget allow to update is_reverse_wind"""
@@ -124,6 +150,20 @@ class TestSWinding(object):
         assert not setup["test_obj"].stator.winding.is_reverse_wind
         setup["widget"].is_reverse.setCheckState(Qt.Checked)
         assert setup["test_obj"].stator.winding.is_reverse_wind
+
+    def test_set_is_reverse_layer(self, setup):
+        """Check that the Widget allow to update is_reverse_layer"""
+        setup["widget"].is_reverse_layer.setCheckState(Qt.Unchecked)
+        assert not setup["test_obj"].stator.winding.is_reverse_layer
+        setup["widget"].is_reverse_layer.setCheckState(Qt.Checked)
+        assert setup["test_obj"].stator.winding.is_reverse_layer
+
+    def test_set_is_change_layer(self, setup):
+        """Check that the Widget allow to update is_change_layer"""
+        setup["widget"].is_change_layer.setCheckState(Qt.Unchecked)
+        assert not setup["test_obj"].stator.winding.is_change_layer
+        setup["widget"].is_change_layer.setCheckState(Qt.Checked)
+        assert setup["test_obj"].stator.winding.is_change_layer
 
     def test_set_Nslot(self, setup):
         """Check that the Widget allow to update Nslot"""

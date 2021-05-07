@@ -67,6 +67,11 @@ try:
 except ImportError as error:
     get_periodicity = error
 
+try:
+    from ..Methods.Machine.Winding.export_to_csv import export_to_csv
+except ImportError as error:
+    export_to_csv = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -193,6 +198,17 @@ class Winding(FrozenClass):
         )
     else:
         get_periodicity = get_periodicity
+    # cf Methods.Machine.Winding.export_to_csv
+    if isinstance(export_to_csv, ImportError):
+        export_to_csv = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method export_to_csv: " + str(export_to_csv)
+                )
+            )
+        )
+    else:
+        export_to_csv = export_to_csv
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -216,6 +232,8 @@ class Winding(FrozenClass):
         per_a=None,
         is_aper_a=None,
         end_winding=-1,
+        is_reverse_layer=False,
+        is_change_layer=False,
         init_dict=None,
         init_str=None,
     ):
@@ -264,6 +282,10 @@ class Winding(FrozenClass):
                 is_aper_a = init_dict["is_aper_a"]
             if "end_winding" in list(init_dict.keys()):
                 end_winding = init_dict["end_winding"]
+            if "is_reverse_layer" in list(init_dict.keys()):
+                is_reverse_layer = init_dict["is_reverse_layer"]
+            if "is_change_layer" in list(init_dict.keys()):
+                is_change_layer = init_dict["is_change_layer"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_reverse_wind = is_reverse_wind
@@ -281,6 +303,8 @@ class Winding(FrozenClass):
         self.per_a = per_a
         self.is_aper_a = is_aper_a
         self.end_winding = end_winding
+        self.is_reverse_layer = is_reverse_layer
+        self.is_change_layer = is_change_layer
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -324,6 +348,8 @@ class Winding(FrozenClass):
             Winding_str += "end_winding = " + tmp
         else:
             Winding_str += "end_winding = None" + linesep + linesep
+        Winding_str += "is_reverse_layer = " + str(self.is_reverse_layer) + linesep
+        Winding_str += "is_change_layer = " + str(self.is_change_layer) + linesep
         return Winding_str
 
     def __eq__(self, other):
@@ -360,6 +386,10 @@ class Winding(FrozenClass):
         if other.is_aper_a != self.is_aper_a:
             return False
         if other.end_winding != self.end_winding:
+            return False
+        if other.is_reverse_layer != self.is_reverse_layer:
+            return False
+        if other.is_change_layer != self.is_change_layer:
             return False
         return True
 
@@ -411,6 +441,10 @@ class Winding(FrozenClass):
             diff_list.extend(
                 self.end_winding.compare(other.end_winding, name=name + ".end_winding")
             )
+        if other._is_reverse_layer != self._is_reverse_layer:
+            diff_list.append(name + ".is_reverse_layer")
+        if other._is_change_layer != self._is_change_layer:
+            diff_list.append(name + ".is_change_layer")
         return diff_list
 
     def __sizeof__(self):
@@ -432,6 +466,8 @@ class Winding(FrozenClass):
         S += getsizeof(self.per_a)
         S += getsizeof(self.is_aper_a)
         S += getsizeof(self.end_winding)
+        S += getsizeof(self.is_reverse_layer)
+        S += getsizeof(self.is_change_layer)
         return S
 
     def as_dict(self, **kwargs):
@@ -466,6 +502,8 @@ class Winding(FrozenClass):
             Winding_dict["end_winding"] = None
         else:
             Winding_dict["end_winding"] = self.end_winding.as_dict(**kwargs)
+        Winding_dict["is_reverse_layer"] = self.is_reverse_layer
+        Winding_dict["is_change_layer"] = self.is_change_layer
         # The class name is added to the dict for deserialisation purpose
         Winding_dict["__class__"] = "Winding"
         return Winding_dict
@@ -490,6 +528,8 @@ class Winding(FrozenClass):
         self.is_aper_a = None
         if self.end_winding is not None:
             self.end_winding._set_None()
+        self.is_reverse_layer = None
+        self.is_change_layer = None
 
     def _get_is_reverse_wind(self):
         """getter of is_reverse_wind"""
@@ -593,16 +633,16 @@ class Winding(FrozenClass):
 
     def _set_type_connection(self, value):
         """setter of type_connection"""
-        check_var("type_connection", value, "int", Vmin=0, Vmax=1)
+        check_var("type_connection", value, "int", Vmin=-1, Vmax=1)
         self._type_connection = value
 
     type_connection = property(
         fget=_get_type_connection,
         fset=_set_type_connection,
-        doc=u"""Winding connection : 0 star (Y), 1 triangle (delta)
+        doc=u"""Winding connection : 0 star (Y), 1 triangle (delta), -1 no connection
 
         :Type: int
-        :min: 0
+        :min: -1
         :max: 1
         """,
     )
@@ -803,5 +843,41 @@ class Winding(FrozenClass):
         doc=u"""End Winding's definition
 
         :Type: EndWinding
+        """,
+    )
+
+    def _get_is_reverse_layer(self):
+        """getter of is_reverse_layer"""
+        return self._is_reverse_layer
+
+    def _set_is_reverse_layer(self, value):
+        """setter of is_reverse_layer"""
+        check_var("is_reverse_layer", value, "bool")
+        self._is_reverse_layer = value
+
+    is_reverse_layer = property(
+        fget=_get_is_reverse_layer,
+        fset=_set_is_reverse_layer,
+        doc=u"""1 to reverse the layers (rad from 0 to Nrad-1 => Nrad-1 to 0)
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_change_layer(self):
+        """getter of is_change_layer"""
+        return self._is_change_layer
+
+    def _set_is_change_layer(self, value):
+        """setter of is_change_layer"""
+        check_var("is_change_layer", value, "bool")
+        self._is_change_layer = value
+
+    is_change_layer = property(
+        fget=_get_is_change_layer,
+        fset=_set_is_change_layer,
+        doc=u"""1 to change the layer from radial to tangential or tangential to radial
+
+        :Type: bool
         """,
     )
