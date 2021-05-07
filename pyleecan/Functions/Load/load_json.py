@@ -1,6 +1,6 @@
+import gzip
 from json import load as jload
-from os.path import isfile, isdir
-from re import match
+from os.path import isdir, isfile, splitext
 
 
 def load_json(file_path):
@@ -9,7 +9,7 @@ def load_json(file_path):
     Parameters
     ----------
     file_path: str
-        path to the file to load
+        path to the file or directory to load
 
     Returns
     -------
@@ -18,24 +18,37 @@ def load_json(file_path):
     json_data: json decoded data type
         data of the json file
     """
+    # remove tailing dir seperators
+    while file_path.endswith(("\\", "/")):
+        file_path = file_path[:-1]
+
+    # if a path is given, add default file name to file_path
     if isdir(file_path):
         i = max(file_path.rfind("\\"), file_path.rfind("/"))
         if i != -1:
-            file_path += file_path[i:] + ".json"
+            file_path += file_path[i:]
         else:
-            file_path += "/" + file_path + ".json"
+            file_path += "/" + file_path
 
-    # The file_name must end with .json
-    elif not match(".*\.json", file_path):
-        file_path += ".json"  # If it doesn't, we add .json at the end
+    # if there is no file extension, try some
+    if not splitext(file_path)[1]:
+        file_ext = ""
+        for ext in [".json", ".json.gz"]:
+            if isfile(file_path + ext):
+                file_ext = ext
+        file_path += file_ext
 
     # The file (and the folder) should exist
     if not isfile(file_path):
         raise LoadMissingFileError(str(file_path) + " doesn't exist")
 
     # Get the data dictionary
-    with open(file_path, "r") as load_file:
-        json_data = jload(load_file)
+    if file_path.endswith(".json.gz"):
+        fp = gzip.open(file_path, mode="rt", encoding="utf-8")
+    else:
+        fp = open(file_path, "r")
+    with fp:
+        json_data = jload(fp)
 
     return file_path, json_data
 
