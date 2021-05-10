@@ -12637,7 +12637,8 @@
             "get_connection_mat",
             "get_dim_wind",
             "get_periodicity",
-            "export_to_csv"
+            "export_to_csv",
+            "clean"
         ],
         "mother": "",
         "name": "Winding",

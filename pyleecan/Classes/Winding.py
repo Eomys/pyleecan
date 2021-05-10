@@ -72,6 +72,11 @@ try:
 except ImportError as error:
     export_to_csv = error
 
+try:
+    from ..Methods.Machine.Winding.clean import clean
+except ImportError as error:
+    clean = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -208,6 +213,15 @@ class Winding(FrozenClass):
         )
     else:
         export_to_csv = export_to_csv
+    # cf Methods.Machine.Winding.clean
+    if isinstance(clean, ImportError):
+        clean = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Winding method clean: " + str(clean))
+            )
+        )
+    else:
+        clean = clean
     # save and copy methods are available in all object
     save = save
     copy = copy

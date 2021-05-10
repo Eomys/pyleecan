@@ -168,7 +168,7 @@ class SWinding(Gen_SWinding, QWidget):
         self.obj.winding.Nlayer = self.si_Nlayer.value()
         self.obj.winding.coil_pitch = self.si_coil_pitch.value()
         self.obj.winding.Ntcoil = self.si_Ntcoil.value()
-        self.obj.winding.wind_mat = None  # Enforce now computation
+        self.obj.winding.clean()  # Enforce now computation
 
         # Check winding
         try:
@@ -215,7 +215,7 @@ class SWinding(Gen_SWinding, QWidget):
             self.si_Ntcoil.setValue(self.obj.winding.Ntcoil)
 
             self.si_Nlayer.setValue(self.obj.winding.Nlayer)
-            self.obj.winding.wind_mat = None  # ­ Enforce new computation
+            self.obj.winding.clean()  # ­ Enforce new computation
             self.hide_star_widget(False)
         else:  # User Defined
             self.obj.winding = WindingUD(init_dict=init_dict)

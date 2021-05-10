@@ -10,7 +10,7 @@ Lewout,m,straight length of the conductors outside the lamination before the cur
 conductor,-,Winding's conductor,,Conductor,,,,,,,get_dim_wind,,,
 coil_pitch,,Coil pitch (or coil span),,int,0,,,,,,get_periodicity,,,
 wind_mat,-,Winding matrix calculated with Star of slots (from SWAT_EM package),4,ndarray,,,,,,,export_to_csv,,,
-Nlayer,,Number of layers per slots,,int,1,1,,,,,,,,
+Nlayer,,Number of layers per slots,,int,1,1,,,,,clean,,,
 per_a,,Number of spatial periods of the winding,,int,None,1,,,,,,,,
 is_aper_a,,True if the winding is anti-periodic over space,,bool,None,,,,,,,,,
 is_reverse_layer,-,1 to reverse the layers (rad from 0 to Nrad-1 => Nrad-1 to 0),0,bool,0,,,,,,,,,
