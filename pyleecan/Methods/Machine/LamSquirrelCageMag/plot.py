@@ -9,6 +9,7 @@ from ....definitions import config_dict
 
 BAR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
 SCR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["SCR_COLOR"]
+MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
 
 def plot(
@@ -67,43 +68,41 @@ def plot(
     # init figure again to get updated label_leg and patch_leg
     (fig, axes, patch_leg, label_leg) = init_fig(fig)
 
-    # setup the patch of the short circuit ring if needed
+    # Add Hole related surfaces
+    surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
-    if not is_lam_only:
-        try:
-            Rmw = self.slot.comp_radius_mid_active()
-            patches.append(
-                Wedge(
-                    (0, 0),
-                    Rmw + self.Hscr / 2.0,
-                    0,
-                    360,
-                    width=self.Hscr,
-                    color=SCR_COLOR,
-                )
-            )  # Full ring
-        except:
-            pass
+    for surf in surf_list:
+        if surf.label is not None and "Magnet" in surf.label and not is_lam_only:
+            patches.extend(
+                surf.get_patches(color=MAGNET_COLOR, is_edge_only=is_edge_only)
+            )
+        elif surf.label is not None and "Hole" in surf.label:
+            patches.extend(surf.get_patches(is_edge_only=is_edge_only))
+    for patch in patches:
+        axes.add_patch(patch)
 
     # Display the result
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
-    axes.set_title("Squirrel Cage Rotor")
+    axes.set_title("Squirrel Cage Rotor with Magnets")
 
     # Axis Setup
     axes.axis("equal")
     Lim = self.Rext * 1.5
     axes.set_xlim(-Lim, Lim)
-    axes.set_ylim(-Lim, Lim)
+    if sym == 1:
+        axes.set_ylim(-Lim, Lim)
+    else:
+        axes.set_ylim(-Lim * 0.3, Lim)
 
     if not is_lam_only:
         # Add the short ciruit ring to the fig
-        for patch in patches:
-            axes.add_patch(patch)
         if "Short Circuit Ring" not in label_leg:
             patch_leg.append(Patch(color=SCR_COLOR))
             label_leg.append("Short Circuit Ring")
-
+        if "Magnet" not in label_leg:
+            patch_leg.append(Patch(color=MAGNET_COLOR))
+            label_leg.append("Magnet")
         legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()

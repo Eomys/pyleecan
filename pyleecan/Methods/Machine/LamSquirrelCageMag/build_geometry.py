@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from numpy import pi
+from ....Classes.LamSquirrelCage import LamSquirrelCage
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -6,8 +8,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
 
     Parameters
     ----------
-    self :
-        LamSquirrelCage Object
+    self : LamSquirrelCageMag
+        A LamSquirrelCageMag Object
     sym : int
         Symmetry factor (1= full machine, 2= half of the machine...)
     alpha : float
@@ -23,13 +25,50 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         list of surfaces
 
     """
-    surf_list = super(type(self), self).build_geometry(
-        sym=sym, is_simplified=is_simplified, alpha=alpha, delta=delta
+
+    # Lamination label
+    if self.is_stator:
+        label = "Lamination_Stator"
+    else:
+        label = "Lamination_Rotor"
+
+    surf_list = LamSquirrelCage.build_geometry(
+        self, sym=sym, is_simplified=is_simplified, alpha=alpha, delta=delta
     )
 
-    # Adapt the label
-    for surf in surf_list:
-        if "Wind" in surf.label:
-            surf.label = surf.label.replace("Wind", "Bar")
+    # Holes surface(s)
+    for hole in self.hole:
+        Zh = hole.Zh
+        assert (Zh % sym) == 0, (
+            "ERROR, Wrong symmetry for "
+            + label
+            + " "
+            + str(Zh)
+            + " holes and sym="
+            + str(sym)
+        )  # For now only
+        angle = 2 * pi / Zh
+        # Create the first hole surface(s)
+        surf_hole = hole.build_geometry(alpha=pi / Zh)
 
+        hole_surf_list = list()
+        # Copy the hole for Zh / sym
+        for ii in range(Zh // sym):
+            for surf in surf_hole:
+                new_surf = type(surf)(init_dict=surf.as_dict())
+                if "Magnet" in surf.label and ii % 2 != 0:  # if the surf is Magnet
+                    # Changing the pole of the magnet (before reference number )
+                    new_surf.label = new_surf.label[:-10] + "S" + new_surf.label[-9:]
+                if "Hole" in surf.label:
+                    # changing the hole or magnet reference number
+                    new_surf.label = new_surf.label[:-1] + str(ii)
+                new_surf.rotate(ii * angle)
+                hole_surf_list.append(new_surf)
+
+    # Apply the transformations
+    for surf in hole_surf_list:
+        surf.rotate(alpha)
+        surf.translate(delta)
+
+    surf_list.extend(hole_surf_list)
     return surf_list

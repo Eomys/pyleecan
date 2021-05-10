@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ....Classes.CondType21 import CondType21
-from ....Classes.LamSlotWind import LamSlotWind
-from ....Methods.Machine.LamSquirrelCage import *
+from ....Classes.LamSquirrelCage import LamSquirrelCage
 
 
 def check(self):
@@ -10,8 +9,8 @@ def check(self):
 
     Parameters
     ----------
-    self : LamSquirrelCage
-        A LamSquirrelCage object
+    self : LamSquirrelCageMag
+        A LamSquirrelCageMag object
 
     Returns
     -------
@@ -25,10 +24,10 @@ def check(self):
         A LamSquirrelCage's conductor must be a type 2_1
     """
 
-    LamSlotWind.check(self)
+    LamSquirrelCage.check(self)
 
-    if self.is_stator:
-        raise SCC_NotARotor("A LamSquirrelCage Lamination can't be " "a stator")
-
-    if not isinstance(self.winding.conductor, CondType21):
-        raise SCC_WrongCond("A LamSquirrelCage's conductor must be " "a type 2_1")
+    # Check p
+    p = self.winding.p
+    assert len(self.hole) > 1
+    for hole in self.hole:
+        assert hole.Zh / 2 == p

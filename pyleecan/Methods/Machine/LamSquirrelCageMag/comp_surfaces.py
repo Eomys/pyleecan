@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from ....Classes.Lamination import Lamination
+from ....Classes.LamSlotWind import LamSlotWind
 
 
 def comp_surfaces(self):
@@ -9,8 +9,8 @@ def comp_surfaces(self):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamSquirrelCageMag
+        A LamSquirrelCageMag object
 
     Returns
     -------
@@ -19,7 +19,7 @@ def comp_surfaces(self):
 
     """
 
-    S_dict = Lamination.comp_surfaces(self)
+    S_dict = LamSlotWind.comp_surfaces(self)
 
     # hole surface
     Shole = 0
