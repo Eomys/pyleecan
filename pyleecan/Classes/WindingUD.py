@@ -18,11 +18,6 @@ from .Winding import Winding
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Machine.WindingUD.comp_connection_mat import comp_connection_mat
-except ImportError as error:
-    comp_connection_mat = error
-
-try:
     from ..Methods.Machine.WindingUD.init_as_CW1L import init_as_CW1L
 except ImportError as error:
     init_as_CW1L = error
@@ -60,18 +55,6 @@ class WindingUD(Winding):
     NAME = "User defined"
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Machine.WindingUD.comp_connection_mat
-    if isinstance(comp_connection_mat, ImportError):
-        comp_connection_mat = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use WindingUD method comp_connection_mat: "
-                    + str(comp_connection_mat)
-                )
-            )
-        )
-    else:
-        comp_connection_mat = comp_connection_mat
     # cf Methods.Machine.WindingUD.init_as_CW1L
     if isinstance(init_as_CW1L, ImportError):
         init_as_CW1L = property(

@@ -12829,7 +12829,6 @@
         "desc": "User defined winding",
         "is_internal": false,
         "methods": [
-            "comp_connection_mat",
             "init_as_CW1L",
             "init_as_CW2LR",
             "init_as_CW2LT",

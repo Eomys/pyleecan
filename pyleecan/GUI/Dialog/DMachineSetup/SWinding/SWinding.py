@@ -306,9 +306,9 @@ class SWinding(Gen_SWinding, QWidget):
     def s_export_csv(self):
         """Export the winding matrix to csv"""
         if self.machine.name is not None:
-            name =self.machine.name+"_Winding.csv"
+            name = self.machine.name + "_Winding.csv"
         else:
-            name ="Winding.csv"
+            name = "Winding.csv"
         save_file_path = QFileDialog.getSaveFileName(
             self, self.tr("Save file"), name, "CSV (*.csv);;All files (*.*)"
         )[0]
