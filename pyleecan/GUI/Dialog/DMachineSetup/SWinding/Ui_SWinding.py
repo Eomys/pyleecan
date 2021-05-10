@@ -35,6 +35,7 @@ class Ui_SWinding(object):
         self.in_wind_param.setPixmap(
             QPixmap(u":/images/images/MachineSetup/WindParam/Winding param.PNG")
         )
+        self.in_wind_param.setScaledContents(True)
 
         self.horizontalLayout_8.addWidget(self.in_wind_param)
 

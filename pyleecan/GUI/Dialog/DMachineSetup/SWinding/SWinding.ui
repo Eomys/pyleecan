@@ -39,6 +39,9 @@
        <property name="pixmap">
         <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WindParam/Winding param.PNG</pixmap>
        </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
