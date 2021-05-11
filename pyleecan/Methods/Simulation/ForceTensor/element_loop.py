@@ -104,9 +104,7 @@ def element_loop(
                 Be / mue - He, (dim, 1, Nt_tot)
             )  # reshaped for matrix product purpose
             # elt magnetostrictive tensor
-            tme = self.comp_magnetrosctrictive_tensor(
-                mue, Me, Nt_tot, polynomial_coeffs
-            )
+            tme = self.comp_magnetostrictive_tensor(mue, Me, Nt_tot, polynomial_coeffs)
 
             # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
             orientation_sign = np.sign(
@@ -137,7 +135,7 @@ def element_loop(
 
                 # Volume ratio (Green Ostrogradski)
                 L = np.linalg.norm(edge_vector)
-                Ve0 = 12
+                Ve0 = L / 2
 
                 # Normalized normal vector n, that has to be directed outside the element (i.e. normal ^ edge same sign as the orientation)
                 normal_to_edge_unoriented = (

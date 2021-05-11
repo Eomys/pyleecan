@@ -1568,7 +1568,7 @@
         "methods": [
             "comp_force",
             "comp_force_nodal",
-            "comp_magnetrosctrictive_tensor",
+            "comp_magnetostrictive_tensor",
             "element_loop"
         ],
         "mother": "Force",

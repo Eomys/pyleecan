@@ -28,11 +28,11 @@ except ImportError as error:
     comp_force_nodal = error
 
 try:
-    from ..Methods.Simulation.ForceTensor.comp_magnetrosctrictive_tensor import (
-        comp_magnetrosctrictive_tensor,
+    from ..Methods.Simulation.ForceTensor.comp_magnetostrictive_tensor import (
+        comp_magnetostrictive_tensor,
     )
 except ImportError as error:
-    comp_magnetrosctrictive_tensor = error
+    comp_magnetostrictive_tensor = error
 
 try:
     from ..Methods.Simulation.ForceTensor.element_loop import element_loop
@@ -72,18 +72,18 @@ class ForceTensor(Force):
         )
     else:
         comp_force_nodal = comp_force_nodal
-    # cf Methods.Simulation.ForceTensor.comp_magnetrosctrictive_tensor
-    if isinstance(comp_magnetrosctrictive_tensor, ImportError):
-        comp_magnetrosctrictive_tensor = property(
+    # cf Methods.Simulation.ForceTensor.comp_magnetostrictive_tensor
+    if isinstance(comp_magnetostrictive_tensor, ImportError):
+        comp_magnetostrictive_tensor = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ForceTensor method comp_magnetrosctrictive_tensor: "
-                    + str(comp_magnetrosctrictive_tensor)
+                    "Can't use ForceTensor method comp_magnetostrictive_tensor: "
+                    + str(comp_magnetostrictive_tensor)
                 )
             )
         )
     else:
-        comp_magnetrosctrictive_tensor = comp_magnetrosctrictive_tensor
+        comp_magnetostrictive_tensor = comp_magnetostrictive_tensor
     # cf Methods.Simulation.ForceTensor.element_loop
     if isinstance(element_loop, ImportError):
         element_loop = property(

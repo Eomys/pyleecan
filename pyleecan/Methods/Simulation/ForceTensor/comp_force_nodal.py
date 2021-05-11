@@ -143,22 +143,6 @@ def comp_force_nodal(self, output, axes_dict):
     solforce = SolutionVector(field=vec_force, type_cell="node", label="F")
     meshsolution.solution.append(solforce)
 
-    ## CSV import
-
-    import csv
-
-    fx2 = np.array([])
-    fy2 = np.array([])
-
-    path = "C:/Users/Utilisateur/Desktop/Jean-Guillaume/magneto/Benchmark_model_20210413_ms_stator.csv"
-    with open(path, "r") as file:
-        reader = csv.reader(file, skipinitialspace=True)
-        next(reader)
-        next(reader)
-        next(reader)
-        # for row in reader:
-        #     print(row)
-
     out_dict = dict()
     out_dict["meshsolution"] = meshsolution
 
