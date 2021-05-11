@@ -77,9 +77,7 @@ class SWinding(Gen_SWinding, QWidget):
                 self.obj.winding.Nlayer = 1
             self.si_Nlayer.setValue(self.obj.winding.Nlayer)
             # Coil_pitch
-            if self.obj.winding.coil_pitch is None:
-                self.obj.winding.coil_pitch = 0
-            self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
+            self.show_coil_pitch()
             # Ntcoil
             if self.obj.winding.Ntcoil is None:
                 self.obj.winding.Ntcoil = 1
@@ -118,6 +116,13 @@ class SWinding(Gen_SWinding, QWidget):
             self.is_change_layer.setCheckState(Qt.Checked)
         else:
             self.is_change_layer.setCheckState(Qt.Unchecked)
+        # is_permute_B_C
+        if self.obj.winding.is_permute_B_C is None:
+            self.obj.winding.is_permute_B_C = False
+        if self.obj.winding.is_permute_B_C:
+            self.is_permute_B_C.setCheckState(Qt.Checked)
+        else:
+            self.is_permute_B_C.setCheckState(Qt.Unchecked)
 
         # Update the GUI
         self.update_graph()
@@ -125,11 +130,13 @@ class SWinding(Gen_SWinding, QWidget):
 
         # Connect the signal/slot
         self.c_wind_type.currentIndexChanged.connect(self.set_type)
+        self.si_Nlayer.valueChanged.connect(self.show_coil_pitch)
         self.si_Npcp.editingFinished.connect(self.set_Npcp)
         self.si_Nslot.valueChanged.connect(self.set_Nslot)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
         self.is_reverse_layer.stateChanged.connect(self.set_is_reverse_layer)
         self.is_change_layer.stateChanged.connect(self.set_is_change_layer)
+        self.is_permute_B_C.stateChanged.connect(self.set_is_permute_B_C)
 
         # self.b_edit_wind_mat.clicked.connect(self.s_edit_wind_mat)
         self.b_import.clicked.connect(self.s_import_csv)
@@ -162,6 +169,18 @@ class SWinding(Gen_SWinding, QWidget):
             self.si_qs.show()
             self.b_generate.show()
             self.b_import.hide()
+
+    def show_coil_pitch(self):
+        if self.si_Nlayer.value() == 1:
+            self.in_coil_pitch.hide()
+            self.si_coil_pitch.hide()
+            self.obj.winding.coil_pitch = None
+        else:
+            self.in_coil_pitch.show()
+            self.si_coil_pitch.show()
+            if self.obj.winding.coil_pitch is None:
+                self.obj.winding.coil_pitch = 1
+            self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
 
     def s_generate(self):
         # Update winding object
@@ -269,6 +288,24 @@ class SWinding(Gen_SWinding, QWidget):
 
         value = self.is_reverse_layer.isChecked()
         self.obj.winding.is_reverse_layer = value
+        self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_is_permute_B_C(self, value):
+        """Signal to update the value of is_permute_B_C according to the
+        widget
+
+        Parameters
+        ----------
+        self : SWinding
+            A SWinding object
+        value :
+            New value of is_permute_B_C
+        """
+
+        value = self.is_permute_B_C.isChecked()
+        self.obj.winding.is_permute_B_C = value
         self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

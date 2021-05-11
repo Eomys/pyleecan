@@ -12847,6 +12847,15 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "True to permute phase B and phase C",
+                "max": "",
+                "min": "",
+                "name": "is_permute_B_C",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },

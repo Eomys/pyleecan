@@ -172,6 +172,11 @@ class Ui_SWinding(object):
 
         self.verticalLayout.addWidget(self.is_change_layer)
 
+        self.is_permute_B_C = QCheckBox(self.g_edit)
+        self.is_permute_B_C.setObjectName(u"is_permute_B_C")
+
+        self.verticalLayout.addWidget(self.is_permute_B_C)
+
         self.b_edit_wind_mat = QPushButton(self.g_edit)
         self.b_edit_wind_mat.setObjectName(u"b_edit_wind_mat")
 
@@ -310,6 +315,9 @@ class Ui_SWinding(object):
         )
         self.is_change_layer.setText(
             QCoreApplication.translate("SWinding", u"Change layer direction", None)
+        )
+        self.is_permute_B_C.setText(
+            QCoreApplication.translate("SWinding", u"Permute B-C phases", None)
         )
         self.b_edit_wind_mat.setText(
             QCoreApplication.translate("SWinding", u"Edit Winding Matrix", None)

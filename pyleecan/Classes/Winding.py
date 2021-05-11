@@ -248,6 +248,7 @@ class Winding(FrozenClass):
         end_winding=-1,
         is_reverse_layer=False,
         is_change_layer=False,
+        is_permute_B_C=False,
         init_dict=None,
         init_str=None,
     ):
@@ -300,6 +301,8 @@ class Winding(FrozenClass):
                 is_reverse_layer = init_dict["is_reverse_layer"]
             if "is_change_layer" in list(init_dict.keys()):
                 is_change_layer = init_dict["is_change_layer"]
+            if "is_permute_B_C" in list(init_dict.keys()):
+                is_permute_B_C = init_dict["is_permute_B_C"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_reverse_wind = is_reverse_wind
@@ -319,6 +322,7 @@ class Winding(FrozenClass):
         self.end_winding = end_winding
         self.is_reverse_layer = is_reverse_layer
         self.is_change_layer = is_change_layer
+        self.is_permute_B_C = is_permute_B_C
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -364,6 +368,7 @@ class Winding(FrozenClass):
             Winding_str += "end_winding = None" + linesep + linesep
         Winding_str += "is_reverse_layer = " + str(self.is_reverse_layer) + linesep
         Winding_str += "is_change_layer = " + str(self.is_change_layer) + linesep
+        Winding_str += "is_permute_B_C = " + str(self.is_permute_B_C) + linesep
         return Winding_str
 
     def __eq__(self, other):
@@ -404,6 +409,8 @@ class Winding(FrozenClass):
         if other.is_reverse_layer != self.is_reverse_layer:
             return False
         if other.is_change_layer != self.is_change_layer:
+            return False
+        if other.is_permute_B_C != self.is_permute_B_C:
             return False
         return True
 
@@ -459,6 +466,8 @@ class Winding(FrozenClass):
             diff_list.append(name + ".is_reverse_layer")
         if other._is_change_layer != self._is_change_layer:
             diff_list.append(name + ".is_change_layer")
+        if other._is_permute_B_C != self._is_permute_B_C:
+            diff_list.append(name + ".is_permute_B_C")
         return diff_list
 
     def __sizeof__(self):
@@ -482,6 +491,7 @@ class Winding(FrozenClass):
         S += getsizeof(self.end_winding)
         S += getsizeof(self.is_reverse_layer)
         S += getsizeof(self.is_change_layer)
+        S += getsizeof(self.is_permute_B_C)
         return S
 
     def as_dict(self, **kwargs):
@@ -518,6 +528,7 @@ class Winding(FrozenClass):
             Winding_dict["end_winding"] = self.end_winding.as_dict(**kwargs)
         Winding_dict["is_reverse_layer"] = self.is_reverse_layer
         Winding_dict["is_change_layer"] = self.is_change_layer
+        Winding_dict["is_permute_B_C"] = self.is_permute_B_C
         # The class name is added to the dict for deserialisation purpose
         Winding_dict["__class__"] = "Winding"
         return Winding_dict
@@ -544,6 +555,7 @@ class Winding(FrozenClass):
             self.end_winding._set_None()
         self.is_reverse_layer = None
         self.is_change_layer = None
+        self.is_permute_B_C = None
 
     def _get_is_reverse_wind(self):
         """getter of is_reverse_wind"""
@@ -891,6 +903,24 @@ class Winding(FrozenClass):
         fget=_get_is_change_layer,
         fset=_set_is_change_layer,
         doc=u"""1 to change the layer from radial to tangential or tangential to radial
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_permute_B_C(self):
+        """getter of is_permute_B_C"""
+        return self._is_permute_B_C
+
+    def _set_is_permute_B_C(self, value):
+        """setter of is_permute_B_C"""
+        check_var("is_permute_B_C", value, "bool")
+        self._is_permute_B_C = value
+
+    is_permute_B_C = property(
+        fget=_get_is_permute_B_C,
+        fset=_set_is_permute_B_C,
+        doc=u"""True to permute phase B and phase C
 
         :Type: bool
         """,

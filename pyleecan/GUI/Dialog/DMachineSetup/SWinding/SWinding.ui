@@ -239,6 +239,13 @@
             </widget>
            </item>
            <item>
+            <widget class="QCheckBox" name="is_permute_B_C">
+             <property name="text">
+              <string>Permute B-C phases</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="b_edit_wind_mat">
              <property name="text">
               <string>Edit Winding Matrix</string>

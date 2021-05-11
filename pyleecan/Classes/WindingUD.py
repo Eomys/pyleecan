@@ -137,6 +137,7 @@ class WindingUD(Winding):
         end_winding=-1,
         is_reverse_layer=False,
         is_change_layer=False,
+        is_permute_B_C=False,
         init_dict=None,
         init_str=None,
     ):
@@ -189,6 +190,8 @@ class WindingUD(Winding):
                 is_reverse_layer = init_dict["is_reverse_layer"]
             if "is_change_layer" in list(init_dict.keys()):
                 is_change_layer = init_dict["is_change_layer"]
+            if "is_permute_B_C" in list(init_dict.keys()):
+                is_permute_B_C = init_dict["is_permute_B_C"]
         # Set the properties (value check and convertion are done in setter)
         # Call Winding init
         super(WindingUD, self).__init__(
@@ -209,6 +212,7 @@ class WindingUD(Winding):
             end_winding=end_winding,
             is_reverse_layer=is_reverse_layer,
             is_change_layer=is_change_layer,
+            is_permute_B_C=is_permute_B_C,
         )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties

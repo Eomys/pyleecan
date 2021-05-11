@@ -37,12 +37,13 @@ class TestSWinding(object):
         test_obj.stator.winding = Winding(p=3)
         test_obj.stator.winding.qs = 6
         test_obj.stator.winding.coil_pitch = 8
-        test_obj.stator.winding.Nlayer = 9
+        test_obj.stator.winding.Nlayer = 2
         test_obj.stator.winding.Nslot_shift_wind = 10
         test_obj.stator.winding.Npcp = 2
         test_obj.stator.winding.is_reverse_wind = True
         test_obj.stator.winding.is_reverse_layer = True
         test_obj.stator.winding.is_change_layer = True
+        test_obj.stator.winding.is_permute_B_C = True
 
         widget = SWinding(machine=test_obj, matlib=[], is_stator=True)
 
@@ -55,7 +56,7 @@ class TestSWinding(object):
         assert setup["widget"].in_Zs.text() == "Slot number=36"
         assert setup["widget"].in_p.text() == "Pole pair number=3"
         assert setup["widget"].si_qs.value() == 6
-        assert setup["widget"].si_Nlayer.value() == 9
+        assert setup["widget"].si_Nlayer.value() == 2
         assert setup["widget"].si_coil_pitch.value() == 8
         assert setup["widget"].si_Nslot.value() == 10
         assert setup["widget"].si_Npcp.value() == 2
@@ -64,7 +65,8 @@ class TestSWinding(object):
         assert setup["widget"].is_reverse.checkState() == Qt.Checked
         assert setup["widget"].is_reverse_layer.checkState() == Qt.Checked
         assert setup["widget"].is_change_layer.checkState() == Qt.Checked
-        assert setup["widget"].out_shape.text() == "Matrix shape [1, 9, 36, 6]"
+        assert setup["widget"].is_permute_B_C.checkState() == Qt.Checked
+        assert setup["widget"].out_shape.text() == "Matrix shape [1, 2, 36, 6]"
 
         setup["test_obj"] = MachineSCIM()
         setup["test_obj"].stator = LamSlotWind()
@@ -157,6 +159,13 @@ class TestSWinding(object):
         assert not setup["test_obj"].stator.winding.is_reverse_layer
         setup["widget"].is_reverse_layer.setCheckState(Qt.Checked)
         assert setup["test_obj"].stator.winding.is_reverse_layer
+
+    def test_set_is_permute_B_C(self, setup):
+        """Check that the Widget allow to update is_permute_B_C"""
+        setup["widget"].is_permute_B_C.setCheckState(Qt.Unchecked)
+        assert not setup["test_obj"].stator.winding.is_permute_B_C
+        setup["widget"].is_permute_B_C.setCheckState(Qt.Checked)
+        assert setup["test_obj"].stator.winding.is_permute_B_C
 
     def test_set_is_change_layer(self, setup):
         """Check that the Widget allow to update is_change_layer"""
