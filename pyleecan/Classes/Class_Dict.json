@@ -12331,7 +12331,7 @@
                 "name": "coil_pitch",
                 "type": "int",
                 "unit": "",
-                "value": 0
+                "value": 1
             },
             {
                 "desc": "Winding matrix calculated with Star of slots (from SWAT_EM package)",
@@ -12340,7 +12340,7 @@
                 "name": "wind_mat",
                 "type": "ndarray",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Number of layers per slots",
