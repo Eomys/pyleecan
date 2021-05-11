@@ -1090,7 +1090,7 @@
             "qs": 3,
             "type_connection": null,
             "wind_mat": null
-        }
+        },
         "yoke_notch": []
     },
     "type_machine": 1
