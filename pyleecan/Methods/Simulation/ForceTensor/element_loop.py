@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import csv
 
 
 def element_loop(
@@ -53,12 +55,18 @@ def element_loop(
 
         mesh_cell_key = mesh.cell[key]
         connect = mesh.cell[key].get_connectivity()  # Each row of connect is an element
+
         nb_elem = len(connect)
 
         nb_node = mesh.node.nb_node  # Total nodes number
 
         # Nodal forces init
         f = np.zeros((nb_node, dim, Nt_tot), dtype=np.float)
+
+        node_indice_set = set(())
+        node_number_set = set(())
+        nodes_x = []
+        nodes_y = []
 
         # ref_cell = mesh.cell[key].interpolation.ref_cell // pas besoin d'interpoler car tout est cst
 
@@ -76,6 +84,16 @@ def element_loop(
                 elt_number
             )  # elt nodes numbers, can differ from indices
             vertice = mesh.get_vertice(elt_number)[key]  # elt nodes coordonates
+
+            node_to_find = 1935
+
+            if (
+                node_number[0] == node_to_find
+                or node_number[1] == node_to_find
+                or node_number[2] == node_to_find
+            ):
+                print(node_number)
+                print(vertice)
 
             # elt physical fields values
             Be = B[elt_indice, :, :]
@@ -95,8 +113,6 @@ def element_loop(
                 np.cross(vertice[1] - vertice[0], vertice[2] - vertice[0])
             )
 
-            node_indice_set = set(())
-
             # Loop on edges
             for n in range(nb_node_per_cell):
 
@@ -107,7 +123,12 @@ def element_loop(
                     mesh.node.indice == node_number[(n + 1) % nb_node_per_cell]
                 )[0][0]
 
-                node_indice_set.add(node_indice)
+                if not (node_indice in node_indice_set):
+
+                    node_indice_set.add(node_indice)
+                    node_number_set.add(node_number[n])
+                    nodes_x.append(vertice[n][0])
+                    nodes_y.append(vertice[n][1])
 
                 # Edge cooordonates
                 edge_vector = (
@@ -116,7 +137,7 @@ def element_loop(
 
                 # Volume ratio (Green Ostrogradski)
                 L = np.linalg.norm(edge_vector)
-                Ve0 = L / 2
+                Ve0 = 12
 
                 # Normalized normal vector n, that has to be directed outside the element (i.e. normal ^ edge same sign as the orientation)
                 normal_to_edge_unoriented = (
@@ -138,8 +159,34 @@ def element_loop(
                 fe = -Ve0 * edge_force / 2
                 f[node_indice, :, :] = f[node_indice, :, :] + fe
                 f[next_node_indice, :, :] = f[next_node_indice, :, :] + fe
-         
 
-        
+    # plt.plot(nodes_x,nodes_y,'og',markersize=1)
+
+    path = "C:/Users/Utilisateur/Desktop/Jean-Guillaume/magneto/Benchmark_model_stator_ms.csv"
+
+    nodes_x2 = []
+    nodes_y2 = []
+    f2 = np.zeros((nb_node, dim))
+    with open(path, "r") as file:
+        reader = csv.reader(file, skipinitialspace=True)
+        next(reader)
+        next(reader)
+        next(reader)
+        for row in reader:
+
+            nodes_x2.append(float(row[1]) / 1000)
+            nodes_y2.append(float(row[2]) / 1000)
+            f2[int(row[0])][0] = float(row[3])
+            f2[int(row[0])][1] = float(row[4])
+
+    # plt.plot(nodes_x2,nodes_y2,'or',markersize=1)
+    score_x = np.abs(f.reshape(nb_node, dim)[:, 0] - f2[:, 0]) / np.abs(f2[:, 0])
+    score_y = np.abs(f.reshape(nb_node, dim)[:, 1] - f2[:, 1]) / np.abs(f2[:, 1])
+    plt.plot(list(node_indice_set), score_x, "o")
+    plt.xlabel("node")
+    plt.ylabel("relative err to f2")
+    plt.title("fx-fx2 / fx2, Ve0 = L/2")
+    # plt.ylim([-1,10])
+    plt.show()
 
     return f, connect

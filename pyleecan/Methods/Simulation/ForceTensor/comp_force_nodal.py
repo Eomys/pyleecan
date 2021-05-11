@@ -57,7 +57,7 @@ def comp_force_nodal(self, output, axes_dict):
         "indice",
         "time=axis_data",
         axis_data={"time": time},
-        is_squeeze = False,
+        is_squeeze=False,
     )
     indice = resultB["indice"]  # Store elements indices
 
@@ -69,7 +69,7 @@ def comp_force_nodal(self, output, axes_dict):
         "indice",
         "time=axis_data",
         axis_data={"time": time},
-        is_squeeze = False,
+        is_squeeze=False,
     )
     Hx = resultH["comp_x"]
     Hy = resultH["comp_y"]
@@ -79,7 +79,7 @@ def comp_force_nodal(self, output, axes_dict):
         "indice",
         "time=axis_data",
         axis_data={"time": time},
-        is_squeeze = False,
+        is_squeeze=False,
     )
     mu = resultmu["\\mu"]
 
@@ -112,12 +112,8 @@ def comp_force_nodal(self, output, axes_dict):
     #         # Loop on edges
     #         for n in range(nb_node_per_cell):
     #             pass
-                
-                
-        
 
-
-    indices_nodes = np.sort(np.unique(connect))
+    indices_nodes = mesh.node.indice.copy()
     Indices_Point = Data1D(name="indice", values=indices_nodes, is_components=True)
 
     # Time axis goes back to first axis
@@ -146,6 +142,22 @@ def comp_force_nodal(self, output, axes_dict):
     vec_force = VectorField(name="Nodal forces", symbol="F", components=components)
     solforce = SolutionVector(field=vec_force, type_cell="node", label="F")
     meshsolution.solution.append(solforce)
+
+    ## CSV import
+
+    import csv
+
+    fx2 = np.array([])
+    fy2 = np.array([])
+
+    path = "C:/Users/Utilisateur/Desktop/Jean-Guillaume/magneto/Benchmark_model_20210413_ms_stator.csv"
+    with open(path, "r") as file:
+        reader = csv.reader(file, skipinitialspace=True)
+        next(reader)
+        next(reader)
+        next(reader)
+        # for row in reader:
+        #     print(row)
 
     out_dict = dict()
     out_dict["meshsolution"] = meshsolution

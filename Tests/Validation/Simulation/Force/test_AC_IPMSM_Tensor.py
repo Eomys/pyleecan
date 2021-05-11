@@ -38,11 +38,12 @@ def test_Benchmark_Tensor():
     simu.elec = None
 
     simu.mag = MagFEMM(
-        type_BH_stator=1, #0 for saturated
+        type_BH_stator=1,  # 0 for saturated
         type_BH_rotor=1,
         is_periodicity_a=False,
         is_periodicity_t=False,
         is_get_meshsolution=True,
+        is_sliding_band=False,
         # nb_worker=cpu_count(),
         Kmesh_fineness=1,
     )
@@ -57,8 +58,8 @@ def test_Benchmark_Tensor():
     out.force.meshsolution.plot_glyph(
         label="F",
         is_point_arrow=True,
-        #is_show_fig=True,
-        #save_path=join(save_path,"magneto_plot_glyph.png"),
+        # is_show_fig=True,
+        # save_path=join(save_path,"magneto_plot_glyph.png"),
     )
 
     return out
