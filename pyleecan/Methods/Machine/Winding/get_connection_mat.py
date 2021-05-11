@@ -2,6 +2,7 @@ from ....Functions.Winding.reverse_wind_mat import (
     reverse_wind_mat,
     reverse_layer,
     change_layer,
+    permute_B_C,
 )
 from ....Functions.Winding.shift_wind_mat import shift_wind_mat
 
@@ -39,4 +40,6 @@ def get_connection_mat(self, Zs=None, p=None):
         wind_mat = reverse_layer(wind_mat)
     if self.is_change_layer:
         wind_mat = change_layer(wind_mat)
+    if self.is_permute_B_C:
+        wind_mat = permute_B_C(wind_mat)
     return wind_mat
