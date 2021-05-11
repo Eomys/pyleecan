@@ -914,7 +914,7 @@
         },
         "winding": {
             "Lewout": 0.0,
-            "Npcp": 1,
+            "Npcpp": 1,
             "Nslot_shift_wind": 1,
             "Ntcoil": 23,
             "__class__": "WindingUD",
@@ -1010,7 +1010,7 @@
             "p": 8,
             "qs": 3,
             "type_connection": null,
-            "wind_mat": [
+            "user_wind_mat": [
                 [
                     [
                         [
