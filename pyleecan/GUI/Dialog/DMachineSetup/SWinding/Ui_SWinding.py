@@ -86,6 +86,7 @@ class Ui_SWinding(object):
         self.si_Nlayer = QSpinBox(self.g_pattern)
         self.si_Nlayer.setObjectName(u"si_Nlayer")
         self.si_Nlayer.setMinimum(1)
+        self.si_Nlayer.setMaximum(2)
 
         self.gridLayout.addWidget(self.si_Nlayer, 1, 1, 1, 1)
 
@@ -302,13 +303,13 @@ class Ui_SWinding(object):
             QCoreApplication.translate("SWinding", u"Slot shift", None)
         )
         self.is_reverse.setText(
-            QCoreApplication.translate("SWinding", u"Reversed winding", None)
+            QCoreApplication.translate("SWinding", u"Reverse winding", None)
         )
         self.is_reverse_layer.setText(
-            QCoreApplication.translate("SWinding", u"Reversed layer", None)
+            QCoreApplication.translate("SWinding", u"Reverse layer", None)
         )
         self.is_change_layer.setText(
-            QCoreApplication.translate("SWinding", u"Change layer", None)
+            QCoreApplication.translate("SWinding", u"Change layer direction", None)
         )
         self.b_edit_wind_mat.setText(
             QCoreApplication.translate("SWinding", u"Edit Winding Matrix", None)

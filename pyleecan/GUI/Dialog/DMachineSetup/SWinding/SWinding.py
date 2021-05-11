@@ -92,7 +92,7 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj.winding.Npcp = 1  # Default value
         self.si_Npcp.setValue(self.obj.winding.Npcp)
         self.si_Npcp.setMaximum(self.obj.winding.p)
-        
+
         # Edit Group setup
         if self.obj.winding.is_reverse_wind is None:
             self.obj.winding.is_reverse_wind = False

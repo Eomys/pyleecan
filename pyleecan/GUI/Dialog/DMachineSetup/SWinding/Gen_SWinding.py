@@ -57,13 +57,13 @@ class Gen_SWinding(Ui_SWinding):
         self.si_Ntcoil.setToolTip(txt)
 
         # Setup of in_Npcp
-        txt = self.tr(u"""number of parallel circuits per phase (maximum 2p)""")
+        txt = self.tr(u"""number of parallel circuits per phase (maximum p)""")
         self.in_Npcp.setWhatsThis(txt)
         self.in_Npcp.setToolTip(txt)
 
         # Setup of si_Npcp
         self.si_Npcp.setMinimum(1)
         self.si_Npcp.setMaximum(1000)
-        txt = self.tr(u"""number of parallel circuits per phase (maximum 2p)""")
+        txt = self.tr(u"""number of parallel circuits per phase (maximum p)""")
         self.si_Npcp.setWhatsThis(txt)
         self.si_Npcp.setToolTip(txt)

@@ -633,7 +633,7 @@ class Winding(FrozenClass):
     Npcp = property(
         fget=_get_Npcp,
         fset=_set_Npcp,
-        doc=u"""number of parallel circuits per phase (maximum 2p)
+        doc=u"""number of parallel circuits per phase (maximum p)
 
         :Type: int
         :min: 1

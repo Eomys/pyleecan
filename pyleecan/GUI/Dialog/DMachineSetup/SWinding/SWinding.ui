@@ -117,6 +117,9 @@
                <property name="minimum">
                 <number>1</number>
                </property>
+               <property name="maximum">
+                <number>2</number>
+               </property>
               </widget>
              </item>
              <item row="2" column="0">
@@ -217,21 +220,21 @@
            <item>
             <widget class="QCheckBox" name="is_reverse">
              <property name="text">
-              <string>Reversed winding</string>
+              <string>Reverse winding</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="is_reverse_layer">
              <property name="text">
-              <string>Reversed layer</string>
+              <string>Reverse layer</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="is_change_layer">
              <property name="text">
-              <string>Change layer</string>
+              <string>Change layer direction</string>
              </property>
             </widget>
            </item>

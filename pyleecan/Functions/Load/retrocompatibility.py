@@ -114,7 +114,7 @@ def convert_Winding(wind_dict):
         wind_dict["Npcp"] = wind_dict.pop("Npcpp")
 
     # Update user_wind_mat
-    if wind_dict["__class__"]  == "WindingUD":
+    if wind_dict["__class__"] == "WindingUD":
         if "user_wind_mat" in wind_dict.keys():
             wind_dict["wind_mat"] = wind_dict["user_wind_mat"]
 

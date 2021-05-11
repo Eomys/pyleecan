@@ -12732,7 +12732,7 @@
                 "value": 7
             },
             {
-                "desc": "number of parallel circuits per phase (maximum 2p)",
+                "desc": "number of parallel circuits per phase (maximum p)",
                 "max": "1000",
                 "min": "1",
                 "name": "Npcp",
