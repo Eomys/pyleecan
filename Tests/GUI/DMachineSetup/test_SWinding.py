@@ -39,7 +39,7 @@ class TestSWinding(object):
         test_obj.stator.winding.coil_pitch = 8
         test_obj.stator.winding.Nlayer = 9
         test_obj.stator.winding.Nslot_shift_wind = 10
-        test_obj.stator.winding.Npcp = 22
+        test_obj.stator.winding.Npcp = 2
         test_obj.stator.winding.is_reverse_wind = True
         test_obj.stator.winding.is_reverse_layer = True
         test_obj.stator.winding.is_change_layer = True
@@ -58,7 +58,7 @@ class TestSWinding(object):
         assert setup["widget"].si_Nlayer.value() == 9
         assert setup["widget"].si_coil_pitch.value() == 8
         assert setup["widget"].si_Nslot.value() == 10
-        assert setup["widget"].si_Npcp.value() == 22
+        assert setup["widget"].si_Npcp.value() == 2
         assert setup["widget"].c_wind_type.currentIndex() == 0
         assert setup["widget"].c_wind_type.currentText() == "Star of Slot"
         assert setup["widget"].is_reverse.checkState() == Qt.Checked
@@ -120,8 +120,8 @@ class TestSWinding(object):
         assert setup["widget"].out_shape.text() == "Matrix shape [1, 2, 36, 3]"
         assert setup["widget"].out_ms.text() == "ms = Zs / (2*p*qs) = 2.0"
         assert setup["widget"].out_Nperw.text() == "Nperw: 6"
-        assert setup["widget"].out_Ncspc.text() == "Ncspc: 12"
-        assert setup["widget"].out_Ntspc.text() == "Ntspc: 108"
+        assert setup["widget"].out_Ncspc.text() == "Ncspc: 6"
+        assert setup["widget"].out_Ntspc.text() == "Ntspc: 54"
 
     def test_export_import(self, setup):
         return_value = (
@@ -177,7 +177,7 @@ class TestSWinding(object):
     def test_set_Npcp(self, setup):
         """Check that the Widget allow to update Npcp"""
         setup["widget"].si_Npcp.clear()  # Clear the field before writing
-        value = int(uniform(0, 100))
+        value = int(uniform(1, 3))
         QTest.keyClicks(setup["widget"].si_Npcp, str(value))
         setup["widget"].si_Npcp.editingFinished.emit()  # To trigger the slot
 
