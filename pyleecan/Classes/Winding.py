@@ -239,7 +239,7 @@ class Winding(FrozenClass):
         p=3,
         Lewout=0.015,
         conductor=-1,
-        coil_pitch=0,
+        coil_pitch=1,
         wind_mat=None,
         Nlayer=1,
         per_a=None,
