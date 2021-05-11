@@ -1305,6 +1305,56 @@
             }
         ]
     },
+    "EndWinding": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "EndWindingCirc"
+        ],
+        "desc": "Abstract Class of the machine's end winding",
+        "is_internal": false,
+        "methods": [
+            "comp_length_endwinding"
+        ],
+        "mother": "",
+        "name": "EndWinding",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/EndWinding.csv",
+        "properties": []
+    },
+    "EndWindingCirc": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class of the machine's end winding assuming a circular shape",
+        "is_internal": false,
+        "methods": [
+            "comp_length_endwinding"
+        ],
+        "mother": "EndWinding",
+        "name": "EndWindingCirc",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/EndWindingCirc.csv",
+        "properties": [
+            {
+                "desc": "effective coil pitch (override) for length calculation",
+                "max": "",
+                "min": "",
+                "name": "coil_pitch",
+                "type": "float",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
     "FPGNSeg": {
         "constants": [
             {
@@ -12770,6 +12820,15 @@
                 "type": "bool",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "End Winding's definition",
+                "max": "",
+                "min": "",
+                "name": "end_winding",
+                "type": "EndWinding",
+                "unit": "-",
+                "value": ""
             },
             {
                 "desc": "1 to reverse the layers (rad from 0 to Nrad-1 => Nrad-1 to 0)",

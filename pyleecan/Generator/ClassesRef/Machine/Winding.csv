@@ -13,5 +13,6 @@ wind_mat,-,Winding matrix calculated with Star of slots (from SWAT_EM package),4
 Nlayer,,Number of layers per slots,,int,1,1,,,,,clean,,,
 per_a,,Number of spatial periods of the winding,,int,None,1,,,,,,,,
 is_aper_a,,True if the winding is anti-periodic over space,,bool,None,,,,,,,,,
+end_winding,-,End Winding's definition,,EndWinding,,,,,,,,,,
 is_reverse_layer,-,1 to reverse the layers (rad from 0 to Nrad-1 => Nrad-1 to 0),0,bool,0,,,,,,,,,
 is_change_layer,-,1 to change the layer from radial to tangential or tangential to radial,0,bool,0,,,,,,,,,

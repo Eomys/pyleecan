@@ -31,6 +31,8 @@ load_switch = {
     "Elmer": Elmer,
     "ElmerResults": ElmerResults,
     "ElmerResultsVTU": ElmerResultsVTU,
+    "EndWinding": EndWinding,
+    "EndWindingCirc": EndWindingCirc,
     "FPGNSeg": FPGNSeg,
     "FPGNTri": FPGNTri,
     "FluxLink": FluxLink,

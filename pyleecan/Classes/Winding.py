@@ -81,6 +81,7 @@ except ImportError as error:
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .Conductor import Conductor
+from .EndWinding import EndWinding
 
 
 class Winding(FrozenClass):
@@ -244,6 +245,7 @@ class Winding(FrozenClass):
         Nlayer=1,
         per_a=None,
         is_aper_a=None,
+        end_winding=-1,
         is_reverse_layer=False,
         is_change_layer=False,
         init_dict=None,
@@ -292,6 +294,8 @@ class Winding(FrozenClass):
                 per_a = init_dict["per_a"]
             if "is_aper_a" in list(init_dict.keys()):
                 is_aper_a = init_dict["is_aper_a"]
+            if "end_winding" in list(init_dict.keys()):
+                end_winding = init_dict["end_winding"]
             if "is_reverse_layer" in list(init_dict.keys()):
                 is_reverse_layer = init_dict["is_reverse_layer"]
             if "is_change_layer" in list(init_dict.keys()):
@@ -312,6 +316,7 @@ class Winding(FrozenClass):
         self.Nlayer = Nlayer
         self.per_a = per_a
         self.is_aper_a = is_aper_a
+        self.end_winding = end_winding
         self.is_reverse_layer = is_reverse_layer
         self.is_change_layer = is_change_layer
 
@@ -350,6 +355,13 @@ class Winding(FrozenClass):
         Winding_str += "Nlayer = " + str(self.Nlayer) + linesep
         Winding_str += "per_a = " + str(self.per_a) + linesep
         Winding_str += "is_aper_a = " + str(self.is_aper_a) + linesep
+        if self.end_winding is not None:
+            tmp = (
+                self.end_winding.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            Winding_str += "end_winding = " + tmp
+        else:
+            Winding_str += "end_winding = None" + linesep + linesep
         Winding_str += "is_reverse_layer = " + str(self.is_reverse_layer) + linesep
         Winding_str += "is_change_layer = " + str(self.is_change_layer) + linesep
         return Winding_str
@@ -386,6 +398,8 @@ class Winding(FrozenClass):
         if other.per_a != self.per_a:
             return False
         if other.is_aper_a != self.is_aper_a:
+            return False
+        if other.end_winding != self.end_winding:
             return False
         if other.is_reverse_layer != self.is_reverse_layer:
             return False
@@ -433,6 +447,14 @@ class Winding(FrozenClass):
             diff_list.append(name + ".per_a")
         if other._is_aper_a != self._is_aper_a:
             diff_list.append(name + ".is_aper_a")
+        if (other.end_winding is None and self.end_winding is not None) or (
+            other.end_winding is not None and self.end_winding is None
+        ):
+            diff_list.append(name + ".end_winding None mismatch")
+        elif self.end_winding is not None:
+            diff_list.extend(
+                self.end_winding.compare(other.end_winding, name=name + ".end_winding")
+            )
         if other._is_reverse_layer != self._is_reverse_layer:
             diff_list.append(name + ".is_reverse_layer")
         if other._is_change_layer != self._is_change_layer:
@@ -457,6 +479,7 @@ class Winding(FrozenClass):
         S += getsizeof(self.Nlayer)
         S += getsizeof(self.per_a)
         S += getsizeof(self.is_aper_a)
+        S += getsizeof(self.end_winding)
         S += getsizeof(self.is_reverse_layer)
         S += getsizeof(self.is_change_layer)
         return S
@@ -489,6 +512,10 @@ class Winding(FrozenClass):
         Winding_dict["Nlayer"] = self.Nlayer
         Winding_dict["per_a"] = self.per_a
         Winding_dict["is_aper_a"] = self.is_aper_a
+        if self.end_winding is None:
+            Winding_dict["end_winding"] = None
+        else:
+            Winding_dict["end_winding"] = self.end_winding.as_dict(**kwargs)
         Winding_dict["is_reverse_layer"] = self.is_reverse_layer
         Winding_dict["is_change_layer"] = self.is_change_layer
         # The class name is added to the dict for deserialisation purpose
@@ -513,6 +540,8 @@ class Winding(FrozenClass):
         self.Nlayer = None
         self.per_a = None
         self.is_aper_a = None
+        if self.end_winding is not None:
+            self.end_winding._set_None()
         self.is_reverse_layer = None
         self.is_change_layer = None
 
@@ -798,6 +827,36 @@ class Winding(FrozenClass):
         doc=u"""True if the winding is anti-periodic over space
 
         :Type: bool
+        """,
+    )
+
+    def _get_end_winding(self):
+        """getter of end_winding"""
+        return self._end_winding
+
+    def _set_end_winding(self, value):
+        """setter of end_winding"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "end_winding"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = EndWinding()
+        check_var("end_winding", value, "EndWinding")
+        self._end_winding = value
+
+        if self._end_winding is not None:
+            self._end_winding.parent = self
+
+    end_winding = property(
+        fget=_get_end_winding,
+        fset=_set_end_winding,
+        doc=u"""End Winding's definition
+
+        :Type: EndWinding
         """,
     )
 
