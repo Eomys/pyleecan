@@ -110,15 +110,22 @@ def comp_connection_mat(self, Zs=None, p=None):
 
     # check that requested number of parallel connections is feasible
     Npcp_list = wdg.get_parallel_connections()
-    if self.Npcp not in Npcp_list:
-
-        if self.Npcp is not None:
-            self.get_logger().warning(
-                "Requested number of parallel circuits per phase is not feasible, assign it to: "
-                + str(Npcp_list[0])
-            )
-
+    if self.Npcp is None:
         self.Npcp = Npcp_list[0]
+    elif self.Npcp > p:
+        self.Npcp = p
+        self.get_logger().warning(
+            "Number of parallel circuits per phase must be < p, assign it to: " + str(p)
+        )
+    # if self.Npcp not in Npcp_list:
+
+    #     if self.Npcp is not None:
+    #         self.get_logger().warning(
+    #             "Requested number of parallel circuits per phase is not feasible, assign it to: "
+    #             + str(Npcp_list[0])
+    #         )
+
+    #     self.Npcp = Npcp_list[0]
 
     # enforce the number of layers if it is not as requested
     Nlayer_actual = wdg.get_num_layers()
