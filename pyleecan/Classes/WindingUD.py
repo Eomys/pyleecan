@@ -46,6 +46,7 @@ except ImportError as error:
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .Conductor import Conductor
+from .EndWinding import EndWinding
 
 
 class WindingUD(Winding):
@@ -133,6 +134,7 @@ class WindingUD(Winding):
         Nlayer=1,
         per_a=None,
         is_aper_a=None,
+        end_winding=-1,
         is_reverse_layer=False,
         is_change_layer=False,
         init_dict=None,
@@ -181,6 +183,8 @@ class WindingUD(Winding):
                 per_a = init_dict["per_a"]
             if "is_aper_a" in list(init_dict.keys()):
                 is_aper_a = init_dict["is_aper_a"]
+            if "end_winding" in list(init_dict.keys()):
+                end_winding = init_dict["end_winding"]
             if "is_reverse_layer" in list(init_dict.keys()):
                 is_reverse_layer = init_dict["is_reverse_layer"]
             if "is_change_layer" in list(init_dict.keys()):
@@ -202,6 +206,7 @@ class WindingUD(Winding):
             Nlayer=Nlayer,
             per_a=per_a,
             is_aper_a=is_aper_a,
+            end_winding=end_winding,
             is_reverse_layer=is_reverse_layer,
             is_change_layer=is_change_layer,
         )
