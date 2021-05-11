@@ -135,7 +135,7 @@ def element_loop(
 
                 # Volume ratio (Green Ostrogradski)
                 L = np.linalg.norm(edge_vector)
-                Ve0 = L / 2
+                Ve0 = L
 
                 # Normalized normal vector n, that has to be directed outside the element (i.e. normal ^ edge same sign as the orientation)
                 normal_to_edge_unoriented = (
@@ -154,9 +154,9 @@ def element_loop(
                 )  # [[1],[0]] means sum product over rows for normal (which is vertical) and over rows for tme
 
                 # Total edge force contribution, to be added to the 2 nodes that made the edge
-                fe = -Ve0 * edge_force / 2
-                f[node_indice, :, :] = f[node_indice, :, :] + fe
-                f[next_node_indice, :, :] = f[next_node_indice, :, :] + fe
+                fe = -Ve0 * edge_force
+                f[node_indice, :, :] = f[node_indice, :, :] + fe/2
+                f[next_node_indice, :, :] = f[next_node_indice, :, :] + fe/2
 
     # plt.plot(nodes_x,nodes_y,'og',markersize=1)
 
