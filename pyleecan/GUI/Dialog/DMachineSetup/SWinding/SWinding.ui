@@ -39,6 +39,9 @@
        <property name="pixmap">
         <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WindParam/Winding param.PNG</pixmap>
        </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -55,13 +58,13 @@
          <height>16777215</height>
         </size>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
          <widget class="QGroupBox" name="g_pattern">
           <property name="title">
            <string>Pattern</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
             <widget class="QComboBox" name="c_wind_type">
              <item>
@@ -91,61 +94,93 @@
             </widget>
            </item>
            <item>
-            <widget class="QStackedWidget" name="stack_wind_type">
-             <property name="currentIndex">
-              <number>0</number>
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="0" column="0">
+              <widget class="QLabel" name="in_qs">
+               <property name="text">
+                <string>Phases number</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="si_qs"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="in_Nlayer">
+               <property name="text">
+                <string>Layer number</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="si_Nlayer">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="in_coil_pitch">
+               <property name="text">
+                <string>Coil pitch</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QSpinBox" name="si_coil_pitch"/>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="in_Ntcoil">
+               <property name="text">
+                <string>Turns per coil</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QSpinBox" name="si_Ntcoil"/>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="in_Npcp">
+               <property name="text">
+                <string>Parallel circuits</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QSpinBox" name="si_Npcp">
+               <property name="maximum">
+                <number>999999999</number>
+               </property>
+               <property name="value">
+                <number>12345</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QPushButton" name="b_generate">
+             <property name="text">
+              <string>Generate</string>
              </property>
-             <widget class="QWidget" name="page">
-              <layout class="QGridLayout" name="gridLayout_2">
-               <item row="0" column="0">
-                <widget class="QLabel" name="in_qs">
-                 <property name="text">
-                  <string>Phases number</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QSpinBox" name="si_qs"/>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="in_Nlayer">
-                 <property name="text">
-                  <string>Layer number</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QSpinBox" name="si_Nlayer">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="in_coil_pitch">
-                 <property name="text">
-                  <string>Coil pitch</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QSpinBox" name="si_coil_pitch"/>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="page_2">
-              <layout class="QVBoxLayout" name="verticalLayout_7">
-               <item>
-                <widget class="QPushButton" name="b_import_csv">
-                 <property name="text">
-                  <string>Import from CSV</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
             </widget>
            </item>
+           <item>
+            <widget class="QPushButton" name="b_import">
+             <property name="text">
+              <string>Import from CSV</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="g_edit">
+          <property name="title">
+           <string>Edit</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
@@ -186,39 +221,24 @@
              </property>
             </widget>
            </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="g_circuit">
-          <property name="title">
-           <string>Circuit</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="in_Ntcoil">
+           <item>
+            <widget class="QCheckBox" name="is_reverse_layer">
              <property name="text">
-              <string>Turns per coil</string>
+              <string>Reversed layer</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QSpinBox" name="si_Ntcoil"/>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="in_Npcp">
+           <item>
+            <widget class="QCheckBox" name="is_change_layer">
              <property name="text">
-              <string>Parallel circuits</string>
+              <string>Change layer</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QSpinBox" name="si_Npcp">
-             <property name="maximum">
-              <number>999999999</number>
-             </property>
-             <property name="value">
-              <number>12345</number>
+           <item>
+            <widget class="QPushButton" name="b_edit_wind_mat">
+             <property name="text">
+              <string>Edit Winding Matrix</string>
              </property>
             </widget>
            </item>
@@ -237,20 +257,6 @@
            </size>
           </property>
          </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="b_edit_wind_mat">
-          <property name="text">
-           <string>Edit Winding Matrix</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="b_export_csv">
-          <property name="text">
-           <string>Export to CSV</string>
-          </property>
-         </widget>
         </item>
         <item>
          <widget class="QGroupBox" name="g_output">
@@ -323,6 +329,13 @@
              </property>
              <property name="text">
               <string>Ncspc:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="b_export">
+             <property name="text">
+              <string>Export to CSV</string>
              </property>
             </widget>
            </item>

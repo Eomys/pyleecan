@@ -14,8 +14,6 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.SlotW28 import SlotW28
 
@@ -48,7 +46,8 @@ class Test_Slot_28_plot(object):
         test_obj.rotor.slot = SlotW28(
             Zs=42, W0=3.5e-3, H0=0.45e-3, R1=3.5e-3, H3=14e-3, W3=5e-3
         )
-        test_obj.rotor.winding = WindingCW2LT(qs=3, p=3)
+        test_obj.rotor.winding = WindingUD(qs=3, p=3)
+        test_obj.rotor.winding.init_as_CW2LT()
         test_obj.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
@@ -64,7 +63,7 @@ class Test_Slot_28_plot(object):
         test_obj.stator.slot = SlotW28(
             Zs=18, W0=7e-3, R1=10e-3, H0=5e-3, H3=30e-3, W3=5e-3
         )
-        test_obj.stator.winding = WindingDW2L(qs=3, p=3, Lewout=60e-3)
+        test_obj.stator.winding = Winding(qs=3, p=3, Nlayer=2, coil_pitch=2)
         test_obj.stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=0.2, Rext=0.25, Lfra=1)
 
@@ -149,3 +148,9 @@ class Test_Slot_28_plot(object):
         tooth.plot(color="r", is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s28_Tooth_out.png"))
+
+
+if __name__ == "__main__":
+    a = Test_Slot_28_plot()
+    a.test_Lam_Wind_28_wind_rad_tan()
+    a.test_Lam_Wind_28_wind_22()

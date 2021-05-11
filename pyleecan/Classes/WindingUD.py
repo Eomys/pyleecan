@@ -18,11 +18,6 @@ from .Winding import Winding
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Machine.WindingUD.comp_connection_mat import comp_connection_mat
-except ImportError as error:
-    comp_connection_mat = error
-
-try:
     from ..Methods.Machine.WindingUD.init_as_CW1L import init_as_CW1L
 except ImportError as error:
     init_as_CW1L = error
@@ -42,6 +37,11 @@ try:
 except ImportError as error:
     init_as_DWL = error
 
+try:
+    from ..Methods.Machine.WindingUD.import_from_csv import import_from_csv
+except ImportError as error:
+    import_from_csv = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -55,18 +55,6 @@ class WindingUD(Winding):
     NAME = "User defined"
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Machine.WindingUD.comp_connection_mat
-    if isinstance(comp_connection_mat, ImportError):
-        comp_connection_mat = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use WindingUD method comp_connection_mat: "
-                    + str(comp_connection_mat)
-                )
-            )
-        )
-    else:
-        comp_connection_mat = comp_connection_mat
     # cf Methods.Machine.WindingUD.init_as_CW1L
     if isinstance(init_as_CW1L, ImportError):
         init_as_CW1L = property(
@@ -111,6 +99,18 @@ class WindingUD(Winding):
         )
     else:
         init_as_DWL = init_as_DWL
+    # cf Methods.Machine.WindingUD.import_from_csv
+    if isinstance(import_from_csv, ImportError):
+        import_from_csv = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use WindingUD method import_from_csv: "
+                    + str(import_from_csv)
+                )
+            )
+        )
+    else:
+        import_from_csv = import_from_csv
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -133,6 +133,8 @@ class WindingUD(Winding):
         Nlayer=1,
         per_a=None,
         is_aper_a=None,
+        is_reverse_layer=False,
+        is_change_layer=False,
         init_dict=None,
         init_str=None,
     ):
@@ -179,6 +181,10 @@ class WindingUD(Winding):
                 per_a = init_dict["per_a"]
             if "is_aper_a" in list(init_dict.keys()):
                 is_aper_a = init_dict["is_aper_a"]
+            if "is_reverse_layer" in list(init_dict.keys()):
+                is_reverse_layer = init_dict["is_reverse_layer"]
+            if "is_change_layer" in list(init_dict.keys()):
+                is_change_layer = init_dict["is_change_layer"]
         # Set the properties (value check and convertion are done in setter)
         # Call Winding init
         super(WindingUD, self).__init__(
@@ -196,6 +202,8 @@ class WindingUD(Winding):
             Nlayer=Nlayer,
             per_a=per_a,
             is_aper_a=is_aper_a,
+            is_reverse_layer=is_reverse_layer,
+            is_change_layer=is_change_layer,
         )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties

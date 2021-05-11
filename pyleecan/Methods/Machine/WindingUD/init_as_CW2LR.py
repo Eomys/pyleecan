@@ -94,6 +94,9 @@ def init_as_CW2LR(self, Zs=None):
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
 
     self.wind_mat = wind_mat
+    # Matrix changed, compute again periodicity
+    self.per_a = None
+    self.is_aper_a = None
 
 
 class WindingT5DefMsError(WindingError):

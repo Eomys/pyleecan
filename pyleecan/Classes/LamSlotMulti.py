@@ -195,6 +195,7 @@ class LamSlotMulti(Lamination):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        yoke_notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -239,6 +240,8 @@ class LamSlotMulti(Lamination):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
         # Set the properties (value check and convertion are done in setter)
         self.slot_list = slot_list
         self.alpha = alpha
@@ -255,6 +258,7 @@ class LamSlotMulti(Lamination):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            yoke_notch=yoke_notch,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties

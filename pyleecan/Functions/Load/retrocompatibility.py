@@ -49,17 +49,16 @@ def is_LamSlotMag_dict(obj_dict):
     """Check if the object need to be updated for LamSlotMag"""
     return (
         "__class__" in obj_dict.keys()
-        and obj_dict["__class__"] == "MachineSIPMSM"
-        and "magnet" not in obj_dict["rotor"]
+        and obj_dict["__class__"] == "LamSlotMag"
+        and "magnet" not in obj_dict.keys()
     )
 
 
-def convert_LamSlotMag(machine_dict):
+def convert_LamSlotMag(lam_dict):
     """Update the content of the dict"""
     print("Old machine version detected, Updating the LamSlotMag object")
     # readability
-    rotor = machine_dict["rotor"]
-    slot = machine_dict["rotor"]["slot"]
+    slot = lam_dict["slot"]
 
     # Moving the magnet (use only one magnet)
     if len(slot["magnet"]) > 1:
@@ -67,17 +66,17 @@ def convert_LamSlotMag(machine_dict):
             "LamSlotMag with more than one magnet per pole "
             + "is not available for now. Only keeping first magnet."
         )
-    rotor["magnet"] = slot["magnet"][0]
+    lam_dict["magnet"] = slot["magnet"][0]
     slot.pop("magnet")
 
     # Update the slot with the magnet parameters
-    if rotor["magnet"] is not None:
-        slot["__class__"] = "SlotM" + rotor["magnet"]["__class__"][-2:]
-        slot["Wmag"] = rotor["magnet"]["Wmag"]
-        slot["Hmag"] = rotor["magnet"]["Hmag"]
-        if "Rtop" in rotor["magnet"]:
-            slot["Rtopm"] = rotor["magnet"]["Rtop"]
-        rotor["magnet"]["__class__"] = "Magnet"
+    if lam_dict["magnet"] is not None:
+        slot["__class__"] = "SlotM" + lam_dict["magnet"]["__class__"][-2:]
+        slot["Wmag"] = lam_dict["magnet"]["Wmag"]
+        slot["Hmag"] = lam_dict["magnet"]["Hmag"]
+        if "Rtop" in lam_dict["magnet"]:
+            slot["Rtopm"] = lam_dict["magnet"]["Rtop"]
+        lam_dict["magnet"]["__class__"] = "Magnet"
 
 
 ######################
@@ -122,24 +121,53 @@ def convert_Winding(wind_dict):
         "WindingDW1L",
         "WindingDW2L",
     ]:
-        old_class = wind_dict["__class__"]
-        wind_dict["__class__"] = "WindingUD"
-        WindingUD = import_class("pyleecan.Classes", "WindingUD")
-        new_wind = WindingUD()
-        if "coil_pitch" in wind_dict.keys():
-            new_wind.coil_pitch = wind_dict["coil_pitch"]
+        # Load Winding main parameters
+        if "qs" in wind_dict.keys():
+            qs = wind_dict["qs"]
         else:
-            new_wind.coil_pitch = 0
-        # Generate Winding matrix
-        if old_class == "WindingCW1L":
-            new_wind.init_as_CW1L(Zs=wind_dict["Zs"])
-        elif old_class == "WindingCW2LR":
-            new_wind.init_as_CW2LR(Zs=wind_dict["Zs"])
-        elif old_class == "WindingCW2LT":
-            new_wind.init_as_CW2LT(Zs=wind_dict["Zs"])
-        elif old_class == "WindingDW1L":
-            new_wind.init_as_DWL(Zs=wind_dict["Zs"], nlay=1)
-        elif old_class == "WindingDW2L":
-            new_wind.init_as_DWL(Zs=wind_dict["Zs"], nlay=2)
-        wind_dict["wind_mat"] = new_wind.wind_mat.tolist()
-        wind_dict["Nlayer"] = new_wind.Nlayer
+            qs = 3
+        if "p" in wind_dict.keys():
+            p = wind_dict["p"]
+        else:
+            p = 3
+        if "coil_pitch" in wind_dict.keys():
+            coil_pitch = wind_dict["coil_pitch"]
+        else:
+            coil_pitch = 0
+        if "Ntcoil" in wind_dict.keys():
+            Ntcoil = wind_dict["Ntcoil"]
+        else:
+            Ntcoil = 1
+
+        if (
+            qs is None
+            or p is None
+            or coil_pitch is None
+            or "Zs" not in wind_dict
+            or wind_dict["Zs"] is None
+        ):
+            # Winding not fully defined => Use Star of slot
+            wind_dict["__class__"] = "Winding"
+        else:
+            # Generate old Winding matrix as UD
+            old_class = wind_dict["__class__"]
+            WindingUD = import_class("pyleecan.Classes", "WindingUD")
+            new_wind = WindingUD(qs=qs, p=p, Ntcoil=Ntcoil, coil_pitch=coil_pitch)
+            try:
+                if old_class == "WindingCW1L":
+                    new_wind.init_as_CW1L(Zs=wind_dict["Zs"])
+                elif old_class == "WindingCW2LR":
+                    new_wind.init_as_CW2LR(Zs=wind_dict["Zs"])
+                elif old_class == "WindingCW2LT":
+                    new_wind.init_as_CW2LT(Zs=wind_dict["Zs"])
+                elif old_class == "WindingDW1L":
+                    new_wind.init_as_DWL(Zs=wind_dict["Zs"], nlay=1)
+                elif old_class == "WindingDW2L":
+                    new_wind.init_as_DWL(Zs=wind_dict["Zs"], nlay=2)
+                # Updating dict
+                wind_dict["wind_mat"] = new_wind.wind_mat.tolist()
+                wind_dict["__class__"] = "WindingUD"
+                wind_dict["Nlayer"] = new_wind.Nlayer
+            except Exception:
+                # Not able to generate winding matrix => Star of Slot
+                wind_dict["__class__"] = "Winding"

@@ -80,8 +80,20 @@ def comp_connection_mat(self, Zs=None, p=None):
     wind_mat_swat = wdg.get_phases()
 
     # perform checks
-    assert p == wdg.get_num_polepairs(), "number of pole pairs is not as requested"
-    assert qs == wdg.get_num_phases(), "number of phases is not as requested"
+    assert p == wdg.get_num_polepairs(), (
+        "number of pole pairs is not as requested (returned "
+        + str(wdg.get_num_polepairs())
+        + " expected "
+        + str(p)
+        + ")"
+    )
+    assert qs == wdg.get_num_phases(), (
+        "number of phases is not as requested (returned "
+        + str(wdg.get_num_phases())
+        + " expected "
+        + str(qs)
+        + ")"
+    )
 
     # convert swat-em connexion matrix to pyleecan connexion matrix
     for qq, phase in enumerate(wind_mat_swat):
@@ -118,15 +130,17 @@ def comp_connection_mat(self, Zs=None, p=None):
         )
 
     # get periodicities
-    self.per_a = wdg.get_periodicity_t()
-    self.is_aper_a = wdg.get_is_symmetric()
-    per_a, is_aper_a = self.comp_periodicity(wind_mat=wind_mat)
-    # if is_aper_a:  # Different def for Anti per  ?
+    # self.per_a = wdg.get_periodicity_t()
+    # self.is_aper_a = wdg.get_is_symmetric()
+
+    # To check periodicities swat-em / pyleecan definitions
+    self.per_a, self.is_aper_a = self.comp_periodicity(wind_mat=wind_mat)
+    # if is_aper_a:  # Different def for Anti per
     #     per_a = per_a / 2
-    if self.per_a != per_a or self.is_aper_a != is_aper_a:
-        self.get_logger().warning(
-            "(Anti-)periodicity calculated by pyleecan and SWAT_EM differs"
-        )
+    # if self.per_a != per_a or self.is_aper_a != is_aper_a:
+    #     self.get_logger().warning(
+    #         "(Anti-)periodicity calculated by pyleecan and SWAT_EM differs"
+    #     )
 
     # Set default values
     if self.is_reverse_wind is None:

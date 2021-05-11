@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     get_notch_list = error
 
+try:
+    from ..Methods.Machine.NotchEvenDist.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
 
 from ._check import InitUnKnowClassError
 from .Slot import Slot
@@ -32,6 +37,7 @@ class NotchEvenDist(Notch):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.NotchEvenDist.get_notch_list
     if isinstance(get_notch_list, ImportError):
         get_notch_list = property(
@@ -44,6 +50,17 @@ class NotchEvenDist(Notch):
         )
     else:
         get_notch_list = get_notch_list
+    # cf Methods.Machine.NotchEvenDist.comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
+    else:
+        comp_surface = comp_surface
     # save and copy methods are available in all object
     save = save
     copy = copy
