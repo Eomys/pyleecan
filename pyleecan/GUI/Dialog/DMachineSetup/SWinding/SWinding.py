@@ -77,7 +77,7 @@ class SWinding(Gen_SWinding, QWidget):
                 self.obj.winding.Nlayer = 1
             self.si_Nlayer.setValue(self.obj.winding.Nlayer)
             # Coil_pitch
-            self.show_coil_pitch()
+            self.show_layer_widget()
             # Ntcoil
             if self.obj.winding.Ntcoil is None:
                 self.obj.winding.Ntcoil = 1
@@ -130,7 +130,7 @@ class SWinding(Gen_SWinding, QWidget):
 
         # Connect the signal/slot
         self.c_wind_type.currentIndexChanged.connect(self.set_type)
-        self.si_Nlayer.valueChanged.connect(self.show_coil_pitch)
+        self.si_Nlayer.valueChanged.connect(self.show_layer_widget)
         self.si_Npcp.editingFinished.connect(self.set_Npcp)
         self.si_Nslot.valueChanged.connect(self.set_Nslot)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
@@ -170,17 +170,35 @@ class SWinding(Gen_SWinding, QWidget):
             self.b_generate.show()
             self.b_import.hide()
 
-    def show_coil_pitch(self):
+    def show_layer_widget(self):
         if self.si_Nlayer.value() == 1:
             self.in_coil_pitch.hide()
             self.si_coil_pitch.hide()
+            self.is_reverse_layer.hide()
+            self.is_change_layer.hide()
             self.obj.winding.coil_pitch = None
         else:
             self.in_coil_pitch.show()
             self.si_coil_pitch.show()
+            self.is_reverse_layer.show()
+            self.is_change_layer.show()
             if self.obj.winding.coil_pitch is None:
                 self.obj.winding.coil_pitch = 1
             self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
+            # is_reverse_layer
+            if self.obj.winding.is_reverse_layer is None:
+                self.obj.winding.is_reverse_layer = False
+            if self.obj.winding.is_reverse_layer:
+                self.is_reverse_layer.setCheckState(Qt.Checked)
+            else:
+                self.is_reverse_layer.setCheckState(Qt.Unchecked)
+            # is_change_layer
+            if self.obj.winding.is_change_layer is None:
+                self.obj.winding.is_change_layer = False
+            if self.obj.winding.is_change_layer:
+                self.is_change_layer.setCheckState(Qt.Checked)
+            else:
+                self.is_change_layer.setCheckState(Qt.Unchecked)
 
     def s_generate(self):
         # Update winding object
