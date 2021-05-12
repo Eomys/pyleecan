@@ -452,7 +452,11 @@ class SWinding(Gen_SWinding, QWidget):
         # Plot the lamination in the viewer fig
         try:
             self.obj.plot(
-                fig=self.w_viewer.fig, is_show_fig=False, is_lam_only=is_lam_only
+                fig=self.w_viewer.fig,
+                ax=self.w_viewer.axes,
+                is_show_fig=False,
+                is_lam_only=is_lam_only,
+                is_add_sign=True,
             )
         except:
             pass
@@ -460,8 +464,6 @@ class SWinding(Gen_SWinding, QWidget):
         # Update the Graph
         self.w_viewer.axes.set_axis_off()
         self.w_viewer.axes.axis("equal")
-        if self.w_viewer.axes.get_legend() is not None:
-            self.w_viewer.axes.get_legend().remove()
         self.w_viewer.draw()
 
     def s_plot(self):

@@ -29,12 +29,20 @@ def find_wind_phase_color(label, wind_mat):
         q = get_phase_id(wind_mat, Nrad, Ntan, Zs)
         if q is None:  # No phase => White
             color = "w"
+            sign = None
         else:
             color = PHASE_COLORS[q]
+            if wind_mat[Nrad, Ntan, Zs, q] > 0:
+                sign = "+"
+            elif wind_mat[Nrad, Ntan, Zs, q] < 0:
+                sign = "-"
+            else:
+                sign = None
     else:
         color = PHASE_COLORS[0]
+        sign = None
 
-    return color
+    return color, sign
 
 
 def get_phase_id(wind_mat, Nrad, Ntan, Zs):
