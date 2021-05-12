@@ -66,7 +66,7 @@ class TestSWinding(object):
         assert setup["widget"].is_reverse_layer.checkState() == Qt.Checked
         assert setup["widget"].is_change_layer.checkState() == Qt.Checked
         assert setup["widget"].is_permute_B_C.checkState() == Qt.Checked
-        assert setup["widget"].out_shape.text() == "Matrix shape [1, 2, 36, 6]"
+        assert setup["widget"].out_rot_dir.text() == "Rotation direction: +"
 
         setup["test_obj"] = MachineSCIM()
         setup["test_obj"].stator = LamSlotWind()
@@ -119,7 +119,7 @@ class TestSWinding(object):
 
         setup["widget"].b_generate.clicked.emit()
         assert setup["widget"].obj.winding.wind_mat.shape == (2, 1, 36, 3)
-        assert setup["widget"].out_shape.text() == "Matrix shape [1, 2, 36, 3]"
+        assert setup["widget"].out_rot_dir.text() == "Rotation direction: -"
         assert setup["widget"].out_ms.text() == "ms = Zs / (2*p*qs) = 2.0"
         assert setup["widget"].out_Nperw.text() == "Nperw: 6"
         assert setup["widget"].out_Ncspc.text() == "Ncspc: 6"
