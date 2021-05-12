@@ -281,7 +281,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="QLabel" name="out_shape">
+            <widget class="QLabel" name="out_rot_dir">
              <property name="minimumSize">
               <size>
                <width>175</width>
@@ -289,7 +289,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Winding Matrix Shape : </string>
+              <string>Rotation Direction: </string>
              </property>
             </widget>
            </item>

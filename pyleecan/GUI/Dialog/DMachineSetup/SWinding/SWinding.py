@@ -289,6 +289,7 @@ class SWinding(Gen_SWinding, QWidget):
         value = self.is_reverse.isChecked()
         self.obj.winding.is_reverse_wind = value
         self.update_graph()
+        self.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -325,6 +326,7 @@ class SWinding(Gen_SWinding, QWidget):
         value = self.is_permute_B_C.isChecked()
         self.obj.winding.is_permute_B_C = value
         self.update_graph()
+        self.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -411,28 +413,18 @@ class SWinding(Gen_SWinding, QWidget):
         """
 
         wind = self.obj.winding  # For readability
-        # Wind_matrix is a matrix of dimension [Nlay_rad, Nlay_tan, Zs, qs]
-        # Nlay_rad and Nlay_tan depend of the winding
+
         try:
-            (Nrad, Ntan) = wind.get_dim_wind()
+            rot_dir = self.obj.comp_rot_dir()
+            if rot_dir == 1:
+                rot_dir = "+"
+            elif rot_dir == -1:
+                rot_dir = "-"
+            else:
+                rot_dir = "?"
         except Exception:  # Unable to compution the connection matrix
-            Nrad = "?"
-            Ntan = "?"
-
-        Nlay = str(Nrad) + ", " + str(Ntan) + ", "
-
-        # Zs should be set, but to be sure:
-        if self.obj.slot.Zs is None:
-            Zs = "?, "
-        else:
-            Zs = str(self.obj.slot.Zs) + ", "
-
-        if wind.qs is None:
-            qs = "?]"
-        else:
-            qs = str(wind.qs) + "]"
-
-        self.out_shape.setText(self.tr("Matrix shape [") + Nlay + Zs + qs)
+            rot_dir = "?"
+        self.out_rot_dir.setText(self.tr("Rotation direction: ") + rot_dir)
 
         try:
             ms = str(self.obj.slot.Zs / (wind.p * wind.qs * 2.0))

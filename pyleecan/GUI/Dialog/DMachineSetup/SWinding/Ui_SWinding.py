@@ -195,11 +195,11 @@ class Ui_SWinding(object):
         self.g_output.setMinimumSize(QSize(200, 0))
         self.verticalLayout_3 = QVBoxLayout(self.g_output)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.out_shape = QLabel(self.g_output)
-        self.out_shape.setObjectName(u"out_shape")
-        self.out_shape.setMinimumSize(QSize(175, 0))
+        self.out_rot_dir = QLabel(self.g_output)
+        self.out_rot_dir.setObjectName(u"out_rot_dir")
+        self.out_rot_dir.setMinimumSize(QSize(175, 0))
 
-        self.verticalLayout_3.addWidget(self.out_shape)
+        self.verticalLayout_3.addWidget(self.out_rot_dir)
 
         self.out_ms = QLabel(self.g_output)
         self.out_ms.setObjectName(u"out_ms")
@@ -323,8 +323,8 @@ class Ui_SWinding(object):
             QCoreApplication.translate("SWinding", u"Edit Winding Matrix", None)
         )
         self.g_output.setTitle(QCoreApplication.translate("SWinding", u"Output", None))
-        self.out_shape.setText(
-            QCoreApplication.translate("SWinding", u"Winding Matrix Shape : ", None)
+        self.out_rot_dir.setText(
+            QCoreApplication.translate("SWinding", u"Rotation Direction: ", None)
         )
         self.out_ms.setText(
             QCoreApplication.translate("SWinding", u"ms = Zs / (2*p*qs) = ?", None)
