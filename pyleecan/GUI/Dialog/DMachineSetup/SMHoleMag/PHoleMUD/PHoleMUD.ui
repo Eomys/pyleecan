@@ -47,7 +47,7 @@
       <item>
        <widget class="QPushButton" name="b_dxf">
         <property name="text">
-         <string>Define Slot from DXF</string>
+         <string>Define Hole from DXF</string>
         </property>
        </widget>
       </item>

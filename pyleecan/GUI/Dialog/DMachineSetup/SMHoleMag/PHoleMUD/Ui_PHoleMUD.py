@@ -107,7 +107,7 @@ class Ui_PHoleMUD(object):
     def retranslateUi(self, PHoleMUD):
         PHoleMUD.setWindowTitle(QCoreApplication.translate("PHoleMUD", u"Form", None))
         self.b_dxf.setText(
-            QCoreApplication.translate("PHoleMUD", u"Define Slot from DXF", None)
+            QCoreApplication.translate("PHoleMUD", u"Define Hole from DXF", None)
         )
         self.g_mat.setTitle(QCoreApplication.translate("PHoleMUD", u"Materials", None))
         self.g_output.setTitle(QCoreApplication.translate("PHoleMUD", u"Output", None))

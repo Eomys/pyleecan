@@ -232,7 +232,9 @@ def plot_schematics(
         plt.axis("equal")
         ax.set_ylim(Rint, Rext)
         ax.set_xlim(-W, W)
-        fig.canvas.set_window_title(type(self).__name__ + " Schematics")
+        manager = plt.get_current_fig_manager()
+        if manager is not None:
+            manager.set_window_title(type(self).__name__ + " Schematics")
         ax.set_title("")
         ax.get_legend().remove()
         ax.set_axis_off()

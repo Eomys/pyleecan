@@ -81,7 +81,7 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 0
         assert (
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 50"
+            == "Hole Type 50"
         )
         assert setup["widget"].tab_hole.widget(0).c_hole_type.count() == 7
 
@@ -120,7 +120,7 @@ class TestSMHoleMag(object):
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.currentIndex() == 4
         assert (
             setup["widget2"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 54"
+            == "Hole Type 54"
         )
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.count() == 8
 
@@ -155,7 +155,7 @@ class TestSMHoleMag(object):
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.currentIndex() == 1
         assert (
             setup["widget2"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 51"
+            == "Hole Type 51"
         )
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.count() == 8
 
@@ -182,7 +182,7 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 1
         assert (
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 51"
+            == "Hole Type 51"
         )
 
     def test_init_52(self, setup):
@@ -196,7 +196,7 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 2
         assert (
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 52"
+            == "Hole Type 52"
         )
 
     def test_init_53(self, setup):
@@ -212,7 +212,7 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 3
         assert (
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 53"
+            == "Hole Type 53"
         )
 
     def test_init_57(self, setup):
@@ -226,7 +226,7 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 4
         assert (
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 57"
+            == "Hole Type 57"
         )
 
     def test_init_58(self, setup):
@@ -240,7 +240,7 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 5
         assert (
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 58"
+            == "Hole Type 58"
         )
 
     # def test_init_UD(self, setup):
@@ -269,7 +269,7 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 1
         assert (
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 51"
+            == "Hole Type 51"
         )
 
     def test_set_type_52(self, setup):
@@ -281,7 +281,7 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 2
         assert (
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 52"
+            == "Hole Type 52"
         )
 
     def test_set_type_53(self, setup):
@@ -293,7 +293,7 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 3
         assert (
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 53"
+            == "Hole Type 53"
         )
 
     def test_set_type_57(self, setup):
@@ -305,7 +305,7 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 4
         assert (
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 57"
+            == "Hole Type 57"
         )
 
     def test_set_type_58(self, setup):
@@ -317,7 +317,7 @@ class TestSMHoleMag(object):
         assert setup["widget"].tab_hole.widget(0).c_hole_type.currentIndex() == 5
         assert (
             setup["widget"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 58"
+            == "Hole Type 58"
         )
 
     def test_SyRM_set_type_54_51_54(self, setup):
@@ -326,7 +326,7 @@ class TestSMHoleMag(object):
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.currentIndex() == 4
         assert (
             setup["widget2"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 54"
+            == "Hole Type 54"
         )
         assert setup["test_obj2"].rotor.hole[0].Zh == 16
 
@@ -335,7 +335,7 @@ class TestSMHoleMag(object):
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.currentIndex() == 1
         assert (
             setup["widget2"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 51"
+            == "Hole Type 51"
         )
         assert type(setup["test_obj2"].rotor.hole[0]) == HoleM51
         assert setup["test_obj2"].rotor.hole[0].magnet_0 == None
@@ -346,7 +346,7 @@ class TestSMHoleMag(object):
         assert setup["widget2"].tab_hole.widget(0).c_hole_type.currentIndex() == 4
         assert (
             setup["widget2"].tab_hole.widget(0).c_hole_type.currentText()
-            == "Slot Type 54"
+            == "Hole Type 54"
         )
         assert type(setup["test_obj2"].rotor.hole[0]) == HoleM54
         assert setup["test_obj2"].rotor.hole[0].Zh == 16
@@ -368,9 +368,9 @@ class TestSMHoleMag(object):
         assert type(setup["test_obj"].rotor.hole[2]) == HoleM50
         assert setup["test_obj"].rotor.hole[2].Zh == 8
         assert setup["widget"].tab_hole.count() == 3
-        assert setup["widget"].tab_hole.tabText(0) == "Slot 1"
-        assert setup["widget"].tab_hole.tabText(1) == "Slot 2"
-        assert setup["widget"].tab_hole.tabText(2) == "Slot 3"
+        assert setup["widget"].tab_hole.tabText(0) == "Hole 1"
+        assert setup["widget"].tab_hole.tabText(1) == "Hole 2"
+        assert setup["widget"].tab_hole.tabText(2) == "Hole 3"
 
         setup["widget"].b_remove.clicked.emit()
         assert len(setup["test_obj"].rotor.hole) == 2

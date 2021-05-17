@@ -22,7 +22,7 @@ def comp_parameters(self, output):
     p = machine.rotor.winding.p
 
     xi = machine.stator.winding.comp_winding_factor()
-    Ntspc = machine.stator.winding.comp_Ntspc()
+    Ntspc = machine.stator.winding.comp_Ntsp()
     norm = (xi[0] * Ntspc) / (Zsr / 6)  # rotor - stator transformation factor
 
     self.parameters["norm"] = norm
