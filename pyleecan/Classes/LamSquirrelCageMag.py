@@ -37,10 +37,16 @@ try:
 except ImportError as error:
     plot = error
 
+try:
+    from ..Methods.Machine.LamSquirrelCageMag.get_pole_pair_number import (
+        get_pole_pair_number,
+    )
+except ImportError as error:
+    get_pole_pair_number = error
+
 
 from ._check import InitUnKnowClassError
 from .Hole import Hole
-from .Bore import Bore
 from .Material import Material
 from .Winding import Winding
 from .Slot import Slot
@@ -95,6 +101,18 @@ class LamSquirrelCageMag(LamSquirrelCage):
         )
     else:
         plot = plot
+    # cf Methods.Machine.LamSquirrelCageMag.get_pole_pair_number
+    if isinstance(get_pole_pair_number, ImportError):
+        get_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCageMag method get_pole_pair_number: "
+                    + str(get_pole_pair_number)
+                )
+            )
+        )
+    else:
+        get_pole_pair_number = get_pole_pair_number
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -104,7 +122,6 @@ class LamSquirrelCageMag(LamSquirrelCage):
     def __init__(
         self,
         hole=-1,
-        bore=None,
         Hscr=0.03,
         Lscr=0.015,
         ring_mat=-1,
@@ -142,8 +159,6 @@ class LamSquirrelCageMag(LamSquirrelCage):
             # Overwrite default value with init_dict content
             if "hole" in list(init_dict.keys()):
                 hole = init_dict["hole"]
-            if "bore" in list(init_dict.keys()):
-                bore = init_dict["bore"]
             if "Hscr" in list(init_dict.keys()):
                 Hscr = init_dict["Hscr"]
             if "Lscr" in list(init_dict.keys()):
@@ -180,7 +195,6 @@ class LamSquirrelCageMag(LamSquirrelCage):
                 notch = init_dict["notch"]
         # Set the properties (value check and convertion are done in setter)
         self.hole = hole
-        self.bore = bore
         # Call LamSquirrelCage init
         super(LamSquirrelCageMag, self).__init__(
             Hscr=Hscr,
@@ -217,11 +231,6 @@ class LamSquirrelCageMag(LamSquirrelCage):
             LamSquirrelCageMag_str += (
                 "hole[" + str(ii) + "] =" + tmp + linesep + linesep
             )
-        if self.bore is not None:
-            tmp = self.bore.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamSquirrelCageMag_str += "bore = " + tmp
-        else:
-            LamSquirrelCageMag_str += "bore = None" + linesep + linesep
         return LamSquirrelCageMag_str
 
     def __eq__(self, other):
@@ -234,8 +243,6 @@ class LamSquirrelCageMag(LamSquirrelCage):
         if not super(LamSquirrelCageMag, self).__eq__(other):
             return False
         if other.hole != self.hole:
-            return False
-        if other.bore != self.bore:
             return False
         return True
 
@@ -263,12 +270,6 @@ class LamSquirrelCageMag(LamSquirrelCage):
                         other.hole[ii], name=name + ".hole[" + str(ii) + "]"
                     )
                 )
-        if (other.bore is None and self.bore is not None) or (
-            other.bore is not None and self.bore is None
-        ):
-            diff_list.append(name + ".bore None mismatch")
-        elif self.bore is not None:
-            diff_list.extend(self.bore.compare(other.bore, name=name + ".bore"))
         return diff_list
 
     def __sizeof__(self):
@@ -281,7 +282,6 @@ class LamSquirrelCageMag(LamSquirrelCage):
         if self.hole is not None:
             for value in self.hole:
                 S += getsizeof(value)
-        S += getsizeof(self.bore)
         return S
 
     def as_dict(self, **kwargs):
@@ -302,10 +302,6 @@ class LamSquirrelCageMag(LamSquirrelCage):
                     LamSquirrelCageMag_dict["hole"].append(obj.as_dict(**kwargs))
                 else:
                     LamSquirrelCageMag_dict["hole"].append(None)
-        if self.bore is None:
-            LamSquirrelCageMag_dict["bore"] = None
-        else:
-            LamSquirrelCageMag_dict["bore"] = self.bore.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSquirrelCageMag_dict["__class__"] = "LamSquirrelCageMag"
@@ -315,8 +311,6 @@ class LamSquirrelCageMag(LamSquirrelCage):
         """Set all the properties to None (except pyleecan object)"""
 
         self.hole = None
-        if self.bore is not None:
-            self.bore._set_None()
         # Set to None the properties inherited from LamSquirrelCage
         super(LamSquirrelCageMag, self)._set_None()
 
@@ -350,33 +344,5 @@ class LamSquirrelCageMag(LamSquirrelCage):
         doc=u"""lamination Hole
 
         :Type: [Hole]
-        """,
-    )
-
-    def _get_bore(self):
-        """getter of bore"""
-        return self._bore
-
-    def _set_bore(self, value):
-        """setter of bore"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Bore()
-        check_var("bore", value, "Bore")
-        self._bore = value
-
-        if self._bore is not None:
-            self._bore.parent = self
-
-    bore = property(
-        fget=_get_bore,
-        fset=_set_bore,
-        doc=u"""Bore Shape
-
-        :Type: Bore
         """,
     )

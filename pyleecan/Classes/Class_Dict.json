@@ -4094,7 +4094,8 @@
             "build_geometry",
             "check",
             "comp_surfaces",
-            "plot"
+            "plot",
+            "get_pole_pair_number"
         ],
         "mother": "LamSquirrelCage",
         "name": "LamSquirrelCageMag",
@@ -4109,15 +4110,6 @@
                 "type": "[Hole]",
                 "unit": "",
                 "value": ""
-            },
-            {
-                "desc": "Bore Shape",
-                "max": "",
-                "min": "",
-                "name": "bore",
-                "type": "Bore",
-                "unit": "",
-                "value": null
             }
         ]
     },

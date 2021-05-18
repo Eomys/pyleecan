@@ -98,7 +98,7 @@ def plot(
     if sym == 1:
         axes.set_ylim(-Lim, Lim)
     else:
-        axes.set_ylim(-Lim*0.3, Lim)
+        axes.set_ylim(-Lim * 0.3, Lim)
 
     if not is_lam_only:
         # Add the short ciruit ring to the fig
