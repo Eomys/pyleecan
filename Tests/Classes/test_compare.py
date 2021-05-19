@@ -80,6 +80,7 @@ def test_compare():
 
     # Compare
     diff_list = simu.compare(simu2, "simu")
+    assert "simu.name" in diff_list
     assert "simu.machine.stator.L1" in diff_list
     assert "simu.machine.rotor.hole[0].magnet_0.mat_type.name" in diff_list
     assert "simu.input.Nt_tot" in diff_list
@@ -90,7 +91,7 @@ def test_compare():
     assert "type(simu.machine.stator.winding)" in diff_list
     assert "simu.input.Is.value" in diff_list
     assert "simu.postproc_list[1].run" in diff_list
-    assert len(diff_list) == 10
+    assert len(diff_list) == 11
 
 
 if __name__ == "__main__":

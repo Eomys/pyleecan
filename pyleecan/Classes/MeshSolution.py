@@ -74,6 +74,11 @@ try:
 except ImportError as error:
     plot_glyph_animated = error
 
+try:
+    from ..Methods.Mesh.MeshSolution.perm_coord import perm_coord
+except ImportError as error:
+    perm_coord = error
+
 
 from ._check import InitUnKnowClassError
 from .Mesh import Mesh
@@ -209,6 +214,17 @@ class MeshSolution(FrozenClass):
         )
     else:
         plot_glyph_animated = plot_glyph_animated
+    # cf Methods.Mesh.MeshSolution.perm_coord
+    if isinstance(perm_coord, ImportError):
+        perm_coord = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method perm_coord: " + str(perm_coord)
+                )
+            )
+        )
+    else:
+        perm_coord = perm_coord
     # save and copy methods are available in all object
     save = save
     copy = copy

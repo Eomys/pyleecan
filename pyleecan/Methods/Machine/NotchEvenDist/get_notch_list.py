@@ -1,7 +1,7 @@
 from numpy import pi
 
 
-def get_notch_list(self, sym=1):
+def get_notch_list(self, sym=1, is_yoke=False):
     """Returns an ordered description of the notches
 
     Parameters
@@ -10,6 +10,8 @@ def get_notch_list(self, sym=1):
         A NotchEvenDist object
     sym: int
         Number of symmetry
+    is_yoke : bool
+        True if the notch is on the Yoke
 
     Returns
     -------
@@ -18,7 +20,12 @@ def get_notch_list(self, sym=1):
     """
 
     notch_list = list()
-    op = self.notch_shape.comp_angle_opening()
+    if is_yoke:
+        self.parent.is_internal = not self.parent.is_internal
+        op = self.notch_shape.comp_angle_opening()
+        self.parent.is_internal = not self.parent.is_internal
+    else:
+        op = self.notch_shape.comp_angle_opening()
 
     for ii in range(self.notch_shape.Zs // sym):
         notch_dict = dict()

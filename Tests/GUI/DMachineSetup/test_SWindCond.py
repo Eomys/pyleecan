@@ -32,14 +32,14 @@ class TestSWindCond(object):
         test_obj = MachineSCIM()
         test_obj.stator = LamSlotWind(is_stator=True)
         test_obj.stator.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
-        test_obj.stator.winding = Winding(Npcpp=10, Ntcoil=11, Lewout=40e-3)
+        test_obj.stator.winding = Winding(Npcp=10, Ntcoil=11, Lewout=40e-3)
         test_obj.stator.winding.conductor = CondType11(
             Nwppc_rad=2, Nwppc_tan=3, Hwire=10e-3, Wwire=20e-3, Wins_wire=30e-3
         )
 
         test_obj.rotor = LamSlotWind(is_stator=False)
         test_obj.rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
-        test_obj.rotor.winding = Winding(Npcpp=20, Ntcoil=21)
+        test_obj.rotor.winding = Winding(Npcp=20, Ntcoil=21)
         test_obj.rotor.winding.conductor = CondType12(
             Nwppc=4, Wwire=11e-3, Wins_wire=21e-3, Wins_cond=31e-3
         )
@@ -207,7 +207,7 @@ class TestSWindCond(object):
         """Check that the check method return errors"""
         rotor = LamSlotWind(is_stator=False)
         rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
-        rotor.winding = Winding(Npcpp=20, Ntcoil=None)
+        rotor.winding = Winding(Npcp=20, Ntcoil=None)
         rotor.winding.conductor = CondType12(
             Nwppc=4, Wwire=None, Wins_wire=21e-3, Wins_cond=31e-3
         )
@@ -218,7 +218,7 @@ class TestSWindCond(object):
         """Check that the init is setting a conductor if None"""
         lam = LamSlotWind(is_stator=False)
         lam.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
-        lam.winding = Winding(Npcpp=20, Ntcoil=21, Lewout=None)
+        lam.winding = Winding(Npcp=20, Ntcoil=21, Lewout=None)
         lam.winding.conductor = None
         widget = PCondType12(lamination=lam)
         assert type(widget.cond) is CondType12
@@ -231,7 +231,7 @@ class TestSWindCond(object):
         """Check that the check methods is correctly working"""
         lam = LamSlotWind(is_stator=False)
         lam.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
-        lam.winding = Winding(Npcpp=20, Ntcoil=21, Lewout=0.15)
+        lam.winding = Winding(Npcp=20, Ntcoil=21, Lewout=0.15)
         lam.winding.conductor = None
         widget = PCondType12(lamination=lam)
         widget.cond.Wwire = 0.5

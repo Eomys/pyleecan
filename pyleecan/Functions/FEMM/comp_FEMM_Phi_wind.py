@@ -1,9 +1,7 @@
 from numpy import zeros
 
 
-def comp_FEMM_Phi_wind(
-    femm, qs, Npcpp, is_stator, Lfemm, L1, sym, is_rescale_flux=True
-):
+def comp_FEMM_Phi_wind(femm, qs, Npcp, is_stator, Lfemm, L1, sym, is_rescale_flux=True):
     """Compute the total fluxlinkage of the winding phases
 
     Parameters
@@ -12,7 +10,7 @@ def comp_FEMM_Phi_wind(
         client to send command to a FEMM instance
     qs : int
         number of phases
-    Npcpp : int
+    Npcp : int
         number of parallel circuits per phase (maximum 2p)
     is_stator : bool
         true if windings are stator windings
@@ -48,7 +46,7 @@ def comp_FEMM_Phi_wind(
             else:
                 Kphi = 1
             # flux linkage of phase q in Wb=Vs=HA
-            Phi_wind[0, q] = sym * PropCirc[2] * Kphi / Npcpp
+            Phi_wind[0, q] = sym * PropCirc[2] * Kphi / Npcp
         except:
             Phi_wind[0, q] = None
     return Phi_wind
