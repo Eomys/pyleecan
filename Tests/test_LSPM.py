@@ -87,8 +87,28 @@ rotor.hole.append(
       H2=0 *mm,
        W3=15*mm))
 
+#rotor magnets material setup
+
+Magnet_prius = Material(name="Magnet_prius")
+
+# Definition of the magnetic properties of the material
+Magnet_prius.mag = MatMagnetics(
+    mur_lin = 1.05, # Relative magnetic permeability
+    Hc = 902181.163126629, # Coercitivity field [A/m]
+    alpha_Br = -0.001, # temperature coefficient for remanent flux density /°C compared to 20°C
+    Brm20 = 1.24, # magnet remanence induction at 20°C [T]
+    Wlam = 0, # lamination sheet width without insulation [m] (0 == not laminated)
+)
+
+# Definition of the electric properties of the material 
+Magnet_prius.elec.rho = 1.6e-06 # Resistivity at 20°C
+
+# Definition of the structural properties of the material
+Magnet_prius.struct.rho = 7500.0 # mass per unit volume [kg/m3]
 
 
+rotor.hole[0].magnet_0.mat_type = Magnet_prius
+rotor.hole[0].magnet_0.type_magnetization = 1
 
 
 
@@ -144,5 +164,5 @@ LSPM.save('LSPM.json')
 
 LSPM.plot()
 fig = plt.gcf()
-fig.savefig(join(save_path, "test1_LSPM.png"))
+fig.savefig(join(save_path, "test_LSPM.png"))
 plt.show()

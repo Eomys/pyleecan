@@ -1,6 +1,6 @@
 {
     "__class__": "MachineUD",
-    "__save_date__": "2021_05_18 22h24min59s ",
+    "__save_date__": "2021_05_19 09h33min17s ",
     "__version__": "pyleecan_1.2.1",
     "desc": "",
     "frame": {
@@ -478,7 +478,7 @@
                                 "__class__": "MatElectrical",
                                 "alpha": 1,
                                 "epsr": 1,
-                                "rho": 1
+                                "rho": 1.6e-06
                             },
                             "is_isotropic": false,
                             "mag": {
@@ -486,18 +486,18 @@
                                     "__class__": "ImportMatrix",
                                     "is_transpose": false
                                 },
-                                "Brm20": 0,
-                                "Hc": 0,
+                                "Brm20": 1.24,
+                                "Hc": 902181.163126629,
                                 "LossData": {
                                     "__class__": "ImportMatrix",
                                     "is_transpose": false
                                 },
                                 "Wlam": 0,
                                 "__class__": "MatMagnetics",
-                                "alpha_Br": 0,
-                                "mur_lin": 1
+                                "alpha_Br": -0.001,
+                                "mur_lin": 1.05
                             },
-                            "name": "Material",
+                            "name": "Magnet_prius",
                             "path": "",
                             "struct": {
                                 "Ex": 215000000000.0,
@@ -510,10 +510,10 @@
                                 "nu_xy": 0.3,
                                 "nu_xz": 0.03,
                                 "nu_yz": 0.03,
-                                "rho": 7650
+                                "rho": 7500.0
                             }
                         },
-                        "type_magnetization": 0
+                        "type_magnetization": 1
                     },
                     "magnetization_dict_offset": null,
                     "mat_void": {
