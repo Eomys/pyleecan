@@ -19,7 +19,7 @@ class Ui_PHoleM51(object):
     def setupUi(self, PHoleM51):
         if not PHoleM51.objectName():
             PHoleM51.setObjectName(u"PHoleM51")
-        PHoleM51.resize(978, 440)
+        PHoleM51.resize(1078, 592)
         PHoleM51.setMinimumSize(QSize(740, 440))
         PHoleM51.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PHoleM51)
@@ -66,214 +66,218 @@ class Ui_PHoleM51(object):
 
         self.horizontalLayout.addLayout(self.verticalLayout_3)
 
-        self.widget = QWidget(PHoleM51)
-        self.widget.setObjectName(u"widget")
-        self.widget.setMinimumSize(QSize(250, 0))
-        self.widget.setMaximumSize(QSize(250, 16777215))
-        self.verticalLayout_2 = QVBoxLayout(self.widget)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.scrollArea = QScrollArea(PHoleM51)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setMinimumSize(QSize(270, 0))
+        self.scrollArea.setMaximumSize(QSize(270, 16777215))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 568))
+        self.verticalLayout_4 = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.in_H0 = QLabel(self.widget)
+        self.in_H0 = QLabel(self.scrollAreaWidgetContents)
         self.in_H0.setObjectName(u"in_H0")
 
         self.gridLayout.addWidget(self.in_H0, 0, 0, 1, 1)
 
-        self.lf_H0 = FloatEdit(self.widget)
+        self.lf_H0 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_H0.setObjectName(u"lf_H0")
 
         self.gridLayout.addWidget(self.lf_H0, 0, 1, 1, 1)
 
-        self.unit_H0 = QLabel(self.widget)
+        self.unit_H0 = QLabel(self.scrollAreaWidgetContents)
         self.unit_H0.setObjectName(u"unit_H0")
 
         self.gridLayout.addWidget(self.unit_H0, 0, 2, 1, 1)
 
-        self.in_H1 = QLabel(self.widget)
+        self.in_H1 = QLabel(self.scrollAreaWidgetContents)
         self.in_H1.setObjectName(u"in_H1")
 
         self.gridLayout.addWidget(self.in_H1, 1, 0, 1, 1)
 
-        self.lf_H1 = FloatEdit(self.widget)
+        self.lf_H1 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_H1.setObjectName(u"lf_H1")
 
         self.gridLayout.addWidget(self.lf_H1, 1, 1, 1, 1)
 
-        self.unit_H1 = QLabel(self.widget)
+        self.unit_H1 = QLabel(self.scrollAreaWidgetContents)
         self.unit_H1.setObjectName(u"unit_H1")
 
         self.gridLayout.addWidget(self.unit_H1, 1, 2, 1, 1)
 
-        self.in_H2 = QLabel(self.widget)
+        self.in_H2 = QLabel(self.scrollAreaWidgetContents)
         self.in_H2.setObjectName(u"in_H2")
 
         self.gridLayout.addWidget(self.in_H2, 2, 0, 1, 1)
 
-        self.lf_H2 = FloatEdit(self.widget)
+        self.lf_H2 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_H2.setObjectName(u"lf_H2")
 
         self.gridLayout.addWidget(self.lf_H2, 2, 1, 1, 1)
 
-        self.unit_H2 = QLabel(self.widget)
+        self.unit_H2 = QLabel(self.scrollAreaWidgetContents)
         self.unit_H2.setObjectName(u"unit_H2")
 
         self.gridLayout.addWidget(self.unit_H2, 2, 2, 1, 1)
 
-        self.in_W0 = QLabel(self.widget)
+        self.in_W0 = QLabel(self.scrollAreaWidgetContents)
         self.in_W0.setObjectName(u"in_W0")
 
         self.gridLayout.addWidget(self.in_W0, 3, 0, 1, 1)
 
-        self.lf_W0 = FloatEdit(self.widget)
+        self.lf_W0 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_W0.setObjectName(u"lf_W0")
 
         self.gridLayout.addWidget(self.lf_W0, 3, 1, 1, 1)
 
-        self.unit_W0 = QLabel(self.widget)
+        self.unit_W0 = QLabel(self.scrollAreaWidgetContents)
         self.unit_W0.setObjectName(u"unit_W0")
 
         self.gridLayout.addWidget(self.unit_W0, 3, 2, 1, 1)
 
-        self.in_W1 = QLabel(self.widget)
+        self.in_W1 = QLabel(self.scrollAreaWidgetContents)
         self.in_W1.setObjectName(u"in_W1")
 
         self.gridLayout.addWidget(self.in_W1, 4, 0, 1, 1)
 
-        self.lf_W1 = FloatEdit(self.widget)
+        self.lf_W1 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_W1.setObjectName(u"lf_W1")
         self.lf_W1.setCursorPosition(0)
 
         self.gridLayout.addWidget(self.lf_W1, 4, 1, 1, 1)
 
-        self.unit_W1 = QLabel(self.widget)
+        self.unit_W1 = QLabel(self.scrollAreaWidgetContents)
         self.unit_W1.setObjectName(u"unit_W1")
 
         self.gridLayout.addWidget(self.unit_W1, 4, 2, 1, 1)
 
-        self.in_W2 = QLabel(self.widget)
+        self.in_W2 = QLabel(self.scrollAreaWidgetContents)
         self.in_W2.setObjectName(u"in_W2")
 
         self.gridLayout.addWidget(self.in_W2, 5, 0, 1, 1)
 
-        self.lf_W2 = FloatEdit(self.widget)
+        self.lf_W2 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_W2.setObjectName(u"lf_W2")
 
         self.gridLayout.addWidget(self.lf_W2, 5, 1, 1, 1)
 
-        self.unit_W2 = QLabel(self.widget)
+        self.unit_W2 = QLabel(self.scrollAreaWidgetContents)
         self.unit_W2.setObjectName(u"unit_W2")
 
         self.gridLayout.addWidget(self.unit_W2, 5, 2, 1, 1)
 
-        self.in_W3 = QLabel(self.widget)
+        self.in_W3 = QLabel(self.scrollAreaWidgetContents)
         self.in_W3.setObjectName(u"in_W3")
 
         self.gridLayout.addWidget(self.in_W3, 6, 0, 1, 1)
 
-        self.lf_W3 = FloatEdit(self.widget)
+        self.lf_W3 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_W3.setObjectName(u"lf_W3")
 
         self.gridLayout.addWidget(self.lf_W3, 6, 1, 1, 1)
 
-        self.unit_W3 = QLabel(self.widget)
+        self.unit_W3 = QLabel(self.scrollAreaWidgetContents)
         self.unit_W3.setObjectName(u"unit_W3")
 
         self.gridLayout.addWidget(self.unit_W3, 6, 2, 1, 1)
 
-        self.in_W4 = QLabel(self.widget)
+        self.in_W4 = QLabel(self.scrollAreaWidgetContents)
         self.in_W4.setObjectName(u"in_W4")
 
         self.gridLayout.addWidget(self.in_W4, 7, 0, 1, 1)
 
-        self.lf_W4 = FloatEdit(self.widget)
+        self.lf_W4 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_W4.setObjectName(u"lf_W4")
 
         self.gridLayout.addWidget(self.lf_W4, 7, 1, 1, 1)
 
-        self.unit_W4 = QLabel(self.widget)
+        self.unit_W4 = QLabel(self.scrollAreaWidgetContents)
         self.unit_W4.setObjectName(u"unit_W4")
 
         self.gridLayout.addWidget(self.unit_W4, 7, 2, 1, 1)
 
-        self.in_W5 = QLabel(self.widget)
+        self.in_W5 = QLabel(self.scrollAreaWidgetContents)
         self.in_W5.setObjectName(u"in_W5")
 
         self.gridLayout.addWidget(self.in_W5, 8, 0, 1, 1)
 
-        self.lf_W5 = FloatEdit(self.widget)
+        self.lf_W5 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_W5.setObjectName(u"lf_W5")
 
         self.gridLayout.addWidget(self.lf_W5, 8, 1, 1, 1)
 
-        self.unit_W5 = QLabel(self.widget)
+        self.unit_W5 = QLabel(self.scrollAreaWidgetContents)
         self.unit_W5.setObjectName(u"unit_W5")
 
         self.gridLayout.addWidget(self.unit_W5, 8, 2, 1, 1)
 
-        self.in_W6 = QLabel(self.widget)
+        self.in_W6 = QLabel(self.scrollAreaWidgetContents)
         self.in_W6.setObjectName(u"in_W6")
 
         self.gridLayout.addWidget(self.in_W6, 9, 0, 1, 1)
 
-        self.lf_W6 = FloatEdit(self.widget)
+        self.lf_W6 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_W6.setObjectName(u"lf_W6")
 
         self.gridLayout.addWidget(self.lf_W6, 9, 1, 1, 1)
 
-        self.unit_W6 = QLabel(self.widget)
+        self.unit_W6 = QLabel(self.scrollAreaWidgetContents)
         self.unit_W6.setObjectName(u"unit_W6")
 
         self.gridLayout.addWidget(self.unit_W6, 9, 2, 1, 1)
 
-        self.in_W7 = QLabel(self.widget)
+        self.in_W7 = QLabel(self.scrollAreaWidgetContents)
         self.in_W7.setObjectName(u"in_W7")
 
         self.gridLayout.addWidget(self.in_W7, 10, 0, 1, 1)
 
-        self.lf_W7 = FloatEdit(self.widget)
+        self.lf_W7 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_W7.setObjectName(u"lf_W7")
 
         self.gridLayout.addWidget(self.lf_W7, 10, 1, 1, 1)
 
-        self.unit_W7 = QLabel(self.widget)
+        self.unit_W7 = QLabel(self.scrollAreaWidgetContents)
         self.unit_W7.setObjectName(u"unit_W7")
 
         self.gridLayout.addWidget(self.unit_W7, 10, 2, 1, 1)
 
-        self.verticalLayout_2.addLayout(self.gridLayout)
+        self.verticalLayout_4.addLayout(self.gridLayout)
 
-        self.w_mat_0 = WMatSelect(self.widget)
+        self.w_mat_0 = WMatSelect(self.scrollAreaWidgetContents)
         self.w_mat_0.setObjectName(u"w_mat_0")
         self.w_mat_0.setMinimumSize(QSize(100, 0))
 
-        self.verticalLayout_2.addWidget(self.w_mat_0)
+        self.verticalLayout_4.addWidget(self.w_mat_0)
 
-        self.w_mat_1 = WMatSelect(self.widget)
+        self.w_mat_1 = WMatSelect(self.scrollAreaWidgetContents)
         self.w_mat_1.setObjectName(u"w_mat_1")
         self.w_mat_1.setMinimumSize(QSize(100, 0))
 
-        self.verticalLayout_2.addWidget(self.w_mat_1)
+        self.verticalLayout_4.addWidget(self.w_mat_1)
 
-        self.w_mat_2 = WMatSelect(self.widget)
+        self.w_mat_2 = WMatSelect(self.scrollAreaWidgetContents)
         self.w_mat_2.setObjectName(u"w_mat_2")
         self.w_mat_2.setMinimumSize(QSize(100, 0))
 
-        self.verticalLayout_2.addWidget(self.w_mat_2)
+        self.verticalLayout_4.addWidget(self.w_mat_2)
 
-        self.w_mat_3 = WMatSelect(self.widget)
+        self.w_mat_3 = WMatSelect(self.scrollAreaWidgetContents)
         self.w_mat_3.setObjectName(u"w_mat_3")
         self.w_mat_3.setMinimumSize(QSize(100, 0))
 
-        self.verticalLayout_2.addWidget(self.w_mat_3)
+        self.verticalLayout_4.addWidget(self.w_mat_3)
 
         self.verticalSpacer_2 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 7, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.verticalLayout_2.addItem(self.verticalSpacer_2)
+        self.verticalLayout_4.addItem(self.verticalSpacer_2)
 
-        self.g_output = QGroupBox(self.widget)
+        self.g_output = QGroupBox(self.scrollAreaWidgetContents)
         self.g_output.setObjectName(u"g_output")
         self.g_output.setMinimumSize(QSize(200, 0))
         self.verticalLayout = QVBoxLayout(self.g_output)
@@ -304,9 +308,11 @@ class Ui_PHoleM51(object):
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
-        self.verticalLayout_2.addWidget(self.g_output)
+        self.verticalLayout_4.addWidget(self.g_output)
 
-        self.horizontalLayout.addWidget(self.widget)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+        self.horizontalLayout.addWidget(self.scrollArea)
 
         QWidget.setTabOrder(self.lf_H0, self.lf_H1)
         QWidget.setTabOrder(self.lf_H1, self.lf_H2)
@@ -330,10 +336,9 @@ class Ui_PHoleM51(object):
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt; font-weight:600; text-decoration: underline;">Constraints :</span></p>\n'
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:14pt;">W3+W2 &lt; W0</span></p>\n'
-                '<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'MS '
-                "Shell Dlg 2'; font-size:8pt;\"><br /></p></body></html>",
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt; font-weight:600; text-decoration: underline;">Constraints :</span></p>\n'
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">W3+W2 &lt; W0</span></p>\n'
+                '<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p></body></html>',
                 None,
             )
         )
