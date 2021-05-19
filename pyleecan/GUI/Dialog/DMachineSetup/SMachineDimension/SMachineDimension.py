@@ -123,7 +123,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.g_shaft.setChecked(True)
             self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
             self.out_Drsh.setText(
-                self.tr("Drsh = 2*Rotor.Rint = ")
+                self.tr("Drsh = ")
                 + format(gui_option.unit.get_m(self.machine.shaft.Drsh), ".4g")
                 + " ["
                 + gui_option.unit.get_m_name()
@@ -311,14 +311,14 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
                 self.machine.shaft._set_None()
                 self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
                 self.out_Drsh.setText(
-                    self.tr("Drsh = 2*Rotor.Rint = ")
+                    self.tr("Drsh = ")
                     + format(gui_option.unit.get_m(self.machine.shaft.Drsh), ".4g")
                     + " ["
                     + gui_option.unit.get_m_name()
                     + "]"
                 )
             else:
-                self.out_Drsh.setText(self.tr("Drsh = 2*Rotor.Rint = "))
+                self.out_Drsh.setText(self.tr("Drsh = "))
                 self.machine.shaft.Drsh = None
             self.w_mat_0.update(self.machine.shaft, "mat_type", self.matlib)
             # machine.rotor.Rint editable only if there is a shaft
