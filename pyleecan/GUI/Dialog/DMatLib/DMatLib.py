@@ -478,7 +478,10 @@ class DMatLib(Gen_DMatLib, QDialog):
             update_text(self.out_Brm20, "Brm20", mat.mag.Brm20, "T")
             update_text(self.out_alpha_Br, "alpha_Br", mat.mag.alpha_Br, None)
             update_text(self.out_wlam, "wlam", mat.mag.Wlam, "m")
-            if isinstance(mat.mag.BH_curve, ImportMatrixXls):
+            if (
+                isinstance(mat.mag.BH_curve, ImportMatrixXls)
+                and mat.mag.BH_curve.file_path is not None
+            ):
                 BH_text = split(mat.mag.BH_curve.file_path)[1]
             elif isinstance(mat.mag.BH_curve, ImportMatrixVal):
                 data = mat.mag.BH_curve.get_data()
