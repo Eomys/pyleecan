@@ -20,8 +20,8 @@ class Ui_PWSlotUD(object):
     def setupUi(self, PWSlotUD):
         if not PWSlotUD.objectName():
             PWSlotUD.setObjectName(u"PWSlotUD")
-        PWSlotUD.resize(740, 440)
-        PWSlotUD.setMinimumSize(QSize(740, 440))
+        PWSlotUD.resize(641, 440)
+        PWSlotUD.setMinimumSize(QSize(0, 440))
         PWSlotUD.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PWSlotUD)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -30,18 +30,22 @@ class Ui_PWSlotUD(object):
 
         self.horizontalLayout.addWidget(self.w_viewer)
 
-        self.widget = QWidget(PWSlotUD)
-        self.widget.setObjectName(u"widget")
-        self.widget.setMinimumSize(QSize(250, 0))
-        self.widget.setMaximumSize(QSize(250, 16777215))
-        self.verticalLayout = QVBoxLayout(self.widget)
+        self.scrollArea = QScrollArea(PWSlotUD)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setMinimumSize(QSize(270, 0))
+        self.scrollArea.setMaximumSize(QSize(270, 16777215))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 416))
+        self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.b_dxf = QPushButton(self.widget)
+        self.b_dxf = QPushButton(self.scrollAreaWidgetContents)
         self.b_dxf.setObjectName(u"b_dxf")
 
         self.verticalLayout.addWidget(self.b_dxf)
 
-        self.w_path_json = WPathSelectorV(self.widget)
+        self.w_path_json = WPathSelectorV(self.scrollAreaWidgetContents)
         self.w_path_json.setObjectName(u"w_path_json")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -57,12 +61,14 @@ class Ui_PWSlotUD(object):
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
-        self.w_out = WWSlotOut(self.widget)
+        self.w_out = WWSlotOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
 
         self.verticalLayout.addWidget(self.w_out)
 
-        self.horizontalLayout.addWidget(self.widget)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+        self.horizontalLayout.addWidget(self.scrollArea)
 
         self.retranslateUi(PWSlotUD)
 

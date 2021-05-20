@@ -18,14 +18,15 @@ class Ui_SWinding(object):
     def setupUi(self, SWinding):
         if not SWinding.objectName():
             SWinding.setObjectName(u"SWinding")
-        SWinding.resize(1158, 758)
+        SWinding.resize(993, 837)
         SWinding.setMinimumSize(QSize(650, 550))
-        self.verticalLayout_5 = QVBoxLayout(SWinding)
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_4 = QVBoxLayout(SWinding)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.horizontalLayout_8 = QHBoxLayout()
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
         self.w_viewer = MPLCanvas2(SWinding)
         self.w_viewer.setObjectName(u"w_viewer")
+        self.w_viewer.setMinimumSize(QSize(250, 0))
 
         self.horizontalLayout_8.addWidget(self.w_viewer)
 
@@ -39,13 +40,17 @@ class Ui_SWinding(object):
 
         self.horizontalLayout_8.addWidget(self.in_wind_param)
 
-        self.widget = QWidget(SWinding)
-        self.widget.setObjectName(u"widget")
-        self.widget.setMinimumSize(QSize(250, 0))
-        self.widget.setMaximumSize(QSize(250, 16777215))
-        self.verticalLayout_4 = QVBoxLayout(self.widget)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.g_pattern = QGroupBox(self.widget)
+        self.scrollArea = QScrollArea(SWinding)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setMinimumSize(QSize(270, 0))
+        self.scrollArea.setMaximumSize(QSize(270, 16777215))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 774))
+        self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.g_pattern = QGroupBox(self.scrollAreaWidgetContents)
         self.g_pattern.setObjectName(u"g_pattern")
         self.verticalLayout_2 = QVBoxLayout(self.g_pattern)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -134,9 +139,15 @@ class Ui_SWinding(object):
 
         self.verticalLayout_2.addWidget(self.b_import)
 
-        self.verticalLayout_4.addWidget(self.g_pattern)
+        self.verticalLayout_5.addWidget(self.g_pattern)
 
-        self.g_edit = QGroupBox(self.widget)
+        self.verticalSpacer = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout_5.addItem(self.verticalSpacer)
+
+        self.g_edit = QGroupBox(self.scrollAreaWidgetContents)
         self.g_edit.setObjectName(u"g_edit")
         self.verticalLayout = QVBoxLayout(self.g_edit)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -182,15 +193,9 @@ class Ui_SWinding(object):
 
         self.verticalLayout.addWidget(self.b_edit_wind_mat)
 
-        self.verticalLayout_4.addWidget(self.g_edit)
+        self.verticalLayout_5.addWidget(self.g_edit)
 
-        self.verticalSpacer = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
-        )
-
-        self.verticalLayout_4.addItem(self.verticalSpacer)
-
-        self.g_output = QGroupBox(self.widget)
+        self.g_output = QGroupBox(self.scrollAreaWidgetContents)
         self.g_output.setObjectName(u"g_output")
         self.g_output.setMinimumSize(QSize(200, 0))
         self.verticalLayout_3 = QVBoxLayout(self.g_output)
@@ -226,11 +231,13 @@ class Ui_SWinding(object):
 
         self.verticalLayout_3.addWidget(self.b_export)
 
-        self.verticalLayout_4.addWidget(self.g_output)
+        self.verticalLayout_5.addWidget(self.g_output)
 
-        self.horizontalLayout_8.addWidget(self.widget)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.verticalLayout_5.addLayout(self.horizontalLayout_8)
+        self.horizontalLayout_8.addWidget(self.scrollArea)
+
+        self.verticalLayout_4.addLayout(self.horizontalLayout_8)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -255,7 +262,7 @@ class Ui_SWinding(object):
 
         self.horizontalLayout_3.addWidget(self.b_next)
 
-        self.verticalLayout_5.addLayout(self.horizontalLayout_3)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_3)
 
         self.retranslateUi(SWinding)
 
