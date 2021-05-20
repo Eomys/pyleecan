@@ -79,6 +79,7 @@ from ..Classes.LamSlotMag import LamSlotMag
 from ..Classes.LamSlotMulti import LamSlotMulti
 from ..Classes.LamSlotWind import LamSlotWind
 from ..Classes.LamSquirrelCage import LamSquirrelCage
+from ..Classes.LamSquirrelCageMag import LamSquirrelCageMag
 from ..Classes.Lamination import Lamination
 from ..Classes.Line import Line
 from ..Classes.Loss import Loss
@@ -89,6 +90,7 @@ from ..Classes.Machine import Machine
 from ..Classes.MachineAsync import MachineAsync
 from ..Classes.MachineDFIM import MachineDFIM
 from ..Classes.MachineIPMSM import MachineIPMSM
+from ..Classes.MachineLSPM import MachineLSPM
 from ..Classes.MachineSCIM import MachineSCIM
 from ..Classes.MachineSIPMSM import MachineSIPMSM
 from ..Classes.MachineSRM import MachineSRM

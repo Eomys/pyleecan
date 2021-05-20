@@ -1,35 +1,35 @@
 # -*- coding: utf-8 -*-
 
-from ....GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
-from ....GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
-    SMachineDimension,
-)
-from ....GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
-from ....GUI.Dialog.DMachineSetup.SWinding.SWinding import SWinding
-from ....GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
-from ....GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
-from ....GUI.Dialog.DMachineSetup.SWPole.SWPole import SWPole
-from ....GUI.Dialog.DMachineSetup.SBar.SBar import SBar
-from ....GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
-from ....GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
-
-from ....Classes.Magnet import Magnet
+from ....Classes.HoleM50 import HoleM50
 from ....Classes.LamHole import LamHole
 from ....Classes.LamSlot import LamSlot
 from ....Classes.LamSlotMag import LamSlotMag
 from ....Classes.LamSlotWind import LamSlotWind
 from ....Classes.LamSquirrelCage import LamSquirrelCage
-from ....Classes.MachineIPMSM import MachineIPMSM
-from ....Classes.MachineSyRM import MachineSyRM
+from ....Classes.LamSquirrelCageMag import LamSquirrelCageMag
 from ....Classes.MachineDFIM import MachineDFIM
+from ....Classes.MachineIPMSM import MachineIPMSM
+from ....Classes.MachineLSPM import MachineLSPM
 from ....Classes.MachineSCIM import MachineSCIM
 from ....Classes.MachineSIPMSM import MachineSIPMSM
-from ....Classes.MachineWRSM import MachineWRSM
 from ....Classes.MachineSRM import MachineSRM
+from ....Classes.MachineSyRM import MachineSyRM
+from ....Classes.MachineWRSM import MachineWRSM
 from ....Classes.SlotM10 import SlotM10
-from ....Classes.HoleM50 import HoleM50
 from ....Classes.Winding import Winding
 from ....Classes.WindingSC import WindingSC
+from ....GUI.Dialog.DMachineSetup.SBar.SBar import SBar
+from ....GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
+from ....GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
+    SMachineDimension,
+)
+from ....GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
+from ....GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
+from ....GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
+from ....GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
+from ....GUI.Dialog.DMachineSetup.SWinding.SWinding import SWinding
+from ....GUI.Dialog.DMachineSetup.SWPole.SWPole import SWPole
+from ....GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
 from ....GUI.Resources import pixmap_dict
 
 # Steps needed to setup a LamSlotWind
@@ -38,6 +38,8 @@ LSW_step = [SLamParam, SWSlot, SWinding, SWindCond]
 LP_step = [SLamParam, SWPole, SWinding, SWindCond]
 # Steps needed to setup a LamSquirrelCage
 LSC_step = [SLamParam, SWSlot, SBar]
+# Steps needed to setup a LamSquirrelCageMag
+LSCM_step = [SLamParam, SWSlot, SBar, SMHoleMag]
 # Steps needed to setup a LamHole
 LH_step = [SLamParam, SMHoleMag]
 # Steps needed to setup a LamSlot
@@ -120,6 +122,16 @@ machine10.type_machine = 10
 machine10.stator.is_stator = True
 machine10.rotor.is_stator = False
 
+machine11 = MachineLSPM(frame=None, shaft=None)
+machine11.stator = LamSlotWind()
+machine11.stator.winding = Winding()
+machine11.rotor = LamSquirrelCageMag()
+machine11.rotor.winding = WindingSC()
+machine11._set_None()  # Empty machine
+machine11.type_machine = 11
+machine11.stator.is_stator = True
+machine11.rotor.is_stator = False
+
 # Dictionnary with all the information to set a SCIM
 SCIM_dict = {
     "machine_type": MachineSCIM,
@@ -197,6 +209,18 @@ SRM_dict = {
     "img": pixmap_dict["SCIM"],
     "txt": "SRM (Switched Reluctance Machine)",
 }
+# Dictionnary with all the information to set a LSPM
+LSPM_dict = {
+    "machine_type": MachineLSPM,
+    "init_machine": machine11,
+    "start_step": S_step,
+    "stator_step": LSW_step,
+    "rotor_step": LSCM_step,
+    "name": "LSPM",
+    "img": pixmap_dict["LSPM"],
+    "txt": "LSPM (Line Start Permanent Magnet)",
+}
+
 # List of machine types available in the GUI
 mach_list = [
     SCIM_dict,
@@ -206,6 +230,7 @@ mach_list = [
     IPMSM_dict,
     WRSM_dict,
     SRM_dict,
+    LSPM_dict,
 ]
 # To find the correct index according to the machine
 mach_index = [mach_dict["machine_type"] for mach_dict in mach_list]

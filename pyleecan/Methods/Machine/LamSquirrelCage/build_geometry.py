@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from ....Classes.LamSlotWind import LamSlotWind
+
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     """Build geometry of the LamSquirrelCage
@@ -23,8 +25,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         list of surfaces
 
     """
-    surf_list = super(type(self), self).build_geometry(
-        sym=sym, is_simplified=is_simplified, alpha=alpha, delta=delta
+    surf_list = LamSlotWind.build_geometry(
+        self, sym=sym, is_simplified=is_simplified, alpha=alpha, delta=delta
     )
 
     # Adapt the label

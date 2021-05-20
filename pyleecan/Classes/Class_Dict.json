@@ -4026,7 +4026,8 @@
         "daughters": [
             "LamSlotMag",
             "LamSlotWind",
-            "LamSquirrelCage"
+            "LamSquirrelCage",
+            "LamSquirrelCageMag"
         ],
         "desc": "Lamination with empty Slot",
         "is_internal": false,
@@ -4149,7 +4150,8 @@
             }
         ],
         "daughters": [
-            "LamSquirrelCage"
+            "LamSquirrelCage",
+            "LamSquirrelCageMag"
         ],
         "desc": "Lamination with Slot filled with winding",
         "is_internal": false,
@@ -4208,7 +4210,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LamSquirrelCageMag"
+        ],
         "desc": "squirrel cages lamination",
         "is_internal": false,
         "methods": [
@@ -4255,6 +4259,39 @@
             }
         ]
     },
+    "LamSquirrelCageMag": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Rotor lamination for LSPM",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_surfaces",
+            "plot",
+            "get_pole_pair_number"
+        ],
+        "mother": "LamSquirrelCage",
+        "name": "LamSquirrelCageMag",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSquirrelCageMag.csv",
+        "properties": [
+            {
+                "desc": "lamination Hole",
+                "max": "",
+                "min": "",
+                "name": "hole",
+                "type": "[Hole]",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "Lamination": {
         "constants": [
             {
@@ -4268,7 +4305,8 @@
             "LamSlotMag",
             "LamSlotMulti",
             "LamSlotWind",
-            "LamSquirrelCage"
+            "LamSquirrelCage",
+            "LamSquirrelCageMag"
         ],
         "desc": "abstract class for lamination",
         "is_internal": false,
@@ -4676,6 +4714,7 @@
             "MachineAsync",
             "MachineDFIM",
             "MachineIPMSM",
+            "MachineLSPM",
             "MachineSCIM",
             "MachineSIPMSM",
             "MachineSRM",
@@ -4872,6 +4911,45 @@
             }
         ]
     },
+    "MachineLSPM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Line Start Permanent Magnet Machine",
+        "is_internal": false,
+        "methods": [
+            "check",
+            "get_machine_type"
+        ],
+        "mother": "MachineSync",
+        "name": "MachineLSPM",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/MachineLSPM.csv",
+        "properties": [
+            {
+                "desc": "Machine's Rotor",
+                "max": "",
+                "min": "",
+                "name": "rotor",
+                "type": "LamSquirrelCageMag",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Machine's Stator",
+                "max": "",
+                "min": "",
+                "name": "stator",
+                "type": "LamSlotWind",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "MachineSCIM": {
         "constants": [
             {
@@ -5018,6 +5096,7 @@
         ],
         "daughters": [
             "MachineIPMSM",
+            "MachineLSPM",
             "MachineSIPMSM",
             "MachineSRM",
             "MachineSyRM",
