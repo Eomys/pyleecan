@@ -1,6 +1,5 @@
 <RCC>
   <qresource prefix="/images">
-    <file>images/MachineSetup/WMSlot/SlotM17.png</file>
     <file>images/icon/help_16.png</file>
     <file>images/icon/search.png</file>
     <file>images/icon/check.png</file>
@@ -28,6 +27,7 @@
     <file>images/MachineSetup/WMSlot/SlotM14.png</file>
     <file>images/MachineSetup/WMSlot/SlotM15.png</file>
     <file>images/MachineSetup/WMSlot/SlotM16.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM17.png</file>
     <file>images/MachineSetup/WSlot/Slot_60.PNG</file>
     <file>images/MachineSetup/WSlot/Slot_61.PNG</file>
     <file>images/MachineSetup/LamParam/PolarVentDuct.png</file>
@@ -42,6 +42,7 @@
     <file>images/MachineSetup/MachineType/machine_IPMSM.png</file>
     <file>images/MachineSetup/MachineType/machine_SCIM.png</file>
     <file>images/MachineSetup/MachineType/machine_SPMSM.png</file>
+    <file>images/MachineSetup/MachineType/machine_LSPM.png</file>
     <file>images/MachineSetup/MachineType/WRSM.png</file>
     <file>images/MachineSetup/MachineType/machine_SynRM.png</file>
     <file>images/MachineSetup/SMHoleMag/HoleM50.png</file>

@@ -14,6 +14,7 @@ from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.MachineWRSM import MachineWRSM
 from pyleecan.Classes.MachineSRM import MachineSRM
+from pyleecan.Classes.MachineLSPM import MachineLSPM
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
@@ -49,6 +50,9 @@ load_test.append(  # 6
 )
 load_test.append(  # 7
     {"type": "SRM", "index": 6, "name": "SRM_test_load", "p": 10, "count": 9}
+)
+load_test.append(  # 7
+    {"type": "LSPM", "index": 7, "name": "LSPM_001", "p": 2, "count": 11}
 )
 from PySide2.QtCore import Qt
 
@@ -99,7 +103,7 @@ class TestDMachineSetup(object):
             setup["widget"].b_load.clicked.emit()
         setup["widget"].nav_step.setCurrentRow(0)
         # To remember to update when adding a new machine type
-        assert setup["widget"].w_step.c_type.count() == 7
+        assert setup["widget"].w_step.c_type.count() == 8
         # Check load MachineType
         assert type(setup["widget"].w_step) == SMachineType
         assert setup["widget"].w_step.c_type.currentIndex() == test_dict["index"]
@@ -112,7 +116,7 @@ class TestDMachineSetup(object):
     def test_set_save_machine_type(self, setup):
         """Check that the Widget allow to change the machine type and save"""
         # Check that all the machine type are available
-        assert setup["widget"].w_step.c_type.count() == 7
+        assert setup["widget"].w_step.c_type.count() == 8
         # DFIM
         setup["widget"].w_step.c_type.setCurrentIndex(1)
         assert setup["widget"].w_step.c_type.currentText() == "DFIM"
@@ -143,6 +147,11 @@ class TestDMachineSetup(object):
         assert setup["widget"].w_step.c_type.currentText() == "SRM"
         assert type(setup["widget"].machine) == MachineSRM
         save_function(setup["widget"], "test_srm_save")
+        # LSPM
+        setup["widget"].w_step.c_type.setCurrentIndex(7)
+        assert setup["widget"].w_step.c_type.currentText() == "LSPM"
+        assert type(setup["widget"].machine) == MachineLSPM
+        save_function(setup["widget"], "test_lspm_save")
         # SCIM
         setup["widget"].w_step.c_type.setCurrentIndex(0)
         assert setup["widget"].w_step.c_type.currentText() == "SCIM"

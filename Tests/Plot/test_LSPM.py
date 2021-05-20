@@ -6,7 +6,7 @@ from numpy import array, cos, exp, linspace, ones, pi, sin, sqrt, zeros
 from pyleecan.Classes.CondType21 import CondType21
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.LamSquirrelCageMag import LamSquirrelCageMag
-from pyleecan.Classes.MachineUD import MachineUD
+from pyleecan.Classes.MachineLSPM import MachineLSPM
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingSC import WindingSC
@@ -20,7 +20,7 @@ from Tests import save_plot_path as save_path
 
 def test_plot_LSPM():
     """Define and Plot the LSPM machine"""
-    LSPM = MachineUD(name="LSPM_001")
+    LSPM = MachineLSPM(name="LSPM_001")
 
     Copper1 = load(join(DATA_DIR, "Material", "Copper1.json"))
     M400_50A = load(join(DATA_DIR, "Material", "M400-50A.json"))
@@ -124,7 +124,8 @@ def test_plot_LSPM():
     rotor.mat_type = M400_50A  # Rotor Lamination material
     stator.winding.conductor.cond_mat = Copper1  # Stator winding conductor material
 
-    LSPM.lam_list = [stator, rotor]
+    LSPM.stator = stator
+    LSPM.rotor = rotor
     LSPM.shaft = Shaft(Drsh=rotor.Rint * 2)
     # LSPM.save(join(DATA_DIR, "Machine", "LSPM_001.json"))
     LSPM.plot(is_show_fig=False, save_path=join(save_path, "test_LSPM.png"))
