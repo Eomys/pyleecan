@@ -4714,6 +4714,7 @@
             "MachineAsync",
             "MachineDFIM",
             "MachineIPMSM",
+            "MachineLSPM",
             "MachineSCIM",
             "MachineSIPMSM",
             "MachineSRM",
@@ -4910,6 +4911,45 @@
             }
         ]
     },
+    "MachineLSPM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Line Start Permanent Magnet Machine",
+        "is_internal": false,
+        "methods": [
+            "check",
+            "get_machine_type"
+        ],
+        "mother": "MachineSync",
+        "name": "MachineLSPM",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/MachineLSPM.csv",
+        "properties": [
+            {
+                "desc": "Machine's Rotor",
+                "max": "",
+                "min": "",
+                "name": "rotor",
+                "type": "LamSquirrelCageMag",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Machine's Stator",
+                "max": "",
+                "min": "",
+                "name": "stator",
+                "type": "LamSlotWind",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "MachineSCIM": {
         "constants": [
             {
@@ -5056,6 +5096,7 @@
         ],
         "daughters": [
             "MachineIPMSM",
+            "MachineLSPM",
             "MachineSIPMSM",
             "MachineSRM",
             "MachineSyRM",

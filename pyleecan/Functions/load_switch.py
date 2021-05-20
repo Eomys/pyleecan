@@ -92,6 +92,7 @@ load_switch = {
     "MachineAsync": MachineAsync,
     "MachineDFIM": MachineDFIM,
     "MachineIPMSM": MachineIPMSM,
+    "MachineLSPM": MachineLSPM,
     "MachineSCIM": MachineSCIM,
     "MachineSIPMSM": MachineSIPMSM,
     "MachineSRM": MachineSRM,

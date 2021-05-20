@@ -90,6 +90,7 @@ from ..Classes.Machine import Machine
 from ..Classes.MachineAsync import MachineAsync
 from ..Classes.MachineDFIM import MachineDFIM
 from ..Classes.MachineIPMSM import MachineIPMSM
+from ..Classes.MachineLSPM import MachineLSPM
 from ..Classes.MachineSCIM import MachineSCIM
 from ..Classes.MachineSIPMSM import MachineSIPMSM
 from ..Classes.MachineSRM import MachineSRM
