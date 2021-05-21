@@ -14,6 +14,7 @@ from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.MachineWRSM import MachineWRSM
 from pyleecan.Classes.MachineSRM import MachineSRM
+from pyleecan.Classes.MachineLSPM import MachineLSPM
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
@@ -21,7 +22,6 @@ from Tests import save_gui_path as save_path
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
-from pyleecan.GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
 from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
@@ -31,25 +31,28 @@ from Tests import TEST_DATA_DIR
 
 load_test = list()
 load_test.append(  # 1
-    {"type": "SCIM", "index": 0, "name": "SCIM_001", "p": 1, "count": 11}
+    {"type": "SCIM", "index": 0, "name": "SCIM_001", "p": 1, "count": 10}
 )
 load_test.append(  # 2
-    {"type": "DFIM", "index": 1, "name": "DFIM_001", "p": 2, "count": 13}
+    {"type": "DFIM", "index": 1, "name": "DFIM_001", "p": 2, "count": 11}
 )
 load_test.append(  # 3
-    {"type": "SynRM", "index": 2, "name": "SynRM_001", "p": 2, "count": 10}
+    {"type": "SynRM", "index": 2, "name": "SynRM_001", "p": 2, "count": 9}
 )
 load_test.append(  # 4
-    {"type": "SPMSM", "index": 3, "name": "SIPMSM_008", "p": 4, "count": 10}
+    {"type": "SPMSM", "index": 3, "name": "SIPMSM_008", "p": 4, "count": 9}
 )
 load_test.append(  # 5
-    {"type": "IPMSM", "index": 4, "name": "machine_Toyota_Prius", "p": 5, "count": 10}
+    {"type": "IPMSM", "index": 4, "name": "machine_IPMSM_A", "p": 5, "count": 9}
 )
 load_test.append(  # 6
-    {"type": "WRSM", "index": 5, "name": "WRSM_001", "p": 6, "count": 13}
+    {"type": "WRSM", "index": 5, "name": "WRSM_001", "p": 6, "count": 11}
 )
 load_test.append(  # 7
-    {"type": "SRM", "index": 6, "name": "SRM_test_load", "p": 10, "count": 10}
+    {"type": "SRM", "index": 6, "name": "SRM_test_load", "p": 10, "count": 9}
+)
+load_test.append(  # 7
+    {"type": "LSPM", "index": 7, "name": "LSPM_001", "p": 2, "count": 11}
 )
 from PySide2.QtCore import Qt
 
@@ -85,7 +88,6 @@ class TestDMachineSetup(object):
 
         self.app.quit()
 
-    @pytest.mark.skip
     @pytest.mark.parametrize("test_dict", load_test)
     def test_load(self, setup, test_dict):
         """Check that you can load a machine"""
@@ -101,7 +103,7 @@ class TestDMachineSetup(object):
             setup["widget"].b_load.clicked.emit()
         setup["widget"].nav_step.setCurrentRow(0)
         # To remember to update when adding a new machine type
-        assert setup["widget"].w_step.c_type.count() == 7
+        assert setup["widget"].w_step.c_type.count() == 8
         # Check load MachineType
         assert type(setup["widget"].w_step) == SMachineType
         assert setup["widget"].w_step.c_type.currentIndex() == test_dict["index"]
@@ -114,7 +116,7 @@ class TestDMachineSetup(object):
     def test_set_save_machine_type(self, setup):
         """Check that the Widget allow to change the machine type and save"""
         # Check that all the machine type are available
-        assert setup["widget"].w_step.c_type.count() == 7
+        assert setup["widget"].w_step.c_type.count() == 8
         # DFIM
         setup["widget"].w_step.c_type.setCurrentIndex(1)
         assert setup["widget"].w_step.c_type.currentText() == "DFIM"
@@ -145,6 +147,11 @@ class TestDMachineSetup(object):
         assert setup["widget"].w_step.c_type.currentText() == "SRM"
         assert type(setup["widget"].machine) == MachineSRM
         save_function(setup["widget"], "test_srm_save")
+        # LSPM
+        setup["widget"].w_step.c_type.setCurrentIndex(7)
+        assert setup["widget"].w_step.c_type.currentText() == "LSPM"
+        assert type(setup["widget"].machine) == MachineLSPM
+        save_function(setup["widget"], "test_lspm_save")
         # SCIM
         setup["widget"].w_step.c_type.setCurrentIndex(0)
         assert setup["widget"].w_step.c_type.currentText() == "SCIM"

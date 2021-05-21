@@ -17,7 +17,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
     # Information for DMachineSetup
-    step_name = "Slot"
+    step_name = "Hole"
 
     def __init__(self, machine, matlib, is_stator=False):
         """Initialize the widget according to machine
@@ -128,7 +128,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             hole_index = self.obj.hole.index(hole)
         tab = WHoleMag(self, is_mag=is_mag, index=hole_index, matlib=self.matlib)
         tab.saveNeeded.connect(self.emit_save)
-        self.tab_hole.addTab(tab, "Slot " + str(hole_index + 1))
+        self.tab_hole.addTab(tab, "Hole " + str(hole_index + 1))
 
     def s_remove(self):
         """Signal to remove the last hole

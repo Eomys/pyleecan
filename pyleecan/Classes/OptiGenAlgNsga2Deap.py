@@ -254,10 +254,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             other.toolbox is not None and self.toolbox is None
         ):
             diff_list.append(name + ".toolbox None mismatch")
-        elif self.toolbox is not None:
-            diff_list.extend(
-                self.toolbox.compare(other.toolbox, name=name + ".toolbox")
-            )
+        elif self.toolbox is not None and self.toolbox != other.toolbox:
+            diff_list.append(name + ".toolbox")
         return diff_list
 
     def __sizeof__(self):

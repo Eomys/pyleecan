@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>630</width>
+    <width>792</width>
     <height>470</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>630</width>
+    <width>270</width>
     <height>470</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>16777215</width>
+    <width>1101</width>
     <height>16777215</height>
    </size>
   </property>
@@ -80,75 +80,88 @@ p, li { white-space: pre-wrap; }
     </layout>
    </item>
    <item>
-    <widget class="QWidget" name="widget" native="true">
+    <widget class="QScrollArea" name="scrollArea">
      <property name="minimumSize">
       <size>
-       <width>250</width>
+       <width>270</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>250</width>
+       <width>270</width>
        <height>16777215</height>
       </size>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="in_W3">
-          <property name="text">
-           <string>W3</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="FloatEdit" name="lf_W3"/>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="unit_W3">
-          <property name="text">
-           <string>m</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="in_H2">
-          <property name="text">
-           <string>H2</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="FloatEdit" name="lf_H2"/>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="unit_H2">
-          <property name="text">
-           <string>m</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="WWSlotOut" name="w_out" native="true"/>
-      </item>
-     </layout>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>268</width>
+        <height>446</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="in_W3">
+           <property name="text">
+            <string>W3</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="FloatEdit" name="lf_W3"/>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="unit_W3">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="in_H2">
+           <property name="text">
+            <string>H2</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="FloatEdit" name="lf_H2"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="unit_H2">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="WWSlotOut" name="w_out" native="true"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>

@@ -30,6 +30,8 @@ from ..Classes.Electrical import Electrical
 from ..Classes.Elmer import Elmer
 from ..Classes.ElmerResults import ElmerResults
 from ..Classes.ElmerResultsVTU import ElmerResultsVTU
+from ..Classes.EndWinding import EndWinding
+from ..Classes.EndWindingCirc import EndWindingCirc
 from ..Classes.FPGNSeg import FPGNSeg
 from ..Classes.FPGNTri import FPGNTri
 from ..Classes.FluxLink import FluxLink
@@ -54,6 +56,7 @@ from ..Classes.HoleUD import HoleUD
 from ..Classes.Import import Import
 from ..Classes.ImportData import ImportData
 from ..Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from ..Classes.ImportGenPWM import ImportGenPWM
 from ..Classes.ImportGenToothSaw import ImportGenToothSaw
 from ..Classes.ImportGenVectLin import ImportGenVectLin
 from ..Classes.ImportGenVectSin import ImportGenVectSin
@@ -78,6 +81,7 @@ from ..Classes.LamSlotMag import LamSlotMag
 from ..Classes.LamSlotMulti import LamSlotMulti
 from ..Classes.LamSlotWind import LamSlotWind
 from ..Classes.LamSquirrelCage import LamSquirrelCage
+from ..Classes.LamSquirrelCageMag import LamSquirrelCageMag
 from ..Classes.Lamination import Lamination
 from ..Classes.Line import Line
 from ..Classes.Loss import Loss
@@ -88,6 +92,7 @@ from ..Classes.Machine import Machine
 from ..Classes.MachineAsync import MachineAsync
 from ..Classes.MachineDFIM import MachineDFIM
 from ..Classes.MachineIPMSM import MachineIPMSM
+from ..Classes.MachineLSPM import MachineLSPM
 from ..Classes.MachineSCIM import MachineSCIM
 from ..Classes.MachineSIPMSM import MachineSIPMSM
 from ..Classes.MachineSRM import MachineSRM
@@ -110,6 +115,11 @@ from ..Classes.MeshMat import MeshMat
 from ..Classes.MeshSolution import MeshSolution
 from ..Classes.MeshVTK import MeshVTK
 from ..Classes.Mode import Mode
+from ..Classes.ModelBH import ModelBH
+from ..Classes.ModelBH_Langevin import ModelBH_Langevin
+from ..Classes.ModelBH_arctangent import ModelBH_arctangent
+from ..Classes.ModelBH_exponential import ModelBH_exponential
+from ..Classes.ModelBH_linear_sat import ModelBH_linear_sat
 from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
@@ -207,11 +217,6 @@ from ..Classes.VentilationCirc import VentilationCirc
 from ..Classes.VentilationPolar import VentilationPolar
 from ..Classes.VentilationTrap import VentilationTrap
 from ..Classes.Winding import Winding
-from ..Classes.WindingCW1L import WindingCW1L
-from ..Classes.WindingCW2LR import WindingCW2LR
-from ..Classes.WindingCW2LT import WindingCW2LT
-from ..Classes.WindingDW1L import WindingDW1L
-from ..Classes.WindingDW2L import WindingDW2L
 from ..Classes.WindingSC import WindingSC
 from ..Classes.WindingUD import WindingUD
 from ..Classes.XOutput import XOutput

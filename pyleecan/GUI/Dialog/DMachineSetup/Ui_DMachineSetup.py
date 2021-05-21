@@ -16,9 +16,16 @@ class Ui_DMachineSetup(object):
     def setupUi(self, DMachineSetup):
         if not DMachineSetup.objectName():
             DMachineSetup.setObjectName(u"DMachineSetup")
-        DMachineSetup.resize(1001, 721)
-        self.horizontalLayout_2 = QHBoxLayout(DMachineSetup)
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        DMachineSetup.resize(1076, 682)
+        self.main_layout = QHBoxLayout(DMachineSetup)
+        self.main_layout.setObjectName(u"main_layout")
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.b_load = QPushButton(DMachineSetup)
+        self.b_load.setObjectName(u"b_load")
+
+        self.verticalLayout.addWidget(self.b_load)
+
         self.nav_step = QListWidget(DMachineSetup)
         self.nav_step.setObjectName(u"nav_step")
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
@@ -28,29 +35,14 @@ class Ui_DMachineSetup(object):
         self.nav_step.setSizePolicy(sizePolicy)
         self.nav_step.setMaximumSize(QSize(190, 16777215))
 
-        self.horizontalLayout_2.addWidget(self.nav_step)
-
-        self.main_layout = QVBoxLayout()
-        self.main_layout.setObjectName(u"main_layout")
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalSpacer = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
-        )
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
+        self.verticalLayout.addWidget(self.nav_step)
 
         self.b_save = QPushButton(DMachineSetup)
         self.b_save.setObjectName(u"b_save")
 
-        self.horizontalLayout.addWidget(self.b_save)
+        self.verticalLayout.addWidget(self.b_save)
 
-        self.b_load = QPushButton(DMachineSetup)
-        self.b_load.setObjectName(u"b_load")
-
-        self.horizontalLayout.addWidget(self.b_load)
-
-        self.main_layout.addLayout(self.horizontalLayout)
+        self.main_layout.addLayout(self.verticalLayout)
 
         self.w_step = QWidget(DMachineSetup)
         self.w_step.setObjectName(u"w_step")
@@ -63,8 +55,6 @@ class Ui_DMachineSetup(object):
 
         self.main_layout.addWidget(self.w_step)
 
-        self.horizontalLayout_2.addLayout(self.main_layout)
-
         self.retranslateUi(DMachineSetup)
 
         QMetaObject.connectSlotsByName(DMachineSetup)
@@ -75,7 +65,7 @@ class Ui_DMachineSetup(object):
         DMachineSetup.setWindowTitle(
             QCoreApplication.translate("DMachineSetup", u"Pyleecan Machine Setup", None)
         )
-        self.b_save.setText(QCoreApplication.translate("DMachineSetup", u"Save", None))
         self.b_load.setText(QCoreApplication.translate("DMachineSetup", u"Load", None))
+        self.b_save.setText(QCoreApplication.translate("DMachineSetup", u"Save", None))
 
     # retranslateUi
