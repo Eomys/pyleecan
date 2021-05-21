@@ -11397,8 +11397,7 @@
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",
-            "check",
-            "plot_schematics"
+            "check"
         ],
         "mother": "Slot",
         "name": "SlotWLSRPM",

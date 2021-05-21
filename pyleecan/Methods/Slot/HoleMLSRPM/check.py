@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from pyleecan.Methods.Slot.Slot import SlotCheckError
 
 
 def check(self):
