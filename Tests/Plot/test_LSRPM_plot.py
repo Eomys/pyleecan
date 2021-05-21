@@ -98,7 +98,7 @@ def test_LSRPM():
         ]
     ).T
 
-    stator.winding = WindingUD(user_wind_mat=wind_mat_LSRPM, qs=6, p=4, Lewout=0)
+    stator.winding = WindingUD(wind_mat=wind_mat_LSRPM, qs=6, p=4, Lewout=0)
 
     # Conductor setup
     stator.winding.conductor = CondType11(
@@ -170,7 +170,7 @@ def test_LSRPM():
     LSRPM = MachineIPMSM(
         name="LSRPM LSEE", stator=stator, rotor=rotor, shaft=shaft, frame=None
     )
-    LSRPM.save(join(DATA_DIR, "Machine", "LSRPM_001.json"))
+    #  LSRPM.save(join(DATA_DIR, "Machine", "LSRPM_001.json"))
 
     LSRPM.plot(is_show_fig=False, save_path=join(save_path, "test_LSRPM.png"))
 

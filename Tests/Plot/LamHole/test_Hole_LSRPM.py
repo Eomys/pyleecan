@@ -15,7 +15,6 @@ from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.HoleMLSRPM import HoleMLSRPM
 from Tests import save_plot_path as save_path
 from pyleecan.Classes.SlotWLSRPM import SlotWLSRPM
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
 
 
 """unittest for Lamination with Hole LSRPM plot"""

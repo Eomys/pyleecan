@@ -15,8 +15,6 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.SlotWLSRPM import SlotWLSRPM
 
 from Tests import save_plot_path as save_path
@@ -112,7 +110,7 @@ wind_mat_LSRPM[1, 1, :, :] = array(
 
 def test_Lam_Wind_LSRPM_wind_tan(machine):
     """Test machine plot with Slot LSRPM and winding rad=1, tan=2"""
-    machine.winding = WindingUD(user_wind_mat=wind_mat_LSRPM, qs=6, p=4, Lewout=0)
+    machine.winding = WindingUD(wind_mat=wind_mat_LSRPM, qs=6, p=4, Lewout=0)
     machine.plot()
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_Lam_Wind_sLSRPM_2-tan-wind.png"))

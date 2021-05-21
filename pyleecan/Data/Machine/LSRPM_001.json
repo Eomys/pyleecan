@@ -1,7 +1,7 @@
 {
     "__class__": "MachineIPMSM",
-    "__save_date__": "2021_05_21 10h15min27s ",
-    "__version__": "pyleecan_1.2.1",
+    "__save_date__": "2021_05_21 11h02min16s ",
+    "__version__": "pyleecan_1.3.0",
     "desc": "",
     "frame": null,
     "logger_name": "Pyleecan.Machine",
@@ -70,9 +70,16 @@
                                 "__class__": "ImportMatrix",
                                 "is_transpose": false
                             },
+                            "ModelBH": {
+                                "Bmax": 2.31,
+                                "Hmax": null,
+                                "__class__": "ModelBH",
+                                "delta": 100
+                            },
                             "Wlam": 0,
                             "__class__": "MatMagnetics",
                             "alpha_Br": -0.001,
+                            "is_BH_extrapolate": false,
                             "mur_lin": 1.05
                         },
                         "name": "MagnetPrius",
@@ -128,9 +135,16 @@
                             "__class__": "ImportMatrix",
                             "is_transpose": false
                         },
+                        "ModelBH": {
+                            "Bmax": 2.31,
+                            "Hmax": null,
+                            "__class__": "ModelBH",
+                            "delta": 100
+                        },
                         "Wlam": 0,
                         "__class__": "MatMagnetics",
                         "alpha_Br": 0,
+                        "is_BH_extrapolate": false,
                         "mur_lin": 1
                     },
                     "name": "Material",
@@ -365,9 +379,16 @@
                     "__class__": "ImportMatrix",
                     "is_transpose": false
                 },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0.0005,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 2500.0
             },
             "name": "M400-50A",
@@ -386,7 +407,8 @@
                 "rho": 7650.0
             }
         },
-        "notch": []
+        "notch": [],
+        "yoke_notch": []
     },
     "shaft": {
         "Drsh": 0.028,
@@ -426,9 +448,16 @@
                     "__class__": "ImportMatrix",
                     "is_transpose": false
                 },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 1
             },
             "name": "Material",
@@ -672,9 +701,16 @@
                     "__class__": "ImportMatrix",
                     "is_transpose": false
                 },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0.0005,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 2500.0
             },
             "name": "M400-50A",
@@ -705,10 +741,12 @@
         },
         "winding": {
             "Lewout": 0,
-            "Npcpp": 2,
+            "Nlayer": 1,
+            "Npcp": 2,
             "Nslot_shift_wind": 0,
             "Ntcoil": 7,
             "__class__": "WindingUD",
+            "coil_pitch": 1,
             "conductor": {
                 "Hwire": 0.002,
                 "Nwppc_rad": 1,
@@ -792,9 +830,16 @@
                             "__class__": "ImportMatrix",
                             "is_transpose": false
                         },
+                        "ModelBH": {
+                            "Bmax": 2.31,
+                            "Hmax": null,
+                            "__class__": "ModelBH",
+                            "delta": 100
+                        },
                         "Wlam": 0,
                         "__class__": "MatMagnetics",
                         "alpha_Br": 0,
+                        "is_BH_extrapolate": false,
                         "mur_lin": 1
                     },
                     "name": "Material",
@@ -815,11 +860,19 @@
                 },
                 "type_winding_shape": 1
             },
+            "end_winding": {
+                "__class__": "EndWinding"
+            },
+            "is_aper_a": null,
+            "is_change_layer": false,
+            "is_permute_B_C": false,
+            "is_reverse_layer": false,
             "is_reverse_wind": false,
             "p": 4,
+            "per_a": null,
             "qs": 6,
             "type_connection": 0,
-            "user_wind_mat": [
+            "wind_mat": [
                 [
                     [
                         [
@@ -1217,7 +1270,8 @@
                     ]
                 ]
             ]
-        }
+        },
+        "yoke_notch": []
     },
     "type_machine": 1
 }
