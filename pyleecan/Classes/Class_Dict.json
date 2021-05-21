@@ -225,6 +225,7 @@
         ],
         "daughters": [
             "BoreFlower",
+            "BoreLSRPM",
             "BoreUD"
         ],
         "desc": "Abstract class for Bore shape",
@@ -274,6 +275,62 @@
             },
             {
                 "desc": "Angular offset for the arc",
+                "max": "",
+                "min": "",
+                "name": "alpha",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            }
+        ]
+    },
+    "BoreLSRPM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class for Bore LSRPM",
+        "is_internal": false,
+        "methods": [
+            "get_bore_line"
+        ],
+        "mother": "Bore",
+        "name": "BoreLSRPM",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/BoreLSRPM.csv",
+        "properties": [
+            {
+                "desc": "Number of flower arc",
+                "max": "",
+                "min": "0",
+                "name": "N",
+                "type": "int",
+                "unit": "-",
+                "value": 8
+            },
+            {
+                "desc": "Radius of the flower arc",
+                "max": "",
+                "min": "0",
+                "name": "Rarc",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0375
+            },
+            {
+                "desc": "Width of segement",
+                "max": "",
+                "min": "",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0035
+            },
+            {
+                "desc": "Angular offset",
                 "max": "",
                 "min": "",
                 "name": "alpha",
@@ -1762,6 +1819,7 @@
             "HoleM54",
             "HoleM57",
             "HoleM58",
+            "HoleMLSRPM",
             "HoleMag",
             "HoleUD",
             "VentilationCirc",
@@ -2626,6 +2684,105 @@
             }
         ]
     },
+    "HoleMLSRPM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "V shape slot for buried magnet",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "remove_magnet",
+            "has_magnet"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleMLSRPM",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleMLSRPM.csv",
+        "properties": [
+            {
+                "desc": "Magnet depth",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0023734787
+            },
+            {
+                "desc": "Magnet top width",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.00388
+            },
+            {
+                "desc": "Magnet width angular 1 ",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "rad",
+                "value": 0.219911482
+            },
+            {
+                "desc": "Small distance",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0007
+            },
+            {
+                "desc": "Rounding radius",
+                "max": "",
+                "min": "0",
+                "name": "R1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0003
+            },
+            {
+                "desc": "Radius 2",
+                "max": "",
+                "min": "",
+                "name": "R2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.019327
+            },
+            {
+                "desc": "Radius 3",
+                "max": "",
+                "min": "",
+                "name": "R3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0165
+            },
+            {
+                "desc": "Magnet of the hole",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "HoleMag": {
         "constants": [
             {
@@ -2640,6 +2797,7 @@
             "HoleM53",
             "HoleM57",
             "HoleM58",
+            "HoleMLSRPM",
             "HoleUD"
         ],
         "desc": "Hole with magnets for lamination (abstract)",
@@ -9244,7 +9402,8 @@
             "SlotW28",
             "SlotW29",
             "SlotW60",
-            "SlotW61"
+            "SlotW61",
+            "SlotWLSRPM"
         ],
         "desc": "Generic class for slot (abstract)",
         "is_internal": false,
@@ -11746,6 +11905,78 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0
+            }
+        ]
+    },
+    "SlotWLSRPM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Open Rectangular or trapezoidal slot with wedge",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "build_geometry_active",
+            "check"
+        ],
+        "mother": "Slot",
+        "name": "SlotWLSRPM",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotWLSRPM.csv",
+        "properties": [
+            {
+                "desc": "Slot bottom side width.",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.008
+            },
+            {
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0116
+            },
+            {
+                "desc": "Slot height ",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0148
+            },
+            {
+                "desc": "Top radius",
+                "max": "",
+                "min": "0",
+                "name": "R1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.00075
+            },
+            {
+                "desc": "damper winding height",
+                "max": "",
+                "min": "0",
+                "name": "H3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
             }
         ]
     },

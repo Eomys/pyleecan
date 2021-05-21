@@ -10,6 +10,7 @@ from ..Classes.Arc2 import Arc2
 from ..Classes.Arc3 import Arc3
 from ..Classes.Bore import Bore
 from ..Classes.BoreFlower import BoreFlower
+from ..Classes.BoreLSRPM import BoreLSRPM
 from ..Classes.BoreUD import BoreUD
 from ..Classes.CellMat import CellMat
 from ..Classes.Circle import Circle
@@ -49,6 +50,7 @@ from ..Classes.HoleM53 import HoleM53
 from ..Classes.HoleM54 import HoleM54
 from ..Classes.HoleM57 import HoleM57
 from ..Classes.HoleM58 import HoleM58
+from ..Classes.HoleMLSRPM import HoleMLSRPM
 from ..Classes.HoleMag import HoleMag
 from ..Classes.HoleUD import HoleUD
 from ..Classes.Import import Import
@@ -194,6 +196,7 @@ from ..Classes.SlotW28 import SlotW28
 from ..Classes.SlotW29 import SlotW29
 from ..Classes.SlotW60 import SlotW60
 from ..Classes.SlotW61 import SlotW61
+from ..Classes.SlotWLSRPM import SlotWLSRPM
 from ..Classes.Solution import Solution
 from ..Classes.SolutionData import SolutionData
 from ..Classes.SolutionMat import SolutionMat
