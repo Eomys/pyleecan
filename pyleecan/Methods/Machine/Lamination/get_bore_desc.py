@@ -133,8 +133,8 @@ def get_bore_desc(self, sym=1, line_label=None):
         else:  # Notches
             lines = bore["obj"].build_geometry()
             for line in lines:
-                line.rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
-            bore_lines.extend(lines)
+                bore_lines.append(line.copy())
+                bore_lines[-1].rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
 
     # Set line label
     if line_label is not None:
