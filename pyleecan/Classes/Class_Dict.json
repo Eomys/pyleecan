@@ -4162,15 +4162,6 @@
                 "type": "[Hole]",
                 "unit": "",
                 "value": ""
-            },
-            {
-                "desc": "Bore Shape",
-                "max": "",
-                "min": "",
-                "name": "bore",
-                "type": "Bore",
-                "unit": "",
-                "value": null
             }
         ]
     },
@@ -4604,6 +4595,15 @@
                 "type": "[Notch]",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Bore Shape",
+                "max": "",
+                "min": "",
+                "name": "bore",
+                "type": "Bore",
+                "unit": "",
+                "value": null
             }
         ]
     },
