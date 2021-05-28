@@ -279,7 +279,7 @@ class ImportMatrixXls(ImportMatrix):
     usecols = property(
         fget=_get_usecols,
         fset=_set_usecols,
-        doc=u"""To select the range of column to use
+        doc=u"""list of Excel column letters and column ranges (e.g. "A:E" or "A,C,E:F")
 
         :Type: str
         """,
