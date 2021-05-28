@@ -3480,7 +3480,7 @@
                 "value": 0
             },
             {
-                "desc": "To select the range of column to use",
+                "desc": "list of Excel column letters and column ranges (e.g. \"A:E\" or \"A,C,E:F\")",
                 "max": "",
                 "min": "",
                 "name": "usecols",

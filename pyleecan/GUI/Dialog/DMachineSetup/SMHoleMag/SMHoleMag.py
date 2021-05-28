@@ -9,6 +9,7 @@ from .....Classes.Material import Material
 from .....GUI.Dialog.DMachineSetup.SMHoleMag.Ui_SMHoleMag import Ui_SMHoleMag
 from .....GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.WHoleMag import WHoleMag
 from .....Methods.Slot.Slot import SlotCheckError
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class SMHoleMag(Ui_SMHoleMag, QWidget):
@@ -155,12 +156,13 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             hole.Zh = self.machine.stator.winding.p * 2
         self.set_hole_pitch(self.obj.hole[0].Zh)
 
-        # We have to make sure the hole is right before truing to plot it
+        # We have to make sure the hole is right before trying to plot it
         error = self.check(self.obj)
         if error:  # Error => Display it
             QMessageBox().critical(self, self.tr("Error"), error)
-        else:  # No error => Plot the hole (No winding for LamSquirrelCage)
-            self.machine.plot(is_show_fig=True)
+        else:  # No error => Plot the lamination
+            self.obj.plot(is_show_fig=True)
+            set_plot_gui_icon()
 
     @staticmethod
     def check(lamination):

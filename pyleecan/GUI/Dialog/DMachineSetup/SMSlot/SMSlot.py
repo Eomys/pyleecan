@@ -17,6 +17,7 @@ from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot14.PMSlot14 import PMSlot14
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot15.PMSlot15 import PMSlot15
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # List to convert index of combobox to slot type
 WIDGET_LIST = [
@@ -229,6 +230,7 @@ class SMSlot(Ui_SMSlot, QWidget):
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Plot the slot (No winding for LamSquirrelCage)
             self.obj.plot()
+            set_plot_gui_icon()
 
     @staticmethod
     def check(lam):

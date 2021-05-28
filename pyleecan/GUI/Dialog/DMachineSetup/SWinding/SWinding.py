@@ -8,6 +8,7 @@ from .....Classes.Winding import Winding
 from .....Classes.WindingUD import WindingUD
 from .....GUI.Dialog.DMachineSetup.SWinding.Gen_SWinding import Gen_SWinding
 from .....Methods.Machine.Winding import WindingError
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class SWinding(Gen_SWinding, QWidget):
@@ -486,6 +487,7 @@ class SWinding(Gen_SWinding, QWidget):
         """
         try:
             self.obj.plot_winding()
+            set_plot_gui_icon()
         except (AssertionError, WindingError) as e:
             QMessageBox().critical(self, self.tr("Error"), str(e))
 

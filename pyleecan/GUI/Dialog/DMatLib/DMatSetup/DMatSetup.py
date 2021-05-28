@@ -101,7 +101,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_alpha_Br.setValue(self.mat.mag.alpha_Br)
         self.lf_Wlam.setValue(self.mat.mag.Wlam)
         # Setup import B(H) widget
-        self.w_BH_import.verbose_name = "B(H) curve"
+        self.w_BH_import.verbose_name = self.mat.name + " B(H) curve"
         self.w_BH_import.obj = self.mat.mag
         self.w_BH_import.param_name = "BH_curve"
         self.w_BH_import.expected_shape = (None, 2)
