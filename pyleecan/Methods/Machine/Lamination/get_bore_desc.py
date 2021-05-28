@@ -26,7 +26,9 @@ def get_bore_desc(self, sym=1, line_label=None):
 
     Rbo = self.get_Rbo()
 
-    if self.notch is None or len(self.notch) == 0:
+    if self.bore is not None and self.notch in [None, list()] and sym == 1:
+        return None, self.bore.get_bore_line(label=line_label)
+    elif self.notch is None or len(self.notch) == 0:
         # No notches
         if sym == 1:
             bore_desc = list()
@@ -131,8 +133,8 @@ def get_bore_desc(self, sym=1, line_label=None):
         else:  # Notches
             lines = bore["obj"].build_geometry()
             for line in lines:
-                line.rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
-            bore_lines.extend(lines)
+                bore_lines.append(line.copy())
+                bore_lines[-1].rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
 
     # Set line label
     if line_label is not None:
