@@ -700,7 +700,12 @@
         "desc": "abstact class for conductors",
         "is_internal": false,
         "methods": [
-            "check"
+            "check",
+            "comp_phi_skin",
+            "comp_psi_skin",
+            "comp_phip_skin",
+            "comp_psip_skin",
+            "comp_skin_effect"
         ],
         "mother": "",
         "name": "Conductor",
@@ -1156,6 +1161,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Electrical"
+            },
+            {
+                "desc": "Skin effect for resistance and inductance",
+                "max": "",
+                "min": "",
+                "name": "type_skin_effect",
+                "type": "int",
+                "unit": "-",
+                "value": 0
             }
         ]
     },

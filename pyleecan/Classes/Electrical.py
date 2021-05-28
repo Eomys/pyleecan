@@ -81,7 +81,12 @@ class Electrical(FrozenClass):
     get_logger = get_logger
 
     def __init__(
-        self, eec=None, logger_name="Pyleecan.Electrical", init_dict=None, init_str=None
+        self,
+        eec=None,
+        logger_name="Pyleecan.Electrical",
+        type_skin_effect=0,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -102,10 +107,13 @@ class Electrical(FrozenClass):
                 eec = init_dict["eec"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "type_skin_effect" in list(init_dict.keys()):
+                type_skin_effect = init_dict["type_skin_effect"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.eec = eec
         self.logger_name = logger_name
+        self.type_skin_effect = type_skin_effect
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -124,6 +132,7 @@ class Electrical(FrozenClass):
         else:
             Electrical_str += "eec = None" + linesep + linesep
         Electrical_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        Electrical_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
         return Electrical_str
 
     def __eq__(self, other):
@@ -134,6 +143,8 @@ class Electrical(FrozenClass):
         if other.eec != self.eec:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.type_skin_effect != self.type_skin_effect:
             return False
         return True
 
@@ -151,6 +162,8 @@ class Electrical(FrozenClass):
             diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
         if other._logger_name != self._logger_name:
             diff_list.append(name + ".logger_name")
+        if other._type_skin_effect != self._type_skin_effect:
+            diff_list.append(name + ".type_skin_effect")
         return diff_list
 
     def __sizeof__(self):
@@ -159,6 +172,7 @@ class Electrical(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.eec)
         S += getsizeof(self.logger_name)
+        S += getsizeof(self.type_skin_effect)
         return S
 
     def as_dict(self, **kwargs):
@@ -174,6 +188,7 @@ class Electrical(FrozenClass):
         else:
             Electrical_dict["eec"] = self.eec.as_dict(**kwargs)
         Electrical_dict["logger_name"] = self.logger_name
+        Electrical_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
@@ -184,6 +199,7 @@ class Electrical(FrozenClass):
         if self.eec is not None:
             self.eec._set_None()
         self.logger_name = None
+        self.type_skin_effect = None
 
     def _get_eec(self):
         """getter of eec"""
@@ -228,5 +244,23 @@ class Electrical(FrozenClass):
         doc=u"""Name of the logger to use
 
         :Type: str
+        """,
+    )
+
+    def _get_type_skin_effect(self):
+        """getter of type_skin_effect"""
+        return self._type_skin_effect
+
+    def _set_type_skin_effect(self, value):
+        """setter of type_skin_effect"""
+        check_var("type_skin_effect", value, "int")
+        self._type_skin_effect = value
+
+    type_skin_effect = property(
+        fget=_get_type_skin_effect,
+        fset=_set_type_skin_effect,
+        doc=u"""Skin effect for resistance and inductance
+
+        :Type: int
         """,
     )
