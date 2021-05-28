@@ -10,6 +10,7 @@ from .....Classes.LamSlotMag import LamSlotMag
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.DAVDuct import DAVDuct
 from .....GUI.Dialog.DMachineSetup.SLamParam.Gen_SLamParam import Gen_SLamParam
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class SLamParam(Gen_SLamParam, QWidget):
@@ -331,3 +332,4 @@ class SLamParam(Gen_SLamParam, QWidget):
             gcf().canvas.set_window_title(
                 self.tr("Lamination (without slots) Front view")
             )
+            set_plot_gui_icon()

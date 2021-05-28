@@ -8,6 +8,7 @@ from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SBar.Gen_SBar import Gen_SBar
 from .....GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
 from .....GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # Information to fill the conductor type combobox
 WIDGET_LIST = [PCondType21, PCondType22]
@@ -175,6 +176,7 @@ class SBar(Gen_SBar, QWidget):
             A SBar object
         """
         self.machine.plot()
+        set_plot_gui_icon()
 
     @staticmethod
     def check(lamination):

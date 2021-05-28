@@ -12,6 +12,7 @@ from .....Classes.Slot import Slot
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot60.PWSlot60 import PWSlot60
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot61.PWSlot61 import PWSlot61
 from .....GUI.Dialog.DMachineSetup.SWPole.Ui_SWPole import Ui_SWPole
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # List to convert index of combobox to slot type
 INIT_INDEX = [SlotW60, SlotW61]
@@ -182,13 +183,14 @@ class SWPole(Ui_SWPole, QWidget):
         self : SWPole
             A SWPole object
         """
-        # We have to make sure the slot is right before truing to plot it
+        # We have to make sure the slot is right before trying to plot it
         error = self.check(self.obj)
 
         if error:  # Error => Display it
             QMessageBox().critical(self, self.tr("Error"), error)
-        else:  # No error => Plot the slot (No winding for LamSquirrelCage)
-            self.obj.plot(plot_activeing=(type(self.obj) is LamSlotWind))
+        else:  # No error => Plot the lamination
+            self.obj.plot()
+            set_plot_gui_icon()
 
     @staticmethod
     def check(lam):

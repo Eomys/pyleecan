@@ -8,7 +8,14 @@ from numpy import array, linspace, meshgrid
 from ....Functions.Winding.gen_phase_list import gen_color, gen_name
 
 
-def plot_winding(self, wind_mat=None, all_slot=False, is_show_fig=True, save_path=None):
+def plot_winding(
+    self,
+    wind_mat=None,
+    all_slot=False,
+    is_show_fig=True,
+    save_path=None,
+    win_title=None,
+):
     """Plot the Winding in a matplotlib fig
 
     Parameters
@@ -23,6 +30,8 @@ def plot_winding(self, wind_mat=None, all_slot=False, is_show_fig=True, save_pat
         To call show at the end of the method
     save_path : str
         full path including folder, name and extension of the file to save if save_path is not None
+    win_title:str
+        Window title
     Returns
     -------
     None
@@ -112,6 +121,19 @@ def plot_winding(self, wind_mat=None, all_slot=False, is_show_fig=True, save_pat
         title(Lam_Name + "'s Winding (every slot)")
     else:
         title(Lam_Name + "'s Winding (periodicity 1/" + str(Nperw) + ")")
+
+    # Window title
+    if (
+        win_title is None
+        and self.parent is not None
+        and self.parent.name not in [None, ""]
+    ):
+        win_title = self.parent.name + " " + Lam_Name + " Winding"
+    elif win_title is None:
+        win_title = Lam_Name + " Winding"
+    manager = plt.get_current_fig_manager()
+    if manager is not None:
+        manager.set_window_title(win_title)
 
     axis("equal")
     ax.get_yaxis().set_visible(False)
