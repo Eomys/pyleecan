@@ -118,20 +118,7 @@ class SMachineType(Gen_SMachineType, QWidget):
         if self.machine.stator.winding is None:
             self.machine.stator.winding = Winding()
             self.machine.stator.winding._set_None()
-        self.machine.stator.winding.p = value
-        # Set machine rotor p according to machine type
-        if type(self.machine) is MachineSIPMSM:
-            self.machine.rotor.slot.Zs = 2 * value
-        elif type(self.machine) in [MachineIPMSM, MachineSyRM]:
-            if self.machine.rotor.hole is None:
-                self.machine.rotor.hole = list()
-            else:
-                for hole in self.machine.rotor.hole:
-                    hole.Zh = 2 * value
-        elif self.machine.type_machine == 10:
-            pass
-        else:
-            self.machine.rotor.winding.p = value
+        self.machine.set_pole_pair_number(value)
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
