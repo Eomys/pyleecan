@@ -97,9 +97,11 @@ class ModelBH_arctangent(ModelBH):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -110,6 +112,8 @@ class ModelBH_arctangent(ModelBH):
             diff_list.append(name + ".k")
         if other._mu_a != self._mu_a:
             diff_list.append(name + ".mu_a")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

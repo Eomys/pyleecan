@@ -352,9 +352,11 @@ class MagFEMM(Magnetics):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -403,6 +405,8 @@ class MagFEMM(Magnetics):
             diff_list.append(name + ".nb_worker")
         if other._Rag_enforced != self._Rag_enforced:
             diff_list.append(name + ".Rag_enforced")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

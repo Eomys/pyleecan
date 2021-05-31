@@ -109,9 +109,11 @@ class OutMagFEMM(OutInternal):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -136,6 +138,8 @@ class OutMagFEMM(OutInternal):
                         name=name + ".handler_list[" + str(ii) + "]",
                     )
                 )
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

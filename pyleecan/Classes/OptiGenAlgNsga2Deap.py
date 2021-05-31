@@ -241,9 +241,11 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -256,6 +258,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             diff_list.append(name + ".toolbox None mismatch")
         elif self.toolbox is not None and self.toolbox != other.toolbox:
             diff_list.append(name + ".toolbox")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

@@ -155,9 +155,11 @@ class FluxLinkFEMM(FluxLink):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -176,6 +178,8 @@ class FluxLinkFEMM(FluxLink):
             diff_list.append(name + ".Nt_tot")
         if other._Kgeo_fineness != self._Kgeo_fineness:
             diff_list.append(name + ".Kgeo_fineness")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

@@ -231,9 +231,11 @@ class HoleM54(Hole):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -248,6 +250,8 @@ class HoleM54(Hole):
             diff_list.append(name + ".W0")
         if other._R1 != self._R1:
             diff_list.append(name + ".R1")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

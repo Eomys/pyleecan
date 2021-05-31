@@ -208,9 +208,11 @@ class Simulation(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -266,6 +268,8 @@ class Simulation(FrozenClass):
             diff_list.append(name + ".layer")
         if other._layer_log_warn != self._layer_log_warn:
             diff_list.append(name + ".layer_log_warn")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

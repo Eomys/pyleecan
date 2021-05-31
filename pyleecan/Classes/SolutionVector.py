@@ -145,9 +145,11 @@ class SolutionVector(Solution):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -160,6 +162,8 @@ class SolutionVector(Solution):
             diff_list.append(name + ".field None mismatch")
         elif self.field is not None:
             diff_list.extend(self.field.compare(other.field, name=name + ".field"))
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
