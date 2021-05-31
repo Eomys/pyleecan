@@ -29,8 +29,8 @@ class WGuiOption(Ui_GUIOption, QDialog):
         Parameters:
         machine_setup: DMachineSetup
             Machine widget
-        matlib : MatLib
-            Material Library
+        matlib : DMatLib
+            Material Library Dialog
         """
         QDialog.__init__(self)
         self.setupUi(self)

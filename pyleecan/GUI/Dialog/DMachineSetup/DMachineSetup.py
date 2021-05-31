@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from os import getcwd, rename
-from os.path import basename, join, isfile, dirname
+from os.path import basename, join, dirname
 
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
 
-from ....Functions.Material.compare_material import compare_material
-from ....Functions.load import load, load_matlib
+from ....Functions.load import load
 from ....GUI.Dialog.DMachineSetup import mach_index, mach_list
 from ....GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
 from ....GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
 from ....definitions import config_dict
 from ....Classes.Machine import Machine
-from ....Classes.Material import Material
-from logging import getLogger
 
 # Flag for set the enable property of w_nav (List_Widget)
 DISABLE_ITEM = Qt.NoItemFlags
@@ -43,7 +39,6 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
 
         self.is_save_needed = False
         self.dmatlib = dmatlib
-        self.matlib = dmatlib.matlib
         self.last_index = 0  # Index of the last step available
 
         # Saving arguments
@@ -177,7 +172,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 machine = load(load_path)
                 if isinstance(machine, Machine):
                     self.machine = machine
-                    is_machine_change = self.matlib.add_machine_mat(machine)
+                    self.dmatlib.machine = machine
+                    self.dmatlib.load_machine_materials()
                 else:
                     QMessageBox().critical(
                         self,
@@ -186,11 +182,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                     )
                     return
                 self.machineChanged.emit()
-
-                # Save needed if machine materials have changed
-                if is_machine_change:
-                    self.save_needed()
-
+                self.is_save_needed = False
             except Exception as e:
                 QMessageBox().critical(
                     self,
@@ -307,7 +299,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         # Regenerate the step with the current values
         self.w_step.setParent(None)
         self.w_step = step_list[index](
-            machine=self.machine, matlib=self.matlib, is_stator=is_stator
+            machine=self.machine, matlib=self.dmatlib, is_stator=is_stator
         )
         self.w_step.b_previous.clicked.connect(self.s_previous)
         if index != len(step_list) - 1:

@@ -15,7 +15,7 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
 
 
@@ -44,7 +44,7 @@ class TestSLamParam(object):
         )
         test_obj.rotor.mat_type.name = "test2"
 
-        matlib = MatLib()
+        matlib = DMatLib()
         matlib.dict_mat["RefMatLib"] = [
             Material(name="test1"),
             Material(name="test2"),

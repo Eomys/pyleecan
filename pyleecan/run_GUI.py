@@ -14,8 +14,6 @@ try:  # Import if pyleecan is installed with pip
     from .definitions import ROOT_DIR, PACKAGE_NAME, config_dict
     from .GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
     from .GUI.Dialog.DMatLib.DMatLib import DMatLib
-    from .GUI.Dialog.DMatLib.MatLib import MatLib
-    from .GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
     from .GUI.Tools.SidebarWindow import SidebarWindow
     from .GUI.Tools.MachinePlotWidget import MachinePlotWidget
     from .GUI.Tools.TreeView import TreeView
@@ -30,12 +28,6 @@ except ImportError:  # Import for dev version
         + ".GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup"
     )
     exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.DMatLib import DMatLib")
-    exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.MatLib import MatLib")
-    exec(
-        "from "
-        + PACKAGE_NAME
-        + ".GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect"
-    )
     exec("from " + PACKAGE_NAME + ".GUI.Tools.SidebarWindow import SidebarWindow")
     exec(
         "from " + PACKAGE_NAME + ".GUI.Tools.MachinePlotWidget import MachinePlotWidget"
@@ -65,11 +57,8 @@ def run_GUI(argv):
         with open(config_dict["GUI"]["CSS_PATH"], "r") as css_file:
             a.setStyleSheet(css_file.read())
 
-    # Setting the material library
-    matlib = MatLib(config_dict["MAIN"]["MATLIB_DIR"])
-
     # MatLib widget
-    mat_widget = DMatLib(matlib, selected=0)
+    mat_widget = DMatLib(machine=None, matlib_path=config_dict["MAIN"]["MATLIB_DIR"])
 
     # Machine Setup Widget
     c = DMachineSetup(
@@ -96,7 +85,7 @@ def run_GUI(argv):
         tree_fcn = lambda: tree.generate(getattr(c, "machine"))
         window.addSubWindow("TreeView", tree, tree_fcn)
 
-        option = WGuiOption(machine_setup=c, matlib=matlib)
+        option = WGuiOption(machine_setup=c, matlib=mat_widget)
         window.addSubWindow("Option", option)
         window.show()
 

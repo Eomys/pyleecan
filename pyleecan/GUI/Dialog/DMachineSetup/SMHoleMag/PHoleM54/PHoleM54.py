@@ -6,7 +6,6 @@ from PySide2.QtWidgets import QWidget
 from ......Classes.HoleM54 import HoleM54
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.Gen_PHoleM54 import Gen_PHoleM54
-from ......GUI.Dialog.DMatLib.MatLib import MatLib
 from ......Methods.Slot.Slot import SlotCheckError
 
 
@@ -19,7 +18,7 @@ class PHoleM54(Gen_PHoleM54, QWidget):
     hole_name = "Hole Type 54"
     hole_type = HoleM54
 
-    def __init__(self, hole=None, matlib=MatLib()):
+    def __init__(self, hole=None, matlib=None):
         """Initialize the widget according to hole
 
         Parameters

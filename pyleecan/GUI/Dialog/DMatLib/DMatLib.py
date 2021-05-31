@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from os import getcwd, remove, rename
-from os.path import abspath, dirname, join, split
+from os import remove
+from os.path import join, split
 from re import match
 
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QDialog, QMessageBox
 
+from ....Classes.Material import Material
 from ....Classes.ImportMatrixVal import ImportMatrixVal
 from ....Classes.ImportMatrixXls import ImportMatrixXls
 from ....Functions.load import load_matlib
@@ -24,17 +25,17 @@ class DMatLib(Gen_DMatLib, QDialog):
     # Signal to W_MachineSetup to know that the save popup is needed
     saveNeeded = Signal()
 
-    def __init__(self, machine=None, matlib_path=None, is_lib_mat=True, selected_id=0):
+    def __init__(self, matlib_path=None, machine=None, is_lib_mat=True, selected_id=0):
         """Init the Matlib GUI
 
         Parameters
         ----------
         self : DMatLib
             a DMatLib object
-        machine : Machine
-            current Machine object
         matlib_path : str
             path to the Material Library
+        machine : Machine
+            current Machine object
         is_lib_mat : bool
             True: Selected material is part of the Library (False machine)
         selected_id :
@@ -60,7 +61,7 @@ class DMatLib(Gen_DMatLib, QDialog):
             MACH_KEY: [],  # Machine-specific materials
         }
         if self.matlib_path is not None:
-            self.matlib_path[LIB_KEY] = load_matlib(self.matlib_path)
+            self.dict_mat[LIB_KEY] = load_matlib(self.matlib_path)
         if self.machine is not None:
             self.load_machine_materials()
         else:
@@ -94,6 +95,10 @@ class DMatLib(Gen_DMatLib, QDialog):
         self.b_delete.clicked.connect(self.delete_material)
         self.b_duplicate.clicked.connect(self.new_material)
 
+    def set_machine(self, machine):
+        self.machine = machine
+        self.load_machine_materials()
+
     def load_machine_materials(self):
         """Add machine materials if they are not in the MatLib
 
@@ -106,13 +111,17 @@ class DMatLib(Gen_DMatLib, QDialog):
         self.dict_mat[MACH_KEY] = []
 
         mach_mat_dict = self.machine.get_material_dict()
-        # Dict to list of unique materials
-        mach_mat_list = list(set(mach_mat_dict.values()))
+        # Dict to list of unique materials (by name)
+        mach_mat_list, name_list = list(), list()
+        for mat in mach_mat_dict.values():
+            if mat.name is not None and mat.name not in name_list:
+                mach_mat_list.append(mat)
+                name_list.append(mat.name)
 
         # Check if material is in Material Library (ignores name and path)
         name_list = list()  # Machine materials name
         for mach_mat in mach_mat_list:
-            for lib_mat in self.matlib_path[LIB_KEY]:
+            for lib_mat in self.dict_mat[LIB_KEY]:
                 if (
                     mach_mat.compare(lib_mat, ignore_list=["self.name", "self.path"])
                     and mach_mat.name not in name_list
@@ -127,12 +136,12 @@ class DMatLib(Gen_DMatLib, QDialog):
         # Get the selected material
         if self.is_lib_mat:
             if self.nav_mat.currentRow() == -1:
-                self.nav_mat.setCurrentRow(0)
+                return None, None
             index = self.nav_mat.currentRow()
             return self.dict_mat[LIB_KEY][index], index
         else:
-            if self.nav_mat_mach.currentRow() == -1:  # Select first material as default
-                self.nav_mat_mach.setCurrentRow(0)
+            if self.nav_mat_mach.currentRow() == -1:
+                return None, None
             index = self.nav_mat_mach.currentRow()
             return self.dict_mat[MACH_KEY][index], index
 
@@ -340,9 +349,6 @@ class DMatLib(Gen_DMatLib, QDialog):
             self.in_machine_mat.setVisible(True)
             self.nav_mat_mach.setVisible(True)
 
-        if self.is_lib_mat and self.nav_mat.currentIndex() == -1:
-            self.nav_mat.setCurrentIndex(0)
-
     def update_out(self, is_lib_mat=True):
         """Update all the output widget for material preview
 
@@ -356,9 +362,12 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         self.is_lib_mat = is_lib_mat
         mat, _ = self.get_current_material()
+        if mat is None:  # No current material
+            mat = Material()
+            mat._set_None()
 
         # Update Main parameters
-        self.out_name.setText(self.tr("name: ") + mat.name)
+        self.out_name.setText(self.tr("name: ") + str(mat.name))
         if mat.is_isotropic:
             self.out_iso.setText(self.tr("type: isotropic"))
         else:

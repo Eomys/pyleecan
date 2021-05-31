@@ -7,7 +7,7 @@ from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM52 import HoleM52
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib, LIB_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52.PHoleM52 import PHoleM52
 from pyleecan.Classes.Material import Material
 
@@ -32,8 +32,8 @@ class TestPHoleM52(object):
         test_obj.hole.append(HoleM52(H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=0.17))
         test_obj.hole[0].magnet_0.mat_type.name = "Magnet2"
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = [
+        matlib = DMatLib()
+        matlib.dict_mat[LIB_KEY] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),
@@ -65,8 +65,8 @@ class TestPHoleM52(object):
         )
         setup["test_obj"].hole[0].magnet_0 == None
 
-        setup["matlib"] = MatLib()
-        setup["matlib"].dict_mat["RefMatLib"] = [
+        setup["matlib"] = DMatLib()
+        setup["matlib"].dict_mat[LIB_KEY] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),

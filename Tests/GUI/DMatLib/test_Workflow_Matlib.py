@@ -14,11 +14,8 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.Material import Material
-from pyleecan.Functions.load import load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 
 from Tests import save_load_path as save_path, TEST_DATA_DIR, is_clean_result
@@ -60,7 +57,7 @@ class Test_Workflow_DMatLib(object):
             join(TEST_DATA_DIR, "Material", "M400-50A.json"),
             join(work_path, "M400-50A.json"),
         )
-        matlib = MatLib(work_path)
+        matlib = DMatLib(matlib_path=work_path)
 
         yield {"work_path": work_path, "matlib": matlib}
 
@@ -86,6 +83,7 @@ class Test_Workflow_DMatLib(object):
         self.widget = SMHoleMag(
             machine=self.machine, matlib=setup["matlib"], is_stator=False
         )
+        self.widget.matlib.set_machine(machine=self.machine)
         # Check default material
         assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.count() == 4
         assert (

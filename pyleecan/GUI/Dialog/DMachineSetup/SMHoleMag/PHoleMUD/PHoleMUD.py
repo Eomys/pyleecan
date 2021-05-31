@@ -10,7 +10,6 @@ from ......Functions.load import load
 from ......Classes.HoleUD import HoleUD
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleMUD.Ui_PHoleMUD import Ui_PHoleMUD
-from ......GUI.Dialog.DMatLib.MatLib import MatLib
 from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dxf.DXF_Hole import DXF_Hole
 from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
@@ -25,7 +24,7 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
     hole_name = "Import from DXF"
     hole_type = HoleUD
 
-    def __init__(self, hole=None, matlib=MatLib()):
+    def __init__(self, hole=None, matlib=None):
         """Initialize the widget according to hole
 
         Parameters

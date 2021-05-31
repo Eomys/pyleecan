@@ -8,7 +8,6 @@ from ......Classes.HoleM57 import HoleM57
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.Gen_PHoleM57 import Gen_PHoleM57
 from ......Methods.Slot.Slot import SlotCheckError
-from ......GUI.Dialog.DMatLib.MatLib import MatLib
 
 
 class PHoleM57(Gen_PHoleM57, QWidget):
@@ -20,7 +19,7 @@ class PHoleM57(Gen_PHoleM57, QWidget):
     hole_name = "Hole Type 57"
     hole_type = HoleM57
 
-    def __init__(self, hole=None, matlib=MatLib()):
+    def __init__(self, hole=None, matlib=None):
         """Initialize the widget according to hole
 
         Parameters

@@ -17,16 +17,9 @@ from pyleecan.Classes.MachineSRM import MachineSRM
 from pyleecan.Classes.MachineLSPM import MachineLSPM
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from Tests import save_gui_path as save_path
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
-from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
-from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
-import matplotlib.pyplot as plt
 from Tests import TEST_DATA_DIR
 
 load_test = list()
@@ -78,8 +71,7 @@ class TestDMachineSetup(object):
             self.app = QtWidgets.QApplication.instance()
 
         # MatLib widget
-        matlib = MatLib(matlib_path)
-        dmatlib = DMatLib(matlib=matlib)
+        dmatlib = DMatLib(matlib_path=matlib_path)
         widget = DMachineSetup(
             dmatlib=dmatlib, machine_path=join(TEST_DATA_DIR, "Machine")
         )

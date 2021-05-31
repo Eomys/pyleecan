@@ -1,7 +1,7 @@
 from ....Classes.Material import Material
 
 
-def get_material_dict(self):
+def get_material_dict(self, path="self"):
     """
     Get the dict of materials contained in a Machine
 
@@ -16,7 +16,7 @@ def get_material_dict(self):
         dict of materials contained in the object (key="obj path" like self.mat_type)
     """
 
-    return get_material(self)
+    return get_material(self, path=path)
 
 
 def get_material(obj, path="self"):

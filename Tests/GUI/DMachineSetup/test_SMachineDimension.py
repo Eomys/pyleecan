@@ -10,7 +10,7 @@ from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib, LIB_KEY
 from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
     SMachineDimension,
@@ -42,8 +42,8 @@ class TestSMachineDimension(object):
         test_obj.frame = Frame(Rint=0.22, Rext=0.24, Lfra=0.25)
         test_obj.shaft = Shaft(Lshaft=0.333, Drsh=test_obj.rotor.Rint * 2)
 
-        matlib = MatLib()
-        matlib.list_mat = [
+        matlib = DMatLib()
+        matlib.dict_mat[LIB_KEY] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),

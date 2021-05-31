@@ -169,7 +169,7 @@ def load_matlib(mat_path):
         for file_name in filenames:
             # For all json file in the folder and subfolder
             if file_name.endswith(".json") or file_name.endswith(".h5"):
-                file_path = join(dirpath, file_name)
+                file_path = join(dirpath, file_name).replace("\\", "/")
                 try:
                     mat = load(file_path)
                     # Update the object property

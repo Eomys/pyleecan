@@ -10,7 +10,6 @@ from PySide2.QtTest import QTest
 
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
 from Tests import TEST_DATA_DIR as data_test
 from pyleecan.definitions import MAIN_DIR
@@ -59,8 +58,7 @@ class TestSPreview(object):
             self.app = QtWidgets.QApplication.instance()
 
         # MatLib widget
-        matlib = MatLib(matlib_path)
-        dmatlib = DMatLib(matlib=matlib)
+        dmatlib = DMatLib(matlib_path=matlib_path)
         widget = DMachineSetup(dmatlib=dmatlib, machine_path=machine_path)
 
         yield {"widget": widget}

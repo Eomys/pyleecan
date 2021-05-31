@@ -7,7 +7,6 @@ from PySide2 import QtWidgets
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from Tests import save_gui_path
 
 from os import makedirs
@@ -62,18 +61,14 @@ class TestDMatLib(object):
         mat_lib.append(Material(name="test_material_6"))
         mat_lib.append(Material(name="test_material_7"))
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = mat_lib
-        matlib.index_first_mat_mach = 7
-
         # Save material in a tmp folder
         if isdir(tmp_folder):
             rmtree(tmp_folder)
         makedirs(tmp_folder)
         for mat in mat_lib:
-            mat.save(tmp_folder + "/" + mat.name + ".json")
+            mat.save(join(tmp_folder, mat.name + ".json"))
 
-        widget = DMatLib(matlib)
+        widget = DMatLib(machine=None, matlib_path=tmp_folder, selected_id=0)
 
         yield {"widget": widget}
 

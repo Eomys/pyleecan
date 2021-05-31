@@ -15,7 +15,7 @@ from pyleecan.Classes.SlotM12 import SlotM12
 from pyleecan.Classes.SlotM13 import SlotM13
 from pyleecan.Classes.SlotM14 import SlotM14
 from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
@@ -48,7 +48,7 @@ class TestSMSlot_inset(object):
         )
         test_obj.rotor.magnet.mat_type.name = "test3"
 
-        matlib = MatLib()
+        matlib = DMatLib()
         matlib.dict_mat["RefMatLib"] = [
             Material(name="test1"),
             Material(name="test2"),

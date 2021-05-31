@@ -12,7 +12,7 @@ from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
@@ -41,7 +41,7 @@ class TestSBar(object):
         test_obj.rotor.winding.conductor = CondType21(Hbar=0.014, Wbar=0.015)
         test_obj.rotor.winding.conductor.cond_mat.name = "test1"
 
-        matlib = MatLib()
+        matlib = DMatLib()
         matlib.dict_mat["RefMatLib"] = [
             Material(name="test1"),
             Material(name="test2"),

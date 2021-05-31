@@ -6,7 +6,7 @@ from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.PHoleM54 import PHoleM54
 from pyleecan.Classes.Material import Material
@@ -30,7 +30,7 @@ class TestPHoleM54(object):
         test_obj = LamHole(Rint=0.1, Rext=0.2)
         test_obj.hole = list()
         test_obj.hole.append(HoleM54(H0=0.10, H1=0.11, W0=0.12, R1=0.13))
-        matlib = MatLib()
+        matlib = DMatLib()
         matlib.list_mat = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),

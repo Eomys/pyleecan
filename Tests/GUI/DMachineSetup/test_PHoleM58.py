@@ -8,7 +8,7 @@ from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM58 import HoleM58
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib, LIB_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM58.PHoleM58 import PHoleM58
 from Tests.GUI import gui_option  # Set unit to m
 from pyleecan.Classes.Material import Material
@@ -38,8 +38,8 @@ class TestPHoleM58(object):
         )
         test_obj.hole[0].magnet_0.mat_type.name = "Magnet3"
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = [
+        matlib = DMatLib()
+        matlib.dict_mat[LIB_KEY] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),
@@ -182,8 +182,8 @@ class TestPHoleM58(object):
             )
         )
 
-        setup["matlib"] = MatLib()
-        setup["matlib"].dict_mat["RefMatLib"] = [
+        setup["matlib"] = DMatLib()
+        setup["matlib"].dict_mat[LIB_KEY] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),

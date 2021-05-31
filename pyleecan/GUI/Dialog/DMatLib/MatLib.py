@@ -13,7 +13,7 @@ from logging import getLogger
 from PySide2.QtCore import QObject, Signal
 
 
-class MatLib(QObject):
+class MatLib_old(QObject):
     saveNeeded = Signal()
 
     def __init__(self, path=None):

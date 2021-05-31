@@ -16,7 +16,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
 from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import (
     PCondType12,
 )
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 
 
 class TestSWindCond(object):
@@ -44,7 +44,7 @@ class TestSWindCond(object):
             Nwppc=4, Wwire=11e-3, Wins_wire=21e-3, Wins_cond=31e-3
         )
 
-        matlib = MatLib()
+        matlib = DMatLib()
         matlib.dict_mat["RefMatLib"] = [
             Material(name="test1"),
             Material(name="test2"),
