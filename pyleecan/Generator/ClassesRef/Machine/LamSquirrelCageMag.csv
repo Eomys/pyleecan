@@ -4,3 +4,4 @@ hole,,lamination Hole,1,[Hole],,,,,Machine,LamSquirrelCage,build_geometry,VERSIO
 ,,,,,,,,,,,comp_surfaces,,,
 ,,,,,,,,,,,plot,,,
 ,,,,,,,,,,,get_pole_pair_number,,,
+,,,,,,,,,,,set_pole_pair_number,,,
