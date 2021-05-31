@@ -77,9 +77,9 @@ except ImportError as error:
     comp_width_airgap_mec = error
 
 try:
-    from ..Methods.Machine.Machine.get_material_list import get_material_list
+    from ..Methods.Machine.Machine.get_material_dict import get_material_dict
 except ImportError as error:
-    get_material_list = error
+    get_material_dict = error
 
 try:
     from ..Methods.Machine.Machine.get_polar_eq import get_polar_eq
@@ -255,18 +255,18 @@ class Machine(FrozenClass):
         )
     else:
         comp_width_airgap_mec = comp_width_airgap_mec
-    # cf Methods.Machine.Machine.get_material_list
-    if isinstance(get_material_list, ImportError):
-        get_material_list = property(
+    # cf Methods.Machine.Machine.get_material_dict
+    if isinstance(get_material_dict, ImportError):
+        get_material_dict = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Machine method get_material_list: "
-                    + str(get_material_list)
+                    "Can't use Machine method get_material_dict: "
+                    + str(get_material_dict)
                 )
             )
         )
     else:
-        get_material_list = get_material_list
+        get_material_dict = get_material_dict
     # cf Methods.Machine.Machine.get_polar_eq
     if isinstance(get_polar_eq, ImportError):
         get_polar_eq = property(

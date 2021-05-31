@@ -4895,7 +4895,7 @@
             "comp_periodicity",
             "comp_width_airgap_mag",
             "comp_width_airgap_mec",
-            "get_material_list",
+            "get_material_dict",
             "get_polar_eq",
             "plot",
             "plot_anim_rotor",
