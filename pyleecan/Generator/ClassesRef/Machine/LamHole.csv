@@ -1,4 +1,4 @@
-﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 hole,,lamination Hole,1,[Hole],,,,,Machine,Lamination,build_geometry,VERSION,1,Lamination with Hole with or without magnet or winding
 ,,,,,,,,,,,comp_height_yoke,,,
 ,,,,,,,,,,,comp_masses,,,
@@ -10,3 +10,4 @@ hole,,lamination Hole,1,[Hole],,,,,Machine,Lamination,build_geometry,VERSION,1,L
 ,,,,,,,,,,,has_magnet,,,
 ,,,,,,,,,,,comp_angle_d_axis,,,
 ,,,,,,,,,,,comp_periodicity,,,
+,,,,,,,,,,,set_pole_pair_number,,,

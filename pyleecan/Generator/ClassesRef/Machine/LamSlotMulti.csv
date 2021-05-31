@@ -1,4 +1,4 @@
-﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
 slot_list,,List of lamination Slot,,[Slot],,,,,Machine,Lamination,build_geometry,VERSION,1,Lamination with list of Slot,
 alpha,[rad],Angular position of the Slots,,ndarray,,,,,,,check,,,,
 ,,,,,,,,,,,comp_radius_mec,,,,

@@ -4147,7 +4147,8 @@
             "comp_radius_mid_yoke",
             "has_magnet",
             "comp_angle_d_axis",
-            "comp_periodicity"
+            "comp_periodicity",
+            "set_pole_pair_number"
         ],
         "mother": "Lamination",
         "name": "LamHole",
@@ -4190,7 +4191,8 @@
             "get_Zs",
             "comp_radius_mid_yoke",
             "comp_periodicity",
-            "get_bore_desc"
+            "get_bore_desc",
+            "set_pole_pair_number"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -4325,7 +4327,8 @@
             "comp_rot_dir",
             "comp_lengths_winding",
             "comp_number_phase_eq",
-            "comp_periodicity"
+            "comp_periodicity",
+            "set_pole_pair_number"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -4423,7 +4426,8 @@
             "check",
             "comp_surfaces",
             "plot",
-            "get_pole_pair_number"
+            "get_pole_pair_number",
+            "set_pole_pair_number"
         ],
         "mother": "LamSquirrelCage",
         "name": "LamSquirrelCageMag",
@@ -4903,7 +4907,8 @@
             "get_lam_list_label",
             "get_lam_by_label",
             "get_lam_index",
-            "get_pole_pair_number"
+            "get_pole_pair_number",
+            "set_pole_pair_number"
         ],
         "mother": "",
         "name": "Machine",
