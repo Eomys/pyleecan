@@ -34,7 +34,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         machine : Machine
             Machine to edit
         material_dict: dict
-            Materials dictionnary (library + machine)
+            Materials dictionary (library + machine)
         machine_path : str
             Default loading path for machine
         """
@@ -267,7 +267,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
 
     def get_machine_index(self):
         """Get the index corresponding to the current machine in the mach_list"""
-        # Get the correct machine dictionnary
+        # Get the correct machine dictionary
         index = mach_index.index(type(self.machine))
         if index == -1:
             QMessageBox().critical(

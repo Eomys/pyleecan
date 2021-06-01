@@ -18,7 +18,7 @@ def load_hdf5(file_path):
 
     file_path: str
     obj_dict: dict
-        dictionnary to instanciate Pyleecan obj
+        dictionary to instanciate Pyleecan obj
     """
     with File(file_path, "r") as file:
         # file is a group
@@ -29,7 +29,7 @@ def load_hdf5(file_path):
 
 def construct_dict_from_group(group):
     """
-    construct_dict_from_group create a dictionnary and extract datasets and groups from the group
+    construct_dict_from_group create a dictionary and extract datasets and groups from the group
 
     Parameters
     ----------

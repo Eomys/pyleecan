@@ -26,7 +26,7 @@ class SPreview(Ui_SPreview, QWidget):
         machine : Machine
             current machine to edit
         material_dict: dict
-            Materials dictionnary (library + machine)
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """

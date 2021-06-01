@@ -160,7 +160,7 @@ def get_config_dict():
     Returns
     -------
     config_dict: dict
-        Dictionnary gather the parameters of the software
+        dictionary gather the parameters of the software
     """
     # dynamic import to avoid loop
     module = __import__(

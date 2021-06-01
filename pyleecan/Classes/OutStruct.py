@@ -48,7 +48,7 @@ class OutStruct(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -519,7 +519,7 @@ class OutStruct(FrozenClass):
     FEA_dict = property(
         fget=_get_FEA_dict,
         fset=_set_FEA_dict,
-        doc=u"""Dictionnary containing the main FEA parameter
+        doc=u"""dictionary containing the main FEA parameter
 
         :Type: dict
         """,

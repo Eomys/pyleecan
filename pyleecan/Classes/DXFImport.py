@@ -54,7 +54,7 @@ class DXFImport(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -201,7 +201,7 @@ class DXFImport(FrozenClass):
     surf_dict = property(
         fget=_get_surf_dict,
         fset=_set_surf_dict,
-        doc=u"""Dictionnary to assign the surfaces: key=complex reference point coordinate, value=label of the surface
+        doc=u"""dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface
 
         :Type: dict
         """,

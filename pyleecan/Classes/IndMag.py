@@ -34,7 +34,7 @@ class IndMag(FrozenClass):
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionary wiht every properties as keys
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""

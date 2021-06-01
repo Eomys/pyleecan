@@ -127,7 +127,7 @@ class HoleUD(HoleMag):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -357,7 +357,7 @@ class HoleUD(HoleMag):
     magnet_dict = property(
         fget=_get_magnet_dict,
         fset=_set_magnet_dict,
-        doc=u"""dictionnary with the magnet for the Hole (None to remove magnet, key should be magnet_X)
+        doc=u"""dictionary with the magnet for the Hole (None to remove magnet, key should be magnet_X)
 
         :Type: {Magnet}
         """,

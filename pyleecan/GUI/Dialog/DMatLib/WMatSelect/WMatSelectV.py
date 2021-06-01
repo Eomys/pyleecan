@@ -81,7 +81,7 @@ class WMatSelectV(QGroupBox):
         mat_attr_name : str
             A string of the material attribute name
         material_dict: dict
-            Materials dictionnary (library + machine)
+            Materials dictionary (library + machine)
 
         Returns
         -------

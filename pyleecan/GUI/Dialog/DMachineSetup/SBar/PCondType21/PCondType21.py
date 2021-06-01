@@ -29,7 +29,7 @@ class PCondType21(Gen_PCondType21, QWidget):
         machine : Machine
             current machine to edit
         material_dict: dict
-            Materials dictionnary (library + machine)
+            Materials dictionary (library + machine)
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)

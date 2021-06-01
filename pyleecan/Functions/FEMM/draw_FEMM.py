@@ -79,7 +79,7 @@ def draw_FEMM(
     -------
 
     FEMM_dict : dict
-        Dictionnary containing the main parameters of FEMM (including circuits and materials)
+        dictionary containing the main parameters of FEMM (including circuits and materials)
     """
 
     # Initialization from output for readibility

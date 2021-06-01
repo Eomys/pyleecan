@@ -2,7 +2,7 @@ from ....Classes.Machine import Machine
 
 
 def comp_desc_dict(self):
-    """Compute a dictionnary with the main parameters/output of the machine
+    """Compute a dictionary with the main parameters/output of the machine
 
     Parameters
     ----------
@@ -12,7 +12,7 @@ def comp_desc_dict(self):
     Returns
     -------
     desc_dict: list
-        list of dictionnary containing the main parameters of the machine
+        list of dictionary containing the main parameters of the machine
     """
 
     desc_dict = Machine.comp_desc_dict(self)

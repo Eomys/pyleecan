@@ -194,7 +194,7 @@ def load_machine_materials(material_dict, machine):
     Parameters
     ----------
     material_dict: dict
-        Materials dictionnary (library + machine)
+        Materials dictionary (library + machine)
     machine : Machine
         Machine object to use the materials from
     """
@@ -235,7 +235,7 @@ def load_matlib(matlib_path=None, machine=None):
     Returns
     -------
     material_dict: dict
-        Materials dictionnary (library + machine)
+        Materials dictionary (library + machine)
     """
     material_dict = {LIB_KEY: list(), MACH_KEY: list()}
     if matlib_path is not None:
