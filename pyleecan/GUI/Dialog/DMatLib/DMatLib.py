@@ -21,7 +21,7 @@ class DMatLib(Gen_DMatLib, QDialog):
     # Signal to W_MachineSetup to know that the save popup is needed
     saveNeeded = Signal()
 
-    def __init__(self, material_dict, is_lib_mat=True, selected_id=0):
+    def __init__(self, material_dict, machine=None, is_lib_mat=True, selected_id=0):
         """Init the Matlib GUI
 
         Parameters
@@ -30,6 +30,8 @@ class DMatLib(Gen_DMatLib, QDialog):
             a DMatLib object
         material_dict: dict
             Materials dictionary (library + machine)
+        machine : Machine
+            A Machine object to update
         is_lib_mat : bool
             True: Selected material is part of the Library (False machine)
         selected_id :
@@ -50,6 +52,7 @@ class DMatLib(Gen_DMatLib, QDialog):
             is_lib_mat  # Current selected mat in is the Library (false machine)
         )
         self.material_dict = material_dict
+        self.machine = machine
         self.update_list_mat()
 
         # Select the material
@@ -131,7 +134,9 @@ class DMatLib(Gen_DMatLib, QDialog):
                     if mach_mat.name == mat_edit.name:
                         mat_path_split = mat_path.split(".")
                         setattr(
-                            mat_path_split[:-1].join("."), mat_path_split[-1], mat_edit
+                            eval(".".join(mat_path_split[:-1])),
+                            mat_path_split[-1],
+                            mat_edit,
                         )
                         self.saveNeeded.emit()
             # Update Matlib
@@ -155,11 +160,11 @@ class DMatLib(Gen_DMatLib, QDialog):
             #         self.matlib.move_ref_mat_to_mach("MachineMatLib", mat_id)
 
             # Update material list
+            self.update_list_mat()
             if is_lib_mat:
                 self.nav_mat.setCurrentRow(index)
             else:
                 self.nav_mat_mach.setCurrentRow(index)
-            self.update_list_mat()
             self.update_out(is_lib_mat=is_lib_mat)
 
             # Signal set by WMatSelect to update Combobox
@@ -430,5 +435,5 @@ def update_text(label, name, value, unit):
         if unit is None:
             txt = name + " = " + val
         else:
-            txt = name + " = " + val + " " + unit
+            txt = name + " = " + val + " [" + unit + "]"
     label.setText(txt)

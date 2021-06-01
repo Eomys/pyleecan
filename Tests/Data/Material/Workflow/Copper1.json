@@ -1,0 +1,42 @@
+{
+    "HT": {
+        "Cp": 381.0,
+        "__class__": "MatHT",
+        "alpha": 0.00393,
+        "lambda_x": 385.0,
+        "lambda_y": 385.0,
+        "lambda_z": 385.0
+    },
+    "__class__": "Material",
+    "__save_date__": "2021_05_03 14h38min33s ",
+    "__version__": "pyleecan_1.2.1",
+    "desc": "COPPER WINDING",
+    "eco": {
+        "__class__": "MatEconomical",
+        "cost_unit": 60.0,
+        "unit_name": "$"
+    },
+    "elec": {
+        "__class__": "MatElectrical",
+        "alpha": 1,
+        "epsr": null,
+        "rho": 1.73e-08
+    },
+    "is_isotropic": true,
+    "mag": null,
+    "name": "Copper1",
+    "path": null,
+    "struct": {
+        "Ex": 115000000000.0,
+        "Ey": 115000000000.0,
+        "Ez": 115000000000.0,
+        "Gxy": null,
+        "Gxz": null,
+        "Gyz": null,
+        "__class__": "MatStructural",
+        "nu_xy": null,
+        "nu_xz": null,
+        "nu_yz": null,
+        "rho": 8900.0
+    }
+}

@@ -2,6 +2,7 @@ from .....GUI.Dialog.DMatLib.WMatSelect.Ui_WMatSelect import Ui_WMatSelect
 from .....GUI.Dialog.DMatLib.DMatLib import DMatLib, LIB_KEY, MACH_KEY
 from PySide2.QtWidgets import QWidget
 from PySide2.QtCore import Signal
+from .....Classes.Machine import Machine
 
 
 class WMatSelect(Ui_WMatSelect, QWidget):
@@ -76,6 +77,12 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         self.obj = obj
         self.mat_attr_name = mat_attr_name
         self.material_dict = material_dict
+
+        # Get machine object to update the materials
+        parent = obj.parent
+        while parent is not None and not isinstance(parent, Machine):
+            parent = parent.parent
+        self.machine = parent
 
         if self.is_hide_button:
             self.b_matlib.hide()
@@ -169,7 +176,10 @@ class WMatSelect(Ui_WMatSelect, QWidget):
             index = self.c_mat_type.currentIndex()
             is_lib_mat = True
         self.current_dialog = DMatLib(
-            material_dict=self.material_dict, is_lib_mat=is_lib_mat, selected_id=index
+            material_dict=self.material_dict,
+            machine=self.machine,
+            is_lib_mat=is_lib_mat,
+            selected_id=index,
         )
         self.current_dialog.accepted.connect(self.set_matlib)
         self.current_dialog.saveNeeded.connect(self.emit_save)

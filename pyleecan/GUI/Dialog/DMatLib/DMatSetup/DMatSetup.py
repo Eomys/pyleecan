@@ -38,6 +38,10 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         # Stored to be used after validation
         self.is_lib_mat = is_lib_mat
         self.index = index
+        if self.is_lib_mat:
+            self.b_add_matlib.setText("Save in Machine")
+        else:
+            self.b_add_matlib.setText("Save in Library")
 
         # Copy to set the modification only if validated
         self.mat = Material(init_dict=material.as_dict())

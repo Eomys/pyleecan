@@ -1,166 +1,179 @@
-# -*- coding: utf-8 -*-
-
 import sys
-from os import remove, mkdir
-from os.path import abspath, join, isdir
-from shutil import copyfile, rmtree
-
-from PySide2 import QtWidgets
-from PySide2.QtCore import Qt
-from PySide2.QtTest import QTest
-from PySide2.QtWidgets import QDialogButtonBox
-
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
-from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-from pyleecan.Functions.load import load_matlib, load_machine_materials
-from Tests import save_load_path as save_path, TEST_DATA_DIR, is_clean_result
-
+from os import makedirs
+from os.path import isdir, join
+from shutil import copytree, rmtree
 
 import pytest
+from PySide2 import QtWidgets
+
+from Tests import TEST_DATA_DIR, save_gui_path as save_path
+from pyleecan.Functions.load import LIB_KEY, MACH_KEY, load, load_matlib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
+
+WS_path = join(save_path, "DMatlib_Workspace_test")
+Ref_path = join(TEST_DATA_DIR, "Material", "Workflow")
 
 
-class Test_Workflow_DMatLib(object):
-    """Test that the widget DMatLib behave like it should when called from a Widget"""
+class TestDMatlibWF(object):
+    """Check that the GUI enables to set/modified/add/delete material from the
+    Material library and the machine.
+    The test machine / library has the following characteristics:
+    - stator.mat_type, rotor.mat_type, shaft.mat_type == M400-50A same as matlib
+    - rotor.hole[0] = Air missing from Reference library
+    - rotor.hole[0].magnet_0.mat_type is an altered version of MagnetPrius
+    - rotor.hole[0].magnet_1.mat_type matches MagnetPrius from Library
+    """
 
-    @pytest.fixture
-    def setup(self):
-        """Run at the begining of every test to setup the gui"""
+    def setup_method(self):
+        """Setup the workspace and the GUI"""
 
+        # Setup workspace with machine and material copy
+        if isdir(WS_path):
+            rmtree(WS_path)
+        copytree(Ref_path, WS_path)
+
+        # Load Machine
+        Toyota_Prius = load(join(WS_path, "Toyota_Prius.json"))
+        assert Toyota_Prius.rotor.hole[0].magnet_0.mat_type.name == "MagnetPrius"
+        # Load Material Library
+        material_dict = load_matlib(machine=Toyota_Prius, matlib_path=WS_path)
+
+        # Machine Setup Widget
+        self.widget = DMachineSetup(material_dict=material_dict, machine=Toyota_Prius)
+
+    @classmethod
+    def setup_class(cls):
+        """Start the app for the test"""
+        print("\nStart Test DMachineSelector")
         if not QtWidgets.QApplication.instance():
-            self.app = QtWidgets.QApplication(sys.argv)
+            cls.app = QtWidgets.QApplication(sys.argv)
         else:
-            self.app = QtWidgets.QApplication.instance()
+            cls.app = QtWidgets.QApplication.instance()
 
-        work_path = join(save_path, "Material Workflow")
-        # Delete old test if needed
-        if isdir(work_path):
-            rmtree(work_path)
-        mkdir(work_path)
-        copyfile(
-            join(TEST_DATA_DIR, "Material", "Magnet1.json"),
-            join(work_path, "Magnet1.json"),
-        )
-        copyfile(
-            join(TEST_DATA_DIR, "Material", "Copper1.json"),
-            join(work_path, "Copper1.json"),
-        )
-        copyfile(
-            join(TEST_DATA_DIR, "Material", "Insulator1.json"),
-            join(work_path, "Insulator1.json"),
-        )
-        copyfile(
-            join(TEST_DATA_DIR, "Material", "M400-50A.json"),
-            join(work_path, "M400-50A.json"),
-        )
-        material_dict = load_matlib(matlib_path=work_path)
-        yield {"work_path": work_path, "material_dict": material_dict}
+    @classmethod
+    def teardown_class(cls):
+        """Exit the app after the test"""
+        if isdir(WS_path):
+            rmtree(WS_path)
+        cls.app.quit()
 
-        self.app.quit()
-
-        topLevelWidgets = QtWidgets.QApplication.topLevelWidgets()
-        for widget in topLevelWidgets:
-            widget.close()
-
-        if is_clean_result:
-            rmtree(work_path)
-
-    def test_init_empty(self, setup):
-        """Check that the widget can open with an unknown material"""
-        self.machine = MachineIPMSM()
-        self.machine.stator = LamSlotWind()
-        self.machine.rotor = LamHole()
-        self.machine._set_None()
-        self.machine.stator.winding.p = 4
-        self.machine.type_machine = 8
-        self.machine.rotor.hole = [HoleM50()]
-        self.machine.rotor.hole[0].magnet_0.mat_type.name = "Magnet_doesnot_exist"
-        load_machine_materials(
-            material_dict=setup["material_dict"], machine=self.machine
-        )
-        self.widget = SMHoleMag(
-            machine=self.machine, material_dict=setup["material_dict"], is_stator=False
-        )
-        # Check default material
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.count() == 4
+    def test_init(self):
+        """Test that Machine GUI and WMatSelect are correctly loaded"""
+        # Check content of MatLib
+        assert self.widget.material_dict is not None
+        mat_dict = self.widget.material_dict
+        assert LIB_KEY in mat_dict
+        assert [mat.name for mat in mat_dict[LIB_KEY]] == [
+            "Copper1",
+            "Insulator1",
+            "M400-50A",
+            "MagnetPrius",
+        ]
+        assert MACH_KEY in mat_dict
+        assert [mat.name for mat in mat_dict[MACH_KEY]] == ["Air", "MagnetPrius_old"]
+        # Check that all the WMatSelect widget are correctly defined
+        exp_items = [
+            "Copper1",
+            "Insulator1",
+            "M400-50A",
+            "MagnetPrius",
+            "Air",
+            "MagnetPrius_old",
+        ]
+        self.widget.nav_step.setCurrentRow(1)  # MachineDimension
+        combo = self.widget.w_step.w_mat_0.c_mat_type
+        assert combo.currentText() == "M400-50A"
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        combo = self.widget.w_step.w_mat.c_mat_type
+        assert combo.currentText() == "M400-50A"
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        self.widget.nav_step.setCurrentRow(5)  # Winding conductor
+        combo = self.widget.w_step.w_mat_0.c_mat_type
+        assert combo.currentText() == "Copper1"
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        combo = self.widget.w_step.w_mat_1.c_mat_type
+        assert combo.currentText() == "Insulator1"
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        self.widget.nav_step.setCurrentRow(6)  # LamParam Rotor
+        combo = self.widget.w_step.w_mat.c_mat_type
+        assert combo.currentText() == "M400-50A"
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        self.widget.nav_step.setCurrentRow(7)  # Hole material
+        combo = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_0.c_mat_type
+        assert combo.currentText() == "Air"
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        combo = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type
         assert (
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentText() == ""
+            self.widget.machine.rotor.hole[0].magnet_0.mat_type.name
+            == "MagnetPrius_old"
         )
-        assert (
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentIndex()
-            == -1
-        )
-        # Click to open matlib
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.current_dialog is None
-        self.widget.tab_hole.widget(0).w_hole.w_mat_1.b_matlib.clicked.emit()
-        assert (
-            type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.current_dialog)
-            == DMatLib
-        )
-        # Check Matlib init
-        assert (
-            self.widget.tab_hole.widget(0).w_hole.w_mat_1.current_dialog.nav_mat.count()
-            == 4
-        )
-        assert (
-            self.widget.tab_hole.widget(0)
-            .w_hole.w_mat_1.current_dialog.nav_mat.currentItem()
-            .text()
-            == "001 - Copper1"
-        )
+        assert combo.currentText() == "MagnetPrius_old"
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        combo = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_2.c_mat_type
+        assert combo.currentText() == "MagnetPrius"
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
 
-    @pytest.mark.skip
-    def test_init(self, setup):
-        """Check that the Widget spinbox initialise to the lamination value"""
-        self.machine = MachineIPMSM()
-        self.machine.stator = LamSlotWind()
-        self.machine.rotor = LamHole()
-        self.machine._set_None()
-        self.machine.rotor.hole = list()  # No hole
-        self.machine.stator.winding.p = 4
-        self.machine.type_machine = 8
-        self.widget = SMHoleMag(
-            machine=self.machine, matlib=setup["matlib"], is_stator=False
-        )
+    def edit_matlib(self):
+        """Edit a material in the Library and check changes in machine"""
+        # Check initial state
+        assert self.widget.machine.stator.mat_type.elec.rho == 1
+        assert self.widget.machine.rotor.mat_type.elec.rho == 1
+        assert self.widget.machine.shaft.mat_type.elec.rho == 1
+        M400 = load(join(WS_path, "M400-50A.json"))
+        assert M400.elec.rho == 1
+        # Open DMatlib
+        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        assert self.widget.w_step.w_mat.current_dialog is None
+        self.widget.w_step.w_mat.b_matlib.clicked.emit()
+        assert isinstance(self.widget.w_step.w_mat.current_dialog, DMatLib)
+        dialog = self.widget.w_step.w_mat.current_dialog
+        assert dialog.is_lib_mat is True
+        assert dialog.nav_mat.currentRow() == 2
+        assert dialog.out_rho_elec.text() == "rho = 1 [ohm.m]"
+        # Edit M400-50A material
+        dialog.b_edit.clicked.emit()
+        dialog.current_dialog.lf_rho_elec.setValue(2)
+        dialog.current_dialog.lf_rho_elec.editingFinished.emit()
+        dialog.current_dialog.b_save.clicked.emit()
+        # Check modifications
+        assert dialog.nav_mat.currentRow() == 2
+        assert dialog.out_rho_elec.text() == "rho = 2.0 [ohm.m]"
+        assert self.widget.machine.stator.mat_type.elec.rho == 2
+        assert self.widget.machine.rotor.mat_type.elec.rho == 2
+        assert self.widget.machine.shaft.mat_type.elec.rho == 2
+        M400 = load(join(WS_path, "M400-50A.json"))
+        assert M400.elec.rho == 2
 
-        wid = self.widget.tab_hole.widget(0).w_hole.w_mat_1
-        # Check default (hole is set to type 50)
-        assert wid.c_mat_type.count() == 4
-        assert wid.c_mat_type.currentText() == "Magnet1"
-        assert wid.c_mat_type.currentIndex() == 3
+    def edit_machine_material(self):
+        """Edit a material from the machine"""
+        # Check initial state
+        assert self.widget.machine.rotor.hole[0].mat_void.struct.rho == 1.2044
+        # Open DMatlib
+        self.widget.nav_step.setCurrentRow(7)  # Hole material
+        w_mat = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_0
+        assert w_mat.current_dialog is None
+        w_mat.b_matlib.clicked.emit()
+        assert isinstance(w_mat.current_dialog, DMatLib)
+        dialog = w_mat.current_dialog
+        assert dialog.is_lib_mat is False
+        assert dialog.nav_mat_mach.currentRow() == 0
+        assert dialog.out_rho_meca.text() == "rho = 1.2044 [kg/m^3]"
+        # Edit M400-50A material
+        dialog.b_edit.clicked.emit()
+        dialog.current_dialog.lf_rho_meca.setValue(2.468)
+        dialog.current_dialog.lf_rho_meca.editingFinished.emit()
+        dialog.current_dialog.b_save.clicked.emit()
+        # Check modifications
+        assert dialog.nav_mat_mach.currentRow() == 0
+        assert dialog.out_rho_meca.text() == "rho = 2.468 [kg/m^3]"
+        assert self.widget.machine.rotor.hole[0].mat_void.struct.rho == 2.468
 
-        # Click to open matlib
-        assert wid.current_dialog is None
-        wid.b_matlib.clicked.emit()
-        assert type(wid.current_dialog) == DMatLib
 
-        # Check Matlib ini
-        assert wid.current_dialog.nav_mat.count() == 4
-        assert wid.current_dialog.nav_mat.currentItem().text() == "004 - Magnet1"
-        assert wid.current_dialog.current_dialog is None
-
-        # Duplicate Magnet1 to Magnet_test
-        assert wid.current_dialog.current_dialog is None
-        wid.current_dialog.b_duplicate.clicked.emit()
-        assert type(wid.current_dialog.current_dialog) == DMatSetup
-        wid.current_dialog.current_dialog.le_name.setText("Magnet_test_python")
-        wid.current_dialog.current_dialog.le_name.editingFinished.emit()
-        assert wid.current_dialog.current_dialog.mat.name == "Magnet_test_python"
-        wid.current_dialog.current_dialog.lf_rho_elec.setText("1234.56789")
-        wid.current_dialog.current_dialog.lf_rho_elec.editingFinished.emit()
-        assert wid.current_dialog.current_dialog.mat.elec.rho == 1234.56789
-
-        # Check creation
-        wid.current_dialog.current_dialog.done(1)
-        assert wid.current_dialog.nav_mat.count() == 5
-        # self.widget.current_dialog.current_dialog.accepted()
-        # button = self.widget.current_dialog.current_dialog.b_close.button(QDialogButtonBox.Ok)
-        # QTest.mouseClick(button, Qt.LeftButton)
-        # self.assertEqual(self.widget.current_dialog.nav_mat.count(), 93)
-        # self.assertEqual(
-        #     self.widget.current_dialog.nav_mat.currentItem().text(), "094 - Magnet_test_python"
-        # )
+if __name__ == "__main__":
+    a = TestDMatlibWF()
+    a.setup_class()
+    a.setup_method()
+    a.edit_machine_material()
+    print("Done")

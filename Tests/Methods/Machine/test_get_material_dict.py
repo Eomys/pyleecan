@@ -19,9 +19,9 @@ def test_material_dict():
         "self.stator.winding.conductor.ins_mat": "Insulator1",
         "self.stator.winding.conductor.cond_mat": "Copper1",
         "self.rotor.mat_type": "M400-50A",
-        "self.rotor.hole.mat_void": "Air",
-        "self.rotor.hole.magnet_0.mat_type": "MagnetPrius",
-        "self.rotor.hole.magnet_1.mat_type": "MagnetPrius",
+        "self.rotor.hole[0].mat_void": "Air",
+        "self.rotor.hole[0].magnet_0.mat_type": "MagnetPrius",
+        "self.rotor.hole[0].magnet_1.mat_type": "MagnetPrius",
         "self.shaft.mat_type": "M400-50A",
     }
 
@@ -41,8 +41,8 @@ def test_material_dict_unique():
         "self.shaft.mat_type": "M400-50A",
         "self.stator.winding.conductor.ins_mat": "Insulator1",
         "self.stator.winding.conductor.cond_mat": "Copper1",
-        "self.rotor.hole.mat_void": "Air",
-        "self.rotor.hole.magnet_0.mat_type": "MagnetPrius",
+        "self.rotor.hole[0].mat_void": "Air",
+        "self.rotor.hole[0].magnet_0.mat_type": "MagnetPrius",
     }
 
     assert mat_dict == exp_dict

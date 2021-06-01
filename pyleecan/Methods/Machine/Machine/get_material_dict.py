@@ -62,6 +62,8 @@ def get_material(obj, path="self"):
         elif isinstance(value, list):
             for ii, v in enumerate(value):
                 if isinstance(v, dict) and "__class__" in v:
-                    materials.update(get_material(sub_obj[ii], path=path + key))
+                    materials.update(
+                        get_material(sub_obj[ii], path=path + key + "[" + str(ii) + "]")
+                    )
 
     return materials
