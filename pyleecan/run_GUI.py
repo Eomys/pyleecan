@@ -18,7 +18,7 @@ try:  # Import if pyleecan is installed with pip
     from .GUI.Tools.MachinePlotWidget import MachinePlotWidget
     from .GUI.Tools.TreeView import TreeView
     from .GUI.Tools.GuiOption.WGuiOption import WGuiOption
-
+    from .Functions.load import load_matlib
 except ImportError:  # Import for dev version
     from definitions import PACKAGE_NAME, ROOT_DIR, config_dict
 
@@ -34,6 +34,7 @@ except ImportError:  # Import for dev version
     )
     exec("from " + PACKAGE_NAME + ".GUI.Tools.TreeView import TreeView")
     exec("from " + PACKAGE_NAME + ".GUI.Tools.GuiOption.WGuiOption import WGuiOption")
+    exec("from " + PACKAGE_NAME + ".Functions.load import load_matlib")
 
 
 EXT_GUI = True
@@ -57,12 +58,17 @@ def run_GUI(argv):
         with open(config_dict["GUI"]["CSS_PATH"], "r") as css_file:
             a.setStyleSheet(css_file.read())
 
+    # Load Material Library
+    material_dict = load_matlib(
+        machine=None, matlib_path=config_dict["MAIN"]["MATLIB_DIR"]
+    )
+
     # MatLib widget
-    mat_widget = DMatLib(machine=None, matlib_path=config_dict["MAIN"]["MATLIB_DIR"])
+    mat_widget = DMatLib(material_dict=material_dict)
 
     # Machine Setup Widget
     c = DMachineSetup(
-        dmatlib=mat_widget, machine_path=config_dict["MAIN"]["MACHINE_DIR"]
+        material_dict=material_dict, machine_path=config_dict["MAIN"]["MACHINE_DIR"]
     )
 
     if EXT_GUI:

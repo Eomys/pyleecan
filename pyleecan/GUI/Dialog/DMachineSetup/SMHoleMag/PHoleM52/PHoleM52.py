@@ -20,7 +20,7 @@ class PHoleM52(Gen_PHoleM52, QWidget):
     hole_name = "Hole Type 52"
     hole_type = HoleM52
 
-    def __init__(self, hole=None, matlib=None):
+    def __init__(self, hole=None, material_dict=None):
         """Initialize the widget according to hole
 
         Parameters
@@ -29,14 +29,14 @@ class PHoleM52(Gen_PHoleM52, QWidget):
             A PHoleM52 widget
         hole : HoleM52
             current hole to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
         self.setupUi(self)
 
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.hole = hole
 
         # Set FloatEdit unit
@@ -72,11 +72,11 @@ class PHoleM52(Gen_PHoleM52, QWidget):
             self.img_slot.setPixmap(
                 QPixmap(":/images/images/MachineSetup/SMHoleMag/HoleM52_no_mag.png")
             )
-            self.w_mat_0.update(self.hole, "mat_void", self.matlib)
+            self.w_mat_0.update(self.hole, "mat_void", self.material_dict)
             self.w_mat_1.hide()
         else:
-            self.w_mat_0.update(self.hole, "mat_void", self.matlib)
-            self.w_mat_1.update(self.hole.magnet_0, "mat_type", self.matlib)
+            self.w_mat_0.update(self.hole, "mat_void", self.material_dict)
+            self.w_mat_1.update(self.hole.magnet_0, "mat_type", self.material_dict)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.hole.W0)

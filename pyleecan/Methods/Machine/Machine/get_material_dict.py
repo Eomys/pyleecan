@@ -1,7 +1,7 @@
 from ....Classes.Material import Material
 
 
-def get_material_dict(self, path="self"):
+def get_material_dict(self, path="self", is_unique=False):
     """
     Get the dict of materials contained in a Machine
 
@@ -9,6 +9,10 @@ def get_material_dict(self, path="self"):
     ----------
     self : Machine
         A Machine object
+    path : str
+        prefix to use for material object path
+    is_unique : bool
+        True each material will only one in the dict
 
     Returns
     -------
@@ -16,7 +20,17 @@ def get_material_dict(self, path="self"):
         dict of materials contained in the object (key="obj path" like self.mat_type)
     """
 
-    return get_material(self, path=path)
+    mach_mat_dict = get_material(self, path=path)
+    if is_unique:
+        result = dict()
+        name_list = list()
+        for key, mat in mach_mat_dict.items():
+            if mat.name is not None and mat.name not in name_list:
+                result[key] = mat
+                name_list.append(mat.name)
+        return result
+    else:
+        return mach_mat_dict
 
 
 def get_material(obj, path="self"):

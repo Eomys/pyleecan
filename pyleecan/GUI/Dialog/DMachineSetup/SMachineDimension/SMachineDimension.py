@@ -21,7 +21,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
     # Information for the DMachineSetup nav
     step_name = "Machine Dimensions"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
@@ -30,8 +30,8 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             A SMachineDimension widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -42,7 +42,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         # Set FloatEdit unit
@@ -93,7 +93,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.lf_Wfra.setValue(machine.frame.comp_height_eq())
             if machine.frame.Lfra is not None:
                 self.lf_Lfra.setValue(machine.frame.Lfra)
-            self.w_mat_1.update(self.machine.frame, "mat_type", self.matlib)
+            self.w_mat_1.update(self.machine.frame, "mat_type", self.material_dict)
 
         # Adapt the GUI to the topology of the machine
         if not machine.rotor.is_internal:  # External Rotor
@@ -129,7 +129,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
                 + gui_option.unit.get_m_name()
                 + "]"
             )
-            self.w_mat_0.update(self.machine.shaft, "mat_type", self.matlib)
+            self.w_mat_0.update(self.machine.shaft, "mat_type", self.material_dict)
 
         # Connect the widget
         self.lf_SRint.editingFinished.connect(self.set_stator_Rint)
@@ -283,7 +283,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             else:
                 self.machine.frame.Rint = None
                 self.machine.frame.Rext = None
-            self.w_mat_1.update(self.machine.frame, "mat_type", self.matlib)
+            self.w_mat_1.update(self.machine.frame, "mat_type", self.material_dict)
             self.lf_Wfra.clear()
             self.lf_Lfra.clear()
         else:
@@ -320,7 +320,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             else:
                 self.out_Drsh.setText(self.tr("Drsh = "))
                 self.machine.shaft.Drsh = None
-            self.w_mat_0.update(self.machine.shaft, "mat_type", self.matlib)
+            self.w_mat_0.update(self.machine.shaft, "mat_type", self.material_dict)
             # machine.rotor.Rint editable only if there is a shaft
             self.lf_RRint.setEnabled(True)
 

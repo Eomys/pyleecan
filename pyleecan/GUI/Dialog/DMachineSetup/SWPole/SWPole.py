@@ -28,7 +28,7 @@ class SWPole(Ui_SWPole, QWidget):
     # Information for DMachineSetup
     step_name = "Pole"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -37,8 +37,8 @@ class SWPole(Ui_SWPole, QWidget):
             A SWPole widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -49,7 +49,7 @@ class SWPole(Ui_SWPole, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         self.b_help.hide()

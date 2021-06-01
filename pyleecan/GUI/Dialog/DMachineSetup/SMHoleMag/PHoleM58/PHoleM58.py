@@ -20,7 +20,7 @@ class PHoleM58(Gen_PHoleM58, QWidget):
     hole_name = "Hole Type 58"
     hole_type = HoleM58
 
-    def __init__(self, hole=None, matlib=None):
+    def __init__(self, hole=None, material_dict=None):
         """Initialize the widget according to hole
 
         Parameters
@@ -29,14 +29,14 @@ class PHoleM58(Gen_PHoleM58, QWidget):
             A PHoleM58 widget
         hole : HoleM58
             current hole to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
         self.setupUi(self)
 
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.hole = hole
 
         # Set FloatEdit unit
@@ -65,12 +65,12 @@ class PHoleM58(Gen_PHoleM58, QWidget):
             )
             self.W1 = 0
             self.W2 = 0
-            self.w_mat_0.update(self.hole, "mat_void", self.matlib)
+            self.w_mat_0.update(self.hole, "mat_void", self.material_dict)
             self.w_mat_1.hide()
         else:
             # Set current material
-            self.w_mat_0.update(self.hole, "mat_void", self.matlib)
-            self.w_mat_1.update(self.hole.magnet_0, "mat_type", self.matlib)
+            self.w_mat_0.update(self.hole, "mat_void", self.material_dict)
+            self.w_mat_1.update(self.hole.magnet_0, "mat_type", self.material_dict)
 
         # Set unit name (m ou mm)
         self.u = gui_option.unit

@@ -10,13 +10,9 @@ from PySide2.QtWidgets import QDialog, QMessageBox
 from ....Classes.Material import Material
 from ....Classes.ImportMatrixVal import ImportMatrixVal
 from ....Classes.ImportMatrixXls import ImportMatrixXls
-from ....Functions.load import load_matlib
+from ....Functions.load import load_matlib, LIB_KEY, MACH_KEY
 from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 from ....GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
-
-
-LIB_KEY = "RefMatLib"
-MACH_KEY = "MachineMatLib"
 
 
 class DMatLib(Gen_DMatLib, QDialog):
@@ -25,17 +21,15 @@ class DMatLib(Gen_DMatLib, QDialog):
     # Signal to W_MachineSetup to know that the save popup is needed
     saveNeeded = Signal()
 
-    def __init__(self, matlib_path=None, machine=None, is_lib_mat=True, selected_id=0):
+    def __init__(self, material_dict, is_lib_mat=True, selected_id=0):
         """Init the Matlib GUI
 
         Parameters
         ----------
         self : DMatLib
             a DMatLib object
-        matlib_path : str
-            path to the Material Library
-        machine : Machine
-            current Machine object
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_lib_mat : bool
             True: Selected material is part of the Library (False machine)
         selected_id :
@@ -52,41 +46,23 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         self.current_dialog = None  # For DMatSetup popup
 
-        # Load the material library and machine materials
-        self.matlib_path = matlib_path
-        self.machine = machine
-        self.is_lib_mat = True  # Current selected mat in is the Library (false machine)
-        self.dict_mat = {
-            LIB_KEY: [],  # Reference Material Library
-            MACH_KEY: [],  # Machine-specific materials
-        }
-        if self.matlib_path is not None:
-            self.dict_mat[LIB_KEY] = load_matlib(self.matlib_path)
-        if self.machine is not None:
-            self.load_machine_materials()
-        else:
-            self.update_list_mat()
+        self.is_lib_mat = (
+            is_lib_mat  # Current selected mat in is the Library (false machine)
+        )
+        self.material_dict = material_dict
+        self.update_list_mat()
 
         # Select the material
-        if is_lib_mat:
-            self.nav_mat.setCurrentRow(selected_id)
-            self.update_out(is_lib_mat=True)
-        else:
-            self.nav_mat_mach.setCurrentRow(selected_id)
-            self.update_out(is_lib_mat=False)
+        self.set_current_material(selected_id, is_lib_mat)
 
         # Hide since unused
         self.out_epsr.hide()
 
         # Connect Slot/Signals
-        self.nav_mat.itemSelectionChanged.connect(
-            lambda: self.update_out(is_lib_mat=True)
-        )
+        self.nav_mat.clicked.connect(lambda: self.update_out(is_lib_mat=True))
         self.nav_mat.doubleClicked.connect(self.edit_material)
 
-        self.nav_mat_mach.itemSelectionChanged.connect(
-            lambda: self.update_out(is_lib_mat=False)
-        )
+        self.nav_mat_mach.clicked.connect(lambda: self.update_out(is_lib_mat=False))
         self.nav_mat_mach.doubleClicked.connect(self.edit_material)
 
         self.le_search.textChanged.connect(self.update_list_mat)
@@ -95,42 +71,6 @@ class DMatLib(Gen_DMatLib, QDialog):
         self.b_delete.clicked.connect(self.delete_material)
         self.b_duplicate.clicked.connect(self.new_material)
 
-    def set_machine(self, machine):
-        self.machine = machine
-        self.load_machine_materials()
-
-    def load_machine_materials(self):
-        """Add machine materials if they are not in the MatLib
-
-        Parameters
-        ----------
-        self: DMatLib
-            A DMatlib object
-        """
-        # Remove previous machine materials
-        self.dict_mat[MACH_KEY] = []
-
-        mach_mat_dict = self.machine.get_material_dict()
-        # Dict to list of unique materials (by name)
-        mach_mat_list, name_list = list(), list()
-        for mat in mach_mat_dict.values():
-            if mat.name is not None and mat.name not in name_list:
-                mach_mat_list.append(mat)
-                name_list.append(mat.name)
-
-        # Check if material is in Material Library (ignores name and path)
-        name_list = list()  # Machine materials name
-        for mach_mat in mach_mat_list:
-            for lib_mat in self.dict_mat[LIB_KEY]:
-                if (
-                    mach_mat.compare(lib_mat, ignore_list=["self.name", "self.path"])
-                    and mach_mat.name not in name_list
-                ):
-                    self.dict_mat[MACH_KEY].append(mach_mat)
-                    name_list.append(name_list)
-        # Update the GUI
-        self.update_list_mat()
-
     def get_current_material(self):
         """Return the current selected material"""
         # Get the selected material
@@ -138,12 +78,22 @@ class DMatLib(Gen_DMatLib, QDialog):
             if self.nav_mat.currentRow() == -1:
                 return None, None
             index = self.nav_mat.currentRow()
-            return self.dict_mat[LIB_KEY][index], index
+            return self.material_dict[LIB_KEY][index], index
         else:
             if self.nav_mat_mach.currentRow() == -1:
                 return None, None
             index = self.nav_mat_mach.currentRow()
-            return self.dict_mat[MACH_KEY][index], index
+            return self.material_dict[MACH_KEY][index], index
+
+    def set_current_material(self, index, is_lib_mat):
+        """Change the current selected material"""
+        self.is_lib_mat = is_lib_mat
+        # Get the selected material
+        if self.is_lib_mat:
+            self.nav_mat.setCurrentRow(index)
+        else:
+            self.nav_mat_mach.setCurrentRow(index)
+        self.update_out(is_lib_mat=is_lib_mat)
 
     def edit_material(self):
         """Open the setup material GUI to edit the current material.
@@ -186,10 +136,10 @@ class DMatLib(Gen_DMatLib, QDialog):
                         self.saveNeeded.emit()
             # Update Matlib
             if is_lib_mat:
-                self.dict_mat[LIB_KEY][index] = mat_edit
+                self.material_dict[LIB_KEY][index] = mat_edit
                 mat_edit.save(mat_edit.path)
             else:
-                self.dict_mat[MACH_KEY][index] = mat_edit
+                self.material_dict[MACH_KEY][index] = mat_edit
 
             # # Move the material
             # if return_code == 2:
@@ -198,7 +148,7 @@ class DMatLib(Gen_DMatLib, QDialog):
             #         self.matlib.move_mach_mat_to_ref(dict_key, mat_id)
 
             #         # Set the pointer on the ref matlib if machine material list is empty
-            #         if len(self.matlib.dict_mat["MachineMatLib"]) == 0:
+            #         if len(self.matlib.material_dict["MachineMatLib"]) == 0:
             #             self.on_matlib = True
             #     else:
             #         # Move the material into the machine materials list
@@ -247,15 +197,15 @@ class DMatLib(Gen_DMatLib, QDialog):
         # 0: Cancel, 1: Save, 2: Add to Matlib (from Machine)
         if return_code > 0:
             if is_lib_mat:
-                self.dict_mat[LIB_KEY].append(mat_new)
-                index = len(self.dict_mat[LIB_KEY]) - 1
+                self.material_dict[LIB_KEY].append(mat_new)
+                index = len(self.material_dict[LIB_KEY]) - 1
                 mat_new.path = join(self.matlib_path, mat_new.name + ".json")
                 mat_new.save(mat_new.path)
                 self.update_list_mat()
                 self.nav_mat.setCurrentIndex(index)
             else:
-                self.dict_mat[MACH_KEY].append(mat_new)
-                index = len(self.dict_mat[MACH_KEY]) - 1
+                self.material_dict[MACH_KEY].append(mat_new)
+                index = len(self.material_dict[MACH_KEY]) - 1
                 self.update_list_mat()
                 self.nav_mat_mach.setCurrentIndex(index)
             self.update_out(is_lib_mat)
@@ -277,7 +227,7 @@ class DMatLib(Gen_DMatLib, QDialog):
         """
         current_mat, index = self.get_current_material()
 
-        if len(self.dict_mat[LIB_KEY]) > 1 and self.is_lib_mat:
+        if len(self.material_dict[LIB_KEY]) > 1 and self.is_lib_mat:
             del_msg = "Are you sure you want to delete " + current_mat.name + " ?"
             reply = QMessageBox.question(
                 self, "Confirmation", del_msg, QMessageBox.Yes, QMessageBox.No
@@ -285,7 +235,7 @@ class DMatLib(Gen_DMatLib, QDialog):
 
             if reply == QMessageBox.Yes:
                 remove(current_mat.path)
-                self.dict_mat.pop(current_mat)
+                self.material_dict.pop(current_mat)
                 index = self.nav_mat.currentRow()
                 self.update_list_mat()
                 if index < self.nav_mat.count() - 1:
@@ -313,12 +263,12 @@ class DMatLib(Gen_DMatLib, QDialog):
         -------
 
         """
-        dict_mat = self.dict_mat
+        material_dict = self.material_dict
 
         # Filter the material Library
         self.nav_mat.blockSignals(True)
         self.nav_mat.clear()
-        for ii, mat in enumerate(dict_mat[LIB_KEY]):
+        for ii, mat in enumerate(material_dict[LIB_KEY]):
             # todo: add new filter
             if self.le_search.text() != "" and not match(
                 ".*" + self.le_search.text().lower() + ".*", mat.name.lower()
@@ -330,19 +280,19 @@ class DMatLib(Gen_DMatLib, QDialog):
         # Filter the Machine materials
         self.nav_mat_mach.blockSignals(True)
         self.nav_mat_mach.clear()
-        for ii, mat in enumerate(dict_mat[MACH_KEY]):
+        for ii, mat in enumerate(material_dict[MACH_KEY]):
             # todo: add new filter
             if self.le_search.text() != "" and not match(
                 ".*" + self.le_search.text().lower() + ".*", mat.name.lower()
             ):
                 continue
             self.nav_mat_mach.addItem(
-                "%03d" % (len(dict_mat[MACH_KEY]) + ii + 1) + " - " + mat.name
+                "%03d" % (len(material_dict[MACH_KEY]) + ii + 1) + " - " + mat.name
             )
         self.nav_mat_mach.blockSignals(False)
 
         # Hide the widget if machine material list is empty
-        if len(dict_mat[MACH_KEY]) == 0:
+        if len(material_dict[MACH_KEY]) == 0:
             self.in_machine_mat.setVisible(False)
             self.nav_mat_mach.setVisible(False)
         elif not self.in_machine_mat.isVisible():
