@@ -2,6 +2,7 @@
 
 from os.path import join, isfile
 from os import remove
+
 import sys
 
 import mock  # for unittest of raw_input
@@ -16,7 +17,7 @@ from pyleecan.Classes.MachineWRSM import MachineWRSM
 from pyleecan.Classes.MachineSRM import MachineSRM
 from pyleecan.Classes.MachineLSPM import MachineLSPM
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from pyleecan.Functions.load import load_matlib
 from Tests import save_gui_path as save_path
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
@@ -71,9 +72,9 @@ class TestDMachineSetup(object):
             self.app = QtWidgets.QApplication.instance()
 
         # MatLib widget
-        dmatlib = DMatLib(matlib_path=matlib_path)
+        material_dict = load_matlib(matlib_path=matlib_path)
         widget = DMachineSetup(
-            dmatlib=dmatlib, machine_path=join(TEST_DATA_DIR, "Machine")
+            material_dict=material_dict, machine_path=join(TEST_DATA_DIR, "Machine")
         )
 
         yield {"widget": widget}

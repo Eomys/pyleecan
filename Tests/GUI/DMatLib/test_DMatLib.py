@@ -6,6 +6,7 @@ from PySide2 import QtWidgets
 
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
+from pyleecan.Functions.load import load_matlib
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from Tests import save_gui_path
 
@@ -68,7 +69,8 @@ class TestDMatLib(object):
         for mat in mat_lib:
             mat.save(join(tmp_folder, mat.name + ".json"))
 
-        widget = DMatLib(machine=None, matlib_path=tmp_folder, selected_id=0)
+        material_dict = load_matlib(matlib_path=tmp_folder)
+        widget = DMatLib(material_dict=material_dict)
 
         yield {"widget": widget}
 

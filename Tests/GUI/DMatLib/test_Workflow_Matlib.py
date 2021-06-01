@@ -17,7 +17,7 @@ from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-
+from pyleecan.Functions.load import load_matlib, load_machine_materials
 from Tests import save_load_path as save_path, TEST_DATA_DIR, is_clean_result
 
 
@@ -57,9 +57,8 @@ class Test_Workflow_DMatLib(object):
             join(TEST_DATA_DIR, "Material", "M400-50A.json"),
             join(work_path, "M400-50A.json"),
         )
-        matlib = DMatLib(matlib_path=work_path)
-
-        yield {"work_path": work_path, "matlib": matlib}
+        material_dict = load_matlib(matlib_path=work_path)
+        yield {"work_path": work_path, "material_dict": material_dict}
 
         self.app.quit()
 
@@ -80,10 +79,12 @@ class Test_Workflow_DMatLib(object):
         self.machine.type_machine = 8
         self.machine.rotor.hole = [HoleM50()]
         self.machine.rotor.hole[0].magnet_0.mat_type.name = "Magnet_doesnot_exist"
-        self.widget = SMHoleMag(
-            machine=self.machine, matlib=setup["matlib"], is_stator=False
+        load_machine_materials(
+            material_dict=setup["material_dict"], machine=self.machine
         )
-        self.widget.matlib.set_machine(machine=self.machine)
+        self.widget = SMHoleMag(
+            machine=self.machine, material_dict=setup["material_dict"], is_stator=False
+        )
         # Check default material
         assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.count() == 4
         assert (

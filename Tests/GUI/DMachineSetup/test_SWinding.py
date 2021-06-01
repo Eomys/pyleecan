@@ -45,7 +45,7 @@ class TestSWinding(object):
         test_obj.stator.winding.is_change_layer = True
         test_obj.stator.winding.is_permute_B_C = True
 
-        widget = SWinding(machine=test_obj, matlib=[], is_stator=True)
+        widget = SWinding(machine=test_obj, material_dict=dict(), is_stator=True)
 
         yield {"widget": widget, "test_obj": test_obj}
 
@@ -74,7 +74,9 @@ class TestSWinding(object):
             Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2
         )
         setup["test_obj"].stator.winding = None
-        setup["widget"] = SWinding(machine=setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWinding(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].c_wind_type.currentIndex() == 0
         assert type(setup["test_obj"].stator.winding) == Winding
@@ -91,7 +93,9 @@ class TestSWinding(object):
         setup["test_obj"].stator.winding.Ntcoil = None
         setup["test_obj"].stator.winding.is_reverse_wind = None
 
-        setup["widget"] = SWinding(machine=setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWinding(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_qs.value() == 3
         assert setup["widget"].si_coil_pitch.value() == 0
