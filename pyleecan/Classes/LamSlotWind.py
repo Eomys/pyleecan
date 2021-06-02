@@ -122,6 +122,11 @@ try:
 except ImportError as error:
     comp_periodicity = error
 
+try:
+    from ..Methods.Machine.LamSlotWind.set_pole_pair_number import set_pole_pair_number
+except ImportError as error:
+    set_pole_pair_number = error
+
 
 from ._check import InitUnKnowClassError
 from .Winding import Winding
@@ -129,6 +134,7 @@ from .Slot import Slot
 from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
+from .Bore import Bore
 
 
 class LamSlotWind(LamSlot):
@@ -375,6 +381,18 @@ class LamSlotWind(LamSlot):
         )
     else:
         comp_periodicity = comp_periodicity
+    # cf Methods.Machine.LamSlotWind.set_pole_pair_number
+    if isinstance(set_pole_pair_number, ImportError):
+        set_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method set_pole_pair_number: "
+                    + str(set_pole_pair_number)
+                )
+            )
+        )
+    else:
+        set_pole_pair_number = set_pole_pair_number
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -398,6 +416,7 @@ class LamSlotWind(LamSlot):
         axial_vent=-1,
         notch=-1,
         yoke_notch=-1,
+        bore=None,
         init_dict=None,
         init_str=None,
     ):
@@ -446,6 +465,8 @@ class LamSlotWind(LamSlot):
                 notch = init_dict["notch"]
             if "yoke_notch" in list(init_dict.keys()):
                 yoke_notch = init_dict["yoke_notch"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
         # Set the properties (value check and convertion are done in setter)
         self.Ksfill = Ksfill
         self.winding = winding
@@ -464,6 +485,7 @@ class LamSlotWind(LamSlot):
             axial_vent=axial_vent,
             notch=notch,
             yoke_notch=yoke_notch,
+            bore=bore,
         )
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties

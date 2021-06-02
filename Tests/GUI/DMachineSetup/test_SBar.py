@@ -84,7 +84,9 @@ class TestSBar(object):
         setup["test_obj"].rotor.ring_mat.name = "test2"
         setup["test_obj"].rotor.winding.conductor = None
         setup["widget"] = SBar(
-            machine=setup["test_obj"], material_dict=setup["material_dict"], is_stator=False
+            machine=setup["test_obj"],
+            material_dict=setup["material_dict"],
+            is_stator=False,
         )
 
         assert setup["widget"].c_bar_type.currentIndex() == 0
@@ -97,7 +99,9 @@ class TestSBar(object):
         setup["test_obj"].rotor.winding.conductor = CondType22()
         setup["test_obj"].rotor.winding.conductor.cond_mat.name = "test3"
         setup["widget"] = SBar(
-            machine=setup["test_obj"], material_dict=setup["material_dict"], is_stator=False
+            machine=setup["test_obj"],
+            material_dict=setup["material_dict"],
+            is_stator=False,
         )
 
         assert setup["widget"].lf_Hscr.value() == 0.21
@@ -200,7 +204,9 @@ class TestSBar(object):
         setup["test_obj"].rotor.winding.Lewout = 0.23
         setup["test_obj"].rotor.ring_mat.name = "test2"
         setup["test_obj"].rotor.winding.conductor = None
-        setup["widget"] = PCondType21(machine=setup["test_obj"], material_dict=setup["material_dict"])
+        setup["widget"] = PCondType21(
+            machine=setup["test_obj"], material_dict=setup["material_dict"]
+        )
         assert type(setup["widget"].machine.rotor.winding.conductor) is CondType21
 
     def test_init_PCondType22(self, setup):
@@ -210,7 +216,9 @@ class TestSBar(object):
         setup["test_obj"].rotor.winding.Lewout = 0.23
         setup["test_obj"].rotor.ring_mat.name = "test2"
         setup["test_obj"].rotor.winding.conductor = None
-        setup["widget"] = PCondType22(machine=setup["test_obj"], material_dict=setup["material_dict"])
+        setup["widget"] = PCondType22(
+            machine=setup["test_obj"], material_dict=setup["material_dict"]
+        )
         assert type(setup["widget"].machine.rotor.winding.conductor) is CondType22
 
     def test_check(self, setup):

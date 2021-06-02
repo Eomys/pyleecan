@@ -89,7 +89,9 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
             self.w_mat_dict[key].def_mat = "MagnetPrius"
             self.w_mat_dict[key].is_hide_button = True
             self.w_mat_dict[key].update(
-                self.hole.magnet_dict["magnet_" + str(index)], "mat_type", self.material_dict
+                self.hole.magnet_dict["magnet_" + str(index)],
+                "mat_type",
+                self.material_dict,
             )
 
     def update_graph(self):

@@ -40,6 +40,7 @@ ICON_SIZE = 24
 COLOR_LIST = ["k", "r", "c"]
 Z_TOL = 1e-4  # Point comparison tolerance
 
+
 class DXF_Hole(Ui_DXF_Hole, QDialog):
     """Dialog to create HoleUD objects from DXF files"""
 

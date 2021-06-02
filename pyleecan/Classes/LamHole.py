@@ -72,12 +72,17 @@ try:
 except ImportError as error:
     comp_periodicity = error
 
+try:
+    from ..Methods.Machine.LamHole.set_pole_pair_number import set_pole_pair_number
+except ImportError as error:
+    set_pole_pair_number = error
+
 
 from ._check import InitUnKnowClassError
 from .Hole import Hole
-from .Bore import Bore
 from .Material import Material
 from .Notch import Notch
+from .Bore import Bore
 
 
 class LamHole(Lamination):
@@ -206,6 +211,18 @@ class LamHole(Lamination):
         )
     else:
         comp_periodicity = comp_periodicity
+    # cf Methods.Machine.LamHole.set_pole_pair_number
+    if isinstance(set_pole_pair_number, ImportError):
+        set_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method set_pole_pair_number: "
+                    + str(set_pole_pair_number)
+                )
+            )
+        )
+    else:
+        set_pole_pair_number = set_pole_pair_number
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -215,7 +232,6 @@ class LamHole(Lamination):
     def __init__(
         self,
         hole=-1,
-        bore=None,
         L1=0.35,
         mat_type=-1,
         Nrvd=0,
@@ -228,6 +244,7 @@ class LamHole(Lamination):
         axial_vent=-1,
         notch=-1,
         yoke_notch=-1,
+        bore=None,
         init_dict=None,
         init_str=None,
     ):
@@ -248,8 +265,6 @@ class LamHole(Lamination):
             # Overwrite default value with init_dict content
             if "hole" in list(init_dict.keys()):
                 hole = init_dict["hole"]
-            if "bore" in list(init_dict.keys()):
-                bore = init_dict["bore"]
             if "L1" in list(init_dict.keys()):
                 L1 = init_dict["L1"]
             if "mat_type" in list(init_dict.keys()):
@@ -274,9 +289,10 @@ class LamHole(Lamination):
                 notch = init_dict["notch"]
             if "yoke_notch" in list(init_dict.keys()):
                 yoke_notch = init_dict["yoke_notch"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
         # Set the properties (value check and convertion are done in setter)
         self.hole = hole
-        self.bore = bore
         # Call Lamination init
         super(LamHole, self).__init__(
             L1=L1,
@@ -291,6 +307,7 @@ class LamHole(Lamination):
             axial_vent=axial_vent,
             notch=notch,
             yoke_notch=yoke_notch,
+            bore=bore,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
@@ -306,11 +323,6 @@ class LamHole(Lamination):
         for ii in range(len(self.hole)):
             tmp = self.hole[ii].__str__().replace(linesep, linesep + "\t") + linesep
             LamHole_str += "hole[" + str(ii) + "] =" + tmp + linesep + linesep
-        if self.bore is not None:
-            tmp = self.bore.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamHole_str += "bore = " + tmp
-        else:
-            LamHole_str += "bore = None" + linesep + linesep
         return LamHole_str
 
     def __eq__(self, other):
@@ -323,8 +335,6 @@ class LamHole(Lamination):
         if not super(LamHole, self).__eq__(other):
             return False
         if other.hole != self.hole:
-            return False
-        if other.bore != self.bore:
             return False
         return True
 
@@ -354,12 +364,6 @@ class LamHole(Lamination):
                         other.hole[ii], name=name + ".hole[" + str(ii) + "]"
                     )
                 )
-        if (other.bore is None and self.bore is not None) or (
-            other.bore is not None and self.bore is None
-        ):
-            diff_list.append(name + ".bore None mismatch")
-        elif self.bore is not None:
-            diff_list.extend(self.bore.compare(other.bore, name=name + ".bore"))
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -374,7 +378,6 @@ class LamHole(Lamination):
         if self.hole is not None:
             for value in self.hole:
                 S += getsizeof(value)
-        S += getsizeof(self.bore)
         return S
 
     def as_dict(self, **kwargs):
@@ -395,10 +398,6 @@ class LamHole(Lamination):
                     LamHole_dict["hole"].append(obj.as_dict(**kwargs))
                 else:
                     LamHole_dict["hole"].append(None)
-        if self.bore is None:
-            LamHole_dict["bore"] = None
-        else:
-            LamHole_dict["bore"] = self.bore.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamHole_dict["__class__"] = "LamHole"
@@ -408,8 +407,6 @@ class LamHole(Lamination):
         """Set all the properties to None (except pyleecan object)"""
 
         self.hole = None
-        if self.bore is not None:
-            self.bore._set_None()
         # Set to None the properties inherited from Lamination
         super(LamHole, self)._set_None()
 
@@ -443,33 +440,5 @@ class LamHole(Lamination):
         doc=u"""lamination Hole
 
         :Type: [Hole]
-        """,
-    )
-
-    def _get_bore(self):
-        """getter of bore"""
-        return self._bore
-
-    def _set_bore(self, value):
-        """setter of bore"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Bore()
-        check_var("bore", value, "Bore")
-        self._bore = value
-
-        if self._bore is not None:
-            self._bore.parent = self
-
-    bore = property(
-        fget=_get_bore,
-        fset=_set_bore,
-        doc=u"""Bore Shape
-
-        :Type: Bore
         """,
     )

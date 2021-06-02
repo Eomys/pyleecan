@@ -33,7 +33,7 @@ The procedure to install and use Pyleecan is detailed on [pyleecan website](http
 **Main Topologies Features:**
 * PYLEECAN includes a **Graphical User Interface** to define main 2D radial flux topologies parametrized geometries (**SPMSM, IPMSM, SCIM, DFIM, WRSM, SRM, SynRM**) including material library.
 * Possibility to import Slot or Hole from DXF files
-* User Defined Winding or automatic algorithm
+* Star of Slot Winding (with [swat-em](https://swat-em.readthedocs.io/en/latest/)) and User Defined Winding
 * Generic Geometry modeler to draw complex machines in the software coupled with PYLEECAN
 * Notches (Yoke and Bore) / Uneven Bore shape (Lamination without slot only) / Machine with more than 2 laminations
 

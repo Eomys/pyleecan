@@ -121,6 +121,11 @@ try:
 except ImportError as error:
     get_pole_pair_number = error
 
+try:
+    from ..Methods.Machine.Machine.set_pole_pair_number import set_pole_pair_number
+except ImportError as error:
+    set_pole_pair_number = error
+
 
 from ._check import InitUnKnowClassError
 from .Frame import Frame
@@ -356,6 +361,18 @@ class Machine(FrozenClass):
         )
     else:
         get_pole_pair_number = get_pole_pair_number
+    # cf Methods.Machine.Machine.set_pole_pair_number
+    if isinstance(set_pole_pair_number, ImportError):
+        set_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method set_pole_pair_number: "
+                    + str(set_pole_pair_number)
+                )
+            )
+        )
+    else:
+        set_pole_pair_number = set_pole_pair_number
     # save and copy methods are available in all object
     save = save
     copy = copy

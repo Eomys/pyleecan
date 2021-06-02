@@ -812,7 +812,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary to assign the surfaces: key=complex reference point coordinate, value=label of the surface",
+                "desc": "dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface",
                 "max": "",
                 "min": "",
                 "name": "surf_dict",
@@ -2852,7 +2852,7 @@
                 "value": ""
             },
             {
-                "desc": "dictionnary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",
+                "desc": "dictionary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",
                 "max": "",
                 "min": "",
                 "name": "magnet_dict",
@@ -4147,7 +4147,8 @@
             "comp_radius_mid_yoke",
             "has_magnet",
             "comp_angle_d_axis",
-            "comp_periodicity"
+            "comp_periodicity",
+            "set_pole_pair_number"
         ],
         "mother": "Lamination",
         "name": "LamHole",
@@ -4162,15 +4163,6 @@
                 "type": "[Hole]",
                 "unit": "",
                 "value": ""
-            },
-            {
-                "desc": "Bore Shape",
-                "max": "",
-                "min": "",
-                "name": "bore",
-                "type": "Bore",
-                "unit": "",
-                "value": null
             }
         ]
     },
@@ -4199,7 +4191,8 @@
             "get_Zs",
             "comp_radius_mid_yoke",
             "comp_periodicity",
-            "get_bore_desc"
+            "get_bore_desc",
+            "set_pole_pair_number"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -4334,7 +4327,8 @@
             "comp_rot_dir",
             "comp_lengths_winding",
             "comp_number_phase_eq",
-            "comp_periodicity"
+            "comp_periodicity",
+            "set_pole_pair_number"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -4432,7 +4426,8 @@
             "check",
             "comp_surfaces",
             "plot",
-            "get_pole_pair_number"
+            "get_pole_pair_number",
+            "set_pole_pair_number"
         ],
         "mother": "LamSquirrelCage",
         "name": "LamSquirrelCageMag",
@@ -4604,6 +4599,15 @@
                 "type": "[Notch]",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Bore Shape",
+                "max": "",
+                "min": "",
+                "name": "bore",
+                "type": "Bore",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -4903,7 +4907,8 @@
             "get_lam_list_label",
             "get_lam_by_label",
             "get_lam_index",
-            "get_pole_pair_number"
+            "get_pole_pair_number",
+            "set_pole_pair_number"
         ],
         "mother": "",
         "name": "Machine",
@@ -5428,7 +5433,7 @@
                 "value": 0
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -5570,7 +5575,7 @@
                 "value": 1
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -8104,7 +8109,7 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutMagElmer.csv",
         "properties": [
             {
-                "desc": "Dictionnary containing the main FEA parameters",
+                "desc": "dictionary containing the main FEA parameters",
                 "max": "",
                 "min": "",
                 "name": "FEA_dict",
@@ -8133,7 +8138,7 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutMagFEMM.csv",
         "properties": [
             {
-                "desc": "Dictionnary containing the main FEMM parameters",
+                "desc": "dictionary containing the main FEMM parameters",
                 "max": "",
                 "min": "",
                 "name": "FEMM_dict",
@@ -8286,7 +8291,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing the main FEA parameter",
+                "desc": "dictionary containing the main FEA parameter",
                 "max": "",
                 "min": "",
                 "name": "FEA_dict",
@@ -8742,7 +8747,7 @@
                 "value": "[]"
             },
             {
-                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "desc": "dictionary of parameters to pass to the plot method when executing it",
                 "max": "",
                 "min": "",
                 "name": "param_list",
@@ -8751,7 +8756,7 @@
                 "value": []
             },
             {
-                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "desc": "dictionary of parameters to pass to the plot method when executing it",
                 "max": "",
                 "min": "",
                 "name": "param_dict",
@@ -12251,7 +12256,7 @@
                 "value": 1
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -13281,7 +13286,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing DataKeeper",
+                "desc": "dictionary containing DataKeeper",
                 "max": "",
                 "min": "",
                 "name": "xoutput_dict",

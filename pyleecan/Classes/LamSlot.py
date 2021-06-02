@@ -67,12 +67,18 @@ try:
 except ImportError as error:
     get_bore_desc = error
 
+try:
+    from ..Methods.Machine.LamSlot.set_pole_pair_number import set_pole_pair_number
+except ImportError as error:
+    set_pole_pair_number = error
+
 
 from ._check import InitUnKnowClassError
 from .Slot import Slot
 from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
+from .Bore import Bore
 
 
 class LamSlot(Lamination):
@@ -189,6 +195,18 @@ class LamSlot(Lamination):
         )
     else:
         get_bore_desc = get_bore_desc
+    # cf Methods.Machine.LamSlot.set_pole_pair_number
+    if isinstance(set_pole_pair_number, ImportError):
+        set_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method set_pole_pair_number: "
+                    + str(set_pole_pair_number)
+                )
+            )
+        )
+    else:
+        set_pole_pair_number = set_pole_pair_number
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -210,6 +228,7 @@ class LamSlot(Lamination):
         axial_vent=-1,
         notch=-1,
         yoke_notch=-1,
+        bore=None,
         init_dict=None,
         init_str=None,
     ):
@@ -254,6 +273,8 @@ class LamSlot(Lamination):
                 notch = init_dict["notch"]
             if "yoke_notch" in list(init_dict.keys()):
                 yoke_notch = init_dict["yoke_notch"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
         # Set the properties (value check and convertion are done in setter)
         self.slot = slot
         # Call Lamination init
@@ -270,6 +291,7 @@ class LamSlot(Lamination):
             axial_vent=axial_vent,
             notch=notch,
             yoke_notch=yoke_notch,
+            bore=bore,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties

@@ -26,6 +26,7 @@ HL_COL = 2
 WIND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
 Z_TOL = 1e-4  # Point comparison tolerance
 
+
 class DXF_Slot(Ui_DXF_Slot, QDialog):
     """Dialog to create SlotUD objects from DXF files"""
 
