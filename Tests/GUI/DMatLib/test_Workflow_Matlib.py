@@ -174,6 +174,45 @@ class TestDMatlibWF(object):
         assert dialog.out_rho_meca.text() == "rho = 2.468 [kg/m^3]"
         assert self.widget.machine.rotor.hole[0].mat_void.struct.rho == 2.468
 
+    def test_edit_machine_material_several(self):
+        """Edit a material from the machine with several "old" material"""
+        # Change M400-50A as old material
+        machine = self.widget.machine.copy()
+        machine.stator.mat_type.elec.rho = 12
+        machine.rotor.mat_type.elec.rho = 12
+        machine.shaft.mat_type.elec.rho = 12
+        material_dict = load_matlib(machine=machine, matlib_path=WS_path)
+        self.widget = DMachineSetup(material_dict=material_dict, machine=machine)
+        # Check initial state
+        assert self.widget.machine.stator.mat_type.name == "M400-50A_old"
+        assert self.widget.machine.rotor.mat_type.name == "M400-50A_old"
+        assert self.widget.machine.shaft.mat_type.name == "M400-50A_old"
+        assert self.widget.machine.stator.mat_type.elec.rho == 12
+        assert self.widget.machine.rotor.mat_type.elec.rho == 12
+        assert self.widget.machine.shaft.mat_type.elec.rho == 12
+        # Open DMatlib
+        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        assert self.widget.w_step.w_mat.current_dialog is None
+        self.widget.w_step.w_mat.b_matlib.clicked.emit()
+        assert isinstance(self.widget.w_step.w_mat.current_dialog, DMatLib)
+        dialog = self.widget.w_step.w_mat.current_dialog
+        assert dialog.is_lib_mat is False
+        assert dialog.nav_mat.count() == 4
+        assert dialog.nav_mat_mach.count() == 3
+        assert dialog.nav_mat_mach.currentRow() == 0
+        assert dialog.out_rho_elec.text() == "rho = 12 [ohm.m]"
+        # Edit M400-50A_old material
+        dialog.b_edit.clicked.emit()
+        dialog.current_dialog.lf_rho_elec.setValue(34)
+        dialog.current_dialog.lf_rho_elec.editingFinished.emit()
+        dialog.current_dialog.b_save.clicked.emit()
+        # Check modifications
+        assert dialog.nav_mat_mach.currentRow() == 0
+        assert dialog.out_rho_elec.text() == "rho = 34 [ohm.m]"
+        assert self.widget.machine.stator.mat_type.elec.rho == 34
+        assert self.widget.machine.rotor.mat_type.elec.rho == 34
+        assert self.widget.machine.shaft.mat_type.elec.rho == 34
+
     def test_new_matlib(self):
         """Create a new material in the Library and check changes in the GUI"""
         # Check initial state
@@ -524,5 +563,5 @@ if __name__ == "__main__":
     a = TestDMatlibWF()
     a.setup_class()
     a.setup_method()
-    a.test_edit_machine_to_library()
+    a.test_delete_matlib()
     print("Done")

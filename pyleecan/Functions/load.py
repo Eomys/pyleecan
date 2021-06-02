@@ -201,7 +201,7 @@ def load_machine_materials(material_dict, machine):
     # Remove previous machine materials
     material_dict[MACH_KEY] = list()
     # Get machine materials (assume unique by name)
-    mach_mat_dict = machine.get_material_dict(is_unique=True)
+    mach_mat_dict = machine.get_material_dict()
     mach_mat_list = list(mach_mat_dict.values())
 
     # Compare material with matlib (ignores name and path)
@@ -217,7 +217,7 @@ def load_machine_materials(material_dict, machine):
                 if mach_mat.name not in name_list:
                     material_dict[MACH_KEY].append(mach_mat)
                     name_list.append(mach_mat.name)
-        else:  # Machine material not in Library
+        elif mach_mat.name not in name_list:  # Machine material not in Library
             material_dict[MACH_KEY].append(mach_mat)
             name_list.append(mach_mat.name)
 
