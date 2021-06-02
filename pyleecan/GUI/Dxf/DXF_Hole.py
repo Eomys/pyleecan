@@ -38,7 +38,7 @@ OFF_COL = 4
 ICON_SIZE = 24
 # Unselected, selected, selected-bottom-mag
 COLOR_LIST = ["k", "r", "c"]
-
+Z_TOL = 1e-4  # Point comparison tolerance
 
 class DXF_Hole(Ui_DXF_Hole, QDialog):
     """Dialog to create HoleUD objects from DXF files"""
@@ -296,7 +296,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         for p1 in point_list:
             count = 0
             for p2 in point_list:
-                if abs(p1 - p2) < 1e-9:
+                if abs(p1 - p2) < Z_TOL:
                     count += 1
             if count != 2:
                 return False
@@ -325,9 +325,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         while len(line_list) > 0:
             end = curve_list[-1].get_end()
             for ii in range(len(line_list)):
-                if abs(line_list[ii].get_begin() - end) < 1e-9:
+                if abs(line_list[ii].get_begin() - end) < Z_TOL:
                     break
-                if abs(line_list[ii].get_end() - end) < 1e-9:
+                if abs(line_list[ii].get_end() - end) < Z_TOL:
                     line_list[ii].reverse()
                     break
             curve_list.append(line_list.pop(ii))
