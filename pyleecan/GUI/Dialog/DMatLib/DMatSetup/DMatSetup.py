@@ -44,7 +44,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             self.b_add_matlib.setText("Save in Library")
 
         # Copy to set the modification only if validated
-        self.mat = Material(init_dict=material.as_dict())
+        self.mat = material.copy()
+        self.init_name = self.mat.name  # To detect rename
 
         self.le_name.setText(self.mat.name)
         if self.mat.is_isotropic:

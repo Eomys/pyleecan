@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from os import remove
-from os.path import join, split
+from os.path import join, split, dirname
 from re import match
 
 from PySide2.QtCore import Signal
@@ -124,15 +124,21 @@ class DMatLib(Gen_DMatLib, QDialog):
         is_lib_mat = self.current_dialog.is_lib_mat
         index = self.current_dialog.index
         mat_edit = self.current_dialog.mat
+        init_name = self.current_dialog.init_name
         # Reset dialog
         self.current_dialog = None
         # 0: Cancel, 1: Save, 2: Add to Matlib (from Machine)
         if return_code > 0:
+            # if return_code == 2:  # Matlib=> machine or machine => Matlib
+            #     if is_lib_mat:  # Library to machine
+            #         mat_edit.name = mat_edit.name + "_edit"
+            #     is_lib_mat = not is_lib_mat
+
             # Update materials in the machine
             if self.machine is not None:
                 mach_mat_dict = self.machine.get_material_dict(path="self.machine")
                 for mat_path, mach_mat in mach_mat_dict.items():
-                    if mach_mat.name == mat_edit.name:
+                    if mach_mat.name == init_name:  # Use original name
                         mat_path_split = mat_path.split(".")
                         setattr(
                             eval(".".join(mat_path_split[:-1])),
@@ -140,8 +146,14 @@ class DMatLib(Gen_DMatLib, QDialog):
                             mat_edit,
                         )
                         self.saveNeeded.emit()
-            # Update Matlib
-            if is_lib_mat and index is not None:  # Update
+
+            if mat_edit.name != init_name and is_lib_mat and index is not None:
+                # Renaming a Library material => Delete original one
+                remove(join(dirname(mat_edit.path), init_name + ".json"))
+                self.material_dict[LIB_KEY][index] = mat_edit
+                mat_edit.save(mat_edit.path)
+                self.materialListChanged.emit()
+            elif is_lib_mat and index is not None:  # Update
                 self.material_dict[LIB_KEY][index] = mat_edit
                 mat_edit.save(mat_edit.path)
             elif is_lib_mat and index is None:  # New in Library
@@ -155,6 +167,8 @@ class DMatLib(Gen_DMatLib, QDialog):
                 self.materialListChanged.emit()
             else:
                 self.material_dict[MACH_KEY][index] = mat_edit
+                if mat_edit.name != init_name:  # Rename
+                    self.materialListChanged.emit()
 
             # # Move the material
             # if return_code == 2:
@@ -274,7 +288,7 @@ class DMatLib(Gen_DMatLib, QDialog):
             ):
                 continue
             self.nav_mat_mach.addItem(
-                "%03d" % (len(material_dict[MACH_KEY]) + ii + 1) + " - " + mat.name
+                "%03d" % (len(material_dict[LIB_KEY]) + ii + 1) + " - " + mat.name
             )
         self.nav_mat_mach.blockSignals(False)
 
