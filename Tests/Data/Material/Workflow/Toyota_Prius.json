@@ -61,7 +61,7 @@
                                 "__class__": "ImportMatrix",
                                 "is_transpose": false
                             },
-                            "Brm20": 1.24,
+                            "Brm20": 1.4,
                             "Hc": 902181.163126629,
                             "LossData": {
                                 "__class__": "ImportMatrix",

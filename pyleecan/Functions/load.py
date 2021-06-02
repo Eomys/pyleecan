@@ -237,7 +237,7 @@ def load_matlib(matlib_path=None, machine=None):
     material_dict: dict
         Materials dictionary (library + machine)
     """
-    material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+    material_dict = {LIB_KEY: list(), MACH_KEY: list(), "MATLIB_PATH": matlib_path}
     if matlib_path is not None:
         material_dict[LIB_KEY] = load_matlib_folder(matlib_path)
     if machine is not None:

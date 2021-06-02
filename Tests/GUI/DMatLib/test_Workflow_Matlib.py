@@ -101,9 +101,11 @@ class TestDMatlibWF(object):
         assert combo.currentText() == "M400-50A"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
         self.widget.nav_step.setCurrentRow(7)  # Hole material
+        # Mat_void
         combo = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_0.c_mat_type
         assert combo.currentText() == "Air"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        # Magnet_0
         combo = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type
         assert (
             self.widget.machine.rotor.hole[0].magnet_0.mat_type.name
@@ -111,11 +113,13 @@ class TestDMatlibWF(object):
         )
         assert combo.currentText() == "MagnetPrius_old"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        # Magnet_1
         combo = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_2.c_mat_type
         assert combo.currentText() == "MagnetPrius"
+        assert self.widget.machine.rotor.hole[0].magnet_1.mat_type.name == "MagnetPrius"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
 
-    def edit_matlib(self):
+    def test_edit_matlib(self):
         """Edit a material in the Library and check changes in machine"""
         # Check initial state
         assert self.widget.machine.stator.mat_type.elec.rho == 1
@@ -139,14 +143,14 @@ class TestDMatlibWF(object):
         dialog.current_dialog.b_save.clicked.emit()
         # Check modifications
         assert dialog.nav_mat.currentRow() == 2
-        assert dialog.out_rho_elec.text() == "rho = 2.0 [ohm.m]"
+        assert dialog.out_rho_elec.text() == "rho = 2 [ohm.m]"
         assert self.widget.machine.stator.mat_type.elec.rho == 2
         assert self.widget.machine.rotor.mat_type.elec.rho == 2
         assert self.widget.machine.shaft.mat_type.elec.rho == 2
         M400 = load(join(WS_path, "M400-50A.json"))
         assert M400.elec.rho == 2
 
-    def edit_machine_material(self):
+    def test_edit_machine_material(self):
         """Edit a material from the machine"""
         # Check initial state
         assert self.widget.machine.rotor.hole[0].mat_void.struct.rho == 1.2044
@@ -170,7 +174,7 @@ class TestDMatlibWF(object):
         assert dialog.out_rho_meca.text() == "rho = 2.468 [kg/m^3]"
         assert self.widget.machine.rotor.hole[0].mat_void.struct.rho == 2.468
 
-    def new_matlib(self):
+    def test_new_matlib(self):
         """Create a new material in the Library and check changes in the GUI"""
         # Check initial state
         assert self.widget.machine.stator.mat_type.elec.rho == 1
@@ -222,7 +226,7 @@ class TestDMatlibWF(object):
         M400_copy = load(join(WS_path, "M400-50A_copy.json"))
         assert M400_copy.elec.rho == 2
 
-    def new_machine_material(self):
+    def test_new_machine_material(self):
         """Create a new material for the machine and check changes in the GUI"""
         # Check initial state
         assert self.widget.machine.rotor.hole[0].magnet_0.mat_type.struct.rho == 7500
@@ -267,7 +271,7 @@ class TestDMatlibWF(object):
         assert self.widget.material_dict[MACH_KEY][1].struct.rho == 7500
         assert self.widget.material_dict[MACH_KEY][2].struct.rho == 3750
 
-    def rename_matlib(self):
+    def test_rename_matlib(self):
         """rename a material in the Library and check changes in machine"""
         # Check initial state
         assert self.widget.machine.stator.mat_type.elec.rho == 1
@@ -295,7 +299,7 @@ class TestDMatlibWF(object):
         # Check modifications
         assert dialog.nav_mat.currentRow() == 2
         assert dialog.nav_mat.item(2).text() == "003 - M400-50A_V2"
-        assert dialog.out_rho_elec.text() == "rho = 2.0 [ohm.m]"
+        assert dialog.out_rho_elec.text() == "rho = 2 [ohm.m]"
         assert dialog.out_name.text() == "name: M400-50A_V2"
         assert self.widget.machine.stator.mat_type.name == "M400-50A_V2"
         assert self.widget.machine.rotor.mat_type.name == "M400-50A_V2"
@@ -318,7 +322,7 @@ class TestDMatlibWF(object):
         ]
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
 
-    def rename_machine_material(self):
+    def test_rename_machine_material(self):
         """rename a material in the machine and check changes in machine"""
         # Check initial state
         assert self.widget.machine.rotor.hole[0].mat_void.struct.rho == 1.2044
@@ -363,7 +367,7 @@ class TestDMatlibWF(object):
         ]
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
 
-    def delete_matlib(self):
+    def test_delete_matlib(self):
         """Check that you can delete a material from the material library"""
         # Check initial state
         assert isfile(join(WS_path, "M400-50A.json"))
@@ -402,10 +406,123 @@ class TestDMatlibWF(object):
         ]
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
 
+    def test_edit_matlib_to_machine(self):
+        """Edit a material in the Library and save it in the machine"""
+        # Check initial state
+        assert self.widget.machine.stator.mat_type.elec.rho == 1
+        assert self.widget.machine.rotor.mat_type.elec.rho == 1
+        assert self.widget.machine.shaft.mat_type.elec.rho == 1
+        M400 = load(join(WS_path, "M400-50A.json"))
+        assert M400.elec.rho == 1
+        # Open DMatlib
+        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        assert self.widget.w_step.w_mat.current_dialog is None
+        self.widget.w_step.w_mat.b_matlib.clicked.emit()
+        assert isinstance(self.widget.w_step.w_mat.current_dialog, DMatLib)
+        dialog = self.widget.w_step.w_mat.current_dialog
+        assert dialog.is_lib_mat is True
+        assert dialog.nav_mat.count() == 4
+        assert dialog.nav_mat_mach.count() == 2
+        assert dialog.nav_mat.currentRow() == 2
+        assert dialog.out_rho_elec.text() == "rho = 1 [ohm.m]"
+        # Edit M400-50A material
+        dialog.b_edit.clicked.emit()
+        dialog.current_dialog.lf_rho_elec.setValue(2)
+        dialog.current_dialog.lf_rho_elec.editingFinished.emit()
+        dialog.current_dialog.b_add_matlib.clicked.emit()
+        # Check modifications
+        assert not dialog.is_lib_mat
+        assert dialog.nav_mat.count() == 4
+        assert dialog.nav_mat_mach.count() == 3
+        assert dialog.nav_mat_mach.currentRow() == 2
+        assert dialog.nav_mat_mach.item(2).text() == "007 - M400-50A_edit"
+        assert dialog.out_name.text() == "name: M400-50A_edit"
+        assert dialog.out_rho_elec.text() == "rho = 2 [ohm.m]"
+        assert self.widget.machine.stator.mat_type.name == "M400-50A_edit"
+        assert self.widget.machine.rotor.mat_type.name == "M400-50A_edit"
+        assert self.widget.machine.shaft.mat_type.name == "M400-50A_edit"
+        assert self.widget.machine.stator.mat_type.elec.rho == 2
+        assert self.widget.machine.rotor.mat_type.elec.rho == 2
+        assert self.widget.machine.shaft.mat_type.elec.rho == 2
+        M400 = load(join(WS_path, "M400-50A.json"))
+        assert M400.elec.rho == 1
+        assert self.widget.material_dict[LIB_KEY][2].name == "M400-50A"
+        assert self.widget.material_dict[LIB_KEY][2].elec.rho == 1
+        assert not isfile(join(WS_path, "M400-50A_edit.json"))
+        combo = self.widget.w_step.w_mat.c_mat_type
+        assert combo.currentText() == "M400-50A_edit"
+        exp_items = [
+            "Copper1",
+            "Insulator1",
+            "M400-50A",
+            "MagnetPrius",
+            "Air",
+            "MagnetPrius_old",
+            "M400-50A_edit",
+        ]
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+
+    def test_edit_machine_to_library(self):
+        """Edit a material from the machine to the library"""
+        # Check initial state
+        assert (
+            self.widget.machine.rotor.hole[0].magnet_0.mat_type.name
+            == "MagnetPrius_old"
+        )
+        assert self.widget.machine.rotor.hole[0].magnet_0.mat_type.struct.rho == 7500
+        assert not isfile(join(WS_path, "MagnetPrius_old.json"))
+        assert not isfile(join(WS_path, "MagnetPriusV1.json"))
+        # Open DMatlib
+        self.widget.nav_step.setCurrentRow(7)  # Hole material
+        w_mat = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_1
+        assert w_mat.current_dialog is None
+        w_mat.b_matlib.clicked.emit()
+        assert isinstance(w_mat.current_dialog, DMatLib)
+        dialog = w_mat.current_dialog
+        assert dialog.is_lib_mat is False
+        assert dialog.nav_mat.count() == 4
+        assert dialog.nav_mat_mach.count() == 2
+        assert dialog.nav_mat_mach.currentRow() == 1
+        assert dialog.out_name.text() == "name: MagnetPrius_old"
+        assert dialog.out_rho_meca.text() == "rho = 7500 [kg/m^3]"
+        # Edit M400-50A material
+        dialog.b_edit.clicked.emit()
+        dialog.current_dialog.le_name.setText("MagnetPriusV1")
+        dialog.current_dialog.le_name.editingFinished.emit()
+        dialog.current_dialog.lf_rho_meca.setValue(1234)
+        dialog.current_dialog.lf_rho_meca.editingFinished.emit()
+        dialog.current_dialog.b_add_matlib.clicked.emit()
+        # Check modifications
+        assert (
+            self.widget.machine.rotor.hole[0].magnet_0.mat_type.name == "MagnetPriusV1"
+        )
+        assert self.widget.machine.rotor.hole[0].magnet_0.mat_type.struct.rho == 1234
+        assert dialog.is_lib_mat is True
+        assert dialog.nav_mat.count() == 5
+        assert dialog.nav_mat_mach.count() == 1
+        assert dialog.nav_mat.currentRow() == 4
+        assert dialog.out_name.text() == "name: MagnetPriusV1"
+        assert dialog.out_rho_meca.text() == "rho = 1234 [kg/m^3]"
+
+        assert isfile(join(WS_path, "MagnetPriusV1.json"))
+        Mag = load(join(WS_path, "MagnetPriusV1.json"))
+        assert Mag.struct.rho == 1234
+        combo = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type
+        assert combo.currentText() == "MagnetPriusV1"
+        exp_items = [
+            "Copper1",
+            "Insulator1",
+            "M400-50A",
+            "MagnetPrius",
+            "MagnetPriusV1",
+            "Air",
+        ]
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+
 
 if __name__ == "__main__":
     a = TestDMatlibWF()
     a.setup_class()
     a.setup_method()
-    a.rename_machine_material()
+    a.test_edit_machine_to_library()
     print("Done")

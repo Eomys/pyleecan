@@ -48,7 +48,6 @@ class DMatLib(Gen_DMatLib, QDialog):
         self.setupUi(self)
 
         self.current_dialog = None  # For DMatSetup popup
-
         self.is_lib_mat = (
             is_lib_mat  # Current selected mat in is the Library (false machine)
         )
@@ -129,10 +128,17 @@ class DMatLib(Gen_DMatLib, QDialog):
         self.current_dialog = None
         # 0: Cancel, 1: Save, 2: Add to Matlib (from Machine)
         if return_code > 0:
-            # if return_code == 2:  # Matlib=> machine or machine => Matlib
-            #     if is_lib_mat:  # Library to machine
-            #         mat_edit.name = mat_edit.name + "_edit"
-            #     is_lib_mat = not is_lib_mat
+            if return_code == 2:  # Matlib=> machine or machine => Matlib
+                if is_lib_mat:  # Library to machine
+                    mat_edit.name = mat_edit.name + "_edit"
+                    self.material_dict[MACH_KEY].append(mat_edit)
+                    index = len(self.material_dict[MACH_KEY]) - 1
+                else:
+                    index = None  # will be handled as "New material" in Lib
+                    mat_edit.path = join(
+                        self.material_dict["MATLIB_PATH"], mat_edit.name + ".json"
+                    )
+                is_lib_mat = not is_lib_mat
 
             # Update materials in the machine
             if self.machine is not None:
@@ -170,19 +176,12 @@ class DMatLib(Gen_DMatLib, QDialog):
                 if mat_edit.name != init_name:  # Rename
                     self.materialListChanged.emit()
 
-            # # Move the material
-            # if return_code == 2:
-            #     if dict_key == "MachineMatLib":
-            #         # Move the material into the Material library
-            #         self.matlib.move_mach_mat_to_ref(dict_key, mat_id)
-
-            #         # Set the pointer on the ref matlib if machine material list is empty
-            #         if len(self.matlib.material_dict["MachineMatLib"]) == 0:
-            #             self.on_matlib = True
-            #     else:
-            #         # Move the material into the machine materials list
-            #         self.matlib.move_ref_mat_to_mach("MachineMatLib", mat_id)
-
+            # Update machine material (Machine => Lib)
+            if return_code == 2 and is_lib_mat:
+                load_machine_materials(
+                    machine=self.machine, material_dict=self.material_dict
+                )
+                self.materialListChanged.emit()
             # Update material list
             self.update_list_mat()
             if is_lib_mat:
@@ -430,6 +429,8 @@ def update_text(label, name, value, unit):
         val = str(value)
         if len(val) > 8:
             val = "%1.2e" % value  # formating: 1.23e+08
+    if val[-2:] == ".0":  # Remove ".0" sufix
+        val = val[:-2]
 
     if name is None:  # For E, G, nu table
         txt = val
