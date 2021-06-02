@@ -572,7 +572,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         for surf_line in surf.line_list:
             mid = surf_line.get_middle()
             for ii, line in enumerate(self.line_list):
-                if abs(mid - line.get_middle()) < 1e-6:
+                if abs(mid - line.get_middle()) < Z_TOL:
                     self.selected_list[ii] = 1
                     self.w_viewer.axes.text(
                         mid.real,

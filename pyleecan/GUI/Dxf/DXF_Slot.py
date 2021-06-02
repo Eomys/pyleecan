@@ -24,7 +24,7 @@ TYPE_COL = 0
 DEL_COL = 1
 HL_COL = 2
 WIND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
-
+Z_TOL = 1e-4  # Point comparison tolerance
 
 class DXF_Slot(Ui_DXF_Slot, QDialog):
     """Dialog to create SlotUD objects from DXF files"""
@@ -242,7 +242,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         for p1 in point_list:
             count = 0
             for p2 in point_list:
-                if abs(p1 - p2) < 1e-9:
+                if abs(p1 - p2) < Z_TOL:
                     count += 1
             if count == 1:
                 count_1 += 1
@@ -290,7 +290,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         for p1 in point_list:
             count = 0
             for p2 in point_list:
-                if abs(p1 - p2) < 1e-9:
+                if abs(p1 - p2) < Z_TOL:
                     count += 1
             if count == 1:
                 single_list.append(p1)
@@ -302,7 +302,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             [
                 ii
                 for ii, line in enumerate(line_list)
-                if abs(line.get_begin() - Zbegin) < 1e-6
+                if abs(line.get_begin() - Zbegin) < Z_TOL
             ]
         )
         # Sort the lines (begin = end)
@@ -311,9 +311,9 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         while len(line_list) > 0:
             end = curve_list[-1].get_end()
             for ii in range(len(line_list)):
-                if abs(line_list[ii].get_begin() - end) < 1e-9:
+                if abs(line_list[ii].get_begin() - end) < Z_TOL:
                     break
-                if abs(line_list[ii].get_end() - end) < 1e-9:
+                if abs(line_list[ii].get_end() - end) < Z_TOL:
                     line_list[ii].reverse()
                     break
             curve_list.append(line_list.pop(ii))
