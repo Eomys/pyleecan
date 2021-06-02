@@ -1,15 +1,15 @@
 import sys
-from os import makedirs
-from os.path import isdir, join
+from os.path import isdir, isfile, join
 from shutil import copytree, rmtree
 
-import pytest
+import mock
 from PySide2 import QtWidgets
-
-from Tests import TEST_DATA_DIR, save_gui_path as save_path
 from pyleecan.Functions.load import LIB_KEY, MACH_KEY, load, load_matlib
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+
+from Tests import TEST_DATA_DIR
+from Tests import save_gui_path as save_path
 
 WS_path = join(save_path, "DMatlib_Workspace_test")
 Ref_path = join(TEST_DATA_DIR, "Material", "Workflow")
@@ -45,7 +45,7 @@ class TestDMatlibWF(object):
     @classmethod
     def setup_class(cls):
         """Start the app for the test"""
-        print("\nStart Test DMachineSelector")
+        print("\nStart Test TestDMatlibWF")
         if not QtWidgets.QApplication.instance():
             cls.app = QtWidgets.QApplication(sys.argv)
         else:
@@ -170,10 +170,146 @@ class TestDMatlibWF(object):
         assert dialog.out_rho_meca.text() == "rho = 2.468 [kg/m^3]"
         assert self.widget.machine.rotor.hole[0].mat_void.struct.rho == 2.468
 
+    def new_matlib(self):
+        """Create a new material in the Library and check changes in the GUI"""
+        # Check initial state
+        assert self.widget.machine.stator.mat_type.elec.rho == 1
+        assert self.widget.machine.rotor.mat_type.elec.rho == 1
+        assert self.widget.machine.shaft.mat_type.elec.rho == 1
+        M400 = load(join(WS_path, "M400-50A.json"))
+        assert M400.elec.rho == 1
+        assert not isfile(join(WS_path, "M400-50A_copy.json"))
+        # Open DMatlib
+        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        assert self.widget.w_step.w_mat.current_dialog is None
+        self.widget.w_step.w_mat.b_matlib.clicked.emit()
+        assert isinstance(self.widget.w_step.w_mat.current_dialog, DMatLib)
+        dialog = self.widget.w_step.w_mat.current_dialog
+        assert dialog.is_lib_mat is True
+        assert dialog.nav_mat.currentRow() == 2
+        assert dialog.nav_mat.count() == 4
+        assert dialog.nav_mat_mach.count() == 2
+        assert dialog.out_name.text() == "name: M400-50A"
+        # Copy M400-50A material
+        dialog.b_duplicate.clicked.emit()
+        assert dialog.current_dialog.le_name.text() == "M400-50A_copy"
+        dialog.current_dialog.lf_rho_elec.setValue(2)
+        dialog.current_dialog.lf_rho_elec.editingFinished.emit()
+        dialog.current_dialog.b_save.clicked.emit()
+        # Check modifications
+        assert dialog.nav_mat.count() == 5
+        assert dialog.nav_mat_mach.count() == 2
+        assert dialog.nav_mat.currentRow() == 4
+        assert dialog.out_name.text() == "name: M400-50A_copy"
+        assert isfile(join(WS_path, "M400-50A_copy.json"))
+        combo = self.widget.w_step.w_mat.c_mat_type
+        assert combo.currentText() == "M400-50A"
+        exp_items = [
+            "Copper1",
+            "Insulator1",
+            "M400-50A",
+            "MagnetPrius",
+            "M400-50A_copy",
+            "Air",
+            "MagnetPrius_old",
+        ]
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        assert self.widget.machine.stator.mat_type.elec.rho == 1
+        assert self.widget.machine.rotor.mat_type.elec.rho == 1
+        assert self.widget.machine.shaft.mat_type.elec.rho == 1
+        M400 = load(join(WS_path, "M400-50A.json"))
+        assert M400.elec.rho == 1
+        M400_copy = load(join(WS_path, "M400-50A_copy.json"))
+        assert M400_copy.elec.rho == 2
+
+    def new_machine_material(self):
+        """Create a new material for the machine and check changes in the GUI"""
+        # Check initial state
+        assert self.widget.machine.rotor.hole[0].magnet_0.mat_type.struct.rho == 7500
+        assert not isfile(join(WS_path, "MagnetPrius_old.json"))
+        # Open DMatlib
+        self.widget.nav_step.setCurrentRow(7)  # Hole material
+        w_mat = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_1
+        assert w_mat.current_dialog is None
+        w_mat.b_matlib.clicked.emit()
+        assert isinstance(w_mat.current_dialog, DMatLib)
+        dialog = w_mat.current_dialog
+        assert dialog.is_lib_mat is False
+        assert dialog.nav_mat_mach.currentRow() == 1
+        assert dialog.nav_mat.count() == 4
+        assert dialog.nav_mat_mach.count() == 2
+        assert dialog.out_name.text() == "name: MagnetPrius_old"
+        # Copy MagnetPrius_old material
+        dialog.b_duplicate.clicked.emit()
+        assert dialog.current_dialog.le_name.text() == "MagnetPrius_old_copy"
+        dialog.current_dialog.lf_rho_meca.setValue(3750)
+        dialog.current_dialog.lf_rho_meca.editingFinished.emit()
+        dialog.current_dialog.b_save.clicked.emit()
+        # Check modifications
+        assert dialog.nav_mat.count() == 4
+        assert dialog.nav_mat_mach.count() == 3
+        assert dialog.nav_mat_mach.currentRow() == 2
+        assert dialog.out_name.text() == "name: MagnetPrius_old_copy"
+        assert not isfile(join(WS_path, "MagnetPrius_old_copy.json"))
+        combo = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type
+        assert combo.currentText() == "MagnetPrius_old"
+        exp_items = [
+            "Copper1",
+            "Insulator1",
+            "M400-50A",
+            "MagnetPrius",
+            "Air",
+            "MagnetPrius_old",
+            "MagnetPrius_old_copy",
+        ]
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        assert self.widget.machine.rotor.hole[0].magnet_0.mat_type.struct.rho == 7500
+        assert self.widget.material_dict[MACH_KEY][1].struct.rho == 7500
+        assert self.widget.material_dict[MACH_KEY][2].struct.rho == 3750
+
+    def delete_matlib(self):
+        """Check that you can delete a material from the material library"""
+        # Check initial state
+        assert isfile(join(WS_path, "M400-50A.json"))
+        # Open DMatlib
+        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        assert self.widget.w_step.w_mat.current_dialog is None
+        self.widget.w_step.w_mat.b_matlib.clicked.emit()
+        assert isinstance(self.widget.w_step.w_mat.current_dialog, DMatLib)
+        dialog = self.widget.w_step.w_mat.current_dialog
+        assert dialog.is_lib_mat is True
+        assert dialog.nav_mat.currentRow() == 2
+        assert dialog.nav_mat.count() == 4
+        assert dialog.nav_mat_mach.count() == 2
+        assert dialog.out_name.text() == "name: M400-50A"
+        # Delete M400-50A material
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.question",
+            return_value=QtWidgets.QMessageBox.Yes,
+        ):
+            dialog.b_delete.clicked.emit()
+        # Check modifications
+        assert dialog.nav_mat.count() == 3
+        assert dialog.nav_mat_mach.count() == 3  # M400-50A is now a machine mat
+        assert dialog.nav_mat.currentRow() == 0
+        assert dialog.out_name.text() == "name: Copper1"
+        assert not isfile(join(WS_path, "M400-50A.json"))
+        combo = self.widget.w_step.w_mat.c_mat_type
+        assert combo.currentText() == "M400-50A"
+        exp_items = [
+            "Copper1",
+            "Insulator1",
+            "MagnetPrius",
+            "M400-50A",
+            "Air",
+            "MagnetPrius_old",
+        ]
+        assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+
 
 if __name__ == "__main__":
     a = TestDMatlibWF()
     a.setup_class()
     a.setup_method()
-    a.edit_machine_material()
+    a.delete_matlib()
     print("Done")

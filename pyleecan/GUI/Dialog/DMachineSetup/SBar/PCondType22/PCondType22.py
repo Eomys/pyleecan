@@ -51,6 +51,7 @@ class PCondType22(Gen_PCondType22, QWidget):
         if conductor is None or not isinstance(conductor, CondType22):
             self.machine.rotor.winding.conductor = CondType22()
             self.machine.rotor.winding.conductor._set_None()
+            conductor = machine.rotor.winding.conductor
 
         self.w_mat.update(conductor, "cond_mat", self.material_dict)
 

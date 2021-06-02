@@ -10,7 +10,7 @@ from PySide2.QtWidgets import QDialog, QMessageBox
 from ....Classes.Material import Material
 from ....Classes.ImportMatrixVal import ImportMatrixVal
 from ....Classes.ImportMatrixXls import ImportMatrixXls
-from ....Functions.load import load_matlib, LIB_KEY, MACH_KEY
+from ....Functions.load import load_machine_materials, load_matlib, LIB_KEY, MACH_KEY
 from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 from ....GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
 
@@ -20,6 +20,7 @@ class DMatLib(Gen_DMatLib, QDialog):
 
     # Signal to W_MachineSetup to know that the save popup is needed
     saveNeeded = Signal()
+    materialListChanged = Signal()
 
     def __init__(self, material_dict, machine=None, is_lib_mat=True, selected_id=0):
         """Init the Matlib GUI
@@ -116,10 +117,10 @@ class DMatLib(Gen_DMatLib, QDialog):
         # creates a copy of the material, i.e. self.matlib won't be edited directly
         # is_lib_mat and index to know which Material to update
         self.current_dialog = DMatSetup(current_mat, self.is_lib_mat, index)
-        self.current_dialog.finished.connect(self.validate_edit)
+        self.current_dialog.finished.connect(self.validate_setup)
         self.current_dialog.show()
 
-    def validate_edit(self, return_code):
+    def validate_setup(self, return_code):
         is_lib_mat = self.current_dialog.is_lib_mat
         index = self.current_dialog.index
         mat_edit = self.current_dialog.mat
@@ -140,9 +141,18 @@ class DMatLib(Gen_DMatLib, QDialog):
                         )
                         self.saveNeeded.emit()
             # Update Matlib
-            if is_lib_mat:
+            if is_lib_mat and index is not None:  # Update
                 self.material_dict[LIB_KEY][index] = mat_edit
                 mat_edit.save(mat_edit.path)
+            elif is_lib_mat and index is None:  # New in Library
+                self.material_dict[LIB_KEY].append(mat_edit)
+                index = len(self.material_dict[LIB_KEY]) - 1
+                mat_edit.save(mat_edit.path)
+                self.materialListChanged.emit()
+            elif not is_lib_mat and index is None:  # New in Machine
+                self.material_dict[MACH_KEY].append(mat_edit)
+                index = len(self.material_dict[MACH_KEY]) - 1
+                self.materialListChanged.emit()
             else:
                 self.material_dict[MACH_KEY][index] = mat_edit
 
@@ -183,56 +193,31 @@ class DMatLib(Gen_DMatLib, QDialog):
         -------
 
         """
+        # Create new material
         current_mat, _ = self.get_current_material()
-
+        new_mat = current_mat.copy()
+        new_mat.name = new_mat.name + "_copy"
+        new_mat.path = new_mat.path[:-5] + "_copy.json"
         # Close previous window if needed
         if self.current_dialog is not None:
             self.current_dialog.close()
 
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
-        self.current_dialog = DMatSetup(current_mat, self.is_lib_mat, index=None)
-        self.current_dialog.finished.connect(self.validate_new)
+        self.current_dialog = DMatSetup(new_mat, self.is_lib_mat, index=None)
+        self.current_dialog.finished.connect(self.validate_setup)
         self.current_dialog.show()
 
-    def validate_new(self, return_code):
-        mat_new = self.current_dialog.mat
-        is_lib_mat = self.current_dialog.is_lib_mat
-        # Reset dialog
-        self.current_dialog = None
-        # 0: Cancel, 1: Save, 2: Add to Matlib (from Machine)
-        if return_code > 0:
-            if is_lib_mat:
-                self.material_dict[LIB_KEY].append(mat_new)
-                index = len(self.material_dict[LIB_KEY]) - 1
-                mat_new.path = join(self.matlib_path, mat_new.name + ".json")
-                mat_new.save(mat_new.path)
-                self.update_list_mat()
-                self.nav_mat.setCurrentIndex(index)
-            else:
-                self.material_dict[MACH_KEY].append(mat_new)
-                index = len(self.material_dict[MACH_KEY]) - 1
-                self.update_list_mat()
-                self.nav_mat_mach.setCurrentIndex(index)
-            self.update_out(is_lib_mat)
-
-            # Signal set by WMatSelect to update WMatSelect Combobox
-            self.accepted.emit()
-
     def delete_material(self):
-        """Delete the selected material
+        """Delete the selected material from the Library
 
         Parameters
         ----------
-        self :
+        self : DMatLib
             A DMatLib object
-
-        Returns
-        -------
-
         """
-        current_mat, index = self.get_current_material()
+        current_mat, _ = self.get_current_material()
 
-        if len(self.material_dict[LIB_KEY]) > 1 and self.is_lib_mat:
+        if current_mat is not None:
             del_msg = "Are you sure you want to delete " + current_mat.name + " ?"
             reply = QMessageBox.question(
                 self, "Confirmation", del_msg, QMessageBox.Yes, QMessageBox.No
@@ -240,21 +225,18 @@ class DMatLib(Gen_DMatLib, QDialog):
 
             if reply == QMessageBox.Yes:
                 remove(current_mat.path)
-                self.material_dict.pop(current_mat)
-                index = self.nav_mat.currentRow()
+                self.material_dict[LIB_KEY].remove(current_mat)
+                # Check that material was not part of the machine
+                if self.machine is not None:
+                    load_machine_materials(
+                        machine=self.machine, material_dict=self.material_dict
+                    )
                 self.update_list_mat()
-                if index < self.nav_mat.count() - 1:
-                    self.nav_mat.setCurrentRow(index)
-                else:
-                    self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
+                if self.nav_mat.count() > 1:
+                    self.nav_mat.setCurrentRow(0)
+                self.update_out(is_lib_mat=True)  # Delete only for Library mat
                 # Signal set by WMatSelect to update Combobox
-                self.accepted.emit()
-        elif not self.is_lib_mat:
-            pass
-        else:
-            QMessageBox.information(
-                self, "", "Material Library must contain at least one material!"
-            )
+                self.materialListChanged.emit()
 
     def update_list_mat(self):
         """Update the list of Material with the current content of MatLib
@@ -320,6 +302,12 @@ class DMatLib(Gen_DMatLib, QDialog):
         if mat is None:  # No current material
             mat = Material()
             mat._set_None()
+
+        # No possibility to delete machine materials
+        if self.is_lib_mat:
+            self.b_delete.setEnabled(True)
+        else:
+            self.b_delete.setEnabled(False)
 
         # Update Main parameters
         self.out_name.setText(self.tr("name: ") + str(mat.name))

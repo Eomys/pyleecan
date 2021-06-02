@@ -188,7 +188,7 @@ class WMatSelectV(QGroupBox):
         self.current_dialog = DMatLib(
             material_dict=self.material_dict, is_lib_mat=is_lib_mat, selected_id=index
         )
-        self.current_dialog.accepted.connect(self.set_matlib)
+        self.current_dialog.materialListChanged.connect(self.update_mat_list)
         self.current_dialog.saveNeeded.connect(self.emit_save)
         self.current_dialog.show()
 
@@ -198,8 +198,8 @@ class WMatSelectV(QGroupBox):
         """
         self.saveNeeded.emit()
 
-    def set_matlib(self):
-        """Update the matlib with the new value
+    def update_mat_list(self):
+        """Update the combobox with the new materials
 
         Parameters
         ----------
