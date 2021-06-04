@@ -19,7 +19,7 @@ class SWinding(Gen_SWinding, QWidget):
     # Information for DMachineSetup nav
     step_name = "Winding"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -28,8 +28,8 @@ class SWinding(Gen_SWinding, QWidget):
             A SWinding widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -43,7 +43,7 @@ class SWinding(Gen_SWinding, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         # Fill the fields with the machine values (if they're filled)

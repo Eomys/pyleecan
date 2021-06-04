@@ -14,7 +14,7 @@ def comp_surfaces(self):
     Returns
     -------
     S_dict: dict
-        Lamination surface dictionnary (Slam, Svent, Syoke, Steeth, Sslot) [m**2]
+        Lamination surface dictionary (Slam, Svent, Syoke, Steeth, Sslot) [m**2]
 
     """
 

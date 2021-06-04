@@ -10,7 +10,7 @@ from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import MACH_KEY, LIB_KEY
 from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
     SMachineDimension,
@@ -42,17 +42,18 @@ class TestSMachineDimension(object):
         test_obj.frame = Frame(Rint=0.22, Rext=0.24, Lfra=0.25)
         test_obj.shaft = Shaft(Lshaft=0.333, Drsh=test_obj.rotor.Rint * 2)
 
-        matlib = MatLib()
-        matlib.list_mat = [
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),
         ]
-        matlib.index_first_mat_mach = 3
 
-        widget = SMachineDimension(machine=test_obj, matlib=matlib, is_stator=False)
+        widget = SMachineDimension(
+            machine=test_obj, material_dict=material_dict, is_stator=False
+        )
 
-        yield {"widget": widget, "test_obj": test_obj, "matlib": matlib}
+        yield {"widget": widget, "test_obj": test_obj, "material_dict": material_dict}
 
         self.app.quit()
 
@@ -74,17 +75,23 @@ class TestSMachineDimension(object):
 
         setup["test_obj"].shaft = None
         setup["widget"] = SMachineDimension(
-            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
+            machine=setup["test_obj"],
+            material_dict=setup["material_dict"],
+            is_stator=False,
         )
         assert setup["widget"].g_shaft.isChecked() == False
         setup["test_obj"].shaft = Shaft(Drsh=None)
         setup["widget"] = SMachineDimension(
-            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
+            machine=setup["test_obj"],
+            material_dict=setup["material_dict"],
+            is_stator=False,
         )
         assert setup["widget"].g_shaft.isChecked() == False
         setup["test_obj"].shaft = Shaft(Drsh=0)
         setup["widget"] = SMachineDimension(
-            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
+            machine=setup["test_obj"],
+            material_dict=setup["material_dict"],
+            is_stator=False,
         )
         assert setup["widget"].g_shaft.isChecked() == False
 

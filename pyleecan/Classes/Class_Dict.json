@@ -812,7 +812,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary to assign the surfaces: key=complex reference point coordinate, value=label of the surface",
+                "desc": "dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface",
                 "max": "",
                 "min": "",
                 "name": "surf_dict",
@@ -2852,7 +2852,7 @@
                 "value": ""
             },
             {
-                "desc": "dictionnary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",
+                "desc": "dictionary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",
                 "max": "",
                 "min": "",
                 "name": "magnet_dict",
@@ -4899,7 +4899,7 @@
             "comp_periodicity",
             "comp_width_airgap_mag",
             "comp_width_airgap_mec",
-            "get_material_list",
+            "get_material_dict",
             "get_polar_eq",
             "plot",
             "plot_anim_rotor",
@@ -5433,7 +5433,7 @@
                 "value": 0
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -5575,7 +5575,7 @@
                 "value": 1
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -8109,7 +8109,7 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutMagElmer.csv",
         "properties": [
             {
-                "desc": "Dictionnary containing the main FEA parameters",
+                "desc": "dictionary containing the main FEA parameters",
                 "max": "",
                 "min": "",
                 "name": "FEA_dict",
@@ -8138,7 +8138,7 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutMagFEMM.csv",
         "properties": [
             {
-                "desc": "Dictionnary containing the main FEMM parameters",
+                "desc": "dictionary containing the main FEMM parameters",
                 "max": "",
                 "min": "",
                 "name": "FEMM_dict",
@@ -8291,7 +8291,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing the main FEA parameter",
+                "desc": "dictionary containing the main FEA parameter",
                 "max": "",
                 "min": "",
                 "name": "FEA_dict",
@@ -8747,7 +8747,7 @@
                 "value": "[]"
             },
             {
-                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "desc": "dictionary of parameters to pass to the plot method when executing it",
                 "max": "",
                 "min": "",
                 "name": "param_list",
@@ -8756,7 +8756,7 @@
                 "value": []
             },
             {
-                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "desc": "dictionary of parameters to pass to the plot method when executing it",
                 "max": "",
                 "min": "",
                 "name": "param_dict",
@@ -12256,7 +12256,7 @@
                 "value": 1
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -13286,7 +13286,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing DataKeeper",
+                "desc": "dictionary containing DataKeeper",
                 "max": "",
                 "min": "",
                 "name": "xoutput_dict",

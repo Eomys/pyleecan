@@ -15,7 +15,7 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
 
 
@@ -44,24 +44,28 @@ class TestSLamParam(object):
         )
         test_obj.rotor.mat_type.name = "test2"
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = [
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
             Material(name="test1"),
             Material(name="test2"),
             Material(name="test3"),
         ]
-        matlib.dict_mat["RefMatLib"][0].elec.rho = 0.31
-        matlib.dict_mat["RefMatLib"][1].elec.rho = 0.32
-        matlib.dict_mat["RefMatLib"][2].elec.rho = 0.33
+        material_dict[LIB_KEY][0].elec.rho = 0.31
+        material_dict[LIB_KEY][1].elec.rho = 0.32
+        material_dict[LIB_KEY][2].elec.rho = 0.33
 
-        widget_1 = SLamParam(machine=test_obj, matlib=matlib, is_stator=True)
-        widget_2 = SLamParam(machine=test_obj, matlib=matlib, is_stator=False)
+        widget_1 = SLamParam(
+            machine=test_obj, material_dict=material_dict, is_stator=True
+        )
+        widget_2 = SLamParam(
+            machine=test_obj, material_dict=material_dict, is_stator=False
+        )
 
         yield {
             "widget": widget_1,
             "widget2": widget_2,
             "test_obj": test_obj,
-            "matlib": matlib,
+            "material_dict": material_dict,
         }
 
         self.app.quit()
@@ -168,7 +172,9 @@ class TestSLamParam(object):
         setup["test_obj"].stator.axial_vent.append(VentilationCirc(Zh=8))
         setup["test_obj"].stator.axial_vent.append(VentilationCirc(Zh=10))
         setup["widget"] = SLamParam(
-            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=True
+            machine=setup["test_obj"],
+            material_dict=setup["material_dict"],
+            is_stator=True,
         )
         assert setup["widget"].g_ax_vent.isChecked()
 
@@ -183,13 +189,17 @@ class TestSLamParam(object):
         setup["test_obj"].stator.axial_vent.append(VentilationCirc(Zh=8))
         setup["test_obj"].stator.axial_vent.append(VentilationCirc(Zh=10))
         setup["widget"] = SLamParam(
-            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=True
+            machine=setup["test_obj"],
+            material_dict=setup["material_dict"],
+            is_stator=True,
         )
         assert setup["widget"].out_axial_duct.text() == "Axial: 2 set (18 ducts)"
 
         setup["test_obj"].stator.axial_vent = list()
         setup["test_obj"].stator.axial_vent.append(VentilationTrap(Zh=20))
         setup["widget"] = SLamParam(
-            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=True
+            machine=setup["test_obj"],
+            material_dict=setup["material_dict"],
+            is_stator=True,
         )
         assert setup["widget"].out_axial_duct.text() == "Axial: 1 set (20 ducts)"

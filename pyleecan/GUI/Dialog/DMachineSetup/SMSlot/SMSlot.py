@@ -42,7 +42,7 @@ class SMSlot(Ui_SMSlot, QWidget):
     # Information for DMachineSetup nav
     step_name = "Magnet"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -51,8 +51,8 @@ class SMSlot(Ui_SMSlot, QWidget):
             A SMSlot widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -63,7 +63,7 @@ class SMSlot(Ui_SMSlot, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         self.b_help.hide()
@@ -97,7 +97,7 @@ class SMSlot(Ui_SMSlot, QWidget):
         # Set material
         self.w_mat.setText(self.tr("mat_mag:"))
         self.w_mat.def_mat = "Magnet1"
-        self.w_mat.update(self.machine.rotor.magnet, "mat_type", self.matlib)
+        self.w_mat.update(self.machine.rotor.magnet, "mat_type", self.material_dict)
 
         # Set the correct index for the type checkbox and display the object
         index = INIT_INDEX.index(type(self.obj.slot))

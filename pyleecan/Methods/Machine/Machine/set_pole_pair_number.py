@@ -10,7 +10,7 @@ def set_pole_pair_number(self, p):
     """
 
     # Set pole pair number for all laminations
-    for lam in self.get_lam_list():
+    for lam in self.get_lam_list(is_int_to_ext=None):
         try:
             lam.set_pole_pair_number(p)
         except:

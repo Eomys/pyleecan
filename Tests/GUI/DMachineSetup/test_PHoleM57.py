@@ -10,9 +10,10 @@ from random import uniform
 
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
-
+from pyleecan.Classes.Material import Material
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM57 import HoleM57
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.PHoleM57 import PHoleM57
 from Tests.GUI import gui_option  # Set unit to m
 
@@ -48,10 +49,23 @@ class TestPHoleM57(object):
                 magnet_0=None,
             )
         )
-        widget = PHoleM57(test_obj.hole[0])
-        widget2 = PHoleM57(test_obj.hole[1])
 
-        yield {"widget": widget, "widget2": widget2, "test_obj": test_obj}
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
+            Material(name="Magnet1"),
+            Material(name="Magnet2"),
+            Material(name="Magnet3"),
+        ]
+
+        widget = PHoleM57(test_obj.hole[0], material_dict)
+        widget2 = PHoleM57(test_obj.hole[1], material_dict)
+
+        yield {
+            "widget": widget,
+            "widget2": widget2,
+            "test_obj": test_obj,
+            "material_dict": material_dict,
+        }
 
         self.app.quit()
 
@@ -71,7 +85,7 @@ class TestPHoleM57(object):
         setup["test_obj"].hole[0] = HoleM57(
             H1=0.21, H2=0.22, W0=0.23, W1=0.24, W2=0.25, W3=0.27, W4=0.29
         )
-        setup["widget"] = PHoleM57(setup["test_obj"].hole[0])
+        setup["widget"] = PHoleM57(setup["test_obj"].hole[0], setup["material_dict"])
         assert setup["widget"].lf_H1.value() == 0.21
         assert setup["widget"].lf_H2.value() == 0.22
         assert setup["widget"].lf_W0.value() == 0.23

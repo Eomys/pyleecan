@@ -20,7 +20,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
     prop : str
         The property to assign in FEMM
     FEMM_dict : dict
-        Dictionnary containing the main parameters of FEMM
+        dictionary containing the main parameters of FEMM
     rotor : Lamination
         The rotor of the machine
     stator : Lamination

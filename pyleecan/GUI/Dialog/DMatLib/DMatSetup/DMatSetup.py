@@ -17,7 +17,7 @@ from numpy import array
 
 
 class DMatSetup(Gen_DMatSetup, QDialog):
-    def __init__(self, material, is_matlib=True):
+    def __init__(self, material, is_lib_mat=True, index=None):
         """
         Dialog for editing material data.
 
@@ -25,17 +25,27 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         ----------
         material : Material
             material to edit
-        is_matlib : bool
-            material already in matlib
+        is_lib_mat : bool
+            True: Selected material is part of the Library (False machine)
+        index : int
+            Index of the Material in Library or Machine (None=New material)
         """
         # Build the interface according to the .ui file
         QDialog.__init__(self)
         self.setupUi(self)
 
         self.is_save_needed = False
+        # Stored to be used after validation
+        self.is_lib_mat = is_lib_mat
+        self.index = index
+        if self.is_lib_mat:
+            self.b_add_matlib.setText("Save in Machine")
+        else:
+            self.b_add_matlib.setText("Save in Library")
 
         # Copy to set the modification only if validated
-        self.mat = Material(init_dict=material.as_dict())
+        self.mat = material.copy()
+        self.init_name = self.mat.name  # To detect rename
 
         self.le_name.setText(self.mat.name)
         if self.mat.is_isotropic:
@@ -48,13 +58,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             self.nav_ther.setCurrentIndex(0)
 
         # Edit button text if the Material selected is in the ref matlib
-        if is_matlib:
+        if is_lib_mat:
             self.b_add_matlib.setText("Add to machine")
-
-        # Three button to close
-        self.b_cancel.clicked.connect(lambda: self.done(0))
-        self.b_save.clicked.connect(lambda: self.done(1))
-        self.b_add_matlib.clicked.connect(lambda: self.done(2))
 
         # === check material attribute and set values ===
         # Elec
@@ -112,6 +117,10 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_epsr.hide()
 
         # === setup signals ===
+        # Three button to close
+        self.b_cancel.clicked.connect(lambda: self.done(0))
+        self.b_save.clicked.connect(lambda: self.done(1))
+        self.b_add_matlib.clicked.connect(lambda: self.done(2))
         # Misc.
         self.le_name.editingFinished.connect(self.set_name)
         self.is_isotropic.toggled.connect(self.set_is_isotropic)

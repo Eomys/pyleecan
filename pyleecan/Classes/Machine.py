@@ -77,9 +77,9 @@ except ImportError as error:
     comp_width_airgap_mec = error
 
 try:
-    from ..Methods.Machine.Machine.get_material_list import get_material_list
+    from ..Methods.Machine.Machine.get_material_dict import get_material_dict
 except ImportError as error:
-    get_material_list = error
+    get_material_dict = error
 
 try:
     from ..Methods.Machine.Machine.get_polar_eq import get_polar_eq
@@ -260,18 +260,18 @@ class Machine(FrozenClass):
         )
     else:
         comp_width_airgap_mec = comp_width_airgap_mec
-    # cf Methods.Machine.Machine.get_material_list
-    if isinstance(get_material_list, ImportError):
-        get_material_list = property(
+    # cf Methods.Machine.Machine.get_material_dict
+    if isinstance(get_material_dict, ImportError):
+        get_material_dict = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Machine method get_material_list: "
-                    + str(get_material_list)
+                    "Can't use Machine method get_material_dict: "
+                    + str(get_material_dict)
                 )
             )
         )
     else:
-        get_material_list = get_material_list
+        get_material_dict = get_material_dict
     # cf Methods.Machine.Machine.get_polar_eq
     if isinstance(get_polar_eq, ImportError):
         get_polar_eq = property(
@@ -393,7 +393,7 @@ class Machine(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -472,9 +472,11 @@ class Machine(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -498,6 +500,8 @@ class Machine(FrozenClass):
             diff_list.append(name + ".type_machine")
         if other._logger_name != self._logger_name:
             diff_list.append(name + ".logger_name")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
