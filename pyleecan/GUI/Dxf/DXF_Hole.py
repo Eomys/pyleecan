@@ -5,8 +5,8 @@ from ezdxf import readfile
 from numpy import angle as np_angle
 from numpy import array, pi, argmax, argmin
 from numpy import max as np_max, min as np_min
-from PySide2.QtCore import QSize, Qt
-from PySide2.QtGui import QIcon, QPixmap
+from PySide2.QtCore import QUrl, Qt
+from PySide2.QtGui import QIcon, QPixmap,QDesktopServices
 from PySide2.QtWidgets import (
     QComboBox,
     QDialog,
@@ -63,6 +63,10 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.delete_icon.scaled(ICON_SIZE, ICON_SIZE, Qt.KeepAspectRatio)
         self.highlight_icon = QPixmap(pixmap_dict["search"])
         self.highlight_icon.scaled(ICON_SIZE, ICON_SIZE, Qt.KeepAspectRatio)
+
+        # Tutorial video link
+        self.url = "https://pyleecan.org/videos.html#feature-tutorials"
+        self.b_tuto.setEnabled(True)
 
         # Set units
         self.lf_mag_len.unit = "m"
@@ -129,6 +133,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.b_plot.pressed.connect(self.plot)
         self.b_reset.pressed.connect(self.update_graph)
         self.b_cancel.pressed.connect(self.remove_selection)
+        self.b_tuto.pressed.connect(self.open_tuto)
 
         # Display the GUI
         self.show()
@@ -611,3 +616,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             self.save_path = save_file_path
             hole.save(save_file_path)
             self.accept()
+
+    def open_tuto(self):
+        """Open the tutorial video in a web browser"""
+        QDesktopServices.openUrl(QUrl(self.url))

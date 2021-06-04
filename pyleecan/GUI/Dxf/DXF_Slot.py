@@ -5,12 +5,11 @@ import matplotlib.pyplot as plt
 from ezdxf import readfile
 from numpy import angle as np_angle
 from numpy import argmin, array
-from PySide2.QtCore import QSize, Qt
-from PySide2.QtGui import QIcon, QPixmap
-from PySide2.QtWidgets import QComboBox, QDialog, QFileDialog, QMessageBox, QPushButton
+from PySide2.QtCore import QUrl
+from PySide2.QtGui import QDesktopServices
+from PySide2.QtWidgets import QDialog, QFileDialog, QMessageBox
 
 from ...Classes.LamSlot import LamSlot
-from ...Classes.Magnet import Magnet
 from ...Classes.SlotUD import SlotUD
 from ...definitions import config_dict
 from ...GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
@@ -49,6 +48,10 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.selected_list = list()  # List of currently selected lines
         self.lam = lam
 
+        # Tutorial video link
+        self.url = "https://pyleecan.org/videos.html#feature-tutorials"
+        self.b_tuto.setEnabled(True)
+
         # Initialize the graph
         self.init_graph()
 
@@ -86,6 +89,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.b_plot.pressed.connect(self.plot)
         self.b_reset.pressed.connect(self.update_graph)
         self.b_cancel.pressed.connect(self.remove_selection)
+        self.b_tuto.pressed.connect(self.open_tuto)
 
         # Display the GUI
         self.show()
@@ -391,3 +395,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 self.save_path = save_file_path
                 slot.save(save_file_path)
                 self.accept()
+
+    def open_tuto(self):
+        """Open the tutorial video in a web browser"""
+        QDesktopServices.openUrl(QUrl(self.url))
