@@ -174,6 +174,8 @@ class SWSlot(Gen_SWSlot, QWidget):
         self.obj.slot.Zs = value
         self.set_slot_pitch(value)
         self.w_slot.w_out.comp_output()
+        if isinstance(self.w_slot, PWSlotUD):
+            self.w_slot.update_graph()
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
