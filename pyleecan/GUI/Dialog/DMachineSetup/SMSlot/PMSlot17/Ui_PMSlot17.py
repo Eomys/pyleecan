@@ -19,7 +19,7 @@ class Ui_PMSlot17(object):
     def setupUi(self, PMSlot17):
         if not PMSlot17.objectName():
             PMSlot17.setObjectName(u"PMSlot17")
-        PMSlot17.resize(1055, 470)
+        PMSlot17.resize(887, 470)
         PMSlot17.setMinimumSize(QSize(630, 470))
         PMSlot17.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PMSlot17)
@@ -60,25 +60,29 @@ class Ui_PMSlot17(object):
 
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
-        self.widget = QWidget(PMSlot17)
-        self.widget.setObjectName(u"widget")
-        self.widget.setMinimumSize(QSize(250, 0))
-        self.widget.setMaximumSize(QSize(250, 16777215))
-        self.verticalLayout = QVBoxLayout(self.widget)
+        self.scrollArea = QScrollArea(PMSlot17)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setMinimumSize(QSize(270, 0))
+        self.scrollArea.setMaximumSize(QSize(270, 16777215))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 446))
+        self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.unit_Lmag = QLabel(self.widget)
+        self.unit_Lmag = QLabel(self.scrollAreaWidgetContents)
         self.unit_Lmag.setObjectName(u"unit_Lmag")
 
         self.gridLayout.addWidget(self.unit_Lmag, 0, 2, 1, 1)
 
-        self.lf_Lmag = FloatEdit(self.widget)
+        self.lf_Lmag = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_Lmag.setObjectName(u"lf_Lmag")
 
         self.gridLayout.addWidget(self.lf_Lmag, 0, 1, 1, 1)
 
-        self.in_Lmag = QLabel(self.widget)
+        self.in_Lmag = QLabel(self.scrollAreaWidgetContents)
         self.in_Lmag.setObjectName(u"in_Lmag")
 
         self.gridLayout.addWidget(self.in_Lmag, 0, 0, 1, 1)
@@ -91,12 +95,14 @@ class Ui_PMSlot17(object):
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
-        self.w_out = WWSlotOut(self.widget)
+        self.w_out = WWSlotOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
 
         self.verticalLayout.addWidget(self.w_out)
 
-        self.horizontalLayout.addWidget(self.widget)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+        self.horizontalLayout.addWidget(self.scrollArea)
 
         QWidget.setTabOrder(self.lf_Lmag, self.txt_constraint)
 

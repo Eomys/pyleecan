@@ -1,15 +1,18 @@
-from PySide2.QtCore import Qt, Signal
-from PySide2.QtWidgets import QWidget, QMessageBox, QDialog
-from pandas import read_excel, ExcelFile
-from .....Classes.ImportMatrixXls import ImportMatrixXls
-from .....Classes.ImportMatrixVal import ImportMatrixVal
-from .....GUI.Tools.WImport.WImportExcel.Ui_WImportExcel import Ui_WImportExcel
-from .....GUI.Tools.WTableData.WTableData import DTableData
 from os.path import isfile
+
 import matplotlib.pyplot as plt
+from pandas import ExcelFile, read_excel
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
+
+from .....Classes.ImportMatrixVal import ImportMatrixVal
+from .....Classes.ImportMatrixXls import ImportMatrixXls
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from .....GUI.Tools.WImport.WImportExcel.Gen_WImportExcel import Gen_WImportExcel
+from .....GUI.Tools.WTableData.DTableData import DTableData
 
 
-class WImportExcel(Ui_WImportExcel, QWidget):
+class WImportExcel(Gen_WImportExcel, QWidget):
     """Widget to define an ImportMatrixXls"""
 
     import_name = "Import from Excel"
@@ -17,7 +20,7 @@ class WImportExcel(Ui_WImportExcel, QWidget):
     saveNeeded = Signal()
     dataTypeChanged = Signal()
 
-    def __init__(self, parent=None, data=None, verbose_name="", expected_shape=None):
+    def __init__(self, parent=None, data=None, verbose_name=None, expected_shape=None):
         """Initialization of the widget
 
         Parameters
@@ -65,6 +68,14 @@ class WImportExcel(Ui_WImportExcel, QWidget):
         self.w_file_path.update()
         self.set_sheet_list()
         self.le_range.setText(self.data.usecols)
+        if is_excel_file(self.data.file_path):
+            self.b_plot.setEnabled(True)
+            self.b_tab.setEnabled(True)
+            self.b_convert.setEnabled(True)
+        else:
+            self.b_plot.setEnabled(False)
+            self.b_tab.setEnabled(False)
+            self.b_convert.setEnabled(False)
 
     def set_sheet_list(self):
         """Complete the combobox with the sheet name from the Excel file"""
@@ -91,6 +102,8 @@ class WImportExcel(Ui_WImportExcel, QWidget):
                 self.data.sheet = xls_file.sheet_names[0]
                 self.c_sheet.setCurrentIndex(0)
             self.c_sheet.blockSignals(False)
+        else:
+            self.c_sheet.setEnabled(False)
 
     def set_sheet(self):
         """Change the current sheet selected"""
@@ -109,7 +122,7 @@ class WImportExcel(Ui_WImportExcel, QWidget):
         except Exception as e:
             QMessageBox.critical(self, self.tr("Error"), str(e))
             return
-        tab = DTableData(data=data)
+        tab = DTableData(data=data, title=self.verbose_name)
         return_code = tab.exec_()
 
     def s_plot(self):
@@ -129,6 +142,9 @@ class WImportExcel(Ui_WImportExcel, QWidget):
             fig, axes = plt.subplots()
             axes.plot(data[:, 0], data[:, 1])
             fig.show()
+        if self.verbose_name is not None:
+            fig.canvas.manager.set_window_title(self.verbose_name)
+        set_plot_gui_icon()
 
     def s_convert(self):
         """Convert data to ImportMatrixVal"""

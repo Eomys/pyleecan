@@ -1,0 +1,11 @@
+[
+    {
+        "cls": "ImportMatrixXls",
+        "name": "usecols",
+        "widget": [
+            "in_range",
+            "le_range"
+        ],
+        "xls": "Import"
+    }
+]

@@ -10,6 +10,7 @@ from ..Classes.Arc2 import Arc2
 from ..Classes.Arc3 import Arc3
 from ..Classes.Bore import Bore
 from ..Classes.BoreFlower import BoreFlower
+from ..Classes.BoreLSRPM import BoreLSRPM
 from ..Classes.BoreUD import BoreUD
 from ..Classes.CellMat import CellMat
 from ..Classes.Circle import Circle
@@ -29,6 +30,8 @@ from ..Classes.Electrical import Electrical
 from ..Classes.Elmer import Elmer
 from ..Classes.ElmerResults import ElmerResults
 from ..Classes.ElmerResultsVTU import ElmerResultsVTU
+from ..Classes.EndWinding import EndWinding
+from ..Classes.EndWindingCirc import EndWindingCirc
 from ..Classes.FPGNSeg import FPGNSeg
 from ..Classes.FPGNTri import FPGNTri
 from ..Classes.FluxLink import FluxLink
@@ -47,6 +50,7 @@ from ..Classes.HoleM53 import HoleM53
 from ..Classes.HoleM54 import HoleM54
 from ..Classes.HoleM57 import HoleM57
 from ..Classes.HoleM58 import HoleM58
+from ..Classes.HoleMLSRPM import HoleMLSRPM
 from ..Classes.HoleMag import HoleMag
 from ..Classes.HoleUD import HoleUD
 from ..Classes.Import import Import
@@ -77,6 +81,7 @@ from ..Classes.LamSlotMag import LamSlotMag
 from ..Classes.LamSlotMulti import LamSlotMulti
 from ..Classes.LamSlotWind import LamSlotWind
 from ..Classes.LamSquirrelCage import LamSquirrelCage
+from ..Classes.LamSquirrelCageMag import LamSquirrelCageMag
 from ..Classes.Lamination import Lamination
 from ..Classes.Line import Line
 from ..Classes.Loss import Loss
@@ -87,6 +92,7 @@ from ..Classes.Machine import Machine
 from ..Classes.MachineAsync import MachineAsync
 from ..Classes.MachineDFIM import MachineDFIM
 from ..Classes.MachineIPMSM import MachineIPMSM
+from ..Classes.MachineLSPM import MachineLSPM
 from ..Classes.MachineSCIM import MachineSCIM
 from ..Classes.MachineSIPMSM import MachineSIPMSM
 from ..Classes.MachineSRM import MachineSRM
@@ -190,6 +196,7 @@ from ..Classes.SlotW28 import SlotW28
 from ..Classes.SlotW29 import SlotW29
 from ..Classes.SlotW60 import SlotW60
 from ..Classes.SlotW61 import SlotW61
+from ..Classes.SlotWLSRPM import SlotWLSRPM
 from ..Classes.Solution import Solution
 from ..Classes.SolutionData import SolutionData
 from ..Classes.SolutionMat import SolutionMat
@@ -210,11 +217,6 @@ from ..Classes.VentilationCirc import VentilationCirc
 from ..Classes.VentilationPolar import VentilationPolar
 from ..Classes.VentilationTrap import VentilationTrap
 from ..Classes.Winding import Winding
-from ..Classes.WindingCW1L import WindingCW1L
-from ..Classes.WindingCW2LR import WindingCW2LR
-from ..Classes.WindingCW2LT import WindingCW2LT
-from ..Classes.WindingDW1L import WindingDW1L
-from ..Classes.WindingDW2L import WindingDW2L
 from ..Classes.WindingSC import WindingSC
 from ..Classes.WindingUD import WindingUD
 from ..Classes.XOutput import XOutput

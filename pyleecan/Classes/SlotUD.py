@@ -111,7 +111,7 @@ class SlotUD(Slot):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -180,9 +180,11 @@ class SlotUD(Slot):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -210,6 +212,8 @@ class SlotUD(Slot):
             diff_list.append(name + ".wind_end_index")
         if other._type_line_wind != self._type_line_wind:
             diff_list.append(name + ".type_line_wind")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

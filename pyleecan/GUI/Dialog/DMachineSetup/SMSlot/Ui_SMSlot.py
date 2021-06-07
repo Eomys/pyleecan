@@ -20,7 +20,7 @@ class Ui_SMSlot(object):
         if not SMSlot.objectName():
             SMSlot.setObjectName(u"SMSlot")
         SMSlot.resize(650, 550)
-        SMSlot.setMinimumSize(QSize(650, 550))
+        SMSlot.setMinimumSize(QSize(650, 0))
         self.main_layout = QVBoxLayout(SMSlot)
         self.main_layout.setObjectName(u"main_layout")
         self.horizontalLayout_2 = QHBoxLayout()

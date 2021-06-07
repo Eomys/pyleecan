@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 paramexplorer_list,-,List containing ParamExplorer,0,[ParamExplorer],,,,,Output,Output,__delitem__,VERSION,1,XOutput object: gather all the outputs of all the modules for multiple simulations
 output_list,-,List containing Output (or Xoutput) for each simulation,0,[Output],,,,,,,__getitem__,,,
-xoutput_dict,-,Dictionnary containing DataKeeper,0,{DataKeeper},,,,,,,__iter__,,,
+xoutput_dict,-,dictionary containing DataKeeper,0,{DataKeeper},,,,,,,__iter__,,,
 nb_simu,-,Number of simulations excluding reference simulation,0,int,0,0,,,,,__len__,,,
 xoutput_ref,-,Xoutput (or Output) of the reference simulation (only if is_keep_all_output is True and not included in output_list),0,Output,None,,,,,,__missing__,,,
 xoutput_ref_index,-,Index of the Xoutput (or Output) of the reference simulation in the output_list (only if is_keep_all_output is True),0,int,None,,,,,,__next__,,,

@@ -7,7 +7,7 @@ from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM52 import HoleM52
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52.PHoleM52 import PHoleM52
 from pyleecan.Classes.Material import Material
 
@@ -32,16 +32,16 @@ class TestPHoleM52(object):
         test_obj.hole.append(HoleM52(H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=0.17))
         test_obj.hole[0].magnet_0.mat_type.name = "Magnet2"
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = [
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),
         ]
 
-        widget = PHoleM52(test_obj.hole[0], matlib)
+        widget = PHoleM52(test_obj.hole[0], material_dict)
 
-        yield {"widget": widget, "test_obj": test_obj, "matlib": matlib}
+        yield {"widget": widget, "test_obj": test_obj, "material_dict": material_dict}
 
         self.app.quit()
 
@@ -65,14 +65,7 @@ class TestPHoleM52(object):
         )
         setup["test_obj"].hole[0].magnet_0 == None
 
-        setup["matlib"] = MatLib()
-        setup["matlib"].dict_mat["RefMatLib"] = [
-            Material(name="Magnet1"),
-            Material(name="Magnet2"),
-            Material(name="Magnet3"),
-        ]
-
-        setup["widget"] = PHoleM52(setup["test_obj"].hole[0], setup["matlib"])
+        setup["widget"] = PHoleM52(setup["test_obj"].hole[0], setup["material_dict"])
         assert not setup["widget"].w_mat_1.isHidden()
 
     def test_set_W0(self, setup):

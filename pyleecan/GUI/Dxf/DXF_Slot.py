@@ -5,12 +5,11 @@ import matplotlib.pyplot as plt
 from ezdxf import readfile
 from numpy import angle as np_angle
 from numpy import argmin, array
-from PySide2.QtCore import QSize, Qt
-from PySide2.QtGui import QIcon, QPixmap
-from PySide2.QtWidgets import QComboBox, QDialog, QFileDialog, QMessageBox, QPushButton
+from PySide2.QtCore import QUrl
+from PySide2.QtGui import QDesktopServices
+from PySide2.QtWidgets import QDialog, QFileDialog, QMessageBox
 
 from ...Classes.LamSlot import LamSlot
-from ...Classes.Magnet import Magnet
 from ...Classes.SlotUD import SlotUD
 from ...definitions import config_dict
 from ...GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
@@ -24,6 +23,7 @@ TYPE_COL = 0
 DEL_COL = 1
 HL_COL = 2
 WIND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
+Z_TOL = 1e-4  # Point comparison tolerance
 
 
 class DXF_Slot(Ui_DXF_Slot, QDialog):
@@ -47,6 +47,10 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.line_list = list()  # List of line from DXF
         self.selected_list = list()  # List of currently selected lines
         self.lam = lam
+
+        # Tutorial video link
+        self.url = "https://pyleecan.org/videos.html#feature-tutorials"
+        self.b_tuto.setEnabled(True)
 
         # Initialize the graph
         self.init_graph()
@@ -85,6 +89,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.b_plot.pressed.connect(self.plot)
         self.b_reset.pressed.connect(self.update_graph)
         self.b_cancel.pressed.connect(self.remove_selection)
+        self.b_tuto.pressed.connect(self.open_tuto)
 
         # Display the GUI
         self.show()
@@ -242,7 +247,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         for p1 in point_list:
             count = 0
             for p2 in point_list:
-                if abs(p1 - p2) < 1e-9:
+                if abs(p1 - p2) < Z_TOL:
                     count += 1
             if count == 1:
                 count_1 += 1
@@ -290,7 +295,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         for p1 in point_list:
             count = 0
             for p2 in point_list:
-                if abs(p1 - p2) < 1e-9:
+                if abs(p1 - p2) < Z_TOL:
                     count += 1
             if count == 1:
                 single_list.append(p1)
@@ -302,7 +307,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             [
                 ii
                 for ii, line in enumerate(line_list)
-                if abs(line.get_begin() - Zbegin) < 1e-6
+                if abs(line.get_begin() - Zbegin) < Z_TOL
             ]
         )
         # Sort the lines (begin = end)
@@ -311,9 +316,9 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         while len(line_list) > 0:
             end = curve_list[-1].get_end()
             for ii in range(len(line_list)):
-                if abs(line_list[ii].get_begin() - end) < 1e-9:
+                if abs(line_list[ii].get_begin() - end) < Z_TOL:
                     break
-                if abs(line_list[ii].get_end() - end) < 1e-9:
+                if abs(line_list[ii].get_end() - end) < Z_TOL:
                     line_list[ii].reverse()
                     break
             curve_list.append(line_list.pop(ii))
@@ -390,3 +395,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 self.save_path = save_file_path
                 slot.save(save_file_path)
                 self.accept()
+
+    def open_tuto(self):
+        """Open the tutorial video in a web browser"""
+        QDesktopServices.openUrl(QUrl(self.url))

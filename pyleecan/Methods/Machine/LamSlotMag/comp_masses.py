@@ -15,7 +15,7 @@ def comp_masses(self):
     Returns
     -------
     M_dict: dict
-        Lamination mass dictionnary (Mtot, Mlam, Mmag) [kg]
+        Lamination mass dictionary (Mtot, Mlam, Mmag) [kg]
 
     """
 

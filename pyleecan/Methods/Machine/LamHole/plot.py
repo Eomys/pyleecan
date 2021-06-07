@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Patch
 from matplotlib.pyplot import axis, legend
 
-from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
-
+from ....Functions.init_fig import init_fig
 
 PATCH_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PATCH_COLOR"]
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
@@ -23,6 +23,7 @@ def plot(
     delta=0,
     is_edge_only=False,
     is_show_fig=True,
+    win_title=None,
 ):
     """Plot a Lamination with Buried Magnets in a matplotlib fig
 
@@ -46,6 +47,8 @@ def plot(
         To plot transparent Patches
     is_show_fig : bool
         To call show at the end of the method
+    win_title : str
+        Window title
 
     Returns
     -------
@@ -54,8 +57,10 @@ def plot(
 
     # Lamination bore
     if self.is_stator:
+        Lam_Name = "Stator"
         lam_color = STATOR_COLOR
     else:
+        Lam_Name = "Rotor"
         lam_color = ROTOR_COLOR
 
     # List of surface to plot the lamination
@@ -85,6 +90,19 @@ def plot(
     Lim = self.Rext * 1.5
     axes.set_xlim(-Lim, Lim)
     axes.set_ylim(-Lim, Lim)
+
+    # Window title
+    if (
+        win_title is None
+        and self.parent is not None
+        and self.parent.name not in [None, ""]
+    ):
+        win_title = self.parent.name + " " + Lam_Name
+    elif win_title is None:
+        win_title = Lam_Name
+    manager = plt.get_current_fig_manager()
+    if manager is not None:
+        manager.set_window_title(win_title)
 
     # Set legend
     if not is_edge_only:

@@ -18,7 +18,7 @@ class Ui_PWSlot60(object):
     def setupUi(self, PWSlot60):
         if not PWSlot60.objectName():
             PWSlot60.setObjectName(u"PWSlot60")
-        PWSlot60.resize(630, 470)
+        PWSlot60.resize(913, 529)
         PWSlot60.setMinimumSize(QSize(630, 470))
         PWSlot60.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PWSlot60)
@@ -59,133 +59,147 @@ class Ui_PWSlot60(object):
 
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.scrollArea = QScrollArea(PWSlot60)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setMinimumSize(QSize(270, 0))
+        self.scrollArea.setMaximumSize(QSize(270, 16777215))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents_2 = QWidget()
+        self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 268, 505))
+        self.verticalLayout_4 = QVBoxLayout(self.scrollAreaWidgetContents_2)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.in_R1 = QLabel(PWSlot60)
+        self.in_R1 = QLabel(self.scrollAreaWidgetContents_2)
         self.in_R1.setObjectName(u"in_R1")
 
         self.gridLayout.addWidget(self.in_R1, 0, 0, 1, 1)
 
-        self.lf_R1 = FloatEdit(PWSlot60)
+        self.lf_R1 = FloatEdit(self.scrollAreaWidgetContents_2)
         self.lf_R1.setObjectName(u"lf_R1")
 
         self.gridLayout.addWidget(self.lf_R1, 0, 1, 1, 1)
 
-        self.unit_R1 = QLabel(PWSlot60)
+        self.unit_R1 = QLabel(self.scrollAreaWidgetContents_2)
         self.unit_R1.setObjectName(u"unit_R1")
 
         self.gridLayout.addWidget(self.unit_R1, 0, 2, 1, 1)
 
-        self.in_W1 = QLabel(PWSlot60)
+        self.in_W1 = QLabel(self.scrollAreaWidgetContents_2)
         self.in_W1.setObjectName(u"in_W1")
 
         self.gridLayout.addWidget(self.in_W1, 1, 0, 1, 1)
 
-        self.lf_W1 = FloatEdit(PWSlot60)
+        self.lf_W1 = FloatEdit(self.scrollAreaWidgetContents_2)
         self.lf_W1.setObjectName(u"lf_W1")
 
         self.gridLayout.addWidget(self.lf_W1, 1, 1, 1, 1)
 
-        self.unit_W1 = QLabel(PWSlot60)
+        self.unit_W1 = QLabel(self.scrollAreaWidgetContents_2)
         self.unit_W1.setObjectName(u"unit_W1")
 
         self.gridLayout.addWidget(self.unit_W1, 1, 2, 1, 1)
 
-        self.in_W2 = QLabel(PWSlot60)
+        self.in_W2 = QLabel(self.scrollAreaWidgetContents_2)
         self.in_W2.setObjectName(u"in_W2")
 
         self.gridLayout.addWidget(self.in_W2, 2, 0, 1, 1)
 
-        self.lf_W2 = FloatEdit(PWSlot60)
+        self.lf_W2 = FloatEdit(self.scrollAreaWidgetContents_2)
         self.lf_W2.setObjectName(u"lf_W2")
 
         self.gridLayout.addWidget(self.lf_W2, 2, 1, 1, 1)
 
-        self.unit_W2 = QLabel(PWSlot60)
+        self.unit_W2 = QLabel(self.scrollAreaWidgetContents_2)
         self.unit_W2.setObjectName(u"unit_W2")
 
         self.gridLayout.addWidget(self.unit_W2, 2, 2, 1, 1)
 
-        self.in_H1 = QLabel(PWSlot60)
+        self.in_H1 = QLabel(self.scrollAreaWidgetContents_2)
         self.in_H1.setObjectName(u"in_H1")
 
         self.gridLayout.addWidget(self.in_H1, 3, 0, 1, 1)
 
-        self.lf_H1 = FloatEdit(PWSlot60)
+        self.lf_H1 = FloatEdit(self.scrollAreaWidgetContents_2)
         self.lf_H1.setObjectName(u"lf_H1")
 
         self.gridLayout.addWidget(self.lf_H1, 3, 1, 1, 1)
 
-        self.unit_H1 = QLabel(PWSlot60)
+        self.unit_H1 = QLabel(self.scrollAreaWidgetContents_2)
         self.unit_H1.setObjectName(u"unit_H1")
 
         self.gridLayout.addWidget(self.unit_H1, 3, 2, 1, 1)
 
-        self.in_H2 = QLabel(PWSlot60)
+        self.in_H2 = QLabel(self.scrollAreaWidgetContents_2)
         self.in_H2.setObjectName(u"in_H2")
 
         self.gridLayout.addWidget(self.in_H2, 4, 0, 1, 1)
 
-        self.lf_H2 = FloatEdit(PWSlot60)
+        self.lf_H2 = FloatEdit(self.scrollAreaWidgetContents_2)
         self.lf_H2.setObjectName(u"lf_H2")
 
         self.gridLayout.addWidget(self.lf_H2, 4, 1, 1, 1)
 
-        self.unit_H2 = QLabel(PWSlot60)
+        self.unit_H2 = QLabel(self.scrollAreaWidgetContents_2)
         self.unit_H2.setObjectName(u"unit_H2")
 
         self.gridLayout.addWidget(self.unit_H2, 4, 2, 1, 1)
 
-        self.in_H3 = QLabel(PWSlot60)
+        self.in_H3 = QLabel(self.scrollAreaWidgetContents_2)
         self.in_H3.setObjectName(u"in_H3")
 
         self.gridLayout.addWidget(self.in_H3, 5, 0, 1, 1)
 
-        self.lf_H3 = FloatEdit(PWSlot60)
+        self.lf_H3 = FloatEdit(self.scrollAreaWidgetContents_2)
         self.lf_H3.setObjectName(u"lf_H3")
 
         self.gridLayout.addWidget(self.lf_H3, 5, 1, 1, 1)
 
-        self.unit_H3 = QLabel(PWSlot60)
+        self.unit_H3 = QLabel(self.scrollAreaWidgetContents_2)
         self.unit_H3.setObjectName(u"unit_H3")
 
         self.gridLayout.addWidget(self.unit_H3, 5, 2, 1, 1)
 
-        self.in_H4 = QLabel(PWSlot60)
+        self.in_H4 = QLabel(self.scrollAreaWidgetContents_2)
         self.in_H4.setObjectName(u"in_H4")
 
         self.gridLayout.addWidget(self.in_H4, 6, 0, 1, 1)
 
-        self.lf_H4 = FloatEdit(PWSlot60)
+        self.lf_H4 = FloatEdit(self.scrollAreaWidgetContents_2)
         self.lf_H4.setObjectName(u"lf_H4")
 
         self.gridLayout.addWidget(self.lf_H4, 6, 1, 1, 1)
 
-        self.unit_H4 = QLabel(PWSlot60)
+        self.unit_H4 = QLabel(self.scrollAreaWidgetContents_2)
         self.unit_H4.setObjectName(u"unit_H4")
 
         self.gridLayout.addWidget(self.unit_H4, 6, 2, 1, 1)
 
-        self.in_W3 = QLabel(PWSlot60)
+        self.in_W3 = QLabel(self.scrollAreaWidgetContents_2)
         self.in_W3.setObjectName(u"in_W3")
 
         self.gridLayout.addWidget(self.in_W3, 7, 0, 1, 1)
 
-        self.lf_W3 = FloatEdit(PWSlot60)
+        self.lf_W3 = FloatEdit(self.scrollAreaWidgetContents_2)
         self.lf_W3.setObjectName(u"lf_W3")
 
         self.gridLayout.addWidget(self.lf_W3, 7, 1, 1, 1)
 
-        self.unit_W3 = QLabel(PWSlot60)
+        self.unit_W3 = QLabel(self.scrollAreaWidgetContents_2)
         self.unit_W3.setObjectName(u"unit_W3")
 
         self.gridLayout.addWidget(self.unit_W3, 7, 2, 1, 1)
 
-        self.verticalLayout.addLayout(self.gridLayout)
+        self.verticalLayout_4.addLayout(self.gridLayout)
 
-        self.g_output = QGroupBox(PWSlot60)
+        self.verticalSpacer = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout_4.addItem(self.verticalSpacer)
+
+        self.g_output = QGroupBox(self.scrollAreaWidgetContents_2)
         self.g_output.setObjectName(u"g_output")
         self.g_output.setMinimumSize(QSize(200, 0))
         self.verticalLayout_3 = QVBoxLayout(self.g_output)
@@ -225,9 +239,11 @@ class Ui_PWSlot60(object):
 
         self.verticalLayout_3.addWidget(self.out_tooth_width)
 
-        self.verticalLayout.addWidget(self.g_output)
+        self.verticalLayout_4.addWidget(self.g_output)
 
-        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents_2)
+
+        self.horizontalLayout.addWidget(self.scrollArea)
 
         QWidget.setTabOrder(self.lf_R1, self.lf_W1)
         QWidget.setTabOrder(self.lf_W1, self.lf_W2)

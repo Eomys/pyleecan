@@ -44,7 +44,7 @@
      <item>
       <widget class="QLabel" name="in_range">
        <property name="text">
-        <string>Range: </string>
+        <string>Column range: </string>
        </property>
       </widget>
      </item>

@@ -76,7 +76,7 @@ def test_EM_BH_Model_001_Toyota_Prius():
         Bmax=None,
     )
 
-    fig = simu.machine.stator.mat_type.mag.plot_BH(color="b")
+    fig = simu.machine.stator.mat_type.mag.plot_BH(color="b", is_show_fig=False)
 
     simu2 = simu.copy()
     simu2.machine.stator.mat_type.mag.ModelBH = ModelBH_Langevin(

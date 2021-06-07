@@ -16,14 +16,26 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 
 from Tests import save_plot_path as save_path
 from Tests.Plot.LamWind import wind_mat
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+
+def test_LamHole_notch():
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    slot_r = SlotW10(Zs=8, W0=5e-3, W1=5e-3, W2=5e-3, H0=0, H1=0, H2=2.5e-3)
+    notch = NotchEvenDist(notch_shape=slot_r, alpha=pi / 8)
+    Toyota_Prius.rotor.notch = [notch]
+
+    Toyota_Prius.plot(is_show_fig=False, save_path=join(save_path, "Toyota_notch.png"))
+    Toyota_Prius.plot(
+        sym=8, is_show_fig=False, save_path=join(save_path, "Toyota_notch_sym.png")
+    )
 
 
 def test_Lam_evenly_dist():
@@ -50,7 +62,7 @@ def test_Lam_evenly_dist():
         H2=130e-3,
         H1_is_rad=False,
     )
-    test_obj.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+    test_obj.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
     test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
     test_obj.stator = LamSlotWind(
@@ -72,7 +84,7 @@ def test_Lam_evenly_dist():
         H2=140e-3,
         H1_is_rad=False,
     )
-    test_obj.stator.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+    test_obj.stator.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
 
     test_obj.frame = None
 
@@ -111,4 +123,5 @@ def test_Lam_evenly_dist():
 
 
 if __name__ == "__main__":
+    test_LamHole_notch()
     test_Lam_evenly_dist()
