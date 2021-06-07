@@ -91,28 +91,6 @@ def comp_force_nodal(self, output, axes_dict):
     # Loop on elements and nodes for nodal forces
     f, connect = self.element_loop(mesh, B, H, mu, indice, dim, Nt_tot)
 
-    # ## DEBUG / VERIF TOOL : a loop on all nodes again
-    # for key in mesh.cell:
-    #     nb_node_per_cell = mesh.cell[
-    #         key
-    #     ].nb_node_per_cell  # Number of nodes per element
-
-    #     mesh_cell_key = mesh.cell[key]
-    #     connect = mesh.cell[key].get_connectivity()  # Each row of connect is an element
-    #     nb_elem = len(connect)
-
-    #     nb_node = mesh.node.nb_node  # Total nodes number
-
-    #     for elt_indice, elt_number in enumerate(indice):
-
-    #         node_number = mesh_cell_key.get_connectivity(
-    #             elt_number
-    #         )  # elt nodes numbers, can differ from indice
-
-    #         # Loop on edges
-    #         for n in range(nb_node_per_cell):
-    #             pass
-
     indices_nodes = mesh.node.indice.copy()
     Indices_Point = Data1D(name="indice", values=indices_nodes, is_components=True)
 

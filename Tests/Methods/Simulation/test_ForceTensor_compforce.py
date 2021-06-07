@@ -195,7 +195,6 @@ def test_comp_normal_to_edge():
     mesh.node.add_node(np.array([0.33, 0]))
     mesh.node.add_node(np.array([-1, 1]))
 
-
     nodes_test = np.array([0, 1, 2])
     mesh.add_cell(nodes_test, "triangle3")
 
@@ -271,7 +270,7 @@ def test_comp_normal_to_edge():
                 # plt.plot(normal_to_edge[0],normal_to_edge[1],'r')
 
     lim = 4
-    plt.quiver(x_normal, y_normal, vec_x, vec_y )
+    plt.quiver(x_normal, y_normal, vec_x, vec_y)
     plt.plot(x_nodes, y_nodes, "ob")
     plt.plot([0], [0], "o", color="black")
     plt.axis("square")

@@ -104,6 +104,7 @@ class ForceTensor(Force):
     def __init__(
         self,
         group="stator core",
+        tensor=None,
         is_periodicity_t=None,
         is_periodicity_a=None,
         is_agsf_transfer=False,
@@ -130,6 +131,8 @@ class ForceTensor(Force):
             # Overwrite default value with init_dict content
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
+            if "tensor" in list(init_dict.keys()):
+                tensor = init_dict["tensor"]
             if "is_periodicity_t" in list(init_dict.keys()):
                 is_periodicity_t = init_dict["is_periodicity_t"]
             if "is_periodicity_a" in list(init_dict.keys()):
@@ -144,6 +147,7 @@ class ForceTensor(Force):
                 logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         self.group = group
+        self.tensor = tensor
         # Call Force init
         super(ForceTensor, self).__init__(
             is_periodicity_t=is_periodicity_t,
@@ -163,6 +167,7 @@ class ForceTensor(Force):
         # Get the properties inherited from Force
         ForceTensor_str += super(ForceTensor, self).__str__()
         ForceTensor_str += 'group = "' + str(self.group) + '"' + linesep
+        ForceTensor_str += "tensor = " + str(self.tensor) + linesep
         return ForceTensor_str
 
     def __eq__(self, other):
@@ -175,6 +180,8 @@ class ForceTensor(Force):
         if not super(ForceTensor, self).__eq__(other):
             return False
         if other.group != self.group:
+            return False
+        if other.tensor != self.tensor:
             return False
         return True
 
@@ -189,6 +196,8 @@ class ForceTensor(Force):
         diff_list.extend(super(ForceTensor, self).compare(other, name=name))
         if other._group != self._group:
             diff_list.append(name + ".group")
+        if other._tensor != self._tensor:
+            diff_list.append(name + ".tensor")
         return diff_list
 
     def __sizeof__(self):
@@ -199,6 +208,9 @@ class ForceTensor(Force):
         # Get size of the properties inherited from Force
         S += super(ForceTensor, self).__sizeof__()
         S += getsizeof(self.group)
+        if self.tensor is not None:
+            for key, value in self.tensor.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self, **kwargs):
@@ -211,6 +223,9 @@ class ForceTensor(Force):
         # Get the properties inherited from Force
         ForceTensor_dict = super(ForceTensor, self).as_dict(**kwargs)
         ForceTensor_dict["group"] = self.group
+        ForceTensor_dict["tensor"] = (
+            self.tensor.copy() if self.tensor is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ForceTensor_dict["__class__"] = "ForceTensor"
@@ -220,6 +235,7 @@ class ForceTensor(Force):
         """Set all the properties to None (except pyleecan object)"""
 
         self.group = None
+        self.tensor = None
         # Set to None the properties inherited from Force
         super(ForceTensor, self)._set_None()
 
@@ -238,5 +254,25 @@ class ForceTensor(Force):
         doc=u"""Name of the group selected for magnetic force computation. If None, all the domain is selected.
 
         :Type: str
+        """,
+    )
+
+    def _get_tensor(self):
+        """getter of tensor"""
+        return self._tensor
+
+    def _set_tensor(self, value):
+        """setter of tensor"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("tensor", value, "dict")
+        self._tensor = value
+
+    tensor = property(
+        fget=_get_tensor,
+        fset=_set_tensor,
+        doc=u"""Force model(s) to be used
+
+        :Type: dict
         """,
     )
