@@ -79,6 +79,7 @@ from ..Classes.LamHole import LamHole
 from ..Classes.LamSlot import LamSlot
 from ..Classes.LamSlotMag import LamSlotMag
 from ..Classes.LamSlotMulti import LamSlotMulti
+from ..Classes.LamSlotMultiWind import LamSlotMultiWind
 from ..Classes.LamSlotWind import LamSlotWind
 from ..Classes.LamSquirrelCage import LamSquirrelCage
 from ..Classes.LamSquirrelCageMag import LamSquirrelCageMag

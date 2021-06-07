@@ -6,7 +6,7 @@ from numpy import angle as np_angle
 from numpy import array, pi, argmax, argmin
 from numpy import max as np_max, min as np_min
 from PySide2.QtCore import QUrl, Qt
-from PySide2.QtGui import QIcon, QPixmap,QDesktopServices
+from PySide2.QtGui import QIcon, QPixmap, QDesktopServices
 from PySide2.QtWidgets import (
     QComboBox,
     QDialog,

@@ -4254,11 +4254,12 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LamSlotMultiWind"
+        ],
         "desc": "Lamination with list of Slot",
         "is_internal": false,
         "methods": [
-            "build_geometry",
             "check",
             "comp_radius_mec",
             "comp_surfaces",
@@ -4289,6 +4290,65 @@
                 "name": "alpha",
                 "type": "ndarray",
                 "unit": "[rad]",
+                "value": ""
+            }
+        ]
+    },
+    "LamSlotMultiWind": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with list of Slot filled with winding",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_masses",
+            "comp_surfaces",
+            "comp_volumes",
+            "get_pole_pair_number",
+            "get_name_phase",
+            "plot",
+            "plot_winding",
+            "comp_fill_factor",
+            "comp_output_geo",
+            "get_polar_eq",
+            "comp_wind_function",
+            "plot_mmf_unit",
+            "comp_resistance_wind",
+            "comp_angle_d_axis",
+            "comp_mmf_unit",
+            "comp_rot_dir",
+            "comp_lengths_winding",
+            "comp_number_phase_eq",
+            "comp_periodicity",
+            "set_pole_pair_number"
+        ],
+        "mother": "LamSlotMulti",
+        "name": "LamSlotMultiWind",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMultiWind.csv",
+        "properties": [
+            {
+                "desc": "Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)",
+                "max": "1",
+                "min": "0",
+                "name": "Ksfill",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Lamination's Winding",
+                "max": "",
+                "min": "",
+                "name": "winding",
+                "type": "Winding",
+                "unit": "",
                 "value": ""
             }
         ]
@@ -4457,6 +4517,7 @@
             "LamSlot",
             "LamSlotMag",
             "LamSlotMulti",
+            "LamSlotMultiWind",
             "LamSlotWind",
             "LamSquirrelCage",
             "LamSquirrelCageMag"
