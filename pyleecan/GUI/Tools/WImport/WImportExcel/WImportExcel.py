@@ -41,6 +41,7 @@ class WImportExcel(Gen_WImportExcel, QWidget):
             self.data = data
         self.verbose_name = verbose_name
         self.expected_shape = expected_shape
+        self.tab_window = None  # For table popup
 
         # Not used yet
         self.g_axe1.hide()
@@ -56,7 +57,7 @@ class WImportExcel(Gen_WImportExcel, QWidget):
         self.update()
 
         # Connect the slot/signal
-        self.w_file_path.pathChanged.connect(self.set_sheet_list)
+        self.w_file_path.pathChanged.connect(self.update)
         self.c_sheet.currentIndexChanged.connect(self.set_sheet)
         self.le_range.editingFinished.connect(self.set_range)
         self.b_plot.clicked.connect(self.s_plot)
@@ -122,8 +123,8 @@ class WImportExcel(Gen_WImportExcel, QWidget):
         except Exception as e:
             QMessageBox.critical(self, self.tr("Error"), str(e))
             return
-        tab = DTableData(data=data, title=self.verbose_name)
-        return_code = tab.exec_()
+        self.tab_window = DTableData(data=data, title=self.verbose_name)
+        self.tab_window.show()
 
     def s_plot(self):
         """display the data in a plot"""

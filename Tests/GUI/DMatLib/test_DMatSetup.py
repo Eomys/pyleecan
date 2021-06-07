@@ -2,16 +2,18 @@
 
 import sys
 from os import mkdir
-from os.path import join, isdir
+from os.path import join, isdir, isfile
+import mock
 from shutil import rmtree, copyfile
 from random import uniform
-
+from numpy import array
 from PySide2 import QtWidgets
 from PySide2.QtCore import Qt
 from PySide2.QtTest import QTest
 
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 from Tests import save_load_path as save_path, TEST_DATA_DIR
 
@@ -46,6 +48,9 @@ class TestDMatSetup(object):
         test_obj.is_isotropic = True
         test_obj.elec.rho = 0.11
         test_obj.mag = MatMagnetics(mur_lin=0.12, Wlam=0.13)
+        test_obj.mag.BH_curve = ImportMatrixVal(
+            value=array([[0, 1], [2, 100], [3, 300], [4, 450]])
+        )
         test_obj.struct.rho = 0.14
         test_obj.struct.Ex = 0.15
         test_obj.struct.Ey = 0.152
@@ -87,6 +92,9 @@ class TestDMatSetup(object):
         assert setup["widget"].lf_Cp.value() == 0.19
         assert setup["widget"].lf_alpha.value() == 0.2
         assert setup["widget"].lf_cost_unit.value() == 0.21
+        assert setup["widget"].w_BH_import.w_import.in_matrix.text() == (
+            "Matrix size: (4, 2)"
+        )
 
         # Test Raw Material
         setup["test_obj"].mag = None
@@ -429,3 +437,65 @@ class TestDMatSetup(object):
         setup["widget"].lf_Lz.editingFinished.emit()
 
         assert setup["widget"].mat.HT.lambda_z == value
+
+    def test_BH_setup(self, setup):
+        """Check that the BH curve behave have expected"""
+        w_imp = setup["widget"].w_BH_import.w_import
+        assert setup["widget"].w_BH_import.c_type_import.currentIndex() == 1
+        setup["widget"].w_BH_import.w_import.in_matrix.text()
+        # Open table to check BH values
+        assert w_imp.tab_window is None
+        w_imp.b_tab.clicked.emit()
+        w_imp.tab_window.si_row.value() == 4
+        w_imp.tab_window.si_col.value() == 2
+        w_imp.tab_window.w_tab.cellWidget(0, 0).value() == 0
+        w_imp.tab_window.w_tab.cellWidget(0, 1).value() == 1
+        w_imp.tab_window.w_tab.cellWidget(1, 0).value() == 2
+        w_imp.tab_window.w_tab.cellWidget(1, 1).value() == 100
+        w_imp.tab_window.w_tab.cellWidget(2, 0).value() == 3
+        w_imp.tab_window.w_tab.cellWidget(2, 1).value() == 300
+        w_imp.tab_window.w_tab.cellWidget(3, 0).value() == 4
+        w_imp.tab_window.w_tab.cellWidget(3, 1).value() == 450
+        # Edit table
+        w_imp.tab_window.w_tab.cellWidget(3, 0).setValue(5)
+        w_imp.tab_window.w_tab.cellWidget(3, 1).setValue(800)
+        w_imp.tab_window.b_close.accepted.emit()
+        w_imp.tab_window.close()
+        setup["widget"].mat.mag.BH_curve.value[3, 0] == 5
+        setup["widget"].mat.mag.BH_curve.value[3, 0] == 800
+        # Export to excel
+        excel_path = join(save_path, "DMatSetup_excel_export.xls").replace("\\", "/")
+        assert not isfile(excel_path)
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getSaveFileName",
+            return_value=(excel_path, "Excel file (*.xls .*xlsx)"),
+        ):
+            w_imp.b_convert.clicked.emit()
+        assert isfile(excel_path)
+        # Convert to excel import
+        setup["widget"].w_BH_import.c_type_import.setCurrentIndex(0)
+        assert (
+            setup["widget"].w_BH_import.c_type_import.currentText()
+            == "Import from Excel"
+        )
+        w_imp = setup["widget"].w_BH_import.w_import
+        # Import the excel file
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getOpenFileName",
+            return_value=(excel_path, "Excel file (*.xls .*xlsx)"),
+        ):
+            w_imp.w_file_path.b_path.clicked.emit()
+        assert w_imp.w_file_path.le_path.text() == excel_path
+        # Check table
+        assert w_imp.tab_window is None
+        w_imp.b_tab.clicked.emit()
+        w_imp.tab_window.si_row.value() == 4
+        w_imp.tab_window.si_col.value() == 2
+        w_imp.tab_window.w_tab.cellWidget(0, 0).value() == 0
+        w_imp.tab_window.w_tab.cellWidget(0, 1).value() == 1
+        w_imp.tab_window.w_tab.cellWidget(1, 0).value() == 2
+        w_imp.tab_window.w_tab.cellWidget(1, 1).value() == 100
+        w_imp.tab_window.w_tab.cellWidget(2, 0).value() == 3
+        w_imp.tab_window.w_tab.cellWidget(2, 1).value() == 300
+        w_imp.tab_window.w_tab.cellWidget(3, 0).value() == 5
+        w_imp.tab_window.w_tab.cellWidget(3, 1).value() == 800

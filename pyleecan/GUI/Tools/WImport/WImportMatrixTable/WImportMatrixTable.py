@@ -46,6 +46,7 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
             self.data = data
         self.verbose_name = verbose_name
         self.expected_shape = expected_shape
+        self.tab_window = None  # For the table popup
 
         self.update()
 
@@ -76,13 +77,15 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
         if self.expected_shape is not None and self.expected_shape[1] is not None:
             shape_min[1] = self.expected_shape[1]
             shape_max[1] = self.expected_shape[1]
-        tab = DTableData(
+        self.tab_window = DTableData(
             data=data, title=self.verbose_name, shape_min=shape_min, shape_max=shape_max
         )
-        return_code = tab.exec_()
-        if return_code == 1:
-            self.data.value = tab.data
-            self.update()
+        self.tab_window.accepted.connect(self.update_data)
+        self.tab_window.show()
+
+    def update_data(self):
+        self.data.value = self.tab_window.data
+        self.update()
 
     def s_plot(self):
         """Plot the matrix (if 2D)"""
