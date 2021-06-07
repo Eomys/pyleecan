@@ -60,21 +60,30 @@ def test_EM_BH_Model_001_Toyota_Prius():
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
-        type_BH_stator=0, type_BH_rotor=0, is_periodicity_a=True, Kgeo_fineness=0.75,
+        type_BH_stator=0,
+        type_BH_rotor=0,
+        is_periodicity_a=True,
+        Kgeo_fineness=0.75,
     )
     simu.force = None
     simu.struct = None
 
     simu.machine.stator.mat_type.mag.BH_curve = None  # Replace imported BH curve
     simu.machine.stator.mat_type.mag.ModelBH = ModelBH_Langevin(
-        Bs=1.46, a=1000, Hmax=8000, Bmax=None,
+        Bs=1.46,
+        a=1000,
+        Hmax=8000,
+        Bmax=None,
     )
 
     fig = simu.machine.stator.mat_type.mag.plot_BH(color="b")
 
     simu2 = simu.copy()
     simu2.machine.stator.mat_type.mag.ModelBH = ModelBH_Langevin(
-        Bs=1.46, a=25, Hmax=8000, Bmax=None,
+        Bs=1.46,
+        a=25,
+        Hmax=8000,
+        Bmax=None,
     )
 
     simu2.machine.stator.mat_type.mag.plot_BH(fig=fig, color="r")

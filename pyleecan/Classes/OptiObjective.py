@@ -24,7 +24,7 @@ from ._check import InitUnKnowClassError
 
 
 class OptiObjective(DataKeeper):
-    """Class to distinguish normal DataKeeper from optimization objectives """
+    """Class to distinguish normal DataKeeper from optimization objectives"""
 
     VERSION = 1
 

@@ -15,7 +15,7 @@ if not isdir(save_path):
 
 
 def testSPWM():
-    """Check """
+    """Check"""
     # fs, duration, f,fmax,fmode, fswimode,fswi, fswi_max,typePWM, Vdc1, U0, type_carrier
     for ii in range(2):
         for jj in range(2):
@@ -57,7 +57,7 @@ def testSPWM():
 
 
 def testDPWM():
-    """Check """
+    """Check"""
     for ii in range(9):
         # fs, duration, f,fmax,fmode, fswimode,fswi, fswi_max,typePWM, Vdc1, U0, type_carrier
         test_obj = ImportGenPWM(

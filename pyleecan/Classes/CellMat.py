@@ -44,7 +44,7 @@ from .Interpolation import Interpolation
 
 
 class CellMat(FrozenClass):
-    """Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). """
+    """Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes)."""
 
     VERSION = 1
 

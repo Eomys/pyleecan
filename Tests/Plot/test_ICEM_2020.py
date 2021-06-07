@@ -690,7 +690,11 @@ def test_Optimization_problem():
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
+    simu.mag = MagFEMM(
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=True,
+    )
 
     simu.struct = None
 

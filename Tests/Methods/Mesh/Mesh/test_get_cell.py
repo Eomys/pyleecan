@@ -9,7 +9,7 @@ import numpy as np
 
 @pytest.mark.MeshSol
 class Test_get_cell_MeshMat(object):
-    """unittest for Mesh get_cell methods. Indirect test add_element """
+    """unittest for Mesh get_cell methods. Indirect test add_element"""
 
     def setup_method(self, method):
         self.mesh = MeshMat()
@@ -45,7 +45,7 @@ class Test_get_cell_MeshMat(object):
             assert testA, msg
 
     def test_MeshMat_1seg2tri(self):
-        """unittest MeshMat return 1 segment """
+        """unittest MeshMat return 1 segment"""
         solution = dict()
         solution["triangle3"] = np.array(
             []

@@ -5,7 +5,7 @@ from numpy.linalg import det, norm
 
 def distance_numpy(A, B, P):
     # from: https://gist.github.com/nim65s/5e9902cd67f094ce65b0
-    """ segment line AB, point P, where each one is an array([x, y]) """
+    """segment line AB, point P, where each one is an array([x, y])"""
     if all(A == P) or all(B == P):
         return 0
     if arccos(dot((P - A) / norm(P - A), (B - A) / norm(B - A))) > pi / 2:
