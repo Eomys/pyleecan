@@ -4,31 +4,35 @@ import matplotlib.pyplot as plt
 from numpy import linspace, pi
 
 from pyleecan.Functions.load import load
-from pyleecan.Classes.LamSlotMulti import LamSlotMulti
+from pyleecan.Classes.LamSlotMultiWind import LamSlotMultiWind
 from pyleecan.Classes.SlotW22 import SlotW22
 
 from pyleecan.definitions import DATA_DIR
+from Tests import save_plot_path as save_path
 
 
-@pytest.mark.SIPMSM
-def test_LamSlotMulti():
+@pytest.mark.LamSlotMulti
+def test_LamSlotMultiWind():
     # Load machine
     SPMSM_001 = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
 
     # New lamination main dimensions definition
-    stator = LamSlotMulti(
-        # Kf1=0.96,
-        # L1=0.05,
-        # Nrvd=0,
-        # Wrvd=0,
+    stator = LamSlotMultiWind(
+        Kf1=0.96,
+        L1=0.05,
+        Nrvd=0,
+        Wrvd=0,
         Rint=0.02785,
         Rext=0.05,
         is_internal=False,
         is_stator=True,
     )
 
+    # Copy winding from original stator
+    stator.winding = SPMSM_001.stator.winding.copy()
+
     # New slots definition
-    Slot1 = SPMSM_001.stator.slot.copy()  # reuse existing slot
+    Slot1 = SPMSM_001.stator.slot.copy()
     Slot2 = SPMSM_001.stator.slot.copy()
     Slot2.H0 = 0.002
     Slot2.H2 -= 0.002
@@ -42,13 +46,16 @@ def test_LamSlotMulti():
 
     # Assign slots to stator and set positions
     stator.slot_list = slot_list
-    stator.alpha = linspace(0, 360, 12, endpoint=False) * pi / 180
+    stator.alpha = linspace(0, 360, 12, endpoint=False) * pi / 180 + pi / 12
 
     # Assign stator to machine
     SPMSM_001.stator = stator
-    SPMSM_001.plot()
-    plt.show()
+
+    # Plot the machine
+    SPMSM_001.plot(
+        is_show_fig=False, save_path=join(save_path, "test_LamSlotMultiWind.png")
+    )
 
 
 if __name__ == "__main__":
-    test_LamSlotMulti()
+    test_LamSlotMultiWind()
