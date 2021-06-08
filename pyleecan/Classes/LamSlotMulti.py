@@ -18,11 +18,6 @@ from .Lamination import Lamination
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Machine.LamSlotMulti.build_geometry import build_geometry
-except ImportError as error:
-    build_geometry = error
-
-try:
     from ..Methods.Machine.LamSlotMulti.check import check
 except ImportError as error:
     check = error
@@ -78,18 +73,6 @@ class LamSlotMulti(Lamination):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Machine.LamSlotMulti.build_geometry
-    if isinstance(build_geometry, ImportError):
-        build_geometry = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMulti method build_geometry: "
-                    + str(build_geometry)
-                )
-            )
-        )
-    else:
-        build_geometry = build_geometry
     # cf Methods.Machine.LamSlotMulti.check
     if isinstance(check, ImportError):
         check = property(

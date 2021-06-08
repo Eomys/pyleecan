@@ -56,7 +56,14 @@ install_requires = [
 ]
 
 
-tests_require = ["ddt>=1.3.1", "pytest>=5.4.1", "pytest-qt>=3.3.0", "mock>=4.0.2", "nbformat", "nbconvert"]
+tests_require = [
+    "ddt>=1.3.1",
+    "pytest>=5.4.1",
+    "pytest-qt>=3.3.0",
+    "mock>=4.0.2",
+    "nbformat",
+    "nbconvert",
+]
 
 setuptools.setup(
     name="pyleecan",

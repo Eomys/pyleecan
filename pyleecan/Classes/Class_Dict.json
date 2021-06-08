@@ -4254,11 +4254,12 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LamSlotMultiWind"
+        ],
         "desc": "Lamination with list of Slot",
         "is_internal": false,
         "methods": [
-            "build_geometry",
             "check",
             "comp_radius_mec",
             "comp_surfaces",
@@ -4289,6 +4290,46 @@
                 "name": "alpha",
                 "type": "ndarray",
                 "unit": "[rad]",
+                "value": ""
+            }
+        ]
+    },
+    "LamSlotMultiWind": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with list of Slot filled with winding",
+        "is_internal": false,
+        "methods": [
+            "plot",
+            "build_geometry",
+            "get_pole_pair_number"
+        ],
+        "mother": "LamSlotMulti",
+        "name": "LamSlotMultiWind",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMultiWind.csv",
+        "properties": [
+            {
+                "desc": "Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)",
+                "max": "1",
+                "min": "0",
+                "name": "Ksfill",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Lamination's Winding",
+                "max": "",
+                "min": "",
+                "name": "winding",
+                "type": "Winding",
+                "unit": "",
                 "value": ""
             }
         ]
@@ -4457,6 +4498,7 @@
             "LamSlot",
             "LamSlotMag",
             "LamSlotMulti",
+            "LamSlotMultiWind",
             "LamSlotWind",
             "LamSquirrelCage",
             "LamSquirrelCageMag"
@@ -5166,7 +5208,7 @@
                 "max": "",
                 "min": "",
                 "name": "stator",
-                "type": "LamSlotWind",
+                "type": "Lamination",
                 "unit": "",
                 "value": ""
             }

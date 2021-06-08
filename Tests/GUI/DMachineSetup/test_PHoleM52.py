@@ -133,7 +133,7 @@ class TestPHoleM52(object):
         assert setup["test_obj"].hole[0].magnet_0.mat_type.name == "Magnet1"
 
     def test_comp_output(self, setup):
-        """Check that you can compute the output only if the hole is correctly set """
+        """Check that you can compute the output only if the hole is correctly set"""
         setup["test_obj"] = LamHole(Rint=0.1, Rext=0.2)
         setup["test_obj"].hole = list()
         setup["test_obj"].hole.append(
