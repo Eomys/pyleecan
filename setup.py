@@ -43,7 +43,7 @@ install_requires = [
     "xlrd>=1.2.0",
     "xlwt>=1.3.0",
     "deap>=1.3.1",
-    "SciDataTool>=1.4.0",
+    "SciDataTool>=1.4.1",
     "pyvista>=0.25.3",
     "meshio>=4.0.15",
     "h5py>=3.2.1",
@@ -56,7 +56,14 @@ install_requires = [
 ]
 
 
-tests_require = ["ddt>=1.3.1", "pytest>=5.4.1", "mock>=4.0.2", "nbformat", "nbconvert"]
+tests_require = [
+    "ddt>=1.3.1",
+    "pytest>=5.4.1",
+    "pytest-qt>=3.3.0",
+    "mock>=4.0.2",
+    "nbformat",
+    "nbconvert",
+]
 
 setuptools.setup(
     name="pyleecan",

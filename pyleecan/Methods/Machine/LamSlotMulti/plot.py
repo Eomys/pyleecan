@@ -22,7 +22,7 @@ def plot(
     is_display=True,
     is_show_fig=True,
 ):
-    """Plot the Lamination in a matplotlib fig
+    """Plot the Lamination with empty Slots in a matplotlib fig
 
     Parameters
     ----------
@@ -62,7 +62,7 @@ def plot(
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
-        if "Ext" in surf.label:
+        if "Lamination" in surf.label:
             patches.extend(surf.get_patches(color=lam_color, is_edge_only=is_edge_only))
         else:
             patches.extend(surf.get_patches(is_edge_only=is_edge_only))

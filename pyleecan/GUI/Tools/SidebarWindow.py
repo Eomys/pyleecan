@@ -70,7 +70,7 @@ class SidebarWindow(QtWidgets.QMainWindow):
         )
 
     def addSubWindow(self, name, widget, btn_fct=None):
-        """ add a new sub window to the stack including the coresponding button"""
+        """add a new sub window to the stack including the coresponding button"""
         # Button
         btn = QtWidgets.QPushButton(name)
         btn.setFixedSize(100, 40)
@@ -95,5 +95,5 @@ class SidebarWindow(QtWidgets.QMainWindow):
         return super(SidebarWindow, self).eventFilter(obj, event)
 
     def closeEvent(self, event):
-        """Overload the methode to call DesignWidget.closeEvent """
+        """Overload the methode to call DesignWidget.closeEvent"""
         self.DesignWidget.closeEvent(event)

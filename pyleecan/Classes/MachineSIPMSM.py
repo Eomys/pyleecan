@@ -30,7 +30,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .LamSlotMag import LamSlotMag
-from .LamSlotWind import LamSlotWind
+from .Lamination import Lamination
 from .Frame import Frame
 from .Shaft import Shaft
 
@@ -274,8 +274,8 @@ class MachineSIPMSM(MachineSync):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            value = LamSlotWind()
-        check_var("stator", value, "LamSlotWind")
+            value = Lamination()
+        check_var("stator", value, "Lamination")
         self._stator = value
 
         if self._stator is not None:
@@ -286,6 +286,6 @@ class MachineSIPMSM(MachineSync):
         fset=_set_stator,
         doc=u"""Machine's Stator
 
-        :Type: LamSlotWind
+        :Type: Lamination
         """,
     )
