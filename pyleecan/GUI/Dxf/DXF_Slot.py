@@ -308,11 +308,15 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 ii
                 for ii, line in enumerate(line_list)
                 if abs(line.get_begin() - Zbegin) < Z_TOL
+                or abs(line.get_end() - Zbegin) < Z_TOL
             ]
         )
         # Sort the lines (begin = end)
         curve_list = list()
         curve_list.append(line_list.pop(id_list[0]))
+        if abs(curve_list[0].get_end() - Zbegin) < Z_TOL:
+            # Reverse begin line if line end matches with begin point
+            curve_list[0].reverse()
         while len(line_list) > 0:
             end = curve_list[-1].get_end()
             for ii in range(len(line_list)):

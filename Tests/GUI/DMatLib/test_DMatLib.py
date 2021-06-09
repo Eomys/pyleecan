@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import sys
-
-from PySide2 import QtWidgets
-
-from pyleecan.Classes.MatMagnetics import MatMagnetics
-from pyleecan.Classes.Material import Material
-from pyleecan.Functions.load import load_matlib
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
-from Tests import save_gui_path
-
 from os import makedirs
 from os.path import isdir, join
 from shutil import rmtree
 
 import pytest
+from numpy import array
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.Material import Material
+from pyleecan.Classes.MatMagnetics import MatMagnetics
+from pyleecan.Functions.load import load_matlib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from PySide2 import QtWidgets
+from Tests import save_gui_path
 
 # To save the tmp Matlib
 tmp_folder = join(save_gui_path, "DMatLib", "tmp_matlib")
@@ -38,6 +37,9 @@ class TestDMatLib(object):
         mat_lib[0].is_isotropic = True
         mat_lib[0].elec.rho = 0.11
         mat_lib[0].mag = MatMagnetics(mur_lin=0.12, Wlam=0.13)
+        mat_lib[0].mag.BH_curve = ImportMatrixVal(
+            value=array([[0, 1], [2, 100], [3, 300], [4, 450]])
+        )
         mat_lib[0].struct.rho = 0.14
         mat_lib[0].struct.Ex = 0.15
         mat_lib[0].struct.Ey = 0.152
@@ -92,6 +94,7 @@ class TestDMatLib(object):
         assert setup["widget"].out_nu.text() == "nu = 0.16"
         assert setup["widget"].out_mur_lin.text() == "mur_lin = 0.12"
         assert setup["widget"].out_wlam.text() == "wlam = 0.13 [m]"
+        assert setup["widget"].out_BH.text() == "Matrix (4, 2)"
 
         # Check list
         assert setup["widget"].nav_mat.count() == 7
