@@ -27,7 +27,7 @@ def get_mag_datakeeper(self, symbol_list, is_multi=False):
             dk_list.append(
                 DataKeeper(
                     name="Max Average Torque",
-                    symbol="Tem_av",
+                    symbol="Max_Tem_av",
                     unit="N.m",
                     keeper="lambda output: max(output.xoutput_dict['Tem_av'].result)",
                     error_keeper=error_nan,
