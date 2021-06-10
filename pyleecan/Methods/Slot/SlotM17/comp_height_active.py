@@ -18,4 +18,4 @@ def comp_height_active(self):
 
     """
 
-    return self.parent.Rext
+    return self.parent.Rext - self.parent.Rint

@@ -17,4 +17,4 @@ def comp_surface_active(self):
 
     """
 
-    return pi * self.parent.Rext ** 2 / 2
+    return pi / 2 * (self.parent.Rext ** 2 - self.parent.Rext ** 2)
