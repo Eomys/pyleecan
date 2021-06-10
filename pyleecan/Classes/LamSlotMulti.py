@@ -57,6 +57,11 @@ try:
 except ImportError as error:
     get_bore_desc = error
 
+try:
+    from ..Methods.Machine.LamSlotMulti.comp_periodicity import comp_periodicity
+except ImportError as error:
+    comp_periodicity = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -158,6 +163,18 @@ class LamSlotMulti(Lamination):
         )
     else:
         get_bore_desc = get_bore_desc
+    # cf Methods.Machine.LamSlotMulti.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMulti method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
+            )
+        )
+    else:
+        comp_periodicity = comp_periodicity
     # save and copy methods are available in all object
     save = save
     copy = copy

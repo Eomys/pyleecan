@@ -4267,7 +4267,8 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc"
+            "get_bore_desc",
+            "comp_periodicity"
         ],
         "mother": "Lamination",
         "name": "LamSlotMulti",
@@ -4307,7 +4308,11 @@
         "methods": [
             "plot",
             "build_geometry",
-            "get_pole_pair_number"
+            "get_pole_pair_number",
+            "comp_rot_dir",
+            "plot_mmf_unit",
+            "comp_mmf_unit",
+            "comp_wind_function"
         ],
         "mother": "LamSlotMulti",
         "name": "LamSlotMultiWind",

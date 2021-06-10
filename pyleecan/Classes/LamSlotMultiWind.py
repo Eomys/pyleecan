@@ -34,6 +34,26 @@ try:
 except ImportError as error:
     get_pole_pair_number = error
 
+try:
+    from ..Methods.Machine.LamSlotMultiWind.comp_rot_dir import comp_rot_dir
+except ImportError as error:
+    comp_rot_dir = error
+
+try:
+    from ..Methods.Machine.LamSlotMultiWind.plot_mmf_unit import plot_mmf_unit
+except ImportError as error:
+    plot_mmf_unit = error
+
+try:
+    from ..Methods.Machine.LamSlotMultiWind.comp_mmf_unit import comp_mmf_unit
+except ImportError as error:
+    comp_mmf_unit = error
+
+try:
+    from ..Methods.Machine.LamSlotMultiWind.comp_wind_function import comp_wind_function
+except ImportError as error:
+    comp_wind_function = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -84,6 +104,54 @@ class LamSlotMultiWind(LamSlotMulti):
         )
     else:
         get_pole_pair_number = get_pole_pair_number
+    # cf Methods.Machine.LamSlotMultiWind.comp_rot_dir
+    if isinstance(comp_rot_dir, ImportError):
+        comp_rot_dir = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMultiWind method comp_rot_dir: "
+                    + str(comp_rot_dir)
+                )
+            )
+        )
+    else:
+        comp_rot_dir = comp_rot_dir
+    # cf Methods.Machine.LamSlotMultiWind.plot_mmf_unit
+    if isinstance(plot_mmf_unit, ImportError):
+        plot_mmf_unit = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMultiWind method plot_mmf_unit: "
+                    + str(plot_mmf_unit)
+                )
+            )
+        )
+    else:
+        plot_mmf_unit = plot_mmf_unit
+    # cf Methods.Machine.LamSlotMultiWind.comp_mmf_unit
+    if isinstance(comp_mmf_unit, ImportError):
+        comp_mmf_unit = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMultiWind method comp_mmf_unit: "
+                    + str(comp_mmf_unit)
+                )
+            )
+        )
+    else:
+        comp_mmf_unit = comp_mmf_unit
+    # cf Methods.Machine.LamSlotMultiWind.comp_wind_function
+    if isinstance(comp_wind_function, ImportError):
+        comp_wind_function = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMultiWind method comp_wind_function: "
+                    + str(comp_wind_function)
+                )
+            )
+        )
+    else:
+        comp_wind_function = comp_wind_function
     # save and copy methods are available in all object
     save = save
     copy = copy
