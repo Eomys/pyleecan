@@ -85,7 +85,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         else:
             pass  # No surface to draw (SlotM17)
 
-    else:  # Part of the lamination by symmetry
+    elif sym != 1 and len(ext_line) > 0:  # Part of the lamination by symmetry
         Z0 = self.Rint
         Z1 = self.Rext
         Z3 = Z0 * exp(1j * 2 * pi / sym)
