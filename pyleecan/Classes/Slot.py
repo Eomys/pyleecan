@@ -83,6 +83,11 @@ except ImportError as error:
     comp_width_opening = error
 
 try:
+    from ..Methods.Slot.Slot.convert_to_SlotUD2 import convert_to_SlotUD2
+except ImportError as error:
+    convert_to_SlotUD2 = error
+
+try:
     from ..Methods.Slot.Slot.get_is_stator import get_is_stator
 except ImportError as error:
     get_is_stator = error
@@ -276,6 +281,18 @@ class Slot(FrozenClass):
         )
     else:
         comp_width_opening = comp_width_opening
+    # cf Methods.Slot.Slot.convert_to_SlotUD2
+    if isinstance(convert_to_SlotUD2, ImportError):
+        convert_to_SlotUD2 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method convert_to_SlotUD2: "
+                    + str(convert_to_SlotUD2)
+                )
+            )
+        )
+    else:
+        convert_to_SlotUD2 = convert_to_SlotUD2
     # cf Methods.Slot.Slot.get_is_stator
     if isinstance(get_is_stator, ImportError):
         get_is_stator = property(
