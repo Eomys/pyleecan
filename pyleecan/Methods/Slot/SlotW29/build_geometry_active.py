@@ -5,6 +5,7 @@ from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Functions.labels import WIND_LAB
 
+
 def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):
     """Split the slot winding area in several zone
 
@@ -76,14 +77,9 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
                     curve_list.append(Segment(Z2, Z3))
                 if ii != Nrad - 1:
                     curve_list.append(Segment(Z3, Z4))
-                label=lam_label
-                    + "_"
-                    + WIND_LAB
-                    + "_R"
-                    + str(ii)
-                    + "-T"
-                    + str(jj)
-                    + "-S0",
+                label = (
+                    lam_label + "_" + WIND_LAB + "_R" + str(ii) + "-T" + str(jj) + "-S0"
+                )
                 surface = SurfLine(
                     line_list=curve_list, label=label, point_ref=point_ref
                 )
