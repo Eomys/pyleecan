@@ -1,7 +1,7 @@
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Classes.Arc1 import Arc1
-from ....Functions.labels import HOLEV_LAB, HOLEM_LAB
+from ....Functions.labels import HOLEV_LAB, HOLEM_LAB, MAGNET_PROP_LAB
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):
@@ -64,73 +64,73 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     Rext = self.get_Rext()
 
     # Create all the lines
-    L_1_2 = Segment(Z1, Z2, label="")
-    L_1s_2s = Segment(Z1s, Z2s, label="")
-    L_1s_11s = Segment(Z1s, Z11s, label="")
-    L_2_3 = Segment(Z2, Z3, label="")
-    L_2s_1s = Segment(Z2s, Z1s, label="")
-    L_2s_3s = Segment(Z2s, Z3s, label="")
-    L_3_4 = Segment(Z3, Z4, label="Rotor_Magnet_0_Right")
-    L_3s_2s = Segment(Z3s, Z2s, label="")
-    L_3s_4s = Segment(Z3s, Z4s, label="Rotor_Magnet_1_Left")
-    L_3_8c = Segment(Z3, Z8c, label="Rotor_Hole_0_Right")
-    L_3s_8cs = Segment(Z3s, Z8cs, label="Rotor_Hole_1_Left")
-    L_4_5 = Segment(Z4, Z5, label="Rotor_Magnet_0_Bottom")
-    L_4s_3s = Segment(Z4s, Z3s, label="")
-    L_4s_5s = Segment(Z4s, Z5s, label="Rotor_Magnet_1_Bottom")
-    L_5_6 = Segment(Z5, Z6, label="Rotor_Magnet_0_Left")
-    L_5s_4s = Segment(Z5s, Z4s, label="")
-    L_5s_6s = Segment(Z5s, Z6s, label="Rotor_Magnet_1_Right")
-    L_6_7 = Segment(Z6, Z7, label="")
-    L_6s_5s = Segment(Z6s, Z5s, label="")
-    L_6s_7s = Segment(Z6s, Z7s, label="")
-    L_6_8b = Segment(Z6, Z8b, label="")
-    L_6s_8bs = Segment(Z6s, Z8bs, label="")
-    L_7_6s = Segment(Z7, Z6s, label="")
-    L_7_8 = Segment(Z7, Z8, label="Rotor_Radial_Bridge")
-    L_7s_6 = Segment(Z7s, Z6, label="")
-    L_7s_8s = Segment(Z7s, Z8s, label="Rotor_Radial_Bridge")
+    L_1_2 = Segment(Z1, Z2, prop_dict=None)
+    L_1s_2s = Segment(Z1s, Z2s, prop_dict=None)
+    L_1s_11s = Segment(Z1s, Z11s, prop_dict=None)
+    L_2_3 = Segment(Z2, Z3, prop_dict=None)
+    L_2s_1s = Segment(Z2s, Z1s, prop_dict=None)
+    L_2s_3s = Segment(Z2s, Z3s, prop_dict=None)
+    L_3_4 = Segment(Z3, Z4, prop_dict={MAGNET_PROP_LAB: "Rotor_Magnet_0_Right"})
+    L_3s_2s = Segment(Z3s, Z2s, prop_dict=None)
+    L_3s_4s = Segment(Z3s, Z4s, prop_dict={MAGNET_PROP_LAB: "Rotor_Magnet_1_Left"})
+    L_3_8c = Segment(Z3, Z8c, prop_dict={MAGNET_PROP_LAB: "Rotor_Hole_0_Right"})
+    L_3s_8cs = Segment(Z3s, Z8cs, prop_dict={MAGNET_PROP_LAB: "Rotor_Hole_1_Left"})
+    L_4_5 = Segment(Z4, Z5, prop_dict={MAGNET_PROP_LAB: "Rotor_Magnet_0_Bottom"})
+    L_4s_3s = Segment(Z4s, Z3s, prop_dict=None)
+    L_4s_5s = Segment(Z4s, Z5s, prop_dict={MAGNET_PROP_LAB: "Rotor_Magnet_1_Bottom"})
+    L_5_6 = Segment(Z5, Z6, prop_dict={MAGNET_PROP_LAB: "Rotor_Magnet_0_Left"})
+    L_5s_4s = Segment(Z5s, Z4s, prop_dict=None)
+    L_5s_6s = Segment(Z5s, Z6s, prop_dict={MAGNET_PROP_LAB: "Rotor_Magnet_1_Right"})
+    L_6_7 = Segment(Z6, Z7, prop_dict=None)
+    L_6s_5s = Segment(Z6s, Z5s, prop_dict=None)
+    L_6s_7s = Segment(Z6s, Z7s, prop_dict=None)
+    L_6_8b = Segment(Z6, Z8b, prop_dict=None)
+    L_6s_8bs = Segment(Z6s, Z8bs, prop_dict=None)
+    L_7_6s = Segment(Z7, Z6s, prop_dict=None)
+    L_7_8 = Segment(Z7, Z8, prop_dict={MAGNET_PROP_LAB: "Rotor_Radial_Bridge"})
+    L_7s_6 = Segment(Z7s, Z6, prop_dict=None)
+    L_7s_8s = Segment(Z7s, Z8s, prop_dict={MAGNET_PROP_LAB: "Rotor_Radial_Bridge"})
 
-    L_8_8b = Segment(Z8, Z8b, label="")
-    L_8_9 = Segment(Z8, Z9, label="")
-    L_8s_8bs = Segment(Z8s, Z8bs, label="Rotor_Hole_1_Top")
-    L_8s_8b = Segment(Z8s, Z8b, label="Rotor_Hole_0_Top")
-    L_8s_9 = Segment(Z8s, Z9, label="")
-    L_8s_9s = Segment(Z8s, Z9s, label="")
+    L_8_8b = Segment(Z8, Z8b, prop_dict=None)
+    L_8_9 = Segment(Z8, Z9, prop_dict=None)
+    L_8s_8bs = Segment(Z8s, Z8bs, prop_dict={MAGNET_PROP_LAB: "Rotor_Hole_1_Top"})
+    L_8s_8b = Segment(Z8s, Z8b, prop_dict={MAGNET_PROP_LAB: "Rotor_Hole_0_Top"})
+    L_8s_9 = Segment(Z8s, Z9, prop_dict=None)
+    L_8s_9s = Segment(Z8s, Z9s, prop_dict=None)
 
-    L_8b_6 = Segment(Z8b, Z6, label="Rotor_Hole_0_Left")
-    L_8bs_6s = Segment(Z8bs, Z6s, label="Rotor_Hole_1_Right")
-    L_8b_8c = Segment(Z8b, Z8c, label="Rotor_Magnet_0_Top")
-    L_8b_8s = Segment(Z8b, Z8s, label="")
-    L_8bs_8 = Segment(Z8bs, Z8, label="")
-    L_8bs_8s = Segment(Z8bs, Z8s, label="Rotor_Hole_1_Top")
-    L_8bs_8cs = Segment(Z8bs, Z8cs, label="Rotor_Magnet_1_Top")
+    L_8b_6 = Segment(Z8b, Z6, prop_dict={MAGNET_PROP_LAB: "Rotor_Hole_0_Left"})
+    L_8bs_6s = Segment(Z8bs, Z6s, prop_dict={MAGNET_PROP_LAB: "Rotor_Hole_1_Right"})
+    L_8b_8c = Segment(Z8b, Z8c, prop_dict={MAGNET_PROP_LAB: "Rotor_Magnet_0_Top"})
+    L_8b_8s = Segment(Z8b, Z8s, prop_dict=None)
+    L_8bs_8 = Segment(Z8bs, Z8, prop_dict=None)
+    L_8bs_8s = Segment(Z8bs, Z8s, prop_dict={MAGNET_PROP_LAB: "Rotor_Hole_1_Top"})
+    L_8bs_8cs = Segment(Z8bs, Z8cs, prop_dict={MAGNET_PROP_LAB: "Rotor_Magnet_1_Top"})
 
-    L_8c_3 = Segment(Z8c, Z3, label="")
-    L_8cs_3s = Segment(Z8cs, Z3s, label="")
-    L_8c_9 = Segment(Z8c, Z9, label="Rotor_Hole_0_Top")
-    L_8cs_9s = Segment(Z8cs, Z9s, label="Rotor_Hole_1_Top")
+    L_8c_3 = Segment(Z8c, Z3, prop_dict=None)
+    L_8cs_3s = Segment(Z8cs, Z3s, prop_dict=None)
+    L_8c_9 = Segment(Z8c, Z9, prop_dict={MAGNET_PROP_LAB: "Rotor_Hole_0_Top"})
+    L_8cs_9s = Segment(Z8cs, Z9s, prop_dict={MAGNET_PROP_LAB: "Rotor_Hole_1_Top"})
 
-    L_9_10 = Segment(Z9, Z10, label="")
-    L_9s_8s = Segment(Z9s, Z8s, label="")
-    L_9s_10s = Segment(Z9s, Z10s, label="")
+    L_9_10 = Segment(Z9, Z10, prop_dict=None)
+    L_9s_8s = Segment(Z9s, Z8s, prop_dict=None)
+    L_9s_10s = Segment(Z9s, Z10s, prop_dict=None)
     L_10_11 = Arc1(
         Z10,
         Z11,
         -Rext + self.H1,
         is_trigo_direction=False,
-        label="Rotor_Tangential_Bridge",
+        prop_dict={MAGNET_PROP_LAB: "Rotor_Tangential_Bridge"},
     )
-    L_10s_9s = Segment(Z10s, Z9s, label="")
+    L_10s_9s = Segment(Z10s, Z9s, prop_dict=None)
     L_10s_11s = Arc1(
         Z10s,
         Z11s,
         Rext - self.H1,
         is_trigo_direction=True,
-        label="Rotor_Tangential_Bridge",
+        prop_dict={MAGNET_PROP_LAB: "Rotor_Tangential_Bridge"},
     )
-    L_11_1 = Segment(Z11, Z1, label="")
-    L_11s_1s = Segment(Z11s, Z1s, label="")
+    L_11_1 = Segment(Z11, Z1, prop_dict=None)
+    L_11s_1s = Segment(Z11s, Z1s, prop_dict=None)
     L_11s_10s = Arc1(Z11s, Z10s, -Rext + self.H1, is_trigo_direction=False)
 
     # Create all the surfaces for all the cases
@@ -264,7 +264,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     if self.H4 > 0:
         curve_list.append(L_9s_10s)
     curve_list.append(
-        Arc1(Z10s, Z11s, Rext - self.H1, is_trigo_direction=True, label="")
+        Arc1(Z10s, Z11s, Rext - self.H1, is_trigo_direction=True, prop_dict=None)
     )
     if self.H4 > 0:
         curve_list.append(L_11s_1s)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ....Functions.FEMM import boundary_prop
+from ....Functions.labels import BOUNDARY_PROP_LAB
 
 
 def draw_FEMM(
@@ -48,7 +49,11 @@ def draw_FEMM(
 
     # Get BC (if any)
     for bound_label in boundary_prop:
-        if bound_label in self.label:
+        if (
+            self.prop_dict is not None
+            and BOUNDARY_PROP_LAB in self.prop_dict
+            and bound_label == self.prop_dict[BOUNDARY_PROP_LAB]
+        ):
             propname = boundary_prop[bound_label]
 
     # Add the nodes

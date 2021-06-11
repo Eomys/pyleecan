@@ -4,7 +4,7 @@ from numpy import exp, pi
 from ....Classes.Lamination import Lamination
 
 
-def get_bore_desc(self, sym=1, line_label=None):
+def get_bore_desc(self, sym=1, prop_dict=None):
     """This method returns an ordered description of the elements
     that defines the bore radius of the lamination
 
@@ -12,8 +12,8 @@ def get_bore_desc(self, sym=1, line_label=None):
     ----------
     self : LamSlot
         A LamSlot object
-    line_label : str
-        Label to apply on the lines
+    prop_dict : dict
+        Property dictionary to apply on the lines
 
     Returns
     -------
@@ -121,9 +121,12 @@ def get_bore_desc(self, sym=1, line_label=None):
                 line.rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
             bore_lines.extend(lines)
 
-    # Set line label
-    if line_label is not None:
+    # Set line properties
+    if prop_dict is not None:
         for line in bore_lines:
-            line.label = line_label
+            if line.prop_dict is None:
+                line.prop_dict = prop_dict
+            else:
+                line.prop_dict.update(prop_dict)
 
     return bore_desc, bore_lines

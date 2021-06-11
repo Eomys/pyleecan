@@ -5,7 +5,15 @@ from ...Classes.Arc1 import Arc1
 from ...Classes.Circle import Circle
 from ...Classes.Segment import Segment
 from ...Classes.SurfLine import SurfLine
-from ...Functions.labels import SLID_LAB, NO_MESH_LAB, NO_LAM_LAB
+from ...Functions.labels import (
+    SLID_LAB,
+    NO_MESH_LAB,
+    NO_LAM_LAB,
+    BOUNDARY_PROP_LAB,
+    SLID_LINE1_LAB,
+    SLID_LINE2_LAB,
+    SLID_LINE_LAB,
+)
 
 
 def get_sliding_band(sym, lam_int, lam_ext):
@@ -72,11 +80,20 @@ def get_sliding_band(sym, lam_int, lam_ext):
         Z3 = Z2 * exp(1j * 2 * pi / sym)
         Z4 = Z1 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
-        airgap_lines.append(Segment(begin=Z1, end=Z2, label="airgap_line_1"))
         airgap_lines.append(
-            Arc1(begin=Z2, end=Z3, radius=Rgap_mec_int + W_sb, label="sliding_line")
+            Segment(begin=Z1, end=Z2, prop_dict={BOUNDARY_PROP_LAB: SLID_LINE1_LAB})
         )
-        airgap_lines.append(Segment(begin=Z3, end=Z4, label="airgap_line_1"))
+        airgap_lines.append(
+            Arc1(
+                begin=Z2,
+                end=Z3,
+                radius=Rgap_mec_int + W_sb,
+                prop_dict={BOUNDARY_PROP_LAB: SLID_LINE_LAB},
+            )
+        )
+        airgap_lines.append(
+            Segment(begin=Z3, end=Z4, prop_dict={BOUNDARY_PROP_LAB: SLID_LINE1_LAB})
+        )
         surf_list.append(
             SurfLine(
                 line_list=airgap_lines,
@@ -90,11 +107,20 @@ def get_sliding_band(sym, lam_int, lam_ext):
         Z7 = Z6 * exp(1j * 2 * pi / sym)
         Z8 = Z5 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
-        airgap_lines.append(Segment(begin=Z5, end=Z6, label="airgap_line_2"))
         airgap_lines.append(
-            Arc1(begin=Z6, end=Z7, radius=Rgap_mec_ext - W_sb, label="sliding_line")
+            Segment(begin=Z5, end=Z6, prop_dict={BOUNDARY_PROP_LAB: SLID_LINE2_LAB})
         )
-        airgap_lines.append(Segment(begin=Z7, end=Z8, label="airgap_line_2"))
+        airgap_lines.append(
+            Arc1(
+                begin=Z6,
+                end=Z7,
+                radius=Rgap_mec_ext - W_sb,
+                prop_dict={BOUNDARY_PROP_LAB: SLID_LINE_LAB},
+            )
+        )
+        airgap_lines.append(
+            Segment(begin=Z7, end=Z8, prop_dict={BOUNDARY_PROP_LAB: SLID_LINE2_LAB})
+        )
         surf_list.append(
             SurfLine(
                 line_list=airgap_lines,

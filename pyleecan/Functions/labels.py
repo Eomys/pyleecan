@@ -17,8 +17,12 @@ NO_LAM_LAB = "None"  # To replace "Stator-X" when no lamination
 # Line Property dict
 BOUNDARY_PROP_LAB = "Boundary"
 YS_LAB = "YokeSide"
+SLID_LINE1_LAB = "airgap_line_1"
+SLID_LINE2_LAB = "airgap_line_2"
+SLID_LINE_LAB = "airgap_line"
 
 RADIUS_PROP_LAB = "LamRadius"
+MAGNET_PROP_LAB = "MagnetLines"
 
 
 def decode_label(label):
