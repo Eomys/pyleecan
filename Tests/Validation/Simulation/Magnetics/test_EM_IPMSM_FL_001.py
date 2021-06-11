@@ -75,3 +75,7 @@ def test_EM_IPMSM_FL_001():
         is_show_fig=False,
         **dict_2D
     )
+
+
+if __name__ == "__main__":
+    test_EM_IPMSM_FL_001()

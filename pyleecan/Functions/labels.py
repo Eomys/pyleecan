@@ -14,6 +14,13 @@ VENT_LAB = "Ventilation"
 NO_LAM_LAB = "None"  # To replace "Stator-X" when no lamination
 
 
+# Line Property dict
+BOUNDARY_PROP_LAB = "Boundary"
+YS_LAB = "YokeSide"
+
+RADIUS_PROP_LAB = "LamRadius"
+
+
 def decode_label(label):
     """Spit the label to return a dict with the main information"""
     label_dict = {"full": label}

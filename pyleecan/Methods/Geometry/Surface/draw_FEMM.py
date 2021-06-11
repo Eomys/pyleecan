@@ -6,6 +6,7 @@ from ....Classes.Arc3 import Arc3
 from ....Functions.FEMM.get_mesh_param import get_mesh_param
 from ....Functions.labels import decode_label
 
+
 def draw_FEMM(
     self, femm, nodeprop=None, maxseg=None, propname=None, FEMM_dict=None, hide=False
 ):
@@ -42,10 +43,9 @@ def draw_FEMM(
     lines = self.get_lines()
 
     for line in lines:
-        if line.label in [None, ""]:  # Use surface mesh param
-            label_dict = decode_label(self.label)
-        else:  # Use line mesh param
-            label_dict = decode_label(line.label)
+        label_dict = decode_label(self.label)  # Use surface mesh param
+        if line.prop_dict not in [None, dict()]:  # Use surface mesh param
+            pass
         mesh_dict = get_mesh_param(label_dict, FEMM_dict)
         if type(line) in [Arc1, Arc2, Arc3]:
             line.draw_FEMM(
