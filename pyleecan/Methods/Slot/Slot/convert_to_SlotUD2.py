@@ -18,7 +18,7 @@ def convert_to_SlotUD2(self):
     new_slot = SlotUD2()
     new_slot.Zs = self.Zs
     new_slot.line_list = self.build_geometry()
-    new_slot.active_surf = self.build_geometry_active(Nrad=1, Ntan=1)[0]
+    new_slot.active_surf = self.get_surface_active()
     new_slot.split_active_surf_dict = None
 
     return new_slot
