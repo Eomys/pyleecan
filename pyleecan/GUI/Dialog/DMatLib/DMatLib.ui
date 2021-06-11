@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Material Library</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../Resources/pyleecan.qrc">
+    <normaloff>:/images/images/icon/pyleecan_64.png</normaloff>:/images/images/icon/pyleecan_64.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_11">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -697,7 +701,6 @@
    </item>
   </layout>
   <zorder>b_close</zorder>
-  <zorder></zorder>
  </widget>
  <resources>
   <include location="../../Resources/pyleecan.qrc"/>

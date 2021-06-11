@@ -14,8 +14,6 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.SlotW13 import SlotW13
 
@@ -27,7 +25,6 @@ import pytest
 """pytest for Lamination with winding plot"""
 
 
-@pytest.mark.PLOT
 class Test_Slot_13_plot(object):
     def test_Lam_Wind_13_wind_22(self):
         """Test machine plot with Slot 13 and winding rad=2, tan=2"""
@@ -54,9 +51,7 @@ class Test_Slot_13_plot(object):
             H2=140e-3,
             H1_is_rad=False,
         )
-        test_obj.rotor.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
         test_obj.shaft.mat_type.name = "M270_35A"
 
@@ -83,9 +78,7 @@ class Test_Slot_13_plot(object):
             H2=130e-3,
             H1_is_rad=False,
         )
-        test_obj.stator.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.stator.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
         test_obj.stator.mat_type.name = "Param"
         test_obj.stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 

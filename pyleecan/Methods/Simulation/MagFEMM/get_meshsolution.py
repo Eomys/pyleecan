@@ -126,7 +126,7 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
             name = FEMM_GROUPS[grp]["name"]
             ind = np.where(listElem0[:, 6] == idx)[0]
             if ind.size > 0:
-                groups[name] = mesh.cell["triangle"].indice[ind]
+                groups[name] = mesh.cell["triangle"].indice[ind].tolist()
     else:
         mesh = None
         groups = None

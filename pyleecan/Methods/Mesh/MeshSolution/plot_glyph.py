@@ -8,17 +8,17 @@ from ....Classes.MeshMat import MeshMat
 
 def plot_glyph(
     self,
-    *arg_list,
+    *args,
     label=None,
     index=None,
     indices=None,
     clim=None,
     factor=None,
     field_name=None,
-    ifreq=0,
     save_path=None,
     is_point_arrow=False,
     group_names=None,
+    is_show_fig=True,
 ):
     """Plot the vector field as a glyph (or quiver) over the mesh.
 
@@ -26,6 +26,8 @@ def plot_glyph(
     ----------
     self : MeshSolution
         a MeshSolution object
+    *args: list of strings
+        List of axes requested by the user, their units and values (optional)
     label : str
         a label
     index : int
@@ -38,8 +40,6 @@ def plot_glyph(
         factor to multiply vector field
     field_name : str
         title of the field to display on plot
-    ifreq : int
-        index of the frequency to use for plot (if exists)
     save_path : str
         path to save the plot into an image
     is_point_arrow : bool
@@ -54,16 +54,16 @@ def plot_glyph(
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
         meshsol_grp.plot_glyph(
-            label,
-            index,
-            indices,
-            clim,
-            factor,
-            field_name,
-            ifreq,
-            save_path,
-            is_point_arrow,
-            None,
+            *args,
+            label=label,
+            index=index,
+            indices=indices,
+            clim=clim,
+            factor=factor,
+            field_name=field_name,
+            save_path=save_path,
+            is_point_arrow=is_point_arrow,
+            group_names=None,
         )
     else:
 
@@ -82,24 +82,27 @@ def plot_glyph(
             is_pyvistaqt = False
 
         # Get the mesh
-        mesh = self.get_mesh(label=label, index=index)
-        new_mesh = mesh.copy()
-        new_mesh.renum()
-        mesh_pv = new_mesh.get_mesh_pv(indices=indices)
+        mesh_pv, field, field_name = self.get_mesh_field_pv(
+            *args,
+            label=label,
+            index=index,
+            indices=indices,
+            field_name=field_name,
+        )
 
-        # Get the vector field
-        arg_list = ["time[0]", "indice"]
-
-        vect_field = real(self.get_field(*arg_list, label=label, index=index))
-        # if len(vect_field.shape) == 3:
-        #     # Third dimension is frequencies
-        #     vect_field = vect_field[:, :, ifreq]
+        vect_field = real(field)
 
         # Compute factor
         if factor is None:
-            factor = 1 / (100 * np_max(vect_field))
+            # factor = 1 / (100 * np_max(vect_field))
+            factor = 1 / np_max(vect_field) * 10
 
-        if self.dimension == 2:
+        # Add third dimension if needed
+        solution = self.get_solution(
+            label=label,
+            index=index,
+        )
+        if solution.dimension == 2:
             vect_field = np.hstack((vect_field, np.zeros((vect_field.shape[0], 1))))
 
         # Add field to mesh
@@ -124,10 +127,13 @@ def plot_glyph(
         p.add_mesh(
             mesh_pv, color="grey", opacity=0.7, show_edges=True, edge_color="white"
         )
+        p.set_position((0.2, 0.2, 0.5))
+        p.reset_camera()
         p.add_mesh(arrows_plt, color="red")
-        if self.dimension:
-            p.view_xy()
-        if save_path is None:
+        p.add_axes()
+        # if self.dimension:
+        #     p.view_xy()
+        if save_path is None and is_show_fig:
             p.show()
         else:
             p.show(interactive=False, screenshot=save_path)

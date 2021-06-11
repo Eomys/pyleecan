@@ -7,7 +7,7 @@
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import check_var, raise_
+from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.copy import copy
@@ -57,7 +57,18 @@ try:
 except ImportError as error:
     as_dict = error
 
+try:
+    from ..Methods.Mesh.MeshVTK.perm_coord import perm_coord
+except ImportError as error:
+    perm_coord = error
 
+try:
+    from ..Methods.Mesh.MeshVTK.get_path import get_path
+except ImportError as error:
+    get_path = error
+
+
+from numpy import array, array_equal
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
@@ -155,6 +166,24 @@ class MeshVTK(Mesh):
         )
     else:
         as_dict = as_dict
+    # cf Methods.Mesh.MeshVTK.perm_coord
+    if isinstance(perm_coord, ImportError):
+        perm_coord = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshVTK method perm_coord: " + str(perm_coord))
+            )
+        )
+    else:
+        perm_coord = perm_coord
+    # cf Methods.Mesh.MeshVTK.get_path
+    if isinstance(get_path, ImportError):
+        get_path = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshVTK method get_path: " + str(get_path))
+            )
+        )
+    else:
+        get_path = get_path
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -166,12 +195,13 @@ class MeshVTK(Mesh):
         mesh=None,
         is_pyvista_mesh=False,
         format="vtk",
-        path="",
+        path=None,
         name="mesh",
         surf=None,
         is_vtk_surf=False,
         surf_path="",
-        surf_name="surf",
+        surf_name="",
+        node_normals=None,
         label=None,
         dimension=2,
         init_dict=None,
@@ -180,7 +210,7 @@ class MeshVTK(Mesh):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -210,6 +240,8 @@ class MeshVTK(Mesh):
                 surf_path = init_dict["surf_path"]
             if "surf_name" in list(init_dict.keys()):
                 surf_name = init_dict["surf_name"]
+            if "node_normals" in list(init_dict.keys()):
+                node_normals = init_dict["node_normals"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
@@ -224,6 +256,7 @@ class MeshVTK(Mesh):
         self.is_vtk_surf = is_vtk_surf
         self.surf_path = surf_path
         self.surf_name = surf_name
+        self.node_normals = node_normals
         # Call Mesh init
         super(MeshVTK, self).__init__(label=label, dimension=dimension)
         # The class is frozen (in Mesh init), for now it's impossible to
@@ -244,6 +277,13 @@ class MeshVTK(Mesh):
         MeshVTK_str += "is_vtk_surf = " + str(self.is_vtk_surf) + linesep
         MeshVTK_str += 'surf_path = "' + str(self.surf_path) + '"' + linesep
         MeshVTK_str += 'surf_name = "' + str(self.surf_name) + '"' + linesep
+        MeshVTK_str += (
+            "node_normals = "
+            + linesep
+            + str(self.node_normals).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return MeshVTK_str
 
     def __eq__(self, other):
@@ -273,11 +313,15 @@ class MeshVTK(Mesh):
             return False
         if other.surf_name != self.surf_name:
             return False
+        if not array_equal(other.node_normals, self.node_normals):
+            return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -288,8 +332,8 @@ class MeshVTK(Mesh):
             other.mesh is not None and self.mesh is None
         ):
             diff_list.append(name + ".mesh None mismatch")
-        elif self.mesh is not None:
-            diff_list.extend(self.mesh.compare(other.mesh, name=name + ".mesh"))
+        elif self.mesh is not None and self.mesh != other.mesh:
+            diff_list.append(name + ".mesh")
         if other._is_pyvista_mesh != self._is_pyvista_mesh:
             diff_list.append(name + ".is_pyvista_mesh")
         if other._format != self._format:
@@ -302,14 +346,18 @@ class MeshVTK(Mesh):
             other.surf is not None and self.surf is None
         ):
             diff_list.append(name + ".surf None mismatch")
-        elif self.surf is not None:
-            diff_list.extend(self.surf.compare(other.surf, name=name + ".surf"))
+        elif self.surf is not None and self.surf != other.surf:
+            diff_list.append(name + ".surf")
         if other._is_vtk_surf != self._is_vtk_surf:
             diff_list.append(name + ".is_vtk_surf")
         if other._surf_path != self._surf_path:
             diff_list.append(name + ".surf_path")
         if other._surf_name != self._surf_name:
             diff_list.append(name + ".surf_name")
+        if not array_equal(other.node_normals, self.node_normals):
+            diff_list.append(name + ".node_normals")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -328,6 +376,7 @@ class MeshVTK(Mesh):
         S += getsizeof(self.is_vtk_surf)
         S += getsizeof(self.surf_path)
         S += getsizeof(self.surf_name)
+        S += getsizeof(self.node_normals)
         return S
 
     def _set_None(self):
@@ -342,6 +391,7 @@ class MeshVTK(Mesh):
         self.is_vtk_surf = None
         self.surf_path = None
         self.surf_name = None
+        self.node_normals = None
         # Set to None the properties inherited from Mesh
         super(MeshVTK, self)._set_None()
 
@@ -504,5 +554,30 @@ class MeshVTK(Mesh):
         doc=u"""Name of the outer surface file
 
         :Type: str
+        """,
+    )
+
+    def _get_node_normals(self):
+        """getter of node_normals"""
+        return self._node_normals
+
+    def _set_node_normals(self, value):
+        """setter of node_normals"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("node_normals", value, "ndarray")
+        self._node_normals = value
+
+    node_normals = property(
+        fget=_get_node_normals,
+        fset=_set_node_normals,
+        doc=u"""Array of normals to nodes (cell vertices)
+
+        :Type: ndarray
         """,
     )

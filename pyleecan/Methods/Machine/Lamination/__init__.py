@@ -8,7 +8,7 @@ class LaminationCheckError(MachineCheckError):
 
 
 class LC_RadiusError(LaminationCheckError):
-    """  """
+    """ """
 
     pass
 

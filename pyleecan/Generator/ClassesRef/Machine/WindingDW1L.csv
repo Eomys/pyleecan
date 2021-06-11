@@ -1,3 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-coil_pitch,-,"winding coil pitch or coil span expressed in slots (coil_pitch1=Zs/(2p)->full-pitch distributed winding, coil_pitch1<Zs/(2p)->chorded/shorted-pitch distributed winding, coil_pitch1=1->tooth-winding). Coil pitch is sometimes written 1/9 means Input.Magnetics.coil_pitch1=9-1=8",0,int,5,0,1000,,Machine,Winding,comp_connection_mat,VERSION,1,single layer overlapping integral distributed winding
-,,,,,,,,,,,get_dim_wind,NAME,"""single layer distributed""",

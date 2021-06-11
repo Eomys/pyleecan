@@ -11,7 +11,6 @@ from pyleecan.Methods.Slot.VentilationPolar import PolarArcBuildGeometryError
 """unittest for VentilationPolar"""
 
 
-@pytest.mark.METHODS
 class Test_VentilationPolar(object):
     @pytest.fixture
     def vent(self):

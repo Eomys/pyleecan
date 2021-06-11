@@ -24,11 +24,10 @@ def test_obj():
     wind_mat[0, 1, 0, 3] = -1
     wind_mat[1, 1, 0, 4] = -1
     wind_mat[2, 1, 0, 5] = -1
-    test_obj.winding = WindingUD(user_wind_mat=wind_mat, qs=6)
+    test_obj.winding = WindingUD(wind_mat=wind_mat, qs=6)
     return test_obj
 
 
-@pytest.mark.PLOT
 def test_slot(test_obj):
     """Schematics for slot number"""
     CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
@@ -57,7 +56,6 @@ def test_slot(test_obj):
     fig.savefig(join(save_path, "test_Wind_Slot.png"))
 
 
-@pytest.mark.PLOT
 def test_rad_tan(test_obj):
     """Schematics for rad/tan layer"""
 

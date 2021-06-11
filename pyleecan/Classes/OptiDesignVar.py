@@ -43,13 +43,14 @@ class OptiDesignVar(ParamExplorer):
         symbol="",
         unit="",
         setter=None,
+        getter=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -75,13 +76,15 @@ class OptiDesignVar(ParamExplorer):
                 unit = init_dict["unit"]
             if "setter" in list(init_dict.keys()):
                 setter = init_dict["setter"]
+            if "getter" in list(init_dict.keys()):
+                getter = init_dict["getter"]
         # Set the properties (value check and convertion are done in setter)
         self.type_var = type_var
         self.space = space
         self.get_value = get_value
         # Call ParamExplorer init
         super(OptiDesignVar, self).__init__(
-            name=name, symbol=symbol, unit=unit, setter=setter
+            name=name, symbol=symbol, unit=unit, setter=setter, getter=getter
         )
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties
@@ -124,9 +127,11 @@ class OptiDesignVar(ParamExplorer):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -139,6 +144,8 @@ class OptiDesignVar(ParamExplorer):
             diff_list.append(name + ".space")
         if other._get_value_str != self._get_value_str:
             diff_list.append(name + ".get_value")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

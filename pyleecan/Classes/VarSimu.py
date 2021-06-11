@@ -39,6 +39,26 @@ try:
 except ImportError as error:
     generate_simulation_list = error
 
+try:
+    from ..Methods.Simulation.VarSimu.gen_datakeeper_list import gen_datakeeper_list
+except ImportError as error:
+    gen_datakeeper_list = error
+
+try:
+    from ..Methods.Simulation.VarSimu.get_elec_datakeeper import get_elec_datakeeper
+except ImportError as error:
+    get_elec_datakeeper = error
+
+try:
+    from ..Methods.Simulation.VarSimu.get_mag_datakeeper import get_mag_datakeeper
+except ImportError as error:
+    get_mag_datakeeper = error
+
+try:
+    from ..Methods.Simulation.VarSimu.get_force_datakeeper import get_force_datakeeper
+except ImportError as error:
+    get_force_datakeeper = error
+
 
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
@@ -92,6 +112,54 @@ class VarSimu(FrozenClass):
         )
     else:
         generate_simulation_list = generate_simulation_list
+    # cf Methods.Simulation.VarSimu.gen_datakeeper_list
+    if isinstance(gen_datakeeper_list, ImportError):
+        gen_datakeeper_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method gen_datakeeper_list: "
+                    + str(gen_datakeeper_list)
+                )
+            )
+        )
+    else:
+        gen_datakeeper_list = gen_datakeeper_list
+    # cf Methods.Simulation.VarSimu.get_elec_datakeeper
+    if isinstance(get_elec_datakeeper, ImportError):
+        get_elec_datakeeper = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_elec_datakeeper: "
+                    + str(get_elec_datakeeper)
+                )
+            )
+        )
+    else:
+        get_elec_datakeeper = get_elec_datakeeper
+    # cf Methods.Simulation.VarSimu.get_mag_datakeeper
+    if isinstance(get_mag_datakeeper, ImportError):
+        get_mag_datakeeper = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_mag_datakeeper: "
+                    + str(get_mag_datakeeper)
+                )
+            )
+        )
+    else:
+        get_mag_datakeeper = get_mag_datakeeper
+    # cf Methods.Simulation.VarSimu.get_force_datakeeper
+    if isinstance(get_force_datakeeper, ImportError):
+        get_force_datakeeper = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_force_datakeeper: "
+                    + str(get_force_datakeeper)
+                )
+            )
+        )
+    else:
+        get_force_datakeeper = get_force_datakeeper
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -117,7 +185,7 @@ class VarSimu(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -260,9 +328,11 @@ class VarSimu(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -360,6 +430,8 @@ class VarSimu(FrozenClass):
                         name=name + ".post_keeper_postproc_list[" + str(ii) + "]",
                     )
                 )
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

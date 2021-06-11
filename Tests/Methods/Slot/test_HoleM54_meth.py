@@ -26,7 +26,6 @@ HoleM54_test.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_HoleM54_meth(object):
     """pytest for HoleM54 methods"""
 

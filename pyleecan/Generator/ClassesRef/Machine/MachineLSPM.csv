@@ -1,0 +1,3 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+rotor,,Machine's Rotor,,LamSquirrelCageMag,,,,,Machine,MachineSync,check,VERSION,1,Line Start Permanent Magnet Machine
+stator,,Machine's Stator,,LamSlotWind,,,,,,,get_machine_type,,,

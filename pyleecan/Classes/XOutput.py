@@ -58,44 +58,14 @@ except ImportError as error:
     __setitem__ = error
 
 try:
-    from ..Methods.Output.XOutput.count import count
-except ImportError as error:
-    count = error
-
-try:
-    from ..Methods.Output.XOutput.insert import insert
-except ImportError as error:
-    insert = error
-
-try:
-    from ..Methods.Output.XOutput.pop import pop
-except ImportError as error:
-    pop = error
-
-try:
-    from ..Methods.Output.XOutput.remove import remove
-except ImportError as error:
-    remove = error
-
-try:
     from ..Methods.Output.XOutput.append import append
 except ImportError as error:
     append = error
 
 try:
-    from ..Methods.Output.XOutput.get_simu import get_simu
+    from ..Methods.Output.XOutput.count import count
 except ImportError as error:
-    get_simu = error
-
-try:
-    from ..Methods.Output.XOutput.keys import keys
-except ImportError as error:
-    keys = error
-
-try:
-    from ..Methods.Output.XOutput.items import items
-except ImportError as error:
-    items = error
+    count = error
 
 try:
     from ..Methods.Output.XOutput.get_param_simu import get_param_simu
@@ -108,6 +78,46 @@ except ImportError as error:
     get_paramexplorer = error
 
 try:
+    from ..Methods.Output.XOutput.get_pareto_index import get_pareto_index
+except ImportError as error:
+    get_pareto_index = error
+
+try:
+    from ..Methods.Output.XOutput.get_simu import get_simu
+except ImportError as error:
+    get_simu = error
+
+try:
+    from ..Methods.Output.XOutput.get_symbol_list import get_symbol_list
+except ImportError as error:
+    get_symbol_list = error
+
+try:
+    from ..Methods.Output.XOutput.get_xoutput_ref import get_xoutput_ref
+except ImportError as error:
+    get_xoutput_ref = error
+
+try:
+    from ..Methods.Output.XOutput.insert import insert
+except ImportError as error:
+    insert = error
+
+try:
+    from ..Methods.Output.XOutput.items import items
+except ImportError as error:
+    items = error
+
+try:
+    from ..Methods.Output.XOutput.keys import keys
+except ImportError as error:
+    keys = error
+
+try:
+    from ..Methods.Output.XOutput.plot_generation import plot_generation
+except ImportError as error:
+    plot_generation = error
+
+try:
     from ..Methods.Output.XOutput.plot_multi import plot_multi
 except ImportError as error:
     plot_multi = error
@@ -118,14 +128,9 @@ except ImportError as error:
     plot_pareto = error
 
 try:
-    from ..Methods.Output.XOutput.plot_generation import plot_generation
+    from ..Methods.Output.XOutput.pop import pop
 except ImportError as error:
-    plot_generation = error
-
-try:
-    from ..Methods.Output.XOutput.get_pareto_index import get_pareto_index
-except ImportError as error:
-    get_pareto_index = error
+    pop = error
 
 try:
     from ..Methods.Output.XOutput.print_memory import print_memory
@@ -133,9 +138,9 @@ except ImportError as error:
     print_memory = error
 
 try:
-    from ..Methods.Output.XOutput.get_xoutput_ref import get_xoutput_ref
+    from ..Methods.Output.XOutput.remove import remove
 except ImportError as error:
-    get_xoutput_ref = error
+    remove = error
 
 
 from ._check import InitUnKnowClassError
@@ -232,42 +237,6 @@ class XOutput(Output):
         )
     else:
         __setitem__ = __setitem__
-    # cf Methods.Output.XOutput.count
-    if isinstance(count, ImportError):
-        count = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use XOutput method count: " + str(count))
-            )
-        )
-    else:
-        count = count
-    # cf Methods.Output.XOutput.insert
-    if isinstance(insert, ImportError):
-        insert = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use XOutput method insert: " + str(insert))
-            )
-        )
-    else:
-        insert = insert
-    # cf Methods.Output.XOutput.pop
-    if isinstance(pop, ImportError):
-        pop = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use XOutput method pop: " + str(pop))
-            )
-        )
-    else:
-        pop = pop
-    # cf Methods.Output.XOutput.remove
-    if isinstance(remove, ImportError):
-        remove = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use XOutput method remove: " + str(remove))
-            )
-        )
-    else:
-        remove = remove
     # cf Methods.Output.XOutput.append
     if isinstance(append, ImportError):
         append = property(
@@ -277,33 +246,15 @@ class XOutput(Output):
         )
     else:
         append = append
-    # cf Methods.Output.XOutput.get_simu
-    if isinstance(get_simu, ImportError):
-        get_simu = property(
+    # cf Methods.Output.XOutput.count
+    if isinstance(count, ImportError):
+        count = property(
             fget=lambda x: raise_(
-                ImportError("Can't use XOutput method get_simu: " + str(get_simu))
+                ImportError("Can't use XOutput method count: " + str(count))
             )
         )
     else:
-        get_simu = get_simu
-    # cf Methods.Output.XOutput.keys
-    if isinstance(keys, ImportError):
-        keys = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use XOutput method keys: " + str(keys))
-            )
-        )
-    else:
-        keys = keys
-    # cf Methods.Output.XOutput.items
-    if isinstance(items, ImportError):
-        items = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use XOutput method items: " + str(items))
-            )
-        )
-    else:
-        items = items
+        count = count
     # cf Methods.Output.XOutput.get_param_simu
     if isinstance(get_param_simu, ImportError):
         get_param_simu = property(
@@ -327,6 +278,87 @@ class XOutput(Output):
         )
     else:
         get_paramexplorer = get_paramexplorer
+    # cf Methods.Output.XOutput.get_pareto_index
+    if isinstance(get_pareto_index, ImportError):
+        get_pareto_index = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method get_pareto_index: "
+                    + str(get_pareto_index)
+                )
+            )
+        )
+    else:
+        get_pareto_index = get_pareto_index
+    # cf Methods.Output.XOutput.get_simu
+    if isinstance(get_simu, ImportError):
+        get_simu = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method get_simu: " + str(get_simu))
+            )
+        )
+    else:
+        get_simu = get_simu
+    # cf Methods.Output.XOutput.get_symbol_list
+    if isinstance(get_symbol_list, ImportError):
+        get_symbol_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method get_symbol_list: " + str(get_symbol_list)
+                )
+            )
+        )
+    else:
+        get_symbol_list = get_symbol_list
+    # cf Methods.Output.XOutput.get_xoutput_ref
+    if isinstance(get_xoutput_ref, ImportError):
+        get_xoutput_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method get_xoutput_ref: " + str(get_xoutput_ref)
+                )
+            )
+        )
+    else:
+        get_xoutput_ref = get_xoutput_ref
+    # cf Methods.Output.XOutput.insert
+    if isinstance(insert, ImportError):
+        insert = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method insert: " + str(insert))
+            )
+        )
+    else:
+        insert = insert
+    # cf Methods.Output.XOutput.items
+    if isinstance(items, ImportError):
+        items = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method items: " + str(items))
+            )
+        )
+    else:
+        items = items
+    # cf Methods.Output.XOutput.keys
+    if isinstance(keys, ImportError):
+        keys = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method keys: " + str(keys))
+            )
+        )
+    else:
+        keys = keys
+    # cf Methods.Output.XOutput.plot_generation
+    if isinstance(plot_generation, ImportError):
+        plot_generation = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method plot_generation: " + str(plot_generation)
+                )
+            )
+        )
+    else:
+        plot_generation = plot_generation
     # cf Methods.Output.XOutput.plot_multi
     if isinstance(plot_multi, ImportError):
         plot_multi = property(
@@ -345,29 +377,15 @@ class XOutput(Output):
         )
     else:
         plot_pareto = plot_pareto
-    # cf Methods.Output.XOutput.plot_generation
-    if isinstance(plot_generation, ImportError):
-        plot_generation = property(
+    # cf Methods.Output.XOutput.pop
+    if isinstance(pop, ImportError):
+        pop = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use XOutput method plot_generation: " + str(plot_generation)
-                )
+                ImportError("Can't use XOutput method pop: " + str(pop))
             )
         )
     else:
-        plot_generation = plot_generation
-    # cf Methods.Output.XOutput.get_pareto_index
-    if isinstance(get_pareto_index, ImportError):
-        get_pareto_index = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use XOutput method get_pareto_index: "
-                    + str(get_pareto_index)
-                )
-            )
-        )
-    else:
-        get_pareto_index = get_pareto_index
+        pop = pop
     # cf Methods.Output.XOutput.print_memory
     if isinstance(print_memory, ImportError):
         print_memory = property(
@@ -379,17 +397,15 @@ class XOutput(Output):
         )
     else:
         print_memory = print_memory
-    # cf Methods.Output.XOutput.get_xoutput_ref
-    if isinstance(get_xoutput_ref, ImportError):
-        get_xoutput_ref = property(
+    # cf Methods.Output.XOutput.remove
+    if isinstance(remove, ImportError):
+        remove = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use XOutput method get_xoutput_ref: " + str(get_xoutput_ref)
-                )
+                ImportError("Can't use XOutput method remove: " + str(remove))
             )
         )
     else:
-        get_xoutput_ref = get_xoutput_ref
+        remove = remove
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -420,7 +436,7 @@ class XOutput(Output):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -553,9 +569,11 @@ class XOutput(Output):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -621,6 +639,8 @@ class XOutput(Output):
             )
         if other._xoutput_ref_index != self._xoutput_ref_index:
             diff_list.append(name + ".xoutput_ref_index")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -795,7 +815,7 @@ class XOutput(Output):
     xoutput_dict = property(
         fget=_get_xoutput_dict,
         fset=_set_xoutput_dict,
-        doc=u"""Dictionnary containing DataKeeper
+        doc=u"""dictionary containing DataKeeper
 
         :Type: {DataKeeper}
         """,

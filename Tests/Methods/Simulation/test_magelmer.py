@@ -9,6 +9,7 @@ from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 # Gather results in the same folder
@@ -39,12 +40,15 @@ mesh_dict = {
 
 
 @pytest.mark.MagElmer
-@pytest.mark.long
+@pytest.mark.long_5s
+@pytest.mark.IPMSM
+@pytest.mark.SingleOP
+@pytest.mark.periodicity
 def test_ipm_Elmer():
 
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    IPMSM_A.stator.slot.H1 = 1e-3
-    simu = Simu1(name="ipm_elmer", machine=IPMSM_A)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    Toyota_Prius.stator.slot.H1 = 1e-3
+    simu = Simu1(name="test_ipm_Elmer", machine=Toyota_Prius)
 
     # Definition of the enforced output of the electrical module
     # N0 = 1500
@@ -69,7 +73,7 @@ def test_ipm_Elmer():
     # simu.input.Nt_tot = 32 * 8    # Number of time step
     # simu.input.Na_tot = 2048     # Spatial discretization
     simu.input.N0 = 2000  # Rotor speed [rpm]
-    p = IPMSM_A.stator.winding.p
+    p = Toyota_Prius.stator.winding.p
     time = linspace(0, 60 / simu.input.N0, num=32 * p, endpoint=False)
     simu.input.time = time
     simu.input.angle = linspace(0, 2 * pi, num=2048, endpoint=False)
@@ -100,9 +104,9 @@ def test_ipm_Elmer():
     # Run simulation
     outp = Output(simu=simu)
     simu.run()
-    # outp.plot_2D_Data("mag.Tem", "time")
-    # outp.plot_2D_Data("elec.Is", "time", "phase")
-    # outp.plot_2D_Data("mag.Tem", "time[smallestperiod]")
+    # outp.mag.Tem.plot_2D_Data("time", **dict_2D)
+    # outp.elec.get_Is().plot_2D_Data("time", "phase", **dict_2D)
+    # outp.mag.Tem.plot_2D_Data("time[smallestperiod]", **dict_2D)
     # outp.mag.meshsolution.plot_contour(label="B")
     # outp.mag.meshsolution.plot_contour(label="A")
     # outp.mag.meshsolution.plot_contour(label="J")
@@ -110,7 +114,10 @@ def test_ipm_Elmer():
 
 
 @pytest.mark.MagElmer
-@pytest.mark.long
+@pytest.mark.long_5s
+@pytest.mark.SPMSM
+@pytest.mark.SingleOP
+@pytest.mark.periodicity
 def test_spm_Elmer():
     # Import the machine from a script
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
@@ -120,7 +127,7 @@ def test_spm_Elmer():
     mesh_dict["Lamination_Rotor_Bore_Radius_Ext"] = 20
 
     # Create the Simulation
-    simu = Simu1(name="spm_elmer", machine=PMSM_A)
+    simu = Simu1(name="test_spm_Elmer", machine=PMSM_A)
 
     # Definition of a sinusoidal current
     simu.input = InputCurrent()
@@ -160,9 +167,9 @@ def test_spm_Elmer():
     # Run simulation
     outp = Output(simu=simu)
     simu.run()
-    outp.plot_2D_Data("mag.Tem", "time")
-    # outp.plot_2D_Data("elec.Is", "time", "phase")
-    # outp.plot_2D_Data("mag.Tem", "time[smallestperiod]")
+    outp.mag.Tem.plot_2D_Data("time", **dict_2D)
+    # outp.elec.get_Is().plot_2D_Data("time", "phase", **dict_2D)
+    # outp.mag.Tem.plot_2D_Data("time[smallestperiod]", **dict_2D)
     # outp.mag.meshsolution.plot_contour(label="B")
     # outp.mag.meshsolution.plot_contour(label="A")
     # outp.mag.meshsolution.plot_contour(label="J")

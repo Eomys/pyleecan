@@ -17,6 +17,7 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.init_fig import init_subplot
 
@@ -75,11 +76,11 @@ def test_axis_LamSlotMag(CURVE_COLORS):
 
 def test_axis_LamHoleMag(CURVE_COLORS):
     """Axis convention for LamHole with magnet"""
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    IPMSM_A.rotor.plot(is_show_fig=False)
-    R1 = IPMSM_A.rotor.Rext * 1.1
-    R2 = IPMSM_A.rotor.Rext * 1.2
-    R3 = IPMSM_A.rotor.Rext * 1.4
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    Toyota_Prius.rotor.plot(is_show_fig=False)
+    R1 = Toyota_Prius.rotor.Rext * 1.1
+    R2 = Toyota_Prius.rotor.Rext * 1.2
+    R3 = Toyota_Prius.rotor.Rext * 1.4
     axes = plt.gca()
 
     # X axis
@@ -95,14 +96,14 @@ def test_axis_LamHoleMag(CURVE_COLORS):
     axes.text(Zly.real, Zly.imag, "Y axis")
 
     # D axis
-    D_axis = IPMSM_A.rotor.comp_angle_d_axis()
+    D_axis = Toyota_Prius.rotor.comp_angle_d_axis()
     Zd = R1 * exp(1j * D_axis)
     plt.arrow(0, 0, Zd.real, Zd.imag, color=CURVE_COLORS[1])
     Zld = R2 * exp(1j * D_axis)
     axes.text(Zld.real, Zld.imag, "D axis")
 
     # Q axis
-    Q_axis = IPMSM_A.rotor.comp_angle_q_axis()
+    Q_axis = Toyota_Prius.rotor.comp_angle_q_axis()
     Zq = R1 * exp(1j * Q_axis)
     plt.arrow(0, 0, Zq.real, Zq.imag, color=CURVE_COLORS[1])
     Zlq = R2 * exp(1j * Q_axis)
@@ -168,8 +169,11 @@ def test_axis_LamHole(CURVE_COLORS):
     plt.close("all")
 
 
-@pytest.mark.FEMM
-@pytest.mark.long
+@pytest.mark.MagFEMM
+@pytest.mark.SCIM
+@pytest.mark.long_5s
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_axis_LamWind(CURVE_COLORS):
     """Axis convention for LamWind"""
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
@@ -284,7 +288,7 @@ def test_axis_LamWind(CURVE_COLORS):
     simu.run()
 
     plt.close("all")
-    out.plot_2D_Data("mag.B", "angle{rad}", is_show_fig=False)
+    out.mag.B.plot_2D_Data("angle{rad}", is_show_fig=False, **dict_2D)
 
     fig = plt.gcf()
     Br = out.mag.B.components["radial"].get_along("time", "angle")

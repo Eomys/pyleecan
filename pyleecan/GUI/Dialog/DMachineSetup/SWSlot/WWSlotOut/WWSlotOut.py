@@ -53,12 +53,12 @@ class WWSlotOut(QGroupBox):
             A WWSlotOut object
         """
 
-        if self.parent() is not None and hasattr(self.parent(), "lamination"):
-            parent = self.parent()
-            lam = self.parent().lamination
-        else:
-            parent = self.parent().parent()
-            lam = self.parent().parent().lamination
+        obj = self
+        while not hasattr(obj.parent(), "lamination") or obj.parent() is None:
+            obj = obj.parent()
+        parent = obj.parent()
+        lam = parent.lamination
+
         if lam.is_stator:
             lam_name = "Stator"
         else:

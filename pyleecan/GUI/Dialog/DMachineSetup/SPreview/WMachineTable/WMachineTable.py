@@ -5,6 +5,7 @@ from ......GUI.Dialog.DMachineSetup.SPreview.WMachineTable.Ui_WMachineTable impo
     Ui_WMachineTable,
 )
 import matplotlib.pyplot as plt
+from ......Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class WMachineTable(Ui_WMachineTable, QWidget):
@@ -65,8 +66,10 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         """Plot the unit mmf of the stator"""
         if self.machine is not None:
             self.machine.stator.plot_mmf_unit(is_show_fig=True)
+        set_plot_gui_icon()
 
     def plot_machine(self):
         """Plot the machine"""
         if self.machine is not None:
             self.machine.plot()
+        set_plot_gui_icon()

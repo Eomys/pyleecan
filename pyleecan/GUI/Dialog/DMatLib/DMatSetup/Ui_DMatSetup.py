@@ -20,6 +20,11 @@ class Ui_DMatSetup(object):
         if not DMatSetup.objectName():
             DMatSetup.setObjectName(u"DMatSetup")
         DMatSetup.resize(642, 451)
+        icon = QIcon()
+        icon.addFile(
+            u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+        )
+        DMatSetup.setWindowIcon(icon)
         self.verticalLayout = QVBoxLayout(DMatSetup)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout = QHBoxLayout()

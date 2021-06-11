@@ -10,7 +10,6 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
 
-@pytest.mark.METHODS
 class Test_get_polar_eq(object):
     """unittest to convert machine to polar and plot them"""
 

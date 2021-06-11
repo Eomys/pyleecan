@@ -19,9 +19,11 @@ class Ui_SMachineDimension(object):
     def setupUi(self, SMachineDimension):
         if not SMachineDimension.objectName():
             SMachineDimension.setObjectName(u"SMachineDimension")
-        SMachineDimension.resize(919, 550)
+        SMachineDimension.resize(1065, 679)
         SMachineDimension.setMinimumSize(QSize(650, 550))
-        self.horizontalLayout_2 = QHBoxLayout(SMachineDimension)
+        self.verticalLayout_3 = QVBoxLayout(SMachineDimension)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.img_machine = QLabel(SMachineDimension)
         self.img_machine.setObjectName(u"img_machine")
@@ -36,13 +38,17 @@ class Ui_SMachineDimension(object):
 
         self.horizontalLayout_2.addWidget(self.img_machine)
 
-        self.widget = QWidget(SMachineDimension)
-        self.widget.setObjectName(u"widget")
-        self.widget.setMinimumSize(QSize(250, 0))
-        self.widget.setMaximumSize(QSize(250, 16777215))
-        self.verticalLayout_3 = QVBoxLayout(self.widget)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.g_stator = QGroupBox(self.widget)
+        self.scrollArea = QScrollArea(SMachineDimension)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setMinimumSize(QSize(270, 0))
+        self.scrollArea.setMaximumSize(QSize(270, 16777215))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 616))
+        self.verticalLayout_4 = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.g_stator = QGroupBox(self.scrollAreaWidgetContents)
         self.g_stator.setObjectName(u"g_stator")
         self.g_stator.setMinimumSize(QSize(150, 0))
         self.g_stator.setMaximumSize(QSize(16777215, 16777215))
@@ -89,9 +95,9 @@ class Ui_SMachineDimension(object):
 
         self.gridLayout_2.addWidget(self.unit_SRint, 1, 2, 1, 1)
 
-        self.verticalLayout_3.addWidget(self.g_stator)
+        self.verticalLayout_4.addWidget(self.g_stator)
 
-        self.g_rotor = QGroupBox(self.widget)
+        self.g_rotor = QGroupBox(self.scrollAreaWidgetContents)
         self.g_rotor.setObjectName(u"g_rotor")
         self.gridLayout_3 = QGridLayout(self.g_rotor)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
@@ -133,14 +139,14 @@ class Ui_SMachineDimension(object):
 
         self.gridLayout_3.addWidget(self.unit_RRint, 1, 2, 1, 1)
 
-        self.verticalLayout_3.addWidget(self.g_rotor)
+        self.verticalLayout_4.addWidget(self.g_rotor)
 
-        self.out_airgap = QLabel(self.widget)
+        self.out_airgap = QLabel(self.scrollAreaWidgetContents)
         self.out_airgap.setObjectName(u"out_airgap")
 
-        self.verticalLayout_3.addWidget(self.out_airgap)
+        self.verticalLayout_4.addWidget(self.out_airgap)
 
-        self.g_shaft = QGroupBox(self.widget)
+        self.g_shaft = QGroupBox(self.scrollAreaWidgetContents)
         self.g_shaft.setObjectName(u"g_shaft")
         self.g_shaft.setMinimumSize(QSize(0, 0))
         self.g_shaft.setCheckable(True)
@@ -157,9 +163,9 @@ class Ui_SMachineDimension(object):
 
         self.verticalLayout.addWidget(self.out_Drsh)
 
-        self.verticalLayout_3.addWidget(self.g_shaft)
+        self.verticalLayout_4.addWidget(self.g_shaft)
 
-        self.g_frame = QGroupBox(self.widget)
+        self.g_frame = QGroupBox(self.scrollAreaWidgetContents)
         self.g_frame.setObjectName(u"g_frame")
         self.g_frame.setCheckable(True)
         self.verticalLayout_2 = QVBoxLayout(self.g_frame)
@@ -206,13 +212,19 @@ class Ui_SMachineDimension(object):
 
         self.verticalLayout_2.addLayout(self.gridLayout)
 
-        self.verticalLayout_3.addWidget(self.g_frame)
+        self.verticalLayout_4.addWidget(self.g_frame)
 
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.verticalLayout_3.addItem(self.verticalSpacer)
+        self.verticalLayout_4.addItem(self.verticalSpacer)
+
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+        self.horizontalLayout_2.addWidget(self.scrollArea)
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_2)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -222,19 +234,17 @@ class Ui_SMachineDimension(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
-        self.b_previous = QPushButton(self.widget)
+        self.b_previous = QPushButton(SMachineDimension)
         self.b_previous.setObjectName(u"b_previous")
 
         self.horizontalLayout.addWidget(self.b_previous)
 
-        self.b_next = QPushButton(self.widget)
+        self.b_next = QPushButton(SMachineDimension)
         self.b_next.setObjectName(u"b_next")
 
         self.horizontalLayout.addWidget(self.b_next)
 
         self.verticalLayout_3.addLayout(self.horizontalLayout)
-
-        self.horizontalLayout_2.addWidget(self.widget)
 
         self.retranslateUi(SMachineDimension)
         self.g_shaft.toggled.connect(self.out_Drsh.setVisible)

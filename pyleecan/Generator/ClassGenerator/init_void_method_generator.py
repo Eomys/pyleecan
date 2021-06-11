@@ -23,7 +23,7 @@ def generate_init_void(class_name):
     )
     init_str += TAB3 + "for pyleecan type, None will call the default " "constructor\n"
     init_str += (
-        TAB2 + "- __init__ (init_dict = d) d must be a dictionnary "
+        TAB2 + "- __init__ (init_dict = d) d must be a dictionary "
         "wiht every properties as keys\n\n"
     )
     init_str += TAB2 + "ndarray or list can be given for Vector and Matrix\n"

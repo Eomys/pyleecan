@@ -76,7 +76,6 @@ disc_test.append({"center": 5 + 5j, "radius": 1, "ref": 4})
 disc_test[1]["result"] = exp(1j * linspace(0, 2 * pi, 200, endpoint=False)) + 5 + 5j
 
 
-@pytest.mark.METHODS
 class Test_Circle_meth(object):
     """Unittest for Class Circle"""
 

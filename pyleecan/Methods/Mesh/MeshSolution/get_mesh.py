@@ -12,8 +12,6 @@ def get_mesh(self, label=None, index=None):
         a label
     index : int
         an index
-    group : list
-        list of indices of part(s) of the mesh
 
     Returns
     -------

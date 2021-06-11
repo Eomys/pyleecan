@@ -33,6 +33,16 @@ except ImportError as error:
     get_field = error
 
 try:
+    from ..Methods.Mesh.MeshSolution.get_group import get_group
+except ImportError as error:
+    get_group = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.get_mesh_field_pv import get_mesh_field_pv
+except ImportError as error:
+    get_mesh_field_pv = error
+
+try:
     from ..Methods.Mesh.MeshSolution.plot_mesh import plot_mesh
 except ImportError as error:
     plot_mesh = error
@@ -60,12 +70,16 @@ except ImportError as error:
     plot_glyph = error
 
 try:
-    from ..Methods.Mesh.MeshSolution.get_group import get_group
+    from ..Methods.Mesh.MeshSolution.plot_glyph_animated import plot_glyph_animated
 except ImportError as error:
-    get_group = error
+    plot_glyph_animated = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.perm_coord import perm_coord
+except ImportError as error:
+    perm_coord = error
 
 
-from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .Mesh import Mesh
 from .Solution import Solution
@@ -108,6 +122,29 @@ class MeshSolution(FrozenClass):
         )
     else:
         get_field = get_field
+    # cf Methods.Mesh.MeshSolution.get_group
+    if isinstance(get_group, ImportError):
+        get_group = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method get_group: " + str(get_group)
+                )
+            )
+        )
+    else:
+        get_group = get_group
+    # cf Methods.Mesh.MeshSolution.get_mesh_field_pv
+    if isinstance(get_mesh_field_pv, ImportError):
+        get_mesh_field_pv = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method get_mesh_field_pv: "
+                    + str(get_mesh_field_pv)
+                )
+            )
+        )
+    else:
+        get_mesh_field_pv = get_mesh_field_pv
     # cf Methods.Mesh.MeshSolution.plot_mesh
     if isinstance(plot_mesh, ImportError):
         plot_mesh = property(
@@ -165,17 +202,29 @@ class MeshSolution(FrozenClass):
         )
     else:
         plot_glyph = plot_glyph
-    # cf Methods.Mesh.MeshSolution.get_group
-    if isinstance(get_group, ImportError):
-        get_group = property(
+    # cf Methods.Mesh.MeshSolution.plot_glyph_animated
+    if isinstance(plot_glyph_animated, ImportError):
+        plot_glyph_animated = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MeshSolution method get_group: " + str(get_group)
+                    "Can't use MeshSolution method plot_glyph_animated: "
+                    + str(plot_glyph_animated)
                 )
             )
         )
     else:
-        get_group = get_group
+        plot_glyph_animated = plot_glyph_animated
+    # cf Methods.Mesh.MeshSolution.perm_coord
+    if isinstance(perm_coord, ImportError):
+        perm_coord = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method perm_coord: " + str(perm_coord)
+                )
+            )
+        )
+    else:
+        perm_coord = perm_coord
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -197,7 +246,7 @@ class MeshSolution(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -258,12 +307,7 @@ class MeshSolution(FrozenClass):
         for ii in range(len(self.solution)):
             tmp = self.solution[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
-        if len(self.group) == 0:
-            MeshSolution_str += "group = dict()"
-        for key, obj in self.group.items():
-            MeshSolution_str += (
-                "group[" + key + "] = " + str(self.group[key]) + linesep + linesep
-            )
+        MeshSolution_str += "group = " + str(self.group) + linesep
         MeshSolution_str += "dimension = " + str(self.dimension) + linesep
         MeshSolution_str += 'path = "' + str(self.path) + '"' + linesep
         return MeshSolution_str
@@ -281,29 +325,19 @@ class MeshSolution(FrozenClass):
             return False
         if other.solution != self.solution:
             return False
-        if (other.group is None and self.group is not None) or (
-            other.group is not None and self.group is None
-        ):
+        if other.group != self.group:
             return False
-        elif other.group is None and self.group is None:
-            pass
-        elif len(other.group) != len(self.group):
-            return False
-        else:
-            for key in other.group:
-                if key not in self.group or not array_equal(
-                    other.group[key], self.group[key]
-                ):
-                    return False
         if other.dimension != self.dimension:
             return False
         if other.path != self.path:
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -341,24 +375,14 @@ class MeshSolution(FrozenClass):
                         other.solution[ii], name=name + ".solution[" + str(ii) + "]"
                     )
                 )
-        if (other.group is None and self.group is not None) or (
-            other.group is not None and self.group is None
-        ):
-            diff_list.append(name + ".group None mismatch")
-        elif self.group is None:
-            pass
-        elif len(other.group) != len(self.group):
-            diff_list.append("len(" + name + ".group)")
-        else:
-            for key in other.group:
-                if key not in self.group or not array_equal(
-                    other.group[key], self.group[key]
-                ):
-                    diff_list.append(name + ".group[" + str(key) + "]")
+        if other._group != self._group:
+            diff_list.append(name + ".group")
         if other._dimension != self._dimension:
             diff_list.append(name + ".dimension")
         if other._path != self._path:
             diff_list.append(name + ".path")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -408,12 +432,9 @@ class MeshSolution(FrozenClass):
                     MeshSolution_dict["solution"].append(obj.as_dict(**kwargs))
                 else:
                     MeshSolution_dict["solution"].append(None)
-        if self.group is None:
-            MeshSolution_dict["group"] = None
-        else:
-            MeshSolution_dict["group"] = dict()
-            for key, obj in self.group.items():
-                MeshSolution_dict["group"][key] = obj.tolist()
+        MeshSolution_dict["group"] = (
+            self.group.copy() if self.group is not None else None
+        )
         MeshSolution_dict["dimension"] = self.dimension
         MeshSolution_dict["path"] = self.path
         # The class name is added to the dict for deserialisation purpose
@@ -539,24 +560,17 @@ class MeshSolution(FrozenClass):
 
     def _set_group(self, value):
         """setter of group"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if type(obj) is list:
-                    try:
-                        value[key] = array(obj)
-                    except:
-                        pass
-        elif type(value) is int and value == -1:
+        if type(value) is int and value == -1:
             value = dict()
-        check_var("group", value, "{ndarray}")
+        check_var("group", value, "dict")
         self._group = value
 
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""Dict sorted by groups name with cells indices. 
+        doc=u"""Dict sorted by groups name with list of cells indices. 
 
-        :Type: {ndarray}
+        :Type: dict
         """,
     )
 

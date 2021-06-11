@@ -81,7 +81,6 @@ def xyz_to_rphiz_field(values, phi):
 
     field_x = values[:, 0]
     field_y = values[:, 1]
-    field_z = values[:, 2]
 
     cos_phi = cos(phi)
     sin_phi = sin(phi)
@@ -89,7 +88,13 @@ def xyz_to_rphiz_field(values, phi):
     field_r = cos_phi * field_x + sin_phi * field_y
     field_phi = -sin_phi * field_x + cos_phi * field_y
 
-    return column_stack((field_r, field_phi, field_z))
+    if values.shape[1] == 3:
+        field_z = values[:, 2]
+        out_field = column_stack((field_r, field_phi, field_z))
+    else:
+        out_field = column_stack((field_r, field_phi))
+
+    return out_field
 
 
 def rphiz_to_xyz_field(values, phi):
@@ -108,7 +113,6 @@ def rphiz_to_xyz_field(values, phi):
 
     field_r = values[:, 0]
     field_phi = values[:, 1]
-    field_z = values[:, 2]
 
     cos_phi = cos(phi)
     sin_phi = sin(phi)
@@ -116,7 +120,13 @@ def rphiz_to_xyz_field(values, phi):
     field_x = cos_phi * field_r - sin_phi * field_phi
     field_y = sin_phi * field_r + cos_phi * field_phi
 
-    return column_stack((field_x, field_y, field_z))
+    if values.shape[1] == 3:
+        field_z = values[:, 2]
+        out_field = column_stack((field_x, field_y, field_z))
+    else:
+        out_field = column_stack((field_x, field_y))
+
+    return out_field
 
 
 def cart2pol(values, points):

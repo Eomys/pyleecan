@@ -225,6 +225,7 @@
         ],
         "daughters": [
             "BoreFlower",
+            "BoreLSRPM",
             "BoreUD"
         ],
         "desc": "Abstract class for Bore shape",
@@ -274,6 +275,62 @@
             },
             {
                 "desc": "Angular offset for the arc",
+                "max": "",
+                "min": "",
+                "name": "alpha",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            }
+        ]
+    },
+    "BoreLSRPM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class for Bore LSRPM",
+        "is_internal": false,
+        "methods": [
+            "get_bore_line"
+        ],
+        "mother": "Bore",
+        "name": "BoreLSRPM",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/BoreLSRPM.csv",
+        "properties": [
+            {
+                "desc": "Number of flower arc",
+                "max": "",
+                "min": "0",
+                "name": "N",
+                "type": "int",
+                "unit": "-",
+                "value": 8
+            },
+            {
+                "desc": "Radius of the flower arc",
+                "max": "",
+                "min": "0",
+                "name": "Rarc",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0375
+            },
+            {
+                "desc": "Width of segement",
+                "max": "",
+                "min": "",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0035
+            },
+            {
+                "desc": "Angular offset",
                 "max": "",
                 "min": "",
                 "name": "alpha",
@@ -755,7 +812,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary to assign the surfaces: key=complex reference point coordinate, value=label of the surface",
+                "desc": "dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface",
                 "max": "",
                 "min": "",
                 "name": "surf_dict",
@@ -787,7 +844,8 @@
         "desc": "Class for defining data to keep on a multi-simulation",
         "is_internal": false,
         "methods": [
-            "as_dict"
+            "as_dict",
+            "_set_result"
         ],
         "mother": "",
         "name": "DataKeeper",
@@ -1304,6 +1362,56 @@
             }
         ]
     },
+    "EndWinding": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "EndWindingCirc"
+        ],
+        "desc": "Abstract Class of the machine's end winding",
+        "is_internal": false,
+        "methods": [
+            "comp_length_endwinding"
+        ],
+        "mother": "",
+        "name": "EndWinding",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/EndWinding.csv",
+        "properties": []
+    },
+    "EndWindingCirc": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class of the machine's end winding assuming a circular shape",
+        "is_internal": false,
+        "methods": [
+            "comp_length_endwinding"
+        ],
+        "mother": "EndWinding",
+        "name": "EndWindingCirc",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/EndWindingCirc.csv",
+        "properties": [
+            {
+                "desc": "effective coil pitch (override) for length calculation",
+                "max": "",
+                "min": "",
+                "name": "coil_pitch",
+                "type": "float",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
     "FPGNSeg": {
         "constants": [
             {
@@ -1720,6 +1828,7 @@
             "HoleM54",
             "HoleM57",
             "HoleM58",
+            "HoleMLSRPM",
             "HoleMag",
             "HoleUD",
             "VentilationCirc",
@@ -2584,6 +2693,105 @@
             }
         ]
     },
+    "HoleMLSRPM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "V shape slot for buried magnet",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "remove_magnet",
+            "has_magnet"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleMLSRPM",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleMLSRPM.csv",
+        "properties": [
+            {
+                "desc": "Magnet depth",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0023734787
+            },
+            {
+                "desc": "Magnet top width",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.00388
+            },
+            {
+                "desc": "Magnet width angular 1 ",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "rad",
+                "value": 0.219911482
+            },
+            {
+                "desc": "Small distance",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0007
+            },
+            {
+                "desc": "Rounding radius",
+                "max": "",
+                "min": "0",
+                "name": "R1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0003
+            },
+            {
+                "desc": "Radius 2",
+                "max": "",
+                "min": "",
+                "name": "R2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.019327
+            },
+            {
+                "desc": "Radius 3",
+                "max": "",
+                "min": "",
+                "name": "R3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0165
+            },
+            {
+                "desc": "Magnet of the hole",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "HoleMag": {
         "constants": [
             {
@@ -2598,6 +2806,7 @@
             "HoleM53",
             "HoleM57",
             "HoleM58",
+            "HoleMLSRPM",
             "HoleUD"
         ],
         "desc": "Hole with magnets for lamination (abstract)",
@@ -2652,7 +2861,7 @@
                 "value": ""
             },
             {
-                "desc": "dictionnary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",
+                "desc": "dictionary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",
                 "max": "",
                 "min": "",
                 "name": "magnet_dict",
@@ -2671,13 +2880,16 @@
         ],
         "daughters": [
             "ImportGenMatrixSin",
+            "ImportGenPWM",
             "ImportGenToothSaw",
             "ImportGenVectLin",
             "ImportGenVectSin",
             "ImportMatlab",
             "ImportMatrix",
             "ImportMatrixVal",
-            "ImportMatrixXls"
+            "ImportMatrixXls",
+            "ImportMeshMat",
+            "ImportMeshUnv"
         ],
         "desc": "Abstract class for Data Import/Generation",
         "is_internal": false,
@@ -2798,6 +3010,134 @@
                 "type": "[ImportGenVectSin]",
                 "unit": "-",
                 "value": ""
+            }
+        ]
+    },
+    "ImportGenPWM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "To generate a PWM voltage matrix",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "ImportMatrix",
+        "name": "ImportGenPWM",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportGenPWM.csv",
+        "properties": [
+            {
+                "desc": "sample frequency",
+                "max": "",
+                "min": "0",
+                "name": "fs",
+                "type": "float",
+                "unit": "Hz",
+                "value": 96000
+            },
+            {
+                "desc": "duration",
+                "max": "",
+                "min": "0",
+                "name": "duration",
+                "type": "int",
+                "unit": "s",
+                "value": 10
+            },
+            {
+                "desc": "fundamental frequency",
+                "max": "",
+                "min": "0",
+                "name": "f",
+                "type": "float",
+                "unit": "Hz",
+                "value": 50
+            },
+            {
+                "desc": "maximal fundamental frequency",
+                "max": "",
+                "min": "0",
+                "name": "fmax",
+                "type": "float",
+                "unit": "Hz",
+                "value": 0
+            },
+            {
+                "desc": "speed mode: 0: Fixed speed, 1: Variable speed",
+                "max": "",
+                "min": "0",
+                "name": "fmode",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "switch mode: 0:Fixed fswi, 1:Variable fswi",
+                "max": "",
+                "min": "",
+                "name": "fswimode",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "switching frequency",
+                "max": "",
+                "min": "",
+                "name": "fswi",
+                "type": "float",
+                "unit": "Hz",
+                "value": 1000
+            },
+            {
+                "desc": "maximal switching frequency",
+                "max": "",
+                "min": "",
+                "name": "fswi_max",
+                "type": "int",
+                "unit": "Hz",
+                "value": 3000
+            },
+            {
+                "desc": "0: GDPWM 1: DPWMMIN 2: DPWMMAX 3: DPWM0 4: DPWM1 5: DPWM2 6: DPWM3 7: SVPWM 8: SPWM",
+                "max": "",
+                "min": "",
+                "name": "typePWM",
+                "type": "int",
+                "unit": "",
+                "value": 8
+            },
+            {
+                "desc": "DC BUS voltage",
+                "max": "",
+                "min": "",
+                "name": "Vdc1",
+                "type": "float",
+                "unit": "V",
+                "value": 2
+            },
+            {
+                "desc": "reference voltage",
+                "max": "",
+                "min": "",
+                "name": "U0",
+                "type": "float",
+                "unit": "V",
+                "value": 1
+            },
+            {
+                "desc": "1: forward toothsaw carrier 2: backwards toothsaw carrier 3: toothsaw carrier else: symetrical toothsaw carrier",
+                "max": "",
+                "min": "",
+                "name": "type_carrier",
+                "type": "int",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -3045,6 +3385,7 @@
         ],
         "daughters": [
             "ImportGenMatrixSin",
+            "ImportGenPWM",
             "ImportGenToothSaw",
             "ImportGenVectLin",
             "ImportGenVectSin",
@@ -3148,7 +3489,7 @@
                 "value": 0
             },
             {
-                "desc": "To select the range of column to use",
+                "desc": "list of Excel column letters and column ranges (e.g. \"A:E\" or \"A,C,E:F\")",
                 "max": "",
                 "min": "",
                 "name": "usecols",
@@ -3173,6 +3514,64 @@
                 "type": "bool",
                 "unit": "-",
                 "value": false
+            }
+        ]
+    },
+    "ImportMeshMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Import mesh as meshMat",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "Import",
+        "name": "ImportMeshMat",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportMeshMat.csv",
+        "properties": [
+            {
+                "desc": "Path of the file to load",
+                "max": "",
+                "min": "",
+                "name": "file_path",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "ImportMeshUnv": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Import mesh data from an unv file",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "Import",
+        "name": "ImportMeshUnv",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportMeshUnv.csv",
+        "properties": [
+            {
+                "desc": "Path of the file to load",
+                "max": "",
+                "min": "",
+                "name": "file_path",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -3757,7 +4156,8 @@
             "comp_radius_mid_yoke",
             "has_magnet",
             "comp_angle_d_axis",
-            "comp_periodicity"
+            "comp_periodicity",
+            "set_pole_pair_number"
         ],
         "mother": "Lamination",
         "name": "LamHole",
@@ -3772,15 +4172,6 @@
                 "type": "[Hole]",
                 "unit": "",
                 "value": ""
-            },
-            {
-                "desc": "Bore Shape",
-                "max": "",
-                "min": "",
-                "name": "bore",
-                "type": "Bore",
-                "unit": "",
-                "value": null
             }
         ]
     },
@@ -3794,12 +4185,12 @@
         "daughters": [
             "LamSlotMag",
             "LamSlotWind",
-            "LamSquirrelCage"
+            "LamSquirrelCage",
+            "LamSquirrelCageMag"
         ],
         "desc": "Lamination with empty Slot",
         "is_internal": false,
         "methods": [
-            "build_geometry",
             "check",
             "comp_radius_mec",
             "comp_surfaces",
@@ -3807,9 +4198,10 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc",
             "comp_radius_mid_yoke",
-            "comp_periodicity"
+            "comp_periodicity",
+            "get_bore_desc",
+            "set_pole_pair_number"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -3871,11 +4263,12 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LamSlotMultiWind"
+        ],
         "desc": "Lamination with list of Slot",
         "is_internal": false,
         "methods": [
-            "build_geometry",
             "check",
             "comp_radius_mec",
             "comp_surfaces",
@@ -3910,6 +4303,46 @@
             }
         ]
     },
+    "LamSlotMultiWind": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with list of Slot filled with winding",
+        "is_internal": false,
+        "methods": [
+            "plot",
+            "build_geometry",
+            "get_pole_pair_number"
+        ],
+        "mother": "LamSlotMulti",
+        "name": "LamSlotMultiWind",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMultiWind.csv",
+        "properties": [
+            {
+                "desc": "Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)",
+                "max": "1",
+                "min": "0",
+                "name": "Ksfill",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Lamination's Winding",
+                "max": "",
+                "min": "",
+                "name": "winding",
+                "type": "Winding",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "LamSlotWind": {
         "constants": [
             {
@@ -3918,7 +4351,8 @@
             }
         ],
         "daughters": [
-            "LamSquirrelCage"
+            "LamSquirrelCage",
+            "LamSquirrelCageMag"
         ],
         "desc": "Lamination with Slot filled with winding",
         "is_internal": false,
@@ -3943,7 +4377,8 @@
             "comp_rot_dir",
             "comp_lengths_winding",
             "comp_number_phase_eq",
-            "comp_periodicity"
+            "comp_periodicity",
+            "set_pole_pair_number"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -3977,7 +4412,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LamSquirrelCageMag"
+        ],
         "desc": "squirrel cages lamination",
         "is_internal": false,
         "methods": [
@@ -4024,6 +4461,40 @@
             }
         ]
     },
+    "LamSquirrelCageMag": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Rotor lamination for LSPM",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_surfaces",
+            "plot",
+            "get_pole_pair_number",
+            "set_pole_pair_number"
+        ],
+        "mother": "LamSquirrelCage",
+        "name": "LamSquirrelCageMag",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSquirrelCageMag.csv",
+        "properties": [
+            {
+                "desc": "lamination Hole",
+                "max": "",
+                "min": "",
+                "name": "hole",
+                "type": "[Hole]",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "Lamination": {
         "constants": [
             {
@@ -4036,8 +4507,10 @@
             "LamSlot",
             "LamSlotMag",
             "LamSlotMulti",
+            "LamSlotMultiWind",
             "LamSlotWind",
-            "LamSquirrelCage"
+            "LamSquirrelCage",
+            "LamSquirrelCageMag"
         ],
         "desc": "abstract class for lamination",
         "is_internal": false,
@@ -4061,7 +4534,9 @@
             "comp_height_yoke",
             "get_notch_list",
             "comp_angle_q_axis",
-            "comp_radius_mid_yoke"
+            "comp_radius_mid_yoke",
+            "get_yoke_desc",
+            "get_bore_desc"
         ],
         "mother": "",
         "name": "Lamination",
@@ -4166,6 +4641,24 @@
                 "type": "[Notch]",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Lamination yoke notches",
+                "max": "",
+                "min": "",
+                "name": "yoke_notch",
+                "type": "[Notch]",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Bore Shape",
+                "max": "",
+                "min": "",
+                "name": "bore",
+                "type": "Bore",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -4434,6 +4927,7 @@
             "MachineAsync",
             "MachineDFIM",
             "MachineIPMSM",
+            "MachineLSPM",
             "MachineSCIM",
             "MachineSIPMSM",
             "MachineSRM",
@@ -4456,7 +4950,7 @@
             "comp_periodicity",
             "comp_width_airgap_mag",
             "comp_width_airgap_mec",
-            "get_material_list",
+            "get_material_dict",
             "get_polar_eq",
             "plot",
             "plot_anim_rotor",
@@ -4464,7 +4958,8 @@
             "get_lam_list_label",
             "get_lam_by_label",
             "get_lam_index",
-            "get_pole_pair_number"
+            "get_pole_pair_number",
+            "set_pole_pair_number"
         ],
         "mother": "",
         "name": "Machine",
@@ -4630,6 +5125,45 @@
             }
         ]
     },
+    "MachineLSPM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Line Start Permanent Magnet Machine",
+        "is_internal": false,
+        "methods": [
+            "check",
+            "get_machine_type"
+        ],
+        "mother": "MachineSync",
+        "name": "MachineLSPM",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/MachineLSPM.csv",
+        "properties": [
+            {
+                "desc": "Machine's Rotor",
+                "max": "",
+                "min": "",
+                "name": "rotor",
+                "type": "LamSquirrelCageMag",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Machine's Stator",
+                "max": "",
+                "min": "",
+                "name": "stator",
+                "type": "LamSlotWind",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "MachineSCIM": {
         "constants": [
             {
@@ -4683,7 +5217,7 @@
                 "max": "",
                 "min": "",
                 "name": "stator",
-                "type": "LamSlotWind",
+                "type": "Lamination",
                 "unit": "",
                 "value": ""
             }
@@ -4776,6 +5310,7 @@
         ],
         "daughters": [
             "MachineIPMSM",
+            "MachineLSPM",
             "MachineSIPMSM",
             "MachineSRM",
             "MachineSyRM",
@@ -4949,7 +5484,7 @@
                 "value": 0
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -5091,7 +5626,7 @@
                 "value": 1
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -5557,6 +6092,24 @@
                 "type": "ImportMatrix",
                 "unit": "W/kg",
                 "value": ""
+            },
+            {
+                "desc": "a model of BH curve with an analytical expression",
+                "max": "",
+                "min": "",
+                "name": "ModelBH",
+                "type": "ModelBH",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "1 to use ModelBH to fit input data and extrapolate BH curve",
+                "max": "",
+                "min": "",
+                "name": "is_BH_extrapolate",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
             }
         ]
     },
@@ -5879,12 +6432,15 @@
             "get_mesh",
             "get_solution",
             "get_field",
+            "get_group",
+            "get_mesh_field_pv",
             "plot_mesh",
             "plot_contour",
             "plot_deflection",
             "plot_deflection_animated",
             "plot_glyph",
-            "get_group"
+            "plot_glyph_animated",
+            "perm_coord"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -5928,11 +6484,11 @@
                 "value": ""
             },
             {
-                "desc": "Dict sorted by groups name with cells indices. ",
+                "desc": "Dict sorted by groups name with list of cells indices. ",
                 "max": "",
                 "min": "",
                 "name": "group",
-                "type": "{ndarray}",
+                "type": "dict",
                 "unit": "",
                 "value": null
             },
@@ -5974,7 +6530,9 @@
             "get_surf",
             "get_cell_area",
             "convert",
-            "as_dict"
+            "as_dict",
+            "perm_coord",
+            "get_path"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",
@@ -6015,7 +6573,7 @@
                 "name": "path",
                 "type": "str",
                 "unit": "",
-                "value": ""
+                "value": "None"
             },
             {
                 "desc": "Name of the mesh file",
@@ -6060,7 +6618,16 @@
                 "name": "surf_name",
                 "type": "str",
                 "unit": "",
-                "value": "surf"
+                "value": ""
+            },
+            {
+                "desc": "Array of normals to nodes (cell vertices)",
+                "max": "",
+                "min": "",
+                "name": "node_normals",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -6111,6 +6678,244 @@
                 "type": "int",
                 "unit": "-",
                 "value": null
+            }
+        ]
+    },
+    "ModelBH": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "ModelBH_Langevin",
+            "ModelBH_arctangent",
+            "ModelBH_linear_sat"
+        ],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [
+            "get_BH",
+            "fit_model"
+        ],
+        "mother": "",
+        "name": "ModelBH",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH.csv",
+        "properties": [
+            {
+                "desc": "Max value of H for extrapolation",
+                "max": "",
+                "min": "",
+                "name": "Bmax",
+                "type": "float",
+                "unit": "-",
+                "value": 2.31
+            },
+            {
+                "desc": "Max value of B for extrapolation",
+                "max": "",
+                "min": "",
+                "name": "Hmax",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Step value for H",
+                "max": "",
+                "min": "",
+                "name": "delta",
+                "type": "float",
+                "unit": "-",
+                "value": 100
+            }
+        ]
+    },
+    "ModelBH_Langevin": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [
+            "get_BH",
+            "BH_func"
+        ],
+        "mother": "ModelBH",
+        "name": "ModelBH_Langevin",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_Langevin.csv",
+        "properties": [
+            {
+                "desc": "To enforc Saturation flux density",
+                "max": "",
+                "min": "",
+                "name": "Bs",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "To enforce Saturation parameter a",
+                "max": "",
+                "min": "",
+                "name": "a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Init value for Bs for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param1",
+                "type": "float",
+                "unit": "-",
+                "value": 1.89
+            },
+            {
+                "desc": "Init value for a for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param2",
+                "type": "float",
+                "unit": "-",
+                "value": 240
+            }
+        ]
+    },
+    "ModelBH_arctangent": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [],
+        "mother": "ModelBH",
+        "name": "ModelBH_arctangent",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_arctangent.csv",
+        "properties": [
+            {
+                "desc": "BH curve parameter",
+                "max": "",
+                "min": "",
+                "name": "k",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "Saturation permeability parameter",
+                "max": "",
+                "min": "",
+                "name": "mu_a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "ModelBH_exponential": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "ModelBH_exponential",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_exponential.csv",
+        "properties": [
+            {
+                "desc": "BH curve parameter",
+                "max": "",
+                "min": "",
+                "name": "Bs",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "Saturation permeability parameter",
+                "max": "",
+                "min": "",
+                "name": "mu_a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "ModelBH_linear_sat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for BH curve model ",
+        "is_internal": false,
+        "methods": [
+            "get_BH",
+            "BH_func"
+        ],
+        "mother": "ModelBH",
+        "name": "ModelBH_linear_sat",
+        "package": "Material",
+        "path": "pyleecan/Generator/ClassesRef/Material/ModelBH_linear_sat.csv",
+        "properties": [
+            {
+                "desc": "Saturation flux density",
+                "max": "",
+                "min": "",
+                "name": "Bs",
+                "type": "float",
+                "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "Linear permeability",
+                "max": "",
+                "min": "",
+                "name": "mu_a",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Init value for Bs for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param1",
+                "type": "float",
+                "unit": "-",
+                "value": 1.89
+            },
+            {
+                "desc": "Init value for mu_a for fitting algorithm",
+                "max": "",
+                "min": "",
+                "name": "param2",
+                "type": "float",
+                "unit": "-",
+                "value": 240
             }
         ]
     },
@@ -6206,7 +7011,8 @@
         "desc": "Class for evenly distributed notches (according to Zs)",
         "is_internal": false,
         "methods": [
-            "get_notch_list"
+            "get_notch_list",
+            "comp_surface"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
@@ -7354,7 +8160,7 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutMagElmer.csv",
         "properties": [
             {
-                "desc": "Dictionnary containing the main FEA parameters",
+                "desc": "dictionary containing the main FEA parameters",
                 "max": "",
                 "min": "",
                 "name": "FEA_dict",
@@ -7383,7 +8189,7 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutMagFEMM.csv",
         "properties": [
             {
-                "desc": "Dictionnary containing the main FEMM parameters",
+                "desc": "dictionary containing the main FEMM parameters",
                 "max": "",
                 "min": "",
                 "name": "FEMM_dict",
@@ -7536,7 +8342,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing the main FEA parameter",
+                "desc": "dictionary containing the main FEA parameter",
                 "max": "",
                 "min": "",
                 "name": "FEA_dict",
@@ -7566,11 +8372,7 @@
             "getter.get_path_result",
             "getter.get_machine_periodicity",
             "getter.get_rot_dir",
-            "plot.plot_2D_Data",
             "getter.get_fund_harm",
-            "plot.plot_A_quiver_2D",
-            "plot.plot_3D_Data",
-            "plot.plot_A_time_space",
             "getter.get_data_from_str",
             "print_memory"
         ],
@@ -7680,12 +8482,15 @@
         ],
         "daughters": [
             "OptiDesignVar",
+            "ParamExplorerInterval",
             "ParamExplorerSet"
         ],
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,
         "methods": [
-            "_set_setter"
+            "_set_setter",
+            "_set_getter",
+            "get_desc"
         ],
         "mother": "",
         "name": "ParamExplorer",
@@ -7727,6 +8532,83 @@
                 "type": "function",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Function to return the reference value (simulation as argument)",
+                "max": "",
+                "min": "",
+                "name": "getter",
+                "type": "function",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "ParamExplorerInterval": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define a set of value (for parameter sweep) on interval",
+        "is_internal": false,
+        "methods": [
+            "get_value",
+            "get_min",
+            "get_max",
+            "get_N"
+        ],
+        "mother": "ParamExplorer",
+        "name": "ParamExplorerInterval",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/ParamExplorerInterval.csv",
+        "properties": [
+            {
+                "desc": "Minumum value of the interval",
+                "max": "",
+                "min": "",
+                "name": "min_value",
+                "type": "float",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Maximum value of the interval",
+                "max": "",
+                "min": "",
+                "name": "max_value",
+                "type": "float",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Number of value to take in the interval",
+                "max": "",
+                "min": "2",
+                "name": "N",
+                "type": "int",
+                "unit": "-",
+                "value": 4
+            },
+            {
+                "desc": "How to generate the value list. 0: linspace, 1: random (Not available yet)",
+                "max": "1",
+                "min": "0",
+                "name": "type_value_gen",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Type of the value: 0:float, 1:int",
+                "max": "1",
+                "min": "0",
+                "name": "type_value",
+                "type": "int",
+                "unit": "-",
+                "value": 0
             }
         ]
     },
@@ -7738,11 +8620,15 @@
             }
         ],
         "daughters": [],
-        "desc": "Abstract class for the multi-simulation",
+        "desc": "Define a parameter set (for parameter sweep) from a list",
         "is_internal": false,
         "methods": [
             "get_value",
-            "as_dict"
+            "as_dict",
+            "get_min",
+            "get_max",
+            "get_N",
+            "_set_value"
         ],
         "mother": "ParamExplorer",
         "name": "ParamExplorerSet",
@@ -7894,7 +8780,7 @@
         "path": "pyleecan/Generator/ClassesRef/Post/PostPlot.csv",
         "properties": [
             {
-                "desc": "Full path of the plot method to call except Output (ex: \"plot_2D_Data\", \"mag.meshsolution.plot_contour\")",
+                "desc": "Name of the plot method to call (e.g. plot_2D_Data, plot_contour, plot_multi)",
                 "max": "",
                 "min": "",
                 "name": "method",
@@ -7912,7 +8798,7 @@
                 "value": "[]"
             },
             {
-                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "desc": "dictionary of parameters to pass to the plot method when executing it",
                 "max": "",
                 "min": "",
                 "name": "param_list",
@@ -7921,7 +8807,7 @@
                 "value": []
             },
             {
-                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "desc": "dictionary of parameters to pass to the plot method when executing it",
                 "max": "",
                 "min": "",
                 "name": "param_dict",
@@ -7937,6 +8823,15 @@
                 "type": "str",
                 "unit": "",
                 "value": "png"
+            },
+            {
+                "desc": "Full path to the quantity to which apply the plot_method except Output (e.g. mag.B, elec.get_Is, mag.meshsolution)",
+                "max": "",
+                "min": "",
+                "name": "quantity",
+                "type": "str",
+                "unit": "",
+                "value": "None"
             }
         ]
     },
@@ -8543,6 +9438,7 @@
             "SlotM14",
             "SlotM15",
             "SlotM16",
+            "SlotM17",
             "SlotUD",
             "SlotUD2",
             "SlotW10",
@@ -8562,7 +9458,8 @@
             "SlotW28",
             "SlotW29",
             "SlotW60",
-            "SlotW61"
+            "SlotW61",
+            "SlotWLSRPM"
         ],
         "desc": "Generic class for slot (abstract)",
         "is_internal": false,
@@ -9333,6 +10230,37 @@
                 "value": 0.001
             }
         ]
+    },
+    "SlotM17": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Full rotor magnet",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_active",
+            "get_surface_active",
+            "plot_schematics"
+        ],
+        "mother": "Slot",
+        "name": "SlotM17",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM17.csv",
+        "properties": []
     },
     "SlotUD": {
         "constants": [
@@ -11036,6 +11964,78 @@
             }
         ]
     },
+    "SlotWLSRPM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Open Rectangular or trapezoidal slot with wedge",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "build_geometry_active",
+            "check"
+        ],
+        "mother": "Slot",
+        "name": "SlotWLSRPM",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotWLSRPM.csv",
+        "properties": [
+            {
+                "desc": "Slot bottom side width.",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.008
+            },
+            {
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0116
+            },
+            {
+                "desc": "Slot height ",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0148
+            },
+            {
+                "desc": "Top radius",
+                "max": "",
+                "min": "0",
+                "name": "R1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.00075
+            },
+            {
+                "desc": "damper winding height",
+                "max": "",
+                "min": "0",
+                "name": "H3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            }
+        ]
+    },
     "Solution": {
         "constants": [
             {
@@ -11307,7 +12307,7 @@
                 "value": 1
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -11614,11 +12614,7 @@
         ],
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
         "is_internal": false,
-        "methods": [
-            "get_elec_datakeeper",
-            "get_mag_datakeeper",
-            "get_force_datakeeper"
-        ],
+        "methods": [],
         "mother": "VarSimu",
         "name": "VarLoad",
         "package": "Simulation",
@@ -11638,7 +12634,6 @@
         "methods": [
             "get_input_list",
             "generate_simulation_list",
-            "gen_datakeeper_list",
             "check_param",
             "get_elec_datakeeper"
         ],
@@ -11738,7 +12733,11 @@
             "run",
             "set_reused_data",
             "check_param",
-            "generate_simulation_list"
+            "generate_simulation_list",
+            "gen_datakeeper_list",
+            "get_elec_datakeeper",
+            "get_mag_datakeeper",
+            "get_force_datakeeper"
         ],
         "mother": "",
         "name": "VarSimu",
@@ -12034,26 +13033,28 @@
             },
             {
                 "name": "NAME",
-                "value": "\"Abstract Winding\""
+                "value": "\"Star of slots\""
             }
         ],
         "daughters": [
-            "WindingCW1L",
-            "WindingCW2LR",
-            "WindingCW2LT",
-            "WindingDW1L",
-            "WindingDW2L",
             "WindingSC",
             "WindingUD"
         ],
-        "desc": "Winding abstract class",
+        "desc": "Winding class generating connection matrix using Star of slots method (coupling with SWAT-EM)",
         "is_internal": false,
         "methods": [
+            "comp_connection_mat",
+            "comp_length_endwinding",
             "comp_Ncspc",
-            "comp_Ntspc",
+            "comp_Ntsp",
+            "comp_periodicity",
             "comp_phasor_angle",
             "comp_winding_factor",
-            "comp_length_endwinding"
+            "get_connection_mat",
+            "get_dim_wind",
+            "get_periodicity",
+            "export_to_csv",
+            "clean"
         ],
         "mother": "",
         "name": "Winding",
@@ -12097,18 +13098,18 @@
                 "value": 7
             },
             {
-                "desc": "number of parallel circuits per phase (maximum 2p)",
+                "desc": "number of parallel circuits per phase (maximum p)",
                 "max": "1000",
                 "min": "1",
-                "name": "Npcpp",
+                "name": "Npcp",
                 "type": "int",
                 "unit": "-",
                 "value": 2
             },
             {
-                "desc": "Winding connection : 0 star (Y), 1 triangle (delta)",
+                "desc": "Winding connection : 0 star (Y), 1 triangle (delta), -1 no connection",
                 "max": "1",
-                "min": "0",
+                "min": "-1",
                 "name": "type_connection",
                 "type": "int",
                 "unit": "-",
@@ -12140,139 +13141,89 @@
                 "type": "Conductor",
                 "unit": "-",
                 "value": ""
-            }
-        ]
-    },
-    "WindingCW1L": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
             },
             {
-                "name": "NAME",
-                "value": "\"single layer concentrated\""
-            }
-        ],
-        "daughters": [],
-        "desc": "single layer non-overlapping 'concentrated' tooth winding 'alternate teeth wound'",
-        "is_internal": false,
-        "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
-        ],
-        "mother": "Winding",
-        "name": "WindingCW1L",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW1L.csv",
-        "properties": []
-    },
-    "WindingCW2LR": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"double layer concentrated (radial)\""
-            }
-        ],
-        "daughters": [],
-        "desc": "double layer non-overlapping \"concentrated\" tooth winding \"all teeth wound\", radial coil superposition",
-        "is_internal": false,
-        "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
-        ],
-        "mother": "Winding",
-        "name": "WindingCW2LR",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW2LR.csv",
-        "properties": []
-    },
-    "WindingCW2LT": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"double layer concentrated (orthoradial)\""
-            }
-        ],
-        "daughters": [],
-        "desc": "double layer non-overlapping \"concentrated\" tooth winding \"all teeth wound\", orthoradial coil superposition",
-        "is_internal": false,
-        "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
-        ],
-        "mother": "Winding",
-        "name": "WindingCW2LT",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW2LT.csv",
-        "properties": []
-    },
-    "WindingDW1L": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "NAME",
-                "value": "\"single layer distributed\""
-            }
-        ],
-        "daughters": [
-            "WindingDW2L"
-        ],
-        "desc": "single layer overlapping integral distributed winding",
-        "is_internal": false,
-        "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
-        ],
-        "mother": "Winding",
-        "name": "WindingDW1L",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingDW1L.csv",
-        "properties": [
-            {
-                "desc": "winding coil pitch or coil span expressed in slots (coil_pitch1=Zs/(2p)->full-pitch distributed winding, coil_pitch1<Zs/(2p)->chorded/shorted-pitch distributed winding, coil_pitch1=1->tooth-winding). Coil pitch is sometimes written 1/9 means Input.Magnetics.coil_pitch1=9-1=8",
-                "max": "1000",
-                "min": "0",
+                "desc": "Coil pitch (or coil span)",
+                "max": "",
+                "min": "",
                 "name": "coil_pitch",
                 "type": "int",
-                "unit": "-",
-                "value": 5
-            }
-        ]
-    },
-    "WindingDW2L": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
+                "unit": "",
+                "value": 1
             },
             {
-                "name": "NAME",
-                "value": "\"double layer distributed\""
+                "desc": "Winding matrix calculated with Star of slots (from SWAT_EM package)",
+                "max": "",
+                "min": "",
+                "name": "wind_mat",
+                "type": "ndarray",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Number of layers per slots",
+                "max": "",
+                "min": "1",
+                "name": "Nlayer",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Number of spatial periods of the winding",
+                "max": "",
+                "min": "1",
+                "name": "per_a",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "True if the winding is anti-periodic over space",
+                "max": "",
+                "min": "",
+                "name": "is_aper_a",
+                "type": "bool",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "End Winding's definition",
+                "max": "",
+                "min": "",
+                "name": "end_winding",
+                "type": "EndWinding",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "1 to reverse the layers (rad from 0 to Nrad-1 => Nrad-1 to 0)",
+                "max": "",
+                "min": "",
+                "name": "is_reverse_layer",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "1 to change the layer from radial to tangential or tangential to radial",
+                "max": "",
+                "min": "",
+                "name": "is_change_layer",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True to permute phase B and phase C",
+                "max": "",
+                "min": "",
+                "name": "is_permute_B_C",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
-        ],
-        "daughters": [],
-        "desc": "double layer overlapping integral distributed winding, radial coil superposition",
-        "is_internal": false,
-        "methods": [
-            "get_dim_wind"
-        ],
-        "mother": "WindingDW1L",
-        "name": "WindingDW2L",
-        "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingDW2L.csv",
-        "properties": []
+        ]
     },
     "WindingSC": {
         "constants": [
@@ -12313,24 +13264,17 @@
         "desc": "User defined winding",
         "is_internal": false,
         "methods": [
-            "comp_connection_mat",
-            "get_dim_wind"
+            "init_as_CW1L",
+            "init_as_CW2LR",
+            "init_as_CW2LT",
+            "init_as_DWL",
+            "import_from_csv"
         ],
         "mother": "Winding",
         "name": "WindingUD",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/WindingUD.csv",
-        "properties": [
-            {
-                "desc": "user defined Winding matrix",
-                "max": "",
-                "min": "",
-                "name": "user_wind_mat",
-                "type": "ndarray",
-                "unit": "-",
-                "value": ""
-            }
-        ]
+        "properties": []
     },
     "XOutput": {
         "constants": [
@@ -12351,22 +13295,23 @@
             "__next__",
             "__reversed__",
             "__setitem__",
-            "count",
-            "insert",
-            "pop",
-            "remove",
             "append",
-            "get_simu",
-            "keys",
-            "items",
+            "count",
             "get_param_simu",
             "get_paramexplorer",
+            "get_pareto_index",
+            "get_simu",
+            "get_symbol_list",
+            "get_xoutput_ref",
+            "insert",
+            "items",
+            "keys",
+            "plot_generation",
             "plot_multi",
             "plot_pareto",
-            "plot_generation",
-            "get_pareto_index",
+            "pop",
             "print_memory",
-            "get_xoutput_ref"
+            "remove"
         ],
         "mother": "Output",
         "name": "XOutput",
@@ -12392,7 +13337,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing DataKeeper",
+                "desc": "dictionary containing DataKeeper",
                 "max": "",
                 "min": "",
                 "name": "xoutput_dict",

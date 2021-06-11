@@ -3,7 +3,7 @@
 from matplotlib.patches import Patch, Polygon, Wedge
 from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
-
+from ....Classes.LamSlotWind import LamSlotWind
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
@@ -54,7 +54,8 @@ def plot(
     (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
     # Plot the lamination
-    super(type(self), self).plot(
+    LamSlotWind.plot(
+        self,
         fig=fig,
         is_lam_only=is_lam_only,
         sym=sym,
@@ -77,7 +78,7 @@ def plot(
                     (0, 0),
                     Rmw + self.Hscr / 2.0,
                     0,
-                    360,
+                    360 / sym,
                     width=self.Hscr,
                     color=SCR_COLOR,
                 )
@@ -94,7 +95,10 @@ def plot(
     axes.axis("equal")
     Lim = self.Rext * 1.5
     axes.set_xlim(-Lim, Lim)
-    axes.set_ylim(-Lim, Lim)
+    if sym == 1:
+        axes.set_ylim(-Lim, Lim)
+    else:
+        axes.set_ylim(-Lim * 0.3, Lim)
 
     if not is_lam_only:
         # Add the short ciruit ring to the fig

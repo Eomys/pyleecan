@@ -15,8 +15,6 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.SlotW27 import SlotW27
 
@@ -27,7 +25,6 @@ from Tests.Plot.LamWind import wind_mat
 """pytest for Lamination with winding plot"""
 
 
-@pytest.mark.PLOT
 class Test_Slot_27_plot(object):
     def test_Lam_Wind_27_wind_22(self):
         """Test machine plot with Slot 27 and winding rad=2, tan=2"""
@@ -50,9 +47,7 @@ class Test_Slot_27_plot(object):
             Zs=6, H0=0.05, W0=30e-3, H1=0.125, W1=0.06, H2=0.05, W2=0.09, W3=0.04
         )
         test_obj.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
-        test_obj.rotor.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
         test_obj.stator = LamSlotWind(
@@ -67,7 +62,7 @@ class Test_Slot_27_plot(object):
         test_obj.stator.slot = SlotW27(
             Zs=18, H0=0.05, W0=30e-3, H1=0.07, W1=0.05, H2=0.15, W2=0.1, W3=0.05
         )
-        test_obj.stator.winding = WindingDW2L(qs=3, p=3)
+        test_obj.stator.winding = Winding(qs=3, p=3, Nlayer=2, coil_pitch=2)
         test_obj.stator.winding.Lewout = 60e-3
         test_obj.stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=0.8, Rext=0.9, Lfra=1)

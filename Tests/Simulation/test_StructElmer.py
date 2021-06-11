@@ -16,7 +16,7 @@ from pyleecan.Functions.load import load
 
 
 # get the machine
-machine_1 = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+machine_1 = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
 # mesh settings, original line label names have to be used (not the translated)
 n1 = 3
@@ -43,9 +43,10 @@ mesh_dict_1 = {
 }
 
 
-@pytest.mark.long
+@pytest.mark.long_5s
 @pytest.mark.StructElmer
-# @pytest.mark.DEV
+@pytest.mark.IPMSM
+@pytest.mark.SingleOP
 class Test_StructElmer(object):
     """Test some basic workflow of StructElmer simulations"""
 
@@ -59,7 +60,7 @@ class Test_StructElmer(object):
         machine.rotor.hole[0].W2 = 1.0e-3
 
         # setup the simulation
-        simu = Simu1(name="HoleM50_2_magnets", machine=machine)
+        simu = Simu1(name="test_StructElmer_HoleM50", machine=machine)
         output = Output(simu=simu)
         output.path_result = save_path
 
@@ -85,7 +86,7 @@ class Test_StructElmer(object):
         # machine.rotor.hole[0].W1 = 1.0e-3
 
         # setup the simulation
-        simu = Simu1(name="HoleM50_no_magnets", machine=machine)
+        simu = Simu1(name="test_StructElmer_HoleM50_no_magnets", machine=machine)
         output = Output(simu=simu)
 
         simu.struct = StructElmer()
@@ -118,7 +119,7 @@ class Test_StructElmer(object):
         machine.rotor.is_stator = False
 
         # setup the simulation
-        simu = Simu1(name="Disc", machine=machine)
+        simu = Simu1(name="test_StructElmer_disk", machine=machine)
         output = Output(simu=simu)
 
         simu.struct = StructElmer()
@@ -137,7 +138,7 @@ class Test_StructElmer(object):
 if __name__ == "__main__":
     # create test object
     obj = Test_StructElmer()
-    # test IPMSM_A (HoleM50-Rotor) with minor modification
+    # test Toyota_Prius (HoleM50-Rotor) with minor modification
     out = obj.test_HoleM50()
     # out = obj.test_HoleM50_wo_magnets()
 

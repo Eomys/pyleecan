@@ -7,7 +7,7 @@ import pytest
 """pytest for comp_periodicity"""
 
 
-@pytest.mark.METHODS
+@pytest.mark.periodicity
 def test_comp_periodicity():
     rotor = LamSlotWind(
         Rint=0.2,

@@ -7,7 +7,7 @@ from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM53 import HoleM53
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.PHoleM53 import PHoleM53
 from pyleecan.Classes.Material import Material
 
@@ -15,7 +15,6 @@ from pyleecan.Classes.Material import Material
 import pytest
 
 
-@pytest.mark.GUI
 class TestPHoleM53(object):
     """Test that the widget PHoleM53 behave like it should"""
 
@@ -38,15 +37,15 @@ class TestPHoleM53(object):
         test_obj.hole[0].magnet_0.mat_type.name = "Magnet3"
         test_obj.hole[0].magnet_1.mat_type.name = "Magnet2"
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = [
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),
         ]
-        widget = PHoleM53(test_obj.hole[0], matlib)
+        widget = PHoleM53(test_obj.hole[0], material_dict)
 
-        yield {"widget": widget, "test_obj": test_obj, "matlib": matlib}
+        yield {"widget": widget, "test_obj": test_obj, "material_dict": material_dict}
 
         self.app.quit()
 
@@ -202,14 +201,7 @@ class TestPHoleM53(object):
             )
         )
 
-        setup["matlib"] = MatLib()
-        setup["matlib"].dict_mat["RefMatLib"] = [
-            Material(name="Magnet1"),
-            Material(name="Magnet2"),
-            Material(name="Magnet3"),
-        ]
-
-        setup["widget"] = PHoleM53(setup["test_obj"].hole[1], setup["matlib"])
+        setup["widget"] = PHoleM53(setup["test_obj"].hole[1], setup["material_dict"])
 
         assert setup["widget"].w_mat_1.isHidden()
         assert setup["widget"].w_mat_2.isHidden()
