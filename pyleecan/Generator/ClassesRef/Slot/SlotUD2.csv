@@ -3,3 +3,4 @@ line_list,-,list of line to draw the edges of the slot,,[Line],,,,,Slot,Slot,bui
 active_surf,-,Active surface of the Slot,,Surface,,,,,,,build_geometry_active,,,
 split_active_surf_dict,-,"Dictionary to enforced the split active surface (key=""Nrad=1, Ntan=2""). Labels set according to list order (loop on Nrad then Ntan)",,dict,None,,,,,,get_surface_active,,,
 ,,,,,,,,,,,check,,,
+,,,,,,,,,,,_set_split_active_surf_dict,,,

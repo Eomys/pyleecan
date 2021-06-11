@@ -37,6 +37,13 @@ try:
 except ImportError as error:
     check = error
 
+try:
+    from ..Methods.Slot.SlotUD2._set_split_active_surf_dict import (
+        _set_split_active_surf_dict,
+    )
+except ImportError as error:
+    _set_split_active_surf_dict = error
+
 
 from ._check import InitUnKnowClassError
 from .Line import Line
@@ -93,6 +100,18 @@ class SlotUD2(Slot):
         )
     else:
         check = check
+    # cf Methods.Slot.SlotUD2._set_split_active_surf_dict
+    if isinstance(_set_split_active_surf_dict, ImportError):
+        _set_split_active_surf_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotUD2 method _set_split_active_surf_dict: "
+                    + str(_set_split_active_surf_dict)
+                )
+            )
+        )
+    else:
+        _set_split_active_surf_dict = _set_split_active_surf_dict
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -103,7 +122,7 @@ class SlotUD2(Slot):
         self,
         line_list=-1,
         active_surf=-1,
-        split_active_surf_dict=-1,
+        split_active_surf_dict=None,
         Zs=36,
         init_dict=None,
         init_str=None,
@@ -347,17 +366,10 @@ class SlotUD2(Slot):
         """getter of split_active_surf_dict"""
         return self._split_active_surf_dict
 
-    def _set_split_active_surf_dict(self, value):
-        """setter of split_active_surf_dict"""
-        if type(value) is int and value == -1:
-            value = dict()
-        check_var("split_active_surf_dict", value, "dict")
-        self._split_active_surf_dict = value
-
     split_active_surf_dict = property(
         fget=_get_split_active_surf_dict,
         fset=_set_split_active_surf_dict,
-        doc=u"""Dictionary to enforced the split active surface (key="Nrad=1, Ntan=2")
+        doc=u"""Dictionary to enforced the split active surface (key="Nrad=1, Ntan=2"). Labels set according to list order (loop on Nrad then Ntan)
 
         :Type: dict
         """,

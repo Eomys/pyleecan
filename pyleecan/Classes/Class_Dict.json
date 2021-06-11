@@ -10342,7 +10342,8 @@
             "build_geometry",
             "build_geometry_active",
             "get_surface_active",
-            "check"
+            "check",
+            "_set_split_active_surf_dict"
         ],
         "mother": "Slot",
         "name": "SlotUD2",
@@ -10368,13 +10369,13 @@
                 "value": ""
             },
             {
-                "desc": "Dictionary to enforced the split active surface (key=\"Nrad=1, Ntan=2\")",
+                "desc": "Dictionary to enforced the split active surface (key=\"Nrad=1, Ntan=2\"). Labels set according to list order (loop on Nrad then Ntan)",
                 "max": "",
                 "min": "",
                 "name": "split_active_surf_dict",
                 "type": "dict",
                 "unit": "-",
-                "value": ""
+                "value": null
             }
         ]
     },

@@ -490,6 +490,10 @@ def test_WindingUD_layer():
     rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
     rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
+    # For testing the _set_split_active_surf_dict method
+    rotor.save(join(save_path, "Fig17_rotor_wind_layer.json"))
+    rotor = load(join(save_path, "Fig17_rotor_wind_layer.json"))
+
     # Plot, check and save
     rotor.plot(is_show_fig=False)
     fig = plt.gcf()
