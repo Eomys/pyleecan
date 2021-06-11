@@ -37,13 +37,6 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
             st = "Stator"
         else:
             st = "Rotor"
-        assert sym == 1, (
-            "ERROR, Wrong symmetry for "
-            + st
-            + ". sym="
-            + str(sym)
-            + " while LamSlotMulti does not handle symmetries."
-        )
         # getting angle between Slot
         angle = self.alpha
         # getting Nrad and Ntan
@@ -56,7 +49,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
             except Exception:
                 Nrad, Ntan = 1, 1
 
-            for ii in range(len(angle)):  # for each slot
+            for ii in range(int(len(angle) / sym)):  # for each slot
                 # get the winding surface
                 surf_Wind = self.slot_list[ii].build_geometry_active(
                     Nrad=Nrad,

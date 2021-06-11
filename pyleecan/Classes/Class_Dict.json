@@ -4292,6 +4292,15 @@
                 "type": "ndarray",
                 "unit": "[rad]",
                 "value": ""
+            },
+            {
+                "desc": "Dictionary to enforce the lamination symmetry",
+                "max": "",
+                "min": "",
+                "name": "sym_dict_enforced",
+                "type": "dict",
+                "unit": "",
+                "value": null
             }
         ]
     },

@@ -185,6 +185,7 @@ class LamSlotMulti(Lamination):
         self,
         slot_list=-1,
         alpha=None,
+        sym_dict_enforced=None,
         L1=0.35,
         mat_type=-1,
         Nrvd=0,
@@ -220,6 +221,8 @@ class LamSlotMulti(Lamination):
                 slot_list = init_dict["slot_list"]
             if "alpha" in list(init_dict.keys()):
                 alpha = init_dict["alpha"]
+            if "sym_dict_enforced" in list(init_dict.keys()):
+                sym_dict_enforced = init_dict["sym_dict_enforced"]
             if "L1" in list(init_dict.keys()):
                 L1 = init_dict["L1"]
             if "mat_type" in list(init_dict.keys()):
@@ -249,6 +252,7 @@ class LamSlotMulti(Lamination):
         # Set the properties (value check and convertion are done in setter)
         self.slot_list = slot_list
         self.alpha = alpha
+        self.sym_dict_enforced = sym_dict_enforced
         # Call Lamination init
         super(LamSlotMulti, self).__init__(
             L1=L1,
@@ -288,6 +292,9 @@ class LamSlotMulti(Lamination):
             + linesep
             + linesep
         )
+        LamSlotMulti_str += (
+            "sym_dict_enforced = " + str(self.sym_dict_enforced) + linesep
+        )
         return LamSlotMulti_str
 
     def __eq__(self, other):
@@ -302,6 +309,8 @@ class LamSlotMulti(Lamination):
         if other.slot_list != self.slot_list:
             return False
         if not array_equal(other.alpha, self.alpha):
+            return False
+        if other.sym_dict_enforced != self.sym_dict_enforced:
             return False
         return True
 
@@ -333,6 +342,8 @@ class LamSlotMulti(Lamination):
                 )
         if not array_equal(other.alpha, self.alpha):
             diff_list.append(name + ".alpha")
+        if other._sym_dict_enforced != self._sym_dict_enforced:
+            diff_list.append(name + ".sym_dict_enforced")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -348,6 +359,9 @@ class LamSlotMulti(Lamination):
             for value in self.slot_list:
                 S += getsizeof(value)
         S += getsizeof(self.alpha)
+        if self.sym_dict_enforced is not None:
+            for key, value in self.sym_dict_enforced.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self, **kwargs):
@@ -372,6 +386,11 @@ class LamSlotMulti(Lamination):
             LamSlotMulti_dict["alpha"] = None
         else:
             LamSlotMulti_dict["alpha"] = self.alpha.tolist()
+        LamSlotMulti_dict["sym_dict_enforced"] = (
+            self.sym_dict_enforced.copy()
+            if self.sym_dict_enforced is not None
+            else None
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotMulti_dict["__class__"] = "LamSlotMulti"
@@ -382,6 +401,7 @@ class LamSlotMulti(Lamination):
 
         self.slot_list = None
         self.alpha = None
+        self.sym_dict_enforced = None
         # Set to None the properties inherited from Lamination
         super(LamSlotMulti, self)._set_None()
 
@@ -440,5 +460,25 @@ class LamSlotMulti(Lamination):
         doc=u"""Angular position of the Slots
 
         :Type: ndarray
+        """,
+    )
+
+    def _get_sym_dict_enforced(self):
+        """getter of sym_dict_enforced"""
+        return self._sym_dict_enforced
+
+    def _set_sym_dict_enforced(self, value):
+        """setter of sym_dict_enforced"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("sym_dict_enforced", value, "dict")
+        self._sym_dict_enforced = value
+
+    sym_dict_enforced = property(
+        fget=_get_sym_dict_enforced,
+        fset=_set_sym_dict_enforced,
+        doc=u"""Dictionary to enforce the lamination symmetry
+
+        :Type: dict
         """,
     )

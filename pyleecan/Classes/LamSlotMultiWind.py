@@ -181,6 +181,7 @@ class LamSlotMultiWind(LamSlotMulti):
         winding=-1,
         slot_list=-1,
         alpha=None,
+        sym_dict_enforced=None,
         L1=0.35,
         mat_type=-1,
         Nrvd=0,
@@ -220,6 +221,8 @@ class LamSlotMultiWind(LamSlotMulti):
                 slot_list = init_dict["slot_list"]
             if "alpha" in list(init_dict.keys()):
                 alpha = init_dict["alpha"]
+            if "sym_dict_enforced" in list(init_dict.keys()):
+                sym_dict_enforced = init_dict["sym_dict_enforced"]
             if "L1" in list(init_dict.keys()):
                 L1 = init_dict["L1"]
             if "mat_type" in list(init_dict.keys()):
@@ -253,6 +256,7 @@ class LamSlotMultiWind(LamSlotMulti):
         super(LamSlotMultiWind, self).__init__(
             slot_list=slot_list,
             alpha=alpha,
+            sym_dict_enforced=sym_dict_enforced,
             L1=L1,
             mat_type=mat_type,
             Nrvd=Nrvd,

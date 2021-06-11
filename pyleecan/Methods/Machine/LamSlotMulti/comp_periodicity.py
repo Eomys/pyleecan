@@ -22,8 +22,17 @@ def comp_periodicity(self, p=None):
 
     """
 
-    Zs = self.get_Zs()
-    is_aper = False
-    # TODO compute it
-    self.get_logger().debug("Symmetry not available yet for LamSlotMulti")
-    return 1, is_aper, 1, is_aper
+    if self.sym_dict_enforced is not None:
+        self.get_logger().debug("Enforcing symmetry for LamSlotMulti")
+        return (
+            self.sym_dict_enforced["per_a"],
+            self.sym_dict_enforced["is_antiper_a"],
+            self.sym_dict_enforced["per_t"],
+            self.sym_dict_enforced["is_antiper_t"],
+        )
+    else:
+        Zs = self.get_Zs()
+        is_aper = False
+        # TODO compute it
+        self.get_logger().debug("Symmetry not available yet for LamSlotMulti")
+        return 1, is_aper, 1, is_aper

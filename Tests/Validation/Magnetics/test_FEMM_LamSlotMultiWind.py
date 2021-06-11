@@ -20,6 +20,12 @@ def test_FEMM_LamSlotMultiWind():
     )
     simu = Simu1(name="test_FEMM_LamSlotMultiWind", machine=SPMSM_LamSlotMultiWind)
 
+    # SPMSM_LamSlotMultiWind.stator.sym_dict_enforced = {
+    #     "per_a": 1,
+    #     "is_antiper_a": True,
+    #     "per_t": 1,
+    #     "is_antiper_t": False,
+    # }
     simu.input = InputCurrent(
         Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=1, N0=1200
     )
@@ -27,7 +33,7 @@ def test_FEMM_LamSlotMultiWind():
     simu.mag = MagFEMM(
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_periodicity_a=False,
+        is_periodicity_a=True,
         is_periodicity_t=False,
     )
     simu.elec = None
