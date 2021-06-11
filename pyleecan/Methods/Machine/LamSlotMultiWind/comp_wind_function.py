@@ -40,8 +40,8 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0, per_a=1):
     Zs = self.get_Zs()  # Number of slot
     Zs0 = int(Zs / per_a)
 
-    slot_angle = self.slot.comp_angle_active_eq()
-    slot_opening = self.slot.comp_angle_opening()
+    slot_angle = self.slot_list[0].comp_angle_active_eq()
+    slot_opening = self.slot_list[0].comp_angle_opening()
 
     wind_mat = self.winding.get_connection_mat(Zs)
     # sum wind_mat along Nlay_rad axis
@@ -49,9 +49,10 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0, per_a=1):
 
     # angle of the center of the slots
     # By convention a tooth is centered on the X axis
-    alpha_slot = linspace(0, 2 * pi / per_a, Zs0, endpoint=False) + pi / Zs
+    alpha_slot = self.alpha[:Zs0]
 
     # angle of the lay in a slot (Nlay point, end and begin excluded)
+    # TODO slot can have different slot_angle
     alpha_lay = linspace(-slot_angle / 2, slot_angle / 2, Ntan + 1, endpoint=False)[1:]
 
     if alpha_mmf0 != 0:

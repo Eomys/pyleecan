@@ -24,5 +24,6 @@ def comp_periodicity(self, p=None):
 
     Zs = self.get_Zs()
     is_aper = False
-
-    return Zs, is_aper, Zs, is_aper
+    # TODO compute it
+    self.get_logger().debug("Symmetry not available yet for LamSlotMulti")
+    return 1, is_aper, 1, is_aper

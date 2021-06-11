@@ -4312,7 +4312,8 @@
             "comp_rot_dir",
             "plot_mmf_unit",
             "comp_mmf_unit",
-            "comp_wind_function"
+            "comp_wind_function",
+            "comp_angle_d_axis"
         ],
         "mother": "LamSlotMulti",
         "name": "LamSlotMultiWind",
@@ -4359,7 +4360,6 @@
             "comp_surfaces",
             "comp_volumes",
             "get_pole_pair_number",
-            "get_name_phase",
             "plot",
             "plot_winding",
             "comp_fill_factor",
@@ -4532,7 +4532,8 @@
             "comp_angle_q_axis",
             "comp_radius_mid_yoke",
             "get_yoke_desc",
-            "get_bore_desc"
+            "get_bore_desc",
+            "comp_point_ref"
         ],
         "mother": "",
         "name": "Lamination",

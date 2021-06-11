@@ -54,6 +54,11 @@ try:
 except ImportError as error:
     comp_wind_function = error
 
+try:
+    from ..Methods.Machine.LamSlotMultiWind.comp_angle_d_axis import comp_angle_d_axis
+except ImportError as error:
+    comp_angle_d_axis = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -152,6 +157,18 @@ class LamSlotMultiWind(LamSlotMulti):
         )
     else:
         comp_wind_function = comp_wind_function
+    # cf Methods.Machine.LamSlotMultiWind.comp_angle_d_axis
+    if isinstance(comp_angle_d_axis, ImportError):
+        comp_angle_d_axis = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMultiWind method comp_angle_d_axis: "
+                    + str(comp_angle_d_axis)
+                )
+            )
+        )
+    else:
+        comp_angle_d_axis = comp_angle_d_axis
     # save and copy methods are available in all object
     save = save
     copy = copy

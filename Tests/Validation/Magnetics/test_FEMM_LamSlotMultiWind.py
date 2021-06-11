@@ -30,6 +30,8 @@ def test_FEMM_LamSlotMultiWind():
         is_periodicity_a=True,
         is_periodicity_t=True,
     )
+    simu.elec = None
+    simu.force = None
 
     out = simu.run()
 
