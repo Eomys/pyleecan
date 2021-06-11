@@ -11,3 +11,5 @@ path,,Path where the MeshSolution is stored as a file,,str,None,,,,,,plot_contou
 ,,,,,,,,,,,plot_glyph,,,
 ,,,,,,,,,,,plot_glyph_animated,,,
 ,,,,,,,,,,,perm_coord,,,
+,,,,,,,,,,,get_deflection,,,
+,,,,,,,,,,,get_glyph,,,
