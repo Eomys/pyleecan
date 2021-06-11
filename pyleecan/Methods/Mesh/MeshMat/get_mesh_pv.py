@@ -25,8 +25,12 @@ def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
         a pyvista UnstructuredGrid object
     """
 
-    nodes = self.get_node()
-    cells, _, _ = self.get_cell()
+    # Numbering and indices compatible with pyvista
+    mesh_renum = self.copy()
+    mesh_renum.renum()
+
+    nodes = mesh_renum.get_node()
+    cells, _, _ = mesh_renum.get_cell()
 
     cells_meshio = list()
     for key in cells:

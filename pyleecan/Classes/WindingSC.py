@@ -7,7 +7,7 @@
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import check_var, raise_
+from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.copy import copy
@@ -28,8 +28,10 @@ except ImportError as error:
     get_dim_wind = error
 
 
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .Conductor import Conductor
+from .EndWinding import EndWinding
 
 
 class WindingSC(Winding):
@@ -74,18 +76,27 @@ class WindingSC(Winding):
         Nslot_shift_wind=0,
         qs=3,
         Ntcoil=7,
-        Npcpp=2,
+        Npcp=2,
         type_connection=0,
         p=3,
         Lewout=0.015,
         conductor=-1,
+        coil_pitch=1,
+        wind_mat=None,
+        Nlayer=1,
+        per_a=None,
+        is_aper_a=None,
+        end_winding=-1,
+        is_reverse_layer=False,
+        is_change_layer=False,
+        is_permute_B_C=False,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -105,8 +116,8 @@ class WindingSC(Winding):
                 qs = init_dict["qs"]
             if "Ntcoil" in list(init_dict.keys()):
                 Ntcoil = init_dict["Ntcoil"]
-            if "Npcpp" in list(init_dict.keys()):
-                Npcpp = init_dict["Npcpp"]
+            if "Npcp" in list(init_dict.keys()):
+                Npcp = init_dict["Npcp"]
             if "type_connection" in list(init_dict.keys()):
                 type_connection = init_dict["type_connection"]
             if "p" in list(init_dict.keys()):
@@ -115,6 +126,24 @@ class WindingSC(Winding):
                 Lewout = init_dict["Lewout"]
             if "conductor" in list(init_dict.keys()):
                 conductor = init_dict["conductor"]
+            if "coil_pitch" in list(init_dict.keys()):
+                coil_pitch = init_dict["coil_pitch"]
+            if "wind_mat" in list(init_dict.keys()):
+                wind_mat = init_dict["wind_mat"]
+            if "Nlayer" in list(init_dict.keys()):
+                Nlayer = init_dict["Nlayer"]
+            if "per_a" in list(init_dict.keys()):
+                per_a = init_dict["per_a"]
+            if "is_aper_a" in list(init_dict.keys()):
+                is_aper_a = init_dict["is_aper_a"]
+            if "end_winding" in list(init_dict.keys()):
+                end_winding = init_dict["end_winding"]
+            if "is_reverse_layer" in list(init_dict.keys()):
+                is_reverse_layer = init_dict["is_reverse_layer"]
+            if "is_change_layer" in list(init_dict.keys()):
+                is_change_layer = init_dict["is_change_layer"]
+            if "is_permute_B_C" in list(init_dict.keys()):
+                is_permute_B_C = init_dict["is_permute_B_C"]
         # Set the properties (value check and convertion are done in setter)
         # Call Winding init
         super(WindingSC, self).__init__(
@@ -122,11 +151,20 @@ class WindingSC(Winding):
             Nslot_shift_wind=Nslot_shift_wind,
             qs=qs,
             Ntcoil=Ntcoil,
-            Npcpp=Npcpp,
+            Npcp=Npcp,
             type_connection=type_connection,
             p=p,
             Lewout=Lewout,
             conductor=conductor,
+            coil_pitch=coil_pitch,
+            wind_mat=wind_mat,
+            Nlayer=Nlayer,
+            per_a=per_a,
+            is_aper_a=is_aper_a,
+            end_winding=end_winding,
+            is_reverse_layer=is_reverse_layer,
+            is_change_layer=is_change_layer,
+            is_permute_B_C=is_permute_B_C,
         )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties
@@ -150,15 +188,19 @@ class WindingSC(Winding):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Winding
         diff_list.extend(super(WindingSC, self).compare(other, name=name))
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

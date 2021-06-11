@@ -293,3 +293,8 @@ class Test_plot_schematics(object):
             save_path=file_path,
             is_show_fig=False,
         )
+
+
+if __name__ == "__main__":
+    a = Test_plot_schematics()
+    a.test_slot(slot_test[7])

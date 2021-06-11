@@ -69,6 +69,7 @@ from .Slot import Slot
 from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
+from .Bore import Bore
 
 
 class LamSlotMag(LamSlot):
@@ -196,13 +197,15 @@ class LamSlotMag(LamSlot):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        yoke_notch=-1,
+        bore=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -240,6 +243,10 @@ class LamSlotMag(LamSlot):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
         # Set the properties (value check and convertion are done in setter)
         self.magnet = magnet
         # Call LamSlot init
@@ -256,6 +263,8 @@ class LamSlotMag(LamSlot):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            yoke_notch=yoke_notch,
+            bore=bore,
         )
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties
@@ -286,9 +295,11 @@ class LamSlotMag(LamSlot):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -301,6 +312,8 @@ class LamSlotMag(LamSlot):
             diff_list.append(name + ".magnet None mismatch")
         elif self.magnet is not None:
             diff_list.extend(self.magnet.compare(other.magnet, name=name + ".magnet"))
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

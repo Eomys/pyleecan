@@ -21,7 +21,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
 
-    def __init__(self, parent, is_mag, index, matlib):
+    def __init__(self, parent, is_mag, index, material_dict):
         """Initialize the GUI according to lamination
 
         Parameters
@@ -34,8 +34,8 @@ class WHoleMag(Ui_WHoleMag, QWidget):
             False: no magnet in the Hole (for the SyRM)
         index : int
             Index of the hole to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -47,7 +47,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
         self.index = index
         self.is_mag = is_mag
         self.parent = parent
-        self.matlib = matlib
+        self.material_dict = material_dict
 
         # Adapt the GUI to the current machine
         if is_mag:  # IPMSM
@@ -90,7 +90,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
         # Regenerate the pages with the new values
         self.w_hole.setParent(None)
         self.w_hole = self.wid_list[self.c_hole_type.currentIndex()](
-            hole=self.obj.hole[index], matlib=self.matlib
+            hole=self.obj.hole[index], material_dict=self.material_dict
         )
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_hole)
@@ -136,7 +136,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
         # Update the GUI
         self.w_hole.setParent(None)
         self.w_hole = self.wid_list[c_index](
-            hole=self.obj.hole[self.index], matlib=self.matlib
+            hole=self.obj.hole[self.index], material_dict=self.material_dict
         )
         self.w_hole.saveNeeded.connect(self.emit_save)
         # Refresh the GUI

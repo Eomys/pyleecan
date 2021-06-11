@@ -7,7 +7,7 @@ from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM51 import HoleM51
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM51.PHoleM51 import PHoleM51
 from pyleecan.Classes.Material import Material
 
@@ -15,7 +15,6 @@ from pyleecan.Classes.Material import Material
 import pytest
 
 
-@pytest.mark.GUI
 class TestPHoleM51(object):
     """Test that the widget PHoleM51 behave like it should"""
 
@@ -49,14 +48,14 @@ class TestPHoleM51(object):
         test_obj.hole[0].magnet_1.mat_type.name = "Magnet2"
         test_obj.hole[0].magnet_2.mat_type.name = "Magnet1"
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = [
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),
         ]
 
-        widget = PHoleM51(test_obj.hole[0], matlib)
+        widget = PHoleM51(test_obj.hole[0], material_dict)
 
         yield {"widget": widget, "test_obj": test_obj}
 

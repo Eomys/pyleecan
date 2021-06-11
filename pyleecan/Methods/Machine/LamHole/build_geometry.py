@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from numpy import pi, exp
 
+from ....Classes.Lamination import Lamination
 from ....Classes.Circle import Circle
 from ....Classes.SurfLine import SurfLine
 from ....Classes.SurfRing import SurfRing
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
-from ....Functions.labels import LAM_LAB, BORE_LAB, YOKE_LAB
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -32,87 +32,14 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
 
     """
 
-    # Label setup
-    label = self.get_label()
-    label_lam = label + "_" + LAM_LAB
-    label_bore = label + "_" + BORE_LAB
-    label_yoke = label + "_" + YOKE_LAB
-
-    if self.is_internal:
-        Ryoke = self.Rint
-        Rbo = self.Rext
+    # Lamination label
+    if self.is_stator:
+        label = "Lamination_Stator"
     else:
-        Ryoke = self.Rext
-        Rbo = self.Rint
+        label = "Lamination_Rotor"
 
-    ref_point = self.comp_radius_mid_yoke() * exp(1j * pi / sym)
-
-    surf_list = list()
-    # Lamination surface(s)
-    if sym == 1:  # Complete lamination
-        if self.bore is None:
-            bore_surf = SurfLine(
-                line_list=self.get_bore_line(0, 2 * pi, label=label_bore),
-                label=label_bore,
-                point_ref=ref_point,
-            )
-        else:
-            bore_surf = SurfLine(
-                line_list=self.bore.get_bore_line(label=label_bore),
-                label=label_bore,
-                point_ref=ref_point,
-            )
-        yoke_surf = Circle(
-            radius=Ryoke, label=label_yoke, point_ref=0, center=0, line_label=label_yoke
-        )
-        if Ryoke > 0:
-            if self.is_internal:
-                surf_list.append(
-                    SurfRing(
-                        out_surf=bore_surf,
-                        in_surf=yoke_surf,
-                        label=label_lam,
-                        point_ref=ref_point,
-                    )
-                )
-            else:
-                surf_list.append(
-                    SurfRing(
-                        out_surf=yoke_surf,
-                        in_surf=bore_surf,
-                        label=label_lam,
-                        point_ref=ref_point,
-                    )
-                )
-        else:
-            bore_surf.label = label_lam
-            surf_list.append(bore_surf)
-
-    else:  # Symmetry lamination
-        alpha_begin = 0
-        alpha_end = 2 * pi / sym
-        begin = Rbo * exp(1j * alpha_begin)
-        end = Rbo * exp(1j * alpha_end)
-        Z_begin = Ryoke * exp(1j * alpha_begin)
-        Z_end = Ryoke * exp(1j * alpha_end)
-        line_list = [Segment(Z_begin, begin, label=label + "_Yoke_Side_Right")]
-        bore_line = self.get_bore_line(alpha_begin, alpha_end, label=label_bore)
-        for line in bore_line:
-            line_list.append(line)
-        line_list.append(Segment(end, Z_end, label=label + "_Yoke_Side_Left"))
-        if Ryoke > 0:
-            line_list.append(
-                Arc1(
-                    begin=Z_end,
-                    end=Z_begin,
-                    radius=-Ryoke,
-                    is_trigo_direction=False,
-                    label=label_yoke,
-                )
-            )
-        surf_list.append(
-            SurfLine(line_list=line_list, label=label_lam, point_ref=ref_point)
-        )
+    # getting the Lamination surface
+    surf_list = Lamination.build_geometry(self, sym=sym, alpha=alpha, delta=delta)
 
     # Holes surface(s)
     for hole in self.hole:
@@ -146,11 +73,5 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     for surf in surf_list:
         surf.rotate(alpha)
         surf.translate(delta)
-
-    # Adding the ventilation surfaces
-    for vent in self.axial_vent:
-        surf_list += vent.build_geometry(
-            sym=sym, alpha=alpha, delta=delta, is_stator=self.is_stator
-        )
 
     return surf_list

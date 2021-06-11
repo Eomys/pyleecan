@@ -3,9 +3,10 @@ from os.path import dirname, isfile
 import matplotlib.pyplot as plt
 from ezdxf import readfile
 from numpy import angle as np_angle
-from numpy import array, pi
-from PySide2.QtCore import QSize, Qt
-from PySide2.QtGui import QIcon, QPixmap
+from numpy import array, pi, argmax, argmin
+from numpy import max as np_max, min as np_min
+from PySide2.QtCore import QUrl, Qt
+from PySide2.QtGui import QIcon, QPixmap, QDesktopServices
 from PySide2.QtWidgets import (
     QComboBox,
     QDialog,
@@ -22,6 +23,7 @@ from ...GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
 from ...GUI.Resources import pixmap_dict
 from ...GUI.Tools.MPLCanvas import MPLCanvas2
 from ...GUI.Tools.FloatEdit import FloatEdit
+from ...GUI import gui_option
 from ...loggers import GUI_LOG_NAME
 from .Ui_DXF_Hole import Ui_DXF_Hole
 
@@ -36,6 +38,7 @@ OFF_COL = 4
 ICON_SIZE = 24
 # Unselected, selected, selected-bottom-mag
 COLOR_LIST = ["k", "r", "c"]
+Z_TOL = 1e-4  # Point comparison tolerance
 
 
 class DXF_Hole(Ui_DXF_Hole, QDialog):
@@ -61,6 +64,18 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.highlight_icon = QPixmap(pixmap_dict["search"])
         self.highlight_icon.scaled(ICON_SIZE, ICON_SIZE, Qt.KeepAspectRatio)
 
+        # Tutorial video link
+        self.url = "https://pyleecan.org/videos.html#feature-tutorials"
+        self.b_tuto.setEnabled(True)
+
+        # Set units
+        self.lf_mag_len.unit = "m"
+        wid_list = [
+            self.unit_mag_len,
+        ]
+        for wid in wid_list:
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
+
         # Initialize the graph
         self.init_graph()
 
@@ -70,6 +85,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.lf_center_y.hide()
         self.lf_axe_angle.hide()
         self.in_axe_angle.hide()
+        self.unit_axe_angle.hide()
 
         # Set default values
         if Zh is not None:
@@ -117,6 +133,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.b_plot.pressed.connect(self.plot)
         self.b_reset.pressed.connect(self.update_graph)
         self.b_cancel.pressed.connect(self.remove_selection)
+        self.b_tuto.pressed.connect(self.open_tuto)
 
         # Display the GUI
         self.show()
@@ -140,6 +157,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             # Display
             # selected line: 0: unselected, 1:selected, 2: selected bottom magnet
             self.selected_list = [0 for line in self.line_list]
+            self.surf_list = list()
+            self.w_surface_list.setRowCount(0)
             self.update_graph()
         except Exception as e:
             QMessageBox().critical(
@@ -283,7 +302,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         for p1 in point_list:
             count = 0
             for p2 in point_list:
-                if abs(p1 - p2) < 1e-9:
+                if abs(p1 - p2) < Z_TOL:
                     count += 1
             if count != 2:
                 return False
@@ -312,9 +331,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         while len(line_list) > 0:
             end = curve_list[-1].get_end()
             for ii in range(len(line_list)):
-                if abs(line_list[ii].get_begin() - end) < 1e-9:
+                if abs(line_list[ii].get_begin() - end) < Z_TOL:
                     break
-                if abs(line_list[ii].get_end() - end) < 1e-9:
+                if abs(line_list[ii].get_end() - end) < Z_TOL:
                     line_list[ii].reverse()
                     break
             curve_list.append(line_list.pop(ii))
@@ -478,6 +497,42 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         for magnet in hole.magnet_dict.values():
             magnet.mat_type = None
 
+        # Sort Hole then magnets
+        # (for plot when Magnets are inside Hole surface)
+        mag_list = list()
+        hole_list = list()
+        for surf in hole.surf_list:
+            if "HoleMagnet" in surf.label:
+                mag_list.append(surf)
+            else:
+                hole_list.append(surf)
+        hole.surf_list = hole_list + mag_list
+
+        # Correct hole ref_point (when Magnets are inside Hole surface)
+        for surf in hole.surf_list:
+            if "HoleMagnet" not in surf.label:
+                line_list = surf.get_lines()
+                # Get middle list
+                middle_array = array([line.get_middle() for line in line_list])
+                # Get the extrema line on the top or bottom of the hole
+                if np_min(middle_array.imag) > 0 and np_max(middle_array.imag) > 0:
+                    start_idx = argmax(middle_array.imag)
+                else:
+                    start_idx = argmin(middle_array.imag)
+                # Get the two lines middle besides the extrema line middle
+                if start_idx == 0:
+                    ref_mid = [middle_array[-1], middle_array[0], middle_array[1]]
+                elif start_idx == len(line_list) - 1:
+                    ref_mid = [middle_array[-2], middle_array[-1], middle_array[0]]
+                else:
+                    ref_mid = [
+                        middle_array[start_idx - 1],
+                        middle_array[start_idx],
+                        middle_array[start_idx + 1],
+                    ]
+                # Barycenter of these middles as new reference
+                surf.point_ref = sum(ref_mid) / 3
+
         return hole
 
     def plot(self):
@@ -493,7 +548,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             hole.plot(is_add_arrow=True)
         else:
             fig, (ax1, ax2) = plt.subplots(1, 2)
-            hole.plot(fig=fig, ax=ax1, is_add_arrow=True)
+            hole.plot(fig=fig, ax=ax1, is_add_arrow=True, is_add_ref=False)
             self.lam.hole = [hole]
             self.lam.plot(fig=fig, ax=ax2)
 
@@ -523,7 +578,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         for surf_line in surf.line_list:
             mid = surf_line.get_middle()
             for ii, line in enumerate(self.line_list):
-                if abs(mid - line.get_middle()) < 1e-6:
+                if abs(mid - line.get_middle()) < Z_TOL:
                     self.selected_list[ii] = 1
                     self.w_viewer.axes.text(
                         mid.real,
@@ -561,3 +616,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             self.save_path = save_file_path
             hole.save(save_file_path)
             self.accept()
+
+    def open_tuto(self):
+        """Open the tutorial video in a web browser"""
+        QDesktopServices.openUrl(QUrl(self.url))

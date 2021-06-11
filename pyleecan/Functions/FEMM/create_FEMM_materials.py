@@ -69,7 +69,7 @@ def create_FEMM_materials(
         Dictionary of properties and list containing the name of the circuits created
     """
 
-    prop_dict = dict()  # Initialisation of the dictionnary to return
+    prop_dict = dict()  # Initialisation of the dictionary to return
 
     rotor = machine.rotor
     stator = machine.stator

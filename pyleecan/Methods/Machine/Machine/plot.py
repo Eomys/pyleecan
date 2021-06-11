@@ -119,8 +119,8 @@ def plot(
     ax.set_ylim(-Lim, Lim)
 
     # Set Windows title
-    if self.name not in ["", None]:
-        fig.canvas.set_window_title(self.name + " plot machine")
+    if self.name not in ["", None] and win_title is None:
+        win_title = self.name + " plot machine"
 
     if save_path is not None:
         fig.savefig(save_path)
@@ -130,4 +130,6 @@ def plot(
         fig.show()
 
     if win_title:
-        fig.canvas.set_window_title(win_title)
+        manager = plt.get_current_fig_manager()
+        if manager is not None:
+            manager.set_window_title(win_title)

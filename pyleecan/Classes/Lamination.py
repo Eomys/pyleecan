@@ -28,16 +28,6 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Machine.Lamination.comp_angle_q_axis import comp_angle_q_axis
-except ImportError as error:
-    comp_angle_q_axis = error
-
-try:
-    from ..Methods.Machine.Lamination.comp_height_yoke import comp_height_yoke
-except ImportError as error:
-    comp_height_yoke = error
-
-try:
     from ..Methods.Machine.Lamination.comp_length import comp_length
 except ImportError as error:
     comp_length = error
@@ -48,19 +38,9 @@ except ImportError as error:
     comp_masses = error
 
 try:
-    from ..Methods.Machine.Lamination.comp_output_geo import comp_output_geo
-except ImportError as error:
-    comp_output_geo = error
-
-try:
     from ..Methods.Machine.Lamination.comp_radius_mec import comp_radius_mec
 except ImportError as error:
     comp_radius_mec = error
-
-try:
-    from ..Methods.Machine.Lamination.comp_radius_mid_yoke import comp_radius_mid_yoke
-except ImportError as error:
-    comp_radius_mid_yoke = error
 
 try:
     from ..Methods.Machine.Lamination.comp_surface_axial_vent import (
@@ -85,26 +65,6 @@ except ImportError as error:
     get_bore_line = error
 
 try:
-    from ..Methods.Machine.Lamination.get_label import get_label
-except ImportError as error:
-    get_label = error
-
-try:
-    from ..Methods.Machine.Lamination.get_name_phase import get_name_phase
-except ImportError as error:
-    get_name_phase = error
-
-try:
-    from ..Methods.Machine.Lamination.get_notch_list import get_notch_list
-except ImportError as error:
-    get_notch_list = error
-
-try:
-    from ..Methods.Machine.Lamination.get_polar_eq import get_polar_eq
-except ImportError as error:
-    get_polar_eq = error
-
-try:
     from ..Methods.Machine.Lamination.get_Rbo import get_Rbo
 except ImportError as error:
     get_Rbo = error
@@ -115,20 +75,71 @@ except ImportError as error:
     get_Ryoke = error
 
 try:
-    from ..Methods.Machine.Lamination.is_outwards import is_outwards
+    from ..Methods.Machine.Lamination.get_name_phase import get_name_phase
 except ImportError as error:
-    is_outwards = error
+    get_name_phase = error
 
 try:
     from ..Methods.Machine.Lamination.plot import plot
 except ImportError as error:
     plot = error
 
+try:
+    from ..Methods.Machine.Lamination.comp_output_geo import comp_output_geo
+except ImportError as error:
+    comp_output_geo = error
+
+try:
+    from ..Methods.Machine.Lamination.get_polar_eq import get_polar_eq
+except ImportError as error:
+    get_polar_eq = error
+
+try:
+    from ..Methods.Machine.Lamination.is_outwards import is_outwards
+except ImportError as error:
+    is_outwards = error
+
+try:
+    from ..Methods.Machine.Lamination.comp_height_yoke import comp_height_yoke
+except ImportError as error:
+    comp_height_yoke = error
+
+try:
+    from ..Methods.Machine.Lamination.get_notch_list import get_notch_list
+except ImportError as error:
+    get_notch_list = error
+
+try:
+    from ..Methods.Machine.Lamination.comp_angle_q_axis import comp_angle_q_axis
+except ImportError as error:
+    comp_angle_q_axis = error
+
+try:
+    from ..Methods.Machine.Lamination.comp_radius_mid_yoke import comp_radius_mid_yoke
+except ImportError as error:
+    comp_radius_mid_yoke = error
+
+try:
+    from ..Methods.Machine.Lamination.get_yoke_desc import get_yoke_desc
+except ImportError as error:
+    get_yoke_desc = error
+
+try:
+    from ..Methods.Machine.Lamination.get_bore_desc import get_bore_desc
+except ImportError as error:
+    get_bore_desc = error
+
+try:
+    from ..Methods.Machine.Lamination.get_label import get_label
+except ImportError as error:
+    get_label = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
+from .Bore import Bore
 
 
 class Lamination(FrozenClass):
@@ -157,30 +168,6 @@ class Lamination(FrozenClass):
         )
     else:
         check = check
-    # cf Methods.Machine.Lamination.comp_angle_q_axis
-    if isinstance(comp_angle_q_axis, ImportError):
-        comp_angle_q_axis = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method comp_angle_q_axis: "
-                    + str(comp_angle_q_axis)
-                )
-            )
-        )
-    else:
-        comp_angle_q_axis = comp_angle_q_axis
-    # cf Methods.Machine.Lamination.comp_height_yoke
-    if isinstance(comp_height_yoke, ImportError):
-        comp_height_yoke = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method comp_height_yoke: "
-                    + str(comp_height_yoke)
-                )
-            )
-        )
-    else:
-        comp_height_yoke = comp_height_yoke
     # cf Methods.Machine.Lamination.comp_length
     if isinstance(comp_length, ImportError):
         comp_length = property(
@@ -203,18 +190,6 @@ class Lamination(FrozenClass):
         )
     else:
         comp_masses = comp_masses
-    # cf Methods.Machine.Lamination.comp_output_geo
-    if isinstance(comp_output_geo, ImportError):
-        comp_output_geo = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method comp_output_geo: "
-                    + str(comp_output_geo)
-                )
-            )
-        )
-    else:
-        comp_output_geo = comp_output_geo
     # cf Methods.Machine.Lamination.comp_radius_mec
     if isinstance(comp_radius_mec, ImportError):
         comp_radius_mec = property(
@@ -227,18 +202,6 @@ class Lamination(FrozenClass):
         )
     else:
         comp_radius_mec = comp_radius_mec
-    # cf Methods.Machine.Lamination.comp_radius_mid_yoke
-    if isinstance(comp_radius_mid_yoke, ImportError):
-        comp_radius_mid_yoke = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method comp_radius_mid_yoke: "
-                    + str(comp_radius_mid_yoke)
-                )
-            )
-        )
-    else:
-        comp_radius_mid_yoke = comp_radius_mid_yoke
     # cf Methods.Machine.Lamination.comp_surface_axial_vent
     if isinstance(comp_surface_axial_vent, ImportError):
         comp_surface_axial_vent = property(
@@ -284,48 +247,6 @@ class Lamination(FrozenClass):
         )
     else:
         get_bore_line = get_bore_line
-    # cf Methods.Machine.Lamination.get_label
-    if isinstance(get_label, ImportError):
-        get_label = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Lamination method get_label: " + str(get_label))
-            )
-        )
-    else:
-        get_label = get_label
-    # cf Methods.Machine.Lamination.get_name_phase
-    if isinstance(get_name_phase, ImportError):
-        get_name_phase = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method get_name_phase: " + str(get_name_phase)
-                )
-            )
-        )
-    else:
-        get_name_phase = get_name_phase
-    # cf Methods.Machine.Lamination.get_notch_list
-    if isinstance(get_notch_list, ImportError):
-        get_notch_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method get_notch_list: " + str(get_notch_list)
-                )
-            )
-        )
-    else:
-        get_notch_list = get_notch_list
-    # cf Methods.Machine.Lamination.get_polar_eq
-    if isinstance(get_polar_eq, ImportError):
-        get_polar_eq = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Lamination method get_polar_eq: " + str(get_polar_eq)
-                )
-            )
-        )
-    else:
-        get_polar_eq = get_polar_eq
     # cf Methods.Machine.Lamination.get_Rbo
     if isinstance(get_Rbo, ImportError):
         get_Rbo = property(
@@ -344,6 +265,49 @@ class Lamination(FrozenClass):
         )
     else:
         get_Ryoke = get_Ryoke
+    # cf Methods.Machine.Lamination.get_name_phase
+    if isinstance(get_name_phase, ImportError):
+        get_name_phase = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_name_phase: " + str(get_name_phase)
+                )
+            )
+        )
+    else:
+        get_name_phase = get_name_phase
+    # cf Methods.Machine.Lamination.plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Lamination method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
+    # cf Methods.Machine.Lamination.comp_output_geo
+    if isinstance(comp_output_geo, ImportError):
+        comp_output_geo = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_output_geo: "
+                    + str(comp_output_geo)
+                )
+            )
+        )
+    else:
+        comp_output_geo = comp_output_geo
+    # cf Methods.Machine.Lamination.get_polar_eq
+    if isinstance(get_polar_eq, ImportError):
+        get_polar_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_polar_eq: " + str(get_polar_eq)
+                )
+            )
+        )
+    else:
+        get_polar_eq = get_polar_eq
     # cf Methods.Machine.Lamination.is_outwards
     if isinstance(is_outwards, ImportError):
         is_outwards = property(
@@ -355,15 +319,84 @@ class Lamination(FrozenClass):
         )
     else:
         is_outwards = is_outwards
-    # cf Methods.Machine.Lamination.plot
-    if isinstance(plot, ImportError):
-        plot = property(
+    # cf Methods.Machine.Lamination.comp_height_yoke
+    if isinstance(comp_height_yoke, ImportError):
+        comp_height_yoke = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Lamination method plot: " + str(plot))
+                ImportError(
+                    "Can't use Lamination method comp_height_yoke: "
+                    + str(comp_height_yoke)
+                )
             )
         )
     else:
-        plot = plot
+        comp_height_yoke = comp_height_yoke
+    # cf Methods.Machine.Lamination.get_notch_list
+    if isinstance(get_notch_list, ImportError):
+        get_notch_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_notch_list: " + str(get_notch_list)
+                )
+            )
+        )
+    else:
+        get_notch_list = get_notch_list
+    # cf Methods.Machine.Lamination.comp_angle_q_axis
+    if isinstance(comp_angle_q_axis, ImportError):
+        comp_angle_q_axis = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_angle_q_axis: "
+                    + str(comp_angle_q_axis)
+                )
+            )
+        )
+    else:
+        comp_angle_q_axis = comp_angle_q_axis
+    # cf Methods.Machine.Lamination.comp_radius_mid_yoke
+    if isinstance(comp_radius_mid_yoke, ImportError):
+        comp_radius_mid_yoke = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_radius_mid_yoke: "
+                    + str(comp_radius_mid_yoke)
+                )
+            )
+        )
+    else:
+        comp_radius_mid_yoke = comp_radius_mid_yoke
+    # cf Methods.Machine.Lamination.get_yoke_desc
+    if isinstance(get_yoke_desc, ImportError):
+        get_yoke_desc = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_yoke_desc: " + str(get_yoke_desc)
+                )
+            )
+        )
+    else:
+        get_yoke_desc = get_yoke_desc
+    # cf Methods.Machine.Lamination.get_bore_desc
+    if isinstance(get_bore_desc, ImportError):
+        get_bore_desc = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_bore_desc: " + str(get_bore_desc)
+                )
+            )
+        )
+    else:
+        get_bore_desc = get_bore_desc
+    # cf Methods.Machine.Lamination.get_label
+    if isinstance(get_label, ImportError):
+        get_label = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Lamination method get_label: " + str(get_label))
+            )
+        )
+    else:
+        get_label = get_label
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -383,13 +416,15 @@ class Lamination(FrozenClass):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        yoke_notch=-1,
+        bore=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -423,6 +458,10 @@ class Lamination(FrozenClass):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.L1 = L1
@@ -436,6 +475,8 @@ class Lamination(FrozenClass):
         self.is_stator = is_stator
         self.axial_vent = axial_vent
         self.notch = notch
+        self.yoke_notch = yoke_notch
+        self.bore = bore
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -473,6 +514,18 @@ class Lamination(FrozenClass):
         for ii in range(len(self.notch)):
             tmp = self.notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
             Lamination_str += "notch[" + str(ii) + "] =" + tmp + linesep + linesep
+        if len(self.yoke_notch) == 0:
+            Lamination_str += "yoke_notch = []" + linesep
+        for ii in range(len(self.yoke_notch)):
+            tmp = (
+                self.yoke_notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            Lamination_str += "yoke_notch[" + str(ii) + "] =" + tmp + linesep + linesep
+        if self.bore is not None:
+            tmp = self.bore.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Lamination_str += "bore = " + tmp
+        else:
+            Lamination_str += "bore = None" + linesep + linesep
         return Lamination_str
 
     def __eq__(self, other):
@@ -502,11 +555,17 @@ class Lamination(FrozenClass):
             return False
         if other.notch != self.notch:
             return False
+        if other.yoke_notch != self.yoke_notch:
+            return False
+        if other.bore != self.bore:
+            return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -564,6 +623,29 @@ class Lamination(FrozenClass):
                         other.notch[ii], name=name + ".notch[" + str(ii) + "]"
                     )
                 )
+        if (other.yoke_notch is None and self.yoke_notch is not None) or (
+            other.yoke_notch is not None and self.yoke_notch is None
+        ):
+            diff_list.append(name + ".yoke_notch None mismatch")
+        elif self.yoke_notch is None:
+            pass
+        elif len(other.yoke_notch) != len(self.yoke_notch):
+            diff_list.append("len(" + name + ".yoke_notch)")
+        else:
+            for ii in range(len(other.yoke_notch)):
+                diff_list.extend(
+                    self.yoke_notch[ii].compare(
+                        other.yoke_notch[ii], name=name + ".yoke_notch[" + str(ii) + "]"
+                    )
+                )
+        if (other.bore is None and self.bore is not None) or (
+            other.bore is not None and self.bore is None
+        ):
+            diff_list.append(name + ".bore None mismatch")
+        elif self.bore is not None:
+            diff_list.extend(self.bore.compare(other.bore, name=name + ".bore"))
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -585,6 +667,10 @@ class Lamination(FrozenClass):
         if self.notch is not None:
             for value in self.notch:
                 S += getsizeof(value)
+        if self.yoke_notch is not None:
+            for value in self.yoke_notch:
+                S += getsizeof(value)
+        S += getsizeof(self.bore)
         return S
 
     def as_dict(self, **kwargs):
@@ -625,6 +711,19 @@ class Lamination(FrozenClass):
                     Lamination_dict["notch"].append(obj.as_dict(**kwargs))
                 else:
                     Lamination_dict["notch"].append(None)
+        if self.yoke_notch is None:
+            Lamination_dict["yoke_notch"] = None
+        else:
+            Lamination_dict["yoke_notch"] = list()
+            for obj in self.yoke_notch:
+                if obj is not None:
+                    Lamination_dict["yoke_notch"].append(obj.as_dict(**kwargs))
+                else:
+                    Lamination_dict["yoke_notch"].append(None)
+        if self.bore is None:
+            Lamination_dict["bore"] = None
+        else:
+            Lamination_dict["bore"] = self.bore.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         Lamination_dict["__class__"] = "Lamination"
         return Lamination_dict
@@ -644,6 +743,9 @@ class Lamination(FrozenClass):
         self.is_stator = None
         self.axial_vent = None
         self.notch = None
+        self.yoke_notch = None
+        if self.bore is not None:
+            self.bore._set_None()
 
     def _get_L1(self):
         """getter of L1"""
@@ -890,5 +992,66 @@ class Lamination(FrozenClass):
         doc=u"""Lamination bore notches
 
         :Type: [Notch]
+        """,
+    )
+
+    def _get_yoke_notch(self):
+        """getter of yoke_notch"""
+        if self._yoke_notch is not None:
+            for obj in self._yoke_notch:
+                if obj is not None:
+                    obj.parent = self
+        return self._yoke_notch
+
+    def _set_yoke_notch(self, value):
+        """setter of yoke_notch"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "yoke_notch"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
+        if value == -1:
+            value = list()
+        check_var("yoke_notch", value, "[Notch]")
+        self._yoke_notch = value
+
+    yoke_notch = property(
+        fget=_get_yoke_notch,
+        fset=_set_yoke_notch,
+        doc=u"""Lamination yoke notches
+
+        :Type: [Notch]
+        """,
+    )
+
+    def _get_bore(self):
+        """getter of bore"""
+        return self._bore
+
+    def _set_bore(self, value):
+        """setter of bore"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Bore()
+        check_var("bore", value, "Bore")
+        self._bore = value
+
+        if self._bore is not None:
+            self._bore.parent = self
+
+    bore = property(
+        fget=_get_bore,
+        fset=_set_bore,
+        doc=u"""Bore Shape
+
+        :Type: Bore
         """,
     )

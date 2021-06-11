@@ -14,8 +14,6 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.SlotW61 import SlotW61
 
@@ -27,7 +25,6 @@ import pytest
 """pytest for Lamination with winding plot"""
 
 
-@pytest.mark.PLOT
 class Test_Slot_61_plot(object):
     def test_Lam_Wind_61(self):
         """Test machine plot with Slot 61"""
@@ -49,7 +46,8 @@ class Test_Slot_61_plot(object):
             H4=2e-3,
             W3=3e-3,
         )
-        test_obj.rotor.winding = WindingCW2LT(qs=3, p=3, Lewout=60e-3)
+        test_obj.rotor.winding = WindingUD(qs=3, p=3, Lewout=60e-3)
+        test_obj.rotor.winding.init_as_CW2LT()
         plt.close("all")
 
         test_obj.rotor.plot(is_show_fig=False)

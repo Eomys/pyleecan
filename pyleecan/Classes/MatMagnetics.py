@@ -33,6 +33,7 @@ from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .ImportMatrix import ImportMatrix
+from .ModelBH import ModelBH
 
 
 class MatMagnetics(FrozenClass):
@@ -74,13 +75,15 @@ class MatMagnetics(FrozenClass):
         Wlam=0,
         BH_curve=-1,
         LossData=-1,
+        ModelBH=-1,
+        is_BH_extrapolate=False,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -106,6 +109,10 @@ class MatMagnetics(FrozenClass):
                 BH_curve = init_dict["BH_curve"]
             if "LossData" in list(init_dict.keys()):
                 LossData = init_dict["LossData"]
+            if "ModelBH" in list(init_dict.keys()):
+                ModelBH = init_dict["ModelBH"]
+            if "is_BH_extrapolate" in list(init_dict.keys()):
+                is_BH_extrapolate = init_dict["is_BH_extrapolate"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.mur_lin = mur_lin
@@ -115,6 +122,8 @@ class MatMagnetics(FrozenClass):
         self.Wlam = Wlam
         self.BH_curve = BH_curve
         self.LossData = LossData
+        self.ModelBH = ModelBH
+        self.is_BH_extrapolate = is_BH_extrapolate
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -144,6 +153,14 @@ class MatMagnetics(FrozenClass):
             MatMagnetics_str += "LossData = " + tmp
         else:
             MatMagnetics_str += "LossData = None" + linesep + linesep
+        if self.ModelBH is not None:
+            tmp = self.ModelBH.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MatMagnetics_str += "ModelBH = " + tmp
+        else:
+            MatMagnetics_str += "ModelBH = None" + linesep + linesep
+        MatMagnetics_str += (
+            "is_BH_extrapolate = " + str(self.is_BH_extrapolate) + linesep
+        )
         return MatMagnetics_str
 
     def __eq__(self, other):
@@ -165,11 +182,17 @@ class MatMagnetics(FrozenClass):
             return False
         if other.LossData != self.LossData:
             return False
+        if other.ModelBH != self.ModelBH:
+            return False
+        if other.is_BH_extrapolate != self.is_BH_extrapolate:
+            return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -199,6 +222,18 @@ class MatMagnetics(FrozenClass):
             diff_list.extend(
                 self.LossData.compare(other.LossData, name=name + ".LossData")
             )
+        if (other.ModelBH is None and self.ModelBH is not None) or (
+            other.ModelBH is not None and self.ModelBH is None
+        ):
+            diff_list.append(name + ".ModelBH None mismatch")
+        elif self.ModelBH is not None:
+            diff_list.extend(
+                self.ModelBH.compare(other.ModelBH, name=name + ".ModelBH")
+            )
+        if other._is_BH_extrapolate != self._is_BH_extrapolate:
+            diff_list.append(name + ".is_BH_extrapolate")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -212,6 +247,8 @@ class MatMagnetics(FrozenClass):
         S += getsizeof(self.Wlam)
         S += getsizeof(self.BH_curve)
         S += getsizeof(self.LossData)
+        S += getsizeof(self.ModelBH)
+        S += getsizeof(self.is_BH_extrapolate)
         return S
 
     def as_dict(self, **kwargs):
@@ -235,6 +272,11 @@ class MatMagnetics(FrozenClass):
             MatMagnetics_dict["LossData"] = None
         else:
             MatMagnetics_dict["LossData"] = self.LossData.as_dict(**kwargs)
+        if self.ModelBH is None:
+            MatMagnetics_dict["ModelBH"] = None
+        else:
+            MatMagnetics_dict["ModelBH"] = self.ModelBH.as_dict(**kwargs)
+        MatMagnetics_dict["is_BH_extrapolate"] = self.is_BH_extrapolate
         # The class name is added to the dict for deserialisation purpose
         MatMagnetics_dict["__class__"] = "MatMagnetics"
         return MatMagnetics_dict
@@ -251,6 +293,9 @@ class MatMagnetics(FrozenClass):
             self.BH_curve._set_None()
         if self.LossData is not None:
             self.LossData._set_None()
+        if self.ModelBH is not None:
+            self.ModelBH._set_None()
+        self.is_BH_extrapolate = None
 
     def _get_mur_lin(self):
         """getter of mur_lin"""
@@ -410,5 +455,53 @@ class MatMagnetics(FrozenClass):
         doc=u"""specific loss data value triplets, i.e. B, f, P
 
         :Type: ImportMatrix
+        """,
+    )
+
+    def _get_ModelBH(self):
+        """getter of ModelBH"""
+        return self._ModelBH
+
+    def _set_ModelBH(self, value):
+        """setter of ModelBH"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "ModelBH"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = ModelBH()
+        check_var("ModelBH", value, "ModelBH")
+        self._ModelBH = value
+
+        if self._ModelBH is not None:
+            self._ModelBH.parent = self
+
+    ModelBH = property(
+        fget=_get_ModelBH,
+        fset=_set_ModelBH,
+        doc=u"""a model of BH curve with an analytical expression
+
+        :Type: ModelBH
+        """,
+    )
+
+    def _get_is_BH_extrapolate(self):
+        """getter of is_BH_extrapolate"""
+        return self._is_BH_extrapolate
+
+    def _set_is_BH_extrapolate(self, value):
+        """setter of is_BH_extrapolate"""
+        check_var("is_BH_extrapolate", value, "bool")
+        self._is_BH_extrapolate = value
+
+    is_BH_extrapolate = property(
+        fget=_get_is_BH_extrapolate,
+        fset=_set_is_BH_extrapolate,
+        doc=u"""1 to use ModelBH to fit input data and extrapolate BH curve
+
+        :Type: bool
         """,
     )

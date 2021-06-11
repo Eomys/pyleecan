@@ -15,7 +15,7 @@ from pyleecan.Classes.SlotM12 import SlotM12
 from pyleecan.Classes.SlotM13 import SlotM13
 from pyleecan.Classes.SlotM14 import SlotM14
 from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
@@ -27,7 +27,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot14.PMSlot14 import PMSlot14
 import pytest
 
 
-@pytest.mark.GUI
 class TestSMSlot_inset(object):
     """Test that the widget SMSlot behave like it should (for SIPMSM)"""
 
@@ -49,17 +48,17 @@ class TestSMSlot_inset(object):
         )
         test_obj.rotor.magnet.mat_type.name = "test3"
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = [
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
             Material(name="test1"),
             Material(name="test2"),
             Material(name="test3"),
         ]
-        matlib.dict_mat["RefMatLib"][0].elec.rho = 0.31
-        matlib.dict_mat["RefMatLib"][1].elec.rho = 0.32
-        matlib.dict_mat["RefMatLib"][2].elec.rho = 0.33
+        material_dict[LIB_KEY][0].elec.rho = 0.31
+        material_dict[LIB_KEY][1].elec.rho = 0.32
+        material_dict[LIB_KEY][2].elec.rho = 0.33
 
-        widget = SMSlot(machine=test_obj, matlib=matlib, is_stator=False)
+        widget = SMSlot(machine=test_obj, material_dict=material_dict, is_stator=False)
 
         yield {"widget": widget, "test_obj": test_obj}
 

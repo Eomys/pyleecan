@@ -9,7 +9,12 @@ PATCH_EDGE_ALPHA = config_dict["PLOT"]["COLOR_DICT"]["PATCH_EDGE_ALPHA"]
 
 
 def get_patches(
-    self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False, linestyle=None
+    self,
+    color=PATCH_COLOR,
+    edgecolor=PATCH_EDGE,
+    is_edge_only=False,
+    linestyle=None,
+    hatch=None,
 ):
     """Returns the PolarArc Patch to be display in matplotlib
 
@@ -25,6 +30,8 @@ def get_patches(
         To set the transparancy of the face color to 0 and 1 for the edge color
     linestyle : str
         Line style of the edge {'-', '--', '-.', ':', '', (offset, on-off-seq), ...}
+    hatch : str
+        Set the hatching pattern: {'/', '\', '|', '-', '+', 'x', 'o', 'O', '.', '*'}
 
     Returns
     -------
@@ -41,7 +48,7 @@ def get_patches(
         edgecolor = PATCH_EDGE_ALPHA
 
     if len(line_list) == 0:
-        return Polygon([], facecolor=color, edgecolor=edgecolor)
+        return Polygon([], facecolor=color, edgecolor=edgecolor, hatch=hatch)
 
     Z_list = list()
     # For each Line discretize
@@ -58,5 +65,11 @@ def get_patches(
         Zi_list.append(Z_list[ii].imag)
     point_list = list(zip(Zr_list, Zi_list))
     return [
-        Polygon(point_list, facecolor=color, edgecolor=edgecolor, linestyle=linestyle)
+        Polygon(
+            point_list,
+            facecolor=color,
+            edgecolor=edgecolor,
+            linestyle=linestyle,
+            hatch=hatch,
+        )
     ]

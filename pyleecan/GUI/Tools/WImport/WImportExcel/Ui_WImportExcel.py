@@ -145,7 +145,7 @@ class Ui_WImportExcel(object):
             QCoreApplication.translate("WImportExcel", u"Sheet: ", None)
         )
         self.in_range.setText(
-            QCoreApplication.translate("WImportExcel", u"Range: ", None)
+            QCoreApplication.translate("WImportExcel", u"Column range: ", None)
         )
         self.g_axe1.setTitle(
             QCoreApplication.translate("WImportExcel", u"First axe", None)

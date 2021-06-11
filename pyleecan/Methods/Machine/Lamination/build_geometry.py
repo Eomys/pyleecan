@@ -40,58 +40,71 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         label_ext = label_yoke
         label_int = label_bore
 
-    surf_list = list()
-    if sym == 1:  # Complete lamination
-        out_surf = Circle(
-            radius=self.Rext,
-            label=label_ext,
-            center=0,
-            point_ref=self.Rint + (self.Rext - self.Rint) / 2,
-        )
-        in_surf = Circle(radius=self.Rint, label=label_int, center=0, point_ref=0)
+    # Get Radius lines
+    if self.is_internal:
         if self.Rint > 0:
-            surf_list.append(
-                SurfRing(
-                    out_surf=out_surf,
-                    in_surf=in_surf,
-                    label=label_lam,
-                    point_ref=self.Rint + (self.Rext - self.Rint) / 2,
-                )
+            _, int_line = self.get_yoke_desc(
+                sym=sym, is_reversed=True, line_label=label_int
             )
         else:
-            out_surf.label = label_lam
-            surf_list.append(out_surf)
+            int_line = []
+        _, ext_line = self.get_bore_desc(sym=sym, line_label=label_ext)
+    else:
+        _, ext_line = self.get_yoke_desc(
+            sym=sym, is_reversed=True, line_label=label_ext
+        )
+        _, int_line = self.get_bore_desc(sym=sym, line_label=label_int)
+
+    # Create the surfaces
+    if self.is_internal:
+        point_ref = self.get_Ryoke() + (self.comp_height_yoke() / 2)
+    else:
+        point_ref = self.get_Ryoke() - (self.comp_height_yoke() / 2)
+    surf_list = list()
+    if sym == 1:  # Complete lamination
+        ext_surf = SurfLine(
+            label=label_ext,
+            line_list=ext_line,
+            point_ref=point_ref,
+        )
+        int_surf = SurfLine(label=label_int, line_list=int_line, point_ref=0)
+        if self.Rint > 0 and len(ext_line) > 0:
+            surf_list.append(
+                SurfRing(
+                    out_surf=ext_surf,
+                    in_surf=int_surf,
+                    label=label_lam,
+                    point_ref=point_ref,
+                )
+            )
+        elif self.Rint == 0 and len(ext_line) > 0:
+            surf_list.append(ext_surf)
+        else:
+            pass  # No surface to draw (SlotM17)
+
     else:  # Part of the lamination by symmetry
         Z0 = self.Rint
         Z1 = self.Rext
         Z3 = Z0 * exp(1j * 2 * pi / sym)
         Z2 = Z1 * exp(1j * 2 * pi / sym)
+        # Create lines
         curve_list = list()
-        curve_list.append(Segment(Z0, Z1, label=label + "_Yoke_Side"))
-        curve_list.append(
-            Arc1(
-                begin=Z1,
-                end=Z2,
-                radius=self.Rext,
-                is_trigo_direction=True,
-                label=label_ext,
-            )
-        )
-        curve_list.append(Segment(Z2, Z3, label=label + "_Yoke_Side"))
+        if self.is_internal:
+            curve_list.append(Segment(Z0, Z1, label=label + "_Yoke_Side"))
+        else:
+            curve_list.append(Segment(Z3, Z2, label=label + "_Yoke_Side"))
+        curve_list.extend(ext_line)
+        if self.is_internal:
+            curve_list.append(Segment(Z2, Z3, label=label + "_Yoke_Side"))
+        else:
+            curve_list.append(Segment(Z1, Z0, label=label + "_Yoke_Side"))
         if self.Rint > 0:
-            curve_list.append(
-                Arc1(
-                    begin=Z3,
-                    end=Z0,
-                    radius=-self.Rint,
-                    is_trigo_direction=False,
-                    label=label_int,
-                )
-            )
+            curve_list.extend(int_line)
+
         surf_yoke = SurfLine(
             line_list=curve_list,
             label=label_lam,
-            point_ref=(self.Rint + (self.Rext - self.Rint) / 2) * exp(1j * pi / sym),
+            point_ref=point_ref * exp(1j * pi / sym),
         )
         surf_list.append(surf_yoke)
 

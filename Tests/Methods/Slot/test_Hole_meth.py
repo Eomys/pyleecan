@@ -9,7 +9,6 @@ from pyleecan.Methods import ParentMissingError
 import pytest
 
 
-@pytest.mark.METHODS
 class TestHole(object):
     """Test that the methods of Hole behave like it should"""
 

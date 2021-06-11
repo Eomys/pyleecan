@@ -43,14 +43,13 @@ list_param = [
 ]
 
 
-@pytest.mark.mesh  # to skip or run only mesh related tests
+@pytest.mark.MeshSol
 @pytest.mark.parametrize(
     "unv_file",
     list_param,
 )
-@pytest.mark.mesh  # to skip or run only mesh related tests
 def test_import_mesh_unv(unv_file):
-    """ Check that .unv file are correctly imported"""
+    """Check that .unv file are correctly imported"""
 
     test_obj = ImportMeshMat(
         file_path=join(TEST_DIR, unv_file["path"]),

@@ -15,11 +15,15 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
 
+@pytest.mark.MagFEMM
+@pytest.mark.IPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_compare():
     """Test the compare method"""
     # Create reference object
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="test_compare", machine=IPMSM_A)
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    simu = Simu1(name="test_compare", machine=Toyota_Prius)
 
     # Initialization of the simulation starting point
     simu.input = InputCurrent()
@@ -55,6 +59,7 @@ def test_compare():
 
     # Create the differences
     simu2 = simu.copy()
+    simu2.name = "test_compare2"
     simu2.machine.stator.L1 = 2  # float
     simu2.machine.rotor.hole[0].magnet_0.mat_type.name = "Test "  # str
     simu2.input.Nt_tot = 1234  # int
@@ -75,6 +80,7 @@ def test_compare():
 
     # Compare
     diff_list = simu.compare(simu2, "simu")
+    assert "simu.name" in diff_list
     assert "simu.machine.stator.L1" in diff_list
     assert "simu.machine.rotor.hole[0].magnet_0.mat_type.name" in diff_list
     assert "simu.input.Nt_tot" in diff_list
@@ -85,8 +91,32 @@ def test_compare():
     assert "type(simu.machine.stator.winding)" in diff_list
     assert "simu.input.Is.value" in diff_list
     assert "simu.postproc_list[1].run" in diff_list
-    assert len(diff_list) == 10
+    assert len(diff_list) == 11
+
+
+def test_compare_ignore():
+    """Test the compare method ignore_list parameter"""
+    # Create reference object
+    Mat1 = load(join(DATA_DIR, "Material", "M400-50A.json"))
+    Mat2 = Mat1.copy()
+    Mat2.name = "test"
+    Mat2.path = "different/path"
+    Mat2.mag.mur_lin = 2512
+    Mat2.elec.rho = 1234
+
+    diff_list = Mat1.compare(Mat2)
+    assert len(diff_list) == 4
+    assert "self.name" in diff_list
+    assert "self.path" in diff_list
+    assert "self.mag.mur_lin" in diff_list
+    assert "self.elec.rho" in diff_list
+
+    diff_list2 = Mat1.compare(Mat2, ignore_list=["self.name", "self.elec.rho"])
+    assert len(diff_list2) == 2
+    assert "self.path" in diff_list2
+    assert "self.mag.mur_lin" in diff_list2
 
 
 if __name__ == "__main__":
     test_compare()
+    test_compare_ignore()
