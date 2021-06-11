@@ -234,7 +234,7 @@ class Arc2(Arc):
         begin=0,
         center=0,
         angle=1.57079633,
-        label="",
+        prop_dict=None,
         init_dict=None,
         init_str=None,
     ):
@@ -259,14 +259,14 @@ class Arc2(Arc):
                 center = init_dict["center"]
             if "angle" in list(init_dict.keys()):
                 angle = init_dict["angle"]
-            if "label" in list(init_dict.keys()):
-                label = init_dict["label"]
+            if "prop_dict" in list(init_dict.keys()):
+                prop_dict = init_dict["prop_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.begin = begin
         self.center = center
         self.angle = angle
         # Call Arc init
-        super(Arc2, self).__init__(label=label)
+        super(Arc2, self).__init__(prop_dict=prop_dict)
         # The class is frozen (in Arc init), for now it's impossible to
         # add new properties
 

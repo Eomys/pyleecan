@@ -4247,13 +4247,13 @@
         "path": "pyleecan/Generator/ClassesRef/Geometry/Line.csv",
         "properties": [
             {
-                "desc": "the label of the Line (EX: Yoke_side)",
+                "desc": "Property dictionary",
                 "max": "",
                 "min": "",
-                "name": "label",
-                "type": "str",
+                "name": "prop_dict",
+                "type": "dict",
                 "unit": "-",
-                "value": ""
+                "value": null
             }
         ]
     },
