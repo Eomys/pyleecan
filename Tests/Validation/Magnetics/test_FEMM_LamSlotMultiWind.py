@@ -27,13 +27,14 @@ def test_FEMM_LamSlotMultiWind():
     simu.mag = MagFEMM(
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_periodicity_a=True,
-        is_periodicity_t=True,
+        is_periodicity_a=False,
+        is_periodicity_t=False,
     )
     simu.elec = None
     simu.force = None
 
     out = simu.run()
+    # out.mag.Tem.plot_2D_Data("time")
 
 
 # To run it without pytest

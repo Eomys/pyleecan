@@ -40,9 +40,6 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0, per_a=1):
     Zs = self.get_Zs()  # Number of slot
     Zs0 = int(Zs / per_a)
 
-    slot_angle = self.slot_list[0].comp_angle_active_eq()
-    slot_opening = self.slot_list[0].comp_angle_opening()
-
     wind_mat = self.winding.get_connection_mat(Zs)
     # sum wind_mat along Nlay_rad axis
     wind_mat = np_sum(wind_mat, axis=0)
@@ -51,28 +48,29 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0, per_a=1):
     # By convention a tooth is centered on the X axis
     alpha_slot = self.alpha[:Zs0]
 
-    # angle of the lay in a slot (Nlay point, end and begin excluded)
-    # TODO slot can have different slot_angle
-    alpha_lay = linspace(-slot_angle / 2, slot_angle / 2, Ntan + 1, endpoint=False)[1:]
-
     if alpha_mmf0 != 0:
         angle = (angle - alpha_mmf0) % (2 * pi)
 
     wf = zeros((qs, Na))
-    for n in range(Ntan):
-        # [Na, Zs]
-        Xalpha_slot, Xangle = meshgrid(alpha_slot + alpha_lay[n], angle)
+    for ii, slot in enumerate(self.slot_list):
+        slot_angle = slot.comp_angle_active_eq()
+        slot_opening = slot.comp_angle_opening()
+        for n in range(Ntan):
+            # [Na, Zs]
+            alpha_lay = linspace(
+                -slot_angle / 2, slot_angle / 2, Ntan + 1, endpoint=False
+            )[1:]
+            Xalpha_slot, Xangle = meshgrid(alpha_slot[ii] + alpha_lay[n], angle)
 
-        Xwind = zeros((1, Zs0, qs))
-        Xwind[0, :, :] = wind_mat[n, 0:Zs0, :]
-        # Extended winding matrix [Na, Zs, qs]
-        Xwind = repeat(Xwind, Na, axis=0)
-        # Single winding function in every slot and angle for nth layer [Na, Zs]
-        Xwf = -0.5 * comp_cond_function(Xalpha_slot, slot_opening, Xangle)
+            Xwind = zeros((1, Zs0, qs))
+            Xwind[0, :, :] = wind_mat[n, 0:Zs0, :]
+            # Extended winding matrix [Na, Zs, qs]
+            Xwind = repeat(Xwind, Na, axis=0)
+            # Single winding function in every slot and angle for nth layer [Na, Zs]
+            Xwf = -0.5 * comp_cond_function(Xalpha_slot, slot_opening, Xangle)
 
-        for q in range(qs):
-            # winding function of qth phase (sum over layers) [qs, Na]
-            wf[q, :] += np_sum(Xwind[:, :, q] * Xwf, axis=1)
+            for q in range(qs):
+                wf[q, :] += np_sum(Xwind[n, ii, q] * Xwf, axis=1)
 
     if per_a > 1:
         wf = wf - mean(wf, axis=1)[:, None]
