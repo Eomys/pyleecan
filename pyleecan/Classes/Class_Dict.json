@@ -11932,7 +11932,13 @@
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",
-            "check"
+            "check",
+            "comp_angle_opening",
+            "comp_height_damper",
+            "comp_height_wind",
+            "compt_height",
+            "comp_surface",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotWLSRPM",

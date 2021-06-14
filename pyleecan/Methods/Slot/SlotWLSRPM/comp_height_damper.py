@@ -1,4 +1,4 @@
-def comp_height_wind(self):
+def comp_height_damper(self):
     """Compute the height of the damper winding area
 
     Parameters

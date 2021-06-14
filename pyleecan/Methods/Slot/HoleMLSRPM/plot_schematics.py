@@ -143,7 +143,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="H1",
-                offset_label=self.H1  + 1j * self.H1 * 0.25,
+                offset_label=self.H1 + 1j * self.H1 * 0.25,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -205,7 +205,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="R3",
-                offset_label=-self.H1*2,
+                offset_label=-self.H1 * 2,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -228,8 +228,8 @@ def plot_schematics(
 
             # W2
             line = Segment(
-                (point_dict["Zw2"]+0.005*exp(1j*self.W1)) * exp(1j * (alpha)),
-                (point_dict["Zw1"]+0.005*exp(1j*self.W1)) * exp(1j * (alpha)),
+                (point_dict["Zw2"] + 0.005 * exp(1j * self.W1)) * exp(1j * (alpha)),
+                (point_dict["Zw1"] + 0.005 * exp(1j * self.W1)) * exp(1j * (alpha)),
             )
             line.plot(
                 fig=fig,
@@ -237,12 +237,10 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W2",
-                offset_label=1j*0.001-0.007,
+                offset_label=1j * 0.001 - 0.007,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-
-
 
             ### TODO:W1 W2
 
@@ -273,11 +271,9 @@ def plot_schematics(
 
             # W1 radius
 
-            
-
             line = Arc1(
-                begin=point_dict['Zw1']*exp(1j * alpha),
-                end=self.R2*exp(1j * alpha),
+                begin=point_dict["Zw1"] * exp(1j * alpha),
+                end=self.R2 * exp(1j * alpha),
                 radius=self.R2,
                 is_trigo_direction=True,
             )
@@ -315,10 +311,10 @@ def plot_schematics(
 
         # Zooming and cleaning
         W = 4e-3
-        Rint = self.R3*0.9
+        Rint = self.R3 * 0.9
         Rext = self.parent.Rext * 1.2
 
-        #plt.axis("equal")
+        # plt.axis("equal")
         ax.set_ylim(Rint, Rext)
         ax.set_xlim(-W, W)
         manager = plt.get_current_fig_manager()

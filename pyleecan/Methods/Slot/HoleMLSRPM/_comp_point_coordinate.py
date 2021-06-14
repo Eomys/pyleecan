@@ -56,8 +56,8 @@ def _comp_point_coordinate(self):
     x4 = (xc2 / alpha2 + yc2 + alpha2 * x3 - y3) / (alpha2 + 1 / alpha2)
     y4 = alpha2 * (x4 - x3) + y3
     Z4 = x4 + 1j * y4
-    Zw1 = self.R2*exp(1j*self.W1)
-    Zw2=Zw1+self.W2*exp(1j*-(pi/2-self.W1))
+    Zw1 = self.R2 * exp(1j * self.W1)
+    Zw2 = Zw1 + self.W2 * exp(1j * -(pi / 2 - self.W1))
     # symmetry
     Z6 = Z5.conjugate()
     Z7 = Z4.conjugate()

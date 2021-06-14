@@ -68,6 +68,8 @@ def _comp_point_coordinate(self):
     Z1t = x1t + 1j * y1t
     Z1 = Z1t * exp(-1j * hsp)
 
+
+
     # Z9 damper winding point
 
     x9t = x1t + self.H3
@@ -91,20 +93,11 @@ def _comp_point_coordinate(self):
     point_dict["Zcm"] = Rbo + self.H3
     point_dict["Zch"] = Rbo + self.H2
     point_dict["Zmid"] = (point_dict["Zcl"] + point_dict["Zch"]) / 2.0
-    # point_dict["Z1"] = Z1
-    # point_dict["Z2"] = Z2
-    # point_dict["Z3"] = Z3
-    # point_dict["Z4"] = Z4
-    # point_dict["Z5"] = Z5
-    # point_dict["Z6"] = Z5.conjugate()
-    # point_dict["Z7"] = Z4.conjugate()
-    # point_dict["Z8"] = Z3.conjugate()
-    # point_dict["Z9"] = Z2.conjugate()
-    # point_dict["Z10"] = Z1.conjugate()
-    # point_dict["Z10"] = Z1.conjugate()
-    # point_dict["Z10"] = Z1.conjugate()
-    # point_dict["Zcl"] = Rbo
-    # point_dict["Zcm"] = Rbo + self.H3
-    # point_dict["Zch"] = Rbo + self.H2
-    # point_dict["Zmid"] = (point_dict["Zcl"] + point_dict["Zch"]) / 2.0
+    # Zc1
+    xc1 = Z2.real
+    yc1 = Z3.imag
+    Zc1 = (xc1 + 1j * yc1).conjugate()
+
+    point_dict["Zc1"] = Zc1
+
     return point_dict

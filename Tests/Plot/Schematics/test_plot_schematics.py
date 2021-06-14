@@ -24,6 +24,7 @@ from pyleecan.Classes.SlotW26 import SlotW26
 from pyleecan.Classes.SlotW27 import SlotW27
 from pyleecan.Classes.SlotW28 import SlotW28
 from pyleecan.Classes.SlotW29 import SlotW29
+from pyleecan.Classes.SlotWLSRPM import SlotWLSRPM
 
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.HoleM51 import HoleM51
@@ -185,6 +186,13 @@ slot_test.append(
 slot_test.append(
     {
         "test_obj": SlotW29(),
+        "type_add_active": 1,
+    }
+)
+
+slot_test.append(
+    {
+        "test_obj": SlotWLSRPM(),
         "type_add_active": 1,
     }
 )

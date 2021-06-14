@@ -23,7 +23,6 @@ def comp_surface_magnet(self):
     Z7 = point_dict["Z7"]
     Z8 = point_dict["Z8"]
 
-
     # symmetry
 
     x3 = Z3.real
