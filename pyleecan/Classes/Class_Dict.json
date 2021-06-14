@@ -2699,8 +2699,14 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
+            "comp_magnetization_direct",
+            "comp_mass_magnet",
+            "comp_surface_magnet",
+            "comp_volume_magnet",
+            "plot_schematics",
             "remove_magnet",
             "has_magnet"
         ],
@@ -2716,7 +2722,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.0023734787
+                "value": 0.002373479
             },
             {
                 "desc": "Magnet top width",

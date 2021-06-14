@@ -79,3 +79,16 @@ def test_Lam_Hole_LSRPM_no_mag(machine):
     fig.savefig(
         join(save_path, "test_Lam_Hole_sLSRPM_3-Rotor hole without " "magnet.png")
     )
+
+
+def test_Lam_Hole_LSRPM_mag_mass(machine):
+    """Test calculate the magnet mass"""
+    machine.rotor.hole[0].comp_mass_magnet()
+
+def test_Lam_Hole_LSRPM_mag_surface(machine):
+    """Test calculate the magnet mass"""
+    machine.rotor.hole[0].comp_surface_magnet()
+
+def test_Lam_Hole_LSRPM_mag_volume(machine):
+    """Test calculate the magnet mass"""
+    machine.rotor.hole[0].comp_volume_magnet()

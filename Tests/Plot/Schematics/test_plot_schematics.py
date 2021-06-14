@@ -32,6 +32,7 @@ from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.HoleM57 import HoleM57
 from pyleecan.Classes.HoleM58 import HoleM58
+from pyleecan.Classes.HoleMLSRPM import HoleMLSRPM
 from Tests import save_plot_path as save_path
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -228,6 +229,13 @@ hole_test.append(
 hole_test.append(
     {
         "test_obj": HoleM58(),
+        "type_add_active": 2,
+    }
+)
+
+hole_test.append(
+    {
+        "test_obj": HoleMLSRPM(),
         "type_add_active": 2,
     }
 )
