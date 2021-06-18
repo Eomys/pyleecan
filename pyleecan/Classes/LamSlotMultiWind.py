@@ -34,6 +34,31 @@ try:
 except ImportError as error:
     get_pole_pair_number = error
 
+try:
+    from ..Methods.Machine.LamSlotMultiWind.comp_rot_dir import comp_rot_dir
+except ImportError as error:
+    comp_rot_dir = error
+
+try:
+    from ..Methods.Machine.LamSlotMultiWind.plot_mmf_unit import plot_mmf_unit
+except ImportError as error:
+    plot_mmf_unit = error
+
+try:
+    from ..Methods.Machine.LamSlotMultiWind.comp_mmf_unit import comp_mmf_unit
+except ImportError as error:
+    comp_mmf_unit = error
+
+try:
+    from ..Methods.Machine.LamSlotMultiWind.comp_wind_function import comp_wind_function
+except ImportError as error:
+    comp_wind_function = error
+
+try:
+    from ..Methods.Machine.LamSlotMultiWind.comp_angle_d_axis import comp_angle_d_axis
+except ImportError as error:
+    comp_angle_d_axis = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -84,6 +109,66 @@ class LamSlotMultiWind(LamSlotMulti):
         )
     else:
         get_pole_pair_number = get_pole_pair_number
+    # cf Methods.Machine.LamSlotMultiWind.comp_rot_dir
+    if isinstance(comp_rot_dir, ImportError):
+        comp_rot_dir = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMultiWind method comp_rot_dir: "
+                    + str(comp_rot_dir)
+                )
+            )
+        )
+    else:
+        comp_rot_dir = comp_rot_dir
+    # cf Methods.Machine.LamSlotMultiWind.plot_mmf_unit
+    if isinstance(plot_mmf_unit, ImportError):
+        plot_mmf_unit = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMultiWind method plot_mmf_unit: "
+                    + str(plot_mmf_unit)
+                )
+            )
+        )
+    else:
+        plot_mmf_unit = plot_mmf_unit
+    # cf Methods.Machine.LamSlotMultiWind.comp_mmf_unit
+    if isinstance(comp_mmf_unit, ImportError):
+        comp_mmf_unit = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMultiWind method comp_mmf_unit: "
+                    + str(comp_mmf_unit)
+                )
+            )
+        )
+    else:
+        comp_mmf_unit = comp_mmf_unit
+    # cf Methods.Machine.LamSlotMultiWind.comp_wind_function
+    if isinstance(comp_wind_function, ImportError):
+        comp_wind_function = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMultiWind method comp_wind_function: "
+                    + str(comp_wind_function)
+                )
+            )
+        )
+    else:
+        comp_wind_function = comp_wind_function
+    # cf Methods.Machine.LamSlotMultiWind.comp_angle_d_axis
+    if isinstance(comp_angle_d_axis, ImportError):
+        comp_angle_d_axis = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMultiWind method comp_angle_d_axis: "
+                    + str(comp_angle_d_axis)
+                )
+            )
+        )
+    else:
+        comp_angle_d_axis = comp_angle_d_axis
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -96,6 +181,7 @@ class LamSlotMultiWind(LamSlotMulti):
         winding=-1,
         slot_list=-1,
         alpha=None,
+        sym_dict_enforced=None,
         L1=0.35,
         mat_type=-1,
         Nrvd=0,
@@ -135,6 +221,8 @@ class LamSlotMultiWind(LamSlotMulti):
                 slot_list = init_dict["slot_list"]
             if "alpha" in list(init_dict.keys()):
                 alpha = init_dict["alpha"]
+            if "sym_dict_enforced" in list(init_dict.keys()):
+                sym_dict_enforced = init_dict["sym_dict_enforced"]
             if "L1" in list(init_dict.keys()):
                 L1 = init_dict["L1"]
             if "mat_type" in list(init_dict.keys()):
@@ -168,6 +256,7 @@ class LamSlotMultiWind(LamSlotMulti):
         super(LamSlotMultiWind, self).__init__(
             slot_list=slot_list,
             alpha=alpha,
+            sym_dict_enforced=sym_dict_enforced,
             L1=L1,
             mat_type=mat_type,
             Nrvd=Nrvd,

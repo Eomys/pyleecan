@@ -59,10 +59,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         _, int_line = self.get_bore_desc(sym=sym, line_label=label_int)
 
     # Create the surfaces
-    if self.is_internal:
-        point_ref = self.get_Ryoke() + (self.comp_height_yoke() / 2)
-    else:
-        point_ref = self.get_Ryoke() - (self.comp_height_yoke() / 2)
+    point_ref = self.comp_point_ref(sym=sym)
     surf_list = list()
     if sym == 1:  # Complete lamination
         ext_surf = SurfLine(
@@ -85,7 +82,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         else:
             pass  # No surface to draw (SlotM17)
 
-    else:  # Part of the lamination by symmetry
+    elif sym != 1 and len(ext_line) > 0:  # Part of the lamination by symmetry
         Z0 = self.Rint
         Z1 = self.Rext
         Z3 = Z0 * exp(1j * 2 * pi / sym)
@@ -107,7 +104,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         surf_yoke = SurfLine(
             line_list=curve_list,
             label=label + "_Ext",
-            point_ref=point_ref * exp(1j * pi / sym),
+            point_ref=point_ref,
         )
         surf_list.append(surf_yoke)
 

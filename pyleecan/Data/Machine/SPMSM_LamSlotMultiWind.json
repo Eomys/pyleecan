@@ -1,0 +1,1090 @@
+{
+    "__class__": "MachineSIPMSM",
+    "__save_date__": "2021_06_10 17h34min22s ",
+    "__version__": "pyleecan_1.3.1",
+    "desc": "",
+    "frame": null,
+    "logger_name": "Pyleecan.Machine",
+    "name": "SPMSM_LamSlotMultiWind",
+    "rotor": {
+        "Kf1": 0.95,
+        "L1": 0.05,
+        "Nrvd": 0,
+        "Rext": 0.023850000000000003,
+        "Rint": 0.011925000000000002,
+        "Wrvd": 0,
+        "__class__": "LamSlotMag",
+        "axial_vent": [],
+        "bore": null,
+        "is_internal": true,
+        "is_stator": false,
+        "magnet": {
+            "Lmag": 0.95,
+            "__class__": "Magnet",
+            "mat_type": {
+                "HT": {
+                    "Cp": 1,
+                    "__class__": "MatHT",
+                    "alpha": 0.00393,
+                    "lambda_x": 1,
+                    "lambda_y": 1,
+                    "lambda_z": 1
+                },
+                "__class__": "Material",
+                "desc": "Material description",
+                "eco": {
+                    "__class__": "MatEconomical",
+                    "cost_unit": 0.127,
+                    "unit_name": "$"
+                },
+                "elec": {
+                    "__class__": "MatElectrical",
+                    "alpha": 1,
+                    "epsr": 1,
+                    "rho": 1.6e-06
+                },
+                "is_isotropic": false,
+                "mag": {
+                    "BH_curve": {
+                        "__class__": "ImportMatrix",
+                        "is_transpose": false
+                    },
+                    "Brm20": 1.2,
+                    "Hc": 909456.817667973,
+                    "LossData": {
+                        "__class__": "ImportMatrix",
+                        "is_transpose": false
+                    },
+                    "ModelBH": {
+                        "Bmax": 2.31,
+                        "Hmax": null,
+                        "__class__": "ModelBH",
+                        "delta": 100
+                    },
+                    "Wlam": 0,
+                    "__class__": "MatMagnetics",
+                    "alpha_Br": 0.0,
+                    "is_BH_extrapolate": false,
+                    "mur_lin": 1.05
+                },
+                "name": "Magnet3",
+                "path": "Magnet3.json",
+                "struct": {
+                    "Ex": 215000000000.0,
+                    "Ey": 215000000000.0,
+                    "Ez": 80000000000,
+                    "Gxy": 0,
+                    "Gxz": 2000000000,
+                    "Gyz": 2000000000,
+                    "__class__": "MatStructural",
+                    "nu_xy": 0.3,
+                    "nu_xz": 0.03,
+                    "nu_yz": 0.03,
+                    "rho": 7500.0
+                }
+            },
+            "type_magnetization": 0
+        },
+        "mat_type": {
+            "HT": {
+                "Cp": 1,
+                "__class__": "MatHT",
+                "alpha": 0.00393,
+                "lambda_x": 1,
+                "lambda_y": 1,
+                "lambda_z": 1
+            },
+            "__class__": "Material",
+            "desc": "Lamination M400-50A",
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": 0.127,
+                "unit_name": "$"
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": 1,
+                "epsr": 1,
+                "rho": 1
+            },
+            "is_isotropic": false,
+            "mag": {
+                "BH_curve": {
+                    "__class__": "ImportMatrixVal",
+                    "is_transpose": false,
+                    "value": [
+                        [
+                            0.0,
+                            0.0
+                        ],
+                        [
+                            100.0,
+                            0.5
+                        ],
+                        [
+                            150.0,
+                            0.7
+                        ],
+                        [
+                            180.0,
+                            0.8
+                        ],
+                        [
+                            200.0,
+                            0.9
+                        ],
+                        [
+                            250.0,
+                            1.0
+                        ],
+                        [
+                            300.0,
+                            1.05
+                        ],
+                        [
+                            350.0,
+                            1.1
+                        ],
+                        [
+                            450.0,
+                            1.15
+                        ],
+                        [
+                            550.0,
+                            1.2
+                        ],
+                        [
+                            650.0,
+                            1.225
+                        ],
+                        [
+                            750.0,
+                            1.25
+                        ],
+                        [
+                            850.0,
+                            1.275
+                        ],
+                        [
+                            950.0,
+                            1.3
+                        ],
+                        [
+                            1100.0,
+                            1.325
+                        ],
+                        [
+                            1250.0,
+                            1.35
+                        ],
+                        [
+                            1400.0,
+                            1.375
+                        ],
+                        [
+                            1550.0,
+                            1.4
+                        ],
+                        [
+                            1700.0,
+                            1.425
+                        ],
+                        [
+                            1900.0,
+                            1.45
+                        ],
+                        [
+                            2150.0,
+                            1.475
+                        ],
+                        [
+                            2450.0,
+                            1.5
+                        ],
+                        [
+                            2750.0,
+                            1.525
+                        ],
+                        [
+                            3150.0,
+                            1.55
+                        ],
+                        [
+                            3600.0,
+                            1.575
+                        ],
+                        [
+                            4100.0,
+                            1.6
+                        ],
+                        [
+                            4700.0,
+                            1.625
+                        ],
+                        [
+                            5250.0,
+                            1.65
+                        ],
+                        [
+                            6000.0,
+                            1.675
+                        ],
+                        [
+                            6700.0,
+                            1.7
+                        ],
+                        [
+                            7500.0,
+                            1.725
+                        ],
+                        [
+                            8650.0,
+                            1.75
+                        ],
+                        [
+                            9500.0,
+                            1.775
+                        ],
+                        [
+                            10750.0,
+                            1.8
+                        ],
+                        [
+                            14500.0,
+                            1.85
+                        ],
+                        [
+                            19500.0,
+                            1.9
+                        ],
+                        [
+                            25000.0,
+                            1.95
+                        ],
+                        [
+                            33000.0,
+                            2.0
+                        ],
+                        [
+                            44000.0,
+                            2.05
+                        ],
+                        [
+                            57000.0,
+                            2.1
+                        ],
+                        [
+                            74000.0,
+                            2.15
+                        ],
+                        [
+                            96000.0,
+                            2.2
+                        ],
+                        [
+                            130000.0,
+                            2.25
+                        ],
+                        [
+                            170000.0,
+                            2.3
+                        ]
+                    ]
+                },
+                "Brm20": 0,
+                "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
+                "Wlam": 0.0005,
+                "__class__": "MatMagnetics",
+                "alpha_Br": 0,
+                "is_BH_extrapolate": false,
+                "mur_lin": 2500.0
+            },
+            "name": "M400-50A",
+            "path": "M400-50A.json",
+            "struct": {
+                "Ex": 215000000000.0,
+                "Ey": 215000000000.0,
+                "Ez": 80000000000.0,
+                "Gxy": 0.0,
+                "Gxz": 2000000000.0,
+                "Gyz": 2000000000.0,
+                "__class__": "MatStructural",
+                "nu_xy": 0.3,
+                "nu_xz": 0.03,
+                "nu_yz": 0.03,
+                "rho": 7650.0
+            }
+        },
+        "notch": [],
+        "slot": {
+            "H0": 0,
+            "Hmag": 0.003,
+            "W0": 0.78539816,
+            "Wmag": 0.78539816,
+            "Zs": 8,
+            "__class__": "SlotM11"
+        },
+        "yoke_notch": []
+    },
+    "shaft": {
+        "Drsh": 0.023850000000000003,
+        "Lshaft": 0.442,
+        "__class__": "Shaft",
+        "mat_type": {
+            "HT": {
+                "Cp": 1,
+                "__class__": "MatHT",
+                "alpha": 0.00393,
+                "lambda_x": 1,
+                "lambda_y": 1,
+                "lambda_z": 1
+            },
+            "__class__": "Material",
+            "desc": "Lamination M400-50A",
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": 0.127,
+                "unit_name": "$"
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": 1,
+                "epsr": 1,
+                "rho": 1
+            },
+            "is_isotropic": false,
+            "mag": {
+                "BH_curve": {
+                    "__class__": "ImportMatrixVal",
+                    "is_transpose": false,
+                    "value": [
+                        [
+                            0.0,
+                            0.0
+                        ],
+                        [
+                            100.0,
+                            0.5
+                        ],
+                        [
+                            150.0,
+                            0.7
+                        ],
+                        [
+                            180.0,
+                            0.8
+                        ],
+                        [
+                            200.0,
+                            0.9
+                        ],
+                        [
+                            250.0,
+                            1.0
+                        ],
+                        [
+                            300.0,
+                            1.05
+                        ],
+                        [
+                            350.0,
+                            1.1
+                        ],
+                        [
+                            450.0,
+                            1.15
+                        ],
+                        [
+                            550.0,
+                            1.2
+                        ],
+                        [
+                            650.0,
+                            1.225
+                        ],
+                        [
+                            750.0,
+                            1.25
+                        ],
+                        [
+                            850.0,
+                            1.275
+                        ],
+                        [
+                            950.0,
+                            1.3
+                        ],
+                        [
+                            1100.0,
+                            1.325
+                        ],
+                        [
+                            1250.0,
+                            1.35
+                        ],
+                        [
+                            1400.0,
+                            1.375
+                        ],
+                        [
+                            1550.0,
+                            1.4
+                        ],
+                        [
+                            1700.0,
+                            1.425
+                        ],
+                        [
+                            1900.0,
+                            1.45
+                        ],
+                        [
+                            2150.0,
+                            1.475
+                        ],
+                        [
+                            2450.0,
+                            1.5
+                        ],
+                        [
+                            2750.0,
+                            1.525
+                        ],
+                        [
+                            3150.0,
+                            1.55
+                        ],
+                        [
+                            3600.0,
+                            1.575
+                        ],
+                        [
+                            4100.0,
+                            1.6
+                        ],
+                        [
+                            4700.0,
+                            1.625
+                        ],
+                        [
+                            5250.0,
+                            1.65
+                        ],
+                        [
+                            6000.0,
+                            1.675
+                        ],
+                        [
+                            6700.0,
+                            1.7
+                        ],
+                        [
+                            7500.0,
+                            1.725
+                        ],
+                        [
+                            8650.0,
+                            1.75
+                        ],
+                        [
+                            9500.0,
+                            1.775
+                        ],
+                        [
+                            10750.0,
+                            1.8
+                        ],
+                        [
+                            14500.0,
+                            1.85
+                        ],
+                        [
+                            19500.0,
+                            1.9
+                        ],
+                        [
+                            25000.0,
+                            1.95
+                        ],
+                        [
+                            33000.0,
+                            2.0
+                        ],
+                        [
+                            44000.0,
+                            2.05
+                        ],
+                        [
+                            57000.0,
+                            2.1
+                        ],
+                        [
+                            74000.0,
+                            2.15
+                        ],
+                        [
+                            96000.0,
+                            2.2
+                        ],
+                        [
+                            130000.0,
+                            2.25
+                        ],
+                        [
+                            170000.0,
+                            2.3
+                        ]
+                    ]
+                },
+                "Brm20": 0,
+                "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
+                "Wlam": 0.0005,
+                "__class__": "MatMagnetics",
+                "alpha_Br": 0,
+                "is_BH_extrapolate": false,
+                "mur_lin": 2500.0
+            },
+            "name": "M400-50A",
+            "path": "M400-50A.json",
+            "struct": {
+                "Ex": 215000000000.0,
+                "Ey": 215000000000.0,
+                "Ez": 80000000000.0,
+                "Gxy": 0.0,
+                "Gxz": 2000000000.0,
+                "Gyz": 2000000000.0,
+                "__class__": "MatStructural",
+                "nu_xy": 0.3,
+                "nu_xz": 0.03,
+                "nu_yz": 0.03,
+                "rho": 7650.0
+            }
+        }
+    },
+    "stator": {
+        "Kf1": 0.96,
+        "Ksfill": null,
+        "L1": 0.05,
+        "Nrvd": 0,
+        "Rext": 0.05,
+        "Rint": 0.02785,
+        "Wrvd": 0,
+        "__class__": "LamSlotMultiWind",
+        "alpha": [
+            0.2617993877991494,
+            0.7853981633974483,
+            1.308996938995747,
+            1.832595714594046,
+            2.356194490192345,
+            2.879793265790644,
+            3.4033920413889427,
+            3.926990816987242,
+            4.45058959258554,
+            4.974188368183839,
+            5.497787143782138,
+            6.021385919380436
+        ],
+        "axial_vent": [],
+        "bore": null,
+        "is_internal": false,
+        "is_stator": true,
+        "mat_type": {
+            "HT": {
+                "Cp": 1,
+                "__class__": "MatHT",
+                "alpha": 0.00393,
+                "lambda_x": 1,
+                "lambda_y": 1,
+                "lambda_z": 1
+            },
+            "__class__": "Material",
+            "desc": "Lamination M400-50A",
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": 0.127,
+                "unit_name": "$"
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": 1,
+                "epsr": 1,
+                "rho": 1
+            },
+            "is_isotropic": false,
+            "mag": {
+                "BH_curve": {
+                    "__class__": "ImportMatrixVal",
+                    "is_transpose": false,
+                    "value": [
+                        [
+                            0.0,
+                            0.0
+                        ],
+                        [
+                            100.0,
+                            0.5
+                        ],
+                        [
+                            150.0,
+                            0.7
+                        ],
+                        [
+                            180.0,
+                            0.8
+                        ],
+                        [
+                            200.0,
+                            0.9
+                        ],
+                        [
+                            250.0,
+                            1.0
+                        ],
+                        [
+                            300.0,
+                            1.05
+                        ],
+                        [
+                            350.0,
+                            1.1
+                        ],
+                        [
+                            450.0,
+                            1.15
+                        ],
+                        [
+                            550.0,
+                            1.2
+                        ],
+                        [
+                            650.0,
+                            1.225
+                        ],
+                        [
+                            750.0,
+                            1.25
+                        ],
+                        [
+                            850.0,
+                            1.275
+                        ],
+                        [
+                            950.0,
+                            1.3
+                        ],
+                        [
+                            1100.0,
+                            1.325
+                        ],
+                        [
+                            1250.0,
+                            1.35
+                        ],
+                        [
+                            1400.0,
+                            1.375
+                        ],
+                        [
+                            1550.0,
+                            1.4
+                        ],
+                        [
+                            1700.0,
+                            1.425
+                        ],
+                        [
+                            1900.0,
+                            1.45
+                        ],
+                        [
+                            2150.0,
+                            1.475
+                        ],
+                        [
+                            2450.0,
+                            1.5
+                        ],
+                        [
+                            2750.0,
+                            1.525
+                        ],
+                        [
+                            3150.0,
+                            1.55
+                        ],
+                        [
+                            3600.0,
+                            1.575
+                        ],
+                        [
+                            4100.0,
+                            1.6
+                        ],
+                        [
+                            4700.0,
+                            1.625
+                        ],
+                        [
+                            5250.0,
+                            1.65
+                        ],
+                        [
+                            6000.0,
+                            1.675
+                        ],
+                        [
+                            6700.0,
+                            1.7
+                        ],
+                        [
+                            7500.0,
+                            1.725
+                        ],
+                        [
+                            8650.0,
+                            1.75
+                        ],
+                        [
+                            9500.0,
+                            1.775
+                        ],
+                        [
+                            10750.0,
+                            1.8
+                        ],
+                        [
+                            14500.0,
+                            1.85
+                        ],
+                        [
+                            19500.0,
+                            1.9
+                        ],
+                        [
+                            25000.0,
+                            1.95
+                        ],
+                        [
+                            33000.0,
+                            2.0
+                        ],
+                        [
+                            44000.0,
+                            2.05
+                        ],
+                        [
+                            57000.0,
+                            2.1
+                        ],
+                        [
+                            74000.0,
+                            2.15
+                        ],
+                        [
+                            96000.0,
+                            2.2
+                        ],
+                        [
+                            130000.0,
+                            2.25
+                        ],
+                        [
+                            170000.0,
+                            2.3
+                        ]
+                    ]
+                },
+                "Brm20": 0,
+                "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
+                "Wlam": 0.0005,
+                "__class__": "MatMagnetics",
+                "alpha_Br": 0,
+                "is_BH_extrapolate": false,
+                "mur_lin": 2500.0
+            },
+            "name": "M400-50A",
+            "path": "M400-50A.json",
+            "struct": {
+                "Ex": 215000000000.0,
+                "Ey": 215000000000.0,
+                "Ez": 80000000000.0,
+                "Gxy": 0.0,
+                "Gxz": 2000000000.0,
+                "Gyz": 2000000000.0,
+                "__class__": "MatStructural",
+                "nu_xy": 0.3,
+                "nu_xz": 0.03,
+                "nu_yz": 0.03,
+                "rho": 7650.0
+            }
+        },
+        "notch": [],
+        "slot_list": [
+            {
+                "H0": 0.0,
+                "H2": 0.018949999999999998,
+                "W0": 0.31415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            },
+            {
+                "H0": 0.002,
+                "H2": 0.01695,
+                "W0": 0.16415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            },
+            {
+                "H0": 0.0,
+                "H2": 0.018949999999999998,
+                "W0": 0.31415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            },
+            {
+                "H0": 0.002,
+                "H2": 0.01695,
+                "W0": 0.16415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            },
+            {
+                "H0": 0.0,
+                "H2": 0.018949999999999998,
+                "W0": 0.31415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            },
+            {
+                "H0": 0.002,
+                "H2": 0.01695,
+                "W0": 0.16415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            },
+            {
+                "H0": 0.0,
+                "H2": 0.018949999999999998,
+                "W0": 0.31415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            },
+            {
+                "H0": 0.002,
+                "H2": 0.01695,
+                "W0": 0.16415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            },
+            {
+                "H0": 0.0,
+                "H2": 0.018949999999999998,
+                "W0": 0.31415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            },
+            {
+                "H0": 0.002,
+                "H2": 0.01695,
+                "W0": 0.16415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            },
+            {
+                "H0": 0.0,
+                "H2": 0.018949999999999998,
+                "W0": 0.31415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            },
+            {
+                "H0": 0.002,
+                "H2": 0.01695,
+                "W0": 0.16415927,
+                "W2": 0.31415927,
+                "Zs": 12,
+                "__class__": "SlotW22"
+            }
+        ],
+        "winding": {
+            "Lewout": 0.015,
+            "Nlayer": 2,
+            "Npcp": 1,
+            "Nslot_shift_wind": 2,
+            "Ntcoil": 34,
+            "__class__": "Winding",
+            "coil_pitch": 1,
+            "conductor": {
+                "Kwoh": null,
+                "Nwppc": 1,
+                "Wins_cond": 0.010006000000000001,
+                "Wins_wire": 1e-06,
+                "Wwire": 0.001,
+                "__class__": "CondType12",
+                "cond_mat": {
+                    "HT": {
+                        "Cp": 381.0,
+                        "__class__": "MatHT",
+                        "alpha": 0.00393,
+                        "lambda_x": 385.0,
+                        "lambda_y": 385.0,
+                        "lambda_z": 385.0
+                    },
+                    "__class__": "Material",
+                    "desc": "COPPER WINDING",
+                    "eco": {
+                        "__class__": "MatEconomical",
+                        "cost_unit": 60.0,
+                        "unit_name": "$"
+                    },
+                    "elec": {
+                        "__class__": "MatElectrical",
+                        "alpha": 1,
+                        "epsr": null,
+                        "rho": 1.73e-08
+                    },
+                    "is_isotropic": true,
+                    "mag": null,
+                    "name": "Copper1",
+                    "path": "Copper1.json",
+                    "struct": {
+                        "Ex": 115000000000.0,
+                        "Ey": 115000000000.0,
+                        "Ez": 115000000000.0,
+                        "Gxy": null,
+                        "Gxz": null,
+                        "Gyz": null,
+                        "__class__": "MatStructural",
+                        "nu_xy": null,
+                        "nu_xz": null,
+                        "nu_yz": null,
+                        "rho": 8900.0
+                    }
+                },
+                "ins_mat": {
+                    "HT": {
+                        "Cp": 671.0,
+                        "__class__": "MatHT",
+                        "alpha": null,
+                        "lambda_x": 0.2,
+                        "lambda_y": 0.2,
+                        "lambda_z": 0.2
+                    },
+                    "__class__": "Material",
+                    "desc": "INSULATOR1",
+                    "eco": {
+                        "__class__": "MatEconomical",
+                        "cost_unit": null,
+                        "unit_name": "$"
+                    },
+                    "elec": {
+                        "__class__": "MatElectrical",
+                        "alpha": 1,
+                        "epsr": null,
+                        "rho": null
+                    },
+                    "is_isotropic": true,
+                    "mag": null,
+                    "name": "Insulator1",
+                    "path": "Insulator1.json",
+                    "struct": {
+                        "Ex": null,
+                        "Ey": null,
+                        "Ez": null,
+                        "Gxy": null,
+                        "Gxz": null,
+                        "Gyz": null,
+                        "__class__": "MatStructural",
+                        "nu_xy": null,
+                        "nu_xz": null,
+                        "nu_yz": null,
+                        "rho": 1200.0
+                    }
+                }
+            },
+            "end_winding": {
+                "__class__": "EndWinding"
+            },
+            "is_aper_a": null,
+            "is_change_layer": false,
+            "is_permute_B_C": false,
+            "is_reverse_layer": false,
+            "is_reverse_wind": false,
+            "p": 4,
+            "per_a": null,
+            "qs": 3,
+            "type_connection": 0,
+            "wind_mat": null
+        },
+        "yoke_notch": [
+            {
+                "__class__": "NotchEvenDist",
+                "alpha": 0.5235987755982988,
+                "notch_shape": {
+                    "H0": 0.001,
+                    "H1": 0.001,
+                    "H1_is_rad": false,
+                    "H2": 0.001,
+                    "R1": 0.0004,
+                    "W0": 0.006,
+                    "W1": 0.006,
+                    "W2": 0.006,
+                    "Zs": 6,
+                    "__class__": "SlotW11"
+                }
+            },
+            {
+                "__class__": "NotchEvenDist",
+                "alpha": 1.0471975511965976,
+                "notch_shape": {
+                    "H0": 0.0035,
+                    "W0": 0.007,
+                    "Zs": 6,
+                    "__class__": "SlotCirc"
+                }
+            }
+        ]
+    },
+    "type_machine": 6
+}

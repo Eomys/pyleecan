@@ -1,9 +1,10 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
 slot_list,,List of lamination Slot,,[Slot],,,,,Machine,Lamination,check,VERSION,1,Lamination with list of Slot,
 alpha,[rad],Angular position of the Slots,,ndarray,,,,,,,comp_radius_mec,,,,
-,,,,,,,,,,,comp_surfaces,,,,
+sym_dict_enforced,,Dictionary to enforce the lamination symmetry,,dict,None,,,,,,comp_surfaces,,,,
 ,,,,,,,,,,,get_pole_pair_number,,,,
 ,,,,,,,,,,,plot,,,,
 ,,,,,,,,,,,comp_height_yoke,,,,
 ,,,,,,,,,,,get_Zs,,,,
 ,,,,,,,,,,,get_bore_desc,,,,
+,,,,,,,,,,,comp_periodicity,,,,

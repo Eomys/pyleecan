@@ -129,6 +129,11 @@ try:
 except ImportError as error:
     get_bore_desc = error
 
+try:
+    from ..Methods.Machine.Lamination.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -383,6 +388,17 @@ class Lamination(FrozenClass):
         )
     else:
         get_bore_desc = get_bore_desc
+    # cf Methods.Machine.Lamination.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # save and copy methods are available in all object
     save = save
     copy = copy
