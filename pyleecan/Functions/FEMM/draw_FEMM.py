@@ -193,9 +193,7 @@ def draw_FEMM(
             FEMM_dict=FEMM_dict,
             hide=False,
         )
-        assign_FEMM_surface(
-            femm, surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
-        )
+        assign_FEMM_surface(femm, surf, prop_dict[label], FEMM_dict, machine)
 
     # Apply BC for DXF import
     if rotor_dxf is not None:

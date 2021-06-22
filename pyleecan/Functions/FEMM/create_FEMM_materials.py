@@ -118,7 +118,10 @@ def create_FEMM_materials(
                         femm.mi_addbhpoint(mat_name, BHr[ii][1], BHr[ii][0])
                 materials.append(mat_name)
             prop_dict[label_dict["full"]] = mat_name
-        elif AIRGAP_LAB in label_dict["surf_type"]:  # Airgap surface
+        elif (
+            AIRGAP_LAB in label_dict["surf_type"] or SLID_LAB in label_dict["surf_type"]
+        ):
+            # Airgap surface
             if "Airgap" not in materials:
                 femm.mi_addmaterial("Airgap", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
                 materials.append("Airgap")
@@ -164,10 +167,7 @@ def create_FEMM_materials(
                 femm, is_mmf, is_eddies, materials, mag_obj
             )
             prop_dict[label_dict["full"]] = prop
-        elif (
-            SLID_LAB in label_dict["surf_type"]
-            or NO_MESH_LAB in label_dict["surf_type"]
-        ):
+        elif NO_MESH_LAB in label_dict["surf_type"]:
             prop_dict[label_dict["full"]] = "<No Mesh>"
         else:
             raise Exception("Unknown label " + label_dict["full"])

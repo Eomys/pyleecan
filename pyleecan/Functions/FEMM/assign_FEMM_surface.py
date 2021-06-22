@@ -9,6 +9,9 @@ from ...Functions.labels import (
     WIND_LAB,
     ROTOR_LAB,
     HOLEM_LAB,
+    HOLEV_LAB,
+    MAG_LAB,
+    VENT_LAB,
 )
 
 
@@ -54,7 +57,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
             else:  # winding on the stator
                 Clabel = "Circs" + prop[:-1][2:]
             lam_obj = get_obj_from_label(machine, label_dict=label_dict)
-            wind_mat = lam_obj.winding.get_connection_mat(lam_obj.slot.get_Zs())
+            wind_mat = lam_obj.winding.get_connection_mat(lam_obj.get_Zs())
             Nrad_id = label_dict["R_id"]  # zone radial coordinate
             Ntan_id = label_dict["T_id"]  # zone tangential coordinate
             Zs_id = label_dict["S_id"]  # Zone slot number coordinate
@@ -77,27 +80,32 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                 mag = mag_0 + mag_dict["magnet_" + str(T_id)] * 180 / pi
 
                 # modifiy magnetisation of south poles
-                if "_S_" in label:
+                if (label_dict["S_id"] % 2) == 1:
                     mag = mag + 180
             else:
                 raise NotImplementedYetError(
                     "Only parallele magnetization are available for HoleMagnet"
                 )
-        elif "Magnet" in label:  # LamSlotMag
-            if "Radial" in label and "_N_" in label:  # Radial magnetization
-                mag = "theta"  # North pole magnet
-            elif "Radial" in label:
-                mag = "theta + 180"  # South pole magnet
-            elif "Parallel" in label and "_N_" in label:
-                mag = angle(point_ref) * 180 / pi  # North pole magnet
-            elif "Parallel" in label:
-                mag = angle(point_ref) * 180 / pi + 180  # South pole magnet
-            elif "Hallbach" in label:
-                Zs = lam.slot.Zs
+        elif MAG_LAB in label_dict["surf_type"]:  # LamSlotMag
+            mag_obj = get_obj_from_label(machine, label_dict=label_dict)
+            # type_magnetization: 0 for radial, 1 for parallel, 2 for Hallbach
+            if mag_obj.type_magnetization == 0 and (label_dict["S_id"] % 2) == 0:
+                mag = "theta"  # Radial North pole magnet
+            elif mag_obj.type_magnetization == 0:
+                mag = "theta + 180"  # Radial South pole magnet
+            elif mag_obj.type_magnetization == 1 and (label_dict["S_id"] % 2) == 0:
+                mag = angle(point_ref) * 180 / pi  # Parallel North pole magnet
+            elif mag_obj.type_magnetization == 1:
+                mag = angle(point_ref) * 180 / pi + 180  # Parallel South pole magnet
+            elif mag_obj.type_magnetization == 2:
+                lam_obj = mag_obj.parent
+                Zs = lam_obj.get_Zs()
                 mag = str(-(Zs / 2 - 1)) + " * theta + 90 "
-        elif "Ventilation" in label:
+        elif VENT_LAB in label_dict["surf_type"]:
+            vent_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop = "Air"
-        elif "Hole" in label:
+        elif HOLEV_LAB in label_dict["surf_type"]:
+            hole_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop = "Air"
         # Set the surface property
         femm.mi_setblockprop(
