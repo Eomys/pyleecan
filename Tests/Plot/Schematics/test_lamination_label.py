@@ -35,7 +35,7 @@ def test_MachineUD():
     lam1.slot = SlotW22(
         Zs=12, W0=2 * pi / 12 * 0.75, W2=2 * pi / 12 * 0.75, H0=0, H2=W1 * 0.65
     )
-    lam1.winding = WindingCW2LT(qs=3, p=3)
+    lam1.winding = Winding(qs=3, p=3, Nlayer=2, coil_pitch=1)
     # Outer rotor
     lam2 = LamSlot(
         Rext=lam1.Rint - A1, Rint=lam1.Rint - A1 - W2, is_internal=True, is_stator=False
@@ -56,7 +56,7 @@ def test_MachineUD():
         Rext=lam3.Rint - A3, Rint=lam3.Rint - A3 - W4, is_internal=True, is_stator=True
     )
     lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
-    lam4.winding = WindingCW2LT(qs=3, p=3)
+    lam4.winding = Winding(qs=3, p=3, Nlayer=2, coil_pitch=1)
     # Machine definition
     machine.lam_list = [lam1, lam2, lam3, lam4]
     label_list = machine.get_lam_list_label()

@@ -60,3 +60,10 @@ class Test_machine_img(object):
         ax.set_axis_off()
         # Save
         fig.savefig(save_path)
+
+
+if __name__ == "__main__":
+    a = Test_machine_img()
+    for test_dict in mach_test:
+        a.test_machine(test_dict)
+    print("Done")
