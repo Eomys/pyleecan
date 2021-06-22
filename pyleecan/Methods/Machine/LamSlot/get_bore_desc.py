@@ -24,7 +24,7 @@ def get_bore_desc(self, sym=1, prop_dict=None):
     """
 
     if self.slot is None:  # No slot
-        return Lamination.get_bore_desc(self, sym=sym, line_label=line_label)
+        return Lamination.get_bore_desc(self, sym=sym, prop_dict=prop_dict)
 
     Rbo = self.get_Rbo()
     slot_list = list()

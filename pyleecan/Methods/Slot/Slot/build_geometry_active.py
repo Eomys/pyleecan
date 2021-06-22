@@ -65,10 +65,10 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     tan_list = list()
     if Ntan == 2:
         tan_list.append(
-            surf_act.split_line(0, 100, is_top=False, is_join=True, label_join="")
+            surf_act.split_line(0, 100, is_top=False, is_join=True, prop_dict_join=None)
         )
         tan_list.append(
-            surf_act.split_line(0, 100, is_top=True, is_join=True, label_join="")
+            surf_act.split_line(0, 100, is_top=True, is_join=True, prop_dict_join=None)
         )
     else:
         tan_list = [surf_act]
@@ -84,11 +84,19 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
                 X = X_list[jj]
                 surf_list.append(
                     surf.split_line(
-                        X - 100j, X + 100j, is_top=direct, is_join=True, label_join=""
+                        X - 100j,
+                        X + 100j,
+                        is_top=direct,
+                        is_join=True,
+                        prop_dict_join=None,
                     )
                 )
                 surf = surf.split_line(
-                    X - 100j, X + 100j, is_top=not direct, is_join=True, label_join=""
+                    X - 100j,
+                    X + 100j,
+                    is_top=not direct,
+                    is_join=True,
+                    prop_dict_join=None,
                 )
             # Add the last surface
             surf_list.append(surf)

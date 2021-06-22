@@ -15,6 +15,7 @@ def get_bore_desc(self, sym=1, prop_dict=None):
     prop_dict : dict
         Property dictionary to apply on the lines
 
+
     Returns
     -------
     bore_desc : list
@@ -27,7 +28,7 @@ def get_bore_desc(self, sym=1, prop_dict=None):
     Rbo = self.get_Rbo()
 
     if self.bore is not None and self.notch in [None, list()] and sym == 1:
-        return None, self.bore.get_bore_line(label=line_label)
+        return None, self.bore.get_bore_line(prop_dict=prop_dict)
     elif self.notch is None or len(self.notch) == 0:
         # No notches
         if sym == 1:

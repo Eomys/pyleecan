@@ -12,7 +12,7 @@ AIRGAP_LAB = "Airgap"
 NO_MESH_LAB = "NoMesh"
 VENT_LAB = "Ventilation"
 NO_LAM_LAB = "None"  # To replace "Stator-X" when no lamination
-
+TOOTH_LAB = "Tooth"
 
 # Line Property dict
 BOUNDARY_PROP_LAB = "Boundary"
