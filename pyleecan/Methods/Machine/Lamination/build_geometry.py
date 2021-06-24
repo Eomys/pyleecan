@@ -38,8 +38,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     # Label setup
     label = self.get_label()
     label_lam = label + "_" + LAM_LAB
-    label_bore = label + "_" + BORE_LAB
-    label_yoke = label + "_" + YOKE_LAB
+    label_bore = label + "_" + LAM_LAB + BORE_LAB
+    label_yoke = label + "_" + LAM_LAB + YOKE_LAB
     if self.is_internal:
         label_ext = label_bore
         label_int = label_yoke
