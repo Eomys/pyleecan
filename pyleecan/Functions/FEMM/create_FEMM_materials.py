@@ -15,6 +15,7 @@ from ...Functions.labels import (
     HOLEM_LAB,
     MAG_LAB,
     WIND_LAB,
+    BAR_LAB,
     SLID_LAB,
     NO_MESH_LAB,
     get_obj_from_label,
@@ -142,7 +143,7 @@ def create_FEMM_materials(
                 femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
                 materials.append("Air")
             prop_dict[label_dict["full"]] = "Air"
-        elif WIND_LAB in label_dict["surf_type"]:
+        elif WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
             is_stator = STATOR_LAB in label_dict["lam_type"]
             I = Is if is_stator else Ir
             is_mmf = is_mmfs if is_stator else is_mmfr
