@@ -482,11 +482,11 @@
                 "value": 0
             },
             {
-                "desc": "Label to set to the lines",
+                "desc": "Property dict to apply on the lines",
                 "max": "",
                 "min": "",
-                "name": "line_label",
-                "type": "str",
+                "name": "prop_dict",
+                "type": "dict",
                 "unit": "",
                 "value": ""
             }

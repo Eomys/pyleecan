@@ -4,6 +4,7 @@ from ....Functions.FEMM import boundary_prop
 from numpy import abs, exp
 from ....Functions.labels import BOUNDARY_PROP_LAB
 
+
 def draw_FEMM(
     self, femm, nodeprop=None, maxseg=None, propname=None, hide=False, group=None
 ):
