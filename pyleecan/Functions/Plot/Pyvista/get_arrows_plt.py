@@ -6,24 +6,25 @@ def get_arrows_plt(mesh_pv, field, meshsol, factor, is_point_arrow, phase=1):
 
     Parameters
     ----------
-    args : tuple
-        argument for extracting field
-    data_list : Data or [Data]
-        Data object or list to plot
-    save_path : str
-        path where to save the gif
-    file_name : str
-        name of the gif file
-    index_var : str
-        name of the plot parameter along which to animate
-    index_max : int
-        maximum value of the index
-    index_step : int
-        step for the index (number of frames = index_max / index_step)
-    component_list : list
-        list of component names to plot in separate figures
-    kwargs : dict
-        parameters of func
+    mesh_pv : UnstructuredGrid
+        a pyvista mesh object
+    field : ndarray
+        a vector field to plot as glyph
+    meshsol : MeshSolution
+        a MeshSolution object
+    factor : float
+        an amplitude factor for the glyph plot
+    is_point_arrow : bool
+        True to plot arrows on the nodes
+    phase : complex
+        a phase shift to apply on the plot
+    
+    Returns
+    -------
+    arrows_plt : PolyData
+        a pyvista object to plot glyph
+    factor : float
+        an amplitude factor for the plot glyph
     """
 
     vect_field = real(field * phase)

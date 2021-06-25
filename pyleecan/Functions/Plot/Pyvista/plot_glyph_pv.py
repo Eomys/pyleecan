@@ -22,22 +22,22 @@ def plot_glyph_pv(
     factor=1,
     phase=1,
 ):
-    """Plot the operational deflection shape using pyvista plotter. Made to be called from plot_pyvista.
+    """Plot a vector field as arrow (or glyph) using pyvista plotter.
 
     Parameters
     ----------
-
-    clim : list
-        a list of 2 elements for the limits of the colorbar
+    p : pyvista.Plotter
+        a pyvista plotting object
+    mesh_pv : UnstructuredGrid
+        a pyvista mesh object
+    vect_field : ndaray
+        field to plot
+    is_point_arrow : bool
+        True to plot arrows on the nodes
     factor : float
-        factor to multiply vector field
-    field_name : str
-        title of the field to display on plot
-    is_show_fig : bool
-        To call show at the end of the method
-    p=None,
-    meshsol_list=[],
-    plot_list=[],
+        amplitude factor for vector field
+    phase : complex
+        coefficient to change the phase of the plot
 
     Returns
     -------

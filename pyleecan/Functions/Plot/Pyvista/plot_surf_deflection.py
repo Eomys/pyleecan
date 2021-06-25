@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-
 from numpy import (
     real,
     min as np_min,
     max as np_max,
     abs as np_abs,
 )
-
 
 from ....definitions import config_dict
 
@@ -25,22 +23,28 @@ def plot_surf_deflection(
     factor=None,
     phase=1,
 ):
-    """Plot the operational deflection shape using pyvista plotter. Made to be called from plot_pyvista.
+    """Plot a vector field as arrow (or glyph) using pyvista plotter.
 
     Parameters
     ----------
-
+    p : pyvista.Plotter
+        a pyvista plotting object
+    *sargs: list of strings
+        List of arguments for the scalar bar 
+    surf_pv : UnstructuredGrid
+        a pyvista surface mesh object
+    vect_field : ndaray
+        field to plot
+    field : ndarray
+        a vector field to plot as glyph
+    field_name : str
+        name of the field
     clim : list
         a list of 2 elements for the limits of the colorbar
     factor : float
-        factor to multiply vector field
-    field_name : str
-        title of the field to display on plot
-    is_show_fig : bool
-        To call show at the end of the method
-    p=None,
-    meshsol_list=[],
-    plot_list=[],
+        amplitude factor for vector field
+    phase : complex
+        coefficient to change the phase of the plot
 
     Returns
     -------

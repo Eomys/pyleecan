@@ -6,6 +6,32 @@ from numpy import (
 
 
 def get_glyph(self, *args, label, index, indices, field_name):
+    """ Get the vector field, the field name and the corresponding pyvista mesh in format adapted to a glyph plot. 
+
+    Parameters
+    ----------
+    self : MeshSolution
+        a MeshSolution object
+    *args: list of strings
+        List of axes requested by the user, their units and values (optional)
+    label : str
+        a label
+    index : int
+        an index
+    indices : list
+        list of the points to extract (optional)
+    field_name : str
+        title of the field to display on plot
+
+    Returns
+    -------
+    vect_field : ndaray
+        field to plot
+    field_name : str
+        name of the field
+    mesh_pv : UnstructuredGrid
+        pyvista mesh to plot
+    """
     # Get mesh_pv and field
 
     # Get the mesh
