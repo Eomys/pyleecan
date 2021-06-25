@@ -51,14 +51,18 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     if self.is_internal:
         if self.Rint > 0:
             _, int_line = self.get_yoke_desc(
-                sym=sym, is_reversed=True, prop_dict={RADIUS_PROP_LAB: YOKE_LAB}
+                sym=sym,
+                is_reversed=True,
+                prop_dict={RADIUS_PROP_LAB: YOKE_LAB, BOUNDARY_PROP_LAB: label_yoke},
             )
         else:
             int_line = []
         _, ext_line = self.get_bore_desc(sym=sym, prop_dict={RADIUS_PROP_LAB: BORE_LAB})
     else:
         _, ext_line = self.get_yoke_desc(
-            sym=sym, is_reversed=True, prop_dict={RADIUS_PROP_LAB: YOKE_LAB}
+            sym=sym,
+            is_reversed=True,
+            prop_dict={RADIUS_PROP_LAB: YOKE_LAB, BOUNDARY_PROP_LAB: label_yoke},
         )
         _, int_line = self.get_bore_desc(sym=sym, prop_dict={RADIUS_PROP_LAB: BORE_LAB})
 
@@ -97,14 +101,22 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         # Create lines
         curve_list = list()
         if self.is_internal:
-            curve_list.append(Segment(Z0, Z1, prop_dict={BOUNDARY_PROP_LAB: YS_LAB}))
+            curve_list.append(
+                Segment(Z0, Z1, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YS_LAB})
+            )
         else:
-            curve_list.append(Segment(Z3, Z2, prop_dict={BOUNDARY_PROP_LAB: YS_LAB}))
+            curve_list.append(
+                Segment(Z3, Z2, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YS_LAB})
+            )
         curve_list.extend(ext_line)
         if self.is_internal:
-            curve_list.append(Segment(Z2, Z3, prop_dict={BOUNDARY_PROP_LAB: YS_LAB}))
+            curve_list.append(
+                Segment(Z2, Z3, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YS_LAB})
+            )
         else:
-            curve_list.append(Segment(Z1, Z0, prop_dict={BOUNDARY_PROP_LAB: YS_LAB}))
+            curve_list.append(
+                Segment(Z1, Z0, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YS_LAB})
+            )
         if self.Rint > 0:
             curve_list.extend(int_line)
 

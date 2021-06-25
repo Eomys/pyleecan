@@ -20,7 +20,7 @@ BOUNDARY_PROP_LAB = "Boundary"
 YS_LAB = "YokeSide"
 SLID_LINE1_LAB = "airgap_line_1"
 SLID_LINE2_LAB = "airgap_line_2"
-SLID_LINE_LAB = "airgap_line"
+SLID_LINE_LAB = "sliding_line"
 
 RADIUS_PROP_LAB = "LamRadius"
 MAGNET_PROP_LAB = "MagnetLines"
@@ -51,9 +51,6 @@ def decode_label(label):
         label_dict["R_id"] = int(id_list[0][1:])
         label_dict["T_id"] = int(id_list[1][1:])
         label_dict["S_id"] = int(id_list[2][1:])
-    # Decode line label
-    if len(label_split) > 3:
-        label_dict["line_label"] = label_split[3]
 
     return label_dict
 

@@ -1,4 +1,14 @@
 # -*- coding: utf-8 -*-
+from ..labels import (
+    YS_LAB,
+    ROTOR_LAB,
+    STATOR_LAB,
+    YOKE_LAB,
+    LAM_LAB,
+    SLID_LINE1_LAB,
+    SLID_LINE2_LAB,
+    SLID_LINE_LAB,
+)
 
 # regions IDs and names (must be unique)
 
@@ -42,13 +52,13 @@ acsolver = 0  # AC solver type 0 for successive approx, 1 for Newton
 # dictionary to match FEMM boundary condition (value) with line labels (key)
 # actual FEMM boundary condition is set in Arc and Segment draw_FEMM methods
 boundary_prop = dict()
-boundary_prop["airgap_line_1"] = "bc_ag1"
-boundary_prop["sliding_line"] = "bc_ag2"
-boundary_prop["airgap_line_2"] = "bc_ag3"
-boundary_prop["Rotor_Yoke_Radius"] = "bc_A0"
-boundary_prop["Stator_Yoke_Radius"] = "bc_A0"
-boundary_prop["Rotor_Yoke_Side"] = "bc_r1"
-boundary_prop["Stator_Yoke_Side"] = "bc_s1"
+boundary_prop[SLID_LINE1_LAB] = "bc_ag1"
+boundary_prop[SLID_LINE_LAB] = "bc_ag2"
+boundary_prop[SLID_LINE2_LAB] = "bc_ag3"
+boundary_prop[ROTOR_LAB + "-0_" + LAM_LAB + YOKE_LAB] = "bc_A0"
+boundary_prop[STATOR_LAB + "-0_" + LAM_LAB + YOKE_LAB] = "bc_A0"
+boundary_prop[ROTOR_LAB + "-0_" + YS_LAB] = "bc_r1"
+boundary_prop[STATOR_LAB + "-0_" + YS_LAB] = "bc_s1"
 
 LAM_MAT_NAME = "Iron"
 AIRGAP_MAT_NAME = "Airgap"

@@ -48,13 +48,8 @@ def draw_FEMM(
     """
 
     # Get BC (if any)
-    for bound_label in boundary_prop:
-        if (
-            self.prop_dict is not None
-            and BOUNDARY_PROP_LAB in self.prop_dict
-            and bound_label == self.prop_dict[BOUNDARY_PROP_LAB]
-        ):
-            propname = boundary_prop[bound_label]
+    if self.prop_dict is not None and BOUNDARY_PROP_LAB in self.prop_dict:
+        propname = boundary_prop[self.prop_dict[BOUNDARY_PROP_LAB]]
 
     # Add the nodes
     X1, Y1 = self.begin.real, self.begin.imag
