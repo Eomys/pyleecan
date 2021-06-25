@@ -1,21 +1,18 @@
 def configure_plot(p, win_title, save_path):
+    """ Configure a pyvista plot. If the plotter doesn't exist, create one depending on avaialble package. 
 
+    Parameters
+    ----------
+    p : pyvista plotter
+        a pyvista plotter
+    win_title : str
+        title of the window
+    save_path : str
+        path where to save the plot
+    """
+    
     if p is None:
         # Configure plot
-        if save_path is None:
-            try:
-                import pyvistaqt as pv
-
-                is_pyvistaqt = True
-            except:
-                import pyvista as pv
-
-                is_pyvistaqt = False
-        else:
-            import pyvista as pv
-
-            is_pyvistaqt = False
-
         if save_path is None:
             try:
                 import pyvistaqt as pv
