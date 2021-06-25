@@ -136,7 +136,7 @@ def plot_glyph(
             phase=phase,
         )
 
-         # Internal animation (cannot be combined with other plots)
+        # Internal animation (cannot be combined with other plots)
         if is_animated:
             p.add_text(
                 'Adjust 3D view and press "Q"',
@@ -154,7 +154,11 @@ def plot_glyph(
                 phase = exp(1j * 2 * pi * t)
 
                 p.add_mesh(
-                    mesh_pv, color="grey", opacity=0.7, show_edges=True, edge_color="white"
+                    mesh_pv,
+                    color="grey",
+                    opacity=0.7,
+                    show_edges=True,
+                    edge_color="white",
                 )
 
                 # Compute pyvista object

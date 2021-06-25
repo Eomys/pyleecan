@@ -6421,6 +6421,24 @@
                 "type": "bool",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "desc": "Spatial symmetry factor",
+                "max": "",
+                "min": "",
+                "name": "sym",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "True if there is a spatial antiperiod",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
+                "unit": "",
+                "value": false
             }
         ]
     },
