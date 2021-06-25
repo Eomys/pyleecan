@@ -15,10 +15,9 @@ from pyleecan.Classes.RefSegmentP1 import RefSegmentP1
 from pyleecan.Classes.FPGNSeg import FPGNSeg
 
 
-@pytest.mark.METHODS
 @pytest.mark.MeshSol
 class unittest_real_nodes(TestCase):
-    """ Tests for get_real_point methods"""
+    """Tests for get_real_point methods"""
 
     def test_line(self):
         DELTA = 1e-10

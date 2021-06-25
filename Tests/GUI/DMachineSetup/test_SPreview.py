@@ -9,11 +9,10 @@ from PySide2.QtTest import QTest
 
 
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
 from Tests import TEST_DATA_DIR as data_test
 from pyleecan.definitions import MAIN_DIR
+from pyleecan.Functions.load import load_matlib
 
 matlib_path = join(data_test, "Material")
 machine_path = join(MAIN_DIR, "Data", "Machine")
@@ -27,30 +26,27 @@ SCIM_dict = {
         ("Pole pair number", "3"),
         ("Topology", "Inner Rotor"),
         ("Stator phase number", "3"),
-        ("Stator winding type", "double layer distributed"),
         ("Stator winding resistance", "0.02392 Ohm"),
         ("Machine total mass", "328.1 kg"),
     ],
-    "Nrow": 9,
+    "Nrow": 8,
 }
 IPMSM_dict = {
-    "file_path": join(machine_path, "IPMSM_A.json").replace("\\", "/"),
+    "file_path": join(machine_path, "Toyota_Prius.json").replace("\\", "/"),
     "table": [
         ("Machine Type", "IPMSM"),
         ("Stator slot number", "48"),
         ("Pole pair number", "4"),
         ("Topology", "Inner Rotor"),
         ("Stator phase number", "3"),
-        ("Stator winding type", "single layer distributed"),
         ("Stator winding resistance", "0.03595 Ohm"),
         ("Machine total mass", "33.38 kg"),
     ],
-    "Nrow": 8,
+    "Nrow": 7,
 }
 load_preview_test = [SCIM_dict, IPMSM_dict]
 
 
-@pytest.mark.GUI
 class TestSPreview(object):
     @pytest.fixture
     def setup(self):
@@ -62,9 +58,8 @@ class TestSPreview(object):
             self.app = QtWidgets.QApplication.instance()
 
         # MatLib widget
-        matlib = MatLib(matlib_path)
-        dmatlib = DMatLib(matlib=matlib)
-        widget = DMachineSetup(dmatlib=dmatlib, machine_path=machine_path)
+        material_dict = load_matlib(matlib_path=matlib_path)
+        widget = DMachineSetup(material_dict=material_dict, machine_path=machine_path)
 
         yield {"widget": widget}
 

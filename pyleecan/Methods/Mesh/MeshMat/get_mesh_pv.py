@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import pyvista as pv
-import meshio
 from os import makedirs, remove
-from os.path import isdir, split
+from os.path import isdir, split, dirname
+
+import meshio
+import pyvista as pv
+
 from pyleecan.definitions import RESULT_DIR
 
 
@@ -23,8 +25,12 @@ def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
         a pyvista UnstructuredGrid object
     """
 
-    nodes = self.get_node()
-    cells, _, _ = self.get_cell()
+    # Numbering and indices compatible with pyvista
+    mesh_renum = self.copy()
+    mesh_renum.renum()
+
+    nodes = mesh_renum.get_node()
+    cells, _, _ = mesh_renum.get_cell()
 
     cells_meshio = list()
     for key in cells:
@@ -32,8 +38,8 @@ def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
         # Write .vtk file using meshio
 
     # Make sure that the file exists
-    if not isdir(split(path)[0]):
-        makedirs(split(path)[0])
+    if not isdir(dirname(path)):
+        makedirs(dirname(path))
 
     meshio.write_points_cells(filename=path, points=nodes, cells=cells_meshio)
 

@@ -34,6 +34,8 @@ def run(self):
 
     # Generate simulation list and ParamExplorerValue list
     simu_dict = self.generate_simulation_list(ref_simu)
+    # Generate default datakeeper
+    self.gen_datakeeper_list(ref_simu)
 
     # Check if one of the simulation from the list matches the reference one
     ref_simu_index = None
@@ -65,6 +67,10 @@ def run(self):
         logger.info("    Computing reference simulation for " + self.NAME)
     else:
         logger.info("Computing reference simulation for " + self.NAME)
+
+    if self.NAME == "Parameter Sweep":
+        for param in simu_dict["paramexplorer_list"]:
+            logger.info(param.get_desc(ref_simu))
 
     progress = 0  # For progress bar
     nb_simu += 1  # Count reference simulation in progress bar

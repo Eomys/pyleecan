@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     as_dict = error
 
+try:
+    from ..Methods.Simulation.DataKeeper._set_result import _set_result
+except ImportError as error:
+    _set_result = error
+
 
 from ntpath import basename
 from os.path import isfile
@@ -36,6 +41,7 @@ class DataKeeper(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.DataKeeper.as_dict
     if isinstance(as_dict, ImportError):
         as_dict = property(
@@ -45,6 +51,17 @@ class DataKeeper(FrozenClass):
         )
     else:
         as_dict = as_dict
+    # cf Methods.Simulation.DataKeeper._set_result
+    if isinstance(_set_result, ImportError):
+        _set_result = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use DataKeeper method _set_result: " + str(_set_result)
+                )
+            )
+        )
+    else:
+        _set_result = _set_result
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -66,7 +83,7 @@ class DataKeeper(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -162,9 +179,11 @@ class DataKeeper(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -196,6 +215,8 @@ class DataKeeper(FrozenClass):
             )
         elif other._result_ref != self._result_ref:
             diff_list.append(name + ".result_ref")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -354,13 +375,6 @@ class DataKeeper(FrozenClass):
     def _get_result(self):
         """getter of result"""
         return self._result
-
-    def _set_result(self, value):
-        """setter of result"""
-        if type(value) is int and value == -1:
-            value = list()
-        check_var("result", value, "list")
-        self._result = value
 
     result = property(
         fget=_get_result,

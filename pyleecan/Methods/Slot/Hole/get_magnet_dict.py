@@ -1,5 +1,5 @@
 def get_magnet_dict(self):
-    """Return a dictionnary with all the magnets of the Hole
+    """Return a dictionary with all the magnets of the Hole
 
     Parameters
     ----------
@@ -9,7 +9,7 @@ def get_magnet_dict(self):
     Returns
     -------
     magnet_dict : {Magnet}
-        Dictionnary of magnet (key = magnet_X, value= Magnet or None)
+        Dictionary of magnet (key = magnet_X, value= Magnet or None)
     """
 
     if hasattr(self, "magnet_dict"):

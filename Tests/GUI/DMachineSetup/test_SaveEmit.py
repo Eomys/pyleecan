@@ -7,8 +7,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 from PySide2.QtCore import Slot, Qt, QTimer
 
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from pyleecan.Functions.load import load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 
 from Tests import TEST_DATA_DIR
@@ -18,17 +17,15 @@ import pytest
 matlib_path = join(TEST_DATA_DIR, "Material")
 
 
-@pytest.mark.GUI
 class TestSaveEmit(object):
     """Test that the save_needed behave like it should"""
 
     @pytest.fixture
     def setup_method(self, qtbot):
         """Run at the begining of every test to setup the gui"""
-        matlib = MatLib(matlib_path)
-        dmatlib = DMatLib(matlib=matlib)
+        material_dict = load_matlib(matlib_path=matlib_path)
         self.widget = DMachineSetup(
-            dmatlib=dmatlib, machine_path=join(TEST_DATA_DIR, "Machine")
+            material_dict=material_dict, machine_path=join(TEST_DATA_DIR, "Machine")
         )
 
         qtbot.addWidget(self.widget)

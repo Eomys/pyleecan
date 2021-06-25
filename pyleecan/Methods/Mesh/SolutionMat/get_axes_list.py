@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def get_axes_list(self):
+def get_axes_list(self, *args):
     """Get the value of variables stored in Solution.
 
     Parameters
@@ -17,4 +17,14 @@ def get_axes_list(self):
 
     """
 
-    return self.axis_name, self.axis_size
+    if self.axis_name is not None:
+        axis_name = self.axis_name.copy()
+    else:
+        axis_name = None
+
+    if self.axis_size is not None:
+        axis_size = self.axis_size.copy()
+    else:
+        axis_size = None
+
+    return axis_name, axis_size

@@ -11,7 +11,7 @@ def generate_properties(gen_dict, class_dict):
         Dict with key = class name and value = class dict (name, package, properties, methods...)
 
     class_dict : dict
-        Dictionnary of the class to generate (keys are name, package, properties, methods...)
+        dictionary of the class to generate (keys are name, package, properties, methods...)
 
     Returns
     -------
@@ -84,9 +84,9 @@ def generate_prop_setter(gen_dict, class_dict, prop):
     gen_dict : dict
         Dict with key = class name and value = class dict (name, package, properties, methods...)
     class_dict : dict
-        Dictionnary of the class to generate (keys are name, package, properties, methods...)
+        dictionary of the class to generate (keys are name, package, properties, methods...)
     prop_dict: dict
-        Dictionnary of the property to generate the setter
+        dictionary of the property to generate the setter
 
     Returns
     -------
@@ -244,7 +244,9 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += (
             TAB2 + "elif type(value) is int and value == -1:  # Default constructor\n"
         )
-        if "SciDataTool" in prop["type"]:
+        if prop["value"] is not None and "()" in prop["value"]:
+            set_str += TAB3 + "value = " + prop["value"] + "\n"
+        elif "SciDataTool" in prop["type"]:
             set_str += TAB3 + "value = " + prop["type"].split(".")[-1] + "()\n"
         else:
             set_str += TAB3 + "value = " + prop["type"] + "()\n"

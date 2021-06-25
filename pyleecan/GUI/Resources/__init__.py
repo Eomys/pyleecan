@@ -11,8 +11,10 @@ pixmap_dict = {
     "SynRM": ":/images/images/MachineSetup/MachineType/machine_SynRM.png",
     "SPMSM": ":/images/images/MachineSetup/MachineType/machine_SPMSM.png",
     "IPMSM": ":/images/images/MachineSetup/MachineType/machine_IPMSM.png",
+    "LSPM": ":/images/images/MachineSetup/MachineType/machine_LSPM.png",
     "WRSM": ":/images/images/MachineSetup/MachineType/WRSM.png",
     "cross": ":/images/images/icon/cross.png",
     "check": ":/images/images/icon/check.png",
     "search": ":/images/images/icon/search.png",
+    "soft_icon": ":/images/images/icon/pyleecan_64.png",
 }

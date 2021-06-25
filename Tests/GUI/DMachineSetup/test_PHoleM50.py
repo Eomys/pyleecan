@@ -8,7 +8,7 @@ from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.PHoleM50 import PHoleM50
 from Tests.GUI import gui_option  # Set unit to m
 from pyleecan.Classes.Material import Material
@@ -17,7 +17,6 @@ from pyleecan.Classes.Material import Material
 import pytest
 
 
-@pytest.mark.GUI
 class TestPHoleM50(object):
     """Test that the widget PHoleM50 behave like it should"""
 
@@ -49,16 +48,16 @@ class TestPHoleM50(object):
         test_obj.hole[0].magnet_0.mat_type.name = "Magnet3"
         test_obj.hole[0].magnet_1.mat_type.name = "Magnet2"
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = [
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),
         ]
 
-        widget = PHoleM50(test_obj.hole[0], matlib)
+        widget = PHoleM50(test_obj.hole[0], material_dict)
 
-        yield {"widget": widget, "test_obj": test_obj, "matlib": matlib}
+        yield {"widget": widget, "test_obj": test_obj, "material_dict": material_dict}
 
         self.app.quit()
 
@@ -95,7 +94,7 @@ class TestPHoleM50(object):
             H4=0.28,
             W4=0.29,
         )
-        setup["widget"] = PHoleM50(setup["test_obj"].hole[0], setup["matlib"])
+        setup["widget"] = PHoleM50(setup["test_obj"].hole[0], setup["material_dict"])
         assert setup["widget"].lf_H0.value() == 0.20
         assert setup["widget"].lf_H1.value() == 0.21
         assert setup["widget"].lf_H2.value() == 0.22
@@ -227,7 +226,7 @@ class TestPHoleM50(object):
         assert setup["test_obj"].hole[0].magnet_1.mat_type.name == "Magnet1"
 
     def test_comp_output(self, setup):
-        """Check that you can compute the output only if the hole is correctly set """
+        """Check that you can compute the output only if the hole is correctly set"""
         setup["test_obj"] = LamHole(Rint=0.1, Rext=0.2)
         setup["test_obj"].hole = list()
         setup["test_obj"].hole.append(

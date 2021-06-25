@@ -27,6 +27,26 @@ try:
 except ImportError as error:
     as_dict = error
 
+try:
+    from ..Methods.Simulation.ParamExplorerSet.get_min import get_min
+except ImportError as error:
+    get_min = error
+
+try:
+    from ..Methods.Simulation.ParamExplorerSet.get_max import get_max
+except ImportError as error:
+    get_max = error
+
+try:
+    from ..Methods.Simulation.ParamExplorerSet.get_N import get_N
+except ImportError as error:
+    get_N = error
+
+try:
+    from ..Methods.Simulation.ParamExplorerSet._set_value import _set_value
+except ImportError as error:
+    _set_value = error
+
 
 from ntpath import basename
 from os.path import isfile
@@ -37,7 +57,7 @@ from ._check import InitUnKnowClassError
 
 
 class ParamExplorerSet(ParamExplorer):
-    """Abstract class for the multi-simulation"""
+    """Define a parameter set (for parameter sweep) from a list"""
 
     VERSION = 1
 
@@ -64,6 +84,48 @@ class ParamExplorerSet(ParamExplorer):
         )
     else:
         as_dict = as_dict
+    # cf Methods.Simulation.ParamExplorerSet.get_min
+    if isinstance(get_min, ImportError):
+        get_min = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ParamExplorerSet method get_min: " + str(get_min)
+                )
+            )
+        )
+    else:
+        get_min = get_min
+    # cf Methods.Simulation.ParamExplorerSet.get_max
+    if isinstance(get_max, ImportError):
+        get_max = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ParamExplorerSet method get_max: " + str(get_max)
+                )
+            )
+        )
+    else:
+        get_max = get_max
+    # cf Methods.Simulation.ParamExplorerSet.get_N
+    if isinstance(get_N, ImportError):
+        get_N = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ParamExplorerSet method get_N: " + str(get_N))
+            )
+        )
+    else:
+        get_N = get_N
+    # cf Methods.Simulation.ParamExplorerSet._set_value
+    if isinstance(_set_value, ImportError):
+        _set_value = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ParamExplorerSet method _set_value: " + str(_set_value)
+                )
+            )
+        )
+    else:
+        _set_value = _set_value
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -77,13 +139,14 @@ class ParamExplorerSet(ParamExplorer):
         symbol="",
         unit="",
         setter=None,
+        getter=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -105,11 +168,13 @@ class ParamExplorerSet(ParamExplorer):
                 unit = init_dict["unit"]
             if "setter" in list(init_dict.keys()):
                 setter = init_dict["setter"]
+            if "getter" in list(init_dict.keys()):
+                getter = init_dict["getter"]
         # Set the properties (value check and convertion are done in setter)
         self.value = value
         # Call ParamExplorer init
         super(ParamExplorerSet, self).__init__(
-            name=name, symbol=symbol, unit=unit, setter=setter
+            name=name, symbol=symbol, unit=unit, setter=setter, getter=getter
         )
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties
@@ -141,9 +206,11 @@ class ParamExplorerSet(ParamExplorer):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -152,6 +219,8 @@ class ParamExplorerSet(ParamExplorer):
         diff_list.extend(super(ParamExplorerSet, self).compare(other, name=name))
         if other._value != self._value:
             diff_list.append(name + ".value")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -176,13 +245,6 @@ class ParamExplorerSet(ParamExplorer):
     def _get_value(self):
         """getter of value"""
         return self._value
-
-    def _set_value(self, value):
-        """setter of value"""
-        if type(value) is int and value == -1:
-            value = list()
-        check_var("value", value, "list")
-        self._value = value
 
     value = property(
         fget=_get_value,

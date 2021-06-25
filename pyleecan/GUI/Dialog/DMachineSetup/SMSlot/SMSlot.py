@@ -15,6 +15,9 @@ from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot12.PMSlot12 import PMSlot12
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot13.PMSlot13 import PMSlot13
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot14.PMSlot14 import PMSlot14
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot15.PMSlot15 import PMSlot15
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # List to convert index of combobox to slot type
 WIDGET_LIST = [
@@ -24,6 +27,8 @@ WIDGET_LIST = [
     PMSlot13,
     PMSlot14,
     PMSlot15,
+    PMSlot16,
+    PMSlot17,
 ]
 INIT_INDEX = [wid.slot_type for wid in WIDGET_LIST]
 SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]
@@ -37,7 +42,7 @@ class SMSlot(Ui_SMSlot, QWidget):
     # Information for DMachineSetup nav
     step_name = "Magnet"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -46,8 +51,8 @@ class SMSlot(Ui_SMSlot, QWidget):
             A SMSlot widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -58,7 +63,7 @@ class SMSlot(Ui_SMSlot, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         self.b_help.hide()
@@ -92,7 +97,7 @@ class SMSlot(Ui_SMSlot, QWidget):
         # Set material
         self.w_mat.setText(self.tr("mat_mag:"))
         self.w_mat.def_mat = "Magnet1"
-        self.w_mat.update(self.machine.rotor.magnet, "mat_type", self.matlib)
+        self.w_mat.update(self.machine.rotor.magnet, "mat_type", self.material_dict)
 
         # Set the correct index for the type checkbox and display the object
         index = INIT_INDEX.index(type(self.obj.slot))
@@ -225,6 +230,7 @@ class SMSlot(Ui_SMSlot, QWidget):
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Plot the slot (No winding for LamSquirrelCage)
             self.obj.plot()
+            set_plot_gui_icon()
 
     @staticmethod
     def check(lam):

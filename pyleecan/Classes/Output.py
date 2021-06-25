@@ -57,29 +57,9 @@ except ImportError as error:
     get_rot_dir = error
 
 try:
-    from ..Methods.Output.Output.plot.plot_2D_Data import plot_2D_Data
-except ImportError as error:
-    plot_2D_Data = error
-
-try:
     from ..Methods.Output.Output.getter.get_fund_harm import get_fund_harm
 except ImportError as error:
     get_fund_harm = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_quiver_2D import plot_A_quiver_2D
-except ImportError as error:
-    plot_A_quiver_2D = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_3D_Data import plot_3D_Data
-except ImportError as error:
-    plot_3D_Data = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_time_space import plot_A_time_space
-except ImportError as error:
-    plot_A_time_space = error
 
 try:
     from ..Methods.Output.Output.getter.get_data_from_str import get_data_from_str
@@ -186,17 +166,6 @@ class Output(FrozenClass):
         )
     else:
         get_rot_dir = get_rot_dir
-    # cf Methods.Output.Output.plot.plot_2D_Data
-    if isinstance(plot_2D_Data, ImportError):
-        plot_2D_Data = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_2D_Data: " + str(plot_2D_Data)
-                )
-            )
-        )
-    else:
-        plot_2D_Data = plot_2D_Data
     # cf Methods.Output.Output.getter.get_fund_harm
     if isinstance(get_fund_harm, ImportError):
         get_fund_harm = property(
@@ -208,40 +177,6 @@ class Output(FrozenClass):
         )
     else:
         get_fund_harm = get_fund_harm
-    # cf Methods.Output.Output.plot.plot_A_quiver_2D
-    if isinstance(plot_A_quiver_2D, ImportError):
-        plot_A_quiver_2D = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_A_quiver_2D: " + str(plot_A_quiver_2D)
-                )
-            )
-        )
-    else:
-        plot_A_quiver_2D = plot_A_quiver_2D
-    # cf Methods.Output.Output.plot.plot_3D_Data
-    if isinstance(plot_3D_Data, ImportError):
-        plot_3D_Data = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_3D_Data: " + str(plot_3D_Data)
-                )
-            )
-        )
-    else:
-        plot_3D_Data = plot_3D_Data
-    # cf Methods.Output.Output.plot.plot_A_time_space
-    if isinstance(plot_A_time_space, ImportError):
-        plot_A_time_space = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_A_time_space: "
-                    + str(plot_A_time_space)
-                )
-            )
-        )
-    else:
-        plot_A_time_space = plot_A_time_space
     # cf Methods.Output.Output.getter.get_data_from_str
     if isinstance(get_data_from_str, ImportError):
         get_data_from_str = property(
@@ -289,7 +224,7 @@ class Output(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -416,9 +351,11 @@ class Output(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -474,6 +411,8 @@ class Output(FrozenClass):
             diff_list.append(name + ".loss None mismatch")
         elif self.loss is not None:
             diff_list.extend(self.loss.compare(other.loss, name=name + ".loss"))
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

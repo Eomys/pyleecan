@@ -1,14 +1,8 @@
-# -*- coding: utf-8 -*-
-
-from itertools import repeat
-
-import matplotlib.pyplot as plt
-from numpy import argmin, abs, squeeze, split, ndarray
-
-from ...Functions.init_fig import init_fig
+from SciDataTool.Functions.Plot.plot_2D import plot_2D as plot_2D_fct
 from ...definitions import config_dict
 
 # Import values from config dict
+COLOR_LIST = config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"]
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
 FONT_SIZE_LABEL = config_dict["PLOT"]["FONT_SIZE_LABEL"]
@@ -19,7 +13,7 @@ def plot_2D(
     Xdatas,
     Ydatas,
     legend_list=[""],
-    color_list=[(0, 0, 1, 0.5)],
+    color_list=None,
     linestyle_list=["-"],
     linewidth_list=[2],
     title="",
@@ -99,143 +93,43 @@ def plot_2D(
         Title of the plot window
     """
 
-    # Set is_show_fig if is None
-    if is_show_fig is None:
-        is_show_fig = True if fig is None else False
+    print(
+        "WARNING: plot_2D function is deprecated and will be removed from the next release. Please use SciDataTool.Functions.Plot.plot_2D instead."
+    )
 
-    # Set figure if needed
-    if fig is None and ax is None:
-        (fig, ax, _, _) = init_fig(fig=None, shape="rectangle")
+    if color_list is None:
+        color_list = COLOR_LIST
 
-    # Number of curves on a axe
-    ndatas = len(Ydatas)
-
-    # Retrocompatibility
-    if isinstance(Xdatas, ndarray):
-        Xdatas = [Xdatas]
-
-    if len(Xdatas) == 1:
-        i_Xdatas = [0 for i in range(ndatas)]
-    else:
-        i_Xdatas = range(ndatas)
-
-    # Expend default argument
-    if 1 == len(color_list) < ndatas:
-        # Set the same color for all curves
-        color_list = list(repeat(color_list[0], ndatas))
-    if 1 == len(linewidth_list) < ndatas:
-        # Set the same color for all curves
-        linewidth_list = list(repeat(linewidth_list[0], ndatas))
-    if 1 == len(linestyle_list) < ndatas:
-        # Set the same linestyles for all curves
-        linestyle_list = list(repeat(linestyle_list[0], ndatas))
-    if 1 == len(legend_list) < ndatas:
-        # Set no legend for all curves
-        legend_list = list(repeat("", ndatas))
-        no_legend = True
-    else:
-        no_legend = False
-
-    # Plot
-    if type_plot == "curve":
-        for i in range(ndatas):
-            ax.plot(
-                Xdatas[i_Xdatas[i]],
-                Ydatas[i],
-                color=color_list[i],
-                label=legend_list[i],
-                linewidth=linewidth_list[i],
-                ls=linestyle_list[i],
-            )
-        if xticks is not None:
-            ax.xaxis.set_ticks(xticks)
-    elif type_plot == "bargraph":
-        positions = range(-ndatas + 1, ndatas, 2)
-        for i in range(ndatas):
-            # width = (Xdatas[i_Xdatas[i]][1] - Xdatas[i_Xdatas[i]][0]) / ndatas
-            width = Xdatas[i_Xdatas[i]][-1] / barwidth
-            barlist = ax.bar(
-                Xdatas[i_Xdatas[i]] + positions[i] * width / (2 * ndatas),
-                Ydatas[i],
-                color=color_list[i],
-                width=width,
-                label=legend_list[i],
-            )
-            if fund_harm is not None:  # Find fundamental
-                imax = argmin(abs(Xdatas[i] - fund_harm))
-                barlist[imax].set_edgecolor("k")
-                barlist[imax].set_facecolor("k")
-
-        if xticks is not None:
-            ax.xaxis.set_ticks(xticks)
-    elif type_plot == "barchart":
-        for i in range(ndatas):
-            if i == 0:
-                ax.bar(
-                    range(len(Xdatas[i_Xdatas[i]])),
-                    Ydatas[i],
-                    color=color_list[i],
-                    width=0.5,
-                    label=legend_list[i],
-                )
-            else:
-                ax.bar(
-                    range(len(Xdatas[i_Xdatas[i]])),
-                    Ydatas[i],
-                    edgecolor=color_list[i],
-                    width=0.5,
-                    fc="None",
-                    lw=1,
-                    label=legend_list[i],
-                )
-        plt.xticks(
-            range(len(Xdatas[i_Xdatas[i]])),
-            [str(f) for f in Xdatas[i_Xdatas[i]]],
-            rotation=90,
-        )
-    elif type_plot == "quiver":
-        for i in range(ndatas):
-            x = [e[0] for e in Xdatas[i_Xdatas[i]]]
-            y = [e[1] for e in Xdatas[i_Xdatas[i]]]
-            vect_list = split(Ydatas[i], 2)
-            ax.quiver(x, y, squeeze(vect_list[0]), squeeze(vect_list[1]))
-            ax.axis("equal")
-
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
-    ax.set_xlim([x_min, x_max])
-    ax.set_ylim([y_min, y_max])
-
-    if is_logscale_x:
-        ax.set_xscale("log")
-
-    if is_logscale_y:
-        ax.set_yscale("log")
-
-    if is_disp_title:
-        ax.set_title(title)
-
-    if is_grid:
-        ax.grid()
-
-    if ndatas > 1 and not no_legend:
-        ax.legend(prop={"family": FONT_NAME, "size": FONT_SIZE_LEGEND})
-
-    plt.tight_layout()
-    for item in (
-        [ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()
-    ):
-        item.set_fontname(FONT_NAME)
-        item.set_fontsize(FONT_SIZE_LABEL)
-    ax.title.set_fontname(FONT_NAME)
-    ax.title.set_fontsize(FONT_SIZE_TITLE)
-
-    if save_path is not None:
-        fig.savefig(save_path)
-        plt.close()
-
-    if is_show_fig:
-        fig.show()
-
-    if win_title:
-        fig.canvas.set_window_title(win_title)
+    # Call SciDataTool plot function
+    plot_2D_fct(
+        Xdatas,
+        Ydatas,
+        legend_list=legend_list,
+        color_list=color_list,
+        linestyle_list=linestyle_list,
+        linewidth_list=linewidth_list,
+        title=title,
+        xlabel=xlabel,
+        ylabel=ylabel,
+        fig=fig,
+        ax=ax,
+        is_logscale_x=is_logscale_x,
+        is_logscale_y=is_logscale_y,
+        is_disp_title=is_disp_title,
+        is_grid=is_grid,
+        type_plot=type_plot,
+        fund_harm=fund_harm,
+        x_min=x_min,
+        x_max=x_max,
+        y_min=y_min,
+        y_max=y_max,
+        xticks=xticks,
+        save_path=save_path,
+        barwidth=barwidth,
+        is_show_fig=is_show_fig,
+        win_title=win_title,
+        font_name=FONT_NAME,
+        font_size_title=FONT_SIZE_TITLE,
+        font_size_label=FONT_SIZE_LABEL,
+        font_size_legend=FONT_SIZE_LEGEND,
+    )

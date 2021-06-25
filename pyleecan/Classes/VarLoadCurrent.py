@@ -30,13 +30,6 @@ except ImportError as error:
     generate_simulation_list = error
 
 try:
-    from ..Methods.Simulation.VarLoadCurrent.gen_datakeeper_list import (
-        gen_datakeeper_list,
-    )
-except ImportError as error:
-    gen_datakeeper_list = error
-
-try:
     from ..Methods.Simulation.VarLoadCurrent.check_param import check_param
 except ImportError as error:
     check_param = error
@@ -86,18 +79,6 @@ class VarLoadCurrent(VarLoad):
         )
     else:
         generate_simulation_list = generate_simulation_list
-    # cf Methods.Simulation.VarLoadCurrent.gen_datakeeper_list
-    if isinstance(gen_datakeeper_list, ImportError):
-        gen_datakeeper_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoadCurrent method gen_datakeeper_list: "
-                    + str(gen_datakeeper_list)
-                )
-            )
-        )
-    else:
-        gen_datakeeper_list = gen_datakeeper_list
     # cf Methods.Simulation.VarLoadCurrent.check_param
     if isinstance(check_param, ImportError):
         check_param = property(
@@ -150,7 +131,7 @@ class VarLoadCurrent(VarLoad):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -251,9 +232,11 @@ class VarLoadCurrent(VarLoad):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -268,6 +251,8 @@ class VarLoadCurrent(VarLoad):
             diff_list.append(name + ".is_torque")
         if other._is_power != self._is_power:
             diff_list.append(name + ".is_power")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

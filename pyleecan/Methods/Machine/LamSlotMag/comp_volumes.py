@@ -15,7 +15,7 @@ def comp_volumes(self):
     Returns
     -------
     V_dict: dict
-        Lamination surface dictionnary (Vlam, Vvent, Vslot, Vmag) [m**3]
+        Lamination surface dictionary (Vlam, Vvent, Vslot, Vmag) [m**3]
 
     """
 

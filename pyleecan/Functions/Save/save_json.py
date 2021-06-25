@@ -126,7 +126,7 @@ def save_split_obj(classes_tuple, obj, folder_path, logger):
         tuple containing the classe names to save separately
 
     obj: dict
-        object dictionnary to save
+        object dictionary to save
 
     folder_path: str
         directory to save all the files
@@ -185,7 +185,7 @@ def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
         tuple containing the classe names to save separately
 
     obj_dict: dict
-        object dictionnary to save
+        object dictionary to save
 
     folder_path: str
         directory to save all the files
@@ -196,7 +196,7 @@ def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
     Returns
     -------
     obj_dict : dict
-        object dictionnary to save
+        object dictionary to save
     """
 
     for key, val in obj_dict.items():

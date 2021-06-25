@@ -12,7 +12,7 @@ from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
@@ -21,7 +21,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
 import pytest
 
 
-@pytest.mark.GUI
 class TestSBar(object):
     """Test that the widget SBar behave like it should"""
 
@@ -42,19 +41,19 @@ class TestSBar(object):
         test_obj.rotor.winding.conductor = CondType21(Hbar=0.014, Wbar=0.015)
         test_obj.rotor.winding.conductor.cond_mat.name = "test1"
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = [
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
             Material(name="test1"),
             Material(name="test2"),
             Material(name="test3"),
         ]
-        matlib.dict_mat["RefMatLib"][0].elec.rho = 0.31
-        matlib.dict_mat["RefMatLib"][1].elec.rho = 0.32
-        matlib.dict_mat["RefMatLib"][2].elec.rho = 0.33
+        material_dict[LIB_KEY][0].elec.rho = 0.31
+        material_dict[LIB_KEY][1].elec.rho = 0.32
+        material_dict[LIB_KEY][2].elec.rho = 0.33
 
-        widget = SBar(machine=test_obj, matlib=matlib, is_stator=False)
+        widget = SBar(machine=test_obj, material_dict=material_dict, is_stator=False)
 
-        yield {"widget": widget, "test_obj": test_obj, "matlib": matlib}
+        yield {"widget": widget, "test_obj": test_obj, "material_dict": material_dict}
 
         self.app.quit()
 
@@ -85,7 +84,9 @@ class TestSBar(object):
         setup["test_obj"].rotor.ring_mat.name = "test2"
         setup["test_obj"].rotor.winding.conductor = None
         setup["widget"] = SBar(
-            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
+            machine=setup["test_obj"],
+            material_dict=setup["material_dict"],
+            is_stator=False,
         )
 
         assert setup["widget"].c_bar_type.currentIndex() == 0
@@ -98,7 +99,9 @@ class TestSBar(object):
         setup["test_obj"].rotor.winding.conductor = CondType22()
         setup["test_obj"].rotor.winding.conductor.cond_mat.name = "test3"
         setup["widget"] = SBar(
-            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=False
+            machine=setup["test_obj"],
+            material_dict=setup["material_dict"],
+            is_stator=False,
         )
 
         assert setup["widget"].lf_Hscr.value() == 0.21
@@ -201,7 +204,9 @@ class TestSBar(object):
         setup["test_obj"].rotor.winding.Lewout = 0.23
         setup["test_obj"].rotor.ring_mat.name = "test2"
         setup["test_obj"].rotor.winding.conductor = None
-        setup["widget"] = PCondType21(machine=setup["test_obj"], matlib=setup["matlib"])
+        setup["widget"] = PCondType21(
+            machine=setup["test_obj"], material_dict=setup["material_dict"]
+        )
         assert type(setup["widget"].machine.rotor.winding.conductor) is CondType21
 
     def test_init_PCondType22(self, setup):
@@ -211,7 +216,9 @@ class TestSBar(object):
         setup["test_obj"].rotor.winding.Lewout = 0.23
         setup["test_obj"].rotor.ring_mat.name = "test2"
         setup["test_obj"].rotor.winding.conductor = None
-        setup["widget"] = PCondType22(machine=setup["test_obj"], matlib=setup["matlib"])
+        setup["widget"] = PCondType22(
+            machine=setup["test_obj"], material_dict=setup["material_dict"]
+        )
         assert type(setup["widget"].machine.rotor.winding.conductor) is CondType22
 
     def test_check(self, setup):

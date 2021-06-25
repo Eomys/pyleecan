@@ -42,13 +42,12 @@ HoleM58_test.append(
 )
 
 
-@pytest.mark.METHODS
 class Test_HoleM58_meth(object):
     """Test machine plot hole 58"""
 
     @pytest.mark.parametrize("test_dict", HoleM58_test)
     def test_magnet_None(self, test_dict):
-        """ Magnet None"""
+        """Magnet None"""
 
         test_obj.hole[0].magnet_0 = None
         result = test_obj.hole[0].build_geometry()

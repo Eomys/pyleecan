@@ -19,7 +19,7 @@ class Ui_PMSlot11(object):
     def setupUi(self, PMSlot11):
         if not PMSlot11.objectName():
             PMSlot11.setObjectName(u"PMSlot11")
-        PMSlot11.resize(826, 470)
+        PMSlot11.resize(877, 470)
         PMSlot11.setMinimumSize(QSize(630, 470))
         PMSlot11.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PMSlot11)
@@ -60,71 +60,75 @@ class Ui_PMSlot11(object):
 
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
-        self.widget = QWidget(PMSlot11)
-        self.widget.setObjectName(u"widget")
-        self.widget.setMinimumSize(QSize(250, 0))
-        self.widget.setMaximumSize(QSize(250, 16777215))
-        self.verticalLayout = QVBoxLayout(self.widget)
+        self.scrollArea = QScrollArea(PMSlot11)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setMinimumSize(QSize(270, 0))
+        self.scrollArea.setMaximumSize(QSize(270, 16777215))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 446))
+        self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.in_Wmag = QLabel(self.widget)
+        self.in_Wmag = QLabel(self.scrollAreaWidgetContents)
         self.in_Wmag.setObjectName(u"in_Wmag")
 
         self.gridLayout.addWidget(self.in_Wmag, 1, 0, 1, 1)
 
-        self.unit_Wmag = QLabel(self.widget)
+        self.unit_Wmag = QLabel(self.scrollAreaWidgetContents)
         self.unit_Wmag.setObjectName(u"unit_Wmag")
 
         self.gridLayout.addWidget(self.unit_Wmag, 1, 2, 1, 1)
 
-        self.in_W0 = QLabel(self.widget)
+        self.in_W0 = QLabel(self.scrollAreaWidgetContents)
         self.in_W0.setObjectName(u"in_W0")
 
         self.gridLayout.addWidget(self.in_W0, 0, 0, 1, 1)
 
-        self.unit_W0 = QLabel(self.widget)
+        self.unit_W0 = QLabel(self.scrollAreaWidgetContents)
         self.unit_W0.setObjectName(u"unit_W0")
 
         self.gridLayout.addWidget(self.unit_W0, 0, 2, 1, 1)
 
-        self.unit_H0 = QLabel(self.widget)
+        self.unit_H0 = QLabel(self.scrollAreaWidgetContents)
         self.unit_H0.setObjectName(u"unit_H0")
 
         self.gridLayout.addWidget(self.unit_H0, 2, 2, 1, 1)
 
-        self.in_H0 = QLabel(self.widget)
+        self.in_H0 = QLabel(self.scrollAreaWidgetContents)
         self.in_H0.setObjectName(u"in_H0")
 
         self.gridLayout.addWidget(self.in_H0, 2, 0, 1, 1)
 
-        self.unit_Hmag = QLabel(self.widget)
+        self.unit_Hmag = QLabel(self.scrollAreaWidgetContents)
         self.unit_Hmag.setObjectName(u"unit_Hmag")
 
         self.gridLayout.addWidget(self.unit_Hmag, 3, 2, 1, 1)
 
-        self.lf_W0 = FloatEdit(self.widget)
+        self.lf_W0 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_W0.setObjectName(u"lf_W0")
         self.lf_W0.setMinimumSize(QSize(90, 0))
 
         self.gridLayout.addWidget(self.lf_W0, 0, 1, 1, 1)
 
-        self.in_Hmag = QLabel(self.widget)
+        self.in_Hmag = QLabel(self.scrollAreaWidgetContents)
         self.in_Hmag.setObjectName(u"in_Hmag")
 
         self.gridLayout.addWidget(self.in_Hmag, 3, 0, 1, 1)
 
-        self.lf_H0 = FloatEdit(self.widget)
+        self.lf_H0 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_H0.setObjectName(u"lf_H0")
 
         self.gridLayout.addWidget(self.lf_H0, 2, 1, 1, 1)
 
-        self.lf_Hmag = FloatEdit(self.widget)
+        self.lf_Hmag = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_Hmag.setObjectName(u"lf_Hmag")
 
         self.gridLayout.addWidget(self.lf_Hmag, 3, 1, 1, 1)
 
-        self.lf_Wmag = FloatEdit(self.widget)
+        self.lf_Wmag = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_Wmag.setObjectName(u"lf_Wmag")
 
         self.gridLayout.addWidget(self.lf_Wmag, 1, 1, 1, 1)
@@ -137,12 +141,14 @@ class Ui_PMSlot11(object):
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
-        self.w_out = WWSlotOut(self.widget)
+        self.w_out = WWSlotOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
 
         self.verticalLayout.addWidget(self.w_out)
 
-        self.horizontalLayout.addWidget(self.widget)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+        self.horizontalLayout.addWidget(self.scrollArea)
 
         QWidget.setTabOrder(self.lf_W0, self.lf_Wmag)
         QWidget.setTabOrder(self.lf_Wmag, self.lf_H0)

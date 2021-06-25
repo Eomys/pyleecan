@@ -7,6 +7,7 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -17,47 +18,47 @@ import matplotlib.pyplot as plt
 # For AlmostEqual
 DELTA = 1e-4
 
-mach_path = join(DATA_DIR, "Machine", "IPMSM_A.json")
+mach_path = join(DATA_DIR, "Machine", "Toyota_Prius.json")
 if isfile(mach_path):
-    IPMSM_A = load(mach_path)
+    Toyota_Prius = load(mach_path)
 
-    surf_list = IPMSM_A.rotor.hole[0].build_geometry()
+    surf_list = Toyota_Prius.rotor.hole[0].build_geometry()
     magnet_dict = {
-        "magnet_0": IPMSM_A.rotor.hole[0].magnet_0,
-        "magnet_1": IPMSM_A.rotor.hole[0].magnet_1,
+        "magnet_0": Toyota_Prius.rotor.hole[0].magnet_0,
+        "magnet_1": Toyota_Prius.rotor.hole[0].magnet_1,
     }
 
     HUD = HoleUD(Zh=4, surf_list=surf_list, magnet_dict=magnet_dict)
 
-    IPMSM_B = IPMSM_A.copy()
+    IPMSM_B = Toyota_Prius.copy()
     IPMSM_B.rotor.hole[0] = HUD
 
-    surf_list = IPMSM_A.rotor.hole[0].build_geometry()
+    surf_list = Toyota_Prius.rotor.hole[0].build_geometry()
     magnet_dict = {
-        "magnet_0": IPMSM_A.rotor.hole[0].magnet_0,
-        "magnet_1": IPMSM_A.rotor.hole[0].magnet_1,
+        "magnet_0": Toyota_Prius.rotor.hole[0].magnet_0,
+        "magnet_1": Toyota_Prius.rotor.hole[0].magnet_1,
     }
     magnet_dict["magnet_0"].type_magnetization = 0
     magnet_dict["magnet_1"].type_magnetization = 0
     HUD2 = HoleUD(Zh=4, surf_list=surf_list, magnet_dict=magnet_dict)
 
-    IPMSM_C = IPMSM_A.copy()
+    IPMSM_C = Toyota_Prius.copy()
     IPMSM_C.rotor.hole[0] = HUD2
     IPMSM_C.rotor.is_stator = True
 
 
-@pytest.mark.METHODS
+@pytest.mark.HoleUD
 class Test_HoleUD_meth(object):
     def test_comp_magnet_surface(self):
         """Check that the computation of the magnet surface"""
-        exp = IPMSM_A.rotor.hole[0].comp_surface_magnets()
+        exp = Toyota_Prius.rotor.hole[0].comp_surface_magnets()
         result = IPMSM_B.rotor.hole[0].comp_surface_magnets()
 
         assert exp == pytest.approx(result, rel=0.01)
 
     def test_comp_surface(self):
         """Check that the computation of the slot surface is correct"""
-        exp = IPMSM_A.rotor.hole[0].comp_surface()
+        exp = Toyota_Prius.rotor.hole[0].comp_surface()
         result = IPMSM_B.rotor.hole[0].comp_surface()
 
         assert exp == pytest.approx(result, rel=0.01)
@@ -111,12 +112,14 @@ class Test_HoleUD_meth(object):
             surf.label = ""
         assert IPMSM_C.rotor.hole[0].comp_surface_magnet_id(0) == 0
 
-    @pytest.mark.long
     @pytest.mark.MagFEMM
+    @pytest.mark.periodicity
+    @pytest.mark.IPMSM
+    @pytest.mark.SingleOP
     def test_convert_UD(self):
         """Check that the simulation is the same with the usual hole and the UD equivalent"""
-        IPMSM_A = load(mach_path)
-        simu = Simu1(name="Simu_Hole_normal", machine=IPMSM_A)
+        Toyota_Prius = load(mach_path)
+        simu = Simu1(name="Simu_Hole_normal", machine=Toyota_Prius)
 
         # Definition of the enforced output of the electrical module
         N0 = 2500
@@ -144,7 +147,7 @@ class Test_HoleUD_meth(object):
         simu.struct = None
 
         simu_UD = simu.copy()
-        hole = IPMSM_A.rotor.hole[0].convert_to_UD()
+        hole = Toyota_Prius.rotor.hole[0].convert_to_UD()
         assert len(hole.surf_list) == 5
         assert len(hole.magnet_dict) == 2
         assert "magnet_0" in hole.magnet_dict
@@ -169,13 +172,13 @@ class Test_HoleUD_meth(object):
         # Plot the result by comparing the two simulation
         plt.close("all")
 
-        out.plot_2D_Data(
-            "mag.B",
+        out.mag.B.plot_2D_Data(
             "angle",
             data_list=[out2.mag.B],
             legend_list=["Normal", "User-Defined"],
             save_path=join(save_path, "test_HoleUD.png"),
             is_show_fig=False,
+            **dict_2D,
         )
 
 

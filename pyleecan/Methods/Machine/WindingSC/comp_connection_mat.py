@@ -8,7 +8,7 @@ from ....Functions.Winding.shift_wind_mat import shift_wind_mat
 
 # TODO: update docstring -> there should not be elementary circuits since
 #       every bar could have its own unique current
-def comp_connection_mat(self, Zs=None):
+def comp_connection_mat(self, Zs=None, p=None):
     """Compute the Winding Matrix (for winding type 10)
     type 10 : Squirrel cage Winding (elementary circuit loop involving bar n°1
     and bar n°Zr for alphar0_rad=0) (Nlay_rad=Nlay_tan=1)
@@ -19,6 +19,8 @@ def comp_connection_mat(self, Zs=None):
         A: Winding object
     Zs : int
         Number of Slot (Integer >0)
+    p : int
+        Number of pole pairs (Integer >0)
 
     Returns
     -------
@@ -43,6 +45,14 @@ def comp_connection_mat(self, Zs=None):
             )
 
         Zs = self.parent.slot.Zs
+
+    if p is None:
+        if self.parent is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object."
+            )
+
+        p = self.parent.get_pole_pair_number()
 
     assert Zs > 0, "Zs must be >0"
     assert Zs % 1 == 0, "Zs must be an integer"

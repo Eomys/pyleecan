@@ -1,0 +1,46 @@
+[
+    {
+        "cls": "Winding",
+        "name": "qs",
+        "widget": [
+            "in_qs",
+            "si_qs"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Winding",
+        "name": "is_reverse_wind",
+        "widget": [
+            "is_reverse"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Winding",
+        "name": "Nslot_shift_wind",
+        "widget": [
+            "in_Nslot",
+            "si_Nslot"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Winding",
+        "name": "Ntcoil",
+        "widget": [
+            "in_Ntcoil",
+            "si_Ntcoil"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Winding",
+        "name": "Npcp",
+        "widget": [
+            "in_Npcp",
+            "si_Npcp"
+        ],
+        "xls": "Machine"
+    }
+]

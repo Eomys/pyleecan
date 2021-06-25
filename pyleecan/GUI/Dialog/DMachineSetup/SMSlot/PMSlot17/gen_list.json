@@ -1,0 +1,11 @@
+[
+    {
+        "cls": "Magnet",
+        "name": "Lmag",
+        "widget": [
+            "in_Lmag",
+            "lf_Lmag"
+        ],
+        "xls": "Machine"
+    }
+]

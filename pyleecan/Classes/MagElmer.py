@@ -176,7 +176,7 @@ class MagElmer(Magnetics):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -331,9 +331,11 @@ class MagElmer(Magnetics):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -374,6 +376,8 @@ class MagElmer(Magnetics):
             diff_list.append(name + ".import_file")
         if other._nb_worker != self._nb_worker:
             diff_list.append(name + ".nb_worker")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -578,7 +582,7 @@ class MagElmer(Magnetics):
     transform_list = property(
         fget=_get_transform_list,
         fset=_set_transform_list,
-        doc=u"""List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
+        doc=u"""List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
 
         :Type: list
         """,

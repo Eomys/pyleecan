@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+from ....Functions.Structural.conversions import pol2cart
 
-def get_field(self, *args):
+
+def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
     """Get the value of variables stored in Solution.
 
     Parameters
@@ -11,6 +13,10 @@ def get_field(self, *args):
         an SolutionVector object
     *args: list of strings
         List of axes requested by the user, their units and values (optional)
+    nodes : array of float
+        Node of the mesh (optional)
+    is_rthetaz : bool
+        cylindrical coordinates
 
     Returns
     -------
@@ -18,33 +24,46 @@ def get_field(self, *args):
         an array of field values
 
     """
-    if len(args) == 1 and type(args[0]) == tuple:
-        args = args[0]
+    # if len(args) == 1 and type(args[0]) == tuple:
+    #     args = args[0]
 
-    axname, axsize = self.get_axes_list()
-
-    id = 0
-    for name in axname:
-        if name == "component":
-            if axsize[id] == 2:
-                dim = 2
-            else:
-                dim = 3
-        id += 1
-
-    if not args:
-        field = np.zeros(axsize)
-        field_dict = self.field.get_xyz_along(tuple(axname))
+    if is_squeeze:
+        axname, axsize = self.get_axes_list(*args)
     else:
-        field_dict = self.field.get_xyz_along(args)
-        comp_x = field_dict["comp_x"]
-        size = np.hstack((comp_x.shape, dim))
-        field = np.zeros(size)
+        axname, axsize = self.get_axes_list()
 
-    field[..., 0] = field_dict["comp_x"]
-    field[..., 1] = field_dict["comp_y"]
+    components = self.field.components
+    ind_0 = axname.index("component")
 
-    if dim == 3:
-        field[..., 2] = field_dict["comp_z"]
+    field_list = list()
+    if "comp_x" in components:
+        results = self.field.get_xyz_along(args, is_squeeze=is_squeeze)
+
+        if "comp_x" in results:
+            field_list.append(results["comp_x"])
+
+        if "comp_y" in results:
+            field_list.append(results["comp_y"])
+
+        if "comp_z" in results and self.dimension == 3:
+            field_list.append(results["comp_z"])
+
+    else:
+        results = self.field.get_rphiz_along(args, is_squeeze=is_squeeze)
+
+        if "radial" in results:
+            field_list.append(results["radial"])
+
+        if "axial" in results and self.dimension == 3:
+            field_list.append(results["axial"])
+
+        # if "circ" in results:
+        #     field_dict["1"] = results["circ"]
+
+        if "tangential" in results:
+            field_list.append(results["tangential"])
+
+    field = np.array(field_list)
+    field = np.moveaxis(field, 0, ind_0)
 
     return field

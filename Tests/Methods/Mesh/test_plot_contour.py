@@ -13,8 +13,6 @@ from Tests import save_plot_path as save_path
 
 
 @pytest.mark.MeshSol
-@pytest.mark.METHODS
-# @pytest.mark.DEV
 def test_plot_contour_1group():
     mesh = MeshMat(dimension=3)
     mesh.node = NodeMat()
@@ -99,5 +97,5 @@ def test_plot_contour_2group():
 
 
 if __name__ == "__main__":
-    # test_plot_contour_1group()
-    test_plot_contour_2group()
+    test_plot_contour_1group()
+    # test_plot_contour_2group()

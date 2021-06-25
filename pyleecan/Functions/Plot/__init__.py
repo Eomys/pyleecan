@@ -1,4 +1,21 @@
 from ..Load.import_class import import_class
+from ...definitions import config_dict
+
+dict_2D = {
+    "color_list": config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"],
+    "font_name": config_dict["PLOT"]["FONT_NAME"],
+    "font_size_title": config_dict["PLOT"]["FONT_SIZE_TITLE"],
+    "font_size_label": config_dict["PLOT"]["FONT_SIZE_LABEL"],
+    "font_size_legend": config_dict["PLOT"]["FONT_SIZE_LEGEND"],
+}
+
+dict_3D = {
+    "colormap": config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"],
+    "font_name": config_dict["PLOT"]["FONT_NAME"],
+    "font_size_title": config_dict["PLOT"]["FONT_SIZE_TITLE"],
+    "font_size_label": config_dict["PLOT"]["FONT_SIZE_LABEL"],
+    "font_size_legend": config_dict["PLOT"]["FONT_SIZE_LEGEND"],
+}
 
 unit_dict = {
     "time": "s",
