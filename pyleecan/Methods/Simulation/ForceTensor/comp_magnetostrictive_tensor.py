@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def comp_magnetrosctrictive_tensor(
+def comp_magnetostrictive_tensor(
     self,
     mu,
     M,
@@ -42,7 +42,7 @@ def comp_magnetrosctrictive_tensor(
     a22 = polynomial_coeffs[1][1]
     a24 = polynomial_coeffs[1][2]
 
-    mu_0 = 4*np.pi*1e-7
+    mu_0 = 4 * np.pi * 1e-7
 
     M_norm = np.linalg.norm(M, axis=(0, 1))  # M matrices are in the first two axes
     mu_times_Mnorm_squared = np.multiply(mu_0, M_norm) ** 2
@@ -54,7 +54,6 @@ def comp_magnetrosctrictive_tensor(
 
     # Iteration over time step
     for ti in range(Nt_tot):
-        
 
         M_times_M = np.dot(M[:, :, ti], np.transpose(M[:, :, ti]))
 

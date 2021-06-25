@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import csv
 
 
 def element_loop(
@@ -53,6 +55,7 @@ def element_loop(
 
         mesh_cell_key = mesh.cell[key]
         connect = mesh.cell[key].get_connectivity()  # Each row of connect is an element
+
         nb_elem = len(connect)
 
         nb_node = mesh.node.nb_node  # Total nodes number
@@ -81,21 +84,26 @@ def element_loop(
             Be = B[elt_indice, :, :]
             He = H[elt_indice, :, :]
             mue = mu[elt_indice, :]
+            mu_0 = 4 * np.pi * 1e-7
 
             Me = np.reshape(
-                Be / mue - He, (dim, 1, Nt_tot)
+                Be / mu_0 - He, (dim, 1, Nt_tot)
             )  # reshaped for matrix product purpose
+
+            # Total tensor initalization
+            total_tensor = np.zeros((dim,dim,Nt_tot))
+            
             # elt magnetostrictive tensor
-            tme = self.comp_magnetrosctrictive_tensor(
-                mue, Me, Nt_tot, polynomial_coeffs
-            )
+            if(self.tensor['magnetostriction']):
+                tme = self.comp_magnetostrictive_tensor(mue, Me, Nt_tot, polynomial_coeffs)
+                total_tensor += tme
+
+    
 
             # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
             orientation_sign = np.sign(
                 np.cross(vertice[1] - vertice[0], vertice[2] - vertice[0])
             )
-
-            node_indice_set = set(())
 
             # Loop on edges
             for n in range(nb_node_per_cell):
@@ -107,16 +115,15 @@ def element_loop(
                     mesh.node.indice == node_number[(n + 1) % nb_node_per_cell]
                 )[0][0]
 
-                node_indice_set.add(node_indice)
 
-                # Edge cooordonates
+                # Edge cooordinates
                 edge_vector = (
                     vertice[(n + 1) % nb_node_per_cell] - vertice[n % nb_node_per_cell]
                 )  # coordonées du vecteur nn+1
 
                 # Volume ratio (Green Ostrogradski)
                 L = np.linalg.norm(edge_vector)
-                Ve0 = L / 2
+                Ve0 = L
 
                 # Normalized normal vector n, that has to be directed outside the element (i.e. normal ^ edge same sign as the orientation)
                 normal_to_edge_unoriented = (
@@ -131,15 +138,12 @@ def element_loop(
 
                 # Green Ostrogradski <tensor, normal> scalar product
                 edge_force = np.tensordot(
-                    tme, normal_to_edge, [[1], [0]]
+                    total_tensor, normal_to_edge, [[1], [0]]
                 )  # [[1],[0]] means sum product over rows for normal (which is vertical) and over rows for tme
 
                 # Total edge force contribution, to be added to the 2 nodes that made the edge
-                fe = -Ve0 * edge_force / 2
-                f[node_indice, :, :] = f[node_indice, :, :] + fe
-                f[next_node_indice, :, :] = f[next_node_indice, :, :] + fe
-         
-
-        
+                fe = -Ve0 * edge_force
+                f[node_indice, :, :] = f[node_indice, :, :] + fe / 2
+                f[next_node_indice, :, :] = f[next_node_indice, :, :] + fe / 2
 
     return f, connect

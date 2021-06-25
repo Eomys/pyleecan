@@ -181,6 +181,8 @@ def test_comp_magnetostrictive_tensor_1cell():
 
 def test_comp_normal_to_edge():
 
+    vec_x = []
+    vec_y = []
     x_normal = []
     y_normal = []
     x_nodes = []
@@ -191,9 +193,9 @@ def test_comp_normal_to_edge():
     mesh.cell["triangle3"] = CellMat(nb_node_per_cell=3)
     mesh.node = NodeMat()
 
+    mesh.node.add_node(np.array([1, 1.22]))
     mesh.node.add_node(np.array([0.33, 0]))
     mesh.node.add_node(np.array([-1, 1]))
-    mesh.node.add_node(np.array([1, 1.22]))
 
     nodes_test = np.array([0, 1, 2])
     mesh.add_cell(nodes_test, "triangle3")
@@ -206,7 +208,6 @@ def test_comp_normal_to_edge():
 
     for key in mesh.cell:
 
-
         nb_node_per_cell = mesh.cell[
             key
         ].nb_node_per_cell  # Number of nodes per element
@@ -216,7 +217,6 @@ def test_comp_normal_to_edge():
         nb_elem = len(connect)
 
         nb_node = mesh.node.nb_node  # Total nodes number
-
 
         # Loop on element (elt)
         for elt_indice, elt_number in enumerate(indice):
@@ -237,7 +237,6 @@ def test_comp_normal_to_edge():
                     vertice[(n + 1) % nb_node_per_cell] - vertice[n % nb_node_per_cell]
                 )  # coordonées du vecteur nn+1
 
-
                 L = np.linalg.norm(edge_vector)
                 # Normalized normal vector n, that has to be directed outside the element (i.e. normal ^ edge same sign as the orientation)
                 normal_to_edge_unoriented = (
@@ -250,25 +249,37 @@ def test_comp_normal_to_edge():
                 )
                 normal_to_edge.reshape(dim, 1)
 
-                x_normal.append(normal_to_edge[0]+(vertice[n][0]+vertice[(n + 1) % nb_node_per_cell][0])/2)
+                # x_normal.append(
+                #     normal_to_edge[0]
+                #     + (vertice[n][0] + vertice[(n + 1) % nb_node_per_cell][0]) / 2
+                # )
+                vec_x.append(normal_to_edge[0])
+                vec_y.append(normal_to_edge[1])
+                x_normal.append(
+                    (vertice[n][0] + vertice[(n + 1) % nb_node_per_cell][0]) / 2
+                )
                 x_nodes.append(vertice[n][0])
-                y_normal.append(normal_to_edge[1]+(vertice[n][1]+vertice[(n + 1) % nb_node_per_cell][1])/2)
+                # y_normal.append(
+                #     normal_to_edge[1]
+                #     + (vertice[n][1] + vertice[(n + 1) % nb_node_per_cell][1]) / 2
+                # )
+                y_normal.append(
+                    (vertice[n][1] + vertice[(n + 1) % nb_node_per_cell][1]) / 2
+                )
                 y_nodes.append(vertice[n][1])
                 print(np.linalg.norm(normal_to_edge))
-                #plt.plot(edge_vector[0],edge_vector[1],'b')
-                #plt.plot(normal_to_edge[0],normal_to_edge[1],'r')
-    
+                # plt.plot(edge_vector[0],edge_vector[1],'b')
+                # plt.plot(normal_to_edge[0],normal_to_edge[1],'r')
 
     lim = 4
-    plt.plot(x_normal,y_normal,'or')
-    plt.plot(x_nodes,y_nodes,'ob')
-    plt.plot([0],[0],'o',color='black')
+    plt.quiver(x_normal, y_normal, vec_x, vec_y)
+    plt.plot(x_nodes, y_nodes, "ob")
+    plt.plot([0], [0], "o", color="black")
     plt.axis("square")
 
-    plt.xlim([-lim,lim])
-    plt.ylim([-lim,lim])
+    plt.xlim([-lim, lim])
+    plt.ylim([-lim, lim])
     plt.show()
-
 
 
 if __name__ == "__main__":

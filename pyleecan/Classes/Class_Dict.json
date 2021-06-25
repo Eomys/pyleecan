@@ -1676,7 +1676,7 @@
         "methods": [
             "comp_force",
             "comp_force_nodal",
-            "comp_magnetrosctrictive_tensor",
+            "comp_magnetostrictive_tensor",
             "element_loop"
         ],
         "mother": "Force",
@@ -1692,6 +1692,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "stator core"
+            },
+            {
+                "desc": "Force model(s) to be used",
+                "max": "",
+                "min": "",
+                "name": "tensor",
+                "type": "dict",
+                "unit": "-",
+                "value": null
             }
         ]
     },
