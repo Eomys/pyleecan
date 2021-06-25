@@ -91,14 +91,14 @@ def element_loop(
             )  # reshaped for matrix product purpose
 
             # Total tensor initalization
-            total_tensor = np.zeros((dim,dim,Nt_tot))
-            
-            # elt magnetostrictive tensor
-            if(self.tensor['magnetostriction']):
-                tme = self.comp_magnetostrictive_tensor(mue, Me, Nt_tot, polynomial_coeffs)
-                total_tensor += tme
+            total_tensor = np.zeros((dim, dim, Nt_tot))
 
-    
+            # elt magnetostrictive tensor
+            if self.tensor["magnetostriction"]:
+                tme = self.comp_magnetostrictive_tensor(
+                    mue, Me, Nt_tot, polynomial_coeffs
+                )
+                total_tensor += tme
 
             # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
             orientation_sign = np.sign(
@@ -114,7 +114,6 @@ def element_loop(
                 next_node_indice = np.where(
                     mesh.node.indice == node_number[(n + 1) % nb_node_per_cell]
                 )[0][0]
-
 
                 # Edge cooordinates
                 edge_vector = (

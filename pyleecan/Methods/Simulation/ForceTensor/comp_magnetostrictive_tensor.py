@@ -3,19 +3,16 @@ import numpy as np
 
 def comp_magnetostrictive_tensor(
     self,
-    mu,
     M,
     Nt_tot,
     polynomial_coeffs=[[0.719, -0.078, -0.042], [-0.391, 0.114, 0.004]],
 ):
-    """compute magnetostrictive tensor.
+    """Compute magnetostrictive tensor.
 
-    from publications: IEEETranMagn2004
+    From publications: L. Vandevelde, J. Gyselinck, M. A. C. De Wulf and J. A. A. Melkebeek, "Finite-element computation of the deformation of ferromagnetic material taking into account magnetic forces and magnetostriction," in IEEE Transactions on Magnetics, vol. 40, no. 2, pp. 565-568, March 2004, doi: 10.1109/TMAG.2004.824540.
 
     Parameters
     ----------
-    mu : array
-        Permeability in the elements, field, material, ...
 
     M : array
         Magnetization vector in the elements, field, material, ...

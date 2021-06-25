@@ -30,7 +30,7 @@ def plot_surf_deflection(
     p : pyvista.Plotter
         a pyvista plotting object
     *sargs: list of strings
-        List of arguments for the scalar bar 
+        List of arguments for the scalar bar
     surf_pv : UnstructuredGrid
         a pyvista surface mesh object
     vect_field : ndaray

@@ -1,5 +1,5 @@
 def configure_plot(p, win_title, save_path):
-    """ Configure a pyvista plot. If the plotter doesn't exist, create one depending on avaialble package. 
+    """Configure a pyvista plot. If the plotter doesn't exist, create one depending on avaialble package.
 
     Parameters
     ----------
@@ -10,7 +10,7 @@ def configure_plot(p, win_title, save_path):
     save_path : str
         path where to save the plot
     """
-    
+
     if p is None:
         # Configure plot
         if save_path is None:

@@ -6470,9 +6470,7 @@
             "plot_mesh",
             "plot_contour",
             "plot_deflection",
-            "plot_deflection_animated",
             "plot_glyph",
-            "plot_glyph_animated",
             "perm_coord",
             "get_deflection",
             "get_glyph"

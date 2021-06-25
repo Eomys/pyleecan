@@ -18,7 +18,7 @@ def get_arrows_plt(mesh_pv, field, meshsol, factor, is_point_arrow, phase=1):
         True to plot arrows on the nodes
     phase : complex
         a phase shift to apply on the plot
-    
+
     Returns
     -------
     arrows_plt : PolyData

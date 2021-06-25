@@ -123,36 +123,58 @@ def test_Benchmark_Tensor():
         label="F",
         is_point_arrow=True,
         # is_show_fig=True,
-        save_path=join(save_path,"magneto_plot_glyph.png"),
+        save_path=join(save_path, "magneto_plot_glyph.png"),
     )
 
     out.force.meshsolution.plot_glyph(
         label="F2",
         is_point_arrow=True,
         # is_show_fig=True,
-        save_path=join(save_path,"magneto_plot_glyph2.png"),
+        save_path=join(save_path, "magneto_plot_glyph2.png"),
     )
 
     # Comparisons
 
-    computed_forces_x = out.force.meshsolution.solution[0].field.components["comp_x"].values
+    computed_forces_x = (
+        out.force.meshsolution.solution[0].field.components["comp_x"].values
+    )
     reference_forces_x = f2[..., 0]
-    computed_forces_y = out.force.meshsolution.solution[0].field.components["comp_y"].values
+    computed_forces_y = (
+        out.force.meshsolution.solution[0].field.components["comp_y"].values
+    )
     reference_forces_y = f2[..., 1]
 
-    relevant_mask_x = reference_forces_x > 1e-3*np.max(reference_forces_x)
-    relevant_mask_y = reference_forces_y > 1e-3*np.max(reference_forces_y)
+    relevant_mask_x = reference_forces_x > 1e-3 * np.max(reference_forces_x)
+    relevant_mask_y = reference_forces_y > 1e-3 * np.max(reference_forces_y)
 
     relevant_computed_forces_x = computed_forces_x[relevant_mask_x]
     relevant_reference_forces_x = reference_forces_x[relevant_mask_x]
     relevant_computed_forces_y = computed_forces_y[relevant_mask_y]
     relevant_reference_forces_y = reference_forces_y[relevant_mask_y]
 
-    big_diff_mask_x = np.logical_and(np.abs(computed_forces_x-reference_forces_x)/np.abs(reference_forces_x) > 0.2, np.abs(computed_forces_x-reference_forces_x)/np.abs(reference_forces_x) < 1.5)
-    big_diff_mask_y = np.logical_and(np.abs(computed_forces_y-reference_forces_y)/np.abs(reference_forces_y) > 0.2, np.abs(computed_forces_y-reference_forces_y)/np.abs(reference_forces_y) < 1.5)
+    big_diff_mask_x = np.logical_and(
+        np.abs(computed_forces_x - reference_forces_x) / np.abs(reference_forces_x)
+        > 0.2,
+        np.abs(computed_forces_x - reference_forces_x) / np.abs(reference_forces_x)
+        < 1.5,
+    )
+    big_diff_mask_y = np.logical_and(
+        np.abs(computed_forces_y - reference_forces_y) / np.abs(reference_forces_y)
+        > 0.2,
+        np.abs(computed_forces_y - reference_forces_y) / np.abs(reference_forces_y)
+        < 1.5,
+    )
 
-    big_diff_x = np.where(big_diff_mask_x,computed_forces_x-reference_forces_x,np.zeros(computed_forces_x.shape))
-    big_diff_y_x = np.where(big_diff_mask_x,computed_forces_y-reference_forces_y,np.zeros(computed_forces_y.shape))
+    big_diff_x = np.where(
+        big_diff_mask_x,
+        computed_forces_x - reference_forces_x,
+        np.zeros(computed_forces_x.shape),
+    )
+    big_diff_y_x = np.where(
+        big_diff_mask_x,
+        computed_forces_y - reference_forces_y,
+        np.zeros(computed_forces_y.shape),
+    )
 
     components_diff_x = {}
     fx_diff_data = DataTime(
@@ -173,7 +195,9 @@ def test_Benchmark_Tensor():
     )
     components_diff_x["comp_y"] = fx_diff_data
 
-    vec_force_dx = VectorField(name="Nodal forces dx", symbol="Fdx", components=components_diff_x)
+    vec_force_dx = VectorField(
+        name="Nodal forces dx", symbol="Fdx", components=components_diff_x
+    )
     solforce_dx = SolutionVector(field=vec_force_dx, type_cell="node", label="Fdx")
     out.force.meshsolution.solution.append(solforce_dx)
 
@@ -181,7 +205,7 @@ def test_Benchmark_Tensor():
         label="Fdx",
         is_point_arrow=True,
         # is_show_fig=True,
-        # save_path=join(save_path,"magneto_plot_glyph2.png"),
+        save_path=join(save_path, "magneto_plot_glyph2.png"),
     )
 
     return out

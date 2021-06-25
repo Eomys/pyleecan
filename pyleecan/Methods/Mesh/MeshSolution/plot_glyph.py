@@ -105,7 +105,7 @@ def plot_glyph(
             )
 
         # Get glyph field
-        vect_field, field_name, mesh_pv = self.get_glyph(
+        vect_field, field_name, mesh_pv, is_2D = self.get_glyph(
             *args,
             label=label,
             index=index,
@@ -135,6 +135,9 @@ def plot_glyph(
             factor=factor,
             phase=phase,
         )
+
+        if is_2D:
+            p.view_xy()
 
         # Internal animation (cannot be combined with other plots)
         if is_animated:
