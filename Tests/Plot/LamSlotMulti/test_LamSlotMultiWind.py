@@ -29,10 +29,9 @@ def test_LamSlotMultiWind():
         Rext=0.05,
         is_internal=False,
         is_stator=True,
+        winding=SPMSM_001.stator.winding.copy(),
+        mat_type=SPMSM_001.stator.mat_type.copy(),
     )
-
-    # Copy winding from original stator
-    stator.winding = SPMSM_001.stator.winding.copy()
 
     # New slots definition
     Slot1 = SPMSM_001.stator.slot.copy()

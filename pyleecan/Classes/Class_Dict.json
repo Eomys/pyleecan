@@ -4267,7 +4267,8 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc"
+            "get_bore_desc",
+            "comp_periodicity"
         ],
         "mother": "Lamination",
         "name": "LamSlotMulti",
@@ -4291,6 +4292,15 @@
                 "type": "ndarray",
                 "unit": "[rad]",
                 "value": ""
+            },
+            {
+                "desc": "Dictionary to enforce the lamination symmetry",
+                "max": "",
+                "min": "",
+                "name": "sym_dict_enforced",
+                "type": "dict",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -4307,7 +4317,12 @@
         "methods": [
             "plot",
             "build_geometry",
-            "get_pole_pair_number"
+            "get_pole_pair_number",
+            "comp_rot_dir",
+            "plot_mmf_unit",
+            "comp_mmf_unit",
+            "comp_wind_function",
+            "comp_angle_d_axis"
         ],
         "mother": "LamSlotMulti",
         "name": "LamSlotMultiWind",
@@ -4354,7 +4369,6 @@
             "comp_surfaces",
             "comp_volumes",
             "get_pole_pair_number",
-            "get_name_phase",
             "plot",
             "plot_winding",
             "comp_fill_factor",
@@ -4527,7 +4541,8 @@
             "comp_angle_q_axis",
             "comp_radius_mid_yoke",
             "get_yoke_desc",
-            "get_bore_desc"
+            "get_bore_desc",
+            "comp_point_ref"
         ],
         "mother": "",
         "name": "Lamination",
@@ -9470,6 +9485,7 @@
             "comp_surface",
             "comp_surface_active",
             "comp_width_opening",
+            "convert_to_SlotUD2",
             "get_is_stator",
             "get_name_lam",
             "get_Rbo",
@@ -10326,8 +10342,10 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
+            "build_geometry_active",
             "get_surface_active",
-            "check"
+            "check",
+            "_set_split_active_surf_dict"
         ],
         "mother": "Slot",
         "name": "SlotUD2",
@@ -10351,6 +10369,15 @@
                 "type": "Surface",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Dictionary to enforced the split active surface (key=\"Nrad=1, Ntan=2\"). Labels set according to list order (loop on Nrad then Ntan)",
+                "max": "",
+                "min": "",
+                "name": "split_active_surf_dict",
+                "type": "dict",
+                "unit": "-",
+                "value": null
             }
         ]
     },

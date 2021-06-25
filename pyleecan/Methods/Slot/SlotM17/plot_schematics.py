@@ -59,7 +59,9 @@ def plot_schematics(
     # Use some default parameter
     if is_default:
         slot = type(self)(Zs=2)
-        lam = LamSlot(Rint=0, Rext=0.135, is_internal=True, is_stator=False, slot=slot)
+        lam = LamSlot(
+            Rint=0.05, Rext=0.135, is_internal=True, is_stator=False, slot=slot
+        )
         slot.plot_schematics(
             is_default=False,
             is_add_point_label=is_add_point_label,
@@ -89,6 +91,18 @@ def plot_schematics(
                 linewidth=ARROW_WIDTH,
                 label="Rext",
                 offset_label=0.2 * lam.Rext,
+                is_arrow=True,
+                fontsize=SC_FONT_SIZE,
+            )
+            # Rint
+            line = Segment(0, lam.Rint * exp(1j * 7 * pi / 4))
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=ARROW_COLOR,
+                linewidth=ARROW_WIDTH,
+                label="Rint",
+                offset_label=0.2 * lam.Rint,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
