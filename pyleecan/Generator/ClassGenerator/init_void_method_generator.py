@@ -30,7 +30,8 @@ def generate_init_void(class_name):
     init_str += TAB2 + 'object or dict can be given for pyleecan Object"""\n\n'
 
     init_str += TAB2 + "if init_dict is not None:  # Initialisation by dict\n"
-    init_str += TAB3 + "assert init_dict == {'__class__' : '" + class_name + "'}\n"
+    init_str += TAB3 + "assert '__class__' in init_dict\n"
+    init_str += TAB3 + "assert init_dict['__class__']== '" + class_name + "'\n"
 
     init_str += TAB2 + "if init_str is not None:  # Initialisation by str\n"
     init_str += TAB3 + "assert type(init_str) is str\n"
