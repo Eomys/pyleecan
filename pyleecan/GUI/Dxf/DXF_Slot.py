@@ -47,6 +47,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.line_list = list()  # List of line from DXF
         self.selected_list = list()  # List of currently selected lines
         self.lam = lam
+        self.Zcenter = 0  # For offset
 
         # Tutorial video link
         self.url = "https://pyleecan.org/videos.html#feature-tutorials"
@@ -214,7 +215,8 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             else:
                 color = "k"
             axes.plot(point_list.real, point_list.imag, color, zorder=1)
-
+        axes.plot(self.Zcenter.real, self.Zcenter.imag, "rx", zorder=0)
+        axes.text(self.Zcenter.real, self.Zcenter.imag, "O")
         self.w_viewer.draw()
 
     def check_selection(self):
@@ -378,6 +380,17 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             if slot.wind_begin_index is not None:
                 surf_wind = slot.get_surface_active()
                 surf_wind.plot(fig=fig, ax=ax1, color=WIND_COLOR, is_show_fig=False)
+            # Add point index
+            index = 0
+            for line in slot.line_list:
+                Zb = line.get_begin()
+                ax1.plot(Zb.real, Zb.imag, "rx", zorder=0)
+                ax1.text(Zb.real, Zb.imag, str(index))
+                index += 1
+            Ze = slot.line_list[-1].get_end()
+            ax1.plot(Ze.real, Ze.imag, "rx", zorder=0)
+            ax1.text(Ze.real, Ze.imag, str(index))
+            # Lamination point
             lam.plot(fig=fig, ax=ax2)
 
     def save(self):
