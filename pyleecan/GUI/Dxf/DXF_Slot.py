@@ -410,8 +410,15 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             )[0]
             if save_file_path not in ["", ".json", None]:
                 self.save_path = save_file_path
-                slot.save(save_file_path)
-                self.accept()
+                try:
+                    slot.save(save_file_path)
+                    self.accept()
+                except Exception as e:
+                    QMessageBox().critical(
+                        self,
+                        self.tr("Error"),
+                        self.tr("Error while saving slot json file:\n" + str(e)),
+                    )
 
     def open_tuto(self):
         """Open the tutorial video in a web browser"""
