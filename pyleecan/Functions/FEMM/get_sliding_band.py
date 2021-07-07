@@ -52,7 +52,7 @@ def get_sliding_band(sym, lam_int, lam_ext):
                 radius=Rgap_mec_int + W_sb,
                 label=label_int + "_" + SLID_LAB,
                 point_ref=(Rgap_mec_int + W_sb / 2) * exp(1j * pi / 2),
-                prop_dict=None,
+                prop_dict={BOUNDARY_PROP_LAB: SLID_LINE_LAB},
             )
         )
         # Top sliding band
@@ -62,7 +62,7 @@ def get_sliding_band(sym, lam_int, lam_ext):
                 radius=Rgap_mec_int + 2 * W_sb,
                 label=label_ext + "_" + SLID_LAB,
                 point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
-                prop_dict=None,
+                prop_dict={BOUNDARY_PROP_LAB: SLID_LINE_LAB},
             )
         )
         # Middle
