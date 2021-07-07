@@ -221,8 +221,10 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             else:
                 color = "k"
             axes.plot(point_list.real, point_list.imag, color, zorder=1)
+        # Add lamination center
         axes.plot(self.Zcenter.real, self.Zcenter.imag, "rx", zorder=0)
         axes.text(self.Zcenter.real, self.Zcenter.imag, "O")
+
         self.w_viewer.draw()
 
     def check_selection(self):
