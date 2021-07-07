@@ -7,6 +7,7 @@ from ....Classes.SurfLine import SurfLine
 from ....Classes.SurfRing import SurfRing
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
+from ....Functions.labels import update_RTS_index
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -62,12 +63,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
                 new_surf = type(surf)(init_dict=surf.as_dict())
                 new_surf.rotate(ii * angle)
                 # Update label like "Rotor-0_HoleVoid_R0-T0-S0"
-                surf_split = new_surf.label.split("_")
-                index_split = surf_split[2].split("-")
-                index_split[2] = "S" + str(ii)
-                surf_split[2] = "-".join(index_split)
-                new_surf.label = "_".join(surf_split)
-
+                new_surf.label = update_RTS_index(label=new_surf.label, S_id=ii)
                 surf_list.append(new_surf)
 
     # Apply the transformations

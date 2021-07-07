@@ -4,7 +4,7 @@ from numpy import pi
 from ....Classes.Winding import Winding
 from ....Methods import NotImplementedYetError
 from ....Classes.LamSlot import LamSlot
-from ....Functions.labels import LAM_LAB, BORE_LAB, YOKE_LAB
+from ....Functions.labels import update_RTS_index
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -69,7 +69,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
             for surf in surf_Wind:
                 new_surf = type(surf)(init_dict=surf.as_dict())
                 # changing the slot reference number
-                new_surf.label = surf.label[:-1] + str(ii)
+                new_surf.label = update_RTS_index(label=surf.label, S_id=ii)
                 new_surf.rotate(ii * angle)
                 surf_list.append(new_surf)
 

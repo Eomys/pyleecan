@@ -55,6 +55,33 @@ def decode_label(label):
     return label_dict
 
 
+def update_RTS_index(label=None, label_dict=None, R_id=None, T_id=None, S_id=None):
+    """Update the index part of a label
+    Stator_Winding_R0-T0-S0 => Stator_Winding_RX-TY-SZ
+    """
+    if label_dict is None:
+        label_dict = decode_label(label)
+    assert label_dict is not None
+    if R_id is not None:
+        label_dict["R_id"] = R_id
+    if T_id is not None:
+        label_dict["T_id"] = T_id
+    if S_id is not None:
+        label_dict["S_id"] = S_id
+
+    return (
+        label_dict["lam_label"]
+        + "_"
+        + label_dict["surf_type"]
+        + "_"
+        + str(label_dict["R_id"])
+        + "-"
+        + str(label_dict["T_id"])
+        + "-"
+        + str(label_dict["S_id"])
+    )
+
+
 def get_obj_from_label(machine, label=None, label_dict=None):
     """Return the object from the machine corresponding to the label"""
     if label_dict is None:
