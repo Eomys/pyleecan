@@ -57,11 +57,10 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.init_graph()
 
         # Not used yet
-        self.in_coord_center.hide()
-        self.lf_center_x.hide()
-        self.lf_center_y.hide()
         self.lf_axe_angle.hide()
         self.in_axe_angle.hide()
+
+        # Set DXF edit widget
         self.lf_center_x.setValue(0)
         self.lf_center_y.setValue(0)
         self.lf_scaling.validator().setBottom(0)
@@ -91,6 +90,8 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.b_reset.pressed.connect(self.update_graph)
         self.b_cancel.pressed.connect(self.remove_selection)
         self.b_tuto.pressed.connect(self.open_tuto)
+        self.lf_center_x.editingFinished.connect(self.set_center)
+        self.lf_center_y.editingFinished.connect(self.set_center)
 
         # Display the GUI
         self.show()
@@ -194,6 +195,11 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         # Axis cleanup
         axes.axis("equal")
         axes.set_axis_off()
+
+    def set_center(self):
+        """Update the position of the center"""
+        self.Zcenter = self.lf_center_x.value() + 1j * self.lf_center_y.value()
+        self.update_graph()
 
     def update_graph(self):
         """Clean and redraw all the lines in viewer
@@ -344,6 +350,11 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         else:
             slot.wind_begin_index = None
             slot.wind_end_index = None
+
+        # Translate
+        if self.Zcenter != 0:
+            for line in curve_list:
+                line.translate(-self.Zcenter)
 
         # Rotation
         Z1 = curve_list[0].get_begin()
