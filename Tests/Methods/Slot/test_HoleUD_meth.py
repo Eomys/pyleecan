@@ -72,11 +72,12 @@ class Test_HoleUD_meth(object):
 
         surf_list = IPMSM_C.rotor.hole[0].build_geometry()
         assert len(surf_list) == 5
-        assert surf_list[0].label == "Hole_Stator_R0_T0_S0"
-        assert surf_list[1].label == "HoleMagnet_Stator_Parallel_N_R0_T0_S0"
-        assert surf_list[2].label == "Hole_Stator_R0_T1_S0"
-        assert surf_list[3].label == "HoleMagnet_Stator_Parallel_N_R0_T1_S0"
-        assert surf_list[4].label == "Hole_Stator_R0_T2_S0"
+
+        assert surf_list[0].label == "Stator_HoleVoid_R0-T0-S0"
+        assert surf_list[1].label == "Stator_HoleMag_R0-T0-S0"
+        assert surf_list[2].label == "Stator_HoleVoid_R0-T1-S0"
+        assert surf_list[3].label == "Stator_HoleMag_R0-T1-S0"
+        assert surf_list[4].label == "Stator_HoleVoid_R0-T2-S0"
 
         IPMSM_C.rotor.hole[0].magnet_dict["magnet_0"].type_magnetization = 0
         IPMSM_C.rotor.hole[0].magnet_dict["magnet_1"].type_magnetization = 0
@@ -98,11 +99,11 @@ class Test_HoleUD_meth(object):
 
         surf_list = IPMSM_C.rotor.hole[0].build_geometry()
         assert len(surf_list) == 5
-        assert surf_list[0].label == "Hole_Stator_R0_T0_S0"
-        assert surf_list[1].label == "HoleMagnet_Stator_Radial_N_R0_T0_S0"
-        assert surf_list[2].label == "Hole_Stator_R0_T1_S0"
-        assert surf_list[3].label == "HoleMagnet_Stator_Radial_N_R0_T1_S0"
-        assert surf_list[4].label == "Hole_Stator_R0_T2_S0"
+        assert surf_list[0].label == "Stator_HoleVoid_R0-T0-S0"
+        assert surf_list[1].label == "Stator_HoleMag_R0-T0-S0"
+        assert surf_list[2].label == "Stator_HoleVoid_R0-T1-S0"
+        assert surf_list[3].label == "Stator_HoleMag_R0-T1-S0"
+        assert surf_list[4].label == "Stator_HoleVoid_R0-T2-S0"
 
     def test_comp_surface_magnet_id(self):
         """check that ids are correct (Remove magnet)"""

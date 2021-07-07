@@ -116,12 +116,12 @@ class Test_SlotW13_meth(object):
         surf_list = test_obj.slot.build_geometry_active(Nrad=3, Ntan=2)
 
         # Check label
-        assert surf_list[0].label == "Wind_Stator_R0_T0_S0"
-        assert surf_list[1].label == "Wind_Stator_R1_T0_S0"
-        assert surf_list[2].label == "Wind_Stator_R2_T0_S0"
-        assert surf_list[3].label == "Wind_Stator_R0_T1_S0"
-        assert surf_list[4].label == "Wind_Stator_R1_T1_S0"
-        assert surf_list[5].label == "Wind_Stator_R2_T1_S0"
+        assert surf_list[0].label == "Stator_Winding_R0-T0-S0"
+        assert surf_list[1].label == "Stator_Winding_R1-T0-S0"
+        assert surf_list[2].label == "Stator_Winding_R2-T0-S0"
+        assert surf_list[3].label == "Stator_Winding_R0-T1-S0"
+        assert surf_list[4].label == "Stator_Winding_R1-T1-S0"
+        assert surf_list[5].label == "Stator_Winding_R2-T1-S0"
         # Check tangential position
         assert surf_list[0].point_ref.imag < 0
         assert surf_list[1].point_ref.imag < 0
