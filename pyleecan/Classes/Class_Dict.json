@@ -1702,7 +1702,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "FrameBar"
+        ],
         "desc": "machine frame",
         "is_internal": false,
         "methods": [
@@ -1754,6 +1756,50 @@
                 "type": "Material",
                 "unit": "",
                 "value": ""
+            }
+        ]
+    },
+    "FrameBar": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "machine frame with structural bars between frame and outer lamination",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "comp_surface",
+            "comp_volume",
+            "comp_height_gap",
+            "build_geometry_bar",
+            "comp_surface_bar",
+            "comp_surface_gap"
+        ],
+        "mother": "Frame",
+        "name": "FrameBar",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/FrameBar.csv",
+        "properties": [
+            {
+                "desc": "Number of bars",
+                "max": "",
+                "min": "1",
+                "name": "Nbar",
+                "type": "int",
+                "unit": "m",
+                "value": 8
+            },
+            {
+                "desc": "Width of bars",
+                "max": "",
+                "min": "0",
+                "name": "wbar",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
             }
         ]
     },
