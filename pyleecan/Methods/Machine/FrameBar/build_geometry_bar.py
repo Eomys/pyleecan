@@ -49,9 +49,9 @@ def build_geometry_bar(self, sym=1, alpha=0, delta=0):
         Z0 = lam_outer.Rext
         rot_angle = arcsin(self.wbar / 2.0 / Z0)
         Z1 = Z0 * exp(rot_angle * -1j)
-        Z2 = Z1 + h_gap
+        Z2 = (Z0 + h_gap) * exp(rot_angle * -1j)
+        Z3 = (Z0 + h_gap) * exp(rot_angle * 1j)
         Z4 = Z0 * exp(rot_angle * 1j)
-        Z3 = Z4 + h_gap
         # Define Lines
         curve_list = list()
         curve_list.append(Segment(Z1, Z2))
