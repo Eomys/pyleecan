@@ -418,9 +418,9 @@ class SWinding(Gen_SWinding, QWidget):
         try:
             rot_dir = self.obj.comp_rot_dir()
             if rot_dir == 1:
-                rot_dir = "+"
+                rot_dir = "CCW"
             elif rot_dir == -1:
-                rot_dir = "-"
+                rot_dir = "CW"
             else:
                 rot_dir = "?"
         except Exception:  # Unable to compution the connection matrix
