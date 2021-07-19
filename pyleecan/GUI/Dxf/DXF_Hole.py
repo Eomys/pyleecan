@@ -80,9 +80,6 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.init_graph()
 
         # Not used yet
-        self.in_coord_center.hide()
-        self.lf_center_x.hide()
-        self.lf_center_y.hide()
         self.lf_axe_angle.hide()
         self.in_axe_angle.hide()
         self.unit_axe_angle.hide()
@@ -101,6 +98,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.line_list = list()  # List of line from DXF
         self.selected_list = list()  # List of currently selected lines
         self.surf_list = list()  # List of defined surfaces
+        self.Zcenter = 0  # For translate offset
+
+        # Set DXF edit widget
         self.lf_center_x.setValue(0)
         self.lf_center_y.setValue(0)
         self.lf_scaling.validator().setBottom(0)
@@ -134,6 +134,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.b_reset.pressed.connect(self.update_graph)
         self.b_cancel.pressed.connect(self.remove_selection)
         self.b_tuto.pressed.connect(self.open_tuto)
+        self.lf_center_x.editingFinished.connect(self.set_center)
+        self.lf_center_y.editingFinished.connect(self.set_center)
 
         # Display the GUI
         self.show()
@@ -254,6 +256,11 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         axes.axis("equal")
         axes.set_axis_off()
 
+    def set_center(self):
+        """Update the position of the center"""
+        self.Zcenter = self.lf_center_x.value() + 1j * self.lf_center_y.value()
+        self.update_graph()
+
     def update_graph(self):
         """Clean and redraw all the lines in viewer
 
@@ -271,6 +278,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             point_list = array(line.discretize(20))
             color = COLOR_LIST[self.selected_list[ii]]
             axes.plot(point_list.real, point_list.imag, color, zorder=1)
+        # Add lamination center
+        axes.plot(self.Zcenter.real, self.Zcenter.imag, "rx", zorder=0)
+        axes.text(self.Zcenter.real, self.Zcenter.imag, "O")
 
         self.w_viewer.draw()
 
@@ -470,6 +480,11 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         offset_list_sorted = [offset_list[ii] for ii in idx]
         hole.surf_list = surf_list_sorted
 
+        # Translate
+        if self.Zcenter != 0:
+            for surf in hole.surf_list:
+                surf.translate(-self.Zcenter * self.lf_scaling.value())
+
         # Rotation
         Zref = sum([surf.point_ref for surf in hole.surf_list])
         for surf in hole.surf_list:
@@ -614,8 +629,15 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         )[0]
         if save_file_path not in ["", ".json", None]:
             self.save_path = save_file_path
-            hole.save(save_file_path)
-            self.accept()
+            try:
+                hole.save(save_file_path)
+                self.accept()
+            except Exception as e:
+                QMessageBox().critical(
+                    self,
+                    self.tr("Error"),
+                    self.tr("Error while saving hole json file:\n" + str(e)),
+                )
 
     def open_tuto(self):
         """Open the tutorial video in a web browser"""
