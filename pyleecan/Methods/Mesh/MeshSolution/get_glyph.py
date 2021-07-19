@@ -6,7 +6,7 @@ from numpy import (
 
 
 def get_glyph(self, *args, label, index, indices, field_name):
-    """ Get the vector field, the field name and the corresponding pyvista mesh in format adapted to a glyph plot. 
+    """Get the vector field, the field name and the corresponding pyvista mesh in format adapted to a glyph plot.
 
     Parameters
     ----------
@@ -54,6 +54,9 @@ def get_glyph(self, *args, label, index, indices, field_name):
     ind = axes_list[0].index("component")
     if axes_list[1][ind] == 2:
         vect_field = hstack((vect_field, zeros((vect_field.shape[0], 1))))
+        is_2D = True
+    else:
+        is_2D = False
 
     if field_name is None:
         if label is not None:
@@ -63,4 +66,7 @@ def get_glyph(self, *args, label, index, indices, field_name):
         else:
             field_name = "Field"
 
-    return vect_field, field_name, mesh_pv
+        # if self.dimension:
+        #     p.view_xy()
+
+    return vect_field, field_name, mesh_pv, is_2D

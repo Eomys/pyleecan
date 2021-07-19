@@ -58,21 +58,9 @@ except ImportError as error:
     plot_deflection = error
 
 try:
-    from ..Methods.Mesh.MeshSolution.plot_deflection_animated import (
-        plot_deflection_animated,
-    )
-except ImportError as error:
-    plot_deflection_animated = error
-
-try:
     from ..Methods.Mesh.MeshSolution.plot_glyph import plot_glyph
 except ImportError as error:
     plot_glyph = error
-
-try:
-    from ..Methods.Mesh.MeshSolution.plot_glyph_animated import plot_glyph_animated
-except ImportError as error:
-    plot_glyph_animated = error
 
 try:
     from ..Methods.Mesh.MeshSolution.perm_coord import perm_coord
@@ -189,18 +177,6 @@ class MeshSolution(FrozenClass):
         )
     else:
         plot_deflection = plot_deflection
-    # cf Methods.Mesh.MeshSolution.plot_deflection_animated
-    if isinstance(plot_deflection_animated, ImportError):
-        plot_deflection_animated = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshSolution method plot_deflection_animated: "
-                    + str(plot_deflection_animated)
-                )
-            )
-        )
-    else:
-        plot_deflection_animated = plot_deflection_animated
     # cf Methods.Mesh.MeshSolution.plot_glyph
     if isinstance(plot_glyph, ImportError):
         plot_glyph = property(
@@ -212,18 +188,6 @@ class MeshSolution(FrozenClass):
         )
     else:
         plot_glyph = plot_glyph
-    # cf Methods.Mesh.MeshSolution.plot_glyph_animated
-    if isinstance(plot_glyph_animated, ImportError):
-        plot_glyph_animated = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshSolution method plot_glyph_animated: "
-                    + str(plot_glyph_animated)
-                )
-            )
-        )
-    else:
-        plot_glyph_animated = plot_glyph_animated
     # cf Methods.Mesh.MeshSolution.perm_coord
     if isinstance(perm_coord, ImportError):
         perm_coord = property(

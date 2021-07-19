@@ -57,6 +57,7 @@ def comp_force_nodal(self, output, axes_dict):
         "indice",
         "time=axis_data",
         axis_data={"time": time},
+        is_squeeze=False,
     )
     indice = resultB["indice"]  # Store elements indices
 
@@ -68,6 +69,7 @@ def comp_force_nodal(self, output, axes_dict):
         "indice",
         "time=axis_data",
         axis_data={"time": time},
+        is_squeeze=False,
     )
     Hx = resultH["comp_x"]
     Hy = resultH["comp_y"]
@@ -77,6 +79,7 @@ def comp_force_nodal(self, output, axes_dict):
         "indice",
         "time=axis_data",
         axis_data={"time": time},
+        is_squeeze=False,
     )
     mu = resultmu["\\mu"]
 
@@ -88,7 +91,7 @@ def comp_force_nodal(self, output, axes_dict):
     # Loop on elements and nodes for nodal forces
     f, connect = self.element_loop(mesh, B, H, mu, indice, dim, Nt_tot)
 
-    indices_nodes = np.sort(np.unique(connect))
+    indices_nodes = mesh.node.indice.copy()
     Indices_Point = Data1D(name="indice", values=indices_nodes, is_components=True)
 
     # Time axis goes back to first axis

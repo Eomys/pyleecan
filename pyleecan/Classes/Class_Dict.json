@@ -1676,7 +1676,7 @@
         "methods": [
             "comp_force",
             "comp_force_nodal",
-            "comp_magnetrosctrictive_tensor",
+            "comp_magnetostrictive_tensor",
             "element_loop"
         ],
         "mother": "Force",
@@ -1692,6 +1692,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "stator core"
+            },
+            {
+                "desc": "Force model(s) to be used",
+                "max": "",
+                "min": "",
+                "name": "tensor",
+                "type": "dict",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -6461,9 +6470,7 @@
             "plot_mesh",
             "plot_contour",
             "plot_deflection",
-            "plot_deflection_animated",
             "plot_glyph",
-            "plot_glyph_animated",
             "perm_coord",
             "get_deflection",
             "get_glyph"
