@@ -79,6 +79,16 @@ try:
 except ImportError as error:
     perm_coord = error
 
+try:
+    from ..Methods.Mesh.MeshSolution.get_deflection import get_deflection
+except ImportError as error:
+    get_deflection = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.get_glyph import get_glyph
+except ImportError as error:
+    get_glyph = error
+
 
 from ._check import InitUnKnowClassError
 from .Mesh import Mesh
@@ -225,6 +235,29 @@ class MeshSolution(FrozenClass):
         )
     else:
         perm_coord = perm_coord
+    # cf Methods.Mesh.MeshSolution.get_deflection
+    if isinstance(get_deflection, ImportError):
+        get_deflection = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method get_deflection: "
+                    + str(get_deflection)
+                )
+            )
+        )
+    else:
+        get_deflection = get_deflection
+    # cf Methods.Mesh.MeshSolution.get_glyph
+    if isinstance(get_glyph, ImportError):
+        get_glyph = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method get_glyph: " + str(get_glyph)
+                )
+            )
+        )
+    else:
+        get_glyph = get_glyph
     # save and copy methods are available in all object
     save = save
     copy = copy

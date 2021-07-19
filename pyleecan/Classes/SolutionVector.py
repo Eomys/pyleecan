@@ -88,6 +88,7 @@ class SolutionVector(Solution):
         type_cell="triangle",
         label=None,
         dimension=2,
+        unit="",
         init_dict=None,
         init_str=None,
     ):
@@ -114,11 +115,13 @@ class SolutionVector(Solution):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
+            if "unit" in list(init_dict.keys()):
+                unit = init_dict["unit"]
         # Set the properties (value check and convertion are done in setter)
         self.field = field
         # Call Solution init
         super(SolutionVector, self).__init__(
-            type_cell=type_cell, label=label, dimension=dimension
+            type_cell=type_cell, label=label, dimension=dimension, unit=unit
         )
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
