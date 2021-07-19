@@ -9,9 +9,9 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from ...GUI.Tools.WPathSelector.WPathSelector import WPathSelector
 from ...GUI.Tools.MPLCanvas import MPLCanvas2
 from ...GUI.Tools.FloatEdit import FloatEdit
+from ...GUI.Tools.WPathSelector.WPathSelector import WPathSelector
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -20,7 +20,7 @@ class Ui_DXF_Slot(object):
     def setupUi(self, DXF_Slot):
         if not DXF_Slot.objectName():
             DXF_Slot.setObjectName(u"DXF_Slot")
-        DXF_Slot.resize(745, 551)
+        DXF_Slot.resize(822, 551)
         icon = QIcon()
         icon.addFile(
             u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
@@ -158,15 +158,16 @@ class Ui_DXF_Slot(object):
 
         self.verticalLayout.addLayout(self.gridLayout)
 
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.horizontalLayout_5.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.in_coord_center = QLabel(self.widget)
-        self.in_coord_center.setObjectName(u"in_coord_center")
+        self.g_center = QGroupBox(self.widget)
+        self.g_center.setObjectName(u"g_center")
+        self.gridLayout_2 = QGridLayout(self.g_center)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.in_coord_center_X = QLabel(self.g_center)
+        self.in_coord_center_X.setObjectName(u"in_coord_center_X")
 
-        self.horizontalLayout_5.addWidget(self.in_coord_center)
+        self.gridLayout_2.addWidget(self.in_coord_center_X, 0, 0, 1, 1)
 
-        self.lf_center_x = FloatEdit(self.widget)
+        self.lf_center_x = FloatEdit(self.g_center)
         self.lf_center_x.setObjectName(u"lf_center_x")
         sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
@@ -174,18 +175,23 @@ class Ui_DXF_Slot(object):
         sizePolicy3.setHeightForWidth(self.lf_center_x.sizePolicy().hasHeightForWidth())
         self.lf_center_x.setSizePolicy(sizePolicy3)
 
-        self.horizontalLayout_5.addWidget(self.lf_center_x)
+        self.gridLayout_2.addWidget(self.lf_center_x, 0, 1, 1, 1)
 
-        self.lf_center_y = FloatEdit(self.widget)
+        self.in_coord_center_Y = QLabel(self.g_center)
+        self.in_coord_center_Y.setObjectName(u"in_coord_center_Y")
+
+        self.gridLayout_2.addWidget(self.in_coord_center_Y, 1, 0, 1, 1)
+
+        self.lf_center_y = FloatEdit(self.g_center)
         self.lf_center_y.setObjectName(u"lf_center_y")
         self.lf_center_y.setEnabled(True)
         sizePolicy3.setHeightForWidth(self.lf_center_y.sizePolicy().hasHeightForWidth())
         self.lf_center_y.setSizePolicy(sizePolicy3)
-        self.lf_center_y.setMaximumSize(QSize(137, 16777215))
+        self.lf_center_y.setMaximumSize(QSize(16777215, 16777215))
 
-        self.horizontalLayout_5.addWidget(self.lf_center_y)
+        self.gridLayout_2.addWidget(self.lf_center_y, 1, 1, 1, 1)
 
-        self.verticalLayout.addLayout(self.horizontalLayout_5)
+        self.verticalLayout.addWidget(self.g_center)
 
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
@@ -258,17 +264,17 @@ class Ui_DXF_Slot(object):
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">1) Select DXF file in [m] (or use scaling factor), spline won\'t be displayed</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">2) Use mouse wheel to zoom in/out</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">3) Click on lines and arc'
-                "s to draw the contour of a single slot</span></p>\n"
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">4) First point and last point must be on the bore radius (must match the lamination radius)</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">5) The winding area is define by a part of the slot contour and a closing line:</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">- The points are ordered in trigonometrical order (from bore radius to bore radius)</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" '
-                'font-size:12pt;">- First point index is 0</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">- Closing line can be either a Segment or an Arc (center 0)</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">6) Plot to check and save</span></p></body></html>',
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">1) Select DXF file in [m] (or use scaling factor), spline won\'t be displayed</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">2) Use mouse wheel to zoom in/out</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"'
+                "><span style=\" font-family:'MS Shell Dlg 2'; font-size:12pt;\">3) Click on lines and arcs to draw the contour of a single slot</span></p>\n"
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">4) First point and last point must be on the bore radius (must match the lamination radius)</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">5) The winding area is define by a part of the slot contour and a closing line:</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">- The points are ordered in trigonometrical order (from bore radius to bor'
+                "e radius)</span></p>\n"
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">- First point index is 0</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">- Closing line can be either a Segment or an Arc (center 0)</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">6) Plot to check and save</span></p></body></html>',
                 None,
             )
         )
@@ -295,10 +301,16 @@ class Ui_DXF_Slot(object):
             QCoreApplication.translate("DXF_Slot", u"Slot axe angle shift", None)
         )
         self.lf_axe_angle.setText(QCoreApplication.translate("DXF_Slot", u"0", None))
-        self.in_coord_center.setText(
-            QCoreApplication.translate("DXF_Slot", u"Machine center (x,y)", None)
+        self.g_center.setTitle(
+            QCoreApplication.translate("DXF_Slot", u"Machine Center", None)
+        )
+        self.in_coord_center_X.setText(
+            QCoreApplication.translate("DXF_Slot", u"X coordinate", None)
         )
         self.lf_center_x.setText(QCoreApplication.translate("DXF_Slot", u"0", None))
+        self.in_coord_center_Y.setText(
+            QCoreApplication.translate("DXF_Slot", u"Y coordinate", None)
+        )
         self.lf_center_y.setText(QCoreApplication.translate("DXF_Slot", u"0", None))
         self.in_scaling.setText(
             QCoreApplication.translate("DXF_Slot", u"Scaling factor", None)

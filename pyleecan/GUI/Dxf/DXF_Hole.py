@@ -281,7 +281,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # Add lamination center
         axes.plot(self.Zcenter.real, self.Zcenter.imag, "rx", zorder=0)
         axes.text(self.Zcenter.real, self.Zcenter.imag, "O")
-        
+
         self.w_viewer.draw()
 
     def check_selection(self):
@@ -483,7 +483,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # Translate
         if self.Zcenter != 0:
             for surf in hole.surf_list:
-                surf.translate(-self.Zcenter)
+                surf.translate(-self.Zcenter * self.lf_scaling.value())
 
         # Rotation
         Zref = sum([surf.point_ref for surf in hole.surf_list])
