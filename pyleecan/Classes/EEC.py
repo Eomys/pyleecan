@@ -40,7 +40,8 @@ class EEC(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert init_dict == {"__class__": "EEC"}
+            assert "__class__" in init_dict
+            assert init_dict["__class__"] == "EEC"
         if init_str is not None:  # Initialisation by str
             assert type(init_str) is str
         # The class is frozen, for now it's impossible to add new properties
