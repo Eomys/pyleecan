@@ -26,7 +26,7 @@ print(f"Bar Surface Area: {bar_area} mm^2")
 gap_area = frame.comp_surface_gap() * 1e6
 print(f"Gap Surface Area: {gap_area} mm^2")
 # frame.plot()
-machine.plot()
+# machine.plot()
 print("Test complete")
 
 # # For AlmostEqual
