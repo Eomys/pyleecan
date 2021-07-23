@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from ..labels import (
+    AIRGAP_LAB,
     BAR_LAB,
     LAM_LAB,
     MAG_LAB,
@@ -86,7 +87,7 @@ def get_mesh_param(label_dict, FEMM_dict):
             mesh_dict["element_size"] = FEMM_dict["elementsize_slotR"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_slotR"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RW"]
-    elif SLID_LAB in label_dict["surf_type"]:
+    elif SLID_LAB in label_dict["surf_type"] or AIRGAP_LAB in label_dict["surf_type"]:
         mesh_dict["automesh"] = FEMM_dict["automesh_airgap"]
         mesh_dict["element_size"] = FEMM_dict["elementsize_airgap"]
         mesh_dict["meshsize"] = FEMM_dict["meshsize_airgap"]

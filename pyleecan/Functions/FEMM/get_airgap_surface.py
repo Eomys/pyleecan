@@ -2,7 +2,7 @@
 from numpy import exp, pi
 
 from ...Classes.SurfLine import SurfLine
-
+from ...Functions.labels import NO_LAM_LAB, AIRGAP_LAB
 
 def get_airgap_surface(lam_int, lam_ext):
     """Returns a list of surface in the airgap without sliding band surface
@@ -31,7 +31,7 @@ def get_airgap_surface(lam_int, lam_ext):
         SurfLine(
             line_list=[],
             point_ref=(Rgap_mec_int + W_sb * 3 / 2) * exp(1j * pi / 2),
-            label="Airgap",
+            label=NO_LAM_LAB + "_" + AIRGAP_LAB,
         )
     )
 
