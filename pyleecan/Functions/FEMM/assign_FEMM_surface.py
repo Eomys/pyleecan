@@ -12,6 +12,7 @@ from ...Functions.labels import (
     HOLEV_LAB,
     MAG_LAB,
     VENT_LAB,
+    BAR_LAB,
 )
 
 
@@ -51,11 +52,8 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
         femm.mi_selectlabel(point_ref.real, point_ref.imag)
 
         # Get circuit or magnetization properties if needed
-        if WIND_LAB in label_dict["surf_type"]:  # If the surface is a winding
-            if ROTOR_LAB in label_dict["lam_type"]:  # Winding on the rotor
-                Clabel = "Circr" + prop[:-1][2:]
-            else:  # winding on the stator
-                Clabel = "Circs" + prop[:-1][2:]
+        if WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
+            # If the surface is a winding or a bar => Set circuit
             lam_obj = get_obj_from_label(machine, label_dict=label_dict)
             wind_mat = lam_obj.winding.get_connection_mat(lam_obj.get_Zs())
             Nrad_id = label_dict["R_id"]  # zone radial coordinate
@@ -63,6 +61,10 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
             Zs_id = label_dict["S_id"]  # Zone slot number coordinate
             # Get the phase value in the correct slot zone
             q_id = get_phase_id(wind_mat, Nrad_id, Ntan_id, Zs_id)
+            if ROTOR_LAB in label_dict["lam_type"]:  # Winding on the rotor
+                Clabel = "Circr" + str(q_id)
+            else:  # winding on the stator
+                Clabel = "Circs" + str(q_id)
             Ntcoil = wind_mat[Nrad_id, Ntan_id, Zs_id, q_id]
         elif HOLEM_LAB in label_dict["surf_type"]:  # LamHole
             mag_obj = get_obj_from_label(machine, label_dict=label_dict)
