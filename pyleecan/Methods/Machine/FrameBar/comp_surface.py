@@ -4,7 +4,7 @@ from numpy import pi
 
 
 def comp_surface(self):
-    """Compute the surface of the Frame
+    """Compute the surface of the Frame without the structural bars
 
     Parameters
     ----------

@@ -33,6 +33,7 @@ def build_geometry_bar(self, sym=1, alpha=0, delta=0):
     h_gap = self.comp_height_gap()
     if h_gap > 0:
         lam_outer = self.parent.get_lam_list()[-1]
+        ###Rectangular Shape
         # #Define Points
         # Z0 = lam_outer.Rext
         # Z1 = Z0 + self.wbar * 1j / 2.0
@@ -45,7 +46,9 @@ def build_geometry_bar(self, sym=1, alpha=0, delta=0):
         # curve_list.append(Segment(Z2, Z3))
         # curve_list.append(Segment(Z3, Z4))
         # curve_list.append(Segment(Z4, Z1))
-        # #Define Points
+
+        ###Circular Shape
+        # Define Points
         Z0 = lam_outer.Rext
         rot_angle = arcsin(self.wbar / 2.0 / Z0)
         Z1 = Z0 * exp(rot_angle * -1j)
