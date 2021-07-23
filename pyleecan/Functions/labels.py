@@ -1,6 +1,7 @@
 STATOR_LAB = "Stator"
 ROTOR_LAB = "Rotor"
 LAM_LAB = "Lamination"
+SHAFT_LAB = "Shaft"
 BORE_LAB = "Bore"
 YOKE_LAB = "Yoke"
 SLID_LAB = "SlidingBand"
@@ -18,12 +19,16 @@ TOOTH_LAB = "Tooth"
 # Line Property dict
 BOUNDARY_PROP_LAB = "Boundary"
 YS_LAB = "YokeSide"
+SHAFTSR_LAB = "ShaftSide-Right"
+SHAFTSL_LAB = "ShaftSide-Left"
+SHAFTR_LAB = "ShaftRadius"
 SLID_LINE1_LAB = "airgap_line_1"
 SLID_LINE2_LAB = "airgap_line_2"
 SLID_LINE_LAB = "sliding_line"
 
 RADIUS_PROP_LAB = "LamRadius"
 MAGNET_PROP_LAB = "MagnetLines"
+MESH_PROP_LAB = "Mesh"
 
 
 def decode_label(label):
@@ -73,11 +78,11 @@ def update_RTS_index(label=None, label_dict=None, R_id=None, T_id=None, S_id=Non
         label_dict["lam_label"]
         + "_"
         + label_dict["surf_type"]
-        + "_"
+        + "_R"
         + str(label_dict["R_id"])
-        + "-"
+        + "-T"
         + str(label_dict["T_id"])
-        + "-"
+        + "-S"
         + str(label_dict["S_id"])
     )
 

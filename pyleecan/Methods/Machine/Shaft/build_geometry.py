@@ -4,6 +4,13 @@ from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from numpy import exp, pi
+from ....Functions.labels import (
+    SHAFT_LAB,
+    BOUNDARY_PROP_LAB,
+    SHAFTSR_LAB,
+    SHAFTSL_LAB,
+    SHAFTR_LAB,
+)
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0):
@@ -30,20 +37,21 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
 
     if sym == 1:
         surf_list.append(
-            Circle(radius=self.Drsh / 2, label="Shaft", center=0, point_ref=0)
+            Circle(radius=self.Drsh / 2, label=SHAFT_LAB, center=0, point_ref=0)
         )
     else:
         begin = self.Drsh / 2
         end = begin * exp(1j * 2 * pi / sym)
         surface = SurfLine(
             line_list=[
-                Segment(0, begin, label="Shaft_Side_Right"),
-                Arc1(begin, end, self.Drsh / 2, label="Shaft_Side_Arc"),
-                Segment(end, 0, label="Shaft_Side_Left"),
+                Segment(0, begin, prop_dict={BOUNDARY_PROP_LAB: SHAFTSR_LAB}),
+                Arc1(begin, end, self.Drsh / 2, prop_dict={BOUNDARY_PROP_LAB: SHAFTR_LAB}),
+                Segment(end, 0, prop_dict={BOUNDARY_PROP_LAB: SHAFTSL_LAB}),
             ],
-            label="Shaft",
+            label=SHAFT_LAB,
             point_ref=0,
         )
+
         surf_list.append(surface)
     for surf in surf_list:
         surf.rotate(alpha)
