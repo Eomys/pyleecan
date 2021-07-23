@@ -57,7 +57,6 @@ def test_split_line(test_dict):
         Z2=test_dict["Z2"],
         is_top=test_dict["is_top"],
         is_join=test_dict["is_join"],
-        label_join="",
     )
 
     assert res_surf == test_dict["exp_surf"], (

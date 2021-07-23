@@ -81,7 +81,7 @@ class Test_HoleM54_meth(object):
 
         test_obj.is_stator = True
         result = test_obj.hole[0].build_geometry()
-        assert result[0].label == "Rotor_HoleVoid_R0-T0-S0"
+        assert result[0].label == "Stator_HoleVoid_R0-T0-S0"
 
     def test_check(self):
         """Check that the check function can raise error"""

@@ -59,13 +59,13 @@ translate_test.append(
 lines_test = list()
 lines_test.append({"center": 0, "radius": 1, "ref": 0})
 lines_test[0]["result"] = [
-    Arc3(begin=1, end=-1, is_trigo_direction=True),
-    Arc3(begin=-1, end=1, is_trigo_direction=True),
+    Arc3(begin=1, end=-1, is_trigo_direction=True, prop_dict=dict()),
+    Arc3(begin=-1, end=1, is_trigo_direction=True, prop_dict=dict()),
 ]
 lines_test.append({"center": 5 + 5j, "radius": 1, "ref": 4})
 lines_test[1]["result"] = [
-    Arc3(begin=6 + 5j, end=4 + 5j, is_trigo_direction=True),
-    Arc3(begin=4 + 5j, end=6 + 5j, is_trigo_direction=True),
+    Arc3(begin=6 + 5j, end=4 + 5j, is_trigo_direction=True, prop_dict=dict()),
+    Arc3(begin=4 + 5j, end=6 + 5j, is_trigo_direction=True, prop_dict=dict()),
 ]
 
 # Dictionary to test discretize
@@ -135,7 +135,16 @@ class Test_Circle_meth(object):
             radius=test_dict["radius"],
         )
         lines = circle.get_lines()
-        assert lines == test_dict["result"]
+
+        assert len(lines) == len(test_dict["result"])
+        for ii in range(len(lines)):
+            msg = (
+                "Error for line["
+                + str(ii)
+                + "] :"
+                + str(lines[ii].compare(test_dict["result"][ii]))
+            )
+            assert lines[ii] == test_dict["result"][ii], msg
 
     @pytest.mark.parametrize("test_dict", disc_test)
     def test_discretize(self, test_dict):
@@ -149,3 +158,9 @@ class Test_Circle_meth(object):
         assert len(points) == len(test_dict["result"])
         for ii in range(len(points)):
             assert abs(points[ii] - test_dict["result"][ii]) < 1e-6
+
+
+if __name__ == "__main__":
+    a = Test_Circle_meth()
+    for test_dict in lines_test:
+        a.test_get_lines(test_dict)
