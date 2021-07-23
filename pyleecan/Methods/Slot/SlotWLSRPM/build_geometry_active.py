@@ -6,6 +6,7 @@ from scipy.optimize import fsolve
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
+from ....Functions.labels import WIND_LAB
 
 
 def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):
@@ -33,10 +34,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
 
     """
 
-    if self.get_is_stator():  # check if the slot is on the stator
-        st = "Stator"
-    else:
-        st = "Rotor"
+    lam_label = self.parent.get_label()
     Rbo = self.get_Rbo()
 
     point_dict = self._comp_point_coordinate()
@@ -70,8 +68,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
 
         surface = SurfLine(
             line_list=[line1, line2, line3, line4, line5, line6],
-            # label="Wind" + st + "_R0_T1_S0",
-            label="Wind_" + st + "_R0_T0_S0",
+            label=(lam_label + "_" + WIND_LAB + "_R0-T0-S0"),
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -86,7 +83,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         point_ref = (Zch + Z5 + Z6 + Z7 + Z8 + Zcl) / 6
         surface = SurfLine(
             line_list=[line1, line2, line3, line4, line5, line6],
-            label="Wind_" + st + "_R0_T1_S0",
+            label=(lam_label + "_" + WIND_LAB + "_R0-T1-S0"),
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -103,8 +100,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
 
         surface = SurfLine(
             line_list=[line1, line2, line3, line4, line5, line6],
-            # label="Wind" + st + "_R0_T1_S0",
-            label="Wind_" + st + "_R0_T0_S0",
+            label=(lam_label + "_" + WIND_LAB + "_R0-T0-S0"),
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -119,7 +115,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         point_ref = (Zch + Z5 + Z6 + Z7 + Z10 + Zcm) / 6
         surface = SurfLine(
             line_list=[line1, line2, line3, line4, line5, line6],
-            label="Wind_" + st + "_R0_T1_S0",
+            label=(lam_label + "_" + WIND_LAB + "_R0-T1-S0"),
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -132,7 +128,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         point_ref = (Zcm + Z10 + Z8 + Zcl) / 4
         surface = SurfLine(
             line_list=[line1, line2, line3, line4],
-            label="Wind_" + st + "_R1_T1_S0",
+            label=(lam_label + "_" + WIND_LAB + "_R1-T1-S0"),
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -145,7 +141,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         point_ref = (Z9 + Zcm + Zcl + Z1) / 4
         surface = SurfLine(
             line_list=[line1, line2, line3, line4],
-            label="Wind_" + st + "_R1_T0_S0",
+            label=(lam_label + "_" + WIND_LAB + "_R1-T0-S0"),
             point_ref=point_ref,
         )
         surf_list.append(surface)
@@ -164,7 +160,9 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         ]
         lines.extend(curve_list)
         surface = SurfLine(
-            line_list=lines, label="Wind_" + st + "_R0_T0_S0", point_ref=Zmid
+            line_list=lines,
+            label=lam_label + "_" + WIND_LAB + "_R0-T0-S0",
+            point_ref=Zmid,
         )
         surf_list.append(surface)
 

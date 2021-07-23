@@ -31,6 +31,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         List of surface delimiting the winding zone
 
     """
+
     # get the name of the lamination
     lam_label = self.parent.get_label()
 
