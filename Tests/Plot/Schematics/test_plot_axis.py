@@ -22,12 +22,10 @@ from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.init_fig import init_subplot
 
 
-@pytest.fixture(scope="module")
-def CURVE_COLORS():
-    return config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
+CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
 
-def test_axis_LamSlotMag(CURVE_COLORS):
+def test_axis_LamSlotMag():
     """Axis convention for LamSlot with magnet"""
     SIPMSM_001 = load(join(DATA_DIR, "Machine", "SIPMSM_001.json"))
     SIPMSM_001.rotor.plot(is_show_fig=False)
@@ -74,7 +72,7 @@ def test_axis_LamSlotMag(CURVE_COLORS):
     plt.close("all")
 
 
-def test_axis_LamHoleMag(CURVE_COLORS):
+def test_axis_LamHoleMag():
     """Axis convention for LamHole with magnet"""
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     Toyota_Prius.rotor.plot(is_show_fig=False)
@@ -121,7 +119,7 @@ def test_axis_LamHoleMag(CURVE_COLORS):
     plt.close("all")
 
 
-def test_axis_LamHole(CURVE_COLORS):
+def test_axis_LamHole():
     """Axis convention for LamHole"""
     SynRM_001 = load(join(DATA_DIR, "Machine", "SynRM_001.json"))
     SynRM_001.rotor.plot(is_show_fig=False)
@@ -174,7 +172,7 @@ def test_axis_LamHole(CURVE_COLORS):
 @pytest.mark.long_5s
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-def test_axis_LamWind(CURVE_COLORS):
+def test_axis_LamWind():
     """Axis convention for LamWind"""
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     SCIM_001.stator.plot(is_show_fig=False)
@@ -296,3 +294,7 @@ def test_axis_LamWind(CURVE_COLORS):
     fig.axes[0].text(d_angle, max(max(Br)), "Max of mmf")
     fig.savefig(join(save_path, "test_axis_LamWind_flux.png"))
     plt.close("all")
+
+
+if __name__ == "__main__":
+    test_axis_LamWind()

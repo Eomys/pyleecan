@@ -129,7 +129,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
 
     # Add the ventilation ducts if there is any
     for vent in self.axial_vent:
-        surf_list.extend(vent.build_geometry(sym=sym, is_stator=self.is_stator))
+        surf_list.extend(vent.build_geometry(sym=sym))
 
     # apply the transformation
     for surf in surf_list:
