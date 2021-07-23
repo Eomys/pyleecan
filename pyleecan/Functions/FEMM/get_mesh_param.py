@@ -52,7 +52,7 @@ def get_mesh_param(label_dict, FEMM_dict):
         else:  # Yoke or other lines
             mesh_dict["element_size"] = FEMM_dict["elementsize_yokeR"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_yokeR"]
-        mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SC"]
+        mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RC"]
     elif VENT_LAB in label_dict["surf_type"]:  # Ventilation
         mesh_dict["element_size"] = FEMM_dict["maxelementsize"]
         mesh_dict["meshsize"] = FEMM_dict["meshsize_air"]
