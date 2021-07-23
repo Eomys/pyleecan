@@ -73,11 +73,11 @@ class Test_HoleUD_meth(object):
         surf_list = IPMSM_C.rotor.hole[0].build_geometry()
         assert len(surf_list) == 5
 
-        assert surf_list[0].label == "Stator_HoleVoid_R0-T0-S0"
-        assert surf_list[1].label == "Stator_HoleMag_R0-T0-S0"
-        assert surf_list[2].label == "Stator_HoleVoid_R0-T1-S0"
-        assert surf_list[3].label == "Stator_HoleMag_R0-T1-S0"
-        assert surf_list[4].label == "Stator_HoleVoid_R0-T2-S0"
+        assert surf_list[0].label == "Stator-0_HoleVoid_R0-T0-S0"
+        assert surf_list[1].label == "Stator-0_HoleMag_R0-T0-S0"
+        assert surf_list[2].label == "Stator-0_HoleVoid_R0-T1-S0"
+        assert surf_list[3].label == "Stator-0_HoleMag_R0-T1-S0"
+        assert surf_list[4].label == "Stator-0_HoleVoid_R0-T2-S0"
 
         IPMSM_C.rotor.hole[0].magnet_dict["magnet_0"].type_magnetization = 0
         IPMSM_C.rotor.hole[0].magnet_dict["magnet_1"].type_magnetization = 0
@@ -95,15 +95,15 @@ class Test_HoleUD_meth(object):
         assert len(surf_list) == 5
         for ii, surf in enumerate(surf_list):
             assert type(surf) is SurfLine
-            assert surf.label == "Hole_Rotor_R0_T" + str(ii) + "_S0"
+            assert surf.label == "Rotor-0_HoleVoid_R0-T" + str(ii) + "-S0"
 
         surf_list = IPMSM_C.rotor.hole[0].build_geometry()
         assert len(surf_list) == 5
-        assert surf_list[0].label == "Stator_HoleVoid_R0-T0-S0"
-        assert surf_list[1].label == "Stator_HoleMag_R0-T0-S0"
-        assert surf_list[2].label == "Stator_HoleVoid_R0-T1-S0"
-        assert surf_list[3].label == "Stator_HoleMag_R0-T1-S0"
-        assert surf_list[4].label == "Stator_HoleVoid_R0-T2-S0"
+        assert surf_list[0].label == "Stator-0_HoleVoid_R0-T0-S0"
+        assert surf_list[1].label == "Stator-0_HoleMag_R0-T0-S0"
+        assert surf_list[2].label == "Stator-0_HoleVoid_R0-T1-S0"
+        assert surf_list[3].label == "Stator-0_HoleMag_R0-T1-S0"
+        assert surf_list[4].label == "Stator-0_HoleVoid_R0-T2-S0"
 
     def test_comp_surface_magnet_id(self):
         """check that ids are correct (Remove magnet)"""
@@ -186,3 +186,8 @@ class Test_HoleUD_meth(object):
 if __name__ == "__main__":
     a = Test_HoleUD_meth()
     a.test_convert_UD()
+    a.test_comp_magnet_surface()
+    a.test_comp_surface()
+    a.test_build_geometry_mag()
+    a.test_build_geometry_no_mag()
+    a.test_comp_surface_magnet_id()

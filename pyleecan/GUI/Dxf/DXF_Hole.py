@@ -26,7 +26,7 @@ from ...GUI.Tools.FloatEdit import FloatEdit
 from ...GUI import gui_option
 from ...loggers import GUI_LOG_NAME
 from .Ui_DXF_Hole import Ui_DXF_Hole
-
+from ...Functions.labels import HOLEM_LAB, HOLEV_LAB
 # Column index for table
 
 DEL_COL = 0
@@ -447,9 +447,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             hole.surf_list.append(self.surf_list[ii].copy())
             hole.surf_list[ii].scale(self.lf_scaling.value())
             if self.w_surface_list.cellWidget(ii, TYPE_COL).currentIndex() == 0:
-                hole.surf_list[ii].label = "Hole"
+                hole.surf_list[ii].label = HOLEV_LAB
             else:
-                hole.surf_list[ii].label = "HoleMagnet"
+                hole.surf_list[ii].label = HOLEM_LAB
                 Nmag += 1
             bottom_list.append(
                 self.line_list[
@@ -479,7 +479,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         mag_dict = dict()
         Nmag = 0
         for ii in range(len(hole.surf_list)):
-            if "Magnet" in hole.surf_list[ii].label:
+            if HOLEM_LAB in hole.surf_list[ii].label:
                 line = bottom_list_sorted[ii].copy()
                 line.rotate(-1 * np_angle(Zref))
                 mag_dict["magnet_" + str(Nmag)] = line.comp_normal()
@@ -502,7 +502,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         mag_list = list()
         hole_list = list()
         for surf in hole.surf_list:
-            if "HoleMagnet" in surf.label:
+            if HOLEM_LAB in surf.label:
                 mag_list.append(surf)
             else:
                 hole_list.append(surf)
@@ -510,7 +510,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
         # Correct hole ref_point (when Magnets are inside Hole surface)
         for surf in hole.surf_list:
-            if "HoleMagnet" not in surf.label:
+            if HOLEV_LAB in surf.label:
                 line_list = surf.get_lines()
                 # Get middle list
                 middle_array = array([line.get_middle() for line in line_list])
