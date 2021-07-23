@@ -123,21 +123,21 @@ def test_gmsh_mesh_dict():
 
     # Definition of the number of each element on each line
     mesh_dict = {
-        "Tooth_Yoke_Side_Right": 5,
-        "Tooth_Yoke_Side_Left": 5,
-        "Tooth_Yoke_Arc": 5,
-        "Tooth_line_3": 2,
-        "Tooth_line_4": 8,
-        "Tooth_line_5": 1,
-        "Tooth_line_6": 1,
-        "Tooth_line_7": 1,
-        "Tooth_bore_arc_bot": 2,
-        "Tooth_bore_arc_top": 2,
-        "Tooth_line_10": 1,
-        "Tooth_line_11": 1,
-        "Tooth_line_12": 1,
-        "Tooth_line_13": 8,
-        "Tooth_line_14": 2,
+        "0": 5,  # Yoke_Side_Right
+        "1": 5,  # Yoke_Side_Left
+        "2": 5,  # Yoke_Arc
+        "3": 2,
+        "4": 8,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 2,  # bore_arc_bot
+        "9": 2,  # bore_arc_top
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 8,
+        "14": 2,
     }
     gen_3D_mesh(
         lamination=stator,
@@ -804,4 +804,4 @@ def test_Optimization_problem():
 
 
 if __name__ == "__main__":
-    test_WindingUD()
+    test_gmsh_mesh_dict()
