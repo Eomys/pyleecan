@@ -4,6 +4,7 @@ from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 import matplotlib.pyplot as plt
 
+from ....Functions.labels import decode_label, WIND_LAB, BAR_LAB, LAM_LAB
 from ....Functions.Winding.find_wind_phase_color import find_wind_phase_color
 from ....Functions.Winding.gen_phase_list import gen_name
 from ....Functions.init_fig import init_fig
@@ -89,9 +90,10 @@ def plot(
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
-        if surf.label is not None and "Lamination" in surf.label:
+        label_dict = decode_label(surf.label)
+        if LAM_LAB in label_dict["surf_type"]:
             patches.extend(surf.get_patches(color=lam_color, is_edge_only=is_edge_only))
-        elif "Wind" in surf.label or "Bar" in surf.label:
+        elif WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
             if not is_lam_only:
                 color, sign = find_wind_phase_color(wind_mat=wind_mat, label=surf.label)
                 if sign == "+" and is_add_sign:
