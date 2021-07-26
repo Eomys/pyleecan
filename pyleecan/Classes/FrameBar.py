@@ -28,11 +28,6 @@ except ImportError as error:
     comp_surface = error
 
 try:
-    from ..Methods.Machine.FrameBar.comp_volume import comp_volume
-except ImportError as error:
-    comp_volume = error
-
-try:
     from ..Methods.Machine.FrameBar.comp_height_gap import comp_height_gap
 except ImportError as error:
     comp_height_gap = error
@@ -58,7 +53,7 @@ from .Material import Material
 
 
 class FrameBar(Frame):
-    """machine frame with structural bars between frame and outer lamination"""
+    """machine frame with polar structural bars between frame and outer lamination"""
 
     VERSION = 1
 
@@ -85,17 +80,6 @@ class FrameBar(Frame):
         )
     else:
         comp_surface = comp_surface
-    # cf Methods.Machine.FrameBar.comp_volume
-    if isinstance(comp_volume, ImportError):
-        comp_volume = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use FrameBar method comp_volume: " + str(comp_volume)
-                )
-            )
-        )
-    else:
-        comp_volume = comp_volume
     # cf Methods.Machine.FrameBar.comp_height_gap
     if isinstance(comp_height_gap, ImportError):
         comp_height_gap = property(

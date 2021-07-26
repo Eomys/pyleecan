@@ -1,7 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Nbar,m,Number of bars,0,int,8,1,,,Machine,Frame,build_geometry,VERSION,1,machine frame with structural bars between frame and outer lamination
+Nbar,m,Number of bars,0,int,8,1,,,Machine,Frame,build_geometry,VERSION,1,machine frame with polar structural bars between frame and outer lamination
 wbar,m,Width of bars,0,float,0.01,0,,,,,comp_surface,,,
-,,,,,,,,,,,comp_volume,,,
 ,,,,,,,,,,,comp_height_gap,,,
 ,,,,,,,,,,,build_geometry_bar,,,
 ,,,,,,,,,,,comp_surface_bar,,,

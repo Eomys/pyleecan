@@ -1767,12 +1767,11 @@
             }
         ],
         "daughters": [],
-        "desc": "machine frame with structural bars between frame and outer lamination",
+        "desc": "machine frame with polar structural bars between frame and outer lamination",
         "is_internal": false,
         "methods": [
             "build_geometry",
             "comp_surface",
-            "comp_volume",
             "comp_height_gap",
             "build_geometry_bar",
             "comp_surface_bar",
