@@ -4,6 +4,7 @@ from os.path import join
 import pytest
 from numpy import pi
 
+from pyleecan.Classes.Lamination import Lamination
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Methods.Slot.VentilationTrap import TrapezeBuildGeometryError
 
@@ -18,6 +19,7 @@ class Test_VentilationTrap(object):
         test_obj = VentilationTrap(
             Zh=6, Alpha0=pi / 6, W1=30e-3, W2=60e-3, D0=0.05, H0=0.3
         )
+        lam = Lamination(is_stator=True, axial_vent=[test_obj])
 
         return test_obj
 

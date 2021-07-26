@@ -3,6 +3,7 @@
 from os.path import join
 import pytest
 
+from pyleecan.Classes.Lamination import Lamination
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Methods.Slot.VentilationCirc import CircleBuildGeometryError
 
@@ -15,6 +16,7 @@ class Test_VentilationCirc(object):
     def vent(self):
         """Run at the begining of every test to setup the VentilationCirc"""
         test_obj = VentilationCirc(Zh=8, Alpha0=0, D0=5e-3, H0=40e-3)
+        lam = Lamination(is_stator=True, axial_vent=[test_obj])
 
         return test_obj
 

@@ -4,6 +4,7 @@ from os.path import join
 import pytest
 from numpy import pi
 
+from pyleecan.Classes.Lamination import Lamination
 from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Methods.Slot.VentilationPolar import PolarArcBuildGeometryError
 
@@ -16,6 +17,7 @@ class Test_VentilationPolar(object):
     def vent(self):
         """Run at the begining of every test to setup the VentilationPolar"""
         test_obj = VentilationPolar(Zh=8, H0=0.08, D0=0.01, W1=pi / 8, Alpha0=pi / 8)
+        lam = Lamination(is_stator=True, axial_vent=[test_obj])
 
         return test_obj
 
