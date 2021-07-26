@@ -45,7 +45,9 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         surface = SurfLine(
             line_list=[
                 Segment(0, begin, prop_dict={BOUNDARY_PROP_LAB: SHAFTSR_LAB}),
-                Arc1(begin, end, self.Drsh / 2, prop_dict={BOUNDARY_PROP_LAB: SHAFTR_LAB}),
+                Arc1(
+                    begin, end, self.Drsh / 2, prop_dict={BOUNDARY_PROP_LAB: SHAFTR_LAB}
+                ),
                 Segment(end, 0, prop_dict={BOUNDARY_PROP_LAB: SHAFTSL_LAB}),
             ],
             label=SHAFT_LAB,

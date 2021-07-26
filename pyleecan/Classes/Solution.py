@@ -34,6 +34,7 @@ class Solution(FrozenClass):
         type_cell="triangle",
         label=None,
         dimension=2,
+        unit="",
         init_dict=None,
         init_str=None,
     ):
@@ -58,11 +59,14 @@ class Solution(FrozenClass):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
+            if "unit" in list(init_dict.keys()):
+                unit = init_dict["unit"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.type_cell = type_cell
         self.label = label
         self.dimension = dimension
+        self.unit = unit
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -78,6 +82,7 @@ class Solution(FrozenClass):
         Solution_str += 'type_cell = "' + str(self.type_cell) + '"' + linesep
         Solution_str += 'label = "' + str(self.label) + '"' + linesep
         Solution_str += "dimension = " + str(self.dimension) + linesep
+        Solution_str += 'unit = "' + str(self.unit) + '"' + linesep
         return Solution_str
 
     def __eq__(self, other):
@@ -90,6 +95,8 @@ class Solution(FrozenClass):
         if other.label != self.label:
             return False
         if other.dimension != self.dimension:
+            return False
+        if other.unit != self.unit:
             return False
         return True
 
@@ -107,6 +114,8 @@ class Solution(FrozenClass):
             diff_list.append(name + ".label")
         if other._dimension != self._dimension:
             diff_list.append(name + ".dimension")
+        if other._unit != self._unit:
+            diff_list.append(name + ".unit")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -118,6 +127,7 @@ class Solution(FrozenClass):
         S += getsizeof(self.type_cell)
         S += getsizeof(self.label)
         S += getsizeof(self.dimension)
+        S += getsizeof(self.unit)
         return S
 
     def as_dict(self, **kwargs):
@@ -131,6 +141,7 @@ class Solution(FrozenClass):
         Solution_dict["type_cell"] = self.type_cell
         Solution_dict["label"] = self.label
         Solution_dict["dimension"] = self.dimension
+        Solution_dict["unit"] = self.unit
         # The class name is added to the dict for deserialisation purpose
         Solution_dict["__class__"] = "Solution"
         return Solution_dict
@@ -141,6 +152,7 @@ class Solution(FrozenClass):
         self.type_cell = None
         self.label = None
         self.dimension = None
+        self.unit = None
 
     def _get_type_cell(self):
         """getter of type_cell"""
@@ -195,5 +207,23 @@ class Solution(FrozenClass):
         :Type: int
         :min: 1
         :max: 3
+        """,
+    )
+
+    def _get_unit(self):
+        """getter of unit"""
+        return self._unit
+
+    def _set_unit(self, value):
+        """setter of unit"""
+        check_var("unit", value, "str")
+        self._unit = value
+
+    unit = property(
+        fget=_get_unit,
+        fset=_set_unit,
+        doc=u"""Unit of the solution
+
+        :Type: str
         """,
     )

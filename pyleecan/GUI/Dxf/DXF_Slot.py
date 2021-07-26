@@ -47,6 +47,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.line_list = list()  # List of line from DXF
         self.selected_list = list()  # List of currently selected lines
         self.lam = lam
+        self.Zcenter = 0  # For offset
 
         # Tutorial video link
         self.url = "https://pyleecan.org/videos.html#feature-tutorials"
@@ -56,11 +57,10 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.init_graph()
 
         # Not used yet
-        self.in_coord_center.hide()
-        self.lf_center_x.hide()
-        self.lf_center_y.hide()
         self.lf_axe_angle.hide()
         self.in_axe_angle.hide()
+
+        # Set DXF edit widget
         self.lf_center_x.setValue(0)
         self.lf_center_y.setValue(0)
         self.lf_scaling.validator().setBottom(0)
@@ -90,6 +90,8 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.b_reset.pressed.connect(self.update_graph)
         self.b_cancel.pressed.connect(self.remove_selection)
         self.b_tuto.pressed.connect(self.open_tuto)
+        self.lf_center_x.editingFinished.connect(self.set_center)
+        self.lf_center_y.editingFinished.connect(self.set_center)
 
         # Display the GUI
         self.show()
@@ -194,6 +196,11 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         axes.axis("equal")
         axes.set_axis_off()
 
+    def set_center(self):
+        """Update the position of the center"""
+        self.Zcenter = self.lf_center_x.value() + 1j * self.lf_center_y.value()
+        self.update_graph()
+
     def update_graph(self):
         """Clean and redraw all the lines in viewer
 
@@ -214,6 +221,9 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             else:
                 color = "k"
             axes.plot(point_list.real, point_list.imag, color, zorder=1)
+        # Add lamination center
+        axes.plot(self.Zcenter.real, self.Zcenter.imag, "rx", zorder=0)
+        axes.text(self.Zcenter.real, self.Zcenter.imag, "O")
 
         self.w_viewer.draw()
 
@@ -343,6 +353,11 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             slot.wind_begin_index = None
             slot.wind_end_index = None
 
+        # Translate
+        if self.Zcenter != 0:
+            for line in curve_list:
+                line.translate(-self.Zcenter * self.lf_scaling.value())
+
         # Rotation
         Z1 = curve_list[0].get_begin()
         Z2 = curve_list[-1].get_end()
@@ -378,6 +393,17 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             if slot.wind_begin_index is not None:
                 surf_wind = slot.get_surface_active()
                 surf_wind.plot(fig=fig, ax=ax1, color=WIND_COLOR, is_show_fig=False)
+            # Add point index
+            index = 0
+            for line in slot.line_list:
+                Zb = line.get_begin()
+                ax1.plot(Zb.real, Zb.imag, "rx", zorder=0)
+                ax1.text(Zb.real, Zb.imag, str(index))
+                index += 1
+            Ze = slot.line_list[-1].get_end()
+            ax1.plot(Ze.real, Ze.imag, "rx", zorder=0)
+            ax1.text(Ze.real, Ze.imag, str(index))
+            # Lamination point
             lam.plot(fig=fig, ax=ax2)
 
     def save(self):
@@ -397,8 +423,15 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             )[0]
             if save_file_path not in ["", ".json", None]:
                 self.save_path = save_file_path
-                slot.save(save_file_path)
-                self.accept()
+                try:
+                    slot.save(save_file_path)
+                    self.accept()
+                except Exception as e:
+                    QMessageBox().critical(
+                        self,
+                        self.tr("Error"),
+                        self.tr("Error while saving slot json file:\n" + str(e)),
+                    )
 
     def open_tuto(self):
         """Open the tutorial video in a web browser"""

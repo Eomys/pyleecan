@@ -67,7 +67,9 @@ def get_group(self, group_names):
         connect_dict, nb_cell, indice_dict = mesh_init.get_cell(sep)
 
         node_indice = list()
-        mesh_new = MeshMat(_is_renum=True)
+        mesh_new = MeshMat(
+            _is_renum=True, sym=mesh_init.sym, is_antiper_a=mesh_init.is_antiper_a
+        )
         for key in connect_dict:
             node_indice.extend(np.unique(connect_dict[key]))
             mesh_new.cell[key] = CellMat(

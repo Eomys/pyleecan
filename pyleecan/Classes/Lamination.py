@@ -130,6 +130,11 @@ except ImportError as error:
     get_bore_desc = error
 
 try:
+    from ..Methods.Machine.Lamination.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
+
+try:
     from ..Methods.Machine.Lamination.get_label import get_label
 except ImportError as error:
     get_label = error
@@ -388,6 +393,17 @@ class Lamination(FrozenClass):
         )
     else:
         get_bore_desc = get_bore_desc
+    # cf Methods.Machine.Lamination.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # cf Methods.Machine.Lamination.get_label
     if isinstance(get_label, ImportError):
         get_label = property(

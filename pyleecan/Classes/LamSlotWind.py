@@ -48,11 +48,6 @@ except ImportError as error:
     get_pole_pair_number = error
 
 try:
-    from ..Methods.Machine.LamSlotWind.get_name_phase import get_name_phase
-except ImportError as error:
-    get_name_phase = error
-
-try:
     from ..Methods.Machine.LamSlotWind.plot import plot
 except ImportError as error:
     plot = error
@@ -209,18 +204,6 @@ class LamSlotWind(LamSlot):
         )
     else:
         get_pole_pair_number = get_pole_pair_number
-    # cf Methods.Machine.LamSlotWind.get_name_phase
-    if isinstance(get_name_phase, ImportError):
-        get_name_phase = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotWind method get_name_phase: "
-                    + str(get_name_phase)
-                )
-            )
-        )
-    else:
-        get_name_phase = get_name_phase
     # cf Methods.Machine.LamSlotWind.plot
     if isinstance(plot, ImportError):
         plot = property(
