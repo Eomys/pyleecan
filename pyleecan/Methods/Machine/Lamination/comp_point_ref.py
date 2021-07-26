@@ -28,7 +28,7 @@ def comp_point_ref(self, sym=1):
     if self.yoke_notch in [None, list()]:
         angle = pi / sym
     else:
-        yoke_desc, _ = self.get_yoke_desc(sym=sym, is_reversed=False, line_label=None)
+        yoke_desc, _ = self.get_yoke_desc(sym=sym, is_reversed=False)
         # Find an Arc without notches
         ii = 0
         while ii < len(yoke_desc) and not (
