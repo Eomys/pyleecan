@@ -225,7 +225,7 @@
                 "surf_list": [
                     {
                         "__class__": "SurfLine",
-                        "label": "HoleVoid",
+                        "label": "Hole_Rotor_R0_T0_S0",
                         "line_list": [
                             {
                                 "__class__": "Segment",
@@ -274,7 +274,7 @@
                     },
                     {
                         "__class__": "SurfLine",
-                        "label": "HoleVoid",
+                        "label": "Hole_Rotor_R0_T1_S0",
                         "line_list": [
                             {
                                 "__class__": "Segment",
@@ -311,7 +311,7 @@
                     },
                     {
                         "__class__": "SurfLine",
-                        "label": "HoleVoid",
+                        "label": "Hole_Rotor_R0_T2_S0",
                         "line_list": [
                             {
                                 "__class__": "Segment",
@@ -348,7 +348,7 @@
                     },
                     {
                         "__class__": "SurfLine",
-                        "label": "HoleVoid",
+                        "label": "Hole_Rotor_R0_T3_S0",
                         "line_list": [
                             {
                                 "__class__": "Segment",
@@ -391,7 +391,7 @@
                     },
                     {
                         "__class__": "SurfLine",
-                        "label": "HoleMag",
+                        "label": "HoleMagnet_Rotor_Parallel_N_R0_T0_S0",
                         "line_list": [
                             {
                                 "__class__": "Segment",
@@ -422,7 +422,7 @@
                     },
                     {
                         "__class__": "SurfLine",
-                        "label": "HoleMag",
+                        "label": "HoleMagnet_Rotor_Parallel_N_R0_T1_S0",
                         "line_list": [
                             {
                                 "__class__": "Segment",
@@ -453,7 +453,7 @@
                     },
                     {
                         "__class__": "SurfLine",
-                        "label": "HoleVoid",
+                        "label": "Hole_Rotor_R0_T4_S0",
                         "line_list": [
                             {
                                 "__class__": "Segment",
@@ -496,7 +496,7 @@
                     },
                     {
                         "__class__": "SurfLine",
-                        "label": "HoleVoid",
+                        "label": "Hole_Rotor_R0_T5_S0",
                         "line_list": [
                             {
                                 "__class__": "Segment",
@@ -533,7 +533,7 @@
                     },
                     {
                         "__class__": "SurfLine",
-                        "label": "HoleVoid",
+                        "label": "Hole_Rotor_R0_T6_S0",
                         "line_list": [
                             {
                                 "__class__": "Segment",
@@ -570,7 +570,7 @@
                     },
                     {
                         "__class__": "SurfLine",
-                        "label": "HoleVoid",
+                        "label": "Hole_Rotor_R0_T7_S0",
                         "line_list": [
                             {
                                 "__class__": "Segment",
