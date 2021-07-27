@@ -65,7 +65,7 @@ def comp_volt_PWM_NUM(
         0: Fixed fswi
         1: Variable fswi
         2: Random fswi
-        3: Symetrical random fswi
+        3: Symmetrical random fswi
     """
 
     Npsim = len(Tpwmu)
@@ -97,16 +97,12 @@ def comp_volt_PWM_NUM(
             triangle = Vdc1 / 2 * signal.sawtooth(wswiT, 0.5)
         else:
             print("ERROR:only SPWM supports the varaible switching frequency")
-    elif fswimode == 2 or fswimode== 3: # Random fswi & Symetrical random fswi
+    elif fswimode == 2 or fswimode== 3: # Random fswi & Symmetrical random fswi
         t1=round(Tpwmu[-1]*5000000)
-        if fswimode=='Symetrical random fswi':
+        if fswimode== 3:
             num_slice=round((fswi_max+fswi)/2*Tpwmu[-1])
             delta_fswi=np.random.randint(fswi, high=fswi_max+1, size=num_slice*2,dtype=int)
             delta_fswi[1::2]=delta_fswi[0::2]*-1
-            # elif fswimode=='Random carrier amplitude':
-            #     num_slice=round(fswiMin*duration)
-            #     delta_fswi=np.random.randint(fswiMin, high=fswiMin+1, size=num_slice*2,dtype=int)
-            #     delta_fswi[1::2]=delta_fswi[0::2]*-1
 
         else:
 
@@ -304,7 +300,7 @@ def comp_carrier(time, fswi, type_carrier):
         1: forward toothsaw carrier
         2: backwards toothsaw carrier
         3: toothsaw carrier
-        else: symetrical toothsaw carrier
+        else: Symmetrical toothsaw carrier
 
     Returns
     -------
