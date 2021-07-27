@@ -26,7 +26,7 @@ def get_data(self):
     """
     # Tpwmu=np.arange(fs*duration)/fs,
     Tpwmu = np.linspace(0, self.duration, self.fs * self.duration, endpoint=True)
-    v_pwm, Vas, M_I = comp_volt_PWM_NUM(
+    v_pwm, Vas, MI, triangle= comp_volt_PWM_NUM(
         Tpwmu=Tpwmu,
         freq0=self.f,
         freq0_max=self.fmax,
@@ -49,4 +49,4 @@ def get_data(self):
     PWM2 = np.where(v_pwm[1] < ref, -1, 1)  # .astype(np.float32)
     PWM3 = np.where(v_pwm[2] < ref, -1, 1)  # .astype(np.float32)
     Triphase = np.column_stack([PWM1, PWM2, PWM3])
-    return Triphase
+    return Triphase, Vas, MI,triangle
