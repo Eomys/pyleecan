@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Zs,-,slot number,0,int,36,0,1000,,Slot,,build_geometry_active,VERSION,1,Generic class for slot (abstract)
+Zs,-,slot number,0,int,36,0,,,Slot,,build_geometry_active,VERSION,1,Generic class for slot (abstract)
 ,,,,,,,,,,,build_geometry_half_tooth,,,
 ,,,,,,,,,,,check,,,
 ,,,,,,,,,,,comp_angle_active_eq,,,

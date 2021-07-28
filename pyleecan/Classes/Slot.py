@@ -465,7 +465,7 @@ class Slot(FrozenClass):
 
     def _set_Zs(self, value):
         """setter of Zs"""
-        check_var("Zs", value, "int", Vmin=0, Vmax=1000)
+        check_var("Zs", value, "int", Vmin=0)
         self._Zs = value
 
     Zs = property(
@@ -475,6 +475,5 @@ class Slot(FrozenClass):
 
         :Type: int
         :min: 0
-        :max: 1000
         """,
     )

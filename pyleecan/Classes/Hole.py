@@ -372,7 +372,7 @@ class Hole(FrozenClass):
 
     def _set_Zh(self, value):
         """setter of Zh"""
-        check_var("Zh", value, "int", Vmin=0, Vmax=1000)
+        check_var("Zh", value, "int", Vmin=0)
         self._Zh = value
 
     Zh = property(
@@ -382,7 +382,6 @@ class Hole(FrozenClass):
 
         :Type: int
         :min: 0
-        :max: 1000
         """,
     )
 

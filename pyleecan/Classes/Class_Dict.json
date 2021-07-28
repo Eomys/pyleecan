@@ -1850,7 +1850,7 @@
         "properties": [
             {
                 "desc": "Number of Hole around the circumference",
-                "max": "1000",
+                "max": "",
                 "min": "0",
                 "name": "Zh",
                 "type": "int",
@@ -9500,7 +9500,7 @@
         "properties": [
             {
                 "desc": "slot number",
-                "max": "1000",
+                "max": "",
                 "min": "0",
                 "name": "Zs",
                 "type": "int",
@@ -12904,7 +12904,7 @@
                 "value": 1
             },
             {
-                "desc": "Diameter of the hole centers",
+                "desc": "Radius of the hole centers",
                 "max": "",
                 "min": "0",
                 "name": "H0",
