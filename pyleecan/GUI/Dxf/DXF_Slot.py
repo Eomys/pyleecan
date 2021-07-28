@@ -356,7 +356,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         # Translate
         if self.Zcenter != 0:
             for line in curve_list:
-                line.translate(-self.Zcenter*self.lf_scaling.value())
+                line.translate(-self.Zcenter * self.lf_scaling.value())
 
         # Rotation
         Z1 = curve_list[0].get_begin()
