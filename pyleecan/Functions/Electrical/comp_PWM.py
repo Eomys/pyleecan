@@ -20,6 +20,8 @@ def comp_volt_PWM_NUM(
     fswi_max=0,
     freq0_max=0,
     type_carrier=0,
+    var_amp=0,
+    
 ):
     """
     Generalized DPWM using numerical method according to
@@ -66,10 +68,14 @@ def comp_volt_PWM_NUM(
         1: Variable fswi
         2: Random fswi
         3: Symmetrical random fswi
+        4: Random amplitude carrier wave
+
+    var_amp: int
+        precentage of variation of the carrier amplitude
     """
 
     Npsim = len(Tpwmu)
-    triangle=np.ones(len(Tpwmu))
+    triangle = np.ones(len(Tpwmu))
     if fmode == 0:  # Fixed speed:
         ws = 2 * np.pi * freq0
     elif fmode == 1:  # Variable speed:
@@ -85,6 +91,7 @@ def comp_volt_PWM_NUM(
 
     if fswimode == 0:  # Fixed fswi:
         if type_DPWM == 8:
+
             triangle = Vdc1 / 2 * comp_carrier(Tpwmu, fswi, type_carrier)
         else:
             Th = 1 / fswi
@@ -97,37 +104,77 @@ def comp_volt_PWM_NUM(
             triangle = Vdc1 / 2 * signal.sawtooth(wswiT, 0.5)
         else:
             print("ERROR:only SPWM supports the varaible switching frequency")
-    elif fswimode == 2 or fswimode== 3: # Random fswi & Symmetrical random fswi
-        t1=round(Tpwmu[-1]*5000000)
-        if fswimode== 3:
-            num_slice=round((fswi_max+fswi)/2*Tpwmu[-1])
-            delta_fswi=np.random.randint(fswi, high=fswi_max+1, size=num_slice*2,dtype=int)
-            delta_fswi[1::2]=delta_fswi[0::2]*-1
+    elif fswimode == 2 or fswimode == 3:  # Random fswi & Symmetrical random fswi
+        t1 = round(Tpwmu[-1] * 5000000)
+        if fswimode == 3:
+            num_slice = round((fswi_max + fswi) / 2 * Tpwmu[-1])
+            delta_fswi = np.random.randint(
+                fswi, high=fswi_max + 1, size=num_slice * 2, dtype=int
+            )
+            delta_fswi[1::2] = delta_fswi[0::2] * -1
 
         else:
 
-            num_slice=round((fswi_max+fswi)/2*Tpwmu[-1])
-            delta_fswi=np.random.randint(fswi, high=fswi_max+1, size=num_slice*2,dtype=int)
-            delta_fswi[1::2]=delta_fswi[1::2]*-1
+            num_slice = round((fswi_max + fswi) / 2 * Tpwmu[-1])
+            delta_fswi = np.random.randint(
+                fswi, high=fswi_max + 1, size=num_slice * 2, dtype=int
+            )
+            delta_fswi[1::2] = delta_fswi[1::2] * -1
 
-        fswi_base=np.array(np.ones(t1))
-        S_delta=1
-        delta_t=S_delta/abs(delta_fswi)
-        time=sum(delta_t)
-        delta_point=delta_t[:-1]/time*t1
-        delta_point=np.array(delta_point)
-        delta_point=np.append(delta_point,t1-sum(delta_point))
-        fswi=np.concatenate([fswi_base[0: round(delta_point[ii])]*delta_fswi[ii] for ii in range(len(delta_fswi))])
-        if len(fswi)<t1:
-            fswi=np.concatenate((fswi,fswi[-1]*np.ones(t1-len(fswi))))
+        fswi_base = np.array(np.ones(t1))
+        S_delta = 1
+        delta_t = S_delta / abs(delta_fswi)
+        time = sum(delta_t)
+        delta_point = delta_t[:-1] / time * t1
+        delta_point = np.array(delta_point)
+        delta_point = np.append(delta_point, t1 - sum(delta_point))
+        fswi = np.concatenate(
+            [
+                fswi_base[0 : round(delta_point[ii])] * delta_fswi[ii]
+                for ii in range(len(delta_fswi))
+            ]
+        )
+        if len(fswi) < t1:
+            fswi = np.concatenate((fswi, fswi[-1] * np.ones(t1 - len(fswi))))
         else:
-            fswi=fswi[:t1]
-        
-        Tpwmu_10=np.linspace(0, round(Tpwmu[-1]), round(Tpwmu[-1])*5000000, endpoint=True)
+            fswi = fswi[:t1]
+
+        Tpwmu_10 = np.linspace(
+            0, round(Tpwmu[-1]), round(Tpwmu[-1]) * 5000000, endpoint=True
+        )
         triangle = integrate.cumtrapz(fswi, Tpwmu_10, initial=0)
-        Aml_tri=max(triangle)
-        triangle=triangle/Aml_tri*Vdc1-Vdc1/2*np.ones(np.size(Tpwmu_10))
-        triangle=signal.resample(triangle,len(Tpwmu))
+        Aml_tri = max(triangle)
+        triangle = triangle / Aml_tri * Vdc1 - Vdc1 / 2 * np.ones(np.size(Tpwmu_10))
+        triangle = signal.resample(triangle, len(Tpwmu))
+    elif fswimode == 4:  # Random amplitude carrier wave
+        if type_DPWM == 8:
+            triangle = Vdc1 / 2 * (comp_carrier(Tpwmu, fswi, type_carrier))
+            num_slice = int(fswi * Tpwmu[-1])
+            delta_amp = np.random.randint(
+                -var_amp, high=var_amp + 1, size=int(num_slice), dtype=int
+            ) / 100 + np.ones(int(num_slice))
+
+            amp_base = np.ones(len(Tpwmu))
+            S_delta = 1
+
+            delta_t = S_delta / fswi * np.ones(int(num_slice))
+
+            delta_point = np.round(delta_t / Tpwmu[-1], 4) * len(Tpwmu)
+            delta_point = np.array(delta_point).astype(int)
+            amp = np.concatenate(
+                [
+                    amp_base[0 : delta_point[ii]] * delta_amp[ii]
+                    for ii in range(len(delta_amp))
+                ]
+            )
+            if len(amp) < len(Tpwmu):
+                amp = np.concatenate((amp, amp[-1] * np.ones(len(Tpwmu) - len(amp))))
+            else:
+                amp = amp[: len(Tpwmu)]
+            triangle = triangle * amp
+        else:
+            print("ERROR:only SPWM supports the varaible switching frequency")
+
     else:
         pass
 
@@ -282,7 +329,6 @@ def comp_volt_PWM_NUM(
         v_pwm[1, Tpwmu > ((n + 1) * Th - T2)] = -Vdc1 / 2
         v_pwm[2, Tpwmu < (T3 + n * Th)] = -Vdc1 / 2
         v_pwm[2, Tpwmu > ((n + 1) * Th - T3)] = -Vdc1 / 2
-
 
     return v_pwm, Vas, M_I, triangle
 

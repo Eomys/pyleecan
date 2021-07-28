@@ -18,7 +18,7 @@ def testSPWM():
     """Check """
     # fs, duration, f,fmax,fmode, fswimode,fswi, fswi_max,typePWM, Vdc1, U0, type_carrier
     for ii in range(2):
-        for jj in range(4):
+        for jj in range(5):
             for hh in range(4):
                 test_obj = ImportGenPWM(
                     fs=96000,
@@ -33,15 +33,13 @@ def testSPWM():
                     Vdc1=2,
                     U0=0.70,
                     type_carrier=hh,
+                    var_amp=20,
                 )
                 # Generate the signal
                 time = linspace(start=0, stop=2, num=2 * 96000, endpoint=True)
                 Triphase = test_obj.get_data()[0]
-                Vas=test_obj.get_data()[1]
-                Triangle=test_obj.get_data()[3]
-
-
-                
+                Vas = test_obj.get_data()[1]
+                Triangle = test_obj.get_data()[3]
 
                 # Plot/save the result
                 plt.close("all")
@@ -61,6 +59,45 @@ def testSPWM():
                         + "_SPWM.png",
                     )
                 )
+
+
+# def testSPWM():
+#     """Check """
+#     # fs, duration, f,fmax,fmode, fswimode,fswi, fswi_max,typePWM, Vdc1, U0, type_carrier
+
+#     test_obj = ImportGenPWM(
+#         fs=96000,
+#         duration=2,
+#         f=1,
+#         fmax=5,
+#         fmode=0,
+#         fswimode=4,
+#         fswi=5,
+#         fswi_max=15,
+#         typePWM=8,
+#         Vdc1=2,
+#         U0=0.70,
+#         type_carrier=6,
+#         var_amp=20,
+#     )
+#     # Generate the signal
+#     time = linspace(start=0, stop=2, num=2 * 96000, endpoint=True)
+#     Triphase = test_obj.get_data()[0]
+#     Vas = test_obj.get_data()[1]
+#     Triangle = test_obj.get_data()[3]
+
+#     # Plot/save the result
+#     plt.close("all")
+#     plt.plot(time, Triphase[:, 1])
+#     plt.plot(time, Vas)
+#     plt.plot(time, Triangle)
+#     fig = plt.gcf()
+#     fig.savefig(
+#         join(
+#             save_path,
+#             "test_ImportGenPWM_" + str(0) + "_" + str(4) + "_" + str(6) + "_SPWM.png",
+#         )
+#     )
 
 
 def testDPWM():
@@ -84,9 +121,8 @@ def testDPWM():
         # Generate the signal
         time = linspace(start=0, stop=2, num=2 * 96000, endpoint=True)
         Triphase = test_obj.get_data()[0]
-        Vas=test_obj.get_data()[1]
-        Triangle=test_obj.get_data()[3]
-
+        Vas = test_obj.get_data()[1]
+        Triangle = test_obj.get_data()[3]
 
         # Plot/save the result
         plt.close("all")
@@ -98,5 +134,7 @@ def testDPWM():
 
 
 if __name__ == "__main__":
-    testDPWM()
+    # testDPWM()
+    # testSPWM()
+
     testSPWM()

@@ -11,3 +11,4 @@ typePWM,,0: GDPWM 1: DPWMMIN 2: DPWMMAX 3: DPWM0 4: DPWM1 5: DPWM2 6: DPWM3 7: S
 Vdc1,V,DC BUS voltage,0,float,2,,,,,,,,,
 U0,V,reference voltage,0,float,1,,,,,,,,,
 type_carrier,,1: forward toothsaw carrier 2: backwards toothsaw carrier 3: toothsaw carrier else: symetrical toothsaw carrier,0,int,0,,,,,,,,,
+var_amp,%,percentage of variation of carrier amplitude,0,int,20,,,,,,,,,
