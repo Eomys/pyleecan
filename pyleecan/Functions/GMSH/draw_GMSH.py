@@ -2,6 +2,7 @@ from ...Classes.Arc import Arc
 from ...Classes.Arc2 import Arc2
 from ...Classes.MachineSIPMSM import MachineSIPMSM
 
+from ...Functions.labels import short_label
 from ...Functions.GMSH import InputError
 from ...Functions.GMSH.get_sliding_band import get_sliding_band
 from ...Functions.GMSH.get_air_box import get_air_box
@@ -404,8 +405,6 @@ def draw_GMSH(
     output,
     sym,
     boundary_prop,
-    boundary_list,
-    surface_label,
     is_antiper=False,
     is_remove_vent=False,
     is_remove_slotS=False,
@@ -430,11 +429,7 @@ def draw_GMSH(
     sym : int
         the symmetry applied on the stator and the rotor (take into account antiperiodicity)
     boundary_prop : dict
-        dictionary to match FEA boundary conditions (dict values) with line labels (dict keys) that are set in the build_geometry methods
-    boundary_list : list
-        list of boundary condition names
-    surface_label : dict
-        dict for the translation of the actual surface labels into FEA software compatible labels
+        dictionary to match FEA boundary conditions (dict values) with line boundary property (dict keys)
     is_remove_vent : bool
         True to remove the ventilation ducts (Default value = False)
     is_remove_slotS : bool
@@ -460,7 +455,7 @@ def draw_GMSH(
     # check some input parameter
     if is_lam_only_S and is_lam_only_R:
         raise InputError(
-            "Only 'is_lam_only_S' or 'is_lam_only_R' can be True at the same time"
+            "is_lam_only_S and is_lam_only_R can't be True at the same time"
         )
 
     # get machine
@@ -523,7 +518,7 @@ def draw_GMSH(
                 {
                     nsurf: {
                         "tag": None,
-                        "label": surface_label.get(surf.label, "UNKNOWN"),
+                        "label": short_label(surf.label),
                     }
                 }
             )
@@ -539,11 +534,11 @@ def draw_GMSH(
                 mesh_dict.update(user_mesh_dict)
 
             # add all lines of the current surface to the gmsh_dict
-            for line in surf.get_lines():
+            for ii, line in enumerate(surf.get_lines()):
                 # When symmetry is 1 the shaft surface is substrtacted from Rotor Lam instead
                 if sym == 1 and line.label == "Lamination_Rotor_Yoke_Radius_Int":
                     continue
-                n_elem = mesh_dict.get(line.label)
+                n_elem = mesh_dict[str(ii)]
                 n_elem = n_elem if n_elem is not None else 0
                 bc_name = get_boundary_condition(line, boundary_prop)
 
@@ -674,7 +669,7 @@ def draw_GMSH(
                 {
                     nsurf: {
                         "tag": None,
-                        "label": surface_label.get(surf.label, "UNKNOWN"),
+                        "label": short_label(surf.label),
                     }
                 }
             )
@@ -772,7 +767,7 @@ def draw_GMSH(
             {
                 nsurf: {
                     "tag": None,
-                    "label": surface_label.get(surf.label, "UNKNOWN"),
+                    "label": short_label(surf.label),
                 }
             }
         )
@@ -856,7 +851,7 @@ def draw_GMSH(
             {
                 nsurf: {
                     "tag": None,
-                    "label": surface_label.get(surf.label, "UNKNOWN"),
+                    "label": short_label(surf.label),
                 }
             }
         )
@@ -924,6 +919,7 @@ def draw_GMSH(
             model.setPhysicalName(2, pg, s_data["label"])
 
     # Set boundary conditions in gmsh lines
+    boundary_list = list(set(boundary_prop.values()))
     for propname in boundary_list:
         bc_id = []
         for s_data in gmsh_dict.values():

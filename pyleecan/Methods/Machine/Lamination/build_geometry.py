@@ -12,7 +12,8 @@ from ....Functions.labels import (
     YOKE_LAB,
     RADIUS_PROP_LAB,
     BOUNDARY_PROP_LAB,
-    YS_LAB,
+    YSR_LAB,
+    YSL_LAB,
 )
 
 
@@ -99,20 +100,20 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         curve_list = list()
         if self.is_internal:
             curve_list.append(
-                Segment(Z0, Z1, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YS_LAB})
+                Segment(Z0, Z1, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YSR_LAB})
             )
         else:
             curve_list.append(
-                Segment(Z3, Z2, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YS_LAB})
+                Segment(Z3, Z2, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YSL_LAB})
             )
         curve_list.extend(ext_line)
         if self.is_internal:
             curve_list.append(
-                Segment(Z2, Z3, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YS_LAB})
+                Segment(Z2, Z3, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YSL_LAB})
             )
         else:
             curve_list.append(
-                Segment(Z1, Z0, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YS_LAB})
+                Segment(Z1, Z0, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YSR_LAB})
             )
         if self.Rint > 0:
             curve_list.extend(int_line)

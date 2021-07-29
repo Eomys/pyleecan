@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ....Functions.FEMM import boundary_prop
+from ....Functions.FEMM import MagFEMM_BP_dict
 from numpy import abs, exp
 from ....Functions.labels import BOUNDARY_PROP_LAB
 
@@ -37,7 +37,7 @@ def draw_FEMM(
 
     # Get BC (if any)
     if self.prop_dict is not None and BOUNDARY_PROP_LAB in self.prop_dict:
-        propname = boundary_prop[self.prop_dict[BOUNDARY_PROP_LAB]]
+        propname = MagFEMM_BP_dict[self.prop_dict[BOUNDARY_PROP_LAB]]
 
     # split if arc angle > 180
     angle = self.get_angle(is_deg=True)

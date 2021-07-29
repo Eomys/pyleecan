@@ -1,8 +1,12 @@
-# Lamination Label
+## Lamination Label
 STATOR_LAB = "Stator"
 ROTOR_LAB = "Rotor"
 NO_LAM_LAB = "None"  # To replace "Stator-X" when no lamination
-# Surface label
+# Short Lamination label alternative
+STATOR_LAB_S = "STA"  # Short version
+ROTOR_LAB_S = "ROT"  # Short version
+
+## Surface label
 LAM_LAB = "Lamination"
 SHAFT_LAB = "Shaft"
 BORE_LAB = "Bore"
@@ -17,13 +21,26 @@ AIRGAP_LAB = "Airgap"
 NO_MESH_LAB = "NoMesh"
 VENT_LAB = "Ventilation"
 TOOTH_LAB = "Tooth"
+# Short Surface label alternative
+LAM_LAB_S = "Lam"
+HOLEV_LAB_S = "HV"
+WIND_LAB_S = "Wind"
+HOLEM_LAB_S = "HM"
+VENT_LAB_S = "Vent"
 
-# Line Property dict
+## Line Property dict
 BOUNDARY_PROP_LAB = "Boundary"
+RIGHT_LABEL = "Right"
+LEFT_LABEL = "Left"
 YS_LAB = "YokeSide"
-SHAFTSR_LAB = "ShaftSide-Right"
-SHAFTSL_LAB = "ShaftSide-Left"
+YSR_LAB = YS_LAB+"-"+RIGHT_LABEL
+YSL_LAB = YS_LAB+"-"+LEFT_LABEL
+
+SHAFTS_LAB = "ShaftSide"
+SHAFTSR_LAB = SHAFTS_LAB+"-"+RIGHT_LABEL
+SHAFTSL_LAB = SHAFTS_LAB+"-"+LEFT_LABEL
 SHAFTR_LAB = "ShaftRadius"
+
 SLID_LINE1_LAB = "airgap_line_1"
 SLID_LINE2_LAB = "airgap_line_2"
 SLID_LINE_LAB = "sliding_line"
@@ -111,3 +128,24 @@ def get_obj_from_label(machine, label=None, label_dict=None):
     elif MAG_LAB in label_dict["surf_type"]:
         return lam_obj.magnet
     raise NotImplementedError(label_dict["full"] + " is not available yet")
+
+
+def short_label(label):
+    """Returns a short version of a label"""
+    label_dict = decode_label(label)
+    # Short Lamination name
+    label_dict["lam_label"].replace(STATOR_LAB, STATOR_LAB_S)
+    label_dict["lam_label"].replace(ROTOR_LAB, ROTOR_LAB_S)
+    # Short Surface name
+    label_dict["surf_type"].replace(LAM_LAB, LAM_LAB_S)
+    label_dict["surf_type"].replace(WIND_LAB, WIND_LAB_S)
+    label_dict["surf_type"].replace(HOLEV_LAB, HOLEV_LAB_S)
+    label_dict["surf_type"].replace(HOLEM_LAB, HOLEM_LAB_S)
+    label_dict["surf_type"].replace(VENT_LAB, VENT_LAB_S)
+
+    # Build the new label
+    label = label_dict["lam_label"] + "_" + label_dict["surf_type"]
+    if "index" in label_dict:
+        label += "_" + label_dict["index"]
+    return label
+

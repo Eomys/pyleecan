@@ -5,7 +5,8 @@ from ....Classes.SurfLine import SurfLine
 from ....Methods import ParentMissingError
 from ....Functions.labels import (
     BOUNDARY_PROP_LAB,
-    YS_LAB,
+    YSR_LAB,
+    YSL_LAB,
     YOKE_LAB,
     NO_LAM_LAB,
     TOOTH_LAB,
@@ -41,7 +42,7 @@ def get_surface_tooth(self):
     Z1 = Ryoke * exp(1j * pi / self.Zs)
     Z2 = Ryoke * exp(-1j * pi / self.Zs)
     curve_list.append(
-        Segment(top_list[-1].get_end(), Z1, prop_dict={BOUNDARY_PROP_LAB: YS_LAB})
+        Segment(top_list[-1].get_end(), Z1, prop_dict={BOUNDARY_PROP_LAB: YSL_LAB})
     )
     if Ryoke > 0:
         curve_list.append(
@@ -54,7 +55,7 @@ def get_surface_tooth(self):
             )
         )
     curve_list.append(
-        Segment(Z2, bot_list[0].get_begin(), prop_dict={BOUNDARY_PROP_LAB: YS_LAB})
+        Segment(Z2, bot_list[0].get_begin(), prop_dict={BOUNDARY_PROP_LAB: YSR_LAB})
     )
     # Second half of the tooth
     curve_list.extend(bot_list)

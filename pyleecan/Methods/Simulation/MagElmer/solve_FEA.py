@@ -19,7 +19,7 @@ from ....Functions.Winding.gen_phase_list import gen_name
 
 
 from ....Classes.Magnetics import Magnetics
-from ....Methods.Simulation.MagElmer import surface_label
+from ....Functinos.labels import short_label
 from ....Functions.Winding.find_wind_phase_color import get_phase_id
 from .... import __version__
 from ....Functions.get_path_binary import get_path_binary
@@ -172,7 +172,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         Ncond_Fminus = 1
         Npcp = machine.stator.winding.Npcp
         for surf in surf_list:
-            label = surface_label.get(surf.label, "UNKNOWN")
+            label = short_label(surf.label)
             if "H_MAGNET" in label:  # LamHole
                 if "PAR" in label:
                     lam = machine.rotor
