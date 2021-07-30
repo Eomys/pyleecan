@@ -128,4 +128,4 @@ def encode_complex(z):
 
 if __name__ == "__main__":
     gmsh_dict = test_gmsh_ipm()
-    # gmsh_dict = test_gmsh_spm()
+    gmsh_dict = test_gmsh_spm()

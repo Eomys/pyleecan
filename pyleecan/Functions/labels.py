@@ -21,6 +21,7 @@ AIRGAP_LAB = "Airgap"
 NO_MESH_LAB = "NoMesh"
 VENT_LAB = "Ventilation"
 TOOTH_LAB = "Tooth"
+AIRBOX_LAB = "Airbox"
 # Short Surface label alternative
 LAM_LAB_S = "Lam"
 HOLEV_LAB_S = "HV"
@@ -37,21 +38,30 @@ TOP_LAB = "Top"
 YS_LAB = "YokeSide"
 YSR_LAB = YS_LAB + "-" + RIGHT_LAB
 YSL_LAB = YS_LAB + "-" + LEFT_LAB
-
+# Shaft BC properties
 SHAFTS_LAB = "ShaftSide"
 SHAFTSR_LAB = SHAFTS_LAB + "-" + RIGHT_LAB
 SHAFTSL_LAB = SHAFTS_LAB + "-" + LEFT_LAB
 SHAFTR_LAB = "ShaftRadius"
-
+# AirBox BC properties
+AIRBOX_S_LAB = "ABSide"
+AIRBOX_SR_LAB = AIRBOX_S_LAB + "-" + RIGHT_LAB
+AIRBOX_SL_LAB = AIRBOX_S_LAB + "-" + LEFT_LAB
+AIRBOX_R_LAB = "ABRadius"
+# Sliding Band BC properties
 SBS_TR_LAB = "sliding_sideline_" + TOP_LAB + "_" + RIGHT_LAB
 SBS_TL_LAB = "sliding_sideline_" + TOP_LAB + "_" + LEFT_LAB
 SBS_BR_LAB = "sliding_sideline_" + BOT_LAB + "_" + RIGHT_LAB
 SBS_BL_LAB = "sliding_sideline_" + BOT_LAB + "_" + LEFT_LAB
 SBR_B_LAB = "sliding_radius_" + BOT_LAB
 SBR_T_LAB = "sliding_radius_" + TOP_LAB
-SLID_LINE1_LAB = "airgap_line_1"
-SLID_LINE2_LAB = "airgap_line_2"
-SLID_LINE_LAB = "sliding_line"
+# Airgap  BC properties
+AS_TR_LAB = "airgap_sideline_" + TOP_LAB + "_" + RIGHT_LAB
+AS_TL_LAB = "airgap_sideline_" + TOP_LAB + "_" + LEFT_LAB
+AS_BR_LAB = "airgap_sideline_" + BOT_LAB + "_" + RIGHT_LAB
+AS_BL_LAB = "airgap_sideline_" + BOT_LAB + "_" + LEFT_LAB
+AR_B_LAB = "airgap_radius_" + BOT_LAB
+AR_T_LAB = "airgap_radius_" + TOP_LAB
 
 RADIUS_PROP_LAB = "LamRadius"
 MAGNET_PROP_LAB = "MagnetLines"

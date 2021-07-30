@@ -118,7 +118,7 @@ def get_sliding_band(sym, lam_int, lam_ext):
                 begin=Z6,
                 end=Z7,
                 radius=Rgap_mec_ext - W_sb,
-                prop_dict={BOUNDARY_PROP_LAB: SBR_B_LAB},
+                prop_dict={BOUNDARY_PROP_LAB: SBR_T_LAB},
             )
         )
         airgap_lines.append(  # Top Left Side
