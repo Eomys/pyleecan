@@ -19,7 +19,21 @@ from ....Functions.Winding.gen_phase_list import gen_name
 
 
 from ....Classes.Magnetics import Magnetics
-from ....Functinos.labels import short_label
+from ....Functions.labels import (
+    AIRGAP_LAB,
+    ROTOR_LAB_S,
+    short_label,
+    decode_label,
+    get_obj_from_label,
+    LAM_LAB_S,
+    STATOR_LAB_S,
+    HOLEV_LAB_S,
+    HOLEM_LAB_S,
+    WIND_LAB_S,
+    MAG_LAB,
+    SHAFT_LAB,
+    NO_LAM_LAB, SLID_LAB, BOT_LAB
+)
 from ....Functions.Winding.find_wind_phase_color import get_phase_id
 from .... import __version__
 from ....Functions.get_path_binary import get_path_binary
@@ -173,39 +187,25 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         Npcp = machine.stator.winding.Npcp
         for surf in surf_list:
             label = short_label(surf.label)
-            if "H_MAGNET" in label:  # LamHole
-                if "PAR" in label:
-                    lam = machine.rotor
+            label_dict = decode_label(label)
+            point_ref = surf.point_ref
+            if HOLEM_LAB_S in label_dict["surf_type"]:  # LamHole
+                mag_obj = get_obj_from_label(machine, label_dict=label_dict)
+                if mag_obj.type_magnetization == 1:  # Parallel
                     magnetization_type = "parallel"
-                    point_ref = surf.point_ref
                     # calculate pole angle and angle of pole middle
-                    alpha_p = 360 / lam.hole[0].Zh
+                    T_id = label_dict["T_id"]
+                    hole = mag_obj.parent
+                    Zh = hole.Zh
+                    alpha_p = 360 / Zh
                     mag_0 = (
-                        floor_divide(np_angle(point_ref, deg=True), alpha_p) + 0.5
+                        floor_divide(angle(point_ref, deg=True), alpha_p) + 0.5
                     ) * alpha_p
 
-                    # HoleM50 or HoleM53
-                    if (type(lam.hole[0]) == HoleM50) or (type(lam.hole[0]) == HoleM53):
-                        if "T0" in label:
-                            mag = mag_0 + lam.hole[0].comp_alpha() * 180 / pi
-                        else:
-                            mag = mag_0 - lam.hole[0].comp_alpha() * 180 / pi
-
-                    # HoleM51
-                    if type(lam.hole[0]) == HoleM51:
-                        if "T0" in label:
-                            mag = mag_0 + lam.hole[0].comp_alpha() * 180 / pi
-                        elif "T1" in label:
-                            mag = mag_0
-                        else:
-                            mag = mag_0 - lam.hole[0].comp_alpha() * 180 / pi
-
-                    # HoleM52
-                    if type(lam.hole[0]) == HoleM52:
-                        mag = mag_0
-
+                    mag_dict = hole.comp_magnetization_dict()
+                    mag = mag_0 + mag_dict["magnet_" + str(T_id)] * 180 / pi
                     # modifiy magnetisation of south poles
-                    if "_S_" in label:
+                    if (label_dict["S_id"] % 2) == 1:
                         mag = mag + 180
                 else:
                     raise NotImplementedYetError(
@@ -218,22 +218,22 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                     bodies[label]["bf"] = 1
                     bodies[label]["tg"] = 1
                     pm_index = pm_index + 1
-            elif "MAGNET" in label:
-                point_ref = surf.point_ref
-                if "RAD" in label and "_N_" in label:  # Radial magnetization
+            elif MAG_LAB in label_dict["surf_type"]:
+                mag_obj = get_obj_from_label(machine, label_dict=label_dict)
+                if mag_obj.type_magnetization == 0 and (label_dict["S_id"] % 2) == 0:
                     mag = 0  # North pole magnet
                     magnetization_type = "radial"
-                elif "RAD" in label:
+                elif mag_obj.type_magnetization == 0:
                     mag = 180  # South pole magnet
                     magnetization_type = "radial"
-                elif "PAR" in label and "_N_" in label:
+                elif mag_obj.type_magnetization == 1 and (label_dict["S_id"] % 2) == 0:
                     mag = np_angle(point_ref) * 180 / pi  # North pole magnet
                     magnetization_type = "parallel"
-                elif "PAR" in label:
+                elif mag_obj.type_magnetization == 1:
                     mag = np_angle(point_ref) * 180 / pi + 180  # South pole magnet
                     magnetization_type = "parallel"
-                elif "HALL" in label:
-                    Zs = machine.rotor.slot.Zs
+                elif mag_obj.type_magnetization == 2:
+                    Zs = mag_obj.parent.slot.Zs
                     mag = str(-(Zs / 2 - 1)) + " * theta + 90 "
                     magnetization_type = "hallback"
                 else:
@@ -245,11 +245,12 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                     bodies[label]["bf"] = 1
                     bodies[label]["tg"] = 1
                     pm_index = pm_index + 1
-            elif "W_STA" in label:
-                st = label.split("_")
-                Nrad_id = int(st[2][1:])  # zone radial coordinate
-                Ntan_id = int(st[3][1:])  # zone tangential coordinate
-                Zs_id = int(st[4][1:])  # Zone slot number coordinate
+            elif WIND_LAB_S in label_dict["surf_type"]:
+                lam_obj = get_obj_from_label(machine, label_dict=label_dict)
+                wind_mat = lam_obj.winding.get_connection_mat(lam_obj.get_Zs())
+                Nrad_id = label_dict["R_id"]  # zone radial coordinate
+                Ntan_id = label_dict["T_id"]  # zone tangential coordinate
+                Zs_id = label_dict["S_id"]  # Zone slot number coordinate
                 # Get the phase value in the correct slot zone
                 q_id = get_phase_id(wind_mat, Nrad_id, Ntan_id, Zs_id)
                 Ncond = wind_mat[Nrad_id, Ntan_id, Zs_id, q_id]
@@ -295,20 +296,34 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                         Ncond_Fminus = abs(Ncond)
                     else:
                         pass
-            elif "ROTOR_LAM" in label and bodies.get(label, None) is not None:
+            elif (
+                LAM_LAB_S in label_dict["surf_type"]
+                and ROTOR_LAB_S in label_dict["lam_label"]
+                and bodies.get(label, None) is not None
+            ):
                 bodies[label]["mat"] = 4
                 bodies[label]["eq"] = 1
                 bodies[label]["bf"] = 1
                 bodies[label]["tg"] = 1
-            elif "STATOR_LAM" in label and bodies.get(label, None) is not None:
+            elif (
+                LAM_LAB_S in label_dict["surf_type"]
+                and STATOR_LAB_S in label_dict["lam_label"]
+                and bodies.get(label, None) is not None
+            ):
                 bodies[label]["mat"] = 3
                 bodies[label]["eq"] = 1
-            elif "SHAFT" in label and bodies.get(label, None) is not None:
+            elif (
+                SHAFT_LAB in label_dict["surf_type"]
+                and bodies.get(label, None) is not None
+            ):
                 bodies[label]["mat"] = 1
                 bodies[label]["eq"] = 1
                 bodies[label]["bf"] = 1
                 bodies[label]["tg"] = 1
-            elif "H_ROTOR" in label and bodies.get(label, None) is not None:
+            elif (
+                HOLEV_LAB_S in label_dict["surf_type"]
+                and bodies.get(label, None) is not None
+            ):
                 bodies[label]["mat"] = 1
                 bodies[label]["eq"] = 1
                 bodies[label]["bf"] = 1
@@ -317,8 +332,8 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                 pass
 
         # The following bodies are not in the dictionary
-        bodies["AG_INT"]["bf"] = 1
-        bodies["SB_INT"]["bf"] = 1
+        bodies[ROTOR_LAB_S+"-0_"+AIRGAP_LAB+BOT_LAB]["bf"] = 1
+        bodies[NO_LAM_LAB + "_" + SLID_LAB + BOT_LAB]["bf"] = 1  # Sliding band bottom
 
         No_Magnets = pm_index - 6
         magnet_temp = 20.0  # Magnet Temperature Fixed for now
