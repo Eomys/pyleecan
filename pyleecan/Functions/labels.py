@@ -30,17 +30,25 @@ VENT_LAB_S = "Vent"
 
 ## Line Property dict
 BOUNDARY_PROP_LAB = "Boundary"
-RIGHT_LABEL = "Right"
-LEFT_LABEL = "Left"
+RIGHT_LAB = "Right"  # Right is 0x line
+LEFT_LAB = "Left"
+BOT_LAB = "Bot"
+TOP_LAB = "Top"
 YS_LAB = "YokeSide"
-YSR_LAB = YS_LAB+"-"+RIGHT_LABEL
-YSL_LAB = YS_LAB+"-"+LEFT_LABEL
+YSR_LAB = YS_LAB + "-" + RIGHT_LAB
+YSL_LAB = YS_LAB + "-" + LEFT_LAB
 
 SHAFTS_LAB = "ShaftSide"
-SHAFTSR_LAB = SHAFTS_LAB+"-"+RIGHT_LABEL
-SHAFTSL_LAB = SHAFTS_LAB+"-"+LEFT_LABEL
+SHAFTSR_LAB = SHAFTS_LAB + "-" + RIGHT_LAB
+SHAFTSL_LAB = SHAFTS_LAB + "-" + LEFT_LAB
 SHAFTR_LAB = "ShaftRadius"
 
+SBS_TR_LAB = "sliding_sideline_" + TOP_LAB + "_" + RIGHT_LAB
+SBS_TL_LAB = "sliding_sideline_" + TOP_LAB + "_" + LEFT_LAB
+SBS_BR_LAB = "sliding_sideline_" + BOT_LAB + "_" + RIGHT_LAB
+SBS_BL_LAB = "sliding_sideline_" + BOT_LAB + "_" + LEFT_LAB
+SBR_B_LAB = "sliding_radius_" + BOT_LAB
+SBR_T_LAB = "sliding_radius_" + TOP_LAB
 SLID_LINE1_LAB = "airgap_line_1"
 SLID_LINE2_LAB = "airgap_line_2"
 SLID_LINE_LAB = "sliding_line"
@@ -148,4 +156,3 @@ def short_label(label):
     if "index" in label_dict:
         label += "_" + label_dict["index"]
     return label
-

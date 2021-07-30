@@ -10,9 +10,12 @@ from ...Functions.labels import (
     NO_MESH_LAB,
     NO_LAM_LAB,
     BOUNDARY_PROP_LAB,
-    SLID_LINE1_LAB,
-    SLID_LINE2_LAB,
-    SLID_LINE_LAB,
+    SBS_TR_LAB,
+    SBS_TL_LAB,
+    SBS_BR_LAB,
+    SBS_BL_LAB,
+    SBR_B_LAB,
+    SBR_T_LAB,
 )
 
 
@@ -52,7 +55,7 @@ def get_sliding_band(sym, lam_int, lam_ext):
                 radius=Rgap_mec_int + W_sb,
                 label=label_int + "_" + SLID_LAB,
                 point_ref=(Rgap_mec_int + W_sb / 2) * exp(1j * pi / 2),
-                prop_dict={BOUNDARY_PROP_LAB: SLID_LINE_LAB},
+                prop_dict={BOUNDARY_PROP_LAB: SBR_B_LAB},  # Bottom Radius
             )
         )
         # Top sliding band
@@ -62,7 +65,7 @@ def get_sliding_band(sym, lam_int, lam_ext):
                 radius=Rgap_mec_int + 2 * W_sb,
                 label=label_ext + "_" + SLID_LAB,
                 point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
-                prop_dict={BOUNDARY_PROP_LAB: SLID_LINE_LAB},
+                prop_dict={BOUNDARY_PROP_LAB: SBR_T_LAB},  # Top Radius
             )
         )
         # Middle
@@ -80,19 +83,19 @@ def get_sliding_band(sym, lam_int, lam_ext):
         Z3 = Z2 * exp(1j * 2 * pi / sym)
         Z4 = Z1 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
-        airgap_lines.append(
-            Segment(begin=Z1, end=Z2, prop_dict={BOUNDARY_PROP_LAB: SLID_LINE1_LAB})
+        airgap_lines.append(  # Bottom Right side
+            Segment(begin=Z1, end=Z2, prop_dict={BOUNDARY_PROP_LAB: SBS_BR_LAB})
         )
         airgap_lines.append(
             Arc1(
                 begin=Z2,
                 end=Z3,
-                radius=Rgap_mec_int + W_sb,
-                prop_dict={BOUNDARY_PROP_LAB: SLID_LINE_LAB},
+                radius=Rgap_mec_int + W_sb,  # Bottom Radius
+                prop_dict={BOUNDARY_PROP_LAB: SBR_B_LAB},
             )
         )
-        airgap_lines.append(
-            Segment(begin=Z3, end=Z4, prop_dict={BOUNDARY_PROP_LAB: SLID_LINE1_LAB})
+        airgap_lines.append(  # Bottom Left side
+            Segment(begin=Z3, end=Z4, prop_dict={BOUNDARY_PROP_LAB: SBS_BL_LAB})
         )
         surf_list.append(
             SurfLine(
@@ -107,19 +110,19 @@ def get_sliding_band(sym, lam_int, lam_ext):
         Z7 = Z6 * exp(1j * 2 * pi / sym)
         Z8 = Z5 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
-        airgap_lines.append(
-            Segment(begin=Z5, end=Z6, prop_dict={BOUNDARY_PROP_LAB: SLID_LINE2_LAB})
+        airgap_lines.append(  # Top Right Side
+            Segment(begin=Z5, end=Z6, prop_dict={BOUNDARY_PROP_LAB: SBS_TR_LAB})
         )
         airgap_lines.append(
-            Arc1(
+            Arc1(  # Top Radius
                 begin=Z6,
                 end=Z7,
                 radius=Rgap_mec_ext - W_sb,
-                prop_dict={BOUNDARY_PROP_LAB: SLID_LINE_LAB},
+                prop_dict={BOUNDARY_PROP_LAB: SBR_B_LAB},
             )
         )
-        airgap_lines.append(
-            Segment(begin=Z7, end=Z8, prop_dict={BOUNDARY_PROP_LAB: SLID_LINE2_LAB})
+        airgap_lines.append(  # Top Left Side
+            Segment(begin=Z7, end=Z8, prop_dict={BOUNDARY_PROP_LAB: SBS_TL_LAB})
         )
         surf_list.append(
             SurfLine(

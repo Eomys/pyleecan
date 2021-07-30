@@ -6,9 +6,12 @@ from ..labels import (
     STATOR_LAB,
     YOKE_LAB,
     LAM_LAB,
-    SLID_LINE1_LAB,
-    SLID_LINE2_LAB,
-    SLID_LINE_LAB,
+    SBS_TR_LAB,
+    SBS_TL_LAB,
+    SBS_BR_LAB,
+    SBS_BL_LAB,
+    SBR_B_LAB,
+    SBR_T_LAB,
 )
 
 # regions IDs and names (must be unique)
@@ -58,9 +61,12 @@ acsolver = 0  # AC solver type 0 for successive approx, 1 for Newton
 R_LAB = ROTOR_LAB + "-0_"
 S_LAB = STATOR_LAB + "-0_"
 MagFEMM_BP_dict = dict()
-MagFEMM_BP_dict[SLID_LINE1_LAB] = "bc_ag1"
-MagFEMM_BP_dict[SLID_LINE_LAB] = "bc_ag2"
-MagFEMM_BP_dict[SLID_LINE2_LAB] = "bc_ag3"
+MagFEMM_BP_dict[SBS_BR_LAB] = "bc_ag1"  # Bottom Sliding Band Side Right
+MagFEMM_BP_dict[SBS_BL_LAB] = "bc_ag1"  # Bottom Sliding Band Side Left
+MagFEMM_BP_dict[SBR_B_LAB] = "bc_ag2"  # Bottom Sliding Band Radius
+MagFEMM_BP_dict[SBR_T_LAB] = "bc_ag2"  # Top Sliding Band Radius
+MagFEMM_BP_dict[SBS_TR_LAB] = "bc_ag3"  # Top Sliding Band Side Right
+MagFEMM_BP_dict[SBS_TL_LAB] = "bc_ag3"  # Top Sliding Band Side Left
 MagFEMM_BP_dict[R_LAB + LAM_LAB + YOKE_LAB] = "bc_A0"
 MagFEMM_BP_dict[S_LAB + LAM_LAB + YOKE_LAB] = "bc_A0"
 MagFEMM_BP_dict[R_LAB + YSR_LAB] = "bc_r1"  # Rotor Yoke Side Right
