@@ -46,6 +46,15 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     # When the two lines at the bottom cross on X axis (ex SlotW14)
     if len(inter_list) == 3 and abs(inter_list[0] - inter_list[1]) < 1e-6:
         inter_list.pop(0)
+    # When 4 lines at the bottom cross on X axis (ex SlotM17)
+    elif (
+        len(inter_list) == 4
+        and abs(inter_list[0] - inter_list[1]) < 1e-6
+        and abs(inter_list[2] - inter_list[3]) < 1e-6
+    ):
+        inter_list.pop(0)
+        inter_list.pop(1)
+
     assert len(inter_list) == 2
 
     if abs(inter_list[0]) < abs(inter_list[1]) and self.is_outwards():

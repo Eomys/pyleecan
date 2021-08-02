@@ -20,8 +20,6 @@ def check(self):
     if self.parent is None:
         raise SlotCheckError("SlotM17 must be inside a lamination")
     if self.Zs != 2:
-        raise SlotCheckError("SlotM17 must have Zs=2")
-    if not self.parent.is_internal or self.parent.Rint != 0:
-        raise SlotCheckError(
-            "SlotM17 must be inside an internal lamination with Rint=0"
-        )
+        raise SlotCheckError("SlotM17 must have p=1")
+    if not self.parent.is_internal:
+        raise SlotCheckError("SlotM17 must be inside an internal lamination")

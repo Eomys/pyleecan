@@ -14,8 +14,6 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.SlotW11 import SlotW11
 
@@ -56,9 +54,7 @@ class Test_Slot_11_plot(object):
             H1_is_rad=False,
             R1=10e-3,
         )
-        test_obj.rotor.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
         test_obj.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
@@ -83,7 +79,7 @@ class Test_Slot_11_plot(object):
             R1=40e-3,
         )
         test_obj.stator.winding.Lewout = 60e-3
-        test_obj.stator.winding = WindingDW2L(qs=3, p=3)
+        test_obj.stator.winding = Winding(qs=3, p=3, Nlayer=2, coil_pitch=2)
         test_obj.stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=0.8, Rext=0.9, Lfra=1)
 

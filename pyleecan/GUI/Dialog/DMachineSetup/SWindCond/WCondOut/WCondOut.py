@@ -48,7 +48,12 @@ class WCondOut(QGroupBox):
             A WCondOut object
         """
 
-        lam = self.parent().parent().lam
+        obj = self
+        while not hasattr(obj.parent(), "lam") or obj.parent() is None:
+            obj = obj.parent()
+        parent = obj.parent()
+        lam = parent.lam
+
         H_txt = self.tr("Hcond = ")
         W_txt = self.tr("Wcond = ")
         S_txt = self.tr("Scond = ")
@@ -58,7 +63,7 @@ class WCondOut(QGroupBox):
         else:
             K_txt = self.tr("Krfill = ")
         # We compute the output only if the slot is correctly set
-        if self.parent().parent().check() is None:
+        if parent.check() is None:
             # Compute all the needed output as string
             H = format(self.u.get_m(lam.winding.conductor.comp_height()), ".4g")
             W = format(self.u.get_m(lam.winding.conductor.comp_width()), ".4g")

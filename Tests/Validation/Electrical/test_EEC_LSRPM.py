@@ -27,10 +27,9 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_EEC_PMSM():
-    """Validation of LSRPM EEC from Sijie's PhD thesis
-    """
+    """Validation of LSRPM EEC from Sijie's PhD thesis"""
 
-    LSRPM = load("LSRPM.json"))
+    LSRPM = load("LSRPM.json")
     simu = Simu1(name="test_EEC_LSRPM", machine=LSRPM)
 
     # Definition of the input

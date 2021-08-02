@@ -28,6 +28,9 @@ mach_test.append(
 mach_test.append(
     {"json_path": join(MACH_PATH, "Benchmark.json"), "machine_name": "SPMSM"}
 )
+mach_test.append(
+    {"json_path": join(MACH_PATH, "LSPM_001.json"), "machine_name": "LSPM"}
+)
 
 
 class Test_machine_img(object):

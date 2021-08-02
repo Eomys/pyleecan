@@ -23,4 +23,4 @@ def get_name_lam(self):
             name = "Rotor"
         return name
     else:
-        raise ParentMissingError("Error: The slot is not inside a Lamination")
+        return "NoLam"

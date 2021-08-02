@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def get_field(self, *args, is_squeeze=False):
+def get_field(self, *args, is_squeeze=False, node=None, is_rthetaz=False):
     """Get the value of variables stored in Solution.
 
     Parameters
@@ -32,7 +32,7 @@ def get_field(self, *args, is_squeeze=False):
         if self.axis_name is not None:
             nb_axis = len(self.axis_name)
             for i in range(nb_axis):
-                #ax = np.where(np.array(field.shape) == self.axis_size[i])[0][0]
+                # ax = np.where(np.array(field.shape) == self.axis_size[i])[0][0]
                 ax_name = self.axis_name[i]
                 is_found = False
                 for axis_str in args:

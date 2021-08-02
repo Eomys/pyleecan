@@ -5,7 +5,6 @@ from numpy import pi
 from os.path import join
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Classes.CondType12 import CondType12
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
@@ -35,10 +34,10 @@ class Test_Electrical(object):
     def test_DQ_axis_stator(self, Toyota_Prius):
         """Check that the DQ axis are correct for the stator"""
         d_axis = Toyota_Prius.stator.comp_angle_d_axis()
-        assert d_axis == pytest.approx(1.3086, abs=0.001)
+        assert d_axis == pytest.approx(1.3096, abs=0.001)
 
         q_axis = Toyota_Prius.stator.comp_angle_q_axis()
-        assert q_axis == pytest.approx(1.3086 + pi / 8, abs=0.0001)
+        assert q_axis == pytest.approx(1.3096 + pi / 8, abs=0.001)
 
     def test_comp_rot_dir(self, Toyota_Prius):
         """Check that the computation of the rot dir is correct"""

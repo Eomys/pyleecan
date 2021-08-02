@@ -17,6 +17,11 @@ class Ui_DTableData(object):
         if not DTableData.objectName():
             DTableData.setObjectName(u"DTableData")
         DTableData.resize(746, 536)
+        icon = QIcon()
+        icon.addFile(
+            u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+        )
+        DTableData.setWindowIcon(icon)
         self.verticalLayout = QVBoxLayout(DTableData)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout = QHBoxLayout()
