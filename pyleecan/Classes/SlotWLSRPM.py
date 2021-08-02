@@ -53,14 +53,9 @@ except ImportError as error:
     comp_height_wind = error
 
 try:
-    from ..Methods.Slot.SlotWLSRPM.compt_height import compt_height
+    from ..Methods.Slot.SlotWLSRPM.comp_height import comp_height
 except ImportError as error:
-    compt_height = error
-
-try:
-    from ..Methods.Slot.SlotWLSRPM.comp_surface import comp_surface
-except ImportError as error:
-    comp_surface = error
+    comp_height = error
 
 try:
     from ..Methods.Slot.SlotWLSRPM.plot_schematics import plot_schematics
@@ -158,28 +153,17 @@ class SlotWLSRPM(Slot):
         )
     else:
         comp_height_wind = comp_height_wind
-    # cf Methods.Slot.SlotWLSRPM.compt_height
-    if isinstance(compt_height, ImportError):
-        compt_height = property(
+    # cf Methods.Slot.SlotWLSRPM.comp_height
+    if isinstance(comp_height, ImportError):
+        comp_height = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotWLSRPM method compt_height: " + str(compt_height)
+                    "Can't use SlotWLSRPM method comp_height: " + str(comp_height)
                 )
             )
         )
     else:
-        compt_height = compt_height
-    # cf Methods.Slot.SlotWLSRPM.comp_surface
-    if isinstance(comp_surface, ImportError):
-        comp_surface = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWLSRPM method comp_surface: " + str(comp_surface)
-                )
-            )
-        )
-    else:
-        comp_surface = comp_surface
+        comp_height = comp_height
     # cf Methods.Slot.SlotWLSRPM.plot_schematics
     if isinstance(plot_schematics, ImportError):
         plot_schematics = property(

@@ -67,7 +67,7 @@ def plot_schematics(
             L1=0.95,
             Nrvd=0,
             Wrvd=0,
-            slot=slot
+            slot=slot,
         )
         slot.plot_schematics(
             is_default=False,
@@ -105,9 +105,9 @@ def plot_schematics(
 
         # Adding schematics
         if is_add_schematics:
-            
+
             # W1
-            line = Segment(point_dict['Z4']+0.005,point_dict['Z2']+0.005)
+            line = Segment(point_dict["Z4"] + 0.005, point_dict["Z2"] + 0.005)
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -119,23 +119,23 @@ def plot_schematics(
                 fontsize=SC_FONT_SIZE,
             )
             # W3
-            line = Segment(point_dict['Z2'],point_dict['Z2']+self.W3*exp(1j*-(pi/2+15/180*pi)))
+            line = Segment(
+                point_dict["Z2"],
+                point_dict["Z2"] + self.W3 * exp(1j * -(pi / 2 + 15 / 180 * pi)),
+            )
             line.plot(
                 fig=fig,
                 ax=ax,
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W3",
-                offset_label=-1j*0.01,
+                offset_label=-1j * 0.01,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
 
-
             # H2
-            line = Segment(
-                point_dict["Zch"], point_dict["Zcl"]
-            )
+            line = Segment(point_dict["Zch"], point_dict["Zcl"])
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -148,8 +148,7 @@ def plot_schematics(
             )
             # H3
             line = Segment(
-                point_dict["Zcm"]+1j*0.001,
-                point_dict["Zcl"]+1j*0.001
+                point_dict["Zcm"] + 1j * 0.001, point_dict["Zcl"] + 1j * 0.001
             )
             line.plot(
                 fig=fig,
@@ -157,13 +156,13 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="H3",
-                offset_label=-self.H3*2+1j*self.H3*5,
+                offset_label=-self.H3 * 2 + 1j * self.H3 * 5,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
 
             # R1
-            line = Segment(point_dict["Zc1"],point_dict["Z7"] )
+            line = Segment(point_dict["Zc1"], point_dict["Z7"])
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -199,7 +198,7 @@ def plot_schematics(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-            
+
         if type_add_active == 1:
             self.plot_active(fig=fig, is_show_fig=False)
         elif type_add_active == 2:
