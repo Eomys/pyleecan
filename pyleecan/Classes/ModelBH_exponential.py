@@ -19,7 +19,7 @@ from ._check import InitUnKnowClassError
 
 
 class ModelBH_exponential(FrozenClass):
-    """Abstract class for BH curve model """
+    """Abstract class for BH curve model"""
 
     VERSION = 1
 

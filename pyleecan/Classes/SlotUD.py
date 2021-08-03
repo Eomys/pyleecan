@@ -43,7 +43,7 @@ from .Line import Line
 
 
 class SlotUD(Slot):
-    """"User defined" Slot from a line list. """
+    """ "User defined" Slot from a line list."""
 
     VERSION = 1
 

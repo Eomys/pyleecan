@@ -32,7 +32,7 @@ from ._check import InitUnKnowClassError
 
 
 class ModelBH_Langevin(ModelBH):
-    """Abstract class for BH curve model """
+    """Abstract class for BH curve model"""
 
     VERSION = 1
 
