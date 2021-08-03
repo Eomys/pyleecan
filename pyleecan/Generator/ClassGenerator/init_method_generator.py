@@ -412,7 +412,7 @@ def get_mother_attr(gen_dict, class_dict, key):
     # Load all the mother properties
     all_list = list(class_dict[key])
     mother_list = list()
-    while class_dict["mother"] != "":
+    while class_dict["mother"] != "" and "." not in class_dict["mother"]:
         class_dict = gen_dict[class_dict["mother"]]
         mother_list.extend(class_dict[key])
     all_list.extend(mother_list)
