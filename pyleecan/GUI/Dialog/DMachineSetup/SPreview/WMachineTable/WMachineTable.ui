@@ -103,6 +103,13 @@
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="QPushButton" name="b_FEMM">
+     <property name="text">
+      <string>Draw in FEMM</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources>

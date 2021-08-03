@@ -59,6 +59,11 @@ class Ui_WMachineTable(object):
 
         self.verticalLayout.addWidget(self.b_mmf)
 
+        self.b_FEMM = QPushButton(WMachineTable)
+        self.b_FEMM.setObjectName(u"b_FEMM")
+
+        self.verticalLayout.addWidget(self.b_FEMM)
+
         self.retranslateUi(WMachineTable)
 
         QMetaObject.connectSlotsByName(WMachineTable)
@@ -87,6 +92,9 @@ class Ui_WMachineTable(object):
         )
         self.b_mmf.setText(
             QCoreApplication.translate("WMachineTable", u"Plot Stator Unit MMF", None)
+        )
+        self.b_FEMM.setText(
+            QCoreApplication.translate("WMachineTable", u"Draw in FEMM", None)
         )
 
     # retranslateUi
