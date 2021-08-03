@@ -175,7 +175,7 @@ class Ui_SLamParam(object):
         self.out_length = QLabel(self.g_rad_vent)
         self.out_length.setObjectName(u"out_length")
         self.out_length.setMinimumSize(QSize(250, 0))
-        self.out_length.setMaximumSize(QSize(300, 16777215))
+        self.out_length.setMaximumSize(QSize(16777215, 16777215))
 
         self.verticalLayout_2.addWidget(self.out_length)
 

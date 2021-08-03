@@ -1904,7 +1904,7 @@
         "properties": [
             {
                 "desc": "Number of Hole around the circumference",
-                "max": "1000",
+                "max": "",
                 "min": "0",
                 "name": "Zh",
                 "type": "int",
@@ -4605,7 +4605,7 @@
         "properties": [
             {
                 "desc": "Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "L1",
                 "type": "float",
@@ -9284,7 +9284,7 @@
         "properties": [
             {
                 "desc": "length of the rotor shaft [m] (used for weight & cost estimation only)",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "Lshaft",
                 "type": "float",
@@ -9302,7 +9302,7 @@
             },
             {
                 "desc": "diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses",
-                "max": "8",
+                "max": "",
                 "min": "0",
                 "name": "Drsh",
                 "type": "float",
@@ -9572,7 +9572,7 @@
         "properties": [
             {
                 "desc": "slot number",
-                "max": "1000",
+                "max": "",
                 "min": "0",
                 "name": "Zs",
                 "type": "int",
@@ -12985,7 +12985,7 @@
                 "value": 1
             },
             {
-                "desc": "Diameter of the hole centers",
+                "desc": "Radius of the hole centers",
                 "max": "",
                 "min": "0",
                 "name": "H0",
@@ -13180,7 +13180,7 @@
             },
             {
                 "desc": "number of phases ",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "qs",
                 "type": "int",
@@ -13189,7 +13189,7 @@
             },
             {
                 "desc": "number of turns per coil",
-                "max": "1000",
+                "max": "",
                 "min": "1",
                 "name": "Ntcoil",
                 "type": "int",
@@ -13197,8 +13197,8 @@
                 "value": 7
             },
             {
-                "desc": "number of parallel circuits per phase (maximum p)",
-                "max": "1000",
+                "desc": "number of parallel circuits per phase",
+                "max": "",
                 "min": "1",
                 "name": "Npcp",
                 "type": "int",
@@ -13216,7 +13216,7 @@
             },
             {
                 "desc": "pole pairs number",
-                "max": "100",
+                "max": "",
                 "min": "1",
                 "name": "p",
                 "type": "int",
@@ -13225,7 +13225,7 @@
             },
             {
                 "desc": "straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length ",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "Lewout",
                 "type": "float",

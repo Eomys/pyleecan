@@ -16,7 +16,7 @@ class Gen_SWSlot(Ui_SWSlot):
 
         # Setup of si_Zs
         self.si_Zs.setMinimum(0)
-        self.si_Zs.setMaximum(1000)
+        self.si_Zs.setMaximum(999999)
         txt = self.tr(u"""slot number""")
         self.si_Zs.setWhatsThis(txt)
         self.si_Zs.setToolTip(txt)
