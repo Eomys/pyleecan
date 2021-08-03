@@ -1676,7 +1676,7 @@
         "methods": [
             "comp_force",
             "comp_force_nodal",
-            "comp_magnetrosctrictive_tensor",
+            "comp_magnetostrictive_tensor",
             "element_loop"
         ],
         "mother": "Force",
@@ -1692,6 +1692,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "stator core"
+            },
+            {
+                "desc": "Force model(s) to be used",
+                "max": "",
+                "min": "",
+                "name": "tensor",
+                "type": "dict",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -6421,6 +6430,24 @@
                 "type": "bool",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "desc": "Spatial symmetry factor",
+                "max": "",
+                "min": "",
+                "name": "sym",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "True if there is a spatial antiperiod",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
+                "unit": "",
+                "value": false
             }
         ]
     },
@@ -6443,10 +6470,10 @@
             "plot_mesh",
             "plot_contour",
             "plot_deflection",
-            "plot_deflection_animated",
             "plot_glyph",
-            "plot_glyph_animated",
-            "perm_coord"
+            "perm_coord",
+            "get_deflection",
+            "get_glyph"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -12099,8 +12126,17 @@
                 "min": "1",
                 "name": "dimension",
                 "type": "int",
-                "unit": "",
+                "unit": "-",
                 "value": 2
+            },
+            {
+                "desc": "Unit of the solution",
+                "max": "",
+                "min": "",
+                "name": "unit",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             }
         ]
     },

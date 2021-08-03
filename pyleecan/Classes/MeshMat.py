@@ -228,6 +228,8 @@ class MeshMat(Mesh):
         cell=-1,
         node=-1,
         _is_renum=False,
+        sym=1,
+        is_antiper_a=False,
         label=None,
         dimension=2,
         init_dict=None,
@@ -254,6 +256,10 @@ class MeshMat(Mesh):
                 node = init_dict["node"]
             if "_is_renum" in list(init_dict.keys()):
                 _is_renum = init_dict["_is_renum"]
+            if "sym" in list(init_dict.keys()):
+                sym = init_dict["sym"]
+            if "is_antiper_a" in list(init_dict.keys()):
+                is_antiper_a = init_dict["is_antiper_a"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
@@ -262,6 +268,8 @@ class MeshMat(Mesh):
         self.cell = cell
         self.node = node
         self._is_renum = _is_renum
+        self.sym = sym
+        self.is_antiper_a = is_antiper_a
         # Call Mesh init
         super(MeshMat, self).__init__(label=label, dimension=dimension)
         # The class is frozen (in Mesh init), for now it's impossible to
@@ -284,6 +292,8 @@ class MeshMat(Mesh):
         else:
             MeshMat_str += "node = None" + linesep + linesep
         MeshMat_str += "_is_renum = " + str(self._is_renum) + linesep
+        MeshMat_str += "sym = " + str(self.sym) + linesep
+        MeshMat_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
         return MeshMat_str
 
     def __eq__(self, other):
@@ -300,6 +310,10 @@ class MeshMat(Mesh):
         if other.node != self.node:
             return False
         if other._is_renum != self._is_renum:
+            return False
+        if other.sym != self.sym:
+            return False
+        if other.is_antiper_a != self.is_antiper_a:
             return False
         return True
 
@@ -335,6 +349,10 @@ class MeshMat(Mesh):
             diff_list.extend(self.node.compare(other.node, name=name + ".node"))
         if other.__is_renum != self.__is_renum:
             diff_list.append(name + "._is_renum")
+        if other._sym != self._sym:
+            diff_list.append(name + ".sym")
+        if other._is_antiper_a != self._is_antiper_a:
+            diff_list.append(name + ".is_antiper_a")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -351,6 +369,8 @@ class MeshMat(Mesh):
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.node)
         S += getsizeof(self._is_renum)
+        S += getsizeof(self.sym)
+        S += getsizeof(self.is_antiper_a)
         return S
 
     def as_dict(self, **kwargs):
@@ -376,6 +396,8 @@ class MeshMat(Mesh):
         else:
             MeshMat_dict["node"] = self.node.as_dict(**kwargs)
         MeshMat_dict["_is_renum"] = self._is_renum
+        MeshMat_dict["sym"] = self.sym
+        MeshMat_dict["is_antiper_a"] = self.is_antiper_a
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MeshMat_dict["__class__"] = "MeshMat"
@@ -388,6 +410,8 @@ class MeshMat(Mesh):
         if self.node is not None:
             self.node._set_None()
         self._is_renum = None
+        self.sym = None
+        self.is_antiper_a = None
         # Set to None the properties inherited from Mesh
         super(MeshMat, self)._set_None()
 
@@ -463,6 +487,42 @@ class MeshMat(Mesh):
         fget=_get__is_renum,
         fset=_set__is_renum,
         doc=u"""True if renumering the nodes and cells is useful when renum method is called (saving calculation time)
+
+        :Type: bool
+        """,
+    )
+
+    def _get_sym(self):
+        """getter of sym"""
+        return self._sym
+
+    def _set_sym(self, value):
+        """setter of sym"""
+        check_var("sym", value, "int")
+        self._sym = value
+
+    sym = property(
+        fget=_get_sym,
+        fset=_set_sym,
+        doc=u"""Spatial symmetry factor
+
+        :Type: int
+        """,
+    )
+
+    def _get_is_antiper_a(self):
+        """getter of is_antiper_a"""
+        return self._is_antiper_a
+
+    def _set_is_antiper_a(self, value):
+        """setter of is_antiper_a"""
+        check_var("is_antiper_a", value, "bool")
+        self._is_antiper_a = value
+
+    is_antiper_a = property(
+        fget=_get_is_antiper_a,
+        fset=_set_is_antiper_a,
+        doc=u"""True if there is a spatial antiperiod
 
         :Type: bool
         """,

@@ -108,6 +108,7 @@ class Mode(SolutionMat):
         type_cell="triangle",
         label=None,
         dimension=2,
+        unit="",
         init_dict=None,
         init_str=None,
     ):
@@ -146,6 +147,8 @@ class Mode(SolutionMat):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
+            if "unit" in list(init_dict.keys()):
+                unit = init_dict["unit"]
         # Set the properties (value check and convertion are done in setter)
         self.nat_freq = nat_freq
         self.order_circ = order_circ
@@ -159,6 +162,7 @@ class Mode(SolutionMat):
             type_cell=type_cell,
             label=label,
             dimension=dimension,
+            unit=unit,
         )
         # The class is frozen (in SolutionMat init), for now it's impossible to
         # add new properties
