@@ -47,6 +47,11 @@ try:
 except ImportError as error:
     plot = error
 
+try:
+    from ..Methods.Geometry.Arc.comp_maxseg import comp_maxseg
+except ImportError as error:
+    comp_maxseg = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -113,6 +118,15 @@ class Arc(Line):
         )
     else:
         plot = plot
+    # cf Methods.Geometry.Arc.comp_maxseg
+    if isinstance(comp_maxseg, ImportError):
+        comp_maxseg = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc method comp_maxseg: " + str(comp_maxseg))
+            )
+        )
+    else:
+        comp_maxseg = comp_maxseg
     # save and copy methods are available in all object
     save = save
     copy = copy

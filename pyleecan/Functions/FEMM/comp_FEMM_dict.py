@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from ...Classes.LamSlot import LamSlot
 from ...Classes.LamHole import LamHole
-from ...Classes.HoleM50 import HoleM50
-from ...Classes.HoleM51 import HoleM51
-from ...Classes.HoleM52 import HoleM52
-from ...Classes.HoleM53 import HoleM53
 from ...Classes.LamSlotMag import LamSlotMag
+from ...Classes.MachineSIPMSM import MachineSIPMSM
 from ...Functions.FEMM import acsolver, pbtype, precision, minangle
 from ...Functions.FEMM import FEMM_GROUPS
 
@@ -91,8 +87,12 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     FEMM_dict["elementsize_yokeR"] = Hry / 4 / Kmesh_fineness
 
     # airgap region mesh and segments max element size parameter
-    FEMM_dict["meshsize_airgap"] = Wgap_mec / 3 / Kmesh_fineness
-    FEMM_dict["elementsize_airgap"] = Wgap_mec / 3 / Kmesh_fineness
+    if isinstance(machine, MachineSIPMSM):
+        FEMM_dict["meshsize_airgap"] = Wgap_mec / 10 / Kmesh_fineness
+        FEMM_dict["elementsize_airgap"] = Wgap_mec / 10 / Kmesh_fineness
+    else:
+        FEMM_dict["meshsize_airgap"] = Wgap_mec / 3 / Kmesh_fineness
+        FEMM_dict["elementsize_airgap"] = Wgap_mec / 3 / Kmesh_fineness
 
     # stator magnet region mesh and segments max element size parameter
     if type(machine.stator) == LamSlotMag:
