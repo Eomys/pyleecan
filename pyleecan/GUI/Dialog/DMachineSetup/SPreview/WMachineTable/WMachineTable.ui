@@ -110,6 +110,13 @@
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="QPushButton" name="b_GMSH">
+     <property name="text">
+      <string>Draw in GMSH</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources>

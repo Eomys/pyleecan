@@ -3,6 +3,7 @@
 from .....Methods.Output.Output.getter import GetOutError
 from .....Classes.OutGeoLam import OutGeoLam
 
+
 def get_BH_stator(self):
     """Return the B(H) curve of the stator material
 

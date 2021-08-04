@@ -18,6 +18,16 @@ from ......GUI.Dialog.DMachineSetup.SPreview.WMachineTable.Ui_WMachineTable impo
     Ui_WMachineTable,
 )
 from SciDataTool import DataLinspace
+from ......Methods.Simulation.MagElmer import (
+    boundary_prop,
+    boundary_list,
+    surface_label,
+)
+
+try:
+    from ......Functions.GMSH.draw_GMSH import draw_GMSH
+except:
+    draw_GMSH = ImportError
 
 
 class WMachineTable(Ui_WMachineTable, QWidget):
@@ -41,6 +51,10 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         # Connect the widget
         self.b_mmf.clicked.connect(self.plot_mmf)
         self.b_FEMM.clicked.connect(self.draw_FEMM)
+        if isinstance(draw_FEMM, ImportError):
+            self.b_GMSH.setEnabled(False)
+        else:
+            self.b_GMSH.clicked.connect(self.draw_GMSH)
         self.b_plot_machine.clicked.connect(self.plot_machine)
 
     def update_tab(self, machine):
@@ -159,7 +173,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             femm.mi_saveas(save_file_path)  # Save
         except Exception as e:
             err_msg = (
-                "Error while drawing machine " + self.machine.name + ":\n" + str(e)
+                "Error while drawing machine " + self.machine.name + " in FEMM:\n" + str(e)
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
@@ -168,3 +182,50 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 self.tr(err_msg),
             )
         femm.closefemm()
+
+    def draw_GMSH(self):
+        machine_path = config_dict["MAIN"]["MACHINE_DIR"]
+        # Ask the user to select a .fem file to save
+        if self.machine.name in ["", None]:
+            save_file_path = QFileDialog.getSaveFileName(
+                self, self.tr("Save file"), machine_path, "GMSH (*.msh)"
+            )[0]
+        else:
+            def_path = join(machine_path, self.machine.name + ".msh")
+            save_file_path = QFileDialog.getSaveFileName(
+                self, self.tr("Save file"), def_path, "GMSH (*.msh)"
+            )[0]
+
+        # Avoid bug due to user closing the popup witout selecting a file
+        if save_file_path is [None, ""]:
+            return
+        # Create the Simulation
+        mySimu = Simu1(name="test_gmsh_ipm", machine=self.machine)
+        myResults = Output(simu=mySimu)
+        sym, is_antiper, _, _ = self.machine.comp_periodicity()
+        if is_antiper:
+            sym *= 2
+        try:
+            draw_GMSH(
+                output=myResults,
+                sym=sym,
+                boundary_prop=boundary_prop,
+                boundary_list=boundary_list,
+                surface_label=surface_label,
+                is_lam_only_S=False,
+                is_lam_only_R=False,
+                user_mesh_dict=None,
+                is_sliding_band=True,
+                is_airbox=True,
+                path_save=save_file_path,
+            )
+        except Exception as e:
+            err_msg = (
+                "Error while drawing machine " + self.machine.name + " in GMSH:\n" + str(e)
+            )
+            getLogger(GUI_LOG_NAME).error(err_msg)
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
+            )

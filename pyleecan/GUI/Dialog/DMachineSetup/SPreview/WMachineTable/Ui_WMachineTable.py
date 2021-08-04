@@ -64,6 +64,11 @@ class Ui_WMachineTable(object):
 
         self.verticalLayout.addWidget(self.b_FEMM)
 
+        self.b_GMSH = QPushButton(WMachineTable)
+        self.b_GMSH.setObjectName(u"b_GMSH")
+
+        self.verticalLayout.addWidget(self.b_GMSH)
+
         self.retranslateUi(WMachineTable)
 
         QMetaObject.connectSlotsByName(WMachineTable)
@@ -95,6 +100,9 @@ class Ui_WMachineTable(object):
         )
         self.b_FEMM.setText(
             QCoreApplication.translate("WMachineTable", u"Draw in FEMM", None)
+        )
+        self.b_GMSH.setText(
+            QCoreApplication.translate("WMachineTable", u"Draw in GMSH", None)
         )
 
     # retranslateUi
