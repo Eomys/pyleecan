@@ -124,9 +124,10 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         # Set Current (constant J in a layer)
         S_slot = self.machine.stator.slot.comp_surface_active()
         (Nrad, Ntan) = self.machine.stator.winding.get_dim_wind()
+        Ntcoil = self.machine.stator.winding.Ntcoil
         Sphase = S_slot / (Nrad * Ntan)
         J = 5e6
-        output.elec.Id_ref = J * Sphase
+        output.elec.Id_ref = J * Sphase / Ntcoil
         output.elec.Iq_ref = 0
         output.elec.felec = 60
         output.elec.Time = DataLinspace(
@@ -142,6 +143,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             is_antiperiod=False,
         )
         Is = output.elec.comp_I_mag(time, is_stator=True)
+        alpha = output.get_angle_offset_initial()
         try:
             # Draw the machine
             FEMM_dict = draw_FEMM(
@@ -161,7 +163,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 circuits=FEMM_dict["circuits"],
                 is_sliding_band=True,
                 is_internal_rotor=self.machine.rotor.is_internal,
-                angle_rotor=[0],
+                angle_rotor=[alpha],
                 Is=Is,
                 Ir=None,
                 ii=0,
