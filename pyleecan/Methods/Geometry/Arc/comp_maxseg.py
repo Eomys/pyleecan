@@ -38,6 +38,6 @@ def comp_maxseg(self, elementsize, maxseg_amp):
 
     n_seg = l_arc / elementsize
 
-    maxseg = abs(min(10, abs(angle / n_seg * maxseg_amp)))
+    maxseg = abs(min(5, abs(angle / n_seg * maxseg_amp)))
 
     return maxseg

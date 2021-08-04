@@ -85,7 +85,7 @@ def draw_FEMM(
     # Initialization from output for readibility
     BHs = output.get_BH_stator()  # Stator B(H) curve
     BHr = output.get_BH_rotor()  # Rotor B(H) curve
-    Is = output.elec.get_Is()  # Stator currents waveforms
+    Is = output.elec.Is  # Stator currents waveforms
     Ir = output.elec.Ir  # Rotor currents waveforms
     machine = output.simu.machine
 
