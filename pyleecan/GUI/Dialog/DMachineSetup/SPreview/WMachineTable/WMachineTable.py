@@ -28,6 +28,10 @@ try:
     from ......Functions.GMSH.draw_GMSH import draw_GMSH
 except:
     draw_GMSH = ImportError
+try:
+    from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+except:
+    gen_3D_mesh = ImportError
 
 
 class WMachineTable(Ui_WMachineTable, QWidget):
@@ -53,8 +57,10 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         self.b_FEMM.clicked.connect(self.draw_FEMM)
         if isinstance(draw_FEMM, ImportError):
             self.b_GMSH.setEnabled(False)
+            self.b_GMSH_3D.setEnabled(False)
         else:
             self.b_GMSH.clicked.connect(self.draw_GMSH)
+            self.b_GMSH_3D.clicked.connect(self.draw_GMSH_3D)
         self.b_plot_machine.clicked.connect(self.plot_machine)
 
     def update_tab(self, machine):
@@ -103,18 +109,8 @@ class WMachineTable(Ui_WMachineTable, QWidget):
 
     def draw_FEMM(self):
         """Draw the Machine in FEMM"""
-        machine_path = config_dict["MAIN"]["MACHINE_DIR"]
-        # Ask the user to select a .fem file to save
-        if self.machine.name in ["", None]:
-            save_file_path = QFileDialog.getSaveFileName(
-                self, self.tr("Save file"), machine_path, "FEMM (*.fem)"
-            )[0]
-        else:
-            def_path = join(machine_path, self.machine.name + ".fem")
-            save_file_path = QFileDialog.getSaveFileName(
-                self, self.tr("Save file"), def_path, "FEMM (*.fem)"
-            )[0]
 
+        save_file_path = self.get_save_path(ext=".fem", file_type="FEMM (*.fem)")
         # Avoid bug due to user closing the popup witout selecting a file
         if save_file_path is [None, ""]:
             return
@@ -173,7 +169,10 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             femm.mi_saveas(save_file_path)  # Save
         except Exception as e:
             err_msg = (
-                "Error while drawing machine " + self.machine.name + " in FEMM:\n" + str(e)
+                "Error while drawing machine "
+                + self.machine.name
+                + " in FEMM:\n"
+                + str(e)
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
@@ -184,18 +183,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         femm.closefemm()
 
     def draw_GMSH(self):
-        machine_path = config_dict["MAIN"]["MACHINE_DIR"]
-        # Ask the user to select a .fem file to save
-        if self.machine.name in ["", None]:
-            save_file_path = QFileDialog.getSaveFileName(
-                self, self.tr("Save file"), machine_path, "GMSH (*.msh)"
-            )[0]
-        else:
-            def_path = join(machine_path, self.machine.name + ".msh")
-            save_file_path = QFileDialog.getSaveFileName(
-                self, self.tr("Save file"), def_path, "GMSH (*.msh)"
-            )[0]
-
+        save_file_path = self.get_save_path(ext=".msh", file_type="GMSH (*.msh)")
         # Avoid bug due to user closing the popup witout selecting a file
         if save_file_path is [None, ""]:
             return
@@ -221,7 +209,10 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             )
         except Exception as e:
             err_msg = (
-                "Error while drawing machine " + self.machine.name + " in GMSH:\n" + str(e)
+                "Error while drawing machine "
+                + self.machine.name
+                + " in GMSH:\n"
+                + str(e)
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
@@ -229,3 +220,43 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 self.tr("Error"),
                 self.tr(err_msg),
             )
+
+    def draw_GMSH_3D(self):
+        save_file_path = self.get_save_path(ext="_stator.msh", file_type="GMSH (*.msh)")
+        # Avoid bug due to user closing the popup witout selecting a file
+        if save_file_path is [None, ""]:
+            return
+        try:
+            gen_3D_mesh(
+                lamination=self.machine.stator,
+                save_path=save_file_path,
+                mesh_size=(self.machine.stator.Rext - self.machine.stator.Rint) / 20,
+                Nlayer=20,
+                display=False,
+            )
+        except Exception as e:
+            err_msg = (
+                "Error while drawing machine "
+                + self.machine.name
+                + " in GMSH:\n"
+                + str(e)
+            )
+            getLogger(GUI_LOG_NAME).error(err_msg)
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
+            )
+
+    def get_save_path(self, ext=".fem", file_type="FEMM (*.fem)"):
+        machine_path = config_dict["MAIN"]["MACHINE_DIR"]
+        # Ask the user to select a .fem file to save
+        if self.machine.name in ["", None]:
+            return QFileDialog.getSaveFileName(
+                self, self.tr("Save file"), machine_path, file_type
+            )[0]
+        else:
+            def_path = join(machine_path, self.machine.name + ext)
+            return QFileDialog.getSaveFileName(
+                self, self.tr("Save file"), def_path, file_type
+            )[0]
