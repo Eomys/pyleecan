@@ -4,7 +4,7 @@ import quadpy
 
 
 def get_gauss_points(self):
-    """ Return the gauss points and weights for Triangle3 cell """
+    """Return the gauss points and weights for Triangle3 cell"""
 
     nb_gauss_points = self.nb_gauss_point
     scheme = quadpy.tn.grundmann_moeller(2, nb_gauss_points)

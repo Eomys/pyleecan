@@ -25,7 +25,7 @@ def draw_FEMM(
         Boundary property ’propname’
          (Default value = None)
     FEMM_dict : dict
-        Dictionnary containing the main parameters of FEMM
+        dictionary containing the main parameters of FEMM
     hide :
         0 = not hidden in post-processor, 1 == hidden in post processor
         (Default value = False)

@@ -1,4 +1,8 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
 eec,-,Electrical Equivalent Circuit,,EEC,None,,,,Simulation,,run,VERSION,1,Electric module object for electrical equivalent circuit simulation,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.Electrical,,,,,,comp_power,,,,
-,,,,,,,,,,,comp_torque,,,,
+type_skin_effect,-,Skin effect for resistance and inductance,1,int,0,,,,,,comp_torque,,,,
+Tsta,deg Celsius,Average stator temperature for operational EEC calculation,0,float,20,,,,,,,,,,
+Trot,deg Celsius,Average rotor temperature for operational EEC calculation,0,float,20,,,,,,,,,,
+Tmag,deg Celsius,Average magnet temperature for operational EEC calculation,0,float,20,,,,,,,,,,
+ELUT_enforced,-,Electrical Look Up Table to be enforced ,,ELUT,None,,,,,,,,,,

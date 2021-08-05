@@ -13,7 +13,7 @@ from pyleecan.Classes.SolutionVector import SolutionVector
 
 @pytest.mark.MeshSol
 def test_SolutionMat():
-    """ Tests for get_field method from SolutionMat class"""
+    """Tests for get_field method from SolutionMat class"""
     DELTA = 1e-10
 
     field = np.zeros((2, 3, 2))

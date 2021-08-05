@@ -1,0 +1,5 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+parameters,-,"Parameters of the EEC: computed if empty, or enforced",,dict,{},,,,Simulation,EEC,comp_parameters,VERSION,1,Electric module: Electrical Equivalent Circuit for Squirrel Cage Induction Machine,
+N0,RPM,Rotation speed,,int,1500,,,,,,solve_EEC,,,,
+felec,Hz,frequency,,int,100,,,,,,gen_drive,,,,
+fluxlink,-,Flux Linkage,,FluxLink,None,,,,,,comp_joule_losses,,,,

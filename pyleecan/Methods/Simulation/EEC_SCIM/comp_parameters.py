@@ -15,6 +15,7 @@ def comp_parameters(self, output):
     output : Output
         an Output object
     """
+
     # get some machine parameters
     machine = output.simu.machine
     Zsr = machine.rotor.slot.Zs
@@ -22,10 +23,15 @@ def comp_parameters(self, output):
     p = machine.rotor.winding.p
 
     xi = machine.stator.winding.comp_winding_factor()
-    Ntspc = machine.stator.winding.comp_Ntspc()
+    Ntspc = machine.stator.winding.comp_Ntsp()
     norm = (xi[0] * Ntspc) / (Zsr / 6)  # rotor - stator transformation factor
 
     self.parameters["norm"] = norm
+
+    Cond = self.parent.parent.machine.stator.winding.conductor
+
+    # compute skin_effect
+    Xkr_skinS, Xke_skinS = Cond.comp_skin_effect(T=20)
 
     # get temperatures TODO remove/replace, since this is a temp. solution only
     Tws = 20 if "Tws" not in self.parameters else self.parameter["Tws"]
@@ -33,7 +39,8 @@ def comp_parameters(self, output):
 
     # Parameters to compute only if they are not set
     if "Rs" not in self.parameters or self.parameters["Rs"] is None:
-        self.parameters["Rs"] = machine.stator.comp_resistance_wind(T=Tws)
+        Rs = machine.stator.comp_resistance_wind(T=Tws)
+        self.parameters["Rs"] = Rs * Xkr_skinS
 
     if "Rr_norm" not in self.parameters or self.parameters["Rr_norm"] is None:
         # 3 phase equivalent rotor resistance
@@ -135,8 +142,8 @@ def comp_parameters(self, output):
         Phi_s, Phi_r = _comp_flux_mean(self, out)
 
         self.parameters["Lm"] = (Phi_r * norm * Zsr / 3) / self.I
-        self.parameters["Ls"] = (Phi_s - (Phi_r * norm * Zsr / 3)) / self.I
-
+        Ls = (Phi_s - (Phi_r * norm * Zsr / 3)) / self.I
+        self.parameters["Ls"] = Ls * Xke_skinS
         # --- compute the main inductance and rotor stray inductance ---
         # set new output
         out = Output(simu=simu)

@@ -1,3 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-user_wind_mat,-,user defined Winding matrix,4,ndarray,,,,,Machine,Winding,comp_connection_mat,VERSION,1,User defined winding
-,,,,,,,,,,,get_dim_wind,NAME,"""User defined""",
+,,,,,,,,,Machine,Winding,init_as_CW1L,VERSION,1,User defined winding
+,,,,,,,,,,,init_as_CW2LR,NAME,"""User defined""",
+,,,,,,,,,,,init_as_CW2LT,,,
+,,,,,,,,,,,init_as_DWL,,,
+,,,,,,,,,,,import_from_csv,,,
