@@ -1,0 +1,6 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Rs,Ohm,DC phase winding resistance at Tsta_ref ,0,float,None,,,,Simulation,,get_parameters,VERSION,1,Abstract class for Electrical Look Up Table (ELUT),
+Ls,H,Phase winding leakage inductance,0,float,None,,,,,,,,,,
+Tsta_ref,degC,"Stator winding average temperature associated to Rs, Ls parameters",0,float,20,,,,,,,,,,
+K_RSE_sta,,Stator winding Resistance Skin Effect factor function of frequency,,ndarray,None,,,,,,,,,,
+K_ISE_sta,,Stator winding Inductance Skin Effect factor function of frequency,,ndarray,None,,,,,,,,,,

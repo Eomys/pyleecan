@@ -1,0 +1,5 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Phi_m,Wb,"Stator winding flux look-up table: list of DataTime objects whose (Id,Iq) is given by Idq list",,ndarray,None,,,,Simulation,ELUT,get_parameters,VERSION,1,ELUT class for SCIM,
+Trot_ref,degC,Rotor bar average temperature at which Phi_m is given,0,float,20,,,,,,get_Lm,,,,
+K_RSE_rot,,Rotor winding Resistance Skin Effect factor function of frequency,,ndarray,None,,,,,,comp_Lm_from_Phim,,,,
+K_ISE_rot,,Rotor winding Inductance Skin Effect factor function of frequency,,ndarray,None,,,,,,import_from_data,,,,

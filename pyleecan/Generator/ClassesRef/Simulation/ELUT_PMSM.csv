@@ -1,0 +1,10 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Phi_dqh,Wb,Stator winding flux llinkage fundamental calculated from user-input inductance tables,,ndarray,None,,,,Simulation,ELUT,get_parameters,VERSION,1,ELUT class for PMSM,
+I_dqh,Arms,Id Iq Ih table corresponding to flux linkage data given in Phi_dqh,,list,None,,,,,,get_Lq,,,,
+Tmag_ref,degC,Magnet average temperature at which Phi_dqh is given,,float,20,,,,,,get_bemf,,,,
+E0,V,RMS fundamental back electromotive force (bemf) along Q-axis,,float,None,,,,,,get_Ld,,,,
+E_dqh,V,Back emf harmonics along DQH axis,,ndarray,None,,,,,,get_Lmd,,,,
+orders_dqh,,Back harmonic orders (multiple of fundamental electrical frequency) corresponding to Edqh spectrum,,ndarray,None,,,,,,get_Lmq,,,,
+,,,,,,,,,,,comp_Ldqh_from_Phidqh,,,,
+,,,,,,,,,,,comp_Phidqh_from_Phiwind,,,,
+,,,,,,,,,,,import_from_data,,,,
