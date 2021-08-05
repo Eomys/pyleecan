@@ -18,9 +18,9 @@ from .ELUT import ELUT
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.ELUT_SCIM.get_parameters import get_parameters
+    from ..Methods.Simulation.ELUT_SCIM.get_param_dict import get_param_dict
 except ImportError as error:
-    get_parameters = error
+    get_param_dict = error
 
 try:
     from ..Methods.Simulation.ELUT_SCIM.get_Lm import get_Lm
@@ -48,17 +48,17 @@ class ELUT_SCIM(ELUT):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.ELUT_SCIM.get_parameters
-    if isinstance(get_parameters, ImportError):
-        get_parameters = property(
+    # cf Methods.Simulation.ELUT_SCIM.get_param_dict
+    if isinstance(get_param_dict, ImportError):
+        get_param_dict = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ELUT_SCIM method get_parameters: " + str(get_parameters)
+                    "Can't use ELUT_SCIM method get_param_dict: " + str(get_param_dict)
                 )
             )
         )
     else:
-        get_parameters = get_parameters
+        get_param_dict = get_param_dict
     # cf Methods.Simulation.ELUT_SCIM.get_Lm
     if isinstance(get_Lm, ImportError):
         get_Lm = property(
@@ -101,14 +101,13 @@ class ELUT_SCIM(ELUT):
     def __init__(
         self,
         Phi_m=None,
+        I_m=None,
         Trot_ref=20,
-        K_RSE_rot=None,
-        K_ISE_rot=None,
+        Rr=None,
+        Lr=None,
         Rs=None,
         Ls=None,
         Tsta_ref=20,
-        K_RSE_sta=None,
-        K_ISE_sta=None,
         init_dict=None,
         init_str=None,
     ):
@@ -129,31 +128,28 @@ class ELUT_SCIM(ELUT):
             # Overwrite default value with init_dict content
             if "Phi_m" in list(init_dict.keys()):
                 Phi_m = init_dict["Phi_m"]
+            if "I_m" in list(init_dict.keys()):
+                I_m = init_dict["I_m"]
             if "Trot_ref" in list(init_dict.keys()):
                 Trot_ref = init_dict["Trot_ref"]
-            if "K_RSE_rot" in list(init_dict.keys()):
-                K_RSE_rot = init_dict["K_RSE_rot"]
-            if "K_ISE_rot" in list(init_dict.keys()):
-                K_ISE_rot = init_dict["K_ISE_rot"]
+            if "Rr" in list(init_dict.keys()):
+                Rr = init_dict["Rr"]
+            if "Lr" in list(init_dict.keys()):
+                Lr = init_dict["Lr"]
             if "Rs" in list(init_dict.keys()):
                 Rs = init_dict["Rs"]
             if "Ls" in list(init_dict.keys()):
                 Ls = init_dict["Ls"]
             if "Tsta_ref" in list(init_dict.keys()):
                 Tsta_ref = init_dict["Tsta_ref"]
-            if "K_RSE_sta" in list(init_dict.keys()):
-                K_RSE_sta = init_dict["K_RSE_sta"]
-            if "K_ISE_sta" in list(init_dict.keys()):
-                K_ISE_sta = init_dict["K_ISE_sta"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_m = Phi_m
+        self.I_m = I_m
         self.Trot_ref = Trot_ref
-        self.K_RSE_rot = K_RSE_rot
-        self.K_ISE_rot = K_ISE_rot
+        self.Rr = Rr
+        self.Lr = Lr
         # Call ELUT init
-        super(ELUT_SCIM, self).__init__(
-            Rs=Rs, Ls=Ls, Tsta_ref=Tsta_ref, K_RSE_sta=K_RSE_sta, K_ISE_sta=K_ISE_sta
-        )
+        super(ELUT_SCIM, self).__init__(Rs=Rs, Ls=Ls, Tsta_ref=Tsta_ref)
         # The class is frozen (in ELUT init), for now it's impossible to
         # add new properties
 
@@ -170,21 +166,16 @@ class ELUT_SCIM(ELUT):
             + linesep
             + linesep
         )
+        ELUT_SCIM_str += (
+            "I_m = "
+            + linesep
+            + str(self.I_m).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         ELUT_SCIM_str += "Trot_ref = " + str(self.Trot_ref) + linesep
-        ELUT_SCIM_str += (
-            "K_RSE_rot = "
-            + linesep
-            + str(self.K_RSE_rot).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        ELUT_SCIM_str += (
-            "K_ISE_rot = "
-            + linesep
-            + str(self.K_ISE_rot).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        ELUT_SCIM_str += "Rr = " + str(self.Rr) + linesep
+        ELUT_SCIM_str += "Lr = " + str(self.Lr) + linesep
         return ELUT_SCIM_str
 
     def __eq__(self, other):
@@ -198,11 +189,13 @@ class ELUT_SCIM(ELUT):
             return False
         if not array_equal(other.Phi_m, self.Phi_m):
             return False
+        if not array_equal(other.I_m, self.I_m):
+            return False
         if other.Trot_ref != self.Trot_ref:
             return False
-        if not array_equal(other.K_RSE_rot, self.K_RSE_rot):
+        if other.Rr != self.Rr:
             return False
-        if not array_equal(other.K_ISE_rot, self.K_ISE_rot):
+        if other.Lr != self.Lr:
             return False
         return True
 
@@ -219,12 +212,14 @@ class ELUT_SCIM(ELUT):
         diff_list.extend(super(ELUT_SCIM, self).compare(other, name=name))
         if not array_equal(other.Phi_m, self.Phi_m):
             diff_list.append(name + ".Phi_m")
+        if not array_equal(other.I_m, self.I_m):
+            diff_list.append(name + ".I_m")
         if other._Trot_ref != self._Trot_ref:
             diff_list.append(name + ".Trot_ref")
-        if not array_equal(other.K_RSE_rot, self.K_RSE_rot):
-            diff_list.append(name + ".K_RSE_rot")
-        if not array_equal(other.K_ISE_rot, self.K_ISE_rot):
-            diff_list.append(name + ".K_ISE_rot")
+        if other._Rr != self._Rr:
+            diff_list.append(name + ".Rr")
+        if other._Lr != self._Lr:
+            diff_list.append(name + ".Lr")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -237,9 +232,10 @@ class ELUT_SCIM(ELUT):
         # Get size of the properties inherited from ELUT
         S += super(ELUT_SCIM, self).__sizeof__()
         S += getsizeof(self.Phi_m)
+        S += getsizeof(self.I_m)
         S += getsizeof(self.Trot_ref)
-        S += getsizeof(self.K_RSE_rot)
-        S += getsizeof(self.K_ISE_rot)
+        S += getsizeof(self.Rr)
+        S += getsizeof(self.Lr)
         return S
 
     def as_dict(self, **kwargs):
@@ -255,15 +251,13 @@ class ELUT_SCIM(ELUT):
             ELUT_SCIM_dict["Phi_m"] = None
         else:
             ELUT_SCIM_dict["Phi_m"] = self.Phi_m.tolist()
+        if self.I_m is None:
+            ELUT_SCIM_dict["I_m"] = None
+        else:
+            ELUT_SCIM_dict["I_m"] = self.I_m.tolist()
         ELUT_SCIM_dict["Trot_ref"] = self.Trot_ref
-        if self.K_RSE_rot is None:
-            ELUT_SCIM_dict["K_RSE_rot"] = None
-        else:
-            ELUT_SCIM_dict["K_RSE_rot"] = self.K_RSE_rot.tolist()
-        if self.K_ISE_rot is None:
-            ELUT_SCIM_dict["K_ISE_rot"] = None
-        else:
-            ELUT_SCIM_dict["K_ISE_rot"] = self.K_ISE_rot.tolist()
+        ELUT_SCIM_dict["Rr"] = self.Rr
+        ELUT_SCIM_dict["Lr"] = self.Lr
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ELUT_SCIM_dict["__class__"] = "ELUT_SCIM"
@@ -273,9 +267,10 @@ class ELUT_SCIM(ELUT):
         """Set all the properties to None (except pyleecan object)"""
 
         self.Phi_m = None
+        self.I_m = None
         self.Trot_ref = None
-        self.K_RSE_rot = None
-        self.K_ISE_rot = None
+        self.Rr = None
+        self.Lr = None
         # Set to None the properties inherited from ELUT
         super(ELUT_SCIM, self)._set_None()
 
@@ -298,7 +293,32 @@ class ELUT_SCIM(ELUT):
     Phi_m = property(
         fget=_get_Phi_m,
         fset=_set_Phi_m,
-        doc=u"""Stator winding flux look-up table: list of DataTime objects whose (Id,Iq) is given by Idq list
+        doc=u"""Magnetizing flux for a given magnetizing current I_m
+
+        :Type: ndarray
+        """,
+    )
+
+    def _get_I_m(self):
+        """getter of I_m"""
+        return self._I_m
+
+    def _set_I_m(self, value):
+        """setter of I_m"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("I_m", value, "ndarray")
+        self._I_m = value
+
+    I_m = property(
+        fget=_get_I_m,
+        fset=_set_I_m,
+        doc=u"""Stator magnetizing current
 
         :Type: ndarray
         """,
@@ -322,52 +342,38 @@ class ELUT_SCIM(ELUT):
         """,
     )
 
-    def _get_K_RSE_rot(self):
-        """getter of K_RSE_rot"""
-        return self._K_RSE_rot
+    def _get_Rr(self):
+        """getter of Rr"""
+        return self._Rr
 
-    def _set_K_RSE_rot(self, value):
-        """setter of K_RSE_rot"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("K_RSE_rot", value, "ndarray")
-        self._K_RSE_rot = value
+    def _set_Rr(self, value):
+        """setter of Rr"""
+        check_var("Rr", value, "float")
+        self._Rr = value
 
-    K_RSE_rot = property(
-        fget=_get_K_RSE_rot,
-        fset=_set_K_RSE_rot,
-        doc=u"""Rotor winding Resistance Skin Effect factor function of frequency
+    Rr = property(
+        fget=_get_Rr,
+        fset=_set_Rr,
+        doc=u"""DC rotor winding resistance at Tsta_ref 
 
-        :Type: ndarray
+        :Type: float
         """,
     )
 
-    def _get_K_ISE_rot(self):
-        """getter of K_ISE_rot"""
-        return self._K_ISE_rot
+    def _get_Lr(self):
+        """getter of Lr"""
+        return self._Lr
 
-    def _set_K_ISE_rot(self, value):
-        """setter of K_ISE_rot"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("K_ISE_rot", value, "ndarray")
-        self._K_ISE_rot = value
+    def _set_Lr(self, value):
+        """setter of Lr"""
+        check_var("Lr", value, "float")
+        self._Lr = value
 
-    K_ISE_rot = property(
-        fget=_get_K_ISE_rot,
-        fset=_set_K_ISE_rot,
-        doc=u"""Rotor winding Inductance Skin Effect factor function of frequency
+    Lr = property(
+        fget=_get_Lr,
+        fset=_set_Lr,
+        doc=u"""Rotor winding leakage inductance
 
-        :Type: ndarray
+        :Type: float
         """,
     )

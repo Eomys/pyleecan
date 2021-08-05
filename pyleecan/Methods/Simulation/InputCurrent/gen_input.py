@@ -24,17 +24,10 @@ def gen_input(self):
     elif isinstance(self.parent.parent, Simulation):
         simu = self.parent.parent
     else:
-        raise InputError(
-            "ERROR: InputCurrent object should be inside a Simulation object"
-        )
+        raise InputError("InputCurrent object should be inside a Simulation object")
 
-    # Create the correct Output object
-    output = OutElec()
-
-    # Set discretization
-    Time, Angle = self.comp_axes(simu.machine, self.N0)
-    output.Time = Time
-    output.Angle = Angle
+    # Call InputVoltage.gen_input()
+    super(type(self), self).gen_input()
 
     # Number of winding phases for stator/rotor
     qs = len(simu.machine.stator.get_name_phase())
@@ -48,7 +41,7 @@ def gen_input(self):
         if self.Is is None:
             if self.Id_ref is None and self.Iq_ref is None:
                 raise InputError(
-                    "ERROR: InputCurrent.Is, InputCurrent.Id_ref, and InputCurrent.Iq_ref missing"
+                    "InputCurrent.Is, InputCurrent.Id_ref, and InputCurrent.Iq_ref missing"
                 )
             else:
                 output.Id_ref = self.Id_ref
@@ -58,7 +51,7 @@ def gen_input(self):
             Is = self.Is.get_data()
             if not isinstance(Is, ndarray) or Is.shape != (self.Nt_tot, qs):
                 raise InputError(
-                    "ERROR: InputCurrent.Is must be a matrix with the shape "
+                    "InputCurrent.Is must be a matrix with the shape "
                     + str((self.Nt_tot, qs))
                     + " (len(time), stator phase number), "
                     + str(Is.shape)
@@ -96,7 +89,7 @@ def gen_input(self):
             Ir = self.Ir.get_data()
         if not isinstance(Ir, ndarray) or Ir.shape != (self.Nt_tot, qr):
             raise InputError(
-                "ERROR: InputCurrent.Ir must be a matrix with the shape "
+                "InputCurrent.Ir must be a matrix with the shape "
                 + str((self.Nt_tot, qr))
                 + " (len(time), rotor phase number), "
                 + str(Ir.shape)
@@ -115,48 +108,6 @@ def gen_input(self):
             symbol="Ir",
             axes=[Phase, Time],
             values=transpose(Ir),
-        )
-
-    # Load and check alpha_rotor and N0
-    if self.angle_rotor is None and self.N0 is None:
-        raise InputError(
-            "ERROR: InputCurrent.angle_rotor and InputCurrent.N0 can't be None at the same time"
-        )
-    if self.angle_rotor is not None:
-        output.angle_rotor = self.angle_rotor.get_data()
-        if (
-            not isinstance(output.angle_rotor, ndarray)
-            or len(output.angle_rotor.shape) != 1
-            or output.angle_rotor.size != self.Nt_tot
-        ):
-            # angle_rotor should be a vector of same length as time
-            raise InputError(
-                "ERROR: InputCurrent.angle_rotor should be a vector of the same length as time, "
-                + str(output.angle_rotor.shape)
-                + " shape found, "
-                + str(self.Nt_tot)
-                + " expected"
-            )
-
-    if self.rot_dir is None or self.rot_dir not in [-1, 1]:
-        # Enforce default rotation direction
-        # simu.parent.geo.rot_dir = None
-        pass  # None is already the default value
-    else:
-        simu.parent.geo.rot_dir = self.rot_dir
-
-    if self.angle_rotor_initial is None:
-        # Enforce default initial position
-        output.angle_rotor_initial = 0
-    else:
-        output.angle_rotor_initial = self.angle_rotor_initial
-
-    if self.Tem_av_ref is not None:
-        output.Tem_av_ref = self.Tem_av_ref
-
-    if simu.parent is None:
-        raise InputError(
-            "ERROR: The Simulation object must be in an Output object to run"
         )
 
     # Save the Output in the correct place

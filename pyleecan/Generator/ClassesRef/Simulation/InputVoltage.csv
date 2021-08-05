@@ -1,0 +1,10 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+angle_rotor,rad,Rotor angular position as a function of time (if None computed according to Nr) to import,Nt_tot,Import,None,,,,Simulation,Input,gen_input,VERSION,1,Input to start the electrical module with voltage input
+rot_dir,-,"Rotation direction of the rotor 1 trigo, -1 clockwise",,float,None,-1,1,,,,set_OP_from_array,,,
+angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,comp_felec,,,
+Tem_av_ref,N.m,Theorical Average Electromagnetic torque,,float,None,,,,,,,,,
+Ud_ref,Vrms,d-axis current RMS magnitude  (phase to neutral),1,float,None,,,,,,,,,
+Uq_ref,Vrms,q-axis current RMS magnitude  (phase to neutral),1,float,None,,,,,,,,,
+felec,Hz,electrical frequency,1,float,None,,,,,,,,,
+slip_ref,,Rotor mechanical slip,,float,0,,,,,,,,,
+U0_ref,Vrms,stator voltage (phase to neutral),,float,None,,,,,,,,,
