@@ -32,8 +32,11 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
     # Get stator winding number of phases
     qs = self.winding.qs
 
+    # Get number of pole pairs
+    p = self.get_pole_pair_number()
+
     # Get spatial symmetry
-    per_a, _, _, _ = self.comp_periodicity()
+    per_a, _, _, _ = self.comp_periodicity(p=p)
 
     # Define the space dicretization
     angle = linspace(0, 2 * pi / per_a, Na, endpoint=False)

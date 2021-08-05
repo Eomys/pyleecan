@@ -51,6 +51,7 @@ def draw_FEMM(
                 femm=femm,
                 nodeprop=nodeprop,
                 maxseg=maxseg,
+                element_size=mesh_dict["element_size"],
                 propname=propname,
                 hide=hide,
                 group=mesh_dict["group"],

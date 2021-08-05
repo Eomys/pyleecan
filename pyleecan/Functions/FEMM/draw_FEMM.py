@@ -83,8 +83,8 @@ def draw_FEMM(
     """
 
     # Initialization from output for readibility
-    BHs = output.geo.stator.BH_curve  # Stator B(H) curve
-    BHr = output.geo.rotor.BH_curve  # Rotor B(H) curve
+    BHs = output.get_BH_stator()  # Stator B(H) curve
+    BHr = output.get_BH_rotor()  # Rotor B(H) curve
     Is = output.elec.Is  # Stator currents waveforms
     Ir = output.elec.Ir  # Rotor currents waveforms
     machine = output.simu.machine
@@ -217,10 +217,11 @@ def draw_FEMM(
         FEMM_dict["acsolver"],
     )
     femm.mi_smartmesh(FEMM_dict["smart_mesh"])
-    output.get_logger().debug("Saving FEMM file at: " + path_save)
-    femm.mi_saveas(path_save)  # Save
-    FEMM_dict["path_save"] = path_save
-    # femm.mi_close()
+    if path_save is not None:
+        output.get_logger().debug("Saving FEMM file at: " + path_save)
+        femm.mi_saveas(path_save)  # Save
+        FEMM_dict["path_save"] = path_save
+        # femm.mi_close()
 
     FEMM_dict["materials"] = materials
     FEMM_dict["circuits"] = circuits

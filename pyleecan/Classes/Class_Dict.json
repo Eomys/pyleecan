@@ -19,7 +19,8 @@
             "is_on_line",
             "split_line",
             "comp_distance",
-            "plot"
+            "plot",
+            "comp_maxseg"
         ],
         "mother": "Line",
         "name": "Arc",

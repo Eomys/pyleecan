@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from numpy import gcd
 
 
-def comp_periodicity(self):
+def comp_periodicity(self, p):
     """Compute the periodicity factor of the lamination
 
     Parameters
@@ -20,5 +21,13 @@ def comp_periodicity(self):
     is_antiper_t : bool
         True if an time anti-periodicity is possible after the periodicities
     """
+    Zs = self.get_Zs()
 
-    return self.slot.Zs, self.slot.Zs % 2 == 0, self.slot.Zs, False
+    per = gcd(Zs, p)
+
+    if per == 1:
+        is_aper = bool(Zs % 2 == 0)
+    else:
+        is_aper = bool(Zs / p % 2 == 0)
+
+    return per, is_aper, per, is_aper
