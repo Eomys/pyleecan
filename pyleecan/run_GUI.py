@@ -20,21 +20,14 @@ try:  # Import if pyleecan is installed with pip
     from .GUI.Tools.GuiOption.WGuiOption import WGuiOption
     from .Functions.load import load_matlib
 except ImportError:  # Import for dev version
-    from definitions import PACKAGE_NAME, ROOT_DIR, config_dict
-
-    exec(
-        "from "
-        + PACKAGE_NAME
-        + ".GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup"
-    )
-    exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.DMatLib import DMatLib")
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.SidebarWindow import SidebarWindow")
-    exec(
-        "from " + PACKAGE_NAME + ".GUI.Tools.MachinePlotWidget import MachinePlotWidget"
-    )
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.TreeView import TreeView")
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.GuiOption.WGuiOption import WGuiOption")
-    exec("from " + PACKAGE_NAME + ".Functions.load import load_matlib")
+    exec("from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup")
+    exec("from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib")
+    exec("from pyleecan.GUI.Tools.SidebarWindow import SidebarWindow")
+    exec("from pyleecan.GUI.Tools.MachinePlotWidget import MachinePlotWidget")
+    exec("from pyleecan.GUI.Tools.TreeView import TreeView")
+    exec("from pyleecan.GUI.Tools.GuiOption.WGuiOption import WGuiOption")
+    exec("from pyleecan.Functions.load import load_matlib")
+    exec("from pyleecan.definitions import PACKAGE_NAME, ROOT_DIR, config_dict")
 
 
 EXT_GUI = True
