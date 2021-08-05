@@ -1,12 +1,13 @@
-# -*- coding: utf-8 -*-
-
-from ....Classes.OutElec import OutElec
-from ....Classes.Simulation import Simulation
-from ....Methods.Simulation.Input import InputError
 from numpy import ndarray, pi, mean, transpose, zeros
+
+from ....Classes.Simulation import Simulation
+
+from ....Methods.Simulation.Input import InputError
+
 from ....Functions.Electrical.coordinate_transformation import n2dq
-from SciDataTool import Data1D, DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
+
+from SciDataTool import Data1D, DataTime
 
 
 def gen_input(self):
@@ -29,12 +30,12 @@ def gen_input(self):
     # Call InputVoltage.gen_input()
     super(type(self), self).gen_input()
 
+    # Get electrical output
+    output = simu.parent.elec
+
     # Number of winding phases for stator/rotor
     qs = len(simu.machine.stator.get_name_phase())
     qr = len(simu.machine.rotor.get_name_phase())
-
-    output.N0 = self.N0
-    output.felec = self.comp_felec()  # TODO introduce set_felec(slip)
 
     # Load and check Is
     if qs > 0:
@@ -68,7 +69,7 @@ def gen_input(self):
                 name="Stator current",
                 unit="A",
                 symbol="Is",
-                axes=[Phase, Time],
+                axes=[Phase, output.Time],
                 values=transpose(Is),
             )
             # Compute corresponding Id/Iq reference
@@ -106,7 +107,7 @@ def gen_input(self):
             name="Rotor current",
             unit="A",
             symbol="Ir",
-            axes=[Phase, Time],
+            axes=[Phase, output.Time],
             values=transpose(Ir),
         )
 

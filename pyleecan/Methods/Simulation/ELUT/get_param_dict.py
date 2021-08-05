@@ -1,6 +1,3 @@
-from numpy import interp
-
-
 def get_param_dict(self):
     """Get the parameters dict from ELUT
 

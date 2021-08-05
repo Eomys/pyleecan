@@ -1,10 +1,12 @@
+from numpy import ndarray
+
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
-from numpy import ndarray, pi, mean, transpose, zeros
-from ....Functions.Electrical.coordinate_transformation import n2dq
-from SciDataTool import Data1D, DataTime
-from ....Functions.Winding.gen_phase_list import gen_name
+
+# from ....Functions.Electrical.coordinate_transformation import n2dq
+# from SciDataTool import Data1D, DataTime
+# from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def gen_input(self):
