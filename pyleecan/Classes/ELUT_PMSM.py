@@ -18,9 +18,9 @@ from .ELUT import ELUT
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.ELUT_PMSM.get_parameters import get_parameters
+    from ..Methods.Simulation.ELUT_PMSM.get_param_dict import get_param_dict
 except ImportError as error:
-    get_parameters = error
+    get_param_dict = error
 
 try:
     from ..Methods.Simulation.ELUT_PMSM.get_Lq import get_Lq
@@ -77,17 +77,17 @@ class ELUT_PMSM(ELUT):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.ELUT_PMSM.get_parameters
-    if isinstance(get_parameters, ImportError):
-        get_parameters = property(
+    # cf Methods.Simulation.ELUT_PMSM.get_param_dict
+    if isinstance(get_param_dict, ImportError):
+        get_param_dict = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ELUT_PMSM method get_parameters: " + str(get_parameters)
+                    "Can't use ELUT_PMSM method get_param_dict: " + str(get_param_dict)
                 )
             )
         )
     else:
-        get_parameters = get_parameters
+        get_param_dict = get_param_dict
     # cf Methods.Simulation.ELUT_PMSM.get_Lq
     if isinstance(get_Lq, ImportError):
         get_Lq = property(
@@ -186,8 +186,6 @@ class ELUT_PMSM(ELUT):
         Rs=None,
         Ls=None,
         Tsta_ref=20,
-        K_RSE_sta=None,
-        K_ISE_sta=None,
         init_dict=None,
         init_str=None,
     ):
@@ -224,10 +222,6 @@ class ELUT_PMSM(ELUT):
                 Ls = init_dict["Ls"]
             if "Tsta_ref" in list(init_dict.keys()):
                 Tsta_ref = init_dict["Tsta_ref"]
-            if "K_RSE_sta" in list(init_dict.keys()):
-                K_RSE_sta = init_dict["K_RSE_sta"]
-            if "K_ISE_sta" in list(init_dict.keys()):
-                K_ISE_sta = init_dict["K_ISE_sta"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_dqh = Phi_dqh
         self.I_dqh = I_dqh
@@ -236,9 +230,7 @@ class ELUT_PMSM(ELUT):
         self.E_dqh = E_dqh
         self.orders_dqh = orders_dqh
         # Call ELUT init
-        super(ELUT_PMSM, self).__init__(
-            Rs=Rs, Ls=Ls, Tsta_ref=Tsta_ref, K_RSE_sta=K_RSE_sta, K_ISE_sta=K_ISE_sta
-        )
+        super(ELUT_PMSM, self).__init__(Rs=Rs, Ls=Ls, Tsta_ref=Tsta_ref)
         # The class is frozen (in ELUT init), for now it's impossible to
         # add new properties
 

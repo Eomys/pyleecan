@@ -80,6 +80,7 @@ load_switch = {
     "InputElec": InputElec,
     "InputFlux": InputFlux,
     "InputForce": InputForce,
+    "InputVoltage": InputVoltage,
     "Interpolation": Interpolation,
     "LamHole": LamHole,
     "LamSlot": LamSlot,

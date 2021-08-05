@@ -1255,7 +1255,7 @@
         "desc": "Abstract class for Electrical Look Up Table (ELUT)",
         "is_internal": false,
         "methods": [
-            "get_parameters"
+            "get_param_dict"
         ],
         "mother": "",
         "name": "ELUT",
@@ -1288,24 +1288,6 @@
                 "type": "float",
                 "unit": "degC",
                 "value": 20
-            },
-            {
-                "desc": "Stator winding Resistance Skin Effect factor function of frequency",
-                "max": "",
-                "min": "",
-                "name": "K_RSE_sta",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Stator winding Inductance Skin Effect factor function of frequency",
-                "max": "",
-                "min": "",
-                "name": "K_ISE_sta",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
             }
         ]
     },
@@ -1320,7 +1302,7 @@
         "desc": "ELUT class for PMSM",
         "is_internal": false,
         "methods": [
-            "get_parameters",
+            "get_param_dict",
             "get_Lq",
             "get_bemf",
             "get_Ld",
@@ -1402,7 +1384,7 @@
         "desc": "ELUT class for SCIM",
         "is_internal": false,
         "methods": [
-            "get_parameters",
+            "get_param_dict",
             "get_Lm",
             "comp_Lm_from_Phim",
             "import_from_data"
@@ -1413,12 +1395,21 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/ELUT_SCIM.csv",
         "properties": [
             {
-                "desc": "Stator winding flux look-up table: list of DataTime objects whose (Id,Iq) is given by Idq list",
+                "desc": "Magnetizing flux for a given magnetizing current I_m",
                 "max": "",
                 "min": "",
                 "name": "Phi_m",
                 "type": "ndarray",
                 "unit": "Wb",
+                "value": null
+            },
+            {
+                "desc": "Stator magnetizing current",
+                "max": "",
+                "min": "",
+                "name": "I_m",
+                "type": "ndarray",
+                "unit": "Arms",
                 "value": null
             },
             {
@@ -1431,21 +1422,21 @@
                 "value": 20
             },
             {
-                "desc": "Rotor winding Resistance Skin Effect factor function of frequency",
+                "desc": "DC rotor winding resistance at Tsta_ref ",
                 "max": "",
                 "min": "",
-                "name": "K_RSE_rot",
-                "type": "ndarray",
-                "unit": "",
+                "name": "Rr",
+                "type": "float",
+                "unit": "Ohm",
                 "value": null
             },
             {
-                "desc": "Rotor winding Inductance Skin Effect factor function of frequency",
+                "desc": "Rotor winding leakage inductance",
                 "max": "",
                 "min": "",
-                "name": "K_ISE_rot",
-                "type": "ndarray",
-                "unit": "",
+                "name": "Lr",
+                "type": "float",
+                "unit": "H",
                 "value": null
             }
         ]
@@ -4055,7 +4046,8 @@
             "InputCurrent",
             "InputElec",
             "InputFlux",
-            "InputForce"
+            "InputForce",
+            "InputVoltage"
         ],
         "desc": "Starting data of the simulation",
         "is_internal": false,
@@ -4140,7 +4132,7 @@
             "set_Id_Iq",
             "set_OP_from_array"
         ],
-        "mother": "Input",
+        "mother": "InputVoltage",
         "name": "InputCurrent",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputCurrent.csv",
@@ -4164,42 +4156,6 @@
                 "value": null
             },
             {
-                "desc": "Rotor angular position as a function of time (if None computed according to Nr) to import",
-                "max": "",
-                "min": "",
-                "name": "angle_rotor",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
-            {
-                "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
-                "max": "1",
-                "min": "-1",
-                "name": "rot_dir",
-                "type": "float",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Initial angular position of the rotor at t=0",
-                "max": "",
-                "min": "",
-                "name": "angle_rotor_initial",
-                "type": "float",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Theorical Average Electromagnetic torque",
-                "max": "",
-                "min": "",
-                "name": "Tem_av_ref",
-                "type": "float",
-                "unit": "N.m",
-                "value": null
-            },
-            {
                 "desc": "d-axis current RMS magnitude",
                 "max": "",
                 "min": "",
@@ -4215,15 +4171,6 @@
                 "name": "Iq_ref",
                 "type": "float",
                 "unit": "A",
-                "value": null
-            },
-            {
-                "desc": "electrical frequency",
-                "max": "",
-                "min": "",
-                "name": "felec",
-                "type": "float",
-                "unit": "Hz",
                 "value": null
             }
         ]
@@ -4414,6 +4361,111 @@
                 "name": "P",
                 "type": "ImportVectorField",
                 "unit": "N.m^2",
+                "value": null
+            }
+        ]
+    },
+    "InputVoltage": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "InputCurrent"
+        ],
+        "desc": "Input to start the electrical module with voltage input",
+        "is_internal": false,
+        "methods": [
+            "gen_input",
+            "set_OP_from_array",
+            "comp_felec"
+        ],
+        "mother": "Input",
+        "name": "InputVoltage",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/InputVoltage.csv",
+        "properties": [
+            {
+                "desc": "Rotor angular position as a function of time (if None computed according to Nr) to import",
+                "max": "",
+                "min": "",
+                "name": "angle_rotor",
+                "type": "Import",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
+                "max": "1",
+                "min": "-1",
+                "name": "rot_dir",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Initial angular position of the rotor at t=0",
+                "max": "",
+                "min": "",
+                "name": "angle_rotor_initial",
+                "type": "float",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Theorical Average Electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "float",
+                "unit": "N.m",
+                "value": null
+            },
+            {
+                "desc": "d-axis current RMS magnitude  (phase to neutral)",
+                "max": "",
+                "min": "",
+                "name": "Ud_ref",
+                "type": "float",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "q-axis current RMS magnitude  (phase to neutral)",
+                "max": "",
+                "min": "",
+                "name": "Uq_ref",
+                "type": "float",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "electrical frequency",
+                "max": "",
+                "min": "",
+                "name": "felec",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
+            },
+            {
+                "desc": "Rotor mechanical slip",
+                "max": "",
+                "min": "",
+                "name": "slip_ref",
+                "type": "float",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "stator voltage (phase to neutral)",
+                "max": "",
+                "min": "",
+                "name": "U0_ref",
+                "type": "float",
+                "unit": "Vrms",
                 "value": null
             }
         ]
@@ -7877,21 +7929,21 @@
                 "value": null
             },
             {
-                "desc": "Electrical time vector (no symmetry)",
+                "desc": "d-axis current rms value",
                 "max": "",
                 "min": "",
                 "name": "Id_ref",
                 "type": "float",
-                "unit": "A",
+                "unit": "Arms",
                 "value": null
             },
             {
-                "desc": "q-axis current magnitude",
+                "desc": "q-axis current rms value",
                 "max": "",
                 "min": "",
                 "name": "Iq_ref",
                 "type": "float",
-                "unit": "A",
+                "unit": "Arms",
                 "value": null
             },
             {
@@ -7904,21 +7956,21 @@
                 "value": null
             },
             {
-                "desc": "d-axis voltage magnitude",
+                "desc": "d-axis voltage rms value",
                 "max": "",
                 "min": "",
                 "name": "Ud_ref",
                 "type": "float",
-                "unit": "V",
+                "unit": "Vrms",
                 "value": null
             },
             {
-                "desc": "q-axis voltage magnitude",
+                "desc": "q-axis voltage rms value",
                 "max": "",
                 "min": "",
                 "name": "Uq_ref",
                 "type": "float",
-                "unit": "V",
+                "unit": "Vrms",
                 "value": null
             },
             {
@@ -7955,6 +8007,24 @@
                 "name": "internal",
                 "type": "OutInternal",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Rotor mechanical slip",
+                "max": "",
+                "min": "",
+                "name": "slip_ref",
+                "type": "float",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "stator voltage (phase to neutral)",
+                "max": "",
+                "min": "",
+                "name": "U0_ref",
+                "type": "float",
+                "unit": "Vrms",
                 "value": null
             }
         ]

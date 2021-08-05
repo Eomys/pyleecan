@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-Phi_dqh,Wb,Stator winding flux llinkage fundamental calculated from user-input inductance tables,,ndarray,None,,,,Simulation,ELUT,get_parameters,VERSION,1,ELUT class for PMSM,
+Phi_dqh,Wb,Stator winding flux llinkage fundamental calculated from user-input inductance tables,,ndarray,None,,,,Simulation,ELUT,get_param_dict,VERSION,1,ELUT class for PMSM,
 I_dqh,Arms,Id Iq Ih table corresponding to flux linkage data given in Phi_dqh,,list,None,,,,,,get_Lq,,,,
 Tmag_ref,degC,Magnet average temperature at which Phi_dqh is given,,float,20,,,,,,get_bemf,,,,
 E0,V,RMS fundamental back electromotive force (bemf) along Q-axis,,float,None,,,,,,get_Ld,,,,

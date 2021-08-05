@@ -78,6 +78,7 @@ from ..Classes.InputCurrent import InputCurrent
 from ..Classes.InputElec import InputElec
 from ..Classes.InputFlux import InputFlux
 from ..Classes.InputForce import InputForce
+from ..Classes.InputVoltage import InputVoltage
 from ..Classes.Interpolation import Interpolation
 from ..Classes.LamHole import LamHole
 from ..Classes.LamSlot import LamSlot

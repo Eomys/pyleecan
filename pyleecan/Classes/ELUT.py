@@ -7,7 +7,7 @@
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import set_array, check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.copy import copy
@@ -18,12 +18,11 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.ELUT.get_parameters import get_parameters
+    from ..Methods.Simulation.ELUT.get_param_dict import get_param_dict
 except ImportError as error:
-    get_parameters = error
+    get_param_dict = error
 
 
-from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
 
@@ -32,33 +31,24 @@ class ELUT(FrozenClass):
 
     VERSION = 1
 
-    # cf Methods.Simulation.ELUT.get_parameters
-    if isinstance(get_parameters, ImportError):
-        get_parameters = property(
+    # cf Methods.Simulation.ELUT.get_param_dict
+    if isinstance(get_param_dict, ImportError):
+        get_param_dict = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ELUT method get_parameters: " + str(get_parameters)
+                    "Can't use ELUT method get_param_dict: " + str(get_param_dict)
                 )
             )
         )
     else:
-        get_parameters = get_parameters
+        get_param_dict = get_param_dict
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Rs=None,
-        Ls=None,
-        Tsta_ref=20,
-        K_RSE_sta=None,
-        K_ISE_sta=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Rs=None, Ls=None, Tsta_ref=20, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -80,17 +70,11 @@ class ELUT(FrozenClass):
                 Ls = init_dict["Ls"]
             if "Tsta_ref" in list(init_dict.keys()):
                 Tsta_ref = init_dict["Tsta_ref"]
-            if "K_RSE_sta" in list(init_dict.keys()):
-                K_RSE_sta = init_dict["K_RSE_sta"]
-            if "K_ISE_sta" in list(init_dict.keys()):
-                K_ISE_sta = init_dict["K_ISE_sta"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Rs = Rs
         self.Ls = Ls
         self.Tsta_ref = Tsta_ref
-        self.K_RSE_sta = K_RSE_sta
-        self.K_ISE_sta = K_ISE_sta
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -106,20 +90,6 @@ class ELUT(FrozenClass):
         ELUT_str += "Rs = " + str(self.Rs) + linesep
         ELUT_str += "Ls = " + str(self.Ls) + linesep
         ELUT_str += "Tsta_ref = " + str(self.Tsta_ref) + linesep
-        ELUT_str += (
-            "K_RSE_sta = "
-            + linesep
-            + str(self.K_RSE_sta).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        ELUT_str += (
-            "K_ISE_sta = "
-            + linesep
-            + str(self.K_ISE_sta).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
         return ELUT_str
 
     def __eq__(self, other):
@@ -132,10 +102,6 @@ class ELUT(FrozenClass):
         if other.Ls != self.Ls:
             return False
         if other.Tsta_ref != self.Tsta_ref:
-            return False
-        if not array_equal(other.K_RSE_sta, self.K_RSE_sta):
-            return False
-        if not array_equal(other.K_ISE_sta, self.K_ISE_sta):
             return False
         return True
 
@@ -153,10 +119,6 @@ class ELUT(FrozenClass):
             diff_list.append(name + ".Ls")
         if other._Tsta_ref != self._Tsta_ref:
             diff_list.append(name + ".Tsta_ref")
-        if not array_equal(other.K_RSE_sta, self.K_RSE_sta):
-            diff_list.append(name + ".K_RSE_sta")
-        if not array_equal(other.K_ISE_sta, self.K_ISE_sta):
-            diff_list.append(name + ".K_ISE_sta")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -168,8 +130,6 @@ class ELUT(FrozenClass):
         S += getsizeof(self.Rs)
         S += getsizeof(self.Ls)
         S += getsizeof(self.Tsta_ref)
-        S += getsizeof(self.K_RSE_sta)
-        S += getsizeof(self.K_ISE_sta)
         return S
 
     def as_dict(self, **kwargs):
@@ -183,14 +143,6 @@ class ELUT(FrozenClass):
         ELUT_dict["Rs"] = self.Rs
         ELUT_dict["Ls"] = self.Ls
         ELUT_dict["Tsta_ref"] = self.Tsta_ref
-        if self.K_RSE_sta is None:
-            ELUT_dict["K_RSE_sta"] = None
-        else:
-            ELUT_dict["K_RSE_sta"] = self.K_RSE_sta.tolist()
-        if self.K_ISE_sta is None:
-            ELUT_dict["K_ISE_sta"] = None
-        else:
-            ELUT_dict["K_ISE_sta"] = self.K_ISE_sta.tolist()
         # The class name is added to the dict for deserialisation purpose
         ELUT_dict["__class__"] = "ELUT"
         return ELUT_dict
@@ -201,8 +153,6 @@ class ELUT(FrozenClass):
         self.Rs = None
         self.Ls = None
         self.Tsta_ref = None
-        self.K_RSE_sta = None
-        self.K_ISE_sta = None
 
     def _get_Rs(self):
         """getter of Rs"""
@@ -255,55 +205,5 @@ class ELUT(FrozenClass):
         doc=u"""Stator winding average temperature associated to Rs, Ls parameters
 
         :Type: float
-        """,
-    )
-
-    def _get_K_RSE_sta(self):
-        """getter of K_RSE_sta"""
-        return self._K_RSE_sta
-
-    def _set_K_RSE_sta(self, value):
-        """setter of K_RSE_sta"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("K_RSE_sta", value, "ndarray")
-        self._K_RSE_sta = value
-
-    K_RSE_sta = property(
-        fget=_get_K_RSE_sta,
-        fset=_set_K_RSE_sta,
-        doc=u"""Stator winding Resistance Skin Effect factor function of frequency
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_K_ISE_sta(self):
-        """getter of K_ISE_sta"""
-        return self._K_ISE_sta
-
-    def _set_K_ISE_sta(self, value):
-        """setter of K_ISE_sta"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("K_ISE_sta", value, "ndarray")
-        self._K_ISE_sta = value
-
-    K_ISE_sta = property(
-        fget=_get_K_ISE_sta,
-        fset=_set_K_ISE_sta,
-        doc=u"""Stator winding Inductance Skin Effect factor function of frequency
-
-        :Type: ndarray
         """,
     )
