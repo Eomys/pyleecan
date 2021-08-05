@@ -66,6 +66,7 @@ def generate_executable(
     license_path = join(PRJ_PATH, "LICENSE").replace("\\", "/")
     # Repository link
     REPO_LINK = "https://github.com/Eomys/pyleecan.git"
+    # REPO_LINK = "https://github.com/EOMYS-Public/pyleecan.git"
     # Path to installer program
     iscc_path = "C:/Program Files (x86)/Inno Setup 6/iscc.exe"
     # Path to installer generation script
