@@ -42,6 +42,7 @@ load_switch = {
     "ForceMT": ForceMT,
     "ForceTensor": ForceTensor,
     "Frame": Frame,
+    "FrameBar": FrameBar,
     "GUIOption": GUIOption,
     "GaussPoint": GaussPoint,
     "Hole": Hole,
