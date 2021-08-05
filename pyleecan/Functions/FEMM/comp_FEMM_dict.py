@@ -33,10 +33,14 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
 
     # Recompute because machine may has been modified
     Hsy = machine.stator.comp_height_yoke()
-    Hstot = machine.stator.Rext - machine.stator.Rint - Hsy  # Works with holes and slot
+    Hs = machine.stator.Rext - machine.stator.Rint
+    Hstot = Hs - Hsy  # Works with holes and slot
+
     Wgap_mec = machine.comp_width_airgap_mec()
+
     Hry = machine.rotor.comp_height_yoke()
-    Hrtot = machine.rotor.Rext - machine.rotor.Rint - Hry  # Works with holes and slot
+    Hr = machine.rotor.Rext - machine.rotor.Rint
+    Hrtot = Hr - Hry  # Works with holes and slot
 
     FEMM_dict = dict()
     FEMM_dict["is_close_model"] = 0
@@ -67,12 +71,12 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
 
     # stator slot region mesh and segments max element size parameter
     # If Hstot = 0 there is no slot and the region parameter won't be used
-    FEMM_dict["meshsize_slotS"] = Hstot / 8 / Kmesh_fineness
-    FEMM_dict["elementsize_slotS"] = Hstot / 8 / Kmesh_fineness
+    FEMM_dict["meshsize_slotS"] = max(Hstot, Hs / 2) / 8 / Kmesh_fineness
+    FEMM_dict["elementsize_slotS"] = max(Hstot, Hs / 2) / 8 / Kmesh_fineness
 
     # stator yoke region mesh and segments max element size parameter
-    FEMM_dict["meshsize_yokeS"] = Hsy / 4 / Kmesh_fineness
-    FEMM_dict["elementsize_yokeS"] = Hsy / 4 / Kmesh_fineness
+    FEMM_dict["meshsize_yokeS"] = min(Hsy, Hs / 2) / 4 / Kmesh_fineness
+    FEMM_dict["elementsize_yokeS"] = min(Hsy, Hs / 2) / 4 / Kmesh_fineness
 
     # rotor slot region mesh and segments max element size parameter
     if type(machine.rotor) == LamSlotMag or type(machine.rotor) == LamHole:
