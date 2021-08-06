@@ -13,7 +13,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={92D3C390-56BC-4EF6-AF66-84C86C9AB050}
+AppId={{92D3C390-56BC-4EF6-AF66-84C86C9AB050}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 VersionInfoVersion={#MyAppVersion}
@@ -31,8 +31,8 @@ OutputBaseFilename=Pyleecan Setup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-SetupIconFile=Exe_gen/Pyleecan.ico
-UninstallDisplayIcon=Exe_gen/Pyleecan.ico
+SetupIconFile=Exe_gen/pyleecan_64.ico
+UninstallDisplayIcon=Exe_gen/pyleecan_64.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
