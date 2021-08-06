@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-def comp_skin_effect_round_wire(self,f, rho=None):
+def comp_skin_effect_round_wire(self,f,rho=None, mu=None):
 
     """ Compute skin effect factor for round wires
 
@@ -13,6 +13,8 @@ def comp_skin_effect_round_wire(self,f, rho=None):
         Frequency (Hz)
     rho: float
         Resistivity of wire material (Ohm meter)
+    mu: float
+        Relative permeability of wire material
     self : Conductor
         an Conductor object
 
@@ -25,7 +27,7 @@ def comp_skin_effect_round_wire(self,f, rho=None):
     """
     
   
-
+    # Resistivity of wire material (Ohm meter)
     if rho is None:
         rho = self.cond_mat.elec.rho
     # Wire diameter    
@@ -33,7 +35,10 @@ def comp_skin_effect_round_wire(self,f, rho=None):
     # Vaccum or air permeability
     mu0 = 4 * np.pi * 1e-7
     # Wire material magnetic permeability (mu*mu0)
-    mu=self.cond_mat.mag.mur_lin*mu0
+    if mu is None:
+        mu=self.cond_mat.mag.mur_lin*mu0
+    else:
+        mu=mu*mu0
     # Thickness of skin
     delta=np.sqrt(rho/(np.pi*f*mu))
 
