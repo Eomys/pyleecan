@@ -67,6 +67,11 @@ try:
 except ImportError as error:
     plot_schematics = error
 
+try:
+    from ..Methods.Slot.SlotWLSRPM.get_surface_active import get_surface_active
+except ImportError as error:
+    get_surface_active = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -192,6 +197,18 @@ class SlotWLSRPM(Slot):
         )
     else:
         plot_schematics = plot_schematics
+    # cf Methods.Slot.SlotWLSRPM.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWLSRPM method get_surface_active: "
+                    + str(get_surface_active)
+                )
+            )
+        )
+    else:
+        get_surface_active = get_surface_active
     # save and copy methods are available in all object
     save = save
     copy = copy

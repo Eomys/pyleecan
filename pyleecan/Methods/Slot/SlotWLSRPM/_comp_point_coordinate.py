@@ -68,8 +68,6 @@ def _comp_point_coordinate(self):
     Z1t = x1t + 1j * y1t
     Z1 = Z1t * exp(-1j * hsp)
 
-
-
     # Z9 damper winding point
 
     x9t = x1t + self.H3

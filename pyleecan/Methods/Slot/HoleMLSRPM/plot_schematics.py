@@ -253,9 +253,9 @@ def plot_schematics(
                 color=MAIN_LINE_COLOR,
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
-            ) 
+            )
             # Guide line 1
-            line = Segment(0, lam.Rext * 1.5 * exp(1j * (alpha+12.6 / 180 * pi)))
+            line = Segment(0, lam.Rext * 1.5 * exp(1j * (alpha + 12.6 / 180 * pi)))
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -264,7 +264,11 @@ def plot_schematics(
                 linewidth=MAIN_LINE_WIDTH,
             )
             # Guide line 2
-            line = Segment(0-1j*0.0007/cos(12.6 / 180 * pi), lam.Rext * 1.5 * exp(1j * (alpha+12.6 / 180 * pi))-1j*0.0007/cos(12.6 / 180 * pi))
+            line = Segment(
+                0 - 1j * 0.0007 / cos(12.6 / 180 * pi),
+                lam.Rext * 1.5 * exp(1j * (alpha + 12.6 / 180 * pi))
+                - 1j * 0.0007 / cos(12.6 / 180 * pi),
+            )
             line.plot(
                 fig=fig,
                 ax=ax,

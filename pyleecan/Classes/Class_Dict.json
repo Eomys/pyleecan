@@ -11938,7 +11938,8 @@
             "comp_height_wind",
             "compt_height",
             "comp_surface",
-            "plot_schematics"
+            "plot_schematics",
+            "get_surface_active"
         ],
         "mother": "Slot",
         "name": "SlotWLSRPM",
