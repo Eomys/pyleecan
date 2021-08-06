@@ -61,7 +61,7 @@ def generate_executable(
     # Path to define the environment
     ENV_PATH = join(PRJ_PATH, "Exenv").replace("\\", "/")
     # Path to result forder of pyinstaller
-    dist_path = join(PRJ_PATH, "dist", "pyleecan").replace("\\", "/")
+    dist_path = join(PRJ_PATH, "dist", "Pyleecan").replace("\\", "/")
     # Path of the license file
     license_path = join(PRJ_PATH, "LICENSE").replace("\\", "/")
     # Repository link
@@ -71,6 +71,7 @@ def generate_executable(
     iscc_path = "C:/Program Files (x86)/Inno Setup 6/iscc.exe"
     # Path to installer generation script
     install_path = join(PRJ_PATH, "Exe_gen", "pyleecan.iss").replace("\\", "/")
+    install_path_2 = join(PRJ_PATH, "pyleecan.iss").replace("\\", "/")
     spec_path = join(PRJ_PATH, "Exe_gen", "pyleecan.spec")  # Original path
     spec_path_2 = join(PRJ_PATH, "pyleecan.spec")  # To move the spec file
     out_path = join(PRJ_PATH, "Output", "Pyleecan Setup.exe").replace("\\", "/")
@@ -165,6 +166,7 @@ def generate_executable(
         # Updating packages
         os.system(join(ENV_PATH, "Scripts", "pip") + " install -U pip")
         os.system(join(ENV_PATH, "Scripts", "pip") + " install -U pyinstaller")
+        os.system(join(ENV_PATH, "Scripts", "pip") + " install gmsh-sdk")
         # Installing required packages
         os.system(
             join(ENV_PATH, "Scripts", "pip")
@@ -223,18 +225,19 @@ def generate_executable(
     if start <= 6 and stop >= 6:  # installer
         # Editing installer generation script
         print("Step 6: Start installer generation...")
+        copy(install_path, install_path_2)
         edit_line_in_file(
-            install_path,
+            install_path_2,
             "^#define MainPath",
             '#define MainPath "' + dist_path + '"',
         )
         edit_line_in_file(
-            install_path,
+            install_path_2,
             "^#define MyAppVersion",
             '#define MyAppVersion "' + version + '"',
         )
         edit_line_in_file(
-            install_path,
+            install_path_2,
             "^LicenseFile=",
             "LicenseFile=" + license_path,
         )
@@ -249,14 +252,14 @@ def generate_executable(
                     + '"; Flags: ignoreversion recursesubdirs\n'
                 )
         edit_line_in_file(
-            install_path,
+            install_path_2,
             "^\[Files\]",
             "[Files]\n" + files_str,
         )
 
         # Generate Installer exe
         try:
-            cmd = '"' + iscc_path + '" ' + install_path
+            cmd = '"' + iscc_path + '" ' + install_path_2
             if os.system(cmd) != 0:
                 raise ("Error while running " + cmd + "\nPlease install Inno Setup")
         except Exception as e:
