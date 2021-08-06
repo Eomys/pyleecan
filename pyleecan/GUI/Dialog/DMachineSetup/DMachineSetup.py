@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from os import getcwd, rename
-from os.path import basename, join, isfile, dirname
+from os.path import basename, join, dirname
 
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
 
-from ....Functions.Material.compare_material import compare_material
-from ....Functions.load import load, load_matlib
+from ....Functions.load import load, load_machine_materials
 from ....GUI.Dialog.DMachineSetup import mach_index, mach_list
 from ....GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
 from ....GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
 from ....definitions import config_dict
 from ....Classes.Machine import Machine
-from ....Classes.Material import Material
-from logging import getLogger
 
 # Flag for set the enable property of w_nav (List_Widget)
 DISABLE_ITEM = Qt.NoItemFlags
@@ -28,13 +24,19 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
     machineChanged = Signal()
     rejected = Signal()
 
-    def __init__(self, machine=None, dmatlib=None, machine_path=""):
+    def __init__(self, machine=None, material_dict=None, machine_path=""):
         """Initialize the GUI according to machine type
 
         Parameters
         ----------
         self : DMachineSetup
             a DMachineSetup object
+        machine : Machine
+            Machine to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
+        machine_path : str
+            Default loading path for machine
         """
 
         # Build the interface according to the .ui file
@@ -42,8 +44,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         self.setupUi(self)
 
         self.is_save_needed = False
-        self.dmatlib = dmatlib
-        self.matlib = dmatlib.matlib
+        self.material_dict = material_dict
         self.last_index = 0  # Index of the last step available
 
         # Saving arguments
@@ -66,8 +67,6 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         self.nav_step.currentRowChanged.connect(self.set_nav)
         self.b_save.clicked.connect(self.s_save)
         self.b_load.clicked.connect(self.s_load)
-
-        self.dmatlib.saveNeeded.connect(self.save_needed)
 
         self.qmessagebox_question = None
 
@@ -177,7 +176,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 machine = load(load_path)
                 if isinstance(machine, Machine):
                     self.machine = machine
-                    is_machine_change = self.matlib.add_machine_mat(machine)
+                    load_machine_materials(self.material_dict, self.machine)
                 else:
                     QMessageBox().critical(
                         self,
@@ -186,11 +185,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                     )
                     return
                 self.machineChanged.emit()
-
-                # Save needed if machine materials have changed
-                if is_machine_change:
-                    self.save_needed()
-
+                self.is_save_needed = False
             except Exception as e:
                 QMessageBox().critical(
                     self,
@@ -272,7 +267,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
 
     def get_machine_index(self):
         """Get the index corresponding to the current machine in the mach_list"""
-        # Get the correct machine dictionnary
+        # Get the correct machine dictionary
         index = mach_index.index(type(self.machine))
         if index == -1:
             QMessageBox().critical(
@@ -307,7 +302,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         # Regenerate the step with the current values
         self.w_step.setParent(None)
         self.w_step = step_list[index](
-            machine=self.machine, matlib=self.matlib, is_stator=is_stator
+            machine=self.machine, material_dict=self.material_dict, is_stator=is_stator
         )
         self.w_step.b_previous.clicked.connect(self.s_previous)
         if index != len(step_list) - 1:

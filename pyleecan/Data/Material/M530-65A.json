@@ -8,6 +8,8 @@
         "lambda_z": 1
     },
     "__class__": "Material",
+    "__save_date__": "2021_05_03 14h38min33s ",
+    "__version__": "pyleecan_1.2.1",
     "desc": "Material description",
     "eco": {
         "__class__": "MatEconomical",
@@ -826,9 +828,20 @@
         },
         "Brm20": 0,
         "Hc": 0,
+        "LossData": {
+            "__class__": "ImportMatrix",
+            "is_transpose": false
+        },
+        "ModelBH": {
+            "Bmax": 2.31,
+            "Hmax": null,
+            "__class__": "ModelBH",
+            "delta": 100
+        },
         "Wlam": 0.0005,
         "__class__": "MatMagnetics",
         "alpha_Br": 0,
+        "is_BH_extrapolate": false,
         "mur_lin": 2500.0
     },
     "name": "M530-65A",

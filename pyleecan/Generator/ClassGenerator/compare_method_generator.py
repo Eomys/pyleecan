@@ -11,7 +11,7 @@ def generate_compare(gen_dict, class_dict):
         Dict with key = class name and value = class dict (name, package, properties, methods...)
 
     class_dict : dict
-        Dictionnary of the class to generate (keys are name, package, properties, methods...)
+        dictionary of the class to generate (keys are name, package, properties, methods...)
 
     Returns
     -------
@@ -23,9 +23,11 @@ def generate_compare(gen_dict, class_dict):
     compare_str = ""  # This string is for the generated code
 
     # Code generation
-    compare_str += TAB + "def compare(self, other, name='self'):\n"
+    compare_str += TAB + "def compare(self, other, name='self', ignore_list=None):\n"
     compare_str += TAB2 + '"""Compare two objects and return list of differences"""\n\n'
     # Check the type
+    compare_str += TAB2 + "if ignore_list is None:\n"
+    compare_str += TAB3 + "ignore_list = list()\n"
     compare_str += TAB2 + "if type(other) != type(self):\n"
     compare_str += TAB3 + "return ['type('+name+')']\n"
     compare_str += TAB2 + "diff_list = list()\n"
@@ -286,6 +288,34 @@ def generate_compare(gen_dict, class_dict):
                 + prop["name"]
                 + "'))\n"
             )
+        elif "." in prop["type"] and "SciDataTool" not in prop["type"]:
+            # External type
+            compare_str += (
+                TAB2
+                + "if (other."
+                + prop["name"]
+                + " is None and self."
+                + prop["name"]
+                + " is not None) or (other."
+                + prop["name"]
+                + " is not None and self."
+                + prop["name"]
+                + " is None):\n"
+            )
+            compare_str += (
+                TAB3 + "diff_list.append(name+'." + prop["name"] + " None mismatch')\n"
+            )
+            compare_str += (
+                TAB2
+                + "elif self."
+                + prop["name"]
+                + " is not None and self."
+                + prop["name"]
+                + " != other."
+                + prop["name"]
+                + ":\n"
+            )
+            compare_str += TAB3 + "diff_list.append(name+'." + prop["name"] + "')\n"
         else:  # pyleecan type
             compare_str += (
                 TAB2
@@ -313,6 +343,10 @@ def generate_compare(gen_dict, class_dict):
                 + prop["name"]
                 + "'))\n"
             )
+    compare_str += TAB2 + "# Filter ignore differences\n"
+    compare_str += (
+        TAB2 + "diff_list = list(filter(lambda x : x not in ignore_list, diff_list))\n"
+    )
     compare_str += TAB2 + "return diff_list\n"
 
     return compare_str

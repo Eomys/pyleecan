@@ -18,7 +18,7 @@ from pyleecan.Classes.FPGNSeg import FPGNSeg
 
 @pytest.mark.MeshSol
 class unittest_ref_nodes(TestCase):
-    """ Tests for get_ref_point methods"""
+    """Tests for get_ref_point methods"""
 
     def test_line2(self):
         DELTA = 1e-10

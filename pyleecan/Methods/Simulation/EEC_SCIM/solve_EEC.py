@@ -62,10 +62,10 @@ def solve_EEC(self, output):
         # fmt: off
         A = array(
             [ 
-                # sum of (real and imagine) voltages equals the input voltage Us
+                # sum of (real and imaginary) voltages equals the input voltage Us
                 [ 1,  0, Rs, -Xs,  0,   0,    0,    0,   0,   0, ], 
                 [ 0,  1, Xs,  Rs,  0,   0,    0,    0,   0,   0, ], 
-                # sum of (real and imagine) currents are zeros
+                # sum of (real and imaginary) currents are zeros
                 [ 0,  0, -1,   0,  1,   0,    1,    0,   1,   0, ], 
                 [ 0,  0,  0,  -1,  0,   1,    0,    1,   0,   1, ], 
                 # j*Xm*Im = Um
@@ -93,8 +93,8 @@ def solve_EEC(self, output):
 
         # TODO use logger for output of some quantities
 
-        output.elec.Id_ref = X[2]  # use Id_ref / Iq_ref for now
-        output.elec.Iq_ref = X[3]
+        output.elec.Id_ref = X[2]  # real part of phase current, use Id_ref for now
+        output.elec.Iq_ref = X[3]  # imag part of phase current, use Iq_ref for now
     else:
         pass
         # TODO

@@ -1,0 +1,9 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+H1,m,Magnet depth,0,float,0.0023734787,0,,,Slot,HoleMag,build_geometry,VERSION,1,V shape slot for buried magnet
+W0,m,Magnet top width,0,float,3.88E-03,0,,,,,check,IS_SYMMETRICAL,1,
+W1,rad,Magnet width angular 1 ,0,float,"12.6/180*3,1415926",0,,,,,remove_magnet,,,
+W2,m,Small distance,0,float,0.0007,0,,,,,has_magnet,,,
+R1,m,Rounding radius,0,float,0.0003,0,,,,,,,,
+R2,m,Radius 2,0,float,0.019327,,,,,,,,,
+R3,m,Radius 3,0,float,0.0165,,,,,,,,,
+magnet_0,-,Magnet of the hole,0,Magnet,,,,,,,,,,

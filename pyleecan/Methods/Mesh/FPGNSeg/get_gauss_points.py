@@ -4,7 +4,7 @@ import numpy as np
 
 
 def get_gauss_points(self):
-    """ Return the gauss points and weights for Segments """
+    """Return the gauss points and weights for Segments"""
 
     nb_gauss_points = self.nb_gauss_point
     gauss_pts = np.zeros([nb_gauss_points, 2], dtype=float)

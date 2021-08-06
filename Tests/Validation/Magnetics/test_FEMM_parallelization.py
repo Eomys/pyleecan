@@ -24,7 +24,7 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_FEMM_parallelization_mag():
-    """test parallelization of FEMM to get B, Tem, PhiWind """
+    """test parallelization of FEMM to get B, Tem, PhiWind"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
@@ -262,5 +262,5 @@ def test_FEMM_parallelization_meshsolution():
 
 if __name__ == "__main__":
 
-    # out, out2 = test_FEMM_parallelization_mag()
-    out3, out4 = test_FEMM_parallelization_meshsolution()
+    out, out2 = test_FEMM_parallelization_mag()
+    # out3, out4 = test_FEMM_parallelization_meshsolution()

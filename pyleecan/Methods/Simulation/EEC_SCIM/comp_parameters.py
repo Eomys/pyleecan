@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 from numpy import zeros, sqrt, pi, tile, isnan
 from multiprocessing import cpu_count
 
 from ....Functions.Electrical.coordinate_transformation import n2ab, ab2n
+from ....Functions.load import import_class
 
 
 def comp_parameters(self, output):
@@ -15,6 +15,7 @@ def comp_parameters(self, output):
     output : Output
         an Output object
     """
+
     # get some machine parameters
     machine = output.simu.machine
     Zsr = machine.rotor.slot.Zs
@@ -22,14 +23,42 @@ def comp_parameters(self, output):
     p = machine.rotor.winding.p
 
     xi = machine.stator.winding.comp_winding_factor()
-    Ntspc = machine.stator.winding.comp_Ntspc()
+    Ntspc = machine.stator.winding.comp_Ntsp()
     norm = (xi[0] * Ntspc) / (Zsr / 6)  # rotor - stator transformation factor
 
     self.parameters["norm"] = norm
 
     Cond = self.parent.parent.machine.stator.winding.conductor
+
     # compute skin_effect
     Xkr_skinS, Xke_skinS = Cond.comp_skin_effect(T=20)
+
+    alphasw = self.cond_mat.elec.alpha
+
+    # alphasw = self.cond_mat.elec.alpha
+
+    # # stator winding phase resistance, skin effect correction
+    # if felec is None:
+    #     Rs_freq = self.Rs
+    # else:
+    #     Rs_dc = self.Rs  # DC resistance at Tsta_ref
+    #     K_RSE_sta = self.K_RSE_sta  # skin effect factor for resistance
+    #     Rs_freq = Rs_dc * interp(K_RSE_sta[0, :], K_RSE_sta[1, :], felec)
+
+    # # stator winding phase resistance, temperature correction
+    # if Tsta is not None:
+    #     Rs_freq_temp = Rs_freq
+    # else:
+    #     Tsta_ref = self.Tsta_ref  # ref temperature
+    #     Rs_freq_temp = Rs_freq * (1 + alphasw * (Tsta - Tsta_ref))
+
+    # # stator winding phase leakage inductance, skin effect correction
+    # if felec is None:
+    #     Ls_freq = self.Ls
+    # else:
+    #     Ls_dc = self.Ls  # DC resistance
+    #     K_ISE_sta = self.K_ISE_sta  # skin effect factor for leakage inductance
+    #     Ls_freq = Ls_dc * interp(K_ISE_sta[0, :], K_ISE_sta[1, :], felec)
 
     # get temperatures TODO remove/replace, since this is a temp. solution only
     Tws = 20 if "Tws" not in self.parameters else self.parameter["Tws"]

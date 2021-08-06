@@ -497,3 +497,12 @@ def test_SPMSM_noload():
         is_show_fig=False,
         **dict_2D
     )
+
+
+if __name__ == "__main__":
+    test_IPMSM_xxx()
+    test_Toyota_Prius()
+    test_SCIM()
+    test_SIPMSM()
+    test_SPMSM_load()
+    test_SPMSM_noload()

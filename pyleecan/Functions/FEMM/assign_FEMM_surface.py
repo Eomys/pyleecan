@@ -20,7 +20,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
     prop : str
         The property to assign in FEMM
     FEMM_dict : dict
-        Dictionnary containing the main parameters of FEMM
+        dictionary containing the main parameters of FEMM
     rotor : Lamination
         The rotor of the machine
     stator : Lamination
@@ -58,7 +58,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
                 Clabel = "Circs" + prop[:-1][2:]
             # Decode the label
             # TODO from create_FEMM_circuit_material -> move to decode/encode func.
-            wind_mat = lam.winding.comp_connection_mat(lam.slot.Zs)
+            wind_mat = lam.winding.get_connection_mat(lam.get_Zs())
             st = label.split("_")
             Nrad_id = int(st[2][1:])  # zone radial coordinate
             Ntan_id = int(st[3][1:])  # zone tangential coordinate

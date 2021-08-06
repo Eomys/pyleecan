@@ -10,7 +10,7 @@ def generate_eq(gen_dict, class_dict):
         Dict with key = class name and value = class dict (name, package, properties, methods...)
 
     class_dict : dict
-        Dictionnary of the class to generate (keys are name, package, properties, methods...)
+        dictionary of the class to generate (keys are name, package, properties, methods...)
 
     Returns
     -------

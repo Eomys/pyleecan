@@ -21,7 +21,6 @@ def comp_volt_PWM_NUM(
     freq0_max=0,
     type_carrier=0,
     var_amp=0,
-    
 ):
     """
     Generalized DPWM using numerical method according to

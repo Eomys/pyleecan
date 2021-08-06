@@ -45,7 +45,7 @@ def create_FEMM_circuit_material(
 
     # Load parameter for readibility
     rho = lam.winding.conductor.cond_mat.elec.rho  # Resistivity at 20°C
-    wind_mat = lam.winding.comp_connection_mat(lam.slot.Zs)
+    wind_mat = lam.winding.get_connection_mat(lam.get_Zs())
     Swire = lam.winding.conductor.comp_surface()
 
     # Decode the label

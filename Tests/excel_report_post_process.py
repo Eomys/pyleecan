@@ -7,7 +7,10 @@ import pandas as pd
 from Tests import TEST_DIR
 
 """
-    Script to use after an excel report of the tests. It allows to make the markers column more readable and handier to sort the markers.
+    Script to use after an excel report of the tests .
+    (pytest --excelreport=report.xlsx)
+    It allows to make the markers column more readable 
+    and handier to sort the markers.
     There is also a verification for the time markers.
 
     Parameters

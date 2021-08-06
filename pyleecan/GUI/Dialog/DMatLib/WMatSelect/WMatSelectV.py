@@ -1,5 +1,5 @@
 from .....GUI.Dialog.DMatLib.WMatSelect.Ui_WMatSelect import Ui_WMatSelect
-from .....GUI.Dialog.DMatLib.DMatLib import DMatLib
+from .....GUI.Dialog.DMatLib.DMatLib import DMatLib, LIB_KEY, MACH_KEY
 from PySide2.QtWidgets import (
     QGroupBox,
     QMessageBox,
@@ -58,8 +58,7 @@ class WMatSelectV(QGroupBox):
         self.mat_win = None  # DMatLib widget
         self.obj = None  # object that has a material attribute
         self.mat_attr_name = ""  # material attribute name
-        self.matlib = list()  # Matlib
-        self.matlib_path = ""  # Path to save the matlib
+        self.material_dict = dict()  # Matlib
         self.def_mat = "M400-50A"  # Default material
         self.is_hide_button = False  # To hide the "Edit material" button
 
@@ -67,7 +66,7 @@ class WMatSelectV(QGroupBox):
         self.c_mat_type.currentIndexChanged.connect(self.set_mat_type)
         self.b_matlib.clicked.connect(self.s_open_matlib)
 
-    def update(self, obj, mat_attr_name, matlib, matlib_path=""):
+    def update(self, obj, mat_attr_name, material_dict):
         """
         Set a reference to a material libray and material data path,
         updates the Combobox by the material names of the libary
@@ -75,16 +74,14 @@ class WMatSelectV(QGroupBox):
 
         Parameters
         ----------
-        self :
+        self : WMatSelect
             A WMatSelect object
-        obj :
+        obj : FrozenObject
             A pyleecan object that has a material attribute
-        mat_attr_name :
+        mat_attr_name : str
             A string of the material attribute name
-        matlib :
-            A material libary, i.e. a list of Material objects
-        matlib_path :
-            A string containing the path of material data
+        material_dict: dict
+            Materials dictionary (library + machine)
 
         Returns
         -------
@@ -95,8 +92,7 @@ class WMatSelectV(QGroupBox):
         # Set material combobox according to matlib names
         self.obj = obj
         self.mat_attr_name = mat_attr_name
-        self.matlib = matlib
-        self.matlib_path = matlib_path
+        self.material_dict = material_dict
 
         if self.is_hide_button:
             self.b_matlib.hide()
@@ -106,22 +102,21 @@ class WMatSelectV(QGroupBox):
         # Update the list of materials
         self.c_mat_type.clear()
         items_to_add = []
-        # Add RefMatLib materials
-        items_to_add.extend([mat.name for mat in matlib.dict_mat["RefMatLib"]])
+        # Add Library materials
+        items_to_add.extend([mat.name for mat in material_dict[LIB_KEY]])
         # Add machine-specific materials
-        items_to_add.extend([mat.name for mat in matlib.dict_mat["MachineMatLib"]])
+        items_to_add.extend([mat.name for mat in material_dict[MACH_KEY]])
         self.c_mat_type.addItems(items_to_add)
 
         mat = getattr(self.obj, mat_attr_name, None)
         if mat is None or mat.name is None:
-            # Default lamination material: M400-50A
+            # Select default material
             index = self.c_mat_type.findText(self.def_mat)
             if index != -1:
-                # self.mat.__init__(init_dict=self.matlib[index].as_dict())
                 setattr(
                     self.obj,
                     self.mat_attr_name,
-                    self.matlib.dict_mat["RefMatLib"][index],
+                    self.material_dict[LIB_KEY][index],
                 )
         else:
             index = self.c_mat_type.findText(mat.name)
@@ -161,13 +156,13 @@ class WMatSelectV(QGroupBox):
         -------
 
         """
-        if index >= len(self.matlib.dict_mat["RefMatLib"]):
-            index -= len(self.matlib.dict_mat["RefMatLib"])
-            dict_key = "MachineMatLib"
+        if index >= len(self.material_dict[LIB_KEY]):
+            index -= len(self.material_dict[LIB_KEY])
+            dict_key = MACH_KEY
         else:
-            dict_key = "RefMatLib"
+            dict_key = LIB_KEY
 
-        setattr(self.obj, self.mat_attr_name, self.matlib.dict_mat[dict_key][index])
+        setattr(self.obj, self.mat_attr_name, self.material_dict[dict_key][index])
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -184,18 +179,18 @@ class WMatSelectV(QGroupBox):
         -------
 
         """
-        if self.c_mat_type.currentIndex() >= len(self.matlib.dict_mat["RefMatLib"]):
-            index = self.c_mat_type.currentIndex() - len(
-                self.matlib.dict_mat["RefMatLib"]
-            )
-            key = "MachineMatLib"
+        if self.c_mat_type.currentIndex() >= len(self.material_dict[LIB_KEY]):
+            index = self.c_mat_type.currentIndex() - len(self.material_dict[LIB_KEY])
+            is_lib_mat = False
         else:
             index = self.c_mat_type.currentIndex()
-            key = "RefMatLib"
-        self.mat_win = DMatLib(self.matlib, key, index)
-        self.mat_win.accepted.connect(self.set_matlib)
-        self.mat_win.saveNeeded.connect(self.emit_save)
-        self.mat_win.show()
+            is_lib_mat = True
+        self.current_dialog = DMatLib(
+            material_dict=self.material_dict, is_lib_mat=is_lib_mat, selected_id=index
+        )
+        self.current_dialog.materialListChanged.connect(self.update_mat_list)
+        self.current_dialog.saveNeeded.connect(self.emit_save)
+        self.current_dialog.show()
 
     def emit_save(self):
         """
@@ -203,8 +198,8 @@ class WMatSelectV(QGroupBox):
         """
         self.saveNeeded.emit()
 
-    def set_matlib(self):
-        """Update the matlib with the new value
+    def update_mat_list(self):
+        """Update the combobox with the new materials
 
         Parameters
         ----------
@@ -217,18 +212,18 @@ class WMatSelectV(QGroupBox):
         """
         # Empty and fill the list to keep the same object (to change it everywhere)
         # del self.matlib[:]
-        # self.matlib.extend(self.mat_win.matlib)
+        # self.matlib.extend(self.current_dialog.matlib)
         # Update the material
-        # index = int(self.mat_win.nav_mat.currentItem().text()[:3]) - 1
+        # index = int(self.current_dialog.nav_mat.currentItem().text()[:3]) - 1
 
         # not needed if machine materials are "connected" properly
-        # mat_dict = (self.mat_win.matlib[index]).as_dict()
+        # mat_dict = (self.current_dialog.matlib[index]).as_dict()
         # self.mat.__init__(init_dict=mat_dict)
 
         # Do not clear for now to keep editor (DMatLib) open
         # # Clear the window
-        # self.mat_win.deleteLater()
-        # self.mat_win = None
+        # self.current_dialog.deleteLater()
+        # self.current_dialog = None
 
         # Update the widget
         # Avoid trigger signal currentIndexChanged
@@ -238,9 +233,9 @@ class WMatSelectV(QGroupBox):
 
         items_to_add = []
         # Add RefMatLib materials
-        items_to_add.extend([mat.name for mat in self.matlib.dict_mat["RefMatLib"]])
+        items_to_add.extend([mat.name for mat in self.material_dict[LIB_KEY]])
         # Add machine-specific materials
-        items_to_add.extend([mat.name for mat in self.matlib.dict_mat["MachineMatLib"]])
+        items_to_add.extend([mat.name for mat in self.material_dict[MACH_KEY]])
         self.c_mat_type.addItems(items_to_add)
 
         index = self.c_mat_type.findText(getattr(self.obj, self.mat_attr_name).name)
