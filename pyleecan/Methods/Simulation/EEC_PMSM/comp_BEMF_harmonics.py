@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 def comp_BEMF_harmonics(Phi_A,Phi_B,Phi_C, delta, time):
     """
-    Compute the back electromotive force harmonics from magnet fluxes
+    Compute the back electromotive force harmonics from magnet fluxes (PMSM)
 
     Parameters
     ----------
@@ -18,7 +18,6 @@ def comp_BEMF_harmonics(Phi_A,Phi_B,Phi_C, delta, time):
     Phi_C: Magnetic flux of phase C
     delta: Rotor angular position
     time: time vector
-
 
     """
 
@@ -113,8 +112,6 @@ def comp_BEMF_harmonics(Phi_A,Phi_B,Phi_C, delta, time):
     E_d=-2*pi*freqs_q*complx_q+2*pi*freqs_d*complx_d*1j
     E_q=2*pi*freqs_d*complx_d+2*pi*freqs_q*complx_q*1j
     E_h=2*pi*freqs_h*complx_h*1j
-
-
 
     return E_d, E_q, E_h, freqs_d, freqs_q, freqs_h
 
