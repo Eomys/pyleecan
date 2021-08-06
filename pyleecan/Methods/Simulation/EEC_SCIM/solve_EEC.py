@@ -15,9 +15,9 @@ def solve_EEC(self, output):
     Autor, Publisher
 
                   --->                     ---->
-     -----Rs------XsIs---- --- -----Rr'----Xr'Ir'----
+     -----Rs------XsIs---- --- -----Rr'----XrIr----
     |                     |   |                       |
-    |                     Rfe Xm                      Rr'*(s-1)/s
+    |                     Rfe Xm                      Rr*(s-1)/s
     |                     |   |                       |
      ---------Is---------- --- ---------Ir------------
 
@@ -32,15 +32,16 @@ def solve_EEC(self, output):
         an Output object
     """
     Rs = self.parameters["Rs"]
-    Rr = self.parameters["Rr_norm"]
+    Rr = self.parameters["Rr"]
     Rfe = self.parameters["Rfe"]
     Ls = self.parameters["Ls"]
-    Lr = self.parameters["Lr_norm"]
-    Lm = self.parameters["Lm"]
-    norm = self.parameters["norm"]
-
+    Lr = self.parameters["Lr"]
+    Phi_m = self.parameters["Phi_m"]
+    I_m = self.parameters["I_m"]
+    K21 = self.parameters["K21"]
     slip = self.parameters["slip"]
 
+    Lm = Phi_m[0] / I_m[0]
     felec = output.elec.felec
     ws = 2 * pi * felec
 

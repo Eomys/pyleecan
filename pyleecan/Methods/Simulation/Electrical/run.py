@@ -51,10 +51,10 @@ def run(self):
     # self.eec.gen_drive(output)
 
     if self.ELUT_enforced is not None:
-        # enforce parameters of EEC coming from enforced ELUT at right frequency & temperatures
+        # enforce parameters of EEC coming from enforced ELUT at right temperatures
         self.eec.parameters = self.ELUT_enforced.get_param_dict()
 
-    # Compute parameters of the electrical equivalent circuit if ELUT not given
+    # Compute parameters of the electrical equivalent circuit if some parameters are missing in ELUT
     out_dict = self.eec.comp_parameters(output, Tsta=self.Tsta, Trot=self.Trot)
 
     # Solve the electrical equivalent circuit

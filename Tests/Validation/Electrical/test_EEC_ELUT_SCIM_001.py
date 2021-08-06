@@ -42,7 +42,8 @@ def test_EEC_ELUT_SCIM_001():
     #     NAS_path + "Manatee_v1_results/default_proj_nl/default_proj_nl_results.mat"
     # )
     # matlab_path = "D:/Manatee_V1_trunk/Manatee_1.0/Results/default_proj_nl/default_proj_nl_results.mat"
-    matlab_path = "D:/Manatee_V1_trunk/Manatee_1.0/ELUT_SCIM_001.mat"
+    # matlab_path = "D:/Manatee_V1_trunk/Manatee_1.0/ELUT_SCIM_001.mat"
+    matlab_path = "C:/Users/Jean/Documents/EOMYS_JLB/MANATEEV2_JLB/ELUT_SCIM_001.mat"
 
     assert isfile(matlab_path)
 
@@ -75,6 +76,9 @@ def test_EEC_ELUT_SCIM_001():
         else:
             param_dict[param] = value
 
+    # add Rfe
+    # param_dict["Rfe"] = 1e12
+
     # Prepare simulation
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
@@ -95,8 +99,8 @@ def test_EEC_ELUT_SCIM_001():
         Rr=param_dict["R2_20"],
         Lr=param_dict["L20"],
         Trot_ref=20,
-        Phi_m=np_abs(param_dict["L_m"] * param_dict["I_m"]),
-        I_m=np_abs(param_dict["I_m"]),
+        Phi_m=np_abs(param_dict["Lm"] * param_dict["Im"]),
+        I_m=np_abs(param_dict["Im"]),
     )
 
     # Configure simulation
