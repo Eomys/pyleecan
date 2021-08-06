@@ -55,7 +55,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         # Connect the widget
         self.b_mmf.clicked.connect(self.plot_mmf)
         self.b_FEMM.clicked.connect(self.draw_FEMM)
-        if isinstance(draw_FEMM, ImportError):
+        if isinstance(draw_GMSH, ImportError):
             self.b_GMSH.setEnabled(False)
             self.b_GMSH_3D.setEnabled(False)
         else:

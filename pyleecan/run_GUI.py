@@ -19,23 +19,17 @@ try:  # Import if pyleecan is installed with pip
     from .GUI.Tools.TreeView import TreeView
     from .GUI.Tools.GuiOption.WGuiOption import WGuiOption
     from .Functions.load import load_matlib
+    from .GUI.Resources import pixmap_dict
 except ImportError:  # Import for dev version
-    from definitions import PACKAGE_NAME, ROOT_DIR, config_dict
-
-    exec(
-        "from "
-        + PACKAGE_NAME
-        + ".GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup"
-    )
-    exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.DMatLib import DMatLib")
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.SidebarWindow import SidebarWindow")
-    exec(
-        "from " + PACKAGE_NAME + ".GUI.Tools.MachinePlotWidget import MachinePlotWidget"
-    )
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.TreeView import TreeView")
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.GuiOption.WGuiOption import WGuiOption")
-    exec("from " + PACKAGE_NAME + ".Functions.load import load_matlib")
-
+    exec("from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup")
+    exec("from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib")
+    exec("from pyleecan.GUI.Tools.SidebarWindow import SidebarWindow")
+    exec("from pyleecan.GUI.Tools.MachinePlotWidget import MachinePlotWidget")
+    exec("from pyleecan.GUI.Tools.TreeView import TreeView")
+    exec("from pyleecan.GUI.Tools.GuiOption.WGuiOption import WGuiOption")
+    exec("from pyleecan.Functions.load import load_matlib")
+    exec("from pyleecan.definitions import PACKAGE_NAME, ROOT_DIR, config_dict")
+    exec("from pyleecan.GUI.Resources import pixmap_dict")
 
 EXT_GUI = True
 
@@ -73,7 +67,7 @@ def run_GUI(argv):
 
     if EXT_GUI:
         # Setup extended GUI with sub windows
-        icon = dirname(__file__) + "/GUI/Resources/images/icon/pyleecan_64.png"
+        icon = pixmap_dict["soft_icon"]
         window = SidebarWindow()
         window.setWindowIcon(QIcon(icon))
 
