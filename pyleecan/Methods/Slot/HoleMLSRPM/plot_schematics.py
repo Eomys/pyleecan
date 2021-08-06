@@ -105,7 +105,7 @@ def plot_schematics(
         if self.parent is None:
             raise ParentMissingError("Error: The hole is not inside a Lamination")
         lam = self.parent
-        alpha = pi / 2  # To rotate the schematics
+        alpha = 0  # To rotate the schematics
         lam.plot(
             alpha=pi / self.Zh + alpha,
             is_show_fig=False,
@@ -159,7 +159,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W0",
-                offset_label=1j * 0.01,
+                offset_label=-0.005,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -221,7 +221,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W1",
-                offset_label=-0.01,
+                offset_label=0.00065,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -237,7 +237,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W2",
-                offset_label=1j * 0.001 - 0.007,
+                offset_label=1j * 0.0015 - 0.003,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -247,6 +247,24 @@ def plot_schematics(
         if is_add_main_line:
             # Ox axis
             line = Segment(0, lam.Rext * 1.5 * exp(1j * alpha))
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            ) 
+            # Guide line 1
+            line = Segment(0, lam.Rext * 1.5 * exp(1j * (alpha+12.6 / 180 * pi)))
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
+            # Guide line 2
+            line = Segment(0-1j*0.0007/cos(12.6 / 180 * pi), lam.Rext * 1.5 * exp(1j * (alpha+12.6 / 180 * pi))-1j*0.0007/cos(12.6 / 180 * pi))
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -315,8 +333,8 @@ def plot_schematics(
         Rext = self.parent.Rext * 1.2
 
         # plt.axis("equal")
-        ax.set_ylim(Rint, Rext)
-        ax.set_xlim(-W, W)
+        ax.set_xlim(Rint, Rext)
+        ax.set_ylim(-W, W)
         manager = plt.get_current_fig_manager()
         if manager is not None:
             manager.set_window_title(type(self).__name__ + " Schematics")

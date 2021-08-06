@@ -107,7 +107,7 @@ def plot_schematics(
         if is_add_schematics:
             
             # W1
-            line = Segment(point_dict['Z4']+0.005,point_dict['Z2']+0.005)
+            line = Segment(point_dict['Z4']+0.005-1j*0.002,point_dict['Z2']+0.005-1j*0.002)
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -148,8 +148,8 @@ def plot_schematics(
             )
             # H3
             line = Segment(
-                point_dict["Zcm"]+1j*0.001,
-                point_dict["Zcl"]+1j*0.001
+                point_dict["Zcm"]+1j*0.003-0.0001,
+                point_dict["Zcl"]+1j*0.003-0.0001
             )
             line.plot(
                 fig=fig,
@@ -157,7 +157,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="H3",
-                offset_label=-self.H3*2+1j*self.H3*5,
+                offset_label=-self.H3*2+1j*self.H3*2,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -208,13 +208,13 @@ def plot_schematics(
             )
 
         # Zooming and cleaning
-        W = (point_dict["Zch"] * exp(1j * sp)).imag * 1.2
+        W = (point_dict["Zch"] * exp(1j * sp)).imag 
         Rint = min(point_dict["Z2"].real, point_dict["Z1"].real)
         Rext = max(point_dict["Z2"].real, point_dict["Z1"].real)
 
         plt.axis("equal")
         ax.set_xlim(Rint, Rext)
-        ax.set_ylim(-W, W)
+        ax.set_ylim(-W*0.9, W*0.7)
         manager = plt.get_current_fig_manager()
         if manager is not None:
             manager.set_window_title(type(self).__name__ + " Schematics")
