@@ -33,11 +33,11 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Slot.HoleMLSRPM.comp_magnetization_direct import (
-        comp_magnetization_direct,
+    from ..Methods.Slot.HoleMLSRPM.comp_magnetization_dict import (
+        comp_magnetization_dict,
     )
 except ImportError as error:
-    comp_magnetization_direct = error
+    comp_magnetization_dict = error
 
 try:
     from ..Methods.Slot.HoleMLSRPM.comp_mass_magnet import comp_mass_magnet
@@ -114,18 +114,18 @@ class HoleMLSRPM(HoleMag):
         )
     else:
         check = check
-    # cf Methods.Slot.HoleMLSRPM.comp_magnetization_direct
-    if isinstance(comp_magnetization_direct, ImportError):
-        comp_magnetization_direct = property(
+    # cf Methods.Slot.HoleMLSRPM.comp_magnetization_dict
+    if isinstance(comp_magnetization_dict, ImportError):
+        comp_magnetization_dict = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use HoleMLSRPM method comp_magnetization_direct: "
-                    + str(comp_magnetization_direct)
+                    "Can't use HoleMLSRPM method comp_magnetization_dict: "
+                    + str(comp_magnetization_dict)
                 )
             )
         )
     else:
-        comp_magnetization_direct = comp_magnetization_direct
+        comp_magnetization_dict = comp_magnetization_dict
     # cf Methods.Slot.HoleMLSRPM.comp_mass_magnet
     if isinstance(comp_mass_magnet, ImportError):
         comp_mass_magnet = property(
