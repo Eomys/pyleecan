@@ -455,7 +455,7 @@ def draw_GMSH(
     Returns
     -------
     GMSH_dict : dict
-        Dictionnary containing the main parameters of GMSH File
+        dictionary containing the main parameters of GMSH File
     """
     # check some input parameter
     if is_lam_only_S and is_lam_only_R:

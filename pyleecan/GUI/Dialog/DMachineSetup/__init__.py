@@ -132,7 +132,7 @@ machine11.type_machine = 11
 machine11.stator.is_stator = True
 machine11.rotor.is_stator = False
 
-# Dictionnary with all the information to set a SCIM
+# dictionary with all the information to set a SCIM
 SCIM_dict = {
     "machine_type": MachineSCIM,
     "init_machine": machine1,
@@ -143,7 +143,7 @@ SCIM_dict = {
     "img": pixmap_dict["SCIM"],
     "txt": "SCIM (Squirrel Cage Induction Machine)",
 }
-# Dictionnary with all the information to set a DFIM
+# dictionary with all the information to set a DFIM
 DFIM_dict = {
     "machine_type": MachineDFIM,
     "init_machine": machine4,
@@ -154,7 +154,7 @@ DFIM_dict = {
     "img": pixmap_dict["DFIM"],
     "txt": "DFIM (Doubly Fed Induction Machine)",
 }
-# Dictionnary with all the information to set a SynRM
+# dictionary with all the information to set a SynRM
 SynRM_dict = {
     "machine_type": MachineSyRM,
     "init_machine": machine5,
@@ -165,7 +165,7 @@ SynRM_dict = {
     "img": pixmap_dict["SynRM"],
     "txt": "SynRM (Synchronous Reluctance Machine)",
 }
-# Dictionnary with all the information to set a SIPMSM
+# dictionary with all the information to set a SIPMSM
 SIPMSM_dict = {
     "machine_type": MachineSIPMSM,
     "init_machine": machine7,
@@ -176,7 +176,7 @@ SIPMSM_dict = {
     "img": pixmap_dict["SPMSM"],
     "txt": "SPMSM (Surface Permanent Magnet Synchronous Machine)",
 }
-# Dictionnary with all the information to set a IPMSM
+# dictionary with all the information to set a IPMSM
 IPMSM_dict = {
     "machine_type": MachineIPMSM,
     "init_machine": machine8,
@@ -187,7 +187,7 @@ IPMSM_dict = {
     "img": pixmap_dict["IPMSM"],
     "txt": "IPMSM (Interior Permanent Magnet Synchronous Machine)",
 }
-# Dictionnary with all the information to set a WRSM
+# dictionary with all the information to set a WRSM
 WRSM_dict = {
     "machine_type": MachineWRSM,
     "init_machine": machine9,
@@ -198,7 +198,7 @@ WRSM_dict = {
     "img": pixmap_dict["WRSM"],
     "txt": "WRSM (Wound Rotor Synchronous Machine)",
 }
-# Dictionnary with all the information to set a SCIM
+# dictionary with all the information to set a SCIM
 SRM_dict = {
     "machine_type": MachineSRM,
     "init_machine": machine10,
@@ -209,7 +209,7 @@ SRM_dict = {
     "img": pixmap_dict["SCIM"],
     "txt": "SRM (Switched Reluctance Machine)",
 }
-# Dictionnary with all the information to set a LSPM
+# dictionary with all the information to set a LSPM
 LSPM_dict = {
     "machine_type": MachineLSPM,
     "init_machine": machine11,

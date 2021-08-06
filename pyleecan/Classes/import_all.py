@@ -40,6 +40,7 @@ from ..Classes.Force import Force
 from ..Classes.ForceMT import ForceMT
 from ..Classes.ForceTensor import ForceTensor
 from ..Classes.Frame import Frame
+from ..Classes.FrameBar import FrameBar
 from ..Classes.GUIOption import GUIOption
 from ..Classes.GaussPoint import GaussPoint
 from ..Classes.Hole import Hole
@@ -79,6 +80,7 @@ from ..Classes.LamHole import LamHole
 from ..Classes.LamSlot import LamSlot
 from ..Classes.LamSlotMag import LamSlotMag
 from ..Classes.LamSlotMulti import LamSlotMulti
+from ..Classes.LamSlotMultiWind import LamSlotMultiWind
 from ..Classes.LamSlotWind import LamSlotWind
 from ..Classes.LamSquirrelCage import LamSquirrelCage
 from ..Classes.LamSquirrelCageMag import LamSquirrelCageMag

@@ -3,7 +3,7 @@ from ....Classes.Winding import Winding
 from ....Classes.Conductor import Conductor
 
 
-def comp_periodicity(self):
+def comp_periodicity(self, p=None):
     """Compute the periodicity factor of the lamination
 
     Parameters
@@ -31,4 +31,4 @@ def comp_periodicity(self):
     if is_antisym_a:
         sym_a /= 2
 
-    return (int(sym_a), is_antisym_a, sym_a, is_antisym_a)
+    return int(sym_a), bool(is_antisym_a), int(sym_a), bool(is_antisym_a)

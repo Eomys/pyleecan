@@ -5,7 +5,14 @@ from numpy import abs, exp
 
 
 def draw_FEMM(
-    self, femm, nodeprop=None, maxseg=None, propname=None, hide=False, group=None
+    self,
+    femm,
+    nodeprop=None,
+    maxseg=None,
+    element_size=None,
+    propname=None,
+    hide=False,
+    group=None,
 ):
     """Draw the Arc object in FEMM and assign the property
 
@@ -84,5 +91,6 @@ def draw_FEMM(
     else:
         femm.mi_selectarcsegment(X2, Y2)
 
+    maxseg = self.comp_maxseg(element_size, maxseg)
     femm.mi_setarcsegmentprop(maxseg, propname, hide, group)
     femm.mi_clearselected()

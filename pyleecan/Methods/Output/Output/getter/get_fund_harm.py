@@ -40,7 +40,7 @@ def get_fund_harm(self, data):
             coeff = None
             is_match = False
 
-            # Search if the current axis in SciDataTool axis dictionnary
+            # Search if the current axis in SciDataTool axis dictionary
             if axe.name in fft_dict.keys():
                 # If yes, find the axis name of the fft
                 axe_fft = fft_dict[axe.name]

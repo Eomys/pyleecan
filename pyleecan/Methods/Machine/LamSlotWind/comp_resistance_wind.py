@@ -14,7 +14,7 @@ def comp_resistance_wind(self, T=20):
     Returns
     -------
     R : float
-        DC winding resistance per phase without skin effect
+        DC winding resistance per phase without skin effect [Ohm]
     """
 
     Zs = self.slot.Zs

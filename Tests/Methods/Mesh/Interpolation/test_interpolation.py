@@ -16,7 +16,7 @@ from pyleecan.Classes.FPGNSeg import FPGNSeg
 
 @pytest.mark.MeshSol
 class unittest_real_nodes(TestCase):
-    """ Tests for interpolation method"""
+    """Tests for interpolation method"""
 
     def test_line(self):
         DELTA = 1e-10

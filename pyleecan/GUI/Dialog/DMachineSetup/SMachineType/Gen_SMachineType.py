@@ -13,7 +13,7 @@ class Gen_SMachineType(Ui_SMachineType):
         Ui_SMachineType.setupUi(self, SMachineType)
         # Setup of si_p
         self.si_p.setMinimum(1)
-        self.si_p.setMaximum(100)
+        self.si_p.setMaximum(999999)
         txt = self.tr(u"""pole pairs number""")
         self.si_p.setWhatsThis(txt)
         self.si_p.setToolTip(txt)

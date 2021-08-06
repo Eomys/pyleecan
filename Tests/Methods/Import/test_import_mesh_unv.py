@@ -49,7 +49,7 @@ list_param = [
     list_param,
 )
 def test_import_mesh_unv(unv_file):
-    """ Check that .unv file are correctly imported"""
+    """Check that .unv file are correctly imported"""
 
     test_obj = ImportMeshMat(
         file_path=join(TEST_DIR, unv_file["path"]),

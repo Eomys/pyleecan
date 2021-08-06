@@ -36,7 +36,7 @@ def generate_code(root_path, gen_dict=None):
     root_path : str
         Path to the main folder of Pyleecan
     gen_dict : dict
-        Generation dictionnary (contains all the csv data)
+        Generation dictionary (contains all the csv data)
     Returns
     -------
     None

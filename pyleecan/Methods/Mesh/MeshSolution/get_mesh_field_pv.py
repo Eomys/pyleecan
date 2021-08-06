@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from pyleecan.Classes.MeshVTK import MeshVTK
 
 
 def get_mesh_field_pv(
@@ -10,6 +11,7 @@ def get_mesh_field_pv(
     is_surf=False,
     is_radial=False,
     is_center=False,
+    is_normal=False,
     field_name=None,
     itimefreq=0,
 ):
@@ -50,7 +52,8 @@ def get_mesh_field_pv(
     mesh = self.get_mesh(label=label, index=index)
     new_mesh = mesh.copy()
 
-    new_mesh.renum()
+    if not isinstance(new_mesh, MeshVTK):
+        new_mesh.renum()
 
     mesh_pv = new_mesh.get_mesh_pv()
 
@@ -60,11 +63,11 @@ def get_mesh_field_pv(
     )
 
     args_list = list()
-    args_list.append("indice")
-    args_list.append("components")
     if len(args) > 0:
         for a in args:
             args_list.append(a)
+    args_list.append("indice")
+    args_list.append("components")
 
     field = self.get_field(
         *args_list,
@@ -74,6 +77,7 @@ def get_mesh_field_pv(
         is_surf=is_surf,
         is_radial=is_radial,
         is_center=is_center,
+        is_normal=is_normal,
     )
 
     if field_name is None:

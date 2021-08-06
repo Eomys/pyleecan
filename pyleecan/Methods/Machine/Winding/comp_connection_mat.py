@@ -38,12 +38,12 @@ def comp_connection_mat(self, Zs=None, p=None):
                 "ERROR: The Winding object must be in a Lamination object."
             )
 
-        if self.parent.slot is None:
+        if not hasattr(self.parent, "slot") and not hasattr(self.parent, "slot_list"):
             raise WindingError(
                 "ERROR: The Winding object must be in a Lamination object with Slot."
             )
 
-        Zs = self.parent.slot.Zs
+        Zs = self.parent.get_Zs()
 
     if p is None:
         if self.parent is None:

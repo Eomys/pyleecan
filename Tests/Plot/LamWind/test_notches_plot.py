@@ -22,6 +22,20 @@ from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 
 from Tests import save_plot_path as save_path
 from Tests.Plot.LamWind import wind_mat
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+
+def test_LamHole_notch():
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    slot_r = SlotW10(Zs=8, W0=5e-3, W1=5e-3, W2=5e-3, H0=0, H1=0, H2=2.5e-3)
+    notch = NotchEvenDist(notch_shape=slot_r, alpha=pi / 8)
+    Toyota_Prius.rotor.notch = [notch]
+
+    Toyota_Prius.plot(is_show_fig=False, save_path=join(save_path, "Toyota_notch.png"))
+    Toyota_Prius.plot(
+        sym=8, is_show_fig=False, save_path=join(save_path, "Toyota_notch_sym.png")
+    )
 
 
 def test_Lam_evenly_dist():
@@ -109,4 +123,5 @@ def test_Lam_evenly_dist():
 
 
 if __name__ == "__main__":
+    test_LamHole_notch()
     test_Lam_evenly_dist()
