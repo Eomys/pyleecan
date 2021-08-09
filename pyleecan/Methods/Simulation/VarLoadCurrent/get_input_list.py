@@ -40,5 +40,7 @@ def get_input_list(self):
             input_list[ii].Iq_ref = self.OP_matrix[ii, 2]
         if self.is_torque:
             input_list[ii].Tem_av_ref = self.OP_matrix[ii, 3]
+        if self.is_power and self.OP_matrix.shape[1] > 4:
+            input_list[ii].P_ref = self.OP_matrix[ii, 4]
 
     return input_list

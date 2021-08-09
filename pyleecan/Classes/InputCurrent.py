@@ -98,6 +98,7 @@ class InputCurrent(Input):
         Id_ref=None,
         Iq_ref=None,
         felec=None,
+        P_ref=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -140,6 +141,8 @@ class InputCurrent(Input):
                 Iq_ref = init_dict["Iq_ref"]
             if "felec" in list(init_dict.keys()):
                 felec = init_dict["felec"]
+            if "P_ref" in list(init_dict.keys()):
+                P_ref = init_dict["P_ref"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -162,6 +165,7 @@ class InputCurrent(Input):
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
         self.felec = felec
+        self.P_ref = P_ref
         # Call Input init
         super(InputCurrent, self).__init__(
             time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
@@ -200,6 +204,7 @@ class InputCurrent(Input):
         InputCurrent_str += "Id_ref = " + str(self.Id_ref) + linesep
         InputCurrent_str += "Iq_ref = " + str(self.Iq_ref) + linesep
         InputCurrent_str += "felec = " + str(self.felec) + linesep
+        InputCurrent_str += "P_ref = " + str(self.P_ref) + linesep
         return InputCurrent_str
 
     def __eq__(self, other):
@@ -228,6 +233,8 @@ class InputCurrent(Input):
         if other.Iq_ref != self.Iq_ref:
             return False
         if other.felec != self.felec:
+            return False
+        if other.P_ref != self.P_ref:
             return False
         return True
 
@@ -274,6 +281,8 @@ class InputCurrent(Input):
             diff_list.append(name + ".Iq_ref")
         if other._felec != self._felec:
             diff_list.append(name + ".felec")
+        if other._P_ref != self._P_ref:
+            diff_list.append(name + ".P_ref")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -294,6 +303,7 @@ class InputCurrent(Input):
         S += getsizeof(self.Id_ref)
         S += getsizeof(self.Iq_ref)
         S += getsizeof(self.felec)
+        S += getsizeof(self.P_ref)
         return S
 
     def as_dict(self, **kwargs):
@@ -323,6 +333,7 @@ class InputCurrent(Input):
         InputCurrent_dict["Id_ref"] = self.Id_ref
         InputCurrent_dict["Iq_ref"] = self.Iq_ref
         InputCurrent_dict["felec"] = self.felec
+        InputCurrent_dict["P_ref"] = self.P_ref
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputCurrent_dict["__class__"] = "InputCurrent"
@@ -343,6 +354,7 @@ class InputCurrent(Input):
         self.Id_ref = None
         self.Iq_ref = None
         self.felec = None
+        self.P_ref = None
         # Set to None the properties inherited from Input
         super(InputCurrent, self)._set_None()
 
@@ -545,6 +557,24 @@ class InputCurrent(Input):
         fget=_get_felec,
         fset=_set_felec,
         doc=u"""electrical frequency
+
+        :Type: float
+        """,
+    )
+
+    def _get_P_ref(self):
+        """getter of P_ref"""
+        return self._P_ref
+
+    def _set_P_ref(self, value):
+        """setter of P_ref"""
+        check_var("P_ref", value, "float")
+        self._P_ref = value
+
+    P_ref = property(
+        fget=_get_P_ref,
+        fset=_set_P_ref,
+        doc=u"""Theorical Power reference
 
         :Type: float
         """,

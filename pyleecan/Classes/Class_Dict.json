@@ -3949,6 +3949,15 @@
                 "type": "float",
                 "unit": "Hz",
                 "value": null
+            },
+            {
+                "desc": "Theorical Power reference",
+                "max": "",
+                "min": "",
+                "name": "P_ref",
+                "type": "float",
+                "unit": "W",
+                "value": null
             }
         ]
     },
@@ -7680,6 +7689,15 @@
                 "type": "OutInternal",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Theorical Power reference",
+                "max": "",
+                "min": "",
+                "name": "P_ref",
+                "type": "float",
+                "unit": "W",
+                "value": null
             }
         ]
     },
@@ -8091,7 +8109,8 @@
             "store",
             "clean",
             "comp_emf",
-            "get_demag"
+            "get_demag",
+            "comp_power"
         ],
         "mother": "",
         "name": "OutMag",
@@ -8220,6 +8239,15 @@
                 "max": "",
                 "min": "",
                 "name": "Rag",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Output Power",
+                "max": "",
+                "min": "",
+                "name": "P",
                 "type": "float",
                 "unit": "-",
                 "value": null

@@ -37,6 +37,11 @@ try:
 except ImportError as error:
     get_demag = error
 
+try:
+    from ..Methods.Output.OutMag.comp_power import comp_power
+except ImportError as error:
+    comp_power = error
+
 
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
@@ -85,6 +90,15 @@ class OutMag(FrozenClass):
         )
     else:
         get_demag = get_demag
+    # cf Methods.Output.OutMag.comp_power
+    if isinstance(comp_power, ImportError):
+        comp_power = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMag method comp_power: " + str(comp_power))
+            )
+        )
+    else:
+        comp_power = comp_power
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -107,6 +121,7 @@ class OutMag(FrozenClass):
         logger_name="Pyleecan.Magnetics",
         internal=None,
         Rag=None,
+        P=None,
         init_dict=None,
         init_str=None,
     ):
@@ -153,6 +168,8 @@ class OutMag(FrozenClass):
                 internal = init_dict["internal"]
             if "Rag" in list(init_dict.keys()):
                 Rag = init_dict["Rag"]
+            if "P" in list(init_dict.keys()):
+                P = init_dict["P"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
@@ -169,6 +186,7 @@ class OutMag(FrozenClass):
         self.logger_name = logger_name
         self.internal = internal
         self.Rag = Rag
+        self.P = P
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -209,6 +227,7 @@ class OutMag(FrozenClass):
         else:
             OutMag_str += "internal = None" + linesep + linesep
         OutMag_str += "Rag = " + str(self.Rag) + linesep
+        OutMag_str += "P = " + str(self.P) + linesep
         return OutMag_str
 
     def __eq__(self, other):
@@ -243,6 +262,8 @@ class OutMag(FrozenClass):
         if other.internal != self.internal:
             return False
         if other.Rag != self.Rag:
+            return False
+        if other.P != self.P:
             return False
         return True
 
@@ -337,6 +358,8 @@ class OutMag(FrozenClass):
             )
         if other._Rag != self._Rag:
             diff_list.append(name + ".Rag")
+        if other._P != self._P:
+            diff_list.append(name + ".P")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -361,6 +384,7 @@ class OutMag(FrozenClass):
         S += getsizeof(self.logger_name)
         S += getsizeof(self.internal)
         S += getsizeof(self.Rag)
+        S += getsizeof(self.P)
         return S
 
     def as_dict(self, **kwargs):
@@ -417,6 +441,7 @@ class OutMag(FrozenClass):
         else:
             OutMag_dict["internal"] = self.internal.as_dict(**kwargs)
         OutMag_dict["Rag"] = self.Rag
+        OutMag_dict["P"] = self.P
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -440,6 +465,7 @@ class OutMag(FrozenClass):
         if self.internal is not None:
             self.internal._set_None()
         self.Rag = None
+        self.P = None
 
     def _get_Time(self):
         """getter of Time"""
@@ -777,6 +803,24 @@ class OutMag(FrozenClass):
         fget=_get_Rag,
         fset=_set_Rag,
         doc=u"""Radius value for air-gap computation
+
+        :Type: float
+        """,
+    )
+
+    def _get_P(self):
+        """getter of P"""
+        return self._P
+
+    def _set_P(self, value):
+        """setter of P"""
+        check_var("P", value, "float")
+        self._P = value
+
+    P = property(
+        fget=_get_P,
+        fset=_set_P,
+        doc=u"""Output Power
 
         :Type: float
         """,

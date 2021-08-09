@@ -89,5 +89,15 @@ def get_mag_datakeeper(self, symbol_list, is_multi=False):
                     error_keeper=error_nan,
                 )
             )
-
+        # Output Power Datakeeper
+        if "P" not in symbol_list:
+            dk_list.append(
+                DataKeeper(
+                    name="Output Power",
+                    symbol="P",
+                    unit="W",
+                    keeper="lambda out: out.mag.P",
+                    error_keeper=error_nan,
+                )
+            )
     return dk_list

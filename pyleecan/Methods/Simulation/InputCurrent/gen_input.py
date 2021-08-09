@@ -153,7 +153,8 @@ def gen_input(self):
 
     if self.Tem_av_ref is not None:
         output.Tem_av_ref = self.Tem_av_ref
-
+    if self.P_ref is not None:
+        output.P_ref = self.P_ref
     if simu.parent is None:
         raise InputError(
             "ERROR: The Simulation object must be in an Output object to run"
