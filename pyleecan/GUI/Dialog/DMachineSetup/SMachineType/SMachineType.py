@@ -20,7 +20,7 @@ class SMachineType(Gen_SMachineType, QWidget):
     # Information for the DMachineSetup nav
     step_name = "Machine Type"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
@@ -29,8 +29,8 @@ class SMachineType(Gen_SMachineType, QWidget):
             A SMachineType widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -40,7 +40,7 @@ class SMachineType(Gen_SMachineType, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         # Dynamic import to avoid import loop
@@ -118,20 +118,7 @@ class SMachineType(Gen_SMachineType, QWidget):
         if self.machine.stator.winding is None:
             self.machine.stator.winding = Winding()
             self.machine.stator.winding._set_None()
-        self.machine.stator.winding.p = value
-        # Set machine rotor p according to machine type
-        if type(self.machine) is MachineSIPMSM:
-            self.machine.rotor.slot.Zs = 2 * value
-        elif type(self.machine) in [MachineIPMSM, MachineSyRM]:
-            if self.machine.rotor.hole is None:
-                self.machine.rotor.hole = list()
-            else:
-                for hole in self.machine.rotor.hole:
-                    hole.Zh = 2 * value
-        elif self.machine.type_machine == 10:
-            pass
-        else:
-            self.machine.rotor.winding.p = value
+        self.machine.set_pole_pair_number(value)
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

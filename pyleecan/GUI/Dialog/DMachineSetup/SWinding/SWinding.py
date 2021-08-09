@@ -8,6 +8,7 @@ from .....Classes.Winding import Winding
 from .....Classes.WindingUD import WindingUD
 from .....GUI.Dialog.DMachineSetup.SWinding.Gen_SWinding import Gen_SWinding
 from .....Methods.Machine.Winding import WindingError
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class SWinding(Gen_SWinding, QWidget):
@@ -18,7 +19,7 @@ class SWinding(Gen_SWinding, QWidget):
     # Information for DMachineSetup nav
     step_name = "Winding"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -27,8 +28,8 @@ class SWinding(Gen_SWinding, QWidget):
             A SWinding widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -42,7 +43,7 @@ class SWinding(Gen_SWinding, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         # Fill the fields with the machine values (if they're filled)
@@ -89,7 +90,6 @@ class SWinding(Gen_SWinding, QWidget):
         if self.obj.winding.Npcp is None:
             self.obj.winding.Npcp = 1  # Default value
         self.si_Npcp.setValue(self.obj.winding.Npcp)
-        self.si_Npcp.setMaximum(self.obj.winding.p)
 
         # Edit Group setup
         if self.obj.winding.is_reverse_wind is None:
@@ -417,9 +417,9 @@ class SWinding(Gen_SWinding, QWidget):
         try:
             rot_dir = self.obj.comp_rot_dir()
             if rot_dir == 1:
-                rot_dir = "+"
+                rot_dir = "CCW"
             elif rot_dir == -1:
-                rot_dir = "-"
+                rot_dir = "CW"
             else:
                 rot_dir = "?"
         except Exception:  # Unable to compution the connection matrix
@@ -486,6 +486,7 @@ class SWinding(Gen_SWinding, QWidget):
         """
         try:
             self.obj.plot_winding()
+            set_plot_gui_icon()
         except (AssertionError, WindingError) as e:
             QMessageBox().critical(self, self.tr("Error"), str(e))
 

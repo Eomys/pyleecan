@@ -42,6 +42,12 @@ class Ui_DMachineSetup(object):
 
         self.verticalLayout.addWidget(self.b_save)
 
+        self.verticalSpacer = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout.addItem(self.verticalSpacer)
+
         self.main_layout.addLayout(self.verticalLayout)
 
         self.w_step = QWidget(DMachineSetup)

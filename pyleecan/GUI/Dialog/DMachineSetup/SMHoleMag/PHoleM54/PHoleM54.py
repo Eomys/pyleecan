@@ -6,7 +6,6 @@ from PySide2.QtWidgets import QWidget
 from ......Classes.HoleM54 import HoleM54
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.Gen_PHoleM54 import Gen_PHoleM54
-from ......GUI.Dialog.DMatLib.MatLib import MatLib
 from ......Methods.Slot.Slot import SlotCheckError
 
 
@@ -19,7 +18,7 @@ class PHoleM54(Gen_PHoleM54, QWidget):
     hole_name = "Hole Type 54"
     hole_type = HoleM54
 
-    def __init__(self, hole=None, matlib=MatLib()):
+    def __init__(self, hole=None, material_dict=None):
         """Initialize the widget according to hole
 
         Parameters
@@ -28,8 +27,8 @@ class PHoleM54(Gen_PHoleM54, QWidget):
             A PHoleM54 widget
         hole : HoleM54
             current hole to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
@@ -47,7 +46,7 @@ class PHoleM54(Gen_PHoleM54, QWidget):
         for wid in wid_list:
             wid.setText("[" + self.u.get_m_name() + "]")
 
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.hole = hole
 
         # Set default materials
@@ -56,7 +55,7 @@ class PHoleM54(Gen_PHoleM54, QWidget):
         self.w_mat_0.is_hide_button = True
 
         # Set current material
-        self.w_mat_0.update(self.hole, "mat_void", self.matlib)
+        self.w_mat_0.update(self.hole, "mat_void", self.material_dict)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.hole.W0)

@@ -8,7 +8,7 @@ from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM58 import HoleM58
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM58.PHoleM58 import PHoleM58
 from Tests.GUI import gui_option  # Set unit to m
 from pyleecan.Classes.Material import Material
@@ -38,16 +38,16 @@ class TestPHoleM58(object):
         )
         test_obj.hole[0].magnet_0.mat_type.name = "Magnet3"
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = [
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),
         ]
 
-        widget = PHoleM58(test_obj.hole[0], matlib)
+        widget = PHoleM58(test_obj.hole[0], material_dict)
 
-        yield {"widget": widget, "test_obj": test_obj, "matlib": matlib}
+        yield {"widget": widget, "test_obj": test_obj, "material_dict": material_dict}
 
         self.app.quit()
 
@@ -69,7 +69,7 @@ class TestPHoleM58(object):
         setup["test_obj"].hole[0] = HoleM58(
             H0=0.20, H1=0.21, H2=0.22, W0=0.23, W1=0.24, W2=0.25, W3=0.27, R0=0.29
         )
-        setup["widget"] = PHoleM58(setup["test_obj"].hole[0], setup["matlib"])
+        setup["widget"] = PHoleM58(setup["test_obj"].hole[0], setup["material_dict"])
         assert setup["widget"].lf_H0.value() == 0.20
         assert setup["widget"].lf_H1.value() == 0.21
         assert setup["widget"].lf_H2.value() == 0.22
@@ -182,14 +182,7 @@ class TestPHoleM58(object):
             )
         )
 
-        setup["matlib"] = MatLib()
-        setup["matlib"].dict_mat["RefMatLib"] = [
-            Material(name="Magnet1"),
-            Material(name="Magnet2"),
-            Material(name="Magnet3"),
-        ]
-
-        setup["widget"] = PHoleM58(setup["test_obj"].hole[1], setup["matlib"])
+        setup["widget"] = PHoleM58(setup["test_obj"].hole[1], setup["material_dict"])
 
         assert setup["widget"].W1 == 0
         assert setup["widget"].W2 == 0

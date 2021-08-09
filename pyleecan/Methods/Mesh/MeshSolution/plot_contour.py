@@ -24,6 +24,7 @@ def plot_contour(
     save_path=None,
     itimefreq=0,
     is_show_fig=True,
+    win_title=None,
 ):
     """Plot the contour of a field on a mesh using pyvista plotter.
 
@@ -114,11 +115,11 @@ def plot_contour(
 
         # Configure plot
         if is_pyvistaqt:
-            p = pv.BackgroundPlotter()
+            p = pv.BackgroundPlotter(title=win_title)
             p.set_background("white")
         else:
             pv.set_plot_theme("document")
-            p = pv.Plotter(notebook=False)
+            p = pv.Plotter(notebook=False, title=win_title)
         sargs = dict(
             interactive=True,
             title_font_size=20,
@@ -134,8 +135,26 @@ def plot_contour(
             clim=clim,
             scalar_bar_args=sargs,
         )
+        p.add_axes(color="k", x_color="#da3061", y_color="#0069a1", z_color="#bbcf1c")
         if self.dimension == 2:
+            # 2D view
             p.view_xy()
+        else:
+            # isometric view with z towards left
+            p.view_isometric()
+            p.camera_position = [
+                p.camera_position[0],
+                (
+                    p.camera_position[1][0],
+                    p.camera_position[1][2],
+                    p.camera_position[1][0],
+                ),
+                (
+                    p.camera_position[2][1],
+                    p.camera_position[2][2],
+                    p.camera_position[2][0],
+                ),
+            ]
         if save_path is None and is_show_fig:
             p.show()
         elif save_path is not None:

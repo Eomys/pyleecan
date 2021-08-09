@@ -32,7 +32,7 @@ class WImport(Ui_WImport, QWidget):
         self.in_param.setText(self.verbose_name)
         # Fill the combobox with the meaningful widgets
         self.c_type_import.blockSignals(True)
-        if self.verbose_name == "B(H) curve":
+        if self.param_name == "BH_curve":
             self.widget_list = [WImportExcel, WImportMatrixTable]
         else:
             self.widget_list = []

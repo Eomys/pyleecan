@@ -35,7 +35,7 @@ class TestSWPole(object):
         )
         test_obj.rotor.winding.p = 4
 
-        widget = SWPole(test_obj, matlib=[], is_stator=False)
+        widget = SWPole(test_obj, material_dict=dict(), is_stator=False)
 
         yield {"widget": widget, "test_obj": test_obj}
 
@@ -63,7 +63,9 @@ class TestSWPole(object):
         )
         setup["test_obj"].rotor.winding.p = 8
 
-        setup["widget"] = SWPole(setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SWPole(
+            setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
         assert setup["widget"].in_Zs.text() == "Zs = 2*p = 16"
         assert setup["widget"].c_slot_type.currentIndex() == 1

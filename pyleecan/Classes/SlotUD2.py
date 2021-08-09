@@ -23,6 +23,11 @@ except ImportError as error:
     build_geometry = error
 
 try:
+    from ..Methods.Slot.SlotUD2.build_geometry_active import build_geometry_active
+except ImportError as error:
+    build_geometry_active = error
+
+try:
     from ..Methods.Slot.SlotUD2.get_surface_active import get_surface_active
 except ImportError as error:
     get_surface_active = error
@@ -31,6 +36,13 @@ try:
     from ..Methods.Slot.SlotUD2.check import check
 except ImportError as error:
     check = error
+
+try:
+    from ..Methods.Slot.SlotUD2._set_split_active_surf_dict import (
+        _set_split_active_surf_dict,
+    )
+except ImportError as error:
+    _set_split_active_surf_dict = error
 
 
 from ._check import InitUnKnowClassError
@@ -55,6 +67,18 @@ class SlotUD2(Slot):
         )
     else:
         build_geometry = build_geometry
+    # cf Methods.Slot.SlotUD2.build_geometry_active
+    if isinstance(build_geometry_active, ImportError):
+        build_geometry_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotUD2 method build_geometry_active: "
+                    + str(build_geometry_active)
+                )
+            )
+        )
+    else:
+        build_geometry_active = build_geometry_active
     # cf Methods.Slot.SlotUD2.get_surface_active
     if isinstance(get_surface_active, ImportError):
         get_surface_active = property(
@@ -76,6 +100,18 @@ class SlotUD2(Slot):
         )
     else:
         check = check
+    # cf Methods.Slot.SlotUD2._set_split_active_surf_dict
+    if isinstance(_set_split_active_surf_dict, ImportError):
+        _set_split_active_surf_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotUD2 method _set_split_active_surf_dict: "
+                    + str(_set_split_active_surf_dict)
+                )
+            )
+        )
+    else:
+        _set_split_active_surf_dict = _set_split_active_surf_dict
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -83,12 +119,18 @@ class SlotUD2(Slot):
     get_logger = get_logger
 
     def __init__(
-        self, line_list=-1, active_surf=-1, Zs=36, init_dict=None, init_str=None
+        self,
+        line_list=-1,
+        active_surf=-1,
+        split_active_surf_dict=None,
+        Zs=36,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -104,11 +146,14 @@ class SlotUD2(Slot):
                 line_list = init_dict["line_list"]
             if "active_surf" in list(init_dict.keys()):
                 active_surf = init_dict["active_surf"]
+            if "split_active_surf_dict" in list(init_dict.keys()):
+                split_active_surf_dict = init_dict["split_active_surf_dict"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         self.active_surf = active_surf
+        self.split_active_surf_dict = split_active_surf_dict
         # Call Slot init
         super(SlotUD2, self).__init__(Zs=Zs)
         # The class is frozen (in Slot init), for now it's impossible to
@@ -134,6 +179,9 @@ class SlotUD2(Slot):
             SlotUD2_str += "active_surf = " + tmp
         else:
             SlotUD2_str += "active_surf = None" + linesep + linesep
+        SlotUD2_str += (
+            "split_active_surf_dict = " + str(self.split_active_surf_dict) + linesep
+        )
         return SlotUD2_str
 
     def __eq__(self, other):
@@ -149,11 +197,15 @@ class SlotUD2(Slot):
             return False
         if other.active_surf != self.active_surf:
             return False
+        if other.split_active_surf_dict != self.split_active_surf_dict:
+            return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -183,6 +235,10 @@ class SlotUD2(Slot):
             diff_list.extend(
                 self.active_surf.compare(other.active_surf, name=name + ".active_surf")
             )
+        if other._split_active_surf_dict != self._split_active_surf_dict:
+            diff_list.append(name + ".split_active_surf_dict")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -196,6 +252,9 @@ class SlotUD2(Slot):
             for value in self.line_list:
                 S += getsizeof(value)
         S += getsizeof(self.active_surf)
+        if self.split_active_surf_dict is not None:
+            for key, value in self.split_active_surf_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self, **kwargs):
@@ -220,6 +279,11 @@ class SlotUD2(Slot):
             SlotUD2_dict["active_surf"] = None
         else:
             SlotUD2_dict["active_surf"] = self.active_surf.as_dict(**kwargs)
+        SlotUD2_dict["split_active_surf_dict"] = (
+            self.split_active_surf_dict.copy()
+            if self.split_active_surf_dict is not None
+            else None
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotUD2_dict["__class__"] = "SlotUD2"
@@ -231,6 +295,7 @@ class SlotUD2(Slot):
         self.line_list = None
         if self.active_surf is not None:
             self.active_surf._set_None()
+        self.split_active_surf_dict = None
         # Set to None the properties inherited from Slot
         super(SlotUD2, self)._set_None()
 
@@ -294,5 +359,18 @@ class SlotUD2(Slot):
         doc=u"""Active surface of the Slot
 
         :Type: Surface
+        """,
+    )
+
+    def _get_split_active_surf_dict(self):
+        """getter of split_active_surf_dict"""
+        return self._split_active_surf_dict
+
+    split_active_surf_dict = property(
+        fget=_get_split_active_surf_dict,
+        fset=_set_split_active_surf_dict,
+        doc=u"""Dictionary to enforced the split active surface (key="Nrad=1, Ntan=2"). Labels set according to list order (loop on Nrad then Ntan)
+
+        :Type: dict
         """,
     )

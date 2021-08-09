@@ -17,7 +17,7 @@ def generate_init(gen_dict, class_dict):
         Dict with key = class name and value = class dict (name, package, properties, methods...)
 
     class_dict : dict
-        Dictionnary of the class to generate (keys are name, package, properties, methods...)
+        dictionary of the class to generate (keys are name, package, properties, methods...)
 
 
     Returns
@@ -150,7 +150,7 @@ def generate_init(gen_dict, class_dict):
     )
     init_str += TAB3 + "for pyleecan type, -1 will call the default " "constructor\n"
     init_str += (
-        TAB2 + "- __init__ (init_dict = d) d must be a dictionnary "
+        TAB2 + "- __init__ (init_dict = d) d must be a dictionary "
         "with property names as keys\n"
     )
     init_str += TAB2 + "- __init__ (init_str = s) s must be a string\n"
@@ -398,7 +398,7 @@ def get_mother_attr(gen_dict, class_dict, key):
         Dict with key = class name and value = class dict (name, package, properties, methods...)
 
     class_dict : dict
-        Dictionnary of the class to generate (keys are name, package, properties, methods...)
+        dictionary of the class to generate (keys are name, package, properties, methods...)
 
     key : str
         Key to extract from the mother class(es) ("properties" or "methods")
@@ -412,7 +412,7 @@ def get_mother_attr(gen_dict, class_dict, key):
     # Load all the mother properties
     all_list = list(class_dict[key])
     mother_list = list()
-    while class_dict["mother"] != "":
+    while class_dict["mother"] != "" and "." not in class_dict["mother"]:
         class_dict = gen_dict[class_dict["mother"]]
         mother_list.extend(class_dict[key])
     all_list.extend(mother_list)

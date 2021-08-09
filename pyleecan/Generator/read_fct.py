@@ -170,7 +170,7 @@ def update_all_daughters(gen_dict):
     daughter_dict = {
         class_name: class_dict
         for class_name, class_dict in gen_dict.items()
-        if class_dict["mother"] not in ["", None]
+        if class_dict["mother"] not in ["", None] and "." not in class_dict["mother"]
     }
 
     # Update the daughter (sorted to avoid "commit noise")
@@ -240,7 +240,7 @@ def find_import_type(gen_dict, class_dict, pyleecan_type=[]):
 
     # Get all properties including mother ones
     prop_list = list(class_dict["properties"])
-    while class_dict["mother"] != "":
+    while class_dict["mother"] != "" and "." not in class_dict["mother"]:
         class_dict = gen_dict[class_dict["mother"]]
         prop_list.extend(class_dict["properties"])
 

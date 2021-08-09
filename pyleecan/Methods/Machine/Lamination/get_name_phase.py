@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def get_name_phase(self):
@@ -15,4 +16,10 @@ def get_name_phase(self):
         Empty list
 
     """
-    return []
+    if (
+        not hasattr(self, "winding")
+        or self.winding is None
+        or self.winding.conductor is None
+    ):
+        return list()
+    return gen_name(self.winding.qs)

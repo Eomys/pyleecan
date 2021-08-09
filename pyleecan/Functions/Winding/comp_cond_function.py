@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from numpy import mod, pi
 
 
@@ -26,15 +24,25 @@ def comp_cond_function(alpha_cond, W0, alpha_rad):
 
     thi = 0
     thf = 2 * pi
-    x1 = pi - W0 / 2.0
-    x2 = pi + W0 / 2.0
+    if W0 == 0:
 
-    A = (alpha_rad < x1) * 1
-    B = (alpha_rad > x2) * 1
+        A = (alpha_rad < pi) * 1
+        B = (alpha_rad > pi) * 1
 
-    C = 1 - A - B
-    return (
-        C * (alpha_rad - pi) / (W0 / 2.0)
-        + B * ((alpha_rad - thf) / (x2 - thf))
-        - A * ((alpha_rad - thi) / (x1 - thi))
-    )
+        return B * ((alpha_rad - thf) / (pi - thf)) - A * (
+            (alpha_rad - thi) / (pi - thi)
+        )
+
+    else:
+        x1 = pi - W0 / 2.0
+        x2 = pi + W0 / 2.0
+
+        A = (alpha_rad < x1) * 1
+        B = (alpha_rad > x2) * 1
+
+        C = 1 - A - B
+        return (
+            C * (alpha_rad - pi) / (W0 / 2.0)
+            + B * ((alpha_rad - thf) / (x2 - thf))
+            - A * ((alpha_rad - thi) / (x1 - thi))
+        )

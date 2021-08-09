@@ -45,7 +45,7 @@ class TestSWinding(object):
         test_obj.stator.winding.is_change_layer = True
         test_obj.stator.winding.is_permute_B_C = True
 
-        widget = SWinding(machine=test_obj, matlib=[], is_stator=True)
+        widget = SWinding(machine=test_obj, material_dict=dict(), is_stator=True)
 
         yield {"widget": widget, "test_obj": test_obj}
 
@@ -66,7 +66,7 @@ class TestSWinding(object):
         assert setup["widget"].is_reverse_layer.checkState() == Qt.Checked
         assert setup["widget"].is_change_layer.checkState() == Qt.Checked
         assert setup["widget"].is_permute_B_C.checkState() == Qt.Checked
-        assert setup["widget"].out_rot_dir.text() == "Rotation direction: +"
+        assert setup["widget"].out_rot_dir.text() == "Rotation direction: CCW"
 
         setup["test_obj"] = MachineSCIM()
         setup["test_obj"].stator = LamSlotWind()
@@ -74,7 +74,9 @@ class TestSWinding(object):
             Zs=36, H0=0.001, H2=0.01, W0=0.1, W2=0.2
         )
         setup["test_obj"].stator.winding = None
-        setup["widget"] = SWinding(machine=setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWinding(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].c_wind_type.currentIndex() == 0
         assert type(setup["test_obj"].stator.winding) == Winding
@@ -91,7 +93,9 @@ class TestSWinding(object):
         setup["test_obj"].stator.winding.Ntcoil = None
         setup["test_obj"].stator.winding.is_reverse_wind = None
 
-        setup["widget"] = SWinding(machine=setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWinding(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_qs.value() == 3
         assert setup["widget"].si_coil_pitch.value() == 0
@@ -119,7 +123,7 @@ class TestSWinding(object):
 
         setup["widget"].b_generate.clicked.emit()
         assert setup["widget"].obj.winding.wind_mat.shape == (2, 1, 36, 3)
-        assert setup["widget"].out_rot_dir.text() == "Rotation direction: -"
+        assert setup["widget"].out_rot_dir.text() == "Rotation direction: CW"
         assert setup["widget"].out_ms.text() == "ms = Zs / (2*p*qs) = 2.0"
         assert setup["widget"].out_Nperw.text() == "Nperw: 6"
         assert setup["widget"].out_Ncspc.text() == "Ncspc: 6"

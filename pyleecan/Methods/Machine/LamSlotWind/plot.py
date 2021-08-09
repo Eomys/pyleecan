@@ -31,6 +31,7 @@ def plot(
     is_add_sign=False,
     is_show_fig=True,
     save_path=None,
+    win_title=None,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -60,6 +61,8 @@ def plot(
         To call show at the end of the method
     save_path : str
         full path including folder, name and extension of the file to save if save_path is not None
+    win_title : str
+        Title for the window
     Returns
     -------
     patches : list
@@ -120,6 +123,23 @@ def plot(
         # Axis Setup
         axes.axis("equal")
 
+        # Window title
+        if self.is_stator:
+            prefix = "Stator "
+        else:
+            prefix = "Rotor "
+        if (
+            win_title is None
+            and self.parent is not None
+            and self.parent.name not in [None, ""]
+        ):
+            win_title = self.parent.name + " " + prefix[:-1]
+        elif win_title is None:
+            win_title = prefix[:-1]
+        manager = plt.get_current_fig_manager()
+        if manager is not None:
+            manager.set_window_title(win_title)
+
         # The Lamination is centered in the figure
         Lim = self.Rext * 1.5
         axes.set_xlim(-Lim, Lim)
@@ -137,10 +157,6 @@ def plot(
                 axes.set_title("Rotor with Winding")
             # Add the winding legend only if needed
             if not is_lam_only:
-                if self.is_stator:
-                    prefix = "Stator "
-                else:
-                    prefix = "Rotor "
                 if isinstance(self.winding, WindingSC):
                     patch_leg.append(Patch(color=PHASE_COLORS[0]))
                     label_leg.append(prefix + "Bar")

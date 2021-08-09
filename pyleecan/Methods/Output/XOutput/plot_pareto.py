@@ -146,7 +146,7 @@ def plot_pareto(
     annot.set_visible(False)
 
     def update_annot(ind):
-        """ Update annotation """
+        """Update annotation"""
         # Get ind position
         pos = sc.get_offsets()[ind["ind"][0]]
         annot.xy = pos

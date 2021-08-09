@@ -5,10 +5,6 @@ from re import match
 from PySide2.QtWidgets import QDialog, QFileDialog, QMessageBox
 
 from ....Functions.load import load_matlib
-from ....Functions.Material.compare_material import compare_material
-from ....Functions.Material.replace_material_pyleecan_obj import (
-    replace_material_pyleecan_obj,
-)
 from ....GUI.Tools.GuiOption.Ui_GuiOption import Ui_GUIOption
 from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 from ....GUI import gui_option
@@ -29,8 +25,8 @@ class WGuiOption(Ui_GUIOption, QDialog):
         Parameters:
         machine_setup: DMachineSetup
             Machine widget
-        matlib : MatLib
-            Material Library
+        matlib : DMatLib
+            Material Library Dialog
         """
         QDialog.__init__(self)
         self.setupUi(self)

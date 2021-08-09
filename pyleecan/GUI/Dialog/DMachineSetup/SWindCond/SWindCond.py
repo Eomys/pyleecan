@@ -24,7 +24,7 @@ class SWindCond(Ui_SWindCond, QWidget):
     # Information for DMachineSetup nav
     step_name = "Conductor"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -33,8 +33,8 @@ class SWindCond(Ui_SWindCond, QWidget):
             A SWindCond widget
         machine : Machine
             current machine to edit
-        matlib : list
-            List of available Material
+        material_dict : list
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -45,7 +45,7 @@ class SWindCond(Ui_SWindCond, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         # Fill the fields with the machine values (if they're filled)
@@ -80,8 +80,8 @@ class SWindCond(Ui_SWindCond, QWidget):
             self.obj.winding.conductor._set_None()
 
         # Set conductor and insulator material
-        self.w_mat_0.update(self.obj.winding.conductor, "cond_mat", self.matlib)
-        self.w_mat_1.update(self.obj.winding.conductor, "ins_mat", self.matlib)
+        self.w_mat_0.update(self.obj.winding.conductor, "cond_mat", self.material_dict)
+        self.w_mat_1.update(self.obj.winding.conductor, "ins_mat", self.material_dict)
 
         # Initialize the needed conductor widget
         index = type_list.index(type(self.obj.winding.conductor))

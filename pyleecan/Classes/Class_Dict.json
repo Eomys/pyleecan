@@ -19,7 +19,8 @@
             "is_on_line",
             "split_line",
             "comp_distance",
-            "plot"
+            "plot",
+            "comp_maxseg"
         ],
         "mother": "Line",
         "name": "Arc",
@@ -812,7 +813,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary to assign the surfaces: key=complex reference point coordinate, value=label of the surface",
+                "desc": "dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface",
                 "max": "",
                 "min": "",
                 "name": "surf_dict",
@@ -1676,7 +1677,7 @@
         "methods": [
             "comp_force",
             "comp_force_nodal",
-            "comp_magnetrosctrictive_tensor",
+            "comp_magnetostrictive_tensor",
             "element_loop"
         ],
         "mother": "Force",
@@ -1692,6 +1693,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "stator core"
+            },
+            {
+                "desc": "Force model(s) to be used",
+                "max": "",
+                "min": "",
+                "name": "tensor",
+                "type": "dict",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -1702,7 +1712,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "FrameBar"
+        ],
         "desc": "machine frame",
         "is_internal": false,
         "methods": [
@@ -1754,6 +1766,49 @@
                 "type": "Material",
                 "unit": "",
                 "value": ""
+            }
+        ]
+    },
+    "FrameBar": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "machine frame with polar structural bars between frame and outer lamination",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "comp_surface",
+            "comp_height_gap",
+            "build_geometry_bar",
+            "comp_surface_bar",
+            "comp_surface_gap"
+        ],
+        "mother": "Frame",
+        "name": "FrameBar",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/FrameBar.csv",
+        "properties": [
+            {
+                "desc": "Number of bars",
+                "max": "",
+                "min": "1",
+                "name": "Nbar",
+                "type": "int",
+                "unit": "m",
+                "value": 8
+            },
+            {
+                "desc": "Width of bars",
+                "max": "",
+                "min": "0",
+                "name": "wbar",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
             }
         ]
     },
@@ -1850,7 +1905,7 @@
         "properties": [
             {
                 "desc": "Number of Hole around the circumference",
-                "max": "1000",
+                "max": "",
                 "min": "0",
                 "name": "Zh",
                 "type": "int",
@@ -2858,7 +2913,7 @@
                 "value": ""
             },
             {
-                "desc": "dictionnary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",
+                "desc": "dictionary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",
                 "max": "",
                 "min": "",
                 "name": "magnet_dict",
@@ -3486,7 +3541,7 @@
                 "value": 0
             },
             {
-                "desc": "To select the range of column to use",
+                "desc": "list of Excel column letters and column ranges (e.g. \"A:E\" or \"A,C,E:F\")",
                 "max": "",
                 "min": "",
                 "name": "usecols",
@@ -4153,7 +4208,8 @@
             "comp_radius_mid_yoke",
             "has_magnet",
             "comp_angle_d_axis",
-            "comp_periodicity"
+            "comp_periodicity",
+            "set_pole_pair_number"
         ],
         "mother": "Lamination",
         "name": "LamHole",
@@ -4168,15 +4224,6 @@
                 "type": "[Hole]",
                 "unit": "",
                 "value": ""
-            },
-            {
-                "desc": "Bore Shape",
-                "max": "",
-                "min": "",
-                "name": "bore",
-                "type": "Bore",
-                "unit": "",
-                "value": null
             }
         ]
     },
@@ -4205,7 +4252,8 @@
             "get_Zs",
             "comp_radius_mid_yoke",
             "comp_periodicity",
-            "get_bore_desc"
+            "get_bore_desc",
+            "set_pole_pair_number"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -4267,11 +4315,12 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LamSlotMultiWind"
+        ],
         "desc": "Lamination with list of Slot",
         "is_internal": false,
         "methods": [
-            "build_geometry",
             "check",
             "comp_radius_mec",
             "comp_surfaces",
@@ -4279,7 +4328,8 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc"
+            "get_bore_desc",
+            "comp_periodicity"
         ],
         "mother": "Lamination",
         "name": "LamSlotMulti",
@@ -4302,6 +4352,60 @@
                 "name": "alpha",
                 "type": "ndarray",
                 "unit": "[rad]",
+                "value": ""
+            },
+            {
+                "desc": "Dictionary to enforce the lamination symmetry",
+                "max": "",
+                "min": "",
+                "name": "sym_dict_enforced",
+                "type": "dict",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "LamSlotMultiWind": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with list of Slot filled with winding",
+        "is_internal": false,
+        "methods": [
+            "plot",
+            "build_geometry",
+            "get_pole_pair_number",
+            "comp_rot_dir",
+            "plot_mmf_unit",
+            "comp_mmf_unit",
+            "comp_wind_function",
+            "comp_angle_d_axis"
+        ],
+        "mother": "LamSlotMulti",
+        "name": "LamSlotMultiWind",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMultiWind.csv",
+        "properties": [
+            {
+                "desc": "Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)",
+                "max": "1",
+                "min": "0",
+                "name": "Ksfill",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Lamination's Winding",
+                "max": "",
+                "min": "",
+                "name": "winding",
+                "type": "Winding",
+                "unit": "",
                 "value": ""
             }
         ]
@@ -4326,7 +4430,6 @@
             "comp_surfaces",
             "comp_volumes",
             "get_pole_pair_number",
-            "get_name_phase",
             "plot",
             "plot_winding",
             "comp_fill_factor",
@@ -4340,7 +4443,8 @@
             "comp_rot_dir",
             "comp_lengths_winding",
             "comp_number_phase_eq",
-            "comp_periodicity"
+            "comp_periodicity",
+            "set_pole_pair_number"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -4438,7 +4542,8 @@
             "check",
             "comp_surfaces",
             "plot",
-            "get_pole_pair_number"
+            "get_pole_pair_number",
+            "set_pole_pair_number"
         ],
         "mother": "LamSquirrelCage",
         "name": "LamSquirrelCageMag",
@@ -4468,6 +4573,7 @@
             "LamSlot",
             "LamSlotMag",
             "LamSlotMulti",
+            "LamSlotMultiWind",
             "LamSlotWind",
             "LamSquirrelCage",
             "LamSquirrelCageMag"
@@ -4496,7 +4602,8 @@
             "comp_angle_q_axis",
             "comp_radius_mid_yoke",
             "get_yoke_desc",
-            "get_bore_desc"
+            "get_bore_desc",
+            "comp_point_ref"
         ],
         "mother": "",
         "name": "Lamination",
@@ -4505,7 +4612,7 @@
         "properties": [
             {
                 "desc": "Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "L1",
                 "type": "float",
@@ -4610,6 +4717,15 @@
                 "type": "[Notch]",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Bore Shape",
+                "max": "",
+                "min": "",
+                "name": "bore",
+                "type": "Bore",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -4901,7 +5017,7 @@
             "comp_periodicity",
             "comp_width_airgap_mag",
             "comp_width_airgap_mec",
-            "get_material_list",
+            "get_material_dict",
             "get_polar_eq",
             "plot",
             "plot_anim_rotor",
@@ -4909,7 +5025,8 @@
             "get_lam_list_label",
             "get_lam_by_label",
             "get_lam_index",
-            "get_pole_pair_number"
+            "get_pole_pair_number",
+            "set_pole_pair_number"
         ],
         "mother": "",
         "name": "Machine",
@@ -5167,7 +5284,7 @@
                 "max": "",
                 "min": "",
                 "name": "stator",
-                "type": "LamSlotWind",
+                "type": "Lamination",
                 "unit": "",
                 "value": ""
             }
@@ -5434,7 +5551,7 @@
                 "value": 0
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -5576,7 +5693,7 @@
                 "value": 1
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -6365,6 +6482,24 @@
                 "type": "bool",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "desc": "Spatial symmetry factor",
+                "max": "",
+                "min": "",
+                "name": "sym",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "True if there is a spatial antiperiod",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
+                "unit": "",
+                "value": false
             }
         ]
     },
@@ -6387,10 +6522,10 @@
             "plot_mesh",
             "plot_contour",
             "plot_deflection",
-            "plot_deflection_animated",
             "plot_glyph",
-            "plot_glyph_animated",
-            "perm_coord"
+            "perm_coord",
+            "get_deflection",
+            "get_glyph"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -8110,7 +8245,7 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutMagElmer.csv",
         "properties": [
             {
-                "desc": "Dictionnary containing the main FEA parameters",
+                "desc": "dictionary containing the main FEA parameters",
                 "max": "",
                 "min": "",
                 "name": "FEA_dict",
@@ -8139,7 +8274,7 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutMagFEMM.csv",
         "properties": [
             {
-                "desc": "Dictionnary containing the main FEMM parameters",
+                "desc": "dictionary containing the main FEMM parameters",
                 "max": "",
                 "min": "",
                 "name": "FEMM_dict",
@@ -8292,7 +8427,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing the main FEA parameter",
+                "desc": "dictionary containing the main FEA parameter",
                 "max": "",
                 "min": "",
                 "name": "FEA_dict",
@@ -8748,7 +8883,7 @@
                 "value": "[]"
             },
             {
-                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "desc": "dictionary of parameters to pass to the plot method when executing it",
                 "max": "",
                 "min": "",
                 "name": "param_list",
@@ -8757,7 +8892,7 @@
                 "value": []
             },
             {
-                "desc": "Dictionnary of parameters to pass to the plot method when executing it",
+                "desc": "dictionary of parameters to pass to the plot method when executing it",
                 "max": "",
                 "min": "",
                 "name": "param_dict",
@@ -9156,7 +9291,7 @@
         "properties": [
             {
                 "desc": "length of the rotor shaft [m] (used for weight & cost estimation only)",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "Lshaft",
                 "type": "float",
@@ -9174,7 +9309,7 @@
             },
             {
                 "desc": "diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses",
-                "max": "8",
+                "max": "",
                 "min": "0",
                 "name": "Drsh",
                 "type": "float",
@@ -9427,6 +9562,7 @@
             "comp_surface",
             "comp_surface_active",
             "comp_width_opening",
+            "convert_to_SlotUD2",
             "get_is_stator",
             "get_name_lam",
             "get_Rbo",
@@ -9443,7 +9579,7 @@
         "properties": [
             {
                 "desc": "slot number",
-                "max": "1000",
+                "max": "",
                 "min": "0",
                 "name": "Zs",
                 "type": "int",
@@ -10283,8 +10419,10 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
+            "build_geometry_active",
             "get_surface_active",
-            "check"
+            "check",
+            "_set_split_active_surf_dict"
         ],
         "mother": "Slot",
         "name": "SlotUD2",
@@ -10308,6 +10446,15 @@
                 "type": "Surface",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Dictionary to enforced the split active surface (key=\"Nrad=1, Ntan=2\"). Labels set according to list order (loop on Nrad then Ntan)",
+                "max": "",
+                "min": "",
+                "name": "split_active_surf_dict",
+                "type": "dict",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -11936,9 +12083,9 @@
             "comp_angle_opening",
             "comp_height_damper",
             "comp_height_wind",
-            "compt_height",
-            "plot_schematics",
-            "get_surface_active"
+            "comp_height",
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotWLSRPM",
@@ -12037,8 +12184,17 @@
                 "min": "1",
                 "name": "dimension",
                 "type": "int",
-                "unit": "",
+                "unit": "-",
                 "value": 2
+            },
+            {
+                "desc": "Unit of the solution",
+                "max": "",
+                "min": "",
+                "name": "unit",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -12263,7 +12419,7 @@
                 "value": 1
             },
             {
-                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "desc": "List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
                 "max": "",
                 "min": "",
                 "name": "transform_list",
@@ -12842,7 +12998,7 @@
                 "value": 1
             },
             {
-                "desc": "Diameter of the hole centers",
+                "desc": "Radius of the hole centers",
                 "max": "",
                 "min": "0",
                 "name": "H0",
@@ -13037,7 +13193,7 @@
             },
             {
                 "desc": "number of phases ",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "qs",
                 "type": "int",
@@ -13046,7 +13202,7 @@
             },
             {
                 "desc": "number of turns per coil",
-                "max": "1000",
+                "max": "",
                 "min": "1",
                 "name": "Ntcoil",
                 "type": "int",
@@ -13054,8 +13210,8 @@
                 "value": 7
             },
             {
-                "desc": "number of parallel circuits per phase (maximum p)",
-                "max": "1000",
+                "desc": "number of parallel circuits per phase",
+                "max": "",
                 "min": "1",
                 "name": "Npcp",
                 "type": "int",
@@ -13073,7 +13229,7 @@
             },
             {
                 "desc": "pole pairs number",
-                "max": "100",
+                "max": "",
                 "min": "1",
                 "name": "p",
                 "type": "int",
@@ -13082,7 +13238,7 @@
             },
             {
                 "desc": "straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length ",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "Lewout",
                 "type": "float",
@@ -13293,7 +13449,7 @@
                 "value": ""
             },
             {
-                "desc": "Dictionnary containing DataKeeper",
+                "desc": "dictionary containing DataKeeper",
                 "max": "",
                 "min": "",
                 "name": "xoutput_dict",

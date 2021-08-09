@@ -70,7 +70,7 @@ class TestSWSlot(object):
             W2=0.15,
             H1_is_rad=False,
         )
-        widget = SWSlot(test_obj, matlib=[], is_stator=True)
+        widget = SWSlot(test_obj, material_dict=dict(), is_stator=True)
 
         yield {"widget": widget, "test_obj": test_obj}
 
@@ -96,13 +96,17 @@ class TestSWSlot(object):
             W2=0.15,
             H1_is_rad=False,
         )
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=False)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
     def test_set_slot_11(self, setup):
         """Check that you can edit a Slot 11"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW11(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 11"
@@ -113,7 +117,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 12"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW12(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 12"
@@ -124,7 +130,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 13"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW13(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 13"
@@ -135,7 +143,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 14"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW14(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 14"
@@ -146,7 +156,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 15"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW15(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 15"
@@ -157,7 +169,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 16"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW16(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 16"
@@ -168,7 +182,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 21"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW21(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 21"
@@ -179,7 +195,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 22"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW22(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 22"
@@ -190,7 +208,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 23"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW23(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 23"
@@ -201,7 +221,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 24"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW24(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 24"
@@ -212,7 +234,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 25"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW25(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 25"
@@ -223,7 +247,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 26"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW26(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 26"
@@ -234,7 +260,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 27"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW27(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 27"
@@ -245,7 +273,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 28"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW28(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 28"
@@ -256,7 +286,9 @@ class TestSWSlot(object):
         """Check that you can edit a Slot 29"""
         Zs = int(uniform(1, 100))
         setup["test_obj"].stator.slot = SlotW29(Zs=Zs)
-        setup["widget"] = SWSlot(setup["test_obj"], matlib=[], is_stator=True)
+        setup["widget"] = SWSlot(
+            setup["test_obj"], material_dict=dict(), is_stator=True
+        )
 
         assert setup["widget"].si_Zs.value() == Zs
         assert setup["widget"].c_slot_type.currentText() == "Slot Type 29"

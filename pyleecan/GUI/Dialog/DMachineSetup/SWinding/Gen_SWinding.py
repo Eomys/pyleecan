@@ -16,7 +16,7 @@ class Gen_SWinding(Ui_SWinding):
 
         # Setup of si_qs
         self.si_qs.setMinimum(0)
-        self.si_qs.setMaximum(100)
+        self.si_qs.setMaximum(999999)
         txt = self.tr(u"""number of phases """)
         self.si_qs.setWhatsThis(txt)
         self.si_qs.setToolTip(txt)
@@ -51,19 +51,19 @@ class Gen_SWinding(Ui_SWinding):
 
         # Setup of si_Ntcoil
         self.si_Ntcoil.setMinimum(1)
-        self.si_Ntcoil.setMaximum(1000)
+        self.si_Ntcoil.setMaximum(999999)
         txt = self.tr(u"""number of turns per coil""")
         self.si_Ntcoil.setWhatsThis(txt)
         self.si_Ntcoil.setToolTip(txt)
 
         # Setup of in_Npcp
-        txt = self.tr(u"""number of parallel circuits per phase (maximum p)""")
+        txt = self.tr(u"""number of parallel circuits per phase""")
         self.in_Npcp.setWhatsThis(txt)
         self.in_Npcp.setToolTip(txt)
 
         # Setup of si_Npcp
         self.si_Npcp.setMinimum(1)
-        self.si_Npcp.setMaximum(1000)
-        txt = self.tr(u"""number of parallel circuits per phase (maximum p)""")
+        self.si_Npcp.setMaximum(999999)
+        txt = self.tr(u"""number of parallel circuits per phase""")
         self.si_Npcp.setWhatsThis(txt)
         self.si_Npcp.setToolTip(txt)

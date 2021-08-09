@@ -1,10 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from numpy import real, min as np_min, max as np_max, zeros, hstack
+from numpy import (
+    pi,
+    real,
+    min as np_min,
+    max as np_max,
+    abs as np_abs,
+    linspace,
+    exp,
+)
 
-from ....Classes.MeshMat import MeshMat
 from ....Classes.MeshVTK import MeshVTK
+
 from ....definitions import config_dict
+from pyleecan.Functions.Plot.Pyvista.configure_plot import configure_plot
+from pyleecan.Functions.Plot.Pyvista.plot_surf_deflection import plot_surf_deflection
 
 COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
@@ -21,9 +31,14 @@ def plot_deflection(
     group_names=None,
     save_path=None,
     title="",
-    win_title=None,
+    win_title="",
     is_surf=True,
     is_show_fig=True,
+    p=None,
+    sargs=None,
+    is_animated=False,
+    phase=1,
+    is_return_plot_args=False,
 ):
     """Plot the operational deflection shape using pyvista plotter.
 
@@ -45,12 +60,16 @@ def plot_deflection(
         title of the field to display on plot
     is_show_fig : bool
         To call show at the end of the method
+    p=None,
+    meshsol_list=[],
+    plot_list=[],
 
     Returns
     -------
     """
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
+
         meshsol_grp.plot_deflection(
             *args,
             label=label,
@@ -65,137 +84,136 @@ def plot_deflection(
             is_surf=is_surf,
             is_show_fig=is_show_fig,
             group_names=None,
+            p=p,
         )
     else:
-        if save_path is None:
-            try:
-                import pyvistaqt as pv
 
-                is_pyvistaqt = True
-            except:
-                import pyvista as pv
+        # Init figure
+        if p is None:
+            if title != "" and win_title == "":
+                win_title = title
+            elif win_title != "" and title == "":
+                title = win_title
 
-                is_pyvistaqt = False
-        else:
-            import pyvista as pv
+            p, sargs = configure_plot(p=p, win_title=win_title, save_path=save_path)
 
-            is_pyvistaqt = False
+            p.add_text(
+                title,
+                position="upper_edge",
+                color="black",
+                font_size=10,
+                font="arial",
+            )
 
-        if save_path is None:
-            try:
-                import pyvistaqt as pv
-
-                is_pyvistaqt = True
-            except:
-                import pyvista as pv
-
-                is_pyvistaqt = False
-        else:
-            import pyvista as pv
-
-            is_pyvistaqt = False
-
-        if title != "" and win_title == "":
-            win_title = title
-        elif win_title != "" and title == "":
-            title = win_title
-
-        # Get mesh and field
-        mesh_pv, field, field_name = self.get_mesh_field_pv(
+        # Get deflection
+        vect_field, field_normal_amp, field_name, mesh_pv = self.get_deflection(
             *args,
             label=label,
             index=index,
             indices=indices,
             field_name=field_name,
-            is_radial=True,
         )
-        mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
-        _, vect_field, _ = self.get_mesh_field_pv(
-            *args,
-            label=label,
-            index=index,
-            indices=indices,
-            field_name=field_name,
-            is_radial=False,
-        )
-
-        if field_name is None:
-            if label is not None:
-                field_name = label
-            elif self.get_solution(index=index).label is not None:
-                field_name = self.get_solution(index=index).label
-            else:
-                field_name = "Field"
 
         # Compute colorbar boundaries
         if clim is None:
-            clim = [np_min(real(field)), np_max(real(field))]
+            clim = [np_min(real(field_normal_amp)), np_max(real(field_normal_amp))]
             if (clim[1] - clim[0]) / clim[1] < 0.01:
                 clim[0] = -abs(clim[1])
                 clim[1] = abs(clim[1])
 
         # Compute deformation factor
         if factor is None:
-            # factor = 1 / (100 * clim[1])
-            factor = 1 / clim[1] * 10
+            factor = 0.2 * np_max(np_abs(mesh_pv.bounds)) / np_max(np_abs(vect_field))
 
-        # Add third dimension if needed
-        solution = self.get_solution(
-            label=label,
-            index=index,
+        field_name += (
+            " \n(x " + format(factor, ".3g") + " [" + self.solution[0].unit + "])"
         )
-        if solution.dimension == 2:
-            vect_field = hstack((vect_field, zeros((vect_field.shape[0], 1))))
+
+        # # Plot mesh only
+        # p.add_mesh(
+        #     mesh_pv, color="grey", opacity=0.7, show_edges=True, edge_color="white"
+        # )
 
         # Extract surface
+        mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
         if is_surf:
-            surf = mesh.get_surf(indices=indices)
+            surf_pv = mesh.get_surf()
         else:
-            surf = mesh.get_mesh_pv(indices=indices)
+            surf_pv = mesh.get_mesh_pv()
 
-        # Add field to surf
-        surf.vectors = real(vect_field) * factor
-
-        # Warp by vectors
-        surf_warp = surf.warp_by_vector()
-
-        # Add radial field
-        surf_warp[field_name] = real(field)
-
-        # Configure plot
-        if is_pyvistaqt:
-            p = pv.BackgroundPlotter()
-            p.set_background("white")
-        else:
-            pv.set_plot_theme("document")
-            p = pv.Plotter(notebook=False, title=win_title)
-        sargs = dict(
-            interactive=True,
-            title_font_size=20,
-            label_font_size=16,
-            font_family="arial",
-            color="black",
-        )
-        p.add_mesh(
-            mesh_pv, color="grey", opacity=1, show_edges=True, edge_color="white"
-        )
-        p.set_position((0.2, 0.2, 0.5))
-        p.reset_camera()
-        p.clear()
-        p.add_mesh(
-            surf_warp,
-            scalars=field_name,
-            opacity=1,
-            show_edges=False,
-            cmap=COLOR_MAP,
+        # Plot deflection surface
+        plot_surf_deflection(
+            surf_pv=surf_pv,
+            vect_field=vect_field,
+            field=field_normal_amp,
+            field_name=field_name,
+            p=p,
+            sargs=sargs,
             clim=clim,
-            scalar_bar_args=sargs,
+            factor=factor,
+            phase=phase,
         )
-        p.add_text(title, position="upper_edge")
-        p.add_axes()
-        if self.dimension == 2:
-            p.view_xy()
-        if save_path is None and is_show_fig:
-            p.show()
-        elif save_path is not None:
-            p.show(interactive=False, screenshot=save_path)
+
+        # Internal animation (cannot be combined with other plots)
+        if is_animated:
+            p.add_text(
+                'Adjust 3D view and press "Q"',
+                position="lower_edge",
+                color="gray",
+                font_size=10,
+                font="arial",
+            )
+            p.show(auto_close=False)
+
+            nframe = 25
+            p.open_gif(save_path)
+            p.clear()
+            for t in linspace(0.0, 1.0, nframe + 1)[:nframe]:
+                phase = exp(1j * 2 * pi * t)
+
+                # Compute pyvista object
+                plot_surf_deflection(
+                    surf_pv=surf_pv,
+                    vect_field=vect_field,
+                    field=field_normal_amp,
+                    field_name=field_name,
+                    p=p,
+                    sargs=sargs,
+                    clim=clim,
+                    factor=factor,
+                    phase=phase,
+                )
+
+                p.add_text(
+                    title,
+                    position="upper_edge",
+                    color="black",
+                    font_size=10,
+                    font="arial",
+                )
+                p.write_frame()
+                p.clear()
+
+            p.close()
+
+        else:
+            # Save figure
+            if save_path is None and is_show_fig:
+                p.show()
+            elif save_path is not None:
+                p.show(interactive=False, screenshot=save_path)
+
+        if is_return_plot_args:
+            return (
+                p,
+                sargs,
+                surf_pv,
+                vect_field,
+                field_normal_amp,
+                field_name,
+                clim,
+                factor,
+                phase,
+            )
+        else:
+            return p

@@ -89,6 +89,7 @@ def get_field(
         is_pol2cart = True
 
     # Enforce indice from those contained in MeshSolution if not None
+
     if self.group is not None and "output_nodes" in self.group and indices is None:
         indices_normals = self.group["output_nodes"]
     else:
@@ -145,6 +146,9 @@ def get_field(
     ## Define the type of transformation
     is_recursive = False  # If there is at least one transformation, switch to true.
 
+    if indices is not None:
+        is_recursive = True
+
     if is_radial:
         is_rthetaz = True
         is_recursive = True
@@ -193,8 +197,9 @@ def get_field(
         cell_area = None
 
     ## Perform the transformation
+    shape_result = axes_list[1]
+
     if is_recursive:
-        shape_result = axes_list[1]
         if is_center:
             shape_result[ind_indices] = mesh_pv.n_cells
         elif indices_normals is not None:
@@ -238,6 +243,9 @@ def get_field(
 
     if is_squeeze:
         result = squeeze(result)
+        if shape_result[ind_indices] == 1:
+            # Re add node dimension which has been squeezed if there is only one node
+            result = result[None, ...]
 
     return result
 
