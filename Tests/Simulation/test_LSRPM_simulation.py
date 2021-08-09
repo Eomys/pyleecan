@@ -4,8 +4,8 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 import matplotlib.pyplot as plt
 
-IPMSM_A = load(join(DATA_DIR, "Machine", "LSRPM_001.json"))
-IPMSM_A.plot()
+LSRPM = load(join(DATA_DIR, "Machine", "LSRPM_001.json"))
+LSRPM.plot()
 
 
 from os.path import join
@@ -17,7 +17,7 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 
 # Create the Simulation
-simu_femm = Simu1(name="FEMM_simulation", machine=IPMSM_A)
+simu_femm = Simu1(name="FEMM_simulation", machine=LSRPM)
 p = simu_femm.machine.stator.winding.p
 qs = simu_femm.machine.stator.winding.qs
 
@@ -25,7 +25,7 @@ qs = simu_femm.machine.stator.winding.qs
 simu_femm.input = InputCurrent()
 
 # Rotor speed [rpm]
-simu_femm.input.N0 = 2000
+simu_femm.input.N0 = 750
 
 # time discretization [s]
 time = linspace(
@@ -39,7 +39,7 @@ simu_femm.input.angle = linspace(
 )  # 2048 steps
 
 # Stator currents as a function of time, each column correspond to one phase [A]
-I0_rms = 250 / sqrt(2)
+I0_rms =  6.85
 felec = p * simu_femm.input.N0 / 60  # [Hz]
 rot_dir = simu_femm.machine.stator.comp_rot_dir()
 Phi0 = 140 * pi / 180  # Maximum Torque Per Amp
@@ -79,5 +79,12 @@ out_femm = simu_femm.run()
 # Radial magnetic flux
 out_femm.mag.B.plot_2D_Data("angle", "time[1]", component_list=["radial"])
 out_femm.mag.B.plot_2D_Data("wavenumber=[0,76]", "time[1]", component_list=["radial"])
+# Tangential magnetic flux
+out_femm.mag.B.plot_2D_Data("angle","time[1]",component_list=["tangential"])
+out_femm.mag.B.plot_2D_Data("wavenumber=[0,76]","time[1]",component_list=["tangential"])
+out_femm.mag.Tem.plot_2D_Data("time")
+print(out_femm.mag.Tem.values.shape)
+print(simu_femm.input.Nt_tot)
+out_femm.mag.meshsolution.plot_contour(label="B", group_names="stator core")
 
 plt.show()

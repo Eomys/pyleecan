@@ -98,7 +98,7 @@
                             "rho": 7500.0
                         }
                     },
-                    "type_magnetization": 1
+                    "type_magnetization": 0
                 },
                 "magnetization_dict_offset": null,
                 "mat_void": {
