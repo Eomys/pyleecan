@@ -2754,8 +2754,14 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
+            "comp_magnetization_dict",
+            "comp_mass_magnet",
+            "comp_surface_magnet",
+            "comp_volume_magnet",
+            "plot_schematics",
             "remove_magnet",
             "has_magnet"
         ],
@@ -2771,7 +2777,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.0023734787
+                "value": 0.002373479
             },
             {
                 "desc": "Magnet top width",
@@ -12073,7 +12079,13 @@
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",
-            "check"
+            "check",
+            "comp_angle_opening",
+            "comp_height_damper",
+            "comp_height_wind",
+            "comp_height",
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotWLSRPM",
