@@ -4,6 +4,7 @@ from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Classes.Arc1 import Arc1
 
+
 def get_surface_active(self, alpha=0, delta=0):
     """Return the full winding surface
 
@@ -38,13 +39,11 @@ def get_surface_active(self, alpha=0, delta=0):
     Z6 = point_dict["Z6"]
     Z7 = point_dict["Z7"]
     Z8 = point_dict["Z8"]
-    point_ref=Z1+Z2+Z3+Z4+Z5+Z6+Z7+Z8/8
+    point_ref = Z1 + Z2 + Z3 + Z4 + Z5 + Z6 + Z7 + Z8 / 8
 
     # Create curve list
     curve_list = self.build_geometry()
-    curve_list.append(
-        Arc1(Z8, Z1, self.Rbo, is_trigo_direction=False)
-    )
+    curve_list.append(Arc1(Z8, Z1, -Rbo, is_trigo_direction=False))
 
     surface = SurfLine(
         line_list=curve_list, label="Wind_" + st + "_R0_T0_S0", point_ref=point_ref
@@ -55,5 +54,3 @@ def get_surface_active(self, alpha=0, delta=0):
     surface.translate(delta)
 
     return surface
-
-    

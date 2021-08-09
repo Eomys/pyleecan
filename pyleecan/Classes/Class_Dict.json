@@ -2702,7 +2702,7 @@
             "_comp_point_coordinate",
             "build_geometry",
             "check",
-            "comp_magnetization_direct",
+            "comp_magnetization_dict",
             "comp_mass_magnet",
             "comp_surface_magnet",
             "comp_volume_magnet",
@@ -11937,7 +11937,6 @@
             "comp_height_damper",
             "comp_height_wind",
             "compt_height",
-            "comp_surface",
             "plot_schematics",
             "get_surface_active"
         ],
