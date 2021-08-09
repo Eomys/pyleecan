@@ -12,7 +12,13 @@ MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
 
 def plot(
-    self, fig=None, ax=None, display_magnet=True, is_add_arrow=False, is_show_fig=True
+    self,
+    fig=None,
+    ax=None,
+    display_magnet=True,
+    is_add_arrow=False,
+    is_add_ref=False,
+    is_show_fig=True,
 ):
     """Plot the Hole in a matplotlib fig
 
@@ -27,6 +33,8 @@ def plot(
         if True, plot the magnet inside the hole, if there is any (Default value = True)
     is_add_arrow : bool
         To add an arrow for the magnetization
+    is_add_ref : bool
+        True to add the reference points of the surfaces
 
     Returns
     -------
@@ -77,6 +85,11 @@ def plot(
                 xytext=(Z1.real, Z1.imag),
                 arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
             )
+
+    # Add reference point
+    if is_add_ref:
+        for surf in self.surf_list:
+            axes.plot(surf.point_ref.real, surf.point_ref.imag, "rx")
 
     # Axis Setup
     axes.axis("equal")

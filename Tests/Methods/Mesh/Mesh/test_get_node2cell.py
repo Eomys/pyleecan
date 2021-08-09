@@ -27,7 +27,7 @@ class Test_get_node2cell(object):
         self.DELTA = 1e-10
 
     def test_MeshMat_node(self):
-        """unittest for an existing node """
+        """unittest for an existing node"""
         ind_elem = self.mesh.cell["triangle"].get_node2cell(1)
         solution = np.array([0, 1])
         testA = np.sum(abs(solution - ind_elem))
@@ -35,7 +35,7 @@ class Test_get_node2cell(object):
         assert abs(testA - 0) < self.DELTA, msg
 
     def test_MeshMat_fakenode(self):
-        """unittest for one non-existing node """
+        """unittest for one non-existing node"""
         ind_elem = self.mesh.cell["triangle"].get_node2cell(-99)
         solution = None
         testA = np.sum(abs(solution - ind_elem))

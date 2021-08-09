@@ -19,6 +19,7 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.SlotUD2 import SlotUD2
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
 from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiProblem import OptiProblem
@@ -451,6 +452,56 @@ def test_WindingUD():
     assert len(fig.axes[0].patches) == 73
 
 
+def test_WindingUD_layer():
+    """Figure 17: User-defined Winding with uneven winding layer"""
+    plt.close("all")
+    # Rotor definition
+    rotor = LamSlotWind(
+        Rint=0.2, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=2, Wrvd=0.05
+    )
+    rotor.axial_vent = [VentilationCirc(Zh=6, Alpha0=pi / 6, D0=100e-3, H0=0.3)]
+    rotor.slot = SlotW11(
+        Zs=6, H0=15e-3, W0=60e-3, W1=100e-3, W2=100e-3, H1=20e-3, H2=200e-3
+    )
+    rotor.slot = rotor.slot.convert_to_SlotUD2()
+    assert isinstance(rotor.slot, SlotUD2)
+    key = "Nrad=2, Ntan=2"
+    Top = rotor.slot.active_surf.split_line(
+        0, 100, is_top=True, is_join=True, label_join=""
+    )
+    Bottom = rotor.slot.active_surf.split_line(
+        0, 100, is_top=False, is_join=True, label_join=""
+    )
+    Bottom_Left = Bottom.split_line(
+        0.320 - 100j, 0.320 + 100j, is_top=True, is_join=True, label_join=""
+    )
+    Bottom_Right = Bottom.split_line(
+        0.320 - 100j, 0.320 + 100j, is_top=False, is_join=True, label_join=""
+    )
+    Top_Left = Top.split_line(
+        0.410 - 100j, 0.410 + 100j, is_top=True, is_join=True, label_join=""
+    )
+    Top_Right = Top.split_line(
+        0.410 - 100j, 0.410 + 100j, is_top=False, is_join=True, label_join=""
+    )
+    rotor.slot.split_active_surf_dict = {
+        key: [Bottom_Right, Bottom_Left, Top_Right, Top_Left]
+    }
+    rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+    rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
+
+    # For testing the _set_split_active_surf_dict method
+    rotor.save(join(save_path, "Fig17_rotor_wind_layer.json"))
+    rotor = load(join(save_path, "Fig17_rotor_wind_layer.json"))
+
+    # Plot, check and save
+    rotor.plot(is_show_fig=False)
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "fig_17_WindingUD_layer.png"))
+    fig.savefig(join(save_path, "fig_17_WindingUD_layer.svg"), format="svg")
+    assert len(fig.axes[0].patches) == 32
+
+
 def test_BoreFlower():
     """Figure 18: LamHole with uneven bore shape
     From pyleecan/Tests/Plot/LamHole/test_Hole_50_plot.py
@@ -804,4 +855,4 @@ def test_Optimization_problem():
 
 
 if __name__ == "__main__":
-    test_WindingUD()
+    test_WindingUD_layer()

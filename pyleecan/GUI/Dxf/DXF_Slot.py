@@ -5,12 +5,11 @@ import matplotlib.pyplot as plt
 from ezdxf import readfile
 from numpy import angle as np_angle
 from numpy import argmin, array
-from PySide2.QtCore import QSize, Qt
-from PySide2.QtGui import QIcon, QPixmap
-from PySide2.QtWidgets import QComboBox, QDialog, QFileDialog, QMessageBox, QPushButton
+from PySide2.QtCore import QUrl
+from PySide2.QtGui import QDesktopServices
+from PySide2.QtWidgets import QDialog, QFileDialog, QMessageBox
 
 from ...Classes.LamSlot import LamSlot
-from ...Classes.Magnet import Magnet
 from ...Classes.SlotUD import SlotUD
 from ...definitions import config_dict
 from ...GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
@@ -24,6 +23,7 @@ TYPE_COL = 0
 DEL_COL = 1
 HL_COL = 2
 WIND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
+Z_TOL = 1e-4  # Point comparison tolerance
 
 
 class DXF_Slot(Ui_DXF_Slot, QDialog):
@@ -47,16 +47,20 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.line_list = list()  # List of line from DXF
         self.selected_list = list()  # List of currently selected lines
         self.lam = lam
+        self.Zcenter = 0  # For offset
+
+        # Tutorial video link
+        self.url = "https://pyleecan.org/videos.html#feature-tutorials"
+        self.b_tuto.setEnabled(True)
 
         # Initialize the graph
         self.init_graph()
 
         # Not used yet
-        self.in_coord_center.hide()
-        self.lf_center_x.hide()
-        self.lf_center_y.hide()
         self.lf_axe_angle.hide()
         self.in_axe_angle.hide()
+
+        # Set DXF edit widget
         self.lf_center_x.setValue(0)
         self.lf_center_y.setValue(0)
         self.lf_scaling.validator().setBottom(0)
@@ -85,6 +89,9 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.b_plot.pressed.connect(self.plot)
         self.b_reset.pressed.connect(self.update_graph)
         self.b_cancel.pressed.connect(self.remove_selection)
+        self.b_tuto.pressed.connect(self.open_tuto)
+        self.lf_center_x.editingFinished.connect(self.set_center)
+        self.lf_center_y.editingFinished.connect(self.set_center)
 
         # Display the GUI
         self.show()
@@ -189,6 +196,11 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         axes.axis("equal")
         axes.set_axis_off()
 
+    def set_center(self):
+        """Update the position of the center"""
+        self.Zcenter = self.lf_center_x.value() + 1j * self.lf_center_y.value()
+        self.update_graph()
+
     def update_graph(self):
         """Clean and redraw all the lines in viewer
 
@@ -209,6 +221,9 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             else:
                 color = "k"
             axes.plot(point_list.real, point_list.imag, color, zorder=1)
+        # Add lamination center
+        axes.plot(self.Zcenter.real, self.Zcenter.imag, "rx", zorder=0)
+        axes.text(self.Zcenter.real, self.Zcenter.imag, "O")
 
         self.w_viewer.draw()
 
@@ -242,7 +257,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         for p1 in point_list:
             count = 0
             for p2 in point_list:
-                if abs(p1 - p2) < 1e-9:
+                if abs(p1 - p2) < Z_TOL:
                     count += 1
             if count == 1:
                 count_1 += 1
@@ -290,7 +305,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         for p1 in point_list:
             count = 0
             for p2 in point_list:
-                if abs(p1 - p2) < 1e-9:
+                if abs(p1 - p2) < Z_TOL:
                     count += 1
             if count == 1:
                 single_list.append(p1)
@@ -302,18 +317,22 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             [
                 ii
                 for ii, line in enumerate(line_list)
-                if abs(line.get_begin() - Zbegin) < 1e-6
+                if abs(line.get_begin() - Zbegin) < Z_TOL
+                or abs(line.get_end() - Zbegin) < Z_TOL
             ]
         )
         # Sort the lines (begin = end)
         curve_list = list()
         curve_list.append(line_list.pop(id_list[0]))
+        if abs(curve_list[0].get_end() - Zbegin) < Z_TOL:
+            # Reverse begin line if line end matches with begin point
+            curve_list[0].reverse()
         while len(line_list) > 0:
             end = curve_list[-1].get_end()
             for ii in range(len(line_list)):
-                if abs(line_list[ii].get_begin() - end) < 1e-9:
+                if abs(line_list[ii].get_begin() - end) < Z_TOL:
                     break
-                if abs(line_list[ii].get_end() - end) < 1e-9:
+                if abs(line_list[ii].get_end() - end) < Z_TOL:
                     line_list[ii].reverse()
                     break
             curve_list.append(line_list.pop(ii))
@@ -333,6 +352,11 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         else:
             slot.wind_begin_index = None
             slot.wind_end_index = None
+
+        # Translate
+        if self.Zcenter != 0:
+            for line in curve_list:
+                line.translate(-self.Zcenter * self.lf_scaling.value())
 
         # Rotation
         Z1 = curve_list[0].get_begin()
@@ -369,6 +393,17 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             if slot.wind_begin_index is not None:
                 surf_wind = slot.get_surface_active()
                 surf_wind.plot(fig=fig, ax=ax1, color=WIND_COLOR, is_show_fig=False)
+            # Add point index
+            index = 0
+            for line in slot.line_list:
+                Zb = line.get_begin()
+                ax1.plot(Zb.real, Zb.imag, "rx", zorder=0)
+                ax1.text(Zb.real, Zb.imag, str(index))
+                index += 1
+            Ze = slot.line_list[-1].get_end()
+            ax1.plot(Ze.real, Ze.imag, "rx", zorder=0)
+            ax1.text(Ze.real, Ze.imag, str(index))
+            # Lamination point
             lam.plot(fig=fig, ax=ax2)
 
     def save(self):
@@ -388,5 +423,16 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             )[0]
             if save_file_path not in ["", ".json", None]:
                 self.save_path = save_file_path
-                slot.save(save_file_path)
-                self.accept()
+                try:
+                    slot.save(save_file_path)
+                    self.accept()
+                except Exception as e:
+                    QMessageBox().critical(
+                        self,
+                        self.tr("Error"),
+                        self.tr("Error while saving slot json file:\n" + str(e)),
+                    )
+
+    def open_tuto(self):
+        """Open the tutorial video in a web browser"""
+        QDesktopServices.openUrl(QUrl(self.url))

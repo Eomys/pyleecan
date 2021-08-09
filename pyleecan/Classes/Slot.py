@@ -83,6 +83,11 @@ except ImportError as error:
     comp_width_opening = error
 
 try:
+    from ..Methods.Slot.Slot.convert_to_SlotUD2 import convert_to_SlotUD2
+except ImportError as error:
+    convert_to_SlotUD2 = error
+
+try:
     from ..Methods.Slot.Slot.get_is_stator import get_is_stator
 except ImportError as error:
     get_is_stator = error
@@ -276,6 +281,18 @@ class Slot(FrozenClass):
         )
     else:
         comp_width_opening = comp_width_opening
+    # cf Methods.Slot.Slot.convert_to_SlotUD2
+    if isinstance(convert_to_SlotUD2, ImportError):
+        convert_to_SlotUD2 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method convert_to_SlotUD2: "
+                    + str(convert_to_SlotUD2)
+                )
+            )
+        )
+    else:
+        convert_to_SlotUD2 = convert_to_SlotUD2
     # cf Methods.Slot.Slot.get_is_stator
     if isinstance(get_is_stator, ImportError):
         get_is_stator = property(
@@ -362,7 +379,7 @@ class Slot(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -403,14 +420,18 @@ class Slot(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._Zs != self._Zs:
             diff_list.append(name + ".Zs")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -444,7 +465,7 @@ class Slot(FrozenClass):
 
     def _set_Zs(self, value):
         """setter of Zs"""
-        check_var("Zs", value, "int", Vmin=0, Vmax=1000)
+        check_var("Zs", value, "int", Vmin=0)
         self._Zs = value
 
     Zs = property(
@@ -454,6 +475,5 @@ class Slot(FrozenClass):
 
         :Type: int
         :min: 0
-        :max: 1000
         """,
     )

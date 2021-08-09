@@ -255,7 +255,7 @@ class Winding(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -414,9 +414,11 @@ class Winding(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -468,6 +470,8 @@ class Winding(FrozenClass):
             diff_list.append(name + ".is_change_layer")
         if other._is_permute_B_C != self._is_permute_B_C:
             diff_list.append(name + ".is_permute_B_C")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -599,7 +603,7 @@ class Winding(FrozenClass):
 
     def _set_qs(self, value):
         """setter of qs"""
-        check_var("qs", value, "int", Vmin=0, Vmax=100)
+        check_var("qs", value, "int", Vmin=0)
         self._qs = value
 
     qs = property(
@@ -609,7 +613,6 @@ class Winding(FrozenClass):
 
         :Type: int
         :min: 0
-        :max: 100
         """,
     )
 
@@ -619,7 +622,7 @@ class Winding(FrozenClass):
 
     def _set_Ntcoil(self, value):
         """setter of Ntcoil"""
-        check_var("Ntcoil", value, "int", Vmin=1, Vmax=1000)
+        check_var("Ntcoil", value, "int", Vmin=1)
         self._Ntcoil = value
 
     Ntcoil = property(
@@ -629,7 +632,6 @@ class Winding(FrozenClass):
 
         :Type: int
         :min: 1
-        :max: 1000
         """,
     )
 
@@ -639,17 +641,16 @@ class Winding(FrozenClass):
 
     def _set_Npcp(self, value):
         """setter of Npcp"""
-        check_var("Npcp", value, "int", Vmin=1, Vmax=1000)
+        check_var("Npcp", value, "int", Vmin=1)
         self._Npcp = value
 
     Npcp = property(
         fget=_get_Npcp,
         fset=_set_Npcp,
-        doc=u"""number of parallel circuits per phase (maximum p)
+        doc=u"""number of parallel circuits per phase
 
         :Type: int
         :min: 1
-        :max: 1000
         """,
     )
 
@@ -679,7 +680,7 @@ class Winding(FrozenClass):
 
     def _set_p(self, value):
         """setter of p"""
-        check_var("p", value, "int", Vmin=1, Vmax=100)
+        check_var("p", value, "int", Vmin=1)
         self._p = value
 
     p = property(
@@ -689,7 +690,6 @@ class Winding(FrozenClass):
 
         :Type: int
         :min: 1
-        :max: 100
         """,
     )
 
@@ -699,7 +699,7 @@ class Winding(FrozenClass):
 
     def _set_Lewout(self, value):
         """setter of Lewout"""
-        check_var("Lewout", value, "float", Vmin=0, Vmax=100)
+        check_var("Lewout", value, "float", Vmin=0)
         self._Lewout = value
 
     Lewout = property(
@@ -709,7 +709,6 @@ class Winding(FrozenClass):
 
         :Type: float
         :min: 0
-        :max: 100
         """,
     )
 

@@ -16,7 +16,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
 from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import (
     PCondType12,
 )
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 
 
 class TestSWindCond(object):
@@ -44,24 +44,28 @@ class TestSWindCond(object):
             Nwppc=4, Wwire=11e-3, Wins_wire=21e-3, Wins_cond=31e-3
         )
 
-        matlib = MatLib()
-        matlib.dict_mat["RefMatLib"] = [
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
             Material(name="test1"),
             Material(name="test2"),
             Material(name="test3"),
         ]
-        matlib.dict_mat["RefMatLib"][0].elec.rho = 0.31
-        matlib.dict_mat["RefMatLib"][1].elec.rho = 0.32
-        matlib.dict_mat["RefMatLib"][2].elec.rho = 0.33
+        material_dict[LIB_KEY][0].elec.rho = 0.31
+        material_dict[LIB_KEY][1].elec.rho = 0.32
+        material_dict[LIB_KEY][2].elec.rho = 0.33
 
-        widget_1 = SWindCond(machine=test_obj, matlib=matlib, is_stator=True)
-        widget_2 = SWindCond(machine=test_obj, matlib=matlib, is_stator=False)
+        widget_1 = SWindCond(
+            machine=test_obj, material_dict=material_dict, is_stator=True
+        )
+        widget_2 = SWindCond(
+            machine=test_obj, material_dict=material_dict, is_stator=False
+        )
 
         yield {
             "widget": widget_1,
             "widget2": widget_2,
             "test_obj": test_obj,
-            "matlib": matlib,
+            "material_dict": material_dict,
         }
 
         self.app.quit()
@@ -83,7 +87,9 @@ class TestSWindCond(object):
 
         setup["test_obj"].stator.winding.conductor = None
         setup["widget"] = SWindCond(
-            machine=setup["test_obj"], matlib=setup["matlib"], is_stator=True
+            machine=setup["test_obj"],
+            material_dict=setup["material_dict"],
+            is_stator=True,
         )
 
         assert setup["widget"].w_mat_0.in_mat_type.text() == "mat_wind1: "

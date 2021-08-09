@@ -48,11 +48,6 @@ except ImportError as error:
     get_pole_pair_number = error
 
 try:
-    from ..Methods.Machine.LamSlotWind.get_name_phase import get_name_phase
-except ImportError as error:
-    get_name_phase = error
-
-try:
     from ..Methods.Machine.LamSlotWind.plot import plot
 except ImportError as error:
     plot = error
@@ -122,6 +117,11 @@ try:
 except ImportError as error:
     comp_periodicity = error
 
+try:
+    from ..Methods.Machine.LamSlotWind.set_pole_pair_number import set_pole_pair_number
+except ImportError as error:
+    set_pole_pair_number = error
+
 
 from ._check import InitUnKnowClassError
 from .Winding import Winding
@@ -129,6 +129,7 @@ from .Slot import Slot
 from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
+from .Bore import Bore
 
 
 class LamSlotWind(LamSlot):
@@ -203,18 +204,6 @@ class LamSlotWind(LamSlot):
         )
     else:
         get_pole_pair_number = get_pole_pair_number
-    # cf Methods.Machine.LamSlotWind.get_name_phase
-    if isinstance(get_name_phase, ImportError):
-        get_name_phase = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotWind method get_name_phase: "
-                    + str(get_name_phase)
-                )
-            )
-        )
-    else:
-        get_name_phase = get_name_phase
     # cf Methods.Machine.LamSlotWind.plot
     if isinstance(plot, ImportError):
         plot = property(
@@ -375,6 +364,18 @@ class LamSlotWind(LamSlot):
         )
     else:
         comp_periodicity = comp_periodicity
+    # cf Methods.Machine.LamSlotWind.set_pole_pair_number
+    if isinstance(set_pole_pair_number, ImportError):
+        set_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method set_pole_pair_number: "
+                    + str(set_pole_pair_number)
+                )
+            )
+        )
+    else:
+        set_pole_pair_number = set_pole_pair_number
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -398,13 +399,14 @@ class LamSlotWind(LamSlot):
         axial_vent=-1,
         notch=-1,
         yoke_notch=-1,
+        bore=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -446,6 +448,8 @@ class LamSlotWind(LamSlot):
                 notch = init_dict["notch"]
             if "yoke_notch" in list(init_dict.keys()):
                 yoke_notch = init_dict["yoke_notch"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
         # Set the properties (value check and convertion are done in setter)
         self.Ksfill = Ksfill
         self.winding = winding
@@ -464,6 +468,7 @@ class LamSlotWind(LamSlot):
             axial_vent=axial_vent,
             notch=notch,
             yoke_notch=yoke_notch,
+            bore=bore,
         )
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties
@@ -497,9 +502,11 @@ class LamSlotWind(LamSlot):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -516,6 +523,8 @@ class LamSlotWind(LamSlot):
             diff_list.extend(
                 self.winding.compare(other.winding, name=name + ".winding")
             )
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

@@ -240,7 +240,7 @@ class Hole(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -301,9 +301,11 @@ class Hole(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -319,6 +321,8 @@ class Hole(FrozenClass):
             )
         if other._magnetization_dict_offset != self._magnetization_dict_offset:
             diff_list.append(name + ".magnetization_dict_offset")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -368,7 +372,7 @@ class Hole(FrozenClass):
 
     def _set_Zh(self, value):
         """setter of Zh"""
-        check_var("Zh", value, "int", Vmin=0, Vmax=1000)
+        check_var("Zh", value, "int", Vmin=0)
         self._Zh = value
 
     Zh = property(
@@ -378,7 +382,6 @@ class Hole(FrozenClass):
 
         :Type: int
         :min: 0
-        :max: 1000
         """,
     )
 

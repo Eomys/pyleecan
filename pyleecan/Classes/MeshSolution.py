@@ -58,26 +58,24 @@ except ImportError as error:
     plot_deflection = error
 
 try:
-    from ..Methods.Mesh.MeshSolution.plot_deflection_animated import (
-        plot_deflection_animated,
-    )
-except ImportError as error:
-    plot_deflection_animated = error
-
-try:
     from ..Methods.Mesh.MeshSolution.plot_glyph import plot_glyph
 except ImportError as error:
     plot_glyph = error
 
 try:
-    from ..Methods.Mesh.MeshSolution.plot_glyph_animated import plot_glyph_animated
-except ImportError as error:
-    plot_glyph_animated = error
-
-try:
     from ..Methods.Mesh.MeshSolution.perm_coord import perm_coord
 except ImportError as error:
     perm_coord = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.get_deflection import get_deflection
+except ImportError as error:
+    get_deflection = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.get_glyph import get_glyph
+except ImportError as error:
+    get_glyph = error
 
 
 from ._check import InitUnKnowClassError
@@ -179,18 +177,6 @@ class MeshSolution(FrozenClass):
         )
     else:
         plot_deflection = plot_deflection
-    # cf Methods.Mesh.MeshSolution.plot_deflection_animated
-    if isinstance(plot_deflection_animated, ImportError):
-        plot_deflection_animated = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshSolution method plot_deflection_animated: "
-                    + str(plot_deflection_animated)
-                )
-            )
-        )
-    else:
-        plot_deflection_animated = plot_deflection_animated
     # cf Methods.Mesh.MeshSolution.plot_glyph
     if isinstance(plot_glyph, ImportError):
         plot_glyph = property(
@@ -202,18 +188,6 @@ class MeshSolution(FrozenClass):
         )
     else:
         plot_glyph = plot_glyph
-    # cf Methods.Mesh.MeshSolution.plot_glyph_animated
-    if isinstance(plot_glyph_animated, ImportError):
-        plot_glyph_animated = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshSolution method plot_glyph_animated: "
-                    + str(plot_glyph_animated)
-                )
-            )
-        )
-    else:
-        plot_glyph_animated = plot_glyph_animated
     # cf Methods.Mesh.MeshSolution.perm_coord
     if isinstance(perm_coord, ImportError):
         perm_coord = property(
@@ -225,6 +199,29 @@ class MeshSolution(FrozenClass):
         )
     else:
         perm_coord = perm_coord
+    # cf Methods.Mesh.MeshSolution.get_deflection
+    if isinstance(get_deflection, ImportError):
+        get_deflection = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method get_deflection: "
+                    + str(get_deflection)
+                )
+            )
+        )
+    else:
+        get_deflection = get_deflection
+    # cf Methods.Mesh.MeshSolution.get_glyph
+    if isinstance(get_glyph, ImportError):
+        get_glyph = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method get_glyph: " + str(get_glyph)
+                )
+            )
+        )
+    else:
+        get_glyph = get_glyph
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -246,7 +243,7 @@ class MeshSolution(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -333,9 +330,11 @@ class MeshSolution(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -379,6 +378,8 @@ class MeshSolution(FrozenClass):
             diff_list.append(name + ".dimension")
         if other._path != self._path:
             diff_list.append(name + ".path")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

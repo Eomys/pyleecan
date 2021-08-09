@@ -15,7 +15,7 @@ def comp_lengths_winding(self):
     Returns
     -------
     L_dict: dict
-        Dictionnary of the length (Lwtot, Lwact, Lew, Lwvent)
+        Dictionary of the length (Lwtot, Lwact, Lew, Lwvent)
     """
 
     # length of the stack including ventilation ducts

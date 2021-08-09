@@ -53,19 +53,19 @@ except ImportError as error:
     comp_height_wind = error
 
 try:
-    from ..Methods.Slot.SlotWLSRPM.compt_height import compt_height
+    from ..Methods.Slot.SlotWLSRPM.comp_height import comp_height
 except ImportError as error:
-    compt_height = error
-
-try:
-    from ..Methods.Slot.SlotWLSRPM.plot_schematics import plot_schematics
-except ImportError as error:
-    plot_schematics = error
+    comp_height = error
 
 try:
     from ..Methods.Slot.SlotWLSRPM.get_surface_active import get_surface_active
 except ImportError as error:
     get_surface_active = error
+
+try:
+    from ..Methods.Slot.SlotWLSRPM.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
 
 
 from ._check import InitUnKnowClassError
@@ -158,29 +158,17 @@ class SlotWLSRPM(Slot):
         )
     else:
         comp_height_wind = comp_height_wind
-    # cf Methods.Slot.SlotWLSRPM.compt_height
-    if isinstance(compt_height, ImportError):
-        compt_height = property(
+    # cf Methods.Slot.SlotWLSRPM.comp_height
+    if isinstance(comp_height, ImportError):
+        comp_height = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotWLSRPM method compt_height: " + str(compt_height)
+                    "Can't use SlotWLSRPM method comp_height: " + str(comp_height)
                 )
             )
         )
     else:
-        compt_height = compt_height
-    # cf Methods.Slot.SlotWLSRPM.plot_schematics
-    if isinstance(plot_schematics, ImportError):
-        plot_schematics = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWLSRPM method plot_schematics: "
-                    + str(plot_schematics)
-                )
-            )
-        )
-    else:
-        plot_schematics = plot_schematics
+        comp_height = comp_height
     # cf Methods.Slot.SlotWLSRPM.get_surface_active
     if isinstance(get_surface_active, ImportError):
         get_surface_active = property(
@@ -193,6 +181,18 @@ class SlotWLSRPM(Slot):
         )
     else:
         get_surface_active = get_surface_active
+    # cf Methods.Slot.SlotWLSRPM.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWLSRPM method plot_schematics: "
+                    + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -213,7 +213,7 @@ class SlotWLSRPM(Slot):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -282,9 +282,11 @@ class SlotWLSRPM(Slot):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -301,6 +303,8 @@ class SlotWLSRPM(Slot):
             diff_list.append(name + ".R1")
         if other._H3 != self._H3:
             diff_list.append(name + ".H3")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

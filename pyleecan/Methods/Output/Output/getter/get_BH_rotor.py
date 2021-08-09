@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from .....Methods.Output.Output.getter import GetOutError
+from .....Classes.OutGeoLam import OutGeoLam
 
 
 def get_BH_rotor(self):
@@ -19,7 +20,11 @@ def get_BH_rotor(self):
     """
 
     # Already available => Return
-    if self.geo.rotor.BH_curve is not None:
+    if (
+        self.geo is not None
+        and self.geo.rotor is not None
+        and self.geo.rotor.BH_curve is not None
+    ):
         return self.geo.rotor.BH_curve
 
     # Check if possible to get the BH curve
@@ -38,6 +43,9 @@ def get_BH_rotor(self):
 
     # Compute and store the BH curve
     BH = mat_type.mag.get_BH()
+    if self.geo.rotor is None:
+        self.geo.rotor = OutGeoLam()
+        self.geo.rotor._set_None()
     self.geo.rotor.BH_curve = BH
 
     return BH

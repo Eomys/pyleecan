@@ -11,6 +11,18 @@ class Gen_PVentPolar(Ui_PVentPolar):
     def setupUi(self, PVentPolar):
         """Abstract class to update the widget according to the csv doc"""
         Ui_PVentPolar.setupUi(self, PVentPolar)
+        # Setup of in_Zh
+        txt = self.tr(u"""Number of Hole around the circumference""")
+        self.in_Zh.setWhatsThis(txt)
+        self.in_Zh.setToolTip(txt)
+
+        # Setup of si_Zh
+        self.si_Zh.setMinimum(0)
+        self.si_Zh.setMaximum(999999)
+        txt = self.tr(u"""Number of Hole around the circumference""")
+        self.si_Zh.setWhatsThis(txt)
+        self.si_Zh.setToolTip(txt)
+
         # Setup of in_Alpha0
         txt = self.tr(u"""Shift angle of the hole around circumference""")
         self.in_Alpha0.setWhatsThis(txt)

@@ -22,4 +22,4 @@ def build_geometry(self):
 
     """
 
-    return self.line_list.copy()
+    return [line.copy() for line in self.line_list]

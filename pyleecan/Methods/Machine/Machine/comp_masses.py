@@ -6,8 +6,8 @@ def comp_masses(self):
     - Mmach : Mass total [kg]
     - Mfra : Mass of the Frame [kg]
     - Msha : Mass of the Shaft [kg]
-    - Mrot : Mass dictionnary of the rotor masses
-    - Msta : Mass dictionnary of the stator masses
+    - Mrot : Mass dictionary of the rotor masses
+    - Msta : Mass dictionary of the stator masses
 
     Parameters
     ----------
@@ -17,7 +17,7 @@ def comp_masses(self):
     Returns
     -------
     M_dict: dict
-        A dictionnary of the Machine's masses (Mmach, Msha,
+        A dictionary of the Machine's masses (Mmach, Msha,
         Mfra, Mrot, Msta) [kg]
 
     """

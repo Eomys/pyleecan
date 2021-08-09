@@ -30,7 +30,8 @@ def get_lam_list(self, is_int_to_ext=True, key=None):
             lam_list.append(self.rotor)
 
     # Sort all laminations according to Rint
-    lam_list = sorted(lam_list, key=lambda x: x.Rint, reverse=not is_int_to_ext)
+    if is_int_to_ext is not None:
+        lam_list = sorted(lam_list, key=lambda x: x.Rint, reverse=not is_int_to_ext)
 
     # Filter the lamination according to key
     if key is not None:

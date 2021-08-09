@@ -16,4 +16,5 @@ pixmap_dict = {
     "cross": ":/images/images/icon/cross.png",
     "check": ":/images/images/icon/check.png",
     "search": ":/images/images/icon/search.png",
+    "soft_icon": ":/images/images/icon/pyleecan_64.png",
 }
