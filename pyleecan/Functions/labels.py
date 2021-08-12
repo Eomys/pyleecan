@@ -152,14 +152,14 @@ def short_label(label):
     """Returns a short version of a label"""
     label_dict = decode_label(label)
     # Short Lamination name
-    label_dict["lam_label"].replace(STATOR_LAB, STATOR_LAB_S)
-    label_dict["lam_label"].replace(ROTOR_LAB, ROTOR_LAB_S)
+    label_dict["lam_label"] = label_dict["lam_label"].replace(STATOR_LAB, STATOR_LAB_S)
+    label_dict["lam_label"] = label_dict["lam_label"].replace(ROTOR_LAB, ROTOR_LAB_S)
     # Short Surface name
-    label_dict["surf_type"].replace(LAM_LAB, LAM_LAB_S)
-    label_dict["surf_type"].replace(WIND_LAB, WIND_LAB_S)
-    label_dict["surf_type"].replace(HOLEV_LAB, HOLEV_LAB_S)
-    label_dict["surf_type"].replace(HOLEM_LAB, HOLEM_LAB_S)
-    label_dict["surf_type"].replace(VENT_LAB, VENT_LAB_S)
+    label_dict["surf_type"] = label_dict["surf_type"].replace(LAM_LAB, LAM_LAB_S)
+    label_dict["surf_type"] = label_dict["surf_type"].replace(WIND_LAB, WIND_LAB_S)
+    label_dict["surf_type"] = label_dict["surf_type"].replace(HOLEV_LAB, HOLEV_LAB_S)
+    label_dict["surf_type"] = label_dict["surf_type"].replace(HOLEM_LAB, HOLEM_LAB_S)
+    label_dict["surf_type"] = label_dict["surf_type"].replace(VENT_LAB, VENT_LAB_S)
 
     # Build the new label
     label = label_dict["lam_label"] + "_" + label_dict["surf_type"]

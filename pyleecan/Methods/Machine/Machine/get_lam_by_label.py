@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ....Functions.labels import STATOR_LAB, ROTOR_LAB
+from ....Functions.labels import STATOR_LAB, ROTOR_LAB, ROTOR_LAB_S, STATOR_LAB_S
 
 
 def get_lam_by_label(self, label):
@@ -25,6 +25,11 @@ def get_lam_by_label(self, label):
         f"'{label}' is not a valid input argument for label."
         + " Only 'Stator-X' or 'Rotor-X', with X the index, are accepted."
     )
+
+    # Short=>Label conversion
+    if STATOR_LAB not in label and ROTOR_LAB not in label:
+        label = label.replace(ROTOR_LAB_S, ROTOR_LAB)
+        label = label.replace(STATOR_LAB_S, STATOR_LAB)
 
     # split the label components
     lam_str = label.split("-")

@@ -199,7 +199,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                     Zh = hole.Zh
                     alpha_p = 360 / Zh
                     mag_0 = (
-                        floor_divide(angle(point_ref, deg=True), alpha_p) + 0.5
+                        floor_divide(np_angle(point_ref, deg=True), alpha_p) + 0.5
                     ) * alpha_p
 
                     mag_dict = hole.comp_magnetization_dict()
