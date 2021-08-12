@@ -87,7 +87,7 @@ def decode_label(label):
     if len(label_split) > 1:
         label_dict["surf_type"] = label_split[1]
     # Decode surf index
-    if len(label_split) > 2:
+    if len(label_split) > 2 and label_split[2].count("-")==2:
         label_dict["index"] = label_split[2]
         id_list = label_dict["index"].split("-")
         label_dict["R_id"] = int(id_list[0][1:])

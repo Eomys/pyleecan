@@ -4,6 +4,17 @@ import sys
 
 from os import replace
 from os.path import splitext
+from ....Functions.labels import (
+    SHAFT_LAB,
+    decode_label,
+    HOLEM_LAB_S,
+    HOLEV_LAB_S,
+    ROTOR_LAB_S,
+    STATOR_LAB_S,
+    LAM_LAB_S,
+    WIND_LAB_S,
+    SHAFT_LAB,
+)
 
 
 def _remove_entities(gmsh, labels):
@@ -92,7 +103,9 @@ def process_mesh(
     gmsh.model.geo.removeAllDuplicates()
 
     # remove unused model parts
-    _remove_entities(gmsh, labels=["stator", "w_sta"])
+    sta_lam = (STATOR_LAB_S + "-0_" + LAM_LAB_S).lower()  # Stator Lamination
+    sta_wind = (STATOR_LAB_S + "-0_" + WIND_LAB_S).lower()  # Stator Winding
+    _remove_entities(gmsh, labels=[sta_lam, sta_wind])
 
     # get group names
     grps = gmsh.model.getPhysicalGroups(-1)
@@ -101,7 +114,8 @@ def process_mesh(
     # get lists of some surfaces by name
     magnet_list = []
     for grp, name in zip(grps, grp_names):
-        if "magnet" in name.lower():
+        label_dict = decode_label(name)
+        if HOLEM_LAB_S in label_dict["surf_type"]:
             entities = gmsh.model.getEntitiesForPhysicalGroup(*grp)
             if grp[0] == 2:
                 magnet_list.extend(entities.tolist())
@@ -109,7 +123,11 @@ def process_mesh(
     if True:  # is_get_lam:
         lam_list = []
         for grp, name in zip(grps, grp_names):
-            if "rotor_lam" in name.lower():
+            label_dict = decode_label(name)
+            if (
+                ROTOR_LAB_S in label_dict["lam_type"]
+                and LAM_LAB_S in label_dict["surf_type"]
+            ):
                 entities = gmsh.model.getEntitiesForPhysicalGroup(*grp)
                 if grp[0] == 2:
                     lam_list.extend(entities.tolist())
@@ -128,7 +146,7 @@ def process_mesh(
                     line,
                 ],
             )
-            if any(["h_rotor" in name.lower() for name in names]):
+            if any([HOLEV_LAB_S in decode_label(name)["surf_type"] for name in names]):
                 hole_lines.append(line)
 
     if is_get_lam and not is_get_magnet:
@@ -156,7 +174,8 @@ def process_mesh(
 
             if is_get_magnet or (is_get_lam and line[1] in lam_lines):
                 for name in names:
-                    if "Magnet" in name:
+                    label_dict = decode_label(name)
+                    if HOLEM_LAB_S in label_dict["surf_type"]:
                         if (
                             line[1] in lam_lines
                         ):  # only lines with direct contact for now
@@ -242,12 +261,14 @@ def process_mesh(
     grp_names = [gmsh.model.getPhysicalName(*grp) for grp in grps]
 
     # delete unused surfaces
-    del_list = ["shaft", "h_rotor"]
+    RL = ROTOR_LAB_S + "-0_"
+    del_list = [SHAFT_LAB, RL + HOLEV_LAB_S]
     if not is_get_magnet:
-        del_list.append("magnet")
+        del_list.append(RL+HOLEM_LAB_S)
 
     if not is_get_lam:
-        del_list.append("rotor_lam")
+        rot_lam = (RL + LAM_LAB_S).lower()  # Rotor Lamination
+        del_list.append(rot_lam)
 
     for grp, name in zip(grps, grp_names):
         if any([n in name.lower() for n in del_list]):
