@@ -54,13 +54,13 @@ def get_elec_datakeeper(self, symbol_list, is_multi=False):
         )
 
     # Keep power
-    if not is_multi and self.OP_matrix.shape[1] > 4 and "P_ref" not in symbol_list:
+    if not is_multi and self.OP_matrix.shape[1] > 4 and "Pem_av_ref" not in symbol_list:
         dk_list.append(
             DataKeeper(
                 name="Reference Power",
-                symbol="P_ref",
+                symbol="Pem_av_ref",
                 unit="W",
-                keeper="lambda output: output.elec.P_ref",
+                keeper="lambda output: output.elec.Pem_av_ref",
             )
         )
 

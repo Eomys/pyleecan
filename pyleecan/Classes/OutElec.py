@@ -111,7 +111,6 @@ class OutElec(FrozenClass):
         Pem_av_ref=None,
         Us=None,
         internal=None,
-        P_ref=None,
         init_dict=None,
         init_str=None,
     ):
@@ -166,8 +165,6 @@ class OutElec(FrozenClass):
                 Us = init_dict["Us"]
             if "internal" in list(init_dict.keys()):
                 internal = init_dict["internal"]
-            if "P_ref" in list(init_dict.keys()):
-                P_ref = init_dict["P_ref"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
@@ -188,7 +185,6 @@ class OutElec(FrozenClass):
         self.Pem_av_ref = Pem_av_ref
         self.Us = Us
         self.internal = internal
-        self.P_ref = P_ref
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -231,7 +227,6 @@ class OutElec(FrozenClass):
             OutElec_str += "internal = " + tmp
         else:
             OutElec_str += "internal = None" + linesep + linesep
-        OutElec_str += "P_ref = " + str(self.P_ref) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -274,8 +269,6 @@ class OutElec(FrozenClass):
         if other.Us != self.Us:
             return False
         if other.internal != self.internal:
-            return False
-        if other.P_ref != self.P_ref:
             return False
         return True
 
@@ -349,8 +342,6 @@ class OutElec(FrozenClass):
             diff_list.extend(
                 self.internal.compare(other.internal, name=name + ".internal")
             )
-        if other._P_ref != self._P_ref:
-            diff_list.append(name + ".P_ref")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -377,7 +368,6 @@ class OutElec(FrozenClass):
         S += getsizeof(self.Pem_av_ref)
         S += getsizeof(self.Us)
         S += getsizeof(self.internal)
-        S += getsizeof(self.P_ref)
         return S
 
     def as_dict(self, **kwargs):
@@ -427,7 +417,6 @@ class OutElec(FrozenClass):
             OutElec_dict["internal"] = None
         else:
             OutElec_dict["internal"] = self.internal.as_dict(**kwargs)
-        OutElec_dict["P_ref"] = self.P_ref
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -454,7 +443,6 @@ class OutElec(FrozenClass):
         self.Us = None
         if self.internal is not None:
             self.internal._set_None()
-        self.P_ref = None
 
     def _get_Time(self):
         """getter of Time"""
@@ -781,7 +769,7 @@ class OutElec(FrozenClass):
     Pem_av_ref = property(
         fget=_get_Pem_av_ref,
         fset=_set_Pem_av_ref,
-        doc=u"""Average Electromagnetic power
+        doc=u"""Theorical Average Electromagnetic Power
 
         :Type: float
         """,
@@ -841,23 +829,5 @@ class OutElec(FrozenClass):
         doc=u"""OutInternal object containg outputs related to a specific model
 
         :Type: OutInternal
-        """,
-    )
-
-    def _get_P_ref(self):
-        """getter of P_ref"""
-        return self._P_ref
-
-    def _set_P_ref(self, value):
-        """setter of P_ref"""
-        check_var("P_ref", value, "float")
-        self._P_ref = value
-
-    P_ref = property(
-        fget=_get_P_ref,
-        fset=_set_P_ref,
-        doc=u"""Theorical Power reference
-
-        :Type: float
         """,
     )

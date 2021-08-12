@@ -3951,10 +3951,10 @@
                 "value": null
             },
             {
-                "desc": "Theorical Power reference",
+                "desc": "Theorical Average Electromagnetic Power",
                 "max": "",
                 "min": "",
-                "name": "P_ref",
+                "name": "Pem_av_ref",
                 "type": "float",
                 "unit": "W",
                 "value": null
@@ -7664,7 +7664,7 @@
                 "value": null
             },
             {
-                "desc": "Average Electromagnetic power",
+                "desc": "Theorical Average Electromagnetic Power",
                 "max": "",
                 "min": "",
                 "name": "Pem_av_ref",
@@ -7688,15 +7688,6 @@
                 "name": "internal",
                 "type": "OutInternal",
                 "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Theorical Power reference",
-                "max": "",
-                "min": "",
-                "name": "P_ref",
-                "type": "float",
-                "unit": "W",
                 "value": null
             }
         ]
@@ -8244,12 +8235,12 @@
                 "value": null
             },
             {
-                "desc": "Output Power",
+                "desc": "Average Electromagnetic power",
                 "max": "",
                 "min": "",
-                "name": "P",
+                "name": "Pem_av",
                 "type": "float",
-                "unit": "-",
+                "unit": "W",
                 "value": null
             }
         ]

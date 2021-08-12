@@ -16,6 +16,6 @@ def comp_power(self):
         and self.parent.elec.N0 is not None
         and self.Tem_av is not None
     ):
-        self.P = 2 * pi * self.parent.elec.N0 / 60 * self.Tem_av
+        self.Pem_av = 2 * pi * self.parent.elec.N0 / 60 * self.Tem_av
     else:
-        self.P = None
+        self.Pem_av = None

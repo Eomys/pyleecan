@@ -13,6 +13,7 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.MagFEMM import MagFEMM
 
+
 @pytest.mark.skip(reason="Radial magnetization not available yet for Hole")
 def test_LSRPM_simulation():
     # Create the Simulation

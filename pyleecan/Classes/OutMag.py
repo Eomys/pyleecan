@@ -121,7 +121,7 @@ class OutMag(FrozenClass):
         logger_name="Pyleecan.Magnetics",
         internal=None,
         Rag=None,
-        P=None,
+        Pem_av=None,
         init_dict=None,
         init_str=None,
     ):
@@ -168,8 +168,8 @@ class OutMag(FrozenClass):
                 internal = init_dict["internal"]
             if "Rag" in list(init_dict.keys()):
                 Rag = init_dict["Rag"]
-            if "P" in list(init_dict.keys()):
-                P = init_dict["P"]
+            if "Pem_av" in list(init_dict.keys()):
+                Pem_av = init_dict["Pem_av"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
@@ -186,7 +186,7 @@ class OutMag(FrozenClass):
         self.logger_name = logger_name
         self.internal = internal
         self.Rag = Rag
-        self.P = P
+        self.Pem_av = Pem_av
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -227,7 +227,7 @@ class OutMag(FrozenClass):
         else:
             OutMag_str += "internal = None" + linesep + linesep
         OutMag_str += "Rag = " + str(self.Rag) + linesep
-        OutMag_str += "P = " + str(self.P) + linesep
+        OutMag_str += "Pem_av = " + str(self.Pem_av) + linesep
         return OutMag_str
 
     def __eq__(self, other):
@@ -263,7 +263,7 @@ class OutMag(FrozenClass):
             return False
         if other.Rag != self.Rag:
             return False
-        if other.P != self.P:
+        if other.Pem_av != self.Pem_av:
             return False
         return True
 
@@ -358,8 +358,8 @@ class OutMag(FrozenClass):
             )
         if other._Rag != self._Rag:
             diff_list.append(name + ".Rag")
-        if other._P != self._P:
-            diff_list.append(name + ".P")
+        if other._Pem_av != self._Pem_av:
+            diff_list.append(name + ".Pem_av")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -384,7 +384,7 @@ class OutMag(FrozenClass):
         S += getsizeof(self.logger_name)
         S += getsizeof(self.internal)
         S += getsizeof(self.Rag)
-        S += getsizeof(self.P)
+        S += getsizeof(self.Pem_av)
         return S
 
     def as_dict(self, **kwargs):
@@ -441,7 +441,7 @@ class OutMag(FrozenClass):
         else:
             OutMag_dict["internal"] = self.internal.as_dict(**kwargs)
         OutMag_dict["Rag"] = self.Rag
-        OutMag_dict["P"] = self.P
+        OutMag_dict["Pem_av"] = self.Pem_av
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -465,7 +465,7 @@ class OutMag(FrozenClass):
         if self.internal is not None:
             self.internal._set_None()
         self.Rag = None
-        self.P = None
+        self.Pem_av = None
 
     def _get_Time(self):
         """getter of Time"""
@@ -808,19 +808,19 @@ class OutMag(FrozenClass):
         """,
     )
 
-    def _get_P(self):
-        """getter of P"""
-        return self._P
+    def _get_Pem_av(self):
+        """getter of Pem_av"""
+        return self._Pem_av
 
-    def _set_P(self, value):
-        """setter of P"""
-        check_var("P", value, "float")
-        self._P = value
+    def _set_Pem_av(self, value):
+        """setter of Pem_av"""
+        check_var("Pem_av", value, "float")
+        self._Pem_av = value
 
-    P = property(
-        fget=_get_P,
-        fset=_set_P,
-        doc=u"""Output Power
+    Pem_av = property(
+        fget=_get_Pem_av,
+        fset=_set_Pem_av,
+        doc=u"""Average Electromagnetic power
 
         :Type: float
         """,
