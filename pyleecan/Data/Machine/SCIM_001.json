@@ -19,7 +19,7 @@
         "__class__": "LamSquirrelCage",
         "axial_vent": [
             {
-                "Alpha0": 0,
+                "Alpha0": 0.3927,
                 "D0": 0.02,
                 "H0": 0.07,
                 "Zh": 8,

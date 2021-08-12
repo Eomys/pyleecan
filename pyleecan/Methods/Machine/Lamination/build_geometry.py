@@ -15,6 +15,7 @@ from ....Functions.labels import (
     YSR_LAB,
     YSL_LAB,
 )
+from ....Functions.Geometry.transform_hole_surf import transform_hole_surf
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0):
@@ -126,8 +127,12 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         surf_list.append(surf_yoke)
 
     # Add the ventilation ducts if there is any
-    for vent in self.axial_vent:
-        surf_list.extend(vent.build_geometry(sym=sym))
+    if self.axial_vent not in [None, []]:
+        for vent in self.axial_vent:
+            vent_list = vent.build_geometry(alpha=0, delta=0)
+            surf_list.extend(
+                transform_hole_surf(hole_surf_list=vent_list, Zh=vent.Zh, sym=sym, alpha=0, delta=0)
+            )
 
     # apply the transformation
     for surf in surf_list:

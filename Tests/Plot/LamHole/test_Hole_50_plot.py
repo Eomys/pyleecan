@@ -87,7 +87,7 @@ class Test_Hole_50_plot(object):
         # 2 for lam + (3*2)*8 for holes + 16 vents
         assert len(fig.axes[0].patches) == 66
 
-        machine.rotor.axial_vent[0].plot(is_show_fig=False)
+        machine.rotor.axial_vent[0].plot(is_show_fig=False, is_all_hole=True)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_CircVent.png"))
         assert len(fig.axes[0].patches) == 8
