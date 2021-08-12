@@ -3949,6 +3949,15 @@
                 "type": "float",
                 "unit": "Hz",
                 "value": null
+            },
+            {
+                "desc": "Theorical Average Electromagnetic Power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_ref",
+                "type": "float",
+                "unit": "W",
+                "value": null
             }
         ]
     },
@@ -7655,7 +7664,7 @@
                 "value": null
             },
             {
-                "desc": "Average Electromagnetic power",
+                "desc": "Theorical Average Electromagnetic Power",
                 "max": "",
                 "min": "",
                 "name": "Pem_av_ref",
@@ -8091,7 +8100,8 @@
             "store",
             "clean",
             "comp_emf",
-            "get_demag"
+            "get_demag",
+            "comp_power"
         ],
         "mother": "",
         "name": "OutMag",
@@ -8222,6 +8232,15 @@
                 "name": "Rag",
                 "type": "float",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Average Electromagnetic power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av",
+                "type": "float",
+                "unit": "W",
                 "value": null
             }
         ]

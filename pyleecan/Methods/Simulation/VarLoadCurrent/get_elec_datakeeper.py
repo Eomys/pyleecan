@@ -53,15 +53,15 @@ def get_elec_datakeeper(self, symbol_list, is_multi=False):
             )
         )
 
-    # TODO Save power
-    # if self.is_power:
-    #     datakeeper_list.append(
-    #         DataKeeper(
-    #             name="Power",
-    #             symbol="Tem",
-    #             unit="N.m",
-    #             keeper="lambda output: output.simu.mag.power",
-    #         ),
-    #     )
+    # Keep power
+    if not is_multi and self.OP_matrix.shape[1] > 4 and "Pem_av_ref" not in symbol_list:
+        dk_list.append(
+            DataKeeper(
+                name="Reference Power",
+                symbol="Pem_av_ref",
+                unit="W",
+                keeper="lambda output: output.elec.Pem_av_ref",
+            )
+        )
 
     return dk_list

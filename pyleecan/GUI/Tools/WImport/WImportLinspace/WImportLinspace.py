@@ -12,14 +12,14 @@ class WImportLinspace(Ui_WImportLinspace, QWidget):
     saveNeeded = Signal()
     dataTypeChanged = Signal()
 
-    def __init__(self, parent=None, data=None, verbose_name="", expected_shape=None):
+    def __init__(self, parent=None, data=None, plot_title="", expected_shape=None):
         """Initialization of the widget
 
         Parameters
         ----------
         data : ImportGenVectLin
             Data import to define
-        verbose_name : str
+        plot_title : str
             Name of the imported data
         expected_shape : list
             List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
@@ -31,7 +31,7 @@ class WImportLinspace(Ui_WImportLinspace, QWidget):
             self.data = ImportGenVectLin()
         else:
             self.data = data
-        self.verbose_name = verbose_name
+        self.plot_title = plot_title
         self.expected_shape = expected_shape
         self.update()
 

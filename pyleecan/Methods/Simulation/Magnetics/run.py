@@ -25,3 +25,4 @@ def run(self):
 
     # Store magnetic quantities contained in out_dict in OutMag, as Data object if necessary
     output.mag.store(out_dict, axes_dict)
+    output.mag.comp_power()
