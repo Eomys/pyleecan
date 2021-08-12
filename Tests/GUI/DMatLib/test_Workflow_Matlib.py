@@ -53,7 +53,7 @@ class TestDMatlibWF(object):
 
     @classmethod
     def teardown_class(cls):
-        """Exit the app after the test"""
+        """Exit the app after all the test"""
         if isdir(WS_path):
             rmtree(WS_path)
         cls.app.quit()
@@ -149,6 +149,8 @@ class TestDMatlibWF(object):
         assert self.widget.machine.shaft.mat_type.elec.rho == 2
         M400 = load(join(WS_path, "M400-50A.json"))
         assert M400.elec.rho == 2
+        # Close the dialog
+        dialog.close()
 
     def test_edit_machine_material(self):
         """Edit a material from the machine"""
@@ -173,6 +175,8 @@ class TestDMatlibWF(object):
         assert dialog.nav_mat_mach.currentRow() == 0
         assert dialog.out_rho_meca.text() == "rho = 2.468 [kg/m^3]"
         assert self.widget.machine.rotor.hole[0].mat_void.struct.rho == 2.468
+        # Close the dialog
+        dialog.close()
 
     def test_edit_machine_material_several(self):
         """Edit a material from the machine with several "old" material"""
@@ -212,6 +216,8 @@ class TestDMatlibWF(object):
         assert self.widget.machine.stator.mat_type.elec.rho == 34
         assert self.widget.machine.rotor.mat_type.elec.rho == 34
         assert self.widget.machine.shaft.mat_type.elec.rho == 34
+        # Close the dialog
+        dialog.close()
 
     def test_new_matlib(self):
         """Create a new material in the Library and check changes in the GUI"""
@@ -264,6 +270,8 @@ class TestDMatlibWF(object):
         assert M400.elec.rho == 1
         M400_copy = load(join(WS_path, "M400-50A_copy.json"))
         assert M400_copy.elec.rho == 2
+        # Close the dialog
+        dialog.close()
 
     def test_new_machine_material(self):
         """Create a new material for the machine and check changes in the GUI"""
@@ -309,6 +317,8 @@ class TestDMatlibWF(object):
         assert self.widget.machine.rotor.hole[0].magnet_0.mat_type.struct.rho == 7500
         assert self.widget.material_dict[MACH_KEY][1].struct.rho == 7500
         assert self.widget.material_dict[MACH_KEY][2].struct.rho == 3750
+        # Close the dialog
+        dialog.close()
 
     def test_rename_matlib(self):
         """rename a material in the Library and check changes in machine"""
@@ -360,6 +370,8 @@ class TestDMatlibWF(object):
             "MagnetPrius_old",
         ]
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        # Close the dialog
+        dialog.close()
 
     def test_rename_machine_material(self):
         """rename a material in the machine and check changes in machine"""
@@ -405,6 +417,8 @@ class TestDMatlibWF(object):
             "MagnetPrius_old",
         ]
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        # Close the dialog
+        dialog.close()
 
     def test_delete_matlib(self):
         """Check that you can delete a material from the material library"""
@@ -444,6 +458,8 @@ class TestDMatlibWF(object):
             "MagnetPrius_old",
         ]
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        # Close the dialog
+        dialog.close()
 
     def test_edit_matlib_to_machine(self):
         """Edit a material in the Library and save it in the machine"""
@@ -500,6 +516,8 @@ class TestDMatlibWF(object):
             "M400-50A_edit",
         ]
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        # Close the dialog
+        dialog.close()
 
     def test_edit_machine_to_library(self):
         """Edit a material from the machine to the library"""
@@ -557,6 +575,8 @@ class TestDMatlibWF(object):
             "Air",
         ]
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
+        # Close the dialog
+        dialog.close()
 
 
 if __name__ == "__main__":

@@ -19,7 +19,8 @@
             "is_on_line",
             "split_line",
             "comp_distance",
-            "plot"
+            "plot",
+            "comp_maxseg"
         ],
         "mother": "Line",
         "name": "Arc",
@@ -1711,7 +1712,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "FrameBar"
+        ],
         "desc": "machine frame",
         "is_internal": false,
         "methods": [
@@ -1763,6 +1766,49 @@
                 "type": "Material",
                 "unit": "",
                 "value": ""
+            }
+        ]
+    },
+    "FrameBar": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "machine frame with polar structural bars between frame and outer lamination",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "comp_surface",
+            "comp_height_gap",
+            "build_geometry_bar",
+            "comp_surface_bar",
+            "comp_surface_gap"
+        ],
+        "mother": "Frame",
+        "name": "FrameBar",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/FrameBar.csv",
+        "properties": [
+            {
+                "desc": "Number of bars",
+                "max": "",
+                "min": "1",
+                "name": "Nbar",
+                "type": "int",
+                "unit": "m",
+                "value": 8
+            },
+            {
+                "desc": "Width of bars",
+                "max": "",
+                "min": "0",
+                "name": "wbar",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
             }
         ]
     },
@@ -1859,7 +1905,7 @@
         "properties": [
             {
                 "desc": "Number of Hole around the circumference",
-                "max": "1000",
+                "max": "",
                 "min": "0",
                 "name": "Zh",
                 "type": "int",
@@ -2708,8 +2754,14 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
+            "comp_magnetization_dict",
+            "comp_mass_magnet",
+            "comp_surface_magnet",
+            "comp_volume_magnet",
+            "plot_schematics",
             "remove_magnet",
             "has_magnet"
         ],
@@ -2725,7 +2777,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.0023734787
+                "value": 0.002373479
             },
             {
                 "desc": "Magnet top width",
@@ -3897,6 +3949,15 @@
                 "type": "float",
                 "unit": "Hz",
                 "value": null
+            },
+            {
+                "desc": "Theorical Average Electromagnetic Power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_ref",
+                "type": "float",
+                "unit": "W",
+                "value": null
             }
         ]
     },
@@ -4561,7 +4622,7 @@
         "properties": [
             {
                 "desc": "Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "L1",
                 "type": "float",
@@ -7604,7 +7665,7 @@
                 "value": null
             },
             {
-                "desc": "Average Electromagnetic power",
+                "desc": "Theorical Average Electromagnetic Power",
                 "max": "",
                 "min": "",
                 "name": "Pem_av_ref",
@@ -8040,7 +8101,8 @@
             "store",
             "clean",
             "comp_emf",
-            "get_demag"
+            "get_demag",
+            "comp_power"
         ],
         "mother": "",
         "name": "OutMag",
@@ -8171,6 +8233,15 @@
                 "name": "Rag",
                 "type": "float",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Average Electromagnetic power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av",
+                "type": "float",
+                "unit": "W",
                 "value": null
             }
         ]
@@ -9240,7 +9311,7 @@
         "properties": [
             {
                 "desc": "length of the rotor shaft [m] (used for weight & cost estimation only)",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "Lshaft",
                 "type": "float",
@@ -9258,7 +9329,7 @@
             },
             {
                 "desc": "diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses",
-                "max": "8",
+                "max": "",
                 "min": "0",
                 "name": "Drsh",
                 "type": "float",
@@ -9528,7 +9599,7 @@
         "properties": [
             {
                 "desc": "slot number",
-                "max": "1000",
+                "max": "",
                 "min": "0",
                 "name": "Zs",
                 "type": "int",
@@ -12028,7 +12099,13 @@
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",
-            "check"
+            "check",
+            "comp_angle_opening",
+            "comp_height_damper",
+            "comp_height_wind",
+            "comp_height",
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotWLSRPM",
@@ -12941,7 +13018,7 @@
                 "value": 1
             },
             {
-                "desc": "Diameter of the hole centers",
+                "desc": "Radius of the hole centers",
                 "max": "",
                 "min": "0",
                 "name": "H0",
@@ -13136,7 +13213,7 @@
             },
             {
                 "desc": "number of phases ",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "qs",
                 "type": "int",
@@ -13145,7 +13222,7 @@
             },
             {
                 "desc": "number of turns per coil",
-                "max": "1000",
+                "max": "",
                 "min": "1",
                 "name": "Ntcoil",
                 "type": "int",
@@ -13153,8 +13230,8 @@
                 "value": 7
             },
             {
-                "desc": "number of parallel circuits per phase (maximum p)",
-                "max": "1000",
+                "desc": "number of parallel circuits per phase",
+                "max": "",
                 "min": "1",
                 "name": "Npcp",
                 "type": "int",
@@ -13172,7 +13249,7 @@
             },
             {
                 "desc": "pole pairs number",
-                "max": "100",
+                "max": "",
                 "min": "1",
                 "name": "p",
                 "type": "int",
@@ -13181,7 +13258,7 @@
             },
             {
                 "desc": "straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length ",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "Lewout",
                 "type": "float",

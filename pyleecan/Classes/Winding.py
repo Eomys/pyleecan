@@ -603,7 +603,7 @@ class Winding(FrozenClass):
 
     def _set_qs(self, value):
         """setter of qs"""
-        check_var("qs", value, "int", Vmin=0, Vmax=100)
+        check_var("qs", value, "int", Vmin=0)
         self._qs = value
 
     qs = property(
@@ -613,7 +613,6 @@ class Winding(FrozenClass):
 
         :Type: int
         :min: 0
-        :max: 100
         """,
     )
 
@@ -623,7 +622,7 @@ class Winding(FrozenClass):
 
     def _set_Ntcoil(self, value):
         """setter of Ntcoil"""
-        check_var("Ntcoil", value, "int", Vmin=1, Vmax=1000)
+        check_var("Ntcoil", value, "int", Vmin=1)
         self._Ntcoil = value
 
     Ntcoil = property(
@@ -633,7 +632,6 @@ class Winding(FrozenClass):
 
         :Type: int
         :min: 1
-        :max: 1000
         """,
     )
 
@@ -643,17 +641,16 @@ class Winding(FrozenClass):
 
     def _set_Npcp(self, value):
         """setter of Npcp"""
-        check_var("Npcp", value, "int", Vmin=1, Vmax=1000)
+        check_var("Npcp", value, "int", Vmin=1)
         self._Npcp = value
 
     Npcp = property(
         fget=_get_Npcp,
         fset=_set_Npcp,
-        doc=u"""number of parallel circuits per phase (maximum p)
+        doc=u"""number of parallel circuits per phase
 
         :Type: int
         :min: 1
-        :max: 1000
         """,
     )
 
@@ -683,7 +680,7 @@ class Winding(FrozenClass):
 
     def _set_p(self, value):
         """setter of p"""
-        check_var("p", value, "int", Vmin=1, Vmax=100)
+        check_var("p", value, "int", Vmin=1)
         self._p = value
 
     p = property(
@@ -693,7 +690,6 @@ class Winding(FrozenClass):
 
         :Type: int
         :min: 1
-        :max: 100
         """,
     )
 
@@ -703,7 +699,7 @@ class Winding(FrozenClass):
 
     def _set_Lewout(self, value):
         """setter of Lewout"""
-        check_var("Lewout", value, "float", Vmin=0, Vmax=100)
+        check_var("Lewout", value, "float", Vmin=0)
         self._Lewout = value
 
     Lewout = property(
@@ -713,7 +709,6 @@ class Winding(FrozenClass):
 
         :Type: float
         :min: 0
-        :max: 100
         """,
     )
 

@@ -18,6 +18,11 @@ from .HoleMag import HoleMag
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Slot.HoleMLSRPM._comp_point_coordinate import _comp_point_coordinate
+except ImportError as error:
+    _comp_point_coordinate = error
+
+try:
     from ..Methods.Slot.HoleMLSRPM.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
@@ -26,6 +31,33 @@ try:
     from ..Methods.Slot.HoleMLSRPM.check import check
 except ImportError as error:
     check = error
+
+try:
+    from ..Methods.Slot.HoleMLSRPM.comp_magnetization_dict import (
+        comp_magnetization_dict,
+    )
+except ImportError as error:
+    comp_magnetization_dict = error
+
+try:
+    from ..Methods.Slot.HoleMLSRPM.comp_mass_magnet import comp_mass_magnet
+except ImportError as error:
+    comp_mass_magnet = error
+
+try:
+    from ..Methods.Slot.HoleMLSRPM.comp_surface_magnet import comp_surface_magnet
+except ImportError as error:
+    comp_surface_magnet = error
+
+try:
+    from ..Methods.Slot.HoleMLSRPM.comp_volume_magnet import comp_volume_magnet
+except ImportError as error:
+    comp_volume_magnet = error
+
+try:
+    from ..Methods.Slot.HoleMLSRPM.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
 
 try:
     from ..Methods.Slot.HoleMLSRPM.remove_magnet import remove_magnet
@@ -50,6 +82,18 @@ class HoleMLSRPM(HoleMag):
     IS_SYMMETRICAL = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.HoleMLSRPM._comp_point_coordinate
+    if isinstance(_comp_point_coordinate, ImportError):
+        _comp_point_coordinate = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMLSRPM method _comp_point_coordinate: "
+                    + str(_comp_point_coordinate)
+                )
+            )
+        )
+    else:
+        _comp_point_coordinate = _comp_point_coordinate
     # cf Methods.Slot.HoleMLSRPM.build_geometry
     if isinstance(build_geometry, ImportError):
         build_geometry = property(
@@ -70,6 +114,66 @@ class HoleMLSRPM(HoleMag):
         )
     else:
         check = check
+    # cf Methods.Slot.HoleMLSRPM.comp_magnetization_dict
+    if isinstance(comp_magnetization_dict, ImportError):
+        comp_magnetization_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMLSRPM method comp_magnetization_dict: "
+                    + str(comp_magnetization_dict)
+                )
+            )
+        )
+    else:
+        comp_magnetization_dict = comp_magnetization_dict
+    # cf Methods.Slot.HoleMLSRPM.comp_mass_magnet
+    if isinstance(comp_mass_magnet, ImportError):
+        comp_mass_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMLSRPM method comp_mass_magnet: "
+                    + str(comp_mass_magnet)
+                )
+            )
+        )
+    else:
+        comp_mass_magnet = comp_mass_magnet
+    # cf Methods.Slot.HoleMLSRPM.comp_surface_magnet
+    if isinstance(comp_surface_magnet, ImportError):
+        comp_surface_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMLSRPM method comp_surface_magnet: "
+                    + str(comp_surface_magnet)
+                )
+            )
+        )
+    else:
+        comp_surface_magnet = comp_surface_magnet
+    # cf Methods.Slot.HoleMLSRPM.comp_volume_magnet
+    if isinstance(comp_volume_magnet, ImportError):
+        comp_volume_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMLSRPM method comp_volume_magnet: "
+                    + str(comp_volume_magnet)
+                )
+            )
+        )
+    else:
+        comp_volume_magnet = comp_volume_magnet
+    # cf Methods.Slot.HoleMLSRPM.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMLSRPM method plot_schematics: "
+                    + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
     # cf Methods.Slot.HoleMLSRPM.remove_magnet
     if isinstance(remove_magnet, ImportError):
         remove_magnet = property(
@@ -100,7 +204,7 @@ class HoleMLSRPM(HoleMag):
 
     def __init__(
         self,
-        H1=0.0023734787,
+        H1=0.002373479,
         W0=0.00388,
         W1=0.219911482,
         W2=0.0007,
