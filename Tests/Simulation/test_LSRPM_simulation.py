@@ -3,7 +3,7 @@ from os.path import join
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 import matplotlib.pyplot as plt
-
+import pytest
 from os.path import join
 
 from numpy import ones, pi, array, linspace, cos, sqrt, zeros
