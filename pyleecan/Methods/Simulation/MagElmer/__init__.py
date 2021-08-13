@@ -20,7 +20,7 @@ from ....Functions.labels import (
     AR_T_LAB,
     AIRBOX_SL_LAB,
     AIRBOX_SR_LAB,
-    AIRBOX_R_LAB
+    AIRBOX_R_LAB,
 )
 
 R_LAB = ROTOR_LAB + "-0_"

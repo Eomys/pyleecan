@@ -264,7 +264,7 @@ def process_mesh(
     RL = ROTOR_LAB_S + "-0_"
     del_list = [SHAFT_LAB, RL + HOLEV_LAB_S]
     if not is_get_magnet:
-        del_list.append(RL+HOLEM_LAB_S)
+        del_list.append(RL + HOLEM_LAB_S)
 
     if not is_get_lam:
         rot_lam = (RL + LAM_LAB_S).lower()  # Rotor Lamination

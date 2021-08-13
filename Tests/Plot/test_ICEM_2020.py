@@ -466,24 +466,16 @@ def test_WindingUD_layer():
     rotor.slot = rotor.slot.convert_to_SlotUD2()
     assert isinstance(rotor.slot, SlotUD2)
     key = "Nrad=2, Ntan=2"
-    Top = rotor.slot.active_surf.split_line(
-        0, 100, is_top=True, is_join=True
-    )
-    Bottom = rotor.slot.active_surf.split_line(
-        0, 100, is_top=False, is_join=True
-    )
+    Top = rotor.slot.active_surf.split_line(0, 100, is_top=True, is_join=True)
+    Bottom = rotor.slot.active_surf.split_line(0, 100, is_top=False, is_join=True)
     Bottom_Left = Bottom.split_line(
         0.320 - 100j, 0.320 + 100j, is_top=True, is_join=True
     )
     Bottom_Right = Bottom.split_line(
         0.320 - 100j, 0.320 + 100j, is_top=False, is_join=True
     )
-    Top_Left = Top.split_line(
-        0.410 - 100j, 0.410 + 100j, is_top=True, is_join=True
-    )
-    Top_Right = Top.split_line(
-        0.410 - 100j, 0.410 + 100j, is_top=False, is_join=True
-    )
+    Top_Left = Top.split_line(0.410 - 100j, 0.410 + 100j, is_top=True, is_join=True)
+    Top_Right = Top.split_line(0.410 - 100j, 0.410 + 100j, is_top=False, is_join=True)
     rotor.slot.split_active_surf_dict = {
         key: [Bottom_Right, Bottom_Left, Top_Right, Top_Left]
     }

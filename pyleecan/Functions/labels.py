@@ -87,7 +87,7 @@ def decode_label(label):
     if len(label_split) > 1:
         label_dict["surf_type"] = label_split[1]
     # Decode surf index
-    if len(label_split) > 2 and label_split[2].count("-")==2:
+    if len(label_split) > 2 and label_split[2].count("-") == 2:
         label_dict["index"] = label_split[2]
         id_list = label_dict["index"].split("-")
         label_dict["R_id"] = int(id_list[0][1:])
@@ -134,7 +134,11 @@ def get_obj_from_label(machine, label=None, label_dict=None):
     lam_obj = machine.get_lam_by_label(label_dict["lam_label"])
     if LAM_LAB in label_dict["surf_type"]:
         return lam_obj
-    elif WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"] or WIND_LAB_S in label_dict["surf_type"]:
+    elif (
+        WIND_LAB in label_dict["surf_type"]
+        or BAR_LAB in label_dict["surf_type"]
+        or WIND_LAB_S in label_dict["surf_type"]
+    ):
         return lam_obj
     elif VENT_LAB in label_dict["surf_type"]:
         return lam_obj.axial_vent[label_dict["R_id"]]

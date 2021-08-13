@@ -35,7 +35,6 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     vent_label = lam_label + "_" + HOLEV_LAB + "_" + RTS_id
     mag_label = lam_label + "_" + HOLEM_LAB + "_" + RTS_id
 
-
     point_dict = self._comp_point_coordinate()
     Z1 = point_dict["Z1"]
     Z2 = point_dict["Z2"]
