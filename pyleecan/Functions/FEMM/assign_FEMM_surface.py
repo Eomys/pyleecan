@@ -68,7 +68,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
             Ntcoil = wind_mat[Nrad_id, Ntan_id, Zs_id, q_id]
         elif HOLEM_LAB in label_dict["surf_type"]:  # LamHole
             mag_obj = get_obj_from_label(machine, label_dict=label_dict)
-            if mag_obj.type_magnetization == 1:  # Parallel
+            if mag_obj.type_magnetization in [1, 3]:  # Parallel or Tangential
                 # calculate pole angle and angle of pole middle
                 T_id = label_dict["T_id"]
                 hole = mag_obj.parent
@@ -84,6 +84,8 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                 # modifiy magnetisation of south poles
                 if (label_dict["S_id"] % 2) == 1:
                     mag = mag + 180
+                if mag_obj.type_magnetization == 3:  # Tangential
+                    mag = mag - 90
             else:
                 raise NotImplementedYetError(
                     "Only parallele magnetization are available for HoleMagnet"
@@ -103,6 +105,12 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                 lam_obj = mag_obj.parent
                 Zs = lam_obj.get_Zs()
                 mag = str(-(Zs / 2 - 1)) + " * theta + 90 "
+            elif mag_obj.type_magnetization == 3 and (label_dict["S_id"] % 2) == 0:
+                mag = angle(point_ref) * 180 / pi - 90  # Tangential North pole magnet
+            elif mag_obj.type_magnetization == 3:
+                mag = (
+                    angle(point_ref) * 180 / pi + 180 - 90
+                )  # Tangential South pole magnet
         elif VENT_LAB in label_dict["surf_type"]:
             vent_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop = "Air"

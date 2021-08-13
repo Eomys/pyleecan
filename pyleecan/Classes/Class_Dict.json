@@ -5793,8 +5793,8 @@
                 "value": ""
             },
             {
-                "desc": "Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach",
-                "max": "5",
+                "desc": "Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach, 3 Tangential",
+                "max": "3",
                 "min": "0",
                 "name": "type_magnetization",
                 "type": "int",

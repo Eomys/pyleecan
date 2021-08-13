@@ -165,13 +165,13 @@ def test_LSRPM():
 
     # Set magnets in the rotor hole
     rotor.hole[0].magnet_0.mat_type = MagnetLSRPM
-    rotor.hole[0].magnet_0.type_magnetization = 1
+    rotor.hole[0].magnet_0.type_magnetization = 3
 
     # matplotlib notebook
     LSRPM = MachineIPMSM(
         name="LSRPM LSEE", stator=stator, rotor=rotor, shaft=shaft, frame=None
     )
-    #  LSRPM.save(join(DATA_DIR, "Machine", "LSRPM_001.json"))
+    # LSRPM.save(join(DATA_DIR, "Machine", "LSRPM_001.json"))
 
     LSRPM.plot(is_show_fig=False, save_path=join(save_path, "test_LSRPM.png"))
 
