@@ -31,9 +31,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     """
     # Get correct label for surfaces
     lam_label = self.parent.get_label()
-    RTS_id = "R" + str(self.parent.hole.index(self)) + "-T0-S0"
-    vent_label = lam_label + "_" + HOLEV_LAB + "_" + RTS_id
-    mag_label = lam_label + "_" + HOLEM_LAB + "_" + RTS_id
+    R_id, surf_type = self.get_R_id()
+    vent_label = lam_label + "_" + surf_type + "_R" + str(R_id) + "-T0-S0"
+    mag_label = lam_label + "_" + HOLEM_LAB + "_R" + str(R_id) + "-T0-S0"
 
     point_dict = self._comp_point_coordinate()
     Z1 = point_dict["Z1"]

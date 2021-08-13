@@ -32,9 +32,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     """
     # Get correct label for surfaces
     lam_label = self.parent.get_label()
-    R_id = "R" + str(self.parent.hole.index(self)) + "-"
-    vent_label = lam_label + "_" + HOLEV_LAB + "_" + R_id
-    mag_label = lam_label + "_" + HOLEM_LAB + "_" + R_id
+    R_id, surf_type = self.get_R_id()
+    vent_label = lam_label + "_" + surf_type + "_R" + str(R_id) + "-"
+    mag_label = lam_label + "_" + HOLEM_LAB + "_R" + str(R_id) + "-"
 
     Rext = self.get_Rext()
 

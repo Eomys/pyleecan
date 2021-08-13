@@ -34,9 +34,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # Get correct label for surfaces
     lam_label = self.parent.get_label()
-    R_id = "R" + str(self.parent.hole.index(self)) + "-"
-    vent_label = lam_label + "_" + HOLEV_LAB + "_" + R_id
-    mag_label = lam_label + "_" + HOLEM_LAB + "_" + R_id
+    R_id, surf_type = self.get_R_id()
+    vent_label = lam_label + "_" + surf_type + "_R" + str(R_id) + "-"
+    mag_label = lam_label + "_" + HOLEM_LAB + "_R" + str(R_id) + "-"
 
     # Get all the points
     point_dict = self._comp_point_coordinate()
@@ -100,11 +100,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # initiating the label of the line of the magnet surface
     # curve_list = set_name_line(curve_list, "magnet_1_line")
     point_ref = (Z2 + Z3 + Z6 + Z7) / 4
-    S2 = SurfLine(
-        line_list=curve_list,
-        label=mag_label + "T0-S0",
-        point_ref=point_ref,
-    )
+    S2 = SurfLine(line_list=curve_list, label=mag_label + "T0-S0", point_ref=point_ref,)
 
     # Air surface with magnet_0 and W1 > 0
     curve_list = list()
@@ -146,11 +142,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # initiating the label of the line on the magnet surface
     # curve_list = set_name_line(curve_list, "magnet_2_line")
-    S5 = SurfLine(
-        line_list=curve_list,
-        label=mag_label + "T1-S0",
-        point_ref=point_ref,
-    )
+    S5 = SurfLine(line_list=curve_list, label=mag_label + "T1-S0", point_ref=point_ref,)
 
     # Air surface with magnet_1 and W1 > 0
     curve_list = list()

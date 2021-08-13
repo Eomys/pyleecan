@@ -1896,7 +1896,8 @@
             "get_Rext",
             "has_magnet",
             "plot",
-            "set_magnet_by_id"
+            "set_magnet_by_id",
+            "get_R_id"
         ],
         "mother": "",
         "name": "Hole",
