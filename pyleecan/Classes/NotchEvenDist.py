@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     get_notch_list = error
 
+try:
+    from ..Methods.Machine.NotchEvenDist.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
 
 from ._check import InitUnKnowClassError
 from .Slot import Slot
@@ -32,6 +37,7 @@ class NotchEvenDist(Notch):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.NotchEvenDist.get_notch_list
     if isinstance(get_notch_list, ImportError):
         get_notch_list = property(
@@ -44,6 +50,17 @@ class NotchEvenDist(Notch):
         )
     else:
         get_notch_list = get_notch_list
+    # cf Methods.Machine.NotchEvenDist.comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
+    else:
+        comp_surface = comp_surface
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -54,7 +71,7 @@ class NotchEvenDist(Notch):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -109,9 +126,11 @@ class NotchEvenDist(Notch):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -128,6 +147,8 @@ class NotchEvenDist(Notch):
             diff_list.extend(
                 self.notch_shape.compare(other.notch_shape, name=name + ".notch_shape")
             )
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

@@ -26,6 +26,7 @@ from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot26.PWSlot26 import PWSlot26
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot27.PWSlot27 import PWSlot27
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot28.PWSlot28 import PWSlot28
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot29.PWSlot29 import PWSlot29
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # List to convert index of combobox to slot type
 WIDGET_LIST = [
@@ -59,7 +60,7 @@ class SWSlot(Gen_SWSlot, QWidget):
     # Information for DMachineSetup nav
     step_name = "Slot"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -68,8 +69,8 @@ class SWSlot(Gen_SWSlot, QWidget):
             A SWSlot widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -80,7 +81,7 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         self.b_help.hide()
@@ -173,6 +174,8 @@ class SWSlot(Gen_SWSlot, QWidget):
         self.obj.slot.Zs = value
         self.set_slot_pitch(value)
         self.w_slot.w_out.comp_output()
+        if isinstance(self.w_slot, PWSlotUD):
+            self.w_slot.update_graph()
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -253,6 +256,7 @@ class SWSlot(Gen_SWSlot, QWidget):
                 self.machine.plot()
             else:
                 self.obj.plot(is_lam_only=not (type(self.obj) is LamSlotWind))
+            set_plot_gui_icon()
 
     @staticmethod
     def check(lam):

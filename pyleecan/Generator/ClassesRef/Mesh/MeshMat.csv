@@ -2,8 +2,8 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 cell,,Storing connectivity,,{CellMat},,,,,Mesh,Mesh,get_node,VERSION,1,Gather the mesh storage format
 node,,Storing nodes,,NodeMat,,,,,,,get_node_indice,,,
 _is_renum,,True if renumering the nodes and cells is useful when renum method is called (saving calculation time),,bool,0,,,,,,get_cell,,,
-,,,,,,,,,,,get_mesh_pv,,,
-,,,,,,,,,,,get_cell_area,,,
+sym,,Spatial symmetry factor,,int,1,,,,,,get_mesh_pv,,,
+is_antiper_a,,True if there is a spatial antiperiod,,bool,False,,,,,,get_cell_area,,,
 ,,,,,,,,,,,get_vertice,,,
 ,,,,,,,,,,,get_node2cell,,,
 ,,,,,,,,,,,add_cell,,,

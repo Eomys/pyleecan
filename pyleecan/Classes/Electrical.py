@@ -35,6 +35,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .EEC import EEC
+from .ELUT import ELUT
 
 
 class Electrical(FrozenClass):
@@ -85,13 +86,17 @@ class Electrical(FrozenClass):
         eec=None,
         logger_name="Pyleecan.Electrical",
         type_skin_effect=0,
+        Tsta=20,
+        Trot=20,
+        Tmag=20,
+        ELUT_enforced=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -109,11 +114,23 @@ class Electrical(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
+            if "Tsta" in list(init_dict.keys()):
+                Tsta = init_dict["Tsta"]
+            if "Trot" in list(init_dict.keys()):
+                Trot = init_dict["Trot"]
+            if "Tmag" in list(init_dict.keys()):
+                Tmag = init_dict["Tmag"]
+            if "ELUT_enforced" in list(init_dict.keys()):
+                ELUT_enforced = init_dict["ELUT_enforced"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.eec = eec
         self.logger_name = logger_name
         self.type_skin_effect = type_skin_effect
+        self.Tsta = Tsta
+        self.Trot = Trot
+        self.Tmag = Tmag
+        self.ELUT_enforced = ELUT_enforced
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -133,6 +150,18 @@ class Electrical(FrozenClass):
             Electrical_str += "eec = None" + linesep + linesep
         Electrical_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         Electrical_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
+        Electrical_str += "Tsta = " + str(self.Tsta) + linesep
+        Electrical_str += "Trot = " + str(self.Trot) + linesep
+        Electrical_str += "Tmag = " + str(self.Tmag) + linesep
+        if self.ELUT_enforced is not None:
+            tmp = (
+                self.ELUT_enforced.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            Electrical_str += "ELUT_enforced = " + tmp
+        else:
+            Electrical_str += "ELUT_enforced = None" + linesep + linesep
         return Electrical_str
 
     def __eq__(self, other):
@@ -146,11 +175,21 @@ class Electrical(FrozenClass):
             return False
         if other.type_skin_effect != self.type_skin_effect:
             return False
+        if other.Tsta != self.Tsta:
+            return False
+        if other.Trot != self.Trot:
+            return False
+        if other.Tmag != self.Tmag:
+            return False
+        if other.ELUT_enforced != self.ELUT_enforced:
+            return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -164,6 +203,24 @@ class Electrical(FrozenClass):
             diff_list.append(name + ".logger_name")
         if other._type_skin_effect != self._type_skin_effect:
             diff_list.append(name + ".type_skin_effect")
+        if other._Tsta != self._Tsta:
+            diff_list.append(name + ".Tsta")
+        if other._Trot != self._Trot:
+            diff_list.append(name + ".Trot")
+        if other._Tmag != self._Tmag:
+            diff_list.append(name + ".Tmag")
+        if (other.ELUT_enforced is None and self.ELUT_enforced is not None) or (
+            other.ELUT_enforced is not None and self.ELUT_enforced is None
+        ):
+            diff_list.append(name + ".ELUT_enforced None mismatch")
+        elif self.ELUT_enforced is not None:
+            diff_list.extend(
+                self.ELUT_enforced.compare(
+                    other.ELUT_enforced, name=name + ".ELUT_enforced"
+                )
+            )
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -173,6 +230,10 @@ class Electrical(FrozenClass):
         S += getsizeof(self.eec)
         S += getsizeof(self.logger_name)
         S += getsizeof(self.type_skin_effect)
+        S += getsizeof(self.Tsta)
+        S += getsizeof(self.Trot)
+        S += getsizeof(self.Tmag)
+        S += getsizeof(self.ELUT_enforced)
         return S
 
     def as_dict(self, **kwargs):
@@ -189,6 +250,13 @@ class Electrical(FrozenClass):
             Electrical_dict["eec"] = self.eec.as_dict(**kwargs)
         Electrical_dict["logger_name"] = self.logger_name
         Electrical_dict["type_skin_effect"] = self.type_skin_effect
+        Electrical_dict["Tsta"] = self.Tsta
+        Electrical_dict["Trot"] = self.Trot
+        Electrical_dict["Tmag"] = self.Tmag
+        if self.ELUT_enforced is None:
+            Electrical_dict["ELUT_enforced"] = None
+        else:
+            Electrical_dict["ELUT_enforced"] = self.ELUT_enforced.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
@@ -200,6 +268,11 @@ class Electrical(FrozenClass):
             self.eec._set_None()
         self.logger_name = None
         self.type_skin_effect = None
+        self.Tsta = None
+        self.Trot = None
+        self.Tmag = None
+        if self.ELUT_enforced is not None:
+            self.ELUT_enforced._set_None()
 
     def _get_eec(self):
         """getter of eec"""
@@ -262,5 +335,89 @@ class Electrical(FrozenClass):
         doc=u"""Skin effect for resistance and inductance
 
         :Type: int
+        """,
+    )
+
+    def _get_Tsta(self):
+        """getter of Tsta"""
+        return self._Tsta
+
+    def _set_Tsta(self, value):
+        """setter of Tsta"""
+        check_var("Tsta", value, "float")
+        self._Tsta = value
+
+    Tsta = property(
+        fget=_get_Tsta,
+        fset=_set_Tsta,
+        doc=u"""Average stator temperature for operational EEC calculation
+
+        :Type: float
+        """,
+    )
+
+    def _get_Trot(self):
+        """getter of Trot"""
+        return self._Trot
+
+    def _set_Trot(self, value):
+        """setter of Trot"""
+        check_var("Trot", value, "float")
+        self._Trot = value
+
+    Trot = property(
+        fget=_get_Trot,
+        fset=_set_Trot,
+        doc=u"""Average rotor temperature for operational EEC calculation
+
+        :Type: float
+        """,
+    )
+
+    def _get_Tmag(self):
+        """getter of Tmag"""
+        return self._Tmag
+
+    def _set_Tmag(self, value):
+        """setter of Tmag"""
+        check_var("Tmag", value, "float")
+        self._Tmag = value
+
+    Tmag = property(
+        fget=_get_Tmag,
+        fset=_set_Tmag,
+        doc=u"""Average magnet temperature for operational EEC calculation
+
+        :Type: float
+        """,
+    )
+
+    def _get_ELUT_enforced(self):
+        """getter of ELUT_enforced"""
+        return self._ELUT_enforced
+
+    def _set_ELUT_enforced(self, value):
+        """setter of ELUT_enforced"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "ELUT_enforced"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = ELUT()
+        check_var("ELUT_enforced", value, "ELUT")
+        self._ELUT_enforced = value
+
+        if self._ELUT_enforced is not None:
+            self._ELUT_enforced.parent = self
+
+    ELUT_enforced = property(
+        fget=_get_ELUT_enforced,
+        fset=_set_ELUT_enforced,
+        doc=u"""Electrical Look Up Table to be enforced 
+
+        :Type: ELUT
         """,
     )

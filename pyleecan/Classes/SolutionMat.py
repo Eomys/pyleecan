@@ -89,13 +89,14 @@ class SolutionMat(Solution):
         type_cell="triangle",
         label=None,
         dimension=2,
+        unit="",
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -121,6 +122,8 @@ class SolutionMat(Solution):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
+            if "unit" in list(init_dict.keys()):
+                unit = init_dict["unit"]
         # Set the properties (value check and convertion are done in setter)
         self.field = field
         self.indice = indice
@@ -128,7 +131,7 @@ class SolutionMat(Solution):
         self.axis_size = axis_size
         # Call Solution init
         super(SolutionMat, self).__init__(
-            type_cell=type_cell, label=label, dimension=dimension
+            type_cell=type_cell, label=label, dimension=dimension, unit=unit
         )
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
@@ -186,9 +189,11 @@ class SolutionMat(Solution):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -203,6 +208,8 @@ class SolutionMat(Solution):
             diff_list.append(name + ".axis_name")
         if other._axis_size != self._axis_size:
             diff_list.append(name + ".axis_size")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

@@ -111,13 +111,15 @@ class OutElec(FrozenClass):
         Pem_av_ref=None,
         Us=None,
         internal=None,
+        slip_ref=0,
+        U0_ref=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -165,6 +167,10 @@ class OutElec(FrozenClass):
                 Us = init_dict["Us"]
             if "internal" in list(init_dict.keys()):
                 internal = init_dict["internal"]
+            if "slip_ref" in list(init_dict.keys()):
+                slip_ref = init_dict["slip_ref"]
+            if "U0_ref" in list(init_dict.keys()):
+                U0_ref = init_dict["U0_ref"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
@@ -185,6 +191,8 @@ class OutElec(FrozenClass):
         self.Pem_av_ref = Pem_av_ref
         self.Us = Us
         self.internal = internal
+        self.slip_ref = slip_ref
+        self.U0_ref = U0_ref
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -227,6 +235,8 @@ class OutElec(FrozenClass):
             OutElec_str += "internal = " + tmp
         else:
             OutElec_str += "internal = None" + linesep + linesep
+        OutElec_str += "slip_ref = " + str(self.slip_ref) + linesep
+        OutElec_str += "U0_ref = " + str(self.U0_ref) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -270,11 +280,17 @@ class OutElec(FrozenClass):
             return False
         if other.internal != self.internal:
             return False
+        if other.slip_ref != self.slip_ref:
+            return False
+        if other.U0_ref != self.U0_ref:
+            return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -340,6 +356,12 @@ class OutElec(FrozenClass):
             diff_list.extend(
                 self.internal.compare(other.internal, name=name + ".internal")
             )
+        if other._slip_ref != self._slip_ref:
+            diff_list.append(name + ".slip_ref")
+        if other._U0_ref != self._U0_ref:
+            diff_list.append(name + ".U0_ref")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -364,6 +386,8 @@ class OutElec(FrozenClass):
         S += getsizeof(self.Pem_av_ref)
         S += getsizeof(self.Us)
         S += getsizeof(self.internal)
+        S += getsizeof(self.slip_ref)
+        S += getsizeof(self.U0_ref)
         return S
 
     def as_dict(self, **kwargs):
@@ -413,6 +437,8 @@ class OutElec(FrozenClass):
             OutElec_dict["internal"] = None
         else:
             OutElec_dict["internal"] = self.internal.as_dict(**kwargs)
+        OutElec_dict["slip_ref"] = self.slip_ref
+        OutElec_dict["U0_ref"] = self.U0_ref
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -439,6 +465,8 @@ class OutElec(FrozenClass):
         self.Us = None
         if self.internal is not None:
             self.internal._set_None()
+        self.slip_ref = None
+        self.U0_ref = None
 
     def _get_Time(self):
         """getter of Time"""
@@ -657,7 +685,7 @@ class OutElec(FrozenClass):
     Id_ref = property(
         fget=_get_Id_ref,
         fset=_set_Id_ref,
-        doc=u"""Electrical time vector (no symmetry)
+        doc=u"""d-axis current rms value
 
         :Type: float
         """,
@@ -675,7 +703,7 @@ class OutElec(FrozenClass):
     Iq_ref = property(
         fget=_get_Iq_ref,
         fset=_set_Iq_ref,
-        doc=u"""q-axis current magnitude
+        doc=u"""q-axis current rms value
 
         :Type: float
         """,
@@ -711,7 +739,7 @@ class OutElec(FrozenClass):
     Ud_ref = property(
         fget=_get_Ud_ref,
         fset=_set_Ud_ref,
-        doc=u"""d-axis voltage magnitude
+        doc=u"""d-axis voltage rms value
 
         :Type: float
         """,
@@ -729,7 +757,7 @@ class OutElec(FrozenClass):
     Uq_ref = property(
         fget=_get_Uq_ref,
         fset=_set_Uq_ref,
-        doc=u"""q-axis voltage magnitude
+        doc=u"""q-axis voltage rms value
 
         :Type: float
         """,
@@ -825,5 +853,41 @@ class OutElec(FrozenClass):
         doc=u"""OutInternal object containg outputs related to a specific model
 
         :Type: OutInternal
+        """,
+    )
+
+    def _get_slip_ref(self):
+        """getter of slip_ref"""
+        return self._slip_ref
+
+    def _set_slip_ref(self, value):
+        """setter of slip_ref"""
+        check_var("slip_ref", value, "float")
+        self._slip_ref = value
+
+    slip_ref = property(
+        fget=_get_slip_ref,
+        fset=_set_slip_ref,
+        doc=u"""Rotor mechanical slip
+
+        :Type: float
+        """,
+    )
+
+    def _get_U0_ref(self):
+        """getter of U0_ref"""
+        return self._U0_ref
+
+    def _set_U0_ref(self, value):
+        """setter of U0_ref"""
+        check_var("U0_ref", value, "float")
+        self._U0_ref = value
+
+    U0_ref = property(
+        fget=_get_U0_ref,
+        fset=_set_U0_ref,
+        doc=u"""stator voltage (phase to neutral)
+
+        :Type: float
         """,
     )

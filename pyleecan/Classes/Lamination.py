@@ -119,11 +119,27 @@ try:
 except ImportError as error:
     comp_radius_mid_yoke = error
 
+try:
+    from ..Methods.Machine.Lamination.get_yoke_desc import get_yoke_desc
+except ImportError as error:
+    get_yoke_desc = error
+
+try:
+    from ..Methods.Machine.Lamination.get_bore_desc import get_bore_desc
+except ImportError as error:
+    get_bore_desc = error
+
+try:
+    from ..Methods.Machine.Lamination.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
+from .Bore import Bore
 
 
 class Lamination(FrozenClass):
@@ -350,6 +366,39 @@ class Lamination(FrozenClass):
         )
     else:
         comp_radius_mid_yoke = comp_radius_mid_yoke
+    # cf Methods.Machine.Lamination.get_yoke_desc
+    if isinstance(get_yoke_desc, ImportError):
+        get_yoke_desc = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_yoke_desc: " + str(get_yoke_desc)
+                )
+            )
+        )
+    else:
+        get_yoke_desc = get_yoke_desc
+    # cf Methods.Machine.Lamination.get_bore_desc
+    if isinstance(get_bore_desc, ImportError):
+        get_bore_desc = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_bore_desc: " + str(get_bore_desc)
+                )
+            )
+        )
+    else:
+        get_bore_desc = get_bore_desc
+    # cf Methods.Machine.Lamination.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -369,13 +418,15 @@ class Lamination(FrozenClass):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        yoke_notch=-1,
+        bore=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -409,6 +460,10 @@ class Lamination(FrozenClass):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.L1 = L1
@@ -422,6 +477,8 @@ class Lamination(FrozenClass):
         self.is_stator = is_stator
         self.axial_vent = axial_vent
         self.notch = notch
+        self.yoke_notch = yoke_notch
+        self.bore = bore
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -459,6 +516,18 @@ class Lamination(FrozenClass):
         for ii in range(len(self.notch)):
             tmp = self.notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
             Lamination_str += "notch[" + str(ii) + "] =" + tmp + linesep + linesep
+        if len(self.yoke_notch) == 0:
+            Lamination_str += "yoke_notch = []" + linesep
+        for ii in range(len(self.yoke_notch)):
+            tmp = (
+                self.yoke_notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            Lamination_str += "yoke_notch[" + str(ii) + "] =" + tmp + linesep + linesep
+        if self.bore is not None:
+            tmp = self.bore.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Lamination_str += "bore = " + tmp
+        else:
+            Lamination_str += "bore = None" + linesep + linesep
         return Lamination_str
 
     def __eq__(self, other):
@@ -488,11 +557,17 @@ class Lamination(FrozenClass):
             return False
         if other.notch != self.notch:
             return False
+        if other.yoke_notch != self.yoke_notch:
+            return False
+        if other.bore != self.bore:
+            return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -550,6 +625,29 @@ class Lamination(FrozenClass):
                         other.notch[ii], name=name + ".notch[" + str(ii) + "]"
                     )
                 )
+        if (other.yoke_notch is None and self.yoke_notch is not None) or (
+            other.yoke_notch is not None and self.yoke_notch is None
+        ):
+            diff_list.append(name + ".yoke_notch None mismatch")
+        elif self.yoke_notch is None:
+            pass
+        elif len(other.yoke_notch) != len(self.yoke_notch):
+            diff_list.append("len(" + name + ".yoke_notch)")
+        else:
+            for ii in range(len(other.yoke_notch)):
+                diff_list.extend(
+                    self.yoke_notch[ii].compare(
+                        other.yoke_notch[ii], name=name + ".yoke_notch[" + str(ii) + "]"
+                    )
+                )
+        if (other.bore is None and self.bore is not None) or (
+            other.bore is not None and self.bore is None
+        ):
+            diff_list.append(name + ".bore None mismatch")
+        elif self.bore is not None:
+            diff_list.extend(self.bore.compare(other.bore, name=name + ".bore"))
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -571,6 +669,10 @@ class Lamination(FrozenClass):
         if self.notch is not None:
             for value in self.notch:
                 S += getsizeof(value)
+        if self.yoke_notch is not None:
+            for value in self.yoke_notch:
+                S += getsizeof(value)
+        S += getsizeof(self.bore)
         return S
 
     def as_dict(self, **kwargs):
@@ -611,6 +713,19 @@ class Lamination(FrozenClass):
                     Lamination_dict["notch"].append(obj.as_dict(**kwargs))
                 else:
                     Lamination_dict["notch"].append(None)
+        if self.yoke_notch is None:
+            Lamination_dict["yoke_notch"] = None
+        else:
+            Lamination_dict["yoke_notch"] = list()
+            for obj in self.yoke_notch:
+                if obj is not None:
+                    Lamination_dict["yoke_notch"].append(obj.as_dict(**kwargs))
+                else:
+                    Lamination_dict["yoke_notch"].append(None)
+        if self.bore is None:
+            Lamination_dict["bore"] = None
+        else:
+            Lamination_dict["bore"] = self.bore.as_dict(**kwargs)
         # The class name is added to the dict for deserialisation purpose
         Lamination_dict["__class__"] = "Lamination"
         return Lamination_dict
@@ -630,6 +745,9 @@ class Lamination(FrozenClass):
         self.is_stator = None
         self.axial_vent = None
         self.notch = None
+        self.yoke_notch = None
+        if self.bore is not None:
+            self.bore._set_None()
 
     def _get_L1(self):
         """getter of L1"""
@@ -876,5 +994,66 @@ class Lamination(FrozenClass):
         doc=u"""Lamination bore notches
 
         :Type: [Notch]
+        """,
+    )
+
+    def _get_yoke_notch(self):
+        """getter of yoke_notch"""
+        if self._yoke_notch is not None:
+            for obj in self._yoke_notch:
+                if obj is not None:
+                    obj.parent = self
+        return self._yoke_notch
+
+    def _set_yoke_notch(self, value):
+        """setter of yoke_notch"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "yoke_notch"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
+        if value == -1:
+            value = list()
+        check_var("yoke_notch", value, "[Notch]")
+        self._yoke_notch = value
+
+    yoke_notch = property(
+        fget=_get_yoke_notch,
+        fset=_set_yoke_notch,
+        doc=u"""Lamination yoke notches
+
+        :Type: [Notch]
+        """,
+    )
+
+    def _get_bore(self):
+        """getter of bore"""
+        return self._bore
+
+    def _set_bore(self, value):
+        """setter of bore"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Bore()
+        check_var("bore", value, "Bore")
+        self._bore = value
+
+        if self._bore is not None:
+            self._bore.parent = self
+
+    bore = property(
+        fget=_get_bore,
+        fset=_set_bore,
+        doc=u"""Bore Shape
+
+        :Type: Bore
         """,
     )

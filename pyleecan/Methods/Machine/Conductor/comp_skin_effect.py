@@ -8,15 +8,19 @@
 from numpy import ones, pi, sqrt, sin
 
 
-def comp_skin_effect(self, T=20):
-    """Compute the electrical average power
+def comp_skin_effect(self, freq, T=20):
+    """Compute the skin effect factor for the conductor
 
     Parameters
     ----------
     self : Conductor
         an Conductor object
-    output :
-        Xkr_skinS, Xke_skinS
+    Returns
+    ----------
+    Xkr_skinS : float
+        skin effect coeff for resistance at freq
+    Xke_skinS : float
+        skin effect coeff for inductance at freq
     """
 
     rhosw20 = self.cond_mat.elec.rho
@@ -24,11 +28,12 @@ def comp_skin_effect(self, T=20):
     rho = rhosw20 * (1 + alphasw * (T - 20))
     sigmar = 1 / rho
     mu0 = 4 * pi * 1e-7
-    ws = 2 * pi * self.parent.parent.parent.parent.input.comp_felec()
+    ws = 2 * pi * freq
     Slot = self.parent.parent.parent.stator.slot
     type_skin_effect = self.parent.parent.parent.parent.elec.type_skin_effect
     # nsw = len(ws)
 
+    # initialization
     Xkr_skinS = 1
     Xke_skinS = 1
 

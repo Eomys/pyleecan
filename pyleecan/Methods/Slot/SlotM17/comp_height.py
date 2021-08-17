@@ -19,4 +19,4 @@ def comp_height(self):
 
     """
 
-    return self.parent.Rext
+    return self.parent.Rext - self.parent.Rint

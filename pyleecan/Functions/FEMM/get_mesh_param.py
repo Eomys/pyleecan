@@ -8,11 +8,11 @@ def get_mesh_param(label, FEMM_dict):
     label : str
         label of the surface to assign
     FEMM_dict : dict
-        Dictionnary containing the main parameters of FEMM
+        dictionary containing the main parameters of FEMM
     Returns
     -------
     mesh_dict : dict
-        dictionnary containing the main mesh parameters of the surface
+        dictionary containing the main mesh parameters of the surface
     """
 
     mesh_dict = dict()

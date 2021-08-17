@@ -4,7 +4,7 @@ import numpy as np
 
 
 def shape_function(self, points, nb_pt):
-    """ Return the values of linear shape functions in reference triangle for a given point """
+    """Return the values of linear shape functions in reference triangle for a given point"""
     # nb_pt = points.shape[0]
     values = np.zeros([nb_pt, 1, 3], dtype=float)
     for i in range(nb_pt):

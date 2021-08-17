@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from ....Classes.SolutionVector import SolutionVector
 from ....Classes.MeshMat import MeshMat
 from ....Classes.MeshVTK import MeshVTK
-from ....Functions.Structural.conversions import DimError, cart2pol
+from ....Functions.Structural.conversions import DimError, cart2pol, pol2cart
 from numpy import (
     einsum,
     sqrt,
@@ -25,6 +26,7 @@ def get_field(
     index=None,
     indices=None,
     is_rthetaz=False,
+    is_pol2cart=False,
     is_radial=False,
     is_normal=False,
     is_rms=False,
@@ -67,20 +69,28 @@ def get_field(
         field
 
     """
-    if len(args_list) == 1 and type(args_list[0]) == tuple:
-        args_list = args_list[0]  # if called from another script with *arg_list
+    # if len(args_list) == 1 and type(args_list[0]) == tuple:
+    #     args_list = args_list[0]  # if called from another script with *arg_list
 
     # Get field
     solution = self.get_solution(label=label, index=index)
+
+    axes_list = solution.get_axes_list(*args_list)
+    ax_names = axes_list[0]
 
     field = solution.get_field(
         *args_list, is_squeeze=False
     )  # Don't use is_squeeze = is_squeeze here!
 
-    axes_list = solution.get_axes_list()
+    if (
+        isinstance(solution, SolutionVector)
+        and not "comp_x" in solution.field.components
+    ):
+        is_pol2cart = True
 
     # Enforce indice from those contained in MeshSolution if not None
-    if "output_nodes" in self.group and indices is None:
+
+    if self.group is not None and "output_nodes" in self.group and indices is None:
         indices_normals = self.group["output_nodes"]
     else:
         indices_normals = indices
@@ -136,6 +146,9 @@ def get_field(
     ## Define the type of transformation
     is_recursive = False  # If there is at least one transformation, switch to true.
 
+    if indices is not None:
+        is_recursive = True
+
     if is_radial:
         is_rthetaz = True
         is_recursive = True
@@ -151,7 +164,7 @@ def get_field(
             raise DimError("The field should be a vector field")
 
     # Get mesh if necessary
-    if is_center or is_normal or is_rthetaz or is_surf:
+    if is_center or is_normal or is_rthetaz or is_surf or is_pol2cart:
         is_recursive = True
         # Get the mesh
         mesh = self.get_mesh(label=label, index=indices_normals)
@@ -162,7 +175,7 @@ def get_field(
     else:
         mesh, mesh_pv = None, None
     # Get nodes coordinates if necessary
-    if is_rthetaz:
+    if is_rthetaz or is_pol2cart:
         is_recursive = True
         points = mesh.get_node(indices=indices)
     else:
@@ -184,8 +197,9 @@ def get_field(
         cell_area = None
 
     ## Perform the transformation
+    shape_result = axes_list[1]
+
     if is_recursive:
-        shape_result = axes_list[1]
         if is_center:
             shape_result[ind_indices] = mesh_pv.n_cells
         elif indices_normals is not None:
@@ -209,6 +223,7 @@ def get_field(
             is_rms,
             is_rthetaz,
             is_radial,
+            is_pol2cart,
             mesh_pv,
             normals,
             points,
@@ -228,6 +243,9 @@ def get_field(
 
     if is_squeeze:
         result = squeeze(result)
+        if shape_result[ind_indices] == 1:
+            # Re add node dimension which has been squeezed if there is only one node
+            result = result[None, ...]
 
     return result
 
@@ -242,6 +260,7 @@ def apply_normal_center_surf_vectorfield(
     is_rms,
     is_rthetaz,
     is_radial,
+    is_pol2cart,
     mesh_pv,
     normals,
     points,
@@ -325,6 +344,8 @@ def apply_normal_center_surf_vectorfield(
             field = cart2pol(field, points)
         if is_radial:
             field = field[:, 0]
+        if is_pol2cart and not is_radial:
+            field = pol2cart(field, points)
 
         field = reshape(field, shape_result)
 
@@ -354,6 +375,7 @@ def apply_normal_center_surf_vectorfield(
                 is_rms,
                 is_rthetaz,
                 is_radial,
+                is_pol2cart,
                 mesh_pv,
                 normals,
                 points,
