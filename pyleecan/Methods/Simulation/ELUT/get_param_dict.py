@@ -1,6 +1,3 @@
-from numpy import interp
-
-
 def get_param_dict(self):
     """Get the parameters dict from ELUT
 
@@ -15,6 +12,6 @@ def get_param_dict(self):
         a Dict object
     """
 
-    param_dict = {"Rs": self.Rs, "Ls": self.Ls, "Tsta_ref": self.Tsta_ref}
+    param_dict = {"R1": self.R1, "L1": self.L1, "T1_ref": self.T1_ref}
 
     return param_dict

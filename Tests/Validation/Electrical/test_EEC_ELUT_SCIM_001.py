@@ -43,7 +43,7 @@ def test_EEC_ELUT_SCIM_001():
     # )
     # matlab_path = "D:/Manatee_V1_trunk/Manatee_1.0/Results/default_proj_nl/default_proj_nl_results.mat"
     # matlab_path = "D:/Manatee_V1_trunk/Manatee_1.0/ELUT_SCIM_001.mat"
-    matlab_path = "C:/Users/Jean/Documents/EOMYS_JLB/MANATEEV2_JLB/ELUT_SCIM_001.mat"
+    matlab_path = "//192.168.1.168/eomys/IT_data/Validation_data/Manatee_v2/test_EEC_SCIM_001/ELUT_SCIM_001.mat"
 
     assert isfile(matlab_path)
 
@@ -82,6 +82,14 @@ def test_EEC_ELUT_SCIM_001():
     # Prepare simulation
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
+    # change SCIM data that is different from ManateeV1
+    # (#TODO check also difference of rotor bar section)
+    # alpha = 1 big bug in Pyleecan to be corrected
+    SCIM_001.rotor.winding.conductor.cond_mat.elec.alpha = 0.003
+    SCIM_001.rotor.winding.conductor.cond_mat.elec.rho = 2.2e-8
+    SCIM_001.rotor.ring_mat.elec.alpha = 0.003
+    SCIM_001.rotor.ring_mat.elec.rho = 2.2e-8
+
     simu = Simu1(name="test_EEC_ELUT_SCIM_001", machine=SCIM_001)
 
     simu.input = InputVoltage(
@@ -93,12 +101,12 @@ def test_EEC_ELUT_SCIM_001():
     )
 
     ELUT_SCIM_001 = ELUT_SCIM(
-        Rs=param_dict["R1_20"],
-        Ls=param_dict["L10"],
-        Tsta_ref=20,
-        Rr=param_dict["R2_20"],
-        Lr=param_dict["L20"],
-        Trot_ref=20,
+        R1=param_dict["R1_20"],
+        L1=param_dict["L10"],
+        T1_ref=20,
+        R2=param_dict["R2_20"],
+        L2=param_dict["L20"],
+        T2_ref=20,
         Phi_m=np_abs(param_dict["Lm"] * param_dict["Im"]),
         I_m=np_abs(param_dict["Im"]),
     )

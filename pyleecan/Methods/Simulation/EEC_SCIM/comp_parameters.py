@@ -20,6 +20,7 @@ def comp_parameters(self, output, Tsta, Trot):
     machine = output.simu.machine
     Zsr = machine.rotor.slot.Zs
     qsr = machine.rotor.winding.qs
+    qs = machine.stator.winding.qs
     p = machine.rotor.winding.p
     felec = (
         output.simu.input.comp_felec()
@@ -35,8 +36,15 @@ def comp_parameters(self, output, Tsta, Trot):
     # change from rotor frame to stator frame
     xi = machine.stator.winding.comp_winding_factor()
     Ntspc = machine.stator.winding.comp_Ntsp()
-    K21 = (xi[0] * Ntspc) / (Zsr / 6)  # rotor - stator transformation factor
-    self.parameters["K21"] = K21
+
+    # winding transformation ratios
+    K21 = (xi[0] * Ntspc) / (1 * 0.5)  # (xi1[0] * Ntspc1) / (xi2[0] * Ntspc2)  for DFIM
+    # transformation ratio from secondary (2, rotor) to primary (1, stator) for impedance in SCIM case
+    K21I = (qs / Zsr) * K21
+    # transformation ratio from secondary (2, rotor) to primary (1, stator) for current  in SCIM case
+    K21Z = (qs / Zsr) * K21 ** 2
+    self.parameters["K21Z"] = K21Z
+    self.parameters["K21I"] = K21I
 
     # check that parameters are in ELUT, otherwise compute missing ones -> to be put in check_ELUT method?
     if "slip" not in self.parameters or self.parameters["slip"] is None:
@@ -45,20 +53,20 @@ def comp_parameters(self, output, Tsta, Trot):
         slip = (Ns - Nr) / Ns
         self.parameters["slip"] = slip
 
-    if "Rs" not in self.parameters or self.parameters["Rs"] is None:
+    if "R1" not in self.parameters or self.parameters["R1"] is None:
         CondS = self.parent.parent.machine.stator.winding.conductor
         # get resistance calculated analytically at simulation temperature
-        Rs = machine.stator.comp_resistance_wind(T=Tsta)
+        R1 = machine.stator.comp_resistance_wind(T=Tsta)
         # compute skin_effect on stator side
         Xkr_skinS, Xke_skinS = CondS.comp_skin_effect(freq=felec, T=Tsta)
         # update resistance value including skin effect
-        self.parameters["Rs"] = Rs * Xkr_skinS
+        self.parameters["R1"] = R1 * Xkr_skinS
 
-    if "Rr" not in self.parameters or self.parameters["Rr"] is None:
+    if "R2" not in self.parameters or self.parameters["R2"] is None:
         # get resistance calculated analytically at simulation temperature
-        R2 = machine.rotor.comp_resistance_wind(T=Trot, qs=3)
+        Rr = machine.rotor.comp_resistance_wind(T=Trot, qs=3)
         # putting resistance on stator side in EEC
-        Rr = K21 ** 2 * R2
+        R2 = K21Z * Rr
 
         # compute skin_effect on rotor side
         if Xkr_skinR is None:
@@ -68,44 +76,44 @@ def comp_parameters(self, output, Tsta, Trot):
             )
 
         # update resistance value including skin effect
-        self.parameters["Rr"] = Rr * Xkr_skinR
+        self.parameters["R2"] = Rr * Xkr_skinR
 
     if "Rfe" not in self.parameters:
         self.parameters["Rfe"] = 1e12  # TODO calculate (or estimate at least)
 
-    if "Lr" not in self.parameters or self.parameters["Lr"] is None:
+    if "L2" not in self.parameters or self.parameters["L2"] is None:
         if type_comp_Lr == 1:
             # analytic calculation
-            # Lr = machine.rotor.slot.comp_inductance_leakage_ANL() #TODO
-            Lr0 = 0
+            # L2 = machine.rotor.slot.comp_inductance_leakage_ANL() #TODO
+            L20 = 0
             if Xke_skinR is None:
                 CondR = self.parent.parent.machine.rotor.winding.conductor
                 Xkr_skinR, Xke_skinR = CondR.comp_skin_effect(
                     freq=felec * (self.parameters["slip"]), T=Trot
                 )
-                Lr = Lr0 * Xke_skinR
+                L2 = L20 * Xke_skinR
         else:
             # FEA calculation
-            # Lr = machine.rotor.slot.comp_inductance_leakage_FEA() #TODO
-            Lr = 0
+            # L2 = machine.rotor.slot.comp_inductance_leakage_FEA() #TODO
+            L2 = 0
 
-        self.parameters["Lr"] = Lr
+        self.parameters["L2"] = L2
 
-    if "Ls" not in self.parameters or self.parameters["Ls"] is None:
+    if "L1" not in self.parameters or self.parameters["L1"] is None:
         if type_comp_Ls == 1:
             # analytic calculation
-            # Ls = machine.stator.slot.comp_inductance_leakage_ANL() #TODO
-            Ls0 = 0
+            # L10 = machine.stator.slot.comp_inductance_leakage_ANL() #TODO
+            L10 = 0
             if Xke_skinS is None:
                 CondS = self.parent.parent.machine.stator.winding.conductor
                 Xkr_skinS, Xke_skinS = CondS.comp_skin_effect(freq=felec, T=Tsta)
-                Ls = Ls0 * Xke_skinS
+                L1 = L10 * Xke_skinS
         else:
             # FEA calculation
-            # Lr = machine.rotor.slot.comp_inductance_leakage_FEA() #TODO
-            Ls = 0
+            # L1 = machine.rotor.slot.comp_inductance_leakage_FEA() #TODO
+            L1 = 0
 
-        self.parameters["Ls"] = Ls
+        self.parameters["L1"] = L1
 
     # alphasw = self.cond_mat.elec.alpha
     # # stator winding phase resistance, skin effect correction
@@ -284,16 +292,16 @@ def _comp_Lm_FEA(self):
     # TODO check wind_mat that the i-th bars is in the i-th slots
     Phi_s, Phi_r = _comp_flux_mean(self, out)
 
-    self.parameters["Lm"] = (Phi_r * K21 * Zsr / 3) / self.I
-    Ls = (Phi_s - (Phi_r * K21 * Zsr / 3)) / self.I
-    self.parameters["Ls"] = Ls * Xke_skinS
+    self.parameters["Lm"] = (Phi_r * K21Z * Zsr / 3) / self.I
+    L1 = (Phi_s - (Phi_r * K21Z * Zsr / 3)) / self.I
+    self.parameters["L1"] = L1 * Xke_skinS
     # --- compute the main inductance and rotor stray inductance ---
     # set new output
     out = Output(simu=simu)
 
     # set current values
     Ir_ = zeros([self.Nt_tot, 2])
-    Ir_[:, 0] = self.I * K21 * sqrt(2)
+    Ir_[:, 0] = self.I * K21Z * sqrt(2)
     Ir = ab2n(Ir_, n=qsr // p)  # TODO no rotation for now
 
     Ir = ImportMatrixVal(value=tile(Ir, (1, p)))
@@ -308,9 +316,9 @@ def _comp_Lm_FEA(self):
     # compute average rotor and stator fluxlinkage
     # TODO check wind_mat that the i-th bars is in the i-th slots
     Phi_s, Phi_r = _comp_flux_mean(self, out)
-    K21 = self.parameters["K21"]
+    K21Z = self.parameters["K21Z"]
     I_m = self.I
     Lm = Phi_s / I_m
-    L2 = ((Phi_r * K21 * Zsr / 3) - Phi_s) / self.I
+    L2 = ((Phi_r * K21Z * Zsr / 3) - Phi_s) / self.I
 
     return Phi_s, I_m

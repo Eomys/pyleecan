@@ -1,4 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-Rs,Ohm,DC phase winding resistance at Tsta_ref ,0,float,None,,,,Simulation,,get_param_dict,VERSION,1,Abstract class for Electrical Look Up Table (ELUT),
-Ls,H,Phase winding leakage inductance,0,float,None,,,,,,,,,,
-Tsta_ref,degC,"Stator winding average temperature associated to Rs, Ls parameters",0,float,20,,,,,,,,,,
+R1,Ohm,DC phase winding resistance at T1_ref per phase ,0,float,None,,,,Simulation,,get_param_dict,VERSION,1,Abstract class for Electrical Look Up Table (ELUT),
+L1,H,Phase winding leakage inductance ,0,float,None,,,,,,,,,,
+T1_ref,degC,"Stator winding average temperature associated to R1, L1 parameters",0,float,20,,,,,,,,,,

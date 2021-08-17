@@ -1263,28 +1263,28 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/ELUT.csv",
         "properties": [
             {
-                "desc": "DC phase winding resistance at Tsta_ref ",
+                "desc": "DC phase winding resistance at T1_ref per phase ",
                 "max": "",
                 "min": "",
-                "name": "Rs",
+                "name": "R1",
                 "type": "float",
                 "unit": "Ohm",
                 "value": null
             },
             {
-                "desc": "Phase winding leakage inductance",
+                "desc": "Phase winding leakage inductance ",
                 "max": "",
                 "min": "",
-                "name": "Ls",
+                "name": "L1",
                 "type": "float",
                 "unit": "H",
                 "value": null
             },
             {
-                "desc": "Stator winding average temperature associated to Rs, Ls parameters",
+                "desc": "Stator winding average temperature associated to R1, L1 parameters",
                 "max": "",
                 "min": "",
-                "name": "Tsta_ref",
+                "name": "T1_ref",
                 "type": "float",
                 "unit": "degC",
                 "value": 20
@@ -1416,16 +1416,16 @@
                 "desc": "Rotor bar average temperature at which Phi_m is given",
                 "max": "",
                 "min": "",
-                "name": "Trot_ref",
+                "name": "T2_ref",
                 "type": "float",
                 "unit": "degC",
                 "value": 20
             },
             {
-                "desc": "DC rotor winding resistance at Tsta_ref ",
+                "desc": "DC rotor winding resistance at T2_ref already expressed per phase in stator frame ",
                 "max": "",
                 "min": "",
-                "name": "Rr",
+                "name": "R2",
                 "type": "float",
                 "unit": "Ohm",
                 "value": null
@@ -1434,7 +1434,7 @@
                 "desc": "Rotor winding leakage inductance",
                 "max": "",
                 "min": "",
-                "name": "Lr",
+                "name": "L2",
                 "type": "float",
                 "unit": "H",
                 "value": null

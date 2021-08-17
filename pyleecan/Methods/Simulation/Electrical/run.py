@@ -47,12 +47,17 @@ def run(self):
     else:
         raise Exception("Time and Angle must not be None in Electrical.run()")
 
-    # Generate drive
-    # self.eec.gen_drive(output)
-
     if self.ELUT_enforced is not None:
         # enforce parameters of EEC coming from enforced ELUT at right temperatures
-        self.eec.parameters = self.ELUT_enforced.get_param_dict()
+        if self.eec.parameters is None:
+            self.eec.parameters = dict()
+        self.eec.parameters.update(self.ELUT_enforced.get_param_dict())
+
+    # Generate drive
+    # self.eec.gen_drive(output)
+    self.eec.parameters["U0_ref"] = output.elec.U0_ref
+    self.eec.parameters["Ud_ref"] = output.elec.Ud_ref
+    self.eec.parameters["Uq_ref"] = output.elec.Uq_ref
 
     # Compute parameters of the electrical equivalent circuit if some parameters are missing in ELUT
     out_dict = self.eec.comp_parameters(output, Tsta=self.Tsta, Trot=self.Trot)

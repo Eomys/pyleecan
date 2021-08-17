@@ -48,7 +48,7 @@ class ELUT(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Rs=None, Ls=None, Tsta_ref=20, init_dict=None, init_str=None):
+    def __init__(self, R1=None, L1=None, T1_ref=20, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -64,17 +64,17 @@ class ELUT(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Rs" in list(init_dict.keys()):
-                Rs = init_dict["Rs"]
-            if "Ls" in list(init_dict.keys()):
-                Ls = init_dict["Ls"]
-            if "Tsta_ref" in list(init_dict.keys()):
-                Tsta_ref = init_dict["Tsta_ref"]
+            if "R1" in list(init_dict.keys()):
+                R1 = init_dict["R1"]
+            if "L1" in list(init_dict.keys()):
+                L1 = init_dict["L1"]
+            if "T1_ref" in list(init_dict.keys()):
+                T1_ref = init_dict["T1_ref"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.Rs = Rs
-        self.Ls = Ls
-        self.Tsta_ref = Tsta_ref
+        self.R1 = R1
+        self.L1 = L1
+        self.T1_ref = T1_ref
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -87,9 +87,9 @@ class ELUT(FrozenClass):
             ELUT_str += "parent = None " + linesep
         else:
             ELUT_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        ELUT_str += "Rs = " + str(self.Rs) + linesep
-        ELUT_str += "Ls = " + str(self.Ls) + linesep
-        ELUT_str += "Tsta_ref = " + str(self.Tsta_ref) + linesep
+        ELUT_str += "R1 = " + str(self.R1) + linesep
+        ELUT_str += "L1 = " + str(self.L1) + linesep
+        ELUT_str += "T1_ref = " + str(self.T1_ref) + linesep
         return ELUT_str
 
     def __eq__(self, other):
@@ -97,11 +97,11 @@ class ELUT(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.Rs != self.Rs:
+        if other.R1 != self.R1:
             return False
-        if other.Ls != self.Ls:
+        if other.L1 != self.L1:
             return False
-        if other.Tsta_ref != self.Tsta_ref:
+        if other.T1_ref != self.T1_ref:
             return False
         return True
 
@@ -113,12 +113,12 @@ class ELUT(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._Rs != self._Rs:
-            diff_list.append(name + ".Rs")
-        if other._Ls != self._Ls:
-            diff_list.append(name + ".Ls")
-        if other._Tsta_ref != self._Tsta_ref:
-            diff_list.append(name + ".Tsta_ref")
+        if other._R1 != self._R1:
+            diff_list.append(name + ".R1")
+        if other._L1 != self._L1:
+            diff_list.append(name + ".L1")
+        if other._T1_ref != self._T1_ref:
+            diff_list.append(name + ".T1_ref")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -127,9 +127,9 @@ class ELUT(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.Rs)
-        S += getsizeof(self.Ls)
-        S += getsizeof(self.Tsta_ref)
+        S += getsizeof(self.R1)
+        S += getsizeof(self.L1)
+        S += getsizeof(self.T1_ref)
         return S
 
     def as_dict(self, **kwargs):
@@ -140,9 +140,9 @@ class ELUT(FrozenClass):
         """
 
         ELUT_dict = dict()
-        ELUT_dict["Rs"] = self.Rs
-        ELUT_dict["Ls"] = self.Ls
-        ELUT_dict["Tsta_ref"] = self.Tsta_ref
+        ELUT_dict["R1"] = self.R1
+        ELUT_dict["L1"] = self.L1
+        ELUT_dict["T1_ref"] = self.T1_ref
         # The class name is added to the dict for deserialisation purpose
         ELUT_dict["__class__"] = "ELUT"
         return ELUT_dict
@@ -150,59 +150,59 @@ class ELUT(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Rs = None
-        self.Ls = None
-        self.Tsta_ref = None
+        self.R1 = None
+        self.L1 = None
+        self.T1_ref = None
 
-    def _get_Rs(self):
-        """getter of Rs"""
-        return self._Rs
+    def _get_R1(self):
+        """getter of R1"""
+        return self._R1
 
-    def _set_Rs(self, value):
-        """setter of Rs"""
-        check_var("Rs", value, "float")
-        self._Rs = value
+    def _set_R1(self, value):
+        """setter of R1"""
+        check_var("R1", value, "float")
+        self._R1 = value
 
-    Rs = property(
-        fget=_get_Rs,
-        fset=_set_Rs,
-        doc=u"""DC phase winding resistance at Tsta_ref 
-
-        :Type: float
-        """,
-    )
-
-    def _get_Ls(self):
-        """getter of Ls"""
-        return self._Ls
-
-    def _set_Ls(self, value):
-        """setter of Ls"""
-        check_var("Ls", value, "float")
-        self._Ls = value
-
-    Ls = property(
-        fget=_get_Ls,
-        fset=_set_Ls,
-        doc=u"""Phase winding leakage inductance
+    R1 = property(
+        fget=_get_R1,
+        fset=_set_R1,
+        doc=u"""DC phase winding resistance at T1_ref per phase 
 
         :Type: float
         """,
     )
 
-    def _get_Tsta_ref(self):
-        """getter of Tsta_ref"""
-        return self._Tsta_ref
+    def _get_L1(self):
+        """getter of L1"""
+        return self._L1
 
-    def _set_Tsta_ref(self, value):
-        """setter of Tsta_ref"""
-        check_var("Tsta_ref", value, "float")
-        self._Tsta_ref = value
+    def _set_L1(self, value):
+        """setter of L1"""
+        check_var("L1", value, "float")
+        self._L1 = value
 
-    Tsta_ref = property(
-        fget=_get_Tsta_ref,
-        fset=_set_Tsta_ref,
-        doc=u"""Stator winding average temperature associated to Rs, Ls parameters
+    L1 = property(
+        fget=_get_L1,
+        fset=_set_L1,
+        doc=u"""Phase winding leakage inductance 
+
+        :Type: float
+        """,
+    )
+
+    def _get_T1_ref(self):
+        """getter of T1_ref"""
+        return self._T1_ref
+
+    def _set_T1_ref(self, value):
+        """setter of T1_ref"""
+        check_var("T1_ref", value, "float")
+        self._T1_ref = value
+
+    T1_ref = property(
+        fget=_get_T1_ref,
+        fset=_set_T1_ref,
+        doc=u"""Stator winding average temperature associated to R1, L1 parameters
 
         :Type: float
         """,

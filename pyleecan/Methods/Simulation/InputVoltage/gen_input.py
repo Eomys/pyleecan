@@ -1,10 +1,12 @@
+from numpy import ndarray
+
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
-from numpy import ndarray, pi, mean, transpose, zeros
-from ....Functions.Electrical.coordinate_transformation import n2dq
-from SciDataTool import Data1D, DataTime
-from ....Functions.Winding.gen_phase_list import gen_name
+
+# from ....Functions.Electrical.coordinate_transformation import n2dq
+# from SciDataTool import Data1D, DataTime
+# from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def gen_input(self):
@@ -37,6 +39,8 @@ def gen_input(self):
 
     if self.U0_ref is None and self.Ud_ref and self.Uq_ref:
         raise Exception("U0_ref, Ud_ref, and Uq_refcannot be all None in InputVoltage")
+
+    output.U0_ref = self.U0_ref
 
     # Generate Us
     # if qs > 0:

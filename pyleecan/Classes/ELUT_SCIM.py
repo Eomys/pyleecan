@@ -102,12 +102,12 @@ class ELUT_SCIM(ELUT):
         self,
         Phi_m=None,
         I_m=None,
-        Trot_ref=20,
-        Rr=None,
-        Lr=None,
-        Rs=None,
-        Ls=None,
-        Tsta_ref=20,
+        T2_ref=20,
+        R2=None,
+        L2=None,
+        R1=None,
+        L1=None,
+        T1_ref=20,
         init_dict=None,
         init_str=None,
     ):
@@ -130,26 +130,26 @@ class ELUT_SCIM(ELUT):
                 Phi_m = init_dict["Phi_m"]
             if "I_m" in list(init_dict.keys()):
                 I_m = init_dict["I_m"]
-            if "Trot_ref" in list(init_dict.keys()):
-                Trot_ref = init_dict["Trot_ref"]
-            if "Rr" in list(init_dict.keys()):
-                Rr = init_dict["Rr"]
-            if "Lr" in list(init_dict.keys()):
-                Lr = init_dict["Lr"]
-            if "Rs" in list(init_dict.keys()):
-                Rs = init_dict["Rs"]
-            if "Ls" in list(init_dict.keys()):
-                Ls = init_dict["Ls"]
-            if "Tsta_ref" in list(init_dict.keys()):
-                Tsta_ref = init_dict["Tsta_ref"]
+            if "T2_ref" in list(init_dict.keys()):
+                T2_ref = init_dict["T2_ref"]
+            if "R2" in list(init_dict.keys()):
+                R2 = init_dict["R2"]
+            if "L2" in list(init_dict.keys()):
+                L2 = init_dict["L2"]
+            if "R1" in list(init_dict.keys()):
+                R1 = init_dict["R1"]
+            if "L1" in list(init_dict.keys()):
+                L1 = init_dict["L1"]
+            if "T1_ref" in list(init_dict.keys()):
+                T1_ref = init_dict["T1_ref"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_m = Phi_m
         self.I_m = I_m
-        self.Trot_ref = Trot_ref
-        self.Rr = Rr
-        self.Lr = Lr
+        self.T2_ref = T2_ref
+        self.R2 = R2
+        self.L2 = L2
         # Call ELUT init
-        super(ELUT_SCIM, self).__init__(Rs=Rs, Ls=Ls, Tsta_ref=Tsta_ref)
+        super(ELUT_SCIM, self).__init__(R1=R1, L1=L1, T1_ref=T1_ref)
         # The class is frozen (in ELUT init), for now it's impossible to
         # add new properties
 
@@ -173,9 +173,9 @@ class ELUT_SCIM(ELUT):
             + linesep
             + linesep
         )
-        ELUT_SCIM_str += "Trot_ref = " + str(self.Trot_ref) + linesep
-        ELUT_SCIM_str += "Rr = " + str(self.Rr) + linesep
-        ELUT_SCIM_str += "Lr = " + str(self.Lr) + linesep
+        ELUT_SCIM_str += "T2_ref = " + str(self.T2_ref) + linesep
+        ELUT_SCIM_str += "R2 = " + str(self.R2) + linesep
+        ELUT_SCIM_str += "L2 = " + str(self.L2) + linesep
         return ELUT_SCIM_str
 
     def __eq__(self, other):
@@ -191,11 +191,11 @@ class ELUT_SCIM(ELUT):
             return False
         if not array_equal(other.I_m, self.I_m):
             return False
-        if other.Trot_ref != self.Trot_ref:
+        if other.T2_ref != self.T2_ref:
             return False
-        if other.Rr != self.Rr:
+        if other.R2 != self.R2:
             return False
-        if other.Lr != self.Lr:
+        if other.L2 != self.L2:
             return False
         return True
 
@@ -214,12 +214,12 @@ class ELUT_SCIM(ELUT):
             diff_list.append(name + ".Phi_m")
         if not array_equal(other.I_m, self.I_m):
             diff_list.append(name + ".I_m")
-        if other._Trot_ref != self._Trot_ref:
-            diff_list.append(name + ".Trot_ref")
-        if other._Rr != self._Rr:
-            diff_list.append(name + ".Rr")
-        if other._Lr != self._Lr:
-            diff_list.append(name + ".Lr")
+        if other._T2_ref != self._T2_ref:
+            diff_list.append(name + ".T2_ref")
+        if other._R2 != self._R2:
+            diff_list.append(name + ".R2")
+        if other._L2 != self._L2:
+            diff_list.append(name + ".L2")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -233,9 +233,9 @@ class ELUT_SCIM(ELUT):
         S += super(ELUT_SCIM, self).__sizeof__()
         S += getsizeof(self.Phi_m)
         S += getsizeof(self.I_m)
-        S += getsizeof(self.Trot_ref)
-        S += getsizeof(self.Rr)
-        S += getsizeof(self.Lr)
+        S += getsizeof(self.T2_ref)
+        S += getsizeof(self.R2)
+        S += getsizeof(self.L2)
         return S
 
     def as_dict(self, **kwargs):
@@ -255,9 +255,9 @@ class ELUT_SCIM(ELUT):
             ELUT_SCIM_dict["I_m"] = None
         else:
             ELUT_SCIM_dict["I_m"] = self.I_m.tolist()
-        ELUT_SCIM_dict["Trot_ref"] = self.Trot_ref
-        ELUT_SCIM_dict["Rr"] = self.Rr
-        ELUT_SCIM_dict["Lr"] = self.Lr
+        ELUT_SCIM_dict["T2_ref"] = self.T2_ref
+        ELUT_SCIM_dict["R2"] = self.R2
+        ELUT_SCIM_dict["L2"] = self.L2
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ELUT_SCIM_dict["__class__"] = "ELUT_SCIM"
@@ -268,9 +268,9 @@ class ELUT_SCIM(ELUT):
 
         self.Phi_m = None
         self.I_m = None
-        self.Trot_ref = None
-        self.Rr = None
-        self.Lr = None
+        self.T2_ref = None
+        self.R2 = None
+        self.L2 = None
         # Set to None the properties inherited from ELUT
         super(ELUT_SCIM, self)._set_None()
 
@@ -324,54 +324,54 @@ class ELUT_SCIM(ELUT):
         """,
     )
 
-    def _get_Trot_ref(self):
-        """getter of Trot_ref"""
-        return self._Trot_ref
+    def _get_T2_ref(self):
+        """getter of T2_ref"""
+        return self._T2_ref
 
-    def _set_Trot_ref(self, value):
-        """setter of Trot_ref"""
-        check_var("Trot_ref", value, "float")
-        self._Trot_ref = value
+    def _set_T2_ref(self, value):
+        """setter of T2_ref"""
+        check_var("T2_ref", value, "float")
+        self._T2_ref = value
 
-    Trot_ref = property(
-        fget=_get_Trot_ref,
-        fset=_set_Trot_ref,
+    T2_ref = property(
+        fget=_get_T2_ref,
+        fset=_set_T2_ref,
         doc=u"""Rotor bar average temperature at which Phi_m is given
 
         :Type: float
         """,
     )
 
-    def _get_Rr(self):
-        """getter of Rr"""
-        return self._Rr
+    def _get_R2(self):
+        """getter of R2"""
+        return self._R2
 
-    def _set_Rr(self, value):
-        """setter of Rr"""
-        check_var("Rr", value, "float")
-        self._Rr = value
+    def _set_R2(self, value):
+        """setter of R2"""
+        check_var("R2", value, "float")
+        self._R2 = value
 
-    Rr = property(
-        fget=_get_Rr,
-        fset=_set_Rr,
-        doc=u"""DC rotor winding resistance at Tsta_ref 
+    R2 = property(
+        fget=_get_R2,
+        fset=_set_R2,
+        doc=u"""DC rotor winding resistance at T2_ref already expressed per phase in stator frame 
 
         :Type: float
         """,
     )
 
-    def _get_Lr(self):
-        """getter of Lr"""
-        return self._Lr
+    def _get_L2(self):
+        """getter of L2"""
+        return self._L2
 
-    def _set_Lr(self, value):
-        """setter of Lr"""
-        check_var("Lr", value, "float")
-        self._Lr = value
+    def _set_L2(self, value):
+        """setter of L2"""
+        check_var("L2", value, "float")
+        self._L2 = value
 
-    Lr = property(
-        fget=_get_Lr,
-        fset=_set_Lr,
+    L2 = property(
+        fget=_get_L2,
+        fset=_set_L2,
         doc=u"""Rotor winding leakage inductance
 
         :Type: float

@@ -183,9 +183,9 @@ class ELUT_PMSM(ELUT):
         E0=None,
         E_dqh=None,
         orders_dqh=None,
-        Rs=None,
-        Ls=None,
-        Tsta_ref=20,
+        R1=None,
+        L1=None,
+        T1_ref=20,
         init_dict=None,
         init_str=None,
     ):
@@ -216,12 +216,12 @@ class ELUT_PMSM(ELUT):
                 E_dqh = init_dict["E_dqh"]
             if "orders_dqh" in list(init_dict.keys()):
                 orders_dqh = init_dict["orders_dqh"]
-            if "Rs" in list(init_dict.keys()):
-                Rs = init_dict["Rs"]
-            if "Ls" in list(init_dict.keys()):
-                Ls = init_dict["Ls"]
-            if "Tsta_ref" in list(init_dict.keys()):
-                Tsta_ref = init_dict["Tsta_ref"]
+            if "R1" in list(init_dict.keys()):
+                R1 = init_dict["R1"]
+            if "L1" in list(init_dict.keys()):
+                L1 = init_dict["L1"]
+            if "T1_ref" in list(init_dict.keys()):
+                T1_ref = init_dict["T1_ref"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_dqh = Phi_dqh
         self.I_dqh = I_dqh
@@ -230,7 +230,7 @@ class ELUT_PMSM(ELUT):
         self.E_dqh = E_dqh
         self.orders_dqh = orders_dqh
         # Call ELUT init
-        super(ELUT_PMSM, self).__init__(Rs=Rs, Ls=Ls, Tsta_ref=Tsta_ref)
+        super(ELUT_PMSM, self).__init__(R1=R1, L1=L1, T1_ref=T1_ref)
         # The class is frozen (in ELUT init), for now it's impossible to
         # add new properties
 
