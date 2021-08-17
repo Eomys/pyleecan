@@ -5,7 +5,7 @@
 # from ....Classes.CondType11 import CondType11
 # from ....Classes.CondType12 import CondType12
 
-from numpy import ones, pi, sqrt
+from numpy import ones, pi, sqrt, sin
 
 
 def comp_skin_effect(self, T=20):
@@ -48,7 +48,9 @@ def comp_skin_effect(self, T=20):
             Wwire = self.Wwire
             Nwppc_tan = self.Nwppc
             Nwppc_rad = self.Nwppc
-            W2s = Slot.W2
+            Alpha_wind = Slot.comp_angle_active_eq()
+            R_wind = Slot.comp_radius_mid_active()
+            W2s = 2 * R_wind * sin(Alpha_wind)
 
             # average resistance factor over the slot
             ksi = Hwire * sqrt((1 / 2) * ws * mu0 * sigmar * Nwppc_tan * Wwire / W2s)
