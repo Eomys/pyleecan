@@ -48,8 +48,8 @@ def comp_flux_airgap(self, output, axes_dict):
         output.mag.internal = OutMagFEMM()
 
     # Get time and angular axes
-    Angle = axes_dict["Angle"]
-    Time = axes_dict["Time"]
+    Angle = axes_dict["angle"]
+    Time = axes_dict["time"]
 
     # Set the angular symmetry factor according to the machine and check if it is anti-periodic
     sym, is_antiper_a = Angle.get_periodicity()

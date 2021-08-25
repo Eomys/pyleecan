@@ -20,6 +20,19 @@ def comp_axes(self, output):
     # Get axis dict from OutMag
     axes_dict_mag = output.mag.axes_dict
 
+    # Get time periodicity
+    is_include_per_t = len(axes_dict_mag["time"].symmetries) > 0
+
+    # Get angle periodicity
+    is_include_per_a = len(axes_dict_mag["angle"].symmetries) > 0
+
+    # Init periodicities if they are None
+    if self.is_periodicity_t is None:
+        self.is_periodicity_t = is_include_per_t
+
+    if self.is_periodicity_a is None:
+        self.is_periodicity_a = is_include_per_a
+
     # Get time and space (anti-)periodicities of the machine
     (
         per_a,
@@ -33,7 +46,7 @@ def comp_axes(self, output):
         axis_in=axes_dict_mag["time"],
         per=per_t,
         is_aper=is_antiper_t,
-        is_include_per=self.is_periodicity_t,
+        is_include_per=is_include_per_t and self.is_periodicity_t,
         is_remove_aper=True,
     )
 
@@ -54,7 +67,7 @@ def comp_axes(self, output):
         axis_in=axes_dict_mag["angle"],
         per=per_a,
         is_aper=is_antiper_a,
-        is_include_per=self.is_periodicity_a,
+        is_include_per=is_include_per_a and self.is_periodicity_a,
         is_remove_aper=True,
     )
 
@@ -70,6 +83,6 @@ def comp_axes(self, output):
             + "). Angular periodicity removed"
         )
 
-    axes_dict = {"Time": Time, "Angle": Angle}
+    axes_dict = {"time": Time, "angle": Angle}
 
     return axes_dict

@@ -43,11 +43,6 @@ except ImportError as error:
     get_path_save = error
 
 try:
-    from ..Methods.Simulation.MagElmer.comp_axes import comp_axes
-except ImportError as error:
-    comp_axes = error
-
-try:
     from ..Methods.Simulation.MagElmer.gen_elmer_mesh import gen_elmer_mesh
 except ImportError as error:
     gen_elmer_mesh = error
@@ -119,15 +114,6 @@ class MagElmer(Magnetics):
         )
     else:
         get_path_save = get_path_save
-    # cf Methods.Simulation.MagElmer.comp_axes
-    if isinstance(comp_axes, ImportError):
-        comp_axes = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MagElmer method comp_axes: " + str(comp_axes))
-            )
-        )
-    else:
-        comp_axes = comp_axes
     # cf Methods.Simulation.MagElmer.gen_elmer_mesh
     if isinstance(gen_elmer_mesh, ImportError):
         gen_elmer_mesh = property(

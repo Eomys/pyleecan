@@ -34,7 +34,9 @@ def test_FEMM_periodicity_time_no_periodicity_a():
 
     assert SPMSM_015.comp_periodicity_spatial() == (9, False)
 
-    simu = Simu1(name="test_FEMM_periodicity_time_no_periodicity_a", machine=SPMSM_015)
+    name = "test_FEMM_periodicity_time_no_periodicity_a"
+
+    simu = Simu1(name=name + "_1", machine=SPMSM_015)
 
     # Definition of the enforced output of the electrical module
     I0_rms = 250 / sqrt(2)
@@ -64,6 +66,7 @@ def test_FEMM_periodicity_time_no_periodicity_a():
 
     # Definition of the magnetic simulation: no periodicity
     simu2 = simu.copy()
+    simu2.name = name + "_2"
     simu2.mag.is_periodicity_t = False
 
     # Run simulations
@@ -181,7 +184,9 @@ def test_FEMM_periodicity_time():
 
     assert SPMSM_015.comp_periodicity_spatial() == (9, False)
 
-    simu = Simu1(name="test_FEMM_periodicity_time", machine=SPMSM_015)
+    name = "test_FEMM_periodicity_time"
+
+    simu = Simu1(name=name + "_1", machine=SPMSM_015)
 
     # Definition of the enforced output of the electrical module
     I0_rms = 250 / sqrt(2)
@@ -211,6 +216,7 @@ def test_FEMM_periodicity_time():
 
     # Definition of the magnetic simulation: no periodicity
     simu2 = simu.copy()
+    simu2.name = name + "_2"
     simu2.mag.is_periodicity_t = False
 
     # Run simulations
@@ -256,7 +262,27 @@ def test_FEMM_periodicity_time():
         "angle[0]",
         data_list=[out2.force.AGSF],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, simu.name + "_P_fft2.png"),
+        save_path=join(save_path, simu.name + "_P_freqs.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+
+    out.force.AGSF.plot_2D_Data(
+        "time",
+        "angle[0]",
+        data_list=[out2.force.AGSF],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, simu.name + "_P_time.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+
+    out.force.AGSF.plot_2D_Data(
+        "angle",
+        "time[0]",
+        data_list=[out2.force.AGSF],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, simu.name + "_P_angle.png"),
         is_show_fig=False,
         **dict_2D
     )
@@ -309,7 +335,7 @@ def test_FEMM_periodicity_time():
     Prad2 = result_AGSF2["radial"]
     time = result_AGSF2["time"]
 
-    assert_array_almost_equal(Prad / 1000, Prad2 / 1000, decimal=0)
+    assert_array_almost_equal(Prad / 100000, Prad2 / 100000, decimal=2)
 
     return out, out2
 
@@ -450,6 +476,6 @@ def test_FEMM_periodicity_angle():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out, out2 = test_FEMM_periodicity_angle()
+    # out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
     out3, out4 = test_FEMM_periodicity_time()
-    out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
+    # out, out2 = test_FEMM_periodicity_angle()

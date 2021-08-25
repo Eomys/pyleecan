@@ -19,8 +19,8 @@ def comp_axes(self, output):
 
     """
 
-    # Get axis dict from OutElec
-    axes_dict_elec = output.elec.axes_dict
+    # Get axis dict from OutGeo
+    axes_dict_geo = output.geo.axes_dict
 
     # Calculate axes for Magnetics module calculation
     # Get time and space (anti-)periodicities of the machine
@@ -33,7 +33,7 @@ def comp_axes(self, output):
 
     # Compute Time axis based on the one stored in OutElec
     Time, is_periodicity_t = create_from_axis(
-        axis_in=axes_dict_elec["time"],
+        axis_in=axes_dict_geo["time"],
         per=per_t,
         is_aper=is_antiper_t,
         is_include_per=self.is_periodicity_t,
@@ -54,7 +54,7 @@ def comp_axes(self, output):
 
     # Compute Angle axis based on the one stored in OutElec
     Angle, is_periodicity_a = create_from_axis(
-        axis_in=axes_dict_elec["angle"],
+        axis_in=axes_dict_geo["angle"],
         per=per_a,
         is_aper=is_antiper_a,
         is_include_per=self.is_periodicity_a,
@@ -82,6 +82,6 @@ def comp_axes(self, output):
         Time_Tem.symmetries["period"] = Time_Tem.symmetries.pop("antiperiod")
 
     # Store in axis dict
-    axes_dict = {"Time": Time, "Angle": Angle, "Time_Tem": Time_Tem}
+    axes_dict = {"time": Time, "angle": Angle, "time_Tem": Time_Tem}
 
     return axes_dict

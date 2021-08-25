@@ -21,7 +21,7 @@ def store(self, out_dict, axes_dict):
     # Store air-gap surface force as VectorField object
 
     # Axes for each component
-    axis_list = [axes_dict["Time"], axes_dict["Angle"]]
+    axis_list = [axes_dict["time"], axes_dict["angle"]]
 
     # Create VectorField with empty components
     self.AGSF = VectorField(

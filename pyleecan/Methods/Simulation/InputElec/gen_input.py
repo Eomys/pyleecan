@@ -31,18 +31,19 @@ def gen_input(self):
 
     # Set time and angle full axes in geometry output
     Time, Angle = self.comp_axes(simu.machine)
-    outgeo.axes_dict = {"Time": Time, "Angle": Angle}
+    outgeo.axes_dict = {"time": Time, "angle": Angle}
 
-    # Create time axis in electrical output accounting for pole periodicity
+    # Create time axis in electrical output without periodicity
+    # TODO: account for pole periodicity
     Time_elec = Time.copy()
     Time_elec, _ = create_from_axis(
         axis_in=Time,
-        per=int(2 * simu.machine.get_pole_pair_number()),
-        is_aper=True,
-        is_include_per=True,
-        is_remove_aper=False,
+        per=1,  # int(2 * simu.machine.get_pole_pair_number()),
+        is_aper=False,  # True,
+        is_include_per=False,  # True,
+        is_remove_aper=True,  # False,
     )
-    outelec.axes_dict = {"Time": Time_elec}
+    outelec.axes_dict = {"time": Time_elec}
 
     # Initialize outelec at None
     outelec.Id_ref = None

@@ -5816,7 +5816,6 @@
             "get_meshsolution",
             "get_path_save_fea",
             "get_path_save",
-            "comp_axes",
             "gen_elmer_mesh"
         ],
         "mother": "Magnetics",

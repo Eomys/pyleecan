@@ -139,6 +139,6 @@ def comp_axes(
         )
 
     # Store in axes_dict
-    axes_dict = {"Time": Time, "Angle": Angle}
+    axes_dict = {"time": Time, "angle": Angle}
 
     return axes_dict
