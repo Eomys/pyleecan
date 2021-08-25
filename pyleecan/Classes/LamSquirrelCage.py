@@ -45,13 +45,6 @@ except ImportError as error:
     comp_number_phase_eq = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCage.comp_periodicity_spatial import (
-        comp_periodicity_spatial,
-    )
-except ImportError as error:
-    comp_periodicity_spatial = error
-
-try:
     from ..Methods.Machine.LamSquirrelCage.comp_surface_ring import comp_surface_ring
 except ImportError as error:
     comp_surface_ring = error
@@ -133,18 +126,6 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_number_phase_eq = comp_number_phase_eq
-    # cf Methods.Machine.LamSquirrelCage.comp_periodicity_spatial
-    if isinstance(comp_periodicity_spatial, ImportError):
-        comp_periodicity_spatial = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCage method comp_periodicity_spatial: "
-                    + str(comp_periodicity_spatial)
-                )
-            )
-        )
-    else:
-        comp_periodicity_spatial = comp_periodicity_spatial
     # cf Methods.Machine.LamSquirrelCage.comp_surface_ring
     if isinstance(comp_surface_ring, ImportError):
         comp_surface_ring = property(

@@ -90,7 +90,7 @@ class InputElec(Input):
         time=None,
         angle=None,
         Nt_tot=2048,
-        Nrev=1,
+        Nrev=None,
         Na_tot=2048,
         N0=None,
         init_dict=None,

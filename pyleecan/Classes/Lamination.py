@@ -134,6 +134,13 @@ try:
 except ImportError as error:
     comp_point_ref = error
 
+try:
+    from ..Methods.Machine.Lamination.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -399,6 +406,18 @@ class Lamination(FrozenClass):
         )
     else:
         comp_point_ref = comp_point_ref
+    # cf Methods.Machine.Lamination.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
     # save and copy methods are available in all object
     save = save
     copy = copy

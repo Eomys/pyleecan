@@ -43,9 +43,11 @@ class OutGeo(FrozenClass):
         rot_dir=None,
         per_a=None,
         is_antiper_a=None,
-        per_t=None,
-        is_antiper_t=None,
+        per_t_S=None,
+        is_antiper_t_S=None,
         axes_dict=None,
+        per_t_R=None,
+        is_antiper_t_R=None,
         init_dict=None,
         init_str=None,
     ):
@@ -86,12 +88,16 @@ class OutGeo(FrozenClass):
                 per_a = init_dict["per_a"]
             if "is_antiper_a" in list(init_dict.keys()):
                 is_antiper_a = init_dict["is_antiper_a"]
-            if "per_t" in list(init_dict.keys()):
-                per_t = init_dict["per_t"]
-            if "is_antiper_t" in list(init_dict.keys()):
-                is_antiper_t = init_dict["is_antiper_t"]
+            if "per_t_S" in list(init_dict.keys()):
+                per_t_S = init_dict["per_t_S"]
+            if "is_antiper_t_S" in list(init_dict.keys()):
+                is_antiper_t_S = init_dict["is_antiper_t_S"]
             if "axes_dict" in list(init_dict.keys()):
                 axes_dict = init_dict["axes_dict"]
+            if "per_t_R" in list(init_dict.keys()):
+                per_t_R = init_dict["per_t_R"]
+            if "is_antiper_t_R" in list(init_dict.keys()):
+                is_antiper_t_R = init_dict["is_antiper_t_R"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.stator = stator
@@ -105,9 +111,11 @@ class OutGeo(FrozenClass):
         self.rot_dir = rot_dir
         self.per_a = per_a
         self.is_antiper_a = is_antiper_a
-        self.per_t = per_t
-        self.is_antiper_t = is_antiper_t
+        self.per_t_S = per_t_S
+        self.is_antiper_t_S = is_antiper_t_S
         self.axes_dict = axes_dict
+        self.per_t_R = per_t_R
+        self.is_antiper_t_R = is_antiper_t_R
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -141,9 +149,11 @@ class OutGeo(FrozenClass):
         OutGeo_str += "rot_dir = " + str(self.rot_dir) + linesep
         OutGeo_str += "per_a = " + str(self.per_a) + linesep
         OutGeo_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
-        OutGeo_str += "per_t = " + str(self.per_t) + linesep
-        OutGeo_str += "is_antiper_t = " + str(self.is_antiper_t) + linesep
+        OutGeo_str += "per_t_S = " + str(self.per_t_S) + linesep
+        OutGeo_str += "is_antiper_t_S = " + str(self.is_antiper_t_S) + linesep
         OutGeo_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
+        OutGeo_str += "per_t_R = " + str(self.per_t_R) + linesep
+        OutGeo_str += "is_antiper_t_R = " + str(self.is_antiper_t_R) + linesep
         return OutGeo_str
 
     def __eq__(self, other):
@@ -173,11 +183,15 @@ class OutGeo(FrozenClass):
             return False
         if other.is_antiper_a != self.is_antiper_a:
             return False
-        if other.per_t != self.per_t:
+        if other.per_t_S != self.per_t_S:
             return False
-        if other.is_antiper_t != self.is_antiper_t:
+        if other.is_antiper_t_S != self.is_antiper_t_S:
             return False
         if other.axes_dict != self.axes_dict:
+            return False
+        if other.per_t_R != self.per_t_R:
+            return False
+        if other.is_antiper_t_R != self.is_antiper_t_R:
             return False
         return True
 
@@ -219,10 +233,10 @@ class OutGeo(FrozenClass):
             diff_list.append(name + ".per_a")
         if other._is_antiper_a != self._is_antiper_a:
             diff_list.append(name + ".is_antiper_a")
-        if other._per_t != self._per_t:
-            diff_list.append(name + ".per_t")
-        if other._is_antiper_t != self._is_antiper_t:
-            diff_list.append(name + ".is_antiper_t")
+        if other._per_t_S != self._per_t_S:
+            diff_list.append(name + ".per_t_S")
+        if other._is_antiper_t_S != self._is_antiper_t_S:
+            diff_list.append(name + ".is_antiper_t_S")
         if (other.axes_dict is None and self.axes_dict is not None) or (
             other.axes_dict is not None and self.axes_dict is None
         ):
@@ -238,6 +252,10 @@ class OutGeo(FrozenClass):
                         other.axes_dict[key], name=name + ".axes_dict"
                     )
                 )
+        if other._per_t_R != self._per_t_R:
+            diff_list.append(name + ".per_t_R")
+        if other._is_antiper_t_R != self._is_antiper_t_R:
+            diff_list.append(name + ".is_antiper_t_R")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -257,11 +275,13 @@ class OutGeo(FrozenClass):
         S += getsizeof(self.rot_dir)
         S += getsizeof(self.per_a)
         S += getsizeof(self.is_antiper_a)
-        S += getsizeof(self.per_t)
-        S += getsizeof(self.is_antiper_t)
+        S += getsizeof(self.per_t_S)
+        S += getsizeof(self.is_antiper_t_S)
         if self.axes_dict is not None:
             for key, value in self.axes_dict.items():
                 S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.per_t_R)
+        S += getsizeof(self.is_antiper_t_R)
         return S
 
     def as_dict(self, **kwargs):
@@ -289,8 +309,8 @@ class OutGeo(FrozenClass):
         OutGeo_dict["rot_dir"] = self.rot_dir
         OutGeo_dict["per_a"] = self.per_a
         OutGeo_dict["is_antiper_a"] = self.is_antiper_a
-        OutGeo_dict["per_t"] = self.per_t
-        OutGeo_dict["is_antiper_t"] = self.is_antiper_t
+        OutGeo_dict["per_t_S"] = self.per_t_S
+        OutGeo_dict["is_antiper_t_S"] = self.is_antiper_t_S
         if self.axes_dict is None:
             OutGeo_dict["axes_dict"] = None
         else:
@@ -300,6 +320,8 @@ class OutGeo(FrozenClass):
                     OutGeo_dict["axes_dict"][key] = obj.as_dict()
                 else:
                     OutGeo_dict["axes_dict"][key] = None
+        OutGeo_dict["per_t_R"] = self.per_t_R
+        OutGeo_dict["is_antiper_t_R"] = self.is_antiper_t_R
         # The class name is added to the dict for deserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
@@ -320,9 +342,11 @@ class OutGeo(FrozenClass):
         self.rot_dir = None
         self.per_a = None
         self.is_antiper_a = None
-        self.per_t = None
-        self.is_antiper_t = None
+        self.per_t_S = None
+        self.is_antiper_t_S = None
         self.axes_dict = None
+        self.per_t_R = None
+        self.is_antiper_t_R = None
 
     def _get_stator(self):
         """getter of stator"""
@@ -548,37 +572,37 @@ class OutGeo(FrozenClass):
         """,
     )
 
-    def _get_per_t(self):
-        """getter of per_t"""
-        return self._per_t
+    def _get_per_t_S(self):
+        """getter of per_t_S"""
+        return self._per_t_S
 
-    def _set_per_t(self, value):
-        """setter of per_t"""
-        check_var("per_t", value, "int")
-        self._per_t = value
+    def _set_per_t_S(self, value):
+        """setter of per_t_S"""
+        check_var("per_t_S", value, "int")
+        self._per_t_S = value
 
-    per_t = property(
-        fget=_get_per_t,
-        fset=_set_per_t,
-        doc=u"""Number of time periodicities of the machine
+    per_t_S = property(
+        fget=_get_per_t_S,
+        fset=_set_per_t_S,
+        doc=u"""Number of time periodicities of the machine in static referential
 
         :Type: int
         """,
     )
 
-    def _get_is_antiper_t(self):
-        """getter of is_antiper_t"""
-        return self._is_antiper_t
+    def _get_is_antiper_t_S(self):
+        """getter of is_antiper_t_S"""
+        return self._is_antiper_t_S
 
-    def _set_is_antiper_t(self, value):
-        """setter of is_antiper_t"""
-        check_var("is_antiper_t", value, "bool")
-        self._is_antiper_t = value
+    def _set_is_antiper_t_S(self, value):
+        """setter of is_antiper_t_S"""
+        check_var("is_antiper_t_S", value, "bool")
+        self._is_antiper_t_S = value
 
-    is_antiper_t = property(
-        fget=_get_is_antiper_t,
-        fset=_set_is_antiper_t,
-        doc=u"""True if an time anti-periodicity is possible after the periodicities
+    is_antiper_t_S = property(
+        fget=_get_is_antiper_t_S,
+        fset=_set_is_antiper_t_S,
+        doc=u"""True if an time anti-periodicity is possible after the periodicities in static referential
 
         :Type: bool
         """,
@@ -612,5 +636,41 @@ class OutGeo(FrozenClass):
         doc=u"""Dict containing axes data without periodicities used for plots and to have simulation full time/angle vectors
 
         :Type: {SciDataTool.Classes.DataND.Data}
+        """,
+    )
+
+    def _get_per_t_R(self):
+        """getter of per_t_R"""
+        return self._per_t_R
+
+    def _set_per_t_R(self, value):
+        """setter of per_t_R"""
+        check_var("per_t_R", value, "int")
+        self._per_t_R = value
+
+    per_t_R = property(
+        fget=_get_per_t_R,
+        fset=_set_per_t_R,
+        doc=u"""Number of time periodicities of the machine in rotating referential
+
+        :Type: int
+        """,
+    )
+
+    def _get_is_antiper_t_R(self):
+        """getter of is_antiper_t_R"""
+        return self._is_antiper_t_R
+
+    def _set_is_antiper_t_R(self, value):
+        """setter of is_antiper_t_R"""
+        check_var("is_antiper_t_R", value, "bool")
+        self._is_antiper_t_R = value
+
+    is_antiper_t_R = property(
+        fget=_get_is_antiper_t_R,
+        fset=_set_is_antiper_t_R,
+        doc=u"""True if an time anti-periodicity is possible after the periodicities in rotating referential
+
+        :Type: bool
         """,
     )

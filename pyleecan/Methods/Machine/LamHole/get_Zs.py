@@ -1,5 +1,5 @@
-def get_pole_pair_number(self):
-    """Return the number of pair of pole of the Lamination
+def get_Zs(self):
+    """Return the number of holes in the lamination
 
     Parameters
     ----------
@@ -13,4 +13,4 @@ def get_pole_pair_number(self):
 
     """
 
-    return self.hole[0].Zh // 2
+    return self.hole[0].Zh

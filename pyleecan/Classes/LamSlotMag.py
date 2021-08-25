@@ -57,13 +57,6 @@ try:
 except ImportError as error:
     comp_angle_d_axis = error
 
-try:
-    from ..Methods.Machine.LamSlotMag.comp_periodicity_spatial import (
-        comp_periodicity_spatial,
-    )
-except ImportError as error:
-    comp_periodicity_spatial = error
-
 
 from ._check import InitUnKnowClassError
 from .Magnet import Magnet
@@ -166,18 +159,6 @@ class LamSlotMag(LamSlot):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
-    # cf Methods.Machine.LamSlotMag.comp_periodicity_spatial
-    if isinstance(comp_periodicity_spatial, ImportError):
-        comp_periodicity_spatial = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMag method comp_periodicity_spatial: "
-                    + str(comp_periodicity_spatial)
-                )
-            )
-        )
-    else:
-        comp_periodicity_spatial = comp_periodicity_spatial
     # save and copy methods are available in all object
     save = save
     copy = copy

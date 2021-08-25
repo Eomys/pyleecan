@@ -4095,7 +4095,7 @@
                 "name": "Nrev",
                 "type": "float",
                 "unit": "-",
-                "value": 1
+                "value": null
             },
             {
                 "desc": "Angular discretization",
@@ -4536,8 +4536,8 @@
             "comp_radius_mid_yoke",
             "has_magnet",
             "comp_angle_d_axis",
-            "comp_periodicity_spatial",
-            "set_pole_pair_number"
+            "set_pole_pair_number",
+            "get_Zs"
         ],
         "mother": "Lamination",
         "name": "LamHole",
@@ -4617,8 +4617,7 @@
             "comp_surfaces",
             "comp_volumes",
             "plot",
-            "comp_angle_d_axis",
-            "comp_periodicity_spatial"
+            "comp_angle_d_axis"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -4817,7 +4816,6 @@
             "comp_length_ring",
             "plot",
             "comp_number_phase_eq",
-            "comp_periodicity_spatial",
             "comp_surface_ring",
             "comp_resistance_wind"
         ],
@@ -4931,7 +4929,8 @@
             "comp_radius_mid_yoke",
             "get_yoke_desc",
             "get_bore_desc",
-            "comp_point_ref"
+            "comp_point_ref",
+            "comp_periodicity_spatial"
         ],
         "mother": "",
         "name": "Lamination",
@@ -8202,19 +8201,19 @@
                 "value": null
             },
             {
-                "desc": "Number of time periodicities of the machine",
+                "desc": "Number of time periodicities of the machine in static referential",
                 "max": "",
                 "min": "",
-                "name": "per_t",
+                "name": "per_t_S",
                 "type": "int",
                 "unit": "-",
                 "value": null
             },
             {
-                "desc": "True if an time anti-periodicity is possible after the periodicities",
+                "desc": "True if an time anti-periodicity is possible after the periodicities in static referential",
                 "max": "",
                 "min": "",
-                "name": "is_antiper_t",
+                "name": "is_antiper_t_S",
                 "type": "bool",
                 "unit": "-",
                 "value": null
@@ -8227,6 +8226,24 @@
                 "type": "{SciDataTool.Classes.DataND.Data}",
                 "unit": "",
                 "value": "None"
+            },
+            {
+                "desc": "Number of time periodicities of the machine in rotating referential",
+                "max": "",
+                "min": "",
+                "name": "per_t_R",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "True if an time anti-periodicity is possible after the periodicities in rotating referential",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_t_R",
+                "type": "bool",
+                "unit": "-",
+                "value": null
             }
         ]
     },
