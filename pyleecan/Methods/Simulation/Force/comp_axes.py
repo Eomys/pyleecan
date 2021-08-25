@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ....Functions.Simulation.create_from_axis import create_from_axis
 
 
@@ -18,11 +17,8 @@ def comp_axes(self, output):
         Dict containing Time and Angle axes including (anti-)periodicties used in any Force module
     """
 
-    # Store Time axis in OutMag
-    output.force.Time = output.mag.Time.copy()
-
-    # Store Angle axis in OutMag
-    output.force.Angle = output.mag.Angle.copy()
+    # Get axis dict from OutMag
+    axes_dict_mag = output.mag.axes_dict
 
     # Get time and space (anti-)periodicities of the machine
     (
@@ -34,7 +30,7 @@ def comp_axes(self, output):
 
     # Compute Time axis based on the one stored in OutMag and removing anti-periodicty
     Time, is_periodicity_t = create_from_axis(
-        axis_in=output.force.Time,
+        axis_in=axes_dict_mag["time"],
         per=per_t,
         is_aper=is_antiper_t,
         is_include_per=self.is_periodicity_t,
@@ -55,7 +51,7 @@ def comp_axes(self, output):
 
     # Compute Angle axis based on the one stored in OutMag and removing anti-periodicty
     Angle, is_periodicity_a = create_from_axis(
-        axis_in=output.force.Angle,
+        axis_in=axes_dict_mag["angle"],
         per=per_a,
         is_aper=is_antiper_a,
         is_include_per=self.is_periodicity_a,

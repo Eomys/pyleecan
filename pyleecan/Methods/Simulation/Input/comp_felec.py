@@ -15,9 +15,7 @@ def comp_felec(self):
     elif self.N0 is not None:
         # Get the phase number for verifications
         if self.parent is None:
-            raise InputError(
-                "InputCurrent object should be inside a Simulation object"
-            )
+            raise InputError("InputCurrent object should be inside a Simulation object")
         # get the pole pair number
         if hasattr(self.parent, "machine"):
             zp = self.parent.machine.stator.get_pole_pair_number()

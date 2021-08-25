@@ -1186,7 +1186,7 @@
                 "value": {}
             },
             {
-                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)",
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.axes_dict[angle])",
                 "max": "",
                 "min": "",
                 "name": "is_periodicity_a",
@@ -1898,7 +1898,7 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Force.csv",
         "properties": [
             {
-                "desc": "True to compute only on one time periodicity (use periodicities defined in output.force.Time). If None, automatically calculated based on Magnetics periodicities.",
+                "desc": "True to compute only on one time periodicity (use periodicities defined in output.force.axes_dict[time]). If None, automatically calculated based on Magnetics periodicities.",
                 "max": "",
                 "min": "",
                 "name": "is_periodicity_t",
@@ -1907,7 +1907,7 @@
                 "value": null
             },
             {
-                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.force.Angle). If None, automatically calculated based on Magnetics periodicities.",
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.force.axes_dict[angle]). If None, automatically calculated based on Magnetics periodicities.",
                 "max": "",
                 "min": "",
                 "name": "is_periodicity_a",
@@ -6217,7 +6217,7 @@
                 "value": 0
             },
             {
-                "desc": "True to compute only on one time periodicity (use periodicities defined in output.mag.Time)",
+                "desc": "True to compute only on one time periodicity (use periodicities defined in output.mag.axes_dict[time])",
                 "max": "",
                 "min": "",
                 "name": "is_periodicity_t",
@@ -6226,7 +6226,7 @@
                 "value": 0
             },
             {
-                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)",
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.axes_dict[angle])",
                 "max": "",
                 "min": "",
                 "name": "is_periodicity_a",
@@ -7849,21 +7849,12 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutElec.csv",
         "properties": [
             {
-                "desc": "Electrical time Data object",
+                "desc": "Dict containing axes data used for Electrical",
                 "max": "",
                 "min": "",
-                "name": "Time",
-                "type": "SciDataTool.Classes.DataND.Data",
-                "unit": "s",
-                "value": "None"
-            },
-            {
-                "desc": "Electrical position Data object",
-                "max": "",
-                "min": "",
-                "name": "Angle",
-                "type": "SciDataTool.Classes.DataND.Data",
-                "unit": "rad",
+                "name": "axes_dict",
+                "type": "{SciDataTool.Classes.DataND.Data}",
+                "unit": "",
                 "value": "None"
             },
             {
@@ -8049,21 +8040,12 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutForce.csv",
         "properties": [
             {
-                "desc": "Force time Data object",
+                "desc": "Dict containing axes data used for Force",
                 "max": "",
                 "min": "",
-                "name": "Time",
-                "type": "SciDataTool.Classes.DataND.Data",
-                "unit": "s",
-                "value": "None"
-            },
-            {
-                "desc": "Force position Data object",
-                "max": "",
-                "min": "",
-                "name": "Angle",
-                "type": "SciDataTool.Classes.DataND.Data",
-                "unit": "rad",
+                "name": "axes_dict",
+                "type": "{SciDataTool.Classes.DataND.Data}",
+                "unit": "",
                 "value": "None"
             },
             {
@@ -8236,6 +8218,15 @@
                 "type": "bool",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Dict containing axes data without periodicities used for plots and to have simulation full time/angle vectors",
+                "max": "",
+                "min": "",
+                "name": "axes_dict",
+                "type": "{SciDataTool.Classes.DataND.Data}",
+                "unit": "",
+                "value": "None"
             }
         ]
     },
@@ -8446,21 +8437,12 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutMag.csv",
         "properties": [
             {
-                "desc": "Magnetic time Data object",
+                "desc": "Dict containing axes data used for Magnetics",
                 "max": "",
                 "min": "",
-                "name": "Time",
-                "type": "SciDataTool.Classes.DataND.Data",
-                "unit": "s",
-                "value": "None"
-            },
-            {
-                "desc": "Magnetic position Data object",
-                "max": "",
-                "min": "",
-                "name": "Angle",
-                "type": "SciDataTool.Classes.DataND.Data",
-                "unit": "rad",
+                "name": "axes_dict",
+                "type": "{SciDataTool.Classes.DataND.Data}",
+                "unit": "",
                 "value": "None"
             },
             {
@@ -8693,40 +8675,13 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutStruct.csv",
         "properties": [
             {
-                "desc": "Structural time Data object",
+                "desc": "Dict containing axes data used for Structural",
                 "max": "",
                 "min": "",
-                "name": "Time",
-                "type": "SciDataTool.Classes.DataND.Data",
-                "unit": "s",
+                "name": "axes_dict",
+                "type": "{SciDataTool.Classes.DataND.Data}",
+                "unit": "",
                 "value": "None"
-            },
-            {
-                "desc": "Structural position Data object",
-                "max": "",
-                "min": "",
-                "name": "Angle",
-                "type": "SciDataTool.Classes.DataND.Data",
-                "unit": "rad",
-                "value": "None"
-            },
-            {
-                "desc": "Length of the time vector",
-                "max": "",
-                "min": "",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Length of the angle vector",
-                "max": "",
-                "min": "",
-                "name": "Na_tot",
-                "type": "int",
-                "unit": "-",
-                "value": null
             },
             {
                 "desc": "Name of the logger to use",
@@ -8736,33 +8691,6 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Structural"
-            },
-            {
-                "desc": "Displacement output",
-                "max": "",
-                "min": "",
-                "name": "Yr",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "m",
-                "value": "None"
-            },
-            {
-                "desc": "Velocity output",
-                "max": "",
-                "min": "",
-                "name": "Vr",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "m/s",
-                "value": "None"
-            },
-            {
-                "desc": "Acceleration output",
-                "max": "",
-                "min": "",
-                "name": "Ar",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "m/s^2",
-                "value": "None"
             },
             {
                 "desc": "FEA software mesh and solution",

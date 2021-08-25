@@ -70,7 +70,7 @@ def solve_EEC(self, output):
     # output.elec.Us = output.elec.get_Us()
 
     # # Compute rotor currents
-    # time = output.elec.Time.get_values(is_oneperiod=True)
+    # time = output.elec.axes_dict["time"].get_values(is_oneperiod=True)
     # Nt = time.size
     # qsr = output.simu.machine.rotor.winding.qs
     # sym = output.simu.machine.comp_periodicity_spatial()[0]
@@ -97,7 +97,7 @@ def solve_EEC(self, output):
     #     name="Rotor current",
     #     unit="A",
     #     symbol="Ir",
-    #     axes=[Phase, output.elec.Time.copy()],
+    #     axes=[Phase, output.elec.axes_dict["time"].copy()],
     #     values=Ir.T,
     # )
 

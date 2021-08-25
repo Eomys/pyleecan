@@ -45,6 +45,7 @@ class OutGeo(FrozenClass):
         is_antiper_a=None,
         per_t=None,
         is_antiper_t=None,
+        axes_dict=None,
         init_dict=None,
         init_str=None,
     ):
@@ -89,6 +90,8 @@ class OutGeo(FrozenClass):
                 per_t = init_dict["per_t"]
             if "is_antiper_t" in list(init_dict.keys()):
                 is_antiper_t = init_dict["is_antiper_t"]
+            if "axes_dict" in list(init_dict.keys()):
+                axes_dict = init_dict["axes_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.stator = stator
@@ -104,6 +107,7 @@ class OutGeo(FrozenClass):
         self.is_antiper_a = is_antiper_a
         self.per_t = per_t
         self.is_antiper_t = is_antiper_t
+        self.axes_dict = axes_dict
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -139,6 +143,7 @@ class OutGeo(FrozenClass):
         OutGeo_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
         OutGeo_str += "per_t = " + str(self.per_t) + linesep
         OutGeo_str += "is_antiper_t = " + str(self.is_antiper_t) + linesep
+        OutGeo_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
         return OutGeo_str
 
     def __eq__(self, other):
@@ -171,6 +176,8 @@ class OutGeo(FrozenClass):
         if other.per_t != self.per_t:
             return False
         if other.is_antiper_t != self.is_antiper_t:
+            return False
+        if other.axes_dict != self.axes_dict:
             return False
         return True
 
@@ -216,6 +223,21 @@ class OutGeo(FrozenClass):
             diff_list.append(name + ".per_t")
         if other._is_antiper_t != self._is_antiper_t:
             diff_list.append(name + ".is_antiper_t")
+        if (other.axes_dict is None and self.axes_dict is not None) or (
+            other.axes_dict is not None and self.axes_dict is None
+        ):
+            diff_list.append(name + ".axes_dict None mismatch")
+        elif self.axes_dict is None:
+            pass
+        elif len(other.axes_dict) != len(self.axes_dict):
+            diff_list.append("len(" + name + "axes_dict)")
+        else:
+            for key in self.axes_dict:
+                diff_list.extend(
+                    self.axes_dict[key].compare(
+                        other.axes_dict[key], name=name + ".axes_dict"
+                    )
+                )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -237,6 +259,9 @@ class OutGeo(FrozenClass):
         S += getsizeof(self.is_antiper_a)
         S += getsizeof(self.per_t)
         S += getsizeof(self.is_antiper_t)
+        if self.axes_dict is not None:
+            for key, value in self.axes_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self, **kwargs):
@@ -266,6 +291,15 @@ class OutGeo(FrozenClass):
         OutGeo_dict["is_antiper_a"] = self.is_antiper_a
         OutGeo_dict["per_t"] = self.per_t
         OutGeo_dict["is_antiper_t"] = self.is_antiper_t
+        if self.axes_dict is None:
+            OutGeo_dict["axes_dict"] = None
+        else:
+            OutGeo_dict["axes_dict"] = dict()
+            for key, obj in self.axes_dict.items():
+                if obj is not None:
+                    OutGeo_dict["axes_dict"][key] = obj.as_dict()
+                else:
+                    OutGeo_dict["axes_dict"][key] = None
         # The class name is added to the dict for deserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
@@ -288,6 +322,7 @@ class OutGeo(FrozenClass):
         self.is_antiper_a = None
         self.per_t = None
         self.is_antiper_t = None
+        self.axes_dict = None
 
     def _get_stator(self):
         """getter of stator"""
@@ -546,5 +581,36 @@ class OutGeo(FrozenClass):
         doc=u"""True if an time anti-periodicity is possible after the periodicities
 
         :Type: bool
+        """,
+    )
+
+    def _get_axes_dict(self):
+        """getter of axes_dict"""
+        if self._axes_dict is not None:
+            for key, obj in self._axes_dict.items():
+                if obj is not None:
+                    obj.parent = self
+        return self._axes_dict
+
+    def _set_axes_dict(self, value):
+        """setter of axes_dict"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("axes_dict", value, "{Data}")
+        self._axes_dict = value
+
+    axes_dict = property(
+        fget=_get_axes_dict,
+        fset=_set_axes_dict,
+        doc=u"""Dict containing axes data without periodicities used for plots and to have simulation full time/angle vectors
+
+        :Type: {SciDataTool.Classes.DataND.Data}
         """,
     )

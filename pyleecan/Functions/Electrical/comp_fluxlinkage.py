@@ -74,7 +74,9 @@ def comp_fluxlinkage(obj, output):
     )
 
     # modify some quantities
-    output.elec.Time = Data1D(
+    if output.elec.axes_dict is None:
+        output.elec.axes_dict = dict()
+    output.elec.axes_dict["time"] = Data1D(
         name="time",
         unit="s",
         values=(angle_rotor - angle_rotor[0]) / (2 * pi * output.elec.N0 / 60),

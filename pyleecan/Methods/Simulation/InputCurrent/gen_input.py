@@ -31,11 +31,14 @@ def gen_input(self):
     super(type(self), self).gen_input()
 
     # Get electrical output
-    output = simu.parent.elec
+    outelec = simu.parent.elec
 
     # Number of winding phases for stator/rotor
     qs = len(simu.machine.stator.get_name_phase())
     qr = len(simu.machine.rotor.get_name_phase())
+
+    # Get time axis
+    Time = outelec.axes_dict["time"]
 
     # Load and check Is
     if qs > 0:
@@ -45,9 +48,9 @@ def gen_input(self):
                     "InputCurrent.Is, InputCurrent.Id_ref, and InputCurrent.Iq_ref missing"
                 )
             else:
-                output.Id_ref = self.Id_ref
-                output.Iq_ref = self.Iq_ref
-                output.Is = None
+                outelec.Id_ref = self.Id_ref
+                outelec.Iq_ref = self.Iq_ref
+                outelec.Is = None
         else:
             Is = self.Is.get_data()
             if not isinstance(Is, ndarray) or Is.shape != (self.Nt_tot, qs):
@@ -65,22 +68,22 @@ def gen_input(self):
                 values=gen_name(qs),
                 is_components=True,
             )
-            output.Is = DataTime(
+            outelec.Is = DataTime(
                 name="Stator current",
                 unit="A",
                 symbol="Is",
-                axes=[Phase, output.Time],
+                axes=[Phase, Time],
                 values=transpose(Is),
             )
             # Compute corresponding Id/Iq reference
             Idq = n2dq(
-                transpose(output.Is.values),
-                2 * pi * output.felec * output.Time.get_values(is_oneperiod=False),
+                transpose(outelec.Is.values),
+                2 * pi * outelec.felec * Time.get_values(is_oneperiod=False),
                 n=qs,
                 is_dq_rms=True,
             )
-            output.Id_ref = mean(Idq[:, 0])
-            output.Iq_ref = mean(Idq[:, 1])
+            outelec.Id_ref = mean(Idq[:, 0])
+            outelec.Iq_ref = mean(Idq[:, 1])
 
     # Load and check Ir is needed
     if qr > 0:
@@ -103,13 +106,13 @@ def gen_input(self):
             values=gen_name(qr),
             is_components=True,
         )
-        output.Ir = DataTime(
+        outelec.Ir = DataTime(
             name="Rotor current",
             unit="A",
             symbol="Ir",
-            axes=[Phase, output.Time],
+            axes=[Phase, Time],
             values=transpose(Ir),
         )
 
     # Save the Output in the correct place
-    simu.parent.elec = output
+    simu.parent.elec = outelec

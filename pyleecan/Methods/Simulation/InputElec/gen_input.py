@@ -1,7 +1,8 @@
-# -*- coding: utf-8 -*-
-
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
+
+from ....Functions.Simulation.create_from_axis import create_from_axis
+
 from ....Methods.Simulation.Input import InputError
 
 
@@ -14,63 +15,70 @@ def gen_input(self):
         An InputCurrent object
     """
 
-    output = OutElec()
-
     # get the simulation
     if isinstance(self.parent, Simulation):
         simu = self.parent
     elif isinstance(self.parent.parent, Simulation):
         simu = self.parent.parent
     else:
-        raise InputError(
-            "ERROR: InputCurrent object should be inside a Simulation object"
-        )
+        raise InputError("InputCurrent object should be inside a Simulation object")
 
-    output.N0 = self.N0
-    output.felec = self.comp_felec()
+    outelec = OutElec()
+    outgeo = simu.parent.geo
 
-    # Set discretization
-    Time, Angle = self.comp_axes(simu.machine, self.N0)
-    output.Time = Time
-    output.Angle = Angle
+    outelec.N0 = self.N0
+    outelec.felec = self.comp_felec()
 
-    # Initialize output at None
-    output.Id_ref = None
-    output.Iq_ref = None
-    output.Ud_ref = None
-    output.Uq_ref = None
-    output.Is = None
-    output.Ir = None
+    # Set time and angle full axes in geometry output
+    Time, Angle = self.comp_axes(simu.machine)
+    outgeo.axes_dict = {"Time": Time, "Angle": Angle}
+
+    # Create time axis in electrical output accounting for pole periodicity
+    Time_elec = Time.copy()
+    Time_elec, _ = create_from_axis(
+        axis_in=Time,
+        per=int(2 * simu.machine.get_pole_pair_number()),
+        is_aper=True,
+        is_include_per=True,
+        is_remove_aper=False,
+    )
+    outelec.axes_dict = {"Time": Time_elec}
+
+    # Initialize outelec at None
+    outelec.Id_ref = None
+    outelec.Iq_ref = None
+    outelec.Ud_ref = None
+    outelec.Uq_ref = None
+    outelec.Is = None
+    outelec.Ir = None
 
     # Load and check voltage and currents
     if self.Ud_ref is not None and self.Uq_ref is not None:
-        output.Ud_ref = self.Ud_ref
-        output.Uq_ref = self.Uq_ref
+        outelec.Ud_ref = self.Ud_ref
+        outelec.Uq_ref = self.Uq_ref
         simu.elec.eec.parameters["Ud"] = self.Ud_ref
         simu.elec.eec.parameters["Uq"] = self.Uq_ref
         if self.Id_ref is not None and self.Iq_ref is not None:
-            output.Id_ref = self.Id_ref
-            output.Iq_ref = self.Iq_ref
+            outelec.Id_ref = self.Id_ref
+            outelec.Iq_ref = self.Iq_ref
         else:
-            output.Id_ref = 1
-            output.Iq_ref = 1
+            outelec.Id_ref = 1
+            outelec.Iq_ref = 1
     elif self.Id_ref is not None and self.Iq_ref is not None:
-        output.Id_ref = self.Id_ref
-        output.Iq_ref = self.Iq_ref
+        outelec.Id_ref = self.Id_ref
+        outelec.Iq_ref = self.Iq_ref
     else:
-        raise InputError("ERROR: Id/Iq or Ud/Uq missing")
+        raise InputError("Id/Iq or Ud/Uq missing")
 
     # Load and check rot_dir
     if self.rot_dir is None or self.rot_dir not in [-1, 1]:
         # Enforce default rotation direction
-        simu.parent.geo.rot_dir = -1
+        outgeo.rot_dir = -1
     else:
-        simu.parent.geo.rot_dir = self.rot_dir
+        outgeo.rot_dir = self.rot_dir
 
     if simu.parent is None:
-        raise InputError(
-            "ERROR: The Simulation object must be in an Output object to run"
-        )
+        raise InputError("The Simulation object must be in an outelec object to run")
 
     # Save the Output in the correct place
-    simu.parent.elec = output
+    simu.parent.elec = outelec

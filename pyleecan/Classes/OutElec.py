@@ -93,8 +93,7 @@ class OutElec(FrozenClass):
 
     def __init__(
         self,
-        Time=None,
-        Angle=None,
+        axes_dict=None,
         Is=None,
         Ir=None,
         angle_rotor=None,
@@ -131,10 +130,8 @@ class OutElec(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Time" in list(init_dict.keys()):
-                Time = init_dict["Time"]
-            if "Angle" in list(init_dict.keys()):
-                Angle = init_dict["Angle"]
+            if "axes_dict" in list(init_dict.keys()):
+                axes_dict = init_dict["axes_dict"]
             if "Is" in list(init_dict.keys()):
                 Is = init_dict["Is"]
             if "Ir" in list(init_dict.keys()):
@@ -173,8 +170,7 @@ class OutElec(FrozenClass):
                 U0_ref = init_dict["U0_ref"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.Time = Time
-        self.Angle = Angle
+        self.axes_dict = axes_dict
         self.Is = Is
         self.Ir = Ir
         self.angle_rotor = angle_rotor
@@ -205,8 +201,7 @@ class OutElec(FrozenClass):
             OutElec_str += "parent = None " + linesep
         else:
             OutElec_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutElec_str += "Time = " + str(self.Time) + linesep + linesep
-        OutElec_str += "Angle = " + str(self.Angle) + linesep + linesep
+        OutElec_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
         OutElec_str += "Is = " + str(self.Is) + linesep + linesep
         OutElec_str += "Ir = " + str(self.Ir) + linesep + linesep
         OutElec_str += (
@@ -244,9 +239,7 @@ class OutElec(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.Time != self.Time:
-            return False
-        if other.Angle != self.Angle:
+        if other.axes_dict != self.axes_dict:
             return False
         if other.Is != self.Is:
             return False
@@ -294,18 +287,21 @@ class OutElec(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if (other.Time is None and self.Time is not None) or (
-            other.Time is not None and self.Time is None
+        if (other.axes_dict is None and self.axes_dict is not None) or (
+            other.axes_dict is not None and self.axes_dict is None
         ):
-            diff_list.append(name + ".Time None mismatch")
-        elif self.Time is not None:
-            diff_list.extend(self.Time.compare(other.Time, name=name + ".Time"))
-        if (other.Angle is None and self.Angle is not None) or (
-            other.Angle is not None and self.Angle is None
-        ):
-            diff_list.append(name + ".Angle None mismatch")
-        elif self.Angle is not None:
-            diff_list.extend(self.Angle.compare(other.Angle, name=name + ".Angle"))
+            diff_list.append(name + ".axes_dict None mismatch")
+        elif self.axes_dict is None:
+            pass
+        elif len(other.axes_dict) != len(self.axes_dict):
+            diff_list.append("len(" + name + "axes_dict)")
+        else:
+            for key in self.axes_dict:
+                diff_list.extend(
+                    self.axes_dict[key].compare(
+                        other.axes_dict[key], name=name + ".axes_dict"
+                    )
+                )
         if (other.Is is None and self.Is is not None) or (
             other.Is is not None and self.Is is None
         ):
@@ -368,8 +364,9 @@ class OutElec(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.Time)
-        S += getsizeof(self.Angle)
+        if self.axes_dict is not None:
+            for key, value in self.axes_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.Is)
         S += getsizeof(self.Ir)
         S += getsizeof(self.angle_rotor)
@@ -398,14 +395,15 @@ class OutElec(FrozenClass):
         """
 
         OutElec_dict = dict()
-        if self.Time is None:
-            OutElec_dict["Time"] = None
+        if self.axes_dict is None:
+            OutElec_dict["axes_dict"] = None
         else:
-            OutElec_dict["Time"] = self.Time.as_dict()
-        if self.Angle is None:
-            OutElec_dict["Angle"] = None
-        else:
-            OutElec_dict["Angle"] = self.Angle.as_dict()
+            OutElec_dict["axes_dict"] = dict()
+            for key, obj in self.axes_dict.items():
+                if obj is not None:
+                    OutElec_dict["axes_dict"][key] = obj.as_dict()
+                else:
+                    OutElec_dict["axes_dict"][key] = None
         if self.Is is None:
             OutElec_dict["Is"] = None
         else:
@@ -446,8 +444,7 @@ class OutElec(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Time = None
-        self.Angle = None
+        self.axes_dict = None
         self.Is = None
         self.Ir = None
         self.angle_rotor = None
@@ -468,57 +465,34 @@ class OutElec(FrozenClass):
         self.slip_ref = None
         self.U0_ref = None
 
-    def _get_Time(self):
-        """getter of Time"""
-        return self._Time
+    def _get_axes_dict(self):
+        """getter of axes_dict"""
+        if self._axes_dict is not None:
+            for key, obj in self._axes_dict.items():
+                if obj is not None:
+                    obj.parent = self
+        return self._axes_dict
 
-    def _set_Time(self, value):
-        """setter of Time"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Time"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Data()
-        check_var("Time", value, "Data")
-        self._Time = value
+    def _set_axes_dict(self, value):
+        """setter of axes_dict"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("axes_dict", value, "{Data}")
+        self._axes_dict = value
 
-    Time = property(
-        fget=_get_Time,
-        fset=_set_Time,
-        doc=u"""Electrical time Data object
+    axes_dict = property(
+        fget=_get_axes_dict,
+        fset=_set_axes_dict,
+        doc=u"""Dict containing axes data used for Electrical
 
-        :Type: SciDataTool.Classes.DataND.Data
-        """,
-    )
-
-    def _get_Angle(self):
-        """getter of Angle"""
-        return self._Angle
-
-    def _set_Angle(self, value):
-        """setter of Angle"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Angle"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Data()
-        check_var("Angle", value, "Data")
-        self._Angle = value
-
-    Angle = property(
-        fget=_get_Angle,
-        fset=_set_Angle,
-        doc=u"""Electrical position Data object
-
-        :Type: SciDataTool.Classes.DataND.Data
+        :Type: {SciDataTool.Classes.DataND.Data}
         """,
     )
 

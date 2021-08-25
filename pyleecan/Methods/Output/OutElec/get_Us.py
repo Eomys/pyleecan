@@ -9,7 +9,7 @@ def get_Us(self):
     if self.Us is None:
         # Generate current according to Ud/Uq
         Usdq = array([self.Ud_ref, self.Uq_ref])
-        time = self.Time.get_values(is_oneperiod=True)
+        time = self.axes_dict["time"].get_values(is_oneperiod=True)
         qs = self.parent.simu.machine.stator.winding.qs
         felec = self.felec
 
@@ -25,7 +25,7 @@ def get_Us(self):
             name="Stator voltage",
             unit="V",
             symbol="Us",
-            axes=[Phase, self.Time.copy()],
+            axes=[Phase, self.axes_dict["time"].copy()],
             values=transpose(Us),
         )
     return self.Us

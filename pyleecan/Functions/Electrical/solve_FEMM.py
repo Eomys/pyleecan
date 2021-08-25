@@ -22,10 +22,14 @@ def solve_FEMM(obj, femm, output, sym, FEMM_dict):
 
     # Interpolate current on electric model time axis
     # Get stator current from elec out
-    Is = output.elec.comp_I_mag(time=output.elec.Time.values, is_stator=True)
+    Is = output.elec.comp_I_mag(
+        time=output.elec.axes_dict["time"].values, is_stator=True
+    )
 
     # Get rotor current from elec out
-    Ir = output.elec.comp_I_mag(time=output.elec.Time.values, is_stator=False)
+    Ir = output.elec.comp_I_mag(
+        time=output.elec.axes_dict["time"].values, is_stator=False
+    )
 
     # Get rotor angular position
     angle_rotor = output.get_angle_rotor()[0:Nt_tot]

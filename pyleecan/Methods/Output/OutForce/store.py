@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from SciDataTool import DataTime, VectorField
 
 
@@ -15,6 +14,9 @@ def store(self, out_dict, axes_dict):
         Dict of axes used for magnetic calculation
 
     """
+
+    # Store axes_dict
+    self.axes_dict = axes_dict
 
     # Store air-gap surface force as VectorField object
 

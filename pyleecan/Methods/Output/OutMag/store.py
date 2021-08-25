@@ -20,6 +20,9 @@ def store(self, out_dict, axes_dict):
 
     """
 
+    # Store axes_dict
+    self.axes_dict = axes_dict
+
     # Get time axis
     Time = axes_dict["Time"]
 

@@ -19,7 +19,7 @@ def gen_drive(self, output):
 
     qs = output.simu.machine.stator.winding.qs
     felec = output.elec.felec
-    time = output.elec.Time.get_values()
+    time = output.elec.axes_dict["time"].get_values()
 
     # Compute voltage
     Voltage = self.drive.get_wave()

@@ -23,7 +23,7 @@ def comp_axes(self, machine):
         Angle axis including (anti)-periodicity
 
     """
-    
+
     N0 = self.N0
 
     if self.time is None and N0 is None:

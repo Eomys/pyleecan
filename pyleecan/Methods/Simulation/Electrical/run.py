@@ -40,13 +40,6 @@ def run(self):
                 "Cannot run Electrical model if machine is PMSM and eec is not EEC_PMSM"
             )
 
-    # Compute and store time and angle axes from elec output
-    # and returns additional axes in axes_dict
-    if output.elec.Time is not None and output.elec.Angle is not None:
-        axes_dict = {"time": output.elec.Time, "angle": output.elec.Angle}
-    else:
-        raise Exception("Time and Angle must not be None in Electrical.run()")
-
     if self.ELUT_enforced is not None:
         # enforce parameters of EEC coming from enforced ELUT at right temperatures
         if self.eec.parameters is None:
@@ -75,4 +68,4 @@ def run(self):
     out_dict = self.comp_torque(output)
 
     # Store electrical quantities contained in out_dict in OutElec, as Data object if necessary
-    out_dict.store(out_dict, axes_dict)
+    out_dict.store(out_dict)

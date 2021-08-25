@@ -34,8 +34,7 @@ def clean(self, clean_level=1):
     if clean_level > 3:
         # clean all internal outputs
         self.internal = None
-        self.Angle = None
-        self.Time = None
+        self.axes_dict = None
 
     else:
         # clean internal depending on log_level
