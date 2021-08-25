@@ -34,7 +34,7 @@ from pyleecan.definitions import DATA_DIR
 # @pytest.mark.IPMSM
 # @pytest.mark.periodicity
 # @pytest.mark.SingleOP
-@pytest.skip(reason="Not finished yet")
+@pytest.mark.skip(reason="Not finished yet")
 def test_skin_effect():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine
     Compute Torque from EEC results and compare with Yang et al, 2013

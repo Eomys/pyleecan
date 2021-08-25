@@ -13639,7 +13639,8 @@
         "is_internal": false,
         "methods": [
             "comp_connection_mat",
-            "get_dim_wind"
+            "get_dim_wind",
+            "comp_periodicity"
         ],
         "mother": "Winding",
         "name": "WindingSC",

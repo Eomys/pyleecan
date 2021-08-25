@@ -12,12 +12,12 @@ def get_bemf(self):
         (1,:) rotor position [rad]
     """
 
+    # TODO
 
-# calculating bemf from MLUT
-Phi_dqh = self.Phi_dqh
-I_dqh = self.I_dqh
+    # # calculating bemf from MLUT
+    # Phi_dqh = self.Phi_dqh
+    # I_dqh = self.I_dqh
 
-# Phi0_dqh = Phi_dqh[I_dqh.index([0,0,0]),:]
+    # # Phi0_dqh = Phi_dqh[I_dqh.index([0,0,0]),:]
 
-
-return bemf
+    # return bemf

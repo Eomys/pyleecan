@@ -14,6 +14,8 @@ if not isdir(save_path):
     mkdir(save_path)
 
 
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 def testSPWM():
     """Check"""
     # fs, duration, f,fmax,fmode, fswimode,fswi, fswi_max,typePWM, Vdc1, U0, type_carrier
@@ -61,45 +63,8 @@ def testSPWM():
                 )
 
 
-# def testSPWM():
-#     """Check """
-#     # fs, duration, f,fmax,fmode, fswimode,fswi, fswi_max,typePWM, Vdc1, U0, type_carrier
-
-#     test_obj = ImportGenPWM(
-#         fs=96000,
-#         duration=2,
-#         f=1,
-#         fmax=5,
-#         fmode=0,
-#         fswimode=4,
-#         fswi=5,
-#         fswi_max=15,
-#         typePWM=8,
-#         Vdc1=2,
-#         U0=0.70,
-#         type_carrier=6,
-#         var_amp=20,
-#     )
-#     # Generate the signal
-#     time = linspace(start=0, stop=2, num=2 * 96000, endpoint=True)
-#     Triphase = test_obj.get_data()[0]
-#     Vas = test_obj.get_data()[1]
-#     Triangle = test_obj.get_data()[3]
-
-#     # Plot/save the result
-#     plt.close("all")
-#     plt.plot(time, Triphase[:, 1])
-#     plt.plot(time, Vas)
-#     plt.plot(time, Triangle)
-#     fig = plt.gcf()
-#     fig.savefig(
-#         join(
-#             save_path,
-#             "test_ImportGenPWM_" + str(0) + "_" + str(4) + "_" + str(6) + "_SPWM.png",
-#         )
-#     )
-
-
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 def testDPWM():
     """Check"""
     for ii in range(9):
@@ -135,6 +100,4 @@ def testDPWM():
 
 if __name__ == "__main__":
     # testDPWM()
-    # testSPWM()
-
     testSPWM()
