@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-from math import gcd
-
-
 def get_machine_periodicity(self):
     """Return / Compute the (anti)-periodicities of the machine in time and space domain
 
@@ -30,9 +26,12 @@ def get_machine_periodicity(self):
         (
             self.geo.per_a,
             self.geo.is_antiper_a,
+        ) = self.simu.machine.comp_periodicity_spatial()
+
+        (
             self.geo.per_t,
             self.geo.is_antiper_t,
-        ) = self.simu.machine.comp_periodicity()
+        ) = self.simu.machine.comp_periodicity_time()
 
     return (
         self.geo.per_a,

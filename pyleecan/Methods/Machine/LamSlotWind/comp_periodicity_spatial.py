@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-from ....Classes.Winding import Winding
-from ....Classes.Conductor import Conductor
-
-
-def comp_periodicity(self):
+def comp_periodicity_spatial(self):
     """Compute the periodicity factor of the lamination
 
     Parameters
@@ -14,13 +9,9 @@ def comp_periodicity(self):
     Returns
     -------
     per_a : int
-        Number of spatial periodicities of the lamination
+        Number of spatial periodicities of the lamination over 2*pi
     is_antiper_a : bool
         True if an spatial anti-periodicity is possible after the periodicities
-    per_t : int
-        Number of time periodicities of the lamination
-    is_antiper_t : bool
-        True if an time anti-periodicity is possible after the periodicities
     """
 
     if self.winding is not None and self.winding.conductor is not None:
@@ -31,4 +22,4 @@ def comp_periodicity(self):
     if is_antisym_a:
         sym_a /= 2
 
-    return (int(sym_a), is_antisym_a, sym_a, is_antisym_a)
+    return int(sym_a), is_antisym_a

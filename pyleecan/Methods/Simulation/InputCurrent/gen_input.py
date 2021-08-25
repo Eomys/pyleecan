@@ -80,7 +80,7 @@ def gen_input(self):
                 is_dq_rms=True,
             )
             output.Id_ref = mean(Idq[:, 0])
-            output.Iq_ref = mean(Idq[:, 1])  # TODO use of mean has to be documented
+            output.Iq_ref = mean(Idq[:, 1])
 
     # Load and check Ir is needed
     if qr > 0:

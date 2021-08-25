@@ -8,7 +8,7 @@ import pytest
 
 
 @pytest.mark.periodicity
-def test_comp_periodicity():
+def test_comp_periodicity_spatial():
     rotor = LamSlotWind(
         Rint=0.2,
         Rext=0.5,
@@ -19,4 +19,4 @@ def test_comp_periodicity():
         Wrvd=0.05,
     )
     rotor.winding = None
-    assert rotor.comp_periodicity() == (1, False, 1, False)
+    assert rotor.comp_periodicity_spatial() == (1, False)

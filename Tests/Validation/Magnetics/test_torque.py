@@ -110,7 +110,7 @@ def test_torque():
     simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=varload.type_OP_matrix)
 
     # Definition of the magnetic simulation (1/2 symmetry)
-    assert SynRM_001.comp_periodicity() == (2, True, 2, True)
+    assert SynRM_001.comp_periodicity_spatial() == (2, True)
     simu.mag = MagFEMM(
         type_BH_stator=0,
         type_BH_rotor=0,

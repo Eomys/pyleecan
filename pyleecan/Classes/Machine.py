@@ -62,9 +62,11 @@ except ImportError as error:
     comp_Rgap_mec = error
 
 try:
-    from ..Methods.Machine.Machine.comp_periodicity import comp_periodicity
+    from ..Methods.Machine.Machine.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
-    comp_periodicity = error
+    comp_periodicity_spatial = error
 
 try:
     from ..Methods.Machine.Machine.comp_width_airgap_mag import comp_width_airgap_mag
@@ -125,6 +127,11 @@ try:
     from ..Methods.Machine.Machine.set_pole_pair_number import set_pole_pair_number
 except ImportError as error:
     set_pole_pair_number = error
+
+try:
+    from ..Methods.Machine.Machine.comp_periodicity_time import comp_periodicity_time
+except ImportError as error:
+    comp_periodicity_time = error
 
 
 from ._check import InitUnKnowClassError
@@ -224,18 +231,18 @@ class Machine(FrozenClass):
         )
     else:
         comp_Rgap_mec = comp_Rgap_mec
-    # cf Methods.Machine.Machine.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
+    # cf Methods.Machine.Machine.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Machine method comp_periodicity: "
-                    + str(comp_periodicity)
+                    "Can't use Machine method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
                 )
             )
         )
     else:
-        comp_periodicity = comp_periodicity
+        comp_periodicity_spatial = comp_periodicity_spatial
     # cf Methods.Machine.Machine.comp_width_airgap_mag
     if isinstance(comp_width_airgap_mag, ImportError):
         comp_width_airgap_mag = property(
@@ -373,6 +380,18 @@ class Machine(FrozenClass):
         )
     else:
         set_pole_pair_number = set_pole_pair_number
+    # cf Methods.Machine.Machine.comp_periodicity_time
+    if isinstance(comp_periodicity_time, ImportError):
+        comp_periodicity_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_periodicity_time: "
+                    + str(comp_periodicity_time)
+                )
+            )
+        )
+    else:
+        comp_periodicity_time = comp_periodicity_time
     # save and copy methods are available in all object
     save = save
     copy = copy

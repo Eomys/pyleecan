@@ -1,12 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from pickle import EMPTY_SET
-from ....Functions.Electrical.coordinate_transformation import dq2n
-from ....Functions.Winding.gen_phase_list import gen_name
-
-from numpy import array, pi, real, imag, tile, interp, complex, shape
-from scipy.linalg import solve
-from SciDataTool import Data1D, DataTime
+from numpy import pi, interp
 
 
 def solve_EEC(self, output):
@@ -81,7 +73,7 @@ def solve_EEC(self, output):
     # time = output.elec.Time.get_values(is_oneperiod=True)
     # Nt = time.size
     # qsr = output.simu.machine.rotor.winding.qs
-    # sym = output.simu.machine.comp_periodicity()[0]
+    # sym = output.simu.machine.comp_periodicity_spatial()[0]
 
     # Ir_ = tile(Ir_norm, (Nt, 1)) * norm
 

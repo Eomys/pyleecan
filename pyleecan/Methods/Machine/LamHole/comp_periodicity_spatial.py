@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
-
-def comp_periodicity(self):
+def comp_periodicity_spatial(self):
     """Compute the periodicity factor of the lamination
 
     Parameters
@@ -15,10 +12,6 @@ def comp_periodicity(self):
         Number of spatial periodicities of the lamination
     is_antiper_a : bool
         True if an spatial anti-periodicity is possible after the periodicities
-    per_t : int
-        Number of time periodicities of the lamination
-    is_antiper_t : bool
-        True if an time anti-periodicity is possible after the periodicities
     """
 
-    return self.get_pole_pair_number(), True, self.get_pole_pair_number(), True
+    return self.get_pole_pair_number(), True

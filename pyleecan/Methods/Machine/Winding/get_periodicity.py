@@ -17,6 +17,6 @@ def get_periodicity(self):
 
     if self.per_a is None or self.is_aper_a is None:
 
-        self.per_a, self.is_aper_a = self.comp_periodicity()
+        self.per_a, self.is_aper_a = self.comp_periodicity_spatial()
 
     return self.per_a, self.is_aper_a

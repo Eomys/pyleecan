@@ -9,5 +9,5 @@ hole,,lamination Hole,1,[Hole],,,,,Machine,Lamination,build_geometry,VERSION,1,L
 ,,,,,,,,,,,comp_radius_mid_yoke,,,
 ,,,,,,,,,,,has_magnet,,,
 ,,,,,,,,,,,comp_angle_d_axis,,,
-,,,,,,,,,,,comp_periodicity,,,
+,,,,,,,,,,,comp_periodicity_spatial,,,
 ,,,,,,,,,,,set_pole_pair_number,,,

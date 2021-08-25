@@ -2,7 +2,7 @@ from numpy import array_equal, roll, squeeze, sum as np_sum, lcm
 from numpy.linalg import norm
 
 
-def comp_periodicity(self, wind_mat=None):
+def comp_periodicity_spatial(self, wind_mat=None):
     """Computes the winding matrix (anti-)periodicity
 
     Parameters

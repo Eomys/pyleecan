@@ -36,7 +36,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
     p = self.get_pole_pair_number()
 
     # Get spatial symmetry
-    per_a, _, _, _ = self.comp_periodicity(p=p)
+    per_a, _ = self.comp_periodicity_spatial()
 
     # Define the space dicretization
     angle = linspace(0, 2 * pi / per_a, Na, endpoint=False)

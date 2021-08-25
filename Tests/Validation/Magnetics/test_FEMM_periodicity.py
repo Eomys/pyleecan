@@ -32,7 +32,7 @@ def test_FEMM_periodicity_time_no_periodicity_a():
 
     SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
 
-    assert SPMSM_015.comp_periodicity() == (9, False, 9, True)
+    assert SPMSM_015.comp_periodicity_spatial() == (9, False)
 
     simu = Simu1(name="test_FEMM_periodicity_time_no_periodicity_a", machine=SPMSM_015)
 
@@ -179,7 +179,7 @@ def test_FEMM_periodicity_time():
 
     SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
 
-    assert SPMSM_015.comp_periodicity() == (9, False, 9, True)
+    assert SPMSM_015.comp_periodicity_spatial() == (9, False)
 
     simu = Simu1(name="test_FEMM_periodicity_time", machine=SPMSM_015)
 
@@ -326,7 +326,7 @@ def test_FEMM_periodicity_angle():
 
     SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
 
-    assert SPMSM_015.comp_periodicity() == (9, False, 9, True)
+    assert SPMSM_015.comp_periodicity_spatial() == (9, False)
 
     simu = Simu1(name="test_FEMM_periodicity_angle", machine=SPMSM_015)
 

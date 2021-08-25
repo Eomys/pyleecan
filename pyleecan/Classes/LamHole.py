@@ -68,9 +68,11 @@ except ImportError as error:
     comp_angle_d_axis = error
 
 try:
-    from ..Methods.Machine.LamHole.comp_periodicity import comp_periodicity
+    from ..Methods.Machine.LamHole.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
-    comp_periodicity = error
+    comp_periodicity_spatial = error
 
 try:
     from ..Methods.Machine.LamHole.set_pole_pair_number import set_pole_pair_number
@@ -199,18 +201,18 @@ class LamHole(Lamination):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
-    # cf Methods.Machine.LamHole.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
+    # cf Methods.Machine.LamHole.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamHole method comp_periodicity: "
-                    + str(comp_periodicity)
+                    "Can't use LamHole method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
                 )
             )
         )
     else:
-        comp_periodicity = comp_periodicity
+        comp_periodicity_spatial = comp_periodicity_spatial
     # cf Methods.Machine.LamHole.set_pole_pair_number
     if isinstance(set_pole_pair_number, ImportError):
         set_pole_pair_number = property(

@@ -166,7 +166,7 @@ def _comp_flux_mean(self, out):
     machine = out.simu.machine
     p = machine.rotor.winding.p
     qsr = machine.rotor.winding.qs
-    sym, is_anti_per, _, _ = machine.comp_periodicity()
+    sym, is_anti_per = machine.comp_periodicity_spatial()
 
     # get the fluxlinkages
     Phi = out.mag.Phi_wind["Rotor_0"].get_along("time", "phase")["Phi_{wind}"]

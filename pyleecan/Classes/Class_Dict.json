@@ -4536,7 +4536,7 @@
             "comp_radius_mid_yoke",
             "has_magnet",
             "comp_angle_d_axis",
-            "comp_periodicity",
+            "comp_periodicity_spatial",
             "set_pole_pair_number"
         ],
         "mother": "Lamination",
@@ -4618,7 +4618,7 @@
             "comp_volumes",
             "plot",
             "comp_angle_d_axis",
-            "comp_periodicity"
+            "comp_periodicity_spatial"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -4657,7 +4657,7 @@
             "comp_height_yoke",
             "get_Zs",
             "get_bore_desc",
-            "comp_periodicity"
+            "comp_periodicity_spatial"
         ],
         "mother": "Lamination",
         "name": "LamSlotMulti",
@@ -4771,7 +4771,7 @@
             "comp_rot_dir",
             "comp_lengths_winding",
             "comp_number_phase_eq",
-            "comp_periodicity",
+            "comp_periodicity_spatial",
             "set_pole_pair_number"
         ],
         "mother": "LamSlot",
@@ -4817,7 +4817,7 @@
             "comp_length_ring",
             "plot",
             "comp_number_phase_eq",
-            "comp_periodicity",
+            "comp_periodicity_spatial",
             "comp_surface_ring",
             "comp_resistance_wind"
         ],
@@ -5342,7 +5342,7 @@
             "comp_masses",
             "comp_output_geo",
             "comp_Rgap_mec",
-            "comp_periodicity",
+            "comp_periodicity_spatial",
             "comp_width_airgap_mag",
             "comp_width_airgap_mec",
             "get_material_dict",
@@ -5354,7 +5354,8 @@
             "get_lam_by_label",
             "get_lam_index",
             "get_pole_pair_number",
-            "set_pole_pair_number"
+            "set_pole_pair_number",
+            "comp_periodicity_time"
         ],
         "mother": "",
         "name": "Machine",

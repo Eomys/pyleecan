@@ -60,7 +60,7 @@ def test_IPMSM_xxx():
     simu.force = None
     simu.struct = None
 
-    assert IPMSM_xxx.comp_periodicity() == (4, True, 4, True)
+    assert IPMSM_xxx.comp_periodicity_spatial() == (4, True)
     # Copy the simu and activate the symmetry
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
@@ -129,7 +129,7 @@ def test_Toyota_Prius():
     simu.struct = None
     # simu.struct.force = ForceMT()
     # Copy the simu and activate the symmetry
-    assert Toyota_Prius.comp_periodicity() == (4, True, 4, True)
+    assert Toyota_Prius.comp_periodicity_spatial() == (4, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 
@@ -199,7 +199,7 @@ def test_SCIM():
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
-    assert SCIM_006.comp_periodicity() == (2, True, 28, False)
+    assert SCIM_006.comp_periodicity_spatial() == (2, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 
@@ -286,7 +286,7 @@ def test_SIPMSM():
     )
 
     # Definition of the magnetic simulation (is_mmfr=False => no flux from the magnets)
-    assert SIPMSM_001.comp_periodicity() == (1, False, 2, True)
+    assert SIPMSM_001.comp_periodicity_spatial() == (1, False)
     simu.mag = MagFEMM(
         type_BH_stator=2,
         type_BH_rotor=2,
@@ -378,7 +378,7 @@ def test_SPMSM_load():
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
-    assert SPMSM_003.comp_periodicity() == (1, True, 1, True)
+    assert SPMSM_003.comp_periodicity_spatial() == (1, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 
@@ -460,7 +460,7 @@ def test_SPMSM_noload():
     )
 
     # Definition of the magnetic simulation (is_mmfr=False => no flux from the magnets)
-    assert SPMSM_015.comp_periodicity() == (9, False, 9, True)
+    assert SPMSM_015.comp_periodicity_spatial() == (9, False)
     simu.mag = MagFEMM(
         type_BH_stator=0,
         type_BH_rotor=0,

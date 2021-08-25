@@ -239,7 +239,7 @@ def test_axis_LamWind(CURVE_COLORS):
     mmf_waveform = magmax * cos(p * angle_rotor + phimax)
     ind_max = argmax(mmf_waveform)
     d_angle = angle_rotor[ind_max]
-    (per_a, _, _, _) = SCIM_001.stator.comp_periodicity()
+    per_a, _ = SCIM_001.stator.comp_periodicity_spatial()
     d_angle = d_angle % (2 * pi / per_a)
 
     fig = plt.figure("MMF fundamental")
