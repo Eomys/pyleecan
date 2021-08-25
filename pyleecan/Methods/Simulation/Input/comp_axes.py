@@ -3,7 +3,7 @@ from SciDataTool import Data1D, DataLinspace
 from ....Methods.Simulation.Input import InputError
 
 
-def comp_axes(self, machine, N0=None):
+def comp_axes(self, machine):
     """Compute simulation axes, i.e. space DataObject including (anti)-periodicity
     and time DataObject including (anti)-periodicity and accounting for rotating speed
     and number of revolutions
@@ -14,9 +14,6 @@ def comp_axes(self, machine, N0=None):
         an Input object
     machine : Machine
         a Machine object
-    N0 : float
-        rotating speed [rpm]
-
 
     Returns
     -------
@@ -26,8 +23,11 @@ def comp_axes(self, machine, N0=None):
         Angle axis including (anti)-periodicity
 
     """
+    
+    N0 = self.N0
+
     if self.time is None and N0 is None:
-        raise InputError("ERROR: time and N0 can't be both None")
+        raise InputError("time and N0 can't be both None")
 
     # Get machine pole pair number
     p = machine.get_pole_pair_number()
@@ -51,11 +51,16 @@ def comp_axes(self, machine, N0=None):
     # Create time axis
     if self.time is None:
         # Create time axis as a DataLinspace
+        if self.Nrev is not None:
+            t_final = 60 / N0 * self.Nrev
+        else:
+            t_final = p / f_elec
+        # Create time axis as a DataLinspace
         Time = DataLinspace(
             name="time",
             unit="s",
             initial=0,
-            final=60 / N0 * self.Nrev,
+            final=t_final,
             number=self.Nt_tot,
             include_endpoint=False,
             normalizations=norm_time,

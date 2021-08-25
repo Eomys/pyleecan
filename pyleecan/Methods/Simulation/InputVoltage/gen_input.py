@@ -30,7 +30,7 @@ def gen_input(self):
     output = OutElec()
 
     # Set discretization
-    Time, Angle = self.comp_axes(simu.machine, self.N0)
+    Time, Angle = self.comp_axes(simu.machine)
     output.Time = Time
     output.Angle = Angle
 
