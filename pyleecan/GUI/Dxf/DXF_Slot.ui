@@ -62,7 +62,7 @@
       </layout>
      </item>
      <item>
-      <widget class="MPLCanvas2" name="w_viewer" native="true"/>
+      <widget class="MPLCanvas" name="w_viewer" native="true"/>
      </item>
      <item>
       <widget class="QTextBrowser" name="textBrowser">
@@ -343,7 +343,7 @@ p, li { white-space: pre-wrap; }
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MPLCanvas2</class>
+   <class>MPLCanvas</class>
    <extends>QWidget</extends>
    <header>...GUI.Tools.MPLCanvas</header>
    <container>1</container>

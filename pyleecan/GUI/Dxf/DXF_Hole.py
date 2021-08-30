@@ -21,7 +21,7 @@ from ...Classes.Magnet import Magnet
 from ...Classes.SurfLine import SurfLine
 from ...GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
 from ...GUI.Resources import pixmap_dict
-from ...GUI.Tools.MPLCanvas import MPLCanvas2
+from ...GUI.Tools.MPLCanvas import MPLCanvas
 from ...GUI.Tools.FloatEdit import FloatEdit
 from ...GUI import gui_option
 from ...loggers import GUI_LOG_NAME

@@ -10,7 +10,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from ......GUI.Tools.WPathSelector.WPathSelectorV import WPathSelectorV
-from ......GUI.Tools.MPLCanvas import MPLCanvas2
+from ......GUI.Tools.MPLCanvas import MPLCanvas
 from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 
 from pyleecan.GUI.Resources import pyleecan_rc
@@ -25,7 +25,7 @@ class Ui_PHoleMUD(object):
         PHoleMUD.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PHoleMUD)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.w_viewer = MPLCanvas2(PHoleMUD)
+        self.w_viewer = MPLCanvas(PHoleMUD)
         self.w_viewer.setObjectName(u"w_viewer")
 
         self.horizontalLayout.addWidget(self.w_viewer)

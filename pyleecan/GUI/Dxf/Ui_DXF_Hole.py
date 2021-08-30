@@ -9,7 +9,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from ...GUI.Tools.MPLCanvas import MPLCanvas2
+from ...GUI.Tools.MPLCanvas import MPLCanvas
 from ...GUI.Tools.FloatEdit import FloatEdit
 from ...GUI.Tools.WPathSelector.WPathSelector import WPathSelector
 
@@ -56,7 +56,7 @@ class Ui_DXF_Hole(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout)
 
-        self.w_viewer = MPLCanvas2(DXF_Hole)
+        self.w_viewer = MPLCanvas(DXF_Hole)
         self.w_viewer.setObjectName(u"w_viewer")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
