@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from PySide2.QtWidgets import QFileDialog, QMessageBox, QMenu
-from cloudpickle.cloudpickle import _is_parametrized_type_hint
 
 from ....Functions.Load.import_class import import_class
 from ....Functions.load import load
@@ -18,7 +17,7 @@ class TreeEditContextMenu(QMenu):
         self._obj_dict = obj_dict
 
         is_root = False
-        if self._obj_dict['parent'] is None:
+        if self._obj_dict["parent"] is None:
             is_root = True
 
         # === Actions ====
@@ -32,7 +31,7 @@ class TreeEditContextMenu(QMenu):
         self.addSeparator()
 
         # save / set none
-        actionSaveObj = self.addAction("Export Object")
+        actionSaveObj = self.addAction("Save Object" if is_root else "Export Object")
         actionSetNone = self.addAction("Set to None")
 
         # === Filter Actions Aviability ===
@@ -52,7 +51,7 @@ class TreeEditContextMenu(QMenu):
             actionNewObj.setEnabled(False)
             actionSetNone.setEnabled(False)
             actionImportObj.setEnabled(False)
-            actionSaveObj.setEnabled(False)  # not yet
+            actionSaveObj.setEnabled(True)
 
         if (
             isinstance(obj, (list, dict))
@@ -103,6 +102,8 @@ class TreeEditContextMenu(QMenu):
         if path[0] == "":
             return False
         self._obj_dict["obj"].save(path[0])
+        if self._obj_dict["parent"] is None:
+            self._parent.setSaveNeeded(False)
         return True
 
     def loadObject(self):

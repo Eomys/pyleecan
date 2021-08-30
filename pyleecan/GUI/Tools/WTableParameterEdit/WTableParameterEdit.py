@@ -67,6 +67,9 @@ class WTableParameterEdit(QWidget):
                 label += "s"
             self.mainLayout.addWidget(QLabel(label + "."))
             self.mainLayout.addStretch()
+        elif self._obj is None:
+            self.mainLayout.addWidget(QLabel("Not implemented yet."))
+            self.mainLayout.addStretch()
         else:
             self.mainLayout.addWidget(self._view)
 

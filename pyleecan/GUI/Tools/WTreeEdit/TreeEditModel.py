@@ -4,8 +4,7 @@ from ....Classes._ClassInfo import ClassInfo
 from .TreeEditModelItems import ObjectItem, UnknownItem
 
 from PySide2.QtCore import Qt, QAbstractItemModel, QModelIndex, Signal
-from PySide2.QtWidgets import QApplication
-from PySide2.QtGui import QColor, QBrush
+from PySide2.QtGui import QColor, QBrush, QFont
 
 """ from QAbstractItemModel doc: 
 When subclassing QAbstractItemModel, at the very least you must implement index(), 
@@ -121,7 +120,7 @@ class TreeEditModel(QAbstractItemModel):
             obj_info["parent_typ"] = None
             obj_info["property"] = name
             obj_info["ref_typ"] = None
-            obj_info["index"] = None 
+            obj_info["index"] = None
 
         # setup object information
         obj_info = dict()
@@ -216,7 +215,7 @@ class TreeEditModel(QAbstractItemModel):
             obj = item.object()
             is_empty = isinstance(obj, (list, dict)) and not obj
             if isinstance(item, UnknownItem) or is_empty or obj is None:
-                font = QApplication.font()
+                font = QFont()
                 font.setItalic(True)
                 return font
         elif role == Qt.ForegroundRole:

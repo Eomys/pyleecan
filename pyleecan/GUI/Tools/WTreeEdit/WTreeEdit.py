@@ -4,7 +4,7 @@
 
 from PySide2 import QtGui
 from PySide2.QtCore import Qt, Signal
-from PySide2.QtWidgets import QSplitter, QStatusBar, QTreeView, QWidget
+from PySide2.QtWidgets import QLabel, QSplitter, QStatusBar, QTreeView, QWidget
 from PySide2.QtWidgets import QVBoxLayout, QSizePolicy
 
 from ....Classes._ClassInfo import ClassInfo
@@ -49,6 +49,7 @@ class WTreeEdit(QWidget):
         self.treeView.expanded.connect(self.onItemExpand)
         self.treeView.customContextMenuRequested.connect(self.openContextMenu)
         self.model.dataChanged.connect(self.onDataChanged)
+        self.dataChanged.connect(self.setSaveNeeded)
 
         # === Finalize ===
         # set 'root' the selected item and resize columns
@@ -76,6 +77,9 @@ class WTreeEdit(QWidget):
         self.statusBar.setStyleSheet(
             "QStatusBar {border: 1px solid rgb(200, 200, 200)}"
         )
+        self.saveLabel = QLabel("unsaved")
+        self.saveLabel.setVisible(False)
+        self.statusBar.addPermanentWidget(self.saveLabel)
 
         # Splitters
         self.leftSplitter = QSplitter()
@@ -106,6 +110,11 @@ class WTreeEdit(QWidget):
             self.selectionModel = self.treeView.selectionModel()
             self.selectionModel.selectionChanged.connect(self.onSelectionChanged)
             self.treeView.setCurrentIndex(self.treeView.model().index(0, 0))
+            self.setSaveNeeded(True)
+
+    def setSaveNeeded(self, state=True):
+        self.is_save_needed = state
+        self.saveLabel.setVisible(state)
 
     def openContextMenu(self, point):
         """Generate and open context the menu at the given point position."""

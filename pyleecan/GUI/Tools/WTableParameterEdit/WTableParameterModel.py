@@ -1,6 +1,5 @@
 from PySide2.QtCore import QSize, Qt, QAbstractTableModel, Signal
-from PySide2.QtGui import QBrush, QColor
-from PySide2.QtWidgets import QApplication
+from PySide2.QtGui import QBrush, QColor, QFont
 
 from ....Classes._ClassInfo import ClassInfo
 
@@ -99,7 +98,7 @@ class WTableParameterModel(QAbstractTableModel):
 
         elif role == Qt.FontRole:
             if item == VALUE_KEY and getattr(self._obj, propDict[NAME_KEY]) is None:
-                font = QApplication.font()
+                font = QFont()
                 font.setItalic(True)
                 return font
 
@@ -176,6 +175,11 @@ class WTableParameterModel(QAbstractTableModel):
                 #     return QSize(50, HEADER_HEIGHT_HINT)
                 # elif self._items[column] == DESC_KEY:
                 #     return QSize(300, HEADER_HEIGHT_HINT)
+
+            elif role == Qt.FontRole:
+                font = QFont()
+                font.setBold(True)
+                return font
 
     def editable(self, row):
         propDict = self._propList[row]
