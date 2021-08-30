@@ -85,4 +85,4 @@ class WTableParameterEdit(QWidget):
         self._view.horizontalHeader().setSectionsClickable(False)
         # self._view.setMinimumWidth(650)
 
-        self.setMinimumWidth(700)
+        self.setMinimumWidth(600)

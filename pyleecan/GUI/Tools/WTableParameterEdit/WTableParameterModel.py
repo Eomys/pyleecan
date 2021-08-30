@@ -170,7 +170,7 @@ class WTableParameterModel(QAbstractTableModel):
                 if self._items[column] == NAME_KEY:
                     return QSize(120, HEADER_HEIGHT_HINT)
                 elif self._items[column] == VALUE_KEY:
-                    return QSize(200, HEADER_HEIGHT_HINT)
+                    return QSize(180, HEADER_HEIGHT_HINT)
                 # elif self._items[column] == UNIT_KEY:
                 #     return QSize(50, HEADER_HEIGHT_HINT)
                 # elif self._items[column] == DESC_KEY:
