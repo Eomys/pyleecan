@@ -19,7 +19,7 @@ def get_Is(self):
     if self.Is is None:
         # Generate current according to Id/Iq
         Isdq = array([self.Id_ref, self.Iq_ref])
-        time = self.axes_dict["time"].get_values(is_oneperiod=True)
+        time = self.axes_dict["time"].get_values(is_smallestperiod=True)
         qs = self.parent.simu.machine.stator.winding.qs
         felec = self.felec
 

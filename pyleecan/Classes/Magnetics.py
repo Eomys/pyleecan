@@ -426,7 +426,7 @@ class Magnetics(FrozenClass):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.mag.axes_dict[time])
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in axes_dict[time])
 
         :Type: bool
         """,
@@ -444,7 +444,7 @@ class Magnetics(FrozenClass):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.axes_dict[angle])
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle])
 
         :Type: bool
         """,

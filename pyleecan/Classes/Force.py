@@ -243,7 +243,7 @@ class Force(FrozenClass):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.force.axes_dict[time]). If None, automatically calculated based on Magnetics periodicities.
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in axes_dict[time]). If None, automatically calculated based on Magnetics periodicities.
 
         :Type: bool
         """,
@@ -261,7 +261,7 @@ class Force(FrozenClass):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.force.axes_dict[angle]). If None, automatically calculated based on Magnetics periodicities.
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle]). If None, automatically calculated based on Magnetics periodicities.
 
         :Type: bool
         """,

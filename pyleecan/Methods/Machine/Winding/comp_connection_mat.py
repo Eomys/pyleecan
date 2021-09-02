@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-
 from numpy import zeros, swapaxes, sign
 
 from ....Methods.Machine.Winding import WindingError
-
 
 from swat_em import datamodel
 
@@ -33,23 +30,19 @@ def comp_connection_mat(self, Zs=None, p=None):
     """
 
     if Zs is None:
-        if self.parent is None:
-            raise WindingError(
-                "ERROR: The Winding object must be in a Lamination object."
-            )
+        if not hasattr(self.parent, "slot") and not hasattr(self.parent, "slot_list"):
+            raise WindingError("The Winding object must be in a Lamination object.")
 
         if not hasattr(self.parent, "slot") and not hasattr(self.parent, "slot_list"):
             raise WindingError(
-                "ERROR: The Winding object must be in a Lamination object with Slot."
+                "The Winding object must be in a Lamination object with Slot."
             )
 
         Zs = self.parent.get_Zs()
 
     if p is None:
         if self.parent is None:
-            raise WindingError(
-                "ERROR: The Winding object must be in a Lamination object."
-            )
+            raise WindingError("The Winding object must be in a Lamination object.")
 
         p = self.parent.get_pole_pair_number()
 
@@ -65,13 +58,14 @@ def comp_connection_mat(self, Zs=None, p=None):
 
     Nlayer = self.Nlayer  # number of layers
 
-    coil_pitch = self.coil_pitch  # coil pitch (coil span)
-
     # generate a datamodel for the winding
     wdg = datamodel()
 
-    # generate winding from inputs
-    wdg.genwdg(Q=Zs, P=2 * p, m=qs, layers=Nlayer, turns=Ntcoil, w=coil_pitch)
+    # generate winding from inputs depending on coil pitch (or coil span)
+    if self.coil_pitch in [0, None]:
+        wdg.genwdg(Q=Zs, P=2 * p, m=qs, layers=Nlayer, turns=Ntcoil, w=5)
+    else:
+        wdg.genwdg(Q=Zs, P=2 * p, m=qs, layers=Nlayer, turns=Ntcoil, w=self.coil_pitch)
 
     # init connexion matrix
     wind_mat = zeros((Nlayer, 1, Zs, qs))
