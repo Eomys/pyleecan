@@ -1092,7 +1092,8 @@
             "comp_parameters",
             "solve_EEC",
             "gen_drive",
-            "comp_joule_losses"
+            "comp_joule_losses",
+            "comp_BEMF_harmonics"
         ],
         "mother": "EEC",
         "name": "EEC_PMSM",
@@ -7839,7 +7840,8 @@
             "get_Nr",
             "get_Is",
             "get_Us",
-            "comp_I_mag"
+            "comp_I_mag",
+            "store"
         ],
         "mother": "",
         "name": "OutElec",

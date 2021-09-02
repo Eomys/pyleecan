@@ -37,6 +37,11 @@ try:
 except ImportError as error:
     comp_joule_losses = error
 
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_BEMF_harmonics import comp_BEMF_harmonics
+except ImportError as error:
+    comp_BEMF_harmonics = error
+
 
 from ._check import InitUnKnowClassError
 from .IndMag import IndMag
@@ -91,6 +96,18 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_joule_losses = comp_joule_losses
+    # cf Methods.Simulation.EEC_PMSM.comp_BEMF_harmonics
+    if isinstance(comp_BEMF_harmonics, ImportError):
+        comp_BEMF_harmonics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_BEMF_harmonics: "
+                    + str(comp_BEMF_harmonics)
+                )
+            )
+        )
+    else:
+        comp_BEMF_harmonics = comp_BEMF_harmonics
     # save and copy methods are available in all object
     save = save
     copy = copy

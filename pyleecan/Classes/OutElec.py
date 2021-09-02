@@ -37,6 +37,11 @@ try:
 except ImportError as error:
     comp_I_mag = error
 
+try:
+    from ..Methods.Output.OutElec.store import store
+except ImportError as error:
+    store = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -85,6 +90,15 @@ class OutElec(FrozenClass):
         )
     else:
         comp_I_mag = comp_I_mag
+    # cf Methods.Output.OutElec.store
+    if isinstance(store, ImportError):
+        store = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method store: " + str(store))
+            )
+        )
+    else:
+        store = store
     # save and copy methods are available in all object
     save = save
     copy = copy

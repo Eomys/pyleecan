@@ -3,7 +3,7 @@ axes_dict,,Dict containing axes data used for Electrical,,{SciDataTool.Classes.D
 Is,A,Stator currents DataTime object,"(qs, Nt_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,get_Is,,,
 Ir,A,Rotor currents as a function of time (each column correspond to one phase),"(qs, Nt_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,get_Us,,,
 angle_rotor,rad,Rotor angular position as a function of time (if None computed according to Nr),Nt_tot,ndarray,None,,,,,,comp_I_mag,,,
-N0,rpm,Rotor speed,1,float,None,,,,,,,,,
+N0,rpm,Rotor speed,1,float,None,,,,,,store,,,
 angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.Electrical,,,,,,,,,
 Tem_av_ref,N.m,Theorical Average Electromagnetic torque,,float,None,,,,,,,,,
