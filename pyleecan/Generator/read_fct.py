@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from os import walk
-from os.path import isfile, join
+from os.path import isfile, join, basename
 
 from csv import reader
 
@@ -67,12 +67,12 @@ def read_all(path, is_internal=False, in_path=""):
     return gen_dict
 
 
-def read_file(path):
+def read_file(file_path):
     """Read a csv file and create a dict for the class code generation
 
     Parameters
     ----------
-    path : str
+    file_path : str
         path to the class csv file to read
 
 
@@ -84,18 +84,18 @@ def read_file(path):
     class_dict = dict()
 
     # Open the module doc
-    if not isfile(path):
+    if not isfile(file_path):
         raise NotAFile("File not found")
 
     # The class name is the csv file name
-    class_dict["name"] = path.split("\\")[-1][:-4]
+    class_dict["name"] = basename(file_path)[:-4]
     try:  # Cleanup path to avoid "commit noise"
-        class_dict["path"] = path[path.rfind(PACKAGE_NAME) :]
+        class_dict["path"] = file_path[file_path.rfind(PACKAGE_NAME) :]
     except ValueError:  # Path doesn't contain pyleecan
-        class_dict["path"] = path
+        class_dict["path"] = file_path
     # Cleanup \ to avoid errors
     class_dict["path"] = class_dict["path"].replace("\\", "/")
-    with open(path, mode="r") as csv_file:
+    with open(file_path, mode="r") as csv_file:
         class_csv = reader(csv_file, delimiter=",")
         class_csv = list(class_csv)
         # Get all the properties of the class
