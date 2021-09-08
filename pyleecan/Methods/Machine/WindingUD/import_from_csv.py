@@ -1,6 +1,6 @@
 from os.path import isfile
 from csv import reader
-from numpy import zeros, amax
+from numpy import zeros, amax, tile
 
 ZS_COL = 0  # Slot id
 COIL_COL = 1  # Ntcoil (+/-)
@@ -46,14 +46,14 @@ def import_from_csv(self, file_path=None):
             wind_shape = (Nrad + 1, Ntan + 1, Zs + 1, qs)
 
         if self.parent is not None and self.parent.slot is not None:
-            assert self.parent.slot.Zs == wind_shape[2], (
+            assert self.parent.slot.Zs % wind_shape[2] == 0, (
                 "Mismatch between Lamination Zs ("
                 + str(self.parent.slot.Zs)
                 + ") and imported winding Zs ("
                 + str(wind_shape[2])
                 + ")"
             )
-        self.wind_mat = zeros(wind_shape)
+        wind_mat = zeros(wind_shape)
 
         # Load matrix
         qs_id = 0
@@ -66,9 +66,16 @@ def import_from_csv(self, file_path=None):
                 Rad_id = int(float(line[RAD_COL + offset]))
                 Tan_id = int(float(line[TAN_COL + offset]))
                 Zs_id = int(float(line[ZS_COL + offset]))
-                self.wind_mat[Rad_id, Tan_id, Zs_id, qs_id] = line[COIL_COL + offset]
+                wind_mat[Rad_id, Tan_id, Zs_id, qs_id] = line[COIL_COL + offset]
+
+    # complete partial winding matrix
+    if self.parent is not None and self.parent.slot is not None:
+        Zs = self.parent.slot.Zs
+        if wind_mat.shape[2] < Zs:
+            wind_mat = tile(wind_mat, (1, 1, Zs // wind_mat.shape[2], 1))
 
     # Update property
+    self.wind_mat = wind_mat
     self.Nlayer = wind_shape[0] * wind_shape[1]
     self.qs = wind_shape[3]
     self.Ntcoil = amax(self.wind_mat)
