@@ -50,7 +50,6 @@ class Gen_SBar(Ui_SBar):
 
         # Setup of lf_Lewout
         self.lf_Lewout.validator().setBottom(0)
-        self.lf_Lewout.validator().setTop(100)
         txt = self.tr(
             u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length """
         )

@@ -32,7 +32,9 @@ from ....Functions.labels import (
     WIND_LAB_S,
     MAG_LAB,
     SHAFT_LAB,
-    NO_LAM_LAB, SLID_LAB, BOT_LAB
+    NO_LAM_LAB,
+    SLID_LAB,
+    BOT_LAB,
 )
 from ....Functions.Winding.find_wind_phase_color import get_phase_id
 from .... import __version__
@@ -332,7 +334,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                 pass
 
         # The following bodies are not in the dictionary
-        bodies[ROTOR_LAB_S+"-0_"+AIRGAP_LAB+BOT_LAB]["bf"] = 1
+        bodies[ROTOR_LAB_S + "-0_" + AIRGAP_LAB + BOT_LAB]["bf"] = 1
         bodies[NO_LAM_LAB + "_" + SLID_LAB + BOT_LAB]["bf"] = 1  # Sliding band bottom
 
         No_Magnets = pm_index - 6

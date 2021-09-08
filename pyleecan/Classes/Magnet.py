@@ -193,17 +193,17 @@ class Magnet(FrozenClass):
 
     def _set_type_magnetization(self, value):
         """setter of type_magnetization"""
-        check_var("type_magnetization", value, "int", Vmin=0, Vmax=5)
+        check_var("type_magnetization", value, "int", Vmin=0, Vmax=3)
         self._type_magnetization = value
 
     type_magnetization = property(
         fget=_get_type_magnetization,
         fset=_set_type_magnetization,
-        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach
+        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach, 3 Tangential
 
         :Type: int
         :min: 0
-        :max: 5
+        :max: 3
         """,
     )
 

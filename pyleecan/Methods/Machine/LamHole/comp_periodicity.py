@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def comp_periodicity(self):
+def comp_periodicity(self, p):
     """Compute the periodicity factor of the lamination
 
     Parameters
@@ -21,4 +21,4 @@ def comp_periodicity(self):
         True if an time anti-periodicity is possible after the periodicities
     """
 
-    return self.get_pole_pair_number(), True, self.get_pole_pair_number(), True
+    return p, True, p, True

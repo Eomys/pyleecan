@@ -47,9 +47,9 @@ def get_air_box(sym, machine):
             Circle(
                 center=0,
                 radius=R_ab,
-                label=NO_LAM_LAB+"_"+AIRBOX_LAB,
+                label=NO_LAM_LAB + "_" + AIRBOX_LAB,
                 point_ref=(R_ab / 2) * exp(1j * pi / 2),
-                prop_dict={BOUNDARY_PROP_LAB:AIRBOX_R_LAB}
+                prop_dict={BOUNDARY_PROP_LAB: AIRBOX_R_LAB},
             )
         )
     else:  # Symmetry
@@ -59,25 +59,27 @@ def get_air_box(sym, machine):
         Z2 = R_ab
         Z3 = Z2 * exp(1j * 2 * pi / sym)
         airbox_lines = list()
-        airbox_lines.append(Segment(begin=Z1, end=Z2, prop_dict={BOUNDARY_PROP_LAB:AIRBOX_SR_LAB}))
+        airbox_lines.append(
+            Segment(begin=Z1, end=Z2, prop_dict={BOUNDARY_PROP_LAB: AIRBOX_SR_LAB})
+        )
         airbox_lines.append(
             Arc1(
                 begin=Z2,
                 end=Z3,
                 radius=R_ab,
-                prop_dict={BOUNDARY_PROP_LAB:AIRBOX_R_LAB},
+                prop_dict={BOUNDARY_PROP_LAB: AIRBOX_R_LAB},
                 is_trigo_direction=True,
             )
         )
-        airbox_lines.append(Segment(begin=Z3, end=Z0, prop_dict={BOUNDARY_PROP_LAB:AIRBOX_SL_LAB}))
         airbox_lines.append(
-            Arc2(begin=Z0, center=0.0, angle=-2 * pi / sym)
+            Segment(begin=Z3, end=Z0, prop_dict={BOUNDARY_PROP_LAB: AIRBOX_SL_LAB})
         )
+        airbox_lines.append(Arc2(begin=Z0, center=0.0, angle=-2 * pi / sym))
         surf_list.append(
             SurfLine(
                 line_list=airbox_lines,
                 # point_ref=0.0 * Z2 * exp(1j * pi / sym),
-                label=NO_LAM_LAB+"_"+AIRBOX_LAB,
+                label=NO_LAM_LAB + "_" + AIRBOX_LAB,
             )
         )
 

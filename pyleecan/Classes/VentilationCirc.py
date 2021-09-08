@@ -303,7 +303,7 @@ class VentilationCirc(Hole):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Diameter of the hole centers
+        doc=u"""Radius of the hole centers
 
         :Type: float
         :min: 0

@@ -769,7 +769,7 @@ class Lamination(FrozenClass):
 
     def _set_L1(self, value):
         """setter of L1"""
-        check_var("L1", value, "float", Vmin=0, Vmax=100)
+        check_var("L1", value, "float", Vmin=0)
         self._L1 = value
 
     L1 = property(
@@ -779,7 +779,6 @@ class Lamination(FrozenClass):
 
         :Type: float
         :min: 0
-        :max: 100
         """,
     )
 

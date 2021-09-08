@@ -143,6 +143,7 @@ def test_LSRPM():
             R3=0.0165,
         )
     )
+    rotor.mat_type
     rotor.bore = BoreLSRPM(N=8, Rarc=0.0375, alpha=0)
 
     # Set shaft
@@ -155,7 +156,7 @@ def test_LSRPM():
     # Loading Materials
     M400_50A = load(join(DATA_DIR, "Material", "M400-50A.json"))
     Copper1 = load(join(DATA_DIR, "Material", "Copper1.json"))
-    MagnetPrius = load(join(DATA_DIR, "Material", "MagnetPrius.json"))
+    MagnetLSRPM = load(join(DATA_DIR, "Material", "MagnetPrius.json"))
 
     # Set Materials
     stator.mat_type = M400_50A
@@ -163,14 +164,14 @@ def test_LSRPM():
     stator.winding.conductor.cond_mat = Copper1
 
     # Set magnets in the rotor hole
-    rotor.hole[0].magnet_0.mat_type = MagnetPrius
-    rotor.hole[0].magnet_0.type_magnetization = 1
+    rotor.hole[0].magnet_0.mat_type = MagnetLSRPM
+    rotor.hole[0].magnet_0.type_magnetization = 3
 
     # matplotlib notebook
     LSRPM = MachineIPMSM(
         name="LSRPM LSEE", stator=stator, rotor=rotor, shaft=shaft, frame=None
     )
-    #  LSRPM.save(join(DATA_DIR, "Machine", "LSRPM_001.json"))
+    # LSRPM.save(join(DATA_DIR, "Machine", "LSRPM_001.json"))
 
     LSRPM.plot(is_show_fig=False, save_path=join(save_path, "test_LSRPM.png"))
 

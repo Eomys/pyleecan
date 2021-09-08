@@ -103,6 +103,27 @@
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="QPushButton" name="b_FEMM">
+     <property name="text">
+      <string>Draw in FEMM</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="b_GMSH">
+     <property name="text">
+      <string>Draw in GMSH</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="b_GMSH_3D">
+     <property name="text">
+      <string>3D stator in GMSH</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources>

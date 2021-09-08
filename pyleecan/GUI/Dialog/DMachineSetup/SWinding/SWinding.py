@@ -90,7 +90,6 @@ class SWinding(Gen_SWinding, QWidget):
         if self.obj.winding.Npcp is None:
             self.obj.winding.Npcp = 1  # Default value
         self.si_Npcp.setValue(self.obj.winding.Npcp)
-        self.si_Npcp.setMaximum(self.obj.winding.p)
 
         # Edit Group setup
         if self.obj.winding.is_reverse_wind is None:
@@ -418,9 +417,9 @@ class SWinding(Gen_SWinding, QWidget):
         try:
             rot_dir = self.obj.comp_rot_dir()
             if rot_dir == 1:
-                rot_dir = "+"
+                rot_dir = "CCW"
             elif rot_dir == -1:
-                rot_dir = "-"
+                rot_dir = "CW"
             else:
                 rot_dir = "?"
         except Exception:  # Unable to compution the connection matrix

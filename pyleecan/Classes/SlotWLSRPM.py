@@ -37,6 +37,36 @@ try:
 except ImportError as error:
     check = error
 
+try:
+    from ..Methods.Slot.SlotWLSRPM.comp_angle_opening import comp_angle_opening
+except ImportError as error:
+    comp_angle_opening = error
+
+try:
+    from ..Methods.Slot.SlotWLSRPM.comp_height_damper import comp_height_damper
+except ImportError as error:
+    comp_height_damper = error
+
+try:
+    from ..Methods.Slot.SlotWLSRPM.comp_height_wind import comp_height_wind
+except ImportError as error:
+    comp_height_wind = error
+
+try:
+    from ..Methods.Slot.SlotWLSRPM.comp_height import comp_height
+except ImportError as error:
+    comp_height = error
+
+try:
+    from ..Methods.Slot.SlotWLSRPM.get_surface_active import get_surface_active
+except ImportError as error:
+    get_surface_active = error
+
+try:
+    from ..Methods.Slot.SlotWLSRPM.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -92,6 +122,77 @@ class SlotWLSRPM(Slot):
         )
     else:
         check = check
+    # cf Methods.Slot.SlotWLSRPM.comp_angle_opening
+    if isinstance(comp_angle_opening, ImportError):
+        comp_angle_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWLSRPM method comp_angle_opening: "
+                    + str(comp_angle_opening)
+                )
+            )
+        )
+    else:
+        comp_angle_opening = comp_angle_opening
+    # cf Methods.Slot.SlotWLSRPM.comp_height_damper
+    if isinstance(comp_height_damper, ImportError):
+        comp_height_damper = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWLSRPM method comp_height_damper: "
+                    + str(comp_height_damper)
+                )
+            )
+        )
+    else:
+        comp_height_damper = comp_height_damper
+    # cf Methods.Slot.SlotWLSRPM.comp_height_wind
+    if isinstance(comp_height_wind, ImportError):
+        comp_height_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWLSRPM method comp_height_wind: "
+                    + str(comp_height_wind)
+                )
+            )
+        )
+    else:
+        comp_height_wind = comp_height_wind
+    # cf Methods.Slot.SlotWLSRPM.comp_height
+    if isinstance(comp_height, ImportError):
+        comp_height = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWLSRPM method comp_height: " + str(comp_height)
+                )
+            )
+        )
+    else:
+        comp_height = comp_height
+    # cf Methods.Slot.SlotWLSRPM.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWLSRPM method get_surface_active: "
+                    + str(get_surface_active)
+                )
+            )
+        )
+    else:
+        get_surface_active = get_surface_active
+    # cf Methods.Slot.SlotWLSRPM.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWLSRPM method plot_schematics: "
+                    + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
     # save and copy methods are available in all object
     save = save
     copy = copy

@@ -38,7 +38,12 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
 
     if sym == 1:
         surf_list.append(
-            Circle(radius=self.Drsh / 2, label=NO_LAM_LAB+'_'+SHAFT_LAB, center=0, point_ref=0)
+            Circle(
+                radius=self.Drsh / 2,
+                label=NO_LAM_LAB + "_" + SHAFT_LAB,
+                center=0,
+                point_ref=0,
+            )
         )
     else:
         begin = self.Drsh / 2
@@ -51,7 +56,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
                 ),
                 Segment(end, 0, prop_dict={BOUNDARY_PROP_LAB: SHAFTSL_LAB}),
             ],
-            label=NO_LAM_LAB+'_'+SHAFT_LAB,
+            label=NO_LAM_LAB + "_" + SHAFT_LAB,
             point_ref=0,
         )
 

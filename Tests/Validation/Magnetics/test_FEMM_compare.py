@@ -199,7 +199,7 @@ def test_SCIM():
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
-    assert SCIM_006.comp_periodicity() == (2, True, 28, False)
+    assert SCIM_006.comp_periodicity() == (2, True, 2, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 

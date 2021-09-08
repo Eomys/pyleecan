@@ -3,6 +3,7 @@ from numpy import pi
 from ...Classes.Arc import Arc
 from ...Classes.Arc2 import Arc2
 import cmath
+
 tol = 1e-6
 
 
