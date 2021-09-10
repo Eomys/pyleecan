@@ -2,7 +2,7 @@ from ....Classes.Segment import Segment
 from ....definitions import PACKAGE_NAME
 
 
-def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
+def split_line(self, Z1, Z2, is_top=True, is_join=False, prop_dict_join=None):
     """Cut the Surface according to a line defined by two complex
 
     Parameters
@@ -18,8 +18,8 @@ def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
         "Above" is in the coordinate system with Z1 in 0 and Z2 on the X>0 axis
     is_join : bool
         True to join the split_list with Segment on the cutting line
-    label_join : str
-        Label of the join line
+    prop_dict_join : dict
+        Property dict to set on the join line
 
     Returns
     -------
@@ -37,7 +37,11 @@ def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
     for line in lines:
         split_list.extend(
             line.split_line(
-                Z1=Z1, Z2=Z2, is_top=is_top, is_join=is_join, label_join=label_join
+                Z1=Z1,
+                Z2=Z2,
+                is_top=is_top,
+                is_join=is_join,
+                prop_dict_join=prop_dict_join,
             )
         )
 
@@ -51,7 +55,7 @@ def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
                     Segment(
                         begin=split_list[ii].get_end(),
                         end=split_list[ii + 1].get_begin(),
-                        label=label_join,
+                        prop_dict=prop_dict_join,
                     )
                 )
         final_list.append(split_list[-1])
@@ -61,7 +65,7 @@ def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
                 Segment(
                     begin=split_list[-1].get_end(),
                     end=split_list[0].get_begin(),
-                    label=label_join,
+                    prop_dict=prop_dict_join,
                 )
             )
         split_list = final_list

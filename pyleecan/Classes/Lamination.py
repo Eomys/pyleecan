@@ -134,6 +134,11 @@ try:
 except ImportError as error:
     comp_point_ref = error
 
+try:
+    from ..Methods.Machine.Lamination.get_label import get_label
+except ImportError as error:
+    get_label = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -399,6 +404,15 @@ class Lamination(FrozenClass):
         )
     else:
         comp_point_ref = comp_point_ref
+    # cf Methods.Machine.Lamination.get_label
+    if isinstance(get_label, ImportError):
+        get_label = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Lamination method get_label: " + str(get_label))
+            )
+        )
+    else:
+        get_label = get_label
     # save and copy methods are available in all object
     save = save
     copy = copy

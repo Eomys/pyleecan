@@ -9,6 +9,7 @@ from ...Functions.FEMM.create_FEMM_boundary_conditions import (
 from ...Functions.FEMM.create_FEMM_materials import create_FEMM_materials
 from ...Functions.FEMM.get_sliding_band import get_sliding_band
 from ...Functions.FEMM.get_airgap_surface import get_airgap_surface
+from ...Functions.labels import NO_MESH_LAB
 
 
 def draw_FEMM(
@@ -83,8 +84,6 @@ def draw_FEMM(
     """
 
     # Initialization from output for readibility
-    BHs = output.get_BH_stator()  # Stator B(H) curve
-    BHr = output.get_BH_rotor()  # Rotor B(H) curve
     Is = output.elec.Is  # Stator currents waveforms
     Ir = output.elec.Ir  # Rotor currents waveforms
     machine = output.simu.machine
@@ -133,7 +132,12 @@ def draw_FEMM(
 
     # Adding no_mesh for shaft if needed
     if lam_int.Rint > 0 and sym == 1:
-        surf_list.append(Circle(point_ref=0, radius=lam_int.Rint, label="No_mesh"))
+        label_int = lam_int.get_label()
+        surf_list.append(
+            Circle(
+                point_ref=0, radius=lam_int.Rint, label=label_int + "_" + NO_MESH_LAB
+            )
+        )
 
     # adding the Airgap surface
     if is_sliding_band:
@@ -168,8 +172,6 @@ def draw_FEMM(
         surf_list,
         Is,
         Ir,
-        BHs,
-        BHr,
         is_mmfs,
         is_mmfr,
         type_BH_stator,
@@ -191,9 +193,7 @@ def draw_FEMM(
             FEMM_dict=FEMM_dict,
             hide=False,
         )
-        assign_FEMM_surface(
-            femm, surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
-        )
+        assign_FEMM_surface(femm, surf, prop_dict[label], FEMM_dict, machine)
 
     # Apply BC for DXF import
     if rotor_dxf is not None:

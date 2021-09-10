@@ -269,7 +269,7 @@ def test_multi_multi():
     # Execute every simulation
     results = simu.run()
     assert len(simu.var_simu.datakeeper_list) == 5
-    assert len(simu.var_simu.var_simu.datakeeper_list) == 8
+    assert len(simu.var_simu.var_simu.datakeeper_list) == 9
 
 
 if __name__ == "__main__":

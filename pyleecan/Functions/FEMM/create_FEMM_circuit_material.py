@@ -5,10 +5,11 @@ from numpy import pi, sign, sqrt
 from ...Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
 from ...Functions.Winding.find_wind_phase_color import get_phase_id
 from ...Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
+from ...Functions.labels import ROTOR_LAB
 
 
 def create_FEMM_circuit_material(
-    femm, circuits, label, is_eddies, lam, I, is_mmf, j_t0, materials
+    femm, circuits, label_dict, is_eddies, lam, I, is_mmf, j_t0, materials
 ):
     """Set in FEMM circuits property
 
@@ -18,8 +19,8 @@ def create_FEMM_circuit_material(
         client to send command to a FEMM instance
     circuits: list
         list the name of all circuits
-    label : str
-        label of the surface
+    label_dict : dict
+        Decoded label of the surface
     sym : bool
         integer for symmetry
     is_eddies :
@@ -49,16 +50,15 @@ def create_FEMM_circuit_material(
     Swire = lam.winding.conductor.comp_surface()
 
     # Decode the label
-    st = label.split("_")
-    Nrad_id = int(st[2][1:])  # zone radial coordinate
-    Ntan_id = int(st[3][1:])  # zone tangential coordinate
-    Zs_id = int(st[4][1:])  # Zone slot number coordinate
+    Nrad_id = label_dict["R_id"]  # zone radial coordinate
+    Ntan_id = label_dict["T_id"]  # zone tangential coordinate
+    Zs_id = label_dict["S_id"]  # Zone slot number coordinate
     # Get the phase value in the correct slot zone
     q_id = get_phase_id(wind_mat, Nrad_id, Ntan_id, Zs_id)
     s = sign(wind_mat[Nrad_id, Ntan_id, Zs_id, q_id])
 
     # circuit definition
-    if "Rotor" in label:
+    if ROTOR_LAB in label_dict["lam_type"]:
         Clabel = "Circr" + str(q_id)
     else:
         Clabel = "Circs" + str(q_id)
@@ -66,7 +66,7 @@ def create_FEMM_circuit_material(
     circuits = set_FEMM_circuit_prop(femm, circuits, Clabel, I=None)
 
     # definition of armature field current sources
-    if "Rotor" in label:
+    if ROTOR_LAB in label_dict["lam_type"]:
         Jlabel = "Jr"
     else:
         Jlabel = "Js"

@@ -106,7 +106,5 @@ def test_EM_BH_Model_001_Toyota_Prius():
     )
 
 
-# To run it without pytest
 if __name__ == "__main__":
-
-    out = test_EM_BH_Model_001_Toyota_Prius()
+    test_EM_BH_Model_001_Toyota_Prius()

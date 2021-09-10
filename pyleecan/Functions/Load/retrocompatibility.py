@@ -1,4 +1,5 @@
 from ...Functions.Load.import_class import import_class
+from ...Functions.labels import HOLEM_LAB, HOLEV_LAB
 
 
 def convert_init_dict(init_dict):
@@ -12,11 +13,13 @@ def convert_init_dict(init_dict):
             convert_LamSlotMag(obj_dict)
         elif is_Winding_dict(obj_dict):
             convert_Winding(obj_dict)
+        elif is_HoleUD_dict(obj_dict):
+            convert_HoleUD(obj_dict)
 
 
 def _search_(obj, convert_list, parent=None):
     # add to list for later conversion
-    if is_LamSlotMag_dict(obj):
+    if is_LamSlotMag_dict(obj) or is_HoleUD_dict(obj):
         convert_list.append(obj)
     elif is_Winding_dict(obj):
         if (
@@ -38,6 +41,31 @@ def _search_(obj, convert_list, parent=None):
                     if isinstance(item, dict):
                         # recursively search the dict
                         _search_(item, convert_list, parent=obj)
+
+
+############################################
+# V  1.3.2 = > 1.4.0
+# Updating HoleUD surface label
+# Label reorganization
+############################################
+def is_HoleUD_dict(obj_dict):
+    """Check if the object need to be updated for HoleUD"""
+    if "__class__" in obj_dict.keys() and obj_dict["__class__"] == "HoleUD":
+        # Old label : Hole_Rotor_R0_T0_S0
+        # Old label : HoleMagnet_Rotor_Parallel_N_R0_T0_S0
+        return len(obj_dict["surf_list"][0]["label"].split("_")) > 3
+    else:
+        return False
+
+
+def convert_HoleUD(hole_dict):
+    """Update the content of the dict"""
+    print("Old machine version detected, Updating the HoleUD object")
+    for ii in range(len(hole_dict["surf_list"])):
+        if "HoleMagnet" in hole_dict["surf_list"][ii]["label"]:
+            hole_dict["surf_list"][ii]["label"] = HOLEM_LAB
+        else:
+            hole_dict["surf_list"][ii]["label"] = HOLEV_LAB
 
 
 ############################################

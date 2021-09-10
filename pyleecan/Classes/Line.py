@@ -46,7 +46,7 @@ class Line(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, label="", init_dict=None, init_str=None):
+    def __init__(self, prop_dict=None, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -62,11 +62,11 @@ class Line(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "label" in list(init_dict.keys()):
-                label = init_dict["label"]
+            if "prop_dict" in list(init_dict.keys()):
+                prop_dict = init_dict["prop_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.label = label
+        self.prop_dict = prop_dict
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -79,7 +79,7 @@ class Line(FrozenClass):
             Line_str += "parent = None " + linesep
         else:
             Line_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Line_str += 'label = "' + str(self.label) + '"' + linesep
+        Line_str += "prop_dict = " + str(self.prop_dict) + linesep
         return Line_str
 
     def __eq__(self, other):
@@ -87,7 +87,7 @@ class Line(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.label != self.label:
+        if other.prop_dict != self.prop_dict:
             return False
         return True
 
@@ -99,8 +99,8 @@ class Line(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._label != self._label:
-            diff_list.append(name + ".label")
+        if other._prop_dict != self._prop_dict:
+            diff_list.append(name + ".prop_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -109,7 +109,9 @@ class Line(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.label)
+        if self.prop_dict is not None:
+            for key, value in self.prop_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self, **kwargs):
@@ -120,7 +122,9 @@ class Line(FrozenClass):
         """
 
         Line_dict = dict()
-        Line_dict["label"] = self.label
+        Line_dict["prop_dict"] = (
+            self.prop_dict.copy() if self.prop_dict is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         Line_dict["__class__"] = "Line"
         return Line_dict
@@ -128,22 +132,24 @@ class Line(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.label = None
+        self.prop_dict = None
 
-    def _get_label(self):
-        """getter of label"""
-        return self._label
+    def _get_prop_dict(self):
+        """getter of prop_dict"""
+        return self._prop_dict
 
-    def _set_label(self, value):
-        """setter of label"""
-        check_var("label", value, "str")
-        self._label = value
+    def _set_prop_dict(self, value):
+        """setter of prop_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("prop_dict", value, "dict")
+        self._prop_dict = value
 
-    label = property(
-        fget=_get_label,
-        fset=_set_label,
-        doc=u"""the label of the Line (EX: Yoke_side)
+    prop_dict = property(
+        fget=_get_prop_dict,
+        fset=_set_prop_dict,
+        doc=u"""Property dictionary
 
-        :Type: str
+        :Type: dict
         """,
     )

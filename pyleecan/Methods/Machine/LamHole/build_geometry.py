@@ -7,6 +7,8 @@ from ....Classes.SurfLine import SurfLine
 from ....Classes.SurfRing import SurfRing
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
+from ....Functions.labels import update_RTS_index
+from ....Functions.Geometry.transform_hole_surf import transform_hole_surf
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -32,42 +34,18 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
 
     """
 
-    # Lamination label
-    if self.is_stator:
-        label = "Lamination_Stator"
-    else:
-        label = "Lamination_Rotor"
-
     # getting the Lamination surface
     surf_list = Lamination.build_geometry(self, sym=sym, alpha=alpha, delta=delta)
 
     # Holes surface(s)
     for hole in self.hole:
-        Zh = hole.Zh
-        assert (Zh % sym) == 0, (
-            "ERROR, Wrong symmetry for "
-            + label
-            + " "
-            + str(Zh)
-            + " holes and sym="
-            + str(sym)
-        )  # For now only
-        angle = 2 * pi / Zh
         # Create the first hole surface(s)
-        surf_hole = hole.build_geometry(alpha=pi / Zh)
-
-        # Copy the hole for Zh / sym
-        for ii in range(Zh // sym):
-            for surf in surf_hole:
-                new_surf = type(surf)(init_dict=surf.as_dict())
-                if "Magnet" in surf.label and ii % 2 != 0:  # if the surf is Magnet
-                    # Changing the pole of the magnet (before reference number )
-                    new_surf.label = new_surf.label[:-10] + "S" + new_surf.label[-9:]
-                if "Hole" in surf.label:
-                    # changing the hole or magnet reference number
-                    new_surf.label = new_surf.label[:-1] + str(ii)
-                new_surf.rotate(ii * angle)
-                surf_list.append(new_surf)
+        surf_hole = hole.build_geometry(alpha=pi / hole.Zh)
+        surf_list.extend(
+            transform_hole_surf(
+                hole_surf_list=surf_hole, Zh=hole.Zh, sym=sym, alpha=0, delta=0
+            )
+        )
 
     # Apply the transformations
     for surf in surf_list:

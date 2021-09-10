@@ -111,7 +111,7 @@ class Test_HoleM50_meth(object):
 
     def test_build_geometry_two_hole_no_mag(self):
         """check that curve_list is correct (two holes no magnet)"""
-        test_obj = LamHole(is_internal=True, Rext=0.075)
+        test_obj = LamHole(is_internal=True, is_stator=False, Rext=0.075)
         test_obj.hole = list()
         test_obj.hole.append(
             HoleM50(
@@ -136,12 +136,10 @@ class Test_HoleM50_meth(object):
         for surf in result:
             assert type(surf) is SurfLine
 
-        assert "Hole_" in result[0].label
-        assert "R0_T0_S0" in result[0].label
+        assert result[0].label == "Rotor_HoleVoid_R0-T0-S0"
         assert len(result[0].line_list) == 11
 
-        assert "Hole_" in result[1].label
-        assert "R0_T1_S0" in result[1].label
+        assert result[1].label == "Rotor_HoleVoid_R0-T1-S0"
         assert len(result[1].line_list) == 11
 
     def test_build_geometry_one_hole_no_mag(self):
@@ -171,13 +169,12 @@ class Test_HoleM50_meth(object):
         for surf in result:
             assert type(surf) is SurfLine
 
-        assert "Hole_" in result[0].label
-        assert "R0_T0_S0" in result[0].label
+        assert result[0].label == "Stator_HoleVoid_R0-T0-S0"
         assert len(result[0].line_list) == 16
 
     def test_build_geometry_one_hole_with_magnet(self):
         """check that curve_list is correct (one hole)"""
-        test_obj = LamHole(is_internal=True, Rext=0.075)
+        test_obj = LamHole(is_internal=True, is_stator=True, Rext=0.075)
         test_obj.hole = list()
         test_obj.hole.append(
             HoleM50(
@@ -201,24 +198,19 @@ class Test_HoleM50_meth(object):
         for surf in result:
             assert type(surf) is SurfLine
 
-        assert "Hole_" in result[0].label
-        assert "R0_T0_S0" in result[0].label
+        assert result[0].label == "Stator_HoleVoid_R0-T0-S0"
         assert len(result[0].line_list) == 5
 
-        assert "HoleMagnet_" in result[1].label
-        assert "_N_R0_T0_S0" in result[1].label
+        assert result[1].label == "Stator_HoleMag_R0-T0-S0"
         assert len(result[1].line_list) == 6
 
-        assert "Hole_" in result[2].label
-        assert "R0_T1_S0" in result[2].label
+        assert result[2].label == "Stator_HoleVoid_R0-T1-S0"
         assert len(result[2].line_list) == 6
 
-        assert "HoleMagnet_" in result[3].label
-        assert "_N_R0_T1_S0" in result[3].label
+        assert result[3].label == "Stator_HoleMag_R0-T1-S0"
         assert len(result[3].line_list) == 6
 
-        assert "Hole_" in result[4].label
-        assert "R0_T2_S0" in result[4].label
+        assert result[4].label == "Stator_HoleVoid_R0-T2-S0"
         assert len(result[4].line_list) == 5
 
     def test_build_geometry_two_hole_with_magnet(self):
@@ -246,23 +238,22 @@ class Test_HoleM50_meth(object):
         for surf in result:
             assert type(surf) is SurfLine
 
-        assert "Hole_" in result[0].label
-        assert "_R0_T0_S0" in result[0].label
+        assert result[0].label == "Rotor_HoleVoid_R0-T0-S0"
         assert len(result[0].line_list) == 7
-        assert "HoleMagnet_" in result[1].label
-        assert "_N_R0_T0_S0" in result[1].label
+
+        assert result[1].label == "Rotor_HoleMag_R0-T0-S0"
         assert len(result[1].line_list) == 6
-        assert "Hole_" in result[2].label
-        assert "_R0_T1_S0" in result[2].label
+
+        assert result[2].label == "Rotor_HoleVoid_R0-T1-S0"
         assert len(result[2].line_list) == 4
-        assert "Hole_" in result[3].label
-        assert "_R0_T2_S0" in result[3].label
+
+        assert result[3].label == "Rotor_HoleVoid_R0-T2-S0"
         assert len(result[3].line_list) == 4
-        assert "HoleMagnet_" in result[4].label
-        assert "_N_R0_T1_S0" in result[4].label
+
+        assert result[4].label == "Rotor_HoleMag_R0-T1-S0"
         assert len(result[4].line_list) == 6
-        assert "Hole_" in result[5].label
-        assert "_R0_T3_S0" in result[5].label
+
+        assert result[5].label == "Rotor_HoleVoid_R0-T3-S0"
         assert len(result[5].line_list) == 7
 
     def test_build_geometry_two_hole_with_magnet_is_simplified(self):
@@ -290,23 +281,22 @@ class Test_HoleM50_meth(object):
         for surf in result:
             assert type(surf) is SurfLine
 
-        assert "Hole_" in result[0].label
-        assert "_R0_T0_S0" in result[0].label
+        assert result[0].label == "Rotor_HoleVoid_R0-T0-S0"
         assert len(result[0].line_list) == 7
-        assert "HoleMagnet_" in result[1].label
-        assert "_N_R0_T0_S0" in result[1].label
+
+        assert result[1].label == "Rotor_HoleMag_R0-T0-S0"
         assert len(result[1].line_list) == 2
-        assert "Hole_" in result[2].label
-        assert "_R0_T1_S0" in result[2].label
+
+        assert result[2].label == "Rotor_HoleVoid_R0-T1-S0"
         assert len(result[2].line_list) == 4
-        assert "Hole_" in result[3].label
-        assert "_R0_T2_S0" in result[3].label
+
+        assert result[3].label == "Rotor_HoleVoid_R0-T2-S0"
         assert len(result[3].line_list) == 4
-        assert "HoleMagnet_" in result[4].label
-        assert "_N_R0_T1_S0" in result[4].label
+
+        assert result[4].label == "Rotor_HoleMag_R0-T1-S0"
         assert len(result[4].line_list) == 2
-        assert "Hole_" in result[5].label
-        assert "_R0_T3_S0" in result[5].label
+
+        assert result[5].label == "Rotor_HoleVoid_R0-T3-S0"
         assert len(result[5].line_list) == 7
 
     def test_comp_radius_mid_yoke(self):

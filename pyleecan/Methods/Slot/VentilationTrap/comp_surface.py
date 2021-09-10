@@ -18,4 +18,4 @@ def comp_surface(self):
 
     self.check()
 
-    return (self.W1 + self.W2) * 0.5 * self.D0 * self.Zh
+    return (self.W1 + self.W2) * 0.5 * self.D0

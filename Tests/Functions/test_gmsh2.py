@@ -11,9 +11,7 @@ from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.definitions import DATA_DIR
 from Tests import save_plot_path
 from pyleecan.Methods.Simulation.MagElmer import (
-    boundary_prop,
-    boundary_list,
-    surface_label,
+    MagElmer_BP_dict,
 )
 
 try:
@@ -67,9 +65,7 @@ def test_gmsh_ipm():
     gmsh_dict = draw_GMSH(
         output=myResults,
         sym=8,
-        boundary_prop=boundary_prop,
-        boundary_list=boundary_list,
-        surface_label=surface_label,
+        boundary_prop=MagElmer_BP_dict,
         is_lam_only_S=False,
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
@@ -110,9 +106,7 @@ def test_gmsh_spm():
     gmsh_dict = draw_GMSH(
         output=myResults,
         sym=4,
-        boundary_prop=boundary_prop,
-        boundary_list=boundary_list,
-        surface_label=surface_label,
+        boundary_prop=MagElmer_BP_dict,
         is_lam_only_S=False,
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
@@ -134,4 +128,4 @@ def encode_complex(z):
 
 if __name__ == "__main__":
     gmsh_dict = test_gmsh_ipm()
-    # gmsh_dict = test_gmsh_spm()
+    gmsh_dict = test_gmsh_spm()

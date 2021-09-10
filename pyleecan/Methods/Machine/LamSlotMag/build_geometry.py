@@ -2,6 +2,7 @@
 from numpy import pi
 
 from ....Classes.LamSlot import LamSlot
+from ....Functions.labels import MAG_LAB
 
 
 def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -29,10 +30,7 @@ def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=
 
     """
 
-    if self.is_stator:
-        st = "Stator"
-    else:
-        st = "Rotor"
+    st = self.get_label()
 
     assert (self.slot.Zs % sym) == 0, (
         "ERROR, Wrong symmetry for "
@@ -55,26 +53,10 @@ def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=
             mag_surf = self.slot.get_surface_active(
                 alpha=slot_pitch * ii + slot_pitch * 0.5
             )
-            # Defining type of magnetization of the magnet
-            if self.magnet.type_magnetization == 0:
-                type_mag = "Radial"
-            elif self.magnet.type_magnetization == 1:
-                type_mag = "Parallel"
-            elif self.magnet.type_magnetization == 2:
-                type_mag = "Hallbach"
-            else:
-                type_mag = ""
 
             surf_list.append(mag_surf)
             # Adapt the label
-            if ii % 2 != 0:  # South pole
-                surf_list[-1].label = (
-                    "Magnet" + st + type_mag + "_S_R0" + "_T0_S" + str(ii)
-                )
-            else:  # North pole
-                surf_list[-1].label = (
-                    "Magnet" + st + type_mag + "_N_R0" + "_T0_S" + str(ii)
-                )
+            surf_list[-1].label = st + "_" + MAG_LAB + "_R0-T0-S" + str(ii)
 
     # Apply the transformations
     for surf in surf_list:

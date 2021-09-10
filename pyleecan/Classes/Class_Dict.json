@@ -483,11 +483,11 @@
                 "value": 0
             },
             {
-                "desc": "Label to set to the lines",
+                "desc": "Property dict to apply on the lines",
                 "max": "",
                 "min": "",
-                "name": "line_label",
-                "type": "str",
+                "name": "prop_dict",
+                "type": "dict",
                 "unit": "",
                 "value": ""
             }
@@ -1896,7 +1896,8 @@
             "get_Rext",
             "has_magnet",
             "plot",
-            "set_magnet_by_id"
+            "set_magnet_by_id",
+            "get_R_id"
         ],
         "mother": "",
         "name": "Hole",
@@ -4612,7 +4613,8 @@
             "comp_radius_mid_yoke",
             "get_yoke_desc",
             "get_bore_desc",
-            "comp_point_ref"
+            "comp_point_ref",
+            "get_label"
         ],
         "mother": "",
         "name": "Lamination",
@@ -4763,13 +4765,13 @@
         "path": "pyleecan/Generator/ClassesRef/Geometry/Line.csv",
         "properties": [
             {
-                "desc": "the label of the Line (EX: Yoke_side)",
+                "desc": "Property dictionary",
                 "max": "",
                 "min": "",
-                "name": "label",
-                "type": "str",
+                "name": "prop_dict",
+                "type": "dict",
                 "unit": "-",
-                "value": ""
+                "value": null
             }
         ]
     },
@@ -5794,8 +5796,8 @@
                 "value": ""
             },
             {
-                "desc": "Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach",
-                "max": "5",
+                "desc": "Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach, 3 Tangential",
+                "max": "3",
                 "min": "0",
                 "name": "type_magnetization",
                 "type": "int",

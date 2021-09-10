@@ -121,16 +121,13 @@ class Test_Hole52_meth(object):
         for surf in result:
             assert type(surf) == SurfLine
 
-        assert result[0].label[:5] == "Hole_"
-        assert result[0].label[-9:] == "_R0_T0_S0"
+        assert result[0].label == "Rotor_HoleVoid_R0-T0-S0"
         assert len(result[0].line_list) == 4
 
-        assert result[1].label[:11] == "HoleMagnet_"
-        assert result[1].label[-11:] == "_N_R0_T0_S0"
+        assert result[1].label == "Rotor_HoleMag_R0-T0-S0"
         assert len(result[1].line_list) == 4
 
-        assert result[2].label[:5] == "Hole_"
-        assert result[2].label[-9:] == "_R0_T1_S0"
+        assert result[2].label == "Rotor_HoleVoid_R0-T1-S0"
         assert len(result[2].line_list) == 4
 
     @pytest.mark.parametrize("test_dict", HoleM52_test)
@@ -143,8 +140,7 @@ class Test_Hole52_meth(object):
         for surf in result:
             assert type(surf) == SurfLine
 
-        assert result[0].label[:5] == "Hole_"
-        assert result[0].label[-9:] == "_R0_T0_S0"
+        assert result[0].label == "Rotor_HoleVoid_R0-T0-S0"
         assert len(result[0].line_list) == 8
 
     @pytest.mark.parametrize("test_dict", HoleM52_test_stator)
@@ -157,7 +153,7 @@ class Test_Hole52_meth(object):
         test_obj.hole[0].magnet_0 = Magnet(type_magnetization=1)
         a = test_obj.hole[0].build_geometry(is_simplified=True)
 
-        assert a[1].label == "HoleMagnet_Stator_Parallel_N_R0_T0_S0"
+        assert a[1].label == "Stator_HoleMag_R0-T0-S0"
         assert a[1].line_list[0] is not None
         assert a[1].line_list[1] is not None
         with pytest.raises(IndexError) as context:
