@@ -7,7 +7,7 @@ from ....Classes.MeshMat import MeshMat
 from ....definitions import config_dict
 
 COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
-
+FONT_FAMILY_PYVISTA = config_dict["PLOT"]["FONT_FAMILY_PYVISTA"]
 
 def plot_contour(
     self,
@@ -124,7 +124,7 @@ def plot_contour(
             interactive=True,
             title_font_size=20,
             label_font_size=16,
-            font_family="arial",
+            font_family=FONT_FAMILY_PYVISTA,
             color="black",
         )
         p.add_mesh(
