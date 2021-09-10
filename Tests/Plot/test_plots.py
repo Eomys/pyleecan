@@ -24,12 +24,12 @@ def import_data():
 
     simu = Simu1(name="test_plots", machine=SCIM_006)
 
-    mat_file_Br = join(TEST_DATA_DIR, "Plots/default_proj_Br.mat")
-    mat_file_time = join(TEST_DATA_DIR, "Plots/default_proj_time.mat")
-    mat_file_angle = join(TEST_DATA_DIR, "Plots/default_proj_angle.mat")
-    mat_file_Br_cfft2 = join(TEST_DATA_DIR, "Plots/default_proj_Br_cfft2.mat")
-    mat_file_Brfreqs = join(TEST_DATA_DIR, "Plots/default_proj_Brfreqs.mat")
-    mat_file_Brwavenumber = join(TEST_DATA_DIR, "Plots/default_proj_Brwavenumber.mat")
+    mat_file_Br = join(TEST_DATA_DIR, "Plots","default_proj_Br.mat")
+    mat_file_time = join(TEST_DATA_DIR, "Plots","default_proj_time.mat")
+    mat_file_angle = join(TEST_DATA_DIR, "Plots","default_proj_angle.mat")
+    mat_file_Br_cfft2 = join(TEST_DATA_DIR, "Plots","default_proj_Br_cfft2.mat")
+    mat_file_Brfreqs = join(TEST_DATA_DIR, "Plots","default_proj_Brfreqs.mat")
+    mat_file_Brwavenumber = join(TEST_DATA_DIR, "Plots","default_proj_Brwavenumber.mat")
     if not isfile(mat_file_Br):
         import urllib.request
 
