@@ -3,7 +3,7 @@ from os.path import join
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 import matplotlib.pyplot as plt
-
+import pytest
 from os.path import join
 
 from numpy import ones, pi, array, linspace, cos, sqrt, zeros
@@ -14,12 +14,11 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.MagFEMM import MagFEMM
 
 
-@pytest.mark.skip(reason="Radial magnetization not available yet for Hole")
 def test_LSRPM_simulation():
     # Create the Simulation
     LSRPM = load(join(DATA_DIR, "Machine", "LSRPM_001.json"))
     # LSRPM.plot()
-    simu_femm = Simu1(name="FEMM_simulation", machine=LSRPM)
+    simu_femm = Simu1(name="LSRPM_001_FEMM_simulation", machine=LSRPM)
     p = simu_femm.machine.stator.winding.p
     qs = simu_femm.machine.stator.winding.qs
 

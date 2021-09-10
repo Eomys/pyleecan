@@ -12,3 +12,4 @@ magnetization_dict_offset,-,"Dictionary add an offset to the magnetization direc
 ,,,,,,,,,,,has_magnet,,,
 ,,,,,,,,,,,plot,,,
 ,,,,,,,,,,,set_magnet_by_id,,,
+,,,,,,,,,,,get_R_id,,,

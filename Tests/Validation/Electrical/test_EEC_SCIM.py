@@ -108,3 +108,7 @@ def test_EEC_SCIM():
     out.elec.Ir.plot_2D_Data("time", "phase[0]")
     out.elec.Us.plot_2D_Data("time", "phase")
     """
+
+
+if __name__ == "__main__":
+    test_EEC_SCIM()

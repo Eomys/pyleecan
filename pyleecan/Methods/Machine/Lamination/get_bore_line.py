@@ -6,7 +6,7 @@ from ....Classes.Arc3 import Arc3
 from ....Methods import NotImplementedYetError
 
 
-def get_bore_line(self, alpha1, alpha2, label="", ignore_notches=False):
+def get_bore_line(self, alpha1, alpha2, prop_dict=None, ignore_notches=False):
     """
 
     Parameters
@@ -17,8 +17,8 @@ def get_bore_line(self, alpha1, alpha2, label="", ignore_notches=False):
         Starting angle [rad]
     alpha2 : float
         Ending angle [rad]
-    label : str
-        the label of the bore line
+    prop_dict : dict
+        Property dictionary to apply on the lines
 
     Returns
     -------
@@ -42,16 +42,22 @@ def get_bore_line(self, alpha1, alpha2, label="", ignore_notches=False):
             Z1 = Rbo * exp(1j * alpha1)
             if delta == 2 * pi:
                 Z2 = Rbo * exp(1j * (alpha1 + delta / 2))
-                line1 = Arc3(begin=Z1, end=Z2, is_trigo_direction=True, label=label)
-                line2 = Arc3(begin=Z2, end=Z1, is_trigo_direction=True, label=label)
+                line1 = Arc3(
+                    begin=Z1, end=Z2, is_trigo_direction=True, prop_dict=prop_dict
+                )
+                line2 = Arc3(
+                    begin=Z2, end=Z1, is_trigo_direction=True, prop_dict=prop_dict
+                )
                 return [line1, line2]
             else:
                 Z2 = Rbo * exp(1j * alpha2)
-                return [Arc1(begin=Z1, end=Z2, radius=Rbo, label=label)]
+                return [Arc1(begin=Z1, end=Z2, radius=Rbo, prop_dict=prop_dict)]
         else:
             # === intermediate solution ========================================
             # no check for intersection of different notches
-            line_list = self.notch[0].build_geometry(alpha1, alpha2, label=label)
+            line_list = self.notch[0].build_geometry(
+                alpha1, alpha2, prop_dict=prop_dict
+            )
             # === later =======================================================
             """
             bore_line = self.get_bore_line(alpha1, alpha2, ignore_notches=True)

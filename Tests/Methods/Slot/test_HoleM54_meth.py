@@ -70,8 +70,7 @@ class Test_HoleM54_meth(object):
         for surf in result:
             assert type(surf) == SurfLine
 
-        assert result[0].label[:4] == "Hole"
-        assert result[0].label[-9:] == "_R0_T0_S0"
+        assert result[0].label == "Rotor_HoleVoid_R0-T0-S0"
         assert len(result[0].line_list) == 4
         assert type(result[0].line_list[0]) == Arc1
         assert type(result[0].line_list[1]) == Arc3
@@ -82,7 +81,7 @@ class Test_HoleM54_meth(object):
 
         test_obj.is_stator = True
         result = test_obj.hole[0].build_geometry()
-        assert result[0].label == "Hole_Stator_R0_T0_S0"
+        assert result[0].label == "Stator_HoleVoid_R0-T0-S0"
 
     def test_check(self):
         """Check that the check function can raise error"""

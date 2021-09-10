@@ -5,7 +5,7 @@ from ....Classes.Arc3 import Arc3
 from ....Functions.Geometry.merge_notch_list import merge_notch_list
 
 
-def get_yoke_desc(self, sym=1, is_reversed=False, line_label=None):
+def get_yoke_desc(self, sym=1, is_reversed=False, prop_dict=None):
     """This method returns an ordered description of the elements
     that defines the yoke radius of the lamination
 
@@ -17,8 +17,8 @@ def get_yoke_desc(self, sym=1, is_reversed=False, line_label=None):
         Symetry factor (2=half the lamination)
     is_reversed : bool
         True to return the line in clockwise oder
-    line_label : str
-        Label to apply on the lines
+    prop_dict : dict
+        Property dictionary to apply on the lines
     Returns
     -------
     yoke_desc : list
@@ -145,9 +145,12 @@ def get_yoke_desc(self, sym=1, is_reversed=False, line_label=None):
         for line in yoke_lines:
             line.reverse()
 
-    # Set line label
-    if line_label is not None:
+    # Set line properties
+    if prop_dict is not None:
         for line in yoke_lines:
-            line.label = line_label
+            if line.prop_dict is None:
+                line.prop_dict = prop_dict
+            else:
+                line.prop_dict.update(prop_dict)
 
     return yoke_desc, yoke_lines

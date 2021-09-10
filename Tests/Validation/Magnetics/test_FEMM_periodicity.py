@@ -58,7 +58,7 @@ def test_FEMM_periodicity_time_no_periodicity_a():
         is_periodicity_a=False,
         is_periodicity_t=True,
         nb_worker=cpu_count(),
-        Kmesh_fineness=2,
+        # Kmesh_fineness=2,
     )
     simu.force = ForceMT()
 
@@ -205,7 +205,7 @@ def test_FEMM_periodicity_time():
         is_periodicity_a=True,
         is_periodicity_t=True,
         nb_worker=cpu_count(),
-        Kmesh_fineness=2,
+        # Kmesh_fineness=2,
     )
     simu.force = ForceMT()
 
@@ -352,7 +352,7 @@ def test_FEMM_periodicity_angle():
         is_periodicity_a=True,
         is_periodicity_t=False,
         nb_worker=cpu_count(),
-        Kmesh_fineness=2,
+        # Kmesh_fineness=2,
     )
     simu.force = ForceMT()
 

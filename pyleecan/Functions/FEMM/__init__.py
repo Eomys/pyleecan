@@ -1,4 +1,18 @@
 # -*- coding: utf-8 -*-
+from ..labels import (
+    YSR_LAB,
+    YSL_LAB,
+    ROTOR_LAB,
+    STATOR_LAB,
+    YOKE_LAB,
+    LAM_LAB,
+    SBS_TR_LAB,
+    SBS_TL_LAB,
+    SBS_BR_LAB,
+    SBS_BL_LAB,
+    SBR_B_LAB,
+    SBR_T_LAB,
+)
 
 # regions IDs and names (must be unique)
 
@@ -39,13 +53,26 @@ is_middleag = 0  # 1 to draw an arc in the middle of the airgap for torque calcu
 # not necessary)
 acsolver = 0  # AC solver type 0 for successive approx, 1 for Newton
 
-# dictionary to match FEMM boundary condition (value) with line labels (key)
+
+# dictionary to match MagFEMM FEA boundary conditions (dict values)
+# with pyleecan line boundary properties (dict keys)
+# that are set in the build_geometry methods
 # actual FEMM boundary condition is set in Arc and Segment draw_FEMM methods
-boundary_prop = dict()
-boundary_prop["airgap_line_1"] = "bc_ag1"
-boundary_prop["sliding_line"] = "bc_ag2"
-boundary_prop["airgap_line_2"] = "bc_ag3"
-boundary_prop["Rotor_Yoke_Radius"] = "bc_A0"
-boundary_prop["Stator_Yoke_Radius"] = "bc_A0"
-boundary_prop["Rotor_Yoke_Side"] = "bc_r1"
-boundary_prop["Stator_Yoke_Side"] = "bc_s1"
+R_LAB = ROTOR_LAB + "-0_"
+S_LAB = STATOR_LAB + "-0_"
+MagFEMM_BP_dict = dict()
+MagFEMM_BP_dict[SBS_BR_LAB] = "bc_ag1"  # Bottom Sliding Band Side Right
+MagFEMM_BP_dict[SBS_BL_LAB] = "bc_ag1"  # Bottom Sliding Band Side Left
+MagFEMM_BP_dict[SBR_B_LAB] = "bc_ag2"  # Bottom Sliding Band Radius
+MagFEMM_BP_dict[SBR_T_LAB] = "bc_ag2"  # Top Sliding Band Radius
+MagFEMM_BP_dict[SBS_TR_LAB] = "bc_ag3"  # Top Sliding Band Side Right
+MagFEMM_BP_dict[SBS_TL_LAB] = "bc_ag3"  # Top Sliding Band Side Left
+MagFEMM_BP_dict[R_LAB + LAM_LAB + YOKE_LAB] = "bc_A0"
+MagFEMM_BP_dict[S_LAB + LAM_LAB + YOKE_LAB] = "bc_A0"
+MagFEMM_BP_dict[R_LAB + YSR_LAB] = "bc_r1"  # Rotor Yoke Side Right
+MagFEMM_BP_dict[R_LAB + YSL_LAB] = "bc_r1"  # Rotor Yoke Side Left
+MagFEMM_BP_dict[S_LAB + YSR_LAB] = "bc_s1"  # STATOR Yoke Side Right
+MagFEMM_BP_dict[S_LAB + YSL_LAB] = "bc_s1"  # STATOR Yoke Side Left
+
+LAM_MAT_NAME = "Iron"
+AIRGAP_MAT_NAME = "Airgap"
