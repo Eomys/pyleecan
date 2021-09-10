@@ -1,3 +1,7 @@
+from ....definitions import config_dict
+
+FONT_FAMILY_PYVISTA = config_dict["PLOT"]["FONT_FAMILY_PYVISTA"]
+
 def configure_plot(p, win_title, save_path):
     """Configure a pyvista plot. If the plotter doesn't exist, create one depending on avaialble package.
 
@@ -56,7 +60,7 @@ def configure_plot(p, win_title, save_path):
         interactive=True,
         title_font_size=12,
         label_font_size=10,
-        font_family="arial",
+        font_family=FONT_FAMILY_PYVISTA,
         color="black",
     )
 

@@ -14,6 +14,9 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.MagFEMM import MagFEMM
 
 
+is_show_fig = False
+
+
 def test_LSRPM_simulation():
     # Create the Simulation
     LSRPM = load(join(DATA_DIR, "Machine", "LSRPM_001.json"))
@@ -86,21 +89,29 @@ def test_LSRPM_simulation():
     )
     out_femm = simu_femm.run()
     # Radial magnetic flux
-    out_femm.mag.B.plot_2D_Data("angle", "time[1]", component_list=["radial"])
     out_femm.mag.B.plot_2D_Data(
-        "wavenumber=[0,76]", "time[1]", component_list=["radial"]
+        "angle", "time[1]", component_list=["radial"], is_show_fig=is_show_fig
+    )
+    out_femm.mag.B.plot_2D_Data(
+        "wavenumber=[0,76]",
+        "time[1]",
+        component_list=["radial"],
+        is_show_fig=is_show_fig,
     )
     # Tangential magnetic flux
-    out_femm.mag.B.plot_2D_Data("angle", "time[1]", component_list=["tangential"])
     out_femm.mag.B.plot_2D_Data(
-        "wavenumber=[0,76]", "time[1]", component_list=["tangential"]
+        "angle", "time[1]", component_list=["tangential"], is_show_fig=is_show_fig
     )
-    out_femm.mag.Tem.plot_2D_Data("time")
+    out_femm.mag.B.plot_2D_Data(
+        "wavenumber=[0,76]",
+        "time[1]",
+        component_list=["tangential"],
+        is_show_fig=is_show_fig,
+    )
+    out_femm.mag.Tem.plot_2D_Data("time", is_show_fig=is_show_fig)
     print(out_femm.mag.Tem.values.shape)
     print(simu_femm.input.Nt_tot)
-    out_femm.mag.meshsolution.plot_contour(label="B", group_names="stator core")
-
-    plt.show()
+    # out_femm.mag.meshsolution.plot_contour(label="B", group_names="stator core")
 
 
 if __name__ == "__main__":

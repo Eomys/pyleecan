@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Functions.Plot.Pyvista.plot_glyph_pv import plot_glyph_pv
-from pyleecan.Functions.Plot.Pyvista.configure_plot import configure_plot
+from ....Functions.Plot.Pyvista.plot_glyph_pv import plot_glyph_pv
+from ....Functions.Plot.Pyvista.configure_plot import configure_plot
 from numpy import (
     pi,
     max as np_max,
@@ -11,6 +11,9 @@ from numpy import (
 )
 
 from ....Classes.MeshMat import MeshMat
+from ....definitions import config_dict
+
+FONT_FAMILY_PYVISTA = config_dict["PLOT"]["FONT_FAMILY_PYVISTA"]
 
 
 def plot_glyph(
@@ -101,7 +104,7 @@ def plot_glyph(
                 position="upper_edge",
                 color="black",
                 font_size=10,
-                font="arial",
+                font=FONT_FAMILY_PYVISTA,
             )
 
         # Get glyph field
@@ -146,7 +149,7 @@ def plot_glyph(
                 position="lower_edge",
                 color="gray",
                 font_size=10,
-                font="arial",
+                font=FONT_FAMILY_PYVISTA,
             )
             p.show(auto_close=False)
 
@@ -179,7 +182,7 @@ def plot_glyph(
                     position="upper_edge",
                     color="black",
                     font_size=10,
-                    font="arial",
+                    font=FONT_FAMILY_PYVISTA,
                 )
                 p.write_frame()
                 p.clear()
