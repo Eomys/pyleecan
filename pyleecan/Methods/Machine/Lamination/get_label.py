@@ -26,8 +26,11 @@ def get_label(self, is_add_id=True):
 
     if is_add_id:
         if self.parent is not None:
-            lam_list = self.parent.get_lam_list(is_int_to_ext=True, key=label)
-            label += "-" + str(lam_list.index(self))
+            try:
+                lam_list = self.parent.get_lam_list(is_int_to_ext=True, key=label)
+                label += "-" + str(lam_list.index(self))
+            except:
+                pass
         # else:
         #     raise ParentMissingError("Error: The slot is not inside a Lamination")
 
