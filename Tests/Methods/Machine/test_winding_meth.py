@@ -9,8 +9,9 @@ from numpy import array_equal
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
+from pyleecan.Classes.Slot import Slot
 
-from Tests import save_load_path as save_path
+from Tests import save_load_path as save_path, TEST_DATA_DIR
 from Tests.Plot.LamWind import wind_mat
 
 # Init result folder
@@ -32,6 +33,7 @@ test_obj.slot.Zs = 36
 test_obj.winding = Winding(qs=3, p=3, Nlayer=2, coil_pitch=5, Ntcoil=9)
 exp_shape = (2, 1, 36, 3)
 exp_imp_list.append({"test_obj": test_obj, "exp_shape": exp_shape})
+wind_per = test_obj.winding.get_connection_mat()  # For periodicity import test
 
 # Ntan = 1 ; Ntan = 2
 test_obj = LamSlotWind()
@@ -136,9 +138,26 @@ def test_export_import_Data_Empty(test_dict):
     assert result.Nlayer == test_dict["test_obj"].winding.Nlayer
 
 
+def test_import_periodicity():
+    lam = LamSlotWind(slot=Slot(Zs=36))
+    lam.winding = WindingUD()
+    # With Header (Zs=12 instead of 36 to trigger periodicity)
+    lam.winding.import_from_csv(
+        join(TEST_DATA_DIR, "Load_GUI", "Winding", "Wind_2_1_Head_Empty_per.csv")
+    )
+    assert array_equal(wind_per, lam.winding.get_connection_mat())
+    # Without Header
+    lam.winding.import_from_csv(
+        join(TEST_DATA_DIR, "Load_GUI", "Winding", "Wind_2_1_Data_Empty_per.csv")
+    )
+    assert array_equal(wind_per, lam.winding.get_connection_mat())
+
+
 if __name__ == "__main__":
     for test_dict in exp_imp_list:
         test_export_import_Head_Full(test_dict)
         test_export_import_Data_Full(test_dict)
         test_export_import_Head_Empty(test_dict)
         test_export_import_Data_Empty(test_dict)
+    test_import_periodicity()
+    print("Done")
