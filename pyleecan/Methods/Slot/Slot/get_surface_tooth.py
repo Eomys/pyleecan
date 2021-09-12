@@ -3,6 +3,14 @@ from ....Classes.Segment import Segment
 from ....Classes.Arc1 import Arc1
 from ....Classes.SurfLine import SurfLine
 from ....Methods import ParentMissingError
+from ....Functions.labels import (
+    BOUNDARY_PROP_LAB,
+    YSR_LAB,
+    YSL_LAB,
+    YOKE_LAB,
+    NO_LAM_LAB,
+    TOOTH_LAB,
+)
 from numpy import exp, pi
 
 
@@ -33,7 +41,9 @@ def get_surface_tooth(self):
     # Yoke lines
     Z1 = Ryoke * exp(1j * pi / self.Zs)
     Z2 = Ryoke * exp(-1j * pi / self.Zs)
-    curve_list.append(Segment(top_list[-1].get_end(), Z1, label="Tooth_Yoke_Side"))
+    curve_list.append(
+        Segment(top_list[-1].get_end(), Z1, prop_dict={BOUNDARY_PROP_LAB: YSL_LAB})
+    )
     if Ryoke > 0:
         curve_list.append(
             Arc1(
@@ -41,12 +51,19 @@ def get_surface_tooth(self):
                 end=Z2,
                 radius=-Ryoke,
                 is_trigo_direction=False,
-                label="Tooth_Yoke_Arc",
+                prop_dict={BOUNDARY_PROP_LAB: YOKE_LAB},
             )
         )
-    curve_list.append(Segment(Z2, bot_list[0].get_begin(), label="Tooth_Yoke_Side"))
+    curve_list.append(
+        Segment(Z2, bot_list[0].get_begin(), prop_dict={BOUNDARY_PROP_LAB: YSR_LAB})
+    )
     # Second half of the tooth
     curve_list.extend(bot_list)
     curve_list.extend(top_list)
 
-    return SurfLine(line_list=curve_list, label="Tooth")
+    if self.parent is not None:
+        lam_label = self.parent.get_label()
+    else:
+        lam_label = NO_LAM_LAB
+    label = lam_label + "_" + TOOTH_LAB
+    return SurfLine(line_list=curve_list, label=label)

@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/Machine.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/Machine.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/Machine
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -57,9 +62,9 @@ except ImportError as error:
     comp_Rgap_mec = error
 
 try:
-    from ..Methods.Machine.Machine.comp_sym import comp_sym
+    from ..Methods.Machine.Machine.comp_periodicity import comp_periodicity
 except ImportError as error:
-    comp_sym = error
+    comp_periodicity = error
 
 try:
     from ..Methods.Machine.Machine.comp_width_airgap_mag import comp_width_airgap_mag
@@ -72,9 +77,9 @@ except ImportError as error:
     comp_width_airgap_mec = error
 
 try:
-    from ..Methods.Machine.Machine.get_material_list import get_material_list
+    from ..Methods.Machine.Machine.get_material_dict import get_material_dict
 except ImportError as error:
-    get_material_list = error
+    get_material_dict = error
 
 try:
     from ..Methods.Machine.Machine.get_polar_eq import get_polar_eq
@@ -90,6 +95,36 @@ try:
     from ..Methods.Machine.Machine.plot_anim_rotor import plot_anim_rotor
 except ImportError as error:
     plot_anim_rotor = error
+
+try:
+    from ..Methods.Machine.Machine.get_lam_list import get_lam_list
+except ImportError as error:
+    get_lam_list = error
+
+try:
+    from ..Methods.Machine.Machine.get_lam_list_label import get_lam_list_label
+except ImportError as error:
+    get_lam_list_label = error
+
+try:
+    from ..Methods.Machine.Machine.get_lam_by_label import get_lam_by_label
+except ImportError as error:
+    get_lam_by_label = error
+
+try:
+    from ..Methods.Machine.Machine.get_lam_index import get_lam_index
+except ImportError as error:
+    get_lam_index = error
+
+try:
+    from ..Methods.Machine.Machine.get_pole_pair_number import get_pole_pair_number
+except ImportError as error:
+    get_pole_pair_number = error
+
+try:
+    from ..Methods.Machine.Machine.set_pole_pair_number import set_pole_pair_number
+except ImportError as error:
+    set_pole_pair_number = error
 
 
 from ._check import InitUnKnowClassError
@@ -189,15 +224,18 @@ class Machine(FrozenClass):
         )
     else:
         comp_Rgap_mec = comp_Rgap_mec
-    # cf Methods.Machine.Machine.comp_sym
-    if isinstance(comp_sym, ImportError):
-        comp_sym = property(
+    # cf Methods.Machine.Machine.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Machine method comp_sym: " + str(comp_sym))
+                ImportError(
+                    "Can't use Machine method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
             )
         )
     else:
-        comp_sym = comp_sym
+        comp_periodicity = comp_periodicity
     # cf Methods.Machine.Machine.comp_width_airgap_mag
     if isinstance(comp_width_airgap_mag, ImportError):
         comp_width_airgap_mag = property(
@@ -222,18 +260,18 @@ class Machine(FrozenClass):
         )
     else:
         comp_width_airgap_mec = comp_width_airgap_mec
-    # cf Methods.Machine.Machine.get_material_list
-    if isinstance(get_material_list, ImportError):
-        get_material_list = property(
+    # cf Methods.Machine.Machine.get_material_dict
+    if isinstance(get_material_dict, ImportError):
+        get_material_dict = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Machine method get_material_list: "
-                    + str(get_material_list)
+                    "Can't use Machine method get_material_dict: "
+                    + str(get_material_dict)
                 )
             )
         )
     else:
-        get_material_list = get_material_list
+        get_material_dict = get_material_dict
     # cf Methods.Machine.Machine.get_polar_eq
     if isinstance(get_polar_eq, ImportError):
         get_polar_eq = property(
@@ -265,15 +303,79 @@ class Machine(FrozenClass):
         )
     else:
         plot_anim_rotor = plot_anim_rotor
-    # save method is available in all object
+    # cf Methods.Machine.Machine.get_lam_list
+    if isinstance(get_lam_list, ImportError):
+        get_lam_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_list: " + str(get_lam_list)
+                )
+            )
+        )
+    else:
+        get_lam_list = get_lam_list
+    # cf Methods.Machine.Machine.get_lam_list_label
+    if isinstance(get_lam_list_label, ImportError):
+        get_lam_list_label = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_list_label: "
+                    + str(get_lam_list_label)
+                )
+            )
+        )
+    else:
+        get_lam_list_label = get_lam_list_label
+    # cf Methods.Machine.Machine.get_lam_by_label
+    if isinstance(get_lam_by_label, ImportError):
+        get_lam_by_label = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_by_label: "
+                    + str(get_lam_by_label)
+                )
+            )
+        )
+    else:
+        get_lam_by_label = get_lam_by_label
+    # cf Methods.Machine.Machine.get_lam_index
+    if isinstance(get_lam_index, ImportError):
+        get_lam_index = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_index: " + str(get_lam_index)
+                )
+            )
+        )
+    else:
+        get_lam_index = get_lam_index
+    # cf Methods.Machine.Machine.get_pole_pair_number
+    if isinstance(get_pole_pair_number, ImportError):
+        get_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_pole_pair_number: "
+                    + str(get_pole_pair_number)
+                )
+            )
+        )
+    else:
+        get_pole_pair_number = get_pole_pair_number
+    # cf Methods.Machine.Machine.set_pole_pair_number
+    if isinstance(set_pole_pair_number, ImportError):
+        set_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method set_pole_pair_number: "
+                    + str(set_pole_pair_number)
+                )
+            )
+        )
+    else:
+        set_pole_pair_number = set_pole_pair_number
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -290,32 +392,16 @@ class Machine(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if frame == -1:
-            frame = Frame()
-        if shaft == -1:
-            shaft = Shaft()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            frame = obj.frame
-            shaft = obj.shaft
-            name = obj.name
-            desc = obj.desc
-            type_machine = obj.type_machine
-            logger_name = obj.logger_name
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -331,26 +417,10 @@ class Machine(FrozenClass):
                 type_machine = init_dict["type_machine"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # frame can be None, a Frame object or a dict
-        if isinstance(frame, dict):
-            self.frame = Frame(init_dict=frame)
-        elif isinstance(frame, str):
-            from ..Functions.load import load
-
-            self.frame = load(frame)
-        else:
-            self.frame = frame
-        # shaft can be None, a Shaft object or a dict
-        if isinstance(shaft, dict):
-            self.shaft = Shaft(init_dict=shaft)
-        elif isinstance(shaft, str):
-            from ..Functions.load import load
-
-            self.shaft = load(shaft)
-        else:
-            self.shaft = shaft
+        self.frame = frame
+        self.shaft = shaft
         self.name = name
         self.desc = desc
         self.type_machine = type_machine
@@ -360,7 +430,7 @@ class Machine(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Machine_str = ""
         if self.parent is None:
@@ -402,24 +472,71 @@ class Machine(FrozenClass):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if (other.frame is None and self.frame is not None) or (
+            other.frame is not None and self.frame is None
+        ):
+            diff_list.append(name + ".frame None mismatch")
+        elif self.frame is not None:
+            diff_list.extend(self.frame.compare(other.frame, name=name + ".frame"))
+        if (other.shaft is None and self.shaft is not None) or (
+            other.shaft is not None and self.shaft is None
+        ):
+            diff_list.append(name + ".shaft None mismatch")
+        elif self.shaft is not None:
+            diff_list.extend(self.shaft.compare(other.shaft, name=name + ".shaft"))
+        if other._name != self._name:
+            diff_list.append(name + ".name")
+        if other._desc != self._desc:
+            diff_list.append(name + ".desc")
+        if other._type_machine != self._type_machine:
+            diff_list.append(name + ".type_machine")
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.frame)
+        S += getsizeof(self.shaft)
+        S += getsizeof(self.name)
+        S += getsizeof(self.desc)
+        S += getsizeof(self.type_machine)
+        S += getsizeof(self.logger_name)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         Machine_dict = dict()
         if self.frame is None:
             Machine_dict["frame"] = None
         else:
-            Machine_dict["frame"] = self.frame.as_dict()
+            Machine_dict["frame"] = self.frame.as_dict(**kwargs)
         if self.shaft is None:
             Machine_dict["shaft"] = None
         else:
-            Machine_dict["shaft"] = self.shaft.as_dict()
+            Machine_dict["shaft"] = self.shaft.as_dict(**kwargs)
         Machine_dict["name"] = self.name
         Machine_dict["desc"] = self.desc
         Machine_dict["type_machine"] = self.type_machine
         Machine_dict["logger_name"] = self.logger_name
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Machine_dict["__class__"] = "Machine"
         return Machine_dict
 
@@ -441,15 +558,29 @@ class Machine(FrozenClass):
 
     def _set_frame(self, value):
         """setter of frame"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "frame"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Frame()
         check_var("frame", value, "Frame")
         self._frame = value
 
         if self._frame is not None:
             self._frame.parent = self
 
-    # Machine's Frame
-    # Type : Frame
-    frame = property(fget=_get_frame, fset=_set_frame, doc=u"""Machine's Frame""")
+    frame = property(
+        fget=_get_frame,
+        fset=_set_frame,
+        doc=u"""Machine's Frame
+
+        :Type: Frame
+        """,
+    )
 
     def _get_shaft(self):
         """getter of shaft"""
@@ -457,15 +588,29 @@ class Machine(FrozenClass):
 
     def _set_shaft(self, value):
         """setter of shaft"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "shaft"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Shaft()
         check_var("shaft", value, "Shaft")
         self._shaft = value
 
         if self._shaft is not None:
             self._shaft.parent = self
 
-    # Machine's Shaft
-    # Type : Shaft
-    shaft = property(fget=_get_shaft, fset=_set_shaft, doc=u"""Machine's Shaft""")
+    shaft = property(
+        fget=_get_shaft,
+        fset=_set_shaft,
+        doc=u"""Machine's Shaft
+
+        :Type: Shaft
+        """,
+    )
 
     def _get_name(self):
         """getter of name"""
@@ -476,9 +621,14 @@ class Machine(FrozenClass):
         check_var("name", value, "str")
         self._name = value
 
-    # Name of the machine
-    # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the machine""")
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the machine
+
+        :Type: str
+        """,
+    )
 
     def _get_desc(self):
         """getter of desc"""
@@ -489,9 +639,14 @@ class Machine(FrozenClass):
         check_var("desc", value, "str")
         self._desc = value
 
-    # Machine description
-    # Type : str
-    desc = property(fget=_get_desc, fset=_set_desc, doc=u"""Machine description""")
+    desc = property(
+        fget=_get_desc,
+        fset=_set_desc,
+        doc=u"""Machine description
+
+        :Type: str
+        """,
+    )
 
     def _get_type_machine(self):
         """getter of type_machine"""
@@ -502,12 +657,13 @@ class Machine(FrozenClass):
         check_var("type_machine", value, "int")
         self._type_machine = value
 
-    # Integer to store the machine type (for the GUI, should be replaced by a test of the object type)
-    # Type : int
     type_machine = property(
         fget=_get_type_machine,
         fset=_set_type_machine,
-        doc=u"""Integer to store the machine type (for the GUI, should be replaced by a test of the object type)""",
+        doc=u"""Integer to store the machine type (for the GUI, should be replaced by a test of the object type)
+
+        :Type: int
+        """,
     )
 
     def _get_logger_name(self):
@@ -519,10 +675,11 @@ class Machine(FrozenClass):
         check_var("logger_name", value, "str")
         self._logger_name = value
 
-    # Name of the logger to use
-    # Type : str
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
     )

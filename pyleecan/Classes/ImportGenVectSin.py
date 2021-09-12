@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportGenVectSin.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportGenVectSin.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportGenVectSin
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .ImportMatrix import ImportMatrix
 
 # Import all class method
@@ -37,15 +42,9 @@ class ImportGenVectSin(ImportMatrix):
         )
     else:
         get_data = get_data
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -62,28 +61,16 @@ class ImportGenVectSin(ImportMatrix):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            f = obj.f
-            A = obj.A
-            Phi = obj.Phi
-            N = obj.N
-            Tf = obj.Tf
-            is_transpose = obj.is_transpose
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -99,7 +86,7 @@ class ImportGenVectSin(ImportMatrix):
                 Tf = init_dict["Tf"]
             if "is_transpose" in list(init_dict.keys()):
                 is_transpose = init_dict["is_transpose"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.f = f
         self.A = A
         self.Phi = Phi
@@ -111,7 +98,7 @@ class ImportGenVectSin(ImportMatrix):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         ImportGenVectSin_str = ""
         # Get the properties inherited from ImportMatrix
@@ -144,18 +131,60 @@ class ImportGenVectSin(ImportMatrix):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from ImportMatrix
+        diff_list.extend(super(ImportGenVectSin, self).compare(other, name=name))
+        if other._f != self._f:
+            diff_list.append(name + ".f")
+        if other._A != self._A:
+            diff_list.append(name + ".A")
+        if other._Phi != self._Phi:
+            diff_list.append(name + ".Phi")
+        if other._N != self._N:
+            diff_list.append(name + ".N")
+        if other._Tf != self._Tf:
+            diff_list.append(name + ".Tf")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from ImportMatrix
+        S += super(ImportGenVectSin, self).__sizeof__()
+        S += getsizeof(self.f)
+        S += getsizeof(self.A)
+        S += getsizeof(self.Phi)
+        S += getsizeof(self.N)
+        S += getsizeof(self.Tf)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         # Get the properties inherited from ImportMatrix
-        ImportGenVectSin_dict = super(ImportGenVectSin, self).as_dict()
+        ImportGenVectSin_dict = super(ImportGenVectSin, self).as_dict(**kwargs)
         ImportGenVectSin_dict["f"] = self.f
         ImportGenVectSin_dict["A"] = self.A
         ImportGenVectSin_dict["Phi"] = self.Phi
         ImportGenVectSin_dict["N"] = self.N
         ImportGenVectSin_dict["Tf"] = self.Tf
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportGenVectSin_dict["__class__"] = "ImportGenVectSin"
         return ImportGenVectSin_dict
@@ -180,10 +209,14 @@ class ImportGenVectSin(ImportMatrix):
         check_var("f", value, "float", Vmin=0)
         self._f = value
 
-    # Frequency of the sinus to generate
-    # Type : float, min = 0
     f = property(
-        fget=_get_f, fset=_set_f, doc=u"""Frequency of the sinus to generate"""
+        fget=_get_f,
+        fset=_set_f,
+        doc=u"""Frequency of the sinus to generate
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_A(self):
@@ -195,10 +228,13 @@ class ImportGenVectSin(ImportMatrix):
         check_var("A", value, "float")
         self._A = value
 
-    # Amplitude of the sinus to generate
-    # Type : float
     A = property(
-        fget=_get_A, fset=_set_A, doc=u"""Amplitude of the sinus to generate"""
+        fget=_get_A,
+        fset=_set_A,
+        doc=u"""Amplitude of the sinus to generate
+
+        :Type: float
+        """,
     )
 
     def _get_Phi(self):
@@ -210,10 +246,15 @@ class ImportGenVectSin(ImportMatrix):
         check_var("Phi", value, "float", Vmin=-6.29, Vmax=6.29)
         self._Phi = value
 
-    # Phase of the sinus to generate
-    # Type : float, min = -6.29, max = 6.29
     Phi = property(
-        fget=_get_Phi, fset=_set_Phi, doc=u"""Phase of the sinus to generate"""
+        fget=_get_Phi,
+        fset=_set_Phi,
+        doc=u"""Phase of the sinus to generate
+
+        :Type: float
+        :min: -6.29
+        :max: 6.29
+        """,
     )
 
     def _get_N(self):
@@ -225,9 +266,15 @@ class ImportGenVectSin(ImportMatrix):
         check_var("N", value, "int", Vmin=0)
         self._N = value
 
-    # Length of the vector to generate
-    # Type : int, min = 0
-    N = property(fget=_get_N, fset=_set_N, doc=u"""Length of the vector to generate""")
+    N = property(
+        fget=_get_N,
+        fset=_set_N,
+        doc=u"""Length of the vector to generate
+
+        :Type: int
+        :min: 0
+        """,
+    )
 
     def _get_Tf(self):
         """getter of Tf"""
@@ -238,8 +285,12 @@ class ImportGenVectSin(ImportMatrix):
         check_var("Tf", value, "float", Vmin=0)
         self._Tf = value
 
-    # End time of the sinus generation
-    # Type : float, min = 0
     Tf = property(
-        fget=_get_Tf, fset=_set_Tf, doc=u"""End time of the sinus generation"""
+        fget=_get_Tf,
+        fset=_set_Tf,
+        doc=u"""End time of the sinus generation
+
+        :Type: float
+        :min: 0
+        """,
     )

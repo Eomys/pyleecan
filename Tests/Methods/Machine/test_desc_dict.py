@@ -3,16 +3,16 @@ from os.path import join
 
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
+from pyleecan.Classes.MachineIPMSM import MachineIPMSM
+from pyleecan.Classes.LamHole import LamHole
 
-SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
-IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
-
+@pytest.mark.SCIM
 def test_desc_SCIM():
-    """Check that the description of a SCIM is correct
-    """
+    """Check that the description of a SCIM is correct"""
+    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     desc_dict = SCIM_001.comp_desc_dict()
-    assert len(desc_dict) == 9
+    assert len(desc_dict) == 8
     assert desc_dict[0]["name"] == "Type"
     assert desc_dict[0]["value"] == "SCIM"
 
@@ -31,21 +31,19 @@ def test_desc_SCIM():
     assert desc_dict[5]["name"] == "qs"
     assert desc_dict[5]["value"] == 3
 
-    assert desc_dict[6]["name"] == "Winding"
-    assert desc_dict[6]["value"] == "double layer distributed"
+    assert desc_dict[6]["name"] == "Rwinds"
+    assert desc_dict[6]["value"] == pytest.approx(0.02392, rel=0.1)
 
-    assert desc_dict[7]["name"] == "Rwinds"
-    assert desc_dict[7]["value"] == pytest.approx(0.02392, rel=0.1)
-
-    assert desc_dict[8]["name"] == "Mmachine"
-    assert desc_dict[8]["value"] == pytest.approx(328.1, rel=0.1)
+    assert desc_dict[7]["name"] == "Mmachine"
+    assert desc_dict[7]["value"] == pytest.approx(328.1, rel=0.1)
 
 
+@pytest.mark.IPMSM
 def test_desc_IPMSM():
-    """Check that the description of an IPMSM is correct
-    """
-    desc_dict = IPMSM_A.comp_desc_dict()
-    assert len(desc_dict) == 8
+    """Check that the description of an IPMSM is correct"""
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    desc_dict = Toyota_Prius.comp_desc_dict()
+    assert len(desc_dict) == 7
     assert desc_dict[0]["name"] == "Type"
     assert desc_dict[0]["value"] == "IPMSM"
 
@@ -61,11 +59,28 @@ def test_desc_IPMSM():
     assert desc_dict[4]["name"] == "qs"
     assert desc_dict[4]["value"] == 3
 
-    assert desc_dict[5]["name"] == "Winding"
-    assert desc_dict[5]["value"] == "single layer distributed"
+    assert desc_dict[5]["name"] == "Rwinds"
+    assert desc_dict[5]["value"] == pytest.approx(0.0359, rel=0.1)
 
-    assert desc_dict[6]["name"] == "Rwinds"
-    assert desc_dict[6]["value"] == pytest.approx(0.0359, rel=0.1)
+    assert desc_dict[6]["name"] == "Mmachine"
+    assert desc_dict[6]["value"] == pytest.approx(33.37, rel=0.1)
 
-    assert desc_dict[7]["name"] == "Mmachine"
-    assert desc_dict[7]["value"] == pytest.approx(33.37, rel=0.1)
+
+@pytest.mark.outer_rotor
+def test_desc_Outer_Rotor():
+    """Check that the description with Outer Rotor is correct"""
+
+    test_obj = MachineIPMSM()
+    test_obj.rotor = LamHole(
+        is_internal=False,
+        Rint=0.021,
+        Rext=0.075,
+        is_stator=False,
+        L1=0.7,
+        Nrvd=0,
+        Kf1=0.95,
+    )
+
+    desc_dict = test_obj.comp_desc_dict()
+    assert desc_dict[3]["name"] == "Topology"
+    assert desc_dict[3]["value"] == "Outer Rotor"

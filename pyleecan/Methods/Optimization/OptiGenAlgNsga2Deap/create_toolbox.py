@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from ....Classes.Output import Output
 from deap import base, creator, tools
+from ....Classes.Output import Output
+from ....Classes.XOutput import XOutput
+from ....Classes.VarSimu import VarSimu
 
 
 def create_toolbox(self):
@@ -12,7 +14,7 @@ def create_toolbox(self):
     Returns
     -------
     self : OptiGenAlgNsga2Deap
-        OptiGenAlgNsga2Deap with toolbox created 
+        OptiGenAlgNsga2Deap with toolbox created
     """
 
     # Create toolbox
@@ -20,59 +22,71 @@ def create_toolbox(self):
 
     # Create Fitness and individual
     creator.create(
-        "FitnessMin", base.Fitness, weights=[-1 for _ in self.problem.design_var]
+        "FitnessMin", base.Fitness, weights=[-1 for _ in self.problem.obj_func]
     )
     creator.create("Individual", list, typecode="d", fitness=creator.FitnessMin)
 
     self.toolbox.register("creator", creator.Individual)
+
+    # Create default output
+    if isinstance(self.problem.simu.parent, Output):
+        output = self.problem.simu.parent
+    elif isinstance(
+        self.problem.simu.var_simu, VarSimu
+    ):  # Optimization of a multi-simulation
+        output = XOutput(simu=self.problem.simu.copy())
+    else:
+        output = Output(simu=self.problem.simu.copy())
 
     # Register individual and population
     self.toolbox.register(
         "individual",
         create_indiv,
         self.toolbox.creator,
-        self.problem.output,
+        output,
         self.problem.design_var,
     )
 
     self.toolbox.register("population", tools.initRepeat, list, self.toolbox.individual)
 
 
-def create_indiv(create, output, design_var):
+def create_indiv(create, output, design_var_list):
     """Create individual using DEAP tools
-    
+
     Parameters
     ----------
     creator : function
         function to create the individual
     output : ....Classes.Output
         output of the individual
-    design_var : dict
-        Design variables  
-        
+    design_var_list : list
+        Design variables
+
     Returns:
     --------
     indiv : list
-        individual 
+        individual
     """
 
     # Extract design variables
-    design_var_name_list = list(design_var.keys())
     var = []
 
-    design_var_name_list.sort()
-    for dv in design_var_name_list:
-        tmp = design_var[dv].function(design_var[dv].space)
-        exec(design_var[dv].name + "=tmp")
-        var.append(tmp)
+    for design_var in design_var_list:
+        # Generate the first value
+        value = design_var.get_value(design_var.space)
+        design_var.setter(output.simu, value)
+        var.append(value)
 
     ind = create(var)
 
     # Store the design_var_name_list
-    ind.design_var_name_list = design_var_name_list
+    ind.design_var_name_list = [dv.name for dv in design_var_list]
+
+    # Store setters in a list
+    ind.setter_list = [dv.setter for dv in design_var_list]
 
     # Store the design variables
-    ind.design_var = design_var
+    ind.design_var = design_var_list
 
     # Store the simulation validity
     ind.is_simu_valid = False
@@ -81,6 +95,6 @@ def create_indiv(create, output, design_var):
     ind.cstr_viol = 0
 
     # Output with the design variables set
-    ind.output = Output(simu=output.simu.as_dict())
+    ind.output = type(output)(simu=output.simu.as_dict())
 
     return ind

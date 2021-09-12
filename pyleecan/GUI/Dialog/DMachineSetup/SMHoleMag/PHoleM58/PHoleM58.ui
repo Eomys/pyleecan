@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>740</width>
-    <height>440</height>
+    <width>1304</width>
+    <height>529</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -31,28 +31,28 @@
      <item>
       <widget class="QLabel" name="img_slot">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="minimumSize">
         <size>
-         <width>500</width>
-         <height>170</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>500</width>
-         <height>170</height>
+         <width>16777215</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="text">
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/Slot_58.PNG</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/SMHoleMag/HoleM58.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -76,7 +76,7 @@
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>100</height>
+         <height>70</height>
         </size>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -86,7 +86,7 @@
         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; text-decoration: underline;&quot;&gt;Constraints :&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;W1 + W2 &amp;lt; W0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
@@ -95,230 +95,244 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </item>
-     <item>
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="in_H0">
-         <property name="text">
-          <string>H0 :</string>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="minimumSize">
+      <size>
+       <width>270</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>270</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>268</width>
+        <height>505</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="in_H0">
+           <property name="text">
+            <string>H0</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="FloatEdit" name="lf_H0"/>
+         </item>
+         <item row="7" column="2">
+          <widget class="QLabel" name="unit_R0">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="unit_H0">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="2">
+          <widget class="QLabel" name="unit_W2">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="unit_W0">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLabel" name="unit_W1">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="in_W3">
+           <property name="text">
+            <string>W3</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="FloatEdit" name="lf_W0"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="in_W1">
+           <property name="text">
+            <string>W1</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="in_W2">
+           <property name="text">
+            <string>W2</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="in_R0">
+           <property name="text">
+            <string>R0</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="FloatEdit" name="lf_W1"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="in_H1">
+           <property name="text">
+            <string>H1</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="in_H2">
+           <property name="text">
+            <string>H2</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="FloatEdit" name="lf_W2"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="in_W0">
+           <property name="text">
+            <string>W0</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="unit_H2">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="FloatEdit" name="lf_W3"/>
+         </item>
+         <item row="7" column="1">
+          <widget class="FloatEdit" name="lf_R0">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="FloatEdit" name="lf_H1"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="FloatEdit" name="lf_H2"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="unit_H1">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="2">
+          <widget class="QLabel" name="unit_W3">
+           <property name="text">
+            <string>[rad]</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="WMatSelect" name="w_mat_0" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="FloatEdit" name="lf_H0"/>
-       </item>
-       <item row="7" column="2">
-        <widget class="QLabel" name="unit_R0">
-         <property name="text">
-          <string>m</string>
+       <item>
+        <widget class="WMatSelect" name="w_mat_1" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="unit_H0">
-         <property name="text">
-          <string>m</string>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QLabel" name="unit_W2">
-         <property name="text">
-          <string>m</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>176</height>
+          </size>
          </property>
-        </widget>
+        </spacer>
        </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="unit_W0">
-         <property name="text">
-          <string>m</string>
+       <item>
+        <widget class="QGroupBox" name="g_output">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
          </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QLabel" name="unit_W1">
-         <property name="text">
-          <string>m</string>
+         <property name="title">
+          <string>Output</string>
          </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="in_W3">
-         <property name="text">
-          <string>W3 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="FloatEdit" name="lf_W0"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="in_W1">
-         <property name="text">
-          <string>W1 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="in_W2">
-         <property name="text">
-          <string>W2 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="in_R0">
-         <property name="text">
-          <string>R0 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="FloatEdit" name="lf_W1"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="in_H1">
-         <property name="text">
-          <string>H1 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="in_H2">
-         <property name="text">
-          <string>H2 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="FloatEdit" name="lf_W2"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="in_W0">
-         <property name="text">
-          <string>W0 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="unit_H2">
-         <property name="text">
-          <string>m</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="FloatEdit" name="lf_W3"/>
-       </item>
-       <item row="7" column="1">
-        <widget class="FloatEdit" name="lf_R0">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="FloatEdit" name="lf_H1"/>
-       </item>
-       <item row="2" column="1">
-        <widget class="FloatEdit" name="lf_H2"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLabel" name="unit_H1">
-         <property name="text">
-          <string>m</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="QLabel" name="unit_W3">
-         <property name="text">
-          <string>rad</string>
-         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QLabel" name="out_slot_surface">
+            <property name="text">
+             <string>Hole suface : ?</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="out_magnet_surface">
+            <property name="text">
+             <string>Magnet surface : ?</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
-     </item>
-     <item>
-      <widget class="WMatSelect" name="w_mat_0" native="true">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="WMatSelect" name="w_mat_1" native="true">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="g_output">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="title">
-        <string>Output</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QLabel" name="out_slot_surface">
-          <property name="text">
-           <string>Hole suface : ?</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="out_magnet_surface">
-          <property name="text">
-           <string>Magnet surface : ?</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -326,12 +340,12 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>FloatEdit</class>
    <extends>QLineEdit</extends>
-   <header>pyleecan/GUI/Tools/FloatEdit.h</header>
+   <header>......GUI/Tools/FloatEdit.h</header>
   </customwidget>
   <customwidget>
    <class>WMatSelect</class>
    <extends>QWidget</extends>
-   <header>pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
+   <header>......GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

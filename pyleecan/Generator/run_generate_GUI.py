@@ -27,6 +27,12 @@ if __name__ == "__main__":
     try:
         import black
 
-        system("{} -m black .".format(sys.executable))
+        system('"{}" -m black .'.format(sys.executable))
+        if black.__version__.split(".")[0] != "20":
+            print("\n############################################")
+            print(
+                "WARNING: The official version of black for pyleecan is 20, please update your black version"
+            )
+            print("############################################\n")
     except ImportError:
-        print("/!\\ Please install and run black /!\\")
+        print("/!\\ Please install and run black (version 20) /!\\")

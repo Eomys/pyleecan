@@ -1,5 +1,32 @@
 import numpy as np
 import h5py
+from h5py import File as FileH5
+from ...definitions import PACKAGE_NAME
+from ... import __version__
+from datetime import datetime
+
+
+def save_hdf5(obj, save_path):
+    """
+    Save a pyleecan obj in hdf5 format
+
+    Parameters
+    ----------
+    obj: Pyleecan object
+        object to save
+    save_path: str
+        file path
+    """
+
+    file5 = None
+    try:
+        file5 = FileH5(save_path, "w")
+        pyleecan_dict_to_hdf5(file5, obj)
+        file5.close()
+    except Exception as err:
+        if file5:
+            file5.close()
+        raise (err)
 
 
 def pyleecan_dict_to_hdf5(file, obj):
@@ -13,13 +40,19 @@ def pyleecan_dict_to_hdf5(file, obj):
         object to save
     """
     obj_dict = obj.as_dict()
+    now = datetime.now()
+    obj_dict["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
+    obj_dict["__version__"] = PACKAGE_NAME + "_" + __version__
     for key, val in obj_dict.items():
         # Object that need groups
         if isinstance(val, dict) or isinstance(val, list):
             variable_to_hdf5(file, "", val, key)
         # Dataset
         elif val == None:
-            file[key] = "NoneValue"
+            # None is not available in H5 => we use a string
+            file[key] = np.string_("NoneValue".encode("ISO-8859-2"))
+        elif isinstance(val, str):
+            file[key] = np.string_(val.encode("ISO-8859-2"))
         else:
             file[key] = val
 
@@ -30,12 +63,12 @@ def list_to_hdf5(file, group_name, name, list_to_save):
 
     Parameters
     ----------
-    file: HDF5 file 
-        file to save the data 
+    file: HDF5 file
+        file to save the data
     group_name: str
         name of the group
     name: str
-        name to extend the group or to contain the dataset 
+        name to extend the group or to contain the dataset
     list_to_save: list
         list to save
 
@@ -46,7 +79,7 @@ def list_to_hdf5(file, group_name, name, list_to_save):
     array_list = np.array(list_to_save)
 
     # Check the type to split or save as an array
-    if array_list.dtype in [np.dtype("O"), np.dtype("<U36")]:
+    if array_list.dtype.kind in ["O", "U"]:
         # Split the list into several datasets
         # Create a new group to contain every dataset
         group_name = group_name + "/" + name
@@ -60,18 +93,23 @@ def list_to_hdf5(file, group_name, name, list_to_save):
             variable_to_hdf5(file, group_name, element, "list_{}".format(i))
 
     else:  # Save as an array
-        grp = file[group_name]
-
-        grp[name] = array_list
-        # Add an attribute to load correctly
-        grp[name].attrs["array_list"] = True
+        if group_name == "":
+            file[name] = array_list
+            file[name].attrs["array_list"] = True
+        else:
+            grp = file[group_name]
+            grp[name] = array_list
+            # Add an attribute to load correctly
+            grp[name].attrs["array_list"] = True
 
 
 def dict_to_hdf5(file, prefix, dict_to_save):
     """
-    Save a list in the hdf5 file 
+    Save a list in the hdf5 file
     """
     for key, value in dict_to_save.items():
+        if isinstance(key, int):
+            key = str(key)
         variable_to_hdf5(file, prefix, value, key)
 
 
@@ -102,7 +140,7 @@ def variable_to_hdf5(file, prefix, variable, name):
             # to http://docs.h5py.org/en/stable/strings.html#exceptions-for-python-3
             grp[name] = np.string_(variable.encode("ISO-8859-2"))
     # None
-    elif None == variable:
+    elif variable is None:
         # Create dataset
         grp = file[prefix]
         grp[name] = "NoneValue"
@@ -110,24 +148,3 @@ def variable_to_hdf5(file, prefix, variable, name):
         # Create dataset
         grp = file[prefix]
         grp[name] = variable
-
-
-def save_hdf5(obj, save_path):
-    """
-    Save a pyleecan obj in hdf5 format
-    
-    Parameters
-    ----------
-    obj: Pyleecan object 
-        object to save
-    save_path: str
-        file path
-    """
-
-    try:
-        file = h5py.File(save_path, "w")
-        pyleecan_dict_to_hdf5(file, obj)
-        file.close()
-    except Exception as err:
-        file.close()
-        raise (err)

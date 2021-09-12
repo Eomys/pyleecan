@@ -2,7 +2,6 @@
 
 
 class GetOutError(Exception):
-    """Raised when an output can't be returned
-    """
+    """Raised when an output can't be returned"""
 
     pass

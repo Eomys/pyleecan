@@ -1,1 +1,7 @@
-# -*- coding: utf-8 -*-
+from ....Methods.Machine.Lamination import LaminationCheckError
+
+
+class SlotCheckError(LaminationCheckError):
+    """ """
+
+    pass

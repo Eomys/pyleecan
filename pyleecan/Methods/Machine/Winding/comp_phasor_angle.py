@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import angle, exp, linspace, pi, sum, zeros
+from ....Methods.Machine.Winding import WindingError
 
 
 def comp_phasor_angle(self, Zs=None):
@@ -9,7 +10,7 @@ def comp_phasor_angle(self, Zs=None):
     ----------
     self : Winding
         A: Winding object
-    Zs : int    
+    Zs : int
         Number of Slot (Integer >0)
 
     Returns
@@ -19,7 +20,7 @@ def comp_phasor_angle(self, Zs=None):
 
     Raises
     ------
-    
+
     """
     if Zs is None:
         if self.parent is None:
@@ -37,7 +38,7 @@ def comp_phasor_angle(self, Zs=None):
     assert Zs > 0, "Zs must be >0"
     assert Zs % 1 == 0, "Zs must be an integer"
 
-    wind_mat = self.comp_connection_mat(Zs)
+    wind_mat = self.get_connection_mat(Zs)
     p = self.p
     qs = self.qs  # number of phases
 

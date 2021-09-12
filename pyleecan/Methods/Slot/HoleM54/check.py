@@ -2,7 +2,8 @@
 
 from numpy import pi
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.HoleM54 import *
 
 
 def check(self):
@@ -40,22 +41,3 @@ def check(self):
 
     if self.R1 <= self.H0:
         raise H54_R1CheckError("You must have H0 < R1")
-
-
-class S54_NoneError(SlotCheckError):
-    """Raised when a propery of HoleM54 is None
-    """
-
-    pass
-
-
-class H54_W0CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class H54_R1CheckError(SlotCheckError):
-    """ """
-
-    pass

@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtWidgets import QWidget
 
 from ....Classes.ImportGenVectLin import ImportGenVectLin
 from ....GUI.Tools.WImport.Ui_WImport import Ui_WImport
@@ -11,16 +11,16 @@ from ....GUI.Tools.WImport.WImportMatrixTable.WImportMatrixTable import (
 
 
 class WImport(Ui_WImport, QWidget):
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
 
     def __init__(self, parent=None):
-        """Widget to define an ImportLinspace
-        """
+        """Widget to define an ImportLinspace"""
         QWidget.__init__(self, parent=parent)
         self.setupUi(self)
 
         self.obj = None  # Object to edit
         self.verbose_name = ""  # Name to display / adapt the GUI
+        self.plot_title = None  # Name to use for the plot
         # List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
         self.expected_shape = None
         self.param_name = ""  # Name of the quantity to set
@@ -29,12 +29,11 @@ class WImport(Ui_WImport, QWidget):
         self.c_type_import.currentIndexChanged.connect(self.set_type_import)
 
     def update(self):
-        """Update the display of the Widget
-        """
+        """Update the display of the Widget"""
         self.in_param.setText(self.verbose_name)
         # Fill the combobox with the meaningful widgets
         self.c_type_import.blockSignals(True)
-        if self.verbose_name == "B(H) curve":
+        if self.param_name == "BH_curve":
             self.widget_list = [WImportExcel, WImportMatrixTable]
         else:
             self.widget_list = []
@@ -56,8 +55,7 @@ class WImport(Ui_WImport, QWidget):
         self.c_type_import.blockSignals(False)
 
     def set_type_import(self):
-        """Change the type of the import object according to the combobox
-        """
+        """Change the type of the import object according to the combobox"""
         data = self.widget_list[self.c_type_import.currentIndex()].import_type()
         data._set_None()
         setattr(self.obj, self.param_name, data)
@@ -67,17 +65,17 @@ class WImport(Ui_WImport, QWidget):
     def set_import_widget(self):
         """Update the import widget
 
-            Parameters
-            ----------
-            self : WImport
-                A WImport object
-            """
+        Parameters
+        ----------
+        self : WImport
+            A WImport object
+        """
         data = getattr(self.obj, self.param_name)
         # Regenerate the pages with the new values
         self.w_import.setParent(None)
         self.w_import = self.widget_list[self.c_type_import.currentIndex()](
             data=data,
-            verbose_name=self.verbose_name,
+            plot_title=self.plot_title if self.plot_title else self.verbose_name,
             expected_shape=self.expected_shape,
         )
         self.w_import.data_type = self.verbose_name
@@ -88,12 +86,14 @@ class WImport(Ui_WImport, QWidget):
         self.main_layout.insertWidget(1, self.w_import)
 
     def update_type(self):
-        """The Import widget has changed the type of the import
-        """
+        """The Import widget has changed the type of the import"""
         setattr(self.obj, self.param_name, self.w_import.data)
         self.update()
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
+
+    def set_plot_title(self, plot_title):
+        self.plot_title = plot_title
+        self.w_import.plot_title = plot_title

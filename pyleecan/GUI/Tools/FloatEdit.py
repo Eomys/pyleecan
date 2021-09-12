@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from re import compile, search
 
-from PyQt5 import QtGui
-from PyQt5.QtGui import QDoubleValidator
-from PyQt5.QtWidgets import QLineEdit
+from PySide2 import QtGui
+from PySide2.QtGui import QDoubleValidator
+from PySide2.QtWidgets import QLineEdit
 
 from ...GUI import gui_option
 
@@ -16,7 +16,7 @@ def valid_float_string(string):
     Parameters
     ----------
     string :
-        
+
 
     Returns
     -------
@@ -30,8 +30,7 @@ class FloatEdit(QLineEdit):
     """A Line Edit Widget optimized to input float"""
 
     def __init__(self, unit="", *args, **kwargs):
-        """Same constructor as QLineEdit + config validator
-        """
+        """Same constructor as QLineEdit + config validator"""
         self.unit = unit
         self.u = gui_option.unit
 
@@ -97,9 +96,9 @@ class FloatValidator(QDoubleValidator):
         Parameters
         ----------
         string :
-            
+
         position :
-            
+
 
         Returns
         -------

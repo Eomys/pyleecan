@@ -1,18 +1,25 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Optimization/OptiGenAlg.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Optimization/OptiGenAlg.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Optimization/OptiGenAlg
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .OptiSolver import OptiSolver
 
-from inspect import getsource
-from cloudpickle import dumps, loads
+from ntpath import basename
+from os.path import isfile
 from ._check import CheckTypeError
+import numpy as np
+import random
 from ._check import InitUnKnowClassError
 from .OptiProblem import OptiProblem
 from .XOutput import XOutput
@@ -23,15 +30,9 @@ class OptiGenAlg(OptiSolver):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -53,37 +54,16 @@ class OptiGenAlg(OptiSolver):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if problem == -1:
-            problem = OptiProblem()
-        if xoutput == -1:
-            xoutput = XOutput()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            selector = obj.selector
-            crossover = obj.crossover
-            mutator = obj.mutator
-            p_cross = obj.p_cross
-            p_mutate = obj.p_mutate
-            size_pop = obj.size_pop
-            nb_gen = obj.nb_gen
-            problem = obj.problem
-            xoutput = obj.xoutput
-            logger_name = obj.logger_name
-            is_keep_all_output = obj.is_keep_all_output
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -109,7 +89,7 @@ class OptiGenAlg(OptiSolver):
                 logger_name = init_dict["logger_name"]
             if "is_keep_all_output" in list(init_dict.keys()):
                 is_keep_all_output = init_dict["is_keep_all_output"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.selector = selector
         self.crossover = crossover
         self.mutator = mutator
@@ -128,29 +108,29 @@ class OptiGenAlg(OptiSolver):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         OptiGenAlg_str = ""
         # Get the properties inherited from OptiSolver
         OptiGenAlg_str += super(OptiGenAlg, self).__str__()
-        if self._selector[1] is None:
-            OptiGenAlg_str += "selector = " + str(self._selector[1])
+        if self._selector_str is not None:
+            OptiGenAlg_str += "selector = " + self._selector_str + linesep
+        elif self._selector_func is not None:
+            OptiGenAlg_str += "selector = " + str(self._selector_func) + linesep
         else:
-            OptiGenAlg_str += (
-                "selector = " + linesep + str(self._selector[1]) + linesep + linesep
-            )
-        if self._crossover[1] is None:
-            OptiGenAlg_str += "crossover = " + str(self._crossover[1])
+            OptiGenAlg_str += "selector = None" + linesep + linesep
+        if self._crossover_str is not None:
+            OptiGenAlg_str += "crossover = " + self._crossover_str + linesep
+        elif self._crossover_func is not None:
+            OptiGenAlg_str += "crossover = " + str(self._crossover_func) + linesep
         else:
-            OptiGenAlg_str += (
-                "crossover = " + linesep + str(self._crossover[1]) + linesep + linesep
-            )
-        if self._mutator[1] is None:
-            OptiGenAlg_str += "mutator = " + str(self._mutator[1])
+            OptiGenAlg_str += "crossover = None" + linesep + linesep
+        if self._mutator_str is not None:
+            OptiGenAlg_str += "mutator = " + self._mutator_str + linesep
+        elif self._mutator_func is not None:
+            OptiGenAlg_str += "mutator = " + str(self._mutator_func) + linesep
         else:
-            OptiGenAlg_str += (
-                "mutator = " + linesep + str(self._mutator[1]) + linesep + linesep
-            )
+            OptiGenAlg_str += "mutator = None" + linesep + linesep
         OptiGenAlg_str += "p_cross = " + str(self.p_cross) + linesep
         OptiGenAlg_str += "p_mutate = " + str(self.p_mutate) + linesep
         OptiGenAlg_str += "size_pop = " + str(self.size_pop) + linesep
@@ -166,11 +146,11 @@ class OptiGenAlg(OptiSolver):
         # Check the properties inherited from OptiSolver
         if not super(OptiGenAlg, self).__eq__(other):
             return False
-        if other.selector != self.selector:
+        if other._selector_str != self._selector_str:
             return False
-        if other.crossover != self.crossover:
+        if other._crossover_str != self._crossover_str:
             return False
-        if other.mutator != self.mutator:
+        if other._mutator_str != self._mutator_str:
             return False
         if other.p_cross != self.p_cross:
             return False
@@ -182,38 +162,101 @@ class OptiGenAlg(OptiSolver):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from OptiSolver
+        diff_list.extend(super(OptiGenAlg, self).compare(other, name=name))
+        if other._selector_str != self._selector_str:
+            diff_list.append(name + ".selector")
+        if other._crossover_str != self._crossover_str:
+            diff_list.append(name + ".crossover")
+        if other._mutator_str != self._mutator_str:
+            diff_list.append(name + ".mutator")
+        if other._p_cross != self._p_cross:
+            diff_list.append(name + ".p_cross")
+        if other._p_mutate != self._p_mutate:
+            diff_list.append(name + ".p_mutate")
+        if other._size_pop != self._size_pop:
+            diff_list.append(name + ".size_pop")
+        if other._nb_gen != self._nb_gen:
+            diff_list.append(name + ".nb_gen")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from OptiSolver
+        S += super(OptiGenAlg, self).__sizeof__()
+        S += getsizeof(self._selector_str)
+        S += getsizeof(self._crossover_str)
+        S += getsizeof(self._mutator_str)
+        S += getsizeof(self.p_cross)
+        S += getsizeof(self.p_mutate)
+        S += getsizeof(self.size_pop)
+        S += getsizeof(self.nb_gen)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         # Get the properties inherited from OptiSolver
-        OptiGenAlg_dict = super(OptiGenAlg, self).as_dict()
-        if self.selector is None:
+        OptiGenAlg_dict = super(OptiGenAlg, self).as_dict(**kwargs)
+        if self._selector_str is not None:
+            OptiGenAlg_dict["selector"] = self._selector_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            OptiGenAlg_dict["selector"] = self.selector
+        else:
             OptiGenAlg_dict["selector"] = None
+            if self.selector is not None:
+                self.get_logger().warning(
+                    "OptiGenAlg.as_dict(): "
+                    + f"Function {self.selector.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
+        if self._crossover_str is not None:
+            OptiGenAlg_dict["crossover"] = self._crossover_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            OptiGenAlg_dict["crossover"] = self.crossover
         else:
-            OptiGenAlg_dict["selector"] = [
-                dumps(self._selector[0]).decode("ISO-8859-2"),
-                self._selector[1],
-            ]
-        if self.crossover is None:
             OptiGenAlg_dict["crossover"] = None
+            if self.crossover is not None:
+                self.get_logger().warning(
+                    "OptiGenAlg.as_dict(): "
+                    + f"Function {self.crossover.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
+        if self._mutator_str is not None:
+            OptiGenAlg_dict["mutator"] = self._mutator_str
+        elif "keep_function" in kwargs and kwargs["keep_function"]:
+            OptiGenAlg_dict["mutator"] = self.mutator
         else:
-            OptiGenAlg_dict["crossover"] = [
-                dumps(self._crossover[0]).decode("ISO-8859-2"),
-                self._crossover[1],
-            ]
-        if self.mutator is None:
             OptiGenAlg_dict["mutator"] = None
-        else:
-            OptiGenAlg_dict["mutator"] = [
-                dumps(self._mutator[0]).decode("ISO-8859-2"),
-                self._mutator[1],
-            ]
+            if self.mutator is not None:
+                self.get_logger().warning(
+                    "OptiGenAlg.as_dict(): "
+                    + f"Function {self.mutator.__name__} is not serializable "
+                    + "and will be converted to None."
+                )
         OptiGenAlg_dict["p_cross"] = self.p_cross
         OptiGenAlg_dict["p_mutate"] = self.p_mutate
         OptiGenAlg_dict["size_pop"] = self.size_pop
         OptiGenAlg_dict["nb_gen"] = self.nb_gen
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OptiGenAlg_dict["__class__"] = "OptiGenAlg"
         return OptiGenAlg_dict
@@ -233,89 +276,107 @@ class OptiGenAlg(OptiSolver):
 
     def _get_selector(self):
         """getter of selector"""
-        return self._selector[0]
+        return self._selector_func
 
     def _set_selector(self, value):
         """setter of selector"""
-        try:
-            check_var("selector", value, "list")
-        except CheckTypeError:
-            check_var("selector", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._selector = [loads(value[0].encode("ISO-8859-2")), value[1]]
-        elif value is None:
-            self._selector = [None, None]
+        if value is None:
+            self._selector_str = None
+            self._selector_func = None
+        elif isinstance(value, str) and "lambda" in value:
+            self._selector_str = value
+            self._selector_func = eval(value)
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+            self._selector_str = value
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._selector_func = eval(basename(value[:-3]))
         elif callable(value):
-            self._selector = [value, getsource(value)]
+            self._selector_str = None
+            self._selector_func = value
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
+            raise CheckTypeError(
+                "For property selector Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
             )
 
-    # Selector of the genetic algorithm
-    # Type : function
     selector = property(
         fget=_get_selector,
         fset=_set_selector,
-        doc=u"""Selector of the genetic algorithm""",
+        doc="""Selector of the genetic algorithm
+
+        :Type: function
+        """,
     )
 
     def _get_crossover(self):
         """getter of crossover"""
-        return self._crossover[0]
+        return self._crossover_func
 
     def _set_crossover(self, value):
         """setter of crossover"""
-        try:
-            check_var("crossover", value, "list")
-        except CheckTypeError:
-            check_var("crossover", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._crossover = [loads(value[0].encode("ISO-8859-2")), value[1]]
-        elif value is None:
-            self._crossover = [None, None]
+        if value is None:
+            self._crossover_str = None
+            self._crossover_func = None
+        elif isinstance(value, str) and "lambda" in value:
+            self._crossover_str = value
+            self._crossover_func = eval(value)
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+            self._crossover_str = value
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._crossover_func = eval(basename(value[:-3]))
         elif callable(value):
-            self._crossover = [value, getsource(value)]
+            self._crossover_str = None
+            self._crossover_func = value
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
+            raise CheckTypeError(
+                "For property crossover Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
             )
 
-    # Crossover of the genetic algorithm
-    # Type : function
     crossover = property(
         fget=_get_crossover,
         fset=_set_crossover,
-        doc=u"""Crossover of the genetic algorithm""",
+        doc="""Crossover of the genetic algorithm
+
+        :Type: function
+        """,
     )
 
     def _get_mutator(self):
         """getter of mutator"""
-        return self._mutator[0]
+        return self._mutator_func
 
     def _set_mutator(self, value):
         """setter of mutator"""
-        try:
-            check_var("mutator", value, "list")
-        except CheckTypeError:
-            check_var("mutator", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._mutator = [loads(value[0].encode("ISO-8859-2")), value[1]]
-        elif value is None:
-            self._mutator = [None, None]
+        if value is None:
+            self._mutator_str = None
+            self._mutator_func = None
+        elif isinstance(value, str) and "lambda" in value:
+            self._mutator_str = value
+            self._mutator_func = eval(value)
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+            self._mutator_str = value
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._mutator_func = eval(basename(value[:-3]))
         elif callable(value):
-            self._mutator = [value, getsource(value)]
+            self._mutator_str = None
+            self._mutator_func = value
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
+            raise CheckTypeError(
+                "For property mutator Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
             )
 
-    # Mutator of the genetic algorithm
-    # Type : function
     mutator = property(
         fget=_get_mutator,
         fset=_set_mutator,
-        doc=u"""Mutator of the genetic algorithm""",
+        doc="""Mutator of the genetic algorithm
+
+        :Type: function
+        """,
     )
 
     def _get_p_cross(self):
@@ -327,10 +388,15 @@ class OptiGenAlg(OptiSolver):
         check_var("p_cross", value, "float", Vmin=0, Vmax=1)
         self._p_cross = value
 
-    # Probability of crossover
-    # Type : float, min = 0, max = 1
     p_cross = property(
-        fget=_get_p_cross, fset=_set_p_cross, doc=u"""Probability of crossover"""
+        fget=_get_p_cross,
+        fset=_set_p_cross,
+        doc="""Probability of crossover
+
+        :Type: float
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_p_mutate(self):
@@ -342,10 +408,15 @@ class OptiGenAlg(OptiSolver):
         check_var("p_mutate", value, "float", Vmin=0, Vmax=1)
         self._p_mutate = value
 
-    # Probability of mutation
-    # Type : float, min = 0, max = 1
     p_mutate = property(
-        fget=_get_p_mutate, fset=_set_p_mutate, doc=u"""Probability of mutation """
+        fget=_get_p_mutate,
+        fset=_set_p_mutate,
+        doc="""Probability of mutation 
+
+        :Type: float
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_size_pop(self):
@@ -357,10 +428,14 @@ class OptiGenAlg(OptiSolver):
         check_var("size_pop", value, "int", Vmin=1)
         self._size_pop = value
 
-    # Size of the population
-    # Type : int, min = 1
     size_pop = property(
-        fget=_get_size_pop, fset=_set_size_pop, doc=u"""Size of the population"""
+        fget=_get_size_pop,
+        fset=_set_size_pop,
+        doc="""Size of the population
+
+        :Type: int
+        :min: 1
+        """,
     )
 
     def _get_nb_gen(self):
@@ -372,8 +447,12 @@ class OptiGenAlg(OptiSolver):
         check_var("nb_gen", value, "int", Vmin=1)
         self._nb_gen = value
 
-    # Number of generations
-    # Type : int, min = 1
     nb_gen = property(
-        fget=_get_nb_gen, fset=_set_nb_gen, doc=u"""Number of generations"""
+        fget=_get_nb_gen,
+        fset=_set_nb_gen,
+        doc="""Number of generations
+
+        :Type: int
+        :min: 1
+        """,
     )

@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
-from ddt import ddt, data
 from pyleecan.Classes.Arc3 import Arc3
 from pyleecan.Classes.Arc2 import Arc2
+from pyleecan.Methods.Geometry.Arc3 import (
+    AngleRotationArc3Error,
+    NbPointArc3DError,
+    PointTranslateArc3Error,
+    PointArc3Error,
+)
 from numpy import pi, exp, sqrt, linspace
+
+import pytest
 
 # For AlmostEqual
 DELTA = 1e-6
@@ -205,14 +211,12 @@ split_half_test.append(
 )
 
 
-@ddt
-class test_Arc3_meth(TestCase):
+class Test_Arc3_meth(object):
     """unittest for Arc3 methods"""
 
-    @data(*discretize_test)
+    @pytest.mark.parametrize("test_dict", discretize_test)
     def test_discretize(self, test_dict):
-        """Check that you can discretize an arc3
-        """
+        """Check that you can discretize an arc3"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
@@ -221,102 +225,104 @@ class test_Arc3_meth(TestCase):
 
         result = arc.discretize(test_dict["nb_point"])
 
-        self.assertEqual(result.size, test_dict["result"].size)
+        assert result.size == test_dict["result"].size
         for i in range(0, result.size):
             a = result[i]
             b = test_dict["result"][i]
-            self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+            assert abs((a - b) / a - 0) < DELTA
 
-    @data(*comp_length_test)
+    @pytest.mark.parametrize("test_dict", comp_length_test)
     def test_comp_length(self, test_dict):
-        """Check that you can compute the lenght of an arc3
-        """
+        """Check that you can compute the lenght of an arc3"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
             is_trigo_direction=test_dict["direc"],
         )
         result = arc.comp_length()
-        self.assertAlmostEqual(abs(result - test_dict["expect"]), 0)
+        assert round(abs(abs(result - test_dict["expect"]) - 0), 7) == 0
 
-    @data(*comp_radius_test)
+    @pytest.mark.parametrize("test_dict", comp_radius_test)
     def test_comp_radius(self, test_dict):
-        """Check that you can compute the radius of an arc3
-        """
+        """Check that you can compute the radius of an arc3"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
             is_trigo_direction=test_dict["direc"],
         )
         result = arc.comp_radius()
-        self.assertAlmostEqual(abs(result - test_dict["expect"]), 0)
+        assert round(abs(abs(result - test_dict["expect"]) - 0), 7) == 0
 
-    @data(*comp_center_test)
+    @pytest.mark.parametrize("test_dict", comp_center_test)
     def test_get_center(self, test_dict):
-        """Check that you can compute the center
-        """
+        """Check that you can compute the center"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
             is_trigo_direction=test_dict["direc"],
         )
         result = arc.get_center()
-        self.assertAlmostEqual(abs(result - test_dict["expect"]), 0)
+        assert round(abs(abs(result - test_dict["expect"]) - 0), 7) == 0
 
-    @data(*comp_mid_test)
+    @pytest.mark.parametrize("test_dict", comp_mid_test)
     def test_get_middle(self, test_dict):
-        """Check that you can compute the middle
-        """
+        """Check that you can compute the middle"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
             is_trigo_direction=test_dict["direc"],
         )
         result = arc.get_middle()
-        self.assertAlmostEqual(abs(result - test_dict["expect"]), 0)
+        assert round(abs(abs(result - test_dict["expect"]) - 0), 7) == 0
 
-    @data(*comp_rotate_test)
+    def test_get_middle_zero(self):
+        """Checking that get_middle() can return 0"""
+        arc = Arc3(
+            begin=0,
+            end=-0.0000000001j,
+            is_trigo_direction=True,
+        )
+        result = arc.get_middle()
+        assert result == 0
+
+    @pytest.mark.parametrize("test_dict", comp_rotate_test)
     def test_rotate(self, test_dict):
-        """Check that you can rotate an arc3
-        """
+        """Check that you can rotate an arc3"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
             is_trigo_direction=test_dict["direc"],
         )
         arc.rotate(test_dict["angle"])
-        self.assertAlmostEqual(abs(arc.begin - test_dict["exp_begin"]), 0)
-        self.assertAlmostEqual(abs(arc.end - test_dict["exp_end"]), 0)
+        assert round(abs(abs(arc.begin - test_dict["exp_begin"]) - 0), 7) == 0
+        assert round(abs(abs(arc.end - test_dict["exp_end"]) - 0), 7) == 0
 
-    @data(*comp_translate_test)
+    @pytest.mark.parametrize("test_dict", comp_translate_test)
     def test_translate(self, test_dict):
-        """Check that you can translate an arc3
-        """
+        """Check that you can translate an arc3"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
             is_trigo_direction=test_dict["direc"],
         )
         arc.translate(test_dict["delta"])
-        self.assertAlmostEqual(abs(arc.begin - test_dict["exp_begin"]), 0)
-        self.assertAlmostEqual(abs(arc.end - test_dict["exp_end"]), 0)
+        assert round(abs(abs(arc.begin - test_dict["exp_begin"]) - 0), 7) == 0
+        assert round(abs(abs(arc.end - test_dict["exp_end"]) - 0), 7) == 0
 
-    @data(*get_angle_test)
+    @pytest.mark.parametrize("test_dict", get_angle_test)
     def test_get_angle(self, test_dict):
-        """Check that the arc3 computed angle is correct
-        """
+        """Check that the arc3 computed angle is correct"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
             is_trigo_direction=test_dict["direction"],
         )
         result = arc.get_angle(test_dict["is_deg"])
-        self.assertAlmostEqual(result, test_dict["exp_angle"])
+        assert round(abs(result - test_dict["exp_angle"]), 7) == 0
 
-    @data(*split_half_test)
+    @pytest.mark.parametrize("test_dict", split_half_test)
     def test_split_half(self, test_dict):
-        """Check that the arc3 split is correct
-        """
+        """Check that the arc3 split is correct"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
@@ -324,7 +330,52 @@ class test_Arc3_meth(TestCase):
         )
         arc.split_half(is_begin=test_dict["is_begin"])
 
-        self.assertTrue(isinstance(arc, Arc2))
-        self.assertAlmostEqual(arc.begin, test_dict["N_begin"])
-        self.assertAlmostEqual(arc.center, test_dict["N_center"])
-        self.assertAlmostEqual(arc.angle, test_dict["N_angle"])
+        assert isinstance(arc, Arc2)
+        assert round(abs(arc.begin - test_dict["N_begin"]), 7) == 0
+        assert round(abs(arc.center - test_dict["N_center"]), 7) == 0
+        assert round(abs(arc.angle - test_dict["N_angle"]), 7) == 0
+
+    def test_arc_rotate_error(self):
+        """Check that the arc3 rotate raise an error"""
+        arc = Arc3(
+            begin=1 - 5j,
+            end=3 + 2j,
+            is_trigo_direction=True,
+        )
+        with pytest.raises(AngleRotationArc3Error) as context:
+            arc.rotate("error")
+
+    def test_discretize_error(self):
+        """Check that you can't discretize an arc3 when an error occurs"""
+        arc = Arc3(
+            begin=2,
+            end=-2,
+            is_trigo_direction=False,
+        )
+
+        with pytest.raises(NbPointArc3DError) as context:
+            arc.discretize(0.12564)
+        with pytest.raises(NbPointArc3DError) as context:
+            arc.discretize(-5)
+
+    def test_translate_error(self):
+        """Check that you can't translate an arc3 when an error occurs"""
+        arc = Arc3(
+            begin=2,
+            end=-2,
+            is_trigo_direction=False,
+        )
+
+        with pytest.raises(PointTranslateArc3Error) as context:
+            arc.translate("error")
+
+    def test_check(self):
+        """Check that you get the correct error on check"""
+        arc = Arc3(
+            begin=2,
+            end=2,
+            is_trigo_direction=False,
+        )
+
+        with pytest.raises(PointArc3Error) as context:
+            arc.check()

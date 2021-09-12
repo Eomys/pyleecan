@@ -15,14 +15,12 @@ def comp_surfaces(self):
     Returns
     -------
     S_dict: dict
-        Lamination surface dictionnary (Slam, Svent, Sslot, Smag) [m**2]
+        Lamination surface dictionary (Slam, Svent, Sslot, Smag) [m**2]
 
     """
 
     S_dict = LamSlot.comp_surfaces(self)
-    Smag = 0
-    for magnet in self.slot.magnet:
-        Smag += magnet.comp_surface()
+    Smag = self.slot.comp_surface_active()
 
     S_dict["Smag"] = Smag
 

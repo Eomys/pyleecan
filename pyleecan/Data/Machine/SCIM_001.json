@@ -1,5 +1,7 @@
 {
     "__class__": "MachineSCIM",
+    "__save_date__": "2021_05_03 17h35min08s ",
+    "__version__": "pyleecan_1.2.1",
     "desc": "",
     "frame": null,
     "logger_name": "Pyleecan.Machine",
@@ -17,11 +19,12 @@
         "__class__": "LamSquirrelCage",
         "axial_vent": [
             {
-                "Alpha0": 0,
+                "Alpha0": 0.3927,
                 "D0": 0.02,
                 "H0": 0.07,
                 "Zh": 8,
                 "__class__": "VentilationCirc",
+                "magnetization_dict_offset": null,
                 "mat_void": {
                     "HT": {
                         "Cp": 1,
@@ -52,9 +55,20 @@
                         },
                         "Brm20": 0,
                         "Hc": 0,
+                        "LossData": {
+                            "__class__": "ImportMatrix",
+                            "is_transpose": false
+                        },
+                        "ModelBH": {
+                            "Bmax": 2.31,
+                            "Hmax": null,
+                            "__class__": "ModelBH",
+                            "delta": 100
+                        },
                         "Wlam": 0,
                         "__class__": "MatMagnetics",
                         "alpha_Br": 0,
+                        "is_BH_extrapolate": false,
                         "mur_lin": 1
                     },
                     "name": "Material",
@@ -280,38 +294,25 @@
                         [
                             170000.0,
                             2.3
-                        ],
-                        [
-                            235000.0,
-                            2.35
-                        ],
-                        [
-                            274000.0,
-                            2.4
-                        ],
-                        [
-                            370000.0,
-                            2.5
-                        ],
-                        [
-                            475000.0,
-                            2.6
-                        ],
-                        [
-                            570000.0,
-                            2.7
-                        ],
-                        [
-                            665000.0,
-                            2.8
                         ]
                     ]
                 },
                 "Brm20": 0,
                 "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0.0005,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 2500.0
             },
             "name": "M400-50A",
@@ -384,10 +385,12 @@
         },
         "winding": {
             "Lewout": 0.017,
-            "Npcpp": 1,
+            "Nlayer": 1,
+            "Npcp": 1,
             "Nslot_shift_wind": 0,
             "Ntcoil": 1,
             "__class__": "WindingSC",
+            "coil_pitch": 0,
             "conductor": {
                 "Hbar": 0.02,
                 "Wbar": 0.01,
@@ -463,9 +466,20 @@
                         },
                         "Brm20": 0,
                         "Hc": 0,
+                        "LossData": {
+                            "__class__": "ImportMatrix",
+                            "is_transpose": false
+                        },
+                        "ModelBH": {
+                            "Bmax": 2.31,
+                            "Hmax": null,
+                            "__class__": "ModelBH",
+                            "delta": 100
+                        },
                         "Wlam": 0,
                         "__class__": "MatMagnetics",
                         "alpha_Br": 0,
+                        "is_BH_extrapolate": false,
                         "mur_lin": 1
                     },
                     "name": "Material",
@@ -485,11 +499,15 @@
                     }
                 }
             },
+            "is_aper_a": null,
             "is_reverse_wind": false,
             "p": 3,
+            "per_a": null,
             "qs": 28,
-            "type_connection": 0
-        }
+            "type_connection": 0,
+            "wind_mat": null
+        },
+        "yoke_notch": []
     },
     "shaft": {
         "Drsh": 0.09,
@@ -698,38 +716,25 @@
                         [
                             170000.0,
                             2.3
-                        ],
-                        [
-                            235000.0,
-                            2.35
-                        ],
-                        [
-                            274000.0,
-                            2.4
-                        ],
-                        [
-                            370000.0,
-                            2.5
-                        ],
-                        [
-                            475000.0,
-                            2.6
-                        ],
-                        [
-                            570000.0,
-                            2.7
-                        ],
-                        [
-                            665000.0,
-                            2.8
                         ]
                     ]
                 },
                 "Brm20": 0,
                 "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0.0005,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 2500.0
             },
             "name": "M400-50A",
@@ -964,38 +969,25 @@
                         [
                             170000.0,
                             2.3
-                        ],
-                        [
-                            235000.0,
-                            2.35
-                        ],
-                        [
-                            274000.0,
-                            2.4
-                        ],
-                        [
-                            370000.0,
-                            2.5
-                        ],
-                        [
-                            475000.0,
-                            2.6
-                        ],
-                        [
-                            570000.0,
-                            2.7
-                        ],
-                        [
-                            665000.0,
-                            2.8
                         ]
                     ]
                 },
                 "Brm20": 0,
                 "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0.0005,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 2500.0
             },
             "name": "M400-50A",
@@ -1028,10 +1020,11 @@
         },
         "winding": {
             "Lewout": 0.1541392,
-            "Npcpp": 2,
+            "Nlayer": 2,
+            "Npcp": 2,
             "Nslot_shift_wind": 0,
             "Ntcoil": 7,
-            "__class__": "WindingDW2L",
+            "__class__": "Winding",
             "coil_pitch": 5,
             "conductor": {
                 "Hwire": 0.002,
@@ -1124,11 +1117,15 @@
                 },
                 "type_winding_shape": 0
             },
+            "is_aper_a": null,
             "is_reverse_wind": false,
             "p": 3,
+            "per_a": null,
             "qs": 3,
-            "type_connection": 0
-        }
+            "type_connection": 0,
+            "wind_mat": null
+        },
+        "yoke_notch": []
     },
     "type_machine": 1
 }

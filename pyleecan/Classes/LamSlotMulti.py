@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/LamSlotMulti.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/LamSlotMulti.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/LamSlotMulti
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Lamination import Lamination
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Machine.LamSlotMulti.build_geometry import build_geometry
-except ImportError as error:
-    build_geometry = error
-
 try:
     from ..Methods.Machine.LamSlotMulti.check import check
 except ImportError as error:
@@ -57,6 +57,11 @@ try:
 except ImportError as error:
     get_bore_desc = error
 
+try:
+    from ..Methods.Machine.LamSlotMulti.comp_periodicity import comp_periodicity
+except ImportError as error:
+    comp_periodicity = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -65,6 +70,7 @@ from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
 from .Skew import Skew
+from .Bore import Bore
 
 
 class LamSlotMulti(Lamination):
@@ -73,18 +79,6 @@ class LamSlotMulti(Lamination):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Machine.LamSlotMulti.build_geometry
-    if isinstance(build_geometry, ImportError):
-        build_geometry = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMulti method build_geometry: "
-                    + str(build_geometry)
-                )
-            )
-        )
-    else:
-        build_geometry = build_geometry
     # cf Methods.Machine.LamSlotMulti.check
     if isinstance(check, ImportError):
         check = property(
@@ -170,22 +164,29 @@ class LamSlotMulti(Lamination):
         )
     else:
         get_bore_desc = get_bore_desc
-    # save method is available in all object
+    # cf Methods.Machine.LamSlotMulti.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMulti method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
+            )
+        )
+    else:
+        comp_periodicity = comp_periodicity
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        slot_list=list(),
+        slot_list=-1,
         alpha=None,
+        sym_dict_enforced=None,
         L1=0.35,
         mat_type=-1,
         Nrvd=0,
@@ -195,48 +196,26 @@ class LamSlotMulti(Lamination):
         Rint=0,
         Rext=1,
         is_stator=True,
-        axial_vent=list(),
-        notch=list(),
+        axial_vent=-1,
+        notch=-1,
         skew=None,
+        yoke_notch=-1,
+        bore=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if mat_type == -1:
-            mat_type = Material()
-        if skew == -1:
-            skew = Skew()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            slot_list = obj.slot_list
-            alpha = obj.alpha
-            L1 = obj.L1
-            mat_type = obj.mat_type
-            Nrvd = obj.Nrvd
-            Wrvd = obj.Wrvd
-            Kf1 = obj.Kf1
-            is_internal = obj.is_internal
-            Rint = obj.Rint
-            Rext = obj.Rext
-            is_stator = obj.is_stator
-            axial_vent = obj.axial_vent
-            notch = obj.notch
-            skew = obj.skew
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -244,6 +223,8 @@ class LamSlotMulti(Lamination):
                 slot_list = init_dict["slot_list"]
             if "alpha" in list(init_dict.keys()):
                 alpha = init_dict["alpha"]
+            if "sym_dict_enforced" in list(init_dict.keys()):
+                sym_dict_enforced = init_dict["sym_dict_enforced"]
             if "L1" in list(init_dict.keys()):
                 L1 = init_dict["L1"]
             if "mat_type" in list(init_dict.keys()):
@@ -268,63 +249,14 @@ class LamSlotMulti(Lamination):
                 notch = init_dict["notch"]
             if "skew" in list(init_dict.keys()):
                 skew = init_dict["skew"]
-        # Initialisation by argument
-        # slot_list can be None or a list of Slot object
-        self.slot_list = list()
-        if type(slot_list) is list:
-            for obj in slot_list:
-                if obj is None:  # Default value
-                    self.slot_list.append(Slot())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Slot",
-                        "Slot19",
-                        "SlotCirc",
-                        "SlotMFlat",
-                        "SlotMPolar",
-                        "SlotMag",
-                        "SlotUD",
-                        "SlotW10",
-                        "SlotW11",
-                        "SlotW12",
-                        "SlotW13",
-                        "SlotW14",
-                        "SlotW15",
-                        "SlotW16",
-                        "SlotW21",
-                        "SlotW22",
-                        "SlotW23",
-                        "SlotW24",
-                        "SlotW25",
-                        "SlotW26",
-                        "SlotW27",
-                        "SlotW28",
-                        "SlotW29",
-                        "SlotW60",
-                        "SlotW61",
-                        "SlotWind",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for slot_list"
-                        )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.slot_list.append(class_obj(init_dict=obj))
-                else:
-                    self.slot_list.append(obj)
-        elif slot_list is None:
-            self.slot_list = list()
-        else:
-            self.slot_list = slot_list
-        # alpha can be None, a ndarray or a list
-        set_array(self, "alpha", alpha)
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
+        # Set the properties (value check and convertion are done in setter)
+        self.slot_list = slot_list
+        self.alpha = alpha
+        self.sym_dict_enforced = sym_dict_enforced
         # Call Lamination init
         super(LamSlotMulti, self).__init__(
             L1=L1,
@@ -339,12 +271,14 @@ class LamSlotMulti(Lamination):
             axial_vent=axial_vent,
             notch=notch,
             skew=skew,
+            yoke_notch=yoke_notch,
+            bore=bore,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         LamSlotMulti_str = ""
         # Get the properties inherited from Lamination
@@ -363,6 +297,9 @@ class LamSlotMulti(Lamination):
             + linesep
             + linesep
         )
+        LamSlotMulti_str += (
+            "sym_dict_enforced = " + str(self.sym_dict_enforced) + linesep
+        )
         return LamSlotMulti_str
 
     def __eq__(self, other):
@@ -378,22 +315,88 @@ class LamSlotMulti(Lamination):
             return False
         if not array_equal(other.alpha, self.alpha):
             return False
+        if other.sym_dict_enforced != self.sym_dict_enforced:
+            return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Lamination
+        diff_list.extend(super(LamSlotMulti, self).compare(other, name=name))
+        if (other.slot_list is None and self.slot_list is not None) or (
+            other.slot_list is not None and self.slot_list is None
+        ):
+            diff_list.append(name + ".slot_list None mismatch")
+        elif self.slot_list is None:
+            pass
+        elif len(other.slot_list) != len(self.slot_list):
+            diff_list.append("len(" + name + ".slot_list)")
+        else:
+            for ii in range(len(other.slot_list)):
+                diff_list.extend(
+                    self.slot_list[ii].compare(
+                        other.slot_list[ii], name=name + ".slot_list[" + str(ii) + "]"
+                    )
+                )
+        if not array_equal(other.alpha, self.alpha):
+            diff_list.append(name + ".alpha")
+        if other._sym_dict_enforced != self._sym_dict_enforced:
+            diff_list.append(name + ".sym_dict_enforced")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Lamination
+        S += super(LamSlotMulti, self).__sizeof__()
+        if self.slot_list is not None:
+            for value in self.slot_list:
+                S += getsizeof(value)
+        S += getsizeof(self.alpha)
+        if self.sym_dict_enforced is not None:
+            for key, value in self.sym_dict_enforced.items():
+                S += getsizeof(value) + getsizeof(key)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         # Get the properties inherited from Lamination
-        LamSlotMulti_dict = super(LamSlotMulti, self).as_dict()
-        LamSlotMulti_dict["slot_list"] = list()
-        for obj in self.slot_list:
-            LamSlotMulti_dict["slot_list"].append(obj.as_dict())
+        LamSlotMulti_dict = super(LamSlotMulti, self).as_dict(**kwargs)
+        if self.slot_list is None:
+            LamSlotMulti_dict["slot_list"] = None
+        else:
+            LamSlotMulti_dict["slot_list"] = list()
+            for obj in self.slot_list:
+                if obj is not None:
+                    LamSlotMulti_dict["slot_list"].append(obj.as_dict(**kwargs))
+                else:
+                    LamSlotMulti_dict["slot_list"].append(None)
         if self.alpha is None:
             LamSlotMulti_dict["alpha"] = None
         else:
             LamSlotMulti_dict["alpha"] = self.alpha.tolist()
-        # The class name is added to the dict fordeserialisation purpose
+        LamSlotMulti_dict["sym_dict_enforced"] = (
+            self.sym_dict_enforced.copy()
+            if self.sym_dict_enforced is not None
+            else None
+        )
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotMulti_dict["__class__"] = "LamSlotMulti"
         return LamSlotMulti_dict
@@ -401,32 +404,43 @@ class LamSlotMulti(Lamination):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.slot_list:
-            obj._set_None()
+        self.slot_list = None
         self.alpha = None
+        self.sym_dict_enforced = None
         # Set to None the properties inherited from Lamination
         super(LamSlotMulti, self)._set_None()
 
     def _get_slot_list(self):
         """getter of slot_list"""
-        for obj in self._slot_list:
-            if obj is not None:
-                obj.parent = self
+        if self._slot_list is not None:
+            for obj in self._slot_list:
+                if obj is not None:
+                    obj.parent = self
         return self._slot_list
 
     def _set_slot_list(self, value):
         """setter of slot_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "slot_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
+        if value == -1:
+            value = list()
         check_var("slot_list", value, "[Slot]")
         self._slot_list = value
 
-        for obj in self._slot_list:
-            if obj is not None:
-                obj.parent = self
-
-    # List of lamination Slot
-    # Type : [Slot]
     slot_list = property(
-        fget=_get_slot_list, fset=_set_slot_list, doc=u"""List of lamination Slot"""
+        fget=_get_slot_list,
+        fset=_set_slot_list,
+        doc=u"""List of lamination Slot
+
+        :Type: [Slot]
+        """,
     )
 
     def _get_alpha(self):
@@ -435,7 +449,7 @@ class LamSlotMulti(Lamination):
 
     def _set_alpha(self, value):
         """setter of alpha"""
-        if value is None:
+        if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
             try:
@@ -445,8 +459,31 @@ class LamSlotMulti(Lamination):
         check_var("alpha", value, "ndarray")
         self._alpha = value
 
-    # Angular position of the Slots
-    # Type : ndarray
     alpha = property(
-        fget=_get_alpha, fset=_set_alpha, doc=u"""Angular position of the Slots"""
+        fget=_get_alpha,
+        fset=_set_alpha,
+        doc=u"""Angular position of the Slots
+
+        :Type: ndarray
+        """,
+    )
+
+    def _get_sym_dict_enforced(self):
+        """getter of sym_dict_enforced"""
+        return self._sym_dict_enforced
+
+    def _set_sym_dict_enforced(self, value):
+        """setter of sym_dict_enforced"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("sym_dict_enforced", value, "dict")
+        self._sym_dict_enforced = value
+
+    sym_dict_enforced = property(
+        fget=_get_sym_dict_enforced,
+        fset=_set_sym_dict_enforced,
+        doc=u"""Dictionary to enforce the lamination symmetry
+
+        :Type: dict
+        """,
     )

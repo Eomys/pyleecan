@@ -10,7 +10,7 @@ def merge_notch_list(notch_list_1, notch_list_2):
 
     Returns
     -------
-    notch_list : list 
+    notch_list : list
         list of dictionary with key: "begin_angle", "end_angle", "obj"
     """
     N1 = len(notch_list_1)
@@ -47,7 +47,6 @@ def merge_notch_list(notch_list_1, notch_list_2):
 
 
 class NotchError(Exception):
-    """Raised when notch are coliding
-    """
+    """Raised when notch are coliding"""
 
     pass

@@ -17,7 +17,7 @@ from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -102,10 +102,10 @@ M_test[-1]["Mmach"] = (
     + M_test[-1]["Mfra"]
     + M_test[-1]["Msha"]
 )
-# IPMSM_A (Prius machine)
+# Toyota_Prius
 M_test.append(
     {
-        "test_obj": IPMSM_A,
+        "test_obj": Toyota_Prius,
         "Mfra": 0,
         "Msha": 7650 * 0.1 * pi * (0.11064 / 2) ** 2,
     }  # No frame
@@ -130,8 +130,7 @@ M_test[-1]["Mmach"] = 33.38
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_surface_rotor(test_dict):
-    """Check that the computation of the surface is correct
-    """
+    """Check that the computation of the surface is correct"""
     result = test_dict["test_obj"].rotor.comp_surfaces()
 
     a = result["Slam"]
@@ -150,11 +149,12 @@ def test_comp_surface_rotor(test_dict):
         msg = "For Smag, Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 
+    a = result["Syoke"]
+
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_surface_stator(test_dict):
-    """Check that the computation of the surface is correct
-    """
+    """Check that the computation of the surface is correct"""
     result = test_dict["test_obj"].stator.comp_surfaces()
 
     a = result["Slam"]
@@ -176,8 +176,7 @@ def test_comp_surface_stator(test_dict):
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_volume_rotor(test_dict):
-    """Check that the computation of the volume is correct
-    """
+    """Check that the computation of the volume is correct"""
     result = test_dict["test_obj"].rotor.comp_volumes()
 
     a = result["Vlam"]
@@ -199,8 +198,7 @@ def test_comp_volume_rotor(test_dict):
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_volume_stator(test_dict):
-    """Check that the computation of the volume is correct
-    """
+    """Check that the computation of the volume is correct"""
     result = test_dict["test_obj"].stator.comp_volumes()
 
     a = result["Vlam"]
@@ -222,8 +220,7 @@ def test_comp_volume_stator(test_dict):
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_mass(test_dict):
-    """Check that the computation of the mass is correct
-    """
+    """Check that the computation of the mass is correct"""
     result = test_dict["test_obj"].comp_masses()
 
     a = result["Mfra"]
@@ -262,3 +259,11 @@ def test_comp_mass(test_dict):
     b = test_dict["Mmach"]
     msg = "Mmach, Return " + str(a) + " expected " + str(b)
     assert a == pytest.approx(b, rel=DELTA), msg
+
+
+def test_comp_mass_shaft_none():
+    """Check that the compytation of the mass is correct even if there is no shaft"""
+    test_obj.shaft = None
+    result = test_obj.comp_masses()
+
+    assert result["Msha"] == 0

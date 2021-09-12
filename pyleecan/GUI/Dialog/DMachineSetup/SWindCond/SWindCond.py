@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.CondType11 import CondType11
 from .....Classes.CondType12 import CondType12
@@ -17,15 +17,14 @@ name_list = [wid.cond_name for wid in wid_list]
 
 
 class SWindCond(Ui_SWindCond, QWidget):
-    """Step to define the winding conductor
-    """
+    """Step to define the winding conductor"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup nav
-    step_name = "Winding Conductor"
+    step_name = "Conductor"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -34,8 +33,8 @@ class SWindCond(Ui_SWindCond, QWidget):
             A SWindCond widget
         machine : Machine
             current machine to edit
-        matlib : list
-            List of available Material
+        material_dict : list
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -46,7 +45,7 @@ class SWindCond(Ui_SWindCond, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         # Fill the fields with the machine values (if they're filled)
@@ -81,8 +80,8 @@ class SWindCond(Ui_SWindCond, QWidget):
             self.obj.winding.conductor._set_None()
 
         # Set conductor and insulator material
-        self.w_mat_0.update(self.obj.winding.conductor, "cond_mat", self.matlib)
-        self.w_mat_1.update(self.obj.winding.conductor, "ins_mat", self.matlib)
+        self.w_mat_0.update(self.obj.winding.conductor, "cond_mat", self.material_dict)
+        self.w_mat_1.update(self.obj.winding.conductor, "ins_mat", self.material_dict)
 
         # Initialize the needed conductor widget
         index = type_list.index(type(self.obj.winding.conductor))
@@ -95,8 +94,7 @@ class SWindCond(Ui_SWindCond, QWidget):
         self.w_mat_1.saveNeeded.connect(self.emit_save)
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     def s_set_cond_type(self, index):

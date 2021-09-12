@@ -2,49 +2,74 @@
 
 # File generated according to WImportMatrixTable.ui
 # WARNING! All changes made in this file will be lost!
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+
+from pyleecan.GUI.Resources import pyleecan_rc
 
 
 class Ui_WImportMatrixTable(object):
     def setupUi(self, WImportMatrixTable):
-        WImportMatrixTable.setObjectName("WImportMatrixTable")
+        if not WImportMatrixTable.objectName():
+            WImportMatrixTable.setObjectName(u"WImportMatrixTable")
         WImportMatrixTable.resize(546, 511)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
-        )
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
             WImportMatrixTable.sizePolicy().hasHeightForWidth()
         )
         WImportMatrixTable.setSizePolicy(sizePolicy)
-        WImportMatrixTable.setMinimumSize(QtCore.QSize(0, 0))
-        self.horizontalLayout = QtWidgets.QHBoxLayout(WImportMatrixTable)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.in_matrix = QtWidgets.QLabel(WImportMatrixTable)
-        self.in_matrix.setObjectName("in_matrix")
+        WImportMatrixTable.setMinimumSize(QSize(0, 0))
+        self.horizontalLayout = QHBoxLayout(WImportMatrixTable)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.in_matrix = QLabel(WImportMatrixTable)
+        self.in_matrix.setObjectName(u"in_matrix")
+
         self.horizontalLayout.addWidget(self.in_matrix)
-        self.b_convert = QtWidgets.QPushButton(WImportMatrixTable)
-        self.b_convert.setObjectName("b_convert")
+
+        self.b_convert = QPushButton(WImportMatrixTable)
+        self.b_convert.setObjectName(u"b_convert")
+
         self.horizontalLayout.addWidget(self.b_convert)
-        self.b_tab = QtWidgets.QPushButton(WImportMatrixTable)
-        self.b_tab.setObjectName("b_tab")
+
+        self.b_tab = QPushButton(WImportMatrixTable)
+        self.b_tab.setObjectName(u"b_tab")
+
         self.horizontalLayout.addWidget(self.b_tab)
-        self.b_plot = QtWidgets.QPushButton(WImportMatrixTable)
-        self.b_plot.setObjectName("b_plot")
+
+        self.b_plot = QPushButton(WImportMatrixTable)
+        self.b_plot.setObjectName(u"b_plot")
+
         self.horizontalLayout.addWidget(self.b_plot)
 
         self.retranslateUi(WImportMatrixTable)
-        QtCore.QMetaObject.connectSlotsByName(WImportMatrixTable)
+
+        QMetaObject.connectSlotsByName(WImportMatrixTable)
+
+    # setupUi
 
     def retranslateUi(self, WImportMatrixTable):
-        _translate = QtCore.QCoreApplication.translate
-        WImportMatrixTable.setWindowTitle(_translate("WImportMatrixTable", "Form"))
-        self.in_matrix.setText(_translate("WImportMatrixTable", "Matrix size (100,2)"))
-        self.b_convert.setText(_translate("WImportMatrixTable", "Convert to Excel"))
-        self.b_tab.setText(_translate("WImportMatrixTable", "Preview Table"))
-        self.b_plot.setText(_translate("WImportMatrixTable", "Preview Plot"))
+        WImportMatrixTable.setWindowTitle(
+            QCoreApplication.translate("WImportMatrixTable", u"Form", None)
+        )
+        self.in_matrix.setText(
+            QCoreApplication.translate(
+                "WImportMatrixTable", u"Matrix size (100,2)", None
+            )
+        )
+        self.b_convert.setText(
+            QCoreApplication.translate("WImportMatrixTable", u"Convert to Excel", None)
+        )
+        self.b_tab.setText(
+            QCoreApplication.translate("WImportMatrixTable", u"Edit Table", None)
+        )
+        self.b_plot.setText(
+            QCoreApplication.translate("WImportMatrixTable", u"Preview Plot", None)
+        )
 
-
-from pyleecan.GUI.Resources import pyleecan_rc
+    # retranslateUi

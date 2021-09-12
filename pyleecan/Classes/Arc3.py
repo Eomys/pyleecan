@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/Arc3.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/Arc3.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/Arc3
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Arc import Arc
 
 # Import all class method
@@ -66,6 +71,11 @@ try:
     from ..Methods.Geometry.Arc3.rotate import rotate
 except ImportError as error:
     rotate = error
+
+try:
+    from ..Methods.Geometry.Arc3.scale import scale
+except ImportError as error:
+    scale = error
 
 try:
     from ..Methods.Geometry.Arc3.split_half import split_half
@@ -186,6 +196,15 @@ class Arc3(Arc):
         )
     else:
         rotate = rotate
+    # cf Methods.Geometry.Arc3.scale
+    if isinstance(scale, ImportError):
+        scale = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc3 method scale: " + str(scale))
+            )
+        )
+    else:
+        scale = scale
     # cf Methods.Geometry.Arc3.split_half
     if isinstance(split_half, ImportError):
         split_half = property(
@@ -204,15 +223,9 @@ class Arc3(Arc):
         )
     else:
         translate = translate
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -221,32 +234,22 @@ class Arc3(Arc):
         begin=0,
         end=0,
         is_trigo_direction=False,
-        label="",
+        prop_dict=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            begin = obj.begin
-            end = obj.end
-            is_trigo_direction = obj.is_trigo_direction
-            label = obj.label
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -256,19 +259,19 @@ class Arc3(Arc):
                 end = init_dict["end"]
             if "is_trigo_direction" in list(init_dict.keys()):
                 is_trigo_direction = init_dict["is_trigo_direction"]
-            if "label" in list(init_dict.keys()):
-                label = init_dict["label"]
-        # Initialisation by argument
+            if "prop_dict" in list(init_dict.keys()):
+                prop_dict = init_dict["prop_dict"]
+        # Set the properties (value check and convertion are done in setter)
         self.begin = begin
         self.end = end
         self.is_trigo_direction = is_trigo_direction
         # Call Arc init
-        super(Arc3, self).__init__(label=label)
+        super(Arc3, self).__init__(prop_dict=prop_dict)
         # The class is frozen (in Arc init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Arc3_str = ""
         # Get the properties inherited from Arc
@@ -295,16 +298,62 @@ class Arc3(Arc):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Arc
+        diff_list.extend(super(Arc3, self).compare(other, name=name))
+        if other._begin != self._begin:
+            diff_list.append(name + ".begin")
+        if other._end != self._end:
+            diff_list.append(name + ".end")
+        if other._is_trigo_direction != self._is_trigo_direction:
+            diff_list.append(name + ".is_trigo_direction")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Arc
+        S += super(Arc3, self).__sizeof__()
+        S += getsizeof(self.begin)
+        S += getsizeof(self.end)
+        S += getsizeof(self.is_trigo_direction)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         # Get the properties inherited from Arc
-        Arc3_dict = super(Arc3, self).as_dict()
-        Arc3_dict["begin"] = self.begin
-        Arc3_dict["end"] = self.end
+        Arc3_dict = super(Arc3, self).as_dict(**kwargs)
+        if self.begin is None:
+            Arc3_dict["begin"] = None
+        elif isinstance(self.begin, float):
+            Arc3_dict["begin"] = self.begin
+        else:
+            Arc3_dict["begin"] = str(self.begin)
+        if self.end is None:
+            Arc3_dict["end"] = None
+        elif isinstance(self.end, float):
+            Arc3_dict["end"] = self.end
+        else:
+            Arc3_dict["end"] = str(self.end)
         Arc3_dict["is_trigo_direction"] = self.is_trigo_direction
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Arc3_dict["__class__"] = "Arc3"
         return Arc3_dict
@@ -324,13 +373,18 @@ class Arc3(Arc):
 
     def _set_begin(self, value):
         """setter of begin"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("begin", value, "complex")
         self._begin = value
 
-    # begin point of the arc
-    # Type : complex
     begin = property(
-        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
+        fget=_get_begin,
+        fset=_set_begin,
+        doc=u"""begin point of the arc
+
+        :Type: complex
+        """,
     )
 
     def _get_end(self):
@@ -339,12 +393,19 @@ class Arc3(Arc):
 
     def _set_end(self, value):
         """setter of end"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("end", value, "complex")
         self._end = value
 
-    # end of the arc
-    # Type : complex
-    end = property(fget=_get_end, fset=_set_end, doc=u"""end of the arc""")
+    end = property(
+        fget=_get_end,
+        fset=_set_end,
+        doc=u"""end of the arc
+
+        :Type: complex
+        """,
+    )
 
     def _get_is_trigo_direction(self):
         """getter of is_trigo_direction"""
@@ -355,10 +416,11 @@ class Arc3(Arc):
         check_var("is_trigo_direction", value, "bool")
         self._is_trigo_direction = value
 
-    # Rotation direction of the arc
-    # Type : bool
     is_trigo_direction = property(
         fget=_get_is_trigo_direction,
         fset=_set_is_trigo_direction,
-        doc=u"""Rotation direction of the arc""",
+        doc=u"""Rotation direction of the arc
+
+        :Type: bool
+        """,
     )

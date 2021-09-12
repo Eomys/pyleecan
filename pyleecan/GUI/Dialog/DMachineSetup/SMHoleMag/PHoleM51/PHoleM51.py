@@ -1,28 +1,26 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.HoleM51 import HoleM51
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM51.Gen_PHoleM51 import Gen_PHoleM51
-from ......GUI.Dialog.DMatLib.MatLib import MatLib
-from ......Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PHoleM51(Gen_PHoleM51, QWidget):
-    """Page to set the Hole Type 51
-    """
+    """Page to set the Hole Type 51"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for WHoleMag
-    hole_name = "Slot Type 51"
+    hole_name = "Hole Type 51"
     hole_type = HoleM51
 
-    def __init__(self, hole=None, matlib=MatLib()):
+    def __init__(self, hole=None, material_dict=None):
         """Initialize the widget according to hole
 
         Parameters
@@ -31,14 +29,14 @@ class PHoleM51(Gen_PHoleM51, QWidget):
             A PHoleM51 widget
         hole : HoleM51
             current hole to edit
-        matlib : MatLib
-            Material Library 
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
         self.setupUi(self)
 
-        self.matlib = matlib
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
@@ -54,14 +52,21 @@ class PHoleM51(Gen_PHoleM51, QWidget):
         self.lf_H2.unit = "m"
 
         # Set default materials
-        self.w_mat_0.setText("mat_void:")
+        self.w_mat_0.setText("mat_void")
         self.w_mat_0.def_mat = "Air"
-        self.w_mat_1.setText("magnet_0:")
+        self.w_mat_0.is_hide_button = True
+
+        self.w_mat_1.setText("magnet_0")
         self.w_mat_1.def_mat = "Magnet1"
-        self.w_mat_2.setText("magnet_1:")
+        self.w_mat_1.is_hide_button = True
+
+        self.w_mat_2.setText("magnet_1")
         self.w_mat_2.def_mat = "Magnet1"
-        self.w_mat_3.setText("magnet_2:")
+        self.w_mat_2.is_hide_button = True
+
+        self.w_mat_3.setText("magnet_2")
         self.w_mat_3.def_mat = "Magnet1"
+        self.w_mat_3.is_hide_button = True
 
         # Set unit name (m ou mm)
         self.u = gui_option.unit
@@ -79,14 +84,14 @@ class PHoleM51(Gen_PHoleM51, QWidget):
             self.unit_H2,
         ]
         for wid in wid_list:
-            wid.setText(self.u.get_m_name())
+            wid.setText("[" + self.u.get_m_name() + "]")
 
         self.hole = hole
 
         # Adapt GUI with/without magnet
         if hole.magnet_0 is None:  # SyRM
             self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/WSlot/Slot_51_no_mag.PNG")
+                QPixmap(":/images/images/MachineSetup/SMHoleMag/HoleM51_no_mag.png")
             )
             # Disable magnet only parameters
             hole.W2 = 0
@@ -101,15 +106,15 @@ class PHoleM51(Gen_PHoleM51, QWidget):
             self.lf_W5.setEnabled(False)
             self.lf_W6.setEnabled(False)
             self.lf_W7.setEnabled(False)
-            self.w_mat_0.update(self.hole, "mat_void", self.matlib)
+            self.w_mat_0.update(self.hole, "mat_void", self.material_dict)
             self.w_mat_1.hide()
             self.w_mat_2.hide()
             self.w_mat_3.hide()
         else:
-            self.w_mat_0.update(self.hole, "mat_void", self.matlib)
-            self.w_mat_1.update(self.hole.magnet_0, "mat_type", self.matlib)
-            self.w_mat_2.update(self.hole.magnet_1, "mat_type", self.matlib)
-            self.w_mat_3.update(self.hole.magnet_2, "mat_type", self.matlib)
+            self.w_mat_0.update(self.hole, "mat_void", self.material_dict)
+            self.w_mat_1.update(self.hole.magnet_0, "mat_type", self.material_dict)
+            self.w_mat_2.update(self.hole.magnet_1, "mat_type", self.material_dict)
+            self.w_mat_3.update(self.hole.magnet_2, "mat_type", self.material_dict)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.hole.W0)
@@ -145,8 +150,7 @@ class PHoleM51(Gen_PHoleM51, QWidget):
         self.w_mat_3.saveNeeded.connect(self.emit_save)
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     def set_W0(self):

@@ -15,14 +15,16 @@ def comp_masses(self):
     Returns
     -------
     M_dict: dict
-        Lamination mass dictionnary (Mtot, Mlam, Mmag) [kg]
+        Lamination mass dictionary (Mtot, Mlam, Mmag) [kg]
 
     """
 
     M_dict = LamSlot.comp_masses(self)
-    Mmag = 0
-    for magnet in self.slot.magnet:
-        Mmag += magnet.comp_mass()
+    Mmag = (
+        self.slot.comp_surface_active()
+        * self.magnet.Lmag
+        * self.magnet.mat_type.struct.rho
+    )
 
     M_dict["Mmag"] = Mmag
     M_dict["Mtot"] += Mmag

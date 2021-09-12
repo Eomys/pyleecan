@@ -5,3 +5,4 @@ Nwppc,-,"cf schematics, winding number of random wires (strands) in parallel per
 Wins_wire,m,"(advanced) cf schematics, winding strand insulation thickness [m]",0,float,0,0,,,,,comp_surface,,,
 Kwoh,-,"winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)",0,float,5.00E-01,0,,,,,comp_width,,,
 ,,,,,,,,,,,plot,,,
+,,,,,,,,,,,plot_schematics,,,

@@ -4,3 +4,4 @@ toolbox,,DEAP toolbox,,deap.base.Toolbox,None,,,,Optimization,OptiGenAlg,solve,V
 ,,,,,,,,,,,cross,,,,
 ,,,,,,,,,,,create_toolbox,,,,
 ,,,,,,,,,,,check_optimization_input,,,,
+,,,,,,,,,,,delete_toolbox,,,,

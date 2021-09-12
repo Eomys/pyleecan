@@ -1,5 +1,7 @@
 {
     "__class__": "MachineSCIM",
+    "__save_date__": "2021_05_03 17h36min19s ",
+    "__version__": "pyleecan_1.2.1",
     "desc": "polar SCIM from K. Boughrara publication",
     "frame": null,
     "logger_name": "Pyleecan.Machine",
@@ -221,42 +223,29 @@
                         [
                             170000.0,
                             2.3
-                        ],
-                        [
-                            235000.0,
-                            2.35
-                        ],
-                        [
-                            274000.0,
-                            2.4
-                        ],
-                        [
-                            370000.0,
-                            2.5
-                        ],
-                        [
-                            475000.0,
-                            2.6
-                        ],
-                        [
-                            570000.0,
-                            2.7
-                        ],
-                        [
-                            665000.0,
-                            2.8
                         ]
                     ]
                 },
                 "Brm20": 0,
                 "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0.0005,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 2500.0
             },
             "name": "M400-50A",
-            "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/M400-50A.json",
+            "path": "M400-50A.json",
             "struct": {
                 "Ex": 215000000000.0,
                 "Ey": 215000000000.0,
@@ -297,7 +286,7 @@
             "is_isotropic": true,
             "mag": null,
             "name": "Copper1",
-            "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/Copper1.json",
+            "path": "Copper1.json",
             "struct": {
                 "Ex": 115000000000.0,
                 "Ey": 115000000000.0,
@@ -322,10 +311,12 @@
         },
         "winding": {
             "Lewout": 0,
-            "Npcpp": 1,
+            "Nlayer": 1,
+            "Npcp": 1,
             "Nslot_shift_wind": 0,
             "Ntcoil": 1,
             "__class__": "WindingSC",
+            "coil_pitch": 0,
             "conductor": {
                 "Hbar": 0.02,
                 "Wbar": 0.01,
@@ -356,7 +347,7 @@
                     "is_isotropic": true,
                     "mag": null,
                     "name": "Copper1",
-                    "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/Copper1.json",
+                    "path": "Copper1.json",
                     "struct": {
                         "Ex": 115000000000.0,
                         "Ey": 115000000000.0,
@@ -401,9 +392,20 @@
                         },
                         "Brm20": 0,
                         "Hc": 0,
+                        "LossData": {
+                            "__class__": "ImportMatrix",
+                            "is_transpose": false
+                        },
+                        "ModelBH": {
+                            "Bmax": 2.31,
+                            "Hmax": null,
+                            "__class__": "ModelBH",
+                            "delta": 100
+                        },
                         "Wlam": 0,
                         "__class__": "MatMagnetics",
                         "alpha_Br": 0,
+                        "is_BH_extrapolate": false,
                         "mur_lin": 1
                     },
                     "name": "Material",
@@ -423,11 +425,15 @@
                     }
                 }
             },
+            "is_aper_a": null,
             "is_reverse_wind": false,
-            "p": 3,
+            "p": 2,
+            "per_a": null,
             "qs": 28,
-            "type_connection": 0
-        }
+            "type_connection": 0,
+            "wind_mat": null
+        },
+        "yoke_notch": []
     },
     "shaft": null,
     "stator": {
@@ -645,42 +651,29 @@
                         [
                             170000.0,
                             2.3
-                        ],
-                        [
-                            235000.0,
-                            2.35
-                        ],
-                        [
-                            274000.0,
-                            2.4
-                        ],
-                        [
-                            370000.0,
-                            2.5
-                        ],
-                        [
-                            475000.0,
-                            2.6
-                        ],
-                        [
-                            570000.0,
-                            2.7
-                        ],
-                        [
-                            665000.0,
-                            2.8
                         ]
                     ]
                 },
                 "Brm20": 0,
                 "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0.0005,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 2500.0
             },
             "name": "M400-50A",
-            "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/M400-50A.json",
+            "path": "M400-50A.json",
             "struct": {
                 "Ex": 215000000000.0,
                 "Ey": 215000000000.0,
@@ -706,11 +699,12 @@
         },
         "winding": {
             "Lewout": 0,
-            "Npcpp": 1,
+            "Nlayer": 1,
+            "Npcp": 1,
             "Nslot_shift_wind": 0,
             "Ntcoil": 15,
-            "__class__": "WindingDW1L",
-            "coil_pitch": 9,
+            "__class__": "Winding",
+            "coil_pitch": 0,
             "conductor": {
                 "Kwoh": 0,
                 "Nwppc": 1,
@@ -743,7 +737,7 @@
                     "is_isotropic": true,
                     "mag": null,
                     "name": "Copper1",
-                    "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/Copper1.json",
+                    "path": "Copper1.json",
                     "struct": {
                         "Ex": 115000000000.0,
                         "Ey": 115000000000.0,
@@ -783,7 +777,7 @@
                     "is_isotropic": true,
                     "mag": null,
                     "name": "Insulator1",
-                    "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/Insulator1.json",
+                    "path": "Insulator1.json",
                     "struct": {
                         "Ex": null,
                         "Ey": null,
@@ -799,11 +793,15 @@
                     }
                 }
             },
+            "is_aper_a": null,
             "is_reverse_wind": false,
             "p": 2,
+            "per_a": null,
             "qs": 3,
-            "type_connection": 0
-        }
+            "type_connection": 0,
+            "wind_mat": null
+        },
+        "yoke_notch": []
     },
     "type_machine": 1
 }

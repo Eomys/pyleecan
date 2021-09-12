@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import femm
-
-from ....Functions.FEMM import boundary_prop
+from ....Functions.FEMM import MagFEMM_BP_dict
+from ....Functions.labels import BOUNDARY_PROP_LAB
 
 
 def draw_FEMM(
     self,
+    femm,
     nodeprop=None,
     propname=None,
     element_size=None,
@@ -18,6 +18,8 @@ def draw_FEMM(
 
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     nodeprop :
         Nodal property
          (Default value = None)
@@ -42,13 +44,12 @@ def draw_FEMM(
     Returns
     -------
 
-    
+
     """
 
     # Get BC (if any)
-    for bound_label in boundary_prop:
-        if bound_label in self.label:
-            propname = boundary_prop[bound_label]
+    if self.prop_dict is not None and BOUNDARY_PROP_LAB in self.prop_dict:
+        propname = MagFEMM_BP_dict[self.prop_dict[BOUNDARY_PROP_LAB]]
 
     # Add the nodes
     X1, Y1 = self.begin.real, self.begin.imag

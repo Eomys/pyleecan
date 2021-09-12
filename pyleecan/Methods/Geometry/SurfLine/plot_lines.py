@@ -6,7 +6,7 @@ from numpy import real, imag
 from ....Functions.init_fig import init_fig
 
 
-def plot_lines(self, fig=None):
+def plot_lines(self, fig=None, is_show_fig=True):
     """Plot the SurfLine-Contour in a matplotlib fig
     (For plotting unclosed contour, for Polygon use plot method from Surface object)
 
@@ -17,7 +17,9 @@ def plot_lines(self, fig=None):
     fig :
         if None, open a new fig and plot, else add to the
         current one (Default value = None)
-   
+    is_show_fig : bool
+        To call show at the end of the method
+
     Returns
     -------
     None
@@ -41,4 +43,5 @@ def plot_lines(self, fig=None):
     # Axis Setup
     axis("equal")
 
-    fig.show()
+    if is_show_fig:
+        fig.show()

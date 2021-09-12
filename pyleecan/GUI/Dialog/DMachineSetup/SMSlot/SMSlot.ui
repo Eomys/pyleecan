@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SMSlot</class>
+ <widget class="QWidget" name="SMSlot">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>650</width>
+    <height>550</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>650</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="main_layout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="HelpButton" name="b_help">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/icon/help_16.png</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="c_slot_type">
+       <item>
+        <property name="text">
+         <string>Slot Type 10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Slot Type 11</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Slot Type 12</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="out_Slot_pitch">
+       <property name="text">
+        <string>p = ? Slot pitch = 1.35 rad</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="WMatSelect" name="w_mat" native="true"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="in_type_magnetization">
+       <property name="text">
+        <string>type_magnetization</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="c_type_magnetization">
+       <item>
+        <property name="text">
+         <string>Radial</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Parallel</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>HallBach</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QWidget" name="w_slot" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_plot">
+       <property name="text">
+        <string>Preview</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_previous">
+       <property name="text">
+        <string>Previous</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_next">
+       <property name="text">
+        <string>Next</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>HelpButton</class>
+   <extends>QLabel</extends>
+   <header>pyleecan/GUI/Tools/HelpButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WMatSelect</class>
+   <extends>QWidget</extends>
+   <header>.....GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../Resources/pyleecan.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/NodeMat.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/NodeMat.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/NodeMat
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from .Node import Node
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -23,21 +28,21 @@ except ImportError as error:
     get_coord = error
 
 try:
-    from ..Methods.Mesh.NodeMat.get_group import get_group
-except ImportError as error:
-    get_group = error
-
-try:
     from ..Methods.Mesh.NodeMat.is_exist import is_exist
 except ImportError as error:
     is_exist = error
+
+try:
+    from ..Methods.Mesh.NodeMat.get_indice import get_indice
+except ImportError as error:
+    get_indice = error
 
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
 
-class NodeMat(Node):
+class NodeMat(FrozenClass):
     """Class to define nodes coordinates and getter."""
 
     VERSION = 1
@@ -61,15 +66,6 @@ class NodeMat(Node):
         )
     else:
         get_coord = get_coord
-    # cf Methods.Mesh.NodeMat.get_group
-    if isinstance(get_group, ImportError):
-        get_group = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use NodeMat method get_group: " + str(get_group))
-            )
-        )
-    else:
-        get_group = get_group
     # cf Methods.Mesh.NodeMat.is_exist
     if isinstance(is_exist, ImportError):
         is_exist = property(
@@ -79,49 +75,42 @@ class NodeMat(Node):
         )
     else:
         is_exist = is_exist
-    # save method is available in all object
+    # cf Methods.Mesh.NodeMat.get_indice
+    if isinstance(get_indice, ImportError):
+        get_indice = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use NodeMat method get_indice: " + str(get_indice))
+            )
+        )
+    else:
+        get_indice = get_indice
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        coordinate=None,
+        coordinate=[],
         nb_node=0,
-        tag=None,
         delta=1e-10,
+        indice=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            coordinate = obj.coordinate
-            nb_node = obj.nb_node
-            tag = obj.tag
-            delta = obj.delta
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -129,28 +118,28 @@ class NodeMat(Node):
                 coordinate = init_dict["coordinate"]
             if "nb_node" in list(init_dict.keys()):
                 nb_node = init_dict["nb_node"]
-            if "tag" in list(init_dict.keys()):
-                tag = init_dict["tag"]
             if "delta" in list(init_dict.keys()):
                 delta = init_dict["delta"]
-        # Initialisation by argument
-        # coordinate can be None, a ndarray or a list
-        set_array(self, "coordinate", coordinate)
+            if "indice" in list(init_dict.keys()):
+                indice = init_dict["indice"]
+        # Set the properties (value check and convertion are done in setter)
+        self.parent = None
+        self.coordinate = coordinate
         self.nb_node = nb_node
-        # tag can be None, a ndarray or a list
-        set_array(self, "tag", tag)
         self.delta = delta
-        # Call Node init
-        super(NodeMat, self).__init__()
-        # The class is frozen (in Node init), for now it's impossible to
-        # add new properties
+        self.indice = indice
+
+        # The class is frozen, for now it's impossible to add new properties
+        self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         NodeMat_str = ""
-        # Get the properties inherited from Node
-        NodeMat_str += super(NodeMat, self).__str__()
+        if self.parent is None:
+            NodeMat_str += "parent = None " + linesep
+        else:
+            NodeMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
         NodeMat_str += (
             "coordinate = "
             + linesep
@@ -159,14 +148,14 @@ class NodeMat(Node):
             + linesep
         )
         NodeMat_str += "nb_node = " + str(self.nb_node) + linesep
+        NodeMat_str += "delta = " + str(self.delta) + linesep
         NodeMat_str += (
-            "tag = "
+            "indice = "
             + linesep
-            + str(self.tag).replace(linesep, linesep + "\t")
+            + str(self.indice).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
-        NodeMat_str += "delta = " + str(self.delta) + linesep
         return NodeMat_str
 
     def __eq__(self, other):
@@ -174,38 +163,65 @@ class NodeMat(Node):
 
         if type(other) != type(self):
             return False
-
-        # Check the properties inherited from Node
-        if not super(NodeMat, self).__eq__(other):
-            return False
         if not array_equal(other.coordinate, self.coordinate):
             return False
         if other.nb_node != self.nb_node:
             return False
-        if not array_equal(other.tag, self.tag):
-            return False
         if other.delta != self.delta:
+            return False
+        if not array_equal(other.indice, self.indice):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if not array_equal(other.coordinate, self.coordinate):
+            diff_list.append(name + ".coordinate")
+        if other._nb_node != self._nb_node:
+            diff_list.append(name + ".nb_node")
+        if other._delta != self._delta:
+            diff_list.append(name + ".delta")
+        if not array_equal(other.indice, self.indice):
+            diff_list.append(name + ".indice")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.coordinate)
+        S += getsizeof(self.nb_node)
+        S += getsizeof(self.delta)
+        S += getsizeof(self.indice)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
-        # Get the properties inherited from Node
-        NodeMat_dict = super(NodeMat, self).as_dict()
+        NodeMat_dict = dict()
         if self.coordinate is None:
             NodeMat_dict["coordinate"] = None
         else:
             NodeMat_dict["coordinate"] = self.coordinate.tolist()
         NodeMat_dict["nb_node"] = self.nb_node
-        if self.tag is None:
-            NodeMat_dict["tag"] = None
-        else:
-            NodeMat_dict["tag"] = self.tag.tolist()
         NodeMat_dict["delta"] = self.delta
-        # The class name is added to the dict fordeserialisation purpose
-        # Overwrite the mother class name
+        if self.indice is None:
+            NodeMat_dict["indice"] = None
+        else:
+            NodeMat_dict["indice"] = self.indice.tolist()
+        # The class name is added to the dict for deserialisation purpose
         NodeMat_dict["__class__"] = "NodeMat"
         return NodeMat_dict
 
@@ -214,10 +230,8 @@ class NodeMat(Node):
 
         self.coordinate = None
         self.nb_node = None
-        self.tag = None
         self.delta = None
-        # Set to None the properties inherited from Node
-        super(NodeMat, self)._set_None()
+        self.indice = None
 
     def _get_coordinate(self):
         """getter of coordinate"""
@@ -225,7 +239,7 @@ class NodeMat(Node):
 
     def _set_coordinate(self, value):
         """setter of coordinate"""
-        if value is None:
+        if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
             try:
@@ -235,10 +249,13 @@ class NodeMat(Node):
         check_var("coordinate", value, "ndarray")
         self._coordinate = value
 
-    # Nodes coordinates
-    # Type : ndarray
     coordinate = property(
-        fget=_get_coordinate, fset=_set_coordinate, doc=u"""Nodes coordinates"""
+        fget=_get_coordinate,
+        fset=_set_coordinate,
+        doc=u"""Nodes coordinates
+
+        :Type: ndarray
+        """,
     )
 
     def _get_nb_node(self):
@@ -250,31 +267,14 @@ class NodeMat(Node):
         check_var("nb_node", value, "int")
         self._nb_node = value
 
-    # Total number of nodes
-    # Type : int
     nb_node = property(
-        fget=_get_nb_node, fset=_set_nb_node, doc=u"""Total number of nodes"""
+        fget=_get_nb_node,
+        fset=_set_nb_node,
+        doc=u"""Total number of nodes
+
+        :Type: int
+        """,
     )
-
-    def _get_tag(self):
-        """getter of tag"""
-        return self._tag
-
-    def _set_tag(self, value):
-        """setter of tag"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("tag", value, "ndarray")
-        self._tag = value
-
-    # Node tags
-    # Type : ndarray
-    tag = property(fget=_get_tag, fset=_set_tag, doc=u"""Node tags""")
 
     def _get_delta(self):
         """getter of delta"""
@@ -285,8 +285,36 @@ class NodeMat(Node):
         check_var("delta", value, "float")
         self._delta = value
 
-    # Sensibility for node searching
-    # Type : float
     delta = property(
-        fget=_get_delta, fset=_set_delta, doc=u"""Sensibility for node searching"""
+        fget=_get_delta,
+        fset=_set_delta,
+        doc=u"""Sensibility for node searching
+
+        :Type: float
+        """,
+    )
+
+    def _get_indice(self):
+        """getter of indice"""
+        return self._indice
+
+    def _set_indice(self, value):
+        """setter of indice"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("indice", value, "ndarray")
+        self._indice = value
+
+    indice = property(
+        fget=_get_indice,
+        fset=_set_indice,
+        doc=u"""Nodes unique indices
+
+        :Type: ndarray
+        """,
     )

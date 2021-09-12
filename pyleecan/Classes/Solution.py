@@ -1,200 +1,88 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/Solution.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/Solution.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/Solution
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Mesh.Solution.get_field import get_field
-except ImportError as error:
-    get_field = error
-
-try:
-    from ..Methods.Mesh.Solution.set_field import set_field
-except ImportError as error:
-    set_field = error
-
-
-from numpy import array, empty
 from ._check import InitUnKnowClassError
 
 
 class Solution(FrozenClass):
-    """Define a solution related to a Mesh object."""
+    """Abstract class for solution related classes."""
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.Solution.get_field
-    if isinstance(get_field, ImportError):
-        get_field = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Solution method get_field: " + str(get_field))
-            )
-        )
-    else:
-        get_field = get_field
-    # cf Methods.Mesh.Solution.set_field
-    if isinstance(set_field, ImportError):
-        set_field = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Solution method set_field: " + str(set_field))
-            )
-        )
-    else:
-        set_field = set_field
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        nodal=dict(),
-        edge=dict(),
-        face=dict(),
-        volume=dict(),
+        type_cell="triangle",
+        label=None,
+        dimension=2,
+        unit="",
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            nodal = obj.nodal
-            edge = obj.edge
-            face = obj.face
-            volume = obj.volume
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "nodal" in list(init_dict.keys()):
-                nodal = init_dict["nodal"]
-            if "edge" in list(init_dict.keys()):
-                edge = init_dict["edge"]
-            if "face" in list(init_dict.keys()):
-                face = init_dict["face"]
-            if "volume" in list(init_dict.keys()):
-                volume = init_dict["volume"]
-        # Initialisation by argument
+            if "type_cell" in list(init_dict.keys()):
+                type_cell = init_dict["type_cell"]
+            if "label" in list(init_dict.keys()):
+                label = init_dict["label"]
+            if "dimension" in list(init_dict.keys()):
+                dimension = init_dict["dimension"]
+            if "unit" in list(init_dict.keys()):
+                unit = init_dict["unit"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # nodal can be None or a dict of ndarray
-        self.nodal = dict()
-        if type(nodal) is dict:
-            for key, obj in nodal.items():
-                if obj is None:  # Default value
-                    value = empty(0)
-                elif isinstance(obj, list):
-                    value = array(obj)
-                self.nodal[key] = value
-        elif nodal is None:
-            self.nodal = dict()
-        else:
-            self.nodal = nodal  # Should raise an error
-        # edge can be None or a dict of ndarray
-        self.edge = dict()
-        if type(edge) is dict:
-            for key, obj in edge.items():
-                if obj is None:  # Default value
-                    value = empty(0)
-                elif isinstance(obj, list):
-                    value = array(obj)
-                self.edge[key] = value
-        elif edge is None:
-            self.edge = dict()
-        else:
-            self.edge = edge  # Should raise an error
-        # face can be None or a dict of ndarray
-        self.face = dict()
-        if type(face) is dict:
-            for key, obj in face.items():
-                if obj is None:  # Default value
-                    value = empty(0)
-                elif isinstance(obj, list):
-                    value = array(obj)
-                self.face[key] = value
-        elif face is None:
-            self.face = dict()
-        else:
-            self.face = face  # Should raise an error
-        # volume can be None or a dict of ndarray
-        self.volume = dict()
-        if type(volume) is dict:
-            for key, obj in volume.items():
-                if obj is None:  # Default value
-                    value = empty(0)
-                elif isinstance(obj, list):
-                    value = array(obj)
-                self.volume[key] = value
-        elif volume is None:
-            self.volume = dict()
-        else:
-            self.volume = volume  # Should raise an error
+        self.type_cell = type_cell
+        self.label = label
+        self.dimension = dimension
+        self.unit = unit
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Solution_str = ""
         if self.parent is None:
             Solution_str += "parent = None " + linesep
         else:
             Solution_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        if len(self.nodal) == 0:
-            Solution_str += "nodal = dict()"
-        for key, obj in self.nodal.items():
-            Solution_str += (
-                "nodal[" + key + "] = " + str(self.nodal[key]) + linesep + linesep
-            )
-        if len(self.edge) == 0:
-            Solution_str += "edge = dict()"
-        for key, obj in self.edge.items():
-            Solution_str += (
-                "edge[" + key + "] = " + str(self.edge[key]) + linesep + linesep
-            )
-        if len(self.face) == 0:
-            Solution_str += "face = dict()"
-        for key, obj in self.face.items():
-            Solution_str += (
-                "face[" + key + "] = " + str(self.face[key]) + linesep + linesep
-            )
-        if len(self.volume) == 0:
-            Solution_str += "volume = dict()"
-        for key, obj in self.volume.items():
-            Solution_str += (
-                "volume[" + key + "] = " + str(self.volume[key]) + linesep + linesep
-            )
+        Solution_str += 'type_cell = "' + str(self.type_cell) + '"' + linesep
+        Solution_str += 'label = "' + str(self.label) + '"' + linesep
+        Solution_str += "dimension = " + str(self.dimension) + linesep
+        Solution_str += 'unit = "' + str(self.unit) + '"' + linesep
         return Solution_str
 
     def __eq__(self, other):
@@ -202,137 +90,140 @@ class Solution(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.nodal != self.nodal:
+        if other.type_cell != self.type_cell:
             return False
-        if other.edge != self.edge:
+        if other.label != self.label:
             return False
-        if other.face != self.face:
+        if other.dimension != self.dimension:
             return False
-        if other.volume != self.volume:
+        if other.unit != self.unit:
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._type_cell != self._type_cell:
+            diff_list.append(name + ".type_cell")
+        if other._label != self._label:
+            diff_list.append(name + ".label")
+        if other._dimension != self._dimension:
+            diff_list.append(name + ".dimension")
+        if other._unit != self._unit:
+            diff_list.append(name + ".unit")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.type_cell)
+        S += getsizeof(self.label)
+        S += getsizeof(self.dimension)
+        S += getsizeof(self.unit)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         Solution_dict = dict()
-        Solution_dict["nodal"] = dict()
-        for key, obj in self.nodal.items():
-            Solution_dict["nodal"][key] = obj.tolist()
-        Solution_dict["edge"] = dict()
-        for key, obj in self.edge.items():
-            Solution_dict["edge"][key] = obj.tolist()
-        Solution_dict["face"] = dict()
-        for key, obj in self.face.items():
-            Solution_dict["face"][key] = obj.tolist()
-        Solution_dict["volume"] = dict()
-        for key, obj in self.volume.items():
-            Solution_dict["volume"][key] = obj.tolist()
-        # The class name is added to the dict fordeserialisation purpose
+        Solution_dict["type_cell"] = self.type_cell
+        Solution_dict["label"] = self.label
+        Solution_dict["dimension"] = self.dimension
+        Solution_dict["unit"] = self.unit
+        # The class name is added to the dict for deserialisation purpose
         Solution_dict["__class__"] = "Solution"
         return Solution_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.nodal = dict()
-        self.edge = dict()
-        self.face = dict()
-        self.volume = dict()
+        self.type_cell = None
+        self.label = None
+        self.dimension = None
+        self.unit = None
 
-    def _get_nodal(self):
-        """getter of nodal"""
-        return self._nodal
+    def _get_type_cell(self):
+        """getter of type_cell"""
+        return self._type_cell
 
-    def _set_nodal(self, value):
-        """setter of nodal"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if obj is None:
-                    obj = array([])
-                elif type(obj) is list:
-                    try:
-                        obj = array(obj)
-                    except:
-                        pass
-        check_var("nodal", value, "{ndarray}")
-        self._nodal = value
+    def _set_type_cell(self, value):
+        """setter of type_cell"""
+        check_var("type_cell", value, "str")
+        self._type_cell = value
 
-    # A solution related to nodes
-    # Type : {ndarray}
-    nodal = property(
-        fget=_get_nodal, fset=_set_nodal, doc=u"""A solution related to nodes"""
+    type_cell = property(
+        fget=_get_type_cell,
+        fset=_set_type_cell,
+        doc=u"""Type of cell (Point, Segment2, Triangle3, etc.)
+
+        :Type: str
+        """,
     )
 
-    def _get_edge(self):
-        """getter of edge"""
-        return self._edge
+    def _get_label(self):
+        """getter of label"""
+        return self._label
 
-    def _set_edge(self, value):
-        """setter of edge"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if obj is None:
-                    obj = array([])
-                elif type(obj) is list:
-                    try:
-                        obj = array(obj)
-                    except:
-                        pass
-        check_var("edge", value, "{ndarray}")
-        self._edge = value
+    def _set_label(self, value):
+        """setter of label"""
+        check_var("label", value, "str")
+        self._label = value
 
-    # A solution related to edges
-    # Type : {ndarray}
-    edge = property(
-        fget=_get_edge, fset=_set_edge, doc=u"""A solution related to edges"""
+    label = property(
+        fget=_get_label,
+        fset=_set_label,
+        doc=u"""Label to identify the solution
+
+        :Type: str
+        """,
     )
 
-    def _get_face(self):
-        """getter of face"""
-        return self._face
+    def _get_dimension(self):
+        """getter of dimension"""
+        return self._dimension
 
-    def _set_face(self, value):
-        """setter of face"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if obj is None:
-                    obj = array([])
-                elif type(obj) is list:
-                    try:
-                        obj = array(obj)
-                    except:
-                        pass
-        check_var("face", value, "{ndarray}")
-        self._face = value
+    def _set_dimension(self, value):
+        """setter of dimension"""
+        check_var("dimension", value, "int", Vmin=1, Vmax=3)
+        self._dimension = value
 
-    # A solution related to faces
-    # Type : {ndarray}
-    face = property(
-        fget=_get_face, fset=_set_face, doc=u"""A solution related to faces"""
+    dimension = property(
+        fget=_get_dimension,
+        fset=_set_dimension,
+        doc=u"""Dimension of the physical problem
+
+        :Type: int
+        :min: 1
+        :max: 3
+        """,
     )
 
-    def _get_volume(self):
-        """getter of volume"""
-        return self._volume
+    def _get_unit(self):
+        """getter of unit"""
+        return self._unit
 
-    def _set_volume(self, value):
-        """setter of volume"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if obj is None:
-                    obj = array([])
-                elif type(obj) is list:
-                    try:
-                        obj = array(obj)
-                    except:
-                        pass
-        check_var("volume", value, "{ndarray}")
-        self._volume = value
+    def _set_unit(self, value):
+        """setter of unit"""
+        check_var("unit", value, "str")
+        self._unit = value
 
-    # A solution related to volumes
-    # Type : {ndarray}
-    volume = property(
-        fget=_get_volume, fset=_set_volume, doc=u"""A solution related to volumes"""
+    unit = property(
+        fget=_get_unit,
+        fset=_set_unit,
+        doc=u"""Unit of the solution
+
+        :Type: str
+        """,
     )

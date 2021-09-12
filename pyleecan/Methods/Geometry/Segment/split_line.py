@@ -3,7 +3,7 @@ from numpy import exp, angle, abs as np_abs
 DELTA = 1e-9  # To remove computing noise
 
 
-def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
+def split_line(self, Z1, Z2, is_top=True, is_join=False, prop_dict_join=None):
     """Cut the Segment according to a line defined by two complex
 
     Parameters
@@ -16,11 +16,11 @@ def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
         Second point of the cutting Line
     is_top : bool
         True to keep the part above the cutting line.
-        "Above" is in the coordinate system with Z1 in 0 and Z2 on the X>0 axis 
+        "Above" is in the coordinate system with Z1 in 0 and Z2 on the X>0 axis
     is_join : bool
         True to join the split_list with Segment if there is more that one remaining parts
-    label_join : str
-        Label of the join line
+    prop_dict_join : dict
+        Property dict to set on the join line
 
     Returns
     -------

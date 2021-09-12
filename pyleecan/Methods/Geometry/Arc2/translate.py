@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+from ....Methods.Geometry.Arc2 import PointTranslateArc2Error
+
+
 def translate(self, Zt):
     """Translate the Arc2 object with
 
@@ -29,9 +31,3 @@ def translate(self, Zt):
     # Modification from the translation of Arc2
     self.begin = self.begin + Zt
     self.center = self.center + Zt
-
-
-class PointTranslateArc2Error(Exception):
-    """ """
-
-    pass

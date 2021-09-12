@@ -1,12 +1,12 @@
-﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-slot,,lamination Slot,,Slot,,,,,Machine,Lamination,build_geometry,VERSION,1,Lamination with empty Slot
-,,,,,,,,,,,check,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+slot,,lamination Slot,,Slot,,,,,Machine,Lamination,check,VERSION,1,Lamination with empty Slot
 ,,,,,,,,,,,comp_radius_mec,,,
 ,,,,,,,,,,,comp_surfaces,,,
 ,,,,,,,,,,,get_pole_pair_number,,,
 ,,,,,,,,,,,plot,,,
 ,,,,,,,,,,,comp_height_yoke,,,
 ,,,,,,,,,,,get_Zs,,,
-,,,,,,,,,,,get_bore_desc,,,
 ,,,,,,,,,,,comp_radius_mid_yoke,,,
-,,,,,,,,,,,comp_sym,,,
+,,,,,,,,,,,comp_periodicity,,,
+,,,,,,,,,,,get_bore_desc,,,
+,,,,,,,,,,,set_pole_pair_number,,,

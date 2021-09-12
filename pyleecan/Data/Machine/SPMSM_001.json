@@ -1,5 +1,7 @@
 {
     "__class__": "MachineSIPMSM",
+    "__save_date__": "2021_05_03 17h39min10s ",
+    "__version__": "pyleecan_1.2.1",
     "desc": "",
     "frame": null,
     "logger_name": "Pyleecan.Machine",
@@ -15,6 +17,73 @@
         "axial_vent": [],
         "is_internal": true,
         "is_stator": false,
+        "magnet": {
+            "Lmag": 0.95,
+            "__class__": "Magnet",
+            "mat_type": {
+                "HT": {
+                    "Cp": 1,
+                    "__class__": "MatHT",
+                    "alpha": 0.00393,
+                    "lambda_x": 1,
+                    "lambda_y": 1,
+                    "lambda_z": 1
+                },
+                "__class__": "Material",
+                "desc": "Material description",
+                "eco": {
+                    "__class__": "MatEconomical",
+                    "cost_unit": 0.127,
+                    "unit_name": "$"
+                },
+                "elec": {
+                    "__class__": "MatElectrical",
+                    "alpha": 1,
+                    "epsr": 1,
+                    "rho": 1.6e-06
+                },
+                "is_isotropic": false,
+                "mag": {
+                    "BH_curve": {
+                        "__class__": "ImportMatrix",
+                        "is_transpose": false
+                    },
+                    "Brm20": 1.2,
+                    "Hc": 909456.817667973,
+                    "LossData": {
+                        "__class__": "ImportMatrix",
+                        "is_transpose": false
+                    },
+                    "ModelBH": {
+                        "Bmax": 2.31,
+                        "Hmax": null,
+                        "__class__": "ModelBH",
+                        "delta": 100
+                    },
+                    "Wlam": 0,
+                    "__class__": "MatMagnetics",
+                    "alpha_Br": 0.0,
+                    "is_BH_extrapolate": false,
+                    "mur_lin": 1.05
+                },
+                "name": "Magnet3",
+                "path": "Magnet3.json",
+                "struct": {
+                    "Ex": 215000000000.0,
+                    "Ey": 215000000000.0,
+                    "Ez": 80000000000,
+                    "Gxy": 0,
+                    "Gxz": 2000000000,
+                    "Gyz": 2000000000,
+                    "__class__": "MatStructural",
+                    "nu_xy": 0.3,
+                    "nu_xz": 0.03,
+                    "nu_yz": 0.03,
+                    "rho": 7500.0
+                }
+            },
+            "type_magnetization": 0
+        },
         "mat_type": {
             "HT": {
                 "Cp": 1,
@@ -218,42 +287,29 @@
                         [
                             170000.0,
                             2.3
-                        ],
-                        [
-                            235000.0,
-                            2.35
-                        ],
-                        [
-                            274000.0,
-                            2.4
-                        ],
-                        [
-                            370000.0,
-                            2.5
-                        ],
-                        [
-                            475000.0,
-                            2.6
-                        ],
-                        [
-                            570000.0,
-                            2.7
-                        ],
-                        [
-                            665000.0,
-                            2.8
                         ]
                     ]
                 },
                 "Brm20": 0,
                 "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0.0005,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 2500.0
             },
             "name": "M400-50A",
-            "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/M400-50A.json",
+            "path": "M400-50A.json",
             "struct": {
                 "Ex": 215000000000.0,
                 "Ey": 215000000000.0,
@@ -271,71 +327,13 @@
         "notch": [],
         "slot": {
             "H0": 0,
+            "Hmag": 0.003,
             "W0": 0.78539816,
-            "W3": 0,
+            "Wmag": 0.78539816,
             "Zs": 8,
-            "__class__": "SlotMPolar",
-            "magnet": [
-                {
-                    "Hmag": 0.003,
-                    "Lmag": 0.95,
-                    "Wmag": 0.78539816,
-                    "__class__": "MagnetType11",
-                    "mat_type": {
-                        "HT": {
-                            "Cp": 1,
-                            "__class__": "MatHT",
-                            "alpha": 0.00393,
-                            "lambda_x": 1,
-                            "lambda_y": 1,
-                            "lambda_z": 1
-                        },
-                        "__class__": "Material",
-                        "desc": "Lamination M400-50A",
-                        "eco": {
-                            "__class__": "MatEconomical",
-                            "cost_unit": 0.127,
-                            "unit_name": "$"
-                        },
-                        "elec": {
-                            "__class__": "MatElectrical",
-                            "alpha": 1,
-                            "epsr": 1,
-                            "rho": 1.6e-06
-                        },
-                        "is_isotropic": false,
-                        "mag": {
-                            "BH_curve": {
-                                "__class__": "ImportMatrix",
-                                "is_transpose": false
-                            },
-                            "Brm20": 1.2,
-                            "Hc": 909456.817667973,
-                            "Wlam": 0,
-                            "__class__": "MatMagnetics",
-                            "alpha_Br": 0.0,
-                            "mur_lin": 1.05
-                        },
-                        "name": "Magnet3",
-                        "path": "",
-                        "struct": {
-                            "Ex": 215000000000.0,
-                            "Ey": 215000000000.0,
-                            "Ez": 80000000000,
-                            "Gxy": 0,
-                            "Gxz": 2000000000,
-                            "Gyz": 2000000000,
-                            "__class__": "MatStructural",
-                            "nu_xy": 0.3,
-                            "nu_xz": 0.03,
-                            "nu_yz": 0.03,
-                            "rho": 7500.0
-                        }
-                    },
-                    "type_magnetization": 0
-                }
-            ]
-        }
+            "__class__": "SlotM11"
+        },
+        "yoke_notch": []
     },
     "shaft": {
         "Drsh": 0.023850000000000003,
@@ -544,42 +542,29 @@
                         [
                             170000.0,
                             2.3
-                        ],
-                        [
-                            235000.0,
-                            2.35
-                        ],
-                        [
-                            274000.0,
-                            2.4
-                        ],
-                        [
-                            370000.0,
-                            2.5
-                        ],
-                        [
-                            475000.0,
-                            2.6
-                        ],
-                        [
-                            570000.0,
-                            2.7
-                        ],
-                        [
-                            665000.0,
-                            2.8
                         ]
                     ]
                 },
                 "Brm20": 0,
                 "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0.0005,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 2500.0
             },
             "name": "M400-50A",
-            "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/M400-50A.json",
+            "path": "M400-50A.json",
             "struct": {
                 "Ex": 215000000000.0,
                 "Ey": 215000000000.0,
@@ -810,42 +795,29 @@
                         [
                             170000.0,
                             2.3
-                        ],
-                        [
-                            235000.0,
-                            2.35
-                        ],
-                        [
-                            274000.0,
-                            2.4
-                        ],
-                        [
-                            370000.0,
-                            2.5
-                        ],
-                        [
-                            475000.0,
-                            2.6
-                        ],
-                        [
-                            570000.0,
-                            2.7
-                        ],
-                        [
-                            665000.0,
-                            2.8
                         ]
                     ]
                 },
                 "Brm20": 0,
                 "Hc": 0,
+                "LossData": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "ModelBH": {
+                    "Bmax": 2.31,
+                    "Hmax": null,
+                    "__class__": "ModelBH",
+                    "delta": 100
+                },
                 "Wlam": 0.0005,
                 "__class__": "MatMagnetics",
                 "alpha_Br": 0,
+                "is_BH_extrapolate": false,
                 "mur_lin": 2500.0
             },
             "name": "M400-50A",
-            "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/M400-50A.json",
+            "path": "M400-50A.json",
             "struct": {
                 "Ex": 215000000000.0,
                 "Ey": 215000000000.0,
@@ -871,10 +843,12 @@
         },
         "winding": {
             "Lewout": 0.015,
-            "Npcpp": 1,
-            "Nslot_shift_wind": 0,
+            "Nlayer": 2,
+            "Npcp": 1,
+            "Nslot_shift_wind": 2,
             "Ntcoil": 34,
-            "__class__": "WindingCW2LT",
+            "__class__": "Winding",
+            "coil_pitch": 1,
             "conductor": {
                 "Kwoh": null,
                 "Nwppc": 1,
@@ -907,7 +881,7 @@
                     "is_isotropic": true,
                     "mag": null,
                     "name": "Copper1",
-                    "path": "C:/Users/Mesure_04/AppData/Roaming/pyleecan/Material/Copper1.json",
+                    "path": "Copper1.json",
                     "struct": {
                         "Ex": 115000000000.0,
                         "Ey": 115000000000.0,
@@ -924,41 +898,30 @@
                 },
                 "ins_mat": {
                     "HT": {
-                        "Cp": null,
+                        "Cp": 671.0,
                         "__class__": "MatHT",
                         "alpha": null,
-                        "lambda_x": null,
-                        "lambda_y": null,
-                        "lambda_z": null
+                        "lambda_x": 0.2,
+                        "lambda_y": 0.2,
+                        "lambda_z": 0.2
                     },
                     "__class__": "Material",
-                    "desc": null,
+                    "desc": "INSULATOR1",
                     "eco": {
                         "__class__": "MatEconomical",
                         "cost_unit": null,
-                        "unit_name": null
+                        "unit_name": "$"
                     },
                     "elec": {
                         "__class__": "MatElectrical",
-                        "alpha": null,
+                        "alpha": 1,
                         "epsr": null,
                         "rho": null
                     },
-                    "is_isotropic": null,
-                    "mag": {
-                        "BH_curve": {
-                            "__class__": "ImportMatrix",
-                            "is_transpose": null
-                        },
-                        "Brm20": null,
-                        "Hc": null,
-                        "Wlam": null,
-                        "__class__": "MatMagnetics",
-                        "alpha_Br": null,
-                        "mur_lin": null
-                    },
-                    "name": null,
-                    "path": null,
+                    "is_isotropic": true,
+                    "mag": null,
+                    "name": "Insulator1",
+                    "path": "Insulator1.json",
                     "struct": {
                         "Ex": null,
                         "Ey": null,
@@ -970,15 +933,19 @@
                         "nu_xy": null,
                         "nu_xz": null,
                         "nu_yz": null,
-                        "rho": null
+                        "rho": 1200.0
                     }
                 }
             },
+            "is_aper_a": null,
             "is_reverse_wind": false,
             "p": 4,
+            "per_a": null,
             "qs": 3,
-            "type_connection": 0
-        }
+            "type_connection": 0,
+            "wind_mat": null
+        },
+        "yoke_notch": []
     },
     "type_machine": 6
 }

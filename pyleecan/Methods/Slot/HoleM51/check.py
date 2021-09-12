@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
 from numpy import pi
+from ....Methods.Slot.HoleM51 import *
 
 
 def check(self):
@@ -41,39 +42,14 @@ def check(self):
     elif self.H2 is None:
         raise S51_NoneError("You must set H2 !")
 
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
     alpha = self.comp_alpha()
 
     if self.W0 < (self.W2 + self.W3):
         raise S51_WCheckError("You must have W2+W3 < W0")
 
-    if Rbo < self.H0 + self.H2:
-        raise S51_RHCheckError("You must have H0+H2 < Rbo")
+    if Rext < self.H0 + self.H2:
+        raise S51_RHCheckError("You must have H0+H2 < Rext")
 
     if alpha > pi / 2:
         raise S51_AlphaCheckError("You must have alpha < pi/2")
-
-
-class S51_NoneError(SlotCheckError):
-    """Raised when a propery of HoleM51 is None
-    """
-
-    pass
-
-
-class S51_WCheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S51_RHCheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S51_AlphaCheckError(SlotCheckError):
-    """ """
-
-    pass

@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/Circle.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/Circle.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/Circle
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Surface import Surface
 
 # Import all class method
@@ -152,15 +157,9 @@ class Circle(Surface):
         )
     else:
         comp_point_ref = comp_point_ref
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -168,7 +167,7 @@ class Circle(Surface):
         self,
         radius=1,
         center=0,
-        line_label="",
+        prop_dict=-1,
         point_ref=0,
         label="",
         init_dict=None,
@@ -176,27 +175,16 @@ class Circle(Surface):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            radius = obj.radius
-            center = obj.center
-            line_label = obj.line_label
-            point_ref = obj.point_ref
-            label = obj.label
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -204,30 +192,30 @@ class Circle(Surface):
                 radius = init_dict["radius"]
             if "center" in list(init_dict.keys()):
                 center = init_dict["center"]
-            if "line_label" in list(init_dict.keys()):
-                line_label = init_dict["line_label"]
+            if "prop_dict" in list(init_dict.keys()):
+                prop_dict = init_dict["prop_dict"]
             if "point_ref" in list(init_dict.keys()):
                 point_ref = init_dict["point_ref"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.radius = radius
         self.center = center
-        self.line_label = line_label
+        self.prop_dict = prop_dict
         # Call Surface init
         super(Circle, self).__init__(point_ref=point_ref, label=label)
         # The class is frozen (in Surface init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Circle_str = ""
         # Get the properties inherited from Surface
         Circle_str += super(Circle, self).__str__()
         Circle_str += "radius = " + str(self.radius) + linesep
         Circle_str += "center = " + str(self.center) + linesep
-        Circle_str += 'line_label = "' + str(self.line_label) + '"' + linesep
+        Circle_str += "prop_dict = " + str(self.prop_dict) + linesep
         return Circle_str
 
     def __eq__(self, other):
@@ -243,20 +231,65 @@ class Circle(Surface):
             return False
         if other.center != self.center:
             return False
-        if other.line_label != self.line_label:
+        if other.prop_dict != self.prop_dict:
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Surface
+        diff_list.extend(super(Circle, self).compare(other, name=name))
+        if other._radius != self._radius:
+            diff_list.append(name + ".radius")
+        if other._center != self._center:
+            diff_list.append(name + ".center")
+        if other._prop_dict != self._prop_dict:
+            diff_list.append(name + ".prop_dict")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Surface
+        S += super(Circle, self).__sizeof__()
+        S += getsizeof(self.radius)
+        S += getsizeof(self.center)
+        if self.prop_dict is not None:
+            for key, value in self.prop_dict.items():
+                S += getsizeof(value) + getsizeof(key)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         # Get the properties inherited from Surface
-        Circle_dict = super(Circle, self).as_dict()
+        Circle_dict = super(Circle, self).as_dict(**kwargs)
         Circle_dict["radius"] = self.radius
-        Circle_dict["center"] = self.center
-        Circle_dict["line_label"] = self.line_label
-        # The class name is added to the dict fordeserialisation purpose
+        if self.center is None:
+            Circle_dict["center"] = None
+        elif isinstance(self.center, float):
+            Circle_dict["center"] = self.center
+        else:
+            Circle_dict["center"] = str(self.center)
+        Circle_dict["prop_dict"] = (
+            self.prop_dict.copy() if self.prop_dict is not None else None
+        )
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Circle_dict["__class__"] = "Circle"
         return Circle_dict
@@ -266,7 +299,7 @@ class Circle(Surface):
 
         self.radius = None
         self.center = None
-        self.line_label = None
+        self.prop_dict = None
         # Set to None the properties inherited from Surface
         super(Circle, self)._set_None()
 
@@ -279,10 +312,14 @@ class Circle(Surface):
         check_var("radius", value, "float", Vmin=0)
         self._radius = value
 
-    # Radius of the circle
-    # Type : float, min = 0
     radius = property(
-        fget=_get_radius, fset=_set_radius, doc=u"""Radius of the circle"""
+        fget=_get_radius,
+        fset=_set_radius,
+        doc=u"""Radius of the circle
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_center(self):
@@ -291,26 +328,36 @@ class Circle(Surface):
 
     def _set_center(self, value):
         """setter of center"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("center", value, "complex")
         self._center = value
 
-    # center of the Circle
-    # Type : complex
     center = property(
-        fget=_get_center, fset=_set_center, doc=u"""center of the Circle"""
+        fget=_get_center,
+        fset=_set_center,
+        doc=u"""center of the Circle
+
+        :Type: complex
+        """,
     )
 
-    def _get_line_label(self):
-        """getter of line_label"""
-        return self._line_label
+    def _get_prop_dict(self):
+        """getter of prop_dict"""
+        return self._prop_dict
 
-    def _set_line_label(self, value):
-        """setter of line_label"""
-        check_var("line_label", value, "str")
-        self._line_label = value
+    def _set_prop_dict(self, value):
+        """setter of prop_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("prop_dict", value, "dict")
+        self._prop_dict = value
 
-    # Label to set to the lines
-    # Type : str
-    line_label = property(
-        fget=_get_line_label, fset=_set_line_label, doc=u"""Label to set to the lines"""
+    prop_dict = property(
+        fget=_get_prop_dict,
+        fset=_set_prop_dict,
+        doc=u"""Property dict to apply on the lines
+
+        :Type: dict
+        """,
     )

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from unittest import TestCase
 
-from PyQt5 import QtWidgets
+from PySide2 import QtWidgets
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineWRSM import MachineWRSM
@@ -17,43 +16,40 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWPole.SWPole import SWPole
 import pytest
 
 
-@pytest.mark.GUI
-class test_SWPole(TestCase):
+class TestSWPole(object):
     """Test that the widget SWPole behave like it should"""
 
-    def setUp(self):
+    @pytest.fixture
+    def setup(self):
         """Run at the begining of every test to setup the gui"""
 
-        self.test_obj = MachineWRSM()
-        self.test_obj.rotor = LamSlotWind(Rint=0.1, Rext=0.2)
-        self.test_obj.rotor.slot = SlotW60(
+        if not QtWidgets.QApplication.instance():
+            self.app = QtWidgets.QApplication(sys.argv)
+        else:
+            self.app = QtWidgets.QApplication.instance()
+
+        test_obj = MachineWRSM()
+        test_obj.rotor = LamSlotWind(Rint=0.1, Rext=0.2)
+        test_obj.rotor.slot = SlotW60(
             Zs=0, R1=0.10, H1=0.11, H2=0.12, W1=0.14, W2=0.15, H3=0.16, H4=0.17, W3=0.18
         )
-        self.test_obj.rotor.winding.p = 4
+        test_obj.rotor.winding.p = 4
 
-        self.widget = SWPole(self.test_obj, matlib=[], is_stator=False)
+        widget = SWPole(test_obj, material_dict=dict(), is_stator=False)
 
-    @classmethod
-    def setUpClass(cls):
-        """Start the app for the test"""
-        print("\nStart Test SWPole")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        yield {"widget": widget, "test_obj": test_obj}
 
-    @classmethod
-    def tearDownClass(cls):
-        """Exit the app after the test"""
-        cls.app.quit()
+        self.app.quit()
 
-    def test_init(self):
+    def test_init(self, setup):
         """Check that the Widget initialize to the correct slot"""
+        assert setup["widget"].in_Zs.text() == "Zs = 2*p = 8"
+        assert setup["widget"].c_slot_type.currentIndex() == 0
+        assert type(setup["widget"].w_slot) == PWSlot60
 
-        self.assertEqual(self.widget.in_Zs.text(), "Zs = 2*p = 8")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 0)
-        self.assertEqual(type(self.widget.w_slot), PWSlot60)
-
-    def test_init_61(self):
+    def test_init_61(self, setup):
         """Check that the Widget initialize to the correct slot"""
-        self.test_obj.rotor.slot = SlotW61(
+        setup["test_obj"].rotor.slot = SlotW61(
             Zs=0,
             H0=0.10,
             H1=0.11,
@@ -65,23 +61,25 @@ class test_SWPole(TestCase):
             H4=0.17,
             W3=0.18,
         )
-        self.test_obj.rotor.winding.p = 8
+        setup["test_obj"].rotor.winding.p = 8
 
-        self.widget = SWPole(self.test_obj, matlib=[], is_stator=False)
+        setup["widget"] = SWPole(
+            setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
-        self.assertEqual(self.widget.in_Zs.text(), "Zs = 2*p = 16")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 1)
-        self.assertEqual(type(self.widget.w_slot), PWSlot61)
+        assert setup["widget"].in_Zs.text() == "Zs = 2*p = 16"
+        assert setup["widget"].c_slot_type.currentIndex() == 1
+        assert type(setup["widget"].w_slot) == PWSlot61
 
-    def test_c_slot_type(self):
+    def test_c_slot_type(self, setup):
         """Check that the combobox allow to update the slot type"""
 
-        self.widget.c_slot_type.setCurrentIndex(1)
-        self.assertEqual(type(self.test_obj.rotor.slot), SlotW61)
-        self.assertEqual(self.test_obj.rotor.slot.Zs, 8)
-        self.assertEqual(type(self.widget.w_slot), PWSlot61)
+        setup["widget"].c_slot_type.setCurrentIndex(1)
+        assert type(setup["test_obj"].rotor.slot) == SlotW61
+        assert setup["test_obj"].rotor.slot.Zs == 8
+        assert type(setup["widget"].w_slot) == PWSlot61
 
-        self.widget.c_slot_type.setCurrentIndex(0)
-        self.assertEqual(type(self.test_obj.rotor.slot), SlotW60)
-        self.assertEqual(self.test_obj.rotor.slot.Zs, 8)
-        self.assertEqual(type(self.widget.w_slot), PWSlot60)
+        setup["widget"].c_slot_type.setCurrentIndex(0)
+        assert type(setup["test_obj"].rotor.slot) == SlotW60
+        assert setup["test_obj"].rotor.slot.Zs == 8
+        assert type(setup["widget"].w_slot) == PWSlot60

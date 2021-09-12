@@ -5,7 +5,7 @@ from ....definitions import PACKAGE_NAME
 DELTA = 1e-9  # To remove computing noise
 
 
-def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
+def split_line(self, Z1, Z2, is_top=True, is_join=False, prop_dict_join=None):
     """Cut the Arc according to a line defined by two complex
 
     Parameters
@@ -21,8 +21,8 @@ def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
         "Above" is in the coordinate system with Z1 in 0 and Z2 on the X>0 axis
     is_join : bool
         True to join the split_list with Segment if there is more that one remaining parts
-    label_join : str
-        Label of the join line
+    prop_dict_join : dict
+        Property dict to set on the join line
 
     Returns
     -------
@@ -160,7 +160,7 @@ def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
         else:  # Intersection == End
             line3 = None
         # Line Intersection 1 => Intersection 2 for join
-        seg_join = Segment(begin=Z_int[0], end=Z_int[1], label=label_join)
+        seg_join = Segment(begin=Z_int[0], end=Z_int[1], prop_dict=prop_dict_join)
 
         # If the intersetion points are begin and end
         if (

@@ -1,54 +1,64 @@
 # -*- coding: utf-8 -*-
-from numpy import pi
-from SciDataTool import Data1D, DataLinspace, DataTime
-from ....Functions.Winding.gen_phase_list import gen_name
-from ....Functions.Plot.plot_A_space import plot_A_space
+import matplotlib.pyplot as plt
+
+from ....Functions.Plot import dict_2D
 from ....definitions import config_dict
 
 
-def plot_mmf_unit(self, Na=2048, fig=None):
+def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
     """Plot the winding unit mmf as a function of space
     Parameters
     ----------
+
     self : LamSlotWind
         an LamSlotWind object
     Na : int
         Space discretization
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
+    is_show_fig : bool
+        To call show at the end of the method
     """
 
+    name = ""
+    if self.parent is not None and self.parent.name not in [None, ""]:
+        name += self.parent.name + " "
+    if self.is_stator:
+        name += "Stator "
+    else:
+        name += "Rotor "
+
     # Compute the winding function and mmf
-    wf = self.comp_wind_function(Na=Na)
+    wf = self.comp_wind_function(per_a=1)
     qs = self.winding.qs
-    mmf_u = self.comp_mmf_unit(Na=Na)
+    MMF_U, WF = self.comp_mmf_unit(Nt=1, Na=wf.shape[1])
 
-    # Create a Data object
-    Phase = Data1D(
-        name="phase",
-        unit="",
-        values=gen_name(qs, is_add_phase=True),
-        is_components=True,
-    )
-    Angle = DataLinspace(
-        name="angle",
-        unit="rad",
-        symmetries={},
-        initial=0,
-        final=2 * pi,
-        number=Na,
-        include_endpoint=False,
-    )
-    Br = DataTime(
-        name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf
-    )
+    color_list = config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"][:qs]
 
-    color_list = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][: qs + 1]
-    plot_A_space(
-        Br,
-        is_fft=True,
-        index_list=[0, 1, 2],
-        data_list=[mmf_u],
+    fig, axs = plt.subplots(2, 1, tight_layout=True, figsize=(8, 8))
+
+    dict_2D_0 = dict_2D.copy()
+    dict_2D_0["color_list"] = color_list + ["k"]
+
+    WF.plot_2D_Data(
+        "angle{°}",
+        "phase",
+        data_list=[MMF_U],
         fig=fig,
-        color_list=color_list,
+        ax=axs[0],
+        is_show_fig=is_show_fig,
+        win_title=name + "Winding functions",
+        **dict_2D_0,
+    )
+
+    dict_2D_0["color_list"] = [color_list[0], "k"]
+
+    WF.plot_2D_Data(
+        "wavenumber=[0," + str(r_max) + "]",
+        data_list=[MMF_U],
+        fig=fig,
+        ax=axs[1],
+        is_show_fig=is_show_fig,
+        win_title=name + "Winding functions & MMF FFT",
+        **dict_2D_0,
     )

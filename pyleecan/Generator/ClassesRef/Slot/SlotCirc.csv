@@ -1,9 +1,9 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-W0,m,Slot isthmus width.,0,float,1.00E-02,0,,,Slot,SlotWind,build_geometry,VERSION,1,Circular slot (for notches)
-H0,m,Slot height,0,float,3.00E-02,0,,,,,build_geometry_wind,IS_SYMMETRICAL,1,
+W0,m,Slot isthmus width.,0,float,1.00E-02,0,,,Slot,Slot,build_geometry,VERSION,1,Circular slot (for notches)
+H0,m,Slot height,0,float,3.00E-02,0,,,,,get_surface_active,IS_SYMMETRICAL,1,
 ,,,,,,,,,,,check,,,
 ,,,,,,,,,,,comp_angle_opening,,,
 ,,,,,,,,,,,comp_height,,,
-,,,,,,,,,,,comp_height_wind,,,
+,,,,,,,,,,,comp_height_active,,,
 ,,,,,,,,,,,comp_surface,,,
-,,,,,,,,,,,comp_surface_wind,,,
+,,,,,,,,,,,comp_surface_active,,,

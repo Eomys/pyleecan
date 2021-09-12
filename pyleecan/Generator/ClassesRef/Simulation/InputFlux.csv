@@ -1,3 +1,8 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-B,T,Airgap flux density,,ImportVectorField,None,,,,Simulation,Input,gen_input,VERSION,1,Input to skip the magnetic module and start with the structural one
+per_a,-,Angle periodicity,,int,1,,,,Simulation,Input,gen_input,VERSION,1,Input to skip the magnetic module and start with the structural one
+per_t,-,Time periodicity,,int,1,,,,,,comp_felec,,,
+is_antiper_a,-,If angle is antiperiodic,,bool,False,,,,,,comp_axes,,,
+is_antiper_t,-,If time is antiperiodic,,bool,False,,,,,,,,,
+B_dict,-,Dict of Import objects or lists for each component of the flux,,dict,None,,,,,,,,,
+unit,-,Unit of the flux if not T,,str,None,,,,,,,,,
 OP,-,InputCurrent to define Operating Point (not mandatory),,Input,None,,,,,,,,,

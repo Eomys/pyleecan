@@ -2,65 +2,76 @@
 
 # File generated according to DMachineSetup.ui
 # WARNING! All changes made in this file will be lost!
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+
+from pyleecan.GUI.Resources import pyleecan_rc
 
 
 class Ui_DMachineSetup(object):
     def setupUi(self, DMachineSetup):
-        DMachineSetup.setObjectName("DMachineSetup")
-        DMachineSetup.resize(996, 711)
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(DMachineSetup)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.nav_step = QtWidgets.QListWidget(DMachineSetup)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
-        )
+        if not DMachineSetup.objectName():
+            DMachineSetup.setObjectName(u"DMachineSetup")
+        DMachineSetup.resize(1076, 682)
+        self.main_layout = QHBoxLayout(DMachineSetup)
+        self.main_layout.setObjectName(u"main_layout")
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.b_load = QPushButton(DMachineSetup)
+        self.b_load.setObjectName(u"b_load")
+
+        self.verticalLayout.addWidget(self.b_load)
+
+        self.nav_step = QListWidget(DMachineSetup)
+        self.nav_step.setObjectName(u"nav_step")
+        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.nav_step.sizePolicy().hasHeightForWidth())
         self.nav_step.setSizePolicy(sizePolicy)
-        self.nav_step.setMaximumSize(QtCore.QSize(170, 16777215))
-        self.nav_step.setObjectName("nav_step")
-        self.horizontalLayout_2.addWidget(self.nav_step)
-        self.main_layout = QtWidgets.QVBoxLayout()
-        self.main_layout.setObjectName("main_layout")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        self.nav_step.setMaximumSize(QSize(190, 16777215))
+
+        self.verticalLayout.addWidget(self.nav_step)
+
+        self.b_save = QPushButton(DMachineSetup)
+        self.b_save.setObjectName(u"b_save")
+
+        self.verticalLayout.addWidget(self.b_save)
+
+        self.verticalSpacer = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
-        self.horizontalLayout.addItem(spacerItem)
-        self.b_save = QtWidgets.QPushButton(DMachineSetup)
-        self.b_save.setObjectName("b_save")
-        self.horizontalLayout.addWidget(self.b_save)
-        self.b_load = QtWidgets.QPushButton(DMachineSetup)
-        self.b_load.setObjectName("b_load")
-        self.horizontalLayout.addWidget(self.b_load)
-        self.main_layout.addLayout(self.horizontalLayout)
-        self.w_step = QtWidgets.QWidget(DMachineSetup)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
-        )
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.w_step.sizePolicy().hasHeightForWidth())
-        self.w_step.setSizePolicy(sizePolicy)
-        self.w_step.setMinimumSize(QtCore.QSize(800, 660))
-        self.w_step.setObjectName("w_step")
+
+        self.verticalLayout.addItem(self.verticalSpacer)
+
+        self.main_layout.addLayout(self.verticalLayout)
+
+        self.w_step = QWidget(DMachineSetup)
+        self.w_step.setObjectName(u"w_step")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.w_step.sizePolicy().hasHeightForWidth())
+        self.w_step.setSizePolicy(sizePolicy1)
+        self.w_step.setMinimumSize(QSize(800, 660))
+
         self.main_layout.addWidget(self.w_step)
-        self.horizontalLayout_2.addLayout(self.main_layout)
 
         self.retranslateUi(DMachineSetup)
-        QtCore.QMetaObject.connectSlotsByName(DMachineSetup)
+
+        QMetaObject.connectSlotsByName(DMachineSetup)
+
+    # setupUi
 
     def retranslateUi(self, DMachineSetup):
-        _translate = QtCore.QCoreApplication.translate
         DMachineSetup.setWindowTitle(
-            _translate("DMachineSetup", "Pyleecan Machine Setup")
+            QCoreApplication.translate("DMachineSetup", u"Pyleecan Machine Setup", None)
         )
-        self.b_save.setText(_translate("DMachineSetup", "Save"))
-        self.b_load.setText(_translate("DMachineSetup", "Load"))
+        self.b_load.setText(QCoreApplication.translate("DMachineSetup", u"Load", None))
+        self.b_save.setText(QCoreApplication.translate("DMachineSetup", u"Save", None))
 
-
-from pyleecan.GUI.Resources import pyleecan_rc
+    # retranslateUi

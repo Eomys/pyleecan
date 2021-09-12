@@ -7,8 +7,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot24.Ui_PWSlot24 import Ui_PWS
 
 class Gen_PWSlot24(Ui_PWSlot24):
     def setupUi(self, PWSlot24):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_PWSlot24.setupUi(self, PWSlot24)
         # Setup of in_W3
         txt = self.tr(u"""Teeth width""")

@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Structural.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Structural.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Structural
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -18,13 +23,12 @@ except ImportError as error:
     run = error
 
 try:
-    from ..Methods.Simulation.Structural.comp_time_angle import comp_time_angle
+    from ..Methods.Simulation.Structural.comp_axes import comp_axes
 except ImportError as error:
-    comp_time_angle = error
+    comp_axes = error
 
 
 from ._check import InitUnKnowClassError
-from .Force import Force
 
 
 class Structural(FrozenClass):
@@ -42,101 +46,57 @@ class Structural(FrozenClass):
         )
     else:
         run = run
-    # cf Methods.Simulation.Structural.comp_time_angle
-    if isinstance(comp_time_angle, ImportError):
-        comp_time_angle = property(
+    # cf Methods.Simulation.Structural.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Structural method comp_time_angle: "
-                    + str(comp_time_angle)
-                )
+                ImportError("Can't use Structural method comp_axes: " + str(comp_axes))
             )
         )
     else:
-        comp_time_angle = comp_time_angle
-    # save method is available in all object
+        comp_axes = comp_axes
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, force=-1, init_dict=None, init_str=None):
+    def __init__(
+        self, logger_name="Pyleecan.Structural", init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if force == -1:
-            force = Force()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            force = obj.force
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "force" in list(init_dict.keys()):
-                force = init_dict["force"]
-        # Initialisation by argument
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # force can be None, a Force object or a dict
-        if isinstance(force, dict):
-            # Check that the type is correct (including daughter)
-            class_name = force.get("__class__")
-            if class_name not in ["Force", "ForceMT"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for force"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.force = class_obj(init_dict=force)
-        elif isinstance(force, str):
-            from ..Functions.load import load
-
-            force = load(force)
-            # Check that the type is correct (including daughter)
-            class_name = force.__class__.__name__
-            if class_name not in ["Force", "ForceMT"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for force"
-                )
-            self.force = force
-        else:
-            self.force = force
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Structural_str = ""
         if self.parent is None:
             Structural_str += "parent = None " + linesep
         else:
             Structural_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        if self.force is not None:
-            tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Structural_str += "force = " + tmp
-        else:
-            Structural_str += "force = None" + linesep + linesep
+        Structural_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return Structural_str
 
     def __eq__(self, other):
@@ -144,41 +104,63 @@ class Structural(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.force != self.force:
+        if other.logger_name != self.logger_name:
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+        if other._logger_name != self._logger_name:
+            diff_list.append(name + ".logger_name")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+        S += getsizeof(self.logger_name)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         Structural_dict = dict()
-        if self.force is None:
-            Structural_dict["force"] = None
-        else:
-            Structural_dict["force"] = self.force.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        Structural_dict["logger_name"] = self.logger_name
+        # The class name is added to the dict for deserialisation purpose
         Structural_dict["__class__"] = "Structural"
         return Structural_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.force is not None:
-            self.force._set_None()
+        self.logger_name = None
 
-    def _get_force(self):
-        """getter of force"""
-        return self._force
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
 
-    def _set_force(self, value):
-        """setter of force"""
-        check_var("force", value, "Force")
-        self._force = value
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
 
-        if self._force is not None:
-            self._force.parent = self
+    logger_name = property(
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use
 
-    # Force module
-    # Type : Force
-    force = property(fget=_get_force, fset=_set_force, doc=u"""Force module""")
+        :Type: str
+        """,
+    )

@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/CondType11.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/CondType11.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/CondType11
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Conductor import Conductor
 
 # Import all class method
@@ -36,6 +41,11 @@ try:
     from ..Methods.Machine.CondType11.plot import plot
 except ImportError as error:
     plot = error
+
+try:
+    from ..Methods.Machine.CondType11.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
 
 
 from ._check import InitUnKnowClassError
@@ -102,15 +112,21 @@ class CondType11(Conductor):
         )
     else:
         plot = plot
-    # save method is available in all object
+    # cf Methods.Machine.CondType11.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType11 method plot_schematics: "
+                    + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -131,36 +147,16 @@ class CondType11(Conductor):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if cond_mat == -1:
-            cond_mat = Material()
-        if ins_mat == -1:
-            ins_mat = Material()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            Hwire = obj.Hwire
-            Wwire = obj.Wwire
-            Nwppc_rad = obj.Nwppc_rad
-            Nwppc_tan = obj.Nwppc_tan
-            Wins_wire = obj.Wins_wire
-            Wins_coil = obj.Wins_coil
-            type_winding_shape = obj.type_winding_shape
-            alpha_ew = obj.alpha_ew
-            cond_mat = obj.cond_mat
-            ins_mat = obj.ins_mat
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -184,7 +180,7 @@ class CondType11(Conductor):
                 cond_mat = init_dict["cond_mat"]
             if "ins_mat" in list(init_dict.keys()):
                 ins_mat = init_dict["ins_mat"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.Hwire = Hwire
         self.Wwire = Wwire
         self.Nwppc_rad = Nwppc_rad
@@ -199,7 +195,7 @@ class CondType11(Conductor):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         CondType11_str = ""
         # Get the properties inherited from Conductor
@@ -243,12 +239,63 @@ class CondType11(Conductor):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Conductor
+        diff_list.extend(super(CondType11, self).compare(other, name=name))
+        if other._Hwire != self._Hwire:
+            diff_list.append(name + ".Hwire")
+        if other._Wwire != self._Wwire:
+            diff_list.append(name + ".Wwire")
+        if other._Nwppc_rad != self._Nwppc_rad:
+            diff_list.append(name + ".Nwppc_rad")
+        if other._Nwppc_tan != self._Nwppc_tan:
+            diff_list.append(name + ".Nwppc_tan")
+        if other._Wins_wire != self._Wins_wire:
+            diff_list.append(name + ".Wins_wire")
+        if other._Wins_coil != self._Wins_coil:
+            diff_list.append(name + ".Wins_coil")
+        if other._type_winding_shape != self._type_winding_shape:
+            diff_list.append(name + ".type_winding_shape")
+        if other._alpha_ew != self._alpha_ew:
+            diff_list.append(name + ".alpha_ew")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Conductor
+        S += super(CondType11, self).__sizeof__()
+        S += getsizeof(self.Hwire)
+        S += getsizeof(self.Wwire)
+        S += getsizeof(self.Nwppc_rad)
+        S += getsizeof(self.Nwppc_tan)
+        S += getsizeof(self.Wins_wire)
+        S += getsizeof(self.Wins_coil)
+        S += getsizeof(self.type_winding_shape)
+        S += getsizeof(self.alpha_ew)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         # Get the properties inherited from Conductor
-        CondType11_dict = super(CondType11, self).as_dict()
+        CondType11_dict = super(CondType11, self).as_dict(**kwargs)
         CondType11_dict["Hwire"] = self.Hwire
         CondType11_dict["Wwire"] = self.Wwire
         CondType11_dict["Nwppc_rad"] = self.Nwppc_rad
@@ -257,7 +304,7 @@ class CondType11(Conductor):
         CondType11_dict["Wins_coil"] = self.Wins_coil
         CondType11_dict["type_winding_shape"] = self.type_winding_shape
         CondType11_dict["alpha_ew"] = self.alpha_ew
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         CondType11_dict["__class__"] = "CondType11"
         return CondType11_dict
@@ -285,12 +332,14 @@ class CondType11(Conductor):
         check_var("Hwire", value, "float", Vmin=0)
         self._Hwire = value
 
-    # cf schematics, single wire height without insulation [m]
-    # Type : float, min = 0
     Hwire = property(
         fget=_get_Hwire,
         fset=_set_Hwire,
-        doc=u"""cf schematics, single wire height without insulation [m]""",
+        doc=u"""cf schematics, single wire height without insulation [m]
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Wwire(self):
@@ -302,12 +351,14 @@ class CondType11(Conductor):
         check_var("Wwire", value, "float", Vmin=0)
         self._Wwire = value
 
-    # cf schematics, single wire width without insulation [m]
-    # Type : float, min = 0
     Wwire = property(
         fget=_get_Wwire,
         fset=_set_Wwire,
-        doc=u"""cf schematics, single wire width without insulation [m]""",
+        doc=u"""cf schematics, single wire width without insulation [m]
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Nwppc_rad(self):
@@ -319,12 +370,14 @@ class CondType11(Conductor):
         check_var("Nwppc_rad", value, "int", Vmin=1)
         self._Nwppc_rad = value
 
-    # cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction
-    # Type : int, min = 1
     Nwppc_rad = property(
         fget=_get_Nwppc_rad,
         fset=_set_Nwppc_rad,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction""",
+        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction
+
+        :Type: int
+        :min: 1
+        """,
     )
 
     def _get_Nwppc_tan(self):
@@ -336,12 +389,14 @@ class CondType11(Conductor):
         check_var("Nwppc_tan", value, "int", Vmin=1)
         self._Nwppc_tan = value
 
-    # cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction
-    # Type : int, min = 1
     Nwppc_tan = property(
         fget=_get_Nwppc_tan,
         fset=_set_Nwppc_tan,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction""",
+        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction
+
+        :Type: int
+        :min: 1
+        """,
     )
 
     def _get_Wins_wire(self):
@@ -353,12 +408,14 @@ class CondType11(Conductor):
         check_var("Wins_wire", value, "float", Vmin=0)
         self._Wins_wire = value
 
-    # (advanced) cf schematics, winding strand insulation thickness [m]
-    # Type : float, min = 0
     Wins_wire = property(
         fget=_get_Wins_wire,
         fset=_set_Wins_wire,
-        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]""",
+        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Wins_coil(self):
@@ -370,12 +427,14 @@ class CondType11(Conductor):
         check_var("Wins_coil", value, "float", Vmin=0)
         self._Wins_coil = value
 
-    # (advanced) cf schematics, winding coil insulation  thickness [m]
-    # Type : float, min = 0
     Wins_coil = property(
         fget=_get_Wins_coil,
         fset=_set_Wins_coil,
-        doc=u"""(advanced) cf schematics, winding coil insulation  thickness [m]""",
+        doc=u"""(advanced) cf schematics, winding coil insulation  thickness [m]
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_type_winding_shape(self):
@@ -387,12 +446,15 @@ class CondType11(Conductor):
         check_var("type_winding_shape", value, "int", Vmin=0, Vmax=1)
         self._type_winding_shape = value
 
-    # type of winding shape for end winding length calculation\n0 for hairpin windings\n1 for normal windings
-    # Type : int, min = 0, max = 1
     type_winding_shape = property(
         fget=_get_type_winding_shape,
         fset=_set_type_winding_shape,
-        doc=u"""type of winding shape for end winding length calculation\n0 for hairpin windings\n1 for normal windings""",
+        doc=u"""type of winding shape for end winding length calculation\n0 for hairpin windings\n1 for normal windings
+
+        :Type: int
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_alpha_ew(self):
@@ -404,10 +466,13 @@ class CondType11(Conductor):
         check_var("alpha_ew", value, "float", Vmin=0, Vmax=180)
         self._alpha_ew = value
 
-    # angle of winding overhang hairpin coils [deg]
-    # Type : float, min = 0, max = 180
     alpha_ew = property(
         fget=_get_alpha_ew,
         fset=_set_alpha_ew,
-        doc=u"""angle of winding overhang hairpin coils [deg]""",
+        doc=u"""angle of winding overhang hairpin coils [deg]
+
+        :Type: float
+        :min: 0
+        :max: 180
+        """,
     )

@@ -14,18 +14,16 @@ class DataKeeperError(Exception):
 
 
 def check_param(self):
-    """Check VarParam parameters validity 
-    
+    """Check VarParam parameters validity
+
     Raises
     ------
     ParamExplorerError: Error in ParamExplorer setting
     VarParamError: Error in VarParam general setting
     DataKeeperError: Error in DataKeeper setting
     """
-
-    # Check the reference simulation
-    if self.parent == None:
-        raise VarParamError("VarParam object must be inside a Simulation object")
+    # run the base class check first
+    super(type(self), self).check_param()
 
     # Check ParamExplorers
     for paramexplorer in self.paramexplorer_list:
@@ -40,12 +38,7 @@ def check_param(self):
             raise ParamExplorerError("ParamExplorer.value_list cannot be empty")
 
     # Default simulation index
-    if self.ref_simu_index is not None:
-        assert self.ref_simu_index < len(self.paramexplorer_list), VarParamError(
-            "ref_simu_index must be less than {}, got {}".format(
-                len(self.paramexplorer_list), self.ref_simu_index
-            )
-        )
+    N_simu = self.get_simu_number()
 
     # Keep every output if there is no DataKeeper defined
     if len(self.datakeeper_list) == 0 and self.is_keep_all_output is False:

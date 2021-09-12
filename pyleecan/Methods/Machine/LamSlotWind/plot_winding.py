@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
 
 from matplotlib.lines import Line2D
+import matplotlib.pyplot as plt
 from matplotlib.pyplot import axis, legend, plot, subplots, title
 from numpy import array, linspace, meshgrid
 
-from ....Functions.Winding.comp_wind_sym import comp_wind_sym
 from ....Functions.Winding.gen_phase_list import gen_color, gen_name
 
 
-def plot_winding(self, wind_mat=None, all_slot=False):
+def plot_winding(
+    self,
+    wind_mat=None,
+    all_slot=False,
+    is_show_fig=True,
+    save_path=None,
+    win_title=None,
+):
     """Plot the Winding in a matplotlib fig
 
     Parameters
@@ -16,10 +23,15 @@ def plot_winding(self, wind_mat=None, all_slot=False):
     self : LamSlotWind
         A: LamSlotWind object
     wind_mat : numpy.ndarray
-        Winding Matrix, if None will call comp_connection_mat (Default value = None)
+        Winding Matrix, if None will call get_connection_mat (Default value = None)
     all_slot : bool
         True if we plot all slot and false when plotting only needed one(sym)
-
+    is_show_fig : bool
+        To call show at the end of the method
+    save_path : str
+        full path including folder, name and extension of the file to save if save_path is not None
+    win_title:str
+        Window title
     Returns
     -------
     None
@@ -27,7 +39,7 @@ def plot_winding(self, wind_mat=None, all_slot=False):
 
     # We compute the wind_mat only if needed
     if wind_mat is None:
-        wind_mat = self.winding.comp_connection_mat(self.slot.Zs)
+        wind_mat = self.winding.get_connection_mat(self.slot.Zs)
 
     # Number of point on rad and tan direction
     Nrad, Ntan = self.winding.get_dim_wind()
@@ -37,7 +49,7 @@ def plot_winding(self, wind_mat=None, all_slot=False):
     if all_slot:  # Every Slot
         Nplot = Zs
     else:  # Only the needed one (sym)
-        Nperw = comp_wind_sym(wind_mat)[0]  # Symmetry of the winding
+        Nperw, _ = self.winding.get_periodicity()  # Symmetry of the winding
         Nplot = Zs // Nperw
 
     qs = wind_mat.shape[3]  # Number of phase
@@ -110,6 +122,19 @@ def plot_winding(self, wind_mat=None, all_slot=False):
     else:
         title(Lam_Name + "'s Winding (periodicity 1/" + str(Nperw) + ")")
 
+    # Window title
+    if (
+        win_title is None
+        and self.parent is not None
+        and self.parent.name not in [None, ""]
+    ):
+        win_title = self.parent.name + " " + Lam_Name + " Winding"
+    elif win_title is None:
+        win_title = Lam_Name + " Winding"
+    manager = plt.get_current_fig_manager()
+    if manager is not None:
+        manager.set_window_title(win_title)
+
     axis("equal")
     ax.get_yaxis().set_visible(False)
 
@@ -144,4 +169,10 @@ def plot_winding(self, wind_mat=None, all_slot=False):
         label_leg.append(qs_name[q] + "-")
 
     legend(sym_leg, label_leg, ncol=2)
-    fig.show()
+
+    if is_show_fig:
+        fig.show()
+
+    if save_path is not None:
+        fig.savefig(save_path)
+        plt.close()

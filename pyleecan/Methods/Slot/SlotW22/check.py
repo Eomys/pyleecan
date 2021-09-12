@@ -2,7 +2,8 @@
 
 from numpy import pi
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.SlotW22 import *
 
 
 def check(self):
@@ -29,15 +30,3 @@ def check(self):
 
     if 2 * pi / self.Zs <= self.W2:
         raise S22_SpCheckError("You must have W2 < 2*pi/Zs")
-
-
-class S22_A02CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S22_SpCheckError(SlotCheckError):
-    """ """
-
-    pass

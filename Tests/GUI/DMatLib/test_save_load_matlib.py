@@ -4,17 +4,12 @@ import sys
 from os import listdir, mkdir, remove
 from os.path import abspath, basename, isdir, isfile, join
 from shutil import copyfile, rmtree
-from unittest import TestCase
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtTest import QTest
-from PyQt5.QtWidgets import QDialogButtonBox
+from PySide2 import QtWidgets
 
-from pyleecan.Functions.load import load
+from pyleecan.Functions.load import load, load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
-from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from Tests import TEST_DATA_DIR
 from Tests import save_load_path as save_path
 
@@ -22,100 +17,91 @@ from Tests import save_load_path as save_path
 import pytest
 
 
-@pytest.mark.GUI
-class test_save_load_matlib(TestCase):
-    """Test that the widget DMachineSetup and DMatLib can save/load the MatLib (old and new)
-    """
+class Testsave_load_matlib(object):
+    """Test that the widget DMachineSetup and DMatLib can save/load the MatLib (old and new)"""
 
-    def setUp(self):
-        """Run at the begining of every test to create the workspace
-        """
-        self.work_path = join(save_path, "Material")
+    @pytest.fixture
+    def setup(self):
+        """Run at the begining of every test to setup the gui"""
+
+        if not QtWidgets.QApplication.instance():
+            self.app = QtWidgets.QApplication(sys.argv)
+        else:
+            self.app = QtWidgets.QApplication.instance()
+
+        work_path = join(save_path, "Material").replace("\\", "/")
         # Delete old test if needed
-        if isdir(self.work_path):
-            rmtree(self.work_path)
-        mkdir(self.work_path)
+        if isdir(work_path):
+            rmtree(work_path)
+        mkdir(work_path)
 
-    def teardown(self):
-        """Delete the workspace at the end of the tests
-        """
-        rmtree(self.work_path)
+        yield {"work_path": work_path}
 
-    @classmethod
-    def setUpClass(cls):
-        """Start the app for the test"""
-        print("\nStart Test Save/Load MatLib")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        self.app.quit()
 
-    @classmethod
-    def tearDownClass(cls):
-        """Exit the app after the test"""
-        cls.app.quit()
+        rmtree(work_path)
 
-    def test_load_save_several_file(self):
-        """Check that you can load/save several machine files
-        """
+    def test_load_save_several_file(self, setup):
+        """Check that you can load/save several machine files"""
         # Copy the matlib
-        mkdir(join(self.work_path, "Lamination"))
-        mkdir(join(self.work_path, "Magnet"))
+        mkdir(join(setup["work_path"], "Lamination"))
+        mkdir(join(setup["work_path"], "Magnet"))
         copyfile(
             join(TEST_DATA_DIR, "Material", "Magnet1.json"),
-            join(self.work_path, "Magnet", "Magnet1.json"),
+            join(setup["work_path"], "Magnet", "Magnet1.json"),
         )
-        cop_path = join(self.work_path, "Copper1.json")
+        cop_path = join(setup["work_path"], "Copper1.json")
         copyfile(join(TEST_DATA_DIR, "Material", "Copper1.json"), cop_path)
         copyfile(
             join(TEST_DATA_DIR, "Material", "Insulator1.json"),
-            join(self.work_path, "Insulator1.json"),
+            join(setup["work_path"], "Insulator1.json"),
         )
-        lam_path = join(self.work_path, "Lamination", "M400-50A.json")
+        lam_path = join(setup["work_path"], "Lamination", "M400-50A.json")
         copyfile(join(TEST_DATA_DIR, "Material", "M400-50A.json"), lam_path)
-        # Check initial state
         nb_file = len(
             [
                 name
-                for name in listdir(self.work_path)
-                if isfile(join(self.work_path, name)) and name[-5:] == ".json"
+                for name in listdir(setup["work_path"])
+                if isfile(join(setup["work_path"], name)) and name[-5:] == ".json"
             ]
         )
-        self.assertEqual(nb_file, 2)
+        assert nb_file == 2
 
         # Start the GUI
-        self.matlib = MatLib(self.work_path)
-        self.mat_widget = DMatLib(matlib=self.matlib)
+        self.material_dict = load_matlib(machine=None, matlib_path=setup["work_path"])
         self.widget = DMachineSetup(
-            dmatlib=self.mat_widget, machine=None, machine_path=self.work_path
+            material_dict=self.material_dict,
+            machine=None,
+            machine_path=setup["work_path"],
         )
         # Check load of the matlib
-        self.assertEqual(len(self.matlib.dict_mat["RefMatLib"]), 4)
-        self.assertEqual(
-            ["Copper1", "Insulator1", "M400-50A", "Magnet1"],
-            [mat.name for mat in self.matlib.dict_mat["RefMatLib"]],
-        )
-        self.assertEqual(self.matlib.dict_mat["RefMatLib"][0].elec.rho, 1.73e-8)
-        self.assertEqual(self.matlib.dict_mat["RefMatLib"][0].HT.alpha, 0.00393)
-        self.assertEqual(
-            self.matlib.dict_mat["RefMatLib"][0].path,
-            join(self.work_path, "Copper1.json").replace("\\", "/"),
-        )
+        assert len(self.material_dict[LIB_KEY]) == 4
+        assert ["Copper1", "Insulator1", "M400-50A", "Magnet1"] == [
+            mat.name for mat in self.material_dict[LIB_KEY]
+        ]
 
-        self.assertEqual(self.matlib.dict_mat["RefMatLib"][2].mag.mur_lin, 2500)
-        self.assertEqual(self.matlib.dict_mat["RefMatLib"][2].struct.rho, 7650)
-        self.assertEqual(self.matlib.dict_mat["RefMatLib"][2].struct.Ex, 215000000000)
-        self.assertEqual(
-            self.matlib.dict_mat["RefMatLib"][2].path,
-            join(self.work_path, "Lamination", "M400-50A.json").replace("\\", "/"),
-        )
+        assert self.material_dict[LIB_KEY][0].elec.rho == 1.73e-8
+        assert self.material_dict[LIB_KEY][0].HT.alpha == 0.00393
+        assert self.material_dict[LIB_KEY][0].path == join(
+            setup["work_path"], "Copper1.json"
+        ).replace("\\", "/")
+
+        assert self.material_dict[LIB_KEY][2].mag.mur_lin == 2500
+        assert self.material_dict[LIB_KEY][2].struct.rho == 7650
+        assert self.material_dict[LIB_KEY][2].struct.Ex == 215000000000
+        assert self.material_dict[LIB_KEY][2].path == join(
+            setup["work_path"], "Lamination", "M400-50A.json"
+        ).replace("\\", "/")
         # Change value of materials
-        self.matlib.dict_mat["RefMatLib"][0].elec.rho = 1.74e-8
-        self.matlib.dict_mat["RefMatLib"][0].HT.alpha = 0.00555
-        self.matlib.dict_mat["RefMatLib"][2].mag.mur_lin = 2501.2
-        self.matlib.dict_mat["RefMatLib"][2].struct.rho = 76
+        self.material_dict[LIB_KEY][0].elec.rho = 1.74e-8
+        self.material_dict[LIB_KEY][0].HT.alpha = 0.00555
+        self.material_dict[LIB_KEY][2].mag.mur_lin = 2501.2
+        self.material_dict[LIB_KEY][2].struct.rho = 76
         # Save matlib
-        for mat in self.matlib.dict_mat["RefMatLib"]:
+        for mat in self.material_dict[LIB_KEY]:
             mat.save(mat.path)
             mat2 = load(mat.path)
-            self.assertEqual(mat.as_dict(), mat2.as_dict())
+            assert mat.as_dict() == mat2.as_dict()
 
 
 def compare_file(file_path1, file_path2):

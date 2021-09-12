@@ -1,34 +1,25 @@
 # -*- coding: utf-8 -*-
 
-from os.path import join
-from os import remove, chdir
+from os import chdir, listdir, remove
+from os.path import isdir, join
 
 import pytest
-from importlib import import_module
-import matplotlib.pyplot as plt
-from numpy import array_equal, empty, array
-from pyleecan.Generator.read_fct import read_all
-from pyleecan.Generator.ClassGenerator.init_method_generator import get_mother_attr
-from pyleecan.definitions import DOC_DIR
-from Tests.find import (
-    find_test_value,
-    is_type_list,
-    is_type_dict,
-    MissingTypeError,
-    PYTHON_TYPE,
-)
-from Tests import save_path
-from pyleecan.Classes._check import CheckMinError, CheckTypeError, CheckMaxError
-from pyleecan.Classes._check import NotADictError
+from cloudpickle import dumps
+from numpy import array, array_equal
+from pyleecan.Classes._check import CheckMaxError, CheckMinError, CheckTypeError
 from pyleecan.Classes._frozen import FrozenClass, FrozenError
+from pyleecan.Classes.import_all import *
+from pyleecan.definitions import DOC_DIR, MAIN_DIR
+from pyleecan.Generator import PYTHON_TYPE
+from pyleecan.Generator.ClassGenerator.init_method_generator import get_mother_attr
+from pyleecan.Generator.read_fct import read_all
+from Tests import save_path
+from Tests.find import find_test_value, is_type_dict, is_type_list
 
 # Get the dict of all the classes and their information
 gen_dict = read_all(DOC_DIR)  # dict of class dict
 # Remove one list level (packages Machine, Simulation, Material...)
 class_list = list(gen_dict.values())
-
-from pyleecan.Classes.import_all import *
-
 
 """
 This test check that all the classes matches the current documentation
@@ -55,14 +46,7 @@ def test_class_init_default(class_dict):
         result = test_obj.__getattribute__(prop["name"])
         if prop["value"] == "None":
             prop["value"] = None
-        if type_name in PYTHON_TYPE:
-            assert result == prop["value"], (
-                "Error for class "
-                + class_dict["name"]
-                + " for property: "
-                + prop["name"],
-            )
-        elif type_name == "dict":
+        if type_name == "dict":
             # Default value is empty dict
             if prop["value"] == "":
                 value = {}
@@ -74,15 +58,38 @@ def test_class_init_default(class_dict):
                 + " for property: "
                 + prop["name"],
             )
+        elif type_name in PYTHON_TYPE:
+            if type_name == "list" and prop["value"] == -1:
+                assert result == [], (
+                    "Error for class "
+                    + class_dict["name"]
+                    + " for property: "
+                    + prop["name"],
+                )
+            else:
+                assert result == prop["value"], (
+                    "Error for class "
+                    + class_dict["name"]
+                    + " for property: "
+                    + prop["name"],
+                )
         elif is_type_list(type_name):  # List of pyleecan type
-            assert result == list(), (
+            if prop["value"] == "":
+                value = []
+            else:
+                value = prop["value"]
+            assert result == value, (
                 "Error for class "
                 + class_dict["name"]
                 + " for property: "
                 + prop["name"],
             )
         elif is_type_dict(type_name):  # Dict of pyleecan type
-            assert result == dict(), (
+            if prop["value"] == "":
+                value = {}
+            else:
+                value = prop["value"]
+            assert result == value, (
                 "Error for class "
                 + class_dict["name"]
                 + " for property: "
@@ -92,7 +99,7 @@ def test_class_init_default(class_dict):
             if type(prop["value"]) is list:
                 expect = array(prop["value"])
             else:
-                expect = empty(0)
+                expect = None
             assert array_equal(result, expect), (
                 "Error for class "
                 + class_dict["name"]
@@ -150,26 +157,35 @@ def test_class_as_dict(class_dict):
     # Generated the expected result dict
     for prop in prop_list:
         if prop["type"] == "ndarray":
-            if type(prop["value"]) is list:
-                d[prop["name"]] = prop["value"]
+            if prop["value"] == "":
+                d[prop["name"]] = None
             else:
-                d[prop["name"]] = list()
+                d[prop["name"]] = prop["value"]
         elif prop["value"] in ["None", None]:
             d[prop["name"]] = None
         elif type(prop["value"]) is str and "()" in prop["value"]:
             d[prop["name"]] = eval(prop["value"] + ".as_dict()")
-        elif prop["type"] in PYTHON_TYPE:
-            d[prop["name"]] = prop["value"]
+        elif prop["type"] == "complex":
+            d[prop["name"]] = str(prop["value"])
         elif prop["type"] == "dict":
             if prop["value"] == "":
                 d[prop["name"]] = {}
             else:
                 d[prop["name"]] = prop["value"]
         elif prop["type"] == "list":
-            if prop["value"] == "":
+            if prop["value"] in ["", -1]:
                 d[prop["name"]] = []
             else:
                 d[prop["name"]] = prop["value"]
+        elif prop["type"] in PYTHON_TYPE:  # PYTHON_TYPE and not dict or list
+            d[prop["name"]] = prop["value"]
+        elif "." in prop["type"]:  # Imported type or list of imported type
+            val = eval(prop["value"])
+            d[prop["name"]] = {
+                "__class__": str(type(val)),
+                "__repr__": str(val.__repr__()),
+                "serialized": dumps(val).decode("ISO-8859-2"),
+            }
         elif is_type_list(prop["type"]):  # List of pyleecan type
             d[prop["name"]] = list()
         elif is_type_dict(prop["type"]):  # Dict of pyleecan type
@@ -192,22 +208,26 @@ def test_class_as_dict(class_dict):
             + ", returned: "
             + str(result_dict[key]),
         )
-    assert d.keys() == result_dict.keys()
+    assert d.keys() == result_dict.keys(), (
+        "Wrong as_dict keys for class "
+        + class_dict["name"]
+        + " returned "
+        + str(result_dict.keys())
+        + " expected "
+        + str(d.keys())
+    )
 
 
 @pytest.mark.parametrize("class_dict", class_list)
 def test_class_set_None(class_dict):
-    """Check that _set_None set to None every non pyleecantype properties
-    """
+    """Check that _set_None set to None every non pyleecantype properties"""
 
     test_obj = eval(class_dict["name"] + "()")
     test_obj._set_None()
     prop_list = get_mother_attr(gen_dict, class_dict, "properties")[0]
     for prop in prop_list:
         # ndarray set as None are set as array([])
-        if prop["type"] == "ndarray":
-            assert array_equal(test_obj.__getattribute__(prop["name"]), array([]))
-        elif prop["type"] in PYTHON_TYPE:
+        if prop["type"] in PYTHON_TYPE or prop["type"] == "ndarray":
             assert test_obj.__getattribute__(prop["name"]) == None
 
 
@@ -231,7 +251,7 @@ def test_class_inherit(class_dict):
         assert eval("issubclass(" + class_dict["name"] + ", FrozenClass)") == True
 
 
-@pytest.mark.parametrize("class_dict", class_list)  # [86:87]
+@pytest.mark.parametrize("class_dict", class_list)
 def test_class_methods(class_dict):
     """Check if the class has all its methods"""
     test_obj = eval(class_dict["name"] + "()")
@@ -245,16 +265,53 @@ def test_class_methods(class_dict):
             class_dict["name"] + " has no method: " + meth
         )
 
-        # Check if the methods doesn't raise ImportError
-        try:
-            eval("test_obj." + meth + "()")
-        except ImportError as err:
-            raise err  # Raise the ImportError because the method doesn't exist
-        except:
-            pass
+        meth_obj = eval("getattr(" + class_dict["name"] + ", '" + meth + "')")
+        assert not isinstance(meth_obj, property), meth_obj.fget("")
 
-    # Some methods may generate plots
-    plt.close("all")
+
+@pytest.mark.parametrize("class_dict", class_list)
+def test_class_uncleaned_methods(class_dict):
+    """Check if all the method in the class folder is in the csv"""
+    folder_path = join(MAIN_DIR, "Methods", class_dict["package"], class_dict["name"])
+
+    meth_list = get_mother_attr(gen_dict, class_dict, "methods")[0]
+    if len(meth_list) == 0 and isdir(folder_path):
+        raise Exception(
+            class_dict["name"]
+            + " has no method in the csv but the method folder exist: "
+            + folder_path
+        )
+    elif len(meth_list) != 0 and isdir(folder_path):
+        dir_list = listdir(folder_path)
+        if "__init__.py" in dir_list:
+            dir_list.remove("__init__.py")
+        if "__pycache__" in dir_list:
+            dir_list.remove("__pycache__")
+        # Get only python file
+        file_list = [path for path in dir_list if path[-3:] == ".py"]
+        # Add subfolder
+        for path in dir_list:
+            if isdir(join(folder_path, path)):
+                file_list.extend(
+                    [
+                        path + "." + name
+                        for name in listdir(join(folder_path, path))
+                        if name[-3:] == ".py"
+                    ]
+                )
+                if path + ".__init__.py" in file_list:
+                    file_list.remove(path + ".__init__.py")
+        # Check if all files are methods
+        for file_name in file_list:
+            assert file_name[:-3] in meth_list, (
+                class_dict["name"]
+                + " method folder contains a file not referenced in the csv: "
+                + file_name
+            )
+        assert len(set(class_dict["methods"])) == len(class_dict["methods"]), (
+            class_dict["name"] + " check for duplicate method in csv"
+        )
+    # else : no method and no folder => Ok
 
 
 @pytest.mark.parametrize("class_dict", class_list)
@@ -265,14 +322,19 @@ def test_class_type_float(class_dict):
     prop_list = get_mother_attr(gen_dict, class_dict, "properties")[0]
     for prop in prop_list:
         value = find_test_value(prop, "float")
+        msg = "Error for class " + class_dict["name"] + " with " + prop["name"]
         # Check the doc to know if it should raise an error or not
-        if prop["type"] in ["float", "complex"]:
+        if prop["type"] in ["float", "complex", "", None]:
             # No error expected
             test_obj.__setattr__(prop["name"], value)
-            assert test_obj.__getattribute__(prop["name"]) == value
+
+            assert test_obj.__getattribute__(prop["name"]) == value, msg
         else:
             # CheckTypeError expected
-            with pytest.raises(CheckTypeError):
+            with pytest.raises(
+                CheckTypeError,
+            ):
+                # print(msg)
                 test_obj.__setattr__(prop["name"], value)
 
 
@@ -338,14 +400,25 @@ def test_class_prop_doc(class_dict):
             + prop["name"]
             + "').__doc__.splitlines()"
         )
-        assert result == prop["desc"].split("\\n")
+
+        # Check only the part from the csv
+        type_index = 2
+        for line in result[2:]:
+            if ":Type:" in line:
+                break
+            else:
+                type_index += 1
+        assert result[: type_index - 1] == prop["desc"].split("\\n")
 
 
 @pytest.mark.parametrize("class_dict", class_list)
 def test_class_copy(class_dict):
-    """Check if the copy method is correct
-    """
+    """Check if the copy method is correct"""
 
     test_obj = eval(class_dict["name"] + "()")
     result = test_obj.copy()
     assert test_obj == result
+
+
+if __name__ == "__main__":
+    test_class_as_dict(class_list[144])

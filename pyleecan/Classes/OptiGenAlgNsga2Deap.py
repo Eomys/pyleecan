@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Optimization/OptiGenAlgNsga2Deap
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .OptiGenAlg import OptiGenAlg
 
 # Import all class method
@@ -39,8 +44,17 @@ try:
 except ImportError as error:
     check_optimization_input = error
 
+try:
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.delete_toolbox import delete_toolbox
+except ImportError as error:
+    delete_toolbox = error
 
-from inspect import getsource
+
+from ntpath import basename
+from os.path import isfile
+from ._check import CheckTypeError
+import numpy as np
+import random
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
@@ -112,15 +126,21 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         )
     else:
         check_optimization_input = check_optimization_input
-    # save method is available in all object
+    # cf Methods.Optimization.OptiGenAlgNsga2Deap.delete_toolbox
+    if isinstance(delete_toolbox, ImportError):
+        delete_toolbox = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OptiGenAlgNsga2Deap method delete_toolbox: "
+                    + str(delete_toolbox)
+                )
+            )
+        )
+    else:
+        delete_toolbox = delete_toolbox
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -143,38 +163,16 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if problem == -1:
-            problem = OptiProblem()
-        if xoutput == -1:
-            xoutput = XOutput()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            toolbox = obj.toolbox
-            selector = obj.selector
-            crossover = obj.crossover
-            mutator = obj.mutator
-            p_cross = obj.p_cross
-            p_mutate = obj.p_mutate
-            size_pop = obj.size_pop
-            nb_gen = obj.nb_gen
-            problem = obj.problem
-            xoutput = obj.xoutput
-            logger_name = obj.logger_name
-            is_keep_all_output = obj.is_keep_all_output
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -202,10 +200,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
                 logger_name = init_dict["logger_name"]
             if "is_keep_all_output" in list(init_dict.keys()):
                 is_keep_all_output = init_dict["is_keep_all_output"]
-        # Initialisation by argument
-        # Check if the type Toolbox has been imported with success
-        if isinstance(Toolbox, ImportError):
-            raise ImportError("Unknown type Toolbox please install deap")
+        # Set the properties (value check and convertion are done in setter)
         self.toolbox = toolbox
         # Call OptiGenAlg init
         super(OptiGenAlgNsga2Deap, self).__init__(
@@ -225,7 +220,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         OptiGenAlgNsga2Deap_str = ""
         # Get the properties inherited from OptiGenAlg
@@ -246,21 +241,57 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from OptiGenAlg
+        diff_list.extend(super(OptiGenAlgNsga2Deap, self).compare(other, name=name))
+        if (other.toolbox is None and self.toolbox is not None) or (
+            other.toolbox is not None and self.toolbox is None
+        ):
+            diff_list.append(name + ".toolbox None mismatch")
+        elif self.toolbox is not None and self.toolbox != other.toolbox:
+            diff_list.append(name + ".toolbox")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from OptiGenAlg
+        S += super(OptiGenAlgNsga2Deap, self).__sizeof__()
+        S += getsizeof(self.toolbox)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         # Get the properties inherited from OptiGenAlg
-        OptiGenAlgNsga2Deap_dict = super(OptiGenAlgNsga2Deap, self).as_dict()
+        OptiGenAlgNsga2Deap_dict = super(OptiGenAlgNsga2Deap, self).as_dict(**kwargs)
         if self.toolbox is None:
             OptiGenAlgNsga2Deap_dict["toolbox"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+        else:
+            # Store serialized data (using cloudpickle) and str
+            # to read it in json save files
             OptiGenAlgNsga2Deap_dict["toolbox"] = {
                 "__class__": str(type(self._toolbox)),
                 "__repr__": str(self._toolbox.__repr__()),
                 "serialized": dumps(self._toolbox).decode("ISO-8859-2"),
             }
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OptiGenAlgNsga2Deap_dict["__class__"] = "OptiGenAlgNsga2Deap"
         return OptiGenAlgNsga2Deap_dict
@@ -278,18 +309,14 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
 
     def _set_toolbox(self, value):
         """setter of toolbox"""
-        try:  # Check the type
-            check_var("toolbox", value, "dict")
-        except CheckTypeError:
-            check_var("toolbox", value, "deap.base.Toolbox")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._toolbox = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._toolbox = value
+        check_var("toolbox", value, "Toolbox")
+        self._toolbox = value
 
-    # DEAP toolbox
-    # Type : deap.base.Toolbox
-    toolbox = property(fget=_get_toolbox, fset=_set_toolbox, doc=u"""DEAP toolbox""")
+    toolbox = property(
+        fget=_get_toolbox,
+        fset=_set_toolbox,
+        doc=u"""DEAP toolbox
+
+        :Type: deap.base.Toolbox
+        """,
+    )

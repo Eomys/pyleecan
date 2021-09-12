@@ -12,11 +12,13 @@ PATCH_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PATCH_COLOR"]
 def plot(
     self,
     fig=None,
+    ax=None,
     color=PATCH_COLOR,
     edgecolor=PATCH_EDGE,
     is_edge_only=False,
     linestyle=None,
     is_disp_point_ref=False,
+    is_show_fig=True,
 ):
     """Plot the Surface patch in a matplotlib fig
 
@@ -37,13 +39,15 @@ def plot(
         Line style of the edge {'-', '--', '-.', ':', '', (offset, on-off-seq), ...}
     is_disp_point_ref : bool
         True to add the point_ref
+    is_show_fig : bool
+        To call show at the end of the methods
 
     Returns
     -------
     None
     """
 
-    (fig, axes, patch_leg, label_leg) = init_fig(fig)
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, ax)
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
 
@@ -56,6 +60,7 @@ def plot(
     if is_disp_point_ref:
         axes.plot(self.point_ref.real, self.point_ref.imag, "kx")
     # Axis Setup
-    axis("equal")
+    axes.axis("equal")
 
-    fig.show()
+    if is_show_fig:
+        fig.show()

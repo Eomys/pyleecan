@@ -2,7 +2,8 @@
 
 from numpy import arcsin, pi
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.SlotW28 import *
 
 
 def check(self):
@@ -54,33 +55,3 @@ def check(self):
 
     if alpha > 2 * pi / self.Zs:
         raise S28_ZsCheckError("There are too many slots to match W3 and R1")
-
-
-class S28_WCheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S28_RboW0CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S28_R1W3CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S28_R1R1CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S28_ZsCheckError(SlotCheckError):
-    """ """
-
-    pass

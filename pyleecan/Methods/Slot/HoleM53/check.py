@@ -2,7 +2,8 @@
 
 from numpy import pi
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.HoleM53 import *
 
 
 def check(self):
@@ -19,10 +20,10 @@ def check(self):
 
     Raises
     -------
-    S53_Rbo0CheckError
-        You must have H0 < Rbo
-    S53_Rbo1CheckError
-        You must have H1 < Rbo
+    S53_Rext0CheckError
+        You must have H0 < Rext
+    S53_Rext1CheckError
+        You must have H1 < Rext
     S53_W4CheckError
         You must have W4 < pi/2
     S53_W5CheckError
@@ -47,47 +48,16 @@ def check(self):
     elif self.H3 is None:
         raise S53_NoneError("You must set H3 !")
 
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
-    if Rbo <= self.H0:
-        raise S53_Rbo0CheckError("You must have H0 < Rbo")
+    if Rext <= self.H0:
+        raise S53_Rext0CheckError("You must have H0 < Rext")
 
-    if Rbo <= self.H1:
-        raise S53_Rbo1CheckError("You must have H1 < Rbo")
+    if Rext <= self.H1:
+        raise S53_Rext1CheckError("You must have H1 < Rext")
 
     if pi / 2 <= self.W4:
         raise S53_W4CheckError("You must have W4 < pi/2")
 
     if self.comp_W5() < 0:
         raise S53_W5CheckError("You must have W5 >=0")
-
-
-class S53_NoneError(SlotCheckError):
-    """Raised when a propery of HoleM53 is None
-    """
-
-    pass
-
-
-class S53_Rbo0CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S53_Rbo1CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S53_W4CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S53_W5CheckError(SlotCheckError):
-    """ """
-
-    pass

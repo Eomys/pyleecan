@@ -4,8 +4,7 @@ from ....Methods.Simulation.Input import InputError
 
 
 def run(self):
-    """Run the Structural module    
-    """
+    """Run the Structural module"""
     if self.parent is None:
         raise InputError(
             "ERROR: The Structural object must be in a Simulation object to run"
@@ -17,7 +16,7 @@ def run(self):
 
     output = self.parent.parent
 
-    self.comp_time_angle(output)
+    self.comp_axes(output)
 
     group = self.force.group  # Magnetic force target
 

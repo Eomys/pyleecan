@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from numpy import pi
 
 
 def comp_angle_offset_initial(self):
@@ -9,7 +8,7 @@ def comp_angle_offset_initial(self):
     ----------
     self : Machine
         A: Machine object
-    
+
     Returns
     -------
     angle_offset_initial: float
@@ -17,7 +16,7 @@ def comp_angle_offset_initial(self):
 
     Raises
     ------
-    
+
 
     """
     return self.stator.comp_angle_d_axis() - self.rotor.comp_angle_d_axis()

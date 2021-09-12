@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/LamSlot.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/LamSlot.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/LamSlot
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Lamination import Lamination
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Machine.LamSlot.build_geometry import build_geometry
-except ImportError as error:
-    build_geometry = error
-
 try:
     from ..Methods.Machine.LamSlot.check import check
 except ImportError as error:
@@ -53,19 +53,24 @@ except ImportError as error:
     get_Zs = error
 
 try:
-    from ..Methods.Machine.LamSlot.get_bore_desc import get_bore_desc
-except ImportError as error:
-    get_bore_desc = error
-
-try:
     from ..Methods.Machine.LamSlot.comp_radius_mid_yoke import comp_radius_mid_yoke
 except ImportError as error:
     comp_radius_mid_yoke = error
 
 try:
-    from ..Methods.Machine.LamSlot.comp_sym import comp_sym
+    from ..Methods.Machine.LamSlot.comp_periodicity import comp_periodicity
 except ImportError as error:
-    comp_sym = error
+    comp_periodicity = error
+
+try:
+    from ..Methods.Machine.LamSlot.get_bore_desc import get_bore_desc
+except ImportError as error:
+    get_bore_desc = error
+
+try:
+    from ..Methods.Machine.LamSlot.set_pole_pair_number import set_pole_pair_number
+except ImportError as error:
+    set_pole_pair_number = error
 
 
 from ._check import InitUnKnowClassError
@@ -74,6 +79,7 @@ from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
 from .Skew import Skew
+from .Bore import Bore
 
 
 class LamSlot(Lamination):
@@ -82,17 +88,6 @@ class LamSlot(Lamination):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Machine.LamSlot.build_geometry
-    if isinstance(build_geometry, ImportError):
-        build_geometry = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlot method build_geometry: " + str(build_geometry)
-                )
-            )
-        )
-    else:
-        build_geometry = build_geometry
     # cf Methods.Machine.LamSlot.check
     if isinstance(check, ImportError):
         check = property(
@@ -166,17 +161,6 @@ class LamSlot(Lamination):
         )
     else:
         get_Zs = get_Zs
-    # cf Methods.Machine.LamSlot.get_bore_desc
-    if isinstance(get_bore_desc, ImportError):
-        get_bore_desc = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlot method get_bore_desc: " + str(get_bore_desc)
-                )
-            )
-        )
-    else:
-        get_bore_desc = get_bore_desc
     # cf Methods.Machine.LamSlot.comp_radius_mid_yoke
     if isinstance(comp_radius_mid_yoke, ImportError):
         comp_radius_mid_yoke = property(
@@ -189,24 +173,44 @@ class LamSlot(Lamination):
         )
     else:
         comp_radius_mid_yoke = comp_radius_mid_yoke
-    # cf Methods.Machine.LamSlot.comp_sym
-    if isinstance(comp_sym, ImportError):
-        comp_sym = property(
+    # cf Methods.Machine.LamSlot.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LamSlot method comp_sym: " + str(comp_sym))
+                ImportError(
+                    "Can't use LamSlot method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
             )
         )
     else:
-        comp_sym = comp_sym
-    # save method is available in all object
+        comp_periodicity = comp_periodicity
+    # cf Methods.Machine.LamSlot.get_bore_desc
+    if isinstance(get_bore_desc, ImportError):
+        get_bore_desc = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method get_bore_desc: " + str(get_bore_desc)
+                )
+            )
+        )
+    else:
+        get_bore_desc = get_bore_desc
+    # cf Methods.Machine.LamSlot.set_pole_pair_number
+    if isinstance(set_pole_pair_number, ImportError):
+        set_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method set_pole_pair_number: "
+                    + str(set_pole_pair_number)
+                )
+            )
+        )
+    else:
+        set_pole_pair_number = set_pole_pair_number
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -222,49 +226,26 @@ class LamSlot(Lamination):
         Rint=0,
         Rext=1,
         is_stator=True,
-        axial_vent=list(),
-        notch=list(),
+        axial_vent=-1,
+        notch=-1,
         skew=None,
+        yoke_notch=-1,
+        bore=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if slot == -1:
-            slot = Slot()
-        if mat_type == -1:
-            mat_type = Material()
-        if skew == -1:
-            skew = Skew()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            slot = obj.slot
-            L1 = obj.L1
-            mat_type = obj.mat_type
-            Nrvd = obj.Nrvd
-            Wrvd = obj.Wrvd
-            Kf1 = obj.Kf1
-            is_internal = obj.is_internal
-            Rint = obj.Rint
-            Rext = obj.Rext
-            is_stator = obj.is_stator
-            axial_vent = obj.axial_vent
-            notch = obj.notch
-            skew = obj.skew
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -294,86 +275,12 @@ class LamSlot(Lamination):
                 notch = init_dict["notch"]
             if "skew" in list(init_dict.keys()):
                 skew = init_dict["skew"]
-        # Initialisation by argument
-        # slot can be None, a Slot object or a dict
-        if isinstance(slot, dict):
-            # Check that the type is correct (including daughter)
-            class_name = slot.get("__class__")
-            if class_name not in [
-                "Slot",
-                "Slot19",
-                "SlotCirc",
-                "SlotMFlat",
-                "SlotMPolar",
-                "SlotMag",
-                "SlotUD",
-                "SlotW10",
-                "SlotW11",
-                "SlotW12",
-                "SlotW13",
-                "SlotW14",
-                "SlotW15",
-                "SlotW16",
-                "SlotW21",
-                "SlotW22",
-                "SlotW23",
-                "SlotW24",
-                "SlotW25",
-                "SlotW26",
-                "SlotW27",
-                "SlotW28",
-                "SlotW29",
-                "SlotW60",
-                "SlotW61",
-                "SlotWind",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for slot"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.slot = class_obj(init_dict=slot)
-        elif isinstance(slot, str):
-            from ..Functions.load import load
-
-            slot = load(slot)
-            # Check that the type is correct (including daughter)
-            class_name = slot.__class__.__name__
-            if class_name not in [
-                "Slot",
-                "Slot19",
-                "SlotCirc",
-                "SlotMFlat",
-                "SlotMPolar",
-                "SlotMag",
-                "SlotUD",
-                "SlotW10",
-                "SlotW11",
-                "SlotW12",
-                "SlotW13",
-                "SlotW14",
-                "SlotW15",
-                "SlotW16",
-                "SlotW21",
-                "SlotW22",
-                "SlotW23",
-                "SlotW24",
-                "SlotW25",
-                "SlotW26",
-                "SlotW27",
-                "SlotW28",
-                "SlotW29",
-                "SlotW60",
-                "SlotW61",
-                "SlotWind",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for slot"
-                )
-            self.slot = slot
-        else:
-            self.slot = slot
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
+        # Set the properties (value check and convertion are done in setter)
+        self.slot = slot
         # Call Lamination init
         super(LamSlot, self).__init__(
             L1=L1,
@@ -388,12 +295,14 @@ class LamSlot(Lamination):
             axial_vent=axial_vent,
             notch=notch,
             skew=skew,
+            yoke_notch=yoke_notch,
+            bore=bore,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         LamSlot_str = ""
         # Get the properties inherited from Lamination
@@ -418,17 +327,51 @@ class LamSlot(Lamination):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Lamination
+        diff_list.extend(super(LamSlot, self).compare(other, name=name))
+        if (other.slot is None and self.slot is not None) or (
+            other.slot is not None and self.slot is None
+        ):
+            diff_list.append(name + ".slot None mismatch")
+        elif self.slot is not None:
+            diff_list.extend(self.slot.compare(other.slot, name=name + ".slot"))
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Lamination
+        S += super(LamSlot, self).__sizeof__()
+        S += getsizeof(self.slot)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         # Get the properties inherited from Lamination
-        LamSlot_dict = super(LamSlot, self).as_dict()
+        LamSlot_dict = super(LamSlot, self).as_dict(**kwargs)
         if self.slot is None:
             LamSlot_dict["slot"] = None
         else:
-            LamSlot_dict["slot"] = self.slot.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+            LamSlot_dict["slot"] = self.slot.as_dict(**kwargs)
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlot_dict["__class__"] = "LamSlot"
         return LamSlot_dict
@@ -447,12 +390,24 @@ class LamSlot(Lamination):
 
     def _set_slot(self, value):
         """setter of slot"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "slot")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Slot()
         check_var("slot", value, "Slot")
         self._slot = value
 
         if self._slot is not None:
             self._slot.parent = self
 
-    # lamination Slot
-    # Type : Slot
-    slot = property(fget=_get_slot, fset=_set_slot, doc=u"""lamination Slot""")
+    slot = property(
+        fget=_get_slot,
+        fset=_set_slot,
+        doc=u"""lamination Slot
+
+        :Type: Slot
+        """,
+    )

@@ -1,6 +1,18 @@
-# -*- coding: utf-8 -*-
-from ....Functions.Geometry.inter_line_line import find_line_eq
-from numpy import sqrt
+from numpy import sqrt, array
+from numpy import arccos, array, dot, pi, cross
+from numpy.linalg import det, norm
+
+
+def distance_numpy(A, B, P):
+    # from: https://gist.github.com/nim65s/5e9902cd67f094ce65b0
+    """segment line AB, point P, where each one is an array([x, y])"""
+    if all(A == P) or all(B == P):
+        return 0
+    if arccos(dot((P - A) / norm(P - A), (B - A) / norm(B - A))) > pi / 2:
+        return norm(P - A)
+    if arccos(dot((P - B) / norm(P - B), (A - B) / norm(A - B))) > pi / 2:
+        return norm(P - B)
+    return norm(cross(A - B, A - P)) / norm(B - A)
 
 
 def comp_distance(self, Z):
@@ -19,16 +31,7 @@ def comp_distance(self, Z):
         distance of a point to the Segment
     """
 
-    Z1 = self.begin
-    Z2 = self.end
-    Z3 = Z
-    if self.is_on_line(Z=Z):
-        return 0
-    # Check if the points are aligned
-    Z12 = Z1 - Z2
-    Z13 = Z1 - Z3
-    if Z12.real * Z13.imag - Z12.imag * Z13.real == 0:
-        return min(abs(Z1 - Z3), abs(Z2 - Z3))
-    # point not aligned
-    (A, B, C) = find_line_eq(Z1, Z2)
-    return (abs(A * Z3.real + B * Z3.imag - C)) / sqrt(A ** 2 + B ** 2)
+    Z1 = array([self.begin.real, self.begin.imag])
+    Z2 = array([self.end.real, self.end.imag])
+    Z3 = array([Z.real, Z.imag])
+    return distance_numpy(Z1, Z2, Z3)

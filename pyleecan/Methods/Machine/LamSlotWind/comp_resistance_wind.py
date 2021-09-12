@@ -1,22 +1,24 @@
 # -*- coding: utf-8 -*-
 
 
-def comp_resistance_wind(self):
-    """Compute the DC winding resistance per phase at 20°C without skin effect
+def comp_resistance_wind(self, T=20):
+    """Compute the DC winding resistance per phase without skin effect
 
     Parameters
     ----------
     self : LamSlotWind
         a LamSlotWind object
+    T : float
+        mean winding temperature [°C], default value is 20°C
 
     Returns
     -------
-    R20 : float
-        DC winding resistance per phase at 20°C without skin effect
+    R : float
+        DC winding resistance per phase without skin effect [Ohm]
     """
 
     Zs = self.slot.Zs
-    Ntspc = self.winding.comp_Ntspc(Zs)
+    Ntspc = self.winding.comp_Ntsp(Zs)
     # length of the stack including ventilation ducts
     L1vd = self.comp_length()
 
@@ -31,8 +33,12 @@ def comp_resistance_wind(self):
     # Active surface of conductor
     Sact = self.winding.conductor.comp_surface_active()
 
+    # temperature coefficient and electrical conductivity
+    alpha = self.winding.conductor.cond_mat.elec.alpha
     rhow20 = self.winding.conductor.cond_mat.elec.rho
-    # DC winding resistance per phase at 20°C
-    R20 = (1.0 / self.winding.Npcpp) * rhow20 * (Ntspc * 2 * Lwht) / (Sact)
+    rhow = rhow20 * (1 + alpha * (T - 20))
 
-    return R20
+    # DC winding resistance per phase at specified temperature
+    R = (1.0 / self.winding.Npcp) * rhow * (Ntspc * 2 * Lwht) / (Sact)
+
+    return R

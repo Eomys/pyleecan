@@ -16,5 +16,7 @@ def comp_mass(self):
         Mass of the Shaft [kg]
 
     """
-
-    return self.Lshaft * pi * ((self.Drsh / 2) ** 2) * self.mat_type.struct.rho
+    if self.Lshaft is None:
+        return 0
+    else:
+        return self.Lshaft * pi * ((self.Drsh / 2) ** 2) * self.mat_type.struct.rho

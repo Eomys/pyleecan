@@ -15,14 +15,14 @@ def comp_surfaces(self):
     Returns
     -------
     S_dict: dict
-        Lamination surface dictionnary (Slam, Svent, Sslot, Swind) [m**2]
+        Lamination surface dictionary (Slam, Svent, Sslot, Swind) [m**2]
 
     """
 
     S_dict = LamSlot.comp_surfaces(self)
 
     if self.slot is not None:
-        S_dict["Swind"] = self.get_Zs() * self.slot.comp_surface_wind()
+        S_dict["Swind"] = self.get_Zs() * self.slot.comp_surface_active()
     else:
         S_dict["Swind"] = 0
 

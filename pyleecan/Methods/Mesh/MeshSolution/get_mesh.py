@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
 
-
-def get_mesh(self, j_t0=0):
-    """Return the mesh corresponding to a time step.
+def get_mesh(self, label=None, index=None):
+    """Return the mesh corresponding to label or an index.
 
     Parameters
     ----------
     self : MeshSolution
         an MeshSolution object
-    j_t0 : int
-        a time step
+    label : str
+        a label
+    index : int
+        an index
 
     Returns
     -------
@@ -21,6 +21,14 @@ def get_mesh(self, j_t0=0):
     """
 
     if self.is_same_mesh:
-        return self.mesh[0]
+        tmpmesh = self.mesh[0]
     else:
-        return self.mesh[j_t0]
+        if index is None:
+            index = 0
+            if label is not None:
+                for i, mesh in enumerate(self.mesh):
+                    if mesh.label == label:
+                        index = i
+        tmpmesh = self.mesh[index]
+
+    return tmpmesh

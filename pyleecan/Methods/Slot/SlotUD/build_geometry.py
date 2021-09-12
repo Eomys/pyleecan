@@ -22,15 +22,4 @@ def build_geometry(self):
 
     """
 
-    # Apply symmetry if needed
-    point_list = self.point_list.copy()
-    if self.is_sym:
-        for point in self.point_list[::-1]:
-            point_list.append(point.conjugate())
-
-    # Creation of curve
-    curve_list = list()
-    for ii in range(len(point_list) - 1):
-        curve_list.append(Segment(point_list[ii], point_list[ii + 1]))
-
-    return curve_list
+    return [line.copy() for line in self.line_list]

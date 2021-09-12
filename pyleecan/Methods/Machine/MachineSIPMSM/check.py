@@ -40,7 +40,8 @@ def check(self):
         raise M2C_PError("The stator and the rotor must have the same value " "for p")
 
     if self.rotor.is_internal and (
-        self.rotor.w_slot.comp_radius_mid_wind(self.rotor.Rext) + self.rotor.Hscr / 2.0
+        self.rotor.w_slot.comp_radius_mid_active(self.rotor.Rext)
+        + self.rotor.Hscr / 2.0
         > self.stator.Rint
     ):
         raise M2C_MagnetTooLarge("The airgap is too small for the magnet")
@@ -58,7 +59,7 @@ class M2C_WrongRotor(MachineCheckError):
     Raises
     ------
     Magnet
-        
+
 
     """
 
@@ -96,7 +97,7 @@ class M2C_PError(MachineCheckError):
     Raises
     ------
     values
-        
+
 
     """
 

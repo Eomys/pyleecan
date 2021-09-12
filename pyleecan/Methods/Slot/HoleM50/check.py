@@ -2,7 +2,8 @@
 
 from numpy import arcsin, pi
 
-from ....Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot import SlotCheckError
+from ....Methods.Slot.HoleM50 import *
 
 
 def check(self):
@@ -30,7 +31,7 @@ def check(self):
     S50_SpCheckError
         Slot pitch too small for the slot, reduce Zh, W3 or W0
     """
-    Rbo = self.get_Rbo()
+    Rext = self.get_Rext()
 
     # Check that everything is set
     if self.W0 is None:
@@ -66,44 +67,7 @@ def check(self):
     if self.comp_W5() < 0:
         raise S50_W5CheckError("You must have W5 >=0")
 
-    alpha_0 = 2 * arcsin(self.W0 / (2 * (Rbo - self.H1)))  # W0 in rad
-    alpha_3 = 2 * arcsin(self.W3 / (2 * (Rbo - self.H1)))  # W3 in rad
+    alpha_0 = 2 * arcsin(self.W0 / (2 * (Rext - self.H1)))  # W0 in rad
+    alpha_3 = 2 * arcsin(self.W3 / (2 * (Rext - self.H1)))  # W3 in rad
     if alpha_0 + alpha_3 > 2 * pi / self.Zh:
         raise S50_SpCheckError("Slot pitch too small for the slot, reduce Zh, W3 or W0")
-
-
-class S50_NoneError(SlotCheckError):
-    """Raised when a propery of HoleM50 is None
-    """
-
-    pass
-
-
-class S50_W01CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S50_H23CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S50_H01CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S50_W5CheckError(SlotCheckError):
-    """ """
-
-    pass
-
-
-class S50_SpCheckError(SlotCheckError):
-    """ """
-
-    pass

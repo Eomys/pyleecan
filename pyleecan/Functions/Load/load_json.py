@@ -14,7 +14,7 @@ def load_json(file_path):
     Returns
     -------
     file_path: str
-        edited path to the file to load 
+        edited path to the file to load
     json_data: json decoded data type
         data of the json file
     """

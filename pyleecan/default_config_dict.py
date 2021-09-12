@@ -11,4 +11,9 @@ default_config_dict["GUI"]["CSS_PATH"] = ""
 # Name of the color set to use
 default_config_dict["PLOT"]["COLOR_DICT_NAME"] = "pyleecan_color.json"
 default_config_dict["PLOT"]["COLOR_DICT"] = {}
-default_config_dict["PLOT"]["FONT_NAME"] = "Arial"
+default_config_dict["PLOT"]["FONT_NAME"] = ""
+default_config_dict["PLOT"]["FONT_FAMILY_PYVISTA"] = "courier"
+default_config_dict["PLOT"]["FONT_SIZE_TITLE"] = 12
+default_config_dict["PLOT"]["FONT_SIZE_LABEL"] = 10
+default_config_dict["PLOT"]["FONT_SIZE_LEGEND"] = 8
+default_config_dict["PLOT"]["LINE_STYLE"] = ["solid", "dashed", "dashdot", "dotted"]

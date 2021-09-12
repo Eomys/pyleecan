@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from .......GUI import gui_option
 from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.Gen_PVentCirc import (
@@ -10,11 +10,10 @@ from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.Gen_PVentCirc i
 
 
 class PVentCirc(Gen_PVentCirc, QWidget):
-    """Page to setup the Ventilation Circ
-    """
+    """Page to setup the Ventilation Circ"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
 
     def __init__(self, lam=None, vent=None):
         """Initialize the widget according the current lamination
@@ -56,7 +55,7 @@ class PVentCirc(Gen_PVentCirc, QWidget):
         # Set unit name (m ou mm)
         wid_list = [self.unit_H0, self.unit_D0]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Connect the signal
         self.si_Zh.editingFinished.connect(self.set_Zh)
@@ -114,7 +113,7 @@ class PVentCirc(Gen_PVentCirc, QWidget):
         Parameters
         ----------
         self : PVentCirc
-            A PVentCirc object    
+            A PVentCirc object
 
         Returns
         -------

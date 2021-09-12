@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from os.path import join
-from unittest import TestCase
+import pytest
 
 import matplotlib.pyplot as plt
 from numpy import pi
@@ -8,25 +8,25 @@ from numpy import pi
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Classes.MagnetType10 import MagnetType10
-from pyleecan.Classes.MagnetType11 import MagnetType11
-from pyleecan.Classes.MagnetType12 import MagnetType12
-from pyleecan.Classes.MagnetType13 import MagnetType13
-from pyleecan.Classes.MagnetType14 import MagnetType14
+from pyleecan.Classes.SlotM10 import SlotM10
+from pyleecan.Classes.SlotM11 import SlotM11
+from pyleecan.Classes.SlotM12 import SlotM12
+from pyleecan.Classes.SlotM13 import SlotM13
+from pyleecan.Classes.SlotM14 import SlotM14
+from pyleecan.Classes.SlotM15 import SlotM15
+from pyleecan.Classes.SlotM16 import SlotM16
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.MatMagnetics import MatMagnetics
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.SlotMPolar import SlotMPolar
 from Tests import save_plot_path as save_path
 
 
-class test_Lam_Mag_inset_plot(TestCase):
-    """unittest for Lamination with inset magnet plot"""
+class Test_Lam_Mag_inset_plot(object):
+    """pytest for Lamination with inset magnet plot"""
 
     def test_Lam_Mag_10_inset(self):
-        """Test machine plot with Magnet 10 inset"""
+        """Test machine plot with SlotM10 inset"""
 
         plt.close("all")
         rotor = LamSlotMag(
@@ -38,8 +38,8 @@ class test_Lam_Mag_inset_plot(TestCase):
             Nrvd=1,
             Wrvd=0.05,
         )
-        magnet = [MagnetType10(Lmag=0.5, Hmag=0.02, Wmag=0.04)]
-        rotor.slot = SlotMFlat(Zs=4, W0=0.04, H0=0.02, magnet=magnet)
+        rotor.magnet.Lmag = 0.5
+        rotor.slot = SlotM10(Zs=4, W0=0.04, H0=0.02, Hmag=0.02, Wmag=0.04)
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
         rotor.axial_vent.append(VentilationCirc(Zh=4, Alpha0=0, D0=2.5e-3, H0=50e-3))
@@ -55,9 +55,8 @@ class test_Lam_Mag_inset_plot(TestCase):
             Nrvd=1,
             Wrvd=0.05,
         )
-
-        magnet2 = [MagnetType10(Lmag=0.5, Hmag=0.02, Wmag=0.04)]
-        stator.slot = SlotMFlat(Zs=8, W0=0.04, W3=2 * pi / 64, H0=0.02, magnet=magnet2)
+        stator.magnet.Lmag = 0.5
+        stator.slot = SlotM10(Zs=8, W0=0.04, Hmag=0.02, Wmag=0.04, H0=0.02)
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
         stator.axial_vent.append(
@@ -67,22 +66,30 @@ class test_Lam_Mag_inset_plot(TestCase):
             VentilationTrap(Zh=6, Alpha0=pi / 6, W1=20e-3, W2=40e-3, D0=0.02, H0=0.170)
         )
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 30)
-        fig.savefig(join(save_path, "test_Lam_Mag_10i_2-Rotor.png"))
+        assert len(fig.axes[0].patches) == 30
+        fig.savefig(join(save_path, "test_Lam_Mag_10i_1-Rotor.png"))
 
-        stator.plot()
+        stator.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 22)
-        fig.savefig(join(save_path, "test_Lam_Mag_10i_3-Stator.png"))
+        assert len(fig.axes[0].patches) == 22
+        fig.savefig(join(save_path, "test_Lam_Mag_10i_2-Stator.png"))
 
-        rotor.slot.magnet = []
-        rotor.plot()
+        rotor.slot.Hmag = rotor.slot.Hmag * 1.2
+        rotor.slot.Wmag = rotor.slot.Wmag * 0.5
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 26)
+        assert len(fig.axes[0].patches) == 30
+        fig.savefig(join(save_path, "test_Lam_Mag_10i_3-Rotor_missmatch.png"))
+
+        rotor.magnet = None
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 26
         fig.savefig(join(save_path, "test_Lam_Mag_10i_4-Rotor_no_mag.png"))
 
+    @pytest.mark.skip(reason="No multi magnet for now")
     def test_Lam_Mag_10_inset_2_mag(self):
         """Test machine plot with Magnet 10 inset with two magnet in the slot"""
         plt.close("all")
@@ -102,8 +109,8 @@ class test_Lam_Mag_inset_plot(TestCase):
             H0=0.02,
             W3=2 * pi / 60,
             magnet=[
-                MagnetType10(Lmag=0.5, Hmag=0.015, Wmag=0.03),
-                MagnetType10(Lmag=0.5, Hmag=0.015, Wmag=0.03),
+                SlotM10(Lmag=0.5, Hmag=0.015, Wmag=0.03),
+                SlotM10(Lmag=0.5, Hmag=0.015, Wmag=0.03),
             ],
         )
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
@@ -127,8 +134,8 @@ class test_Lam_Mag_inset_plot(TestCase):
             W3=2 * pi / 64,
             H0=0.02,
             magnet=[
-                MagnetType10(Lmag=0.5, Hmag=0.025, Wmag=0.03),
-                MagnetType10(Lmag=0.5, Hmag=0.025, Wmag=0.03),
+                SlotM10(Lmag=0.5, Hmag=0.025, Wmag=0.03),
+                SlotM10(Lmag=0.5, Hmag=0.025, Wmag=0.03),
             ],
         )
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
@@ -140,14 +147,14 @@ class test_Lam_Mag_inset_plot(TestCase):
             VentilationTrap(Zh=6, Alpha0=pi / 6, W1=20e-3, W2=40e-3, D0=0.02, H0=0.170)
         )
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 34)
+        assert len(fig.axes[0].patches) == 34
         fig.savefig(join(save_path, "test_Lam_Mag_10i_2_Mag_2-Rotor.png"))
 
-        stator.plot()
+        stator.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 30)
+        assert len(fig.axes[0].patches) == 30
         fig.savefig(join(save_path, "test_Lam_Mag_10i_3_Mag_2-Stator.png"))
 
     def test_Lam_Mag_11_inset(self):
@@ -164,8 +171,8 @@ class test_Lam_Mag_inset_plot(TestCase):
             Wrvd=0.05,
         )
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
-        magnet = [MagnetType11(Lmag=0.5, Hmag=0.01, Wmag=pi / 8)]
-        rotor.slot = SlotMPolar(Zs=8, W0=pi / 8, H0=0.01, W3=2 * pi / 64, magnet=magnet)
+        rotor.magnet.Lmag = 0.5
+        rotor.slot = SlotM11(Zs=8, W0=pi / 8, H0=0.01, Hmag=0.01, Wmag=pi / 8)
 
         stator = LamSlotMag(
             Rint=115e-3,
@@ -176,28 +183,40 @@ class test_Lam_Mag_inset_plot(TestCase):
             Nrvd=2,
             Wrvd=0.05,
         )
-        magnet2 = [MagnetType11(Lmag=0.35, Hmag=0.03, Wmag=pi / 4)]
-        stator.slot = SlotMPolar(
-            Zs=4, W0=pi / 4, H0=0.02, W3=2 * pi / 64, magnet=magnet2
+        stator.magnet.Lmag = 0.35
+        stator.slot = SlotM11(
+            Zs=4,
+            W0=pi / 4,
+            Hmag=0.03,
+            Wmag=pi / 4,
+            H0=0.02,
         )
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 10)
-        fig.savefig(join(save_path, "test_Lam_Mag_11i_2-Rotor.png"))
+        assert len(fig.axes[0].patches) == 10
+        fig.savefig(join(save_path, "test_Lam_Mag_11i_1-Rotor.png"))
 
-        stator.plot()
+        stator.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 6)
-        fig.savefig(join(save_path, "test_Lam_Mag_11i_3-Stator.png"))
+        assert len(fig.axes[0].patches) == 6
+        fig.savefig(join(save_path, "test_Lam_Mag_11i_2-Stator.png"))
 
-        rotor.slot.magnet = []
-        rotor.plot()
+        rotor.slot.Hmag = rotor.slot.Hmag * 1.2
+        rotor.slot.Wmag = rotor.slot.Wmag * 0.5
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 2)
+        assert len(fig.axes[0].patches) == 10
+        fig.savefig(join(save_path, "test_Lam_Mag_11i_3-Rotor_missmatch.png"))
+
+        rotor.magnet = None
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 2
         fig.savefig(join(save_path, "test_Lam_Mag_11i_4-Rotor_no_mag.png"))
 
+    @pytest.mark.skip(reason="Only one magnet for now")
     def test_Lam_Mag_11_inset_2_mag(self):
         """Test machine plot with Magnet 11 inset with two magnet in the slot"""
         plt.close("all")
@@ -217,8 +236,8 @@ class test_Lam_Mag_inset_plot(TestCase):
             H0=0.01,
             W3=pi / 18,
             magnet=[
-                MagnetType11(Lmag=0.5, Hmag=0.01, Wmag=pi / 12),
-                MagnetType11(Lmag=0.5, Hmag=0.01, Wmag=pi / 12),
+                SlotM11(Lmag=0.5, Hmag=0.01, Wmag=pi / 12),
+                SlotM11(Lmag=0.5, Hmag=0.01, Wmag=pi / 12),
             ],
         )
 
@@ -231,26 +250,27 @@ class test_Lam_Mag_inset_plot(TestCase):
             Nrvd=2,
             Wrvd=0.05,
         )
+
         stator.slot = SlotMPolar(
             Zs=4,
             W0=pi / 10,
             H0=0.02,
             W3=2 * pi / 50,
             magnet=[
-                MagnetType11(Lmag=0.35, Hmag=0.03, Wmag=pi / 10),
-                MagnetType11(Lmag=0.35, Hmag=0.03, Wmag=pi / 10),
+                SlotM11(Lmag=0.35, Hmag=0.03, Wmag=pi / 10),
+                SlotM11(Lmag=0.35, Hmag=0.03, Wmag=pi / 10),
             ],
         )
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 18)
+        assert len(fig.axes[0].patches) == 18
         fig.savefig(join(save_path, "test_Lam_Mag_11i_2_Mag_2-Rotor.png"))
 
-        stator.plot()
+        stator.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 10)
+        assert len(fig.axes[0].patches) == 10
         fig.savefig(join(save_path, "test_Lam_Mag_11i_3_Mag_2-Stator.png"))
 
     def test_Lam_Mag_12_inset(self):
@@ -266,8 +286,8 @@ class test_Lam_Mag_inset_plot(TestCase):
             Nrvd=3,
             Wrvd=0.05,
         )
-        magnet = [MagnetType12(Lmag=0.5, Hmag=0.02, Wmag=0.04)]
-        rotor.slot = SlotMFlat(Zs=8, W0=0.04, H0=0.02, W3=2 * pi / 64, magnet=magnet)
+        rotor.magnet.Lmag = 0.5
+        rotor.slot = SlotM12(Zs=8, W0=0.04, H0=0.02, Hmag=0.02, Wmag=0.04)
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
         stator = LamSlotMag(
@@ -279,22 +299,35 @@ class test_Lam_Mag_inset_plot(TestCase):
             Nrvd=3,
             Wrvd=0.05,
         )
-        magnet2 = [MagnetType12(Lmag=0.5, Hmag=0.03, Wmag=0.04)]
-        stator.slot = SlotMFlat(Zs=4, W0=0.04, H0=0.02, W3=2 * pi / 64, magnet=magnet2)
+        stator.magnet.Lmag = 0.5
+        stator.slot = SlotM12(Zs=4, W0=0.04, H0=0.02, Hmag=0.03, Wmag=0.04)
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 10)
-        fig.savefig(join(save_path, "test_Lam_Mag_12i_2-Rotor.png"))
+        assert len(fig.axes[0].patches) == 10
+        fig.savefig(join(save_path, "test_Lam_Mag_12i_1-Rotor.png"))
 
-        stator.plot()
+        stator.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 6)
-        fig.savefig(join(save_path, "test_Lam_Mag_12i_3-Stator.png"))
+        assert len(fig.axes[0].patches) == 6
+        fig.savefig(join(save_path, "test_Lam_Mag_12i_2-Stator.png"))
+
+        rotor.slot.Hmag = rotor.slot.Hmag * 1.2
+        rotor.slot.Wmag = rotor.slot.Wmag * 0.5
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 10
+        fig.savefig(join(save_path, "test_Lam_Mag_12i_3-Rotor_missmatch.png"))
+
+        rotor.magnet = None
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 2
+        fig.savefig(join(save_path, "test_Lam_Mag_12i_4-Rotor_no_mag.png"))
 
     def test_Lam_Mag_13_inset(self):
-        """Test machine plot with Magnet 12 inset"""
+        """Test machine plot with Magnet 13 inset"""
 
         plt.close("all")
         rotor = LamSlotMag(
@@ -306,8 +339,8 @@ class test_Lam_Mag_inset_plot(TestCase):
             Nrvd=4,
             Wrvd=0.02,
         )
-        magnet = [MagnetType13(Lmag=0.5, Hmag=0.02, Wmag=0.04, Rtop=0.04)]
-        rotor.slot = SlotMFlat(Zs=8, W0=0.04, H0=0.02, W3=2 * pi / 64, magnet=magnet)
+        rotor.magnet.Lmag = 0.5
+        rotor.slot = SlotM13(Zs=8, W0=0.04, H0=0.02, Hmag=0.02, Wmag=0.04, Rtopm=0.04)
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
         stator = LamSlotMag(
@@ -319,19 +352,33 @@ class test_Lam_Mag_inset_plot(TestCase):
             Nrvd=4,
             Wrvd=0.02,
         )
-        magnet2 = [MagnetType13(Lmag=0.5, Hmag=0.02, Wmag=0.04, Rtop=0.04)]
-        stator.slot = SlotMFlat(Zs=4, W0=0.04, H0=0.025, W3=2 * pi / 64, magnet=magnet2)
+        stator.magnet.Lmag = 0.5
+        stator.slot = SlotM13(Zs=4, W0=0.04, H0=0.025, Hmag=0.02, Wmag=0.04, Rtopm=0.04)
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 10)
-        fig.savefig(join(save_path, "test_Lam_Mag_13i_2-Rotor.png"))
+        assert len(fig.axes[0].patches) == 10
+        fig.savefig(join(save_path, "test_Lam_Mag_13i_1-Rotor.png"))
 
-        stator.plot()
+        stator.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 6)
-        fig.savefig(join(save_path, "test_Lam_Mag_13i_3-Stator.png"))
+        assert len(fig.axes[0].patches) == 6
+        fig.savefig(join(save_path, "test_Lam_Mag_13i_2-Stator.png"))
+
+        rotor.slot.Wmag = rotor.slot.Wmag * 0.5
+        rotor.slot.Hmag = rotor.slot.Hmag * 1.4
+        rotor.slot.Rtopm = rotor.slot.Rtopm * 0.5
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 10
+        fig.savefig(join(save_path, "test_Lam_Mag_13i_3-Rotor_missmatch.png"))
+
+        rotor.magnet = None
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 2
+        fig.savefig(join(save_path, "test_Lam_Mag_13i_4-Rotor_No_mag.png"))
 
     def test_Lam_Mag_14_inset(self):
         """Test machine plot with Magnet 14 inset"""
@@ -346,8 +393,8 @@ class test_Lam_Mag_inset_plot(TestCase):
             Nrvd=5,
             Wrvd=0.02,
         )
-        magnet = [MagnetType14(Lmag=0.5, Hmag=0.02, Wmag=0.628, Rtop=0.04)]
-        rotor.slot = SlotMPolar(Zs=4, W0=0.628, H0=0.02, magnet=magnet)
+        rotor.magnet.Lmag = 0.5
+        rotor.slot = SlotM14(Zs=4, W0=0.628, H0=0.02, Hmag=0.02, Wmag=0.628, Rtopm=0.04)
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
         stator = Lamination(
@@ -361,12 +408,88 @@ class test_Lam_Mag_inset_plot(TestCase):
         )
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        rotor.plot()
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 6)
-        fig.savefig(join(save_path, "test_Lam_Mag_14i_2-Rotor.png"))
+        assert len(fig.axes[0].patches) == 6
+        fig.savefig(join(save_path, "test_Lam_Mag_14i_1-Rotor.png"))
 
-        stator.plot()
+        rotor.slot.Wmag = rotor.slot.Wmag * 0.5
+        rotor.plot(is_show_fig=False)
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 2)
-        fig.savefig(join(save_path, "test_Lam_Mag_14i_3-Stator.png"))
+        assert len(fig.axes[0].patches) == 6
+        fig.savefig(join(save_path, "test_Lam_Mag_14i_2-Rotor_missmatch.png"))
+
+        rotor.magnet = None
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 2
+        fig.savefig(join(save_path, "test_Lam_Mag_14i_3-Rotor_no_mag.png"))
+
+    def test_Lam_Mag_15_inset(self):
+        """Test machine plot with Magnet 15 inset"""
+
+        plt.close("all")
+        mm = 1e-3
+        rotor = LamSlotMag(Rint=40 * mm, Rext=110 * mm, is_internal=True)
+        rotor.slot = SlotM15(
+            Zs=4,
+            W0=80 * pi / 180,
+            H0=10 * mm,
+            Hmag=20 * mm,
+            Wmag=100 * mm,
+            Rtopm=100 * mm,
+        )
+
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 6
+        fig.savefig(join(save_path, "test_Lam_Mag_15i_1-Rotor.png"))
+
+        rotor.slot.Wmag = rotor.slot.Wmag * 0.5
+        rotor.slot.Rtopm = rotor.slot.Rtopm * 0.5
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 6
+        fig.savefig(join(save_path, "test_Lam_Mag_15i_2-Rotor_missmatch.png"))
+
+        rotor.magnet = None
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 2
+        fig.savefig(join(save_path, "test_Lam_Mag_15i_3-Rotor_No_mag.png"))
+
+    def test_Lam_Mag_16_inset(self):
+        """Test machine plot with SlotM10 inset"""
+
+        plt.close("all")
+        rotor = LamSlotMag(
+            Rint=80e-3,
+            Rext=200e-3,
+            is_internal=True,
+            is_stator=False,
+        )
+        rotor.slot = SlotM16(Zs=4, W0=0.02, H0=0.02, H1=0.08, W1=0.04)
+
+        stator = LamSlotMag(
+            Rint=220e-3,
+            Rext=400e-3,
+            is_internal=False,
+            is_stator=True,
+        )
+        stator.slot = SlotM16(Zs=8, W0=0.02, H0=0.02, H1=0.08, W1=0.04)
+
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 6
+        fig.savefig(join(save_path, "test_Lam_Mag_16i_1-Rotor.png"))
+
+        stator.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 10
+        fig.savefig(join(save_path, "test_Lam_Mag_16i_2-Stator.png"))
+
+        rotor.magnet = None
+        rotor.plot(is_show_fig=False)
+        fig = plt.gcf()
+        assert len(fig.axes[0].patches) == 2
+        fig.savefig(join(save_path, "test_Lam_Mag_16i_3-Rotor_no_mag.png"))

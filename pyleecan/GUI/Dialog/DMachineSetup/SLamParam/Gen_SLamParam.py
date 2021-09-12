@@ -7,8 +7,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.Ui_SLamParam import Ui_SLamPara
 
 class Gen_SLamParam(Ui_SLamParam):
     def setupUi(self, SLamParam):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_SLamParam.setupUi(self, SLamParam)
         # Setup of in_L1
         txt = self.tr(
@@ -19,7 +18,6 @@ class Gen_SLamParam(Ui_SLamParam):
 
         # Setup of lf_L1
         self.lf_L1.validator().setBottom(0)
-        self.lf_L1.validator().setTop(100)
         txt = self.tr(
             u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets"""
         )

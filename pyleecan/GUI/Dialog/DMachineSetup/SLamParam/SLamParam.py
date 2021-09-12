@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from matplotlib.pyplot import gcf
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QDialog, QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QDialog, QMessageBox, QWidget
 
 from .....Classes.LamHole import LamHole
 from .....Classes.Lamination import Lamination
@@ -10,18 +10,18 @@ from .....Classes.LamSlotMag import LamSlotMag
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.DAVDuct import DAVDuct
 from .....GUI.Dialog.DMachineSetup.SLamParam.Gen_SLamParam import Gen_SLamParam
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class SLamParam(Gen_SLamParam, QWidget):
-    """Step to setup the main lamination parameters
-    """
+    """Step to setup the main lamination parameters"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for the DMachineSetup nav
     step_name = "Lamination"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
@@ -30,8 +30,8 @@ class SLamParam(Gen_SLamParam, QWidget):
             A SLamParam widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library 
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -42,7 +42,7 @@ class SLamParam(Gen_SLamParam, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         # Set FloatEdit unit
@@ -65,8 +65,10 @@ class SLamParam(Gen_SLamParam, QWidget):
             if self.obj.Kf1 is None:
                 # Default value for rotor is the stator one
                 self.obj.Kf1 = self.machine.stator.Kf1
+        if self.obj.axial_vent is None:
+            self.obj.axial_vent = list()
 
-        self.w_mat.update(self.obj, "mat_type", self.matlib)
+        self.w_mat.update(self.obj, "mat_type", self.material_dict)
 
         self.lf_L1.setValue(self.obj.L1)
         self.lf_Kf1.setValue(self.obj.Kf1)
@@ -247,7 +249,7 @@ class SLamParam(Gen_SLamParam, QWidget):
             length = format(
                 self.u.get_m(self.obj.L1 + self.obj.Nrvd * self.obj.Wrvd), ".4g"
             )
-            self.out_length.setText(lam_txt + length + " " + self.u.get_m_name())
+            self.out_length.setText(lam_txt + length + " [" + self.u.get_m_name() + "]")
 
     @staticmethod
     def check(lamination):
@@ -330,3 +332,4 @@ class SLamParam(Gen_SLamParam, QWidget):
             gcf().canvas.set_window_title(
                 self.tr("Lamination (without slots) Front view")
             )
+            set_plot_gui_icon()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from os import walk
-from os.path import isfile, join
+from os.path import isfile, join, basename
 
 from csv import reader
 
@@ -67,12 +67,12 @@ def read_all(path, is_internal=False, in_path=""):
     return gen_dict
 
 
-def read_file(path):
+def read_file(file_path):
     """Read a csv file and create a dict for the class code generation
 
     Parameters
     ----------
-    path : str
+    file_path : str
         path to the class csv file to read
 
 
@@ -84,18 +84,18 @@ def read_file(path):
     class_dict = dict()
 
     # Open the module doc
-    if not isfile(path):
+    if not isfile(file_path):
         raise NotAFile("File not found")
 
     # The class name is the csv file name
-    class_dict["name"] = path.split("\\")[-1][:-4]
+    class_dict["name"] = basename(file_path)[:-4]
     try:  # Cleanup path to avoid "commit noise"
-        class_dict["path"] = path[path.index(PACKAGE_NAME) :]
+        class_dict["path"] = file_path[file_path.rfind(PACKAGE_NAME) :]
     except ValueError:  # Path doesn't contain pyleecan
-        class_dict["path"] = path
+        class_dict["path"] = file_path
     # Cleanup \ to avoid errors
     class_dict["path"] = class_dict["path"].replace("\\", "/")
-    with open(path, mode="r") as csv_file:
+    with open(file_path, mode="r") as csv_file:
         class_csv = reader(csv_file, delimiter=",")
         class_csv = list(class_csv)
         # Get all the properties of the class
@@ -170,7 +170,7 @@ def update_all_daughters(gen_dict):
     daughter_dict = {
         class_name: class_dict
         for class_name, class_dict in gen_dict.items()
-        if class_dict["mother"] not in ["", None]
+        if class_dict["mother"] not in ["", None] and "." not in class_dict["mother"]
     }
 
     # Update the daughter (sorted to avoid "commit noise")
@@ -210,7 +210,7 @@ def get_value_str(value, type_val):
         # For int convert to avoid ".0"
         return str(int(value))
     elif type_val == "dict":
-        return "{}"
+        return "-1"
     elif type_val == "bool":
         # change 1 or 0 to True and False
         return str(bool(int(value)))
@@ -240,7 +240,7 @@ def find_import_type(gen_dict, class_dict, pyleecan_type=[]):
 
     # Get all properties including mother ones
     prop_list = list(class_dict["properties"])
-    while class_dict["mother"] != "":
+    while class_dict["mother"] != "" and "." not in class_dict["mother"]:
         class_dict = gen_dict[class_dict["mother"]]
         prop_list.extend(class_dict["properties"])
 
@@ -277,7 +277,13 @@ def is_list_pyleecan_type(type_name):
     is_list : bool
         True if the type is a list of pyleecan type
     """
-    return type_name[0] == "[" and type_name[-1] == "]"
+    return (
+        type_name not in ["", None]
+        and type_name[0] == "["
+        and type_name[-1] == "]"
+        and type_name != "[ndarray]"
+        and ("." not in type_name or "SciDataTool" in type_name)
+    )
 
 
 def is_dict_pyleecan_type(type_name):
@@ -294,18 +300,22 @@ def is_dict_pyleecan_type(type_name):
         True if the type is a dict of pyleecan type
     """
 
-    return type_name[0] == "{" and type_name[-1] == "}" and type_name != "{ndarray}"
+    return (
+        type_name not in ["", None]
+        and type_name[0] == "{"
+        and type_name[-1] == "}"
+        and type_name != "{ndarray}"
+        and ("." not in type_name or "SciDataTool" in type_name)
+    )
 
 
 class NotAFile(Exception):
-    """Raised when the code generator is call on a wrong path
-    """
+    """Raised when the code generator is call on a wrong path"""
 
     pass
 
 
 class InheritError(Exception):
-    """Raised when a class has a wrong mother defined
-    """
+    """Raised when a class has a wrong mother defined"""
 
     pass

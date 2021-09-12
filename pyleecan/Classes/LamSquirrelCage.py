@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/LamSquirrelCage.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/LamSquirrelCage.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/LamSquirrelCage
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .LamSlotWind import LamSlotWind
 
 # Import all class method
@@ -40,9 +45,21 @@ except ImportError as error:
     comp_number_phase_eq = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCage.comp_sym import comp_sym
+    from ..Methods.Machine.LamSquirrelCage.comp_periodicity import comp_periodicity
 except ImportError as error:
-    comp_sym = error
+    comp_periodicity = error
+
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_surface_ring import comp_surface_ring
+except ImportError as error:
+    comp_surface_ring = error
+
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_resistance_wind import (
+        comp_resistance_wind,
+    )
+except ImportError as error:
+    comp_resistance_wind = error
 
 
 from ._check import InitUnKnowClassError
@@ -52,6 +69,7 @@ from .Slot import Slot
 from .Hole import Hole
 from .Notch import Notch
 from .Skew import Skew
+from .Bore import Bore
 
 
 class LamSquirrelCage(LamSlotWind):
@@ -114,26 +132,45 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_number_phase_eq = comp_number_phase_eq
-    # cf Methods.Machine.LamSquirrelCage.comp_sym
-    if isinstance(comp_sym, ImportError):
-        comp_sym = property(
+    # cf Methods.Machine.LamSquirrelCage.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSquirrelCage method comp_sym: " + str(comp_sym)
+                    "Can't use LamSquirrelCage method comp_periodicity: "
+                    + str(comp_periodicity)
                 )
             )
         )
     else:
-        comp_sym = comp_sym
-    # save method is available in all object
+        comp_periodicity = comp_periodicity
+    # cf Methods.Machine.LamSquirrelCage.comp_surface_ring
+    if isinstance(comp_surface_ring, ImportError):
+        comp_surface_ring = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_surface_ring: "
+                    + str(comp_surface_ring)
+                )
+            )
+        )
+    else:
+        comp_surface_ring = comp_surface_ring
+    # cf Methods.Machine.LamSquirrelCage.comp_resistance_wind
+    if isinstance(comp_resistance_wind, ImportError):
+        comp_resistance_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_resistance_wind: "
+                    + str(comp_resistance_wind)
+                )
+            )
+        )
+    else:
+        comp_resistance_wind = comp_resistance_wind
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -154,58 +191,26 @@ class LamSquirrelCage(LamSlotWind):
         Rint=0,
         Rext=1,
         is_stator=True,
-        axial_vent=list(),
-        notch=list(),
+        axial_vent=-1,
+        notch=-1,
         skew=None,
+        yoke_notch=-1,
+        bore=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if ring_mat == -1:
-            ring_mat = Material()
-        if winding == -1:
-            winding = Winding()
-        if slot == -1:
-            slot = Slot()
-        if mat_type == -1:
-            mat_type = Material()
-        if skew == -1:
-            skew = Skew()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            Hscr = obj.Hscr
-            Lscr = obj.Lscr
-            ring_mat = obj.ring_mat
-            Ksfill = obj.Ksfill
-            winding = obj.winding
-            slot = obj.slot
-            L1 = obj.L1
-            mat_type = obj.mat_type
-            Nrvd = obj.Nrvd
-            Wrvd = obj.Wrvd
-            Kf1 = obj.Kf1
-            is_internal = obj.is_internal
-            Rint = obj.Rint
-            Rext = obj.Rext
-            is_stator = obj.is_stator
-            axial_vent = obj.axial_vent
-            notch = obj.notch
-            skew = obj.skew
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -245,18 +250,14 @@ class LamSquirrelCage(LamSlotWind):
                 notch = init_dict["notch"]
             if "skew" in list(init_dict.keys()):
                 skew = init_dict["skew"]
-        # Initialisation by argument
+            if "yoke_notch" in list(init_dict.keys()):
+                yoke_notch = init_dict["yoke_notch"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
+        # Set the properties (value check and convertion are done in setter)
         self.Hscr = Hscr
         self.Lscr = Lscr
-        # ring_mat can be None, a Material object or a dict
-        if isinstance(ring_mat, dict):
-            self.ring_mat = Material(init_dict=ring_mat)
-        elif isinstance(ring_mat, str):
-            from ..Functions.load import load
-
-            self.ring_mat = load(ring_mat)
-        else:
-            self.ring_mat = ring_mat
+        self.ring_mat = ring_mat
         # Call LamSlotWind init
         super(LamSquirrelCage, self).__init__(
             Ksfill=Ksfill,
@@ -274,12 +275,14 @@ class LamSquirrelCage(LamSlotWind):
             axial_vent=axial_vent,
             notch=notch,
             skew=skew,
+            yoke_notch=yoke_notch,
+            bore=bore,
         )
         # The class is frozen (in LamSlotWind init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         LamSquirrelCage_str = ""
         # Get the properties inherited from LamSlotWind
@@ -310,19 +313,61 @@ class LamSquirrelCage(LamSlotWind):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from LamSlotWind
+        diff_list.extend(super(LamSquirrelCage, self).compare(other, name=name))
+        if other._Hscr != self._Hscr:
+            diff_list.append(name + ".Hscr")
+        if other._Lscr != self._Lscr:
+            diff_list.append(name + ".Lscr")
+        if (other.ring_mat is None and self.ring_mat is not None) or (
+            other.ring_mat is not None and self.ring_mat is None
+        ):
+            diff_list.append(name + ".ring_mat None mismatch")
+        elif self.ring_mat is not None:
+            diff_list.extend(
+                self.ring_mat.compare(other.ring_mat, name=name + ".ring_mat")
+            )
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from LamSlotWind
+        S += super(LamSquirrelCage, self).__sizeof__()
+        S += getsizeof(self.Hscr)
+        S += getsizeof(self.Lscr)
+        S += getsizeof(self.ring_mat)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         # Get the properties inherited from LamSlotWind
-        LamSquirrelCage_dict = super(LamSquirrelCage, self).as_dict()
+        LamSquirrelCage_dict = super(LamSquirrelCage, self).as_dict(**kwargs)
         LamSquirrelCage_dict["Hscr"] = self.Hscr
         LamSquirrelCage_dict["Lscr"] = self.Lscr
         if self.ring_mat is None:
             LamSquirrelCage_dict["ring_mat"] = None
         else:
-            LamSquirrelCage_dict["ring_mat"] = self.ring_mat.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+            LamSquirrelCage_dict["ring_mat"] = self.ring_mat.as_dict(**kwargs)
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSquirrelCage_dict["__class__"] = "LamSquirrelCage"
         return LamSquirrelCage_dict
@@ -346,12 +391,14 @@ class LamSquirrelCage(LamSlotWind):
         check_var("Hscr", value, "float", Vmin=0)
         self._Hscr = value
 
-    # short circuit ring section radial height [m]
-    # Type : float, min = 0
     Hscr = property(
         fget=_get_Hscr,
         fset=_set_Hscr,
-        doc=u"""short circuit ring section radial height [m]""",
+        doc=u"""short circuit ring section radial height [m]
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Lscr(self):
@@ -363,12 +410,14 @@ class LamSquirrelCage(LamSlotWind):
         check_var("Lscr", value, "float", Vmin=0)
         self._Lscr = value
 
-    # short circuit ring section axial length
-    # Type : float, min = 0
     Lscr = property(
         fget=_get_Lscr,
         fset=_set_Lscr,
-        doc=u"""short circuit ring section axial length""",
+        doc=u"""short circuit ring section axial length
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_ring_mat(self):
@@ -377,16 +426,26 @@ class LamSquirrelCage(LamSlotWind):
 
     def _set_ring_mat(self, value):
         """setter of ring_mat"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "ring_mat"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Material()
         check_var("ring_mat", value, "Material")
         self._ring_mat = value
 
         if self._ring_mat is not None:
             self._ring_mat.parent = self
 
-    # Material of the Rotor short circuit ring
-    # Type : Material
     ring_mat = property(
         fget=_get_ring_mat,
         fset=_set_ring_mat,
-        doc=u"""Material of the Rotor short circuit ring""",
+        doc=u"""Material of the Rotor short circuit ring
+
+        :Type: Material
+        """,
     )

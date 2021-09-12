@@ -15,14 +15,12 @@ def comp_volumes(self):
     Returns
     -------
     V_dict: dict
-        Lamination surface dictionnary (Vlam, Vvent, Vslot, Vmag) [m**3]
+        Lamination surface dictionary (Vlam, Vvent, Vslot, Vmag) [m**3]
 
     """
 
     V_dict = LamSlot.comp_volumes(self)
-    Vmag = 0
-    for magnet in self.slot.magnet:
-        Vmag += magnet.comp_volume()
+    Vmag = self.slot.comp_surface_active() * self.magnet.Lmag
 
     V_dict["Vmag"] = Vmag
 

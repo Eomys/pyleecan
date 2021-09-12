@@ -1,0 +1,36 @@
+# -*- coding: utf-8 -*-
+from ....Functions.labels import HOLEM_LAB
+
+
+def comp_surface_magnet_id(self, index):
+    """Compute the surface of the hole magnet of the corresponding index
+
+    Parameters
+    ----------
+    self : HoleUD
+        A HoleUD object
+    index : int
+        Index of the magnet to compute the surface
+
+    Returns
+    -------
+    Smag: float
+        Surface of the Magnet [m**2]
+    """
+
+    if self.magnet_dict is None:
+        self.magnet_dict = dict()
+
+    label = "magnet_" + str(index)
+    if label in self.magnet_dict:
+        if self.magnet_dict[label] is None:  # Magnet disabled
+            return 0
+        else:
+            # Find the corresponding surface
+            mag_id = 0
+            for surf in self.surf_list:
+                if HOLEM_LAB in surf.label and mag_id == index:
+                    return surf.comp_surface()
+                elif HOLEM_LAB in surf.label:
+                    mag_id += 1
+            return 0

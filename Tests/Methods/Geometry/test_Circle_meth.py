@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
 from pyleecan.Classes.Circle import Circle
 from pyleecan.Classes.Arc3 import Arc3
-from pyleecan.Methods.Geometry.Circle.rotate import AngleRotationCircleError
-from pyleecan.Methods.Geometry.Circle.translate import PointTranslateCircleError
+from pyleecan.Methods.Geometry.Circle import (
+    AngleRotationCircleError,
+    PointTranslateCircleError,
+)
 from numpy import pi, sqrt, exp, linspace
-from ddt import ddt, data
+import pytest
 
 # Dictionary to test comp_length
 comp_length_test = list()
@@ -58,13 +59,13 @@ translate_test.append(
 lines_test = list()
 lines_test.append({"center": 0, "radius": 1, "ref": 0})
 lines_test[0]["result"] = [
-    Arc3(begin=1, end=-1, is_trigo_direction=True),
-    Arc3(begin=-1, end=1, is_trigo_direction=True),
+    Arc3(begin=1, end=-1, is_trigo_direction=True, prop_dict=dict()),
+    Arc3(begin=-1, end=1, is_trigo_direction=True, prop_dict=dict()),
 ]
 lines_test.append({"center": 5 + 5j, "radius": 1, "ref": 4})
 lines_test[1]["result"] = [
-    Arc3(begin=6 + 5j, end=4 + 5j, is_trigo_direction=True),
-    Arc3(begin=4 + 5j, end=6 + 5j, is_trigo_direction=True),
+    Arc3(begin=6 + 5j, end=4 + 5j, is_trigo_direction=True, prop_dict=dict()),
+    Arc3(begin=4 + 5j, end=6 + 5j, is_trigo_direction=True, prop_dict=dict()),
 ]
 
 # Dictionary to test discretize
@@ -75,68 +76,59 @@ disc_test.append({"center": 5 + 5j, "radius": 1, "ref": 4})
 disc_test[1]["result"] = exp(1j * linspace(0, 2 * pi, 200, endpoint=False)) + 5 + 5j
 
 
-@ddt
-class test_Circle_meth(TestCase):
+class Test_Circle_meth(object):
     """Unittest for Class Circle"""
 
-    @data(*comp_length_test)
+    @pytest.mark.parametrize("test_dict", comp_length_test)
     def test_comp_length(self, test_dict):
-        """Check that you can compute the circle length
-        """
+        """Check that you can compute the circle length"""
         circle = Circle(
             center=test_dict["center"],
             point_ref=test_dict["ref"],
             radius=test_dict["radius"],
         )
         result = circle.comp_length()
-        self.assertAlmostEqual(abs(result - test_dict["expect"]), 0)
+        assert round(abs(abs(result - test_dict["expect"]) - 0), 7) == 0
 
     def test_rotate_fail(self):
-        """Check that the rotate method can detect a wrong arg
-        """
+        """Check that the rotate method can detect a wrong arg"""
         circle = Circle(point_ref=1j, radius=1)
-        with self.assertRaises(AngleRotationCircleError):
+        with pytest.raises(AngleRotationCircleError):
             circle.rotate("")
 
-    @data(*rotate_test)
+    @pytest.mark.parametrize("test_dict", rotate_test)
     def test_rotate(self, test_dict):
-        """Check that you can rotate a circle
-        """
+        """Check that you can rotate a circle"""
         circle = Circle(
             center=test_dict["center"],
             point_ref=test_dict["ref"],
             radius=test_dict["radius"],
         )
         circle.rotate(test_dict["alpha"])
-
-        self.assertAlmostEqual(abs(test_dict["radius"] - circle.radius), 0)
-        self.assertAlmostEqual(abs(test_dict["exp_center"] - circle.center), 0)
+        assert round(abs(abs(test_dict["radius"] - circle.radius) - 0), 7) == 0
+        assert round(abs(abs(test_dict["exp_center"] - circle.center) - 0), 7) == 0
 
     def test_translate_fail(self):
-        """Check that the translate method can detect a wrong arg
-        """
+        """Check that the translate method can detect a wrong arg"""
         circle = Circle(point_ref=1j, radius=1)
-        with self.assertRaises(PointTranslateCircleError):
+        with pytest.raises(PointTranslateCircleError):
             circle.translate("")
 
-    @data(*translate_test)
+    @pytest.mark.parametrize("test_dict", translate_test)
     def test_translate(self, test_dict):
-        """Check that you can translate a circle
-        """
+        """Check that you can translate a circle"""
         circle = Circle(
             center=test_dict["center"],
             point_ref=test_dict["ref"],
             radius=test_dict["radius"],
         )
         circle.translate(test_dict["delta"])
+        assert round(abs(abs(test_dict["radius"] - circle.radius) - 0), 7) == 0
+        assert round(abs(abs(test_dict["exp_center"] - circle.center) - 0), 7) == 0
 
-        self.assertAlmostEqual(abs(test_dict["radius"] - circle.radius), 0)
-        self.assertAlmostEqual(abs(test_dict["exp_center"] - circle.center), 0)
-
-    @data(*lines_test)
+    @pytest.mark.parametrize("test_dict", lines_test)
     def test_get_lines(self, test_dict):
-        """Check that you get the correct lines to draw the circle
-        """
+        """Check that you get the correct lines to draw the circle"""
         circle = Circle(
             center=test_dict["center"],
             point_ref=test_dict["ref"],
@@ -144,19 +136,31 @@ class test_Circle_meth(TestCase):
         )
         lines = circle.get_lines()
 
-        self.assertEqual(lines, test_dict["result"])
+        assert len(lines) == len(test_dict["result"])
+        for ii in range(len(lines)):
+            msg = (
+                "Error for line["
+                + str(ii)
+                + "] :"
+                + str(lines[ii].compare(test_dict["result"][ii]))
+            )
+            assert lines[ii] == test_dict["result"][ii], msg
 
-    @data(*disc_test)
+    @pytest.mark.parametrize("test_dict", disc_test)
     def test_discretize(self, test_dict):
-        """Check that you can discretize the circle
-        """
+        """Check that you can discretize the circle"""
         circle = Circle(
             center=test_dict["center"],
             point_ref=test_dict["ref"],
             radius=test_dict["radius"],
         )
         points = circle.discretize()
-
-        self.assertEqual(len(points), len(test_dict["result"]))
+        assert len(points) == len(test_dict["result"])
         for ii in range(len(points)):
-            self.assertAlmostEqual(points[ii], test_dict["result"][ii], delta=1e-6)
+            assert abs(points[ii] - test_dict["result"][ii]) < 1e-6
+
+
+if __name__ == "__main__":
+    a = Test_Circle_meth()
+    for test_dict in lines_test:
+        a.test_get_lines(test_dict)

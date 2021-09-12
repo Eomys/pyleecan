@@ -1,4 +1,4 @@
-# -*-- coding: utf-8 -*
+from ....Methods.Geometry.Trapeze import *
 
 
 def check(self):
@@ -27,9 +27,3 @@ def check(self):
 
     if self.W2 <= 0:
         raise TrapezeError("the W2 base of Trapeze must be greater than 0")
-
-
-class TrapezeError(Exception):
-    """ """
-
-    pass

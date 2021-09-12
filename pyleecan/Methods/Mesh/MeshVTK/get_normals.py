@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def get_normals(self, indices=[]):
+def get_normals(self, indices=None, loc="center"):
     """Return the array of the normals coordinates.
 
     Parameters
@@ -10,6 +10,8 @@ def get_normals(self, indices=[]):
         a MeshVTK object
     indices : list
         list of the points to extract (optional)
+    loc : str
+        localization of the normals ("center" or "point")
 
     Returns
     -------
@@ -17,6 +19,25 @@ def get_normals(self, indices=[]):
         Normals coordinates
     """
 
-    surf = self.get_surf(indices)
+    # Get surfaces
+    surf = self.get_surf()
 
-    return surf.cell_normals
+    if loc == "center":
+
+        normals = surf.cell_normals
+
+    elif loc == "point":
+        if self.node_normals is None:
+            self.surf.compute_normals(
+                cell_normals=False, point_normals=True, inplace=True
+            )
+
+            self.node_normals = self.surf["Normals"]
+
+        normals = self.node_normals
+
+    if indices is None:
+        return normals
+
+    else:
+        return normals[indices, :]

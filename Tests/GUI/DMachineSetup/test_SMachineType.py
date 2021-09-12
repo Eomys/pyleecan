@@ -2,11 +2,10 @@
 
 import sys
 from random import uniform
-from unittest import TestCase
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtTest import QTest
+from PySide2 import QtWidgets
+from PySide2.QtCore import Qt
+from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.LamSlotMag import LamSlotMag
@@ -24,274 +23,330 @@ from pyleecan.Classes.HoleM50 import HoleM50
 import pytest
 
 
-@pytest.mark.GUI
-class test_SMachineType(TestCase):
+class TestSMachineType(object):
     """Test that the widget SMachineType behave like it should"""
 
-    def setUp(self):
+    @pytest.fixture
+    def setup(self):
         """Run at the begining of every test to setup the gui"""
-        self.test_obj = MachineSCIM(name="test_machine", type_machine=1)
-        self.test_obj.stator = LamSlotWind(
+
+        if not QtWidgets.QApplication.instance():
+            self.app = QtWidgets.QApplication(sys.argv)
+        else:
+            self.app = QtWidgets.QApplication.instance()
+
+        test_obj = MachineSCIM(name="test_machine", type_machine=1)
+        test_obj.stator = LamSlotWind(
             is_stator=True, is_internal=False, Rint=0.21, Rext=0.22
         )
-        self.test_obj.stator.winding.p = 6
-        self.test_obj.rotor = LamSlotWind(
+        test_obj.stator.winding.p = 6
+        test_obj.rotor = LamSlotWind(
             is_stator=False, is_internal=True, Rint=0.11, Rext=0.12
         )
 
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+        widget = SMachineType(machine=test_obj, material_dict=dict(), is_stator=False)
 
-    @classmethod
-    def setUpClass(cls):
-        """Start the app for the test"""
-        print("\nStart Test SMachineType")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        yield {"widget": widget, "test_obj": test_obj}
 
-    @classmethod
-    def tearDownClass(cls):
-        """Exit the app after the test"""
-        cls.app.quit()
+        self.app.quit()
 
-    def test_init(self):
+    def test_init(self, setup):
         """Check that the Widget spinbox initialise to the lamination value"""
 
-        self.assertEqual(self.widget.le_name.text(), "test_machine")
-        self.assertEqual(self.widget.si_p.value(), 6)
-        self.assertEqual(self.widget.c_type.currentIndex(), 0)
-        self.assertEqual(self.widget.c_type.currentText(), "SCIM")
-        self.assertEqual(self.widget.is_inner_rotor.checkState(), Qt.Checked)
+        assert setup["widget"].le_name.text() == "test_machine"
+        assert setup["widget"].si_p.value() == 6
+        assert setup["widget"].c_type.currentIndex() == 0
+        assert setup["widget"].c_type.currentText() == "SCIM"
+        assert setup["widget"].is_inner_rotor.checkState() == Qt.Checked
 
         # DFIM
-        self.test_obj = MachineDFIM(name="test_machine_dfim", type_machine=4)
-        self.test_obj.stator = LamSlotWind(
+        setup["test_obj"] = MachineDFIM(name="test_machine_dfim", type_machine=4)
+        setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.stator.winding.p = 7
-        self.test_obj.rotor = LamSlotWind(
+        setup["test_obj"].stator.winding.p = 7
+        setup["test_obj"].rotor = LamSlotWind(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
-        self.assertEqual(self.widget.le_name.text(), "test_machine_dfim")
-        self.assertEqual(self.widget.si_p.value(), 7)
-        self.assertEqual(self.widget.c_type.currentIndex(), 1)
-        self.assertEqual(self.widget.c_type.currentText(), "DFIM")
-        self.assertEqual(self.widget.is_inner_rotor.checkState(), Qt.Unchecked)
+        assert setup["widget"].le_name.text() == "test_machine_dfim"
+        assert setup["widget"].si_p.value() == 7
+        assert setup["widget"].c_type.currentIndex() == 1
+        assert setup["widget"].c_type.currentText() == "DFIM"
+        assert setup["widget"].is_inner_rotor.checkState() == Qt.Unchecked
 
-        # SyRM
-        self.test_obj = MachineSyRM(name="test_machine_syrm", type_machine=5)
-        self.test_obj.stator = LamSlotWind(
+        # SynRM
+        setup["test_obj"] = MachineSyRM(name="test_machine_synrm", type_machine=5)
+        setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.stator.winding.p = 21
-        self.test_obj.rotor = LamHole(
+        setup["test_obj"].stator.winding.p = 21
+        setup["test_obj"].rotor = LamHole(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
-        self.assertEqual(self.widget.le_name.text(), "test_machine_syrm")
-        self.assertEqual(self.widget.si_p.value(), 21)
-        self.assertEqual(self.widget.c_type.currentIndex(), 2)
-        self.assertEqual(self.widget.c_type.currentText(), "SyRM")
-        self.assertEqual(self.widget.is_inner_rotor.checkState(), Qt.Unchecked)
+        assert setup["widget"].le_name.text() == "test_machine_synrm"
+        assert setup["widget"].si_p.value() == 21
+        assert setup["widget"].c_type.currentIndex() == 2
+        assert setup["widget"].c_type.currentText() == "SynRM"
+        assert setup["widget"].is_inner_rotor.checkState() == Qt.Unchecked
 
         # SPMSM
-        self.test_obj = MachineSIPMSM(name="test_machine_spmsm", type_machine=6)
-        self.test_obj.stator = LamSlotWind(
-            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
-        )
-        self.test_obj.stator.winding.p = 8
-        self.test_obj.rotor = LamSlotMag(
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
-        )
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
-
-        self.assertEqual(self.widget.le_name.text(), "test_machine_spmsm")
-        self.assertEqual(self.widget.si_p.value(), 8)
-        self.assertEqual(self.widget.c_type.currentIndex(), 3)
-        self.assertEqual(self.widget.c_type.currentText(), "SPMSM")
-        self.assertEqual(self.widget.is_inner_rotor.checkState(), Qt.Unchecked)
-
-        # SIPMSM
-        self.test_obj = MachineSIPMSM(name="test_machine_sipmsm", type_machine=7)
-        self.test_obj.stator = LamSlotWind(
+        setup["test_obj"] = MachineSIPMSM(name="test_machine_spmsm", type_machine=7)
+        setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=False, Rint=0.21, Rext=0.22
         )
-        self.test_obj.stator.winding.p = 9
-        self.test_obj.rotor = LamSlotMag(
+        setup["test_obj"].stator.winding.p = 9
+        setup["test_obj"].rotor = LamSlotMag(
             is_stator=False, is_internal=True, Rint=0.11, Rext=0.12
         )
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
-        self.assertEqual(self.widget.le_name.text(), "test_machine_sipmsm")
-        self.assertEqual(self.widget.si_p.value(), 9)
-        self.assertEqual(self.widget.c_type.currentIndex(), 4)
-        self.assertEqual(self.widget.c_type.currentText(), "SIPMSM")
-        self.assertEqual(self.widget.is_inner_rotor.checkState(), Qt.Checked)
+        assert setup["widget"].le_name.text() == "test_machine_spmsm"
+        assert setup["widget"].si_p.value() == 9
+        assert setup["widget"].c_type.currentIndex() == 3
+        assert setup["widget"].c_type.currentText() == "SPMSM"
+        assert setup["widget"].is_inner_rotor.checkState() == Qt.Checked
 
         # IPMSM
-        self.test_obj = MachineIPMSM(name="test_machine_ipmsm", type_machine=8)
-        self.test_obj.stator = LamSlotWind(
+        setup["test_obj"] = MachineIPMSM(name="test_machine_ipmsm", type_machine=8)
+        setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.stator.winding.p = 10
-        self.test_obj.rotor = LamHole(
+        setup["test_obj"].stator.winding.p = 10
+        setup["test_obj"].rotor = LamHole(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
-        self.assertEqual(self.widget.le_name.text(), "test_machine_ipmsm")
-        self.assertEqual(self.widget.si_p.value(), 10)
-        self.assertEqual(self.widget.c_type.currentIndex(), 5)
-        self.assertEqual(self.widget.c_type.currentText(), "IPMSM")
-        self.assertEqual(self.widget.is_inner_rotor.checkState(), Qt.Unchecked)
+        assert setup["widget"].le_name.text() == "test_machine_ipmsm"
+        assert setup["widget"].si_p.value() == 10
+        assert setup["widget"].c_type.currentIndex() == 4
+        assert setup["widget"].c_type.currentText() == "IPMSM"
+        assert setup["widget"].is_inner_rotor.checkState() == Qt.Unchecked
 
         # WRSM
-        self.test_obj = MachineWRSM(name="test_machine_wrsm", type_machine=9)
-        self.test_obj.stator = LamSlotWind(
+        setup["test_obj"] = MachineWRSM(name="test_machine_wrsm", type_machine=9)
+        setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.stator.winding.p = 5
-        self.test_obj.rotor = LamSlotWind(
+        setup["test_obj"].stator.winding.p = 5
+        setup["test_obj"].rotor = LamSlotWind(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
-        self.assertEqual(self.widget.le_name.text(), "test_machine_wrsm")
-        self.assertEqual(self.widget.si_p.value(), 5)
-        self.assertEqual(self.widget.c_type.currentIndex(), 6)
-        self.assertEqual(self.widget.c_type.currentText(), "WRSM")
-        self.assertEqual(self.widget.is_inner_rotor.checkState(), Qt.Unchecked)
+        assert setup["widget"].le_name.text() == "test_machine_wrsm"
+        assert setup["widget"].si_p.value() == 5
+        assert setup["widget"].c_type.currentIndex() == 5
+        assert setup["widget"].c_type.currentText() == "WRSM"
+        assert setup["widget"].is_inner_rotor.checkState() == Qt.Unchecked
 
-    def test_set_name(self):
+    def test_set_name(self, setup):
         """Check that the Widget allow to update name"""
         # Clear the field before writing the new value
-        self.widget.le_name.clear()
+        setup["widget"].le_name.clear()
         value = round(uniform(0, 1), 4)
-        QTest.keyClicks(self.widget.le_name, "test_" + str(value))
-        self.widget.le_name.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(setup["widget"].le_name, "test_" + str(value))
+        setup["widget"].le_name.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.test_obj.name, "test_" + str(value))
+        assert setup["test_obj"].name == "test_" + str(value)
 
-    def test_set_is_inner_rotor(self):
+    def test_set_is_inner_rotor(self, setup):
         """Check that the Widget allow to update is_inner_rotor"""
-        self.widget.is_inner_rotor.setCheckState(Qt.Checked)
-        self.assertTrue(self.test_obj.rotor.is_internal)
+        setup["widget"].is_inner_rotor.setCheckState(Qt.Checked)
+        assert setup["test_obj"].rotor.is_internal
+        setup["widget"].is_inner_rotor.setCheckState(Qt.Unchecked)
+        assert not setup["test_obj"].rotor.is_internal
 
-        self.widget.is_inner_rotor.setCheckState(Qt.Unchecked)
-        self.assertFalse(self.test_obj.rotor.is_internal)
-
-    def test_set_p_scim(self):
+    def test_set_p_scim(self, setup):
         """Check that the Widget allow to update p"""
         # Clear the field before writing the new value
-        self.widget.si_p.clear()
+        setup["widget"].si_p.clear()
         value = int(uniform(3, 100))
-        QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(setup["widget"].si_p, str(value))
+        setup["widget"].si_p.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.test_obj.stator.winding.p, value)
-        self.assertEqual(self.test_obj.rotor.winding.p, value)
+        assert setup["test_obj"].stator.winding.p == value
+        assert setup["test_obj"].rotor.winding.p == value
 
-    def test_set_p_dfim(self):
+    def test_set_p_dfim(self, setup):
         """Check that the Widget allow to update p"""
-        self.test_obj = MachineDFIM(name="test_machine_dfim", type_machine=4)
-        self.test_obj.stator = LamSlotWind(
+        setup["test_obj"] = MachineDFIM(name="test_machine_dfim", type_machine=4)
+        setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.rotor = LamSlotWind(
+        setup["test_obj"].rotor = LamSlotWind(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
         # Clear the field before writing the new value
-        self.widget.si_p.clear()
+        setup["widget"].si_p.clear()
         value = int(uniform(3, 100))
-        QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(setup["widget"].si_p, str(value))
+        setup["widget"].si_p.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.test_obj.stator.winding.p, value)
-        self.assertEqual(self.test_obj.rotor.winding.p, value)
+        assert setup["test_obj"].stator.winding.p == value
+        assert setup["test_obj"].rotor.winding.p == value
 
-    def test_set_p_spmsm(self):
+    def test_set_p_sipmsm(self, setup):
         """Check that the Widget allow to update p"""
-        self.test_obj = MachineSIPMSM(name="test_machine_spmsm", type_machine=6)
-        self.test_obj.stator = LamSlotWind(
+        setup["test_obj"] = MachineSIPMSM(name="test_machine_ipmsm", type_machine=7)
+        setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.rotor = LamSlotMag(
+        setup["test_obj"].rotor = LamSlotMag(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
         # Clear the field before writing the new value
-        self.widget.si_p.clear()
+        setup["widget"].si_p.clear()
         value = int(uniform(3, 100))
-        QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(setup["widget"].si_p, str(value))
+        setup["widget"].si_p.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.test_obj.stator.winding.p, value)
-        self.assertEqual(self.test_obj.rotor.slot.Zs, 2 * value)
+        assert setup["test_obj"].stator.winding.p == value
+        assert setup["test_obj"].rotor.slot.Zs == 2 * value
 
-    def test_set_p_sipmsm(self):
+    def test_set_p_ipmsm(self, setup):
         """Check that the Widget allow to update p"""
-        self.test_obj = MachineSIPMSM(name="test_machine_ipmsm", type_machine=7)
-        self.test_obj.stator = LamSlotWind(
+        setup["test_obj"] = MachineIPMSM(name="test_machine_ipmsm", type_machine=8)
+        setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.rotor = LamSlotMag(
+        setup["test_obj"].rotor = LamHole(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+        setup["test_obj"].rotor.hole = list()
+        setup["test_obj"].rotor.hole.append(HoleM50(Zh=0))
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
         # Clear the field before writing the new value
-        self.widget.si_p.clear()
+        setup["widget"].si_p.clear()
         value = int(uniform(3, 100))
-        QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(setup["widget"].si_p, str(value))
+        setup["widget"].si_p.editingFinished.emit()  # To trigger the slot
+        assert setup["test_obj"].stator.winding.p == value
+        assert setup["test_obj"].rotor.hole[0].Zh == 2 * value
 
-        self.assertEqual(self.test_obj.stator.winding.p, value)
-        self.assertEqual(self.test_obj.rotor.slot.Zs, 2 * value)
-
-    def test_set_p_ipmsm(self):
+    def test_set_p_syrm(self, setup):
         """Check that the Widget allow to update p"""
-        self.test_obj = MachineIPMSM(name="test_machine_ipmsm", type_machine=8)
-        self.test_obj.stator = LamSlotWind(
+        setup["test_obj"] = MachineSyRM(name="test_machine_ipmsm", type_machine=5)
+        setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.rotor = LamHole(
+        setup["test_obj"].rotor = LamHole(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
-        self.test_obj.rotor.hole = list()
-        self.test_obj.rotor.hole.append(HoleM50(Zh=0))
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+        setup["test_obj"].rotor.hole = list()
+        setup["test_obj"].rotor.hole.append(HoleM50(Zh=0))
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=False
+        )
 
         # Clear the field before writing the new value
-        self.widget.si_p.clear()
+        setup["widget"].si_p.clear()
         value = int(uniform(3, 100))
-        QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(setup["widget"].si_p, str(value))
+        setup["widget"].si_p.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.test_obj.stator.winding.p, value)
-        self.assertEqual(self.test_obj.rotor.hole[0].Zh, 2 * value)
+        assert setup["test_obj"].stator.winding.p == value
+        assert setup["test_obj"].rotor.hole[0].Zh == 2 * value
 
-    def test_set_p_syrm(self):
-        """Check that the Widget allow to update p"""
-        self.test_obj = MachineSyRM(name="test_machine_ipmsm", type_machine=5)
-        self.test_obj.stator = LamSlotWind(
+    def test_set_p(self, setup):
+        """Check that the Widget allow to update p when Winding is None"""
+        setup["test_obj"] = MachineSyRM(name="test_machine_ipmsm", type_machine=5)
+        setup["test_obj"].stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22, Ksfill=0.545
+        )
+        setup["test_obj"].stator.winding = None
+        setup["test_obj"].rotor = LamHole(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
+        )
+        setup["test_obj"].rotor.hole = list()
+        setup["test_obj"].rotor.hole.append(HoleM50(Zh=0))
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=False
+        )
+
+        # Clear the field before writing the new value
+        setup["widget"].si_p.clear()
+        value = int(uniform(3, 100))
+        QTest.keyClicks(setup["widget"].si_p, str(value))
+        setup["widget"].si_p.editingFinished.emit()  # To trigger the slot
+
+        assert setup["widget"].machine.stator.winding.p == value
+        assert setup["widget"].machine.stator.winding.is_reverse_wind == None
+        assert setup["widget"].machine.stator.winding.Nslot_shift_wind == None
+        assert setup["widget"].machine.stator.winding.qs == None
+        assert setup["widget"].machine.stator.winding.Ntcoil == None
+        assert setup["widget"].machine.stator.winding.Npcp == None
+        assert setup["widget"].machine.stator.winding.type_connection == None
+        assert setup["widget"].machine.stator.winding.Lewout == None
+
+    @pytest.mark.skip(reason="Need to have DMachineSetup as parent")
+    def test_set_type_ipmsm(self, setup):
+        """Check that you can define an IPMSM machine"""
+        setup["widget"].c_type.setCurrentText("IPMSM")
+        # Clear the field before writing the new value
+        setup["widget"].si_p.clear()
+        value = int(uniform(3, 100))
+        QTest.keyClicks(setup["widget"].si_p, str(value))
+        setup["widget"].si_p.editingFinished.emit()  # To trigger the slot
+
+        assert setup["widget"].machine.stator.winding.p == value
+        assert type(setup["widget"].machine) is MachineIPMSM
+        assert setup["widget"].machine.rotor.hole == list()
+
+    # def test_set_c_type(self, setup):
+    #     """Check that the Widget allow to update c_type when changing value in the combobox"""
+    #     # SIPMSM
+    #     setup["test_obj"] = MachineSIPMSM(name="test_machine_sipmsm", type_machine=7)
+    #     setup["test_obj"].stator = LamSlotWind(
+    #         is_stator=True, is_internal=False, Rint=0.21, Rext=0.22
+    #     )
+    #     setup["test_obj"].stator.winding.p = 9
+    #     setup["test_obj"].rotor = LamSlotMag(
+    #         is_stator=False, is_internal=True, Rint=0.11, Rext=0.12
+    #     )
+    #     setup["widget"] = SMachineType(machine=setup["test_obj"], material_dict=dict(), is_stator=False)
+
+    #     assert setup["widget"].le_name.text() == "test_machine_sipmsm"
+    #     assert setup["widget"].si_p.value() == 9
+    #     assert setup["widget"].c_type.currentIndex() == 4
+    #     assert setup["widget"].c_type.currentText() == "SIPMSM"
+    #     assert setup["widget"].is_inner_rotor.checkState() == Qt.Checked
+
+    #     QTest.keyClicks(setup["widget"].c_type, "WRSM")
+
+    #     assert setup["widget"].c_type.currentIndex() == 3
+    #     assert setup["widget"].c_type.currentText() == "WRSM"   TODO
+
+    def test_check(self, setup):
+        setup["test_obj"] = MachineSyRM(name="test_machine_ipmsm", type_machine=5)
+        setup["test_obj"].stator = LamSlotWind(
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.rotor = LamHole(
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
-        )
-        self.test_obj.rotor.hole = list()
-        self.test_obj.rotor.hole.append(HoleM50(Zh=0))
-        self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
+        setup["test_obj"].stator.winding = None
 
-        # Clear the field before writing the new value
-        self.widget.si_p.clear()
-        value = int(uniform(3, 100))
-        QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit()  # To trigger the slot
-
-        self.assertEqual(self.test_obj.stator.winding.p, value)
-        self.assertEqual(self.test_obj.rotor.hole[0].Zh, 2 * value)
+        assert setup["widget"].check(setup["test_obj"]) == "Missing stator winding"

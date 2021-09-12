@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QMessageBox, QWidget
 
+from .....Classes.Shaft import Shaft
 from .....Classes.Frame import Frame
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SMachineDimension.Ui_SMachineDimension import (
@@ -13,15 +14,14 @@ from .....GUI.Resources import pixmap_dict
 
 
 class SMachineDimension(Ui_SMachineDimension, QWidget):
-    """Step to setup the Machine dimension
-    """
+    """Step to setup the Machine dimension"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for the DMachineSetup nav
     step_name = "Machine Dimensions"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
@@ -30,8 +30,8 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             A SMachineDimension widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library 
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -42,7 +42,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         # Set FloatEdit unit
@@ -62,7 +62,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.unit_Lfra,
         ]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Initialize the GUI with the current machine value
         self.lf_SRint.setValue(machine.stator.Rint)
@@ -73,9 +73,9 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         self.set_airgap()  # Update out_airgap if possible
 
         # Set default materials
-        self.w_mat_0.setText("mat_type:")
+        self.w_mat_0.setText("Shaft Material")
         self.w_mat_0.def_mat = "M400-50A"
-        self.w_mat_1.setText("mat_type:")
+        self.w_mat_1.setText("Frame Material")
         self.w_mat_1.def_mat = "M400-50A"
 
         if (
@@ -84,16 +84,16 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             or machine.frame.Rext is None
             or machine.frame.comp_height_eq() == 0
         ):
+            machine.frame = None
             self.g_frame.setChecked(False)
             self.lf_Wfra.clear()  # Empty spinbox
             self.lf_Lfra.clear()  # Empty spinbox
         else:
             self.g_frame.setChecked(True)
-            Wfra = machine.frame.comp_height_eq()
-            self.lf_Wfra.setText(format(gui_option.unit.get_m(Wfra), ".6g"))
+            self.lf_Wfra.setValue(machine.frame.comp_height_eq())
             if machine.frame.Lfra is not None:
                 self.lf_Lfra.setValue(machine.frame.Lfra)
-            self.w_mat_1.update(self.machine.frame, "mat_type", self.matlib)
+            self.w_mat_1.update(self.machine.frame, "mat_type", self.material_dict)
 
         # Adapt the GUI to the topology of the machine
         if not machine.rotor.is_internal:  # External Rotor
@@ -106,6 +106,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             or machine.shaft.Drsh == 0
         ):
             # Internal Rotor without shaft
+            machine.shaft = None
             self.g_shaft.show()
             self.g_frame.show()
             self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft"]))
@@ -120,14 +121,15 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.g_frame.show()
             self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
             self.g_shaft.setChecked(True)
-            if machine.shaft.Drsh is not None:
-                self.out_Drsh.setText(
-                    self.tr("Drsh = 2*Rotor.Rint = ")
-                    + str(2000 * self.machine.rotor.Rint)
-                    + " mm"
-                )
-
-            self.w_mat_0.update(self.machine.shaft, "mat_type", self.matlib)
+            self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
+            self.out_Drsh.setText(
+                self.tr("Drsh = ")
+                + format(gui_option.unit.get_m(self.machine.shaft.Drsh), ".4g")
+                + " ["
+                + gui_option.unit.get_m_name()
+                + "]"
+            )
+            self.w_mat_0.update(self.machine.shaft, "mat_type", self.material_dict)
 
         # Connect the widget
         self.lf_SRint.editingFinished.connect(self.set_stator_Rint)
@@ -281,11 +283,9 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             else:
                 self.machine.frame.Rint = None
                 self.machine.frame.Rext = None
-            self.w_mat_1.update(self.machine.frame, "mat_type", self.matlib)
+            self.w_mat_1.update(self.machine.frame, "mat_type", self.material_dict)
             self.lf_Wfra.clear()
             self.lf_Lfra.clear()
-            self.in_Lfra.show()
-            self.unit_Lfra.show()
         else:
             self.machine.frame = None
         # Notify the machine GUI that the machine has changed
@@ -305,19 +305,22 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         if is_checked:  # If there is a shaft
             # Set the corresponding image
             self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
-            self.w_mat_0.update(self.machine.shaft, "mat_type", self.matlib)
             # Set Drsh if machine.rotor.Rint is set
             if self.machine.rotor.Rint is not None:
-                self.out_Drsh.setText(
-                    self.tr("Drsh = 2*Rotor.Rint = ")
-                    + str(2000 * self.machine.rotor.Rint)
-                    + " mm"
-                )
+                self.machine.shaft = Shaft()
+                self.machine.shaft._set_None()
                 self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
+                self.out_Drsh.setText(
+                    self.tr("Drsh = ")
+                    + format(gui_option.unit.get_m(self.machine.shaft.Drsh), ".4g")
+                    + " ["
+                    + gui_option.unit.get_m_name()
+                    + "]"
+                )
             else:
-                self.out_Drsh.setText(self.tr("Drsh = 2*Rotor.Rint = "))
+                self.out_Drsh.setText(self.tr("Drsh = "))
                 self.machine.shaft.Drsh = None
-
+            self.w_mat_0.update(self.machine.shaft, "mat_type", self.material_dict)
             # machine.rotor.Rint editable only if there is a shaft
             self.lf_RRint.setEnabled(True)
 
@@ -325,7 +328,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             # Set the corresponding image
             self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft"]))
 
-            self.machine.shaft.Drsh = 0
+            self.machine.shaft = None
             self.machine.rotor.Rint = 0
             self.lf_RRint.setValue(0)
 
@@ -391,12 +394,12 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             return self.tr("You must set Rotor.Rint !")
         if machine.rotor.Rint is None and not self.g_shaft.isChecked():
             machine.rotor.Rint = 0
+            machine.shaft = None
         if self.g_frame.isChecked() and machine.frame.Rint is None:
             return self.tr("You must set Wfra or unchecked Frame !")
         if not self.g_frame.isChecked():
             self.machine.frame = None
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()

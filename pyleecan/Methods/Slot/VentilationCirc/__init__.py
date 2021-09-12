@@ -1,1 +1,16 @@
-# -*- coding: utf-8 -*-
+class VentilationCircInstanceError(Exception):
+    """ """
+
+    pass
+
+
+class CircleBuildGeometryError(Exception):
+    """ """
+
+    pass
+
+
+class SymmetryError(Exception):
+    """ """
+
+    pass

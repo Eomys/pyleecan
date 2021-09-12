@@ -2,35 +2,50 @@ import os
 import numpy as np
 
 from ....definitions import MAIN_DIR
-from ....Classes.Mesh import Mesh
-from ....Classes.ElementMat import ElementMat
+from ....Classes.MeshMat import MeshMat
+from ....Classes.CellMat import CellMat
 from ....Classes.NodeMat import NodeMat
-from ....Classes.Solution import Solution
-from femm import callfemm
+from ....Classes.RefTriangle3 import RefTriangle3
+
 from os.path import join
 
+from ....Functions.FEMM import FEMM_GROUPS
 
-def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
+
+def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False):
     """Load the mesh data and solution data. FEMM must be working and a simulation must have been solved.
 
     Parameters
     ----------
     self : MagFEMM
         a MagFEMM object
-    is_get_mesh : bool
-        1 to load the mesh and solution into the simulation
-    is_save_FEA : bool
-        1 to save the mesh and solution into a .json file
+    femm : FEMMHandler
+        client to send command to a FEMM instance
+    save_path: str
+        Full path to folder in which to save results
     j_t0 : int
-        Targeted time step
+        time step index
+    id_worker : int
+        worker index
+    is_get_mesh : bool
+        True to load and create the mesh or not
 
     Returns
     -------
-    res_path: str
-        path to the result folder
+    mesh: MeshMat
+        Object containing magnetic mesh
+    B: ndarray
+        3D Magnetic flux density for each element (Nelem, 3) [T]
+    H : ndarray
+        3D Magnetic field for each element (Nelem, 3) [A/m]
+    mu : ndarray
+        Magnetic relative permeability for each element (Nelem,1) []
+    groups: dict
+        Dict whose values are group label and values are array of indices of related elements
+
     """
 
-    idworker = "1"  # For parallelization TODO
+    idworker = str(id_worker)  # For parallelization TODO
 
     path_txt = join(MAIN_DIR, "Functions", "FEMM") + "\\"
     path_txt_lua = path_txt.replace("\\", "/")
@@ -53,7 +68,7 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
     # Run the LUA externally using FEMM LUA console and store the data in the
     # temporary text files
     path_lua_out2 = path_lua_out.replace("\\", "/")
-    callfemm('dofile("' + path_lua_out2 + '")')
+    femm.callfemm('dofile("' + path_lua_out2 + '")')
 
     # Delete the LUA script
     os.remove(path_lua_out)
@@ -86,33 +101,38 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
     # Delete text files
     os.remove(path_results)
 
-    # Create Mesh and Solution dictionaries
-    if (not self.is_sliding_band) or (j_t0 == 0):
-        mesh = Mesh()
-        mesh.element["Triangle3"] = ElementMat(
-            connectivity=listElem,
-            nb_elem=NbElem,
-            group=listElem0[:, 6],
-            nb_node_per_element=3,
-            tag=np.linspace(0, NbElem - 1, NbElem),
-        )
-        mesh.node = NodeMat(
-            coordinate=listNd[:, 0:2], nb_node=NbNd, tag=np.linspace(0, NbNd - 1, NbNd)
-        )
+    ## Create Mesh and Solution dictionaries
 
-        mesh.group = np.unique(listElem0[:, 6])
+    # Save MeshMat for only 1 time step with sliding band
+    if is_get_mesh:
+        mesh = MeshMat()
+        mesh.label = "FEMM"
+        mesh.cell["triangle"] = CellMat(
+            connectivity=listElem,
+            nb_cell=NbElem,
+            nb_node_per_cell=3,
+            indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
+        )
+        mesh.cell["triangle"].interpolation.ref_cell = RefTriangle3(epsilon=1e-9)
+        mesh.node = NodeMat(
+            coordinate=listNd[:, 0:2],
+            nb_node=NbNd,
+            indice=np.linspace(0, NbNd - 1, NbNd, dtype=int),
+        )
+        # get all groups that are in the FEMM model
+        groups = dict()
+        for grp in FEMM_GROUPS:
+            idx = FEMM_GROUPS[grp]["ID"]
+            name = FEMM_GROUPS[grp]["name"]
+            ind = np.where(listElem0[:, 6] == idx)[0]
+            if ind.size > 0:
+                groups[name] = mesh.cell["triangle"].indice[ind].tolist()
     else:
         mesh = None
+        groups = None
 
     B = results[:, 0:2]
     H = results[:, 2:4]
     mu = results[:, 4]
-    Az = results[:, 5]
 
-    solution = Solution()
-    solution.set_field(field_value=B, field_name="B", field_type="face")
-    solution.set_field(field_value=H, field_name="H", field_type="face")
-    solution.set_field(field_value=mu, field_name="mu", field_type="face")
-    solution.set_field(field_value=Az, field_name="Az", field_type="nodal")
-
-    return mesh, solution
+    return mesh, B, H, mu, groups

@@ -1,16 +1,6 @@
-# -*- coding: utf-8 -*-
-
-import femm
 from ...Classes.Lamination import Lamination
 from ...Classes.Circle import Circle
-from ...Functions.FEMM import (
-    hidebc,
-    is_eddies,
-    is_middleag,
-    pbtype,
-    precision,
-    type_yokeS,
-)
+from ...Functions.FEMM import is_eddies
 from ...Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
 from ...Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
 from ...Functions.FEMM.create_FEMM_boundary_conditions import (
@@ -19,9 +9,11 @@ from ...Functions.FEMM.create_FEMM_boundary_conditions import (
 from ...Functions.FEMM.create_FEMM_materials import create_FEMM_materials
 from ...Functions.FEMM.get_sliding_band import get_sliding_band
 from ...Functions.FEMM.get_airgap_surface import get_airgap_surface
+from ...Functions.labels import NO_MESH_LAB
 
 
 def draw_FEMM(
+    femm,
     output,
     is_mmfr,
     is_mmfs,
@@ -39,11 +31,15 @@ def draw_FEMM(
     path_save="FEMM_model.fem",
     is_sliding_band=True,
     transform_list=[],
+    rotor_dxf=None,
+    stator_dxf=None,
 ):
     """Draws and assigns the property of the machine in FEMM
-    
+
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     output : Output
         Output object
     is_mmfr : bool
@@ -75,20 +71,46 @@ def draw_FEMM(
         the symmetry applied on the stator and the rotor (take into account antiperiodicity)
     is_antiper: bool
         To apply antiperiodicity boundary conditions
+    rotor_dxf : DXFImport
+        To use a dxf version of the rotor instead of build_geometry
+    stator_dxf : DXFImport
+        To use a dxf version of the stator instead of build_geometry
 
     Returns
     -------
 
     FEMM_dict : dict
-        Dictionnary containing the main parameters of FEMM (including circuits and materials)
+        dictionary containing the main parameters of FEMM (including circuits and materials)
     """
 
     # Initialization from output for readibility
-    BHs = output.geo.stator.BH_curve  # Stator B(H) curve
-    BHr = output.geo.rotor.BH_curve  # Rotor B(H) curve
     Is = output.elec.Is  # Stator currents waveforms
     Ir = output.elec.Ir  # Rotor currents waveforms
     machine = output.simu.machine
+
+    # Computing parameter (element size, arcspan...) needed to define the simulation
+    FEMM_dict = comp_FEMM_dict(
+        machine, kgeo_fineness, kmesh_fineness, type_calc_leakage
+    )
+    FEMM_dict.update(user_FEMM_dict)  # Overwrite some values if needed
+
+    # The package must be initialized with the openfemm command.
+    try:
+        femm.openfemm(1)  # 1 == open in background, 0 == open normally
+    except Exception as e:
+        raise FEMMError(
+            "ERROR: Unable to open FEMM, please check that FEMM is correctly installed\n"
+            + str(e)
+        )
+
+    # We need to create a new Magnetostatics document to work on.
+    femm.newdocument(0)
+
+    # Minimize the main window for faster geometry creation.
+    # femm.main_minimize()
+
+    # defining the problem
+    femm.mi_probdef(0, "meters", FEMM_dict["pbtype"], FEMM_dict["precision"])
 
     # Modifiy the machine to match the conditions
     machine = type(machine)(init_dict=machine.as_dict())
@@ -110,9 +132,12 @@ def draw_FEMM(
 
     # Adding no_mesh for shaft if needed
     if lam_int.Rint > 0 and sym == 1:
-        surf_list.append(Circle(point_ref=0, radius=lam_int.Rint, label="No_mesh"))
-    # adding Internal Lamination surface
-    surf_list.extend(lam_int.build_geometry(sym=sym))
+        label_int = lam_int.get_label()
+        surf_list.append(
+            Circle(
+                point_ref=0, radius=lam_int.Rint, label=label_int + "_" + NO_MESH_LAB
+            )
+        )
 
     # adding the Airgap surface
     if is_sliding_band:
@@ -120,49 +145,33 @@ def draw_FEMM(
     else:
         surf_list.extend(get_airgap_surface(lam_int=lam_int, lam_ext=lam_ext))
 
-    # adding External Lamination surface
-    surf_list.extend(lam_ext.build_geometry(sym=sym))
+    # adding Both laminations surfaces (or import from DXF)
+    if rotor_dxf is not None:
+        femm.mi_readdxf(rotor_dxf.file_path)
+        surf_list.extend(rotor_dxf.get_surfaces())
+    else:
+        surf_list.extend(machine.rotor.build_geometry(sym=sym))
+    if stator_dxf is not None:
+        femm.mi_readdxf(stator_dxf.file_path)
+        surf_list.extend(stator_dxf.get_surfaces())
+    else:
+        surf_list.extend(machine.stator.build_geometry(sym=sym))
 
     # Applying user defined modifications
-    for transfrom in transform_list:
+    for transform in transform_list:
         for surf in surf_list:
-            if transfrom["label"] in surf.label and transfrom["type"] == "rotate":
-                surf.rotate(transfrom["value"])
-            elif transfrom["label"] in surf.label and transfrom["type"] == "translate":
-                surf.translate(transfrom["value"])
-
-    # Computing parameter (element size, arcspan...) needed to define the simulation
-    FEMM_dict = comp_FEMM_dict(
-        machine, kgeo_fineness, kmesh_fineness, type_calc_leakage
-    )
-    FEMM_dict.update(user_FEMM_dict)  # Overwrite some values if needed
-
-    # The package must be initialized with the openfemm command.
-    try:
-        femm.openfemm()
-    except Exception as e:
-        raise FEMMError(
-            "ERROR: Unable to open FEMM, please check that FEMM is correctly installed\n"
-            + str(e)
-        )
-
-    # We need to create a new Magnetostatics document to work on.
-    femm.newdocument(0)
-
-    # Minimize the main window for faster geometry creation.
-    femm.main_minimize()
-
-    # defining the problem
-    femm.mi_probdef(0, "meters", FEMM_dict["pbtype"], FEMM_dict["precision"])
+            if transform["label"] in surf.label and transform["type"] == "rotate":
+                surf.rotate(transform["value"])
+            elif transform["label"] in surf.label and transform["type"] == "translate":
+                surf.translate(transform["value"])
 
     # Creation of all the materials and circuit in FEMM
     prop_dict, materials, circuits = create_FEMM_materials(
+        femm,
         machine,
         surf_list,
         Is,
         Ir,
-        BHs,
-        BHr,
         is_mmfs,
         is_mmfr,
         type_BH_stator,
@@ -170,24 +179,34 @@ def draw_FEMM(
         is_eddies,
         j_t0=0,
     )
-    create_FEMM_boundary_conditions(sym=sym, is_antiper=is_antiper)
+    create_FEMM_boundary_conditions(femm=femm, sym=sym, is_antiper=is_antiper)
 
     # Draw and assign all the surfaces of the machine
     for surf in surf_list:
         label = surf.label
         # Get the correct element size and group according to the label
         surf.draw_FEMM(
+            femm=femm,
             nodeprop="None",
             maxseg=FEMM_dict["arcspan"],  # max span of arc element in degrees
             propname="None",
             FEMM_dict=FEMM_dict,
             hide=False,
         )
-        assign_FEMM_surface(
-            surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
-        )
+        assign_FEMM_surface(femm, surf, prop_dict[label], FEMM_dict, machine)
 
-    femm.mi_zoomnatural()  # Zoom out
+    # Apply BC for DXF import
+    if rotor_dxf is not None:
+        for BC in rotor_dxf.BC_list:
+            if BC[1] is True:  # Select Arc
+                femm.mi_selectarcsegment(BC[0].real, BC[0].imag)
+                femm.mi_setarcsegmentprop(FEMM_dict["arcspan"], BC[2], False, None)
+            else:  # Select Line
+                femm.mi_selectsegment(BC[0].real, BC[0].imag)
+                femm.mi_setsegmentprop(BC[2], None, None, False, None)
+            femm.mi_clearselected()
+
+    # femm.mi_zoomnatural()  # Zoom out
     femm.mi_probdef(
         FEMM_dict["freqpb"],
         "meters",
@@ -197,9 +216,12 @@ def draw_FEMM(
         FEMM_dict["minangle"],
         FEMM_dict["acsolver"],
     )
-    femm.smartmesh(FEMM_dict["smart_mesh"])
-    femm.mi_saveas(path_save)  # Save
-    # femm.mi_close()
+    femm.mi_smartmesh(FEMM_dict["smart_mesh"])
+    if path_save is not None:
+        output.get_logger().debug("Saving FEMM file at: " + path_save)
+        femm.mi_saveas(path_save)  # Save
+        FEMM_dict["path_save"] = path_save
+        # femm.mi_close()
 
     FEMM_dict["materials"] = materials
     FEMM_dict["circuits"] = circuits
@@ -208,5 +230,6 @@ def draw_FEMM(
 
 
 class FEMMError(Exception):
-    """Raised when FEMM is not possible to run
-    """
+    """Raised when FEMM is not possible to run"""
+
+    pass

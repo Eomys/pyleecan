@@ -19,7 +19,9 @@ def comp_surface(self):
 
     """
 
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
 
     if self.is_outwards():
         Rint = abs(Z1)
@@ -31,7 +33,7 @@ def comp_surface(self):
     # Surface of a slot pitch
     Sring = (pi * Rext ** 2 - pi * Rint ** 2) * 1 / self.Zs
 
-    Swind = self.comp_surface_wind()
+    Swind = self.comp_surface_active()
     # Tooth surface
     St = self.H1 * self.W4
 

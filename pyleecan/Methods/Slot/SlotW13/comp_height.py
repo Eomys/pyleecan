@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import cos, tan
+from numpy import cos
 
 
 def comp_height(self):
@@ -20,10 +20,7 @@ def comp_height(self):
 
     Rbo = self.get_Rbo()
 
-    if self.H1_is_rad:  # H1 in rad
-        H1 = (self.W1 - self.W0) / 2.0 * tan(self.H1)  # convertion to m
-    else:  # H1 in m
-        H1 = self.H1
+    H1 = self.get_H1()
 
     # Computation of the arc height
     alpha = self.comp_angle_opening() / 2

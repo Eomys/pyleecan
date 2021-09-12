@@ -1,15 +1,26 @@
 # -*- coding: utf-8 -*-
 
-import femm
-from ....Functions.FEMM import boundary_prop
+from ....Functions.FEMM import MagFEMM_BP_dict
 from numpy import abs, exp
+from ....Functions.labels import BOUNDARY_PROP_LAB
 
 
-def draw_FEMM(self, nodeprop=None, maxseg=None, propname=None, hide=False, group=None):
+def draw_FEMM(
+    self,
+    femm,
+    nodeprop=None,
+    maxseg=None,
+    element_size=None,
+    propname=None,
+    hide=False,
+    group=None,
+):
     """Draw the Arc object in FEMM and assign the property
 
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     nodeprop :
         Nodal property
          (Default value = None)
@@ -32,9 +43,8 @@ def draw_FEMM(self, nodeprop=None, maxseg=None, propname=None, hide=False, group
     """
 
     # Get BC (if any)
-    for bound_label in boundary_prop:
-        if bound_label in self.label:
-            propname = boundary_prop[bound_label]
+    if self.prop_dict is not None and BOUNDARY_PROP_LAB in self.prop_dict:
+        propname = MagFEMM_BP_dict[self.prop_dict[BOUNDARY_PROP_LAB]]
 
     # split if arc angle > 180
     angle = self.get_angle(is_deg=True)
@@ -81,5 +91,6 @@ def draw_FEMM(self, nodeprop=None, maxseg=None, propname=None, hide=False, group
     else:
         femm.mi_selectarcsegment(X2, Y2)
 
+    maxseg = self.comp_maxseg(element_size, maxseg)
     femm.mi_setarcsegmentprop(maxseg, propname, hide, group)
     femm.mi_clearselected()

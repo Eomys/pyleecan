@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SBar.Gen_SBar import Gen_SBar
 from .....GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
 from .....GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # Information to fill the conductor type combobox
 WIDGET_LIST = [PCondType21, PCondType22]
@@ -16,15 +17,14 @@ COND_NAME = [wid.cond_name for wid in WIDGET_LIST]
 
 
 class SBar(Gen_SBar, QWidget):
-    """Step to setup the Rotor Bar for SCIM machine
-    """
+    """Step to setup the Rotor Bar for SCIM machine"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for the DMachineSetup nav
     step_name = "Bar"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
@@ -33,8 +33,8 @@ class SBar(Gen_SBar, QWidget):
             A SBar widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library 
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -45,7 +45,7 @@ class SBar(Gen_SBar, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         # Set FloatEdit unit
@@ -55,12 +55,20 @@ class SBar(Gen_SBar, QWidget):
         # Set unit name (m ou mm)
         wid_list = [self.unit_Hscr, self.unit_Lscr, self.unit_Lewout]
         for wid in wid_list:
-            wid.setText(gui_option.unit.get_m_name())
+            wid.setText("[" + gui_option.unit.get_m_name() + "]")
+
+        # Update winding qs
+        if (
+            self.machine.rotor.slot.Zs is not None
+            and self.machine.rotor.winding.qs is None
+        ):
+            self.machine.rotor.winding.qs = self.machine.rotor.slot.Zs
 
         # Set materials
         self.w_mat.def_mat = "Copper1"
         self.w_mat.setText("Ring material:")
-        self.w_mat.update(self.machine.rotor, "ring_mat", self.matlib)
+        self.w_mat.is_hide_button = True
+        self.w_mat.update(self.machine.rotor, "ring_mat", self.material_dict)
 
         # Initialize the GUI with the current machine value
         self.lf_Hscr.setValue(machine.rotor.Hscr)
@@ -77,7 +85,7 @@ class SBar(Gen_SBar, QWidget):
             index = INIT_INDEX.index(type(conductor))
             self.g_bar.layout().removeWidget(self.w_bar)
             self.w_bar.setParent(None)
-            self.w_bar = WIDGET_LIST[index](self.machine, self.matlib)
+            self.w_bar = WIDGET_LIST[index](self.machine, self.material_dict)
             self.g_bar.layout().addWidget(self.w_bar)
             self.c_bar_type.setCurrentIndex(index)
         else:  # Set default conductor
@@ -94,8 +102,7 @@ class SBar(Gen_SBar, QWidget):
         self.w_mat.saveNeeded.connect(self.emit_save)
 
     def emit_save(self):
-        """Emit the saveNeeded signal
-        """
+        """Emit the saveNeeded signal"""
         self.saveNeeded.emit()
 
     def set_Hscr(self):
@@ -153,7 +160,7 @@ class SBar(Gen_SBar, QWidget):
         self.machine.rotor.winding.conductor = INIT_INDEX[index]()
         self.machine.rotor.winding.conductor._set_None()
 
-        self.w_bar = WIDGET_LIST[index](self.machine, self.matlib)
+        self.w_bar = WIDGET_LIST[index](self.machine, self.material_dict)
         self.w_bar.saveNeeded.connect(self.emit_save)
         # Refresh the GUi
         self.g_bar.layout().addWidget(self.w_bar)
@@ -169,6 +176,7 @@ class SBar(Gen_SBar, QWidget):
             A SBar object
         """
         self.machine.plot()
+        set_plot_gui_icon()
 
     @staticmethod
     def check(lamination):

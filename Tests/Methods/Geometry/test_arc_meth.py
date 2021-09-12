@@ -801,8 +801,7 @@ split_test.append(
 
 @pytest.mark.parametrize("test_dict", split_test)
 def test_split_line(test_dict):
-    """Check that the intersection and the split_line is computed correctly
-    """
+    """Check that the intersection and the split_line is computed correctly"""
     arc_obj = test_dict["arc"]
 
     # Check center
@@ -923,3 +922,202 @@ def test_split_line(test_dict):
         assert split_list[ii].get_angle() == pytest.approx(
             test_dict["Zs_bot"][ii].get_angle(), abs=DELTA
         ), ("Angle error: " + msg)
+
+
+# Compute the distance
+D_test = list()
+# 0
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": 2,  # First point of cutting line
+        "D": 1,
+    }
+)
+# 1
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": 0,  # First point of cutting line
+        "D": 1,
+    }
+)
+# 2
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": -1j,  # First point of cutting line
+        "D": sqrt(2),
+    }
+)
+# 3
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": -2j,  # First point of cutting line
+        "D": sqrt(5),
+    }
+)
+# 4
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": exp(1j * pi / 4),  # First point of cutting line
+        "D": 0,
+    }
+)
+# 5
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": 1 + 1j,  # First point of cutting line
+        "D": abs(1 + 1j - exp(1j * pi / 4)),
+    }
+)
+# 6
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=1, is_trigo_direction=False),
+        "Z": -2j + 1,  # First point of cutting line
+        "D": 1,
+    }
+)
+# 7
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1j,  # First point of cutting line
+        "D": 1,
+    }
+)
+# 8
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": 0,  # First point of cutting line
+        "D": sqrt(2),
+    }
+)
+# 9
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": 1,  # First point of cutting line
+        "D": sqrt(5),
+    }
+)
+# 10
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1j + exp(1j * 5 * pi / 4),  # First point of cutting line
+        "D": 0,
+    }
+)
+# 11
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1 - 2j,  # First point of cutting line
+        "D": abs(-1 - 2j - (-1j + exp(1j * 5 * pi / 4))),
+    }
+)
+# 12
+D_test.append(
+    {
+        "arc": Arc2(center=0 + 0j, begin=1 + 0j, angle=pi / 2),
+        "Z": -4 - 2j,  # First point of cutting line
+        "D": 5,
+    }
+)
+
+
+@pytest.mark.parametrize("test_dict", D_test)
+def test_distance(test_dict):
+    """Check the comp_distance method"""
+    arc_obj = test_dict["arc"]
+
+    # Check center
+    result = arc_obj.comp_distance(test_dict["Z"])
+    msg = (
+        "Wrong distance: returned " + str(result) + ", expected: " + str(test_dict["D"])
+    )
+    assert result == pytest.approx(test_dict["D"], abs=DELTA), msg
+
+
+"""Tests of the function is_on_line from Arc meth"""
+
+is_on_line_list = list()
+
+# 1  Check not on the circle
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1 - 2j,  # First point of cutting line
+        "result": False,
+    }
+)
+
+# 2  Check on the circle
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1j + exp(1j * 5 * pi / 4),  # First point of cutting line
+        "result": True,
+    }
+)
+
+# 3 Check on the beg of the arc
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -2j,  # First point of cutting line
+        "result": True,
+    }
+)
+
+# 4 Check on the end of the arc
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1 - 1j,  # First point of cutting line
+        "result": True,
+    }
+)
+
+# 5 Check above the arc
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1j,  # First point of cutting line
+        "result": False,
+    }
+)
+
+# 6 Check beneath the arc
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1 - 2j,  # First point of cutting line
+        "result": False,
+    }
+)
+
+# # 7 Check at the center of the arc
+# is_on_line_list.append(
+#     {
+#         "arc": Arc1(begin=1+1j, end=-1 -1j, radius=-1, is_trigo_direction=False),
+#         "Z": 0+0j,  # First point of cutting line             TODO
+#         "result": True,
+#     }
+# )
+
+
+@pytest.mark.parametrize("test_dict", is_on_line_list)
+def test_is_on_line(test_dict):
+    """Check is_on_line method"""
+    arc_obj = test_dict["arc"]
+
+    result = arc_obj.is_on_line(test_dict["Z"])
+
+    assert result == test_dict["result"]

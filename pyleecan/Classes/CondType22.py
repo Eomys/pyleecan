@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/CondType22.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/CondType22.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/CondType22
 """
 
 from os import linesep
+from sys import getsizeof
 from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Conductor import Conductor
 
 # Import all class method
@@ -56,15 +61,9 @@ class CondType22(Conductor):
         )
     else:
         comp_surface = comp_surface
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -73,29 +72,16 @@ class CondType22(Conductor):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if cond_mat == -1:
-            cond_mat = Material()
-        if ins_mat == -1:
-            ins_mat = Material()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            Sbar = obj.Sbar
-            cond_mat = obj.cond_mat
-            ins_mat = obj.ins_mat
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -105,7 +91,7 @@ class CondType22(Conductor):
                 cond_mat = init_dict["cond_mat"]
             if "ins_mat" in list(init_dict.keys()):
                 ins_mat = init_dict["ins_mat"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.Sbar = Sbar
         # Call Conductor init
         super(CondType22, self).__init__(cond_mat=cond_mat, ins_mat=ins_mat)
@@ -113,7 +99,7 @@ class CondType22(Conductor):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         CondType22_str = ""
         # Get the properties inherited from Conductor
@@ -134,14 +120,44 @@ class CondType22(Conductor):
             return False
         return True
 
-    def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+    def compare(self, other, name="self", ignore_list=None):
+        """Compare two objects and return list of differences"""
+
+        if ignore_list is None:
+            ignore_list = list()
+        if type(other) != type(self):
+            return ["type(" + name + ")"]
+        diff_list = list()
+
+        # Check the properties inherited from Conductor
+        diff_list.extend(super(CondType22, self).compare(other, name=name))
+        if other._Sbar != self._Sbar:
+            diff_list.append(name + ".Sbar")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        return diff_list
+
+    def __sizeof__(self):
+        """Return the size in memory of the object (including all subobject)"""
+
+        S = 0  # Full size of the object
+
+        # Get size of the properties inherited from Conductor
+        S += super(CondType22, self).__sizeof__()
+        S += getsizeof(self.Sbar)
+        return S
+
+    def as_dict(self, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
         """
 
         # Get the properties inherited from Conductor
-        CondType22_dict = super(CondType22, self).as_dict()
+        CondType22_dict = super(CondType22, self).as_dict(**kwargs)
         CondType22_dict["Sbar"] = self.Sbar
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         CondType22_dict["__class__"] = "CondType22"
         return CondType22_dict
@@ -162,6 +178,12 @@ class CondType22(Conductor):
         check_var("Sbar", value, "float", Vmin=0)
         self._Sbar = value
 
-    # Surface of the Slot
-    # Type : float, min = 0
-    Sbar = property(fget=_get_Sbar, fset=_set_Sbar, doc=u"""Surface of the Slot""")
+    Sbar = property(
+        fget=_get_Sbar,
+        fset=_set_Sbar,
+        doc=u"""Surface of the Slot
+
+        :Type: float
+        :min: 0
+        """,
+    )

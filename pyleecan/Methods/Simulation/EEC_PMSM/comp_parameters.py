@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi
-
 
 def comp_parameters(self, output):
     """Compute the parameters dict for the equivalent electrical circuit:
@@ -13,14 +11,44 @@ def comp_parameters(self, output):
     output : Output
         an Output object
     """
+    # TODO maybe set currents to small value if I is 0 to compute inductance
 
-    if "R20" not in self.parameters:
-        self.parameters["R20"] = output.simu.machine.stator.comp_resistance_wind()
-    if "Ld" not in self.parameters:
-        (Lmd, Lmq) = self.indmag.comp_inductance(output)
-        self.parameters["Ld"] = Lmd
-        self.parameters["Lq"] = Lmq
-    if "BEMF" not in self.parameters:
-        phi = self.fluxlink.comp_fluxlinkage(output)
-        freq0 = self.freq0
-        self.parameters["BEMF"] = 2 * pi * freq0 * phi
+    PAR = self.parameters
+
+    # Parameters to compute only once
+    if "R20" not in PAR:
+        PAR["R20"] = output.simu.machine.stator.comp_resistance_wind()
+    if "phi" not in PAR:
+        PAR["phi"] = self.fluxlink.comp_fluxlinkage(output)
+
+    # Parameters which may vary for each simulation
+    is_comp_ind = False
+    # check for complete parameter set
+    # (there may be some redundancy here but it seems simplier to implement)
+    if not all(k in PAR for k in ("Phid", "Phiq", "Ld", "Lq")):
+        is_comp_ind = True
+
+    # check for d- and q-current (change)
+    if "Id" not in PAR or PAR["Id"] != output.elec.Id_ref:
+        PAR["Id"] = output.elec.Id_ref
+        is_comp_ind = True
+
+    if "Iq" not in PAR or PAR["Iq"] != output.elec.Iq_ref:
+        PAR["Iq"] = output.elec.Iq_ref
+        is_comp_ind = True
+
+    # compute inductance if necessary
+    if is_comp_ind:
+        (phid, phiq) = self.indmag.comp_inductance(output)
+        if PAR["Id"] != 0:
+            PAR["Ld"] = (phid - PAR["phi"]) / PAR["Id"]
+        else:
+            PAR["Ld"] = None  # to have the parameters complete though
+
+        if PAR["Iq"] != 0:
+            PAR["Lq"] = phiq / PAR["Iq"]
+        else:
+            PAR["Lq"] = None  # to have the parameters complete though
+
+        PAR["Phid"] = phid
+        PAR["Phiq"] = phiq

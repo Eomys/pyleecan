@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from .....Methods.Output.Output.getter import GetOutError
+from .....Classes.OutGeoLam import OutGeoLam
 
 
 def get_BH_stator(self):
@@ -19,7 +20,11 @@ def get_BH_stator(self):
     """
 
     # Already available => Return
-    if self.geo.stator.BH_curve is not None:
+    if (
+        self.geo is not None
+        and self.geo.stator is not None
+        and self.geo.stator.BH_curve is not None
+    ):
         return self.geo.stator.BH_curve
 
     # Check if possible to get the BH curve
@@ -38,13 +43,15 @@ def get_BH_stator(self):
 
     # Compute and store the BH curve
     BH = mat_type.mag.get_BH()
+    if self.geo.stator is None:
+        self.geo.stator = OutGeoLam()
+        self.geo.stator._set_None()
     self.geo.stator.BH_curve = BH
 
     return BH
 
 
 class BHShapeError(Exception):
-    """Raised when the BH curve has not the expected shape
-    """
+    """Raised when the BH curve has not the expected shape"""
 
     pass

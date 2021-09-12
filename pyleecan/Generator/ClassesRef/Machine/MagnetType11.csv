@@ -1,5 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Wmag,rad,magnet bottom width [rad],0,float,2.00E-03,0,,,Machine,MagnetPolar,_comp_point_coordinate,VERSION,1,single magnet with polar shape
-Hmag,m,magnet radial height [m],0,float,1.00E-03,0,,,,,build_geometry,IS_FLAT_BOT,0,
-,,,,,,,,,,,comp_height,IS_FLAT_TOP,0,
-,,,,,,,,,,,comp_surface,,,

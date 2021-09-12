@@ -1,15 +1,14 @@
 from ....GUI.Tools.WPathSelector.Ui_WPathSelector import Ui_WPathSelector
-from PyQt5.QtWidgets import QWidget, QMessageBox, QDialog, QFileDialog
+from PySide2.QtWidgets import QWidget, QMessageBox, QDialog, QFileDialog
 from os.path import isfile, isdir
-from PyQt5.QtCore import pyqtSignal
+from PySide2.QtCore import Signal
 from ....definitions import config_dict
 
 
 class WPathSelector(Ui_WPathSelector, QWidget):
-    """Widget to select the path to a file or a folder
-    """
+    """Widget to select the path to a file or a folder"""
 
-    pathChanged = pyqtSignal()  # Changed and correct
+    pathChanged = Signal()  # Changed and correct
 
     def __init__(self, parent=None):
         """Create the widget
@@ -65,27 +64,28 @@ class WPathSelector(Ui_WPathSelector, QWidget):
             self.le_path.setText(getattr(self.obj, self.param_name))
 
     def get_path(self):
-        """Return the current path
-        """
+        """Return the current path"""
         return self.le_path.text().replace("\\", "/")
 
     def set_path_txt(self, path):
-        """Set the line edit text
-        """
-        self.le_path.setText(path.replace("\\", "/"))
+        """Set the line edit text"""
+        if path is not None:
+            path = path.replace("\\", "/")
+        self.le_path.setText(path)
 
     def set_obj_path(self):
-        """Update the object with the current path (if correct)
-        """
+        """Update the object with the current path (if correct)"""
         path = self.get_path().replace("\\", "/")
         if (self.is_file and isfile(path)) or (not self.is_file and isdir(path)):
             if self.obj is not None:
-                setattr(self.obj, self.param_name, path)
-            self.pathChanged.emit()
+                if getattr(self.obj, self.param_name) != path:
+                    setattr(self.obj, self.param_name, path)
+                    self.pathChanged.emit()
+            else:
+                self.pathChanged.emit()
 
     def select_path(self):
-        """Open a popup to select the correct path
-        """
+        """Open a popup to select the correct path"""
         # Initial folder for the Dialog
         default_path = self.get_path()
         if self.is_file:  # Select a file
@@ -104,7 +104,7 @@ class WPathSelector(Ui_WPathSelector, QWidget):
                 self, "Select " + self.verbose_name + " directory", default_path
             )
         # Update the path
-        if path is not None:
+        if path:  # check for empty string as well as None
             path = path.replace("\\", "/")
             self.le_path.setText(path)
             self.set_obj_path()

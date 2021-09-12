@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
 from .....Classes.SlotW60 import SlotW60
 from .....Classes.SlotW61 import SlotW61
-from .....Classes.SlotWind import SlotWind
+from .....Classes.Slot import Slot
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot60.PWSlot60 import PWSlot60
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot61.PWSlot61 import PWSlot61
 from .....GUI.Dialog.DMachineSetup.SWPole.Ui_SWPole import Ui_SWPole
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # List to convert index of combobox to slot type
 INIT_INDEX = [SlotW60, SlotW61]
@@ -20,15 +21,14 @@ WIDGET_LIST = [PWSlot60, PWSlot61]
 
 
 class SWPole(Ui_SWPole, QWidget):
-    """Step to set the lamination pole (for WRSM)
-    """
+    """Step to set the lamination pole (for WRSM)"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup
     step_name = "Pole"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -37,8 +37,8 @@ class SWPole(Ui_SWPole, QWidget):
             A SWPole widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library 
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -49,11 +49,10 @@ class SWPole(Ui_SWPole, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
-        self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
-        self.b_help.url += "how-to-set-up-the-slots"
+        self.b_help.hide()
 
         # Avoid erase all the parameters when navigating though the slots
         self.previous_slot = {SlotW60: None, SlotW61: None}
@@ -88,8 +87,7 @@ class SWPole(Ui_SWPole, QWidget):
         self.b_plot.clicked.connect(self.s_plot)
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     def set_slot_type(self, index):
@@ -185,13 +183,14 @@ class SWPole(Ui_SWPole, QWidget):
         self : SWPole
             A SWPole object
         """
-        # We have to make sure the slot is right before truing to plot it
+        # We have to make sure the slot is right before trying to plot it
         error = self.check(self.obj)
 
         if error:  # Error => Display it
             QMessageBox().critical(self, self.tr("Error"), error)
-        else:  # No error => Plot the slot (No winding for LamSquirrelCage)
-            self.obj.plot(plot_winding=(type(self.obj) is LamSlotWind))
+        else:  # No error => Plot the lamination
+            self.obj.plot()
+            set_plot_gui_icon()
 
     @staticmethod
     def check(lam):

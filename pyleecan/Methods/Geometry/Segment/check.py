@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+from ....Methods.Geometry.Segment import *
 
 
 def check(self):
@@ -24,9 +24,3 @@ def check(self):
         raise PointSegmentError(
             "The beginning point and the ending point of " "a Segment can't be the same"
         )
-
-
-class PointSegmentError(Exception):
-    """ """
-
-    pass

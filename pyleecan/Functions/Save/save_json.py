@@ -4,6 +4,9 @@ from os import mkdir
 from datetime import datetime
 from logging import getLogger
 from ...Classes._frozen import FrozenClass
+from ...definitions import PACKAGE_NAME
+from ... import __version__
+from numpy import int32
 
 
 def create_folder(logger, save_path):
@@ -30,12 +33,12 @@ def create_folder(logger, save_path):
 def fix_file_name(save_path, obj, is_folder, logger):
     """
     Check save_path and modify it according to is_folder
-    
+
     Parameters
     ----------
     save_path: str
         File/Folder path
-    obj: 
+    obj:
         Pyleecan object to save
     is_folder: bool
         object is saved if folder mode (splitting Materials, Machine, Simulation in different files)
@@ -66,8 +69,7 @@ def is_json_serializable(obj):
 
 
 def has_as_dict(obj):
-    """Check if object has 'as_dict' method.
-    """
+    """Check if object has 'as_dict' method."""
     return hasattr(obj, "as_dict") and callable(getattr(obj, "as_dict", None))
 
 
@@ -78,9 +80,9 @@ def build_data(obj):
 
     Parameters
     ----------
-    obj : 
+    obj :
         An object to serialize
-    
+
     Returns
     -------
     data :
@@ -103,7 +105,9 @@ def build_data(obj):
         return None
     # pyleecan classes, i.e. instances with as_dict method
     if has_as_dict(obj):
-        return obj.as_dict()
+        return build_data(obj.as_dict())
+    if isinstance(obj, int32):  # int
+        return int(obj)
     #
     if is_json_serializable(obj):
         return obj
@@ -113,7 +117,7 @@ def build_data(obj):
 
 def save_split_obj(classes_tuple, obj, folder_path, logger):
     """
-    Scan the object attribute and save the object in a dedicated file 
+    Scan the object attribute and save the object in a dedicated file
 
     Parameters
     ----------
@@ -122,7 +126,7 @@ def save_split_obj(classes_tuple, obj, folder_path, logger):
         tuple containing the classe names to save separately
 
     obj: dict
-        object dictionnary to save
+        object dictionary to save
 
     folder_path: str
         directory to save all the files
@@ -181,7 +185,7 @@ def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
         tuple containing the classe names to save separately
 
     obj_dict: dict
-        object dictionnary to save
+        object dictionary to save
 
     folder_path: str
         directory to save all the files
@@ -192,7 +196,7 @@ def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
     Returns
     -------
     obj_dict : dict
-        object dictionnary to save
+        object dictionary to save
     """
 
     for key, val in obj_dict.items():
@@ -230,12 +234,12 @@ def save_json(obj, save_path="", is_folder=False):
 
     Parameters
     ----------
-    self : 
+    self :
         A pyleecan object
     save_path: str
         path to the folder to save the object
     is_folder: bool
-        to split the object in different files: separate simulation machine and materials 
+        to split the object in different files: separate simulation machine and materials
     """
     if isinstance(obj, FrozenClass):  # Pyleecan obj
         # Get the object logger
@@ -248,6 +252,9 @@ def save_json(obj, save_path="", is_folder=False):
 
     # save
     obj = build_data(obj)
+    now = datetime.now()
+    obj["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
+    obj["__version__"] = PACKAGE_NAME + "_" + __version__
     if isinstance(obj, dict) and is_folder:
         # Tuple containing classes to save separately
         class_to_split = ("Simulation", "Machine", "Material")

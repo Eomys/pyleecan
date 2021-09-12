@@ -2,177 +2,254 @@
 
 # File generated according to SLamParam.ui
 # WARNING! All changes made in this file will be lost!
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+
+from .....GUI.Tools.FloatEdit import FloatEdit
+from .....GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+
+from pyleecan.GUI.Resources import pyleecan_rc
 
 
 class Ui_SLamParam(object):
     def setupUi(self, SLamParam):
-        SLamParam.setObjectName("SLamParam")
+        if not SLamParam.objectName():
+            SLamParam.setObjectName(u"SLamParam")
         SLamParam.resize(650, 550)
-        SLamParam.setMinimumSize(QtCore.QSize(650, 550))
-        self.main_layout = QtWidgets.QVBoxLayout(SLamParam)
-        self.main_layout.setObjectName("main_layout")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.in_L1 = QtWidgets.QLabel(SLamParam)
-        self.in_L1.setObjectName("in_L1")
+        SLamParam.setMinimumSize(QSize(650, 550))
+        self.main_layout = QVBoxLayout(SLamParam)
+        self.main_layout.setObjectName(u"main_layout")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.in_L1 = QLabel(SLamParam)
+        self.in_L1.setObjectName(u"in_L1")
+
         self.horizontalLayout.addWidget(self.in_L1)
+
         self.lf_L1 = FloatEdit(SLamParam)
-        self.lf_L1.setMaximumSize(QtCore.QSize(100, 16777215))
-        self.lf_L1.setObjectName("lf_L1")
+        self.lf_L1.setObjectName(u"lf_L1")
+        self.lf_L1.setMaximumSize(QSize(100, 16777215))
+
         self.horizontalLayout.addWidget(self.lf_L1)
-        self.unit_L1 = QtWidgets.QLabel(SLamParam)
-        self.unit_L1.setObjectName("unit_L1")
+
+        self.unit_L1 = QLabel(SLamParam)
+        self.unit_L1.setObjectName(u"unit_L1")
+
         self.horizontalLayout.addWidget(self.unit_L1)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+
+        self.horizontalSpacer_8 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
-        self.horizontalLayout.addItem(spacerItem)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_8)
+
         self.main_layout.addLayout(self.horizontalLayout)
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.in_Kf1 = QtWidgets.QLabel(SLamParam)
-        self.in_Kf1.setObjectName("in_Kf1")
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.in_Kf1 = QLabel(SLamParam)
+        self.in_Kf1.setObjectName(u"in_Kf1")
+
         self.horizontalLayout_2.addWidget(self.in_Kf1)
+
         self.lf_Kf1 = FloatEdit(SLamParam)
-        self.lf_Kf1.setMaximumSize(QtCore.QSize(100, 25))
-        self.lf_Kf1.setObjectName("lf_Kf1")
+        self.lf_Kf1.setObjectName(u"lf_Kf1")
+        self.lf_Kf1.setMaximumSize(QSize(100, 25))
+
         self.horizontalLayout_2.addWidget(self.lf_Kf1)
+
         self.w_mat = WMatSelect(SLamParam)
-        self.w_mat.setMinimumSize(QtCore.QSize(100, 0))
-        self.w_mat.setObjectName("w_mat")
+        self.w_mat.setObjectName(u"w_mat")
+        self.w_mat.setMinimumSize(QSize(100, 0))
+
         self.horizontalLayout_2.addWidget(self.w_mat)
-        spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+
+        self.horizontalSpacer_2 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
-        self.horizontalLayout_2.addItem(spacerItem1)
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
+
         self.main_layout.addLayout(self.horizontalLayout_2)
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.g_ax_vent = QtWidgets.QGroupBox(SLamParam)
-        self.g_ax_vent.setMinimumSize(QtCore.QSize(300, 300))
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.g_ax_vent = QGroupBox(SLamParam)
+        self.g_ax_vent.setObjectName(u"g_ax_vent")
+        self.g_ax_vent.setMinimumSize(QSize(300, 300))
         self.g_ax_vent.setCheckable(True)
         self.g_ax_vent.setChecked(False)
-        self.g_ax_vent.setObjectName("g_ax_vent")
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.g_ax_vent)
-        self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.label = QtWidgets.QLabel(self.g_ax_vent)
-        self.label.setText("")
+        self.verticalLayout_3 = QVBoxLayout(self.g_ax_vent)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.label = QLabel(self.g_ax_vent)
+        self.label.setObjectName(u"label")
         self.label.setPixmap(
-            QtGui.QPixmap(":/images/images/MachineSetup/LamParam/CircVentDuct.png")
+            QPixmap(u":/images/images/MachineSetup/LamParam/CircVentDuct.png")
         )
         self.label.setScaledContents(True)
-        self.label.setObjectName("label")
+
         self.verticalLayout_3.addWidget(self.label)
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.out_axial_duct = QtWidgets.QLabel(self.g_ax_vent)
-        self.out_axial_duct.setObjectName("out_axial_duct")
+
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.out_axial_duct = QLabel(self.g_ax_vent)
+        self.out_axial_duct.setObjectName(u"out_axial_duct")
+
         self.horizontalLayout_5.addWidget(self.out_axial_duct)
-        self.b_axial_duct = QtWidgets.QPushButton(self.g_ax_vent)
-        self.b_axial_duct.setObjectName("b_axial_duct")
+
+        self.b_axial_duct = QPushButton(self.g_ax_vent)
+        self.b_axial_duct.setObjectName(u"b_axial_duct")
+
         self.horizontalLayout_5.addWidget(self.b_axial_duct)
-        spacerItem2 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+
+        self.horizontalSpacer_4 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
-        self.horizontalLayout_5.addItem(spacerItem2)
+
+        self.horizontalLayout_5.addItem(self.horizontalSpacer_4)
+
         self.verticalLayout_3.addLayout(self.horizontalLayout_5)
+
         self.horizontalLayout_3.addWidget(self.g_ax_vent)
-        self.g_rad_vent = QtWidgets.QGroupBox(SLamParam)
-        self.g_rad_vent.setMinimumSize(QtCore.QSize(0, 300))
+
+        self.g_rad_vent = QGroupBox(SLamParam)
+        self.g_rad_vent.setObjectName(u"g_rad_vent")
+        self.g_rad_vent.setMinimumSize(QSize(0, 300))
         self.g_rad_vent.setFlat(False)
         self.g_rad_vent.setCheckable(True)
         self.g_rad_vent.setChecked(False)
-        self.g_rad_vent.setObjectName("g_rad_vent")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.g_rad_vent)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.img_rad_duct = QtWidgets.QLabel(self.g_rad_vent)
-        self.img_rad_duct.setMinimumSize(QtCore.QSize(300, 0))
-        self.img_rad_duct.setText("")
+        self.verticalLayout_2 = QVBoxLayout(self.g_rad_vent)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.img_rad_duct = QLabel(self.g_rad_vent)
+        self.img_rad_duct.setObjectName(u"img_rad_duct")
+        self.img_rad_duct.setMinimumSize(QSize(300, 0))
         self.img_rad_duct.setPixmap(
-            QtGui.QPixmap(":/images/images/MachineSetup/LamParam/RadVentDuct.png")
+            QPixmap(u":/images/images/MachineSetup/LamParam/RadVentDuct.png")
         )
         self.img_rad_duct.setScaledContents(True)
-        self.img_rad_duct.setObjectName("img_rad_duct")
+
         self.verticalLayout_2.addWidget(self.img_rad_duct)
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.in_Nrvd = QtWidgets.QLabel(self.g_rad_vent)
-        self.in_Nrvd.setObjectName("in_Nrvd")
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.in_Nrvd = QLabel(self.g_rad_vent)
+        self.in_Nrvd.setObjectName(u"in_Nrvd")
+
         self.horizontalLayout_4.addWidget(self.in_Nrvd)
-        self.si_Nrvd = QtWidgets.QSpinBox(self.g_rad_vent)
+
+        self.si_Nrvd = QSpinBox(self.g_rad_vent)
+        self.si_Nrvd.setObjectName(u"si_Nrvd")
         self.si_Nrvd.setMaximum(999)
-        self.si_Nrvd.setProperty("value", 0)
-        self.si_Nrvd.setObjectName("si_Nrvd")
+        self.si_Nrvd.setValue(0)
+
         self.horizontalLayout_4.addWidget(self.si_Nrvd)
-        self.in_Wrvd = QtWidgets.QLabel(self.g_rad_vent)
-        self.in_Wrvd.setObjectName("in_Wrvd")
+
+        self.in_Wrvd = QLabel(self.g_rad_vent)
+        self.in_Wrvd.setObjectName(u"in_Wrvd")
+
         self.horizontalLayout_4.addWidget(self.in_Wrvd)
+
         self.lf_Wrvd = FloatEdit(self.g_rad_vent)
-        self.lf_Wrvd.setMaximumSize(QtCore.QSize(100, 16777215))
-        self.lf_Wrvd.setObjectName("lf_Wrvd")
+        self.lf_Wrvd.setObjectName(u"lf_Wrvd")
+        self.lf_Wrvd.setMaximumSize(QSize(100, 16777215))
+
         self.horizontalLayout_4.addWidget(self.lf_Wrvd)
-        self.unit_Wrvd = QtWidgets.QLabel(self.g_rad_vent)
-        self.unit_Wrvd.setObjectName("unit_Wrvd")
+
+        self.unit_Wrvd = QLabel(self.g_rad_vent)
+        self.unit_Wrvd.setObjectName(u"unit_Wrvd")
+
         self.horizontalLayout_4.addWidget(self.unit_Wrvd)
-        spacerItem3 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+
+        self.horizontalSpacer_6 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
-        self.horizontalLayout_4.addItem(spacerItem3)
+
+        self.horizontalLayout_4.addItem(self.horizontalSpacer_6)
+
         self.verticalLayout_2.addLayout(self.horizontalLayout_4)
-        self.out_length = QtWidgets.QLabel(self.g_rad_vent)
-        self.out_length.setMinimumSize(QtCore.QSize(250, 0))
-        self.out_length.setMaximumSize(QtCore.QSize(300, 16777215))
-        self.out_length.setObjectName("out_length")
+
+        self.out_length = QLabel(self.g_rad_vent)
+        self.out_length.setObjectName(u"out_length")
+        self.out_length.setMinimumSize(QSize(250, 0))
+        self.out_length.setMaximumSize(QSize(16777215, 16777215))
+
         self.verticalLayout_2.addWidget(self.out_length)
+
         self.horizontalLayout_3.addWidget(self.g_rad_vent)
+
         self.main_layout.addLayout(self.horizontalLayout_3)
-        self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        spacerItem4 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.horizontalSpacer_7 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
-        self.horizontalLayout_6.addItem(spacerItem4)
-        self.b_plot = QtWidgets.QPushButton(SLamParam)
-        self.b_plot.setObjectName("b_plot")
+
+        self.horizontalLayout_6.addItem(self.horizontalSpacer_7)
+
+        self.b_plot = QPushButton(SLamParam)
+        self.b_plot.setObjectName(u"b_plot")
+
         self.horizontalLayout_6.addWidget(self.b_plot)
-        self.b_previous = QtWidgets.QPushButton(SLamParam)
-        self.b_previous.setObjectName("b_previous")
+
+        self.b_previous = QPushButton(SLamParam)
+        self.b_previous.setObjectName(u"b_previous")
+
         self.horizontalLayout_6.addWidget(self.b_previous)
-        self.b_next = QtWidgets.QPushButton(SLamParam)
-        self.b_next.setObjectName("b_next")
+
+        self.b_next = QPushButton(SLamParam)
+        self.b_next.setObjectName(u"b_next")
+
         self.horizontalLayout_6.addWidget(self.b_next)
+
         self.main_layout.addLayout(self.horizontalLayout_6)
 
+        QWidget.setTabOrder(self.lf_L1, self.lf_Kf1)
+        QWidget.setTabOrder(self.lf_Kf1, self.b_next)
+        QWidget.setTabOrder(self.b_next, self.si_Nrvd)
+        QWidget.setTabOrder(self.si_Nrvd, self.lf_Wrvd)
+
         self.retranslateUi(SLamParam)
-        QtCore.QMetaObject.connectSlotsByName(SLamParam)
-        SLamParam.setTabOrder(self.lf_L1, self.lf_Kf1)
-        SLamParam.setTabOrder(self.lf_Kf1, self.b_next)
-        SLamParam.setTabOrder(self.b_next, self.si_Nrvd)
-        SLamParam.setTabOrder(self.si_Nrvd, self.lf_Wrvd)
+
+        QMetaObject.connectSlotsByName(SLamParam)
+
+    # setupUi
 
     def retranslateUi(self, SLamParam):
-        _translate = QtCore.QCoreApplication.translate
-        SLamParam.setWindowTitle(_translate("SLamParam", "Form"))
-        self.in_L1.setText(_translate("SLamParam", "L1 :"))
-        self.unit_L1.setText(_translate("SLamParam", "m"))
-        self.in_Kf1.setText(_translate("SLamParam", "Kf1 :"))
-        self.g_ax_vent.setTitle(_translate("SLamParam", "Axial Ventilation Ducts"))
-        self.out_axial_duct.setText(_translate("SLamParam", "Axial : 0 set (0 ducts)"))
-        self.b_axial_duct.setText(_translate("SLamParam", "set axial ducts"))
-        self.g_rad_vent.setTitle(_translate("SLamParam", "Radial Ventilation Ducts"))
-        self.in_Nrvd.setText(_translate("SLamParam", "Nrvd :"))
-        self.in_Wrvd.setText(_translate("SLamParam", "Wrvd :"))
-        self.unit_Wrvd.setText(_translate("SLamParam", "m"))
-        self.out_length.setText(
-            _translate("SLamParam", "stator total length = L1 + Nrvd * Wrvd = ?")
+        SLamParam.setWindowTitle(QCoreApplication.translate("SLamParam", u"Form", None))
+        self.in_L1.setText(QCoreApplication.translate("SLamParam", u"L1 :", None))
+        self.unit_L1.setText(QCoreApplication.translate("SLamParam", u"m", None))
+        self.in_Kf1.setText(QCoreApplication.translate("SLamParam", u"Kf1 :", None))
+        self.g_ax_vent.setTitle(
+            QCoreApplication.translate("SLamParam", u"Axial Ventilation Ducts", None)
         )
-        self.b_plot.setText(_translate("SLamParam", "Preview"))
-        self.b_previous.setText(_translate("SLamParam", "Previous"))
-        self.b_next.setText(_translate("SLamParam", "Next"))
+        self.label.setText("")
+        self.out_axial_duct.setText(
+            QCoreApplication.translate("SLamParam", u"Axial : 0 set (0 ducts)", None)
+        )
+        self.b_axial_duct.setText(
+            QCoreApplication.translate("SLamParam", u"set axial ducts", None)
+        )
+        self.g_rad_vent.setTitle(
+            QCoreApplication.translate("SLamParam", u"Radial Ventilation Ducts", None)
+        )
+        self.img_rad_duct.setText("")
+        self.in_Nrvd.setText(QCoreApplication.translate("SLamParam", u"Nrvd :", None))
+        self.in_Wrvd.setText(QCoreApplication.translate("SLamParam", u"Wrvd :", None))
+        self.unit_Wrvd.setText(QCoreApplication.translate("SLamParam", u"m", None))
+        self.out_length.setText(
+            QCoreApplication.translate(
+                "SLamParam", u"stator total length = L1 + Nrvd * Wrvd = ?", None
+            )
+        )
+        self.b_plot.setText(QCoreApplication.translate("SLamParam", u"Preview", None))
+        self.b_previous.setText(
+            QCoreApplication.translate("SLamParam", u"Previous", None)
+        )
+        self.b_next.setText(QCoreApplication.translate("SLamParam", u"Next", None))
 
-
-from .....GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
-from .....GUI.Tools.FloatEdit import FloatEdit
-from pyleecan.GUI.Resources import pyleecan_rc
+    # retranslateUi
