@@ -8,7 +8,7 @@ from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Classes.Arc1 import Arc1
 from ....Methods import ParentMissingError
-from ....Functions.labels import HOLEV_LAB, HOLEM_LAB
+from ....Functions.labels import HOLEV_LAB, HOLEM_LAB, LAM_LAB
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):
@@ -36,7 +36,10 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     surf_list = self.surf_list
 
     # Get correct label for surfaces
-    lam_label = self.parent.get_label()
+    if self.parent is not None:
+        lam_label = self.parent.get_label()
+    else:
+        lam_label = LAM_LAB
     R_id, surf_type = self.get_R_id()
     vent_label = lam_label + "_" + surf_type + "_R" + str(R_id) + "-T"
     mag_label = lam_label + "_" + HOLEM_LAB + "_R" + str(R_id) + "-T"
