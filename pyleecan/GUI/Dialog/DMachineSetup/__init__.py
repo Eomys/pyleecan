@@ -30,22 +30,23 @@ from ....GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
 from ....GUI.Dialog.DMachineSetup.SWinding.SWinding import SWinding
 from ....GUI.Dialog.DMachineSetup.SWPole.SWPole import SWPole
 from ....GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
+from ....GUI.Dialog.DMachineSetup.SSkew.SSkew import SSkew
 from ....GUI.Resources import pixmap_dict
 
 # Steps needed to setup a LamSlotWind
 LSW_step = [SLamParam, SWSlot, SWinding, SWindCond]
 # Steps needed to setup a LamSlotWind for the rotor of a WRSM
-LP_step = [SLamParam, SWPole, SWinding, SWindCond]
+LP_step = [SLamParam, SWPole, SWinding, SWindCond, SSkew]
 # Steps needed to setup a LamSquirrelCage
-LSC_step = [SLamParam, SWSlot, SBar]
+LSC_step = [SLamParam, SWSlot, SBar, SSkew]
 # Steps needed to setup a LamSquirrelCageMag
-LSCM_step = [SLamParam, SWSlot, SBar, SMHoleMag]
+LSCM_step = [SLamParam, SWSlot, SBar, SMHoleMag, SSkew]
 # Steps needed to setup a LamHole
-LH_step = [SLamParam, SMHoleMag]
+LH_step = [SLamParam, SMHoleMag, SSkew]
 # Steps needed to setup a LamSlot
 LS_step = [SLamParam, SWSlot]
 # Steps needed to setup a LamSlotMag
-LSM_step = [SLamParam, SMSlot]
+LSM_step = [SLamParam, SMSlot, SSkew]
 # Steps to start the design of a machine with 2 laminations
 S_step = [SMachineType, SMachineDimension]
 
@@ -204,7 +205,7 @@ SRM_dict = {
     "init_machine": machine10,
     "start_step": S_step,
     "stator_step": LSW_step,
-    "rotor_step": LS_step,
+    "rotor_step": LS_step + [SSkew],
     "name": "SRM",
     "img": pixmap_dict["SCIM"],
     "txt": "SRM (Switched Reluctance Machine)",
