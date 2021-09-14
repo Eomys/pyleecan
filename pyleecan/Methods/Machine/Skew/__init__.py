@@ -1,1 +1,1 @@
-# -*- coding: utf-8 -*-
+TYPE_SKEW_LIST = ["linear", "vshape", "alternate", "user-defined", "function"]

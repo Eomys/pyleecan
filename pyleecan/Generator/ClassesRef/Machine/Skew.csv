@@ -1,7 +1,8 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-type,-,"Type of skew (""linear"", ""vshape"", ""function"", ""user-defined"")",0,str,None,,,,Machine,,comp_angle,VERSION,1,Class for the skew (rotor or stator)
-rate,-,Skew rate,0,float,0,,,,,,plot,,,
-is_step,-,Skew is defined as steps,0,bool,True,,,,,,get_angle_unique,,,
-function,-,Function for function skew,0,function,None,,,,,,get_ind_unique,,,
+type_skew,-,"Type of skew (""linear"", ""vshape"", ""function"", ""user-defined"")",0,str,None,,,,Machine,,comp_angle,VERSION,1,Class for the skew (rotor or stator)
+rate,-,"Skew rate expressed in terms of slot pitch (stator slot pitch for SCIM, rotor slot pitch for PMSM)",0,float,1,,,,,,comp_pattern,,,
+is_step,-,True to define skew as steps,0,bool,True,,,,,,plot,,,
+function,-,Function which describes skew pattern,0,function,None,,,,,,,,,
 angle_list,rad,List of skew angles,1,list,None,,,,,,,,,
-z_list,m,List of slice positions,1,list,None,,,,,,,,,
+z_list,m,List of z axis positions for which skew angles are given,1,list,None,,,,,,,,,
+Nstep,,Number of steps if step skew,,int,None,2,,,,,,,,
