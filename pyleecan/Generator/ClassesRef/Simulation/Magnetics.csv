@@ -11,6 +11,6 @@ is_periodicity_a,-,True to compute only on one angle periodicity (use periodicit
 angle_stator_shift,rad,Shift angle to appy to the stator in magnetic model,0,float,0,,,,,,,,,,
 angle_rotor_shift,rad,Shift angle to appy to the rotor in magnetic model,0,float,0,,,,,,,,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.Magnetics,,,,,,,,,,
-Slice_enforced,-,Enforce slice model to account for skew/eccentricity,0,SliceModel,None,,,,,,,,,,
+Slice_enforced,-,Enforce slice model to account for skew,0,SliceModel,None,,,,,,,,,,
 Nslices_enforced,,To enforce number of slices in slice model,,int,None,,,,,,,,,,
 type_distribution_enforced,-,"To enforce type of slice distribution to use for rotor skew if linear and continuous (""uniform"", ""gauss"", ""user-defined"")",,str,None,,,,,,,,,,

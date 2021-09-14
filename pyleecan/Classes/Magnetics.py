@@ -607,7 +607,7 @@ class Magnetics(FrozenClass):
     Slice_enforced = property(
         fget=_get_Slice_enforced,
         fset=_set_Slice_enforced,
-        doc=u"""Enforce slice model to account for skew/eccentricity
+        doc=u"""Enforce slice model to account for skew
 
         :Type: SliceModel
         """,
