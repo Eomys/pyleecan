@@ -89,8 +89,6 @@ class SliceModel(FrozenClass):
         L=None,
         is_step=None,
         is_skew=None,
-        is_3D_ecc=None,
-        is_post_ecc=True,
         init_dict=None,
         init_str=None,
     ):
@@ -125,10 +123,6 @@ class SliceModel(FrozenClass):
                 is_step = init_dict["is_step"]
             if "is_skew" in list(init_dict.keys()):
                 is_skew = init_dict["is_skew"]
-            if "is_3D_ecc" in list(init_dict.keys()):
-                is_3D_ecc = init_dict["is_3D_ecc"]
-            if "is_post_ecc" in list(init_dict.keys()):
-                is_post_ecc = init_dict["is_post_ecc"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.type_distribution = type_distribution
@@ -139,8 +133,6 @@ class SliceModel(FrozenClass):
         self.L = L
         self.is_step = is_step
         self.is_skew = is_skew
-        self.is_3D_ecc = is_3D_ecc
-        self.is_post_ecc = is_post_ecc
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -180,8 +172,6 @@ class SliceModel(FrozenClass):
         SliceModel_str += "L = " + str(self.L) + linesep
         SliceModel_str += "is_step = " + str(self.is_step) + linesep
         SliceModel_str += "is_skew = " + str(self.is_skew) + linesep
-        SliceModel_str += "is_3D_ecc = " + str(self.is_3D_ecc) + linesep
-        SliceModel_str += "is_post_ecc = " + str(self.is_post_ecc) + linesep
         return SliceModel_str
 
     def __eq__(self, other):
@@ -204,10 +194,6 @@ class SliceModel(FrozenClass):
         if other.is_step != self.is_step:
             return False
         if other.is_skew != self.is_skew:
-            return False
-        if other.is_3D_ecc != self.is_3D_ecc:
-            return False
-        if other.is_post_ecc != self.is_post_ecc:
             return False
         return True
 
@@ -235,10 +221,6 @@ class SliceModel(FrozenClass):
             diff_list.append(name + ".is_step")
         if other._is_skew != self._is_skew:
             diff_list.append(name + ".is_skew")
-        if other._is_3D_ecc != self._is_3D_ecc:
-            diff_list.append(name + ".is_3D_ecc")
-        if other._is_post_ecc != self._is_post_ecc:
-            diff_list.append(name + ".is_post_ecc")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -257,8 +239,6 @@ class SliceModel(FrozenClass):
         S += getsizeof(self.L)
         S += getsizeof(self.is_step)
         S += getsizeof(self.is_skew)
-        S += getsizeof(self.is_3D_ecc)
-        S += getsizeof(self.is_post_ecc)
         return S
 
     def as_dict(self, **kwargs):
@@ -285,8 +265,6 @@ class SliceModel(FrozenClass):
         SliceModel_dict["L"] = self.L
         SliceModel_dict["is_step"] = self.is_step
         SliceModel_dict["is_skew"] = self.is_skew
-        SliceModel_dict["is_3D_ecc"] = self.is_3D_ecc
-        SliceModel_dict["is_post_ecc"] = self.is_post_ecc
         # The class name is added to the dict for deserialisation purpose
         SliceModel_dict["__class__"] = "SliceModel"
         return SliceModel_dict
@@ -302,8 +280,6 @@ class SliceModel(FrozenClass):
         self.L = None
         self.is_step = None
         self.is_skew = None
-        self.is_3D_ecc = None
-        self.is_post_ecc = None
 
     def _get_type_distribution(self):
         """getter of type_distribution"""
@@ -460,42 +436,6 @@ class SliceModel(FrozenClass):
         fget=_get_is_skew,
         fset=_set_is_skew,
         doc=u"""True if slices account for skew
-
-        :Type: bool
-        """,
-    )
-
-    def _get_is_3D_ecc(self):
-        """getter of is_3D_ecc"""
-        return self._is_3D_ecc
-
-    def _set_is_3D_ecc(self, value):
-        """setter of is_3D_ecc"""
-        check_var("is_3D_ecc", value, "bool")
-        self._is_3D_ecc = value
-
-    is_3D_ecc = property(
-        fget=_get_is_3D_ecc,
-        fset=_set_is_3D_ecc,
-        doc=u"""True if slices account for 3D eccentricity
-
-        :Type: bool
-        """,
-    )
-
-    def _get_is_post_ecc(self):
-        """getter of is_post_ecc"""
-        return self._is_post_ecc
-
-    def _set_is_post_ecc(self, value):
-        """setter of is_post_ecc"""
-        check_var("is_post_ecc", value, "bool")
-        self._is_post_ecc = value
-
-    is_post_ecc = property(
-        fget=_get_is_post_ecc,
-        fset=_set_is_post_ecc,
-        doc=u"""True to calculate eccentricity as a posprocessing and not to include it in calculation
 
         :Type: bool
         """,

@@ -1,6 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-type_dist,-,"Type of slice distribution to use for rotor skew (""uniform"", ""gauss"", ""user-defined"")",,str,const,,,,Simulation,,comp_dist,VERSION,1,Class for the skew model
-Nslices,-,Number of slices,,int,5,,,,,,comp_skew,,,
-z_list,m,List of slice positions (for user-defined skew) to be multiplied by lamination length,,list,None,,,,,,plot,,,
-angle_list_rotor,rad,List of rotor skew angles for user-defined skew (optional),,list,None,,,,,,,,,
-angle_list_stator,rad,List of stator skew angles for user-defined skew (optional),,list,None,,,,,,,,,
