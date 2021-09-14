@@ -875,7 +875,7 @@ class OutMag(FrozenClass):
     Slice = property(
         fget=_get_Slice,
         fset=_set_Slice,
-        doc=u"""Slice model to account for skew/eccentricity
+        doc=u"""Slice model to account for skew
 
         :Type: SliceModel
         """,

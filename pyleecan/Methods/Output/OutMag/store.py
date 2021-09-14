@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from numpy import mean, max as np_max, min as np_min
 
 from SciDataTool import DataTime, VectorField, Data1D
@@ -26,7 +25,7 @@ def store(self, out_dict, axes_dict):
 
     # Store airgap flux as VectorField object
     # Axes for each airgap flux component
-    axis_list = [Time, axes_dict["Angle"]]
+    axis_list = [Time, axes_dict["angle"], axes_dict["z"]]
     # Create VectorField with empty components
     self.B = VectorField(
         name="Airgap flux density",
@@ -64,6 +63,19 @@ def store(self, out_dict, axes_dict):
     if "Tem" in out_dict:
 
         Tem = out_dict.pop("Tem")
+
+        if (
+            len(Tem.shape) == 2 and Tem.shape[-1] > 1
+        ):  # time + slice axis -> integrate over slices
+            Tem_full = DataTime(
+                name="Electromagnetic torque",
+                unit="Nm",
+                symbol="T_{em}",
+                axes=[axes_dict["time_Tem"], axes_dict["z"]],
+                values=Tem,
+            )
+            # Integrate over slice axis
+            Tem = Tem_full.get_along("time[smallestperiod]", "z=integrate")["T_{em}"]
 
         self.Tem = DataTime(
             name="Electromagnetic torque",
@@ -103,12 +115,28 @@ def store(self, out_dict, axes_dict):
                 is_components=True,
             )
             prefix = "Stator" if lam.is_stator else "Rotor"
+            Phi_wind = out_dict["Phi_wind"][key]
+
+            if (
+                len(Phi_wind.shape) == 3 and Phi_wind.shape[-1] > 1
+            ):  # time + phase + slice axis -> integrate over slices
+                Phi_wind_full = DataTime(
+                    name=prefix + " Winding Flux",
+                    unit="Wb",
+                    symbol="Phi_{wind}",
+                    axes=[Time, Phase, axes_dict["z"]],
+                    values=Phi_wind,
+                )
+                # Integrate over slice axis
+                Phi_wind = Phi_wind_full.get_along(
+                    "time[smallestperiod]", "phase", "z=integrate"
+                )["Phi_{wind}"]
             self.Phi_wind[key] = DataTime(
                 name=prefix + " Winding Flux",
                 unit="Wb",
                 symbol="Phi_{wind}",
                 axes=[Time, Phase],
-                values=out_dict["Phi_wind"][key],
+                values=Phi_wind,
             )
 
         if (

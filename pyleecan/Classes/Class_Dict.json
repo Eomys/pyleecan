@@ -5956,7 +5956,7 @@
                 "value": "Pyleecan.Magnetics"
             },
             {
-                "desc": "Enforce slice model to account for skew/eccentricity",
+                "desc": "Enforce slice model to account for skew",
                 "max": "",
                 "min": "",
                 "name": "Slice_enforced",
@@ -8285,7 +8285,7 @@
                 "value": null
             },
             {
-                "desc": "Slice model to account for skew/eccentricity",
+                "desc": "Slice model to account for skew",
                 "max": "",
                 "min": "",
                 "name": "Slice",
@@ -9750,24 +9750,6 @@
                 "type": "bool",
                 "unit": "",
                 "value": null
-            },
-            {
-                "desc": "True if slices account for 3D eccentricity",
-                "max": "",
-                "min": "",
-                "name": "is_3D_ecc",
-                "type": "bool",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "True to calculate eccentricity as a posprocessing and not to include it in calculation",
-                "max": "",
-                "min": "",
-                "name": "is_post_ecc",
-                "type": "bool",
-                "unit": "",
-                "value": 1
             }
         ]
     },
