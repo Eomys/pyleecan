@@ -75,7 +75,7 @@ def comp_angle(self):
                 else:
                     angle_list = concatenate((angles_half[:-1], flip(angles_half)))
 
-            elif type_skew == "alternate":
+            elif type_skew == "zig-zag":
 
                 if Nstep in [None, 2]:
                     raise Exception(

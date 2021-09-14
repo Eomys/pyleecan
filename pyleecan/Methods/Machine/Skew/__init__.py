@@ -1,1 +1,1 @@
-TYPE_SKEW_LIST = ["linear", "vshape", "alternate", "user-defined", "function"]
+TYPE_SKEW_LIST = ["linear", "vshape", "zig-zag", "user-defined", "function"]

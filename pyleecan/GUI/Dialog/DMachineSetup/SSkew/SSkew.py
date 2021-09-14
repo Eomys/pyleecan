@@ -271,7 +271,7 @@ class SSkew(Ui_SSkew, QWidget):
             self.type_skew = "linear"
             self.cb_type.setCurrentIndex(self.type_skew_list.index(self.type_skew))
 
-        if self.type_skew in ["vshape", "alternate"] and self.Nslice < 3:
+        if self.type_skew in ["vshape", "zig-zag"] and self.Nslice < 3:
             self.Nslice = 3
             self.sb_nslice.setValue(self.Nslice)
 

@@ -139,9 +139,7 @@ def test_skew_pattern():
     assert max(angle_step_vshape) - min(angle_step_vshape) == ssp1
 
     #%% 5-Stepped alternate skew, one stator slot pitch
-    Toyota_Prius.rotor.skew = Skew(
-        type_skew="alternate", is_step=True, Nstep=5, rate=0.8
-    )
+    Toyota_Prius.rotor.skew = Skew(type_skew="zig-zag", is_step=True, Nstep=5, rate=0.8)
 
     angle_step_alternate, z_step_alternate = Toyota_Prius.rotor.skew.comp_pattern()
 
