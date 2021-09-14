@@ -25,7 +25,7 @@ def store(self, out_dict, axes_dict):
 
     # Store airgap flux as VectorField object
     # Axes for each airgap flux component
-    axis_list = [Time, axes_dict["angle"], axes_dict["z"]]
+    axis_list = [Time, axes_dict["Angle"], axes_dict["z"]]
     # Create VectorField with empty components
     self.B = VectorField(
         name="Airgap flux density",
@@ -71,7 +71,7 @@ def store(self, out_dict, axes_dict):
                 name="Electromagnetic torque",
                 unit="Nm",
                 symbol="T_{em}",
-                axes=[axes_dict["time_Tem"], axes_dict["z"]],
+                axes=[axes_dict["Time_Tem"], axes_dict["z"]],
                 values=Tem,
             )
             # Integrate over slice axis

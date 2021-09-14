@@ -87,6 +87,6 @@ def comp_axes(self, output):
     Slice = self.Slice_enforced.get_data()
 
     # Store in axis dict
-    axes_dict = {"time": Time, "angle": Angle, "time_Tem": Time_Tem, "z": Slice}
+    axes_dict = {"Time": Time, "Angle": Angle, "Time_Tem": Time_Tem, "z": Slice}
 
     return axes_dict
