@@ -72,6 +72,11 @@ try:
 except ImportError as error:
     set_pole_pair_number = error
 
+try:
+    from ..Methods.Machine.LamSlot.comp_angle_d_axis import comp_angle_d_axis
+except ImportError as error:
+    comp_angle_d_axis = error
+
 
 from ._check import InitUnKnowClassError
 from .Slot import Slot
@@ -207,6 +212,18 @@ class LamSlot(Lamination):
         )
     else:
         set_pole_pair_number = set_pole_pair_number
+    # cf Methods.Machine.LamSlot.comp_angle_d_axis
+    if isinstance(comp_angle_d_axis, ImportError):
+        comp_angle_d_axis = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method comp_angle_d_axis: "
+                    + str(comp_angle_d_axis)
+                )
+            )
+        )
+    else:
+        comp_angle_d_axis = comp_angle_d_axis
     # save and copy methods are available in all object
     save = save
     copy = copy
