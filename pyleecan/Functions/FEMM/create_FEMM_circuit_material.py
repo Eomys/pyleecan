@@ -46,6 +46,19 @@ def create_FEMM_circuit_material(
 
     # Load parameter for readibility
     rho = lam.winding.conductor.cond_mat.elec.rho  # Resistivity at 20°C
+    if rho is None:
+        mat_name = (
+            " (" + lam.winding.conductor.cond_mat.name + ")"
+            if lam.winding.conductor.cond_mat.name
+            else ""
+        )
+        raise Exception(
+            "Error while defining the "
+            + lam.get_label()
+            + " winding material"
+            + mat_name
+            + " in FEMM: elec.rho is not defined"
+        )
     wind_mat = lam.winding.get_connection_mat(lam.get_Zs())
     Swire = lam.winding.conductor.comp_surface()
 
