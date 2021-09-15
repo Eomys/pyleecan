@@ -9,6 +9,7 @@ from ....definitions import config_dict
 COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 FONT_FAMILY_PYVISTA = config_dict["PLOT"]["FONT_FAMILY_PYVISTA"]
 
+
 def plot_contour(
     self,
     *args,
