@@ -1,10 +1,6 @@
 from os.path import join
 
 import pytest
-from numpy import array, nan
-from numpy.testing import assert_array_almost_equal
-
-from Tests import save_validation_path as save_path
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
