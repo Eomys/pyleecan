@@ -177,20 +177,26 @@ class SWinding(Gen_SWinding, QWidget):
             self.b_import.hide()
 
     def show_layer_widget(self):
+
+        # Coil pitch (or coil span)
+        Zs = self.obj.slot.Zs
+        qs = self.obj.winding.qs
+        p = self.obj.winding.p
+        if self.obj.winding.coil_pitch in [0, None]:
+            if Zs / (2 * p * qs) > 1:
+                # distributed winding
+                self.obj.winding.coil_pitch = int(Zs / (2 * p))
+            else:
+                # tooth concentrated winding
+                self.obj.winding.coil_pitch = 1
+        self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
+
         if self.si_Nlayer.value() == 1:
-            self.in_coil_pitch.hide()
-            self.si_coil_pitch.hide()
             self.is_reverse_layer.hide()
             self.is_change_layer.hide()
-            self.obj.winding.coil_pitch = None
         else:
-            self.in_coil_pitch.show()
-            self.si_coil_pitch.show()
             self.is_reverse_layer.show()
             self.is_change_layer.show()
-            if self.obj.winding.coil_pitch is None:
-                self.obj.winding.coil_pitch = 1
-            self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
             # is_reverse_layer
             if self.obj.winding.is_reverse_layer is None:
                 self.obj.winding.is_reverse_layer = False
