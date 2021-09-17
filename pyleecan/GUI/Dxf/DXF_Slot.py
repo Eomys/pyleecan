@@ -21,6 +21,7 @@ from ...GUI.Resources import pixmap_dict
 from ...GUI.Tools.MPLCanvas import MPLCanvas2
 from ...loggers import GUI_LOG_NAME
 from .Ui_DXF_Slot import Ui_DXF_Slot
+from ...Functions.init_fig import init_fig
 
 # Column index for table
 TYPE_COL = 0
@@ -134,11 +135,15 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self : DXF_Slot
             a DXF_Slot object
         """
+        # Init fig
+        fig, axes, _, _ = init_fig()
+        self.fig = fig
+        self.axes = axes
         # Set plot layout
         canvas = FigureCanvasQTAgg(fig)
         toolbar = NavigationToolbar(canvas, self)
         # Remove Subplots button
-        unwanted_buttons = ["Subplots"]
+        unwanted_buttons = ["Subplots", "Customize"]
         for x in toolbar.actions():
             if x.text() in unwanted_buttons:
                 toolbar.removeAction(x)
@@ -149,19 +154,16 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             "Zoom",
             "Back",
             "Forward",
-            "Customize",
             "Save",
         ]
         for action in toolbar.actions():
             if action.text() in icons_buttons and "mpl_" + action.text() in pixmap_dict:
                 action.setIcon(QIcon(pixmap_dict["mpl_" + action.text()]))
         # Change default file name
-        canvas.get_default_filename = (
-            lambda: self.windowTitle().replace(" ", "_").replace(":", "") + ".png"
-        )
+        canvas.get_default_filename = "DXF_slot_visu.png"
         self.w_viewer.addWidget(toolbar)
         self.w_viewer.addWidget(canvas)
-        fig, axes = self.w_viewer.fig, self.w_viewer.axes
+        self.canvas = canvas
         axes.set_axis_off()
 
         # Setup interaction with graph
@@ -187,14 +189,14 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             else:
                 color = "k"
             axes.plot(point_list.real, point_list.imag, color, zorder=2)
-            self.w_viewer.draw()
+            self.canvas.draw()
 
         def zoom(event):
             """Function to zoom/unzoom according the mouse wheel"""
 
-            base_scale = 0.3  # Scaling factor
+            base_scale = 0.8  # Scaling factor
             # get the current x and y limits
-            ax = self.w_viewer.axes
+            ax = self.axes
             cur_xlim = ax.get_xlim()
             cur_ylim = ax.get_ylim()
             cur_xrange = (cur_xlim[1] - cur_xlim[0]) * 0.5
@@ -217,11 +219,11 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             ax.set_ylim(
                 [ydata - cur_yrange * scale_factor, ydata + cur_yrange * scale_factor]
             )
-            self.w_viewer.draw()  # force re-draw
+            self.canvas.draw()  # force re-draw
 
         # Connect the function
-        self.w_viewer.mpl_connect("button_press_event", select_line)
-        self.w_viewer.mpl_connect("scroll_event", zoom)
+        self.canvas.mpl_connect("button_press_event", select_line)
+        self.canvas.mpl_connect("scroll_event", zoom)
 
         # Axis cleanup
         axes.axis("equal")
@@ -240,7 +242,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self : DXF_Slot
             a DXF_Slot object
         """
-        fig, axes = self.w_viewer.fig, self.w_viewer.axes
+        fig, axes = self.fig, self.axes
         axes.clear()
         axes.set_axis_off()
 
@@ -256,7 +258,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         axes.plot(self.Zcenter.real, self.Zcenter.imag, "rx", zorder=0)
         axes.text(self.Zcenter.real, self.Zcenter.imag, "O")
 
-        self.w_viewer.draw()
+        self.canvas.draw()
 
     def check_selection(self):
         """Check if every line in the selection are connected
