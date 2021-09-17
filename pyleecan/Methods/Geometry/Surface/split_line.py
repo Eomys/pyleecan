@@ -36,27 +36,23 @@ def split_line(self, Z1, Z2, is_join=False, prop_dict_join=None):
     bot_split_list = list()  # List of line of the bot part
     for line in lines:
         line_top, line_bot = line.split_line(
-            Z1=Z1,
-            Z2=Z2,
-            is_join=is_join,
-            prop_dict_join=prop_dict_join,
+            Z1=Z1, Z2=Z2, is_join=is_join, prop_dict_join=prop_dict_join,
         )
         top_split_list.extend(line_top)
         bot_split_list.extend(line_bot)
 
-    # Make sure that the surface is closed (if needed)
-    if is_join:
-        top_split_list = join_surf_line(top_split_list, prop_dict_join)
-        bot_split_list = join_surf_line(bot_split_list, prop_dict_join)
-
     # Create the resulting surface and update ref point
     if len(top_split_list) > 0:
+        if is_join:  # Make sure that the surface is closed (if needed)
+            top_split_list = join_surf_line(top_split_list, prop_dict_join)
         top_surf = SurfLine(label=self.label, line_list=top_split_list)
         top_surf.comp_point_ref(is_set=True)
     else:
         top_surf = None
 
     if len(bot_split_list) > 0:
+        if is_join:  # Make sure that the surface is closed (if needed)
+            bot_split_list = join_surf_line(bot_split_list, prop_dict_join)
         bot_surf = SurfLine(label=self.label, line_list=bot_split_list)
         bot_surf.comp_point_ref(is_set=True)
     else:
