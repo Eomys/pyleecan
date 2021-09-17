@@ -1,6 +1,10 @@
 from logging import getLogger
 from os.path import dirname, isfile
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import (
+    FigureCanvasQTAgg,
+    NavigationToolbar2QT as NavigationToolbar,
+)
 from ezdxf import readfile
 from numpy import angle as np_angle
 from numpy import array, pi, argmax, argmin
@@ -27,6 +31,7 @@ from ...GUI import gui_option
 from ...loggers import GUI_LOG_NAME
 from .Ui_DXF_Hole import Ui_DXF_Hole
 from ...Functions.labels import HOLEM_LAB, HOLEV_LAB
+from ...Functions.init_fig import init_fig
 
 # Column index for table
 
@@ -178,7 +183,35 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self : DXF_Hole
             a DXF_Hole object
         """
-        fig, axes = self.w_viewer.fig, self.w_viewer.axes
+        # Init fig
+        fig, axes, _, _ = init_fig()
+        self.fig = fig
+        self.axes = axes
+        # Set plot layout
+        canvas = FigureCanvasQTAgg(fig)
+        toolbar = NavigationToolbar(canvas, self)
+        # Remove Subplots button
+        unwanted_buttons = ["Subplots", "Customize"]
+        for x in toolbar.actions():
+            if x.text() in unwanted_buttons:
+                toolbar.removeAction(x)
+        # Adding custom icon on mpl toobar
+        icons_buttons = [
+            "Home",
+            "Pan",
+            "Zoom",
+            "Back",
+            "Forward",
+            "Save",
+        ]
+        for action in toolbar.actions():
+            if action.text() in icons_buttons and "mpl_" + action.text() in pixmap_dict:
+                action.setIcon(QIcon(pixmap_dict["mpl_" + action.text()]))
+        # Change default file name
+        canvas.get_default_filename = "DXF_hole_visu.png"
+        self.w_viewer.addWidget(toolbar)
+        self.w_viewer.addWidget(canvas)
+        self.canvas = canvas
         axes.set_axis_off()
 
         # Setup interaction with graph
@@ -213,7 +246,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             point_list = array(self.line_list[closest_id].discretize(20))
             color = COLOR_LIST[self.selected_list[closest_id]]
             axes.plot(point_list.real, point_list.imag, color, zorder=2)
-            self.w_viewer.draw()
+            self.canvas.draw()
 
             # Check if the surface is complete
             if self.check_selection():
@@ -222,9 +255,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         def zoom(event):
             """Function to zoom/unzoom according the mouse wheel"""
 
-            base_scale = 0.3  # Scaling factor
+            base_scale = 0.8  # Scaling factor
             # get the current x and y limits
-            ax = self.w_viewer.axes
+            ax = self.axes
             cur_xlim = ax.get_xlim()
             cur_ylim = ax.get_ylim()
             cur_xrange = (cur_xlim[1] - cur_xlim[0]) * 0.5
@@ -247,11 +280,11 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             ax.set_ylim(
                 [ydata - cur_yrange * scale_factor, ydata + cur_yrange * scale_factor]
             )
-            self.w_viewer.draw()  # force re-draw
+            self.canvas.draw()  # force re-draw
 
         # Connect the function
-        self.w_viewer.mpl_connect("button_press_event", select_line)
-        self.w_viewer.mpl_connect("scroll_event", zoom)
+        self.canvas.mpl_connect("button_press_event", select_line)
+        self.canvas.mpl_connect("scroll_event", zoom)
 
         # Axis cleanup
         axes.axis("equal")
@@ -270,7 +303,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self : DXF_Hole
             a DXF_Hole object
         """
-        fig, axes = self.w_viewer.fig, self.w_viewer.axes
+        fig, axes = self.fig, self.axes
         axes.clear()
         axes.set_axis_off()
 
@@ -283,7 +316,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         axes.plot(self.Zcenter.real, self.Zcenter.imag, "rx", zorder=0)
         axes.text(self.Zcenter.real, self.Zcenter.imag, "O")
 
-        self.w_viewer.draw()
+        self.canvas.draw()
 
     def check_selection(self):
         """Check if every line in the selection form a surface
@@ -596,7 +629,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             for ii, line in enumerate(self.line_list):
                 if abs(mid - line.get_middle()) < Z_TOL:
                     self.selected_list[ii] = 1
-                    self.w_viewer.axes.text(
+                    self.axes.text(
                         mid.real,
                         mid.imag,
                         str(ii),
@@ -607,7 +640,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         for ii in range(len(self.selected_list)):
             if self.selected_list[ii] == 1:
                 Zmid = self.line_list[ii].get_middle()
-                self.w_viewer.axes.text(
+                self.axes.text(
                     Zmid.real,
                     Zmid.imag,
                     str(ii),
