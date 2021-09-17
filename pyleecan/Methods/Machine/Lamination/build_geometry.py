@@ -72,11 +72,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     point_ref = self.comp_point_ref(sym=sym)
     surf_list = list()
     if sym == 1:  # Complete lamination
-        ext_surf = SurfLine(
-            label=label_ext,
-            line_list=ext_line,
-            point_ref=point_ref,
-        )
+        ext_surf = SurfLine(label=label_ext, line_list=ext_line, point_ref=point_ref,)
         int_surf = SurfLine(label=label_int, line_list=int_line, point_ref=0)
         if self.Rint > 0 and len(ext_line) > 0:
             surf_list.append(
@@ -120,9 +116,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             curve_list.extend(int_line)
 
         surf_yoke = SurfLine(
-            line_list=curve_list,
-            label=label_lam,
-            point_ref=point_ref,
+            line_list=curve_list, label=label_lam, point_ref=point_ref,
         )
         surf_list.append(surf_yoke)
 
@@ -132,7 +126,12 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             vent_list = vent.build_geometry(alpha=0, delta=0)
             surf_list.extend(
                 transform_hole_surf(
-                    hole_surf_list=vent_list, Zh=vent.Zh, sym=sym, alpha=0, delta=0
+                    hole_surf_list=vent_list,
+                    Zh=vent.Zh,
+                    sym=sym,
+                    alpha=0,
+                    delta=0,
+                    is_split=True,
                 )
             )
 

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 
@@ -22,6 +23,7 @@ def plot(
     delta=0,
     is_edge_only=False,
     is_show_fig=True,
+    save_path=None,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -45,6 +47,8 @@ def plot(
         To plot transparent Patches
     is_show_fig : bool
         To call show at the end of the method
+    save_path : str
+        full path including folder, name and extension of the file to save if save_path is not None
 
     Returns
     -------
@@ -100,3 +104,6 @@ def plot(
         legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()
+    if save_path is not None:
+        fig.savefig(save_path)
+        plt.close()
