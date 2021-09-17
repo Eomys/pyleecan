@@ -5,13 +5,15 @@ from ....Methods import ParentMissingError
 from numpy import pi, sqrt, exp
 
 
-def get_bore_line(self, label=""):
+def get_bore_line(self, prop_dict=None):
     """Return the bore line description
 
     Parameters
     ----------
     self : BoreLSRPM
         A BoreLSRPM object
+    prop_dict : dict
+        Property dictionary to apply on the lines
 
     Returns
     -------
@@ -54,7 +56,7 @@ def get_bore_line(self, label=""):
                 end=Z2 * exp(1j * (2 * pi / self.N * (ii - 1) + self.alpha)),
                 radius=self.Rarc,
                 is_trigo_direction=True,
-                label=label,
+                prop_dict=prop_dict,
             )
         )
 
@@ -62,6 +64,7 @@ def get_bore_line(self, label=""):
             Segment(
                 Z2 * exp(1j * (2 * pi / self.N * (ii - 1) + self.alpha)),
                 Z3 * exp(1j * (2 * pi / self.N * (ii - 1) + self.alpha)),
+                prop_dict=prop_dict,
             )
         )
 
@@ -71,7 +74,7 @@ def get_bore_line(self, label=""):
                 end=Z4 * exp(1j * (2 * pi / self.N * (ii - 1) + self.alpha)),
                 radius=self.Rarc,
                 is_trigo_direction=True,
-                label=label,
+                prop_dict=prop_dict,
             )
         )
 

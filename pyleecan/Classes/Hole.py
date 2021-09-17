@@ -82,6 +82,11 @@ try:
 except ImportError as error:
     set_magnet_by_id = error
 
+try:
+    from ..Methods.Slot.Hole.get_R_id import get_R_id
+except ImportError as error:
+    get_R_id = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -223,6 +228,15 @@ class Hole(FrozenClass):
         )
     else:
         set_magnet_by_id = set_magnet_by_id
+    # cf Methods.Slot.Hole.get_R_id
+    if isinstance(get_R_id, ImportError):
+        get_R_id = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method get_R_id: " + str(get_R_id))
+            )
+        )
+    else:
+        get_R_id = get_R_id
     # save and copy methods are available in all object
     save = save
     copy = copy

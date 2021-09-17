@@ -6,6 +6,16 @@ from ....Classes.Circle import Circle
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Classes.SurfRing import SurfRing
+from ....Functions.labels import (
+    LAM_LAB,
+    BORE_LAB,
+    YOKE_LAB,
+    RADIUS_PROP_LAB,
+    BOUNDARY_PROP_LAB,
+    YSR_LAB,
+    YSL_LAB,
+)
+from ....Functions.Geometry.transform_hole_surf import transform_hole_surf
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0):
@@ -27,36 +37,36 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         list of surfaces needed to draw the lamination
 
     """
-    # Lamination label
-    if self.is_stator:
-        label = "Lamination_Stator"
-    else:
-        label = "Lamination_Rotor"
-
-    label_bore = label + "_Bore_Radius"
-    label_yoke = label + "_Yoke_Radius"
-
+    # Label setup
+    label = self.get_label()
+    label_lam = label + "_" + LAM_LAB
+    label_bore = label + "_" + LAM_LAB + BORE_LAB
+    label_yoke = label + "_" + LAM_LAB + YOKE_LAB
     if self.is_internal:
-        label_int = label_yoke + "_Int"  # internal label is yoke
-        label_ext = label_bore + "_Ext"  # external label is bore
+        label_ext = label_bore
+        label_int = label_yoke
     else:
-        label_int = label_bore + "_Int"  # internal label is bore
-        label_ext = label_yoke + "_Ext"  # external label is yoke
+        label_ext = label_yoke
+        label_int = label_bore
 
     # Get Radius lines
     if self.is_internal:
         if self.Rint > 0:
             _, int_line = self.get_yoke_desc(
-                sym=sym, is_reversed=True, line_label=label_int
+                sym=sym,
+                is_reversed=True,
+                prop_dict={RADIUS_PROP_LAB: YOKE_LAB, BOUNDARY_PROP_LAB: label_yoke},
             )
         else:
             int_line = []
-        _, ext_line = self.get_bore_desc(sym=sym, line_label=label_ext)
+        _, ext_line = self.get_bore_desc(sym=sym, prop_dict={RADIUS_PROP_LAB: BORE_LAB})
     else:
         _, ext_line = self.get_yoke_desc(
-            sym=sym, is_reversed=True, line_label=label_ext
+            sym=sym,
+            is_reversed=True,
+            prop_dict={RADIUS_PROP_LAB: YOKE_LAB, BOUNDARY_PROP_LAB: label_yoke},
         )
-        _, int_line = self.get_bore_desc(sym=sym, line_label=label_int)
+        _, int_line = self.get_bore_desc(sym=sym, prop_dict={RADIUS_PROP_LAB: BORE_LAB})
 
     # Create the surfaces
     point_ref = self.comp_point_ref(sym=sym)
@@ -73,7 +83,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
                 SurfRing(
                     out_surf=ext_surf,
                     in_surf=int_surf,
-                    label=label,
+                    label=label_lam,
                     point_ref=point_ref,
                 )
             )
@@ -90,27 +100,41 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         # Create lines
         curve_list = list()
         if self.is_internal:
-            curve_list.append(Segment(Z0, Z1, label=label + "_Yoke_Side"))
+            curve_list.append(
+                Segment(Z0, Z1, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YSR_LAB})
+            )
         else:
-            curve_list.append(Segment(Z3, Z2, label=label + "_Yoke_Side"))
+            curve_list.append(
+                Segment(Z3, Z2, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YSL_LAB})
+            )
         curve_list.extend(ext_line)
         if self.is_internal:
-            curve_list.append(Segment(Z2, Z3, label=label + "_Yoke_Side"))
+            curve_list.append(
+                Segment(Z2, Z3, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YSL_LAB})
+            )
         else:
-            curve_list.append(Segment(Z1, Z0, label=label + "_Yoke_Side"))
+            curve_list.append(
+                Segment(Z1, Z0, prop_dict={BOUNDARY_PROP_LAB: label + "_" + YSR_LAB})
+            )
         if self.Rint > 0:
             curve_list.extend(int_line)
 
         surf_yoke = SurfLine(
             line_list=curve_list,
-            label=label + "_Ext",
+            label=label_lam,
             point_ref=point_ref,
         )
         surf_list.append(surf_yoke)
 
     # Add the ventilation ducts if there is any
-    for vent in self.axial_vent:
-        surf_list.extend(vent.build_geometry(sym=sym, is_stator=self.is_stator))
+    if self.axial_vent not in [None, []]:
+        for vent in self.axial_vent:
+            vent_list = vent.build_geometry(alpha=0, delta=0)
+            surf_list.extend(
+                transform_hole_surf(
+                    hole_surf_list=vent_list, Zh=vent.Zh, sym=sym, alpha=0, delta=0
+                )
+            )
 
     # apply the transformation
     for surf in surf_list:

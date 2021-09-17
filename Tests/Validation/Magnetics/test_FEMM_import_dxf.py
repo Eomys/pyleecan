@@ -53,12 +53,12 @@ def test_FEMM_import_dxf():
     )
     # Set each surface name
     surf_dict = dict()
-    surf_dict[0.0546 + 1j * 0.0224] = "Lamination_Rotor_Bore_Radius_Ext"
-    surf_dict[0.0763 + 0.00867j] = "Hole_Rotor_R0_T0_S0"
-    surf_dict[0.0669 + 0.01668j] = "HoleMagnet_Rotor_Parallel_N_R0_T0_S0"
-    surf_dict[0.0614 + 0.0254j] = "Hole_Rotor_R0_T1_S0"
-    surf_dict[0.0591 + 0.03555j] = "HoleMagnet_Rotor_Parallel_N_R0_T1_S0"
-    surf_dict[0.06009 + 0.0478j] = "Hole_Rotor_R0_T2_S0"
+    surf_dict[0.0546 + 1j * 0.0224] = "Rotor-0_Lamination"
+    surf_dict[0.0763 + 0.00867j] = "Rotor-0_HoleVoid_R0-T0-S0"
+    surf_dict[0.0669 + 0.01668j] = "Rotor-0_HoleMag_R0-T0-S0"
+    surf_dict[0.0614 + 0.0254j] = "Rotor-0_HoleVoid_R0-T1-S0"
+    surf_dict[0.0591 + 0.03555j] = "Rotor-0_HoleMag_R0-T1-S0"
+    surf_dict[0.06009 + 0.0478j] = "Rotor-0_HoleVoid_R0-T2-S0"
     simu.mag.rotor_dxf.surf_dict = surf_dict
     # Set every BC
     BC_list = list()
@@ -84,3 +84,7 @@ def test_FEMM_import_dxf():
         is_show_fig=False,
         **dict_2D
     )
+
+
+if __name__ == "__main__":
+    test_FEMM_import_dxf()

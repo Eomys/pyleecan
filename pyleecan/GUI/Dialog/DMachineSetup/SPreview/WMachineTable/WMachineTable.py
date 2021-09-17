@@ -19,19 +19,17 @@ from ......GUI.Dialog.DMachineSetup.SPreview.WMachineTable.Ui_WMachineTable impo
 )
 from SciDataTool import DataLinspace
 from ......Methods.Simulation.MagElmer import (
-    boundary_prop,
-    boundary_list,
-    surface_label,
+    MagElmer_BP_dict,
 )
 
 try:
     from ......Functions.GMSH.draw_GMSH import draw_GMSH
-except:
-    draw_GMSH = ImportError
+except Exception as e:
+    draw_GMSH = e
 try:
     from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
-except:
-    gen_3D_mesh = ImportError
+except Exception as e:
+    gen_3D_mesh = e
 
 
 class WMachineTable(Ui_WMachineTable, QWidget):
@@ -55,9 +53,14 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         # Connect the widget
         self.b_mmf.clicked.connect(self.plot_mmf)
         self.b_FEMM.clicked.connect(self.draw_FEMM)
-        if isinstance(draw_GMSH, ImportError):
+        if isinstance(draw_GMSH, Exception):
             self.b_GMSH.setEnabled(False)
+            self.b_GMSH.setWhatsThis(str(draw_GMSH))
+            self.b_GMSH.setToolTip(str(draw_GMSH))
+
             self.b_GMSH_3D.setEnabled(False)
+            self.b_GMSH_3D.setWhatsThis(str(gen_3D_mesh))
+            self.b_GMSH_3D.setToolTip(str(gen_3D_mesh))
         else:
             self.b_GMSH.clicked.connect(self.draw_GMSH)
             self.b_GMSH_3D.clicked.connect(self.draw_GMSH_3D)
@@ -199,9 +202,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             draw_GMSH(
                 output=myResults,
                 sym=sym,
-                boundary_prop=boundary_prop,
-                boundary_list=boundary_list,
-                surface_label=surface_label,
+                boundary_prop=MagElmer_BP_dict,
                 is_lam_only_S=False,
                 is_lam_only_R=False,
                 user_mesh_dict=None,

@@ -6,6 +6,7 @@ from ....Classes.SurfLine import SurfLine
 from ....Classes.Arc import Arc
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
+from ....Functions.labels import BORE_LAB, BOUNDARY_PROP_LAB
 
 
 def build_geometry_half_tooth(self, is_top=False, alpha=0, delta=0):
@@ -62,12 +63,23 @@ def build_geometry_half_tooth(self, is_top=False, alpha=0, delta=0):
     Zbo = Rbo * exp(-1j * pi / Zs)
     if np_abs(Zbo - top_list[0].get_begin()) > 1e-6:
         top_list.insert(
-            0, Arc1(Zbo, top_list[0].get_begin(), Rbo, label="Tooth_bore_arc_top")
+            0,
+            Arc1(
+                Zbo,
+                top_list[0].get_begin(),
+                Rbo,
+                prop_dict={BOUNDARY_PROP_LAB: BORE_LAB},
+            ),
         )
     Zbo = Rbo * exp(1j * pi / Zs)
     if np_abs(Zbo - bot_list[-1].get_end()) > 1e-6:
         bot_list.append(
-            Arc1(bot_list[-1].get_end(), Zbo, Rbo, label="Tooth_bore_arc_bot")
+            Arc1(
+                bot_list[-1].get_end(),
+                Zbo,
+                Rbo,
+                prop_dict={BOUNDARY_PROP_LAB: BORE_LAB},
+            )
         )
 
     # Select the lines to return

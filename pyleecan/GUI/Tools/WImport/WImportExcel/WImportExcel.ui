@@ -175,7 +175,7 @@
      <item>
       <widget class="QPushButton" name="b_convert">
        <property name="text">
-        <string>Convert to Matrix</string>
+        <string>Convert to Table</string>
        </property>
       </widget>
      </item>

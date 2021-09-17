@@ -275,7 +275,7 @@ class Segment(Line):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, begin=0, end=0, label="", init_dict=None, init_str=None):
+    def __init__(self, begin=0, end=0, prop_dict=None, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -295,13 +295,13 @@ class Segment(Line):
                 begin = init_dict["begin"]
             if "end" in list(init_dict.keys()):
                 end = init_dict["end"]
-            if "label" in list(init_dict.keys()):
-                label = init_dict["label"]
+            if "prop_dict" in list(init_dict.keys()):
+                prop_dict = init_dict["prop_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.begin = begin
         self.end = end
         # Call Line init
-        super(Segment, self).__init__(label=label)
+        super(Segment, self).__init__(prop_dict=prop_dict)
         # The class is frozen (in Line init), for now it's impossible to
         # add new properties
 

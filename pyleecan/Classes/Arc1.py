@@ -235,7 +235,7 @@ class Arc1(Arc):
         end=0,
         radius=0,
         is_trigo_direction=True,
-        label="",
+        prop_dict=None,
         init_dict=None,
         init_str=None,
     ):
@@ -262,15 +262,15 @@ class Arc1(Arc):
                 radius = init_dict["radius"]
             if "is_trigo_direction" in list(init_dict.keys()):
                 is_trigo_direction = init_dict["is_trigo_direction"]
-            if "label" in list(init_dict.keys()):
-                label = init_dict["label"]
+            if "prop_dict" in list(init_dict.keys()):
+                prop_dict = init_dict["prop_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.begin = begin
         self.end = end
         self.radius = radius
         self.is_trigo_direction = is_trigo_direction
         # Call Arc init
-        super(Arc1, self).__init__(label=label)
+        super(Arc1, self).__init__(prop_dict=prop_dict)
         # The class is frozen (in Arc init), for now it's impossible to
         # add new properties
 

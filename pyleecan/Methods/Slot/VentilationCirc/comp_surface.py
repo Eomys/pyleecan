@@ -20,4 +20,4 @@ def comp_surface(self):
 
     self.check()
 
-    return pi * ((self.D0 / 2.0) ** 2) * self.Zh
+    return pi * ((self.D0 / 2.0) ** 2)

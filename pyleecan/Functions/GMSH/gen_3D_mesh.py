@@ -99,13 +99,13 @@ def gen_3D_mesh(
     # Change the mesh size for each line
     if user_mesh_dict is not None:
         # Compute basic mesh_dict
-        mesh_dict = tooth_surf.comp_mesh_dict(element_size=mesh_size, label="Tooth")
+        mesh_dict = tooth_surf.comp_mesh_dict(element_size=mesh_size)
         # Overwrite basic mesh dict with user one
         mesh_dict.update(user_mesh_dict)
         # Apply the number of element on each line of the surface
         for ii, line in enumerate(tooth_surf.get_lines()):
             factory.mesh.setTransfiniteCurve(
-                ii + 1, mesh_dict[line.label] + 1, "Progression"
+                ii + 1, mesh_dict[str(ii)] + 1, "Progression"
             )
 
     # Copy/Rotate all the tooth to get the 2D lamination

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ...Functions.labels import BOUNDARY_PROP_LAB
 
 
 def get_boundary_condition(line, boundary_prop):
@@ -15,9 +16,10 @@ def get_boundary_condition(line, boundary_prop):
         boundary name
     """
 
-    propname = ""
-    for bound_label in boundary_prop:
-        if bound_label in line.label:
-            propname = boundary_prop[bound_label]
-
-    return propname
+    if (
+        line.prop_dict
+        and BOUNDARY_PROP_LAB in line.prop_dict
+        and line.prop_dict[BOUNDARY_PROP_LAB] in boundary_prop
+    ):
+        return boundary_prop[line.prop_dict[BOUNDARY_PROP_LAB]]
+    return ""

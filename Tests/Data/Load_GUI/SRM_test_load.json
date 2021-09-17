@@ -331,7 +331,7 @@
                 "type_winding_shape": null
             },
             "is_reverse_wind": false,
-            "p": 10,
+            "p": null,
             "qs": 3,
             "type_connection": null
         }
