@@ -64,7 +64,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     return_list = list()
     for surf in surf_list:
         return_list.append(surf.copy())
-        return_list[-1].rotate(alpha)
+        return_list[-1].rotate(alpha + self.Alpha0)
         return_list[-1].translate(delta)
 
     return return_list

@@ -1930,6 +1930,15 @@
                 "type": "dict",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Shift angle of the holes around circumference",
+                "max": "6.29",
+                "min": "0",
+                "name": "Alpha0",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
             }
         ]
     },
@@ -13004,15 +13013,6 @@
         "path": "pyleecan/Generator/ClassesRef/Slot/VentilationCirc.csv",
         "properties": [
             {
-                "desc": "Shift angle of the holes around circumference",
-                "max": "6.29",
-                "min": "0",
-                "name": "Alpha0",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
-            },
-            {
                 "desc": "Hole diameters",
                 "max": "",
                 "min": "0",
@@ -13054,15 +13054,6 @@
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/VentilationPolar.csv",
         "properties": [
-            {
-                "desc": "Shift angle of the hole around circumference",
-                "max": "6.29",
-                "min": "0",
-                "name": "Alpha0",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
-            },
             {
                 "desc": "Height of the hole",
                 "max": "",
@@ -13114,15 +13105,6 @@
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/VentilationTrap.csv",
         "properties": [
-            {
-                "desc": "Shift angle of the hole around circumference",
-                "max": "6.29",
-                "min": "0",
-                "name": "Alpha0",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
-            },
             {
                 "desc": "Hole height",
                 "max": "",
