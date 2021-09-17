@@ -8,8 +8,9 @@ from numpy import exp, sqrt, pi, meshgrid, zeros, real
 from numpy.testing import assert_array_almost_equal
 
 from pyleecan.Classes.Simu1 import Simu1
-
+import matplotlib.pyplot as plt
 from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.VentilationCirc import VentilationCirc
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.ForceMT import ForceMT
@@ -44,11 +45,7 @@ def test_FEMM_periodicity_time_no_periodicity_a():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref,
-        Iq_ref=Iq_ref,
-        Na_tot=252 * 9,
-        Nt_tot=4 * 9,
-        N0=1000,
+        Id_ref=Id_ref, Iq_ref=Iq_ref, Na_tot=252 * 9, Nt_tot=4 * 9, N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -191,11 +188,7 @@ def test_FEMM_periodicity_time():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref,
-        Iq_ref=Iq_ref,
-        Na_tot=252 * 9,
-        Nt_tot=4 * 9,
-        N0=1000,
+        Id_ref=Id_ref, Iq_ref=Iq_ref, Na_tot=252 * 9, Nt_tot=4 * 9, N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -325,6 +318,14 @@ def test_FEMM_periodicity_angle():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
     SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
+    # Add ventilation ducts on symmetry lines + matching mid yoke (default point ref)
+    H0 = SPMSM_015.stator.comp_radius_mid_yoke()
+    D0 = SPMSM_015.stator.comp_height_yoke() / 3
+    SPMSM_015.stator.axial_vent = [
+        VentilationCirc(Zh=SPMSM_015.stator.slot.Zs * 2, Alpha0=0, D0=D0, H0=H0,)
+    ]
+    # SPMSM_015.plot()
+    # plt.show()
 
     assert SPMSM_015.comp_periodicity() == (9, False, 9, True)
 
@@ -338,11 +339,7 @@ def test_FEMM_periodicity_angle():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref,
-        Iq_ref=Iq_ref,
-        Na_tot=252 * 9,
-        Nt_tot=4 * 9,
-        N0=1000,
+        Id_ref=Id_ref, Iq_ref=Iq_ref, Na_tot=252 * 9, Nt_tot=4 * 9, N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -451,5 +448,5 @@ def test_FEMM_periodicity_angle():
 if __name__ == "__main__":
 
     out, out2 = test_FEMM_periodicity_angle()
-    out3, out4 = test_FEMM_periodicity_time()
-    out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
+    # out3, out4 = test_FEMM_periodicity_time()
+    # out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()

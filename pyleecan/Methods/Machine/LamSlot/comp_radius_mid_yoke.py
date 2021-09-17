@@ -18,6 +18,6 @@ def comp_radius_mid_yoke(self):
 
     Hyoke = self.comp_height_yoke()
     if self.is_internal:
-        return self.Rint - Hyoke / 2
+        return self.Rint + Hyoke / 2
     else:
         return self.Rext - Hyoke / 2

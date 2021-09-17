@@ -113,7 +113,7 @@ def draw_FEMM(
     femm.mi_probdef(0, "meters", FEMM_dict["pbtype"], FEMM_dict["precision"])
 
     # Modifiy the machine to match the conditions
-    machine = type(machine)(init_dict=machine.as_dict())
+    machine = machine.copy()
     if is_remove_slotR:  # Remove all slots on the rotor
         lam_dict = machine.rotor.as_dict()
         machine.rotor = Lamination(init_dict=lam_dict)
