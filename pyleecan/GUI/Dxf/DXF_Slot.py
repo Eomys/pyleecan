@@ -143,7 +143,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         canvas = FigureCanvasQTAgg(fig)
         toolbar = NavigationToolbar(canvas, self)
         # Remove Subplots button
-        unwanted_buttons = ["Subplots", "Customize"]
+        unwanted_buttons = ["Subplots", "Customize", "Save"]
         for x in toolbar.actions():
             if x.text() in unwanted_buttons:
                 toolbar.removeAction(x)
@@ -154,7 +154,6 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             "Zoom",
             "Back",
             "Forward",
-            "Save",
         ]
         for action in toolbar.actions():
             if action.text() in icons_buttons and "mpl_" + action.text() in pixmap_dict:
