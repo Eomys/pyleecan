@@ -2,11 +2,15 @@ from logging import getLogger
 from os.path import dirname, isfile
 
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import (
+    FigureCanvasQTAgg,
+    NavigationToolbar2QT as NavigationToolbar,
+)
 from ezdxf import readfile
 from numpy import angle as np_angle
 from numpy import argmin, array
 from PySide2.QtCore import QUrl
-from PySide2.QtGui import QDesktopServices
+from PySide2.QtGui import QDesktopServices, QIcon
 from PySide2.QtWidgets import QDialog, QFileDialog, QMessageBox
 
 from ...Classes.LamSlot import LamSlot
@@ -130,6 +134,33 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self : DXF_Slot
             a DXF_Slot object
         """
+        # Set plot layout
+        canvas = FigureCanvasQTAgg(fig)
+        toolbar = NavigationToolbar(canvas, self)
+        # Remove Subplots button
+        unwanted_buttons = ["Subplots"]
+        for x in toolbar.actions():
+            if x.text() in unwanted_buttons:
+                toolbar.removeAction(x)
+        # Adding custom icon on mpl toobar
+        icons_buttons = [
+            "Home",
+            "Pan",
+            "Zoom",
+            "Back",
+            "Forward",
+            "Customize",
+            "Save",
+        ]
+        for action in toolbar.actions():
+            if action.text() in icons_buttons and "mpl_" + action.text() in pixmap_dict:
+                action.setIcon(QIcon(pixmap_dict["mpl_" + action.text()]))
+        # Change default file name
+        canvas.get_default_filename = (
+            lambda: self.windowTitle().replace(" ", "_").replace(":", "") + ".png"
+        )
+        self.w_viewer.addWidget(toolbar)
+        self.w_viewer.addWidget(canvas)
         fig, axes = self.w_viewer.fig, self.w_viewer.axes
         axes.set_axis_off()
 
