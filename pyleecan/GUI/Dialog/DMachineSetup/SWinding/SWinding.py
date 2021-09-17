@@ -215,11 +215,13 @@ class SWinding(Gen_SWinding, QWidget):
         if isinstance(self.machine, MachineSRM):
             if self.obj.slot.Zs % self.obj.winding.qs != 0:
                 QMessageBox().critical(
-                self, self.tr("Error"), "Error while creating the winding:\nZs must be a multiple of qs for SRM machine"
+                    self,
+                    self.tr("Error"),
+                    "Error while creating the winding:\nZs must be a multiple of qs for SRM machine",
                 )
                 return
             # p is not defined for SRM => enforced to p=Zs/qs
-            self.obj.winding.p = self.obj.slot.Zs // self.obj.winding.qs  
+            self.obj.winding.p = self.obj.slot.Zs // self.obj.winding.qs
         self.obj.winding.clean()  # Enforce now computation
         # Check winding
         try:

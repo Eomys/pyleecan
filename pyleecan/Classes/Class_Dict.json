@@ -4263,7 +4263,8 @@
             "comp_radius_mid_yoke",
             "comp_periodicity",
             "get_bore_desc",
-            "set_pole_pair_number"
+            "set_pole_pair_number",
+            "comp_angle_d_axis"
         ],
         "mother": "Lamination",
         "name": "LamSlot",

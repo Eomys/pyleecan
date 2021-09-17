@@ -100,7 +100,11 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # initiating the label of the line of the magnet surface
     # curve_list = set_name_line(curve_list, "magnet_1_line")
     point_ref = (Z2 + Z3 + Z6 + Z7) / 4
-    S2 = SurfLine(line_list=curve_list, label=mag_label + "T0-S0", point_ref=point_ref,)
+    S2 = SurfLine(
+        line_list=curve_list,
+        label=mag_label + "T0-S0",
+        point_ref=point_ref,
+    )
 
     # Air surface with magnet_0 and W1 > 0
     curve_list = list()
@@ -142,7 +146,11 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # initiating the label of the line on the magnet surface
     # curve_list = set_name_line(curve_list, "magnet_2_line")
-    S5 = SurfLine(line_list=curve_list, label=mag_label + "T1-S0", point_ref=point_ref,)
+    S5 = SurfLine(
+        line_list=curve_list,
+        label=mag_label + "T1-S0",
+        point_ref=point_ref,
+    )
 
     # Air surface with magnet_1 and W1 > 0
     curve_list = list()

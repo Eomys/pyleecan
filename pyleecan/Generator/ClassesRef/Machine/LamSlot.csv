@@ -10,3 +10,4 @@ slot,,lamination Slot,,Slot,,,,,Machine,Lamination,check,VERSION,1,Lamination wi
 ,,,,,,,,,,,comp_periodicity,,,
 ,,,,,,,,,,,get_bore_desc,,,
 ,,,,,,,,,,,set_pole_pair_number,,,
+,,,,,,,,,,,comp_angle_d_axis,,,

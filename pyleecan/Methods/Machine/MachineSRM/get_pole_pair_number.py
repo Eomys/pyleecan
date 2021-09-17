@@ -15,4 +15,4 @@ def get_pole_pair_number(self):
         Pole pair number of the machine
     """
 
-    return self.rotor.Zs
+    return self.rotor.get_Zs()

@@ -2,6 +2,7 @@ from ....definitions import config_dict
 
 FONT_FAMILY_PYVISTA = config_dict["PLOT"]["FONT_FAMILY_PYVISTA"]
 
+
 def configure_plot(p, win_title, save_path):
     """Configure a pyvista plot. If the plotter doesn't exist, create one depending on avaialble package.
 
