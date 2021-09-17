@@ -55,9 +55,11 @@ def comp_connection_mat(self, Zs=None, p=None):
 
     # Coil pitch (or coil span)
     if self.coil_pitch in [0, None]:
-        if Zs / (2 * p * qs) > 1:
+        # Number of slots per pole and per phase
+        spp = Zs / (2 * p * qs)
+        if spp > 0.5:
             # distributed winding
-            self.coil_pitch = int(Zs / (2 * p))
+            self.coil_pitch = int(qs * spp)
         else:
             # tooth concentrated winding
             self.coil_pitch = 1

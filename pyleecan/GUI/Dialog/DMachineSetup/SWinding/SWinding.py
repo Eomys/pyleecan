@@ -179,13 +179,15 @@ class SWinding(Gen_SWinding, QWidget):
     def show_layer_widget(self):
 
         # Coil pitch (or coil span)
-        Zs = self.obj.slot.Zs
-        qs = self.obj.winding.qs
-        p = self.obj.winding.p
         if self.obj.winding.coil_pitch in [0, None]:
-            if Zs / (2 * p * qs) > 1:
+            Zs = self.obj.slot.Zs
+            qs = self.obj.winding.qs
+            p = self.obj.winding.p
+            # Number of slots per pole and per phase
+            spp = Zs / (2 * p * qs)
+            if spp > 0.5:
                 # distributed winding
-                self.obj.winding.coil_pitch = int(Zs / (2 * p))
+                self.obj.winding.coil_pitch = int(qs * spp)
             else:
                 # tooth concentrated winding
                 self.obj.winding.coil_pitch = 1
