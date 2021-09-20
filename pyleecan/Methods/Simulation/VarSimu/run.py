@@ -38,7 +38,7 @@ def run(self):
     self.gen_datakeeper_list(ref_simu)
 
     # Check if one of the simulation from the list matches the reference one
-    ref_simu_index = self.get_simu_index(ref_simu, simu_dict)
+    ref_simu_index = self.get_ref_simu_index(ref_simu, simu_dict)
 
     # Fill/initialize input/output parameters
     nb_simu = len(simu_dict["simulation_list"])
