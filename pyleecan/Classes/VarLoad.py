@@ -15,6 +15,14 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .VarSimu import VarSimu
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Simulation.VarLoad.get_ref_simu_index import get_ref_simu_index
+except ImportError as error:
+    get_ref_simu_index = error
+
+
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
 from .VarSimu import VarSimu
@@ -27,6 +35,18 @@ class VarLoad(VarSimu):
     VERSION = 1
     NAME = "Variable Load"
 
+    # cf Methods.Simulation.VarLoad.get_ref_simu_index
+    if isinstance(get_ref_simu_index, ImportError):
+        get_ref_simu_index = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarLoad method get_ref_simu_index: "
+                    + str(get_ref_simu_index)
+                )
+            )
+        )
+    else:
+        get_ref_simu_index = get_ref_simu_index
     # save and copy methods are available in all object
     save = save
     copy = copy
