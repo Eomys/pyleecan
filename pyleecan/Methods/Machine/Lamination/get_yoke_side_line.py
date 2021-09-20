@@ -67,6 +67,10 @@ def merge_line_list(Z1, Z2, label, inter_list):
         Z1, Z2 = Z2, Z1
     # Sort the inter_list by begin (assume that the vents doesn't collide)
     inter_list.sort(key=lambda x: abs(x.get_begin()), reverse=False)
+    # Make sure that all the lines are int to ext
+    for line in inter_list:
+        if abs(line.get_end()) < abs(line.get_begin()):
+            line.reverse()
 
     line_list = list()
     Zb = Z1  # Current Begin

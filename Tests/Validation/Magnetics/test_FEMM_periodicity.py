@@ -11,7 +11,7 @@ from pyleecan.Classes.Simu1 import Simu1
 import matplotlib.pyplot as plt
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VentilationCirc import VentilationCirc
-
+from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Output import Output
@@ -318,14 +318,30 @@ def test_FEMM_periodicity_angle():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
     SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
-    # Add ventilation ducts on symmetry lines + matching mid yoke (default point ref)
-    H0 = SPMSM_015.stator.comp_radius_mid_yoke()
-    D0 = SPMSM_015.stator.comp_height_yoke() / 3
+    # Add ventilation ducts on symmetry lines
+    Hy = SPMSM_015.stator.comp_height_yoke()
+    H1 = SPMSM_015.stator.comp_radius_mid_yoke() - Hy / 4
+    H2 = SPMSM_015.stator.comp_radius_mid_yoke() + Hy / 4
+    D0 = SPMSM_015.stator.comp_height_yoke() / 4
+    Zh = SPMSM_015.stator.slot.Zs * 2
     SPMSM_015.stator.axial_vent = [
-        VentilationCirc(Zh=SPMSM_015.stator.slot.Zs * 2, Alpha0=0, D0=D0, H0=H0,)
+        VentilationCirc(Zh=Zh, Alpha0=0, D0=D0, H0=H1,),
+        VentilationCirc(Zh=Zh, D0=D0, H0=H2, Alpha0=2 * pi / Zh * 0.9),
     ]
-    # SPMSM_015.plot()
-    # plt.show()
+    # Same on rotor
+    Hy = SPMSM_015.rotor.comp_height_yoke()
+    H1 = SPMSM_015.rotor.comp_radius_mid_yoke() - Hy / 4
+    H2 = SPMSM_015.rotor.comp_radius_mid_yoke() + Hy / 4
+    D0 = SPMSM_015.rotor.comp_height_yoke() / 6
+    Zh = SPMSM_015.rotor.slot.Zs * 2
+    SPMSM_015.rotor.axial_vent = [
+        VentilationPolar(Zh=Zh, Alpha0=0, D0=D0, H0=H1, W1=pi / Zh * 0.5),
+        VentilationPolar(
+            Zh=Zh, D0=D0, H0=H2, Alpha0=2 * pi / Zh * 0.9, W1=pi / Zh * 0.5
+        ),
+    ]
+    SPMSM_015.plot()
+    plt.show()
 
     assert SPMSM_015.comp_periodicity() == (9, False, 9, True)
 

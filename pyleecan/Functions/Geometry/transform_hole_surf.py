@@ -53,13 +53,19 @@ def transform_hole_surf(hole_surf_list, Zh, sym, alpha, delta, is_split=False):
 
     # Split the surfaces for symmetry
     if is_split and sym > 1:
-        # Add an extra surface for the second cut
+        # Add an extra surface for each cut (alpha0 > 0)
         for surf in hole_surf_list:
-            new_surf = surf.copy()
-            new_surf.rotate((ii + 1) * 2 * pi / Zh)
+            last_surf = surf.copy()
+            last_surf.rotate((ii + 1) * 2 * pi / Zh)
             # Update label like "Rotor-0_HoleVoid_R0-T0-S0"
-            new_surf.label = update_RTS_index(label=new_surf.label, S_id=ii + 1)
-            surf_list.append(new_surf)
+            last_surf.label = update_RTS_index(label=last_surf.label, S_id=ii + 1)
+            surf_list.append(last_surf)
+
+            first_surf = surf.copy()
+            first_surf.rotate((Zh - 1) * 2 * pi / Zh)
+            # Update label like "Rotor-0_HoleVoid_R0-T0-S0"
+            first_surf.label = update_RTS_index(label=first_surf.label, S_id=Zh - 1)
+            surf_list.append(first_surf)
 
         cut_list = list()
         lam_label = decode_label(new_surf.label)["lam_label"]

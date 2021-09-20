@@ -92,16 +92,17 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         ext_surf = SurfLine(label=label_ext, line_list=ext_line, point_ref=point_ref,)
         int_surf = SurfLine(label=label_int, line_list=int_line, point_ref=0)
         if self.Rint > 0 and len(ext_line) > 0:
-            surf_list.append(
+            surf_list.insert(
+                0,
                 SurfRing(
                     out_surf=ext_surf,
                     in_surf=int_surf,
                     label=label_lam,
                     point_ref=point_ref,
-                )
+                ),  # First in list for plot
             )
         elif self.Rint == 0 and len(ext_line) > 0:
-            surf_list.append(ext_surf)
+            surf_list.insert(0, ext_surf)  # First in list for plot
         else:
             pass  # No surface to draw (SlotM17)
 
@@ -126,7 +127,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         surf_yoke = SurfLine(
             line_list=curve_list, label=label_lam, point_ref=point_ref,
         )
-        surf_list.append(surf_yoke)
+        surf_list.insert(0, surf_yoke)  # First in list for plot
 
     # apply the transformation
     for surf in surf_list:
