@@ -4624,7 +4624,8 @@
             "get_yoke_desc",
             "get_bore_desc",
             "comp_point_ref",
-            "get_label"
+            "get_label",
+            "get_yoke_side_line"
         ],
         "mother": "",
         "name": "Lamination",
