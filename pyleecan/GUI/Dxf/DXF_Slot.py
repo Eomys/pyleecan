@@ -164,31 +164,38 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.w_viewer.addWidget(canvas)
         self.canvas = canvas
         axes.set_axis_off()
+        self.toolbar = toolbar
 
         # Setup interaction with graph
         def select_line(event):
             """Function to select/unselect the closest line from click"""
-            X = event.xdata  # X position of the click
-            Y = event.ydata  # Y position of the click
-            # Get closer pyleecan object
-            Z = X + 1j * Y
-            min_dist = float("inf")
-            closest_id = -1
-            for ii, line in enumerate(self.line_list):
-                line_dist = line.comp_distance(Z)
-                if line_dist < min_dist:
-                    closest_id = ii
-                    min_dist = line_dist
-            # Select/unselect line
-            self.selected_list[closest_id] = not self.selected_list[closest_id]
-            # Change line color
-            point_list = array(self.line_list[closest_id].discretize(20))
-            if self.selected_list[closest_id]:
-                color = "r"
-            else:
-                color = "k"
-            axes.plot(point_list.real, point_list.imag, color, zorder=2)
-            self.canvas.draw()
+            # Ignore if matplotlib action is clicked
+            is_ignore = False
+            for action in toolbar.actions():
+                if action.isChecked():
+                    is_ignore = True
+            if not is_ignore:
+                X = event.xdata  # X position of the click
+                Y = event.ydata  # Y position of the click
+                # Get closer pyleecan object
+                Z = X + 1j * Y
+                min_dist = float("inf")
+                closest_id = -1
+                for ii, line in enumerate(self.line_list):
+                    line_dist = line.comp_distance(Z)
+                    if line_dist < min_dist:
+                        closest_id = ii
+                        min_dist = line_dist
+                # Select/unselect line
+                self.selected_list[closest_id] = not self.selected_list[closest_id]
+                # Change line color
+                point_list = array(self.line_list[closest_id].discretize(20))
+                if self.selected_list[closest_id]:
+                    color = "r"
+                else:
+                    color = "k"
+                axes.plot(point_list.real, point_list.imag, color, zorder=2)
+                self.canvas.draw()
 
         def zoom(event):
             """Function to zoom/unzoom according the mouse wheel"""

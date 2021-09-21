@@ -212,44 +212,57 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.w_viewer.addWidget(canvas)
         self.canvas = canvas
         axes.set_axis_off()
+        self.toolbar = toolbar
 
         # Setup interaction with graph
         def select_line(event):
             """Function to select/unselect the closest line from click"""
-            X = event.xdata  # X position of the click
-            Y = event.ydata  # Y position of the click
-            # Get closer pyleecan object
-            Z = X + 1j * Y
-            min_dist = float("inf")
-            closest_id = -1
-            for ii, line in enumerate(self.line_list):
-                line_dist = line.comp_distance(Z)
-                if line_dist < min_dist:
-                    closest_id = ii
-                    min_dist = line_dist
-            # Select/unselect line
-            if self.selected_list[closest_id] == 0:  # Unselected to selected
-                self.selected_list[closest_id] = 1
-            elif self.selected_list[closest_id] == 1:  # Selected to selected bottom mag
-                if 2 in self.selected_list:
-                    current_bot_mag = self.selected_list.index(2)
-                    # Only one selected bottom mag line at the time
-                    point_list = array(self.line_list[current_bot_mag].discretize(20))
-                    self.selected_list[current_bot_mag] = 1
-                    axes.plot(point_list.real, point_list.imag, COLOR_LIST[1], zorder=2)
-                self.selected_list[closest_id] = 2
-            elif self.selected_list[closest_id] == 2:
-                # selected bottom mag to Unselected
-                self.selected_list[closest_id] = 0
-            # Change line color
-            point_list = array(self.line_list[closest_id].discretize(20))
-            color = COLOR_LIST[self.selected_list[closest_id]]
-            axes.plot(point_list.real, point_list.imag, color, zorder=2)
-            self.canvas.draw()
+            # Ignore if matplotlib action is clicked
+            is_ignore = False
+            for action in toolbar.actions():
+                if action.isChecked():
+                    is_ignore = True
+            if not is_ignore:
+                X = event.xdata  # X position of the click
+                Y = event.ydata  # Y position of the click
+                # Get closer pyleecan object
+                Z = X + 1j * Y
+                min_dist = float("inf")
+                closest_id = -1
+                for ii, line in enumerate(self.line_list):
+                    line_dist = line.comp_distance(Z)
+                    if line_dist < min_dist:
+                        closest_id = ii
+                        min_dist = line_dist
+                # Select/unselect line
+                if self.selected_list[closest_id] == 0:  # Unselected to selected
+                    self.selected_list[closest_id] = 1
+                elif (
+                    self.selected_list[closest_id] == 1
+                ):  # Selected to selected bottom mag
+                    if 2 in self.selected_list:
+                        current_bot_mag = self.selected_list.index(2)
+                        # Only one selected bottom mag line at the time
+                        point_list = array(
+                            self.line_list[current_bot_mag].discretize(20)
+                        )
+                        self.selected_list[current_bot_mag] = 1
+                        axes.plot(
+                            point_list.real, point_list.imag, COLOR_LIST[1], zorder=2
+                        )
+                    self.selected_list[closest_id] = 2
+                elif self.selected_list[closest_id] == 2:
+                    # selected bottom mag to Unselected
+                    self.selected_list[closest_id] = 0
+                # Change line color
+                point_list = array(self.line_list[closest_id].discretize(20))
+                color = COLOR_LIST[self.selected_list[closest_id]]
+                axes.plot(point_list.real, point_list.imag, color, zorder=2)
+                self.canvas.draw()
 
-            # Check if the surface is complete
-            if self.check_selection():
-                self.add_surface()
+                # Check if the surface is complete
+                if self.check_selection():
+                    self.add_surface()
 
         def zoom(event):
             """Function to zoom/unzoom according the mouse wheel"""
