@@ -340,8 +340,8 @@ def test_FEMM_periodicity_angle():
             Zh=Zh, D0=D0, H0=H2, Alpha0=2 * pi / Zh * 0.9, W1=pi / Zh * 0.5
         ),
     ]
-    SPMSM_015.plot()
-    plt.show()
+    # SPMSM_015.plot()
+    # plt.show()
 
     assert SPMSM_015.comp_periodicity() == (9, False, 9, True)
 
