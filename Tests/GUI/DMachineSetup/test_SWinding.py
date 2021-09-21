@@ -54,7 +54,7 @@ class TestSWinding(object):
     @classmethod
     def teardown_class(cls):
         """Exit the app after the test"""
-        self.app.quit()
+        cls.app.quit()
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""

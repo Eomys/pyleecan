@@ -72,7 +72,7 @@ class TestDMachineSetup(object):
     @classmethod
     def teardown_class(cls):
         """Exit the app after the test"""
-        self.app.quit()
+        cls.app.quit()
 
     @pytest.mark.parametrize("test_dict", load_test)
     def test_load(self, test_dict):
