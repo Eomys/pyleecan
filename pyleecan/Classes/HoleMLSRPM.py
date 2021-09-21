@@ -215,6 +215,7 @@ class HoleMLSRPM(HoleMag):
         Zh=36,
         mat_void=-1,
         magnetization_dict_offset=None,
+        Alpha0=0,
         init_dict=None,
         init_str=None,
     ):
@@ -255,6 +256,8 @@ class HoleMLSRPM(HoleMag):
                 mat_void = init_dict["mat_void"]
             if "magnetization_dict_offset" in list(init_dict.keys()):
                 magnetization_dict_offset = init_dict["magnetization_dict_offset"]
+            if "Alpha0" in list(init_dict.keys()):
+                Alpha0 = init_dict["Alpha0"]
         # Set the properties (value check and convertion are done in setter)
         self.H1 = H1
         self.W0 = W0
@@ -269,6 +272,7 @@ class HoleMLSRPM(HoleMag):
             Zh=Zh,
             mat_void=mat_void,
             magnetization_dict_offset=magnetization_dict_offset,
+            Alpha0=Alpha0,
         )
         # The class is frozen (in HoleMag init), for now it's impossible to
         # add new properties

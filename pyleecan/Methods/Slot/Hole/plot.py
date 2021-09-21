@@ -83,7 +83,7 @@ def plot(
         for magnet_name, mag_dir in mag_dict.items():
             # Get the correct surface
             mag_surf = None
-            mag_id = magnet_name.split("_")[-1]
+            mag_id = int(magnet_name.split("_")[-1])
             for surf in surf_hole:
                 label_dict = decode_label(surf.label)
                 if (

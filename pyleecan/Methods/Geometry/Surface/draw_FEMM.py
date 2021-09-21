@@ -4,8 +4,10 @@ from ....Classes.Arc1 import Arc1
 from ....Classes.Arc2 import Arc2
 from ....Classes.Arc3 import Arc3
 from ....Functions.FEMM.get_mesh_param import get_mesh_param
+from ....Functions.FEMM.get_FEMM_BC_propname import get_FEMM_BC_propname
 from ....Functions.labels import (
     decode_label,
+    BOUNDARY_PROP_LAB,
     RADIUS_PROP_LAB,
     YOKE_LAB,
     BORE_LAB,
@@ -14,7 +16,7 @@ from ....Functions.labels import (
 
 
 def draw_FEMM(
-    self, femm, nodeprop=None, maxseg=None, propname=None, FEMM_dict=None, hide=False
+    self, femm, nodeprop=None, maxseg=None, FEMM_dict=None, hide=False, BC_dict=None,
 ):
     """draw the Surface in FEMM
 
@@ -28,14 +30,13 @@ def draw_FEMM(
     maxseg :
         Meshed with elements that span at most maxsegdeg degrees per element
          (Default value = None)
-    propname :
-        Boundary property ’propname’
-         (Default value = None)
     FEMM_dict : dict
         dictionary containing the main parameters of FEMM
     hide :
         0 = not hidden in post-processor, 1 == hidden in post processor
         (Default value = False)
+    BC_dict : dict
+        Boundary condition dict ([line label] = BC name)
 
     Returns
     -------
@@ -62,6 +63,15 @@ def draw_FEMM(
                         "Unknown prop_dict for line of surface " + self.label
                     )
         mesh_dict = get_mesh_param(label_dict, FEMM_dict)
+
+        # Get or create the Boundary Condition (if any)
+        if line.prop_dict is not None and BOUNDARY_PROP_LAB in line.prop_dict:
+            propname = get_FEMM_BC_propname(
+                femm=femm, line_label=line.prop_dict[BOUNDARY_PROP_LAB], BC_dict=BC_dict
+            )
+        else:
+            propname = "None"  # No BC to set
+        # Draw the Line
         if type(line) in [Arc1, Arc2, Arc3]:
             line.draw_FEMM(
                 femm=femm,
