@@ -131,46 +131,63 @@ class Test_Segment_Split(object):
         for ii in range(len(result)):
             assert round(abs(abs(result[ii] - test_dict["Zi"][ii]) - 0), 7) == 0, msg
 
-        # Check split_line is_top=True
-        seg2 = seg.split_line(test_dict["Z1"], test_dict["Z2"], is_top=True)
-        assert type(seg2) == list
-        if len(seg2) > 0:
-            assert len(seg2) == 1
+        # Check split_line
+        seg_top, seg_bot = seg.split_line(test_dict["Z1"], test_dict["Z2"])
+        assert type(seg_top) == list
+        assert type(seg_bot) == list
+        # Check top return
+        if len(seg_top) > 0:
+            assert len(seg_top) == 1
             msg = (
-                "Wrong begin with is_top: returned "
-                + str(seg2[0].begin)
+                "Wrong begin for top: returned "
+                + str(seg_top[0].begin)
                 + ", expected: "
                 + str(test_dict["Zb_top"])
             )
-            assert round(abs(abs(seg2[0].begin - test_dict["Zb_top"]) - 0), 7) == 0, msg
+            assert (
+                round(abs(abs(seg_top[0].begin - test_dict["Zb_top"]) - 0), 7) == 0
+            ), msg
             msg = (
-                "Wrong end with is_top: returned "
-                + str(seg2[0].end)
+                "Wrong end for top: returned "
+                + str(seg_top[0].end)
                 + ", expected: "
                 + str(test_dict["Ze_top"])
             )
-            assert round(abs(abs(seg2[0].end - test_dict["Ze_top"]) - 0), 7) == 0, msg
+            assert (
+                round(abs(abs(seg_top[0].end - test_dict["Ze_top"]) - 0), 7) == 0
+            ), msg
         else:  # No intersection
             assert test_dict["Zb_top"] is None
 
-        # Check split_line is_top=False
-        seg3 = seg.split_line(test_dict["Z1"], test_dict["Z2"], is_top=False)
-        assert type(seg3) == list
-        if len(seg3) > 0:
-            assert len(seg3) == 1
+        # Check bot return
+        if len(seg_bot) > 0:
+            assert len(seg_bot) == 1
             msg = (
-                "Wrong begin with not is_top: returned "
-                + str(seg3[0].begin)
+                "Wrong begin for Bot: returned "
+                + str(seg_bot[0].begin)
                 + ", expected: "
                 + str(test_dict["Zb_bot"])
             )
-            assert round(abs(abs(seg3[0].begin - test_dict["Zb_bot"]) - 0), 7) == 0, msg
+            assert (
+                round(abs(abs(seg_bot[0].begin - test_dict["Zb_bot"]) - 0), 7) == 0
+            ), msg
             msg = (
-                "Wrong end with not is_top: returned "
-                + str(seg3[0].end)
+                "Wrong end for Bot: returned "
+                + str(seg_bot[0].end)
                 + ", expected: "
                 + str(test_dict["Ze_bot"])
             )
-            assert round(abs(abs(seg3[0].end - test_dict["Ze_bot"]) - 0), 7) == 0, msg
+            assert (
+                round(abs(abs(seg_bot[0].end - test_dict["Ze_bot"]) - 0), 7) == 0
+            ), msg
         else:  # No intersection
             assert test_dict["Zb_bot"] is None
+
+
+if __name__ == "__main__":
+    a = Test_Segment_Split()
+    for ii, test_dict in enumerate(split_list):
+        print(ii)
+        a.test_intersect(test_dict)
+    # a.test_intersect(split_list[5])
+    print("Done")

@@ -1,6 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Alpha0,rad,Shift angle of the holes around circumference,0,float,0,0,6.29,,Slot,Hole,build_geometry,VERSION,1,Circular axial ventilation duct
-D0,m,Hole diameters,0,float,1,0,,,,,check,,,
-H0,m,Radius of the hole centers,0,float,1,0,,,,,comp_radius,,,
+D0,m,Hole diameters,0,float,1,0,,,Slot,Hole,build_geometry,VERSION,1,Circular axial ventilation duct
+H0,m,Radius of the hole centers,0,float,1,0,,,,,check,,,
+,,,,,,,,,,,comp_radius,,,
 ,,,,,,,,,,,comp_surface,,,
 ,,,,,,,,,,,get_center,,,

@@ -73,12 +73,11 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     # First Tan split
     tan_list = list()
     if Ntan == 2:
-        tan_list.append(
-            surf_act.split_line(0, 100, is_top=False, is_join=True, prop_dict_join=None)
+        top_surf, bot_surf = surf_act.split_line(
+            0, 100, is_join=True, prop_dict_join=None
         )
-        tan_list.append(
-            surf_act.split_line(0, 100, is_top=True, is_join=True, prop_dict_join=None)
-        )
+        tan_list.append(bot_surf)
+        tan_list.append(top_surf)
     else:
         tan_list = [surf_act]
 
@@ -88,25 +87,17 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     for ii in range(Ntan):
         surf = tan_list[ii]
         if Nrad > 1:
-            direct = self.is_outwards()
             for jj in range(Nrad - 1):
                 X = X_list[jj]
-                surf_list.append(
-                    surf.split_line(
-                        X - 100j,
-                        X + 100j,
-                        is_top=direct,
-                        is_join=True,
-                        prop_dict_join=None,
-                    )
+                top_surf, bot_surf = surf.split_line(
+                    X - 100j, X + 100j, is_join=True, prop_dict_join=None,
                 )
-                surf = surf.split_line(
-                    X - 100j,
-                    X + 100j,
-                    is_top=not direct,
-                    is_join=True,
-                    prop_dict_join=None,
-                )
+                if self.is_outwards():
+                    surf_list.append(top_surf)
+                    surf = bot_surf
+                else:
+                    surf_list.append(bot_surf)
+                    surf = top_surf
             # Add the last surface
             surf_list.append(surf)
         else:  # add the radial surfaces without any other cut
