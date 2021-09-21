@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def comp_radius_mid_yoke(self):
     """Compute the Lamination middle of the yoke radius
 
@@ -16,4 +13,8 @@ def comp_radius_mid_yoke(self):
 
     """
 
-    return (self.Rext + self.Rint) / 2
+    Hyoke = self.comp_height_yoke()
+    if self.is_internal:
+        return self.Rint + Hyoke / 2
+    else:
+        return self.Rext - Hyoke / 2

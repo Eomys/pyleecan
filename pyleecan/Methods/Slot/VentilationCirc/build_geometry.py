@@ -38,17 +38,12 @@ def build_geometry(self, alpha=0, delta=0):
         )
 
     surf_list = list()
+    # Modulo on Alpha0 for sym
+    Alpha0 = self.Alpha0 % (2 * pi / self.Zh)
     # The center
-    Zc = self.H0 * exp(1j * self.Alpha0)
+    Zc = self.H0 * exp(1j * Alpha0)
     # the radius of the circle on the VentilationCirc
     R = self.D0 / 2
-    surf_list.append(
-        Circle(
-            point_ref=Zc,
-            label=vent_label,
-            radius=R,
-            center=Zc,
-        )
-    )
+    surf_list.append(Circle(point_ref=Zc, label=vent_label, radius=R, center=Zc,))
 
     return surf_list
