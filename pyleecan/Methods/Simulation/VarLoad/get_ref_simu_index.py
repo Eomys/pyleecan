@@ -32,7 +32,7 @@ def get_ref_simu_index(self, ref_simu, simu_dict):
         if len(diff_list) == 0:
             ref_simu_index = ii
             break
-    else:
+    if ref_simu_index is None:
         logger.warning(
             "Reference Operating point is not in OP_matrix, one extra simulation will be computed"
         )
