@@ -45,7 +45,11 @@ def test_FEMM_periodicity_time_no_periodicity_a():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref, Iq_ref=Iq_ref, Na_tot=252 * 9, Nt_tot=4 * 9, N0=1000,
+        Id_ref=Id_ref,
+        Iq_ref=Iq_ref,
+        Na_tot=252 * 9,
+        Nt_tot=4 * 9,
+        N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -188,7 +192,11 @@ def test_FEMM_periodicity_time():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref, Iq_ref=Iq_ref, Na_tot=252 * 9, Nt_tot=4 * 9, N0=1000,
+        Id_ref=Id_ref,
+        Iq_ref=Iq_ref,
+        Na_tot=252 * 9,
+        Nt_tot=4 * 9,
+        N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -325,7 +333,12 @@ def test_FEMM_periodicity_angle():
     D0 = SPMSM_015.stator.comp_height_yoke() / 4
     Zh = SPMSM_015.stator.slot.Zs * 2
     SPMSM_015.stator.axial_vent = [
-        VentilationCirc(Zh=Zh, Alpha0=0, D0=D0, H0=H1,),
+        VentilationCirc(
+            Zh=Zh,
+            Alpha0=0,
+            D0=D0,
+            H0=H1,
+        ),
         VentilationCirc(Zh=Zh, D0=D0, H0=H2, Alpha0=2 * pi / Zh * 0.9),
     ]
     # Same on rotor
@@ -355,7 +368,11 @@ def test_FEMM_periodicity_angle():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref, Iq_ref=Iq_ref, Na_tot=252 * 9, Nt_tot=4 * 9, N0=1000,
+        Id_ref=Id_ref,
+        Iq_ref=Iq_ref,
+        Na_tot=252 * 9,
+        Nt_tot=4 * 9,
+        N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity

@@ -16,7 +16,13 @@ from ....Functions.labels import (
 
 
 def draw_FEMM(
-    self, femm, nodeprop=None, maxseg=None, FEMM_dict=None, hide=False, BC_dict=None,
+    self,
+    femm,
+    nodeprop=None,
+    maxseg=None,
+    FEMM_dict=None,
+    hide=False,
+    BC_dict=None,
 ):
     """draw the Surface in FEMM
 
