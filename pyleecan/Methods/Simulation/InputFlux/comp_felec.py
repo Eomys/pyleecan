@@ -27,7 +27,7 @@ def comp_felec(self):
         else:
             raise InputError("Cannot find InputFlux simulation.")
 
-        zp = simu.machine.stator.get_pole_pair_number()
+        zp = simu.machine.get_pole_pair_number()
         zp = zp if zp is not None else 1
 
         return self.OP.N0 * zp / 60
