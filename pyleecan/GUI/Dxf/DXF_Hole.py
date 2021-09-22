@@ -208,8 +208,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                 action.setIcon(QIcon(pixmap_dict["mpl_" + action.text()]))
         # Change default file name
         canvas.get_default_filename = "DXF_hole_visu.png"
-        self.w_viewer.addWidget(toolbar)
-        self.w_viewer.addWidget(canvas)
+        self.layout_plot.insertWidget(1,toolbar)
+        self.layout_plot.insertWidget(2,canvas)
         self.canvas = canvas
         axes.set_axis_off()
         self.toolbar = toolbar

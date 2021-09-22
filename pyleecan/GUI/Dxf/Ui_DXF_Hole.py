@@ -19,14 +19,16 @@ class Ui_DXF_Hole(object):
     def setupUi(self, DXF_Hole):
         if not DXF_Hole.objectName():
             DXF_Hole.setObjectName(u"DXF_Hole")
-        DXF_Hole.resize(783, 653)
+        DXF_Hole.resize(864, 653)
         icon = QIcon()
         icon.addFile(
             u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
         )
         DXF_Hole.setWindowIcon(icon)
-        self.gridLayout_2 = QGridLayout(DXF_Hole)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.horizontalLayout_3 = QHBoxLayout(DXF_Hole)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.layout_plot = QVBoxLayout()
+        self.layout_plot.setObjectName(u"layout_plot")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.b_reset = QPushButton(DXF_Hole)
@@ -51,7 +53,15 @@ class Ui_DXF_Hole(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
 
-        self.gridLayout_2.addLayout(self.horizontalLayout, 0, 0, 1, 1)
+        self.layout_plot.addLayout(self.horizontalLayout)
+
+        self.textBrowser = QTextBrowser(DXF_Hole)
+        self.textBrowser.setObjectName(u"textBrowser")
+        self.textBrowser.setMaximumSize(QSize(16777215, 200))
+
+        self.layout_plot.addWidget(self.textBrowser)
+
+        self.horizontalLayout_3.addLayout(self.layout_plot)
 
         self.w_side = QWidget(DXF_Hole)
         self.w_side.setObjectName(u"w_side")
@@ -231,23 +241,7 @@ class Ui_DXF_Hole(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
 
-        self.gridLayout_2.addWidget(self.w_side, 0, 1, 3, 1)
-
-        self.w_viewer = QVBoxLayout()
-        self.w_viewer.setObjectName(u"w_viewer")
-        self.verticalSpacer = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
-        )
-
-        self.w_viewer.addItem(self.verticalSpacer)
-
-        self.gridLayout_2.addLayout(self.w_viewer, 1, 0, 1, 1)
-
-        self.textBrowser = QTextBrowser(DXF_Hole)
-        self.textBrowser.setObjectName(u"textBrowser")
-        self.textBrowser.setMaximumSize(QSize(16777215, 200))
-
-        self.gridLayout_2.addWidget(self.textBrowser, 2, 0, 1, 1)
+        self.horizontalLayout_3.addWidget(self.w_side)
 
         self.retranslateUi(DXF_Hole)
 
@@ -267,6 +261,31 @@ class Ui_DXF_Hole(object):
         )
         self.b_tuto.setText(
             QCoreApplication.translate("DXF_Hole", u"Open Tutorial", None)
+        )
+        self.textBrowser.setHtml(
+            QCoreApplication.translate(
+                "DXF_Hole",
+                u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
+                '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
+                "p, li { white-space: pre-wrap; }\n"
+                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">1) Select DXF file in [m] (or use scaling factor), spline won\'t be displayed</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">2) Use mouse wheel to zoom in/out</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">3) Click on lines and arc'
+                "s to define a closed area</span></p>\n"
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">4) Select all the surfaces of a single hole (air + magnet)</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">5) Assign the surface type (air or magnet)</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">6) Define the magnetization direction of each magnet with:</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">- Mag ref: Line index whose normal is used as reference</span></p>\n'
+                '<p align="justify"'
+                ' style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">- Mag offset: will be added to angle of the line normal [deg]</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">7) Plot to check and save</span></p>\n'
+                '<p align="justify" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;"><br /></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Hint: When clicking twice on a line, its color changes to define this line as magnetization reference for the magnet.</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; m'
+                'argin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">Hint: &quot;Show&quot; highlights the surface and display the index of each line/arc. </span></p></body></html>',
+                None,
+            )
         )
         self.in_zh.setText(
             QCoreApplication.translate("DXF_Hole", u"Number of holes", None)
@@ -320,30 +339,5 @@ class Ui_DXF_Hole(object):
         self.lf_scaling.setText(QCoreApplication.translate("DXF_Hole", u"1", None))
         self.b_plot.setText(QCoreApplication.translate("DXF_Hole", u"Plot", None))
         self.b_save.setText(QCoreApplication.translate("DXF_Hole", u"Save", None))
-        self.textBrowser.setHtml(
-            QCoreApplication.translate(
-                "DXF_Hole",
-                u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
-                '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
-                "p, li { white-space: pre-wrap; }\n"
-                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">1) Select DXF file in [m] (or use scaling factor), spline won\'t be displayed</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">2) Use mouse wheel to zoom in/out</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"'
-                "><span style=\" font-family:'MS Shell Dlg 2'; font-size:12pt;\">3) Click on lines and arcs to define a closed area</span></p>\n"
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">4) Select all the surfaces of a single hole (air + magnet)</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">5) Assign the surface type (air or magnet)</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">6) Define the magnetization direction of each magnet with:</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; m'
-                'argin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">- Mag ref: Line index whose normal is used as reference</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">- Mag offset: will be added to angle of the line normal [deg]</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">7) Plot to check and save</span></p>\n'
-                '<p align="justify" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'MS Shell Dlg 2\'; font-size:12pt;"><br /></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin'
-                '-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">Hint: When clicking twice on a line, its color changes to define this line as magnetization reference for the magnet.</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">Hint: &quot;Show&quot; highlights the surface and display the index of each line/arc. </span></p></body></html>',
-                None,
-            )
-        )
 
     # retranslateUi
