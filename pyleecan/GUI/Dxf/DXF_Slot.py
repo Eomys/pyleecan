@@ -171,7 +171,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             """Function to select/unselect the closest line from click"""
             # Ignore if matplotlib action is clicked
             is_ignore = False
-            for action in toolbar.actions():
+            for action in self.toolbar.actions():
                 if action.isChecked():
                     is_ignore = True
             if not is_ignore:
@@ -195,7 +195,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 else:
                     color = "k"
                 axes.plot(point_list.real, point_list.imag, color, zorder=2)
-                self.canvas.draw()
+                self.canvas.draw_idle()
 
         def zoom(event):
             """Function to zoom/unzoom according the mouse wheel"""

@@ -219,7 +219,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             """Function to select/unselect the closest line from click"""
             # Ignore if matplotlib action is clicked
             is_ignore = False
-            for action in toolbar.actions():
+            for action in self.toolbar.actions():
                 if action.isChecked():
                     is_ignore = True
             if not is_ignore:
@@ -258,7 +258,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                 point_list = array(self.line_list[closest_id].discretize(20))
                 color = COLOR_LIST[self.selected_list[closest_id]]
                 axes.plot(point_list.real, point_list.imag, color, zorder=2)
-                self.canvas.draw()
+                self.canvas.draw_idle()
 
                 # Check if the surface is complete
                 if self.check_selection():
