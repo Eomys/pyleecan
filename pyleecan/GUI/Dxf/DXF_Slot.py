@@ -165,6 +165,12 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.canvas = canvas
         axes.set_axis_off()
         self.toolbar = toolbar
+        self.xlim = self.axes.get_xlim()
+        self.ylim = self.axes.get_ylim()
+
+        def on_draw(event):
+            self.xlim = self.axes.get_xlim()
+            self.ylim = self.axes.get_ylim()
 
         # Setup interaction with graph
         def select_line(event):
@@ -195,7 +201,9 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 else:
                     color = "k"
                 axes.plot(point_list.real, point_list.imag, color, zorder=2)
-                self.canvas.draw_idle()
+                self.axes.set_xlim(self.xlim)
+                self.axes.set_ylim(self.ylim)
+                self.canvas.draw()
 
         def zoom(event):
             """Function to zoom/unzoom according the mouse wheel"""
@@ -228,6 +236,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             self.canvas.draw()  # force re-draw
 
         # Connect the function
+        self.canvas.mpl_connect("draw_event", on_draw)
         self.canvas.mpl_connect("button_press_event", select_line)
         self.canvas.mpl_connect("scroll_event", zoom)
 

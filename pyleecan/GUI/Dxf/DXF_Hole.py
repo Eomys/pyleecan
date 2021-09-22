@@ -208,11 +208,17 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                 action.setIcon(QIcon(pixmap_dict["mpl_" + action.text()]))
         # Change default file name
         canvas.get_default_filename = "DXF_hole_visu.png"
-        self.layout_plot.insertWidget(1,toolbar)
-        self.layout_plot.insertWidget(2,canvas)
+        self.layout_plot.insertWidget(1, toolbar)
+        self.layout_plot.insertWidget(2, canvas)
         self.canvas = canvas
         axes.set_axis_off()
         self.toolbar = toolbar
+        self.xlim = self.axes.get_xlim()
+        self.ylim = self.axes.get_ylim()
+
+        def on_draw(event):
+            self.xlim = self.axes.get_xlim()
+            self.ylim = self.axes.get_ylim()
 
         # Setup interaction with graph
         def select_line(event):
@@ -258,7 +264,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                 point_list = array(self.line_list[closest_id].discretize(20))
                 color = COLOR_LIST[self.selected_list[closest_id]]
                 axes.plot(point_list.real, point_list.imag, color, zorder=2)
-                self.canvas.draw_idle()
+                self.axes.set_xlim(self.xlim)
+                self.axes.set_ylim(self.ylim)
+                self.canvas.draw()
 
                 # Check if the surface is complete
                 if self.check_selection():
@@ -295,6 +303,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             self.canvas.draw()  # force re-draw
 
         # Connect the function
+        self.canvas.mpl_connect("draw_event", on_draw)
         self.canvas.mpl_connect("button_press_event", select_line)
         self.canvas.mpl_connect("scroll_event", zoom)
 
