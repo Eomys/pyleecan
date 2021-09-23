@@ -184,7 +184,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             a DXF_Hole object
         """
         # Init fig
-        fig, axes, _, _ = init_fig()
+        fig, axes = plt.subplots(tight_layout=False)
         self.fig = fig
         self.axes = axes
         # Set plot layout
@@ -413,9 +413,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         combobox = QComboBox()
         combobox.addItems(["Hole", "Magnet"])
         self.w_surface_list.setCellWidget(
-            nrows,
-            TYPE_COL,
-            combobox,
+            nrows, TYPE_COL, combobox,
         )
         if 2 in self.selected_list:
             combobox.setCurrentIndex(1)  # Magnet
@@ -426,9 +424,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         del_button.setIcon(QIcon(self.delete_icon))
         del_button.pressed.connect(self.delete_surface)
         self.w_surface_list.setCellWidget(
-            nrows,
-            DEL_COL,
-            del_button,
+            nrows, DEL_COL, del_button,
         )
 
         # Adding Highlight button
@@ -436,18 +432,14 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         HL_button.setIcon(QIcon(self.highlight_icon))
         HL_button.pressed.connect(self.highlight_surface)
         self.w_surface_list.setCellWidget(
-            nrows,
-            HL_COL,
-            HL_button,
+            nrows, HL_COL, HL_button,
         )
 
         # Add reference combobox
         combobox = QComboBox()
         combobox.addItems(index_list)
         self.w_surface_list.setCellWidget(
-            nrows,
-            REF_COL,
-            combobox,
+            nrows, REF_COL, combobox,
         )
         if 2 in self.selected_list:
             combobox.setCurrentIndex(
@@ -464,9 +456,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # lf_off.setText("0")
         lf_off.setEnabled(2 in self.selected_list)
         self.w_surface_list.setCellWidget(
-            nrows,
-            OFF_COL,
-            lf_off,
+            nrows, OFF_COL, lf_off,
         )
 
         # Remove selection to start new one
@@ -485,7 +475,12 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
     def remove_selection(self):
         # Remove selection
         self.selected_list = [0 for line in self.line_list]
-        self.update_graph()
+        # Redraw all the lines (in black)
+        for ii, line in enumerate(self.line_list):
+            point_list = array(line.discretize(20))
+            color = COLOR_LIST[self.selected_list[ii]]
+            self.axes.plot(point_list.real, point_list.imag, color, zorder=2)
+        self.canvas.draw()
 
     def get_hole(self):
         """Generate the HoleUD object corresponding to the selected surfaces

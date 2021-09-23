@@ -136,7 +136,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             a DXF_Slot object
         """
         # Init fig
-        fig, axes, _, _ = init_fig()
+        fig, axes = plt.subplots(tight_layout=False)
         self.fig = fig
         self.axes = axes
         # Set plot layout
