@@ -36,7 +36,10 @@ def split_line(self, Z1, Z2, is_join=False, prop_dict_join=None):
     bot_split_list = list()  # List of line of the bot part
     for line in lines:
         line_top, line_bot = line.split_line(
-            Z1=Z1, Z2=Z2, is_join=is_join, prop_dict_join=prop_dict_join,
+            Z1=Z1,
+            Z2=Z2,
+            is_join=is_join,
+            prop_dict_join=prop_dict_join,
         )
         top_split_list.extend(line_top)
         bot_split_list.extend(line_bot)

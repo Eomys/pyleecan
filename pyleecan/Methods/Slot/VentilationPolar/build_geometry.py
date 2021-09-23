@@ -51,7 +51,12 @@ def build_geometry(self, alpha=0, delta=0):
     Alpha0 = self.Alpha0 % (2 * pi / self.Zh)
     Zc = (self.H0 + (self.D0 / 2)) * exp(1j * Alpha0)
     surf_list.append(
-        PolarArc(point_ref=Zc, label=vent_label, angle=self.W1, height=self.D0,)
+        PolarArc(
+            point_ref=Zc,
+            label=vent_label,
+            angle=self.W1,
+            height=self.D0,
+        )
     )
 
     return surf_list

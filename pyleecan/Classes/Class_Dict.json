@@ -12984,7 +12984,9 @@
         ],
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_ref_simu_index"
+        ],
         "mother": "VarSimu",
         "name": "VarLoad",
         "package": "Simulation",
@@ -13107,7 +13109,8 @@
             "gen_datakeeper_list",
             "get_elec_datakeeper",
             "get_mag_datakeeper",
-            "get_force_datakeeper"
+            "get_force_datakeeper",
+            "get_ref_simu_index"
         ],
         "mother": "",
         "name": "VarSimu",
