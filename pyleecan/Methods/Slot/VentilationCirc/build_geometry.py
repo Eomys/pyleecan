@@ -44,6 +44,13 @@ def build_geometry(self, alpha=0, delta=0):
     Zc = self.H0 * exp(1j * Alpha0)
     # the radius of the circle on the VentilationCirc
     R = self.D0 / 2
-    surf_list.append(Circle(point_ref=Zc, label=vent_label, radius=R, center=Zc,))
+    surf_list.append(
+        Circle(
+            point_ref=Zc,
+            label=vent_label,
+            radius=R,
+            center=Zc,
+        )
+    )
 
     return surf_list

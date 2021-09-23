@@ -42,7 +42,9 @@ split_test.append(
 def test_split_line(test_dict):
 
     res_top_surf, res_bot_surf = test_dict["surf"].split_line(
-        Z1=test_dict["Z1"], Z2=test_dict["Z2"], is_join=test_dict["is_join"],
+        Z1=test_dict["Z1"],
+        Z2=test_dict["Z2"],
+        is_join=test_dict["is_join"],
     )
 
     assert res_top_surf == test_dict["exp_top_surf"], (

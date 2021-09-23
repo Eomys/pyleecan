@@ -12,6 +12,8 @@ from ..labels import (
     SBS_BL_LAB,
     SBR_B_LAB,
     SBR_T_LAB,
+    AS_BR_LAB,
+    AS_BL_LAB,
     decode_label,
 )
 
@@ -63,6 +65,11 @@ def create_FEMM_boundary_conditions(femm, line_label, BC_dict):
         femm.mi_addboundprop("bc_ag3", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
         BC_dict[SBS_TR_LAB] = "bc_ag3"
         BC_dict[SBS_TL_LAB] = "bc_ag3"
+    ##  Airgap Side
+    elif line_label in [AS_BR_LAB, AS_BL_LAB]:
+        femm.mi_addboundprop("bc_ag1", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
+        BC_dict[AS_BR_LAB] = "bc_ag1"
+        BC_dict[AS_BL_LAB] = "bc_ag1"
     ## Lamination YokeSide
     elif YS_LAB in line_label:
         # cf Lamination.get_yoke_side_line for label creation

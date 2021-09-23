@@ -89,7 +89,11 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     # Create the Lamination surfaces
     point_ref = self.comp_point_ref(sym=sym)
     if sym == 1:  # Complete lamination
-        ext_surf = SurfLine(label=label_ext, line_list=ext_line, point_ref=point_ref,)
+        ext_surf = SurfLine(
+            label=label_ext,
+            line_list=ext_line,
+            point_ref=point_ref,
+        )
         int_surf = SurfLine(label=label_int, line_list=int_line, point_ref=0)
         if self.Rint > 0 and len(ext_line) > 0:
             surf_list.insert(
@@ -125,7 +129,9 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             curve_list.extend(int_line)
 
         surf_yoke = SurfLine(
-            line_list=curve_list, label=label_lam, point_ref=point_ref,
+            line_list=curve_list,
+            label=label_lam,
+            point_ref=point_ref,
         )
         surf_list.insert(0, surf_yoke)  # First in list for plot
 

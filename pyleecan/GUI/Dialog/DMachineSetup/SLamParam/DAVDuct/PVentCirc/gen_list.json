@@ -9,7 +9,7 @@
         "xls": "Slot"
     },
     {
-        "cls": "VentilationCirc",
+        "cls": "Hole",
         "name": "Alpha0",
         "widget": [
             "in_Alpha0",
