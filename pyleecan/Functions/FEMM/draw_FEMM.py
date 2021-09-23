@@ -3,9 +3,6 @@ from ...Classes.Circle import Circle
 from ...Functions.FEMM import is_eddies
 from ...Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
 from ...Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
-from ...Functions.FEMM.create_FEMM_boundary_conditions import (
-    create_FEMM_boundary_conditions,
-)
 from ...Functions.FEMM.create_FEMM_materials import create_FEMM_materials
 from ...Functions.FEMM.get_sliding_band import get_sliding_band
 from ...Functions.FEMM.get_airgap_surface import get_airgap_surface
@@ -113,7 +110,7 @@ def draw_FEMM(
     femm.mi_probdef(0, "meters", FEMM_dict["pbtype"], FEMM_dict["precision"])
 
     # Modifiy the machine to match the conditions
-    machine = type(machine)(init_dict=machine.as_dict())
+    machine = machine.copy()
     if is_remove_slotR:  # Remove all slots on the rotor
         lam_dict = machine.rotor.as_dict()
         machine.rotor = Lamination(init_dict=lam_dict)
@@ -179,7 +176,8 @@ def draw_FEMM(
         is_eddies,
         j_t0=0,
     )
-    create_FEMM_boundary_conditions(femm=femm, sym=sym, is_antiper=is_antiper)
+    # Init Boundary condition dict (will be filled while drawing Surface/Lines)
+    BC_dict = {"sym": sym, "is_antiper": is_antiper}
 
     # Draw and assign all the surfaces of the machine
     for surf in surf_list:
@@ -189,9 +187,9 @@ def draw_FEMM(
             femm=femm,
             nodeprop="None",
             maxseg=FEMM_dict["arcspan"],  # max span of arc element in degrees
-            propname="None",
             FEMM_dict=FEMM_dict,
             hide=False,
+            BC_dict=BC_dict,
         )
         assign_FEMM_surface(femm, surf, prop_dict[label], FEMM_dict, machine)
 

@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from ....Functions.FEMM import MagFEMM_BP_dict
-from ....Functions.labels import BOUNDARY_PROP_LAB
-
-
 def draw_FEMM(
     self,
     femm,
@@ -22,13 +16,13 @@ def draw_FEMM(
         client to send command to a FEMM instance
     nodeprop :
         Nodal property
-         (Default value = None)
+        (Default value = None)
     propname :
         Boundary property ’propname’
-         (Default value = None)
+        (Default value = None)
     element_size :
         Local element size along segment no greater than element_size
-         (Default value = None)
+        (Default value = None)
     automesh :
         0 = mesher defers to the element constraint defined by
         element_size, 1 = mesher automatically chooses mesh size along
@@ -36,20 +30,11 @@ def draw_FEMM(
         (Default value = None)
     hide :
         0 = not hidden in post-processor, 1 == hidden in post processorc
-         (Default value = False)
+        (Default value = False)
     group :
         group the segment belongs
-         (Default value = None)
-
-    Returns
-    -------
-
-
+        (Default value = None)
     """
-
-    # Get BC (if any)
-    if self.prop_dict is not None and BOUNDARY_PROP_LAB in self.prop_dict:
-        propname = MagFEMM_BP_dict[self.prop_dict[BOUNDARY_PROP_LAB]]
 
     # Add the nodes
     X1, Y1 = self.begin.real, self.begin.imag
