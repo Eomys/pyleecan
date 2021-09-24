@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from PySide2.QtWidgets import QFileDialog, QMessageBox, QMenu
+from PySide2.QtWidgets import QDialog, QFileDialog, QMessageBox, QMenu
 
 from ....Functions.Load.import_class import import_class
 from ....Functions.load import load
@@ -50,7 +50,7 @@ class TreeEditContextMenu(QMenu):
         if is_root:
             actionNewObj.setEnabled(False)
             actionSetNone.setEnabled(False)
-            actionImportObj.setEnabled(False)
+            actionImportObj.setEnabled(True)
             actionSaveObj.setEnabled(True)
 
         if (
@@ -108,6 +108,19 @@ class TreeEditContextMenu(QMenu):
 
     def loadObject(self):
         """Load an object."""
+        if self._obj_dict["parent"] is None:
+            reply = QMessageBox.warning(
+                self,
+                "Are you sure?",
+                "The reference to the 'Design' machine will be lost, if an object is "
+                + "imported. \nSwitching to 'Design' will restore the reference "
+                + "but also replace the imported object without any warning.",
+                QMessageBox.Ok | QMessageBox.Cancel,
+                QMessageBox.Cancel,
+            )
+            if reply != QMessageBox.Ok:
+                return
+
         # Ask the user to select a .json, h5, ... file to load
         path = ""
         load_path = str(
@@ -124,9 +137,8 @@ class TreeEditContextMenu(QMenu):
                 )
                 return
 
-            obj_type = type(obj).__name__
-
             if self._obj_dict["parent"] is not None:
+                obj_type = type(obj).__name__
                 # get the allowed object types for this property
                 ref_type = self._obj_dict["ref_typ"]
                 daughter_types = self._parent.class_dict[ref_type]["daughters"]
@@ -136,3 +148,6 @@ class TreeEditContextMenu(QMenu):
                 else:
                     msg = f"Wrong object type '{obj_type}', '{ref_type}' expected."
                     QMessageBox().critical(self, self.tr("Error"), self.tr(msg))
+
+            else:
+                self._parent.update(obj)

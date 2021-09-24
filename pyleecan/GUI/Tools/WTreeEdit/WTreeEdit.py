@@ -104,6 +104,7 @@ class WTreeEdit(QWidget):
     def update(self, obj):
         """Check if object has changed and update tree in case."""
         if not obj is self.obj:
+            self.obj = obj
             self.model = TreeEditModel(obj)
             self.treeView.setModel(self.model)
             self.model.dataChanged.connect(self.onDataChanged)
@@ -180,7 +181,6 @@ class WTreeEdit(QWidget):
 
         elif typ == "MeshSolution":
             widget = WMeshSolution(obj)  # only a view (not editable)
-
 
         # list (no pyleecan type, non empty) -> table editor
         # TODO add another widget for lists of non 'primitive' types (e.g. DataND)
