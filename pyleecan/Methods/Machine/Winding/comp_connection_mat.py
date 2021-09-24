@@ -112,10 +112,10 @@ def comp_connection_mat(self, Zs=None, p=None):
     Npcp_list = wdg.get_parallel_connections()
     if self.Npcp is None:
         self.Npcp = Npcp_list[0]
-    elif self.Npcp > p:
-        self.Npcp = p
+    elif self.Npcp > 2*p:
+        self.Npcp = 2*p
         self.get_logger().warning(
-            "Number of parallel circuits per phase must be < p, assign it to: " + str(p)
+            "Number of parallel circuits per phase must be < 2*p, assign it to: " + str(self.Npcp)
         )
     # if self.Npcp not in Npcp_list:
 

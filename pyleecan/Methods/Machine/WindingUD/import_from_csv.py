@@ -53,6 +53,7 @@ def import_from_csv(self, file_path=None):
                 + str(wind_shape[2])
                 + ")"
             )
+        self.clean()  # Remove periodicity
         self.wind_mat = zeros(wind_shape)
 
         # Load matrix
