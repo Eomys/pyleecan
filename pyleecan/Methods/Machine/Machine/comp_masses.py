@@ -6,8 +6,8 @@ def comp_masses(self):
     - Mmach : Mass total [kg]
     - Mfra : Mass of the Frame [kg]
     - Msha : Mass of the Shaft [kg]
-    - Mrot : Mass dictionnary of the rotor masses
-    - Msta : Mass dictionnary of the stator masses
+    - Mrot : Mass dictionary of the rotor masses
+    - Msta : Mass dictionary of the stator masses
 
     Parameters
     ----------
@@ -17,22 +17,28 @@ def comp_masses(self):
     Returns
     -------
     M_dict: dict
-        A dictionnary of the Machine's masses (Mmach, Msha,
+        A dictionary of the Machine's masses (Mmach, Msha,
         Mfra, Mrot, Msta) [kg]
 
     """
 
+    M_dict = dict()
     if self.frame is None:
-        Mfra = 0
+        M_dict["Frame"] = 0
     else:
-        Mfra = self.frame.comp_mass()
+        M_dict["Frame"] = self.frame.comp_mass()
+
     if self.shaft is None:
-        Msha = 0
+        M_dict["Shaft"] = 0
     else:
-        Msha = self.shaft.comp_mass()
-    Mrot = self.rotor.comp_masses()
-    Msta = self.stator.comp_masses()
+        M_dict["Shaft"] = self.shaft.comp_mass()
 
-    Mtot = Mfra + Msha + Mrot["Mtot"] + Msta["Mtot"]
+    Mlam = 0
+    for lam in self.get_lam_list():
+        M = lam.comp_masses()
+        M_dict[lam.get_label()] = M
+        Mlam += M["Mtot"]
 
-    return {"Mmach": Mtot, "Mfra": Mfra, "Msha": Msha, "Mrot": Mrot, "Msta": Msta}
+    Mtot = M_dict["Frame"] + M_dict["Shaft"] + Mlam
+    M_dict["All"] = Mtot
+    return M_dict

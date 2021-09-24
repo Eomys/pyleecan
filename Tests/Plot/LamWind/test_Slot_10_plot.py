@@ -15,8 +15,6 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.SurfLine import SurfLine
 
@@ -56,9 +54,7 @@ class Test_Slot_10_plot(object):
             H2=130e-3,
             H1_is_rad=False,
         )
-        test_obj.rotor.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
         test_obj.stator = LamSlotWind(
@@ -80,9 +76,7 @@ class Test_Slot_10_plot(object):
             H2=140e-3,
             H1_is_rad=False,
         )
-        test_obj.stator.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.stator.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
 
         test_obj.frame = Frame(Rint=0.8, Rext=0.9, Lfra=1)
         test_obj.frame.mat_type.name = "M330_35A"
@@ -141,9 +135,9 @@ class Test_Slot_10_plot(object):
         tooth.plot(color="r", is_show_fig=False)
         fig = plt.gcf()
         mesh_dict = tooth.comp_mesh_dict(5e-3)
-        for line in tooth.get_lines():
+        for ii, line in enumerate(tooth.get_lines()):
             mid = line.get_middle()
-            plt.text(mid.real, mid.imag, str(mesh_dict[line.label]))
+            plt.text(mid.real, mid.imag, str(mesh_dict[str(ii)]))
         fig.savefig(join(save_path, "test_Lam_Wind_s10_Tooth_out.png"))
 
         slot = SlotW10(
@@ -204,9 +198,7 @@ class Test_Slot_10_plot(object):
             H2=140e-3,
             H1_is_rad=False,
         )
-        test_obj.stator.winding = WindingUD(
-            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-        )
+        test_obj.stator.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
 
         test_obj.frame = Frame(Rint=0.8, Rext=0.9, Lfra=1)
         test_obj.frame.mat_type.name = "M330_35A"

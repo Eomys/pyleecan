@@ -9,9 +9,8 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from ...GUI.Tools.WPathSelector.WPathSelector import WPathSelector
-from ...GUI.Tools.MPLCanvas import MPLCanvas2
 from ...GUI.Tools.FloatEdit import FloatEdit
+from ...GUI.Tools.WPathSelector.WPathSelector import WPathSelector
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -20,7 +19,7 @@ class Ui_DXF_Slot(object):
     def setupUi(self, DXF_Slot):
         if not DXF_Slot.objectName():
             DXF_Slot.setObjectName(u"DXF_Slot")
-        DXF_Slot.resize(745, 551)
+        DXF_Slot.resize(900, 551)
         icon = QIcon()
         icon.addFile(
             u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
@@ -28,8 +27,8 @@ class Ui_DXF_Slot(object):
         DXF_Slot.setWindowIcon(icon)
         self.horizontalLayout_3 = QHBoxLayout(DXF_Slot)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.layout_plot = QVBoxLayout()
+        self.layout_plot.setObjectName(u"layout_plot")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.b_reset = QPushButton(DXF_Slot)
@@ -54,20 +53,15 @@ class Ui_DXF_Slot(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
-
-        self.w_viewer = MPLCanvas2(DXF_Slot)
-        self.w_viewer.setObjectName(u"w_viewer")
-
-        self.verticalLayout_2.addWidget(self.w_viewer)
+        self.layout_plot.addLayout(self.horizontalLayout)
 
         self.textBrowser = QTextBrowser(DXF_Slot)
         self.textBrowser.setObjectName(u"textBrowser")
         self.textBrowser.setMaximumSize(QSize(16777215, 200))
 
-        self.verticalLayout_2.addWidget(self.textBrowser)
+        self.layout_plot.addWidget(self.textBrowser)
 
-        self.horizontalLayout_3.addLayout(self.verticalLayout_2)
+        self.horizontalLayout_3.addLayout(self.layout_plot)
 
         self.widget = QWidget(DXF_Slot)
         self.widget.setObjectName(u"widget")
@@ -158,15 +152,16 @@ class Ui_DXF_Slot(object):
 
         self.verticalLayout.addLayout(self.gridLayout)
 
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.horizontalLayout_5.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.in_coord_center = QLabel(self.widget)
-        self.in_coord_center.setObjectName(u"in_coord_center")
+        self.g_center = QGroupBox(self.widget)
+        self.g_center.setObjectName(u"g_center")
+        self.gridLayout_2 = QGridLayout(self.g_center)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.in_coord_center_X = QLabel(self.g_center)
+        self.in_coord_center_X.setObjectName(u"in_coord_center_X")
 
-        self.horizontalLayout_5.addWidget(self.in_coord_center)
+        self.gridLayout_2.addWidget(self.in_coord_center_X, 0, 0, 1, 1)
 
-        self.lf_center_x = FloatEdit(self.widget)
+        self.lf_center_x = FloatEdit(self.g_center)
         self.lf_center_x.setObjectName(u"lf_center_x")
         sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
@@ -174,18 +169,23 @@ class Ui_DXF_Slot(object):
         sizePolicy3.setHeightForWidth(self.lf_center_x.sizePolicy().hasHeightForWidth())
         self.lf_center_x.setSizePolicy(sizePolicy3)
 
-        self.horizontalLayout_5.addWidget(self.lf_center_x)
+        self.gridLayout_2.addWidget(self.lf_center_x, 0, 1, 1, 1)
 
-        self.lf_center_y = FloatEdit(self.widget)
+        self.in_coord_center_Y = QLabel(self.g_center)
+        self.in_coord_center_Y.setObjectName(u"in_coord_center_Y")
+
+        self.gridLayout_2.addWidget(self.in_coord_center_Y, 1, 0, 1, 1)
+
+        self.lf_center_y = FloatEdit(self.g_center)
         self.lf_center_y.setObjectName(u"lf_center_y")
         self.lf_center_y.setEnabled(True)
         sizePolicy3.setHeightForWidth(self.lf_center_y.sizePolicy().hasHeightForWidth())
         self.lf_center_y.setSizePolicy(sizePolicy3)
-        self.lf_center_y.setMaximumSize(QSize(137, 16777215))
+        self.lf_center_y.setMaximumSize(QSize(16777215, 16777215))
 
-        self.horizontalLayout_5.addWidget(self.lf_center_y)
+        self.gridLayout_2.addWidget(self.lf_center_y, 1, 1, 1, 1)
 
-        self.verticalLayout.addLayout(self.horizontalLayout_5)
+        self.verticalLayout.addWidget(self.g_center)
 
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
@@ -273,13 +273,13 @@ class Ui_DXF_Slot(object):
             )
         )
         self.in_Zs.setText(
-            QCoreApplication.translate("DXF_Slot", u"Number of slot", None)
+            QCoreApplication.translate("DXF_Slot", u"Number of slots", None)
         )
         self.in_wind_begin_index.setText(
-            QCoreApplication.translate("DXF_Slot", u"Index start of winding", None)
+            QCoreApplication.translate("DXF_Slot", u"Winding start index", None)
         )
         self.in_wind_end_index.setText(
-            QCoreApplication.translate("DXF_Slot", u"Index end of winding", None)
+            QCoreApplication.translate("DXF_Slot", u"Winding end index", None)
         )
         self.in_type_line.setText(
             QCoreApplication.translate("DXF_Slot", u"Type closing line", None)
@@ -295,10 +295,16 @@ class Ui_DXF_Slot(object):
             QCoreApplication.translate("DXF_Slot", u"Slot axe angle shift", None)
         )
         self.lf_axe_angle.setText(QCoreApplication.translate("DXF_Slot", u"0", None))
-        self.in_coord_center.setText(
-            QCoreApplication.translate("DXF_Slot", u"Machine center (x,y)", None)
+        self.g_center.setTitle(
+            QCoreApplication.translate("DXF_Slot", u"Machine Center", None)
+        )
+        self.in_coord_center_X.setText(
+            QCoreApplication.translate("DXF_Slot", u"X coordinate", None)
         )
         self.lf_center_x.setText(QCoreApplication.translate("DXF_Slot", u"0", None))
+        self.in_coord_center_Y.setText(
+            QCoreApplication.translate("DXF_Slot", u"Y coordinate", None)
+        )
         self.lf_center_y.setText(QCoreApplication.translate("DXF_Slot", u"0", None))
         self.in_scaling.setText(
             QCoreApplication.translate("DXF_Slot", u"Scaling factor", None)

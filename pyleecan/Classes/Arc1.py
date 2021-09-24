@@ -235,14 +235,14 @@ class Arc1(Arc):
         end=0,
         radius=0,
         is_trigo_direction=True,
-        label="",
+        prop_dict=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -262,15 +262,15 @@ class Arc1(Arc):
                 radius = init_dict["radius"]
             if "is_trigo_direction" in list(init_dict.keys()):
                 is_trigo_direction = init_dict["is_trigo_direction"]
-            if "label" in list(init_dict.keys()):
-                label = init_dict["label"]
+            if "prop_dict" in list(init_dict.keys()):
+                prop_dict = init_dict["prop_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.begin = begin
         self.end = end
         self.radius = radius
         self.is_trigo_direction = is_trigo_direction
         # Call Arc init
-        super(Arc1, self).__init__(label=label)
+        super(Arc1, self).__init__(prop_dict=prop_dict)
         # The class is frozen (in Arc init), for now it's impossible to
         # add new properties
 
@@ -305,9 +305,11 @@ class Arc1(Arc):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -322,6 +324,8 @@ class Arc1(Arc):
             diff_list.append(name + ".radius")
         if other._is_trigo_direction != self._is_trigo_direction:
             diff_list.append(name + ".is_trigo_direction")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

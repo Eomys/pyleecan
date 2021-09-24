@@ -5,7 +5,7 @@ from scipy.optimize import fsolve
 
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
-import matplotlib.pyplot as plt
+from ....Functions.labels import WIND_LAB
 
 
 def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):
@@ -46,6 +46,15 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     # When the two lines at the bottom cross on X axis (ex SlotW14)
     if len(inter_list) == 3 and abs(inter_list[0] - inter_list[1]) < 1e-6:
         inter_list.pop(0)
+    # When 4 lines at the bottom cross on X axis (ex SlotM17)
+    elif (
+        len(inter_list) == 4
+        and abs(inter_list[0] - inter_list[1]) < 1e-6
+        and abs(inter_list[2] - inter_list[3]) < 1e-6
+    ):
+        inter_list.pop(0)
+        inter_list.pop(1)
+
     assert len(inter_list) == 2
 
     if abs(inter_list[0]) < abs(inter_list[1]) and self.is_outwards():
@@ -64,12 +73,11 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     # First Tan split
     tan_list = list()
     if Ntan == 2:
-        tan_list.append(
-            surf_act.split_line(0, 100, is_top=False, is_join=True, label_join="")
+        top_surf, bot_surf = surf_act.split_line(
+            0, 100, is_join=True, prop_dict_join=None
         )
-        tan_list.append(
-            surf_act.split_line(0, 100, is_top=True, is_join=True, label_join="")
-        )
+        tan_list.append(bot_surf)
+        tan_list.append(top_surf)
     else:
         tan_list = [surf_act]
 
@@ -79,24 +87,27 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     for ii in range(Ntan):
         surf = tan_list[ii]
         if Nrad > 1:
-            direct = self.is_outwards()
             for jj in range(Nrad - 1):
                 X = X_list[jj]
-                surf_list.append(
-                    surf.split_line(
-                        X - 100j, X + 100j, is_top=direct, is_join=True, label_join=""
-                    )
+                top_surf, bot_surf = surf.split_line(
+                    X - 100j,
+                    X + 100j,
+                    is_join=True,
+                    prop_dict_join=None,
                 )
-                surf = surf.split_line(
-                    X - 100j, X + 100j, is_top=not direct, is_join=True, label_join=""
-                )
+                if self.is_outwards():
+                    surf_list.append(top_surf)
+                    surf = bot_surf
+                else:
+                    surf_list.append(bot_surf)
+                    surf = top_surf
             # Add the last surface
             surf_list.append(surf)
         else:  # add the radial surfaces without any other cut
             surf_list.append(surf.copy())
 
     # Set all label
-    set_label(surf_list, Nrad, Ntan, self.get_name_lam())
+    set_label(surf_list, Nrad, Ntan, self.parent.get_label())
 
     # Apply transformation
     for surf in surf_list:
@@ -106,13 +117,13 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     return surf_list
 
 
-def set_label(surf_list, Nrad, Ntan, st):
+def set_label(surf_list, Nrad, Ntan, lam_label):
     """Set the normalized label"""
 
     index = 0
     for jj in range(Ntan):
         for ii in range(Nrad):
             surf_list[index].label = (
-                "Wind_" + st + "_R" + str(ii) + "_T" + str(jj) + "_S0"
+                lam_label + "_" + WIND_LAB + "_R" + str(ii) + "-T" + str(jj) + "-S0"
             )
             index += 1

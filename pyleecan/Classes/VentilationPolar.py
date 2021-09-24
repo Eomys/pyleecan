@@ -116,20 +116,20 @@ class VentilationPolar(Hole):
 
     def __init__(
         self,
-        Alpha0=0,
         D0=1,
         H0=1,
         W1=1,
         Zh=36,
         mat_void=-1,
         magnetization_dict_offset=None,
+        Alpha0=0,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -141,8 +141,6 @@ class VentilationPolar(Hole):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Alpha0" in list(init_dict.keys()):
-                Alpha0 = init_dict["Alpha0"]
             if "D0" in list(init_dict.keys()):
                 D0 = init_dict["D0"]
             if "H0" in list(init_dict.keys()):
@@ -155,8 +153,9 @@ class VentilationPolar(Hole):
                 mat_void = init_dict["mat_void"]
             if "magnetization_dict_offset" in list(init_dict.keys()):
                 magnetization_dict_offset = init_dict["magnetization_dict_offset"]
+            if "Alpha0" in list(init_dict.keys()):
+                Alpha0 = init_dict["Alpha0"]
         # Set the properties (value check and convertion are done in setter)
-        self.Alpha0 = Alpha0
         self.D0 = D0
         self.H0 = H0
         self.W1 = W1
@@ -165,6 +164,7 @@ class VentilationPolar(Hole):
             Zh=Zh,
             mat_void=mat_void,
             magnetization_dict_offset=magnetization_dict_offset,
+            Alpha0=Alpha0,
         )
         # The class is frozen (in Hole init), for now it's impossible to
         # add new properties
@@ -175,7 +175,6 @@ class VentilationPolar(Hole):
         VentilationPolar_str = ""
         # Get the properties inherited from Hole
         VentilationPolar_str += super(VentilationPolar, self).__str__()
-        VentilationPolar_str += "Alpha0 = " + str(self.Alpha0) + linesep
         VentilationPolar_str += "D0 = " + str(self.D0) + linesep
         VentilationPolar_str += "H0 = " + str(self.H0) + linesep
         VentilationPolar_str += "W1 = " + str(self.W1) + linesep
@@ -190,8 +189,6 @@ class VentilationPolar(Hole):
         # Check the properties inherited from Hole
         if not super(VentilationPolar, self).__eq__(other):
             return False
-        if other.Alpha0 != self.Alpha0:
-            return False
         if other.D0 != self.D0:
             return False
         if other.H0 != self.H0:
@@ -200,23 +197,25 @@ class VentilationPolar(Hole):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Hole
         diff_list.extend(super(VentilationPolar, self).compare(other, name=name))
-        if other._Alpha0 != self._Alpha0:
-            diff_list.append(name + ".Alpha0")
         if other._D0 != self._D0:
             diff_list.append(name + ".D0")
         if other._H0 != self._H0:
             diff_list.append(name + ".H0")
         if other._W1 != self._W1:
             diff_list.append(name + ".W1")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -226,7 +225,6 @@ class VentilationPolar(Hole):
 
         # Get size of the properties inherited from Hole
         S += super(VentilationPolar, self).__sizeof__()
-        S += getsizeof(self.Alpha0)
         S += getsizeof(self.D0)
         S += getsizeof(self.H0)
         S += getsizeof(self.W1)
@@ -241,7 +239,6 @@ class VentilationPolar(Hole):
 
         # Get the properties inherited from Hole
         VentilationPolar_dict = super(VentilationPolar, self).as_dict(**kwargs)
-        VentilationPolar_dict["Alpha0"] = self.Alpha0
         VentilationPolar_dict["D0"] = self.D0
         VentilationPolar_dict["H0"] = self.H0
         VentilationPolar_dict["W1"] = self.W1
@@ -253,32 +250,11 @@ class VentilationPolar(Hole):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Alpha0 = None
         self.D0 = None
         self.H0 = None
         self.W1 = None
         # Set to None the properties inherited from Hole
         super(VentilationPolar, self)._set_None()
-
-    def _get_Alpha0(self):
-        """getter of Alpha0"""
-        return self._Alpha0
-
-    def _set_Alpha0(self, value):
-        """setter of Alpha0"""
-        check_var("Alpha0", value, "float", Vmin=0, Vmax=6.29)
-        self._Alpha0 = value
-
-    Alpha0 = property(
-        fget=_get_Alpha0,
-        fset=_set_Alpha0,
-        doc=u"""Shift angle of the hole around circumference
-
-        :Type: float
-        :min: 0
-        :max: 6.29
-        """,
-    )
 
     def _get_D0(self):
         """getter of D0"""

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def comp_periodicity(self):
+def comp_periodicity(self, p=None):
     """Compute the periodicity factor of the lamination
 
     Parameters

@@ -16,11 +16,11 @@ class Test_split_line(object):
         # Ref circle
         circle = Circle(radius=1, center=0, point_ref=0)
         # Cut the circle in half
-        cut = circle.split_line(Z1=0, Z2=1, is_top=True, is_join=True)
+        cut, _ = circle.split_line(Z1=0, Z2=1, is_join=True)  # Get top
         # Cut the result
-        cut2 = cut.split_line(Z1=1j, Z2=1, is_top=True, is_join=True)
+        cut2, _ = cut.split_line(Z1=1j, Z2=1, is_join=True)  # Get Top
         # Reverse second cut side
-        cut3 = cut.split_line(Z1=1j, Z2=1, is_top=False, is_join=True)
+        _, cut3 = cut.split_line(Z1=1j, Z2=1, is_join=True)  # Get bot
 
         # Plot the result
         plt.close("all")

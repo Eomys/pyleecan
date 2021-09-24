@@ -57,7 +57,7 @@ def test_Benchmark_AGSF_Rag():
         is_periodicity_a=False,
         is_periodicity_t=False,
         is_sliding_band=False,
-        Kmesh_fineness=4,
+        Kmesh_fineness=2,  # 4
         nb_worker=cpu_count(),
     )
 

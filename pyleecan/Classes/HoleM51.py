@@ -224,13 +224,14 @@ class HoleM51(HoleMag):
         Zh=36,
         mat_void=-1,
         magnetization_dict_offset=None,
+        Alpha0=0,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -276,6 +277,8 @@ class HoleM51(HoleMag):
                 mat_void = init_dict["mat_void"]
             if "magnetization_dict_offset" in list(init_dict.keys()):
                 magnetization_dict_offset = init_dict["magnetization_dict_offset"]
+            if "Alpha0" in list(init_dict.keys()):
+                Alpha0 = init_dict["Alpha0"]
         # Set the properties (value check and convertion are done in setter)
         self.H0 = H0
         self.H1 = H1
@@ -296,6 +299,7 @@ class HoleM51(HoleMag):
             Zh=Zh,
             mat_void=mat_void,
             magnetization_dict_offset=magnetization_dict_offset,
+            Alpha0=Alpha0,
         )
         # The class is frozen (in HoleMag init), for now it's impossible to
         # add new properties
@@ -373,9 +377,11 @@ class HoleM51(HoleMag):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -428,6 +434,8 @@ class HoleM51(HoleMag):
             diff_list.extend(
                 self.magnet_2.compare(other.magnet_2, name=name + ".magnet_2")
             )
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

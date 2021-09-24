@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from PySide2 import QtWidgets, QtGui, QtCore
+from matplotlib.backends.backend_qt5agg import FigureCanvas
+
 import sys
 from os.path import dirname, join, isfile
 from sys import argv, exit
@@ -11,35 +14,22 @@ try:  # Import if pyleecan is installed with pip
     from .definitions import ROOT_DIR, PACKAGE_NAME, config_dict
     from .GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
     from .GUI.Dialog.DMatLib.DMatLib import DMatLib
-    from .GUI.Dialog.DMatLib.MatLib import MatLib
-    from .GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
     from .GUI.Tools.SidebarWindow import SidebarWindow
     from .GUI.Tools.MachinePlotWidget import MachinePlotWidget
     from .GUI.Tools.TreeView import TreeView
     from .GUI.Tools.GuiOption.WGuiOption import WGuiOption
-
+    from .Functions.load import load_matlib
+    from .GUI.Resources import pixmap_dict
 except ImportError:  # Import for dev version
-    from definitions import PACKAGE_NAME, ROOT_DIR, config_dict
-
-    exec(
-        "from "
-        + PACKAGE_NAME
-        + ".GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup"
-    )
-    exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.DMatLib import DMatLib")
-    exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.MatLib import MatLib")
-    exec(
-        "from "
-        + PACKAGE_NAME
-        + ".GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect"
-    )
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.SidebarWindow import SidebarWindow")
-    exec(
-        "from " + PACKAGE_NAME + ".GUI.Tools.MachinePlotWidget import MachinePlotWidget"
-    )
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.TreeView import TreeView")
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.GuiOption.WGuiOption import WGuiOption")
-
+    exec("from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup")
+    exec("from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib")
+    exec("from pyleecan.GUI.Tools.SidebarWindow import SidebarWindow")
+    exec("from pyleecan.GUI.Tools.MachinePlotWidget import MachinePlotWidget")
+    exec("from pyleecan.GUI.Tools.TreeView import TreeView")
+    exec("from pyleecan.GUI.Tools.GuiOption.WGuiOption import WGuiOption")
+    exec("from pyleecan.Functions.load import load_matlib")
+    exec("from pyleecan.definitions import PACKAGE_NAME, ROOT_DIR, config_dict")
+    exec("from pyleecan.GUI.Resources import pixmap_dict")
 
 EXT_GUI = True
 
@@ -62,20 +52,22 @@ def run_GUI(argv):
         with open(config_dict["GUI"]["CSS_PATH"], "r") as css_file:
             a.setStyleSheet(css_file.read())
 
-    # Setting the material library
-    matlib = MatLib(config_dict["MAIN"]["MATLIB_DIR"])
+    # Load Material Library
+    material_dict = load_matlib(
+        machine=None, matlib_path=config_dict["MAIN"]["MATLIB_DIR"]
+    )
 
     # MatLib widget
-    mat_widget = DMatLib(matlib, selected=0)
+    mat_widget = DMatLib(material_dict=material_dict)
 
     # Machine Setup Widget
     c = DMachineSetup(
-        dmatlib=mat_widget, machine_path=config_dict["MAIN"]["MACHINE_DIR"]
+        material_dict=material_dict, machine_path=config_dict["MAIN"]["MACHINE_DIR"]
     )
 
     if EXT_GUI:
         # Setup extended GUI with sub windows
-        icon = dirname(__file__) + "/GUI/Resources/images/icon/pyleecan_64.png"
+        icon = pixmap_dict["soft_icon"]
         window = SidebarWindow()
         window.setWindowIcon(QIcon(icon))
 
@@ -93,7 +85,7 @@ def run_GUI(argv):
         tree_fcn = lambda: tree.generate(getattr(c, "machine"))
         window.addSubWindow("TreeView", tree, tree_fcn)
 
-        option = WGuiOption(machine_setup=c, matlib=matlib)
+        option = WGuiOption(machine_setup=c, matlib=mat_widget)
         window.addSubWindow("Option", option)
         window.show()
 

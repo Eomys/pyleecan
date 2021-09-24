@@ -47,11 +47,11 @@ class Test_HoleM58_meth(object):
 
     @pytest.mark.parametrize("test_dict", HoleM58_test)
     def test_magnet_None(self, test_dict):
-        """ Magnet None"""
+        """Magnet None"""
 
         test_obj.hole[0].magnet_0 = None
         result = test_obj.hole[0].build_geometry()
-        assert "Hole_Rotor_R0_T0_S0" == result[0].label
+        assert result[0].label == "Rotor_HoleVoid_R0-T0-S0"
 
     @pytest.mark.parametrize("test_dict", HoleM58_test)
     def test_magnet_Parallel(self, test_dict):
@@ -59,4 +59,4 @@ class Test_HoleM58_meth(object):
 
         test_obj.hole[0].magnet_0 = Magnet(type_magnetization=1)
         result = test_obj.hole[0].build_geometry()
-        assert result[1].label == "HoleMagnet_Rotor_Parallel_N_R0_T0_S0"
+        assert result[1].label == "Rotor_HoleMag_R0-T0-S0"

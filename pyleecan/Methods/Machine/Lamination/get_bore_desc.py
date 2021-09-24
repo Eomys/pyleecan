@@ -4,7 +4,7 @@ from ....Classes.Arc3 import Arc3
 from numpy import exp, pi
 
 
-def get_bore_desc(self, sym=1, line_label=None):
+def get_bore_desc(self, sym=1, prop_dict=None):
     """This method returns an ordered description of the elements
     that defines the bore radius of the lamination
 
@@ -12,8 +12,9 @@ def get_bore_desc(self, sym=1, line_label=None):
     ----------
     self : Lamination
         A Lamination object
-    line_label : str
-        Label to apply on the lines
+    prop_dict : dict
+        Property dictionary to apply on the lines
+
 
     Returns
     -------
@@ -26,7 +27,9 @@ def get_bore_desc(self, sym=1, line_label=None):
 
     Rbo = self.get_Rbo()
 
-    if self.notch is None or len(self.notch) == 0:
+    if self.bore is not None and self.notch in [None, list()] and sym == 1:
+        return None, self.bore.get_bore_line(prop_dict=prop_dict)
+    elif self.notch is None or len(self.notch) == 0:
         # No notches
         if sym == 1:
             bore_desc = list()
@@ -131,12 +134,15 @@ def get_bore_desc(self, sym=1, line_label=None):
         else:  # Notches
             lines = bore["obj"].build_geometry()
             for line in lines:
-                line.rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
-            bore_lines.extend(lines)
+                bore_lines.append(line.copy())
+                bore_lines[-1].rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
 
-    # Set line label
-    if line_label is not None:
+    # Set line properties
+    if prop_dict is not None:
         for line in bore_lines:
-            line.label = line_label
+            if line.prop_dict is None:
+                line.prop_dict = prop_dict
+            else:
+                line.prop_dict.update(prop_dict)
 
     return bore_desc, bore_lines

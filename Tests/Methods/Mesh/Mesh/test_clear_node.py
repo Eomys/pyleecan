@@ -12,7 +12,7 @@ DELTA = 1e-10
 
 @pytest.mark.MeshSol
 def test_MeshMat():
-    """ Test for 1 group"""
+    """Test for 1 group"""
 
     mesh = MeshMat()
     mesh.cell["triangle"] = CellMat(nb_node_per_cell=3)

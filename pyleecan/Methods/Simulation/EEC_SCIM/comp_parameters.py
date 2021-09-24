@@ -3,6 +3,7 @@ from numpy import zeros, sqrt, pi, tile, isnan
 from multiprocessing import cpu_count
 
 from ....Functions.Electrical.coordinate_transformation import n2ab, ab2n
+from ....Functions.labels import STATOR_LAB, ROTOR_LAB
 
 
 def comp_parameters(self, output):
@@ -22,7 +23,7 @@ def comp_parameters(self, output):
     p = machine.rotor.winding.p
 
     xi = machine.stator.winding.comp_winding_factor()
-    Ntspc = machine.stator.winding.comp_Ntspc()
+    Ntspc = machine.stator.winding.comp_Ntsp()
     norm = (xi[0] * Ntspc) / (Zsr / 6)  # rotor - stator transformation factor
 
     self.parameters["norm"] = norm
@@ -175,7 +176,7 @@ def _comp_flux_mean(self, out):
     sym, is_anti_per, _, _ = machine.comp_periodicity()
 
     # get the fluxlinkages
-    Phi = out.mag.Phi_wind["Rotor_0"].get_along("time", "phase")["Phi_{wind}"]
+    Phi = out.mag.Phi_wind[ROTOR_LAB + "-0"].get_along("time", "phase")["Phi_{wind}"]
 
     # reconstruct fluxlinkage in case of (anti) periodicity
     if out.simu.mag.is_periodicity_a:
@@ -219,7 +220,9 @@ def _comp_flux_mean(self, out):
 
     # compute rotor and stator fluxlinkage
     Phi_r = abs(Phi_ab[:, 0] + 1j * Phi_ab[:, 1]).mean() / sqrt(2)
-    Phi_ab = n2ab(out.mag.Phi_wind["Stator_0"].get_along("time", "phase")["Phi_{wind}"])
+    Phi_ab = n2ab(
+        out.mag.Phi_wind[STATOR_LAB + "-0"].get_along("time", "phase")["Phi_{wind}"]
+    )
     Phi_s = abs(Phi_ab[:, 0] + 1j * Phi_ab[:, 1]).mean() / sqrt(2)
 
     return Phi_s, Phi_r

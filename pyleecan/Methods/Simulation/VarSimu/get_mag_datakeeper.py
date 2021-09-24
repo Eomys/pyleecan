@@ -27,9 +27,9 @@ def get_mag_datakeeper(self, symbol_list, is_multi=False):
             dk_list.append(
                 DataKeeper(
                     name="Max Average Torque",
-                    symbol="Tem_av",
+                    symbol="Max_Tem_av",
                     unit="N.m",
-                    keeper="lambda output: max(output.xoutput_dict['Tem_av'].result)",
+                    keeper="lambda output: max([val for val in output.xoutput_dict['Tem_av'].result if val is not None]) if output.xoutput_dict['Tem_av'].result[0] is not None else None",
                     error_keeper=error_nan,
                 )
             )
@@ -40,7 +40,7 @@ def get_mag_datakeeper(self, symbol_list, is_multi=False):
                     name="Max Peak to Peak Torque ripple",
                     symbol="Max_Tem_rip_pp",
                     unit="N.m",
-                    keeper="lambda output: max(output.xoutput_dict['Tem_rip_pp'].result)",
+                    keeper="lambda output: max([val for val in output.xoutput_dict['Tem_rip_pp'].result if val is not None]) if output.xoutput_dict['Tem_rip_pp'].result[0] is not None else None",
                     error_keeper=error_nan,
                 )
             )
@@ -51,7 +51,7 @@ def get_mag_datakeeper(self, symbol_list, is_multi=False):
                     name="Max Peak to Peak Torque ripple normalized",
                     symbol="Max_Tem_rip_norm",
                     unit="-",
-                    keeper="lambda output: max(output.xoutput_dict['Tem_rip_norm'].result)",
+                    keeper="lambda output: max([val for val in output.xoutput_dict['Tem_rip_norm'].result if val is not None]) if output.xoutput_dict['Tem_rip_norm'].result[0] is not None else None",
                     error_keeper=error_nan,
                 )
             )
@@ -89,5 +89,15 @@ def get_mag_datakeeper(self, symbol_list, is_multi=False):
                     error_keeper=error_nan,
                 )
             )
-
+        # Output Power Datakeeper
+        if "Pem_av" not in symbol_list:
+            dk_list.append(
+                DataKeeper(
+                    name="Output Power",
+                    symbol="Pem_av",
+                    unit="W",
+                    keeper="lambda out: out.mag.Pem_av",
+                    error_keeper=error_nan,
+                )
+            )
     return dk_list

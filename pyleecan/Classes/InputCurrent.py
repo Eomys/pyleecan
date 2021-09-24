@@ -98,6 +98,7 @@ class InputCurrent(Input):
         Id_ref=None,
         Iq_ref=None,
         felec=None,
+        Pem_av_ref=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -110,7 +111,7 @@ class InputCurrent(Input):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -140,6 +141,8 @@ class InputCurrent(Input):
                 Iq_ref = init_dict["Iq_ref"]
             if "felec" in list(init_dict.keys()):
                 felec = init_dict["felec"]
+            if "Pem_av_ref" in list(init_dict.keys()):
+                Pem_av_ref = init_dict["Pem_av_ref"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -162,6 +165,7 @@ class InputCurrent(Input):
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
         self.felec = felec
+        self.Pem_av_ref = Pem_av_ref
         # Call Input init
         super(InputCurrent, self).__init__(
             time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
@@ -200,6 +204,7 @@ class InputCurrent(Input):
         InputCurrent_str += "Id_ref = " + str(self.Id_ref) + linesep
         InputCurrent_str += "Iq_ref = " + str(self.Iq_ref) + linesep
         InputCurrent_str += "felec = " + str(self.felec) + linesep
+        InputCurrent_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         return InputCurrent_str
 
     def __eq__(self, other):
@@ -229,11 +234,15 @@ class InputCurrent(Input):
             return False
         if other.felec != self.felec:
             return False
+        if other.Pem_av_ref != self.Pem_av_ref:
+            return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -272,6 +281,10 @@ class InputCurrent(Input):
             diff_list.append(name + ".Iq_ref")
         if other._felec != self._felec:
             diff_list.append(name + ".felec")
+        if other._Pem_av_ref != self._Pem_av_ref:
+            diff_list.append(name + ".Pem_av_ref")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -290,6 +303,7 @@ class InputCurrent(Input):
         S += getsizeof(self.Id_ref)
         S += getsizeof(self.Iq_ref)
         S += getsizeof(self.felec)
+        S += getsizeof(self.Pem_av_ref)
         return S
 
     def as_dict(self, **kwargs):
@@ -319,6 +333,7 @@ class InputCurrent(Input):
         InputCurrent_dict["Id_ref"] = self.Id_ref
         InputCurrent_dict["Iq_ref"] = self.Iq_ref
         InputCurrent_dict["felec"] = self.felec
+        InputCurrent_dict["Pem_av_ref"] = self.Pem_av_ref
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputCurrent_dict["__class__"] = "InputCurrent"
@@ -339,6 +354,7 @@ class InputCurrent(Input):
         self.Id_ref = None
         self.Iq_ref = None
         self.felec = None
+        self.Pem_av_ref = None
         # Set to None the properties inherited from Input
         super(InputCurrent, self)._set_None()
 
@@ -541,6 +557,24 @@ class InputCurrent(Input):
         fget=_get_felec,
         fset=_set_felec,
         doc=u"""electrical frequency
+
+        :Type: float
+        """,
+    )
+
+    def _get_Pem_av_ref(self):
+        """getter of Pem_av_ref"""
+        return self._Pem_av_ref
+
+    def _set_Pem_av_ref(self, value):
+        """setter of Pem_av_ref"""
+        check_var("Pem_av_ref", value, "float")
+        self._Pem_av_ref = value
+
+    Pem_av_ref = property(
+        fget=_get_Pem_av_ref,
+        fset=_set_Pem_av_ref,
+        doc=u"""Theorical Average Electromagnetic Power
 
         :Type: float
         """,

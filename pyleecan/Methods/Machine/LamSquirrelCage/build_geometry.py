@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from ....Functions.labels import WIND_LAB, BAR_LAB
+
+from ....Classes.LamSlotWind import LamSlotWind
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -23,13 +26,13 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         list of surfaces
 
     """
-    surf_list = super(type(self), self).build_geometry(
-        sym=sym, is_simplified=is_simplified, alpha=alpha, delta=delta
+    surf_list = LamSlotWind.build_geometry(
+        self, sym=sym, is_simplified=is_simplified, alpha=alpha, delta=delta
     )
 
     # Adapt the label
     for surf in surf_list:
-        if "Wind" in surf.label:
-            surf.label = surf.label.replace("Wind", "Bar")
+        if WIND_LAB in surf.label:
+            surf.label = surf.label.replace(WIND_LAB, BAR_LAB)
 
     return surf_list

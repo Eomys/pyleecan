@@ -41,7 +41,7 @@ class Magnet(FrozenClass):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -98,9 +98,11 @@ class Magnet(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -116,6 +118,8 @@ class Magnet(FrozenClass):
             diff_list.append(name + ".type_magnetization")
         if other._Lmag != self._Lmag:
             diff_list.append(name + ".Lmag")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -189,17 +193,17 @@ class Magnet(FrozenClass):
 
     def _set_type_magnetization(self, value):
         """setter of type_magnetization"""
-        check_var("type_magnetization", value, "int", Vmin=0, Vmax=5)
+        check_var("type_magnetization", value, "int", Vmin=0, Vmax=3)
         self._type_magnetization = value
 
     type_magnetization = property(
         fget=_get_type_magnetization,
         fset=_set_type_magnetization,
-        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach
+        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach, 3 Tangential
 
         :Type: int
         :min: 0
-        :max: 5
+        :max: 3
         """,
     )
 

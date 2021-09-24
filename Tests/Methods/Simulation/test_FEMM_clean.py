@@ -15,7 +15,7 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
 def test_FEMM_clean():
-    """test clean of MagFEMM """
+    """test clean of MagFEMM"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 

@@ -19,15 +19,13 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.SlotUD2 import SlotUD2
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
 from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
-from pyleecan.Methods.Machine.Winding import WindingError
-from pyleecan.Methods.Machine.WindingCW2LT import WindingT1DefMsError
-from pyleecan.Methods.Machine.WindingCW1L import WindingT2DefNtError
 
 import numpy as np
 import random
@@ -126,21 +124,21 @@ def test_gmsh_mesh_dict():
 
     # Definition of the number of each element on each line
     mesh_dict = {
-        "Tooth_Yoke_Side_Right": 5,
-        "Tooth_Yoke_Side_Left": 5,
-        "Tooth_Yoke_Arc": 5,
-        "Tooth_line_3": 2,
-        "Tooth_line_4": 8,
-        "Tooth_line_5": 1,
-        "Tooth_line_6": 1,
-        "Tooth_line_7": 1,
-        "Tooth_bore_arc_bot": 2,
-        "Tooth_bore_arc_top": 2,
-        "Tooth_line_10": 1,
-        "Tooth_line_11": 1,
-        "Tooth_line_12": 1,
-        "Tooth_line_13": 8,
-        "Tooth_line_14": 2,
+        "0": 5,  # Yoke_Side_Right
+        "1": 5,  # Yoke_Side_Left
+        "2": 5,  # Yoke_Arc
+        "3": 2,
+        "4": 8,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 2,  # bore_arc_bot
+        "9": 2,  # bore_arc_top
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 8,
+        "14": 2,
     }
     gen_3D_mesh(
         lamination=stator,
@@ -234,7 +232,8 @@ def test_MachineUD():
     lam1.slot = SlotW22(
         Zs=12, W0=2 * pi / 12 * 0.75, W2=2 * pi / 12 * 0.75, H0=0, H2=W1 * 0.65
     )
-    lam1.winding = WindingCW2LT(qs=3, p=3)
+    lam1.winding = WindingUD(qs=3, p=3)
+    lam1.winding.init_as_CW2LT()
     # Outer rotor
     lam2 = LamSlot(
         Rext=lam1.Rint - A1, Rint=lam1.Rint - A1 - W2, is_internal=True, is_stator=False
@@ -255,7 +254,8 @@ def test_MachineUD():
         Rext=lam3.Rint - A3, Rint=lam3.Rint - A3 - W4, is_internal=True, is_stator=True
     )
     lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
-    lam4.winding = WindingCW2LT(qs=3, p=3)
+    lam4.winding = WindingUD(qs=3, p=3)
+    lam4.winding.init_as_CW2LT()
     # Machine definition
     machine.lam_list = [lam1, lam2, lam3, lam4]
 
@@ -274,47 +274,6 @@ def test_MachineUD():
     fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.png"))
     fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.svg"), format="svg")
     assert len(fig.axes[0].patches) == 57
-
-    """Check that comp_connection_mat can raise a WindingT1DefMsError"""
-
-    lam4.winding = WindingCW2LT(qs=16, p=3)
-    with pytest.raises(WindingT1DefMsError) as context:
-        lam4.winding.comp_connection_mat(Zs=10)
-
-    """Check that comp_connection_mat can raise a WindingError"""
-    winding = WindingCW2LT(qs=3, p=3)
-
-    with pytest.raises(WindingError) as context:
-        winding.comp_connection_mat(Zs=None)
-
-    lam4.winding = WindingCW2LT(qs=3, p=3)
-    lam4.slot = None
-    with pytest.raises(WindingError) as context:
-        lam4.winding.comp_connection_mat(Zs=None)
-
-    # FOR WindingCW1L comp_connection_mat
-
-    """Check that comp_connection_mat can raise a WindingT2DefNtError"""
-
-    lam4.winding = WindingCW1L(qs=2, p=3)
-    lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
-    with pytest.raises(WindingT2DefNtError) as context:
-        lam4.winding.comp_connection_mat(Zs=17)
-
-    lam4.winding = WindingCW1L(qs=2, p=3)
-    lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
-    lam4.winding.comp_connection_mat(Zs=None)
-
-    """Check that comp_connection_mat can raise a WindingError"""
-
-    lam4.winding = WindingCW1L(qs=3, p=3)
-    lam4.slot = None
-    with pytest.raises(WindingError) as context:
-        lam4.winding.comp_connection_mat(Zs=None)
-
-    winding = WindingCW1L(qs=3, p=3)
-    with pytest.raises(WindingError) as context:
-        winding.comp_connection_mat(Zs=None)
 
 
 def test_SlotMulti_rotor():
@@ -409,7 +368,8 @@ def test_SlotUD():
     machine.stator.slot = SlotW21(
         Zs=36, W0=7e-3, H0=10e-3, H1=0, H2=70e-3, W1=30e-3, W2=0.1e-3
     )
-    machine.stator.winding = WindingDW2L(qs=3, p=3, coil_pitch=5)
+    machine.stator.winding = WindingUD(qs=3, p=3, coil_pitch=5)
+    machine.stator.winding.init_as_DWL(nlay=2)
 
     # Rotor definition
     machine.rotor = LamSlot(Rint=0.02, Rext=Rrotor, is_internal=True, is_stator=False)
@@ -462,7 +422,7 @@ def test_WindingUD():
         VentilationPolar(Zh=6, Alpha0=pi / 6, W1=pi / 6, D0=100e-3, H0=0.3)
     ]
     machine.rotor.slot = SlotW12(Zs=6, R2=35e-3, H0=20e-3, R1=17e-3, H1=130e-3)
-    machine.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+    machine.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
     machine.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
     # Stator definion
     machine.stator = LamSlotWind(
@@ -476,7 +436,8 @@ def test_WindingUD():
     )
     machine.stator.slot = SlotW12(Zs=18, R2=25e-3, H0=30e-3, R1=0, H1=150e-3)
     machine.stator.winding.Lewout = 60e-3
-    machine.stator.winding = WindingDW2L(qs=3, p=3)
+    machine.stator.winding = WindingUD(qs=3, p=3, coil_pitch=1)
+    machine.stator.winding.init_as_DWL(nlay=2)
     machine.stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
     # Shaft & frame
@@ -489,6 +450,43 @@ def test_WindingUD():
     fig.savefig(join(save_path, "fig_16_WindingUD.png"))
     fig.savefig(join(save_path, "fig_16_WindingUD.svg"), format="svg")
     assert len(fig.axes[0].patches) == 73
+
+
+def test_WindingUD_layer():
+    """Figure 17: User-defined Winding with uneven winding layer"""
+    plt.close("all")
+    # Rotor definition
+    rotor = LamSlotWind(
+        Rint=0.2, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=2, Wrvd=0.05
+    )
+    rotor.axial_vent = [VentilationCirc(Zh=6, Alpha0=pi / 6, D0=100e-3, H0=0.3)]
+    rotor.slot = SlotW11(
+        Zs=6, H0=15e-3, W0=60e-3, W1=100e-3, W2=100e-3, H1=20e-3, H2=200e-3
+    )
+    rotor.slot = rotor.slot.convert_to_SlotUD2()
+    assert isinstance(rotor.slot, SlotUD2)
+    key = "Nrad=2, Ntan=2"
+    Top, Bottom = rotor.slot.active_surf.split_line(0, 100, is_join=True)
+    Bottom_Left, Bottom_Right = Bottom.split_line(
+        0.320 - 100j, 0.320 + 100j, is_join=True
+    )
+    Top_Left, Top_Right = Top.split_line(0.410 - 100j, 0.410 + 100j, is_join=True)
+    rotor.slot.split_active_surf_dict = {
+        key: [Bottom_Right, Bottom_Left, Top_Right, Top_Left]
+    }
+    rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+    rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
+
+    # For testing the _set_split_active_surf_dict method
+    rotor.save(join(save_path, "Fig17_rotor_wind_layer.json"))
+    rotor = load(join(save_path, "Fig17_rotor_wind_layer.json"))
+
+    # Plot, check and save
+    rotor.plot(is_show_fig=False)
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "fig_17_WindingUD_layer.png"))
+    fig.savefig(join(save_path, "fig_17_WindingUD_layer.svg"), format="svg")
+    assert len(fig.axes[0].patches) == 32
 
 
 def test_BoreFlower():
@@ -690,7 +688,11 @@ def test_Optimization_problem():
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
+    simu.mag = MagFEMM(
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=True,
+    )
 
     simu.struct = None
 
@@ -840,4 +842,4 @@ def test_Optimization_problem():
 
 
 if __name__ == "__main__":
-    test_FEMM_sym()
+    test_WindingUD_layer()

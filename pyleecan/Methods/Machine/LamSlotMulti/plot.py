@@ -3,6 +3,7 @@
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 
+from ....Functions.labels import decode_label, LAM_LAB
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
@@ -22,7 +23,7 @@ def plot(
     is_display=True,
     is_show_fig=True,
 ):
-    """Plot the Lamination in a matplotlib fig
+    """Plot the Lamination with empty Slots in a matplotlib fig
 
     Parameters
     ----------
@@ -62,7 +63,8 @@ def plot(
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
-        if "Ext" in surf.label:
+        label_dict = decode_label(surf.label)
+        if LAM_LAB in label_dict["surf_type"]:
             patches.extend(surf.get_patches(color=lam_color, is_edge_only=is_edge_only))
         else:
             patches.extend(surf.get_patches(is_edge_only=is_edge_only))

@@ -14,7 +14,7 @@ from pyleecan.Classes.SolutionVector import SolutionVector
 
 @pytest.mark.MeshSol
 class Test_get_solution(TestCase):
-    """ Tests for get_solution method from Solution classes"""
+    """Tests for get_solution method from Solution classes"""
 
     def test_SolutionMat(self):
         DELTA = 1e-10

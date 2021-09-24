@@ -7,6 +7,7 @@ from ....Classes.Arc3 import Arc3
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Functions.Geometry.inter_line_circle import inter_line_circle
+from ....Functions.labels import HOLEV_LAB, HOLEM_LAB
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):
@@ -32,6 +33,11 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     """
 
+    # Get correct label for surfaces
+    lam_label = self.parent.get_label()
+    R_id, surf_type = self.get_R_id()
+    vent_label = lam_label + "_" + surf_type + "_R" + str(R_id) + "-"
+
     Rext = self.get_Rext()
     # Get all the points
     point_dict = self._comp_point_coordinate()
@@ -47,13 +53,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Arc1(begin=Z3, end=Z4, radius=self.R1 + self.H1))
     curve_list.append(Arc3(begin=Z4, end=Z1, is_trigo_direction=True))
 
-    if self.get_is_stator():  # check if the slot is on the stator
-        st = "_Stator"
-    else:
-        st = "_Rotor"
     Zref = Rext - self.H0 - self.H1 / 2
     surf_list.append(
-        SurfLine(line_list=curve_list, label="Hole" + st + "_R0_T0_S0", point_ref=Zref)
+        SurfLine(line_list=curve_list, label=vent_label + "T0-S0", point_ref=Zref)
     )
 
     # Apply the transformations

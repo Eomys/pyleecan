@@ -6,9 +6,7 @@ from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import Gen_SMachineType
 from .....Classes.Winding import Winding
-from .....Classes.MachineIPMSM import MachineIPMSM
-from .....Classes.MachineSIPMSM import MachineSIPMSM
-from .....Classes.MachineSyRM import MachineSyRM
+from .....Classes.MachineSRM import MachineSRM
 from .....definitions import PACKAGE_NAME
 
 
@@ -20,7 +18,7 @@ class SMachineType(Gen_SMachineType, QWidget):
     # Information for the DMachineSetup nav
     step_name = "Machine Type"
 
-    def __init__(self, machine, matlib, is_stator=False):
+    def __init__(self, machine, material_dict, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
@@ -29,8 +27,8 @@ class SMachineType(Gen_SMachineType, QWidget):
             A SMachineType widget
         machine : Machine
             current machine to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -40,7 +38,7 @@ class SMachineType(Gen_SMachineType, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.is_stator = is_stator
 
         # Dynamic import to avoid import loop
@@ -61,7 +59,11 @@ class SMachineType(Gen_SMachineType, QWidget):
         self.txt_type_machine.setText(self.mach_dict["txt"])
         self.img_type_machine.setPixmap(QPixmap(self.mach_dict["img"]))
         self.c_type.setCurrentIndex(index)
-        if machine.stator.get_pole_pair_number() is not None:
+        if isinstance(self.machine, MachineSRM):
+            # p is not meaningful for SRM
+            self.si_p.hide()
+            self.in_p.hide()
+        elif machine.stator.get_pole_pair_number() is not None:
             self.si_p.setValue(machine.stator.winding.p)
         else:
             self.si_p.clear()  # Empty spinbox
@@ -118,20 +120,7 @@ class SMachineType(Gen_SMachineType, QWidget):
         if self.machine.stator.winding is None:
             self.machine.stator.winding = Winding()
             self.machine.stator.winding._set_None()
-        self.machine.stator.winding.p = value
-        # Set machine rotor p according to machine type
-        if type(self.machine) is MachineSIPMSM:
-            self.machine.rotor.slot.Zs = 2 * value
-        elif type(self.machine) in [MachineIPMSM, MachineSyRM]:
-            if self.machine.rotor.hole is None:
-                self.machine.rotor.hole = list()
-            else:
-                for hole in self.machine.rotor.hole:
-                    hole.Zh = 2 * value
-        elif self.machine.type_machine == 10:
-            pass
-        else:
-            self.machine.rotor.winding.p = value
+        self.machine.set_pole_pair_number(value)
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -192,7 +181,9 @@ class SMachineType(Gen_SMachineType, QWidget):
         try:
             if machine.stator.winding is None:
                 return "Missing stator winding"
-            if machine.stator.get_pole_pair_number() in [None, 0]:
+            if not isinstance(
+                machine, MachineSRM
+            ) and machine.stator.get_pole_pair_number() in [None, 0]:
                 return "p must be >0 !"
         except Exception as e:
             return str(e)

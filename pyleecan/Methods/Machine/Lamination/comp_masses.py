@@ -12,7 +12,7 @@ def comp_masses(self):
     Returns
     -------
     M_dict: dict
-        Lamination mass dictionnary (Mtot, Mlam, Mteeth, Myoke) [kg]
+        Lamination mass dictionary (Mtot, Mlam, Mteeth, Myoke) [kg]
 
     """
     rho = self.mat_type.struct.rho

@@ -4,7 +4,7 @@ from matplotlib.pyplot import subplots
 from ....Functions.init_fig import init_fig
 
 
-def plot_BH(self, fig=None, grid=True, color="r"):
+def plot_BH(self, fig=None, grid=True, color="r", is_show_fig=True):
     """Plot the curve B(H) at the specified frequency
 
     Parameters
@@ -28,6 +28,7 @@ def plot_BH(self, fig=None, grid=True, color="r"):
         axes.set_xlabel("H [A/m]")
         axes.set_ylabel("B [T]")
         axes.set_title("B(H) curve")
-        fig.show()
+        if is_show_fig:
+            fig.show()
 
     return fig

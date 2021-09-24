@@ -207,7 +207,7 @@ def split_obj_dict(cls_tupel, obj_dict, folder, split_list, file_ext, logger):
         tuple containing the classe names to save separately
 
     obj_dict: dict
-        object dictionnary to save
+        object dictionary to save
 
     folder_path: str
         directory to save all the files
@@ -275,7 +275,7 @@ def get_filename(obj, folder, split_list, file_ext, logger):
     ----------
 
     obj: dict
-        object dictionnary to save
+        object dictionary to save
 
     folder_path: str
         directory to save all the files

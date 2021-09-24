@@ -1,5 +1,5 @@
 def comp_desc_dict(self):
-    """Compute a dictionnary with the main parameters/output of the machine
+    """Compute a dictionary with the main parameters/output of the machine
 
     Parameters
     ----------
@@ -9,7 +9,7 @@ def comp_desc_dict(self):
     Returns
     -------
     desc_dict: list
-        list of dictionnary containing the main parameters of the machine
+        list of dictionary containing the main parameters of the machine
     """
 
     desc_dict = list()
@@ -89,20 +89,6 @@ def comp_desc_dict(self):
             }
         )
     )
-    # Stator winding type
-    desc_dict.append(
-        dict(
-            {
-                "name": "Winding",
-                "path": "machine.stator.winding.NAME",
-                "verbose": "Stator winding type",
-                "type": str,
-                "unit": "",
-                "is_input": False,
-                "value": self.stator.winding.NAME,
-            }
-        )
-    )
     # Stator winding resistance
     try:
         Rwind = self.stator.comp_resistance_wind()
@@ -123,14 +109,14 @@ def comp_desc_dict(self):
     )
     # Machine mass
     try:
-        Mmach = self.comp_masses()["Mmach"]
+        Mmach = self.comp_masses()["All"]
     except Exception:
         Mmach = None
     desc_dict.append(
         dict(
             {
                 "name": "Mmachine",
-                "path": "machine.comp_masses()['Mmach']",
+                "path": "machine.comp_masses()['All']",
                 "verbose": "Machine total mass",
                 "type": float,
                 "unit": "kg",

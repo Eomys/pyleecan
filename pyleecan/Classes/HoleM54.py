@@ -154,13 +154,14 @@ class HoleM54(Hole):
         Zh=36,
         mat_void=-1,
         magnetization_dict_offset=None,
+        Alpha0=0,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -186,6 +187,8 @@ class HoleM54(Hole):
                 mat_void = init_dict["mat_void"]
             if "magnetization_dict_offset" in list(init_dict.keys()):
                 magnetization_dict_offset = init_dict["magnetization_dict_offset"]
+            if "Alpha0" in list(init_dict.keys()):
+                Alpha0 = init_dict["Alpha0"]
         # Set the properties (value check and convertion are done in setter)
         self.H0 = H0
         self.H1 = H1
@@ -196,6 +199,7 @@ class HoleM54(Hole):
             Zh=Zh,
             mat_void=mat_void,
             magnetization_dict_offset=magnetization_dict_offset,
+            Alpha0=Alpha0,
         )
         # The class is frozen (in Hole init), for now it's impossible to
         # add new properties
@@ -231,9 +235,11 @@ class HoleM54(Hole):
             return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -248,6 +254,8 @@ class HoleM54(Hole):
             diff_list.append(name + ".W0")
         if other._R1 != self._R1:
             diff_list.append(name + ".R1")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):

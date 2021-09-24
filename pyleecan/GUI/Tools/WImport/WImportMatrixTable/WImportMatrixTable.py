@@ -1,10 +1,11 @@
-from os.path import isfile
+from os.path import join
 
 import matplotlib.pyplot as plt
-from pandas import DataFrame, ExcelFile, read_excel
-from PySide2.QtCore import Qt, Signal
-from PySide2.QtWidgets import QDialog, QFileDialog, QMessageBox, QWidget
+from pandas import DataFrame
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
 
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....Classes.ImportMatrixVal import ImportMatrixVal
 from .....Classes.ImportMatrixXls import ImportMatrixXls
 from .....definitions import USER_DIR
@@ -17,20 +18,20 @@ from .....GUI.Tools.WTableData.DTableData import DTableData
 class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
     """Widget to define an ImportMatrixVal"""
 
-    import_name = "Defined as a Matrix"
+    import_name = "User-defined Table"
     import_type = ImportMatrixVal
     saveNeeded = Signal()
     dataTypeChanged = Signal()
 
-    def __init__(self, parent=None, data=None, verbose_name="", expected_shape=None):
+    def __init__(self, parent=None, data=None, plot_title="", expected_shape=None):
         """Initialization of the widget
 
         Parameters
         ----------
         data : ImportMatrixVal
             Data import to define
-        verbose_name : str
-            Name of the imported data
+        plot_title : str
+            Name of to use for the plot and table display
         expected_shape : list
             List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
         """
@@ -43,8 +44,9 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
             self.data = ImportMatrixVal()
         else:
             self.data = data
-        self.verbose_name = verbose_name
+        self.plot_title = plot_title
         self.expected_shape = expected_shape
+        self.tab_window = None  # For the table popup
 
         self.update()
 
@@ -75,13 +77,15 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
         if self.expected_shape is not None and self.expected_shape[1] is not None:
             shape_min[1] = self.expected_shape[1]
             shape_max[1] = self.expected_shape[1]
-        tab = DTableData(
-            data=data, title=self.verbose_name, shape_min=shape_min, shape_max=shape_max
+        self.tab_window = DTableData(
+            data=data, title=self.plot_title, shape_min=shape_min, shape_max=shape_max
         )
-        return_code = tab.exec_()
-        if return_code == 1:
-            self.data.value = tab.data
-            self.update()
+        self.tab_window.accepted.connect(self.update_data)
+        self.tab_window.show()
+
+    def update_data(self):
+        self.data.value = self.tab_window.data
+        self.update()
 
     def s_plot(self):
         """Plot the matrix (if 2D)"""
@@ -107,11 +111,15 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
                 "Unable to plot matrix of shape " + str(data.shape),
             )
             return
+        if self.plot_title is not None:
+            fig.canvas.manager.set_window_title(self.plot_title)
+        set_plot_gui_icon()
 
     def s_convert(self):
         """Convert the ImportMatrixVal to a ImportMatrixXls by saving the matrix in Excel"""
+        def_path = join(USER_DIR, self.plot_title + ".xls")
         save_file_path = QFileDialog.getSaveFileName(
-            self, self.tr("Export to excel"), USER_DIR, "Excel file (*.xls .*xlsx)"
+            self, self.tr("Export to excel"), def_path, "Excel file (*.xls .*xlsx)"
         )[0]
         if save_file_path is not None:
             # Save the Excel file

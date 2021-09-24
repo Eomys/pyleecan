@@ -37,6 +37,11 @@ try:
 except ImportError as error:
     get_demag = error
 
+try:
+    from ..Methods.Output.OutMag.comp_power import comp_power
+except ImportError as error:
+    comp_power = error
+
 
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
@@ -85,6 +90,15 @@ class OutMag(FrozenClass):
         )
     else:
         get_demag = get_demag
+    # cf Methods.Output.OutMag.comp_power
+    if isinstance(comp_power, ImportError):
+        comp_power = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMag method comp_power: " + str(comp_power))
+            )
+        )
+    else:
+        comp_power = comp_power
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -107,13 +121,14 @@ class OutMag(FrozenClass):
         logger_name="Pyleecan.Magnetics",
         internal=None,
         Rag=None,
+        Pem_av=None,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
+        - __init__ (init_dict = d) d must be a dictionary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
@@ -153,6 +168,8 @@ class OutMag(FrozenClass):
                 internal = init_dict["internal"]
             if "Rag" in list(init_dict.keys()):
                 Rag = init_dict["Rag"]
+            if "Pem_av" in list(init_dict.keys()):
+                Pem_av = init_dict["Pem_av"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
@@ -169,6 +186,7 @@ class OutMag(FrozenClass):
         self.logger_name = logger_name
         self.internal = internal
         self.Rag = Rag
+        self.Pem_av = Pem_av
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -209,6 +227,7 @@ class OutMag(FrozenClass):
         else:
             OutMag_str += "internal = None" + linesep + linesep
         OutMag_str += "Rag = " + str(self.Rag) + linesep
+        OutMag_str += "Pem_av = " + str(self.Pem_av) + linesep
         return OutMag_str
 
     def __eq__(self, other):
@@ -244,11 +263,15 @@ class OutMag(FrozenClass):
             return False
         if other.Rag != self.Rag:
             return False
+        if other.Pem_av != self.Pem_av:
+            return False
         return True
 
-    def compare(self, other, name="self"):
+    def compare(self, other, name="self", ignore_list=None):
         """Compare two objects and return list of differences"""
 
+        if ignore_list is None:
+            ignore_list = list()
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
@@ -335,6 +358,10 @@ class OutMag(FrozenClass):
             )
         if other._Rag != self._Rag:
             diff_list.append(name + ".Rag")
+        if other._Pem_av != self._Pem_av:
+            diff_list.append(name + ".Pem_av")
+        # Filter ignore differences
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -357,6 +384,7 @@ class OutMag(FrozenClass):
         S += getsizeof(self.logger_name)
         S += getsizeof(self.internal)
         S += getsizeof(self.Rag)
+        S += getsizeof(self.Pem_av)
         return S
 
     def as_dict(self, **kwargs):
@@ -413,6 +441,7 @@ class OutMag(FrozenClass):
         else:
             OutMag_dict["internal"] = self.internal.as_dict(**kwargs)
         OutMag_dict["Rag"] = self.Rag
+        OutMag_dict["Pem_av"] = self.Pem_av
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -436,6 +465,7 @@ class OutMag(FrozenClass):
         if self.internal is not None:
             self.internal._set_None()
         self.Rag = None
+        self.Pem_av = None
 
     def _get_Time(self):
         """getter of Time"""
@@ -773,6 +803,24 @@ class OutMag(FrozenClass):
         fget=_get_Rag,
         fset=_set_Rag,
         doc=u"""Radius value for air-gap computation
+
+        :Type: float
+        """,
+    )
+
+    def _get_Pem_av(self):
+        """getter of Pem_av"""
+        return self._Pem_av
+
+    def _set_Pem_av(self, value):
+        """setter of Pem_av"""
+        check_var("Pem_av", value, "float")
+        self._Pem_av = value
+
+    Pem_av = property(
+        fget=_get_Pem_av,
+        fset=_set_Pem_av,
+        doc=u"""Average Electromagnetic power
 
         :Type: float
         """,

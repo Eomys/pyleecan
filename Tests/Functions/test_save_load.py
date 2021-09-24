@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from os import getcwd, remove
+from os import getcwd, remove, listdir
 from os.path import isfile, join
 from unittest.mock import patch  # for unittest of input
 
@@ -20,7 +20,7 @@ from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.SlotW10 import SlotW10
-from pyleecan.Classes.WindingDW1L import WindingDW1L
+from pyleecan.Classes.Winding import Winding
 from pyleecan.Functions.load import (
     LoadSwitchError,
     LoadWrongDictClassError,
@@ -50,7 +50,7 @@ def test_save_load_machine():
     test_obj = MachineSIPMSM(name="test", desc="test\non\nseveral lines")
     test_obj.stator = LamSlotWind(L1=0.45)
     test_obj.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
-    test_obj.stator.winding = WindingDW1L(qs=5)
+    test_obj.stator.winding = Winding(qs=5, Nlayer=1, p=3)
     test_obj.rotor = LamSlotMag(L1=0.55)
     test_obj.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
     test_obj.shaft = Shaft(Lshaft=0.65)
@@ -78,8 +78,10 @@ def test_save_load_machine():
     assert result.stator.slot.H0 == 0.21
     assert result.stator.slot.W0 == 0.23
 
-    assert type(result.stator.winding) is WindingDW1L
+    assert type(result.stator.winding) is Winding
     assert result.stator.winding.qs == 5
+    assert result.stator.winding.p == 3
+    assert result.stator.winding.Nlayer == 1
 
     assert type(result.rotor) is LamSlotMag
     assert result.rotor.L1 == 0.55
@@ -146,14 +148,26 @@ def test_save_load_folder_path():
     assert isfile(file_path) == False
     test_obj.save(loc_save_path, is_folder=True)
     assert isfile(file_path)
-    assert isfile(join(loc_save_path, "Material.json"))
+    assert isfile(join(loc_save_path, "MagnetPrius.json"))
     assert isfile(join(loc_save_path, "M400-50A.json"))
     assert isfile(join(loc_save_path, "Toyota_Prius.json"))
     assert isfile(join(loc_save_path, "test_save_load_folder_path.json"))
+    assert len(listdir(loc_save_path)) == 8
     test_obj2 = load(loc_save_path)
     assert test_obj == test_obj2
     assert callable(test_obj.simu.postproc_list[0]._run_func)
     assert callable(test_obj.simu.postproc_list[1]._run_func)
+
+    # Check that the machine can be updated
+    test_obj2.simu.machine.stator.L1 = 999
+    # Check that empty materials are not save in separate file
+    test_obj2.simu.machine.stator.winding.conductor.ins_mat._set_None()
+
+    test_obj2.save(loc_save_path, is_folder=True)
+    test_obj3 = load(loc_save_path)
+
+    assert test_obj2.simu.machine.stator.L1 == test_obj3.simu.machine.stator.L1
+    assert len(listdir(loc_save_path)) == 8
 
 
 def test_save_load_just_name():
@@ -209,7 +223,7 @@ def test_save_load_list():
     test_obj_1 = MachineSIPMSM(name="test", desc="test\non\nseveral lines")
     test_obj_1.stator = LamSlotWind(L1=0.45)
     test_obj_1.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
-    test_obj_1.stator.winding = WindingDW1L(qs=5)
+    test_obj_1.stator.winding = Winding(qs=5, p=3, Nlayer=1)
     test_obj_1.rotor = LamSlotMag(L1=0.55)
     test_obj_1.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
     test_obj_1.shaft = Shaft(Lshaft=0.65)
@@ -249,7 +263,7 @@ def test_save_load_dict():
     test_obj_1 = MachineSIPMSM(name="test", desc="test\non\nseveral lines")
     test_obj_1.stator = LamSlotWind(L1=0.45)
     test_obj_1.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
-    test_obj_1.stator.winding = WindingDW1L(qs=5)
+    test_obj_1.stator.winding = Winding(qs=5, p=3)
     test_obj_1.rotor = LamSlotMag(L1=0.55)
     test_obj_1.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
     test_obj_1.shaft = Shaft(Lshaft=0.65)
@@ -331,3 +345,10 @@ def test_save_load_simu(type_file):
     assert isfile(file_path)
     test_obj2 = load(file_path)
     assert test_obj == test_obj2
+
+
+if __name__ == "__main__":
+    test_save_load_folder_path()
+    # test_save_load_simu("json")
+    # test_save_load_simu("h5")
+    # test_save_load_simu("pkl")

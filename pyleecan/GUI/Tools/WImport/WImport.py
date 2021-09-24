@@ -20,6 +20,7 @@ class WImport(Ui_WImport, QWidget):
 
         self.obj = None  # Object to edit
         self.verbose_name = ""  # Name to display / adapt the GUI
+        self.plot_title = None  # Name to use for the plot
         # List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
         self.expected_shape = None
         self.param_name = ""  # Name of the quantity to set
@@ -32,7 +33,7 @@ class WImport(Ui_WImport, QWidget):
         self.in_param.setText(self.verbose_name)
         # Fill the combobox with the meaningful widgets
         self.c_type_import.blockSignals(True)
-        if self.verbose_name == "B(H) curve":
+        if self.param_name == "BH_curve":
             self.widget_list = [WImportExcel, WImportMatrixTable]
         else:
             self.widget_list = []
@@ -74,7 +75,7 @@ class WImport(Ui_WImport, QWidget):
         self.w_import.setParent(None)
         self.w_import = self.widget_list[self.c_type_import.currentIndex()](
             data=data,
-            verbose_name=self.verbose_name,
+            plot_title=self.plot_title if self.plot_title else self.verbose_name,
             expected_shape=self.expected_shape,
         )
         self.w_import.data_type = self.verbose_name
@@ -92,3 +93,7 @@ class WImport(Ui_WImport, QWidget):
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
+
+    def set_plot_title(self, plot_title):
+        self.plot_title = plot_title
+        self.w_import.plot_title = plot_title

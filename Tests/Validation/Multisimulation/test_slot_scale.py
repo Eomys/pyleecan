@@ -93,6 +93,8 @@ def test_slot_scale():
         simu.machine.stator.slot.W2 *= scale_factor
         simu.machine.stator.slot.H0 *= scale_factor
         simu.machine.stator.slot.H1 *= scale_factor
+        simu.machine.stator.slot.H2 *= scale_factor
+        simu.machine.stator.slot.R1 *= scale_factor
 
     # List of ParamExplorer to define multisimulation input values
     paramexplorer_list = [

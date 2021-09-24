@@ -65,7 +65,7 @@ def test_compare_Kmesh():
     # Simu with low finesness
     simu3 = simu.copy()
     simu3.name = "test_compare_Kmesh_direct_fine"
-    simu3.mag.Kmesh_fineness = 4
+    simu3.mag.Kmesh_fineness = 2  # 4
     out3 = simu3.run()
 
     AGSF_list = list()

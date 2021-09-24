@@ -25,7 +25,7 @@ from Tests import TEST_DATA_DIR
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-def test_IPMSM_xxx():
+def test_FEMM_compare_IPMSM_xxx():
     """Test compute the Flux in FEMM of machine IPMSM_xxx, with and without symmetry"""
     IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
     simu = Simu1(name="test_FEMM_compare_IPMSM_xxx", machine=IPMSM_xxx)
@@ -87,7 +87,7 @@ def test_IPMSM_xxx():
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-def test_Toyota_Prius():
+def test_FEMM_compare_Prius():
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication
 
@@ -157,7 +157,7 @@ def test_Toyota_Prius():
 @pytest.mark.SCIM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-def test_SCIM():
+def test_FEMM_compare_SCIM():
     """Validation of the FEMM model of a polar SCIM machine
     Only one time step
 
@@ -199,7 +199,7 @@ def test_SCIM():
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
-    assert SCIM_006.comp_periodicity() == (2, True, 28, False)
+    assert SCIM_006.comp_periodicity() == (2, True, 2, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 
@@ -252,7 +252,7 @@ def test_SCIM():
 @pytest.mark.SIPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-def test_SIPMSM():
+def test_FEMM_compare_SIPMSM():
     """Validation of a polar SIPMSM with inset magnet
     Armature load (magnet field canceled by is_mmfr=False)
 
@@ -497,3 +497,12 @@ def test_SPMSM_noload():
         is_show_fig=False,
         **dict_2D
     )
+
+
+if __name__ == "__main__":
+    test_FEMM_compare_IPMSM_xxx()
+    test_FEMM_compare_Prius()
+    test_FEMM_compare_SCIM()
+    test_FEMM_compare_SIPMSM()
+    test_SPMSM_load()
+    test_SPMSM_noload()

@@ -1,23 +1,18 @@
-# -*- coding: utf-8 -*-
-from os.path import join, dirname, split
-from PySide2.QtWidgets import QDialog, QMessageBox, QFileDialog
+from os.path import join, dirname
+from PySide2.QtWidgets import QDialog, QMessageBox
 from PySide2.QtCore import Qt
 
+from numpy import pi
+
 from .....GUI.Dialog.DMatLib.DMatSetup.Gen_DMatSetup import Gen_DMatSetup
-from .....GUI.Tools.MPLCanvas import MPLCanvas
 
 from .....Classes.Material import Material
-from .....Classes.MatMagnetics import MatMagnetics
-from .....Classes.ImportMatrixXls import ImportMatrixXls
-from .....Classes.ImportMatrixVal import ImportMatrixVal
 
-from .....Functions.path_tools import abs_file_path, rel_file_path
-
-from numpy import array
+from .....Functions.path_tools import rel_file_path
 
 
 class DMatSetup(Gen_DMatSetup, QDialog):
-    def __init__(self, material, is_matlib=True):
+    def __init__(self, material, is_lib_mat=True, index=None):
         """
         Dialog for editing material data.
 
@@ -25,17 +20,27 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         ----------
         material : Material
             material to edit
-        is_matlib : bool
-            material already in matlib
+        is_lib_mat : bool
+            True: Selected material is part of the Library (False machine)
+        index : int
+            Index of the Material in Library or Machine (None=New material)
         """
         # Build the interface according to the .ui file
         QDialog.__init__(self)
         self.setupUi(self)
 
         self.is_save_needed = False
+        # Stored to be used after validation
+        self.is_lib_mat = is_lib_mat
+        self.index = index
+        if self.is_lib_mat:
+            self.b_add_matlib.setText("Save in Machine")
+        else:
+            self.b_add_matlib.setText("Save in Library")
 
         # Copy to set the modification only if validated
-        self.mat = Material(init_dict=material.as_dict())
+        self.mat = material.copy()
+        self.init_name = self.mat.name  # To detect rename
 
         self.le_name.setText(self.mat.name)
         if self.mat.is_isotropic:
@@ -48,13 +53,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             self.nav_ther.setCurrentIndex(0)
 
         # Edit button text if the Material selected is in the ref matlib
-        if is_matlib:
+        if is_lib_mat:
             self.b_add_matlib.setText("Add to machine")
-
-        # Three button to close
-        self.b_cancel.clicked.connect(lambda: self.done(0))
-        self.b_save.clicked.connect(lambda: self.done(1))
-        self.b_add_matlib.clicked.connect(lambda: self.done(2))
 
         # === check material attribute and set values ===
         # Elec
@@ -101,7 +101,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_alpha_Br.setValue(self.mat.mag.alpha_Br)
         self.lf_Wlam.setValue(self.mat.mag.Wlam)
         # Setup import B(H) widget
-        self.w_BH_import.verbose_name = "B(H) curve"
+        self.w_BH_import.verbose_name = "B(H) curve definition"
+        self.w_BH_import.plot_title = self.mat.name + " B(H) curve"
         self.w_BH_import.obj = self.mat.mag
         self.w_BH_import.param_name = "BH_curve"
         self.w_BH_import.expected_shape = (None, 2)
@@ -112,6 +113,10 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_epsr.hide()
 
         # === setup signals ===
+        # Three button to close
+        self.b_cancel.clicked.connect(lambda: self.done(0))
+        self.b_save.clicked.connect(lambda: self.done(1))
+        self.b_add_matlib.clicked.connect(lambda: self.done(2))
         # Misc.
         self.le_name.editingFinished.connect(self.set_name)
         self.is_isotropic.toggled.connect(self.set_is_isotropic)
@@ -207,6 +212,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.mat.path = rel_file_path(
             join(dirname(self.mat.path), file_name + ".json"), "MATLIB_DIR"
         )
+        self.w_BH_import.set_plot_title(self.mat.name + " B(H) curve")
         self.is_save_needed = True
 
     def set_is_isotropic(self, is_checked):
@@ -255,6 +261,13 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.mag.mur_lin = self.lf_mur_lin.value()
+
+        if self.mat.mag.Brm20 is not None:
+            # Update coercitive field
+            self.mat.mag.Hc = self.mat.mag.Brm20 / (
+                4 * pi * 1e-7 * self.mat.mag.mur_lin
+            )
+
         self.is_save_needed = True
 
     def set_Brm20(self):
@@ -270,6 +283,13 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.mag.Brm20 = self.lf_Brm20.value()
+
+        if self.mat.mag.mur_lin is not None:
+            # Update coercitive field
+            self.mat.mag.Hc = self.mat.mag.Brm20 / (
+                4 * pi * 1e-7 * self.mat.mag.mur_lin
+            )
+
         self.is_save_needed = True
 
     def set_alpha_Br(self):

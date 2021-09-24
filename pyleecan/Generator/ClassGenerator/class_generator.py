@@ -100,9 +100,15 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Import of the mother_class (FrozenClass by default)
     # All the classes file are in the Classes folder (regardless of their main package)
-    if class_dict["mother"] != "":
+    if class_dict["mother"] != "" and "." not in class_dict["mother"]:
         class_file.write(
             "from ." + class_dict["mother"] + " import " + class_dict["mother"] + "\n\n"
+        )
+    elif class_dict["mother"] != "" and "." in class_dict["mother"]:
+        class_split = class_dict["mother"].split(".")
+        # Daughter of external package class
+        class_file.write(
+            "from " + ".".join(class_split[:-1]) + " import " + class_split[-1] + "\n\n"
         )
     else:
         class_file.write("from ._frozen import FrozenClass\n\n")
@@ -183,9 +189,17 @@ def generate_class(gen_dict, class_name, path_to_gen):
                 )
 
     # Class declaration
-    if class_dict["mother"] != "":
+    if class_dict["mother"] != "" and "." not in class_dict["mother"]:
         class_file.write(
             "\n\nclass " + class_name + "(" + class_dict["mother"] + "):\n"
+        )
+    elif class_dict["mother"] != "" and "." in class_dict["mother"]:
+        class_file.write(
+            "\n\nclass "
+            + class_name
+            + "("
+            + class_dict["mother"].split(".")[-1]
+            + "):\n"
         )
     else:
         class_file.write("\n\nclass " + class_name + "(FrozenClass):\n")
@@ -268,10 +282,11 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(TAB + "get_logger = get_logger\n\n")
 
     # Add the __init__ method
-    if len(class_dict["properties"]) == 0 and class_dict["mother"] == "":
-        class_file.write(generate_init_void(class_name) + "\n")
-    else:
-        class_file.write(generate_init(gen_dict, class_dict) + "\n")
+    if "__init__" not in class_dict["methods"]:
+        if len(class_dict["properties"]) == 0 and class_dict["mother"] == "":
+            class_file.write(generate_init_void(class_name) + "\n")
+        else:
+            class_file.write(generate_init(gen_dict, class_dict) + "\n")
 
     # Add the __str__ method
     if "__str__" not in class_dict["methods"]:

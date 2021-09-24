@@ -10,7 +10,6 @@ from ......Functions.load import load
 from ......Classes.HoleUD import HoleUD
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleMUD.Ui_PHoleMUD import Ui_PHoleMUD
-from ......GUI.Dialog.DMatLib.MatLib import MatLib
 from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dxf.DXF_Hole import DXF_Hole
 from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
@@ -25,7 +24,7 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
     hole_name = "Import from DXF"
     hole_type = HoleUD
 
-    def __init__(self, hole=None, matlib=MatLib()):
+    def __init__(self, hole=None, material_dict=None):
         """Initialize the widget according to hole
 
         Parameters
@@ -34,15 +33,15 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
             A PHoleMUD widget
         hole : HoleUD
             current hole to edit
-        matlib : MatLib
-            Material Library
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
         self.setupUi(self)
 
         # Set properties
-        self.matlib = matlib
+        self.material_dict = material_dict
         self.hole = hole
         self.u = gui_option.unit
         self.w_mat_dict = dict()  # For magnet materials
@@ -71,7 +70,7 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
     def update_mag_list(self):
         """Update the material selector list according to hole magnet"""
         # Set void material
-        self.w_mat_0.update(self.hole, "mat_void", self.matlib)
+        self.w_mat_0.update(self.hole, "mat_void", self.material_dict)
         # Remove previous widget:
         for wid in self.w_mat_dict.values():
             self.g_mat_layout.removeWidget(wid)
@@ -90,7 +89,9 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
             self.w_mat_dict[key].def_mat = "MagnetPrius"
             self.w_mat_dict[key].is_hide_button = True
             self.w_mat_dict[key].update(
-                self.hole.magnet_dict["magnet_" + str(index)], "mat_type", self.matlib
+                self.hole.magnet_dict["magnet_" + str(index)],
+                "mat_type",
+                self.material_dict,
             )
 
     def update_graph(self):

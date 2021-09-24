@@ -1,6 +1,15 @@
 [
     {
-        "cls": "VentilationPolar",
+        "cls": "Hole",
+        "name": "Zh",
+        "widget": [
+            "in_Zh",
+            "si_Zh"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "Hole",
         "name": "Alpha0",
         "widget": [
             "in_Alpha0",
