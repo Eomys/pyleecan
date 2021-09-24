@@ -6813,21 +6813,21 @@
         "path": "pyleecan/Generator/ClassesRef/Material/ModelBH.csv",
         "properties": [
             {
-                "desc": "Max value of H for extrapolation",
+                "desc": "Max value of B for extrapolation",
                 "max": "",
                 "min": "",
                 "name": "Bmax",
                 "type": "float",
-                "unit": "-",
+                "unit": "T",
                 "value": 2.31
             },
             {
-                "desc": "Max value of B for extrapolation",
+                "desc": "Max value of H for extrapolation",
                 "max": "",
                 "min": "",
                 "name": "Hmax",
                 "type": "float",
-                "unit": "-",
+                "unit": "A/m",
                 "value": null
             },
             {
@@ -6836,7 +6836,7 @@
                 "min": "",
                 "name": "delta",
                 "type": "float",
-                "unit": "-",
+                "unit": "A/m",
                 "value": 100
             }
         ]
