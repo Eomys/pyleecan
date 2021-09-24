@@ -143,7 +143,7 @@ class Test_SlotW61_meth(object):
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.build_geometry_active(Nrad=1, Ntan=2)
         a = result
-        assert "Wind_Stator_R0_T0_S0" == a[0].label
+        assert "Stator_Winding_R0-T0-S0" == a[0].label
 
     @pytest.mark.parametrize("test_dict", slotW61_test)
     def test_build_geometry_active_error(self, test_dict):

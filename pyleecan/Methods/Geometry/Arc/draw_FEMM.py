@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from ....Functions.FEMM import boundary_prop
 from numpy import abs, exp
 
 
@@ -40,11 +37,6 @@ def draw_FEMM(
     -------
     None
     """
-
-    # Get BC (if any)
-    for bound_label in boundary_prop:
-        if bound_label in self.label:
-            propname = boundary_prop[bound_label]
 
     # split if arc angle > 180
     angle = self.get_angle(is_deg=True)

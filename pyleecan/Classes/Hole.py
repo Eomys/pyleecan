@@ -82,6 +82,11 @@ try:
 except ImportError as error:
     set_magnet_by_id = error
 
+try:
+    from ..Methods.Slot.Hole.get_R_id import get_R_id
+except ImportError as error:
+    get_R_id = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -223,6 +228,15 @@ class Hole(FrozenClass):
         )
     else:
         set_magnet_by_id = set_magnet_by_id
+    # cf Methods.Slot.Hole.get_R_id
+    if isinstance(get_R_id, ImportError):
+        get_R_id = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method get_R_id: " + str(get_R_id))
+            )
+        )
+    else:
+        get_R_id = get_R_id
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -234,6 +248,7 @@ class Hole(FrozenClass):
         Zh=36,
         mat_void=-1,
         magnetization_dict_offset=None,
+        Alpha0=0,
         init_dict=None,
         init_str=None,
     ):
@@ -258,11 +273,14 @@ class Hole(FrozenClass):
                 mat_void = init_dict["mat_void"]
             if "magnetization_dict_offset" in list(init_dict.keys()):
                 magnetization_dict_offset = init_dict["magnetization_dict_offset"]
+            if "Alpha0" in list(init_dict.keys()):
+                Alpha0 = init_dict["Alpha0"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Zh = Zh
         self.mat_void = mat_void
         self.magnetization_dict_offset = magnetization_dict_offset
+        self.Alpha0 = Alpha0
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -286,6 +304,7 @@ class Hole(FrozenClass):
             + str(self.magnetization_dict_offset)
             + linesep
         )
+        Hole_str += "Alpha0 = " + str(self.Alpha0) + linesep
         return Hole_str
 
     def __eq__(self, other):
@@ -298,6 +317,8 @@ class Hole(FrozenClass):
         if other.mat_void != self.mat_void:
             return False
         if other.magnetization_dict_offset != self.magnetization_dict_offset:
+            return False
+        if other.Alpha0 != self.Alpha0:
             return False
         return True
 
@@ -321,6 +342,8 @@ class Hole(FrozenClass):
             )
         if other._magnetization_dict_offset != self._magnetization_dict_offset:
             diff_list.append(name + ".magnetization_dict_offset")
+        if other._Alpha0 != self._Alpha0:
+            diff_list.append(name + ".Alpha0")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -334,6 +357,7 @@ class Hole(FrozenClass):
         if self.magnetization_dict_offset is not None:
             for key, value in self.magnetization_dict_offset.items():
                 S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.Alpha0)
         return S
 
     def as_dict(self, **kwargs):
@@ -354,6 +378,7 @@ class Hole(FrozenClass):
             if self.magnetization_dict_offset is not None
             else None
         )
+        Hole_dict["Alpha0"] = self.Alpha0
         # The class name is added to the dict for deserialisation purpose
         Hole_dict["__class__"] = "Hole"
         return Hole_dict
@@ -365,6 +390,7 @@ class Hole(FrozenClass):
         if self.mat_void is not None:
             self.mat_void._set_None()
         self.magnetization_dict_offset = None
+        self.Alpha0 = None
 
     def _get_Zh(self):
         """getter of Zh"""
@@ -432,5 +458,25 @@ class Hole(FrozenClass):
         doc=u"""Dictionary add an offset to the magnetization direction of the magnets (key=magnet_X, value=angle[rad])
 
         :Type: dict
+        """,
+    )
+
+    def _get_Alpha0(self):
+        """getter of Alpha0"""
+        return self._Alpha0
+
+    def _set_Alpha0(self, value):
+        """setter of Alpha0"""
+        check_var("Alpha0", value, "float", Vmin=0, Vmax=6.29)
+        self._Alpha0 = value
+
+    Alpha0 = property(
+        fget=_get_Alpha0,
+        fset=_set_Alpha0,
+        doc=u"""Shift angle of the holes around circumference
+
+        :Type: float
+        :min: 0
+        :max: 6.29
         """,
     )

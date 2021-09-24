@@ -20,14 +20,14 @@ class WImportExcel(Gen_WImportExcel, QWidget):
     saveNeeded = Signal()
     dataTypeChanged = Signal()
 
-    def __init__(self, parent=None, data=None, verbose_name=None, expected_shape=None):
+    def __init__(self, parent=None, data=None, plot_title=None, expected_shape=None):
         """Initialization of the widget
 
         Parameters
         ----------
         data : ImportMatrixXls
             Data import to define
-        verbose_name : str
+        plot_title : str
             Name of the imported data
         expected_shape : list
             List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
@@ -39,7 +39,7 @@ class WImportExcel(Gen_WImportExcel, QWidget):
             self.data = ImportMatrixXls()
         else:
             self.data = data
-        self.verbose_name = verbose_name
+        self.plot_title = plot_title
         self.expected_shape = expected_shape
         self.tab_window = None  # For table popup
 
@@ -123,7 +123,7 @@ class WImportExcel(Gen_WImportExcel, QWidget):
         except Exception as e:
             QMessageBox.critical(self, self.tr("Error"), str(e))
             return
-        self.tab_window = DTableData(data=data, title=self.verbose_name)
+        self.tab_window = DTableData(data=data, title=self.plot_title)
         self.tab_window.show()
 
     def s_plot(self):
@@ -143,8 +143,8 @@ class WImportExcel(Gen_WImportExcel, QWidget):
             fig, axes = plt.subplots()
             axes.plot(data[:, 0], data[:, 1])
             fig.show()
-        if self.verbose_name is not None:
-            fig.canvas.manager.set_window_title(self.verbose_name)
+        if self.plot_title is not None:
+            fig.canvas.manager.set_window_title(self.plot_title)
         set_plot_gui_icon()
 
     def s_convert(self):

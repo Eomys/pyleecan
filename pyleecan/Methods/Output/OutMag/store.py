@@ -4,6 +4,7 @@ from numpy import mean, max as np_max, min as np_min
 from SciDataTool import DataTime, VectorField, Data1D
 
 from ....Functions.Winding.gen_phase_list import gen_name
+from ....Functions.labels import STATOR_LAB
 
 
 def store(self, out_dict, axes_dict):
@@ -110,8 +111,10 @@ def store(self, out_dict, axes_dict):
                 values=out_dict["Phi_wind"][key],
             )
 
-        if "Stator_0" in out_dict["Phi_wind"].keys():  # TODO fix for multi stator
-            self.Phi_wind_stator = self.Phi_wind["Stator_0"]
+        if (
+            STATOR_LAB + "-0" in out_dict["Phi_wind"].keys()
+        ):  # TODO fix for multi stator
+            self.Phi_wind_stator = self.Phi_wind[STATOR_LAB + "-0"]
 
         # Electromotive force computation
         self.comp_emf()

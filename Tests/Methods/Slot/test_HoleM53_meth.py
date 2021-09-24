@@ -153,20 +153,20 @@ class Test_HoleM53_meth(object):
         test_obj.hole[0].magnet_1 = Magnet(type_magnetization=1)
         a = test_obj.hole[0].build_geometry(is_simplified=True)
 
-        assert a[1].label == "HoleMagnet_Stator_Parallel_N_R0_T0_S0"
+        assert a[1].label == "Stator_HoleMag_R0-T0-S0"
         assert a[1].line_list[0] is not None
         assert a[1].line_list[1] is not None
         with pytest.raises(IndexError) as context:
             a[1].line_list[2]
 
         if test_obj.hole[0].W1 > 0:
-            assert a[4].label == "HoleMagnet_Stator_Parallel_N_R0_T1_S0"
+            assert a[4].label == "Stator_HoleMag_R0-T1-S0"
             assert a[4].line_list[0] is not None
             assert a[4].line_list[1] is not None
             with pytest.raises(IndexError) as context:
                 a[4].line_list[2]
         else:
-            assert a[3].label == "HoleMagnet_Stator_Parallel_N_R0_T1_S0"
+            assert a[3].label == "Stator_HoleMag_R0-T1-S0"
             assert a[3].line_list[0] is not None
             assert a[3].line_list[1] is not None
             with pytest.raises(IndexError) as context:

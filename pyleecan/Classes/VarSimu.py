@@ -59,6 +59,11 @@ try:
 except ImportError as error:
     get_force_datakeeper = error
 
+try:
+    from ..Methods.Simulation.VarSimu.get_ref_simu_index import get_ref_simu_index
+except ImportError as error:
+    get_ref_simu_index = error
+
 
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
@@ -160,6 +165,18 @@ class VarSimu(FrozenClass):
         )
     else:
         get_force_datakeeper = get_force_datakeeper
+    # cf Methods.Simulation.VarSimu.get_ref_simu_index
+    if isinstance(get_ref_simu_index, ImportError):
+        get_ref_simu_index = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_ref_simu_index: "
+                    + str(get_ref_simu_index)
+                )
+            )
+        )
+    else:
+        get_ref_simu_index = get_ref_simu_index
     # save and copy methods are available in all object
     save = save
     copy = copy

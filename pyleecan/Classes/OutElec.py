@@ -769,7 +769,7 @@ class OutElec(FrozenClass):
     Pem_av_ref = property(
         fget=_get_Pem_av_ref,
         fset=_set_Pem_av_ref,
-        doc=u"""Average Electromagnetic power
+        doc=u"""Theorical Average Electromagnetic Power
 
         :Type: float
         """,

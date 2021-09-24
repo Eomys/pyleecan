@@ -42,6 +42,8 @@ if not isdir(save_load_path):
 save_gui_path = join(save_path, "GUI").replace("\\", "/")
 if not isdir(save_gui_path):
     makedirs(save_gui_path)
-
+SCHEMATICS_PATH = join(save_plot_path, "Schematics").replace("\\", "/")
+if not isdir(SCHEMATICS_PATH):
+    makedirs(SCHEMATICS_PATH)
 # To clean all the results at the end of the corresponding test
 is_clean_result = False

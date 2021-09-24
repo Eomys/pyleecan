@@ -26,7 +26,7 @@ def comp_felec(self):
         else:
             raise InputError("Cannot find InputCurrent simulation.")
 
-        zp = simu.machine.stator.get_pole_pair_number()
+        zp = simu.machine.get_pole_pair_number()
         if zp is None:
             return self.N0 / 60
         else:

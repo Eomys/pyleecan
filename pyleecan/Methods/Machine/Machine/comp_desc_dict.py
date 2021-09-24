@@ -109,14 +109,14 @@ def comp_desc_dict(self):
     )
     # Machine mass
     try:
-        Mmach = self.comp_masses()["Mmach"]
+        Mmach = self.comp_masses()["All"]
     except Exception:
         Mmach = None
     desc_dict.append(
         dict(
             {
                 "name": "Mmachine",
-                "path": "machine.comp_masses()['Mmach']",
+                "path": "machine.comp_masses()['All']",
                 "verbose": "Machine total mass",
                 "type": float,
                 "unit": "kg",

@@ -1,19 +1,14 @@
-# -*- coding: utf-8 -*-
-from os.path import join, dirname, split
-from PySide2.QtWidgets import QDialog, QMessageBox, QFileDialog
+from os.path import join, dirname
+from PySide2.QtWidgets import QDialog, QMessageBox
 from PySide2.QtCore import Qt
 
+from numpy import pi
+
 from .....GUI.Dialog.DMatLib.DMatSetup.Gen_DMatSetup import Gen_DMatSetup
-from .....GUI.Tools.MPLCanvas import MPLCanvas
 
 from .....Classes.Material import Material
-from .....Classes.MatMagnetics import MatMagnetics
-from .....Classes.ImportMatrixXls import ImportMatrixXls
-from .....Classes.ImportMatrixVal import ImportMatrixVal
 
-from .....Functions.path_tools import abs_file_path, rel_file_path
-
-from numpy import array
+from .....Functions.path_tools import rel_file_path
 
 
 class DMatSetup(Gen_DMatSetup, QDialog):
@@ -106,7 +101,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_alpha_Br.setValue(self.mat.mag.alpha_Br)
         self.lf_Wlam.setValue(self.mat.mag.Wlam)
         # Setup import B(H) widget
-        self.w_BH_import.verbose_name = self.mat.name + " B(H) curve"
+        self.w_BH_import.verbose_name = "B(H) curve definition"
+        self.w_BH_import.plot_title = self.mat.name + " B(H) curve"
         self.w_BH_import.obj = self.mat.mag
         self.w_BH_import.param_name = "BH_curve"
         self.w_BH_import.expected_shape = (None, 2)
@@ -216,6 +212,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.mat.path = rel_file_path(
             join(dirname(self.mat.path), file_name + ".json"), "MATLIB_DIR"
         )
+        self.w_BH_import.set_plot_title(self.mat.name + " B(H) curve")
         self.is_save_needed = True
 
     def set_is_isotropic(self, is_checked):
@@ -264,6 +261,13 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.mag.mur_lin = self.lf_mur_lin.value()
+
+        if self.mat.mag.Brm20 is not None:
+            # Update coercitive field
+            self.mat.mag.Hc = self.mat.mag.Brm20 / (
+                4 * pi * 1e-7 * self.mat.mag.mur_lin
+            )
+
         self.is_save_needed = True
 
     def set_Brm20(self):
@@ -279,6 +283,13 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.mag.Brm20 = self.lf_Brm20.value()
+
+        if self.mat.mag.mur_lin is not None:
+            # Update coercitive field
+            self.mat.mag.Hc = self.mat.mag.Brm20 / (
+                4 * pi * 1e-7 * self.mat.mag.mur_lin
+            )
+
         self.is_save_needed = True
 
     def set_alpha_Br(self):

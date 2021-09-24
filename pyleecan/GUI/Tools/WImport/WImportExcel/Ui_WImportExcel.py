@@ -171,7 +171,7 @@ class Ui_WImportExcel(object):
             QCoreApplication.translate("WImportExcel", u"Second axe", None)
         )
         self.b_convert.setText(
-            QCoreApplication.translate("WImportExcel", u"Convert to Matrix", None)
+            QCoreApplication.translate("WImportExcel", u"Convert to Table", None)
         )
         self.b_tab.setText(
             QCoreApplication.translate("WImportExcel", u"Preview Table", None)

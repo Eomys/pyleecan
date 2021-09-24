@@ -17,6 +17,6 @@ def comp_surface_axial_vent(self):
     """
 
     if len(self.axial_vent) > 0:
-        return sum([vent.comp_surface() for vent in self.axial_vent])
+        return sum([vent.comp_surface() * vent.Zh for vent in self.axial_vent])
     else:
         return 0

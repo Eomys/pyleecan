@@ -23,6 +23,7 @@ from Tests import save_plot_path as save_path
 DELTA = 1e-6
 
 
+@pytest.mark.skip
 @pytest.mark.SIPMSM
 @pytest.mark.periodicity
 @pytest.mark.long_5s

@@ -3,6 +3,7 @@ from os.path import join
 
 from numpy import zeros
 
+from ....Functions.labels import STATOR_LAB
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Classes._FEMMHandler import _FEMMHandler
 from ....Classes.OutMagFEMM import OutMagFEMM
@@ -175,8 +176,8 @@ def comp_flux_airgap(self, output, axes_dict):
         output.mag.internal.FEMM_dict = FEMM_dict
 
     # Store stator winding flux
-    if "Stator_0" in out_dict["Phi_wind"].keys():
-        out_dict["Phi_wind_stator"] = out_dict["Phi_wind"]["Stator_0"]
+    if STATOR_LAB + "-0" in out_dict["Phi_wind"].keys():
+        out_dict["Phi_wind_stator"] = out_dict["Phi_wind"][STATOR_LAB + "-0"]
 
         # Store mesh data & solution
     if self.is_get_meshsolution and B_elem is not None:

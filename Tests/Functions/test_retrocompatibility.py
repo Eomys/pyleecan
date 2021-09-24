@@ -9,12 +9,13 @@ from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from Tests import TEST_DATA_DIR
 
-# 1: LamSlotMag convertion (magnet from slot to lamination)
-mag_list = list()
-mag_list.append(
+
+# 3: HoleUD convertion (label update)
+hole_list = list()
+hole_list.append(  # WindingCW1L
     {
-        "ref": join(DATA_DIR, "Machine", "SPMSM_001.json"),
-        "old": join(TEST_DATA_DIR, "Retrocompatibility", "Magnet", "SPMSM_001.json"),
+        "ref": join(DATA_DIR, "Machine", "BMW_i3.json"),
+        "old": join(TEST_DATA_DIR, "Retrocompatibility", "Label", "BMW_i3.json"),
     }
 )
 
@@ -58,6 +59,29 @@ wind_list.append(  # WindingDW1L
         ),
     }
 )
+
+# 1: LamSlotMag convertion (magnet from slot to lamination)
+mag_list = list()
+mag_list.append(
+    {
+        "ref": join(DATA_DIR, "Machine", "SPMSM_001.json"),
+        "old": join(TEST_DATA_DIR, "Retrocompatibility", "Magnet", "SPMSM_001.json"),
+    }
+)
+
+
+@pytest.mark.parametrize("file_dict", hole_list)
+def test_save_load_hole_retro(file_dict):
+    """Check that the HoleUD convertion works"""
+    ref = load(file_dict["ref"])
+    old = load(file_dict["old"])
+
+    hole_ref = ref.rotor.hole[0]
+    hole_old = old.rotor.hole[0]
+
+    # Check old file is converted to current version
+    msg = "Error for " + ref.name + ": " + str(hole_ref.compare(hole_old, "hole"))
+    assert hole_ref == hole_old, msg
 
 
 @pytest.mark.parametrize("file_dict", mag_list)
@@ -107,8 +131,11 @@ def test_save_load_wind_retro(file_dict):
 
 
 if __name__ == "__main__":
+    for file_dict in hole_list:
+        test_save_load_hole_retro(file_dict)
     for file_dict in mag_list:
         test_save_load_mag_retro(file_dict)
 
     for file_dict in wind_list:
         test_save_load_wind_retro(file_dict)
+    print("Done")

@@ -134,6 +134,16 @@ try:
 except ImportError as error:
     comp_point_ref = error
 
+try:
+    from ..Methods.Machine.Lamination.get_label import get_label
+except ImportError as error:
+    get_label = error
+
+try:
+    from ..Methods.Machine.Lamination.get_yoke_side_line import get_yoke_side_line
+except ImportError as error:
+    get_yoke_side_line = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -399,6 +409,27 @@ class Lamination(FrozenClass):
         )
     else:
         comp_point_ref = comp_point_ref
+    # cf Methods.Machine.Lamination.get_label
+    if isinstance(get_label, ImportError):
+        get_label = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Lamination method get_label: " + str(get_label))
+            )
+        )
+    else:
+        get_label = get_label
+    # cf Methods.Machine.Lamination.get_yoke_side_line
+    if isinstance(get_yoke_side_line, ImportError):
+        get_yoke_side_line = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_yoke_side_line: "
+                    + str(get_yoke_side_line)
+                )
+            )
+        )
+    else:
+        get_yoke_side_line = get_yoke_side_line
     # save and copy methods are available in all object
     save = save
     copy = copy

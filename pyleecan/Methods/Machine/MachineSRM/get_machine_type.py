@@ -31,10 +31,10 @@ def get_machine_type(self):
     else:
         type_str += "?r / "
 
-    if self.stator.winding.p is not None:
-        type_str += str(self.stator.winding.p) + "p"
+    if self.stator.winding.qs is not None:
+        type_str += str(self.stator.winding.qs) + "qs"
     else:
-        type_str += "?p"
+        type_str += "?qs"
 
     if self.stator.is_internal:
         type_str += " (ext rotor)"

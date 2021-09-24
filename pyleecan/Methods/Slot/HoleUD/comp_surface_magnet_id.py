@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ....Functions.labels import HOLEM_LAB
 
 
 def comp_surface_magnet_id(self, index):
@@ -28,8 +29,8 @@ def comp_surface_magnet_id(self, index):
             # Find the corresponding surface
             mag_id = 0
             for surf in self.surf_list:
-                if "HoleMagnet" in surf.label and mag_id == index:
+                if HOLEM_LAB in surf.label and mag_id == index:
                     return surf.comp_surface()
-                elif "HoleMagnet" in surf.label:
+                elif HOLEM_LAB in surf.label:
                     mag_id += 1
             return 0

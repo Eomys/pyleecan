@@ -5,6 +5,7 @@ from matplotlib.pyplot import axis, legend
 import matplotlib.pyplot as plt
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
+from ....Functions.labels import decode_label, MAG_LAB, LAM_LAB
 
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
@@ -66,9 +67,10 @@ def plot(
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
-        if "Lamination" in surf.label:
+        label_dict = decode_label(surf.label)
+        if LAM_LAB in label_dict["surf_type"]:
             patches.extend(surf.get_patches(color=lam_color, is_edge_only=is_edge_only))
-        elif "Magnet" in surf.label:
+        elif MAG_LAB in label_dict["surf_type"]:
             if not is_lam_only:
                 patches.extend(
                     surf.get_patches(color=MAGNET_COLOR, is_edge_only=is_edge_only)

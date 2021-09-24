@@ -4,6 +4,7 @@ from matplotlib.patches import Patch, Polygon, Wedge
 from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
 
+from ....Functions.labels import decode_label, HOLEM_LAB, HOLEV_LAB
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
@@ -72,11 +73,12 @@ def plot(
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
-        if surf.label is not None and "Magnet" in surf.label and not is_lam_only:
+        label_dict = decode_label(surf.label)
+        if HOLEM_LAB in label_dict["surf_type"] and not is_lam_only:
             patches.extend(
                 surf.get_patches(color=MAGNET_COLOR, is_edge_only=is_edge_only)
             )
-        elif surf.label is not None and "Hole" in surf.label:
+        elif HOLEV_LAB in label_dict["surf_type"]:
             patches.extend(surf.get_patches(is_edge_only=is_edge_only))
     for patch in patches:
         axes.add_patch(patch)
