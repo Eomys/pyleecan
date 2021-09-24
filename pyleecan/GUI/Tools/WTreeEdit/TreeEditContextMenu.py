@@ -108,10 +108,6 @@ class TreeEditContextMenu(QMenu):
 
     def loadObject(self):
         """Load an object."""
-        # get the allowed object types for this property
-        ref_type = self._obj_dict["ref_typ"]
-        daughter_types = self._parent.class_dict[ref_type]["daughters"]
-
         # Ask the user to select a .json, h5, ... file to load
         path = ""
         load_path = str(
@@ -122,21 +118,21 @@ class TreeEditContextMenu(QMenu):
                 obj = load(load_path)
 
             except Exception as e:
-                msg = "While loading file the follow error occured:\n"
+                msg = self.tr("While loading file the follow error occured:\n")
                 QMessageBox().critical(
-                    self,
-                    self.tr("Error"),
-                    self.tr(msg) + f"{type(e).__name__}: {str(e)}",
+                    self, self.tr("Error"), msg + f"{type(e).__name__}: {str(e)}"
                 )
                 return
 
             obj_type = type(obj).__name__
-            if obj_type == ref_type or obj_type in daughter_types:
-                print(f"Loaded class {type(obj).__name__}")
-                self.setProp(obj)
-            else:
-                QMessageBox().critical(
-                    self,
-                    self.tr("Error"),
-                    self.tr(f"Wrong object type '{obj_type}', '{ref_type}' expected."),
-                )
+
+            if self._obj_dict["parent"] is not None:
+                # get the allowed object types for this property
+                ref_type = self._obj_dict["ref_typ"]
+                daughter_types = self._parent.class_dict[ref_type]["daughters"]
+                if obj_type == ref_type or obj_type in daughter_types:
+                    print(f"Loaded class {type(obj).__name__}")
+                    self.setProp(obj)
+                else:
+                    msg = f"Wrong object type '{obj_type}', '{ref_type}' expected."
+                    QMessageBox().critical(self, self.tr("Error"), self.tr(msg))

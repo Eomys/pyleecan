@@ -37,7 +37,7 @@ class TreeEditModel(QAbstractItemModel):
         """
         obj : an object (that should be modeled and shown)
         parent : a model item
-        name : name of the property (on the parent that contains 'obj')
+        name : name of the property (ot the parent that contains the object)
         id : list index or dict key if parent object is a list or a dict
         """
         if viewItem is None:
