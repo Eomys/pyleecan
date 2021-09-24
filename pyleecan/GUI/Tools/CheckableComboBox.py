@@ -113,7 +113,7 @@ class CheckableComboBox(QComboBox):
                     others = self.model().item(i)
                     if others.checkState() == Qt.Checked and others.text() != text:
                         self.model().item(i).setCheckState(Qt.Unchecked)
-        
+
         self._selectionChanged = True
         self.updateText()
 
