@@ -14,11 +14,11 @@ from ....Classes._ClassInfo import ClassInfo
 # from ...Dialog.DMatLib.DMatLib import DMatLib
 # from ...Dialog.DMatLib.MatLib import MatLib
 
-
 from ..WTableParameterEdit.WTableParameterEdit import WTableParameterEdit
 from ..WTableData.WTableData import WTableData
 from .TreeEditContextMenu import TreeEditContextMenu
 from .TreeEditModel import TreeEditModel
+from ..WMeshSolution.WMeshSolution import WMeshSolution
 
 # from ....Functions.Save.save_json import JSON_SETTINGS
 
@@ -177,6 +177,10 @@ class WTreeEdit(QWidget):
         if typ == "ndarray":
             widget = WTableData(obj, editable=True)
             widget.dataChanged.connect(self.dataChanged.emit)
+
+        elif typ == "MeshSolution":
+            widget = WMeshSolution(obj)  # only a view (not editable)
+
 
         # list (no pyleecan type, non empty) -> table editor
         # TODO add another widget for lists of non 'primitive' types (e.g. DataND)
