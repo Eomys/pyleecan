@@ -13,9 +13,6 @@ from numpy import load as np_load
 from ..loggers import GUI_LOG_NAME
 from ..default_config_dict import default_config_dict
 
-DEFAULT_FONT = "Arial"
-DEFAULT_COLOR_MAP = "RdBu_r"
-
 
 def save_config_dict(config_dict):
     """update the config file with config_dict values
@@ -135,6 +132,7 @@ def init_config_dict():
     )
     USER_DIR = module.USER_DIR
     CONF_PATH = module.CONF_PATH
+    DEFAULT_FONT = module.DEFAULT_FONT
 
     # Get version
     module = __import__(
@@ -150,6 +148,8 @@ def init_config_dict():
     # Initialization to make sure all the parameters exist
     config_dict = default_config_dict.copy()
     config_dict["version"] = version
+    if config_dict["PLOT"]["FONT_NAME"] == "":
+        config_dict["PLOT"]["FONT_NAME"] = DEFAULT_FONT
     save_config_dict(config_dict)
     logger.debug("Init config_dict at :" + CONF_PATH + "(version=" + version + ")")
 
@@ -167,11 +167,14 @@ def get_config_dict():
         "pyleecan.definitions",
         globals=globals(),
         locals=locals(),
-        fromlist=["USER_DIR", "CONF_PATH"],
+        fromlist=["USER_DIR", "CONF_PATH", "DEFAULT_FONT", "DEFAULT_COLOR_MAP"],
         level=0,
     )
     USER_DIR = module.USER_DIR
     CONF_PATH = module.CONF_PATH
+    DEFAULT_FONT = module.DEFAULT_FONT
+    DEFAULT_COLOR_MAP = module.DEFAULT_COLOR_MAP
+
     # Get version
     module = __import__(
         "pyleecan",
@@ -240,7 +243,7 @@ def get_config_dict():
         logger.warning(
             "WARNING: "
             + font_name
-            + "font not available. Try: matplotlib.font_manager._rebuild()"
+            + " font not available. Try: matplotlib.font_manager._rebuild()"
         )
         config_dict["PLOT"]["FONT_NAME"] = DEFAULT_FONT  # Default font
 

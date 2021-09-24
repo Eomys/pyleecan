@@ -9,7 +9,6 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from ...GUI.Tools.MPLCanvas import MPLCanvas
 from ...GUI.Tools.FloatEdit import FloatEdit
 from ...GUI.Tools.WPathSelector.WPathSelector import WPathSelector
 
@@ -20,7 +19,7 @@ class Ui_DXF_Slot(object):
     def setupUi(self, DXF_Slot):
         if not DXF_Slot.objectName():
             DXF_Slot.setObjectName(u"DXF_Slot")
-        DXF_Slot.resize(822, 551)
+        DXF_Slot.resize(900, 551)
         icon = QIcon()
         icon.addFile(
             u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
@@ -28,8 +27,8 @@ class Ui_DXF_Slot(object):
         DXF_Slot.setWindowIcon(icon)
         self.horizontalLayout_3 = QHBoxLayout(DXF_Slot)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.layout_plot = QVBoxLayout()
+        self.layout_plot.setObjectName(u"layout_plot")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.b_reset = QPushButton(DXF_Slot)
@@ -54,20 +53,15 @@ class Ui_DXF_Slot(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
-
-        self.w_viewer = MPLCanvas(DXF_Slot)
-        self.w_viewer.setObjectName(u"w_viewer")
-
-        self.verticalLayout_2.addWidget(self.w_viewer)
+        self.layout_plot.addLayout(self.horizontalLayout)
 
         self.textBrowser = QTextBrowser(DXF_Slot)
         self.textBrowser.setObjectName(u"textBrowser")
         self.textBrowser.setMaximumSize(QSize(16777215, 200))
 
-        self.verticalLayout_2.addWidget(self.textBrowser)
+        self.layout_plot.addWidget(self.textBrowser)
 
-        self.horizontalLayout_3.addLayout(self.verticalLayout_2)
+        self.horizontalLayout_3.addLayout(self.layout_plot)
 
         self.widget = QWidget(DXF_Slot)
         self.widget.setObjectName(u"widget")
@@ -264,28 +258,28 @@ class Ui_DXF_Slot(object):
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">1) Select DXF file in [m] (or use scaling factor), spline won\'t be displayed</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">2) Use mouse wheel to zoom in/out</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"'
-                "><span style=\" font-family:'MS Shell Dlg 2'; font-size:12pt;\">3) Click on lines and arcs to draw the contour of a single slot</span></p>\n"
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">4) First point and last point must be on the bore radius (must match the lamination radius)</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">5) The winding area is define by a part of the slot contour and a closing line:</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">- The points are ordered in trigonometrical order (from bore radius to bor'
-                "e radius)</span></p>\n"
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">- First point index is 0</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">- Closing line can be either a Segment or an Arc (center 0)</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">6) Plot to check and save</span></p></body></html>',
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">1) Select DXF file in [m] (or use scaling factor), spline won\'t be displayed</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">2) Use mouse wheel to zoom in/out</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">3) Click on lines and arc'
+                "s to draw the contour of a single slot</span></p>\n"
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">4) First point and last point must be on the bore radius (must match the lamination radius)</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">5) The winding area is define by a part of the slot contour and a closing line:</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">- The points are ordered in trigonometrical order (from bore radius to bore radius)</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" '
+                'font-size:12pt;">- First point index is 0</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">- Closing line can be either a Segment or an Arc (center 0)</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">6) Plot to check and save</span></p></body></html>',
                 None,
             )
         )
         self.in_Zs.setText(
-            QCoreApplication.translate("DXF_Slot", u"Number of slot", None)
+            QCoreApplication.translate("DXF_Slot", u"Number of slots", None)
         )
         self.in_wind_begin_index.setText(
-            QCoreApplication.translate("DXF_Slot", u"Index start of winding", None)
+            QCoreApplication.translate("DXF_Slot", u"Winding start index", None)
         )
         self.in_wind_end_index.setText(
-            QCoreApplication.translate("DXF_Slot", u"Index end of winding", None)
+            QCoreApplication.translate("DXF_Slot", u"Winding end index", None)
         )
         self.in_type_line.setText(
             QCoreApplication.translate("DXF_Slot", u"Type closing line", None)

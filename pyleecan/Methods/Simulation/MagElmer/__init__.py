@@ -1,96 +1,56 @@
-# -*- coding: utf-8 -*-
+from ....Functions.labels import (
+    AIRBOX_R_LAB,
+    AIRBOX_SR_LAB,
+    SHAFTSR_LAB,
+    SHAFTSL_LAB,
+    YSR_LAB,
+    YSL_LAB,
+    ROTOR_LAB,
+    STATOR_LAB,
+    SBS_TR_LAB,
+    SBS_TL_LAB,
+    SBS_BR_LAB,
+    SBS_BL_LAB,
+    SBR_B_LAB,
+    SBR_T_LAB,
+    AS_TR_LAB,
+    AS_TL_LAB,
+    AS_BR_LAB,
+    AS_BL_LAB,
+    AR_T_LAB,
+    AIRBOX_SL_LAB,
+    AIRBOX_SR_LAB,
+    AIRBOX_R_LAB,
+)
 
-boundary_list = [
-    "MASTER_ROTOR_BOUNDARY",
-    "SLAVE_ROTOR_BOUNDARY",
-    "SB_ROTOR_BOUNDARY",
-    "MASTER_STATOR_BOUNDARY",
-    "SLAVE_STATOR_BOUNDARY",
-    "SB_STATOR_BOUNDARY",
-    "AIRGAP_ARC_BOUNDARY",
-    "VP0_BOUNDARY",
-]
+R_LAB = ROTOR_LAB + "-0_"
+S_LAB = STATOR_LAB + "-0_"
+# dictionary to match MagElmer FEA boundary conditions (dict values)
+# with pyleecan line boundary properties (dict keys)
+# that are set in the build_geometry methods
+MagElmer_BP_dict = dict()
+MagElmer_BP_dict[AS_BR_LAB] = "MASTER_ROTOR_BOUNDARY"
+MagElmer_BP_dict[AS_BL_LAB] = "SLAVE_ROTOR_BOUNDARY"
 
-# dictionary to match FEA boundary conditions (dict values)
-# with line labels (dict keys) that are set in the build_geometry methods
-boundary_prop = dict()
-boundary_prop["int_airgap_line_1"] = "MASTER_ROTOR_BOUNDARY"
-boundary_prop["int_airgap_line_2"] = "SLAVE_ROTOR_BOUNDARY"
-boundary_prop["int_sb_line_1"] = "MASTER_ROTOR_BOUNDARY"
-boundary_prop["int_sb_line_2"] = "SLAVE_ROTOR_BOUNDARY"
-boundary_prop["Lamination_Rotor_Yoke_Side_Right"] = "MASTER_ROTOR_BOUNDARY"
-boundary_prop["Lamination_Rotor_Yoke_Side_Left"] = "SLAVE_ROTOR_BOUNDARY"
-boundary_prop["Shaft_Side_Right"] = "MASTER_ROTOR_BOUNDARY"
-boundary_prop["Shaft_Side_Left"] = "SLAVE_ROTOR_BOUNDARY"
-boundary_prop["int_sb_arc"] = "SB_ROTOR_BOUNDARY"
-boundary_prop["ext_airgap_line_1"] = "MASTER_STATOR_BOUNDARY"
-boundary_prop["ext_airgap_line_2"] = "SLAVE_STATOR_BOUNDARY"
-boundary_prop["ext_sb_line_1"] = "MASTER_STATOR_BOUNDARY"
-boundary_prop["ext_sb_line_2"] = "SLAVE_STATOR_BOUNDARY"
-boundary_prop["airbox_line_1"] = "MASTER_STATOR_BOUNDARY"
-boundary_prop["airbox_line_2"] = "SLAVE_STATOR_BOUNDARY"
-boundary_prop["Lamination_Stator_Yoke_Side_Right"] = "MASTER_STATOR_BOUNDARY"
-boundary_prop["Lamination_Stator_Yoke_Side_Left"] = "SLAVE_STATOR_BOUNDARY"
-boundary_prop["ext_sb_arc"] = "SB_STATOR_BOUNDARY"
-boundary_prop["ext_airgap_arc_copy"] = "AIRGAP_ARC_BOUNDARY"
-boundary_prop["airbox_arc"] = "VP0_BOUNDARY"
+MagElmer_BP_dict[SBS_BR_LAB] = "MASTER_ROTOR_BOUNDARY"
+MagElmer_BP_dict[SBS_BL_LAB] = "SLAVE_ROTOR_BOUNDARY"
+MagElmer_BP_dict[SBR_B_LAB] = "SB_ROTOR_BOUNDARY"
 
-# dict for the translation of the actual surface labels into Elmer compatible labels,
-# i.e. max. 30 characters; key: actual label, value: Elmer label
-surface_label = dict()
-surface_label["Shaft"] = "SHAFT"
-surface_label["Lamination_Rotor"] = "ROTOR_LAM"
-surface_label["Lamination_Stator"] = "STATOR_LAM"
-surface_label["Lamination_Rotor_Bore_Radius_Ext"] = "ROTOR_LAM"
-surface_label["Lamination_Stator_Bore_Radius_Int"] = "STATOR_LAM"
-surface_label["Airgap_int"] = "AG_INT"
-surface_label["SlidingBand_int"] = "SB_INT"
-surface_label["SlidingBand_ext"] = "SB_EXT"
-surface_label["Airgap_ext"] = "AG_EXT"
-surface_label["Airbox"] = "AIRBOX"
+MagElmer_BP_dict[R_LAB + YSR_LAB] = "MASTER_ROTOR_BOUNDARY"  # Rotor Yoke Side Right
+MagElmer_BP_dict[R_LAB + YSL_LAB] = "SLAVE_ROTOR_BOUNDARY"  # Rotor Yoke Side Left
+MagElmer_BP_dict[S_LAB + YSR_LAB] = "MASTER_STATOR_BOUNDARY"  # Stator Yoke Side Right
+MagElmer_BP_dict[S_LAB + YSL_LAB] = "SLAVE_STATOR_BOUNDARY"  # Stator Yoke Side Left
+MagElmer_BP_dict[SHAFTSR_LAB] = "MASTER_ROTOR_BOUNDARY"  # Shaft Side Right
+MagElmer_BP_dict[SHAFTSL_LAB] = "SLAVE_ROTOR_BOUNDARY"  # Shaft Side Left
 
-# TODO: use actual surface labels
-for rr in range(0, 20):
-    for tt in range(0, 20):
-        for ss in range(0, 80):
-            # Interior Permanent Magnet
-            old_label = f"Hole_Rotor_R{rr}_T{tt}_S{ss}"
-            new_label = f"H_ROTOR_R{rr}T{tt}S{ss}"
-            surface_label[old_label] = new_label
-            old_label = f"HoleMagnet_Rotor_Parallel_N_R{rr}_T{tt}_S{ss}"
-            new_label = f"H_MAGNET_ROT_PAR_N_R{rr}T{tt}S{ss}"
-            surface_label[old_label] = new_label
-            old_label = f"HoleMagnet_Rotor_Parallel_S_R{rr}_T{tt}_S{ss}"
-            new_label = f"H_MAGNET_ROT_PAR_S_R{rr}T{tt}S{ss}"
-            surface_label[old_label] = new_label
-            old_label = f"HoleMagnet_Rotor_Radial_N_R{rr}_T{tt}_S{ss}"
-            new_label = f"H_MAGNET_ROT_RAD_N_R{rr}T{tt}S{ss}"
-            surface_label[old_label] = new_label
-            old_label = f"HoleMagnet_Rotor_Radial_S_R{rr}_T{tt}_S{ss}"
-            new_label = f"H_MAGNET_ROT_RAD_S_R{rr}T{tt}S{ss}"
-            surface_label[old_label] = new_label
+MagElmer_BP_dict[AS_TR_LAB] = "MASTER_STATOR_BOUNDARY"
+MagElmer_BP_dict[AS_TL_LAB] = "SLAVE_STATOR_BOUNDARY"
+MagElmer_BP_dict[AR_T_LAB] = "AIRGAP_ARC_BOUNDARY"
 
-            # This is weird, added after SlotM upgrade
-            # not sure why this is different
-            old_label = f"Rotor_Hole_Rotor_R{rr}_T{tt}_S{ss}"
-            new_label = f"H_ROTOR_R{rr}T{tt}S{ss}"
-            surface_label[old_label] = new_label
+MagElmer_BP_dict[SBS_TR_LAB] = "MASTER_STATOR_BOUNDARY"
+MagElmer_BP_dict[SBS_TL_LAB] = "SLAVE_STATOR_BOUNDARY"
+MagElmer_BP_dict[SBR_T_LAB] = "SB_STATOR_BOUNDARY"
 
-            # Surface Permanent Magnets
-            old_label = f"MagnetRotorParallel_N_R{rr}_T{tt}_S{ss}"
-            new_label = f"MAGNET_ROT_PAR_N_R{rr}T{tt}S{ss}"
-            surface_label[old_label] = new_label
-            old_label = f"MagnetRotorParallel_S_R{rr}_T{tt}_S{ss}"
-            new_label = f"MAGNET_ROT_PAR_S_R{rr}T{tt}S{ss}"
-            surface_label[old_label] = new_label
-            old_label = f"MagnetRotorRadial_N_R{rr}_T{tt}_S{ss}"
-            new_label = f"MAGNET_ROT_RAD_N_R{rr}T{tt}S{ss}"
-            surface_label[old_label] = new_label
-            old_label = f"MagnetRotorRadial_S_R{rr}_T{tt}_S{ss}"
-            new_label = f"MAGNET_ROT_RAD_S_R{rr}T{tt}S{ss}"
-            surface_label[old_label] = new_label
-
-            # Windings
-            old_label = f"Wind_Stator_R{rr}_T{tt}_S{ss}"
-            new_label = f"W_STA_R{rr}_T{tt}_S{ss}"
-            surface_label[old_label] = new_label
+MagElmer_BP_dict[AIRBOX_SR_LAB] = "MASTER_STATOR_BOUNDARY"
+MagElmer_BP_dict[AIRBOX_SL_LAB] = "SLAVE_STATOR_BOUNDARY"
+MagElmer_BP_dict[AIRBOX_R_LAB] = "VP0_BOUNDARY"

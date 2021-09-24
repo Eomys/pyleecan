@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from ....Functions.labels import STATOR_LAB, ROTOR_LAB
+
 
 def get_lam_list(self, is_int_to_ext=True, key=None):
     """Returns the ordered list of lamination of the machine
@@ -35,9 +37,9 @@ def get_lam_list(self, is_int_to_ext=True, key=None):
 
     # Filter the lamination according to key
     if key is not None:
-        if key == "Stator":
+        if key == STATOR_LAB:
             is_stator = True
-        elif key == "Rotor":
+        elif key == ROTOR_LAB:
             is_stator = False
         else:
             raise KeyInputError(

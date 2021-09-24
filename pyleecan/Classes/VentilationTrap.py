@@ -116,7 +116,6 @@ class VentilationTrap(Hole):
 
     def __init__(
         self,
-        Alpha0=0,
         D0=1,
         H0=1,
         W1=1,
@@ -124,6 +123,7 @@ class VentilationTrap(Hole):
         Zh=36,
         mat_void=-1,
         magnetization_dict_offset=None,
+        Alpha0=0,
         init_dict=None,
         init_str=None,
     ):
@@ -142,8 +142,6 @@ class VentilationTrap(Hole):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Alpha0" in list(init_dict.keys()):
-                Alpha0 = init_dict["Alpha0"]
             if "D0" in list(init_dict.keys()):
                 D0 = init_dict["D0"]
             if "H0" in list(init_dict.keys()):
@@ -158,8 +156,9 @@ class VentilationTrap(Hole):
                 mat_void = init_dict["mat_void"]
             if "magnetization_dict_offset" in list(init_dict.keys()):
                 magnetization_dict_offset = init_dict["magnetization_dict_offset"]
+            if "Alpha0" in list(init_dict.keys()):
+                Alpha0 = init_dict["Alpha0"]
         # Set the properties (value check and convertion are done in setter)
-        self.Alpha0 = Alpha0
         self.D0 = D0
         self.H0 = H0
         self.W1 = W1
@@ -169,6 +168,7 @@ class VentilationTrap(Hole):
             Zh=Zh,
             mat_void=mat_void,
             magnetization_dict_offset=magnetization_dict_offset,
+            Alpha0=Alpha0,
         )
         # The class is frozen (in Hole init), for now it's impossible to
         # add new properties
@@ -179,7 +179,6 @@ class VentilationTrap(Hole):
         VentilationTrap_str = ""
         # Get the properties inherited from Hole
         VentilationTrap_str += super(VentilationTrap, self).__str__()
-        VentilationTrap_str += "Alpha0 = " + str(self.Alpha0) + linesep
         VentilationTrap_str += "D0 = " + str(self.D0) + linesep
         VentilationTrap_str += "H0 = " + str(self.H0) + linesep
         VentilationTrap_str += "W1 = " + str(self.W1) + linesep
@@ -194,8 +193,6 @@ class VentilationTrap(Hole):
 
         # Check the properties inherited from Hole
         if not super(VentilationTrap, self).__eq__(other):
-            return False
-        if other.Alpha0 != self.Alpha0:
             return False
         if other.D0 != self.D0:
             return False
@@ -218,8 +215,6 @@ class VentilationTrap(Hole):
 
         # Check the properties inherited from Hole
         diff_list.extend(super(VentilationTrap, self).compare(other, name=name))
-        if other._Alpha0 != self._Alpha0:
-            diff_list.append(name + ".Alpha0")
         if other._D0 != self._D0:
             diff_list.append(name + ".D0")
         if other._H0 != self._H0:
@@ -239,7 +234,6 @@ class VentilationTrap(Hole):
 
         # Get size of the properties inherited from Hole
         S += super(VentilationTrap, self).__sizeof__()
-        S += getsizeof(self.Alpha0)
         S += getsizeof(self.D0)
         S += getsizeof(self.H0)
         S += getsizeof(self.W1)
@@ -255,7 +249,6 @@ class VentilationTrap(Hole):
 
         # Get the properties inherited from Hole
         VentilationTrap_dict = super(VentilationTrap, self).as_dict(**kwargs)
-        VentilationTrap_dict["Alpha0"] = self.Alpha0
         VentilationTrap_dict["D0"] = self.D0
         VentilationTrap_dict["H0"] = self.H0
         VentilationTrap_dict["W1"] = self.W1
@@ -268,33 +261,12 @@ class VentilationTrap(Hole):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Alpha0 = None
         self.D0 = None
         self.H0 = None
         self.W1 = None
         self.W2 = None
         # Set to None the properties inherited from Hole
         super(VentilationTrap, self)._set_None()
-
-    def _get_Alpha0(self):
-        """getter of Alpha0"""
-        return self._Alpha0
-
-    def _set_Alpha0(self, value):
-        """setter of Alpha0"""
-        check_var("Alpha0", value, "float", Vmin=0, Vmax=6.29)
-        self._Alpha0 = value
-
-    Alpha0 = property(
-        fget=_get_Alpha0,
-        fset=_set_Alpha0,
-        doc=u"""Shift angle of the hole around circumference
-
-        :Type: float
-        :min: 0
-        :max: 6.29
-        """,
-    )
 
     def _get_D0(self):
         """getter of D0"""

@@ -19,9 +19,7 @@ from ......GUI.Dialog.DMachineSetup.SPreview.WMachineTable.Ui_WMachineTable impo
 )
 from SciDataTool import DataLinspace
 from ......Methods.Simulation.MagElmer import (
-    boundary_prop,
-    boundary_list,
-    surface_label,
+    MagElmer_BP_dict,
 )
 
 try:
@@ -204,9 +202,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             draw_GMSH(
                 output=myResults,
                 sym=sym,
-                boundary_prop=boundary_prop,
-                boundary_list=boundary_list,
-                surface_label=surface_label,
+                boundary_prop=MagElmer_BP_dict,
                 is_lam_only_S=False,
                 is_lam_only_R=False,
                 user_mesh_dict=None,

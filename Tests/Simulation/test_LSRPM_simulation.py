@@ -3,7 +3,7 @@ from os.path import join
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 import matplotlib.pyplot as plt
-
+import pytest
 from os.path import join
 
 from numpy import ones, pi, array, linspace, cos, sqrt, zeros
@@ -14,12 +14,14 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.MagFEMM import MagFEMM
 
 
-@pytest.mark.skip(reason="Radial magnetization not available yet for Hole")
+is_show_fig = False
+
+
 def test_LSRPM_simulation():
     # Create the Simulation
     LSRPM = load(join(DATA_DIR, "Machine", "LSRPM_001.json"))
     # LSRPM.plot()
-    simu_femm = Simu1(name="FEMM_simulation", machine=LSRPM)
+    simu_femm = Simu1(name="LSRPM_001_FEMM_simulation", machine=LSRPM)
     p = simu_femm.machine.stator.winding.p
     qs = simu_femm.machine.stator.winding.qs
 
@@ -87,21 +89,29 @@ def test_LSRPM_simulation():
     )
     out_femm = simu_femm.run()
     # Radial magnetic flux
-    out_femm.mag.B.plot_2D_Data("angle", "time[1]", component_list=["radial"])
     out_femm.mag.B.plot_2D_Data(
-        "wavenumber=[0,76]", "time[1]", component_list=["radial"]
+        "angle", "time[1]", component_list=["radial"], is_show_fig=is_show_fig
+    )
+    out_femm.mag.B.plot_2D_Data(
+        "wavenumber=[0,76]",
+        "time[1]",
+        component_list=["radial"],
+        is_show_fig=is_show_fig,
     )
     # Tangential magnetic flux
-    out_femm.mag.B.plot_2D_Data("angle", "time[1]", component_list=["tangential"])
     out_femm.mag.B.plot_2D_Data(
-        "wavenumber=[0,76]", "time[1]", component_list=["tangential"]
+        "angle", "time[1]", component_list=["tangential"], is_show_fig=is_show_fig
     )
-    out_femm.mag.Tem.plot_2D_Data("time")
+    out_femm.mag.B.plot_2D_Data(
+        "wavenumber=[0,76]",
+        "time[1]",
+        component_list=["tangential"],
+        is_show_fig=is_show_fig,
+    )
+    out_femm.mag.Tem.plot_2D_Data("time", is_show_fig=is_show_fig)
     print(out_femm.mag.Tem.values.shape)
     print(simu_femm.input.Nt_tot)
-    out_femm.mag.meshsolution.plot_contour(label="B", group_names="stator core")
-
-    plt.show()
+    # out_femm.mag.meshsolution.plot_contour(label="B", group_names="stator core")
 
 
 if __name__ == "__main__":

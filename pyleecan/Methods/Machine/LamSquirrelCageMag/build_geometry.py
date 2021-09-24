@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import pi
 from ....Classes.LamSquirrelCage import LamSquirrelCage
+from ....Functions.labels import HOLEV_LAB, HOLEM_LAB, update_RTS_index
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
@@ -56,12 +57,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         for ii in range(Zh // sym):
             for surf in surf_hole:
                 new_surf = type(surf)(init_dict=surf.as_dict())
-                if "Magnet" in surf.label and ii % 2 != 0:  # if the surf is Magnet
-                    # Changing the pole of the magnet (before reference number )
-                    new_surf.label = new_surf.label[:-10] + "S" + new_surf.label[-9:]
-                if "Hole" in surf.label:
-                    # changing the hole or magnet reference number
-                    new_surf.label = new_surf.label[:-1] + str(ii)
+                new_surf.label = update_RTS_index(label=new_surf.label, S_id=ii)
                 new_surf.rotate(ii * angle)
                 hole_surf_list.append(new_surf)
 

@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from ....Functions.FEMM import boundary_prop
-
-
 def draw_FEMM(
     self,
     femm,
@@ -21,13 +16,13 @@ def draw_FEMM(
         client to send command to a FEMM instance
     nodeprop :
         Nodal property
-         (Default value = None)
+        (Default value = None)
     propname :
         Boundary property ’propname’
-         (Default value = None)
+        (Default value = None)
     element_size :
         Local element size along segment no greater than element_size
-         (Default value = None)
+        (Default value = None)
     automesh :
         0 = mesher defers to the element constraint defined by
         element_size, 1 = mesher automatically chooses mesh size along
@@ -35,21 +30,11 @@ def draw_FEMM(
         (Default value = None)
     hide :
         0 = not hidden in post-processor, 1 == hidden in post processorc
-         (Default value = False)
+        (Default value = False)
     group :
         group the segment belongs
-         (Default value = None)
-
-    Returns
-    -------
-
-
+        (Default value = None)
     """
-
-    # Get BC (if any)
-    for bound_label in boundary_prop:
-        if bound_label in self.label:
-            propname = boundary_prop[bound_label]
 
     # Add the nodes
     X1, Y1 = self.begin.real, self.begin.imag

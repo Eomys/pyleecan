@@ -1,6 +1,10 @@
 from logging import getLogger
 from os.path import dirname, isfile
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import (
+    FigureCanvasQTAgg,
+    NavigationToolbar2QT as NavigationToolbar,
+)
 from ezdxf import readfile
 from numpy import angle as np_angle
 from numpy import array, pi, argmax, argmin
@@ -26,6 +30,8 @@ from ...GUI.Tools.FloatEdit import FloatEdit
 from ...GUI import gui_option
 from ...loggers import GUI_LOG_NAME
 from .Ui_DXF_Hole import Ui_DXF_Hole
+from ...Functions.labels import HOLEM_LAB, HOLEV_LAB
+from ...Functions.init_fig import init_fig
 
 # Column index for table
 
@@ -177,53 +183,101 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self : DXF_Hole
             a DXF_Hole object
         """
-        fig, axes = self.w_viewer.fig, self.w_viewer.axes
+        # Init fig
+        fig, axes = plt.subplots(tight_layout=False)
+        self.fig = fig
+        self.axes = axes
+        # Set plot layout
+        canvas = FigureCanvasQTAgg(fig)
+        toolbar = NavigationToolbar(canvas, self)
+        # Remove Subplots button
+        unwanted_buttons = ["Subplots", "Customize", "Save"]
+        for x in toolbar.actions():
+            if x.text() in unwanted_buttons:
+                toolbar.removeAction(x)
+        # Adding custom icon on mpl toobar
+        icons_buttons = [
+            "Home",
+            "Pan",
+            "Zoom",
+            "Back",
+            "Forward",
+        ]
+        for action in toolbar.actions():
+            if action.text() in icons_buttons and "mpl_" + action.text() in pixmap_dict:
+                action.setIcon(QIcon(pixmap_dict["mpl_" + action.text()]))
+        # Change default file name
+        canvas.get_default_filename = "DXF_hole_visu.png"
+        self.layout_plot.insertWidget(1, toolbar)
+        self.layout_plot.insertWidget(2, canvas)
+        self.canvas = canvas
         axes.set_axis_off()
+        self.toolbar = toolbar
+        self.xlim = self.axes.get_xlim()
+        self.ylim = self.axes.get_ylim()
+
+        def on_draw(event):
+            self.xlim = self.axes.get_xlim()
+            self.ylim = self.axes.get_ylim()
 
         # Setup interaction with graph
         def select_line(event):
             """Function to select/unselect the closest line from click"""
-            X = event.xdata  # X position of the click
-            Y = event.ydata  # Y position of the click
-            # Get closer pyleecan object
-            Z = X + 1j * Y
-            min_dist = float("inf")
-            closest_id = -1
-            for ii, line in enumerate(self.line_list):
-                line_dist = line.comp_distance(Z)
-                if line_dist < min_dist:
-                    closest_id = ii
-                    min_dist = line_dist
-            # Select/unselect line
-            if self.selected_list[closest_id] == 0:  # Unselected to selected
-                self.selected_list[closest_id] = 1
-            elif self.selected_list[closest_id] == 1:  # Selected to selected bottom mag
-                if 2 in self.selected_list:
-                    current_bot_mag = self.selected_list.index(2)
-                    # Only one selected bottom mag line at the time
-                    point_list = array(self.line_list[current_bot_mag].discretize(20))
-                    self.selected_list[current_bot_mag] = 1
-                    axes.plot(point_list.real, point_list.imag, COLOR_LIST[1], zorder=2)
-                self.selected_list[closest_id] = 2
-            elif self.selected_list[closest_id] == 2:
-                # selected bottom mag to Unselected
-                self.selected_list[closest_id] = 0
-            # Change line color
-            point_list = array(self.line_list[closest_id].discretize(20))
-            color = COLOR_LIST[self.selected_list[closest_id]]
-            axes.plot(point_list.real, point_list.imag, color, zorder=2)
-            self.w_viewer.draw()
+            # Ignore if matplotlib action is clicked
+            is_ignore = False
+            for action in self.toolbar.actions():
+                if action.isChecked():
+                    is_ignore = True
+            if not is_ignore:
+                X = event.xdata  # X position of the click
+                Y = event.ydata  # Y position of the click
+                # Get closer pyleecan object
+                Z = X + 1j * Y
+                min_dist = float("inf")
+                closest_id = -1
+                for ii, line in enumerate(self.line_list):
+                    line_dist = line.comp_distance(Z)
+                    if line_dist < min_dist:
+                        closest_id = ii
+                        min_dist = line_dist
+                # Select/unselect line
+                if self.selected_list[closest_id] == 0:  # Unselected to selected
+                    self.selected_list[closest_id] = 1
+                elif (
+                    self.selected_list[closest_id] == 1
+                ):  # Selected to selected bottom mag
+                    if 2 in self.selected_list:
+                        current_bot_mag = self.selected_list.index(2)
+                        # Only one selected bottom mag line at the time
+                        point_list = array(
+                            self.line_list[current_bot_mag].discretize(20)
+                        )
+                        self.selected_list[current_bot_mag] = 1
+                        axes.plot(
+                            point_list.real, point_list.imag, COLOR_LIST[1], zorder=2
+                        )
+                    self.selected_list[closest_id] = 2
+                elif self.selected_list[closest_id] == 2:
+                    # selected bottom mag to Unselected
+                    self.selected_list[closest_id] = 0
+                # Change line color
+                point_list = array(self.line_list[closest_id].discretize(20))
+                color = COLOR_LIST[self.selected_list[closest_id]]
+                axes.plot(point_list.real, point_list.imag, color, zorder=2)
+                self.axes.set_xlim(self.xlim)
+                self.axes.set_ylim(self.ylim)
+                self.canvas.draw()
 
-            # Check if the surface is complete
-            if self.check_selection():
-                self.add_surface()
+                # Check if the surface is complete
+                if self.check_selection():
+                    self.add_surface()
 
         def zoom(event):
             """Function to zoom/unzoom according the mouse wheel"""
 
-            base_scale = 0.3  # Scaling factor
+            base_scale = 0.8  # Scaling factor
             # get the current x and y limits
-            ax = self.w_viewer.axes
+            ax = self.axes
             cur_xlim = ax.get_xlim()
             cur_ylim = ax.get_ylim()
             cur_xrange = (cur_xlim[1] - cur_xlim[0]) * 0.5
@@ -246,11 +300,12 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             ax.set_ylim(
                 [ydata - cur_yrange * scale_factor, ydata + cur_yrange * scale_factor]
             )
-            self.w_viewer.draw()  # force re-draw
+            self.canvas.draw()  # force re-draw
 
         # Connect the function
-        self.w_viewer.mpl_connect("button_press_event", select_line)
-        self.w_viewer.mpl_connect("scroll_event", zoom)
+        self.canvas.mpl_connect("draw_event", on_draw)
+        self.canvas.mpl_connect("button_press_event", select_line)
+        self.canvas.mpl_connect("scroll_event", zoom)
 
         # Axis cleanup
         axes.axis("equal")
@@ -269,7 +324,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self : DXF_Hole
             a DXF_Hole object
         """
-        fig, axes = self.w_viewer.fig, self.w_viewer.axes
+        fig, axes = self.fig, self.axes
         axes.clear()
         axes.set_axis_off()
 
@@ -282,7 +337,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         axes.plot(self.Zcenter.real, self.Zcenter.imag, "rx", zorder=0)
         axes.text(self.Zcenter.real, self.Zcenter.imag, "O")
 
-        self.w_viewer.draw()
+        self.canvas.draw()
 
     def check_selection(self):
         """Check if every line in the selection form a surface
@@ -358,9 +413,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         combobox = QComboBox()
         combobox.addItems(["Hole", "Magnet"])
         self.w_surface_list.setCellWidget(
-            nrows,
-            TYPE_COL,
-            combobox,
+            nrows, TYPE_COL, combobox,
         )
         if 2 in self.selected_list:
             combobox.setCurrentIndex(1)  # Magnet
@@ -371,9 +424,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         del_button.setIcon(QIcon(self.delete_icon))
         del_button.pressed.connect(self.delete_surface)
         self.w_surface_list.setCellWidget(
-            nrows,
-            DEL_COL,
-            del_button,
+            nrows, DEL_COL, del_button,
         )
 
         # Adding Highlight button
@@ -381,18 +432,14 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         HL_button.setIcon(QIcon(self.highlight_icon))
         HL_button.pressed.connect(self.highlight_surface)
         self.w_surface_list.setCellWidget(
-            nrows,
-            HL_COL,
-            HL_button,
+            nrows, HL_COL, HL_button,
         )
 
         # Add reference combobox
         combobox = QComboBox()
         combobox.addItems(index_list)
         self.w_surface_list.setCellWidget(
-            nrows,
-            REF_COL,
-            combobox,
+            nrows, REF_COL, combobox,
         )
         if 2 in self.selected_list:
             combobox.setCurrentIndex(
@@ -409,9 +456,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # lf_off.setText("0")
         lf_off.setEnabled(2 in self.selected_list)
         self.w_surface_list.setCellWidget(
-            nrows,
-            OFF_COL,
-            lf_off,
+            nrows, OFF_COL, lf_off,
         )
 
         # Remove selection to start new one
@@ -430,7 +475,12 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
     def remove_selection(self):
         # Remove selection
         self.selected_list = [0 for line in self.line_list]
-        self.update_graph()
+        # Redraw all the lines (in black)
+        for ii, line in enumerate(self.line_list):
+            point_list = array(line.discretize(20))
+            color = COLOR_LIST[self.selected_list[ii]]
+            self.axes.plot(point_list.real, point_list.imag, color, zorder=2)
+        self.canvas.draw()
 
     def get_hole(self):
         """Generate the HoleUD object corresponding to the selected surfaces
@@ -457,9 +507,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             hole.surf_list.append(self.surf_list[ii].copy())
             hole.surf_list[ii].scale(self.lf_scaling.value())
             if self.w_surface_list.cellWidget(ii, TYPE_COL).currentIndex() == 0:
-                hole.surf_list[ii].label = "Hole"
+                hole.surf_list[ii].label = HOLEV_LAB
             else:
-                hole.surf_list[ii].label = "HoleMagnet"
+                hole.surf_list[ii].label = HOLEM_LAB
                 Nmag += 1
             bottom_list.append(
                 self.line_list[
@@ -494,7 +544,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         mag_dict = dict()
         Nmag = 0
         for ii in range(len(hole.surf_list)):
-            if "Magnet" in hole.surf_list[ii].label:
+            if HOLEM_LAB in hole.surf_list[ii].label:
                 line = bottom_list_sorted[ii].copy()
                 line.rotate(-1 * np_angle(Zref))
                 mag_dict["magnet_" + str(Nmag)] = line.comp_normal()
@@ -517,7 +567,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         mag_list = list()
         hole_list = list()
         for surf in hole.surf_list:
-            if "HoleMagnet" in surf.label:
+            if HOLEM_LAB in surf.label:
                 mag_list.append(surf)
             else:
                 hole_list.append(surf)
@@ -525,7 +575,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
         # Correct hole ref_point (when Magnets are inside Hole surface)
         for surf in hole.surf_list:
-            if "HoleMagnet" not in surf.label:
+            if HOLEV_LAB in surf.label:
                 line_list = surf.get_lines()
                 # Get middle list
                 middle_array = array([line.get_middle() for line in line_list])
@@ -595,7 +645,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             for ii, line in enumerate(self.line_list):
                 if abs(mid - line.get_middle()) < Z_TOL:
                     self.selected_list[ii] = 1
-                    self.w_viewer.axes.text(
+                    self.axes.text(
                         mid.real,
                         mid.imag,
                         str(ii),
@@ -606,7 +656,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         for ii in range(len(self.selected_list)):
             if self.selected_list[ii] == 1:
                 Zmid = self.line_list[ii].get_middle()
-                self.w_viewer.axes.text(
+                self.axes.text(
                     Zmid.real,
                     Zmid.imag,
                     str(ii),

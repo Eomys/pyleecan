@@ -15,5 +15,6 @@ def set_pole_pair_number(self, p):
             lam.set_pole_pair_number(p)
         except:
             raise Exception(
-                "ERROR, cannot enforce pole pair number to lamination " + str(i + 1)
+                "ERROR, cannot enforce pole pair number to lamination "
+                + lam.get_label()
             )

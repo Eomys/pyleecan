@@ -6,6 +6,7 @@ from os.path import join
 from mock import MagicMock
 from numpy import array, pi, zeros
 
+from pyleecan.Classes.MachineUD import MachineUD
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.LamHole import LamHole
@@ -126,6 +127,13 @@ M_test[-1]["stator"]["Mtot"] = (
     M_test[-1]["stator"]["Vlam"] * 7650 * 0.95 + M_test[-1]["stator"]["Mwind"]
 )
 M_test[-1]["Mmach"] = 33.38
+# Toyota Prius as MachineUD
+UD_dict = M_test[-1].copy()
+UD_dict["test_obj"] = MachineUD(
+    frame=Toyota_Prius.frame,
+    shaft=Toyota_Prius.shaft,
+    lam_list=[Toyota_Prius.rotor, Toyota_Prius.stator],
+)
 
 
 @pytest.mark.parametrize("test_dict", M_test)
@@ -218,44 +226,44 @@ def test_comp_volume_stator(test_dict):
         assert a == pytest.approx(b, rel=DELTA), msg
 
 
-@pytest.mark.parametrize("test_dict", M_test)
+@pytest.mark.parametrize("test_dict", M_test + [UD_dict])
 def test_comp_mass(test_dict):
     """Check that the computation of the mass is correct"""
     result = test_dict["test_obj"].comp_masses()
 
-    a = result["Mfra"]
+    a = result["Frame"]
     b = test_dict["Mfra"]
     msg = "Mfra, Return " + str(a) + " expected " + str(b)
     assert a == pytest.approx(b, rel=DELTA), msg
 
-    a = result["Msha"]
+    a = result["Shaft"]
     b = test_dict["Msha"]
     msg = "Msha, Return " + str(a) + " expected " + str(b)
     assert a == pytest.approx(b, rel=DELTA), msg
 
-    a = result["Mrot"]["Mtot"]
+    a = result["Rotor-0"]["Mtot"]
     b = test_dict["Mrot"]
     msg = "Mrot, Return " + str(a) + " expected " + str(b)
     assert a == pytest.approx(b, rel=DELTA), msg
 
-    assert result["Mrot"]["Myoke"] + result["Mrot"]["Mteeth"] == pytest.approx(
-        result["Mrot"]["Mlam"], rel=DELTA
+    assert result["Rotor-0"]["Myoke"] + result["Rotor-0"]["Mteeth"] == pytest.approx(
+        result["Rotor-0"]["Mlam"], rel=DELTA
     )
-    assert result["Msta"]["Myoke"] + result["Msta"]["Mteeth"] == pytest.approx(
-        result["Msta"]["Mlam"], rel=DELTA
+    assert result["Stator-0"]["Myoke"] + result["Stator-0"]["Mteeth"] == pytest.approx(
+        result["Stator-0"]["Mlam"], rel=DELTA
     )
 
-    a = result["Msta"]["Mwind"]
+    a = result["Stator-0"]["Mwind"]
     b = test_dict["stator"]["Mwind"]
     msg = "Msta[Mwind], Return " + str(a) + " expected " + str(b)
     assert a == pytest.approx(b, rel=DELTA), msg
 
-    a = result["Msta"]["Mtot"]
+    a = result["Stator-0"]["Mtot"]
     b = test_dict["stator"]["Mtot"]
     msg = "Msta[Mtot], Return " + str(a) + " expected " + str(b)
     assert a == pytest.approx(b, rel=DELTA), msg
 
-    a = result["Mmach"]
+    a = result["All"]
     b = test_dict["Mmach"]
     msg = "Mmach, Return " + str(a) + " expected " + str(b)
     assert a == pytest.approx(b, rel=DELTA), msg
@@ -266,4 +274,16 @@ def test_comp_mass_shaft_none():
     test_obj.shaft = None
     result = test_obj.comp_masses()
 
-    assert result["Msha"] == 0
+    assert result["Shaft"] == 0
+
+
+if __name__ == "__main__":
+    for test_dict in M_test:
+        test_comp_surface_rotor(test_dict)
+        test_comp_surface_stator(test_dict)
+        test_comp_volume_rotor(test_dict)
+        test_comp_volume_stator(test_dict)
+        test_comp_mass(test_dict)
+
+    test_comp_mass_shaft_none()
+    print("Done")

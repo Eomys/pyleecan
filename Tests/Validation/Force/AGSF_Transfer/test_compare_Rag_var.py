@@ -44,7 +44,7 @@ def test_compare_Rag_variation():
         is_periodicity_a=False,
         is_periodicity_t=False,
         is_sliding_band=False,
-        Kmesh_fineness=4,
+        Kmesh_fineness=2,  # 4
         nb_worker=cpu_count(),
     )
 
@@ -150,7 +150,7 @@ def test_compare_Rag_variation_Nmax_sensitivity():
         is_periodicity_a=False,
         is_periodicity_t=False,
         is_sliding_band=False,
-        Kmesh_fineness=4,
+        Kmesh_fineness=2,  # 4
         nb_worker=cpu_count(),
     )
 

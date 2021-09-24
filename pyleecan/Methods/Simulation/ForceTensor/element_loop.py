@@ -96,7 +96,7 @@ def element_loop(
             # elt magnetostrictive tensor
             if self.tensor["magnetostriction"]:
                 tme = self.comp_magnetostrictive_tensor(
-                    mue, Me, Nt_tot, polynomial_coeffs
+                    M=Me, Nt_tot=Nt_tot, polynomial_coeffs=polynomial_coeffs
                 )
                 total_tensor += tme
 
