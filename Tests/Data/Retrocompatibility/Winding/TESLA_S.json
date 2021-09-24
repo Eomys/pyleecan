@@ -59,7 +59,7 @@
         }
     },
     "logger_name": null,
-    "name": "TESLA_S",
+    "name": "Tesla_S",
     "rotor": {
         "Hscr": 0.02,
         "Kf1": 0.95,

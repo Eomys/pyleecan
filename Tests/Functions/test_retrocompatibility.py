@@ -47,8 +47,8 @@ wind_list.append(  # WindingUD
 )
 # wind_list.append(  # WindingSC + WindingDW2L
 #     {
-#         "ref": join(DATA_DIR, "Machine", "TESLA_S.json"),
-#         "old": join(TEST_DATA_DIR, "Retrocompatibility", "Winding", "TESLA_S.json"),
+#         "ref": join(DATA_DIR, "Machine", "Tesla_S.json"),
+#         "old": join(TEST_DATA_DIR, "Retrocompatibility", "Winding", "Tesla_S.json"),
 #     }
 # )
 wind_list.append(  # WindingDW1L
