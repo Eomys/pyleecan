@@ -1,5 +1,5 @@
-from numpy import array_equal, roll, squeeze, sum as np_sum, lcm
-from numpy.linalg import norm
+from numpy import squeeze, abs as np_abs, mod, where, all as np_all, gcd
+from numpy.fft import fft
 
 
 def comp_periodicity(self, wind_mat=None):
@@ -24,49 +24,49 @@ def comp_periodicity(self, wind_mat=None):
     if wind_mat is None:
         wind_mat = self.get_connection_mat()
 
-    assert len(wind_mat.shape) == 4, "dim 4 expected for wind_mat"
+    assert wind_mat.ndim == 4, "dim 4 expected for wind_mat"
+
+    Zs = wind_mat.shape[2]  # Number of Slot
+    qs = wind_mat.shape[3]  # Number of phase
 
     # Summing on all the layers (Nlay_r and Nlay_theta)
-    wind_mat2 = squeeze(np_sum(np_sum(wind_mat, axis=1), axis=0))
+    wind_mat2 = squeeze(wind_mat)
 
-    qs = wind_mat.shape[3]  # Number of phase
-    Zs = wind_mat.shape[2]  # Number of Slot
+    if wind_mat2.ndim == 4:
+        Nlay = wind_mat2.shape[0] * wind_mat2.shape[1]
+        wind_mat2.reshape((Nlay, Zs, qs))
+    elif wind_mat2.ndim == 2:
+        Nlay = 1
+        wind_mat2 = wind_mat2[None, :, :]
+    else:
+        Nlay = wind_mat2.shape[0]
 
-    Nperw = 1  # Number of electrical period of the winding
-    Nperslot = 1  # Periodicity of the winding in number of slots
+    Nperw = Zs  # Number of electrical period of the winding
+    is_aper = True  # True if winding pattern is anti-periodic
 
     # Looking for the periodicity of each phase
-    for q in range(0, qs):
-        k = 1
-        is_per = False
-        while k <= Zs and not is_per:
-            # We shift the array arround the slot and check if it's the same
-            if array_equal(wind_mat2[:, q], roll(wind_mat2[:, q], shift=k)):
-                is_per = True
+    for q in range(qs):
+        # Looking for the periodicity of each layer
+        for l in range(Nlay):
+            # FFT of connectivity array for the given layer and phase
+            wind_mat_ql_fft = fft(wind_mat2[l, :, q])
+            # Find indices of nonzero amplitudes
+            I0 = where(np_abs(wind_mat_ql_fft) > 1e-3)[0]
+            # Periodicity is given by the non zero lowest order
+            Nperw_ql = I0[0] if I0[0] != 0 else I0[1]
+            Nperw = gcd(Nperw, Nperw_ql)
+            if I0[0] == 0:
+                # Anti-periodicity is necessary false if there is a constant component
+                is_aper = False
             else:
-                k += 1
-        # least common multiple to find common periodicity between different phase
-        Nperslot = lcm(Nperslot, k)
+                # Anti-periodicity is true if all non-zero components are odd multiple of periodicity
+                is_aper = is_aper and np_all(mod(I0 / Nperw_ql, 2) == 1)
 
-    # If Nperslot > Zs no symmetry
-    if Nperslot > 0 and Nperslot < Zs:
-        # nb of periods of the winding (2 means 180°)
-        Nperw = Zs / float(Nperslot)
-        # if Zs cannot be divided by Nperslot (non integer)
-        if Nperw % 1 != 0:
-            Nperw = 1
+            if Nperw == 1 and not is_aper:
+                # No need to further continue if there is no anti-periodicity
+                break
 
-    # Check for anti symmetries in the elementary winding pattern
-    if (
-        Nperslot % 2 == 0
-        and norm(
-            wind_mat2[0 : Nperslot // 2, :] + wind_mat2[Nperslot // 2 : Nperslot, :]
-        )
-        == 0
-    ):
-        is_aper_a = True
-        Nperw = Nperw * 2
-    else:
-        is_aper_a = False
+    # Multiply periodicity number by two in case of anti-periodicity
+    Nperw = Nperw * 2 if is_aper else Nperw
 
-    return int(Nperw), is_aper_a
+    return int(Nperw), bool(is_aper)

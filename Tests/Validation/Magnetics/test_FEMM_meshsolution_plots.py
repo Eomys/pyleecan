@@ -70,7 +70,6 @@ def test_FEMM_meshsolution_plots_SPMSM():
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
-    assert SPMSM_003.comp_periodicity() == (1, True, 1, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 
