@@ -75,6 +75,7 @@ def import_from_csv(self, file_path=None):
             wind_mat = tile(wind_mat, (1, 1, Zs // wind_mat.shape[2], 1))
 
     # Update property
+    self.clean()  # Remove periodicity
     self.wind_mat = wind_mat
     self.Nlayer = wind_shape[0] * wind_shape[1]
     self.qs = wind_shape[3]
