@@ -44,7 +44,7 @@ LSCM_step = [SLamParam, SWSlot, SBar, SMHoleMag, SSkew]
 # Steps needed to setup a LamHole
 LH_step = [SLamParam, SMHoleMag, SSkew]
 # Steps needed to setup a LamSlot
-LS_step = [SLamParam, SWSlot]
+LS_step = [SLamParam, SWSlot, SSkew]
 # Steps needed to setup a LamSlotMag
 LSM_step = [SLamParam, SMSlot, SSkew]
 # Steps to start the design of a machine with 2 laminations
@@ -150,7 +150,7 @@ DFIM_dict = {
     "init_machine": machine4,
     "start_step": S_step,
     "stator_step": LSW_step,
-    "rotor_step": LSW_step,
+    "rotor_step": LSW_step + [SSkew],
     "name": "DFIM",
     "img": pixmap_dict["DFIM"],
     "txt": "DFIM (Doubly Fed Induction Machine)",
@@ -205,7 +205,7 @@ SRM_dict = {
     "init_machine": machine10,
     "start_step": S_step,
     "stator_step": LSW_step,
-    "rotor_step": LS_step + [SSkew],
+    "rotor_step": LS_step,
     "name": "SRM",
     "img": pixmap_dict["SCIM"],
     "txt": "SRM (Switched Reluctance Machine)",
