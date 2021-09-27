@@ -32,9 +32,9 @@ def comp_periodicity(self, wind_mat=None):
     # Summing on all the layers (Nlay_r and Nlay_theta)
     wind_mat2 = squeeze(wind_mat)
 
-    if wind_mat2.ndim == 4:
+    if wind_mat2.ndim == 4:  # rad and tan > 2
         Nlay = wind_mat2.shape[0] * wind_mat2.shape[1]
-        wind_mat2.reshape((Nlay, Zs, qs))
+        wind_mat2 = wind_mat2.reshape((Nlay, Zs, qs))
     elif wind_mat2.ndim == 2:
         Nlay = 1
         wind_mat2 = wind_mat2[None, :, :]
@@ -52,6 +52,9 @@ def comp_periodicity(self, wind_mat=None):
             wind_mat_ql_fft = fft(wind_mat2[l, :, q])
             # Find indices of nonzero amplitudes
             I0 = where(np_abs(wind_mat_ql_fft) > 1e-3)[0]
+            if len(I0) == 0:  
+                Nperw, is_aper = 1, False
+                break
             # Periodicity is given by the non zero lowest order
             Nperw_ql = I0[0] if I0[0] != 0 else I0[1]
             Nperw = gcd(Nperw, Nperw_ql)
