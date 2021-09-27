@@ -18,6 +18,7 @@ machine_list = [
     ["SPMSM_015", (9, False, 9, True)],
     ["SIPMSM_001", (1, False, 2, True)],
     ["SynRM_001", (2, True, 2, True)],
+    ["LSRPM_001", (4, True, 4, True)],
 ]
 
 
