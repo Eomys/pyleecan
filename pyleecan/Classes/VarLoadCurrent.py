@@ -268,19 +268,36 @@ class VarLoadCurrent(VarLoad):
         S += getsizeof(self.is_power)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from VarLoad
-        VarLoadCurrent_dict = super(VarLoadCurrent, self).as_dict(**kwargs)
+        VarLoadCurrent_dict = super(VarLoadCurrent, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.OP_matrix is None:
             VarLoadCurrent_dict["OP_matrix"] = None
         else:
-            VarLoadCurrent_dict["OP_matrix"] = self.OP_matrix.tolist()
+            if type_handle_ndarray == 0:
+                VarLoadCurrent_dict["OP_matrix"] = self.OP_matrix.tolist()
+            elif type_handle_ndarray == 1:
+                VarLoadCurrent_dict["OP_matrix"] = self.OP_matrix.copy()
+            elif type_handle_ndarray == 2:
+                VarLoadCurrent_dict["OP_matrix"] = self.OP_matrix
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         VarLoadCurrent_dict["type_OP_matrix"] = self.type_OP_matrix
         VarLoadCurrent_dict["is_torque"] = self.is_torque
         VarLoadCurrent_dict["is_power"] = self.is_power

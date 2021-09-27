@@ -387,9 +387,13 @@ class OutMag(FrozenClass):
         S += getsizeof(self.Pem_av)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -398,48 +402,84 @@ class OutMag(FrozenClass):
         if self.Time is None:
             OutMag_dict["Time"] = None
         else:
-            OutMag_dict["Time"] = self.Time.as_dict()
+            OutMag_dict["Time"] = self.Time.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Angle is None:
             OutMag_dict["Angle"] = None
         else:
-            OutMag_dict["Angle"] = self.Angle.as_dict()
+            OutMag_dict["Angle"] = self.Angle.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.B is None:
             OutMag_dict["B"] = None
         else:
-            OutMag_dict["B"] = self.B.as_dict()
+            OutMag_dict["B"] = self.B.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Tem is None:
             OutMag_dict["Tem"] = None
         else:
-            OutMag_dict["Tem"] = self.Tem.as_dict()
+            OutMag_dict["Tem"] = self.Tem.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutMag_dict["Tem_av"] = self.Tem_av
         OutMag_dict["Tem_rip_norm"] = self.Tem_rip_norm
         OutMag_dict["Tem_rip_pp"] = self.Tem_rip_pp
         if self.Phi_wind_stator is None:
             OutMag_dict["Phi_wind_stator"] = None
         else:
-            OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.as_dict()
+            OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Phi_wind is None:
             OutMag_dict["Phi_wind"] = None
         else:
             OutMag_dict["Phi_wind"] = dict()
             for key, obj in self.Phi_wind.items():
                 if obj is not None:
-                    OutMag_dict["Phi_wind"][key] = obj.as_dict()
+                    OutMag_dict["Phi_wind"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     OutMag_dict["Phi_wind"][key] = None
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:
-            OutMag_dict["emf"] = self.emf.as_dict()
+            OutMag_dict["emf"] = self.emf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.meshsolution is None:
             OutMag_dict["meshsolution"] = None
         else:
-            OutMag_dict["meshsolution"] = self.meshsolution.as_dict(**kwargs)
+            OutMag_dict["meshsolution"] = self.meshsolution.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutMag_dict["logger_name"] = self.logger_name
         if self.internal is None:
             OutMag_dict["internal"] = None
         else:
-            OutMag_dict["internal"] = self.internal.as_dict(**kwargs)
+            OutMag_dict["internal"] = self.internal.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutMag_dict["Rag"] = self.Rag
         OutMag_dict["Pem_av"] = self.Pem_av
         # The class name is added to the dict for deserialisation purpose

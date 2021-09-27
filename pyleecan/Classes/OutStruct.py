@@ -229,9 +229,13 @@ class OutStruct(FrozenClass):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -240,30 +244,54 @@ class OutStruct(FrozenClass):
         if self.Time is None:
             OutStruct_dict["Time"] = None
         else:
-            OutStruct_dict["Time"] = self.Time.as_dict()
+            OutStruct_dict["Time"] = self.Time.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Angle is None:
             OutStruct_dict["Angle"] = None
         else:
-            OutStruct_dict["Angle"] = self.Angle.as_dict()
+            OutStruct_dict["Angle"] = self.Angle.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutStruct_dict["Nt_tot"] = self.Nt_tot
         OutStruct_dict["Na_tot"] = self.Na_tot
         OutStruct_dict["logger_name"] = self.logger_name
         if self.Yr is None:
             OutStruct_dict["Yr"] = None
         else:
-            OutStruct_dict["Yr"] = self.Yr.as_dict()
+            OutStruct_dict["Yr"] = self.Yr.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Vr is None:
             OutStruct_dict["Vr"] = None
         else:
-            OutStruct_dict["Vr"] = self.Vr.as_dict()
+            OutStruct_dict["Vr"] = self.Vr.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Ar is None:
             OutStruct_dict["Ar"] = None
         else:
-            OutStruct_dict["Ar"] = self.Ar.as_dict()
+            OutStruct_dict["Ar"] = self.Ar.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.meshsolution is None:
             OutStruct_dict["meshsolution"] = None
         else:
-            OutStruct_dict["meshsolution"] = self.meshsolution.as_dict(**kwargs)
+            OutStruct_dict["meshsolution"] = self.meshsolution.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutStruct_dict["FEA_dict"] = (
             self.FEA_dict.copy() if self.FEA_dict is not None else None
         )

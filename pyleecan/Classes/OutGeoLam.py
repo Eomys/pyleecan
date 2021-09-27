@@ -204,9 +204,13 @@ class OutGeoLam(FrozenClass):
         S += getsizeof(self.is_antiper_t)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -218,7 +222,16 @@ class OutGeoLam(FrozenClass):
         if self.BH_curve is None:
             OutGeoLam_dict["BH_curve"] = None
         else:
-            OutGeoLam_dict["BH_curve"] = self.BH_curve.tolist()
+            if type_handle_ndarray == 0:
+                OutGeoLam_dict["BH_curve"] = self.BH_curve.tolist()
+            elif type_handle_ndarray == 1:
+                OutGeoLam_dict["BH_curve"] = self.BH_curve.copy()
+            elif type_handle_ndarray == 2:
+                OutGeoLam_dict["BH_curve"] = self.BH_curve
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         OutGeoLam_dict["Ksfill"] = self.Ksfill
         OutGeoLam_dict["S_slot"] = self.S_slot
         OutGeoLam_dict["S_slot_wind"] = self.S_slot_wind

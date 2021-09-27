@@ -516,9 +516,13 @@ class Machine(FrozenClass):
         S += getsizeof(self.logger_name)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -527,11 +531,19 @@ class Machine(FrozenClass):
         if self.frame is None:
             Machine_dict["frame"] = None
         else:
-            Machine_dict["frame"] = self.frame.as_dict(**kwargs)
+            Machine_dict["frame"] = self.frame.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.shaft is None:
             Machine_dict["shaft"] = None
         else:
-            Machine_dict["shaft"] = self.shaft.as_dict(**kwargs)
+            Machine_dict["shaft"] = self.shaft.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Machine_dict["name"] = self.name
         Machine_dict["desc"] = self.desc
         Machine_dict["type_machine"] = self.type_machine

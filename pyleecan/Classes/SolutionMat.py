@@ -229,23 +229,49 @@ class SolutionMat(Solution):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Solution
-        SolutionMat_dict = super(SolutionMat, self).as_dict(**kwargs)
+        SolutionMat_dict = super(SolutionMat, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.field is None:
             SolutionMat_dict["field"] = None
         else:
-            SolutionMat_dict["field"] = self.field.tolist()
+            if type_handle_ndarray == 0:
+                SolutionMat_dict["field"] = self.field.tolist()
+            elif type_handle_ndarray == 1:
+                SolutionMat_dict["field"] = self.field.copy()
+            elif type_handle_ndarray == 2:
+                SolutionMat_dict["field"] = self.field
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.indice is None:
             SolutionMat_dict["indice"] = None
         else:
-            SolutionMat_dict["indice"] = self.indice.tolist()
+            if type_handle_ndarray == 0:
+                SolutionMat_dict["indice"] = self.indice.tolist()
+            elif type_handle_ndarray == 1:
+                SolutionMat_dict["indice"] = self.indice.copy()
+            elif type_handle_ndarray == 2:
+                SolutionMat_dict["indice"] = self.indice
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         SolutionMat_dict["axis_name"] = (
             self.axis_name.copy() if self.axis_name is not None else None
         )
