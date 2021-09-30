@@ -3,7 +3,14 @@ from SciDataTool import Data1D, DataLinspace
 from ....Methods.Simulation.Input import InputError
 
 
-def comp_axes(self, machine):
+def comp_axes(
+    self,
+    machine=None,
+    per_a=1,
+    is_antiper_a=False,
+    per_t=1,
+    is_antiper_t=False,
+):
     """Compute simulation axes, i.e. space DataObject including (anti)-periodicity
     and time DataObject including (anti)-periodicity and accounting for rotating speed
     and number of revolutions
@@ -14,13 +21,19 @@ def comp_axes(self, machine):
         an Input object
     machine : Machine
         a Machine object
+    per_a : int
+        angle periodicity
+    is_antiper_a : bool
+        if the angle axis is antiperiodic
+    per_t : int
+        time periodicity
+    is_antiper_t : bool
+        if the time axis is antiperiodic
 
     Returns
     -------
-    Time : DataLinspace
-        Time axis including (anti)-periodicity and accounting for rotating speed and number of revolutions
-    Angle : DataLinspace
-        Angle axis including (anti)-periodicity
+    axes_dict: {Data}
+        dict of axes containing time and angle axes (with or without (anti-)periodicity)
 
     """
 
@@ -28,6 +41,15 @@ def comp_axes(self, machine):
 
     if self.time is None and N0 is None:
         raise InputError("time and N0 can't be both None")
+
+    if machine is None:
+        # Fetch machine from input
+        if (
+            self.parent is not None
+            and hasattr(self.parent, "machine")
+            and self.parent.machine is not None
+        ):
+            machine = self.parent.machine
 
     # Get machine pole pair number
     p = machine.get_pole_pair_number()
@@ -43,8 +65,6 @@ def comp_axes(self, machine):
         "elec_order": f_elec,
         "mech_order": f_elec / p,
     }
-    if N0 is not None:
-        norm_time["angle_rotor"] = 1 / (360 * N0 / 60)
 
     norm_angle = {"space_order": p, "distance": 1 / Rag}
 
@@ -91,4 +111,17 @@ def comp_axes(self, machine):
             name="angle", unit="rad", values=angle, normalizations=norm_angle
         )
 
-    return Time, Angle
+    # Add time (anti-)periodicity
+    if per_t > 1 or is_antiper_t:
+        Time = Time.get_axis_periodic(per_t, is_antiper_t)
+
+    # Add angle (anti-)periodicity
+    if per_a > 1 or is_antiper_a:
+        Angle = Angle.get_axis_periodic(per_a, is_antiper_a)
+
+    # Compute angle_rotor (added to time normalizations)
+    self.parent.parent.comp_angle_rotor(Time)
+
+    axes_dict = {"time": Time, "angle": Angle}
+
+    return axes_dict

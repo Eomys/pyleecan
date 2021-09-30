@@ -4119,7 +4119,7 @@
         "methods": [
             "gen_input",
             "comp_axes",
-            "comp_felec"
+            "set_disc"
         ],
         "mother": "",
         "name": "Input",
@@ -4327,9 +4327,7 @@
         "desc": "Input to skip the magnetic module and start with the structural one",
         "is_internal": false,
         "methods": [
-            "gen_input",
-            "comp_felec",
-            "comp_axes"
+            "gen_input"
         ],
         "mother": "Input",
         "name": "InputFlux",

@@ -6,6 +6,7 @@ from ....Methods.Simulation.Input import InputError
 
 from ....Functions.Electrical.coordinate_transformation import n2dq
 from ....Functions.Winding.gen_phase_list import gen_name
+from ....Classes.InputVoltage import InputVoltage
 
 from SciDataTool import Data1D, DataTime
 
@@ -28,14 +29,18 @@ def gen_input(self):
         raise InputError("InputCurrent object should be inside a Simulation object")
 
     # Call InputVoltage.gen_input()
-    super(type(self), self).gen_input()
+    InputVoltage.gen_input(self)
 
     # Get electrical output
     outelec = simu.parent.elec
 
     # Number of winding phases for stator/rotor
-    qs = len(simu.machine.stator.get_name_phase())
-    qr = len(simu.machine.rotor.get_name_phase())
+    if simu.machine is not None:
+        qs = len(simu.machine.stator.get_name_phase())
+        qr = len(simu.machine.rotor.get_name_phase())
+    else:
+        qs = 0
+        qr = 0
 
     # Get time axis
     Time = outelec.axes_dict["time"]
@@ -71,7 +76,7 @@ def gen_input(self):
             outelec.Is = DataTime(
                 name="Stator current",
                 unit="A",
-                symbol="Is",
+                symbol="I_s",
                 axes=[Phase, Time],
                 values=transpose(Is),
             )
@@ -112,49 +117,6 @@ def gen_input(self):
             symbol="Ir",
             axes=[Phase, Time],
             values=transpose(Ir),
-        )
-
-    # Load and check alpha_rotor and N0
-    if self.angle_rotor is None and self.N0 is None:
-        raise InputError(
-            "ERROR: InputCurrent.angle_rotor and InputCurrent.N0 can't be None at the same time"
-        )
-    if self.angle_rotor is not None:
-        outelec.angle_rotor = self.angle_rotor.get_data()
-        if (
-            not isinstance(outelec.angle_rotor, ndarray)
-            or len(outelec.angle_rotor.shape) != 1
-            or outelec.angle_rotor.size != self.Nt_tot
-        ):
-            # angle_rotor should be a vector of same length as time
-            raise InputError(
-                "ERROR: InputCurrent.angle_rotor should be a vector of the same length as time, "
-                + str(outelec.angle_rotor.shape)
-                + " shape found, "
-                + str(self.Nt_tot)
-                + " expected"
-            )
-
-    if self.rot_dir is None or self.rot_dir not in [-1, 1]:
-        # Enforce default rotation direction
-        # simu.parent.geo.rot_dir = None
-        pass  # None is already the default value
-    else:
-        simu.parent.geo.rot_dir = self.rot_dir
-
-    if self.angle_rotor_initial is None:
-        # Enforce default initial position
-        outelec.angle_rotor_initial = 0
-    else:
-        outelec.angle_rotor_initial = self.angle_rotor_initial
-
-    if self.Tem_av_ref is not None:
-        outelec.Tem_av_ref = self.Tem_av_ref
-    if self.Pem_av_ref is not None:
-        outelec.Pem_av_ref = self.Pem_av_ref
-    if simu.parent is None:
-        raise InputError(
-            "ERROR: The Simulation object must be in an Output object to run"
         )
 
     # Save the Output in the correct place

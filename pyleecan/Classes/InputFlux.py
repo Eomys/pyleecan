@@ -22,16 +22,6 @@ try:
 except ImportError as error:
     gen_input = error
 
-try:
-    from ..Methods.Simulation.InputFlux.comp_felec import comp_felec
-except ImportError as error:
-    comp_felec = error
-
-try:
-    from ..Methods.Simulation.InputFlux.comp_axes import comp_axes
-except ImportError as error:
-    comp_axes = error
-
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
@@ -46,7 +36,6 @@ class InputFlux(Input):
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.InputFlux.gen_input
     if isinstance(gen_input, ImportError):
         gen_input = property(
@@ -56,24 +45,6 @@ class InputFlux(Input):
         )
     else:
         gen_input = gen_input
-    # cf Methods.Simulation.InputFlux.comp_felec
-    if isinstance(comp_felec, ImportError):
-        comp_felec = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use InputFlux method comp_felec: " + str(comp_felec))
-            )
-        )
-    else:
-        comp_felec = comp_felec
-    # cf Methods.Simulation.InputFlux.comp_axes
-    if isinstance(comp_axes, ImportError):
-        comp_axes = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use InputFlux method comp_axes: " + str(comp_axes))
-            )
-        )
-    else:
-        comp_axes = comp_axes
     # save and copy methods are available in all object
     save = save
     copy = copy

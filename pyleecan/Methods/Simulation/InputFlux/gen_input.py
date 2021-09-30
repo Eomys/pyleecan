@@ -1,23 +1,31 @@
-# -*- coding: utf-8 -*-
+from numpy import arange, pi, array
 
-from numpy import arange
+from SciDataTool import DataPattern
 
 from ....Classes.OutMag import OutMag
-from ....Classes.Simulation import Simulation
 from ....Classes.ImportMatrixXls import ImportMatrixXls
+from ....Classes.ImportMatrixVal import ImportMatrixVal
+from ....Classes.Input import Input
+from ....Classes.InputCurrent import InputCurrent
+
 from ....Methods.Simulation.Input import InputError
+
+from ....Functions.load import import_class
+
+
+VERBOSE_KEY = {"Br": "Radial", "Bt": "Tangential", "Bz": "Axial"}
 
 
 def gen_input(self):
-    """Generate the input for the structural module (magnetic output)
+    """Generate the input for the force/stress module (magnetic output)
 
     Parameters
     ----------
-    self : InFlux
-        An InFlux object
+    self : InputFlux
+        An InputFlux object
     """
 
-    output = OutMag()
+    Simulation = import_class("pyleecan.Classes", "Simulation")
 
     # get the simulation
     if isinstance(self.parent, Simulation):
@@ -25,54 +33,100 @@ def gen_input(self):
     elif isinstance(self.parent.parent, Simulation):
         simu = self.parent.parent
     else:
-        raise InputError(
-            "ERROR: InputCurrent object should be inside a Simulation object"
-        )
-
-    # Set discretization
-    if self.N0 is None:
-        if self.OP is None:
-            N0 = None  # N0 can be None if time isn't
-        else:
-            N0 = self.OP.N0
-    else:
-        N0 = self.N0
-
-    # Import flux components
-    per_a = self.per_a
-    per_t = self.per_t
-    is_antiper_a = self.is_antiper_a
-    is_antiper_t = self.is_antiper_t
-    out_dict = {}
-    for key in self.B_dict:
-        comp = self.B_dict[key]
-        if isinstance(comp, ImportMatrixXls) and comp.axes_colrows is not None:
-            B_comp, axes_values = comp.get_data()
-        else:
-            B_comp = comp.get_data()
-            axes_values = {}
-        out_dict[key] = B_comp
-
-    axes_dict = self.comp_axes(
-        axes_values,
-        N0=N0,
-        per_a=per_a,
-        is_antiper_a=is_antiper_a,
-        per_t=per_t,
-        is_antiper_t=is_antiper_t,
-    )
+        raise InputError("InputCurrent object should be inside a Simulation object")
 
     if simu.parent is None:
-        raise InputError(
-            "ERROR: The Simulation object must be in an Output object to run"
-        )
-    # Save the Output in the correct place
-    if N0 is not None:
-        simu.parent.elec.N0 = N0
-    output = OutMag()
-    output.store(out_dict=out_dict, axes_dict=axes_dict)
-    simu.parent.mag = output
+        raise InputError("The Simulation object must be in an Output object to run")
 
-    # Define the electrical Output to set the Operating Point
-    if self.OP is not None:
-        self.OP.gen_input()
+    logger = simu.get_logger()
+
+    # Call InputCurrent.gen_input()
+    InputCurrent.gen_input(self)
+
+    # Import flux components
+    out_mag = OutMag()
+    if self.B_enforced is None:
+        per_a = self.per_a
+        per_t = self.per_t
+        is_antiper_a = self.is_antiper_a
+        is_antiper_t = self.is_antiper_t
+        out_dict = {}
+        for key in self.B_dict:
+            comp = self.B_dict[key]
+            if isinstance(comp, list):
+                for i, B_import in enumerate(comp):
+                    if i == 0:
+                        values, axes_values = B_import.get_data()
+                        B_comp = values[..., None]
+                    else:
+                        values, _ = B_import.get_data()
+                        B_comp.append(B_comp, values[..., None], axis=-1)
+                if self.slice is not None:
+                    axes_values["slice"] = self.slice
+                else:
+                    axes_values["slice"] = arange(len(comp))
+            elif isinstance(comp, ImportMatrixXls):
+                # Only this one is used to import flux from excel files
+                logger.info(
+                    "Importing "
+                    + VERBOSE_KEY[key].lower()
+                    + " flux from "
+                    + comp.file_path
+                )
+                B_comp, axes_values = comp.get_data(logger=logger)
+
+            else:
+                B_comp = comp.get_data()
+                axes_values = {}
+            if len(B_comp.shape) < 3:
+                B_comp = B_comp[..., None]
+
+            out_dict[key] = B_comp
+
+        self.time = ImportMatrixVal(value=axes_values["time"])
+        self.angle = ImportMatrixVal(value=axes_values["angle"])
+
+        axes_dict = Input.comp_axes(
+            self,
+            per_a=per_a,
+            is_antiper_a=is_antiper_a,
+            per_t=per_t,
+            is_antiper_t=is_antiper_t,
+        )
+
+        # Compute slices and angles
+        if "slice" in axes_values:
+            Slice = DataPattern(
+                name="z",
+                unit="m",
+                values=axes_values["z"],
+                rebuild_indices=axes_values["slice"],
+                unique_indices=axes_values["slice"],
+                values_whole=axes_values["z"],
+            )
+        else:
+            # Single slice
+            Slice = DataPattern(
+                name="z",
+                unit="m",
+                values=array([0], dtype=float),
+                rebuild_indices=[0],
+                unique_indices=[0],
+                values_whole=array([0], dtype=float),
+            )
+
+        # Store in axes_dict
+        axes_dict["z"] = Slice
+
+        # Save the Output in the correct place
+        out_mag.store(out_dict=out_dict, axes_dict=axes_dict)
+
+    else:
+        # Enforce input VectorField
+        out_mag.B = self.B_enforced
+        out_mag.axes_dict = dict()
+        axes_list = self.B_enforced.get_axes()
+        for ax in axes_list:
+            out_mag.axes_dict[ax.name] = ax.copy()
+
+    simu.parent.mag = out_mag

@@ -6,8 +6,8 @@ def comp_felec(self):
 
     Parameters
     ----------
-    felec : float
-        Electrical frequency [Hz]
+    self : InputCurrent
+        An InputCurrent object
     """
 
     if hasattr(self, "felec") and self.felec is not None:
@@ -25,6 +25,6 @@ def comp_felec(self):
             logger = self.get_logger()
             logger.warning("Input.comp_felec(): Machine was not found.")
             zp = 1
-        return self.N0 * zp / 60
+        return self.N0 * zp / (60 * (1 - self.slip_ref))
     else:
         raise InputError("InputCurrent object can't have felec and N0 at None")

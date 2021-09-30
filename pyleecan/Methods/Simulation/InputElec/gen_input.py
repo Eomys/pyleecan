@@ -1,3 +1,5 @@
+from numpy import ndarray, pi, linspace
+
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 
@@ -41,7 +43,6 @@ def gen_input(self):
         per=1,  # int(2 * simu.machine.get_pole_pair_number()),
         is_aper=False,  # True,
         is_include_per=False,  # True,
-        is_remove_aper=True,  # False,
     )
     outelec.axes_dict = {"time": Time_elec}
 

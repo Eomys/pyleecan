@@ -28,9 +28,9 @@ except ImportError as error:
     comp_axes = error
 
 try:
-    from ..Methods.Simulation.Input.comp_felec import comp_felec
+    from ..Methods.Simulation.Input.set_disc import set_disc
 except ImportError as error:
-    comp_felec = error
+    set_disc = error
 
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
@@ -64,15 +64,15 @@ class Input(FrozenClass):
         )
     else:
         comp_axes = comp_axes
-    # cf Methods.Simulation.Input.comp_felec
-    if isinstance(comp_felec, ImportError):
-        comp_felec = property(
+    # cf Methods.Simulation.Input.set_disc
+    if isinstance(set_disc, ImportError):
+        set_disc = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Input method comp_felec: " + str(comp_felec))
+                ImportError("Can't use Input method set_disc: " + str(set_disc))
             )
         )
     else:
-        comp_felec = comp_felec
+        set_disc = set_disc
     # save and copy methods are available in all object
     save = save
     copy = copy
