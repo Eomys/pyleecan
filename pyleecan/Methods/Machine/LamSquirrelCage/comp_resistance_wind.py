@@ -24,7 +24,7 @@ def comp_resistance_wind(self, T=20, qs=3):
     rho20 = self.ring_mat.elec.rho
     rho = rho20 * (1 + alpha * (T - 20))
 
-    Sring = self.comp_surfacef_ring()
+    Sring = self.comp_surface_ring()
     lring = self.comp_length_ring()
     Zr = self.get_Zs()
     P = self.get_pole_pair_number()

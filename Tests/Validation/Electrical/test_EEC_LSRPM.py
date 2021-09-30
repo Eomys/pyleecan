@@ -10,7 +10,7 @@ import pytest
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputElec import InputElec
 from pyleecan.Classes.Electrical import Electrical
-from pyleecan.Classes.EEC_PMSM import EEC_PMSM
+from pyleecan.Classes.EEC_LSRPM import EEC_LSRPM
 from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
 from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.MagFEMM import MagFEMM
@@ -22,14 +22,14 @@ from pyleecan.definitions import DATA_DIR
 
 @pytest.mark.long_5s
 @pytest.mark.MagFEMM
-@pytest.mark.EEC_PMSM
+@pytest.mark.EEC_LSRPM
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_EEC_PMSM():
     """Validation of LSRPM EEC from Sijie's PhD thesis"""
 
-    LSRPM = load("LSRPM.json")
+    LSRPM = load("LSRPM_001.json")
     simu = Simu1(name="test_EEC_LSRPM", machine=LSRPM)
 
     # Definition of the input
@@ -42,7 +42,7 @@ def test_EEC_PMSM():
 
     # Definition of the electrical simulation (FEMM)
     simu.elec = Electrical()
-    simu.elec.eec = EEC_LPMSM(
+    simu.elec.eec = EEC_LSRPM(
         indmag=IndMagFEMM(is_periodicity_a=True, Nt_tot=10),
         fluxlink=FluxLinkFEMM(is_periodicity_a=True, Nt_tot=10),
     )
