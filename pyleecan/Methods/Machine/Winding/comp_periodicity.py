@@ -52,18 +52,18 @@ def comp_periodicity(self, wind_mat=None):
             wind_mat_ql_fft = fft(wind_mat2[l, :, q])
             # Find indices of nonzero amplitudes
             I0 = where(np_abs(wind_mat_ql_fft) > 1e-3)[0]
-            if len(I0) == 0:  
-                Nperw, is_aper = 1, False
-                break
-            # Periodicity is given by the non zero lowest order
-            Nperw_ql = I0[0] if I0[0] != 0 else I0[1]
-            Nperw = gcd(Nperw, Nperw_ql)
-            if I0[0] == 0:
-                # Anti-periodicity is necessary false if there is a constant component
-                is_aper = False
+            if len(I0) == 0:  # This phase is not present in this layer
+                pass  # No impact on symmetry
             else:
-                # Anti-periodicity is true if all non-zero components are odd multiple of periodicity
-                is_aper = is_aper and np_all(mod(I0 / Nperw_ql, 2) == 1)
+                # Periodicity is given by the non zero lowest order
+                Nperw_ql = I0[0] if I0[0] != 0 else I0[1]
+                Nperw = gcd(Nperw, Nperw_ql)
+                if I0[0] == 0:
+                    # Anti-periodicity is necessary false if there is a constant component
+                    is_aper = False
+                else:
+                    # Anti-periodicity is true if all non-zero components are odd multiple of periodicity
+                    is_aper = is_aper and np_all(mod(I0 / Nperw_ql, 2) == 1)
 
             if Nperw == 1 and not is_aper:
                 # No need to further continue if there is no anti-periodicity
