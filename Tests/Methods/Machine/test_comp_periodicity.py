@@ -18,6 +18,7 @@ machine_list = [
     ["SPMSM_015", (9, False, 9, True)],
     ["SIPMSM_001", (1, False, 2, True)],
     ["SynRM_001", (2, True, 2, True)],
+    ["LSRPM_001", (4, False, 4, True)],
 ]
 
 
@@ -47,7 +48,7 @@ def test_comp_periodicity(machine):
 # To run it without pytest
 if __name__ == "__main__":
 
-    # per_tuple = test_comp_periodicity(machine_list[1])
+    per_tuple = test_comp_periodicity(machine_list[-1])
 
     for machine in machine_list:
         per_tuple = test_comp_periodicity(machine)
