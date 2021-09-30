@@ -99,30 +99,32 @@ def plot(
                 # Get the correct surface
                 mag_surf = None
                 mag_id = int(magnet_name.split("_")[-1])
-                for surf in hole.build_geometry():
-                    label_dict = decode_label(surf.label)
-                    if (
-                        HOLEM_LAB in label_dict["surf_type"]
-                        and label_dict["T_id"] == mag_id
-                    ):
-                        mag_surf = surf
-                        break
-                # Create arrow coordinates
-                Zh = hole.Zh
-                for ii in range(Zh):
-                    off = pi if ii % 2 == 1 else 0
-                    if hole.get_magnet_by_id(mag_id).type_magnetization == 3:
-                        off -= pi / 2
-                    Z1 = mag_surf.point_ref * exp(1j * (ii * 2 * pi / Zh + pi / Zh))
-                    Z2 = (mag_surf.point_ref + H / 5 * exp(1j * (mag_dir + off))) * exp(
-                        1j * (ii * 2 * pi / Zh + pi / Zh)
-                    )
-                    axes.annotate(
-                        text="",
-                        xy=(Z2.real, Z2.imag),
-                        xytext=(Z1.real, Z1.imag),
-                        arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
-                    )
+                mag = hole.get_magnet_by_id(mag_id)
+                if mag is not None:
+                    for surf in hole.build_geometry():
+                        label_dict = decode_label(surf.label)
+                        if (
+                            HOLEM_LAB in label_dict["surf_type"]
+                            and label_dict["T_id"] == mag_id
+                        ):
+                            mag_surf = surf
+                            break
+                    # Create arrow coordinates
+                    Zh = hole.Zh
+                    for ii in range(Zh):
+                        off = pi if ii % 2 == 1 else 0
+                        if mag is not None and mag.type_magnetization == 3:
+                            off -= pi / 2
+                        Z1 = mag_surf.point_ref * exp(1j * (ii * 2 * pi / Zh + pi / Zh))
+                        Z2 = (
+                            mag_surf.point_ref + H / 5 * exp(1j * (mag_dir + off))
+                        ) * exp(1j * (ii * 2 * pi / Zh + pi / Zh))
+                        axes.annotate(
+                            text="",
+                            xy=(Z2.real, Z2.imag),
+                            xytext=(Z1.real, Z1.imag),
+                            arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
+                        )
 
     # Axis Setup
     axes.axis("equal")
