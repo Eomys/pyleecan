@@ -1,7 +1,7 @@
 {
     "__class__": "MachineIPMSM",
-    "__save_date__": "2021_05_21 11h02min16s ",
-    "__version__": "pyleecan_1.3.0",
+    "__save_date__": "2021_08_13 15h51min20s ",
+    "__version__": "pyleecan_1.3.2",
     "desc": "",
     "frame": null,
     "logger_name": "Pyleecan.Machine",
@@ -85,20 +85,20 @@
                         "name": "MagnetPrius",
                         "path": "MagnetPrius.json",
                         "struct": {
-                            "Ex": null,
+                            "Ex": 15500000000,
                             "Ey": null,
                             "Ez": null,
                             "Gxy": null,
                             "Gxz": null,
                             "Gyz": null,
                             "__class__": "MatStructural",
-                            "nu_xy": null,
+                            "nu_xy": 0.3,
                             "nu_xz": null,
                             "nu_yz": null,
                             "rho": 7500.0
                         }
                     },
-                    "type_magnetization": 1
+                    "type_magnetization": 3
                 },
                 "magnetization_dict_offset": null,
                 "mat_void": {
@@ -487,6 +487,7 @@
         "Wrvd": 0,
         "__class__": "LamSlotWind",
         "axial_vent": [],
+        "bore": null,
         "is_internal": false,
         "is_stator": true,
         "mat_type": {

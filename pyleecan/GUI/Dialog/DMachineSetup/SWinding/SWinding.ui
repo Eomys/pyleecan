@@ -23,7 +23,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_8">
      <item>
-      <widget class="MPLCanvas2" name="w_viewer" native="true">
+      <widget class="MPLCanvas" name="w_viewer" native="true">
        <property name="minimumSize">
         <size>
          <width>250</width>
@@ -126,13 +126,31 @@
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="in_Nlayer">
+                <property name="toolTip">
+                 <string>Number of different phases in a same slot</string>
+                </property>
+                <property name="statusTip">
+                 <string>Number of different phases in a same slot</string>
+                </property>
+                <property name="whatsThis">
+                 <string>Number of different phases in a same slot</string>
+                </property>
                 <property name="text">
-                 <string>Layer number</string>
+                 <string>Layers number</string>
                 </property>
                </widget>
               </item>
               <item row="1" column="1">
                <widget class="QSpinBox" name="si_Nlayer">
+                <property name="toolTip">
+                 <string>Number of different phases in a same slot</string>
+                </property>
+                <property name="statusTip">
+                 <string>Number of different phases in a same slot</string>
+                </property>
+                <property name="whatsThis">
+                 <string>Number of different phases in a same slot</string>
+                </property>
                 <property name="minimum">
                  <number>1</number>
                 </property>
@@ -307,6 +325,15 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Fundamental field rotation direction when feeding the winding with direct AC current</string>
+              </property>
+              <property name="statusTip">
+               <string>Fundamental field rotation direction when feeding the winding with direct AC current</string>
+              </property>
+              <property name="whatsThis">
+               <string>Fundamental field rotation direction when feeding the winding with direct AC current</string>
+              </property>
               <property name="text">
                <string>Rotation Direction: </string>
               </property>
@@ -419,7 +446,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MPLCanvas2</class>
+   <class>MPLCanvas</class>
    <extends>QWidget</extends>
    <header>.....GUI.Tools.MPLCanvas</header>
    <container>1</container>

@@ -76,6 +76,42 @@ class Test_SlotW14_meth(object):
         )
 
     @pytest.mark.parametrize("test_dict", slotW14_test)
+    def test_build_geometry_active(self, test_dict):
+        """Check that the active geometry is correctly split"""
+        test_obj = test_dict["test_obj"]
+        surf_list = test_obj.slot.build_geometry_active(Nrad=3, Ntan=2)
+
+        # Check label
+        assert surf_list[0].label == "Stator_Winding_R0-T0-S0"
+        assert surf_list[1].label == "Stator_Winding_R1-T0-S0"
+        assert surf_list[2].label == "Stator_Winding_R2-T0-S0"
+        assert surf_list[3].label == "Stator_Winding_R0-T1-S0"
+        assert surf_list[4].label == "Stator_Winding_R1-T1-S0"
+        assert surf_list[5].label == "Stator_Winding_R2-T1-S0"
+        # Check tangential position
+        assert surf_list[0].point_ref.imag < 0
+        assert surf_list[1].point_ref.imag < 0
+        assert surf_list[2].point_ref.imag < 0
+        assert surf_list[3].point_ref.imag > 0
+        assert surf_list[4].point_ref.imag > 0
+        assert surf_list[5].point_ref.imag > 0
+        # Check radial position
+        if test_obj.is_internal:
+            # Tan=0
+            assert surf_list[0].point_ref.real > surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real > surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real > surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real > surf_list[5].point_ref.real
+        else:
+            # Tan=0
+            assert surf_list[0].point_ref.real < surf_list[1].point_ref.real
+            assert surf_list[1].point_ref.real < surf_list[2].point_ref.real
+            # Tan=1
+            assert surf_list[3].point_ref.real < surf_list[4].point_ref.real
+            assert surf_list[4].point_ref.real < surf_list[5].point_ref.real
+
+    @pytest.mark.parametrize("test_dict", slotW14_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]

@@ -37,6 +37,11 @@ try:
 except ImportError as error:
     get_demag = error
 
+try:
+    from ..Methods.Output.OutMag.comp_power import comp_power
+except ImportError as error:
+    comp_power = error
+
 
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
@@ -85,6 +90,15 @@ class OutMag(FrozenClass):
         )
     else:
         get_demag = get_demag
+    # cf Methods.Output.OutMag.comp_power
+    if isinstance(comp_power, ImportError):
+        comp_power = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMag method comp_power: " + str(comp_power))
+            )
+        )
+    else:
+        comp_power = comp_power
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -93,6 +107,7 @@ class OutMag(FrozenClass):
 
     def __init__(
         self,
+        Time=None,
         axes_dict=None,
         B=None,
         Tem=None,
@@ -106,6 +121,7 @@ class OutMag(FrozenClass):
         logger_name="Pyleecan.Magnetics",
         internal=None,
         Rag=None,
+        Pem_av=None,
         init_dict=None,
         init_str=None,
     ):
@@ -124,6 +140,8 @@ class OutMag(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
+            if "Time" in list(init_dict.keys()):
+                Time = init_dict["Time"]
             if "axes_dict" in list(init_dict.keys()):
                 axes_dict = init_dict["axes_dict"]
             if "B" in list(init_dict.keys()):
@@ -150,8 +168,11 @@ class OutMag(FrozenClass):
                 internal = init_dict["internal"]
             if "Rag" in list(init_dict.keys()):
                 Rag = init_dict["Rag"]
+            if "Pem_av" in list(init_dict.keys()):
+                Pem_av = init_dict["Pem_av"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
+        self.Time = Time
         self.axes_dict = axes_dict
         self.B = B
         self.Tem = Tem
@@ -165,6 +186,7 @@ class OutMag(FrozenClass):
         self.logger_name = logger_name
         self.internal = internal
         self.Rag = Rag
+        self.Pem_av = Pem_av
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -177,6 +199,7 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = None " + linesep
         else:
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        OutMag_str += "Time = " + str(self.Time) + linesep + linesep
         OutMag_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
         OutMag_str += "B = " + str(self.B) + linesep + linesep
         OutMag_str += "Tem = " + str(self.Tem) + linesep + linesep
@@ -204,12 +227,15 @@ class OutMag(FrozenClass):
         else:
             OutMag_str += "internal = None" + linesep + linesep
         OutMag_str += "Rag = " + str(self.Rag) + linesep
+        OutMag_str += "Pem_av = " + str(self.Pem_av) + linesep
         return OutMag_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
 
         if type(other) != type(self):
+            return False
+        if other.Time != self.Time:
             return False
         if other.axes_dict != self.axes_dict:
             return False
@@ -237,6 +263,8 @@ class OutMag(FrozenClass):
             return False
         if other.Rag != self.Rag:
             return False
+        if other.Pem_av != self.Pem_av:
+            return False
         return True
 
     def compare(self, other, name="self", ignore_list=None):
@@ -247,6 +275,12 @@ class OutMag(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
+        if (other.Time is None and self.Time is not None) or (
+            other.Time is not None and self.Time is None
+        ):
+            diff_list.append(name + ".Time None mismatch")
+        elif self.Time is not None:
+            diff_list.extend(self.Time.compare(other.Time, name=name + ".Time"))
         if (other.axes_dict is None and self.axes_dict is not None) or (
             other.axes_dict is not None and self.axes_dict is None
         ):
@@ -333,6 +367,8 @@ class OutMag(FrozenClass):
             )
         if other._Rag != self._Rag:
             diff_list.append(name + ".Rag")
+        if other._Pem_av != self._Pem_av:
+            diff_list.append(name + ".Pem_av")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -341,6 +377,7 @@ class OutMag(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
+        S += getsizeof(self.Time)
         if self.axes_dict is not None:
             for key, value in self.axes_dict.items():
                 S += getsizeof(value) + getsizeof(key)
@@ -358,6 +395,7 @@ class OutMag(FrozenClass):
         S += getsizeof(self.logger_name)
         S += getsizeof(self.internal)
         S += getsizeof(self.Rag)
+        S += getsizeof(self.Pem_av)
         return S
 
     def as_dict(self, **kwargs):
@@ -368,6 +406,10 @@ class OutMag(FrozenClass):
         """
 
         OutMag_dict = dict()
+        if self.Time is None:
+            OutMag_dict["Time"] = None
+        else:
+            OutMag_dict["Time"] = self.Time.as_dict()
         if self.axes_dict is None:
             OutMag_dict["axes_dict"] = None
         else:
@@ -415,6 +457,7 @@ class OutMag(FrozenClass):
         else:
             OutMag_dict["internal"] = self.internal.as_dict(**kwargs)
         OutMag_dict["Rag"] = self.Rag
+        OutMag_dict["Pem_av"] = self.Pem_av
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -422,6 +465,7 @@ class OutMag(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
+        self.Time = None
         self.axes_dict = None
         self.B = None
         self.Tem = None
@@ -437,6 +481,34 @@ class OutMag(FrozenClass):
         if self.internal is not None:
             self.internal._set_None()
         self.Rag = None
+        self.Pem_av = None
+
+    def _get_Time(self):
+        """getter of Time"""
+        return self._Time
+
+    def _set_Time(self, value):
+        """setter of Time"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Time"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("Time", value, "Data")
+        self._Time = value
+
+    Time = property(
+        fget=_get_Time,
+        fset=_set_Time,
+        doc=u"""Magnetic time Data object
+
+        :Type: SciDataTool.Classes.DataND.Data
+        """,
+    )
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -751,6 +823,24 @@ class OutMag(FrozenClass):
         fget=_get_Rag,
         fset=_set_Rag,
         doc=u"""Radius value for air-gap computation
+
+        :Type: float
+        """,
+    )
+
+    def _get_Pem_av(self):
+        """getter of Pem_av"""
+        return self._Pem_av
+
+    def _set_Pem_av(self, value):
+        """setter of Pem_av"""
+        check_var("Pem_av", value, "float")
+        self._Pem_av = value
+
+    Pem_av = property(
+        fget=_get_Pem_av,
+        fset=_set_Pem_av,
+        doc=u"""Average Electromagnetic power
 
         :Type: float
         """,

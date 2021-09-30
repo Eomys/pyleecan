@@ -19,7 +19,8 @@
             "is_on_line",
             "split_line",
             "comp_distance",
-            "plot"
+            "plot",
+            "comp_maxseg"
         ],
         "mother": "Line",
         "name": "Arc",
@@ -482,11 +483,11 @@
                 "value": 0
             },
             {
-                "desc": "Label to set to the lines",
+                "desc": "Property dict to apply on the lines",
                 "max": "",
                 "min": "",
-                "name": "line_label",
-                "type": "str",
+                "name": "prop_dict",
+                "type": "dict",
                 "unit": "",
                 "value": ""
             }
@@ -2022,7 +2023,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "FrameBar"
+        ],
         "desc": "machine frame",
         "is_internal": false,
         "methods": [
@@ -2074,6 +2077,49 @@
                 "type": "Material",
                 "unit": "",
                 "value": ""
+            }
+        ]
+    },
+    "FrameBar": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "machine frame with polar structural bars between frame and outer lamination",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "comp_surface",
+            "comp_height_gap",
+            "build_geometry_bar",
+            "comp_surface_bar",
+            "comp_surface_gap"
+        ],
+        "mother": "Frame",
+        "name": "FrameBar",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/FrameBar.csv",
+        "properties": [
+            {
+                "desc": "Number of bars",
+                "max": "",
+                "min": "1",
+                "name": "Nbar",
+                "type": "int",
+                "unit": "m",
+                "value": 8
+            },
+            {
+                "desc": "Width of bars",
+                "max": "",
+                "min": "0",
+                "name": "wbar",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
             }
         ]
     },
@@ -2161,7 +2207,8 @@
             "get_Rext",
             "has_magnet",
             "plot",
-            "set_magnet_by_id"
+            "set_magnet_by_id",
+            "get_R_id"
         ],
         "mother": "",
         "name": "Hole",
@@ -2170,7 +2217,7 @@
         "properties": [
             {
                 "desc": "Number of Hole around the circumference",
-                "max": "1000",
+                "max": "",
                 "min": "0",
                 "name": "Zh",
                 "type": "int",
@@ -2194,6 +2241,15 @@
                 "type": "dict",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Shift angle of the holes around circumference",
+                "max": "6.29",
+                "min": "0",
+                "name": "Alpha0",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
             }
         ]
     },
@@ -3019,8 +3075,14 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
+            "_comp_point_coordinate",
             "build_geometry",
             "check",
+            "comp_magnetization_dict",
+            "comp_mass_magnet",
+            "comp_surface_magnet",
+            "comp_volume_magnet",
+            "plot_schematics",
             "remove_magnet",
             "has_magnet"
         ],
@@ -3036,7 +3098,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.0023734787
+                "value": 0.002373479
             },
             {
                 "desc": "Magnet top width",
@@ -4468,6 +4530,15 @@
                 "type": "float",
                 "unit": "Vrms",
                 "value": null
+            },
+            {
+                "desc": "Theorical Average Electromagnetic Power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_ref",
+                "type": "float",
+                "unit": "W",
+                "value": null
             }
         ]
     },
@@ -4580,8 +4651,10 @@
             "comp_height_yoke",
             "get_Zs",
             "comp_radius_mid_yoke",
+            "comp_periodicity",
             "get_bore_desc",
-            "set_pole_pair_number"
+            "set_pole_pair_number",
+            "comp_angle_d_axis"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -4930,7 +5003,9 @@
             "get_yoke_desc",
             "get_bore_desc",
             "comp_point_ref",
-            "comp_periodicity_spatial"
+            "comp_periodicity_spatial",
+            "get_label",
+            "get_yoke_side_line"
         ],
         "mother": "",
         "name": "Lamination",
@@ -5081,13 +5156,13 @@
         "path": "pyleecan/Generator/ClassesRef/Geometry/Line.csv",
         "properties": [
             {
-                "desc": "the label of the Line (EX: Yoke_side)",
+                "desc": "Property dictionary",
                 "max": "",
                 "min": "",
-                "name": "label",
-                "type": "str",
+                "name": "prop_dict",
+                "type": "dict",
                 "unit": "-",
-                "value": ""
+                "value": null
             }
         ]
     },
@@ -5630,7 +5705,9 @@
         "is_internal": false,
         "methods": [
             "check",
-            "get_machine_type"
+            "get_machine_type",
+            "get_pole_pair_number",
+            "set_pole_pair_number"
         ],
         "mother": "MachineSync",
         "name": "MachineSRM",
@@ -6110,8 +6187,8 @@
                 "value": ""
             },
             {
-                "desc": "Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach",
-                "max": "5",
+                "desc": "Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach, 3 Tangential",
+                "max": "3",
                 "min": "0",
                 "name": "type_magnetization",
                 "type": "int",
@@ -7117,21 +7194,21 @@
         "path": "pyleecan/Generator/ClassesRef/Material/ModelBH.csv",
         "properties": [
             {
-                "desc": "Max value of H for extrapolation",
+                "desc": "Max value of B for extrapolation",
                 "max": "",
                 "min": "",
                 "name": "Bmax",
                 "type": "float",
-                "unit": "-",
+                "unit": "T",
                 "value": 2.31
             },
             {
-                "desc": "Max value of B for extrapolation",
+                "desc": "Max value of H for extrapolation",
                 "max": "",
                 "min": "",
                 "name": "Hmax",
                 "type": "float",
-                "unit": "-",
+                "unit": "A/m",
                 "value": null
             },
             {
@@ -7140,7 +7217,7 @@
                 "min": "",
                 "name": "delta",
                 "type": "float",
-                "unit": "-",
+                "unit": "A/m",
                 "value": 100
             }
         ]
@@ -7974,7 +8051,7 @@
                 "value": null
             },
             {
-                "desc": "Average Electromagnetic power",
+                "desc": "Theorical Average Electromagnetic Power",
                 "max": "",
                 "min": "",
                 "name": "Pem_av_ref",
@@ -8446,13 +8523,23 @@
             "store",
             "clean",
             "comp_emf",
-            "get_demag"
+            "get_demag",
+            "comp_power"
         ],
         "mother": "",
         "name": "OutMag",
         "package": "Output",
         "path": "pyleecan/Generator/ClassesRef/Output/OutMag.csv",
         "properties": [
+            {
+                "desc": "Magnetic time Data object",
+                "max": "",
+                "min": "",
+                "name": "Time",
+                "type": "SciDataTool.Classes.DataND.Data",
+                "unit": "s",
+                "value": "None"
+            },
             {
                 "desc": "Dict containing axes data used for Magnetics",
                 "max": "",
@@ -8568,6 +8655,15 @@
                 "name": "Rag",
                 "type": "float",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Average Electromagnetic power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av",
+                "type": "float",
+                "unit": "W",
                 "value": null
             }
         ]
@@ -9583,7 +9679,7 @@
         "properties": [
             {
                 "desc": "length of the rotor shaft [m] (used for weight & cost estimation only)",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "Lshaft",
                 "type": "float",
@@ -9601,7 +9697,7 @@
             },
             {
                 "desc": "diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses",
-                "max": "8",
+                "max": "",
                 "min": "0",
                 "name": "Drsh",
                 "type": "float",
@@ -9871,7 +9967,7 @@
         "properties": [
             {
                 "desc": "slot number",
-                "max": "1000",
+                "max": "",
                 "min": "0",
                 "name": "Zs",
                 "type": "int",
@@ -12371,7 +12467,13 @@
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",
-            "check"
+            "check",
+            "comp_angle_opening",
+            "comp_height_damper",
+            "comp_height_wind",
+            "comp_height",
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotWLSRPM",
@@ -13012,7 +13114,9 @@
         ],
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_ref_simu_index"
+        ],
         "mother": "VarSimu",
         "name": "VarLoad",
         "package": "Simulation",
@@ -13135,7 +13239,8 @@
             "gen_datakeeper_list",
             "get_elec_datakeeper",
             "get_mag_datakeeper",
-            "get_force_datakeeper"
+            "get_force_datakeeper",
+            "get_ref_simu_index"
         ],
         "mother": "",
         "name": "VarSimu",
@@ -13266,15 +13371,6 @@
         "path": "pyleecan/Generator/ClassesRef/Slot/VentilationCirc.csv",
         "properties": [
             {
-                "desc": "Shift angle of the holes around circumference",
-                "max": "6.29",
-                "min": "0",
-                "name": "Alpha0",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
-            },
-            {
                 "desc": "Hole diameters",
                 "max": "",
                 "min": "0",
@@ -13284,7 +13380,7 @@
                 "value": 1
             },
             {
-                "desc": "Diameter of the hole centers",
+                "desc": "Radius of the hole centers",
                 "max": "",
                 "min": "0",
                 "name": "H0",
@@ -13316,15 +13412,6 @@
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/VentilationPolar.csv",
         "properties": [
-            {
-                "desc": "Shift angle of the hole around circumference",
-                "max": "6.29",
-                "min": "0",
-                "name": "Alpha0",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
-            },
             {
                 "desc": "Height of the hole",
                 "max": "",
@@ -13376,15 +13463,6 @@
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/VentilationTrap.csv",
         "properties": [
-            {
-                "desc": "Shift angle of the hole around circumference",
-                "max": "6.29",
-                "min": "0",
-                "name": "Alpha0",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
-            },
             {
                 "desc": "Hole height",
                 "max": "",
@@ -13479,7 +13557,7 @@
             },
             {
                 "desc": "number of phases ",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "qs",
                 "type": "int",
@@ -13488,7 +13566,7 @@
             },
             {
                 "desc": "number of turns per coil",
-                "max": "1000",
+                "max": "",
                 "min": "1",
                 "name": "Ntcoil",
                 "type": "int",
@@ -13496,8 +13574,8 @@
                 "value": 7
             },
             {
-                "desc": "number of parallel circuits per phase (maximum p)",
-                "max": "1000",
+                "desc": "number of parallel circuits per phase",
+                "max": "",
                 "min": "1",
                 "name": "Npcp",
                 "type": "int",
@@ -13515,7 +13593,7 @@
             },
             {
                 "desc": "pole pairs number",
-                "max": "100",
+                "max": "",
                 "min": "1",
                 "name": "p",
                 "type": "int",
@@ -13524,7 +13602,7 @@
             },
             {
                 "desc": "straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length ",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "Lewout",
                 "type": "float",

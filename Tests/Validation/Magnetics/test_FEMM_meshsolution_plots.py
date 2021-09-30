@@ -1,11 +1,8 @@
-import json
 from multiprocessing import cpu_count
 from os.path import join
 
-import matplotlib.pyplot as plt
-import numpy as np
 import pytest
-from numpy import array, ones, pi, zeros
+from numpy import array, pi, zeros
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -23,7 +20,7 @@ from Tests import save_load_path, save_plot_path
 @pytest.mark.MeshSol
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-def test_SPMSM():
+def test_FEMM_meshsolution_plots_SPMSM():
     """Validation of a polar SIPMSM with surface magnet
     Linear lamination material
 
@@ -144,7 +141,7 @@ def test_SPMSM():
 @pytest.mark.periodicity
 @pytest.mark.IPMSM
 @pytest.mark.SingleOP
-def test_slotless():
+def test_FEMM_meshsolution_plots_slotless():
     """Validation of extracting FEMM data with MeshSolution.
 
     Electrical machine is an academic slotless machine inspired
@@ -271,7 +268,7 @@ def test_slotless():
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-def test_Toyota_Prius():
+def test_FEMM_meshsolution_plots_Prius():
     """Validation of extracting FEMM data with MeshSolution with Toyota Prius electrical machine."""
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     simu = Simu1(name="test_meshsolution_plots_Toyota_Prius", machine=Toyota_Prius)
@@ -402,6 +399,6 @@ def test_Toyota_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_slotless()
-    # out = test_Toyota_Prius()
-    out = test_SPMSM()
+    out = test_FEMM_meshsolution_plots_SPMSM()
+    # out = test_FEMM_meshsolution_plots_slotless()
+    # out = test_FEMM_meshsolution_plots_Prius()

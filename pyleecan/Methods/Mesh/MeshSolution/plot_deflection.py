@@ -17,6 +17,7 @@ from pyleecan.Functions.Plot.Pyvista.configure_plot import configure_plot
 from pyleecan.Functions.Plot.Pyvista.plot_surf_deflection import plot_surf_deflection
 
 COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
+FONT_FAMILY_PYVISTA = config_dict["PLOT"]["FONT_FAMILY_PYVISTA"]
 
 
 def plot_deflection(
@@ -102,7 +103,7 @@ def plot_deflection(
                 position="upper_edge",
                 color="black",
                 font_size=10,
-                font="arial",
+                font=FONT_FAMILY_PYVISTA,
             )
 
         # Get deflection
@@ -161,7 +162,7 @@ def plot_deflection(
                 position="lower_edge",
                 color="gray",
                 font_size=10,
-                font="arial",
+                font=FONT_FAMILY_PYVISTA,
             )
             p.show(auto_close=False)
 
@@ -189,7 +190,7 @@ def plot_deflection(
                     position="upper_edge",
                     color="black",
                     font_size=10,
-                    font="arial",
+                    font=FONT_FAMILY_PYVISTA,
                 )
                 p.write_frame()
                 p.clear()

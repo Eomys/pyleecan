@@ -47,6 +47,11 @@ try:
 except ImportError as error:
     plot = error
 
+try:
+    from ..Methods.Geometry.Arc.comp_maxseg import comp_maxseg
+except ImportError as error:
+    comp_maxseg = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -113,13 +118,22 @@ class Arc(Line):
         )
     else:
         plot = plot
+    # cf Methods.Geometry.Arc.comp_maxseg
+    if isinstance(comp_maxseg, ImportError):
+        comp_maxseg = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc method comp_maxseg: " + str(comp_maxseg))
+            )
+        )
+    else:
+        comp_maxseg = comp_maxseg
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, label="", init_dict=None, init_str=None):
+    def __init__(self, prop_dict=None, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -135,11 +149,11 @@ class Arc(Line):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "label" in list(init_dict.keys()):
-                label = init_dict["label"]
+            if "prop_dict" in list(init_dict.keys()):
+                prop_dict = init_dict["prop_dict"]
         # Set the properties (value check and convertion are done in setter)
         # Call Line init
-        super(Arc, self).__init__(label=label)
+        super(Arc, self).__init__(prop_dict=prop_dict)
         # The class is frozen (in Line init), for now it's impossible to
         # add new properties
 

@@ -1,11 +1,15 @@
-# -*- coding: utf-8 -*-
-
-from ....Functions.FEMM import boundary_prop
 from numpy import abs, exp
 
 
 def draw_FEMM(
-    self, femm, nodeprop=None, maxseg=None, propname=None, hide=False, group=None
+    self,
+    femm,
+    nodeprop=None,
+    maxseg=None,
+    element_size=None,
+    propname=None,
+    hide=False,
+    group=None,
 ):
     """Draw the Arc object in FEMM and assign the property
 
@@ -33,11 +37,6 @@ def draw_FEMM(
     -------
     None
     """
-
-    # Get BC (if any)
-    for bound_label in boundary_prop:
-        if bound_label in self.label:
-            propname = boundary_prop[bound_label]
 
     # split if arc angle > 180
     angle = self.get_angle(is_deg=True)
@@ -84,5 +83,6 @@ def draw_FEMM(
     else:
         femm.mi_selectarcsegment(X2, Y2)
 
+    maxseg = self.comp_maxseg(element_size, maxseg)
     femm.mi_setarcsegmentprop(maxseg, propname, hide, group)
     femm.mi_clearselected()

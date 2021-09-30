@@ -21,7 +21,7 @@ import platform
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.3.2"
+PYLEECAN_VERSION = "1.3.5"
 
 
 with open("README.md", "r") as fh:
@@ -34,7 +34,7 @@ install_requires = [
     "setuptools",
     "cloudpickle>=1.3.0",
     "matplotlib>=3.3.2",
-    "numpy==1.19.3",
+    "numpy>1.19.5",
     "pandas>=1.0.3",
     'pyfemm>=0.1.1;platform_system=="Windows"',
     "PySide2>=5.15.2",
@@ -43,7 +43,7 @@ install_requires = [
     "xlrd>=1.2.0",
     "xlwt>=1.3.0",
     "deap>=1.3.1",
-    "SciDataTool>=1.4.1",
+    "SciDataTool>=1.4.6",
     "pyvista>=0.25.3",
     "meshio>=4.0.15",
     "h5py>=3.2.1",
@@ -54,7 +54,6 @@ install_requires = [
     "pytest-qt>=3.3.0",
     "pyuff>=1.25",
 ]
-
 
 tests_require = [
     "ddt>=1.3.1",

@@ -98,6 +98,7 @@ class InputVoltage(Input):
         felec=None,
         slip_ref=0,
         U0_ref=None,
+        Pem_av_ref=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -140,6 +141,8 @@ class InputVoltage(Input):
                 slip_ref = init_dict["slip_ref"]
             if "U0_ref" in list(init_dict.keys()):
                 U0_ref = init_dict["U0_ref"]
+            if "Pem_av_ref" in list(init_dict.keys()):
+                Pem_av_ref = init_dict["Pem_av_ref"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -162,6 +165,7 @@ class InputVoltage(Input):
         self.felec = felec
         self.slip_ref = slip_ref
         self.U0_ref = U0_ref
+        self.Pem_av_ref = Pem_av_ref
         # Call Input init
         super(InputVoltage, self).__init__(
             time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
@@ -192,6 +196,7 @@ class InputVoltage(Input):
         InputVoltage_str += "felec = " + str(self.felec) + linesep
         InputVoltage_str += "slip_ref = " + str(self.slip_ref) + linesep
         InputVoltage_str += "U0_ref = " + str(self.U0_ref) + linesep
+        InputVoltage_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         return InputVoltage_str
 
     def __eq__(self, other):
@@ -220,6 +225,8 @@ class InputVoltage(Input):
         if other.slip_ref != self.slip_ref:
             return False
         if other.U0_ref != self.U0_ref:
+            return False
+        if other.Pem_av_ref != self.Pem_av_ref:
             return False
         return True
 
@@ -258,6 +265,8 @@ class InputVoltage(Input):
             diff_list.append(name + ".slip_ref")
         if other._U0_ref != self._U0_ref:
             diff_list.append(name + ".U0_ref")
+        if other._Pem_av_ref != self._Pem_av_ref:
+            diff_list.append(name + ".Pem_av_ref")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -278,6 +287,7 @@ class InputVoltage(Input):
         S += getsizeof(self.felec)
         S += getsizeof(self.slip_ref)
         S += getsizeof(self.U0_ref)
+        S += getsizeof(self.Pem_av_ref)
         return S
 
     def as_dict(self, **kwargs):
@@ -301,6 +311,7 @@ class InputVoltage(Input):
         InputVoltage_dict["felec"] = self.felec
         InputVoltage_dict["slip_ref"] = self.slip_ref
         InputVoltage_dict["U0_ref"] = self.U0_ref
+        InputVoltage_dict["Pem_av_ref"] = self.Pem_av_ref
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputVoltage_dict["__class__"] = "InputVoltage"
@@ -319,6 +330,7 @@ class InputVoltage(Input):
         self.felec = None
         self.slip_ref = None
         self.U0_ref = None
+        self.Pem_av_ref = None
         # Set to None the properties inherited from Input
         super(InputVoltage, self)._set_None()
 
@@ -493,6 +505,24 @@ class InputVoltage(Input):
         fget=_get_U0_ref,
         fset=_set_U0_ref,
         doc=u"""stator voltage (phase to neutral)
+
+        :Type: float
+        """,
+    )
+
+    def _get_Pem_av_ref(self):
+        """getter of Pem_av_ref"""
+        return self._Pem_av_ref
+
+    def _set_Pem_av_ref(self, value):
+        """setter of Pem_av_ref"""
+        check_var("Pem_av_ref", value, "float")
+        self._Pem_av_ref = value
+
+    Pem_av_ref = property(
+        fget=_get_Pem_av_ref,
+        fset=_set_Pem_av_ref,
+        doc=u"""Theorical Average Electromagnetic Power
 
         :Type: float
         """,

@@ -9,6 +9,26 @@ from ...Classes.Circle import Circle
 from ...Classes.Segment import Segment
 from ...Classes.SurfLine import SurfLine
 from ...Classes.MachineSIPMSM import MachineSIPMSM
+from ...Functions.labels import (
+    AIRGAP_LAB,
+    SLID_LAB,
+    NO_LAM_LAB,
+    BOT_LAB,
+    TOP_LAB,
+    BOUNDARY_PROP_LAB,
+    SBS_TR_LAB,
+    SBS_TL_LAB,
+    SBS_BR_LAB,
+    SBS_BL_LAB,
+    SBR_B_LAB,
+    SBR_T_LAB,
+    AS_TR_LAB,
+    AS_TL_LAB,
+    AS_BR_LAB,
+    AS_BL_LAB,
+    AR_B_LAB,
+    AR_T_LAB,
+)
 
 
 def get_sliding_band(sym, machine):
@@ -31,6 +51,8 @@ def get_sliding_band(sym, machine):
     lam_list = machine.get_lam_list()
     lam_int = lam_list[0]
     lam_ext = lam_list[1]
+    lab_int = lam_int.get_label()
+    lab_ext = lam_ext.get_label()
 
     stator_list = machine.stator.build_geometry(sym=sym)
     rotor_list = machine.rotor.build_geometry(sym=sym)
@@ -66,13 +88,13 @@ def get_sliding_band(sym, machine):
                         begin=p1,
                         end=p2,
                         radius=radius,
-                        label=line.label,
+                        prop_dict=line.prop_dict,
                         is_trigo_direction=True,
                     )
                     # if phi_p2 > phi_p1:
                     #    line_copy.reverse()
                 else:
-                    line_copy = Segment(begin=p1, end=p2, label=line.label)
+                    line_copy = Segment(begin=p1, end=p2, prop_dict=line.prop_dict)
                 new_p1 = p1
                 for p in first_points:
                     if abs(p1.real - p.real) < tol and abs(p1.imag - p.imag) < tol:
@@ -106,13 +128,13 @@ def get_sliding_band(sym, machine):
                             begin=p1,
                             end=p2,
                             radius=radius,
-                            label=line.label,
+                            prop_dict=line.prop_dict,
                             is_trigo_direction=True,
                         )
                         if phi_p2 > phi_p1:
                             line_copy.reverse()
                     else:
-                        line_copy = Segment(begin=p1, end=p2, label=line.label)
+                        line_copy = Segment(begin=p1, end=p2, prop_dict=line.prop_dict)
                         if phi_p2 > phi_p1:
                             line_copy.reverse()
                     rotor_airgap_int_lines.append(line_copy)
@@ -132,13 +154,13 @@ def get_sliding_band(sym, machine):
                             begin=p1,
                             end=p2,
                             radius=radius,
-                            label=line.label,
+                            prop_dict=line.prop_dict,
                             is_trigo_direction=True,
                         )
                         if phi_p2 > phi_p1:
                             line_copy.reverse()
                     else:
-                        line_copy = Segment(begin=p1, end=p2, label=line.label)
+                        line_copy = Segment(begin=p1, end=p2, prop_dict=line.prop_dict)
                         if phi_p2 > phi_p1:
                             line_copy.reverse()
                     rotor_airgap_int_lines.append(line_copy)
@@ -151,9 +173,9 @@ def get_sliding_band(sym, machine):
             Circle(
                 center=0,
                 radius=Rgap_mec_int + W_sb,
-                label="Airgap_int",
+                label=lab_int + "_" + AIRGAP_LAB + BOT_LAB,
                 point_ref=(Rgap_mec_int + W_sb / 2) * exp(1j * pi / 2),
-                line_label="int_airgap_line",
+                prop_dict={BOUNDARY_PROP_LAB: AR_B_LAB},
             )
         )
         # Internal Sliding band
@@ -161,9 +183,9 @@ def get_sliding_band(sym, machine):
             Circle(
                 center=0,
                 radius=Rgap_mec_int + 2 * W_sb,
-                label="SildingBand_int",
+                label=NO_LAM_LAB + "_" + SLID_LAB,
                 point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
-                line_label="int_sb_line",
+                prop_dict={BOUNDARY_PROP_LAB: SBR_B_LAB},
             )
         )
         # External AirGap
@@ -171,9 +193,9 @@ def get_sliding_band(sym, machine):
             Circle(
                 center=0,
                 radius=Rgap_mec_int + 3 * W_sb,
-                label="Airgap_ext",
+                label=lab_ext + "_" + AIRGAP_LAB + TOP_LAB,
                 point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
-                line_label="ext_airgap_line",
+                prop_dict={BOUNDARY_PROP_LAB: AR_T_LAB},
             )
         )
 
@@ -186,22 +208,26 @@ def get_sliding_band(sym, machine):
         Z2 = Rgap_mec_int + W_sb
         Z3 = Z2 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
-        airgap_lines.append(Segment(begin=Z1, end=Z2, label="int_airgap_line_1"))
+        airgap_lines.append(
+            Segment(begin=Z1, end=Z2, prop_dict={BOUNDARY_PROP_LAB: AS_BR_LAB})
+        )
         int_airgap_arc = Arc1(
             begin=Z2,
             end=Z3,
             radius=Rgap_mec_int + W_sb,
-            label="int_airgap_arc",
+            prop_dict={BOUNDARY_PROP_LAB: AR_B_LAB},
             is_trigo_direction=True,
         )
         airgap_lines.append(int_airgap_arc)
-        airgap_lines.append(Segment(begin=Z3, end=Z0, label="int_airgap_line_2"))
+        airgap_lines.append(
+            Segment(begin=Z3, end=Z0, prop_dict={BOUNDARY_PROP_LAB: AS_BL_LAB})
+        )
         airgap_lines.extend(rotor_airgap_int_lines)
         surf_list.append(
             SurfLine(
                 line_list=airgap_lines,
                 point_ref=(Z2 - W_sb / 2) * exp(1j * pi / sym),
-                label="Airgap_int",
+                label=lab_int + "_" + AIRGAP_LAB + BOT_LAB,
             )
         )
 
@@ -209,21 +235,25 @@ def get_sliding_band(sym, machine):
         Z4 = Rgap_mec_int + 2 * W_sb - tol / 10
         Z5 = Z4 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
-        airgap_lines.append(Segment(begin=Z2, end=Z4, label="int_sb_line_1"))
+        airgap_lines.append(
+            Segment(begin=Z2, end=Z4, prop_dict={BOUNDARY_PROP_LAB: SBS_BR_LAB})
+        )
         int_sb_arc = Arc1(
             begin=Z4,
             end=Z5,
             radius=Rgap_mec_int + 2 * W_sb,
-            label="int_sb_arc",
+            prop_dict={BOUNDARY_PROP_LAB: SBR_B_LAB},
             is_trigo_direction=True,
         )
         airgap_lines.append(int_sb_arc)
-        airgap_lines.append(Segment(begin=Z5, end=Z3, label="int_sb_line_2"))
+        airgap_lines.append(
+            Segment(begin=Z5, end=Z3, prop_dict={BOUNDARY_PROP_LAB: SBS_BL_LAB})
+        )
         int_airgap_arc_copy = Arc1(
             begin=Z2,
             end=Z3,
             radius=Rgap_mec_int + W_sb,
-            label="int_airgap_arc_copy",
+            # label="int_airgap_arc_copy",
             is_trigo_direction=True,
         )
         int_airgap_arc_copy.reverse()
@@ -232,7 +262,7 @@ def get_sliding_band(sym, machine):
             SurfLine(
                 line_list=airgap_lines,
                 point_ref=(Z4 - W_sb / 2) * exp(1j * pi / sym),
-                label="SlidingBand_int",
+                label=NO_LAM_LAB + "_" + SLID_LAB + BOT_LAB,
             )
         )
 
@@ -242,21 +272,25 @@ def get_sliding_band(sym, machine):
         Z8 = Rgap_mec_int + 3 * W_sb
         Z9 = Z8 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
-        airgap_lines.append(Segment(begin=Z6, end=Z8, label="ext_sb_line_1"))
+        airgap_lines.append(  # Right Top SB
+            Segment(begin=Z6, end=Z8, prop_dict={BOUNDARY_PROP_LAB: SBS_TR_LAB})
+        )
         ext_airgap_arc = Arc1(
             begin=Z8,
             end=Z9,
             radius=Rgap_mec_int + 3 * W_sb,
-            label="ext_airgap_arc",
+            prop_dict={BOUNDARY_PROP_LAB: SBR_T_LAB},  # Top Radius SB
             is_trigo_direction=True,
         )
         airgap_lines.append(ext_airgap_arc)
-        airgap_lines.append(Segment(begin=Z9, end=Z7, label="ext_sb_line_2"))
+        airgap_lines.append(  # Left Top SB
+            Segment(begin=Z9, end=Z7, prop_dict={BOUNDARY_PROP_LAB: SBS_TL_LAB})
+        )
         ext_sb_arc = Arc1(
             begin=Z6,
             end=Z7,
             radius=Rgap_mec_int + 2 * W_sb,
-            label="ext_sb_arc",
+            # label="ext_sb_arc",
             is_trigo_direction=True,
         )
         ext_sb_arc.reverse()
@@ -265,7 +299,7 @@ def get_sliding_band(sym, machine):
             SurfLine(
                 line_list=airgap_lines,
                 point_ref=(Z8 - W_sb / 2) * exp(1j * pi / sym),
-                label="SlidingBand_ext",
+                label=NO_LAM_LAB + "_" + SLID_LAB + TOP_LAB,
             )
         )
 
@@ -273,13 +307,18 @@ def get_sliding_band(sym, machine):
         Z10 = Rgap_mec_ext
         Z11 = Z10 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
-        airgap_lines.append(Segment(begin=Z8, end=Z10, label="ext_airgap_line_1"))
-        airgap_lines.append(Segment(begin=Z11, end=Z9, label="ext_airgap_line_2"))
+        airgap_lines.append(
+            Segment(begin=Z8, end=Z10, prop_dict={BOUNDARY_PROP_LAB: AS_TR_LAB})
+        )
+        airgap_lines.append(
+            Segment(begin=Z11, end=Z9, prop_dict={BOUNDARY_PROP_LAB: AS_TL_LAB})
+        )
         ext_airgap_arc_copy = Arc1(
             begin=Z8,
             end=Z9,
             radius=Rgap_mec_int + 3 * W_sb,
-            label="ext_airgap_arc_copy",
+            # label="ext_airgap_arc_copy",
+            prop_dict={BOUNDARY_PROP_LAB: AR_T_LAB},
             is_trigo_direction=True,
         )
         ext_airgap_arc_copy.reverse()
@@ -289,7 +328,7 @@ def get_sliding_band(sym, machine):
             SurfLine(
                 line_list=airgap_lines,
                 point_ref=(Z8 + W_sb / 2) * exp(1j * pi / sym),
-                label="Airgap_ext",
+                label=lab_ext + "_" + AIRGAP_LAB + TOP_LAB,
             )
         )
 

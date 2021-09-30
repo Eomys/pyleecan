@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
-from numpy import exp, arcsin, tan, cos, sqrt, sin
+from numpy import exp, arcsin, tan, cos, sqrt, sin, pi
 
 
-def comp_volume_magnets(self):
-    """Compute the volume of the magnet (if any)
+def _comp_point_coordinate(self):
+    """Compute the point coordinates needed to plot the Slot.
 
     Parameters
     ----------
@@ -13,17 +11,14 @@ def comp_volume_magnets(self):
 
     Returns
     -------
-    Vmag: float
-        Volume of the magnet [m**3]
-
+    point_dict: dict
+        A dict of the slot coordinates
     """
     Rbo = self.get_Rbo()
     # Z1
     delta1 = arcsin((self.R1 + self.W2) / (self.R1 + self.R3))
     alpha1 = self.W1 - delta1
     Z1 = self.R3 * exp(-1j * alpha1)
-    x1 = Z1.real
-    y1 = Z1.imag
 
     # Zc1
     Zc1 = (self.R3 + self.R1) * exp(-1j * alpha1)
@@ -61,51 +56,28 @@ def comp_volume_magnets(self):
     x4 = (xc2 / alpha2 + yc2 + alpha2 * x3 - y3) / (alpha2 + 1 / alpha2)
     y4 = alpha2 * (x4 - x3) + y3
     Z4 = x4 + 1j * y4
+    Zw1 = self.R2 * exp(1j * self.W1)
+    Zw2 = Zw1 + self.W2 * exp(1j * -(pi / 2 - self.W1))
     # symmetry
     Z6 = Z5.conjugate()
-    x6 = Z6.real
-    y6 = Z6.imag
     Z7 = Z4.conjugate()
-    x7 = Z7.real
-    y7 = Z7.imag
     Z8 = Z3.conjugate()
-    x8 = Z8.real
-    y8 = Z8.imag
     Z9 = Z2.conjugate()
-    x9 = Z9.real
-    y9 = Z9.imag
     Z10 = Z1.conjugate()
-    x10 = Z10.real
-    y10 = Z10.imag
 
-    S_magnet_1 = (
-        x1 * y2
-        + x2 * y3
-        + x3 * y4
-        + x4 * y5
-        + x5 * y6
-        + x6 * y7
-        + x7 * y8
-        + x8 * y9
-        + x9 * y10
-        + x10 * y1
-    )
-    S_magnet_2 = (
-        x1 * y10
-        + x2 * y1
-        + x3 * y2
-        + x4 * y3
-        + x5 * y4
-        + x6 * y5
-        + x7 * y6
-        + x8 * y7
-        + x9 * y8
-        + x10 * y9
-    )
-
-    S_magnet = 0.5 * abs(S_magnet_1 - S_magnet_2)
-
-    if self.magnet_0:
-        return S_magnet * self.magnet_0.Lmag
-    else:
-        return 0
+    point_dict = dict()
+    point_dict["Z1"] = Z1
+    point_dict["Z2"] = Z2
+    point_dict["Z3"] = Z3
+    point_dict["Z4"] = Z4
+    point_dict["Z5"] = Z5
+    point_dict["Z6"] = Z6
+    point_dict["Z7"] = Z7
+    point_dict["Z8"] = Z8
+    point_dict["Z9"] = Z9
+    point_dict["Z10"] = Z10
+    point_dict["Zc1"] = Zc1
+    point_dict["Zc2"] = Zc2
+    point_dict["Zw1"] = Zw1
+    point_dict["Zw2"] = Zw2
+    return point_dict

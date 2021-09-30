@@ -12,7 +12,7 @@ from PySide2.QtWidgets import *
 from .....GUI.Dialog.DMachineSetup.SPreview.WMachineTable.WMachineTable import (
     WMachineTable,
 )
-from .....GUI.Tools.MPLCanvas import MPLCanvas2
+from .....GUI.Tools.MPLCanvas import MPLCanvas
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -27,7 +27,7 @@ class Ui_SPreview(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.w_plot = MPLCanvas2(SPreview)
+        self.w_plot = MPLCanvas(SPreview)
         self.w_plot.setObjectName(u"w_plot")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)

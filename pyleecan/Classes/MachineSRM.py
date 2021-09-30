@@ -27,6 +27,16 @@ try:
 except ImportError as error:
     get_machine_type = error
 
+try:
+    from ..Methods.Machine.MachineSRM.get_pole_pair_number import get_pole_pair_number
+except ImportError as error:
+    get_pole_pair_number = error
+
+try:
+    from ..Methods.Machine.MachineSRM.set_pole_pair_number import set_pole_pair_number
+except ImportError as error:
+    set_pole_pair_number = error
+
 
 from ._check import InitUnKnowClassError
 from .LamSlot import LamSlot
@@ -62,6 +72,30 @@ class MachineSRM(MachineSync):
         )
     else:
         get_machine_type = get_machine_type
+    # cf Methods.Machine.MachineSRM.get_pole_pair_number
+    if isinstance(get_pole_pair_number, ImportError):
+        get_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MachineSRM method get_pole_pair_number: "
+                    + str(get_pole_pair_number)
+                )
+            )
+        )
+    else:
+        get_pole_pair_number = get_pole_pair_number
+    # cf Methods.Machine.MachineSRM.set_pole_pair_number
+    if isinstance(set_pole_pair_number, ImportError):
+        set_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MachineSRM method set_pole_pair_number: "
+                    + str(set_pole_pair_number)
+                )
+            )
+        )
+    else:
+        set_pole_pair_number = set_pole_pair_number
     # save and copy methods are available in all object
     save = save
     copy = copy

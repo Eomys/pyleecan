@@ -206,7 +206,7 @@ class Shaft(FrozenClass):
 
     def _set_Lshaft(self, value):
         """setter of Lshaft"""
-        check_var("Lshaft", value, "float", Vmin=0, Vmax=100)
+        check_var("Lshaft", value, "float", Vmin=0)
         self._Lshaft = value
 
     Lshaft = property(
@@ -216,7 +216,6 @@ class Shaft(FrozenClass):
 
         :Type: float
         :min: 0
-        :max: 100
         """,
     )
 
@@ -256,7 +255,7 @@ class Shaft(FrozenClass):
 
     def _set_Drsh(self, value):
         """setter of Drsh"""
-        check_var("Drsh", value, "float", Vmin=0, Vmax=8)
+        check_var("Drsh", value, "float", Vmin=0)
         self._Drsh = value
 
     Drsh = property(
@@ -266,6 +265,5 @@ class Shaft(FrozenClass):
 
         :Type: float
         :min: 0
-        :max: 8
         """,
     )

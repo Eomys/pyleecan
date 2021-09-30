@@ -45,15 +45,6 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
 
     fig, axs = plt.subplots(2, 1, tight_layout=True, figsize=(8, 8))
 
-    # Add Manatee icon to plot window
-    thismanager = plt.get_current_fig_manager()
-    if thismanager is not None:
-        icon = QIcon()
-        icon.addFile(
-            ":/images/images/icon/Manatee.ico", QSize(), QIcon.Normal, QIcon.Off
-        )
-        thismanager.window.setWindowIcon(icon)
-
     WF.plot_2D_Data(
         "angle{°}",
         "phase",

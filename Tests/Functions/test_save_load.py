@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from os import getcwd, remove
+from os import getcwd, remove, listdir
 from os.path import isfile, join
 from unittest.mock import patch  # for unittest of input
 
@@ -152,10 +152,22 @@ def test_save_load_folder_path():
     assert isfile(join(loc_save_path, "M400-50A.json"))
     assert isfile(join(loc_save_path, "Toyota_Prius.json"))
     assert isfile(join(loc_save_path, "test_save_load_folder_path.json"))
+    assert len(listdir(loc_save_path)) == 8
     test_obj2 = load(loc_save_path)
     assert test_obj == test_obj2
     assert callable(test_obj.simu.postproc_list[0]._run_func)
     assert callable(test_obj.simu.postproc_list[1]._run_func)
+
+    # Check that the machine can be updated
+    test_obj2.simu.machine.stator.L1 = 999
+    # Check that empty materials are not save in separate file
+    test_obj2.simu.machine.stator.winding.conductor.ins_mat._set_None()
+
+    test_obj2.save(loc_save_path, is_folder=True)
+    test_obj3 = load(loc_save_path)
+
+    assert test_obj2.simu.machine.stator.L1 == test_obj3.simu.machine.stator.L1
+    assert len(listdir(loc_save_path)) == 8
 
 
 def test_save_load_just_name():
@@ -337,3 +349,6 @@ def test_save_load_simu(type_file):
 
 if __name__ == "__main__":
     test_save_load_folder_path()
+    # test_save_load_simu("json")
+    # test_save_load_simu("h5")
+    # test_save_load_simu("pkl")

@@ -11,7 +11,7 @@ from PySide2.QtWidgets import *
 
 from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
 from ......GUI.Tools.WPathSelector.WPathSelectorV import WPathSelectorV
-from ......GUI.Tools.MPLCanvas import MPLCanvas2
+from ......GUI.Tools.MPLCanvas import MPLCanvas
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -25,7 +25,7 @@ class Ui_PWSlotUD(object):
         PWSlotUD.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PWSlotUD)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.w_viewer = MPLCanvas2(PWSlotUD)
+        self.w_viewer = MPLCanvas(PWSlotUD)
         self.w_viewer.setObjectName(u"w_viewer")
 
         self.horizontalLayout.addWidget(self.w_viewer)

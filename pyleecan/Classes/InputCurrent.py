@@ -102,6 +102,7 @@ class InputCurrent(InputVoltage):
         felec=None,
         slip_ref=0,
         U0_ref=None,
+        Pem_av_ref=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -152,6 +153,8 @@ class InputCurrent(InputVoltage):
                 slip_ref = init_dict["slip_ref"]
             if "U0_ref" in list(init_dict.keys()):
                 U0_ref = init_dict["U0_ref"]
+            if "Pem_av_ref" in list(init_dict.keys()):
+                Pem_av_ref = init_dict["Pem_av_ref"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -180,6 +183,7 @@ class InputCurrent(InputVoltage):
             felec=felec,
             slip_ref=slip_ref,
             U0_ref=U0_ref,
+            Pem_av_ref=Pem_av_ref,
             time=time,
             angle=angle,
             Nt_tot=Nt_tot,

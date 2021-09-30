@@ -6,6 +6,7 @@ from PySide2.QtWidgets import QMessageBox, QWidget, QFileDialog
 
 from .....Classes.Winding import Winding
 from .....Classes.WindingUD import WindingUD
+from .....Classes.MachineSRM import MachineSRM
 from .....GUI.Dialog.DMachineSetup.SWinding.Gen_SWinding import Gen_SWinding
 from .....Methods.Machine.Winding import WindingError
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
@@ -52,7 +53,12 @@ class SWinding(Gen_SWinding, QWidget):
         else:
             self.obj = machine.rotor
         self.in_Zs.setText("Slot number=" + str(self.obj.get_Zs()))
-        self.in_p.setText("Pole pair number=" + str(self.obj.get_pole_pair_number()))
+        if isinstance(machine, MachineSRM):
+            self.in_p.hide()  # p is not meaningful for SRM
+        else:
+            self.in_p.setText(
+                "Pole pair number=" + str(self.obj.get_pole_pair_number())
+            )
 
         # if machine.type_machine == 9 and not self.is_stator:
         #     # Enforce tooth winding for WRSM rotor
@@ -90,7 +96,6 @@ class SWinding(Gen_SWinding, QWidget):
         if self.obj.winding.Npcp is None:
             self.obj.winding.Npcp = 1  # Default value
         self.si_Npcp.setValue(self.obj.winding.Npcp)
-        self.si_Npcp.setMaximum(self.obj.winding.p)
 
         # Edit Group setup
         if self.obj.winding.is_reverse_wind is None:
@@ -172,20 +177,31 @@ class SWinding(Gen_SWinding, QWidget):
             self.b_import.hide()
 
     def show_layer_widget(self):
+
+        # Coil pitch (or coil span)
+        if self.obj.winding.coil_pitch in [0, None]:
+            if self.obj.winding.p is None:  # SRM
+                self.obj.winding.coil_pitch = 1  # Tooth winding
+            else:
+                Zs = self.obj.slot.Zs
+                qs = self.obj.winding.qs
+                p = self.obj.winding.p
+                # Number of slots per pole and per phase
+                spp = Zs / (2 * p * qs)
+                if spp > 0.5:
+                    # distributed winding
+                    self.obj.winding.coil_pitch = int(qs * spp)
+                else:
+                    # tooth concentrated winding
+                    self.obj.winding.coil_pitch = 1
+        self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
+
         if self.si_Nlayer.value() == 1:
-            self.in_coil_pitch.hide()
-            self.si_coil_pitch.hide()
             self.is_reverse_layer.hide()
             self.is_change_layer.hide()
-            self.obj.winding.coil_pitch = None
         else:
-            self.in_coil_pitch.show()
-            self.si_coil_pitch.show()
             self.is_reverse_layer.show()
             self.is_change_layer.show()
-            if self.obj.winding.coil_pitch is None:
-                self.obj.winding.coil_pitch = 1
-            self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
             # is_reverse_layer
             if self.obj.winding.is_reverse_layer is None:
                 self.obj.winding.is_reverse_layer = False
@@ -207,8 +223,17 @@ class SWinding(Gen_SWinding, QWidget):
         self.obj.winding.Nlayer = self.si_Nlayer.value()
         self.obj.winding.coil_pitch = self.si_coil_pitch.value()
         self.obj.winding.Ntcoil = self.si_Ntcoil.value()
+        if isinstance(self.machine, MachineSRM):
+            if self.obj.slot.Zs % self.obj.winding.qs != 0:
+                QMessageBox().critical(
+                    self,
+                    self.tr("Error"),
+                    "Error while creating the winding:\nZs must be a multiple of qs for SRM machine",
+                )
+                return
+            # p is not defined for SRM => enforced to p=Zs/qs
+            self.obj.winding.p = self.obj.slot.Zs // self.obj.winding.qs
         self.obj.winding.clean()  # Enforce now computation
-
         # Check winding
         try:
             self.obj.winding.get_connection_mat()
@@ -418,9 +443,9 @@ class SWinding(Gen_SWinding, QWidget):
         try:
             rot_dir = self.obj.comp_rot_dir()
             if rot_dir == 1:
-                rot_dir = "+"
+                rot_dir = "CCW"
             elif rot_dir == -1:
-                rot_dir = "-"
+                rot_dir = "CW"
             else:
                 rot_dir = "?"
         except Exception:  # Unable to compution the connection matrix

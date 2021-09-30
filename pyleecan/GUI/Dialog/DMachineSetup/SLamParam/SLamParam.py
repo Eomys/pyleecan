@@ -249,7 +249,7 @@ class SLamParam(Gen_SLamParam, QWidget):
             length = format(
                 self.u.get_m(self.obj.L1 + self.obj.Nrvd * self.obj.Wrvd), ".4g"
             )
-            self.out_length.setText(lam_txt + length + " " + self.u.get_m_name())
+            self.out_length.setText(lam_txt + length + " [" + self.u.get_m_name() + "]")
 
     @staticmethod
     def check(lamination):

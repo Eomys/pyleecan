@@ -19,17 +19,26 @@ def comp_point_ref(self, sym=1):
         Reference point of the lamination
 
     """
-    if self.is_internal:
-        Rref = self.get_Ryoke() + (self.comp_height_yoke() / 2)
-    else:
-        Rref = self.get_Ryoke() - (self.comp_height_yoke() / 2)
-    # TODO adapt Rref to avoid ventilations
 
+    Rref = self.comp_radius_mid_yoke()
+
+    # Find a radius that doesn't match any ventilation
+    if self.axial_vent not in [None, list()]:
+        R1, R2 = Rref, Rref
+        for vent in self.axial_vent:
+            (Rmin, Rmax) = vent.comp_radius()
+            R1 = min(R1, Rmin)
+            R2 = max(R2, Rmax)
+        if self.is_internal:
+            Rref = (self.Rint + R1) / 2
+        else:
+            Rref = (self.Rext + R2) / 2
+
+    # Find an angle without notches
     if self.yoke_notch in [None, list()]:
         angle = pi / sym
     else:
-        yoke_desc, _ = self.get_yoke_desc(sym=sym, is_reversed=False, line_label=None)
-        # Find an Arc without notches
+        yoke_desc, _ = self.get_yoke_desc(sym=sym, is_reversed=False)
         ii = 0
         while ii < len(yoke_desc) and not (
             isinstance(yoke_desc[ii]["obj"], Arc)

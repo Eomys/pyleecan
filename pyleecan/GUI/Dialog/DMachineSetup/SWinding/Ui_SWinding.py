@@ -9,7 +9,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from .....GUI.Tools.MPLCanvas import MPLCanvas2
+from .....GUI.Tools.MPLCanvas import MPLCanvas
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -24,7 +24,7 @@ class Ui_SWinding(object):
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.horizontalLayout_8 = QHBoxLayout()
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.w_viewer = MPLCanvas2(SWinding)
+        self.w_viewer = MPLCanvas(SWinding)
         self.w_viewer.setObjectName(u"w_viewer")
         self.w_viewer.setMinimumSize(QSize(250, 0))
 
@@ -292,9 +292,51 @@ class Ui_SWinding(object):
         self.in_qs.setText(
             QCoreApplication.translate("SWinding", u"Phases number", None)
         )
-        self.in_Nlayer.setText(
-            QCoreApplication.translate("SWinding", u"Layer number", None)
+        # if QT_CONFIG(tooltip)
+        self.in_Nlayer.setToolTip(
+            QCoreApplication.translate(
+                "SWinding", u"Number of different phases in a same slot", None
+            )
         )
+        # endif // QT_CONFIG(tooltip)
+        # if QT_CONFIG(statustip)
+        self.in_Nlayer.setStatusTip(
+            QCoreApplication.translate(
+                "SWinding", u"Number of different phases in a same slot", None
+            )
+        )
+        # endif // QT_CONFIG(statustip)
+        # if QT_CONFIG(whatsthis)
+        self.in_Nlayer.setWhatsThis(
+            QCoreApplication.translate(
+                "SWinding", u"Number of different phases in a same slot", None
+            )
+        )
+        # endif // QT_CONFIG(whatsthis)
+        self.in_Nlayer.setText(
+            QCoreApplication.translate("SWinding", u"Layers number", None)
+        )
+        # if QT_CONFIG(tooltip)
+        self.si_Nlayer.setToolTip(
+            QCoreApplication.translate(
+                "SWinding", u"Number of different phases in a same slot", None
+            )
+        )
+        # endif // QT_CONFIG(tooltip)
+        # if QT_CONFIG(statustip)
+        self.si_Nlayer.setStatusTip(
+            QCoreApplication.translate(
+                "SWinding", u"Number of different phases in a same slot", None
+            )
+        )
+        # endif // QT_CONFIG(statustip)
+        # if QT_CONFIG(whatsthis)
+        self.si_Nlayer.setWhatsThis(
+            QCoreApplication.translate(
+                "SWinding", u"Number of different phases in a same slot", None
+            )
+        )
+        # endif // QT_CONFIG(whatsthis)
         self.in_coil_pitch.setText(
             QCoreApplication.translate("SWinding", u"Coil pitch", None)
         )
@@ -330,6 +372,33 @@ class Ui_SWinding(object):
             QCoreApplication.translate("SWinding", u"Edit Winding Matrix", None)
         )
         self.g_output.setTitle(QCoreApplication.translate("SWinding", u"Output", None))
+        # if QT_CONFIG(tooltip)
+        self.out_rot_dir.setToolTip(
+            QCoreApplication.translate(
+                "SWinding",
+                u"Fundamental field rotation direction when feeding the winding with direct AC current",
+                None,
+            )
+        )
+        # endif // QT_CONFIG(tooltip)
+        # if QT_CONFIG(statustip)
+        self.out_rot_dir.setStatusTip(
+            QCoreApplication.translate(
+                "SWinding",
+                u"Fundamental field rotation direction when feeding the winding with direct AC current",
+                None,
+            )
+        )
+        # endif // QT_CONFIG(statustip)
+        # if QT_CONFIG(whatsthis)
+        self.out_rot_dir.setWhatsThis(
+            QCoreApplication.translate(
+                "SWinding",
+                u"Fundamental field rotation direction when feeding the winding with direct AC current",
+                None,
+            )
+        )
+        # endif // QT_CONFIG(whatsthis)
         self.out_rot_dir.setText(
             QCoreApplication.translate("SWinding", u"Rotation Direction: ", None)
         )

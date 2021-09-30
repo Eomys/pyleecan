@@ -116,12 +116,12 @@ class VentilationCirc(Hole):
 
     def __init__(
         self,
-        Alpha0=0,
         D0=1,
         H0=1,
         Zh=36,
         mat_void=-1,
         magnetization_dict_offset=None,
+        Alpha0=0,
         init_dict=None,
         init_str=None,
     ):
@@ -140,8 +140,6 @@ class VentilationCirc(Hole):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Alpha0" in list(init_dict.keys()):
-                Alpha0 = init_dict["Alpha0"]
             if "D0" in list(init_dict.keys()):
                 D0 = init_dict["D0"]
             if "H0" in list(init_dict.keys()):
@@ -152,8 +150,9 @@ class VentilationCirc(Hole):
                 mat_void = init_dict["mat_void"]
             if "magnetization_dict_offset" in list(init_dict.keys()):
                 magnetization_dict_offset = init_dict["magnetization_dict_offset"]
+            if "Alpha0" in list(init_dict.keys()):
+                Alpha0 = init_dict["Alpha0"]
         # Set the properties (value check and convertion are done in setter)
-        self.Alpha0 = Alpha0
         self.D0 = D0
         self.H0 = H0
         # Call Hole init
@@ -161,6 +160,7 @@ class VentilationCirc(Hole):
             Zh=Zh,
             mat_void=mat_void,
             magnetization_dict_offset=magnetization_dict_offset,
+            Alpha0=Alpha0,
         )
         # The class is frozen (in Hole init), for now it's impossible to
         # add new properties
@@ -171,7 +171,6 @@ class VentilationCirc(Hole):
         VentilationCirc_str = ""
         # Get the properties inherited from Hole
         VentilationCirc_str += super(VentilationCirc, self).__str__()
-        VentilationCirc_str += "Alpha0 = " + str(self.Alpha0) + linesep
         VentilationCirc_str += "D0 = " + str(self.D0) + linesep
         VentilationCirc_str += "H0 = " + str(self.H0) + linesep
         return VentilationCirc_str
@@ -184,8 +183,6 @@ class VentilationCirc(Hole):
 
         # Check the properties inherited from Hole
         if not super(VentilationCirc, self).__eq__(other):
-            return False
-        if other.Alpha0 != self.Alpha0:
             return False
         if other.D0 != self.D0:
             return False
@@ -204,8 +201,6 @@ class VentilationCirc(Hole):
 
         # Check the properties inherited from Hole
         diff_list.extend(super(VentilationCirc, self).compare(other, name=name))
-        if other._Alpha0 != self._Alpha0:
-            diff_list.append(name + ".Alpha0")
         if other._D0 != self._D0:
             diff_list.append(name + ".D0")
         if other._H0 != self._H0:
@@ -221,7 +216,6 @@ class VentilationCirc(Hole):
 
         # Get size of the properties inherited from Hole
         S += super(VentilationCirc, self).__sizeof__()
-        S += getsizeof(self.Alpha0)
         S += getsizeof(self.D0)
         S += getsizeof(self.H0)
         return S
@@ -235,7 +229,6 @@ class VentilationCirc(Hole):
 
         # Get the properties inherited from Hole
         VentilationCirc_dict = super(VentilationCirc, self).as_dict(**kwargs)
-        VentilationCirc_dict["Alpha0"] = self.Alpha0
         VentilationCirc_dict["D0"] = self.D0
         VentilationCirc_dict["H0"] = self.H0
         # The class name is added to the dict for deserialisation purpose
@@ -246,31 +239,10 @@ class VentilationCirc(Hole):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Alpha0 = None
         self.D0 = None
         self.H0 = None
         # Set to None the properties inherited from Hole
         super(VentilationCirc, self)._set_None()
-
-    def _get_Alpha0(self):
-        """getter of Alpha0"""
-        return self._Alpha0
-
-    def _set_Alpha0(self, value):
-        """setter of Alpha0"""
-        check_var("Alpha0", value, "float", Vmin=0, Vmax=6.29)
-        self._Alpha0 = value
-
-    Alpha0 = property(
-        fget=_get_Alpha0,
-        fset=_set_Alpha0,
-        doc=u"""Shift angle of the holes around circumference
-
-        :Type: float
-        :min: 0
-        :max: 6.29
-        """,
-    )
 
     def _get_D0(self):
         """getter of D0"""
@@ -303,7 +275,7 @@ class VentilationCirc(Hole):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Diameter of the hole centers
+        doc=u"""Radius of the hole centers
 
         :Type: float
         :min: 0

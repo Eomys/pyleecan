@@ -18,9 +18,9 @@ def comp_felec(self):
             raise InputError("InputCurrent object should be inside a Simulation object")
         # get the pole pair number
         if hasattr(self.parent, "machine"):
-            zp = self.parent.machine.stator.get_pole_pair_number()
+            zp = self.parent.machine.get_pole_pair_number()
         elif hasattr(self.parent.parent, "machine"):
-            zp = self.parent.parent.machine.stator.get_pole_pair_number()
+            zp = self.parent.parent.machine.get_pole_pair_number()
         else:
             logger = self.get_logger()
             logger.warning("Input.comp_felec(): Machine was not found.")

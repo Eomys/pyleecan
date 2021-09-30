@@ -24,8 +24,8 @@ def get_lam_index(self, label):
     labels = self.get_lam_list_label()
 
     # if no index is provided with label append index 0
-    if len(label.split("_")) == 1:
-        label += "_0"
+    if len(label.split("-")) == 1:
+        label += "-0"
 
     # check if label exists
     if label in labels:

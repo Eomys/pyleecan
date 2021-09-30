@@ -14,4 +14,4 @@ def comp_height(self):
 
     """
 
-    return 0
+    return self.H2

@@ -58,6 +58,11 @@ except ImportError as error:
     comp_radius_mid_yoke = error
 
 try:
+    from ..Methods.Machine.LamSlot.comp_periodicity import comp_periodicity
+except ImportError as error:
+    comp_periodicity = error
+
+try:
     from ..Methods.Machine.LamSlot.get_bore_desc import get_bore_desc
 except ImportError as error:
     get_bore_desc = error
@@ -66,6 +71,11 @@ try:
     from ..Methods.Machine.LamSlot.set_pole_pair_number import set_pole_pair_number
 except ImportError as error:
     set_pole_pair_number = error
+
+try:
+    from ..Methods.Machine.LamSlot.comp_angle_d_axis import comp_angle_d_axis
+except ImportError as error:
+    comp_angle_d_axis = error
 
 
 from ._check import InitUnKnowClassError
@@ -167,6 +177,18 @@ class LamSlot(Lamination):
         )
     else:
         comp_radius_mid_yoke = comp_radius_mid_yoke
+    # cf Methods.Machine.LamSlot.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
+            )
+        )
+    else:
+        comp_periodicity = comp_periodicity
     # cf Methods.Machine.LamSlot.get_bore_desc
     if isinstance(get_bore_desc, ImportError):
         get_bore_desc = property(
@@ -190,6 +212,18 @@ class LamSlot(Lamination):
         )
     else:
         set_pole_pair_number = set_pole_pair_number
+    # cf Methods.Machine.LamSlot.comp_angle_d_axis
+    if isinstance(comp_angle_d_axis, ImportError):
+        comp_angle_d_axis = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method comp_angle_d_axis: "
+                    + str(comp_angle_d_axis)
+                )
+            )
+        )
+    else:
+        comp_angle_d_axis = comp_angle_d_axis
     # save and copy methods are available in all object
     save = save
     copy = copy

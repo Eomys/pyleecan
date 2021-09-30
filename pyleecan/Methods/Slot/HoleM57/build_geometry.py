@@ -6,6 +6,7 @@ from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Functions.Geometry.inter_line_line import inter_line_line
 import matplotlib.pyplot as plt
+from ....Functions.labels import HOLEV_LAB, HOLEM_LAB
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):
@@ -31,27 +32,11 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     """
 
-    if self.get_is_stator():  # check if the slot is on the stator
-        st = "_Stator"
-    else:
-        st = "_Rotor"
-
-    # Defining type of magnetization of magnet 0 and magnet 1
-    if self.magnet_0:
-        if self.magnet_0.type_magnetization == 0:
-            type_mag_0 = "_Radial"
-        else:
-            type_mag_0 = "_Parallel"
-    else:
-        type_mag_0 = "None"
-
-    if self.magnet_1:
-        if self.magnet_1.type_magnetization == 0:
-            type_mag_1 = "_Radial"
-        else:
-            type_mag_1 = "_Parallel"
-    else:
-        type_mag_1 = "None"
+    # Get correct label for surfaces
+    lam_label = self.parent.get_label()
+    R_id, surf_type = self.get_R_id()
+    vent_label = lam_label + "_" + surf_type + "_R" + str(R_id) + "-"
+    mag_label = lam_label + "_" + HOLEM_LAB + "_R" + str(R_id) + "-"
 
     # Get all the points
     point_dict = self._comp_point_coordinate()
@@ -99,7 +84,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # initiating the label of the line on the air surface
     # curve_list = set_name_line(curve_list, "hole_1_line")
     point_ref = (Z1 + Z2 + Z7 + Z8) / 4
-    S1 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
+    S1 = SurfLine(line_list=curve_list, label=vent_label + "T0-S0", point_ref=point_ref)
 
     # Magnet_0 surface
     curve_list = list()
@@ -117,7 +102,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     point_ref = (Z2 + Z3 + Z6 + Z7) / 4
     S2 = SurfLine(
         line_list=curve_list,
-        label="HoleMagnet" + st + type_mag_0 + "_N_R0_T0_S0",
+        label=mag_label + "T0-S0",
         point_ref=point_ref,
     )
 
@@ -133,7 +118,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # curve_list = set_name_line(curve_list, "hole_2_line")
     point_ref = (Z6 + Z5 + Z4) / 3
 
-    S3 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
+    S3 = SurfLine(line_list=curve_list, label=vent_label + "T1-S0", point_ref=point_ref)
 
     # Symmetry Air surface (W3) with magnet_1
     curve_list = list()
@@ -145,7 +130,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     point_ref = (Z1s + Z2s + Z8s + Z7s) / 4
     # initiating the label of the line on the air surface
     # curve_list = set_name_line(curve_list, "hole_3_line")
-    S4 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
+    S4 = SurfLine(line_list=curve_list, label=vent_label + "T2-S0", point_ref=point_ref)
 
     # magnet_1 surface
     curve_list = list()
@@ -163,7 +148,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # curve_list = set_name_line(curve_list, "magnet_2_line")
     S5 = SurfLine(
         line_list=curve_list,
-        label="HoleMagnet" + st + type_mag_1 + "_N_R0_T1_S0",
+        label=mag_label + "T1-S0",
         point_ref=point_ref,
     )
 
@@ -179,7 +164,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     # initiating the label of the line on the air surface
     # curve_list = set_name_line(curve_list, "hole_4_line")
-    S6 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
+    S6 = SurfLine(line_list=curve_list, label=vent_label + "T1-S0", point_ref=point_ref)
 
     # Air surface between magnet_0 and magnet_1 with W1 == 0
     curve_list = list()
@@ -194,7 +179,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # curve_list = set_name_line(curve_list, "hole_2_line")
     point_ref = (Z5 + Z4) / 2
 
-    S7 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
+    S7 = SurfLine(line_list=curve_list, label=vent_label + "T2-S0", point_ref=point_ref)
 
     # Air surface without magnet_0 and W1 > 0
     curve_list = list()
@@ -207,7 +192,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # curve_list = set_name_line(curve_list, "hole_1_line")
     point_ref = (Z5 + Z1) / 2
 
-    S8 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
+    S8 = SurfLine(line_list=curve_list, label=vent_label + "T1-S0", point_ref=point_ref)
 
     # Air surface without magnet_1 and W1 > 0
     curve_list = list()
@@ -220,7 +205,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # curve_list = set_name_line(curve_list, "hole_2_line")
     point_ref = (Z5s + Z1s) / 2
 
-    S9 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
+    S9 = SurfLine(line_list=curve_list, label=vent_label + "T0-S0", point_ref=point_ref)
 
     # Air surface No magnet and W1 == 0
     curve_list = list()
@@ -235,8 +220,11 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # curve_list = set_name_line(curve_list, "hole_1_line")
     point_ref = (Z4 + Z5) / 2
 
-    S12 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
+    S12 = SurfLine(
+        line_list=curve_list, label=vent_label + "T0-S0", point_ref=point_ref
+    )
 
+    # TODO correct vent_label TX id
     # Create the surface list by selecting the correct ones
     if self.magnet_0 and self.magnet_1 and self.W1 > 0:
         surf_list = [S1, S2, S3, S6, S5, S4]

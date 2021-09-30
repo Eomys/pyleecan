@@ -3,12 +3,10 @@ from ...Classes.Circle import Circle
 from ...Functions.FEMM import is_eddies
 from ...Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
 from ...Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
-from ...Functions.FEMM.create_FEMM_boundary_conditions import (
-    create_FEMM_boundary_conditions,
-)
 from ...Functions.FEMM.create_FEMM_materials import create_FEMM_materials
 from ...Functions.FEMM.get_sliding_band import get_sliding_band
 from ...Functions.FEMM.get_airgap_surface import get_airgap_surface
+from ...Functions.labels import NO_MESH_LAB
 
 
 def draw_FEMM(
@@ -83,8 +81,6 @@ def draw_FEMM(
     """
 
     # Initialization from output for readibility
-    BHs = output.geo.stator.BH_curve  # Stator B(H) curve
-    BHr = output.geo.rotor.BH_curve  # Rotor B(H) curve
     Is = output.elec.Is  # Stator currents waveforms
     Ir = output.elec.Ir  # Rotor currents waveforms
     machine = output.simu.machine
@@ -114,7 +110,7 @@ def draw_FEMM(
     femm.mi_probdef(0, "meters", FEMM_dict["pbtype"], FEMM_dict["precision"])
 
     # Modifiy the machine to match the conditions
-    machine = type(machine)(init_dict=machine.as_dict())
+    machine = machine.copy()
     if is_remove_slotR:  # Remove all slots on the rotor
         lam_dict = machine.rotor.as_dict()
         machine.rotor = Lamination(init_dict=lam_dict)
@@ -133,7 +129,12 @@ def draw_FEMM(
 
     # Adding no_mesh for shaft if needed
     if lam_int.Rint > 0 and sym == 1:
-        surf_list.append(Circle(point_ref=0, radius=lam_int.Rint, label="No_mesh"))
+        label_int = lam_int.get_label()
+        surf_list.append(
+            Circle(
+                point_ref=0, radius=lam_int.Rint, label=label_int + "_" + NO_MESH_LAB
+            )
+        )
 
     # adding the Airgap surface
     if is_sliding_band:
@@ -168,8 +169,6 @@ def draw_FEMM(
         surf_list,
         Is,
         Ir,
-        BHs,
-        BHr,
         is_mmfs,
         is_mmfr,
         type_BH_stator,
@@ -177,7 +176,8 @@ def draw_FEMM(
         is_eddies,
         j_t0=0,
     )
-    create_FEMM_boundary_conditions(femm=femm, sym=sym, is_antiper=is_antiper)
+    # Init Boundary condition dict (will be filled while drawing Surface/Lines)
+    BC_dict = {"sym": sym, "is_antiper": is_antiper}
 
     # Draw and assign all the surfaces of the machine
     for surf in surf_list:
@@ -187,13 +187,11 @@ def draw_FEMM(
             femm=femm,
             nodeprop="None",
             maxseg=FEMM_dict["arcspan"],  # max span of arc element in degrees
-            propname="None",
             FEMM_dict=FEMM_dict,
             hide=False,
+            BC_dict=BC_dict,
         )
-        assign_FEMM_surface(
-            femm, surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
-        )
+        assign_FEMM_surface(femm, surf, prop_dict[label], FEMM_dict, machine)
 
     # Apply BC for DXF import
     if rotor_dxf is not None:
@@ -217,10 +215,11 @@ def draw_FEMM(
         FEMM_dict["acsolver"],
     )
     femm.mi_smartmesh(FEMM_dict["smart_mesh"])
-    output.get_logger().debug("Saving FEMM file at: " + path_save)
-    femm.mi_saveas(path_save)  # Save
-    FEMM_dict["path_save"] = path_save
-    # femm.mi_close()
+    if path_save is not None:
+        output.get_logger().debug("Saving FEMM file at: " + path_save)
+        femm.mi_saveas(path_save)  # Save
+        FEMM_dict["path_save"] = path_save
+        # femm.mi_close()
 
     FEMM_dict["materials"] = materials
     FEMM_dict["circuits"] = circuits

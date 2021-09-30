@@ -11,15 +11,27 @@ class Gen_PVentTrap(Ui_PVentTrap):
     def setupUi(self, PVentTrap):
         """Abstract class to update the widget according to the csv doc"""
         Ui_PVentTrap.setupUi(self, PVentTrap)
+        # Setup of in_Zh
+        txt = self.tr(u"""Number of Hole around the circumference""")
+        self.in_Zh.setWhatsThis(txt)
+        self.in_Zh.setToolTip(txt)
+
+        # Setup of si_Zh
+        self.si_Zh.setMinimum(0)
+        self.si_Zh.setMaximum(999999)
+        txt = self.tr(u"""Number of Hole around the circumference""")
+        self.si_Zh.setWhatsThis(txt)
+        self.si_Zh.setToolTip(txt)
+
         # Setup of in_Alpha0
-        txt = self.tr(u"""Shift angle of the hole around circumference""")
+        txt = self.tr(u"""Shift angle of the holes around circumference""")
         self.in_Alpha0.setWhatsThis(txt)
         self.in_Alpha0.setToolTip(txt)
 
         # Setup of lf_Alpha0
         self.lf_Alpha0.validator().setBottom(0)
         self.lf_Alpha0.validator().setTop(6.29)
-        txt = self.tr(u"""Shift angle of the hole around circumference""")
+        txt = self.tr(u"""Shift angle of the holes around circumference""")
         self.lf_Alpha0.setWhatsThis(txt)
         self.lf_Alpha0.setToolTip(txt)
 

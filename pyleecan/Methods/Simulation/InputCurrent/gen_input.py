@@ -114,5 +114,48 @@ def gen_input(self):
             values=transpose(Ir),
         )
 
+    # Load and check alpha_rotor and N0
+    if self.angle_rotor is None and self.N0 is None:
+        raise InputError(
+            "ERROR: InputCurrent.angle_rotor and InputCurrent.N0 can't be None at the same time"
+        )
+    if self.angle_rotor is not None:
+        output.angle_rotor = self.angle_rotor.get_data()
+        if (
+            not isinstance(output.angle_rotor, ndarray)
+            or len(output.angle_rotor.shape) != 1
+            or output.angle_rotor.size != self.Nt_tot
+        ):
+            # angle_rotor should be a vector of same length as time
+            raise InputError(
+                "ERROR: InputCurrent.angle_rotor should be a vector of the same length as time, "
+                + str(output.angle_rotor.shape)
+                + " shape found, "
+                + str(self.Nt_tot)
+                + " expected"
+            )
+
+    if self.rot_dir is None or self.rot_dir not in [-1, 1]:
+        # Enforce default rotation direction
+        # simu.parent.geo.rot_dir = None
+        pass  # None is already the default value
+    else:
+        simu.parent.geo.rot_dir = self.rot_dir
+
+    if self.angle_rotor_initial is None:
+        # Enforce default initial position
+        output.angle_rotor_initial = 0
+    else:
+        output.angle_rotor_initial = self.angle_rotor_initial
+
+    if self.Tem_av_ref is not None:
+        output.Tem_av_ref = self.Tem_av_ref
+    if self.Pem_av_ref is not None:
+        output.Pem_av_ref = self.Pem_av_ref
+    if simu.parent is None:
+        raise InputError(
+            "ERROR: The Simulation object must be in an Output object to run"
+        )
+
     # Save the Output in the correct place
     simu.parent.elec = outelec

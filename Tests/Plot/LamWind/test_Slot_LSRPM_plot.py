@@ -116,3 +116,23 @@ def test_Lam_Wind_LSRPM_wind_tan(machine):
     fig.savefig(join(save_path, "test_Lam_Wind_sLSRPM_2-tan-wind.png"))
     # 2 for lam + Zs*2 for wind
     # assert len(fig.axes[0].patches) == 26
+
+
+def test_stator_slot_angle_opening(machine):
+    """Test calculate the angle opening"""
+    machine.slot.comp_angle_opening()
+
+
+def test_stator_slot_height_damper(machine):
+    """Test calculate the damper height"""
+    machine.slot.comp_height_damper()
+
+
+def test_stator_slot_height_wind(machine):
+    """Test calculate the winding height"""
+    machine.slot.comp_height_wind()
+
+
+def test_stator_slot_height(machine):
+    """Test calculate the total height"""
+    machine.slot.comp_height()

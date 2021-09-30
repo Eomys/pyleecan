@@ -251,11 +251,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         if error:  # Error => Display it
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Plot the slot (No winding for LamSquirrelCage)
-            if self.machine.type_machine == 10:
-                # For SRM, this is the last step => Plot the complete machine
-                self.machine.plot()
-            else:
-                self.obj.plot(is_lam_only=not (type(self.obj) is LamSlotWind))
+            self.obj.plot(is_lam_only=not (type(self.obj) is LamSlotWind))
             set_plot_gui_icon()
 
     @staticmethod

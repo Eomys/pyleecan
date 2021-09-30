@@ -6,9 +6,7 @@ from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import Gen_SMachineType
 from .....Classes.Winding import Winding
-from .....Classes.MachineIPMSM import MachineIPMSM
-from .....Classes.MachineSIPMSM import MachineSIPMSM
-from .....Classes.MachineSyRM import MachineSyRM
+from .....Classes.MachineSRM import MachineSRM
 from .....definitions import PACKAGE_NAME
 
 
@@ -61,7 +59,11 @@ class SMachineType(Gen_SMachineType, QWidget):
         self.txt_type_machine.setText(self.mach_dict["txt"])
         self.img_type_machine.setPixmap(QPixmap(self.mach_dict["img"]))
         self.c_type.setCurrentIndex(index)
-        if machine.stator.get_pole_pair_number() is not None:
+        if isinstance(self.machine, MachineSRM):
+            # p is not meaningful for SRM
+            self.si_p.hide()
+            self.in_p.hide()
+        elif machine.stator.get_pole_pair_number() is not None:
             self.si_p.setValue(machine.stator.winding.p)
         else:
             self.si_p.clear()  # Empty spinbox
@@ -179,7 +181,9 @@ class SMachineType(Gen_SMachineType, QWidget):
         try:
             if machine.stator.winding is None:
                 return "Missing stator winding"
-            if machine.stator.get_pole_pair_number() in [None, 0]:
+            if not isinstance(
+                machine, MachineSRM
+            ) and machine.stator.get_pole_pair_number() in [None, 0]:
                 return "p must be >0 !"
         except Exception as e:
             return str(e)

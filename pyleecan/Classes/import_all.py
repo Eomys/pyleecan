@@ -44,6 +44,7 @@ from ..Classes.Force import Force
 from ..Classes.ForceMT import ForceMT
 from ..Classes.ForceTensor import ForceTensor
 from ..Classes.Frame import Frame
+from ..Classes.FrameBar import FrameBar
 from ..Classes.GUIOption import GUIOption
 from ..Classes.GaussPoint import GaussPoint
 from ..Classes.Hole import Hole

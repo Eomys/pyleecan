@@ -167,7 +167,7 @@ class Circle(Surface):
         self,
         radius=1,
         center=0,
-        line_label="",
+        prop_dict=-1,
         point_ref=0,
         label="",
         init_dict=None,
@@ -192,8 +192,8 @@ class Circle(Surface):
                 radius = init_dict["radius"]
             if "center" in list(init_dict.keys()):
                 center = init_dict["center"]
-            if "line_label" in list(init_dict.keys()):
-                line_label = init_dict["line_label"]
+            if "prop_dict" in list(init_dict.keys()):
+                prop_dict = init_dict["prop_dict"]
             if "point_ref" in list(init_dict.keys()):
                 point_ref = init_dict["point_ref"]
             if "label" in list(init_dict.keys()):
@@ -201,7 +201,7 @@ class Circle(Surface):
         # Set the properties (value check and convertion are done in setter)
         self.radius = radius
         self.center = center
-        self.line_label = line_label
+        self.prop_dict = prop_dict
         # Call Surface init
         super(Circle, self).__init__(point_ref=point_ref, label=label)
         # The class is frozen (in Surface init), for now it's impossible to
@@ -215,7 +215,7 @@ class Circle(Surface):
         Circle_str += super(Circle, self).__str__()
         Circle_str += "radius = " + str(self.radius) + linesep
         Circle_str += "center = " + str(self.center) + linesep
-        Circle_str += 'line_label = "' + str(self.line_label) + '"' + linesep
+        Circle_str += "prop_dict = " + str(self.prop_dict) + linesep
         return Circle_str
 
     def __eq__(self, other):
@@ -231,7 +231,7 @@ class Circle(Surface):
             return False
         if other.center != self.center:
             return False
-        if other.line_label != self.line_label:
+        if other.prop_dict != self.prop_dict:
             return False
         return True
 
@@ -250,8 +250,8 @@ class Circle(Surface):
             diff_list.append(name + ".radius")
         if other._center != self._center:
             diff_list.append(name + ".center")
-        if other._line_label != self._line_label:
-            diff_list.append(name + ".line_label")
+        if other._prop_dict != self._prop_dict:
+            diff_list.append(name + ".prop_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -265,7 +265,9 @@ class Circle(Surface):
         S += super(Circle, self).__sizeof__()
         S += getsizeof(self.radius)
         S += getsizeof(self.center)
-        S += getsizeof(self.line_label)
+        if self.prop_dict is not None:
+            for key, value in self.prop_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self, **kwargs):
@@ -284,7 +286,9 @@ class Circle(Surface):
             Circle_dict["center"] = self.center
         else:
             Circle_dict["center"] = str(self.center)
-        Circle_dict["line_label"] = self.line_label
+        Circle_dict["prop_dict"] = (
+            self.prop_dict.copy() if self.prop_dict is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Circle_dict["__class__"] = "Circle"
@@ -295,7 +299,7 @@ class Circle(Surface):
 
         self.radius = None
         self.center = None
-        self.line_label = None
+        self.prop_dict = None
         # Set to None the properties inherited from Surface
         super(Circle, self)._set_None()
 
@@ -338,20 +342,22 @@ class Circle(Surface):
         """,
     )
 
-    def _get_line_label(self):
-        """getter of line_label"""
-        return self._line_label
+    def _get_prop_dict(self):
+        """getter of prop_dict"""
+        return self._prop_dict
 
-    def _set_line_label(self, value):
-        """setter of line_label"""
-        check_var("line_label", value, "str")
-        self._line_label = value
+    def _set_prop_dict(self, value):
+        """setter of prop_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("prop_dict", value, "dict")
+        self._prop_dict = value
 
-    line_label = property(
-        fget=_get_line_label,
-        fset=_set_line_label,
-        doc=u"""Label to set to the lines
+    prop_dict = property(
+        fget=_get_prop_dict,
+        fset=_set_prop_dict,
+        doc=u"""Property dict to apply on the lines
 
-        :Type: str
+        :Type: dict
         """,
     )

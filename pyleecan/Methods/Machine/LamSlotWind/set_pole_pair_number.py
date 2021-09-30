@@ -12,3 +12,5 @@ def set_pole_pair_number(self, p):
 
     if self.winding is not None:
         self.winding.p = p
+        # Enforce call to redefine winding matrix
+        self.winding.clean()

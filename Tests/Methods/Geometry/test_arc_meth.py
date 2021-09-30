@@ -373,7 +373,7 @@ split_test.append(
         "center": 2 - 1j,  # Center of the arc (should not be changed by the split)
         "Zi": [4 - 1j],  # Expected intersection points
         "Zs_top": [
-            Arc1(begin=-1j, end=4 - 1j, radius=2, is_trigo_direction=False)
+            Arc2(begin=-1j, center=2 - 1j, angle=-pi)
         ],  # Expected result for slip is_top
         "Zs_bot": [],  # Expected result for slip not is_top
     }
@@ -629,7 +629,7 @@ split_test.append(
         "Zi": [5],  # Expected intersection points
         "Zs_top": [],  # Expected result for slip is_top
         "Zs_bot": [
-            Arc1(begin=-5j, end=5, radius=sqrt(50) / 2, is_trigo_direction=True)
+            Arc3(begin=-5j, end=5, is_trigo_direction=True)
         ],  # Expected result for slip not is_top
     }
 )
@@ -823,11 +823,11 @@ def test_split_line(test_dict):
     for ii in range(len(result)):
         assert result[ii] == pytest.approx(test_dict["Zi"][ii], abs=DELTA), msg
 
-    # Check split_line is_top=True
-    split_list = arc_obj.split_line(test_dict["Z1"], test_dict["Z2"], is_top=True)
-    assert len(split_list) == len(test_dict["Zs_top"])
+    # Check Top split list
+    top_list, bot_list = arc_obj.split_line(test_dict["Z1"], test_dict["Z2"])
+    assert len(top_list) == len(test_dict["Zs_top"])
     msg = "Wrong split top: returned [\n"
-    for split in split_list:
+    for split in top_list:
         msg += (
             "beg:"
             + str(split.get_begin())
@@ -853,31 +853,30 @@ def test_split_line(test_dict):
             + "\n"
         )
     msg += "]"
-    for ii in range(len(split_list)):
-        assert type(split_list[ii]) == type(test_dict["Zs_top"][ii]), (
-            "Type error for index " + str(ii) + " returned " + str(type(split_list[ii]))
+    for ii in range(len(top_list)):
+        assert type(top_list[ii]) == type(test_dict["Zs_top"][ii]), (
+            "Type error for index " + str(ii) + " returned " + str(type(top_list[ii]))
         )
-        assert abs(split_list[ii].get_center() - test_dict["center"]) == pytest.approx(
+        assert abs(top_list[ii].get_center() - test_dict["center"]) == pytest.approx(
             0, abs=DELTA
         ), ("Center error: " + msg)
         assert abs(
-            split_list[ii].get_begin() - test_dict["Zs_top"][ii].get_begin()
+            top_list[ii].get_begin() - test_dict["Zs_top"][ii].get_begin()
         ) == pytest.approx(0, abs=DELTA), ("Begin error: " + msg)
         assert abs(
-            split_list[ii].get_end() - test_dict["Zs_top"][ii].get_end()
+            top_list[ii].get_end() - test_dict["Zs_top"][ii].get_end()
         ) == pytest.approx(0, abs=DELTA), ("End error: " + msg)
-        assert split_list[ii].comp_radius() == test_dict["Zs_top"][ii].comp_radius(), (
+        assert top_list[ii].comp_radius() == test_dict["Zs_top"][ii].comp_radius(), (
             "Radius error: " + msg
         )
-        assert split_list[ii].get_angle() == pytest.approx(
+        assert top_list[ii].get_angle() == pytest.approx(
             test_dict["Zs_top"][ii].get_angle(), abs=DELTA
         ), ("Angle error: " + msg)
 
-    # Check split_line is_top=False
-    split_list = arc_obj.split_line(test_dict["Z1"], test_dict["Z2"], is_top=False)
-    assert len(split_list) == len(test_dict["Zs_bot"])
+    # Check bottom list
+    assert len(bot_list) == len(test_dict["Zs_bot"])
     msg = "Wrong split bot: returned [\n"
-    for split in split_list:
+    for split in bot_list:
         msg += (
             "beg:"
             + str(split.get_begin())
@@ -903,23 +902,23 @@ def test_split_line(test_dict):
             + "\n"
         )
     msg += "]"
-    for ii in range(len(split_list)):
-        assert type(split_list[ii]) == type(test_dict["Zs_bot"][ii]), (
-            "Type error for index " + str(ii) + " returned " + str(type(split_list[ii]))
+    for ii in range(len(bot_list)):
+        assert type(bot_list[ii]) == type(test_dict["Zs_bot"][ii]), (
+            "Type error for index " + str(ii) + " returned " + str(type(bot_list[ii]))
         )
-        assert abs(split_list[ii].get_center() - test_dict["center"]) == pytest.approx(
+        assert abs(bot_list[ii].get_center() - test_dict["center"]) == pytest.approx(
             0, abs=DELTA
         ), ("Center error: " + msg)
         assert abs(
-            split_list[ii].get_begin() - test_dict["Zs_bot"][ii].get_begin()
+            bot_list[ii].get_begin() - test_dict["Zs_bot"][ii].get_begin()
         ) == pytest.approx(0, abs=DELTA), ("Begin error: " + msg)
         assert abs(
-            split_list[ii].get_end() - test_dict["Zs_bot"][ii].get_end()
+            bot_list[ii].get_end() - test_dict["Zs_bot"][ii].get_end()
         ) == pytest.approx(0, abs=DELTA), ("End error: " + msg)
-        assert split_list[ii].comp_radius() == test_dict["Zs_bot"][ii].comp_radius(), (
+        assert bot_list[ii].comp_radius() == test_dict["Zs_bot"][ii].comp_radius(), (
             "Radius error: " + msg
         )
-        assert split_list[ii].get_angle() == pytest.approx(
+        assert bot_list[ii].get_angle() == pytest.approx(
             test_dict["Zs_bot"][ii].get_angle(), abs=DELTA
         ), ("Angle error: " + msg)
 
@@ -1121,3 +1120,11 @@ def test_is_on_line(test_dict):
     result = arc_obj.is_on_line(test_dict["Z"])
 
     assert result == test_dict["result"]
+
+
+if __name__ == "__main__":
+    # test_split_line(split_test[31])
+    for ii, test_dict in enumerate(split_test):
+        print(ii)
+        test_split_line(test_dict)
+    print("Done")

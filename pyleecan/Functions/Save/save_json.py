@@ -144,10 +144,11 @@ def save_split_obj(classes_tuple, obj, folder_path, logger):
 
     if "name" in obj.keys() and obj["name"] != "" and obj["name"] != None:
         name = obj["name"] + ".json"
-        if not isfile(join(folder_path, name)):
-            with open(join(folder_path, name), "w") as json_file:
-                logger.info("Saving " + obj["name"] + " in " + join(folder_path, name))
-                dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
+        with open(join(folder_path, name), "w") as json_file:
+            logger.info("Saving " + obj["name"] + " in " + join(folder_path, name))
+            dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
+    elif obj["__class__"] == "Material":  # Material without name is empty => no split
+        name = obj
     else:
         zeros = "0000"
         num = 1
