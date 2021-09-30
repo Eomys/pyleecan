@@ -22,6 +22,7 @@ machine_list = [
 
 
 @pytest.mark.periodicity
+@pytest.mark.parametrize("machine", machine_list)
 def test_comp_periodicity(machine):
 
     machine_obj = load(join(DATA_DIR, "Machine", machine[0] + ".json"))
