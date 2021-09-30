@@ -18,6 +18,11 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Output.Output.getter.comp_angle_rotor import comp_angle_rotor
+except ImportError as error:
+    comp_angle_rotor = error
+
+try:
     from ..Methods.Output.Output.getter.get_angle_offset_initial import (
         get_angle_offset_initial,
     )
@@ -89,6 +94,17 @@ class Output(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Output.Output.getter.comp_angle_rotor
+    if isinstance(comp_angle_rotor, ImportError):
+        comp_angle_rotor = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method comp_angle_rotor: " + str(comp_angle_rotor)
+                )
+            )
+        )
+    else:
+        comp_angle_rotor = comp_angle_rotor
     # cf Methods.Output.Output.getter.get_angle_offset_initial
     if isinstance(get_angle_offset_initial, ImportError):
         get_angle_offset_initial = property(

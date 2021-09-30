@@ -1,28 +1,32 @@
 from numpy import ones
 
 
-class OutElecError(Exception):
-    pass
-
-
-def get_Nr(self):
+def get_Nr(self, Time=None):
     """Create speed in function of time vector Nr
 
     Parameters
     ----------
     self : OutElec
         An OutElec object
+    Time : Data
+        a time axis (SciDataTool Data object)
 
     Returns
     -------
     Nr: ndarray
         speed in function of time
     """
-    if self.axes_dict is None or "time" not in self.axes_dict:
-        raise OutElecError('You must define "time" property before calling get_Nr')
+
+    if Time is None:
+        if self.axes_dict is not None and "time" in self.axes_dict:
+            Time = self.axes_dict["time"]
+        else:
+            raise Exception('You must define "time" property before calling get_Nr')
+
     if self.N0 is None:
-        raise OutElecError('You must define "N0" before calling get_Nr.')
+        raise Exception('You must define "N0" before calling get_Nr')
 
     # Same speed for every timestep
-    Nr = self.N0 * ones(self.axes_dict["time"].get_length(is_oneperiod=False))
+    Nr = self.N0 * ones(Time.get_length(is_oneperiod=False))
+
     return Nr

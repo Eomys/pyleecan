@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 time,s,Electrical time vector (no symmetry) to import,Nt_tot,ImportMatrix,None,,,,Simulation,,gen_input,VERSION,1,Starting data of the simulation
 angle,rad,Electrical position vector (no symmetry) to import,Na_tot,ImportMatrix,None,,,,,,comp_axes,,,
-Nt_tot,-,Time discretization,0,int,2048,1,,,,,set_disc,,,
+Nt_tot,-,Time discretization,0,int,2048,1,,,,,,,,
 Nrev,-,Number of rotor revolution (to compute the final time),,float,None,0,,,,,,,,
 Na_tot,-,Angular discretization,,int,2048,1,,,,,,,,
 N0,rpm,Rotor speed,1,float,None,,,,,,,,,
