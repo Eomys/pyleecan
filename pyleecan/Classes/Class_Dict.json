@@ -763,7 +763,9 @@
             "comp_psi_skin",
             "comp_phip_skin",
             "comp_psip_skin",
-            "comp_skin_effect"
+            "comp_skin_effect",
+            "comp_power",
+            "comp_skin_effect_round_wire"
         ],
         "mother": "",
         "name": "Conductor",
@@ -4650,8 +4652,6 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "comp_radius_mid_yoke",
-            "comp_periodicity",
             "get_bore_desc",
             "set_pole_pair_number",
             "comp_angle_d_axis"
@@ -5014,7 +5014,7 @@
         "properties": [
             {
                 "desc": "Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets",
-                "max": "100",
+                "max": "",
                 "min": "0",
                 "name": "L1",
                 "type": "float",

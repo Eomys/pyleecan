@@ -47,7 +47,7 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
 
     WF.plot_2D_Data(
         "angle{°}",
-        "phase",
+        "phase[]",
         data_list=[MMF_U],
         fig=fig,
         ax=axs[0],

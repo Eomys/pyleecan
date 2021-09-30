@@ -135,7 +135,7 @@ def test_PostPlot():
     plot_Is = PostPlot(
         method="plot_2D_Data",
         quantity="elec.get_Is",
-        param_list=["time", "phase"],
+        param_list=["time", "phase[]"],
         param_dict=dict(
             {
                 "is_show_fig": False,

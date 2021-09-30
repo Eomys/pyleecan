@@ -99,7 +99,7 @@ def test_FEMM_parallelization_mag():
 
     out.mag.Phi_wind_stator.plot_2D_Data(
         "time",
-        "phase",
+        "phase[]",
         data_list=[out2.mag.Phi_wind_stator],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Phi_wind_stator.png"),

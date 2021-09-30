@@ -47,6 +47,18 @@ try:
 except ImportError as error:
     comp_skin_effect = error
 
+try:
+    from ..Methods.Machine.Conductor.comp_power import comp_power
+except ImportError as error:
+    comp_power = error
+
+try:
+    from ..Methods.Machine.Conductor.comp_skin_effect_round_wire import (
+        comp_skin_effect_round_wire,
+    )
+except ImportError as error:
+    comp_skin_effect_round_wire = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -123,6 +135,27 @@ class Conductor(FrozenClass):
         )
     else:
         comp_skin_effect = comp_skin_effect
+    # cf Methods.Machine.Conductor.comp_power
+    if isinstance(comp_power, ImportError):
+        comp_power = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Conductor method comp_power: " + str(comp_power))
+            )
+        )
+    else:
+        comp_power = comp_power
+    # cf Methods.Machine.Conductor.comp_skin_effect_round_wire
+    if isinstance(comp_skin_effect_round_wire, ImportError):
+        comp_skin_effect_round_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Conductor method comp_skin_effect_round_wire: "
+                    + str(comp_skin_effect_round_wire)
+                )
+            )
+        )
+    else:
+        comp_skin_effect_round_wire = comp_skin_effect_round_wire
     # save and copy methods are available in all object
     save = save
     copy = copy
