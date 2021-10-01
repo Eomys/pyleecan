@@ -8,7 +8,7 @@ from multiprocessing import cpu_count
 import pytest
 
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.InputElec import InputElec
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_LSRPM import EEC_LSRPM
 from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
@@ -17,7 +17,6 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
-from pyleecan.definitions import DATA_DIR
 
 
 @pytest.mark.long_5s
@@ -33,7 +32,7 @@ def test_EEC_PMSM():
     simu = Simu1(name="test_EEC_LSRPM", machine=LSRPM)
 
     # Definition of the input
-    simu.input = InputElec(N0=2000, Nt_tot=10, Na_tot=2048)
+    simu.input = InputCurrent(N0=2000, Nt_tot=10, Na_tot=2048)
     simu.input.set_Id_Iq(I0=250 / sqrt(2), Phi0=60 * pi / 180)
 
     # Define second simu for FEMM comparison

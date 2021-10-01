@@ -1,4 +1,4 @@
-from numpy import ones, pi, array, linspace, zeros
+from numpy import pi, array, linspace, zeros
 from os.path import join
 import matplotlib.pyplot as plt
 from multiprocessing import cpu_count
@@ -9,7 +9,6 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.InputFlux import InputFlux
 from pyleecan.Classes.ImportMatlab import ImportMatlab
-from pyleecan.Classes.ImportData import ImportData
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
@@ -271,7 +270,8 @@ def test_FEMM_compare_SIPMSM():
     Is = ImportMatrixVal(
         value=array([[14.1421, -7.0711, -7.0711], [-14.1421, 7.0711, 7.0711]])
     )
-    time = ImportGenVectLin(start=0, stop=0.1, num=2, endpoint=True)
+    Nt_tot = 2
+    time = ImportGenVectLin(start=0, stop=0.1, num=Nt_tot, endpoint=True)
     Na_tot = 1024
 
     Ar = ImportMatrixVal(value=array([2.5219, 0.9511]) + pi / 6)
@@ -281,6 +281,7 @@ def test_FEMM_compare_SIPMSM():
         N0=N0,
         angle_rotor=Ar,  # Will be computed
         time=time,
+        Nt_tot=Nt_tot,
         Na_tot=Na_tot,
         angle_rotor_initial=0,
     )
@@ -305,7 +306,11 @@ def test_FEMM_compare_SIPMSM():
     Br = ImportMatlab(file_path=mat_file, var_name="XBr")
     Bt = ImportMatlab(file_path=mat_file, var_name="XBt")
     simu_load.input = InputFlux(
-        time=time, Na_tot=Na_tot, B_dict={"Br": Br, "Bt": Bt}, OP=simu.input.copy()
+        time=time,
+        Na_tot=Na_tot,
+        Nt_tot=Nt_tot,
+        B_dict={"Br": Br, "Bt": Bt},
+        OP=simu.input.copy(),
     )
 
     out = Output(simu=simu)

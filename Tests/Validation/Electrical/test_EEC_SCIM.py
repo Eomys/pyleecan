@@ -7,7 +7,7 @@ from pyleecan.definitions import DATA_DIR
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_SCIM import EEC_SCIM
-from pyleecan.Classes.InputElec import InputElec
+from pyleecan.Classes.InputCurrent import InputCurrent
 
 from numpy import angle, cos
 import pytest
@@ -59,7 +59,7 @@ def test_EEC_SCIM():
     simu.struct = None
 
     # Definition of a sinusoidal current
-    simu.input = InputElec()
+    simu.input = InputCurrent()
     simu.input.felec = 50  # [Hz]
     simu.input.Id_ref = None  # [A]
     simu.input.Iq_ref = None  # [A]

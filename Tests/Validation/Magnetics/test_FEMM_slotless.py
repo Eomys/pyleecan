@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 import pytest
 from os.path import join
 
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Output import Output
 
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
@@ -42,6 +40,8 @@ def test_FEMM_slotless():
     )
 
     out = simu.run()
+
+    return out
 
 
 # To run it without pytest

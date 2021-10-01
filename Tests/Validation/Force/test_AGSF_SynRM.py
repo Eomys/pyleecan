@@ -64,6 +64,7 @@ def test_AGSF_SynRM():
         angle_rotor=alpha_rotor,
         time=time_obj,
         Na_tot=Na_tot,
+        Nt_tot=Nt_tot,
         angle_rotor_initial=0,
         felec=freq0,
     )

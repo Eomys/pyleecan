@@ -6,7 +6,7 @@ from pyleecan.definitions import DATA_DIR
 from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.PostMethod import PostMethod
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.InputElec import InputElec
+from pyleecan.Classes.InputCurrent import InputCurrent
 
 
 class ExamplePostMethod(PostMethod):
@@ -24,7 +24,7 @@ def test_post_simu():
     # simu1, simu without postprocessing
     simu1 = Simu1(name="test_post_simu", machine=Toyota_Prius)
     # Definition of the input
-    simu1.input = InputElec(
+    simu1.input = InputCurrent(
         N0=2000, Id_ref=-100, Iq_ref=200, Nt_tot=10, Na_tot=2048, rot_dir=1
     )
 
@@ -49,3 +49,8 @@ def test_post_simu():
 
     assert out1.simu.machine.stator.slot.W0 + 2 == out2.simu.machine.stator.slot.W0
     assert out1.simu.machine.stator.slot.H0 + 1 == out2.simu.machine.stator.slot.H0
+
+
+# To run it without pytest
+if __name__ == "__main__":
+    out = test_post_simu()

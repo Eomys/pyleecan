@@ -1,25 +1,25 @@
 import pytest
 from os.path import join
 
-import sys
-from os.path import dirname, abspath, normpath, join, realpath
-from os import listdir, remove, system
-import json
-from numpy import sqrt
-from pyleecan.Functions.load import load
-from pyleecan.definitions import DATA_DIR
-from pyleecan.Classes.PostFunction import PostFunction
-from pyleecan.Classes.PostMethod import PostMethod
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.InputElec import InputElec
-from pyleecan.Classes.VarParam import VarParam
-from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
-from pyleecan.Classes.DataKeeper import DataKeeper
 from copy import copy
-from Tests import TEST_DATA_DIR
+
+from numpy import sqrt
+
 from pyleecan.Classes.HoleM51 import HoleM51
 from pyleecan.Classes.HoleM52 import HoleM52
 from pyleecan.Classes.HoleM53 import HoleM53
+from pyleecan.Classes.PostFunction import PostFunction
+from pyleecan.Classes.PostMethod import PostMethod
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.VarParam import VarParam
+from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
+from pyleecan.Classes.DataKeeper import DataKeeper
+
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+from Tests import TEST_DATA_DIR
 
 
 class ExamplePostMethod(PostMethod):
@@ -46,7 +46,7 @@ def test_post_var_simu():
     # simu1, simu without postprocessing
     simu1 = Simu1(name="test_post_simu", machine=Toyota_Prius)
     # Definition of the input
-    simu1.input = InputElec(
+    simu1.input = InputCurrent(
         N0=2000, Id_ref=-100, Iq_ref=200, Nt_tot=10, Na_tot=2048, rot_dir=1
     )
 
