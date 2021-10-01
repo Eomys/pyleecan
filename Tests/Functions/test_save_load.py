@@ -145,14 +145,23 @@ def test_save_load_folder_path():
     if isfile(file_path):
         remove(file_path)
 
+    # Check save
     assert isfile(file_path) == False
     test_obj.save(loc_save_path, is_folder=True)
     assert isfile(file_path)
     assert isfile(join(loc_save_path, "MagnetPrius.json"))
+    assert isfile(join(loc_save_path, "MagnetPrius_00001.json"))
     assert isfile(join(loc_save_path, "M400-50A.json"))
+    assert isfile(join(loc_save_path, "M400-50A_00001.json"))
+    assert isfile(join(loc_save_path, "M400-50A_00002.json"))
+    assert isfile(join(loc_save_path, "Insulator1.json"))
+    assert isfile(join(loc_save_path, "Air.json"))
+    assert isfile(join(loc_save_path, "Copper1.json"))
     assert isfile(join(loc_save_path, "Toyota_Prius.json"))
-    assert isfile(join(loc_save_path, "test_save_load_folder_path.json"))
-    assert len(listdir(loc_save_path)) == 8
+    assert isfile(join(loc_save_path, "test_save_load_folder_path.json"))  # Simu
+    assert isfile(join(loc_save_path, "FolderSaved.json"))  # Output
+    assert len(listdir(loc_save_path)) == 11
+    # Check load
     test_obj2 = load(loc_save_path)
     assert test_obj == test_obj2
     assert callable(test_obj.simu.postproc_list[0]._run_func)
@@ -160,14 +169,28 @@ def test_save_load_folder_path():
 
     # Check that the machine can be updated
     test_obj2.simu.machine.stator.L1 = 999
+    test_obj2.simu.machine.name = "Toyota2"
     # Check that empty materials are not save in separate file
     test_obj2.simu.machine.stator.winding.conductor.ins_mat._set_None()
 
-    test_obj2.save(loc_save_path, is_folder=True)
+    test_obj2.save(loc_save_path, is_folder=True, is_delete_old=True)
+    assert isfile(join(loc_save_path, "MagnetPrius.json"))
+    assert isfile(join(loc_save_path, "MagnetPrius_00001.json"))
+    assert isfile(join(loc_save_path, "M400-50A.json"))
+    assert isfile(join(loc_save_path, "M400-50A_00001.json"))
+    assert isfile(join(loc_save_path, "M400-50A_00002.json"))
+    assert not isfile(join(loc_save_path, "Insulator1.json"))  # Material removed
+    assert not isfile(join(loc_save_path, "Material_00001.json"))  # Material removed
+    assert isfile(join(loc_save_path, "Air.json"))
+    assert isfile(join(loc_save_path, "Copper1.json"))
+    assert isfile(join(loc_save_path, "Toyota2.json"))
+    assert isfile(join(loc_save_path, "test_save_load_folder_path.json"))  # Simu
+    assert isfile(join(loc_save_path, "FolderSaved.json"))  # Output
+    assert len(listdir(loc_save_path)) == 10
     test_obj3 = load(loc_save_path)
 
     assert test_obj2.simu.machine.stator.L1 == test_obj3.simu.machine.stator.L1
-    assert len(listdir(loc_save_path)) == 8
+    assert len(test_obj2.compare(test_obj3)) == 0
 
 
 def test_save_load_just_name():
@@ -349,6 +372,7 @@ def test_save_load_simu(type_file):
 
 if __name__ == "__main__":
     test_save_load_folder_path()
+    print("Done")
     # test_save_load_simu("json")
     # test_save_load_simu("h5")
     # test_save_load_simu("pkl")

@@ -2,7 +2,7 @@ import gzip
 from datetime import datetime
 from json import dump
 from logging import getLogger
-from os import makedirs
+from os import makedirs, remove, listdir
 from os.path import isdir, isfile, join, split
 
 from numpy import int32
@@ -17,6 +17,7 @@ def save_json(
     obj,
     save_path="",
     is_folder=False,
+    is_delete_old=True,
     type_compression=0,
     class_to_split=("Simulation", "Machine", "Material"),
 ):
@@ -30,6 +31,8 @@ def save_json(
         path to the folder to save the object
     is_folder: bool
         to split the object in different files
+    is_delete_old : bool
+        True to remove all the ".json" file from the folder before saving
     type_compression: int
         0: no compression, 1: gzip
     class_to_split: list
@@ -48,7 +51,9 @@ def save_json(
         file_ext += ".gz"
 
     # create path and name for the base file
-    file_path, base_name = setup_save_path(save_path, obj, is_folder, file_ext, logger)
+    file_path, base_name = setup_save_path(
+        save_path, obj, is_folder, is_delete_old, file_ext, logger
+    )
 
     # prepare data for dumping and split if needed
     obj = build_data(obj, logger)
@@ -96,9 +101,8 @@ def save_json(
     return obj
 
 
-def setup_save_path(save_path, obj, is_folder, file_ext, logger):
+def setup_save_path(save_path, obj, is_folder, is_delete_old, file_ext, logger):
     """
-
     Check save_path and modify or create it if needed, i.e. add or remove
     file extension .json or create new name based on class name.
 
@@ -110,6 +114,8 @@ def setup_save_path(save_path, obj, is_folder, file_ext, logger):
         Pyleecan object to save
     is_folder: bool
         object is saved if folder mode
+    is_delete_old : bool
+        True to remove all the ".json" file from the folder before saving
     file_ext: str
         File extension e.g. ".json"
     logger :
@@ -144,6 +150,21 @@ def setup_save_path(save_path, obj, is_folder, file_ext, logger):
             file_path, file_name = split(save_path)
             file_path = join(file_path, file_name)
             file_name += file_ext
+            # Remove old files from old folder
+            if isdir(file_path) and is_delete_old:
+                for name in listdir(file_path):
+                    if name[-5:] == ".json":
+                        path = join(file_path, name)
+                        logger.debug("Removing old file :" + path)
+                        try:
+                            remove(path)
+                        except Exception as e:
+                            logger.error(
+                                "Unable to remove old file ("
+                                + path
+                                + ") while saving:\n"
+                                + str(e)
+                            )
 
     if file_path and not isdir(file_path):
         makedirs(file_path)
@@ -230,7 +251,12 @@ def split_obj_dict(cls_tupel, obj_dict, folder, split_list, file_ext, logger):
                 cls_tupel, val, folder, split_list, file_ext, logger
             )
 
-        if "__class__" in obj_dict.keys() and obj_dict["__class__"] in cls_tupel:
+        if (
+            "__class__" in obj_dict.keys()
+            and obj_dict["__class__"] in cls_tupel
+            and "name" in obj_dict.keys()
+            and obj_dict["name"] not in ["", None]
+        ):
             # and also add it to the list of objects to be saved
             name = get_filename(obj_dict, folder, split_list, file_ext, logger)
             split_list.append({name: obj_dict})
