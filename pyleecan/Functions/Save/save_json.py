@@ -1,38 +1,110 @@
-from json import dump, load
-from os.path import join, basename, isdir, isfile
-from os import mkdir
+import gzip
 from datetime import datetime
+from json import dump
 from logging import getLogger
-from ...Classes._frozen import FrozenClass
-from ...definitions import PACKAGE_NAME
-from ... import __version__
+from os import makedirs, remove, listdir
+from os.path import isdir, isfile, join, split
+
 from numpy import int32
 
+from ... import __version__
+from ...Classes import get_class_dict
+from ...Classes._frozen import FrozenClass
+from ...definitions import PACKAGE_NAME
 
-def create_folder(logger, save_path):
+
+def save_json(
+    obj,
+    save_path="",
+    is_folder=False,
+    is_delete_old=True,
+    type_compression=0,
+    class_to_split=("Simulation", "Machine", "Material"),
+):
+    """Save the object to the save_path
+
+    Parameters
+    ----------
+    obj :
+        A pyleecan object to save
+    save_path: str
+        path to the folder to save the object
+    is_folder: bool
+        to split the object in different files
+    is_delete_old : bool
+        True to remove all the ".json" file from the folder before saving
+    type_compression: int
+        0: no compression, 1: gzip
+    class_to_split: list
+        list of classes (and daughter classes) that should be split
+        only for is_folder == True
     """
-    Create the folder: "YYYY_mm_dd HH_MM_SS save_path"
-    """
-    # datetime object containing current date and time
+    if isinstance(obj, FrozenClass):  # Pyleecan obj
+        # Get the object logger
+        logger = obj.get_logger()
+    else:
+        logger = getLogger("Pyleecan")
+
+    # init
+    file_ext = ".json"
+    if type_compression == 1:
+        file_ext += ".gz"
+
+    # create path and name for the base file
+    file_path, base_name = setup_save_path(
+        save_path, obj, is_folder=is_folder, is_delete_old=is_delete_old, file_ext=file_ext, logger=logger
+    )
+
+    # prepare data for dumping and split if needed
+    obj = build_data(obj, logger)
     now = datetime.now()
-    dt_string = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
-    path = dt_string + save_path
+    obj["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
+    obj["__version__"] = PACKAGE_NAME + "_" + __version__
 
-    # Check if the directory exists
-    while isdir(path):
-        now = datetime.now()
-        dt_string = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
-        path = dt_string + save_path
+    split_list = [{base_name: obj}]
 
-    logger.info("Creating folder " + path + " to save the object.")
-    mkdir(path)
+    if is_folder:
+        # Add the classes daughters
+        class_to_add = []
+        class_dict = get_class_dict()
 
-    return path
+        for class_name in class_to_split:
+            class_to_add.extend(class_dict[class_name]["daughters"])
+
+        class_to_split += tuple(class_to_add)
+        split_obj_dict(class_to_split, obj, file_path, split_list, file_ext, logger)
+
+    # logging
+    cls_name = obj["__class__"]
+    if is_folder:
+        msg = f"Saving {cls_name} to folder '{file_path}' ({len(split_list)} files)."
+    else:
+        msg = f"Saving {cls_name} to file '{join(file_path, base_name)}'."
+    logger.info(msg)
+    print(msg)
+
+    # save all objects from the split list
+    for elem in split_list:
+        file_name = list(elem.keys())[0]
+        save_obj = elem[file_name]
+        json_kwargs = dict(sort_keys=True, indent=4, separators=(",", ": "))
+        json_file = join(file_path, file_name)
+
+        if type_compression == 1:
+            fp = gzip.open(json_file, mode="wt", encoding="utf-8")
+        else:
+            fp = open(json_file, "w")
+
+        with fp:
+            dump(save_obj, fp, **json_kwargs)
+
+    return obj
 
 
-def fix_file_name(save_path, obj, is_folder, logger):
+def setup_save_path(save_path, obj, is_folder, is_delete_old, file_ext, logger):
     """
-    Check save_path and modify it according to is_folder
+    Check save_path and modify or create it if needed, i.e. add or remove
+    file extension .json or create new name based on class name.
 
     Parameters
     ----------
@@ -41,39 +113,66 @@ def fix_file_name(save_path, obj, is_folder, logger):
     obj:
         Pyleecan object to save
     is_folder: bool
-        object is saved if folder mode (splitting Materials, Machine, Simulation in different files)
+        object is saved if folder mode
+    is_delete_old : bool
+        True to remove all the ".json" file from the folder before saving
+    file_ext: str
+        File extension e.g. ".json"
+    logger :
+        Logger to use
     """
-    if not save_path:
-        if is_folder:  # Create the folder
-            save_path = create_folder(logger, type(obj).__name__)
+    # generate or correct file and path if needed
+    if not save_path:  # generate
+        if is_folder:
+            file_path = create_folder(type(obj).__name__, logger)
+            file_name = file_path + file_ext
         else:
-            save_path = join(save_path, type(obj).__name__ + ".json")
-    elif ".json" != basename(save_path)[-5:] and not is_folder:
-        save_path = save_path + ".json"
-    elif is_folder:
+            file_path = ""
+            file_name = get_filename(obj, file_path, [], file_ext, logger)
+
+    else:  # correct
+        # remove old extension in case
         if save_path.endswith(".json"):
             save_path = save_path[:-5]
-        if not isdir(save_path):
-            mkdir(save_path)
-    else:
-        save_path = save_path
+            if is_folder:
+                logger.warning(
+                    f"Removed '.json' from save_path '{save_path}' in folder mode."
+                )
 
-    return save_path
+        # file mode
+        if not is_folder:
+            if not save_path.endswith(file_ext):
+                save_path += file_ext
+            file_path, file_name = split(save_path)
+
+        # folder mode
+        else:
+            file_path, file_name = split(save_path)
+            file_path = join(file_path, file_name)
+            file_name += file_ext
+            # Remove old files from old folder
+            if isdir(file_path) and is_delete_old:
+                for name in listdir(file_path):
+                    if name[-5:] == ".json":
+                        path = join(file_path, name)
+                        logger.debug("Removing old file :" + path)
+                        try:
+                            remove(path)
+                        except Exception as e:
+                            logger.error(
+                                "Unable to remove old file ("
+                                + path
+                                + ") while saving:\n"
+                                + str(e)
+                            )
+
+    if file_path and not isdir(file_path):
+        makedirs(file_path)
+
+    return file_path, file_name
 
 
-def is_json_serializable(obj):
-    if isinstance(obj, (bool, float, int, str)):
-        return True
-    else:
-        return False
-
-
-def has_as_dict(obj):
-    """Check if object has 'as_dict' method."""
-    return hasattr(obj, "as_dict") and callable(getattr(obj, "as_dict", None))
-
-
-def build_data(obj):
+def build_data(obj, logger):
     """
     Build a json serializable data structure of lists, dicts and pyleecan objects.
     Data that can not be serialized will be set to None. Tuples will also be None.
@@ -92,92 +191,39 @@ def build_data(obj):
     if isinstance(obj, list):
         data = []
         for elem in obj:
-            data.append(build_data(elem))
+            data.append(build_data(elem, logger))
         return data
     # dicts
     if isinstance(obj, dict):
         data = {}
         for key in obj:
-            data[key] = build_data(obj[key])
+            data[key] = build_data(obj[key], logger)
         return data
-    # tuples (excluded)
-    if isinstance(obj, tuple):
-        return None
     # pyleecan classes, i.e. instances with as_dict method
-    if has_as_dict(obj):
-        return build_data(obj.as_dict())
+    if hasattr(obj, "as_dict") and callable(getattr(obj, "as_dict", None)):
+        return build_data(obj.as_dict(), logger)
     if isinstance(obj, int32):  # int
         return int(obj)
-    #
+    # other allowed types
     if is_json_serializable(obj):
         return obj
-    else:
-        return None
+    # tuples (excluded)
+    if isinstance(obj, tuple):
+        pass  # TODO Do we need tuples? If we do, add pyleecan tuple helper class.
 
-
-def save_split_obj(classes_tuple, obj, folder_path, logger):
-    """
-    Scan the object attribute and save the object in a dedicated file
-
-    Parameters
-    ----------
-
-    classes_tuple: tuple
-        tuple containing the classe names to save separately
-
-    obj: dict
-        object dictionary to save
-
-    folder_path: str
-        directory to save all the files
-
-    logger: logging.Logger
-        logger to display information
-
-    Returns
-    -------
-    name : str
-        name of the file containing the object
-    """
-    # Call save_separated_obj to save the sub object into files
-    save_separated_obj(classes_tuple, obj, folder_path, logger)
-
-    if "name" in obj.keys() and obj["name"] != "" and obj["name"] != None:
-        name = obj["name"] + ".json"
-        with open(join(folder_path, name), "w") as json_file:
-            logger.info("Saving " + obj["name"] + " in " + join(folder_path, name))
-            dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
-    elif obj["__class__"] == "Material":  # Material without name is empty => no split
-        name = obj
-    else:
-        zeros = "0000"
-        num = 1
-        prefix = zeros[: -len(str(num))] + str(num)
-        name = obj["__class__"] + prefix
-
-        # Define the file name
-        while isfile(join(folder_path, name + ".json")):
-            num += 1
-            prefix = zeros[: -len(str(num))] + str(num)
-            name = obj["__class__"] + prefix
-
-        # Save the file
-        name += ".json"
-        logger.info(
-            "Saving unamed object of class",
-            obj["__class__"],
-            "in",
-            join(folder_path, name),
+    if obj is not None:
+        logger.warning(
+            f"build_data(): Objects of type {type(obj).__name__} can not be "
+            + "serialized for now and will be saved as None."
         )
-        with open(join(folder_path, name), "w") as json_file:
-            dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
 
-    return name  # Set the name to load the file
+    return None
 
 
-def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
+def split_obj_dict(cls_tupel, obj_dict, folder, split_list, file_ext, logger):
     """
-    Save classes_tuple objects contained in obj_dict in separated files and modify obj_dict
+    Store classes_tuple objects contained in obj_dict in split_list and modify
+    the obj_dict.
 
     Parameters
     ----------
@@ -197,94 +243,106 @@ def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
     Returns
     -------
     obj_dict : dict
-        object dictionary to save
+        object dictionnary to save
     """
+    if isinstance(obj_dict, dict):
+        for key, val in obj_dict.items():
+            obj_dict[key] = split_obj_dict(
+                cls_tupel, val, folder, split_list, file_ext, logger
+            )
 
-    for key, val in obj_dict.items():
-        if isinstance(val, dict):
-            if "__class__" in val.keys() and val["__class__"] in classes_tuple:
-                # Call save_split_obj to save the obj and its attributes
-                obj_dict[key] = save_split_obj(
-                    classes_tuple, val, folder_path, logger
-                )  # Set the name to load the file
-            else:
-                # Call save_separed_obj to scan the attributes
-                obj_dict[key] = save_separated_obj(
-                    classes_tuple, val, folder_path, logger
-                )
-        elif isinstance(val, list):
-            for idx, list_val in enumerate(val):
-                # Pyleecan obj
-                if isinstance(list_val, dict) and "__class__" in list_val.keys():
-                    # Object to split
-                    if list_val["__class__"] in classes_tuple:
-                        # Call save_split_obj to save the obj and its attributes
-                        obj_dict[key][idx] = save_split_obj(
-                            classes_tuple, list_val, folder_path, logger
-                        )  # Set the name to load the file
-                    else:
-                        # Call save_separed_obj to scan the attributes
-                        obj_dict[key][idx] = save_separated_obj(
-                            classes_tuple, list_val, folder_path, logger
-                        )
+        if (
+            "__class__" in obj_dict.keys()
+            and obj_dict["__class__"] in cls_tupel
+            and "name" in obj_dict.keys()
+            and obj_dict["name"] not in ["", None]
+        ):
+            # and also add it to the list of objects to be saved
+            name = get_filename(obj_dict, folder, split_list, file_ext, logger)
+            split_list.append({name: obj_dict})
+            return name
+
+    elif isinstance(obj_dict, list):
+        for idx, list_val in enumerate(obj_dict):
+            obj_dict[idx] = split_obj_dict(
+                cls_tupel, list_val, folder, split_list, file_ext, logger
+            )
+
     return obj_dict
 
 
-def save_json(obj, save_path="", is_folder=False):
-    """Save the object to the save_path
+def create_folder(name, logger):
+    """Create a new non existing the folder: "YYYY_mm_dd-HH_MM_SS-name". """
+    # datetime object containing current date and time
+    now = datetime.now()
+    dt_string = now.strftime("%Y_%m_%d-%Hh%Mmin%Ss-")
+    path = dt_string + name
+
+    # Check if the directory exists
+    while isdir(path):
+        now = datetime.now()
+        dt_string = now.strftime("%Y_%m_%d-%Hh%Mmin%Ss-")
+        path = dt_string + name
+
+    logger.info("Creating folder " + path + " to save the object.")
+    makedirs(path)
+
+    return path
+
+
+def is_json_serializable(obj):
+    if isinstance(obj, (bool, float, int, str)):
+        return True
+    else:
+        return False
+
+
+def get_filename(obj, folder, split_list, file_ext, logger):
+    """
+    Get a filename for the object that doesn't exists.
 
     Parameters
     ----------
-    self :
-        A pyleecan object
-    save_path: str
-        path to the folder to save the object
-    is_folder: bool
-        to split the object in different files: separate simulation machine and materials
+
+    obj: dict
+        object dictionary to save
+
+    folder_path: str
+        directory to save all the files
+
+    split_list: list
+        list of objects to be saved seperately
+
+    logger: logging.Logger
+        logger to display information
+
+    Returns
+    -------
+    name : str
+        name of the file containing the object
     """
-    if isinstance(obj, FrozenClass):  # Pyleecan obj
-        # Get the object logger
-        logger = obj.get_logger()
+    # Define the file name
+    if "name" in obj.keys() and obj["name"] not in ["", None]:
+        name = obj["name"]
+        msg = f"Saving {name} in "
     else:
-        logger = getLogger("Pyleecan")
+        name = obj["__class__"]
+        msg = f"Saving unnamed object of class {name} in "
 
-    # correct file name if needed
-    save_path = fix_file_name(save_path, obj, is_folder, logger)
+    # get list of names that will be created with this save to folder
+    name_list = []
+    for elem in split_list:
+        name_list.append(list(elem.keys())[0])
 
-    # save
-    obj = build_data(obj)
-    now = datetime.now()
-    obj["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
-    obj["__version__"] = PACKAGE_NAME + "_" + __version__
-    if isinstance(obj, dict) and is_folder:
-        # Tuple containing classes to save separately
-        class_to_split = ("Simulation", "Machine", "Material")
+    # Add prefix to get a file name that doesn't exists
+    num = 0
+    new_name = name + file_ext
+    while isfile(join(folder, new_name)) or new_name in name_list:
+        num += 1
+        new_name = name + "_{:05d}".format(num) + file_ext
 
-        # Add the classes daughters
-        class_to_add = []
-        with open(
-            __file__[: __file__.rfind("Functions")] + "Classes/Class_Dict.json"
-        ) as class_dict_file:
-            class_dict = load(class_dict_file)
+    # logging
+    file_path = join(folder, new_name)
+    logger.info(msg + file_path)
 
-        for class_name in class_to_split:
-            class_to_add.extend(class_dict[class_name]["daughters"])
-
-        class_to_split += tuple(class_to_add)
-
-        # Call ref_objects to save the objects separately
-        obj = save_separated_obj(class_to_split, obj, save_path, logger)
-
-        i = max(save_path.rfind("/"), save_path.rfind("\\"))
-        if i != -1:
-            save_path += save_path[i:]
-        else:
-            save_path += "/" + save_path
-    if is_folder:
-        save_path += ".json"
-
-    logger.info("Saving in " + save_path)
-    with open(save_path, "w") as json_file:
-        dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
-
-    return obj
+    return new_name  # Set the name to load the file
