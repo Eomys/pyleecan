@@ -13,6 +13,7 @@ from .Load.retrocompatibility import convert_init_dict
 LIB_KEY = "RefMatLib"
 MACH_KEY = "MachineMatLib"
 
+
 def load(file_path):
     """Load a pyleecan object from a json file
 
