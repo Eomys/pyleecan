@@ -98,6 +98,19 @@ def test_save_load_machine():
     assert result.frame == None
 
 
+def test_save_load_json_compressed():
+    """Check that you can save/load a compressed json file"""
+    test_obj = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    # Check save
+    file_path = join(save_path, "Toyota_Prius_compressed")
+    assert not isfile(file_path + ".json.gz")
+    test_obj.save(file_path, type_compression=1)
+    assert isfile(file_path + ".json.gz")
+    # Check load
+    test_obj2 = load(file_path + ".json.gz")
+    assert test_obj == test_obj2
+
+
 @pytest.mark.IPMSM
 @pytest.mark.MagFEMM
 @pytest.mark.periodicity
@@ -166,6 +179,10 @@ def test_save_load_folder_path():
     assert test_obj == test_obj2
     assert callable(test_obj.simu.postproc_list[0]._run_func)
     assert callable(test_obj.simu.postproc_list[1]._run_func)
+    # Check that material name are still the same
+    assert test_obj2.simu.machine.stator.mat_type.name == "M400-50A"
+    assert test_obj2.simu.machine.rotor.mat_type.name == "M400-50A"
+    assert test_obj2.simu.machine.shaft.mat_type.name == "M400-50A"
 
     # Check that the machine can be updated
     test_obj2.simu.machine.stator.L1 = 999
@@ -184,6 +201,7 @@ def test_save_load_folder_path():
     assert isfile(join(loc_save_path, "Air.json"))
     assert isfile(join(loc_save_path, "Copper1.json"))
     assert isfile(join(loc_save_path, "Toyota2.json"))
+    assert not isfile(join(loc_save_path, "Toyota_Prius.json"))
     assert isfile(join(loc_save_path, "test_save_load_folder_path.json"))  # Simu
     assert isfile(join(loc_save_path, "FolderSaved.json"))  # Output
     assert len(listdir(loc_save_path)) == 10
@@ -372,6 +390,7 @@ def test_save_load_simu(type_file):
 
 if __name__ == "__main__":
     test_save_load_folder_path()
+    test_save_load_json_compressed()
     print("Done")
     # test_save_load_simu("json")
     # test_save_load_simu("h5")
