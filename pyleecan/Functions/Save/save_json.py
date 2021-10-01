@@ -52,7 +52,7 @@ def save_json(
 
     # create path and name for the base file
     file_path, base_name = setup_save_path(
-        save_path, obj, is_folder, is_delete_old, file_ext, logger
+        save_path, obj, is_folder=is_folder, is_delete_old=is_delete_old, file_ext=file_ext, logger=logger
     )
 
     # prepare data for dumping and split if needed

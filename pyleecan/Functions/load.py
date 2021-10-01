@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from os import chdir, getcwd, walk
-from os.path import isdir, join
+from os.path import isdir, join, splitext
 
 from .Load.import_class import import_class
 from .Load.load_hdf5 import load_hdf5
