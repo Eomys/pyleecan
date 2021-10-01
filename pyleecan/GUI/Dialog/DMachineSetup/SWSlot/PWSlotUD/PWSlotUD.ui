@@ -27,7 +27,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="MPLCanvas2" name="w_viewer" native="true"/>
+    <widget class="MPLCanvas" name="w_viewer" native="true"/>
    </item>
    <item>
     <widget class="QScrollArea" name="scrollArea">
@@ -109,7 +109,7 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>MPLCanvas2</class>
+   <class>MPLCanvas</class>
    <extends>QWidget</extends>
    <header>......GUI.Tools.MPLCanvas</header>
    <container>1</container>

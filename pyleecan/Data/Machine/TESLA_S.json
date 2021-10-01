@@ -5,7 +5,7 @@
     "desc": "Tesla model S 2013 \nsee Open Source Electric Motor Models for Commercial EV & Hybrid Traction Motors Dr David Staton Dr James Goss (2017)",
     "frame": null,
     "logger_name": null,
-    "name": "TESLA_S",
+    "name": "Tesla_S",
     "rotor": {
         "Hscr": 0.02,
         "Kf1": 0.95,

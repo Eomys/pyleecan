@@ -9,7 +9,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from .....GUI.Tools.MPLCanvas import MPLCanvas2
+from .....GUI.Tools.MPLCanvas import MPLCanvas
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -24,7 +24,7 @@ class Ui_SWinding(object):
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.horizontalLayout_8 = QHBoxLayout()
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.w_viewer = MPLCanvas2(SWinding)
+        self.w_viewer = MPLCanvas(SWinding)
         self.w_viewer.setObjectName(u"w_viewer")
         self.w_viewer.setMinimumSize(QSize(250, 0))
 

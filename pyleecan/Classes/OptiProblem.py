@@ -278,9 +278,13 @@ class OptiProblem(FrozenClass):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -289,14 +293,24 @@ class OptiProblem(FrozenClass):
         if self.simu is None:
             OptiProblem_dict["simu"] = None
         else:
-            OptiProblem_dict["simu"] = self.simu.as_dict(**kwargs)
+            OptiProblem_dict["simu"] = self.simu.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs,
+            )
         if self.design_var is None:
             OptiProblem_dict["design_var"] = None
         else:
             OptiProblem_dict["design_var"] = list()
             for obj in self.design_var:
                 if obj is not None:
-                    OptiProblem_dict["design_var"].append(obj.as_dict(**kwargs))
+                    OptiProblem_dict["design_var"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs,
+                        )
+                    )
                 else:
                     OptiProblem_dict["design_var"].append(None)
         if self.obj_func is None:
@@ -305,7 +319,13 @@ class OptiProblem(FrozenClass):
             OptiProblem_dict["obj_func"] = list()
             for obj in self.obj_func:
                 if obj is not None:
-                    OptiProblem_dict["obj_func"].append(obj.as_dict(**kwargs))
+                    OptiProblem_dict["obj_func"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs,
+                        )
+                    )
                 else:
                     OptiProblem_dict["obj_func"].append(None)
         if self._eval_func_str is not None:
@@ -326,7 +346,13 @@ class OptiProblem(FrozenClass):
             OptiProblem_dict["constraint"] = list()
             for obj in self.constraint:
                 if obj is not None:
-                    OptiProblem_dict["constraint"].append(obj.as_dict(**kwargs))
+                    OptiProblem_dict["constraint"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs,
+                        )
+                    )
                 else:
                     OptiProblem_dict["constraint"].append(None)
         if self._preprocessing_str is not None:
@@ -347,7 +373,13 @@ class OptiProblem(FrozenClass):
             OptiProblem_dict["datakeeper_list"] = list()
             for obj in self.datakeeper_list:
                 if obj is not None:
-                    OptiProblem_dict["datakeeper_list"].append(obj.as_dict(**kwargs))
+                    OptiProblem_dict["datakeeper_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs,
+                        )
+                    )
                 else:
                     OptiProblem_dict["datakeeper_list"].append(None)
         # The class name is added to the dict for deserialisation purpose

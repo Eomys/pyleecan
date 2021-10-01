@@ -263,22 +263,36 @@ class HoleUD(HoleMag):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from HoleMag
-        HoleUD_dict = super(HoleUD, self).as_dict(**kwargs)
+        HoleUD_dict = super(HoleUD, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.surf_list is None:
             HoleUD_dict["surf_list"] = None
         else:
             HoleUD_dict["surf_list"] = list()
             for obj in self.surf_list:
                 if obj is not None:
-                    HoleUD_dict["surf_list"].append(obj.as_dict(**kwargs))
+                    HoleUD_dict["surf_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     HoleUD_dict["surf_list"].append(None)
         if self.magnet_dict is None:
@@ -287,7 +301,11 @@ class HoleUD(HoleMag):
             HoleUD_dict["magnet_dict"] = dict()
             for key, obj in self.magnet_dict.items():
                 if obj is not None:
-                    HoleUD_dict["magnet_dict"][key] = obj.as_dict(**kwargs)
+                    HoleUD_dict["magnet_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     HoleUD_dict["magnet_dict"][key] = None
         # The class name is added to the dict for deserialisation purpose

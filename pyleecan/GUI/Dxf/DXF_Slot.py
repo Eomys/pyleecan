@@ -18,7 +18,7 @@ from ...Classes.SlotUD import SlotUD
 from ...definitions import config_dict
 from ...GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
 from ...GUI.Resources import pixmap_dict
-from ...GUI.Tools.MPLCanvas import MPLCanvas2
+from ...GUI.Tools.MPLCanvas import MPLCanvas
 from ...loggers import GUI_LOG_NAME
 from .Ui_DXF_Slot import Ui_DXF_Slot
 from ...Functions.init_fig import init_fig

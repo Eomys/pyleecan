@@ -431,9 +431,13 @@ class Output(FrozenClass):
         S += getsizeof(self.loss)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -442,37 +446,69 @@ class Output(FrozenClass):
         if self.simu is None:
             Output_dict["simu"] = None
         else:
-            Output_dict["simu"] = self.simu.as_dict(**kwargs)
+            Output_dict["simu"] = self.simu.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Output_dict["path_result"] = self.path_result
         if self.geo is None:
             Output_dict["geo"] = None
         else:
-            Output_dict["geo"] = self.geo.as_dict(**kwargs)
+            Output_dict["geo"] = self.geo.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.elec is None:
             Output_dict["elec"] = None
         else:
-            Output_dict["elec"] = self.elec.as_dict(**kwargs)
+            Output_dict["elec"] = self.elec.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.mag is None:
             Output_dict["mag"] = None
         else:
-            Output_dict["mag"] = self.mag.as_dict(**kwargs)
+            Output_dict["mag"] = self.mag.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.struct is None:
             Output_dict["struct"] = None
         else:
-            Output_dict["struct"] = self.struct.as_dict(**kwargs)
+            Output_dict["struct"] = self.struct.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.post is None:
             Output_dict["post"] = None
         else:
-            Output_dict["post"] = self.post.as_dict(**kwargs)
+            Output_dict["post"] = self.post.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Output_dict["logger_name"] = self.logger_name
         if self.force is None:
             Output_dict["force"] = None
         else:
-            Output_dict["force"] = self.force.as_dict(**kwargs)
+            Output_dict["force"] = self.force.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.loss is None:
             Output_dict["loss"] = None
         else:
-            Output_dict["loss"] = self.loss.as_dict(**kwargs)
+            Output_dict["loss"] = self.loss.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         Output_dict["__class__"] = "Output"
         return Output_dict
