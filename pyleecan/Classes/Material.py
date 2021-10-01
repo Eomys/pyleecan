@@ -224,9 +224,13 @@ class Material(FrozenClass):
         S += getsizeof(self.path)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -237,23 +241,43 @@ class Material(FrozenClass):
         if self.elec is None:
             Material_dict["elec"] = None
         else:
-            Material_dict["elec"] = self.elec.as_dict(**kwargs)
+            Material_dict["elec"] = self.elec.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.mag is None:
             Material_dict["mag"] = None
         else:
-            Material_dict["mag"] = self.mag.as_dict(**kwargs)
+            Material_dict["mag"] = self.mag.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.struct is None:
             Material_dict["struct"] = None
         else:
-            Material_dict["struct"] = self.struct.as_dict(**kwargs)
+            Material_dict["struct"] = self.struct.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.HT is None:
             Material_dict["HT"] = None
         else:
-            Material_dict["HT"] = self.HT.as_dict(**kwargs)
+            Material_dict["HT"] = self.HT.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.eco is None:
             Material_dict["eco"] = None
         else:
-            Material_dict["eco"] = self.eco.as_dict(**kwargs)
+            Material_dict["eco"] = self.eco.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Material_dict["desc"] = self.desc
         Material_dict["path"] = self.path
         # The class name is added to the dict for deserialisation purpose

@@ -538,20 +538,32 @@ class LamSlotWind(LamSlot):
         S += getsizeof(self.winding)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LamSlot
-        LamSlotWind_dict = super(LamSlotWind, self).as_dict(**kwargs)
+        LamSlotWind_dict = super(LamSlotWind, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         LamSlotWind_dict["Ksfill"] = self.Ksfill
         if self.winding is None:
             LamSlotWind_dict["winding"] = None
         else:
-            LamSlotWind_dict["winding"] = self.winding.as_dict(**kwargs)
+            LamSlotWind_dict["winding"] = self.winding.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotWind_dict["__class__"] = "LamSlotWind"

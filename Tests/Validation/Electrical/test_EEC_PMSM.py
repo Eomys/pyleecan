@@ -70,7 +70,7 @@ def test_EEC_PMSM():
     # Plot 3-phase current function of time
     out.elec.get_Is().plot_2D_Data(
         "time",
-        "phase",
+        "phase[]",
         save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
         is_show_fig=False,
         **dict_2D

@@ -1,12 +1,12 @@
-import numpy as np
 import h5py
+import numpy as np
 from h5py import File as FileH5
 from ...definitions import PACKAGE_NAME
 from ... import __version__
 from datetime import datetime
 
 
-def save_hdf5(obj, save_path):
+def save_hdf5(obj, save_path, obj_dict=None):
     """
     Save a pyleecan obj in hdf5 format
 
@@ -16,12 +16,14 @@ def save_hdf5(obj, save_path):
         object to save
     save_path: str
         file path
+    obj_dict : dict
+        obj.as_dict to save (optionnal to skip call to as_dict)
     """
 
     file5 = None
     try:
         file5 = FileH5(save_path, "w")
-        pyleecan_dict_to_hdf5(file5, obj)
+        pyleecan_dict_to_hdf5(file5, obj, obj_dict=obj_dict)
         file5.close()
     except Exception as err:
         if file5:
@@ -29,17 +31,27 @@ def save_hdf5(obj, save_path):
         raise (err)
 
 
-def pyleecan_dict_to_hdf5(file, obj):
+def pyleecan_dict_to_hdf5(file, obj, obj_dict=None):
     """
     Save a dict from a pyleecan object in the hdf5 file
 
     Parameters
     ----------
-    file: hdf5 file
+    file:
+        hdf5 file
     obj: Pyleecan object
         object to save
+    obj_dict : dict
+        obj.as_dict to save (optionnal to skip call to as_dict)
     """
-    obj_dict = obj.as_dict()
+    if obj_dict is not None:
+        pass
+    elif isinstance(obj, dict):
+        obj_dict = dict()
+        for key, val in obj.items():
+            obj_dict[key] = val.as_dict(type_handle_ndarray=2)
+    else:
+        obj_dict = obj.as_dict(type_handle_ndarray=2)
     now = datetime.now()
     obj_dict["__save_date__"] = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
     obj_dict["__version__"] = PACKAGE_NAME + "_" + __version__
@@ -48,6 +60,8 @@ def pyleecan_dict_to_hdf5(file, obj):
         if isinstance(val, dict) or isinstance(val, list):
             variable_to_hdf5(file, "", val, key)
         # Dataset
+        elif isinstance(val, np.ndarray):
+            file[key] = val
         elif val == None:
             # None is not available in H5 => we use a string
             file[key] = np.string_("NoneValue".encode("ISO-8859-2"))
@@ -73,7 +87,8 @@ def list_to_hdf5(file, group_name, name, list_to_save):
         list to save
 
     """
-    #
+
+    np.warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
     # Convert into array
     array_list = np.array(list_to_save)
@@ -114,6 +129,9 @@ def dict_to_hdf5(file, prefix, dict_to_save):
 
 
 def variable_to_hdf5(file, prefix, variable, name):
+    # Unable to save matrix of string (U=unicode) => Convert to list
+    if isinstance(variable, np.ndarray) and "U" in str(variable.dtype):
+        variable = variable.tolist()
     # Pyleecan object dict
     if isinstance(variable, dict):
         # Create group
@@ -125,7 +143,6 @@ def variable_to_hdf5(file, prefix, variable, name):
 
     # List
     elif isinstance(variable, list):
-        # Create group
 
         # Call function to create groups and datasets recursively
         list_to_hdf5(file, prefix, name, variable)

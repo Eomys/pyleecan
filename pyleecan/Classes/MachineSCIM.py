@@ -169,15 +169,23 @@ class MachineSCIM(MachineDFIM):
         S += super(MachineSCIM, self).__sizeof__()
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from MachineDFIM
-        MachineSCIM_dict = super(MachineSCIM, self).as_dict(**kwargs)
+        MachineSCIM_dict = super(MachineSCIM, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineSCIM_dict["__class__"] = "MachineSCIM"

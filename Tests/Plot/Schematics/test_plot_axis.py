@@ -298,3 +298,4 @@ def test_axis_LamWind():
 
 if __name__ == "__main__":
     test_axis_LamWind()
+    print("Done")

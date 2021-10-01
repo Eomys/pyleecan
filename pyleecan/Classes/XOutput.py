@@ -664,22 +664,36 @@ class XOutput(Output):
         S += getsizeof(self.xoutput_ref_index)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Output
-        XOutput_dict = super(XOutput, self).as_dict(**kwargs)
+        XOutput_dict = super(XOutput, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.paramexplorer_list is None:
             XOutput_dict["paramexplorer_list"] = None
         else:
             XOutput_dict["paramexplorer_list"] = list()
             for obj in self.paramexplorer_list:
                 if obj is not None:
-                    XOutput_dict["paramexplorer_list"].append(obj.as_dict(**kwargs))
+                    XOutput_dict["paramexplorer_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     XOutput_dict["paramexplorer_list"].append(None)
         if self.output_list is None:
@@ -688,7 +702,13 @@ class XOutput(Output):
             XOutput_dict["output_list"] = list()
             for obj in self.output_list:
                 if obj is not None:
-                    XOutput_dict["output_list"].append(obj.as_dict(**kwargs))
+                    XOutput_dict["output_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     XOutput_dict["output_list"].append(None)
         if self.xoutput_dict is None:
@@ -697,14 +717,22 @@ class XOutput(Output):
             XOutput_dict["xoutput_dict"] = dict()
             for key, obj in self.xoutput_dict.items():
                 if obj is not None:
-                    XOutput_dict["xoutput_dict"][key] = obj.as_dict(**kwargs)
+                    XOutput_dict["xoutput_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     XOutput_dict["xoutput_dict"][key] = None
         XOutput_dict["nb_simu"] = self.nb_simu
         if self.xoutput_ref is None:
             XOutput_dict["xoutput_ref"] = None
         else:
-            XOutput_dict["xoutput_ref"] = self.xoutput_ref.as_dict(**kwargs)
+            XOutput_dict["xoutput_ref"] = self.xoutput_ref.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         XOutput_dict["xoutput_ref_index"] = self.xoutput_ref_index
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name

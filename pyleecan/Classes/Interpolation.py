@@ -163,9 +163,13 @@ class Interpolation(FrozenClass):
         S += getsizeof(self.scalar_product)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -174,15 +178,27 @@ class Interpolation(FrozenClass):
         if self.ref_cell is None:
             Interpolation_dict["ref_cell"] = None
         else:
-            Interpolation_dict["ref_cell"] = self.ref_cell.as_dict(**kwargs)
+            Interpolation_dict["ref_cell"] = self.ref_cell.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.gauss_point is None:
             Interpolation_dict["gauss_point"] = None
         else:
-            Interpolation_dict["gauss_point"] = self.gauss_point.as_dict(**kwargs)
+            Interpolation_dict["gauss_point"] = self.gauss_point.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.scalar_product is None:
             Interpolation_dict["scalar_product"] = None
         else:
-            Interpolation_dict["scalar_product"] = self.scalar_product.as_dict(**kwargs)
+            Interpolation_dict["scalar_product"] = self.scalar_product.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         Interpolation_dict["__class__"] = "Interpolation"
         return Interpolation_dict

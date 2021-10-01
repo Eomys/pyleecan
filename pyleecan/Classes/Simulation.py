@@ -291,9 +291,13 @@ class Simulation(FrozenClass):
         S += getsizeof(self.layer_log_warn)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -304,23 +308,41 @@ class Simulation(FrozenClass):
         if self.machine is None:
             Simulation_dict["machine"] = None
         else:
-            Simulation_dict["machine"] = self.machine.as_dict(**kwargs)
+            Simulation_dict["machine"] = self.machine.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.input is None:
             Simulation_dict["input"] = None
         else:
-            Simulation_dict["input"] = self.input.as_dict(**kwargs)
+            Simulation_dict["input"] = self.input.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Simulation_dict["logger_name"] = self.logger_name
         if self.var_simu is None:
             Simulation_dict["var_simu"] = None
         else:
-            Simulation_dict["var_simu"] = self.var_simu.as_dict(**kwargs)
+            Simulation_dict["var_simu"] = self.var_simu.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.postproc_list is None:
             Simulation_dict["postproc_list"] = None
         else:
             Simulation_dict["postproc_list"] = list()
             for obj in self.postproc_list:
                 if obj is not None:
-                    Simulation_dict["postproc_list"].append(obj.as_dict(**kwargs))
+                    Simulation_dict["postproc_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     Simulation_dict["postproc_list"].append(None)
         Simulation_dict["index"] = self.index

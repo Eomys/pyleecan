@@ -437,15 +437,23 @@ class MagFEMM(Magnetics):
         S += getsizeof(self.Rag_enforced)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Magnetics
-        MagFEMM_dict = super(MagFEMM, self).as_dict(**kwargs)
+        MagFEMM_dict = super(MagFEMM, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         MagFEMM_dict["Kmesh_fineness"] = self.Kmesh_fineness
         MagFEMM_dict["Kgeo_fineness"] = self.Kgeo_fineness
         MagFEMM_dict["type_calc_leakage"] = self.type_calc_leakage
@@ -464,11 +472,19 @@ class MagFEMM(Magnetics):
         if self.rotor_dxf is None:
             MagFEMM_dict["rotor_dxf"] = None
         else:
-            MagFEMM_dict["rotor_dxf"] = self.rotor_dxf.as_dict(**kwargs)
+            MagFEMM_dict["rotor_dxf"] = self.rotor_dxf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.stator_dxf is None:
             MagFEMM_dict["stator_dxf"] = None
         else:
-            MagFEMM_dict["stator_dxf"] = self.stator_dxf.as_dict(**kwargs)
+            MagFEMM_dict["stator_dxf"] = self.stator_dxf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         MagFEMM_dict["import_file"] = self.import_file
         MagFEMM_dict["is_close_femm"] = self.is_close_femm
         MagFEMM_dict["nb_worker"] = self.nb_worker

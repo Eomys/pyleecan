@@ -25,7 +25,7 @@ CLASS_DEF_COL = 14  # class description
 # DAUG_COL = 18  # daughter class list (unused)
 
 
-def read_all(path, is_internal=False, in_path=""):
+def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
     """Read every csv files in a directory and subdirectory and create a structure for the
     code generation
 
@@ -35,6 +35,8 @@ def read_all(path, is_internal=False, in_path=""):
         path to the root folder with the csv files
     is_internal : bool
         True to overwrite the open source csv files by internal ones
+    soft_name : str
+        Name of the generated software
 
     Returns
     -------
@@ -48,7 +50,9 @@ def read_all(path, is_internal=False, in_path=""):
         for file_name in filenames:
             if file_name[-4:] == ".csv" and file_name[:2] != "~$":
                 # For all .csv file in the folder and subfolder ...
-                gen_dict[file_name[:-4]] = read_file(join(dirpath, file_name))
+                gen_dict[file_name[:-4]] = read_file(
+                    join(dirpath, file_name), soft_name=soft_name
+                )
                 gen_dict[file_name[:-4]]["is_internal"] = False
 
     # Read the Internal doc to adapt the classes (if needed)
@@ -58,7 +62,9 @@ def read_all(path, is_internal=False, in_path=""):
                 if file_name[-4:] == ".csv" and file_name[:2] != "~$":
                     # For all .csv file in the folder and subfolder ...
                     print("Using internal version for: " + file_name[:-4])
-                    gen_dict[file_name[:-4]] = read_file(join(dirpath, file_name))
+                    gen_dict[file_name[:-4]] = read_file(
+                        join(dirpath, file_name), soft_name=soft_name
+                    )
                     gen_dict[file_name[:-4]]["is_internal"] = True
 
     # Update all the "daughters" key according to "mother" key
@@ -67,7 +73,7 @@ def read_all(path, is_internal=False, in_path=""):
     return gen_dict
 
 
-def read_file(file_path):
+def read_file(file_path, soft_name=PACKAGE_NAME):
     """Read a csv file and create a dict for the class code generation
 
     Parameters
@@ -90,7 +96,7 @@ def read_file(file_path):
     # The class name is the csv file name
     class_dict["name"] = basename(file_path)[:-4]
     try:  # Cleanup path to avoid "commit noise"
-        class_dict["path"] = file_path[file_path.rfind(PACKAGE_NAME) :]
+        class_dict["path"] = file_path[file_path.rfind(soft_name) :]
     except ValueError:  # Path doesn't contain pyleecan
         class_dict["path"] = file_path
     # Cleanup \ to avoid errors

@@ -157,15 +157,23 @@ class OutMagFEMM(OutInternal):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from OutInternal
-        OutMagFEMM_dict = super(OutMagFEMM, self).as_dict(**kwargs)
+        OutMagFEMM_dict = super(OutMagFEMM, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         OutMagFEMM_dict["FEMM_dict"] = (
             self.FEMM_dict.copy() if self.FEMM_dict is not None else None
         )
@@ -175,7 +183,13 @@ class OutMagFEMM(OutInternal):
             OutMagFEMM_dict["handler_list"] = list()
             for obj in self.handler_list:
                 if obj is not None:
-                    OutMagFEMM_dict["handler_list"].append(obj.as_dict(**kwargs))
+                    OutMagFEMM_dict["handler_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     OutMagFEMM_dict["handler_list"].append(None)
         # The class name is added to the dict for deserialisation purpose
