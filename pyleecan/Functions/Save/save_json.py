@@ -17,7 +17,7 @@ def save_json(
     obj,
     save_path="",
     is_folder=False,
-    compression=None,
+    type_compression=0,
     class_to_split=("Simulation", "Machine", "Material"),
 ):
     """Save the object to the save_path
@@ -25,11 +25,13 @@ def save_json(
     Parameters
     ----------
     obj :
-        A pyleecan object
+        A pyleecan object to save
     save_path: str
         path to the folder to save the object
     is_folder: bool
         to split the object in different files
+    type_compression: int
+        0: no compression, 1: gzip
     class_to_split: list
         list of classes (and daughter classes) that should be split
         only for is_folder == True
@@ -42,7 +44,7 @@ def save_json(
 
     # init
     file_ext = ".json"
-    if compression == "gzip":
+    if type_compression == 1:
         file_ext += ".gz"
 
     # create path and name for the base file
@@ -83,7 +85,7 @@ def save_json(
         json_kwargs = dict(sort_keys=True, indent=4, separators=(",", ": "))
         json_file = join(file_path, file_name)
 
-        if compression == "gzip":
+        if type_compression == 1:
             fp = gzip.open(json_file, mode="wt", encoding="utf-8")
         else:
             fp = open(json_file, "w")
@@ -110,6 +112,8 @@ def setup_save_path(save_path, obj, is_folder, file_ext, logger):
         object is saved if folder mode
     file_ext: str
         File extension e.g. ".json"
+    logger :
+        Logger to use
     """
     # generate or correct file and path if needed
     if not save_path:  # generate

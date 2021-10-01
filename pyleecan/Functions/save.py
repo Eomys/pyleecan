@@ -8,7 +8,7 @@ class FormatError(Exception):
     pass
 
 
-def save(self, save_path="", is_folder=False, compression=None):
+def save(self, save_path="", is_folder=False, type_compression=0):
     """Save the object to the save_path
 
     Parameters
@@ -19,6 +19,8 @@ def save(self, save_path="", is_folder=False, compression=None):
         path to the folder to save the object
     is_folder: bool
         to split the object in different files: separate simulation machine and materials
+    type_compression: int
+        Available only for json, 0: no compression, 1: gzip 
     """
     # Save in the object.path if it exist and save_path is empty
     if save_path == "" and hasattr(self, "path") and getattr(self, "path") != None:
@@ -39,7 +41,7 @@ def save(self, save_path="", is_folder=False, compression=None):
             self,
             save_path=save_path,
             is_folder=is_folder,
-            compression=compression,
+            type_compression=type_compression,
         )
     # Save in hdf5
     elif save_path.endswith(".h5"):
