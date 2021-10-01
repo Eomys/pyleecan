@@ -18,11 +18,6 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.Input.gen_input import gen_input
-except ImportError as error:
-    gen_input = error
-
-try:
     from ..Methods.Simulation.Input.comp_axes import comp_axes
 except ImportError as error:
     comp_axes = error
@@ -40,16 +35,6 @@ class Input(FrozenClass):
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.Input.gen_input
-    if isinstance(gen_input, ImportError):
-        gen_input = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Input method gen_input: " + str(gen_input))
-            )
-        )
-    else:
-        gen_input = gen_input
     # cf Methods.Simulation.Input.comp_axes
     if isinstance(comp_axes, ImportError):
         comp_axes = property(

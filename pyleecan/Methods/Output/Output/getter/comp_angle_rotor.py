@@ -50,7 +50,7 @@ def comp_angle_rotor(self, Time):
             Ar[0] = 0
             angle_rotor = Ar + A0
 
-    # Store in time axis normalizations
-    Time.normalizations["angle_rotor"] = angle_rotor
+    # Store in time axis normalizations (#TODO array)
+    Time.normalizations["angle_rotor"] = 1 / (360 * Nr[0] / 60)
 
     return angle_rotor

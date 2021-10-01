@@ -85,11 +85,21 @@ def comp_axes(
             include_endpoint=False,
             normalizations=norm_time,
         )
+        # Add time (anti-)periodicity
+        if per_t > 1 or is_antiper_t:
+            Time = Time.get_axis_periodic(per_t, is_antiper_t)
     else:
         # Load time data
         time = self.time.get_data()
         self.Nt_tot = len(time)
         Time = Data1D(name="time", unit="s", values=time, normalizations=norm_time)
+        # Add time (anti-)periodicity
+        sym_t = dict()
+        if is_antiper_t:
+            sym_t["antiperiod"] = per_t
+        else:
+            sym_t["period"] = per_t
+        Time.symmetries = sym_t
 
     # Create angle axis
     if self.angle is None:
@@ -103,6 +113,10 @@ def comp_axes(
             include_endpoint=False,
             normalizations=norm_angle,
         )
+        # Add angle (anti-)periodicity
+        if per_a > 1 or is_antiper_a:
+            Angle = Angle.get_axis_periodic(per_a, is_antiper_a)
+
     else:
         # Load angle data
         angle = self.angle.get_data()
@@ -110,14 +124,13 @@ def comp_axes(
         Angle = Data1D(
             name="angle", unit="rad", values=angle, normalizations=norm_angle
         )
-
-    # Add time (anti-)periodicity
-    if per_t > 1 or is_antiper_t:
-        Time = Time.get_axis_periodic(per_t, is_antiper_t)
-
-    # Add angle (anti-)periodicity
-    if per_a > 1 or is_antiper_a:
-        Angle = Angle.get_axis_periodic(per_a, is_antiper_a)
+        # Add angle (anti-)periodicity
+        sym_a = dict()
+        if is_antiper_a:
+            sym_a["antiperiod"] = per_a
+        else:
+            sym_a["period"] = per_a
+        Angle.symmetries = sym_a
 
     # Compute angle_rotor (added to time normalizations)
     self.parent.parent.comp_angle_rotor(Time)

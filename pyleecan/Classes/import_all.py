@@ -76,7 +76,6 @@ from ..Classes.IndMag import IndMag
 from ..Classes.IndMagFEMM import IndMagFEMM
 from ..Classes.Input import Input
 from ..Classes.InputCurrent import InputCurrent
-from ..Classes.InputElec import InputElec
 from ..Classes.InputFlux import InputFlux
 from ..Classes.InputForce import InputForce
 from ..Classes.InputVoltage import InputVoltage

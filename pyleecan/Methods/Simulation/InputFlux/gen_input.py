@@ -83,9 +83,15 @@ def gen_input(self):
 
             out_dict[key] = B_comp
 
-        self.time = ImportMatrixVal(value=axes_values["time"])
-        self.angle = ImportMatrixVal(value=axes_values["angle"])
+        # Create import object for time values
+        if self.time is None and "time" in axes_values:
+            self.time = ImportMatrixVal(value=axes_values["time"])
 
+        # Create import object for angle values
+        if self.angle is None and "angle" in axes_values:
+            self.angle = ImportMatrixVal(value=axes_values["angle"])
+
+        # Calculate time and angle axes
         axes_dict = Input.comp_axes(
             self,
             per_a=per_a,
