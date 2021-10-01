@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 from ....Classes.OutForce import OutForce
+from ....Classes.InputCurrent import InputCurrent
 from ....Methods.Simulation.Input import InputError
 
 
@@ -14,15 +13,14 @@ def gen_input(self):
     """
 
     if self.parent.parent is None:
-        raise InputError(
-            "ERROR: The Simulation object must be in an Output object to run"
-        )
+        raise InputError("The Simulation object must be in an Output object to run")
 
     if self.AGSF is None and self.AGSF_enforced is None:
-        raise InputError("ERROR: Input AGSF are missing")
+        raise InputError("Input AGSF are missing")
     else:
         # generate OutElec from parent InputCurrent
-        super(type(self), self).gen_input()
+        # Call InputCurrent.gen_input()
+        InputCurrent.gen_input(self)
 
         # generate OutForce
         outforce = OutForce()

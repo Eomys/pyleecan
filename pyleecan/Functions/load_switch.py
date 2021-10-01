@@ -78,7 +78,6 @@ load_switch = {
     "IndMagFEMM": IndMagFEMM,
     "Input": Input,
     "InputCurrent": InputCurrent,
-    "InputElec": InputElec,
     "InputFlux": InputFlux,
     "InputForce": InputForce,
     "InputVoltage": InputVoltage,

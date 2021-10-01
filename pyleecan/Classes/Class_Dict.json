@@ -4109,7 +4109,6 @@
         ],
         "daughters": [
             "InputCurrent",
-            "InputElec",
             "InputFlux",
             "InputForce",
             "InputVoltage"
@@ -4117,7 +4116,6 @@
         "desc": "Starting data of the simulation",
         "is_internal": false,
         "methods": [
-            "gen_input",
             "comp_axes"
         ],
         "mother": "",
@@ -4235,82 +4233,6 @@
                 "name": "Iq_ref",
                 "type": "float",
                 "unit": "A",
-                "value": null
-            }
-        ]
-    },
-    "InputElec": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Input to skip the electrical module and start with the magnetic one",
-        "is_internal": false,
-        "methods": [
-            "gen_input",
-            "comp_felec",
-            "set_Id_Iq"
-        ],
-        "mother": "Input",
-        "name": "InputElec",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InputElec.csv",
-        "properties": [
-            {
-                "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
-                "max": "1",
-                "min": "-1",
-                "name": "rot_dir",
-                "type": "float",
-                "unit": "-",
-                "value": -1
-            },
-            {
-                "desc": "d-axis current magnitude",
-                "max": "",
-                "min": "",
-                "name": "Id_ref",
-                "type": "float",
-                "unit": "A",
-                "value": null
-            },
-            {
-                "desc": "q-axis current magnitude",
-                "max": "",
-                "min": "",
-                "name": "Iq_ref",
-                "type": "float",
-                "unit": "A",
-                "value": null
-            },
-            {
-                "desc": "d-axis voltage magnitude",
-                "max": "",
-                "min": "",
-                "name": "Ud_ref",
-                "type": "float",
-                "unit": "V",
-                "value": null
-            },
-            {
-                "desc": "q-axis voltage magnitude",
-                "max": "",
-                "min": "",
-                "name": "Uq_ref",
-                "type": "float",
-                "unit": "V",
-                "value": null
-            },
-            {
-                "desc": "electrical frequency",
-                "max": "",
-                "min": "",
-                "name": "felec",
-                "type": "float",
-                "unit": "Hz",
                 "value": null
             }
         ]
