@@ -19,7 +19,7 @@ def save_json(
     is_folder=False,
     is_delete_old=True,
     type_compression=0,
-    class_to_split=("Simulation", "Machine", "Material"),
+    class_to_split=("Simulation", "Machine", "Material", "HoleUD", "SlotUD", "SlotUD2"),
 ):
     """Save the object to the save_path
 
@@ -52,7 +52,12 @@ def save_json(
 
     # create path and name for the base file
     file_path, base_name = setup_save_path(
-        save_path, obj, is_folder=is_folder, is_delete_old=is_delete_old, file_ext=file_ext, logger=logger
+        save_path,
+        obj,
+        is_folder=is_folder,
+        is_delete_old=is_delete_old,
+        file_ext=file_ext,
+        logger=logger,
     )
 
     # prepare data for dumping and split if needed
@@ -254,8 +259,10 @@ def split_obj_dict(cls_tupel, obj_dict, folder, split_list, file_ext, logger):
         if (
             "__class__" in obj_dict.keys()
             and obj_dict["__class__"] in cls_tupel
-            and "name" in obj_dict.keys()
-            and obj_dict["name"] not in ["", None]
+            and (
+                ("name" in obj_dict.keys() and obj_dict["name"] not in ["", None])
+                or "name" not in obj_dict.keys()
+            )
         ):
             # and also add it to the list of objects to be saved
             name = get_filename(obj_dict, folder, split_list, file_ext, logger)
