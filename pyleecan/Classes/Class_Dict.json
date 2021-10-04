@@ -5786,6 +5786,15 @@
                 "type": "float",
                 "unit": "m",
                 "value": null
+            },
+            {
+                "desc": "True set previous .ans result file in current .fem to use it as initialization and speed up calculation time",
+                "max": "",
+                "min": "",
+                "name": "is_set_previous",
+                "type": "bool",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -9674,6 +9683,15 @@
                 "name": "Nstep",
                 "type": "int",
                 "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Overall skewing angle",
+                "max": "",
+                "min": "0",
+                "name": "angle_overall",
+                "type": "float",
+                "unit": "rad",
                 "value": null
             }
         ]

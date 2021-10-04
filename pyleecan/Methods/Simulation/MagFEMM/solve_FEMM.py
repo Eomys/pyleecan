@@ -1,4 +1,4 @@
-from os.path import basename, splitext
+from os.path import basename, splitext, isfile
 
 from numpy import zeros, pi, roll, cos, sin
 
@@ -81,7 +81,7 @@ def solve_FEMM(
         try:
             # Open the document
             femm.openfemm(1)
-        except:
+        except Exception:
             # Create a new FEMM handler in case of parallelization on another FEMM instance
             femm = _FEMMHandler()
             output.mag.internal.handler_list.append(femm)
@@ -144,12 +144,19 @@ def solve_FEMM(
             ii=ii,
         )
         # try "previous solution" for speed up of FEMM calculation
-        if self.is_sliding_band:
+        if self.is_sliding_band and self.is_set_previous:
             try:
-                base = basename(self.get_path_save_fem(output))
-                ans_file = splitext(base)[0] + ".ans"
-                femm.mi_setprevious(ans_file, 0)
-            except:
+                if filename is None:
+                    filename = basename(self.get_path_save_fem(output))
+                ans_file = (
+                    (splitext(filename)[0] + ".ans")
+                    .replace("\\", "/")
+                    .replace("//", "/")
+                )
+                if isfile(ans_file):
+                    femm.mi_setprevious(ans_file, 0)
+            except Exception:
+                # No previous .ans file, skip this step
                 pass
 
         # Run the computation
