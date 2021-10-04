@@ -92,7 +92,7 @@ def save_json(
     for elem in split_list:
         file_name = list(elem.keys())[0]
         save_obj = elem[file_name]
-        json_kwargs = dict(sort_keys=True, indent=4, separators=(",", ": "))
+        json_kwargs = dict(sort_keys=True, indent=2, separators=(",", ": "))
         json_file = join(file_path, file_name)
 
         if type_compression == 1:
