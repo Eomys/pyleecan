@@ -1,4 +1,5 @@
 from numpy import pi, array, linspace, mean, floor, flip, concatenate, arange
+from numpy.testing import assert_almost_equal
 
 from ....Methods.Machine.Skew import TYPE_SKEW_LIST
 
@@ -20,6 +21,7 @@ def comp_angle(self):
 
     L = self.parent.comp_length()
     rate = self.rate
+    angle_overall = self.angle_overall
     is_step = self.is_step
     type_skew = self.type_skew
     Nstep = self.Nstep
@@ -33,10 +35,23 @@ def comp_angle(self):
 
     sp = 2 * pi / Z
 
-    if rate is None:
+    if rate is None and angle_overall is None:
         # Set rate value by default
         logger.info("Skew rate is " + str(rate) + ", setting it to 1 by default")
         rate = 1
+
+    elif angle_overall is None:
+        # Calculate overall angle from skew rate
+        angle_overall = rate * sp
+
+    elif rate is None:
+        # Calculate skew rate from overall angle
+        rate = angle_overall / sp
+
+    elif abs(angle_overall - rate * sp) > 1e-4:
+        raise Exception(
+            "Input skew rate and angle_overall does not fulfill constraint: angle_overall=rate*slot_pitch"
+        )
 
     # Continuous skew
     if is_step:
@@ -55,7 +70,7 @@ def comp_angle(self):
 
             if type_skew == "linear":
 
-                angle_list = linspace(-rate * sp / 2, rate * sp / 2, Nstep)
+                angle_list = linspace(-angle_overall / 2, angle_overall / 2, Nstep)
 
             elif type_skew == "vshape":
 
@@ -68,7 +83,7 @@ def comp_angle(self):
 
                 Nhalf = int(floor((Nstep + 1) / 2))
 
-                angles_half = linspace(-rate * sp, 0, Nhalf)
+                angles_half = linspace(-angle_overall, 0, Nhalf)
 
                 if Nstep % 2 == 0:
                     angle_list = concatenate((angles_half, flip(angles_half)))
@@ -84,7 +99,7 @@ def comp_angle(self):
                         + " must be defined and > 2 for alternate stepped skew"
                     )
 
-                angle_list = 0.5 * rate * sp * (-1) ** arange(Nstep)
+                angle_list = 0.5 * angle_overall * (-1) ** arange(Nstep)
 
             elif type_skew == "function":
                 if self.function is None:
@@ -105,6 +120,7 @@ def comp_angle(self):
             Nstep = len(angle_list)
 
             if z_list is None:
+                # Init as linear skew type
                 z_list = linspace(-0.5, 0.5, Nstep + 1)
 
             else:
@@ -132,7 +148,7 @@ def comp_angle(self):
         if type_skew == "linear":
             Nstep = 2
             z_list = linspace(-0.5, 0.5, Nstep)
-            angle_list = [z * rate * sp for z in z_list]
+            angle_list = [z * angle_overall for z in z_list]
 
         else:
             raise Exception("Only linear skew is available for continuous skew")
@@ -141,6 +157,7 @@ def comp_angle(self):
     z_list = [z * L for z in z_list]
 
     self.rate = rate
+    self.angle_overall = angle_overall
     self.Nstep = Nstep
     self.angle_list = angle_list
     self.z_list = z_list

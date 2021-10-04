@@ -89,6 +89,7 @@ class Skew(FrozenClass):
         angle_list=None,
         z_list=None,
         Nstep=None,
+        angle_overall=None,
         init_dict=None,
         init_str=None,
     ):
@@ -121,6 +122,8 @@ class Skew(FrozenClass):
                 z_list = init_dict["z_list"]
             if "Nstep" in list(init_dict.keys()):
                 Nstep = init_dict["Nstep"]
+            if "angle_overall" in list(init_dict.keys()):
+                angle_overall = init_dict["angle_overall"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.type_skew = type_skew
@@ -130,6 +133,7 @@ class Skew(FrozenClass):
         self.angle_list = angle_list
         self.z_list = z_list
         self.Nstep = Nstep
+        self.angle_overall = angle_overall
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -164,6 +168,7 @@ class Skew(FrozenClass):
             + linesep
         )
         Skew_str += "Nstep = " + str(self.Nstep) + linesep
+        Skew_str += "angle_overall = " + str(self.angle_overall) + linesep
         return Skew_str
 
     def __eq__(self, other):
@@ -184,6 +189,8 @@ class Skew(FrozenClass):
         if other.z_list != self.z_list:
             return False
         if other.Nstep != self.Nstep:
+            return False
+        if other.angle_overall != self.angle_overall:
             return False
         return True
 
@@ -209,6 +216,8 @@ class Skew(FrozenClass):
             diff_list.append(name + ".z_list")
         if other._Nstep != self._Nstep:
             diff_list.append(name + ".Nstep")
+        if other._angle_overall != self._angle_overall:
+            diff_list.append(name + ".angle_overall")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -228,6 +237,7 @@ class Skew(FrozenClass):
             for value in self.z_list:
                 S += getsizeof(value)
         S += getsizeof(self.Nstep)
+        S += getsizeof(self.angle_overall)
         return S
 
     def as_dict(self, **kwargs):
@@ -258,6 +268,7 @@ class Skew(FrozenClass):
         )
         Skew_dict["z_list"] = self.z_list.copy() if self.z_list is not None else None
         Skew_dict["Nstep"] = self.Nstep
+        Skew_dict["angle_overall"] = self.angle_overall
         # The class name is added to the dict for deserialisation purpose
         Skew_dict["__class__"] = "Skew"
         return Skew_dict
@@ -272,6 +283,7 @@ class Skew(FrozenClass):
         self.angle_list = None
         self.z_list = None
         self.Nstep = None
+        self.angle_overall = None
 
     def _get_type_skew(self):
         """getter of type_skew"""
@@ -418,5 +430,24 @@ class Skew(FrozenClass):
 
         :Type: int
         :min: 2
+        """,
+    )
+
+    def _get_angle_overall(self):
+        """getter of angle_overall"""
+        return self._angle_overall
+
+    def _set_angle_overall(self, value):
+        """setter of angle_overall"""
+        check_var("angle_overall", value, "float", Vmin=0)
+        self._angle_overall = value
+
+    angle_overall = property(
+        fget=_get_angle_overall,
+        fset=_set_angle_overall,
+        doc="""Overall skewing angle
+
+        :Type: float
+        :min: 0
         """,
     )
