@@ -22,17 +22,20 @@ def get_slice_model(self):
 
         machine = self.parent.machine
 
+        # Rotor length
+        L = machine.rotor.L1
+
         # Check rotor skew
         rotor_skew = machine.rotor.skew
         is_rotor_skew = rotor_skew is not None
 
         # Enforce slice model depending on rotor skew
-        slice_model = SliceModel(L=machine.rotor.L1)
+        slice_model = SliceModel(L=L)
 
         if not is_rotor_skew:
             # Single slice model
-            Nslices = 1
-            z_list = [0.0]
+            Nslices = 2
+            z_list = [-0.5 * L, 0.5 * L]
             is_step = True
             angle_rotor = zeros(Nslices)
 
@@ -46,7 +49,7 @@ def get_slice_model(self):
                     Nslices = self.Nslices_enforced
                 if self.type_distribution_enforced is None:
                     self.get_logger().debug(
-                        'Enforce type_distribution_enforced = ""uniform"'
+                        'Enforce type_distribution_enforced = "uniform"'
                     )
                     type_distribution = "uniform"
                 else:

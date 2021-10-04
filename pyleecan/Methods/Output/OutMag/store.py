@@ -62,35 +62,25 @@ def store(self, out_dict, axes_dict):
     # Store electromagnetic torque over time, and global values: average, peak to peak and ripple
     if "Tem" in out_dict:
 
-        Tem = out_dict.pop("Tem")
-
-        if (
-            len(Tem.shape) == 2 and Tem.shape[-1] > 1
-        ):  # time + slice axis -> integrate over slices
-            Tem_full = DataTime(
-                name="Electromagnetic torque",
-                unit="Nm",
-                symbol="T_{em}",
-                axes=[axes_dict["Time_Tem"], axes_dict["z"]],
-                values=Tem,
-            )
-            # Integrate over slice axis
-            Tem = Tem_full.get_along("time[smallestperiod]", "z=integrate")["T_{em}"]
-
-        self.Tem = DataTime(
-            name="Electromagnetic torque",
-            unit="Nm",
+        # Store electromagnetic torque per slice
+        self.Tem_slice = DataTime(
+            name="Electromagnetic torque per slice",
+            unit="Nm/m",
             symbol="T_{em}",
-            axes=[axes_dict["Time_Tem"]],
-            values=Tem,
+            axes=[axes_dict["Time_Tem"], axes_dict["z"]],
+            values=out_dict.pop("Tem"),
         )
 
+        # Integrate over slice axis
+        self.Tem = self.Tem_slice.get_data_along("time[smallestperiod]", "z=integrate")
+
         # Calculate average torque in Nm
-        self.Tem_av = mean(Tem)
+        Tem_values = self.Tem.get_along("time[smallestperiod]")[self.Tem.symbol]
+        self.Tem_av = mean(Tem_values)
         self.get_logger().debug("Average Torque: " + str(self.Tem_av) + " N.m")
 
         # Calculate peak to peak torque in absolute value Nm
-        self.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]
+        self.Tem_rip_pp = abs(np_max(Tem_values) - np_min(Tem_values))  # [N.m]
 
         # Calculate torque ripple in percentage
         if self.Tem_av != 0:

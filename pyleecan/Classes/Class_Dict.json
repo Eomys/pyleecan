@@ -8302,6 +8302,15 @@
                 "type": "SliceModel",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Electromagnetic torque DataTime object including torque per slice",
+                "max": "",
+                "min": "",
+                "name": "Tem_slice",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "N.m",
+                "value": "None"
             }
         ]
     },

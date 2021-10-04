@@ -124,6 +124,7 @@ class OutMag(FrozenClass):
         Rag=None,
         Pem_av=None,
         Slice=None,
+        Tem_slice=None,
         init_dict=None,
         init_str=None,
     ):
@@ -174,6 +175,8 @@ class OutMag(FrozenClass):
                 Pem_av = init_dict["Pem_av"]
             if "Slice" in list(init_dict.keys()):
                 Slice = init_dict["Slice"]
+            if "Tem_slice" in list(init_dict.keys()):
+                Tem_slice = init_dict["Tem_slice"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
@@ -192,6 +195,7 @@ class OutMag(FrozenClass):
         self.Rag = Rag
         self.Pem_av = Pem_av
         self.Slice = Slice
+        self.Tem_slice = Tem_slice
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -238,6 +242,7 @@ class OutMag(FrozenClass):
             OutMag_str += "Slice = " + tmp
         else:
             OutMag_str += "Slice = None" + linesep + linesep
+        OutMag_str += "Tem_slice = " + str(self.Tem_slice) + linesep + linesep
         return OutMag_str
 
     def __eq__(self, other):
@@ -276,6 +281,8 @@ class OutMag(FrozenClass):
         if other.Pem_av != self.Pem_av:
             return False
         if other.Slice != self.Slice:
+            return False
+        if other.Tem_slice != self.Tem_slice:
             return False
         return True
 
@@ -378,6 +385,14 @@ class OutMag(FrozenClass):
             diff_list.append(name + ".Slice None mismatch")
         elif self.Slice is not None:
             diff_list.extend(self.Slice.compare(other.Slice, name=name + ".Slice"))
+        if (other.Tem_slice is None and self.Tem_slice is not None) or (
+            other.Tem_slice is not None and self.Tem_slice is None
+        ):
+            diff_list.append(name + ".Tem_slice None mismatch")
+        elif self.Tem_slice is not None:
+            diff_list.extend(
+                self.Tem_slice.compare(other.Tem_slice, name=name + ".Tem_slice")
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -404,6 +419,7 @@ class OutMag(FrozenClass):
         S += getsizeof(self.Rag)
         S += getsizeof(self.Pem_av)
         S += getsizeof(self.Slice)
+        S += getsizeof(self.Tem_slice)
         return S
 
     def as_dict(self, **kwargs):
@@ -465,6 +481,10 @@ class OutMag(FrozenClass):
             OutMag_dict["Slice"] = None
         else:
             OutMag_dict["Slice"] = self.Slice.as_dict(**kwargs)
+        if self.Tem_slice is None:
+            OutMag_dict["Tem_slice"] = None
+        else:
+            OutMag_dict["Tem_slice"] = self.Tem_slice.as_dict()
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -491,6 +511,7 @@ class OutMag(FrozenClass):
         self.Pem_av = None
         if self.Slice is not None:
             self.Slice._set_None()
+        self.Tem_slice = None
 
     def _get_Time(self):
         """getter of Time"""
@@ -878,5 +899,32 @@ class OutMag(FrozenClass):
         doc=u"""Slice model to account for skew
 
         :Type: SliceModel
+        """,
+    )
+
+    def _get_Tem_slice(self):
+        """getter of Tem_slice"""
+        return self._Tem_slice
+
+    def _set_Tem_slice(self, value):
+        """setter of Tem_slice"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Tem_slice"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("Tem_slice", value, "DataND")
+        self._Tem_slice = value
+
+    Tem_slice = property(
+        fget=_get_Tem_slice,
+        fset=_set_Tem_slice,
+        doc=u"""Electromagnetic torque DataTime object including torque per slice
+
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )
