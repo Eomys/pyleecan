@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-from ....Functions.Simulation.create_from_axis import create_from_axis
-
-
 def comp_axes(self, output):
     """Compute the axes required in any Magnetics module
 
@@ -32,9 +28,8 @@ def comp_axes(self, output):
     ) = output.get_machine_periodicity()
 
     # Compute Time axis based on the one stored in OutElec
-    Time, is_periodicity_t = create_from_axis(
-        axis_in=axes_dict_geo["time"],
-        per=per_t,
+    Time, is_periodicity_t = axes_dict_geo["time"].get_axis_periodic(
+        Nper=per_t,
         is_aper=is_antiper_t,
         is_include_per=self.is_periodicity_t,
         is_remove_aper=False,
@@ -53,9 +48,8 @@ def comp_axes(self, output):
         )
 
     # Compute Angle axis based on the one stored in OutElec
-    Angle, is_periodicity_a = create_from_axis(
-        axis_in=axes_dict_geo["angle"],
-        per=per_a,
+    Angle, is_periodicity_a = axes_dict_geo["angle"].get_axis_periodic(
+        Nper=per_a,
         is_aper=is_antiper_a,
         is_include_per=self.is_periodicity_a,
         is_remove_aper=False,

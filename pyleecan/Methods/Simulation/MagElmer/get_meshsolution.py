@@ -3,7 +3,7 @@ from ....Classes.MeshVTK import MeshVTK
 from ....Classes.SolutionData import SolutionData
 from ....Classes.SolutionVector import SolutionVector
 from meshio import read
-from SciDataTool import Data1D, VectorField, DataTime
+from SciDataTool import Data1D, VectorField, DataTime, Norm_ref
 from numpy import arange, append as np_append
 from os.path import join
 
@@ -122,7 +122,7 @@ def get_meshsolution(self, output):
                     axes=[Indices],
                     # values=value[:, i],
                     values=values[:, i],
-                    normalizations={"ref": store_dict[key]["norm"]},
+                    normalizations={"ref": Norm_ref(ref=store_dict[key]["norm"])},
                 )
 
                 components.append(data)

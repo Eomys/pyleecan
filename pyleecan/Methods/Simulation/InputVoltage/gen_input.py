@@ -3,8 +3,6 @@ from numpy import ndarray
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 
-from ....Functions.Simulation.create_from_axis import create_from_axis
-
 from ....Methods.Simulation.Input import InputError
 
 
@@ -96,9 +94,8 @@ def gen_input(self):
 
     # Create time axis in electrical output without periodicity
     # TODO: account for pole periodicity
-    Time_elec, _ = create_from_axis(
-        axis_in=axes_dict["time"],
-        per=1,  # int(2 * simu.machine.get_pole_pair_number()),
+    Time_elec, _ = axes_dict["time"].get_axis_periodic(
+        Nper=1,  # int(2 * simu.machine.get_pole_pair_number()),
         is_aper=False,  # True,
         is_include_per=False,  # True,
     )

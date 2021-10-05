@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import pi, linspace, zeros, ones, dot, squeeze
-from SciDataTool import Data1D, DataTime
+from SciDataTool import Data1D, DataTime, Norm_ref
 from ....Functions.Electrical.coordinate_transformation import dq2n
 from ....Functions.Winding.gen_phase_list import gen_name
 from pyleecan.Classes.Winding import Winding
@@ -65,7 +65,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
         unit="rad",
         symmetries={"period": per_a},
         values=angle,
-        normalizations={"space_order": self.get_pole_pair_number()},
+        normalizations={"space_order": Norm_ref(ref=self.get_pole_pair_number())},
     )
     Phase = Data1D(
         name="phase",

@@ -1,4 +1,5 @@
 from numpy import pi, cumsum, roll, ones, unique
+from SciDataTool import Norm_vector
 
 
 def comp_angle_rotor(self, Time):
@@ -50,7 +51,7 @@ def comp_angle_rotor(self, Time):
             Ar[0] = 0
             angle_rotor = Ar + A0
 
-    # Store in time axis normalizations (#TODO array)
-    Time.normalizations["angle_rotor"] = 1 / (360 * Nr[0] / 60)
+    # Store in time axis normalizations
+    Time.normalizations["angle_rotor"] = Norm_vector(vector=angle_rotor)
 
     return angle_rotor

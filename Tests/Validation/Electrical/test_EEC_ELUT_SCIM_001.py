@@ -22,7 +22,7 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.definitions import config_dict
 from pyleecan.Functions.Plot import dict_2D, dict_3D
 
-from SciDataTool import Data1D, DataLinspace, DataTime, DataFreq, VectorField
+from SciDataTool import Data1D, DataLinspace, DataTime, DataFreq, VectorField, Norm_ref
 
 color_list = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
@@ -161,7 +161,7 @@ def test_EEC_ELUT_SCIM_001():
     #     name="time",
     #     unit="s",
     #     values=time,
-    #     normalizations={"elec_order": 1188 / 60 * 3},
+    #     normalizations={"elec_order": Norm_ref(ref=1188 / 60 * 3)},
     # )
     # MMF_time = DataTime(
     #     symbol="MMF",
