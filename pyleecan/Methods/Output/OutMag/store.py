@@ -107,25 +107,22 @@ def store(self, out_dict, axes_dict):
             )
             prefix = "Stator" if lam.is_stator else "Rotor"
 
-            # Get flux linkae values from output dict
-            phi_wind_val = out_dict.pop("Phi_wind")
-
             # Store winding flux linkage per phase and per slice (in Weber per meter)
             self.Phi_wind_slice[key] = DataTime(
                 name=prefix + " Winding Flux",
                 unit="Wb",
                 symbol="Phi_{wind}",
                 axes=[Time, Phase, axes_dict["z"]],
-                values=phi_wind_val[key],
+                values=out_dict["Phi_wind"][key],
             )
             # Integrate over slice axis to get overall winding flux linkage (in Weber)
             self.Phi_wind[key] = self.Phi_wind_slice[key].get_data_along(
                 "time[smallestperiod]", "phase", "z=integrate"
             )
 
-        if (
-            STATOR_LAB + "-0" in out_dict["Phi_wind"].keys()
-        ):  # TODO fix for multi stator
+        # Particular case: Phi_wind for stator-0 has its own property
+        if STATOR_LAB + "-0" in out_dict["Phi_wind"].keys():
+            # TODO fix for multi stator/lamination
             self.Phi_wind_stator = self.Phi_wind[STATOR_LAB + "-0"]
 
         # Electromotive force computation
