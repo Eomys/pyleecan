@@ -196,7 +196,10 @@ def test_class_as_dict(class_dict):
 
     test_obj = eval(class_dict["name"] + "()")
     # Test
-    result_dict = test_obj.as_dict()
+    try:
+        result_dict = test_obj.as_dict(type_handle_ndarray=0, keep_function=False)
+    except Exception as e:
+        raise Exception("Error while calling as_dict for "+class_dict["name"]+":\n"+str(e))
     for key in result_dict:
         assert d[key] == result_dict[key], (
             "Error for class "

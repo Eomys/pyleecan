@@ -217,15 +217,23 @@ class ElmerResults(Elmer):
         S += getsizeof(self.is_scalars)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Elmer
-        ElmerResults_dict = super(ElmerResults, self).as_dict(**kwargs)
+        ElmerResults_dict = super(ElmerResults, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         ElmerResults_dict["data"] = self.data.copy() if self.data is not None else None
         ElmerResults_dict["file"] = self.file
         ElmerResults_dict["usecols"] = (

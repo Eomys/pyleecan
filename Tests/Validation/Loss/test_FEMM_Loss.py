@@ -133,12 +133,12 @@ def test_FEMM_Loss():
 
     loss_st_iron = loss_stator_iron.get_along("Speed=4000", "time")["Loss"].mean()
     loss_ro_iron = loss_rotor_iron.get_along("Speed=4000", "time")["Loss"].mean()
-    loss_st_wdg = loss_stator_wind.get_along("time", "phase")["Loss"].mean()
+    loss_st_wdg = loss_stator_wind.get_along("time", "phase=sum")["Loss"].mean()
 
     print(f"mechanical power = {P_mech} W")
     print(f"stator iron loss = {loss_st_iron} W")
     print(f"rotor iron loss = {loss_ro_iron} W")
-    print(f"stator winding loss = {qs*loss_st_wdg} W")
+    print(f"stator winding loss = {loss_st_wdg} W")
 
     delta = 5 / 100  # arbitary allowed relative difference
 

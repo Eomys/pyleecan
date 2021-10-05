@@ -196,9 +196,13 @@ class OutForce(FrozenClass):
         S += getsizeof(self.meshsolution)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -207,21 +211,37 @@ class OutForce(FrozenClass):
         if self.Time is None:
             OutForce_dict["Time"] = None
         else:
-            OutForce_dict["Time"] = self.Time.as_dict()
+            OutForce_dict["Time"] = self.Time.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Angle is None:
             OutForce_dict["Angle"] = None
         else:
-            OutForce_dict["Angle"] = self.Angle.as_dict()
+            OutForce_dict["Angle"] = self.Angle.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.AGSF is None:
             OutForce_dict["AGSF"] = None
         else:
-            OutForce_dict["AGSF"] = self.AGSF.as_dict()
+            OutForce_dict["AGSF"] = self.AGSF.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutForce_dict["logger_name"] = self.logger_name
         OutForce_dict["Rag"] = self.Rag
         if self.meshsolution is None:
             OutForce_dict["meshsolution"] = None
         else:
-            OutForce_dict["meshsolution"] = self.meshsolution.as_dict(**kwargs)
+            OutForce_dict["meshsolution"] = self.meshsolution.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         OutForce_dict["__class__"] = "OutForce"
         return OutForce_dict

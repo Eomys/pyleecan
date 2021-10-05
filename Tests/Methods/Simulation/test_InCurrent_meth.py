@@ -286,7 +286,7 @@ class Test_InCurrent_meth(object):
 
         # Plot 3-phase current function of time
         # out.plot_2D_Data("elec.Is", "time", "phase", is_show_fig=False)
-        out.elec.get_Is().plot_2D_Data("time", "phase", is_show_fig=False, **dict_2D)
+        out.elec.get_Is().plot_2D_Data("time", "phase[]", is_show_fig=False, **dict_2D)
 
         # Save picture
         title = "Id=" + str(test_dict["Id"]) + " Iq=" + str(test_dict["Iq"])
@@ -312,10 +312,11 @@ if __name__ == "__main__":
 
     obj = Test_InCurrent_meth()
 
-    test_dict = idq_test[0]
-
-    out = obj.test_InputCurrent_DQ(test_dict)
-
+    # test_dict = idq_test[0]
+    # obj.test_InputCurrent_DQ(test_dict)
+    for test_dict in idq_test:
+        out = obj.test_InputCurrent_DQ(test_dict)
+    print("Done")
     # out.plot_2D_Data(
     #         "elec.Is",
     #         "time",

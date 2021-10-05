@@ -725,9 +725,13 @@ class Lamination(FrozenClass):
         S += getsizeof(self.bore)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -737,7 +741,11 @@ class Lamination(FrozenClass):
         if self.mat_type is None:
             Lamination_dict["mat_type"] = None
         else:
-            Lamination_dict["mat_type"] = self.mat_type.as_dict(**kwargs)
+            Lamination_dict["mat_type"] = self.mat_type.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Lamination_dict["Nrvd"] = self.Nrvd
         Lamination_dict["Wrvd"] = self.Wrvd
         Lamination_dict["Kf1"] = self.Kf1
@@ -751,7 +759,13 @@ class Lamination(FrozenClass):
             Lamination_dict["axial_vent"] = list()
             for obj in self.axial_vent:
                 if obj is not None:
-                    Lamination_dict["axial_vent"].append(obj.as_dict(**kwargs))
+                    Lamination_dict["axial_vent"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     Lamination_dict["axial_vent"].append(None)
         if self.notch is None:
@@ -760,7 +774,13 @@ class Lamination(FrozenClass):
             Lamination_dict["notch"] = list()
             for obj in self.notch:
                 if obj is not None:
-                    Lamination_dict["notch"].append(obj.as_dict(**kwargs))
+                    Lamination_dict["notch"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     Lamination_dict["notch"].append(None)
         if self.skew is None:
@@ -773,13 +793,23 @@ class Lamination(FrozenClass):
             Lamination_dict["yoke_notch"] = list()
             for obj in self.yoke_notch:
                 if obj is not None:
-                    Lamination_dict["yoke_notch"].append(obj.as_dict(**kwargs))
+                    Lamination_dict["yoke_notch"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     Lamination_dict["yoke_notch"].append(None)
         if self.bore is None:
             Lamination_dict["bore"] = None
         else:
-            Lamination_dict["bore"] = self.bore.as_dict(**kwargs)
+            Lamination_dict["bore"] = self.bore.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         Lamination_dict["__class__"] = "Lamination"
         return Lamination_dict

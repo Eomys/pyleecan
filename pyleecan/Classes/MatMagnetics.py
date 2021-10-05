@@ -251,9 +251,13 @@ class MatMagnetics(FrozenClass):
         S += getsizeof(self.is_BH_extrapolate)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -267,15 +271,27 @@ class MatMagnetics(FrozenClass):
         if self.BH_curve is None:
             MatMagnetics_dict["BH_curve"] = None
         else:
-            MatMagnetics_dict["BH_curve"] = self.BH_curve.as_dict(**kwargs)
+            MatMagnetics_dict["BH_curve"] = self.BH_curve.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.LossData is None:
             MatMagnetics_dict["LossData"] = None
         else:
-            MatMagnetics_dict["LossData"] = self.LossData.as_dict(**kwargs)
+            MatMagnetics_dict["LossData"] = self.LossData.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.ModelBH is None:
             MatMagnetics_dict["ModelBH"] = None
         else:
-            MatMagnetics_dict["ModelBH"] = self.ModelBH.as_dict(**kwargs)
+            MatMagnetics_dict["ModelBH"] = self.ModelBH.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         MatMagnetics_dict["is_BH_extrapolate"] = self.is_BH_extrapolate
         # The class name is added to the dict for deserialisation purpose
         MatMagnetics_dict["__class__"] = "MatMagnetics"

@@ -385,22 +385,36 @@ class LamHole(Lamination):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Lamination
-        LamHole_dict = super(LamHole, self).as_dict(**kwargs)
+        LamHole_dict = super(LamHole, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.hole is None:
             LamHole_dict["hole"] = None
         else:
             LamHole_dict["hole"] = list()
             for obj in self.hole:
                 if obj is not None:
-                    LamHole_dict["hole"].append(obj.as_dict(**kwargs))
+                    LamHole_dict["hole"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     LamHole_dict["hole"].append(None)
         # The class name is added to the dict for deserialisation purpose

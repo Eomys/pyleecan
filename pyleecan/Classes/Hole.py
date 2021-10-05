@@ -360,9 +360,13 @@ class Hole(FrozenClass):
         S += getsizeof(self.Alpha0)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -372,7 +376,11 @@ class Hole(FrozenClass):
         if self.mat_void is None:
             Hole_dict["mat_void"] = None
         else:
-            Hole_dict["mat_void"] = self.mat_void.as_dict(**kwargs)
+            Hole_dict["mat_void"] = self.mat_void.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Hole_dict["magnetization_dict_offset"] = (
             self.magnetization_dict_offset.copy()
             if self.magnetization_dict_offset is not None

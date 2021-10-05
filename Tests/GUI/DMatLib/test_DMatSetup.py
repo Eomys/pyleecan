@@ -489,13 +489,14 @@ class TestDMatSetup(object):
         # Check table
         assert w_imp.tab_window is None
         w_imp.b_tab.clicked.emit()
-        w_imp.tab_window.si_row.value() == 4
-        w_imp.tab_window.si_col.value() == 2
-        w_imp.tab_window.w_tab.cellWidget(0, 0).value() == 0
-        w_imp.tab_window.w_tab.cellWidget(0, 1).value() == 1
-        w_imp.tab_window.w_tab.cellWidget(1, 0).value() == 2
-        w_imp.tab_window.w_tab.cellWidget(1, 1).value() == 100
-        w_imp.tab_window.w_tab.cellWidget(2, 0).value() == 3
-        w_imp.tab_window.w_tab.cellWidget(2, 1).value() == 300
-        w_imp.tab_window.w_tab.cellWidget(3, 0).value() == 5
-        w_imp.tab_window.w_tab.cellWidget(3, 1).value() == 800
+        assert w_imp.tab_window.si_row.value() == 4
+        assert w_imp.tab_window.si_col.value() == 2
+        assert w_imp.tab_window.w_tab.cellWidget(0, 0).value() == 0
+        assert w_imp.tab_window.w_tab.cellWidget(0, 1).value() == 1
+        assert w_imp.tab_window.w_tab.cellWidget(1, 0).value() == 2
+        assert w_imp.tab_window.w_tab.cellWidget(1, 1).value() == 100
+        assert w_imp.tab_window.w_tab.cellWidget(2, 0).value() == 3
+        assert w_imp.tab_window.w_tab.cellWidget(2, 1).value() == 300
+        assert w_imp.tab_window.w_tab.cellWidget(3, 0).value() == 5
+        assert w_imp.tab_window.w_tab.cellWidget(3, 1).value() == 800
+        w_imp.tab_window.close()

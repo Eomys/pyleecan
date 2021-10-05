@@ -369,28 +369,51 @@ class LamSlotMulti(Lamination):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Lamination
-        LamSlotMulti_dict = super(LamSlotMulti, self).as_dict(**kwargs)
+        LamSlotMulti_dict = super(LamSlotMulti, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.slot_list is None:
             LamSlotMulti_dict["slot_list"] = None
         else:
             LamSlotMulti_dict["slot_list"] = list()
             for obj in self.slot_list:
                 if obj is not None:
-                    LamSlotMulti_dict["slot_list"].append(obj.as_dict(**kwargs))
+                    LamSlotMulti_dict["slot_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     LamSlotMulti_dict["slot_list"].append(None)
         if self.alpha is None:
             LamSlotMulti_dict["alpha"] = None
         else:
-            LamSlotMulti_dict["alpha"] = self.alpha.tolist()
+            if type_handle_ndarray == 0:
+                LamSlotMulti_dict["alpha"] = self.alpha.tolist()
+            elif type_handle_ndarray == 1:
+                LamSlotMulti_dict["alpha"] = self.alpha.copy()
+            elif type_handle_ndarray == 2:
+                LamSlotMulti_dict["alpha"] = self.alpha
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         LamSlotMulti_dict["sym_dict_enforced"] = (
             self.sym_dict_enforced.copy()
             if self.sym_dict_enforced is not None

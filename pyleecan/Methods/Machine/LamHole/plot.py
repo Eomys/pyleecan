@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from numpy import exp, pi
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Patch
 from matplotlib.pyplot import axis, legend
@@ -23,6 +24,7 @@ def plot(
     alpha=0,
     delta=0,
     is_edge_only=False,
+    is_add_arrow=True,
     is_show_fig=True,
     win_title=None,
 ):
@@ -46,6 +48,8 @@ def plot(
         complex for translation (Default value = 0)
     is_edge_only: bool
         To plot transparent Patches
+    is_add_arrow : bool
+        To add an arrow for the magnetization
     is_show_fig : bool
         To call show at the end of the method
     win_title : str
@@ -85,6 +89,43 @@ def plot(
 
     for patch in patches:
         axes.add_patch(patch)
+
+    # Add Magnetization arrow
+    if is_add_arrow:
+        for hole in self.hole:
+            H = hole.comp_height()
+            mag_dict = hole.comp_magnetization_dict()
+            for magnet_name, mag_dir in mag_dict.items():
+                # Get the correct surface
+                mag_surf = None
+                mag_id = int(magnet_name.split("_")[-1])
+                mag = hole.get_magnet_by_id(mag_id)
+                if mag is not None:
+                    for surf in hole.build_geometry():
+                        label_dict = decode_label(surf.label)
+                        if (
+                            HOLEM_LAB in label_dict["surf_type"]
+                            and label_dict["T_id"] == mag_id
+                        ):
+                            mag_surf = surf
+                            break
+                    # Create arrow coordinates
+                    Zh = hole.Zh
+                    for ii in range(Zh):
+                        off = pi if ii % 2 == 1 else 0
+                        if mag is not None and mag.type_magnetization == 3:
+                            off -= pi / 2
+                        Z1 = mag_surf.point_ref * exp(1j * (ii * 2 * pi / Zh + pi / Zh))
+                        Z2 = (
+                            mag_surf.point_ref + H / 5 * exp(1j * (mag_dir + off))
+                        ) * exp(1j * (ii * 2 * pi / Zh + pi / Zh))
+                        axes.annotate(
+                            text="",
+                            xy=(Z2.real, Z2.imag),
+                            xytext=(Z1.real, Z1.imag),
+                            arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
+                        )
+
     # Axis Setup
     axes.axis("equal")
 
