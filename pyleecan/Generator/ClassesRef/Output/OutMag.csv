@@ -15,4 +15,5 @@ internal,-,OutInternal object containg outputs related to a specific model,0,Out
 Rag,-,Radius value for air-gap computation,0,float,None,,,,,,,,,
 Pem_av,W,Average Electromagnetic power,0,float,None,,,,,,,,,
 Slice,-,Slice model to account for skew,0,SliceModel,None,,,,,,,,,
-Tem_slice,N.m,Electromagnetic torque DataTime object including torque per slice,"(Nt_tot, Nslice)",SciDataTool.Classes.DataND.DataND,None,,,,,,,,,
+Tem_slice,N,Electromagnetic torque DataTime object including torque per slice,"(Nt_tot, Nslice)",SciDataTool.Classes.DataND.DataND,None,,,,,,,,,
+Phi_wind_slice,Wb/m,Dict of lamination winding fluxlinkage DataTime objects per slice,"(Nt_tot, qs, Nslice)",{SciDataTool.Classes.DataTime.DataTime},None,,,,,,,,,

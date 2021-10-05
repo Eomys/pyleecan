@@ -62,16 +62,16 @@ def store(self, out_dict, axes_dict):
     # Store electromagnetic torque over time, and global values: average, peak to peak and ripple
     if "Tem" in out_dict:
 
-        # Store electromagnetic torque per slice
+        # Store electromagnetic torque per slice (in Newton)
         self.Tem_slice = DataTime(
             name="Electromagnetic torque per slice",
-            unit="Nm/m",
+            unit="N",
             symbol="T_{em}",
             axes=[axes_dict["Time_Tem"], axes_dict["z"]],
             values=out_dict.pop("Tem"),
         )
 
-        # Integrate over slice axis
+        # Integrate over slice axis to get overall torque (in Newton meter)
         self.Tem = self.Tem_slice.get_data_along("time[smallestperiod]", "z=integrate")
 
         # Calculate average torque in Nm
@@ -92,7 +92,8 @@ def store(self, out_dict, axes_dict):
     # and calculate electromotive force
     if "Phi_wind" in out_dict:
         machine = self.parent.simu.machine
-        self.Phi_wind = {}
+        self.Phi_wind_slice = dict()
+        self.Phi_wind = dict()
         for key in out_dict["Phi_wind"].keys():
             # Store stator winding flux
             lam = machine.get_lam_by_label(key)
@@ -105,28 +106,21 @@ def store(self, out_dict, axes_dict):
                 is_components=True,
             )
             prefix = "Stator" if lam.is_stator else "Rotor"
-            Phi_wind = out_dict["Phi_wind"][key]
 
-            if (
-                len(Phi_wind.shape) == 3 and Phi_wind.shape[-1] > 1
-            ):  # time + phase + slice axis -> integrate over slices
-                Phi_wind_full = DataTime(
-                    name=prefix + " Winding Flux",
-                    unit="Wb",
-                    symbol="Phi_{wind}",
-                    axes=[Time, Phase, axes_dict["z"]],
-                    values=Phi_wind,
-                )
-                # Integrate over slice axis
-                Phi_wind = Phi_wind_full.get_along(
-                    "time[smallestperiod]", "phase", "z=integrate"
-                )["Phi_{wind}"]
-            self.Phi_wind[key] = DataTime(
+            # Get flux linkae values from output dict
+            phi_wind_val = out_dict.pop("Phi_wind")
+
+            # Store winding flux linkage per phase and per slice (in Weber per meter)
+            self.Phi_wind_slice[key] = DataTime(
                 name=prefix + " Winding Flux",
                 unit="Wb",
                 symbol="Phi_{wind}",
-                axes=[Time, Phase],
-                values=Phi_wind,
+                axes=[Time, Phase, axes_dict["z"]],
+                values=phi_wind_val[key],
+            )
+            # Integrate over slice axis to get overall winding flux linkage (in Weber)
+            self.Phi_wind[key] = self.Phi_wind_slice[key].get_data_along(
+                "time[smallestperiod]", "phase", "z=integrate"
             )
 
         if (
@@ -136,9 +130,6 @@ def store(self, out_dict, axes_dict):
 
         # Electromotive force computation
         self.comp_emf()
-
-        # remove from out_dict
-        out_dict.pop("Phi_wind")
 
     # Store MeshSolution object
     if "meshsolution" in out_dict:

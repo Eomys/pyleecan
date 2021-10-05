@@ -8318,7 +8318,16 @@
                 "min": "",
                 "name": "Tem_slice",
                 "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "N.m",
+                "unit": "N",
+                "value": "None"
+            },
+            {
+                "desc": "Dict of lamination winding fluxlinkage DataTime objects per slice",
+                "max": "",
+                "min": "",
+                "name": "Phi_wind_slice",
+                "type": "{SciDataTool.Classes.DataTime.DataTime}",
+                "unit": "Wb/m",
                 "value": "None"
             }
         ]

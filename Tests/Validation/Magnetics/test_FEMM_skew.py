@@ -118,4 +118,3 @@ def test_FEMM_skew():
 # To run it without pytest
 if __name__ == "__main__":
     out_no_skew = test_FEMM_skew()
-

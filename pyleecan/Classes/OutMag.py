@@ -125,6 +125,7 @@ class OutMag(FrozenClass):
         Pem_av=None,
         Slice=None,
         Tem_slice=None,
+        Phi_wind_slice=None,
         init_dict=None,
         init_str=None,
     ):
@@ -177,6 +178,8 @@ class OutMag(FrozenClass):
                 Slice = init_dict["Slice"]
             if "Tem_slice" in list(init_dict.keys()):
                 Tem_slice = init_dict["Tem_slice"]
+            if "Phi_wind_slice" in list(init_dict.keys()):
+                Phi_wind_slice = init_dict["Phi_wind_slice"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Time = Time
@@ -196,6 +199,7 @@ class OutMag(FrozenClass):
         self.Pem_av = Pem_av
         self.Slice = Slice
         self.Tem_slice = Tem_slice
+        self.Phi_wind_slice = Phi_wind_slice
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -243,6 +247,7 @@ class OutMag(FrozenClass):
         else:
             OutMag_str += "Slice = None" + linesep + linesep
         OutMag_str += "Tem_slice = " + str(self.Tem_slice) + linesep + linesep
+        OutMag_str += "Phi_wind_slice = " + str(self.Phi_wind_slice) + linesep + linesep
         return OutMag_str
 
     def __eq__(self, other):
@@ -283,6 +288,8 @@ class OutMag(FrozenClass):
         if other.Slice != self.Slice:
             return False
         if other.Tem_slice != self.Tem_slice:
+            return False
+        if other.Phi_wind_slice != self.Phi_wind_slice:
             return False
         return True
 
@@ -393,6 +400,21 @@ class OutMag(FrozenClass):
             diff_list.extend(
                 self.Tem_slice.compare(other.Tem_slice, name=name + ".Tem_slice")
             )
+        if (other.Phi_wind_slice is None and self.Phi_wind_slice is not None) or (
+            other.Phi_wind_slice is not None and self.Phi_wind_slice is None
+        ):
+            diff_list.append(name + ".Phi_wind_slice None mismatch")
+        elif self.Phi_wind_slice is None:
+            pass
+        elif len(other.Phi_wind_slice) != len(self.Phi_wind_slice):
+            diff_list.append("len(" + name + "Phi_wind_slice)")
+        else:
+            for key in self.Phi_wind_slice:
+                diff_list.extend(
+                    self.Phi_wind_slice[key].compare(
+                        other.Phi_wind_slice[key], name=name + ".Phi_wind_slice"
+                    )
+                )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -420,6 +442,9 @@ class OutMag(FrozenClass):
         S += getsizeof(self.Pem_av)
         S += getsizeof(self.Slice)
         S += getsizeof(self.Tem_slice)
+        if self.Phi_wind_slice is not None:
+            for key, value in self.Phi_wind_slice.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self, **kwargs):
@@ -485,6 +510,15 @@ class OutMag(FrozenClass):
             OutMag_dict["Tem_slice"] = None
         else:
             OutMag_dict["Tem_slice"] = self.Tem_slice.as_dict()
+        if self.Phi_wind_slice is None:
+            OutMag_dict["Phi_wind_slice"] = None
+        else:
+            OutMag_dict["Phi_wind_slice"] = dict()
+            for key, obj in self.Phi_wind_slice.items():
+                if obj is not None:
+                    OutMag_dict["Phi_wind_slice"][key] = obj.as_dict()
+                else:
+                    OutMag_dict["Phi_wind_slice"][key] = None
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -512,6 +546,7 @@ class OutMag(FrozenClass):
         if self.Slice is not None:
             self.Slice._set_None()
         self.Tem_slice = None
+        self.Phi_wind_slice = None
 
     def _get_Time(self):
         """getter of Time"""
@@ -926,5 +961,36 @@ class OutMag(FrozenClass):
         doc=u"""Electromagnetic torque DataTime object including torque per slice
 
         :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
+
+    def _get_Phi_wind_slice(self):
+        """getter of Phi_wind_slice"""
+        if self._Phi_wind_slice is not None:
+            for key, obj in self._Phi_wind_slice.items():
+                if obj is not None:
+                    obj.parent = self
+        return self._Phi_wind_slice
+
+    def _set_Phi_wind_slice(self, value):
+        """setter of Phi_wind_slice"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "Phi_wind_slice"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("Phi_wind_slice", value, "{DataTime}")
+        self._Phi_wind_slice = value
+
+    Phi_wind_slice = property(
+        fget=_get_Phi_wind_slice,
+        fset=_set_Phi_wind_slice,
+        doc=u"""Dict of lamination winding fluxlinkage DataTime objects per slice
+
+        :Type: {SciDataTool.Classes.DataTime.DataTime}
         """,
     )
