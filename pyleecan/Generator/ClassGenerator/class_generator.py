@@ -319,7 +319,9 @@ def generate_class(
 
     # Add all the properties getter and setter
     if len(class_dict["properties"]) > 0:
-        class_file.write("\n" + generate_properties(gen_dict, class_dict) + "\n")
+        class_file.write(
+            "\n" + generate_properties(gen_dict, class_dict, soft_name=soft_name) + "\n"
+        )
 
     # End of class generation
     class_file.close()
