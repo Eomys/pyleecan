@@ -1,5 +1,5 @@
 from logging import getLogger
-from os.path import dirname, isfile
+from os.path import dirname, isfile, splitext, basename
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg,
@@ -689,6 +689,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         )[0]
         if save_file_path not in ["", ".json", None]:
             self.save_path = save_file_path
+            hole.name = splitext(basename(self.save_path))[0]
             try:
                 hole.save(save_file_path)
                 self.accept()

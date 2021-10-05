@@ -4,7 +4,7 @@ from json import dump
 from logging import getLogger
 from os import makedirs, remove, listdir
 from os.path import isdir, isfile, join, split
-
+from shutil import move
 from numpy import int32
 
 from ... import __version__
@@ -17,9 +17,9 @@ def save_json(
     obj,
     save_path="",
     is_folder=False,
-    is_delete_old=True,
+    type_handle_old=2,
     type_compression=0,
-    class_to_split=("Simulation", "Machine", "Material"),
+    class_to_split=("Simulation", "Machine", "Material", "HoleUD", "SlotUD", "SlotUD2"),
 ):
     """Save the object to the save_path
 
@@ -31,8 +31,8 @@ def save_json(
         path to the folder to save the object
     is_folder: bool
         to split the object in different files
-    is_delete_old : bool
-        True to remove all the ".json" file from the folder before saving
+    type_handle_old : int
+        How to handle old file in folder mode (0:Nothing, 1:Delete, 2:Move to "Backup" folder)
     type_compression: int
         0: no compression, 1: gzip
     class_to_split: list
@@ -52,7 +52,12 @@ def save_json(
 
     # create path and name for the base file
     file_path, base_name = setup_save_path(
-        save_path, obj, is_folder=is_folder, is_delete_old=is_delete_old, file_ext=file_ext, logger=logger
+        save_path,
+        obj,
+        is_folder=is_folder,
+        type_handle_old=type_handle_old,
+        file_ext=file_ext,
+        logger=logger,
     )
 
     # prepare data for dumping and split if needed
@@ -87,7 +92,7 @@ def save_json(
     for elem in split_list:
         file_name = list(elem.keys())[0]
         save_obj = elem[file_name]
-        json_kwargs = dict(sort_keys=True, indent=4, separators=(",", ": "))
+        json_kwargs = dict(sort_keys=True, indent=2, separators=(",", ": "))
         json_file = join(file_path, file_name)
 
         if type_compression == 1:
@@ -101,7 +106,7 @@ def save_json(
     return obj
 
 
-def setup_save_path(save_path, obj, is_folder, is_delete_old, file_ext, logger):
+def setup_save_path(save_path, obj, is_folder, type_handle_old, file_ext, logger):
     """
     Check save_path and modify or create it if needed, i.e. add or remove
     file extension .json or create new name based on class name.
@@ -114,8 +119,8 @@ def setup_save_path(save_path, obj, is_folder, is_delete_old, file_ext, logger):
         Pyleecan object to save
     is_folder: bool
         object is saved if folder mode
-    is_delete_old : bool
-        True to remove all the ".json" file from the folder before saving
+    type_handle_old : int
+        How to handle old file in folder mode (0:Nothing, 1:Delete, 2:Move to "Backup" folder)
     file_ext: str
         File extension e.g. ".json"
     logger :
@@ -151,20 +156,35 @@ def setup_save_path(save_path, obj, is_folder, is_delete_old, file_ext, logger):
             file_path = join(file_path, file_name)
             file_name += file_ext
             # Remove old files from old folder
-            if isdir(file_path) and is_delete_old:
+            if isdir(file_path) and type_handle_old != 0:
                 for name in listdir(file_path):
                     if name[-5:] == ".json":
                         path = join(file_path, name)
-                        logger.debug("Removing old file :" + path)
-                        try:
-                            remove(path)
-                        except Exception as e:
-                            logger.error(
-                                "Unable to remove old file ("
-                                + path
-                                + ") while saving:\n"
-                                + str(e)
-                            )
+                        if type_handle_old == 1:
+                            logger.debug("Removing old file :" + path)
+                            try:
+                                remove(path)
+                            except Exception as e:
+                                logger.error(
+                                    "Unable to remove old file ("
+                                    + path
+                                    + ") while saving:\n"
+                                    + str(e)
+                                )
+                        elif type_handle_old == 2:
+                            logger.debug("Moving old file to Backup folder:" + path)
+                            back_path = join(file_path, "Backup")
+                            try:
+                                if not isdir(back_path):
+                                    makedirs(back_path)
+                                move(path, back_path)
+                            except Exception as e:
+                                logger.error(
+                                    "Unable to move old file ("
+                                    + path
+                                    + ") while saving:\n"
+                                    + str(e)
+                                )
 
     if file_path and not isdir(file_path):
         makedirs(file_path)
@@ -254,8 +274,10 @@ def split_obj_dict(cls_tupel, obj_dict, folder, split_list, file_ext, logger):
         if (
             "__class__" in obj_dict.keys()
             and obj_dict["__class__"] in cls_tupel
-            and "name" in obj_dict.keys()
-            and obj_dict["name"] not in ["", None]
+            and (
+                ("name" in obj_dict.keys() and obj_dict["name"] not in ["", None])
+                or "name" not in obj_dict.keys()
+            )
         ):
             # and also add it to the list of objects to be saved
             name = get_filename(obj_dict, folder, split_list, file_ext, logger)

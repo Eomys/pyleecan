@@ -13,7 +13,9 @@ def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
     """
 
     # Get the properties inherited from Mesh
-    MeshVTK_dict = super(type(self), self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+    MeshVTK_dict = super(type(self), self).as_dict(
+        type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs
+    )
     MeshVTK_dict["mesh"] = None
     MeshVTK_dict["is_pyvista_mesh"] = self.is_pyvista_mesh
     MeshVTK_dict["format"] = self.format
@@ -33,9 +35,7 @@ def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         elif type_handle_ndarray == 2:
             MeshVTK_dict["node_normals"] = self.node_normals
         else:
-            raise Exception(
-                "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-            )
+            raise Exception("Unknown type_handle_ndarray: " + str(type_handle_ndarray))
 
     # The class name is added to the dict for deserialisation purpose
     # Overwrite the mother class name
