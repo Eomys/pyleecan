@@ -2930,6 +2930,15 @@
                 "type": "{Magnet}",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "Name of the hole (for save)",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -10437,6 +10446,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "Name of the slot (for save)",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -10488,6 +10506,15 @@
                 "type": "dict",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Name of the slot (for save)",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             }
         ]
     },

@@ -1,5 +1,5 @@
 from logging import getLogger
-from os.path import dirname, isfile
+from os.path import dirname, isfile, basename, splitext
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import (
@@ -471,6 +471,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             )[0]
             if save_file_path not in ["", ".json", None]:
                 self.save_path = save_file_path
+                slot.name = splitext(basename(self.save_path))[0]
                 try:
                     slot.save(save_file_path)
                     self.accept()

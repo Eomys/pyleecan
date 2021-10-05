@@ -63,7 +63,7 @@ class PWSlot10(Gen_PWSlot10, QWidget):
         self.lf_H0.setValue(self.slot.H0)
         if self.slot.H1_is_rad is None:
             self.slot.H1_is_rad = False  # default unit: [m]
-        self.lf_H1.setValue(self.slot.H1)
+
         self.lf_H2.setValue(self.slot.H2)
 
         # Update the unit combobox with the current m unit name
@@ -73,8 +73,10 @@ class PWSlot10(Gen_PWSlot10, QWidget):
         )
         if self.slot.H1_is_rad:  # rad
             self.c_H1_unit.setCurrentIndex(1)
+            self.lf_H1.setValue(self.slot.H1)
         else:
             self.c_H1_unit.setCurrentIndex(0)
+            self.lf_H1.setValue(gui_option.unit.get_m(self.slot.H1))
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()

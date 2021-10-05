@@ -3,3 +3,4 @@ line_list,-,list of line to draw the edges of the slot,,[Line],,,,,Slot,Slot,bui
 wind_begin_index,-,Index of the first line to include in the winding,,int,None,,,,,,set_from_point_list,,,
 wind_end_index,-,Index of the last line to include in the winding,,int,None,,,,,,get_surface_active,,,
 type_line_wind,-,"0 to close winding with Segment, 1 for Arc1",,int,0,0,1,,,,check,,,
+name,-,Name of the slot (for save),,str,,,,,,,,,,
