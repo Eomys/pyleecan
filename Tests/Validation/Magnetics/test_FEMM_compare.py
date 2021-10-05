@@ -12,7 +12,6 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
@@ -64,11 +63,9 @@ def test_FEMM_compare_IPMSM_xxx():
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 
-    out = Output(simu=simu)
-    simu.run()
+    out = simu.run()
 
-    out2 = Output(simu=simu_sym)
-    simu_sym.run()
+    out2 = simu_sym.run()
 
     # Plot the result by comparing the two simulation
     plt.close("all")
@@ -82,6 +79,7 @@ def test_FEMM_compare_IPMSM_xxx():
     )
 
 
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
@@ -132,11 +130,9 @@ def test_FEMM_compare_Prius():
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 
-    out = Output(simu=simu)
-    simu.run()
+    out = simu.run()
 
-    out2 = Output(simu=simu_sym)
-    simu_sym.run()
+    out2 = simu_sym.run()
 
     # Plot the result by comparing the two simulation
     plt.close("all")
@@ -209,17 +205,19 @@ def test_FEMM_compare_SCIM():
     Br = ImportMatlab(file_path=mat_file, var_name="XBr")
     angle2 = ImportGenVectLin(start=0, stop=pi, num=4096 / 2, endpoint=False)
     simu_load.input = InputFlux(
-        time=time, angle=angle2, B_dict={"Br": Br}, OP=simu.input.copy()
+        time=time,
+        angle=angle2,
+        B_dict={"Br": Br},
+        Is=Is,
+        Ir=Ir,
+        N0=simu.input.N0,
     )
 
-    out = Output(simu=simu)
-    simu.run()
+    out = simu.run()
 
-    out2 = Output(simu=simu_sym)
-    simu_sym.run()
+    out2 = simu_sym.run()
 
-    out3 = Output(simu=simu_load)
-    simu_load.run()
+    out3 = simu_load.run()
 
     # Plot the result by comparing the two simulation (sym / no sym)
     plt.close("all")
@@ -247,6 +245,7 @@ def test_FEMM_compare_SCIM():
     )
 
 
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.SIPMSM
 @pytest.mark.periodicity
@@ -310,14 +309,14 @@ def test_FEMM_compare_SIPMSM():
         Na_tot=Na_tot,
         Nt_tot=Nt_tot,
         B_dict={"Br": Br, "Bt": Bt},
-        OP=simu.input.copy(),
+        Is=Is,
+        Ir=None,  # No winding on the rotor
+        N0=simu.input.N0,
     )
 
-    out = Output(simu=simu)
-    simu.run()
+    out = simu.run()
 
-    out3 = Output(simu=simu_load)
-    simu_load.run()
+    out3 = simu_load.run()
 
     # Plot the result by comparing the two simulation (no sym / MANATEE SDM)
     plt.close("all")
@@ -394,16 +393,18 @@ def test_SPMSM_load():
     Br = ImportMatlab(file_path=mat_file, var_name="XBr")
     Bt = ImportMatlab(file_path=mat_file, var_name="XBt")
     simu_load.input = InputFlux(
-        time=time, Na_tot=Na_tot, B_dict={"Br": Br, "Bt": Bt}, OP=simu.input.copy()
+        time=time,
+        Na_tot=Na_tot,
+        B_dict={"Br": Br, "Bt": Bt},
+        Is=Is,
+        Ir=None,  # No winding on the rotor
+        N0=simu.input.N0,
     )
-    out = Output(simu=simu)
-    simu.run()
+    out = simu.run()
 
-    out2 = Output(simu=simu_sym)
-    simu_sym.run()
+    out2 = simu_sym.run()
 
-    out3 = Output(simu=simu_load)
-    simu_load.run()
+    out3 = simu_load.run()
 
     # Plot the result by comparing the two simulation (sym / no sym)
     plt.close("all")
@@ -430,6 +431,7 @@ def test_SPMSM_load():
     )
 
 
+@pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
@@ -483,14 +485,17 @@ def test_SPMSM_noload():
     Bt = ImportMatlab(file_path=mat_file, var_name="Bt")
     angle2 = ImportGenVectLin(start=0, stop=2 * pi / 9, num=2048 / 9, endpoint=False)
     simu_load.input = InputFlux(
-        time=time, angle=angle2, B_dict={"Br": Br, "Bt": Bt}, OP=simu.input.copy()
+        time=time,
+        angle=angle2,
+        B_dict={"Br": Br, "Bt": Bt},
+        Is=Is,
+        Ir=None,  # No winding on the rotor
+        N0=simu.input.N0,
     )
 
-    out = Output(simu=simu)
-    simu.run()
+    out = simu.run()
 
-    out3 = Output(simu=simu_load)
-    simu_load.run()
+    out3 = simu_load.run()
 
     plt.close("all")
 

@@ -4186,7 +4186,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "InputFlux"
+        ],
         "desc": "Input to skip the electrical module and start with the magnetic one",
         "is_internal": false,
         "methods": [
@@ -4250,7 +4252,7 @@
         "methods": [
             "gen_input"
         ],
-        "mother": "Input",
+        "mother": "InputCurrent",
         "name": "InputFlux",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
@@ -4280,7 +4282,7 @@
                 "name": "is_antiper_a",
                 "type": "bool",
                 "unit": "-",
-                "value": false
+                "value": 0
             },
             {
                 "desc": "If time is antiperiodic",
@@ -4289,7 +4291,7 @@
                 "name": "is_antiper_t",
                 "type": "bool",
                 "unit": "-",
-                "value": false
+                "value": 0
             },
             {
                 "desc": "Dict of Import objects or lists for each component of the flux",
@@ -4310,13 +4312,22 @@
                 "value": "None"
             },
             {
-                "desc": "InputCurrent to define Operating Point (not mandatory)",
+                "desc": "Slice axis values",
                 "max": "",
                 "min": "",
-                "name": "OP",
-                "type": "Input",
-                "unit": "-",
+                "name": "slice",
+                "type": "ndarray",
+                "unit": "m",
                 "value": null
+            },
+            {
+                "desc": "Airgap flux density as VectorField object",
+                "max": "",
+                "min": "",
+                "name": "B_enforced",
+                "type": "SciDataTool.Classes.VectorField.VectorField",
+                "unit": "",
+                "value": "None"
             }
         ]
     },
@@ -4357,7 +4368,8 @@
             }
         ],
         "daughters": [
-            "InputCurrent"
+            "InputCurrent",
+            "InputFlux"
         ],
         "desc": "Input to start the electrical module with voltage input",
         "is_internal": false,
