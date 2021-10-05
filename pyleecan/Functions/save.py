@@ -8,7 +8,7 @@ class FormatError(Exception):
     pass
 
 
-def save(self, save_path="", is_folder=False, is_delete_old=True, type_compression=0):
+def save(self, save_path="", is_folder=False, type_handle_old=2, type_compression=0):
     """Save the object to the save_path
 
     Parameters
@@ -19,8 +19,8 @@ def save(self, save_path="", is_folder=False, is_delete_old=True, type_compressi
         path to the folder to save the object
     is_folder: bool
         to split the object in different files: separate simulation machine and materials (json only)
-    is_delete_old : bool
-        True to remove all the ".ext" file from the folder before saving
+    type_handle_old : int
+        How to handle old file in folder mode (0:Nothing, 1:Delete, 2:Move to "Backup" folder)
     type_compression: int
         Available only for json, 0: no compression, 1: gzip
     """
@@ -43,7 +43,7 @@ def save(self, save_path="", is_folder=False, is_delete_old=True, type_compressi
             self,
             save_path=save_path,
             is_folder=is_folder,
-            is_delete_old=is_delete_old,
+            type_handle_old=type_handle_old,
             type_compression=type_compression,
         )
     # Save in hdf5
