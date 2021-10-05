@@ -10,7 +10,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from .....GUI.Tools.FloatEdit import FloatEdit
-from .....GUI.Tools.MPLCanvas import MPLCanvas2
+from .....GUI.Tools.MPLCanvas import MPLCanvas
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -30,7 +30,7 @@ class Ui_SSkew(object):
         self.g_plot.setMinimumSize(QSize(800, 0))
         self.verticalLayout_2 = QVBoxLayout(self.g_plot)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.w_viewer = MPLCanvas2(self.g_plot)
+        self.w_viewer = MPLCanvas(self.g_plot)
         self.w_viewer.setObjectName(u"w_viewer")
 
         self.verticalLayout_2.addWidget(self.w_viewer)

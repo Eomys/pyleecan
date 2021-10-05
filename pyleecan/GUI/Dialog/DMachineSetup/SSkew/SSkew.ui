@@ -35,7 +35,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="MPLCanvas2" name="w_viewer" native="true"/>
+         <widget class="MPLCanvas" name="w_viewer" native="true"/>
         </item>
        </layout>
       </widget>
@@ -271,7 +271,7 @@
    <header location="global">.....GUI.Tools.FloatEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>MPLCanvas2</class>
+   <class>MPLCanvas</class>
    <extends>QWidget</extends>
    <header>.....GUI.Tools.MPLCanvas</header>
    <container>1</container>
