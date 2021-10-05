@@ -786,7 +786,11 @@ class Lamination(FrozenClass):
         if self.skew is None:
             Lamination_dict["skew"] = None
         else:
-            Lamination_dict["skew"] = self.skew.as_dict(**kwargs)
+            Lamination_dict["skew"] = self.skew.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.yoke_notch is None:
             Lamination_dict["yoke_notch"] = None
         else:

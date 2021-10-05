@@ -8245,7 +8245,7 @@
                 "max": "",
                 "min": "",
                 "name": "Phi_wind_stator",
-                "type": "SciDataTool.Classes.DataTime.DataTime",
+                "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "Wb",
                 "value": "None"
             },
@@ -8254,7 +8254,7 @@
                 "max": "",
                 "min": "",
                 "name": "Phi_wind",
-                "type": "{SciDataTool.Classes.DataTime.DataTime}",
+                "type": "{SciDataTool.Classes.DataND.DataND}",
                 "unit": "Wb",
                 "value": "None"
             },
@@ -8263,7 +8263,7 @@
                 "max": "",
                 "min": "",
                 "name": "emf",
-                "type": "SciDataTool.Classes.DataTime.DataTime",
+                "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "V",
                 "value": "None"
             },
@@ -8335,7 +8335,7 @@
                 "max": "",
                 "min": "",
                 "name": "Phi_wind_slice",
-                "type": "{SciDataTool.Classes.DataTime.DataTime}",
+                "type": "{SciDataTool.Classes.DataND.DataND}",
                 "unit": "Wb/m",
                 "value": "None"
             }

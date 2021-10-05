@@ -545,18 +545,30 @@ class OutMag(FrozenClass):
         if self.Slice is None:
             OutMag_dict["Slice"] = None
         else:
-            OutMag_dict["Slice"] = self.Slice.as_dict(**kwargs)
+            OutMag_dict["Slice"] = self.Slice.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Tem_slice is None:
             OutMag_dict["Tem_slice"] = None
         else:
-            OutMag_dict["Tem_slice"] = self.Tem_slice.as_dict()
+            OutMag_dict["Tem_slice"] = self.Tem_slice.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Phi_wind_slice is None:
             OutMag_dict["Phi_wind_slice"] = None
         else:
             OutMag_dict["Phi_wind_slice"] = dict()
             for key, obj in self.Phi_wind_slice.items():
                 if obj is not None:
-                    OutMag_dict["Phi_wind_slice"][key] = obj.as_dict()
+                    OutMag_dict["Phi_wind_slice"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     OutMag_dict["Phi_wind_slice"][key] = None
         # The class name is added to the dict for deserialisation purpose
@@ -762,8 +774,8 @@ class OutMag(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            value = DataTime()
-        check_var("Phi_wind_stator", value, "DataTime")
+            value = DataND()
+        check_var("Phi_wind_stator", value, "DataND")
         self._Phi_wind_stator = value
 
     Phi_wind_stator = property(
@@ -771,7 +783,7 @@ class OutMag(FrozenClass):
         fset=_set_Phi_wind_stator,
         doc=u"""Stator winding flux DataTime object
 
-        :Type: SciDataTool.Classes.DataTime.DataTime
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )
 
@@ -794,7 +806,7 @@ class OutMag(FrozenClass):
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
-        check_var("Phi_wind", value, "{DataTime}")
+        check_var("Phi_wind", value, "{DataND}")
         self._Phi_wind = value
 
     Phi_wind = property(
@@ -802,7 +814,7 @@ class OutMag(FrozenClass):
         fset=_set_Phi_wind,
         doc=u"""Dict of lamination winding fluxlinkage DataTime objects
 
-        :Type: {SciDataTool.Classes.DataTime.DataTime}
+        :Type: {SciDataTool.Classes.DataND.DataND}
         """,
     )
 
@@ -820,8 +832,8 @@ class OutMag(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            value = DataTime()
-        check_var("emf", value, "DataTime")
+            value = DataND()
+        check_var("emf", value, "DataND")
         self._emf = value
 
     emf = property(
@@ -829,7 +841,7 @@ class OutMag(FrozenClass):
         fset=_set_emf,
         doc=u"""Electromotive force DataTime object
 
-        :Type: SciDataTool.Classes.DataTime.DataTime
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )
 
@@ -1023,7 +1035,7 @@ class OutMag(FrozenClass):
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
-        check_var("Phi_wind_slice", value, "{DataTime}")
+        check_var("Phi_wind_slice", value, "{DataND}")
         self._Phi_wind_slice = value
 
     Phi_wind_slice = property(
@@ -1031,6 +1043,6 @@ class OutMag(FrozenClass):
         fset=_set_Phi_wind_slice,
         doc=u"""Dict of lamination winding fluxlinkage DataTime objects per slice
 
-        :Type: {SciDataTool.Classes.DataTime.DataTime}
+        :Type: {SciDataTool.Classes.DataND.DataND}
         """,
     )

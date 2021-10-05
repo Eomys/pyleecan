@@ -340,7 +340,11 @@ class Magnetics(FrozenClass):
         if self.Slice_enforced is None:
             Magnetics_dict["Slice_enforced"] = None
         else:
-            Magnetics_dict["Slice_enforced"] = self.Slice_enforced.as_dict(**kwargs)
+            Magnetics_dict["Slice_enforced"] = self.Slice_enforced.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Magnetics_dict["Nslices_enforced"] = self.Nslices_enforced
         Magnetics_dict["type_distribution_enforced"] = self.type_distribution_enforced
         # The class name is added to the dict for deserialisation purpose

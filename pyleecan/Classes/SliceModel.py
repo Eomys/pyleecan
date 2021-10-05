@@ -241,9 +241,13 @@ class SliceModel(FrozenClass):
         S += getsizeof(self.is_skew)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -257,11 +261,29 @@ class SliceModel(FrozenClass):
         if self.angle_rotor is None:
             SliceModel_dict["angle_rotor"] = None
         else:
-            SliceModel_dict["angle_rotor"] = self.angle_rotor.tolist()
+            if type_handle_ndarray == 0:
+                SliceModel_dict["angle_rotor"] = self.angle_rotor.tolist()
+            elif type_handle_ndarray == 1:
+                SliceModel_dict["angle_rotor"] = self.angle_rotor.copy()
+            elif type_handle_ndarray == 2:
+                SliceModel_dict["angle_rotor"] = self.angle_rotor
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.angle_stator is None:
             SliceModel_dict["angle_stator"] = None
         else:
-            SliceModel_dict["angle_stator"] = self.angle_stator.tolist()
+            if type_handle_ndarray == 0:
+                SliceModel_dict["angle_stator"] = self.angle_stator.tolist()
+            elif type_handle_ndarray == 1:
+                SliceModel_dict["angle_stator"] = self.angle_stator.copy()
+            elif type_handle_ndarray == 2:
+                SliceModel_dict["angle_stator"] = self.angle_stator
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         SliceModel_dict["L"] = self.L
         SliceModel_dict["is_step"] = self.is_step
         SliceModel_dict["is_skew"] = self.is_skew
