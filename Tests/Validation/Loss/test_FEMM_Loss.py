@@ -21,6 +21,7 @@ from pyleecan.definitions import DATA_DIR
 
 @pytest.mark.long_5s
 @pytest.mark.long_1m
+@pytest.mark.long_10m
 @pytest.mark.FEMM
 @pytest.mark.MagFEMM
 @pytest.mark.periodicity
