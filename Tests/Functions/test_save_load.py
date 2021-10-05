@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from os import getcwd, remove, listdir
-from os.path import isfile, join
+from os.path import isfile, join, isdir
 from unittest.mock import patch  # for unittest of input
 
 import pytest
@@ -190,7 +190,7 @@ def test_save_load_folder_path():
     # Check that empty materials are not save in separate file
     test_obj2.simu.machine.stator.winding.conductor.ins_mat._set_None()
 
-    test_obj2.save(loc_save_path, is_folder=True, is_delete_old=True)
+    test_obj2.save(loc_save_path, is_folder=True, type_handle_old=1)
     assert isfile(join(loc_save_path, "MagnetPrius.json"))
     assert isfile(join(loc_save_path, "MagnetPrius_00001.json"))
     assert isfile(join(loc_save_path, "M400-50A.json"))
@@ -209,6 +209,24 @@ def test_save_load_folder_path():
 
     assert test_obj2.simu.machine.stator.L1 == test_obj3.simu.machine.stator.L1
     assert len(test_obj2.compare(test_obj3)) == 0
+
+    # Check save with backup folder
+    test_obj2.save(loc_save_path, is_folder=True, type_handle_old=2)
+    assert isfile(join(loc_save_path, "MagnetPrius.json"))
+    assert isfile(join(loc_save_path, "MagnetPrius_00001.json"))
+    assert isfile(join(loc_save_path, "M400-50A.json"))
+    assert isfile(join(loc_save_path, "M400-50A_00001.json"))
+    assert isfile(join(loc_save_path, "M400-50A_00002.json"))
+    assert isfile(join(loc_save_path, "Air.json"))
+    assert isfile(join(loc_save_path, "Copper1.json"))
+    assert isfile(join(loc_save_path, "Toyota2.json"))
+    assert isfile(join(loc_save_path, "test_save_load_folder_path.json"))  # Simu
+    assert isfile(join(loc_save_path, "FolderSaved.json"))  # Output
+    assert len(listdir(loc_save_path)) == 11
+
+    back_path = join(loc_save_path, "Backup")
+    assert isdir(back_path)
+    assert len(listdir(back_path)) == 10
 
 
 def test_save_load_just_name():
