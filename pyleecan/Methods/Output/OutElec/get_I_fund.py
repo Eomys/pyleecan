@@ -1,4 +1,4 @@
-from numpy import pi, array, transpose, where
+from numpy import pi, array, transpose, where, isclose
 
 from SciDataTool import Data1D, DataTime, DataFreq
 
@@ -50,7 +50,7 @@ def get_I_fund(self, Time=None):
         result = self.Is.get_along("freqs", "phase")
         Is_val = result["I_s"]
         freqs = result["freqs"]
-        ifund = where(freqs == felec)
+        ifund = where(isclose(freqs, felec))
         Is_fund = Is_val[:, ifund]
 
         Freq = Data1D(
