@@ -93,34 +93,25 @@ def comp_axes(
     # Get machine pole pair number
     p = machine.get_pole_pair_number()
 
-    if ("time" in axes_list and is_periodicity_t) or (
-        "angle" in axes_list and is_periodicity_a
-    ):
-        # Fill periodicity parameters that are None
-        if (
-            per_a is None
-            or is_antiper_a is None
-            or per_t is None
-            or is_antiper_t is None
-        ):
-            # Get time and space (anti-)periodicities of the machine
-            (
-                per_a_0,
-                is_antiper_a_0,
-                per_t_0,
-                is_antiper_t_0,
-            ) = output.get_machine_periodicity()
-            # Enforce None values to machine periodicity
-            per_a = per_a_0 if per_a is None else per_a
-            is_antiper_a = is_antiper_a_0 if is_antiper_a is None else is_antiper_a
-            per_t = per_t_0 if per_t is None else per_t
-            is_antiper_t = is_antiper_t_0 if is_antiper_t is None else is_antiper_t
+    # Fill periodicity parameters that are None
+    if per_a is None or is_antiper_a is None or per_t is None or is_antiper_t is None:
+        # Get time and space (anti-)periodicities of the machine
+        (
+            per_a_0,
+            is_antiper_a_0,
+            per_t_0,
+            is_antiper_t_0,
+        ) = output.get_machine_periodicity()
 
     if "time" in axes_list:
 
-        if is_periodicity_t is None:
-            # Enforce requested time periodicity
-            is_periodicity_t = per_t > 1 or is_antiper_t
+        if is_periodicity_t is None or is_periodicity_t:
+            # Enforce None values to machine time periodicity
+            per_t = per_t_0 if per_t is None else per_t
+            is_antiper_t = is_antiper_t_0 if is_antiper_t is None else is_antiper_t
+            if is_periodicity_t is None:
+                # Check time periodicity is included
+                is_periodicity_t = per_t > 1 or is_antiper_t
         elif not is_periodicity_t:
             # Remove time periodicity
             per_t = 1
@@ -185,9 +176,13 @@ def comp_axes(
 
     if "angle" in axes_list:
 
-        if is_periodicity_a is None:
-            # Enforce requested angle periodicity
-            is_periodicity_a = per_a > 1 or is_antiper_a
+        if is_periodicity_a is None or is_periodicity_a:
+            # Enforce None values to machine periodicity
+            per_a = per_a_0 if per_a is None else per_a
+            is_antiper_a = is_antiper_a_0 if is_antiper_a is None else is_antiper_a
+            if is_periodicity_a is None:
+                # Enforce requested angle periodicity
+                is_periodicity_a = per_a > 1 or is_antiper_a
         elif not is_periodicity_a:
             # Remove angle periodicity
             per_a = 1
