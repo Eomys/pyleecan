@@ -2,7 +2,7 @@ from ....Classes.WindingSC import WindingSC
 from numpy import array
 
 
-def comp_I_mag(self, time, is_stator, phase=None):
+def comp_I_mag(self, Time, is_stator, phase=None, I_data=None, is_periodicity_t=True):
     """Compute the current on the given lamination and time vector to use it in Magnetics model
     Phase currents are divided by the number of parallel circuits per pole
     and per phase to account for actual current in slot conductors
@@ -11,7 +11,7 @@ def comp_I_mag(self, time, is_stator, phase=None):
     ----------
     self : OutElec
         an OutElec object
-    time : ndarray
+    Time : Data1D
         Time vector on which to interpolate currents stored in OutElec
     is_stator: bool
         True if lamination is stator
@@ -23,6 +23,13 @@ def comp_I_mag(self, time, is_stator, phase=None):
     I: ndarray
         Current matrix accounting for periodicities [q_pera,len(time)]
     """
+    _, is_antiper_t = Time.get_periodicity()
+
+    # Number of time steps
+    time = Time.get_values(
+        is_oneperiod=is_periodicity_t,
+        is_antiperiod=is_antiper_t and is_periodicity_t,
+    )
 
     # Get lamination
     if is_stator:
@@ -43,10 +50,11 @@ def comp_I_mag(self, time, is_stator, phase=None):
             Npcp = 1
 
         # Get current DataTime
-        if is_stator:
-            I_data = self.get_Is()
-        else:
-            I_data = self.Ir
+        if I_data is None:
+            if is_stator:
+                I_data = self.get_Is()
+            else:
+                I_data = self.Ir
 
         if phase is None:
             # Take all phases that are in the I_data Data object

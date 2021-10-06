@@ -6,7 +6,7 @@ from ....Functions.Electrical.coordinate_transformation import dq2n
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
-def get_Is(self):
+def get_Is(self, Time=None, is_current_harm=False):
     """Return the stator current DataTime object
 
     Parameters
@@ -16,30 +16,7 @@ def get_Is(self):
 
     """
     # Calculate stator currents if Is is not in OutElec
-    if self.Is is None:
-        # Generate current according to Id/Iq
-        Isdq = array([self.Id_ref, self.Iq_ref])
-        time = self.axes_dict["time"].get_values(is_smallestperiod=True)
-        qs = self.parent.simu.machine.stator.winding.qs
-        felec = self.felec
-
-        # Get rotation direction of the fundamental magnetic field created by the winding
-        rot_dir = self.parent.get_rot_dir()
-
-        # Get stator current function of time
-        Is = dq2n(Isdq, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_n_rms=False)
-
-        Phase = Data1D(
-            name="phase",
-            unit="",
-            values=gen_name(qs),
-            is_components=True,
-        )
-        self.Is = DataTime(
-            name="Stator current",
-            unit="A",
-            symbol="Is",
-            axes=[Phase, self.axes_dict["time"].copy()],
-            values=transpose(Is),
-        )
+    if self.Is is None or is_current_harm:
+        self.Is = self.get_I_fund(Time=Time)
+        
     return self.Is
