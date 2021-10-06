@@ -14,6 +14,8 @@ from pyleecan.Functions.Plot import dict_2D
 
 from pyleecan.definitions import DATA_DIR
 
+from Tests import save_validation_path as save_path
+
 is_show_fig = False
 
 
@@ -93,24 +95,33 @@ def test_FEMM_skew():
     legend_list = ["no skew"] + ["skew " + str(k) + " seg" for k in range(2, 6)]
     linestyles = ["solid", "solid", "dashed", "dashdot", "dotted"]
 
-    if is_show_fig:
-
-        for out_skew in out_list:
-            out_skew.mag.Tem_slice.plot_2D_Data(
-                "time->angle_rotor", "z[smallestpattern]", x_min=0, x_max=30, **dict_2D
-            )
-
-        out_no_skew.mag.Tem.plot_2D_Data(
+    for out_skew in out_list:
+        out_skew.mag.Tem_slice.plot_2D_Data(
             "time->angle_rotor",
-            data_list=data_list,
-            legend_list=legend_list,
-            linestyles=linestyles,
-            # save_path=join(save_path, "test_skew_IPMSM_B_slice.png"),
-            # is_show_fig=False,
+            "z[smallestpattern]",
             x_min=0,
             x_max=30,
-            **dict_2D
+            **dict_2D,
+            save_path=join(
+                save_path,
+                "test_FEMM_skew_Tem_slice_Nstep"
+                + str(out_skew.simu.machine.rotor.skew.Nstep)
+                + ".png",
+            ),
+            is_show_fig=is_show_fig,
         )
+
+    out_no_skew.mag.Tem.plot_2D_Data(
+        "time->angle_rotor",
+        data_list=data_list,
+        legend_list=legend_list,
+        linestyles=linestyles,
+        save_path=join(save_path, "test_FEMM_skew_Tem_compare.png"),
+        is_show_fig=is_show_fig,
+        x_min=0,
+        x_max=30,
+        **dict_2D,
+    )
 
     return out_no_skew, out_list
 
