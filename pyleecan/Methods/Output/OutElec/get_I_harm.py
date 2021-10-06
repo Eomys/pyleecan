@@ -1,9 +1,5 @@
-from numpy import pi, array, transpose, where
-
-from SciDataTool import Data1D, DataTime
-
-from ....Functions.Electrical.coordinate_transformation import dq2n
-from ....Functions.Winding.gen_phase_list import gen_name
+from numpy import where, isclose, logical_not
+from SciDataTool import Data1D
 
 
 def get_I_harm(self):
@@ -25,10 +21,13 @@ def get_I_harm(self):
 
     # Remove fundamental value
     freqs = results["freqs"]
-    ifund = where(freqs != self.felec)[0]
+    ifund = where(logical_not(isclose(freqs, felec, rtol=1e-05)))[0]
 
-    Freqs = I_fund_freq.axes[1].copy()
-    Freqs.values = results["freqs"][ifund]
+    Freqs = Data1D(
+        name="freqs",
+        unit="Hz",
+        values=results["freqs"][ifund],
+    )
 
     I_harm = I_fund_freq.copy()
     I_harm.axes = [I_fund_freq.axes[0], Freqs]
