@@ -46,6 +46,11 @@
          <string>Trapeze</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Import from DXF</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>

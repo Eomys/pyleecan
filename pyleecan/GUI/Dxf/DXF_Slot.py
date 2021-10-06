@@ -528,6 +528,8 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             err_msg = "Error while converting dxf file " + file_path + " :\n" + str(e)
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self, self.tr("Error"), self.tr(err_msg),
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
             )
             return file_path  # Continue with original file

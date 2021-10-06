@@ -29,6 +29,7 @@ class Ui_WVent(object):
         self.c_vent_type.addItem("")
         self.c_vent_type.addItem("")
         self.c_vent_type.addItem("")
+        self.c_vent_type.addItem("")
         self.c_vent_type.setObjectName(u"c_vent_type")
 
         self.horizontalLayout.addWidget(self.c_vent_type)
@@ -66,6 +67,9 @@ class Ui_WVent(object):
         )
         self.c_vent_type.setItemText(
             2, QCoreApplication.translate("WVent", u"Trapeze", None)
+        )
+        self.c_vent_type.setItemText(
+            3, QCoreApplication.translate("WVent", u"Import from DXF", None)
         )
 
     # retranslateUi

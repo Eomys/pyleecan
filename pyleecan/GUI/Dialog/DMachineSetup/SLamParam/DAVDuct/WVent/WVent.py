@@ -7,6 +7,7 @@ from PySide2.QtWidgets import QMessageBox, QWidget
 from .......Classes.VentilationCirc import VentilationCirc
 from .......Classes.VentilationPolar import VentilationPolar
 from .......Classes.VentilationTrap import VentilationTrap
+from .......Classes.HoleUD import HoleUD
 from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.PVentCirc import (
     PVentCirc,
 )
@@ -16,11 +17,14 @@ from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.PVentPolar imp
 from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.PVentTrap import (
     PVentTrap,
 )
+from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentUD.PVentUD import (
+    PVentUD,
+)
 from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVent.Ui_WVent import Ui_WVent
 
 # List to convert index of combobox to slot type
-INIT_INDEX = [VentilationCirc, VentilationTrap, VentilationPolar]
-PAGE_INDEX = [PVentCirc, PVentTrap, PVentPolar]
+INIT_INDEX = [VentilationCirc, VentilationTrap, VentilationPolar, HoleUD]
+PAGE_INDEX = [PVentCirc, PVentTrap, PVentPolar, PVentUD]
 
 
 class WVent(Ui_WVent, QWidget):

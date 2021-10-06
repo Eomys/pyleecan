@@ -29,7 +29,7 @@ from ...GUI.Tools.MPLCanvas import MPLCanvas
 from ...GUI.Tools.FloatEdit import FloatEdit
 from ...GUI import gui_option
 from ...loggers import GUI_LOG_NAME
-from .Ui_DXF_Hole import Ui_DXF_Hole
+from .Ui_DXF_Surf import Ui_DXF_Surf
 from ...Functions.labels import HOLEM_LAB, HOLEV_LAB
 from ...Functions.init_fig import init_fig
 
@@ -47,16 +47,16 @@ COLOR_LIST = ["k", "r", "c"]
 Z_TOL = 1e-4  # Point comparison tolerance
 
 
-class DXF_Hole(Ui_DXF_Hole, QDialog):
-    """Dialog to create HoleUD objects from DXF files"""
+class DXF_Surf(Ui_DXF_Surf, QDialog):
+    """Dialog to create Vents or BoreUD objects from DXF files"""
 
-    def __init__(self, dxf_path=None, Zh=None, Lmag=None, lam=None):
+    def __init__(self, dxf_path=None, Zh=None, lam=None, is_vent=True):
         """Initialize the Dialog
 
         Parameters
         ----------
-        self : DXF_Hole
-            a DXF_Hole object
+        self : DXF_Surf
+            a DXF_Surf object
         dxf_path : str
             Path to a dxf file to read
         """
@@ -64,37 +64,16 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         QDialog.__init__(self)
         self.setupUi(self)
 
-        # Icon preparation
-        self.delete_icon = QPixmap(pixmap_dict["cross"])
-        self.delete_icon.scaled(ICON_SIZE, ICON_SIZE, Qt.KeepAspectRatio)
-        self.highlight_icon = QPixmap(pixmap_dict["search"])
-        self.highlight_icon.scaled(ICON_SIZE, ICON_SIZE, Qt.KeepAspectRatio)
-
         # Tutorial video link
         self.url = "https://pyleecan.org/videos.html#feature-tutorials"
-        self.b_tuto.setEnabled(True)
-
-        # Set units
-        self.lf_mag_len.unit = "m"
-        wid_list = [
-            self.unit_mag_len,
-        ]
-        for wid in wid_list:
-            wid.setText("[" + gui_option.unit.get_m_name() + "]")
+        self.b_tuto.setEnabled(False)
 
         # Initialize the graph
         self.init_graph()
 
-        # Not used yet
-        self.lf_axe_angle.hide()
-        self.in_axe_angle.hide()
-        self.unit_axe_angle.hide()
-
         # Set default values
         if Zh is not None:
             self.si_Zh.setValue(Zh)
-        if Lmag is not None:
-            self.lf_mag_len.setValue(Lmag)
         if lam is None:
             self.lam = lam
         else:
@@ -103,7 +82,6 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # Init properties
         self.line_list = list()  # List of line from DXF
         self.selected_list = list()  # List of currently selected lines
-        self.surf_list = list()  # List of defined surfaces
         self.Zcenter = 0  # For translate offset
 
         # Set DXF edit widget
@@ -124,14 +102,6 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.w_path_selector.extension = "DXF file (*.dxf)"
         self.w_path_selector.set_path_txt(self.dxf_path)
         self.w_path_selector.update()
-
-        # Set table column width
-        header = self.w_surface_list.horizontalHeader()
-        header.setSectionResizeMode(DEL_COL, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(HL_COL, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(TYPE_COL, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(REF_COL, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(OFF_COL, QHeaderView.ResizeToContents)
 
         # Connect signals to slot
         self.w_path_selector.pathChanged.connect(self.open_document)
@@ -157,8 +127,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
         Parameters
         ----------
-        self : DXF_Hole
-            a DXF_Hole object
+        self : DXF_Surf
+            a DXF_Surf object
         """
 
         # Check convertion
@@ -179,10 +149,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             # Convert DXF to pyleecan objects
             self.line_list = dxf_to_pyleecan_list(modelspace)
             # Display
-            # selected line: 0: unselected, 1:selected, 2: selected bottom magnet
+            # selected line: 0: unselected, 1:selected
             self.selected_list = [0 for line in self.line_list]
             self.surf_list = list()
-            self.w_surface_list.setRowCount(0)
             self.update_graph()
         except Exception as e:
             QMessageBox().critical(
@@ -196,8 +165,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
         Parameters
         ----------
-        self : DXF_Hole
-            a DXF_Hole object
+        self : DXF_Surf
+            a DXF_Surf object
         """
         # Init fig
         fig, axes = plt.subplots(tight_layout=False)
@@ -223,7 +192,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             if action.text() in icons_buttons and "mpl_" + action.text() in pixmap_dict:
                 action.setIcon(QIcon(pixmap_dict["mpl_" + action.text()]))
         # Change default file name
-        canvas.get_default_filename = "DXF_hole_visu.png"
+        canvas.get_default_filename = "DXF_Surf_visu.png"
         self.layout_plot.insertWidget(1, toolbar)
         self.layout_plot.insertWidget(2, canvas)
         self.canvas = canvas
@@ -259,22 +228,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                 # Select/unselect line
                 if self.selected_list[closest_id] == 0:  # Unselected to selected
                     self.selected_list[closest_id] = 1
-                elif (
-                    self.selected_list[closest_id] == 1
-                ):  # Selected to selected bottom mag
-                    if 2 in self.selected_list:
-                        current_bot_mag = self.selected_list.index(2)
-                        # Only one selected bottom mag line at the time
-                        point_list = array(
-                            self.line_list[current_bot_mag].discretize(20)
-                        )
-                        self.selected_list[current_bot_mag] = 1
-                        axes.plot(
-                            point_list.real, point_list.imag, COLOR_LIST[1], zorder=2
-                        )
-                    self.selected_list[closest_id] = 2
-                elif self.selected_list[closest_id] == 2:
-                    # selected bottom mag to Unselected
+                elif self.selected_list[closest_id] == 1:
+                    # selected to Unselected
                     self.selected_list[closest_id] = 0
                 # Change line color
                 point_list = array(self.line_list[closest_id].discretize(20))
@@ -283,10 +238,6 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                 self.axes.set_xlim(self.xlim)
                 self.axes.set_ylim(self.ylim)
                 self.canvas.draw()
-
-                # Check if the surface is complete
-                if self.check_selection():
-                    self.add_surface()
 
         def zoom(event):
             """Function to zoom/unzoom according the mouse wheel"""
@@ -337,8 +288,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
         Parameters
         ----------
-        self : DXF_Hole
-            a DXF_Hole object
+        self : DXF_Surf
+            a DXF_Surf object
         """
         fig, axes = self.fig, self.axes
         axes.clear()
@@ -360,8 +311,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
         Parameters
         ----------
-        self : DXF_Hole
-            a DXF_Hole object
+        self : DXF_Surf
+            a DXF_Surf object
 
         Returns
         -------
@@ -390,13 +341,13 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
         return True
 
-    def add_surface(self):
+    def get_surface(self):
         """Validate the selection and create a surface object
 
         Parameters
         ----------
-        self : DXF_Hole
-            a DXF_Hole object
+        self : DXF_Surf
+            a DXF_Surf object
         """
 
         # Get all the selected lines
@@ -419,84 +370,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                     break
             curve_list.append(line_list.pop(ii))
         # Create the Surface object
-        self.surf_list.append(SurfLine(line_list=curve_list))
-        self.surf_list[-1].comp_point_ref(is_set=True)
-
-        # Add a line in the Table
-        nrows = self.w_surface_list.rowCount()
-        self.w_surface_list.setRowCount(nrows + 1)
-        # Adding Surface Type combobox
-        combobox = QComboBox()
-        combobox.addItems(["Hole", "Magnet"])
-        self.w_surface_list.setCellWidget(
-            nrows,
-            TYPE_COL,
-            combobox,
-        )
-        if 2 in self.selected_list:
-            combobox.setCurrentIndex(1)  # Magnet
-        combobox.currentIndexChanged.connect(self.enable_magnetization)
-
-        # Adding Delete button
-        del_button = QPushButton("")
-        del_button.setIcon(QIcon(self.delete_icon))
-        del_button.pressed.connect(self.delete_surface)
-        self.w_surface_list.setCellWidget(
-            nrows,
-            DEL_COL,
-            del_button,
-        )
-
-        # Adding Highlight button
-        HL_button = QPushButton("")
-        HL_button.setIcon(QIcon(self.highlight_icon))
-        HL_button.pressed.connect(self.highlight_surface)
-        self.w_surface_list.setCellWidget(
-            nrows,
-            HL_COL,
-            HL_button,
-        )
-
-        # Add reference combobox
-        combobox = QComboBox()
-        combobox.addItems(index_list)
-        self.w_surface_list.setCellWidget(
-            nrows,
-            REF_COL,
-            combobox,
-        )
-        if 2 in self.selected_list:
-            combobox.setCurrentIndex(
-                index_list.index(str(self.selected_list.index(2)))
-            )  #
-        else:
-            combobox.setEnabled(False)
-
-        # Add Offset FloatEdit
-        lf_off = FloatEdit()
-        lf_off.validator().setBottom(-360)
-        lf_off.validator().setTop(360)
-        lf_off.setValue(0)
-        # lf_off.setText("0")
-        lf_off.setEnabled(2 in self.selected_list)
-        self.w_surface_list.setCellWidget(
-            nrows,
-            OFF_COL,
-            lf_off,
-        )
-
-        # Remove selection to start new one
-        self.remove_selection()
-
-    def enable_magnetization(self):
-        """Enable/Disable the combobox/float edit for magnetization according to type"""
-        for ii in range(self.w_surface_list.rowCount()):
-            if self.w_surface_list.cellWidget(ii, TYPE_COL).currentIndex() == 0:
-                self.w_surface_list.cellWidget(ii, REF_COL).setEnabled(False)
-                self.w_surface_list.cellWidget(ii, OFF_COL).setEnabled(False)
-            else:
-                self.w_surface_list.cellWidget(ii, REF_COL).setEnabled(True)
-                self.w_surface_list.cellWidget(ii, OFF_COL).setEnabled(True)
+        surf = SurfLine(line_list=curve_list)
+        surf.comp_point_ref(is_set=True)
+        return surf
 
     def remove_selection(self):
         # Remove selection
@@ -513,8 +389,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
         Parameters
         ----------
-        self : DXF_Hole
-            a DXF_Hole object
+        self : DXF_Surf
+            a DXF_Surf object
 
         Returns
         -------
@@ -524,105 +400,23 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
         if self.lf_scaling.value() == 0:  # Avoid error
             self.lf_scaling.setValue(1)
+        surf = self.get_surface()
+        surf.scale(self.lf_scaling.value())
+        surf.label = HOLEV_LAB
         hole = HoleUD(surf_list=[])
-        bottom_list = list()
-        offset_list = list()
-        # Set labels
-        Nmag = 0
-        for ii in range(self.w_surface_list.rowCount()):
-            hole.surf_list.append(self.surf_list[ii].copy())
-            hole.surf_list[ii].scale(self.lf_scaling.value())
-            if self.w_surface_list.cellWidget(ii, TYPE_COL).currentIndex() == 0:
-                hole.surf_list[ii].label = HOLEV_LAB
-            else:
-                hole.surf_list[ii].label = HOLEM_LAB
-                Nmag += 1
-            bottom_list.append(
-                self.line_list[
-                    int(self.w_surface_list.cellWidget(ii, REF_COL).currentText())
-                ]
-            )
-            offset_list.append(self.w_surface_list.cellWidget(ii, OFF_COL).value())
-        # Create magnet objects
-        hole.magnet_dict = dict()
-        for ii in range(Nmag):
-            hole.magnet_dict["magnet_" + str(ii)] = Magnet(type_magnetization=1)
-
-        # Sort the surfaces
-        angles = [np_angle(surf.point_ref) for surf in hole.surf_list]
-        idx = sorted(range(len(angles)), key=lambda k: angles[k])
-        surf_list_sorted = [hole.surf_list[ii] for ii in idx]
-        bottom_list_sorted = [bottom_list[ii] for ii in idx]
-        offset_list_sorted = [offset_list[ii] for ii in idx]
-        hole.surf_list = surf_list_sorted
 
         # Translate
         if self.Zcenter != 0:
-            for surf in hole.surf_list:
-                surf.translate(-self.Zcenter * self.lf_scaling.value())
+            surf.translate(-self.Zcenter * self.lf_scaling.value())
 
         # Rotation
-        Zref = sum([surf.point_ref for surf in hole.surf_list])
-        for surf in hole.surf_list:
-            surf.rotate(-1 * np_angle(Zref))
-
-        # Magnetization dict
-        mag_dict = dict()
-        Nmag = 0
-        for ii in range(len(hole.surf_list)):
-            if HOLEM_LAB in hole.surf_list[ii].label:
-                line = bottom_list_sorted[ii].copy()
-                line.rotate(-1 * np_angle(Zref))
-                mag_dict["magnet_" + str(Nmag)] = line.comp_normal()
-                mag_dict["magnet_" + str(Nmag)] += offset_list_sorted[ii] * pi / 180
-                Nmag += 1
-        hole.magnetization_dict_offset = mag_dict
+        surf.rotate(-1 * np_angle(surf.point_ref))
 
         # Set metadata
         hole.Zh = self.si_Zh.value()
-        for magnet in hole.magnet_dict.values():
-            magnet.Lmag = self.lf_mag_len.value()
 
-        # Remove all materials => To be set in GUI
+        # Remove materials => To be set in GUI
         hole.mat_void = None
-        for magnet in hole.magnet_dict.values():
-            magnet.mat_type = None
-
-        # Sort Hole then magnets
-        # (for plot when Magnets are inside Hole surface)
-        mag_list = list()
-        hole_list = list()
-        for surf in hole.surf_list:
-            if HOLEM_LAB in surf.label:
-                mag_list.append(surf)
-            else:
-                hole_list.append(surf)
-        hole.surf_list = hole_list + mag_list
-
-        # Correct hole ref_point (when Magnets are inside Hole surface)
-        for surf in hole.surf_list:
-            if HOLEV_LAB in surf.label:
-                line_list = surf.get_lines()
-                # Get middle list
-                middle_array = array([line.get_middle() for line in line_list])
-                # Get the extrema line on the top or bottom of the hole
-                if np_min(middle_array.imag) > 0 and np_max(middle_array.imag) > 0:
-                    start_idx = argmax(middle_array.imag)
-                else:
-                    start_idx = argmin(middle_array.imag)
-                # Get the two lines middle besides the extrema line middle
-                if start_idx == 0:
-                    ref_mid = [middle_array[-1], middle_array[0], middle_array[1]]
-                elif start_idx == len(line_list) - 1:
-                    ref_mid = [middle_array[-2], middle_array[-1], middle_array[0]]
-                else:
-                    ref_mid = [
-                        middle_array[start_idx - 1],
-                        middle_array[start_idx],
-                        middle_array[start_idx + 1],
-                    ]
-                # Barycenter of these middles as new reference
-                surf.point_ref = sum(ref_mid) / 3
 
         return hole
 
@@ -631,8 +425,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
         Parameters
         ----------
-        self : DXF_Hole
-            a DXF_Hole object
+        self : DXF_Surf
+            a DXF_Surf object
         """
         hole = self.get_hole()
         if self.lam is None:
@@ -640,62 +434,16 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         else:
             fig, (ax1, ax2) = plt.subplots(1, 2)
             hole.plot(fig=fig, ax=ax1, is_add_arrow=True, is_add_ref=False)
-            self.lam.hole = [hole]
+            self.lam.axial_vent = [hole]
             self.lam.plot(fig=fig, ax=ax2)
-
-    def delete_surface(self):
-        """Delete a selected surface
-
-        Parameters
-        ----------
-        self : DXF_Hole
-            a DXF_Hole object
-        """
-        nrow = self.w_surface_list.currentRow()
-        self.surf_list.pop(nrow)
-        self.w_surface_list.removeRow(nrow)
-
-    def highlight_surface(self):
-        """Highlight a surface to find it on the viewer
-
-        Parameters
-        ----------
-        self : DXF_Hole
-            a DXF_Hole object
-        """
-        self.selected_list = [0 for line in self.line_list]
-        surf = self.surf_list[self.w_surface_list.currentRow()]
-        # Find the index of the surface line in self.line_list
-        for surf_line in surf.line_list:
-            mid = surf_line.get_middle()
-            for ii, line in enumerate(self.line_list):
-                if abs(mid - line.get_middle()) < Z_TOL:
-                    self.selected_list[ii] = 1
-                    self.axes.text(
-                        mid.real,
-                        mid.imag,
-                        str(ii),
-                        # fontsize=fontsize,
-                    )
-        self.update_graph()
-        # Add Label
-        for ii in range(len(self.selected_list)):
-            if self.selected_list[ii] == 1:
-                Zmid = self.line_list[ii].get_middle()
-                self.axes.text(
-                    Zmid.real,
-                    Zmid.imag,
-                    str(ii),
-                    # fontsize=fontsize,
-                )
 
     def save(self):
         """Save the HoleUD object in a json file
 
         Parameters
         ----------
-        self : DXF_Hole
-            a DXF_Hole object
+        self : DXF_Surf
+            a DXF_Surf object
         """
 
         hole = self.get_hole()
