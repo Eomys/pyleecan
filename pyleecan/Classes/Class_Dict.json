@@ -8463,15 +8463,6 @@
         "path": "pyleecan/Generator/ClassesRef/Output/OutMag.csv",
         "properties": [
             {
-                "desc": "Magnetic time Data object",
-                "max": "",
-                "min": "",
-                "name": "Time",
-                "type": "SciDataTool.Classes.DataND.Data",
-                "unit": "s",
-                "value": "None"
-            },
-            {
                 "desc": "Dict containing axes data used for Magnetics",
                 "max": "",
                 "min": "",

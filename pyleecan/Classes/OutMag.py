@@ -107,7 +107,6 @@ class OutMag(FrozenClass):
 
     def __init__(
         self,
-        Time=None,
         axes_dict=None,
         B=None,
         Tem=None,
@@ -140,8 +139,6 @@ class OutMag(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Time" in list(init_dict.keys()):
-                Time = init_dict["Time"]
             if "axes_dict" in list(init_dict.keys()):
                 axes_dict = init_dict["axes_dict"]
             if "B" in list(init_dict.keys()):
@@ -172,7 +169,6 @@ class OutMag(FrozenClass):
                 Pem_av = init_dict["Pem_av"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.Time = Time
         self.axes_dict = axes_dict
         self.B = B
         self.Tem = Tem
@@ -199,7 +195,6 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = None " + linesep
         else:
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutMag_str += "Time = " + str(self.Time) + linesep + linesep
         OutMag_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
         OutMag_str += "B = " + str(self.B) + linesep + linesep
         OutMag_str += "Tem = " + str(self.Tem) + linesep + linesep
@@ -234,8 +229,6 @@ class OutMag(FrozenClass):
         """Compare two objects (skip parent)"""
 
         if type(other) != type(self):
-            return False
-        if other.Time != self.Time:
             return False
         if other.axes_dict != self.axes_dict:
             return False
@@ -275,12 +268,6 @@ class OutMag(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if (other.Time is None and self.Time is not None) or (
-            other.Time is not None and self.Time is None
-        ):
-            diff_list.append(name + ".Time None mismatch")
-        elif self.Time is not None:
-            diff_list.extend(self.Time.compare(other.Time, name=name + ".Time"))
         if (other.axes_dict is None and self.axes_dict is not None) or (
             other.axes_dict is not None and self.axes_dict is None
         ):
@@ -377,7 +364,6 @@ class OutMag(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.Time)
         if self.axes_dict is not None:
             for key, value in self.axes_dict.items():
                 S += getsizeof(value) + getsizeof(key)
@@ -406,10 +392,6 @@ class OutMag(FrozenClass):
         """
 
         OutMag_dict = dict()
-        if self.Time is None:
-            OutMag_dict["Time"] = None
-        else:
-            OutMag_dict["Time"] = self.Time.as_dict()
         if self.axes_dict is None:
             OutMag_dict["axes_dict"] = None
         else:
@@ -465,7 +447,6 @@ class OutMag(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Time = None
         self.axes_dict = None
         self.B = None
         self.Tem = None
@@ -482,33 +463,6 @@ class OutMag(FrozenClass):
             self.internal._set_None()
         self.Rag = None
         self.Pem_av = None
-
-    def _get_Time(self):
-        """getter of Time"""
-        return self._Time
-
-    def _set_Time(self, value):
-        """setter of Time"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Time"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Data()
-        check_var("Time", value, "Data")
-        self._Time = value
-
-    Time = property(
-        fget=_get_Time,
-        fset=_set_Time,
-        doc=u"""Magnetic time Data object
-
-        :Type: SciDataTool.Classes.DataND.Data
-        """,
-    )
 
     def _get_axes_dict(self):
         """getter of axes_dict"""

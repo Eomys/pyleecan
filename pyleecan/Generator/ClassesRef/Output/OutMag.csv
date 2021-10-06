@@ -1,10 +1,9 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Time,s,Magnetic time Data object,Nt_tot,SciDataTool.Classes.DataND.Data,None,,,,Output,,store,VERSION,1,Gather the magnetic module outputs
-axes_dict,,Dict containing axes data used for Magnetics,,{SciDataTool.Classes.DataND.Data},None,,,,,,clean,,,
-B,H,Airgap flux density VectorField object,"(Nt_tot,Na_tot)",SciDataTool.Classes.VectorField.VectorField,None,,,,,,comp_emf,,,
-Tem,N.m,Electromagnetic torque DataTime object,Nt_tot,SciDataTool.Classes.DataND.DataND,None,,,,,,get_demag,,,
-Tem_av,N.m,Average Electromagnetic torque,,float,None,,,,,,comp_power,,,
-Tem_rip_norm,-,Peak to Peak Torque ripple normalized according to average torque (None if average torque=0),,float,None,,,,,,,,,
+axes_dict,,Dict containing axes data used for Magnetics,,{SciDataTool.Classes.DataND.Data},None,,,,Output,,store,VERSION,1,Gather the magnetic module outputs
+B,H,Airgap flux density VectorField object,"(Nt_tot,Na_tot)",SciDataTool.Classes.VectorField.VectorField,None,,,,,,clean,,,
+Tem,N.m,Electromagnetic torque DataTime object,Nt_tot,SciDataTool.Classes.DataND.DataND,None,,,,,,comp_emf,,,
+Tem_av,N.m,Average Electromagnetic torque,,float,None,,,,,,get_demag,,,
+Tem_rip_norm,-,Peak to Peak Torque ripple normalized according to average torque (None if average torque=0),,float,None,,,,,,comp_power,,,
 Tem_rip_pp,N.m,Peak to Peak Torque ripple,,float,None,,,,,,,,,
 Phi_wind_stator,Wb,Stator winding flux DataTime object,"(Nt_tot, qs)",SciDataTool.Classes.DataTime.DataTime,None,,,,,,,,,
 Phi_wind,Wb,Dict of lamination winding fluxlinkage DataTime objects,"(Nt_tot, qs)",{SciDataTool.Classes.DataTime.DataTime},None,,,,,,,,,
