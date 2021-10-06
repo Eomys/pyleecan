@@ -86,16 +86,19 @@ def test_FEMM_skew():
 
         out_list.append(out_skew_kseg)
 
-        # Plot skew pattern result
-        SPMSM_skew_kseg.rotor.skew.plot(
-            # save_path=join(save_path, "test_skew_IPMSM_plot_rotor_skew_nseg" + str(k))
-        )
-
     data_list = [out.mag.Tem for out in out_list]
     legend_list = ["no skew"] + ["skew " + str(k) + " seg" for k in range(2, 6)]
     linestyles = ["solid", "solid", "dashed", "dashdot", "dotted"]
 
     for out_skew in out_list:
+
+        Nstep = out_skew.simu.machine.rotor.skew.Nstep
+
+        # Plot skew pattern result
+        out_skew.simu.machine.rotor.skew.plot(
+            save_path=join(save_path, "test_FEMM_skew_pattern_Nstep" + str(Nstep))
+        )
+
         out_skew.mag.Tem_slice.plot_2D_Data(
             "time->angle_rotor",
             "z[smallestpattern]",
@@ -104,9 +107,7 @@ def test_FEMM_skew():
             **dict_2D,
             save_path=join(
                 save_path,
-                "test_FEMM_skew_Tem_slice_Nstep"
-                + str(out_skew.simu.machine.rotor.skew.Nstep)
-                + ".png",
+                "test_FEMM_skew_Tem_slice_Nstep" + str(Nstep) + ".png",
             ),
             is_show_fig=is_show_fig,
         )
