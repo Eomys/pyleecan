@@ -13,7 +13,7 @@ from ....Functions.MeshSolution.build_solution_vector import build_solution_vect
 from SciDataTool import Data1D
 
 
-def comp_flux_airgap(self, output, axes_dict):
+def comp_flux_airgap(self, output, axes_dict, Is=None, Ir=None):
     """Build and solve FEMM model to calculate and store magnetic quantities
 
     Parameters
@@ -77,15 +77,6 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Interpolate current on magnetic model time axis
     # Get stator current from elec out
-    if self.is_mmfs:
-        Is = output.elec.comp_I_mag(time, is_stator=True)
-    else:
-        Is = None
-    # Get rotor current from elec out
-    if self.is_mmfr:
-        Ir = output.elec.comp_I_mag(time, is_stator=False)
-    else:
-        Ir = None
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM

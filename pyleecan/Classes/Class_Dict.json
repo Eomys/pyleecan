@@ -6266,6 +6266,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Magnetics"
+            },
+            {
+                "desc": "0 To compute only the airgap flux from fundamental current harmonics",
+                "max": "",
+                "min": "",
+                "name": "is_current_harm",
+                "type": "bool",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -7844,10 +7853,12 @@
         "desc": "Gather the electric module outputs",
         "is_internal": false,
         "methods": [
-            "get_Nr",
-            "get_Is",
-            "get_Us",
             "comp_I_mag",
+            "get_I_fund",
+            "get_I_harm",
+            "get_Is",
+            "get_Nr",
+            "get_Us",
             "store"
         ],
         "mother": "",
@@ -8451,11 +8462,11 @@
         "desc": "Gather the magnetic module outputs",
         "is_internal": false,
         "methods": [
-            "store",
             "clean",
             "comp_emf",
+            "comp_power",
             "get_demag",
-            "comp_power"
+            "store"
         ],
         "mother": "",
         "name": "OutMag",

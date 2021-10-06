@@ -75,6 +75,7 @@ class Magnetics(FrozenClass):
         angle_stator_shift=0,
         angle_rotor_shift=0,
         logger_name="Pyleecan.Magnetics",
+        is_current_harm=True,
         init_dict=None,
         init_str=None,
     ):
@@ -117,6 +118,8 @@ class Magnetics(FrozenClass):
                 angle_rotor_shift = init_dict["angle_rotor_shift"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "is_current_harm" in list(init_dict.keys()):
+                is_current_harm = init_dict["is_current_harm"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -131,6 +134,7 @@ class Magnetics(FrozenClass):
         self.angle_stator_shift = angle_stator_shift
         self.angle_rotor_shift = angle_rotor_shift
         self.logger_name = logger_name
+        self.is_current_harm = is_current_harm
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -157,6 +161,7 @@ class Magnetics(FrozenClass):
         )
         Magnetics_str += "angle_rotor_shift = " + str(self.angle_rotor_shift) + linesep
         Magnetics_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        Magnetics_str += "is_current_harm = " + str(self.is_current_harm) + linesep
         return Magnetics_str
 
     def __eq__(self, other):
@@ -187,6 +192,8 @@ class Magnetics(FrozenClass):
         if other.angle_rotor_shift != self.angle_rotor_shift:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.is_current_harm != self.is_current_harm:
             return False
         return True
 
@@ -222,6 +229,8 @@ class Magnetics(FrozenClass):
             diff_list.append(name + ".angle_rotor_shift")
         if other._logger_name != self._logger_name:
             diff_list.append(name + ".logger_name")
+        if other._is_current_harm != self._is_current_harm:
+            diff_list.append(name + ".is_current_harm")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -242,6 +251,7 @@ class Magnetics(FrozenClass):
         S += getsizeof(self.angle_stator_shift)
         S += getsizeof(self.angle_rotor_shift)
         S += getsizeof(self.logger_name)
+        S += getsizeof(self.is_current_harm)
         return S
 
     def as_dict(self, **kwargs):
@@ -264,6 +274,7 @@ class Magnetics(FrozenClass):
         Magnetics_dict["angle_stator_shift"] = self.angle_stator_shift
         Magnetics_dict["angle_rotor_shift"] = self.angle_rotor_shift
         Magnetics_dict["logger_name"] = self.logger_name
+        Magnetics_dict["is_current_harm"] = self.is_current_harm
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -283,6 +294,7 @@ class Magnetics(FrozenClass):
         self.angle_stator_shift = None
         self.angle_rotor_shift = None
         self.logger_name = None
+        self.is_current_harm = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -501,5 +513,23 @@ class Magnetics(FrozenClass):
         doc=u"""Name of the logger to use
 
         :Type: str
+        """,
+    )
+
+    def _get_is_current_harm(self):
+        """getter of is_current_harm"""
+        return self._is_current_harm
+
+    def _set_is_current_harm(self, value):
+        """setter of is_current_harm"""
+        check_var("is_current_harm", value, "bool")
+        self._is_current_harm = value
+
+    is_current_harm = property(
+        fget=_get_is_current_harm,
+        fset=_set_is_current_harm,
+        doc=u"""0 To compute only the airgap flux from fundamental current harmonics
+
+        :Type: bool
         """,
     )

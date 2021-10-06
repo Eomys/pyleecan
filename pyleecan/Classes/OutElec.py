@@ -18,9 +18,19 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.OutElec.get_Nr import get_Nr
+    from ..Methods.Output.OutElec.comp_I_mag import comp_I_mag
 except ImportError as error:
-    get_Nr = error
+    comp_I_mag = error
+
+try:
+    from ..Methods.Output.OutElec.get_I_fund import get_I_fund
+except ImportError as error:
+    get_I_fund = error
+
+try:
+    from ..Methods.Output.OutElec.get_I_harm import get_I_harm
+except ImportError as error:
+    get_I_harm = error
 
 try:
     from ..Methods.Output.OutElec.get_Is import get_Is
@@ -28,14 +38,14 @@ except ImportError as error:
     get_Is = error
 
 try:
+    from ..Methods.Output.OutElec.get_Nr import get_Nr
+except ImportError as error:
+    get_Nr = error
+
+try:
     from ..Methods.Output.OutElec.get_Us import get_Us
 except ImportError as error:
     get_Us = error
-
-try:
-    from ..Methods.Output.OutElec.comp_I_mag import comp_I_mag
-except ImportError as error:
-    comp_I_mag = error
 
 try:
     from ..Methods.Output.OutElec.store import store
@@ -54,33 +64,6 @@ class OutElec(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.OutElec.get_Nr
-    if isinstance(get_Nr, ImportError):
-        get_Nr = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutElec method get_Nr: " + str(get_Nr))
-            )
-        )
-    else:
-        get_Nr = get_Nr
-    # cf Methods.Output.OutElec.get_Is
-    if isinstance(get_Is, ImportError):
-        get_Is = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutElec method get_Is: " + str(get_Is))
-            )
-        )
-    else:
-        get_Is = get_Is
-    # cf Methods.Output.OutElec.get_Us
-    if isinstance(get_Us, ImportError):
-        get_Us = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutElec method get_Us: " + str(get_Us))
-            )
-        )
-    else:
-        get_Us = get_Us
     # cf Methods.Output.OutElec.comp_I_mag
     if isinstance(comp_I_mag, ImportError):
         comp_I_mag = property(
@@ -90,6 +73,51 @@ class OutElec(FrozenClass):
         )
     else:
         comp_I_mag = comp_I_mag
+    # cf Methods.Output.OutElec.get_I_fund
+    if isinstance(get_I_fund, ImportError):
+        get_I_fund = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_I_fund: " + str(get_I_fund))
+            )
+        )
+    else:
+        get_I_fund = get_I_fund
+    # cf Methods.Output.OutElec.get_I_harm
+    if isinstance(get_I_harm, ImportError):
+        get_I_harm = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_I_harm: " + str(get_I_harm))
+            )
+        )
+    else:
+        get_I_harm = get_I_harm
+    # cf Methods.Output.OutElec.get_Is
+    if isinstance(get_Is, ImportError):
+        get_Is = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_Is: " + str(get_Is))
+            )
+        )
+    else:
+        get_Is = get_Is
+    # cf Methods.Output.OutElec.get_Nr
+    if isinstance(get_Nr, ImportError):
+        get_Nr = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_Nr: " + str(get_Nr))
+            )
+        )
+    else:
+        get_Nr = get_Nr
+    # cf Methods.Output.OutElec.get_Us
+    if isinstance(get_Us, ImportError):
+        get_Us = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_Us: " + str(get_Us))
+            )
+        )
+    else:
+        get_Us = get_Us
     # cf Methods.Output.OutElec.store
     if isinstance(store, ImportError):
         store = property(
