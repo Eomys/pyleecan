@@ -43,7 +43,7 @@ def store(self, out_dict, axes_dict):
     # Tangential flux component
     if "Bt" in out_dict:
         self.B.components["tangential"] = DataTime(
-            name="Airgap tangential flux density",
+            name="Airgap circumferential flux density",
             unit="T",
             symbol="B_t",
             axes=axis_list,
@@ -94,7 +94,7 @@ def store(self, out_dict, axes_dict):
         machine = self.parent.simu.machine
         self.Phi_wind_slice = dict()
         self.Phi_wind = dict()
-        for key in out_dict["Phi_wind"].keys():
+        for key, phi_wind in out_dict["Phi_wind"].items():
             # Store stator winding flux
             lam = machine.get_lam_by_label(key)
             qs = lam.winding.qs
@@ -113,7 +113,7 @@ def store(self, out_dict, axes_dict):
                 unit="Wb",
                 symbol="Phi_{wind}",
                 axes=[Time, Phase, axes_dict["z"]],
-                values=out_dict["Phi_wind"][key],
+                values=phi_wind,
             )
             # Integrate over slice axis to get overall winding flux linkage (in Weber)
             self.Phi_wind[key] = self.Phi_wind_slice[key].get_data_along(

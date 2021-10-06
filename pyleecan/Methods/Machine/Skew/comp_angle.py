@@ -1,5 +1,4 @@
-from numpy import pi, array, linspace, mean, floor, flip, concatenate, arange
-from numpy.testing import assert_almost_equal
+from numpy import pi, array, linspace, mean as np_mean, floor, flip, concatenate, arange
 
 from ....Methods.Machine.Skew import TYPE_SKEW_LIST
 
@@ -110,7 +109,7 @@ def comp_angle(self):
                     raise Exception("Error in skew function definition")
 
             # Put average skew angle to zero
-            angle_list = list(array(angle_list) - mean(angle_list))
+            angle_list = list(array(angle_list) - np_mean(angle_list))
 
         elif type_skew == "user-defined":
 
