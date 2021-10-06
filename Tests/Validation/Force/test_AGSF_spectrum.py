@@ -181,9 +181,8 @@ def test_IPMSM_AGSF_spectrum_sym():
                 Prad_wr[ifrq, ir] * exp(1j * 2 * pi * frq * Xtime + 1j * r * Xangle)
             )
 
-    # assert_array_almost_equal(XP_rad1, Prad, decimal=3)
-    test = abs(XP_rad1 - Prad) / mean(XP_rad1)
-    assert_array_almost_equal(test, 0, decimal=1)  # Less than 10% error
+    test = abs(XP_rad1 - Prad) / XP_rad1
+    assert_array_almost_equal(test, 0, decimal=5)
 
     return out
 

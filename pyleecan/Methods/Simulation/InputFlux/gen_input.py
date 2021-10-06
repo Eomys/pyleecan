@@ -1,4 +1,4 @@
-from numpy import arange, pi, array
+from numpy import arange, array
 
 from SciDataTool import DataPattern
 
