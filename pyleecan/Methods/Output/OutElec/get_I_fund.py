@@ -52,7 +52,7 @@ def get_I_fund(self, Time=None):
         freqs = result["freqs"]
         ifund = where(freqs == felec)
         Is_fund = Is_val[:, ifund]
-        
+
         Freq = Data1D(
             name="freqs",
             unit="Hz",

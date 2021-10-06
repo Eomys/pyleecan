@@ -18,11 +18,6 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.OutMag.store import store
-except ImportError as error:
-    store = error
-
-try:
     from ..Methods.Output.OutMag.clean import clean
 except ImportError as error:
     clean = error
@@ -33,14 +28,19 @@ except ImportError as error:
     comp_emf = error
 
 try:
+    from ..Methods.Output.OutMag.comp_power import comp_power
+except ImportError as error:
+    comp_power = error
+
+try:
     from ..Methods.Output.OutMag.get_demag import get_demag
 except ImportError as error:
     get_demag = error
 
 try:
-    from ..Methods.Output.OutMag.comp_power import comp_power
+    from ..Methods.Output.OutMag.store import store
 except ImportError as error:
-    comp_power = error
+    store = error
 
 
 from ._check import InitUnKnowClassError
@@ -54,15 +54,6 @@ class OutMag(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.OutMag.store
-    if isinstance(store, ImportError):
-        store = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutMag method store: " + str(store))
-            )
-        )
-    else:
-        store = store
     # cf Methods.Output.OutMag.clean
     if isinstance(clean, ImportError):
         clean = property(
@@ -81,15 +72,6 @@ class OutMag(FrozenClass):
         )
     else:
         comp_emf = comp_emf
-    # cf Methods.Output.OutMag.get_demag
-    if isinstance(get_demag, ImportError):
-        get_demag = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutMag method get_demag: " + str(get_demag))
-            )
-        )
-    else:
-        get_demag = get_demag
     # cf Methods.Output.OutMag.comp_power
     if isinstance(comp_power, ImportError):
         comp_power = property(
@@ -99,6 +81,24 @@ class OutMag(FrozenClass):
         )
     else:
         comp_power = comp_power
+    # cf Methods.Output.OutMag.get_demag
+    if isinstance(get_demag, ImportError):
+        get_demag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMag method get_demag: " + str(get_demag))
+            )
+        )
+    else:
+        get_demag = get_demag
+    # cf Methods.Output.OutMag.store
+    if isinstance(store, ImportError):
+        store = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMag method store: " + str(store))
+            )
+        )
+    else:
+        store = store
     # save and copy methods are available in all object
     save = save
     copy = copy

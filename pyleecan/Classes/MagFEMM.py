@@ -161,6 +161,7 @@ class MagFEMM(Magnetics):
         angle_stator_shift=0,
         angle_rotor_shift=0,
         logger_name="Pyleecan.Magnetics",
+        is_current_harm=True,
         init_dict=None,
         init_str=None,
     ):
@@ -233,6 +234,8 @@ class MagFEMM(Magnetics):
                 angle_rotor_shift = init_dict["angle_rotor_shift"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "is_current_harm" in list(init_dict.keys()):
+                is_current_harm = init_dict["is_current_harm"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -263,6 +266,7 @@ class MagFEMM(Magnetics):
             angle_stator_shift=angle_stator_shift,
             angle_rotor_shift=angle_rotor_shift,
             logger_name=logger_name,
+            is_current_harm=is_current_harm,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties

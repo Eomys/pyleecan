@@ -21,14 +21,25 @@ def run(self):
     axes_dict = self.comp_axes(output)
 
     if self.is_mmfs:
-        Is = output.elec.get_Is(Time=axes_dict["time"], is_current_harm=self.is_current_harm)
-        Is_val = output.elec.comp_I_mag(Time=axes_dict["time"], is_stator=True, I_data=Is, is_periodicity_t=self.is_periodicity_t)
+        Is = output.elec.get_Is(
+            Time=axes_dict["time"], is_current_harm=self.is_current_harm
+        )
+        Is_val = output.elec.comp_I_mag(
+            Time=axes_dict["time"],
+            is_stator=True,
+            I_data=Is,
+            is_periodicity_t=self.is_periodicity_t,
+        )
     else:
         Is_val = None
     # Get rotor current from elec out
     if self.is_mmfr:
         # Ir = output.elec.get_Ir(Time=axes_dict["time"]) TODO
-        Ir_val =  output.elec.comp_I_mag(Time=axes_dict["time"], is_stator=False, is_periodicity_t=self.is_periodicity_t)
+        Ir_val = output.elec.comp_I_mag(
+            Time=axes_dict["time"],
+            is_stator=False,
+            is_periodicity_t=self.is_periodicity_t,
+        )
     else:
         Ir_val = None
 

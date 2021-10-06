@@ -1,11 +1,11 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-axes_dict,,Dict containing axes data used for Electrical,,{SciDataTool.Classes.DataND.Data},None,,,,Output,,get_Nr,VERSION,1,Gather the electric module outputs
-Is,A,Stator currents DataTime object,"(qs, Nt_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,get_Is,,,
-Ir,A,Rotor currents as a function of time (each column correspond to one phase),"(qs, Nt_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,get_Us,,,
-angle_rotor,rad,Rotor angular position as a function of time (if None computed according to Nr),Nt_tot,ndarray,None,,,,,,comp_I_mag,,,
-N0,rpm,Rotor speed,1,float,None,,,,,,store,,,
-angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.Electrical,,,,,,,,,
+axes_dict,,Dict containing axes data used for Electrical,,{SciDataTool.Classes.DataND.Data},None,,,,Output,,comp_I_mag,VERSION,1,Gather the electric module outputs
+Is,A,Stator currents DataTime object,"(qs, Nt_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,get_I_fund,,,
+Ir,A,Rotor currents as a function of time (each column correspond to one phase),"(qs, Nt_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,get_I_harm,,,
+angle_rotor,rad,Rotor angular position as a function of time (if None computed according to Nr),Nt_tot,ndarray,None,,,,,,get_Is,,,
+N0,rpm,Rotor speed,1,float,None,,,,,,get_Nr,,,
+angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,get_Us,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Electrical,,,,,,store,,,
 Tem_av_ref,N.m,Theorical Average Electromagnetic torque,,float,None,,,,,,,,,
 Id_ref,Arms,d-axis current rms value,1,float,None,,,,,,,,,
 Iq_ref,Arms,q-axis current rms value,1,float,None,,,,,,,,,
