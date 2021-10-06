@@ -155,6 +155,7 @@ load_switch = {
     "ParamExplorerSet": ParamExplorerSet,
     "PolarArc": PolarArc,
     "Post": Post,
+    "PostELUT": PostELUT,
     "PostFunction": PostFunction,
     "PostMethod": PostMethod,
     "PostPlot": PostPlot,

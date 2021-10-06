@@ -55,13 +55,6 @@ except ImportError as error:
     comp_Ldqh_from_Phidqh = error
 
 try:
-    from ..Methods.Simulation.ELUT_PMSM.comp_Phidqh_from_Phiwind import (
-        comp_Phidqh_from_Phiwind,
-    )
-except ImportError as error:
-    comp_Phidqh_from_Phiwind = error
-
-try:
     from ..Methods.Simulation.ELUT_PMSM.import_from_data import import_from_data
 except ImportError as error:
     import_from_data = error
@@ -145,18 +138,6 @@ class ELUT_PMSM(ELUT):
         )
     else:
         comp_Ldqh_from_Phidqh = comp_Ldqh_from_Phidqh
-    # cf Methods.Simulation.ELUT_PMSM.comp_Phidqh_from_Phiwind
-    if isinstance(comp_Phidqh_from_Phiwind, ImportError):
-        comp_Phidqh_from_Phiwind = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ELUT_PMSM method comp_Phidqh_from_Phiwind: "
-                    + str(comp_Phidqh_from_Phiwind)
-                )
-            )
-        )
-    else:
-        comp_Phidqh_from_Phiwind = comp_Phidqh_from_Phiwind
     # cf Methods.Simulation.ELUT_PMSM.import_from_data
     if isinstance(import_from_data, ImportError):
         import_from_data = property(
@@ -183,6 +164,7 @@ class ELUT_PMSM(ELUT):
         E0=None,
         E_dqh=None,
         orders_dqh=None,
+        bemf=None,
         R1=None,
         L1=None,
         T1_ref=20,
@@ -216,6 +198,8 @@ class ELUT_PMSM(ELUT):
                 E_dqh = init_dict["E_dqh"]
             if "orders_dqh" in list(init_dict.keys()):
                 orders_dqh = init_dict["orders_dqh"]
+            if "bemf" in list(init_dict.keys()):
+                bemf = init_dict["bemf"]
             if "R1" in list(init_dict.keys()):
                 R1 = init_dict["R1"]
             if "L1" in list(init_dict.keys()):
@@ -229,6 +213,7 @@ class ELUT_PMSM(ELUT):
         self.E0 = E0
         self.E_dqh = E_dqh
         self.orders_dqh = orders_dqh
+        self.bemf = bemf
         # Call ELUT init
         super(ELUT_PMSM, self).__init__(R1=R1, L1=L1, T1_ref=T1_ref)
         # The class is frozen (in ELUT init), for now it's impossible to
@@ -269,6 +254,7 @@ class ELUT_PMSM(ELUT):
             + linesep
             + linesep
         )
+        ELUT_PMSM_str += "bemf = " + str(self.bemf) + linesep + linesep
         return ELUT_PMSM_str
 
     def __eq__(self, other):
@@ -291,6 +277,8 @@ class ELUT_PMSM(ELUT):
         if not array_equal(other.E_dqh, self.E_dqh):
             return False
         if not array_equal(other.orders_dqh, self.orders_dqh):
+            return False
+        if other.bemf != self.bemf:
             return False
         return True
 
@@ -317,6 +305,12 @@ class ELUT_PMSM(ELUT):
             diff_list.append(name + ".E_dqh")
         if not array_equal(other.orders_dqh, self.orders_dqh):
             diff_list.append(name + ".orders_dqh")
+        if (other.bemf is None and self.bemf is not None) or (
+            other.bemf is not None and self.bemf is None
+        ):
+            diff_list.append(name + ".bemf None mismatch")
+        elif self.bemf is not None:
+            diff_list.extend(self.bemf.compare(other.bemf, name=name + ".bemf"))
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -336,6 +330,7 @@ class ELUT_PMSM(ELUT):
         S += getsizeof(self.E0)
         S += getsizeof(self.E_dqh)
         S += getsizeof(self.orders_dqh)
+        S += getsizeof(self.bemf)
         return S
 
     def as_dict(self, **kwargs):
@@ -362,6 +357,10 @@ class ELUT_PMSM(ELUT):
             ELUT_PMSM_dict["orders_dqh"] = None
         else:
             ELUT_PMSM_dict["orders_dqh"] = self.orders_dqh.tolist()
+        if self.bemf is None:
+            ELUT_PMSM_dict["bemf"] = None
+        else:
+            ELUT_PMSM_dict["bemf"] = self.bemf.as_dict()
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ELUT_PMSM_dict["__class__"] = "ELUT_PMSM"
@@ -376,6 +375,7 @@ class ELUT_PMSM(ELUT):
         self.E0 = None
         self.E_dqh = None
         self.orders_dqh = None
+        self.bemf = None
         # Set to None the properties inherited from ELUT
         super(ELUT_PMSM, self)._set_None()
 
@@ -507,5 +507,32 @@ class ELUT_PMSM(ELUT):
         doc=u"""Back harmonic orders (multiple of fundamental electrical frequency) corresponding to Edqh spectrum
 
         :Type: ndarray
+        """,
+    )
+
+    def _get_bemf(self):
+        """getter of bemf"""
+        return self._bemf
+
+    def _set_bemf(self, value):
+        """setter of bemf"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "bemf"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("bemf", value, "DataND")
+        self._bemf = value
+
+    bemf = property(
+        fget=_get_bemf,
+        fset=_set_bemf,
+        doc=u"""Back electromotive force DataTime object
+
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )

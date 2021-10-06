@@ -1,6 +1,6 @@
 from os.path import join
 
-from Tests import save_validation_path as save_path
+from Tests import save_validation_path as save_path, TEST_DATA_DIR
 from numpy import sqrt, pi
 from multiprocessing import cpu_count
 
@@ -12,6 +12,7 @@ from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.PostELUT import PostELUT
 from pyleecan.Classes.DataKeeper import DataKeeper
+from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
@@ -36,6 +37,11 @@ def test_ELUT_PMSM():
         N0=1000, Nt_tot=8 * 80, Na_tot=8 * 200, Id_ref=0, Iq_ref=0
     )
 
+    # Load OP_matrix
+    OP_matrix = ImportMatrixXls(
+        file_path=join(TEST_DATA_DIR, "OP_ELUT_PMSM.xlsx"), sheet="Feuil1"
+    ).get_data()
+
     # Set varspeed simulation
     simu.var_simu = VarLoadCurrent(type_OP_matrix=1, OP_matrix=OP_matrix)
 
@@ -59,8 +65,24 @@ def test_ELUT_PMSM():
         keeper="lambda out: out.mag.Tem",
     )
 
+    # Stator Winding Flux along dq Datakeeper
+    Phi_wind_dq_dk = DataKeeper(
+        name="Stator Winding Flux along dq axes",
+        symbol="Phi_{dq}",
+        unit="Wb",
+        keeper="lambda out: out.mag.comp_Phi_dq()",
+    )
+
+    # Electromotive force Datakeeper
+    EMF_dk = DataKeeper(
+        name="Stator Winding Electromotive Force",
+        symbol="EMF",
+        unit="V",
+        keeper="lambda out: out.mag.comp_emf()",
+    )
+
     # Store Datakeepers
-    simu.var_simu.datakeeper_list = [Phi_wind_stator_dk, Tem_dk]
+    simu.var_simu.datakeeper_list = [Phi_wind_stator_dk, Tem_dk, Phi_wind_dq_dk, EMF_dk]
 
     # Postprocessing
     simu.var_simu.postproc_list = [PostELUT()]
@@ -85,9 +107,9 @@ def test_ELUT_PMSM():
     # assert out.elec.Tem_av_ref == pytest.approx(81.81, rel=0.1)
     # assert out2.mag.Tem_av == pytest.approx(81.70, rel=0.1)
 
-    return out, out2
+    return out
 
 
 # To run it without pytest
 if __name__ == "__main__":
-    out, out2 = test_ELUT_PMSM()
+    out = test_ELUT_PMSM()

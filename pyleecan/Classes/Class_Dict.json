@@ -1313,7 +1313,6 @@
             "get_Lmd",
             "get_Lmq",
             "comp_Ldqh_from_Phidqh",
-            "comp_Phidqh_from_Phiwind",
             "import_from_data"
         ],
         "mother": "ELUT",
@@ -1374,6 +1373,15 @@
                 "type": "ndarray",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "Back electromotive force DataTime object",
+                "max": "",
+                "min": "",
+                "name": "bemf",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "V",
+                "value": "None"
             }
         ]
     },
@@ -8464,6 +8472,7 @@
         "methods": [
             "clean",
             "comp_emf",
+            "comp_Phi_dq",
             "comp_power",
             "get_demag",
             "store"
@@ -9107,6 +9116,7 @@
             }
         ],
         "daughters": [
+            "PostELUT",
             "PostFunction",
             "PostMethod",
             "PostPlot"
@@ -9119,6 +9129,53 @@
         "package": "Post",
         "path": "pyleecan/Generator/ClassesRef/Post/Post.csv",
         "properties": []
+    },
+    "PostELUT": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to generate an ELUT after the corresponding simulation",
+        "is_internal": false,
+        "methods": [
+            "run"
+        ],
+        "mother": "PostMethod",
+        "name": "PostELUT",
+        "package": "Post",
+        "path": "pyleecan/Generator/ClassesRef/Post/PostELUT.csv",
+        "properties": [
+            {
+                "desc": "Electrical Look-Up Table to enforce",
+                "max": "",
+                "min": "",
+                "name": "ELUT",
+                "type": "ELUT",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "True to save ELUT in PostELUT",
+                "max": "",
+                "min": "",
+                "name": "is_save_ELUT",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "True to store ELUT in PostELUT",
+                "max": "",
+                "min": "",
+                "name": "is_store_ELUT",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            }
+        ]
     },
     "PostFunction": {
         "constants": [
@@ -9155,6 +9212,7 @@
             }
         ],
         "daughters": [
+            "PostELUT",
             "PostPlot"
         ],
         "desc": "Abstract class for post-processing defined in the method run",
