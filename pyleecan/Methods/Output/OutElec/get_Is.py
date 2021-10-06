@@ -1,11 +1,3 @@
-from numpy import pi, array, transpose
-
-from SciDataTool import Data1D, DataTime
-
-from ....Functions.Electrical.coordinate_transformation import dq2n
-from ....Functions.Winding.gen_phase_list import gen_name
-
-
 def get_Is(self, Time=None, is_current_harm=False):
     """Return the stator current DataTime object
 
@@ -17,6 +9,9 @@ def get_Is(self, Time=None, is_current_harm=False):
     """
     # Calculate stator currents if Is is not in OutElec
     if self.Is is None or not is_current_harm:
-        self.Is = self.get_I_fund(Time=Time)
+        Is = self.get_I_fund(Time=Time)
+    
+    if self.Is is None:
+        self.Is = Is
 
     return self.Is
