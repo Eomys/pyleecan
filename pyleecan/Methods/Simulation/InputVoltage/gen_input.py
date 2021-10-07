@@ -88,11 +88,15 @@ def gen_input(self):
         outelec.Tem_av_ref = self.Tem_av_ref
 
     # Calculate time, angle and phase axes and store them in OutGeo
-    outgeo.axes_dict = self.comp_axes(axes_list=["time", "angle", "phase"])
+    outgeo.axes_dict = self.comp_axes(
+        axes_list=["time", "angle", "phase"],
+        is_periodicity_a=False,
+        is_periodicity_t=False,
+    )
 
     # Create time axis for electrical model including periodicity
     outelec.axes_dict = self.comp_axes(
-        axes_list=["time"], axes_dict=outgeo.axes_dict, is_periodicity_t=True
+        axes_list=["time"], axes_dict=outgeo.axes_dict, is_periodicity_t=False
     )
 
     # Generate Us
