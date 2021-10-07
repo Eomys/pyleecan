@@ -87,20 +87,17 @@ def gen_input(self):
     if self.Tem_av_ref is not None:
         outelec.Tem_av_ref = self.Tem_av_ref
 
-    # Set time and angle full axes in geometry output
-    axes_dict = self.comp_axes()
-    # Store in axes_dict
-    outgeo.axes_dict = axes_dict
-
-    # Create time axis in electrical output without periodicity
-    # TODO: account for pole periodicity
-    Time_elec, _ = axes_dict["time"].get_axis_periodic(
-        Nper=1,  # int(2 * simu.machine.get_pole_pair_number()),
-        is_aper=False,  # True,
-        is_include_per=False,  # True,
+    # Calculate time, angle and phase axes and store them in OutGeo
+    outgeo.axes_dict = self.comp_axes(
+        axes_list=["time", "angle", "phase"],
+        is_periodicity_a=False,
+        is_periodicity_t=False,
     )
-    # Store in axes_dict
-    outelec.axes_dict = {"time": Time_elec}
+
+    # Create time axis for electrical model including periodicity
+    outelec.axes_dict = self.comp_axes(
+        axes_list=["time"], axes_dict=outgeo.axes_dict, is_periodicity_t=False
+    )
 
     # Generate Us
     # if qs > 0:

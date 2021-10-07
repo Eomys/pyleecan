@@ -28,6 +28,11 @@ except ImportError as error:
     comp_emf = error
 
 try:
+    from ..Methods.Output.OutMag.comp_Phi_dq import comp_Phi_dq
+except ImportError as error:
+    comp_Phi_dq = error
+
+try:
     from ..Methods.Output.OutMag.comp_power import comp_power
 except ImportError as error:
     comp_power = error
@@ -72,6 +77,15 @@ class OutMag(FrozenClass):
         )
     else:
         comp_emf = comp_emf
+    # cf Methods.Output.OutMag.comp_Phi_dq
+    if isinstance(comp_Phi_dq, ImportError):
+        comp_Phi_dq = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutMag method comp_Phi_dq: " + str(comp_Phi_dq))
+            )
+        )
+    else:
+        comp_Phi_dq = comp_Phi_dq
     # cf Methods.Output.OutMag.comp_power
     if isinstance(comp_power, ImportError):
         comp_power = property(

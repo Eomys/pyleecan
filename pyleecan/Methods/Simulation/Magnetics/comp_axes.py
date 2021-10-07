@@ -18,64 +18,53 @@ def comp_axes(self, output):
     # Get axis dict from OutGeo
     axes_dict_geo = output.geo.axes_dict
 
-    # Calculate axes for Magnetics module calculation
-    # Get time and space (anti-)periodicities of the machine
-    (
-        per_a,
-        is_antiper_a,
-        per_t,
-        is_antiper_t,
-    ) = output.get_machine_periodicity()
-
-    # Compute Time axis based on the one stored in OutElec
-    Time, is_periodicity_t = axes_dict_geo["time"].get_axis_periodic(
-        Nper=per_t,
-        is_aper=is_antiper_t,
-        is_include_per=self.is_periodicity_t,
-        is_remove_aper=False,
+    # Add periodicities to time and angle axes
+    axes_dict = self.parent.input.comp_axes(
+        axes_list=["time", "angle"],
+        axes_dict=axes_dict_geo,
+        is_periodicity_a=self.is_periodicity_a,
+        is_periodicity_t=self.is_periodicity_t,
     )
 
-    if is_periodicity_t != self.is_periodicity_t:
+    # Check Time periodicities regarding Magnetics model input
+    per_t0, is_antiper_t0 = axes_dict["time"].get_periodicity()
+    is_periodicity_t0 = per_t0 > 1 or is_antiper_t0
+    if is_periodicity_t0 != self.is_periodicity_t:
         # Remove time periodicity in Magnetic model
         self.is_periodicity_t = False
-        Nt_tot = Time.get_length(is_oneperiod=False)
+        Nt_tot = axes_dict["time"].get_length(is_oneperiod=False)
         self.get_logger().warning(
-            "WARNING: In Magnetic model, Nt_tot="
+            "In Magnetic model, Nt_tot="
             + str(Nt_tot)
             + " is not divisible by the machine time periodicity ("
-            + str(per_t)
+            + str(output.geo.per_t_S)
             + "). Time periodicity removed"
         )
 
-    # Compute Angle axis based on the one stored in OutElec
-    Angle, is_periodicity_a = axes_dict_geo["angle"].get_axis_periodic(
-        Nper=per_a,
-        is_aper=is_antiper_a,
-        is_include_per=self.is_periodicity_a,
-        is_remove_aper=False,
-    )
-
-    if is_periodicity_a != self.is_periodicity_a:
+    # Check Angle periodicities regarding Magnetics model input
+    per_a0, is_antiper_a0 = axes_dict["angle"].get_periodicity()
+    is_periodicity_a0 = per_a0 > 1 or is_antiper_a0
+    if is_periodicity_a0 != self.is_periodicity_a:
         # Remove time periodicity in Magnetic model
         self.is_periodicity_a = False
-        Na_tot = Angle.get_length(is_oneperiod=False)
+        Na_tot = axes_dict["angle"].get_length(is_oneperiod=False)
         self.get_logger().warning(
-            "WARNING: In Magnetic model, Na_tot="
+            "In Magnetic model, Na_tot="
             + str(Na_tot)
             + " is not divisible by the machine angular periodicity ("
-            + str(per_a)
+            + str(output.geo.per_a)
             + "). Angular periodicity removed"
         )
 
     # Add Time axis on which to calculate torque
     # Copy from standard Time axis
-    Time_Tem = Time.copy()
+    Time_Tem = axes_dict["time"].copy()
 
     # Remove anti-periodicity if any
     if "antiperiod" in Time_Tem.symmetries:
         Time_Tem.symmetries["period"] = Time_Tem.symmetries.pop("antiperiod")
 
     # Store in axis dict
-    axes_dict = {"time": Time, "angle": Angle, "time_Tem": Time_Tem}
+    axes_dict["time_Tem"] = Time_Tem
 
     return axes_dict
