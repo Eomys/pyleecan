@@ -154,19 +154,31 @@ class PostELUT(PostMethod):
         S += getsizeof(self.is_store_ELUT)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from PostMethod
-        PostELUT_dict = super(PostELUT, self).as_dict(**kwargs)
+        PostELUT_dict = super(PostELUT, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.ELUT is None:
             PostELUT_dict["ELUT"] = None
         else:
-            PostELUT_dict["ELUT"] = self.ELUT.as_dict(**kwargs)
+            PostELUT_dict["ELUT"] = self.ELUT.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         PostELUT_dict["is_save_ELUT"] = self.is_save_ELUT
         PostELUT_dict["is_store_ELUT"] = self.is_store_ELUT
         # The class name is added to the dict for deserialisation purpose

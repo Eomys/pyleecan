@@ -51,6 +51,7 @@ except ImportError as error:
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
 from .OutInternal import OutInternal
+from .SliceModel import SliceModel
 
 
 class OutMag(FrozenClass):
@@ -135,6 +136,9 @@ class OutMag(FrozenClass):
         internal=None,
         Rag=None,
         Pem_av=None,
+        Slice=None,
+        Tem_slice=None,
+        Phi_wind_slice=None,
         init_dict=None,
         init_str=None,
     ):
@@ -181,6 +185,12 @@ class OutMag(FrozenClass):
                 Rag = init_dict["Rag"]
             if "Pem_av" in list(init_dict.keys()):
                 Pem_av = init_dict["Pem_av"]
+            if "Slice" in list(init_dict.keys()):
+                Slice = init_dict["Slice"]
+            if "Tem_slice" in list(init_dict.keys()):
+                Tem_slice = init_dict["Tem_slice"]
+            if "Phi_wind_slice" in list(init_dict.keys()):
+                Phi_wind_slice = init_dict["Phi_wind_slice"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -197,6 +207,9 @@ class OutMag(FrozenClass):
         self.internal = internal
         self.Rag = Rag
         self.Pem_av = Pem_av
+        self.Slice = Slice
+        self.Tem_slice = Tem_slice
+        self.Phi_wind_slice = Phi_wind_slice
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -237,6 +250,13 @@ class OutMag(FrozenClass):
             OutMag_str += "internal = None" + linesep + linesep
         OutMag_str += "Rag = " + str(self.Rag) + linesep
         OutMag_str += "Pem_av = " + str(self.Pem_av) + linesep
+        if self.Slice is not None:
+            tmp = self.Slice.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OutMag_str += "Slice = " + tmp
+        else:
+            OutMag_str += "Slice = None" + linesep + linesep
+        OutMag_str += "Tem_slice = " + str(self.Tem_slice) + linesep + linesep
+        OutMag_str += "Phi_wind_slice = " + str(self.Phi_wind_slice) + linesep + linesep
         return OutMag_str
 
     def __eq__(self, other):
@@ -271,6 +291,12 @@ class OutMag(FrozenClass):
         if other.Rag != self.Rag:
             return False
         if other.Pem_av != self.Pem_av:
+            return False
+        if other.Slice != self.Slice:
+            return False
+        if other.Tem_slice != self.Tem_slice:
+            return False
+        if other.Phi_wind_slice != self.Phi_wind_slice:
             return False
         return True
 
@@ -370,6 +396,35 @@ class OutMag(FrozenClass):
             diff_list.append(name + ".Rag")
         if other._Pem_av != self._Pem_av:
             diff_list.append(name + ".Pem_av")
+        if (other.Slice is None and self.Slice is not None) or (
+            other.Slice is not None and self.Slice is None
+        ):
+            diff_list.append(name + ".Slice None mismatch")
+        elif self.Slice is not None:
+            diff_list.extend(self.Slice.compare(other.Slice, name=name + ".Slice"))
+        if (other.Tem_slice is None and self.Tem_slice is not None) or (
+            other.Tem_slice is not None and self.Tem_slice is None
+        ):
+            diff_list.append(name + ".Tem_slice None mismatch")
+        elif self.Tem_slice is not None:
+            diff_list.extend(
+                self.Tem_slice.compare(other.Tem_slice, name=name + ".Tem_slice")
+            )
+        if (other.Phi_wind_slice is None and self.Phi_wind_slice is not None) or (
+            other.Phi_wind_slice is not None and self.Phi_wind_slice is None
+        ):
+            diff_list.append(name + ".Phi_wind_slice None mismatch")
+        elif self.Phi_wind_slice is None:
+            pass
+        elif len(other.Phi_wind_slice) != len(self.Phi_wind_slice):
+            diff_list.append("len(" + name + "Phi_wind_slice)")
+        else:
+            for key in self.Phi_wind_slice:
+                diff_list.extend(
+                    self.Phi_wind_slice[key].compare(
+                        other.Phi_wind_slice[key], name=name + ".Phi_wind_slice"
+                    )
+                )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -396,11 +451,20 @@ class OutMag(FrozenClass):
         S += getsizeof(self.internal)
         S += getsizeof(self.Rag)
         S += getsizeof(self.Pem_av)
+        S += getsizeof(self.Slice)
+        S += getsizeof(self.Tem_slice)
+        if self.Phi_wind_slice is not None:
+            for key, value in self.Phi_wind_slice.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -412,48 +476,109 @@ class OutMag(FrozenClass):
             OutMag_dict["axes_dict"] = dict()
             for key, obj in self.axes_dict.items():
                 if obj is not None:
-                    OutMag_dict["axes_dict"][key] = obj.as_dict()
+                    OutMag_dict["axes_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     OutMag_dict["axes_dict"][key] = None
         if self.B is None:
             OutMag_dict["B"] = None
         else:
-            OutMag_dict["B"] = self.B.as_dict()
+            OutMag_dict["B"] = self.B.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Tem is None:
             OutMag_dict["Tem"] = None
         else:
-            OutMag_dict["Tem"] = self.Tem.as_dict()
+            OutMag_dict["Tem"] = self.Tem.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutMag_dict["Tem_av"] = self.Tem_av
         OutMag_dict["Tem_rip_norm"] = self.Tem_rip_norm
         OutMag_dict["Tem_rip_pp"] = self.Tem_rip_pp
         if self.Phi_wind_stator is None:
             OutMag_dict["Phi_wind_stator"] = None
         else:
-            OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.as_dict()
+            OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Phi_wind is None:
             OutMag_dict["Phi_wind"] = None
         else:
             OutMag_dict["Phi_wind"] = dict()
             for key, obj in self.Phi_wind.items():
                 if obj is not None:
-                    OutMag_dict["Phi_wind"][key] = obj.as_dict()
+                    OutMag_dict["Phi_wind"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     OutMag_dict["Phi_wind"][key] = None
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:
-            OutMag_dict["emf"] = self.emf.as_dict()
+            OutMag_dict["emf"] = self.emf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.meshsolution is None:
             OutMag_dict["meshsolution"] = None
         else:
-            OutMag_dict["meshsolution"] = self.meshsolution.as_dict(**kwargs)
+            OutMag_dict["meshsolution"] = self.meshsolution.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutMag_dict["logger_name"] = self.logger_name
         if self.internal is None:
             OutMag_dict["internal"] = None
         else:
-            OutMag_dict["internal"] = self.internal.as_dict(**kwargs)
+            OutMag_dict["internal"] = self.internal.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutMag_dict["Rag"] = self.Rag
         OutMag_dict["Pem_av"] = self.Pem_av
+        if self.Slice is None:
+            OutMag_dict["Slice"] = None
+        else:
+            OutMag_dict["Slice"] = self.Slice.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        if self.Tem_slice is None:
+            OutMag_dict["Tem_slice"] = None
+        else:
+            OutMag_dict["Tem_slice"] = self.Tem_slice.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        if self.Phi_wind_slice is None:
+            OutMag_dict["Phi_wind_slice"] = None
+        else:
+            OutMag_dict["Phi_wind_slice"] = dict()
+            for key, obj in self.Phi_wind_slice.items():
+                if obj is not None:
+                    OutMag_dict["Phi_wind_slice"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
+                else:
+                    OutMag_dict["Phi_wind_slice"][key] = None
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -477,6 +602,10 @@ class OutMag(FrozenClass):
             self.internal._set_None()
         self.Rag = None
         self.Pem_av = None
+        if self.Slice is not None:
+            self.Slice._set_None()
+        self.Tem_slice = None
+        self.Phi_wind_slice = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -629,8 +758,8 @@ class OutMag(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            value = DataTime()
-        check_var("Phi_wind_stator", value, "DataTime")
+            value = DataND()
+        check_var("Phi_wind_stator", value, "DataND")
         self._Phi_wind_stator = value
 
     Phi_wind_stator = property(
@@ -638,7 +767,7 @@ class OutMag(FrozenClass):
         fset=_set_Phi_wind_stator,
         doc=u"""Stator winding flux DataTime object
 
-        :Type: SciDataTool.Classes.DataTime.DataTime
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )
 
@@ -661,7 +790,7 @@ class OutMag(FrozenClass):
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
-        check_var("Phi_wind", value, "{DataTime}")
+        check_var("Phi_wind", value, "{DataND}")
         self._Phi_wind = value
 
     Phi_wind = property(
@@ -669,7 +798,7 @@ class OutMag(FrozenClass):
         fset=_set_Phi_wind,
         doc=u"""Dict of lamination winding fluxlinkage DataTime objects
 
-        :Type: {SciDataTool.Classes.DataTime.DataTime}
+        :Type: {SciDataTool.Classes.DataND.DataND}
         """,
     )
 
@@ -687,8 +816,8 @@ class OutMag(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            value = DataTime()
-        check_var("emf", value, "DataTime")
+            value = DataND()
+        check_var("emf", value, "DataND")
         self._emf = value
 
     emf = property(
@@ -696,7 +825,7 @@ class OutMag(FrozenClass):
         fset=_set_emf,
         doc=u"""Electromotive force DataTime object
 
-        :Type: SciDataTool.Classes.DataTime.DataTime
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )
 
@@ -811,5 +940,93 @@ class OutMag(FrozenClass):
         doc=u"""Average Electromagnetic power
 
         :Type: float
+        """,
+    )
+
+    def _get_Slice(self):
+        """getter of Slice"""
+        return self._Slice
+
+    def _set_Slice(self, value):
+        """setter of Slice"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "Slice"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = SliceModel()
+        check_var("Slice", value, "SliceModel")
+        self._Slice = value
+
+        if self._Slice is not None:
+            self._Slice.parent = self
+
+    Slice = property(
+        fget=_get_Slice,
+        fset=_set_Slice,
+        doc=u"""Slice model to account for skew
+
+        :Type: SliceModel
+        """,
+    )
+
+    def _get_Tem_slice(self):
+        """getter of Tem_slice"""
+        return self._Tem_slice
+
+    def _set_Tem_slice(self, value):
+        """setter of Tem_slice"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Tem_slice"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("Tem_slice", value, "DataND")
+        self._Tem_slice = value
+
+    Tem_slice = property(
+        fget=_get_Tem_slice,
+        fset=_set_Tem_slice,
+        doc=u"""Electromagnetic torque DataTime object including torque per slice
+
+        :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
+
+    def _get_Phi_wind_slice(self):
+        """getter of Phi_wind_slice"""
+        if self._Phi_wind_slice is not None:
+            for key, obj in self._Phi_wind_slice.items():
+                if obj is not None:
+                    obj.parent = self
+        return self._Phi_wind_slice
+
+    def _set_Phi_wind_slice(self, value):
+        """setter of Phi_wind_slice"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "Phi_wind_slice"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("Phi_wind_slice", value, "{DataND}")
+        self._Phi_wind_slice = value
+
+    Phi_wind_slice = property(
+        fget=_get_Phi_wind_slice,
+        fset=_set_Phi_wind_slice,
+        doc=u"""Dict of lamination winding fluxlinkage DataTime objects per slice
+
+        :Type: {SciDataTool.Classes.DataND.DataND}
         """,
     )

@@ -295,15 +295,23 @@ class InputFlux(InputCurrent):
         S += getsizeof(self.B_enforced)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from InputCurrent
-        InputFlux_dict = super(InputFlux, self).as_dict(**kwargs)
+        InputFlux_dict = super(InputFlux, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         InputFlux_dict["per_a"] = self.per_a
         InputFlux_dict["per_t"] = self.per_t
         InputFlux_dict["is_antiper_a"] = self.is_antiper_a
@@ -315,11 +323,24 @@ class InputFlux(InputCurrent):
         if self.slice is None:
             InputFlux_dict["slice"] = None
         else:
-            InputFlux_dict["slice"] = self.slice.tolist()
+            if type_handle_ndarray == 0:
+                InputFlux_dict["slice"] = self.slice.tolist()
+            elif type_handle_ndarray == 1:
+                InputFlux_dict["slice"] = self.slice.copy()
+            elif type_handle_ndarray == 2:
+                InputFlux_dict["slice"] = self.slice
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.B_enforced is None:
             InputFlux_dict["B_enforced"] = None
         else:
-            InputFlux_dict["B_enforced"] = self.B_enforced.as_dict()
+            InputFlux_dict["B_enforced"] = self.B_enforced.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputFlux_dict["__class__"] = "InputFlux"

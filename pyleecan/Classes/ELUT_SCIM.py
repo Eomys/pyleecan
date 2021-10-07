@@ -246,23 +246,49 @@ class ELUT_SCIM(ELUT):
         S += getsizeof(self.L2)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ELUT
-        ELUT_SCIM_dict = super(ELUT_SCIM, self).as_dict(**kwargs)
+        ELUT_SCIM_dict = super(ELUT_SCIM, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.Phi_m is None:
             ELUT_SCIM_dict["Phi_m"] = None
         else:
-            ELUT_SCIM_dict["Phi_m"] = self.Phi_m.tolist()
+            if type_handle_ndarray == 0:
+                ELUT_SCIM_dict["Phi_m"] = self.Phi_m.tolist()
+            elif type_handle_ndarray == 1:
+                ELUT_SCIM_dict["Phi_m"] = self.Phi_m.copy()
+            elif type_handle_ndarray == 2:
+                ELUT_SCIM_dict["Phi_m"] = self.Phi_m
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.I_m is None:
             ELUT_SCIM_dict["I_m"] = None
         else:
-            ELUT_SCIM_dict["I_m"] = self.I_m.tolist()
+            if type_handle_ndarray == 0:
+                ELUT_SCIM_dict["I_m"] = self.I_m.tolist()
+            elif type_handle_ndarray == 1:
+                ELUT_SCIM_dict["I_m"] = self.I_m.copy()
+            elif type_handle_ndarray == 2:
+                ELUT_SCIM_dict["I_m"] = self.I_m
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         ELUT_SCIM_dict["T2_ref"] = self.T2_ref
         ELUT_SCIM_dict["R2"] = self.R2
         ELUT_SCIM_dict["L2"] = self.L2

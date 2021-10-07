@@ -164,9 +164,13 @@ class OutStruct(FrozenClass):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -178,14 +182,22 @@ class OutStruct(FrozenClass):
             OutStruct_dict["axes_dict"] = dict()
             for key, obj in self.axes_dict.items():
                 if obj is not None:
-                    OutStruct_dict["axes_dict"][key] = obj.as_dict()
+                    OutStruct_dict["axes_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     OutStruct_dict["axes_dict"][key] = None
         OutStruct_dict["logger_name"] = self.logger_name
         if self.meshsolution is None:
             OutStruct_dict["meshsolution"] = None
         else:
-            OutStruct_dict["meshsolution"] = self.meshsolution.as_dict(**kwargs)
+            OutStruct_dict["meshsolution"] = self.meshsolution.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutStruct_dict["FEA_dict"] = (
             self.FEA_dict.copy() if self.FEA_dict is not None else None
         )

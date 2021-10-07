@@ -415,9 +415,13 @@ class OutElec(FrozenClass):
         S += getsizeof(self.U0_ref)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -429,21 +433,42 @@ class OutElec(FrozenClass):
             OutElec_dict["axes_dict"] = dict()
             for key, obj in self.axes_dict.items():
                 if obj is not None:
-                    OutElec_dict["axes_dict"][key] = obj.as_dict()
+                    OutElec_dict["axes_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     OutElec_dict["axes_dict"][key] = None
         if self.Is is None:
             OutElec_dict["Is"] = None
         else:
-            OutElec_dict["Is"] = self.Is.as_dict()
+            OutElec_dict["Is"] = self.Is.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Ir is None:
             OutElec_dict["Ir"] = None
         else:
-            OutElec_dict["Ir"] = self.Ir.as_dict()
+            OutElec_dict["Ir"] = self.Ir.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.angle_rotor is None:
             OutElec_dict["angle_rotor"] = None
         else:
-            OutElec_dict["angle_rotor"] = self.angle_rotor.tolist()
+            if type_handle_ndarray == 0:
+                OutElec_dict["angle_rotor"] = self.angle_rotor.tolist()
+            elif type_handle_ndarray == 1:
+                OutElec_dict["angle_rotor"] = self.angle_rotor.copy()
+            elif type_handle_ndarray == 2:
+                OutElec_dict["angle_rotor"] = self.angle_rotor
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         OutElec_dict["N0"] = self.N0
         OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         OutElec_dict["logger_name"] = self.logger_name
@@ -458,11 +483,19 @@ class OutElec(FrozenClass):
         if self.Us is None:
             OutElec_dict["Us"] = None
         else:
-            OutElec_dict["Us"] = self.Us.as_dict()
+            OutElec_dict["Us"] = self.Us.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.internal is None:
             OutElec_dict["internal"] = None
         else:
-            OutElec_dict["internal"] = self.internal.as_dict(**kwargs)
+            OutElec_dict["internal"] = self.internal.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutElec_dict["slip_ref"] = self.slip_ref
         OutElec_dict["U0_ref"] = self.U0_ref
         # The class name is added to the dict for deserialisation purpose
