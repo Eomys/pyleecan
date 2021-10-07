@@ -66,8 +66,8 @@ def get_fund_harm(self, data):
                     fund_harm[axe_fft] = coeff
 
                     # Add also normalizations in dict
-                    for key, val in axe.normalizations.items():
-                        fund_harm[key] = fund_harm[axe_fft] / val
+                    for key, norm in axe.normalizations.items():
+                        fund_harm[key] = norm.normalize(fund_harm[axe_fft])
 
     # Cannot calculate dict of fundamental harmonic values
     else:

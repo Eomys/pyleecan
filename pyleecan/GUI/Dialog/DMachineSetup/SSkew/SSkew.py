@@ -387,7 +387,7 @@ class SSkew(Ui_SSkew, QWidget):
         self.skew_object = Skew(
             type_skew=self.type_skew,
             is_step=is_step,
-            angle_overall=self.lf_angle.value(),
+            angle_overall=self.lf_angle.value()*pi/180,
             rate=rate,
             Nstep=Nslices,
             angle_list=angle_list,
