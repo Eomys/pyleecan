@@ -87,6 +87,7 @@ def solve_FEMM(
     """
 
     logger = self.get_logger()
+    is_sliding_band = self.is_sliding_band
 
     if filename is not None:
         # Open FEMM instance if filename is not None (parallel case)
@@ -106,7 +107,7 @@ def solve_FEMM(
         # FEMM instance and file is already open, get filename from output
         filename = basename(self.get_path_save_fem(output))
 
-    if self.is_set_previous:
+    if is_sliding_band and self.is_set_previous:
         # Check result .ans file existence and delete it if it exists
         ans_file = (
             (splitext(filename)[0] + ".ans").replace("\\", "/").replace("//", "/")
@@ -170,7 +171,7 @@ def solve_FEMM(
         )
 
         # Check if there is a previous solution file to speed up non-linear iterations
-        if self.is_sliding_band and self.is_set_previous and ii > start_t:
+        if is_sliding_band and self.is_set_previous and ii > start_t:
             if isfile(ans_file):
                 # Setup .ans file path in FEMM model
                 femm.mi_setprevious(ans_file, 0)
@@ -216,7 +217,7 @@ def solve_FEMM(
                 )
 
         # Load mesh data & solution
-        if (self.is_sliding_band or Nt == 1) and (self.is_get_meshsolution):
+        if self.is_get_meshsolution and (is_sliding_band or Nt == 1):
             # Get mesh data and magnetic quantities from .ans file
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
                 femm,
