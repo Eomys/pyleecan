@@ -165,13 +165,10 @@ class ELUT_PMSM(ELUT):
         E_dqh=None,
         orders_dqh=None,
         bemf=None,
-        Phi_wind_stator=None,
-        Tem=None,
         R1=None,
         L1=None,
         T1_ref=20,
         OP_matrix=None,
-        axes_dict=None,
         init_dict=None,
         init_str=None,
     ):
@@ -204,10 +201,6 @@ class ELUT_PMSM(ELUT):
                 orders_dqh = init_dict["orders_dqh"]
             if "bemf" in list(init_dict.keys()):
                 bemf = init_dict["bemf"]
-            if "Phi_wind_stator" in list(init_dict.keys()):
-                Phi_wind_stator = init_dict["Phi_wind_stator"]
-            if "Tem" in list(init_dict.keys()):
-                Tem = init_dict["Tem"]
             if "R1" in list(init_dict.keys()):
                 R1 = init_dict["R1"]
             if "L1" in list(init_dict.keys()):
@@ -216,8 +209,6 @@ class ELUT_PMSM(ELUT):
                 T1_ref = init_dict["T1_ref"]
             if "OP_matrix" in list(init_dict.keys()):
                 OP_matrix = init_dict["OP_matrix"]
-            if "axes_dict" in list(init_dict.keys()):
-                axes_dict = init_dict["axes_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_dqh = Phi_dqh
         self.I_dqh = I_dqh
@@ -226,11 +217,9 @@ class ELUT_PMSM(ELUT):
         self.E_dqh = E_dqh
         self.orders_dqh = orders_dqh
         self.bemf = bemf
-        self.Phi_wind_stator = Phi_wind_stator
-        self.Tem = Tem
         # Call ELUT init
         super(ELUT_PMSM, self).__init__(
-            R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix, axes_dict=axes_dict
+            R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix
         )
         # The class is frozen (in ELUT init), for now it's impossible to
         # add new properties
@@ -271,10 +260,6 @@ class ELUT_PMSM(ELUT):
             + linesep
         )
         ELUT_PMSM_str += "bemf = " + str(self.bemf) + linesep + linesep
-        ELUT_PMSM_str += (
-            "Phi_wind_stator = " + str(self.Phi_wind_stator) + linesep + linesep
-        )
-        ELUT_PMSM_str += "Tem = " + str(self.Tem) + linesep + linesep
         return ELUT_PMSM_str
 
     def __eq__(self, other):
@@ -299,10 +284,6 @@ class ELUT_PMSM(ELUT):
         if not array_equal(other.orders_dqh, self.orders_dqh):
             return False
         if other.bemf != self.bemf:
-            return False
-        if other.Phi_wind_stator != self.Phi_wind_stator:
-            return False
-        if other.Tem != self.Tem:
             return False
         return True
 
@@ -335,37 +316,6 @@ class ELUT_PMSM(ELUT):
             diff_list.append(name + ".bemf None mismatch")
         elif self.bemf is not None:
             diff_list.extend(self.bemf.compare(other.bemf, name=name + ".bemf"))
-        if (other.Phi_wind_stator is None and self.Phi_wind_stator is not None) or (
-            other.Phi_wind_stator is not None and self.Phi_wind_stator is None
-        ):
-            diff_list.append(name + ".Phi_wind_stator None mismatch")
-        elif self.Phi_wind_stator is None:
-            pass
-        elif len(other.Phi_wind_stator) != len(self.Phi_wind_stator):
-            diff_list.append("len(" + name + ".Phi_wind_stator)")
-        else:
-            for ii in range(len(other.Phi_wind_stator)):
-                diff_list.extend(
-                    self.Phi_wind_stator[ii].compare(
-                        other.Phi_wind_stator[ii],
-                        name=name + ".Phi_wind_stator[" + str(ii) + "]",
-                    )
-                )
-        if (other.Tem is None and self.Tem is not None) or (
-            other.Tem is not None and self.Tem is None
-        ):
-            diff_list.append(name + ".Tem None mismatch")
-        elif self.Tem is None:
-            pass
-        elif len(other.Tem) != len(self.Tem):
-            diff_list.append("len(" + name + ".Tem)")
-        else:
-            for ii in range(len(other.Tem)):
-                diff_list.extend(
-                    self.Tem[ii].compare(
-                        other.Tem[ii], name=name + ".Tem[" + str(ii) + "]"
-                    )
-                )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -386,12 +336,6 @@ class ELUT_PMSM(ELUT):
         S += getsizeof(self.E_dqh)
         S += getsizeof(self.orders_dqh)
         S += getsizeof(self.bemf)
-        if self.Phi_wind_stator is not None:
-            for value in self.Phi_wind_stator:
-                S += getsizeof(value)
-        if self.Tem is not None:
-            for value in self.Tem:
-                S += getsizeof(value)
         return S
 
     def as_dict(self, **kwargs):
@@ -422,24 +366,6 @@ class ELUT_PMSM(ELUT):
             ELUT_PMSM_dict["bemf"] = None
         else:
             ELUT_PMSM_dict["bemf"] = self.bemf.as_dict()
-        if self.Phi_wind_stator is None:
-            ELUT_PMSM_dict["Phi_wind_stator"] = None
-        else:
-            ELUT_PMSM_dict["Phi_wind_stator"] = list()
-            for obj in self.Phi_wind_stator:
-                if obj is not None:
-                    ELUT_PMSM_dict["Phi_wind_stator"].append(obj.as_dict())
-                else:
-                    ELUT_PMSM_dict["Phi_wind_stator"].append(None)
-        if self.Tem is None:
-            ELUT_PMSM_dict["Tem"] = None
-        else:
-            ELUT_PMSM_dict["Tem"] = list()
-            for obj in self.Tem:
-                if obj is not None:
-                    ELUT_PMSM_dict["Tem"].append(obj.as_dict())
-                else:
-                    ELUT_PMSM_dict["Tem"].append(None)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ELUT_PMSM_dict["__class__"] = "ELUT_PMSM"
@@ -455,8 +381,6 @@ class ELUT_PMSM(ELUT):
         self.E_dqh = None
         self.orders_dqh = None
         self.bemf = None
-        self.Phi_wind_stator = None
-        self.Tem = None
         # Set to None the properties inherited from ELUT
         super(ELUT_PMSM, self)._set_None()
 
@@ -615,71 +539,5 @@ class ELUT_PMSM(ELUT):
         doc=u"""Back electromotive force DataTime object
 
         :Type: SciDataTool.Classes.DataND.DataND
-        """,
-    )
-
-    def _get_Phi_wind_stator(self):
-        """getter of Phi_wind_stator"""
-        if self._Phi_wind_stator is not None:
-            for obj in self._Phi_wind_stator:
-                if obj is not None:
-                    obj.parent = self
-        return self._Phi_wind_stator
-
-    def _set_Phi_wind_stator(self, value):
-        """setter of Phi_wind_stator"""
-        if type(value) is list:
-            for ii, obj in enumerate(value):
-                if type(obj) is dict:
-                    class_obj = import_class(
-                        "SciDataTool.Classes", obj.get("__class__"), "Phi_wind_stator"
-                    )
-                    value[ii] = class_obj(init_dict=obj)
-                if value[ii] is not None:
-                    value[ii].parent = self
-        if value == -1:
-            value = list()
-        check_var("Phi_wind_stator", value, "[DataND]")
-        self._Phi_wind_stator = value
-
-    Phi_wind_stator = property(
-        fget=_get_Phi_wind_stator,
-        fset=_set_Phi_wind_stator,
-        doc=u"""Stator winding flux look-up table: list of DataTime objects whose (Id,Iq) is given by Idq list
-
-        :Type: [SciDataTool.Classes.DataND.DataND]
-        """,
-    )
-
-    def _get_Tem(self):
-        """getter of Tem"""
-        if self._Tem is not None:
-            for obj in self._Tem:
-                if obj is not None:
-                    obj.parent = self
-        return self._Tem
-
-    def _set_Tem(self, value):
-        """setter of Tem"""
-        if type(value) is list:
-            for ii, obj in enumerate(value):
-                if type(obj) is dict:
-                    class_obj = import_class(
-                        "SciDataTool.Classes", obj.get("__class__"), "Tem"
-                    )
-                    value[ii] = class_obj(init_dict=obj)
-                if value[ii] is not None:
-                    value[ii].parent = self
-        if value == -1:
-            value = list()
-        check_var("Tem", value, "[DataND]")
-        self._Tem = value
-
-    Tem = property(
-        fget=_get_Tem,
-        fset=_set_Tem,
-        doc=u"""Instaneous torque look-up table: list of DataTime objects whose (Id,Iq) is given by Idq list
-
-        :Type: [SciDataTool.Classes.DataND.DataND]
         """,
     )
