@@ -59,6 +59,13 @@ try:
 except ImportError as error:
     import_from_data = error
 
+try:
+    from ..Methods.Simulation.ELUT_PMSM.comp_Phidqh_from_Phiwind import (
+        comp_Phidqh_from_Phiwind,
+    )
+except ImportError as error:
+    comp_Phidqh_from_Phiwind = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -150,6 +157,18 @@ class ELUT_PMSM(ELUT):
         )
     else:
         import_from_data = import_from_data
+    # cf Methods.Simulation.ELUT_PMSM.comp_Phidqh_from_Phiwind
+    if isinstance(comp_Phidqh_from_Phiwind, ImportError):
+        comp_Phidqh_from_Phiwind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ELUT_PMSM method comp_Phidqh_from_Phiwind: "
+                    + str(comp_Phidqh_from_Phiwind)
+                )
+            )
+        )
+    else:
+        comp_Phidqh_from_Phiwind = comp_Phidqh_from_Phiwind
     # save and copy methods are available in all object
     save = save
     copy = copy

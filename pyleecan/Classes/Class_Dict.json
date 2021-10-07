@@ -1322,7 +1322,8 @@
             "get_Lmd",
             "get_Lmq",
             "comp_Ldqh_from_Phidqh",
-            "import_from_data"
+            "import_from_data",
+            "comp_Phidqh_from_Phiwind"
         ],
         "mother": "ELUT",
         "name": "ELUT_PMSM",
