@@ -38,7 +38,7 @@ def comp_angle_rotor(self, Time):
 
     else:
 
-        time = Time.get_values(is_oneperiod=False)
+        time = Time.get_values(is_smallestperiod=True)
         if time.size == 1:
             # Only one time step, no need to compute the position
             angle_rotor = ones(1) * A0
@@ -54,4 +54,4 @@ def comp_angle_rotor(self, Time):
     # Store in time axis normalizations
     Time.normalizations["angle_rotor"] = Norm_vector(vector=angle_rotor)
 
-    return angle_rotor
+    return Time.get_values(normalization="angle_rotor")
