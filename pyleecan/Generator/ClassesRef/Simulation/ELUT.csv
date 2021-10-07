@@ -2,3 +2,5 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 R1,Ohm,DC phase winding resistance at T1_ref per phase ,0,float,None,,,,Simulation,,get_param_dict,VERSION,1,Abstract class for Electrical Look Up Table (ELUT),
 L1,H,Phase winding leakage inductance ,0,float,None,,,,,,,,,,
 T1_ref,degC,"Stator winding average temperature associated to R1, L1 parameters",0,float,20,,,,,,,,,,
+OP_matrix,,"Array of operating point values of size (N,5) with N the number of operating points (Speed, Id, Iq, Torque, Power). OP values are set to nan if they are not given.",,ndarray,None,,,,,,,,,,
+axes_dict,,Dict containing axes data used for Magnetics,,{SciDataTool.Classes.DataND.Data},None,,,,,,,,,,
