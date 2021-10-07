@@ -28,11 +28,9 @@ def test_comp_periodicity(machine):
 
     machine_obj = load(join(DATA_DIR, "Machine", machine[0] + ".json"))
 
-    # per_a, aper_a = machine_obj.comp_periodicity_spatial()
+    per_a, aper_a = machine_obj.comp_periodicity_spatial()
 
-    # per_t, aper_t, _, _ = machine_obj.comp_periodicity_time()
-
-    per_a, aper_a, per_t, aper_t = machine_obj.comp_periodicity()
+    per_t, aper_t, _, _ = machine_obj.comp_periodicity_time()
 
     msg = (
         "Wrong periodicity calculation for "
