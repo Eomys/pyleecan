@@ -1,5 +1,5 @@
 from numpy import pi, cumsum, roll, ones, unique
-from SciDataTool import Norm_vector
+from SciDataTool import Norm_vector, Norm_affine
 
 
 def comp_angle_rotor(self, Time):
@@ -33,8 +33,8 @@ def comp_angle_rotor(self, Time):
     A0 = self.get_angle_offset_initial()
 
     # Case where normalization is a constant
-    if A0 == 0 and unique(Nr).size == 1:
-        angle_rotor = rot_dir * Nr[0] * 2 * pi / 60
+    if unique(Nr).size == 1:
+        norm = Norm_affine(slope=rot_dir * Nr[0] * 360 / 60, offset=A0 * 180 / pi)
 
     else:
 
@@ -50,8 +50,9 @@ def comp_angle_rotor(self, Time):
             Ar = roll(Ar, 1)
             Ar[0] = 0
             angle_rotor = Ar + A0
+        norm = Norm_vector(vector=angle_rotor)
 
     # Store in time axis normalizations
-    Time.normalizations["angle_rotor"] = Norm_vector(vector=angle_rotor)
+    Time.normalizations["angle_rotor"] = norm
 
     return Time.get_values(normalization="angle_rotor")
