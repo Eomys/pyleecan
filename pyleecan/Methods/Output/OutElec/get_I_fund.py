@@ -1,4 +1,4 @@
-from numpy import pi, array, transpose, where, isclose
+from numpy import pi, array, where, isclose, zeros
 
 from SciDataTool import Data1D, DataTime, DataFreq
 
@@ -29,21 +29,31 @@ def get_I_fund(self, Time=None):
     )
 
     if self.Is is None:
-        # Generate current according to Id/Iq
-        Isdq = array([self.Id_ref, self.Iq_ref])
+        if (
+            self.Id_ref is not None
+            and self.Iq_ref is not None
+            and self.Id_ref != 0
+            and self.Iq_ref != 0
+        ):
+            # Generate current according to Id/Iq
+            Isdq = array([self.Id_ref, self.Iq_ref])
 
-        # Get rotation direction of the fundamental magnetic field created by the winding
-        rot_dir = self.parent.get_rot_dir()
+            # Get rotation direction of the fundamental magnetic field created by the winding
+            rot_dir = self.parent.get_rot_dir()
 
-        # Get stator current function of time
-        Is = dq2n(Isdq, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_n_rms=False)
+            # Get stator current function of time
+            Is = dq2n(
+                Isdq, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_n_rms=False
+            )
+        else:
+            Is = zeros((time.size, qs))
 
         I_fund = DataTime(
             name="Stator current",
             unit="A",
             symbol="I_s",
-            axes=[Phase, Time],
-            values=transpose(Is),
+            axes=[Time, Phase],
+            values=Is,
         )
 
     else:
@@ -51,7 +61,7 @@ def get_I_fund(self, Time=None):
         Is_val = result["I_s"]
         freqs = result["freqs"]
         ifund = where(isclose(freqs, felec))
-        Is_fund = Is_val[:, ifund]
+        Is_fund = Is_val[ifund, :]
 
         Freq = Data1D(
             name="freqs",
@@ -63,7 +73,7 @@ def get_I_fund(self, Time=None):
             name="Stator current",
             unit="A",
             symbol="I_s",
-            axes=[Phase, Freq],
+            axes=[Freq, Phase],
             values=Is_fund,
         )
 

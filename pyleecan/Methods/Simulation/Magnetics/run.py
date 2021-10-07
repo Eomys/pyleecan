@@ -23,35 +23,12 @@ def run(self):
     # and returns additional axes in axes_dict
     axes_dict = self.comp_axes(output)
 
-    if self.is_mmfs:
-        Is = output.elec.get_Is(
-            Time=axes_dict["time"], is_current_harm=self.is_current_harm
-        )
-        Is_val = self.comp_I_mag(
-            output=output,
-            Time=axes_dict["time"],
-            is_stator=True,
-            I_data=Is,
-            is_periodicity_t=self.is_periodicity_t,
-        )
-    else:
-        Is_val = None
-    # Get rotor current from elec out
-    if self.is_mmfr:
-        # Ir = output.elec.get_Ir(Time=axes_dict["time"]) TODO
-        Ir_val = self.comp_I_mag(
-            output=output,
-            Time=axes_dict["time"],
-            is_stator=False,
-            is_periodicity_t=self.is_periodicity_t,
-        )
-    else:
-        Ir_val = None
-
-    # Calculate airgap flux
-    # Loop over skew axis
+    # Get z axis
     Slice_axis = axes_dict["z"]
     unique_indices = Slice_axis.unique_indices
+
+    # Get stator and rotor currents if requested
+    Is_val, Ir_val = self.comp_I_mag(output, Time=axes_dict["time"])
 
     # First iteration to check dimensions
     # Assign stator and rotor angle shifts
