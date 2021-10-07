@@ -54,9 +54,9 @@ def comp_I_mag(
         # Get current DataTime
         if I_data is None:
             if is_stator:
-                I_data = self.get_Is()
+                I_data = output.elec.get_Is()
             else:
-                I_data = self.Ir
+                I_data = output.elec.Ir
 
         if phase is None:
             # Take all phases that are in the I_data Data object
