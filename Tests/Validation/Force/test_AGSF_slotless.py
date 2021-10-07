@@ -1,23 +1,15 @@
-# -*- coding: utf-8 -*-
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Output import Output
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Functions.Plot import dict_2D
 
 from Tests import save_plot_path
 from os.path import join
-from numpy import zeros, ones, pi, array
 
-import matplotlib.pyplot as plt
-import json
-import numpy as np
 import pytest
 
 
