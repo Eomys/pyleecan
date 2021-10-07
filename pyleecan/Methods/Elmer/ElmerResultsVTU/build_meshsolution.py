@@ -3,7 +3,7 @@ from numpy import arange
 from meshio import read
 from os.path import join, split, splitext
 
-from SciDataTool import DataTime, Data1D, VectorField
+from SciDataTool import DataTime, Data1D, VectorField, Norm_ref
 
 from ....Classes.SolutionData import SolutionData
 from ....Classes.SolutionVector import SolutionVector
@@ -87,7 +87,7 @@ def build_meshsolution(self):
                     symbol=self.store_dict[key]["symbol"] + ext,
                     axes=[Indices],
                     values=value[:, i],
-                    normalizations={"ref": self.store_dict[key]["norm"]},
+                    normalizations={"ref": Norm_ref(ref=self.store_dict[key]["norm"])},
                 )
                 components.append(data)
                 comp_name.append("comp_" + ext)

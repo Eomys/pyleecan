@@ -1,6 +1,6 @@
 from numpy import array, unique
 
-from SciDataTool import DataPattern
+from SciDataTool import DataPattern, Norm_ref
 
 
 def get_data(self):
@@ -32,7 +32,7 @@ def get_data(self):
     rebuild_indices = rebuild_indices.tolist()
 
     # Setup other parameters
-    normalizations = {"x L": self.L}
+    normalizations = {"x L": Norm_ref(ref=self.L)}
     is_step = self.is_step
 
     # Create DataPattern
