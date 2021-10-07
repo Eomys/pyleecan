@@ -18,11 +18,6 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.OutElec.comp_I_mag import comp_I_mag
-except ImportError as error:
-    comp_I_mag = error
-
-try:
     from ..Methods.Output.OutElec.get_I_fund import get_I_fund
 except ImportError as error:
     get_I_fund = error
@@ -64,15 +59,6 @@ class OutElec(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.OutElec.comp_I_mag
-    if isinstance(comp_I_mag, ImportError):
-        comp_I_mag = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutElec method comp_I_mag: " + str(comp_I_mag))
-            )
-        )
-    else:
-        comp_I_mag = comp_I_mag
     # cf Methods.Output.OutElec.get_I_fund
     if isinstance(get_I_fund, ImportError):
         get_I_fund = property(

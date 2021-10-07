@@ -6160,7 +6160,8 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_axes"
+            "comp_axes",
+            "comp_I_mag"
         ],
         "mother": "",
         "name": "Magnetics",
@@ -7861,7 +7862,6 @@
         "desc": "Gather the electric module outputs",
         "is_internal": false,
         "methods": [
-            "comp_I_mag",
             "get_I_fund",
             "get_I_harm",
             "get_Is",

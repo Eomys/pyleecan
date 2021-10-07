@@ -24,7 +24,8 @@ def run(self):
         Is = output.elec.get_Is(
             Time=axes_dict["time"], is_current_harm=self.is_current_harm
         )
-        Is_val = output.elec.comp_I_mag(
+        Is_val = self.comp_I_mag(
+            output=output,
             Time=axes_dict["time"],
             is_stator=True,
             I_data=Is,
@@ -35,7 +36,8 @@ def run(self):
     # Get rotor current from elec out
     if self.is_mmfr:
         # Ir = output.elec.get_Ir(Time=axes_dict["time"]) TODO
-        Ir_val = output.elec.comp_I_mag(
+        Ir_val = self.comp_I_mag(
+            output=output,
             Time=axes_dict["time"],
             is_stator=False,
             is_periodicity_t=self.is_periodicity_t,

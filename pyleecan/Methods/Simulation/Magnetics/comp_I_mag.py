@@ -2,15 +2,17 @@ from ....Classes.WindingSC import WindingSC
 from numpy import array
 
 
-def comp_I_mag(self, Time, is_stator, phase=None, I_data=None, is_periodicity_t=True):
+def comp_I_mag(
+    self, output, Time, is_stator, phase=None, I_data=None, is_periodicity_t=True
+):
     """Compute the current on the given lamination and time vector to use it in Magnetics model
     Phase currents are divided by the number of parallel circuits per pole
     and per phase to account for actual current in slot conductors
 
     Parameters
     ----------
-    self : OutElec
-        an OutElec object
+    self : Magnetics
+        an Magnetics object
     Time : Data1D
         Time vector on which to interpolate currents stored in OutElec
     is_stator: bool
@@ -33,9 +35,9 @@ def comp_I_mag(self, Time, is_stator, phase=None, I_data=None, is_periodicity_t=
 
     # Get lamination
     if is_stator:
-        lam = self.parent.simu.machine.stator
+        lam = output.simu.machine.stator
     else:
-        lam = self.parent.simu.machine.rotor
+        lam = output.simu.machine.rotor
 
     if (
         hasattr(lam, "winding")
