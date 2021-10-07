@@ -1,5 +1,5 @@
 from os import remove
-from os.path import basename, splitext, isfile
+from os.path import splitext, isfile
 
 from numpy import zeros, pi, roll, cos, sin
 
@@ -105,7 +105,7 @@ def solve_FEMM(
         femm.opendocument(filename)
     else:
         # FEMM instance and file is already open, get filename from output
-        filename = basename(self.get_path_save_fem(output))
+        filename = self.get_path_save_fem(output)
 
     if is_sliding_band and self.is_set_previous:
         # Check result .ans file existence and delete it if it exists
@@ -113,7 +113,7 @@ def solve_FEMM(
             (splitext(filename)[0] + ".ans").replace("\\", "/").replace("//", "/")
         )
         if isfile(ans_file):
-            logger.info("Delete existing result .ans file at: " + ans_file)
+            logger.debug("Delete existing result .ans file at: " + ans_file)
             remove(ans_file)
 
     # Take last time step at Nt by default
