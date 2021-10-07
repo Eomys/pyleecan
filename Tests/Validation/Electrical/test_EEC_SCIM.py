@@ -18,6 +18,7 @@ import pytest
 @pytest.mark.SCIM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
+@pytest.mark.skip(reason="Work in progress")
 def test_EEC_SCIM():
     """Validation of the SCIM Electrical Equivalent Circuit with the 3kW SCIM
     from 'Berechnung elektrischer Maschinen' (ISBN: 978-3-527-40525-1)

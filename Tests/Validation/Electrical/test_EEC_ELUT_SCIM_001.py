@@ -33,6 +33,7 @@ is_show_fig = False
 
 @pytest.mark.SCIM
 @pytest.mark.Electrical
+@pytest.mark.skip(reason="Work in progress")
 def test_EEC_ELUT_SCIM_001():
     """Validation of the structural/acoustic module for default_machine machine
     Comparison with MANATEE V1 results"""
