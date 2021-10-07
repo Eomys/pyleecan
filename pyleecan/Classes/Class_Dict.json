@@ -1301,15 +1301,6 @@
                 "type": "ndarray",
                 "unit": "",
                 "value": null
-            },
-            {
-                "desc": "Dict containing axes data used for Magnetics",
-                "max": "",
-                "min": "",
-                "name": "axes_dict",
-                "type": "{SciDataTool.Classes.DataND.Data}",
-                "unit": "",
-                "value": "None"
             }
         ]
     },
@@ -1399,24 +1390,6 @@
                 "name": "bemf",
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "V",
-                "value": "None"
-            },
-            {
-                "desc": "Stator winding flux look-up table: list of DataTime objects whose (Id,Iq) is given by Idq list",
-                "max": "",
-                "min": "",
-                "name": "Phi_wind_stator",
-                "type": "[SciDataTool.Classes.DataND.DataND]",
-                "unit": "Wb",
-                "value": "None"
-            },
-            {
-                "desc": "Instaneous torque look-up table: list of DataTime objects whose (Id,Iq) is given by Idq list",
-                "max": "",
-                "min": "",
-                "name": "Tem",
-                "type": "[SciDataTool.Classes.DataND.DataND]",
-                "unit": "Nm",
                 "value": "None"
             }
         ]

@@ -109,7 +109,6 @@ class ELUT_SCIM(ELUT):
         L1=None,
         T1_ref=20,
         OP_matrix=None,
-        axes_dict=None,
         init_dict=None,
         init_str=None,
     ):
@@ -146,8 +145,6 @@ class ELUT_SCIM(ELUT):
                 T1_ref = init_dict["T1_ref"]
             if "OP_matrix" in list(init_dict.keys()):
                 OP_matrix = init_dict["OP_matrix"]
-            if "axes_dict" in list(init_dict.keys()):
-                axes_dict = init_dict["axes_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_m = Phi_m
         self.I_m = I_m
@@ -156,7 +153,7 @@ class ELUT_SCIM(ELUT):
         self.L2 = L2
         # Call ELUT init
         super(ELUT_SCIM, self).__init__(
-            R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix, axes_dict=axes_dict
+            R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix
         )
         # The class is frozen (in ELUT init), for now it's impossible to
         # add new properties
