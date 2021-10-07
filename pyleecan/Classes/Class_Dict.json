@@ -4740,6 +4740,15 @@
                 "value": ""
             },
             {
+                "desc": "Skew object",
+                "max": "",
+                "min": "",
+                "name": "skew",
+                "type": "Skew",
+                "unit": "-",
+                "value": null
+            },
+            {
                 "desc": "Lamination yoke notches",
                 "max": "",
                 "min": "",
@@ -5786,6 +5795,15 @@
                 "type": "float",
                 "unit": "m",
                 "value": null
+            },
+            {
+                "desc": "True set previous .ans result file in current .fem to use it as initialization and speed up calculation time",
+                "max": "",
+                "min": "",
+                "name": "is_set_previous",
+                "type": "bool",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -5849,7 +5867,8 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_axes"
+            "comp_axes",
+            "get_slice_model"
         ],
         "mother": "",
         "name": "Magnetics",
@@ -5963,6 +5982,33 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Magnetics"
+            },
+            {
+                "desc": "Enforce slice model to account for skew",
+                "max": "",
+                "min": "",
+                "name": "Slice_enforced",
+                "type": "SliceModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "To enforce number of slices in slice model",
+                "max": "",
+                "min": "",
+                "name": "Nslices_enforced",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "To enforce type of slice distribution to use for rotor skew if linear and continuous (\"uniform\", \"gauss\", \"user-defined\")",
+                "max": "",
+                "min": "",
+                "name": "type_distribution_enforced",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
             }
         ]
     },
@@ -8199,7 +8245,7 @@
                 "max": "",
                 "min": "",
                 "name": "Phi_wind_stator",
-                "type": "SciDataTool.Classes.DataTime.DataTime",
+                "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "Wb",
                 "value": "None"
             },
@@ -8208,7 +8254,7 @@
                 "max": "",
                 "min": "",
                 "name": "Phi_wind",
-                "type": "{SciDataTool.Classes.DataTime.DataTime}",
+                "type": "{SciDataTool.Classes.DataND.DataND}",
                 "unit": "Wb",
                 "value": "None"
             },
@@ -8217,7 +8263,7 @@
                 "max": "",
                 "min": "",
                 "name": "emf",
-                "type": "SciDataTool.Classes.DataTime.DataTime",
+                "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "V",
                 "value": "None"
             },
@@ -8265,6 +8311,33 @@
                 "type": "float",
                 "unit": "W",
                 "value": null
+            },
+            {
+                "desc": "Slice model to account for skew",
+                "max": "",
+                "min": "",
+                "name": "Slice",
+                "type": "SliceModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Electromagnetic torque DataTime object including torque per slice",
+                "max": "",
+                "min": "",
+                "name": "Tem_slice",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "N",
+                "value": "None"
+            },
+            {
+                "desc": "Dict of lamination winding fluxlinkage DataTime objects per slice",
+                "max": "",
+                "min": "",
+                "name": "Phi_wind_slice",
+                "type": "{SciDataTool.Classes.DataND.DataND}",
+                "unit": "Wb/m",
+                "value": "None"
             }
         ]
     },
@@ -9543,6 +9616,194 @@
                 "name": "layer_log_warn",
                 "type": "int",
                 "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "Skew": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class for the skew (rotor or stator)",
+        "is_internal": false,
+        "methods": [
+            "comp_angle",
+            "comp_pattern",
+            "plot"
+        ],
+        "mother": "",
+        "name": "Skew",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/Skew.csv",
+        "properties": [
+            {
+                "desc": "Type of skew (\"linear\", \"vshape\", \"function\", \"user-defined\")",
+                "max": "",
+                "min": "",
+                "name": "type_skew",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
+            },
+            {
+                "desc": "Skew rate expressed in terms of slot pitch (stator slot pitch for SCIM, rotor slot pitch for PMSM)",
+                "max": "",
+                "min": "",
+                "name": "rate",
+                "type": "float",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "True to define skew as steps",
+                "max": "",
+                "min": "",
+                "name": "is_step",
+                "type": "bool",
+                "unit": "-",
+                "value": true
+            },
+            {
+                "desc": "Function which describes skew pattern",
+                "max": "",
+                "min": "",
+                "name": "function",
+                "type": "function",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "List of skew angles",
+                "max": "",
+                "min": "",
+                "name": "angle_list",
+                "type": "list",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "desc": "List of z axis positions for which skew angles are given",
+                "max": "",
+                "min": "",
+                "name": "z_list",
+                "type": "list",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "desc": "Number of steps if step skew",
+                "max": "",
+                "min": "2",
+                "name": "Nstep",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Overall skewing angle",
+                "max": "",
+                "min": "0",
+                "name": "angle_overall",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            }
+        ]
+    },
+    "SliceModel": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to hande slices in magnetics model",
+        "is_internal": false,
+        "methods": [
+            "get_distribution",
+            "get_data",
+            "plot"
+        ],
+        "mother": "",
+        "name": "SliceModel",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/SliceModel.csv",
+        "properties": [
+            {
+                "desc": "Type of slice distribution to use for rotor skew if linear and continuous (\"uniform\", \"gauss\", \"user-defined\")",
+                "max": "",
+                "min": "",
+                "name": "type_distribution",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
+            },
+            {
+                "desc": "Number of slices",
+                "max": "",
+                "min": "",
+                "name": "Nslices",
+                "type": "int",
+                "unit": "-",
+                "value": 5
+            },
+            {
+                "desc": "List of slice positions",
+                "max": "",
+                "min": "",
+                "name": "z_list",
+                "type": "list",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "desc": "Array of rotor skew angles in case of skew",
+                "max": "",
+                "min": "",
+                "name": "angle_rotor",
+                "type": "ndarray",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "desc": "Array of stator skew angles in case of skew",
+                "max": "",
+                "min": "",
+                "name": "angle_stator",
+                "type": "ndarray",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "desc": "Machine length (mean of rotor/stator lengths)",
+                "max": "",
+                "min": "",
+                "name": "L",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "desc": "True to define slices as steps",
+                "max": "",
+                "min": "",
+                "name": "is_step",
+                "type": "bool",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "True if slices account for skew",
+                "max": "",
+                "min": "",
+                "name": "is_skew",
+                "type": "bool",
+                "unit": "",
                 "value": null
             }
         ]

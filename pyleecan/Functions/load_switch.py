@@ -168,6 +168,8 @@ load_switch = {
     "Shaft": Shaft,
     "Simu1": Simu1,
     "Simulation": Simulation,
+    "Skew": Skew,
+    "SliceModel": SliceModel,
     "Slot": Slot,
     "Slot19": Slot19,
     "SlotCirc": SlotCirc,

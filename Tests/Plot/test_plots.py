@@ -3,7 +3,7 @@ from os.path import join
 
 import matplotlib.pyplot as plt
 import pytest
-from SciDataTool import DataTime, Data1D, DataLinspace, VectorField
+from SciDataTool import DataTime, Data1D, DataLinspace, VectorField, Norm_ref
 from numpy import linspace, sin, squeeze
 
 from Tests import TEST_DATA_DIR
@@ -82,7 +82,7 @@ class Test_plots(object):
         time_arr = squeeze(time.get_data())
         angle_arr = squeeze(angle.get_data())
         flux_arr = flux.get_data()
-        norm_angle = {"space_order": 3}
+        norm_angle = {"space_order": Norm_ref(ref=3)}
 
         simu = Simu1(name="test_default_proj_Br_time_space", machine=SCIM_006)
         simu.mag = None
@@ -197,7 +197,9 @@ class Test_plots(object):
             is_show_fig=False,
             **dict_2D,
         )
-        out.mag.B.components["radial"].axes[1].normalizations["space_order"] = 3
+        out.mag.B.components["radial"].axes[1].normalizations["space_order"] = Norm_ref(
+            ref=3
+        )
         out.mag.B.plot_2D_Data(
             "wavenumber->space_order=[0,100]",
             data_list=[out3.mag.B],

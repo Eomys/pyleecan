@@ -68,7 +68,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
             Ntcoil = wind_mat[Nrad_id, Ntan_id, Zs_id, q_id]
         elif HOLEM_LAB in label_dict["surf_type"]:  # LamHole
             mag_obj = get_obj_from_label(machine, label_dict=label_dict)
-            if mag_obj.type_magnetization in [1, 3]:  # Parallel or Tangential
+            if mag_obj.type_magnetization in [1, 3, None]:  # Parallel or Tangential
                 # calculate pole angle and angle of pole middle
                 T_id = label_dict["T_id"]
                 hole = mag_obj.parent

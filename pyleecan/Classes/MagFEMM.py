@@ -50,6 +50,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .DXFImport import DXFImport
+from .SliceModel import SliceModel
 
 
 class MagFEMM(Magnetics):
@@ -149,6 +150,7 @@ class MagFEMM(Magnetics):
         is_close_femm=True,
         nb_worker=1,
         Rag_enforced=None,
+        is_set_previous=True,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -161,6 +163,9 @@ class MagFEMM(Magnetics):
         angle_stator_shift=0,
         angle_rotor_shift=0,
         logger_name="Pyleecan.Magnetics",
+        Slice_enforced=None,
+        Nslices_enforced=None,
+        type_distribution_enforced=None,
         init_dict=None,
         init_str=None,
     ):
@@ -209,6 +214,8 @@ class MagFEMM(Magnetics):
                 nb_worker = init_dict["nb_worker"]
             if "Rag_enforced" in list(init_dict.keys()):
                 Rag_enforced = init_dict["Rag_enforced"]
+            if "is_set_previous" in list(init_dict.keys()):
+                is_set_previous = init_dict["is_set_previous"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -233,6 +240,12 @@ class MagFEMM(Magnetics):
                 angle_rotor_shift = init_dict["angle_rotor_shift"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "Slice_enforced" in list(init_dict.keys()):
+                Slice_enforced = init_dict["Slice_enforced"]
+            if "Nslices_enforced" in list(init_dict.keys()):
+                Nslices_enforced = init_dict["Nslices_enforced"]
+            if "type_distribution_enforced" in list(init_dict.keys()):
+                type_distribution_enforced = init_dict["type_distribution_enforced"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -249,6 +262,7 @@ class MagFEMM(Magnetics):
         self.is_close_femm = is_close_femm
         self.nb_worker = nb_worker
         self.Rag_enforced = Rag_enforced
+        self.is_set_previous = is_set_previous
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -263,6 +277,9 @@ class MagFEMM(Magnetics):
             angle_stator_shift=angle_stator_shift,
             angle_rotor_shift=angle_rotor_shift,
             logger_name=logger_name,
+            Slice_enforced=Slice_enforced,
+            Nslices_enforced=Nslices_enforced,
+            type_distribution_enforced=type_distribution_enforced,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
@@ -309,6 +326,7 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "is_close_femm = " + str(self.is_close_femm) + linesep
         MagFEMM_str += "nb_worker = " + str(self.nb_worker) + linesep
         MagFEMM_str += "Rag_enforced = " + str(self.Rag_enforced) + linesep
+        MagFEMM_str += "is_set_previous = " + str(self.is_set_previous) + linesep
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -349,6 +367,8 @@ class MagFEMM(Magnetics):
         if other.nb_worker != self.nb_worker:
             return False
         if other.Rag_enforced != self.Rag_enforced:
+            return False
+        if other.is_set_previous != self.is_set_previous:
             return False
         return True
 
@@ -405,6 +425,8 @@ class MagFEMM(Magnetics):
             diff_list.append(name + ".nb_worker")
         if other._Rag_enforced != self._Rag_enforced:
             diff_list.append(name + ".Rag_enforced")
+        if other._is_set_previous != self._is_set_previous:
+            diff_list.append(name + ".is_set_previous")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -435,6 +457,7 @@ class MagFEMM(Magnetics):
         S += getsizeof(self.is_close_femm)
         S += getsizeof(self.nb_worker)
         S += getsizeof(self.Rag_enforced)
+        S += getsizeof(self.is_set_previous)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -489,6 +512,7 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["is_close_femm"] = self.is_close_femm
         MagFEMM_dict["nb_worker"] = self.nb_worker
         MagFEMM_dict["Rag_enforced"] = self.Rag_enforced
+        MagFEMM_dict["is_set_previous"] = self.is_set_previous
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -514,6 +538,7 @@ class MagFEMM(Magnetics):
         self.is_close_femm = None
         self.nb_worker = None
         self.Rag_enforced = None
+        self.is_set_previous = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -814,5 +839,23 @@ class MagFEMM(Magnetics):
         doc=u"""To enforce a different radius value for air-gap outputs
 
         :Type: float
+        """,
+    )
+
+    def _get_is_set_previous(self):
+        """getter of is_set_previous"""
+        return self._is_set_previous
+
+    def _set_is_set_previous(self, value):
+        """setter of is_set_previous"""
+        check_var("is_set_previous", value, "bool")
+        self._is_set_previous = value
+
+    is_set_previous = property(
+        fget=_get_is_set_previous,
+        fset=_set_is_set_previous,
+        doc=u"""True set previous .ans result file in current .fem to use it as initialization and speed up calculation time
+
+        :Type: bool
         """,
     )
