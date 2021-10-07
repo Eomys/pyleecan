@@ -19,10 +19,10 @@ from ...Generator.ClassGenerator.compare_method_generator import generate_compar
 from ...Generator.ClassGenerator.size_of_method_generator import generate_size_of
 from ...Generator.ClassGenerator.set_None_method_generator import generate_set_None
 
-IS_LOGGER = True  # False to remove logger related code
 
-
-def generate_class(gen_dict, class_name, path_to_gen):
+def generate_class(
+    gen_dict, class_name, path_to_gen, soft_name="pyleecan", is_log=True
+):
     """generate the corresponding class file (erase the previous code)
 
     Parameters
@@ -66,7 +66,11 @@ def generate_class(gen_dict, class_name, path_to_gen):
         )
     class_file.write("# WARNING! All changes made in this file will be lost!\n")
     class_file.write(
-        '"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/'
+        '"""Method code available at https://github.com/Eomys/'
+        + soft_name
+        + "/tree/master/"
+        + soft_name
+        + "/Methods/"
         + class_dict["package"]
         + "/"
         + class_dict["name"]
@@ -76,7 +80,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
     # Import
     class_file.write("from os import linesep\n")
     class_file.write("from sys import getsizeof\n")
-    if IS_LOGGER:
+    if is_log:
         class_file.write("from logging import getLogger\n")
 
     if "ndarray" in import_type_list:
@@ -85,7 +89,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write("from ._check import check_var, raise_\n")
 
     # Get logger function
-    if IS_LOGGER:
+    if is_log:
         class_file.write("from ..Functions.get_logger import get_logger\n")
 
     #
@@ -179,7 +183,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
                 types_imported.append(type_name)
 
-    # Import of all needed pyleecan type for empty init
+    # Import of all needed software type for empty init
     class_file.write("from ._check import InitUnKnowClassError\n")
     for pyleecan_type in import_type_list:
         if pyleecan_type:
@@ -277,16 +281,18 @@ def generate_class(gen_dict, class_name, path_to_gen):
     if "copy" not in class_dict["methods"]:
         class_file.write(TAB + "copy = copy\n")
 
-    if IS_LOGGER:
+    if is_log:
         class_file.write(TAB + "# get_logger method is available in all object\n")
         class_file.write(TAB + "get_logger = get_logger\n\n")
 
     # Add the __init__ method
     if "__init__" not in class_dict["methods"]:
         if len(class_dict["properties"]) == 0 and class_dict["mother"] == "":
-            class_file.write(generate_init_void(class_name) + "\n")
+            class_file.write(generate_init_void(class_name, soft_name=soft_name) + "\n")
         else:
-            class_file.write(generate_init(gen_dict, class_dict) + "\n")
+            class_file.write(
+                generate_init(gen_dict, class_dict, soft_name=soft_name) + "\n"
+            )
 
     # Add the __str__ method
     if "__str__" not in class_dict["methods"]:
@@ -309,11 +315,13 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Add the _set_None method
     if "_set_None" not in class_dict["methods"]:
-        class_file.write(generate_set_None(gen_dict, class_dict))
+        class_file.write(generate_set_None(gen_dict, class_dict, soft_name=soft_name))
 
     # Add all the properties getter and setter
     if len(class_dict["properties"]) > 0:
-        class_file.write("\n" + generate_properties(gen_dict, class_dict) + "\n")
+        class_file.write(
+            "\n" + generate_properties(gen_dict, class_dict, soft_name=soft_name) + "\n"
+        )
 
     # End of class generation
     class_file.close()

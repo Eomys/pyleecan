@@ -56,6 +56,12 @@ def comp_axes(self, output):
             + "). Angular periodicity removed"
         )
 
+    # Compute slice axis
+    Slice = self.Slice_enforced.get_data()
+
+    # Add slice axis
+    axes_dict["z"] = Slice
+
     # Add Time axis on which to calculate torque
     # Copy from standard Time axis
     Time_Tem = axes_dict["time"].copy()

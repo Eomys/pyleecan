@@ -261,23 +261,39 @@ class EEC_PMSM(EEC):
         S += getsizeof(self.drive)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from EEC
-        EEC_PMSM_dict = super(EEC_PMSM, self).as_dict(**kwargs)
+        EEC_PMSM_dict = super(EEC_PMSM, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.indmag is None:
             EEC_PMSM_dict["indmag"] = None
         else:
-            EEC_PMSM_dict["indmag"] = self.indmag.as_dict(**kwargs)
+            EEC_PMSM_dict["indmag"] = self.indmag.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.fluxlink is None:
             EEC_PMSM_dict["fluxlink"] = None
         else:
-            EEC_PMSM_dict["fluxlink"] = self.fluxlink.as_dict(**kwargs)
+            EEC_PMSM_dict["fluxlink"] = self.fluxlink.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         EEC_PMSM_dict["parameters"] = (
             self.parameters.copy() if self.parameters is not None else None
         )
@@ -285,7 +301,11 @@ class EEC_PMSM(EEC):
         if self.drive is None:
             EEC_PMSM_dict["drive"] = None
         else:
-            EEC_PMSM_dict["drive"] = self.drive.as_dict(**kwargs)
+            EEC_PMSM_dict["drive"] = self.drive.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         EEC_PMSM_dict["__class__"] = "EEC_PMSM"

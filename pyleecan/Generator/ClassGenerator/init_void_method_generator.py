@@ -1,13 +1,15 @@
 from ...Generator import TAB, TAB2, TAB3
 
 
-def generate_init_void(class_name):
+def generate_init_void(class_name, soft_name="software"):
     """Generate the code for the init method with no property
 
     Returns
     -------
     init_str : str
         String containing the code to initialize a class with no property
+    soft_name : str
+        Name of the software to generate
     """
 
     init_str = ""
@@ -21,13 +23,15 @@ def generate_init_void(class_name):
     init_str += (
         TAB3 + "for Matrix, None will initialise the property with " "an empty Matrix\n"
     )
-    init_str += TAB3 + "for pyleecan type, None will call the default " "constructor\n"
+    init_str += (
+        TAB3 + "for " + soft_name + " type, None will call the default " "constructor\n"
+    )
     init_str += (
         TAB2 + "- __init__ (init_dict = d) d must be a dictionary "
         "wiht every properties as keys\n\n"
     )
     init_str += TAB2 + "ndarray or list can be given for Vector and Matrix\n"
-    init_str += TAB2 + 'object or dict can be given for pyleecan Object"""\n\n'
+    init_str += TAB2 + "object or dict can be given for " + soft_name + ' Object"""\n\n'
 
     init_str += TAB2 + "if init_dict is not None:  # Initialisation by dict\n"
     init_str += TAB3 + "assert '__class__' in init_dict\n"

@@ -7,6 +7,7 @@ from ...Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
 def solve_FEMM(obj, femm, output, sym, FEMM_dict):
 
     L1 = output.simu.machine.stator.comp_length()
+    L2 = output.simu.machine.rotor.comp_length()
     Nt_tot = obj.Nt_tot  # Number of time step
     is_internal_rotor = output.simu.machine.rotor.is_internal
 
@@ -56,7 +57,7 @@ def solve_FEMM(obj, femm, output, sym, FEMM_dict):
                 base = FEMM_dict["path_save"]
                 ans_file = splitext(base)[0] + ".ans"
                 femm.mi_setprevious(ans_file, 0)
-            except:
+            except Exception:
                 pass
 
         # Run the computation
@@ -70,8 +71,8 @@ def solve_FEMM(obj, femm, output, sym, FEMM_dict):
                 qs,
                 Npcp,
                 is_stator=True,
-                Lfemm=FEMM_dict["Lfemm"],
                 L1=L1,
+                L2=L2,
                 sym=sym,
             )
 

@@ -104,6 +104,7 @@ class SlotUD(Slot):
         wind_begin_index=None,
         wind_end_index=None,
         type_line_wind=0,
+        name="",
         Zs=36,
         init_dict=None,
         init_str=None,
@@ -131,6 +132,8 @@ class SlotUD(Slot):
                 wind_end_index = init_dict["wind_end_index"]
             if "type_line_wind" in list(init_dict.keys()):
                 type_line_wind = init_dict["type_line_wind"]
+            if "name" in list(init_dict.keys()):
+                name = init_dict["name"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
         # Set the properties (value check and convertion are done in setter)
@@ -138,6 +141,7 @@ class SlotUD(Slot):
         self.wind_begin_index = wind_begin_index
         self.wind_end_index = wind_end_index
         self.type_line_wind = type_line_wind
+        self.name = name
         # Call Slot init
         super(SlotUD, self).__init__(Zs=Zs)
         # The class is frozen (in Slot init), for now it's impossible to
@@ -159,6 +163,7 @@ class SlotUD(Slot):
         SlotUD_str += "wind_begin_index = " + str(self.wind_begin_index) + linesep
         SlotUD_str += "wind_end_index = " + str(self.wind_end_index) + linesep
         SlotUD_str += "type_line_wind = " + str(self.type_line_wind) + linesep
+        SlotUD_str += 'name = "' + str(self.name) + '"' + linesep
         return SlotUD_str
 
     def __eq__(self, other):
@@ -177,6 +182,8 @@ class SlotUD(Slot):
         if other.wind_end_index != self.wind_end_index:
             return False
         if other.type_line_wind != self.type_line_wind:
+            return False
+        if other.name != self.name:
             return False
         return True
 
@@ -212,6 +219,8 @@ class SlotUD(Slot):
             diff_list.append(name + ".wind_end_index")
         if other._type_line_wind != self._type_line_wind:
             diff_list.append(name + ".type_line_wind")
+        if other._name != self._name:
+            diff_list.append(name + ".name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -229,29 +238,45 @@ class SlotUD(Slot):
         S += getsizeof(self.wind_begin_index)
         S += getsizeof(self.wind_end_index)
         S += getsizeof(self.type_line_wind)
+        S += getsizeof(self.name)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Slot
-        SlotUD_dict = super(SlotUD, self).as_dict(**kwargs)
+        SlotUD_dict = super(SlotUD, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.line_list is None:
             SlotUD_dict["line_list"] = None
         else:
             SlotUD_dict["line_list"] = list()
             for obj in self.line_list:
                 if obj is not None:
-                    SlotUD_dict["line_list"].append(obj.as_dict(**kwargs))
+                    SlotUD_dict["line_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     SlotUD_dict["line_list"].append(None)
         SlotUD_dict["wind_begin_index"] = self.wind_begin_index
         SlotUD_dict["wind_end_index"] = self.wind_end_index
         SlotUD_dict["type_line_wind"] = self.type_line_wind
+        SlotUD_dict["name"] = self.name
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotUD_dict["__class__"] = "SlotUD"
@@ -264,6 +289,7 @@ class SlotUD(Slot):
         self.wind_begin_index = None
         self.wind_end_index = None
         self.type_line_wind = None
+        self.name = None
         # Set to None the properties inherited from Slot
         super(SlotUD, self)._set_None()
 
@@ -353,5 +379,23 @@ class SlotUD(Slot):
         :Type: int
         :min: 0
         :max: 1
+        """,
+    )
+
+    def _get_name(self):
+        """getter of name"""
+        return self._name
+
+    def _set_name(self, value):
+        """setter of name"""
+        check_var("name", value, "str")
+        self._name = value
+
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the slot (for save)
+
+        :Type: str
         """,
     )

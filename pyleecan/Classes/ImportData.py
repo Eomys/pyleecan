@@ -209,9 +209,13 @@ class ImportData(FrozenClass):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -223,13 +227,23 @@ class ImportData(FrozenClass):
             ImportData_dict["axes"] = list()
             for obj in self.axes:
                 if obj is not None:
-                    ImportData_dict["axes"].append(obj.as_dict(**kwargs))
+                    ImportData_dict["axes"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     ImportData_dict["axes"].append(None)
         if self.field is None:
             ImportData_dict["field"] = None
         else:
-            ImportData_dict["field"] = self.field.as_dict(**kwargs)
+            ImportData_dict["field"] = self.field.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         ImportData_dict["unit"] = self.unit
         ImportData_dict["name"] = self.name
         ImportData_dict["symbol"] = self.symbol

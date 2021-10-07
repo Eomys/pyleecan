@@ -307,15 +307,23 @@ class SlotM16(Slot):
         S += getsizeof(self.H1)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Slot
-        SlotM16_dict = super(SlotM16, self).as_dict(**kwargs)
+        SlotM16_dict = super(SlotM16, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         SlotM16_dict["W0"] = self.W0
         SlotM16_dict["H0"] = self.H0
         SlotM16_dict["W1"] = self.W1

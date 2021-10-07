@@ -2,16 +2,17 @@ from ...Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6, TAB7
 from ...Generator.read_fct import is_list_pyleecan_type, is_dict_pyleecan_type
 
 
-def generate_set_None(gen_dict, class_dict):
+def generate_set_None(gen_dict, class_dict, soft_name="software"):
     """Generate the code for the _set_None method of the class
 
     Parameters
     ----------
     gen_dict : dict
         Dict with key = class name and value = class dict (name, package, properties, methods...)
-
     class_dict : dict
         dictionary of the class to generate (keys are name, package, properties, methods...)
+    soft_name : str
+        Name of the software to generate
 
     Returns
     -------
@@ -48,7 +49,10 @@ def generate_set_None(gen_dict, class_dict):
     # Code generation
     None_str += TAB + "def _set_None(self):\n"
     None_str += (
-        TAB2 + '"""Set all the properties to None (except ' + 'pyleecan object)"""\n\n'
+        TAB2
+        + '"""Set all the properties to None (except '
+        + soft_name
+        + ' object)"""\n\n'
     )
     None_str += var_str
     if class_dict["mother"] != "":

@@ -123,6 +123,7 @@ class SlotUD2(Slot):
         line_list=-1,
         active_surf=-1,
         split_active_surf_dict=None,
+        name="",
         Zs=36,
         init_dict=None,
         init_str=None,
@@ -148,12 +149,15 @@ class SlotUD2(Slot):
                 active_surf = init_dict["active_surf"]
             if "split_active_surf_dict" in list(init_dict.keys()):
                 split_active_surf_dict = init_dict["split_active_surf_dict"]
+            if "name" in list(init_dict.keys()):
+                name = init_dict["name"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         self.active_surf = active_surf
         self.split_active_surf_dict = split_active_surf_dict
+        self.name = name
         # Call Slot init
         super(SlotUD2, self).__init__(Zs=Zs)
         # The class is frozen (in Slot init), for now it's impossible to
@@ -182,6 +186,7 @@ class SlotUD2(Slot):
         SlotUD2_str += (
             "split_active_surf_dict = " + str(self.split_active_surf_dict) + linesep
         )
+        SlotUD2_str += 'name = "' + str(self.name) + '"' + linesep
         return SlotUD2_str
 
     def __eq__(self, other):
@@ -198,6 +203,8 @@ class SlotUD2(Slot):
         if other.active_surf != self.active_surf:
             return False
         if other.split_active_surf_dict != self.split_active_surf_dict:
+            return False
+        if other.name != self.name:
             return False
         return True
 
@@ -237,6 +244,8 @@ class SlotUD2(Slot):
             )
         if other._split_active_surf_dict != self._split_active_surf_dict:
             diff_list.append(name + ".split_active_surf_dict")
+        if other._name != self._name:
+            diff_list.append(name + ".name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -255,35 +264,55 @@ class SlotUD2(Slot):
         if self.split_active_surf_dict is not None:
             for key, value in self.split_active_surf_dict.items():
                 S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.name)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Slot
-        SlotUD2_dict = super(SlotUD2, self).as_dict(**kwargs)
+        SlotUD2_dict = super(SlotUD2, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.line_list is None:
             SlotUD2_dict["line_list"] = None
         else:
             SlotUD2_dict["line_list"] = list()
             for obj in self.line_list:
                 if obj is not None:
-                    SlotUD2_dict["line_list"].append(obj.as_dict(**kwargs))
+                    SlotUD2_dict["line_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     SlotUD2_dict["line_list"].append(None)
         if self.active_surf is None:
             SlotUD2_dict["active_surf"] = None
         else:
-            SlotUD2_dict["active_surf"] = self.active_surf.as_dict(**kwargs)
+            SlotUD2_dict["active_surf"] = self.active_surf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         SlotUD2_dict["split_active_surf_dict"] = (
             self.split_active_surf_dict.copy()
             if self.split_active_surf_dict is not None
             else None
         )
+        SlotUD2_dict["name"] = self.name
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotUD2_dict["__class__"] = "SlotUD2"
@@ -296,6 +325,7 @@ class SlotUD2(Slot):
         if self.active_surf is not None:
             self.active_surf._set_None()
         self.split_active_surf_dict = None
+        self.name = None
         # Set to None the properties inherited from Slot
         super(SlotUD2, self)._set_None()
 
@@ -372,5 +402,23 @@ class SlotUD2(Slot):
         doc=u"""Dictionary to enforced the split active surface (key="Nrad=1, Ntan=2"). Labels set according to list order (loop on Nrad then Ntan)
 
         :Type: dict
+        """,
+    )
+
+    def _get_name(self):
+        """getter of name"""
+        return self._name
+
+    def _set_name(self, value):
+        """setter of name"""
+        check_var("name", value, "str")
+        self._name = value
+
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the slot (for save)
+
+        :Type: str
         """,
     )
