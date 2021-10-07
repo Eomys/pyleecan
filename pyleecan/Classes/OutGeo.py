@@ -284,9 +284,13 @@ class OutGeo(FrozenClass):
         S += getsizeof(self.is_antiper_t_R)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -295,11 +299,19 @@ class OutGeo(FrozenClass):
         if self.stator is None:
             OutGeo_dict["stator"] = None
         else:
-            OutGeo_dict["stator"] = self.stator.as_dict(**kwargs)
+            OutGeo_dict["stator"] = self.stator.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.rotor is None:
             OutGeo_dict["rotor"] = None
         else:
-            OutGeo_dict["rotor"] = self.rotor.as_dict(**kwargs)
+            OutGeo_dict["rotor"] = self.rotor.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutGeo_dict["Wgap_mec"] = self.Wgap_mec
         OutGeo_dict["Wgap_mag"] = self.Wgap_mag
         OutGeo_dict["Rgap_mec"] = self.Rgap_mec
@@ -317,7 +329,11 @@ class OutGeo(FrozenClass):
             OutGeo_dict["axes_dict"] = dict()
             for key, obj in self.axes_dict.items():
                 if obj is not None:
-                    OutGeo_dict["axes_dict"][key] = obj.as_dict()
+                    OutGeo_dict["axes_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     OutGeo_dict["axes_dict"][key] = None
         OutGeo_dict["per_t_R"] = self.per_t_R

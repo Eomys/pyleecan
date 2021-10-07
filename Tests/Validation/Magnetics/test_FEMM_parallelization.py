@@ -1,7 +1,6 @@
 from os.path import join
 from time import time
 
-import matplotlib.pyplot as plt
 import pytest
 from numpy import array, pi
 from numpy.testing import assert_allclose

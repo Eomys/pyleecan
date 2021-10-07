@@ -217,15 +217,23 @@ class ForceTensor(Force):
                 S += getsizeof(value) + getsizeof(key)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Force
-        ForceTensor_dict = super(ForceTensor, self).as_dict(**kwargs)
+        ForceTensor_dict = super(ForceTensor, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         ForceTensor_dict["group"] = self.group
         ForceTensor_dict["tensor"] = (
             self.tensor.copy() if self.tensor is not None else None

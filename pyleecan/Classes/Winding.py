@@ -498,9 +498,13 @@ class Winding(FrozenClass):
         S += getsizeof(self.is_permute_B_C)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -517,19 +521,36 @@ class Winding(FrozenClass):
         if self.conductor is None:
             Winding_dict["conductor"] = None
         else:
-            Winding_dict["conductor"] = self.conductor.as_dict(**kwargs)
+            Winding_dict["conductor"] = self.conductor.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Winding_dict["coil_pitch"] = self.coil_pitch
         if self.wind_mat is None:
             Winding_dict["wind_mat"] = None
         else:
-            Winding_dict["wind_mat"] = self.wind_mat.tolist()
+            if type_handle_ndarray == 0:
+                Winding_dict["wind_mat"] = self.wind_mat.tolist()
+            elif type_handle_ndarray == 1:
+                Winding_dict["wind_mat"] = self.wind_mat.copy()
+            elif type_handle_ndarray == 2:
+                Winding_dict["wind_mat"] = self.wind_mat
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         Winding_dict["Nlayer"] = self.Nlayer
         Winding_dict["per_a"] = self.per_a
         Winding_dict["is_aper_a"] = self.is_aper_a
         if self.end_winding is None:
             Winding_dict["end_winding"] = None
         else:
-            Winding_dict["end_winding"] = self.end_winding.as_dict(**kwargs)
+            Winding_dict["end_winding"] = self.end_winding.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Winding_dict["is_reverse_layer"] = self.is_reverse_layer
         Winding_dict["is_change_layer"] = self.is_change_layer
         Winding_dict["is_permute_B_C"] = self.is_permute_B_C

@@ -236,9 +236,13 @@ class Electrical(FrozenClass):
         S += getsizeof(self.ELUT_enforced)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -247,7 +251,11 @@ class Electrical(FrozenClass):
         if self.eec is None:
             Electrical_dict["eec"] = None
         else:
-            Electrical_dict["eec"] = self.eec.as_dict(**kwargs)
+            Electrical_dict["eec"] = self.eec.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Electrical_dict["logger_name"] = self.logger_name
         Electrical_dict["type_skin_effect"] = self.type_skin_effect
         Electrical_dict["Tsta"] = self.Tsta
@@ -256,7 +264,11 @@ class Electrical(FrozenClass):
         if self.ELUT_enforced is None:
             Electrical_dict["ELUT_enforced"] = None
         else:
-            Electrical_dict["ELUT_enforced"] = self.ELUT_enforced.as_dict(**kwargs)
+            Electrical_dict["ELUT_enforced"] = self.ELUT_enforced.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict

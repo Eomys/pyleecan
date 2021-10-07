@@ -131,6 +131,7 @@ from .Slot import Slot
 from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
+from .Skew import Skew
 from .Bore import Bore
 
 
@@ -400,6 +401,7 @@ class LamSlotWind(LamSlot):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        skew=None,
         yoke_notch=-1,
         bore=None,
         init_dict=None,
@@ -448,6 +450,8 @@ class LamSlotWind(LamSlot):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "skew" in list(init_dict.keys()):
+                skew = init_dict["skew"]
             if "yoke_notch" in list(init_dict.keys()):
                 yoke_notch = init_dict["yoke_notch"]
             if "bore" in list(init_dict.keys()):
@@ -469,6 +473,7 @@ class LamSlotWind(LamSlot):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            skew=skew,
             yoke_notch=yoke_notch,
             bore=bore,
         )
@@ -540,20 +545,32 @@ class LamSlotWind(LamSlot):
         S += getsizeof(self.winding)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LamSlot
-        LamSlotWind_dict = super(LamSlotWind, self).as_dict(**kwargs)
+        LamSlotWind_dict = super(LamSlotWind, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         LamSlotWind_dict["Ksfill"] = self.Ksfill
         if self.winding is None:
             LamSlotWind_dict["winding"] = None
         else:
-            LamSlotWind_dict["winding"] = self.winding.as_dict(**kwargs)
+            LamSlotWind_dict["winding"] = self.winding.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotWind_dict["__class__"] = "LamSlotWind"

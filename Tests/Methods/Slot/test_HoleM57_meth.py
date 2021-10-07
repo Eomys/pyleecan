@@ -7,7 +7,9 @@ import pytest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM57 import HoleM57
+from pyleecan.Classes.Hole import Hole
 
+DELTA = 1e-6
 HoleM57_test = list()
 
 test_obj = LamHole(is_internal=True, Rint=0.021, Rext=0.075, is_stator=False, L1=0.7)
@@ -78,3 +80,26 @@ class Test_HoleM57_meth(object):
         assert abs(point_dict["Z8"] - point_dict["Z9"]) == pytest.approx(
             test_obj.hole[0].H2
         )
+
+    @pytest.mark.parametrize("test_dict", HoleM57_test)
+    def test_comp_radius(self, test_dict):
+        """Check that the computation of the surface is correct"""
+        test_obj = test_dict["test_obj"]
+        Rmin, Rmax = test_obj.hole[0].comp_radius()
+
+        # Check that the analytical method returns the same result as the numerical one
+        Rmin_a, Rmax_a = Hole.comp_radius(test_obj.hole[0])
+
+        a, b = Rmin, Rmin_a
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+        a, b = Rmax, Rmax_a
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+
+if __name__ == "__main__":
+    a = Test_HoleM57_meth()
+    for test_dict in HoleM57_test:
+        a.test_comp_radius(test_dict)
+    print("Done")

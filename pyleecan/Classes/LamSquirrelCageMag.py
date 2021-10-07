@@ -58,6 +58,7 @@ from .Material import Material
 from .Winding import Winding
 from .Slot import Slot
 from .Notch import Notch
+from .Skew import Skew
 from .Bore import Bore
 
 
@@ -159,6 +160,7 @@ class LamSquirrelCageMag(LamSquirrelCage):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        skew=None,
         yoke_notch=-1,
         bore=None,
         init_dict=None,
@@ -215,6 +217,8 @@ class LamSquirrelCageMag(LamSquirrelCage):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "skew" in list(init_dict.keys()):
+                skew = init_dict["skew"]
             if "yoke_notch" in list(init_dict.keys()):
                 yoke_notch = init_dict["yoke_notch"]
             if "bore" in list(init_dict.keys()):
@@ -240,6 +244,7 @@ class LamSquirrelCageMag(LamSquirrelCage):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            skew=skew,
             yoke_notch=yoke_notch,
             bore=bore,
         )
@@ -316,22 +321,36 @@ class LamSquirrelCageMag(LamSquirrelCage):
                 S += getsizeof(value)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LamSquirrelCage
-        LamSquirrelCageMag_dict = super(LamSquirrelCageMag, self).as_dict(**kwargs)
+        LamSquirrelCageMag_dict = super(LamSquirrelCageMag, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.hole is None:
             LamSquirrelCageMag_dict["hole"] = None
         else:
             LamSquirrelCageMag_dict["hole"] = list()
             for obj in self.hole:
                 if obj is not None:
-                    LamSquirrelCageMag_dict["hole"].append(obj.as_dict(**kwargs))
+                    LamSquirrelCageMag_dict["hole"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     LamSquirrelCageMag_dict["hole"].append(None)
         # The class name is added to the dict for deserialisation purpose

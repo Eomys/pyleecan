@@ -196,7 +196,12 @@ def test_class_as_dict(class_dict):
 
     test_obj = eval(class_dict["name"] + "()")
     # Test
-    result_dict = test_obj.as_dict()
+    try:
+        result_dict = test_obj.as_dict(type_handle_ndarray=0, keep_function=False)
+    except Exception as e:
+        raise Exception(
+            "Error while calling as_dict for " + class_dict["name"] + ":\n" + str(e)
+        )
     for key in result_dict:
         assert d[key] == result_dict[key], (
             "Error for class "
@@ -331,9 +336,7 @@ def test_class_type_float(class_dict):
             assert test_obj.__getattribute__(prop["name"]) == value, msg
         else:
             # CheckTypeError expected
-            with pytest.raises(
-                CheckTypeError,
-            ):
+            with pytest.raises(CheckTypeError,):
                 # print(msg)
                 test_obj.__setattr__(prop["name"], value)
 

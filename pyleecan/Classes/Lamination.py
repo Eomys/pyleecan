@@ -156,6 +156,7 @@ from ._check import InitUnKnowClassError
 from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
+from .Skew import Skew
 from .Bore import Bore
 
 
@@ -468,6 +469,7 @@ class Lamination(FrozenClass):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        skew=None,
         yoke_notch=-1,
         bore=None,
         init_dict=None,
@@ -510,6 +512,8 @@ class Lamination(FrozenClass):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "skew" in list(init_dict.keys()):
+                skew = init_dict["skew"]
             if "yoke_notch" in list(init_dict.keys()):
                 yoke_notch = init_dict["yoke_notch"]
             if "bore" in list(init_dict.keys()):
@@ -527,6 +531,7 @@ class Lamination(FrozenClass):
         self.is_stator = is_stator
         self.axial_vent = axial_vent
         self.notch = notch
+        self.skew = skew
         self.yoke_notch = yoke_notch
         self.bore = bore
 
@@ -566,6 +571,11 @@ class Lamination(FrozenClass):
         for ii in range(len(self.notch)):
             tmp = self.notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
             Lamination_str += "notch[" + str(ii) + "] =" + tmp + linesep + linesep
+        if self.skew is not None:
+            tmp = self.skew.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Lamination_str += "skew = " + tmp
+        else:
+            Lamination_str += "skew = None" + linesep + linesep
         if len(self.yoke_notch) == 0:
             Lamination_str += "yoke_notch = []" + linesep
         for ii in range(len(self.yoke_notch)):
@@ -606,6 +616,8 @@ class Lamination(FrozenClass):
         if other.axial_vent != self.axial_vent:
             return False
         if other.notch != self.notch:
+            return False
+        if other.skew != self.skew:
             return False
         if other.yoke_notch != self.yoke_notch:
             return False
@@ -675,6 +687,12 @@ class Lamination(FrozenClass):
                         other.notch[ii], name=name + ".notch[" + str(ii) + "]"
                     )
                 )
+        if (other.skew is None and self.skew is not None) or (
+            other.skew is not None and self.skew is None
+        ):
+            diff_list.append(name + ".skew None mismatch")
+        elif self.skew is not None:
+            diff_list.extend(self.skew.compare(other.skew, name=name + ".skew"))
         if (other.yoke_notch is None and self.yoke_notch is not None) or (
             other.yoke_notch is not None and self.yoke_notch is None
         ):
@@ -719,15 +737,20 @@ class Lamination(FrozenClass):
         if self.notch is not None:
             for value in self.notch:
                 S += getsizeof(value)
+        S += getsizeof(self.skew)
         if self.yoke_notch is not None:
             for value in self.yoke_notch:
                 S += getsizeof(value)
         S += getsizeof(self.bore)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -737,7 +760,11 @@ class Lamination(FrozenClass):
         if self.mat_type is None:
             Lamination_dict["mat_type"] = None
         else:
-            Lamination_dict["mat_type"] = self.mat_type.as_dict(**kwargs)
+            Lamination_dict["mat_type"] = self.mat_type.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Lamination_dict["Nrvd"] = self.Nrvd
         Lamination_dict["Wrvd"] = self.Wrvd
         Lamination_dict["Kf1"] = self.Kf1
@@ -751,7 +778,13 @@ class Lamination(FrozenClass):
             Lamination_dict["axial_vent"] = list()
             for obj in self.axial_vent:
                 if obj is not None:
-                    Lamination_dict["axial_vent"].append(obj.as_dict(**kwargs))
+                    Lamination_dict["axial_vent"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     Lamination_dict["axial_vent"].append(None)
         if self.notch is None:
@@ -760,22 +793,46 @@ class Lamination(FrozenClass):
             Lamination_dict["notch"] = list()
             for obj in self.notch:
                 if obj is not None:
-                    Lamination_dict["notch"].append(obj.as_dict(**kwargs))
+                    Lamination_dict["notch"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     Lamination_dict["notch"].append(None)
+        if self.skew is None:
+            Lamination_dict["skew"] = None
+        else:
+            Lamination_dict["skew"] = self.skew.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.yoke_notch is None:
             Lamination_dict["yoke_notch"] = None
         else:
             Lamination_dict["yoke_notch"] = list()
             for obj in self.yoke_notch:
                 if obj is not None:
-                    Lamination_dict["yoke_notch"].append(obj.as_dict(**kwargs))
+                    Lamination_dict["yoke_notch"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
                     Lamination_dict["yoke_notch"].append(None)
         if self.bore is None:
             Lamination_dict["bore"] = None
         else:
-            Lamination_dict["bore"] = self.bore.as_dict(**kwargs)
+            Lamination_dict["bore"] = self.bore.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         Lamination_dict["__class__"] = "Lamination"
         return Lamination_dict
@@ -795,6 +852,8 @@ class Lamination(FrozenClass):
         self.is_stator = None
         self.axial_vent = None
         self.notch = None
+        if self.skew is not None:
+            self.skew._set_None()
         self.yoke_notch = None
         if self.bore is not None:
             self.bore._set_None()
@@ -1043,6 +1102,34 @@ class Lamination(FrozenClass):
         doc=u"""Lamination bore notches
 
         :Type: [Notch]
+        """,
+    )
+
+    def _get_skew(self):
+        """getter of skew"""
+        return self._skew
+
+    def _set_skew(self, value):
+        """setter of skew"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "skew")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Skew()
+        check_var("skew", value, "Skew")
+        self._skew = value
+
+        if self._skew is not None:
+            self._skew.parent = self
+
+    skew = property(
+        fget=_get_skew,
+        fset=_set_skew,
+        doc=u"""Skew object
+
+        :Type: Skew
         """,
     )
 

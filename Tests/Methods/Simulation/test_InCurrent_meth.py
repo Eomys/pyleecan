@@ -312,10 +312,11 @@ if __name__ == "__main__":
 
     obj = Test_InCurrent_meth()
 
-    test_dict = idq_test[0]
-
-    out = obj.test_InputCurrent_DQ(test_dict)
-
+    # test_dict = idq_test[0]
+    # obj.test_InputCurrent_DQ(test_dict)
+    for test_dict in idq_test:
+        out = obj.test_InputCurrent_DQ(test_dict)
+    print("Done")
     # out.plot_2D_Data(
     #         "elec.Is",
     #         "time",

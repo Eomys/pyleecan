@@ -203,9 +203,13 @@ class NodeMat(FrozenClass):
         S += getsizeof(self.indice)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -214,13 +218,31 @@ class NodeMat(FrozenClass):
         if self.coordinate is None:
             NodeMat_dict["coordinate"] = None
         else:
-            NodeMat_dict["coordinate"] = self.coordinate.tolist()
+            if type_handle_ndarray == 0:
+                NodeMat_dict["coordinate"] = self.coordinate.tolist()
+            elif type_handle_ndarray == 1:
+                NodeMat_dict["coordinate"] = self.coordinate.copy()
+            elif type_handle_ndarray == 2:
+                NodeMat_dict["coordinate"] = self.coordinate
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         NodeMat_dict["nb_node"] = self.nb_node
         NodeMat_dict["delta"] = self.delta
         if self.indice is None:
             NodeMat_dict["indice"] = None
         else:
-            NodeMat_dict["indice"] = self.indice.tolist()
+            if type_handle_ndarray == 0:
+                NodeMat_dict["indice"] = self.indice.tolist()
+            elif type_handle_ndarray == 1:
+                NodeMat_dict["indice"] = self.indice.copy()
+            elif type_handle_ndarray == 2:
+                NodeMat_dict["indice"] = self.indice
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         # The class name is added to the dict for deserialisation purpose
         NodeMat_dict["__class__"] = "NodeMat"
         return NodeMat_dict

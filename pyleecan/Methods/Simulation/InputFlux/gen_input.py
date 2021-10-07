@@ -33,7 +33,7 @@ def gen_input(self):
     elif isinstance(self.parent.parent, Simulation):
         simu = self.parent.parent
     else:
-        raise InputError("InputCurrent object should be inside a Simulation object")
+        raise InputError("InputFlux object should be inside a Simulation object")
 
     if simu.parent is None:
         raise InputError("The Simulation object must be in an Output object to run")
@@ -112,13 +112,14 @@ def gen_input(self):
             )
         else:
             # Single slice
+            L1 = simu.machine.rotor.L1
             Slice = DataPattern(
                 name="z",
                 unit="m",
-                values=array([0], dtype=float),
-                rebuild_indices=[0],
+                values=array([-L1 / 2], dtype=float),
+                rebuild_indices=[0, 0],
                 unique_indices=[0],
-                values_whole=array([0], dtype=float),
+                values_whole=array([-L1 / 2, L1 / 2], dtype=float),
             )
 
         # Store in axes_dict
