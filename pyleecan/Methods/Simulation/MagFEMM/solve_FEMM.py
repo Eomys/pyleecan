@@ -1,8 +1,7 @@
+from os import remove
 from os.path import basename, splitext, isfile
 
 from numpy import zeros, pi, roll, cos, sin
-
-# from scipy.interpolate import interp1d
 
 from ....Classes._FEMMHandler import _FEMMHandler
 from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
@@ -74,22 +73,47 @@ def solve_FEMM(
 
     Returns
     -------
+    B: ndarray
+        3D Magnetic flux density for all time steps and each element (Nt, Nelem, 3) [T]
+    H : ndarray
+        3D Magnetic field for all time steps and each element (Nt, Nelem, 3) [A/m]
+    mu : ndarray
+        Magnetic relative permeability for all time steps and each element (Nt, Nelem) []
+    mesh: MeshMat
+        Object containing magnetic mesh at first time step
+    groups: dict
+        Dict whose values are group label and values are array of indices of related elements
 
     """
-    # Open FEMM file if not None, else it is already open
+
+    logger = self.get_logger()
+
     if filename is not None:
+        # Open FEMM instance if filename is not None (parallel case)
         try:
-            # Open the document
+            # Try to open FEMM instance if handler already exists (first parallelized handler)
             femm.openfemm(1)
         except Exception:
             # Create a new FEMM handler in case of parallelization on another FEMM instance
             femm = _FEMMHandler()
             output.mag.internal.handler_list.append(femm)
-            # Open the document
+            # Open a new FEMM instance associated to new handler
             femm.openfemm(1)
 
-        # Import FEMM file
+        # Open FEMM file
         femm.opendocument(filename)
+    else:
+        # FEMM instance and file is already open, get filename from output
+        filename = basename(self.get_path_save_fem(output))
+
+    if self.is_set_previous:
+        # Check result .ans file existence and delete it if it exists
+        ans_file = (
+            (splitext(filename)[0] + ".ans").replace("\\", "/").replace("//", "/")
+        )
+        if isfile(ans_file):
+            logger.info("Delete existing result .ans file at: " + ans_file)
+            remove(ans_file)
 
     # Take last time step at Nt by default
     if end_t is None:
@@ -128,11 +152,11 @@ def solve_FEMM(
     # Compute the data for each time step
     for ii in range(start_t, end_t):
         if Nt > 1:
-            self.get_logger().info(
+            logger.info(
                 "Solving time step " + str(ii + 1) + " / " + str(Nt) + " in FEMM"
             )
         else:
-            self.get_logger().info("Computing Airgap Flux in FEMM")
+            logger.info("Computing Airgap Flux in FEMM")
         # Update rotor position and currents
         update_FEMM_simulation(
             femm=femm,
@@ -144,21 +168,17 @@ def solve_FEMM(
             Ir=Ir,
             ii=ii,
         )
-        # try "previous solution" for speed up of FEMM calculation
-        if self.is_sliding_band and self.is_set_previous:
-            try:
-                if filename is None:
-                    filename = basename(self.get_path_save_fem(output))
-                ans_file = (
-                    (splitext(filename)[0] + ".ans")
-                    .replace("\\", "/")
-                    .replace("//", "/")
-                )
-                if isfile(ans_file):
-                    femm.mi_setprevious(ans_file, 0)
-            except Exception:
-                # No previous .ans file, skip this step
-                pass
+
+        # Check if there is a previous solution file to speed up non-linear iterations
+        if self.is_sliding_band and self.is_set_previous and ii > start_t:
+            if isfile(ans_file):
+                # Setup .ans file path in FEMM model
+                femm.mi_setprevious(ans_file, 0)
+            else:
+                logger.warning("Cannot reuse result .ans file: " + ans_file)
+        else:
+            # Make sure that no file path is filled in FEMM model
+            femm.mi_setprevious("", 0)
 
         # Run the computation
         femm.mi_analyze()
@@ -230,11 +250,6 @@ def solve_FEMM(
         roll_id = int(self.angle_stator_shift * Na / (2 * pi))
         out_dict["Br"] = roll(out_dict["Br"], roll_id, axis=1)
         out_dict["Bt"] = roll(out_dict["Bt"], roll_id, axis=1)
-
-        # # Interpolate on updated angular position # TODO to improve accuracy
-        # angle_new = (angle - self.angle_stator_shift) % (2 * pi / sym)
-        # out_dict["Br"] = interp1d(append(angle, 2 * pi / sym), append(out_dict["Br"], out_dict["Br"][:,0]), axis=1)[angle_new]
-        # out_dict["Bt"] = interp1d(append(angle, 2 * pi / sym), append(out_dict["Bt"], out_dict["Bt"][:,0]), axis=1)[angle_new]
 
     # Close FEMM handler
     if is_close_femm:
