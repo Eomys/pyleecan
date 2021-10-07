@@ -27,6 +27,6 @@ def get_Nr(self, Time=None):
         raise Exception('You must define "N0" before calling get_Nr')
 
     # Same speed for every timestep
-    Nr = self.N0 * ones(Time.get_length(is_oneperiod=False))
+    Nr = self.N0 * ones(Time.get_length(is_smallestperiod=True))
 
     return Nr
