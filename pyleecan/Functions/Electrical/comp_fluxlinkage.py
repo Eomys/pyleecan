@@ -25,6 +25,7 @@ def comp_fluxlinkage(obj, output):
         the calculated fluxlinkage
     """
     # get some machine and simulation parameters
+    L1 = output.simu.machine.stator.L1
     qs = output.simu.machine.stator.winding.qs
     zp = output.simu.machine.stator.get_pole_pair_number()
     Nt_tot = obj.Nt_tot
@@ -103,7 +104,7 @@ def comp_fluxlinkage(obj, output):
     )
 
     # Solve for all time step and store all the results in output
-    Phi_wind = obj.solve_FEMM(femm, output, sym, FEMM_dict)
+    Phi_wind = L1 * obj.solve_FEMM(femm, output, sym, FEMM_dict)
 
     # Close FEMM after simulation
     femm.closefemm()
