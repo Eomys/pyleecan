@@ -33,83 +33,101 @@ class Ui_PVentCirc(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_vent.sizePolicy().hasHeightForWidth())
         self.img_vent.setSizePolicy(sizePolicy)
+        self.img_vent.setMinimumSize(QSize(300, 300))
         self.img_vent.setMaximumSize(QSize(16777215, 16777215))
         self.img_vent.setPixmap(
             QPixmap(u":/images/images/MachineSetup/LamParam/CircVentDuct.png")
         )
-        self.img_vent.setScaledContents(True)
+        self.img_vent.setScaledContents(False)
+        self.img_vent.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.img_vent)
 
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
-        self.verticalLayout = QVBoxLayout()
+        self.scrollArea = QScrollArea(PVentCirc)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setMinimumSize(QSize(270, 0))
+        self.scrollArea.setMaximumSize(QSize(270, 16777215))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 446))
+        self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.lf_D0 = FloatEdit(PVentCirc)
-        self.lf_D0.setObjectName(u"lf_D0")
-
-        self.gridLayout.addWidget(self.lf_D0, 2, 1, 1, 1)
-
-        self.lf_Alpha0 = FloatEdit(PVentCirc)
-        self.lf_Alpha0.setObjectName(u"lf_Alpha0")
-
-        self.gridLayout.addWidget(self.lf_Alpha0, 3, 1, 1, 1)
-
-        self.unit_D0 = QLabel(PVentCirc)
-        self.unit_D0.setObjectName(u"unit_D0")
-
-        self.gridLayout.addWidget(self.unit_D0, 2, 2, 1, 1)
-
-        self.in_Alpha0 = QLabel(PVentCirc)
-        self.in_Alpha0.setObjectName(u"in_Alpha0")
-
-        self.gridLayout.addWidget(self.in_Alpha0, 3, 0, 1, 1)
-
-        self.unit_Alpha0 = QLabel(PVentCirc)
-        self.unit_Alpha0.setObjectName(u"unit_Alpha0")
-
-        self.gridLayout.addWidget(self.unit_Alpha0, 3, 2, 1, 1)
-
-        self.unit_H0 = QLabel(PVentCirc)
-        self.unit_H0.setObjectName(u"unit_H0")
-
-        self.gridLayout.addWidget(self.unit_H0, 1, 2, 1, 1)
-
-        self.lf_H0 = FloatEdit(PVentCirc)
-        self.lf_H0.setObjectName(u"lf_H0")
-
-        self.gridLayout.addWidget(self.lf_H0, 1, 1, 1, 1)
-
-        self.in_H0 = QLabel(PVentCirc)
-        self.in_H0.setObjectName(u"in_H0")
-
-        self.gridLayout.addWidget(self.in_H0, 1, 0, 1, 1)
-
-        self.in_D0 = QLabel(PVentCirc)
-        self.in_D0.setObjectName(u"in_D0")
-
-        self.gridLayout.addWidget(self.in_D0, 2, 0, 1, 1)
-
-        self.in_Zh = QLabel(PVentCirc)
+        self.in_Zh = QLabel(self.scrollAreaWidgetContents)
         self.in_Zh.setObjectName(u"in_Zh")
 
         self.gridLayout.addWidget(self.in_Zh, 0, 0, 1, 1)
 
-        self.si_Zh = QSpinBox(PVentCirc)
+        self.si_Zh = QSpinBox(self.scrollAreaWidgetContents)
         self.si_Zh.setObjectName(u"si_Zh")
 
         self.gridLayout.addWidget(self.si_Zh, 0, 1, 1, 1)
 
+        self.in_H0 = QLabel(self.scrollAreaWidgetContents)
+        self.in_H0.setObjectName(u"in_H0")
+
+        self.gridLayout.addWidget(self.in_H0, 1, 0, 1, 1)
+
+        self.lf_H0 = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_H0.setObjectName(u"lf_H0")
+
+        self.gridLayout.addWidget(self.lf_H0, 1, 1, 1, 1)
+
+        self.unit_H0 = QLabel(self.scrollAreaWidgetContents)
+        self.unit_H0.setObjectName(u"unit_H0")
+
+        self.gridLayout.addWidget(self.unit_H0, 1, 2, 1, 1)
+
+        self.in_D0 = QLabel(self.scrollAreaWidgetContents)
+        self.in_D0.setObjectName(u"in_D0")
+
+        self.gridLayout.addWidget(self.in_D0, 2, 0, 1, 1)
+
+        self.lf_D0 = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_D0.setObjectName(u"lf_D0")
+
+        self.gridLayout.addWidget(self.lf_D0, 2, 1, 1, 1)
+
+        self.unit_D0 = QLabel(self.scrollAreaWidgetContents)
+        self.unit_D0.setObjectName(u"unit_D0")
+
+        self.gridLayout.addWidget(self.unit_D0, 2, 2, 1, 1)
+
+        self.in_Alpha0 = QLabel(self.scrollAreaWidgetContents)
+        self.in_Alpha0.setObjectName(u"in_Alpha0")
+
+        self.gridLayout.addWidget(self.in_Alpha0, 3, 0, 1, 1)
+
+        self.lf_Alpha0 = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_Alpha0.setObjectName(u"lf_Alpha0")
+
+        self.gridLayout.addWidget(self.lf_Alpha0, 3, 1, 1, 1)
+
+        self.unit_Alpha0 = QLabel(self.scrollAreaWidgetContents)
+        self.unit_Alpha0.setObjectName(u"unit_Alpha0")
+
+        self.gridLayout.addWidget(self.unit_Alpha0, 3, 2, 1, 1)
+
         self.verticalLayout.addLayout(self.gridLayout)
 
-        self.w_out = WVentOut(PVentCirc)
+        self.verticalSpacer = QSpacerItem(
+            20, 286, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout.addItem(self.verticalSpacer)
+
+        self.w_out = WVentOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
 
         self.verticalLayout.addWidget(self.w_out)
 
-        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+        self.horizontalLayout.addWidget(self.scrollArea)
 
         QWidget.setTabOrder(self.lf_H0, self.lf_D0)
         QWidget.setTabOrder(self.lf_D0, self.lf_Alpha0)
@@ -123,14 +141,14 @@ class Ui_PVentCirc(object):
     def retranslateUi(self, PVentCirc):
         PVentCirc.setWindowTitle(QCoreApplication.translate("PVentCirc", u"Form", None))
         self.img_vent.setText("")
+        self.in_Zh.setText(QCoreApplication.translate("PVentCirc", u"Zh :", None))
+        self.in_H0.setText(QCoreApplication.translate("PVentCirc", u"H0 :", None))
+        self.unit_H0.setText(QCoreApplication.translate("PVentCirc", u"m", None))
+        self.in_D0.setText(QCoreApplication.translate("PVentCirc", u"D0 :", None))
         self.unit_D0.setText(QCoreApplication.translate("PVentCirc", u"m", None))
         self.in_Alpha0.setText(
             QCoreApplication.translate("PVentCirc", u"Alpha0 :", None)
         )
         self.unit_Alpha0.setText(QCoreApplication.translate("PVentCirc", u"rad", None))
-        self.unit_H0.setText(QCoreApplication.translate("PVentCirc", u"m", None))
-        self.in_H0.setText(QCoreApplication.translate("PVentCirc", u"H0 :", None))
-        self.in_D0.setText(QCoreApplication.translate("PVentCirc", u"D0 :", None))
-        self.in_Zh.setText(QCoreApplication.translate("PVentCirc", u"Zh :", None))
 
     # retranslateUi

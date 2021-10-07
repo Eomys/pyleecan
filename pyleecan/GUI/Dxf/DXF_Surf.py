@@ -403,7 +403,7 @@ class DXF_Surf(Ui_DXF_Surf, QDialog):
         surf = self.get_surface()
         surf.scale(self.lf_scaling.value())
         surf.label = HOLEV_LAB
-        hole = HoleUD(surf_list=[])
+        hole = HoleUD(surf_list=[surf])
 
         # Translate
         if self.Zcenter != 0:

@@ -53,7 +53,10 @@ class WVentOut(QGroupBox):
             A WVentOut object
         """
 
-        lam = self.parent().lam
+        if hasattr(self.parent(), "lam"):
+            lam = self.parent().lam
+        else:  # For VentUD
+            lam = self.parent().parent().parent().parent().lam
 
         # Lamination output
         Rint = format(self.u.get_m(lam.Rint), ".4g")

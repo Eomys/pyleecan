@@ -46,6 +46,14 @@ class PVentUD(Ui_PVentUD, QWidget):
         self.vent = vent
         self.u = gui_option.unit
 
+        # Set vent values
+        if self.vent.Zh is None:
+            self.vent.Zh = 8
+        self.si_Zh.setValue(self.vent.Zh)
+        if self.vent.Alpha0 is None:
+            self.vent.Alpha0 = 0
+        self.lf_Alpha0.setValue(self.vent.Alpha0)
+
         # Setup Path selector for Json files
         self.w_path_json.obj = None
         self.w_path_json.param_name = None
@@ -60,6 +68,8 @@ class PVentUD(Ui_PVentUD, QWidget):
         # Connect the signals
         self.b_dxf.clicked.connect(self.open_DXF_Surf)
         self.w_path_json.pathChanged.connect(self.load_hole)
+        self.si_Zh.editingFinished.connect(self.set_Zh)
+        self.lf_Alpha0.editingFinished.connect(self.set_Alpha0)
 
     def set_Zh(self):
         """Signal to update the value of Zh according to the line edit
@@ -109,13 +119,13 @@ class PVentUD(Ui_PVentUD, QWidget):
     def update_graph(self):
         """Plot the lamination with/without the slot"""
         # Use a copy to avoid changing the main object
-        lam = self.lamination.copy()
+        lam = self.lam.copy()
         try:
             self.vent.check()
             lam.axial_vent = [self.vent]
         except SlotCheckError:
             # Plot only the lamination
-            lam.slot = None
+            lam.axial_vent = list()
         # Plot the lamination in the viewer fig
         lam.plot(fig=self.w_viewer.fig, is_show_fig=False)
 
@@ -161,7 +171,7 @@ class PVentUD(Ui_PVentUD, QWidget):
     def open_DXF_Surf(self):
         """Open the GUI to define the HoleUD"""
         # Init GUI with lamination parameters
-        self.dxf_gui = DXF_Surf(Zh=self.vent.Zh, lam=self.lamination)
+        self.dxf_gui = DXF_Surf(Zh=self.vent.Zh, lam=self.lam)
         self.dxf_gui.setWindowFlags(Qt.Window)  # To maximize the GUI
         self.dxf_gui.show()
         # Update the slot when saving

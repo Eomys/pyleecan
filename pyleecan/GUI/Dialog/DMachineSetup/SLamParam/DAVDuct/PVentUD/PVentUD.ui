@@ -130,13 +130,13 @@
   <customwidget>
    <class>WPathSelectorV</class>
    <extends>QWidget</extends>
-   <header>......GUI.Tools.WPathSelector.WPathSelectorV</header>
+   <header>.......GUI.Tools.WPathSelector.WPathSelectorV</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>MPLCanvas</class>
    <extends>QWidget</extends>
-   <header>......GUI.Tools.MPLCanvas</header>
+   <header>.......GUI.Tools.MPLCanvas</header>
    <container>1</container>
   </customwidget>
   <customwidget>

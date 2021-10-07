@@ -36,6 +36,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>300</width>
+         <height>300</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
@@ -49,100 +55,143 @@
         <pixmap resource="../../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/LamParam/PolarVentDuct.png</pixmap>
        </property>
        <property name="scaledContents">
-        <bool>true</bool>
+        <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="in_Zh">
-         <property name="text">
-          <string>Zh :</string>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="minimumSize">
+      <size>
+       <width>270</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>270</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>268</width>
+        <height>446</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="in_Zh">
+           <property name="text">
+            <string>Zh :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="si_Zh"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="in_H0">
+           <property name="text">
+            <string>H0 :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="FloatEdit" name="lf_H0"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="unit_H0">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="in_D0">
+           <property name="text">
+            <string>D0 :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="FloatEdit" name="lf_D0"/>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="unit_D0">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="in_W1">
+           <property name="text">
+            <string>W1 :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="FloatEdit" name="lf_W1"/>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="unit_W1">
+           <property name="text">
+            <string>rad</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="in_Alpha0">
+           <property name="text">
+            <string>Alpha0 :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="FloatEdit" name="lf_Alpha0"/>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLabel" name="unit_Alpha0">
+           <property name="text">
+            <string>rad</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="in_H0">
-         <property name="text">
-          <string>H0 :</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>257</height>
+          </size>
          </property>
-        </widget>
+        </spacer>
        </item>
-       <item row="1" column="1">
-        <widget class="FloatEdit" name="lf_H0"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLabel" name="unit_H0">
-         <property name="text">
-          <string>m</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="in_D0">
-         <property name="text">
-          <string>D0 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="FloatEdit" name="lf_D0"/>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="unit_D0">
-         <property name="text">
-          <string>m</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="in_W1">
-         <property name="text">
-          <string>W1 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="FloatEdit" name="lf_W1"/>
-       </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="unit_W1">
-         <property name="text">
-          <string>rad</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="in_Alpha0">
-         <property name="text">
-          <string>Alpha0 :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="FloatEdit" name="lf_Alpha0"/>
-       </item>
-       <item row="4" column="2">
-        <widget class="QLabel" name="unit_Alpha0">
-         <property name="text">
-          <string>rad</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="si_Zh"/>
+       <item>
+        <widget class="WVentOut" name="w_out" native="true"/>
        </item>
       </layout>
-     </item>
-     <item>
-      <widget class="WVentOut" name="w_out" native="true"/>
-     </item>
-    </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
