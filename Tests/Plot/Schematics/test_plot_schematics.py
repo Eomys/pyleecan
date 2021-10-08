@@ -33,6 +33,7 @@ from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.HoleM57 import HoleM57
 from pyleecan.Classes.HoleM58 import HoleM58
+from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.HoleMLSRPM import HoleMLSRPM
 from Tests import SCHEMATICS_PATH
 from os.path import join, isdir, isfile
@@ -238,10 +239,15 @@ hole_test.append(
         "type_add_active": 2,
     }
 )
-
 hole_test.append(
     {
         "test_obj": HoleMLSRPM(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": VentilationCirc(),
         "type_add_active": 2,
     }
 )
@@ -312,4 +318,6 @@ class Test_plot_schematics(object):
 
 if __name__ == "__main__":
     a = Test_plot_schematics()
-    a.test_slot(slot_test[7])
+    a.test_slot(slot_test[-1])
+    a.test_slot_point(slot_test[-1])
+    print("Done")
