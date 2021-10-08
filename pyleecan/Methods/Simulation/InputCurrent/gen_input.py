@@ -1,4 +1,4 @@
-from numpy import ndarray, pi, mean, transpose, zeros
+from numpy import ndarray, pi, mean, zeros
 
 from ....Classes.Simulation import Simulation
 
@@ -83,7 +83,7 @@ def gen_input(self):
             )
             # Compute corresponding Id/Iq reference
             Idq = n2dq(
-                transpose(outelec.Is.values),
+                outelec.Is.values,
                 2 * pi * outelec.felec * Time.get_values(is_oneperiod=False),
                 n=qs,
                 is_dq_rms=True,
@@ -116,6 +116,6 @@ def gen_input(self):
             name="Rotor current",
             unit="A",
             symbol="Ir",
-            axes=[Phase, Time],
-            values=transpose(Ir),
+            axes=[Time, Phase],
+            values=Ir,
         )
