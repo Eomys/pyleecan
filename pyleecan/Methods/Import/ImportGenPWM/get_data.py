@@ -28,7 +28,8 @@ def get_data(self):
         modulation index
     carrier : ndarray
         carrier waveform
-
+    Tpwmu : ndarray
+        time vector
     """
     # Tpwmu=np.arange(fs*duration)/fs,
     Tpwmu = np.linspace(0, self.duration, self.fs * self.duration, endpoint=True)
@@ -55,4 +56,4 @@ def get_data(self):
     PWM2 = np.where(v_pwm[1] < ref, -1, 1)  # .astype(np.float32)
     PWM3 = np.where(v_pwm[2] < ref, -1, 1)  # .astype(np.float32)
     Vpwm = np.column_stack([PWM1, PWM2, PWM3])
-    return Vpwm, Vas, MI, carrier
+    return Vpwm, Vas, MI, carrier, Tpwmu
