@@ -51,7 +51,7 @@ def get_I_fund(self, Time=None):
         Is_val = result["I_s"]
         freqs = result["freqs"]
         ifund = where(isclose(freqs, felec))
-        Is_fund = Is_val[:, ifund]
+        Is_fund = Is_val[ifund]
 
         Freq = Data1D(
             name="freqs",
@@ -63,7 +63,7 @@ def get_I_fund(self, Time=None):
             name="Stator current",
             unit="A",
             symbol="I_s",
-            axes=[Phase, Freq],
+            axes=[Freq, Phase],
             values=Is_fund,
         )
 

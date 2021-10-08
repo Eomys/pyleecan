@@ -30,7 +30,7 @@ def get_I_harm(self):
     )
 
     I_harm = I_fund_freq.copy()
-    I_harm.axes = [I_fund_freq.axes[0], Freqs]
-    I_harm.values = results["I_s"][:, ifund]
+    I_harm.axes = [Freqs, I_fund_freq.axes[0]]
+    I_harm.values = results["I_s"][ifund]
 
     return I_harm
