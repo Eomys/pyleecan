@@ -3447,7 +3447,7 @@
                 "max": "",
                 "min": "0",
                 "name": "duration",
-                "type": "int",
+                "type": "float",
                 "unit": "s",
                 "value": 10
             },
@@ -3501,7 +3501,7 @@
                 "max": "",
                 "min": "",
                 "name": "fswi_max",
-                "type": "int",
+                "type": "float",
                 "unit": "Hz",
                 "value": 3000
             },

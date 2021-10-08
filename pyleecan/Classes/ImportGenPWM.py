@@ -339,7 +339,7 @@ class ImportGenPWM(ImportMatrix):
 
     def _set_duration(self, value):
         """setter of duration"""
-        check_var("duration", value, "int", Vmin=0)
+        check_var("duration", value, "float", Vmin=0)
         self._duration = value
 
     duration = property(
@@ -347,7 +347,7 @@ class ImportGenPWM(ImportMatrix):
         fset=_set_duration,
         doc=u"""duration
 
-        :Type: int
+        :Type: float
         :min: 0
         """,
     )
@@ -451,7 +451,7 @@ class ImportGenPWM(ImportMatrix):
 
     def _set_fswi_max(self, value):
         """setter of fswi_max"""
-        check_var("fswi_max", value, "int")
+        check_var("fswi_max", value, "float")
         self._fswi_max = value
 
     fswi_max = property(
@@ -459,7 +459,7 @@ class ImportGenPWM(ImportMatrix):
         fset=_set_fswi_max,
         doc=u"""maximal switching frequency
 
-        :Type: int
+        :Type: float
         """,
     )
 
