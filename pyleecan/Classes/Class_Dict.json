@@ -3549,6 +3549,15 @@
                 "type": "int",
                 "unit": "%",
                 "value": 20
+            },
+            {
+                "desc": "number of phase",
+                "max": "",
+                "min": "",
+                "name": "qs",
+                "type": "int",
+                "unit": "",
+                "value": 3
             }
         ]
     },

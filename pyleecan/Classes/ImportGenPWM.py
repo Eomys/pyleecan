@@ -61,6 +61,7 @@ class ImportGenPWM(ImportMatrix):
         U0=1,
         type_carrier=0,
         var_amp=20,
+        qs=3,
         is_transpose=False,
         init_dict=None,
         init_str=None,
@@ -106,6 +107,8 @@ class ImportGenPWM(ImportMatrix):
                 type_carrier = init_dict["type_carrier"]
             if "var_amp" in list(init_dict.keys()):
                 var_amp = init_dict["var_amp"]
+            if "qs" in list(init_dict.keys()):
+                qs = init_dict["qs"]
             if "is_transpose" in list(init_dict.keys()):
                 is_transpose = init_dict["is_transpose"]
         # Set the properties (value check and convertion are done in setter)
@@ -122,6 +125,7 @@ class ImportGenPWM(ImportMatrix):
         self.U0 = U0
         self.type_carrier = type_carrier
         self.var_amp = var_amp
+        self.qs = qs
         # Call ImportMatrix init
         super(ImportGenPWM, self).__init__(is_transpose=is_transpose)
         # The class is frozen (in ImportMatrix init), for now it's impossible to
@@ -146,6 +150,7 @@ class ImportGenPWM(ImportMatrix):
         ImportGenPWM_str += "U0 = " + str(self.U0) + linesep
         ImportGenPWM_str += "type_carrier = " + str(self.type_carrier) + linesep
         ImportGenPWM_str += "var_amp = " + str(self.var_amp) + linesep
+        ImportGenPWM_str += "qs = " + str(self.qs) + linesep
         return ImportGenPWM_str
 
     def __eq__(self, other):
@@ -182,6 +187,8 @@ class ImportGenPWM(ImportMatrix):
         if other.type_carrier != self.type_carrier:
             return False
         if other.var_amp != self.var_amp:
+            return False
+        if other.qs != self.qs:
             return False
         return True
 
@@ -222,6 +229,8 @@ class ImportGenPWM(ImportMatrix):
             diff_list.append(name + ".type_carrier")
         if other._var_amp != self._var_amp:
             diff_list.append(name + ".var_amp")
+        if other._qs != self._qs:
+            diff_list.append(name + ".qs")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -246,6 +255,7 @@ class ImportGenPWM(ImportMatrix):
         S += getsizeof(self.U0)
         S += getsizeof(self.type_carrier)
         S += getsizeof(self.var_amp)
+        S += getsizeof(self.qs)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -278,6 +288,7 @@ class ImportGenPWM(ImportMatrix):
         ImportGenPWM_dict["U0"] = self.U0
         ImportGenPWM_dict["type_carrier"] = self.type_carrier
         ImportGenPWM_dict["var_amp"] = self.var_amp
+        ImportGenPWM_dict["qs"] = self.qs
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportGenPWM_dict["__class__"] = "ImportGenPWM"
@@ -299,6 +310,7 @@ class ImportGenPWM(ImportMatrix):
         self.U0 = None
         self.type_carrier = None
         self.var_amp = None
+        self.qs = None
         # Set to None the properties inherited from ImportMatrix
         super(ImportGenPWM, self)._set_None()
 
@@ -536,6 +548,24 @@ class ImportGenPWM(ImportMatrix):
         fget=_get_var_amp,
         fset=_set_var_amp,
         doc=u"""percentage of variation of carrier amplitude
+
+        :Type: int
+        """,
+    )
+
+    def _get_qs(self):
+        """getter of qs"""
+        return self._qs
+
+    def _set_qs(self, value):
+        """setter of qs"""
+        check_var("qs", value, "int")
+        self._qs = value
+
+    qs = property(
+        fget=_get_qs,
+        fset=_set_qs,
+        doc=u"""number of phase
 
         :Type: int
         """,

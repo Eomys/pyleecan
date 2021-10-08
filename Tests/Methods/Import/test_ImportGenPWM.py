@@ -34,6 +34,7 @@ def testSPWM():
                     U0=0.70,
                     type_carrier=hh,
                     var_amp=20,
+                    qs=3,
                 )
                 # Generate the signal
                 time = linspace(start=0, stop=2, num=2 * 96000, endpoint=True)
@@ -80,6 +81,7 @@ def testDPWM():
             Vdc1=2,
             U0=0.70,
             type_carrier=0,
+            qs=3,
         )
         # Generate the signal
         time = linspace(start=0, stop=2, num=2 * 96000, endpoint=True)
