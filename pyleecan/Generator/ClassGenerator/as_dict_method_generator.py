@@ -62,12 +62,22 @@ def generate_as_dict(gen_dict, class_dict):
             var_str += _get_pyleecan_type_str(cls, prop, prop_type)
 
     # Code generation
-    dict_str += T1 + "def as_dict(self, **kwargs):"
+    dict_str += (
+        T1 + "def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):"
+    )
     dict_str += (
         T2
         + '"""'
         + T2
         + "Convert this object in a json serializable dict (can be use in __init__)."
+        + T2
+        + "type_handle_ndarray: int"
+        + T3
+        + "How to handle ndarray (0: tolist, 1: copy, 2: nothing)"
+        + T2
+        + "keep_function : bool"
+        + T3
+        + "True to keep the function object, else return str"
         + T2
         + "Optional keyword input parameter is for internal use only "
         + T2
@@ -78,7 +88,10 @@ def generate_as_dict(gen_dict, class_dict):
     if cls_mother != "":
         # Get the properties of the mother class (if needed)
         dict_str += T2 + f"# Get the properties inherited from {cls_mother}"
-        dict_str += T2 + f"{cls}_dict = super({cls}, self).as_dict(**kwargs)"
+        dict_str += (
+            T2
+            + f"{cls}_dict = super({cls}, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)"
+        )
     else:
         dict_str += T2 + f"{cls}_dict = dict()"
 
@@ -100,10 +113,10 @@ def _get_pyleecan_type_str(cls, prop, prop_type):
     var_str += T3 + f'{cls}_dict["{prop}"] = None'
     var_str += T2 + "else:"
 
-    var_str += T3 + f'{cls}_dict["{prop}"] = self.{prop}.as_dict('
-    if "SciDataTool" not in prop_type:
-        var_str += "**kwargs"
-    var_str += ")"
+    var_str += (
+        T3
+        + f'{cls}_dict["{prop}"] = self.{prop}.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)'
+    )
     return var_str
 
 
@@ -152,10 +165,10 @@ def _get_dict_of_pyleecan_str(cls, prop, prop_type):
     var_str += T3 + f'{cls}_dict["{prop}"] = dict()'
     var_str += T3 + f"for key, obj in self.{prop}.items():"
     var_str += T4 + f"if obj is not None:"
-    var_str += T5 + f'{cls}_dict["{prop}"][key] = obj.as_dict('
-    if "SciDataTool" not in prop_type:
-        var_str += "**kwargs"
-    var_str += ")"
+    var_str += (
+        T5
+        + f'{cls}_dict["{prop}"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)'
+    )
     var_str += T4 + f"else:"
     var_str += T5 + f'{cls}_dict["{prop}"][key] = None'
     return var_str
@@ -169,10 +182,10 @@ def _get_list_of_pyleecan_str(cls, prop, prop_type):
     var_str += T3 + f'{cls}_dict["{prop}"] = list()'
     var_str += T3 + f"for obj in self.{prop}:"
     var_str += T4 + f"if obj is not None:"
-    var_str += T5 + f'{cls}_dict["{prop}"].append(obj.as_dict('
-    if "SciDataTool" not in prop_type:
-        var_str += "**kwargs"
-    var_str += "))"
+    var_str += (
+        T5
+        + f'{cls}_dict["{prop}"].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))'
+    )
     var_str += T4 + f"else:"
     var_str += T5 + f'{cls}_dict["{prop}"].append(None)'
     return var_str
@@ -186,7 +199,17 @@ def _get_dict_of_ndarray_str(cls, prop):
     var_str += T2 + f"else:"
     var_str += T3 + f'{cls}_dict["{prop}"] = dict()'
     var_str += T3 + f"for key, obj in self.{prop}.items():"
-    var_str += T4 + f'{cls}_dict["{prop}"][key] = obj.tolist()'
+    var_str += T4 + "if type_handle_ndarray==0:"
+    var_str += T5 + f'{cls}_dict["{prop}"][key] = obj.tolist()'
+    var_str += T4 + "elif type_handle_ndarray==1:"
+    var_str += T5 + f'{cls}_dict["{prop}"][key] = obj.copy()'
+    var_str += T4 + "elif type_handle_ndarray==2:"
+    var_str += T5 + f'{cls}_dict["{prop}"][key] = obj'
+    var_str += T4 + "else:"
+    var_str += (
+        T5
+        + "raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))"
+    )
     return var_str
 
 
@@ -197,7 +220,17 @@ def _get_list_of_ndarray_str(cls, prop):
     var_str += T2 + f"else:"
     var_str += T3 + f'{cls}_dict["{prop}"] = list()'
     var_str += T3 + f"for obj in self.{prop}:"
-    var_str += T4 + f'{cls}_dict["{prop}"].append(obj.tolist())'
+    var_str += T4 + "if type_handle_ndarray==0:"
+    var_str += T5 + f'{cls}_dict["{prop}"].append(obj.tolist())'
+    var_str += T4 + "elif type_handle_ndarray==1:"
+    var_str += T5 + f'{cls}_dict["{prop}"].append(obj.copy())'
+    var_str += T4 + "elif type_handle_ndarray==2:"
+    var_str += T5 + f'{cls}_dict["{prop}"].append(obj)'
+    var_str += T4 + "else:"
+    var_str += (
+        T5
+        + "raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))"
+    )
     return var_str
 
 
@@ -206,8 +239,18 @@ def _get_ndarray_str(cls, prop):
     var_str = ""
     var_str += T2 + f"if self.{prop} is None:"
     var_str += T3 + f'{cls}_dict["{prop}"] = None'
-    var_str += T2 + f"else:"
-    var_str += T3 + f'{cls}_dict["{prop}"] = self.{prop}.tolist()'
+    var_str += T2 + "else:"
+    var_str += T3 + "if type_handle_ndarray==0:"
+    var_str += T4 + f'{cls}_dict["{prop}"] = self.{prop}.tolist()'
+    var_str += T3 + "elif type_handle_ndarray==1:"
+    var_str += T4 + f'{cls}_dict["{prop}"] = self.{prop}.copy()'
+    var_str += T3 + "elif type_handle_ndarray==2:"
+    var_str += T4 + f'{cls}_dict["{prop}"] = self.{prop}'
+    var_str += T3 + "else:"
+    var_str += (
+        T4
+        + "raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))"
+    )
     return var_str
 
 
@@ -245,9 +288,22 @@ def _get_no_type_str(cls, prop):
     var_str += T2 + f"if self.{prop} is None:"
     var_str += T3 + f'{cls}_dict["{prop}"] = None'
     var_str += T2 + f"elif isinstance(self.{prop}, np.ndarray):"
-    var_str += T3 + f'{cls}_dict["{prop}"] = self.{prop}.tolist()'
+    var_str += T3 + "if type_handle_ndarray==0:"
+    var_str += T4 + f'{cls}_dict["{prop}"] = self.{prop}.tolist()'
+    var_str += T3 + "elif type_handle_ndarray==1:"
+    var_str += T4 + f'{cls}_dict["{prop}"] = self.{prop}.copy()'
+    var_str += T3 + "elif type_handle_ndarray==2:"
+    var_str += T4 + f'{cls}_dict["{prop}"] = self.{prop}'
+    var_str += T3 + "else:"
+    var_str += (
+        T4
+        + "raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))"
+    )
     var_str += T2 + f"elif hasattr(self.{prop}, 'as_dict'):"
-    var_str += T3 + f'{cls}_dict["{prop}"] = self.{prop}.as_dict()'
-    var_str += T2 + f"else:"
+    var_str += (
+        T3
+        + f'{cls}_dict["{prop}"] = self.{prop}.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)'
+    )
+    var_str += T2 + "else:"
     var_str += T3 + f'{cls}_dict["{prop}"] = self.{prop}'
     return var_str

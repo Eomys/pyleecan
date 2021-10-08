@@ -287,15 +287,23 @@ class CondType11(Conductor):
         S += getsizeof(self.alpha_ew)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Conductor
-        CondType11_dict = super(CondType11, self).as_dict(**kwargs)
+        CondType11_dict = super(CondType11, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         CondType11_dict["Hwire"] = self.Hwire
         CondType11_dict["Wwire"] = self.Wwire
         CondType11_dict["Nwppc_rad"] = self.Nwppc_rad

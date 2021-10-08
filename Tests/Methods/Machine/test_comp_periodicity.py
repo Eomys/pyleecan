@@ -1,109 +1,52 @@
-from os.path import join
-
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-
 import pytest
+from os.path import join
 
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-
-"""pytest for comp_periodicity"""
+machine_list = [
+    ["Toyota_Prius", (4, True, 4, True)],
+    ["BMW_i3", (6, True, 6, True)],
+    ["Protean_InWheel", (8, False, 32, True)],
+    ["Tesla_S", (2, False, 2, False)],
+    ["Audi_eTron", (2, False, 2, False)],
+    ["Benchmark", (1, True, 5, True)],
+    ["SCIM_001", (1, True, 1, True)],
+    ["SCIM_006", (2, True, 2, True)],
+    ["SPMSM_001", (4, False, 4, True)],
+    ["SPMSM_003", (1, True, 1, True)],
+    ["SPMSM_015", (9, False, 9, True)],
+    ["SIPMSM_001", (1, False, 2, True)],
+    ["SynRM_001", (2, True, 2, True)],
+    ["LSRPM_001", (4, False, 4, True)],
+]
 
 
 @pytest.mark.periodicity
-def test_comp_periodicity_spatial():
-    rotor = LamSlotWind(
-        Rint=0.2,
-        Rext=0.5,
-        is_internal=True,
-        is_stator=False,
-        L1=0.95,
-        Nrvd=1,
-        Wrvd=0.05,
+@pytest.mark.parametrize("machine", machine_list)
+def test_comp_periodicity(machine):
+
+    machine_obj = load(join(DATA_DIR, "Machine", machine[0] + ".json"))
+
+    per_a, aper_a = machine_obj.comp_periodicity_spatial()
+
+    per_t, aper_t, _, _ = machine_obj.comp_periodicity_time()
+
+    msg = (
+        "Wrong periodicity calculation for "
+        + machine_obj.name
+        + ": "
+        + str((per_a, aper_a, per_t, aper_t))
     )
-    rotor.winding = None
-    assert rotor.comp_periodicity_spatial() == (1, False)
+    assert (per_a, aper_a, per_t, aper_t) == machine[1], msg
+
+    return (per_a, aper_a, per_t, aper_t)
 
 
-@pytest.mark.periodicity
-def test_comp_periodicity():
-
-    machine = load(join(DATA_DIR, "Machine", "Benchmark.json"))
-
-    # Spatial periodicities
-    (
-        per_a,
-        is_antiper_a,
-    ) = machine.comp_periodicity_spatial()
-
-    assert per_a, is_antiper_a == (1, True)
-
-    # Time periodicities in both static and rotating referentials
-    (
-        per_t_S,
-        is_antiper_t_S,
-        per_t_R,
-        is_antiper_t_R,
-    ) = machine.comp_periodicity_time(slip=0)
-
-    assert (per_t_S, is_antiper_t_S, per_t_R, is_antiper_t_R) == (
-        5,
-        True,
-        1,
-        False,
-    )
-
-    machine = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
-
-    # Spatial periodicities
-    (
-        per_a,
-        is_antiper_a,
-    ) = machine.comp_periodicity_spatial()
-
-    assert per_a, is_antiper_a == (9, False)
-
-    # Time periodicities in both static and rotating referentials
-    (
-        per_t_S,
-        is_antiper_t_S,
-        per_t_R,
-        is_antiper_t_R,
-    ) = machine.comp_periodicity_time(slip=0)
-
-    assert (per_t_S, is_antiper_t_S, per_t_R, is_antiper_t_R) == (
-        9,
-        True,
-        9,
-        False,
-    )
-
-    machine = load(join(DATA_DIR, "Machine", "Audi_eTron.json"))
-
-    # Spatial periodicities
-    (
-        per_a,
-        is_antiper_a,
-    ) = machine.comp_periodicity_spatial()
-
-    assert per_a, is_antiper_a == (2, False)
-
-    # Time periodicities in both static and rotating referentials
-    (
-        per_t_S,
-        is_antiper_t_S,
-        per_t_R,
-        is_antiper_t_R,
-    ) = machine.comp_periodicity_time(slip=0)
-
-    assert (per_t_S, is_antiper_t_S, per_t_R, is_antiper_t_R) == (
-        2,
-        False,
-        2,
-        False,
-    )
-
-
+# To run it without pytest
 if __name__ == "__main__":
-    test_comp_periodicity()
+
+    per_tuple = test_comp_periodicity(machine_list[-1])
+
+    for machine in machine_list:
+        per_tuple = test_comp_periodicity(machine)

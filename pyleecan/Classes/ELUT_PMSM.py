@@ -59,6 +59,13 @@ try:
 except ImportError as error:
     import_from_data = error
 
+try:
+    from ..Methods.Simulation.ELUT_PMSM.comp_Phidqh_from_Phiwind import (
+        comp_Phidqh_from_Phiwind,
+    )
+except ImportError as error:
+    comp_Phidqh_from_Phiwind = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -150,6 +157,18 @@ class ELUT_PMSM(ELUT):
         )
     else:
         import_from_data = import_from_data
+    # cf Methods.Simulation.ELUT_PMSM.comp_Phidqh_from_Phiwind
+    if isinstance(comp_Phidqh_from_Phiwind, ImportError):
+        comp_Phidqh_from_Phiwind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ELUT_PMSM method comp_Phidqh_from_Phiwind: "
+                    + str(comp_Phidqh_from_Phiwind)
+                )
+            )
+        )
+    else:
+        comp_Phidqh_from_Phiwind = comp_Phidqh_from_Phiwind
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -168,6 +187,7 @@ class ELUT_PMSM(ELUT):
         R1=None,
         L1=None,
         T1_ref=20,
+        OP_matrix=None,
         init_dict=None,
         init_str=None,
     ):
@@ -206,6 +226,8 @@ class ELUT_PMSM(ELUT):
                 L1 = init_dict["L1"]
             if "T1_ref" in list(init_dict.keys()):
                 T1_ref = init_dict["T1_ref"]
+            if "OP_matrix" in list(init_dict.keys()):
+                OP_matrix = init_dict["OP_matrix"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_dqh = Phi_dqh
         self.I_dqh = I_dqh
@@ -215,7 +237,9 @@ class ELUT_PMSM(ELUT):
         self.orders_dqh = orders_dqh
         self.bemf = bemf
         # Call ELUT init
-        super(ELUT_PMSM, self).__init__(R1=R1, L1=L1, T1_ref=T1_ref)
+        super(ELUT_PMSM, self).__init__(
+            R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix
+        )
         # The class is frozen (in ELUT init), for now it's impossible to
         # add new properties
 
@@ -333,34 +357,73 @@ class ELUT_PMSM(ELUT):
         S += getsizeof(self.bemf)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ELUT
-        ELUT_PMSM_dict = super(ELUT_PMSM, self).as_dict(**kwargs)
+        ELUT_PMSM_dict = super(ELUT_PMSM, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.Phi_dqh is None:
             ELUT_PMSM_dict["Phi_dqh"] = None
         else:
-            ELUT_PMSM_dict["Phi_dqh"] = self.Phi_dqh.tolist()
+            if type_handle_ndarray == 0:
+                ELUT_PMSM_dict["Phi_dqh"] = self.Phi_dqh.tolist()
+            elif type_handle_ndarray == 1:
+                ELUT_PMSM_dict["Phi_dqh"] = self.Phi_dqh.copy()
+            elif type_handle_ndarray == 2:
+                ELUT_PMSM_dict["Phi_dqh"] = self.Phi_dqh
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         ELUT_PMSM_dict["I_dqh"] = self.I_dqh.copy() if self.I_dqh is not None else None
         ELUT_PMSM_dict["Tmag_ref"] = self.Tmag_ref
         ELUT_PMSM_dict["E0"] = self.E0
         if self.E_dqh is None:
             ELUT_PMSM_dict["E_dqh"] = None
         else:
-            ELUT_PMSM_dict["E_dqh"] = self.E_dqh.tolist()
+            if type_handle_ndarray == 0:
+                ELUT_PMSM_dict["E_dqh"] = self.E_dqh.tolist()
+            elif type_handle_ndarray == 1:
+                ELUT_PMSM_dict["E_dqh"] = self.E_dqh.copy()
+            elif type_handle_ndarray == 2:
+                ELUT_PMSM_dict["E_dqh"] = self.E_dqh
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.orders_dqh is None:
             ELUT_PMSM_dict["orders_dqh"] = None
         else:
-            ELUT_PMSM_dict["orders_dqh"] = self.orders_dqh.tolist()
+            if type_handle_ndarray == 0:
+                ELUT_PMSM_dict["orders_dqh"] = self.orders_dqh.tolist()
+            elif type_handle_ndarray == 1:
+                ELUT_PMSM_dict["orders_dqh"] = self.orders_dqh.copy()
+            elif type_handle_ndarray == 2:
+                ELUT_PMSM_dict["orders_dqh"] = self.orders_dqh
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.bemf is None:
             ELUT_PMSM_dict["bemf"] = None
         else:
-            ELUT_PMSM_dict["bemf"] = self.bemf.as_dict()
+            ELUT_PMSM_dict["bemf"] = self.bemf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ELUT_PMSM_dict["__class__"] = "ELUT_PMSM"

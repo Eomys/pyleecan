@@ -63,6 +63,7 @@ from .Winding import Winding
 from .Slot import Slot
 from .Hole import Hole
 from .Notch import Notch
+from .Skew import Skew
 from .Bore import Bore
 
 
@@ -175,6 +176,7 @@ class LamSquirrelCage(LamSlotWind):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        skew=None,
         yoke_notch=-1,
         bore=None,
         init_dict=None,
@@ -229,6 +231,8 @@ class LamSquirrelCage(LamSlotWind):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "skew" in list(init_dict.keys()):
+                skew = init_dict["skew"]
             if "yoke_notch" in list(init_dict.keys()):
                 yoke_notch = init_dict["yoke_notch"]
             if "bore" in list(init_dict.keys()):
@@ -253,6 +257,7 @@ class LamSquirrelCage(LamSlotWind):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            skew=skew,
             yoke_notch=yoke_notch,
             bore=bore,
         )
@@ -330,21 +335,33 @@ class LamSquirrelCage(LamSlotWind):
         S += getsizeof(self.ring_mat)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LamSlotWind
-        LamSquirrelCage_dict = super(LamSquirrelCage, self).as_dict(**kwargs)
+        LamSquirrelCage_dict = super(LamSquirrelCage, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         LamSquirrelCage_dict["Hscr"] = self.Hscr
         LamSquirrelCage_dict["Lscr"] = self.Lscr
         if self.ring_mat is None:
             LamSquirrelCage_dict["ring_mat"] = None
         else:
-            LamSquirrelCage_dict["ring_mat"] = self.ring_mat.as_dict(**kwargs)
+            LamSquirrelCage_dict["ring_mat"] = self.ring_mat.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSquirrelCage_dict["__class__"] = "LamSquirrelCage"

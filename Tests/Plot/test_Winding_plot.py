@@ -204,4 +204,5 @@ class Test_Winding_plot(object):
 
 if __name__ == "__main__":
     a = Test_Winding_plot()
-    a.test_type_wind_CW1L()
+    a.test_plot_mmf_unit()
+    print("Done")

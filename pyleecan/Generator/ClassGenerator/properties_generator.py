@@ -2,17 +2,17 @@ from ...Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6, TAB7
 from ...Generator.read_fct import is_list_pyleecan_type, is_dict_pyleecan_type
 
 
-def generate_properties(gen_dict, class_dict):
+def generate_properties(gen_dict, class_dict, soft_name="pyleecan"):
     """Generate the code for the getter and setter of the properties of the class
 
     Parameters
     ----------
     gen_dict : dict
         Dict with key = class name and value = class dict (name, package, properties, methods...)
-
     class_dict : dict
         dictionary of the class to generate (keys are name, package, properties, methods...)
-
+    soft_name : str
+        Name of the software to generate
     Returns
     -------
     prop_str : str
@@ -53,7 +53,9 @@ def generate_properties(gen_dict, class_dict):
         ## Setter
         # Write the setter only if it is not user defined
         if "_set_" + prop["name"] not in class_dict["methods"]:
-            prop_str += generate_prop_setter(gen_dict, class_dict, prop)
+            prop_str += generate_prop_setter(
+                gen_dict, class_dict, prop, soft_name=soft_name
+            )
 
         ## For sphinx doc
         desc_str = '"""' + prop["desc"] + "\n\n"
@@ -76,7 +78,7 @@ def generate_properties(gen_dict, class_dict):
     return prop_str[:-2]  # Remove last \n\n
 
 
-def generate_prop_setter(gen_dict, class_dict, prop):
+def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
     """Generate the code for the getter and setter of the properties of the class
 
     Parameters
@@ -87,6 +89,8 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         dictionary of the class to generate (keys are name, package, properties, methods...)
     prop_dict: dict
         dictionary of the property to generate the setter
+    soft_name : str
+        Name of the software to generate
 
     Returns
     -------
@@ -166,7 +170,9 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         else:
             set_str += (
                 TAB5
-                + "class_obj = import_class('pyleecan.Classes', obj.get('__class__'), '"
+                + "class_obj = import_class('"
+                + soft_name
+                + ".Classes', obj.get('__class__'), '"
                 + prop["name"]
                 + "')\n"
             )
@@ -187,7 +193,9 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         else:
             set_str += (
                 TAB5
-                + "class_obj = import_class('pyleecan.Classes', obj.get('__class__'), '"
+                + "class_obj = import_class('"
+                + soft_name
+                + ".Classes', obj.get('__class__'), '"
                 + prop["name"]
                 + "')\n"
             )
@@ -201,7 +209,9 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB3 + "try:\n"
         set_str += (
             TAB4
-            + "class_obj = import_class('pyleecan.Classes', value.get('__class__'), '"
+            + "class_obj = import_class('"
+            + soft_name
+            + ".Classes', value.get('__class__'), '"
             + prop["name"]
             + "')\n"
         )
@@ -236,7 +246,9 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         else:
             set_str += (
                 TAB3
-                + "class_obj = import_class('pyleecan.Classes', value.get('__class__'), '"
+                + "class_obj = import_class('"
+                + soft_name
+                + ".Classes', value.get('__class__'), '"
                 + prop["name"]
                 + "')\n"
             )

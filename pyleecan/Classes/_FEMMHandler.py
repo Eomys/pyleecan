@@ -2118,6 +2118,11 @@ class _FEMMHandler(object):
     def mi_readdxf(self, docname):
         self.callfemm("print(mi_readdxf(" + self.quote(docname) + "))")
 
+    def mi_readdxf2(self, docname, tol):
+        self.callfemm(
+            "print(mi_readdxf(" + self.quote(docname) + ", " + str(tol) + "))"
+        )
+
     def mi_refreshview(self):
         self.callfemm("mi_refreshview()")
 
@@ -2135,6 +2140,11 @@ class _FEMMHandler(object):
 
     def mi_savedxf(self, docname):
         self.callfemm_noeval("mi_savedxf(" + self.quote(docname) + ")")
+
+    def mi_savedxf2(self, docname, tol):
+        self.callfemm(
+            "print(mi_savedxf(" + self.quote(docname) + ", " + str(tol) + "))"
+        )
 
     def mi_savemetafile(self, n):
         self.callfemm("mi_savemetafile(" + self.quote(n) + ")")

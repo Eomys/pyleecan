@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from .....Methods.Output.Output.getter import GetOutError
-from numpy import pi, cumsum, roll, size, ones
+from numpy import pi
 
 
 def get_angle_rotor(self, Time=None):
@@ -18,7 +15,7 @@ def get_angle_rotor(self, Time=None):
 
     Returns
     -------
-    alpha_rotor: numpy.ndarray
+    angle_rotor: ndarray
         angular position of the rotor as a function of time (vector) [rad]
 
     """
@@ -34,8 +31,8 @@ def get_angle_rotor(self, Time=None):
             logger.error("No time axis, cannot compute rotor angle")
 
     if "angle_rotor" in Time.normalizations:
-        # angle rotor is stored as normalization of Time axis
-        angle_rotor = Time.get_values(normalization="angle_rotor")
+        # angle rotor is stored in degrees as normalization of Time axis
+        angle_rotor = Time.get_values(normalization="angle_rotor") * pi / 180
     else:
         # compute angle rotor from time axis
         angle_rotor = self.comp_angle_rotor(Time)

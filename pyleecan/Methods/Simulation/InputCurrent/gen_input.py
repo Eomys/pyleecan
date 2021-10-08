@@ -1,4 +1,4 @@
-from numpy import ndarray, pi, mean, transpose, zeros
+from numpy import ndarray, pi, mean, zeros
 
 from ....Classes.Simulation import Simulation
 
@@ -28,11 +28,18 @@ def gen_input(self):
     else:
         raise InputError("InputCurrent object should be inside a Simulation object")
 
+    # Get output
+    if simu.parent is not None:
+        output = simu.parent
+    else:
+        raise InputError("Simulation object should be inside an Output object")
+
     # Call InputVoltage.gen_input()
     InputVoltage.gen_input(self)
 
-    # Get electrical output
-    outelec = simu.parent.elec
+    # Get outputs
+    outgeo = output.geo
+    outelec = output.elec
 
     # Number of winding phases for stator/rotor
     if simu.machine is not None:
@@ -67,22 +74,16 @@ def gen_input(self):
                     + " returned"
                 )
             # Creating the data object
-            Phase = Data1D(
-                name="phase",
-                unit="",
-                values=gen_name(qs),
-                is_components=True,
-            )
             outelec.Is = DataTime(
                 name="Stator current",
                 unit="A",
                 symbol="I_s",
-                axes=[Phase, Time],
-                values=transpose(Is),
+                axes=[Time, outgeo.axes_dict["phase"]],
+                values=Is,
             )
             # Compute corresponding Id/Iq reference
             Idq = n2dq(
-                transpose(outelec.Is.values),
+                outelec.Is.values,
                 2 * pi * outelec.felec * Time.get_values(is_oneperiod=False),
                 n=qs,
                 is_dq_rms=True,
@@ -115,9 +116,6 @@ def gen_input(self):
             name="Rotor current",
             unit="A",
             symbol="Ir",
-            axes=[Phase, Time],
-            values=transpose(Ir),
+            axes=[Time, Phase],
+            values=Ir,
         )
-
-    # Save the Output in the correct place
-    simu.parent.elec = outelec

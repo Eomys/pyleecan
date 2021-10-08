@@ -29,7 +29,7 @@ def plot(
     delta=0,
     is_edge_only=False,
     is_display=True,
-    is_add_sign=False,
+    is_add_sign=True,
     is_show_fig=True,
     save_path=None,
     win_title=None,

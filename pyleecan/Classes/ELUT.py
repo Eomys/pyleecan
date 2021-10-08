@@ -7,7 +7,7 @@
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import check_var, raise_
+from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.copy import copy
@@ -23,6 +23,7 @@ except ImportError as error:
     get_param_dict = error
 
 
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
 
@@ -48,7 +49,9 @@ class ELUT(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, R1=None, L1=None, T1_ref=20, init_dict=None, init_str=None):
+    def __init__(
+        self, R1=None, L1=None, T1_ref=20, OP_matrix=None, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -70,11 +73,14 @@ class ELUT(FrozenClass):
                 L1 = init_dict["L1"]
             if "T1_ref" in list(init_dict.keys()):
                 T1_ref = init_dict["T1_ref"]
+            if "OP_matrix" in list(init_dict.keys()):
+                OP_matrix = init_dict["OP_matrix"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.R1 = R1
         self.L1 = L1
         self.T1_ref = T1_ref
+        self.OP_matrix = OP_matrix
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -90,6 +96,13 @@ class ELUT(FrozenClass):
         ELUT_str += "R1 = " + str(self.R1) + linesep
         ELUT_str += "L1 = " + str(self.L1) + linesep
         ELUT_str += "T1_ref = " + str(self.T1_ref) + linesep
+        ELUT_str += (
+            "OP_matrix = "
+            + linesep
+            + str(self.OP_matrix).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return ELUT_str
 
     def __eq__(self, other):
@@ -102,6 +115,8 @@ class ELUT(FrozenClass):
         if other.L1 != self.L1:
             return False
         if other.T1_ref != self.T1_ref:
+            return False
+        if not array_equal(other.OP_matrix, self.OP_matrix):
             return False
         return True
 
@@ -119,6 +134,8 @@ class ELUT(FrozenClass):
             diff_list.append(name + ".L1")
         if other._T1_ref != self._T1_ref:
             diff_list.append(name + ".T1_ref")
+        if not array_equal(other.OP_matrix, self.OP_matrix):
+            diff_list.append(name + ".OP_matrix")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -130,11 +147,16 @@ class ELUT(FrozenClass):
         S += getsizeof(self.R1)
         S += getsizeof(self.L1)
         S += getsizeof(self.T1_ref)
+        S += getsizeof(self.OP_matrix)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -143,6 +165,19 @@ class ELUT(FrozenClass):
         ELUT_dict["R1"] = self.R1
         ELUT_dict["L1"] = self.L1
         ELUT_dict["T1_ref"] = self.T1_ref
+        if self.OP_matrix is None:
+            ELUT_dict["OP_matrix"] = None
+        else:
+            if type_handle_ndarray == 0:
+                ELUT_dict["OP_matrix"] = self.OP_matrix.tolist()
+            elif type_handle_ndarray == 1:
+                ELUT_dict["OP_matrix"] = self.OP_matrix.copy()
+            elif type_handle_ndarray == 2:
+                ELUT_dict["OP_matrix"] = self.OP_matrix
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         # The class name is added to the dict for deserialisation purpose
         ELUT_dict["__class__"] = "ELUT"
         return ELUT_dict
@@ -153,6 +188,7 @@ class ELUT(FrozenClass):
         self.R1 = None
         self.L1 = None
         self.T1_ref = None
+        self.OP_matrix = None
 
     def _get_R1(self):
         """getter of R1"""
@@ -205,5 +241,30 @@ class ELUT(FrozenClass):
         doc=u"""Stator winding average temperature associated to R1, L1 parameters
 
         :Type: float
+        """,
+    )
+
+    def _get_OP_matrix(self):
+        """getter of OP_matrix"""
+        return self._OP_matrix
+
+    def _set_OP_matrix(self, value):
+        """setter of OP_matrix"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("OP_matrix", value, "ndarray")
+        self._OP_matrix = value
+
+    OP_matrix = property(
+        fget=_get_OP_matrix,
+        fset=_set_OP_matrix,
+        doc=u"""Array of operating point values of size (N,5) with N the number of operating points (Speed, Id, Iq, Torque, Power). OP values are set to nan if they are not given.
+
+        :Type: ndarray
         """,
     )

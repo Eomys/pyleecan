@@ -235,9 +235,13 @@ class CellMat(FrozenClass):
         S += getsizeof(self.interpolation)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
@@ -246,17 +250,39 @@ class CellMat(FrozenClass):
         if self.connectivity is None:
             CellMat_dict["connectivity"] = None
         else:
-            CellMat_dict["connectivity"] = self.connectivity.tolist()
+            if type_handle_ndarray == 0:
+                CellMat_dict["connectivity"] = self.connectivity.tolist()
+            elif type_handle_ndarray == 1:
+                CellMat_dict["connectivity"] = self.connectivity.copy()
+            elif type_handle_ndarray == 2:
+                CellMat_dict["connectivity"] = self.connectivity
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         CellMat_dict["nb_cell"] = self.nb_cell
         CellMat_dict["nb_node_per_cell"] = self.nb_node_per_cell
         if self.indice is None:
             CellMat_dict["indice"] = None
         else:
-            CellMat_dict["indice"] = self.indice.tolist()
+            if type_handle_ndarray == 0:
+                CellMat_dict["indice"] = self.indice.tolist()
+            elif type_handle_ndarray == 1:
+                CellMat_dict["indice"] = self.indice.copy()
+            elif type_handle_ndarray == 2:
+                CellMat_dict["indice"] = self.indice
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.interpolation is None:
             CellMat_dict["interpolation"] = None
         else:
-            CellMat_dict["interpolation"] = self.interpolation.as_dict(**kwargs)
+            CellMat_dict["interpolation"] = self.interpolation.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         CellMat_dict["__class__"] = "CellMat"
         return CellMat_dict

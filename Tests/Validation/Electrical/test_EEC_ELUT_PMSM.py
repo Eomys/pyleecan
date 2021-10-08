@@ -24,6 +24,7 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.EEC_PMSM
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
+@pytest.mark.skip(reason="Work in progress")
 def test_ELUT_PMSM():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine
     Compute Torque from EEC results and compare with Yang et al, 2013
@@ -43,27 +44,12 @@ def test_ELUT_PMSM():
     ).get_data()
 
     # Set varspeed simulation
-    simu.var_simu = VarLoadCurrent(type_OP_matrix=1, OP_matrix=OP_matrix)
+    simu.var_simu = VarLoadCurrent(
+        type_OP_matrix=1, OP_matrix=OP_matrix, is_keep_all_output=True
+    )
 
     # Define second simu for FEMM comparison
     simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True, nb_worker=4)
-
-    # Datakeepers
-    # Stator Winding Flux Datakeeper
-    Phi_wind_stator_dk = DataKeeper(
-        name="Stator Winding Flux",
-        symbol="Phi_{wind}",
-        unit="Wb",
-        keeper="lambda out: out.mag.Phi_wind_stator",
-    )
-
-    # Instanteneous torque Datakeeper
-    Tem_dk = DataKeeper(
-        name="Electromagnetic torque",
-        symbol="T_{em}",
-        unit="N.m",
-        keeper="lambda out: out.mag.Tem",
-    )
 
     # Stator Winding Flux along dq Datakeeper
     Phi_wind_dq_dk = DataKeeper(
@@ -73,39 +59,22 @@ def test_ELUT_PMSM():
         keeper="lambda out: out.mag.comp_Phi_dq()",
     )
 
-    # Electromotive force Datakeeper
-    EMF_dk = DataKeeper(
-        name="Stator Winding Electromotive Force",
-        symbol="EMF",
-        unit="V",
-        keeper="lambda out: out.mag.comp_emf()",
-    )
-
     # Store Datakeepers
-    simu.var_simu.datakeeper_list = [Phi_wind_stator_dk, Tem_dk, Phi_wind_dq_dk, EMF_dk]
+    simu.var_simu.datakeeper_list = [Phi_wind_dq_dk]
 
     # Postprocessing
     simu.var_simu.postproc_list = [PostELUT()]
 
     out = simu.run()
 
-    # Definition of the magnetic simulation (FEMM)
-
-    # out2 = Output(simu=simu2)
-    # simu2.run()
-
-    # # Plot 3-phase current function of time
-    # out.elec.get_Is().plot_2D_Data(
-    #     "time",
-    #     "phase[]",
-    #     save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
-    #     is_show_fig=False,
-    #     **dict_2D
-    # )
-
-    # # from Yang et al, 2013
-    # assert out.elec.Tem_av_ref == pytest.approx(81.81, rel=0.1)
-    # assert out2.mag.Tem_av == pytest.approx(81.70, rel=0.1)
+    # Plot 3-phase current function of time
+    out.mag.Phi_wind_stator.plot_2D_Data(
+        "time",
+        "phase[]",
+        # save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
+        # is_show_fig=False,
+        **dict_2D
+    )
 
     return out
 

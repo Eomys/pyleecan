@@ -10,33 +10,39 @@ begin = len(normpath(abspath(join(dirname(__file__), "../.."))))
 end = len(normpath(abspath(join(dirname(__file__), ".."))))
 MAIN_DIR = dirname(realpath(__file__))
 
-package_name = MAIN_DIR[begin + 1 : end]
+soft_name = MAIN_DIR[begin + 1 : end]
+is_log = True  # To add logger related code (get_logger, ...)
 
 # Add the directory to the python path
 sys.path.append(MAIN_DIR[:begin])
 
 exec(
     "from "
-    + package_name
+    + soft_name
     + ".Generator.ClassGenerator.class_generator import generate_class"
 )
-exec("from " + package_name + ".Generator.read_fct import read_all")
-exec("from " + package_name + ".definitions import MAIN_DIR, DOC_DIR, INT_DIR")
+exec("from " + soft_name + ".Generator.read_fct import read_all")
+exec("from " + soft_name + ".definitions import MAIN_DIR, DOC_DIR, INT_DIR")
 
 
 # List of the main packages (to sort the classes)
 PACKAGE_LIST = ["Geometry", "Machine", "Material", "Slot", "Import"]
 
 
-def generate_code(root_path, gen_dict=None):
-    """Generate pyleecan Classes code according to doc in root_path
+def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
+    """Generate the package Classes code according to doc in root_path
 
     Parameters
     ----------
     root_path : str
-        Path to the main folder of Pyleecan
+        Path to the main folder of the package
     gen_dict : dict
         Generation dictionary (contains all the csv data)
+    soft_name : str
+        Name of the software to generate
+    is_log : bool
+        True to add the log related code (get_logger...)
+
     Returns
     -------
     None
@@ -46,9 +52,6 @@ def generate_code(root_path, gen_dict=None):
     DOC_DIR = join(root_path, "Generator", "ClassesRef")
     print("Reading classes csv in: " + DOC_DIR)
     print("Saving generated files in: " + CLASS_DIR)
-
-    path = __file__[__file__.index(package_name) :]
-    path = path.replace("\\", "/")
 
     # Deleting all the previous class
     print("Deleting old class files...")
@@ -73,7 +76,7 @@ def generate_code(root_path, gen_dict=None):
 
     # Read all the csv files
     if gen_dict is None:
-        gen_dict = read_all(DOC_DIR)
+        gen_dict = read_all(DOC_DIR, soft_name=soft_name)
 
     # Generate all the class files (sorted to remove "commit noise")
     for class_name, _ in iter(sorted(list(gen_dict.items()))):
@@ -82,7 +85,9 @@ def generate_code(root_path, gen_dict=None):
         )
         load_file.write('    "' + class_name + '": ' + class_name + ",\n")
         print("Generation of " + class_name + " class")
-        generate_class(gen_dict, class_name, CLASS_DIR)
+        generate_class(
+            gen_dict, class_name, CLASS_DIR, soft_name=soft_name, is_log=is_log
+        )
     import_file.close()
     load_file.write("}\n")
     load_file.close()
@@ -97,13 +102,31 @@ def generate_code(root_path, gen_dict=None):
 
 
 if __name__ == "__main__":
-    gen_dict = read_all(DOC_DIR, is_internal=False, in_path=INT_DIR)
-    generate_code(MAIN_DIR, gen_dict)
+    IS_SDT = False
+    SDT_PATH = ""  # To fill
+    if IS_SDT:
+        MAIN_DIR = join(SDT_PATH, "SciDataTool")
+        DOC_DIR = join(MAIN_DIR, "Generator", "ClassesRef")
+        INT_DIR = join(MAIN_DIR, "Generator", "Internal")
+        soft_name = "SciDataTool"
+        is_log = False
+    gen_dict = read_all(
+        DOC_DIR,
+        is_internal=False,
+        in_path=INT_DIR,
+        soft_name=soft_name,
+    )
+    generate_code(
+        MAIN_DIR,
+        gen_dict,
+        soft_name=soft_name,
+        is_log=is_log,
+    )
     # Run black
     try:
         import black
 
-        system('"{}" -m black .'.format(sys.executable))
+        system('"{}" -m black {}'.format(sys.executable, MAIN_DIR))
         if black.__version__.split(".")[0] != "20":
             print("\n############################################")
             print(

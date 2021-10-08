@@ -50,6 +50,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .DXFImport import DXFImport
+from .SliceModel import SliceModel
 
 
 class MagElmer(Magnetics):
@@ -156,6 +157,9 @@ class MagElmer(Magnetics):
         angle_stator_shift=0,
         angle_rotor_shift=0,
         logger_name="Pyleecan.Magnetics",
+        Slice_enforced=None,
+        Nslices_enforced=None,
+        type_distribution_enforced=None,
         is_current_harm=True,
         init_dict=None,
         init_str=None,
@@ -221,6 +225,12 @@ class MagElmer(Magnetics):
                 angle_rotor_shift = init_dict["angle_rotor_shift"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "Slice_enforced" in list(init_dict.keys()):
+                Slice_enforced = init_dict["Slice_enforced"]
+            if "Nslices_enforced" in list(init_dict.keys()):
+                Nslices_enforced = init_dict["Nslices_enforced"]
+            if "type_distribution_enforced" in list(init_dict.keys()):
+                type_distribution_enforced = init_dict["type_distribution_enforced"]
             if "is_current_harm" in list(init_dict.keys()):
                 is_current_harm = init_dict["is_current_harm"]
         # Set the properties (value check and convertion are done in setter)
@@ -249,6 +259,9 @@ class MagElmer(Magnetics):
             angle_stator_shift=angle_stator_shift,
             angle_rotor_shift=angle_rotor_shift,
             logger_name=logger_name,
+            Slice_enforced=Slice_enforced,
+            Nslices_enforced=Nslices_enforced,
+            type_distribution_enforced=type_distribution_enforced,
             is_current_harm=is_current_harm,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
@@ -394,15 +407,23 @@ class MagElmer(Magnetics):
         S += getsizeof(self.nb_worker)
         return S
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
         """
         Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
         Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Magnetics
-        MagElmer_dict = super(MagElmer, self).as_dict(**kwargs)
+        MagElmer_dict = super(MagElmer, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         MagElmer_dict["Kmesh_fineness"] = self.Kmesh_fineness
         MagElmer_dict["Kgeo_fineness"] = self.Kgeo_fineness
         MagElmer_dict["file_name"] = self.file_name
@@ -417,11 +438,19 @@ class MagElmer(Magnetics):
         if self.rotor_dxf is None:
             MagElmer_dict["rotor_dxf"] = None
         else:
-            MagElmer_dict["rotor_dxf"] = self.rotor_dxf.as_dict(**kwargs)
+            MagElmer_dict["rotor_dxf"] = self.rotor_dxf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.stator_dxf is None:
             MagElmer_dict["stator_dxf"] = None
         else:
-            MagElmer_dict["stator_dxf"] = self.stator_dxf.as_dict(**kwargs)
+            MagElmer_dict["stator_dxf"] = self.stator_dxf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         MagElmer_dict["import_file"] = self.import_file
         MagElmer_dict["nb_worker"] = self.nb_worker
         # The class name is added to the dict for deserialisation purpose

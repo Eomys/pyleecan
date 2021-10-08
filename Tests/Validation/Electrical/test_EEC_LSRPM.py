@@ -25,7 +25,8 @@ from pyleecan.Functions.Plot import dict_2D
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-def test_EEC_PMSM():
+@pytest.mark.skip(reason="Work in progress")
+def test_EEC_LSRPM():
     """Validation of LSRPM EEC from Sijie's PhD thesis"""
 
     LSRPM = load("LSRPM_001.json")
@@ -82,4 +83,4 @@ def test_EEC_PMSM():
 
 # To run it without pytest
 if __name__ == "__main__":
-    out, out2 = test_EEC_PMSM()
+    out, out2 = test_EEC_LSRPM()
