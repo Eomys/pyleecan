@@ -66,6 +66,21 @@ try:
 except ImportError as error:
     comp_Phidqh_from_Phiwind = error
 
+try:
+    from ..Methods.Simulation.ELUT_PMSM.get_Phid_mag_mean import get_Phid_mag_mean
+except ImportError as error:
+    get_Phid_mag_mean = error
+
+try:
+    from ..Methods.Simulation.ELUT_PMSM.get_Phid_mag_harm import get_Phid_mag_harm
+except ImportError as error:
+    get_Phid_mag_harm = error
+
+try:
+    from ..Methods.Simulation.ELUT_PMSM.get_orders_dqh import get_orders_dqh
+except ImportError as error:
+    get_orders_dqh = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -169,6 +184,41 @@ class ELUT_PMSM(ELUT):
         )
     else:
         comp_Phidqh_from_Phiwind = comp_Phidqh_from_Phiwind
+    # cf Methods.Simulation.ELUT_PMSM.get_Phid_mag_mean
+    if isinstance(get_Phid_mag_mean, ImportError):
+        get_Phid_mag_mean = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ELUT_PMSM method get_Phid_mag_mean: "
+                    + str(get_Phid_mag_mean)
+                )
+            )
+        )
+    else:
+        get_Phid_mag_mean = get_Phid_mag_mean
+    # cf Methods.Simulation.ELUT_PMSM.get_Phid_mag_harm
+    if isinstance(get_Phid_mag_harm, ImportError):
+        get_Phid_mag_harm = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ELUT_PMSM method get_Phid_mag_harm: "
+                    + str(get_Phid_mag_harm)
+                )
+            )
+        )
+    else:
+        get_Phid_mag_harm = get_Phid_mag_harm
+    # cf Methods.Simulation.ELUT_PMSM.get_orders_dqh
+    if isinstance(get_orders_dqh, ImportError):
+        get_orders_dqh = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ELUT_PMSM method get_orders_dqh: " + str(get_orders_dqh)
+                )
+            )
+        )
+    else:
+        get_orders_dqh = get_orders_dqh
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -177,13 +227,11 @@ class ELUT_PMSM(ELUT):
 
     def __init__(
         self,
-        Phi_dqh=None,
+        Phi_dqh_mean=None,
         I_dqh=None,
         Tmag_ref=20,
-        E0=None,
-        E_dqh=None,
-        orders_dqh=None,
-        bemf=None,
+        Phi_dqh_mag=None,
+        Phi_wind=None,
         R1=None,
         L1=None,
         T1_ref=20,
@@ -206,20 +254,16 @@ class ELUT_PMSM(ELUT):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Phi_dqh" in list(init_dict.keys()):
-                Phi_dqh = init_dict["Phi_dqh"]
+            if "Phi_dqh_mean" in list(init_dict.keys()):
+                Phi_dqh_mean = init_dict["Phi_dqh_mean"]
             if "I_dqh" in list(init_dict.keys()):
                 I_dqh = init_dict["I_dqh"]
             if "Tmag_ref" in list(init_dict.keys()):
                 Tmag_ref = init_dict["Tmag_ref"]
-            if "E0" in list(init_dict.keys()):
-                E0 = init_dict["E0"]
-            if "E_dqh" in list(init_dict.keys()):
-                E_dqh = init_dict["E_dqh"]
-            if "orders_dqh" in list(init_dict.keys()):
-                orders_dqh = init_dict["orders_dqh"]
-            if "bemf" in list(init_dict.keys()):
-                bemf = init_dict["bemf"]
+            if "Phi_dqh_mag" in list(init_dict.keys()):
+                Phi_dqh_mag = init_dict["Phi_dqh_mag"]
+            if "Phi_wind" in list(init_dict.keys()):
+                Phi_wind = init_dict["Phi_wind"]
             if "R1" in list(init_dict.keys()):
                 R1 = init_dict["R1"]
             if "L1" in list(init_dict.keys()):
@@ -229,13 +273,11 @@ class ELUT_PMSM(ELUT):
             if "OP_matrix" in list(init_dict.keys()):
                 OP_matrix = init_dict["OP_matrix"]
         # Set the properties (value check and convertion are done in setter)
-        self.Phi_dqh = Phi_dqh
+        self.Phi_dqh_mean = Phi_dqh_mean
         self.I_dqh = I_dqh
         self.Tmag_ref = Tmag_ref
-        self.E0 = E0
-        self.E_dqh = E_dqh
-        self.orders_dqh = orders_dqh
-        self.bemf = bemf
+        self.Phi_dqh_mag = Phi_dqh_mag
+        self.Phi_wind = Phi_wind
         # Call ELUT init
         super(ELUT_PMSM, self).__init__(
             R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix
@@ -250,9 +292,9 @@ class ELUT_PMSM(ELUT):
         # Get the properties inherited from ELUT
         ELUT_PMSM_str += super(ELUT_PMSM, self).__str__()
         ELUT_PMSM_str += (
-            "Phi_dqh = "
+            "Phi_dqh_mean = "
             + linesep
-            + str(self.Phi_dqh).replace(linesep, linesep + "\t")
+            + str(self.Phi_dqh_mean).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
@@ -263,22 +305,8 @@ class ELUT_PMSM(ELUT):
             + linesep
         )
         ELUT_PMSM_str += "Tmag_ref = " + str(self.Tmag_ref) + linesep
-        ELUT_PMSM_str += "E0 = " + str(self.E0) + linesep
-        ELUT_PMSM_str += (
-            "E_dqh = "
-            + linesep
-            + str(self.E_dqh).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        ELUT_PMSM_str += (
-            "orders_dqh = "
-            + linesep
-            + str(self.orders_dqh).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        ELUT_PMSM_str += "bemf = " + str(self.bemf) + linesep + linesep
+        ELUT_PMSM_str += "Phi_dqh_mag = " + str(self.Phi_dqh_mag) + linesep + linesep
+        ELUT_PMSM_str += "Phi_wind = " + str(self.Phi_wind) + linesep + linesep
         return ELUT_PMSM_str
 
     def __eq__(self, other):
@@ -290,19 +318,15 @@ class ELUT_PMSM(ELUT):
         # Check the properties inherited from ELUT
         if not super(ELUT_PMSM, self).__eq__(other):
             return False
-        if not array_equal(other.Phi_dqh, self.Phi_dqh):
+        if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
             return False
         if other.I_dqh != self.I_dqh:
             return False
         if other.Tmag_ref != self.Tmag_ref:
             return False
-        if other.E0 != self.E0:
+        if other.Phi_dqh_mag != self.Phi_dqh_mag:
             return False
-        if not array_equal(other.E_dqh, self.E_dqh):
-            return False
-        if not array_equal(other.orders_dqh, self.orders_dqh):
-            return False
-        if other.bemf != self.bemf:
+        if other.Phi_wind != self.Phi_wind:
             return False
         return True
 
@@ -317,24 +341,35 @@ class ELUT_PMSM(ELUT):
 
         # Check the properties inherited from ELUT
         diff_list.extend(super(ELUT_PMSM, self).compare(other, name=name))
-        if not array_equal(other.Phi_dqh, self.Phi_dqh):
-            diff_list.append(name + ".Phi_dqh")
+        if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
+            diff_list.append(name + ".Phi_dqh_mean")
         if other._I_dqh != self._I_dqh:
             diff_list.append(name + ".I_dqh")
         if other._Tmag_ref != self._Tmag_ref:
             diff_list.append(name + ".Tmag_ref")
-        if other._E0 != self._E0:
-            diff_list.append(name + ".E0")
-        if not array_equal(other.E_dqh, self.E_dqh):
-            diff_list.append(name + ".E_dqh")
-        if not array_equal(other.orders_dqh, self.orders_dqh):
-            diff_list.append(name + ".orders_dqh")
-        if (other.bemf is None and self.bemf is not None) or (
-            other.bemf is not None and self.bemf is None
+        if (other.Phi_dqh_mag is None and self.Phi_dqh_mag is not None) or (
+            other.Phi_dqh_mag is not None and self.Phi_dqh_mag is None
         ):
-            diff_list.append(name + ".bemf None mismatch")
-        elif self.bemf is not None:
-            diff_list.extend(self.bemf.compare(other.bemf, name=name + ".bemf"))
+            diff_list.append(name + ".Phi_dqh_mag None mismatch")
+        elif self.Phi_dqh_mag is not None:
+            diff_list.extend(
+                self.Phi_dqh_mag.compare(other.Phi_dqh_mag, name=name + ".Phi_dqh_mag")
+            )
+        if (other.Phi_wind is None and self.Phi_wind is not None) or (
+            other.Phi_wind is not None and self.Phi_wind is None
+        ):
+            diff_list.append(name + ".Phi_wind None mismatch")
+        elif self.Phi_wind is None:
+            pass
+        elif len(other.Phi_wind) != len(self.Phi_wind):
+            diff_list.append("len(" + name + ".Phi_wind)")
+        else:
+            for ii in range(len(other.Phi_wind)):
+                diff_list.extend(
+                    self.Phi_wind[ii].compare(
+                        other.Phi_wind[ii], name=name + ".Phi_wind[" + str(ii) + "]"
+                    )
+                )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -346,15 +381,15 @@ class ELUT_PMSM(ELUT):
 
         # Get size of the properties inherited from ELUT
         S += super(ELUT_PMSM, self).__sizeof__()
-        S += getsizeof(self.Phi_dqh)
+        S += getsizeof(self.Phi_dqh_mean)
         if self.I_dqh is not None:
             for value in self.I_dqh:
                 S += getsizeof(value)
         S += getsizeof(self.Tmag_ref)
-        S += getsizeof(self.E0)
-        S += getsizeof(self.E_dqh)
-        S += getsizeof(self.orders_dqh)
-        S += getsizeof(self.bemf)
+        S += getsizeof(self.Phi_dqh_mag)
+        if self.Phi_wind is not None:
+            for value in self.Phi_wind:
+                S += getsizeof(value)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -374,56 +409,44 @@ class ELUT_PMSM(ELUT):
             keep_function=keep_function,
             **kwargs
         )
-        if self.Phi_dqh is None:
-            ELUT_PMSM_dict["Phi_dqh"] = None
+        if self.Phi_dqh_mean is None:
+            ELUT_PMSM_dict["Phi_dqh_mean"] = None
         else:
             if type_handle_ndarray == 0:
-                ELUT_PMSM_dict["Phi_dqh"] = self.Phi_dqh.tolist()
+                ELUT_PMSM_dict["Phi_dqh_mean"] = self.Phi_dqh_mean.tolist()
             elif type_handle_ndarray == 1:
-                ELUT_PMSM_dict["Phi_dqh"] = self.Phi_dqh.copy()
+                ELUT_PMSM_dict["Phi_dqh_mean"] = self.Phi_dqh_mean.copy()
             elif type_handle_ndarray == 2:
-                ELUT_PMSM_dict["Phi_dqh"] = self.Phi_dqh
+                ELUT_PMSM_dict["Phi_dqh_mean"] = self.Phi_dqh_mean
             else:
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
         ELUT_PMSM_dict["I_dqh"] = self.I_dqh.copy() if self.I_dqh is not None else None
         ELUT_PMSM_dict["Tmag_ref"] = self.Tmag_ref
-        ELUT_PMSM_dict["E0"] = self.E0
-        if self.E_dqh is None:
-            ELUT_PMSM_dict["E_dqh"] = None
+        if self.Phi_dqh_mag is None:
+            ELUT_PMSM_dict["Phi_dqh_mag"] = None
         else:
-            if type_handle_ndarray == 0:
-                ELUT_PMSM_dict["E_dqh"] = self.E_dqh.tolist()
-            elif type_handle_ndarray == 1:
-                ELUT_PMSM_dict["E_dqh"] = self.E_dqh.copy()
-            elif type_handle_ndarray == 2:
-                ELUT_PMSM_dict["E_dqh"] = self.E_dqh
-            else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
-        if self.orders_dqh is None:
-            ELUT_PMSM_dict["orders_dqh"] = None
-        else:
-            if type_handle_ndarray == 0:
-                ELUT_PMSM_dict["orders_dqh"] = self.orders_dqh.tolist()
-            elif type_handle_ndarray == 1:
-                ELUT_PMSM_dict["orders_dqh"] = self.orders_dqh.copy()
-            elif type_handle_ndarray == 2:
-                ELUT_PMSM_dict["orders_dqh"] = self.orders_dqh
-            else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
-        if self.bemf is None:
-            ELUT_PMSM_dict["bemf"] = None
-        else:
-            ELUT_PMSM_dict["bemf"] = self.bemf.as_dict(
+            ELUT_PMSM_dict["Phi_dqh_mag"] = self.Phi_dqh_mag.as_dict(
                 type_handle_ndarray=type_handle_ndarray,
                 keep_function=keep_function,
                 **kwargs
             )
+        if self.Phi_wind is None:
+            ELUT_PMSM_dict["Phi_wind"] = None
+        else:
+            ELUT_PMSM_dict["Phi_wind"] = list()
+            for obj in self.Phi_wind:
+                if obj is not None:
+                    ELUT_PMSM_dict["Phi_wind"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
+                else:
+                    ELUT_PMSM_dict["Phi_wind"].append(None)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ELUT_PMSM_dict["__class__"] = "ELUT_PMSM"
@@ -432,22 +455,20 @@ class ELUT_PMSM(ELUT):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Phi_dqh = None
+        self.Phi_dqh_mean = None
         self.I_dqh = None
         self.Tmag_ref = None
-        self.E0 = None
-        self.E_dqh = None
-        self.orders_dqh = None
-        self.bemf = None
+        self.Phi_dqh_mag = None
+        self.Phi_wind = None
         # Set to None the properties inherited from ELUT
         super(ELUT_PMSM, self)._set_None()
 
-    def _get_Phi_dqh(self):
-        """getter of Phi_dqh"""
-        return self._Phi_dqh
+    def _get_Phi_dqh_mean(self):
+        """getter of Phi_dqh_mean"""
+        return self._Phi_dqh_mean
 
-    def _set_Phi_dqh(self, value):
-        """setter of Phi_dqh"""
+    def _set_Phi_dqh_mean(self, value):
+        """setter of Phi_dqh_mean"""
         if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
@@ -455,13 +476,13 @@ class ELUT_PMSM(ELUT):
                 value = array(value)
             except:
                 pass
-        check_var("Phi_dqh", value, "ndarray")
-        self._Phi_dqh = value
+        check_var("Phi_dqh_mean", value, "ndarray")
+        self._Phi_dqh_mean = value
 
-    Phi_dqh = property(
-        fget=_get_Phi_dqh,
-        fset=_set_Phi_dqh,
-        doc=u"""Stator winding flux llinkage fundamental calculated from user-input inductance tables
+    Phi_dqh_mean = property(
+        fget=_get_Phi_dqh_mean,
+        fset=_set_Phi_dqh_mean,
+        doc=u"""RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh)
 
         :Type: ndarray
         """,
@@ -481,7 +502,7 @@ class ELUT_PMSM(ELUT):
     I_dqh = property(
         fget=_get_I_dqh,
         fset=_set_I_dqh,
-        doc=u"""Id Iq Ih table corresponding to flux linkage data given in Phi_dqh
+        doc=u"""RMS Id Iq Ih table corresponding to flux linkage table given in Phi_dqh_mean
 
         :Type: list
         """,
@@ -505,97 +526,62 @@ class ELUT_PMSM(ELUT):
         """,
     )
 
-    def _get_E0(self):
-        """getter of E0"""
-        return self._E0
+    def _get_Phi_dqh_mag(self):
+        """getter of Phi_dqh_mag"""
+        return self._Phi_dqh_mag
 
-    def _set_E0(self, value):
-        """setter of E0"""
-        check_var("E0", value, "float")
-        self._E0 = value
-
-    E0 = property(
-        fget=_get_E0,
-        fset=_set_E0,
-        doc=u"""RMS fundamental back electromotive force (bemf) along Q-axis
-
-        :Type: float
-        """,
-    )
-
-    def _get_E_dqh(self):
-        """getter of E_dqh"""
-        return self._E_dqh
-
-    def _set_E_dqh(self, value):
-        """setter of E_dqh"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("E_dqh", value, "ndarray")
-        self._E_dqh = value
-
-    E_dqh = property(
-        fget=_get_E_dqh,
-        fset=_set_E_dqh,
-        doc=u"""Back emf harmonics along DQH axis
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_orders_dqh(self):
-        """getter of orders_dqh"""
-        return self._orders_dqh
-
-    def _set_orders_dqh(self, value):
-        """setter of orders_dqh"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("orders_dqh", value, "ndarray")
-        self._orders_dqh = value
-
-    orders_dqh = property(
-        fget=_get_orders_dqh,
-        fset=_set_orders_dqh,
-        doc=u"""Back harmonic orders (multiple of fundamental electrical frequency) corresponding to Edqh spectrum
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_bemf(self):
-        """getter of bemf"""
-        return self._bemf
-
-    def _set_bemf(self, value):
-        """setter of bemf"""
+    def _set_Phi_dqh_mag(self, value):
+        """setter of Phi_dqh_mag"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "bemf"
+                "SciDataTool.Classes", value.get("__class__"), "Phi_dqh_mag"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
-        check_var("bemf", value, "DataND")
-        self._bemf = value
+        check_var("Phi_dqh_mag", value, "DataND")
+        self._Phi_dqh_mag = value
 
-    bemf = property(
-        fget=_get_bemf,
-        fset=_set_bemf,
-        doc=u"""Back electromotive force DataTime object
+    Phi_dqh_mag = property(
+        fget=_get_Phi_dqh_mag,
+        fset=_set_Phi_dqh_mag,
+        doc=u"""RMS stator winding flux linkage in dqh frame including harmonics (only magnets)
 
         :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
+
+    def _get_Phi_wind(self):
+        """getter of Phi_wind"""
+        if self._Phi_wind is not None:
+            for obj in self._Phi_wind:
+                if obj is not None:
+                    obj.parent = self
+        return self._Phi_wind
+
+    def _set_Phi_wind(self, value):
+        """setter of Phi_wind"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "Phi_wind"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
+        if value == -1:
+            value = list()
+        check_var("Phi_wind", value, "[DataND]")
+        self._Phi_wind = value
+
+    Phi_wind = property(
+        fget=_get_Phi_wind,
+        fset=_set_Phi_wind,
+        doc=u"""Stator winding flux function of time and phases
+
+        :Type: [SciDataTool.Classes.DataND.DataND]
         """,
     )

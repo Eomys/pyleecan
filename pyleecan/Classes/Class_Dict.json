@@ -1323,7 +1323,10 @@
             "get_Lmq",
             "comp_Ldqh_from_Phidqh",
             "import_from_data",
-            "comp_Phidqh_from_Phiwind"
+            "comp_Phidqh_from_Phiwind",
+            "get_Phid_mag_mean",
+            "get_Phid_mag_harm",
+            "get_orders_dqh"
         ],
         "mother": "ELUT",
         "name": "ELUT_PMSM",
@@ -1331,16 +1334,16 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/ELUT_PMSM.csv",
         "properties": [
             {
-                "desc": "Stator winding flux llinkage fundamental calculated from user-input inductance tables",
+                "desc": "RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh)",
                 "max": "",
                 "min": "",
-                "name": "Phi_dqh",
+                "name": "Phi_dqh_mean",
                 "type": "ndarray",
-                "unit": "Wb",
+                "unit": "Wbrms",
                 "value": null
             },
             {
-                "desc": "Id Iq Ih table corresponding to flux linkage data given in Phi_dqh",
+                "desc": "RMS Id Iq Ih table corresponding to flux linkage table given in Phi_dqh_mean",
                 "max": "",
                 "min": "",
                 "name": "I_dqh",
@@ -1358,39 +1361,21 @@
                 "value": 20
             },
             {
-                "desc": "RMS fundamental back electromotive force (bemf) along Q-axis",
+                "desc": "RMS stator winding flux linkage in dqh frame including harmonics (only magnets)",
                 "max": "",
                 "min": "",
-                "name": "E0",
-                "type": "float",
-                "unit": "V",
-                "value": null
-            },
-            {
-                "desc": "Back emf harmonics along DQH axis",
-                "max": "",
-                "min": "",
-                "name": "E_dqh",
-                "type": "ndarray",
-                "unit": "V",
-                "value": null
-            },
-            {
-                "desc": "Back harmonic orders (multiple of fundamental electrical frequency) corresponding to Edqh spectrum",
-                "max": "",
-                "min": "",
-                "name": "orders_dqh",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Back electromotive force DataTime object",
-                "max": "",
-                "min": "",
-                "name": "bemf",
+                "name": "Phi_dqh_mag",
                 "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "V",
+                "unit": "Wbrms",
+                "value": "None"
+            },
+            {
+                "desc": "Stator winding flux function of time and phases",
+                "max": "",
+                "min": "",
+                "name": "Phi_wind",
+                "type": "[SciDataTool.Classes.DataND.DataND]",
+                "unit": "Wb",
                 "value": "None"
             }
         ]
@@ -4143,7 +4128,10 @@
         "desc": "Starting data of the simulation",
         "is_internal": false,
         "methods": [
-            "comp_axes"
+            "comp_axes",
+            "comp_axis_time",
+            "comp_axis_angle",
+            "comp_axis_phase"
         ],
         "mother": "",
         "name": "Input",
@@ -8537,7 +8525,6 @@
         "methods": [
             "clean",
             "comp_emf",
-            "comp_Phi_dq",
             "comp_power",
             "get_demag",
             "store"

@@ -2,7 +2,7 @@ import os
 from os.path import join
 
 from ...Functions.FEMM.draw_FEMM import draw_FEMM
-from ...Functions.Electrical.coordinate_transformation import n2dq
+from ...Functions.Electrical.coordinate_transformation import n2dqh
 from ...Classes._FEMMHandler import _FEMMHandler
 from ...Classes.OutMagFEMM import OutMagFEMM
 from numpy import linspace, pi, split
@@ -114,7 +114,7 @@ def comp_fluxlinkage(obj, output):
 
     # Define d axis angle for the d,q transform
     d_angle = (angle_rotor - angle_offset_initial) * zp
-    fluxdq = split(n2dq(Phi_wind, d_angle, n=qs), 2, axis=1)
+    fluxdq = split(n2dqh(Phi_wind, d_angle), 2, axis=1)
 
     # restore the original elec
     output.elec = elec

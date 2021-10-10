@@ -18,15 +18,16 @@ def gen_input(self):
     # Get the simulation
     if isinstance(self.parent, Simulation):
         simu = self.parent
-    elif isinstance(self.parent.parent, Simulation):
-        simu = self.parent.parent
     else:
-        raise InputError("InputVoltage object should be inside a Simulation object")
+        raise InputError(
+            self.__class__.__name__ + " object should be inside a Simulation object"
+        )
 
-    if simu.parent is None:
-        raise InputError("The Simulation object must be in an Output object to run")
-
-    output = simu.parent
+    # Get output
+    if simu.parent is not None:
+        output = simu.parent
+    else:
+        raise InputError("Simulation object should be inside an Output object")
 
     # Create the correct Output object
     outelec = OutElec()
@@ -51,9 +52,8 @@ def gen_input(self):
 
     # Load and check alpha_rotor and N0
     if self.angle_rotor is None and self.N0 is None:
-        raise InputError(
-            "InputVoltage.angle_rotor and InputVoltage.N0 can't be None at the same time"
-        )
+        raise InputError("angle_rotor and N0 can't be None at the same time")
+
     if self.angle_rotor is not None:
         outelec.angle_rotor = self.angle_rotor.get_data()
         if (
@@ -89,58 +89,14 @@ def gen_input(self):
 
     # Calculate time, angle and phase axes and store them in OutGeo
     outgeo.axes_dict = self.comp_axes(
-        axes_list=["time", "angle", "phase"],
+        axes_list=["time", "angle"],
         is_periodicity_a=False,
         is_periodicity_t=False,
     )
 
     # Create time axis for electrical model including periodicity
     outelec.axes_dict = self.comp_axes(
-        axes_list=["time"], axes_dict=outgeo.axes_dict, is_periodicity_t=False
+        axes_list=["time", "phase_S", "phase_R"],
+        axes_dict_in=outgeo.axes_dict,
+        is_periodicity_t=False,
     )
-
-    # Generate Us
-    # if qs > 0:
-    # TODO
-    #     if self.Is is None:
-    #         if self.Id_ref is None and self.Iq_ref is None:
-    #             raise InputError(
-    #                 "ERROR: InputVoltage.Is, InputVoltage.Id_ref, and InputVoltage.Iq_ref missing"
-    #             )
-    #         else:
-    #             outelec.Id_ref = self.Id_ref
-    #             outelec.Iq_ref = self.Iq_ref
-    #             outelec.Is = None
-    #     else:
-    #         Is = self.Is.get_data()
-    #         if not isinstance(Is, ndarray) or Is.shape != (self.Nt_tot, qs):
-    #             raise InputError(
-    #                 "ERROR: InputVoltage.Is must be a matrix with the shape "
-    #                 + str((self.Nt_tot, qs))
-    #                 + " (len(time), stator phase number), "
-    #                 + str(Is.shape)
-    #                 + " returned"
-    #             )
-    #         # Creating the data object
-    #         Phase = Data1D(
-    #             name="phase",
-    #             unit="",
-    #             values=gen_name(qs),
-    #             is_components=True,
-    #         )
-    #         outelec.Is = DataTime(
-    #             name="Stator current",
-    #             unit="A",
-    #             symbol="Is",
-    #             axes=[Phase, Time],
-    #             values=transpose(Is),
-    #         )
-    #         # Compute corresponding Id/Iq reference
-    #         Idq = n2dq(
-    #             transpose(outelec.Is.values),
-    #             2 * pi * outelec.felec * outelec.axes_dict["time"].get_values(is_oneperiod=False),
-    #             n=qs,
-    #             is_dq_rms=True,
-    #         )
-    #         outelec.Id_ref = mean(Idq[:, 0])
-    #         outelec.Iq_ref = mean(Idq[:, 1])  # TODO use of mean has to be documented

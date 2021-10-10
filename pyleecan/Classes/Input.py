@@ -22,6 +22,21 @@ try:
 except ImportError as error:
     comp_axes = error
 
+try:
+    from ..Methods.Simulation.Input.comp_axis_time import comp_axis_time
+except ImportError as error:
+    comp_axis_time = error
+
+try:
+    from ..Methods.Simulation.Input.comp_axis_angle import comp_axis_angle
+except ImportError as error:
+    comp_axis_angle = error
+
+try:
+    from ..Methods.Simulation.Input.comp_axis_phase import comp_axis_phase
+except ImportError as error:
+    comp_axis_phase = error
+
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
@@ -35,6 +50,7 @@ class Input(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Input.comp_axes
     if isinstance(comp_axes, ImportError):
         comp_axes = property(
@@ -44,6 +60,39 @@ class Input(FrozenClass):
         )
     else:
         comp_axes = comp_axes
+    # cf Methods.Simulation.Input.comp_axis_time
+    if isinstance(comp_axis_time, ImportError):
+        comp_axis_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Input method comp_axis_time: " + str(comp_axis_time)
+                )
+            )
+        )
+    else:
+        comp_axis_time = comp_axis_time
+    # cf Methods.Simulation.Input.comp_axis_angle
+    if isinstance(comp_axis_angle, ImportError):
+        comp_axis_angle = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Input method comp_axis_angle: " + str(comp_axis_angle)
+                )
+            )
+        )
+    else:
+        comp_axis_angle = comp_axis_angle
+    # cf Methods.Simulation.Input.comp_axis_phase
+    if isinstance(comp_axis_phase, ImportError):
+        comp_axis_phase = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Input method comp_axis_phase: " + str(comp_axis_phase)
+                )
+            )
+        )
+    else:
+        comp_axis_phase = comp_axis_phase
     # save and copy methods are available in all object
     save = save
     copy = copy

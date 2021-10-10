@@ -8,10 +8,6 @@ from ....Classes.ImportMatrixVal import ImportMatrixVal
 from ....Classes.Input import Input
 from ....Classes.InputCurrent import InputCurrent
 
-from ....Methods.Simulation.Input import InputError
-
-from ....Functions.load import import_class
-
 
 VERBOSE_KEY = {"Br": "Radial", "Bt": "Tangential", "Bz": "Axial"}
 
@@ -25,23 +21,14 @@ def gen_input(self):
         An InputFlux object
     """
 
-    Simulation = import_class("pyleecan.Classes", "Simulation")
-
-    # get the simulation
-    if isinstance(self.parent, Simulation):
-        simu = self.parent
-    elif isinstance(self.parent.parent, Simulation):
-        simu = self.parent.parent
-    else:
-        raise InputError("InputFlux object should be inside a Simulation object")
-
-    if simu.parent is None:
-        raise InputError("The Simulation object must be in an Output object to run")
-
-    logger = simu.get_logger()
-
     # Call InputCurrent.gen_input()
     InputCurrent.gen_input(self)
+
+    # Get simulation and outputs
+    simu = self.parent
+    output = simu.parent
+
+    logger = simu.get_logger()
 
     # Import flux components
     out_mag = OutMag()
@@ -136,4 +123,4 @@ def gen_input(self):
         for ax in axes_list:
             out_mag.axes_dict[ax.name] = ax.copy()
 
-    simu.parent.mag = out_mag
+    output.mag = out_mag
