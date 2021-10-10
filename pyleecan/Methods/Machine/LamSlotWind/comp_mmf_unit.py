@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import pi, linspace, zeros, ones, dot, squeeze
 from SciDataTool import Data1D, DataTime, Norm_ref
-from ....Functions.Electrical.coordinate_transformation import dq2n
+from ....Functions.Electrical.coordinate_transformation import dqh2n
 from ....Functions.Winding.gen_phase_list import gen_name
 from pyleecan.Classes.Winding import Winding
 
@@ -50,10 +50,10 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
     else:
         wf = self.comp_wind_function(angle=angle, per_a=per_a)
 
-    # Compute unit current function of time applying constant Id=1 Arms, Iq=0
-    Idq = zeros((Nt, 2))
+    # Compute unit current function of time applying constant Id=1 Arms, Iq=0, Ih=0
+    Idq = zeros((Nt, 3))
     Idq[:, 0] = ones(Nt)
-    I = dq2n(Idq, 2 * pi * freq * time, n=qs, is_n_rms=False)
+    I = dqh2n(Idq, 2 * pi * freq * time, n=qs, is_n_rms=False)
 
     # Compute unit mmf
     mmf_u = squeeze(dot(I, wf))

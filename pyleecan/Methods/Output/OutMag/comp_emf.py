@@ -1,6 +1,6 @@
 from numpy import diff, zeros, newaxis, pi
 
-from ....Functions.Electrical.coordinate_transformation import n2dq
+from ....Functions.Electrical.coordinate_transformation import n2dqh
 
 
 def comp_emf(self, is_dq=False):
@@ -49,12 +49,8 @@ def comp_emf(self, is_dq=False):
             output = self.parent
             qs = output.simu.machine.stator.winding.qs
             felec = output.elec.felec
-            # Get rotation direction of the fundamental magnetic field created by the winding
-            rot_dir = output.get_rot_dir()
             # Get stator current function of time
-            emf = n2dq(
-                emf, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_dq_rms=True
-            )
+            emf = n2dqh(emf, 2 * pi * felec * time, is_dq_rms=True)
 
         EMF = Phi_wind.copy()
         EMF.values = emf

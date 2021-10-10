@@ -1,4 +1,4 @@
-from ....Functions.Electrical.coordinate_transformation import dq2n
+from ....Functions.Electrical.coordinate_transformation import dqh2n
 from numpy import pi, array, transpose
 from SciDataTool import Data1D, DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
@@ -14,7 +14,7 @@ def get_Us(self):
         felec = self.felec
 
         # add stator current
-        Us = dq2n(Usdq, 2 * pi * felec * time, n=qs)
+        Us = dqh2n(Usdq, 2 * pi * felec * time, n=qs)
         Phase = Data1D(
             name="phase",
             unit="",

@@ -84,7 +84,7 @@ def solve_EEC(self, output):
 
     # # compute actual rotor bar currents
     # # TODO fix: initial rotor pos. is disregarded for now
-    # Ir = dq2n(Ir_, w_slip * time, n=qsr // sym, rot_dir=rot_dir, is_n_rms=False)
+    # Ir = dqh2n(Ir_, w_slip * time, n=qsr // sym, rot_dir=rot_dir, is_n_rms=False)
     # Ir = tile(Ir, (1, sym))
 
     # Phase = Data1D(
