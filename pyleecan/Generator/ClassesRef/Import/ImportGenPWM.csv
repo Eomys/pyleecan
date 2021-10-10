@@ -1,14 +1,15 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 fs,Hz,sample frequency,0,float,96000,0,,,Import,ImportMatrix,get_data,VERSION,1,To generate a PWM voltage matrix
-duration,s,duration,0,int,10,0,,,,,,,,
+duration,s,duration,0,float,10,0,,,,,,,,
 f,Hz,fundamental frequency,0,float,50,0,,,,,,,,
 fmax,Hz,maximal fundamental frequency,0,float,0,0,,,,,,,,
 fmode,,"speed mode: 0: Fixed speed, 1: Variable speed",0,int,0,0,,,,,,,,
 fswimode,,"switch mode: 0:Fixed fswi, 1:Variable fswi",0,int,0,,,,,,,,,
 fswi,Hz,switching frequency,0,float,1000,,,,,,,,,
-fswi_max,Hz,maximal switching frequency,0,int,3000,,,,,,,,,
+fswi_max,Hz,maximal switching frequency,0,float,3000,,,,,,,,,
 typePWM,,0: GDPWM 1: DPWMMIN 2: DPWMMAX 3: DPWM0 4: DPWM1 5: DPWM2 6: DPWM3 7: SVPWM 8: SPWM,0,int,8,,,,,,,,,
 Vdc1,V,DC BUS voltage,0,float,2,,,,,,,,,
 U0,V,reference voltage,0,float,1,,,,,,,,,
 type_carrier,,1: forward toothsaw carrier 2: backwards toothsaw carrier 3: toothsaw carrier else: symetrical toothsaw carrier,0,int,0,,,,,,,,,
 var_amp,%,percentage of variation of carrier amplitude,0,int,20,,,,,,,,,
+qs,,number of phase,0,int,3,,,,,,,,,
