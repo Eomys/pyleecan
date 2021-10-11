@@ -58,23 +58,22 @@ class WVentOut(QGroupBox):
         else:  # For VentUD
             lam = self.parent().parent().parent().parent().lam
 
+        if lam.is_stator:
+            lam_name = "Stator"
+        else:
+            lam_name = "Rotor"
+
         # Lamination output
         Rint = format(self.u.get_m(lam.Rint), ".4g")
-        self.out_Rint.setText(
-            self.tr("Lam. internal radius: ") + Rint + " " + self.u.get_m_name()
-        )
+        self.out_Rint.setText(lam_name + ".Rint: " + Rint + " " + self.u.get_m_name())
 
         Rext = format(self.u.get_m(lam.Rext), ".4g")
-        self.out_Rext.setText(
-            self.tr("Lam. external radius: ") + Rext + " " + self.u.get_m_name()
-        )
+        self.out_Rext.setText(lam_name + ".Rext: " + Rext + " " + self.u.get_m_name())
         Slam = format(self.u.get_m2(pi * (lam.Rext ** 2 - lam.Rint ** 2)), ".4g")
         self.out_lam_surface.setText(
-            self.tr("Lam. surface (no slot, no vent): ")
-            + Slam
-            + " "
-            + self.u.get_m2_name()
+            lam_name + " surface: " + Slam + " " + self.u.get_m2_name()
         )
+        self.out_lam_vent_surface.hide()
         # Ventilation output
         try:
             lam = Lamination(Rext=lam.Rext, Rint=lam.Rint)
