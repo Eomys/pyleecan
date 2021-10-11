@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from os import walk
-from os.path import isfile, join, basename
+from os.path import isfile, join, basename, isdir
 
 from csv import reader
 
@@ -45,6 +45,10 @@ def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
     """
     gen_dict = dict()
 
+    if not isdir(path):
+        raise Exception(
+            "Error while scanning csv files, " + path + " is not a folder !"
+        )
     # Read the open source doc
     for (dirpath, _, filenames) in walk(path):
         for file_name in filenames:
