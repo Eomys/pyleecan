@@ -31,6 +31,8 @@ def n2dqh_DataTime(data_n, is_dqh_rms=True):
     if data_n.axes[1].name != "phase":
         raise Exception("DataTime object should contain phase as second axis")
 
+    # TODO: add check on angle_elec normalization
+
     # Get values for one time period converted in electrical angle and for all phases
     result = data_n.get_along("time[oneperiod]->angle_elec", "phase")
     data_n_val = result[data_n.symbol]
@@ -98,6 +100,8 @@ def dqh2n_DataTime(data_dqh, n, is_n_rms=False):
         raise Exception("DataTime object should contain time as first axis")
     if data_dqh.axes[1].name != "phase":
         raise Exception("DataTime object should contain phase as second axis")
+
+    # TODO: add check on angle_elec normalization
 
     # Get values for one time period converted in electrical angle and for all phases
     result = data_dqh.get_along("time[oneperiod]->angle_elec", "phase")

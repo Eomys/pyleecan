@@ -35,7 +35,7 @@ def test_coordinate_transformation(param_dict):
     rot_dir = param_dict["rot_dir"]
 
     time = linspace(0, 1 / f_elec, Nt, endpoint=False)
-    angle_elec = rot_dir * 2 * pi * time
+    angle_elec = rot_dir * 2 * pi * f_elec * time
 
     # Time axis for plots
     norm_time = {
@@ -45,6 +45,9 @@ def test_coordinate_transformation(param_dict):
     }
     Time = Data1D(name="time", unit="s", values=time, normalizations=norm_time)
 
+    # TODO: test angle_elec
+    angle_elec_bis = Time.get_values(is_smallestperiod=True, normalization="angle_elec")
+
     # Phase axis for plots
     Phase = Data1D(
         name="phase",
@@ -53,7 +56,7 @@ def test_coordinate_transformation(param_dict):
         is_components=True,
     )
 
-    phase_list = array([0, 45, 90, 180]) * pi / 180
+    phase_list = array([0, 45, 90, 180, 270]) * pi / 180
     for phase in phase_list:
         In = zeros((Nt, qs))
         for ii in range(qs):
@@ -81,6 +84,8 @@ def test_coordinate_transformation(param_dict):
             axes=[Time, Phase],
             values=In,
         )
+
+        In_data.plot_2D_Data("time", "phase[]")
 
         I_dqh_data = n2dqh_DataTime(In_data)
         In_data_check = dqh2n_DataTime(I_dqh_data, n=qs)
