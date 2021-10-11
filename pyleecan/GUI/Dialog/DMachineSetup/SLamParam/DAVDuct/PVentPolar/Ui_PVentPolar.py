@@ -19,13 +19,11 @@ class Ui_PVentPolar(object):
     def setupUi(self, PVentPolar):
         if not PVentPolar.objectName():
             PVentPolar.setObjectName(u"PVentPolar")
-        PVentPolar.resize(630, 470)
-        PVentPolar.setMinimumSize(QSize(630, 470))
+        PVentPolar.resize(700, 479)
+        PVentPolar.setMinimumSize(QSize(700, 470))
         PVentPolar.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PVentPolar)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.img_vent = QLabel(PVentPolar)
         self.img_vent.setObjectName(u"img_vent")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -33,17 +31,15 @@ class Ui_PVentPolar(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_vent.sizePolicy().hasHeightForWidth())
         self.img_vent.setSizePolicy(sizePolicy)
-        self.img_vent.setMinimumSize(QSize(300, 300))
+        self.img_vent.setMinimumSize(QSize(410, 410))
         self.img_vent.setMaximumSize(QSize(16777215, 16777215))
         self.img_vent.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/LamParam/PolarVentDuct.png")
+            QPixmap(u":/images/images/MachineSetup/LamParam/VentilationPolar.png")
         )
         self.img_vent.setScaledContents(False)
         self.img_vent.setAlignment(Qt.AlignCenter)
 
-        self.verticalLayout_2.addWidget(self.img_vent)
-
-        self.horizontalLayout.addLayout(self.verticalLayout_2)
+        self.horizontalLayout.addWidget(self.img_vent)
 
         self.scrollArea = QScrollArea(PVentPolar)
         self.scrollArea.setObjectName(u"scrollArea")
@@ -52,7 +48,7 @@ class Ui_PVentPolar(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 446))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 455))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()

@@ -19,13 +19,11 @@ class Ui_PVentCirc(object):
     def setupUi(self, PVentCirc):
         if not PVentCirc.objectName():
             PVentCirc.setObjectName(u"PVentCirc")
-        PVentCirc.resize(630, 470)
-        PVentCirc.setMinimumSize(QSize(630, 470))
+        PVentCirc.resize(700, 470)
+        PVentCirc.setMinimumSize(QSize(700, 470))
         PVentCirc.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PVentCirc)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.img_vent = QLabel(PVentCirc)
         self.img_vent.setObjectName(u"img_vent")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -33,17 +31,15 @@ class Ui_PVentCirc(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_vent.sizePolicy().hasHeightForWidth())
         self.img_vent.setSizePolicy(sizePolicy)
-        self.img_vent.setMinimumSize(QSize(300, 300))
+        self.img_vent.setMinimumSize(QSize(410, 300))
         self.img_vent.setMaximumSize(QSize(16777215, 16777215))
         self.img_vent.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/LamParam/CircVentDuct.png")
+            QPixmap(u":/images/images/MachineSetup/LamParam/VentilationCirc.png")
         )
         self.img_vent.setScaledContents(False)
         self.img_vent.setAlignment(Qt.AlignCenter)
 
-        self.verticalLayout_2.addWidget(self.img_vent)
-
-        self.horizontalLayout.addLayout(self.verticalLayout_2)
+        self.horizontalLayout.addWidget(self.img_vent)
 
         self.scrollArea = QScrollArea(PVentCirc)
         self.scrollArea.setObjectName(u"scrollArea")
