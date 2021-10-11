@@ -10,7 +10,7 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.PostELUT import PostELUT
+from pyleecan.Classes.PostLUT import PostLUT
 from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 
@@ -25,13 +25,13 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.skip(reason="Work in progress")
-def test_ELUT_PMSM():
+def test_LUT_PMSM():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine
     Compute Torque from EEC results and compare with Yang et al, 2013
     """
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    simu = Simu1(name="test_ELUT_PMSM", machine=Toyota_Prius)
+    simu = Simu1(name="test_LUT_PMSM", machine=Toyota_Prius)
 
     # Definition of the input
     simu.input = InputCurrent(
@@ -40,7 +40,7 @@ def test_ELUT_PMSM():
 
     # Load OP_matrix
     OP_matrix = ImportMatrixXls(
-        file_path=join(TEST_DATA_DIR, "OP_ELUT_PMSM.xlsx"), sheet="Feuil1"
+        file_path=join(TEST_DATA_DIR, "OP_LUT_PMSM.xlsx"), sheet="Feuil1"
     ).get_data()
 
     # Set varspeed simulation
@@ -63,7 +63,7 @@ def test_ELUT_PMSM():
     simu.var_simu.datakeeper_list = [Phi_wind_dq_dk]
 
     # Postprocessing
-    simu.var_simu.postproc_list = [PostELUT()]
+    simu.var_simu.postproc_list = [PostLUT()]
 
     out = simu.run()
 
@@ -81,4 +81,4 @@ def test_ELUT_PMSM():
 
 # To run it without pytest
 if __name__ == "__main__":
-    out = test_ELUT_PMSM()
+    out = test_LUT_PMSM()

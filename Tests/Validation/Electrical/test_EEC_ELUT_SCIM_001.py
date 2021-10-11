@@ -10,7 +10,7 @@ from Tests import save_validation_path as save_path
 
 from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_SCIM import EEC_SCIM
-from pyleecan.Classes.ELUT_SCIM import ELUT_SCIM
+from pyleecan.Classes.LUTslip import LUTslip
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.InputVoltage import InputVoltage
 from pyleecan.Classes.Output import Output
@@ -101,7 +101,7 @@ def test_EEC_ELUT_SCIM_001():
         slip_ref=param_dict["slip"],
     )
 
-    ELUT_SCIM_001 = ELUT_SCIM(
+    ELUT_SCIM_001 = LUTslip(
         R1=param_dict["R1_20"],
         L1=param_dict["L10"],
         T1_ref=20,

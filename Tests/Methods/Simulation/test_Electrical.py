@@ -52,3 +52,9 @@ class Test_Electrical(object):
         )
         rot_dir = IPMSM_B.stator.comp_rot_dir()
         assert rot_dir == 1
+
+
+if __name__ == "__main__":
+    a = Test_Electrical()
+    toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    a.test_comp_rot_dir(toyota_Prius)

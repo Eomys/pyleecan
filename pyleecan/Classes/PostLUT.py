@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Post/PostELUT.csv
+# File generated according to Generator/ClassesRef/Post/PostLUT.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Post/PostELUT
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Post/PostLUT
 """
 
 from os import linesep
@@ -18,25 +18,25 @@ from .PostMethod import PostMethod
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Post.PostELUT.run import run
+    from ..Methods.Post.PostLUT.run import run
 except ImportError as error:
     run = error
 
 
 from ._check import InitUnKnowClassError
-from .ELUT import ELUT
+from .LUT import LUT
 
 
-class PostELUT(PostMethod):
-    """Class to generate an ELUT after the corresponding simulation"""
+class PostLUT(PostMethod):
+    """Class to generate a LUT after the corresponding simulation"""
 
     VERSION = 1
 
-    # cf Methods.Post.PostELUT.run
+    # cf Methods.Post.PostLUT.run
     if isinstance(run, ImportError):
         run = property(
             fget=lambda x: raise_(
-                ImportError("Can't use PostELUT method run: " + str(run))
+                ImportError("Can't use PostLUT method run: " + str(run))
             )
         )
     else:
@@ -49,9 +49,9 @@ class PostELUT(PostMethod):
 
     def __init__(
         self,
-        ELUT=None,
-        is_save_ELUT=True,
-        is_store_ELUT=True,
+        LUT=None,
+        is_save_LUT=True,
+        is_store_LUT=True,
         init_dict=None,
         init_str=None,
     ):
@@ -70,35 +70,35 @@ class PostELUT(PostMethod):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "ELUT" in list(init_dict.keys()):
-                ELUT = init_dict["ELUT"]
-            if "is_save_ELUT" in list(init_dict.keys()):
-                is_save_ELUT = init_dict["is_save_ELUT"]
-            if "is_store_ELUT" in list(init_dict.keys()):
-                is_store_ELUT = init_dict["is_store_ELUT"]
+            if "LUT" in list(init_dict.keys()):
+                LUT = init_dict["LUT"]
+            if "is_save_LUT" in list(init_dict.keys()):
+                is_save_LUT = init_dict["is_save_LUT"]
+            if "is_store_LUT" in list(init_dict.keys()):
+                is_store_LUT = init_dict["is_store_LUT"]
         # Set the properties (value check and convertion are done in setter)
-        self.ELUT = ELUT
-        self.is_save_ELUT = is_save_ELUT
-        self.is_store_ELUT = is_store_ELUT
+        self.LUT = LUT
+        self.is_save_LUT = is_save_LUT
+        self.is_store_LUT = is_store_LUT
         # Call PostMethod init
-        super(PostELUT, self).__init__()
+        super(PostLUT, self).__init__()
         # The class is frozen (in PostMethod init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
-        PostELUT_str = ""
+        PostLUT_str = ""
         # Get the properties inherited from PostMethod
-        PostELUT_str += super(PostELUT, self).__str__()
-        if self.ELUT is not None:
-            tmp = self.ELUT.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            PostELUT_str += "ELUT = " + tmp
+        PostLUT_str += super(PostLUT, self).__str__()
+        if self.LUT is not None:
+            tmp = self.LUT.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            PostLUT_str += "LUT = " + tmp
         else:
-            PostELUT_str += "ELUT = None" + linesep + linesep
-        PostELUT_str += "is_save_ELUT = " + str(self.is_save_ELUT) + linesep
-        PostELUT_str += "is_store_ELUT = " + str(self.is_store_ELUT) + linesep
-        return PostELUT_str
+            PostLUT_str += "LUT = None" + linesep + linesep
+        PostLUT_str += "is_save_LUT = " + str(self.is_save_LUT) + linesep
+        PostLUT_str += "is_store_LUT = " + str(self.is_store_LUT) + linesep
+        return PostLUT_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -107,13 +107,13 @@ class PostELUT(PostMethod):
             return False
 
         # Check the properties inherited from PostMethod
-        if not super(PostELUT, self).__eq__(other):
+        if not super(PostLUT, self).__eq__(other):
             return False
-        if other.ELUT != self.ELUT:
+        if other.LUT != self.LUT:
             return False
-        if other.is_save_ELUT != self.is_save_ELUT:
+        if other.is_save_LUT != self.is_save_LUT:
             return False
-        if other.is_store_ELUT != self.is_store_ELUT:
+        if other.is_store_LUT != self.is_store_LUT:
             return False
         return True
 
@@ -127,17 +127,17 @@ class PostELUT(PostMethod):
         diff_list = list()
 
         # Check the properties inherited from PostMethod
-        diff_list.extend(super(PostELUT, self).compare(other, name=name))
-        if (other.ELUT is None and self.ELUT is not None) or (
-            other.ELUT is not None and self.ELUT is None
+        diff_list.extend(super(PostLUT, self).compare(other, name=name))
+        if (other.LUT is None and self.LUT is not None) or (
+            other.LUT is not None and self.LUT is None
         ):
-            diff_list.append(name + ".ELUT None mismatch")
-        elif self.ELUT is not None:
-            diff_list.extend(self.ELUT.compare(other.ELUT, name=name + ".ELUT"))
-        if other._is_save_ELUT != self._is_save_ELUT:
-            diff_list.append(name + ".is_save_ELUT")
-        if other._is_store_ELUT != self._is_store_ELUT:
-            diff_list.append(name + ".is_store_ELUT")
+            diff_list.append(name + ".LUT None mismatch")
+        elif self.LUT is not None:
+            diff_list.extend(self.LUT.compare(other.LUT, name=name + ".LUT"))
+        if other._is_save_LUT != self._is_save_LUT:
+            diff_list.append(name + ".is_save_LUT")
+        if other._is_store_LUT != self._is_store_LUT:
+            diff_list.append(name + ".is_store_LUT")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -148,10 +148,10 @@ class PostELUT(PostMethod):
         S = 0  # Full size of the object
 
         # Get size of the properties inherited from PostMethod
-        S += super(PostELUT, self).__sizeof__()
-        S += getsizeof(self.ELUT)
-        S += getsizeof(self.is_save_ELUT)
-        S += getsizeof(self.is_store_ELUT)
+        S += super(PostLUT, self).__sizeof__()
+        S += getsizeof(self.LUT)
+        S += getsizeof(self.is_save_LUT)
+        S += getsizeof(self.is_store_LUT)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -166,95 +166,95 @@ class PostELUT(PostMethod):
         """
 
         # Get the properties inherited from PostMethod
-        PostELUT_dict = super(PostELUT, self).as_dict(
+        PostLUT_dict = super(PostLUT, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
             **kwargs
         )
-        if self.ELUT is None:
-            PostELUT_dict["ELUT"] = None
+        if self.LUT is None:
+            PostLUT_dict["LUT"] = None
         else:
-            PostELUT_dict["ELUT"] = self.ELUT.as_dict(
+            PostLUT_dict["LUT"] = self.LUT.as_dict(
                 type_handle_ndarray=type_handle_ndarray,
                 keep_function=keep_function,
                 **kwargs
             )
-        PostELUT_dict["is_save_ELUT"] = self.is_save_ELUT
-        PostELUT_dict["is_store_ELUT"] = self.is_store_ELUT
+        PostLUT_dict["is_save_LUT"] = self.is_save_LUT
+        PostLUT_dict["is_store_LUT"] = self.is_store_LUT
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
-        PostELUT_dict["__class__"] = "PostELUT"
-        return PostELUT_dict
+        PostLUT_dict["__class__"] = "PostLUT"
+        return PostLUT_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.ELUT is not None:
-            self.ELUT._set_None()
-        self.is_save_ELUT = None
-        self.is_store_ELUT = None
+        if self.LUT is not None:
+            self.LUT._set_None()
+        self.is_save_LUT = None
+        self.is_store_LUT = None
         # Set to None the properties inherited from PostMethod
-        super(PostELUT, self)._set_None()
+        super(PostLUT, self)._set_None()
 
-    def _get_ELUT(self):
-        """getter of ELUT"""
-        return self._ELUT
+    def _get_LUT(self):
+        """getter of LUT"""
+        return self._LUT
 
-    def _set_ELUT(self, value):
-        """setter of ELUT"""
+    def _set_LUT(self, value):
+        """setter of LUT"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "ELUT")
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "LUT")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            value = ELUT()
-        check_var("ELUT", value, "ELUT")
-        self._ELUT = value
+            value = LUT()
+        check_var("LUT", value, "LUT")
+        self._LUT = value
 
-        if self._ELUT is not None:
-            self._ELUT.parent = self
+        if self._LUT is not None:
+            self._LUT.parent = self
 
-    ELUT = property(
-        fget=_get_ELUT,
-        fset=_set_ELUT,
-        doc=u"""Electrical Look-Up Table to enforce
+    LUT = property(
+        fget=_get_LUT,
+        fset=_set_LUT,
+        doc=u"""Look-Up Table to enforce
 
-        :Type: ELUT
+        :Type: LUT
         """,
     )
 
-    def _get_is_save_ELUT(self):
-        """getter of is_save_ELUT"""
-        return self._is_save_ELUT
+    def _get_is_save_LUT(self):
+        """getter of is_save_LUT"""
+        return self._is_save_LUT
 
-    def _set_is_save_ELUT(self, value):
-        """setter of is_save_ELUT"""
-        check_var("is_save_ELUT", value, "bool")
-        self._is_save_ELUT = value
+    def _set_is_save_LUT(self, value):
+        """setter of is_save_LUT"""
+        check_var("is_save_LUT", value, "bool")
+        self._is_save_LUT = value
 
-    is_save_ELUT = property(
-        fget=_get_is_save_ELUT,
-        fset=_set_is_save_ELUT,
-        doc=u"""True to save ELUT in PostELUT
+    is_save_LUT = property(
+        fget=_get_is_save_LUT,
+        fset=_set_is_save_LUT,
+        doc=u"""True to save LUT in PostLUT
 
         :Type: bool
         """,
     )
 
-    def _get_is_store_ELUT(self):
-        """getter of is_store_ELUT"""
-        return self._is_store_ELUT
+    def _get_is_store_LUT(self):
+        """getter of is_store_LUT"""
+        return self._is_store_LUT
 
-    def _set_is_store_ELUT(self, value):
-        """setter of is_store_ELUT"""
-        check_var("is_store_ELUT", value, "bool")
-        self._is_store_ELUT = value
+    def _set_is_store_LUT(self, value):
+        """setter of is_store_LUT"""
+        check_var("is_store_LUT", value, "bool")
+        self._is_store_LUT = value
 
-    is_store_ELUT = property(
-        fget=_get_is_store_ELUT,
-        fset=_set_is_store_ELUT,
-        doc=u"""True to store ELUT in PostELUT
+    is_store_LUT = property(
+        fget=_get_is_store_LUT,
+        fset=_set_is_store_LUT,
+        doc=u"""True to store LUT in PostLUT
 
         :Type: bool
         """,

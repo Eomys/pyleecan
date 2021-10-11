@@ -1,4 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-ELUT,,Electrical Look-Up Table to enforce,,ELUT,None,,,,Post,PostMethod,run,VERSION,1,Class to generate an ELUT after the corresponding simulation
-is_save_ELUT,,True to save ELUT in PostELUT,,bool,1,,,,,,,,,
-is_store_ELUT,,True to store ELUT in PostELUT,,bool,1,,,,,,,,,

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/ELUT.csv
+# File generated according to Generator/ClassesRef/Simulation/LUT.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/ELUT
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LUT
 """
 
 from os import linesep
@@ -18,7 +18,7 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.ELUT.get_param_dict import get_param_dict
+    from ..Methods.Simulation.LUT.get_param_dict import get_param_dict
 except ImportError as error:
     get_param_dict = error
 
@@ -27,17 +27,17 @@ from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
 
-class ELUT(FrozenClass):
-    """Abstract class for Electrical Look Up Table (ELUT)"""
+class LUT(FrozenClass):
+    """Abstract class for Look Up Table (LUT)"""
 
     VERSION = 1
 
-    # cf Methods.Simulation.ELUT.get_param_dict
+    # cf Methods.Simulation.LUT.get_param_dict
     if isinstance(get_param_dict, ImportError):
         get_param_dict = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ELUT method get_param_dict: " + str(get_param_dict)
+                    "Can't use LUT method get_param_dict: " + str(get_param_dict)
                 )
             )
         )
@@ -88,22 +88,22 @@ class ELUT(FrozenClass):
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
-        ELUT_str = ""
+        LUT_str = ""
         if self.parent is None:
-            ELUT_str += "parent = None " + linesep
+            LUT_str += "parent = None " + linesep
         else:
-            ELUT_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        ELUT_str += "R1 = " + str(self.R1) + linesep
-        ELUT_str += "L1 = " + str(self.L1) + linesep
-        ELUT_str += "T1_ref = " + str(self.T1_ref) + linesep
-        ELUT_str += (
+            LUT_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        LUT_str += "R1 = " + str(self.R1) + linesep
+        LUT_str += "L1 = " + str(self.L1) + linesep
+        LUT_str += "T1_ref = " + str(self.T1_ref) + linesep
+        LUT_str += (
             "OP_matrix = "
             + linesep
             + str(self.OP_matrix).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
-        return ELUT_str
+        return LUT_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -161,26 +161,26 @@ class ELUT(FrozenClass):
         and may prevent json serializability.
         """
 
-        ELUT_dict = dict()
-        ELUT_dict["R1"] = self.R1
-        ELUT_dict["L1"] = self.L1
-        ELUT_dict["T1_ref"] = self.T1_ref
+        LUT_dict = dict()
+        LUT_dict["R1"] = self.R1
+        LUT_dict["L1"] = self.L1
+        LUT_dict["T1_ref"] = self.T1_ref
         if self.OP_matrix is None:
-            ELUT_dict["OP_matrix"] = None
+            LUT_dict["OP_matrix"] = None
         else:
             if type_handle_ndarray == 0:
-                ELUT_dict["OP_matrix"] = self.OP_matrix.tolist()
+                LUT_dict["OP_matrix"] = self.OP_matrix.tolist()
             elif type_handle_ndarray == 1:
-                ELUT_dict["OP_matrix"] = self.OP_matrix.copy()
+                LUT_dict["OP_matrix"] = self.OP_matrix.copy()
             elif type_handle_ndarray == 2:
-                ELUT_dict["OP_matrix"] = self.OP_matrix
+                LUT_dict["OP_matrix"] = self.OP_matrix
             else:
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
         # The class name is added to the dict for deserialisation purpose
-        ELUT_dict["__class__"] = "ELUT"
-        return ELUT_dict
+        LUT_dict["__class__"] = "LUT"
+        return LUT_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

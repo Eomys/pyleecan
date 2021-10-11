@@ -6,7 +6,7 @@ from ....Functions.Winding.gen_phase_list import gen_name
 from pyleecan.Classes.Winding import Winding
 
 
-def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
+def comp_mmf_unit(self, Na=None, Nt=None, freq=1, rot_dir=-1):
     """Compute the winding Unit magnetomotive force
 
     Parameters
@@ -53,7 +53,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
     # Compute unit current function of time applying constant Id=1 Arms, Iq=0, Ih=0
     Idq = zeros((Nt, 3))
     Idq[:, 0] = ones(Nt)
-    I = dqh2n(Idq, 2 * pi * freq * time, n=qs, is_n_rms=False)
+    I = dqh2n(Idq, rot_dir * 2 * pi * freq * time, n=qs, is_n_rms=False)
 
     # Compute unit mmf
     mmf_u = squeeze(dot(I, wf))

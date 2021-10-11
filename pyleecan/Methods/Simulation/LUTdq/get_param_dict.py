@@ -5,8 +5,8 @@ def get_param_dict(self):
     """Get the parameters dict for the ELUT of PMSM at the operationnal temperature and frequency
     Parameters
     ----------
-    self : ELUT
-        an ELUT_PMSM object
+    self : LUTdq
+        a LUTdq object
 
     Returns
     ----------

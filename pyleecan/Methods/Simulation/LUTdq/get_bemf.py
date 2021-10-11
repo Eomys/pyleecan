@@ -2,8 +2,8 @@ def get_bemf(self):
     """Get the phase to phase back electromotive force magnitude [V] from ELUT flux linkage data
     Parameters
     ----------
-    self : ELUT
-        an ELUT_PMSM object
+    self : LUTdq
+        a LUTdq object
 
     Returns
     ----------

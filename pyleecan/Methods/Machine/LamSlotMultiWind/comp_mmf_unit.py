@@ -1,10 +1,10 @@
 from numpy import pi, linspace, zeros, ones, dot, squeeze
 from SciDataTool import Data1D, DataTime, Norm_ref
-from ....Functions.Electrical.coordinate_transformation import dq2n
+from ....Functions.Electrical.coordinate_transformation import dqh2n
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
-def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
+def comp_mmf_unit(self, Na=None, Nt=None, freq=1, rot_dir=-1):
     """Compute the winding Unit magnetomotive force
 
     Parameters
@@ -17,6 +17,8 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
         Time discretization for offline computation (otherwise use out.elec.time)
     freq : float
         Stator current frequency to consider
+    rot_dir : int
+        Rotation direction (+/- 1)
 
     Returns
     -------
@@ -49,9 +51,9 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
         wf = self.comp_wind_function(angle=angle, per_a=per_a)
 
     # Compute unit current function of time applying constant Id=1 Arms, Iq=0
-    Idq = zeros((Nt, 2))
+    Idq = zeros((Nt, 3))
     Idq[:, 0] = ones(Nt)
-    I = dq2n(Idq, 2 * pi * freq * time, n=qs, is_n_rms=False)
+    I = dqh2n(Idq, rot_dir * 2 * pi * freq * time, n=qs, is_n_rms=False)
 
     # Compute unit mmf
     mmf_u = squeeze(dot(I, wf))

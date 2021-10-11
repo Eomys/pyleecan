@@ -27,9 +27,6 @@ from ..Classes.EEC import EEC
 from ..Classes.EEC_LSRPM import EEC_LSRPM
 from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.EEC_SCIM import EEC_SCIM
-from ..Classes.ELUT import ELUT
-from ..Classes.ELUT_PMSM import ELUT_PMSM
-from ..Classes.ELUT_SCIM import ELUT_SCIM
 from ..Classes.Electrical import Electrical
 from ..Classes.Elmer import Elmer
 from ..Classes.ElmerResults import ElmerResults
@@ -80,6 +77,9 @@ from ..Classes.InputFlux import InputFlux
 from ..Classes.InputForce import InputForce
 from ..Classes.InputVoltage import InputVoltage
 from ..Classes.Interpolation import Interpolation
+from ..Classes.LUT import LUT
+from ..Classes.LUTdq import LUTdq
+from ..Classes.LUTslip import LUTslip
 from ..Classes.LamHole import LamHole
 from ..Classes.LamSlot import LamSlot
 from ..Classes.LamSlotMag import LamSlotMag
@@ -153,8 +153,8 @@ from ..Classes.ParamExplorerInterval import ParamExplorerInterval
 from ..Classes.ParamExplorerSet import ParamExplorerSet
 from ..Classes.PolarArc import PolarArc
 from ..Classes.Post import Post
-from ..Classes.PostELUT import PostELUT
 from ..Classes.PostFunction import PostFunction
+from ..Classes.PostLUT import PostLUT
 from ..Classes.PostMethod import PostMethod
 from ..Classes.PostPlot import PostPlot
 from ..Classes.RefCell import RefCell

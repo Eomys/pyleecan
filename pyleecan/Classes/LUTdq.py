@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/ELUT_PMSM.csv
+# File generated according to Generator/ClassesRef/Simulation/LUTdq.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/ELUT_PMSM
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LUTdq
 """
 
 from os import linesep
@@ -13,212 +13,228 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .ELUT import ELUT
+from .LUT import LUT
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.ELUT_PMSM.get_param_dict import get_param_dict
+    from ..Methods.Simulation.LUTdq.get_param_dict import get_param_dict
 except ImportError as error:
     get_param_dict = error
 
 try:
-    from ..Methods.Simulation.ELUT_PMSM.get_Lq import get_Lq
+    from ..Methods.Simulation.LUTdq.get_Lq import get_Lq
 except ImportError as error:
     get_Lq = error
 
 try:
-    from ..Methods.Simulation.ELUT_PMSM.get_bemf import get_bemf
+    from ..Methods.Simulation.LUTdq.get_bemf import get_bemf
 except ImportError as error:
     get_bemf = error
 
 try:
-    from ..Methods.Simulation.ELUT_PMSM.get_Ld import get_Ld
+    from ..Methods.Simulation.LUTdq.get_Ld import get_Ld
 except ImportError as error:
     get_Ld = error
 
 try:
-    from ..Methods.Simulation.ELUT_PMSM.get_Lmd import get_Lmd
+    from ..Methods.Simulation.LUTdq.get_Lmd import get_Lmd
 except ImportError as error:
     get_Lmd = error
 
 try:
-    from ..Methods.Simulation.ELUT_PMSM.get_Lmq import get_Lmq
+    from ..Methods.Simulation.LUTdq.get_Lmq import get_Lmq
 except ImportError as error:
     get_Lmq = error
 
 try:
-    from ..Methods.Simulation.ELUT_PMSM.comp_Ldqh_from_Phidqh import (
-        comp_Ldqh_from_Phidqh,
-    )
-except ImportError as error:
-    comp_Ldqh_from_Phidqh = error
-
-try:
-    from ..Methods.Simulation.ELUT_PMSM.import_from_data import import_from_data
+    from ..Methods.Simulation.LUTdq.import_from_data import import_from_data
 except ImportError as error:
     import_from_data = error
 
 try:
-    from ..Methods.Simulation.ELUT_PMSM.comp_Phidqh_from_Phiwind import (
-        comp_Phidqh_from_Phiwind,
-    )
+    from ..Methods.Simulation.LUTdq.get_Phidqh_mean import get_Phidqh_mean
 except ImportError as error:
-    comp_Phidqh_from_Phiwind = error
+    get_Phidqh_mean = error
 
 try:
-    from ..Methods.Simulation.ELUT_PMSM.get_Phid_mag_mean import get_Phid_mag_mean
+    from ..Methods.Simulation.LUTdq.get_Phidqh_mag import get_Phidqh_mag
 except ImportError as error:
-    get_Phid_mag_mean = error
+    get_Phidqh_mag = error
 
 try:
-    from ..Methods.Simulation.ELUT_PMSM.get_Phid_mag_harm import get_Phid_mag_harm
+    from ..Methods.Simulation.LUTdq.get_Phidqh_mag_mean import get_Phidqh_mag_mean
 except ImportError as error:
-    get_Phid_mag_harm = error
+    get_Phidqh_mag_mean = error
 
 try:
-    from ..Methods.Simulation.ELUT_PMSM.get_orders_dqh import get_orders_dqh
+    from ..Methods.Simulation.LUTdq.get_Phidqh_mag_harm import get_Phidqh_mag_harm
+except ImportError as error:
+    get_Phidqh_mag_harm = error
+
+try:
+    from ..Methods.Simulation.LUTdq.get_orders_dqh import get_orders_dqh
 except ImportError as error:
     get_orders_dqh = error
 
+try:
+    from ..Methods.Simulation.LUTdq.interp_Phi_dqh import interp_Phi_dqh
+except ImportError as error:
+    interp_Phi_dqh = error
+
 
 from numpy import array, array_equal
+from cloudpickle import dumps, loads
+from ._check import CheckTypeError
+
+try:
+    from scipy import interp
+except ImportError:
+    interp = ImportError
 from ._check import InitUnKnowClassError
 
 
-class ELUT_PMSM(ELUT):
-    """ELUT class for PMSM"""
+class LUTdq(LUT):
+    """Look Up Table class for dq OP matrix"""
 
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.ELUT_PMSM.get_param_dict
+    # cf Methods.Simulation.LUTdq.get_param_dict
     if isinstance(get_param_dict, ImportError):
         get_param_dict = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ELUT_PMSM method get_param_dict: " + str(get_param_dict)
+                    "Can't use LUTdq method get_param_dict: " + str(get_param_dict)
                 )
             )
         )
     else:
         get_param_dict = get_param_dict
-    # cf Methods.Simulation.ELUT_PMSM.get_Lq
+    # cf Methods.Simulation.LUTdq.get_Lq
     if isinstance(get_Lq, ImportError):
         get_Lq = property(
             fget=lambda x: raise_(
-                ImportError("Can't use ELUT_PMSM method get_Lq: " + str(get_Lq))
+                ImportError("Can't use LUTdq method get_Lq: " + str(get_Lq))
             )
         )
     else:
         get_Lq = get_Lq
-    # cf Methods.Simulation.ELUT_PMSM.get_bemf
+    # cf Methods.Simulation.LUTdq.get_bemf
     if isinstance(get_bemf, ImportError):
         get_bemf = property(
             fget=lambda x: raise_(
-                ImportError("Can't use ELUT_PMSM method get_bemf: " + str(get_bemf))
+                ImportError("Can't use LUTdq method get_bemf: " + str(get_bemf))
             )
         )
     else:
         get_bemf = get_bemf
-    # cf Methods.Simulation.ELUT_PMSM.get_Ld
+    # cf Methods.Simulation.LUTdq.get_Ld
     if isinstance(get_Ld, ImportError):
         get_Ld = property(
             fget=lambda x: raise_(
-                ImportError("Can't use ELUT_PMSM method get_Ld: " + str(get_Ld))
+                ImportError("Can't use LUTdq method get_Ld: " + str(get_Ld))
             )
         )
     else:
         get_Ld = get_Ld
-    # cf Methods.Simulation.ELUT_PMSM.get_Lmd
+    # cf Methods.Simulation.LUTdq.get_Lmd
     if isinstance(get_Lmd, ImportError):
         get_Lmd = property(
             fget=lambda x: raise_(
-                ImportError("Can't use ELUT_PMSM method get_Lmd: " + str(get_Lmd))
+                ImportError("Can't use LUTdq method get_Lmd: " + str(get_Lmd))
             )
         )
     else:
         get_Lmd = get_Lmd
-    # cf Methods.Simulation.ELUT_PMSM.get_Lmq
+    # cf Methods.Simulation.LUTdq.get_Lmq
     if isinstance(get_Lmq, ImportError):
         get_Lmq = property(
             fget=lambda x: raise_(
-                ImportError("Can't use ELUT_PMSM method get_Lmq: " + str(get_Lmq))
+                ImportError("Can't use LUTdq method get_Lmq: " + str(get_Lmq))
             )
         )
     else:
         get_Lmq = get_Lmq
-    # cf Methods.Simulation.ELUT_PMSM.comp_Ldqh_from_Phidqh
-    if isinstance(comp_Ldqh_from_Phidqh, ImportError):
-        comp_Ldqh_from_Phidqh = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ELUT_PMSM method comp_Ldqh_from_Phidqh: "
-                    + str(comp_Ldqh_from_Phidqh)
-                )
-            )
-        )
-    else:
-        comp_Ldqh_from_Phidqh = comp_Ldqh_from_Phidqh
-    # cf Methods.Simulation.ELUT_PMSM.import_from_data
+    # cf Methods.Simulation.LUTdq.import_from_data
     if isinstance(import_from_data, ImportError):
         import_from_data = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ELUT_PMSM method import_from_data: "
-                    + str(import_from_data)
+                    "Can't use LUTdq method import_from_data: " + str(import_from_data)
                 )
             )
         )
     else:
         import_from_data = import_from_data
-    # cf Methods.Simulation.ELUT_PMSM.comp_Phidqh_from_Phiwind
-    if isinstance(comp_Phidqh_from_Phiwind, ImportError):
-        comp_Phidqh_from_Phiwind = property(
+    # cf Methods.Simulation.LUTdq.get_Phidqh_mean
+    if isinstance(get_Phidqh_mean, ImportError):
+        get_Phidqh_mean = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ELUT_PMSM method comp_Phidqh_from_Phiwind: "
-                    + str(comp_Phidqh_from_Phiwind)
+                    "Can't use LUTdq method get_Phidqh_mean: " + str(get_Phidqh_mean)
                 )
             )
         )
     else:
-        comp_Phidqh_from_Phiwind = comp_Phidqh_from_Phiwind
-    # cf Methods.Simulation.ELUT_PMSM.get_Phid_mag_mean
-    if isinstance(get_Phid_mag_mean, ImportError):
-        get_Phid_mag_mean = property(
+        get_Phidqh_mean = get_Phidqh_mean
+    # cf Methods.Simulation.LUTdq.get_Phidqh_mag
+    if isinstance(get_Phidqh_mag, ImportError):
+        get_Phidqh_mag = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ELUT_PMSM method get_Phid_mag_mean: "
-                    + str(get_Phid_mag_mean)
+                    "Can't use LUTdq method get_Phidqh_mag: " + str(get_Phidqh_mag)
                 )
             )
         )
     else:
-        get_Phid_mag_mean = get_Phid_mag_mean
-    # cf Methods.Simulation.ELUT_PMSM.get_Phid_mag_harm
-    if isinstance(get_Phid_mag_harm, ImportError):
-        get_Phid_mag_harm = property(
+        get_Phidqh_mag = get_Phidqh_mag
+    # cf Methods.Simulation.LUTdq.get_Phidqh_mag_mean
+    if isinstance(get_Phidqh_mag_mean, ImportError):
+        get_Phidqh_mag_mean = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ELUT_PMSM method get_Phid_mag_harm: "
-                    + str(get_Phid_mag_harm)
+                    "Can't use LUTdq method get_Phidqh_mag_mean: "
+                    + str(get_Phidqh_mag_mean)
                 )
             )
         )
     else:
-        get_Phid_mag_harm = get_Phid_mag_harm
-    # cf Methods.Simulation.ELUT_PMSM.get_orders_dqh
+        get_Phidqh_mag_mean = get_Phidqh_mag_mean
+    # cf Methods.Simulation.LUTdq.get_Phidqh_mag_harm
+    if isinstance(get_Phidqh_mag_harm, ImportError):
+        get_Phidqh_mag_harm = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LUTdq method get_Phidqh_mag_harm: "
+                    + str(get_Phidqh_mag_harm)
+                )
+            )
+        )
+    else:
+        get_Phidqh_mag_harm = get_Phidqh_mag_harm
+    # cf Methods.Simulation.LUTdq.get_orders_dqh
     if isinstance(get_orders_dqh, ImportError):
         get_orders_dqh = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ELUT_PMSM method get_orders_dqh: " + str(get_orders_dqh)
+                    "Can't use LUTdq method get_orders_dqh: " + str(get_orders_dqh)
                 )
             )
         )
     else:
         get_orders_dqh = get_orders_dqh
+    # cf Methods.Simulation.LUTdq.interp_Phi_dqh
+    if isinstance(interp_Phi_dqh, ImportError):
+        interp_Phi_dqh = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LUTdq method interp_Phi_dqh: " + str(interp_Phi_dqh)
+                )
+            )
+        )
+    else:
+        interp_Phi_dqh = interp_Phi_dqh
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -232,6 +248,7 @@ class ELUT_PMSM(ELUT):
         Tmag_ref=20,
         Phi_dqh_mag=None,
         Phi_wind=None,
+        Phi_dqh_interp=None,
         R1=None,
         L1=None,
         T1_ref=20,
@@ -264,6 +281,8 @@ class ELUT_PMSM(ELUT):
                 Phi_dqh_mag = init_dict["Phi_dqh_mag"]
             if "Phi_wind" in list(init_dict.keys()):
                 Phi_wind = init_dict["Phi_wind"]
+            if "Phi_dqh_interp" in list(init_dict.keys()):
+                Phi_dqh_interp = init_dict["Phi_dqh_interp"]
             if "R1" in list(init_dict.keys()):
                 R1 = init_dict["R1"]
             if "L1" in list(init_dict.keys()):
@@ -278,36 +297,36 @@ class ELUT_PMSM(ELUT):
         self.Tmag_ref = Tmag_ref
         self.Phi_dqh_mag = Phi_dqh_mag
         self.Phi_wind = Phi_wind
-        # Call ELUT init
-        super(ELUT_PMSM, self).__init__(
-            R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix
-        )
-        # The class is frozen (in ELUT init), for now it's impossible to
+        self.Phi_dqh_interp = Phi_dqh_interp
+        # Call LUT init
+        super(LUTdq, self).__init__(R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix)
+        # The class is frozen (in LUT init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
-        ELUT_PMSM_str = ""
-        # Get the properties inherited from ELUT
-        ELUT_PMSM_str += super(ELUT_PMSM, self).__str__()
-        ELUT_PMSM_str += (
+        LUTdq_str = ""
+        # Get the properties inherited from LUT
+        LUTdq_str += super(LUTdq, self).__str__()
+        LUTdq_str += (
             "Phi_dqh_mean = "
             + linesep
             + str(self.Phi_dqh_mean).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
-        ELUT_PMSM_str += (
+        LUTdq_str += (
             "I_dqh = "
             + linesep
             + str(self.I_dqh).replace(linesep, linesep + "\t")
             + linesep
         )
-        ELUT_PMSM_str += "Tmag_ref = " + str(self.Tmag_ref) + linesep
-        ELUT_PMSM_str += "Phi_dqh_mag = " + str(self.Phi_dqh_mag) + linesep + linesep
-        ELUT_PMSM_str += "Phi_wind = " + str(self.Phi_wind) + linesep + linesep
-        return ELUT_PMSM_str
+        LUTdq_str += "Tmag_ref = " + str(self.Tmag_ref) + linesep
+        LUTdq_str += "Phi_dqh_mag = " + str(self.Phi_dqh_mag) + linesep + linesep
+        LUTdq_str += "Phi_wind = " + str(self.Phi_wind) + linesep + linesep
+        LUTdq_str += "Phi_dqh_interp = " + str(self.Phi_dqh_interp) + linesep + linesep
+        return LUTdq_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -315,8 +334,8 @@ class ELUT_PMSM(ELUT):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from ELUT
-        if not super(ELUT_PMSM, self).__eq__(other):
+        # Check the properties inherited from LUT
+        if not super(LUTdq, self).__eq__(other):
             return False
         if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
             return False
@@ -327,6 +346,8 @@ class ELUT_PMSM(ELUT):
         if other.Phi_dqh_mag != self.Phi_dqh_mag:
             return False
         if other.Phi_wind != self.Phi_wind:
+            return False
+        if other.Phi_dqh_interp != self.Phi_dqh_interp:
             return False
         return True
 
@@ -339,8 +360,8 @@ class ELUT_PMSM(ELUT):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from ELUT
-        diff_list.extend(super(ELUT_PMSM, self).compare(other, name=name))
+        # Check the properties inherited from LUT
+        diff_list.extend(super(LUTdq, self).compare(other, name=name))
         if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
             diff_list.append(name + ".Phi_dqh_mean")
         if other._I_dqh != self._I_dqh:
@@ -370,6 +391,15 @@ class ELUT_PMSM(ELUT):
                         other.Phi_wind[ii], name=name + ".Phi_wind[" + str(ii) + "]"
                     )
                 )
+        if (other.Phi_dqh_interp is None and self.Phi_dqh_interp is not None) or (
+            other.Phi_dqh_interp is not None and self.Phi_dqh_interp is None
+        ):
+            diff_list.append(name + ".Phi_dqh_interp None mismatch")
+        elif (
+            self.Phi_dqh_interp is not None
+            and self.Phi_dqh_interp != other.Phi_dqh_interp
+        ):
+            diff_list.append(name + ".Phi_dqh_interp")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -379,8 +409,8 @@ class ELUT_PMSM(ELUT):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from ELUT
-        S += super(ELUT_PMSM, self).__sizeof__()
+        # Get size of the properties inherited from LUT
+        S += super(LUTdq, self).__sizeof__()
         S += getsizeof(self.Phi_dqh_mean)
         if self.I_dqh is not None:
             for value in self.I_dqh:
@@ -390,6 +420,7 @@ class ELUT_PMSM(ELUT):
         if self.Phi_wind is not None:
             for value in self.Phi_wind:
                 S += getsizeof(value)
+        S += getsizeof(self.Phi_dqh_interp)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -403,42 +434,42 @@ class ELUT_PMSM(ELUT):
         and may prevent json serializability.
         """
 
-        # Get the properties inherited from ELUT
-        ELUT_PMSM_dict = super(ELUT_PMSM, self).as_dict(
+        # Get the properties inherited from LUT
+        LUTdq_dict = super(LUTdq, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
             **kwargs
         )
         if self.Phi_dqh_mean is None:
-            ELUT_PMSM_dict["Phi_dqh_mean"] = None
+            LUTdq_dict["Phi_dqh_mean"] = None
         else:
             if type_handle_ndarray == 0:
-                ELUT_PMSM_dict["Phi_dqh_mean"] = self.Phi_dqh_mean.tolist()
+                LUTdq_dict["Phi_dqh_mean"] = self.Phi_dqh_mean.tolist()
             elif type_handle_ndarray == 1:
-                ELUT_PMSM_dict["Phi_dqh_mean"] = self.Phi_dqh_mean.copy()
+                LUTdq_dict["Phi_dqh_mean"] = self.Phi_dqh_mean.copy()
             elif type_handle_ndarray == 2:
-                ELUT_PMSM_dict["Phi_dqh_mean"] = self.Phi_dqh_mean
+                LUTdq_dict["Phi_dqh_mean"] = self.Phi_dqh_mean
             else:
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
-        ELUT_PMSM_dict["I_dqh"] = self.I_dqh.copy() if self.I_dqh is not None else None
-        ELUT_PMSM_dict["Tmag_ref"] = self.Tmag_ref
+        LUTdq_dict["I_dqh"] = self.I_dqh.copy() if self.I_dqh is not None else None
+        LUTdq_dict["Tmag_ref"] = self.Tmag_ref
         if self.Phi_dqh_mag is None:
-            ELUT_PMSM_dict["Phi_dqh_mag"] = None
+            LUTdq_dict["Phi_dqh_mag"] = None
         else:
-            ELUT_PMSM_dict["Phi_dqh_mag"] = self.Phi_dqh_mag.as_dict(
+            LUTdq_dict["Phi_dqh_mag"] = self.Phi_dqh_mag.as_dict(
                 type_handle_ndarray=type_handle_ndarray,
                 keep_function=keep_function,
                 **kwargs
             )
         if self.Phi_wind is None:
-            ELUT_PMSM_dict["Phi_wind"] = None
+            LUTdq_dict["Phi_wind"] = None
         else:
-            ELUT_PMSM_dict["Phi_wind"] = list()
+            LUTdq_dict["Phi_wind"] = list()
             for obj in self.Phi_wind:
                 if obj is not None:
-                    ELUT_PMSM_dict["Phi_wind"].append(
+                    LUTdq_dict["Phi_wind"].append(
                         obj.as_dict(
                             type_handle_ndarray=type_handle_ndarray,
                             keep_function=keep_function,
@@ -446,11 +477,21 @@ class ELUT_PMSM(ELUT):
                         )
                     )
                 else:
-                    ELUT_PMSM_dict["Phi_wind"].append(None)
+                    LUTdq_dict["Phi_wind"].append(None)
+        if self.Phi_dqh_interp is None:
+            LUTdq_dict["Phi_dqh_interp"] = None
+        else:
+            # Store serialized data (using cloudpickle) and str
+            # to read it in json save files
+            LUTdq_dict["Phi_dqh_interp"] = {
+                "__class__": str(type(self._Phi_dqh_interp)),
+                "__repr__": str(self._Phi_dqh_interp.__repr__()),
+                "serialized": dumps(self._Phi_dqh_interp).decode("ISO-8859-2"),
+            }
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
-        ELUT_PMSM_dict["__class__"] = "ELUT_PMSM"
-        return ELUT_PMSM_dict
+        LUTdq_dict["__class__"] = "LUTdq"
+        return LUTdq_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -460,8 +501,9 @@ class ELUT_PMSM(ELUT):
         self.Tmag_ref = None
         self.Phi_dqh_mag = None
         self.Phi_wind = None
-        # Set to None the properties inherited from ELUT
-        super(ELUT_PMSM, self)._set_None()
+        self.Phi_dqh_interp = None
+        # Set to None the properties inherited from LUT
+        super(LUTdq, self)._set_None()
 
     def _get_Phi_dqh_mean(self):
         """getter of Phi_dqh_mean"""
@@ -547,7 +589,7 @@ class ELUT_PMSM(ELUT):
     Phi_dqh_mag = property(
         fget=_get_Phi_dqh_mag,
         fset=_set_Phi_dqh_mag,
-        doc=u"""RMS stator winding flux linkage in dqh frame including harmonics (only magnets)
+        doc=u"""RMS stator winding flux linkage spectrum in dqh frame including harmonics (only magnets)
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -583,5 +625,23 @@ class ELUT_PMSM(ELUT):
         doc=u"""Stator winding flux function of time and phases
 
         :Type: [SciDataTool.Classes.DataND.DataND]
+        """,
+    )
+
+    def _get_Phi_dqh_interp(self):
+        """getter of Phi_dqh_interp"""
+        return self._Phi_dqh_interp
+
+    def _set_Phi_dqh_interp(self, value):
+        """setter of Phi_dqh_interp"""
+        check_var("Phi_dqh_interp", value, "interp")
+        self._Phi_dqh_interp = value
+
+    Phi_dqh_interp = property(
+        fget=_get_Phi_dqh_interp,
+        fset=_set_Phi_dqh_interp,
+        doc=u"""Interpolant function of Phi_dqh
+
+        :Type: scipy.interp
         """,
     )

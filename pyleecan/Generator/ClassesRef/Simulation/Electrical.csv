@@ -5,4 +5,4 @@ type_skin_effect,-,Skin effect for resistance and inductance,1,int,0,,,,,,comp_t
 Tsta,deg Celsius,Average stator temperature for operational EEC calculation,0,float,20,,,,,,,,,,
 Trot,deg Celsius,Average rotor temperature for operational EEC calculation,0,float,20,,,,,,,,,,
 Tmag,deg Celsius,Average magnet temperature for operational EEC calculation,0,float,20,,,,,,,,,,
-ELUT_enforced,-,Electrical Look Up Table to be enforced ,,ELUT,None,,,,,,,,,,
+ELUT_enforced,-,Electrical Look Up Table to be enforced ,,LUT,None,,,,,,,,,,

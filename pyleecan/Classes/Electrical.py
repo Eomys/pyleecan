@@ -35,7 +35,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .EEC import EEC
-from .ELUT import ELUT
+from .LUT import LUT
 
 
 class Electrical(FrozenClass):
@@ -418,8 +418,8 @@ class Electrical(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            value = ELUT()
-        check_var("ELUT_enforced", value, "ELUT")
+            value = LUT()
+        check_var("ELUT_enforced", value, "LUT")
         self._ELUT_enforced = value
 
         if self._ELUT_enforced is not None:
@@ -430,6 +430,6 @@ class Electrical(FrozenClass):
         fset=_set_ELUT_enforced,
         doc=u"""Electrical Look Up Table to be enforced 
 
-        :Type: ELUT
+        :Type: LUT
         """,
     )

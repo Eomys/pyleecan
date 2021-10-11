@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-Phi_m,Wb,Magnetizing flux for a given magnetizing current I_m,,ndarray,None,,,,Simulation,ELUT,get_param_dict,VERSION,1,ELUT class for SCIM,
+Phi_m,Wb,Magnetizing flux for a given magnetizing current I_m,,ndarray,None,,,,Simulation,LUT,get_param_dict,VERSION,1,Look Up Table class for u0/slip OP matrix,
 I_m,Arms,Stator magnetizing current,,ndarray,None,,,,,,get_Lm,,,,
 T2_ref,degC,Rotor bar average temperature at which Phi_m is given,0,float,20,,,,,,comp_Lm_from_Phim,,,,
 R2,Ohm,DC rotor winding resistance at T2_ref already expressed per phase in stator frame ,0,float,None,,,,,,import_from_data,,,,

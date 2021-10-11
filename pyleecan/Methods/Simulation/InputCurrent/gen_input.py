@@ -69,7 +69,7 @@ def gen_input(self):
             Idq = n2dqh(
                 outelec.Is.values,
                 Time.get_values(is_oneperiod=False, normalization="angle_elec"),
-                is_dq_rms=True,
+                is_dqh_rms=True,
             )
             outelec.Id_ref = mean(Idq[:, 0])
             outelec.Iq_ref = mean(Idq[:, 1])
