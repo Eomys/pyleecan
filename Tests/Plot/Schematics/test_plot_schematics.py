@@ -259,6 +259,12 @@ hole_test.append(
         "type_add_active": 2,
     }
 )
+hole_test.append(
+    {
+        "test_obj": VentilationTrap(),
+        "type_add_active": 2,
+    }
+)
 slot_test.extend(hole_test)
 
 
@@ -326,6 +332,9 @@ class Test_plot_schematics(object):
 
 if __name__ == "__main__":
     a = Test_plot_schematics()
-    a.test_slot(slot_test[-1])
-    a.test_slot_point(slot_test[-1])
+    # a.test_slot(slot_test[-1])
+    # a.test_slot_point(slot_test[-1])
+    for slot in slot_test:
+        a.test_slot(slot)
+        a.test_slot_point(slot)
     print("Done")
