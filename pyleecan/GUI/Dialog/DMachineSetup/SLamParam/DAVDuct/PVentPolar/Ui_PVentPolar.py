@@ -43,12 +43,12 @@ class Ui_PVentPolar(object):
 
         self.scrollArea = QScrollArea(PVentPolar)
         self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setMinimumSize(QSize(270, 0))
-        self.scrollArea.setMaximumSize(QSize(270, 16777215))
+        self.scrollArea.setMinimumSize(QSize(300, 0))
+        self.scrollArea.setMaximumSize(QSize(300, 16777215))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 455))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 298, 455))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
@@ -160,10 +160,12 @@ class Ui_PVentPolar(object):
         self.in_D0.setText(QCoreApplication.translate("PVentPolar", u"D0 :", None))
         self.unit_D0.setText(QCoreApplication.translate("PVentPolar", u"m", None))
         self.in_W1.setText(QCoreApplication.translate("PVentPolar", u"W1 :", None))
-        self.unit_W1.setText(QCoreApplication.translate("PVentPolar", u"rad", None))
+        self.unit_W1.setText(QCoreApplication.translate("PVentPolar", u"[rad]", None))
         self.in_Alpha0.setText(
             QCoreApplication.translate("PVentPolar", u"Alpha0 :", None)
         )
-        self.unit_Alpha0.setText(QCoreApplication.translate("PVentPolar", u"rad", None))
+        self.unit_Alpha0.setText(
+            QCoreApplication.translate("PVentPolar", u"[rad]", None)
+        )
 
     # retranslateUi

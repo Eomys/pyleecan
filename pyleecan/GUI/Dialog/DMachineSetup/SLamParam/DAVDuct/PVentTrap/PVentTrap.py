@@ -9,6 +9,7 @@ from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.Gen_PVentTrap i
 )
 from .......Classes.VentilationTrap import VentilationTrap
 
+
 class PVentTrap(Gen_PVentTrap, QWidget):
     """Page to setup the Ventilation Trap"""
 
@@ -58,7 +59,13 @@ class PVentTrap(Gen_PVentTrap, QWidget):
         self.w_out.comp_output()
 
         # Set unit name (m ou mm)
-        wid_list = [self.unit_H0, self.unit_D0, self.unit_W1, self.unit_W1]
+        wid_list = [
+            self.unit_H0,
+            self.unit_D0,
+            self.unit_W1,
+            self.unit_W1,
+            self.unit_W2,
+        ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 

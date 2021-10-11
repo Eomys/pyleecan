@@ -33,13 +33,13 @@
     <widget class="QScrollArea" name="scrollArea">
      <property name="minimumSize">
       <size>
-       <width>270</width>
+       <width>300</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>270</width>
+       <width>300</width>
        <height>16777215</height>
       </size>
      </property>
@@ -51,7 +51,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>268</width>
+        <width>298</width>
         <height>416</height>
        </rect>
       </property>
@@ -98,7 +98,7 @@
          <item row="1" column="2">
           <widget class="QLabel" name="unit_Alpha0">
            <property name="text">
-            <string>rad</string>
+            <string>[rad]</string>
            </property>
           </widget>
          </item>
@@ -128,6 +128,17 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>FloatEdit</class>
+   <extends>QLineEdit</extends>
+   <header>.......GUI/Tools/FloatEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WVentOut</class>
+   <extends>QWidget</extends>
+   <header>.......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>WPathSelectorV</class>
    <extends>QWidget</extends>
    <header>.......GUI.Tools.WPathSelector.WPathSelectorV</header>
@@ -137,17 +148,6 @@
    <class>MPLCanvas</class>
    <extends>QWidget</extends>
    <header>.......GUI.Tools.MPLCanvas</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>FloatEdit</class>
-   <extends>QLineEdit</extends>
-   <header>.......GUI/Tools/FloatEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>WVentOut</class>
-   <extends>QWidget</extends>
-   <header>.......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -64,13 +64,13 @@
     <widget class="QScrollArea" name="scrollArea">
      <property name="minimumSize">
       <size>
-       <width>270</width>
+       <width>300</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>270</width>
+       <width>300</width>
        <height>16777215</height>
       </size>
      </property>
@@ -82,7 +82,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>268</width>
+        <width>298</width>
         <height>446</height>
        </rect>
       </property>
@@ -97,7 +97,14 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="si_Zh"/>
+          <widget class="QSpinBox" name="si_Zh">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="in_H0">
@@ -146,7 +153,7 @@
          <item row="3" column="2">
           <widget class="QLabel" name="unit_Alpha0">
            <property name="text">
-            <string>rad</string>
+            <string>[rad]</string>
            </property>
           </widget>
          </item>

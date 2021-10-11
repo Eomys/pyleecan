@@ -16,7 +16,7 @@ class WVentOut(QGroupBox):
         # Init the main widget
         self.u = gui_option.unit
         self.setTitle(self.tr("Output"))
-        self.setMinimumSize(QSize(300, 0))
+        self.setMinimumSize(QSize(200, 0))
         self.setObjectName("g_output")
         self.layout = QVBoxLayout(self)
         self.layout.setObjectName("layout")

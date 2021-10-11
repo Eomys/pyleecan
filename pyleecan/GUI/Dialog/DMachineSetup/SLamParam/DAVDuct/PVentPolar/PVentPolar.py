@@ -9,6 +9,7 @@ from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.Gen_PVentPolar
 )
 from .......Classes.VentilationPolar import VentilationPolar
 
+
 class PVentPolar(Gen_PVentPolar, QWidget):
     """Page to setup the Ventilation Polar"""
 
@@ -17,6 +18,7 @@ class PVentPolar(Gen_PVentPolar, QWidget):
     # Information for Hole combobox
     hole_name = "Polar"
     hole_type = VentilationPolar
+
     def __init__(self, lam=None, vent=None):
         """Initialize the widget according the current lamination
 

@@ -9,10 +9,10 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from .......GUI.Tools.WPathSelector.WPathSelectorV import WPathSelectorV
-from .......GUI.Tools.MPLCanvas import MPLCanvas
 from .......GUI.Tools.FloatEdit import FloatEdit
 from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import WVentOut
+from .......GUI.Tools.WPathSelector.WPathSelectorV import WPathSelectorV
+from .......GUI.Tools.MPLCanvas import MPLCanvas
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -33,12 +33,12 @@ class Ui_PVentUD(object):
 
         self.scrollArea = QScrollArea(PVentUD)
         self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setMinimumSize(QSize(270, 0))
-        self.scrollArea.setMaximumSize(QSize(270, 16777215))
+        self.scrollArea.setMinimumSize(QSize(300, 0))
+        self.scrollArea.setMaximumSize(QSize(300, 16777215))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 416))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 298, 416))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.b_dxf = QPushButton(self.scrollAreaWidgetContents)
@@ -113,6 +113,6 @@ class Ui_PVentUD(object):
         )
         self.in_Zh.setText(QCoreApplication.translate("PVentUD", u"Zh :", None))
         self.in_Alpha0.setText(QCoreApplication.translate("PVentUD", u"Alpha0 :", None))
-        self.unit_Alpha0.setText(QCoreApplication.translate("PVentUD", u"rad", None))
+        self.unit_Alpha0.setText(QCoreApplication.translate("PVentUD", u"[rad]", None))
 
     # retranslateUi
