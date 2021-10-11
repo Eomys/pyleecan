@@ -26,22 +26,24 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.periodicity
 @pytest.mark.skip(reason="Work in progress")
 def test_LUT_PMSM():
-    """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine
-    Compute Torque from EEC results and compare with Yang et al, 2013
-    """
+    """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     simu = Simu1(name="test_LUT_PMSM", machine=Toyota_Prius)
 
     # Definition of the input
     simu.input = InputCurrent(
-        N0=1000, Nt_tot=8 * 80, Na_tot=8 * 200, Id_ref=0, Iq_ref=0
+        N0=1000, Nt_tot=8 * 10, Na_tot=8 * 200, Id_ref=0, Iq_ref=0
     )
 
     # Load OP_matrix
-    OP_matrix = ImportMatrixXls(
-        file_path=join(TEST_DATA_DIR, "OP_LUT_PMSM.xlsx"), sheet="Feuil1"
-    ).get_data()
+    OP_matrix = (
+        ImportMatrixXls(
+            file_path=join(TEST_DATA_DIR, "OP_ELUT_PMSM.xlsx"), sheet="Feuil1"
+        )
+        .get_data()
+        .astype(float)
+    )
 
     # Set varspeed simulation
     simu.var_simu = VarLoadCurrent(
@@ -52,15 +54,15 @@ def test_LUT_PMSM():
     simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True, nb_worker=4)
 
     # Stator Winding Flux along dq Datakeeper
-    Phi_wind_dq_dk = DataKeeper(
-        name="Stator Winding Flux along dq axes",
-        symbol="Phi_{dq}",
+    Phi_wind_dk = DataKeeper(
+        name="Stator Winding Flux",
+        symbol="Phi_{wind}",
         unit="Wb",
-        keeper="lambda out: out.mag.comp_Phi_dq()",
+        keeper="lambda out: out.mag.Phi_wind_stator",
     )
 
     # Store Datakeepers
-    simu.var_simu.datakeeper_list = [Phi_wind_dq_dk]
+    simu.var_simu.datakeeper_list = [Phi_wind_dk]
 
     # Postprocessing
     simu.var_simu.postproc_list = [PostLUT()]
@@ -75,6 +77,8 @@ def test_LUT_PMSM():
         # is_show_fig=False,
         **dict_2D
     )
+
+    out.simu.var_simu.postproc_list[0].LUT.get_Lmd(Id=50, Iq=50)
 
     return out
 

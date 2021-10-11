@@ -41,8 +41,8 @@ def run(self, out):
 
             # Fill LUT variables
             dk_list = list(out.keys())
-            if "Phi_{dq}" in dk_list:
-                LUT.Phi_dqh = out["Phi_{dq}"].result
+            if "Phi_{wind}" in dk_list:
+                LUT.Phi_wind = out["Phi_{wind}"].result
 
             # Find Id=Iq=0
             OP_list = LUT.OP_matrix[:, 1:3].tolist()
@@ -50,12 +50,12 @@ def run(self, out):
                 ii = OP_list.index([0, 0])
             else:
                 raise Exception("Operating Point Id=Iq=0 is required to compute LUT")
-            # Compute back electromotive force
-            out.output_list[ii].mag.comp_emf()
-            BEMF = out.output_list[ii].mag.emf
-            BEMF.name = "Stator Winding Back Electromotive Force"
-            BEMF.symbol = "BEMF"
-            LUT.bemf = BEMF
+            # # Compute back electromotive force
+            # out.output_list[ii].mag.comp_emf()
+            # BEMF = out.output_list[ii].mag.emf
+            # BEMF.name = "Stator Winding Back Electromotive Force"
+            # BEMF.symbol = "BEMF"
+            # LUT.bemf = BEMF
 
             # # Set if the interpolation must be made along a curve
             # LUT.set_is_interp_along_curve()
