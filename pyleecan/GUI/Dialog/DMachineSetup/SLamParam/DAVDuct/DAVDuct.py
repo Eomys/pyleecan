@@ -1,14 +1,14 @@
 ﻿# -*- coding: utf-8 -*-
 
 
-from PySide2.QtCore import QSize
-from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QDialog, QMessageBox, QSpinBox, QTableWidgetItem
+from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QDialog, QMessageBox
 
 from ......Classes.Lamination import Lamination
 from ......Classes.VentilationCirc import VentilationCirc
 from ......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.Ui_DAVDuct import Ui_DAVDuct
 from ......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVent.WVent import WVent
+from ......Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class DAVDuct(Ui_DAVDuct, QDialog):
@@ -27,6 +27,7 @@ class DAVDuct(Ui_DAVDuct, QDialog):
         # Build the interface according to the .ui file
         QDialog.__init__(self)
         self.setupUi(self)
+        self.setWindowFlag(Qt.WindowMaximizeButtonHint, True)
 
         self.obj = lamination  # Current object
         self.lam = Lamination(
@@ -101,6 +102,7 @@ class DAVDuct(Ui_DAVDuct, QDialog):
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Plot the hole (No winding for LamSquirrelCage)
             self.lam.plot()
+            set_plot_gui_icon()
 
     def valid_vent(self):
         """Validate the new ventilation and update the lamination

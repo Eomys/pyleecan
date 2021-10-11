@@ -7,13 +7,16 @@ from .......GUI import gui_option
 from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.Gen_PVentTrap import (
     Gen_PVentTrap,
 )
-
+from .......Classes.VentilationTrap import VentilationTrap
 
 class PVentTrap(Gen_PVentTrap, QWidget):
     """Page to setup the Ventilation Trap"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
+    # Information for Hole combobox
+    hole_name = "Trapeze"
+    hole_type = VentilationTrap
 
     def __init__(self, lam=None, vent=None):
         """Initialize the widget according the current lamination

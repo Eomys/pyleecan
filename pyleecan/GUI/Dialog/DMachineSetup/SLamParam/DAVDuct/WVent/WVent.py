@@ -2,12 +2,8 @@
 
 
 from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget
+from PySide2.QtWidgets import QWidget
 
-from .......Classes.VentilationCirc import VentilationCirc
-from .......Classes.VentilationPolar import VentilationPolar
-from .......Classes.VentilationTrap import VentilationTrap
-from .......Classes.HoleUD import HoleUD
 from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.PVentCirc import (
     PVentCirc,
 )
@@ -23,8 +19,9 @@ from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentUD.PVentUD import (
 from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVent.Ui_WVent import Ui_WVent
 
 # List to convert index of combobox to slot type
-INIT_INDEX = [VentilationCirc, VentilationTrap, VentilationPolar, HoleUD]
 PAGE_INDEX = [PVentCirc, PVentTrap, PVentPolar, PVentUD]
+INIT_INDEX = [wid.hole_type for wid in PAGE_INDEX]
+HOLE_NAME = [wid.hole_name for wid in PAGE_INDEX]
 
 
 class WVent(Ui_WVent, QWidget):
@@ -52,6 +49,10 @@ class WVent(Ui_WVent, QWidget):
         self.obj = lam
         self.index = index
 
+        # Fill the combobox with the available slot
+        self.c_vent_type.clear()
+        for hole in HOLE_NAME:
+            self.c_vent_type.addItem(hole)
         # Avoid erase all the parameters when navigating though the vents
         self.previous_vent = dict()
         for vent_type in INIT_INDEX:

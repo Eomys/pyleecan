@@ -58,42 +58,36 @@ class WVentOut(QGroupBox):
         else:  # For VentUD
             lam = self.parent().parent().parent().parent().lam
 
-        if lam.is_stator:
-            lam_name = "Stator"
-        else:
-            lam_name = "Rotor"
-
         # Lamination output
-        Rint = format(self.u.get_m(lam.Rint), ".4g")
-        self.out_Rint.setText(lam_name + ".Rint: " + Rint + " " + self.u.get_m_name())
+        # Rint = format(self.u.get_m(lam.Rint), ".4g")
+        # self.out_Rint.setText(lam_name + ".Rint: " + Rint + " " + self.u.get_m_name())
+        self.out_Rint.hide()
 
-        Rext = format(self.u.get_m(lam.Rext), ".4g")
-        self.out_Rext.setText(lam_name + ".Rext: " + Rext + " " + self.u.get_m_name())
-        Slam = format(self.u.get_m2(pi * (lam.Rext ** 2 - lam.Rint ** 2)), ".4g")
+        # Rext = format(self.u.get_m(lam.Rext), ".4g")
+        # self.out_Rext.setText(lam_name + ".Rext: " + Rext + " " + self.u.get_m_name())
+        self.out_Rext.hide()
+
+        Slam = pi * (lam.Rext ** 2 - lam.Rint ** 2)
+        Slam_txt = format(self.u.get_m2(Slam), ".4g")
         self.out_lam_surface.setText(
-            lam_name + " surface: " + Slam + " " + self.u.get_m2_name()
+            "Active surface: " + Slam_txt + " [" + self.u.get_m2_name() + "]"
         )
         self.out_lam_vent_surface.hide()
+
         # Ventilation output
         try:
-            lam = Lamination(Rext=lam.Rext, Rint=lam.Rint)
-
-            lam.axial_vent = self.parent().lam.axial_vent
-            Svent = format(self.u.get_m2(lam.comp_surface_axial_vent()), ".4g")
+            Svent = lam.comp_surface_axial_vent()
         except Exception:
             Svent = 0
-            self.out_lam_vent_surface.setText(
-                self.tr("Lam. surface (no slot, with vent): ?")
-            )
-            self.out_vent_surf.setText(self.tr("Vent surface: ?"))
+
         if Svent != 0:
-            Slv = format(float(Slam) - float(Svent), ".4g")
-            self.out_lam_vent_surface.setText(
-                self.tr("Lam. surface (no slot, with vent): ")
-                + Slv
-                + " "
-                + self.u.get_m2_name()
+            Slv = format(self.u.get_m2(float(Slam) - float(Svent)), ".4g")
+            Svent = format(self.u.get_m2(float(Svent)), ".4g")
+            self.out_lam_surface.setText(
+                self.tr("Active surface: ") + Slv + " [" + self.u.get_m2_name() + "]"
             )
             self.out_vent_surf.setText(
-                self.tr("Vent surface: ") + Svent + " " + self.u.get_m2_name()
+                self.tr("Cooling surface: ") + Svent + " [" + self.u.get_m2_name() + "]"
             )
+        else:
+            self.out_vent_surf.setText(self.tr("Cooling surface: ?"))
