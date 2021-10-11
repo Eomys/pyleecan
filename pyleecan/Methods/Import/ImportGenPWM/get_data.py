@@ -31,8 +31,8 @@ def get_data(self):
     Tpwmu : ndarray
         time vector
     """
-    # Tpwmu=np.arange(fs*duration)/fs,
-    Tpwmu = np.linspace(0, self.duration, self.fs * self.duration, endpoint=True)
+    N = int(self.fs * self.duration)  # Number of points
+    Tpwmu = np.linspace(0, (N - 1) / self.fs, N, endpoint=True)  # Time vector
     v_pwm, Vas, MI, carrier = comp_volt_PWM_NUM(
         Tpwmu=Tpwmu,
         freq0=self.f,

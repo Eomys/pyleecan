@@ -122,7 +122,7 @@ def comp_volt_PWM_NUM(
         else:
             print("ERROR:only SPWM supports the variable switching frequency")
     elif fswimode == 2 or fswimode == 3:  # Random fswi & Symmetrical random fswi
-        t1 = round(Tpwmu[-1] * 5000000)
+        t1 = round(Tpwmu[-1] * 5000000)  # Nombre de points
         if fswimode == 3:
             num_slice = round((fswi_max + fswi) / 2 * Tpwmu[-1])
             delta_fswi = np.random.randint(
@@ -156,9 +156,8 @@ def comp_volt_PWM_NUM(
         else:
             fswi = fswi[:t1]
 
-        Tpwmu_10 = np.linspace(
-            0, round(Tpwmu[-1]), round(Tpwmu[-1]) * 5000000, endpoint=True
-        )
+        Tpwmu_10 = np.linspace(0, (t1 - 1) / 5000000, t1, endpoint=True)
+        np.linspace(0, (t1 - 1) / 5000000, t1, endpoint=True)
         carrier = integrate.cumtrapz(fswi, Tpwmu_10, initial=0)
         Aml_tri = max(carrier)
         carrier = carrier / Aml_tri * Vdc1 - Vdc1 / 2 * np.ones(np.size(Tpwmu_10))
