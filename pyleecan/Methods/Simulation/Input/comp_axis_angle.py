@@ -62,7 +62,7 @@ def comp_axis_angle(self, p, Rag, per_a, is_antiper_a, Angle_in=None):
         sym_a = dict()
         if is_antiper_a:
             sym_a["antiperiod"] = per_a
-        else:
+        elif per_a > 1:
             sym_a["period"] = per_a
         Angle.symmetries = sym_a
         Angle = Angle.to_linspace()
