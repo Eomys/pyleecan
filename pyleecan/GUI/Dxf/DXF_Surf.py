@@ -92,6 +92,10 @@ class DXF_Surf(Ui_DXF_Surf, QDialog):
         self.lf_scaling.validator().setBottom(0)
         self.lf_scaling.setValue(1)
 
+        # Not available Yet (for BoreUD)
+        self.in_per_a.hide()
+        self.si_per_a.hide()
+
         # Load the DXF file if provided
         self.dxf_path = dxf_path
         if dxf_path is not None and isfile(dxf_path):

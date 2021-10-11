@@ -114,15 +114,15 @@ class Ui_DXF_Surf(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.in_zh = QLabel(self.w_side)
-        self.in_zh.setObjectName(u"in_zh")
+        self.in_Zh = QLabel(self.w_side)
+        self.in_Zh.setObjectName(u"in_Zh")
 
-        self.gridLayout.addWidget(self.in_zh, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_Zh, 0, 0, 1, 1)
 
-        self.in_mag_len = QLabel(self.w_side)
-        self.in_mag_len.setObjectName(u"in_mag_len")
+        self.in_per_a = QLabel(self.w_side)
+        self.in_per_a.setObjectName(u"in_per_a")
 
-        self.gridLayout.addWidget(self.in_mag_len, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_per_a, 1, 0, 1, 1)
 
         self.si_Zh = QSpinBox(self.w_side)
         self.si_Zh.setObjectName(u"si_Zh")
@@ -138,10 +138,10 @@ class Ui_DXF_Surf(object):
 
         self.gridLayout.addWidget(self.si_Zh, 0, 2, 1, 1)
 
-        self.spinBox = QSpinBox(self.w_side)
-        self.spinBox.setObjectName(u"spinBox")
+        self.si_per_a = QSpinBox(self.w_side)
+        self.si_per_a.setObjectName(u"si_per_a")
 
-        self.gridLayout.addWidget(self.spinBox, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.si_per_a, 1, 2, 1, 1)
 
         self.verticalLayout_2.addLayout(self.gridLayout)
 
@@ -251,11 +251,11 @@ class Ui_DXF_Surf(object):
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">1) Import your DXF file in [m] or set a scaling factor</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">FEMM convertion enables to merge close points according to tolerance in [local unit] and converts lines to arcs and segments (splines need to be converted)</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0p'
-                'x; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">2) Click on lines and arcs to define a closed area</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">3) Plot to check and save</span></p></body></html>',
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">1) Import your DXF file in [m] or set a scaling factor</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">FEMM convertion enables to merge close points according to tolerance in [local unit] and converts lines to arcs and segments (splines need to be converted)</span></p>\n'
+                '<p align="justify" style=" margin-'
+                'top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">2) Click on lines and arcs to define a closed area</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">3) Plot to check and save</span></p></body></html>',
                 None,
             )
         )
@@ -269,10 +269,10 @@ class Ui_DXF_Surf(object):
             QCoreApplication.translate("DXF_Surf", u"Merge tolerance [l.u.]", None)
         )
         self.lf_tol.setText(QCoreApplication.translate("DXF_Surf", u"1e-5", None))
-        self.in_zh.setText(
+        self.in_Zh.setText(
             QCoreApplication.translate("DXF_Surf", u"Number of vents", None)
         )
-        self.in_mag_len.setText(
+        self.in_per_a.setText(
             QCoreApplication.translate("DXF_Surf", u"Periodicity", None)
         )
         self.g_center.setTitle(
