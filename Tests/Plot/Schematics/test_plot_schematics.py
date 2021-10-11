@@ -34,6 +34,8 @@ from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.HoleM57 import HoleM57
 from pyleecan.Classes.HoleM58 import HoleM58
 from pyleecan.Classes.VentilationCirc import VentilationCirc
+from pyleecan.Classes.VentilationPolar import VentilationPolar
+from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.HoleMLSRPM import HoleMLSRPM
 from Tests import SCHEMATICS_PATH
 from os.path import join, isdir, isfile
@@ -248,6 +250,12 @@ hole_test.append(
 hole_test.append(
     {
         "test_obj": VentilationCirc(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": VentilationPolar(),
         "type_add_active": 2,
     }
 )
