@@ -1,92 +1,90 @@
-# -*- coding: utf-8 -*-
-from numpy import pi, linspace, zeros, ones, dot, squeeze
-from SciDataTool import Data1D, DataTime, Norm_ref
+from numpy import zeros, ones, dot, squeeze
+
+from SciDataTool import DataTime
+
 from ....Functions.Electrical.coordinate_transformation import dqh2n
-from ....Functions.Winding.gen_phase_list import gen_name
-from pyleecan.Classes.Winding import Winding
+from ....Functions.Load.import_class import import_class
 
 
-def comp_mmf_unit(self, Na=None, Nt=None, freq=1, rot_dir=-1):
-    """Compute the winding Unit magnetomotive force
+def comp_mmf_unit(self, Na, Nt, felec=1, rot_dir=-1):
+    """Compute the winding unit magnetomotive force
 
     Parameters
     ----------
     self : LamSlotWind
         an LamSlotWind object
     Na : int
-        Space discretization for offline computation (otherwise use out.elec.angle)
+        Space discretization for offline computation
     Nt : int
-        Time discretization for offline computation (otherwise use out.elec.time)
+        Time discretization for offline computation
     freq : float
         Stator current frequency to consider
 
     Returns
     -------
-    MMF_U : SciDataTool.Classes.DataND.DataND
+    MMF_U : DataTime
         Unit magnetomotive force (Na,Nt)
-    WF : SciDataTool.Classes.DataND.DataND
+    WF : DataTime
         Winding functions (qs,Na)
 
     """
 
-    # Get stator winding number of phases
-    qs = self.winding.qs
-
-    # Get number of pole pairs
-    p = self.get_pole_pair_number()
-
-    # Get spatial symmetry
-    per_a, _ = self.comp_periodicity_spatial()
-
-    # Define the space dicretization
-    angle = linspace(0, 2 * pi / per_a, Na, endpoint=False)
-
-    # Define the time dicretization
-    time = linspace(0, 1 / freq, Nt, endpoint=False)
+    # Check that parent machine is not None
+    if self.parent is None:
+        raise Exception("Cannot calculate mmf unit if parent machine is None")
+    else:
+        machine = self.parent
 
     # Compute the winding function and mmf
     if self.winding is None or self.winding.conductor is None:
-        wf = zeros((qs, Na))
+        raise Exception("Cannot calculate mmf unit if winding or conductor is None")
     else:
-        wf = self.comp_wind_function(angle=angle, per_a=per_a)
+        # Get stator winding number of phases
+        qs = self.winding.qs
 
-    # Compute unit current function of time applying constant Id=1 Arms, Iq=0, Ih=0
-    Idq = zeros((Nt, 3))
-    Idq[:, 0] = ones(Nt)
-    I = dqh2n(Idq, rot_dir * 2 * pi * freq * time, n=qs, is_n_rms=False)
+    InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
+    input = InputCurrent(Na_tot=Na, Nt_tot=Nt, felec=felec, rot_dir=rot_dir)
+
+    axes_dict = input.comp_axes(
+        axes_list=["time", "angle", "phase_S"],
+        machine=machine,
+        is_periodicity_t=True,
+        is_periodicity_a=True,
+        is_antiper_t=False,
+        is_antiper_a=False,
+    )
+
+    # Compute winding function
+    angle = axes_dict["angle"].get_values(is_oneperiod=True)
+    per_a, _ = axes_dict["angle"].get_periodicity()
+    wf = self.comp_wind_function(angle=angle, per_a=per_a)
+
+    # Compute unit current function of time applying constant Id=1 Arms, Iq=Ih=0
+    angle_elec = axes_dict["time"].get_values(
+        is_oneperiod=True, normalization="angle_elec"
+    )
+    Idq = zeros((angle_elec.size, 3))
+    Idq[:, 0] = ones(angle_elec.size)
+    I = dqh2n(Idq, angle_elec, n=qs, is_n_rms=False)
 
     # Compute unit mmf
     mmf_u = squeeze(dot(I, wf))
 
     # Create a Data object
-    Time = Data1D(name="time", unit="s", values=time)
-    Angle = Data1D(
-        name="angle",
-        unit="rad",
-        symmetries={"period": per_a},
-        values=angle,
-        normalizations={"space_order": Norm_ref(ref=self.get_pole_pair_number())},
-    )
-    Phase = Data1D(
-        name="phase",
-        unit="",
-        values=gen_name(qs),
-        is_components=True,
-    )
     MMF_U = DataTime(
-        name="Unit MMF",
+        name="Overall MMF",
         unit="A",
-        symbol="Magnitude",
-        axes=[Time, Angle],
+        symbol="MMF",
+        axes=[axes_dict["time"], axes_dict["angle"]],
         values=mmf_u,
     )
 
     WF = DataTime(
-        name="Winding Functions",
+        name="Phase MMF",
         unit="A",
-        symbol="Magnitude",
-        axes=[Phase, Angle],
-        values=wf,
+        symbol="MMF",
+        axes=[axes_dict["angle"], axes_dict["phase_" + self.get_label()]],
+        values=wf.T,
     )
 
     return MMF_U, WF

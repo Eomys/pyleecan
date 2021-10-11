@@ -161,15 +161,7 @@ def n2dqh(Z_n, angle_elec, is_dqh_rms=True):
     Z_dqh : ndarray
         transformed matrix (N x 3) of dqh equivalent values
     """
-
-    if angle_elec.size > 1:
-        # Get rotating direction by looking at sign of angle_elec derivate
-        rot_dir = np.mean(np.sign(np.diff(angle_elec)))
-    else:
-        # Default rotating direction in pyleecan
-        rot_dir = -1
-
-    Z_dqh = abc2dqh(n2abc(Z_n, rot_dir), angle_elec)
+    Z_dqh = abc2dqh(n2abc(Z_n), angle_elec)
 
     if is_dqh_rms:
         # Divide by sqrt(2) to go from (Id_peak, Iq_peak) to (Id_rms, Iq_rms)
@@ -198,14 +190,7 @@ def dqh2n(Z_dqh, angle_elec, n, is_n_rms=False):
         transformed matrix (N x n) of n phase values
     """
 
-    if angle_elec.size > 1:
-        # Get rotating direction by looking at sign of angle_elec derivate
-        rot_dir = np.mean(np.sign(np.diff(angle_elec)))
-    else:
-        # Default rotating direction in pyleecan
-        rot_dir = -1
-
-    Z_n = abc2n(dqh2abc(Z_dqh, angle_elec), n, rot_dir)
+    Z_n = abc2n(dqh2abc(Z_dqh, angle_elec), n)
 
     if not is_n_rms:
         # Multiply by sqrt(2) to from (I_n_rms) to (I_n_peak)
@@ -214,7 +199,7 @@ def dqh2n(Z_dqh, angle_elec, n, is_n_rms=False):
     return Z_n
 
 
-def abc2n(Z_abc, n=3, rot_dir=-1):
+def abc2n(Z_abc, n=3):
     """3 phase equivalent to n phase coordinate transformation, i.e. Clarke transformation
 
     Parameters
@@ -223,8 +208,6 @@ def abc2n(Z_abc, n=3, rot_dir=-1):
         matrix (N x 3) of 3 phase equivalent values in alpha-beta-gamma frame
     n: int
         number of phases
-    rot_dir : integer
-        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
 
     Returns
     -------
@@ -234,22 +217,20 @@ def abc2n(Z_abc, n=3, rot_dir=-1):
     """
 
     # Inverse of Clarke transformation matrix
-    ab_2_n = comp_Clarke_transform(n, rot_dir, is_inv=True)
+    ab_2_n = comp_Clarke_transform(n, is_inv=True)
 
     Z_n = np.matmul(Z_abc, ab_2_n)
 
     return Z_n
 
 
-def n2abc(Z_n, rot_dir=-1):
+def n2abc(Z_n):
     """n phase to 3 phases equivalent coordinate transformation, i.e. Clarke transformation
 
     Parameters
     ----------
     Z_n : ndarray
         matrix (N x n) of n phase values
-    rot_dir : integer
-        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
 
     Returns
     -------
@@ -260,7 +241,7 @@ def n2abc(Z_n, rot_dir=-1):
 
     n = Z_n.shape[1]
 
-    n_2_abc = comp_Clarke_transform(n, rot_dir, is_inv=False)
+    n_2_abc = comp_Clarke_transform(n, is_inv=False)
 
     Z_abc = np.matmul(Z_n, n_2_abc)
 
@@ -334,15 +315,13 @@ def dqh2abc(Z_dqh, angle_elec):
     return Z_abc
 
 
-def comp_Clarke_transform(n, rot_dir, is_inv=False):
+def comp_Clarke_transform(n, is_inv=False):
     """Compute Clarke transformation for given number of phases and rotating direction of phases
 
     Parameters
     ----------
     n : int
         number of phases
-    rot_dir : integer
-        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
     is_inv: bool
         False to return Clarke transform, True to return inverse of Clarke transform
 
@@ -354,8 +333,7 @@ def comp_Clarke_transform(n, rot_dir, is_inv=False):
     """
 
     # Phasor depending on fundamental field rotation direction
-    ii = np.linspace(0, n - 1, n)
-    phasor = rot_dir * 2 * ii * np.pi / n
+    phasor = np.linspace(0, 2 * np.pi * (n - 1) / n, n)
 
     # Clarke transformation matrix
     if is_inv:

@@ -1,11 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 from numpy import pi
 from os.path import join
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.CondType12 import CondType12
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
@@ -34,15 +29,15 @@ class Test_Electrical(object):
     def test_DQ_axis_stator(self, Toyota_Prius):
         """Check that the DQ axis are correct for the stator"""
         d_axis = Toyota_Prius.stator.comp_angle_d_axis()
-        assert d_axis == pytest.approx(1.3096, abs=0.001)
+        assert d_axis == pytest.approx(1.3076, abs=0.001)
 
         q_axis = Toyota_Prius.stator.comp_angle_q_axis()
-        assert q_axis == pytest.approx(1.3096 + pi / 8, abs=0.001)
+        assert q_axis == pytest.approx(1.3076 + pi / 8, abs=0.001)
 
     def test_comp_rot_dir(self, Toyota_Prius):
         """Check that the computation of the rot dir is correct"""
         rot_dir = Toyota_Prius.stator.comp_rot_dir()
-        assert rot_dir == -1
+        assert rot_dir == -1, "rot_dir=" + str(rot_dir) + " instead of -1"
 
     def test_comp_rot_dir_reverse_wind(self, Toyota_Prius):
         """Check that the computation of the rot dir is correct when reversing the winding"""
@@ -57,4 +52,8 @@ class Test_Electrical(object):
 if __name__ == "__main__":
     a = Test_Electrical()
     toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    a.test_resistance(toyota_Prius)
+    a.test_DQ_axis_rotor(toyota_Prius)
+    a.test_DQ_axis_stator(toyota_Prius)
     a.test_comp_rot_dir(toyota_Prius)
+    a.test_comp_rot_dir_reverse_wind(toyota_Prius)

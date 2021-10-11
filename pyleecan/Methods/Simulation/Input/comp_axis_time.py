@@ -2,18 +2,14 @@ from numpy import pi
 
 from SciDataTool import Data1D, DataLinspace, Norm_ref
 
-from ....Methods.Simulation.Input import InputError
 
-
-def comp_axis_time(self, output, p, per_t, is_antiper_t, Time_in=None):
+def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None, output=None):
     """Compute time axis, with or without periodicities and including normalizations
 
     Parameters
     ----------
     self : Input
         an Input object
-    output: Output
-        An output object to calculate angle_rotor normalization
     p: int
         Number of pole pairs
     per_t : int
@@ -22,17 +18,28 @@ def comp_axis_time(self, output, p, per_t, is_antiper_t, Time_in=None):
         if the time axis is antiperiodic
     Time_in: Data
         Input time axis
+    output: Output
+        An output object to calculate angle_rotor normalization
 
     Returns
     -------
     Time: Data
         Requested Time axis
     """
+
+    logger = self.get_logger()
+
     # Get electrical fundamental frequency
-    f_elec = self.comp_felec()
+    f_elec = self.comp_felec(p=p)
 
     # Get magnetic field rotation direction
-    rot_dir = output.get_rot_dir()
+    if output is not None:
+        rot_dir = output.get_rot_dir()
+    else:
+        if self.rot_dir not in [-1, 1]:
+            self.rot_dir = -1
+            logger.debug("Enforcing input.rot_dir=-1")
+        rot_dir = self.rot_dir
 
     # Setup normalizations for time and angle axes
     norm_time = {
@@ -50,11 +57,10 @@ def comp_axis_time(self, output, p, per_t, is_antiper_t, Time_in=None):
     elif self.time is None:
         # Create time axis as a DataLinspace
         if self.Nrev is not None:
-            if self.N0 is not None:
-                t_final = 60 / self.N0 * self.Nrev
-            else:
-                raise InputError("time and N0 can't be both None")
+            # Set final time depending on rotor speed and number of revolutions
+            t_final = 60 / self.N0 * self.Nrev
         else:
+            # Set final time to p times the number of electrical periods
             t_final = p / f_elec
         # Create time axis as a DataLinspace
         Time = DataLinspace(
@@ -83,7 +89,12 @@ def comp_axis_time(self, output, p, per_t, is_antiper_t, Time_in=None):
         Time.symmetries = sym_t
         Time = Time.to_linspace()
 
-    # Compute angle_rotor (added to time normalizations)
-    output.comp_angle_rotor(Time)
+    if output is not None:
+        # Compute angle_rotor (added to time normalizations)
+        output.comp_angle_rotor(Time)
+    else:
+        # Add default normalization
+        Time.normalizations["angle_rotor"] = Norm_ref(ref=rot_dir * self.N0 * 360 / 60)
+        logger.debug("Enforcing default angle_rotor normalization to time axis")
 
     return Time

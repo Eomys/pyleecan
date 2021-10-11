@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 from numpy import linspace, meshgrid, pi, repeat, sum as np_sum, zeros, mean
+
 from ....Functions.Winding.comp_cond_function import comp_cond_function
 
 

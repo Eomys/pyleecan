@@ -58,11 +58,12 @@ def gen_input(self):
                     + " returned"
                 )
             # Creating the data object
+            stator_label = "phase_" + simu.machine.get_label()
             outelec.Is = DataTime(
                 name="Stator current",
                 unit="A",
                 symbol="I_s",
-                axes=[Time, outelec.axes_dict["phase_S"]],
+                axes=[Time, outelec.axes_dict[stator_label]],
                 values=Is,
             )
             # Compute corresponding Id/Iq reference

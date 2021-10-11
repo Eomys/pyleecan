@@ -18,12 +18,11 @@ def comp_rot_dir(self):
     p = self.get_pole_pair_number()
 
     # Compute unit mmf
-    MMF, _ = self.comp_mmf_unit(
-        Nt=20 * p, Na=20 * p
-    )  # 20 points per pole over time and space is enough to capture rotating direction of fundamental mmf
+    # 20 points per pole over time and space is enough to capture rotating direction of fundamental mmf
+    MMF, _ = self.comp_mmf_unit(Nt=20 * p, Na=20 * p)
 
     # Extract fundamental from unit mmf
-    results = MMF.get_harmonics(1, "freqs", "wavenumber")
+    results = MMF.get_harmonics(1, "freqs>0", "wavenumber")
 
     # Get frequency and wavenumber of fundamental
     f = results["freqs"][0]
