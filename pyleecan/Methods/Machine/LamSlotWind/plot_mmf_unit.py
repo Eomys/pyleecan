@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 
 from ....Functions.Plot import dict_2D
@@ -29,9 +28,9 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
         name += "Rotor "
 
     # Compute the winding function and mmf
-    wf = self.comp_wind_function(per_a=1)
     qs = self.winding.qs
-    MMF_U, WF = self.comp_mmf_unit(Nt=1, Na=wf.shape[1])
+    p = self.get_pole_pair_number()
+    MMF_U, WF = self.comp_mmf_unit(Nt=1, Na=400 * p)
 
     color_list = config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"][:qs]
 
@@ -47,7 +46,7 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
         fig=fig,
         ax=axs[0],
         is_show_fig=is_show_fig,
-        win_title=name + "Winding functions",
+        win_title=name + "phase MMF",
         **dict_2D_0,
     )
 
@@ -59,6 +58,6 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
         fig=fig,
         ax=axs[1],
         is_show_fig=is_show_fig,
-        win_title=name + "Winding functions & MMF FFT",
+        win_title=name + "phase MMF FFT",
         **dict_2D_0,
     )

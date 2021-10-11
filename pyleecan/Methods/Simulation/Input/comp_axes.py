@@ -42,16 +42,18 @@ def comp_axes(
         dict of axes containing requested axes
 
     """
+    if len(axes_list) == 0:
+        raise Exception("axes_list should not be empty")
 
     if self.parent is not None:
         simu = self.parent
     else:
-        raise Exception("Cannot calculate axes if parent simu is None")
+        simu = None
 
-    if hasattr(self.parent, "parent") and self.parent.parent is not None:
+    if hasattr(simu, "parent") and simu.parent is not None:
         output = simu.parent
     else:
-        raise Exception("Cannot calculate axes if parent output is None")
+        output = None
 
     if (axes_list is None or len(axes_list) == 0) and (
         axes_dict_in is None or len(axes_dict_in) == 0
@@ -59,9 +61,6 @@ def comp_axes(
         raise Exception(
             "Cannot calculate axes if both axes list and axes dict are None"
         )
-
-    if len(axes_list) == 0:
-        raise Exception("axes_list should not be empty")
 
     if machine is None:
         # Fetch machine from input
@@ -75,13 +74,18 @@ def comp_axes(
 
     # Fill periodicity parameters that are None
     if per_a is None or is_antiper_a is None or per_t is None or is_antiper_t is None:
-        # Get time and space (anti-)periodicities of the machine
-        (
-            per_a_0,
-            is_antiper_a_0,
-            per_t_0,
-            is_antiper_t_0,
-        ) = output.get_machine_periodicity()
+        if output is not None:
+            # Get time and space (anti-)periodicities from the output
+            (
+                per_a_0,
+                is_antiper_a_0,
+                per_t_0,
+                is_antiper_t_0,
+            ) = output.get_machine_periodicity()
+        else:
+            # Compute time and space (anti-)periodicities from the machine
+            per_a_0, is_antiper_a_0 = machine.comp_periodicity_spatial()
+            per_t_0, is_antiper_t_0, _, _ = machine.comp_periodicity_time()
 
     if is_periodicity_t is None or is_periodicity_t:
         # Enforce None values to machine time periodicity
@@ -120,7 +124,7 @@ def comp_axes(
             Time_in = None
 
         # Calculate time axis
-        Time = self.comp_axis_time(output, p, per_t, is_antiper_t, Time_in)
+        Time = self.comp_axis_time(p, per_t, is_antiper_t, Time_in, output)
 
         # Store time axis in dict
         axes_dict["time"] = Time
@@ -146,8 +150,9 @@ def comp_axes(
     if "phase_S" in axes_list:
 
         # Check if Phase is already in input dict of axes
-        if axes_dict_in is not None and "phase_S" in axes_dict_in:
-            Phase_in = axes_dict_in["phase_S"]
+        stator_label = "phase_" + machine.stator.get_label()
+        if axes_dict_in is not None and stator_label in axes_dict_in:
+            Phase_in = axes_dict_in[stator_label]
         else:
             Phase_in = None
 
@@ -156,13 +161,14 @@ def comp_axes(
 
         if Phase is not None:
             # Store phase axis in dict
-            axes_dict["phase_S"] = Phase
+            axes_dict[stator_label] = Phase
 
     if "phase_R" in axes_list:
 
         # Check if Phase is already in input dict of axes
-        if axes_dict_in is not None and "phase_R" in axes_dict_in:
-            Phase_in = axes_dict_in["phase_R"]
+        rotor_label = "phase_" + machine.rotor.get_label()
+        if axes_dict_in is not None and rotor_label in axes_dict_in:
+            Phase_in = axes_dict_in[rotor_label]
         else:
             Phase_in = None
 
@@ -172,6 +178,6 @@ def comp_axes(
 
         if Phase is not None:
             # Store phase axis in dict
-            axes_dict["phase_R"] = Phase
+            axes_dict[rotor_label] = Phase
 
     return axes_dict

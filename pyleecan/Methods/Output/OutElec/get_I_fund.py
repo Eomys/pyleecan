@@ -18,9 +18,10 @@ def get_I_fund(self, Time=None):
         Time = self.axes_dict["time"]
     angle_elec = Time.get_values(is_smallestperiod=True, normalization="angle_elec")
     qs = self.parent.simu.machine.stator.winding.qs
+    stator_label = "phase_" + self.parent.simu.machine.stator.get_label()
     felec = self.felec
 
-    Phase = self.axes_dict["phase_S"]
+    Phase = self.axes_dict[stator_label]
 
     if self.Is is None:
         if (
