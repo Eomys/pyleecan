@@ -129,7 +129,7 @@ def store(self, out_dict, axes_dict):
             self.Phi_wind_stator = self.Phi_wind[STATOR_LAB + "-0"]
 
         # Electromotive force computation
-        self.comp_emf()
+        # self.comp_emf()
 
     # Store MeshSolution object
     if "meshsolution" in out_dict:
