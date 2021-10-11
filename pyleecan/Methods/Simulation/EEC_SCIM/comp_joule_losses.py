@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import mean, zeros
-from ....Functions.Electrical.coordinate_transformation import n2ab
+from ....Functions.Electrical.coordinate_transformation import n2abc
 
 
 def comp_joule_losses(self, output):
@@ -36,7 +36,7 @@ def comp_joule_losses(self, output):
     for ii in range(p):
         id0 = qr_eff * ii
         id1 = qr_eff * (ii + 1)
-        Ir_2ph += n2ab(Ir[:, id0:id1], n=qr_eff) / p
+        Ir_2ph += n2abc(Ir[:, id0:id1], n=qr_eff) / p
 
     Ir_mag = abs(Ir_2ph[:, 0] + 1j * Ir_2ph[:, 1])
 

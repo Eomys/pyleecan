@@ -1,7 +1,7 @@
 from numpy import zeros, sqrt, pi, tile, isnan
 from multiprocessing import cpu_count
 
-from ....Functions.Electrical.coordinate_transformation import n2ab, ab2n
+from ....Functions.Electrical.coordinate_transformation import n2abc, abc2n
 from ....Functions.labels import STATOR_LAB, ROTOR_LAB
 from ....Functions.load import import_class
 
@@ -208,13 +208,13 @@ def _comp_flux_mean(self, out):
         for ii in range(p):
             id0 = qsr_per_pole * ii
             id1 = qsr_per_pole * (ii + 1)
-            Phi_ab += n2ab(Phi[:, id0:id1], n=qsr_per_pole) / p
+            Phi_ab += n2abc(Phi[:, id0:id1], n=qsr_per_pole) / p
     else:
         logger.warning(f"{type(self).__name__}: " + "Not Implemented Yet")
 
     # compute rotor and stator flux linkage
     Phi_r = abs(Phi_ab[:, 0] + 1j * Phi_ab[:, 1]).mean() / sqrt(2)
-    Phi_ab = n2ab(
+    Phi_ab = n2abc(
         out.mag.Phi_wind[STATOR_LAB + "-0"].get_along("time", "phase")["Phi_{wind}"]
     )
     Phi_s = abs(Phi_ab[:, 0] + 1j * Phi_ab[:, 1]).mean() / sqrt(2)
@@ -305,7 +305,7 @@ def _comp_Lm_FEA(self):
     # set current values
     Ir_ = zeros([self.Nt_tot, 2])
     Ir_[:, 0] = self.I * K21Z * sqrt(2)
-    Ir = ab2n(Ir_, n=qsr // p)  # TODO no rotation for now
+    Ir = abc2n(Ir_, n=qsr // p)  # TODO no rotation for now
 
     Ir = ImportMatrixVal(value=tile(Ir, (1, p)))
 

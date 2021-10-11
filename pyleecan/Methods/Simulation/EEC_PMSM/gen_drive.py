@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ....Functions.Electrical.coordinate_transformation import n2dq
+from ....Functions.Electrical.coordinate_transformation import n2dqh
 from numpy import split, transpose, mean, pi
 
 import matplotlib.pyplot as plt
@@ -26,9 +26,7 @@ def gen_drive(self, output):
 
     # d,q transform
     voltage = Voltage.values
-    voltage_dq = split(
-        n2dq(transpose(voltage), -2 * pi * felec * time, n=qs), 2, axis=1
-    )
+    voltage_dq = split(n2dqh(transpose(voltage), -2 * pi * felec * time), 2, axis=1)
 
     fig = plt.figure()
     plt.plot(time[:50], voltage[0, :50], color="tab:blue", label="A")

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ....Functions.Winding.gen_phase_list import gen_name
 
 

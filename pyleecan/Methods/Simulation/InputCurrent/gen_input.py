@@ -1,11 +1,8 @@
-from numpy import ndarray, pi, mean, zeros
-
-from ....Classes.Simulation import Simulation
+from numpy import ndarray, mean, zeros
 
 from ....Methods.Simulation.Input import InputError
 
-from ....Functions.Electrical.coordinate_transformation import n2dq
-from ....Functions.Winding.gen_phase_list import gen_name
+from ....Functions.Electrical.coordinate_transformation import n2dqh
 from ....Classes.InputVoltage import InputVoltage
 
 from SciDataTool import Data1D, DataTime
@@ -20,25 +17,12 @@ def gen_input(self):
         An InputCurrent object
     """
 
-    # Get the simulation
-    if isinstance(self.parent, Simulation):
-        simu = self.parent
-    elif isinstance(self.parent.parent, Simulation):
-        simu = self.parent.parent
-    else:
-        raise InputError("InputCurrent object should be inside a Simulation object")
-
-    # Get output
-    if simu.parent is not None:
-        output = simu.parent
-    else:
-        raise InputError("Simulation object should be inside an Output object")
-
     # Call InputVoltage.gen_input()
     InputVoltage.gen_input(self)
 
-    # Get outputs
-    outgeo = output.geo
+    # Get simulation and outputs
+    simu = self.parent
+    output = simu.parent
     outelec = output.elec
 
     # Number of winding phases for stator/rotor
@@ -78,14 +62,13 @@ def gen_input(self):
                 name="Stator current",
                 unit="A",
                 symbol="I_s",
-                axes=[Time, outgeo.axes_dict["phase"]],
+                axes=[Time, outelec.axes_dict["phase_S"]],
                 values=Is,
             )
             # Compute corresponding Id/Iq reference
-            Idq = n2dq(
+            Idq = n2dqh(
                 outelec.Is.values,
-                2 * pi * outelec.felec * Time.get_values(is_oneperiod=False),
-                n=qs,
+                Time.get_values(is_oneperiod=False, normalization="angle_elec"),
                 is_dq_rms=True,
             )
             outelec.Id_ref = mean(Idq[:, 0])
@@ -105,17 +88,11 @@ def gen_input(self):
                 + str(Ir.shape)
                 + " returned"
             )
-        # Creating the data object
-        Phase = Data1D(
-            name="phase",
-            unit="",
-            values=gen_name(qr),
-            is_components=True,
-        )
+
         outelec.Ir = DataTime(
             name="Rotor current",
             unit="A",
             symbol="Ir",
-            axes=[Time, Phase],
+            axes=[Time, outelec.axes_dict["phase_R"]],
             values=Ir,
         )

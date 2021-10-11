@@ -23,7 +23,7 @@ def comp_axes(self, output):
     # Add periodicities to time and angle axes
     axes_dict = output.simu.input.comp_axes(
         axes_list=["time", "angle"],
-        axes_dict=axes_dict_mag,
+        axes_dict_in=axes_dict_mag,
         is_periodicity_a=self.is_periodicity_a,
         is_periodicity_t=self.is_periodicity_t,
     )

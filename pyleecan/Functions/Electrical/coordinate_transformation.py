@@ -1,196 +1,194 @@
-from numpy import (
-    array,
-    matmul,
-    sqrt,
-    cos,
-    sin,
-    reshape,
-    newaxis,
-    finfo,
-    log10,
-    floor,
-    pi,
-    linspace,
-    column_stack,
-    vstack,
-)
+import numpy as np
 
-EPS = int(floor(-log10(finfo(float).eps)))
+from SciDataTool import Data1D, DataTime
 
-# TODO: add homopolar component
+from ...Functions.Winding.gen_phase_list import gen_name
 
 
-def ab2n(Z_ab, n=3, rot_dir=-1):
-    """
-    2 phase equivalent to n phase coordinate transformation, i.e. Clarke transformation
+def n2dqh_DataTime(data_n, is_dqh_rms=True):
+    """n phases to dqh equivalent coordinate transformation of DataTime object
 
     Parameters
     ----------
-    Z_ab : ndarray
-        matrix (N x 2) of 2 phase equivalent values
-    n : integer
-        number of phases
-    rot_dir : integer
-        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
-
-    Returns
-    -------
-    Z_n : ndarray
-        transformed matrix (N x n) of n phase values
-
-    """
-    ii = linspace(0, n - 1, n)
-    alpha = (
-        rot_dir * 2 * ii * pi / n
-    )  # Phasor depending on fundamental field rotation direction
-
-    # Transformation matrix
-    ab_2_n = vstack((cos(alpha).round(decimals=EPS), -sin(alpha).round(decimals=EPS)))
-
-    Z_n = matmul(Z_ab, ab_2_n)
-
-    return Z_n
-
-
-def n2ab(Z_n, n=3, rot_dir=-1):
-    """n phase to 2 phase equivalent coordinate transformation, i.e. Clarke transformation
-
-    Parameters
-    ----------
-    Z_n : ndarray
-        matrix (N x n) of n phase values
-    n : integer
-        number of phases
-    rot_dir : integer
-        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
-
-    Returns
-    -------
-    Z_ab : ndarray
-        transformed matrix (N x 2) of 2 phase equivalent values
-
-    """
-    ii = linspace(0, n - 1, n)
-    alpha = (
-        rot_dir * 2 * ii * pi / n
-    )  # Phasor depending on fundamental field rotation direction
-
-    # Transformation matrix
-    n_2_ab = (
-        2
-        / n
-        * column_stack(
-            (cos(alpha).round(decimals=EPS), -sin(alpha).round(decimals=EPS))
-        )
-    )
-
-    Z_ab = matmul(Z_n, n_2_ab)
-
-    return Z_ab
-
-
-def ab2dq(Z_ab, theta):
-    """
-    alpha-beta to dq coordinate transformation
-    NOTE: sin/cos values are rounded to avoid numerical errors
-
-    Parameters
-    ----------
-    Z_ab : ndarray
-        matrix (N x 2) of alpha-beta - reference frame values
-    theta : ndarray
-        angle of the rotor coordinate system
-
-    Returns
-    -------
-    Z_dq : ndarray
-        transformed (dq) values
-
-    """
-    if len(Z_ab.shape) == 1:
-        Z_ab = Z_ab[newaxis, :]
-
-    sin_theta = sin(theta).round(decimals=EPS)
-    cos_theta = cos(theta).round(decimals=EPS)
-
-    Z_d = Z_ab[:, 0] * cos_theta + Z_ab[:, 1] * sin_theta
-    Z_q = -Z_ab[:, 0] * sin_theta + Z_ab[:, 1] * cos_theta
-
-    return reshape([Z_d, Z_q], (2, -1)).transpose()
-
-
-def dq2ab(Z_dq, theta):
-    """
-    dq to alpha-beta coordinate transformation
-    NOTE: sin/cos values are rounded to avoid numerical errors
-
-    Parameters
-    ----------
-    Z_dq : ndarray
-        matrix (N x 2) of dq - reference frame values
-    theta : ndarray
-        angle of the rotor coordinate system
-
-    Returns
-    -------
-    Z_ab : ndarray
-        transformed array
-
-    """
-    if len(Z_dq.shape) == 1:
-        Z_dq = Z_dq[newaxis, :]
-
-    sin_theta = sin(theta).round(decimals=EPS)
-    cos_theta = cos(theta).round(decimals=EPS)
-
-    # Multiply by sqrt(2) to go from (Id_rms, Iq_rms) in to I_ab in amplitude
-    Z_a = Z_dq[:, 0] * cos_theta - Z_dq[:, 1] * sin_theta
-    Z_b = Z_dq[:, 0] * sin_theta + Z_dq[:, 1] * cos_theta
-
-    return reshape([Z_a, Z_b], (2, -1)).transpose()
-
-
-def n2dq(Z_n, theta, n=3, rot_dir=-1, is_dq_rms=True):
-    """n phase to dq equivalent coordinate transformation
-
-    Parameters
-    ----------
-    Z_n : ndarray
-        matrix (N x n) of n phase values
-    n : integer
-        number of phases
-    rot_dir : integer
-        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
-    is_dq_rms : boolean
+    data_n : DataTime
+        data object containing values over time and phase axes
+    is_dqh_rms : boolean
         True to return dq currents in rms value (Pyleecan convention), False to return peak values
 
     Returns
     -------
-    Z_dq : ndarray
-        transformed matrix (N x 2) of dq equivalent values
+    data_dqh : DataTime
+        data object transformed in dqh frame
 
     """
 
-    Z_dq = ab2dq(n2ab(Z_n, n=n, rot_dir=rot_dir), theta)
+    if not isinstance(data_n, DataTime):
+        raise Exception("Input object should be a DataTime object")
+    if len(data_n.axes) != 2:
+        raise Exception("DataTime object should contain two axes: time and phase")
+    if data_n.axes[0].name != "time":
+        raise Exception("DataTime object should contain time as first axis")
+    if data_n.axes[1].name != "phase":
+        raise Exception("DataTime object should contain phase as second axis")
 
-    if is_dq_rms == True:
-        # Divide by sqrt(2) to go from (Id_peak, Iq_peak) to (Id_rms, Iq_rms)
-        Z_dq = Z_dq / sqrt(2)
+    # TODO: add check on angle_elec normalization
 
-    return Z_dq
+    # Get values for one time period converted in electrical angle and for all phases
+    result = data_n.get_along("time[oneperiod]->angle_elec", "phase")
+    data_n_val = result[data_n.symbol]
+    angle_elec = result["time"]
+
+    # Convert values to dqh frame
+    data_dqh_val = n2dqh(data_n_val, angle_elec, is_dqh_rms=is_dqh_rms)
+
+    # Get time axis on one period
+    per_t, is_aper_t = data_n.axes[0].get_periodicity()
+    per_t = int(per_t / 2) if is_aper_t else per_t
+    Time = data_n.axes[0].get_axis_periodic(per_t, is_aper=False)
+
+    # Create DQH axis
+    axis_dq = Data1D(
+        name="phase",
+        unit="",
+        values=["direct", "quadrature", "homopolar"],
+        is_components=True,
+    )
+
+    # Get normalizations
+    if data_n.normalizations is None or len(data_n.normalizations) == 0:
+        normalizations = dict()
+    else:
+        normalizations = data_n.normalizations.copy()
+
+    # Create DataTime object in dqh frame
+    data_dqh = DataTime(
+        name=data_n.name + " in DQH frame",
+        unit=data_n.unit,
+        symbol=data_n.symbol,
+        values=data_dqh_val,
+        axes=[Time, axis_dq],
+        normalizations=normalizations,
+        is_real=data_n.is_real,
+    )
+
+    return data_dqh
 
 
-def dq2n(Z_dq, theta, n=3, rot_dir=-1, is_n_rms=False):
-    """n phase to dq equivalent coordinate transformation
+def dqh2n_DataTime(data_dqh, n, is_n_rms=False):
+    """dqh to n phase coordinate transformation of DataTime object
 
     Parameters
     ----------
-    Z_dq : ndarray
-        matrix (N x 2) of dq phase values
-    n : integer
+    data_dqh : DataTime
+        data object containing values over time in dqh frame
+    n: int
         number of phases
-    rot_dir : integer
-        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
+    is_n_rms : boolean
+        True to return n currents in rms value, False to return peak values (Pyleecan convention)
+
+    Returns
+    -------
+    data_n : DataTime
+        data object containing values over time and phase axes
+    """
+
+    if not isinstance(data_dqh, DataTime):
+        raise Exception("Input object should be a DataTime object")
+    if len(data_dqh.axes) != 2:
+        raise Exception("DataTime object should contain two axes: time and phase")
+    if data_dqh.axes[0].name != "time":
+        raise Exception("DataTime object should contain time as first axis")
+    if data_dqh.axes[1].name != "phase":
+        raise Exception("DataTime object should contain phase as second axis")
+
+    # TODO: add check on angle_elec normalization
+
+    # Get values for one time period converted in electrical angle and for all phases
+    result = data_dqh.get_along("time[oneperiod]->angle_elec", "phase")
+    data_dqh_val = result[data_dqh.symbol]
+    angle_elec = result["time"]
+
+    # Convert values to dqh frame
+    data_n_val = dqh2n(data_dqh_val, angle_elec, n=n, is_n_rms=is_n_rms)
+
+    # Get time axis on one period
+    per_t, is_aper_t = data_dqh.axes[0].get_periodicity()
+    per_t = int(per_t / 2) if is_aper_t else per_t
+    Time = data_dqh.axes[0].get_axis_periodic(per_t, is_aper=False)
+
+    # Create DQH axis
+    Phase = Data1D(
+        name="phase",
+        unit="",
+        values=gen_name(n),
+        is_components=True,
+    )
+
+    # Get normalizations
+    if data_dqh.normalizations is None or len(data_dqh.normalizations) == 0:
+        normalizations = dict()
+    else:
+        normalizations = data_dqh.normalizations.copy()
+
+    # Create DataTime object in dqh frame
+    data_n = DataTime(
+        name=data_dqh.name.replace(" in DQH frame", ""),
+        unit=data_dqh.unit,
+        symbol=data_dqh.symbol,
+        values=data_n_val,
+        axes=[Time, Phase],
+        normalizations=normalizations,
+        is_real=data_dqh.is_real,
+    )
+
+    return data_n
+
+
+def n2dqh(Z_n, angle_elec, is_dqh_rms=True):
+    """n phases to dqh equivalent coordinate transformation
+
+    Parameters
+    ----------
+    Z_n : ndarray
+        matrix (N x n) of n phases values
+    angle_elec : ndarray
+        angle of the rotor coordinate system
+    is_dqh_rms : boolean
+        True to return dq currents in rms value (Pyleecan convention), False to return peak values
+
+    Returns
+    -------
+    Z_dqh : ndarray
+        transformed matrix (N x 3) of dqh equivalent values
+    """
+
+    if angle_elec.size > 1:
+        # Get rotating direction by looking at sign of angle_elec derivate
+        rot_dir = np.mean(np.sign(np.diff(angle_elec)))
+    else:
+        # Default rotating direction in pyleecan
+        rot_dir = -1
+
+    Z_dqh = abc2dqh(n2abc(Z_n, rot_dir), angle_elec)
+
+    if is_dqh_rms:
+        # Divide by sqrt(2) to go from (Id_peak, Iq_peak) to (Id_rms, Iq_rms)
+        Z_dqh = Z_dqh / np.sqrt(2)
+
+    return Z_dqh
+
+
+def dqh2n(Z_dqh, angle_elec, n, is_n_rms=False):
+    """dqh to n phase coordinate transformation
+
+    Parameters
+    ----------
+    Z_dqh : ndarray
+        matrix (N x 3) of dqh phase values
+    angle_elec : ndarray
+        angle of the rotor coordinate system
+    n: int
+        number of phases
     is_n_rms : boolean
         True to return n currents in rms value, False to return peak values (Pyleecan convention)
 
@@ -198,13 +196,171 @@ def dq2n(Z_dq, theta, n=3, rot_dir=-1, is_n_rms=False):
     -------
     Z_n : ndarray
         transformed matrix (N x n) of n phase values
+    """
+
+    if angle_elec.size > 1:
+        # Get rotating direction by looking at sign of angle_elec derivate
+        rot_dir = np.mean(np.sign(np.diff(angle_elec)))
+    else:
+        # Default rotating direction in pyleecan
+        rot_dir = -1
+
+    Z_n = abc2n(dqh2abc(Z_dqh, angle_elec), n, rot_dir)
+
+    if not is_n_rms:
+        # Multiply by sqrt(2) to from (I_n_rms) to (I_n_peak)
+        Z_n = Z_n * np.sqrt(2)
+
+    return Z_n
+
+
+def abc2n(Z_abc, n=3, rot_dir=-1):
+    """3 phase equivalent to n phase coordinate transformation, i.e. Clarke transformation
+
+    Parameters
+    ----------
+    Z_abc : ndarray
+        matrix (N x 3) of 3 phase equivalent values in alpha-beta-gamma frame
+    n: int
+        number of phases
+    rot_dir : integer
+        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
+
+    Returns
+    -------
+    Z_n : ndarray
+        transformed matrix (N x n) of n phase values
 
     """
 
-    Z_n = ab2n(dq2ab(Z_dq, theta), n=n, rot_dir=rot_dir)
+    # Inverse of Clarke transformation matrix
+    ab_2_n = comp_Clarke_transform(n, rot_dir, is_inv=True)
 
-    if is_n_rms == False:
-        # Multiply by sqrt(2) to from (I_n_rms) to (I_n_peak)
-        Z_n = Z_n * sqrt(2)
+    Z_n = np.matmul(Z_abc, ab_2_n)
 
     return Z_n
+
+
+def n2abc(Z_n, rot_dir=-1):
+    """n phase to 3 phases equivalent coordinate transformation, i.e. Clarke transformation
+
+    Parameters
+    ----------
+    Z_n : ndarray
+        matrix (N x n) of n phase values
+    rot_dir : integer
+        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
+
+    Returns
+    -------
+    Z_abc : ndarray
+        transformed matrix (N x 3) of 3 phases equivalent values (alpha-beta-gamma)
+
+    """
+
+    n = Z_n.shape[1]
+
+    n_2_abc = comp_Clarke_transform(n, rot_dir, is_inv=False)
+
+    Z_abc = np.matmul(Z_n, n_2_abc)
+
+    return Z_abc
+
+
+def abc2dqh(Z_abc, angle_elec):
+    """alpha-beta-gamma to dqh coordinate transformation
+
+    Parameters
+    ----------
+    Z_abc : ndarray
+        matrix (N x 3) of alpha-beta-gamma - reference frame values
+    angle_elec : ndarray
+        angle of the rotor coordinate system
+
+    Returns
+    -------
+    Z_dqh : ndarray
+        transformed (dqh) values
+
+    """
+
+    if Z_abc.ndim == 1:
+        Z_abc = Z_abc[None, :]
+
+    sin_angle_elec = np.sin(angle_elec)
+    cos_angle_elec = np.cos(angle_elec)
+
+    Z_dqh = np.zeros((angle_elec.size, 3))
+
+    # d-axis
+    Z_dqh[:, 0] = Z_abc[:, 0] * cos_angle_elec + Z_abc[:, 1] * sin_angle_elec
+    # q-axis
+    Z_dqh[:, 1] = -Z_abc[:, 0] * sin_angle_elec + Z_abc[:, 1] * cos_angle_elec
+    # Homopolar axis
+    Z_dqh[:, 2] = Z_abc[:, 2]
+
+    return Z_dqh
+
+
+def dqh2abc(Z_dqh, angle_elec):
+    """dqh to alpha-beta-gamma coordinate transformation
+
+    Parameters
+    ----------
+    Z_dqh : ndarray
+        matrix (N x 3) of dqh - reference frame values
+    angle_elec : ndarray
+        angle of the rotor coordinate system
+
+    Returns
+    -------
+    Z_abc : ndarray
+        transformed array
+
+    """
+
+    if Z_dqh.ndim == 1:
+        Z_dqh = Z_dqh[None, :]
+
+    sin_angle_elec = np.sin(angle_elec)
+    cos_angle_elec = np.cos(angle_elec)
+
+    Z_abc = np.zeros((angle_elec.size, 3))
+
+    Z_abc[:, 0] = Z_dqh[:, 0] * cos_angle_elec - Z_dqh[:, 1] * sin_angle_elec
+    Z_abc[:, 1] = Z_dqh[:, 0] * sin_angle_elec + Z_dqh[:, 1] * cos_angle_elec
+    Z_abc[:, 2] = Z_dqh[:, 2]
+
+    return Z_abc
+
+
+def comp_Clarke_transform(n, rot_dir, is_inv=False):
+    """Compute Clarke transformation for given number of phases and rotating direction of phases
+
+    Parameters
+    ----------
+    n : int
+        number of phases
+    rot_dir : integer
+        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
+    is_inv: bool
+        False to return Clarke transform, True to return inverse of Clarke transform
+
+    Returns
+    -------
+    mat : ndarray
+        Clarke transform matrix of size (n, 3)
+
+    """
+
+    # Phasor depending on fundamental field rotation direction
+    ii = np.linspace(0, n - 1, n)
+    phasor = rot_dir * 2 * ii * np.pi / n
+
+    # Clarke transformation matrix
+    if is_inv:
+        mat = np.vstack((np.cos(phasor), -np.sin(phasor), np.ones(n)))
+    else:
+        mat = 2 / n * np.column_stack((np.cos(phasor), -np.sin(phasor), np.ones(n) / 2))
+
+    return mat

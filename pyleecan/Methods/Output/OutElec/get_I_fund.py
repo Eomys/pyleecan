@@ -1,9 +1,8 @@
-from numpy import pi, array, where, isclose, zeros
+from numpy import array, where, isclose, zeros
 
 from SciDataTool import Data1D, DataTime, DataFreq
 
-from ....Functions.Electrical.coordinate_transformation import dq2n
-from ....Functions.Winding.gen_phase_list import gen_name
+from ....Functions.Electrical.coordinate_transformation import dqh2n
 
 
 def get_I_fund(self, Time=None):
@@ -17,16 +16,11 @@ def get_I_fund(self, Time=None):
     """
     if Time is None:
         Time = self.axes_dict["time"]
-    time = Time.get_values(is_smallestperiod=True)
+    angle_elec = Time.get_values(is_smallestperiod=True, normalization="angle_elec")
     qs = self.parent.simu.machine.stator.winding.qs
     felec = self.felec
 
-    Phase = Data1D(
-        name="phase",
-        unit="",
-        values=gen_name(qs),
-        is_components=True,
-    )
+    Phase = self.axes_dict["phase_S"]
 
     if self.Is is None:
         if (
@@ -35,18 +29,15 @@ def get_I_fund(self, Time=None):
             and self.Id_ref != 0
             and self.Iq_ref != 0
         ):
-            # Generate current according to Id/Iq
-            Isdq = array([self.Id_ref, self.Iq_ref])
-
-            # Get rotation direction of the fundamental magnetic field created by the winding
-            rot_dir = self.parent.get_rot_dir()
+            # Generate current according to Id/Iq, Ih=0
+            Is_dqh = zeros((angle_elec.size, 3))
+            Is_dqh[:, 0] = self.Id_ref
+            Is_dqh[:, 1] = self.Iq_ref
 
             # Get stator current function of time
-            Is = dq2n(
-                Isdq, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_n_rms=False
-            )
+            Is = dqh2n(Is_dqh, angle_elec, n=qs, is_n_rms=False)
         else:
-            Is = zeros((time.size, qs))
+            Is = zeros((angle_elec.size, qs))
 
         I_fund = DataTime(
             name="Stator current",
@@ -58,7 +49,7 @@ def get_I_fund(self, Time=None):
 
     else:
         result = self.Is.get_along("freqs", "phase")
-        Is_val = result["I_s"]
+        Is_val = result[self.Is.symbol]
         freqs = result["freqs"]
         ifund = where(isclose(freqs, felec))
         Is_fund = Is_val[ifund, :]
