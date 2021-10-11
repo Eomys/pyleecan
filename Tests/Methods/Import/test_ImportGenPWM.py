@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from os import mkdir
 from os.path import isdir, join
 
@@ -14,6 +12,8 @@ if not isdir(save_path):
     mkdir(save_path)
 
 
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 def testSPWM():
     """Check"""
     # fs, duration, f,fmax,fmode, fswimode,fswi, fswi_max,typePWM, Vdc1, U0, type_carrier
@@ -56,6 +56,8 @@ def testSPWM():
                 )
 
 
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 def testDPWM():
     """Check"""
     for ii in range(9):

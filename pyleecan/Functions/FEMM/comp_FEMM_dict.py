@@ -65,9 +65,8 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     # segment discretization(1 for automatic meshing) "elementsize" in FEMM doc
     FEMM_dict["arcspan"] = 1 / Kgeo_fineness  # max span of arc element in degrees
 
-    FEMM_dict["Lfemm"] = (
-        machine.stator.comp_length() + machine.rotor.comp_length()
-    ) / 2
+    # assign unitary length to calculate torque and flux linkage per meter unit
+    FEMM_dict["Lfemm"] = 1
 
     # stator slot region mesh and segments max element size parameter
     # If Hstot = 0 there is no slot and the region parameter won't be used

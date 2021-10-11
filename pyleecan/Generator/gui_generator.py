@@ -17,11 +17,13 @@ MIN_SPIN = -999999
 MAX_SPIN = 999999
 
 
-def generate_gui(gen_dict, is_gen_resource=True):
+def generate_gui(ui_folder_path, gen_dict, is_gen_resource=True):
     """Generate all the needed file for the GUI
 
     Parameters
     ----------
+    ui_folder_path : str
+        Path to the folder to scan recursively for ui files
     gen_dict : dict
         Dict with key = class name and value = class_dict
     is_gen_resource : bool
@@ -29,7 +31,7 @@ def generate_gui(gen_dict, is_gen_resource=True):
     """
 
     # Get all the ui files
-    file_list = find_ui_files()
+    file_list = find_ui_files(ui_folder_path=ui_folder_path)
     for file_tuple in file_list:
         # Convert every ui file to py
         ui_to_py(file_tuple[0], file_tuple[1])
@@ -543,13 +545,22 @@ def ui_to_py(path, file_name):
 # print file_name[:-3]+" converted"
 
 
-def find_ui_files():
+def find_ui_files(ui_folder_path):
     """Find all the .ui files in a directory
-    @param[out] file_list List of tuple (path, file_name.ui)
+
+    Parameters
+    ----------
+    ui_folder_path : str
+        Path to the folder to scan recursively for ui file
+
+    Returns
+    -------
+    file_list : list
+        List of tuple (folder_path, file_name.ui)
     """
 
     file_list = list()
-    for (dirpath, dirnames, filenames) in walk(GUI_DIR):
+    for (dirpath, dirnames, filenames) in walk(ui_folder_path):
         for file_name in filenames:
             # If the file name end by .ui, add it to the list
             if match(".*\.ui$", file_name):

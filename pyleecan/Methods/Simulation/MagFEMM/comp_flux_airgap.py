@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from os.path import join
-
 from numpy import zeros
 
 from ....Functions.labels import STATOR_LAB

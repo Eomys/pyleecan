@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from numpy import mean, max as np_max, min as np_min
 
 from SciDataTool import DataTime, VectorField, Data1D
@@ -26,7 +25,7 @@ def store(self, out_dict, axes_dict):
 
     # Store airgap flux as VectorField object
     # Axes for each airgap flux component
-    axis_list = [Time, axes_dict["Angle"]]
+    axis_list = [Time, axes_dict["Angle"], axes_dict["z"]]
     # Create VectorField with empty components
     self.B = VectorField(
         name="Airgap flux density",
@@ -44,7 +43,7 @@ def store(self, out_dict, axes_dict):
     # Tangential flux component
     if "Bt" in out_dict:
         self.B.components["tangential"] = DataTime(
-            name="Airgap tangential flux density",
+            name="Airgap circumferential flux density",
             unit="T",
             symbol="B_t",
             axes=axis_list,
@@ -63,22 +62,25 @@ def store(self, out_dict, axes_dict):
     # Store electromagnetic torque over time, and global values: average, peak to peak and ripple
     if "Tem" in out_dict:
 
-        Tem = out_dict.pop("Tem")
-
-        self.Tem = DataTime(
-            name="Electromagnetic torque",
-            unit="Nm",
+        # Store electromagnetic torque per slice (in Newton)
+        self.Tem_slice = DataTime(
+            name="Electromagnetic torque per slice",
+            unit="N",
             symbol="T_{em}",
-            axes=[axes_dict["Time_Tem"]],
-            values=Tem,
+            axes=[axes_dict["Time_Tem"], axes_dict["z"]],
+            values=out_dict.pop("Tem"),
         )
 
+        # Integrate over slice axis to get overall torque (in Newton meter)
+        self.Tem = self.Tem_slice.get_data_along("time[smallestperiod]", "z=integrate")
+
         # Calculate average torque in Nm
-        self.Tem_av = mean(Tem)
+        Tem_values = self.Tem.get_along("time[smallestperiod]")[self.Tem.symbol]
+        self.Tem_av = mean(Tem_values)
         self.get_logger().debug("Average Torque: " + str(self.Tem_av) + " N.m")
 
         # Calculate peak to peak torque in absolute value Nm
-        self.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]
+        self.Tem_rip_pp = abs(np_max(Tem_values) - np_min(Tem_values))  # [N.m]
 
         # Calculate torque ripple in percentage
         if self.Tem_av != 0:
@@ -90,8 +92,9 @@ def store(self, out_dict, axes_dict):
     # and calculate electromotive force
     if "Phi_wind" in out_dict:
         machine = self.parent.simu.machine
-        self.Phi_wind = {}
-        for key in out_dict["Phi_wind"].keys():
+        self.Phi_wind_slice = dict()
+        self.Phi_wind = dict()
+        for key, phi_wind in out_dict["Phi_wind"].items():
             # Store stator winding flux
             lam = machine.get_lam_by_label(key)
             qs = lam.winding.qs
@@ -103,24 +106,27 @@ def store(self, out_dict, axes_dict):
                 is_components=True,
             )
             prefix = "Stator" if lam.is_stator else "Rotor"
-            self.Phi_wind[key] = DataTime(
+
+            # Store winding flux linkage per phase and per slice (in Weber per meter)
+            self.Phi_wind_slice[key] = DataTime(
                 name=prefix + " Winding Flux",
                 unit="Wb",
                 symbol="Phi_{wind}",
-                axes=[Time, Phase],
-                values=out_dict["Phi_wind"][key],
+                axes=[Time, Phase, axes_dict["z"]],
+                values=phi_wind,
+            )
+            # Integrate over slice axis to get overall winding flux linkage (in Weber)
+            self.Phi_wind[key] = self.Phi_wind_slice[key].get_data_along(
+                "time[smallestperiod]", "phase", "z=integrate"
             )
 
-        if (
-            STATOR_LAB + "-0" in out_dict["Phi_wind"].keys()
-        ):  # TODO fix for multi stator
+        # Particular case: Phi_wind for stator-0 has its own property
+        if STATOR_LAB + "-0" in out_dict["Phi_wind"].keys():
+            # TODO fix for multi stator/lamination
             self.Phi_wind_stator = self.Phi_wind[STATOR_LAB + "-0"]
 
         # Electromotive force computation
         self.comp_emf()
-
-        # remove from out_dict
-        out_dict.pop("Phi_wind")
 
     # Store MeshSolution object
     if "meshsolution" in out_dict:

@@ -199,13 +199,13 @@ def solve_FEMM_parallel(
     for w in range(nb_worker, 0, -1):
         try:
             remove(fem_file[:-4] + "_" + str(w) + ".fem")
-        except:
+        except Exception:
             filename = fem_file[:-4] + "_" + str(w) + ".fem"
             self.get_logger().warning("Could not remove file: " + filename)
 
         try:
             remove(fem_file[:-4] + "_" + str(w) + ".ans")
-        except:
+        except Exception:
             filename = fem_file[:-4] + "_" + str(w) + ".ans"
             self.get_logger().warning("Could not remove file: " + filename)
 
