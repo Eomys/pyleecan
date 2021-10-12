@@ -94,6 +94,6 @@ def gen_input(self):
             name="Rotor current",
             unit="A",
             symbol="Ir",
-            axes=[Time, outelec.axes_dict["phase_R"]],
+            axes=[Time, outelec.axes_dict["phase_" + simu.machine.rotor.get_label()]],
             values=Ir,
         )

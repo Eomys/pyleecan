@@ -46,7 +46,7 @@ def comp_mmf_unit(self, Na, Nt, felec=1, rot_dir=-1):
     input = InputCurrent(Na_tot=Na, Nt_tot=Nt, felec=felec, rot_dir=rot_dir)
 
     axes_dict = input.comp_axes(
-        axes_list=["time", "angle", "phase_S"],
+        axes_list=["time", "angle", "phase_S", "phase_R"],
         machine=machine,
         is_periodicity_t=True,
         is_periodicity_a=True,

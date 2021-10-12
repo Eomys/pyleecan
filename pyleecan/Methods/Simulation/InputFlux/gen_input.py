@@ -81,6 +81,7 @@ def gen_input(self):
         # Calculate time and angle axes
         axes_dict = Input.comp_axes(
             self,
+            axes_list=["time", "angle"],
             per_a=per_a,
             is_antiper_a=is_antiper_a,
             per_t=per_t,
