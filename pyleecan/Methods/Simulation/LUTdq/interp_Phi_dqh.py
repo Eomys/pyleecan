@@ -21,11 +21,13 @@ def interp_Phi_dqh(self, Id, Iq):
 
     # Compute interpolant at first call
     if self.Phi_dqh_interp is None:
-        # Flatten Id/Iq grid columnwise
-        XId, XIq = self.OP_matrix[:, 1], self.OP_matrix[:, 2]
+        # Get unique Id, Iq, assuming regular grid
+        XId, XIq = np.unique(self.OP_matrix[:, 1]), np.unique(self.OP_matrix[:, 2])
         # Sort in ascending order
         self.Phi_dqh_interp = scp_int.RegularGridInterpolator(
-            (XId, XIq), self.get_Phidqh_mean(), method="linear"
+            (XId, XIq),
+            self.get_Phidqh_mean()[:, 0:2].reshape((len(XId), len(XIq), 2)),
+            method="linear",
         )
 
     # Perform 2D interpolation

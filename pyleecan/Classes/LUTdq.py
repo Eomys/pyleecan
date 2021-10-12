@@ -88,9 +88,9 @@ from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
 try:
-    from scipy import interp
+    from scipy.interpolate.interpolate import RegularGridInterpolator
 except ImportError:
-    interp = ImportError
+    RegularGridInterpolator = ImportError
 from ._check import InitUnKnowClassError
 
 
@@ -244,7 +244,6 @@ class LUTdq(LUT):
     def __init__(
         self,
         Phi_dqh_mean=None,
-        I_dqh=None,
         Tmag_ref=20,
         Phi_dqh_mag=None,
         Phi_wind=None,
@@ -273,8 +272,6 @@ class LUTdq(LUT):
             # Overwrite default value with init_dict content
             if "Phi_dqh_mean" in list(init_dict.keys()):
                 Phi_dqh_mean = init_dict["Phi_dqh_mean"]
-            if "I_dqh" in list(init_dict.keys()):
-                I_dqh = init_dict["I_dqh"]
             if "Tmag_ref" in list(init_dict.keys()):
                 Tmag_ref = init_dict["Tmag_ref"]
             if "Phi_dqh_mag" in list(init_dict.keys()):
@@ -293,7 +290,6 @@ class LUTdq(LUT):
                 OP_matrix = init_dict["OP_matrix"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_dqh_mean = Phi_dqh_mean
-        self.I_dqh = I_dqh
         self.Tmag_ref = Tmag_ref
         self.Phi_dqh_mag = Phi_dqh_mag
         self.Phi_wind = Phi_wind
@@ -316,12 +312,6 @@ class LUTdq(LUT):
             + linesep
             + linesep
         )
-        LUTdq_str += (
-            "I_dqh = "
-            + linesep
-            + str(self.I_dqh).replace(linesep, linesep + "\t")
-            + linesep
-        )
         LUTdq_str += "Tmag_ref = " + str(self.Tmag_ref) + linesep
         LUTdq_str += "Phi_dqh_mag = " + str(self.Phi_dqh_mag) + linesep + linesep
         LUTdq_str += "Phi_wind = " + str(self.Phi_wind) + linesep + linesep
@@ -338,8 +328,6 @@ class LUTdq(LUT):
         if not super(LUTdq, self).__eq__(other):
             return False
         if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
-            return False
-        if other.I_dqh != self.I_dqh:
             return False
         if other.Tmag_ref != self.Tmag_ref:
             return False
@@ -364,8 +352,6 @@ class LUTdq(LUT):
         diff_list.extend(super(LUTdq, self).compare(other, name=name))
         if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
             diff_list.append(name + ".Phi_dqh_mean")
-        if other._I_dqh != self._I_dqh:
-            diff_list.append(name + ".I_dqh")
         if other._Tmag_ref != self._Tmag_ref:
             diff_list.append(name + ".Tmag_ref")
         if (other.Phi_dqh_mag is None and self.Phi_dqh_mag is not None) or (
@@ -412,9 +398,6 @@ class LUTdq(LUT):
         # Get size of the properties inherited from LUT
         S += super(LUTdq, self).__sizeof__()
         S += getsizeof(self.Phi_dqh_mean)
-        if self.I_dqh is not None:
-            for value in self.I_dqh:
-                S += getsizeof(value)
         S += getsizeof(self.Tmag_ref)
         S += getsizeof(self.Phi_dqh_mag)
         if self.Phi_wind is not None:
@@ -453,7 +436,6 @@ class LUTdq(LUT):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
-        LUTdq_dict["I_dqh"] = self.I_dqh.copy() if self.I_dqh is not None else None
         LUTdq_dict["Tmag_ref"] = self.Tmag_ref
         if self.Phi_dqh_mag is None:
             LUTdq_dict["Phi_dqh_mag"] = None
@@ -497,7 +479,6 @@ class LUTdq(LUT):
         """Set all the properties to None (except pyleecan object)"""
 
         self.Phi_dqh_mean = None
-        self.I_dqh = None
         self.Tmag_ref = None
         self.Phi_dqh_mag = None
         self.Phi_wind = None
@@ -527,26 +508,6 @@ class LUTdq(LUT):
         doc=u"""RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh)
 
         :Type: ndarray
-        """,
-    )
-
-    def _get_I_dqh(self):
-        """getter of I_dqh"""
-        return self._I_dqh
-
-    def _set_I_dqh(self, value):
-        """setter of I_dqh"""
-        if type(value) is int and value == -1:
-            value = list()
-        check_var("I_dqh", value, "list")
-        self._I_dqh = value
-
-    I_dqh = property(
-        fget=_get_I_dqh,
-        fset=_set_I_dqh,
-        doc=u"""RMS Id Iq Ih table corresponding to flux linkage table given in Phi_dqh_mean
-
-        :Type: list
         """,
     )
 
@@ -634,7 +595,7 @@ class LUTdq(LUT):
 
     def _set_Phi_dqh_interp(self, value):
         """setter of Phi_dqh_interp"""
-        check_var("Phi_dqh_interp", value, "interp")
+        check_var("Phi_dqh_interp", value, "RegularGridInterpolator")
         self._Phi_dqh_interp = value
 
     Phi_dqh_interp = property(
@@ -642,6 +603,6 @@ class LUTdq(LUT):
         fset=_set_Phi_dqh_interp,
         doc=u"""Interpolant function of Phi_dqh
 
-        :Type: scipy.interp
+        :Type: scipy.interpolate.interpolate.RegularGridInterpolator
         """,
     )

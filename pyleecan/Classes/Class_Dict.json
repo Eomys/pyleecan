@@ -4440,15 +4440,6 @@
                 "value": null
             },
             {
-                "desc": "RMS Id Iq Ih table corresponding to flux linkage table given in Phi_dqh_mean",
-                "max": "",
-                "min": "",
-                "name": "I_dqh",
-                "type": "list",
-                "unit": "Arms",
-                "value": null
-            },
-            {
                 "desc": "Magnet average temperature at which Phi_dqh is given",
                 "max": "",
                 "min": "",
@@ -4480,7 +4471,7 @@
                 "max": "",
                 "min": "",
                 "name": "Phi_dqh_interp",
-                "type": "scipy.interp",
+                "type": "scipy.interpolate.interpolate.RegularGridInterpolator",
                 "unit": "",
                 "value": "None"
             }
