@@ -58,7 +58,7 @@ def gen_input(self):
                     + " returned"
                 )
             # Creating the data object
-            stator_label = "phase_" + simu.machine.get_label()
+            stator_label = "phase_" + simu.machine.stator.get_label()
             outelec.Is = DataTime(
                 name="Stator current",
                 unit="A",

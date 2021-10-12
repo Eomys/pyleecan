@@ -27,8 +27,7 @@ def get_I_fund(self, Time=None):
         if (
             self.Id_ref is not None
             and self.Iq_ref is not None
-            and self.Id_ref != 0
-            and self.Iq_ref != 0
+            and (self.Id_ref != 0 or self.Iq_ref != 0)
         ):
             # Generate current according to Id/Iq, Ih=0
             Is_dqh = zeros((angle_elec.size, 3))

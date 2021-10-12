@@ -217,17 +217,17 @@ class Test_InCurrent_meth(object):
         Ia = (
             A_rms
             * sqrt(2)
-            * cos(2 * pi * felec * time_exp + 0 * rot_dir * 2 * pi / qs + Phi0)
+            * cos(rot_dir * 2 * pi * felec * time_exp + 0 * 2 * pi / qs + Phi0)
         )
         Ib = (
             A_rms
             * sqrt(2)
-            * cos(2 * pi * felec * time_exp + 1 * rot_dir * 2 * pi / qs + Phi0)
+            * cos(rot_dir * 2 * pi * felec * time_exp + 1 * 2 * pi / qs + Phi0)
         )
         Ic = (
             A_rms
             * sqrt(2)
-            * cos(2 * pi * felec * time_exp + 2 * rot_dir * 2 * pi / qs + Phi0)
+            * cos(rot_dir * 2 * pi * felec * time_exp + 2 * 2 * pi / qs + Phi0)
         )
         Is_exp = array([Ia, Ib, Ic])
 
@@ -262,7 +262,7 @@ class Test_InCurrent_meth(object):
             output.geo.axes_dict["angle"].get_values(is_oneperiod=False),
             linspace(0, 2 * pi, Na_tot, endpoint=False),
         )
-        assert_array_almost_equal(output.elec.get_Is().values, Is_exp)
+        assert_array_almost_equal(output.elec.get_Is().values, Is_exp.T)
         assert_array_almost_equal(output.get_angle_rotor(), angle_rotor_exp)
         assert_array_almost_equal(output.elec.N0, N0)
         assert_array_almost_equal(output.geo.rot_dir, rot_dir)
