@@ -36,8 +36,8 @@ def comp_mmf_unit(self, Na, Nt, felec=1, rot_dir=-1):
         machine = self.parent
 
     # Compute the winding function and mmf
-    if self.winding is None or self.winding.conductor is None:
-        raise Exception("Cannot calculate mmf unit if winding or conductor is None")
+    if self.winding is None:
+        raise Exception("Cannot calculate mmf unit if winding is None")
     else:
         # Get stator winding number of phases
         qs = self.winding.qs
