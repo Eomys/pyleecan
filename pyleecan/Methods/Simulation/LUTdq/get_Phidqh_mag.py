@@ -10,7 +10,7 @@ def get_Phidqh_mag(self):
 
     Returns
     ----------
-    Phi_dqh_mag : ndarray
+    Phi_dqh_mag : DataND
         magnets flux linkage in dqh frame (Nt_tot, 3)
     """
 

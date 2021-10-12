@@ -79,6 +79,7 @@ def test_LUT_PMSM():
     )
 
     out.simu.var_simu.postproc_list[0].LUT.get_Lmd(Id=50, Iq=50)
+    out.simu.var_simu.postproc_list[0].LUT.get_Phidqh_mag_harm()
 
     return out
 
