@@ -109,7 +109,7 @@ class Ui_PVentUD(object):
     def retranslateUi(self, PVentUD):
         PVentUD.setWindowTitle(QCoreApplication.translate("PVentUD", u"Form", None))
         self.b_dxf.setText(
-            QCoreApplication.translate("PVentUD", u"Define Vent from DXF", None)
+            QCoreApplication.translate("PVentUD", u"Define Duct from DXF", None)
         )
         self.in_Zh.setText(QCoreApplication.translate("PVentUD", u"Zh :", None))
         self.in_Alpha0.setText(QCoreApplication.translate("PVentUD", u"Alpha0 :", None))

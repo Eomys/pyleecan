@@ -73,7 +73,7 @@ class DAVDuct(Ui_DAVDuct, QDialog):
         else:
             index = self.lam.axial_vent.index(vent)
         tab = WVent(self.lam, index=index)
-        self.tab_vent.addTab(tab, "Vent " + str(index + 1))
+        self.tab_vent.addTab(tab, "Set " + str(index + 1))
 
     def s_remove(self):
         """Signal to remove the last hole

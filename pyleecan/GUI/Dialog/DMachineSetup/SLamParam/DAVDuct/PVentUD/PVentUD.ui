@@ -59,7 +59,7 @@
        <item>
         <widget class="QPushButton" name="b_dxf">
          <property name="text">
-          <string>Define Vent from DXF</string>
+          <string>Define Duct from DXF</string>
          </property>
         </widget>
        </item>
