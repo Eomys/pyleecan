@@ -25,7 +25,7 @@ def comp_rot_dir(self):
     result_p = MMF.get_harmonics(1, "freqs>0", "wavenumber=" + str(p))
     result_n = MMF.get_harmonics(1, "freqs>0", "wavenumber=" + str(-p))
 
-    if result_p["Magnitude"][0] > result_n["Magnitude"][0]:
+    if result_p[MMF.symbol][0] > result_n[MMF.symbol][0]:
         result = result_p
     else:
         result = result_n
