@@ -22,11 +22,17 @@ def comp_rot_dir(self):
     MMF, _ = self.comp_mmf_unit(Nt=20 * p, Na=20 * p)
 
     # Extract fundamental from unit mmf
-    results = MMF.get_harmonics(1, "freqs>0", "wavenumber")
+    result_p = MMF.get_harmonics(1, "freqs>0", "wavenumber=" + str(p))
+    result_n = MMF.get_harmonics(1, "freqs>0", "wavenumber=" + str(-p))
+
+    if result_p["Magnitude"][0] > result_n["Magnitude"][0]:
+        result = result_p
+    else:
+        result = result_n
 
     # Get frequency and wavenumber of fundamental
-    f = results["freqs"][0]
-    r = results["wavenumber"][0]
+    f = result["freqs"][0]
+    r = result["wavenumber"][0]
 
     # Rotating direction is the sign of the mechanical speed of the magnetic field fundamental, i.e frequency over wavenumber
     rot_dir = int(sign(f / r))

@@ -23,8 +23,8 @@ def comp_rot_dir(self):
     )  # 20 points per pole over time and space is enough to capture rotating direction of fundamental mmf
 
     # Extract fundamental from unit mmf
-    result_p = MMF.get_harmonics(1, "freqs", "wavenumber=" + str(p))
-    result_n = MMF.get_harmonics(1, "freqs", "wavenumber=" + str(-p))
+    result_p = MMF.get_harmonics(1, "freqs>0", "wavenumber=" + str(p))
+    result_n = MMF.get_harmonics(1, "freqs>0", "wavenumber=" + str(-p))
 
     if result_p[MMF.symbol][0] > result_n[MMF.symbol][0]:
         result = result_p
