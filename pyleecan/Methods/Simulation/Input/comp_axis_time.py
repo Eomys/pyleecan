@@ -84,7 +84,7 @@ def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None, output=None):
         sym_t = dict()
         if is_antiper_t:
             sym_t["antiperiod"] = per_t
-        else:
+        elif per_t > 1:
             sym_t["period"] = per_t
         Time.symmetries = sym_t
         Time = Time.to_linspace()
