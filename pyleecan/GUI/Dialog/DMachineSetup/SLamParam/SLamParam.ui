@@ -116,7 +116,7 @@
         </size>
        </property>
        <property name="title">
-        <string>Axial Ventilation Ducts</string>
+        <string>Axial Cooling Ducts</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -181,7 +181,7 @@
         </size>
        </property>
        <property name="title">
-        <string>Radial Ventilation Ducts</string>
+        <string>Radial Cooling Ducts</string>
        </property>
        <property name="flat">
         <bool>false</bool>

@@ -25,28 +25,12 @@
      <item>
       <widget class="QLabel" name="in_vent_type">
        <property name="text">
-        <string>Ventilation Shape:</string>
+        <string>Cooling Duct Shape:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="c_vent_type">
-       <item>
-        <property name="text">
-         <string>Circular</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Polar</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Trapeze</string>
-        </property>
-       </item>
-      </widget>
+      <widget class="QComboBox" name="c_vent_type"/>
      </item>
      <item>
       <spacer name="horizontalSpacer">

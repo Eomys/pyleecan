@@ -176,12 +176,21 @@ class SLamParam(Gen_SLamParam, QWidget):
             A SLamParam object
         """
         self.avd_win = DAVDuct(self.obj)
-        return_code = self.avd_win.exec_()
-        if return_code == QDialog.Accepted:
-            # self.obj.axial_vent = self.avd_win.vent
-            self.update_avd_text()
-            # Notify the machine GUI that the machine has changed
-            self.saveNeeded.emit()
+        self.avd_win.show()
+        self.avd_win.accepted.connect(self.validate_avd)
+
+    def validate_avd(self):
+        """Validate the ventilation
+
+        Parameters
+        ----------
+        self : SLamParam
+            A SLamParam object
+        """
+        # self.obj.axial_vent = self.avd_win.vent
+        self.update_avd_text()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def update_avd_text(self):
         """Update the text with the current number of axial vent

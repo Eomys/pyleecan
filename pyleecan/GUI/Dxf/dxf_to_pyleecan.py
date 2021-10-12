@@ -81,7 +81,9 @@ def convert_dxf_with_FEMM(self, file_path, tol):
         else:
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self, self.tr("Error"), self.tr(err_msg),
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
             )
             # Keep FEMM open
             return file_path  # Continue with original file
@@ -93,7 +95,9 @@ def convert_dxf_with_FEMM(self, file_path, tol):
         err_msg = "Error while saving dxf file to " + conv_path + " :\n" + str(e)
         getLogger(GUI_LOG_NAME).error(err_msg)
         QMessageBox().critical(
-            self, self.tr("Error"), self.tr(err_msg),
+            self,
+            self.tr("Error"),
+            self.tr(err_msg),
         )
         # Keep FEMM open
         return file_path  # Continue with original file

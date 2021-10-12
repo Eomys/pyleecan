@@ -7,6 +7,7 @@ from .......GUI import gui_option
 from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.Gen_PVentTrap import (
     Gen_PVentTrap,
 )
+from .......Classes.VentilationTrap import VentilationTrap
 
 
 class PVentTrap(Gen_PVentTrap, QWidget):
@@ -14,6 +15,9 @@ class PVentTrap(Gen_PVentTrap, QWidget):
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
+    # Information for Hole combobox
+    hole_name = "Trapeze"
+    hole_type = VentilationTrap
 
     def __init__(self, lam=None, vent=None):
         """Initialize the widget according the current lamination
@@ -55,7 +59,13 @@ class PVentTrap(Gen_PVentTrap, QWidget):
         self.w_out.comp_output()
 
         # Set unit name (m ou mm)
-        wid_list = [self.unit_H0, self.unit_D0, self.unit_W1, self.unit_W1]
+        wid_list = [
+            self.unit_H0,
+            self.unit_D0,
+            self.unit_W1,
+            self.unit_W1,
+            self.unit_W2,
+        ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 

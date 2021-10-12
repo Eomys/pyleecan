@@ -26,9 +26,6 @@ class Ui_WVent(object):
         self.horizontalLayout.addWidget(self.in_vent_type)
 
         self.c_vent_type = QComboBox(WVent)
-        self.c_vent_type.addItem("")
-        self.c_vent_type.addItem("")
-        self.c_vent_type.addItem("")
         self.c_vent_type.setObjectName(u"c_vent_type")
 
         self.horizontalLayout.addWidget(self.c_vent_type)
@@ -56,16 +53,7 @@ class Ui_WVent(object):
     def retranslateUi(self, WVent):
         WVent.setWindowTitle(QCoreApplication.translate("WVent", u"Form", None))
         self.in_vent_type.setText(
-            QCoreApplication.translate("WVent", u"Ventilation Shape:", None)
-        )
-        self.c_vent_type.setItemText(
-            0, QCoreApplication.translate("WVent", u"Circular", None)
-        )
-        self.c_vent_type.setItemText(
-            1, QCoreApplication.translate("WVent", u"Polar", None)
-        )
-        self.c_vent_type.setItemText(
-            2, QCoreApplication.translate("WVent", u"Trapeze", None)
+            QCoreApplication.translate("WVent", u"Cooling Duct Shape:", None)
         )
 
     # retranslateUi
