@@ -93,7 +93,7 @@ def test_compare_Rag_variation():
         AGSF_list2.append(out_list2[ik].force.AGSF)
 
         out_list[ik].force.AGSF.plot_2D_Data(
-            "angle=[0,3.14]",
+            "angle",
             "time=0",
             data_list=[AGSF_list2[ik]],
             legend_list=["Direct", "Transfer"],
@@ -188,7 +188,7 @@ def test_compare_Rag_variation_Nmax_sensitivity():
         AGSF_list.append(out_tmp.force.AGSF)
 
     out.force.AGSF.plot_2D_Data(
-        "angle=[0,3.14]",
+        "angle",
         "time=0",
         data_list=AGSF_list,
         legend_list=legend_list,
