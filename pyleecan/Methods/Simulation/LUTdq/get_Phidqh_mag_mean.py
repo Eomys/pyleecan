@@ -1,5 +1,5 @@
 def get_Phidqh_mag_mean(self):
-    """Get the total d-axis inductance
+    """Get the mean magnets flux linkage in DQH frame
     Parameters
     ----------
     self : LUTdq
