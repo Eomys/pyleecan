@@ -1,3 +1,4 @@
+from SciDataTool import Norm_ref
 from numpy import ndarray, pi
 
 from ....Classes.OutElec import OutElec
@@ -110,11 +111,13 @@ def gen_input(self):
     # Generate PWM signal
     if self.PWM is not None:
         # Fill generator with simu data
-        felec = self.comp_felec
+        felec = self.comp_felec()
         rot_dir = output.get_rot_dir()
         qs = simu.machine.stator.winding.qs
         self.PWM.f = felec
-        self.fs = self.PWM.fmax * 2.56  # Shanon based sampling frequency (with margin)
+        self.PWM.fs = (
+            self.PWM.fmax * 2.56
+        )  # Shanon based sampling frequency (with margin)
         self.PWM.duration = 1 / felec
         # Generate PWM signal
         Uabc, modulation, _, carrier, time = self.PWM.get_data()
@@ -126,6 +129,7 @@ def gen_input(self):
             final=time[-1],
             number=len(time),
             include_endpoint=True,
+            normalizations={"angle_elec": Norm_ref(ref=rot_dir / (2 * pi * felec))},
         )
         Phase = Data1D(
             name="phase",
@@ -141,9 +145,7 @@ def gen_input(self):
             values=Uabc,
         )
         # Rotate to DQH frame
-        Udqh = n2dqh_DataTime(
-            Uabc_data, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_dq_rms=True
-        )
+        Udqh = n2dqh_DataTime(Uabc_data, is_dqh_rms=True)
         # fft
         Udqh_freq = Udqh.time_to_freq()
         # Store
