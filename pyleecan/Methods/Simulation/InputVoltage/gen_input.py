@@ -52,6 +52,8 @@ def gen_input(self):
         raise Exception("U0_ref, Ud_ref, and Uq_ref cannot be all None in InputVoltage")
 
     outelec.U0_ref = self.U0_ref
+    outelec.Ud_ref = self.Ud_ref
+    outelec.Uq_ref = self.Uq_ref
     outelec.slip_ref = self.slip_ref
 
     # Load and check alpha_rotor and N0
