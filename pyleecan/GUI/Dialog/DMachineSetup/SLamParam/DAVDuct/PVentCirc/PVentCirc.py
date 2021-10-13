@@ -7,6 +7,7 @@ from .......GUI import gui_option
 from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.Gen_PVentCirc import (
     Gen_PVentCirc,
 )
+from .......Classes.VentilationCirc import VentilationCirc
 
 
 class PVentCirc(Gen_PVentCirc, QWidget):
@@ -14,6 +15,9 @@ class PVentCirc(Gen_PVentCirc, QWidget):
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
+    # Information for Hole combobox
+    hole_name = "Circular"
+    hole_type = VentilationCirc
 
     def __init__(self, lam=None, vent=None):
         """Initialize the widget according the current lamination

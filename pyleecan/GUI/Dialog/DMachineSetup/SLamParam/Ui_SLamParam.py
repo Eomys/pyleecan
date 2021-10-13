@@ -225,7 +225,7 @@ class Ui_SLamParam(object):
         self.unit_L1.setText(QCoreApplication.translate("SLamParam", u"m", None))
         self.in_Kf1.setText(QCoreApplication.translate("SLamParam", u"Kf1 :", None))
         self.g_ax_vent.setTitle(
-            QCoreApplication.translate("SLamParam", u"Axial Ventilation Ducts", None)
+            QCoreApplication.translate("SLamParam", u"Axial Cooling Ducts", None)
         )
         self.label.setText("")
         self.out_axial_duct.setText(
@@ -235,7 +235,7 @@ class Ui_SLamParam(object):
             QCoreApplication.translate("SLamParam", u"set axial ducts", None)
         )
         self.g_rad_vent.setTitle(
-            QCoreApplication.translate("SLamParam", u"Radial Ventilation Ducts", None)
+            QCoreApplication.translate("SLamParam", u"Radial Cooling Ducts", None)
         )
         self.img_rad_duct.setText("")
         self.in_Nrvd.setText(QCoreApplication.translate("SLamParam", u"Nrvd :", None))

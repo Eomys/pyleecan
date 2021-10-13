@@ -19,6 +19,11 @@ class Ui_DAVDuct(object):
         if not DAVDuct.objectName():
             DAVDuct.setObjectName(u"DAVDuct")
         DAVDuct.resize(767, 630)
+        icon = QIcon()
+        icon.addFile(
+            u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+        )
+        DAVDuct.setWindowIcon(icon)
         self.verticalLayout = QVBoxLayout(DAVDuct)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_2 = QHBoxLayout()
@@ -97,7 +102,7 @@ class Ui_DAVDuct(object):
 
     def retranslateUi(self, DAVDuct):
         DAVDuct.setWindowTitle(
-            QCoreApplication.translate("DAVDuct", u"Set axial ventilation duct", None)
+            QCoreApplication.translate("DAVDuct", u"Set axial cooling duct", None)
         )
         self.b_new.setText(QCoreApplication.translate("DAVDuct", u"Add New Set", None))
         self.b_remove.setText(
