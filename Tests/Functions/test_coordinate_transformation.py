@@ -45,8 +45,8 @@ def test_coordinate_transformation(param_dict):
     }
     Time = Data1D(name="time", unit="s", values=time, normalizations=norm_time)
 
-    # TODO: test angle_elec
     angle_elec_bis = Time.get_values(is_smallestperiod=True, normalization="angle_elec")
+    assert_array_almost_equal(angle_elec, angle_elec_bis)
 
     # Phase axis for plots
     Phase = Data1D(
@@ -84,8 +84,6 @@ def test_coordinate_transformation(param_dict):
             axes=[Time, Phase],
             values=In,
         )
-
-        In_data.plot_2D_Data("time", "phase[]")
 
         I_dqh_data = n2dqh_DataTime(In_data)
         In_data_check = dqh2n_DataTime(I_dqh_data, n=qs)
