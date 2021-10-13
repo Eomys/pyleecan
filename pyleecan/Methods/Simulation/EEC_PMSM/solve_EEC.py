@@ -33,7 +33,7 @@ def solve_EEC(self, output):
     # Prepare linear system
 
     # Solve system
-    if "Ud" in self.parameters:
+    if "Ud" in self.parameters:  # Voltage driven
         XR = array(
             [
                 [self.parameters["R20"], -ws * self.parameters["Lq"]],
@@ -45,7 +45,7 @@ def solve_EEC(self, output):
         XI = solve(XR, XU - XE)
         output.elec.Id_ref = XI[0]
         output.elec.Iq_ref = XI[1]
-    else:
+    else:  # Current Driven
         output.elec.Ud_ref = (
             self.parameters["R20"] * self.parameters["Id"]
             - ws * self.parameters["Phiq"]

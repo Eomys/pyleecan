@@ -112,10 +112,6 @@ def comp_fluxlinkage(obj, output):
     femm.closefemm()
     output.elec.internal.handler_list.remove(femm)
 
-    # Define d axis angle for the d,q transform
-    d_angle = (angle_rotor - angle_offset_initial) * zp
-    fluxdq = split(n2dqh(Phi_wind, d_angle), 2, axis=1)
-
     # restore the original elec
     output.elec = elec
 

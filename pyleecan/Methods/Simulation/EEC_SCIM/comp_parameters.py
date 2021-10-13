@@ -6,7 +6,7 @@ from ....Functions.labels import STATOR_LAB, ROTOR_LAB
 from ....Functions.load import import_class
 
 
-def comp_parameters(self, output, Tsta, Trot):
+def comp_parameters(self, machine, N0, felec, Id_ref, Iq_ref, Tsta, Trot):
     """Compute the parameters dict for the equivalent electrical circuit:
     resistance, inductance
     Parameters
@@ -18,14 +18,10 @@ def comp_parameters(self, output, Tsta, Trot):
     """
 
     # get some machine parameters
-    machine = output.simu.machine
     Zsr = machine.rotor.slot.Zs
     qsr = machine.rotor.winding.qs
     qs = machine.stator.winding.qs
     p = machine.rotor.winding.p
-    felec = (
-        output.simu.input.comp_felec()
-    )  # XXX felec should be at same level that Tsta Trot (simulation param)
 
     # simulation type for magnetizing inductance when missing (0: FEA, 1: Analytical)
     type_comp_Lm = 0
@@ -49,13 +45,13 @@ def comp_parameters(self, output, Tsta, Trot):
 
     # check that parameters are in ELUT, otherwise compute missing ones -> to be put in check_ELUT method?
     if "slip" not in self.parameters or self.parameters["slip"] is None:
-        Nr = output.elec.N0
-        Ns = output.elec.felec / p * 60
+        Nr = N0
+        Ns = felec / p * 60
         slip = (Ns - Nr) / Ns
         self.parameters["slip"] = slip
 
     if "R1" not in self.parameters or self.parameters["R1"] is None:
-        CondS = self.parent.parent.machine.stator.winding.conductor
+        CondS = machine.stator.winding.conductor
         # get resistance calculated analytically at simulation temperature
         R1 = machine.stator.comp_resistance_wind(T=Tsta)
         # compute skin_effect on stator side
@@ -71,7 +67,7 @@ def comp_parameters(self, output, Tsta, Trot):
 
         # compute skin_effect on rotor side
         if Xkr_skinR is None:
-            CondR = self.parent.parent.machine.rotor.winding.conductor
+            CondR = machine.rotor.winding.conductor
             Xkr_skinR, Xke_skinR = CondR.comp_skin_effect(
                 freq=felec * (self.parameters["slip"]), T=Trot
             )
@@ -88,7 +84,7 @@ def comp_parameters(self, output, Tsta, Trot):
             # L2 = machine.rotor.slot.comp_inductance_leakage_ANL() #TODO
             L20 = 0
             if Xke_skinR is None:
-                CondR = self.parent.parent.machine.rotor.winding.conductor
+                CondR = machine.rotor.winding.conductor
                 Xkr_skinR, Xke_skinR = CondR.comp_skin_effect(
                     freq=felec * (self.parameters["slip"]), T=Trot
                 )
@@ -106,7 +102,7 @@ def comp_parameters(self, output, Tsta, Trot):
             # L10 = machine.stator.slot.comp_inductance_leakage_ANL() #TODO
             L10 = 0
             if Xke_skinS is None:
-                CondS = self.parent.parent.machine.stator.winding.conductor
+                CondS = machine.stator.winding.conductor
                 Xkr_skinS, Xke_skinS = CondS.comp_skin_effect(freq=felec, T=Tsta)
                 L1 = L10 * Xke_skinS
         else:

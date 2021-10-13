@@ -26,7 +26,6 @@ def run(self):
             self.eec = EEC_SCIM()
         elif isinstance(machine, (MachineSIPMSM, MachineIPMSM)):
             self.eec = EEC_PMSM()
-
     else:
         # Check that EEC is consistent with machine type
         if isinstance(machine, MachineSCIM) and not isinstance(self.eec, EEC_SCIM):
@@ -52,8 +51,19 @@ def run(self):
     self.eec.parameters["Ud_ref"] = output.elec.Ud_ref
     self.eec.parameters["Uq_ref"] = output.elec.Uq_ref
 
+    # Ud_ref, Ud_ref, fe => OP_fund
+    # for harm
+    #     Ud, Uq, Fharm => Op_harm
     # Compute parameters of the electrical equivalent circuit if some parameters are missing in ELUT
-    out_dict = self.eec.comp_parameters(output, Tsta=self.Tsta, Trot=self.Trot)
+    out_dict = self.eec.comp_parameters(
+        machine,
+        output.elec.N0,
+        output.elec.felec,
+        output.elec.Id_ref,
+        output.elec.Iq_ref,
+        Tsta=self.Tsta,
+        Trot=self.Trot,
+    )
 
     # Solve the electrical equivalent circuit
     out_dict = self.eec.solve_EEC(output)
