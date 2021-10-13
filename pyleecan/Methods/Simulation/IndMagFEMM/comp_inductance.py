@@ -4,8 +4,8 @@ from numpy import mean, split
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simulation import Simulation
-
-from ....Functions.Electrical.coordinate_transformation import n2dqh
+from pyleecan.Classes.Simu1 import Simu1
+from ....Functions.Electrical.coordinate_transformation import n2dqh_DataTime
 
 
 def comp_inductance(self, machine, Id_ref, Iq_ref):
@@ -42,11 +42,11 @@ def comp_inductance(self, machine, Id_ref, Iq_ref):
         path_result = None
 
     # Define simulation
-    simu_ind = Simulation(
+    simu_ind = Simu1(
         elec=None, name=simu_name, path_result=path_result, machine=machine_fl
     )
     simu_ind.input = InputCurrent(
-        N0=2000, Id_ref=0, Iq_ref=0, Nt_tot=self.Nt_tot, Na_tot=2048
+        N0=2000, Id_ref=Id_ref, Iq_ref=Iq_ref, Nt_tot=self.Nt_tot, Na_tot=2048
     )
     simu_ind.mag = MagFEMM(
         is_periodicity_t=True,
@@ -60,11 +60,7 @@ def comp_inductance(self, machine, Id_ref, Iq_ref):
     out_ind = simu_ind.run()
 
     # Post-Process
-    angle_rotor = out_ind.get_angle_rotor()
-    angle_offset_initial = out_ind.get_angle_offset_initial()
-    zp = machine.get_pole_pair_number()
-    Phi_wind = out_ind.mag.Phi_wind_stator
-    # Define d axis angle for the d,q transform
-    d_angle = (angle_rotor - angle_offset_initial) * zp
-    fluxdq = split(n2dqh(Phi_wind, d_angle), 2, axis=1)
-    return (mean(fluxdq[0]), mean(fluxdq[1]))
+    Phidqh = n2dqh_DataTime(out_ind.mag.Phi_wind_stator)
+    Phi_d_mean = float(Phidqh.get_along("time=mean", "phase[0]")["Phi_{wind}"])
+    Phi_q_mean = float(Phidqh.get_along("time=mean", "phase[1]")["Phi_{wind}"])
+    return (Phi_d_mean, Phi_q_mean)

@@ -45,8 +45,8 @@ def test_EEC_PMSM():
     # Definition of the electrical simulation (FEMM)
     simu.elec = Electrical()
     simu.elec.eec = EEC_PMSM(
-        indmag=IndMagFEMM(is_periodicity_a=True, Nt_tot=10),
-        fluxlink=FluxLinkFEMM(is_periodicity_a=True, Nt_tot=10),
+        indmag=IndMagFEMM(is_periodicity_a=True, Nt_tot=16),
+        fluxlink=FluxLinkFEMM(is_periodicity_a=True, Nt_tot=16),
     )
 
     simu.mag = None

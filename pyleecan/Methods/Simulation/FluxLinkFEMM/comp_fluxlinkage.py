@@ -3,9 +3,9 @@ from os.path import join
 from numpy import mean, split
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Simulation import Simulation
-
-from ....Functions.Electrical.coordinate_transformation import n2dqh
+from ....Functions.Electrical.coordinate_transformation import n2dqh_DataTime
 
 
 def comp_fluxlinkage(self, machine):
@@ -42,7 +42,7 @@ def comp_fluxlinkage(self, machine):
         path_result = None
 
     # Define simulation
-    simu_fl = Simulation(
+    simu_fl = Simu1(
         elec=None, name=simu_name, path_result=path_result, machine=machine_fl
     )
     simu_fl.input = InputCurrent(
@@ -60,11 +60,6 @@ def comp_fluxlinkage(self, machine):
     out_fl = simu_fl.run()
 
     # Post-Process
-    angle_rotor = out_fl.get_angle_rotor()
-    angle_offset_initial = out_fl.get_angle_offset_initial()
-    zp = machine.get_pole_pair_number()
-    Phi_wind = out_fl.mag.Phi_wind_stator
-    # Define d axis angle for the d,q transform
-    d_angle = (angle_rotor - angle_offset_initial) * zp
-    fluxdq = split(n2dqh(Phi_wind, d_angle), 2, axis=1)
-    return mean(fluxdq[0])
+    Phidqh = n2dqh_DataTime(out_fl.mag.Phi_wind_stator)
+    Phi_d_mean = float(Phidqh.get_along("time=mean", "phase[0]")["Phi_{wind}"])
+    return Phi_d_mean

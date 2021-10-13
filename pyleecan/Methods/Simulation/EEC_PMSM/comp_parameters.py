@@ -23,7 +23,7 @@ def comp_parameters(self, machine, N0, felec, Id_ref, Iq_ref, Tsta=None, Trot=No
     Cond = machine.stator.winding.conductor
 
     # compute skin_effect
-    Xkr_skinS, Xke_skinS = Cond.comp_skin_effect(T=20)
+    Xkr_skinS, Xke_skinS = Cond.comp_skin_effect(T=20, freq=felec)
 
     # Parameters to compute only once
     if "R20" not in PAR:
