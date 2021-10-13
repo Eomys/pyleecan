@@ -39,6 +39,7 @@ from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .ImportMatrix import ImportMatrix
 from .Import import Import
+from .ImportGenPWM import ImportGenPWM
 
 
 class InputCurrent(InputVoltage):
@@ -103,6 +104,7 @@ class InputCurrent(InputVoltage):
         slip_ref=0,
         U0_ref=None,
         Pem_av_ref=None,
+        PWM=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -155,6 +157,8 @@ class InputCurrent(InputVoltage):
                 U0_ref = init_dict["U0_ref"]
             if "Pem_av_ref" in list(init_dict.keys()):
                 Pem_av_ref = init_dict["Pem_av_ref"]
+            if "PWM" in list(init_dict.keys()):
+                PWM = init_dict["PWM"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -184,6 +188,7 @@ class InputCurrent(InputVoltage):
             slip_ref=slip_ref,
             U0_ref=U0_ref,
             Pem_av_ref=Pem_av_ref,
+            PWM=PWM,
             time=time,
             angle=angle,
             Nt_tot=Nt_tot,

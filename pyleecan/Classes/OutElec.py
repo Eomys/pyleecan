@@ -140,6 +140,7 @@ class OutElec(FrozenClass):
         internal=None,
         slip_ref=0,
         U0_ref=None,
+        Us_harm=None,
         init_dict=None,
         init_str=None,
     ):
@@ -196,6 +197,8 @@ class OutElec(FrozenClass):
                 slip_ref = init_dict["slip_ref"]
             if "U0_ref" in list(init_dict.keys()):
                 U0_ref = init_dict["U0_ref"]
+            if "Us_harm" in list(init_dict.keys()):
+                Us_harm = init_dict["Us_harm"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -217,6 +220,7 @@ class OutElec(FrozenClass):
         self.internal = internal
         self.slip_ref = slip_ref
         self.U0_ref = U0_ref
+        self.Us_harm = Us_harm
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -260,6 +264,7 @@ class OutElec(FrozenClass):
             OutElec_str += "internal = None" + linesep + linesep
         OutElec_str += "slip_ref = " + str(self.slip_ref) + linesep
         OutElec_str += "U0_ref = " + str(self.U0_ref) + linesep
+        OutElec_str += "Us_harm = " + str(self.Us_harm) + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -304,6 +309,8 @@ class OutElec(FrozenClass):
         if other.slip_ref != self.slip_ref:
             return False
         if other.U0_ref != self.U0_ref:
+            return False
+        if other.Us_harm != self.Us_harm:
             return False
         return True
 
@@ -384,6 +391,14 @@ class OutElec(FrozenClass):
             diff_list.append(name + ".slip_ref")
         if other._U0_ref != self._U0_ref:
             diff_list.append(name + ".U0_ref")
+        if (other.Us_harm is None and self.Us_harm is not None) or (
+            other.Us_harm is not None and self.Us_harm is None
+        ):
+            diff_list.append(name + ".Us_harm None mismatch")
+        elif self.Us_harm is not None:
+            diff_list.extend(
+                self.Us_harm.compare(other.Us_harm, name=name + ".Us_harm")
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -413,6 +428,7 @@ class OutElec(FrozenClass):
         S += getsizeof(self.internal)
         S += getsizeof(self.slip_ref)
         S += getsizeof(self.U0_ref)
+        S += getsizeof(self.Us_harm)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -498,6 +514,14 @@ class OutElec(FrozenClass):
             )
         OutElec_dict["slip_ref"] = self.slip_ref
         OutElec_dict["U0_ref"] = self.U0_ref
+        if self.Us_harm is None:
+            OutElec_dict["Us_harm"] = None
+        else:
+            OutElec_dict["Us_harm"] = self.Us_harm.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -525,6 +549,7 @@ class OutElec(FrozenClass):
             self.internal._set_None()
         self.slip_ref = None
         self.U0_ref = None
+        self.Us_harm = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -924,5 +949,32 @@ class OutElec(FrozenClass):
         doc=u"""stator voltage (phase to neutral)
 
         :Type: float
+        """,
+    )
+
+    def _get_Us_harm(self):
+        """getter of Us_harm"""
+        return self._Us_harm
+
+    def _set_Us_harm(self, value):
+        """setter of Us_harm"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Us_harm"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("Us_harm", value, "DataND")
+        self._Us_harm = value
+
+    Us_harm = property(
+        fget=_get_Us_harm,
+        fset=_set_Us_harm,
+        doc=u"""Harmonic stator voltage as a function of time (each column correspond to one phase)
+
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )

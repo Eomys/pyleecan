@@ -38,6 +38,7 @@ from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .Import import Import
+from .ImportGenPWM import ImportGenPWM
 from .ImportMatrix import ImportMatrix
 
 
@@ -99,6 +100,7 @@ class InputVoltage(Input):
         slip_ref=0,
         U0_ref=None,
         Pem_av_ref=None,
+        PWM=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -143,6 +145,8 @@ class InputVoltage(Input):
                 U0_ref = init_dict["U0_ref"]
             if "Pem_av_ref" in list(init_dict.keys()):
                 Pem_av_ref = init_dict["Pem_av_ref"]
+            if "PWM" in list(init_dict.keys()):
+                PWM = init_dict["PWM"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -166,6 +170,7 @@ class InputVoltage(Input):
         self.slip_ref = slip_ref
         self.U0_ref = U0_ref
         self.Pem_av_ref = Pem_av_ref
+        self.PWM = PWM
         # Call Input init
         super(InputVoltage, self).__init__(
             time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
@@ -197,6 +202,11 @@ class InputVoltage(Input):
         InputVoltage_str += "slip_ref = " + str(self.slip_ref) + linesep
         InputVoltage_str += "U0_ref = " + str(self.U0_ref) + linesep
         InputVoltage_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
+        if self.PWM is not None:
+            tmp = self.PWM.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InputVoltage_str += "PWM = " + tmp
+        else:
+            InputVoltage_str += "PWM = None" + linesep + linesep
         return InputVoltage_str
 
     def __eq__(self, other):
@@ -227,6 +237,8 @@ class InputVoltage(Input):
         if other.U0_ref != self.U0_ref:
             return False
         if other.Pem_av_ref != self.Pem_av_ref:
+            return False
+        if other.PWM != self.PWM:
             return False
         return True
 
@@ -267,6 +279,12 @@ class InputVoltage(Input):
             diff_list.append(name + ".U0_ref")
         if other._Pem_av_ref != self._Pem_av_ref:
             diff_list.append(name + ".Pem_av_ref")
+        if (other.PWM is None and self.PWM is not None) or (
+            other.PWM is not None and self.PWM is None
+        ):
+            diff_list.append(name + ".PWM None mismatch")
+        elif self.PWM is not None:
+            diff_list.extend(self.PWM.compare(other.PWM, name=name + ".PWM"))
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -288,6 +306,7 @@ class InputVoltage(Input):
         S += getsizeof(self.slip_ref)
         S += getsizeof(self.U0_ref)
         S += getsizeof(self.Pem_av_ref)
+        S += getsizeof(self.PWM)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -324,6 +343,14 @@ class InputVoltage(Input):
         InputVoltage_dict["slip_ref"] = self.slip_ref
         InputVoltage_dict["U0_ref"] = self.U0_ref
         InputVoltage_dict["Pem_av_ref"] = self.Pem_av_ref
+        if self.PWM is None:
+            InputVoltage_dict["PWM"] = None
+        else:
+            InputVoltage_dict["PWM"] = self.PWM.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputVoltage_dict["__class__"] = "InputVoltage"
@@ -343,6 +370,8 @@ class InputVoltage(Input):
         self.slip_ref = None
         self.U0_ref = None
         self.Pem_av_ref = None
+        if self.PWM is not None:
+            self.PWM._set_None()
         # Set to None the properties inherited from Input
         super(InputVoltage, self)._set_None()
 
@@ -537,5 +566,33 @@ class InputVoltage(Input):
         doc=u"""Theorical Average Electromagnetic Power
 
         :Type: float
+        """,
+    )
+
+    def _get_PWM(self):
+        """getter of PWM"""
+        return self._PWM
+
+    def _set_PWM(self, value):
+        """setter of PWM"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "PWM")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = ImportGenPWM()
+        check_var("PWM", value, "ImportGenPWM")
+        self._PWM = value
+
+        if self._PWM is not None:
+            self._PWM.parent = self
+
+    PWM = property(
+        fget=_get_PWM,
+        fset=_set_PWM,
+        doc=u"""Object to generate PWM signal
+
+        :Type: ImportGenPWM
         """,
     )

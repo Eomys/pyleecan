@@ -4293,6 +4293,15 @@
                 "type": "float",
                 "unit": "W",
                 "value": null
+            },
+            {
+                "desc": "Object to generate PWM signal",
+                "max": "",
+                "min": "",
+                "name": "PWM",
+                "type": "ImportGenPWM",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -8107,6 +8116,15 @@
                 "type": "float",
                 "unit": "Vrms",
                 "value": null
+            },
+            {
+                "desc": "Harmonic stator voltage as a function of time (each column correspond to one phase)",
+                "max": "",
+                "min": "",
+                "name": "Us_harm",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "V",
+                "value": "None"
             }
         ]
     },

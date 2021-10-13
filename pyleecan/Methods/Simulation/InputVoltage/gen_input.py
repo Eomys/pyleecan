@@ -1,9 +1,13 @@
-from numpy import ndarray
+from numpy import ndarray, pi
 
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 
 from ....Methods.Simulation.Input import InputError
+from ....Functions.Electrical.coordinate_transformation import n2dqh, n2dqh_DataTime
+from ....Functions.Winding.gen_phase_list import gen_name
+
+from SciDataTool import Data1D, DataLinspace, DataTime
 
 
 def gen_input(self):
@@ -100,3 +104,45 @@ def gen_input(self):
         axes_dict_in=outgeo.axes_dict,
         is_periodicity_t=False,
     )
+
+    # Generate PWM signal
+    if self.PWM is not None:
+        # Fill generator with simu data
+        felec = self.comp_felec
+        rot_dir = output.get_rot_dir()
+        qs = simu.machine.stator.winding.qs
+        self.PWM.f = felec
+        self.fs = self.PWM.fmax * 2.56  # Shanon based sampling frequency (with margin)
+        self.PWM.duration = 1 / felec
+        # Generate PWM signal
+        Uabc, modulation, _, carrier, time = self.PWM.get_data()
+        # Create DataTime object
+        Time = DataLinspace(
+            name="time",
+            unit="s",
+            initial=0,
+            final=time[-1],
+            number=len(time),
+            include_endpoint=True,
+        )
+        Phase = Data1D(
+            name="phase",
+            unit="",
+            values=gen_name(qs),
+            is_components=True,
+        )
+        Uabc_data = DataTime(
+            name="Stator voltage",
+            symbol="U_{abc}",
+            unit="V",
+            axes=[Time, Phase],
+            values=Uabc,
+        )
+        # Rotate to DQH frame
+        Udqh = n2dqh_DataTime(
+            Uabc_data, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_dq_rms=True
+        )
+        # fft
+        Udqh_freq = Udqh.time_to_freq()
+        # Store
+        outelec.Us_harm = Udqh_freq
