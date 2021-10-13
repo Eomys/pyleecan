@@ -139,7 +139,7 @@ def gen_input(self):
         )
         Uabc_data = DataTime(
             name="Stator voltage",
-            symbol="U_{abc}",
+            symbol="U_s",
             unit="V",
             axes=[Time, Phase],
             values=Uabc,
