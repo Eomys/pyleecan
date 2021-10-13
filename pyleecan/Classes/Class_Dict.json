@@ -13650,7 +13650,9 @@
             "check",
             "comp_radius",
             "comp_surface",
-            "get_center"
+            "get_center",
+            "_comp_point_coordinate",
+            "plot_schematics"
         ],
         "mother": "Hole",
         "name": "VentilationCirc",
@@ -13692,7 +13694,9 @@
             "check",
             "comp_radius",
             "comp_surface",
-            "get_center"
+            "get_center",
+            "_comp_point_coordinate",
+            "plot_schematics"
         ],
         "mother": "Hole",
         "name": "VentilationPolar",
@@ -13743,7 +13747,9 @@
             "check",
             "comp_radius",
             "comp_surface",
-            "get_center"
+            "get_center",
+            "_comp_point_coordinate",
+            "plot_schematics"
         ],
         "mother": "Hole",
         "name": "VentilationTrap",

@@ -19,11 +19,10 @@ from PySide2.QtWidgets import (
     QPushButton,
     QHeaderView,
 )
-from ...Classes._FEMMHandler import _FEMMHandler
 from ...Classes.HoleUD import HoleUD
 from ...Classes.Magnet import Magnet
 from ...Classes.SurfLine import SurfLine
-from ...GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
+from ...GUI.Dxf.dxf_to_pyleecan import dxf_to_pyleecan_list, convert_dxf_with_FEMM
 from ...GUI.Resources import pixmap_dict
 from ...GUI.Tools.MPLCanvas import MPLCanvas
 from ...GUI.Tools.FloatEdit import FloatEdit
@@ -49,6 +48,8 @@ Z_TOL = 1e-4  # Point comparison tolerance
 
 class DXF_Hole(Ui_DXF_Hole, QDialog):
     """Dialog to create HoleUD objects from DXF files"""
+
+    convert_dxf_with_FEMM = convert_dxf_with_FEMM
 
     def __init__(self, dxf_path=None, Zh=None, Lmag=None, lam=None):
         """Initialize the Dialog
@@ -719,34 +720,3 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
     def open_tuto(self):
         """Open the tutorial video in a web browser"""
         QDesktopServices.openUrl(QUrl(self.url))
-
-    def convert_dxf_with_FEMM(self, file_path, tol):
-        """Convert a DXF file with FEMM:
-        - Merge point according to tolerance
-        - Convert lines to Arc and Segments
-
-        Parameters
-        ----------
-        file_path : str
-            Path to the file to convert
-        tol : float
-            Tolerance to merge point [local unit]
-        """
-        try:
-            femm = _FEMMHandler()
-            femm.openfemm(1)
-            femm.newdocument(0)
-            conv_path = file_path[:-4] + "_converted.dxf"
-            femm.mi_readdxf2(file_path, tol)
-            femm.mi_savedxf2(conv_path, tol)
-            femm.mi_close()
-            return conv_path  # Continue with converted file
-        except Exception as e:
-            err_msg = "Error while converting dxf file " + file_path + " :\n" + str(e)
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
-            )
-            return file_path  # Continue with original file

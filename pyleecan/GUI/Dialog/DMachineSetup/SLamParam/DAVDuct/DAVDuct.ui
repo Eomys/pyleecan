@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Set axial ventilation duct</string>
+   <string>Set axial cooling duct</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../../../Resources/pyleecan.qrc">
+    <normaloff>:/images/images/icon/pyleecan_64.png</normaloff>:/images/images/icon/pyleecan_64.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

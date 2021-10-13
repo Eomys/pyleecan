@@ -26,8 +26,9 @@ def build_geometry(self, alpha=0, delta=0):
 
     """
     lam_label = self.parent.get_label()
-    RTS_id = "R" + str(self.parent.axial_vent.index(self)) + "-T0-S0"
-    vent_label = lam_label + "_" + VENT_LAB + "_" + RTS_id
+    R_id, surf_type = self.get_R_id()
+    RTS_id = "R" + str(R_id) + "-T0-S0"
+    vent_label = lam_label + "_" + surf_type + "_" + RTS_id
 
     # checking if the param have good type
     if type(alpha) not in [int, float]:
