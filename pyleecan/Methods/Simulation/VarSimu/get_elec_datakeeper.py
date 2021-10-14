@@ -27,7 +27,7 @@ def get_elec_datakeeper(self, symbol_list, is_multi=False):
                 name="Id",
                 symbol="Id",
                 unit="Arms",
-                keeper="lambda output: output.elec.Id_ref",
+                keeper="lambda output: output.elec.OP.get_Id_Iq()['Id']",
             )
         )
     # Save Iq
@@ -37,7 +37,7 @@ def get_elec_datakeeper(self, symbol_list, is_multi=False):
                 name="Iq",
                 symbol="Iq",
                 unit="Arms",
-                keeper="lambda output: output.elec.Iq_ref",
+                keeper="lambda output: output.elec.OP.get_Id_Iq()['Iq']",
             )
         )
 

@@ -176,9 +176,9 @@ def log_step_simu(index, nb_simu, paramexplorer_list, logger, layer):
     for param_exp in paramexplorer_list:
         value = param_exp.get_value()[index]
         if isinstance(value, InputCurrent):
-            msg += "N0=" + format(value.N0, ".6g") + " [rpm]"
-            msg += ", Id=" + format(value.Id_ref, ".4g") + " [Arms]"
-            msg += ", Iq=" + format(value.Iq_ref, ".4g") + " [Arms], "
+            msg += "N0=" + format(value.get_N0(), ".6g") + " [rpm]"
+            msg += ", Id=" + format(value.get_Id_Iq()["Id"], ".4g") + " [Arms]"
+            msg += ", Iq=" + format(value.get_Id_Iq()["Iq"], ".4g") + " [Arms], "
         elif isinstance(value, (list, np.ndarray)):
             msg += param_exp.symbol
             msg += "="

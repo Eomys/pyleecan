@@ -57,10 +57,7 @@ def run(self):
     # Compute parameters of the electrical equivalent circuit if some parameters are missing in ELUT
     out_dict = self.eec.comp_parameters(
         machine,
-        output.elec.N0,
-        output.elec.felec,
-        output.elec.Id_ref,
-        output.elec.Iq_ref,
+        OP=output.elec.OP,
         Tsta=self.Tsta,
         Trot=self.Trot,
     )

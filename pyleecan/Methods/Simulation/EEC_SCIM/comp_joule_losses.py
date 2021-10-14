@@ -16,8 +16,8 @@ def comp_joule_losses(self, output):
     # TODO utilize loss models instead here
     # compute stator joule losses
     qs = output.simu.machine.stator.winding.qs
-    Id = output.elec.Id_ref
-    Iq = output.elec.Iq_ref
+    I_dict = self.OP.get_Id_Iq()
+    Id, Iq = I_dict["Id"], I_dict["Iq"]
     Rs = self.parameters["Rs"]
 
     P_joule_s = qs * Rs * (Id ** 2 + Iq ** 2)

@@ -4,7 +4,7 @@
 from enum import unique
 
 
-def comp_parameters(self, machine, N0, felec, Id_ref, Iq_ref, Tsta=None, Trot=None):
+def comp_parameters(self, machine, OP, Tsta=None, Trot=None):
     """Compute the parameters dict for the equivalent electrical circuit:
     resistance, inductance and back electromotive force
     Parameters
@@ -21,6 +21,9 @@ def comp_parameters(self, machine, N0, felec, Id_ref, Iq_ref, Tsta=None, Trot=No
 
     PAR = self.parameters
     Cond = machine.stator.winding.conductor
+    I_dict = OP.get_Id_Iq()
+    Id_ref, Iq_ref = I_dict["Id"], I_dict["Iq"]
+    felec = OP.get_felec()
 
     # compute skin_effect
     Xkr_skinS, Xke_skinS = Cond.comp_skin_effect(T=20, freq=felec)

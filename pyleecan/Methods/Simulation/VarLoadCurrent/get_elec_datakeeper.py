@@ -29,7 +29,7 @@ def get_elec_datakeeper(self, symbol_list, is_multi=False):
                     name="I0",
                     symbol="I0",
                     unit="A",
-                    keeper="lambda output: np.abs(output.elec.Id_ref + 1j * output.elec.Iq_ref)",
+                    keeper="lambda output: output.elec.OP.get_I0_Phi0()['I0']",
                 )
             )
         # Save Phi0
@@ -39,7 +39,7 @@ def get_elec_datakeeper(self, symbol_list, is_multi=False):
                     name="Phi0",
                     symbol="Phi0",
                     unit="",
-                    keeper="lambda output: np.angle(output.elec.Id_ref + 1j * output.elec.Iq_ref) % (2 * np.pi)",
+                    keeper="lambda output: output.elec.OP.get_I0_Phi0()['Phi0']",
                 )
             )
     # Keep torque

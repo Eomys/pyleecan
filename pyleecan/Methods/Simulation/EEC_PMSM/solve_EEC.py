@@ -43,8 +43,7 @@ def solve_EEC(self, output):
         XE = array([0, ws * self.parameters["phi"]])
         XU = array([self.parameters["Ud"], self.parameters["Uq"]])
         XI = solve(XR, XU - XE)
-        output.elec.Id_ref = XI[0]
-        output.elec.Iq_ref = XI[1]
+        output.elec.OP.set_Id_Iq(Id=XI[0], Iq=XI[1])
     else:  # Current Driven
         output.elec.Ud_ref = (
             self.parameters["R20"] * self.parameters["Id"]

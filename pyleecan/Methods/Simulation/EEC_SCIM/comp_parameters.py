@@ -6,7 +6,7 @@ from ....Functions.labels import STATOR_LAB, ROTOR_LAB
 from ....Functions.load import import_class
 
 
-def comp_parameters(self, machine, N0, felec, Id_ref, Iq_ref, Tsta, Trot):
+def comp_parameters(self, machine, OP, Tsta, Trot):
     """Compute the parameters dict for the equivalent electrical circuit:
     resistance, inductance
     Parameters
@@ -22,6 +22,8 @@ def comp_parameters(self, machine, N0, felec, Id_ref, Iq_ref, Tsta, Trot):
     qsr = machine.rotor.winding.qs
     qs = machine.stator.winding.qs
     p = machine.rotor.winding.p
+    N0 = OP.get_N0()
+    felec = OP.get_felec()
 
     # simulation type for magnetizing inductance when missing (0: FEA, 1: Analytical)
     type_comp_Lm = 0

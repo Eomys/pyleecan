@@ -42,6 +42,11 @@ try:
 except ImportError as error:
     set_Id_Iq = error
 
+try:
+    from ..Methods.Output.OPslip.get_I0_Phi0 import get_I0_Phi0
+except ImportError as error:
+    get_I0_Phi0 = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -97,6 +102,15 @@ class OPslip(OP):
         )
     else:
         set_Id_Iq = set_Id_Iq
+    # cf Methods.Output.OPslip.get_I0_Phi0
+    if isinstance(get_I0_Phi0, ImportError):
+        get_I0_Phi0 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OPslip method get_I0_Phi0: " + str(get_I0_Phi0))
+            )
+        )
+    else:
+        get_I0_Phi0 = get_I0_Phi0
     # save and copy methods are available in all object
     save = save
     copy = copy

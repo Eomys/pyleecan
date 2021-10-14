@@ -13,8 +13,8 @@ def comp_joule_losses(self, output):
     """
 
     qs = output.simu.machine.stator.winding.qs
-    Id = output.elec.Id_ref
-    Iq = output.elec.Iq_ref
+    I_dict = self.OP.get_Id_Iq()
+    Id, Iq = I_dict["Id"], I_dict["Iq"]
     R = self.parameters["R20"]
 
     # Id and Iq are in RMS

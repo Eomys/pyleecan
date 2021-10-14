@@ -24,15 +24,13 @@ def get_I_fund(self, Time=None):
     Phase = self.axes_dict[stator_label]
 
     if self.Is is None:
-        if (
-            self.Id_ref is not None
-            and self.Iq_ref is not None
-            and (self.Id_ref != 0 or self.Iq_ref != 0)
-        ):
+        I_dict = self.OP.get_Id_Iq()
+        Id, Iq = I_dict["Id"], I_dict["Iq"]
+        if Id is not None and Iq is not None and (Id != 0 or Iq != 0):
             # Generate current according to Id/Iq, Ih=0
             Is_dqh = zeros((angle_elec.size, 3))
-            Is_dqh[:, 0] = self.Id_ref
-            Is_dqh[:, 1] = self.Iq_ref
+            Is_dqh[:, 0] = Id
+            Is_dqh[:, 1] = Iq
 
             # Get stator current function of time
             Is = dqh2n(Is_dqh, angle_elec, n=qs, is_n_rms=False)

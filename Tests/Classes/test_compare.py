@@ -71,7 +71,7 @@ def test_compare():
     simu2.mag.transform_list = ["bla"]  # len(list)
     simu2.postproc_list[0].param_list = [1, 3]  # list diff
     simu2.postproc_list[0].param_dict["test2"] = 3  # len(dict)
-    simu2.postproc_list[1].run = "lambda out: out.elec.Id_ref"  # function
+    simu2.postproc_list[1].run = "lambda out: out.elec.OP.N0"  # function
     # dict diff
     simu2.machine.stator.winding = WindingUD()  # pyleecan type diff
     # pyleecan dict
