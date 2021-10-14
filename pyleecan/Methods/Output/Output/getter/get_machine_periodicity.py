@@ -38,7 +38,7 @@ def get_machine_periodicity(self, is_rotor_ref=False):
             self.geo.is_antiper_t_S,
             self.geo.per_t_R,
             self.geo.is_antiper_t_R,
-        ) = self.simu.machine.comp_periodicity_time(slip=self.elec.OP.slip_ref)
+        ) = self.simu.machine.comp_periodicity_time(slip=self.elec.OP.get_slip())
 
     if is_rotor_ref:
         return (
