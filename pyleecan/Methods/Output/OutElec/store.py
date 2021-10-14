@@ -20,4 +20,6 @@ def store(self, out_dict, axes_dict):
 
     """
 
-    # TODO
+    self.Pj_losses = out_dict["Pj_losses"]
+    self.Tem_av_ref = out_dict["Tem_av_ref"]
+    self.Pem_av_ref = out_dict["Pem_av_ref"]

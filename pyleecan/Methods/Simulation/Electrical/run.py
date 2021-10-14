@@ -47,9 +47,9 @@ def run(self):
 
     # Generate drive
     # self.eec.gen_drive(output)
-    self.eec.parameters["U0_ref"] = output.elec.U0_ref
-    self.eec.parameters["Ud_ref"] = output.elec.Ud_ref
-    self.eec.parameters["Uq_ref"] = output.elec.Uq_ref
+    # self.eec.parameters["U0_ref"] = output.elec.U0_ref
+    # self.eec.parameters["Ud_ref"] = output.elec.OP.get_Ud_Uq()["Ud"]
+    # self.eec.parameters["Uq_ref"] = output.elec.OP.get_Ud_Uq()["Uq"]
 
     # Ud_ref, Ud_ref, fe => OP_fund
     # for harm
@@ -65,14 +65,22 @@ def run(self):
     # Solve the electrical equivalent circuit
     out_dict = self.eec.solve_EEC(output)
 
+    # Solve for each harmonic in case of Us_harm
+    if output.elec.Us_harm is not None:
+        freqs = output.elec.Us_harm.get_axes("freqs")[0].get_values().tolist()
+        for f in freqs:
+            out_dict_harm = self.eec.solve_EEC(output)
+    else:
+        out_dict_harm = None
+
     # Compute losses due to Joule effects
-    out_dict = self.eec.comp_joule_losses(output)
+    out_dict = self.eec.comp_joule_losses(out_dict, machine)
 
     # Compute electromagnetic power
-    out_dict = self.comp_power(output)
+    out_dict = self.comp_power(out_dict, machine)
 
     # Compute torque
-    out_dict = self.comp_torque(output)
+    self.comp_torque(out_dict, output.elec.OP.get_N0())
 
     # Store electrical quantities contained in out_dict in OutElec, as Data object if necessary
-    out_dict.store(out_dict)
+    output.elec.store(out_dict, out_dict_harm)
