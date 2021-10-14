@@ -7573,7 +7573,7 @@
         ],
         "mother": "",
         "name": "OP",
-        "package": "Output",
+        "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/OP.csv",
         "properties": [
             {
@@ -7633,7 +7633,7 @@
         ],
         "mother": "OP",
         "name": "OPdq",
-        "package": "Output",
+        "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/OPdq.csv",
         "properties": [
             {
@@ -7693,7 +7693,7 @@
         ],
         "mother": "OP",
         "name": "OPslip",
-        "package": "Output",
+        "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/OPslip.csv",
         "properties": [
             {

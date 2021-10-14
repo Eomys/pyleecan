@@ -23,10 +23,10 @@ def get_Nr(self, Time=None):
         else:
             raise Exception('You must define "time" property before calling get_Nr')
 
-    if self.N0 is None:
+    if self.OP.get_N0() is None:
         raise Exception('You must define "N0" before calling get_Nr')
 
     # Same speed for every timestep
-    Nr = self.N0 * ones(Time.get_length(is_smallestperiod=True))
+    Nr = self.OP.get_N0() * ones(Time.get_length(is_smallestperiod=True))
 
     return Nr

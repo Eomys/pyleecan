@@ -80,7 +80,7 @@ def comp_fluxlinkage(obj, output):
     output.elec.axes_dict["time"] = Data1D(
         name="time",
         unit="s",
-        values=(angle_rotor - angle_rotor[0]) / (2 * pi * output.elec.N0 / 60),
+        values=(angle_rotor - angle_rotor[0]) / (2 * pi * output.elec.OP.get_N0() / 60),
     )
     output.elec.Is = None  # to compute Is from Id_ref and Iq_ref (that are mean val.)
     output.elec.Is = output.elec.get_Is()  # TODO get_Is disregards initial rotor angle

@@ -84,7 +84,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     BHr = output.geo.rotor.BH_curve  # Rotor B(H) curve
     # Is = output.elec.Is  # Stator currents waveforms
     # Ir = output.elec.Ir  # Rotor currents waveforms
-    Speed = output.elec.N0
+    Speed = output.elec.OP.get_N0()
     rotor_mat_file = join(project_name, "rotor_material.pmf")
     stator_mat_file = join(project_name, "stator_material.pmf")
 
