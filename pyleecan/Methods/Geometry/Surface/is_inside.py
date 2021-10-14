@@ -24,7 +24,7 @@ def is_inside(self, Z, if_online=False):
         False : the point is outside the surface
     """
 
-    eps = 0.001  # Half of the width of the window where we will check is there is a distance between the point and the outside line of the surface
+    eps = 0.001  # Half of the width of the branch where we will check is there is a point
 
     # Recovering the point cloud that compose the surface
     line_list = self.get_lines()
