@@ -7628,6 +7628,7 @@
             "get_Id_Iq",
             "get_felec",
             "get_N0",
+            "get_slip",
             "get_Ud_Uq",
             "set_Id_Iq"
         ],
@@ -7688,6 +7689,7 @@
             "get_Id_Iq",
             "get_felec",
             "get_N0",
+            "get_slip",
             "get_Ud_Uq",
             "set_Id_Iq"
         ],

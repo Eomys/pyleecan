@@ -33,6 +33,11 @@ except ImportError as error:
     get_N0 = error
 
 try:
+    from ..Methods.Simulation.OPdq.get_slip import get_slip
+except ImportError as error:
+    get_slip = error
+
+try:
     from ..Methods.Simulation.OPdq.get_Ud_Uq import get_Ud_Uq
 except ImportError as error:
     get_Ud_Uq = error
@@ -79,6 +84,15 @@ class OPdq(OP):
         )
     else:
         get_N0 = get_N0
+    # cf Methods.Simulation.OPdq.get_slip
+    if isinstance(get_slip, ImportError):
+        get_slip = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OPdq method get_slip: " + str(get_slip))
+            )
+        )
+    else:
+        get_slip = get_slip
     # cf Methods.Simulation.OPdq.get_Ud_Uq
     if isinstance(get_Ud_Uq, ImportError):
         get_Ud_Uq = property(
