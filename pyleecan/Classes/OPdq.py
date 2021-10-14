@@ -37,6 +37,11 @@ try:
 except ImportError as error:
     get_Ud_Uq = error
 
+try:
+    from ..Methods.Output.OPdq.set_Id_Iq import set_Id_Iq
+except ImportError as error:
+    set_Id_Iq = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -83,6 +88,15 @@ class OPdq(OP):
         )
     else:
         get_Ud_Uq = get_Ud_Uq
+    # cf Methods.Output.OPdq.set_Id_Iq
+    if isinstance(set_Id_Iq, ImportError):
+        set_Id_Iq = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OPdq method set_Id_Iq: " + str(set_Id_Iq))
+            )
+        )
+    else:
+        set_Id_Iq = set_Id_Iq
     # save and copy methods are available in all object
     save = save
     copy = copy

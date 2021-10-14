@@ -4194,8 +4194,7 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_OP_from_array",
-            "comp_felec"
+            "set_OP_from_array"
         ],
         "mother": "Input",
         "name": "InputVoltage",
@@ -4281,6 +4280,15 @@
                 "name": "U0_ref",
                 "type": "float",
                 "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "stator voltage phase",
+                "max": "",
+                "min": "",
+                "name": "Phi0_ref",
+                "type": "float",
+                "unit": "rad",
                 "value": null
             },
             {
@@ -7620,7 +7628,8 @@
             "get_Id_Iq",
             "get_felec",
             "get_N0",
-            "get_Ud_Uq"
+            "get_Ud_Uq",
+            "set_Id_Iq"
         ],
         "mother": "OP",
         "name": "OPdq",
@@ -7679,7 +7688,8 @@
             "get_Id_Iq",
             "get_felec",
             "get_N0",
-            "get_Ud_Uq"
+            "get_Ud_Uq",
+            "set_Id_Iq"
         ],
         "mother": "OP",
         "name": "OPslip",

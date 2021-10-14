@@ -3,3 +3,4 @@ Id_ref,Arms,d-axis current rms value,1,float,None,,,,Output,OP,get_Id_Iq,VERSION
 Iq_ref,Arms,q-axis current rms value,1,float,None,,,,,,get_felec,,,
 Ud_ref,Vrms,d-axis voltage rms value,1,float,None,,,,,,get_N0,,,
 Uq_ref,Vrms,q-axis voltage rms value,1,float,None,,,,,,get_Ud_Uq,,,
+,,,,,,,,,,,set_Id_Iq,,,

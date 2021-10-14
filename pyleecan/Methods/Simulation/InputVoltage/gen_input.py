@@ -3,7 +3,8 @@ from numpy import ndarray, pi
 
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
-
+from ....Classes.OPdq import OPdq
+from ....Classes.OPslip import OPslip
 from ....Methods.Simulation.Input import InputError
 from ....Functions.Electrical.coordinate_transformation import n2dqh, n2dqh_DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
@@ -38,28 +39,32 @@ def gen_input(self):
     outelec = OutElec()
     output.elec = outelec
     outgeo = output.geo
-
-    # Calculate electrical frequency and/or speed depending on inputs
-    outelec.felec = self.comp_felec()
-
+    if simu.machine.is_synchronous():
+        output.elec.OP = OPdq(
+            N0=self.N0,
+            felec=self.felec,
+            Ud_ref=self.Ud_ref,
+            Uq_ref=self.Uq_ref,
+            Tem_av_ref=self.Tem_av_ref,
+            Pem_av_ref=self.Pem_av_ref,
+        )
+    else:
+        output.elec.OP = OPslip(
+            N0=self.N0,
+            felec=self.felec,
+            slip_ref=self.slip_ref,
+            U0_ref=self.U0_ref,
+            UPhi0_ref=self.Phi0_ref,
+            Tem_av_ref=self.Tem_av_ref,
+            Pem_av_ref=self.Pem_av_ref,
+        )
+    OP = output.elec.OP
     # Replace N0=0 by 0.1 rpm
-    if self.N0 == 0:
-        self.N0 = 0.1
+    if OP.N0 == 0:
+        OP.N0 = 0.1
         self.get_logger().debug("Updating N0 from 0 [rpm] to 0.1 [rpm] in gen_input")
-
-    outelec.N0 = self.N0
-
-    if self.U0_ref is None and self.Ud_ref and self.Uq_ref:
-        raise Exception("U0_ref, Ud_ref, and Uq_ref cannot be all None in InputVoltage")
-
-    outelec.U0_ref = self.U0_ref
-    outelec.Ud_ref = self.Ud_ref
-    outelec.Uq_ref = self.Uq_ref
-    outelec.slip_ref = self.slip_ref
-
-    # Load and check alpha_rotor and N0
-    if self.angle_rotor is None and self.N0 is None:
-        raise InputError("angle_rotor and N0 can't be None at the same time")
+    # Check that felec/N0 can be computed
+    OP.get_felec()
 
     if self.angle_rotor is not None:
         outelec.angle_rotor = self.angle_rotor.get_data()
@@ -91,9 +96,6 @@ def gen_input(self):
     else:
         outelec.angle_rotor_initial = self.angle_rotor_initial
 
-    if self.Tem_av_ref is not None:
-        outelec.Tem_av_ref = self.Tem_av_ref
-
     # Calculate time, angle and phase axes and store them in OutGeo
     outgeo.axes_dict = self.comp_axes(
         axes_list=["time", "angle"],
@@ -111,7 +113,7 @@ def gen_input(self):
     # Generate PWM signal
     if self.PWM is not None:
         # Fill generator with simu data
-        felec = self.comp_felec()
+        felec = OP.get_felec()
         rot_dir = output.get_rot_dir()
         qs = simu.machine.stator.winding.qs
         self.PWM.f = felec

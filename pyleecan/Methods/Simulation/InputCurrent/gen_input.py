@@ -44,8 +44,7 @@ def gen_input(self):
                     "InputCurrent.Is, InputCurrent.Id_ref, and InputCurrent.Iq_ref missing"
                 )
             else:
-                outelec.Id_ref = self.Id_ref
-                outelec.Iq_ref = self.Iq_ref
+                outelec.OP.set_Id_Iq(self.Id_ref, self.Iq_ref)
                 outelec.Is = None
         else:
             Is = self.Is.get_data()
@@ -72,8 +71,7 @@ def gen_input(self):
                 Time.get_values(is_oneperiod=False, normalization="angle_elec"),
                 is_dqh_rms=True,
             )
-            outelec.Id_ref = mean(Idq[:, 0])
-            outelec.Iq_ref = mean(Idq[:, 1])
+            outelec.OP.set_Id_Iq(mean(Idq[:, 0], mean(Idq[:, 1])))
 
     # Load and check Ir is needed
     if qr > 0:

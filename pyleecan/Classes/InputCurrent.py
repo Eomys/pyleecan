@@ -103,6 +103,7 @@ class InputCurrent(InputVoltage):
         felec=None,
         slip_ref=0,
         U0_ref=None,
+        Phi0_ref=None,
         Pem_av_ref=None,
         PWM=None,
         time=None,
@@ -155,6 +156,8 @@ class InputCurrent(InputVoltage):
                 slip_ref = init_dict["slip_ref"]
             if "U0_ref" in list(init_dict.keys()):
                 U0_ref = init_dict["U0_ref"]
+            if "Phi0_ref" in list(init_dict.keys()):
+                Phi0_ref = init_dict["Phi0_ref"]
             if "Pem_av_ref" in list(init_dict.keys()):
                 Pem_av_ref = init_dict["Pem_av_ref"]
             if "PWM" in list(init_dict.keys()):
@@ -187,6 +190,7 @@ class InputCurrent(InputVoltage):
             felec=felec,
             slip_ref=slip_ref,
             U0_ref=U0_ref,
+            Phi0_ref=Phi0_ref,
             Pem_av_ref=Pem_av_ref,
             PWM=PWM,
             time=time,
