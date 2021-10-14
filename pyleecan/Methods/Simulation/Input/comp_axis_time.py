@@ -29,17 +29,17 @@ def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None, output=None):
 
     logger = self.get_logger()
 
-    # Get electrical fundamental frequency
-    f_elec = self.comp_felec(p=p)
-
     # Get magnetic field rotation direction
     if output is not None:
         rot_dir = output.get_rot_dir()
+        # Get electrical fundamental frequency
+        f_elec = output.elec.OP.get_felec()
     else:
         if self.rot_dir not in [-1, 1]:
             self.rot_dir = -1
             logger.debug("Enforcing input.rot_dir=-1")
         rot_dir = self.rot_dir
+        f_elec = self.felec
 
     # Setup normalizations for time and angle axes
     norm_time = {

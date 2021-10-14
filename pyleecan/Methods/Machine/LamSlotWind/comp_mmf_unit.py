@@ -6,7 +6,7 @@ from ....Functions.Electrical.coordinate_transformation import dqh2n
 from ....Functions.Load.import_class import import_class
 
 
-def comp_mmf_unit(self, Na, Nt, felec=1, rot_dir=-1):
+def comp_mmf_unit(self, Na=None, Nt=None, felec=1, rot_dir=-1, N0=1000):
     """Compute the winding unit magnetomotive force
 
     Parameters
@@ -42,8 +42,11 @@ def comp_mmf_unit(self, Na, Nt, felec=1, rot_dir=-1):
         # Get stator winding number of phases
         qs = self.winding.qs
 
+    # Output = import_class("pyleecan.Classes", "Output")
+    # OutElec = import_class("pyleecan.Classes", "OutElec")
+    # Simu1 = import_class("pyleecan.Classes", "Simu1")
     InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
-    input = InputCurrent(Na_tot=Na, Nt_tot=Nt, felec=felec, rot_dir=rot_dir)
+    input = InputCurrent(Na_tot=Na, Nt_tot=Nt, felec=felec, rot_dir=rot_dir, N0=N0)
 
     axes_dict = input.comp_axes(
         axes_list=["time", "angle", "phase_S", "phase_R"],

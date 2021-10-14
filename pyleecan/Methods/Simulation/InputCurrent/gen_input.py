@@ -71,7 +71,7 @@ def gen_input(self):
                 Time.get_values(is_oneperiod=False, normalization="angle_elec"),
                 is_dqh_rms=True,
             )
-            outelec.OP.set_Id_Iq(mean(Idq[:, 0], mean(Idq[:, 1])))
+            outelec.OP.set_Id_Iq(mean(Idq[:, 0]), mean(Idq[:, 1]))
 
     # Load and check Ir is needed
     if qr > 0:
