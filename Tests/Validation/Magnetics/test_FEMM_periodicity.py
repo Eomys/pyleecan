@@ -12,6 +12,9 @@ import matplotlib.pyplot as plt
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
+from pyleecan.Classes.SlotCirc import SlotCirc
+from pyleecan.Classes.SlotM10 import SlotM10
+from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Output import Output
@@ -349,8 +352,25 @@ def test_FEMM_periodicity_angle():
             Zh=Zh, D0=D0, H0=H2, Alpha0=2 * pi / Zh * 0.9, W1=pi / Zh * 0.5
         ),
     ]
-    # SPMSM_015.plot()
-    # plt.show()
+    # Add notches on yoke and bore symetry lines
+    Zs = SPMSM_015.stator.slot.Zs
+    W0 = SPMSM_015.stator.slot.W0 * 0.7
+    H0 = SPMSM_015.stator.slot.H0 * 0.8
+    NBS = SlotCirc(Zs=Zs, W0=W0, H0=H0)
+    SPMSM_015.stator.notch = [NotchEvenDist(alpha=0, notch_shape=NBS)]
+    NYS = SlotM10(Zs=Zs, W0=W0, H0=H0)
+    SPMSM_015.stator.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYS)]
+
+    Zr = SPMSM_015.rotor.slot.Zs
+    W0 = SPMSM_015.stator.slot.W0 * 0.5
+    H0 = SPMSM_015.rotor.comp_height_yoke() * 0.1
+    NBR = SlotCirc(Zs=Zr, W0=W0, H0=H0)
+    SPMSM_015.rotor.notch = [NotchEvenDist(alpha=0, notch_shape=NBR)]
+    NYR = SlotM10(Zs=Zr, W0=W0, H0=H0)
+    SPMSM_015.rotor.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYR)]
+
+    SPMSM_015.plot()
+    plt.show()
 
     simu = Simu1(name="test_FEMM_periodicity_angle", machine=SPMSM_015)
 
