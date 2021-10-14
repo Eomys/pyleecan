@@ -22,11 +22,6 @@ try:
 except ImportError as error:
     comp_inductance = error
 
-try:
-    from ..Methods.Simulation.IndMagFEMM.solve_FEMM import solve_FEMM
-except ImportError as error:
-    solve_FEMM = error
-
 
 from ._check import InitUnKnowClassError
 
@@ -36,7 +31,6 @@ class IndMagFEMM(IndMag):
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.IndMagFEMM.comp_inductance
     if isinstance(comp_inductance, ImportError):
         comp_inductance = property(
@@ -49,17 +43,6 @@ class IndMagFEMM(IndMag):
         )
     else:
         comp_inductance = comp_inductance
-    # cf Methods.Simulation.IndMagFEMM.solve_FEMM
-    if isinstance(solve_FEMM, ImportError):
-        solve_FEMM = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use IndMagFEMM method solve_FEMM: " + str(solve_FEMM)
-                )
-            )
-        )
-    else:
-        solve_FEMM = solve_FEMM
     # save and copy methods are available in all object
     save = save
     copy = copy

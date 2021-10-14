@@ -129,6 +129,9 @@ from ..Classes.ModelBH_linear_sat import ModelBH_linear_sat
 from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
+from ..Classes.OP import OP
+from ..Classes.OPdq import OPdq
+from ..Classes.OPslip import OPslip
 from ..Classes.OptiConstraint import OptiConstraint
 from ..Classes.OptiDesignVar import OptiDesignVar
 from ..Classes.OptiGenAlg import OptiGenAlg

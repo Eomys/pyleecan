@@ -22,11 +22,6 @@ try:
 except ImportError as error:
     comp_fluxlinkage = error
 
-try:
-    from ..Methods.Simulation.FluxLinkFEMM.solve_FEMM import solve_FEMM
-except ImportError as error:
-    solve_FEMM = error
-
 
 from ._check import InitUnKnowClassError
 
@@ -36,7 +31,6 @@ class FluxLinkFEMM(FluxLink):
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.FluxLinkFEMM.comp_fluxlinkage
     if isinstance(comp_fluxlinkage, ImportError):
         comp_fluxlinkage = property(
@@ -49,17 +43,6 @@ class FluxLinkFEMM(FluxLink):
         )
     else:
         comp_fluxlinkage = comp_fluxlinkage
-    # cf Methods.Simulation.FluxLinkFEMM.solve_FEMM
-    if isinstance(solve_FEMM, ImportError):
-        solve_FEMM = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use FluxLinkFEMM method solve_FEMM: " + str(solve_FEMM)
-                )
-            )
-        )
-    else:
-        solve_FEMM = solve_FEMM
     # save and copy methods are available in all object
     save = save
     copy = copy

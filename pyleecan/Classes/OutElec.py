@@ -51,6 +51,7 @@ except ImportError as error:
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .OutInternal import OutInternal
+from .OP import OP
 
 
 class OutElec(FrozenClass):
@@ -125,22 +126,13 @@ class OutElec(FrozenClass):
         Is=None,
         Ir=None,
         angle_rotor=None,
-        N0=None,
         angle_rotor_initial=0,
         logger_name="Pyleecan.Electrical",
-        Tem_av_ref=None,
-        Id_ref=None,
-        Iq_ref=None,
-        felec=None,
-        Ud_ref=None,
-        Uq_ref=None,
         Pj_losses=None,
-        Pem_av_ref=None,
         Us=None,
         internal=None,
-        slip_ref=0,
-        U0_ref=None,
         Us_harm=None,
+        OP=None,
         init_dict=None,
         init_str=None,
     ):
@@ -167,60 +159,33 @@ class OutElec(FrozenClass):
                 Ir = init_dict["Ir"]
             if "angle_rotor" in list(init_dict.keys()):
                 angle_rotor = init_dict["angle_rotor"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
             if "angle_rotor_initial" in list(init_dict.keys()):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-            if "Tem_av_ref" in list(init_dict.keys()):
-                Tem_av_ref = init_dict["Tem_av_ref"]
-            if "Id_ref" in list(init_dict.keys()):
-                Id_ref = init_dict["Id_ref"]
-            if "Iq_ref" in list(init_dict.keys()):
-                Iq_ref = init_dict["Iq_ref"]
-            if "felec" in list(init_dict.keys()):
-                felec = init_dict["felec"]
-            if "Ud_ref" in list(init_dict.keys()):
-                Ud_ref = init_dict["Ud_ref"]
-            if "Uq_ref" in list(init_dict.keys()):
-                Uq_ref = init_dict["Uq_ref"]
             if "Pj_losses" in list(init_dict.keys()):
                 Pj_losses = init_dict["Pj_losses"]
-            if "Pem_av_ref" in list(init_dict.keys()):
-                Pem_av_ref = init_dict["Pem_av_ref"]
             if "Us" in list(init_dict.keys()):
                 Us = init_dict["Us"]
             if "internal" in list(init_dict.keys()):
                 internal = init_dict["internal"]
-            if "slip_ref" in list(init_dict.keys()):
-                slip_ref = init_dict["slip_ref"]
-            if "U0_ref" in list(init_dict.keys()):
-                U0_ref = init_dict["U0_ref"]
             if "Us_harm" in list(init_dict.keys()):
                 Us_harm = init_dict["Us_harm"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
         self.Is = Is
         self.Ir = Ir
         self.angle_rotor = angle_rotor
-        self.N0 = N0
         self.angle_rotor_initial = angle_rotor_initial
         self.logger_name = logger_name
-        self.Tem_av_ref = Tem_av_ref
-        self.Id_ref = Id_ref
-        self.Iq_ref = Iq_ref
-        self.felec = felec
-        self.Ud_ref = Ud_ref
-        self.Uq_ref = Uq_ref
         self.Pj_losses = Pj_losses
-        self.Pem_av_ref = Pem_av_ref
         self.Us = Us
         self.internal = internal
-        self.slip_ref = slip_ref
-        self.U0_ref = U0_ref
         self.Us_harm = Us_harm
+        self.OP = OP
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -243,28 +208,23 @@ class OutElec(FrozenClass):
             + linesep
             + linesep
         )
-        OutElec_str += "N0 = " + str(self.N0) + linesep
         OutElec_str += (
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
-        OutElec_str += "Id_ref = " + str(self.Id_ref) + linesep
-        OutElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
-        OutElec_str += "felec = " + str(self.felec) + linesep
-        OutElec_str += "Ud_ref = " + str(self.Ud_ref) + linesep
-        OutElec_str += "Uq_ref = " + str(self.Uq_ref) + linesep
         OutElec_str += "Pj_losses = " + str(self.Pj_losses) + linesep
-        OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         OutElec_str += "Us = " + str(self.Us) + linesep + linesep
         if self.internal is not None:
             tmp = self.internal.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             OutElec_str += "internal = " + tmp
         else:
             OutElec_str += "internal = None" + linesep + linesep
-        OutElec_str += "slip_ref = " + str(self.slip_ref) + linesep
-        OutElec_str += "U0_ref = " + str(self.U0_ref) + linesep
         OutElec_str += "Us_harm = " + str(self.Us_harm) + linesep + linesep
+        if self.OP is not None:
+            tmp = self.OP.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OutElec_str += "OP = " + tmp
+        else:
+            OutElec_str += "OP = None" + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -280,37 +240,19 @@ class OutElec(FrozenClass):
             return False
         if not array_equal(other.angle_rotor, self.angle_rotor):
             return False
-        if other.N0 != self.N0:
-            return False
         if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
         if other.logger_name != self.logger_name:
             return False
-        if other.Tem_av_ref != self.Tem_av_ref:
-            return False
-        if other.Id_ref != self.Id_ref:
-            return False
-        if other.Iq_ref != self.Iq_ref:
-            return False
-        if other.felec != self.felec:
-            return False
-        if other.Ud_ref != self.Ud_ref:
-            return False
-        if other.Uq_ref != self.Uq_ref:
-            return False
         if other.Pj_losses != self.Pj_losses:
-            return False
-        if other.Pem_av_ref != self.Pem_av_ref:
             return False
         if other.Us != self.Us:
             return False
         if other.internal != self.internal:
             return False
-        if other.slip_ref != self.slip_ref:
-            return False
-        if other.U0_ref != self.U0_ref:
-            return False
         if other.Us_harm != self.Us_harm:
+            return False
+        if other.OP != self.OP:
             return False
         return True
 
@@ -351,28 +293,12 @@ class OutElec(FrozenClass):
             diff_list.extend(self.Ir.compare(other.Ir, name=name + ".Ir"))
         if not array_equal(other.angle_rotor, self.angle_rotor):
             diff_list.append(name + ".angle_rotor")
-        if other._N0 != self._N0:
-            diff_list.append(name + ".N0")
         if other._angle_rotor_initial != self._angle_rotor_initial:
             diff_list.append(name + ".angle_rotor_initial")
         if other._logger_name != self._logger_name:
             diff_list.append(name + ".logger_name")
-        if other._Tem_av_ref != self._Tem_av_ref:
-            diff_list.append(name + ".Tem_av_ref")
-        if other._Id_ref != self._Id_ref:
-            diff_list.append(name + ".Id_ref")
-        if other._Iq_ref != self._Iq_ref:
-            diff_list.append(name + ".Iq_ref")
-        if other._felec != self._felec:
-            diff_list.append(name + ".felec")
-        if other._Ud_ref != self._Ud_ref:
-            diff_list.append(name + ".Ud_ref")
-        if other._Uq_ref != self._Uq_ref:
-            diff_list.append(name + ".Uq_ref")
         if other._Pj_losses != self._Pj_losses:
             diff_list.append(name + ".Pj_losses")
-        if other._Pem_av_ref != self._Pem_av_ref:
-            diff_list.append(name + ".Pem_av_ref")
         if (other.Us is None and self.Us is not None) or (
             other.Us is not None and self.Us is None
         ):
@@ -387,10 +313,6 @@ class OutElec(FrozenClass):
             diff_list.extend(
                 self.internal.compare(other.internal, name=name + ".internal")
             )
-        if other._slip_ref != self._slip_ref:
-            diff_list.append(name + ".slip_ref")
-        if other._U0_ref != self._U0_ref:
-            diff_list.append(name + ".U0_ref")
         if (other.Us_harm is None and self.Us_harm is not None) or (
             other.Us_harm is not None and self.Us_harm is None
         ):
@@ -399,6 +321,12 @@ class OutElec(FrozenClass):
             diff_list.extend(
                 self.Us_harm.compare(other.Us_harm, name=name + ".Us_harm")
             )
+        if (other.OP is None and self.OP is not None) or (
+            other.OP is not None and self.OP is None
+        ):
+            diff_list.append(name + ".OP None mismatch")
+        elif self.OP is not None:
+            diff_list.extend(self.OP.compare(other.OP, name=name + ".OP"))
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -413,22 +341,13 @@ class OutElec(FrozenClass):
         S += getsizeof(self.Is)
         S += getsizeof(self.Ir)
         S += getsizeof(self.angle_rotor)
-        S += getsizeof(self.N0)
         S += getsizeof(self.angle_rotor_initial)
         S += getsizeof(self.logger_name)
-        S += getsizeof(self.Tem_av_ref)
-        S += getsizeof(self.Id_ref)
-        S += getsizeof(self.Iq_ref)
-        S += getsizeof(self.felec)
-        S += getsizeof(self.Ud_ref)
-        S += getsizeof(self.Uq_ref)
         S += getsizeof(self.Pj_losses)
-        S += getsizeof(self.Pem_av_ref)
         S += getsizeof(self.Us)
         S += getsizeof(self.internal)
-        S += getsizeof(self.slip_ref)
-        S += getsizeof(self.U0_ref)
         S += getsizeof(self.Us_harm)
+        S += getsizeof(self.OP)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -485,17 +404,9 @@ class OutElec(FrozenClass):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
-        OutElec_dict["N0"] = self.N0
         OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         OutElec_dict["logger_name"] = self.logger_name
-        OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
-        OutElec_dict["Id_ref"] = self.Id_ref
-        OutElec_dict["Iq_ref"] = self.Iq_ref
-        OutElec_dict["felec"] = self.felec
-        OutElec_dict["Ud_ref"] = self.Ud_ref
-        OutElec_dict["Uq_ref"] = self.Uq_ref
         OutElec_dict["Pj_losses"] = self.Pj_losses
-        OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
         if self.Us is None:
             OutElec_dict["Us"] = None
         else:
@@ -512,12 +423,18 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        OutElec_dict["slip_ref"] = self.slip_ref
-        OutElec_dict["U0_ref"] = self.U0_ref
         if self.Us_harm is None:
             OutElec_dict["Us_harm"] = None
         else:
             OutElec_dict["Us_harm"] = self.Us_harm.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        if self.OP is None:
+            OutElec_dict["OP"] = None
+        else:
+            OutElec_dict["OP"] = self.OP.as_dict(
                 type_handle_ndarray=type_handle_ndarray,
                 keep_function=keep_function,
                 **kwargs
@@ -533,23 +450,15 @@ class OutElec(FrozenClass):
         self.Is = None
         self.Ir = None
         self.angle_rotor = None
-        self.N0 = None
         self.angle_rotor_initial = None
         self.logger_name = None
-        self.Tem_av_ref = None
-        self.Id_ref = None
-        self.Iq_ref = None
-        self.felec = None
-        self.Ud_ref = None
-        self.Uq_ref = None
         self.Pj_losses = None
-        self.Pem_av_ref = None
         self.Us = None
         if self.internal is not None:
             self.internal._set_None()
-        self.slip_ref = None
-        self.U0_ref = None
         self.Us_harm = None
+        if self.OP is not None:
+            self.OP._set_None()
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -661,24 +570,6 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_N0(self):
-        """getter of N0"""
-        return self._N0
-
-    def _set_N0(self, value):
-        """setter of N0"""
-        check_var("N0", value, "float")
-        self._N0 = value
-
-    N0 = property(
-        fget=_get_N0,
-        fset=_set_N0,
-        doc=u"""Rotor speed
-
-        :Type: float
-        """,
-    )
-
     def _get_angle_rotor_initial(self):
         """getter of angle_rotor_initial"""
         return self._angle_rotor_initial
@@ -715,114 +606,6 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_Tem_av_ref(self):
-        """getter of Tem_av_ref"""
-        return self._Tem_av_ref
-
-    def _set_Tem_av_ref(self, value):
-        """setter of Tem_av_ref"""
-        check_var("Tem_av_ref", value, "float")
-        self._Tem_av_ref = value
-
-    Tem_av_ref = property(
-        fget=_get_Tem_av_ref,
-        fset=_set_Tem_av_ref,
-        doc=u"""Theorical Average Electromagnetic torque
-
-        :Type: float
-        """,
-    )
-
-    def _get_Id_ref(self):
-        """getter of Id_ref"""
-        return self._Id_ref
-
-    def _set_Id_ref(self, value):
-        """setter of Id_ref"""
-        check_var("Id_ref", value, "float")
-        self._Id_ref = value
-
-    Id_ref = property(
-        fget=_get_Id_ref,
-        fset=_set_Id_ref,
-        doc=u"""d-axis current rms value
-
-        :Type: float
-        """,
-    )
-
-    def _get_Iq_ref(self):
-        """getter of Iq_ref"""
-        return self._Iq_ref
-
-    def _set_Iq_ref(self, value):
-        """setter of Iq_ref"""
-        check_var("Iq_ref", value, "float")
-        self._Iq_ref = value
-
-    Iq_ref = property(
-        fget=_get_Iq_ref,
-        fset=_set_Iq_ref,
-        doc=u"""q-axis current rms value
-
-        :Type: float
-        """,
-    )
-
-    def _get_felec(self):
-        """getter of felec"""
-        return self._felec
-
-    def _set_felec(self, value):
-        """setter of felec"""
-        check_var("felec", value, "float")
-        self._felec = value
-
-    felec = property(
-        fget=_get_felec,
-        fset=_set_felec,
-        doc=u"""Electrical Frequency
-
-        :Type: float
-        """,
-    )
-
-    def _get_Ud_ref(self):
-        """getter of Ud_ref"""
-        return self._Ud_ref
-
-    def _set_Ud_ref(self, value):
-        """setter of Ud_ref"""
-        check_var("Ud_ref", value, "float")
-        self._Ud_ref = value
-
-    Ud_ref = property(
-        fget=_get_Ud_ref,
-        fset=_set_Ud_ref,
-        doc=u"""d-axis voltage rms value
-
-        :Type: float
-        """,
-    )
-
-    def _get_Uq_ref(self):
-        """getter of Uq_ref"""
-        return self._Uq_ref
-
-    def _set_Uq_ref(self, value):
-        """setter of Uq_ref"""
-        check_var("Uq_ref", value, "float")
-        self._Uq_ref = value
-
-    Uq_ref = property(
-        fget=_get_Uq_ref,
-        fset=_set_Uq_ref,
-        doc=u"""q-axis voltage rms value
-
-        :Type: float
-        """,
-    )
-
     def _get_Pj_losses(self):
         """getter of Pj_losses"""
         return self._Pj_losses
@@ -836,24 +619,6 @@ class OutElec(FrozenClass):
         fget=_get_Pj_losses,
         fset=_set_Pj_losses,
         doc=u"""Electrical Joule losses
-
-        :Type: float
-        """,
-    )
-
-    def _get_Pem_av_ref(self):
-        """getter of Pem_av_ref"""
-        return self._Pem_av_ref
-
-    def _set_Pem_av_ref(self, value):
-        """setter of Pem_av_ref"""
-        check_var("Pem_av_ref", value, "float")
-        self._Pem_av_ref = value
-
-    Pem_av_ref = property(
-        fget=_get_Pem_av_ref,
-        fset=_set_Pem_av_ref,
-        doc=u"""Theorical Average Electromagnetic Power
 
         :Type: float
         """,
@@ -916,42 +681,6 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_slip_ref(self):
-        """getter of slip_ref"""
-        return self._slip_ref
-
-    def _set_slip_ref(self, value):
-        """setter of slip_ref"""
-        check_var("slip_ref", value, "float")
-        self._slip_ref = value
-
-    slip_ref = property(
-        fget=_get_slip_ref,
-        fset=_set_slip_ref,
-        doc=u"""Rotor mechanical slip
-
-        :Type: float
-        """,
-    )
-
-    def _get_U0_ref(self):
-        """getter of U0_ref"""
-        return self._U0_ref
-
-    def _set_U0_ref(self, value):
-        """setter of U0_ref"""
-        check_var("U0_ref", value, "float")
-        self._U0_ref = value
-
-    U0_ref = property(
-        fget=_get_U0_ref,
-        fset=_set_U0_ref,
-        doc=u"""stator voltage (phase to neutral)
-
-        :Type: float
-        """,
-    )
-
     def _get_Us_harm(self):
         """getter of Us_harm"""
         return self._Us_harm
@@ -976,5 +705,33 @@ class OutElec(FrozenClass):
         doc=u"""Harmonic stator voltage as a function of time (each column correspond to one phase)
 
         :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
+
+    def _get_OP(self):
+        """getter of OP"""
+        return self._OP
+
+    def _set_OP(self, value):
+        """setter of OP"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "OP")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OP()
+        check_var("OP", value, "OP")
+        self._OP = value
+
+        if self._OP is not None:
+            self._OP.parent = self
+
+    OP = property(
+        fget=_get_OP,
+        fset=_set_OP,
+        doc=u"""Operating Point
+
+        :Type: OP
         """,
     )

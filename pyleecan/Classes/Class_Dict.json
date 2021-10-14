@@ -1614,8 +1614,7 @@
         "desc": "Electric module: Flux Linkage with FEMM",
         "is_internal": false,
         "methods": [
-            "comp_fluxlinkage",
-            "solve_FEMM"
+            "comp_fluxlinkage"
         ],
         "mother": "FluxLink",
         "name": "FluxLinkFEMM",
@@ -3854,8 +3853,7 @@
         "desc": "Electric module: Magnetic Inductance with FEMM",
         "is_internal": false,
         "methods": [
-            "comp_inductance",
-            "solve_FEMM"
+            "comp_inductance"
         ],
         "mother": "IndMag",
         "name": "IndMagFEMM",
@@ -7549,6 +7547,192 @@
             }
         ]
     },
+    "OP": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "OPdq",
+            "OPslip"
+        ],
+        "desc": "Define the Operating Point of the simulation",
+        "is_internal": false,
+        "methods": [
+            "get_machine_from_parent"
+        ],
+        "mother": "",
+        "name": "OP",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/OP.csv",
+        "properties": [
+            {
+                "desc": "Rotor speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "float",
+                "unit": "rpm",
+                "value": null
+            },
+            {
+                "desc": "Electrical Frequency",
+                "max": "",
+                "min": "",
+                "name": "felec",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
+            },
+            {
+                "desc": "Theorical Average Electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "float",
+                "unit": "N.m",
+                "value": null
+            },
+            {
+                "desc": "Theorical Average Electromagnetic Power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_ref",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            }
+        ]
+    },
+    "OPdq": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Operating Point defined in DQH frame",
+        "is_internal": false,
+        "methods": [
+            "get_Id_Iq",
+            "get_felec",
+            "get_N0",
+            "get_Ud_Uq"
+        ],
+        "mother": "OP",
+        "name": "OPdq",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/OPdq.csv",
+        "properties": [
+            {
+                "desc": "d-axis current rms value",
+                "max": "",
+                "min": "",
+                "name": "Id_ref",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "q-axis current rms value",
+                "max": "",
+                "min": "",
+                "name": "Iq_ref",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "d-axis voltage rms value",
+                "max": "",
+                "min": "",
+                "name": "Ud_ref",
+                "type": "float",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "q-axis voltage rms value",
+                "max": "",
+                "min": "",
+                "name": "Uq_ref",
+                "type": "float",
+                "unit": "Vrms",
+                "value": null
+            }
+        ]
+    },
+    "OPslip": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Operating Point defined with slip, I0",
+        "is_internal": false,
+        "methods": [
+            "get_Id_Iq",
+            "get_felec",
+            "get_N0",
+            "get_Ud_Uq"
+        ],
+        "mother": "OP",
+        "name": "OPslip",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/OPslip.csv",
+        "properties": [
+            {
+                "desc": "Current rms value",
+                "max": "",
+                "min": "",
+                "name": "I0_ref",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Current phase",
+                "max": "",
+                "min": "",
+                "name": "IPhi0_ref",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "desc": "Rotor mechanical slip",
+                "max": "",
+                "min": "",
+                "name": "slip_ref",
+                "type": "float",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "stator voltage (phase to neutral)",
+                "max": "",
+                "min": "",
+                "name": "U0_ref",
+                "type": "float",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Voltage phase",
+                "max": "",
+                "min": "",
+                "name": "UPhi0_ref",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            }
+        ]
+    },
     "OptiConstraint": {
         "constants": [
             {
@@ -7983,15 +8167,6 @@
                 "value": null
             },
             {
-                "desc": "Rotor speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "float",
-                "unit": "rpm",
-                "value": null
-            },
-            {
                 "desc": "Initial angular position of the rotor at t=0",
                 "max": "",
                 "min": "",
@@ -8010,73 +8185,10 @@
                 "value": "Pyleecan.Electrical"
             },
             {
-                "desc": "Theorical Average Electromagnetic torque",
-                "max": "",
-                "min": "",
-                "name": "Tem_av_ref",
-                "type": "float",
-                "unit": "N.m",
-                "value": null
-            },
-            {
-                "desc": "d-axis current rms value",
-                "max": "",
-                "min": "",
-                "name": "Id_ref",
-                "type": "float",
-                "unit": "Arms",
-                "value": null
-            },
-            {
-                "desc": "q-axis current rms value",
-                "max": "",
-                "min": "",
-                "name": "Iq_ref",
-                "type": "float",
-                "unit": "Arms",
-                "value": null
-            },
-            {
-                "desc": "Electrical Frequency",
-                "max": "",
-                "min": "",
-                "name": "felec",
-                "type": "float",
-                "unit": "Hz",
-                "value": null
-            },
-            {
-                "desc": "d-axis voltage rms value",
-                "max": "",
-                "min": "",
-                "name": "Ud_ref",
-                "type": "float",
-                "unit": "Vrms",
-                "value": null
-            },
-            {
-                "desc": "q-axis voltage rms value",
-                "max": "",
-                "min": "",
-                "name": "Uq_ref",
-                "type": "float",
-                "unit": "Vrms",
-                "value": null
-            },
-            {
                 "desc": "Electrical Joule losses",
                 "max": "",
                 "min": "",
                 "name": "Pj_losses",
-                "type": "float",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Theorical Average Electromagnetic Power",
-                "max": "",
-                "min": "",
-                "name": "Pem_av_ref",
                 "type": "float",
                 "unit": "W",
                 "value": null
@@ -8100,24 +8212,6 @@
                 "value": null
             },
             {
-                "desc": "Rotor mechanical slip",
-                "max": "",
-                "min": "",
-                "name": "slip_ref",
-                "type": "float",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "stator voltage (phase to neutral)",
-                "max": "",
-                "min": "",
-                "name": "U0_ref",
-                "type": "float",
-                "unit": "Vrms",
-                "value": null
-            },
-            {
                 "desc": "Harmonic stator voltage as a function of time (each column correspond to one phase)",
                 "max": "",
                 "min": "",
@@ -8125,6 +8219,15 @@
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "V",
                 "value": "None"
+            },
+            {
+                "desc": "Operating Point",
+                "max": "",
+                "min": "",
+                "name": "OP",
+                "type": "OP",
+                "unit": "-",
+                "value": null
             }
         ]
     },
