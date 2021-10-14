@@ -8,7 +8,7 @@ from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
 from Tests import save_plot_path as save_path
 
-is_show_fig = True
+is_show_fig = False
 
 
 def test_InVoltage_PWM():
