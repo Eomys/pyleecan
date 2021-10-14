@@ -32,7 +32,7 @@ from .ImportMatrix import ImportMatrix
 
 
 class InputForce(Input):
-    """Input to start with the structural one """
+    """Input to start with the structural one"""
 
     VERSION = 1
 
