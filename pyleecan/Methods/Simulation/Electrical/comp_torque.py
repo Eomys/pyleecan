@@ -14,7 +14,7 @@ def comp_torque(self, output):
         an Output object
     """
 
-    N0 = output.elec.N0
+    N0 = output.elec.OP.get_N0()
     omega = 2 * pi * N0 / 60
 
     P = output.elec.Pem_av_ref

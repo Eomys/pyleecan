@@ -54,7 +54,7 @@ def test_compare():
     simu.struct = None
     simu.postproc_list = [
         PostPlot(param_list=[1, 2], param_dict={"test": 2}),
-        PostFunction(run="lambda out: out.elec.N0"),
+        PostFunction(run="lambda out: out.elec.OP.get_N0()"),
     ]
 
     # Create the differences

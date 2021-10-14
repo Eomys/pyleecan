@@ -1,7 +1,7 @@
 from ....Methods.Simulation.Input import InputError
 
 
-def get_felec(self):
+def get_N0(self):
     """Returns the Rotor speed
 
     Parameters

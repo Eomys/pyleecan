@@ -7573,7 +7573,7 @@
         ],
         "mother": "",
         "name": "OP",
-        "package": "Output",
+        "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/OP.csv",
         "properties": [
             {
@@ -7628,13 +7628,14 @@
             "get_Id_Iq",
             "get_felec",
             "get_N0",
+            "get_slip",
             "get_Ud_Uq",
             "set_Id_Iq",
             "get_I0_Phi0"
         ],
         "mother": "OP",
         "name": "OPdq",
-        "package": "Output",
+        "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/OPdq.csv",
         "properties": [
             {
@@ -7689,13 +7690,14 @@
             "get_Id_Iq",
             "get_felec",
             "get_N0",
+            "get_slip",
             "get_Ud_Uq",
             "set_Id_Iq",
             "get_I0_Phi0"
         ],
         "mother": "OP",
         "name": "OPslip",
-        "package": "Output",
+        "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/OPslip.csv",
         "properties": [
             {

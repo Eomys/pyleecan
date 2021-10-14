@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # File generated according to Generator/ClassesRef/Simulation/OP.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OP
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/OP
 """
 
 from os import linesep
@@ -18,7 +18,7 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.OP.get_machine_from_parent import get_machine_from_parent
+    from ..Methods.Simulation.OP.get_machine_from_parent import get_machine_from_parent
 except ImportError as error:
     get_machine_from_parent = error
 
@@ -31,7 +31,7 @@ class OP(FrozenClass):
 
     VERSION = 1
 
-    # cf Methods.Output.OP.get_machine_from_parent
+    # cf Methods.Simulation.OP.get_machine_from_parent
     if isinstance(get_machine_from_parent, ImportError):
         get_machine_from_parent = property(
             fget=lambda x: raise_(

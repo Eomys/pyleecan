@@ -264,7 +264,7 @@ class Test_InCurrent_meth(object):
         )
         assert_array_almost_equal(output.elec.get_Is().values, Is_exp.T)
         assert_array_almost_equal(output.get_angle_rotor(), angle_rotor_exp)
-        assert_array_almost_equal(output.elec.N0, N0)
+        assert_array_almost_equal(output.elec.OP.get_N0(), N0)
         assert_array_almost_equal(output.geo.rot_dir, rot_dir)
 
         # Check Id/Iq by enforcing Is

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # File generated according to Generator/ClassesRef/Simulation/OPslip.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OPslip
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/OPslip
 """
 
 from os import linesep
@@ -18,27 +18,32 @@ from .OP import OP
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.OPslip.get_Id_Iq import get_Id_Iq
+    from ..Methods.Simulation.OPslip.get_Id_Iq import get_Id_Iq
 except ImportError as error:
     get_Id_Iq = error
 
 try:
-    from ..Methods.Output.OPslip.get_felec import get_felec
+    from ..Methods.Simulation.OPslip.get_felec import get_felec
 except ImportError as error:
     get_felec = error
 
 try:
-    from ..Methods.Output.OPslip.get_N0 import get_N0
+    from ..Methods.Simulation.OPslip.get_N0 import get_N0
 except ImportError as error:
     get_N0 = error
 
 try:
-    from ..Methods.Output.OPslip.get_Ud_Uq import get_Ud_Uq
+    from ..Methods.Simulation.OPslip.get_slip import get_slip
+except ImportError as error:
+    get_slip = error
+
+try:
+    from ..Methods.Simulation.OPslip.get_Ud_Uq import get_Ud_Uq
 except ImportError as error:
     get_Ud_Uq = error
 
 try:
-    from ..Methods.Output.OPslip.set_Id_Iq import set_Id_Iq
+    from ..Methods.Simulation.OPslip.set_Id_Iq import set_Id_Iq
 except ImportError as error:
     set_Id_Iq = error
 
@@ -57,7 +62,7 @@ class OPslip(OP):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.OPslip.get_Id_Iq
+    # cf Methods.Simulation.OPslip.get_Id_Iq
     if isinstance(get_Id_Iq, ImportError):
         get_Id_Iq = property(
             fget=lambda x: raise_(
@@ -66,7 +71,7 @@ class OPslip(OP):
         )
     else:
         get_Id_Iq = get_Id_Iq
-    # cf Methods.Output.OPslip.get_felec
+    # cf Methods.Simulation.OPslip.get_felec
     if isinstance(get_felec, ImportError):
         get_felec = property(
             fget=lambda x: raise_(
@@ -75,7 +80,7 @@ class OPslip(OP):
         )
     else:
         get_felec = get_felec
-    # cf Methods.Output.OPslip.get_N0
+    # cf Methods.Simulation.OPslip.get_N0
     if isinstance(get_N0, ImportError):
         get_N0 = property(
             fget=lambda x: raise_(
@@ -84,7 +89,16 @@ class OPslip(OP):
         )
     else:
         get_N0 = get_N0
-    # cf Methods.Output.OPslip.get_Ud_Uq
+    # cf Methods.Simulation.OPslip.get_slip
+    if isinstance(get_slip, ImportError):
+        get_slip = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OPslip method get_slip: " + str(get_slip))
+            )
+        )
+    else:
+        get_slip = get_slip
+    # cf Methods.Simulation.OPslip.get_Ud_Uq
     if isinstance(get_Ud_Uq, ImportError):
         get_Ud_Uq = property(
             fget=lambda x: raise_(
@@ -93,7 +107,7 @@ class OPslip(OP):
         )
     else:
         get_Ud_Uq = get_Ud_Uq
-    # cf Methods.Output.OPslip.set_Id_Iq
+    # cf Methods.Simulation.OPslip.set_Id_Iq
     if isinstance(set_Id_Iq, ImportError):
         set_Id_Iq = property(
             fget=lambda x: raise_(
