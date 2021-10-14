@@ -58,7 +58,7 @@ def is_inside(self, Z, if_online=False):
                 is_bot = True
 
         else:
-            # If the point selected is inside the breanch on the y-axis
+            # If the point selected is inside the branch on the y-axis
             if (imag(point) > imag(Z) - eps) and (imag(point) < imag(Z) + eps):
                 if real(point) - real(Z) > 0:
                     #The point is on the left of Z
