@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ....Functions.Simulation.create_from_axis import create_from_axis
 
 
@@ -84,7 +83,10 @@ def comp_axes(self, output):
     if "antiperiod" in Time_Tem.symmetries:
         Time_Tem.symmetries["period"] = Time_Tem.symmetries.pop("antiperiod")
 
+    # Compute slice axis
+    Slice = self.Slice_enforced.get_data()
+
     # Store in axis dict
-    axes_dict = {"Time": Time, "Angle": Angle, "Time_Tem": Time_Tem}
+    axes_dict = {"Time": Time, "Angle": Angle, "Time_Tem": Time_Tem, "z": Slice}
 
     return axes_dict

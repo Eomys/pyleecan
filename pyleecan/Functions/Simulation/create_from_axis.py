@@ -32,7 +32,6 @@ def create_from_axis(axis_in, per, is_aper, is_include_per, is_remove_aper=False
     if is_include_per:
         try:
             # Reduce axis to the machine periodicity
-            per = per * 2 if is_aper else per
             axis_out = axis_in.get_axis_periodic(per, is_aper and not is_remove_aper)
 
         except AxisError:

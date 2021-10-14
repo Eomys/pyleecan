@@ -1,5 +1,5 @@
 from logging import getLogger
-from os.path import dirname, isfile
+from os.path import dirname, isfile, basename, splitext
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import (
@@ -13,10 +13,11 @@ from PySide2.QtCore import QUrl
 from PySide2.QtGui import QDesktopServices, QIcon
 from PySide2.QtWidgets import QDialog, QFileDialog, QMessageBox
 
+
 from ...Classes.LamSlot import LamSlot
 from ...Classes.SlotUD import SlotUD
 from ...definitions import config_dict
-from ...GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
+from ...GUI.Dxf.dxf_to_pyleecan import dxf_to_pyleecan_list, convert_dxf_with_FEMM
 from ...GUI.Resources import pixmap_dict
 from ...GUI.Tools.MPLCanvas import MPLCanvas
 from ...loggers import GUI_LOG_NAME
@@ -33,6 +34,8 @@ Z_TOL = 1e-4  # Point comparison tolerance
 
 class DXF_Slot(Ui_DXF_Slot, QDialog):
     """Dialog to create SlotUD objects from DXF files"""
+
+    convert_dxf_with_FEMM = convert_dxf_with_FEMM
 
     def __init__(self, dxf_path=None, Zs=None, lam=None):
         """Initialize the Dialog
@@ -95,11 +98,17 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.b_reset.pressed.connect(self.update_graph)
         self.b_cancel.pressed.connect(self.remove_selection)
         self.b_tuto.pressed.connect(self.open_tuto)
+        self.is_convert.toggled.connect(self.enable_tolerance)
         self.lf_center_x.editingFinished.connect(self.set_center)
         self.lf_center_y.editingFinished.connect(self.set_center)
 
         # Display the GUI
         self.show()
+
+    def enable_tolerance(self):
+        """Enable/Disable tolerance widget"""
+        self.lf_tol.setEnabled(self.is_convert.isChecked())
+        self.in_tol.setEnabled(self.is_convert.isChecked())
 
     def open_document(self):
         """Open a new dxf in the viewer
@@ -109,6 +118,16 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self : DXF_Slot
             a DXF_Slot object
         """
+
+        # Check convertion
+        if self.is_convert.isChecked():
+            getLogger(GUI_LOG_NAME).info("Converting dxf file: " + self.dxf_path)
+            self.dxf_path = self.convert_dxf_with_FEMM(
+                self.dxf_path, self.lf_tol.value()
+            )
+            self.w_path_selector.blockSignals(True)
+            self.w_path_selector.set_path_txt(self.dxf_path)
+            self.w_path_selector.blockSignals(False)
 
         getLogger(GUI_LOG_NAME).debug("Reading dxf file: " + self.dxf_path)
         # Read the DXF file
@@ -471,6 +490,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             )[0]
             if save_file_path not in ["", ".json", None]:
                 self.save_path = save_file_path
+                slot.name = splitext(basename(self.save_path))[0]
                 try:
                     slot.save(save_file_path)
                     self.accept()

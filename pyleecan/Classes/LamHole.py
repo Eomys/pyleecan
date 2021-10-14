@@ -82,6 +82,7 @@ from ._check import InitUnKnowClassError
 from .Hole import Hole
 from .Material import Material
 from .Notch import Notch
+from .Skew import Skew
 from .Bore import Bore
 
 
@@ -243,6 +244,7 @@ class LamHole(Lamination):
         is_stator=True,
         axial_vent=-1,
         notch=-1,
+        skew=None,
         yoke_notch=-1,
         bore=None,
         init_dict=None,
@@ -287,6 +289,8 @@ class LamHole(Lamination):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "skew" in list(init_dict.keys()):
+                skew = init_dict["skew"]
             if "yoke_notch" in list(init_dict.keys()):
                 yoke_notch = init_dict["yoke_notch"]
             if "bore" in list(init_dict.keys()):
@@ -306,6 +310,7 @@ class LamHole(Lamination):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            skew=skew,
             yoke_notch=yoke_notch,
             bore=bore,
         )

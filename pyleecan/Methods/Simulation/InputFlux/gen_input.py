@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+from numpy import array
 
-from numpy import arange
+from SciDataTool import DataPattern
 
 from ....Classes.OutMag import OutMag
 from ....Classes.Simulation import Simulation
@@ -25,9 +25,10 @@ def gen_input(self):
     elif isinstance(self.parent.parent, Simulation):
         simu = self.parent.parent
     else:
-        raise InputError(
-            "ERROR: InputCurrent object should be inside a Simulation object"
-        )
+        raise InputError("InputFlux object should be inside a Simulation object")
+
+    if simu.parent is None:
+        raise InputError("The Simulation object must be in an Output object to run")
 
     # Set discretization
     if self.N0 is None:
@@ -62,10 +63,30 @@ def gen_input(self):
         is_antiper_t=is_antiper_t,
     )
 
-    if simu.parent is None:
-        raise InputError(
-            "ERROR: The Simulation object must be in an Output object to run"
+    # Compute slices and angles
+    if "slice" in axes_values:
+        Slice = DataPattern(
+            name="z",
+            unit="m",
+            values=axes_values["z"],
+            rebuild_indices=axes_values["slice"],
+            unique_indices=axes_values["slice"],
+            values_whole=axes_values["z"],
         )
+    else:
+        # Single slice
+        Slice = DataPattern(
+            name="z",
+            unit="m",
+            values=array([0], dtype=float),
+            rebuild_indices=[0],
+            unique_indices=[0],
+            values_whole=array([0], dtype=float),
+        )
+
+    # Store in axes_dict
+    axes_dict["z"] = Slice
+
     # Save the Output in the correct place
     if N0 is not None:
         simu.parent.elec.N0 = N0

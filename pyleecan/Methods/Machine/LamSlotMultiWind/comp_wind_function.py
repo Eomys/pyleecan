@@ -40,6 +40,11 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0, per_a=1):
     Zs = self.get_Zs()  # Number of slot
     Zs0 = int(Zs / per_a)
 
+    if self.sym_dict_enforced is not None:
+        slot_list = self.slot_list[0:Zs0]
+    else:
+        slot_list = self.slot_list
+
     wind_mat = self.winding.get_connection_mat(Zs)
     # sum wind_mat along Nlay_rad axis
     wind_mat = np_sum(wind_mat, axis=0)
@@ -52,7 +57,7 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0, per_a=1):
         angle = (angle - alpha_mmf0) % (2 * pi)
 
     wf = zeros((qs, Na))
-    for ii, slot in enumerate(self.slot_list):
+    for ii, slot in enumerate(slot_list):
         slot_angle = slot.comp_angle_active_eq()
         slot_opening = slot.comp_angle_opening()
         for n in range(Ntan):

@@ -1,5 +1,5 @@
 from numpy import pi
-from SciDataTool import Data1D, DataLinspace
+from SciDataTool import Data1D, DataLinspace, Norm_ref
 from ....Methods.Simulation.Input import InputError
 
 
@@ -40,13 +40,13 @@ def comp_axes(self, machine, N0=None):
 
     # Setup normalizations for time and angle axes
     norm_time = {
-        "elec_order": f_elec,
-        "mech_order": f_elec / p,
+        "elec_order": Norm_ref(ref=f_elec),
+        "mech_order": Norm_ref(ref=f_elec / p),
     }
     if N0 is not None:
-        norm_time["angle_rotor"] = 1 / (360 * N0 / 60)
+        norm_time["angle_rotor"] = Norm_ref(ref=1 / (360 * N0 / 60))
 
-    norm_angle = {"space_order": p, "distance": 1 / Rag}
+    norm_angle = {"space_order": Norm_ref(ref=p), "distance": Norm_ref(ref=1 / Rag)}
 
     # Create time axis
     if self.time is None:

@@ -118,6 +118,7 @@ class HoleUD(HoleMag):
         self,
         surf_list=-1,
         magnet_dict=-1,
+        name="",
         Zh=36,
         mat_void=-1,
         magnetization_dict_offset=None,
@@ -144,6 +145,8 @@ class HoleUD(HoleMag):
                 surf_list = init_dict["surf_list"]
             if "magnet_dict" in list(init_dict.keys()):
                 magnet_dict = init_dict["magnet_dict"]
+            if "name" in list(init_dict.keys()):
+                name = init_dict["name"]
             if "Zh" in list(init_dict.keys()):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
@@ -155,6 +158,7 @@ class HoleUD(HoleMag):
         # Set the properties (value check and convertion are done in setter)
         self.surf_list = surf_list
         self.magnet_dict = magnet_dict
+        self.name = name
         # Call HoleMag init
         super(HoleUD, self).__init__(
             Zh=Zh,
@@ -186,6 +190,7 @@ class HoleUD(HoleMag):
                 + linesep
             )
             HoleUD_str += "magnet_dict[" + key + "] =" + tmp + linesep + linesep
+        HoleUD_str += 'name = "' + str(self.name) + '"' + linesep
         return HoleUD_str
 
     def __eq__(self, other):
@@ -200,6 +205,8 @@ class HoleUD(HoleMag):
         if other.surf_list != self.surf_list:
             return False
         if other.magnet_dict != self.magnet_dict:
+            return False
+        if other.name != self.name:
             return False
         return True
 
@@ -244,6 +251,8 @@ class HoleUD(HoleMag):
                         other.magnet_dict[key], name=name + ".magnet_dict"
                     )
                 )
+        if other._name != self._name:
+            diff_list.append(name + ".name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -261,6 +270,7 @@ class HoleUD(HoleMag):
         if self.magnet_dict is not None:
             for key, value in self.magnet_dict.items():
                 S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.name)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -308,6 +318,7 @@ class HoleUD(HoleMag):
                     )
                 else:
                     HoleUD_dict["magnet_dict"][key] = None
+        HoleUD_dict["name"] = self.name
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         HoleUD_dict["__class__"] = "HoleUD"
@@ -318,6 +329,7 @@ class HoleUD(HoleMag):
 
         self.surf_list = None
         self.magnet_dict = None
+        self.name = None
         # Set to None the properties inherited from HoleMag
         super(HoleUD, self)._set_None()
 
@@ -382,5 +394,23 @@ class HoleUD(HoleMag):
         doc=u"""dictionary with the magnet for the Hole (None to remove magnet, key should be magnet_X)
 
         :Type: {Magnet}
+        """,
+    )
+
+    def _get_name(self):
+        """getter of name"""
+        return self._name
+
+    def _set_name(self, value):
+        """setter of name"""
+        check_var("name", value, "str")
+        self._name = value
+
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the hole (for save)
+
+        :Type: str
         """,
     )

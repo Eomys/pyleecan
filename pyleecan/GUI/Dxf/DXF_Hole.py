@@ -1,5 +1,5 @@
 from logging import getLogger
-from os.path import dirname, isfile
+from os.path import dirname, isfile, splitext, basename
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg,
@@ -19,11 +19,10 @@ from PySide2.QtWidgets import (
     QPushButton,
     QHeaderView,
 )
-
 from ...Classes.HoleUD import HoleUD
 from ...Classes.Magnet import Magnet
 from ...Classes.SurfLine import SurfLine
-from ...GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
+from ...GUI.Dxf.dxf_to_pyleecan import dxf_to_pyleecan_list, convert_dxf_with_FEMM
 from ...GUI.Resources import pixmap_dict
 from ...GUI.Tools.MPLCanvas import MPLCanvas
 from ...GUI.Tools.FloatEdit import FloatEdit
@@ -49,6 +48,8 @@ Z_TOL = 1e-4  # Point comparison tolerance
 
 class DXF_Hole(Ui_DXF_Hole, QDialog):
     """Dialog to create HoleUD objects from DXF files"""
+
+    convert_dxf_with_FEMM = convert_dxf_with_FEMM
 
     def __init__(self, dxf_path=None, Zh=None, Lmag=None, lam=None):
         """Initialize the Dialog
@@ -140,11 +141,17 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.b_reset.pressed.connect(self.update_graph)
         self.b_cancel.pressed.connect(self.remove_selection)
         self.b_tuto.pressed.connect(self.open_tuto)
+        self.is_convert.toggled.connect(self.enable_tolerance)
         self.lf_center_x.editingFinished.connect(self.set_center)
         self.lf_center_y.editingFinished.connect(self.set_center)
 
         # Display the GUI
         self.show()
+
+    def enable_tolerance(self):
+        """Enable/Disable tolerance widget"""
+        self.lf_tol.setEnabled(self.is_convert.isChecked())
+        self.in_tol.setEnabled(self.is_convert.isChecked())
 
     def open_document(self):
         """Open a new dxf in the viewer
@@ -154,6 +161,16 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self : DXF_Hole
             a DXF_Hole object
         """
+
+        # Check convertion
+        if self.is_convert.isChecked():
+            getLogger(GUI_LOG_NAME).info("Converting dxf file: " + self.dxf_path)
+            self.dxf_path = self.convert_dxf_with_FEMM(
+                self.dxf_path, self.lf_tol.value()
+            )
+            self.w_path_selector.blockSignals(True)
+            self.w_path_selector.set_path_txt(self.dxf_path)
+            self.w_path_selector.blockSignals(False)
 
         getLogger(GUI_LOG_NAME).debug("Reading dxf file: " + self.dxf_path)
         # Read the DXF file
@@ -689,6 +706,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         )[0]
         if save_file_path not in ["", ".json", None]:
             self.save_path = save_file_path
+            hole.name = splitext(basename(self.save_path))[0]
             try:
                 hole.save(save_file_path)
                 self.accept()

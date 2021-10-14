@@ -27,8 +27,14 @@ try:
 except ImportError as error:
     comp_axes = error
 
+try:
+    from ..Methods.Simulation.Magnetics.get_slice_model import get_slice_model
+except ImportError as error:
+    get_slice_model = error
+
 
 from ._check import InitUnKnowClassError
+from .SliceModel import SliceModel
 
 
 class Magnetics(FrozenClass):
@@ -55,6 +61,18 @@ class Magnetics(FrozenClass):
         )
     else:
         comp_axes = comp_axes
+    # cf Methods.Simulation.Magnetics.get_slice_model
+    if isinstance(get_slice_model, ImportError):
+        get_slice_model = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Magnetics method get_slice_model: "
+                    + str(get_slice_model)
+                )
+            )
+        )
+    else:
+        get_slice_model = get_slice_model
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -75,6 +93,9 @@ class Magnetics(FrozenClass):
         angle_stator_shift=0,
         angle_rotor_shift=0,
         logger_name="Pyleecan.Magnetics",
+        Slice_enforced=None,
+        Nslices_enforced=None,
+        type_distribution_enforced=None,
         init_dict=None,
         init_str=None,
     ):
@@ -117,6 +138,12 @@ class Magnetics(FrozenClass):
                 angle_rotor_shift = init_dict["angle_rotor_shift"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "Slice_enforced" in list(init_dict.keys()):
+                Slice_enforced = init_dict["Slice_enforced"]
+            if "Nslices_enforced" in list(init_dict.keys()):
+                Nslices_enforced = init_dict["Nslices_enforced"]
+            if "type_distribution_enforced" in list(init_dict.keys()):
+                type_distribution_enforced = init_dict["type_distribution_enforced"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -131,6 +158,9 @@ class Magnetics(FrozenClass):
         self.angle_stator_shift = angle_stator_shift
         self.angle_rotor_shift = angle_rotor_shift
         self.logger_name = logger_name
+        self.Slice_enforced = Slice_enforced
+        self.Nslices_enforced = Nslices_enforced
+        self.type_distribution_enforced = type_distribution_enforced
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -157,6 +187,22 @@ class Magnetics(FrozenClass):
         )
         Magnetics_str += "angle_rotor_shift = " + str(self.angle_rotor_shift) + linesep
         Magnetics_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        if self.Slice_enforced is not None:
+            tmp = (
+                self.Slice_enforced.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            Magnetics_str += "Slice_enforced = " + tmp
+        else:
+            Magnetics_str += "Slice_enforced = None" + linesep + linesep
+        Magnetics_str += "Nslices_enforced = " + str(self.Nslices_enforced) + linesep
+        Magnetics_str += (
+            'type_distribution_enforced = "'
+            + str(self.type_distribution_enforced)
+            + '"'
+            + linesep
+        )
         return Magnetics_str
 
     def __eq__(self, other):
@@ -187,6 +233,12 @@ class Magnetics(FrozenClass):
         if other.angle_rotor_shift != self.angle_rotor_shift:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.Slice_enforced != self.Slice_enforced:
+            return False
+        if other.Nslices_enforced != self.Nslices_enforced:
+            return False
+        if other.type_distribution_enforced != self.type_distribution_enforced:
             return False
         return True
 
@@ -222,6 +274,20 @@ class Magnetics(FrozenClass):
             diff_list.append(name + ".angle_rotor_shift")
         if other._logger_name != self._logger_name:
             diff_list.append(name + ".logger_name")
+        if (other.Slice_enforced is None and self.Slice_enforced is not None) or (
+            other.Slice_enforced is not None and self.Slice_enforced is None
+        ):
+            diff_list.append(name + ".Slice_enforced None mismatch")
+        elif self.Slice_enforced is not None:
+            diff_list.extend(
+                self.Slice_enforced.compare(
+                    other.Slice_enforced, name=name + ".Slice_enforced"
+                )
+            )
+        if other._Nslices_enforced != self._Nslices_enforced:
+            diff_list.append(name + ".Nslices_enforced")
+        if other._type_distribution_enforced != self._type_distribution_enforced:
+            diff_list.append(name + ".type_distribution_enforced")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -242,6 +308,9 @@ class Magnetics(FrozenClass):
         S += getsizeof(self.angle_stator_shift)
         S += getsizeof(self.angle_rotor_shift)
         S += getsizeof(self.logger_name)
+        S += getsizeof(self.Slice_enforced)
+        S += getsizeof(self.Nslices_enforced)
+        S += getsizeof(self.type_distribution_enforced)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -268,6 +337,16 @@ class Magnetics(FrozenClass):
         Magnetics_dict["angle_stator_shift"] = self.angle_stator_shift
         Magnetics_dict["angle_rotor_shift"] = self.angle_rotor_shift
         Magnetics_dict["logger_name"] = self.logger_name
+        if self.Slice_enforced is None:
+            Magnetics_dict["Slice_enforced"] = None
+        else:
+            Magnetics_dict["Slice_enforced"] = self.Slice_enforced.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        Magnetics_dict["Nslices_enforced"] = self.Nslices_enforced
+        Magnetics_dict["type_distribution_enforced"] = self.type_distribution_enforced
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -287,6 +366,10 @@ class Magnetics(FrozenClass):
         self.angle_stator_shift = None
         self.angle_rotor_shift = None
         self.logger_name = None
+        if self.Slice_enforced is not None:
+            self.Slice_enforced._set_None()
+        self.Nslices_enforced = None
+        self.type_distribution_enforced = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -503,6 +586,72 @@ class Magnetics(FrozenClass):
         fget=_get_logger_name,
         fset=_set_logger_name,
         doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
+    )
+
+    def _get_Slice_enforced(self):
+        """getter of Slice_enforced"""
+        return self._Slice_enforced
+
+    def _set_Slice_enforced(self, value):
+        """setter of Slice_enforced"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "Slice_enforced"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = SliceModel()
+        check_var("Slice_enforced", value, "SliceModel")
+        self._Slice_enforced = value
+
+        if self._Slice_enforced is not None:
+            self._Slice_enforced.parent = self
+
+    Slice_enforced = property(
+        fget=_get_Slice_enforced,
+        fset=_set_Slice_enforced,
+        doc=u"""Enforce slice model to account for skew
+
+        :Type: SliceModel
+        """,
+    )
+
+    def _get_Nslices_enforced(self):
+        """getter of Nslices_enforced"""
+        return self._Nslices_enforced
+
+    def _set_Nslices_enforced(self, value):
+        """setter of Nslices_enforced"""
+        check_var("Nslices_enforced", value, "int")
+        self._Nslices_enforced = value
+
+    Nslices_enforced = property(
+        fget=_get_Nslices_enforced,
+        fset=_set_Nslices_enforced,
+        doc=u"""To enforce number of slices in slice model
+
+        :Type: int
+        """,
+    )
+
+    def _get_type_distribution_enforced(self):
+        """getter of type_distribution_enforced"""
+        return self._type_distribution_enforced
+
+    def _set_type_distribution_enforced(self, value):
+        """setter of type_distribution_enforced"""
+        check_var("type_distribution_enforced", value, "str")
+        self._type_distribution_enforced = value
+
+    type_distribution_enforced = property(
+        fget=_get_type_distribution_enforced,
+        fset=_set_type_distribution_enforced,
+        doc=u"""To enforce type of slice distribution to use for rotor skew if linear and continuous ("uniform", "gauss", "user-defined")
 
         :Type: str
         """,

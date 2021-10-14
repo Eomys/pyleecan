@@ -55,6 +55,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .DXFImport import DXFImport
+from .SliceModel import SliceModel
 
 
 class MagElmer(Magnetics):
@@ -170,6 +171,9 @@ class MagElmer(Magnetics):
         angle_stator_shift=0,
         angle_rotor_shift=0,
         logger_name="Pyleecan.Magnetics",
+        Slice_enforced=None,
+        Nslices_enforced=None,
+        type_distribution_enforced=None,
         init_dict=None,
         init_str=None,
     ):
@@ -234,6 +238,12 @@ class MagElmer(Magnetics):
                 angle_rotor_shift = init_dict["angle_rotor_shift"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "Slice_enforced" in list(init_dict.keys()):
+                Slice_enforced = init_dict["Slice_enforced"]
+            if "Nslices_enforced" in list(init_dict.keys()):
+                Nslices_enforced = init_dict["Nslices_enforced"]
+            if "type_distribution_enforced" in list(init_dict.keys()):
+                type_distribution_enforced = init_dict["type_distribution_enforced"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -260,6 +270,9 @@ class MagElmer(Magnetics):
             angle_stator_shift=angle_stator_shift,
             angle_rotor_shift=angle_rotor_shift,
             logger_name=logger_name,
+            Slice_enforced=Slice_enforced,
+            Nslices_enforced=Nslices_enforced,
+            type_distribution_enforced=type_distribution_enforced,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
