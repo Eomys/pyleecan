@@ -12891,13 +12891,14 @@
             "SurfRing",
             "Trapeze"
         ],
-        "desc": "SurfLine define by list of lines that delimit it, label and point reference.",
+        "desc": "SurfLine define by list of lines that delimit it",
         "is_internal": false,
         "methods": [
             "comp_mesh_dict",
             "draw_FEMM",
             "plot",
-            "split_line"
+            "split_line",
+            "is_inside"
         ],
         "mother": "",
         "name": "Surface",

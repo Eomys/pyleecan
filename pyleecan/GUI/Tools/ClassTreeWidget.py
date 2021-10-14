@@ -46,7 +46,7 @@ class ClassTreeWidget(QDialog):
             self.accept()
 
     def onSelectionChanged(self, itSelection):
-        """"""
+        """ """
         index = itSelection.indexes()[0]
         desc = index.model().itemFromIndex(index).data()
         self.text.setText(desc)
@@ -108,7 +108,7 @@ class ClassTreeWidget(QDialog):
         self.setLayout(layout)
 
     def generate(self):
-        """Method to (recursively) build the tree (view) of the data object. """
+        """Method to (recursively) build the tree (view) of the data object."""
         self.treeDict = dict()
         for key in self.keys:
             self.genTreeDict(key, self.treeDict)

@@ -142,7 +142,7 @@ class SSkew(Ui_SSkew, QWidget):
         self.lf_angle.editingFinished.connect(self.set_rate)
 
     def activate_skew(self):
-        """ Activate skewing setup"""
+        """Activate skewing setup"""
 
         if self.g_activate.isChecked():
             # Calculate skew set up by default
@@ -160,7 +160,7 @@ class SSkew(Ui_SSkew, QWidget):
         self.saveNeeded.emit()
 
     def update_hide(self):
-        """ Hide / show widget depending on parameters"""
+        """Hide / show widget depending on parameters"""
 
         if self.g_activate.isChecked():
 
@@ -265,7 +265,7 @@ class SSkew(Ui_SSkew, QWidget):
         self.saveNeeded.emit()
 
     def check_values(self):
-        """ Check if values are consistent """
+        """Check if values are consistent"""
 
         if not self.is_step:
             self.type_skew = "linear"
@@ -309,7 +309,7 @@ class SSkew(Ui_SSkew, QWidget):
         )
 
     def set_table(self):
-        """ Fill angle table """
+        """Fill angle table"""
 
         if self.is_step:
             # stepped skew
