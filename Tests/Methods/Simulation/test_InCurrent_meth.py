@@ -281,8 +281,8 @@ class Test_InCurrent_meth(object):
         )
         out = Output(simu=test_obj)
         test_obj.input.gen_input()
-        assert out.elec.Id_ref == pytest.approx(test_dict["Id"], abs=0.01)
-        assert out.elec.Iq_ref == pytest.approx(test_dict["Iq"], abs=0.01)
+        assert out.elec.OP.get_Id_Iq()["Id"] == pytest.approx(test_dict["Id"], abs=0.01)
+        assert out.elec.OP.get_Id_Iq()["Iq"] == pytest.approx(test_dict["Iq"], abs=0.01)
 
         # Plot 3-phase current function of time
         # out.plot_2D_Data("elec.Is", "time", "phase", is_show_fig=False)
