@@ -3,7 +3,7 @@
 from numpy import real, imag
 
 
-def is_inside(self, Z, is_online=False):
+def is_inside(self, Z, if_online=False):
     """Determine if a given point is inside the surface.
        If the point is on the line defining the surface, by default it will be considered as outside
 
@@ -13,11 +13,9 @@ def is_inside(self, Z, is_online=False):
         A Surface object
     Z : complex
         Point that we want to check if it is in the surface
-
-    is_online : bool
+    if_online : bool
         True to consider the point  on the line as in the surface
         False to consider the point on the line as out of the surface
-
 
     Returns
     -------
@@ -26,48 +24,47 @@ def is_inside(self, Z, is_online=False):
         False : the point is outside the surface
     """
 
-    eps = 0.1  # The width of the window where we will check is there is a distance between the point and the outside line of the surface
+    eps = 0.001  # Half of the width of the window where we will check is there is a distance between the point and the outside line of the surface
 
     # Recovering the point cloud that compose the surface
-    segment_list = self.get_lines()
+    line_list = self.get_lines()
 
     pointcloud = list()
-    for seg in segment_list:
-        seg_len = seg.comp_length()
-        pointcloud.extend(seg.discretize(nb_point=int(seg_len / eps)))
+    for line in line_list:
+        line_len = line.comp_length()
+        pointcloud.extend(line.discretize(nb_point=int(line_len / eps)))
 
-    dx = list()
-    dy = list()
+    # Step 1 : Checking if the point is on the line that define the surface
+    # First, we call the is_online method for each segment to check is the point is on one of the segment
+    on_line_list = list()
+    for line in line_list:
+        if line.is_on_line(Z):
+            return if_online
+
+    # Step 2 : Checking if the point is inside the surface
+    # Then, we are creating a cross on both axes with a width of 2*eps centered on Z
+    # We check that at least one point is inside each branch of the cross
+
+    #To determine which branch the point is in, we check the distance to Z
+    is_top, is_left, is_bot, is_right = False, False, False, False
     for point in pointcloud:
+        # If the point selected is inside the branch on the x-axis
         if (real(point) > real(Z) - eps) and (real(point) < real(Z) + eps):
-            dy.append(imag(point) - imag(Z))
+            if imag(point) - imag(Z)  > 0:
+                #The point is on top of Z
+                is_top = True
+            else:
+                #The point is below Z
+                is_bot = True
 
-        if (imag(point) > imag(Z) - eps) and (imag(point) < imag(Z) + eps):
-            dx.append(real(point) - real(Z))
+        else:
+            # If the point selected is inside the breanch on the y-axis
+            if (imag(point) > imag(Z) - eps) and (imag(point) < imag(Z) + eps):
+                if real(point) - real(Z) > 0:
+                    #The point is on the left of Z
+                    is_left = True
+                else:
+                    #The point is on the right of Z
+                    is_right = True
 
-    pos_val_x = list()
-    neg_val_x = list()
-    pos_val_y = list()
-    neg_val_y = list()
-
-    if is_online:
-        for val in dx:
-            pos_val_x.append(val >= 0)
-            neg_val_x.append(val <= 0)
-
-        for val in dy:
-            pos_val_y.append(val >= 0)
-            neg_val_y.append(val <= 0)
-    else:
-        for val in dx:
-            pos_val_x.append(val > 0)
-            neg_val_x.append(val < 0)
-
-        for val in dy:
-            pos_val_y.append(val > 0)
-            neg_val_y.append(val < 0)
-
-    if any(pos_val_x) and any(neg_val_x) and any(pos_val_y) and any(neg_val_y):
-        return True
-    else:
-        return False
+    return is_top and is_left and is_right and is_bot
