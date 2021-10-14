@@ -48,7 +48,7 @@ except ImportError as error:
     set_Id_Iq = error
 
 try:
-    from ..Methods.Output.OPdq.get_I0_Phi0 import get_I0_Phi0
+    from ..Methods.Simulation.OPdq.get_I0_Phi0 import get_I0_Phi0
 except ImportError as error:
     get_I0_Phi0 = error
 
@@ -116,7 +116,7 @@ class OPdq(OP):
         )
     else:
         set_Id_Iq = set_Id_Iq
-    # cf Methods.Output.OPdq.get_I0_Phi0
+    # cf Methods.Simulation.OPdq.get_I0_Phi0
     if isinstance(get_I0_Phi0, ImportError):
         get_I0_Phi0 = property(
             fget=lambda x: raise_(

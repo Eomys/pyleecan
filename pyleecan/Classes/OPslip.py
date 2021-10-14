@@ -33,11 +33,6 @@ except ImportError as error:
     get_N0 = error
 
 try:
-    from ..Methods.Simulation.OPslip.get_slip import get_slip
-except ImportError as error:
-    get_slip = error
-
-try:
     from ..Methods.Simulation.OPslip.get_Ud_Uq import get_Ud_Uq
 except ImportError as error:
     get_Ud_Uq = error
@@ -48,9 +43,14 @@ except ImportError as error:
     set_Id_Iq = error
 
 try:
-    from ..Methods.Output.OPslip.get_I0_Phi0 import get_I0_Phi0
+    from ..Methods.Simulation.OPslip.get_I0_Phi0 import get_I0_Phi0
 except ImportError as error:
     get_I0_Phi0 = error
+
+try:
+    from ..Methods.Simulation.OPslip.get_slip import get_slip
+except ImportError as error:
+    get_slip = error
 
 
 from ._check import InitUnKnowClassError
@@ -89,15 +89,6 @@ class OPslip(OP):
         )
     else:
         get_N0 = get_N0
-    # cf Methods.Simulation.OPslip.get_slip
-    if isinstance(get_slip, ImportError):
-        get_slip = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OPslip method get_slip: " + str(get_slip))
-            )
-        )
-    else:
-        get_slip = get_slip
     # cf Methods.Simulation.OPslip.get_Ud_Uq
     if isinstance(get_Ud_Uq, ImportError):
         get_Ud_Uq = property(
@@ -116,7 +107,7 @@ class OPslip(OP):
         )
     else:
         set_Id_Iq = set_Id_Iq
-    # cf Methods.Output.OPslip.get_I0_Phi0
+    # cf Methods.Simulation.OPslip.get_I0_Phi0
     if isinstance(get_I0_Phi0, ImportError):
         get_I0_Phi0 = property(
             fget=lambda x: raise_(
@@ -125,6 +116,15 @@ class OPslip(OP):
         )
     else:
         get_I0_Phi0 = get_I0_Phi0
+    # cf Methods.Simulation.OPslip.get_slip
+    if isinstance(get_slip, ImportError):
+        get_slip = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OPslip method get_slip: " + str(get_slip))
+            )
+        )
+    else:
+        get_slip = get_slip
     # save and copy methods are available in all object
     save = save
     copy = copy

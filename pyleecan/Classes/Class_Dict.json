@@ -7690,10 +7690,10 @@
             "get_Id_Iq",
             "get_felec",
             "get_N0",
-            "get_slip",
             "get_Ud_Uq",
             "set_Id_Iq",
-            "get_I0_Phi0"
+            "get_I0_Phi0",
+            "get_slip"
         ],
         "mother": "OP",
         "name": "OPslip",
