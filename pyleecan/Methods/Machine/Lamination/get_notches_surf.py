@@ -1,6 +1,6 @@
 from ....Functions.Geometry.transform_hole_surf import transform_hole_surf
 from ....Classes.NotchEvenDist import NotchEvenDist
-from ....Functions.labels import NOTCH_LAB,YSNR_LAB, YSNL_LAB
+from ....Functions.labels import NOTCH_LAB, YSNR_LAB, YSNL_LAB
 
 
 def get_notches_surf(self, sym):
@@ -34,8 +34,8 @@ def get_notches_surf(self, sym):
         Nsurf.label = self.get_label() + "_" + NOTCH_LAB + "_R" + str(ii) + "-T0-S0"
         Nsurf.rotate(angle=notch.alpha)
         # Label definition
-        BC_prop_right = self.get_label() +"_"+YSNR_LAB
-        BC_prop_left = self.get_label() +"_"+YSNL_LAB
+        BC_prop_right = self.get_label() + "_" + YSNR_LAB
+        BC_prop_left = self.get_label() + "_" + YSNL_LAB
         # Generate all the surfaces
         surf_list.extend(
             transform_hole_surf(

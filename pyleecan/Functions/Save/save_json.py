@@ -294,7 +294,7 @@ def split_obj_dict(cls_tupel, obj_dict, folder, split_list, file_ext, logger):
 
 
 def create_folder(name, logger):
-    """Create a new non existing the folder: "YYYY_mm_dd-HH_MM_SS-name". """
+    """Create a new non existing the folder: "YYYY_mm_dd-HH_MM_SS-name"."""
     # datetime object containing current date and time
     now = datetime.now()
     dt_string = now.strftime("%Y_%m_%d-%Hh%Mmin%Ss-")
