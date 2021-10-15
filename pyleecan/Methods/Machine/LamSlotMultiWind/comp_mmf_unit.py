@@ -1,7 +1,7 @@
 from ....Functions.Load.import_class import import_class
 
 
-def comp_mmf_unit(self, Na, Nt, felec=1, rot_dir=-1):
+def comp_mmf_unit(self, Na, Nt, felec=1, rot_dir=-1, N0=1000):
     """Compute the winding Unit magnetomotive force
 
     Parameters
@@ -30,7 +30,7 @@ def comp_mmf_unit(self, Na, Nt, felec=1, rot_dir=-1):
     LamSlotWind = import_class("pyleecan.Classes", "LamSlotWind")
 
     MMF_U, WF = LamSlotWind.comp_mmf_unit(
-        self, Na=Na, Nt=Nt, felec=felec, rot_dir=rot_dir
+        self, Na=Na, Nt=Nt, felec=felec, rot_dir=rot_dir, N0=N0
     )
 
     return MMF_U, WF
