@@ -39,32 +39,13 @@ def gen_input(self):
     outelec = OutElec()
     output.elec = outelec
     outgeo = output.geo
-    if simu.machine.is_synchronous():
-        output.elec.OP = OPdq(
-            N0=self.N0,
-            felec=self.felec,
-            Ud_ref=self.Ud_ref,
-            Uq_ref=self.Uq_ref,
-            Tem_av_ref=self.Tem_av_ref,
-            Pem_av_ref=self.Pem_av_ref,
-        )
-    else:
-        output.elec.OP = OPslip(
-            N0=self.N0,
-            felec=self.felec,
-            slip_ref=self.slip_ref,
-            U0_ref=self.U0_ref,
-            UPhi0_ref=self.Phi0_ref,
-            Tem_av_ref=self.Tem_av_ref,
-            Pem_av_ref=self.Pem_av_ref,
-        )
-    OP = output.elec.OP
     # Replace N0=0 by 0.1 rpm
-    if OP.N0 == 0:
-        OP.N0 = 0.1
+    if self.OP.N0 == 0:
+        self.OP.N0 = 0.1
         self.get_logger().debug("Updating N0 from 0 [rpm] to 0.1 [rpm] in gen_input")
     # Check that felec/N0 can be computed
-    OP.get_felec()
+    self.OP.get_felec()
+    output.elec.OP = self.OP
 
     if self.angle_rotor is not None:
         outelec.angle_rotor = self.angle_rotor.get_data()
@@ -113,7 +94,7 @@ def gen_input(self):
     # Generate PWM signal
     if self.PWM is not None:
         # Fill generator with simu data
-        felec = OP.get_felec()
+        felec = self.OP.get_felec()
         rot_dir = output.get_rot_dir()
         qs = simu.machine.stator.winding.qs
         self.PWM.f = felec
@@ -150,5 +131,7 @@ def gen_input(self):
         Udqh = n2dqh_DataTime(Uabc_data, is_dqh_rms=True)
         # fft
         Udqh_freq = Udqh.time_to_freq()
+        # Remove f=0
+        Us_harm = Udqh_freq.get_data_along("freqs>" + str(self.OP.get_felec()), "phase")
         # Store
-        outelec.Us_harm = Udqh_freq
+        outelec.Us_harm = Us_harm

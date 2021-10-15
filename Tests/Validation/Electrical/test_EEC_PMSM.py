@@ -5,6 +5,7 @@ from numpy import sqrt, pi
 from multiprocessing import cpu_count
 
 import pytest
+from pyleecan.Classes.OPdq import OPdq
 
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -35,7 +36,7 @@ def test_EEC_PMSM():
     simu = Simu1(name="test_EEC_PMSM", machine=Toyota_Prius)
 
     # Definition of the input
-    simu.input = InputCurrent(N0=2000, Nt_tot=10, Na_tot=2048)
+    simu.input = InputCurrent(OP=OPdq(N0=2000), Nt_tot=10, Na_tot=2048)
     simu.input.set_Id_Iq(I0=250 / sqrt(2), Phi0=60 * pi / 180)
 
     # Define second simu for FEMM comparison

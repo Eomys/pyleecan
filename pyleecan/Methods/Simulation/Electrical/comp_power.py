@@ -20,3 +20,5 @@ def comp_power(self, out_dict, machine):
     Pem_av_ref = qs * (Ud * Id + Uq * Iq)
 
     out_dict["Pem_av_ref"] = Pem_av_ref
+
+    return out_dict

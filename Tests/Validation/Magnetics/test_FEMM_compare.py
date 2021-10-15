@@ -5,6 +5,7 @@ from multiprocessing import cpu_count
 import pytest
 
 from Tests import save_validation_path as save_path
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.InputFlux import InputFlux
@@ -48,7 +49,7 @@ def test_FEMM_compare_IPMSM_xxx():
         )
     )
     simu.input.Ir = None  # SPMSM machine => no rotor currents to define
-    simu.input.N0 = 3000  # Rotor speed [rpm]
+    simu.input.OP = OPdq(N0=3000)  # Rotor speed [rpm]
     simu.input.angle_rotor_initial = 0.5216 + pi  # Rotor position at t=0 [rad]
 
     # Definition of the magnetic simulation (no symmetry)
@@ -108,7 +109,7 @@ def test_FEMM_compare_Prius():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
+        OP=OPdq(N0=N0),
         angle_rotor=None,  # Will be computed
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
@@ -177,7 +178,7 @@ def test_FEMM_compare_SCIM():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
+        OP=OPdq(N0=N0),
         angle_rotor=None,  # Will be computed
         time=time,
         Na_tot=Na_tot,
@@ -210,7 +211,7 @@ def test_FEMM_compare_SCIM():
         B_dict={"Br": Br},
         Is=Is,
         Ir=Ir,
-        N0=simu.input.N0,
+        OP=OPdq(N0=simu.input.OP.N0),
     )
 
     out = simu.run()
@@ -277,7 +278,7 @@ def test_FEMM_compare_SIPMSM():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
+        OP=OPdq(N0=N0),
         angle_rotor=Ar,  # Will be computed
         time=time,
         Nt_tot=Nt_tot,
@@ -311,7 +312,7 @@ def test_FEMM_compare_SIPMSM():
         B_dict={"Br": Br, "Bt": Bt},
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=simu.input.N0,
+        OP=OPdq(N0=simu.input.OP.N0),
     )
 
     out = simu.run()
@@ -368,7 +369,7 @@ def test_SPMSM_load():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
+        OP=OPdq(N0=N0),
         angle_rotor=None,  # Will be computed
         time=time,
         Na_tot=Na_tot,
@@ -398,7 +399,7 @@ def test_SPMSM_load():
         B_dict={"Br": Br, "Bt": Bt},
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=simu.input.N0,
+        OP=OPdq(N0=simu.input.OP.N0),
     )
     out = simu.run()
 
@@ -459,7 +460,7 @@ def test_SPMSM_noload():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
+        OP=OPdq(N0=N0),
         angle_rotor=None,
         time=time,
         angle=angle,
@@ -490,7 +491,7 @@ def test_SPMSM_noload():
         B_dict={"Br": Br, "Bt": Bt},
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=simu.input.N0,
+        OP=OPdq(N0=simu.input.OP.N0),
     )
 
     out = simu.run()

@@ -1036,7 +1036,7 @@
         "methods": [
             "comp_parameters",
             "solve_EEC",
-            "gen_drive"
+            "comp_joule_losses"
         ],
         "mother": "EEC",
         "name": "EEC_ANL",
@@ -4038,12 +4038,12 @@
                 "value": 2048
             },
             {
-                "desc": "Rotor speed",
+                "desc": "Operating Point",
                 "max": "",
                 "min": "",
-                "name": "N0",
-                "type": "float",
-                "unit": "rpm",
+                "name": "OP",
+                "type": "OP",
+                "unit": "-",
                 "value": null
             }
         ]
@@ -4085,24 +4085,6 @@
                 "min": "",
                 "name": "Ir",
                 "type": "ImportMatrix",
-                "unit": "A",
-                "value": null
-            },
-            {
-                "desc": "d-axis current RMS magnitude",
-                "max": "",
-                "min": "",
-                "name": "Id_ref",
-                "type": "float",
-                "unit": "A",
-                "value": null
-            },
-            {
-                "desc": "q-axis current RMS magnitude",
-                "max": "",
-                "min": "",
-                "name": "Iq_ref",
-                "type": "float",
                 "unit": "A",
                 "value": null
             }
@@ -4277,78 +4259,6 @@
                 "type": "float",
                 "unit": "",
                 "value": 0
-            },
-            {
-                "desc": "Theorical Average Electromagnetic torque",
-                "max": "",
-                "min": "",
-                "name": "Tem_av_ref",
-                "type": "float",
-                "unit": "N.m",
-                "value": null
-            },
-            {
-                "desc": "d-axis current RMS magnitude  (phase to neutral)",
-                "max": "",
-                "min": "",
-                "name": "Ud_ref",
-                "type": "float",
-                "unit": "Vrms",
-                "value": null
-            },
-            {
-                "desc": "q-axis current RMS magnitude  (phase to neutral)",
-                "max": "",
-                "min": "",
-                "name": "Uq_ref",
-                "type": "float",
-                "unit": "Vrms",
-                "value": null
-            },
-            {
-                "desc": "electrical frequency",
-                "max": "",
-                "min": "",
-                "name": "felec",
-                "type": "float",
-                "unit": "Hz",
-                "value": null
-            },
-            {
-                "desc": "Rotor mechanical slip",
-                "max": "",
-                "min": "",
-                "name": "slip_ref",
-                "type": "float",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "stator voltage (phase to neutral)",
-                "max": "",
-                "min": "",
-                "name": "U0_ref",
-                "type": "float",
-                "unit": "Vrms",
-                "value": null
-            },
-            {
-                "desc": "stator voltage phase",
-                "max": "",
-                "min": "",
-                "name": "Phi0_ref",
-                "type": "float",
-                "unit": "rad",
-                "value": null
-            },
-            {
-                "desc": "Theorical Average Electromagnetic Power",
-                "max": "",
-                "min": "",
-                "name": "Pem_av_ref",
-                "type": "float",
-                "unit": "W",
-                "value": null
             },
             {
                 "desc": "Object to generate PWM signal",
@@ -8310,6 +8220,15 @@
                 "type": "float",
                 "unit": "N.m",
                 "value": null
+            },
+            {
+                "desc": "Harmonic stator current ",
+                "max": "",
+                "min": "",
+                "name": "Is_harm",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "A",
+                "value": "None"
             }
         ]
     },

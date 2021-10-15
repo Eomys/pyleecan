@@ -40,6 +40,7 @@ from ._check import InitUnKnowClassError
 from .ImportMatrix import ImportMatrix
 from .Import import Import
 from .ImportGenPWM import ImportGenPWM
+from .OP import OP
 
 
 class InputCurrent(InputVoltage):
@@ -92,26 +93,16 @@ class InputCurrent(InputVoltage):
         self,
         Is=None,
         Ir=None,
-        Id_ref=None,
-        Iq_ref=None,
         angle_rotor=None,
         rot_dir=None,
         angle_rotor_initial=0,
-        Tem_av_ref=None,
-        Ud_ref=None,
-        Uq_ref=None,
-        felec=None,
-        slip_ref=0,
-        U0_ref=None,
-        Phi0_ref=None,
-        Pem_av_ref=None,
         PWM=None,
         time=None,
         angle=None,
         Nt_tot=2048,
         Nrev=None,
         Na_tot=2048,
-        N0=None,
+        OP=None,
         init_dict=None,
         init_str=None,
     ):
@@ -134,32 +125,12 @@ class InputCurrent(InputVoltage):
                 Is = init_dict["Is"]
             if "Ir" in list(init_dict.keys()):
                 Ir = init_dict["Ir"]
-            if "Id_ref" in list(init_dict.keys()):
-                Id_ref = init_dict["Id_ref"]
-            if "Iq_ref" in list(init_dict.keys()):
-                Iq_ref = init_dict["Iq_ref"]
             if "angle_rotor" in list(init_dict.keys()):
                 angle_rotor = init_dict["angle_rotor"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
-            if "Tem_av_ref" in list(init_dict.keys()):
-                Tem_av_ref = init_dict["Tem_av_ref"]
-            if "Ud_ref" in list(init_dict.keys()):
-                Ud_ref = init_dict["Ud_ref"]
-            if "Uq_ref" in list(init_dict.keys()):
-                Uq_ref = init_dict["Uq_ref"]
-            if "felec" in list(init_dict.keys()):
-                felec = init_dict["felec"]
-            if "slip_ref" in list(init_dict.keys()):
-                slip_ref = init_dict["slip_ref"]
-            if "U0_ref" in list(init_dict.keys()):
-                U0_ref = init_dict["U0_ref"]
-            if "Phi0_ref" in list(init_dict.keys()):
-                Phi0_ref = init_dict["Phi0_ref"]
-            if "Pem_av_ref" in list(init_dict.keys()):
-                Pem_av_ref = init_dict["Pem_av_ref"]
             if "PWM" in list(init_dict.keys()):
                 PWM = init_dict["PWM"]
             if "time" in list(init_dict.keys()):
@@ -172,33 +143,23 @@ class InputCurrent(InputVoltage):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
         # Set the properties (value check and convertion are done in setter)
         self.Is = Is
         self.Ir = Ir
-        self.Id_ref = Id_ref
-        self.Iq_ref = Iq_ref
         # Call InputVoltage init
         super(InputCurrent, self).__init__(
             angle_rotor=angle_rotor,
             rot_dir=rot_dir,
             angle_rotor_initial=angle_rotor_initial,
-            Tem_av_ref=Tem_av_ref,
-            Ud_ref=Ud_ref,
-            Uq_ref=Uq_ref,
-            felec=felec,
-            slip_ref=slip_ref,
-            U0_ref=U0_ref,
-            Phi0_ref=Phi0_ref,
-            Pem_av_ref=Pem_av_ref,
             PWM=PWM,
             time=time,
             angle=angle,
             Nt_tot=Nt_tot,
             Nrev=Nrev,
             Na_tot=Na_tot,
-            N0=N0,
+            OP=OP,
         )
         # The class is frozen (in InputVoltage init), for now it's impossible to
         # add new properties
@@ -219,8 +180,6 @@ class InputCurrent(InputVoltage):
             InputCurrent_str += "Ir = " + tmp
         else:
             InputCurrent_str += "Ir = None" + linesep + linesep
-        InputCurrent_str += "Id_ref = " + str(self.Id_ref) + linesep
-        InputCurrent_str += "Iq_ref = " + str(self.Iq_ref) + linesep
         return InputCurrent_str
 
     def __eq__(self, other):
@@ -235,10 +194,6 @@ class InputCurrent(InputVoltage):
         if other.Is != self.Is:
             return False
         if other.Ir != self.Ir:
-            return False
-        if other.Id_ref != self.Id_ref:
-            return False
-        if other.Iq_ref != self.Iq_ref:
             return False
         return True
 
@@ -265,10 +220,6 @@ class InputCurrent(InputVoltage):
             diff_list.append(name + ".Ir None mismatch")
         elif self.Ir is not None:
             diff_list.extend(self.Ir.compare(other.Ir, name=name + ".Ir"))
-        if other._Id_ref != self._Id_ref:
-            diff_list.append(name + ".Id_ref")
-        if other._Iq_ref != self._Iq_ref:
-            diff_list.append(name + ".Iq_ref")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -282,8 +233,6 @@ class InputCurrent(InputVoltage):
         S += super(InputCurrent, self).__sizeof__()
         S += getsizeof(self.Is)
         S += getsizeof(self.Ir)
-        S += getsizeof(self.Id_ref)
-        S += getsizeof(self.Iq_ref)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -319,8 +268,6 @@ class InputCurrent(InputVoltage):
                 keep_function=keep_function,
                 **kwargs
             )
-        InputCurrent_dict["Id_ref"] = self.Id_ref
-        InputCurrent_dict["Iq_ref"] = self.Iq_ref
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputCurrent_dict["__class__"] = "InputCurrent"
@@ -333,8 +280,6 @@ class InputCurrent(InputVoltage):
             self.Is._set_None()
         if self.Ir is not None:
             self.Ir._set_None()
-        self.Id_ref = None
-        self.Iq_ref = None
         # Set to None the properties inherited from InputVoltage
         super(InputCurrent, self)._set_None()
 
@@ -399,41 +344,5 @@ class InputCurrent(InputVoltage):
         doc=u"""Rotor currents as a function of time (each column correspond to one phase) to import
 
         :Type: ImportMatrix
-        """,
-    )
-
-    def _get_Id_ref(self):
-        """getter of Id_ref"""
-        return self._Id_ref
-
-    def _set_Id_ref(self, value):
-        """setter of Id_ref"""
-        check_var("Id_ref", value, "float")
-        self._Id_ref = value
-
-    Id_ref = property(
-        fget=_get_Id_ref,
-        fset=_set_Id_ref,
-        doc=u"""d-axis current RMS magnitude
-
-        :Type: float
-        """,
-    )
-
-    def _get_Iq_ref(self):
-        """getter of Iq_ref"""
-        return self._Iq_ref
-
-    def _set_Iq_ref(self, value):
-        """setter of Iq_ref"""
-        check_var("Iq_ref", value, "float")
-        self._Iq_ref = value
-
-    Iq_ref = property(
-        fget=_get_Iq_ref,
-        fset=_set_Iq_ref,
-        doc=u"""q-axis current RMS magnitude
-
-        :Type: float
         """,
     )

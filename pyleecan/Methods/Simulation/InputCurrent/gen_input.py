@@ -39,12 +39,12 @@ def gen_input(self):
     # Load and check Is
     if qs > 0:
         if self.Is is None:
-            if self.Id_ref is None and self.Iq_ref is None:
+            if self.OP.Id_ref is None and self.OP.Iq_ref is None:
                 raise InputError(
-                    "InputCurrent.Is, InputCurrent.Id_ref, and InputCurrent.Iq_ref missing"
+                    "InputCurrent.Is, InputCurrent.OP.Id_ref, and InputCurrent.OP.Iq_ref missing"
                 )
             else:
-                outelec.OP.set_Id_Iq(self.Id_ref, self.Iq_ref)
+                outelec.OP = self.OP
                 outelec.Is = None
         else:
             Is = self.Is.get_data()

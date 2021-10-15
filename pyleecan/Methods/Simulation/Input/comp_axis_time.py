@@ -39,7 +39,7 @@ def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None, output=None):
             self.rot_dir = -1
             logger.debug("Enforcing input.rot_dir=-1")
         rot_dir = self.rot_dir
-        f_elec = self.felec
+        f_elec = self.OP.get_felec()
 
     # Setup normalizations for time and angle axes
     norm_time = {
@@ -58,7 +58,7 @@ def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None, output=None):
         # Create time axis as a DataLinspace
         if self.Nrev is not None:
             # Set final time depending on rotor speed and number of revolutions
-            t_final = 60 / self.N0 * self.Nrev
+            t_final = 60 / self.OP.N0 * self.Nrev
         else:
             # Set final time to p times the number of electrical periods
             t_final = p / f_elec
@@ -94,7 +94,9 @@ def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None, output=None):
         output.comp_angle_rotor(Time)
     else:
         # Add default normalization
-        Time.normalizations["angle_rotor"] = Norm_ref(ref=rot_dir * self.N0 * 360 / 60)
+        Time.normalizations["angle_rotor"] = Norm_ref(
+            ref=rot_dir * self.OP.N0 * 360 / 60
+        )
         logger.debug("Enforcing default angle_rotor normalization to time axis")
 
     return Time

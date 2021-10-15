@@ -12,3 +12,4 @@ Us_harm,V,Harmonic stator voltage as a function of time (each column correspond 
 OP,-,Operating Point,,OP,None,,,,,,,,,
 Pem_av_ref,W,Theorical Average Electromagnetic Power,1,float,None,,,,,,,,,
 Tem_av_ref,N.m,Theorical Average Electromagnetic torque,,float,None,,,,,,,,,
+Is_harm,A,Harmonic stator current ,,SciDataTool.Classes.DataND.DataND,None,,,,,,,,,

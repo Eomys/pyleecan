@@ -10,7 +10,7 @@ from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.PostPlot import PostPlot
 from pyleecan.Classes.PostFunction import PostFunction
-from pyleecan.Classes.Output import Output
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
@@ -45,7 +45,7 @@ def test_compare():
         )
     )
     simu.input.Ir = None  # SPMSM machine => no rotor currents to define
-    simu.input.N0 = 3000  # Rotor speed [rpm]
+    simu.input.OP = OPdq(N0=3000)  # Rotor speed [rpm]
     simu.input.angle_rotor_initial = 0.5216 + pi  # Rotor position at t=0 [rad]
 
     # Definition of the magnetic simulation (no symmetry)

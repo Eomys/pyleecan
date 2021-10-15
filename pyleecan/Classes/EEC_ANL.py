@@ -28,9 +28,9 @@ except ImportError as error:
     solve_EEC = error
 
 try:
-    from ..Methods.Simulation.EEC_ANL.gen_drive import gen_drive
+    from ..Methods.Simulation.EEC_ANL.comp_joule_losses import comp_joule_losses
 except ImportError as error:
-    gen_drive = error
+    comp_joule_losses = error
 
 
 from ._check import InitUnKnowClassError
@@ -63,15 +63,18 @@ class EEC_ANL(EEC):
         )
     else:
         solve_EEC = solve_EEC
-    # cf Methods.Simulation.EEC_ANL.gen_drive
-    if isinstance(gen_drive, ImportError):
-        gen_drive = property(
+    # cf Methods.Simulation.EEC_ANL.comp_joule_losses
+    if isinstance(comp_joule_losses, ImportError):
+        comp_joule_losses = property(
             fget=lambda x: raise_(
-                ImportError("Can't use EEC_ANL method gen_drive: " + str(gen_drive))
+                ImportError(
+                    "Can't use EEC_ANL method comp_joule_losses: "
+                    + str(comp_joule_losses)
+                )
             )
         )
     else:
-        gen_drive = gen_drive
+        comp_joule_losses = comp_joule_losses
     # save and copy methods are available in all object
     save = save
     copy = copy

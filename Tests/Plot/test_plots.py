@@ -10,6 +10,7 @@ from Tests import TEST_DATA_DIR
 from Tests import save_plot_path as save_path
 from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.InputFlux import InputFlux
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Functions.load import load
@@ -96,9 +97,7 @@ class Test_plots(object):
             B_dict={"Br": flux},
             time=time,
             angle=angle,
-            N0=N0,
-            Id_ref=Id_ref,
-            Iq_ref=Iq_ref,
+            OP=OPdq(N0=N0, Id_ref=Id_ref, Iq_ref=Iq_ref),
         )
         out = Output(simu=simu)
         simu.run()
@@ -229,9 +228,7 @@ class Test_plots(object):
             B_dict={"Br": flux},
             time=time,
             angle=angle,
-            N0=N0,
-            Id_ref=Id_ref,
-            Iq_ref=Iq_ref,
+            OP=OPdq(N0=N0, Id_ref=Id_ref, Iq_ref=Iq_ref),
         )
         out4 = Output(simu=simu4)
         simu4.run()
@@ -325,9 +322,7 @@ class Test_plots(object):
             B_dict={"Br": flux},
             time=time,
             angle=angle,
-            N0=N0,
-            Id_ref=Id_ref,
-            Iq_ref=Iq_ref,
+            OP=OPdq(N0=N0, Id_ref=Id_ref, Iq_ref=Iq_ref),
         )
         simu.mag = None
         simu.force = None
@@ -372,9 +367,7 @@ class Test_plots(object):
             B_dict={"Br": flux},
             time=time,
             angle=angle,
-            N0=N0,
-            Id_ref=Id_ref,
-            Iq_ref=Iq_ref,
+            OP=OPdq(N0=N0, Id_ref=Id_ref, Iq_ref=Iq_ref),
         )
         out = Output(simu=simu)
         simu.run()
@@ -413,9 +406,7 @@ class Test_plots(object):
             B_dict={"Br": flux},
             time=time,
             angle=angle,
-            N0=N0,
-            Id_ref=Id_ref,
-            Iq_ref=Iq_ref,
+            OP=OPdq(N0=N0, Id_ref=Id_ref, Iq_ref=Iq_ref),
         )
         out = Output(simu=simu)
         simu.run()
@@ -454,9 +445,7 @@ class Test_plots(object):
             B_dict={"Br": flux},
             time=time,
             angle=angle,
-            N0=N0,
-            Id_ref=Id_ref,
-            Iq_ref=Iq_ref,
+            OP=OPdq(N0=N0, Id_ref=Id_ref, Iq_ref=Iq_ref),
         )
         out = Output(simu=simu)
         simu.run()

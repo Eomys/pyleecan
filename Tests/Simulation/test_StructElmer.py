@@ -2,6 +2,7 @@ from os.path import join
 from numpy import pi
 import pytest
 from Tests import save_path, TEST_DATA_DIR
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.definitions import DATA_DIR
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag
@@ -68,7 +69,7 @@ class Test_StructElmer(object):
         simu.struct.is_get_mesh = True
 
         # set rotor speed and run simulation
-        simu.input = InputVoltage(N0=10000)  # rpm
+        simu.input = InputVoltage(OP=OPdq(N0=10000))  # rpm
         simu.run()
 
         return output
@@ -94,7 +95,7 @@ class Test_StructElmer(object):
         simu.struct.is_get_mesh = True
 
         # set rotor speed and run simulation
-        simu.input = InputVoltage(N0=10000)  # rpm
+        simu.input = InputVoltage(OP=OPdq(N0=10000))  # rpm
         simu.run()
 
         return output
@@ -127,7 +128,7 @@ class Test_StructElmer(object):
         simu.struct.is_get_mesh = True
 
         # set rotor speed and run simulation
-        simu.input = InputVoltage(N0=10000)  # rpm
+        simu.input = InputVoltage(OP=OPdq(N0=10000))  # rpm
         simu.run()
 
         return output

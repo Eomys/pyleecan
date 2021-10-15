@@ -5,7 +5,9 @@ from numpy import sqrt, pi
 from multiprocessing import cpu_count
 
 import pytest
-
+from pyleecan.Classes.ImportGenPWM import ImportGenPWM
+from pyleecan.Classes.InputVoltage import InputVoltage
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
@@ -39,7 +41,9 @@ def test_EEC_ELUT_PMSM():
 
     # Definition of the input
     simu.input = InputCurrent(
-        N0=1000, Nt_tot=8 * 10, Na_tot=8 * 200, Id_ref=0, Iq_ref=0
+        Nt_tot=8 * 10,
+        Na_tot=8 * 200,
+        OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0),
     )
 
     # Load OP_matrix
@@ -53,7 +57,10 @@ def test_EEC_ELUT_PMSM():
 
     # Set varspeed simulation
     simu.var_simu = VarLoadCurrent(
-        type_OP_matrix=1, OP_matrix=OP_matrix, is_keep_all_output=True
+        type_OP_matrix=1,
+        OP_matrix=OP_matrix,
+        is_keep_all_output=True,
+        stop_if_error=True,
     )
 
     # Define second simu for FEMM comparison
@@ -78,11 +85,18 @@ def test_EEC_ELUT_PMSM():
     ELUT = out.simu.var_simu.postproc_list[0].LUT
 
     # Simu with EEC using ELUT
+    fmax = 20000
+    fswi = 7000
+    Vdc1 = 1000  # Bus voltage
+    U0 = 800  # Phase voltage
     simu_EEC = Simu1(name="test_LUT_PMSM", machine=Toyota_Prius)
 
     # Definition of the input
-    simu_EEC.input = InputCurrent(
-        N0=1000, Nt_tot=8 * 10, Na_tot=8 * 200, Id_ref=50, Iq_ref=50
+    simu_EEC.input = InputVoltage(
+        Na_tot=1024,
+        Nt_tot=1024,
+        PWM=ImportGenPWM(fmax=fmax, fswi=fswi, Vdc1=Vdc1, U0=U0),
+        OP=OPdq(N0=1000, Id_ref=50, Iq_ref=100, Ud_ref=200, Uq_ref=300),
     )
 
     simu_EEC.elec = Electrical(eec=EEC_ANL(), ELUT_enforced=ELUT)
@@ -94,6 +108,13 @@ def test_EEC_ELUT_PMSM():
         "time",
         "phase[]",
         save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
+        is_show_fig=is_show_fig,
+        **dict_2D
+    )
+
+    out_EEC.elec.Is_harm.plot_2D_Data(
+        "freqs",
+        save_path=join(save_path, "EEC_FEMM_IPMSM_Is_harm.png"),
         is_show_fig=is_show_fig,
         **dict_2D
     )

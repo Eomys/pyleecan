@@ -2,6 +2,7 @@ from os.path import join
 
 import pytest
 from Tests import save_validation_path as save_path
+from pyleecan.Classes.OPdq import OPdq
 
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -57,7 +58,10 @@ def test_FEMM_Loss():
     simu = Simu1(name="test_FEMM_Loss", machine=machine)
 
     # Definition of the enforced output of the electrical module
-    simu.input = InputCurrent(Id_ref=Id_ref, Iq_ref=Iq_ref, Na_tot=2048, N0=rotor_speed)
+    simu.input = InputCurrent(
+        OP=OPdq(N0=rotor_speed, Id_ref=Id_ref, Iq_ref=Iq_ref),
+        Na_tot=2048,
+    )
 
     # time discretization [s]
     # TODO without explicit time def. there is an error

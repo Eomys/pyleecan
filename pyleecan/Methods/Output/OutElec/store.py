@@ -6,7 +6,7 @@ from SciDataTool import DataFreq
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
-def store(self, out_dict, out_dict_harm, axes_dict):
+def store(self, out_dict, out_dict_harm):
     """Store the standard outputs of Electrical that are temporarily in out_dict as arrays into OutElec as Data object
 
     Parameters
@@ -17,8 +17,6 @@ def store(self, out_dict, out_dict_harm, axes_dict):
         Dict containing all electrical quantities that have been calculated in EEC
     out_dict_harm : dict
         Dict containing harmonic quantities that have been calculated in EEC
-    axes_dict: {Data}
-        Dict of axes used for electrical calculation
 
     """
 

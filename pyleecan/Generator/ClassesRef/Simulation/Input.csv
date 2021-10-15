@@ -4,4 +4,4 @@ angle,rad,Electrical position vector (no symmetry) to import,Na_tot,ImportMatrix
 Nt_tot,-,Time discretization,0,int,2048,1,,,,,comp_axis_angle,,,
 Nrev,-,Number of rotor revolution (to compute the final time),,float,None,0,,,,,comp_axis_phase,,,
 Na_tot,-,Angular discretization,,int,2048,1,,,,,,,,
-N0,rpm,Rotor speed,1,float,None,,,,,,,,,
+OP,-,Operating Point,,OP,None,,,,,,,,,

@@ -27,8 +27,13 @@ def solve_EEC(self):
 
     out_dict = dict()
 
-    # Solve system
-    if "Ud" in PAR:  # Voltage driven
+    if "Ud" in PAR and "Id" in PAR:
+        # No need to compute
+        out_dict["Id"] = PAR["Id"]
+        out_dict["Iq"] = PAR["Iq"]
+        out_dict["Ud"] = PAR["Ud"]
+        out_dict["Uq"] = PAR["Uq"]
+    elif "Ud" in PAR:  # Voltage driven
         out_dict["Id"] = PAR["Ud"] / (1j * ws * PAR["Ld"])
         out_dict["Iq"] = PAR["Uq"] / (1j * ws * PAR["Lq"])
         out_dict["Ud"] = PAR["Ud"]

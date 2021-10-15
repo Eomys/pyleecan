@@ -7,6 +7,7 @@ from numpy.testing import assert_allclose
 from Tests import save_validation_path as save_path
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
@@ -32,11 +33,9 @@ def test_FEMM_set_previous():
 
     # Definition of a sinusoidal current
     simu.input = InputCurrent()
-    simu.input.Id_ref = -100  # [A]
-    simu.input.Iq_ref = 200  # [A]
+    simu.input.OP = OPdq(Id_ref=-100, Iq_ref=200, N0=2000)
     simu.input.Nt_tot = 32 * 4  # Number of time step
     simu.input.Na_tot = 1024  # Spatial discretization
-    simu.input.N0 = 2000  # Rotor speed [rpm]
 
     # Definition of the magnetic simulation with previous ans file
     simu.mag = MagFEMM(

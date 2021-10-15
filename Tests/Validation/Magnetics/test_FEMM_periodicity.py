@@ -6,6 +6,7 @@ from Tests import save_validation_path as save_path
 
 from numpy import exp, sqrt, pi, meshgrid, zeros, real
 from numpy.testing import assert_array_almost_equal
+from pyleecan.Classes.OPdq import OPdq
 
 from pyleecan.Classes.Simu1 import Simu1
 import matplotlib.pyplot as plt
@@ -47,11 +48,9 @@ def test_FEMM_periodicity_time_no_periodicity_a():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref,
-        Iq_ref=Iq_ref,
+        OP=OPdq(N0=1000, Id_ref=Id_ref, Iq_ref=Iq_ref),
         Na_tot=252 * 9,
         Nt_tot=4 * 9,
-        N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -197,11 +196,9 @@ def test_FEMM_periodicity_time():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref,
-        Iq_ref=Iq_ref,
+        OP=OPdq(N0=1000, Id_ref=Id_ref, Iq_ref=Iq_ref),
         Na_tot=252 * 9,
         Nt_tot=4 * 9,
-        N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -394,11 +391,9 @@ def test_FEMM_periodicity_angle():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref,
-        Iq_ref=Iq_ref,
+        OP=OPdq(N0=1000, Id_ref=Id_ref, Iq_ref=Iq_ref),
         Na_tot=252 * 9,
         Nt_tot=4 * 9,
-        N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity

@@ -45,3 +45,5 @@ def comp_joule_losses(self, out_dict, machine):
     P_joule_r = 3 * Rr * mean(Ir_mag ** 2) / 2
 
     out_dict["Pj_losses"] = P_joule_s + P_joule_r
+
+    return out_dict

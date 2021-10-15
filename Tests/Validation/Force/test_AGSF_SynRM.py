@@ -2,6 +2,7 @@ from numpy import pi, zeros, linspace, cos
 from os.path import join
 
 from Tests import save_validation_path as save_path
+from pyleecan.Classes.OPdq import OPdq
 
 from pyleecan.Classes.Simu1 import Simu1
 
@@ -60,13 +61,12 @@ def test_AGSF_SynRM():
     simu.input = InputCurrent(
         Is=None,
         Ir=None,  # No winding on the rotor
-        N0=None,
+        OP=OPdq(N0=None, felec=freq0),
         angle_rotor=alpha_rotor,
         time=time_obj,
         Na_tot=Na_tot,
         Nt_tot=Nt_tot,
         angle_rotor_initial=0,
-        felec=freq0,
     )
 
     # Definition of the magnetic simulation (1/2 symmetry)

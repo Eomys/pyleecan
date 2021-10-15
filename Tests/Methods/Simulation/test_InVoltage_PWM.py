@@ -3,6 +3,7 @@ from os.path import join
 from pyleecan.Classes.ImportGenPWM import ImportGenPWM
 from pyleecan.Classes.InputVoltage import InputVoltage
 from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
@@ -23,7 +24,7 @@ def test_InVoltage_PWM():
     simu = Simu1(name="test_InVoltage_PWM", machine=Toyota_Prius)
 
     simu.input = InputVoltage(
-        N0=2000,
+        OP=OPdq(N0=2000),
         Na_tot=1024,
         Nt_tot=1024,
         PWM=ImportGenPWM(fmax=fmax, fswi=fswi, Vdc1=Vdc1, U0=U0),

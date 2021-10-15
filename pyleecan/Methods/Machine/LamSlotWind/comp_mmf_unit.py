@@ -2,6 +2,9 @@ from numpy import zeros, ones, dot, squeeze
 
 from SciDataTool import DataTime
 
+from pyleecan.Classes.OPdq import OPdq
+from pyleecan.Classes.OPslip import OPslip
+
 from ....Functions.Electrical.coordinate_transformation import dqh2n
 from ....Functions.Load.import_class import import_class
 
@@ -42,11 +45,14 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, rot_dir=-1, N0=1000):
         # Get stator winding number of phases
         qs = self.winding.qs
 
-    # Output = import_class("pyleecan.Classes", "Output")
-    # OutElec = import_class("pyleecan.Classes", "OutElec")
-    # Simu1 = import_class("pyleecan.Classes", "Simu1")
+    if machine.is_synchronous():
+        OPclass = OPdq
+    else:
+        OPclass = OPslip
     InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
-    input = InputCurrent(Na_tot=Na, Nt_tot=Nt, felec=felec, rot_dir=rot_dir, N0=N0)
+    input = InputCurrent(
+        Na_tot=Na, Nt_tot=Nt, OP=OPclass(N0=N0, felec=felec), rot_dir=rot_dir
+    )
 
     axes_dict = input.comp_axes(
         axes_list=["time", "angle", "phase_S", "phase_R"],

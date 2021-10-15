@@ -65,7 +65,7 @@ def test_FEMM_sym():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
+        OP=OPdq(N0=N0),
         angle_rotor=None,  # Will be computed
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
@@ -552,7 +552,7 @@ def test_ecc_FEMM():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
+        OP=OPdq(N0=N0),
         angle_rotor=None,
         time=time,
         angle=angle,
@@ -680,7 +680,7 @@ def test_Optimization_problem():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
+        OP=OPdq(N0=N0),
         angle_rotor=None,  # Will be computed
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,

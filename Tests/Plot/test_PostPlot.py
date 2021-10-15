@@ -5,6 +5,7 @@ import pytest
 from numpy import exp, sqrt, pi
 
 import matplotlib.pyplot as plt
+from pyleecan.Classes.OPdq import OPdq
 
 from pyleecan.Classes.Simu1 import Simu1
 
@@ -45,7 +46,7 @@ def test_PostPlot():
         Iq_ref=Iq_ref,
         Na_tot=252 * 8,
         Nt_tot=20 * 8,
-        N0=1000,
+        OP=OPdq(N0=1000),
     )
 
     # Definition of the magnetic simulation: with periodicity

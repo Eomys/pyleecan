@@ -69,10 +69,19 @@ def run(self):
     # Solve for each harmonic in case of Us_harm
     out_dict_harm = dict()
     if output.elec.Us_harm is not None:
-        freqs = output.elec.Us_harm.get_axes("freqs")[0].get_values().tolist()
-        Is_harm = zeros((len(freqs), machine.winding.qs))
+        result = output.elec.Us_harm.get_along("freqs", "phase")
+        Udqh = result[output.elec.Us_harm.symbol]
+        freqs = result["freqs"].tolist()
+        Is_harm = zeros((len(freqs), machine.stator.winding.qs), dtype=complex)
+        # Remove Id/Iq from eec parameters
+        del self.eec.parameters["Id"]
+        del self.eec.parameters["Iq"]
         for i, f in enumerate(freqs):
+            # Update eec paremeters
             self.eec.freq0 = f
+            self.eec.parameters["Ud"] = Udqh[i, 0]
+            self.eec.parameters["Uq"] = Udqh[i, 1]
+            # Solve eec
             out_dict_i = self.eec.solve_EEC()
             Is_harm[i, :] = array([out_dict_i["Id"], out_dict_i["Iq"], 0])
         out_dict_harm["Is_harm"] = Is_harm

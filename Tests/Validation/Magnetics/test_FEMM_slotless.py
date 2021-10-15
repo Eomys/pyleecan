@@ -1,5 +1,6 @@
 import pytest
 from os.path import join
+from pyleecan.Classes.OPdq import OPdq
 
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -27,7 +28,10 @@ def test_FEMM_slotless():
     simu = Simu1(name="test_FEMM_slotless", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=1, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=2 ** 6,
+        Nt_tot=1,
     )
 
     simu.mag = MagFEMM(

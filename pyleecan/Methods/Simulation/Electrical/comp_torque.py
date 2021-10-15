@@ -21,3 +21,5 @@ def comp_torque(self, out_dict, N0):
     Tem_av_ref = (P - out_dict["Pj_losses"]) / omega
 
     out_dict["Tem_av_ref"] = Tem_av_ref
+
+    return out_dict

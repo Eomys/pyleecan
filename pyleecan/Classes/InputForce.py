@@ -29,6 +29,7 @@ from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .ImportVectorField import ImportVectorField
 from .ImportMatrix import ImportMatrix
+from .OP import OP
 
 
 class InputForce(Input):
@@ -59,7 +60,7 @@ class InputForce(Input):
         Nt_tot=2048,
         Nrev=None,
         Na_tot=2048,
-        N0=None,
+        OP=None,
         init_dict=None,
         init_str=None,
     ):
@@ -90,13 +91,13 @@ class InputForce(Input):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
         # Set the properties (value check and convertion are done in setter)
         self.P = P
         # Call Input init
         super(InputForce, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
+            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, OP=OP
         )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties

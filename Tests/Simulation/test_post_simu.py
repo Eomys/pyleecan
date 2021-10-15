@@ -1,5 +1,6 @@
 import pytest
 from os.path import join
+from pyleecan.Classes.OPdq import OPdq
 
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
@@ -25,7 +26,7 @@ def test_post_simu():
     simu1 = Simu1(name="test_post_simu", machine=Toyota_Prius)
     # Definition of the input
     simu1.input = InputCurrent(
-        N0=2000, Id_ref=-100, Iq_ref=200, Nt_tot=10, Na_tot=2048, rot_dir=1
+        OP=OPdq(N0=2000, Id_ref=-100, Iq_ref=200), Nt_tot=10, Na_tot=2048, rot_dir=1
     )
 
     # simu2, postprocessing 1 PostFunction, 1 PostMethod

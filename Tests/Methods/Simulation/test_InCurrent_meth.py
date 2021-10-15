@@ -25,6 +25,7 @@ from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineDFIM import MachineDFIM
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.Simulation import Simulation
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
@@ -147,7 +148,12 @@ InputCurrent_Error_test.append(
 # Wrong N0, alpha_rotor
 test_obj = Simulation(machine=M3)
 test_obj.input = InputCurrent(
-    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=None, N0=None
+    time=time,
+    angle=angle,
+    Is=I_1,
+    Ir=I_2,
+    angle_rotor=None,
+    OP=OPdq(N0=None),
 )
 InputCurrent_Error_test.append(
     {
@@ -157,7 +163,12 @@ InputCurrent_Error_test.append(
 )
 test_obj = Simulation(machine=M3)
 test_obj.input = InputCurrent(
-    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=angle_rotor_wrong, N0=None
+    time=time,
+    angle=angle,
+    Is=I_1,
+    Ir=I_2,
+    angle_rotor=angle_rotor_wrong,
+    OP=OPdq(N0=None),
 )
 InputCurrent_Error_test.append(
     {
@@ -167,7 +178,12 @@ InputCurrent_Error_test.append(
 )
 test_obj = Simulation(machine=M3)
 test_obj.input = InputCurrent(
-    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=angle_rotor_wrong2, N0=None
+    time=time,
+    angle=angle,
+    Is=I_1,
+    Ir=I_2,
+    angle_rotor=angle_rotor_wrong2,
+    OP=OPdq(N0=None),
 )
 InputCurrent_Error_test.append(
     {
@@ -244,11 +260,9 @@ class Test_InCurrent_meth(object):
             Nt_tot=Nt_tot,
             Na_tot=Na_tot,
             Is=None,
-            Iq_ref=Iq_ref,
-            Id_ref=Id_ref,
+            OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=N0),
             Ir=None,
             angle_rotor=None,  # Will be computed according to N0 and rot_dir
-            N0=N0,
             rot_dir=None,
         )
 
@@ -272,11 +286,9 @@ class Test_InCurrent_meth(object):
             Nt_tot=Nt_tot,
             Na_tot=Na_tot,
             Is=Is_exp.transpose(),
-            Iq_ref=None,
-            Id_ref=None,
+            OP=OPdq(Id_ref=None, Iq_ref=None, N0=N0),
             Ir=None,
             angle_rotor=None,  # Will be computed according to N0 and rot_dir
-            N0=N0,
             rot_dir=None,
         )
         out = Output(simu=test_obj)

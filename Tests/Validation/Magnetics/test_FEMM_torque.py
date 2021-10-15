@@ -4,6 +4,7 @@ import pytest
 from numpy import array, ones, pi, zeros, sqrt
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.definitions import DATA_DIR
@@ -98,7 +99,7 @@ def test_FEMM_torque():
     simu.input = InputCurrent(
         Is=None,
         Ir=None,  # No winding on the rotor
-        N0=N0,
+        OP=OPdq(N0=N0),
         Nt_tot=Nt_tot,
         Nrev=1 / 6,
         Na_tot=Na_tot,

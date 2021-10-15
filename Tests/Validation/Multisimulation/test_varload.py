@@ -2,6 +2,8 @@
 import sys
 from os.path import dirname, abspath, normpath, join
 
+from pyleecan.Classes.OPdq import OPdq
+
 sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", "..", ".."))))
 sys.path.insert(0, normpath(abspath(dirname(__file__))))
 
@@ -68,7 +70,7 @@ def test_varload():
 
     simu.input.Nt_tot = 8 * 5  # Number of time step
     simu.input.Na_tot = 2048  # Spatial discretization
-    simu.input.N0 = 2000  # Rotor speed [rpm]
+    simu.input.OP = OPdq(N0=2000)
 
     varload = VarLoadCurrent(is_torque=True)
     varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref

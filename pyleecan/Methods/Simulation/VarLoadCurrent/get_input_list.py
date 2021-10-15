@@ -1,5 +1,7 @@
 from ....Classes.Simulation import Simulation
 from ....Classes.InputCurrent import InputCurrent
+from ....Classes.OPdq import OPdq
+from ....Classes.OPslip import OPslip
 
 
 def get_input_list(self):
@@ -25,8 +27,13 @@ def get_input_list(self):
     else:
         Nrev = ref_input.Nrev
     # Update OP according to OP_matrix
+    if self.parent.machine.is_synchronous():
+        OPclass = OPdq
+    else:
+        OPclass = OPslip
     for ii in range(N_simu):
-        input_list[ii].N0 = self.OP_matrix[ii, 0]
+        input_list[ii].OP = OPclass()
+        input_list[ii].OP.N0 = self.OP_matrix[ii, 0]
         # Edit time vector
         input_list[ii].time = None
         input_list[ii].Nt_tot = Nt_tot
@@ -36,11 +43,11 @@ def get_input_list(self):
                 I0=self.OP_matrix[ii, 1], Phi0=self.OP_matrix[ii, 2]
             )
         else:  # Id/Iq
-            input_list[ii].Id_ref = self.OP_matrix[ii, 1]
-            input_list[ii].Iq_ref = self.OP_matrix[ii, 2]
+            input_list[ii].OP.Id_ref = self.OP_matrix[ii, 1]
+            input_list[ii].OP.Iq_ref = self.OP_matrix[ii, 2]
         if self.is_torque:
-            input_list[ii].Tem_av_ref = self.OP_matrix[ii, 3]
+            input_list[ii].OP.Tem_av_ref = self.OP_matrix[ii, 3]
         if self.is_power and self.OP_matrix.shape[1] > 4:
-            input_list[ii].Pem_av_ref = self.OP_matrix[ii, 4]
+            input_list[ii].OP.Pem_av_ref = self.OP_matrix[ii, 4]
 
     return input_list

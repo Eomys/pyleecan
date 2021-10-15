@@ -5,6 +5,7 @@ from os.path import join
 from multiprocessing import cpu_count
 
 from pyleecan.Classes.ForceMT import ForceMT
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -33,7 +34,10 @@ def test_IPMSM():
     simu = Simu1(name="test_compare_transfer_IPMSM_no_transfer", machine=Toyota_Prius)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 11, Nt_tot=2 ** 6, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=2 ** 11,
+        Nt_tot=2 ** 6,
     )
 
     # Configure simulation
@@ -55,7 +59,10 @@ def test_IPMSM():
     simu2.name = "test_compare_transfer_IPMSM_with_transfer"
 
     simu2.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 11, Nt_tot=2 ** 6, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=2 ** 11,
+        Nt_tot=2 ** 6,
     )
 
     simu2.mag = MagFEMM(
@@ -121,7 +128,10 @@ def test_Benchmark():
     simu = Simu1(name="test_compare_transfer_Benchmark_Rag", machine=Benchmark)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=5 * 2 ** 9, Nt_tot=2, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=5 * 2 ** 9,
+        Nt_tot=2,
     )
 
     # Configure simulation

@@ -35,6 +35,7 @@ from ._check import InitUnKnowClassError
 from .Import import Import
 from .ImportGenPWM import ImportGenPWM
 from .ImportMatrix import ImportMatrix
+from .OP import OP
 
 
 class InputVoltage(Input):
@@ -77,21 +78,13 @@ class InputVoltage(Input):
         angle_rotor=None,
         rot_dir=None,
         angle_rotor_initial=0,
-        Tem_av_ref=None,
-        Ud_ref=None,
-        Uq_ref=None,
-        felec=None,
-        slip_ref=0,
-        U0_ref=None,
-        Phi0_ref=None,
-        Pem_av_ref=None,
         PWM=None,
         time=None,
         angle=None,
         Nt_tot=2048,
         Nrev=None,
         Na_tot=2048,
-        N0=None,
+        OP=None,
         init_dict=None,
         init_str=None,
     ):
@@ -116,22 +109,6 @@ class InputVoltage(Input):
                 rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
-            if "Tem_av_ref" in list(init_dict.keys()):
-                Tem_av_ref = init_dict["Tem_av_ref"]
-            if "Ud_ref" in list(init_dict.keys()):
-                Ud_ref = init_dict["Ud_ref"]
-            if "Uq_ref" in list(init_dict.keys()):
-                Uq_ref = init_dict["Uq_ref"]
-            if "felec" in list(init_dict.keys()):
-                felec = init_dict["felec"]
-            if "slip_ref" in list(init_dict.keys()):
-                slip_ref = init_dict["slip_ref"]
-            if "U0_ref" in list(init_dict.keys()):
-                U0_ref = init_dict["U0_ref"]
-            if "Phi0_ref" in list(init_dict.keys()):
-                Phi0_ref = init_dict["Phi0_ref"]
-            if "Pem_av_ref" in list(init_dict.keys()):
-                Pem_av_ref = init_dict["Pem_av_ref"]
             if "PWM" in list(init_dict.keys()):
                 PWM = init_dict["PWM"]
             if "time" in list(init_dict.keys()):
@@ -144,24 +121,16 @@ class InputVoltage(Input):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
         # Set the properties (value check and convertion are done in setter)
         self.angle_rotor = angle_rotor
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
-        self.Tem_av_ref = Tem_av_ref
-        self.Ud_ref = Ud_ref
-        self.Uq_ref = Uq_ref
-        self.felec = felec
-        self.slip_ref = slip_ref
-        self.U0_ref = U0_ref
-        self.Phi0_ref = Phi0_ref
-        self.Pem_av_ref = Pem_av_ref
         self.PWM = PWM
         # Call Input init
         super(InputVoltage, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
+            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, OP=OP
         )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
@@ -183,14 +152,6 @@ class InputVoltage(Input):
         InputVoltage_str += (
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
-        InputVoltage_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
-        InputVoltage_str += "Ud_ref = " + str(self.Ud_ref) + linesep
-        InputVoltage_str += "Uq_ref = " + str(self.Uq_ref) + linesep
-        InputVoltage_str += "felec = " + str(self.felec) + linesep
-        InputVoltage_str += "slip_ref = " + str(self.slip_ref) + linesep
-        InputVoltage_str += "U0_ref = " + str(self.U0_ref) + linesep
-        InputVoltage_str += "Phi0_ref = " + str(self.Phi0_ref) + linesep
-        InputVoltage_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         if self.PWM is not None:
             tmp = self.PWM.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InputVoltage_str += "PWM = " + tmp
@@ -212,22 +173,6 @@ class InputVoltage(Input):
         if other.rot_dir != self.rot_dir:
             return False
         if other.angle_rotor_initial != self.angle_rotor_initial:
-            return False
-        if other.Tem_av_ref != self.Tem_av_ref:
-            return False
-        if other.Ud_ref != self.Ud_ref:
-            return False
-        if other.Uq_ref != self.Uq_ref:
-            return False
-        if other.felec != self.felec:
-            return False
-        if other.slip_ref != self.slip_ref:
-            return False
-        if other.U0_ref != self.U0_ref:
-            return False
-        if other.Phi0_ref != self.Phi0_ref:
-            return False
-        if other.Pem_av_ref != self.Pem_av_ref:
             return False
         if other.PWM != self.PWM:
             return False
@@ -256,22 +201,6 @@ class InputVoltage(Input):
             diff_list.append(name + ".rot_dir")
         if other._angle_rotor_initial != self._angle_rotor_initial:
             diff_list.append(name + ".angle_rotor_initial")
-        if other._Tem_av_ref != self._Tem_av_ref:
-            diff_list.append(name + ".Tem_av_ref")
-        if other._Ud_ref != self._Ud_ref:
-            diff_list.append(name + ".Ud_ref")
-        if other._Uq_ref != self._Uq_ref:
-            diff_list.append(name + ".Uq_ref")
-        if other._felec != self._felec:
-            diff_list.append(name + ".felec")
-        if other._slip_ref != self._slip_ref:
-            diff_list.append(name + ".slip_ref")
-        if other._U0_ref != self._U0_ref:
-            diff_list.append(name + ".U0_ref")
-        if other._Phi0_ref != self._Phi0_ref:
-            diff_list.append(name + ".Phi0_ref")
-        if other._Pem_av_ref != self._Pem_av_ref:
-            diff_list.append(name + ".Pem_av_ref")
         if (other.PWM is None and self.PWM is not None) or (
             other.PWM is not None and self.PWM is None
         ):
@@ -292,14 +221,6 @@ class InputVoltage(Input):
         S += getsizeof(self.angle_rotor)
         S += getsizeof(self.rot_dir)
         S += getsizeof(self.angle_rotor_initial)
-        S += getsizeof(self.Tem_av_ref)
-        S += getsizeof(self.Ud_ref)
-        S += getsizeof(self.Uq_ref)
-        S += getsizeof(self.felec)
-        S += getsizeof(self.slip_ref)
-        S += getsizeof(self.U0_ref)
-        S += getsizeof(self.Phi0_ref)
-        S += getsizeof(self.Pem_av_ref)
         S += getsizeof(self.PWM)
         return S
 
@@ -330,14 +251,6 @@ class InputVoltage(Input):
             )
         InputVoltage_dict["rot_dir"] = self.rot_dir
         InputVoltage_dict["angle_rotor_initial"] = self.angle_rotor_initial
-        InputVoltage_dict["Tem_av_ref"] = self.Tem_av_ref
-        InputVoltage_dict["Ud_ref"] = self.Ud_ref
-        InputVoltage_dict["Uq_ref"] = self.Uq_ref
-        InputVoltage_dict["felec"] = self.felec
-        InputVoltage_dict["slip_ref"] = self.slip_ref
-        InputVoltage_dict["U0_ref"] = self.U0_ref
-        InputVoltage_dict["Phi0_ref"] = self.Phi0_ref
-        InputVoltage_dict["Pem_av_ref"] = self.Pem_av_ref
         if self.PWM is None:
             InputVoltage_dict["PWM"] = None
         else:
@@ -358,14 +271,6 @@ class InputVoltage(Input):
             self.angle_rotor._set_None()
         self.rot_dir = None
         self.angle_rotor_initial = None
-        self.Tem_av_ref = None
-        self.Ud_ref = None
-        self.Uq_ref = None
-        self.felec = None
-        self.slip_ref = None
-        self.U0_ref = None
-        self.Phi0_ref = None
-        self.Pem_av_ref = None
         if self.PWM is not None:
             self.PWM._set_None()
         # Set to None the properties inherited from Input
@@ -434,150 +339,6 @@ class InputVoltage(Input):
         fget=_get_angle_rotor_initial,
         fset=_set_angle_rotor_initial,
         doc=u"""Initial angular position of the rotor at t=0
-
-        :Type: float
-        """,
-    )
-
-    def _get_Tem_av_ref(self):
-        """getter of Tem_av_ref"""
-        return self._Tem_av_ref
-
-    def _set_Tem_av_ref(self, value):
-        """setter of Tem_av_ref"""
-        check_var("Tem_av_ref", value, "float")
-        self._Tem_av_ref = value
-
-    Tem_av_ref = property(
-        fget=_get_Tem_av_ref,
-        fset=_set_Tem_av_ref,
-        doc=u"""Theorical Average Electromagnetic torque
-
-        :Type: float
-        """,
-    )
-
-    def _get_Ud_ref(self):
-        """getter of Ud_ref"""
-        return self._Ud_ref
-
-    def _set_Ud_ref(self, value):
-        """setter of Ud_ref"""
-        check_var("Ud_ref", value, "float")
-        self._Ud_ref = value
-
-    Ud_ref = property(
-        fget=_get_Ud_ref,
-        fset=_set_Ud_ref,
-        doc=u"""d-axis current RMS magnitude  (phase to neutral)
-
-        :Type: float
-        """,
-    )
-
-    def _get_Uq_ref(self):
-        """getter of Uq_ref"""
-        return self._Uq_ref
-
-    def _set_Uq_ref(self, value):
-        """setter of Uq_ref"""
-        check_var("Uq_ref", value, "float")
-        self._Uq_ref = value
-
-    Uq_ref = property(
-        fget=_get_Uq_ref,
-        fset=_set_Uq_ref,
-        doc=u"""q-axis current RMS magnitude  (phase to neutral)
-
-        :Type: float
-        """,
-    )
-
-    def _get_felec(self):
-        """getter of felec"""
-        return self._felec
-
-    def _set_felec(self, value):
-        """setter of felec"""
-        check_var("felec", value, "float")
-        self._felec = value
-
-    felec = property(
-        fget=_get_felec,
-        fset=_set_felec,
-        doc=u"""electrical frequency
-
-        :Type: float
-        """,
-    )
-
-    def _get_slip_ref(self):
-        """getter of slip_ref"""
-        return self._slip_ref
-
-    def _set_slip_ref(self, value):
-        """setter of slip_ref"""
-        check_var("slip_ref", value, "float")
-        self._slip_ref = value
-
-    slip_ref = property(
-        fget=_get_slip_ref,
-        fset=_set_slip_ref,
-        doc=u"""Rotor mechanical slip
-
-        :Type: float
-        """,
-    )
-
-    def _get_U0_ref(self):
-        """getter of U0_ref"""
-        return self._U0_ref
-
-    def _set_U0_ref(self, value):
-        """setter of U0_ref"""
-        check_var("U0_ref", value, "float")
-        self._U0_ref = value
-
-    U0_ref = property(
-        fget=_get_U0_ref,
-        fset=_set_U0_ref,
-        doc=u"""stator voltage (phase to neutral)
-
-        :Type: float
-        """,
-    )
-
-    def _get_Phi0_ref(self):
-        """getter of Phi0_ref"""
-        return self._Phi0_ref
-
-    def _set_Phi0_ref(self, value):
-        """setter of Phi0_ref"""
-        check_var("Phi0_ref", value, "float")
-        self._Phi0_ref = value
-
-    Phi0_ref = property(
-        fget=_get_Phi0_ref,
-        fset=_set_Phi0_ref,
-        doc=u"""stator voltage phase
-
-        :Type: float
-        """,
-    )
-
-    def _get_Pem_av_ref(self):
-        """getter of Pem_av_ref"""
-        return self._Pem_av_ref
-
-    def _set_Pem_av_ref(self, value):
-        """setter of Pem_av_ref"""
-        check_var("Pem_av_ref", value, "float")
-        self._Pem_av_ref = value
-
-    Pem_av_ref = property(
-        fget=_get_Pem_av_ref,
-        fset=_set_Pem_av_ref,
-        doc=u"""Theorical Average Electromagnetic Power
 
         :Type: float
         """,

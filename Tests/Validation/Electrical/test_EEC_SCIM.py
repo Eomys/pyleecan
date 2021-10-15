@@ -5,6 +5,7 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
 from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.OPslip import OPslip
 from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_SCIM import EEC_SCIM
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -61,14 +62,11 @@ def test_EEC_SCIM():
 
     # Definition of a sinusoidal current
     simu.input = InputCurrent()
-    simu.input.felec = 50  # [Hz]
-    simu.input.Id_ref = None  # [A]
-    simu.input.Iq_ref = None  # [A]
-    simu.input.Ud_ref = 400  # [V]
-    simu.input.Uq_ref = 0  # [V]
+    simu.input.OP = OPslip(
+        felec=50, Id_ref=None, Iq_ref=None, Ud_ref=400, Uq_ref=0, N0=1418
+    )
     simu.input.Nt_tot = 360  # Number of time steps
     simu.input.Na_tot = 2048  # Spatial discretization
-    simu.input.N0 = 1418  # Rotor speed [rpm]
     simu.input.rot_dir = 1  # To enforce the rotation direction
     simu.input.Nrev = 5
 

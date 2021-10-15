@@ -8,6 +8,7 @@ from numpy import sqrt
 from pyleecan.Classes.HoleM51 import HoleM51
 from pyleecan.Classes.HoleM52 import HoleM52
 from pyleecan.Classes.HoleM53 import HoleM53
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.PostMethod import PostMethod
 from pyleecan.Classes.Simu1 import Simu1
@@ -47,7 +48,7 @@ def test_post_var_simu():
     simu1 = Simu1(name="test_post_simu", machine=Toyota_Prius)
     # Definition of the input
     simu1.input = InputCurrent(
-        N0=2000, Id_ref=-100, Iq_ref=200, Nt_tot=10, Na_tot=2048, rot_dir=1
+        OP=OPdq(N0=2000, Id_ref=-100, Iq_ref=200), Nt_tot=10, Na_tot=2048, rot_dir=1
     )
 
     # Vary Stator slot H0

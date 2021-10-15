@@ -135,6 +135,7 @@ class OutElec(FrozenClass):
         OP=None,
         Pem_av_ref=None,
         Tem_av_ref=None,
+        Is_harm=None,
         init_dict=None,
         init_str=None,
     ):
@@ -179,6 +180,8 @@ class OutElec(FrozenClass):
                 Pem_av_ref = init_dict["Pem_av_ref"]
             if "Tem_av_ref" in list(init_dict.keys()):
                 Tem_av_ref = init_dict["Tem_av_ref"]
+            if "Is_harm" in list(init_dict.keys()):
+                Is_harm = init_dict["Is_harm"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -194,6 +197,7 @@ class OutElec(FrozenClass):
         self.OP = OP
         self.Pem_av_ref = Pem_av_ref
         self.Tem_av_ref = Tem_av_ref
+        self.Is_harm = Is_harm
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -235,6 +239,7 @@ class OutElec(FrozenClass):
             OutElec_str += "OP = None" + linesep + linesep
         OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
+        OutElec_str += "Is_harm = " + str(self.Is_harm) + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -267,6 +272,8 @@ class OutElec(FrozenClass):
         if other.Pem_av_ref != self.Pem_av_ref:
             return False
         if other.Tem_av_ref != self.Tem_av_ref:
+            return False
+        if other.Is_harm != self.Is_harm:
             return False
         return True
 
@@ -345,6 +352,14 @@ class OutElec(FrozenClass):
             diff_list.append(name + ".Pem_av_ref")
         if other._Tem_av_ref != self._Tem_av_ref:
             diff_list.append(name + ".Tem_av_ref")
+        if (other.Is_harm is None and self.Is_harm is not None) or (
+            other.Is_harm is not None and self.Is_harm is None
+        ):
+            diff_list.append(name + ".Is_harm None mismatch")
+        elif self.Is_harm is not None:
+            diff_list.extend(
+                self.Is_harm.compare(other.Is_harm, name=name + ".Is_harm")
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -368,6 +383,7 @@ class OutElec(FrozenClass):
         S += getsizeof(self.OP)
         S += getsizeof(self.Pem_av_ref)
         S += getsizeof(self.Tem_av_ref)
+        S += getsizeof(self.Is_harm)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -461,6 +477,14 @@ class OutElec(FrozenClass):
             )
         OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
         OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
+        if self.Is_harm is None:
+            OutElec_dict["Is_harm"] = None
+        else:
+            OutElec_dict["Is_harm"] = self.Is_harm.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -483,6 +507,7 @@ class OutElec(FrozenClass):
             self.OP._set_None()
         self.Pem_av_ref = None
         self.Tem_av_ref = None
+        self.Is_harm = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -793,5 +818,32 @@ class OutElec(FrozenClass):
         doc=u"""Theorical Average Electromagnetic torque
 
         :Type: float
+        """,
+    )
+
+    def _get_Is_harm(self):
+        """getter of Is_harm"""
+        return self._Is_harm
+
+    def _set_Is_harm(self, value):
+        """setter of Is_harm"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Is_harm"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("Is_harm", value, "DataND")
+        self._Is_harm = value
+
+    Is_harm = property(
+        fget=_get_Is_harm,
+        fset=_set_Is_harm,
+        doc=u"""Harmonic stator current 
+
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )

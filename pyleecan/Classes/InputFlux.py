@@ -30,6 +30,7 @@ from ._check import InitUnKnowClassError
 from .ImportMatrix import ImportMatrix
 from .Import import Import
 from .ImportGenPWM import ImportGenPWM
+from .OP import OP
 
 
 class InputFlux(InputCurrent):
@@ -64,26 +65,16 @@ class InputFlux(InputCurrent):
         B_enforced=None,
         Is=None,
         Ir=None,
-        Id_ref=None,
-        Iq_ref=None,
         angle_rotor=None,
         rot_dir=None,
         angle_rotor_initial=0,
-        Tem_av_ref=None,
-        Ud_ref=None,
-        Uq_ref=None,
-        felec=None,
-        slip_ref=0,
-        U0_ref=None,
-        Phi0_ref=None,
-        Pem_av_ref=None,
         PWM=None,
         time=None,
         angle=None,
         Nt_tot=2048,
         Nrev=None,
         Na_tot=2048,
-        N0=None,
+        OP=None,
         init_dict=None,
         init_str=None,
     ):
@@ -122,32 +113,12 @@ class InputFlux(InputCurrent):
                 Is = init_dict["Is"]
             if "Ir" in list(init_dict.keys()):
                 Ir = init_dict["Ir"]
-            if "Id_ref" in list(init_dict.keys()):
-                Id_ref = init_dict["Id_ref"]
-            if "Iq_ref" in list(init_dict.keys()):
-                Iq_ref = init_dict["Iq_ref"]
             if "angle_rotor" in list(init_dict.keys()):
                 angle_rotor = init_dict["angle_rotor"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
-            if "Tem_av_ref" in list(init_dict.keys()):
-                Tem_av_ref = init_dict["Tem_av_ref"]
-            if "Ud_ref" in list(init_dict.keys()):
-                Ud_ref = init_dict["Ud_ref"]
-            if "Uq_ref" in list(init_dict.keys()):
-                Uq_ref = init_dict["Uq_ref"]
-            if "felec" in list(init_dict.keys()):
-                felec = init_dict["felec"]
-            if "slip_ref" in list(init_dict.keys()):
-                slip_ref = init_dict["slip_ref"]
-            if "U0_ref" in list(init_dict.keys()):
-                U0_ref = init_dict["U0_ref"]
-            if "Phi0_ref" in list(init_dict.keys()):
-                Phi0_ref = init_dict["Phi0_ref"]
-            if "Pem_av_ref" in list(init_dict.keys()):
-                Pem_av_ref = init_dict["Pem_av_ref"]
             if "PWM" in list(init_dict.keys()):
                 PWM = init_dict["PWM"]
             if "time" in list(init_dict.keys()):
@@ -160,8 +131,8 @@ class InputFlux(InputCurrent):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
         # Set the properties (value check and convertion are done in setter)
         self.per_a = per_a
         self.per_t = per_t
@@ -175,26 +146,16 @@ class InputFlux(InputCurrent):
         super(InputFlux, self).__init__(
             Is=Is,
             Ir=Ir,
-            Id_ref=Id_ref,
-            Iq_ref=Iq_ref,
             angle_rotor=angle_rotor,
             rot_dir=rot_dir,
             angle_rotor_initial=angle_rotor_initial,
-            Tem_av_ref=Tem_av_ref,
-            Ud_ref=Ud_ref,
-            Uq_ref=Uq_ref,
-            felec=felec,
-            slip_ref=slip_ref,
-            U0_ref=U0_ref,
-            Phi0_ref=Phi0_ref,
-            Pem_av_ref=Pem_av_ref,
             PWM=PWM,
             time=time,
             angle=angle,
             Nt_tot=Nt_tot,
             Nrev=Nrev,
             Na_tot=Na_tot,
-            N0=N0,
+            OP=OP,
         )
         # The class is frozen (in InputCurrent init), for now it's impossible to
         # add new properties
