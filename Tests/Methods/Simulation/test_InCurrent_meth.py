@@ -75,13 +75,13 @@ M3.rotor.winding.qs = 2
 
 # Wrong time
 test_obj = Simulation(machine=Toyota_Prius)
-test_obj.input = InputCurrent(time=None)
+test_obj.input = InputCurrent(time=None, OP=OPdq())
 InputCurrent_Error_test.append(
     {"test_obj": test_obj, "exp": "ERROR: InputCurrent.time missing"}
 )
 # Wrong time shape
 test_obj = Simulation(machine=Toyota_Prius)
-test_obj.input = InputCurrent(time=time_wrong)
+test_obj.input = InputCurrent(time=time_wrong, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -90,7 +90,7 @@ InputCurrent_Error_test.append(
 )
 # Wrong angle shape
 test_obj = Simulation(machine=Toyota_Prius)
-test_obj.input = InputCurrent(time=time, angle=angle_wrong)
+test_obj.input = InputCurrent(time=time, angle=angle_wrong, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -99,7 +99,7 @@ InputCurrent_Error_test.append(
 )
 # Missing Is
 test_obj = Simulation(machine=M1)
-test_obj.input = InputCurrent(time=time, angle=angle, Is=None)
+test_obj.input = InputCurrent(time=time, angle=angle, Is=None, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -108,7 +108,7 @@ InputCurrent_Error_test.append(
 )
 # Is wrong shape
 test_obj = Simulation(machine=M1)
-test_obj.input = InputCurrent(time=time, angle=angle, Is=I_3)
+test_obj.input = InputCurrent(time=time, angle=angle, Is=I_3, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -116,7 +116,7 @@ InputCurrent_Error_test.append(
     }
 )
 test_obj = Simulation(machine=M1)
-test_obj.input = InputCurrent(time=time, angle=angle, Is=I_4)
+test_obj.input = InputCurrent(time=time, angle=angle, Is=I_4, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -125,12 +125,12 @@ InputCurrent_Error_test.append(
 )
 # Wrong Ir
 test_obj = Simulation(machine=M2)
-test_obj.input = InputCurrent(time=time, angle=angle, Ir=None)
+test_obj.input = InputCurrent(time=time, angle=angle, Ir=None, OP=OPdq())
 InputCurrent_Error_test.append(
     {"test_obj": test_obj, "exp": "ERROR: InputCurrent.Ir missing"}
 )
 test_obj = Simulation(machine=M2)
-test_obj.input = InputCurrent(time=time, angle=angle, Ir=I_3)
+test_obj.input = InputCurrent(time=time, angle=angle, Ir=I_3, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -138,7 +138,7 @@ InputCurrent_Error_test.append(
     }
 )
 test_obj = Simulation(machine=M2)
-test_obj.input = InputCurrent(time=time, angle=angle, Ir=I_4)
+test_obj.input = InputCurrent(time=time, angle=angle, Ir=I_4, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -326,8 +326,8 @@ if __name__ == "__main__":
 
     # test_dict = idq_test[0]
     # obj.test_InputCurrent_DQ(test_dict)
-    for test_dict in idq_test:
-        out = obj.test_InputCurrent_DQ(test_dict)
+    for test_dict in InputCurrent_Error_test:
+        out = obj.test_InputCurrent_Error_test(test_dict)
     print("Done")
     # out.plot_2D_Data(
     #         "elec.Is",

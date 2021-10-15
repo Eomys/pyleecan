@@ -30,7 +30,6 @@ is_show_fig = False
 @pytest.mark.EEC_PMSM
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
-@pytest.mark.skip(reason="Work in progress")
 def test_EEC_ELUT_PMSM():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine"""
 
