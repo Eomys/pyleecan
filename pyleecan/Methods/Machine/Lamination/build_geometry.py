@@ -113,15 +113,23 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     elif sym != 1 and len(ext_line) > 0:  # Part of the lamination by symmetry
         # Get limit point of the yoke side
         if self.is_internal:
-            ZBR = int_line[-1].get_end()  # Bot Right
             ZTR = ext_line[0].get_begin()  # Top Right
-            ZBL = int_line[0].get_begin()  # Bot Left
             ZTL = ext_line[-1].get_end()  # Top Left
+            if len(int_line) > 0:
+                ZBR = int_line[-1].get_end()  # Bot Right
+                ZBL = int_line[0].get_begin()  # Bot Left
+            else:  # Machine without shaft for instance
+                ZBR = None
+                ZBL = None
         else:
-            ZBR = int_line[0].get_begin()  # Bot Right
             ZTR = ext_line[-1].get_end()  # Top Right
-            ZBL = int_line[-1].get_end()  # Bot Left
             ZTL = ext_line[0].get_begin()  # Top Left
+            if len(int_line) >0:
+                ZBL = int_line[-1].get_end()  # Bot Left
+                ZBR = int_line[0].get_begin()  # Bot Right
+            else:  # Machine without shaft for instance
+                ZBR = None
+                ZBL = None
         right_list, left_list = self.get_yoke_side_line(
             sym=sym, vent_surf_list=vent_surf_list, ZBR=ZBR, ZTR=ZTR, ZBL=ZBL, ZTL=ZTL
         )

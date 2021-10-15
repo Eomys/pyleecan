@@ -22,7 +22,7 @@ def test_EEC_SCIM():
     """Validation of the SCIM Electrical Equivalent Circuit with the 3kW SCIM
     from 'Berechnung elektrischer Maschinen' (ISBN: 978-3-527-40525-1)
     Note: conductor properties have been set to operation point temperature condition,
-          stator end winding length is adapted to ref. lenght
+    stator end winding length is adapted to ref. lenght
     """
     SCIM = load(join(DATA_DIR, "Machine", "SCIM_010.json"))
 
