@@ -23,4 +23,6 @@ def get_surface(self):
     Zend = curve_list[0].get_begin()
     curve_list.append(Arc1(Zbegin, Zend, -Rbo, is_trigo_direction=False))
 
-    return SurfLine(line_list=curve_list, label="Slot")
+    surf = SurfLine(line_list=curve_list, label="Slot")
+    surf.comp_point_ref(is_set=True)
+    return surf

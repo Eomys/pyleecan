@@ -27,6 +27,9 @@ def get_bore_desc(self, sym=1, prop_dict=None):
 
     Rbo = self.get_Rbo()
 
+    if self.notch is None:
+        self.notch = list()
+
     if self.bore is not None and self.notch in [None, list()] and sym == 1:
         return None, self.bore.get_bore_line(prop_dict=prop_dict)
     elif self.notch is None or len(self.notch) == 0:

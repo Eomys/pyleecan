@@ -22,6 +22,7 @@ NO_MESH_LAB = "NoMesh"
 VENT_LAB = "Ventilation"
 TOOTH_LAB = "Tooth"
 AIRBOX_LAB = "Airbox"
+NOTCH_LAB = "Notch"
 # Short Surface label alternative
 LAM_LAB_S = "Lam"
 HOLEV_LAB_S = "HV"
@@ -36,8 +37,11 @@ LEFT_LAB = "Left"
 BOT_LAB = "Bot"
 TOP_LAB = "Top"
 YS_LAB = "YokeSide"
+YSN_LAB = YS_LAB + NOTCH_LAB
 YSR_LAB = YS_LAB + "-" + RIGHT_LAB
 YSL_LAB = YS_LAB + "-" + LEFT_LAB
+YSNR_LAB = YSN_LAB + "-" + RIGHT_LAB
+YSNL_LAB = YSN_LAB + "-" + LEFT_LAB
 # Shaft BC properties
 SHAFTS_LAB = "ShaftSide"
 SHAFTSR_LAB = SHAFTS_LAB + "-" + RIGHT_LAB

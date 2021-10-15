@@ -11,6 +11,7 @@ from ...Functions.labels import (
     ROTOR_LAB,
     AIRGAP_LAB,
     VENT_LAB,
+    NOTCH_LAB,
     HOLEV_LAB,
     HOLEM_LAB,
     MAG_LAB,
@@ -127,6 +128,12 @@ def create_FEMM_materials(
                 femm.mi_addmaterial("Airgap", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
                 materials.append("Airgap")
             prop_dict[label_dict["full"]] = "Airgap"
+        elif NOTCH_LAB in label_dict["surf_type"]:  # Notches
+            # Same material as Airgap but different mesh
+            if "Air" not in materials:
+                femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
+                materials.append("Air")
+            prop_dict[label_dict["full"]] = "Air"
         elif VENT_LAB in label_dict["surf_type"]:  # Ventilation
             vent = get_obj_from_label(machine, label_dict=label_dict)
             material = vent.mat_void

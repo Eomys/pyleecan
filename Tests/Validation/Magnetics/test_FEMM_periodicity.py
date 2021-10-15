@@ -359,18 +359,18 @@ def test_FEMM_periodicity_angle():
     NBS = SlotCirc(Zs=Zs, W0=W0, H0=H0)
     SPMSM_015.stator.notch = [NotchEvenDist(alpha=0, notch_shape=NBS)]
     NYS = SlotM10(Zs=Zs, W0=W0, H0=H0)
-    SPMSM_015.stator.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYS)]
+    # SPMSM_015.stator.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYS)]
 
     Zr = SPMSM_015.rotor.slot.Zs
     W0 = SPMSM_015.stator.slot.W0 * 0.1
     H0 = SPMSM_015.rotor.comp_height_yoke() * 0.05
     NBR = SlotCirc(Zs=Zr, W0=W0, H0=H0)
-    SPMSM_015.rotor.notch = [NotchEvenDist(alpha=0, notch_shape=NBR)]
+    SPMSM_015.rotor.notch = [NotchEvenDist(alpha=0.001, notch_shape=NBR)]
     NYR = SlotM10(Zs=Zr, W0=W0, H0=H0)
-    SPMSM_015.rotor.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYR)]
+    # SPMSM_015.rotor.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYR)]
 
-    SPMSM_015.plot(sym=3)
-    plt.show()
+    # SPMSM_015.plot(sym=3)
+    # plt.show()
 
     simu = Simu1(name="test_FEMM_periodicity_angle", machine=SPMSM_015)
 
@@ -394,7 +394,7 @@ def test_FEMM_periodicity_angle():
         type_BH_stator=1,
         type_BH_rotor=1,
         is_periodicity_a=True,
-        is_periodicity_t=False,
+        is_periodicity_t=True,
         nb_worker=cpu_count(),
         # Kmesh_fineness=2,
     )
@@ -403,6 +403,7 @@ def test_FEMM_periodicity_angle():
     # Definition of the magnetic simulation: no periodicity
     # Definition of the magnetic simulation: no periodicity
     simu2 = simu.copy()
+    simu2.name = simu.name + "_Full"
     simu2.mag.is_periodicity_a = False
 
     simu2.force = ForceMT()
