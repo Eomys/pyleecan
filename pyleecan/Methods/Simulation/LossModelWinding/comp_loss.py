@@ -34,7 +34,7 @@ def comp_loss(self, output, part_label):
         else:
             current = output.elec.get_Ir()
 
-        axes_names = [axis.name for axis in current.axes]
+        axes_names = [axis.name + "[smallestperiod]" for axis in current.axes]
         data_dict = current.get_along(*axes_names)
 
         data = DataTime(
