@@ -133,6 +133,8 @@ class OutElec(FrozenClass):
         internal=None,
         Us_harm=None,
         OP=None,
+        Pem_av_ref=None,
+        Tem_av_ref=None,
         init_dict=None,
         init_str=None,
     ):
@@ -173,6 +175,10 @@ class OutElec(FrozenClass):
                 Us_harm = init_dict["Us_harm"]
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
+            if "Pem_av_ref" in list(init_dict.keys()):
+                Pem_av_ref = init_dict["Pem_av_ref"]
+            if "Tem_av_ref" in list(init_dict.keys()):
+                Tem_av_ref = init_dict["Tem_av_ref"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -186,6 +192,8 @@ class OutElec(FrozenClass):
         self.internal = internal
         self.Us_harm = Us_harm
         self.OP = OP
+        self.Pem_av_ref = Pem_av_ref
+        self.Tem_av_ref = Tem_av_ref
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -225,6 +233,8 @@ class OutElec(FrozenClass):
             OutElec_str += "OP = " + tmp
         else:
             OutElec_str += "OP = None" + linesep + linesep
+        OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
+        OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -253,6 +263,10 @@ class OutElec(FrozenClass):
         if other.Us_harm != self.Us_harm:
             return False
         if other.OP != self.OP:
+            return False
+        if other.Pem_av_ref != self.Pem_av_ref:
+            return False
+        if other.Tem_av_ref != self.Tem_av_ref:
             return False
         return True
 
@@ -327,6 +341,10 @@ class OutElec(FrozenClass):
             diff_list.append(name + ".OP None mismatch")
         elif self.OP is not None:
             diff_list.extend(self.OP.compare(other.OP, name=name + ".OP"))
+        if other._Pem_av_ref != self._Pem_av_ref:
+            diff_list.append(name + ".Pem_av_ref")
+        if other._Tem_av_ref != self._Tem_av_ref:
+            diff_list.append(name + ".Tem_av_ref")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -348,6 +366,8 @@ class OutElec(FrozenClass):
         S += getsizeof(self.internal)
         S += getsizeof(self.Us_harm)
         S += getsizeof(self.OP)
+        S += getsizeof(self.Pem_av_ref)
+        S += getsizeof(self.Tem_av_ref)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -439,6 +459,8 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
+        OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
+        OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -459,6 +481,8 @@ class OutElec(FrozenClass):
         self.Us_harm = None
         if self.OP is not None:
             self.OP._set_None()
+        self.Pem_av_ref = None
+        self.Tem_av_ref = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -733,5 +757,41 @@ class OutElec(FrozenClass):
         doc=u"""Operating Point
 
         :Type: OP
+        """,
+    )
+
+    def _get_Pem_av_ref(self):
+        """getter of Pem_av_ref"""
+        return self._Pem_av_ref
+
+    def _set_Pem_av_ref(self, value):
+        """setter of Pem_av_ref"""
+        check_var("Pem_av_ref", value, "float")
+        self._Pem_av_ref = value
+
+    Pem_av_ref = property(
+        fget=_get_Pem_av_ref,
+        fset=_set_Pem_av_ref,
+        doc=u"""Theorical Average Electromagnetic Power
+
+        :Type: float
+        """,
+    )
+
+    def _get_Tem_av_ref(self):
+        """getter of Tem_av_ref"""
+        return self._Tem_av_ref
+
+    def _set_Tem_av_ref(self, value):
+        """setter of Tem_av_ref"""
+        check_var("Tem_av_ref", value, "float")
+        self._Tem_av_ref = value
+
+    Tem_av_ref = property(
+        fget=_get_Tem_av_ref,
+        fset=_set_Tem_av_ref,
+        doc=u"""Theorical Average Electromagnetic torque
+
+        :Type: float
         """,
     )

@@ -13,8 +13,14 @@ def comp_parameters(self, machine, OP, Tsta, Trot):
     ----------
     self : EEC_PMSM
         an EEC_PMSM object
-    output : Output
-        an Output object
+    machine : Machine
+        a Machine object
+    OP : OP
+        an OP object
+    Tsta : float
+        Average stator temperature
+    Trot : float
+        Average rotor temperature
     """
 
     # get some machine parameters

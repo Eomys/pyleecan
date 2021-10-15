@@ -24,6 +24,7 @@ from ..Classes.DataKeeper import DataKeeper
 from ..Classes.Drive import Drive
 from ..Classes.DriveWave import DriveWave
 from ..Classes.EEC import EEC
+from ..Classes.EEC_ANL import EEC_ANL
 from ..Classes.EEC_LSRPM import EEC_LSRPM
 from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.EEC_SCIM import EEC_SCIM

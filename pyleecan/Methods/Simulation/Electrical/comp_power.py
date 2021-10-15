@@ -13,8 +13,8 @@ def comp_power(self, out_dict, machine):
     """
 
     qs = machine.stator.winding.qs
-    Id, Iq = self.eec.parameters["Id"], self.eec.parameters["Iq"]
-    Ud, Uq = self.eec.parameters["Ud"], self.eec.parameters["Uq"]
+    Id, Iq = out_dict["Id"], out_dict["Iq"]
+    Ud, Uq = out_dict["Ud"], out_dict["Uq"]
 
     # All quantities are in RMS
     Pem_av_ref = qs * (Ud * Id + Uq * Iq)

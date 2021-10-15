@@ -13,10 +13,14 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.PostLUT import PostLUT
 from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
+from pyleecan.Classes.Electrical import Electrical
+from pyleecan.Classes.EEC_ANL import EEC_ANL
 
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
+
+is_show_fig = False
 
 
 @pytest.mark.long_5s
@@ -25,10 +29,12 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.skip(reason="Work in progress")
-def test_LUT_PMSM():
+def test_EEC_ELUT_PMSM():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+
+    # Generate ELUT
     simu = Simu1(name="test_LUT_PMSM", machine=Toyota_Prius)
 
     # Definition of the input
@@ -69,21 +75,32 @@ def test_LUT_PMSM():
 
     out = simu.run()
 
+    ELUT = out.simu.var_simu.postproc_list[0].LUT
+
+    # Simu with EEC using ELUT
+    simu_EEC = Simu1(name="test_LUT_PMSM", machine=Toyota_Prius)
+
+    # Definition of the input
+    simu_EEC.input = InputCurrent(
+        N0=1000, Nt_tot=8 * 10, Na_tot=8 * 200, Id_ref=50, Iq_ref=50
+    )
+
+    simu_EEC.elec = Electrical(eec=EEC_ANL(), ELUT_enforced=ELUT)
+
+    out_EEC = simu_EEC.run()
+
     # Plot 3-phase current function of time
     out.mag.Phi_wind_stator.plot_2D_Data(
         "time",
         "phase[]",
-        # save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
-        # is_show_fig=False,
+        save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
+        is_show_fig=is_show_fig,
         **dict_2D
     )
 
-    out.simu.var_simu.postproc_list[0].LUT.get_Lmd(Id=50, Iq=50)
-    out.simu.var_simu.postproc_list[0].LUT.get_Phidqh_mag_harm()
-
-    return out
+    return out, out_EEC
 
 
 # To run it without pytest
 if __name__ == "__main__":
-    out = test_LUT_PMSM()
+    out, out_EEC = test_EEC_ELUT_PMSM()

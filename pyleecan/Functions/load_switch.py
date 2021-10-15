@@ -26,6 +26,7 @@ load_switch = {
     "Drive": Drive,
     "DriveWave": DriveWave,
     "EEC": EEC,
+    "EEC_ANL": EEC_ANL,
     "EEC_LSRPM": EEC_LSRPM,
     "EEC_PMSM": EEC_PMSM,
     "EEC_SCIM": EEC_SCIM,

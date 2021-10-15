@@ -1009,6 +1009,7 @@
             }
         ],
         "daughters": [
+            "EEC_ANL",
             "EEC_LSRPM",
             "EEC_PMSM",
             "EEC_SCIM"
@@ -1021,6 +1022,55 @@
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC.csv",
         "properties": []
+    },
+    "EEC_ANL": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module: Analytical Electrical Equivalent Circuit",
+        "is_internal": false,
+        "methods": [
+            "comp_parameters",
+            "solve_EEC",
+            "gen_drive"
+        ],
+        "mother": "EEC",
+        "name": "EEC_ANL",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_ANL.csv",
+        "properties": [
+            {
+                "desc": "Parameters of the EEC: computed if empty, or enforced",
+                "max": "",
+                "min": "",
+                "name": "parameters",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
+            },
+            {
+                "desc": "Frequency",
+                "max": "",
+                "min": "",
+                "name": "freq0",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
+            },
+            {
+                "desc": "Drive",
+                "max": "",
+                "min": "",
+                "name": "drive",
+                "type": "Drive",
+                "unit": "-",
+                "value": null
+            }
+        ]
     },
     "EEC_LSRPM": {
         "constants": [
@@ -8241,6 +8291,24 @@
                 "name": "OP",
                 "type": "OP",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Theorical Average Electromagnetic Power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_ref",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Theorical Average Electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "float",
+                "unit": "N.m",
                 "value": null
             }
         ]

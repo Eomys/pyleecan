@@ -3,19 +3,21 @@ from numpy import mean, zeros
 from ....Functions.Electrical.coordinate_transformation import n2abc
 
 
-def comp_joule_losses(self, output):
+def comp_joule_losses(self, out_dict, machine):
     """Compute the electrical Joule losses
 
     Parameters
     ----------
     self : Electrical
         an Electrical object
-    output : Output
-        an Output object
+    out_dict : dict
+        Dict containing all magnetic quantities that have been calculated in comp_parameters of EEC
+    machine : Machine
+        a Machine object
     """
     # TODO utilize loss models instead here
     # compute stator joule losses
-    qs = output.simu.machine.stator.winding.qs
+    qs = machine.stator.winding.qs
     I_dict = self.OP.get_Id_Iq()
     Id, Iq = I_dict["Id"], I_dict["Iq"]
     Rs = self.parameters["Rs"]
@@ -23,12 +25,12 @@ def comp_joule_losses(self, output):
     P_joule_s = qs * Rs * (Id ** 2 + Iq ** 2)
 
     # compute rotor joule losses
-    qr = output.simu.machine.rotor.winding.qs
-    p = output.simu.machine.rotor.winding.p
+    qr = machine.rotor.winding.qs
+    p = machine.rotor.winding.p
     Rr = self.parameters["Rr_norm"] / self.parameters["norm"] ** 2
 
     # get the bar currents
-    Ir = output.elec.Ir.get_along("time", "phase")["Ir"].T
+    Ir = machine.parent.parent.elec.Ir.get_along("time", "phase")["Ir"].T
 
     # transform rotor current to 2 phase equivalent
     qr_eff = qr // p
@@ -42,4 +44,4 @@ def comp_joule_losses(self, output):
 
     P_joule_r = 3 * Rr * mean(Ir_mag ** 2) / 2
 
-    output.elec.Pj_losses = P_joule_s + P_joule_r
+    out_dict["Pj_losses"] = P_joule_s + P_joule_r

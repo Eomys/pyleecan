@@ -6,12 +6,10 @@ def comp_joule_losses(self, out_dict, machine):
 
     Parameters
     ----------
-    self : Electrical
-        an Electrical object
+    self : EEC_PMSM
+        an EEC_PMSM object
     out_dict : dict
         Dict containing all magnetic quantities that have been calculated in comp_parameters of EEC
-    machine : Machine
-        a Machine object
     """
 
     qs = machine.stator.winding.qs

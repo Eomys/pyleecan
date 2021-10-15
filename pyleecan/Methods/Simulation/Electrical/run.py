@@ -1,7 +1,9 @@
 from numpy.lib.shape_base import expand_dims
+from numpy import zeros, array
 from ....Methods.Simulation.Input import InputError
 from ....Classes.EEC_SCIM import EEC_SCIM
 from ....Classes.EEC_PMSM import EEC_PMSM
+from ....Classes.EEC_ANL import EEC_ANL
 from ....Classes.MachineSCIM import MachineSCIM
 from ....Classes.MachineSIPMSM import MachineSIPMSM
 from ....Classes.MachineIPMSM import MachineIPMSM
@@ -28,22 +30,24 @@ def run(self):
             self.eec = EEC_PMSM()
     else:
         # Check that EEC is consistent with machine type
-        if isinstance(machine, MachineSCIM) and not isinstance(self.eec, EEC_SCIM):
-            raise Exception(
-                "Cannot run Electrical model if machine is SCIM and eec is not EEC_SCIM"
-            )
-        elif isinstance(machine, (MachineSIPMSM, MachineIPMSM)) and not isinstance(
-            self.eec, EEC_PMSM
+        if isinstance(machine, MachineSCIM) and (
+            not isinstance(self.eec, EEC_SCIM) and not isinstance(self.eec, EEC_ANL)
         ):
             raise Exception(
-                "Cannot run Electrical model if machine is PMSM and eec is not EEC_PMSM"
+                "Cannot run Electrical model if machine is SCIM and eec is not EEC_SCIM or EEC_ANL"
+            )
+        elif isinstance(machine, (MachineSIPMSM, MachineIPMSM)) and (
+            not isinstance(self.eec, EEC_PMSM) and not isinstance(self.eec, EEC_ANL)
+        ):
+            raise Exception(
+                "Cannot run Electrical model if machine is PMSM and eec is not EEC_PMSM or EEC_ANL"
             )
 
     if self.ELUT_enforced is not None:
         # enforce parameters of EEC coming from enforced ELUT at right temperatures
         if self.eec.parameters is None:
             self.eec.parameters = dict()
-        self.eec.parameters.update(self.ELUT_enforced.get_param_dict())
+        self.eec.parameters.update(self.ELUT_enforced.get_param_dict(OP=output.elec.OP))
 
     # Generate drive
     # self.eec.gen_drive(output)
@@ -51,11 +55,8 @@ def run(self):
     # self.eec.parameters["Ud_ref"] = output.elec.OP.get_Ud_Uq()["Ud"]
     # self.eec.parameters["Uq_ref"] = output.elec.OP.get_Ud_Uq()["Uq"]
 
-    # Ud_ref, Ud_ref, fe => OP_fund
-    # for harm
-    #     Ud, Uq, Fharm => Op_harm
     # Compute parameters of the electrical equivalent circuit if some parameters are missing in ELUT
-    out_dict = self.eec.comp_parameters(
+    self.eec.comp_parameters(
         machine,
         OP=output.elec.OP,
         Tsta=self.Tsta,
@@ -63,15 +64,18 @@ def run(self):
     )
 
     # Solve the electrical equivalent circuit
-    out_dict = self.eec.solve_EEC(output)
+    out_dict = self.eec.solve_EEC()
 
     # Solve for each harmonic in case of Us_harm
+    out_dict_harm = dict()
     if output.elec.Us_harm is not None:
         freqs = output.elec.Us_harm.get_axes("freqs")[0].get_values().tolist()
-        for f in freqs:
-            out_dict_harm = self.eec.solve_EEC(output)
-    else:
-        out_dict_harm = None
+        Is_harm = zeros((len(freqs), machine.winding.qs))
+        for i, f in enumerate(freqs):
+            self.eec.freq0 = f
+            out_dict_i = self.eec.solve_EEC()
+            Is_harm[i, :] = array([out_dict_i["Id"], out_dict_i["Iq"], 0])
+        out_dict_harm["Is_harm"] = Is_harm
 
     # Compute losses due to Joule effects
     out_dict = self.eec.comp_joule_losses(out_dict, machine)
