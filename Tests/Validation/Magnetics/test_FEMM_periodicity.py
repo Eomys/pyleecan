@@ -362,14 +362,14 @@ def test_FEMM_periodicity_angle():
     SPMSM_015.stator.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYS)]
 
     Zr = SPMSM_015.rotor.slot.Zs
-    W0 = SPMSM_015.stator.slot.W0 * 0.5
-    H0 = SPMSM_015.rotor.comp_height_yoke() * 0.1
+    W0 = SPMSM_015.stator.slot.W0 * 0.1
+    H0 = SPMSM_015.rotor.comp_height_yoke() * 0.05
     NBR = SlotCirc(Zs=Zr, W0=W0, H0=H0)
     SPMSM_015.rotor.notch = [NotchEvenDist(alpha=0, notch_shape=NBR)]
     NYR = SlotM10(Zs=Zr, W0=W0, H0=H0)
     SPMSM_015.rotor.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYR)]
 
-    SPMSM_015.plot()
+    SPMSM_015.plot(sym=3)
     plt.show()
 
     simu = Simu1(name="test_FEMM_periodicity_angle", machine=SPMSM_015)
