@@ -6,6 +6,7 @@ from ....Classes.Arc3 import Arc3
 from ....Functions.FEMM.get_mesh_param import get_mesh_param
 from ....Functions.FEMM.get_FEMM_BC_propname import get_FEMM_BC_propname
 from ....Functions.labels import (
+    DRAW_PROP_LAB,
     decode_label,
     BOUNDARY_PROP_LAB,
     RADIUS_PROP_LAB,
@@ -32,10 +33,10 @@ def draw_FEMM(
         client to send command to a FEMM instance
     nodeprop :
         Nodal property
-         (Default value = None)
+        (Default value = None)
     maxseg :
         Meshed with elements that span at most maxsegdeg degrees per element
-         (Default value = None)
+        (Default value = None)
     FEMM_dict : dict
         dictionary containing the main parameters of FEMM
     hide :
@@ -68,6 +69,8 @@ def draw_FEMM(
                     raise Exception(
                         "Unknown prop_dict for line of surface " + self.label
                     )
+            if DRAW_PROP_LAB in line.prop_dict and not line.prop_dict[DRAW_PROP_LAB]:
+                continue  #  This line should not be drawn
         mesh_dict = get_mesh_param(label_dict, FEMM_dict)
 
         # Get or create the Boundary Condition (if any)

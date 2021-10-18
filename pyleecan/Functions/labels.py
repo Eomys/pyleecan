@@ -31,6 +31,7 @@ HOLEM_LAB_S = "HM"
 VENT_LAB_S = "Vent"
 
 ## Line Property dict
+DRAW_PROP_LAB = "IS_DRAW"
 BOUNDARY_PROP_LAB = "Boundary"
 RIGHT_LAB = "Right"  # Right is 0x line
 LEFT_LAB = "Left"

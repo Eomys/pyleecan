@@ -137,8 +137,8 @@ def draw_FEMM(
         )
 
     # Add Bore notches surfaces
-    surf_list.extend(lam_int.get_notches_surf(sym=sym))
-    surf_list.extend(lam_ext.get_notches_surf(sym=sym))
+    surf_list.extend(lam_int.get_notches_surf(sym=sym, is_simplified=True))
+    surf_list.extend(lam_ext.get_notches_surf(sym=sym, is_simplified=True))
 
     # adding the Airgap surface
     if is_sliding_band:
