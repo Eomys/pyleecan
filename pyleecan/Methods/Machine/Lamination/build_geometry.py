@@ -124,7 +124,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         else:
             ZTR = ext_line[-1].get_end()  # Top Right
             ZTL = ext_line[0].get_begin()  # Top Left
-            if len(int_line) >0:
+            if len(int_line) > 0:
                 ZBL = int_line[-1].get_end()  # Bot Left
                 ZBR = int_line[0].get_begin()  # Bot Right
             else:  # Machine without shaft for instance
