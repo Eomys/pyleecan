@@ -4,7 +4,7 @@ from multiprocessing import cpu_count
 import pytest
 from Tests import save_validation_path as save_path
 
-from numpy import exp, sqrt, pi, meshgrid, zeros, real
+from numpy import exp, sqrt, pi, max as np_max
 from numpy.testing import assert_array_almost_equal
 
 from pyleecan.Classes.Simu1 import Simu1
@@ -411,9 +411,11 @@ def test_FEMM_periodicity_angle():
     # Run simulations
     out = Output(simu=simu)
     simu.run()
+    assert np_max(out.mag.B.components["radial"].values) == pytest.approx(3.95, rel=0.1)
 
     out2 = Output(simu=simu2)
     simu2.run()
+    assert np_max(out2.mag.B.components["radial"].values) == pytest.approx(3.95, rel=0.1)
 
     # Plot the result
     out.mag.B.plot_2D_Data(
