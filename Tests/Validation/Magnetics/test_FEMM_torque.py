@@ -99,11 +99,10 @@ def test_FEMM_torque():
     simu.input = InputCurrent(
         Is=None,
         Ir=None,  # No winding on the rotor
-        OP=OPdq(N0=N0),
+        OP=OPdq(N0=N0, felec=felec),
         Nt_tot=Nt_tot,
         Nrev=1 / 6,
         Na_tot=Na_tot,
-        felec=felec,
     )
     # Select first OP as reference
     simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=varload.type_OP_matrix)
