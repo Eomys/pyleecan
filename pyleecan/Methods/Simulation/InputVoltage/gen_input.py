@@ -102,36 +102,22 @@ def gen_input(self):
             self.PWM.fmax * 2.56
         )  # Shanon based sampling frequency (with margin)
         self.PWM.duration = 1 / felec
+        self.PWM.typePWM = 7
         # Generate PWM signal
         Uabc, modulation, _, carrier, time = self.PWM.get_data()
         # Create DataTime object
-        Time = DataLinspace(
-            name="time",
-            unit="s",
-            initial=0,
-            final=time[-1],
-            number=len(time),
-            include_endpoint=True,
-            normalizations={"angle_elec": Norm_ref(ref=rot_dir / (2 * pi * felec))},
+        self.time = time
+        Time = self.comp_axis_time(
+            simu.machine.get_pole_pair_number(),
+            per_t=1,
+            is_antiper_t=False,
+            output=output,
         )
-        Phase = Data1D(
-            name="phase",
-            unit="",
-            values=gen_name(qs),
-            is_components=True,
-        )
-        Uabc_data = DataTime(
+        Phase = self.comp_axis_phase(simu.machine.stator)
+        outelec.Us_PWM = DataTime(
             name="Stator voltage",
             symbol="U_s",
             unit="V",
             axes=[Time, Phase],
             values=Uabc,
         )
-        # Rotate to DQH frame
-        Udqh = n2dqh_DataTime(Uabc_data, is_dqh_rms=True)
-        # fft
-        Udqh_freq = Udqh.time_to_freq()
-        # Remove f=0
-        Us_harm = Udqh_freq.get_data_along("freqs>" + str(self.OP.get_felec()), "phase")
-        # Store
-        outelec.Us_harm = Us_harm

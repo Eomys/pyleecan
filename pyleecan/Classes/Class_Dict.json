@@ -8097,6 +8097,7 @@
             "get_Is",
             "get_Nr",
             "get_Us",
+            "get_Us_harm",
             "store"
         ],
         "mother": "",
@@ -8186,10 +8187,10 @@
                 "value": null
             },
             {
-                "desc": "Harmonic stator voltage as a function of time (each column correspond to one phase)",
+                "desc": "PWM stator voltage as a function of time (each column correspond to one phase)",
                 "max": "",
                 "min": "",
-                "name": "Us_harm",
+                "name": "Us_PWM",
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "V",
                 "value": "None"

@@ -43,6 +43,11 @@ except ImportError as error:
     get_Us = error
 
 try:
+    from ..Methods.Output.OutElec.get_Us_harm import get_Us_harm
+except ImportError as error:
+    get_Us_harm = error
+
+try:
     from ..Methods.Output.OutElec.store import store
 except ImportError as error:
     store = error
@@ -105,6 +110,15 @@ class OutElec(FrozenClass):
         )
     else:
         get_Us = get_Us
+    # cf Methods.Output.OutElec.get_Us_harm
+    if isinstance(get_Us_harm, ImportError):
+        get_Us_harm = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_Us_harm: " + str(get_Us_harm))
+            )
+        )
+    else:
+        get_Us_harm = get_Us_harm
     # cf Methods.Output.OutElec.store
     if isinstance(store, ImportError):
         store = property(
@@ -131,7 +145,7 @@ class OutElec(FrozenClass):
         Pj_losses=None,
         Us=None,
         internal=None,
-        Us_harm=None,
+        Us_PWM=None,
         OP=None,
         Pem_av_ref=None,
         Tem_av_ref=None,
@@ -172,8 +186,8 @@ class OutElec(FrozenClass):
                 Us = init_dict["Us"]
             if "internal" in list(init_dict.keys()):
                 internal = init_dict["internal"]
-            if "Us_harm" in list(init_dict.keys()):
-                Us_harm = init_dict["Us_harm"]
+            if "Us_PWM" in list(init_dict.keys()):
+                Us_PWM = init_dict["Us_PWM"]
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
             if "Pem_av_ref" in list(init_dict.keys()):
@@ -193,7 +207,7 @@ class OutElec(FrozenClass):
         self.Pj_losses = Pj_losses
         self.Us = Us
         self.internal = internal
-        self.Us_harm = Us_harm
+        self.Us_PWM = Us_PWM
         self.OP = OP
         self.Pem_av_ref = Pem_av_ref
         self.Tem_av_ref = Tem_av_ref
@@ -231,7 +245,7 @@ class OutElec(FrozenClass):
             OutElec_str += "internal = " + tmp
         else:
             OutElec_str += "internal = None" + linesep + linesep
-        OutElec_str += "Us_harm = " + str(self.Us_harm) + linesep + linesep
+        OutElec_str += "Us_PWM = " + str(self.Us_PWM) + linesep + linesep
         if self.OP is not None:
             tmp = self.OP.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             OutElec_str += "OP = " + tmp
@@ -265,7 +279,7 @@ class OutElec(FrozenClass):
             return False
         if other.internal != self.internal:
             return False
-        if other.Us_harm != self.Us_harm:
+        if other.Us_PWM != self.Us_PWM:
             return False
         if other.OP != self.OP:
             return False
@@ -334,14 +348,12 @@ class OutElec(FrozenClass):
             diff_list.extend(
                 self.internal.compare(other.internal, name=name + ".internal")
             )
-        if (other.Us_harm is None and self.Us_harm is not None) or (
-            other.Us_harm is not None and self.Us_harm is None
+        if (other.Us_PWM is None and self.Us_PWM is not None) or (
+            other.Us_PWM is not None and self.Us_PWM is None
         ):
-            diff_list.append(name + ".Us_harm None mismatch")
-        elif self.Us_harm is not None:
-            diff_list.extend(
-                self.Us_harm.compare(other.Us_harm, name=name + ".Us_harm")
-            )
+            diff_list.append(name + ".Us_PWM None mismatch")
+        elif self.Us_PWM is not None:
+            diff_list.extend(self.Us_PWM.compare(other.Us_PWM, name=name + ".Us_PWM"))
         if (other.OP is None and self.OP is not None) or (
             other.OP is not None and self.OP is None
         ):
@@ -379,7 +391,7 @@ class OutElec(FrozenClass):
         S += getsizeof(self.Pj_losses)
         S += getsizeof(self.Us)
         S += getsizeof(self.internal)
-        S += getsizeof(self.Us_harm)
+        S += getsizeof(self.Us_PWM)
         S += getsizeof(self.OP)
         S += getsizeof(self.Pem_av_ref)
         S += getsizeof(self.Tem_av_ref)
@@ -459,10 +471,10 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        if self.Us_harm is None:
-            OutElec_dict["Us_harm"] = None
+        if self.Us_PWM is None:
+            OutElec_dict["Us_PWM"] = None
         else:
-            OutElec_dict["Us_harm"] = self.Us_harm.as_dict(
+            OutElec_dict["Us_PWM"] = self.Us_PWM.as_dict(
                 type_handle_ndarray=type_handle_ndarray,
                 keep_function=keep_function,
                 **kwargs
@@ -502,7 +514,7 @@ class OutElec(FrozenClass):
         self.Us = None
         if self.internal is not None:
             self.internal._set_None()
-        self.Us_harm = None
+        self.Us_PWM = None
         if self.OP is not None:
             self.OP._set_None()
         self.Pem_av_ref = None
@@ -730,28 +742,28 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_Us_harm(self):
-        """getter of Us_harm"""
-        return self._Us_harm
+    def _get_Us_PWM(self):
+        """getter of Us_PWM"""
+        return self._Us_PWM
 
-    def _set_Us_harm(self, value):
-        """setter of Us_harm"""
+    def _set_Us_PWM(self, value):
+        """setter of Us_PWM"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Us_harm"
+                "SciDataTool.Classes", value.get("__class__"), "Us_PWM"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
-        check_var("Us_harm", value, "DataND")
-        self._Us_harm = value
+        check_var("Us_PWM", value, "DataND")
+        self._Us_PWM = value
 
-    Us_harm = property(
-        fget=_get_Us_harm,
-        fset=_set_Us_harm,
-        doc=u"""Harmonic stator voltage as a function of time (each column correspond to one phase)
+    Us_PWM = property(
+        fget=_get_Us_PWM,
+        fset=_set_Us_PWM,
+        doc=u"""PWM stator voltage as a function of time (each column correspond to one phase)
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,

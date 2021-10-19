@@ -52,8 +52,11 @@ def get_data(self):
     )
 
     ref = np.zeros(np.size(v_pwm[0])).astype(np.float32)
-    PWM1 = np.where(v_pwm[0] < ref, -1, 1)  # .astype(np.float32)
-    PWM2 = np.where(v_pwm[1] < ref, -1, 1)  # .astype(np.float32)
-    PWM3 = np.where(v_pwm[2] < ref, -1, 1)  # .astype(np.float32)
+    # PWM1 = np.where(v_pwm[0] < ref, -1, 1)  # .astype(np.float32)
+    # PWM2 = np.where(v_pwm[1] < ref, -1, 1)  # .astype(np.float32)
+    # PWM3 = np.where(v_pwm[2] < ref, -1, 1)  # .astype(np.float32)
+    PWM1 = v_pwm[0]
+    PWM2 = v_pwm[1]
+    PWM3 = v_pwm[2]
     Vpwm = np.column_stack([PWM1, PWM2, PWM3])
     return Vpwm, Vas, MI, carrier, Tpwmu

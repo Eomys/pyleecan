@@ -86,8 +86,8 @@ def test_EEC_ELUT_PMSM():
     # Simu with EEC using ELUT
     fmax = 20000
     fswi = 7000
-    Vdc1 = 1000  # Bus voltage
-    U0 = 800  # Phase voltage
+    Vdc1 = 800  # Bus voltage
+    U0 = 460  # Phase voltage
     simu_EEC = Simu1(name="test_LUT_PMSM", machine=Toyota_Prius)
 
     # Definition of the input

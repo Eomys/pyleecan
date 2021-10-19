@@ -16,8 +16,8 @@ def test_InVoltage_PWM():
 
     fmax = 20000
     fswi = 7000
-    Vdc1 = 2  # Bus voltage
-    U0 = 0.5  # Phase voltage
+    Vdc1 = 800  # Bus voltage
+    U0 = 460  # Phase voltage
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
@@ -32,13 +32,20 @@ def test_InVoltage_PWM():
 
     out = simu.run()
 
-    if is_show_fig:
-        out.elec.Us_harm.plot_2D_Data(
-            "freqs",
-            is_auto_ticks=False,
-            save_path=join(save_path, "test_InVoltage_PWM.png"),
-            **dict_2D
-        )
+    out.elec.Us_PWM.plot_2D_Data(
+        "freqs",
+        is_auto_ticks=False,
+        save_path=join(save_path, "test_InVoltage_PWM.png"),
+        is_show_fig=is_show_fig,
+        **dict_2D
+    )
+    out.elec.get_Us_harm().plot_2D_Data(
+        "freqs",
+        is_auto_ticks=False,
+        save_path=join(save_path, "test_InVoltage_PWM_dqh.png"),
+        is_show_fig=is_show_fig,
+        **dict_2D
+    )
 
     return out
 

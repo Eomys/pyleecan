@@ -66,11 +66,12 @@ def run(self):
     # Solve the electrical equivalent circuit
     out_dict = self.eec.solve_EEC()
 
-    # Solve for each harmonic in case of Us_harm
+    # Solve for each harmonic in case of Us_PWM
     out_dict_harm = dict()
-    if output.elec.Us_harm is not None:
-        result = output.elec.Us_harm.get_along("freqs", "phase")
-        Udqh = result[output.elec.Us_harm.symbol]
+    if output.elec.Us_PWM is not None:
+        Us_harm = output.elec.get_Us_harm()
+        result = Us_harm.get_along("freqs", "phase")
+        Udqh = result[Us_harm.symbol]
         freqs = result["freqs"].tolist()
         Is_harm = zeros((len(freqs), machine.stator.winding.qs), dtype=complex)
         # Remove Id/Iq from eec parameters
