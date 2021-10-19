@@ -29,5 +29,6 @@ def comp_periodicity(self, p):
         is_aper = bool(Zs % 2 == 0)
     else:
         is_aper = bool(Zs / p % 2 == 0)
+    per, is_aper = self.comp_periodicity_duct_spatial(per, is_aper)
 
     return per, is_aper, per, is_aper

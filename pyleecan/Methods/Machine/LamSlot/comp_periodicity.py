@@ -22,4 +22,9 @@ def comp_periodicity(self, p=None):
 
     """
 
-    return self.get_Zs(), False, self.get_Zs(), False
+    per_a, is_antiper_a = self.get_Zs(), False
+    per_a, is_antiper_a = self.comp_periodicity_duct_spatial(per_a, is_antiper_a)
+
+    per_t, is_antiper_t = self.get_Zs(), False
+
+    return per_a, is_antiper_a, per_t, is_antiper_t
