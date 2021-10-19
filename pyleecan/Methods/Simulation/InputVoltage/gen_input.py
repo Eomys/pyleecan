@@ -104,7 +104,7 @@ def gen_input(self):
         self.PWM.duration = 1 / felec
         self.PWM.typePWM = 7
         # Generate PWM signal
-        Uabc, modulation, _, carrier, time = self.PWM.get_data()
+        Uabc, modulation, _, carrier, time = self.PWM.get_data(is_norm=False)
         # Create DataTime object
         self.time = time
         Time = self.comp_axis_time(

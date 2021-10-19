@@ -10,13 +10,15 @@ import numpy as np
 from ....Functions.Electrical.comp_PWM import comp_volt_PWM_NUM
 
 
-def get_data(self):
+def get_data(self, is_norm=True):
     """Generate the PWM matrix
 
     Parameters
     ----------
     self : ImportGenPWM
         An ImportGenPWM object
+    is_norm : bool
+        True to normalize signal
 
     Returns
     -------
@@ -51,12 +53,14 @@ def get_data(self):
         var_amp=self.var_amp,
     )
 
-    ref = np.zeros(np.size(v_pwm[0])).astype(np.float32)
-    # PWM1 = np.where(v_pwm[0] < ref, -1, 1)  # .astype(np.float32)
-    # PWM2 = np.where(v_pwm[1] < ref, -1, 1)  # .astype(np.float32)
-    # PWM3 = np.where(v_pwm[2] < ref, -1, 1)  # .astype(np.float32)
-    PWM1 = v_pwm[0]
-    PWM2 = v_pwm[1]
-    PWM3 = v_pwm[2]
+    if is_norm:
+        ref = np.zeros(np.size(v_pwm[0])).astype(np.float32)
+        PWM1 = np.where(v_pwm[0] < ref, -1, 1)  # .astype(np.float32)
+        PWM2 = np.where(v_pwm[1] < ref, -1, 1)  # .astype(np.float32)
+        PWM3 = np.where(v_pwm[2] < ref, -1, 1)  # .astype(np.float32)
+    else:
+        PWM1 = v_pwm[0]
+        PWM2 = v_pwm[1]
+        PWM3 = v_pwm[2]
     Vpwm = np.column_stack([PWM1, PWM2, PWM3])
     return Vpwm, Vas, MI, carrier, Tpwmu
