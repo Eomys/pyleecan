@@ -1,4 +1,4 @@
-from numpy import array, sum
+from numpy import array, sum, exp, angle, min as np_min, max as np_max, argmin
 
 
 def comp_point_ref(self, is_set=False):
@@ -17,10 +17,18 @@ def comp_point_ref(self, is_set=False):
         the reference point of the surface
     """
 
-    point_list = list()
-    for line in self.get_lines():
-        point_list.append(line.get_middle())
-    point_ref = sum(array(point_list)) / len(point_list)
+    middle_array = array([line.get_middle() for line in self.get_lines()])
+    point_ref = sum(middle_array) / middle_array.size
+
+    # Use another method if the point is not is the surface
+    if not self.is_inside(Z=point_ref, if_online=False):
+        middle_array_abs = abs(middle_array)
+        # Find "min abs" middle
+        mid_id = argmin(middle_array_abs)
+        Zmid = middle_array[mid_id]
+        H = (np_min(middle_array_abs) + np_max(middle_array_abs)) / 2
+
+        point_ref = (abs(Zmid) + H / 100) * exp(1j * angle(Zmid))
 
     if is_set:
         self.point_ref = point_ref
