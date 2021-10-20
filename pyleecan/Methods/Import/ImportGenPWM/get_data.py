@@ -10,7 +10,7 @@ import numpy as np
 from ....Functions.Electrical.comp_PWM import comp_volt_PWM_NUM
 
 
-def get_data(self, is_norm=True):
+def get_data(self, is_norm=True, N_add=None):
     """Generate the PWM matrix
 
     Parameters
@@ -34,7 +34,9 @@ def get_data(self, is_norm=True):
         time vector
     """
     N = int(self.fs * self.duration)  # Number of points
-    Tpwmu = np.linspace(0, (N - 1) / self.fs, N, endpoint=True)  # Time vector
+    if N_add is not None:
+        N += N_add
+    Tpwmu = np.linspace(0, N / self.fs, N, endpoint=False)  # Time vector
     v_pwm, Vas, MI, carrier = comp_volt_PWM_NUM(
         Tpwmu=Tpwmu,
         freq0=self.f,
@@ -47,10 +49,12 @@ def get_data(self, is_norm=True):
         Vdc1=self.Vdc1,
         U0=self.U0,
         type_carrier=self.type_carrier,
-        rot_dir=-1,
+        rot_dir=self.rot_dir,
         type_DPWM=self.typePWM,
         PF_angle=0,
         var_amp=self.var_amp,
+        is_norm=is_norm,
+        N_add=N_add,
     )
 
     if is_norm:

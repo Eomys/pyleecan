@@ -1,5 +1,5 @@
 from SciDataTool import Norm_ref
-from numpy import ndarray, pi
+from numpy import ndarray, arange, searchsorted, ceil
 
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
@@ -98,15 +98,30 @@ def gen_input(self):
         rot_dir = output.get_rot_dir()
         qs = simu.machine.stator.winding.qs
         self.PWM.f = felec
-        self.PWM.fs = (
-            self.PWM.fmax * 2.56
-        )  # Shanon based sampling frequency (with margin)
+        self.PWM.qs = qs
+        self.PWM.rot_dir = rot_dir
         self.PWM.duration = 1 / felec
-        self.PWM.typePWM = 7
+        self.PWM.typePWM = 8
+        self.PWM.Vdc1 *= 2  # In comp_PWM, max is Vdc1/2
+        # Compute sampling frequency (even multiple of fswi + close to 2*fmax)
+        mult = arange(1, 100)
+        ind = searchsorted(self.PWM.fswi * 2 * mult, 2 * self.PWM.fmax, side="right")
+        self.PWM.fs = 2 * mult[ind] * self.PWM.fswi
         # Generate PWM signal
-        Uabc, modulation, _, carrier, time = self.PWM.get_data(is_norm=False)
+        Uabc, modulant, _, carrier, time = self.PWM.get_data(
+            is_norm=False, N_add=mult[ind]
+        )
+        # Account for coupling phase
+        if self.PWM.is_star:
+            Uabc[:, 0] = Uabc[:, 0] - Uabc.mean(axis=1)
+            Uabc[:, 1] = Uabc[:, 1] - Uabc.mean(axis=1)
+            Uabc[:, 2] = Uabc[:, 2] - Uabc.mean(axis=1)
         # Create DataTime object
         self.time = time
+        Time = Data1D(name="time", unit="s", symmetries={"period": 5}, values=time)
+        Carrier = DataTime(values=carrier, axes=[Time])
+        Modulant = DataTime(values=modulant, axes=[Time])
+        Carrier.plot_2D_Data("time", data_list=[Modulant])
         Time = self.comp_axis_time(
             simu.machine.get_pole_pair_number(),
             per_t=1,

@@ -20,6 +20,8 @@ def comp_volt_PWM_NUM(
     freq0_max=0,
     type_carrier=0,
     var_amp=0,
+    is_norm=True,
+    N_add=None,
 ):
     """
     Generalized DPWM using numerical method according to
@@ -204,15 +206,19 @@ def comp_volt_PWM_NUM(
 
         Phase = [0, 1, -1]
 
+    # Remove additional points
+    if N_add is not None:
+        Tpwmu2 = np.linspace(0, Tpwmu[-N_add], len(Tpwmu), endpoint=False)
+
     if is_sin:
-        Vas = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu + Phase[0] * 2 * np.pi / 3)
-        Vbs = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu + Phase[1] * 2 * np.pi / 3)
-        Vcs = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu + Phase[2] * 2 * np.pi / 3)
+        Vas = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu2 + Phase[0] * 2 * np.pi / 3)
+        Vbs = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu2 + Phase[1] * 2 * np.pi / 3)
+        Vcs = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu2 + Phase[2] * 2 * np.pi / 3)
 
     else:
-        Vas = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu + Phase[0] * 2 * np.pi / 3)
-        Vbs = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu + Phase[1] * 2 * np.pi / 3)
-        Vcs = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu + Phase[2] * 2 * np.pi / 3)
+        Vas = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu2 + Phase[0] * 2 * np.pi / 3)
+        Vbs = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu2 + Phase[1] * 2 * np.pi / 3)
+        Vcs = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu2 + Phase[2] * 2 * np.pi / 3)
 
     V_min = np.amin(
         np.concatenate((Vas[:, None], Vbs[:, None], Vcs[:, None]), axis=1), axis=1
@@ -327,10 +333,14 @@ def comp_volt_PWM_NUM(
 
     if type_DPWM == 8:
         v_pwm = np.ones((qs, Npsim))
-
-        v_pwm[0] = np.where(Vas < carrier, -1, 1)
-        v_pwm[1] = np.where(Vbs < carrier, -1, 1)
-        v_pwm[2] = np.where(Vcs < carrier, -1, 1)
+        if is_norm:
+            v_pwm[0] = np.where(Vas < carrier, -1, 1)
+            v_pwm[1] = np.where(Vbs < carrier, -1, 1)
+            v_pwm[2] = np.where(Vcs < carrier, -1, 1)
+        else:
+            v_pwm[0] = np.where(Vas < carrier, -Vdc1 / 2, Vdc1 / 2)
+            v_pwm[1] = np.where(Vbs < carrier, -Vdc1 / 2, Vdc1 / 2)
+            v_pwm[2] = np.where(Vcs < carrier, -Vdc1 / 2, Vdc1 / 2)
 
     else:
 

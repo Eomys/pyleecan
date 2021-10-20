@@ -3389,6 +3389,24 @@
                 "type": "int",
                 "unit": "",
                 "value": 3
+            },
+            {
+                "desc": "True if star coupling, False if triangle coupling",
+                "max": "",
+                "min": "",
+                "name": "is_star",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "rotor rotation direction",
+                "max": "",
+                "min": "",
+                "name": "rot_dir",
+                "type": "int",
+                "unit": "",
+                "value": -1
             }
         ]
     },
