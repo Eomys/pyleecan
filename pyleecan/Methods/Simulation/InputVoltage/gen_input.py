@@ -108,9 +108,7 @@ def gen_input(self):
         ind = searchsorted(self.PWM.fswi * 2 * mult, 2 * self.PWM.fmax, side="right")
         self.PWM.fs = 2 * mult[ind] * self.PWM.fswi
         # Generate PWM signal
-        Uabc, modulant, _, carrier, time = self.PWM.get_data(
-            is_norm=False, N_add=mult[ind]
-        )
+        Uabc, _, _, _, time = self.PWM.get_data(is_norm=False, N_add=mult[ind])
         # Account for coupling phase
         if self.PWM.is_star:
             Uabc[:, 0] = Uabc[:, 0] - Uabc.mean(axis=1)
@@ -118,10 +116,6 @@ def gen_input(self):
             Uabc[:, 2] = Uabc[:, 2] - Uabc.mean(axis=1)
         # Create DataTime object
         self.time = time
-        Time = Data1D(name="time", unit="s", symmetries={"period": 5}, values=time)
-        Carrier = DataTime(values=carrier, axes=[Time])
-        Modulant = DataTime(values=modulant, axes=[Time])
-        Carrier.plot_2D_Data("time", data_list=[Modulant])
         Time = self.comp_axis_time(
             simu.machine.get_pole_pair_number(),
             per_t=1,
