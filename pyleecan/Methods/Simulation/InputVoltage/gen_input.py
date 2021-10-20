@@ -109,11 +109,6 @@ def gen_input(self):
         self.PWM.fs = 2 * mult[ind] * self.PWM.fswi
         # Generate PWM signal
         Uabc, _, _, _, time = self.PWM.get_data(is_norm=False, N_add=mult[ind])
-        # Account for coupling phase
-        if self.PWM.is_star:
-            Uabc[:, 0] = Uabc[:, 0] - Uabc.mean(axis=1)
-            Uabc[:, 1] = Uabc[:, 1] - Uabc.mean(axis=1)
-            Uabc[:, 2] = Uabc[:, 2] - Uabc.mean(axis=1)
         # Create DataTime object
         self.time = time
         Time = self.comp_axis_time(

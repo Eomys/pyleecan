@@ -67,4 +67,10 @@ def get_data(self, is_norm=True, N_add=None):
         PWM2 = v_pwm[1]
         PWM3 = v_pwm[2]
     Vpwm = np.column_stack([PWM1, PWM2, PWM3])
+    if self.is_star:  # star coupling
+        mean = Vpwm.mean(axis=1)
+        PWM1 = PWM1 - mean
+        PWM2 = PWM2 - mean
+        PWM3 = PWM3 - mean
+        Vpwm = np.column_stack([PWM1, PWM2, PWM3])
     return Vpwm, Vas, MI, carrier, Tpwmu
