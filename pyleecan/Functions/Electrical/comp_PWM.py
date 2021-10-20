@@ -209,6 +209,8 @@ def comp_volt_PWM_NUM(
     # Remove additional points
     if N_add is not None:
         Tpwmu2 = np.linspace(0, Tpwmu[-N_add], len(Tpwmu), endpoint=False)
+    else:
+        Tpwmu2 = Tpwmu
 
     if is_sin:
         Vas = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu2 + Phase[0] * 2 * np.pi / 3)
