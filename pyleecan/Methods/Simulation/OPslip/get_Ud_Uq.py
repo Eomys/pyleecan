@@ -15,5 +15,5 @@ def get_Ud_Uq(self):
         Dict with key "Ud", "Uq"
     """
 
-    Z = self.U0 * exp(1j * self.UPhi0)
+    Z = self.U0_ref * exp(1j * self.UPhi0_ref)
     return {"Ud": Z.real, "Uq": Z.imag}
