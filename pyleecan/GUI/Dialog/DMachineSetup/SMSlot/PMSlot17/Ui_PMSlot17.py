@@ -37,7 +37,8 @@ class Ui_PMSlot17(object):
         self.img_slot.setPixmap(
             QPixmap(u":/images/images/MachineSetup/WMSlot/SlotM17.png")
         )
-        self.img_slot.setScaledContents(True)
+        self.img_slot.setScaledContents(False)
+        self.img_slot.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.img_slot)
 

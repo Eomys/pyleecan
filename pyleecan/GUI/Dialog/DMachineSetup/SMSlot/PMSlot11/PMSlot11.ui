@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>892</width>
-    <height>470</height>
+    <width>866</width>
+    <height>555</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -59,7 +59,7 @@
      <item>
       <widget class="QTextEdit" name="txt_constraint">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -67,13 +67,13 @@
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>120</height>
+         <height>90</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>70</height>
+         <height>90</height>
         </size>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -118,7 +118,7 @@ p, li { white-space: pre-wrap; }
         <x>0</x>
         <y>0</y>
         <width>268</width>
-        <height>446</height>
+        <height>531</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">

@@ -19,7 +19,7 @@ class Ui_PMSlot11(object):
     def setupUi(self, PMSlot11):
         if not PMSlot11.objectName():
             PMSlot11.setObjectName(u"PMSlot11")
-        PMSlot11.resize(892, 470)
+        PMSlot11.resize(866, 555)
         PMSlot11.setMinimumSize(QSize(630, 470))
         PMSlot11.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PMSlot11)
@@ -44,15 +44,12 @@ class Ui_PMSlot11(object):
 
         self.txt_constraint = QTextEdit(PMSlot11)
         self.txt_constraint.setObjectName(u"txt_constraint")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(
+        sizePolicy.setHeightForWidth(
             self.txt_constraint.sizePolicy().hasHeightForWidth()
         )
-        self.txt_constraint.setSizePolicy(sizePolicy1)
-        self.txt_constraint.setMinimumSize(QSize(0, 120))
-        self.txt_constraint.setMaximumSize(QSize(16777215, 70))
+        self.txt_constraint.setSizePolicy(sizePolicy)
+        self.txt_constraint.setMinimumSize(QSize(0, 90))
+        self.txt_constraint.setMaximumSize(QSize(16777215, 90))
         self.txt_constraint.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.txt_constraint.setTextInteractionFlags(
             Qt.TextSelectableByKeyboard | Qt.TextSelectableByMouse
@@ -69,7 +66,7 @@ class Ui_PMSlot11(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 446))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 531))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
