@@ -21,4 +21,11 @@ def comp_periodicity(self, p):
         True if an time anti-periodicity is possible after the periodicities
     """
 
-    return p, True, p, True
+    # Angular periodicity
+    per_a, is_antiper_a = p, True
+    per_a, is_antiper_a = self.comp_periodicity_duct_spatial(per_a, is_antiper_a)
+
+    # Time peridodicity
+    per_t, is_antiper_t = p, True
+
+    return per_a, is_antiper_a, per_t, is_antiper_t

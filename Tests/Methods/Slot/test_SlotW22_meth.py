@@ -175,3 +175,17 @@ class Test_SlotW22_meth(object):
         result = lam.slot.get_surface_active()
         assert result.label == "Wind_Rotor_R0_T0_S0"
         assert len(result.get_lines()) == 6
+
+
+if __name__ == "__main__":
+    a = Test_SlotW22_meth()
+    a.test_get_surface_active()
+
+    for test_dict in slotW22_test:
+        a.test_schematics(test_dict)
+        a.test_build_geometry_active(test_dict)
+        a.test_comp_angle_active_eq(test_dict)
+        a.test_comp_angle_opening(test_dict)
+        a.test_comp_height(test_dict)
+        a.test_comp_surface(test_dict)
+        a.test_comp_surface_active(test_dict)

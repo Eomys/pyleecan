@@ -4633,7 +4633,9 @@
             "get_bore_desc",
             "comp_point_ref",
             "get_label",
-            "get_yoke_side_line"
+            "get_yoke_side_line",
+            "get_notches_surf",
+            "comp_periodicity_duct_spatial"
         ],
         "mother": "",
         "name": "Lamination",

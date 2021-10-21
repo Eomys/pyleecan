@@ -144,6 +144,18 @@ try:
 except ImportError as error:
     get_yoke_side_line = error
 
+try:
+    from ..Methods.Machine.Lamination.get_notches_surf import get_notches_surf
+except ImportError as error:
+    get_notches_surf = error
+
+try:
+    from ..Methods.Machine.Lamination.comp_periodicity_duct_spatial import (
+        comp_periodicity_duct_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_duct_spatial = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -431,6 +443,30 @@ class Lamination(FrozenClass):
         )
     else:
         get_yoke_side_line = get_yoke_side_line
+    # cf Methods.Machine.Lamination.get_notches_surf
+    if isinstance(get_notches_surf, ImportError):
+        get_notches_surf = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_notches_surf: "
+                    + str(get_notches_surf)
+                )
+            )
+        )
+    else:
+        get_notches_surf = get_notches_surf
+    # cf Methods.Machine.Lamination.comp_periodicity_duct_spatial
+    if isinstance(comp_periodicity_duct_spatial, ImportError):
+        comp_periodicity_duct_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_periodicity_duct_spatial: "
+                    + str(comp_periodicity_duct_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_duct_spatial = comp_periodicity_duct_spatial
     # save and copy methods are available in all object
     save = save
     copy = copy

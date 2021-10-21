@@ -24,7 +24,9 @@ def is_inside(self, Z, if_online=False):
         False : the point is outside the surface
     """
 
-    eps = 0.001  # Half of the width of the branch where we will check is there is a point
+    eps = (
+        0.001  # Half of the width of the branch where we will check is there is a point
+    )
 
     # Recovering the point cloud that compose the surface
     line_list = self.get_lines()
@@ -45,26 +47,26 @@ def is_inside(self, Z, if_online=False):
     # Then, we are creating a cross on both axes with a width of 2*eps centered on Z
     # We check that at least one point is inside each branch of the cross
 
-    #To determine which branch the point is in, we check the distance to Z
+    # To determine which branch the point is in, we check the distance to Z
     is_top, is_left, is_bot, is_right = False, False, False, False
     for point in pointcloud:
         # If the point selected is inside the branch on the x-axis
         if (real(point) > real(Z) - eps) and (real(point) < real(Z) + eps):
-            if imag(point) - imag(Z)  > 0:
-                #The point is on top of Z
+            if imag(point) - imag(Z) > 0:
+                # The point is on top of Z
                 is_top = True
             else:
-                #The point is below Z
+                # The point is below Z
                 is_bot = True
 
         else:
             # If the point selected is inside the branch on the y-axis
             if (imag(point) > imag(Z) - eps) and (imag(point) < imag(Z) + eps):
                 if real(point) - real(Z) > 0:
-                    #The point is on the left of Z
+                    # The point is on the left of Z
                     is_left = True
                 else:
-                    #The point is on the right of Z
+                    # The point is on the right of Z
                     is_right = True
 
     return is_top and is_left and is_right and is_bot

@@ -65,6 +65,7 @@ class Ui_PVentUD(object):
 
         self.si_Zh = QSpinBox(self.scrollAreaWidgetContents)
         self.si_Zh.setObjectName(u"si_Zh")
+        self.si_Zh.setMaximum(999999999)
 
         self.gridLayout.addWidget(self.si_Zh, 0, 1, 1, 1)
 

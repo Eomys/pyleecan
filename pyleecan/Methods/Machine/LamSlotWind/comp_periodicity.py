@@ -23,12 +23,16 @@ def comp_periodicity(self, p=None):
         True if an time anti-periodicity is possible after the periodicities
     """
 
+    # Angular periodicity
     if self.winding is not None and self.winding.conductor is not None:
-        sym_a, is_antisym_a = self.winding.get_periodicity()
+        per_a, is_antiper_a = self.winding.get_periodicity()
     else:
-        sym_a, is_antisym_a = 1, False
+        per_a, is_antiper_a = 1, False
+    if is_antiper_a:
+        per_a = int(per_a / 2)
+    per_a, is_antiper_a = self.comp_periodicity_duct_spatial(per_a, is_antiper_a)
 
-    if is_antisym_a:
-        sym_a /= 2
+    # Time periodicity
+    per_t, is_antiper_t = per_a, is_antiper_a
 
-    return int(sym_a), bool(is_antisym_a), int(sym_a), bool(is_antisym_a)
+    return int(per_a), bool(is_antiper_a), int(per_t), bool(is_antiper_t)
