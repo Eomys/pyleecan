@@ -21,6 +21,7 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.Winding import Winding
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Functions.load import (
     LoadSwitchError,
     LoadWrongDictClassError,
@@ -129,7 +130,7 @@ def test_save_load_folder_path():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
+        OP=OPdq(N0=N0),
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
@@ -375,7 +376,7 @@ def test_save_load_simu(type_file):
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
+        OP=OPdq(N0=N0),
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
