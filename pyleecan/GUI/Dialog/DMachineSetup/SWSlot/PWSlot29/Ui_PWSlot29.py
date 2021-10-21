@@ -19,7 +19,7 @@ class Ui_PWSlot29(object):
     def setupUi(self, PWSlot29):
         if not PWSlot29.objectName():
             PWSlot29.setObjectName(u"PWSlot29")
-        PWSlot29.resize(854, 470)
+        PWSlot29.resize(899, 470)
         PWSlot29.setMinimumSize(QSize(630, 470))
         PWSlot29.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PWSlot29)
@@ -37,7 +37,8 @@ class Ui_PWSlot29(object):
         self.img_slot.setPixmap(
             QPixmap(u":/images/images/MachineSetup/WSlot/SlotW29.png")
         )
-        self.img_slot.setScaledContents(True)
+        self.img_slot.setScaledContents(False)
+        self.img_slot.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.img_slot)
 
