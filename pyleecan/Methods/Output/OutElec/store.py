@@ -3,6 +3,8 @@ from numpy import mean, max as np_max, min as np_min
 
 from SciDataTool import DataFreq
 
+from pyleecan.Functions.Electrical.coordinate_transformation import dqh2n_DataTime
+
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
@@ -40,11 +42,17 @@ def store(self, out_dict, out_dict_harm):
 
     if "Is_harm" in out_dict_harm:
         # Create Data object
-        axes_list = self.Us_harm.get_axes()
-        self.Is_harm = DataFreq(
+        Is_dqh = DataFreq(
             name="Harmonic stator current",
             unit="A",
             symbol="I_s^{harm}",
-            axes=axes_list,
+            axes=out_dict_harm["axes_list"],
             values=out_dict_harm["Is_harm"],
         )
+        # ifft
+        Is_dqh_time = Is_dqh.freq_to_time()
+        qs = self.parent.simu.machine.stator.winding.qs
+        # back to ABC
+        Is_abc = dqh2n_DataTime(Is_dqh_time, qs, is_n_rms=True)
+        # fft
+        self.Is_harm = Is_abc.time_to_freq()

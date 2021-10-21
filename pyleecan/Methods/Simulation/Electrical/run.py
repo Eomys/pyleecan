@@ -86,6 +86,7 @@ def run(self):
             out_dict_i = self.eec.solve_EEC()
             Is_harm[i, :] = array([out_dict_i["Id"], out_dict_i["Iq"], 0])
         out_dict_harm["Is_harm"] = Is_harm
+        out_dict_harm["axes_list"] = Us_harm.get_axes()
 
     # Compute losses due to Joule effects
     out_dict = self.eec.comp_joule_losses(out_dict, machine)
