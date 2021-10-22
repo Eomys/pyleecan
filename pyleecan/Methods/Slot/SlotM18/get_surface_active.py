@@ -60,4 +60,8 @@ def get_surface_active(self, alpha=0, delta=0):
     surface.rotate(alpha)
     surface.translate(delta)
 
+    # init prop_dict
+    for line in surface.line_list:
+        line.prop_dict = dict()
+
     return surface
