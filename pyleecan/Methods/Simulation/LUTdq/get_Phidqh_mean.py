@@ -27,9 +27,7 @@ def get_Phidqh_mean(self):
                 is_dqh_rms=True,
             )
             # mean over time axis
-            Phi_dqh_mean[i, :] = Phi_dqh.get_along("time=mean", "phases")[
-                Phi_dqh.symbol
-            ]
+            Phi_dqh_mean[i, :] = Phi_dqh.get_along("time=mean", "phase")[Phi_dqh.symbol]
 
         # Store for next call
         self.Phi_dqh_mean = Phi_dqh_mean
