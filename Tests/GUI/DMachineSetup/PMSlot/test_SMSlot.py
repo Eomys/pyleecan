@@ -17,6 +17,7 @@ from pyleecan.Classes.SlotM14 import SlotM14
 from pyleecan.Classes.SlotM15 import SlotM15
 from pyleecan.Classes.SlotM16 import SlotM16
 from pyleecan.Classes.SlotM17 import SlotM17
+from pyleecan.Classes.SlotM18 import SlotM18
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
@@ -28,7 +29,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot14.PMSlot14 import PMSlot14
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot15.PMSlot15 import PMSlot15
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
-
+from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot18.PMSlot18 import PMSlot18
 import pytest
 
 
@@ -77,7 +78,7 @@ class TestSMSlot(object):
     def test_init(self):
         """Check that the GUI initialize correctly"""
         # To remember to update after adding a new type
-        assert self.widget.c_slot_type.count() == 8
+        assert self.widget.c_slot_type.count() == 9
 
         assert self.widget.c_slot_type.currentIndex() == 1
         assert self.widget.c_slot_type.currentText() == "Polar Magnet"
@@ -162,7 +163,7 @@ class TestSMSlot(object):
         assert type(self.test_obj.rotor.slot) == SlotM16
 
     def test_set_type_17(self):
-        """Check that the Widget is able to set Magnet type 16"""
+        """Check that the Widget is able to set Magnet type 17"""
         self.widget.c_slot_type.setCurrentIndex(7)
         assert type(self.widget.w_slot) == PMSlot17
         assert (
@@ -170,6 +171,13 @@ class TestSMSlot(object):
             == "Cylindrical magnet (no lamination)"
         )
         assert type(self.test_obj.rotor.slot) == SlotM17
+
+    def test_set_type_18(self):
+        """Check that the Widget is able to set Magnet type 18"""
+        self.widget.c_slot_type.setCurrentIndex(8)
+        assert type(self.widget.w_slot) == PMSlot18
+        assert self.widget.c_slot_type.currentText() == "Ring Magnet"
+        assert type(self.test_obj.rotor.slot) == SlotM18
 
 
 if __name__ == "__main__":

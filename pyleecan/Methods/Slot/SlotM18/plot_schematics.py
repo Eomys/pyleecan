@@ -58,7 +58,7 @@ def plot_schematics(
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(Zs=8, H0=20e-3, W0=pi / 8, Hmag=15e-3, Wmag=pi / 8 * 0.75)
+        slot = type(self)(Zs=16, Hmag=15e-3)
         lam = LamSlot(
             Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
         )
@@ -99,52 +99,6 @@ def plot_schematics(
 
         # Adding schematics
         if is_add_schematics:
-            # W0
-            R = Rbo + sign * self.H0 * 1.1
-            line = Arc1(
-                begin=R * exp(-1j * self.W0 / 2),
-                end=R * exp(1j * self.W0 / 2),
-                radius=R,
-                is_trigo_direction=True,
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W0",
-                offset_label=sign * self.H0 * 0.3,
-                fontsize=SC_FONT_SIZE,
-            )
-            # Wmag
-            R = self.get_Rbo() + sign * (self.H0 - self.Hmag * 1.1)
-            line = Arc1(
-                begin=R * exp(-1j * self.Wmag / 2),
-                end=R * exp(1j * self.Wmag / 2),
-                radius=R,
-                is_trigo_direction=True,
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="Wmag",
-                offset_label=-1 * sign * self.H0 * 0.2,
-                fontsize=SC_FONT_SIZE,
-            )
-            # H0
-            line = Segment(point_dict["Z1"], point_dict["Z2"])
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="H0",
-                offset_label=1j * point_dict["Z4"].imag * 0.1,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
             # Hmag
             line = Segment(point_dict["ZM3"], point_dict["ZM4"])
             line.plot(
@@ -153,7 +107,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="Hmag",
-                offset_label=1j * point_dict["Z4"].imag * 0.2,
+                offset_label=1j * self.Hmag * 0.7,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -168,56 +122,19 @@ def plot_schematics(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-            # Z1 Line
-            line = Segment(0, Rbo * 2 * exp(-1j * self.W0 / 2))
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
-            # Z2 Line
-            line = Segment(0, Rbo * 2 * exp(1j * self.W0 / 2))
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
-            # ZM1 Line
-            line = Segment(0, Rbo * 2 * exp(-1j * self.Wmag / 2))
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
-            # ZM2 Line
-            line = Segment(0, Rbo * 2 * exp(1j * self.Wmag / 2))
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
-            # Top arc
-            line = Arc1(
-                begin=point_dict["Z1"],
-                end=point_dict["Z4"],
-                radius=self.get_Rbo(),
-                is_trigo_direction=True,
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
+            # Magnet separation lines
+            for ii in range(self.Zs):
+                line = Segment(
+                    point_dict["ZM1"] * exp(1j * 2 * pi / self.Zs * ii),
+                    point_dict["ZM2"] * exp(1j * 2 * pi / self.Zs * ii),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color="k",
+                    linestyle="-",
+                    linewidth=MAIN_LINE_WIDTH,
+                )
 
         if type_add_active == 1:
             self.plot_active(fig=fig, is_show_fig=False)
@@ -227,7 +144,7 @@ def plot_schematics(
             )
 
         # Zooming and cleaning
-        W = point_dict["Z4"].imag * 1.2
+        W = point_dict["ZM3"].imag * 3
         Rint, Rext = self.comp_radius()
 
         plt.axis("equal")

@@ -17,6 +17,7 @@ from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot14.PMSlot14 import PMSlot14
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot15.PMSlot15 import PMSlot15
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot18.PMSlot18 import PMSlot18
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # List to convert index of combobox to slot type
@@ -29,6 +30,7 @@ WIDGET_LIST = [
     PMSlot15,
     PMSlot16,
     PMSlot17,
+    PMSlot18,
 ]
 INIT_INDEX = [wid.slot_type for wid in WIDGET_LIST]
 SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]

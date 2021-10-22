@@ -7,6 +7,7 @@ from pyleecan.Classes.SlotM14 import SlotM14
 from pyleecan.Classes.SlotM15 import SlotM15
 from pyleecan.Classes.SlotM16 import SlotM16
 from pyleecan.Classes.SlotM17 import SlotM17
+from pyleecan.Classes.SlotM18 import SlotM18
 
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.SlotW11 import SlotW11
@@ -90,6 +91,12 @@ slot_test.append(
 slot_test.append(
     {
         "test_obj": SlotM17(),
+        "type_add_active": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotM18(),
         "type_add_active": 2,
     }
 )
