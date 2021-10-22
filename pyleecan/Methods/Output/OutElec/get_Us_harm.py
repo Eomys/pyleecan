@@ -13,7 +13,7 @@ def get_Us_harm(self, is_dqh=True):
 
     Returns
     -------
-    Us_harm
+    Us_harm: DataND
         harmonic stator voltage
     """
     if self.Us_PWM is None:

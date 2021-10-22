@@ -1,4 +1,4 @@
-from numpy import array, where, isclose, zeros
+from numpy import where, isclose, zeros
 
 from SciDataTool import Data1D, DataTime, DataFreq
 
@@ -6,13 +6,19 @@ from ....Functions.Electrical.coordinate_transformation import dqh2n
 
 
 def get_I_fund(self, Time=None):
-    """Return the stator current DataTime object
+    """Return the fundamental of stator currents in a DataND object
 
     Parameters
     ----------
     self : OutElec
         an OutElec object
+    Time : Data
+        Time axis
 
+    Returns
+    -------
+    I_fund: DataND
+        fundamental stator current
     """
     if Time is None:
         Time = self.axes_dict["time"]

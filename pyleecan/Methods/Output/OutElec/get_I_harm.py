@@ -3,12 +3,17 @@ from SciDataTool import Data1D
 
 
 def get_I_harm(self):
-    """Return the stator current DataTime object
+    """Return the stator current harmonics in a DataFreq object
 
     Parameters
     ----------
     self : OutElec
         an OutElec object
+
+    Returns
+    -------
+    I_harm: DataND
+        stator current harmonics
 
     """
 
