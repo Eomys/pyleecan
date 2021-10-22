@@ -105,10 +105,10 @@ def gen_input(self):
         self.PWM.Vdc1 *= 2  # In comp_PWM, max is Vdc1/2
         # Compute sampling frequency (even multiple of fswi + close to 2*fmax)
         mult = arange(1, 100)
-        ind = searchsorted(self.PWM.fswi * 2 * mult, 2 * self.PWM.fmax, side="right")
+        ind = searchsorted(2 * mult * self.PWM.fswi, 2 * self.PWM.fmax, side="right")
         self.PWM.fs = 2 * mult[ind] * self.PWM.fswi
         # Generate PWM signal
-        Uabc, _, _, _, time = self.PWM.get_data(is_norm=False, N_add=mult[ind])
+        Uabc, _, _, _, time = self.PWM.get_data(is_norm=False)
         # Create DataTime object
         self.time = time
         Time = self.comp_axis_time(

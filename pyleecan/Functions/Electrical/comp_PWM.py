@@ -21,7 +21,6 @@ def comp_volt_PWM_NUM(
     type_carrier=0,
     var_amp=0,
     is_norm=True,
-    N_add=None,
 ):
     """
     Generalized DPWM using numerical method according to
@@ -206,21 +205,15 @@ def comp_volt_PWM_NUM(
 
         Phase = [0, 1, -1]
 
-    # Remove additional points
-    if N_add is not None:
-        Tpwmu2 = np.linspace(0, Tpwmu[-N_add], len(Tpwmu), endpoint=False)
-    else:
-        Tpwmu2 = Tpwmu
-
     if is_sin:
-        Vas = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu2 + Phase[0] * 2 * np.pi / 3)
-        Vbs = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu2 + Phase[1] * 2 * np.pi / 3)
-        Vcs = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu2 + Phase[2] * 2 * np.pi / 3)
+        Vas = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu + Phase[0] * 2 * np.pi / 3)
+        Vbs = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu + Phase[1] * 2 * np.pi / 3)
+        Vcs = k * M_I * (Vdc1 / 2) * np.sin(ws * Tpwmu + Phase[2] * 2 * np.pi / 3)
 
     else:
-        Vas = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu2 + Phase[0] * 2 * np.pi / 3)
-        Vbs = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu2 + Phase[1] * 2 * np.pi / 3)
-        Vcs = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu2 + Phase[2] * 2 * np.pi / 3)
+        Vas = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu + Phase[0] * 2 * np.pi / 3)
+        Vbs = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu + Phase[1] * 2 * np.pi / 3)
+        Vcs = k * M_I * (Vdc1 / 2) * np.cos(ws * Tpwmu + Phase[2] * 2 * np.pi / 3)
 
     V_min = np.amin(
         np.concatenate((Vas[:, None], Vbs[:, None], Vcs[:, None]), axis=1), axis=1

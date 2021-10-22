@@ -23,7 +23,6 @@ def get_Phidqh_mag(self):
         else:
             raise Exception("Operating Point Id=Iq=0 is required to compute LUT")
 
-        Time = self.Phi_wind[ii].get_axes("time")[0]
         # dqh transform
         Phi_dqh_mag = n2dqh_DataTime(
             self.Phi_wind[ii],
