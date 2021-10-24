@@ -333,7 +333,7 @@ def comp_Clarke_transform(n, is_inv=False):
     """
 
     # Phasor depending on fundamental field rotation direction
-    phasor = np.linspace(0, 2 * np.pi * (n - 1) / n, n)
+    phasor = np.linspace(0, -2 * np.pi * (n - 1) / n, n)
 
     # Clarke transformation matrix
     if is_inv:

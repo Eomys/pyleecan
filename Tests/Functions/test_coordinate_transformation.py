@@ -60,7 +60,7 @@ def test_coordinate_transformation(param_dict):
     for phase in phase_list:
         In = zeros((Nt, qs))
         for ii in range(qs):
-            In[:, ii] = cos(angle_elec + phase + 2 * ii * pi / qs)
+            In[:, ii] = cos(angle_elec + phase - 2 * ii * pi / qs)
 
         Idqh_rms = n2dqh(In, angle_elec, is_dqh_rms=True)
         Idqh_amp = n2dqh(In, angle_elec, is_dqh_rms=False)
