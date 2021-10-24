@@ -33,11 +33,8 @@ from Tests import save_validation_path as save_path
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-@pytest.mark.skip(reason="Work in progress")
 def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
-    """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine
-    Compute Torque from EEC results and compare with Yang et al, 2013
-    """
+    """Validation of the PMSM Electrical Equivalent Circuit by comparing torque with MagFEMM"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     simu = Simu1(name="test_EEC_PMSM", machine=Toyota_Prius)
@@ -65,22 +62,31 @@ def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
     out_mag = simu_mag.run()
 
     # from Yang et al, 2013
-    assert out.elec.Tem_av_ref == pytest.approx(81.69, rel=0.1)
-    assert out_mag.mag.Tem_av == pytest.approx(81.91, rel=0.1)
+    assert out.elec.Tem_av_ref == pytest.approx(82.7, rel=0.1)
+    assert out_mag.mag.Tem_av == pytest.approx(82.7, rel=0.1)
 
     # Plot 3-phase current function of time
     out.elec.get_Is().plot_2D_Data(
         "time",
         "phase[]",
-        # save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
-        # is_show_fig=False,
+        save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
+        is_show_fig=False,
         **dict_2D
     )
 
     return out
 
 
+@pytest.mark.long_5s
+@pytest.mark.long_1m
+@pytest.mark.MagFEMM
+@pytest.mark.EEC_PMSM
+@pytest.mark.IPMSM
+@pytest.mark.periodicity
 def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
+    """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine
+    Compute Torque from EEC results and compare with Yang et al, 2013
+    """
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     simu = Simu1(name="test_EEC_PMSM", machine=Toyota_Prius)
@@ -125,6 +131,8 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
         xlabel="Current angle [°]",
         ylabel="Electrical torque [N.m]",
         title="Electrical torque vs current angle",
+        save_path=join(save_path, "test_EEC_PMSM_validation.png"),
+        is_show_fig=False,
         **dict_2D
     )
 
@@ -132,7 +140,7 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
     p = Toyota_Prius.get_pole_pair_number()
     Tem_sync = zeros(N_simu)
     Tem_rel = zeros(N_simu)
-    phi_mag = out.output_list[0].elec.eec.fluxlink.comp_fluxlinkage(Toyota_Prius)
+    phi_mag = out.output_list[0].simu.elec.eec.fluxlink.comp_fluxlinkage(Toyota_Prius)
     for ii, out_ii in enumerate(out.output_list):
         out_ii.simu.elec.eec.parameters["phi"] = phi_mag
         Tem_sync[ii], Tem_rel[ii] = out_ii.simu.elec.eec.comp_torque_sync_rel(
@@ -141,6 +149,18 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
 
     Tem2 = Tem_sync + Tem_rel
     assert_almost_equal(out.xoutput_dict["Tem_av_ref"].result - Tem2, 0, decimal=13)
+
+    plot_2D(
+        array([x * 180 / pi for x in out.xoutput_dict["Phi0"].result]),
+        [out.xoutput_dict["Tem_av_ref"].result, Tem_sync, Tem_rel],
+        legend_list=["Overall", "Synchronous", "Reluctant"],
+        xlabel="Current angle [°]",
+        ylabel="Electrical torque [N.m]",
+        title="Electrical torque vs current angle",
+        save_path=join(save_path, "test_EEC_PMSM_sync_rel.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
 
     return out
 

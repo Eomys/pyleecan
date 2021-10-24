@@ -32,10 +32,9 @@ def test_FEMM_set_previous():
     simu = Simu1(name="test_FEMM_set_previous", machine=Toyota_Prius)
 
     # Definition of a sinusoidal current
-    simu.input = InputCurrent()
-    simu.input.OP = OPdq(Id_ref=-100, Iq_ref=200, N0=2000)
-    simu.input.Nt_tot = 32 * 4  # Number of time step
-    simu.input.Na_tot = 1024  # Spatial discretization
+    simu.input = InputCurrent(
+        OP=OPdq(Id_ref=-100, Iq_ref=200, N0=2000), Nt_tot=32 * 4, Na_tot=1024
+    )
 
     # Definition of the magnetic simulation with previous ans file
     simu.mag = MagFEMM(

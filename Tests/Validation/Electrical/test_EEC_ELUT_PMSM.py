@@ -6,6 +6,7 @@ from numpy.testing import assert_almost_equal
 import pytest
 
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
+from SciDataTool.Functions.Plot.plot_3D import plot_3D
 
 from pyleecan.Classes.ImportGenPWM import ImportGenPWM
 from pyleecan.Classes.InputVoltage import InputVoltage
@@ -30,6 +31,7 @@ is_show_fig = False
 
 
 @pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.MagFEMM
 @pytest.mark.EEC_PMSM
 @pytest.mark.IPMSM
@@ -38,18 +40,19 @@ is_show_fig = False
 def test_ELUT():
     """Fixture to calculate ELUT and use it in all tests"""
 
-    _, ELUT = test_EEC_ELUT_PMSM()
+    _, ELUT = test_EEC_ELUT_PMSM_calc()
 
     return ELUT
 
 
 @pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.MagFEMM
 @pytest.mark.EEC_PMSM
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.skip(reason="called by fixture and for direct call to test")
-def test_EEC_ELUT_PMSM(n_Id=3, n_Iq=3):
+def test_EEC_ELUT_PMSM_calc(n_Id=5, n_Iq=5):
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
@@ -60,14 +63,14 @@ def test_EEC_ELUT_PMSM(n_Id=3, n_Iq=3):
 
     # Definition of the input
     simu.input = InputCurrent(
-        Nt_tot=8 * 10,
+        Nt_tot=8 * 12,
         Na_tot=8 * 200,
         OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0),
     )
 
     # Build OP_matrix with a meshgrid of Id/Iq
-    Id_min, Id_max = 0, 100
-    Iq_min, Iq_max = 0, 200
+    Id_min, Id_max = -100, 100
+    Iq_min, Iq_max = -200, 200
     Id, Iq = np.meshgrid(
         np.linspace(Id_min, Id_max, n_Id), np.linspace(Iq_min, Iq_max, n_Iq)
     )
@@ -96,28 +99,30 @@ def test_EEC_ELUT_PMSM(n_Id=3, n_Iq=3):
 
     # Check flux linkage dqh values
     Phi_dqh_mean = ELUT.get_Phidqh_mean()
+    OP_list = OP_matrix[:, 1:3].tolist()
+    ii = OP_list.index([0, 0])
     Phi_dqh0 = n2dqh_DataTime(
-        ELUT.Phi_wind[0],
+        ELUT.Phi_wind[ii],
         is_dqh_rms=True,
     )
     Phi_dqh0_mean = Phi_dqh0.get_along("time=mean", "phase")[Phi_dqh0.symbol]
-    assert_almost_equal(Phi_dqh0_mean, Phi_dqh_mean[0, :], decimal=20)
+    assert_almost_equal(Phi_dqh0_mean, Phi_dqh_mean[ii, :], decimal=20)
     assert_almost_equal(Phi_dqh0_mean[0], 0.141, decimal=3)
 
     # Plot 3-phase current function of time
-    ELUT.Phi_wind[0].plot_2D_Data(
+    ELUT.Phi_wind[ii].plot_2D_Data(
         "time",
         "phase[]",
         save_path=join(save_path, name + "_flux_linkage_abc.png"),
         is_show_fig=is_show_fig,
-        **dict_2D
+        **dict_2D,
     )
     Phi_dqh0.plot_2D_Data(
         "time",
         "phase[]",
         save_path=join(save_path, name + "_flux_linkage_dqh.png"),
         is_show_fig=is_show_fig,
-        **dict_2D
+        **dict_2D,
     )
 
     return out, ELUT
@@ -128,14 +133,15 @@ def test_EEC_ELUT_PMSM(n_Id=3, n_Iq=3):
 @pytest.mark.EEC_PMSM
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
-def test_EEC_ELUT_PMSM_MTPA(test_ELUT):
+def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine for MTPA calculation"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     qs = Toyota_Prius.stator.winding.qs
     p = Toyota_Prius.get_pole_pair_number()
 
-    simu_MTPA = Simu1(name="test_EEC_ELUT_PMSM_MTPA", machine=Toyota_Prius)
+    name = "test_EEC_ELUT_PMSM_MTPA"
+    simu_MTPA = Simu1(name=name, machine=Toyota_Prius)
 
     # Definition of the input
     OP_ref = OPdq(N0=1000, Id_ref=50, Iq_ref=100)
@@ -153,30 +159,81 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT):
     Iq_max = np.max(OP_matrix[:, 2])
 
     Id, Iq = np.meshgrid(
-        np.linspace(Id_min, Id_max, 50), np.linspace(Iq_min, Iq_max, 100)
+        np.linspace(Id_min, Id_max, n_Id), np.linspace(Iq_min, Iq_max, n_Iq)
     )
     Id, Iq = Id.ravel(), Iq.ravel()
 
     elec_model = Electrical(eec=EEC_PMSM(), ELUT_enforced=test_ELUT)
+
     # Interpolate stator winding flux in dqh frame for all Id/Iq
     elec_model.eec.parameters = elec_model.ELUT_enforced.get_param_dict(
         Id=Id, Iq=Iq, param_list=["Idqh", "Phidqh"]
     )
 
+    # Compute torque
+    Tem_sync, Tem_rel = elec_model.eec.comp_torque_sync_rel(qs, p)
+    Tem_interp = Tem_sync + Tem_rel
+
+    # Init plot map
+    dict_map = {
+        "Xdata": Id.reshape((n_Iq, n_Id))[0, :],
+        "Ydata": Iq.reshape((n_Iq, n_Id))[:, 0],
+        "xlabel": "d-axis current [Arms]",
+        "ylabel": "q-axis current [Arms]",
+        "type_plot": "pcolor",
+        "is_contour": True,
+        "is_show_fig": is_show_fig,
+    }
+
+    # Plot torque map
+    plot_3D(
+        Zdata=Tem_interp.reshape((n_Iq, n_Id)).T,
+        zlabel="Average Torque [N.m]",
+        title="Torque map in dq plane",
+        save_path=join(save_path, name + "_torque_map.png"),
+        **dict_map,
+    )
+
+    # Plot Phi_d map
+    plot_3D(
+        Zdata=elec_model.eec.parameters["Phid"].reshape((n_Iq, n_Id)).T,
+        zlabel="$\Phi_d$ [Wb]",
+        title="Flux linkage map in dq plane (d-axis)",
+        save_path=join(save_path, name + "_phid_map.png"),
+        **dict_map,
+    )
+
+    # Plot Phi_q map
+    plot_3D(
+        Zdata=elec_model.eec.parameters["Phiq"].reshape((n_Iq, n_Id)).T,
+        zlabel="$\Phi_q$ [Wb]",
+        title="Flux linkage map in dq plane (q-axis)",
+        save_path=join(save_path, name + "_phiq_map.png"),
+        **dict_map,
+    )
+
+    # MTPA
     # Maximum current [Arms]
-    I_max = 250
+    I_max = 250 / np.sqrt(2)
     Imax_interp = np.sqrt(Id ** 2 + Iq ** 2)
     # Maximum voltage [Vrms]
-    U_max = 500
+    U_max = 300
     # Speed vector
     Nspeed = 50
     N0_min = 50
     N0_max = 8000
     N0_vect = np.linspace(N0_min, N0_max, Nspeed)
-    # Maximum current vector
+    # Maximum load vector
     Ntorque = 5
-    if Ntorque == 1:
+    is_braking = False  # True to include negative torque (braking)
+    if is_braking:
+        Ntorque = (
+            2 * Ntorque + 1
+        )  # Take twice the number of torques + odd to include zero torque
+    if not is_braking and Ntorque == 1:
         I_max_vect = np.array([I_max])
+    elif is_braking:
+        I_max_vect = np.linspace(-I_max, I_max, Ntorque)
     else:
         I_max_vect = np.linspace(0, I_max, Ntorque)
 
@@ -205,16 +262,11 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT):
         out_dict = elec_model.eec.solve_EEC()
         U_max_interp = np.sqrt(out_dict["Ud"] ** 2 + out_dict["Uq"] ** 2)
 
-        # Compute torque
-        Tem_sync, Tem_rel = elec_model.eec.comp_torque_sync_rel(qs, p)
-        Tem_interp = Tem_sync + Tem_rel
-
         for kk, I_max0 in enumerate(I_max_vect):
 
             if I_max0 == 0:
-                # Finding indices of operating points satisfying Vmax voltage
-                k0 = np.logical_and(U_max_interp <= U_max, np.abs(Tem_interp) <= 1e-1)
-                j0 = np.logical_and(k0, np.abs(Iq) == 0)
+                # Finding indices of operating points satisfying Vmax voltage for Iq=0 (no torque production)
+                j0 = np.logical_and(U_max_interp <= U_max, np.abs(Iq) == 0)
 
                 # Finding index of operating point giving lowest current
                 jmax = np.argmin(np.abs(Imax_interp[j0]))
@@ -247,25 +299,8 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT):
             I_MTPA[ii, kk, 1] = OP_matrix_MTPA[ii, kk, 2]
             I_MTPA[ii, kk, 2] = Imax_interp[j0][jmax]
 
-    i_load = 0
-    plot_2D(
-        [OP_matrix_MTPA[:, i_load, 0]],
-        [I_MTPA[:, i_load, 0], I_MTPA[:, i_load, 1], I_MTPA[:, i_load, 2]],
-        xlabel="Speed [rpm]",
-        ylabel="Current [Arms]",
-        legend_list=["Id", "Iq", "Imax"],
-    )
-
-    i_load = 0
-    plot_2D(
-        [OP_matrix_MTPA[:, i_load, 0]],
-        [U_MTPA[:, i_load, 0], U_MTPA[:, i_load, 1], U_MTPA[:, i_load, 2]],
-        xlabel="Speed [rpm]",
-        ylabel="Voltage [Vrms]",
-        legend_list=["Ud", "Uq", "Umax"],
-    )
-
     if Ntorque > 1:
+        # Plot torque speed curve for each load level
         y_list = list()
         legend_list = list()
         for i_load in range(Ntorque):
@@ -273,14 +308,36 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT):
             legend_list.append(
                 "Load level = " + str(int(round(100 * (i_load) / (Ntorque - 1)))) + " %"
             )
-
         plot_2D(
             [OP_matrix_MTPA[:, i_load, 0]],
             y_list,
             xlabel="Speed [rpm]",
             ylabel="Average torque [N.m]",
             legend_list=legend_list,
+            # save_path=join(save_path, name + "_MTPA_torque_speed.png"),
+            # is_show_fig=is_show_fig,
         )
+
+    i_load = -1
+    plot_2D(
+        [OP_matrix_MTPA[:, i_load, 0]],
+        [I_MTPA[:, i_load, 0], I_MTPA[:, i_load, 1], I_MTPA[:, i_load, 2]],
+        xlabel="Speed [rpm]",
+        ylabel="Current [Arms]",
+        legend_list=["Id", "Iq", "Imax"],
+        # save_path=join(save_path, name + "_current_MTPA_OP" + str(i_load) + ".png"),
+        # is_show_fig=is_show_fig,
+    )
+
+    plot_2D(
+        [OP_matrix_MTPA[:, i_load, 0]],
+        [U_MTPA[:, i_load, 0], U_MTPA[:, i_load, 1], U_MTPA[:, i_load, 2]],
+        xlabel="Speed [rpm]",
+        ylabel="Voltage [Vrms]",
+        legend_list=["Ud", "Uq", "Umax"],
+        # save_path=join(save_path, name + "_voltage_MTPA_OP" + str(i_load) + ".png"),
+        # is_show_fig=is_show_fig,
+    )
 
 
 @pytest.mark.long_5s
@@ -317,7 +374,7 @@ def test_EEC_ELUT_PMSM_PWM(test_ELUT):
         "freqs",
         save_path=join(save_path, "EEC_FEMM_IPMSM_Is_harm.png"),
         is_show_fig=is_show_fig,
-        **dict_2D
+        **dict_2D,
     )
 
     return out_EEC
@@ -325,7 +382,7 @@ def test_EEC_ELUT_PMSM_PWM(test_ELUT):
 
 # To run it without pytest
 if __name__ == "__main__":
-    # out0, ELUT = test_ELUT()
+    # out0, ELUT = test_EEC_ELUT_PMSM_calc()
     # ELUT.save("ELUT_PMSM.h5")
     ELUT = load("ELUT_PMSM.h5")
     test_EEC_ELUT_PMSM_MTPA(ELUT)
