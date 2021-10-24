@@ -1,20 +1,21 @@
-# -*- coding: utf-8 -*-
-# from ....Classes.InputElec import InputElec
-# from ....Classes.Slot import Slot
-# from ....Classes.Conductor import Conductor
-# from ....Classes.CondType11 import CondType11
-# from ....Classes.CondType12 import CondType12
-
-from numpy import ones, pi, sqrt, sin
+from numpy import pi, sqrt, sin
 
 
-def comp_skin_effect(self, freq, T=20):
+def comp_skin_effect(self, freq, T=20, type_skin_effect=1):
     """Compute the skin effect factor for the conductor
 
     Parameters
     ----------
     self : Conductor
         an Conductor object
+    freq: float
+        electrical frequency [Hz]
+    T: float
+        Conductor temperature [degC]
+    type_skin_effect: int
+        Model type for skin effect calculation:
+        - 1: analytical model (default)
+
     Returns
     ----------
     Xkr_skinS : float
@@ -29,8 +30,7 @@ def comp_skin_effect(self, freq, T=20):
     sigmar = 1 / rho
     mu0 = 4 * pi * 1e-7
     ws = 2 * pi * freq
-    Slot = self.parent.parent.parent.stator.slot
-    type_skin_effect = self.parent.parent.parent.parent.elec.type_skin_effect
+    Slot = self.parent.parent.slot
     # nsw = len(ws)
 
     # initialization

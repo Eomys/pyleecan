@@ -1,5 +1,5 @@
-def get_Lq(self, Id, Iq, L_endwinding=0):
-    """Get the total q-axis inductance
+def get_Ldqh(self, Id, Iq, L_endwinding=0, Phi_dqh=None):
+    """Get the total dqh inductance
     Parameters
     ----------
     self : LUTdq
@@ -13,10 +13,10 @@ def get_Lq(self, Id, Iq, L_endwinding=0):
 
     Returns
     ----------
-    Lq : ndarray
-        q-axis inductance
+    Ldqh : ndarray
+        ddqh inductance
     """
 
-    Lmq = self.get_Lmq(Id=Id, Iq=Iq)
+    Lmdqh = self.get_Lmdqh(Id=Id, Iq=Iq, Phi_dqh=Phi_dqh)
 
-    return Lmq + L_endwinding
+    return Lmdqh + L_endwinding

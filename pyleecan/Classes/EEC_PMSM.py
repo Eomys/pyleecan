@@ -42,6 +42,11 @@ try:
 except ImportError as error:
     comp_BEMF_harmonics = error
 
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_torque_sync_rel import comp_torque_sync_rel
+except ImportError as error:
+    comp_torque_sync_rel = error
+
 
 from ._check import InitUnKnowClassError
 from .IndMag import IndMag
@@ -108,6 +113,18 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_BEMF_harmonics = comp_BEMF_harmonics
+    # cf Methods.Simulation.EEC_PMSM.comp_torque_sync_rel
+    if isinstance(comp_torque_sync_rel, ImportError):
+        comp_torque_sync_rel = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_torque_sync_rel: "
+                    + str(comp_torque_sync_rel)
+                )
+            )
+        )
+    else:
+        comp_torque_sync_rel = comp_torque_sync_rel
     # save and copy methods are available in all object
     save = save
     copy = copy

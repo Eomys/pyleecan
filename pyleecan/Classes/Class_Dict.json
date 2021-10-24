@@ -1146,7 +1146,8 @@
             "solve_EEC",
             "gen_drive",
             "comp_joule_losses",
-            "comp_BEMF_harmonics"
+            "comp_BEMF_harmonics",
+            "comp_torque_sync_rel"
         ],
         "mother": "EEC",
         "name": "EEC_PMSM",
@@ -1724,6 +1725,15 @@
                 "type": "float",
                 "unit": "",
                 "value": 0.5
+            },
+            {
+                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
+                "max": "",
+                "min": "",
+                "name": "nb_worker",
+                "type": "int",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -3981,6 +3991,15 @@
                 "type": "float",
                 "unit": "",
                 "value": 0.5
+            },
+            {
+                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
+                "max": "",
+                "min": "",
+                "name": "nb_worker",
+                "type": "int",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -4405,11 +4424,9 @@
         "is_internal": false,
         "methods": [
             "get_param_dict",
-            "get_Lq",
             "get_bemf",
-            "get_Ld",
-            "get_Lmd",
-            "get_Lmq",
+            "get_Ldqh",
+            "get_Lmdqh",
             "import_from_data",
             "get_Phidqh_mean",
             "get_Phidqh_mag",

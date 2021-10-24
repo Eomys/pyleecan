@@ -57,6 +57,7 @@ class IndMagFEMM(IndMag):
         is_periodicity_a=False,
         Nt_tot=5,
         Kgeo_fineness=0.5,
+        nb_worker=1,
         init_dict=None,
         init_str=None,
     ):
@@ -87,6 +88,8 @@ class IndMagFEMM(IndMag):
                 Nt_tot = init_dict["Nt_tot"]
             if "Kgeo_fineness" in list(init_dict.keys()):
                 Kgeo_fineness = init_dict["Kgeo_fineness"]
+            if "nb_worker" in list(init_dict.keys()):
+                nb_worker = init_dict["nb_worker"]
         # Set the properties (value check and convertion are done in setter)
         self.FEMM_dict = FEMM_dict
         self.type_calc_leakage = type_calc_leakage
@@ -94,6 +97,7 @@ class IndMagFEMM(IndMag):
         self.is_periodicity_a = is_periodicity_a
         self.Nt_tot = Nt_tot
         self.Kgeo_fineness = Kgeo_fineness
+        self.nb_worker = nb_worker
         # Call IndMag init
         super(IndMagFEMM, self).__init__()
         # The class is frozen (in IndMag init), for now it's impossible to
@@ -111,6 +115,7 @@ class IndMagFEMM(IndMag):
         IndMagFEMM_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
         IndMagFEMM_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         IndMagFEMM_str += "Kgeo_fineness = " + str(self.Kgeo_fineness) + linesep
+        IndMagFEMM_str += "nb_worker = " + str(self.nb_worker) + linesep
         return IndMagFEMM_str
 
     def __eq__(self, other):
@@ -133,6 +138,8 @@ class IndMagFEMM(IndMag):
         if other.Nt_tot != self.Nt_tot:
             return False
         if other.Kgeo_fineness != self.Kgeo_fineness:
+            return False
+        if other.nb_worker != self.nb_worker:
             return False
         return True
 
@@ -159,6 +166,8 @@ class IndMagFEMM(IndMag):
             diff_list.append(name + ".Nt_tot")
         if other._Kgeo_fineness != self._Kgeo_fineness:
             diff_list.append(name + ".Kgeo_fineness")
+        if other._nb_worker != self._nb_worker:
+            diff_list.append(name + ".nb_worker")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -178,6 +187,7 @@ class IndMagFEMM(IndMag):
         S += getsizeof(self.is_periodicity_a)
         S += getsizeof(self.Nt_tot)
         S += getsizeof(self.Kgeo_fineness)
+        S += getsizeof(self.nb_worker)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -205,6 +215,7 @@ class IndMagFEMM(IndMag):
         IndMagFEMM_dict["is_periodicity_a"] = self.is_periodicity_a
         IndMagFEMM_dict["Nt_tot"] = self.Nt_tot
         IndMagFEMM_dict["Kgeo_fineness"] = self.Kgeo_fineness
+        IndMagFEMM_dict["nb_worker"] = self.nb_worker
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         IndMagFEMM_dict["__class__"] = "IndMagFEMM"
@@ -219,6 +230,7 @@ class IndMagFEMM(IndMag):
         self.is_periodicity_a = None
         self.Nt_tot = None
         self.Kgeo_fineness = None
+        self.nb_worker = None
         # Set to None the properties inherited from IndMag
         super(IndMagFEMM, self)._set_None()
 
@@ -331,5 +343,23 @@ class IndMagFEMM(IndMag):
         doc=u"""global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)
 
         :Type: float
+        """,
+    )
+
+    def _get_nb_worker(self):
+        """getter of nb_worker"""
+        return self._nb_worker
+
+    def _set_nb_worker(self, value):
+        """setter of nb_worker"""
+        check_var("nb_worker", value, "int")
+        self._nb_worker = value
+
+    nb_worker = property(
+        fget=_get_nb_worker,
+        fset=_set_nb_worker,
+        doc=u"""To run FEMM in parallel (the parallelization is on the time loop)
+
+        :Type: int
         """,
     )

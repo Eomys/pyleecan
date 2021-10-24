@@ -23,29 +23,19 @@ except ImportError as error:
     get_param_dict = error
 
 try:
-    from ..Methods.Simulation.LUTdq.get_Lq import get_Lq
-except ImportError as error:
-    get_Lq = error
-
-try:
     from ..Methods.Simulation.LUTdq.get_bemf import get_bemf
 except ImportError as error:
     get_bemf = error
 
 try:
-    from ..Methods.Simulation.LUTdq.get_Ld import get_Ld
+    from ..Methods.Simulation.LUTdq.get_Ldqh import get_Ldqh
 except ImportError as error:
-    get_Ld = error
+    get_Ldqh = error
 
 try:
-    from ..Methods.Simulation.LUTdq.get_Lmd import get_Lmd
+    from ..Methods.Simulation.LUTdq.get_Lmdqh import get_Lmdqh
 except ImportError as error:
-    get_Lmd = error
-
-try:
-    from ..Methods.Simulation.LUTdq.get_Lmq import get_Lmq
-except ImportError as error:
-    get_Lmq = error
+    get_Lmdqh = error
 
 try:
     from ..Methods.Simulation.LUTdq.import_from_data import import_from_data
@@ -111,15 +101,6 @@ class LUTdq(LUT):
         )
     else:
         get_param_dict = get_param_dict
-    # cf Methods.Simulation.LUTdq.get_Lq
-    if isinstance(get_Lq, ImportError):
-        get_Lq = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LUTdq method get_Lq: " + str(get_Lq))
-            )
-        )
-    else:
-        get_Lq = get_Lq
     # cf Methods.Simulation.LUTdq.get_bemf
     if isinstance(get_bemf, ImportError):
         get_bemf = property(
@@ -129,33 +110,24 @@ class LUTdq(LUT):
         )
     else:
         get_bemf = get_bemf
-    # cf Methods.Simulation.LUTdq.get_Ld
-    if isinstance(get_Ld, ImportError):
-        get_Ld = property(
+    # cf Methods.Simulation.LUTdq.get_Ldqh
+    if isinstance(get_Ldqh, ImportError):
+        get_Ldqh = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LUTdq method get_Ld: " + str(get_Ld))
+                ImportError("Can't use LUTdq method get_Ldqh: " + str(get_Ldqh))
             )
         )
     else:
-        get_Ld = get_Ld
-    # cf Methods.Simulation.LUTdq.get_Lmd
-    if isinstance(get_Lmd, ImportError):
-        get_Lmd = property(
+        get_Ldqh = get_Ldqh
+    # cf Methods.Simulation.LUTdq.get_Lmdqh
+    if isinstance(get_Lmdqh, ImportError):
+        get_Lmdqh = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LUTdq method get_Lmd: " + str(get_Lmd))
+                ImportError("Can't use LUTdq method get_Lmdqh: " + str(get_Lmdqh))
             )
         )
     else:
-        get_Lmd = get_Lmd
-    # cf Methods.Simulation.LUTdq.get_Lmq
-    if isinstance(get_Lmq, ImportError):
-        get_Lmq = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LUTdq method get_Lmq: " + str(get_Lmq))
-            )
-        )
-    else:
-        get_Lmq = get_Lmq
+        get_Lmdqh = get_Lmdqh
     # cf Methods.Simulation.LUTdq.import_from_data
     if isinstance(import_from_data, ImportError):
         import_from_data = property(

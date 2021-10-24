@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
-
-from enum import unique
+from numpy import isscalar
 
 
 def comp_parameters(self, machine, OP, Tsta=None, Trot=None):
@@ -27,60 +24,72 @@ def comp_parameters(self, machine, OP, Tsta=None, Trot=None):
 
     PAR = self.parameters
     Cond = machine.stator.winding.conductor
+
     I_dict = OP.get_Id_Iq()
     Id_ref, Iq_ref = I_dict["Id"], I_dict["Iq"]
+
     U_dict = OP.get_Ud_Uq()
     Ud_ref, Uq_ref = U_dict["Ud"], U_dict["Uq"]
-    felec = OP.get_felec()
+
+    # Update frequency with current OP and store frequency in EEC
+    self.freq0 = OP.get_felec()
+    felec = self.freq0
 
     # compute skin_effect
-    Xkr_skinS, Xke_skinS = Cond.comp_skin_effect(T=20, freq=felec)
+    Xkr_skinS, Xke_skinS = Cond.comp_skin_effect(T=Tsta, freq=felec)
 
-    # Parameters to compute only once
+    # Stator resistance
     if "R20" not in PAR:
         R20 = machine.stator.comp_resistance_wind()
         PAR["R20"] = R20 * Xkr_skinS
-    if "phi" not in PAR:
+
+    # Stator flux linkage
+    if "phi" not in PAR and Ud_ref is not None and Uq_ref is not None:
         PAR["phi"] = self.fluxlink.comp_fluxlinkage(machine)
 
     # Parameters which may vary for each simulation
     is_comp_ind = False
     # check for complete parameter set
     # (there may be some redundancy here but it seems simplier to implement)
-    if not all(k in PAR for k in ("Phid", "Phiq", "Ld", "Lq")):
+    if (
+        Ud_ref is not None
+        and Uq_ref is not None
+        and not all(k in PAR for k in ("Phid", "Phiq", "Ld", "Lq"))
+    ):
         is_comp_ind = True
 
     # check for d- and q-current (change)
-    if "Id" not in PAR or PAR["Id"] != Id_ref:
+    if "Id" not in PAR or (isscalar(PAR["Id"]) and PAR["Id"] != Id_ref):
         PAR["Id"] = Id_ref
         is_comp_ind = True
 
-    if "Iq" not in PAR or PAR["Iq"] != Iq_ref:
+    if "Iq" not in PAR or (isscalar(PAR["Iq"]) and PAR["Iq"] != Iq_ref):
         PAR["Iq"] = Iq_ref
         is_comp_ind = True
 
     # check for d- and q-voltage (change)
-    if "Ud" not in PAR or PAR["Ud"] != Ud_ref:
+    if Ud_ref is not None and (
+        "Ud" not in PAR or (isscalar(PAR["Ud"]) and PAR["Ud"] != Ud_ref)
+    ):
         PAR["Ud"] = Ud_ref
 
-    if "Uq" not in PAR or PAR["Uq"] != Uq_ref:
+    if Uq_ref is not None and (
+        "Uq" not in PAR or (isscalar(PAR["Uq"]) and PAR["Uq"] != Uq_ref)
+    ):
         PAR["Uq"] = Uq_ref
 
     # compute inductance if necessary
     if is_comp_ind:
-        (phid, phiq) = self.indmag.comp_inductance(
-            machine=machine, Id_ref=Id_ref, Iq_ref=Iq_ref
-        )
-        (phid, phiq) = tuple([z * Xke_skinS for z in (phid, phiq)])
-        if PAR["Id"] != 0:
-            PAR["Ld"] = (phid - PAR["phi"]) / PAR["Id"]
+        (phid, phiq) = self.indmag.comp_inductance(machine=machine, OP_ref=OP)
+        PAR["Phid"] = phid * Xke_skinS
+        PAR["Phiq"] = phiq * Xke_skinS
+
+        if PAR["Id"] != 0 and "phi" in PAR and Ud_ref is not None:
+            PAR["Ld"] = (PAR["Phid"] - PAR["phi"]) / PAR["Id"]
         else:
             PAR["Ld"] = None  # to have the parameters complete though
 
-        if PAR["Iq"] != 0:
-            PAR["Lq"] = phiq / PAR["Iq"]
+        if PAR["Iq"] != 0 and Uq_ref is not None:
+            PAR["Lq"] = PAR["Phiq"] / PAR["Iq"]
         else:
             PAR["Lq"] = None  # to have the parameters complete though
-
-        PAR["Phid"] = phid
-        PAR["Phiq"] = phiq
