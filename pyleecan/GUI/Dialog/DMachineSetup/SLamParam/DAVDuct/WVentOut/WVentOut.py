@@ -42,6 +42,9 @@ class WVentOut(QGroupBox):
         self.out_vent_surf.setObjectName("out_vent_surf")
         self.layout.addWidget(self.out_vent_surf)
 
+        self.out_sp = QLabel(self)
+        self.out_sp.setObjectName("out_sp")
+        self.layout.addWidget(self.out_sp)
         # self.layout.addWidget(self)
 
     def comp_output(self):
@@ -55,8 +58,10 @@ class WVentOut(QGroupBox):
 
         if hasattr(self.parent(), "lam"):
             lam = self.parent().lam
+            vent = self.parent().vent
         else:  # For VentUD
             lam = self.parent().parent().parent().parent().lam
+            vent = self.parent().parent().parent().parent().vent
 
         # Lamination output
         # Rint = format(self.u.get_m(lam.Rint), ".4g")
@@ -66,6 +71,12 @@ class WVentOut(QGroupBox):
         # Rext = format(self.u.get_m(lam.Rext), ".4g")
         # self.out_Rext.setText(lam_name + ".Rext: " + Rext + " " + self.u.get_m_name())
         self.out_Rext.hide()
+
+        if vent.Zh not in [None, 0]:
+            sp_txt = format(pi / vent.Zh, ".4g") + " [rad]"
+        else:
+            sp_txt = "?"
+        self.out_sp.setText("pi / Zh : " + sp_txt)
 
         Slam = pi * (lam.Rext ** 2 - lam.Rint ** 2)
         Slam_txt = format(self.u.get_m2(Slam), ".4g")
