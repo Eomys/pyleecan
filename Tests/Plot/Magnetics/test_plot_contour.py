@@ -20,7 +20,7 @@ from Tests import save_plot_path as save_path
 @pytest.mark.long_1m
 @pytest.mark.MagFEMM
 @pytest.mark.SPMSM
-def test_plot_contour_B_FEMM():
+def test_SPMSM015_plot_contour_B_FEMM():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
     SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
@@ -70,5 +70,44 @@ def test_plot_contour_B_FEMM():
 
     pass
 
+def test_Benchmark_plot_contour_B_FEMM():
+    """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
+
+    Benchmark = load(join(DATA_DIR, "Machine", "Benchmark.json"))
+    simu = Simu1(name="test_FEMM_compare_Toyota_Prius", machine=Benchmark)
+
+    simu.input = InputCurrent(
+        Id_ref=0,
+        Iq_ref=0,
+        Na_tot=2048,
+        Nt_tot=50,
+        N0=2504,
+    )
+
+    # Definition of the magnetic simulation: with periodicity
+    simu.mag = MagFEMM(
+        type_BH_stator=0,
+        type_BH_rotor=0,
+        is_periodicity_a=False,
+        is_periodicity_t=True,
+        is_get_meshsolution=True,
+        nb_worker=cpu_count(),
+    )
+
+    out = simu.run()
+
+    out.plot_B_mesh(save_path=join(save_path, "plot_B_mesh.png"))
+
+    out.plot_B_mesh(group_names="stator core", is_animated=True, is_show_fig=False, save_path=join(save_path, "plot_B_mesh.gif"),)
+
+    out.mag.meshsolution.plot_contour(
+        group_names=["rotor magnets","rotor core"],
+        is_show_fig=False,
+        save_path=join(save_path, "plot_mesh_stator.png"),
+    )
+
+    pass
+
 if __name__ == "__main__":
-    test_plot_contour_B_FEMM()
+
+    test_Benchmark_plot_contour_B_FEMM()
