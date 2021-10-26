@@ -5896,10 +5896,19 @@
                 "value": 0
             },
             {
-                "desc": "1 to artificially remove the ventilations duct",
+                "desc": "1 to artificially remove the ventilations duct of the stator",
                 "max": "",
                 "min": "",
-                "name": "is_remove_vent",
+                "name": "is_remove_ventS",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "1 to artificially remove the ventilations duct of the rotor",
+                "max": "",
+                "min": "",
+                "name": "is_remove_ventR",
                 "type": "bool",
                 "unit": "-",
                 "value": 0

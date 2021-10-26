@@ -17,7 +17,8 @@ def draw_FEMM(
     sym,
     is_antiper,
     type_calc_leakage,
-    is_remove_vent=False,
+    is_remove_ventS=False,
+    is_remove_ventR=False,
     is_remove_slotS=False,
     is_remove_slotR=False,
     type_BH_stator=0,
@@ -48,8 +49,10 @@ def draw_FEMM(
     type_calc_leakage : int
         0 no leakage calculation
         1 calculation using single slot
-    is_remove_vent : bool
-        True to remove the ventilation ducts in FEMM (Default value = False)
+    is_remove_ventS : bool
+        True to remove the ventilation ducts on stator in FEMM (Default value = False)
+    is_remove_ventR : bool
+        True to remove the ventilation ducts on rotor in FEMM (Default value = False)
     is_remove_slotS : bool
         True to solve without slot effect on the Stator (Default value = False)
     is_remove_slotR : bool
@@ -117,8 +120,10 @@ def draw_FEMM(
     if is_remove_slotS:  # Remove all slots on the stator
         lam_dict = machine.stator.as_dict()
         machine.stator = Lamination(init_dict=lam_dict)
-    if is_remove_vent:  # Remove all ventilations
+    # Remove ventilations
+    if is_remove_ventR:
         machine.rotor.axial_vent = list()
+    if is_remove_ventS:
         machine.stator.axial_vent = list()
 
     # Building geometry of the (modified) stator and the rotor
