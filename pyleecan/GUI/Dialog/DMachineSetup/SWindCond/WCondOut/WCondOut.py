@@ -62,8 +62,9 @@ class WCondOut(QGroupBox):
             K_txt = self.tr("Ksfill = ")
         else:
             K_txt = self.tr("Krfill = ")
+
         # We compute the output only if the slot is correctly set
-        if parent.check() is None:
+        if parent.check(lam) is None:
             # Compute all the needed output as string
             H = format(self.u.get_m(lam.winding.conductor.comp_height()), ".4g")
             W = format(self.u.get_m(lam.winding.conductor.comp_width()), ".4g")

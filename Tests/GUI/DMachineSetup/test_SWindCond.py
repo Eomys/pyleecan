@@ -20,15 +20,7 @@ from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 
 
 class TestSWindCond(object):
-    @pytest.fixture
-    def setup(self):
-        """Run at the begining of every test to setup the gui"""
-
-        if not QtWidgets.QApplication.instance():
-            self.app = QtWidgets.QApplication(sys.argv)
-        else:
-            self.app = QtWidgets.QApplication.instance()
-
+    def setup_method(self):
         test_obj = MachineSCIM()
         test_obj.stator = LamSlotWind(is_stator=True)
         test_obj.stator.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
@@ -61,155 +53,158 @@ class TestSWindCond(object):
             machine=test_obj, material_dict=material_dict, is_stator=False
         )
 
-        yield {
-            "widget": widget_1,
-            "widget2": widget_2,
-            "test_obj": test_obj,
-            "material_dict": material_dict,
-        }
+        self.widget = widget_1
+        self.widget2 = widget_2
+        self.test_obj = test_obj
+        self.material_dict = material_dict
 
-        self.app.quit()
+    @classmethod
+    def setup_class(cls):
+        """Start the app for the test"""
+        print("\nStart Test TestSWindCond")
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
-    def test_init(self, setup):
-        assert setup["widget"].c_cond_type.currentIndex() == 0
-        assert setup["widget"].w_cond.si_Nwpc1_rad.value() == 2
-        assert setup["widget"].w_cond.si_Nwpc1_tan.value() == 3
-        assert setup["widget"].w_cond.lf_Hwire.value() == 10e-3
-        assert setup["widget"].w_cond.lf_Wwire.value() == 20e-3
-        assert setup["widget"].w_cond.lf_Wins_wire.value() == 30e-3
-        assert setup["widget"].w_cond.lf_Lewout.value() == 40e-3
+    @classmethod
+    def teardown_class(cls):
+        """Exit the app after the test"""
+        cls.app.quit()
 
-        assert setup["widget2"].c_cond_type.currentIndex() == 1
-        assert setup["widget2"].w_cond.si_Nwpc1.value() == 4
-        assert setup["widget2"].w_cond.lf_Wwire.value() == 11e-3
-        assert setup["widget2"].w_cond.lf_Wins_wire.value() == 21e-3
-        assert setup["widget2"].w_cond.lf_Wins_cond.value() == 31e-3
+    def test_init(self):
+        assert self.widget.c_cond_type.currentIndex() == 0
+        assert self.widget.w_cond.si_Nwpc1_rad.value() == 2
+        assert self.widget.w_cond.si_Nwpc1_tan.value() == 3
+        assert self.widget.w_cond.lf_Hwire.value() == 10e-3
+        assert self.widget.w_cond.lf_Wwire.value() == 20e-3
+        assert self.widget.w_cond.lf_Wins_wire.value() == 30e-3
+        assert self.widget.w_cond.lf_Lewout.value() == 40e-3
 
-        setup["test_obj"].stator.winding.conductor = None
-        setup["widget"] = SWindCond(
-            machine=setup["test_obj"],
-            material_dict=setup["material_dict"],
+        assert self.widget2.c_cond_type.currentIndex() == 1
+        assert self.widget2.w_cond.si_Nwpc1.value() == 4
+        assert self.widget2.w_cond.lf_Wwire.value() == 11e-3
+        assert self.widget2.w_cond.lf_Wins_wire.value() == 21e-3
+        assert self.widget2.w_cond.lf_Wins_cond.value() == 31e-3
+
+        self.test_obj.stator.winding.conductor = None
+        self.widget = SWindCond(
+            machine=self.test_obj,
+            material_dict=self.material_dict,
             is_stator=True,
         )
 
-        assert setup["widget"].w_mat_0.in_mat_type.text() == "mat_wind1: "
-        assert type(setup["test_obj"].stator.winding.conductor) is CondType11
+        assert self.widget.w_mat_0.in_mat_type.text() == "mat_wind1: "
+        assert type(self.test_obj.stator.winding.conductor) is CondType11
 
-    def test_set_si_Nwpc1_rad(self, setup):
+    def test_set_si_Nwpc1_rad(self):
         """Check that the Widget allow to update si_Nwpc1_rad"""
         # Clear the field before writing the new value
-        setup["widget"].w_cond.si_Nwpc1_rad.clear()
+        self.widget.w_cond.si_Nwpc1_rad.clear()
         value = int(uniform(5, 100))
-        QTest.keyClicks(setup["widget"].w_cond.si_Nwpc1_rad, str(value))
-        setup[
-            "widget"
-        ].w_cond.si_Nwpc1_rad.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(self.widget.w_cond.si_Nwpc1_rad, str(value))
+        # To trigger the slot
+        self.widget.w_cond.si_Nwpc1_rad.editingFinished.emit()
 
-        assert setup["test_obj"].stator.winding.conductor.Nwppc_rad == value
+        assert self.test_obj.stator.winding.conductor.Nwppc_rad == value
 
-    def test_set_si_Nwpc1_tan(self, setup):
+    def test_set_si_Nwpc1_tan(self):
         """Check that the Widget allow to update si_Nwpc1_tan"""
         # Clear the field before writing the new value
-        setup["widget"].w_cond.si_Nwpc1_tan.clear()
+        self.widget.w_cond.si_Nwpc1_tan.clear()
         value = int(uniform(5, 100))
-        QTest.keyClicks(setup["widget"].w_cond.si_Nwpc1_tan, str(value))
-        setup[
-            "widget"
-        ].w_cond.si_Nwpc1_tan.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(self.widget.w_cond.si_Nwpc1_tan, str(value))
+        # To trigger the slot
+        self.widget.w_cond.si_Nwpc1_tan.editingFinished.emit()
 
-        assert setup["test_obj"].stator.winding.conductor.Nwppc_tan == value
+        assert self.test_obj.stator.winding.conductor.Nwppc_tan == value
 
-    def test_set_si_Nwpc1(self, setup):
+    def test_set_si_Nwpc1(self):
         """Check that the Widget allow to update si_Nwpc1"""
         # Clear the field before writing the new value
-        setup["widget2"].w_cond.si_Nwpc1.clear()
+        self.widget2.w_cond.si_Nwpc1.clear()
         value = int(uniform(5, 100))
-        QTest.keyClicks(setup["widget2"].w_cond.si_Nwpc1, str(value))
-        setup["widget2"].w_cond.si_Nwpc1.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(self.widget2.w_cond.si_Nwpc1, str(value))
+        self.widget2.w_cond.si_Nwpc1.editingFinished.emit()  # To trigger the slot
 
-        assert setup["test_obj"].rotor.winding.conductor.Nwppc == value
+        assert self.test_obj.rotor.winding.conductor.Nwppc == value
 
-    def test_set_Wins_wire(self, setup):
+    def test_set_Wins_wire(self):
         """Check that the Widget allow to update Wins_wire"""
         # Clear the field before writing the new value
-        setup["widget"].w_cond.lf_Wins_wire.clear()
+        self.widget.w_cond.lf_Wins_wire.clear()
         value = uniform(5, 100)
-        QTest.keyClicks(setup["widget"].w_cond.lf_Wins_wire, str(value))
-        setup[
-            "widget"
-        ].w_cond.lf_Wins_wire.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(self.widget.w_cond.lf_Wins_wire, str(value))
+        self.widget.w_cond.lf_Wins_wire.editingFinished.emit()  # To trigger the slot
 
-        assert setup["test_obj"].stator.winding.conductor.Wins_wire == value
+        assert self.test_obj.stator.winding.conductor.Wins_wire == value
 
         # Clear the field before writing the new value
-        setup["widget2"].w_cond.lf_Wins_wire.clear()
+        self.widget2.w_cond.lf_Wins_wire.clear()
         value = uniform(5, 100)
-        QTest.keyClicks(setup["widget2"].w_cond.lf_Wins_wire, str(value))
-        setup[
-            "widget2"
-        ].w_cond.lf_Wins_wire.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(self.widget2.w_cond.lf_Wins_wire, str(value))
+        self.widget2.w_cond.lf_Wins_wire.editingFinished.emit()  # To trigger the slot
 
-        assert setup["test_obj"].rotor.winding.conductor.Wins_wire == value
+        assert self.test_obj.rotor.winding.conductor.Wins_wire == value
 
-    def test_set_Wwire(self, setup):
+    def test_set_Wwire(self):
         """Check that the Widget allow to update Wins_wire"""
         # Clear the field before writing the new value
-        setup["widget"].w_cond.lf_Wwire.clear()
+        self.widget.w_cond.lf_Wwire.clear()
         value = uniform(5, 100)
-        QTest.keyClicks(setup["widget"].w_cond.lf_Wwire, str(value))
-        setup["widget"].w_cond.lf_Wwire.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(self.widget.w_cond.lf_Wwire, str(value))
+        self.widget.w_cond.lf_Wwire.editingFinished.emit()  # To trigger the slot
 
-        assert setup["test_obj"].stator.winding.conductor.Wwire == value
+        assert self.test_obj.stator.winding.conductor.Wwire == value
 
         # Clear the field before writing the new value
-        setup["widget2"].w_cond.lf_Wwire.clear()
+        self.widget2.w_cond.lf_Wwire.clear()
         value = uniform(5, 100)
-        QTest.keyClicks(setup["widget2"].w_cond.lf_Wwire, str(value))
-        setup["widget2"].w_cond.lf_Wwire.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(self.widget2.w_cond.lf_Wwire, str(value))
+        self.widget2.w_cond.lf_Wwire.editingFinished.emit()  # To trigger the slot
 
-        assert setup["test_obj"].rotor.winding.conductor.Wwire == value
+        assert self.test_obj.rotor.winding.conductor.Wwire == value
 
-    def test_set_Lewout(self, setup):
+    def test_set_Lewout(self):
         """Check that the Widget allow to update Lewout"""
         # Clear the field before writing the new value
-        setup["widget"].w_cond.lf_Lewout.clear()
+        self.widget.w_cond.lf_Lewout.clear()
         value = uniform(5, 100)
-        QTest.keyClicks(setup["widget"].w_cond.lf_Lewout, str(value))
-        setup["widget"].w_cond.lf_Lewout.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(self.widget.w_cond.lf_Lewout, str(value))
+        self.widget.w_cond.lf_Lewout.editingFinished.emit()  # To trigger the slot
 
-        assert setup["test_obj"].stator.winding.Lewout == value
+        assert self.test_obj.stator.winding.Lewout == value
 
         # Clear the field before writing the new value
-        setup["widget2"].w_cond.lf_Lewout.clear()
+        self.widget2.w_cond.lf_Lewout.clear()
         value = uniform(5, 100)
-        QTest.keyClicks(setup["widget2"].w_cond.lf_Lewout, str(value))
-        setup["widget2"].w_cond.lf_Lewout.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(self.widget2.w_cond.lf_Lewout, str(value))
+        self.widget2.w_cond.lf_Lewout.editingFinished.emit()  # To trigger the slot
 
-        assert setup["test_obj"].rotor.winding.Lewout == value
+        assert self.test_obj.rotor.winding.Lewout == value
 
-    def test_set_Wins_cond(self, setup):
+    def test_set_Wins_cond(self):
         """Check that the Widget allow to update Wins_cond"""
         # Clear the field before writing the new value
-        setup["widget2"].w_cond.lf_Wins_cond.clear()
+        self.widget2.w_cond.lf_Wins_cond.clear()
         value = uniform(5, 100)
-        QTest.keyClicks(setup["widget2"].w_cond.lf_Wins_cond, str(value))
-        setup[
-            "widget2"
-        ].w_cond.lf_Wins_cond.editingFinished.emit()  # To trigger the slot
+        QTest.keyClicks(self.widget2.w_cond.lf_Wins_cond, str(value))
+        # To trigger the slot
+        self.widget2.w_cond.lf_Wins_cond.editingFinished.emit()
 
-        assert setup["test_obj"].rotor.winding.conductor.Wins_cond == value
+        assert self.test_obj.rotor.winding.conductor.Wins_cond == value
 
-    def test_set_cond_type(self, setup):
+    def test_set_cond_type(self):
         """Check that the Widget allow to update conductor type"""
-        assert type(setup["test_obj"].stator.winding.conductor) is CondType11
+        assert type(self.test_obj.stator.winding.conductor) is CondType11
 
-        setup["widget"].c_cond_type.setCurrentIndex(1)
-        assert type(setup["test_obj"].stator.winding.conductor) is CondType12
+        self.widget.c_cond_type.setCurrentIndex(1)
+        assert type(self.test_obj.stator.winding.conductor) is CondType12
 
-        setup["widget"].c_cond_type.setCurrentIndex(0)
-        assert type(setup["test_obj"].stator.winding.conductor) is CondType11
+        self.widget.c_cond_type.setCurrentIndex(0)
+        assert type(self.test_obj.stator.winding.conductor) is CondType11
 
-    def test_check(self, setup):
+    def test_check(self):
         """Check that the check method return errors"""
         rotor = LamSlotWind(is_stator=False)
         rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
@@ -218,9 +213,9 @@ class TestSWindCond(object):
             Nwppc=4, Wwire=None, Wins_wire=21e-3, Wins_cond=31e-3
         )
 
-        assert setup["widget2"].check(rotor) == "You must set Wwire !"
+        assert self.widget2.check(rotor) == "You must set Wwire !"
 
-    def test_init_PCondType12(self, setup):
+    def test_init_PCondType12(self):
         """Check that the init is setting a conductor if None"""
         lam = LamSlotWind(is_stator=False)
         lam.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
@@ -230,10 +225,10 @@ class TestSWindCond(object):
         assert type(widget.cond) is CondType12
         assert widget.cond.Nwppc == 1
         assert widget.cond.Wins_wire == 0
-        assert widget.cond.Wins_cond == 0
+        assert widget.cond.Wins_cond is None
         assert widget.lam.winding.Lewout == 0
 
-    def test_check_PCondType12(self, setup):
+    def test_check_PCondType12(self):
         """Check that the check methods is correctly working"""
         lam = LamSlotWind(is_stator=False)
         lam.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
@@ -241,14 +236,25 @@ class TestSWindCond(object):
         lam.winding.conductor = None
         widget = PCondType12(lamination=lam)
         widget.cond.Wwire = 0.5
-
+        widget.cond.Wins_cond = 0.1
+        assert widget.check(lam) == "You must have Wins_cond >= Wwire !"
+        widget.cond.Wins_cond = 0.6
         widget.lam.winding.Lewout = None
-        assert widget.check() == "You must set Lewout !"
+        assert widget.check(lam) == "You must set Lewout !"
         widget.cond.Wins_cond = None
-        assert widget.check() == "You must set Wins_cond !"
+        assert widget.check(lam) == "You must set Wins_cond !"
         widget.cond._Wins_wire = None
-        assert widget.check() == "You must set Wins_wire !"
+        assert widget.check(lam) == "You must set Wins_wire !"
         widget.cond.Wwire = None
-        assert widget.check() == "You must set Wwire !"
+        assert widget.check(lam) == "You must set Wwire !"
         widget.cond.Nwppc = None
-        assert widget.check() == "You must set Nwppc !"
+        assert widget.check(lam) == "You must set Nwppc !"
+
+
+if __name__ == "__main__":
+    a = TestSWindCond()
+    a.setup_class()
+    a.setup_method()
+    a.test_check_PCondType12()
+    a.teardown_class()
+    print("Done")

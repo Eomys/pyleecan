@@ -152,16 +152,9 @@ class SWindCond(Ui_SWindCond, QWidget):
         """
 
         try:
-            obj = lamination.winding  # For readibility
-
-            # Check that the conductor properties are set
-            if type(obj.conductor) is CondType11:
-                for name in ["Hwire", "Wwire", "Wins_wire", "Nwppc_rad", "Nwppc_tan"]:
-                    if obj.conductor.__getattribute__(name) is None:
-                        return "You must set " + name + " !"
-            elif type(obj.conductor) is CondType12:
-                for name in ["Wwire", "Wins_wire", "Wins_cond", "Nwppc"]:
-                    if obj.conductor.__getattribute__(name) is None:
-                        return "You must set " + name + " !"
+            # Call the check method of the conductor (every cond type have a
+            # different check method)
+            index = type_list.index(type(lamination.winding.conductor))
+            return wid_list[index].check(lamination)
         except Exception as e:
             return str(e)
