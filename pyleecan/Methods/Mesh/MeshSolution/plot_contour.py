@@ -178,9 +178,8 @@ def plot_contour(
             else:
                 nframe = 25
                 mesh_pv_B, field_B, field_name_B = self.get_mesh_field_pv(args)
-                is_time=False
+                is_time = False
                 t = linspace(0.0, 1.0, nframe + 1)[:nframe]
-
 
             for i in range(nframe):
                 # Compute colorbar boundaries
