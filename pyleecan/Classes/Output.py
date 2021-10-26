@@ -67,6 +67,11 @@ except ImportError as error:
     get_data_from_str = error
 
 try:
+    from ..Methods.Output.Output.plot.Magnetic.plot_B_mesh import plot_B_mesh
+except ImportError as error:
+    plot_B_mesh = error
+
+try:
     from ..Methods.Output.Output.print_memory import print_memory
 except ImportError as error:
     print_memory = error
@@ -189,6 +194,15 @@ class Output(FrozenClass):
         )
     else:
         get_data_from_str = get_data_from_str
+    # cf Methods.Output.Output.plot.Magnetic.plot_B_mesh
+    if isinstance(plot_B_mesh, ImportError):
+        plot_B_mesh = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_B_mesh: " + str(plot_B_mesh))
+            )
+        )
+    else:
+        plot_B_mesh = plot_B_mesh
     # cf Methods.Output.Output.print_memory
     if isinstance(print_memory, ImportError):
         print_memory = property(

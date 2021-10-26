@@ -8576,6 +8576,7 @@
             "getter.get_rot_dir",
             "getter.get_fund_harm",
             "getter.get_data_from_str",
+            "plot.Magnetic.plot_B_mesh",
             "print_memory"
         ],
         "mother": "",
