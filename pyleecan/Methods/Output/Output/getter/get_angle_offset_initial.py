@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def get_angle_offset_initial(self):
     """Return the difference between the d axis angle of the stator and the rotor
 

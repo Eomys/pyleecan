@@ -1,13 +1,15 @@
 from numpy import zeros
 
-from ....Functions.labels import STATOR_LAB
-from ....Functions.FEMM.draw_FEMM import draw_FEMM
+from SciDataTool import Data1D
+
 from ....Classes._FEMMHandler import _FEMMHandler
 from ....Classes.OutMagFEMM import OutMagFEMM
+
+from ....Functions.labels import STATOR_LAB
+from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Functions.MeshSolution.build_solution_data import build_solution_data
 from ....Functions.MeshSolution.build_meshsolution import build_meshsolution
 from ....Functions.MeshSolution.build_solution_vector import build_solution_vector
-from SciDataTool import Data1D
 
 
 def comp_flux_airgap(self, output, axes_dict, Is=None, Ir=None):
@@ -71,9 +73,6 @@ def comp_flux_airgap(self, output, axes_dict, Is=None, Ir=None):
 
     # Get rotor angular position
     angle_rotor = output.get_angle_rotor()[0:Nt]
-
-    # Interpolate current on magnetic model time axis
-    # Get stator current from elec out
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
@@ -167,7 +166,7 @@ def comp_flux_airgap(self, output, axes_dict, Is=None, Ir=None):
     if STATOR_LAB + "-0" in out_dict["Phi_wind"].keys():
         out_dict["Phi_wind_stator"] = out_dict["Phi_wind"][STATOR_LAB + "-0"]
 
-        # Store mesh data & solution
+    # Store mesh data & solution
     if self.is_get_meshsolution and B_elem is not None:
 
         # Define axis
