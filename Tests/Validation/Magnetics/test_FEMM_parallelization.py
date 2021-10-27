@@ -156,7 +156,6 @@ def test_FEMM_parallelization_meshsolution():
         Is=Is,
         Ir=None,  # No winding on the rotor
         OP=OPdq(N0=N0),
-        angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
         angle_rotor_initial=0.5216 + pi,

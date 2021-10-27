@@ -32,7 +32,6 @@ from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .Import import Import
 from .ImportGenPWM import ImportGenPWM
 from .ImportMatrix import ImportMatrix
 from .OP import OP
@@ -75,7 +74,6 @@ class InputVoltage(Input):
 
     def __init__(
         self,
-        angle_rotor=None,
         rot_dir=-1,
         angle_rotor_initial=0,
         PWM=None,
@@ -104,8 +102,6 @@ class InputVoltage(Input):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "angle_rotor" in list(init_dict.keys()):
-                angle_rotor = init_dict["angle_rotor"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
@@ -127,7 +123,6 @@ class InputVoltage(Input):
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
         # Set the properties (value check and convertion are done in setter)
-        self.angle_rotor = angle_rotor
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         self.PWM = PWM
@@ -145,13 +140,6 @@ class InputVoltage(Input):
         InputVoltage_str = ""
         # Get the properties inherited from Input
         InputVoltage_str += super(InputVoltage, self).__str__()
-        if self.angle_rotor is not None:
-            tmp = (
-                self.angle_rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            )
-            InputVoltage_str += "angle_rotor = " + tmp
-        else:
-            InputVoltage_str += "angle_rotor = None" + linesep + linesep
         InputVoltage_str += "rot_dir = " + str(self.rot_dir) + linesep
         InputVoltage_str += (
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
@@ -172,8 +160,6 @@ class InputVoltage(Input):
 
         # Check the properties inherited from Input
         if not super(InputVoltage, self).__eq__(other):
-            return False
-        if other.angle_rotor != self.angle_rotor:
             return False
         if other.rot_dir != self.rot_dir:
             return False
@@ -196,14 +182,6 @@ class InputVoltage(Input):
 
         # Check the properties inherited from Input
         diff_list.extend(super(InputVoltage, self).compare(other, name=name))
-        if (other.angle_rotor is None and self.angle_rotor is not None) or (
-            other.angle_rotor is not None and self.angle_rotor is None
-        ):
-            diff_list.append(name + ".angle_rotor None mismatch")
-        elif self.angle_rotor is not None:
-            diff_list.extend(
-                self.angle_rotor.compare(other.angle_rotor, name=name + ".angle_rotor")
-            )
         if other._rot_dir != self._rot_dir:
             diff_list.append(name + ".rot_dir")
         if other._angle_rotor_initial != self._angle_rotor_initial:
@@ -227,7 +205,6 @@ class InputVoltage(Input):
 
         # Get size of the properties inherited from Input
         S += super(InputVoltage, self).__sizeof__()
-        S += getsizeof(self.angle_rotor)
         S += getsizeof(self.rot_dir)
         S += getsizeof(self.angle_rotor_initial)
         S += getsizeof(self.PWM)
@@ -251,14 +228,6 @@ class InputVoltage(Input):
             keep_function=keep_function,
             **kwargs
         )
-        if self.angle_rotor is None:
-            InputVoltage_dict["angle_rotor"] = None
-        else:
-            InputVoltage_dict["angle_rotor"] = self.angle_rotor.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
         InputVoltage_dict["rot_dir"] = self.rot_dir
         InputVoltage_dict["angle_rotor_initial"] = self.angle_rotor_initial
         if self.PWM is None:
@@ -278,8 +247,6 @@ class InputVoltage(Input):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.angle_rotor is not None:
-            self.angle_rotor._set_None()
         self.rot_dir = None
         self.angle_rotor_initial = None
         if self.PWM is not None:
@@ -287,36 +254,6 @@ class InputVoltage(Input):
         self.current_dir = None
         # Set to None the properties inherited from Input
         super(InputVoltage, self)._set_None()
-
-    def _get_angle_rotor(self):
-        """getter of angle_rotor"""
-        return self._angle_rotor
-
-    def _set_angle_rotor(self, value):
-        """setter of angle_rotor"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "angle_rotor"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Import()
-        check_var("angle_rotor", value, "Import")
-        self._angle_rotor = value
-
-        if self._angle_rotor is not None:
-            self._angle_rotor.parent = self
-
-    angle_rotor = property(
-        fget=_get_angle_rotor,
-        fset=_set_angle_rotor,
-        doc=u"""Rotor angular position as a function of time (if None computed according to Nr) to import
-
-        :Type: Import
-        """,
-    )
 
     def _get_rot_dir(self):
         """getter of rot_dir"""

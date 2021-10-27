@@ -28,7 +28,6 @@ from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .ImportMatrix import ImportMatrix
-from .Import import Import
 from .ImportGenPWM import ImportGenPWM
 from .OP import OP
 
@@ -65,7 +64,6 @@ class InputFlux(InputCurrent):
         B_enforced=None,
         Is=None,
         Ir=None,
-        angle_rotor=None,
         rot_dir=-1,
         angle_rotor_initial=0,
         PWM=None,
@@ -114,8 +112,6 @@ class InputFlux(InputCurrent):
                 Is = init_dict["Is"]
             if "Ir" in list(init_dict.keys()):
                 Ir = init_dict["Ir"]
-            if "angle_rotor" in list(init_dict.keys()):
-                angle_rotor = init_dict["angle_rotor"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
@@ -149,7 +145,6 @@ class InputFlux(InputCurrent):
         super(InputFlux, self).__init__(
             Is=Is,
             Ir=Ir,
-            angle_rotor=angle_rotor,
             rot_dir=rot_dir,
             angle_rotor_initial=angle_rotor_initial,
             PWM=PWM,

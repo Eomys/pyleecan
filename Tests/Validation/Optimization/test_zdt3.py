@@ -61,7 +61,6 @@ def test_zdt3():
         Is=Is,
         Ir=Ir,  # zero current for the rotor
         OP=OPslip(N0=N0),
-        angle_rotor=None,  # Will be computed
         time=time,
         Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + np.pi,

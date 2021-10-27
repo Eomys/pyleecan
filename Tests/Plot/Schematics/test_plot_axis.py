@@ -266,7 +266,6 @@ def test_axis_LamWind():
         Is=Is,
         Ir=Ir,  # zero current for the rotor
         OP=OPdq(N0=N0),
-        angle_rotor=None,  # Will be computed
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
         angle_rotor_initial=0,

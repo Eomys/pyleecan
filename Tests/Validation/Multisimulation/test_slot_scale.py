@@ -55,7 +55,6 @@ def test_slot_scale():
         Is=Is,
         Ir=None,  # No winding on the rotor
         OP=OPdq(N0=2504),
-        angle_rotor=None,  # Will be computed
         time=time,
         Na_tot=Na_tot,
         angle_rotor_initial=0.86,

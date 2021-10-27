@@ -4271,15 +4271,6 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputVoltage.csv",
         "properties": [
             {
-                "desc": "Rotor angular position as a function of time (if None computed according to Nr) to import",
-                "max": "",
-                "min": "",
-                "name": "angle_rotor",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
-            {
                 "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
                 "max": "1",
                 "min": "-1",
@@ -8175,15 +8166,6 @@
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "A",
                 "value": "None"
-            },
-            {
-                "desc": "Rotor angular position as a function of time (if None computed according to Nr)",
-                "max": "",
-                "min": "",
-                "name": "angle_rotor",
-                "type": "ndarray",
-                "unit": "rad",
-                "value": null
             },
             {
                 "desc": "Initial angular position of the rotor at t=0",

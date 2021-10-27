@@ -145,52 +145,6 @@ InputCurrent_Error_test.append(
         "exp": "ERROR: InputCurrent.Ir must be a matrix with the shape (100, 2) (len(time), rotor phase number), (100,) returned",
     }
 )
-# Wrong N0, alpha_rotor
-test_obj = Simulation(machine=M3)
-test_obj.input = InputCurrent(
-    time=time,
-    angle=angle,
-    Is=I_1,
-    Ir=I_2,
-    angle_rotor=None,
-    OP=OPdq(N0=None),
-)
-InputCurrent_Error_test.append(
-    {
-        "test_obj": test_obj,
-        "exp": "ERROR: InputCurrent.angle_rotor and InputCurrent.N0 can't be None at the same time",
-    }
-)
-test_obj = Simulation(machine=M3)
-test_obj.input = InputCurrent(
-    time=time,
-    angle=angle,
-    Is=I_1,
-    Ir=I_2,
-    angle_rotor=angle_rotor_wrong,
-    OP=OPdq(N0=None),
-)
-InputCurrent_Error_test.append(
-    {
-        "test_obj": test_obj,
-        "exp": "ERROR: InputCurrent.angle_rotor should be a vector of the same length as time, (10, 2) shape found, (100,) expected",
-    }
-)
-test_obj = Simulation(machine=M3)
-test_obj.input = InputCurrent(
-    time=time,
-    angle=angle,
-    Is=I_1,
-    Ir=I_2,
-    angle_rotor=angle_rotor_wrong2,
-    OP=OPdq(N0=None),
-)
-InputCurrent_Error_test.append(
-    {
-        "test_obj": test_obj,
-        "exp": "ERROR: InputCurrent.angle_rotor should be a vector of the same length as time, (102,) shape found, (100,) expected",
-    }
-)
 
 idq_test = list()
 idq_test.append({"Id": 2, "Iq": 0})
@@ -262,7 +216,6 @@ class Test_InCurrent_meth(object):
             Is=None,
             OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=N0),
             Ir=None,
-            angle_rotor=None,  # Will be computed according to N0 and rot_dir
             rot_dir=None,
         )
 
@@ -288,7 +241,6 @@ class Test_InCurrent_meth(object):
             Is=Is_exp.transpose(),
             OP=OPdq(Id_ref=None, Iq_ref=None, N0=N0),
             Ir=None,
-            angle_rotor=None,  # Will be computed according to N0 and rot_dir
             rot_dir=None,
         )
         out = Output(simu=test_obj)

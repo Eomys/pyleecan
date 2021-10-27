@@ -61,7 +61,6 @@ def test_ipm_Elmer():
     #     Is=Is,
     #     Ir=Ir,  # zero current for the rotor
     #     N0=N0,
-    #     angle_rotor=None,  # Will be computed
     #     Nt_tot=Nt_tot,
     #     Na_tot=Na_tot,
     #     angle_rotor_initial=0.2244,

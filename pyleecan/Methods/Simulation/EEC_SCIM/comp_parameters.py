@@ -270,7 +270,6 @@ def _comp_Lm_FEA(self):
         Iq_ref=0,
         Ir=Ir,  # zero current for the rotor
         N0=N0,
-        angle_rotor=None,  # Will be computed
         time=time,
         felec=felec,
     )

@@ -131,7 +131,6 @@ def test_save_load_folder_path():
         Is=Is,
         Ir=None,  # No winding on the rotor
         OP=OPdq(N0=N0),
-        angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
         rot_dir=-1,
@@ -377,7 +376,6 @@ def test_save_load_simu(type_file):
         Is=Is,
         Ir=None,  # No winding on the rotor
         OP=OPdq(N0=N0),
-        angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
         rot_dir=-1,

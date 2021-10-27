@@ -1,6 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-angle_rotor,rad,Rotor angular position as a function of time (if None computed according to Nr) to import,Nt_tot,Import,None,,,,Simulation,Input,gen_input,VERSION,1,Input to start the electrical module with voltage input
-rot_dir,-,"Rotation direction of the rotor 1 trigo, -1 clockwise",,int,-1,-1,1,,,,set_OP_from_array,,,
-angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,,,,
+rot_dir,-,"Rotation direction of the rotor 1 trigo, -1 clockwise",,int,-1,-1,1,,Simulation,Input,gen_input,VERSION,1,Input to start the electrical module with voltage input
+angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,set_OP_from_array,,,
 PWM,,Object to generate PWM signal,,ImportGenPWM,None,,,,,,,,,
 current_dir,-,"Rotation direction of the stator currents 1 trigo, -1 clockwise",,int,-1,-1,1,,,,,,,

@@ -110,7 +110,6 @@ def test_FEMM_compare_Prius():
         Is=Is,
         Ir=None,  # No winding on the rotor
         OP=OPdq(N0=N0),
-        angle_rotor=None,  # Will be computed
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
         angle_rotor_initial=0.86,
@@ -179,7 +178,6 @@ def test_FEMM_compare_SCIM():
         Is=Is,
         Ir=Ir,  # zero current for the rotor
         OP=OPdq(N0=N0),
-        angle_rotor=None,  # Will be computed
         time=time,
         Na_tot=Na_tot,
         angle_rotor_initial=0.2244,
@@ -279,7 +277,7 @@ def test_FEMM_compare_SIPMSM():
         Is=Is,
         Ir=None,  # No winding on the rotor
         OP=OPdq(N0=N0),
-        angle_rotor=Ar,  # Will be computed
+        # angle_rotor=Ar,  # Will be computed
         time=time,
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
@@ -370,7 +368,6 @@ def test_SPMSM_load():
         Is=Is,
         Ir=None,  # No winding on the rotor
         OP=OPdq(N0=N0),
-        angle_rotor=None,  # Will be computed
         time=time,
         Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + pi,
@@ -461,7 +458,6 @@ def test_SPMSM_noload():
         Is=Is,
         Ir=None,  # No winding on the rotor
         OP=OPdq(N0=N0),
-        angle_rotor=None,
         time=time,
         angle=angle,
         angle_rotor_initial=0,
@@ -511,9 +507,9 @@ def test_SPMSM_noload():
 
 
 if __name__ == "__main__":
-    test_FEMM_compare_IPMSM_xxx()
-    test_FEMM_compare_Prius()
-    test_FEMM_compare_SCIM()
+    # test_FEMM_compare_IPMSM_xxx()
+    # test_FEMM_compare_Prius()
+    # test_FEMM_compare_SCIM()
     test_FEMM_compare_SIPMSM()
-    test_SPMSM_load()
-    test_SPMSM_noload()
+    # test_SPMSM_load()
+    # test_SPMSM_noload()
