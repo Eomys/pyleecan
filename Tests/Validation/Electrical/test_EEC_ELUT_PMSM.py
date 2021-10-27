@@ -22,7 +22,7 @@ from pyleecan.Classes.EEC_PMSM import EEC_PMSM
 
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
-from pyleecan.Functions.Electrical.coordinate_transformation import n2dqh_DataTime
+from pyleecan.Functions.Electrical.dqh_transformation import n2dqh_DataTime
 from pyleecan.definitions import DATA_DIR
 
 from Tests import save_validation_path as save_path

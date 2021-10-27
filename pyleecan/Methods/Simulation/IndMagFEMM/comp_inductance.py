@@ -4,7 +4,7 @@ from ....Classes.InputCurrent import InputCurrent
 from ....Classes.MagFEMM import MagFEMM
 from ....Classes.Simulation import Simulation
 from ....Classes.Simu1 import Simu1
-from ....Functions.Electrical.coordinate_transformation import n2dqh_DataTime
+from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 
 
 def comp_inductance(self, machine, OP_ref):

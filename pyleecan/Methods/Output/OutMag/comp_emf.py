@@ -1,8 +1,3 @@
-from numpy import diff, zeros, newaxis, pi
-
-from ....Functions.Electrical.coordinate_transformation import n2dqh
-
-
 def comp_emf(self):
     """Compute the Electromotive force [V]
 

@@ -3,7 +3,7 @@ from numpy import insert
 
 from SciDataTool import DataFreq
 
-from pyleecan.Functions.Electrical.coordinate_transformation import dqh2n_DataTime
+from pyleecan.Functions.Electrical.dqh_transformation import dqh2n_DataTime
 
 
 def store(self, out_dict, out_dict_harm):

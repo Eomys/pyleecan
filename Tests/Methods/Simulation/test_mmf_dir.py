@@ -1,7 +1,9 @@
 import pytest
+
 from numpy import pi
-from numpy.testing import assert_almost_equal
+
 from os.path import join
+
 from multiprocessing import cpu_count
 
 from pyleecan.Classes.MagFEMM import MagFEMM
@@ -11,6 +13,7 @@ from pyleecan.Classes.InputVoltage import InputVoltage
 from pyleecan.Classes.InputCurrent import InputCurrent
 
 from pyleecan.Functions.load import load
+
 from pyleecan.definitions import DATA_DIR
 
 
@@ -35,9 +38,11 @@ param_list = [
 
 is_show_fig = True
 
-
+@pytest.mark.long_5s
+@pytest.mark.MagFEMM
 @pytest.mark.parametrize("param_dict", param_list)
 def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
+    """test calculation of stator mmf rotating direction according to winding pattern and rotor direction"""
 
     machine = load(join(DATA_DIR, "Machine", param_dict["name"] + ".json"))
 
@@ -113,6 +118,7 @@ def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
         # Run simulation
         out = simu.run()
 
+        # Check torque value
         assert out.mag.Tem_av == pytest.approx(param_dict["Tem_av"], abs=0.01)
 
         if is_show_fig:
@@ -130,7 +136,7 @@ def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
 
 if __name__ == "__main__":
 
-    # for param_dict in param_list:
-    # out = test_mmf_dir(param_dict)
+    for param_dict in param_list:
+        out = test_mmf_dir(param_dict)
 
-    out = test_mmf_dir(param_list[1])
+    # out = test_mmf_dir(param_list[1])

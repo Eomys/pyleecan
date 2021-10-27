@@ -5,7 +5,7 @@ from ....Classes.OPdq import OPdq
 from ....Classes.MagFEMM import MagFEMM
 from ....Classes.Simu1 import Simu1
 from ....Classes.Simulation import Simulation
-from ....Functions.Electrical.coordinate_transformation import n2dqh_DataTime
+from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 
 
 def comp_fluxlinkage(self, machine):

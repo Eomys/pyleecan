@@ -1,4 +1,4 @@
-from ....Functions.Electrical.coordinate_transformation import n2dqh_DataTime
+from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 
 
 def get_Us_harm(self, is_dqh=True):

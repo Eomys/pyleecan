@@ -1,6 +1,6 @@
 from numpy import zeros
 
-from ....Functions.Electrical.coordinate_transformation import n2dqh_DataTime
+from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 
 
 def get_Phidqh_mean(self):

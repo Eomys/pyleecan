@@ -6,7 +6,7 @@ from ...Functions.Winding.gen_phase_list import gen_name
 from ...Functions.Load.import_class import import_class
 
 
-def n2dqh_DataTime(data_n, is_dqh_rms=True):
+def n2dqh_DataTime(data_n, is_dqh_rms=True, phase_dir=None):
     """n phases to dqh equivalent coordinate transformation of DataTime object
 
     Parameters
@@ -15,6 +15,9 @@ def n2dqh_DataTime(data_n, is_dqh_rms=True):
         data object containing values over time and phase axes
     is_dqh_rms : boolean
         True to return dq currents in rms value (Pyleecan convention), False to return peak values
+    phase_dir: int
+        direction of phase distribution: +/-1 (-1 clockwise) to enforce
+        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -40,7 +43,7 @@ def n2dqh_DataTime(data_n, is_dqh_rms=True):
     angle_elec = result["time"]
 
     # Convert values to dqh frame
-    data_dqh_val = n2dqh(data_n_val, angle_elec, is_dqh_rms=is_dqh_rms)
+    data_dqh_val = n2dqh(data_n_val, angle_elec, is_dqh_rms, phase_dir)
 
     # Get time axis on one period
     per_t, is_aper_t = data_n.axes[0].get_periodicity()
@@ -75,7 +78,7 @@ def n2dqh_DataTime(data_n, is_dqh_rms=True):
     return data_dqh
 
 
-def dqh2n_DataTime(data_dqh, n, is_n_rms=False):
+def dqh2n_DataTime(data_dqh, n, is_n_rms=False, phase_dir=None):
     """dqh to n phase coordinate transformation of DataTime object
 
     Parameters
@@ -86,6 +89,9 @@ def dqh2n_DataTime(data_dqh, n, is_n_rms=False):
         number of phases
     is_n_rms : boolean
         True to return n currents in rms value, False to return peak values (Pyleecan convention)
+    phase_dir: int
+        direction of phase distribution: +/-1 (-1 clockwise) to enforce
+        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -110,7 +116,7 @@ def dqh2n_DataTime(data_dqh, n, is_n_rms=False):
     angle_elec = result["time"]
 
     # Convert values to dqh frame
-    data_n_val = dqh2n(data_dqh_val, angle_elec, n=n, is_n_rms=is_n_rms)
+    data_n_val = dqh2n(data_dqh_val, angle_elec, n, is_n_rms, phase_dir)
 
     # Get time axis on one period
     per_t, is_aper_t = data_dqh.axes[0].get_periodicity()
@@ -145,7 +151,7 @@ def dqh2n_DataTime(data_dqh, n, is_n_rms=False):
     return data_n
 
 
-def n2dqh(Z_n, angle_elec, is_dqh_rms=True):
+def n2dqh(Z_n, angle_elec, is_dqh_rms=True, phase_dir=None):
     """n phases to dqh equivalent coordinate transformation
 
     Parameters
@@ -156,6 +162,9 @@ def n2dqh(Z_n, angle_elec, is_dqh_rms=True):
         angle of the rotor coordinate system
     is_dqh_rms : boolean
         True to return dq currents in rms value (Pyleecan convention), False to return peak values
+    phase_dir: int
+        direction of phase distribution: +/-1 (-1 clockwise) to enforce
+        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -163,7 +172,7 @@ def n2dqh(Z_n, angle_elec, is_dqh_rms=True):
         transformed matrix (N x 3) of dqh equivalent values
     """
 
-    Z_dqh = abc2dqh(n2abc(Z_n), angle_elec)
+    Z_dqh = abc2dqh(n2abc(Z_n, phase_dir), angle_elec)
 
     if is_dqh_rms:
         # Divide by sqrt(2) to go from (Id_peak, Iq_peak) to (Id_rms, Iq_rms)
@@ -172,7 +181,7 @@ def n2dqh(Z_n, angle_elec, is_dqh_rms=True):
     return Z_dqh
 
 
-def dqh2n(Z_dqh, angle_elec, n, is_n_rms=False):
+def dqh2n(Z_dqh, angle_elec, n, is_n_rms=False, phase_dir=None):
     """dqh to n phase coordinate transformation
 
     Parameters
@@ -185,6 +194,9 @@ def dqh2n(Z_dqh, angle_elec, n, is_n_rms=False):
         number of phases
     is_n_rms : boolean
         True to return n currents in rms value, False to return peak values (Pyleecan convention)
+    phase_dir: int
+        direction of phase distribution: +/-1 (-1 clockwise) to enforce
+        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -192,7 +204,7 @@ def dqh2n(Z_dqh, angle_elec, n, is_n_rms=False):
         transformed matrix (N x n) of n phase values
     """
 
-    Z_n = abc2n(dqh2abc(Z_dqh, angle_elec), n)
+    Z_n = abc2n(dqh2abc(Z_dqh, angle_elec), n, phase_dir)
 
     if not is_n_rms:
         # Multiply by sqrt(2) to from (I_n_rms) to (I_n_peak)
@@ -201,7 +213,7 @@ def dqh2n(Z_dqh, angle_elec, n, is_n_rms=False):
     return Z_n
 
 
-def abc2n(Z_abc, n=3):
+def abc2n(Z_abc, n=3, phase_dir=None):
     """3 phase equivalent to n phase coordinate transformation, i.e. Clarke transformation
 
     Parameters
@@ -210,6 +222,9 @@ def abc2n(Z_abc, n=3):
         matrix (N x 3) of 3 phase equivalent values in alpha-beta-gamma frame
     n: int
         number of phases
+    phase_dir: int
+        direction of phase distribution: +/-1 (-1 clockwise) to enforce
+        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -219,20 +234,23 @@ def abc2n(Z_abc, n=3):
     """
 
     # Inverse of Clarke transformation matrix
-    ab_2_n = comp_Clarke_transform(n, is_inv=True)
+    ab_2_n = comp_Clarke_transform(n, is_inv=True, phase_dir=phase_dir)
 
     Z_n = np.matmul(Z_abc, ab_2_n)
 
     return Z_n
 
 
-def n2abc(Z_n):
+def n2abc(Z_n, phase_dir=None):
     """n phase to 3 phases equivalent coordinate transformation, i.e. Clarke transformation
 
     Parameters
     ----------
     Z_n : ndarray
         matrix (N x n) of n phase values
+    phase_dir: int
+        direction of phase distribution: +/-1 (-1 clockwise) to enforce
+        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -243,7 +261,7 @@ def n2abc(Z_n):
 
     n = Z_n.shape[1]
 
-    n_2_abc = comp_Clarke_transform(n, is_inv=False)
+    n_2_abc = comp_Clarke_transform(n, is_inv=False, phase_dir=phase_dir)
 
     Z_abc = np.matmul(Z_n, n_2_abc)
 
@@ -317,7 +335,7 @@ def dqh2abc(Z_dqh, angle_elec):
     return Z_abc
 
 
-def comp_Clarke_transform(n, is_inv=False):
+def comp_Clarke_transform(n, is_inv=False, phase_dir=None):
     """Compute Clarke transformation for given number of phases and rotating direction of phases
 
     Parameters
@@ -326,6 +344,9 @@ def comp_Clarke_transform(n, is_inv=False):
         number of phases
     is_inv: bool
         False to return Clarke transform, True to return inverse of Clarke transform
+    phase_dir: int
+        direction of phase distribution: +/-1 (-1 clockwise) to enforce
+        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -333,13 +354,15 @@ def comp_Clarke_transform(n, is_inv=False):
         Clarke transform matrix of size (n, 3)
     """
 
-    # Take phase rotation direction from default current rotation direction in InputVoltage
-    InputVoltage = import_class("pyleecan.Classes", "InputVoltage")
-    input = InputVoltage()
-    current_dir_ref = input.current_dir
+    if phase_dir is None:
+        # Take phase rotation direction from default current rotation direction in InputVoltage
+        InputVoltage = import_class("pyleecan.Classes", "InputVoltage")
+        phase_dir = InputVoltage().current_dir
+    elif phase_dir not in [-1, 1]:
+        raise Exception("Cannot enforce phase_dir other than +1 or -1")
 
     # Phasor depending on fundamental field rotation direction
-    phasor = np.linspace(0, current_dir_ref * 2 * np.pi * (n - 1) / n, n)
+    phasor = np.linspace(0, phase_dir * 2 * np.pi * (n - 1) / n, n)
 
     # Clarke transformation matrix
     if is_inv:

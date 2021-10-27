@@ -5,7 +5,7 @@ from SciDataTool import DataTime
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.OPslip import OPslip
 
-from ....Functions.Electrical.coordinate_transformation import dqh2n
+from ....Functions.Electrical.dqh_transformation import dqh2n
 from ....Functions.Load.import_class import import_class
 
 

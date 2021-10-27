@@ -1,7 +1,7 @@
 from numpy import zeros, sqrt, pi, tile, isnan
 from multiprocessing import cpu_count
 
-from ....Functions.Electrical.coordinate_transformation import n2abc, abc2n
+from ....Functions.Electrical.dqh_transformation import n2abc, abc2n
 from ....Functions.labels import STATOR_LAB, ROTOR_LAB
 from ....Functions.load import import_class
 

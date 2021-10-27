@@ -6,7 +6,7 @@ from ....Classes.Simulation import Simulation
 from ....Classes.OPdq import OPdq
 from ....Classes.OPslip import OPslip
 from ....Methods.Simulation.Input import InputError
-from ....Functions.Electrical.coordinate_transformation import n2dqh, n2dqh_DataTime
+from ....Functions.Electrical.dqh_transformation import n2dqh, n2dqh_DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
 
 from SciDataTool import Data1D, DataLinspace, DataTime

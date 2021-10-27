@@ -2,7 +2,7 @@ from numpy import array
 
 from SciDataTool import DataTime
 
-from ....Functions.Electrical.coordinate_transformation import dqh2n
+from ....Functions.Electrical.dqh_transformation import dqh2n
 
 
 def get_Us(self):

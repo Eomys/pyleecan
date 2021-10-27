@@ -2,7 +2,7 @@ from numpy import ndarray, mean, zeros
 
 from ....Methods.Simulation.Input import InputError
 
-from ....Functions.Electrical.coordinate_transformation import n2dqh
+from ....Functions.Electrical.dqh_transformation import n2dqh
 from ....Classes.InputVoltage import InputVoltage
 
 from SciDataTool import Data1D, DataTime

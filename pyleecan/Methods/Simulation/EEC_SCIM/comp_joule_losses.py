@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import mean, zeros
-from ....Functions.Electrical.coordinate_transformation import n2abc
+from ....Functions.Electrical.dqh_transformation import n2abc
 
 
 def comp_joule_losses(self, out_dict, machine):

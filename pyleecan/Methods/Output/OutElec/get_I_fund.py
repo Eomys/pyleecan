@@ -2,7 +2,7 @@ from numpy import where, isclose, zeros
 
 from SciDataTool import Data1D, DataTime, DataFreq
 
-from ....Functions.Electrical.coordinate_transformation import dqh2n
+from ....Functions.Electrical.dqh_transformation import dqh2n
 
 
 def get_I_fund(self, Time=None):
