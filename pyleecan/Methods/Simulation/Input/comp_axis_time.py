@@ -35,7 +35,7 @@ def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None):
         "mech_order": Norm_ref(ref=N0 / 60),
         "angle_elec": Norm_ref(ref=self.current_dir / (2 * pi * f_elec)),
         "angle_rotor": Norm_affine(
-            slope=self.rot_dir * N0 * 360 / 60, offset=-self.rot_dir * A0 * 180 / pi
+            slope=self.rot_dir * N0 * 360 / 60, offset=A0 * 180 / pi
         ),
     }
 
