@@ -8,7 +8,16 @@ from ...Functions.labels import (
 )
 
 
-def transform_hole_surf(hole_surf_list, Zh, sym, alpha, delta, is_split=False):
+def transform_hole_surf(
+    hole_surf_list,
+    Zh,
+    sym,
+    alpha,
+    delta,
+    is_split=False,
+    BC_prop_right=None,
+    BC_prop_left=None,
+):
     """Take a list of surface for a single hole and apply the
     transformation (rotate, translate, duplicate)
 
@@ -26,6 +35,10 @@ def transform_hole_surf(hole_surf_list, Zh, sym, alpha, delta, is_split=False):
         True if ventilation is on the stator and 0 on the rotor (Default value = True)
     is_split : bool
         When sym>1, call surf.split_line to cut the surfaces
+    BC_prop_right : str
+        BOUNDARY_PROP_LAB to set on right cut
+    BC_prop_left : str
+        BOUNDARY_PROP_LAB to set on left cut
 
     Returns
     -------
@@ -34,6 +47,13 @@ def transform_hole_surf(hole_surf_list, Zh, sym, alpha, delta, is_split=False):
     """
 
     assert Zh % sym == 0
+
+    # Default BC
+    lam_label = decode_label(hole_surf_list[0].label)["lam_label"]
+    if BC_prop_right is None:
+        BC_prop_right = lam_label + "_" + YSR_LAB
+    if BC_prop_left is None:
+        BC_prop_left = lam_label + "_" + YSL_LAB
 
     # Rotate/translate
     if alpha != 0 or delta != 0:
@@ -68,14 +88,13 @@ def transform_hole_surf(hole_surf_list, Zh, sym, alpha, delta, is_split=False):
             surf_list.append(first_surf)
 
         cut_list = list()
-        lam_label = decode_label(new_surf.label)["lam_label"]
         for surf in surf_list:
             # Cut Ox axis
             top, _ = surf.split_line(
                 0,
                 100,
                 is_join=True,
-                prop_dict_join={BOUNDARY_PROP_LAB: lam_label + "_" + YSR_LAB},
+                prop_dict_join={BOUNDARY_PROP_LAB: BC_prop_right},
             )
             if top is not None and sym > 2:
                 # Cut O-"sym angle" axis
@@ -83,7 +102,7 @@ def transform_hole_surf(hole_surf_list, Zh, sym, alpha, delta, is_split=False):
                     0,
                     100 * exp(1j * 2 * pi / sym),
                     is_join=True,
-                    prop_dict_join={BOUNDARY_PROP_LAB: lam_label + "_" + YSL_LAB},
+                    prop_dict_join={BOUNDARY_PROP_LAB: BC_prop_left},
                 )
                 if bot is not None:
                     cut_list.append(bot)

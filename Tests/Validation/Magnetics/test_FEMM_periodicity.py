@@ -4,7 +4,7 @@ from multiprocessing import cpu_count
 import pytest
 from Tests import save_validation_path as save_path
 
-from numpy import exp, sqrt, pi, meshgrid, zeros, real
+from numpy import exp, sqrt, pi, max as np_max
 from numpy.testing import assert_array_almost_equal
 from pyleecan.Classes.OPdq import OPdq
 
@@ -13,6 +13,9 @@ import matplotlib.pyplot as plt
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
+from pyleecan.Classes.SlotCirc import SlotCirc
+from pyleecan.Classes.SlotM10 import SlotM10
+from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Output import Output
@@ -376,7 +379,24 @@ def test_FEMM_periodicity_angle():
             Zh=Zh, D0=D0, H0=H2, Alpha0=2 * pi / Zh * 0.9, W1=pi / Zh * 0.5
         ),
     ]
-    # SPMSM_015.plot()
+    # Add notches on yoke and bore symetry lines
+    Zs = SPMSM_015.stator.slot.Zs
+    W0 = SPMSM_015.stator.slot.W0 * 0.7
+    H0 = SPMSM_015.stator.slot.H0 * 0.8
+    NBS = SlotCirc(Zs=Zs, W0=W0, H0=H0)
+    SPMSM_015.stator.notch = [NotchEvenDist(alpha=0, notch_shape=NBS)]
+    NYS = SlotM10(Zs=Zs, W0=W0, H0=H0)
+    # SPMSM_015.stator.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYS)]
+
+    Zr = SPMSM_015.rotor.slot.Zs
+    W0 = SPMSM_015.stator.slot.W0 * 0.1
+    H0 = SPMSM_015.rotor.comp_height_yoke() * 0.05
+    NBR = SlotCirc(Zs=Zr, W0=W0, H0=H0)
+    SPMSM_015.rotor.notch = [NotchEvenDist(alpha=0.001, notch_shape=NBR)]
+    NYR = SlotM10(Zs=Zr, W0=W0, H0=H0)
+    # SPMSM_015.rotor.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYR)]
+
+    # SPMSM_015.plot(sym=3)
     # plt.show()
 
     assert SPMSM_015.comp_periodicity_spatial() == (9, False)
@@ -401,7 +421,7 @@ def test_FEMM_periodicity_angle():
         type_BH_stator=1,
         type_BH_rotor=1,
         is_periodicity_a=True,
-        is_periodicity_t=False,
+        is_periodicity_t=True,
         nb_worker=cpu_count(),
         # Kmesh_fineness=2,
     )
@@ -410,6 +430,7 @@ def test_FEMM_periodicity_angle():
     # Definition of the magnetic simulation: no periodicity
     # Definition of the magnetic simulation: no periodicity
     simu2 = simu.copy()
+    simu2.name = simu.name + "_Full"
     simu2.mag.is_periodicity_a = False
 
     simu2.force = ForceMT()
@@ -417,9 +438,11 @@ def test_FEMM_periodicity_angle():
     # Run simulations
     out = Output(simu=simu)
     simu.run()
+    assert np_max(out.mag.B.components["radial"].values) == pytest.approx(3.95, rel=0.1)
 
     out2 = Output(simu=simu2)
     simu2.run()
+    assert np_max(out2.mag.B.components["radial"].values) == pytest.approx(3.95, rel=0.1)
 
     # Plot the result
     out.mag.B.plot_2D_Data(

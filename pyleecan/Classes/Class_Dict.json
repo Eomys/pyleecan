@@ -4971,7 +4971,9 @@
             "comp_point_ref",
             "comp_periodicity_spatial",
             "get_label",
-            "get_yoke_side_line"
+            "get_yoke_side_line",
+            "get_notches_surf",
+            "comp_periodicity_duct_spatial"
         ],
         "mother": "",
         "name": "Lamination",
@@ -13411,13 +13413,14 @@
             "SurfRing",
             "Trapeze"
         ],
-        "desc": "SurfLine define by list of lines that delimit it, label and point reference.",
+        "desc": "SurfLine define by list of lines that delimit it",
         "is_internal": false,
         "methods": [
             "comp_mesh_dict",
             "draw_FEMM",
             "plot",
-            "split_line"
+            "split_line",
+            "is_inside"
         ],
         "mother": "",
         "name": "Surface",

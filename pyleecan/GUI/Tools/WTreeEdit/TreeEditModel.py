@@ -252,7 +252,7 @@ class TreeEditModel(QAbstractItemModel):
         self.dataChanged.emit(QModelIndex(), QModelIndex())
 
     def removeRows(self, row, count, parent=QModelIndex()):
-        """ Remove the given rows from the model."""
+        """Remove the given rows from the model."""
         self._cache.clear()
         if not parent.isValid():
             return False

@@ -37,12 +37,17 @@ try:
 except ImportError as error:
     split_line = error
 
+try:
+    from ..Methods.Geometry.Surface.is_inside import is_inside
+except ImportError as error:
+    is_inside = error
+
 
 from ._check import InitUnKnowClassError
 
 
 class Surface(FrozenClass):
-    """SurfLine define by list of lines that delimit it, label and point reference."""
+    """SurfLine define by list of lines that delimit it"""
 
     VERSION = 1
 
@@ -85,6 +90,15 @@ class Surface(FrozenClass):
         )
     else:
         split_line = split_line
+    # cf Methods.Geometry.Surface.is_inside
+    if isinstance(is_inside, ImportError):
+        is_inside = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Surface method is_inside: " + str(is_inside))
+            )
+        )
+    else:
+        is_inside = is_inside
     # save and copy methods are available in all object
     save = save
     copy = copy

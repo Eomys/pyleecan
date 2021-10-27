@@ -156,7 +156,7 @@ p, li { white-space: pre-wrap; }
         <item row="0" column="0">
          <widget class="QLabel" name="in_Zh">
           <property name="text">
-           <string>Number of vents</string>
+           <string>Number of ducts</string>
           </property>
          </widget>
         </item>

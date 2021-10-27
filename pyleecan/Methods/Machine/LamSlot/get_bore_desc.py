@@ -65,7 +65,24 @@ def get_bore_desc(self, sym=1, prop_dict=None):
             bore_desc.append(bore_dict)
 
     # Add last bore line
-    if sym == 1 and abs(op - 2 * pi / Zs) > 1e-6:
+    if sym != 1 and len(notch_list) > 0:
+        # Notche and symetry => Generate full and cut
+        bore_desc, bore_lines = self.get_bore_desc(sym=1, prop_dict=prop_dict)
+        # First cut Ox
+        first_cut = list()
+        for line in bore_lines:
+            top, _ = line.split_line(-1.2 * self.Rext, 1.2 * self.Rext)
+            first_cut.extend(top)
+        if sym > 2:
+            # Second cut 0Sym
+            bore_lines = list()
+            for line in first_cut:
+                top, _ = line.split_line(1.2 * self.Rext * exp(1j * 2 * pi / sym), 0)
+                bore_lines.extend(top)
+        else:  # Cutting lamination in half
+            bore_lines = first_cut
+        return bore_desc, bore_lines
+    elif sym == 1 and abs(op - 2 * pi / Zs) > 1e-6:
         bore_dict = dict()
         bore_dict["begin_angle"] = merged_list[-1]["end_angle"]
         bore_dict["end_angle"] = merged_list[0]["begin_angle"]

@@ -16,9 +16,9 @@ def comp_length(self):
         length of the arc
     """
 
-    R = self.comp_radius()  # Radius of the arc
+    R = abs(self.comp_radius())  # Radius of the arc
     angle = self.angle
 
     # 2*pi*R is the length of the total circle
     # The arc is an alpha / 2pi portion of the cercle
-    return float(2 * pi * R * (angle / (2 * pi)))
+    return float(2 * pi * R * (abs(angle) / (2 * pi)))

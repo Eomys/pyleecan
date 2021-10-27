@@ -270,7 +270,7 @@ class Ui_DXF_Surf(object):
         )
         self.lf_tol.setText(QCoreApplication.translate("DXF_Surf", u"1e-5", None))
         self.in_Zh.setText(
-            QCoreApplication.translate("DXF_Surf", u"Number of vents", None)
+            QCoreApplication.translate("DXF_Surf", u"Number of ducts", None)
         )
         self.in_per_a.setText(
             QCoreApplication.translate("DXF_Surf", u"Periodicity", None)

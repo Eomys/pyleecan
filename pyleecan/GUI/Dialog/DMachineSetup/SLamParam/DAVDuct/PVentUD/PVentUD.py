@@ -9,14 +9,14 @@ from PySide2.QtCore import Qt
 from .......Functions.load import load
 from .......Classes.HoleUD import HoleUD
 from .......GUI import gui_option
-from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentUD.Ui_PVentUD import (
-    Ui_PVentUD,
+from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentUD.Gen_PVentUD import (
+    Gen_PVentUD,
 )
 from .......Methods.Slot.Slot import SlotCheckError
 from .......GUI.Dxf.DXF_Surf import DXF_Surf
 
 
-class PVentUD(Ui_PVentUD, QWidget):
+class PVentUD(Gen_PVentUD, QWidget):
     """Page to set the slot from DXF"""
 
     # Signal to DMachineSetup to know that the save popup is needed
@@ -161,8 +161,13 @@ class PVentUD(Ui_PVentUD, QWidget):
 
         # Update the slot object
         self.vent.__init__(init_dict=vent.as_dict())  # keep pointer
-        self.vent.Zh = self.si_Zh.value()
-        self.vent.Alpha0 = self.lf_Alpha0.value()
+        # Update GUI widget according to hole
+        self.si_Zh.blockSignals(True)
+        self.lf_Alpha0.blockSignals(True)
+        self.si_Zh.setValue(self.vent.Zh)
+        self.lf_Alpha0.setValue(self.vent.Alpha0)
+        self.si_Zh.blockSignals(False)
+        self.lf_Alpha0.blockSignals(False)
 
         # Update the new GUI according to the new vent
         self.update_graph()
