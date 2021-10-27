@@ -8,6 +8,8 @@ def get_N0(self, p=None):
     ----------
     self : OPdq
         An OPdq object
+    p: int
+        pole pair number
 
     Returns
     -------
