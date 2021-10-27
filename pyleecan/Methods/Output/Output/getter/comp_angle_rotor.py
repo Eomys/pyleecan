@@ -3,8 +3,9 @@ from numpy import pi, cumsum, roll, array, unique
 from SciDataTool import Norm_vector, Norm_affine
 
 
-def comp_angle_rotor(self, Time, rot_dir=-1):
+def comp_angle_rotor(self, Time):
     """Computes the angular position of the rotor as a function of time and set it as normalization
+    (should not happen since angle_rotor is already added in Time normalizations in Input.comp_axis_time)
 
     Parameters
     ----------
@@ -13,7 +14,7 @@ def comp_angle_rotor(self, Time, rot_dir=-1):
     Time : Data
         a time axis (SciDataTool Data object)
     rot_dir: int
-        Rotor rotating direction (by default -1: anti-clockwise)
+        Rotor rotating direction (by default -1: clockwise)
 
     Returns
     -------
@@ -21,6 +22,9 @@ def comp_angle_rotor(self, Time, rot_dir=-1):
         angular position of the rotor as a function of time (vector) [rad]
 
     """
+
+    # Get rotor rotating direction
+    rot_dir = self.geo.rot_dir
 
     # Compute according to the speed
     Nr = self.elec.get_Nr(Time=Time)
