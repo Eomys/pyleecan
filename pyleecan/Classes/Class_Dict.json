@@ -8424,7 +8424,7 @@
                 "value": null
             },
             {
-                "desc": "rotation direction of rotor\u00c2\u00a0: rot_dir = -1 by default (counter clockwise rotation)",
+                "desc": "rotation direction of rotor(rot_dir = -1 by default, i.e. clockwise rotation)",
                 "max": "1",
                 "min": "-1",
                 "name": "rot_dir",
@@ -8496,7 +8496,7 @@
                 "value": null
             },
             {
-                "desc": "rotation direction of the stator currents: current_dir=1 by default (counter clockwise rotation)",
+                "desc": "rotation direction of the stator currents(current_dir = -1 by default, i.e. clockwise rotation)",
                 "max": "1",
                 "min": "-1",
                 "name": "current_dir",

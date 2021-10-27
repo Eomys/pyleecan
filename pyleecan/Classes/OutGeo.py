@@ -554,7 +554,7 @@ class OutGeo(FrozenClass):
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""rotation direction of rotor : rot_dir = -1 by default (counter clockwise rotation)
+        doc=u"""rotation direction of rotor(rot_dir = -1 by default, i.e. clockwise rotation)
 
         :Type: int
         :min: -1
@@ -713,7 +713,7 @@ class OutGeo(FrozenClass):
     current_dir = property(
         fget=_get_current_dir,
         fset=_set_current_dir,
-        doc=u"""rotation direction of the stator currents: current_dir=1 by default (counter clockwise rotation)
+        doc=u"""rotation direction of the stator currents(current_dir = -1 by default, i.e. clockwise rotation)
 
         :Type: int
         :min: -1

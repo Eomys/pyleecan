@@ -21,6 +21,7 @@ def comp_periodicity_spatial(self):
         per_a, is_antiper_a = 1, False
     if is_antiper_a:
         per_a = int(per_a / 2)
+
     per_a, is_antiper_a = self.comp_periodicity_duct_spatial(per_a, is_antiper_a)
 
     return int(per_a), bool(is_antiper_a)

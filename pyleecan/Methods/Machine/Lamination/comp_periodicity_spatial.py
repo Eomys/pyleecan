@@ -21,15 +21,18 @@ def comp_periodicity_spatial(self):
         Zs = self.get_Zs()
         p = self.get_pole_pair_number()
 
-        per = int(gcd(Zs, p))
+        per_a = int(gcd(Zs, p))
 
-        if per == 1:
-            is_aper = bool(Zs % 2 == 0)
+        if per_a == 1:
+            is_antiper_a = bool(Zs % 2 == 0)
         else:
-            is_aper = bool(Zs / p % 2 == 0)
+            is_antiper_a = bool(Zs / p % 2 == 0)
+
+        # Account for duct periodicity
+        per_a, is_antiper_a = self.comp_periodicity_duct_spatial(per_a, is_antiper_a)
 
     else:
-        per = None
-        is_aper = False
+        per_a = None
+        is_antiper_a = False
 
-    return per, is_aper
+    return per_a, is_antiper_a

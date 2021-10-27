@@ -84,20 +84,20 @@ SC = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 SC0 = SC.copy()
 SC0.name = SC0.name + "_0"
 SC0.rotor.axial_vent = [v9]
-test_per_list.append({"machine": SC0, "exp": (1, False, 1, True)})
+test_per_list.append({"machine": SC0, "exp": (1, False, 1, False)})
 
 # Rotor is 4, True => 1, True
 SP = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
 SP0 = SP.copy()
 SP0.name = SP0.name + "_0"
 SP0.rotor.axial_vent = [v2]
-test_per_list.append({"machine": SP0, "exp": (2, False, 1, True)})
+test_per_list.append({"machine": SP0, "exp": (2, False, 2, False)})
 
 # no antiper, remove sym
 SP1 = SP.copy()
 SP1.name = SP1.name + "_1"
 SP1.rotor.axial_vent = [v9]
-test_per_list.append({"machine": SP1, "exp": (1, False, 1, True)})
+test_per_list.append({"machine": SP1, "exp": (1, False, 1, False)})
 
 
 @pytest.mark.periodicity
@@ -147,3 +147,5 @@ if __name__ == "__main__":
         print(str(ii) + " :" + machine_name)
         per_tuple = test_comp_periodicity(test_dict)
     print("Done")
+
+    # per_tuple = test_comp_periodicity(test_per_list[22])
