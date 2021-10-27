@@ -1,4 +1,4 @@
-from numpy import mean, max as np_max, min as np_min
+from numpy import max as np_max, min as np_min, mean as np_mean
 
 from SciDataTool import DataTime, VectorField, Data1D
 
@@ -78,16 +78,15 @@ def store(self, out_dict, axes_dict):
         self.Tem = self.Tem_slice.get_data_along("time[smallestperiod]", "z=integrate")
 
         # Calculate average torque in Nm
-        Tem_values = self.Tem.get_along("time[smallestperiod]")[self.Tem.symbol]
-        self.Tem_av = mean(Tem_values)
-        self.get_logger().debug("Average Torque: " + str(self.Tem_av) + " N.m")
+        self.Tem_av = np_mean(self.Tem.values)
+        # self.Tem_av = float(self.Tem.get_along("time=mean")[self.Tem.symbol])
 
-        # Calculate peak to peak torque in absolute value Nm
-        self.Tem_rip_pp = abs(np_max(Tem_values) - np_min(Tem_values))  # [N.m]
+        # Calculate peak to peak torque in absolute value [N.m]
+        self.Tem_rip_pp = abs(np_max(self.Tem.values) - np_min(self.Tem.values))
 
-        # Calculate torque ripple in percentage
+        # Calculate torque ripple in percentage [%]
         if self.Tem_av != 0:
-            self.Tem_rip_norm = self.Tem_rip_pp / self.Tem_av  # []
+            self.Tem_rip_norm = self.Tem_rip_pp / self.Tem_av
         else:
             self.Tem_rip_norm = None
 
