@@ -1,9 +1,9 @@
 from numpy import pi
 
-from SciDataTool import Data1D, DataLinspace, Norm_ref
+from SciDataTool import Data1D, DataLinspace, Norm_ref, Norm_affine
 
 
-def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None, output=None):
+def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None):
     """Compute time axis, with or without periodicities and including normalizations
 
     Parameters
@@ -18,8 +18,6 @@ def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None, output=None):
         if the time axis is antiperiodic
     Time_in: Data
         Input time axis
-    output: Output
-        An output object to calculate angle_rotor normalization
 
     Returns
     -------
@@ -27,25 +25,18 @@ def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None, output=None):
         Requested Time axis
     """
 
-    logger = self.get_logger()
-
-    # Get magnetic field rotation direction
-    if output is not None:
-        rot_dir = output.get_rot_dir()
-        # Get electrical fundamental frequency
-        f_elec = output.elec.OP.get_felec()
-    else:
-        if self.rot_dir not in [-1, 1]:
-            self.rot_dir = -1
-            logger.debug("Enforcing input.rot_dir=-1")
-        rot_dir = self.rot_dir
-        f_elec = self.OP.get_felec()
+    f_elec = self.OP.get_felec(p=p)
+    N0 = self.OP.get_N0(p=p)
+    A0 = self.angle_rotor_initial
 
     # Setup normalizations for time and angle axes
     norm_time = {
         "elec_order": Norm_ref(ref=f_elec),
-        "mech_order": Norm_ref(ref=f_elec / p),
-        "angle_elec": Norm_ref(ref=rot_dir / (2 * pi * f_elec)),
+        "mech_order": Norm_ref(ref=N0 / 60),
+        "angle_elec": Norm_ref(ref=self.current_dir / (2 * pi * f_elec)),
+        "angle_rotor": Norm_affine(
+            slope=self.rot_dir * N0 * 360 / 60, offset=A0 * 180 / pi
+        ),
     }
 
     if Time_in is not None:
@@ -88,15 +79,5 @@ def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None, output=None):
             sym_t["period"] = per_t
         Time.symmetries = sym_t
         Time = Time.to_linspace()
-
-    if output is not None:
-        # Compute angle_rotor (added to time normalizations)
-        output.comp_angle_rotor(Time)
-    else:
-        # Add default normalization
-        Time.normalizations["angle_rotor"] = Norm_ref(
-            ref=rot_dir * self.OP.N0 * 360 / 60
-        )
-        logger.debug("Enforcing default angle_rotor normalization to time axis")
 
     return Time

@@ -1,25 +1,32 @@
 from numpy import sign
 
 
-def comp_rot_dir(self, N0=1000, felec=1):
-    """Compute the rotation direction of the fundamental magnetic field induced by the winding
-    WARNING: rot_dir = -1 to have positive rotor rotating direction, i.e. rotor position moves towards positive angle
+def comp_mmf_dir(self, felec=1, current_dir=1, is_plot=False):
+    """Compute the rotation direction of the fundamental magnetomotive force induced by the winding
 
     Parameters
     ----------
     self : LamSlotWind
         A LamSlotWind object
+    felec : float
+        Stator current frequency to consider
+    current_dir: int
+        Stator current rotation direction +/-1
+    is_plot: bool
+        True to plot fft2 of stator MMF
 
     Returns
     -------
-    rot_dir : int
+    mmf_dir : int
         -1 or +1
     """
     p = self.get_pole_pair_number()
 
     # Compute unit mmf
     # 20 points per pole over time and space is enough to capture rotating direction of fundamental mmf
-    MMF, _ = self.comp_mmf_unit(Nt=20 * p, Na=20 * p, felec=felec, N0=N0)
+    MMF, _ = self.comp_mmf_unit(
+        Nt=20 * p, Na=20 * p, felec=felec, current_dir=current_dir
+    )
 
     # Extract fundamental from unit mmf
     result_p = MMF.get_harmonics(1, "freqs>0", "wavenumber=" + str(p))
@@ -34,7 +41,11 @@ def comp_rot_dir(self, N0=1000, felec=1):
     f = result["freqs"][0]
     r = result["wavenumber"][0]
 
-    # Rotating direction is the sign of the mechanical speed of the magnetic field fundamental, i.e frequency over wavenumber
-    rot_dir = int(sign(f / r))
+    # Rotating direction is the sign of the mechanical speed of the magnetomotive force fundamental,
+    # i.e frequency over wavenumber
+    mmf_dir = int(sign(f / r))
 
-    return rot_dir
+    if is_plot:
+        MMF.plot_3D_Data("freqs", "wavenumber")
+
+    return mmf_dir

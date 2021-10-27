@@ -9,7 +9,7 @@ from ....Functions.Electrical.coordinate_transformation import dqh2n
 from ....Functions.Load.import_class import import_class
 
 
-def comp_mmf_unit(self, Na=None, Nt=None, felec=1, rot_dir=-1, N0=1000):
+def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=1):
     """Compute the winding unit magnetomotive force
 
     Parameters
@@ -20,8 +20,10 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, rot_dir=-1, N0=1000):
         Space discretization for offline computation
     Nt : int
         Time discretization for offline computation
-    freq : float
+    felec : float
         Stator current frequency to consider
+    current_dir: int
+        Stator current rotation direction +/-1
 
     Returns
     -------
@@ -51,7 +53,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, rot_dir=-1, N0=1000):
         OPclass = OPslip
     InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
     input = InputCurrent(
-        Na_tot=Na, Nt_tot=Nt, OP=OPclass(N0=N0, felec=felec), rot_dir=rot_dir
+        Na_tot=Na, Nt_tot=Nt, OP=OPclass(felec=felec), current_dir=current_dir
     )
 
     axes_dict = input.comp_axes(

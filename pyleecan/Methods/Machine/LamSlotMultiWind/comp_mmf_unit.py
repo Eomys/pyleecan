@@ -1,7 +1,7 @@
 from ....Functions.Load.import_class import import_class
 
 
-def comp_mmf_unit(self, Na, Nt, felec=1, rot_dir=-1, N0=1000):
+def comp_mmf_unit(self, Na, Nt, felec=1, current_dir=1):
     """Compute the winding Unit magnetomotive force
 
     Parameters
@@ -12,10 +12,10 @@ def comp_mmf_unit(self, Na, Nt, felec=1, rot_dir=-1, N0=1000):
         Space discretization for offline computation (otherwise use out.elec.angle)
     Nt : int
         Time discretization for offline computation (otherwise use out.elec.time)
-    freq : float
+    felec : float
         Stator current frequency to consider
-    rot_dir : int
-        Rotation direction (+/- 1)
+    current_dir: int
+        Stator current rotation direction +/-1
 
     Returns
     -------
@@ -30,7 +30,7 @@ def comp_mmf_unit(self, Na, Nt, felec=1, rot_dir=-1, N0=1000):
     LamSlotWind = import_class("pyleecan.Classes", "LamSlotWind")
 
     MMF_U, WF = LamSlotWind.comp_mmf_unit(
-        self, Na=Na, Nt=Nt, felec=felec, rot_dir=rot_dir, N0=N0
+        self, Na=Na, Nt=Nt, felec=felec, current_dir=current_dir
     )
 
     return MMF_U, WF

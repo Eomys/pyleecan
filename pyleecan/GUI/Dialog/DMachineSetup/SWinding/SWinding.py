@@ -441,7 +441,7 @@ class SWinding(Gen_SWinding, QWidget):
         wind = self.obj.winding  # For readability
 
         try:
-            rot_dir = self.obj.comp_rot_dir()
+            rot_dir = self.obj.comp_mmf_dir()
             if rot_dir == 1:
                 rot_dir = "CCW"
             elif rot_dir == -1:

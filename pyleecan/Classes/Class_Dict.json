@@ -4284,9 +4284,9 @@
                 "max": "1",
                 "min": "-1",
                 "name": "rot_dir",
-                "type": "float",
+                "type": "int",
                 "unit": "-",
-                "value": null
+                "value": -1
             },
             {
                 "desc": "Initial angular position of the rotor at t=0",
@@ -4305,6 +4305,15 @@
                 "type": "ImportGenPWM",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "Rotation direction of the stator currents -1 trigo, 1 clockwise",
+                "max": "1",
+                "min": "-1",
+                "name": "current_dir",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
@@ -4745,7 +4754,7 @@
             "plot",
             "build_geometry",
             "get_pole_pair_number",
-            "comp_rot_dir",
+            "comp_mmf_dir",
             "plot_mmf_unit",
             "comp_mmf_unit",
             "comp_wind_function",
@@ -4806,7 +4815,7 @@
             "comp_resistance_wind",
             "comp_angle_d_axis",
             "comp_mmf_unit",
-            "comp_rot_dir",
+            "comp_mmf_dir",
             "comp_lengths_winding",
             "comp_number_phase_eq",
             "comp_periodicity_spatial",
@@ -8422,7 +8431,7 @@
                 "value": null
             },
             {
-                "desc": "rotation direction of the magnetic field fundamental !! WARNING: rot_dir = -1 to have positive rotor rotating direction, i.e. rotor position moves towards positive angle",
+                "desc": "rotation direction of rotor\u00c2\u00a0: rot_dir = -1 by default (counter clockwise rotation)",
                 "max": "1",
                 "min": "-1",
                 "name": "rot_dir",
@@ -8490,6 +8499,24 @@
                 "min": "",
                 "name": "is_antiper_t_R",
                 "type": "bool",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "rotation direction of the stator magnetomotive force\u00c2\u00a0: mmf_dir=1 by default (counter clockwise rotation)",
+                "max": "1",
+                "min": "-1",
+                "name": "mmf_dir",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "rotation direction of the stator currents: current_dir=1 by default (counter clockwise rotation)",
+                "max": "1",
+                "min": "-1",
+                "name": "current_dir",
+                "type": "int",
                 "unit": "-",
                 "value": null
             }
@@ -9034,7 +9061,6 @@
             "getter.get_BH_stator",
             "getter.get_path_result",
             "getter.get_machine_periodicity",
-            "getter.get_rot_dir",
             "getter.get_fund_harm",
             "getter.get_data_from_str",
             "print_memory"

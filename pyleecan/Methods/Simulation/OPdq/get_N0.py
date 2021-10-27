@@ -1,7 +1,7 @@
 from ....Methods.Simulation.Input import InputError
 
 
-def get_N0(self):
+def get_N0(self, p=None):
     """Returns the Rotor speed
 
     Parameters
@@ -22,10 +22,12 @@ def get_N0(self):
     if self.felec is None:
         raise InputError("OPdq object can't have felec and N0 both None")
 
-    machine = self.get_machine_from_parent()
-    if machine is None:
-        raise InputError("OPdq object can't find machine parent to compute N0")
+    if p is None:
+        machine = self.get_machine_from_parent()
+        if machine is None:
+            raise InputError("OPdq object can't find machine parent to compute N0")
+        p = machine.get_pole_pair_number()
 
-    p = machine.get_pole_pair_number()
     self.N0 = self.felec * 60 / p
+
     return self.N0

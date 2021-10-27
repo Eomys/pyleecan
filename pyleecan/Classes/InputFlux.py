@@ -66,9 +66,10 @@ class InputFlux(InputCurrent):
         Is=None,
         Ir=None,
         angle_rotor=None,
-        rot_dir=None,
+        rot_dir=-1,
         angle_rotor_initial=0,
         PWM=None,
+        current_dir=1,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -121,6 +122,8 @@ class InputFlux(InputCurrent):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "PWM" in list(init_dict.keys()):
                 PWM = init_dict["PWM"]
+            if "current_dir" in list(init_dict.keys()):
+                current_dir = init_dict["current_dir"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -150,6 +153,7 @@ class InputFlux(InputCurrent):
             rot_dir=rot_dir,
             angle_rotor_initial=angle_rotor_initial,
             PWM=PWM,
+            current_dir=current_dir,
             time=time,
             angle=angle,
             Nt_tot=Nt_tot,

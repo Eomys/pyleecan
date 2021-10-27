@@ -57,11 +57,6 @@ except ImportError as error:
     get_machine_periodicity = error
 
 try:
-    from ..Methods.Output.Output.getter.get_rot_dir import get_rot_dir
-except ImportError as error:
-    get_rot_dir = error
-
-try:
     from ..Methods.Output.Output.getter.get_fund_harm import get_fund_harm
 except ImportError as error:
     get_fund_harm = error
@@ -173,15 +168,6 @@ class Output(FrozenClass):
         )
     else:
         get_machine_periodicity = get_machine_periodicity
-    # cf Methods.Output.Output.getter.get_rot_dir
-    if isinstance(get_rot_dir, ImportError):
-        get_rot_dir = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method get_rot_dir: " + str(get_rot_dir))
-            )
-        )
-    else:
-        get_rot_dir = get_rot_dir
     # cf Methods.Output.Output.getter.get_fund_harm
     if isinstance(get_fund_harm, ImportError):
         get_fund_harm = property(

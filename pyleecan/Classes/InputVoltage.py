@@ -76,9 +76,10 @@ class InputVoltage(Input):
     def __init__(
         self,
         angle_rotor=None,
-        rot_dir=None,
+        rot_dir=-1,
         angle_rotor_initial=0,
         PWM=None,
+        current_dir=1,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -111,6 +112,8 @@ class InputVoltage(Input):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "PWM" in list(init_dict.keys()):
                 PWM = init_dict["PWM"]
+            if "current_dir" in list(init_dict.keys()):
+                current_dir = init_dict["current_dir"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -128,6 +131,7 @@ class InputVoltage(Input):
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         self.PWM = PWM
+        self.current_dir = current_dir
         # Call Input init
         super(InputVoltage, self).__init__(
             time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, OP=OP
@@ -157,6 +161,7 @@ class InputVoltage(Input):
             InputVoltage_str += "PWM = " + tmp
         else:
             InputVoltage_str += "PWM = None" + linesep + linesep
+        InputVoltage_str += "current_dir = " + str(self.current_dir) + linesep
         return InputVoltage_str
 
     def __eq__(self, other):
@@ -175,6 +180,8 @@ class InputVoltage(Input):
         if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
         if other.PWM != self.PWM:
+            return False
+        if other.current_dir != self.current_dir:
             return False
         return True
 
@@ -207,6 +214,8 @@ class InputVoltage(Input):
             diff_list.append(name + ".PWM None mismatch")
         elif self.PWM is not None:
             diff_list.extend(self.PWM.compare(other.PWM, name=name + ".PWM"))
+        if other._current_dir != self._current_dir:
+            diff_list.append(name + ".current_dir")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -222,6 +231,7 @@ class InputVoltage(Input):
         S += getsizeof(self.rot_dir)
         S += getsizeof(self.angle_rotor_initial)
         S += getsizeof(self.PWM)
+        S += getsizeof(self.current_dir)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -259,6 +269,7 @@ class InputVoltage(Input):
                 keep_function=keep_function,
                 **kwargs
             )
+        InputVoltage_dict["current_dir"] = self.current_dir
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputVoltage_dict["__class__"] = "InputVoltage"
@@ -273,6 +284,7 @@ class InputVoltage(Input):
         self.angle_rotor_initial = None
         if self.PWM is not None:
             self.PWM._set_None()
+        self.current_dir = None
         # Set to None the properties inherited from Input
         super(InputVoltage, self)._set_None()
 
@@ -312,7 +324,7 @@ class InputVoltage(Input):
 
     def _set_rot_dir(self, value):
         """setter of rot_dir"""
-        check_var("rot_dir", value, "float", Vmin=-1, Vmax=1)
+        check_var("rot_dir", value, "int", Vmin=-1, Vmax=1)
         self._rot_dir = value
 
     rot_dir = property(
@@ -320,7 +332,7 @@ class InputVoltage(Input):
         fset=_set_rot_dir,
         doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise
 
-        :Type: float
+        :Type: int
         :min: -1
         :max: 1
         """,
@@ -369,5 +381,25 @@ class InputVoltage(Input):
         doc=u"""Object to generate PWM signal
 
         :Type: ImportGenPWM
+        """,
+    )
+
+    def _get_current_dir(self):
+        """getter of current_dir"""
+        return self._current_dir
+
+    def _set_current_dir(self, value):
+        """setter of current_dir"""
+        check_var("current_dir", value, "int", Vmin=-1, Vmax=1)
+        self._current_dir = value
+
+    current_dir = property(
+        fget=_get_current_dir,
+        fset=_set_current_dir,
+        doc=u"""Rotation direction of the stator currents -1 trigo, 1 clockwise
+
+        :Type: int
+        :min: -1
+        :max: 1
         """,
     )

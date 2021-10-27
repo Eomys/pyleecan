@@ -35,6 +35,8 @@ def gen_input(self):
     else:
         raise InputError("Simulation object should be inside an Output object")
 
+    logger = self.get_logger()
+
     # Create the correct Output object
     outelec = OutElec()
     output.elec = outelec
@@ -42,40 +44,38 @@ def gen_input(self):
     # Replace N0=0 by 0.1 rpm
     if self.OP.N0 == 0:
         self.OP.N0 = 0.1
-        self.get_logger().debug("Updating N0 from 0 [rpm] to 0.1 [rpm] in gen_input")
+        logger.debug("Updating N0 from 0 [rpm] to 0.1 [rpm] in gen_input")
     # Check that felec/N0 can be computed
     self.OP.get_felec()
     output.elec.OP = self.OP
 
-    if self.angle_rotor is not None:
-        outelec.angle_rotor = self.angle_rotor.get_data()
-        if (
-            not isinstance(outelec.angle_rotor, ndarray)
-            or len(outelec.angle_rotor.shape) != 1
-            or outelec.angle_rotor.size != self.Nt_tot
-        ):
-            # angle_rotor should be a vector of same length as time
-            raise InputError(
-                "InputVoltage.angle_rotor should be a vector of the same length as time, "
-                + str(outelec.angle_rotor.shape)
-                + " shape found, "
-                + str(self.Nt_tot)
-                + " expected"
-            )
+    # Set rotor rotation direction
+    if self.rot_dir not in [-1, 1]:
+        # Enforce rotor rotation direction to -1
+        logger.info("Enforcing rotor rotating direction to -1: clockwise rotation")
+        self.rot_dir = -1
+    outgeo.rot_dir = self.rot_dir
 
-    if self.rot_dir is not None:
-        if self.rot_dir in [-1, 1]:
-            # Enforce user-defined rotation direction
-            outgeo.rot_dir = self.rot_dir
-        else:
-            # Enforce calculation of rotation direction
-            outgeo.rot_dir = None
+    # Set current rotation direction
+    if self.current_dir not in [-1, 1]:
+        # Enforce current rotation direction to 1
+        logger.info("Enforcing current rotating direction to 1: clockwise rotation")
+        self.current_dir = 1
+    outgeo.current_dir = self.current_dir
 
-    if self.angle_rotor_initial is None:
-        # Enforce default initial position
-        outelec.angle_rotor_initial = 0
-    else:
-        outelec.angle_rotor_initial = self.angle_rotor_initial
+    # Check if stator magnetomotive force direction is consistent with rotor direction
+    mmf_dir = simu.machine.stator.comp_mmf_dir(felec=1, current_dir=self.current_dir)
+    if mmf_dir != -self.rot_dir:
+        logger.debug(
+            "Reverse current rotation direction so that stator mmf rotates in same direction as rotor"
+        )
+        self.current_dir = -self.current_dir
+
+    # Set rotor initial angular position
+    if self.angle_rotor_initial in [0, None]:
+        # Calculate initial position according to machine properties
+        self.angle_rotor_initial = simu.machine.comp_angle_offset_initial()
+    output.geo.angle_offset_initial = self.angle_rotor_initial
 
     # Calculate time, angle and phase axes and store them in OutGeo
     outgeo.axes_dict = self.comp_axes(
@@ -95,7 +95,7 @@ def gen_input(self):
     if self.PWM is not None:
         # Fill generator with simu data
         felec = self.OP.get_felec()
-        rot_dir = output.get_rot_dir()
+        rot_dir = outgeo.rot_dir
         qs = simu.machine.stator.winding.qs
         self.PWM.f = felec
         self.PWM.qs = qs

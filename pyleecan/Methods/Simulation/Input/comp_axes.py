@@ -124,7 +124,7 @@ def comp_axes(
             Time_in = None
 
         # Calculate time axis
-        Time = self.comp_axis_time(p, per_t, is_antiper_t, Time_in, output)
+        Time = self.comp_axis_time(p, per_t, is_antiper_t, Time_in)
 
         # Store time axis in dict
         axes_dict["time"] = Time

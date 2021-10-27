@@ -48,6 +48,8 @@ class OutGeo(FrozenClass):
         axes_dict=None,
         per_t_R=None,
         is_antiper_t_R=None,
+        mmf_dir=None,
+        current_dir=None,
         init_dict=None,
         init_str=None,
     ):
@@ -98,6 +100,10 @@ class OutGeo(FrozenClass):
                 per_t_R = init_dict["per_t_R"]
             if "is_antiper_t_R" in list(init_dict.keys()):
                 is_antiper_t_R = init_dict["is_antiper_t_R"]
+            if "mmf_dir" in list(init_dict.keys()):
+                mmf_dir = init_dict["mmf_dir"]
+            if "current_dir" in list(init_dict.keys()):
+                current_dir = init_dict["current_dir"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.stator = stator
@@ -116,6 +122,8 @@ class OutGeo(FrozenClass):
         self.axes_dict = axes_dict
         self.per_t_R = per_t_R
         self.is_antiper_t_R = is_antiper_t_R
+        self.mmf_dir = mmf_dir
+        self.current_dir = current_dir
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -154,6 +162,8 @@ class OutGeo(FrozenClass):
         OutGeo_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
         OutGeo_str += "per_t_R = " + str(self.per_t_R) + linesep
         OutGeo_str += "is_antiper_t_R = " + str(self.is_antiper_t_R) + linesep
+        OutGeo_str += "mmf_dir = " + str(self.mmf_dir) + linesep
+        OutGeo_str += "current_dir = " + str(self.current_dir) + linesep
         return OutGeo_str
 
     def __eq__(self, other):
@@ -192,6 +202,10 @@ class OutGeo(FrozenClass):
         if other.per_t_R != self.per_t_R:
             return False
         if other.is_antiper_t_R != self.is_antiper_t_R:
+            return False
+        if other.mmf_dir != self.mmf_dir:
+            return False
+        if other.current_dir != self.current_dir:
             return False
         return True
 
@@ -256,6 +270,10 @@ class OutGeo(FrozenClass):
             diff_list.append(name + ".per_t_R")
         if other._is_antiper_t_R != self._is_antiper_t_R:
             diff_list.append(name + ".is_antiper_t_R")
+        if other._mmf_dir != self._mmf_dir:
+            diff_list.append(name + ".mmf_dir")
+        if other._current_dir != self._current_dir:
+            diff_list.append(name + ".current_dir")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -282,6 +300,8 @@ class OutGeo(FrozenClass):
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.per_t_R)
         S += getsizeof(self.is_antiper_t_R)
+        S += getsizeof(self.mmf_dir)
+        S += getsizeof(self.current_dir)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -338,6 +358,8 @@ class OutGeo(FrozenClass):
                     OutGeo_dict["axes_dict"][key] = None
         OutGeo_dict["per_t_R"] = self.per_t_R
         OutGeo_dict["is_antiper_t_R"] = self.is_antiper_t_R
+        OutGeo_dict["mmf_dir"] = self.mmf_dir
+        OutGeo_dict["current_dir"] = self.current_dir
         # The class name is added to the dict for deserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
@@ -363,6 +385,8 @@ class OutGeo(FrozenClass):
         self.axes_dict = None
         self.per_t_R = None
         self.is_antiper_t_R = None
+        self.mmf_dir = None
+        self.current_dir = None
 
     def _get_stator(self):
         """getter of stator"""
@@ -544,7 +568,7 @@ class OutGeo(FrozenClass):
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""rotation direction of the magnetic field fundamental !! WARNING: rot_dir = -1 to have positive rotor rotating direction, i.e. rotor position moves towards positive angle
+        doc=u"""rotation direction of rotor : rot_dir = -1 by default (counter clockwise rotation)
 
         :Type: int
         :min: -1
@@ -688,5 +712,45 @@ class OutGeo(FrozenClass):
         doc=u"""True if an time anti-periodicity is possible after the periodicities in rotating referential
 
         :Type: bool
+        """,
+    )
+
+    def _get_mmf_dir(self):
+        """getter of mmf_dir"""
+        return self._mmf_dir
+
+    def _set_mmf_dir(self, value):
+        """setter of mmf_dir"""
+        check_var("mmf_dir", value, "int", Vmin=-1, Vmax=1)
+        self._mmf_dir = value
+
+    mmf_dir = property(
+        fget=_get_mmf_dir,
+        fset=_set_mmf_dir,
+        doc=u"""rotation direction of the stator magnetomotive force : mmf_dir=1 by default (counter clockwise rotation)
+
+        :Type: int
+        :min: -1
+        :max: 1
+        """,
+    )
+
+    def _get_current_dir(self):
+        """getter of current_dir"""
+        return self._current_dir
+
+    def _set_current_dir(self, value):
+        """setter of current_dir"""
+        check_var("current_dir", value, "int", Vmin=-1, Vmax=1)
+        self._current_dir = value
+
+    current_dir = property(
+        fget=_get_current_dir,
+        fset=_set_current_dir,
+        doc=u"""rotation direction of the stator currents: current_dir=1 by default (counter clockwise rotation)
+
+        :Type: int
+        :min: -1
+        :max: 1
         """,
     )

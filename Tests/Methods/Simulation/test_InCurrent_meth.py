@@ -229,7 +229,7 @@ class Test_InCurrent_meth(object):
         p = Toyota_Prius.stator.get_pole_pair_number()
         time_exp = linspace(0, 60 / N0, Nt_tot, endpoint=False)
         felec = p * N0 / 60
-        rot_dir = Toyota_Prius.stator.comp_rot_dir()
+        rot_dir = Toyota_Prius.stator.comp_mmf_dir()
         Ia = (
             A_rms
             * sqrt(2)

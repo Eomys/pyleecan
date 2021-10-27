@@ -46,7 +46,7 @@ def test_LSRPM_simulation():
     # Stator currents as a function of time, each column correspond to one phase [A]
     I0_rms = 6.85
     felec = p * simu_femm.input.OP.N0 / 60  # [Hz]
-    rot_dir = simu_femm.machine.stator.comp_rot_dir()
+    rot_dir = simu_femm.machine.stator.comp_mmf_dir()
     Phi0 = 140 * pi / 180  # Maximum Torque Per Amp
 
     Ia = (
