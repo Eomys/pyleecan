@@ -102,6 +102,7 @@ def gen_input(self):
         felec = self.OP.get_felec()
         rot_dir = outgeo.rot_dir
         qs = simu.machine.stator.winding.qs
+        p = simu.machine.get_pole_pair_number()
         self.PWM.f = felec
         self.PWM.qs = qs
         self.PWM.rot_dir = rot_dir
@@ -116,12 +117,7 @@ def gen_input(self):
         Uabc, _, _, _, time = self.PWM.get_data(is_norm=False)
         # Create DataTime object
         self.time = time
-        Time = self.comp_axis_time(
-            simu.machine.get_pole_pair_number(),
-            per_t=1,
-            is_antiper_t=False,
-            output=output,
-        )
+        Time = self.comp_axis_time(p, per_t=1, is_antiper_t=False)
         Phase = self.comp_axis_phase(simu.machine.stator)
         outelec.Us_PWM = DataTime(
             name="Stator voltage",

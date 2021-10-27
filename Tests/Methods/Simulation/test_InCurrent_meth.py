@@ -1,25 +1,20 @@
-# -*- coding: utf-8 -*-
-
 from os.path import join
 
 from numpy import (
     array,
     linspace,
-    ones,
     pi,
     sqrt,
     cos,
-    transpose,
     zeros,
     abs as np_abs,
     angle as np_angle,
 )
 from numpy.testing import assert_array_almost_equal
 import matplotlib.pyplot as plt
-from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.InputVoltage import InputVoltage
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineDFIM import MachineDFIM
@@ -183,31 +178,36 @@ class Test_InCurrent_meth(object):
         p = Toyota_Prius.stator.get_pole_pair_number()
         time_exp = linspace(0, 60 / N0, Nt_tot, endpoint=False)
         felec = p * N0 / 60
-        rot_dir = Toyota_Prius.stator.comp_mmf_dir()
+        current_dir = InputVoltage().current_dir
+        assert current_dir == -1
+        rot_dir = InputVoltage().rot_dir
+        assert rot_dir == -1
+        # mmf_dir is the rotation direction of the fundamental magnetic field
+        mmf_dir = Toyota_Prius.stator.comp_mmf_dir(current_dir=current_dir)
+        assert mmf_dir == 1
         Ia = (
             A_rms
             * sqrt(2)
-            * cos(rot_dir * 2 * pi * felec * time_exp + 0 * 2 * pi / qs + Phi0)
+            * cos(current_dir * (2 * pi * felec * time_exp + 0 * 2 * pi / qs) + Phi0)
         )
         Ib = (
             A_rms
             * sqrt(2)
-            * cos(rot_dir * 2 * pi * felec * time_exp + 1 * 2 * pi / qs + Phi0)
+            * cos(current_dir * (2 * pi * felec * time_exp + 1 * 2 * pi / qs) + Phi0)
         )
         Ic = (
             A_rms
             * sqrt(2)
-            * cos(rot_dir * 2 * pi * felec * time_exp + 2 * 2 * pi / qs + Phi0)
+            * cos(current_dir * (2 * pi * felec * time_exp + 2 * 2 * pi / qs) + Phi0)
         )
         Is_exp = array([Ia, Ib, Ic])
 
         # Compute expected rotor position
         angle_rotor_initial = Toyota_Prius.comp_angle_rotor_initial()
-        # rot_dir is the rotation direction of the fundamental magnetic field
-        # Then rotor position is -1 * rot_dir
+
+        # Then rotor position is -1 * mmf_dir
         angle_rotor_exp = (
-            linspace(0, -1 * rot_dir * 2 * pi, Nt_tot, endpoint=False)
-            + angle_rotor_initial
+            linspace(0, rot_dir * 2 * pi, Nt_tot, endpoint=False) + angle_rotor_initial
         )
 
         test_obj.input = InputCurrent(
@@ -216,7 +216,6 @@ class Test_InCurrent_meth(object):
             Is=None,
             OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=N0),
             Ir=None,
-            rot_dir=None,
         )
 
         # Generate Is according to Id/Iq
@@ -232,7 +231,7 @@ class Test_InCurrent_meth(object):
         assert_array_almost_equal(output.elec.get_Is().values, Is_exp.T)
         assert_array_almost_equal(output.get_angle_rotor(), angle_rotor_exp)
         assert_array_almost_equal(output.elec.OP.get_N0(), N0)
-        assert_array_almost_equal(output.geo.rot_dir, rot_dir)
+        assert_array_almost_equal(output.geo.rot_dir, -mmf_dir)
 
         # Check Id/Iq by enforcing Is
         test_obj.input = InputCurrent(
@@ -241,7 +240,6 @@ class Test_InCurrent_meth(object):
             Is=Is_exp.transpose(),
             OP=OPdq(Id_ref=None, Iq_ref=None, N0=N0),
             Ir=None,
-            rot_dir=None,
         )
         out = Output(simu=test_obj)
         test_obj.input.gen_input()
@@ -277,9 +275,10 @@ if __name__ == "__main__":
     obj = Test_InCurrent_meth()
 
     # test_dict = idq_test[0]
-    # obj.test_InputCurrent_DQ(test_dict)
-    for test_dict in InputCurrent_Error_test:
-        out = obj.test_InputCurrent_Error_test(test_dict)
+    for test_dict in idq_test:
+        obj.test_InputCurrent_DQ(test_dict)
+    # for test_dict in InputCurrent_Error_test:
+    #     out = obj.test_InputCurrent_Error_test(test_dict)
     print("Done")
     # out.plot_2D_Data(
     #         "elec.Is",

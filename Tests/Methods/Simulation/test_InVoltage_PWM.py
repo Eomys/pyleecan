@@ -13,6 +13,9 @@ is_show_fig = False
 
 
 def test_InVoltage_PWM():
+    """Test voltage generation with PWM"""
+
+    # TODO: add assert almost equal
 
     fmax = 20000
     fswi = 7000
