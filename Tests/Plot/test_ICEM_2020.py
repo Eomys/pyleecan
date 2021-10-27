@@ -44,6 +44,8 @@ on Pyleecan open-source object-oriented software"
 """
 
 
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.MagFEMM
 @pytest.mark.SCIM
 @pytest.mark.periodicity
