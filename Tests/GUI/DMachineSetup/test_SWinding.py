@@ -71,7 +71,7 @@ class TestSWinding(object):
         assert self.widget.is_reverse_layer.checkState() == Qt.Checked
         assert self.widget.is_change_layer.checkState() == Qt.Checked
         assert self.widget.is_permute_B_C.checkState() == Qt.Checked
-        assert self.widget.out_rot_dir.text() == "Rotation direction: CCW"
+        assert self.widget.out_rot_dir.text() == "Rotation direction: CW"
 
         self.test_obj = MachineSCIM()
         self.test_obj.stator = LamSlotWind()
@@ -127,7 +127,7 @@ class TestSWinding(object):
 
         self.widget.b_generate.clicked.emit()
         assert self.widget.obj.winding.wind_mat.shape == (2, 1, 36, 3)
-        assert self.widget.out_rot_dir.text() == "Rotation direction: CW"
+        assert self.widget.out_rot_dir.text() == "Rotation direction: CCW"
         assert self.widget.out_ms.text() == "ms = Zs / (2*p*qs) = 2.0"
         assert self.widget.out_Nperw.text() == "Nperw: 6"
         assert self.widget.out_Ncspc.text() == "Ncspc: 6"
@@ -214,4 +214,5 @@ if __name__ == "__main__":
     a.setup_class()
     a.setup_method()
     a.test_init()
+    a.test_generate()
     print("Done")
