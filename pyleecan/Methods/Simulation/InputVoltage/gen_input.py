@@ -79,8 +79,8 @@ def gen_input(self):
     # Set rotor initial angular position
     if self.angle_rotor_initial in [0, None]:
         # Calculate initial position according to machine properties
-        self.angle_rotor_initial = simu.machine.comp_angle_offset_initial()
-    output.geo.angle_offset_initial = self.angle_rotor_initial
+        self.angle_rotor_initial = simu.machine.comp_angle_rotor_initial()
+    output.geo.angle_rotor_initial = self.angle_rotor_initial
 
     # Calculate time, angle and phase axes and store them in OutGeo
     outgeo.axes_dict = self.comp_axes(

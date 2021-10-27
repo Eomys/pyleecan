@@ -248,7 +248,7 @@ class Test_InCurrent_meth(object):
         Is_exp = array([Ia, Ib, Ic])
 
         # Compute expected rotor position
-        angle_rotor_initial = Toyota_Prius.comp_angle_offset_initial()
+        angle_rotor_initial = Toyota_Prius.comp_angle_rotor_initial()
         # rot_dir is the rotation direction of the fundamental magnetic field
         # Then rotor position is -1 * rot_dir
         angle_rotor_exp = (

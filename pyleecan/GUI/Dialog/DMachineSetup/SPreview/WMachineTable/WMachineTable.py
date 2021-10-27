@@ -150,7 +150,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             is_antiperiod=False,
         )
         Is = output.elec.comp_I_mag(time, is_stator=True)
-        alpha = output.get_angle_offset_initial()
+        alpha = output.get_angle_rotor_initial()
         try:
             # Draw the machine
             FEMM_dict = draw_FEMM(

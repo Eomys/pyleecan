@@ -23,11 +23,11 @@ except ImportError as error:
     comp_angle_rotor = error
 
 try:
-    from ..Methods.Output.Output.getter.get_angle_offset_initial import (
-        get_angle_offset_initial,
+    from ..Methods.Output.Output.getter.get_angle_rotor_initial import (
+        get_angle_rotor_initial,
     )
 except ImportError as error:
-    get_angle_offset_initial = error
+    get_angle_rotor_initial = error
 
 try:
     from ..Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
@@ -100,18 +100,18 @@ class Output(FrozenClass):
         )
     else:
         comp_angle_rotor = comp_angle_rotor
-    # cf Methods.Output.Output.getter.get_angle_offset_initial
-    if isinstance(get_angle_offset_initial, ImportError):
-        get_angle_offset_initial = property(
+    # cf Methods.Output.Output.getter.get_angle_rotor_initial
+    if isinstance(get_angle_rotor_initial, ImportError):
+        get_angle_rotor_initial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method get_angle_offset_initial: "
-                    + str(get_angle_offset_initial)
+                    "Can't use Output method get_angle_rotor_initial: "
+                    + str(get_angle_rotor_initial)
                 )
             )
         )
     else:
-        get_angle_offset_initial = get_angle_offset_initial
+        get_angle_rotor_initial = get_angle_rotor_initial
     # cf Methods.Output.Output.getter.get_angle_rotor
     if isinstance(get_angle_rotor, ImportError):
         get_angle_rotor = property(

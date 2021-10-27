@@ -5394,7 +5394,7 @@
         "methods": [
             "build_geometry",
             "check",
-            "comp_angle_offset_initial",
+            "comp_angle_rotor_initial",
             "comp_desc_dict",
             "comp_length_airgap_active",
             "comp_masses",
@@ -8434,7 +8434,7 @@
                 "desc": "Difference between the d axis angle of the stator and the rotor",
                 "max": "",
                 "min": "",
-                "name": "angle_offset_initial",
+                "name": "angle_rotor_initial",
                 "type": "float",
                 "unit": "rad",
                 "value": null
@@ -9055,7 +9055,7 @@
         "is_internal": false,
         "methods": [
             "getter.comp_angle_rotor",
-            "getter.get_angle_offset_initial",
+            "getter.get_angle_rotor_initial",
             "getter.get_angle_rotor",
             "getter.get_BH_rotor",
             "getter.get_BH_stator",

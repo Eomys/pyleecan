@@ -353,7 +353,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         degrees_step = 1  # Fixed for now
         current_angle = 0 - pp * degrees_step * skip_steps
         angle_shift = self.angle_rotor_shift - self.angle_stator_shift
-        rotor_init_pos = machine.comp_angle_offset_initial() + angle_shift
+        rotor_init_pos = machine.comp_angle_rotor_initial() + angle_shift
         rotor_d_axis = machine.rotor.comp_angle_d_axis() * 180.0 / pi
         Ncond = 1  # Fixed for Now
         Cp = 1  # Fixed for Now

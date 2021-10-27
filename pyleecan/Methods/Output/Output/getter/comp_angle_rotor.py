@@ -30,7 +30,7 @@ def comp_angle_rotor(self, Time):
     Nr = self.elec.get_Nr(Time=Time)
 
     # Compute rotor initial angle (for synchronous machines, to align rotor d-axis and stator alpha-axis)
-    A0 = self.get_angle_offset_initial()
+    A0 = self.get_angle_rotor_initial()
 
     # Case where normalization is a constant
     if unique(Nr).size == 1:
