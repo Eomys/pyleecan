@@ -79,7 +79,7 @@ class InputVoltage(Input):
         rot_dir=-1,
         angle_rotor_initial=0,
         PWM=None,
-        current_dir=1,
+        current_dir=-1,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -396,7 +396,7 @@ class InputVoltage(Input):
     current_dir = property(
         fget=_get_current_dir,
         fset=_set_current_dir,
-        doc=u"""Rotation direction of the stator currents -1 trigo, 1 clockwise
+        doc=u"""Rotation direction of the stator currents 1 trigo, -1 clockwise
 
         :Type: int
         :min: -1

@@ -47,7 +47,7 @@ def gen_input(self):
         logger.debug("Updating N0 from 0 [rpm] to 0.1 [rpm] in gen_input")
     # Check that felec/N0 can be computed
     self.OP.get_felec()
-    output.elec.OP = self.OP
+    outelec.OP = self.OP
 
     # Set rotor rotation direction
     if self.rot_dir not in [-1, 1]:
@@ -63,13 +63,18 @@ def gen_input(self):
         self.current_dir = 1
     outgeo.current_dir = self.current_dir
 
+    # Init permutation array of stator currents
+    qs = simu.machine.stator.winding.qs
+    perm_phases = arange(qs)
     # Check if stator magnetomotive force direction is consistent with rotor direction
-    mmf_dir = simu.machine.stator.comp_mmf_dir(felec=1, current_dir=self.current_dir)
+    mmf_dir = simu.machine.stator.comp_mmf_dir(current_dir=self.current_dir)
     if mmf_dir != -self.rot_dir:
-        logger.debug(
-            "Reverse current rotation direction so that stator mmf rotates in same direction as rotor"
+        # Switch two last phases to reverse rotation direction
+        perm_phases[-1], perm_phases[-2] = perm_phases[-2], perm_phases[-1]
+        logger.info(
+            "Reverse the two last stator current phases to reverse rotation direction of stator mmf fundamental according to rotor direction"
         )
-        self.current_dir = -self.current_dir
+    outelec.perm_phases = perm_phases
 
     # Set rotor initial angular position
     if self.angle_rotor_initial in [0, None]:

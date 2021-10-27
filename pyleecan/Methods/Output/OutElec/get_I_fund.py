@@ -26,8 +26,8 @@ def get_I_fund(self, Time=None):
     qs = self.parent.simu.machine.stator.winding.qs
     stator_label = "phase_" + self.parent.simu.machine.stator.get_label()
     felec = self.OP.get_felec()
-
     Phase = self.axes_dict[stator_label]
+    perm_phases = self.perm_phases
 
     if self.Is is None:
         I_dict = self.OP.get_Id_Iq()
@@ -48,7 +48,7 @@ def get_I_fund(self, Time=None):
             unit="A",
             symbol="I_s",
             axes=[Time, Phase],
-            values=Is,
+            values=Is[:, perm_phases],
         )
 
     else:
@@ -56,7 +56,7 @@ def get_I_fund(self, Time=None):
         Is_val = result[self.Is.symbol]
         freqs = result["freqs"]
         ifund = where(isclose(freqs, felec))
-        Is_fund = Is_val[ifund, :]
+        Is_fund = Is_val[ifund, perm_phases]
 
         Freq = Data1D(
             name="freqs",

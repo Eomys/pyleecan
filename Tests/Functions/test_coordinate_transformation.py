@@ -3,7 +3,7 @@ import pytest
 from numpy import pi, array, linspace, zeros, cos, mean, sqrt, sin
 from numpy.testing import assert_array_almost_equal
 
-from SciDataTool import DataTime, Data1D, Norm_ref
+from SciDataTool import DataTime, Data1D, Norm_ref, Norm_affine
 
 from pyleecan.Functions.Electrical.coordinate_transformation import (
     n2dqh,
@@ -30,18 +30,21 @@ def test_coordinate_transformation(param_dict):
     Nt = 100
     f_elec = 1
     p = 1
+    N0 = f_elec / p
 
     qs = param_dict["qs"]
     rot_dir = param_dict["rot_dir"]
+    current_dir = -rot_dir
 
     time = linspace(0, 1 / f_elec, Nt, endpoint=False)
-    angle_elec = rot_dir * 2 * pi * f_elec * time
+    angle_elec = current_dir * 2 * pi * f_elec * time
 
     # Time axis for plots
     norm_time = {
         "elec_order": Norm_ref(ref=f_elec),
-        "mech_order": Norm_ref(ref=f_elec / p),
-        "angle_elec": Norm_ref(ref=rot_dir / (2 * pi * f_elec)),
+        "mech_order": Norm_ref(ref=N0 / 60),
+        "angle_elec": Norm_ref(ref=current_dir / (2 * pi * f_elec)),
+        "angle_rotor": Norm_affine(slope=rot_dir * N0 * 360 / 60, offset=0),
     }
     Time = Data1D(name="time", unit="s", values=time, normalizations=norm_time)
 
@@ -60,12 +63,16 @@ def test_coordinate_transformation(param_dict):
     for phase in phase_list:
         In = zeros((Nt, qs))
         for ii in range(qs):
-            In[:, ii] = cos(angle_elec + phase - 2 * ii * pi / qs)
+            In[:, ii] = cos(angle_elec + phase + rot_dir * 2 * ii * pi / qs)
 
-        Idqh_rms = n2dqh(In, angle_elec, is_dqh_rms=True)
-        Idqh_amp = n2dqh(In, angle_elec, is_dqh_rms=False)
-        In_check_rms = dqh2n(Idqh_rms, angle_elec, n=qs, is_n_rms=False)
-        In_check_amp = dqh2n(Idqh_amp, angle_elec, n=qs, is_n_rms=True)
+        Idqh_rms = n2dqh(In, angle_elec, is_dqh_rms=True, is_clockwise=rot_dir < 0)
+        Idqh_amp = n2dqh(In, angle_elec, is_dqh_rms=False, is_clockwise=rot_dir < 0)
+        In_check_rms = dqh2n(
+            Idqh_rms, angle_elec, n=qs, is_n_rms=False, is_clockwise=rot_dir < 0
+        )
+        In_check_amp = dqh2n(
+            Idqh_amp, angle_elec, n=qs, is_n_rms=True, is_clockwise=rot_dir < 0
+        )
 
         assert_array_almost_equal(
             mean(Idqh_rms, axis=0),

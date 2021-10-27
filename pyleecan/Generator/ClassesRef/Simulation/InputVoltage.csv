@@ -3,4 +3,4 @@ angle_rotor,rad,Rotor angular position as a function of time (if None computed a
 rot_dir,-,"Rotation direction of the rotor 1 trigo, -1 clockwise",,int,-1,-1,1,,,,set_OP_from_array,,,
 angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,,,,
 PWM,,Object to generate PWM signal,,ImportGenPWM,None,,,,,,,,,
-current_dir,-,"Rotation direction of the stator currents -1 trigo, 1 clockwise",,int,1,-1,1,,,,,,,
+current_dir,-,"Rotation direction of the stator currents 1 trigo, -1 clockwise",,int,-1,-1,1,,,,,,,

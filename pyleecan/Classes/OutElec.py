@@ -150,6 +150,7 @@ class OutElec(FrozenClass):
         Pem_av_ref=None,
         Tem_av_ref=None,
         Is_harm=None,
+        perm_phases=None,
         init_dict=None,
         init_str=None,
     ):
@@ -196,6 +197,8 @@ class OutElec(FrozenClass):
                 Tem_av_ref = init_dict["Tem_av_ref"]
             if "Is_harm" in list(init_dict.keys()):
                 Is_harm = init_dict["Is_harm"]
+            if "perm_phases" in list(init_dict.keys()):
+                perm_phases = init_dict["perm_phases"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -212,6 +215,7 @@ class OutElec(FrozenClass):
         self.Pem_av_ref = Pem_av_ref
         self.Tem_av_ref = Tem_av_ref
         self.Is_harm = Is_harm
+        self.perm_phases = perm_phases
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -254,6 +258,13 @@ class OutElec(FrozenClass):
         OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         OutElec_str += "Is_harm = " + str(self.Is_harm) + linesep + linesep
+        OutElec_str += (
+            "perm_phases = "
+            + linesep
+            + str(self.perm_phases).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return OutElec_str
 
     def __eq__(self, other):
@@ -288,6 +299,8 @@ class OutElec(FrozenClass):
         if other.Tem_av_ref != self.Tem_av_ref:
             return False
         if other.Is_harm != self.Is_harm:
+            return False
+        if not array_equal(other.perm_phases, self.perm_phases):
             return False
         return True
 
@@ -372,6 +385,8 @@ class OutElec(FrozenClass):
             diff_list.extend(
                 self.Is_harm.compare(other.Is_harm, name=name + ".Is_harm")
             )
+        if not array_equal(other.perm_phases, self.perm_phases):
+            diff_list.append(name + ".perm_phases")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -396,6 +411,7 @@ class OutElec(FrozenClass):
         S += getsizeof(self.Pem_av_ref)
         S += getsizeof(self.Tem_av_ref)
         S += getsizeof(self.Is_harm)
+        S += getsizeof(self.perm_phases)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -497,6 +513,19 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
+        if self.perm_phases is None:
+            OutElec_dict["perm_phases"] = None
+        else:
+            if type_handle_ndarray == 0:
+                OutElec_dict["perm_phases"] = self.perm_phases.tolist()
+            elif type_handle_ndarray == 1:
+                OutElec_dict["perm_phases"] = self.perm_phases.copy()
+            elif type_handle_ndarray == 2:
+                OutElec_dict["perm_phases"] = self.perm_phases
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -520,6 +549,7 @@ class OutElec(FrozenClass):
         self.Pem_av_ref = None
         self.Tem_av_ref = None
         self.Is_harm = None
+        self.perm_phases = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -857,5 +887,30 @@ class OutElec(FrozenClass):
         doc=u"""Harmonic stator current 
 
         :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
+
+    def _get_perm_phases(self):
+        """getter of perm_phases"""
+        return self._perm_phases
+
+    def _set_perm_phases(self, value):
+        """setter of perm_phases"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("perm_phases", value, "ndarray")
+        self._perm_phases = value
+
+    perm_phases = property(
+        fget=_get_perm_phases,
+        fset=_set_perm_phases,
+        doc=u"""Phase permutation array to reverse rotating direction of stator mmf fundamental 
+
+        :Type: ndarray
         """,
     )

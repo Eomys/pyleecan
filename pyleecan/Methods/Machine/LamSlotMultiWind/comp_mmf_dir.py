@@ -1,7 +1,7 @@
 from ....Functions.Load.import_class import import_class
 
 
-def comp_mmf_dir(self, felec=1, current_dir=1, is_plot=False):
+def comp_mmf_dir(self, current_dir, is_plot=False):
     """Compute the rotation direction of the fundamental magnetomotive force induced by the winding
 
     Parameters
@@ -24,8 +24,6 @@ def comp_mmf_dir(self, felec=1, current_dir=1, is_plot=False):
     # Call method of LamSlotWind
     LamSlotWind = import_class("pyleecan.Classes", "LamSlotWind")
 
-    rot_dir = LamSlotWind.comp_mmf_dir(
-        self, felec=felec, current_dir=current_dir, is_plot=is_plot
-    )
+    rot_dir = LamSlotWind.comp_mmf_dir(self, current_dir, is_plot)
 
     return rot_dir

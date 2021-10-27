@@ -9,8 +9,8 @@ from ....Functions.Electrical.coordinate_transformation import dqh2n
 from ....Functions.Load.import_class import import_class
 
 
-def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=1):
-    """Compute the winding unit magnetomotive force
+def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None):
+    """Compute the winding unit magnetomotive force for given inputs
 
     Parameters
     ----------
@@ -51,10 +51,14 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=1):
         OPclass = OPdq
     else:
         OPclass = OPslip
-    InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
-    input = InputCurrent(
-        Na_tot=Na, Nt_tot=Nt, OP=OPclass(felec=felec), current_dir=current_dir
-    )
+    InputVoltage = import_class("pyleecan.Classes", "InputVoltage")
+    input = InputVoltage(Na_tot=Na, Nt_tot=Nt, OP=OPclass(felec=felec))
+    if current_dir is not None:
+        if current_dir in [-1, 1]:
+            # Enforce input current_dir otherwise keep it as default
+            input.current_dir = current_dir
+        else:
+            raise Exception("Cannot enforce current_dir other than +1 or -1")
 
     axes_dict = input.comp_axes(
         axes_list=["time", "angle", "phase_S", "phase_R"],

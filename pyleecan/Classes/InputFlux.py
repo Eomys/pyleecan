@@ -69,7 +69,7 @@ class InputFlux(InputCurrent):
         rot_dir=-1,
         angle_rotor_initial=0,
         PWM=None,
-        current_dir=1,
+        current_dir=-1,
         time=None,
         angle=None,
         Nt_tot=2048,

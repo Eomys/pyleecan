@@ -3,6 +3,7 @@ import numpy as np
 from SciDataTool import Data1D, DataTime
 
 from ...Functions.Winding.gen_phase_list import gen_name
+from ...Functions.Load.import_class import import_class
 
 
 def n2dqh_DataTime(data_n, is_dqh_rms=True):
@@ -30,8 +31,8 @@ def n2dqh_DataTime(data_n, is_dqh_rms=True):
         raise Exception("DataTime object should contain time as first axis")
     if data_n.axes[1].name != "phase":
         raise Exception("DataTime object should contain phase as second axis")
-
-    # TODO: add check on angle_elec normalization
+    if "angle_elec" not in data_n.axes[0].normalizations:
+        raise Exception("Time axis should contain angle_elec normalization")
 
     # Get values for one time period converted in electrical angle and for all phases
     result = data_n.get_along("time[oneperiod]->angle_elec", "phase")
@@ -100,8 +101,8 @@ def dqh2n_DataTime(data_dqh, n, is_n_rms=False):
         raise Exception("DataTime object should contain time as first axis")
     if data_dqh.axes[1].name != "phase":
         raise Exception("DataTime object should contain phase as second axis")
-
-    # TODO: add check on angle_elec normalization
+    if "angle_elec" not in data_dqh.axes[0].normalizations:
+        raise Exception("Time axis should contain angle_elec normalization")
 
     # Get values for one time period converted in electrical angle and for all phases
     result = data_dqh.get_along("time[oneperiod]->angle_elec", "phase")
@@ -161,6 +162,7 @@ def n2dqh(Z_n, angle_elec, is_dqh_rms=True):
     Z_dqh : ndarray
         transformed matrix (N x 3) of dqh equivalent values
     """
+
     Z_dqh = abc2dqh(n2abc(Z_n), angle_elec)
 
     if is_dqh_rms:
@@ -329,11 +331,15 @@ def comp_Clarke_transform(n, is_inv=False):
     -------
     mat : ndarray
         Clarke transform matrix of size (n, 3)
-
     """
 
+    # Take phase rotation direction from default current rotation direction in InputVoltage
+    InputVoltage = import_class("pyleecan.Classes", "InputVoltage")
+    input = InputVoltage()
+    current_dir_ref = input.current_dir
+
     # Phasor depending on fundamental field rotation direction
-    phasor = np.linspace(0, -2 * np.pi * (n - 1) / n, n)
+    phasor = np.linspace(0, current_dir_ref * 2 * np.pi * (n - 1) / n, n)
 
     # Clarke transformation matrix
     if is_inv:

@@ -27,6 +27,7 @@ def get_Us(self):
         angle_elec = Time.get_values(is_smallestperiod=True, normalization="angle_elec")
         qs = self.parent.simu.machine.stator.winding.qs
         stator_label = "phase_" + self.parent.simu.machine.stator.get_label()
+        perm_phases = self.perm_phases
 
         # Switch from dqh to abc referential
         Us = dqh2n(Usdqh, angle_elec, n=qs)
@@ -36,6 +37,6 @@ def get_Us(self):
             unit="V",
             symbol="Us",
             axes=[Time.copy(), self.axes_dict[stator_label].copy()],
-            values=Us,
+            values=Us[:, perm_phases],
         )
     return self.Us

@@ -15,5 +15,4 @@ is_antiper_t_S,-,True if an time anti-periodicity is possible after the periodic
 axes_dict,,Dict containing axes data without periodicities used for plots and to have simulation full time/angle vectors,,{SciDataTool.Classes.DataND.Data},None,,,,,,,,,
 per_t_R,-,Number of time periodicities of the machine in rotating referential,0,int,None,,,,,,,,,
 is_antiper_t_R,-,True if an time anti-periodicity is possible after the periodicities in rotating referential,0,bool,None,,,,,,,,,
-mmf_dir,-,rotation direction of the stator magnetomotive force : mmf_dir=1 by default (counter clockwise rotation),0,int,None,-1,1,,,,,,,
 current_dir,-,rotation direction of the stator currents: current_dir=1 by default (counter clockwise rotation),0,int,None,-1,1,,,,,,,

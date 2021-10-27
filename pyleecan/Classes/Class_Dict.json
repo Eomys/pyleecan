@@ -4307,13 +4307,13 @@
                 "value": null
             },
             {
-                "desc": "Rotation direction of the stator currents -1 trigo, 1 clockwise",
+                "desc": "Rotation direction of the stator currents 1 trigo, -1 clockwise",
                 "max": "1",
                 "min": "-1",
                 "name": "current_dir",
                 "type": "int",
                 "unit": "-",
-                "value": 1
+                "value": -1
             }
         ]
     },
@@ -8274,6 +8274,15 @@
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "A",
                 "value": "None"
+            },
+            {
+                "desc": "Phase permutation array to reverse rotating direction of stator mmf fundamental ",
+                "max": "",
+                "min": "",
+                "name": "perm_phases",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -8499,15 +8508,6 @@
                 "min": "",
                 "name": "is_antiper_t_R",
                 "type": "bool",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "rotation direction of the stator magnetomotive force\u00c2\u00a0: mmf_dir=1 by default (counter clockwise rotation)",
-                "max": "1",
-                "min": "-1",
-                "name": "mmf_dir",
-                "type": "int",
                 "unit": "-",
                 "value": null
             },
