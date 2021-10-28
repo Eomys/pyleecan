@@ -9,10 +9,10 @@ from multiprocessing import cpu_count
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.InputVoltage import InputVoltage
 from pyleecan.Classes.InputCurrent import InputCurrent
 
 from pyleecan.Functions.load import load
+from pyleecan.Methods.Simulation.Input import CURRENT_DIR_REF
 
 from pyleecan.definitions import DATA_DIR
 
@@ -38,6 +38,7 @@ param_list = [
 
 is_show_fig = True
 
+
 @pytest.mark.long_5s
 @pytest.mark.MagFEMM
 @pytest.mark.parametrize("param_dict", param_list)
@@ -48,7 +49,7 @@ def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
 
     p = machine.get_pole_pair_number()
 
-    current_dir_ref = InputVoltage().current_dir
+    current_dir_ref = CURRENT_DIR_REF
 
     # Check that resistance computation is correct
     resistance = machine.stator.comp_resistance_wind()

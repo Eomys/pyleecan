@@ -4277,7 +4277,7 @@
                 "name": "rot_dir",
                 "type": "int",
                 "unit": "-",
-                "value": -1
+                "value": null
             },
             {
                 "desc": "Initial angular position of the rotor at t=0",
@@ -4304,7 +4304,7 @@
                 "name": "current_dir",
                 "type": "int",
                 "unit": "-",
-                "value": -1
+                "value": null
             }
         ]
     },

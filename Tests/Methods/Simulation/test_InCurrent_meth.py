@@ -14,7 +14,6 @@ from numpy.testing import assert_array_almost_equal
 import matplotlib.pyplot as plt
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.InputVoltage import InputVoltage
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineDFIM import MachineDFIM
@@ -24,7 +23,7 @@ from pyleecan.Classes.OPdq import OPdq
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
-from pyleecan.Methods.Simulation.Input import InputError
+from pyleecan.Methods.Simulation.Input import CURRENT_DIR_REF, ROT_DIR_REF, InputError
 import pytest
 from Tests import save_plot_path as save_path
 
@@ -178,9 +177,9 @@ class Test_InCurrent_meth(object):
         p = Toyota_Prius.stator.get_pole_pair_number()
         time_exp = linspace(0, 60 / N0, Nt_tot, endpoint=False)
         felec = p * N0 / 60
-        current_dir = InputVoltage().current_dir
+        current_dir = CURRENT_DIR_REF
         assert current_dir == -1
-        rot_dir = InputVoltage().rot_dir
+        rot_dir = ROT_DIR_REF
         assert rot_dir == -1
         # mmf_dir is the rotation direction of the fundamental magnetic field
         mmf_dir = Toyota_Prius.stator.comp_mmf_dir(current_dir=current_dir)

@@ -8,6 +8,8 @@ from pyleecan.Classes.OPslip import OPslip
 from ....Functions.Electrical.dqh_transformation import dqh2n
 from ....Functions.Load.import_class import import_class
 
+from ....Methods.Simulation.Input import CURRENT_DIR_REF
+
 
 def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None):
     """Compute the winding unit magnetomotive force for given inputs
@@ -56,7 +58,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None):
     if current_dir is not None:
         if current_dir in [-1, 1]:
             # Enforce input current_dir otherwise keep it as default
-            input.current_dir = current_dir
+            input.current_dir = CURRENT_DIR_REF
         else:
             raise Exception("Cannot enforce current_dir other than +1 or -1")
 

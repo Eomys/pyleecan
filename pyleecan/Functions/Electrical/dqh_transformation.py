@@ -3,7 +3,8 @@ import numpy as np
 from SciDataTool import Data1D, DataTime
 
 from ...Functions.Winding.gen_phase_list import gen_name
-from ...Functions.Load.import_class import import_class
+
+from ...Methods.Simulation.Input import PHASE_DIR_REF
 
 
 def n2dqh_DataTime(data_n, is_dqh_rms=True, phase_dir=None):
@@ -355,9 +356,8 @@ def comp_Clarke_transform(n, is_inv=False, phase_dir=None):
     """
 
     if phase_dir is None:
-        # Take phase rotation direction from default current rotation direction in InputVoltage
-        InputVoltage = import_class("pyleecan.Classes", "InputVoltage")
-        phase_dir = InputVoltage().current_dir
+        # Take phase rotation direction from reference current rotation direction
+        phase_dir = PHASE_DIR_REF
     elif phase_dir not in [-1, 1]:
         raise Exception("Cannot enforce phase_dir other than +1 or -1")
 

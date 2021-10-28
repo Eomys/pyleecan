@@ -74,10 +74,10 @@ class InputVoltage(Input):
 
     def __init__(
         self,
-        rot_dir=-1,
+        rot_dir=None,
         angle_rotor_initial=0,
         PWM=None,
-        current_dir=-1,
+        current_dir=None,
         time=None,
         angle=None,
         Nt_tot=2048,

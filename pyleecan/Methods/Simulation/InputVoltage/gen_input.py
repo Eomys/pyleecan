@@ -1,15 +1,11 @@
-from SciDataTool import Norm_ref
-from numpy import ndarray, arange, searchsorted, ceil
+from numpy import arange, searchsorted
+
+from SciDataTool import DataTime
 
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
-from ....Classes.OPdq import OPdq
-from ....Classes.OPslip import OPslip
-from ....Methods.Simulation.Input import InputError
-from ....Functions.Electrical.dqh_transformation import n2dqh, n2dqh_DataTime
-from ....Functions.Winding.gen_phase_list import gen_name
 
-from SciDataTool import Data1D, DataLinspace, DataTime
+from ....Methods.Simulation.Input import CURRENT_DIR_REF, ROT_DIR_REF, InputError
 
 
 def gen_input(self):
@@ -53,14 +49,14 @@ def gen_input(self):
     if self.rot_dir not in [-1, 1]:
         # Enforce rotor rotation direction to -1
         logger.info("Enforcing rotor rotating direction to -1: clockwise rotation")
-        self.rot_dir = -1
+        self.rot_dir = ROT_DIR_REF
     outgeo.rot_dir = self.rot_dir
 
     # Set current rotation direction
     if self.current_dir not in [-1, 1]:
         # Enforce current rotation direction to 1
         logger.info("Enforcing current rotating direction to 1: clockwise rotation")
-        self.current_dir = 1
+        self.current_dir = CURRENT_DIR_REF
     outgeo.current_dir = self.current_dir
 
     # Init permutation array of stator currents
