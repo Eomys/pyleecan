@@ -29,11 +29,14 @@ def store(self, out_dict, axes_dict):
     # Store airgap flux as VectorField object
     # Axes for each airgap flux component
     axis_list = [Time, axes_dict["angle"], axes_dict["z"]]
+
     # Create VectorField with empty components
-    self.B = VectorField(
-        name="Airgap flux density",
-        symbol="B",
-    )
+    if "Br" in out_dict or "Bt" in out_dict or "Bz" in out_dict:
+        self.B = VectorField(
+            name="Airgap flux density",
+            symbol="B",
+        )
+
     # Radial flux component
     if "Br" in out_dict:
         self.B.components["radial"] = DataTime(
