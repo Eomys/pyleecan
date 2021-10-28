@@ -8,10 +8,10 @@ from pyleecan.Classes.OPslip import OPslip
 from ....Functions.Electrical.dqh_transformation import dqh2n
 from ....Functions.Load.import_class import import_class
 
-from ....Methods.Simulation.Input import CURRENT_DIR_REF
+from ....Methods.Simulation.Input import CURRENT_DIR_REF, PHASE_DIR_REF
 
 
-def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None):
+def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None, phase_dir=None):
     """Compute the winding unit magnetomotive force for given inputs
 
     Parameters
@@ -26,6 +26,8 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None):
         Stator current frequency to consider
     current_dir: int
         Stator current rotation direction +/-1
+    phase_dir: int
+        Stator winding phasor rotation direction +/-1
 
     Returns
     -------
@@ -49,18 +51,28 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None):
         # Get stator winding number of phases
         qs = self.winding.qs
 
+    if current_dir is not None:
+        if current_dir in [-1, 1]:
+            # Enforce input current_dir otherwise keep it as default
+            current_dir = CURRENT_DIR_REF
+        else:
+            raise Exception("Cannot enforce current_dir other than +1 or -1")
+
+    if phase_dir is not None:
+        if phase_dir in [-1, 1]:
+            # Enforce input phase_dir otherwise keep it as default
+            phase_dir = PHASE_DIR_REF
+        else:
+            raise Exception("Cannot enforce current_dir other than +1 or -1")
+
     if machine.is_synchronous():
         OPclass = OPdq
     else:
         OPclass = OPslip
     InputVoltage = import_class("pyleecan.Classes", "InputVoltage")
-    input = InputVoltage(Na_tot=Na, Nt_tot=Nt, OP=OPclass(felec=felec))
-    if current_dir is not None:
-        if current_dir in [-1, 1]:
-            # Enforce input current_dir otherwise keep it as default
-            input.current_dir = CURRENT_DIR_REF
-        else:
-            raise Exception("Cannot enforce current_dir other than +1 or -1")
+    input = InputVoltage(
+        Na_tot=Na, Nt_tot=Nt, OP=OPclass(felec=felec), current_dir=current_dir
+    )
 
     axes_dict = input.comp_axes(
         axes_list=["time", "angle", "phase_S", "phase_R"],
@@ -82,7 +94,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None):
     )
     Idq = zeros((angle_elec.size, 3))
     Idq[:, 0] = ones(angle_elec.size)
-    I = dqh2n(Idq, angle_elec, n=qs, is_n_rms=False)
+    I = dqh2n(Idq, angle_elec, n=qs, is_n_rms=False, phase_dir=phase_dir)
 
     # Compute unit mmf
     mmf_u = squeeze(dot(I, wf))

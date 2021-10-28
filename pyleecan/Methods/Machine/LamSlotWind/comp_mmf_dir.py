@@ -1,7 +1,7 @@
 from numpy import sign
 
 
-def comp_mmf_dir(self, current_dir=None, is_plot=False):
+def comp_mmf_dir(self, current_dir=None, phase_dir=None, is_plot=False):
     """Compute the rotation direction of the fundamental magnetomotive force induced by the winding
 
     Parameters
@@ -10,6 +10,8 @@ def comp_mmf_dir(self, current_dir=None, is_plot=False):
         A LamSlotWind object
     current_dir: int
         Stator current rotation direction +/-1
+    phase_dir: int
+        Stator winding phasor rotation direction +/-1
     is_plot: bool
         True to plot fft2 of stator MMF
 
@@ -22,7 +24,9 @@ def comp_mmf_dir(self, current_dir=None, is_plot=False):
 
     # Compute unit mmf
     # 20 points per pole over time and space is enough to capture rotating direction of fundamental mmf
-    MMF, _ = self.comp_mmf_unit(Nt=20 * p, Na=20 * p, current_dir=current_dir)
+    MMF, _ = self.comp_mmf_unit(
+        Nt=20 * p, Na=20 * p, current_dir=current_dir, phase_dir=phase_dir
+    )
 
     # Extract fundamental from unit mmf
     result_p = MMF.get_harmonics(1, "freqs>0", "wavenumber=" + str(p))
