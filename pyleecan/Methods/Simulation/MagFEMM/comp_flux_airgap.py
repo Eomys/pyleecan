@@ -140,7 +140,7 @@ def comp_flux_airgap(self, output, axes_dict):
         femm.closefemm()
         output.mag.internal.handler_list.remove(femm)
         # With parallelization
-        B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM_parallel(
+        B_elem, H_elem, mu_elem, A_node, meshFEMM, groups = self.solve_FEMM_parallel(
             femm,
             output,
             out_dict,
@@ -154,7 +154,7 @@ def comp_flux_airgap(self, output, axes_dict):
         )
     else:
         # Without parallelization
-        B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM(
+        B_elem, H_elem, mu_elem, A_node, meshFEMM, groups = self.solve_FEMM(
             femm,
             output,
             out_dict,
@@ -208,7 +208,20 @@ def comp_flux_airgap(self, output, axes_dict):
             unit="H/m",
         )
 
-        list_solution = [B_sol, H_sol, mu_sol]
+        indices_nodes = meshFEMM[0].node.indice
+        Indices_Nodes = Data1D(name="indice", values=indices_nodes, is_components=True)
+        axis_list_node = [Time, Indices_Nodes]
+
+        A_sol = build_solution_data(
+            field=A_node,
+            axis_list=axis_list_node,
+            name="Magnetic Potential Vector",
+            symbol="A_z",
+            unit="T.m",
+        )
+        A_sol.type_cell = "node"
+
+        list_solution = [B_sol, H_sol, mu_sol, A_sol]
 
         out_dict["meshsolution"] = build_meshsolution(
             list_solution=list_solution,

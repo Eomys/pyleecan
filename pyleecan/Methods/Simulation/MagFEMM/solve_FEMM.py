@@ -149,6 +149,7 @@ def solve_FEMM(
     mu_elem = None
     meshFEMM = None
     groups = None
+    A_node = None
 
     # Compute the data for each time step
     for ii in range(start_t, end_t):
@@ -219,7 +220,7 @@ def solve_FEMM(
         # Load mesh data & solution
         if self.is_get_meshsolution and (is_sliding_band or Nt == 1):
             # Get mesh data and magnetic quantities from .ans file
-            tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
+            tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpA, tmpgroups = self.get_meshsolution(
                 femm,
                 save_path,
                 j_t0=ii,
@@ -234,10 +235,12 @@ def solve_FEMM(
                 meshFEMM = [tmpmeshFEMM]
                 groups = tmpgroups
                 Nelem = meshFEMM[0].cell["triangle"].nb_cell
+                Nnode = meshFEMM[0].node.nb_node
                 Nt0 = end_t - start_t
                 B_elem = zeros([Nt0, Nelem, 3])
                 H_elem = zeros([Nt0, Nelem, 3])
                 mu_elem = zeros([Nt0, Nelem])
+                A_node = zeros([Nt0, Nnode])
 
             # Shift time index ii in case start_t is not 0 (parallelization)
             ii0 = ii - start_t
@@ -245,6 +248,7 @@ def solve_FEMM(
             B_elem[ii0, :, 0:2] = tmpB
             H_elem[ii0, :, 0:2] = tmpH
             mu_elem[ii0, :] = tmpmu
+            A_node[ii0, :] = tmpA
 
     # Shift to take into account stator position
     if self.angle_stator_shift != 0:
@@ -259,4 +263,4 @@ def solve_FEMM(
 
     out_dict["Rag"] = Rag
 
-    return B_elem, H_elem, mu_elem, meshFEMM, groups
+    return B_elem, H_elem, mu_elem, A_node, meshFEMM, groups
