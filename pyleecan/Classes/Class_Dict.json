@@ -4271,7 +4271,7 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputVoltage.csv",
         "properties": [
             {
-                "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
+                "desc": "Rotation direction of the rotor\u00c2\u00a0: rot_dir*N0, default value given by ROT_DIR_REF",
                 "max": "1",
                 "min": "-1",
                 "name": "rot_dir",
@@ -4298,7 +4298,16 @@
                 "value": null
             },
             {
-                "desc": "Rotation direction of the stator currents 1 trigo, -1 clockwise",
+                "desc": "Rotation direction of the stator phases\u00c2\u00a0: phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF",
+                "max": "1",
+                "min": "-1",
+                "name": "phase_dir",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Rotation direction of the stator currents\u00c2\u00a0: current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF",
                 "max": "1",
                 "min": "-1",
                 "name": "current_dir",
@@ -4367,7 +4376,8 @@
         "desc": "Abstract class for Look Up Table (LUT)",
         "is_internal": false,
         "methods": [
-            "get_param_dict"
+            "get_param_dict",
+            "get_phase_dir"
         ],
         "mother": "",
         "name": "LUT",
@@ -4407,6 +4417,15 @@
                 "min": "",
                 "name": "OP_matrix",
                 "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Rotation direction of the stator phases\u00c2\u00a0: phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF",
+                "max": "1",
+                "min": "-1",
+                "name": "phase_dir",
+                "type": "int",
                 "unit": "",
                 "value": null
             }
@@ -8269,12 +8288,21 @@
                 "value": "None"
             },
             {
-                "desc": "Phase permutation array to reverse rotating direction of stator mmf fundamental ",
-                "max": "",
-                "min": "",
-                "name": "perm_phases",
-                "type": "ndarray",
+                "desc": "Rotation direction of the stator phases\u00c2\u00a0: phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF",
+                "max": "1",
+                "min": "-1",
+                "name": "phase_dir",
+                "type": "int",
                 "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Rotation direction of the stator currents\u00c2\u00a0: current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF",
+                "max": "1",
+                "min": "-1",
+                "name": "current_dir",
+                "type": "int",
+                "unit": "-",
                 "value": null
             }
         ]
@@ -8433,7 +8461,7 @@
                 "value": null
             },
             {
-                "desc": "rotation direction of rotor(rot_dir = -1 by default, i.e. clockwise rotation)",
+                "desc": "Rotation direction of the rotor\u00c2\u00a0: rot_dir*N0, default value given by ROT_DIR_REF",
                 "max": "1",
                 "min": "-1",
                 "name": "rot_dir",
@@ -8501,15 +8529,6 @@
                 "min": "",
                 "name": "is_antiper_t_R",
                 "type": "bool",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "rotation direction of the stator currents(current_dir = -1 by default, i.e. clockwise rotation)",
-                "max": "1",
-                "min": "-1",
-                "name": "current_dir",
-                "type": "int",
                 "unit": "-",
                 "value": null
             }

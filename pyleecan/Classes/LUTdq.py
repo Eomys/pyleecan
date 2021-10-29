@@ -224,6 +224,7 @@ class LUTdq(LUT):
         L1=None,
         T1_ref=20,
         OP_matrix=None,
+        phase_dir=None,
         init_dict=None,
         init_str=None,
     ):
@@ -260,6 +261,8 @@ class LUTdq(LUT):
                 T1_ref = init_dict["T1_ref"]
             if "OP_matrix" in list(init_dict.keys()):
                 OP_matrix = init_dict["OP_matrix"]
+            if "phase_dir" in list(init_dict.keys()):
+                phase_dir = init_dict["phase_dir"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_dqh_mean = Phi_dqh_mean
         self.Tmag_ref = Tmag_ref
@@ -267,7 +270,9 @@ class LUTdq(LUT):
         self.Phi_wind = Phi_wind
         self.Phi_dqh_interp = Phi_dqh_interp
         # Call LUT init
-        super(LUTdq, self).__init__(R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix)
+        super(LUTdq, self).__init__(
+            R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix, phase_dir=phase_dir
+        )
         # The class is frozen (in LUT init), for now it's impossible to
         # add new properties
 

@@ -21,7 +21,7 @@ def get_Us_harm(self, is_dqh=True):
     else:
         # Rotate to DQH frame
         if is_dqh:
-            U = n2dqh_DataTime(self.Us_PWM, is_dqh_rms=True)
+            U = n2dqh_DataTime(self.Us_PWM, is_dqh_rms=True, phase_dir=self.phase_dir)
         else:
             U = self.Us_PWM
         # fft

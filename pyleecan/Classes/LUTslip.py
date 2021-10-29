@@ -109,6 +109,7 @@ class LUTslip(LUT):
         L1=None,
         T1_ref=20,
         OP_matrix=None,
+        phase_dir=None,
         init_dict=None,
         init_str=None,
     ):
@@ -145,6 +146,8 @@ class LUTslip(LUT):
                 T1_ref = init_dict["T1_ref"]
             if "OP_matrix" in list(init_dict.keys()):
                 OP_matrix = init_dict["OP_matrix"]
+            if "phase_dir" in list(init_dict.keys()):
+                phase_dir = init_dict["phase_dir"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_m = Phi_m
         self.I_m = I_m
@@ -152,7 +155,9 @@ class LUTslip(LUT):
         self.R2 = R2
         self.L2 = L2
         # Call LUT init
-        super(LUTslip, self).__init__(R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix)
+        super(LUTslip, self).__init__(
+            R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix, phase_dir=phase_dir
+        )
         # The class is frozen (in LUT init), for now it's impossible to
         # add new properties
 

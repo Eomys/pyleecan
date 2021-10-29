@@ -95,6 +95,7 @@ class InputCurrent(InputVoltage):
         rot_dir=None,
         angle_rotor_initial=0,
         PWM=None,
+        phase_dir=None,
         current_dir=None,
         time=None,
         angle=None,
@@ -130,6 +131,8 @@ class InputCurrent(InputVoltage):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "PWM" in list(init_dict.keys()):
                 PWM = init_dict["PWM"]
+            if "phase_dir" in list(init_dict.keys()):
+                phase_dir = init_dict["phase_dir"]
             if "current_dir" in list(init_dict.keys()):
                 current_dir = init_dict["current_dir"]
             if "time" in list(init_dict.keys()):
@@ -152,6 +155,7 @@ class InputCurrent(InputVoltage):
             rot_dir=rot_dir,
             angle_rotor_initial=angle_rotor_initial,
             PWM=PWM,
+            phase_dir=phase_dir,
             current_dir=current_dir,
             time=time,
             angle=angle,

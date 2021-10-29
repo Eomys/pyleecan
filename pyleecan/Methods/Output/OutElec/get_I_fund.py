@@ -27,7 +27,7 @@ def get_I_fund(self, Time=None):
     stator_label = "phase_" + self.parent.simu.machine.stator.get_label()
     felec = self.OP.get_felec()
     Phase = self.axes_dict[stator_label]
-    perm_phases = self.perm_phases
+    phase_dir = self.phase_dir
 
     if self.Is is None:
         I_dict = self.OP.get_Id_Iq()
@@ -39,7 +39,7 @@ def get_I_fund(self, Time=None):
             Is_dqh[:, 1] = Iq
 
             # Get stator current function of time
-            Is = dqh2n(Is_dqh, angle_elec, n=qs, is_n_rms=False)
+            Is = dqh2n(Is_dqh, angle_elec, n=qs, is_n_rms=False, phase_dir=phase_dir)
         else:
             Is = zeros((angle_elec.size, qs))
 
@@ -48,7 +48,7 @@ def get_I_fund(self, Time=None):
             unit="A",
             symbol="I_s",
             axes=[Time, Phase],
-            values=Is[:, perm_phases],
+            values=Is,
         )
 
     else:
@@ -56,7 +56,7 @@ def get_I_fund(self, Time=None):
         Is_val = result[self.Is.symbol]
         freqs = result["freqs"]
         ifund = where(isclose(freqs, felec))
-        Is_fund = Is_val[ifund, perm_phases]
+        Is_fund = Is_val[ifund]
 
         Freq = Data1D(
             name="freqs",

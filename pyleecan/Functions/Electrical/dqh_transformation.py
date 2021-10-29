@@ -4,8 +4,6 @@ from SciDataTool import Data1D, DataTime
 
 from ...Functions.Winding.gen_phase_list import gen_name
 
-from ...Methods.Simulation.Input import PHASE_DIR_REF
-
 
 def n2dqh_DataTime(data_n, is_dqh_rms=True, phase_dir=None):
     """n phases to dqh equivalent coordinate transformation of DataTime object
@@ -18,7 +16,6 @@ def n2dqh_DataTime(data_n, is_dqh_rms=True, phase_dir=None):
         True to return dq currents in rms value (Pyleecan convention), False to return peak values
     phase_dir: int
         direction of phase distribution: +/-1 (-1 clockwise) to enforce
-        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -26,15 +23,9 @@ def n2dqh_DataTime(data_n, is_dqh_rms=True, phase_dir=None):
         data object transformed in dqh frame
 
     """
+    # Check if input data object is compliant with dqh transformation
+    check_DataTime(data_n)
 
-    if not isinstance(data_n, DataTime):
-        raise Exception("Input object should be a DataTime object")
-    if len(data_n.axes) != 2:
-        raise Exception("DataTime object should contain two axes: time and phase")
-    if data_n.axes[0].name != "time":
-        raise Exception("DataTime object should contain time as first axis")
-    if data_n.axes[1].name != "phase":
-        raise Exception("DataTime object should contain phase as second axis")
     if "angle_elec" not in data_n.axes[0].normalizations:
         raise Exception("Time axis should contain angle_elec normalization")
 
@@ -92,7 +83,6 @@ def dqh2n_DataTime(data_dqh, n, is_n_rms=False, phase_dir=None):
         True to return n currents in rms value, False to return peak values (Pyleecan convention)
     phase_dir: int
         direction of phase distribution: +/-1 (-1 clockwise) to enforce
-        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -100,14 +90,9 @@ def dqh2n_DataTime(data_dqh, n, is_n_rms=False, phase_dir=None):
         data object containing values over time and phase axes
     """
 
-    if not isinstance(data_dqh, DataTime):
-        raise Exception("Input object should be a DataTime object")
-    if len(data_dqh.axes) != 2:
-        raise Exception("DataTime object should contain two axes: time and phase")
-    if data_dqh.axes[0].name != "time":
-        raise Exception("DataTime object should contain time as first axis")
-    if data_dqh.axes[1].name != "phase":
-        raise Exception("DataTime object should contain phase as second axis")
+    # Check if input data object is compliant with dqh transformation
+    check_DataTime(data_dqh)
+
     if "angle_elec" not in data_dqh.axes[0].normalizations:
         raise Exception("Time axis should contain angle_elec normalization")
 
@@ -165,7 +150,6 @@ def n2dqh(Z_n, angle_elec, is_dqh_rms=True, phase_dir=None):
         True to return dq currents in rms value (Pyleecan convention), False to return peak values
     phase_dir: int
         direction of phase distribution: +/-1 (-1 clockwise) to enforce
-        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -197,7 +181,6 @@ def dqh2n(Z_dqh, angle_elec, n, is_n_rms=False, phase_dir=None):
         True to return n currents in rms value, False to return peak values (Pyleecan convention)
     phase_dir: int
         direction of phase distribution: +/-1 (-1 clockwise) to enforce
-        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -225,7 +208,6 @@ def abc2n(Z_abc, n=3, phase_dir=None):
         number of phases
     phase_dir: int
         direction of phase distribution: +/-1 (-1 clockwise) to enforce
-        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -251,7 +233,6 @@ def n2abc(Z_n, phase_dir=None):
         matrix (N x n) of n phase values
     phase_dir: int
         direction of phase distribution: +/-1 (-1 clockwise) to enforce
-        (it can be different from current direction given by slope of angle_elec)
 
     Returns
     -------
@@ -347,7 +328,7 @@ def comp_Clarke_transform(n, is_inv=False, phase_dir=None):
         False to return Clarke transform, True to return inverse of Clarke transform
     phase_dir: int
         direction of phase distribution: +/-1 (-1 clockwise) to enforce
-        (it can be different from current direction given by slope of angle_elec)
+
 
     Returns
     -------
@@ -355,10 +336,7 @@ def comp_Clarke_transform(n, is_inv=False, phase_dir=None):
         Clarke transform matrix of size (n, 3)
     """
 
-    if phase_dir is None:
-        # Take phase rotation direction from reference current rotation direction
-        phase_dir = PHASE_DIR_REF
-    elif phase_dir not in [-1, 1]:
+    if phase_dir not in [-1, 1]:
         raise Exception("Cannot enforce phase_dir other than +1 or -1")
 
     # Phasor depending on fundamental field rotation direction
@@ -371,3 +349,79 @@ def comp_Clarke_transform(n, is_inv=False, phase_dir=None):
         mat = 2 / n * np.column_stack((np.cos(phasor), -np.sin(phasor), np.ones(n) / 2))
 
     return mat
+
+
+def get_phase_dir_DataTime(data_n):
+    """Get the phase rotating direction of input n-phase DataTime object
+
+    Parameters
+    ----------
+    data_n : DataTime
+        data object containing values over time and phase axes
+
+    Returns
+    -------
+    phase_dir : int
+        rotating direction of phases +/-1
+    """
+
+    # Check if input data object is compliant with dqh transformation
+    check_DataTime(data_n)
+
+    # Extract values from DataTime
+    Z_n = data_n.get_along("time[oneperiod]", "phase")[data_n.symbol]
+
+    # Get phase direction
+    phase_dir = get_phase_dir(Z_n)
+
+    return phase_dir
+
+
+def get_phase_dir(Z_n):
+    """Get the phase rotating direction of input n-phase quantity
+
+    Parameters
+    ----------
+    Z_n : ndarray
+        matrix (N x n) of n phase values
+
+    Returns
+    ----------
+    phase_dir : int
+        rotating direction of phases +/-1
+    """
+
+    # Get number of time steps and phase
+    N, n = Z_n.shape
+
+    # Shift first phase of +/- Nt/qs
+    Z_n_p = np.roll(Z_n[:, 0], shift=int(N / n))
+    Z_n_n = np.roll(Z_n[:, 0], shift=-int(N / n))
+
+    # Find which shifted phase is closer to second phase
+    is_trigo = np.sum(np.abs(Z_n_p - Z_n[:, 1])) > np.sum(np.abs(Z_n_n - Z_n[:, 1]))
+
+    # phase_dir=+/-1
+    phase_dir = int((-1) ** int(is_trigo))
+
+    return phase_dir
+
+
+def check_DataTime(data):
+    """Check if input data object is compliant with dqh transformation
+
+    Parameters
+    ----------
+    data : Data
+        data object to check
+
+    """
+
+    if not isinstance(data, DataTime):
+        raise Exception("Input object should be a DataTime object")
+    if len(data.axes) != 2:
+        raise Exception("DataTime object should contain two axes: time and phase")
+    if data.axes[0].name != "time":
+        raise Exception("DataTime object should contain time as first axis")
+    if data.axes[1].name != "phase":
+        raise Exception("DataTime object should contain phase as second axis")

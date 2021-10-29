@@ -60,7 +60,9 @@ def comp_fluxlinkage(self, machine):
 
     # Post-Process
     stator_label = machine.stator.get_label()
-    Phidqh = n2dqh_DataTime(out_fl.mag.Phi_wind[stator_label])
+    Phidqh = n2dqh_DataTime(
+        out_fl.mag.Phi_wind[stator_label], phase_dir=out_fl.elec.phase_dir
+    )
     Phi_d_mean = float(Phidqh.get_along("time=mean", "phase[0]")[Phidqh.symbol])
 
     return Phi_d_mean

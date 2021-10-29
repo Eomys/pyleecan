@@ -5,7 +5,12 @@ from SciDataTool import DataTime
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 
-from ....Methods.Simulation.Input import CURRENT_DIR_REF, ROT_DIR_REF, InputError
+from ....Methods.Simulation.Input import (
+    CURRENT_DIR_REF,
+    ROT_DIR_REF,
+    InputError,
+    PHASE_DIR_REF,
+)
 
 
 def gen_input(self):
@@ -46,31 +51,37 @@ def gen_input(self):
     outelec.OP = self.OP
 
     # Set rotor rotation direction
-    if self.rot_dir not in [-1, 1]:
-        # Enforce rotor rotation direction to -1
-        logger.info("Enforcing rotor rotating direction to -1: clockwise rotation")
+    if self.rot_dir is None:
         self.rot_dir = ROT_DIR_REF
+    elif self.rot_dir not in [-1, 1]:
+        raise Exception("Cannot enforce rot_dir other than +1 or -1")
     outgeo.rot_dir = self.rot_dir
 
     # Set current rotation direction
-    if self.current_dir not in [-1, 1]:
-        # Enforce current rotation direction to 1
-        logger.info("Enforcing current rotating direction to 1: clockwise rotation")
+    if self.current_dir is None:
         self.current_dir = CURRENT_DIR_REF
-    outgeo.current_dir = self.current_dir
+    elif self.current_dir not in [-1, 1]:
+        raise Exception("Cannot enforce current_dir other than +1 or -1")
+    outelec.current_dir = self.current_dir
 
-    # Init permutation array of stator currents
-    qs = simu.machine.stator.winding.qs
-    perm_phases = arange(qs)
+    # Set phase rotation direction
+    if self.phase_dir is None:
+        self.phase_dir = PHASE_DIR_REF
+    elif self.phase_dir not in [-1, 1]:
+        raise Exception("Cannot enforce phase_dir other than +1 or -1")
+    outelec.phase_dir = self.phase_dir
+
     # Check if stator magnetomotive force direction is consistent with rotor direction
-    mmf_dir = simu.machine.stator.comp_mmf_dir(current_dir=self.current_dir)
+    mmf_dir = simu.machine.stator.comp_mmf_dir(
+        current_dir=self.current_dir, phase_dir=self.phase_dir
+    )
     if mmf_dir != -self.rot_dir:
-        # Switch two last phases to reverse rotation direction
-        perm_phases[-1], perm_phases[-2] = perm_phases[-2], perm_phases[-1]
+        # Switch phase direction to reverse rotation direction
+        self.phase_dir = -self.phase_dir
         logger.info(
             "Reverse the two last stator current phases to reverse rotation direction of stator mmf fundamental according to rotor direction"
         )
-    outelec.perm_phases = perm_phases
+    outelec.phase_dir = self.phase_dir
 
     # Set rotor initial angular position
     if self.angle_rotor_initial in [0, None]:

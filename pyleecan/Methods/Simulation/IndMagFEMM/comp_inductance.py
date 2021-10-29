@@ -61,7 +61,9 @@ def comp_inductance(self, machine, OP_ref):
 
     # Post-Process
     stator_label = machine.stator.get_label()
-    Phidqh = n2dqh_DataTime(out_ind.mag.Phi_wind[stator_label])
+    Phidqh = n2dqh_DataTime(
+        out_ind.mag.Phi_wind[stator_label], phase_dir=out_ind.elec.phase_dir
+    )
     Phi_dqh_mean = Phidqh.get_along("time=mean", "phase")[Phidqh.symbol]
 
     return (Phi_dqh_mean[0], Phi_dqh_mean[1])

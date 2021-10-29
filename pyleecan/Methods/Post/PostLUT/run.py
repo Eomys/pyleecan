@@ -19,7 +19,7 @@ def run(self, out):
 
     if out.simu.machine.is_synchronous():
         # Init LUT object
-        LUT = LUTdq()
+        LUT = LUTdq(phase_dir=out.elec.phase_dir)
 
         XOutput = import_class("pyleecan.Classes", "XOutput")
 
@@ -43,14 +43,8 @@ def run(self, out):
             if "Phi_{wind}" in out.keys():
                 LUT.Phi_wind = out["Phi_{wind}"].result
             elif out.output_list is not None:
-                LUT.Phi_wind = [o.mag.Phi_wind_stator for o in out.output_list]
-
-            # Find Id=Iq=0
-            OP_list = LUT.OP_matrix[:, 1:3].tolist()
-            if [0, 0] in OP_list:
-                ii = OP_list.index([0, 0])
-            else:
-                raise Exception("Operating Point Id=Iq=0 is required to compute LUT")
+                stator_label = out.simu.machine.stator.get_label()
+                LUT.Phi_wind = [o.mag.Phi_wind[stator_label] for o in out.output_list]
 
             if self.is_save_LUT:
                 # Save LUT object

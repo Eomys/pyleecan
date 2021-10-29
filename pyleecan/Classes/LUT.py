@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     get_param_dict = error
 
+try:
+    from ..Methods.Simulation.LUT.get_phase_dir import get_phase_dir
+except ImportError as error:
+    get_phase_dir = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -32,6 +37,7 @@ class LUT(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.LUT.get_param_dict
     if isinstance(get_param_dict, ImportError):
         get_param_dict = property(
@@ -43,6 +49,15 @@ class LUT(FrozenClass):
         )
     else:
         get_param_dict = get_param_dict
+    # cf Methods.Simulation.LUT.get_phase_dir
+    if isinstance(get_phase_dir, ImportError):
+        get_phase_dir = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LUT method get_phase_dir: " + str(get_phase_dir))
+            )
+        )
+    else:
+        get_phase_dir = get_phase_dir
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -50,7 +65,14 @@ class LUT(FrozenClass):
     get_logger = get_logger
 
     def __init__(
-        self, R1=None, L1=None, T1_ref=20, OP_matrix=None, init_dict=None, init_str=None
+        self,
+        R1=None,
+        L1=None,
+        T1_ref=20,
+        OP_matrix=None,
+        phase_dir=None,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -75,12 +97,15 @@ class LUT(FrozenClass):
                 T1_ref = init_dict["T1_ref"]
             if "OP_matrix" in list(init_dict.keys()):
                 OP_matrix = init_dict["OP_matrix"]
+            if "phase_dir" in list(init_dict.keys()):
+                phase_dir = init_dict["phase_dir"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.R1 = R1
         self.L1 = L1
         self.T1_ref = T1_ref
         self.OP_matrix = OP_matrix
+        self.phase_dir = phase_dir
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -103,6 +128,7 @@ class LUT(FrozenClass):
             + linesep
             + linesep
         )
+        LUT_str += "phase_dir = " + str(self.phase_dir) + linesep
         return LUT_str
 
     def __eq__(self, other):
@@ -117,6 +143,8 @@ class LUT(FrozenClass):
         if other.T1_ref != self.T1_ref:
             return False
         if not array_equal(other.OP_matrix, self.OP_matrix):
+            return False
+        if other.phase_dir != self.phase_dir:
             return False
         return True
 
@@ -136,6 +164,8 @@ class LUT(FrozenClass):
             diff_list.append(name + ".T1_ref")
         if not array_equal(other.OP_matrix, self.OP_matrix):
             diff_list.append(name + ".OP_matrix")
+        if other._phase_dir != self._phase_dir:
+            diff_list.append(name + ".phase_dir")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -148,6 +178,7 @@ class LUT(FrozenClass):
         S += getsizeof(self.L1)
         S += getsizeof(self.T1_ref)
         S += getsizeof(self.OP_matrix)
+        S += getsizeof(self.phase_dir)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -178,6 +209,7 @@ class LUT(FrozenClass):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
+        LUT_dict["phase_dir"] = self.phase_dir
         # The class name is added to the dict for deserialisation purpose
         LUT_dict["__class__"] = "LUT"
         return LUT_dict
@@ -189,6 +221,7 @@ class LUT(FrozenClass):
         self.L1 = None
         self.T1_ref = None
         self.OP_matrix = None
+        self.phase_dir = None
 
     def _get_R1(self):
         """getter of R1"""
@@ -266,5 +299,25 @@ class LUT(FrozenClass):
         doc=u"""Array of operating point values of size (N,5) with N the number of operating points (Speed, Id, Iq, Torque, Power). OP values are set to nan if they are not given.
 
         :Type: ndarray
+        """,
+    )
+
+    def _get_phase_dir(self):
+        """getter of phase_dir"""
+        return self._phase_dir
+
+    def _set_phase_dir(self, value):
+        """setter of phase_dir"""
+        check_var("phase_dir", value, "int", Vmin=-1, Vmax=1)
+        self._phase_dir = value
+
+    phase_dir = property(
+        fget=_get_phase_dir,
+        fset=_set_phase_dir,
+        doc=u"""Rotation direction of the stator phases : phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF
+
+        :Type: int
+        :min: -1
+        :max: 1
         """,
     )

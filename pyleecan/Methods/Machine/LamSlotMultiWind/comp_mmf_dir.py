@@ -26,6 +26,6 @@ def comp_mmf_dir(self, current_dir=None, phase_dir=None, is_plot=False):
     # Call method of LamSlotWind
     LamSlotWind = import_class("pyleecan.Classes", "LamSlotWind")
 
-    rot_dir = LamSlotWind.comp_mmf_dir(self, current_dir, is_plot)
+    rot_dir = LamSlotWind.comp_mmf_dir(self, current_dir, phase_dir, is_plot)
 
     return rot_dir

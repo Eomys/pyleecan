@@ -8,7 +8,7 @@ from pyleecan.Classes.OPslip import OPslip
 from ....Functions.Electrical.dqh_transformation import dqh2n
 from ....Functions.Load.import_class import import_class
 
-from ....Methods.Simulation.Input import CURRENT_DIR_REF, PHASE_DIR_REF
+from ....Methods.Simulation.Input import CURRENT_DIR_REF, PHASE_DIR_REF, ROT_DIR_REF
 
 
 def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None, phase_dir=None):
@@ -51,19 +51,15 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None, phase_dir=N
         # Get stator winding number of phases
         qs = self.winding.qs
 
-    if current_dir is not None:
-        if current_dir in [-1, 1]:
-            # Enforce input current_dir otherwise keep it as default
-            current_dir = CURRENT_DIR_REF
-        else:
-            raise Exception("Cannot enforce current_dir other than +1 or -1")
+    if current_dir is None:
+        current_dir = CURRENT_DIR_REF
+    elif current_dir not in [-1, 1]:
+        raise Exception("Cannot enforce current_dir other than +1 or -1")
 
-    if phase_dir is not None:
-        if phase_dir in [-1, 1]:
-            # Enforce input phase_dir otherwise keep it as default
-            phase_dir = PHASE_DIR_REF
-        else:
-            raise Exception("Cannot enforce current_dir other than +1 or -1")
+    if phase_dir is None:
+        phase_dir = PHASE_DIR_REF
+    elif phase_dir not in [-1, 1]:
+        raise Exception("Cannot enforce phase_dir other than +1 or -1")
 
     if machine.is_synchronous():
         OPclass = OPdq
@@ -71,7 +67,11 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None, phase_dir=N
         OPclass = OPslip
     InputVoltage = import_class("pyleecan.Classes", "InputVoltage")
     input = InputVoltage(
-        Na_tot=Na, Nt_tot=Nt, OP=OPclass(felec=felec), current_dir=current_dir
+        Na_tot=Na,
+        Nt_tot=Nt,
+        OP=OPclass(felec=felec),
+        current_dir=current_dir,
+        rot_dir=ROT_DIR_REF,  # rotor rotating dir has not impact on unit mmf
     )
 
     axes_dict = input.comp_axes(

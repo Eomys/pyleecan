@@ -7,7 +7,7 @@
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import set_array, check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.copy import copy
@@ -53,7 +53,6 @@ except ImportError as error:
     store = error
 
 
-from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .OutInternal import OutInternal
 from .OP import OP
@@ -149,7 +148,8 @@ class OutElec(FrozenClass):
         Pem_av_ref=None,
         Tem_av_ref=None,
         Is_harm=None,
-        perm_phases=None,
+        phase_dir=None,
+        current_dir=None,
         init_dict=None,
         init_str=None,
     ):
@@ -194,8 +194,10 @@ class OutElec(FrozenClass):
                 Tem_av_ref = init_dict["Tem_av_ref"]
             if "Is_harm" in list(init_dict.keys()):
                 Is_harm = init_dict["Is_harm"]
-            if "perm_phases" in list(init_dict.keys()):
-                perm_phases = init_dict["perm_phases"]
+            if "phase_dir" in list(init_dict.keys()):
+                phase_dir = init_dict["phase_dir"]
+            if "current_dir" in list(init_dict.keys()):
+                current_dir = init_dict["current_dir"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -211,7 +213,8 @@ class OutElec(FrozenClass):
         self.Pem_av_ref = Pem_av_ref
         self.Tem_av_ref = Tem_av_ref
         self.Is_harm = Is_harm
-        self.perm_phases = perm_phases
+        self.phase_dir = phase_dir
+        self.current_dir = current_dir
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -247,13 +250,8 @@ class OutElec(FrozenClass):
         OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         OutElec_str += "Is_harm = " + str(self.Is_harm) + linesep + linesep
-        OutElec_str += (
-            "perm_phases = "
-            + linesep
-            + str(self.perm_phases).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutElec_str += "phase_dir = " + str(self.phase_dir) + linesep
+        OutElec_str += "current_dir = " + str(self.current_dir) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -287,7 +285,9 @@ class OutElec(FrozenClass):
             return False
         if other.Is_harm != self.Is_harm:
             return False
-        if not array_equal(other.perm_phases, self.perm_phases):
+        if other.phase_dir != self.phase_dir:
+            return False
+        if other.current_dir != self.current_dir:
             return False
         return True
 
@@ -370,8 +370,10 @@ class OutElec(FrozenClass):
             diff_list.extend(
                 self.Is_harm.compare(other.Is_harm, name=name + ".Is_harm")
             )
-        if not array_equal(other.perm_phases, self.perm_phases):
-            diff_list.append(name + ".perm_phases")
+        if other._phase_dir != self._phase_dir:
+            diff_list.append(name + ".phase_dir")
+        if other._current_dir != self._current_dir:
+            diff_list.append(name + ".current_dir")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -395,7 +397,8 @@ class OutElec(FrozenClass):
         S += getsizeof(self.Pem_av_ref)
         S += getsizeof(self.Tem_av_ref)
         S += getsizeof(self.Is_harm)
-        S += getsizeof(self.perm_phases)
+        S += getsizeof(self.phase_dir)
+        S += getsizeof(self.current_dir)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -484,19 +487,8 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        if self.perm_phases is None:
-            OutElec_dict["perm_phases"] = None
-        else:
-            if type_handle_ndarray == 0:
-                OutElec_dict["perm_phases"] = self.perm_phases.tolist()
-            elif type_handle_ndarray == 1:
-                OutElec_dict["perm_phases"] = self.perm_phases.copy()
-            elif type_handle_ndarray == 2:
-                OutElec_dict["perm_phases"] = self.perm_phases
-            else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
+        OutElec_dict["phase_dir"] = self.phase_dir
+        OutElec_dict["current_dir"] = self.current_dir
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -519,7 +511,8 @@ class OutElec(FrozenClass):
         self.Pem_av_ref = None
         self.Tem_av_ref = None
         self.Is_harm = None
-        self.perm_phases = None
+        self.phase_dir = None
+        self.current_dir = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -835,27 +828,42 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_perm_phases(self):
-        """getter of perm_phases"""
-        return self._perm_phases
+    def _get_phase_dir(self):
+        """getter of phase_dir"""
+        return self._phase_dir
 
-    def _set_perm_phases(self, value):
-        """setter of perm_phases"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("perm_phases", value, "ndarray")
-        self._perm_phases = value
+    def _set_phase_dir(self, value):
+        """setter of phase_dir"""
+        check_var("phase_dir", value, "int", Vmin=-1, Vmax=1)
+        self._phase_dir = value
 
-    perm_phases = property(
-        fget=_get_perm_phases,
-        fset=_set_perm_phases,
-        doc=u"""Phase permutation array to reverse rotating direction of stator mmf fundamental 
+    phase_dir = property(
+        fget=_get_phase_dir,
+        fset=_set_phase_dir,
+        doc=u"""Rotation direction of the stator phases : phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF
 
-        :Type: ndarray
+        :Type: int
+        :min: -1
+        :max: 1
+        """,
+    )
+
+    def _get_current_dir(self):
+        """getter of current_dir"""
+        return self._current_dir
+
+    def _set_current_dir(self, value):
+        """setter of current_dir"""
+        check_var("current_dir", value, "int", Vmin=-1, Vmax=1)
+        self._current_dir = value
+
+    current_dir = property(
+        fget=_get_current_dir,
+        fset=_set_current_dir,
+        doc=u"""Rotation direction of the stator currents : current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF
+
+        :Type: int
+        :min: -1
+        :max: 1
         """,
     )

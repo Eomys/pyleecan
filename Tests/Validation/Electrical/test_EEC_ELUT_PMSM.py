@@ -22,7 +22,10 @@ from pyleecan.Classes.EEC_PMSM import EEC_PMSM
 
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
-from pyleecan.Functions.Electrical.dqh_transformation import n2dqh_DataTime
+from pyleecan.Functions.Electrical.dqh_transformation import (
+    get_phase_dir_DataTime,
+    n2dqh_DataTime,
+)
 from pyleecan.definitions import DATA_DIR
 
 from Tests import save_validation_path as save_path
@@ -97,6 +100,9 @@ def test_EEC_ELUT_PMSM_calc(n_Id=5, n_Iq=5):
 
     ELUT = out.simu.var_simu.postproc_list[0].LUT
 
+    # Check phase_dir calculation
+    assert ELUT.get_phase_dir() == get_phase_dir_DataTime(ELUT.Phi_wind[0])
+
     # Check flux linkage dqh values
     Phi_dqh_mean = ELUT.get_Phidqh_mean()
     OP_list = OP_matrix[:, 1:3].tolist()
@@ -104,6 +110,7 @@ def test_EEC_ELUT_PMSM_calc(n_Id=5, n_Iq=5):
     Phi_dqh0 = n2dqh_DataTime(
         ELUT.Phi_wind[ii],
         is_dqh_rms=True,
+        phase_dir=ELUT.get_phase_dir(),
     )
     Phi_dqh0_mean = Phi_dqh0.get_along("time=mean", "phase")[Phi_dqh0.symbol]
     assert_almost_equal(Phi_dqh0_mean, Phi_dqh_mean[ii, :], decimal=20)
@@ -185,12 +192,26 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
         "is_show_fig": is_show_fig,
     }
 
-    # Plot torque map
+    # Plot torque maps
     plot_3D(
         Zdata=Tem_interp.reshape((n_Iq, n_Id)).T,
         zlabel="Average Torque [N.m]",
         title="Torque map in dq plane",
         save_path=join(save_path, name + "_torque_map.png"),
+        **dict_map,
+    )
+    plot_3D(
+        Zdata=Tem_sync.reshape((n_Iq, n_Id)).T,
+        zlabel="Synchrnous Torque [N.m]",
+        title="Torque map in dq plane",
+        save_path=join(save_path, name + "_torque_sync_map.png"),
+        **dict_map,
+    )
+    plot_3D(
+        Zdata=Tem_rel.reshape((n_Iq, n_Id)).T,
+        zlabel="Reluctant Torque [N.m]",
+        title="Torque map in dq plane",
+        save_path=join(save_path, name + "_torque_rel_map.png"),
         **dict_map,
     )
 
@@ -217,7 +238,7 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
     I_max = 250 / np.sqrt(2)
     Imax_interp = np.sqrt(Id ** 2 + Iq ** 2)
     # Maximum voltage [Vrms]
-    U_max = 300
+    U_max = 200
     # Speed vector
     Nspeed = 50
     N0_min = 50
@@ -270,9 +291,6 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
 
                 # Finding index of operating point giving lowest current
                 jmax = np.argmin(np.abs(Imax_interp[j0]))
-
-                # print(Id_interp[j0][jmax])
-                # print(Iq_interp[j0][jmax])
 
             else:
                 # Finding indices of operating points satisfying Vmax and XImax(i) voltage and torque limitations
@@ -338,6 +356,8 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
         # save_path=join(save_path, name + "_voltage_MTPA_OP" + str(i_load) + ".png"),
         # is_show_fig=is_show_fig,
     )
+
+    pass
 
 
 @pytest.mark.long_5s
