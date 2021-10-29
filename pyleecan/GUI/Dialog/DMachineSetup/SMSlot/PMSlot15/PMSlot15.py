@@ -50,6 +50,7 @@ class PMSlot15(Gen_PMSlot15, QWidget):
             self.unit_H0,
             self.unit_Hmag,
             self.unit_Rtopm,
+            self.unit_Wmag,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")

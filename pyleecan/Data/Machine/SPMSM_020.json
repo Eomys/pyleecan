@@ -921,7 +921,7 @@
             "conductor": {
                 "Kwoh": null,
                 "Nwppc": 1,
-                "Wins_cond": 0,
+                "Wins_cond": 0.000455,
                 "Wins_wire": 0.0,
                 "Wwire": 0.000455,
                 "__class__": "CondType12",

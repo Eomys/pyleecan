@@ -36,7 +36,8 @@ class Ui_PHoleM57(object):
         self.img_slot.setPixmap(
             QPixmap(u":/images/images/MachineSetup/SMHoleMag/HoleM57.png")
         )
-        self.img_slot.setScaledContents(True)
+        self.img_slot.setScaledContents(False)
+        self.img_slot.setAlignment(Qt.AlignCenter)
 
         self.horizontalLayout.addWidget(self.img_slot)
 

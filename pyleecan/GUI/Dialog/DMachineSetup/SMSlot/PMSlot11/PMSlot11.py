@@ -12,6 +12,9 @@ from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
+# Unit combobox
+RAD_ID = 0
+
 
 class PMSlot11(Gen_PMSlot11, QWidget):
     """Page to set the Slot Magnet Type 11"""
@@ -75,7 +78,10 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self : PMSlot11
             A PMSlot11 object
         """
-        self.slot.W0 = self.lf_W0.value()
+        if self.c_W0_unit.currentIndex() == RAD_ID:
+            self.slot.W0 = self.lf_W0.value()
+        else:
+            self.slot.W0 = self.lf_W0.value() * pi / 180
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -88,7 +94,10 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self : PMSlot11
             A PMSlot11 object
         """
-        self.slot.Wmag = self.lf_Wmag.value()
+        if self.c_Wmag_unit.currentIndex() == RAD_ID:
+            self.slot.Wmag = self.lf_Wmag.value()
+        else:
+            self.slot.Wmag = self.lf_Wmag.value() * pi / 180
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

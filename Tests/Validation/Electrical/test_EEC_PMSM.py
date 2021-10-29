@@ -86,3 +86,4 @@ def test_EEC_PMSM():
 # To run it without pytest
 if __name__ == "__main__":
     out, out2 = test_EEC_PMSM()
+    print("Done")

@@ -19,3 +19,5 @@ def check(self):
     """
     if self.W0 < self.Wmag:
         raise SlotCheckError("You must have Wmag <= W0")
+    if self.Wmag >= 2 * pi / self.Zs:
+        raise SlotCheckError("You must have Wmag < pi/p (use ring magnet instead)")

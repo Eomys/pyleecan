@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*
 
-from numpy import real, imag
-
 
 def is_inside(self, Z, if_online=False):
     """Determine if a given point is inside the surface.
@@ -24,9 +22,8 @@ def is_inside(self, Z, if_online=False):
         False : the point is outside the surface
     """
 
-    eps = (
-        0.001  # Half of the width of the branch where we will check is there is a point
-    )
+    # Half of the width of the branch where we will check is there is a point
+    eps = 0.0001
 
     # Recovering the point cloud that compose the surface
     line_list = self.get_lines()
@@ -34,11 +31,11 @@ def is_inside(self, Z, if_online=False):
     pointcloud = list()
     for line in line_list:
         line_len = line.comp_length()
-        pointcloud.extend(line.discretize(nb_point=int(line_len / eps)))
+        Npoint = max(int(line_len / eps), 4)
+        pointcloud.extend(line.discretize(nb_point=Npoint))
 
     # Step 1 : Checking if the point is on the line that define the surface
     # First, we call the is_online method for each segment to check is the point is on one of the segment
-    on_line_list = list()
     for line in line_list:
         if line.is_on_line(Z):
             return if_online
@@ -51,8 +48,8 @@ def is_inside(self, Z, if_online=False):
     is_top, is_left, is_bot, is_right = False, False, False, False
     for point in pointcloud:
         # If the point selected is inside the branch on the x-axis
-        if (real(point) > real(Z) - eps) and (real(point) < real(Z) + eps):
-            if imag(point) - imag(Z) > 0:
+        if (point.real > Z.real - eps) and (point.real < Z.real + eps):
+            if point.imag - Z.imag > 0:
                 # The point is on top of Z
                 is_top = True
             else:
@@ -61,8 +58,8 @@ def is_inside(self, Z, if_online=False):
 
         else:
             # If the point selected is inside the branch on the y-axis
-            if (imag(point) > imag(Z) - eps) and (imag(point) < imag(Z) + eps):
-                if real(point) - real(Z) > 0:
+            if (point.imag > Z.imag - eps) and (point.imag < Z.imag + eps):
+                if point.real - Z.real > 0:
                     # The point is on the left of Z
                     is_left = True
                 else:

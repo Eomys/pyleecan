@@ -326,12 +326,9 @@
         },
         "notch": [],
         "slot": {
-            "H0": 0,
             "Hmag": 0.003,
-            "W0": 0.78539816,
-            "Wmag": 0.78539816,
             "Zs": 8,
-            "__class__": "SlotM11"
+            "__class__": "SlotM18"
         },
         "yoke_notch": []
     },
