@@ -149,6 +149,7 @@ def solve_FEMM(
     mu_elem = None
     meshFEMM = None
     groups = None
+    A_node = None
 
     # Compute the data for each time step
     for ii in range(start_t, end_t):
