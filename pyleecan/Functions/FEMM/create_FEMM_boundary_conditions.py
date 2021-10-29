@@ -5,6 +5,9 @@ from ..labels import (
     YSN_LAB,
     YSNR_LAB,
     YSNL_LAB,
+    YSM_LAB,
+    YSMR_LAB,
+    YSML_LAB,
     STATOR_LAB,
     YS_LAB,
     YOKE_LAB,
@@ -73,6 +76,22 @@ def create_FEMM_boundary_conditions(femm, line_label, BC_dict):
         femm.mi_addboundprop("bc_ag1", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
         BC_dict[AS_BR_LAB] = "bc_ag1"
         BC_dict[AS_BL_LAB] = "bc_ag1"
+    ## Lamination YokeSide for Magnets
+    elif YSM_LAB in line_label:
+        # Create BC name (bc_ys_s0_N for instance - yoke side stator 0 Notche)
+        label_dict = decode_label(line_label)
+        bc_name = "bc_ys_"
+        if STATOR_LAB in label_dict["lam_type"]:
+            bc_name += "s"
+        else:
+            bc_name += "r"
+        bc_name += str(label_dict["lam_id"])
+        bc_name += "_M"
+        # Create BC
+        femm.mi_addboundprop(bc_name, 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
+        # Update dict
+        BC_dict[label_dict["lam_label"] + "_" + YSML_LAB] = bc_name
+        BC_dict[label_dict["lam_label"] + "_" + YSMR_LAB] = bc_name
     ## Lamination YokeSide for Notches
     elif YSN_LAB in line_label:
         # Create BC name (bc_ys_s0_N for instance - yoke side stator 0 Notche)

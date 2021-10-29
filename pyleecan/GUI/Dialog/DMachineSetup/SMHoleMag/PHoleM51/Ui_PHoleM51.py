@@ -40,8 +40,8 @@ class Ui_PHoleM51(object):
         self.img_slot.setPixmap(
             QPixmap(u":/images/images/MachineSetup/SMHoleMag/HoleM51.png")
         )
-        self.img_slot.setScaledContents(True)
-        self.img_slot.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter)
+        self.img_slot.setScaledContents(False)
+        self.img_slot.setAlignment(Qt.AlignCenter)
         self.img_slot.setWordWrap(False)
 
         self.verticalLayout_3.addWidget(self.img_slot)
@@ -73,7 +73,7 @@ class Ui_PHoleM51(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 568))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 247, 572))
         self.verticalLayout_4 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.gridLayout = QGridLayout()

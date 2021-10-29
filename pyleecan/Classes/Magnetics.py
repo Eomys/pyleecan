@@ -97,7 +97,8 @@ class Magnetics(FrozenClass):
         self,
         is_remove_slotS=False,
         is_remove_slotR=False,
-        is_remove_vent=False,
+        is_remove_ventS=False,
+        is_remove_ventR=False,
         is_mmfs=True,
         is_mmfr=True,
         type_BH_stator=0,
@@ -133,8 +134,10 @@ class Magnetics(FrozenClass):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
                 is_remove_slotR = init_dict["is_remove_slotR"]
-            if "is_remove_vent" in list(init_dict.keys()):
-                is_remove_vent = init_dict["is_remove_vent"]
+            if "is_remove_ventS" in list(init_dict.keys()):
+                is_remove_ventS = init_dict["is_remove_ventS"]
+            if "is_remove_ventR" in list(init_dict.keys()):
+                is_remove_ventR = init_dict["is_remove_ventR"]
             if "is_mmfs" in list(init_dict.keys()):
                 is_mmfs = init_dict["is_mmfs"]
             if "is_mmfr" in list(init_dict.keys()):
@@ -165,7 +168,8 @@ class Magnetics(FrozenClass):
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
         self.is_remove_slotR = is_remove_slotR
-        self.is_remove_vent = is_remove_vent
+        self.is_remove_ventS = is_remove_ventS
+        self.is_remove_ventR = is_remove_ventR
         self.is_mmfs = is_mmfs
         self.is_mmfr = is_mmfr
         self.type_BH_stator = type_BH_stator
@@ -193,7 +197,8 @@ class Magnetics(FrozenClass):
             Magnetics_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Magnetics_str += "is_remove_slotS = " + str(self.is_remove_slotS) + linesep
         Magnetics_str += "is_remove_slotR = " + str(self.is_remove_slotR) + linesep
-        Magnetics_str += "is_remove_vent = " + str(self.is_remove_vent) + linesep
+        Magnetics_str += "is_remove_ventS = " + str(self.is_remove_ventS) + linesep
+        Magnetics_str += "is_remove_ventR = " + str(self.is_remove_ventR) + linesep
         Magnetics_str += "is_mmfs = " + str(self.is_mmfs) + linesep
         Magnetics_str += "is_mmfr = " + str(self.is_mmfr) + linesep
         Magnetics_str += "type_BH_stator = " + str(self.type_BH_stator) + linesep
@@ -233,7 +238,9 @@ class Magnetics(FrozenClass):
             return False
         if other.is_remove_slotR != self.is_remove_slotR:
             return False
-        if other.is_remove_vent != self.is_remove_vent:
+        if other.is_remove_ventS != self.is_remove_ventS:
+            return False
+        if other.is_remove_ventR != self.is_remove_ventR:
             return False
         if other.is_mmfs != self.is_mmfs:
             return False
@@ -275,8 +282,10 @@ class Magnetics(FrozenClass):
             diff_list.append(name + ".is_remove_slotS")
         if other._is_remove_slotR != self._is_remove_slotR:
             diff_list.append(name + ".is_remove_slotR")
-        if other._is_remove_vent != self._is_remove_vent:
-            diff_list.append(name + ".is_remove_vent")
+        if other._is_remove_ventS != self._is_remove_ventS:
+            diff_list.append(name + ".is_remove_ventS")
+        if other._is_remove_ventR != self._is_remove_ventR:
+            diff_list.append(name + ".is_remove_ventR")
         if other._is_mmfs != self._is_mmfs:
             diff_list.append(name + ".is_mmfs")
         if other._is_mmfr != self._is_mmfr:
@@ -321,7 +330,8 @@ class Magnetics(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.is_remove_slotS)
         S += getsizeof(self.is_remove_slotR)
-        S += getsizeof(self.is_remove_vent)
+        S += getsizeof(self.is_remove_ventS)
+        S += getsizeof(self.is_remove_ventR)
         S += getsizeof(self.is_mmfs)
         S += getsizeof(self.is_mmfr)
         S += getsizeof(self.type_BH_stator)
@@ -351,7 +361,8 @@ class Magnetics(FrozenClass):
         Magnetics_dict = dict()
         Magnetics_dict["is_remove_slotS"] = self.is_remove_slotS
         Magnetics_dict["is_remove_slotR"] = self.is_remove_slotR
-        Magnetics_dict["is_remove_vent"] = self.is_remove_vent
+        Magnetics_dict["is_remove_ventS"] = self.is_remove_ventS
+        Magnetics_dict["is_remove_ventR"] = self.is_remove_ventR
         Magnetics_dict["is_mmfs"] = self.is_mmfs
         Magnetics_dict["is_mmfr"] = self.is_mmfr
         Magnetics_dict["type_BH_stator"] = self.type_BH_stator
@@ -381,7 +392,8 @@ class Magnetics(FrozenClass):
 
         self.is_remove_slotS = None
         self.is_remove_slotR = None
-        self.is_remove_vent = None
+        self.is_remove_ventS = None
+        self.is_remove_ventR = None
         self.is_mmfs = None
         self.is_mmfr = None
         self.type_BH_stator = None
@@ -433,19 +445,37 @@ class Magnetics(FrozenClass):
         """,
     )
 
-    def _get_is_remove_vent(self):
-        """getter of is_remove_vent"""
-        return self._is_remove_vent
+    def _get_is_remove_ventS(self):
+        """getter of is_remove_ventS"""
+        return self._is_remove_ventS
 
-    def _set_is_remove_vent(self, value):
-        """setter of is_remove_vent"""
-        check_var("is_remove_vent", value, "bool")
-        self._is_remove_vent = value
+    def _set_is_remove_ventS(self, value):
+        """setter of is_remove_ventS"""
+        check_var("is_remove_ventS", value, "bool")
+        self._is_remove_ventS = value
 
-    is_remove_vent = property(
-        fget=_get_is_remove_vent,
-        fset=_set_is_remove_vent,
-        doc=u"""1 to artificially remove the ventilations duct
+    is_remove_ventS = property(
+        fget=_get_is_remove_ventS,
+        fset=_set_is_remove_ventS,
+        doc=u"""1 to artificially remove the ventilations duct of the stator
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_remove_ventR(self):
+        """getter of is_remove_ventR"""
+        return self._is_remove_ventR
+
+    def _set_is_remove_ventR(self, value):
+        """setter of is_remove_ventR"""
+        check_var("is_remove_ventR", value, "bool")
+        self._is_remove_ventR = value
+
+    is_remove_ventR = property(
+        fget=_get_is_remove_ventR,
+        fset=_set_is_remove_ventR,
+        doc=u"""1 to artificially remove the ventilations duct of the rotor
 
         :Type: bool
         """,

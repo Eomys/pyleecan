@@ -26,7 +26,7 @@ def comp_point_ref(self, is_set=False):
         # Find "min abs" middle
         mid_id = argmin(middle_array_abs)
         Zmid = middle_array[mid_id]
-        H = (np_min(middle_array_abs) + np_max(middle_array_abs)) / 2
+        H = np_max(middle_array_abs) - np_min(middle_array_abs)
 
         point_ref = (abs(Zmid) + H / 100) * exp(1j * angle(Zmid))
 

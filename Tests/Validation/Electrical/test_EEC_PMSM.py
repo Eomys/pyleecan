@@ -113,7 +113,7 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
     OP_matrix[:, 0] = 2000
     # Set I0 = 250/sqrt(2) [A] (RMS) for all simulations
     OP_matrix[:, 1] = 250 / sqrt(2)
-    # Set Phi0 from 60Â° to 180Â°
+    # Set Phi0 from 60° to 180°
     OP_matrix[:, 2] = Phi0_ref
     # Set reference torque from Yang et al, 2013
     OP_matrix[:, 3] = Tem_av_ref
@@ -128,7 +128,7 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
         array([x * 180 / pi for x in out.xoutput_dict["Phi0"].result]),
         [out.xoutput_dict["Tem_av_ref"].result, Tem_av_ref],
         legend_list=["Pyleecan", "Yang et al, 2013"],
-        xlabel="Current angle [Â°]",
+        xlabel="Current angle [°]",
         ylabel="Electrical torque [N.m]",
         title="Electrical torque vs current angle",
         save_path=join(save_path, "test_EEC_PMSM_validation.png"),
@@ -154,7 +154,7 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
         array([x * 180 / pi for x in out.xoutput_dict["Phi0"].result]),
         [out.xoutput_dict["Tem_av_ref"].result, Tem_sync, Tem_rel],
         legend_list=["Overall", "Synchronous", "Reluctant"],
-        xlabel="Current angle [Â°]",
+        xlabel="Current angle [°]",
         ylabel="Electrical torque [N.m]",
         title="Electrical torque vs current angle",
         save_path=join(save_path, "test_EEC_PMSM_sync_rel.png"),
@@ -167,6 +167,7 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
 
 # To run it without pytest
 if __name__ == "__main__":
-    # out, out2 = test_EEC_PMSM()
+    out, out2 = test_EEC_PMSM()
 
     test_EEC_PMSM_sync_rel()
+    print("Done")

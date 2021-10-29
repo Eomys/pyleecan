@@ -153,7 +153,8 @@ class MagFEMM(Magnetics):
         is_set_previous=True,
         is_remove_slotS=False,
         is_remove_slotR=False,
-        is_remove_vent=False,
+        is_remove_ventS=False,
+        is_remove_ventR=False,
         is_mmfs=True,
         is_mmfr=True,
         type_BH_stator=0,
@@ -221,8 +222,10 @@ class MagFEMM(Magnetics):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
                 is_remove_slotR = init_dict["is_remove_slotR"]
-            if "is_remove_vent" in list(init_dict.keys()):
-                is_remove_vent = init_dict["is_remove_vent"]
+            if "is_remove_ventS" in list(init_dict.keys()):
+                is_remove_ventS = init_dict["is_remove_ventS"]
+            if "is_remove_ventR" in list(init_dict.keys()):
+                is_remove_ventR = init_dict["is_remove_ventR"]
             if "is_mmfs" in list(init_dict.keys()):
                 is_mmfs = init_dict["is_mmfs"]
             if "is_mmfr" in list(init_dict.keys()):
@@ -270,7 +273,8 @@ class MagFEMM(Magnetics):
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
             is_remove_slotR=is_remove_slotR,
-            is_remove_vent=is_remove_vent,
+            is_remove_ventS=is_remove_ventS,
+            is_remove_ventR=is_remove_ventR,
             is_mmfs=is_mmfs,
             is_mmfr=is_mmfr,
             type_BH_stator=type_BH_stator,

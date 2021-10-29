@@ -180,13 +180,14 @@ class PCondType11(Gen_PCondType11, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def check(self):
-        """Check that the current machine have all the needed field set
+    @staticmethod
+    def check(lam):
+        """Check that the current lamination have all the needed field set
 
         Parameters
         ----------
-        self : PCondType11
-            A PCondType11 object
+        lam: LamSlotWind
+            Lamination to check
 
         Returns
         -------
@@ -194,16 +195,17 @@ class PCondType11(Gen_PCondType11, QWidget):
             Error message (return None if no error)
         """
 
+        cond = lam.winding.conductor
         # Check that everything is set
-        if self.cond.Nwppc_tan is None:
-            return self.tr("You must set Nwpc1_tan !")
-        elif self.cond.Nwppc_rad is None:
-            return self.tr("You must set Nwpc1_rad !")
-        elif self.cond.Hwire is None:
-            return self.tr("You must set Hwire !")
-        elif self.cond.Wwire is None:
-            return self.tr("You must set Wwire !")
-        elif self.cond.Wins_wire is None:
-            return self.tr("You must set Wins_wire !")
-        elif self.lam.winding.Lewout is None:
-            return self.tr("You must set Lewout !")
+        if cond.Nwppc_tan is None:
+            return "You must set Nwppc_tan !"
+        elif cond.Nwppc_rad is None:
+            return "You must set Nwppc_rad !"
+        elif cond.Hwire is None:
+            return "You must set Hwire !"
+        elif cond.Wwire is None:
+            return "You must set Wwire !"
+        elif cond.Wins_wire is None:
+            return "You must set Wins_wire !"
+        elif lam.winding.Lewout is None:
+            return "You must set Lewout !"

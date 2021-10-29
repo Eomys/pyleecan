@@ -7,11 +7,8 @@ def convert_init_dict(init_dict):
     convert_list = []
     _search_(init_dict, convert_list)
 
-    # V 1.0.4 => 1.1.0: New definition for LamSlotMag + SlotMag
     for obj_dict in convert_list:
-        if is_LamSlotMag_dict(obj_dict):
-            convert_LamSlotMag(obj_dict)
-        elif is_Winding_dict(obj_dict):
+        if is_Winding_dict(obj_dict):
             convert_Winding(obj_dict)
         elif is_HoleUD_dict(obj_dict):
             convert_HoleUD(obj_dict)
@@ -19,7 +16,7 @@ def convert_init_dict(init_dict):
 
 def _search_(obj, convert_list, parent=None):
     # add to list for later conversion
-    if is_LamSlotMag_dict(obj) or is_HoleUD_dict(obj):
+    if is_HoleUD_dict(obj):
         convert_list.append(obj)
     elif is_Winding_dict(obj):
         if (
@@ -66,45 +63,6 @@ def convert_HoleUD(hole_dict):
             hole_dict["surf_list"][ii]["label"] = HOLEM_LAB
         else:
             hole_dict["surf_list"][ii]["label"] = HOLEV_LAB
-
-
-############################################
-# V 1.0.4 => 1.1.0
-# LamSlotMag list of magnet to single magnet
-# SlotMag and SlotWind unification
-############################################
-def is_LamSlotMag_dict(obj_dict):
-    """Check if the object need to be updated for LamSlotMag"""
-    return (
-        "__class__" in obj_dict.keys()
-        and obj_dict["__class__"] == "LamSlotMag"
-        and "magnet" not in obj_dict.keys()
-    )
-
-
-def convert_LamSlotMag(lam_dict):
-    """Update the content of the dict"""
-    print("Old machine version detected, Updating the LamSlotMag object")
-    # readability
-    slot = lam_dict["slot"]
-
-    # Moving the magnet (use only one magnet)
-    if len(slot["magnet"]) > 1:
-        print(
-            "LamSlotMag with more than one magnet per pole "
-            + "is not available for now. Only keeping first magnet."
-        )
-    lam_dict["magnet"] = slot["magnet"][0]
-    slot.pop("magnet")
-
-    # Update the slot with the magnet parameters
-    if lam_dict["magnet"] is not None:
-        slot["__class__"] = "SlotM" + lam_dict["magnet"]["__class__"][-2:]
-        slot["Wmag"] = lam_dict["magnet"]["Wmag"]
-        slot["Hmag"] = lam_dict["magnet"]["Hmag"]
-        if "Rtop" in lam_dict["magnet"]:
-            slot["Rtopm"] = lam_dict["magnet"]["Rtop"]
-        lam_dict["magnet"]["__class__"] = "Magnet"
 
 
 ######################
