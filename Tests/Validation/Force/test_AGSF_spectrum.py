@@ -25,31 +25,6 @@ from Tests import save_validation_path as save_path
 
 DELTA = 1e-6
 
-# Load machine
-Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-# Prepare simulation
-simu = Simu1(name="test_AGSF_spectrum", machine=Toyota_Prius)
-
-simu.input = InputCurrent(
-    OP=OPdq(Id_ref=0, Iq_ref=0, N0=1200),
-    Ir=None,
-    Na_tot=2 ** 6,
-    Nt_tot=4 * 2 ** 4,
-)
-
-simu.elec = None
-
-simu.mag = MagFEMM(
-    type_BH_stator=1,
-    type_BH_rotor=1,
-    is_periodicity_a=False,
-    is_periodicity_t=False,
-)
-simu.force = ForceMT(
-    is_periodicity_a=False,
-    is_periodicity_t=False,
-)
-
 
 @pytest.mark.MagFEMM
 @pytest.mark.ForceMT
@@ -62,7 +37,30 @@ simu.force = ForceMT(
 def test_IPMSM_AGSF_spectrum_no_sym():
     """Validation of the AGSF spectrum calculation for IPMSM machine"""
 
-    simu.name = "test_IPMSM_AGSF_spectrum_no_sym"
+    # Load machine
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    # Prepare simulation
+    simu = Simu1(name="test_IPMSM_AGSF_spectrum_no_sym", machine=Toyota_Prius)
+
+    simu.input = InputCurrent(
+        OP=OPdq(Id_ref=0, Iq_ref=0, N0=1200),
+        Ir=None,
+        Na_tot=2 ** 6,
+        Nt_tot=4 * 2 ** 4,
+    )
+
+    simu.elec = None
+
+    simu.mag = MagFEMM(
+        type_BH_stator=1,
+        type_BH_rotor=1,
+        is_periodicity_a=False,
+        is_periodicity_t=False,
+    )
+    simu.force = ForceMT(
+        is_periodicity_a=False,
+        is_periodicity_t=False,
+    )
 
     # Run simulation
     out = simu.run()
@@ -131,10 +129,32 @@ def test_IPMSM_AGSF_spectrum_no_sym():
 @pytest.mark.SingleOP
 def test_IPMSM_AGSF_spectrum_sym():
     """Validation of the AGSF spectrum calculation for IPMSM machine with symmetries"""
-
     # Test 2 : With sym
-    simu2 = simu.copy()
-    simu2.name = "test_IPMSM_AGSF_spectrum_sym"
+
+    # Load machine
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    # Prepare simulation
+    simu2 = Simu1(name="test_IPMSM_AGSF_spectrum_sym", machine=Toyota_Prius)
+
+    simu2.input = InputCurrent(
+        OP=OPdq(Id_ref=0, Iq_ref=0, N0=1200),
+        Ir=None,
+        Na_tot=2 ** 6,
+        Nt_tot=4 * 2 ** 4,
+    )
+
+    simu2.elec = None
+
+    simu2.mag = MagFEMM(
+        type_BH_stator=1,
+        type_BH_rotor=1,
+        is_periodicity_a=False,
+        is_periodicity_t=False,
+    )
+    simu2.force = ForceMT(
+        is_periodicity_a=False,
+        is_periodicity_t=False,
+    )
 
     simu2.mag.is_periodicity_a = True
     simu2.mag.is_periodicity_t = True

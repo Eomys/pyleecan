@@ -36,7 +36,7 @@ param_list = [
     },
 ]
 
-is_show_fig = True
+is_show_fig = False
 
 
 @pytest.mark.long_5s
