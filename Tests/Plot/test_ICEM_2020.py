@@ -842,4 +842,5 @@ def test_Optimization_problem():
 
 if __name__ == "__main__":
     test_FEMM_sym()
+    test_ecc_FEMM()
     test_WindingUD_layer()

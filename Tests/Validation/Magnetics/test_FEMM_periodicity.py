@@ -6,10 +6,9 @@ from Tests import save_validation_path as save_path
 
 from numpy import exp, sqrt, pi, max as np_max
 from numpy.testing import assert_array_almost_equal
-from pyleecan.Classes.OPdq import OPdq
 
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
-import matplotlib.pyplot as plt
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
@@ -19,10 +18,10 @@ from pyleecan.Classes.SlotM18 import SlotM18
 from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.ForceMT import ForceMT
-from pyleecan.Classes.Output import Output
 
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
+
 from pyleecan.definitions import DATA_DIR
 
 
@@ -74,11 +73,9 @@ def test_FEMM_periodicity_time_no_periodicity_a():
     simu2.mag.is_periodicity_t = False
 
     # Run simulations
-    out = Output(simu=simu)
-    simu.run()
+    out = simu.run()
 
-    out2 = Output(simu=simu2)
-    simu2.run()
+    out2 = simu2.run()
 
     # Plot the result
     out.mag.B.plot_2D_Data(
@@ -222,11 +219,9 @@ def test_FEMM_periodicity_time():
     simu2.mag.is_periodicity_t = False
 
     # Run simulations
-    out = Output(simu=simu)
-    simu.run()
+    out = simu.run()
 
-    out2 = Output(simu=simu2)
-    simu2.run()
+    out2 = simu2.run()
 
     # Plot the result
     out.mag.B.plot_2D_Data(
@@ -437,14 +432,12 @@ def test_FEMM_periodicity_angle():
     simu2.force = ForceMT()
 
     # Run simulations
-    out = Output(simu=simu)
-    simu.run()
-    assert np_max(out.mag.B.components["radial"].values) == pytest.approx(3.95, rel=0.1)
+    out = simu.run()
+    assert np_max(out.mag.B.components["radial"].values) == pytest.approx(4.82, rel=0.1)
 
-    out2 = Output(simu=simu2)
-    simu2.run()
+    out2 = simu2.run()
     assert np_max(out2.mag.B.components["radial"].values) == pytest.approx(
-        3.95, rel=0.1
+        4.82, rel=0.1
     )
 
     # Plot the result
@@ -453,8 +446,8 @@ def test_FEMM_periodicity_angle():
         "angle[0]{°}",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, simu.name + "_B_time.png"),
-        is_show_fig=False,
+        # save_path=join(save_path, simu.name + "_B_time.png"),
+        # is_show_fig=False,
         **dict_2D
     )
 
@@ -463,8 +456,8 @@ def test_FEMM_periodicity_angle():
         "time[1]",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, simu.name + "_B_space.png"),
-        is_show_fig=False,
+        # save_path=join(save_path, simu.name + "_B_space.png"),
+        # is_show_fig=False,
         **dict_2D
     )
 
@@ -524,6 +517,13 @@ def test_FEMM_periodicity_angle():
     return out, out2
 
 
+@pytest.mark.long_5s
+@pytest.mark.long_1m
+@pytest.mark.MagFEMM
+@pytest.mark.SPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
+@pytest.mark.ForceMT
 def test_Ring_Magnet():
     """Check that a machine with Ring magnet can be simulated with sym"""
     machine = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
@@ -538,11 +538,9 @@ def test_Ring_Magnet():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref,
-        Iq_ref=Iq_ref,
+        OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=1000),
         Na_tot=252 * 9,
         Nt_tot=8 * 3,
-        N0=1000,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -563,11 +561,9 @@ def test_Ring_Magnet():
     simu2.mag.is_periodicity_a = True
 
     # Run simulations
-    out = Output(simu=simu)
-    simu.run()
+    out = simu.run()
 
-    out2 = Output(simu=simu2)
-    simu2.run()
+    out2 = simu2.run()
 
     # Plot the result
     out.mag.B.plot_2D_Data(
@@ -621,8 +617,8 @@ def test_Ring_Magnet():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out, out2 = test_FEMM_periodicity_angle()
+    out, out2 = test_FEMM_periodicity_angle()
     # out3, out4 = test_FEMM_periodicity_time()
     # out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
-    test_Ring_Magnet()
+    # test_Ring_Magnet()
     print("Done")

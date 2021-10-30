@@ -72,7 +72,7 @@ def test_EEC_ELUT_PMSM_calc(n_Id=5, n_Iq=5):
     )
 
     # Build OP_matrix with a meshgrid of Id/Iq
-    Id_min, Id_max = -100, 100
+    Id_min, Id_max = -200, 200
     Iq_min, Iq_max = -200, 200
     Id, Iq = np.meshgrid(
         np.linspace(Id_min, Id_max, n_Id), np.linspace(Iq_min, Iq_max, n_Iq)
@@ -169,6 +169,7 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
         np.linspace(Id_min, Id_max, n_Id), np.linspace(Iq_min, Iq_max, n_Iq)
     )
     Id, Iq = Id.ravel(), Iq.ravel()
+    Imax_interp = np.sqrt(Id ** 2 + Iq ** 2)
 
     elec_model = Electrical(eec=EEC_PMSM(), ELUT_enforced=test_ELUT)
 
@@ -197,9 +198,23 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
         Zdata=Tem_interp.reshape((n_Iq, n_Id)).T,
         zlabel="Average Torque [N.m]",
         title="Torque map in dq plane",
-        save_path=join(save_path, name + "_torque_map.png"),
+        # save_path=join(save_path, name + "_torque_map.png"),
         **dict_map,
     )
+    # plt.contour(
+    #     dict_map["Xdata"],
+    #     dict_map["Ydata"],
+    #     Imax_interp.reshape((n_Iq, n_Id)),
+    #     colors="red",
+    #     linewidths=0.8,
+    # )
+    # plt.contour(
+    #     dict_map["Xdata"],
+    #     dict_map["Ydata"],
+    #     U_max_interp.reshape((n_Iq, n_Id)),
+    #     colors="blue",
+    #     linewidths=0.8,
+    # )
     plot_3D(
         Zdata=Tem_sync.reshape((n_Iq, n_Id)).T,
         zlabel="Synchrnous Torque [N.m]",
@@ -236,16 +251,15 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
     # MTPA
     # Maximum current [Arms]
     I_max = 250 / np.sqrt(2)
-    Imax_interp = np.sqrt(Id ** 2 + Iq ** 2)
     # Maximum voltage [Vrms]
-    U_max = 200
+    U_max = 500
     # Speed vector
     Nspeed = 50
     N0_min = 50
     N0_max = 8000
     N0_vect = np.linspace(N0_min, N0_max, Nspeed)
     # Maximum load vector
-    Ntorque = 5
+    Ntorque = 1
     is_braking = False  # True to include negative torque (braking)
     if is_braking:
         Ntorque = (
@@ -405,5 +419,5 @@ if __name__ == "__main__":
     # out0, ELUT = test_EEC_ELUT_PMSM_calc()
     # ELUT.save("ELUT_PMSM.h5")
     ELUT = load("ELUT_PMSM.h5")
-    test_EEC_ELUT_PMSM_MTPA(ELUT)
-    # test_EEC_ELUT_PMSM_PWM(ELUT)
+    # test_EEC_ELUT_PMSM_MTPA(ELUT)
+    test_EEC_ELUT_PMSM_PWM(ELUT)

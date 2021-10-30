@@ -406,9 +406,9 @@ def test_save_load_simu(type_file):
 
 
 if __name__ == "__main__":
-    test_save_load_folder_path()
-    test_save_load_json_compressed()
+    test_save_load_simu("json")
+    test_save_load_simu("h5")
+    test_save_load_simu("pkl")
+    # test_save_load_folder_path()
+    # test_save_load_json_compressed()
     print("Done")
-    # test_save_load_simu("json")
-    # test_save_load_simu("h5")
-    # test_save_load_simu("pkl")

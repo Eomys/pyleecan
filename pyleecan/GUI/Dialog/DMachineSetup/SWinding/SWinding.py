@@ -450,7 +450,7 @@ class SWinding(Gen_SWinding, QWidget):
                 mmf_dir = "?"
         except Exception:  # Unable to compution the connection matrix
             mmf_dir = "?"
-        self.out_mmf_dir.setText(self.tr("Rotation direction: ") + mmf_dir)
+        self.out_rot_dir.setText(self.tr("Rotation direction: ") + mmf_dir)
 
         try:
             ms = str(self.obj.slot.Zs / (wind.p * wind.qs * 2.0))

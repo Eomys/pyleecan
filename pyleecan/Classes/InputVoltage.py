@@ -279,7 +279,7 @@ class InputVoltage(Input):
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor : rot_dir*N0, default value given by ROT_DIR_REF
+        doc=u"""Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)
 
         :Type: int
         :min: -1
@@ -345,7 +345,7 @@ class InputVoltage(Input):
     phase_dir = property(
         fget=_get_phase_dir,
         fset=_set_phase_dir,
-        doc=u"""Rotation direction of the stator phases : phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF
+        doc=u"""Rotation direction of the stator phase (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)
 
         :Type: int
         :min: -1
@@ -365,7 +365,7 @@ class InputVoltage(Input):
     current_dir = property(
         fget=_get_current_dir,
         fset=_set_current_dir,
-        doc=u"""Rotation direction of the stator currents : current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF
+        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
 
         :Type: int
         :min: -1

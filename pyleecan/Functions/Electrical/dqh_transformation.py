@@ -5,6 +5,26 @@ from SciDataTool import Data1D, DataTime
 from ...Functions.Winding.gen_phase_list import gen_name
 
 
+def check_DataTime(data):
+    """Check if input data object is compliant with dqh transformation
+
+    Parameters
+    ----------
+    data : Data
+        data object to check
+
+    """
+
+    if not isinstance(data, DataTime):
+        raise Exception("Input object should be a DataTime object")
+    if len(data.axes) != 2:
+        raise Exception("DataTime object should contain two axes: time and phase")
+    if data.axes[0].name != "time":
+        raise Exception("DataTime object should contain time as first axis")
+    if data.axes[1].name != "phase":
+        raise Exception("DataTime object should contain phase as second axis")
+
+
 def n2dqh_DataTime(data_n, is_dqh_rms=True, phase_dir=None):
     """n phases to dqh equivalent coordinate transformation of DataTime object
 
@@ -23,8 +43,14 @@ def n2dqh_DataTime(data_n, is_dqh_rms=True, phase_dir=None):
         data object transformed in dqh frame
 
     """
-    # Check if input data object is compliant with dqh transformation
-    check_DataTime(data_n)
+
+    if phase_dir is None:
+        # Check if input data object is compliant with dqh transformation
+        # and get phase_dir from data object
+        phase_dir = get_phase_dir_DataTime(data_n)
+    else:
+        # Only check if input data object is compliant with dqh transformation
+        check_DataTime(data_n)
 
     if "angle_elec" not in data_n.axes[0].normalizations:
         raise Exception("Time axis should contain angle_elec normalization")
@@ -156,6 +182,10 @@ def n2dqh(Z_n, angle_elec, is_dqh_rms=True, phase_dir=None):
     Z_dqh : ndarray
         transformed matrix (N x 3) of dqh equivalent values
     """
+
+    if phase_dir is None:
+        # Get phase_dir from Z_n
+        phase_dir = get_phase_dir(Z_n)
 
     Z_dqh = abc2dqh(n2abc(Z_n, phase_dir), angle_elec)
 
@@ -395,33 +425,13 @@ def get_phase_dir(Z_n):
     N, n = Z_n.shape
 
     # Shift first phase of +/- Nt/qs
-    Z_n_p = np.roll(Z_n[:, 0], shift=int(N / n))
-    Z_n_n = np.roll(Z_n[:, 0], shift=-int(N / n))
+    Z_n_p = np.roll(Z_n[:, 0], shift=int(N / n))  # clockwise shift
+    Z_n_n = np.roll(Z_n[:, 0], shift=-int(N / n))  # trigonomic shift
 
-    # Find which shifted phase is closer to second phase
-    is_trigo = np.sum(np.abs(Z_n_p - Z_n[:, 1])) > np.sum(np.abs(Z_n_n - Z_n[:, 1]))
+    # Input Z_n rotates in trigo direction if first phase with negative shift is closer to second phase
+    is_trigo = np.mean(np.abs(Z_n_p - Z_n[:, 1])) > np.mean(np.abs(Z_n_n - Z_n[:, 1]))
 
     # phase_dir=+/-1
     phase_dir = int((-1) ** int(is_trigo))
 
     return phase_dir
-
-
-def check_DataTime(data):
-    """Check if input data object is compliant with dqh transformation
-
-    Parameters
-    ----------
-    data : Data
-        data object to check
-
-    """
-
-    if not isinstance(data, DataTime):
-        raise Exception("Input object should be a DataTime object")
-    if len(data.axes) != 2:
-        raise Exception("DataTime object should contain two axes: time and phase")
-    if data.axes[0].name != "time":
-        raise Exception("DataTime object should contain time as first axis")
-    if data.axes[1].name != "phase":
-        raise Exception("DataTime object should contain phase as second axis")

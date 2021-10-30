@@ -55,5 +55,7 @@ def store(self, out_dict, out_dict_harm):
         Is_dqh_time = Is_dqh.freq_to_time()
         qs = self.parent.simu.machine.stator.winding.qs
         # back to ABC
-        Is_abc = dqh2n_DataTime(Is_dqh_time, qs, is_n_rms=True, phase=self.phase_dir)
+        Is_abc = dqh2n_DataTime(
+            Is_dqh_time, qs, is_n_rms=True, phase_dir=self.phase_dir
+        )
         self.Is_harm = Is_abc.time_to_freq()

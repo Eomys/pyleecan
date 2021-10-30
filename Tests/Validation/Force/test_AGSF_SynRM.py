@@ -63,7 +63,6 @@ def test_AGSF_SynRM(nb_worker=int(cpu_count() / 2)):
         time=ImportMatrixVal(value=time),
         Na_tot=Na_tot,
         Nt_tot=Nt_tot,
-        nb_worker=nb_worker,
     )
 
     # Definition of the magnetic simulation (1/2 symmetry)
@@ -71,6 +70,7 @@ def test_AGSF_SynRM(nb_worker=int(cpu_count() / 2)):
         type_BH_stator=0,
         type_BH_rotor=0,
         is_periodicity_a=True,
+        nb_worker=nb_worker,
     )
 
     # Definition of the magnetic simulation (no symmetry)

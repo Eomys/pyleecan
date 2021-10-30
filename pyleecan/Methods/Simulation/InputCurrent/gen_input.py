@@ -1,11 +1,12 @@
-from numpy import ndarray, mean, zeros
+from numpy import mean as np_mean, zeros
 
-from ....Methods.Simulation.Input import InputError
+from SciDataTool import DataTime
 
-from ....Functions.Electrical.dqh_transformation import n2dqh
 from ....Classes.InputVoltage import InputVoltage
 
-from SciDataTool import Data1D, DataTime
+from ....Functions.Electrical.dqh_transformation import n2dqh, get_phase_dir
+
+from ....Methods.Simulation.Input import InputError
 
 
 def gen_input(self):
@@ -48,7 +49,16 @@ def gen_input(self):
                 outelec.Is = None
         else:
             Is = self.Is.get_data()
-            if not isinstance(Is, ndarray) or Is.shape != (self.Nt_tot, qs):
+            # Get phase_dir from Is
+            phase_dir = get_phase_dir(Is)
+            if phase_dir != outelec.phase_dir:
+                self.get_logger().warning(
+                    "Enforcing outelec.phase_dir="
+                    + str(phase_dir)
+                    + " to comply with input current"
+                )
+                outelec.phase_dir = phase_dir
+            if Is.shape != (self.Nt_tot, qs):
                 raise InputError(
                     "InputCurrent.Is must be a matrix with the shape "
                     + str((self.Nt_tot, qs))
@@ -70,8 +80,9 @@ def gen_input(self):
                 outelec.Is.values,
                 Time.get_values(is_oneperiod=False, normalization="angle_elec"),
                 is_dqh_rms=True,
+                phase_dir=outelec.phase_dir,
             )
-            outelec.OP.set_Id_Iq(mean(Idq[:, 0]), mean(Idq[:, 1]))
+            outelec.OP.set_Id_Iq(np_mean(Idq[:, 0]), np_mean(Idq[:, 1]))
 
     # Load and check Ir is needed
     if qr > 0:
@@ -79,7 +90,7 @@ def gen_input(self):
             Ir = zeros((self.Nt_tot, qr))
         else:
             Ir = self.Ir.get_data()
-        if not isinstance(Ir, ndarray) or Ir.shape != (self.Nt_tot, qr):
+        if Ir.shape != (self.Nt_tot, qr):
             raise InputError(
                 "InputCurrent.Ir must be a matrix with the shape "
                 + str((self.Nt_tot, qr))
