@@ -198,7 +198,7 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
         Zdata=Tem_interp.reshape((n_Iq, n_Id)).T,
         zlabel="Average Torque [N.m]",
         title="Torque map in dq plane",
-        # save_path=join(save_path, name + "_torque_map.png"),
+        save_path=join(save_path, name + "_torque_map.png"),
         **dict_map,
     )
     # plt.contour(
@@ -346,8 +346,8 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
             xlabel="Speed [rpm]",
             ylabel="Average torque [N.m]",
             legend_list=legend_list,
-            # save_path=join(save_path, name + "_MTPA_torque_speed.png"),
-            # is_show_fig=is_show_fig,
+            save_path=join(save_path, name + "_MTPA_torque_speed.png"),
+            is_show_fig=is_show_fig,
         )
 
     i_load = -1
@@ -357,8 +357,8 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
         xlabel="Speed [rpm]",
         ylabel="Current [Arms]",
         legend_list=["Id", "Iq", "Imax"],
-        # save_path=join(save_path, name + "_current_MTPA_OP" + str(i_load) + ".png"),
-        # is_show_fig=is_show_fig,
+        save_path=join(save_path, name + "_current_MTPA_OP" + str(i_load) + ".png"),
+        is_show_fig=is_show_fig,
     )
 
     plot_2D(
@@ -367,8 +367,8 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
         xlabel="Speed [rpm]",
         ylabel="Voltage [Vrms]",
         legend_list=["Ud", "Uq", "Umax"],
-        # save_path=join(save_path, name + "_voltage_MTPA_OP" + str(i_load) + ".png"),
-        # is_show_fig=is_show_fig,
+        save_path=join(save_path, name + "_voltage_MTPA_OP" + str(i_load) + ".png"),
+        is_show_fig=is_show_fig,
     )
 
     pass

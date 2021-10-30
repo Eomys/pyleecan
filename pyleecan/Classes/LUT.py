@@ -314,7 +314,7 @@ class LUT(FrozenClass):
     phase_dir = property(
         fget=_get_phase_dir,
         fset=_set_phase_dir,
-        doc=u"""Rotation direction of the stator phases : phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF
+        doc=u"""Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)
 
         :Type: int
         :min: -1

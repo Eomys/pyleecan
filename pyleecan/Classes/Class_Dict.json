@@ -4421,7 +4421,7 @@
                 "value": null
             },
             {
-                "desc": "Rotation direction of the stator phases\u00c2\u00a0: phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF",
+                "desc": "Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",
                 "max": "1",
                 "min": "-1",
                 "name": "phase_dir",

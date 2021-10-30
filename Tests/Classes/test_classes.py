@@ -427,4 +427,4 @@ def test_class_copy(class_dict):
 
 if __name__ == "__main__":
     # test_class_as_dict(class_list[116])
-    test_class_prop_doc(class_list[116])
+    test_class_prop_doc(class_list[160])
