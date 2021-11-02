@@ -446,8 +446,8 @@ def test_FEMM_periodicity_angle():
         "angle[0]{°}",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
-        # save_path=join(save_path, simu.name + "_B_time.png"),
-        # is_show_fig=False,
+        save_path=join(save_path, simu.name + "_B_time.png"),
+        is_show_fig=False,
         **dict_2D
     )
 
@@ -456,8 +456,8 @@ def test_FEMM_periodicity_angle():
         "time[1]",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
-        # save_path=join(save_path, simu.name + "_B_space.png"),
-        # is_show_fig=False,
+        save_path=join(save_path, simu.name + "_B_space.png"),
+        is_show_fig=False,
         **dict_2D
     )
 
