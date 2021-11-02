@@ -8198,15 +8198,6 @@
                 "value": "None"
             },
             {
-                "desc": "Initial angular position of the rotor at t=0",
-                "max": "",
-                "min": "",
-                "name": "angle_rotor_initial",
-                "type": "float",
-                "unit": "",
-                "value": 0
-            },
-            {
                 "desc": "Name of the logger to use",
                 "max": "",
                 "min": "",

@@ -138,7 +138,6 @@ class OutElec(FrozenClass):
         axes_dict=None,
         Is=None,
         Ir=None,
-        angle_rotor_initial=0,
         logger_name="Pyleecan.Electrical",
         Pj_losses=None,
         Us=None,
@@ -174,8 +173,6 @@ class OutElec(FrozenClass):
                 Is = init_dict["Is"]
             if "Ir" in list(init_dict.keys()):
                 Ir = init_dict["Ir"]
-            if "angle_rotor_initial" in list(init_dict.keys()):
-                angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
             if "Pj_losses" in list(init_dict.keys()):
@@ -203,7 +200,6 @@ class OutElec(FrozenClass):
         self.axes_dict = axes_dict
         self.Is = Is
         self.Ir = Ir
-        self.angle_rotor_initial = angle_rotor_initial
         self.logger_name = logger_name
         self.Pj_losses = Pj_losses
         self.Us = Us
@@ -230,9 +226,6 @@ class OutElec(FrozenClass):
         OutElec_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
         OutElec_str += "Is = " + str(self.Is) + linesep + linesep
         OutElec_str += "Ir = " + str(self.Ir) + linesep + linesep
-        OutElec_str += (
-            "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
-        )
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         OutElec_str += "Pj_losses = " + str(self.Pj_losses) + linesep
         OutElec_str += "Us = " + str(self.Us) + linesep + linesep
@@ -264,8 +257,6 @@ class OutElec(FrozenClass):
         if other.Is != self.Is:
             return False
         if other.Ir != self.Ir:
-            return False
-        if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
         if other.logger_name != self.logger_name:
             return False
@@ -326,8 +317,6 @@ class OutElec(FrozenClass):
             diff_list.append(name + ".Ir None mismatch")
         elif self.Ir is not None:
             diff_list.extend(self.Ir.compare(other.Ir, name=name + ".Ir"))
-        if other._angle_rotor_initial != self._angle_rotor_initial:
-            diff_list.append(name + ".angle_rotor_initial")
         if other._logger_name != self._logger_name:
             diff_list.append(name + ".logger_name")
         if other._Pj_losses != self._Pj_losses:
@@ -387,7 +376,6 @@ class OutElec(FrozenClass):
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.Is)
         S += getsizeof(self.Ir)
-        S += getsizeof(self.angle_rotor_initial)
         S += getsizeof(self.logger_name)
         S += getsizeof(self.Pj_losses)
         S += getsizeof(self.Us)
@@ -442,7 +430,6 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         OutElec_dict["logger_name"] = self.logger_name
         OutElec_dict["Pj_losses"] = self.Pj_losses
         if self.Us is None:
@@ -499,7 +486,6 @@ class OutElec(FrozenClass):
         self.axes_dict = None
         self.Is = None
         self.Ir = None
-        self.angle_rotor_initial = None
         self.logger_name = None
         self.Pj_losses = None
         self.Us = None
@@ -596,24 +582,6 @@ class OutElec(FrozenClass):
         doc=u"""Rotor currents as a function of time (each column correspond to one phase)
 
         :Type: SciDataTool.Classes.DataND.DataND
-        """,
-    )
-
-    def _get_angle_rotor_initial(self):
-        """getter of angle_rotor_initial"""
-        return self._angle_rotor_initial
-
-    def _set_angle_rotor_initial(self, value):
-        """setter of angle_rotor_initial"""
-        check_var("angle_rotor_initial", value, "float")
-        self._angle_rotor_initial = value
-
-    angle_rotor_initial = property(
-        fget=_get_angle_rotor_initial,
-        fset=_set_angle_rotor_initial,
-        doc=u"""Initial angular position of the rotor at t=0
-
-        :Type: float
         """,
     )
 

@@ -1,5 +1,5 @@
-import scipy.interpolate as scp_int
 import numpy as np
+import scipy.interpolate as scp_int
 
 
 def interp_Phi_dqh(self, Id, Iq):
