@@ -32,6 +32,11 @@ try:
 except ImportError as error:
     get_slice_model = error
 
+try:
+    from ..Methods.Simulation.Magnetics.comp_I_mag import comp_I_mag
+except ImportError as error:
+    comp_I_mag = error
+
 
 from ._check import InitUnKnowClassError
 from .SliceModel import SliceModel
@@ -73,6 +78,15 @@ class Magnetics(FrozenClass):
         )
     else:
         get_slice_model = get_slice_model
+    # cf Methods.Simulation.Magnetics.comp_I_mag
+    if isinstance(comp_I_mag, ImportError):
+        comp_I_mag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Magnetics method comp_I_mag: " + str(comp_I_mag))
+            )
+        )
+    else:
+        comp_I_mag = comp_I_mag
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -97,6 +111,7 @@ class Magnetics(FrozenClass):
         Slice_enforced=None,
         Nslices_enforced=None,
         type_distribution_enforced=None,
+        is_current_harm=True,
         init_dict=None,
         init_str=None,
     ):
@@ -147,6 +162,8 @@ class Magnetics(FrozenClass):
                 Nslices_enforced = init_dict["Nslices_enforced"]
             if "type_distribution_enforced" in list(init_dict.keys()):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
+            if "is_current_harm" in list(init_dict.keys()):
+                is_current_harm = init_dict["is_current_harm"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -165,6 +182,7 @@ class Magnetics(FrozenClass):
         self.Slice_enforced = Slice_enforced
         self.Nslices_enforced = Nslices_enforced
         self.type_distribution_enforced = type_distribution_enforced
+        self.is_current_harm = is_current_harm
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -208,6 +226,7 @@ class Magnetics(FrozenClass):
             + '"'
             + linesep
         )
+        Magnetics_str += "is_current_harm = " + str(self.is_current_harm) + linesep
         return Magnetics_str
 
     def __eq__(self, other):
@@ -246,6 +265,8 @@ class Magnetics(FrozenClass):
         if other.Nslices_enforced != self.Nslices_enforced:
             return False
         if other.type_distribution_enforced != self.type_distribution_enforced:
+            return False
+        if other.is_current_harm != self.is_current_harm:
             return False
         return True
 
@@ -297,6 +318,8 @@ class Magnetics(FrozenClass):
             diff_list.append(name + ".Nslices_enforced")
         if other._type_distribution_enforced != self._type_distribution_enforced:
             diff_list.append(name + ".type_distribution_enforced")
+        if other._is_current_harm != self._is_current_harm:
+            diff_list.append(name + ".is_current_harm")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -321,6 +344,7 @@ class Magnetics(FrozenClass):
         S += getsizeof(self.Slice_enforced)
         S += getsizeof(self.Nslices_enforced)
         S += getsizeof(self.type_distribution_enforced)
+        S += getsizeof(self.is_current_harm)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -358,6 +382,7 @@ class Magnetics(FrozenClass):
             )
         Magnetics_dict["Nslices_enforced"] = self.Nslices_enforced
         Magnetics_dict["type_distribution_enforced"] = self.type_distribution_enforced
+        Magnetics_dict["is_current_harm"] = self.is_current_harm
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -382,6 +407,7 @@ class Magnetics(FrozenClass):
             self.Slice_enforced._set_None()
         self.Nslices_enforced = None
         self.type_distribution_enforced = None
+        self.is_current_harm = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -543,7 +569,7 @@ class Magnetics(FrozenClass):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.mag.Time)
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in axes_dict[time])
 
         :Type: bool
         """,
@@ -561,7 +587,7 @@ class Magnetics(FrozenClass):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle])
 
         :Type: bool
         """,
@@ -684,5 +710,23 @@ class Magnetics(FrozenClass):
         doc=u"""To enforce type of slice distribution to use for rotor skew if linear and continuous ("uniform", "gauss", "user-defined")
 
         :Type: str
+        """,
+    )
+
+    def _get_is_current_harm(self):
+        """getter of is_current_harm"""
+        return self._is_current_harm
+
+    def _set_is_current_harm(self, value):
+        """setter of is_current_harm"""
+        check_var("is_current_harm", value, "bool")
+        self._is_current_harm = value
+
+    is_current_harm = property(
+        fget=_get_is_current_harm,
+        fset=_set_is_current_harm,
+        doc=u"""0 To compute only the airgap flux from fundamental current harmonics
+
+        :Type: bool
         """,
     )

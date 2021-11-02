@@ -4,6 +4,7 @@ import pytest
 import matplotlib.pyplot as plt
 from numpy import exp, pi, ones, array, zeros
 from numpy import argmax, cos, abs as np_abs, angle as np_angle
+from pyleecan.Classes.OPdq import OPdq
 
 from pyleecan.definitions import config_dict
 from Tests import save_plot_path as save_path
@@ -237,7 +238,7 @@ def test_axis_LamWind():
     mmf_waveform = magmax * cos(p * angle_rotor + phimax)
     ind_max = argmax(mmf_waveform)
     d_angle = angle_rotor[ind_max]
-    (per_a, _, _, _) = SCIM_001.stator.comp_periodicity()
+    per_a, _ = SCIM_001.stator.comp_periodicity_spatial()
     d_angle = d_angle % (2 * pi / per_a)
 
     fig = plt.figure("MMF fundamental")
@@ -264,8 +265,7 @@ def test_axis_LamWind():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
         angle_rotor_initial=0,

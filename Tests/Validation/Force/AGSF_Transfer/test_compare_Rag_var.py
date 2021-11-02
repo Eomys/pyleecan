@@ -5,6 +5,7 @@ from os.path import join
 from multiprocessing import cpu_count
 
 from pyleecan.Classes.ForceMT import ForceMT
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -32,7 +33,10 @@ def test_compare_Rag_variation():
     simu = Simu1(name="test_compare_Rag_variation_direct", machine=Benchmark)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=5 * 2 ** 8, Nt_tot=2, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=5 * 2 ** 8,
+        Nt_tot=2,
     )
 
     # Configure simulation
@@ -93,7 +97,7 @@ def test_compare_Rag_variation():
         AGSF_list2.append(out_list2[ik].force.AGSF)
 
         out_list[ik].force.AGSF.plot_2D_Data(
-            "angle=[0,3.14]",
+            "angle",
             "time=0",
             data_list=[AGSF_list2[ik]],
             legend_list=["Direct", "Transfer"],
@@ -138,7 +142,10 @@ def test_compare_Rag_variation_Nmax_sensitivity():
     )
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=5 * 2 ** 8, Nt_tot=2, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=5 * 2 ** 8,
+        Nt_tot=2,
     )
 
     # Configure simulation
@@ -188,7 +195,7 @@ def test_compare_Rag_variation_Nmax_sensitivity():
         AGSF_list.append(out_tmp.force.AGSF)
 
     out.force.AGSF.plot_2D_Data(
-        "angle=[0,3.14]",
+        "angle",
         "time=0",
         data_list=AGSF_list,
         legend_list=legend_list,

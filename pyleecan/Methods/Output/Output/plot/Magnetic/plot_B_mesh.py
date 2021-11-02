@@ -172,7 +172,7 @@ def plot_B_mesh(
             )
             nframe = len(field_B)
             is_time = True
-        
+
             if is_contour:
                 mesh_pv_Az, field_A, field_name_A = MS_B_plot.get_mesh_field_pv(
                     "time",
@@ -196,7 +196,7 @@ def plot_B_mesh(
             else:
                 field = field_B
                 phase = exp(1j * 2 * pi * t[i])
-                        
+
                 if is_contour:
                     field_At = field_A
             # Compute pyvista object
@@ -211,7 +211,7 @@ def plot_B_mesh(
             )
 
             if is_contour:
-                mesh_pv_Az[field_name_A] = real(field_At*phase)
+                mesh_pv_Az[field_name_A] = real(field_At * phase)
                 contours = mesh_pv_Az.contour()
                 p.add_mesh(contours, color="black", line_width=5)
 

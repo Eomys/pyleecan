@@ -23,7 +23,7 @@ def comp_force_nodal(self, output, axes_dict):
     """
 
     dim = 2
-    Time = axes_dict["Time"]
+    Time = axes_dict["time"]
     Nt_tot = Time.get_length()  # Number of time step
 
     meshsolution_mag = output.mag.meshsolution  # Comes from FEMM simulation

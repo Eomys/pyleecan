@@ -129,7 +129,14 @@ def solve_FEMM_parallel(
 
     # Init mesh solution as None since array allocation can only be done once
     # number of elements is known, i.e. after first time step resolution
-    B_elem, H_elem, mu_elem, meshFEMM, groups, A_node = None, None, None, None, None, None
+    B_elem, H_elem, mu_elem, meshFEMM, groups, A_node = (
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+    )
 
     # Loading parameters for readibility
     fem_file = self.get_path_save_fem(output)

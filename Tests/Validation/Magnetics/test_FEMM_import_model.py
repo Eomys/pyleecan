@@ -3,6 +3,7 @@ from os.path import join
 import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
 from numpy.testing import assert_array_almost_equal
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -46,7 +47,7 @@ def test_FEMM_import_model():
         )
     )
     simu.input.Ir = None  # SPMSM machine => no rotor currents to define
-    simu.input.N0 = 3000  # Rotor speed [rpm]
+    simu.input.OP = OPdq(N0=3000)  # Rotor speed [rpm]
 
     # Definition of the magnetic simulation
     simu.mag = MagFEMM(

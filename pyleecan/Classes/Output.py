@@ -18,11 +18,16 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.Output.getter.get_angle_offset_initial import (
-        get_angle_offset_initial,
+    from ..Methods.Output.Output.getter.comp_angle_rotor import comp_angle_rotor
+except ImportError as error:
+    comp_angle_rotor = error
+
+try:
+    from ..Methods.Output.Output.getter.get_angle_rotor_initial import (
+        get_angle_rotor_initial,
     )
 except ImportError as error:
-    get_angle_offset_initial = error
+    get_angle_rotor_initial = error
 
 try:
     from ..Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
@@ -50,11 +55,6 @@ try:
     )
 except ImportError as error:
     get_machine_periodicity = error
-
-try:
-    from ..Methods.Output.Output.getter.get_rot_dir import get_rot_dir
-except ImportError as error:
-    get_rot_dir = error
 
 try:
     from ..Methods.Output.Output.getter.get_fund_harm import get_fund_harm
@@ -94,18 +94,29 @@ class Output(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.Output.getter.get_angle_offset_initial
-    if isinstance(get_angle_offset_initial, ImportError):
-        get_angle_offset_initial = property(
+    # cf Methods.Output.Output.getter.comp_angle_rotor
+    if isinstance(comp_angle_rotor, ImportError):
+        comp_angle_rotor = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method get_angle_offset_initial: "
-                    + str(get_angle_offset_initial)
+                    "Can't use Output method comp_angle_rotor: " + str(comp_angle_rotor)
                 )
             )
         )
     else:
-        get_angle_offset_initial = get_angle_offset_initial
+        comp_angle_rotor = comp_angle_rotor
+    # cf Methods.Output.Output.getter.get_angle_rotor_initial
+    if isinstance(get_angle_rotor_initial, ImportError):
+        get_angle_rotor_initial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_angle_rotor_initial: "
+                    + str(get_angle_rotor_initial)
+                )
+            )
+        )
+    else:
+        get_angle_rotor_initial = get_angle_rotor_initial
     # cf Methods.Output.Output.getter.get_angle_rotor
     if isinstance(get_angle_rotor, ImportError):
         get_angle_rotor = property(
@@ -162,15 +173,6 @@ class Output(FrozenClass):
         )
     else:
         get_machine_periodicity = get_machine_periodicity
-    # cf Methods.Output.Output.getter.get_rot_dir
-    if isinstance(get_rot_dir, ImportError):
-        get_rot_dir = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method get_rot_dir: " + str(get_rot_dir))
-            )
-        )
-    else:
-        get_rot_dir = get_rot_dir
     # cf Methods.Output.Output.getter.get_fund_harm
     if isinstance(get_fund_harm, ImportError):
         get_fund_harm = property(

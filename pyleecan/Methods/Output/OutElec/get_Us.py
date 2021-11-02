@@ -1,31 +1,42 @@
-from ....Functions.Electrical.coordinate_transformation import dq2n
-from numpy import pi, array, transpose
-from SciDataTool import Data1D, DataTime
-from ....Functions.Winding.gen_phase_list import gen_name
+from numpy import array
+
+from SciDataTool import DataTime
+
+from ....Functions.Electrical.dqh_transformation import dqh2n
 
 
 def get_Us(self):
-    """Return the stator voltage"""
+    """Return the fundamental stator voltage as DataND object
+
+    Parameters
+    ----------
+    self : OutElec
+        an OutElec object
+
+    Returns
+    -------
+    Us: DataND
+        fundamental stator voltage
+    """
     if self.Us is None:
         # Generate current according to Ud/Uq
-        Usdq = array([self.Ud_ref, self.Uq_ref])
-        time = self.Time.get_values(is_oneperiod=True)
-        qs = self.parent.simu.machine.stator.winding.qs
-        felec = self.felec
+        Usdqh = array([self.OP.get_Ud_Uq()["Ud"], self.OP.get_Ud_Uq()["Uq"], 0])
 
-        # add stator current
-        Us = dq2n(Usdq, 2 * pi * felec * time, n=qs)
-        Phase = Data1D(
-            name="phase",
-            unit="",
-            values=gen_name(qs),
-            is_components=True,
-        )
+        Time = self.axes_dict["time"]
+
+        angle_elec = Time.get_values(is_smallestperiod=True, normalization="angle_elec")
+        qs = self.parent.simu.machine.stator.winding.qs
+        stator_label = "phase_" + self.parent.simu.machine.stator.get_label()
+        phase_dir = self.phase_dir
+
+        # Switch from dqh to abc referential
+        Us = dqh2n(Usdqh, angle_elec, n=qs, is_n_rms=False, phase_dir=phase_dir)
+
         self.Us = DataTime(
             name="Stator voltage",
             unit="V",
             symbol="Us",
-            axes=[Phase, self.Time.copy()],
-            values=transpose(Us),
+            axes=[Time.copy(), self.axes_dict[stator_label].copy()],
+            values=Us,
         )
     return self.Us

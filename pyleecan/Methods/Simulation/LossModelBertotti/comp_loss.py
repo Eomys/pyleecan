@@ -64,7 +64,7 @@ def comp_loss(self, output, part_label):
     L1 = lam.L1
     mat_type = lam.mat_type
     rho = mat_type.struct.rho
-    N0 = output.elec.N0
+    N0 = output.elec.OP.get_N0()
     group_name = part_label.lower() + " " + self.group  # TODO unifiy FEA names
 
     # setup meshsolution and solution list
@@ -113,7 +113,7 @@ def comp_loss(self, output, part_label):
         N0_list = self.N0 if self.N0 else [N0]
         k_freq = [n / N0 for n in N0_list]
 
-        Time = output.elec.Time
+        Time = output.elec.axes_dict["time"]
         Speed = Data1D(name="speed", unit="rpm", symbol="N0", values=N0_list)
 
         loss_sum = _comp_loss_sum(self, LossDensComps, area, k_freq)[newaxis, :]

@@ -341,7 +341,7 @@ class EEC_SCIM(EEC):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle])
 
         :Type: bool
         """,

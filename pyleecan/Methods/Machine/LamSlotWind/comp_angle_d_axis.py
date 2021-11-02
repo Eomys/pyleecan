@@ -1,7 +1,7 @@
 from numpy import argmax, cos, abs as np_abs, angle as np_angle
 
 
-def comp_angle_d_axis(self):
+def comp_angle_d_axis(self, is_plot=False):
     """Compute the angle between the X axis and the first d+ axis
     By convention a "Tooth" is centered on the X axis
 
@@ -9,6 +9,8 @@ def comp_angle_d_axis(self):
     ----------
     self : LamSlotWind
         A LamSlotWind object
+    is_plot : bool
+        True to plot d axis position regarding unit mmf
 
     Returns
     -------
@@ -43,13 +45,16 @@ def comp_angle_d_axis(self):
     # Get the first angle where mmf is max
     d_angle = angle_stator[argmax(mmf_waveform)]
 
-    # import matplotlib.pyplot as plt
-    # from numpy import squeeze
+    if is_plot:
+        import matplotlib.pyplot as plt
+        from numpy import squeeze
 
-    # fig, ax = plt.subplots()
-    # ax.plot(angle_stator, squeeze(MMF.get_along("angle[oneperiod]")[MMF.symbol]), "k")
-    # ax.plot(angle_stator, mmf_waveform, "r")
-    # ax.plot([d_angle, d_angle], [-magmax, magmax], "--k")
-    # plt.show()
+        fig, ax = plt.subplots()
+        ax.plot(
+            angle_stator, squeeze(MMF.get_along("angle[oneperiod]")[MMF.symbol]), "k"
+        )
+        ax.plot(angle_stator, mmf_waveform, "r")
+        ax.plot([d_angle, d_angle], [-magmax, magmax], "--k")
+        plt.show()
 
     return d_angle

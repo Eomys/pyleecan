@@ -23,9 +23,12 @@ def run(self):
     # and returns additional axes in axes_dict
     axes_dict = self.comp_axes(output)
 
-    # Loop over skew axis
+    # Get z axis
     Slice_axis = axes_dict["z"]
     unique_indices = Slice_axis.unique_indices
+
+    # Get stator and rotor currents if requested
+    Is_val, Ir_val = self.comp_I_mag(output, Time=axes_dict["time"])
 
     # First iteration to check dimensions
     # Assign stator and rotor angle shifts
@@ -36,7 +39,7 @@ def run(self):
     Nslices = len(unique_indices)
     if Nslices > 1:
         self.get_logger().info("Solving slice 1 / " + str(Nslices))
-    out_dict = self.comp_flux_airgap(output, axes_dict)
+    out_dict = self.comp_flux_airgap(output, axes_dict, Is=Is_val, Ir=Ir_val)
 
     if Nslices == 1:
         # Add one dimension to ndarray

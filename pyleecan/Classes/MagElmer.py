@@ -43,11 +43,6 @@ except ImportError as error:
     get_path_save = error
 
 try:
-    from ..Methods.Simulation.MagElmer.comp_axes import comp_axes
-except ImportError as error:
-    comp_axes = error
-
-try:
     from ..Methods.Simulation.MagElmer.gen_elmer_mesh import gen_elmer_mesh
 except ImportError as error:
     gen_elmer_mesh = error
@@ -120,15 +115,6 @@ class MagElmer(Magnetics):
         )
     else:
         get_path_save = get_path_save
-    # cf Methods.Simulation.MagElmer.comp_axes
-    if isinstance(comp_axes, ImportError):
-        comp_axes = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MagElmer method comp_axes: " + str(comp_axes))
-            )
-        )
-    else:
-        comp_axes = comp_axes
     # cf Methods.Simulation.MagElmer.gen_elmer_mesh
     if isinstance(gen_elmer_mesh, ImportError):
         gen_elmer_mesh = property(
@@ -175,6 +161,7 @@ class MagElmer(Magnetics):
         Slice_enforced=None,
         Nslices_enforced=None,
         type_distribution_enforced=None,
+        is_current_harm=True,
         init_dict=None,
         init_str=None,
     ):
@@ -247,6 +234,8 @@ class MagElmer(Magnetics):
                 Nslices_enforced = init_dict["Nslices_enforced"]
             if "type_distribution_enforced" in list(init_dict.keys()):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
+            if "is_current_harm" in list(init_dict.keys()):
+                is_current_harm = init_dict["is_current_harm"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -277,6 +266,7 @@ class MagElmer(Magnetics):
             Slice_enforced=Slice_enforced,
             Nslices_enforced=Nslices_enforced,
             type_distribution_enforced=type_distribution_enforced,
+            is_current_harm=is_current_harm,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties

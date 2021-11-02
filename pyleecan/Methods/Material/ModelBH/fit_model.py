@@ -6,7 +6,7 @@ from scipy.optimize import curve_fit, root_scalar
 
 def fit_model(self, BH):
     """
-    Fit the BH model paramaters based on input B(H) curve of the material, and perform extrapolation.
+    Fit the BH model parameters based on input B(H) curve of the material, and perform extrapolation.
 
     Parameters
     ----------

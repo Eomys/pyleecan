@@ -13,6 +13,7 @@ from pyleecan.definitions import PACKAGE_NAME
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.OPslip import OPslip
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
 from pyleecan.Classes.OptiObjective import OptiObjective
@@ -64,8 +65,7 @@ def test_Binh_and_Korn():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPslip(N0=N0),
         time=time,
         Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + np.pi,

@@ -1,4 +1,5 @@
 # Multisimulation objects
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.VarParam import VarParam
 from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
 from pyleecan.Classes.DataKeeper import DataKeeper
@@ -53,8 +54,7 @@ def test_slot_scale():
     ref_simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=2504,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=2504),
         time=time,
         Na_tot=Na_tot,
         angle_rotor_initial=0.86,

@@ -2,7 +2,7 @@
 
 
 def comp_resistance_wind(self, T=20):
-    """Compute the DC winding resistance per phase without skin effect
+    """Compute the DC winding resistance per phase without skin effect at average temperature T degC
 
     Parameters
     ----------

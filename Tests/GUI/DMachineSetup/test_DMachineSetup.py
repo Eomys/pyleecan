@@ -177,8 +177,8 @@ if __name__ == "__main__":
     a = TestDMachineSetup()
     a.setup_class()
     a.setup_method()
-    for ii, test_dict in enumerate(load_test):
-        print(ii)
-        a.test_load(test_dict)
-    a.test_load(load_test[6])
+    # for ii, test_dict in enumerate(load_test):
+    #     print(ii)
+    #     a.test_load(test_dict)
+    a.test_load(load_test[0])
     print("Done")

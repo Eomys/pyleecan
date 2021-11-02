@@ -44,6 +44,8 @@ on Pyleecan open-source object-oriented software"
 """
 
 
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.MagFEMM
 @pytest.mark.SCIM
 @pytest.mark.periodicity
@@ -65,8 +67,7 @@ def test_FEMM_sym():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
         angle_rotor_initial=0.2244,
@@ -552,8 +553,7 @@ def test_ecc_FEMM():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
-        angle_rotor=None,
+        OP=OPdq(N0=N0),
         time=time,
         angle=angle,
         angle_rotor_initial=0,
@@ -680,8 +680,7 @@ def test_Optimization_problem():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
         angle_rotor_initial=0.39,
@@ -843,4 +842,5 @@ def test_Optimization_problem():
 
 if __name__ == "__main__":
     test_FEMM_sym()
-    # test_WindingUD_layer()
+    test_ecc_FEMM()
+    test_WindingUD_layer()

@@ -1,4 +1,4 @@
-from numpy import mean, max as np_max, min as np_min
+from numpy import max as np_max, min as np_min, mean as np_mean
 
 from SciDataTool import DataTime, VectorField, Data1D
 
@@ -20,17 +20,23 @@ def store(self, out_dict, axes_dict):
 
     """
 
+    # Store axes_dict
+    self.axes_dict = axes_dict
+
     # Get time axis
-    Time = axes_dict["Time"]
+    Time = axes_dict["time"]
 
     # Store airgap flux as VectorField object
     # Axes for each airgap flux component
-    axis_list = [Time, axes_dict["Angle"], axes_dict["z"]]
+    axis_list = [Time, axes_dict["angle"], axes_dict["z"]]
+
     # Create VectorField with empty components
-    self.B = VectorField(
-        name="Airgap flux density",
-        symbol="B",
-    )
+    if "Br" in out_dict or "Bt" in out_dict or "Bz" in out_dict:
+        self.B = VectorField(
+            name="Airgap flux density",
+            symbol="B",
+        )
+
     # Radial flux component
     if "Br" in out_dict:
         self.B.components["radial"] = DataTime(
@@ -67,7 +73,7 @@ def store(self, out_dict, axes_dict):
             name="Electromagnetic torque per slice",
             unit="N",
             symbol="T_{em}",
-            axes=[axes_dict["Time_Tem"], axes_dict["z"]],
+            axes=[axes_dict["time_Tem"], axes_dict["z"]],
             values=out_dict.pop("Tem"),
         )
 
@@ -75,16 +81,15 @@ def store(self, out_dict, axes_dict):
         self.Tem = self.Tem_slice.get_data_along("time[smallestperiod]", "z=integrate")
 
         # Calculate average torque in Nm
-        Tem_values = self.Tem.get_along("time[smallestperiod]")[self.Tem.symbol]
-        self.Tem_av = mean(Tem_values)
-        self.get_logger().debug("Average Torque: " + str(self.Tem_av) + " N.m")
+        self.Tem_av = np_mean(self.Tem.values)
+        # self.Tem_av = float(self.Tem.get_along("time=mean")[self.Tem.symbol])
 
-        # Calculate peak to peak torque in absolute value Nm
-        self.Tem_rip_pp = abs(np_max(Tem_values) - np_min(Tem_values))  # [N.m]
+        # Calculate peak to peak torque in absolute value [N.m]
+        self.Tem_rip_pp = abs(np_max(self.Tem.values) - np_min(self.Tem.values))
 
-        # Calculate torque ripple in percentage
+        # Calculate torque ripple in percentage [%]
         if self.Tem_av != 0:
-            self.Tem_rip_norm = self.Tem_rip_pp / self.Tem_av  # []
+            self.Tem_rip_norm = self.Tem_rip_pp / self.Tem_av
         else:
             self.Tem_rip_norm = None
 
@@ -126,7 +131,7 @@ def store(self, out_dict, axes_dict):
             self.Phi_wind_stator = self.Phi_wind[STATOR_LAB + "-0"]
 
         # Electromotive force computation
-        self.comp_emf()
+        # self.comp_emf()
 
     # Store MeshSolution object
     if "meshsolution" in out_dict:

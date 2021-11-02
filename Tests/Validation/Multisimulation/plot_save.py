@@ -48,7 +48,7 @@ def plot_save(output):
             "Simulation W0="
             + format(output.simu.machine.stator.slot.W0, ".4g")
             + " N0="
-            + format(output.simu.input.N0, ".4g"),
+            + format(output.simu.input.OP.N0, ".4g"),
             fontsize=20,
         )
         fig.savefig(
@@ -57,7 +57,7 @@ def plot_save(output):
                 "machine_W0="
                 + format(output.simu.machine.stator.slot.W0, ".4g")
                 + "_N0="
-                + format(output.simu.input.N0, ".4g")
+                + format(output.simu.input.OP.N0, ".4g")
                 + ".png",
             ),
             dpi=100,

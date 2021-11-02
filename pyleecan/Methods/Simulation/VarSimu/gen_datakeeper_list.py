@@ -20,7 +20,7 @@ def gen_datakeeper_list(self, ref_simu):
                 name="Speed",
                 symbol="N0",
                 unit="rpm",
-                keeper="lambda output: output.elec.N0",
+                keeper="lambda output: output.elec.OP.get_N0()",
             )
         )
 

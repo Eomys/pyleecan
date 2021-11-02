@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
-from numpy import pi, linspace, zeros, ones, dot, squeeze
-from SciDataTool import Data1D, DataTime, Norm_ref
-from ....Functions.Electrical.coordinate_transformation import dq2n
-from ....Functions.Winding.gen_phase_list import gen_name
-from pyleecan.Classes.Winding import Winding
+from ....Functions.Load.import_class import import_class
 
 
-def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
+def comp_mmf_unit(self, Na, Nt, felec=1, current_dir=None, phase_dir=None):
     """Compute the winding Unit magnetomotive force
 
     Parameters
@@ -17,8 +12,12 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
         Space discretization for offline computation (otherwise use out.elec.angle)
     Nt : int
         Time discretization for offline computation (otherwise use out.elec.time)
-    freq : float
+    felec : float
         Stator current frequency to consider
+    current_dir: int
+        Stator current rotation direction +/-1
+    phase_dir: int
+        Stator winding phasor rotation direction +/-1
 
     Returns
     -------
@@ -29,64 +28,11 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
 
     """
 
-    # Get stator winding number of phases
-    qs = self.winding.qs
+    # Call method of LamSlotWind
+    LamSlotWind = import_class("pyleecan.Classes", "LamSlotWind")
 
-    # Get number of pole pairs
-    p = self.get_pole_pair_number()
-
-    # Get spatial symmetry
-    per_a, _, _, _ = self.comp_periodicity(p=p)
-
-    # Define the space dicretization
-    angle = linspace(0, 2 * pi / per_a, Na, endpoint=False)
-
-    # Define the time dicretization
-    time = linspace(0, 1 / freq, Nt, endpoint=False)
-
-    # Compute the winding function and mmf
-    if self.winding is None or self.winding.conductor is None:
-        wf = zeros((qs, Na))
-    else:
-        wf = self.comp_wind_function(angle=angle, per_a=per_a)
-
-    # Compute unit current function of time applying constant Id=1 Arms, Iq=0
-    Idq = zeros((Nt, 2))
-    Idq[:, 0] = ones(Nt)
-    I = dq2n(Idq, 2 * pi * freq * time, n=qs, is_n_rms=False)
-
-    # Compute unit mmf
-    mmf_u = squeeze(dot(I, wf))
-
-    # Create a Data object
-    Time = Data1D(name="time", unit="s", values=time)
-    Angle = Data1D(
-        name="angle",
-        unit="rad",
-        symmetries={"period": per_a},
-        values=angle,
-        normalizations={"space_order": Norm_ref(ref=self.get_pole_pair_number())},
-    )
-    Phase = Data1D(
-        name="phase",
-        unit="",
-        values=gen_name(qs),
-        is_components=True,
-    )
-    MMF_U = DataTime(
-        name="Total MMF",
-        unit="A",
-        symbol="Magnitude",
-        axes=[Time, Angle],
-        values=mmf_u,
-    )
-
-    WF = DataTime(
-        name="Phase MMF",
-        unit="A",
-        symbol="Magnitude",
-        axes=[Phase, Angle],
-        values=wf,
+    MMF_U, WF = LamSlotWind.comp_mmf_unit(
+        self, Na=Na, Nt=Nt, felec=felec, current_dir=current_dir, phase_dir=phase_dir
     )
 
     return MMF_U, WF

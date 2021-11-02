@@ -16,6 +16,7 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.ParamExplorerInterval import ParamExplorerInterval
 from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
@@ -130,10 +131,7 @@ def test_multi_multi():
     simu.input = InputCurrent(
         Is=None,
         Ir=None,  # No winding on the rotor
-        N0=N0_MTPA[0],
-        Id_ref=Id_MTPA[0],
-        Iq_ref=Iq_MTPA[0],
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0_MTPA[0], Id_ref=Id_MTPA[0], Iq_ref=Iq_MTPA[0]),
         Nt_tot=Nt_tot,
         Na_tot=2048,
     )

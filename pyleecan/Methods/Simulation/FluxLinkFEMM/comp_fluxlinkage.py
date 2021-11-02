@@ -1,49 +1,68 @@
-# -*- coding: utf-8 -*-
+from os.path import join
 
-from ....Functions.Electrical.comp_fluxlinkage import comp_fluxlinkage as comp_flx
-from numpy import zeros, split, mean
-import matplotlib.pyplot as plt
+from ....Classes.InputCurrent import InputCurrent
+from ....Classes.OPdq import OPdq
+from ....Classes.MagFEMM import MagFEMM
+from ....Classes.Simu1 import Simu1
+from ....Classes.Simulation import Simulation
+from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 
 
-def comp_fluxlinkage(self, output):
+def comp_fluxlinkage(self, machine):
     """Compute using FEMM the flux linkage
 
     Parameters
     ----------
     self : FluxLinkFEMM
         a FluxLinkFEMM object
-    output : Output
-        an Output object
+    machine : Machine
+        a Machine object
+
+    Returns
+    ----------
+    Phi_d_mean: float
+        Flux linkage along d-axis
     """
 
-    self.get_logger().info("INFO: Compute flux linkage with FEMM")
+    self.get_logger().info("Compute flux linkage with FEMM")
 
-    # store orignal currents
-    Is = output.elec.Is
-    Id_ref = output.elec.Id_ref
-    Iq_ref = output.elec.Iq_ref
+    # Get simulation name and result path
+    if isinstance(machine.parent, Simulation) and machine.parent.name not in [None, ""]:
+        simu_name = machine.parent.name + "_FluxLinkFEMM"
+        path_result = (
+            join(machine.parent.path_result, "FluxLinkFEMM")
+            if machine.parent.path_result not in [None, ""]
+            else None
+        )
+    elif machine.name not in [None, ""]:
+        simu_name = machine.name + "_FluxLinkFEMM"
+        path_result = None
+    else:
+        simu_name = "FluxLinkFEMM"
+        path_result = None
 
-    # Set currents at 0A for the FEMM simulation
-    output.elec.Is = None
-    output.elec.Id_ref = 0
-    output.elec.Iq_ref = 0
+    # Define simulation
+    simu_fl = Simu1(elec=None, name=simu_name, path_result=path_result, machine=machine)
+    simu_fl.input = InputCurrent(
+        OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0), Nt_tot=self.Nt_tot, Na_tot=2048
+    )
+    simu_fl.mag = MagFEMM(
+        is_periodicity_t=True,
+        is_periodicity_a=self.is_periodicity_a,
+        is_sliding_band=self.is_sliding_band,
+        Kgeo_fineness=self.Kgeo_fineness,
+        type_calc_leakage=self.type_calc_leakage,
+        nb_worker=self.nb_worker,
+    )
 
-    # compute the fluxlinkage
-    fluxdq = comp_flx(self, output)
+    # Run Simulation
+    out_fl = simu_fl.run()
 
-    # flux = split(Phi_wind, 3, axis=1)
-    # fig = plt.figure()
-    # plt.plot(angle, flux[0], color="tab:blue", label="A")
-    # plt.plot(angle, flux[1], color="tab:red", label="B")
-    # plt.plot(angle, flux[2], color="tab:olive", label="C")
-    # plt.plot(angle, fluxdq[0], color="k", label="D")
-    # plt.plot(angle, fluxdq[1], color="g", label="Q")
-    # plt.legend()
-    # fig.savefig("test_fluxlink.png")
+    # Post-Process
+    stator_label = machine.stator.get_label()
+    Phidqh = n2dqh_DataTime(
+        out_fl.mag.Phi_wind[stator_label], phase_dir=out_fl.elec.phase_dir
+    )
+    Phi_d_mean = float(Phidqh.get_along("time=mean", "phase[0]")[Phidqh.symbol])
 
-    # restore orignal currents
-    output.elec.Is = Is
-    output.elec.Id_ref = Id_ref
-    output.elec.Iq_ref = Iq_ref
-
-    return mean(fluxdq[0])
+    return Phi_d_mean

@@ -53,11 +53,6 @@ except ImportError as error:
     get_Zs = error
 
 try:
-    from ..Methods.Machine.LamSlot.comp_periodicity import comp_periodicity
-except ImportError as error:
-    comp_periodicity = error
-
-try:
     from ..Methods.Machine.LamSlot.get_bore_desc import get_bore_desc
 except ImportError as error:
     get_bore_desc = error
@@ -161,18 +156,6 @@ class LamSlot(Lamination):
         )
     else:
         get_Zs = get_Zs
-    # cf Methods.Machine.LamSlot.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlot method comp_periodicity: "
-                    + str(comp_periodicity)
-                )
-            )
-        )
-    else:
-        comp_periodicity = comp_periodicity
     # cf Methods.Machine.LamSlot.get_bore_desc
     if isinstance(get_bore_desc, ImportError):
         get_bore_desc = property(

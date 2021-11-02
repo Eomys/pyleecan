@@ -32,14 +32,8 @@ class OutStruct(FrozenClass):
 
     def __init__(
         self,
-        Time=None,
-        Angle=None,
-        Nt_tot=None,
-        Na_tot=None,
+        axes_dict=None,
         logger_name="Pyleecan.Structural",
-        Yr=None,
-        Vr=None,
-        Ar=None,
         meshsolution=-1,
         FEA_dict=None,
         init_dict=None,
@@ -60,36 +54,18 @@ class OutStruct(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Time" in list(init_dict.keys()):
-                Time = init_dict["Time"]
-            if "Angle" in list(init_dict.keys()):
-                Angle = init_dict["Angle"]
-            if "Nt_tot" in list(init_dict.keys()):
-                Nt_tot = init_dict["Nt_tot"]
-            if "Na_tot" in list(init_dict.keys()):
-                Na_tot = init_dict["Na_tot"]
+            if "axes_dict" in list(init_dict.keys()):
+                axes_dict = init_dict["axes_dict"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-            if "Yr" in list(init_dict.keys()):
-                Yr = init_dict["Yr"]
-            if "Vr" in list(init_dict.keys()):
-                Vr = init_dict["Vr"]
-            if "Ar" in list(init_dict.keys()):
-                Ar = init_dict["Ar"]
             if "meshsolution" in list(init_dict.keys()):
                 meshsolution = init_dict["meshsolution"]
             if "FEA_dict" in list(init_dict.keys()):
                 FEA_dict = init_dict["FEA_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.Time = Time
-        self.Angle = Angle
-        self.Nt_tot = Nt_tot
-        self.Na_tot = Na_tot
+        self.axes_dict = axes_dict
         self.logger_name = logger_name
-        self.Yr = Yr
-        self.Vr = Vr
-        self.Ar = Ar
         self.meshsolution = meshsolution
         self.FEA_dict = FEA_dict
 
@@ -104,14 +80,8 @@ class OutStruct(FrozenClass):
             OutStruct_str += "parent = None " + linesep
         else:
             OutStruct_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutStruct_str += "Time = " + str(self.Time) + linesep + linesep
-        OutStruct_str += "Angle = " + str(self.Angle) + linesep + linesep
-        OutStruct_str += "Nt_tot = " + str(self.Nt_tot) + linesep
-        OutStruct_str += "Na_tot = " + str(self.Na_tot) + linesep
+        OutStruct_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
         OutStruct_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OutStruct_str += "Yr = " + str(self.Yr) + linesep + linesep
-        OutStruct_str += "Vr = " + str(self.Vr) + linesep + linesep
-        OutStruct_str += "Ar = " + str(self.Ar) + linesep + linesep
         if self.meshsolution is not None:
             tmp = (
                 self.meshsolution.__str__()
@@ -129,21 +99,9 @@ class OutStruct(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.Time != self.Time:
-            return False
-        if other.Angle != self.Angle:
-            return False
-        if other.Nt_tot != self.Nt_tot:
-            return False
-        if other.Na_tot != self.Na_tot:
+        if other.axes_dict != self.axes_dict:
             return False
         if other.logger_name != self.logger_name:
-            return False
-        if other.Yr != self.Yr:
-            return False
-        if other.Vr != self.Vr:
-            return False
-        if other.Ar != self.Ar:
             return False
         if other.meshsolution != self.meshsolution:
             return False
@@ -159,42 +117,23 @@ class OutStruct(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if (other.Time is None and self.Time is not None) or (
-            other.Time is not None and self.Time is None
+        if (other.axes_dict is None and self.axes_dict is not None) or (
+            other.axes_dict is not None and self.axes_dict is None
         ):
-            diff_list.append(name + ".Time None mismatch")
-        elif self.Time is not None:
-            diff_list.extend(self.Time.compare(other.Time, name=name + ".Time"))
-        if (other.Angle is None and self.Angle is not None) or (
-            other.Angle is not None and self.Angle is None
-        ):
-            diff_list.append(name + ".Angle None mismatch")
-        elif self.Angle is not None:
-            diff_list.extend(self.Angle.compare(other.Angle, name=name + ".Angle"))
-        if other._Nt_tot != self._Nt_tot:
-            diff_list.append(name + ".Nt_tot")
-        if other._Na_tot != self._Na_tot:
-            diff_list.append(name + ".Na_tot")
+            diff_list.append(name + ".axes_dict None mismatch")
+        elif self.axes_dict is None:
+            pass
+        elif len(other.axes_dict) != len(self.axes_dict):
+            diff_list.append("len(" + name + "axes_dict)")
+        else:
+            for key in self.axes_dict:
+                diff_list.extend(
+                    self.axes_dict[key].compare(
+                        other.axes_dict[key], name=name + ".axes_dict"
+                    )
+                )
         if other._logger_name != self._logger_name:
             diff_list.append(name + ".logger_name")
-        if (other.Yr is None and self.Yr is not None) or (
-            other.Yr is not None and self.Yr is None
-        ):
-            diff_list.append(name + ".Yr None mismatch")
-        elif self.Yr is not None:
-            diff_list.extend(self.Yr.compare(other.Yr, name=name + ".Yr"))
-        if (other.Vr is None and self.Vr is not None) or (
-            other.Vr is not None and self.Vr is None
-        ):
-            diff_list.append(name + ".Vr None mismatch")
-        elif self.Vr is not None:
-            diff_list.extend(self.Vr.compare(other.Vr, name=name + ".Vr"))
-        if (other.Ar is None and self.Ar is not None) or (
-            other.Ar is not None and self.Ar is None
-        ):
-            diff_list.append(name + ".Ar None mismatch")
-        elif self.Ar is not None:
-            diff_list.extend(self.Ar.compare(other.Ar, name=name + ".Ar"))
         if (other.meshsolution is None and self.meshsolution is not None) or (
             other.meshsolution is not None and self.meshsolution is None
         ):
@@ -215,14 +154,10 @@ class OutStruct(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.Time)
-        S += getsizeof(self.Angle)
-        S += getsizeof(self.Nt_tot)
-        S += getsizeof(self.Na_tot)
+        if self.axes_dict is not None:
+            for key, value in self.axes_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.logger_name)
-        S += getsizeof(self.Yr)
-        S += getsizeof(self.Vr)
-        S += getsizeof(self.Ar)
         S += getsizeof(self.meshsolution)
         if self.FEA_dict is not None:
             for key, value in self.FEA_dict.items():
@@ -241,49 +176,20 @@ class OutStruct(FrozenClass):
         """
 
         OutStruct_dict = dict()
-        if self.Time is None:
-            OutStruct_dict["Time"] = None
+        if self.axes_dict is None:
+            OutStruct_dict["axes_dict"] = None
         else:
-            OutStruct_dict["Time"] = self.Time.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
-        if self.Angle is None:
-            OutStruct_dict["Angle"] = None
-        else:
-            OutStruct_dict["Angle"] = self.Angle.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
-        OutStruct_dict["Nt_tot"] = self.Nt_tot
-        OutStruct_dict["Na_tot"] = self.Na_tot
+            OutStruct_dict["axes_dict"] = dict()
+            for key, obj in self.axes_dict.items():
+                if obj is not None:
+                    OutStruct_dict["axes_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
+                else:
+                    OutStruct_dict["axes_dict"][key] = None
         OutStruct_dict["logger_name"] = self.logger_name
-        if self.Yr is None:
-            OutStruct_dict["Yr"] = None
-        else:
-            OutStruct_dict["Yr"] = self.Yr.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
-        if self.Vr is None:
-            OutStruct_dict["Vr"] = None
-        else:
-            OutStruct_dict["Vr"] = self.Vr.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
-        if self.Ar is None:
-            OutStruct_dict["Ar"] = None
-        else:
-            OutStruct_dict["Ar"] = self.Ar.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
         if self.meshsolution is None:
             OutStruct_dict["meshsolution"] = None
         else:
@@ -302,105 +208,40 @@ class OutStruct(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Time = None
-        self.Angle = None
-        self.Nt_tot = None
-        self.Na_tot = None
+        self.axes_dict = None
         self.logger_name = None
-        self.Yr = None
-        self.Vr = None
-        self.Ar = None
         if self.meshsolution is not None:
             self.meshsolution._set_None()
         self.FEA_dict = None
 
-    def _get_Time(self):
-        """getter of Time"""
-        return self._Time
+    def _get_axes_dict(self):
+        """getter of axes_dict"""
+        if self._axes_dict is not None:
+            for key, obj in self._axes_dict.items():
+                if obj is not None:
+                    obj.parent = self
+        return self._axes_dict
 
-    def _set_Time(self, value):
-        """setter of Time"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Time"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Data()
-        check_var("Time", value, "Data")
-        self._Time = value
+    def _set_axes_dict(self, value):
+        """setter of axes_dict"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("axes_dict", value, "{Data}")
+        self._axes_dict = value
 
-    Time = property(
-        fget=_get_Time,
-        fset=_set_Time,
-        doc=u"""Structural time Data object
+    axes_dict = property(
+        fget=_get_axes_dict,
+        fset=_set_axes_dict,
+        doc=u"""Dict containing axes data used for Structural
 
-        :Type: SciDataTool.Classes.DataND.Data
-        """,
-    )
-
-    def _get_Angle(self):
-        """getter of Angle"""
-        return self._Angle
-
-    def _set_Angle(self, value):
-        """setter of Angle"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Angle"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Data()
-        check_var("Angle", value, "Data")
-        self._Angle = value
-
-    Angle = property(
-        fget=_get_Angle,
-        fset=_set_Angle,
-        doc=u"""Structural position Data object
-
-        :Type: SciDataTool.Classes.DataND.Data
-        """,
-    )
-
-    def _get_Nt_tot(self):
-        """getter of Nt_tot"""
-        return self._Nt_tot
-
-    def _set_Nt_tot(self, value):
-        """setter of Nt_tot"""
-        check_var("Nt_tot", value, "int")
-        self._Nt_tot = value
-
-    Nt_tot = property(
-        fget=_get_Nt_tot,
-        fset=_set_Nt_tot,
-        doc=u"""Length of the time vector
-
-        :Type: int
-        """,
-    )
-
-    def _get_Na_tot(self):
-        """getter of Na_tot"""
-        return self._Na_tot
-
-    def _set_Na_tot(self, value):
-        """setter of Na_tot"""
-        check_var("Na_tot", value, "int")
-        self._Na_tot = value
-
-    Na_tot = property(
-        fget=_get_Na_tot,
-        fset=_set_Na_tot,
-        doc=u"""Length of the angle vector
-
-        :Type: int
+        :Type: {SciDataTool.Classes.DataND.Data}
         """,
     )
 
@@ -419,87 +260,6 @@ class OutStruct(FrozenClass):
         doc=u"""Name of the logger to use
 
         :Type: str
-        """,
-    )
-
-    def _get_Yr(self):
-        """getter of Yr"""
-        return self._Yr
-
-    def _set_Yr(self, value):
-        """setter of Yr"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Yr"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = DataND()
-        check_var("Yr", value, "DataND")
-        self._Yr = value
-
-    Yr = property(
-        fget=_get_Yr,
-        fset=_set_Yr,
-        doc=u"""Displacement output
-
-        :Type: SciDataTool.Classes.DataND.DataND
-        """,
-    )
-
-    def _get_Vr(self):
-        """getter of Vr"""
-        return self._Vr
-
-    def _set_Vr(self, value):
-        """setter of Vr"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Vr"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = DataND()
-        check_var("Vr", value, "DataND")
-        self._Vr = value
-
-    Vr = property(
-        fget=_get_Vr,
-        fset=_set_Vr,
-        doc=u"""Velocity output
-
-        :Type: SciDataTool.Classes.DataND.DataND
-        """,
-    )
-
-    def _get_Ar(self):
-        """getter of Ar"""
-        return self._Ar
-
-    def _set_Ar(self, value):
-        """setter of Ar"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Ar"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = DataND()
-        check_var("Ar", value, "DataND")
-        self._Ar = value
-
-    Ar = property(
-        fget=_get_Ar,
-        fset=_set_Ar,
-        doc=u"""Acceleration output
-
-        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )
 

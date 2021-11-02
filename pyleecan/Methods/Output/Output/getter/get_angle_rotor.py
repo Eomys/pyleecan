@@ -1,50 +1,41 @@
-# -*- coding: utf-8 -*-
-
-from .....Methods.Output.Output.getter import GetOutError
-from numpy import pi, cumsum, roll, size, ones
+from numpy import pi
 
 
-def get_angle_rotor(self):
-    """
-    Return the angular position of the rotor as a function of time
-    and set the Output.elec.angle_rotor attribute if it is None
+def get_angle_rotor(self, Time=None):
+    """Return the angular position of the rotor as a function of time from Time normalizations
+    and or calculate angle_rotor and add it to Time normalization
 
     Parameters
     ----------
     self : Output
         an Output object
+    Time: Data
+        a time axis (SciDataTool Data object)
 
     Returns
     -------
-    alpha_rotor: numpy.ndarray
+    angle_rotor: ndarray
         angular position of the rotor as a function of time (vector) [rad]
 
     """
 
-    # Already available => Return
-    if self.elec.angle_rotor is not None and self.elec.angle_rotor.size > 0:
-        return self.elec.angle_rotor
-    else:  # Compute according to the speed
-        Nr = self.elec.get_Nr()
-
-        # Get rotor rotating direction
-        rot_dir = (
-            -self.get_rot_dir()
-        )  # rotor rotating is the opposite of rot_dir which is fundamental field rotation direction so that rotor moves in positive angles
-
-        # Compute rotor initial angle (for synchronous machines, to align rotor d-axis and stator alpha-axis)
-        A0 = self.get_angle_offset_initial()
-
-        time = self.elec.Time.get_values(is_oneperiod=False)
-        if time.size == 1:
-            # Only one time step, no need to compute the position
-            return ones(1) * A0
+    # time axis is not provided -> use elec or mag time axis
+    if Time is None:
+        if self.elec.axes_dict is not None and "time" in self.elec.axes_dict:
+            Time = self.elec.axes_dict["time"]
+        elif self.mag.axes_dict is not None and "time" in self.mag.axes_dict:
+            Time = self.mag.axes_dict["time"]
         else:
-            deltaT = time[1] - time[0]
-            # Convert Nr from [rpm] to [rad/s] (time in [s] and angle_rotor in [rad])
-            Ar = cumsum(rot_dir * deltaT * Nr * 2 * pi / 60)
-            # Enforce first position to 0
-            Ar = roll(Ar, 1)
-            Ar[0] = 0
-            self.elec.angle_rotor = Ar + A0
-            return self.elec.angle_rotor
+            raise Exception("No time axis given, cannot compute rotor angle")
+
+    if "angle_rotor" in Time.normalizations:
+        # angle rotor is stored in degrees as normalization of Time axis
+        angle_rotor = Time.get_values(normalization="angle_rotor") * pi / 180
+    else:
+        # Recalculate rotor angular position over time (should not happen)
+        self.get_logger().warning(
+            "angle_rotor not in time normalizations, recalculate rotor angular position over time and add it to normalizations"
+        )
+        angle_rotor = self.comp_angle_rotor(Time)
+
+    return angle_rotor

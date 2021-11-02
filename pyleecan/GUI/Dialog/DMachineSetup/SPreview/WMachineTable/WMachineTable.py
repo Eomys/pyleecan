@@ -9,6 +9,8 @@ from PySide2.QtWidgets import QFileDialog, QTableWidgetItem, QWidget, QMessageBo
 from ......Classes._FEMMHandler import _FEMMHandler
 from ......Classes.Output import Output
 from ......Classes.Simu1 import Simu1
+from ......Classes.OPdq import OPdq
+from ......Classes.OPslip import OPslip
 from ......definitions import config_dict
 from ......loggers import GUI_LOG_NAME
 from ......Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
@@ -130,9 +132,11 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         Ntcoil = self.machine.stator.winding.Ntcoil
         Sphase = S_slot / (Nrad * Ntan)
         J = 5e6
-        output.elec.Id_ref = J * Sphase / Ntcoil
-        output.elec.Iq_ref = 0
-        output.elec.felec = 60
+        if self.machine.is_synchronous():
+            output.elec.OP = OPdq(felec=60)
+        else:
+            output.elec.OP = OPslip(felec=60)
+        output.elec.OP.set_Id_Iq(Id=J * Sphase / Ntcoil, Iq=0)
         output.elec.Time = DataLinspace(
             name="time",
             unit="s",
@@ -146,7 +150,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             is_antiperiod=False,
         )
         Is = output.elec.comp_I_mag(time, is_stator=True)
-        alpha = output.get_angle_offset_initial()
+        alpha = output.get_angle_rotor_initial()
         try:
             # Draw the machine
             FEMM_dict = draw_FEMM(

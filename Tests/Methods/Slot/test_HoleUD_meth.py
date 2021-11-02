@@ -4,6 +4,7 @@ import pytest
 
 from pyleecan.Classes.HoleUD import HoleUD
 from pyleecan.Classes.LamHole import LamHole
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
@@ -130,11 +131,9 @@ class Test_HoleUD_meth(object):
         simu.input = InputCurrent(
             Is=None,
             Ir=None,  # No winding on the rotor
-            N0=N0,
+            OP=OPdq(N0=N0, Id_ref=50, Iq_ref=0),
             Nt_tot=Nt_tot,
             Na_tot=Na_tot,
-            Id_ref=50,
-            Iq_ref=0,
         )
 
         # Definition of the magnetic simulation (no symmetry)

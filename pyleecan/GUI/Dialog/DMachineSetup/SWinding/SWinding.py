@@ -441,16 +441,16 @@ class SWinding(Gen_SWinding, QWidget):
         wind = self.obj.winding  # For readability
 
         try:
-            rot_dir = self.obj.comp_rot_dir()
-            if rot_dir == 1:
-                rot_dir = "CCW"
-            elif rot_dir == -1:
-                rot_dir = "CW"
+            mmf_dir = self.obj.comp_mmf_dir()
+            if mmf_dir == 1:
+                mmf_dir = "CCW"
+            elif mmf_dir == -1:
+                mmf_dir = "CW"
             else:
-                rot_dir = "?"
+                mmf_dir = "?"
         except Exception:  # Unable to compution the connection matrix
-            rot_dir = "?"
-        self.out_rot_dir.setText(self.tr("Rotation direction: ") + rot_dir)
+            mmf_dir = "?"
+        self.out_rot_dir.setText(self.tr("Rotation direction: ") + mmf_dir)
 
         try:
             ms = str(self.obj.slot.Zs / (wind.p * wind.qs * 2.0))

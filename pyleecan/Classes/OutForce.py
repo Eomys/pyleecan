@@ -49,8 +49,7 @@ class OutForce(FrozenClass):
 
     def __init__(
         self,
-        Time=None,
-        Angle=None,
+        axes_dict=None,
         AGSF=None,
         logger_name="Pyleecan.Force",
         Rag=None,
@@ -73,10 +72,8 @@ class OutForce(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Time" in list(init_dict.keys()):
-                Time = init_dict["Time"]
-            if "Angle" in list(init_dict.keys()):
-                Angle = init_dict["Angle"]
+            if "axes_dict" in list(init_dict.keys()):
+                axes_dict = init_dict["axes_dict"]
             if "AGSF" in list(init_dict.keys()):
                 AGSF = init_dict["AGSF"]
             if "logger_name" in list(init_dict.keys()):
@@ -87,8 +84,7 @@ class OutForce(FrozenClass):
                 meshsolution = init_dict["meshsolution"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.Time = Time
-        self.Angle = Angle
+        self.axes_dict = axes_dict
         self.AGSF = AGSF
         self.logger_name = logger_name
         self.Rag = Rag
@@ -105,8 +101,7 @@ class OutForce(FrozenClass):
             OutForce_str += "parent = None " + linesep
         else:
             OutForce_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutForce_str += "Time = " + str(self.Time) + linesep + linesep
-        OutForce_str += "Angle = " + str(self.Angle) + linesep + linesep
+        OutForce_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
         OutForce_str += "AGSF = " + str(self.AGSF) + linesep + linesep
         OutForce_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         OutForce_str += "Rag = " + str(self.Rag) + linesep
@@ -126,9 +121,7 @@ class OutForce(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.Time != self.Time:
-            return False
-        if other.Angle != self.Angle:
+        if other.axes_dict != self.axes_dict:
             return False
         if other.AGSF != self.AGSF:
             return False
@@ -148,18 +141,21 @@ class OutForce(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if (other.Time is None and self.Time is not None) or (
-            other.Time is not None and self.Time is None
+        if (other.axes_dict is None and self.axes_dict is not None) or (
+            other.axes_dict is not None and self.axes_dict is None
         ):
-            diff_list.append(name + ".Time None mismatch")
-        elif self.Time is not None:
-            diff_list.extend(self.Time.compare(other.Time, name=name + ".Time"))
-        if (other.Angle is None and self.Angle is not None) or (
-            other.Angle is not None and self.Angle is None
-        ):
-            diff_list.append(name + ".Angle None mismatch")
-        elif self.Angle is not None:
-            diff_list.extend(self.Angle.compare(other.Angle, name=name + ".Angle"))
+            diff_list.append(name + ".axes_dict None mismatch")
+        elif self.axes_dict is None:
+            pass
+        elif len(other.axes_dict) != len(self.axes_dict):
+            diff_list.append("len(" + name + "axes_dict)")
+        else:
+            for key in self.axes_dict:
+                diff_list.extend(
+                    self.axes_dict[key].compare(
+                        other.axes_dict[key], name=name + ".axes_dict"
+                    )
+                )
         if (other.AGSF is None and self.AGSF is not None) or (
             other.AGSF is not None and self.AGSF is None
         ):
@@ -188,8 +184,9 @@ class OutForce(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.Time)
-        S += getsizeof(self.Angle)
+        if self.axes_dict is not None:
+            for key, value in self.axes_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.AGSF)
         S += getsizeof(self.logger_name)
         S += getsizeof(self.Rag)
@@ -208,22 +205,19 @@ class OutForce(FrozenClass):
         """
 
         OutForce_dict = dict()
-        if self.Time is None:
-            OutForce_dict["Time"] = None
+        if self.axes_dict is None:
+            OutForce_dict["axes_dict"] = None
         else:
-            OutForce_dict["Time"] = self.Time.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
-        if self.Angle is None:
-            OutForce_dict["Angle"] = None
-        else:
-            OutForce_dict["Angle"] = self.Angle.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            OutForce_dict["axes_dict"] = dict()
+            for key, obj in self.axes_dict.items():
+                if obj is not None:
+                    OutForce_dict["axes_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
+                else:
+                    OutForce_dict["axes_dict"][key] = None
         if self.AGSF is None:
             OutForce_dict["AGSF"] = None
         else:
@@ -249,65 +243,41 @@ class OutForce(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Time = None
-        self.Angle = None
+        self.axes_dict = None
         self.AGSF = None
         self.logger_name = None
         self.Rag = None
         if self.meshsolution is not None:
             self.meshsolution._set_None()
 
-    def _get_Time(self):
-        """getter of Time"""
-        return self._Time
+    def _get_axes_dict(self):
+        """getter of axes_dict"""
+        if self._axes_dict is not None:
+            for key, obj in self._axes_dict.items():
+                if obj is not None:
+                    obj.parent = self
+        return self._axes_dict
 
-    def _set_Time(self, value):
-        """setter of Time"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Time"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Data()
-        check_var("Time", value, "Data")
-        self._Time = value
+    def _set_axes_dict(self, value):
+        """setter of axes_dict"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("axes_dict", value, "{Data}")
+        self._axes_dict = value
 
-    Time = property(
-        fget=_get_Time,
-        fset=_set_Time,
-        doc=u"""Force time Data object
+    axes_dict = property(
+        fget=_get_axes_dict,
+        fset=_set_axes_dict,
+        doc=u"""Dict containing axes data used for Force
 
-        :Type: SciDataTool.Classes.DataND.Data
-        """,
-    )
-
-    def _get_Angle(self):
-        """getter of Angle"""
-        return self._Angle
-
-    def _set_Angle(self, value):
-        """setter of Angle"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Angle"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Data()
-        check_var("Angle", value, "Data")
-        self._Angle = value
-
-    Angle = property(
-        fget=_get_Angle,
-        fset=_set_Angle,
-        doc=u"""Force position Data object
-
-        :Type: SciDataTool.Classes.DataND.Data
+        :Type: {SciDataTool.Classes.DataND.Data}
         """,
     )
 

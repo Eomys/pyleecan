@@ -4,7 +4,7 @@ from numpy import array, pi
 from scipy.linalg import solve
 
 
-def solve_EEC(self, output):
+def solve_EEC(self):
     """Compute the parameters dict for the equivalent electrical circuit
     cf "Advanced Electrical Drives, analysis, modeling, control"
     Rik de doncker, Duco W.J. Pulle, Andre Veltman, Springer edition
@@ -23,17 +23,19 @@ def solve_EEC(self, output):
     ----------
     self : EEC_PMSM
         an EEC_PMSM object
-    output : Output
-        an Output object
+    Return
+    ------
+    out_dict : dict
+        Dict containing all magnetic quantities that have been calculated in EEC
     """
 
-    felec = output.elec.felec
+    felec = self.freq0
     ws = 2 * pi * felec
 
-    # Prepare linear system
+    out_dict = dict()
 
-    # Solve system
-    if "Ud" in self.parameters:
+    if "Ud" in self.parameters:  # Voltage driven
+        # Prepare linear system
         XR = array(
             [
                 [self.parameters["R20"], -ws * self.parameters["Lq"]],
@@ -42,23 +44,24 @@ def solve_EEC(self, output):
         )
         XE = array([0, ws * self.parameters["phi"]])
         XU = array([self.parameters["Ud"], self.parameters["Uq"]])
+        # Solve system
         XI = solve(XR, XU - XE)
-        output.elec.Id_ref = XI[0]
-        output.elec.Iq_ref = XI[1]
-    else:
-        output.elec.Ud_ref = (
+        out_dict["Id"] = XI[0]
+        out_dict["Iq"] = XI[1]
+        out_dict["Ud"] = self.parameters["Ud"]
+        out_dict["Uq"] = self.parameters["Uq"]
+    else:  # Current Driven
+        Ud = (
             self.parameters["R20"] * self.parameters["Id"]
             - ws * self.parameters["Phiq"]
         )
-        output.elec.Uq_ref = (
+        Uq = (
             self.parameters["R20"] * self.parameters["Iq"]
             + ws * self.parameters["Phid"]
         )
+        out_dict["Ud"] = Ud
+        out_dict["Uq"] = Uq
+        out_dict["Id"] = self.parameters["Id"]
+        out_dict["Iq"] = self.parameters["Iq"]
 
-    # Compute currents
-    output.elec.Is = None
-    output.elec.Is = output.elec.get_Is()
-
-    # Compute voltage
-    output.elec.Us = None
-    output.elec.Us = output.elec.get_Us()
+    return out_dict

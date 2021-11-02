@@ -24,6 +24,8 @@ from ..Classes.DataKeeper import DataKeeper
 from ..Classes.Drive import Drive
 from ..Classes.DriveWave import DriveWave
 from ..Classes.EEC import EEC
+from ..Classes.EEC_ANL import EEC_ANL
+from ..Classes.EEC_LSRPM import EEC_LSRPM
 from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.EEC_SCIM import EEC_SCIM
 from ..Classes.Electrical import Electrical
@@ -72,10 +74,13 @@ from ..Classes.IndMag import IndMag
 from ..Classes.IndMagFEMM import IndMagFEMM
 from ..Classes.Input import Input
 from ..Classes.InputCurrent import InputCurrent
-from ..Classes.InputElec import InputElec
 from ..Classes.InputFlux import InputFlux
 from ..Classes.InputForce import InputForce
+from ..Classes.InputVoltage import InputVoltage
 from ..Classes.Interpolation import Interpolation
+from ..Classes.LUT import LUT
+from ..Classes.LUTdq import LUTdq
+from ..Classes.LUTslip import LUTslip
 from ..Classes.LamHole import LamHole
 from ..Classes.LamSlot import LamSlot
 from ..Classes.LamSlotMag import LamSlotMag
@@ -125,6 +130,9 @@ from ..Classes.ModelBH_linear_sat import ModelBH_linear_sat
 from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
+from ..Classes.OP import OP
+from ..Classes.OPdq import OPdq
+from ..Classes.OPslip import OPslip
 from ..Classes.OptiConstraint import OptiConstraint
 from ..Classes.OptiDesignVar import OptiDesignVar
 from ..Classes.OptiGenAlg import OptiGenAlg
@@ -150,6 +158,7 @@ from ..Classes.ParamExplorerSet import ParamExplorerSet
 from ..Classes.PolarArc import PolarArc
 from ..Classes.Post import Post
 from ..Classes.PostFunction import PostFunction
+from ..Classes.PostLUT import PostLUT
 from ..Classes.PostMethod import PostMethod
 from ..Classes.PostPlot import PostPlot
 from ..Classes.RefCell import RefCell

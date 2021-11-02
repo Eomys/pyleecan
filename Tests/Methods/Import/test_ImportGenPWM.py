@@ -18,7 +18,7 @@ def testSPWM():
     """Check"""
     # fs, duration, f,fmax,fmode, fswimode,fswi, fswi_max,typePWM, Vdc1, U0, type_carrier
     for ii in range(2):
-        for jj in range(2):
+        for jj in range(5):
             for hh in range(4):
                 test_obj = ImportGenPWM(
                     fs=96000,
@@ -27,20 +27,23 @@ def testSPWM():
                     fmax=5,
                     fmode=ii,
                     fswimode=jj,
-                    fswi=10,
-                    fswi_max=30,
+                    fswi=5,
+                    fswi_max=15,
                     typePWM=8,
                     Vdc1=2,
-                    U0=0.77,
+                    U0=0.70,
                     type_carrier=hh,
+                    var_amp=20,
+                    qs=3,
                 )
                 # Generate the signal
-                time = linspace(start=0, stop=2, num=2 * 96000, endpoint=True)
-                result = test_obj.get_data()
+                Uabc, Vas, _, carrier, time = test_obj.get_data()
 
                 # Plot/save the result
                 plt.close("all")
-                plt.plot(time, result[:, 1])
+                plt.plot(time, Uabc[:, 1])
+                plt.plot(time, Vas)
+                plt.plot(time, carrier)
                 fig = plt.gcf()
                 fig.savefig(
                     join(
@@ -57,7 +60,6 @@ def testSPWM():
 
 
 @pytest.mark.long_5s
-@pytest.mark.long_1m
 def testDPWM():
     """Check"""
     for ii in range(9):
@@ -73,20 +75,22 @@ def testDPWM():
             fswi_max=30,
             typePWM=ii,
             Vdc1=2,
-            U0=0.77,
+            U0=0.70,
             type_carrier=0,
+            qs=3,
         )
         # Generate the signal
-        time = linspace(start=0, stop=2, num=2 * 96000, endpoint=True)
-        result = test_obj.get_data()
+        Uabc, Vas, _, carrier, time = test_obj.get_data()
 
         # Plot/save the result
         plt.close("all")
-        plt.plot(time, result[:, 1])
+        plt.plot(time, Uabc[:, 1])
+        plt.plot(time, Vas)
+        plt.plot(time, carrier)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_ImportGenPWM_" + str(ii) + ".png"))
 
 
 if __name__ == "__main__":
-    testDPWM()
+    # testDPWM()
     testSPWM()

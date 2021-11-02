@@ -1,12 +1,17 @@
-from numpy import pi
-from SciDataTool import Data1D, DataLinspace, Norm_ref
-from ....Methods.Simulation.Input import InputError
-
-
-def comp_axes(self, machine, N0=None):
-    """Compute simulation axes, i.e. space DataObject including (anti)-periodicity
-    and time DataObject including (anti)-periodicity and accounting for rotating speed
-    and number of revolutions
+def comp_axes(
+    self,
+    axes_list,
+    machine=None,
+    axes_dict_in=None,
+    is_periodicity_a=None,
+    is_periodicity_t=None,
+    per_a=None,
+    is_antiper_a=None,
+    per_t=None,
+    is_antiper_t=None,
+):
+    """Compute simulation axes such as time / angle / phase axes, with or without periodicities
+    and including normalizations
 
     Parameters
     ----------
@@ -14,76 +19,165 @@ def comp_axes(self, machine, N0=None):
         an Input object
     machine : Machine
         a Machine object
-    N0 : float
-        rotating speed [rpm]
-
+    axes_list: list
+        List of axes name to return in axes dict
+    axes_dict: {Data}
+        dict of axes containing time and angle axes (with or without (anti-)periodicity)
+    is_periodicity_a: bool
+        True if spatial periodicity is requested
+    is_periodicity_t: bool
+        True if time periodicity is requested
+    per_a : int
+        angle periodicity
+    is_antiper_a : bool
+        if the angle axis is antiperiodic
+    per_t : int
+        time periodicity
+    is_antiper_t : bool
+        if the time axis is antiperiodic
 
     Returns
     -------
-    Time : DataLinspace
-        Time axis including (anti)-periodicity and accounting for rotating speed and number of revolutions
-    Angle : DataLinspace
-        Angle axis including (anti)-periodicity
+    axes_dict: {Data}
+        dict of axes containing requested axes
 
     """
-    if self.time is None and N0 is None:
-        raise InputError("ERROR: time and N0 can't be both None")
+    if len(axes_list) == 0:
+        raise Exception("axes_list should not be empty")
+
+    if self.parent is not None:
+        simu = self.parent
+    else:
+        simu = None
+
+    if hasattr(simu, "parent") and simu.parent is not None:
+        output = simu.parent
+    else:
+        output = None
+
+    if (axes_list is None or len(axes_list) == 0) and (
+        axes_dict_in is None or len(axes_dict_in) == 0
+    ):
+        raise Exception(
+            "Cannot calculate axes if both axes list and axes dict are None"
+        )
+
+    if machine is None:
+        # Fetch machine from input
+        if hasattr(simu, "machine") and simu.machine is not None:
+            machine = simu.machine
+        else:
+            raise Exception("Cannot calculate axes if simu.machine is None")
 
     # Get machine pole pair number
     p = machine.get_pole_pair_number()
 
-    # Get electrical fundamental frequency
-    f_elec = self.comp_felec()
+    # Fill periodicity parameters that are None
+    if per_a is None or is_antiper_a is None or per_t is None or is_antiper_t is None:
+        if output is not None:
+            # Get time and space (anti-)periodicities from the output
+            (
+                per_a_0,
+                is_antiper_a_0,
+                per_t_0,
+                is_antiper_t_0,
+            ) = output.get_machine_periodicity()
+        else:
+            # Compute time and space (anti-)periodicities from the machine
+            per_a_0, is_antiper_a_0 = machine.comp_periodicity_spatial()
+            per_t_0, is_antiper_t_0, _, _ = machine.comp_periodicity_time()
 
-    # Airgap radius
-    Rag = machine.comp_Rgap_mec()
+    if is_periodicity_t is None or is_periodicity_t:
+        # Enforce None values to machine time periodicity
+        per_t = per_t_0 if per_t is None else per_t
+        is_antiper_t = is_antiper_t_0 if is_antiper_t is None else is_antiper_t
+        if is_periodicity_t is None:
+            # Check time periodicity is included
+            is_periodicity_t = per_t > 1 or is_antiper_t
+    elif not is_periodicity_t:
+        # Remove time periodicity
+        per_t = 1
+        is_antiper_t = False
 
-    # Setup normalizations for time and angle axes
-    norm_time = {
-        "elec_order": Norm_ref(ref=f_elec),
-        "mech_order": Norm_ref(ref=f_elec / p),
-    }
-    if N0 is not None:
-        norm_time["angle_rotor"] = Norm_ref(ref=1 / (360 * N0 / 60))
+    if is_periodicity_a is None or is_periodicity_a:
+        # Enforce None values to machine periodicity
+        per_a = per_a_0 if per_a is None else per_a
+        is_antiper_a = is_antiper_a_0 if is_antiper_a is None else is_antiper_a
+        if is_periodicity_a is None:
+            # Enforce requested angle periodicity
+            is_periodicity_a = per_a > 1 or is_antiper_a
+    elif not is_periodicity_a:
+        # Remove angle periodicity
+        per_a = 1
+        is_antiper_a = False
 
-    norm_angle = {"space_order": Norm_ref(ref=p), "distance": Norm_ref(ref=1 / Rag)}
+    # Init axes_dict
+    axes_dict = dict()
 
-    # Create time axis
-    if self.time is None:
-        # Create time axis as a DataLinspace
-        Time = DataLinspace(
-            name="time",
-            unit="s",
-            initial=0,
-            final=60 / N0 * self.Nrev,
-            number=self.Nt_tot,
-            include_endpoint=False,
-            normalizations=norm_time,
-        )
-    else:
-        # Load time data
-        time = self.time.get_data()
-        self.Nt_tot = len(time)
-        Time = Data1D(name="time", unit="s", values=time, normalizations=norm_time)
+    # Get time axis
+    if "time" in axes_list:
 
-    # Create angle axis
-    if self.angle is None:
-        # Create angle axis as a DataLinspace
-        Angle = DataLinspace(
-            name="angle",
-            unit="rad",
-            initial=0,
-            final=2 * pi,
-            number=self.Na_tot,
-            include_endpoint=False,
-            normalizations=norm_angle,
-        )
-    else:
-        # Load angle data
-        angle = self.angle.get_data()
-        self.Na_tot = len(angle)
-        Angle = Data1D(
-            name="angle", unit="rad", values=angle, normalizations=norm_angle
-        )
+        # Check if Time is already in input dict of axes
+        if axes_dict_in is not None and "time" in axes_dict_in:
+            Time_in = axes_dict_in["time"]
+        else:
+            Time_in = None
 
-    return Time, Angle
+        # Calculate time axis
+        Time = self.comp_axis_time(p, per_t, is_antiper_t, Time_in)
+
+        # Store time axis in dict
+        axes_dict["time"] = Time
+
+    # Get angle axis
+    if "angle" in axes_list:
+
+        # Airgap radius
+        Rag = machine.comp_Rgap_mec()
+
+        # Check if Angle is already in input dict of axes
+        if axes_dict_in is not None and "angle" in axes_dict_in:
+            Angle_in = axes_dict_in["angle"]
+        else:
+            Angle_in = None
+
+        # Calculate angle axis
+        Angle = self.comp_axis_angle(p, Rag, per_a, is_antiper_a, Angle_in)
+
+        # Store angle axis in dict
+        axes_dict["angle"] = Angle
+
+    if "phase_S" in axes_list:
+
+        # Check if Phase is already in input dict of axes
+        stator_label = "phase_" + machine.stator.get_label()
+        if axes_dict_in is not None and stator_label in axes_dict_in:
+            Phase_in = axes_dict_in[stator_label]
+        else:
+            Phase_in = None
+
+        # Calculate stator phase axis
+        Phase = self.comp_axis_phase(machine.stator, Phase_in)
+
+        if Phase is not None:
+            # Store phase axis in dict
+            axes_dict[stator_label] = Phase
+
+    if "phase_R" in axes_list:
+
+        # Check if Phase is already in input dict of axes
+        rotor_label = "phase_" + machine.rotor.get_label()
+        if axes_dict_in is not None and rotor_label in axes_dict_in:
+            Phase_in = axes_dict_in[rotor_label]
+        else:
+            Phase_in = None
+
+        # Calculate rotor phase axis
+        per_a_phase = 2 * per_a if is_antiper_a else per_a
+        Phase = self.comp_axis_phase(machine.rotor, per_a_phase, Phase_in)
+
+        if Phase is not None:
+            # Store phase axis in dict
+            axes_dict[rotor_label] = Phase
+
+    return axes_dict

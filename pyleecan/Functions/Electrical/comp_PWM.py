@@ -1,43 +1,53 @@
 import numpy as np
-from scipy import signal
+from numpy.core.numeric import ones
+from scipy import signal, integrate
 
 
 def comp_volt_PWM_NUM(
     Tpwmu,
     freq0,
     fmode,
-    fswimode,
     fswi,
     qs,
     Vdc1,
     U0,
     rot_dir,
     type_DPWM: int,
+    fswimode=0,
     PF_angle=0,
-    is_plot: bool = False,
     is_sin=True,
     fswi_max=0,
     freq0_max=0,
     type_carrier=0,
+    var_amp=0,
+    is_norm=True,
 ):
     """
     Generalized DPWM using numerical method according to
     'Impact of Modulation Schemes on DC-Link Capacitor of VSI in HEV Applications'
-    Tpwmu : vector
-        TIME VECTOR
+
+    Parameters
+    ----------
+    Tpwmu : ndarray
+        time vector
     freq0: float
         fundamental frequency
+    fmode: int, optional
+        type of control
+        0: Fixed speed
+        1: Variable speed
     fswi: float
         switching frequency
     qs: int
         number of phases
     Vdc1: float
-        bus voltage
+        bus voltage [VDC]
     U0: float
-        Phase Voltage
+        Phase Voltage [Vrms]
     rot_dir: int
         rotation direction
     type_DPWM : int
+        type of modulation waveform
         0: GDPWM
         1: DPWMMIN
         2: DPWMMAX
@@ -47,26 +57,43 @@ def comp_volt_PWM_NUM(
         6: DPWM3
         7: SVPWM
         8: SPWM
+    fswimode: int, optional
+        mode of the switching frequency evolution
+        0: Fixed fswi [default]
+        1: Variable fswi
+        2: Random fswi
+        3: Symmetrical random fswi
+        4: Random amplitude carrier wave
+    PF_angle: float, optional
+        power factor angle, default to 0
+    fswi_max: int, optional
+        Maximal switching frequency, default to 0
+    freq0_max: int, optional
+        maximal fundamental frequency, default to 0
     type_carrier: int
         type of carrier waveform
-    PF_angle: float
-        power factor angle
-    is_plot: bool
-        to plot the pwm
-    fswi_max: int
-        Maximal switching frequency
-    freq0_max: int
-        maximal fundamental frequency
-    fmode: int
-        0: Fixed speed
-        1: Varaible speed
-    fswimode: int
-        0: Fixed fswi
-        1: Variable fswi
+        1: forward toothsaw carrier
+        2: backwards toothsaw carrier
+        3: toothsaw carrier
+        else: Symmetrical toothsaw carrier [default]
+    var_amp: int
+        precentage of variation of the carrier amplitude, default to 0
+
+    Returns
+    -------
+     v_pwm : ndarray
+        n-phase PWM voltage waveform
+     Vas : ndarray
+        modulation waveform
+     M_I : float
+        modulation index
+     carrier : ndarray
+        carrier waveform
+
     """
 
     Npsim = len(Tpwmu)
-
+    carrier = np.ones(len(Tpwmu))
     if fmode == 0:  # Fixed speed:
         ws = 2 * np.pi * freq0
     elif fmode == 1:  # Variable speed:
@@ -76,24 +103,95 @@ def comp_volt_PWM_NUM(
             )
             ws = np.pi * freq0_array
         else:
-            print("ERROR:only SPWM supports the varaible fundamental frequency")
+            print("ERROR:only SPWM supports the variable fundamental frequency")
     else:
         pass
 
     if fswimode == 0:  # Fixed fswi:
         if type_DPWM == 8:
-            triangle = Vdc1 / 2 * comp_carrier(Tpwmu, fswi, type_carrier)
+
+            carrier = Vdc1 / 2 * comp_carrier(Tpwmu, fswi, type_carrier)
         else:
             Th = 1 / fswi
-    elif fswimode == 1:  # Variable fswi:
+    elif fswimode == 1:  # Variable fswi (ramp):
         if type_DPWM == 8:
             wswiT = (
                 np.pi * (fswi_max - fswi) / Tpwmu[-1] * Tpwmu ** 2
                 + 2 * np.pi * fswi * Tpwmu
             )
-            triangle = Vdc1 / 2 * signal.sawtooth(wswiT, 0.5)
+            carrier = Vdc1 / 2 * signal.sawtooth(wswiT, 0.5)
         else:
-            print("ERROR:only SPWM supports the varaible switching frequency")
+            print("ERROR:only SPWM supports the variable switching frequency")
+    elif fswimode == 2 or fswimode == 3:  # Random fswi & Symmetrical random fswi
+        t1 = round(Tpwmu[-1] * 5000000)  # Nombre de points
+        if fswimode == 3:
+            num_slice = round((fswi_max + fswi) / 2 * Tpwmu[-1])
+            delta_fswi = np.random.randint(
+                fswi, high=fswi_max + 1, size=num_slice * 2, dtype=int
+            )
+            delta_fswi[1::2] = delta_fswi[0::2] * -1
+
+        else:
+
+            num_slice = round((fswi_max + fswi) / 2 * Tpwmu[-1])
+            delta_fswi = np.random.randint(
+                fswi, high=fswi_max + 1, size=num_slice * 2, dtype=int
+            )
+            delta_fswi[1::2] = delta_fswi[1::2] * -1
+
+        fswi_base = np.array(np.ones(t1))
+        S_delta = 1
+        delta_t = S_delta / abs(delta_fswi)
+        time = sum(delta_t)
+        delta_point = delta_t[:-1] / time * t1
+        delta_point = np.array(delta_point)
+        delta_point = np.append(delta_point, t1 - sum(delta_point))
+        fswi = np.concatenate(
+            [
+                fswi_base[0 : round(delta_point[ii])] * delta_fswi[ii]
+                for ii in range(len(delta_fswi))
+            ]
+        )
+        if len(fswi) < t1:
+            fswi = np.concatenate((fswi, fswi[-1] * np.ones(t1 - len(fswi))))
+        else:
+            fswi = fswi[:t1]
+
+        Tpwmu_10 = np.linspace(0, (t1 - 1) / 5000000, t1, endpoint=True)
+        np.linspace(0, (t1 - 1) / 5000000, t1, endpoint=True)
+        carrier = integrate.cumtrapz(fswi, Tpwmu_10, initial=0)
+        Aml_tri = max(carrier)
+        carrier = carrier / Aml_tri * Vdc1 - Vdc1 / 2 * np.ones(np.size(Tpwmu_10))
+        carrier = signal.resample(carrier, len(Tpwmu))
+    elif fswimode == 4:  # Random amplitude carrier wave
+        if type_DPWM == 8:
+            carrier = Vdc1 / 2 * (comp_carrier(Tpwmu, fswi, type_carrier))
+            num_slice = int(fswi * Tpwmu[-1])
+            delta_amp = np.random.randint(
+                -var_amp, high=var_amp + 1, size=int(num_slice), dtype=int
+            ) / 100 + np.ones(int(num_slice))
+
+            amp_base = np.ones(len(Tpwmu))
+            S_delta = 1
+
+            delta_t = S_delta / fswi * np.ones(int(num_slice))
+
+            delta_point = np.round(delta_t / Tpwmu[-1], 4) * len(Tpwmu)
+            delta_point = np.array(delta_point).astype(int)
+            amp = np.concatenate(
+                [
+                    amp_base[0 : delta_point[ii]] * delta_amp[ii]
+                    for ii in range(len(delta_amp))
+                ]
+            )
+            if len(amp) < len(Tpwmu):
+                amp = np.concatenate((amp, amp[-1] * np.ones(len(Tpwmu) - len(amp))))
+            else:
+                amp = amp[: len(Tpwmu)]
+            carrier = carrier * amp
+        else:
+            print("ERROR:only SPWM supports the variable switching frequency")
+
     else:
         pass
 
@@ -230,10 +328,14 @@ def comp_volt_PWM_NUM(
 
     if type_DPWM == 8:
         v_pwm = np.ones((qs, Npsim))
-
-        v_pwm[0] = np.where(Vas < triangle, -1, 1)
-        v_pwm[1] = np.where(Vbs < triangle, -1, 1)
-        v_pwm[2] = np.where(Vcs < triangle, -1, 1)
+        if is_norm:
+            v_pwm[0] = np.where(Vas < carrier, -1, 1)
+            v_pwm[1] = np.where(Vbs < carrier, -1, 1)
+            v_pwm[2] = np.where(Vcs < carrier, -1, 1)
+        else:
+            v_pwm[0] = np.where(Vas < carrier, -Vdc1 / 2, Vdc1 / 2)
+            v_pwm[1] = np.where(Vbs < carrier, -Vdc1 / 2, Vdc1 / 2)
+            v_pwm[2] = np.where(Vcs < carrier, -Vdc1 / 2, Vdc1 / 2)
 
     else:
 
@@ -249,36 +351,7 @@ def comp_volt_PWM_NUM(
         v_pwm[2, Tpwmu < (T3 + n * Th)] = -Vdc1 / 2
         v_pwm[2, Tpwmu > ((n + 1) * Th - T3)] = -Vdc1 / 2
 
-    if is_plot:
-        fig, axs = plt.subplots(2)
-        axs[0].plot(v_pwm[0])
-        axs[0].plot(Tpwmu, v_pwm[1])
-        axs[0].plot(Tpwmu, v_pwm[2])
-        axs[1].plot(Tpwmu, Van)
-        axs[1].plot(Tpwmu, V_offset)
-        axs[1].plot(Tpwmu, Vas)
-
-        fig.show()
-        plt.show()
-
-        if type_DPWM == 8:
-            fig, axs = plt.subplots(3)
-            axs[0].plot(Tpwmu, Vas, "red", label="Sine wave")
-            axs[0].plot(Tpwmu, triangle, "green", label="Carrier wave")
-            axs[1].plot(Tpwmu, v_pwm[0], "blue", label="Square wave")
-            axs[2].plot(Tpwmu, ws, "blue", label="Square wave")
-
-            axs[0].set_title("SPWM generation")
-            axs[0].set_ylabel("Frequency [Hz]")
-            axs[0].legend()
-            axs[1].set_xlabel("Time [s]")
-            axs[1].set_ylabel("Frequency [Hz]")
-            axs[1].legend()
-
-            fig.show()
-            plt.show()
-
-    return v_pwm, Vas, M_I
+    return v_pwm, Vas, M_I, carrier
 
 
 def comp_carrier(time, fswi, type_carrier):
@@ -291,10 +364,10 @@ def comp_carrier(time, fswi, type_carrier):
     fswi : array
         Switching frequency
     type_carrier : int
-            1: forward toothsaw carrier
+        1: forward toothsaw carrier
         2: backwards toothsaw carrier
         3: toothsaw carrier
-        else: symetrical toothsaw carrier
+        else: Symmetrical toothsaw carrier
 
     Returns
     -------
@@ -334,7 +407,6 @@ def comp_carrier(time, fswi, type_carrier):
             / (-t1 + 0.5 * T)
             + np.where(time >= t2, 1, 0) * (time - T) / (T - t2)
         )
-
     else:
         wswiT = 2 * np.pi * time * fswi
         Y = signal.sawtooth(wswiT, 0.5)
