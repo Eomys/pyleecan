@@ -9066,6 +9066,7 @@
             "getter.get_machine_periodicity",
             "getter.get_fund_harm",
             "getter.get_data_from_str",
+            "plot.Magnetic.plot_B_mesh",
             "print_memory"
         ],
         "mother": "",

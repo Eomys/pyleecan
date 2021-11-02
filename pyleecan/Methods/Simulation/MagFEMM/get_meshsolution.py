@@ -76,15 +76,15 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
     # Read the nodes and elements files
     path_node = join(save_path, "nodes" + idworker + ".txt")
     path_element = join(save_path, "elements" + idworker + ".txt")
-    listNd0 = np.loadtxt(path_node, delimiter=" ")
+    results_nodes = np.loadtxt(path_node, delimiter=" ")
     listElem0 = np.loadtxt(path_element, dtype="i", delimiter=" ")
-    NbNd = len(listNd0)
+    NbNd = len(results_nodes)
     NbElem = len(listElem0)
 
     # Node list
     listNd = np.zeros(shape=(NbNd, 3))
-    listNd[:, 0] = listNd0[:, 0]
-    listNd[:, 1] = listNd0[:, 1]
+    listNd[:, 0] = results_nodes[:, 0]
+    listNd[:, 1] = results_nodes[:, 1]
 
     # Element list
     # listElem = np.zeros(shape=(NbElem, 3))
@@ -134,5 +134,6 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
     B = results[:, 0:2]
     H = results[:, 2:4]
     mu = results[:, 4]
+    A = results_nodes[:, 2]
 
-    return mesh, B, H, mu, groups
+    return mesh, B, H, mu, A, groups
