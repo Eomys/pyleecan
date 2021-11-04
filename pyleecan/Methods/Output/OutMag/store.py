@@ -70,7 +70,7 @@ def store(self, out_dict, axes_dict):
 
         # Store electromagnetic torque per slice (in Newton)
         self.Tem_slice = DataTime(
-            name="Electromagnetic torque per slice",
+            name="Electromagnetic torque (axial density)",
             unit="N",
             symbol="T_{em}",
             axes=[axes_dict["time_Tem"], axes_dict["z"]],
@@ -79,6 +79,7 @@ def store(self, out_dict, axes_dict):
 
         # Integrate over slice axis to get overall torque (in Newton meter)
         self.Tem = self.Tem_slice.get_data_along("time[smallestperiod]", "z=integrate")
+        self.Tem.name = "Electromagnetic torque"
 
         # Calculate average torque in Nm
         self.Tem_av = np_mean(self.Tem.values)
@@ -114,8 +115,8 @@ def store(self, out_dict, axes_dict):
 
             # Store winding flux linkage per phase and per slice (in Weber per meter)
             self.Phi_wind_slice[key] = DataTime(
-                name=prefix + " Winding Flux",
-                unit="Wb",
+                name=prefix + " Winding Flux (axial density)",
+                unit="Wb/m",
                 symbol="Phi_{wind}",
                 axes=[Time, Phase, axes_dict["z"]],
                 values=phi_wind,
@@ -124,6 +125,7 @@ def store(self, out_dict, axes_dict):
             self.Phi_wind[key] = self.Phi_wind_slice[key].get_data_along(
                 "time[smallestperiod]", "phase", "z=integrate"
             )
+            self.Phi_wind[key].name = prefix + " Winding Flux"
 
         # Particular case: Phi_wind for stator-0 has its own property
         if STATOR_LAB + "-0" in out_dict["Phi_wind"].keys():
