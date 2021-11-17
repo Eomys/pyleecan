@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from numpy import array as np_array, where, vstack, hstack
-
+import numpy as np
 import pyuff
 
 
@@ -48,5 +48,29 @@ def get_data(self):
                     elements[elt_type] = vstack(
                         (elt_dict["element_nums"], np_array(elt_dict["nodes_nums"]).T)
                     ).T
+
+        elif dataset["type"] == 82:
+            # Store connectivities
+            elements = dict()
+            nodes_nums = dataset["nodes"]
+            ind = np.where(nodes_nums == 0.0)  ##identify zeros
+            nodes_nums = np.delete(nodes_nums, ind)  # delete zeros
+            indices = list()  ##indices of duplicated node numbers
+            for i in range(1, len(nodes_nums)):
+                if nodes_nums[i] == nodes_nums[i - 1]:
+                    indices.append(i)
+            nodes_nums = np.delete(nodes_nums, indices)
+
+            indices_node1 = np.arange(
+                4, len(nodes_nums), 5
+            )  ##indices of first node of previous element
+
+            nodes_nums = np.delete(nodes_nums, indices_node1)
+
+            ##assuming quad elements 4 nodes per element
+            n = int(len(nodes_nums) / 4)
+            nodes_nums = np.reshape(nodes_nums, (n, 4))
+            element_nums = np.arange(len(nodes_nums))
+            elements["quad"] = vstack((element_nums, nodes_nums.T)).T
 
     return nodes, elements
