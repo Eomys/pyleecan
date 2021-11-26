@@ -7656,6 +7656,7 @@
             "get_slip",
             "get_Ud_Uq",
             "set_Id_Iq",
+            "set_I0_Phi0",
             "get_I0_Phi0"
         ],
         "mother": "OP",
@@ -7718,7 +7719,8 @@
             "get_Ud_Uq",
             "set_Id_Iq",
             "get_I0_Phi0",
-            "get_slip"
+            "get_slip",
+            "set_I0_Phi0"
         ],
         "mother": "OP",
         "name": "OPslip",

@@ -48,6 +48,11 @@ except ImportError as error:
     set_Id_Iq = error
 
 try:
+    from ..Methods.Simulation.OPdq.set_I0_Phi0 import set_I0_Phi0
+except ImportError as error:
+    set_I0_Phi0 = error
+
+try:
     from ..Methods.Simulation.OPdq.get_I0_Phi0 import get_I0_Phi0
 except ImportError as error:
     get_I0_Phi0 = error
@@ -116,6 +121,15 @@ class OPdq(OP):
         )
     else:
         set_Id_Iq = set_Id_Iq
+    # cf Methods.Simulation.OPdq.set_I0_Phi0
+    if isinstance(set_I0_Phi0, ImportError):
+        set_I0_Phi0 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OPdq method set_I0_Phi0: " + str(set_I0_Phi0))
+            )
+        )
+    else:
+        set_I0_Phi0 = set_I0_Phi0
     # cf Methods.Simulation.OPdq.get_I0_Phi0
     if isinstance(get_I0_Phi0, ImportError):
         get_I0_Phi0 = property(
