@@ -35,9 +35,7 @@ def test_SPMSM015_plot_contour_B_FEMM():
     Iq_ref = (I0_rms * np.exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=1000),
-        Na_tot=252 * 9,
-        Nt_tot=4 * 9,
+        OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=1000), Na_tot=252 * 9, Nt_tot=4 * 9,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -61,12 +59,12 @@ def test_SPMSM015_plot_contour_B_FEMM():
         is_show_fig=False,
         save_path=join(save_path, "plot_mesh_stator.png"),
     )
-    out.mag.meshsolution.plot_contour(
-        is_animated=True,
-        group_names="stator core",
-        is_show_fig=False,
-        save_path=join(save_path, "plot_mesh_stator.gif"),
-    )
+    # out.mag.meshsolution.plot_contour(
+    #     is_animated=True,
+    #     group_names="stator core",
+    #     is_show_fig=False,
+    #     save_path=join(save_path, "plot_mesh_stator.gif"),
+    # )
 
     pass
 
@@ -78,9 +76,7 @@ def test_Benchmark_plot_contour_B_FEMM():
     simu = Simu1(name="test_FEMM_compare_Toyota_Prius", machine=Benchmark)
 
     simu.input = InputCurrent(
-        OP=OPdq(Id_ref=0, Iq_ref=0, N0=2504),
-        Na_tot=2048,
-        Nt_tot=50,
+        OP=OPdq(Id_ref=0, Iq_ref=0, N0=2504), Na_tot=2048, Nt_tot=50,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -97,12 +93,12 @@ def test_Benchmark_plot_contour_B_FEMM():
 
     out.plot_B_mesh(save_path=join(save_path, "plot_B_mesh.png"))
 
-    out.plot_B_mesh(
-        group_names="stator core",
-        is_animated=True,
-        is_show_fig=False,
-        save_path=join(save_path, "plot_B_mesh.gif"),
-    )
+    # out.plot_B_mesh(
+    #     group_names="stator core",
+    #     is_animated=True,
+    #     is_show_fig=False,
+    #     save_path=join(save_path, "plot_B_mesh.gif"),
+    # )
 
     out.mag.meshsolution.plot_contour(
         group_names=["rotor magnets", "rotor core"],
