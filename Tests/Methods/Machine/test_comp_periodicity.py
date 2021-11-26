@@ -25,11 +25,13 @@ test_per_list = [
 # Machine with ventilation
 TP = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 # Only Zh matters for periodicity comp
-v2 = VentilationCirc(Zh=2)
-v4 = VentilationCirc(Zh=4)
-v8 = VentilationCirc(Zh=8)
-v9 = VentilationCirc(Zh=9)
-v16 = VentilationCirc(Zh=16)
+H0 = 0.1235
+D0 = 0.01
+v2 = VentilationCirc(Zh=2, D0=D0, H0=H0)
+v4 = VentilationCirc(Zh=4, D0=D0, H0=H0)
+v8 = VentilationCirc(Zh=8, D0=D0, H0=H0)
+v9 = VentilationCirc(Zh=9, D0=D0, H0=H0)
+v16 = VentilationCirc(Zh=16, D0=D0, H0=H0)
 
 # Rotor vent matches sym
 TP0 = TP.copy()
@@ -81,6 +83,9 @@ test_per_list.append({"machine": TP7, "exp": (1, False, 4, True)})
 
 # No sym, remove antiper
 SC = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+v9 = v9.copy()
+v9.H0 = 0.06
+v9.D0 = 0.01
 SC0 = SC.copy()
 SC0.name = SC0.name + "_0"
 SC0.rotor.axial_vent = [v9]
@@ -88,6 +93,9 @@ test_per_list.append({"machine": SC0, "exp": (1, False, 1, False)})
 
 # Rotor is 4, True => 1, True
 SP = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
+v2 = v2.copy()
+v2.H0 = 0.018
+v2.D0 = 0.005
 SP0 = SP.copy()
 SP0.name = SP0.name + "_0"
 SP0.rotor.axial_vent = [v2]
@@ -95,6 +103,9 @@ test_per_list.append({"machine": SP0, "exp": (2, False, 2, False)})
 
 # no antiper, remove sym
 SP1 = SP.copy()
+v9 = v9.copy()
+v9.H0 = 0.018
+v9.D0 = 0.005
 SP1.name = SP1.name + "_1"
 SP1.rotor.axial_vent = [v9]
 test_per_list.append({"machine": SP1, "exp": (1, False, 1, False)})
@@ -139,6 +150,9 @@ def test_comp_periodicity(test_dict):
 
 # To run it without pytest
 if __name__ == "__main__":
+    # TP7.plot()
+    # SC0.plot()
+    # SP0.plot()
     for ii, test_dict in enumerate(test_per_list):
         if isinstance(test_dict["machine"], str):
             machine_name = test_dict["machine"]
