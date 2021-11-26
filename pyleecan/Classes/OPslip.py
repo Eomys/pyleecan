@@ -52,6 +52,11 @@ try:
 except ImportError as error:
     get_slip = error
 
+try:
+    from ..Methods.Simulation.OPslip.set_I0_Phi0 import set_I0_Phi0
+except ImportError as error:
+    set_I0_Phi0 = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -125,6 +130,15 @@ class OPslip(OP):
         )
     else:
         get_slip = get_slip
+    # cf Methods.Simulation.OPslip.set_I0_Phi0
+    if isinstance(set_I0_Phi0, ImportError):
+        set_I0_Phi0 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OPslip method set_I0_Phi0: " + str(set_I0_Phi0))
+            )
+        )
+    else:
+        set_I0_Phi0 = set_I0_Phi0
     # save and copy methods are available in all object
     save = save
     copy = copy
