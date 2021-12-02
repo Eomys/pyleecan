@@ -56,6 +56,11 @@ try:
 except ImportError as error:
     comp_resistance_wind = error
 
+try:
+    from ..Methods.Machine.LamSquirrelCage.get_name_phase import get_name_phase
+except ImportError as error:
+    get_name_phase = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -151,6 +156,18 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_resistance_wind = comp_resistance_wind
+    # cf Methods.Machine.LamSquirrelCage.get_name_phase
+    if isinstance(get_name_phase, ImportError):
+        get_name_phase = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method get_name_phase: "
+                    + str(get_name_phase)
+                )
+            )
+        )
+    else:
+        get_name_phase = get_name_phase
     # save and copy methods are available in all object
     save = save
     copy = copy

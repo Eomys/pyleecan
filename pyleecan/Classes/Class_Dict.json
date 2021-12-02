@@ -4837,7 +4837,8 @@
             "plot",
             "comp_number_phase_eq",
             "comp_surface_ring",
-            "comp_resistance_wind"
+            "comp_resistance_wind",
+            "get_name_phase"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
