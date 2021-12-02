@@ -1,6 +1,7 @@
 from numpy import ndarray, min as np_min, max as np_max
 
 from SciDataTool import VectorField, Data
+from logging import getLogger
 
 
 def log_datakeeper_step_result(simulation, datakeeper_list, index, simu_type):
@@ -41,12 +42,14 @@ def log_datakeeper_step_result(simulation, datakeeper_list, index, simu_type):
         elif isinstance(value, Data) or isinstance(value, VectorField):
             msg += datakeeper.symbol + "=" + type(value).__name__
         elif value is None:
-            msg += datakeeper.symbol + "=None"
+            pass
+            # msg += datakeeper.symbol + "=None"
         else:
             msg += datakeeper.symbol + "=" + format(value, ".4g")
-        if datakeeper.unit is not None:
-            msg += " [" + datakeeper.unit + "], "
-        else:
-            msg += ", "
+        if value is not None:
+            if datakeeper.unit is not None:
+                msg += " [" + datakeeper.unit + "], "
+            else:
+                msg += ", "
     msg = msg[:-2]
     simulation.get_logger().info(msg)
