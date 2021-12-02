@@ -103,7 +103,6 @@ class Electrical(FrozenClass):
         Trot=20,
         Tmag=20,
         freq_max=40000,
-        type_calc_PWM_harm=1,
         init_dict=None,
         init_str=None,
     ):
@@ -136,8 +135,6 @@ class Electrical(FrozenClass):
                 Tmag = init_dict["Tmag"]
             if "freq_max" in list(init_dict.keys()):
                 freq_max = init_dict["freq_max"]
-            if "type_calc_PWM_harm" in list(init_dict.keys()):
-                type_calc_PWM_harm = init_dict["type_calc_PWM_harm"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.eec = eec
@@ -147,7 +144,6 @@ class Electrical(FrozenClass):
         self.Trot = Trot
         self.Tmag = Tmag
         self.freq_max = freq_max
-        self.type_calc_PWM_harm = type_calc_PWM_harm
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -171,9 +167,6 @@ class Electrical(FrozenClass):
         Electrical_str += "Trot = " + str(self.Trot) + linesep
         Electrical_str += "Tmag = " + str(self.Tmag) + linesep
         Electrical_str += "freq_max = " + str(self.freq_max) + linesep
-        Electrical_str += (
-            "type_calc_PWM_harm = " + str(self.type_calc_PWM_harm) + linesep
-        )
         return Electrical_str
 
     def __eq__(self, other):
@@ -194,8 +187,6 @@ class Electrical(FrozenClass):
         if other.Tmag != self.Tmag:
             return False
         if other.freq_max != self.freq_max:
-            return False
-        if other.type_calc_PWM_harm != self.type_calc_PWM_harm:
             return False
         return True
 
@@ -225,8 +216,6 @@ class Electrical(FrozenClass):
             diff_list.append(name + ".Tmag")
         if other._freq_max != self._freq_max:
             diff_list.append(name + ".freq_max")
-        if other._type_calc_PWM_harm != self._type_calc_PWM_harm:
-            diff_list.append(name + ".type_calc_PWM_harm")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -242,7 +231,6 @@ class Electrical(FrozenClass):
         S += getsizeof(self.Trot)
         S += getsizeof(self.Tmag)
         S += getsizeof(self.freq_max)
-        S += getsizeof(self.type_calc_PWM_harm)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -271,7 +259,6 @@ class Electrical(FrozenClass):
         Electrical_dict["Trot"] = self.Trot
         Electrical_dict["Tmag"] = self.Tmag
         Electrical_dict["freq_max"] = self.freq_max
-        Electrical_dict["type_calc_PWM_harm"] = self.type_calc_PWM_harm
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
@@ -287,7 +274,6 @@ class Electrical(FrozenClass):
         self.Trot = None
         self.Tmag = None
         self.freq_max = None
-        self.type_calc_PWM_harm = None
 
     def _get_eec(self):
         """getter of eec"""
@@ -422,23 +408,5 @@ class Electrical(FrozenClass):
         doc=u"""Maximum frequency to calculate voltage and current harmonics
 
         :Type: float
-        """,
-    )
-
-    def _get_type_calc_PWM_harm(self):
-        """getter of type_calc_PWM_harm"""
-        return self._type_calc_PWM_harm
-
-    def _set_type_calc_PWM_harm(self, value):
-        """setter of type_calc_PWM_harm"""
-        check_var("type_calc_PWM_harm", value, "int")
-        self._type_calc_PWM_harm = value
-
-    type_calc_PWM_harm = property(
-        fget=_get_type_calc_PWM_harm,
-        fset=_set_type_calc_PWM_harm,
-        doc=u"""0 to account for the actual fundamental frequency and modulation index (can be source of numerical errors due to spectral leakage), 1 to only account for modulation index and (fundamental frequency is given by fswi/(4*Nsidebands) to avoid spectral leakage)
-
-        :Type: int
         """,
     )

@@ -8,8 +8,6 @@ import pytest
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
 from SciDataTool.Functions.Plot.plot_3D import plot_3D
 
-from pyleecan.Classes.ImportGenPWM import ImportGenPWM
-from pyleecan.Classes.InputVoltage import InputVoltage
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -17,7 +15,6 @@ from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.PostLUT import PostLUT
 from pyleecan.Classes.Electrical import Electrical
-from pyleecan.Classes.EEC_ANL import EEC_ANL
 from pyleecan.Classes.EEC_PMSM import EEC_PMSM
 
 from pyleecan.Functions.load import load
@@ -171,10 +168,10 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
     Id, Iq = Id.ravel(), Iq.ravel()
     Imax_interp = np.sqrt(Id ** 2 + Iq ** 2)
 
-    elec_model = Electrical(eec=EEC_PMSM(), ELUT_enforced=test_ELUT)
+    elec_model = Electrical(eec=EEC_PMSM(), LUT_enforced=test_ELUT)
 
     # Interpolate stator winding flux in dqh frame for all Id/Iq
-    elec_model.eec.parameters = elec_model.ELUT_enforced.get_param_dict(
+    elec_model.eec.parameters = elec_model.LUT_enforced.get_param_dict(
         Id=Id, Iq=Iq, param_list=["Idqh", "Phidqh"]
     )
 
@@ -294,7 +291,7 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
         )
 
         # Calculate voltage
-        out_dict = elec_model.eec.solve_EEC()
+        out_dict = elec_model.eec.solve()
         U_max_interp = np.sqrt(out_dict["Ud"] ** 2 + out_dict["Uq"] ** 2)
 
         for kk, I_max0 in enumerate(I_max_vect):
@@ -374,50 +371,9 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
     pass
 
 
-@pytest.mark.long_5s
-@pytest.mark.MagFEMM
-@pytest.mark.EEC_PMSM
-@pytest.mark.IPMSM
-@pytest.mark.periodicity
-def test_EEC_ELUT_PMSM_PWM(test_ELUT):
-    """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine including PWM"""
-
-    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-
-    # Simu with EEC using ELUT
-    fmax = 20000
-    fswi = 7000
-    Vdc1 = 800  # Bus voltage
-    U0 = 460  # Phase voltage
-    simu_EEC = Simu1(name="test_LUT_PMSM", machine=Toyota_Prius)
-
-    # Definition of the input
-    simu_EEC.input = InputVoltage(
-        Na_tot=1024,
-        Nt_tot=1024,
-        PWM=ImportGenPWM(fmax=fmax, fswi=fswi, Vdc1=Vdc1, U0=U0),
-        OP=OPdq(N0=1000, Id_ref=50, Iq_ref=100, Ud_ref=200, Uq_ref=300),
-    )
-
-    simu_EEC.elec = Electrical(eec=EEC_ANL(), ELUT_enforced=test_ELUT)
-
-    out_EEC = simu_EEC.run()
-
-    # Plot 3-phase current function of time
-    out_EEC.elec.Is_harm.plot_2D_Data(
-        "freqs",
-        save_path=join(save_path, "EEC_FEMM_IPMSM_Is_harm.png"),
-        is_show_fig=is_show_fig,
-        **dict_2D,
-    )
-
-    return out_EEC
-
-
 # To run it without pytest
 if __name__ == "__main__":
     # out0, ELUT = test_EEC_ELUT_PMSM_calc()
     # ELUT.save("ELUT_PMSM.h5")
     ELUT = load("ELUT_PMSM.h5")
     # test_EEC_ELUT_PMSM_MTPA(ELUT)
-    test_EEC_ELUT_PMSM_PWM(ELUT)

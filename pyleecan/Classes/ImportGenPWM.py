@@ -116,8 +116,6 @@ class ImportGenPWM(ImportMatrix):
         phase_dir=None,
         current_dir=None,
         Phi0=None,
-        Nswi=None,
-        Nsidebands=5,
         is_transpose=False,
         init_dict=None,
         init_str=None,
@@ -173,10 +171,6 @@ class ImportGenPWM(ImportMatrix):
                 current_dir = init_dict["current_dir"]
             if "Phi0" in list(init_dict.keys()):
                 Phi0 = init_dict["Phi0"]
-            if "Nswi" in list(init_dict.keys()):
-                Nswi = init_dict["Nswi"]
-            if "Nsidebands" in list(init_dict.keys()):
-                Nsidebands = init_dict["Nsidebands"]
             if "is_transpose" in list(init_dict.keys()):
                 is_transpose = init_dict["is_transpose"]
         # Set the properties (value check and convertion are done in setter)
@@ -198,8 +192,6 @@ class ImportGenPWM(ImportMatrix):
         self.phase_dir = phase_dir
         self.current_dir = current_dir
         self.Phi0 = Phi0
-        self.Nswi = Nswi
-        self.Nsidebands = Nsidebands
         # Call ImportMatrix init
         super(ImportGenPWM, self).__init__(is_transpose=is_transpose)
         # The class is frozen (in ImportMatrix init), for now it's impossible to
@@ -229,8 +221,6 @@ class ImportGenPWM(ImportMatrix):
         ImportGenPWM_str += "phase_dir = " + str(self.phase_dir) + linesep
         ImportGenPWM_str += "current_dir = " + str(self.current_dir) + linesep
         ImportGenPWM_str += "Phi0 = " + str(self.Phi0) + linesep
-        ImportGenPWM_str += "Nswi = " + str(self.Nswi) + linesep
-        ImportGenPWM_str += "Nsidebands = " + str(self.Nsidebands) + linesep
         return ImportGenPWM_str
 
     def __eq__(self, other):
@@ -277,10 +267,6 @@ class ImportGenPWM(ImportMatrix):
         if other.current_dir != self.current_dir:
             return False
         if other.Phi0 != self.Phi0:
-            return False
-        if other.Nswi != self.Nswi:
-            return False
-        if other.Nsidebands != self.Nsidebands:
             return False
         return True
 
@@ -331,10 +317,6 @@ class ImportGenPWM(ImportMatrix):
             diff_list.append(name + ".current_dir")
         if other._Phi0 != self._Phi0:
             diff_list.append(name + ".Phi0")
-        if other._Nswi != self._Nswi:
-            diff_list.append(name + ".Nswi")
-        if other._Nsidebands != self._Nsidebands:
-            diff_list.append(name + ".Nsidebands")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -364,8 +346,6 @@ class ImportGenPWM(ImportMatrix):
         S += getsizeof(self.phase_dir)
         S += getsizeof(self.current_dir)
         S += getsizeof(self.Phi0)
-        S += getsizeof(self.Nswi)
-        S += getsizeof(self.Nsidebands)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -403,8 +383,6 @@ class ImportGenPWM(ImportMatrix):
         ImportGenPWM_dict["phase_dir"] = self.phase_dir
         ImportGenPWM_dict["current_dir"] = self.current_dir
         ImportGenPWM_dict["Phi0"] = self.Phi0
-        ImportGenPWM_dict["Nswi"] = self.Nswi
-        ImportGenPWM_dict["Nsidebands"] = self.Nsidebands
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportGenPWM_dict["__class__"] = "ImportGenPWM"
@@ -431,8 +409,6 @@ class ImportGenPWM(ImportMatrix):
         self.phase_dir = None
         self.current_dir = None
         self.Phi0 = None
-        self.Nswi = None
-        self.Nsidebands = None
         # Set to None the properties inherited from ImportMatrix
         super(ImportGenPWM, self)._set_None()
 
@@ -766,41 +742,5 @@ class ImportGenPWM(ImportMatrix):
         doc=u"""reference voltage phase (rad)
 
         :Type: float
-        """,
-    )
-
-    def _get_Nswi(self):
-        """getter of Nswi"""
-        return self._Nswi
-
-    def _set_Nswi(self, value):
-        """setter of Nswi"""
-        check_var("Nswi", value, "int")
-        self._Nswi = value
-
-    Nswi = property(
-        fget=_get_Nswi,
-        fset=_set_Nswi,
-        doc=u"""Number of switching groups to consider (if None automatically calculated from fswi and freq_max in electrical model)
-
-        :Type: int
-        """,
-    )
-
-    def _get_Nsidebands(self):
-        """getter of Nsidebands"""
-        return self._Nsidebands
-
-    def _set_Nsidebands(self, value):
-        """setter of Nsidebands"""
-        check_var("Nsidebands", value, "int")
-        self._Nsidebands = value
-
-    Nsidebands = property(
-        fget=_get_Nsidebands,
-        fset=_set_Nsidebands,
-        doc=u"""Number of sidebands per switching groups
-
-        :Type: int
         """,
     )

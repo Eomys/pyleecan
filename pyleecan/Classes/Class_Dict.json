@@ -1293,15 +1293,6 @@
                 "type": "float",
                 "unit": "Hz",
                 "value": 40000
-            },
-            {
-                "desc": "0 to account for the actual fundamental frequency and modulation index (can be source of numerical errors due to spectral leakage), 1 to only account for modulation index and (fundamental frequency is given by fswi/(4*Nsidebands) to avoid spectral leakage)",
-                "max": "",
-                "min": "",
-                "name": "type_calc_PWM_harm",
-                "type": "int",
-                "unit": "",
-                "value": 1
             }
         ]
     },
@@ -3362,24 +3353,6 @@
                 "type": "float",
                 "unit": "",
                 "value": null
-            },
-            {
-                "desc": "Number of switching groups to consider (if None automatically calculated from fswi and freq_max in electrical model)",
-                "max": "",
-                "min": "",
-                "name": "Nswi",
-                "type": "int",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Number of sidebands per switching groups",
-                "max": "",
-                "min": "",
-                "name": "Nsidebands",
-                "type": "int",
-                "unit": "",
-                "value": 5
             }
         ]
     },
@@ -8123,13 +8096,11 @@
         "desc": "Gather the electric module outputs",
         "is_internal": false,
         "methods": [
-            "get_I_fund",
-            "get_I_harm",
-            "get_Is",
             "get_Nr",
+            "get_Is",
             "get_Us",
-            "get_Us_harm",
-            "store"
+            "store",
+            "get_electrical"
         ],
         "mother": "",
         "name": "OutElec",
@@ -8170,7 +8141,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.Electrical"
+                "value": "pyleecan.Electrical"
             },
             {
                 "desc": "Electrical Joule losses",
@@ -8200,15 +8171,6 @@
                 "value": null
             },
             {
-                "desc": "PWM stator voltage as a function of time (each column correspond to one phase)",
-                "max": "",
-                "min": "",
-                "name": "Us_PWM",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "V",
-                "value": "None"
-            },
-            {
                 "desc": "Operating Point",
                 "max": "",
                 "min": "",
@@ -8218,7 +8180,7 @@
                 "value": null
             },
             {
-                "desc": "Theorical Average Electromagnetic Power",
+                "desc": "Theoretical Average Electromagnetic Power",
                 "max": "",
                 "min": "",
                 "name": "Pem_av_ref",
@@ -8227,22 +8189,13 @@
                 "value": null
             },
             {
-                "desc": "Theorical Average Electromagnetic torque",
+                "desc": "Theoretical Average Electromagnetic torque",
                 "max": "",
                 "min": "",
                 "name": "Tem_av_ref",
                 "type": "float",
                 "unit": "N.m",
                 "value": null
-            },
-            {
-                "desc": "Harmonic stator current ",
-                "max": "",
-                "min": "",
-                "name": "Is_harm",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "A",
-                "value": "None"
             },
             {
                 "desc": "Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",
@@ -8260,6 +8213,24 @@
                 "name": "current_dir",
                 "type": "int",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Object to generate PWM signal",
+                "max": "",
+                "min": "",
+                "name": "PWM",
+                "type": "ImportGenPWM",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Dict containing parameters used in Electric Equivalent Circuit",
+                "max": "",
+                "min": "",
+                "name": "eec_param",
+                "type": "dict",
+                "unit": "",
                 "value": null
             }
         ]

@@ -7,18 +7,7 @@ from ....Functions.Electrical.dqh_transformation_freq import dqh2n_DataFreq
 
 def solve_PWM(self, output, freq_max=None, is_dqh_freq=False):
     """Get stator current harmonics due to PWM harmonics
-
-    cf Liang thesis
-
-                    <---                               --->
-     -- R*Id --- -we*Lq*Iq ---            -----R*Id-----we*Lq*Iq----
-    |                         |            |                     |
-    |                     j*wh*Ld*Id      |                    BEMF
-    |                         |            |                     |
-     ---------Id--------------              ---------Iq----------
-
-             --->                               --->
-              Ud                                 Uq
+    TODO: validation with transient FEA simulation
 
     Parameters
     ----------
@@ -45,21 +34,14 @@ def solve_PWM(self, output, freq_max=None, is_dqh_freq=False):
     freqs_n = output.elec.Us.axes_df[0].values
 
     # Get stator voltage harmonics in dqh frame
-    # No need to filter harmonics, it as already been done in gen_drive()
-    Us_PWM = output.elec.get_Us(
-        is_filter_harmonics=False,
-        is_dqh=True,
-        is_harm_only=True,
-        freq_max=freq_max,
-        is_freq=True,
-    )
-    result = Us_PWM.get_along("freqs", "phase")
-    Udqh_val = result[Us_PWM.symbol]
-    freqs_dqh = result["freqs"]
+    Us_PWM = output.elec.get_Us(is_dqh=True, is_harm_only=True, is_freq=True)
+    result_dqh = Us_PWM.get_along("freqs<" + str(freq_max), "phase")
+    Udqh_val = result_dqh[Us_PWM.symbol]
+    freqs_dqh = result_dqh["freqs"]
 
     # # Plot Us_n and U_dqh
-    # output.elec.Us.plot_2D_Data("freqs=[0,2000]", "phase[0]")
-    # Us_PWM.plot_2D_Data("freqs=[0,200]", "phase[0]")
+    # output.elec.Us.plot_2D_Data("freqs=[0,10000]", "phase[0]")
+    # Us_PWM.plot_2D_Data("freqs=[0,5000]", "phase[0]")
 
     # Filter Udqh_val zeros values
     Udqh_norm = np.linalg.norm(Udqh_val, axis=-1)
@@ -102,10 +84,8 @@ def solve_PWM(self, output, freq_max=None, is_dqh_freq=False):
             else:
                 fn_dqh[ii] = fn_ii
 
-        fn_dqh[np.abs(fn_dqh) < par["felec"]] = par["felec"]
-
     # Calculate impedances
-    we = 0 * 2 * np.pi * par["felec"]
+    we = 0 * 2 * np.pi * par["felec"]  # in static frame
     wh = 2 * np.pi * fn_dqh
     a = par["R20"] + 1j * wh * par["Ld"]
     b = -we * par["Lq"]

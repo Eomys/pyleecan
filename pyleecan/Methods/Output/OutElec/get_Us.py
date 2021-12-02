@@ -1,42 +1,46 @@
-from numpy import array
-
-from SciDataTool import DataTime
-
-from ....Functions.Electrical.dqh_transformation import dqh2n
-
-
-def get_Us(self):
+def get_Us(
+    self, Time=None, is_dqh=False, is_fund_only=False, is_harm_only=False, is_freq=None
+):
     """Return the fundamental stator voltage as DataND object
 
     Parameters
     ----------
     self : OutElec
         an OutElec object
+    Time : Data
+        Time axis
+    is_dqh : bool
+        True to rotate in DQH frame
+    is_fund_only : bool
+        True to return only fundamental component
+    is_harm_only : bool
+        True to return only components at higher frequencies than fundamental component
 
     Returns
     -------
     Us: DataND
-        fundamental stator voltage
+        stator voltage
     """
-    if self.Us is None:
-        # Generate current according to Ud/Uq
-        Usdqh = array([self.OP.get_Ud_Uq()["Ud"], self.OP.get_Ud_Uq()["Uq"], 0])
 
-        Time = self.axes_dict["time"]
+    label = self.parent.simu.machine.stator.get_label()
+    Udq_dict = self.OP.get_Ud_Uq()
 
-        angle_elec = Time.get_values(is_smallestperiod=True, normalization="angle_elec")
-        qs = self.parent.simu.machine.stator.winding.qs
-        stator_label = "phase_" + self.parent.simu.machine.stator.get_label()
-        phase_dir = self.phase_dir
+    data_dict = {
+        "name": "Stator voltage",
+        "unit": "V",
+        "symbol": "U_s",
+        "lam_label": label,
+        "Ad": Udq_dict["Ud"],
+        "Aq": Udq_dict["Uq"],
+    }
 
-        # Switch from dqh to abc referential
-        Us = dqh2n(Usdqh, angle_elec, n=qs, is_n_rms=False, phase_dir=phase_dir)
+    Us = self.get_electrical(
+        data_dict,
+        Time=Time,
+        is_dqh=is_dqh,
+        is_fund_only=is_fund_only,
+        is_harm_only=is_harm_only,
+        is_freq=is_freq,
+    )
 
-        self.Us = DataTime(
-            name="Stator voltage",
-            unit="V",
-            symbol="Us",
-            axes=[Time.copy(), self.axes_dict[stator_label].copy()],
-            values=Us,
-        )
-    return self.Us
+    return Us

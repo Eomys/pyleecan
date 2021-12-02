@@ -453,21 +453,22 @@ def _check_data(data, is_freq=False):
     elif isinstance(data, DataFreq):
         _check_DataFreq(data)
 
-    elif isinstance(DataND):
+    elif isinstance(data, DataDual):
+        if is_freq:
+            data.axes = data.axes_df
+            data.values = data.values_df
+            _check_DataFreq(data)
+
+        else:
+            data.axes = data.axes_dt
+            data.values = data.values_dt
+            _check_DataTime(data)
+
+    elif isinstance(data, DataND):
         try:
             _check_DataTime(data)
         except Exception:
             _check_DataFreq(data)
-
-    elif is_freq:
-        data.axes = data.axes_df
-        data.values = data.values_df
-        _check_DataFreq(data)
-
-    else:
-        data.axes = data.axes_dt
-        data.values = data.values_dt
-        _check_DataTime(data)
 
 
 def _check_DataTime(data):

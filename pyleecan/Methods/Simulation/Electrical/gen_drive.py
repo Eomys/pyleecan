@@ -1,22 +1,17 @@
 import numpy as np
 
-from SciDataTool import DataTime
+from SciDataTool import DataTime, Data1D
 
 
 def gen_drive(self, output):
-    """Generate the drive for the equivalent electrical circuit
+    """Generate the drive for the equivalent electrical circuit (only PWM drive for now)
 
     Parameters
     ----------
-    self : EEC_PMSM
-        an EEC_PMSM object
+    self : Electrical
+        an Electrical object
     output : Output
         an Output object
-
-    Returns
-    ----------
-    Us_dqh_freq: DataFreq
-        Harmonic content of stator voltage in dqh frame
     """
 
     self.get_logger().info("Calculating PWM voltage")
@@ -26,11 +21,11 @@ def gen_drive(self, output):
     # Get PWM object
     PWM = output.elec.PWM
 
+    if PWM.U0 in [0, None]:
+        raise Exception("Cannot calculate PWM voltage if PWM.U0 is None or 0")
+
     # Get operating point
     OP = output.elec.OP
-
-    # Get the number of switching groups
-    PWM.Nswi = int(np.ceil(self.freq_max / PWM.fswi))
 
     if PWM.is_star:
         # Calculate modulation index to account for quick variations
@@ -41,10 +36,6 @@ def gen_drive(self, output):
 
     # Number of points depends on modulation index
     Nt_tot = int(PWM.fs * PWM.duration)
-
-    # Get PWM theoretical frequencies
-    Freqs_op, orders = output.elec.get_freqs_th(is_dqh=False, freq_max=self.freq_max)
-    freqs_th = Freqs_op.values
 
     # Get time axis
     input_pwm = type(output.simu.input)(
@@ -72,69 +63,29 @@ def gen_drive(self, output):
         values=Uabc,
     )
 
-    # Recalculate PWM voltage waveform with convenient supply frequency
-    if self.type_calc_PWM_harm == 1:
-        # Copy PWM object
-        PWM_bis = output.elec.PWM.copy()
+    # Get DataFreq object and frequency axis by taking FFT
+    Us_df = Us_dt.get_data_along("freqs<" + str(self.freq_max), "phase")
+    Freqs = Us_df.axes[0]
+    freqs = Freqs.get_values()
 
-        # Calculate PWM harmonics for fswi multiple of felec
-        PWM_bis.f = PWM_bis.fswi / (4 * PWM_bis.Nsidebands)
-        PWM_bis.duration = 2 * p / PWM_bis.f
-        OP_bis = output.elec.OP.copy()
-        OP_bis.felec = PWM_bis.f
-        OP_bis.N0 = 60 * PWM_bis.f / p
-
-        # Calculate theoretical frequencies for dummy felec
-        f_PWM = np.array([0, PWM_bis.f, PWM_bis.fswi])
-        freqs_th_bis = np.abs(np.matmul(orders, f_PWM[:, None])[:, 0])
-
-        # adjust PWM maximum frequency
-        PWM_bis.fs = max([2 * freqs_th_bis.max(), PWM_bis.fs])
-
-        # Get time axis
-        input_pwm_bis = type(output.simu.input)(
-            OP=OP_bis,
-            Nt_tot=Nt_tot,
-            t_final=PWM_bis.duration,
-            current_dir=output.elec.current_dir,
-            rot_dir=output.geo.rot_dir,
-        )
-        Time_PWM_bis = input_pwm_bis.comp_axis_time(p, per_t=1, is_antiper_t=False)
-
-        # Generate PWM signal
-        Uabc_bis = PWM_bis.get_data(is_norm=False, Time=Time_PWM_bis)[0]
-
-        # Create DataTime object
-        Us_dt_bis = DataTime(
-            name="Stator voltage",
-            symbol="U_s",
-            unit="V",
-            axes=[Time_PWM_bis, Phase],
-            values=Uabc_bis,
-        )
-
-    if self.type_calc_PWM_harm == 1:
-        # Get FFT frequency vector
-        freqs_fft = Time_PWM_bis.get_values(operation="time_to_freqs")
-
-        # Find closest index of each frequency in the grid
-        If = np.argmin(np.abs(freqs_fft[:, None] - freqs_th_bis[None, :]), axis=0)
-
-        # Extract data at theoretical frequencies
-        Us_df = Us_dt_bis.get_data_along("freqs" + str(If.tolist()), "phase")
-
-        # Map theoretical frequencies to operational frequencies
-        Us_df.axes[0] = Freqs_op
-
-    else:
-        # Filter harmonics in spectrum removing leakage
-        Us_df = Us_dt.filter_spectral_leakage(freqs_th)
+    # Filter frequencies with low amplitude and create new frequency axis
+    Un_norm = np.linalg.norm(Us_df.values, axis=-1)
+    Iamp_n = Un_norm > 1e-2 * Un_norm.max()
+    Us_df.axes[0] = Data1D(
+        name=Freqs.name,
+        unit=Freqs.unit,
+        symbol=Freqs.symbol,
+        values=freqs[Iamp_n],
+        normalizations=Freqs.normalizations,
+        is_components=False,
+        symmetries=Freqs.symmetries,
+    )
+    Us_df.values = Us_df.values[Iamp_n, :]
 
     # Store voltage spectrum in OutElec
-    output.elec.Us = Us_dt.to_datadual(Us_df)
+    output.elec.Us = Us_dt.to_datadual(datafreq=Us_df)
 
     # Store Time_PWM axis in axes_dict
     output.elec.axes_dict["time"] = Time_PWM
 
     # Us_dt.plot_2D_Data("time", "phase[]")
-    # Us_df.plot_2D_Data("freqs", "phase[0]", data_list=[Us_dt, Us_df1], barwidth=500)

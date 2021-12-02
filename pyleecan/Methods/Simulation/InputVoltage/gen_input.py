@@ -125,8 +125,6 @@ def gen_input(self):
         outelec.PWM.qs = qs
         outelec.PWM.phase_dir = outelec.phase_dir
         outelec.PWM.current_dir = outelec.current_dir
-        # Enforce Sine PWM
-        outelec.PWM.typePWM = 8
         # Take sampling frequency as 2*fmax to catch fmax components
         outelec.PWM.fs = 2 * outelec.PWM.fmax
         # Set PWM duration as 2*p times the electrical period (to increase frequency resolution)
