@@ -27,6 +27,11 @@ try:
 except ImportError as error:
     set_OP_from_array = error
 
+try:
+    from ..Methods.Simulation.InputVoltage.set_Ud_Uq import set_Ud_Uq
+except ImportError as error:
+    set_Ud_Uq = error
+
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
@@ -66,6 +71,17 @@ class InputVoltage(Input):
         )
     else:
         set_OP_from_array = set_OP_from_array
+    # cf Methods.Simulation.InputVoltage.set_Ud_Uq
+    if isinstance(set_Ud_Uq, ImportError):
+        set_Ud_Uq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use InputVoltage method set_Ud_Uq: " + str(set_Ud_Uq)
+                )
+            )
+        )
+    else:
+        set_Ud_Uq = set_Ud_Uq
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -85,6 +101,7 @@ class InputVoltage(Input):
         Nrev=None,
         Na_tot=2048,
         OP=None,
+        t_final=None,
         init_dict=None,
         init_str=None,
     ):
@@ -125,6 +142,8 @@ class InputVoltage(Input):
                 Na_tot = init_dict["Na_tot"]
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
+            if "t_final" in list(init_dict.keys()):
+                t_final = init_dict["t_final"]
         # Set the properties (value check and convertion are done in setter)
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
@@ -133,7 +152,13 @@ class InputVoltage(Input):
         self.current_dir = current_dir
         # Call Input init
         super(InputVoltage, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, OP=OP
+            time=time,
+            angle=angle,
+            Nt_tot=Nt_tot,
+            Nrev=Nrev,
+            Na_tot=Na_tot,
+            OP=OP,
+            t_final=t_final,
         )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties

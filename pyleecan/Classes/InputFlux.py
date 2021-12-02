@@ -75,6 +75,7 @@ class InputFlux(InputCurrent):
         Nrev=None,
         Na_tot=2048,
         OP=None,
+        t_final=None,
         init_dict=None,
         init_str=None,
     ):
@@ -135,6 +136,8 @@ class InputFlux(InputCurrent):
                 Na_tot = init_dict["Na_tot"]
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
+            if "t_final" in list(init_dict.keys()):
+                t_final = init_dict["t_final"]
         # Set the properties (value check and convertion are done in setter)
         self.per_a = per_a
         self.per_t = per_t
@@ -159,6 +162,7 @@ class InputFlux(InputCurrent):
             Nrev=Nrev,
             Na_tot=Na_tot,
             OP=OP,
+            t_final=t_final,
         )
         # The class is frozen (in InputCurrent init), for now it's impossible to
         # add new properties

@@ -226,6 +226,7 @@ load_switch = {
     "Unit": Unit,
     "VarLoad": VarLoad,
     "VarLoadCurrent": VarLoadCurrent,
+    "VarLoadVoltage": VarLoadVoltage,
     "VarParam": VarParam,
     "VarSimu": VarSimu,
     "VentilationCirc": VentilationCirc,

@@ -4045,6 +4045,15 @@
                 "type": "OP",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "To enforce final time",
+                "max": "",
+                "min": "",
+                "name": "t_final",
+                "type": "float",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -4226,7 +4235,8 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_OP_from_array"
+            "set_OP_from_array",
+            "set_Ud_Uq"
         ],
         "mother": "Input",
         "name": "InputVoltage",
@@ -7608,8 +7618,8 @@
             "get_slip",
             "get_Ud_Uq",
             "set_Id_Iq",
-            "set_I0_Phi0",
-            "get_I0_Phi0"
+            "get_I0_Phi0",
+            "set_Ud_Uq"
         ],
         "mother": "OP",
         "name": "OPdq",
@@ -7672,7 +7682,8 @@
             "set_Id_Iq",
             "get_I0_Phi0",
             "get_slip",
-            "set_I0_Phi0"
+            "set_I0_Phi0",
+            "set_Ud_Uq"
         ],
         "mother": "OP",
         "name": "OPslip",
@@ -13583,7 +13594,8 @@
             }
         ],
         "daughters": [
-            "VarLoadCurrent"
+            "VarLoadCurrent",
+            "VarLoadVoltage"
         ],
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
         "is_internal": false,
@@ -13594,28 +13606,6 @@
         "name": "VarLoad",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoad.csv",
-        "properties": []
-    },
-    "VarLoadCurrent": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Generate a multisimulation with InputCurrent at variable operating point",
-        "is_internal": false,
-        "methods": [
-            "get_input_list",
-            "generate_simulation_list",
-            "check_param",
-            "get_elec_datakeeper"
-        ],
-        "mother": "VarLoad",
-        "name": "VarLoadCurrent",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoadCurrent.csv",
         "properties": [
             {
                 "desc": "Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) ",
@@ -13654,6 +13644,48 @@
                 "value": false
             }
         ]
+    },
+    "VarLoadCurrent": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Generate a multisimulation with InputCurrent at variable operating point",
+        "is_internal": false,
+        "methods": [
+            "get_input_list",
+            "generate_simulation_list",
+            "get_elec_datakeeper"
+        ],
+        "mother": "VarLoad",
+        "name": "VarLoadCurrent",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoadCurrent.csv",
+        "properties": []
+    },
+    "VarLoadVoltage": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Generate a multisimulation with InputVoltage at variable operating point",
+        "is_internal": false,
+        "methods": [
+            "generate_simulation_list",
+            "get_elec_datakeeper",
+            "get_input_list"
+        ],
+        "mother": "VarLoad",
+        "name": "VarLoadVoltage",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoadVoltage.csv",
+        "properties": []
     },
     "VarParam": {
         "constants": [
@@ -13700,6 +13732,7 @@
         "daughters": [
             "VarLoad",
             "VarLoadCurrent",
+            "VarLoadVoltage",
             "VarParam"
         ],
         "desc": "Abstract class for the multi-simulation",

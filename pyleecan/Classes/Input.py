@@ -108,6 +108,7 @@ class Input(FrozenClass):
         Nrev=None,
         Na_tot=2048,
         OP=None,
+        t_final=None,
         init_dict=None,
         init_str=None,
     ):
@@ -138,6 +139,8 @@ class Input(FrozenClass):
                 Na_tot = init_dict["Na_tot"]
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
+            if "t_final" in list(init_dict.keys()):
+                t_final = init_dict["t_final"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.time = time
@@ -146,6 +149,7 @@ class Input(FrozenClass):
         self.Nrev = Nrev
         self.Na_tot = Na_tot
         self.OP = OP
+        self.t_final = t_final
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -176,6 +180,7 @@ class Input(FrozenClass):
             Input_str += "OP = " + tmp
         else:
             Input_str += "OP = None" + linesep + linesep
+        Input_str += "t_final = " + str(self.t_final) + linesep
         return Input_str
 
     def __eq__(self, other):
@@ -194,6 +199,8 @@ class Input(FrozenClass):
         if other.Na_tot != self.Na_tot:
             return False
         if other.OP != self.OP:
+            return False
+        if other.t_final != self.t_final:
             return False
         return True
 
@@ -229,6 +236,8 @@ class Input(FrozenClass):
             diff_list.append(name + ".OP None mismatch")
         elif self.OP is not None:
             diff_list.extend(self.OP.compare(other.OP, name=name + ".OP"))
+        if other._t_final != self._t_final:
+            diff_list.append(name + ".t_final")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -243,6 +252,7 @@ class Input(FrozenClass):
         S += getsizeof(self.Nrev)
         S += getsizeof(self.Na_tot)
         S += getsizeof(self.OP)
+        S += getsizeof(self.t_final)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -284,6 +294,7 @@ class Input(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
+        Input_dict["t_final"] = self.t_final
         # The class name is added to the dict for deserialisation purpose
         Input_dict["__class__"] = "Input"
         return Input_dict
@@ -300,6 +311,7 @@ class Input(FrozenClass):
         self.Na_tot = None
         if self.OP is not None:
             self.OP._set_None()
+        self.t_final = None
 
     def _get_time(self):
         """getter of time"""
@@ -449,5 +461,23 @@ class Input(FrozenClass):
         doc=u"""Operating Point
 
         :Type: OP
+        """,
+    )
+
+    def _get_t_final(self):
+        """getter of t_final"""
+        return self._t_final
+
+    def _set_t_final(self, value):
+        """setter of t_final"""
+        check_var("t_final", value, "float")
+        self._t_final = value
+
+    t_final = property(
+        fget=_get_t_final,
+        fset=_set_t_final,
+        doc=u"""To enforce final time
+
+        :Type: float
         """,
     )

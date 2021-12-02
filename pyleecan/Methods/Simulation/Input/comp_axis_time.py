@@ -3,7 +3,7 @@ from numpy import pi
 from SciDataTool import Data1D, DataLinspace, Norm_ref, Norm_affine
 
 
-def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None):
+def comp_axis_time(self, p, per_t=None, is_antiper_t=None, Time_in=None):
     """Compute time axis, with or without periodicities and including normalizations
 
     Parameters
@@ -39,15 +39,23 @@ def comp_axis_time(self, p, per_t, is_antiper_t, Time_in=None):
         ),
     }
 
+    # Compute Time axis based on input one
     if Time_in is not None:
-        # Compute Time axis based on the one stored in OutElec
+        if per_t is None or is_antiper_t is None:
+            # Get periodicity from input Time axis
+            per_t, is_antiper_t = Time_in.get_periodicity()
+            per_t = int(per_t / 2) if is_antiper_t else per_t
+        # Get axis on given periodicities
         Time = Time_in.get_axis_periodic(Nper=per_t, is_aper=is_antiper_t)
         Time.normalizations = norm_time
 
     # Create time axis
     elif self.time is None:
         # Create time axis as a DataLinspace
-        if self.Nrev is not None:
+        if self.t_final is not None:
+            # Enforce final time
+            t_final = self.t_final
+        elif self.Nrev is not None:
             # Set final time depending on rotor speed and number of revolutions
             t_final = 60 / self.OP.N0 * self.Nrev
         else:

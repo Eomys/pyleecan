@@ -173,8 +173,7 @@ def comp_axes(
             Phase_in = None
 
         # Calculate rotor phase axis
-        per_a_phase = 2 * per_a if is_antiper_a else per_a
-        Phase = self.comp_axis_phase(machine.rotor, per_a_phase, Phase_in)
+        Phase = self.comp_axis_phase(machine.rotor, per_a, is_antiper_a, Phase_in)
 
         if Phase is not None:
             # Store phase axis in dict

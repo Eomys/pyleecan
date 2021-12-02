@@ -3,7 +3,7 @@ from numpy import pi
 from SciDataTool import Data1D, DataLinspace, Norm_ref
 
 
-def comp_axis_angle(self, p, Rag, per_a, is_antiper_a, Angle_in=None):
+def comp_axis_angle(self, p, Rag, per_a=None, is_antiper_a=None, Angle_in=None):
     """Compute angle axis with or without periodicities and including normalizations
 
     Parameters
@@ -30,9 +30,15 @@ def comp_axis_angle(self, p, Rag, per_a, is_antiper_a, Angle_in=None):
 
     norm_angle = {"space_order": Norm_ref(ref=p), "distance": Norm_ref(ref=1 / Rag)}
 
+    # Compute angle axis based on input one
     if Angle_in is not None:
-        # Compute Angle axis based on the one stored in OutElec
+        if per_a is None or is_antiper_a is None:
+            # Get periodicity from input Angle axis
+            per_a, is_antiper_a = Angle_in.get_periodicity()
+            per_a = int(per_a / 2) if is_antiper_a else per_a
+        # Get Angle axis on requested periodicities
         Angle = Angle_in.get_axis_periodic(Nper=per_a, is_aper=is_antiper_a)
+        Angle.normalizations = norm_angle
 
     # Create angle axis
     elif self.angle is None:
