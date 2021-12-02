@@ -23,7 +23,7 @@ is_show_fig = False
 
 param_list = [
     {"strategy": "Sine", "type_PWM": 8, "val1": 0.34, "val2": 0.371},
-    {"strategy": "Space_Vector", "type_PWM": 7, "val1": 0.23, "val2": 0.391},
+    {"strategy": "Space_Vector", "type_PWM": 7, "val1": 0.23, "val2": 0.393},
 ]
 
 
@@ -40,7 +40,7 @@ def test_EEC_PWM(param_dict):
     fswi = 5000
     freq_max = 20000
 
-    M_I_val = np.linspace(0.05, 1.1, 11)
+    M_I_val = np.linspace(0.05, 1.1, 13)
 
     # Definition of the input
     simu.input = InputVoltage(

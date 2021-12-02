@@ -765,7 +765,8 @@
             "comp_psip_skin",
             "comp_skin_effect",
             "comp_power",
-            "comp_skin_effect_round_wire"
+            "comp_skin_effect_round_wire",
+            "comp_temperature_effect"
         ],
         "mother": "",
         "name": "Conductor",
