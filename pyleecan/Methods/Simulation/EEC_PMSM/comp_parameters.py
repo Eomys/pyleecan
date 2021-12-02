@@ -64,27 +64,8 @@ def comp_parameters(self, machine, OP, Tsta=None, Trot=None):
         and ("Phid" not in par or "Phiq" not in par)
     ):
         if is_LUT:
-            Slice_MLUT = LUT.axes_dict["z"]
-            is_rebuild_skew = (
-                Slice_MLUT.values.size == 1 and machine.rotor.skew is not None
-            )
-
-            if LUT.is_interp_along_curve or is_rebuild_skew:
-
-                # Interpolate stator winding flux using LUT
-                Phi_wind = LUT.interp_Phi_wind(OP=OP)
-
-                # dqh transform
-                Phi_dqh = n2dqh_DataTime(
-                    Phi_wind, is_dqh_rms=True, phase_dir=LUT.get_phase_dir()
-                )
-
-                # Get Phi_dqh_mean
-                Phi_dqh_mean = Phi_dqh.get_along("time=mean", "phase")[Phi_dqh.symbol]
-
-            else:
-                # Get dqh flux function of current
-                Phi_dqh_mean = self.interp_Phi_dqh(Id=par["Id"], Iq=par["Iq"])
+            # Get dqh flux function of current
+            Phi_dqh_mean = self.interp_Phi_dqh(Id=par["Id"], Iq=par["Iq"])
         else:
             Phi_dqh_mean = self.indmag.comp_inductance(machine=machine, OP_ref=OP)
 

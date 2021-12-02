@@ -18,11 +18,6 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LUT.get_param_dict import get_param_dict
-except ImportError as error:
-    get_param_dict = error
-
-try:
     from ..Methods.Simulation.LUT.get_phase_dir import get_phase_dir
 except ImportError as error:
     get_phase_dir = error
@@ -37,18 +32,6 @@ class LUT(FrozenClass):
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.LUT.get_param_dict
-    if isinstance(get_param_dict, ImportError):
-        get_param_dict = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LUT method get_param_dict: " + str(get_param_dict)
-                )
-            )
-        )
-    else:
-        get_param_dict = get_param_dict
     # cf Methods.Simulation.LUT.get_phase_dir
     if isinstance(get_phase_dir, ImportError):
         get_phase_dir = property(

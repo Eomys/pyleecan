@@ -4339,7 +4339,6 @@
         "desc": "Abstract class for Look Up Table (LUT)",
         "is_internal": false,
         "methods": [
-            "get_param_dict",
             "get_phase_dir"
         ],
         "mother": "",
@@ -4405,16 +4404,11 @@
         "desc": "Look Up Table class for dq OP matrix",
         "is_internal": false,
         "methods": [
-            "get_param_dict",
-            "get_bemf",
             "get_Ldqh",
             "get_Lmdqh",
-            "import_from_data",
             "get_Phidqh_mean",
             "get_Phidqh_mag",
             "get_Phidqh_mag_mean",
-            "get_Phidqh_mag_harm",
-            "get_orders_dqh",
             "interp_Phi_dqh"
         ],
         "mother": "LUT",
@@ -4479,12 +4473,7 @@
         "daughters": [],
         "desc": "Look Up Table class for u0/slip OP matrix",
         "is_internal": false,
-        "methods": [
-            "get_param_dict",
-            "get_Lm",
-            "comp_Lm_from_Phim",
-            "import_from_data"
-        ],
+        "methods": [],
         "mother": "LUT",
         "name": "LUTslip",
         "package": "Simulation",
