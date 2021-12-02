@@ -1009,39 +1009,17 @@
             }
         ],
         "daughters": [
-            "EEC_ANL",
             "EEC_LSRPM",
             "EEC_PMSM",
             "EEC_SCIM"
         ],
-        "desc": "Electric module: Equivalent Electrical Circuit abstract class",
+        "desc": "Equivalent Electrical Circuit abstract class",
         "is_internal": false,
         "methods": [],
         "mother": "",
         "name": "EEC",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC.csv",
-        "properties": []
-    },
-    "EEC_ANL": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Electric module: Analytical Electrical Equivalent Circuit",
-        "is_internal": false,
-        "methods": [
-            "comp_parameters",
-            "solve_EEC",
-            "comp_joule_losses"
-        ],
-        "mother": "EEC",
-        "name": "EEC_ANL",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_ANL.csv",
         "properties": [
             {
                 "desc": "Parameters of the EEC: computed if empty, or enforced",
@@ -1050,15 +1028,15 @@
                 "name": "parameters",
                 "type": "dict",
                 "unit": "-",
-                "value": {}
+                "value": null
             },
             {
-                "desc": "Frequency",
+                "desc": "Electrical Look Up Table to be enforced ",
                 "max": "",
                 "min": "",
-                "name": "freq0",
-                "type": "float",
-                "unit": "Hz",
+                "name": "LUT_enforced",
+                "type": "LUT",
+                "unit": "-",
                 "value": null
             },
             {
@@ -1080,12 +1058,11 @@
             }
         ],
         "daughters": [],
-        "desc": "Electric module: Electrical Equivalent Circuit for Squirrel Cage Induction Machine",
+        "desc": "Electrical Equivalent Circuit for LSRPM",
         "is_internal": false,
         "methods": [
             "comp_parameters",
-            "solve_EEC",
-            "gen_drive",
+            "solve",
             "comp_joule_losses"
         ],
         "mother": "EEC",
@@ -1094,13 +1071,13 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_LSRPM.csv",
         "properties": [
             {
-                "desc": "Parameters of the EEC: computed if empty, or enforced",
+                "desc": "Flux Linkage",
                 "max": "",
                 "min": "",
-                "name": "parameters",
-                "type": "dict",
+                "name": "fluxlink",
+                "type": "FluxLink",
                 "unit": "-",
-                "value": {}
+                "value": null
             },
             {
                 "desc": "Rotation speed",
@@ -1110,24 +1087,6 @@
                 "type": "int",
                 "unit": "RPM",
                 "value": 1500
-            },
-            {
-                "desc": "frequency",
-                "max": "",
-                "min": "",
-                "name": "felec",
-                "type": "int",
-                "unit": "Hz",
-                "value": 100
-            },
-            {
-                "desc": "Flux Linkage",
-                "max": "",
-                "min": "",
-                "name": "fluxlink",
-                "type": "FluxLink",
-                "unit": "-",
-                "value": null
             }
         ]
     },
@@ -1139,15 +1098,15 @@
             }
         ],
         "daughters": [],
-        "desc": "Electric module: Electrical Equivalent Circuit",
+        "desc": "Electrical Equivalent Circuit of Permanent Magnet Synchronous Machines",
         "is_internal": false,
         "methods": [
             "comp_parameters",
-            "solve_EEC",
-            "gen_drive",
+            "solve",
+            "solve_PWM",
             "comp_joule_losses",
-            "comp_BEMF_harmonics",
-            "comp_torque_sync_rel"
+            "comp_torque_sync_rel",
+            "comp_BEMF_harmonics"
         ],
         "mother": "EEC",
         "name": "EEC_PMSM",
@@ -1171,33 +1130,6 @@
                 "type": "FluxLink",
                 "unit": "-",
                 "value": null
-            },
-            {
-                "desc": "Parameters of the EEC: computed if empty, or enforced",
-                "max": "",
-                "min": "",
-                "name": "parameters",
-                "type": "dict",
-                "unit": "-",
-                "value": {}
-            },
-            {
-                "desc": "Frequency",
-                "max": "",
-                "min": "",
-                "name": "freq0",
-                "type": "float",
-                "unit": "Hz",
-                "value": null
-            },
-            {
-                "desc": "Drive",
-                "max": "",
-                "min": "",
-                "name": "drive",
-                "type": "Drive",
-                "unit": "-",
-                "value": null
             }
         ]
     },
@@ -1213,9 +1145,9 @@
         "is_internal": false,
         "methods": [
             "comp_parameters",
-            "solve_EEC",
-            "gen_drive",
-            "comp_joule_losses"
+            "solve",
+            "comp_joule_losses",
+            "solve_elementary"
         ],
         "mother": "EEC",
         "name": "EEC_SCIM",
@@ -1230,15 +1162,6 @@
                 "type": "float",
                 "unit": "-",
                 "value": 1
-            },
-            {
-                "desc": "Parameters of the EEC: computed if empty, or enforced",
-                "max": "",
-                "min": "",
-                "name": "parameters",
-                "type": "dict",
-                "unit": "-",
-                "value": {}
             },
             {
                 "desc": "True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle])",
@@ -1265,15 +1188,6 @@
                 "name": "N0",
                 "type": "float",
                 "unit": "rpm",
-                "value": null
-            },
-            {
-                "desc": "electrical frequency",
-                "max": "",
-                "min": "",
-                "name": "felec",
-                "type": "float",
-                "unit": "Hz",
                 "value": null
             },
             {
@@ -1309,7 +1223,8 @@
         "methods": [
             "run",
             "comp_power",
-            "comp_torque"
+            "comp_torque",
+            "gen_drive"
         ],
         "mother": "",
         "name": "Electrical",
@@ -1371,13 +1286,22 @@
                 "value": 20
             },
             {
-                "desc": "Electrical Look Up Table to be enforced ",
+                "desc": "Maximum frequency to calculate voltage and current harmonics",
                 "max": "",
                 "min": "",
-                "name": "ELUT_enforced",
-                "type": "LUT",
-                "unit": "-",
-                "value": null
+                "name": "freq_max",
+                "type": "float",
+                "unit": "Hz",
+                "value": 40000
+            },
+            {
+                "desc": "0 to account for the actual fundamental frequency and modulation index (can be source of numerical errors due to spectral leakage), 1 to only account for modulation index and (fundamental frequency is given by fswi/(4*Nsidebands) to avoid spectral leakage)",
+                "max": "",
+                "min": "",
+                "name": "type_calc_PWM_harm",
+                "type": "int",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -3267,7 +3191,10 @@
         "desc": "To generate a PWM voltage matrix",
         "is_internal": false,
         "methods": [
-            "get_data"
+            "get_data",
+            "comp_voltage",
+            "get_modulation_index",
+            "comp_carrier"
         ],
         "mother": "ImportMatrix",
         "name": "ImportGenPWM",
@@ -3365,13 +3292,13 @@
                 "value": 2
             },
             {
-                "desc": "reference voltage",
+                "desc": "reference voltage amplitude (rms)",
                 "max": "",
                 "min": "",
                 "name": "U0",
                 "type": "float",
                 "unit": "V",
-                "value": 1
+                "value": null
             },
             {
                 "desc": "1: forward toothsaw carrier 2: backwards toothsaw carrier 3: toothsaw carrier else: symetrical toothsaw carrier",
@@ -3410,13 +3337,49 @@
                 "value": 1
             },
             {
-                "desc": "rotor rotation direction",
-                "max": "",
-                "min": "",
-                "name": "rot_dir",
+                "desc": "Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",
+                "max": "1",
+                "min": "-1",
+                "name": "phase_dir",
                 "type": "int",
                 "unit": "",
-                "value": -1
+                "value": null
+            },
+            {
+                "desc": "Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)",
+                "max": "1",
+                "min": "-1",
+                "name": "current_dir",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "reference voltage phase (rad)",
+                "max": "",
+                "min": "",
+                "name": "Phi0",
+                "type": "float",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Number of switching groups to consider (if None automatically calculated from fswi and freq_max in electrical model)",
+                "max": "",
+                "min": "",
+                "name": "Nswi",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Number of sidebands per switching groups",
+                "max": "",
+                "min": "",
+                "name": "Nsidebands",
+                "type": "int",
+                "unit": "",
+                "value": 5
             }
         ]
     },

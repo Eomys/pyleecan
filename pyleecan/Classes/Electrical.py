@@ -32,10 +32,14 @@ try:
 except ImportError as error:
     comp_torque = error
 
+try:
+    from ..Methods.Simulation.Electrical.gen_drive import gen_drive
+except ImportError as error:
+    gen_drive = error
+
 
 from ._check import InitUnKnowClassError
 from .EEC import EEC
-from .LUT import LUT
 
 
 class Electrical(FrozenClass):
@@ -75,6 +79,15 @@ class Electrical(FrozenClass):
         )
     else:
         comp_torque = comp_torque
+    # cf Methods.Simulation.Electrical.gen_drive
+    if isinstance(gen_drive, ImportError):
+        gen_drive = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Electrical method gen_drive: " + str(gen_drive))
+            )
+        )
+    else:
+        gen_drive = gen_drive
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -89,7 +102,8 @@ class Electrical(FrozenClass):
         Tsta=20,
         Trot=20,
         Tmag=20,
-        ELUT_enforced=None,
+        freq_max=40000,
+        type_calc_PWM_harm=1,
         init_dict=None,
         init_str=None,
     ):
@@ -120,8 +134,10 @@ class Electrical(FrozenClass):
                 Trot = init_dict["Trot"]
             if "Tmag" in list(init_dict.keys()):
                 Tmag = init_dict["Tmag"]
-            if "ELUT_enforced" in list(init_dict.keys()):
-                ELUT_enforced = init_dict["ELUT_enforced"]
+            if "freq_max" in list(init_dict.keys()):
+                freq_max = init_dict["freq_max"]
+            if "type_calc_PWM_harm" in list(init_dict.keys()):
+                type_calc_PWM_harm = init_dict["type_calc_PWM_harm"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.eec = eec
@@ -130,7 +146,8 @@ class Electrical(FrozenClass):
         self.Tsta = Tsta
         self.Trot = Trot
         self.Tmag = Tmag
-        self.ELUT_enforced = ELUT_enforced
+        self.freq_max = freq_max
+        self.type_calc_PWM_harm = type_calc_PWM_harm
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -153,15 +170,10 @@ class Electrical(FrozenClass):
         Electrical_str += "Tsta = " + str(self.Tsta) + linesep
         Electrical_str += "Trot = " + str(self.Trot) + linesep
         Electrical_str += "Tmag = " + str(self.Tmag) + linesep
-        if self.ELUT_enforced is not None:
-            tmp = (
-                self.ELUT_enforced.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            Electrical_str += "ELUT_enforced = " + tmp
-        else:
-            Electrical_str += "ELUT_enforced = None" + linesep + linesep
+        Electrical_str += "freq_max = " + str(self.freq_max) + linesep
+        Electrical_str += (
+            "type_calc_PWM_harm = " + str(self.type_calc_PWM_harm) + linesep
+        )
         return Electrical_str
 
     def __eq__(self, other):
@@ -181,7 +193,9 @@ class Electrical(FrozenClass):
             return False
         if other.Tmag != self.Tmag:
             return False
-        if other.ELUT_enforced != self.ELUT_enforced:
+        if other.freq_max != self.freq_max:
+            return False
+        if other.type_calc_PWM_harm != self.type_calc_PWM_harm:
             return False
         return True
 
@@ -209,16 +223,10 @@ class Electrical(FrozenClass):
             diff_list.append(name + ".Trot")
         if other._Tmag != self._Tmag:
             diff_list.append(name + ".Tmag")
-        if (other.ELUT_enforced is None and self.ELUT_enforced is not None) or (
-            other.ELUT_enforced is not None and self.ELUT_enforced is None
-        ):
-            diff_list.append(name + ".ELUT_enforced None mismatch")
-        elif self.ELUT_enforced is not None:
-            diff_list.extend(
-                self.ELUT_enforced.compare(
-                    other.ELUT_enforced, name=name + ".ELUT_enforced"
-                )
-            )
+        if other._freq_max != self._freq_max:
+            diff_list.append(name + ".freq_max")
+        if other._type_calc_PWM_harm != self._type_calc_PWM_harm:
+            diff_list.append(name + ".type_calc_PWM_harm")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -233,7 +241,8 @@ class Electrical(FrozenClass):
         S += getsizeof(self.Tsta)
         S += getsizeof(self.Trot)
         S += getsizeof(self.Tmag)
-        S += getsizeof(self.ELUT_enforced)
+        S += getsizeof(self.freq_max)
+        S += getsizeof(self.type_calc_PWM_harm)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -261,14 +270,8 @@ class Electrical(FrozenClass):
         Electrical_dict["Tsta"] = self.Tsta
         Electrical_dict["Trot"] = self.Trot
         Electrical_dict["Tmag"] = self.Tmag
-        if self.ELUT_enforced is None:
-            Electrical_dict["ELUT_enforced"] = None
-        else:
-            Electrical_dict["ELUT_enforced"] = self.ELUT_enforced.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+        Electrical_dict["freq_max"] = self.freq_max
+        Electrical_dict["type_calc_PWM_harm"] = self.type_calc_PWM_harm
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
@@ -283,8 +286,8 @@ class Electrical(FrozenClass):
         self.Tsta = None
         self.Trot = None
         self.Tmag = None
-        if self.ELUT_enforced is not None:
-            self.ELUT_enforced._set_None()
+        self.freq_max = None
+        self.type_calc_PWM_harm = None
 
     def _get_eec(self):
         """getter of eec"""
@@ -404,32 +407,38 @@ class Electrical(FrozenClass):
         """,
     )
 
-    def _get_ELUT_enforced(self):
-        """getter of ELUT_enforced"""
-        return self._ELUT_enforced
+    def _get_freq_max(self):
+        """getter of freq_max"""
+        return self._freq_max
 
-    def _set_ELUT_enforced(self, value):
-        """setter of ELUT_enforced"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "ELUT_enforced"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = LUT()
-        check_var("ELUT_enforced", value, "LUT")
-        self._ELUT_enforced = value
+    def _set_freq_max(self, value):
+        """setter of freq_max"""
+        check_var("freq_max", value, "float")
+        self._freq_max = value
 
-        if self._ELUT_enforced is not None:
-            self._ELUT_enforced.parent = self
+    freq_max = property(
+        fget=_get_freq_max,
+        fset=_set_freq_max,
+        doc=u"""Maximum frequency to calculate voltage and current harmonics
 
-    ELUT_enforced = property(
-        fget=_get_ELUT_enforced,
-        fset=_set_ELUT_enforced,
-        doc=u"""Electrical Look Up Table to be enforced 
+        :Type: float
+        """,
+    )
 
-        :Type: LUT
+    def _get_type_calc_PWM_harm(self):
+        """getter of type_calc_PWM_harm"""
+        return self._type_calc_PWM_harm
+
+    def _set_type_calc_PWM_harm(self, value):
+        """setter of type_calc_PWM_harm"""
+        check_var("type_calc_PWM_harm", value, "int")
+        self._type_calc_PWM_harm = value
+
+    type_calc_PWM_harm = property(
+        fget=_get_type_calc_PWM_harm,
+        fset=_set_type_calc_PWM_harm,
+        doc=u"""0 to account for the actual fundamental frequency and modulation index (can be source of numerical errors due to spectral leakage), 1 to only account for modulation index and (fundamental frequency is given by fswi/(4*Nsidebands) to avoid spectral leakage)
+
+        :Type: int
         """,
     )
