@@ -1,8 +1,8 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 fs,Hz,sample frequency,0,float,96000,0,,,Import,ImportMatrix,get_data,VERSION,1,To generate a PWM voltage matrix
-duration,s,duration,0,float,10,0,,,,,,,,
-f,Hz,fundamental frequency,0,float,50,0,,,,,,,,
-fmax,Hz,maximal fundamental frequency,0,float,0,0,,,,,,,,
+duration,s,duration,0,float,10,0,,,,,comp_voltage,,,
+f,Hz,fundamental frequency,0,float,50,0,,,,,get_modulation_index,,,
+fmax,Hz,maximal fundamental frequency,0,float,0,0,,,,,comp_carrier,,,
 fmode,,"speed mode: 0: Fixed speed, 1: Variable speed",0,int,0,0,,,,,,,,
 fswimode,,"switch mode: 0:Fixed fswi, 1:Variable fswi",0,int,0,,,,,,,,,
 fswi,Hz,switching frequency,0,float,1000,,,,,,,,,
