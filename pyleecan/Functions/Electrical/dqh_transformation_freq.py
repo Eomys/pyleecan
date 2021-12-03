@@ -416,7 +416,7 @@ def get_phase_dir(Z_n, current_dir):
     # Differentiate phase angle between phases and taking sign
     phase_shift_sign = np.unique(np.sign(np.diff(angle_Zn_max)))
 
-    if phase_shift_sign.size == 1:
+    if phase_shift_sign.size == 1 and int(phase_shift_sign[0]) in [-1, 1]:
         # phase_dir / current_dir has the sign of phase shift angle
         phase_dir = current_dir * int(phase_shift_sign[0])
     else:

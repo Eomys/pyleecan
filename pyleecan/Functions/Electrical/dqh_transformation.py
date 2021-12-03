@@ -2,6 +2,9 @@ import numpy as np
 
 from SciDataTool import Data1D, DataFreq, DataTime, DataDual, DataND
 
+from ...Functions.Electrical.dqh_transformation_freq import (
+    get_phase_dir as get_phase_dir_freq,
+)
 from ...Functions.Winding.gen_phase_list import gen_name
 
 
@@ -412,26 +415,14 @@ def get_phase_dir(Z_n, current_dir):
         rotating direction of phases +/-1
     """
 
-    # Get number of time steps and phase
-    N, n = Z_n.shape
+    # Get number of time steps
+    N = Z_n.shape[0]
 
     # Get Fourier transform for all phases
     TF_Zn = np.fft.fft(Z_n, axis=0)[: int(N / 2), :]
 
-    # Get index of maximum component
-    Imax = np.argmax(np.linalg.norm(TF_Zn, axis=-1))
-
-    # Get phase angle for all phases
-    angle_Zn_max = np.unwrap(np.angle(TF_Zn[Imax, :]) - np.angle(TF_Zn[Imax, 0]))
-
-    # Differentiate phase angle between phases and taking sign
-    phase_shift_sign = np.unique(np.sign(np.diff(angle_Zn_max)))
-
-    if phase_shift_sign.size == 1:
-        # phase_dir / current_dir has the sign of phase shift angle
-        phase_dir = current_dir * int(phase_shift_sign[0])
-    else:
-        raise Exception("Cannot calculate phase_dir, please put phase_dir as input")
+    # Calculate phase_dir from FFT components
+    phase_dir = get_phase_dir_freq(TF_Zn, current_dir)
 
     return phase_dir
 
