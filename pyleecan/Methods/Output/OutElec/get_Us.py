@@ -15,6 +15,8 @@ def get_Us(
         True to return only fundamental component
     is_harm_only : bool
         True to return only components at higher frequencies than fundamental component
+    is_freq: bool
+        True to calculate dqh transformation in frequency domain
 
     Returns
     -------

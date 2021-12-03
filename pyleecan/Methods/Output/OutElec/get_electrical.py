@@ -35,7 +35,7 @@ def get_electrical(
     is_harm_only : bool
         True to return only components at higher frequencies than fundamental component
     is_freq: bool
-        None not to force to return DataFreq/DataTime, True to force to return DataFreq, False to force to return DataTime
+        True to calculate dqh transformation in frequency domain
 
     Returns
     -------

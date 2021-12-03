@@ -11,22 +11,12 @@ def comp_voltage(self, Tpwmu, PF_angle=0, is_sin=True, is_norm=True):
     ----------
     Tpwmu : ndarray
         time vector
-    PF_angle: float, optional
+    PF_angle: float
         power factor angle only for GDPWM, default to 0
     is_sin: bool
         True to generate sine wave, False to generate cosine wave
-    fswi_max: int, optional
-        Maximal switching frequency, default to 0
-    freq0_max: int, optional
-        maximal fundamental frequency, default to 0
-    type_carrier: int
-        type of carrier waveform
-        1: forward toothsaw carrier
-        2: backwards toothsaw carrier
-        3: toothsaw carrier
-        else: Symmetrical toothsaw carrier [default]
-    var_amp: int
-        percentage of variation of the carrier amplitude, default to 0
+    is_norm: int
+        True to normalize signal between -1 and 1
 
     Returns
     -------
