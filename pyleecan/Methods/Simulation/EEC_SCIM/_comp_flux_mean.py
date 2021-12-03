@@ -5,6 +5,23 @@ from ....Functions.labels import STATOR_LAB, ROTOR_LAB
 
 
 def _comp_flux_mean(self, out):
+    """Calculate magnetizing flux (not used)
+
+    Parameters
+    ----------
+    self : EEC_SCIM
+        an EEC_SCIM object
+    out: Output
+        An Output object
+
+    Returns
+    ------
+    Phi_s : float
+        Stator flux linkage [Wb]
+    Phi_r : float
+        Rotor flux linkage [Wb]
+    """
+
     # TODO add fix for single time value
     # TODO add option to calculate RMS instead of mean fluxlinkage
 

@@ -10,6 +10,26 @@ from ....Functions.Load.import_class import import_class
 
 
 def _comp_Lm_FEA(self, machine, K21Z, Xke_skinS):
+    """Calculate magnetizing flux (not used)
+
+    Parameters
+    ----------
+    self : EEC_SCIM
+        an EEC_SCIM object
+    machine: Machine
+        A Machine object
+    K21Z: float
+        Stator to rotor impedance ratio
+    Xke_skinS: float
+        Skin effect on stator inductance
+
+    Returns
+    ------
+    Phi_s : float
+        Stator magnetizing flux [Wb]
+    I_m : float
+        Stator magnetizing current [A]
+    """
 
     Simu1 = import_class("pyleecan.Classes", "Simu1")
     InputCurrent = import_class("pyleecan.Classes", "InputCurrent")

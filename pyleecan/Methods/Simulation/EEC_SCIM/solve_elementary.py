@@ -19,6 +19,18 @@ def solve_elementary(self, Lm_init):
 
     Parameters
     ----------
+
+
+
+    Parameters
+    ----------
+    self : EEC_SCIM
+        an EEC_SCIM object
+    Lm_init: float
+        Magnetizing inductance initial value [H]
+
+    Returns
+    ----------
     I1: float
         Stator phase current [Arms]
     I2: float

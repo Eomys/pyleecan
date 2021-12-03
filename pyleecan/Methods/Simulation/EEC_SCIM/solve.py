@@ -2,7 +2,7 @@ from numpy import sqrt
 
 
 def solve(self):
-    """Compute the parameters dict for the equivalent electrical circuit
+    """Solve the equivalent electrical circuit of SCIM
     TODO find ref. to cite
     cf "Title"
     Autor, Publisher
@@ -23,6 +23,11 @@ def solve(self):
         an EEC_SCIM object
     output : Output
         an Output object
+
+    Returns
+    ----------
+    out_dict: dict
+        Output dict containing EEC values
     """
 
     Phi_m = self.parameters["Phi_m"]
