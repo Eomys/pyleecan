@@ -35,6 +35,9 @@ def testSPWM():
                     type_carrier=hh,
                     var_amp=20,
                     qs=3,
+                    current_dir=-1,
+                    phase_dir=-1,
+                    Phi0=0,
                 )
                 # Generate the signal
                 Uabc, Vas, _, carrier, time = test_obj.get_data()
@@ -78,6 +81,9 @@ def testDPWM():
             U0=0.70,
             type_carrier=0,
             qs=3,
+            current_dir=-1,
+            phase_dir=-1,
+            Phi0=0,
         )
         # Generate the signal
         Uabc, Vas, _, carrier, time = test_obj.get_data()

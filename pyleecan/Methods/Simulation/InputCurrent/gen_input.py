@@ -49,8 +49,12 @@ def gen_input(self):
                 outelec.Is = None
         else:
             Is_val = self.Is.get_data()
-            # Get phase_dir from Is
-            phase_dir = get_phase_dir(Is_val)
+            try:
+                # Get phase_dir from Is
+                phase_dir = get_phase_dir(Is_val, current_dir=outelec.current_dir)
+            except Exception:
+                # Cannot calculate phase_dir, enforce phase_dir to -1
+                phase_dir = -1
             if phase_dir != outelec.phase_dir:
                 self.get_logger().warning(
                     "Enforcing outelec.phase_dir="

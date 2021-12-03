@@ -1,5 +1,3 @@
-import itertools
-import numpy as np
 from ....Classes.ParamExplorerSet import ParamExplorerSet
 
 
@@ -8,8 +6,8 @@ def generate_simulation_list(self, ref_simu=None):
 
     Parameters
     ----------
-    self : VarSimu
-        A VarSimu object
+    self : VarLoadCurrent
+        A VarLoadCurrent object
     ref_simu : Simulation
         Reference simulation to copy / update
 

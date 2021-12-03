@@ -143,6 +143,7 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     qs = Toyota_Prius.stator.winding.qs
     p = Toyota_Prius.get_pole_pair_number()
+    Tsta = 20  # stator winding temperature
 
     name = "test_EEC_ELUT_PMSM_MTPA"
     simu_MTPA = Simu1(name=name, machine=Toyota_Prius)
@@ -168,11 +169,11 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
     Id, Iq = Id.ravel(), Iq.ravel()
     Imax_interp = np.sqrt(Id ** 2 + Iq ** 2)
 
-    elec_model = Electrical(eec=EEC_PMSM(), LUT_enforced=test_ELUT)
+    elec_model = Electrical(eec=EEC_PMSM(LUT_enforced=test_ELUT), Tsta=Tsta)
 
     # Interpolate stator winding flux in dqh frame for all Id/Iq
-    elec_model.eec.parameters = elec_model.LUT_enforced.get_param_dict(
-        Id=Id, Iq=Iq, param_list=["Idqh", "Phidqh"]
+    elec_model.eec.comp_parameters(
+        machine=Toyota_Prius, OP=OP_ref, Tsta=elec_model.Tsta, Id_array=Id, Iq_array=Iq
     )
 
     # Compute torque
@@ -198,12 +199,19 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
         save_path=join(save_path, name + "_torque_map.png"),
         **dict_map,
     )
-    # plt.contour(
-    #     dict_map["Xdata"],
-    #     dict_map["Ydata"],
-    #     Imax_interp.reshape((n_Iq, n_Id)),
-    #     colors="red",
-    #     linewidths=0.8,
+    # plot_3D(
+    #     Zdata=Id.reshape((n_Iq, n_Id)).T,
+    #     zlabel="Average Torque [N.m]",
+    #     title="Torque map in dq plane",
+    #     # save_path=join(save_path, name + "_torque_map.png"),
+    #     **dict_map,
+    # )
+    # plot_3D(
+    #     Zdata=Iq.reshape((n_Iq, n_Id)).T,
+    #     zlabel="Average Torque [N.m]",
+    #     title="Torque map in dq plane",
+    #     # save_path=join(save_path, name + "_torque_map.png"),
+    #     **dict_map,
     # )
     # plt.contour(
     #     dict_map["Xdata"],
@@ -249,7 +257,7 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
     # Maximum current [Arms]
     I_max = 250 / np.sqrt(2)
     # Maximum voltage [Vrms]
-    U_max = 500
+    U_max = 400
     # Speed vector
     Nspeed = 50
     N0_min = 50
@@ -376,4 +384,4 @@ if __name__ == "__main__":
     # out0, ELUT = test_EEC_ELUT_PMSM_calc()
     # ELUT.save("ELUT_PMSM.h5")
     ELUT = load("ELUT_PMSM.h5")
-    # test_EEC_ELUT_PMSM_MTPA(ELUT)
+    test_EEC_ELUT_PMSM_MTPA(ELUT)

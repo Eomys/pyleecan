@@ -57,6 +57,11 @@ try:
 except ImportError as error:
     set_Ud_Uq = error
 
+try:
+    from ..Methods.Simulation.OPdq.set_I0_Phi0 import set_I0_Phi0
+except ImportError as error:
+    set_I0_Phi0 = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -139,6 +144,15 @@ class OPdq(OP):
         )
     else:
         set_Ud_Uq = set_Ud_Uq
+    # cf Methods.Simulation.OPdq.set_I0_Phi0
+    if isinstance(set_I0_Phi0, ImportError):
+        set_I0_Phi0 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OPdq method set_I0_Phi0: " + str(set_I0_Phi0))
+            )
+        )
+    else:
+        set_I0_Phi0 = set_I0_Phi0
     # save and copy methods are available in all object
     save = save
     copy = copy

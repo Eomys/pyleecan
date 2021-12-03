@@ -1148,7 +1148,9 @@
             "comp_parameters",
             "solve",
             "comp_joule_losses",
-            "solve_elementary"
+            "solve_elementary",
+            "_comp_flux_mean",
+            "_comp_Lm_FEA"
         ],
         "mother": "EEC",
         "name": "EEC_SCIM",
@@ -3335,7 +3337,7 @@
                 "name": "phase_dir",
                 "type": "int",
                 "unit": "",
-                "value": null
+                "value": -1
             },
             {
                 "desc": "Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)",
@@ -3344,7 +3346,7 @@
                 "name": "current_dir",
                 "type": "int",
                 "unit": "-",
-                "value": null
+                "value": -1
             },
             {
                 "desc": "reference voltage phase (rad)",
@@ -3353,7 +3355,7 @@
                 "name": "Phi0",
                 "type": "float",
                 "unit": "",
-                "value": null
+                "value": 0
             }
         ]
     },
@@ -4068,6 +4070,15 @@
                 "min": "",
                 "name": "Ir",
                 "type": "ImportMatrix",
+                "unit": "A",
+                "value": null
+            },
+            {
+                "desc": "Stator harmonic currents",
+                "max": "",
+                "min": "",
+                "name": "Is_harm",
+                "type": "ImportData",
                 "unit": "A",
                 "value": null
             }
@@ -7594,7 +7605,8 @@
             "get_Ud_Uq",
             "set_Id_Iq",
             "get_I0_Phi0",
-            "set_Ud_Uq"
+            "set_Ud_Uq",
+            "set_I0_Phi0"
         ],
         "mother": "OP",
         "name": "OPdq",
