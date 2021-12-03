@@ -1,8 +1,7 @@
 from numpy import max as np_max, min as np_min, mean as np_mean
 
-from SciDataTool import DataTime, VectorField, Data1D
+from SciDataTool import DataTime, VectorField
 
-from ....Functions.Winding.gen_phase_list import gen_name
 from ....Functions.labels import STATOR_LAB
 
 
@@ -103,14 +102,8 @@ def store(self, out_dict, axes_dict):
         for key, phi_wind in out_dict["Phi_wind"].items():
             # Store stator winding flux
             lam = machine.get_lam_by_label(key)
-            qs = lam.winding.qs
 
-            Phase = Data1D(
-                name="phase",
-                unit="",
-                values=gen_name(qs),
-                is_components=True,
-            )
+            Phase = self.parent.elec.axes_dict["phase_" + key]
             prefix = "Stator" if lam.is_stator else "Rotor"
 
             # Store winding flux linkage per phase and per slice (in Weber per meter)

@@ -6,6 +6,7 @@ def comp_parameters(
 ):
     """Compute the parameters dict for the equivalent electrical circuit:
     resistance, inductance and back electromotive force
+
     Parameters
     ----------
     self : EEC_PMSM
@@ -18,6 +19,10 @@ def comp_parameters(
         Average stator temperature
     Trot : float
         Average rotor temperature
+    Id_array : ndarray
+        Array of Id currents for vectorized calculation
+    Iq_array : ndarray
+        Array of Iq currents for vectorized calculation
     """
 
     if self.parameters is None:

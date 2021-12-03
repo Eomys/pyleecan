@@ -13611,7 +13611,7 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoad.csv",
         "properties": [
             {
-                "desc": "Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) ",
+                "desc": "Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) or (N0,U0,s,T,P)",
                 "max": "",
                 "min": "",
                 "name": "OP_matrix",
@@ -13620,8 +13620,8 @@
                 "value": null
             },
             {
-                "desc": "Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) ",
-                "max": "1",
+                "desc": "Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P), 2:(N0,U0,s,T,P)",
+                "max": "2",
                 "min": "0",
                 "name": "type_OP_matrix",
                 "type": "int",
@@ -13635,7 +13635,7 @@
                 "name": "is_torque",
                 "type": "bool",
                 "unit": "-",
-                "value": false
+                "value": 0
             },
             {
                 "desc": "True if the Power is defined in OP_matrix",
@@ -13644,7 +13644,7 @@
                 "name": "is_power",
                 "type": "bool",
                 "unit": "",
-                "value": false
+                "value": 0
             }
         ]
     },
