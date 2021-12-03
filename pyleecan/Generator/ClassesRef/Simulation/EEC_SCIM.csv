@@ -3,5 +3,5 @@ I,-,RMS current for parameter estimation,,float,1,,,,Simulation,EEC,comp_paramet
 is_periodicity_a,,True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle]),,bool,1,,,,,,solve,,,,
 nb_worker,,To run FEMM in parallel (the parallelization is on the time loop),,int,None,,,,,,comp_joule_losses,,,,
 N0,rpm,Rotor speed,1,float,None,,,,,,solve_elementary,,,,
-Nt_tot,-,Time discretization,0,int,32,1,,,,,,,,,
-Nrev,-,Number of rotor revolution (to compute the final time),,float,1,0,,,,,,,,,
+Nt_tot,-,Time discretization,0,int,32,1,,,,,_comp_flux_mean,,,,
+Nrev,-,Number of rotor revolution (to compute the final time),,float,1,0,,,,,_comp_Lm_FEA,,,,

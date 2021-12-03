@@ -37,6 +37,16 @@ try:
 except ImportError as error:
     solve_elementary = error
 
+try:
+    from ..Methods.Simulation.EEC_SCIM._comp_flux_mean import _comp_flux_mean
+except ImportError as error:
+    _comp_flux_mean = error
+
+try:
+    from ..Methods.Simulation.EEC_SCIM._comp_Lm_FEA import _comp_Lm_FEA
+except ImportError as error:
+    _comp_Lm_FEA = error
+
 
 from ._check import InitUnKnowClassError
 from .LUT import LUT
@@ -93,6 +103,28 @@ class EEC_SCIM(EEC):
         )
     else:
         solve_elementary = solve_elementary
+    # cf Methods.Simulation.EEC_SCIM._comp_flux_mean
+    if isinstance(_comp_flux_mean, ImportError):
+        _comp_flux_mean = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_SCIM method _comp_flux_mean: " + str(_comp_flux_mean)
+                )
+            )
+        )
+    else:
+        _comp_flux_mean = _comp_flux_mean
+    # cf Methods.Simulation.EEC_SCIM._comp_Lm_FEA
+    if isinstance(_comp_Lm_FEA, ImportError):
+        _comp_Lm_FEA = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_SCIM method _comp_Lm_FEA: " + str(_comp_Lm_FEA)
+                )
+            )
+        )
+    else:
+        _comp_Lm_FEA = _comp_Lm_FEA
     # save and copy methods are available in all object
     save = save
     copy = copy
