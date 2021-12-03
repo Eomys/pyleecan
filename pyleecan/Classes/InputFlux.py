@@ -71,6 +71,8 @@ class InputFlux(InputCurrent):
         PWM=None,
         phase_dir=None,
         current_dir=None,
+        is_periodicity_t=False,
+        is_periodicity_a=False,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -128,6 +130,10 @@ class InputFlux(InputCurrent):
                 phase_dir = init_dict["phase_dir"]
             if "current_dir" in list(init_dict.keys()):
                 current_dir = init_dict["current_dir"]
+            if "is_periodicity_t" in list(init_dict.keys()):
+                is_periodicity_t = init_dict["is_periodicity_t"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -161,6 +167,8 @@ class InputFlux(InputCurrent):
             PWM=PWM,
             phase_dir=phase_dir,
             current_dir=current_dir,
+            is_periodicity_t=is_periodicity_t,
+            is_periodicity_a=is_periodicity_a,
             time=time,
             angle=angle,
             Nt_tot=Nt_tot,

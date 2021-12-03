@@ -95,6 +95,8 @@ class InputVoltage(Input):
         PWM=None,
         phase_dir=None,
         current_dir=None,
+        is_periodicity_t=False,
+        is_periodicity_a=False,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -130,6 +132,10 @@ class InputVoltage(Input):
                 phase_dir = init_dict["phase_dir"]
             if "current_dir" in list(init_dict.keys()):
                 current_dir = init_dict["current_dir"]
+            if "is_periodicity_t" in list(init_dict.keys()):
+                is_periodicity_t = init_dict["is_periodicity_t"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -150,6 +156,8 @@ class InputVoltage(Input):
         self.PWM = PWM
         self.phase_dir = phase_dir
         self.current_dir = current_dir
+        self.is_periodicity_t = is_periodicity_t
+        self.is_periodicity_a = is_periodicity_a
         # Call Input init
         super(InputVoltage, self).__init__(
             time=time,
@@ -180,6 +188,8 @@ class InputVoltage(Input):
             InputVoltage_str += "PWM = None" + linesep + linesep
         InputVoltage_str += "phase_dir = " + str(self.phase_dir) + linesep
         InputVoltage_str += "current_dir = " + str(self.current_dir) + linesep
+        InputVoltage_str += "is_periodicity_t = " + str(self.is_periodicity_t) + linesep
+        InputVoltage_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
         return InputVoltage_str
 
     def __eq__(self, other):
@@ -200,6 +210,10 @@ class InputVoltage(Input):
         if other.phase_dir != self.phase_dir:
             return False
         if other.current_dir != self.current_dir:
+            return False
+        if other.is_periodicity_t != self.is_periodicity_t:
+            return False
+        if other.is_periodicity_a != self.is_periodicity_a:
             return False
         return True
 
@@ -228,6 +242,10 @@ class InputVoltage(Input):
             diff_list.append(name + ".phase_dir")
         if other._current_dir != self._current_dir:
             diff_list.append(name + ".current_dir")
+        if other._is_periodicity_t != self._is_periodicity_t:
+            diff_list.append(name + ".is_periodicity_t")
+        if other._is_periodicity_a != self._is_periodicity_a:
+            diff_list.append(name + ".is_periodicity_a")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -244,6 +262,8 @@ class InputVoltage(Input):
         S += getsizeof(self.PWM)
         S += getsizeof(self.phase_dir)
         S += getsizeof(self.current_dir)
+        S += getsizeof(self.is_periodicity_t)
+        S += getsizeof(self.is_periodicity_a)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -275,6 +295,8 @@ class InputVoltage(Input):
             )
         InputVoltage_dict["phase_dir"] = self.phase_dir
         InputVoltage_dict["current_dir"] = self.current_dir
+        InputVoltage_dict["is_periodicity_t"] = self.is_periodicity_t
+        InputVoltage_dict["is_periodicity_a"] = self.is_periodicity_a
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputVoltage_dict["__class__"] = "InputVoltage"
@@ -289,6 +311,8 @@ class InputVoltage(Input):
             self.PWM._set_None()
         self.phase_dir = None
         self.current_dir = None
+        self.is_periodicity_t = None
+        self.is_periodicity_a = None
         # Set to None the properties inherited from Input
         super(InputVoltage, self)._set_None()
 
@@ -395,5 +419,41 @@ class InputVoltage(Input):
         :Type: int
         :min: -1
         :max: 1
+        """,
+    )
+
+    def _get_is_periodicity_t(self):
+        """getter of is_periodicity_t"""
+        return self._is_periodicity_t
+
+    def _set_is_periodicity_t(self, value):
+        """setter of is_periodicity_t"""
+        check_var("is_periodicity_t", value, "bool")
+        self._is_periodicity_t = value
+
+    is_periodicity_t = property(
+        fget=_get_is_periodicity_t,
+        fset=_set_is_periodicity_t,
+        doc=u"""True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time])
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_periodicity_a(self):
+        """getter of is_periodicity_a"""
+        return self._is_periodicity_a
+
+    def _set_is_periodicity_a(self, value):
+        """setter of is_periodicity_a"""
+        check_var("is_periodicity_a", value, "bool")
+        self._is_periodicity_a = value
+
+    is_periodicity_a = property(
+        fget=_get_is_periodicity_a,
+        fset=_set_is_periodicity_a,
+        doc=u"""True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle])
+
+        :Type: bool
         """,
     )

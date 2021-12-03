@@ -99,7 +99,8 @@ def gen_input(self):
     outelec.axes_dict = self.comp_axes(
         axes_list=["time", "phase_S", "phase_R"],
         axes_dict_in=outgeo.axes_dict,
-        is_periodicity_t=True,
+        is_periodicity_a=self.is_periodicity_a,
+        is_periodicity_t=self.is_periodicity_t,
     )
 
     # Generate PWM signal

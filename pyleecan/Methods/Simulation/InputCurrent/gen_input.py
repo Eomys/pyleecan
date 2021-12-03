@@ -49,6 +49,8 @@ def gen_input(self):
                 outelec.Is = None
         else:
             Is_val = self.Is.get_data()
+            Nt_per = Time.get_length(is_smallestperiod=True)
+            Phase_S = outelec.axes_dict["phase_" + simu.machine.stator.get_label()]
             try:
                 # Get phase_dir from Is
                 phase_dir = get_phase_dir(Is_val, current_dir=outelec.current_dir)
@@ -62,23 +64,23 @@ def gen_input(self):
                     + " to comply with input current"
                 )
                 outelec.phase_dir = phase_dir
-            if Is_val.shape != (self.Nt_tot, qs):
+            try:
+                # Creating the data object
+                Is = DataTime(
+                    name="Stator current",
+                    unit="A",
+                    symbol="I_s",
+                    axes=[Time, Phase_S],
+                    values=Is_val,
+                )
+            except Exception:
                 raise InputError(
                     "InputCurrent.Is must be a matrix with the shape "
-                    + str((self.Nt_tot, qs))
+                    + str((Nt_per, qs))
                     + " (len(time), stator phase number), "
                     + str(Is_val.shape)
                     + " returned"
                 )
-            # Creating the data object
-            Phase_S = outelec.axes_dict["phase_" + simu.machine.stator.get_label()]
-            Is = DataTime(
-                name="Stator current",
-                unit="A",
-                symbol="I_s",
-                axes=[Time, Phase_S],
-                values=Is_val,
-            )
             # Compute corresponding Id/Iq reference
             Idq = n2dqh_DataTime(
                 Is,
@@ -97,27 +99,39 @@ def gen_input(self):
 
     # Load and check Ir is needed
     if qr > 0:
-        Nt_tot = Time.get_length(is_smallestperiod=True)
+        Nt_per = Time.get_length(is_smallestperiod=True)
+        Phase_R = outelec.axes_dict["phase_" + simu.machine.rotor.get_label()]
+        qr_per = Phase_R.get_length(is_smallestperiod=True)
         if self.Ir is None:
-            Ir_val = zeros((Nt_tot, qr))
+            Ir_val = zeros((Nt_per, qr_per))
         else:
             Ir_val = self.Ir.get_data()
-        if Ir_val.shape != (Nt_tot, qr):
+            if Ir_val.ndim == 1:
+                # time axis is squeeze, putting it back to first dimension
+                Ir_val = Ir_val[None, :]
+            if Ir_val.shape[1] > qr_per:
+                Ir_val = Ir_val[:, :qr_per]
+                self.get_logger().info(
+                    "Restrict input rotor bar currents to smallest spatial periodicity"
+                )
+
+        try:
+            Ir = DataTime(
+                name="Rotor current",
+                unit="A",
+                symbol="Ir",
+                axes=[Time, Phase_R],
+                values=Ir_val,
+            )
+        except Exception:
             raise InputError(
                 "InputCurrent.Ir must be a matrix with the shape "
-                + str((Nt_tot, qr))
+                + str((Nt_per, qr_per))
                 + " (len(time), rotor phase number), "
                 + str(Ir_val.shape)
                 + " returned"
             )
-        Phase_R = outelec.axes_dict["phase_" + simu.machine.rotor.get_label()]
-        Ir = DataTime(
-            name="Rotor current",
-            unit="A",
-            symbol="Ir",
-            axes=[Time, Phase_R],
-            values=Ir_val,
-        )
+
         outelec.Ir = Ir
 
     if outelec.PWM is not None:

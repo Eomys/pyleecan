@@ -24,7 +24,7 @@ param_list = [
         "stator_d_axis": 1.3076,
         "rotor_d_axis": pi / 8,
         "mmf_dir": 1,
-        "Tem_av": 368.45,
+        "Tem_av": 368.04,
     },
     {
         "name": "Protean_InWheel",
@@ -32,7 +32,7 @@ param_list = [
         "stator_d_axis": 0.09817,
         "rotor_d_axis": pi / 64,
         "mmf_dir": -1,
-        "Tem_av": 806.35,
+        "Tem_av": 806.31,
     },
 ]
 

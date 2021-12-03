@@ -4272,6 +4272,24 @@
                 "type": "int",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time])",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_t",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle])",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_a",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
             }
         ]
     },

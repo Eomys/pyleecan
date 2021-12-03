@@ -66,4 +66,4 @@ def comp_inductance(self, machine, OP_ref):
     )
     Phi_dqh_mean = Phidqh.get_along("time=mean", "phase")[Phidqh.symbol]
 
-    return (Phi_dqh_mean[0], Phi_dqh_mean[1])
+    return Phi_dqh_mean

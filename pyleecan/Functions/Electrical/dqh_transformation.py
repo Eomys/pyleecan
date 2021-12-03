@@ -39,7 +39,9 @@ def n2dqh_DataTime(data_n, is_dqh_rms=True, phase_dir=None):
     angle_elec = data_n.axes[0].get_values(
         normalization="angle_elec", is_oneperiod=True
     )
-    data_n_val = data_n.get_along("time[oneperiod]", "phase")[data_n.symbol]
+    data_n_val = data_n.get_along("time[oneperiod]", "phase", is_squeeze=False)[
+        data_n.symbol
+    ]
 
     # Convert values to dqh frame
     data_dqh_val = n2dqh(data_n_val, angle_elec, is_dqh_rms, phase_dir)
@@ -201,7 +203,9 @@ def dqh2n_DataTime(data_dqh, n, is_n_rms=False, phase_dir=None):
     angle_elec = data_dqh.axes[0].get_values(
         normalization="angle_elec", is_oneperiod=True
     )
-    data_dqh_val = data_dqh.get_along("time[oneperiod]", "phase")[data_dqh.symbol]
+    data_dqh_val = data_dqh.get_along("time[oneperiod]", "phase", is_squeeze=False)[
+        data_dqh.symbol
+    ]
 
     # Convert values to dqh frame
     data_n_val = dqh2n(data_dqh_val, angle_elec, n, is_n_rms, phase_dir)
