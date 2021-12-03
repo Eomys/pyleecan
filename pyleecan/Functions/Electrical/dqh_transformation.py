@@ -2,9 +2,6 @@ import numpy as np
 
 from SciDataTool import Data1D, DataFreq, DataTime, DataDual, DataND
 
-from ...Functions.Electrical.dqh_transformation_freq import (
-    get_phase_dir as get_phase_dir_freq,
-)
 from ...Functions.Winding.gen_phase_list import gen_name
 
 
@@ -414,6 +411,10 @@ def get_phase_dir(Z_n, current_dir):
     phase_dir : int
         rotating direction of phases +/-1
     """
+
+    from ...Functions.Electrical.dqh_transformation_freq import (
+        get_phase_dir as get_phase_dir_freq,
+    )
 
     # Get number of time steps
     N = Z_n.shape[0]

@@ -53,6 +53,9 @@ def comp_parameters(self, machine, OP, Tsta, Trot):
     # Store electrical frequency in parameters
     par["felec"] = felec
 
+    # Store slip in parameters
+    par["slip"] = slip
+
     # compute temperature effect on stator side
     if LUT is not None:
         T1_ref = LUT.T1_ref
@@ -76,9 +79,6 @@ def comp_parameters(self, machine, OP, Tsta, Trot):
     # check that parameters are in ELUT, otherwise compute missing ones
     if "U0_ref" not in par or par["U0_ref"] is None:
         par["U0_ref"] = OP.U0_ref
-
-    if "slip" not in par or par["slip"] is None:
-        par["slip"] = slip
 
     if "R1" not in par or par["R1"] is None:
         if is_LUT and LUT.R1 is not None:

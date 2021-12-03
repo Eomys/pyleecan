@@ -509,7 +509,7 @@ def test_SPMSM_noload():
 if __name__ == "__main__":
     # test_FEMM_compare_IPMSM_xxx()
     # test_FEMM_compare_Prius()
-    # test_FEMM_compare_SCIM()
+    test_FEMM_compare_SCIM()
     test_FEMM_compare_SIPMSM()
     # test_SPMSM_load()
     # test_SPMSM_noload()
