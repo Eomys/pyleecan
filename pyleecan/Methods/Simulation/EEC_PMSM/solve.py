@@ -40,8 +40,8 @@ def solve(self, out_dict=None):
         # Impedance matrix
         XR = array(
             [
-                [par["R20"], -ws * par["Lq"]],
-                [ws * par["Ld"], par["R20"]],
+                [par["R1"], -ws * par["Lq"]],
+                [ws * par["Ld"], par["R1"]],
             ]
         )
         # Back emf array
@@ -62,8 +62,8 @@ def solve(self, out_dict=None):
 
     elif "Id" in par and par["Id"] is not None:
         # Current Driven
-        Ud = par["R20"] * par["Id"] - ws * par["Phiq"]
-        Uq = par["R20"] * par["Iq"] + ws * par["Phid"]
+        Ud = par["R1"] * par["Id"] - ws * par["Phiq"]
+        Uq = par["R1"] * par["Iq"] + ws * par["Phid"]
         out_dict["Ud"] = Ud
         out_dict["Uq"] = Uq
         out_dict["Id"] = par["Id"]

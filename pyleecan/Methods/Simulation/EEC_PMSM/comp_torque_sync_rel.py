@@ -22,11 +22,12 @@ def comp_torque_sync_rel(self, qs, p, machine=None):
     Iq = self.parameters["Iq"]
     Phid = self.parameters["Phid"]
     Phiq = self.parameters["Phiq"]
-    if "Phid_mag" not in self.parameters:
-        Phi_dqh_mag = self.fluxlink.comp_fluxlinkage(machine)
 
-    self.parameters["Phid_mag"] = float(Phi_dqh_mag[0])
-    self.parameters["Phiq_mag"] = float(Phi_dqh_mag[1])
+    if "Phid_mag" not in self.parameters:
+        # Recalculate dqh flux due to permanent magnets
+        Phi_dqh_mag = self.fluxlink.comp_fluxlinkage(machine)
+        self.parameters["Phid_mag"] = float(Phi_dqh_mag[0])
+        self.parameters["Phiq_mag"] = float(Phi_dqh_mag[1])
 
     Phid_mag = self.parameters["Phid_mag"]
 

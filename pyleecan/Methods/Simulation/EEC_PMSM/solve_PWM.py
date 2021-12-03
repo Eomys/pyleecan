@@ -87,10 +87,10 @@ def solve_PWM(self, output, freq_max=None, is_dqh_freq=False):
     # Calculate impedances
     we = 0 * 2 * np.pi * par["felec"]  # in static frame
     wh = 2 * np.pi * fn_dqh
-    a = par["R20"] + 1j * wh * par["Ld"]
+    a = par["R1"] + 1j * wh * par["Ld"]
     b = -we * par["Lq"]
     c = we * par["Ld"]
-    d = par["R20"] + 1j * wh * par["Lq"]
+    d = par["R1"] + 1j * wh * par["Lq"]
     det = a * d - c * b
     # Calculate current harmonics
     # Calculate Id

@@ -1,9 +1,9 @@
 from numpy import isscalar
 
-from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 
-
-def comp_parameters(self, machine, OP, Tsta=None, Trot=None):
+def comp_parameters(
+    self, machine, OP, Tsta=None, Trot=None, Id_array=None, Iq_array=None
+):
     """Compute the parameters dict for the equivalent electrical circuit:
     resistance, inductance and back electromotive force
     Parameters
@@ -33,20 +33,33 @@ def comp_parameters(self, machine, OP, Tsta=None, Trot=None):
     # Store dqh voltages
     par.update(OP.get_Ud_Uq())
 
-    # Store dqh currents
-    par.update(OP.get_Id_Iq())
+    if Id_array is None and Iq_array is None:
+        # Store dqh currents
+        par.update(OP.get_Id_Iq())
+    else:
+        # Store arrays of Id / Iq
+        par["Id"] = Id_array
+        par["Iq"] = Iq_array
 
-    # compute skin_effect
-    cond = machine.stator.winding.conductor
-    Xkr_skinS, Xke_skinS = cond.comp_skin_effect(T=Tsta, freq=par["felec"])
+    # Get stator conductor
+    CondS = machine.stator.winding.conductor
+
+    # compute temperature effect on stator side
+    if LUT is not None:
+        T1_ref = LUT.T1_ref
+    else:
+        T1_ref = Tsta
+    Tfact1 = CondS.comp_temperature_effect(T_op=Tsta, T_ref=T1_ref)
+    # compute skin_effect on stator side
+    Xkr_skinS, Xke_skinS = CondS.comp_skin_effect(freq=par["felec"], Tfact=Tfact1)
 
     # Stator resistance
-    if "R20" not in par:
+    if "R1" not in par:
         if is_LUT and LUT.R1 is not None:
-            R20 = LUT.R1
+            R10 = LUT.R1
         else:
-            R20 = machine.stator.comp_resistance_wind()
-        par["R20"] = R20 * Xkr_skinS
+            R10 = machine.stator.comp_resistance_wind()
+        par["R1"] = R10 * Tfact1 * Xkr_skinS
 
     # Stator flux linkage only due to permanent magnets
     if "Phid_mag" not in par or "Phiq_mag" not in par:
@@ -65,7 +78,7 @@ def comp_parameters(self, machine, OP, Tsta=None, Trot=None):
     ):
         if is_LUT:
             # Get dqh flux function of current
-            Phi_dqh_mean = self.interp_Phi_dqh(Id=par["Id"], Iq=par["Iq"])
+            Phi_dqh_mean = LUT.interp_Phi_dqh(Id=par["Id"], Iq=par["Iq"])
         else:
             Phi_dqh_mean = self.indmag.comp_inductance(machine=machine, OP_ref=OP)
 
@@ -78,7 +91,12 @@ def comp_parameters(self, machine, OP, Tsta=None, Trot=None):
     # compute inductance if necessary
     if "Ld" not in par or "Lq" not in par:
 
-        if par["Id"] not in [0, None] and par["Iq"] not in [0, None]:
+        if (
+            isscalar(par["Id"])
+            and par["Id"] != 0
+            and isscalar(par["Iq"])
+            and par["Iq"] != 0
+        ):
 
             par["Ld"] = (par["Phid"] - par["Phid_mag"]) / par["Id"]
             par["Lq"] = (par["Phiq"] - par["Phiq_mag"]) / par["Iq"]
