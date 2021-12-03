@@ -1,17 +1,19 @@
 from numpy import zeros, sqrt, tile
 from multiprocessing import cpu_count
 
-from ....Classes.Simu1 import Simu1
-from ....Classes.InputCurrent import InputCurrent
-from ....Classes.MagFEMM import MagFEMM
-from ....Classes.Output import Output
 from ....Classes.ImportGenVectLin import ImportGenVectLin
 from ....Classes.ImportMatrixVal import ImportMatrixVal
 
 from ....Functions.Electrical.dqh_transformation import abc2n
 
+from ....Functions.Load.import_class import import_class
+
 
 def _comp_Lm_FEA(self, machine, K21Z, Xke_skinS):
+
+    Simu1 = import_class("pyleecan.Classes", "Simu1")
+    InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
+    MagFEMM = import_class("pyleecan.Classes", "MagFEMM")
 
     p = machine.get_pole_pair_number()
 
@@ -76,8 +78,7 @@ def _comp_Lm_FEA(self, machine, K21Z, Xke_skinS):
 
     # --- compute the main inductance and stator stray inductance ---
     # set output and run first simulation
-    out = Output(simu=simu)
-    out.simu.run()
+    out = simu.run()
 
     # compute average rotor and stator fluxlinkage
     # TODO check wind_mat that the i-th bars is in the i-th slots
@@ -86,9 +87,6 @@ def _comp_Lm_FEA(self, machine, K21Z, Xke_skinS):
     par["Lm"] = (Phi_r * K21Z * qsr / 3) / self.I
     L1 = (Phi_s - (Phi_r * K21Z * qsr / 3)) / self.I
     par["L1"] = L1 * Xke_skinS
-    # --- compute the main inductance and rotor stray inductance ---
-    # set new output
-    out = Output(simu=simu)
 
     # set current values
     Ir_ = zeros([self.Nt_tot, 2])
@@ -102,11 +100,11 @@ def _comp_Lm_FEA(self, machine, K21Z, Xke_skinS):
     simu.input.Iq_ref = 0
     simu.input.Ir = Ir
 
-    out.simu.run()
+    out2 = simu.run()
 
     # compute average rotor and stator fluxlinkage
     # TODO check wind_mat that the i-th bars is in the i-th slots
-    Phi_s, Phi_r = self._comp_flux_mean(out)
+    Phi_s, Phi_r = self._comp_flux_mean(out2)
     K21Z = par["K21Z"]
     I_m = self.I
     Lm = Phi_s / I_m
