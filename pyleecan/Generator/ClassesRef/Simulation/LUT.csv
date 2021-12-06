@@ -1,6 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-R1,Ohm,DC phase winding resistance at T1_ref per phase ,0,float,None,,,,Simulation,,get_param_dict,VERSION,1,Abstract class for Look Up Table (LUT),
-L1,H,Phase winding leakage inductance ,0,float,None,,,,,,get_phase_dir,,,,
+R1,Ohm,DC phase winding resistance at T1_ref per phase ,0,float,None,,,,Simulation,,get_phase_dir,VERSION,1,Abstract class for Look Up Table (LUT),
+L1,H,Phase winding leakage inductance ,0,float,None,,,,,,,,,,
 T1_ref,degC,"Stator winding average temperature associated to R1, L1 parameters",0,float,20,,,,,,,,,,
 OP_matrix,,"Array of operating point values of size (N,5) with N the number of operating points (Speed, Id, Iq, Torque, Power). OP values are set to nan if they are not given.",,ndarray,None,,,,,,,,,,
 phase_dir,,"Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",0,int,None,-1,1,,,,,,,,

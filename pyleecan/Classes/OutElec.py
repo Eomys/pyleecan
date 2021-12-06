@@ -18,14 +18,9 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.OutElec.get_I_fund import get_I_fund
+    from ..Methods.Output.OutElec.get_Nr import get_Nr
 except ImportError as error:
-    get_I_fund = error
-
-try:
-    from ..Methods.Output.OutElec.get_I_harm import get_I_harm
-except ImportError as error:
-    get_I_harm = error
+    get_Nr = error
 
 try:
     from ..Methods.Output.OutElec.get_Is import get_Is
@@ -33,29 +28,25 @@ except ImportError as error:
     get_Is = error
 
 try:
-    from ..Methods.Output.OutElec.get_Nr import get_Nr
-except ImportError as error:
-    get_Nr = error
-
-try:
     from ..Methods.Output.OutElec.get_Us import get_Us
 except ImportError as error:
     get_Us = error
-
-try:
-    from ..Methods.Output.OutElec.get_Us_harm import get_Us_harm
-except ImportError as error:
-    get_Us_harm = error
 
 try:
     from ..Methods.Output.OutElec.store import store
 except ImportError as error:
     store = error
 
+try:
+    from ..Methods.Output.OutElec.get_electrical import get_electrical
+except ImportError as error:
+    get_electrical = error
+
 
 from ._check import InitUnKnowClassError
 from .OutInternal import OutInternal
 from .OP import OP
+from .ImportGenPWM import ImportGenPWM
 
 
 class OutElec(FrozenClass):
@@ -64,33 +55,6 @@ class OutElec(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.OutElec.get_I_fund
-    if isinstance(get_I_fund, ImportError):
-        get_I_fund = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutElec method get_I_fund: " + str(get_I_fund))
-            )
-        )
-    else:
-        get_I_fund = get_I_fund
-    # cf Methods.Output.OutElec.get_I_harm
-    if isinstance(get_I_harm, ImportError):
-        get_I_harm = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutElec method get_I_harm: " + str(get_I_harm))
-            )
-        )
-    else:
-        get_I_harm = get_I_harm
-    # cf Methods.Output.OutElec.get_Is
-    if isinstance(get_Is, ImportError):
-        get_Is = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutElec method get_Is: " + str(get_Is))
-            )
-        )
-    else:
-        get_Is = get_Is
     # cf Methods.Output.OutElec.get_Nr
     if isinstance(get_Nr, ImportError):
         get_Nr = property(
@@ -100,6 +64,15 @@ class OutElec(FrozenClass):
         )
     else:
         get_Nr = get_Nr
+    # cf Methods.Output.OutElec.get_Is
+    if isinstance(get_Is, ImportError):
+        get_Is = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_Is: " + str(get_Is))
+            )
+        )
+    else:
+        get_Is = get_Is
     # cf Methods.Output.OutElec.get_Us
     if isinstance(get_Us, ImportError):
         get_Us = property(
@@ -109,15 +82,6 @@ class OutElec(FrozenClass):
         )
     else:
         get_Us = get_Us
-    # cf Methods.Output.OutElec.get_Us_harm
-    if isinstance(get_Us_harm, ImportError):
-        get_Us_harm = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutElec method get_Us_harm: " + str(get_Us_harm))
-            )
-        )
-    else:
-        get_Us_harm = get_Us_harm
     # cf Methods.Output.OutElec.store
     if isinstance(store, ImportError):
         store = property(
@@ -127,6 +91,17 @@ class OutElec(FrozenClass):
         )
     else:
         store = store
+    # cf Methods.Output.OutElec.get_electrical
+    if isinstance(get_electrical, ImportError):
+        get_electrical = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutElec method get_electrical: " + str(get_electrical)
+                )
+            )
+        )
+    else:
+        get_electrical = get_electrical
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -138,17 +113,17 @@ class OutElec(FrozenClass):
         axes_dict=None,
         Is=None,
         Ir=None,
-        logger_name="Pyleecan.Electrical",
+        logger_name="pyleecan.Electrical",
         Pj_losses=None,
         Us=None,
         internal=None,
-        Us_PWM=None,
         OP=None,
         Pem_av_ref=None,
         Tem_av_ref=None,
-        Is_harm=None,
         phase_dir=None,
         current_dir=None,
+        PWM=None,
+        eec_param=None,
         init_dict=None,
         init_str=None,
     ):
@@ -181,20 +156,20 @@ class OutElec(FrozenClass):
                 Us = init_dict["Us"]
             if "internal" in list(init_dict.keys()):
                 internal = init_dict["internal"]
-            if "Us_PWM" in list(init_dict.keys()):
-                Us_PWM = init_dict["Us_PWM"]
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
             if "Pem_av_ref" in list(init_dict.keys()):
                 Pem_av_ref = init_dict["Pem_av_ref"]
             if "Tem_av_ref" in list(init_dict.keys()):
                 Tem_av_ref = init_dict["Tem_av_ref"]
-            if "Is_harm" in list(init_dict.keys()):
-                Is_harm = init_dict["Is_harm"]
             if "phase_dir" in list(init_dict.keys()):
                 phase_dir = init_dict["phase_dir"]
             if "current_dir" in list(init_dict.keys()):
                 current_dir = init_dict["current_dir"]
+            if "PWM" in list(init_dict.keys()):
+                PWM = init_dict["PWM"]
+            if "eec_param" in list(init_dict.keys()):
+                eec_param = init_dict["eec_param"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -204,13 +179,13 @@ class OutElec(FrozenClass):
         self.Pj_losses = Pj_losses
         self.Us = Us
         self.internal = internal
-        self.Us_PWM = Us_PWM
         self.OP = OP
         self.Pem_av_ref = Pem_av_ref
         self.Tem_av_ref = Tem_av_ref
-        self.Is_harm = Is_harm
         self.phase_dir = phase_dir
         self.current_dir = current_dir
+        self.PWM = PWM
+        self.eec_param = eec_param
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -234,7 +209,6 @@ class OutElec(FrozenClass):
             OutElec_str += "internal = " + tmp
         else:
             OutElec_str += "internal = None" + linesep + linesep
-        OutElec_str += "Us_PWM = " + str(self.Us_PWM) + linesep + linesep
         if self.OP is not None:
             tmp = self.OP.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             OutElec_str += "OP = " + tmp
@@ -242,9 +216,14 @@ class OutElec(FrozenClass):
             OutElec_str += "OP = None" + linesep + linesep
         OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
-        OutElec_str += "Is_harm = " + str(self.Is_harm) + linesep + linesep
         OutElec_str += "phase_dir = " + str(self.phase_dir) + linesep
         OutElec_str += "current_dir = " + str(self.current_dir) + linesep
+        if self.PWM is not None:
+            tmp = self.PWM.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OutElec_str += "PWM = " + tmp
+        else:
+            OutElec_str += "PWM = None" + linesep + linesep
+        OutElec_str += "eec_param = " + str(self.eec_param) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -266,19 +245,19 @@ class OutElec(FrozenClass):
             return False
         if other.internal != self.internal:
             return False
-        if other.Us_PWM != self.Us_PWM:
-            return False
         if other.OP != self.OP:
             return False
         if other.Pem_av_ref != self.Pem_av_ref:
             return False
         if other.Tem_av_ref != self.Tem_av_ref:
             return False
-        if other.Is_harm != self.Is_harm:
-            return False
         if other.phase_dir != self.phase_dir:
             return False
         if other.current_dir != self.current_dir:
+            return False
+        if other.PWM != self.PWM:
+            return False
+        if other.eec_param != self.eec_param:
             return False
         return True
 
@@ -335,12 +314,6 @@ class OutElec(FrozenClass):
             diff_list.extend(
                 self.internal.compare(other.internal, name=name + ".internal")
             )
-        if (other.Us_PWM is None and self.Us_PWM is not None) or (
-            other.Us_PWM is not None and self.Us_PWM is None
-        ):
-            diff_list.append(name + ".Us_PWM None mismatch")
-        elif self.Us_PWM is not None:
-            diff_list.extend(self.Us_PWM.compare(other.Us_PWM, name=name + ".Us_PWM"))
         if (other.OP is None and self.OP is not None) or (
             other.OP is not None and self.OP is None
         ):
@@ -351,18 +324,18 @@ class OutElec(FrozenClass):
             diff_list.append(name + ".Pem_av_ref")
         if other._Tem_av_ref != self._Tem_av_ref:
             diff_list.append(name + ".Tem_av_ref")
-        if (other.Is_harm is None and self.Is_harm is not None) or (
-            other.Is_harm is not None and self.Is_harm is None
-        ):
-            diff_list.append(name + ".Is_harm None mismatch")
-        elif self.Is_harm is not None:
-            diff_list.extend(
-                self.Is_harm.compare(other.Is_harm, name=name + ".Is_harm")
-            )
         if other._phase_dir != self._phase_dir:
             diff_list.append(name + ".phase_dir")
         if other._current_dir != self._current_dir:
             diff_list.append(name + ".current_dir")
+        if (other.PWM is None and self.PWM is not None) or (
+            other.PWM is not None and self.PWM is None
+        ):
+            diff_list.append(name + ".PWM None mismatch")
+        elif self.PWM is not None:
+            diff_list.extend(self.PWM.compare(other.PWM, name=name + ".PWM"))
+        if other._eec_param != self._eec_param:
+            diff_list.append(name + ".eec_param")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -380,13 +353,15 @@ class OutElec(FrozenClass):
         S += getsizeof(self.Pj_losses)
         S += getsizeof(self.Us)
         S += getsizeof(self.internal)
-        S += getsizeof(self.Us_PWM)
         S += getsizeof(self.OP)
         S += getsizeof(self.Pem_av_ref)
         S += getsizeof(self.Tem_av_ref)
-        S += getsizeof(self.Is_harm)
         S += getsizeof(self.phase_dir)
         S += getsizeof(self.current_dir)
+        S += getsizeof(self.PWM)
+        if self.eec_param is not None:
+            for key, value in self.eec_param.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -448,14 +423,6 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        if self.Us_PWM is None:
-            OutElec_dict["Us_PWM"] = None
-        else:
-            OutElec_dict["Us_PWM"] = self.Us_PWM.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
         if self.OP is None:
             OutElec_dict["OP"] = None
         else:
@@ -466,16 +433,19 @@ class OutElec(FrozenClass):
             )
         OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
         OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
-        if self.Is_harm is None:
-            OutElec_dict["Is_harm"] = None
+        OutElec_dict["phase_dir"] = self.phase_dir
+        OutElec_dict["current_dir"] = self.current_dir
+        if self.PWM is None:
+            OutElec_dict["PWM"] = None
         else:
-            OutElec_dict["Is_harm"] = self.Is_harm.as_dict(
+            OutElec_dict["PWM"] = self.PWM.as_dict(
                 type_handle_ndarray=type_handle_ndarray,
                 keep_function=keep_function,
                 **kwargs
             )
-        OutElec_dict["phase_dir"] = self.phase_dir
-        OutElec_dict["current_dir"] = self.current_dir
+        OutElec_dict["eec_param"] = (
+            self.eec_param.copy() if self.eec_param is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -491,14 +461,15 @@ class OutElec(FrozenClass):
         self.Us = None
         if self.internal is not None:
             self.internal._set_None()
-        self.Us_PWM = None
         if self.OP is not None:
             self.OP._set_None()
         self.Pem_av_ref = None
         self.Tem_av_ref = None
-        self.Is_harm = None
         self.phase_dir = None
         self.current_dir = None
+        if self.PWM is not None:
+            self.PWM._set_None()
+        self.eec_param = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -678,33 +649,6 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_Us_PWM(self):
-        """getter of Us_PWM"""
-        return self._Us_PWM
-
-    def _set_Us_PWM(self, value):
-        """setter of Us_PWM"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Us_PWM"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = DataND()
-        check_var("Us_PWM", value, "DataND")
-        self._Us_PWM = value
-
-    Us_PWM = property(
-        fget=_get_Us_PWM,
-        fset=_set_Us_PWM,
-        doc=u"""PWM stator voltage as a function of time (each column correspond to one phase)
-
-        :Type: SciDataTool.Classes.DataND.DataND
-        """,
-    )
-
     def _get_OP(self):
         """getter of OP"""
         return self._OP
@@ -745,7 +689,7 @@ class OutElec(FrozenClass):
     Pem_av_ref = property(
         fget=_get_Pem_av_ref,
         fset=_set_Pem_av_ref,
-        doc=u"""Theorical Average Electromagnetic Power
+        doc=u"""Theoretical Average Electromagnetic Power
 
         :Type: float
         """,
@@ -763,36 +707,9 @@ class OutElec(FrozenClass):
     Tem_av_ref = property(
         fget=_get_Tem_av_ref,
         fset=_set_Tem_av_ref,
-        doc=u"""Theorical Average Electromagnetic torque
+        doc=u"""Theoretical Average Electromagnetic torque
 
         :Type: float
-        """,
-    )
-
-    def _get_Is_harm(self):
-        """getter of Is_harm"""
-        return self._Is_harm
-
-    def _set_Is_harm(self, value):
-        """setter of Is_harm"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Is_harm"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = DataND()
-        check_var("Is_harm", value, "DataND")
-        self._Is_harm = value
-
-    Is_harm = property(
-        fget=_get_Is_harm,
-        fset=_set_Is_harm,
-        doc=u"""Harmonic stator current 
-
-        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )
 
@@ -833,5 +750,53 @@ class OutElec(FrozenClass):
         :Type: int
         :min: -1
         :max: 1
+        """,
+    )
+
+    def _get_PWM(self):
+        """getter of PWM"""
+        return self._PWM
+
+    def _set_PWM(self, value):
+        """setter of PWM"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "PWM")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = ImportGenPWM()
+        check_var("PWM", value, "ImportGenPWM")
+        self._PWM = value
+
+        if self._PWM is not None:
+            self._PWM.parent = self
+
+    PWM = property(
+        fget=_get_PWM,
+        fset=_set_PWM,
+        doc=u"""Object to generate PWM signal
+
+        :Type: ImportGenPWM
+        """,
+    )
+
+    def _get_eec_param(self):
+        """getter of eec_param"""
+        return self._eec_param
+
+    def _set_eec_param(self, value):
+        """setter of eec_param"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("eec_param", value, "dict")
+        self._eec_param = value
+
+    eec_param = property(
+        fget=_get_eec_param,
+        fset=_set_eec_param,
+        doc=u"""Dict containing parameters used in Electric Equivalent Circuit
+
+        :Type: dict
         """,
     )

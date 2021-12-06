@@ -28,6 +28,7 @@ from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .ImportMatrix import ImportMatrix
+from .ImportData import ImportData
 from .ImportGenPWM import ImportGenPWM
 from .OP import OP
 
@@ -64,17 +65,21 @@ class InputFlux(InputCurrent):
         B_enforced=None,
         Is=None,
         Ir=None,
+        Is_harm=None,
         rot_dir=None,
         angle_rotor_initial=0,
         PWM=None,
         phase_dir=None,
         current_dir=None,
+        is_periodicity_t=False,
+        is_periodicity_a=False,
         time=None,
         angle=None,
         Nt_tot=2048,
         Nrev=None,
         Na_tot=2048,
         OP=None,
+        t_final=None,
         init_dict=None,
         init_str=None,
     ):
@@ -113,6 +118,8 @@ class InputFlux(InputCurrent):
                 Is = init_dict["Is"]
             if "Ir" in list(init_dict.keys()):
                 Ir = init_dict["Ir"]
+            if "Is_harm" in list(init_dict.keys()):
+                Is_harm = init_dict["Is_harm"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
@@ -123,6 +130,10 @@ class InputFlux(InputCurrent):
                 phase_dir = init_dict["phase_dir"]
             if "current_dir" in list(init_dict.keys()):
                 current_dir = init_dict["current_dir"]
+            if "is_periodicity_t" in list(init_dict.keys()):
+                is_periodicity_t = init_dict["is_periodicity_t"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -135,6 +146,8 @@ class InputFlux(InputCurrent):
                 Na_tot = init_dict["Na_tot"]
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
+            if "t_final" in list(init_dict.keys()):
+                t_final = init_dict["t_final"]
         # Set the properties (value check and convertion are done in setter)
         self.per_a = per_a
         self.per_t = per_t
@@ -148,17 +161,21 @@ class InputFlux(InputCurrent):
         super(InputFlux, self).__init__(
             Is=Is,
             Ir=Ir,
+            Is_harm=Is_harm,
             rot_dir=rot_dir,
             angle_rotor_initial=angle_rotor_initial,
             PWM=PWM,
             phase_dir=phase_dir,
             current_dir=current_dir,
+            is_periodicity_t=is_periodicity_t,
+            is_periodicity_a=is_periodicity_a,
             time=time,
             angle=angle,
             Nt_tot=Nt_tot,
             Nrev=Nrev,
             Na_tot=Na_tot,
             OP=OP,
+            t_final=t_final,
         )
         # The class is frozen (in InputCurrent init), for now it's impossible to
         # add new properties

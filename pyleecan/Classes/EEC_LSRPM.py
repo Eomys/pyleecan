@@ -23,14 +23,9 @@ except ImportError as error:
     comp_parameters = error
 
 try:
-    from ..Methods.Simulation.EEC_LSRPM.solve_EEC import solve_EEC
+    from ..Methods.Simulation.EEC_LSRPM.solve import solve
 except ImportError as error:
-    solve_EEC = error
-
-try:
-    from ..Methods.Simulation.EEC_LSRPM.gen_drive import gen_drive
-except ImportError as error:
-    gen_drive = error
+    solve = error
 
 try:
     from ..Methods.Simulation.EEC_LSRPM.comp_joule_losses import comp_joule_losses
@@ -40,10 +35,12 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .FluxLink import FluxLink
+from .LUT import LUT
+from .Drive import Drive
 
 
 class EEC_LSRPM(EEC):
-    """Electric module: Electrical Equivalent Circuit for Squirrel Cage Induction Machine"""
+    """Electrical Equivalent Circuit for LSRPM"""
 
     VERSION = 1
 
@@ -60,24 +57,15 @@ class EEC_LSRPM(EEC):
         )
     else:
         comp_parameters = comp_parameters
-    # cf Methods.Simulation.EEC_LSRPM.solve_EEC
-    if isinstance(solve_EEC, ImportError):
-        solve_EEC = property(
+    # cf Methods.Simulation.EEC_LSRPM.solve
+    if isinstance(solve, ImportError):
+        solve = property(
             fget=lambda x: raise_(
-                ImportError("Can't use EEC_LSRPM method solve_EEC: " + str(solve_EEC))
+                ImportError("Can't use EEC_LSRPM method solve: " + str(solve))
             )
         )
     else:
-        solve_EEC = solve_EEC
-    # cf Methods.Simulation.EEC_LSRPM.gen_drive
-    if isinstance(gen_drive, ImportError):
-        gen_drive = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use EEC_LSRPM method gen_drive: " + str(gen_drive))
-            )
-        )
-    else:
-        gen_drive = gen_drive
+        solve = solve
     # cf Methods.Simulation.EEC_LSRPM.comp_joule_losses
     if isinstance(comp_joule_losses, ImportError):
         comp_joule_losses = property(
@@ -98,10 +86,11 @@ class EEC_LSRPM(EEC):
 
     def __init__(
         self,
-        parameters=-1,
-        N0=1500,
-        felec=100,
         fluxlink=None,
+        N0=1500,
+        parameters=None,
+        LUT_enforced=None,
+        drive=None,
         init_dict=None,
         init_str=None,
     ):
@@ -120,21 +109,23 @@ class EEC_LSRPM(EEC):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "parameters" in list(init_dict.keys()):
-                parameters = init_dict["parameters"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
-            if "felec" in list(init_dict.keys()):
-                felec = init_dict["felec"]
             if "fluxlink" in list(init_dict.keys()):
                 fluxlink = init_dict["fluxlink"]
+            if "N0" in list(init_dict.keys()):
+                N0 = init_dict["N0"]
+            if "parameters" in list(init_dict.keys()):
+                parameters = init_dict["parameters"]
+            if "LUT_enforced" in list(init_dict.keys()):
+                LUT_enforced = init_dict["LUT_enforced"]
+            if "drive" in list(init_dict.keys()):
+                drive = init_dict["drive"]
         # Set the properties (value check and convertion are done in setter)
-        self.parameters = parameters
-        self.N0 = N0
-        self.felec = felec
         self.fluxlink = fluxlink
+        self.N0 = N0
         # Call EEC init
-        super(EEC_LSRPM, self).__init__()
+        super(EEC_LSRPM, self).__init__(
+            parameters=parameters, LUT_enforced=LUT_enforced, drive=drive
+        )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties
 
@@ -144,14 +135,12 @@ class EEC_LSRPM(EEC):
         EEC_LSRPM_str = ""
         # Get the properties inherited from EEC
         EEC_LSRPM_str += super(EEC_LSRPM, self).__str__()
-        EEC_LSRPM_str += "parameters = " + str(self.parameters) + linesep
-        EEC_LSRPM_str += "N0 = " + str(self.N0) + linesep
-        EEC_LSRPM_str += "felec = " + str(self.felec) + linesep
         if self.fluxlink is not None:
             tmp = self.fluxlink.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             EEC_LSRPM_str += "fluxlink = " + tmp
         else:
             EEC_LSRPM_str += "fluxlink = None" + linesep + linesep
+        EEC_LSRPM_str += "N0 = " + str(self.N0) + linesep
         return EEC_LSRPM_str
 
     def __eq__(self, other):
@@ -163,13 +152,9 @@ class EEC_LSRPM(EEC):
         # Check the properties inherited from EEC
         if not super(EEC_LSRPM, self).__eq__(other):
             return False
-        if other.parameters != self.parameters:
+        if other.fluxlink != self.fluxlink:
             return False
         if other.N0 != self.N0:
-            return False
-        if other.felec != self.felec:
-            return False
-        if other.fluxlink != self.fluxlink:
             return False
         return True
 
@@ -184,12 +169,6 @@ class EEC_LSRPM(EEC):
 
         # Check the properties inherited from EEC
         diff_list.extend(super(EEC_LSRPM, self).compare(other, name=name))
-        if other._parameters != self._parameters:
-            diff_list.append(name + ".parameters")
-        if other._N0 != self._N0:
-            diff_list.append(name + ".N0")
-        if other._felec != self._felec:
-            diff_list.append(name + ".felec")
         if (other.fluxlink is None and self.fluxlink is not None) or (
             other.fluxlink is not None and self.fluxlink is None
         ):
@@ -198,6 +177,8 @@ class EEC_LSRPM(EEC):
             diff_list.extend(
                 self.fluxlink.compare(other.fluxlink, name=name + ".fluxlink")
             )
+        if other._N0 != self._N0:
+            diff_list.append(name + ".N0")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -209,12 +190,8 @@ class EEC_LSRPM(EEC):
 
         # Get size of the properties inherited from EEC
         S += super(EEC_LSRPM, self).__sizeof__()
-        if self.parameters is not None:
-            for key, value in self.parameters.items():
-                S += getsizeof(value) + getsizeof(key)
-        S += getsizeof(self.N0)
-        S += getsizeof(self.felec)
         S += getsizeof(self.fluxlink)
+        S += getsizeof(self.N0)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -234,11 +211,6 @@ class EEC_LSRPM(EEC):
             keep_function=keep_function,
             **kwargs
         )
-        EEC_LSRPM_dict["parameters"] = (
-            self.parameters.copy() if self.parameters is not None else None
-        )
-        EEC_LSRPM_dict["N0"] = self.N0
-        EEC_LSRPM_dict["felec"] = self.felec
         if self.fluxlink is None:
             EEC_LSRPM_dict["fluxlink"] = None
         else:
@@ -247,6 +219,7 @@ class EEC_LSRPM(EEC):
                 keep_function=keep_function,
                 **kwargs
             )
+        EEC_LSRPM_dict["N0"] = self.N0
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         EEC_LSRPM_dict["__class__"] = "EEC_LSRPM"
@@ -255,69 +228,11 @@ class EEC_LSRPM(EEC):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.parameters = None
-        self.N0 = None
-        self.felec = None
         if self.fluxlink is not None:
             self.fluxlink._set_None()
+        self.N0 = None
         # Set to None the properties inherited from EEC
         super(EEC_LSRPM, self)._set_None()
-
-    def _get_parameters(self):
-        """getter of parameters"""
-        return self._parameters
-
-    def _set_parameters(self, value):
-        """setter of parameters"""
-        if type(value) is int and value == -1:
-            value = dict()
-        check_var("parameters", value, "dict")
-        self._parameters = value
-
-    parameters = property(
-        fget=_get_parameters,
-        fset=_set_parameters,
-        doc=u"""Parameters of the EEC: computed if empty, or enforced
-
-        :Type: dict
-        """,
-    )
-
-    def _get_N0(self):
-        """getter of N0"""
-        return self._N0
-
-    def _set_N0(self, value):
-        """setter of N0"""
-        check_var("N0", value, "int")
-        self._N0 = value
-
-    N0 = property(
-        fget=_get_N0,
-        fset=_set_N0,
-        doc=u"""Rotation speed
-
-        :Type: int
-        """,
-    )
-
-    def _get_felec(self):
-        """getter of felec"""
-        return self._felec
-
-    def _set_felec(self, value):
-        """setter of felec"""
-        check_var("felec", value, "int")
-        self._felec = value
-
-    felec = property(
-        fget=_get_felec,
-        fset=_set_felec,
-        doc=u"""frequency
-
-        :Type: int
-        """,
-    )
 
     def _get_fluxlink(self):
         """getter of fluxlink"""
@@ -346,5 +261,23 @@ class EEC_LSRPM(EEC):
         doc=u"""Flux Linkage
 
         :Type: FluxLink
+        """,
+    )
+
+    def _get_N0(self):
+        """getter of N0"""
+        return self._N0
+
+    def _set_N0(self, value):
+        """setter of N0"""
+        check_var("N0", value, "int")
+        self._N0 = value
+
+    N0 = property(
+        fget=_get_N0,
+        fset=_set_N0,
+        doc=u"""Rotation speed
+
+        :Type: int
         """,
     )

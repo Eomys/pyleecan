@@ -20,8 +20,8 @@ def comp_fluxlinkage(self, machine):
 
     Returns
     ----------
-    Phi_d_mean: float
-        Flux linkage along d-axis
+    Phi_dqh_mean: float
+        Flux linkage in dqh frame
     """
 
     self.get_logger().info("Compute flux linkage with FEMM")
@@ -63,6 +63,6 @@ def comp_fluxlinkage(self, machine):
     Phidqh = n2dqh_DataTime(
         out_fl.mag.Phi_wind[stator_label], phase_dir=out_fl.elec.phase_dir
     )
-    Phi_d_mean = float(Phidqh.get_along("time=mean", "phase[0]")[Phidqh.symbol])
+    Phi_dqh_mean = Phidqh.get_along("time=mean", "phase")[Phidqh.symbol]
 
-    return Phi_d_mean
+    return Phi_dqh_mean

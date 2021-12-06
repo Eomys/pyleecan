@@ -765,7 +765,8 @@
             "comp_psip_skin",
             "comp_skin_effect",
             "comp_power",
-            "comp_skin_effect_round_wire"
+            "comp_skin_effect_round_wire",
+            "comp_temperature_effect"
         ],
         "mother": "",
         "name": "Conductor",
@@ -1009,39 +1010,17 @@
             }
         ],
         "daughters": [
-            "EEC_ANL",
             "EEC_LSRPM",
             "EEC_PMSM",
             "EEC_SCIM"
         ],
-        "desc": "Electric module: Equivalent Electrical Circuit abstract class",
+        "desc": "Equivalent Electrical Circuit abstract class",
         "is_internal": false,
         "methods": [],
         "mother": "",
         "name": "EEC",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC.csv",
-        "properties": []
-    },
-    "EEC_ANL": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Electric module: Analytical Electrical Equivalent Circuit",
-        "is_internal": false,
-        "methods": [
-            "comp_parameters",
-            "solve_EEC",
-            "comp_joule_losses"
-        ],
-        "mother": "EEC",
-        "name": "EEC_ANL",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_ANL.csv",
         "properties": [
             {
                 "desc": "Parameters of the EEC: computed if empty, or enforced",
@@ -1050,15 +1029,15 @@
                 "name": "parameters",
                 "type": "dict",
                 "unit": "-",
-                "value": {}
+                "value": null
             },
             {
-                "desc": "Frequency",
+                "desc": "Electrical Look Up Table to be enforced ",
                 "max": "",
                 "min": "",
-                "name": "freq0",
-                "type": "float",
-                "unit": "Hz",
+                "name": "LUT_enforced",
+                "type": "LUT",
+                "unit": "-",
                 "value": null
             },
             {
@@ -1080,12 +1059,11 @@
             }
         ],
         "daughters": [],
-        "desc": "Electric module: Electrical Equivalent Circuit for Squirrel Cage Induction Machine",
+        "desc": "Electrical Equivalent Circuit for LSRPM",
         "is_internal": false,
         "methods": [
             "comp_parameters",
-            "solve_EEC",
-            "gen_drive",
+            "solve",
             "comp_joule_losses"
         ],
         "mother": "EEC",
@@ -1094,13 +1072,13 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_LSRPM.csv",
         "properties": [
             {
-                "desc": "Parameters of the EEC: computed if empty, or enforced",
+                "desc": "Flux Linkage",
                 "max": "",
                 "min": "",
-                "name": "parameters",
-                "type": "dict",
+                "name": "fluxlink",
+                "type": "FluxLink",
                 "unit": "-",
-                "value": {}
+                "value": null
             },
             {
                 "desc": "Rotation speed",
@@ -1110,24 +1088,6 @@
                 "type": "int",
                 "unit": "RPM",
                 "value": 1500
-            },
-            {
-                "desc": "frequency",
-                "max": "",
-                "min": "",
-                "name": "felec",
-                "type": "int",
-                "unit": "Hz",
-                "value": 100
-            },
-            {
-                "desc": "Flux Linkage",
-                "max": "",
-                "min": "",
-                "name": "fluxlink",
-                "type": "FluxLink",
-                "unit": "-",
-                "value": null
             }
         ]
     },
@@ -1139,15 +1099,15 @@
             }
         ],
         "daughters": [],
-        "desc": "Electric module: Electrical Equivalent Circuit",
+        "desc": "Electrical Equivalent Circuit of Permanent Magnet Synchronous Machines",
         "is_internal": false,
         "methods": [
             "comp_parameters",
-            "solve_EEC",
-            "gen_drive",
+            "solve",
+            "solve_PWM",
             "comp_joule_losses",
-            "comp_BEMF_harmonics",
-            "comp_torque_sync_rel"
+            "comp_torque_sync_rel",
+            "comp_BEMF_harmonics"
         ],
         "mother": "EEC",
         "name": "EEC_PMSM",
@@ -1171,33 +1131,6 @@
                 "type": "FluxLink",
                 "unit": "-",
                 "value": null
-            },
-            {
-                "desc": "Parameters of the EEC: computed if empty, or enforced",
-                "max": "",
-                "min": "",
-                "name": "parameters",
-                "type": "dict",
-                "unit": "-",
-                "value": {}
-            },
-            {
-                "desc": "Frequency",
-                "max": "",
-                "min": "",
-                "name": "freq0",
-                "type": "float",
-                "unit": "Hz",
-                "value": null
-            },
-            {
-                "desc": "Drive",
-                "max": "",
-                "min": "",
-                "name": "drive",
-                "type": "Drive",
-                "unit": "-",
-                "value": null
             }
         ]
     },
@@ -1213,9 +1146,11 @@
         "is_internal": false,
         "methods": [
             "comp_parameters",
-            "solve_EEC",
-            "gen_drive",
-            "comp_joule_losses"
+            "solve",
+            "comp_joule_losses",
+            "solve_elementary",
+            "_comp_flux_mean",
+            "_comp_Lm_FEA"
         ],
         "mother": "EEC",
         "name": "EEC_SCIM",
@@ -1230,15 +1165,6 @@
                 "type": "float",
                 "unit": "-",
                 "value": 1
-            },
-            {
-                "desc": "Parameters of the EEC: computed if empty, or enforced",
-                "max": "",
-                "min": "",
-                "name": "parameters",
-                "type": "dict",
-                "unit": "-",
-                "value": {}
             },
             {
                 "desc": "True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle])",
@@ -1265,15 +1191,6 @@
                 "name": "N0",
                 "type": "float",
                 "unit": "rpm",
-                "value": null
-            },
-            {
-                "desc": "electrical frequency",
-                "max": "",
-                "min": "",
-                "name": "felec",
-                "type": "float",
-                "unit": "Hz",
                 "value": null
             },
             {
@@ -1309,7 +1226,8 @@
         "methods": [
             "run",
             "comp_power",
-            "comp_torque"
+            "comp_torque",
+            "gen_drive"
         ],
         "mother": "",
         "name": "Electrical",
@@ -1371,13 +1289,13 @@
                 "value": 20
             },
             {
-                "desc": "Electrical Look Up Table to be enforced ",
+                "desc": "Maximum frequency to calculate voltage and current harmonics",
                 "max": "",
                 "min": "",
-                "name": "ELUT_enforced",
-                "type": "LUT",
-                "unit": "-",
-                "value": null
+                "name": "freq_max",
+                "type": "float",
+                "unit": "Hz",
+                "value": 40000
             }
         ]
     },
@@ -3267,7 +3185,10 @@
         "desc": "To generate a PWM voltage matrix",
         "is_internal": false,
         "methods": [
-            "get_data"
+            "get_data",
+            "comp_voltage",
+            "get_modulation_index",
+            "comp_carrier"
         ],
         "mother": "ImportMatrix",
         "name": "ImportGenPWM",
@@ -3365,13 +3286,13 @@
                 "value": 2
             },
             {
-                "desc": "reference voltage",
+                "desc": "reference voltage amplitude (rms)",
                 "max": "",
                 "min": "",
                 "name": "U0",
                 "type": "float",
                 "unit": "V",
-                "value": 1
+                "value": null
             },
             {
                 "desc": "1: forward toothsaw carrier 2: backwards toothsaw carrier 3: toothsaw carrier else: symetrical toothsaw carrier",
@@ -3410,13 +3331,31 @@
                 "value": 1
             },
             {
-                "desc": "rotor rotation direction",
-                "max": "",
-                "min": "",
-                "name": "rot_dir",
+                "desc": "Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",
+                "max": "1",
+                "min": "-1",
+                "name": "phase_dir",
                 "type": "int",
                 "unit": "",
                 "value": -1
+            },
+            {
+                "desc": "Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)",
+                "max": "1",
+                "min": "-1",
+                "name": "current_dir",
+                "type": "int",
+                "unit": "-",
+                "value": -1
+            },
+            {
+                "desc": "reference voltage phase (rad)",
+                "max": "",
+                "min": "",
+                "name": "Phi0",
+                "type": "float",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -4082,6 +4021,15 @@
                 "type": "OP",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "To enforce final time",
+                "max": "",
+                "min": "",
+                "name": "t_final",
+                "type": "float",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -4122,6 +4070,15 @@
                 "min": "",
                 "name": "Ir",
                 "type": "ImportMatrix",
+                "unit": "A",
+                "value": null
+            },
+            {
+                "desc": "Stator harmonic currents",
+                "max": "",
+                "min": "",
+                "name": "Is_harm",
+                "type": "ImportData",
                 "unit": "A",
                 "value": null
             }
@@ -4263,7 +4220,8 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_OP_from_array"
+            "set_OP_from_array",
+            "set_Ud_Uq"
         ],
         "mother": "Input",
         "name": "InputVoltage",
@@ -4314,6 +4272,24 @@
                 "type": "int",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time])",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_t",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle])",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_a",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
             }
         ]
     },
@@ -4376,7 +4352,6 @@
         "desc": "Abstract class for Look Up Table (LUT)",
         "is_internal": false,
         "methods": [
-            "get_param_dict",
             "get_phase_dir"
         ],
         "mother": "",
@@ -4442,16 +4417,11 @@
         "desc": "Look Up Table class for dq OP matrix",
         "is_internal": false,
         "methods": [
-            "get_param_dict",
-            "get_bemf",
             "get_Ldqh",
             "get_Lmdqh",
-            "import_from_data",
             "get_Phidqh_mean",
             "get_Phidqh_mag",
             "get_Phidqh_mag_mean",
-            "get_Phidqh_mag_harm",
-            "get_orders_dqh",
             "interp_Phi_dqh"
         ],
         "mother": "LUT",
@@ -4516,12 +4486,7 @@
         "daughters": [],
         "desc": "Look Up Table class for u0/slip OP matrix",
         "is_internal": false,
-        "methods": [
-            "get_param_dict",
-            "get_Lm",
-            "comp_Lm_from_Phim",
-            "import_from_data"
-        ],
+        "methods": [],
         "mother": "LUT",
         "name": "LUTslip",
         "package": "Simulation",
@@ -4875,7 +4840,9 @@
             "plot",
             "comp_number_phase_eq",
             "comp_surface_ring",
-            "comp_resistance_wind"
+            "comp_resistance_wind",
+            "get_name_phase",
+            "comp_angle_d_axis"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -7656,8 +7623,9 @@
             "get_slip",
             "get_Ud_Uq",
             "set_Id_Iq",
-            "set_I0_Phi0",
-            "get_I0_Phi0"
+            "get_I0_Phi0",
+            "set_Ud_Uq",
+            "set_I0_Phi0"
         ],
         "mother": "OP",
         "name": "OPdq",
@@ -7720,7 +7688,8 @@
             "set_Id_Iq",
             "get_I0_Phi0",
             "get_slip",
-            "set_I0_Phi0"
+            "set_I0_Phi0",
+            "set_Ud_Uq"
         ],
         "mother": "OP",
         "name": "OPslip",
@@ -8159,13 +8128,11 @@
         "desc": "Gather the electric module outputs",
         "is_internal": false,
         "methods": [
-            "get_I_fund",
-            "get_I_harm",
-            "get_Is",
             "get_Nr",
+            "get_Is",
             "get_Us",
-            "get_Us_harm",
-            "store"
+            "store",
+            "get_electrical"
         ],
         "mother": "",
         "name": "OutElec",
@@ -8206,7 +8173,7 @@
                 "name": "logger_name",
                 "type": "str",
                 "unit": "-",
-                "value": "Pyleecan.Electrical"
+                "value": "pyleecan.Electrical"
             },
             {
                 "desc": "Electrical Joule losses",
@@ -8236,15 +8203,6 @@
                 "value": null
             },
             {
-                "desc": "PWM stator voltage as a function of time (each column correspond to one phase)",
-                "max": "",
-                "min": "",
-                "name": "Us_PWM",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "V",
-                "value": "None"
-            },
-            {
                 "desc": "Operating Point",
                 "max": "",
                 "min": "",
@@ -8254,7 +8212,7 @@
                 "value": null
             },
             {
-                "desc": "Theorical Average Electromagnetic Power",
+                "desc": "Theoretical Average Electromagnetic Power",
                 "max": "",
                 "min": "",
                 "name": "Pem_av_ref",
@@ -8263,22 +8221,13 @@
                 "value": null
             },
             {
-                "desc": "Theorical Average Electromagnetic torque",
+                "desc": "Theoretical Average Electromagnetic torque",
                 "max": "",
                 "min": "",
                 "name": "Tem_av_ref",
                 "type": "float",
                 "unit": "N.m",
                 "value": null
-            },
-            {
-                "desc": "Harmonic stator current ",
-                "max": "",
-                "min": "",
-                "name": "Is_harm",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "A",
-                "value": "None"
             },
             {
                 "desc": "Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",
@@ -8296,6 +8245,24 @@
                 "name": "current_dir",
                 "type": "int",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Object to generate PWM signal",
+                "max": "",
+                "min": "",
+                "name": "PWM",
+                "type": "ImportGenPWM",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Dict containing parameters used in Electric Equivalent Circuit",
+                "max": "",
+                "min": "",
+                "name": "eec_param",
+                "type": "dict",
+                "unit": "",
                 "value": null
             }
         ]
@@ -10418,7 +10385,8 @@
             "get_surface_tooth",
             "is_outwards",
             "plot",
-            "plot_active"
+            "plot_active",
+            "set_label"
         ],
         "mother": "",
         "name": "Slot",
@@ -13631,7 +13599,8 @@
             }
         ],
         "daughters": [
-            "VarLoadCurrent"
+            "VarLoadCurrent",
+            "VarLoadVoltage"
         ],
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
         "is_internal": false,
@@ -13642,7 +13611,44 @@
         "name": "VarLoad",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoad.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) or (N0,U0,s,T,P)",
+                "max": "",
+                "min": "",
+                "name": "OP_matrix",
+                "type": "ndarray",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P), 2:(N0,U0,s,T,P)",
+                "max": "2",
+                "min": "0",
+                "name": "type_OP_matrix",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True if the Torque is defined in OP_matrix",
+                "max": "",
+                "min": "",
+                "name": "is_torque",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True if the Power is defined in OP_matrix",
+                "max": "",
+                "min": "",
+                "name": "is_power",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            }
+        ]
     },
     "VarLoadCurrent": {
         "constants": [
@@ -13657,51 +13663,34 @@
         "methods": [
             "get_input_list",
             "generate_simulation_list",
-            "check_param",
             "get_elec_datakeeper"
         ],
         "mother": "VarLoad",
         "name": "VarLoadCurrent",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoadCurrent.csv",
-        "properties": [
+        "properties": []
+    },
+    "VarLoadVoltage": {
+        "constants": [
             {
-                "desc": "Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) ",
-                "max": "",
-                "min": "",
-                "name": "OP_matrix",
-                "type": "ndarray",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) ",
-                "max": "1",
-                "min": "0",
-                "name": "type_OP_matrix",
-                "type": "int",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "desc": "True if the Torque is defined in OP_matrix",
-                "max": "",
-                "min": "",
-                "name": "is_torque",
-                "type": "bool",
-                "unit": "-",
-                "value": false
-            },
-            {
-                "desc": "True if the Power is defined in OP_matrix",
-                "max": "",
-                "min": "",
-                "name": "is_power",
-                "type": "bool",
-                "unit": "",
-                "value": false
+                "name": "VERSION",
+                "value": "1"
             }
-        ]
+        ],
+        "daughters": [],
+        "desc": "Generate a multisimulation with InputVoltage at variable operating point",
+        "is_internal": false,
+        "methods": [
+            "generate_simulation_list",
+            "get_elec_datakeeper",
+            "get_input_list"
+        ],
+        "mother": "VarLoad",
+        "name": "VarLoadVoltage",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoadVoltage.csv",
+        "properties": []
     },
     "VarParam": {
         "constants": [
@@ -13748,6 +13737,7 @@
         "daughters": [
             "VarLoad",
             "VarLoadCurrent",
+            "VarLoadVoltage",
             "VarParam"
         ],
         "desc": "Abstract class for the multi-simulation",

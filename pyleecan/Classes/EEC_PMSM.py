@@ -23,14 +23,14 @@ except ImportError as error:
     comp_parameters = error
 
 try:
-    from ..Methods.Simulation.EEC_PMSM.solve_EEC import solve_EEC
+    from ..Methods.Simulation.EEC_PMSM.solve import solve
 except ImportError as error:
-    solve_EEC = error
+    solve = error
 
 try:
-    from ..Methods.Simulation.EEC_PMSM.gen_drive import gen_drive
+    from ..Methods.Simulation.EEC_PMSM.solve_PWM import solve_PWM
 except ImportError as error:
-    gen_drive = error
+    solve_PWM = error
 
 try:
     from ..Methods.Simulation.EEC_PMSM.comp_joule_losses import comp_joule_losses
@@ -38,24 +38,25 @@ except ImportError as error:
     comp_joule_losses = error
 
 try:
-    from ..Methods.Simulation.EEC_PMSM.comp_BEMF_harmonics import comp_BEMF_harmonics
-except ImportError as error:
-    comp_BEMF_harmonics = error
-
-try:
     from ..Methods.Simulation.EEC_PMSM.comp_torque_sync_rel import comp_torque_sync_rel
 except ImportError as error:
     comp_torque_sync_rel = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_BEMF_harmonics import comp_BEMF_harmonics
+except ImportError as error:
+    comp_BEMF_harmonics = error
 
 
 from ._check import InitUnKnowClassError
 from .IndMag import IndMag
 from .FluxLink import FluxLink
+from .LUT import LUT
 from .Drive import Drive
 
 
 class EEC_PMSM(EEC):
-    """Electric module: Electrical Equivalent Circuit"""
+    """Electrical Equivalent Circuit of Permanent Magnet Synchronous Machines"""
 
     VERSION = 1
 
@@ -71,24 +72,24 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_parameters = comp_parameters
-    # cf Methods.Simulation.EEC_PMSM.solve_EEC
-    if isinstance(solve_EEC, ImportError):
-        solve_EEC = property(
+    # cf Methods.Simulation.EEC_PMSM.solve
+    if isinstance(solve, ImportError):
+        solve = property(
             fget=lambda x: raise_(
-                ImportError("Can't use EEC_PMSM method solve_EEC: " + str(solve_EEC))
+                ImportError("Can't use EEC_PMSM method solve: " + str(solve))
             )
         )
     else:
-        solve_EEC = solve_EEC
-    # cf Methods.Simulation.EEC_PMSM.gen_drive
-    if isinstance(gen_drive, ImportError):
-        gen_drive = property(
+        solve = solve
+    # cf Methods.Simulation.EEC_PMSM.solve_PWM
+    if isinstance(solve_PWM, ImportError):
+        solve_PWM = property(
             fget=lambda x: raise_(
-                ImportError("Can't use EEC_PMSM method gen_drive: " + str(gen_drive))
+                ImportError("Can't use EEC_PMSM method solve_PWM: " + str(solve_PWM))
             )
         )
     else:
-        gen_drive = gen_drive
+        solve_PWM = solve_PWM
     # cf Methods.Simulation.EEC_PMSM.comp_joule_losses
     if isinstance(comp_joule_losses, ImportError):
         comp_joule_losses = property(
@@ -101,18 +102,6 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_joule_losses = comp_joule_losses
-    # cf Methods.Simulation.EEC_PMSM.comp_BEMF_harmonics
-    if isinstance(comp_BEMF_harmonics, ImportError):
-        comp_BEMF_harmonics = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use EEC_PMSM method comp_BEMF_harmonics: "
-                    + str(comp_BEMF_harmonics)
-                )
-            )
-        )
-    else:
-        comp_BEMF_harmonics = comp_BEMF_harmonics
     # cf Methods.Simulation.EEC_PMSM.comp_torque_sync_rel
     if isinstance(comp_torque_sync_rel, ImportError):
         comp_torque_sync_rel = property(
@@ -125,6 +114,18 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_torque_sync_rel = comp_torque_sync_rel
+    # cf Methods.Simulation.EEC_PMSM.comp_BEMF_harmonics
+    if isinstance(comp_BEMF_harmonics, ImportError):
+        comp_BEMF_harmonics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_BEMF_harmonics: "
+                    + str(comp_BEMF_harmonics)
+                )
+            )
+        )
+    else:
+        comp_BEMF_harmonics = comp_BEMF_harmonics
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -135,8 +136,8 @@ class EEC_PMSM(EEC):
         self,
         indmag=None,
         fluxlink=None,
-        parameters=-1,
-        freq0=None,
+        parameters=None,
+        LUT_enforced=None,
         drive=None,
         init_dict=None,
         init_str=None,
@@ -162,18 +163,17 @@ class EEC_PMSM(EEC):
                 fluxlink = init_dict["fluxlink"]
             if "parameters" in list(init_dict.keys()):
                 parameters = init_dict["parameters"]
-            if "freq0" in list(init_dict.keys()):
-                freq0 = init_dict["freq0"]
+            if "LUT_enforced" in list(init_dict.keys()):
+                LUT_enforced = init_dict["LUT_enforced"]
             if "drive" in list(init_dict.keys()):
                 drive = init_dict["drive"]
         # Set the properties (value check and convertion are done in setter)
         self.indmag = indmag
         self.fluxlink = fluxlink
-        self.parameters = parameters
-        self.freq0 = freq0
-        self.drive = drive
         # Call EEC init
-        super(EEC_PMSM, self).__init__()
+        super(EEC_PMSM, self).__init__(
+            parameters=parameters, LUT_enforced=LUT_enforced, drive=drive
+        )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties
 
@@ -193,13 +193,6 @@ class EEC_PMSM(EEC):
             EEC_PMSM_str += "fluxlink = " + tmp
         else:
             EEC_PMSM_str += "fluxlink = None" + linesep + linesep
-        EEC_PMSM_str += "parameters = " + str(self.parameters) + linesep
-        EEC_PMSM_str += "freq0 = " + str(self.freq0) + linesep
-        if self.drive is not None:
-            tmp = self.drive.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_PMSM_str += "drive = " + tmp
-        else:
-            EEC_PMSM_str += "drive = None" + linesep + linesep
         return EEC_PMSM_str
 
     def __eq__(self, other):
@@ -214,12 +207,6 @@ class EEC_PMSM(EEC):
         if other.indmag != self.indmag:
             return False
         if other.fluxlink != self.fluxlink:
-            return False
-        if other.parameters != self.parameters:
-            return False
-        if other.freq0 != self.freq0:
-            return False
-        if other.drive != self.drive:
             return False
         return True
 
@@ -248,16 +235,6 @@ class EEC_PMSM(EEC):
             diff_list.extend(
                 self.fluxlink.compare(other.fluxlink, name=name + ".fluxlink")
             )
-        if other._parameters != self._parameters:
-            diff_list.append(name + ".parameters")
-        if other._freq0 != self._freq0:
-            diff_list.append(name + ".freq0")
-        if (other.drive is None and self.drive is not None) or (
-            other.drive is not None and self.drive is None
-        ):
-            diff_list.append(name + ".drive None mismatch")
-        elif self.drive is not None:
-            diff_list.extend(self.drive.compare(other.drive, name=name + ".drive"))
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -271,11 +248,6 @@ class EEC_PMSM(EEC):
         S += super(EEC_PMSM, self).__sizeof__()
         S += getsizeof(self.indmag)
         S += getsizeof(self.fluxlink)
-        if self.parameters is not None:
-            for key, value in self.parameters.items():
-                S += getsizeof(value) + getsizeof(key)
-        S += getsizeof(self.freq0)
-        S += getsizeof(self.drive)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -311,18 +283,6 @@ class EEC_PMSM(EEC):
                 keep_function=keep_function,
                 **kwargs
             )
-        EEC_PMSM_dict["parameters"] = (
-            self.parameters.copy() if self.parameters is not None else None
-        )
-        EEC_PMSM_dict["freq0"] = self.freq0
-        if self.drive is None:
-            EEC_PMSM_dict["drive"] = None
-        else:
-            EEC_PMSM_dict["drive"] = self.drive.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         EEC_PMSM_dict["__class__"] = "EEC_PMSM"
@@ -335,10 +295,6 @@ class EEC_PMSM(EEC):
             self.indmag._set_None()
         if self.fluxlink is not None:
             self.fluxlink._set_None()
-        self.parameters = None
-        self.freq0 = None
-        if self.drive is not None:
-            self.drive._set_None()
         # Set to None the properties inherited from EEC
         super(EEC_PMSM, self)._set_None()
 
@@ -399,73 +355,5 @@ class EEC_PMSM(EEC):
         doc=u"""Flux Linkage
 
         :Type: FluxLink
-        """,
-    )
-
-    def _get_parameters(self):
-        """getter of parameters"""
-        return self._parameters
-
-    def _set_parameters(self, value):
-        """setter of parameters"""
-        if type(value) is int and value == -1:
-            value = dict()
-        check_var("parameters", value, "dict")
-        self._parameters = value
-
-    parameters = property(
-        fget=_get_parameters,
-        fset=_set_parameters,
-        doc=u"""Parameters of the EEC: computed if empty, or enforced
-
-        :Type: dict
-        """,
-    )
-
-    def _get_freq0(self):
-        """getter of freq0"""
-        return self._freq0
-
-    def _set_freq0(self, value):
-        """setter of freq0"""
-        check_var("freq0", value, "float")
-        self._freq0 = value
-
-    freq0 = property(
-        fget=_get_freq0,
-        fset=_set_freq0,
-        doc=u"""Frequency
-
-        :Type: float
-        """,
-    )
-
-    def _get_drive(self):
-        """getter of drive"""
-        return self._drive
-
-    def _set_drive(self, value):
-        """setter of drive"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "drive"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Drive()
-        check_var("drive", value, "Drive")
-        self._drive = value
-
-        if self._drive is not None:
-            self._drive.parent = self
-
-    drive = property(
-        fget=_get_drive,
-        fset=_set_drive,
-        doc=u"""Drive
-
-        :Type: Drive
         """,
     )

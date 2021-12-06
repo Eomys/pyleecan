@@ -21,3 +21,4 @@ Zs,-,slot number,0,int,36,0,,,Slot,,build_geometry_active,VERSION,1,Generic clas
 ,,,,,,,,,,,is_outwards,,,
 ,,,,,,,,,,,plot,,,
 ,,,,,,,,,,,plot_active,,,
+,,,,,,,,,,,set_label,,,

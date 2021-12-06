@@ -1,4 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-parameters,-,"Parameters of the EEC: computed if empty, or enforced",,dict,{},,,,Simulation,EEC,comp_parameters,VERSION,1,Electric module: Analytical Electrical Equivalent Circuit,
-freq0,Hz,Frequency,,float,None,,,,,,solve_EEC,,,,
-drive,-,Drive,,Drive,None,,,,,,comp_joule_losses,,,,

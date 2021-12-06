@@ -30,11 +30,6 @@ except ImportError as error:
     generate_simulation_list = error
 
 try:
-    from ..Methods.Simulation.VarLoadCurrent.check_param import check_param
-except ImportError as error:
-    check_param = error
-
-try:
     from ..Methods.Simulation.VarLoadCurrent.get_elec_datakeeper import (
         get_elec_datakeeper,
     )
@@ -79,17 +74,6 @@ class VarLoadCurrent(VarLoad):
         )
     else:
         generate_simulation_list = generate_simulation_list
-    # cf Methods.Simulation.VarLoadCurrent.check_param
-    if isinstance(check_param, ImportError):
-        check_param = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoadCurrent method check_param: " + str(check_param)
-                )
-            )
-        )
-    else:
-        check_param = check_param
     # cf Methods.Simulation.VarLoadCurrent.get_elec_datakeeper
     if isinstance(get_elec_datakeeper, ImportError):
         get_elec_datakeeper = property(
@@ -174,12 +158,12 @@ class VarLoadCurrent(VarLoad):
             if "post_keeper_postproc_list" in list(init_dict.keys()):
                 post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
         # Set the properties (value check and convertion are done in setter)
-        self.OP_matrix = OP_matrix
-        self.type_OP_matrix = type_OP_matrix
-        self.is_torque = is_torque
-        self.is_power = is_power
         # Call VarLoad init
         super(VarLoadCurrent, self).__init__(
+            OP_matrix=OP_matrix,
+            type_OP_matrix=type_OP_matrix,
+            is_torque=is_torque,
+            is_power=is_power,
             name=name,
             desc=desc,
             datakeeper_list=datakeeper_list,
@@ -201,16 +185,6 @@ class VarLoadCurrent(VarLoad):
         VarLoadCurrent_str = ""
         # Get the properties inherited from VarLoad
         VarLoadCurrent_str += super(VarLoadCurrent, self).__str__()
-        VarLoadCurrent_str += (
-            "OP_matrix = "
-            + linesep
-            + str(self.OP_matrix).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        VarLoadCurrent_str += "type_OP_matrix = " + str(self.type_OP_matrix) + linesep
-        VarLoadCurrent_str += "is_torque = " + str(self.is_torque) + linesep
-        VarLoadCurrent_str += "is_power = " + str(self.is_power) + linesep
         return VarLoadCurrent_str
 
     def __eq__(self, other):
@@ -221,14 +195,6 @@ class VarLoadCurrent(VarLoad):
 
         # Check the properties inherited from VarLoad
         if not super(VarLoadCurrent, self).__eq__(other):
-            return False
-        if not array_equal(other.OP_matrix, self.OP_matrix):
-            return False
-        if other.type_OP_matrix != self.type_OP_matrix:
-            return False
-        if other.is_torque != self.is_torque:
-            return False
-        if other.is_power != self.is_power:
             return False
         return True
 
@@ -243,14 +209,6 @@ class VarLoadCurrent(VarLoad):
 
         # Check the properties inherited from VarLoad
         diff_list.extend(super(VarLoadCurrent, self).compare(other, name=name))
-        if not array_equal(other.OP_matrix, self.OP_matrix):
-            diff_list.append(name + ".OP_matrix")
-        if other._type_OP_matrix != self._type_OP_matrix:
-            diff_list.append(name + ".type_OP_matrix")
-        if other._is_torque != self._is_torque:
-            diff_list.append(name + ".is_torque")
-        if other._is_power != self._is_power:
-            diff_list.append(name + ".is_power")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -262,10 +220,6 @@ class VarLoadCurrent(VarLoad):
 
         # Get size of the properties inherited from VarLoad
         S += super(VarLoadCurrent, self).__sizeof__()
-        S += getsizeof(self.OP_matrix)
-        S += getsizeof(self.type_OP_matrix)
-        S += getsizeof(self.is_torque)
-        S += getsizeof(self.is_power)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -285,22 +239,6 @@ class VarLoadCurrent(VarLoad):
             keep_function=keep_function,
             **kwargs
         )
-        if self.OP_matrix is None:
-            VarLoadCurrent_dict["OP_matrix"] = None
-        else:
-            if type_handle_ndarray == 0:
-                VarLoadCurrent_dict["OP_matrix"] = self.OP_matrix.tolist()
-            elif type_handle_ndarray == 1:
-                VarLoadCurrent_dict["OP_matrix"] = self.OP_matrix.copy()
-            elif type_handle_ndarray == 2:
-                VarLoadCurrent_dict["OP_matrix"] = self.OP_matrix
-            else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
-        VarLoadCurrent_dict["type_OP_matrix"] = self.type_OP_matrix
-        VarLoadCurrent_dict["is_torque"] = self.is_torque
-        VarLoadCurrent_dict["is_power"] = self.is_power
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VarLoadCurrent_dict["__class__"] = "VarLoadCurrent"
@@ -309,90 +247,5 @@ class VarLoadCurrent(VarLoad):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.OP_matrix = None
-        self.type_OP_matrix = None
-        self.is_torque = None
-        self.is_power = None
         # Set to None the properties inherited from VarLoad
         super(VarLoadCurrent, self)._set_None()
-
-    def _get_OP_matrix(self):
-        """getter of OP_matrix"""
-        return self._OP_matrix
-
-    def _set_OP_matrix(self, value):
-        """setter of OP_matrix"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("OP_matrix", value, "ndarray")
-        self._OP_matrix = value
-
-    OP_matrix = property(
-        fget=_get_OP_matrix,
-        fset=_set_OP_matrix,
-        doc=u"""Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) 
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_type_OP_matrix(self):
-        """getter of type_OP_matrix"""
-        return self._type_OP_matrix
-
-    def _set_type_OP_matrix(self, value):
-        """setter of type_OP_matrix"""
-        check_var("type_OP_matrix", value, "int", Vmin=0, Vmax=1)
-        self._type_OP_matrix = value
-
-    type_OP_matrix = property(
-        fget=_get_type_OP_matrix,
-        fset=_set_type_OP_matrix,
-        doc=u"""Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) 
-
-        :Type: int
-        :min: 0
-        :max: 1
-        """,
-    )
-
-    def _get_is_torque(self):
-        """getter of is_torque"""
-        return self._is_torque
-
-    def _set_is_torque(self, value):
-        """setter of is_torque"""
-        check_var("is_torque", value, "bool")
-        self._is_torque = value
-
-    is_torque = property(
-        fget=_get_is_torque,
-        fset=_set_is_torque,
-        doc=u"""True if the Torque is defined in OP_matrix
-
-        :Type: bool
-        """,
-    )
-
-    def _get_is_power(self):
-        """getter of is_power"""
-        return self._is_power
-
-    def _set_is_power(self, value):
-        """setter of is_power"""
-        check_var("is_power", value, "bool")
-        self._is_power = value
-
-    is_power = property(
-        fget=_get_is_power,
-        fset=_set_is_power,
-        doc=u"""True if the Power is defined in OP_matrix
-
-        :Type: bool
-        """,
-    )

@@ -23,22 +23,34 @@ except ImportError as error:
     comp_parameters = error
 
 try:
-    from ..Methods.Simulation.EEC_SCIM.solve_EEC import solve_EEC
+    from ..Methods.Simulation.EEC_SCIM.solve import solve
 except ImportError as error:
-    solve_EEC = error
-
-try:
-    from ..Methods.Simulation.EEC_SCIM.gen_drive import gen_drive
-except ImportError as error:
-    gen_drive = error
+    solve = error
 
 try:
     from ..Methods.Simulation.EEC_SCIM.comp_joule_losses import comp_joule_losses
 except ImportError as error:
     comp_joule_losses = error
 
+try:
+    from ..Methods.Simulation.EEC_SCIM.solve_elementary import solve_elementary
+except ImportError as error:
+    solve_elementary = error
+
+try:
+    from ..Methods.Simulation.EEC_SCIM._comp_flux_mean import _comp_flux_mean
+except ImportError as error:
+    _comp_flux_mean = error
+
+try:
+    from ..Methods.Simulation.EEC_SCIM._comp_Lm_FEA import _comp_Lm_FEA
+except ImportError as error:
+    _comp_Lm_FEA = error
+
 
 from ._check import InitUnKnowClassError
+from .LUT import LUT
+from .Drive import Drive
 
 
 class EEC_SCIM(EEC):
@@ -58,24 +70,15 @@ class EEC_SCIM(EEC):
         )
     else:
         comp_parameters = comp_parameters
-    # cf Methods.Simulation.EEC_SCIM.solve_EEC
-    if isinstance(solve_EEC, ImportError):
-        solve_EEC = property(
+    # cf Methods.Simulation.EEC_SCIM.solve
+    if isinstance(solve, ImportError):
+        solve = property(
             fget=lambda x: raise_(
-                ImportError("Can't use EEC_SCIM method solve_EEC: " + str(solve_EEC))
+                ImportError("Can't use EEC_SCIM method solve: " + str(solve))
             )
         )
     else:
-        solve_EEC = solve_EEC
-    # cf Methods.Simulation.EEC_SCIM.gen_drive
-    if isinstance(gen_drive, ImportError):
-        gen_drive = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use EEC_SCIM method gen_drive: " + str(gen_drive))
-            )
-        )
-    else:
-        gen_drive = gen_drive
+        solve = solve
     # cf Methods.Simulation.EEC_SCIM.comp_joule_losses
     if isinstance(comp_joule_losses, ImportError):
         comp_joule_losses = property(
@@ -88,6 +91,40 @@ class EEC_SCIM(EEC):
         )
     else:
         comp_joule_losses = comp_joule_losses
+    # cf Methods.Simulation.EEC_SCIM.solve_elementary
+    if isinstance(solve_elementary, ImportError):
+        solve_elementary = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_SCIM method solve_elementary: "
+                    + str(solve_elementary)
+                )
+            )
+        )
+    else:
+        solve_elementary = solve_elementary
+    # cf Methods.Simulation.EEC_SCIM._comp_flux_mean
+    if isinstance(_comp_flux_mean, ImportError):
+        _comp_flux_mean = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_SCIM method _comp_flux_mean: " + str(_comp_flux_mean)
+                )
+            )
+        )
+    else:
+        _comp_flux_mean = _comp_flux_mean
+    # cf Methods.Simulation.EEC_SCIM._comp_Lm_FEA
+    if isinstance(_comp_Lm_FEA, ImportError):
+        _comp_Lm_FEA = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_SCIM method _comp_Lm_FEA: " + str(_comp_Lm_FEA)
+                )
+            )
+        )
+    else:
+        _comp_Lm_FEA = _comp_Lm_FEA
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -97,13 +134,14 @@ class EEC_SCIM(EEC):
     def __init__(
         self,
         I=1,
-        parameters=-1,
         is_periodicity_a=True,
         nb_worker=None,
         N0=None,
-        felec=None,
         Nt_tot=32,
         Nrev=1,
+        parameters=None,
+        LUT_enforced=None,
+        drive=None,
         init_dict=None,
         init_str=None,
     ):
@@ -124,31 +162,33 @@ class EEC_SCIM(EEC):
             # Overwrite default value with init_dict content
             if "I" in list(init_dict.keys()):
                 I = init_dict["I"]
-            if "parameters" in list(init_dict.keys()):
-                parameters = init_dict["parameters"]
             if "is_periodicity_a" in list(init_dict.keys()):
                 is_periodicity_a = init_dict["is_periodicity_a"]
             if "nb_worker" in list(init_dict.keys()):
                 nb_worker = init_dict["nb_worker"]
             if "N0" in list(init_dict.keys()):
                 N0 = init_dict["N0"]
-            if "felec" in list(init_dict.keys()):
-                felec = init_dict["felec"]
             if "Nt_tot" in list(init_dict.keys()):
                 Nt_tot = init_dict["Nt_tot"]
             if "Nrev" in list(init_dict.keys()):
                 Nrev = init_dict["Nrev"]
+            if "parameters" in list(init_dict.keys()):
+                parameters = init_dict["parameters"]
+            if "LUT_enforced" in list(init_dict.keys()):
+                LUT_enforced = init_dict["LUT_enforced"]
+            if "drive" in list(init_dict.keys()):
+                drive = init_dict["drive"]
         # Set the properties (value check and convertion are done in setter)
         self.I = I
-        self.parameters = parameters
         self.is_periodicity_a = is_periodicity_a
         self.nb_worker = nb_worker
         self.N0 = N0
-        self.felec = felec
         self.Nt_tot = Nt_tot
         self.Nrev = Nrev
         # Call EEC init
-        super(EEC_SCIM, self).__init__()
+        super(EEC_SCIM, self).__init__(
+            parameters=parameters, LUT_enforced=LUT_enforced, drive=drive
+        )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties
 
@@ -159,11 +199,9 @@ class EEC_SCIM(EEC):
         # Get the properties inherited from EEC
         EEC_SCIM_str += super(EEC_SCIM, self).__str__()
         EEC_SCIM_str += "I = " + str(self.I) + linesep
-        EEC_SCIM_str += "parameters = " + str(self.parameters) + linesep
         EEC_SCIM_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
         EEC_SCIM_str += "nb_worker = " + str(self.nb_worker) + linesep
         EEC_SCIM_str += "N0 = " + str(self.N0) + linesep
-        EEC_SCIM_str += "felec = " + str(self.felec) + linesep
         EEC_SCIM_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         EEC_SCIM_str += "Nrev = " + str(self.Nrev) + linesep
         return EEC_SCIM_str
@@ -179,15 +217,11 @@ class EEC_SCIM(EEC):
             return False
         if other.I != self.I:
             return False
-        if other.parameters != self.parameters:
-            return False
         if other.is_periodicity_a != self.is_periodicity_a:
             return False
         if other.nb_worker != self.nb_worker:
             return False
         if other.N0 != self.N0:
-            return False
-        if other.felec != self.felec:
             return False
         if other.Nt_tot != self.Nt_tot:
             return False
@@ -208,16 +242,12 @@ class EEC_SCIM(EEC):
         diff_list.extend(super(EEC_SCIM, self).compare(other, name=name))
         if other._I != self._I:
             diff_list.append(name + ".I")
-        if other._parameters != self._parameters:
-            diff_list.append(name + ".parameters")
         if other._is_periodicity_a != self._is_periodicity_a:
             diff_list.append(name + ".is_periodicity_a")
         if other._nb_worker != self._nb_worker:
             diff_list.append(name + ".nb_worker")
         if other._N0 != self._N0:
             diff_list.append(name + ".N0")
-        if other._felec != self._felec:
-            diff_list.append(name + ".felec")
         if other._Nt_tot != self._Nt_tot:
             diff_list.append(name + ".Nt_tot")
         if other._Nrev != self._Nrev:
@@ -234,13 +264,9 @@ class EEC_SCIM(EEC):
         # Get size of the properties inherited from EEC
         S += super(EEC_SCIM, self).__sizeof__()
         S += getsizeof(self.I)
-        if self.parameters is not None:
-            for key, value in self.parameters.items():
-                S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.is_periodicity_a)
         S += getsizeof(self.nb_worker)
         S += getsizeof(self.N0)
-        S += getsizeof(self.felec)
         S += getsizeof(self.Nt_tot)
         S += getsizeof(self.Nrev)
         return S
@@ -263,13 +289,9 @@ class EEC_SCIM(EEC):
             **kwargs
         )
         EEC_SCIM_dict["I"] = self.I
-        EEC_SCIM_dict["parameters"] = (
-            self.parameters.copy() if self.parameters is not None else None
-        )
         EEC_SCIM_dict["is_periodicity_a"] = self.is_periodicity_a
         EEC_SCIM_dict["nb_worker"] = self.nb_worker
         EEC_SCIM_dict["N0"] = self.N0
-        EEC_SCIM_dict["felec"] = self.felec
         EEC_SCIM_dict["Nt_tot"] = self.Nt_tot
         EEC_SCIM_dict["Nrev"] = self.Nrev
         # The class name is added to the dict for deserialisation purpose
@@ -281,11 +303,9 @@ class EEC_SCIM(EEC):
         """Set all the properties to None (except pyleecan object)"""
 
         self.I = None
-        self.parameters = None
         self.is_periodicity_a = None
         self.nb_worker = None
         self.N0 = None
-        self.felec = None
         self.Nt_tot = None
         self.Nrev = None
         # Set to None the properties inherited from EEC
@@ -306,26 +326,6 @@ class EEC_SCIM(EEC):
         doc=u"""RMS current for parameter estimation
 
         :Type: float
-        """,
-    )
-
-    def _get_parameters(self):
-        """getter of parameters"""
-        return self._parameters
-
-    def _set_parameters(self, value):
-        """setter of parameters"""
-        if type(value) is int and value == -1:
-            value = dict()
-        check_var("parameters", value, "dict")
-        self._parameters = value
-
-    parameters = property(
-        fget=_get_parameters,
-        fset=_set_parameters,
-        doc=u"""Parameters of the EEC: computed if empty, or enforced
-
-        :Type: dict
         """,
     )
 
@@ -378,24 +378,6 @@ class EEC_SCIM(EEC):
         fget=_get_N0,
         fset=_set_N0,
         doc=u"""Rotor speed
-
-        :Type: float
-        """,
-    )
-
-    def _get_felec(self):
-        """getter of felec"""
-        return self._felec
-
-    def _set_felec(self, value):
-        """setter of felec"""
-        check_var("felec", value, "float")
-        self._felec = value
-
-    felec = property(
-        fget=_get_felec,
-        fset=_set_felec,
-        doc=u"""electrical frequency
 
         :Type: float
         """,

@@ -22,6 +22,21 @@ try:
 except ImportError as error:
     get_data = error
 
+try:
+    from ..Methods.Import.ImportGenPWM.comp_voltage import comp_voltage
+except ImportError as error:
+    comp_voltage = error
+
+try:
+    from ..Methods.Import.ImportGenPWM.get_modulation_index import get_modulation_index
+except ImportError as error:
+    get_modulation_index = error
+
+try:
+    from ..Methods.Import.ImportGenPWM.comp_carrier import comp_carrier
+except ImportError as error:
+    comp_carrier = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -31,6 +46,7 @@ class ImportGenPWM(ImportMatrix):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Import.ImportGenPWM.get_data
     if isinstance(get_data, ImportError):
         get_data = property(
@@ -40,6 +56,40 @@ class ImportGenPWM(ImportMatrix):
         )
     else:
         get_data = get_data
+    # cf Methods.Import.ImportGenPWM.comp_voltage
+    if isinstance(comp_voltage, ImportError):
+        comp_voltage = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ImportGenPWM method comp_voltage: " + str(comp_voltage)
+                )
+            )
+        )
+    else:
+        comp_voltage = comp_voltage
+    # cf Methods.Import.ImportGenPWM.get_modulation_index
+    if isinstance(get_modulation_index, ImportError):
+        get_modulation_index = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ImportGenPWM method get_modulation_index: "
+                    + str(get_modulation_index)
+                )
+            )
+        )
+    else:
+        get_modulation_index = get_modulation_index
+    # cf Methods.Import.ImportGenPWM.comp_carrier
+    if isinstance(comp_carrier, ImportError):
+        comp_carrier = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ImportGenPWM method comp_carrier: " + str(comp_carrier)
+                )
+            )
+        )
+    else:
+        comp_carrier = comp_carrier
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -58,12 +108,14 @@ class ImportGenPWM(ImportMatrix):
         fswi_max=3000,
         typePWM=8,
         Vdc1=2,
-        U0=1,
+        U0=None,
         type_carrier=0,
         var_amp=20,
         qs=3,
         is_star=True,
-        rot_dir=-1,
+        phase_dir=-1,
+        current_dir=-1,
+        Phi0=0,
         is_transpose=False,
         init_dict=None,
         init_str=None,
@@ -113,8 +165,12 @@ class ImportGenPWM(ImportMatrix):
                 qs = init_dict["qs"]
             if "is_star" in list(init_dict.keys()):
                 is_star = init_dict["is_star"]
-            if "rot_dir" in list(init_dict.keys()):
-                rot_dir = init_dict["rot_dir"]
+            if "phase_dir" in list(init_dict.keys()):
+                phase_dir = init_dict["phase_dir"]
+            if "current_dir" in list(init_dict.keys()):
+                current_dir = init_dict["current_dir"]
+            if "Phi0" in list(init_dict.keys()):
+                Phi0 = init_dict["Phi0"]
             if "is_transpose" in list(init_dict.keys()):
                 is_transpose = init_dict["is_transpose"]
         # Set the properties (value check and convertion are done in setter)
@@ -133,7 +189,9 @@ class ImportGenPWM(ImportMatrix):
         self.var_amp = var_amp
         self.qs = qs
         self.is_star = is_star
-        self.rot_dir = rot_dir
+        self.phase_dir = phase_dir
+        self.current_dir = current_dir
+        self.Phi0 = Phi0
         # Call ImportMatrix init
         super(ImportGenPWM, self).__init__(is_transpose=is_transpose)
         # The class is frozen (in ImportMatrix init), for now it's impossible to
@@ -160,7 +218,9 @@ class ImportGenPWM(ImportMatrix):
         ImportGenPWM_str += "var_amp = " + str(self.var_amp) + linesep
         ImportGenPWM_str += "qs = " + str(self.qs) + linesep
         ImportGenPWM_str += "is_star = " + str(self.is_star) + linesep
-        ImportGenPWM_str += "rot_dir = " + str(self.rot_dir) + linesep
+        ImportGenPWM_str += "phase_dir = " + str(self.phase_dir) + linesep
+        ImportGenPWM_str += "current_dir = " + str(self.current_dir) + linesep
+        ImportGenPWM_str += "Phi0 = " + str(self.Phi0) + linesep
         return ImportGenPWM_str
 
     def __eq__(self, other):
@@ -202,7 +262,11 @@ class ImportGenPWM(ImportMatrix):
             return False
         if other.is_star != self.is_star:
             return False
-        if other.rot_dir != self.rot_dir:
+        if other.phase_dir != self.phase_dir:
+            return False
+        if other.current_dir != self.current_dir:
+            return False
+        if other.Phi0 != self.Phi0:
             return False
         return True
 
@@ -247,8 +311,12 @@ class ImportGenPWM(ImportMatrix):
             diff_list.append(name + ".qs")
         if other._is_star != self._is_star:
             diff_list.append(name + ".is_star")
-        if other._rot_dir != self._rot_dir:
-            diff_list.append(name + ".rot_dir")
+        if other._phase_dir != self._phase_dir:
+            diff_list.append(name + ".phase_dir")
+        if other._current_dir != self._current_dir:
+            diff_list.append(name + ".current_dir")
+        if other._Phi0 != self._Phi0:
+            diff_list.append(name + ".Phi0")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -275,7 +343,9 @@ class ImportGenPWM(ImportMatrix):
         S += getsizeof(self.var_amp)
         S += getsizeof(self.qs)
         S += getsizeof(self.is_star)
-        S += getsizeof(self.rot_dir)
+        S += getsizeof(self.phase_dir)
+        S += getsizeof(self.current_dir)
+        S += getsizeof(self.Phi0)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -310,7 +380,9 @@ class ImportGenPWM(ImportMatrix):
         ImportGenPWM_dict["var_amp"] = self.var_amp
         ImportGenPWM_dict["qs"] = self.qs
         ImportGenPWM_dict["is_star"] = self.is_star
-        ImportGenPWM_dict["rot_dir"] = self.rot_dir
+        ImportGenPWM_dict["phase_dir"] = self.phase_dir
+        ImportGenPWM_dict["current_dir"] = self.current_dir
+        ImportGenPWM_dict["Phi0"] = self.Phi0
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportGenPWM_dict["__class__"] = "ImportGenPWM"
@@ -334,7 +406,9 @@ class ImportGenPWM(ImportMatrix):
         self.var_amp = None
         self.qs = None
         self.is_star = None
-        self.rot_dir = None
+        self.phase_dir = None
+        self.current_dir = None
+        self.Phi0 = None
         # Set to None the properties inherited from ImportMatrix
         super(ImportGenPWM, self)._set_None()
 
@@ -535,7 +609,7 @@ class ImportGenPWM(ImportMatrix):
     U0 = property(
         fget=_get_U0,
         fset=_set_U0,
-        doc=u"""reference voltage
+        doc=u"""reference voltage amplitude (rms)
 
         :Type: float
         """,
@@ -613,20 +687,60 @@ class ImportGenPWM(ImportMatrix):
         """,
     )
 
-    def _get_rot_dir(self):
-        """getter of rot_dir"""
-        return self._rot_dir
+    def _get_phase_dir(self):
+        """getter of phase_dir"""
+        return self._phase_dir
 
-    def _set_rot_dir(self, value):
-        """setter of rot_dir"""
-        check_var("rot_dir", value, "int")
-        self._rot_dir = value
+    def _set_phase_dir(self, value):
+        """setter of phase_dir"""
+        check_var("phase_dir", value, "int", Vmin=-1, Vmax=1)
+        self._phase_dir = value
 
-    rot_dir = property(
-        fget=_get_rot_dir,
-        fset=_set_rot_dir,
-        doc=u"""rotor rotation direction
+    phase_dir = property(
+        fget=_get_phase_dir,
+        fset=_set_phase_dir,
+        doc=u"""Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)
 
         :Type: int
+        :min: -1
+        :max: 1
+        """,
+    )
+
+    def _get_current_dir(self):
+        """getter of current_dir"""
+        return self._current_dir
+
+    def _set_current_dir(self, value):
+        """setter of current_dir"""
+        check_var("current_dir", value, "int", Vmin=-1, Vmax=1)
+        self._current_dir = value
+
+    current_dir = property(
+        fget=_get_current_dir,
+        fset=_set_current_dir,
+        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
+
+        :Type: int
+        :min: -1
+        :max: 1
+        """,
+    )
+
+    def _get_Phi0(self):
+        """getter of Phi0"""
+        return self._Phi0
+
+    def _set_Phi0(self, value):
+        """setter of Phi0"""
+        check_var("Phi0", value, "float")
+        self._Phi0 = value
+
+    Phi0 = property(
+        fget=_get_Phi0,
+        fset=_set_Phi0,
+        doc=u"""reference voltage phase (rad)
+
+        :Type: float
         """,
     )

@@ -687,11 +687,7 @@ def test_Optimization_problem():
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
 
     simu.struct = None
 
@@ -841,6 +837,7 @@ def test_Optimization_problem():
 
 
 if __name__ == "__main__":
-    test_FEMM_sym()
-    test_ecc_FEMM()
+    # test_FEMM_sym()
+    test_WindingUD()
+    # test_ecc_FEMM()
     test_WindingUD_layer()

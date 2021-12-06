@@ -24,7 +24,6 @@ from ..Classes.DataKeeper import DataKeeper
 from ..Classes.Drive import Drive
 from ..Classes.DriveWave import DriveWave
 from ..Classes.EEC import EEC
-from ..Classes.EEC_ANL import EEC_ANL
 from ..Classes.EEC_LSRPM import EEC_LSRPM
 from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.EEC_SCIM import EEC_SCIM
@@ -225,6 +224,7 @@ from ..Classes.Trapeze import Trapeze
 from ..Classes.Unit import Unit
 from ..Classes.VarLoad import VarLoad
 from ..Classes.VarLoadCurrent import VarLoadCurrent
+from ..Classes.VarLoadVoltage import VarLoadVoltage
 from ..Classes.VarParam import VarParam
 from ..Classes.VarSimu import VarSimu
 from ..Classes.VentilationCirc import VentilationCirc

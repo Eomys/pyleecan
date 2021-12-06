@@ -57,6 +57,11 @@ try:
 except ImportError as error:
     set_I0_Phi0 = error
 
+try:
+    from ..Methods.Simulation.OPslip.set_Ud_Uq import set_Ud_Uq
+except ImportError as error:
+    set_Ud_Uq = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -139,6 +144,15 @@ class OPslip(OP):
         )
     else:
         set_I0_Phi0 = set_I0_Phi0
+    # cf Methods.Simulation.OPslip.set_Ud_Uq
+    if isinstance(set_Ud_Uq, ImportError):
+        set_Ud_Uq = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OPslip method set_Ud_Uq: " + str(set_Ud_Uq))
+            )
+        )
+    else:
+        set_Ud_Uq = set_Ud_Uq
     # save and copy methods are available in all object
     save = save
     copy = copy

@@ -253,7 +253,7 @@ def test_axis_LamWind():
 
     fig.savefig(join(save_path, "test_axis_LamWind_fund.png"))
 
-    simu = Simu1(name="test_flux", machine=SCIM_001)
+    simu = Simu1(name="test_axis_LamWind", machine=SCIM_001)
 
     # Definition of the enforced output of the electrical module
     N0 = 1500

@@ -10,6 +10,8 @@ from pyleecan.Functions.Electrical.dqh_transformation import (
     dqh2n,
     n2dqh_DataTime,
     dqh2n_DataTime,
+    get_phase_dir,
+    get_phase_dir_DataTime,
 )
 from pyleecan.Functions.Winding.gen_phase_list import gen_name
 
@@ -18,7 +20,7 @@ param_list = [
     {"qs": 3, "current_dir": 1, "phase_dir": 1},  # other convention, 3 phases
     {"qs": 3, "current_dir": 1, "phase_dir": -1},  # other convention, 3 phases
     {"qs": 6, "current_dir": -1, "phase_dir": -1},  # pyleecan convention, 6 phases
-    {"qs": 11, "current_dir": -1, "phase_dir": -1},  # pyleecan convention, 1 phases
+    {"qs": 11, "current_dir": -1, "phase_dir": -1},  # pyleecan convention, 11 phases
 ]
 
 is_show_fig = False
@@ -97,6 +99,12 @@ def test_dqh_transformation(param_dict):
         In_data1 = dqh2n_DataTime(I_dqh_data, n=qs, phase_dir=phase_dir)
         assert_array_almost_equal(In_data1.values, In_rms)
 
+        # Check phase_dir calculation
+        phase_dir_calc1 = get_phase_dir(In, current_dir)
+        phase_dir_calc2 = get_phase_dir_DataTime(In_data)
+        assert phase_dir_calc1 == phase_dir
+        assert phase_dir_calc2 == phase_dir
+
         if is_show_fig:
             In_data.plot_2D_Data("time", "phase[]")
             I_dqh_data.plot_2D_Data("time", "phase[]")
@@ -109,4 +117,4 @@ if __name__ == "__main__":
     for param_dict in param_list:
         test_dqh_transformation(param_dict)
 
-    # test_dqh_transformation(param_list[2])
+    # test_dqh_transformation(param_list[1])
