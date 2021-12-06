@@ -10385,7 +10385,8 @@
             "get_surface_tooth",
             "is_outwards",
             "plot",
-            "plot_active"
+            "plot_active",
+            "set_label"
         ],
         "mother": "",
         "name": "Slot",

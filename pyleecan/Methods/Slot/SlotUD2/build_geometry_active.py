@@ -33,7 +33,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
 
     if self.split_active_surf_dict is not None and key in self.split_active_surf_dict:
         surf_list = [surf.copy() for surf in self.split_active_surf_dict[key]]
-        Slot.set_label(self, surf_list, Nrad, Ntan, self.get_name_lam())
+        self.set_label(surf_list, Nrad, Ntan, self.get_name_lam())
         return surf_list
     else:
         return Slot.build_geometry_active(
