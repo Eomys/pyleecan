@@ -172,6 +172,9 @@ class SWSlot(Gen_SWSlot, QWidget):
         """
         value = self.si_Zs.value()
         self.obj.slot.Zs = value
+        # Clear previous winding matrix (if needed)
+        if hasattr(self.obj, "winding"):
+            self.obj.winding.clean()
         self.set_slot_pitch(value)
         self.w_slot.w_out.comp_output()
         if isinstance(self.w_slot, PWSlotUD):
