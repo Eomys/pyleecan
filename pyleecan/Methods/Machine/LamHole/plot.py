@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-
 from numpy import exp, pi
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle, Patch
-from matplotlib.pyplot import axis, legend
+from matplotlib.patches import Patch
+from matplotlib.pyplot import legend
 
 from ....definitions import config_dict
 from ....Functions.init_fig import init_fig
@@ -13,6 +11,8 @@ PATCH_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PATCH_COLOR"]
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
 STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
+VENT_COLOR = config_dict["PLOT"]["COLOR_DICT"]["VENT_COLOR"]
+VENT_EDGE = config_dict["PLOT"]["COLOR_DICT"]["VENT_EDGE"]
 
 
 def plot(
@@ -78,6 +78,12 @@ def plot(
         elif HOLEM_LAB in label_dict["surf_type"] and not is_lam_only:
             patches.extend(
                 surf.get_patches(color=MAGNET_COLOR, is_edge_only=is_edge_only)
+            )
+        elif surf.label is not None and "Ventilation_" in surf.label:
+            patches.extend(
+                surf.get_patches(
+                    color=VENT_COLOR, edgecolor=VENT_EDGE, is_edge_only=is_edge_only
+                )
             )
         else:
             patches.extend(surf.get_patches(is_edge_only=is_edge_only))
