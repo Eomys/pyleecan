@@ -10,5 +10,6 @@ def set_pole_pair_number(self, p):
 
     """
 
-    for hole in self.hole:
-        hole.Zh = 2 * p
+    if self.hole is not None:
+        for hole in self.hole:
+            hole.Zh = 2 * p
