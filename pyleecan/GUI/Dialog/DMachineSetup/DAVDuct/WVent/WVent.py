@@ -4,19 +4,19 @@
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
 
-from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.PVentCirc import (
+from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentCirc.PVentCirc import (
     PVentCirc,
 )
-from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.PVentPolar import (
+from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentPolar.PVentPolar import (
     PVentPolar,
 )
-from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.PVentTrap import (
+from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentTrap.PVentTrap import (
     PVentTrap,
 )
-from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentUD.PVentUD import (
+from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentUD.PVentUD import (
     PVentUD,
 )
-from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVent.Ui_WVent import Ui_WVent
+from ......GUI.Dialog.DMachineSetup.DAVDuct.WVent.Ui_WVent import Ui_WVent
 
 # List to convert index of combobox to slot type
 PAGE_INDEX = [PVentCirc, PVentTrap, PVentPolar, PVentUD]

@@ -16,14 +16,14 @@ from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
+from pyleecan.GUI.Dialog.DMachineSetup.SLamShape.SLamShape import SLamShape
 
 
 import pytest
 
 
-class TestSLamParam(object):
-    """Test that the widget SLamParam behave like it should"""
+class TestSLamShape(object):
+    """Test that the widget SLamShape behave like it should"""
 
     @pytest.fixture
     def setup(self):
@@ -54,10 +54,10 @@ class TestSLamParam(object):
         material_dict[LIB_KEY][1].elec.rho = 0.32
         material_dict[LIB_KEY][2].elec.rho = 0.33
 
-        widget_1 = SLamParam(
+        widget_1 = SLamShape(
             machine=test_obj, material_dict=material_dict, is_stator=True
         )
-        widget_2 = SLamParam(
+        widget_2 = SLamShape(
             machine=test_obj, material_dict=material_dict, is_stator=False
         )
 
@@ -171,7 +171,7 @@ class TestSLamParam(object):
         setup["test_obj"].stator.axial_vent = list()
         setup["test_obj"].stator.axial_vent.append(VentilationCirc(Zh=8))
         setup["test_obj"].stator.axial_vent.append(VentilationCirc(Zh=10))
-        setup["widget"] = SLamParam(
+        setup["widget"] = SLamShape(
             machine=setup["test_obj"],
             material_dict=setup["material_dict"],
             is_stator=True,
@@ -188,7 +188,7 @@ class TestSLamParam(object):
         setup["test_obj"].stator.axial_vent = list()
         setup["test_obj"].stator.axial_vent.append(VentilationCirc(Zh=8))
         setup["test_obj"].stator.axial_vent.append(VentilationCirc(Zh=10))
-        setup["widget"] = SLamParam(
+        setup["widget"] = SLamShape(
             machine=setup["test_obj"],
             material_dict=setup["material_dict"],
             is_stator=True,
@@ -197,7 +197,7 @@ class TestSLamParam(object):
 
         setup["test_obj"].stator.axial_vent = list()
         setup["test_obj"].stator.axial_vent.append(VentilationTrap(Zh=20))
-        setup["widget"] = SLamParam(
+        setup["widget"] = SLamShape(
             machine=setup["test_obj"],
             material_dict=setup["material_dict"],
             is_stator=True,

@@ -3,11 +3,11 @@
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
 
-from .......GUI import gui_option
-from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.Gen_PVentTrap import (
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentTrap.Gen_PVentTrap import (
     Gen_PVentTrap,
 )
-from .......Classes.VentilationTrap import VentilationTrap
+from ......Classes.VentilationTrap import VentilationTrap
 
 
 class PVentTrap(Gen_PVentTrap, QWidget):

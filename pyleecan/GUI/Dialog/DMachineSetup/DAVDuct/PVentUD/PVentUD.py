@@ -6,14 +6,14 @@ from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QWidget, QDialog
 from PySide2.QtWidgets import QMessageBox
 from PySide2.QtCore import Qt
-from .......Functions.load import load
-from .......Classes.HoleUD import HoleUD
-from .......GUI import gui_option
-from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentUD.Gen_PVentUD import (
+from ......Functions.load import load
+from ......Classes.HoleUD import HoleUD
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentUD.Gen_PVentUD import (
     Gen_PVentUD,
 )
-from .......Methods.Slot.Slot import SlotCheckError
-from .......GUI.Dxf.DXF_Surf import DXF_Surf
+from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Dxf.DXF_Surf import DXF_Surf
 
 
 class PVentUD(Gen_PVentUD, QWidget):

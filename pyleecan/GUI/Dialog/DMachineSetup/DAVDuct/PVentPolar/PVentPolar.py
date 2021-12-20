@@ -3,11 +3,11 @@
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
 
-from .......GUI import gui_option
-from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.Gen_PVentPolar import (
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentPolar.Gen_PVentPolar import (
     Gen_PVentPolar,
 )
-from .......Classes.VentilationPolar import VentilationPolar
+from ......Classes.VentilationPolar import VentilationPolar
 
 
 class PVentPolar(Gen_PVentPolar, QWidget):

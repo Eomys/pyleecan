@@ -9,10 +9,10 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from .......GUI.Tools.FloatEdit import FloatEdit
-from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import WVentOut
-from .......GUI.Tools.WPathSelector.WPathSelectorV import WPathSelectorV
-from .......GUI.Tools.MPLCanvas import MPLCanvas
+from ......GUI.Tools.FloatEdit import FloatEdit
+from ......GUI.Dialog.DMachineSetup.DAVDuct.WVentOut.WVentOut import WVentOut
+from ......GUI.Tools.WPathSelector.WPathSelectorV import WPathSelectorV
+from ......GUI.Tools.MPLCanvas import MPLCanvas
 
 from pyleecan.GUI.Resources import pyleecan_rc
 

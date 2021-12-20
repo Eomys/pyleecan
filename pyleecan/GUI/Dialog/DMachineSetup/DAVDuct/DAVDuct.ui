@@ -130,7 +130,7 @@
   <customwidget>
    <class>HelpButton</class>
    <extends>QLabel</extends>
-   <header>......GUI/Tools/HelpButton.h</header>
+   <header>.....GUI/Tools/HelpButton.h</header>
   </customwidget>
  </customwidgets>
  <resources>
