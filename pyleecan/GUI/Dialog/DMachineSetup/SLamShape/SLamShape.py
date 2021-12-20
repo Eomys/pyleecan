@@ -3,12 +3,8 @@
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
 
-from .....Classes.LamHole import LamHole
-from .....Classes.Lamination import Lamination
-from .....Classes.LamSlotMag import LamSlotMag
-from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....GUI import gui_option
-from .....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.DAVDuct import DAVDuct
+from .....GUI.Dialog.DMachineSetup.DAVDuct.DAVDuct import DAVDuct
 from .....GUI.Dialog.DMachineSetup.SLamShape.Gen_SLamShape import Gen_SLamShape
 
 
@@ -120,8 +116,8 @@ class SLamShape(Gen_SLamShape, QWidget):
 
         Parameters
         ----------
-        self : SLamParam
-            A SLamParam object
+        self : SLamShape
+            A SLamShape object
         """
         if self.lf_L1.value() != self.obj.L1:
             self.obj.L1 = self.lf_L1.value()
@@ -134,8 +130,8 @@ class SLamShape(Gen_SLamShape, QWidget):
 
         Parameters
         ----------
-        self : SLamParam
-            A SLamParam object
+        self : SLamShape
+            A SLamShape object
         """
         self.obj.Kf1 = self.lf_Kf1.value()
         # Notify the machine GUI that the machine has changed
@@ -146,8 +142,8 @@ class SLamShape(Gen_SLamShape, QWidget):
 
         Parameters
         ----------
-        self : SLamParam
-            A SLamParam object
+        self : SLamShape
+            A SLamShape object
         is_checked : bool
             State of the g_radial checkbox
         """
@@ -165,8 +161,8 @@ class SLamShape(Gen_SLamShape, QWidget):
 
         Parameters
         ----------
-        self : SLamParam
-            A SLamParam object
+        self : SLamShape
+            A SLamShape object
         is_checked : bool
             State of the g_axial checkbox
         """
@@ -182,8 +178,8 @@ class SLamShape(Gen_SLamShape, QWidget):
 
         Parameters
         ----------
-        self : SLamParam
-            A SLamParam object
+        self : SLamShape
+            A SLamShape object
         """
         self.avd_win = DAVDuct(self.obj)
         self.avd_win.show()
@@ -194,8 +190,8 @@ class SLamShape(Gen_SLamShape, QWidget):
 
         Parameters
         ----------
-        self : SLamParam
-            A SLamParam object
+        self : SLamShape
+            A SLamShape object
         """
         # self.obj.axial_vent = self.avd_win.vent
         self.update_avd_text()
@@ -208,8 +204,8 @@ class SLamShape(Gen_SLamShape, QWidget):
 
         Parameters
         ----------
-        self : SLamParam
-            A SLamParam object
+        self : SLamShape
+            A SLamShape object
         """
         Nset = 0
         Nduct = 0
@@ -229,8 +225,8 @@ class SLamShape(Gen_SLamShape, QWidget):
 
         Parameters
         ----------
-        self : SLamParam
-            A SLamParam object
+        self : SLamShape
+            A SLamShape object
         """
         self.obj.Nrvd = self.si_Nrvd.value()
         self.update_lenght()
@@ -242,8 +238,8 @@ class SLamShape(Gen_SLamShape, QWidget):
 
         Parameters
         ----------
-        self : SLamParam
-            A SLamParam object
+        self : SLamShape
+            A SLamShape object
         """
         self.obj.Wrvd = self.lf_Wrvd.value()
         self.update_lenght()
@@ -255,8 +251,8 @@ class SLamShape(Gen_SLamShape, QWidget):
 
         Parameters
         ----------
-        self : SLamParam
-            A SLamParam object
+        self : SLamShape
+            A SLamShape object
         """
         if self.obj.is_stator:  # Adapt the text to the current lamination
             lam_txt = self.tr("Stator total length = ")
@@ -300,8 +296,8 @@ class SLamShape(Gen_SLamShape, QWidget):
 
         Parameters
         ----------
-        self : SLamParam
-            A SLamParam object
+        self : SLamShape
+            A SLamShape object
         """
         if self.g_radial.isChecked() and self.obj.Nrvd is None:
             return self.tr("You must set Nrvd or unchecked " "radial Ventilation !")

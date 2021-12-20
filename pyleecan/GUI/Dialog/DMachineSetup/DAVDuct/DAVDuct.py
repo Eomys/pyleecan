@@ -4,11 +4,11 @@
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QDialog, QMessageBox
 
-from ......Classes.Lamination import Lamination
-from ......Classes.VentilationCirc import VentilationCirc
-from ......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.Ui_DAVDuct import Ui_DAVDuct
-from ......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVent.WVent import WVent
-from ......Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from .....Classes.Lamination import Lamination
+from .....Classes.VentilationCirc import VentilationCirc
+from .....GUI.Dialog.DMachineSetup.DAVDuct.Ui_DAVDuct import Ui_DAVDuct
+from .....GUI.Dialog.DMachineSetup.DAVDuct.WVent.WVent import WVent
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class DAVDuct(Ui_DAVDuct, QDialog):

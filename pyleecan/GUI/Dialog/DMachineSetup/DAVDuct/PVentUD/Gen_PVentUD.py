@@ -2,9 +2,7 @@
 """File generated according to PVentUD/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentUD.Ui_PVentUD import (
-    Ui_PVentUD,
-)
+from pyleecan.GUI.Dialog.DMachineSetup.DAVDuct.PVentUD.Ui_PVentUD import Ui_PVentUD
 
 
 class Gen_PVentUD(Ui_PVentUD):
