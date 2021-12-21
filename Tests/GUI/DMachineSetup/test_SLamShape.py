@@ -166,7 +166,7 @@ class TestSLamShape(object):
     def test_clean_vent(self, setup):
         """Test that you can clean the ventilation"""
 
-        assert not setup["widget"].g_ax_vent.isChecked()
+        assert not setup["widget"].g_axial.isChecked()
 
         setup["test_obj"].stator.axial_vent = list()
         setup["test_obj"].stator.axial_vent.append(VentilationCirc(Zh=8))
@@ -176,9 +176,9 @@ class TestSLamShape(object):
             material_dict=setup["material_dict"],
             is_stator=True,
         )
-        assert setup["widget"].g_ax_vent.isChecked()
+        assert setup["widget"].g_axial.isChecked()
 
-        setup["widget"].g_ax_vent.setChecked(False)
+        setup["widget"].g_axial.setChecked(False)
         assert setup["test_obj"].stator.axial_vent == list()
 
     def test_text_vent(self, setup):

@@ -115,17 +115,17 @@ class TestPWSlot25(object):
         setup["test_obj"].slot = SlotW25(H2=None, H1=0.11, W4=0.1, W3=0.16)
         assert setup["widget"].check(setup["test_obj"]) == "You must set H2 !"
         # Wrong
-        setup["test_obj"].slot = SlotW25(H2=0.11, H1=0, W4=0.1, W3=0.16)
+        setup["test_obj"].slot = SlotW25(Zs=4, H2=0.11, H1=0, W4=0.1, W3=0.16)
         assert (
             setup["widget"].check(setup["test_obj"])
             == "You must have H1>0 (use Slot 24 for H1=0)"
         )
-        setup["test_obj"].slot = SlotW25(H2=0, H1=0.11, W4=0.1, W3=0.16)
+        setup["test_obj"].slot = SlotW25(Zs=4, H2=0, H1=0.11, W4=0.1, W3=0.16)
         assert (
             setup["widget"].check(setup["test_obj"])
             == "You must have H2>0 (use Slot 24 for H2=0)"
         )
-        setup["test_obj"].slot = SlotW25(H2=0.12, H1=0.11, W4=0.1, W3=0.1)
+        setup["test_obj"].slot = SlotW25(Zs=4, H2=0.12, H1=0.11, W4=0.1, W3=0.1)
         assert (
             setup["widget"].check(setup["test_obj"])
             == "You must have W4 != W3 (use Slot 24 for W4=W3)"
