@@ -6,6 +6,13 @@ import mock
 from PySide2 import QtWidgets
 from pyleecan.Functions.load import LIB_KEY, MACH_KEY, load, load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
+from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
+from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
+    SMachineDimension,
+)
+from pyleecan.GUI.Dialog.DMachineSetup.SLamShape.SLamShape import SLamShape
+from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
+from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 
 from Tests import TEST_DATA_DIR
@@ -81,26 +88,36 @@ class TestDMatlibWF(object):
             "Air",
             "MagnetPrius_old",
         ]
-        self.widget.nav_step.setCurrentRow(1)  # MachineDimension
+        # MachineDimension
+        self.widget.nav_step.setCurrentRow(1)
+        assert isinstance(self.widget.w_step, SMachineDimension)
         combo = self.widget.w_step.w_mat_0.c_mat_type
         assert combo.currentText() == "M400-50A"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
-        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        # LamParam Stator
+        self.widget.nav_step.setCurrentRow(5)
+        assert isinstance(self.widget.w_step, SLamShape)
         combo = self.widget.w_step.w_mat.c_mat_type
         assert combo.currentText() == "M400-50A"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
-        self.widget.nav_step.setCurrentRow(5)  # Winding conductor
+        # Winding conductor
+        self.widget.nav_step.setCurrentRow(4)
+        assert isinstance(self.widget.w_step, SWindCond)
         combo = self.widget.w_step.w_mat_0.c_mat_type
         assert combo.currentText() == "Copper1"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
         combo = self.widget.w_step.w_mat_1.c_mat_type
         assert combo.currentText() == "Insulator1"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
-        self.widget.nav_step.setCurrentRow(6)  # LamParam Rotor
+        # LamParam Rotor
+        self.widget.nav_step.setCurrentRow(7)
+        assert isinstance(self.widget.w_step, SLamShape)
         combo = self.widget.w_step.w_mat.c_mat_type
         assert combo.currentText() == "M400-50A"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
-        self.widget.nav_step.setCurrentRow(7)  # Hole material
+        # Hole material
+        self.widget.nav_step.setCurrentRow(6)
+        assert isinstance(self.widget.w_step, SMHoleMag)
         # Mat_void
         combo = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_0.c_mat_type
         assert combo.currentText() == "Air"
@@ -128,7 +145,8 @@ class TestDMatlibWF(object):
         M400 = load(join(WS_path, "M400-50A.json"))
         assert M400.elec.rho == 1
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
         assert isinstance(self.widget.w_step.w_mat.current_dialog, DMatLib)
@@ -157,7 +175,8 @@ class TestDMatlibWF(object):
         # Check initial state
         assert self.widget.machine.rotor.hole[0].mat_void.struct.rho == 1.2044
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(7)  # Hole material
+        self.widget.nav_step.setCurrentRow(6)  # Hole material
+        assert isinstance(self.widget.w_step, SMHoleMag)
         w_mat = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_0
         assert w_mat.current_dialog is None
         w_mat.b_matlib.clicked.emit()
@@ -195,7 +214,8 @@ class TestDMatlibWF(object):
         assert self.widget.machine.rotor.mat_type.elec.rho == 12
         assert self.widget.machine.shaft.mat_type.elec.rho == 12
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
         assert isinstance(self.widget.w_step.w_mat.current_dialog, DMatLib)
@@ -229,7 +249,8 @@ class TestDMatlibWF(object):
         assert M400.elec.rho == 1
         assert not isfile(join(WS_path, "M400-50A_copy.json"))
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
         assert isinstance(self.widget.w_step.w_mat.current_dialog, DMatLib)
@@ -279,7 +300,8 @@ class TestDMatlibWF(object):
         assert self.widget.machine.rotor.hole[0].magnet_0.mat_type.struct.rho == 7500
         assert not isfile(join(WS_path, "MagnetPrius_old.json"))
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(7)  # Hole material
+        self.widget.nav_step.setCurrentRow(6)  # Hole material
+        assert isinstance(self.widget.w_step, SMHoleMag)
         w_mat = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_1
         assert w_mat.current_dialog is None
         w_mat.b_matlib.clicked.emit()
@@ -329,7 +351,8 @@ class TestDMatlibWF(object):
         M400 = load(join(WS_path, "M400-50A.json"))
         assert M400.elec.rho == 1
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
         assert isinstance(self.widget.w_step.w_mat.current_dialog, DMatLib)
@@ -380,7 +403,8 @@ class TestDMatlibWF(object):
         assert self.widget.machine.rotor.hole[0].mat_void.name == "Air"
         assert not isfile(join(WS_path, "Air.json"))
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(7)  # Hole material
+        self.widget.nav_step.setCurrentRow(6)  # Hole material
+        assert isinstance(self.widget.w_step, SMHoleMag)
         w_mat = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_0
         assert w_mat.current_dialog is None
         w_mat.b_matlib.clicked.emit()
@@ -425,7 +449,8 @@ class TestDMatlibWF(object):
         # Check initial state
         assert isfile(join(WS_path, "M400-50A.json"))
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
         assert isinstance(self.widget.w_step.w_mat.current_dialog, DMatLib)
@@ -470,7 +495,8 @@ class TestDMatlibWF(object):
         M400 = load(join(WS_path, "M400-50A.json"))
         assert M400.elec.rho == 1
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(2)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
         assert isinstance(self.widget.w_step.w_mat.current_dialog, DMatLib)
@@ -530,7 +556,8 @@ class TestDMatlibWF(object):
         assert not isfile(join(WS_path, "MagnetPrius_old.json"))
         assert not isfile(join(WS_path, "MagnetPriusV1.json"))
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(7)  # Hole material
+        self.widget.nav_step.setCurrentRow(6)  # Hole material
+        assert isinstance(self.widget.w_step, SMHoleMag)
         w_mat = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_1
         assert w_mat.current_dialog is None
         w_mat.b_matlib.clicked.emit()
