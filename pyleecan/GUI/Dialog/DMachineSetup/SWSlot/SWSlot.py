@@ -5,6 +5,7 @@ from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.LamSlotWind import LamSlotWind
+from .....Classes.LamSquirrelCage import LamSquirrelCage
 from .....Classes.Slot import Slot
 from .....Classes.SlotW10 import SlotW10
 from .....Classes.Slot import Slot
@@ -175,6 +176,8 @@ class SWSlot(Gen_SWSlot, QWidget):
         # Clear previous winding matrix (if needed)
         if hasattr(self.obj, "winding"):
             self.obj.winding.clean()
+        if isinstance(self.obj, LamSquirrelCage):
+            self.obj.winding.qs = value
         self.set_slot_pitch(value)
         self.w_slot.w_out.comp_output()
         if isinstance(self.w_slot, PWSlotUD):
