@@ -271,14 +271,43 @@ class DMatLib(Ui_DMatLib, QDialog):
         self : DMatLib
             A DMatLib object
         """
-        current_mat, _, _ = self.get_current_material()
+        current_mat, key, index = self.get_current_material()
 
+        # Ask before delete
+        msg = self.tr(
+            "Do you want to remove material " + current_mat.name + " from the library?"
+        )
+        reply = QMessageBox.question(
+            self,
+            self.tr("Deleting material"),
+            msg,
+            QMessageBox.Yes,
+            QMessageBox.No,
+        )
+        self.qmessagebox_question = reply
+        if reply == QMessageBox.No:
+            return
+
+        # Delete the material
         try:
             remove(current_mat.path)
-            self.material_dict[LIB_KEY].remove(current_mat)
-        except:
-            # TODO better log
+            self.material_dict[key].pop(index)
+            self.material_dict_ref[key].pop(index)
+        except Exception as e:
+            err_msg = (
+                "Error while deleting material from "
+                + current_mat.path
+                + ":\n"
+                + str(e)
+            )
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
+            )
+            getLogger(GUI_LOG_NAME).error(err_msg)
             return
+        getLogger(GUI_LOG_NAME).info(current_mat.name + " was deleted")
 
         # Check that material was not part of the machine
         if self.machine is not None:
@@ -286,8 +315,10 @@ class DMatLib(Ui_DMatLib, QDialog):
                 machine=self.machine, material_dict=self.material_dict
             )
         self.update_treeview_material()
+        # Select first material (if any)
         if self.nav_mat.count() > 1:
             self.nav_mat.setCurrentRow(0)
+        self.select_current_material()
         # Signal set by WMatSelect to update Combobox
         self.materialListChanged.emit()
 
@@ -301,23 +332,45 @@ class DMatLib(Ui_DMatLib, QDialog):
         """
 
         # Path have been updated in the widget
-        old_path = self.w_setup.mat_backup.path
+        old_path = self.w_setup.init_path
         new_path = self.w_setup.mat.path
 
         try:
-            rename(old_path, new_path)
-        except:
-            # TODO better log
+            remove(old_path)
+            self.w_setup.mat.save(new_path)
+        except Exception as e:
+            err_msg = (
+                "Error while renaming material from "
+                + self.w_setup.init_path
+                + " to "
+                + self.w_setup.mat.path
+                + ":\n"
+                + str(e)
+            )
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
+            )
+            getLogger(GUI_LOG_NAME).error(err_msg)
             return
 
-        # Check that material was not part of the machine
+        getLogger(GUI_LOG_NAME).info(
+            self.w_setup.init_name + " was renamed to " + self.w_setup.mat.name
+        )
+        # Update reference (material_dict is already updated)
+        mat, key, index = self.get_current_material()
+        self.material_dict_ref[key][index] = mat.copy()
+
+        # Update list of material from the machine
         if self.machine is not None:
             load_machine_materials(
                 machine=self.machine, material_dict=self.material_dict
             )
+        self.le_search.setText("")  # Remove filter
         self.update_treeview_material()
-        if self.nav_mat.count() > 1:
-            self.nav_mat.setCurrentRow(0)
+        self.nav_mat.setCurrentRow(index)
+
         # Signal set by WMatSelect to update Combobox
         self.materialListChanged.emit()
 

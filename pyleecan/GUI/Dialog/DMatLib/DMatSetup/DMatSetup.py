@@ -36,6 +36,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
 
         self.is_save_needed = False
         self.init_name = None  # Initial name of current Material (to revert rename)
+        self.init_path = None  # Initial part of current Material (for rename)
         self.mat = None  # Current material being edited
 
         # Set initial material
@@ -141,6 +142,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         """
         self.mat = material
         self.init_name = self.mat.name  # Keep to revert rename
+        self.init_path = self.mat.path
         getLogger(GUI_LOG_NAME).debug("DMatSetup: Setting material " + self.mat.name)
 
         self.le_name.setText(self.mat.name)
